@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>ruby -e "
+print '&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=\"Refresh\" content=\"0; URL='
+print 'http://jigsaw.w3.org/css-validator/validator?&amp;warning=1&amp;profile=none&amp;usermedium=all&amp;text='
+
+\$&lt;.each_byte do |b|
+  if b == 32
+    print '+'
+  elsif (48..57).include? b or
+        (65..90).include? b or
+        (97..122).include? b
+    print b.chr
+  else
+    printf '%%%02x', b
+  end
+end
+
+puts '#errors\"&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;'  "</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^V</string>
+	<key>name</key>
+	<string>Validate Selected CSS</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>CSS</string>
+	<key>uuid</key>
+	<string>45E5E5A1-84CC-11D9-970D-0011242E4184</string>
+</dict>
+</plist>

@@ -18,22 +18,21 @@
 	patterns = (
 				
 		{
-			name = "Pascal Keywords";
+			name = "keywords.control.pascal";
 			match = "\\<(?i:(absolute|abstract|all|and|and_then|array|as|asm|attribute|begin|bindable|case|class|const|constructor|destructor|div|do|end|do|else|end|export|exports|external|far|file|finalization|for|forward|function|goto|if|implementation|import|in|inherited|initialization|interface|interrupt|is|label|library|mod|module|name|near|nil|not|object|of|only|operator|or|or_else|otherwise|packed|pow|private|procedure|program|property|protected|public|published|qualified|record|repeat|resident|restricted|segment|set|shl|shr|then|to|type|unit|until|uses|value|var|view|virtual|while|with|xor))\\>";
 			fontStyle = ( bold );
 			foregroundColor = "blue";
 		},
 		
-		{ name = "Numeric Constant"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
+		{ name = "constants.numeric.pascal"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
 		
-		{ name = "Ada/HyperTalk-style Comment"; match = "--(.*)$"; foregroundColor = "#236B8E"; fontStyle = ( italic );},
-		{ name = "Pascal-style Comment One"; begin = "\\(\\*"; end = "\\*\\)"; foregroundColor = "#236B8E"; },
-		{ name = "Pascal-style Comment Two"; begin = "\\{"; end = "\\}"; foregroundColor = "#236B8E"; },
-		{ name = "C++-style Comment"; match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
+		{ name = "comments.line.pascal.one"; match = "--(.*)$"; foregroundColor = "#236B8E"; fontStyle = ( italic );},
+		{ name = "comments.line.pascal.two"; match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
+		{ name = "comments.block.pascal.one"; begin = "\\(\\*"; end = "\\*\\)"; foregroundColor = "#236B8E"; },
+		{ name = "comments.block.pascal.two"; begin = "\\{"; end = "\\}"; foregroundColor = "#236B8E"; },
 
-		{ name = "String"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
-		
-		{ name = "Character Constant"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+		{ name = "strings.double-quoted.pascal"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+		{ name = "strings.single-quoted.pascal"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#8B2252"; },
 
 	);
 }

@@ -16,13 +16,13 @@
 	backgroundColor = "#2F4F4F";
 
 	patterns = (
-		{ name = "Method"; match = "\\<(.*)\\>(\s*)\\(\\)"; fontStyle = ( bold );},
-		{ name = "Numeric Constant"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#F0F8FF"; },
-		{ name = "Single String"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; },
-	    { name = "Double Quoted String"; begin = "\""; end = "\"";  foregroundColor = "#FFFCCF";   },
+		{ name = "keywords.functions.shell"; match = "\\<(.*)\\>(\s*)\\(\\)"; fontStyle = ( bold );},
+		{ name = "constants.numeric.shell"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#F0F8FF"; },
+		{ name = "strings.single-quoted.shell"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; },
+	    { name = "strings.double-quoted.shell"; begin = "\""; end = "\"";  foregroundColor = "#FFFCCF";   },
 	
-		{ name = "Comment"; match = "#[^{](.*)"; "fontStyle" = ( italic ); foregroundColor = "#E6E8FA"; },
-		{ name = "Comment"; match = "#$"; "fontStyle" = ( italic ); foregroundColor = "#E6E8FA"; }
+		{ name = "comments.line.shell"; match = "#[^{](.*)"; "fontStyle" = ( italic ); foregroundColor = "#E6E8FA"; },
+		{ name = "comments.line.shell.lonepound"; match = "#$"; "fontStyle" = ( italic ); foregroundColor = "#E6E8FA"; }
 	);
 }
 

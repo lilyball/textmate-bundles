@@ -17,13 +17,13 @@
 	backgroundColor = "#FFFFFF";
 
 	patterns = (
-		{ name = "Comment"; match = "!(.*)"; "fontStyle" = ( italic ); foregroundColor = "#236B8E"; },
-		{ name = "Method"; match = "(\\s*)\\[(\\s*)(.*)(\\s*);"; "fontStyle[3]" = ( bold );},
-		{ name = "Numeric Constant"; match = "\\<((\\$[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#0000CD"; },
-		{ name = "Single String"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#8B2252"; },
-	   { name = "Double Quoted String"; begin = "\""; end = "\"";  foregroundColor = "#8B2252";   },
-		{ name = "Keyword"; match = "\\<(box|break|continue|do|else|font(\\s+)(on|off)|for|give|if|jump|new_line|objectloop|print|print_ret|remove|return|rfalse|rtrue|spaces|string|style(\\s+)(roman|bold|underline|reverse|fixed)|switch|until|while|has|hasnt|in|notin|ofclass|provides|or)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
-		{ name = "Directives"; match = "\\<(Abbreviate|Array|Attribute|Class|Constant|Default|End|Endif|Extend|Global|Ifdef|Ifndef|Ifnot|Iftrue|Iffalse|Import|Include|Link|Lowstring|Message|Object|Property|Release|Replace|Serial|Switches|Statusline(\\s+)(score|time)|System_file|Verb|Zcharacter)\\>"; fontStyle = ( bold ); foregroundColor = "#5C246E"; },
+		{ name = "comments.line.inform"; match = "!(.*)"; "fontStyle" = ( italic ); foregroundColor = "#236B8E"; },
+		{ name = "keywords.functions.inform"; match = "(\\s*)\\[(\\s*)(.*)(\\s*);"; "fontStyle[3]" = ( bold );},
+		{ name = "constants.numeric.inform"; match = "\\<((\\$[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#0000CD"; },
+		{ name = "strings.single-quoted.inform"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+	   { name = "strings.double-quoted.inform"; begin = "\""; end = "\"";  foregroundColor = "#8B2252";   },
+		{ name = "keywords.control.inform"; match = "\\<(box|break|continue|do|else|font(\\s+)(on|off)|for|give|if|jump|new_line|objectloop|print|print_ret|remove|return|rfalse|rtrue|spaces|string|style(\\s+)(roman|bold|underline|reverse|fixed)|switch|until|while|has|hasnt|in|notin|ofclass|provides|or)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+		{ name = "keywords.directives.inform"; match = "\\<(Abbreviate|Array|Attribute|Class|Constant|Default|End|Endif|Extend|Global|Ifdef|Ifndef|Ifnot|Iftrue|Iffalse|Import|Include|Link|Lowstring|Message|Object|Property|Release|Replace|Serial|Switches|Statusline(\\s+)(score|time)|System_file|Verb|Zcharacter)\\>"; fontStyle = ( bold ); foregroundColor = "#5C246E"; },
 	);
 }
 

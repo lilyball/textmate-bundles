@@ -27,7 +27,7 @@
 		{ name = "Comment"; match = ";.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
 		
 		{
-			name = "Function";
+			name = "keywords.functions.lisp";
 			match = "(\\<(?i:defun|defmethod|defmacro)\\>)(\\s+)((\\w|\\-|\\!|\\?)*)";
 			"fontStyle[1]" = ( bold );
 			"fontStyle[3]" = ( underline );
@@ -35,8 +35,8 @@
 		},
 		
 		{
-			// better name? function #'+ or character constant #\a (might want to highlight these two constructs differently)
-			name = "Inline Constant";
+			// better class? function #'+ or character constant #\a (might want to highlight these two constructs differently)
+			name = "constants.lisp";
 			match = "#(\\w|[\\\\+-=<>'\"&#])+";
 			foregroundColor = "#8B2252";
 		},
@@ -55,13 +55,13 @@
 //		},
 		
 		{
-			name = "Global";
+			name = "variables.globals.lisp";
 			match = "\\*(\\S*)\\*";
 			foregroundColor = "#5C246E";
 		},
 		
-		{ name = "Keyword"; match = "\\<(?i:case|car|cdr|cons|cond|loop|lambda|format|setq|setf|quote|do|eval|append|let|list|listp|null|memberp|nil|t||load|loop|if|else|eq|neq|and|or|when|progn)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
-		{ name = "Numeric Constant"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
-		{ name = "String"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+		{ name = "keywords.lisp"; match = "\\<(?i:case|car|cdr|cons|cond|loop|lambda|format|setq|setf|quote|do|eval|append|let|list|listp|null|memberp|nil|t||load|loop|if|else|eq|neq|and|or|when|progn)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+		{ name = "constants.numeric.lisp"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
+		{ name = "strings.double-quoted.lisp"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
 	);
 }

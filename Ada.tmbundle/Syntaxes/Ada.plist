@@ -18,16 +18,16 @@
 	patterns = (
 				
 		{
-			name = "Ada Keywords";
+			name = "keywords.control.ada";
 			match = "\\<(?i:(abort|else|new|return|abs|elsif|not|reverse|abstract|end|null|accept|entry|select|access|exception|of|separate|aliased|exit|or|subtype|all|others|and|for|out|tagged|array|function|task|at|package|terminate|generic|pragma|then|begin|goto|private|type|body|procedure|if|protected|until|case|in|use|constant|is|raise|range|when|declare|limited|record|while|delay|loop|rem|with|delta|renames|digits|mod|requeue|xor|do))\\>";
 			fontStyle = ( bold );
 			foregroundColor = "blue";
 		},
 		
-		{ name = "Numeric Constant"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
-		{ name = "String"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+		{ name = "constants.numeric.ada"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
+		{ name = "strings.double-quoted.ada"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
 		
-		{ name = "Comment"; match = "--(.*)$"; foregroundColor = "#236B8E"; fontStyle = ( italic );},
+		{ name = "comments.line.ada"; match = "--(.*)$"; foregroundColor = "#236B8E"; fontStyle = ( italic );},
 		
 	);
 }

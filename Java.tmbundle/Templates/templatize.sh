@@ -1,5 +1,6 @@
 #!/bin/bash
 
+template="$1"
 classname=${TM_NEW_FILE_BASENAME%.java}
 
 ## find package name
@@ -12,11 +13,11 @@ if [ -z "${pkg_path}" ] || [ "${TM_PROJECT_DIRECTORY}" = "${pkg_path}" ]; then
 fi
 
 ## build @author
-author=$(defaults read AddressBookME | awk -f addrbook.awk)
+author=$(defaults read AddressBookME 2>/dev/null | awk -f ../addrbook.awk)
 
 sed -e "s#@@CLASSNAME@@#${classname}#g" \
     -e "s#@@PROJECT@@#${package}#g" \
     -e "s#@@AUTHOR@@#${author}#g" \
-    < java-insert.java > ${TM_NEW_FILE}
+    < ${template} > "${TM_NEW_FILE}"
 
-## env >> ${TM_NEW_FILE}
+## env >> "${TM_NEW_FILE}"

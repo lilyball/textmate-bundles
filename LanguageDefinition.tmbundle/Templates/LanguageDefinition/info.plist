@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>command</key>
-	<string>cp Template.plist "$TM_NEW_FILE"</string>
+	<string>[ -f "$TM_NEW_FILE" ] || perl -pe &lt;Template.plist &gt;"$TM_NEW_FILE" 's/__UUID_PLACEHOLDER__/`uuidgen|tr -d "\n"`/e'</string>
 	<key>extension</key>
 	<string>plist</string>
 	<key>name</key>

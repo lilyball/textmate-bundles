@@ -51,24 +51,24 @@ int|integer|interval\\(\\d+\\)|line|lseg|macaddr|money|numeric(\\(\\d+,\\d+\\))?
 
  		{ name = "strings.double-quoted.sql"; begin = "\""; end = "\"";  foregroundColor = "#66CC33";
 			patterns = (
-        		{ name = "Interpolated String"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; }
+        		{ name = "strings.interpolation.sql"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; }
 			);
 		},
 		{ name = "strings.double-quoted.sql"; begin = "%\\{"; end = "\\}";  foregroundColor = "#66CC33";
 			patterns = (
-				{ name = "Interpolated String"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; }
+				{ name = "strings.interpolation.sql"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; }
 			);
 		},
 		{ name = "strings.regex.sql"; begin = "/"; end = "/";  foregroundColor = "#CCCC33";
 			patterns = (
-				{ name = "Interpolated String"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; },
-				{ name = "Escaped slash"; match = "\\\\/"; foregroundColor = "#CCCC33"; }
+				{ name = "strings.interpolation.sql"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; },
+				{ name = "strings.escaped-slash.sql"; match = "\\\\/"; foregroundColor = "#CCCC33"; }
 			);
 		},
 		{ name = "strings.regex.modr.sql"; begin = "%r\\{"; end = "\\}";  foregroundColor = "#CCCC33";
 			patterns = (
-				{ name = "Interpolated String"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; },
-				{ name = "Escaped slash"; match = "\\\\/"; foregroundColor = "#CCCC33"; }
+				{ name = "strings.interpolation.sql"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; },
+				{ name = "strings.escaped-slash.sql"; match = "\\\\/"; foregroundColor = "#CCCC33"; }
 			);
 		},
 	);

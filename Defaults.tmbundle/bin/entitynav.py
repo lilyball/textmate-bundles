@@ -12,9 +12,9 @@ Usage:  entitynav -f <filename>
  -m, --mode <mode>              : set extension/mode to <mode>
  -e, --ext <ext>                : set extension/mode as <ext> when stdin
  -E, --ext-from-file <filename> : set extension/mode to extension of <filename>
- -h, --help                     : print usage
  -s, --sort                     : sort output by function/method/class name
  -S, --sort-silently            : sort only if the mode supports it, otherwise output unsorted
+ -h, --help                     : print usage
 
 """
 

@@ -1,5 +1,14 @@
-{
-	name = "HTML 4.01 Strict";
-	extension = "html";
-	command = "[ -f \"$TM_NEW_FILE\" ] || TM_DATE=`date +%Y-%m-%d` TM_YEAR=`date +%Y` TM_USERNAME=`niutil -readprop / /users/\\$USER realname` perl -pe 's/\\$\\{([^}]*)\\}/$ENV{$1}/g' <index.html >\"$TM_NEW_FILE\"";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>[ -f "$TM_NEW_FILE" ] || TM_DATE=`date +%Y-%m-%d` TM_YEAR=`date +%Y` TM_USERNAME=`niutil -readprop / /users/\$USER realname` perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' &lt;index.html &gt;"$TM_NEW_FILE"</string>
+	<key>extension</key>
+	<string>html</string>
+	<key>name</key>
+	<string>HTML 4.01 Strict</string>
+	<key>uuid</key>
+	<string>2D3D1461-6DFB-11D9-91EB-000D93589AF6</string>
+</dict>
+</plist>

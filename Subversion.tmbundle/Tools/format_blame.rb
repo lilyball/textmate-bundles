@@ -8,47 +8,45 @@
 
 
 # fetch some tm things..
-full_file = ENV['TM_FILEPATH']
-current   = ENV['TM_LINE_NUMBER'].to_i
-tab_size  = ENV['TM_TAB_SIZE'].to_i
-bundle    = ENV['TM_BUNDLE_PATH']
+$full_file  = ENV['TM_FILEPATH']
+$current    = ENV['TM_LINE_NUMBER'].to_i
+$tab_size   = ENV['TM_TAB_SIZE'].to_i
+$bundle     = ENV['TM_BUNDLE_PATH']
 
 
 # require the helper, it does some formating, etc:
-require bundle+'/Tools/svn_helper.rb'
+require $bundle+'/Tools/svn_helper.rb'
 include SVNHelper
 
 
-# create some other local and global vars..
-file      = full_file.sub( /^.*\//, '')  # just get the filename without path
-linecount = 1           # to show line numbers in output
-out       = ''          # output buffer
-error_txt = Array.new   # used to collect the error lines
-$tab_size = tab_size    # just to make it accesible to the htmlize thing
+# to show line numbers in output:
+linecount = 1
 
 
-# start..
 begin
-   out += '<table class="blame"> <tr>' +
+   make_head( "Subversion blame for '"+$full_file.sub( /^.*\//, '')+"'",
+              [ $bundle+"/Stylesheets/svn_style.css",
+                $bundle+"/Stylesheets/svn_blame_style.css"] )
+   
+   
+   puts '<table class="blame"> <tr>' +
             '<th>line</th>' +
             '<th class="revhead">rev</th>' +
             '<th>name</th>' +
-            '<th class="codehead">code</th>' +
-            "</tr>\n"
+            '<th class="codehead">code</th>' + '</tr>'
    
    $stdin.each_line do |line|
-      if line =~ /^svn: (.*)$/
-         error_txt << $1
+      raise SVNErrorException, line  if line =~ /^svn:/
+      
+      if line =~ /\s*(\d+)\s*(\w+) (.*)/
+         curr_add = ($current == linecount) ? ' current_line' : ''
          
-      elsif error_txt.size == 0 and line =~ /\s*(\d+)\s*(\w+) (.*)/
-         curr_add = (current == linecount) ? ' current_line' : ''
-         
-         out += '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +
-                    '<td class="revcol'+curr_add+'">' + $1 + "</td>\n" +
-                    '<td class="namecol'+curr_add+'">' + $2 + "</td>\n" +
-                    '<td class="codecol'+curr_add+'"><a href="' +
-                        make_tm_link( full_file, linecount) +'">'+ htmlize( $3 ) +
-                    "</a></td></tr>\n\n"
+         puts '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +
+                  '<td class="revcol'+curr_add+'">' + $1 + "</td>\n" +
+                  '<td class="namecol'+curr_add+'">' + $2 + "</td>\n" +
+                  '<td class="codecol'+curr_add+'"><a href="' +
+                        make_tm_link( $full_file, linecount) +'">'+ htmlize( $3 ) +
+                  "</a></td></tr>\n\n"
          
          linecount += 1
          
@@ -58,38 +56,19 @@ begin
       
    end
    
-   out += '</table>'
-   
 rescue NoMatchException
-   out = '<div class="error"><br />&emsp; mhh, something with with the regex or svn must be wrong, the last line was 
-          <br />&emsp; "<i>'+htmlize( $! )+'</i>".
-          <br />&emsp; please bug-report to <a href="mailto:torsten.becker@gmail.com" class="mail_to">
-                       torsten.becker@gmail.com</a>.</div>'
+   puts '<div class="generic_error"><h2>NoMatchException</h2>'
+   puts 'mhh, something with with the regex or svn must be wrong.<br />'
+   puts 'last line: <em>'+htmlize( $! )+'</em><br />'
+   puts 'please bug-report to <a href="mailto:torsten.becker@gmail.com" class="mail_to">'
+   puts 'torsten.becker@gmail.com</a>.</div>'
+   
+rescue SVNErrorException
+   puts '<div class="generic_error"><h2>SVNError</h2>'+ htmlize( $! )+'<br />'
+   $stdin.each_line { |line| puts htmlize( line )+'<br />' }
+   puts '</div>'     
+   
+ensure
+   puts '</table>'
+   make_foot()
 end
-
-
-# if we got some svn: lines:
-if error_txt.size > 0
-   out = '<div class="svn_says"><br />&emsp;'
-   error_txt.each { |el| out += htmlize( el ) + "\n<br />&emsp;" }
-   out += '</div>'
-end
-
-
-# show it..
-puts "<html>
-<head>
-<title>Subversion blame for '"+file+"'</title>
-<style type=\"text/css\">
-   @import 'file://"+bundle+"/Stylesheets/svn_style.css';
-   @import 'file://"+bundle+"/Stylesheets/svn_blame_style.css';
-</style>
-</head>
-
-<body>
-<h1>Subversion blame for '"+file+"'</h1>
-<hr />
-"+out+"
-</body>
-
-</html>"

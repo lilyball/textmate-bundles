@@ -15,6 +15,7 @@ table.blame {
    font-size: 9.5pt;
    padding: 1px;
    border-collapse: collapse;
+   width: 100%;
 }
 
 table.blame th {
@@ -68,7 +69,9 @@ td.namecol {
 td.codecol {
    font-size: 9pt;
    font-family: "Bitstream Vera Sans Mono", monospace;
+/*   white-space: pre-wrap;*/
    padding-left: 4px;
+   width: 100%;
 }
 
 /* maybe this should be implemented as id but its

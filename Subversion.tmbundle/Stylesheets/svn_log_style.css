@@ -1,0 +1,84 @@
+/* helps with the implementation of the changed
+   files list.. */
+.hidden {
+   display: none;
+}
+
+
+table.log_msg {
+   font-size: 93%;
+   width: 100%;
+   margin-bottom: 5px;
+}
+
+table.alternate {
+   background-color: #f2f2f2;
+}
+
+
+table.log_msg th {
+   text-align: right;
+   padding-left: 5px;
+   vertical-align: top;
+   white-space: nowrap;
+}
+
+
+table.log_msg td {
+   vertical-align: top;
+   width: 100%;
+}
+
+
+table.log_msg td ul {
+   list-style-type: none;
+   padding-left: 4px;
+}
+
+td.msg_field {
+   font-family: "Bitstream Vera Sans Mono", monospace;
+   font-size: 9.5pt;
+}
+
+
+table.log_msg td ul li {
+   margin-bottom: 2px;
+   font-size: 96%;
+}
+
+li.added:before, li.modified:before, li.deleted:before, li.unknown:before {
+   font-weight: bold;
+   font-family: "Bitstream Vera Sans Mono", monospace;
+}
+
+li.added:before {
+   content: 'A ';
+   color: green;
+}
+li.added {
+   background-color: #a0f595;
+}
+
+li.deleted:before {
+   content: 'D ';
+   color: red;
+}
+li.deleted {
+   background-color: #f59696;
+}
+
+li.modified:before {
+   content: 'M ';
+   color: orange;
+}
+li.modified {
+   background-color: #f5d996;
+}
+
+li.unknown:before {
+   content: '? ';
+   color: purple;
+}
+li.unknown {
+   background-color: #edaef5;
+}

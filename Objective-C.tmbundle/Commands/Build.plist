@@ -23,9 +23,9 @@ xcodebuild 2&gt;${res} -project $PROJECT_FILE -buildstyle $BUILD_STYLE \
 echo '&lt;h2&gt;' "$(&lt; ${res})" '&lt;/h2&gt;'
 
 cd "${TM_BUNDLE_PATH}"
-if [[ "$(&lt; ${res})" == "** BUILD SUCCEEDED **" ]];
- then bin/play Sounds/Harp.wav
- else bin/play Sounds/Whistle.wav
+if [[ "$(&lt; ${res})" == "** BUILD SUCCEEDED **" ]]
+ then bin/play Sounds/Harp.wav    &amp;&gt;/dev/null &amp;
+ else bin/play Sounds/Whistle.wav &amp;&gt;/dev/null &amp;
 fi
 
 rm ${res}</string>

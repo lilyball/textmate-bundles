@@ -28,13 +28,13 @@
 	   },
 		{ name = "strings.double-quoted.objc";
 		  begin = "@\""; end = "\""; swallow = "\\\\.";
-		  foregroundColor = "#224d14"; },
+		  foregroundColor = "#8B2252"; },
 		{ name = "keywords.objc";
 		  match = "\\<(id|BOOL|SEL|IBOutlet|IBAction|self|super|in|out|inout|oneway|YES|NO|nil)\\>";
 		  foregroundColor = "blue";
 		  fontStyle = ( bold ); },
 		{ name = "keywords.objc.directives";
-		  match = "@(class|interface|implementation|synchronized|protocol|selector|defs|try|catch|finally|throw|end)\\>";
+		  match = "@(class|interface|implementation|synchronized|protocol|selector|defs|try|catch|finally|throw|end|encode|public|private|protected)\\>";
 		  "fontStyle[1]" = ( bold ); foregroundColor = "blue"; },
 		{ include = "C"; },
 	);

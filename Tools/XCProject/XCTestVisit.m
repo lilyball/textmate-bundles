@@ -1,5 +1,5 @@
 //
-// File: XCProject.m
+// File: XCTestVisit.m
 //
 // Copyright: 2005 Chris Thomas. All Rights Reserved.
 //
@@ -14,21 +14,17 @@
 
 
 @interface TestDelegate : NSObject <XCVisitor>
-
-- (void) visitGroup:(NSString *)group;
-- (void) visitFile:(NSString *)name path:(NSString *)name;
-
 @end
 
 @implementation TestDelegate
 
-- (void) visitGroup:(NSString *)group
+- (void) visitGroup:(XCGroup *)group
 {
-	fprintf( stdout, "Group: %s\n", [group UTF8String] );
+	fprintf( stdout, "Group: %s\n", [[group displayName] UTF8String] );
 }
-- (void) visitFile:(NSString *)name path:(NSString *)path
+- (void) visitFile:(XCFile *)file ofGroup:(XCGroup *)group
 {
-	fprintf( stdout, "File: %s path:%s\n", [name UTF8String], [path UTF8String] );
+	fprintf( stdout, "File: %s\n", [[file displayName] UTF8String] );
 }
 
 @end

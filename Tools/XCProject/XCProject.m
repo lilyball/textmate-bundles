@@ -187,7 +187,7 @@
 }
 
 // recursive file visitor
-- (void) visitFile:(id)file withDelegate:(id)delegate
+- (void) visitFile:(id)file ofGroup:(PBXGroup *)group withDelegate:(id)delegate
 {
 	// name = @"name"
 	// name ||= @"path"
@@ -202,24 +202,65 @@
 	{
 		NSArray *	children;
 		
-		[delegate visitGroup:name];
+		[delegate visitGroup:(XCGroup *)file];
 		children = [file valueForKey:@"children"];
 		for( unsigned int index = 0; index < [children count]; index += 1 )
 		{
 			id	object = [children objectAtIndex:index];
-			[self visitFile:object withDelegate:delegate];
+			[self visitFile:object ofGroup:group withDelegate:delegate];
 		}
 	}
 	else
 	{
-		[delegate visitFile:name path:[file valueForKey:@"path"]];
+		[delegate visitFile:file ofGroup:group];
 	}
 }
 
 - (void) visitFileGroupsDepthFirstWithVisitor:(id)delegate
 {
-	[self visitFile:[[self root] valueForKey:@"mainGroup"] withDelegate:delegate];
+	[self visitFile:[[self root] valueForKey:@"mainGroup"] ofGroup:nil withDelegate:delegate];
 }
 
 @end
 
+@implementation XCFile(Accessors)
+
+- (NSString *) displayName
+{
+	// name = @"name"
+	// name ||= @"path"
+	NSString *	displayName = [self valueForKey:@"name"];
+
+	if(displayName == nil)
+	{
+		displayName = [self valueForKey:@"path"];
+	}
+	
+	return displayName;
+}
+
+// path is group relative?
+-(BOOL) isGroupRelative
+{
+	return [[self valueForKey:@"sourceTree"] isEqualToString:@"<group>"];
+}
+
+// Return the path of this file ref.
+// If the file's path is not group-relative, the parent group is ignored.
+-(NSString *) pathForGroup:(XCGroup *)group
+{
+	NSString * pathForGroup;
+	NSString * leaf = [self valueForKey:@"path"];
+	
+	if( [self isGroupRelative] )
+	{
+		pathForGroup = [NSString stringWithFormat:@"%@/%@", [group valueForKey:@"path"], leaf];
+	}
+	else
+	{
+		pathForGroup = leaf;
+	}
+	return pathForGroup;
+}
+
+@end

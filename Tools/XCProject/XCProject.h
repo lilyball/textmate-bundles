@@ -6,10 +6,29 @@
 // MIT license.
 //
 #import <Foundation/Foundation.h>
+#import "XCodeArchiveTypes.h"
+
+@class PBXFileReference;
+@class PBXGroup;
+
+#define XCFile PBXFileReference
+#define XCGroup PBXGroup
+
+@interface XCFile(Accessors)
+
+- (NSString *) displayName;
+
+// path is group relative?
+-(BOOL) isGroupRelative;
+
+// Return the path of this file ref.
+// If the file's path is not group-relative, the parent group is ignored.
+-(NSString *) pathForGroup:(XCGroup *)group;
+@end
 
 @protocol XCVisitor
-- (void) visitGroup:(NSString *)group;
-- (void) visitFile:(NSString *)name path:(NSString *)name;
+- (void) visitGroup:(XCGroup *)group;
+- (void) visitFile:(XCFile *)file ofGroup:(XCGroup *)group;
 @end
 
 @interface XCProject : NSObject

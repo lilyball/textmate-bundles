@@ -191,7 +191,7 @@ class EntityNav:
     def getHandler(self):
         mode = self.ext.capitalize()
         self.handler = getHandler(mode)
-        if self.sorted and isinstance(self.handler, SortableEntities) is not True:
+        if self.sorted and not isinstance(self.handler, SortableEntities):
             raise SortError, "Handler for mode '%s' does not support sorting" % mode
             
     def outputParsable(self):

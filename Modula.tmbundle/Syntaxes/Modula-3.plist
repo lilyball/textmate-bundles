@@ -26,7 +26,7 @@
    backgroundColor = "#181818";
    
    patterns = (
-      {  name = "keywords.modula3-";
+      {  name = "keywords.modula-3";
          foregroundColor = "#05e0e0";
          match = "\\<(ANY|ARRAY|AS|BEGIN|BITS|BRANDED|BY|CASE|CONST|DIV|DO|ELSE|ELSIF|END|EVAL|EXCEPT|EXCEPTION|EXIT|EXPORTS|FINALLY|FOR|FROM|GENERIC|IF|IMPORT|INTERFACE|LOCK|LOOP|METHODS|MOD|MODULE|OBJECT|OF|OVERRIDES|PROCEDURE|RAISE|RAISES|READONLY|RECORD|REF|REPEAT|RETURN|REVEAL|ROOT|SET|THEN|TO|TRY|TYPE|TYPECASE|UNSAFE|UNTIL|UNTRACED|VALUE|VAR|WHILE|WITH)\\>";
       },
@@ -41,25 +41,27 @@
          match = "\\<(IN|NOT|AND|OR)\\>";
       },
       
-    { name = "constant.numeric.modula-3";
+    { name = "constants.numeric.modula-3";
       "foregroundColor[2]" = "#61e01c";
       match = "(\\s)((\\-){0,1}((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)";
     },
     
     
-      {  name = ".constant.c-char.modula-3";
+      {  name = "strings.single-quoted.modula-3";
          foregroundColor = "#b4f00a";
-         match = "'.'";
+         begin = "'";
+         end = "'";
+         swallow = "\\\\.";
       },
     
-      {  name = "constant.c-string.modula-3";
+      {  name = "strings.double-quoted.modula-3";
          begin = "\"";
          end = "\"";
          swallow = "\\\\.";
          foregroundColor = "#b4f00a";
       },
       
-      {  name = "comment.block.modula-3";
+      {  name = "comments.block.modula-3";
          begin = "\\(\\*";
          end = "\\*\\)";
 //      swallow = "\\\\.";

@@ -19,11 +19,12 @@ require bundle+'/Tools/svn_helper.rb'
 include SVNHelper
 
 
-# create some other local vars..
+# create some other local and global vars..
 file      = full_file.sub( /^.*\//, '')  # just get the filename without path
-linecount = 1
-out       = ''
-error_txt = ''
+linecount = 1           # to show line numbers in output
+out       = ''          # output buffer
+error_txt = Array.new   # used to collect the error lines
+$tab_size = tab_size    # just to make it accesible to the htmlize thing
 
 
 # start..
@@ -36,28 +37,42 @@ begin
             "</tr>\n"
    
    $stdin.each_line do |line|
-      raise SVNErrorException  if line =~ /^svn: (.*)$/
-      raise NoMatchException   unless line =~ /\s*(\d+)\s*(\w+) (.*)/
+      if line =~ /^svn: (.*)$/
+         error_txt << $1
+         
+      elsif error_txt.size == 0 and line =~ /\s*(\d+)\s*(\w+) (.*)/
+         curr_add = (current == linecount) ? ' current_line' : ''
+         
+         out += '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +
+                    '<td class="revcol'+curr_add+'">' + $1 + "</td>\n" +
+                    '<td class="namecol'+curr_add+'">' + $2 + "</td>\n" +
+                    '<td class="codecol'+curr_add+'"><a href="' +
+                        make_tm_link( full_file, linecount) +'">'+ htmlize( $3 ) +
+                    "</a></td></tr>\n\n"
+         
+         linecount += 1
+         
+      else
+         raise NoMatchException, line
+      end
       
-      curr_add = (current == linecount) ? ' current_line' : ''
-      
-      out += '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +
-                 '<td class="revcol'+curr_add+'">' + $1 + "</td>\n" +
-                 '<td class="namecol'+curr_add+'">' + $2 + "</td>\n" +
-                 '<td class="codecol'+curr_add+'"><a href="' +
-                     make_tm_link( full_file, linecount) +'">'+ htmlize( $3, tab_size ) +
-                 "</a></td></tr>\n\n"
-      
-      linecount += 1
    end
    
    out += '</table>'
    
-rescue SVNErrorException
-   out = '<div class="svn_says"><br />&emsp;'+ htmlize( $1, tab_size ) + '</div>'
 rescue NoMatchException
-   out = '<div class="error"><br />&emsp;mhh, something with with the regex or svn must be wrong,
-   please bug-report to <a href="mailto:torsten.becker@gmail.com" class="mail_to">torsten.becker@gmail.com</a>.</div>'
+   out = '<div class="error"><br />&emsp; mhh, something with with the regex or svn must be wrong, the last line was 
+          <br />&emsp; "<i>'+htmlize( $! )+'</i>".
+          <br />&emsp; please bug-report to <a href="mailto:torsten.becker@gmail.com" class="mail_to">
+                       torsten.becker@gmail.com</a>.</div>'
+end
+
+
+# if we got some svn: lines:
+if error_txt.size > 0
+   out = '<div class="svn_says"><br />&emsp;'
+   error_txt.each { |el| out += htmlize( el ) + "\n<br />&emsp;" }
+   out += '</div>'
 end
 
 

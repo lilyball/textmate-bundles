@@ -8,13 +8,13 @@
 
 module SVNHelper
    class NoMatchException < StandardError; end
-   class SVNErrorException < StandardError; end
+   
    
    def make_tm_link( filename, line )
       'txmt://open?url=file://' + filename + '&amp;line=' + line.to_s
    end
    
-   def htmlize( string, tab_size )
+   def htmlize( string, tab_size = $tab_size )
       return string.to_s.gsub( /\<|\>|&| |\t/ ) do |match|
          case match
             when '<'

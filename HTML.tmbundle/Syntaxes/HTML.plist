@@ -12,38 +12,38 @@
         {
             foregroundColor = "#88bb99"; 
             match = "<\\?xml.*?\\?>"; 
-            name = "XML Declaration"; 
+            name = "meta.docinfo.processing.xml"; 
         }, 
         {
             begin = "<!"; 
             end = ">"; 
             foregroundColor = "#999999"; 
-            name = "SGML Entities"; 
+            name = "keywords.sgml"; 
             patterns = (
                 {
                     backgroundColor = "#CC3300"; 
                     foregroundColor = "#ECECEC"; 
                     match = "(\\s*)(?!--|>)\\S(\\s*)"; 
-                    name = "Bad Comments or CDATA"; 
+                    name = "invalid.bad-comments-or-CDATA.html"; 
                 }, 
                 {
                     begin = "--"; 
                     end = "--"; 
                     foregroundColor = "#999999"; 
-                    name = Comments; 
+                    name = "comments.block.html"; 
                     patterns = (
                         {
                             backgroundColor = "#E0E7F0"; 
                             begin = "^#\\s*(include|config|echo|exec|fsize|flastmod|printenv|set)"; 
                             end = "(?=\\s*--|>)"; 
                             foregroundColor = "#888888"; 
-                            name = "Server Side Includes"; 
+                            name = "macros.server-side-includes.html"; 
                         }, 
                         {
                             backgroundColor = "#CC3300"; 
                             foregroundColor = "#ffffff"; 
                             match = ">|<"; 
-                            name = "Bad Comment End"; 
+                            name = "invalid.bad-comment-end.html";
                         }
                     ); 
                 }, 
@@ -51,16 +51,16 @@
                     begin = DOCTYPE; 
                     end = "(?=>)"; 
                     foregroundColor = "#888888"; 
-                    name = "Document Type"; 
+                    name = "meta.docinfo.doctype.html"; 
                     patterns = (
-                        {fontStyle = (italic); match = "\"[^\">]*\""; name = "Identifiers and DTDs"; }
+                        {fontStyle = (italic); match = "\"[^\">]*\""; name = "meta.docinfo.doctype.identifiers-and-DTDs.html"; }
                     ); 
                 }, 
                 {
                     backgroundColor = "#fff3e7"; 
                     begin = "\\[CDATA\\["; 
                     end = "]](?=>)"; 
-                    name = "Character Data"; 
+                    name = "constants.inline-data.html"; 
                 }
             ); 
         }, 
@@ -68,50 +68,50 @@
             backgroundColor = "#E5E5E5"; 
             begin = "<%"; 
             end = "%>"; 
-            name = "Embedded Ruby"; 
+            name = "embedded.ruby.html"; 
         }, 
         {
             backgroundColor = "#E5E5E5"; 
             begin = "<\\?(php|=)?"; 
             end = "\\?>"; 
-            name = "Embedded PHP"; 
+            name = "embedded.php.html"; 
         }, 
         {
             backgroundColor = "#ECECEC"; 
             begin = "(^\\s+)?<(?i:style)\\>.*?>?"; 
             end = "</(?i:style)>(\\s+$)?"; 
-            name = "Embedded CSS"; 
+            name = "embedded.css.html";
             patterns = ({include = CSS; }); 
         }, 
         {
             foregroundColor = "#6600CC"; 
             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-            name = "HTML Entities"; 
+            name = "constants.character-entities.html";
         }, 
         {
             begin = "</?([a-zA-Z0-9]+)"; 
             "elementFontStyle[1]" = (underline); 
             end = ">"; 
             foregroundColor = "#0066CC"; 
-            name = Tags; 
+            name = "keywords.markup.tag.html"; 
             patterns = (
-                {match = " ([a-zA-Z-]+)"; name = Option; }, 
+                {match = " ([a-zA-Z-]+)"; name = "keywords.markup.tag.options.html"; }, 
                 {
                     begin = "\""; 
                     end = "\""; 
                     foregroundColor = "#CC3300"; 
-                    name = "Double Quoted String"; 
+                    name = "strings.double-quoted.html"; 
                     patterns = (
                         {
                             foregroundColor = "#6600CC"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                            name = "HTML Entities"; 
+                            name = "constants.character-entities.html"; 
                         }, 
                         {
                             backgroundColor = "#CC3300"; 
                             foregroundColor = "#ffffff"; 
                             match = "&"; 
-                            name = "Bad Ampersand"; 
+                            name = "invalid.bad-ampersand.html"; 
                         }
                     ); 
                 }, 
@@ -120,18 +120,18 @@
                     end = "'"; 
                     fontStyle = (); 
                     foregroundColor = "#CC3300"; 
-                    name = "Single Quoted String"; 
+                    name = "strings.single-quoted.html"; 
                     patterns = (
                         {
                             foregroundColor = "#6600CC"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                            name = "HTML Entities"; 
+                            name = "constants.character-entities.html"; 
                         }, 
                         {
                             backgroundColor = "#CC3300"; 
                             foregroundColor = "#ffffff"; 
                             match = "&"; 
-                            name = "Bad Ampersand"; 
+                            name = "invalid.bad-ampersand.html";
                         }
                     ); 
                 }
@@ -141,13 +141,13 @@
             backgroundColor = "#3399ff"; 
             foregroundColor = "#ffffff"; 
             match = "<>"; 
-            name = "Incomplete Tag"; 
+            name = "invalid.incomplete.html"; 
         }, 
         {
             backgroundColor = "#CC3300"; 
             foregroundColor = "#ffffff"; 
             match = "<(?=\\W)|>|&"; 
-            name = "Bad Angle Bracket or Ampersand"; 
+            name = "invalid.bad-angle-bracket-or-ampersand.html";
         }
     ); 
 }

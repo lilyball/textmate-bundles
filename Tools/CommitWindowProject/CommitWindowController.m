@@ -63,7 +63,7 @@
 			
 			NSMutableDictionary *	dictionary	= [fFilesController newObject];
 
-			[dictionary setObject:argument forKey:@"path"];
+			[dictionary setObject:[argument stringByAbbreviatingWithTildeInPath] forKey:@"path"];
 	//		[dictionary setObject:[NSNumber numberWithBool:YES] forKey:@"commit"]; not needed; the binding defaults to YES
 			[fFilesController addObject:dictionary];
 		}
@@ -74,9 +74,6 @@
 	// Bring the window to absolute front.
 	// -[NSWindow orderFrontRegardless] doesn't work (maybe because we're an LSUIElement).
 	//
-	[self setWindow:fWindow];
-	[fWindow setLevel:NSModalPanelWindowLevel];
-	[fWindow makeKeyAndOrderFront:self];
 	
 	// Process Manager works, though!
 	{
@@ -85,6 +82,13 @@
 		GetCurrentProcess(&process);
 		SetFrontProcess(&process);
 	}
+	
+	
+	
+	[self setWindow:fWindow];
+	[fWindow setLevel:NSModalPanelWindowLevel];
+	[fWindow makeKeyAndOrderFront:self];
+	
 }
 
 - (IBAction) commit:(id) sender
@@ -96,9 +100,11 @@
 	
 	//
 	// Quote any single-quotes in the commit message
+	// \' doesn't work with bash. We must use string concatenation.
+	// This sort of thing is why the Unix Hater's Handbook exists.
 	//
 	commitString = [[[fCommitMessage string] mutableCopy] autorelease];
-	[commitString replaceOccurrencesOfString:@"'" withString:@"\\'" options:0 range:NSMakeRange(0, [commitString length])];
+	[commitString replaceOccurrencesOfString:@"'" withString:@"'\"'\"'" options:0 range:NSMakeRange(0, [commitString length])];
 	
 	fprintf(stdout, "-m '%s' ", [commitString UTF8String] );
 	
@@ -122,7 +128,7 @@
 			//
 			path = [dictionary objectForKey:@"path"];
 			path = [[[path stringByStandardizingPath] mutableCopy] autorelease];
-			[path replaceOccurrencesOfString:@"'" withString:@"\\'" options:0 range:NSMakeRange(0, [path length])];
+			[path replaceOccurrencesOfString:@"'" withString:@"'\"'\"'" options:0 range:NSMakeRange(0, [path length])];
 
 			fprintf( stdout, "'%s' ", [path UTF8String] );
 			pathsToCommitCount += 1;

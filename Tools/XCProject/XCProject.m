@@ -27,6 +27,8 @@
 @end
 @implementation PBXGroup
 @end
+@implementation PBXVariantGroup
+@end
 @implementation PBXProject
 @end
 @implementation PBXTarget
@@ -51,6 +53,14 @@
 @end
 @implementation PBXTargetDependency
 @end
+@implementation PBXObject
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key
+{
+	NSLog(@"Tried to set value '%@' for undefined key '%@'", value, key);
+}
+@end
+
+
 
 @interface XCProject(Private)
 
@@ -59,6 +69,8 @@
 - (id) unarchiveObjectForKey:(NSString *)objID;
 
 @end
+
+
 
 
 @implementation XCProject
@@ -117,6 +129,11 @@
 		keys = [dict allKeys];
 
 		theClass = NSClassFromString(localisa);
+		if(theClass == nil)
+		{
+			NSLog(@"unknown class:%@", localisa);
+		}
+		
 		NSParameterAssert(theClass);
 
 		object = [[theClass alloc] init];

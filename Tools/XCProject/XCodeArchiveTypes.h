@@ -5,15 +5,22 @@
 //
 // MIT license.
 //
-// Reverse-engineered by staring at a pbxproj file.
+// Reverse-engineered by staring at many pbxproj files.
+//
+// We don't know the actual class hierarchy of these objects in Xcode's
+// implementation, but for archiving purposes, it doesn't matter.
+//
 
-@interface PBXBuildFile : NSObject
+@interface PBXObject : NSObject
+@end
+
+@interface PBXBuildFile : PBXObject
 {
 	id	fileRef;
 	id	settings;
 }
 @end
-@interface PBXBuildRule : NSObject
+@interface PBXBuildRule : PBXObject
 {
 	id compilerSpec;
 	id fileType;
@@ -22,13 +29,13 @@
 	id script;
 }
 @end
-@interface PBXBuildStyle : NSObject
+@interface PBXBuildStyle : PBXObject
 {
 	id name;
 	id buildSettings;
 }
 @end
-@interface PBXContainerItemProxy : NSObject
+@interface PBXContainerItemProxy : PBXObject
 {
 	id containerPortal;
 	id proxyType;
@@ -36,7 +43,7 @@
 	id remoteInfo;
 }
 @end
-@interface PBXFileReference : NSObject
+@interface PBXFileReference : PBXObject
 {
 	id name;
 	id fileEncoding;
@@ -57,7 +64,9 @@
 	id children;
 }
 @end
-@interface PBXProject : NSObject
+@interface PBXVariantGroup : PBXGroup
+@end
+@interface PBXProject : PBXObject
 {
 	id buildSettings;
 	id buildStyles;
@@ -69,7 +78,7 @@
 	id knownRegions;
 }
 @end
-@interface PBXTarget : NSObject
+@interface PBXTarget : PBXObject
 {
 	id productInstallPath;
 	id productType;
@@ -88,7 +97,7 @@
 @interface PBXAggregateTarget : PBXTarget
 @end
 
-@interface PBXBuildPhase : NSObject
+@interface PBXBuildPhase : PBXObject
 {
 	id buildActionMask;
 	id files;
@@ -113,7 +122,7 @@
 @end
 @interface PBXRezBuildPhase : PBXBuildPhase
 @end
-@interface PBXTargetDependency : NSObject
+@interface PBXTargetDependency : PBXObject
 {
 	id	target;
 	id	targetProxy;

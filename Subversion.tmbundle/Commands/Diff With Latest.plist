@@ -5,16 +5,24 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>${TM_SVN:=svn}
+	<string>TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
 
-TMPFILE=`mktemp -u /tmp/tm-svn.XXXXXX` || exit 1
+mv "$TMPFILE" "$TMPFILE.diff"
 TMPFILE="$TMPFILE.diff"
 
-"$TM_SVN" diff -rHEAD &amp;&gt; "$TMPFILE"
+"${TM_SVN:=svn}" diff -rHEAD "$TM_FILEPATH" &amp;&gt; "$TMPFILE"
 
 open -a TextMate "$TMPFILE" &amp;
 
-#rm "$TMPFILE" # ideally, we'd do this, but it creates a race condition, because 'open' is asynchronous.
+#rm "$TMPFILE" # ideally, we'd do this, but it creates a
+               # race condition, because 'open' is asynchronous.
+#remove_tmp_file()
+#{
+#	sleep 2
+#	rm "$TMPFILE"
+#}
+#
+#remove_tmp_file &amp; # I'm told this should work, but it doesn't.
 </string>
 	<key>input</key>
 	<string>none</string>

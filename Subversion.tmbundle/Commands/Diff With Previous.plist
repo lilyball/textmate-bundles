@@ -5,12 +5,12 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>${TM_SVN:=svn}
+	<string>TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
 
-TMPFILE=`mktemp -u /tmp/tm-svn.XXXXXX` || exit 1
+mv "$TMPFILE" "$TMPFILE.diff"
 TMPFILE="$TMPFILE.diff"
 
-"$TM_SVN" diff -rPREV &amp;&gt; "$TMPFILE"
+"${TM_SVN:=svn}" diff -rPREV "$TM_FILEPATH" &amp;&gt; "$TMPFILE"
 
 open -a TextMate "$TMPFILE" &amp;
 

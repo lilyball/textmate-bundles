@@ -10,6 +10,13 @@
 OPEN="open -a TextMate"
 CREATE="touch"
 
+
+# If you don't want the script to switch back to the Terminal (or iTerm), comment out 
+# the definition of OPENTERMAPP.
+
+OPENTERMAPP="open -a iTerm"
+# OPENTERMAPP="open -a Terminal"
+
 CREATE_FILE=0
 while getopts chtuw FLAG; do
 	case $FLAG in
@@ -33,7 +40,7 @@ if (($HELP)); then
 	echo "    -h Show this help."
 	echo "    -t Specify a title for piped input. Overrides other flags."
 	echo "    -u Treat filenames as URLs (e.g. tm -u www.google.com). Uses curl."
-	echo "    -w Waits for the edited file window to close before ending (for external editing)"
+	echo "    -w Wait for the file window close before ending"
 	echo ""
 	exit 1;
 fi
@@ -131,4 +138,6 @@ if (($WAIT)); then
 	while [[ `osascript -e 'tell app "TextMate.app" to return name of every window whose id is '"$TMwindowid"` != "" ]]; do
 	         sleep 1 # set this to something else if there's some need to
 	done
+	
+	$OPENTERMAPP
 fi

@@ -1,12 +1,13 @@
 {
+	//
 	// Generic Lisp.
 	// chris@cjack.com
 	// Feel free to send additions and modifications.
 	//
-	// Note 1. We do not correctly handle the 'character' constant when used with a double quote: (position #\" string).
-	// This can be fixed simply by highlighting characters. This will be a simple future addition to this file.
-	// This is a tiny, tiny subset of the enormous ANSI Common Lisp language. More may be added, but probably to a superset "Common Lisp" syntax... This file should ideally be a basis for Scheme and other consistently S-expression-only dialects of Lisp.
-	
+	// This is a tiny, tiny subset of the enormous ANSI Common Lisp language.
+	// More may be added, but probably to a superset "Common Lisp" syntax... (some of this should probably be moved to such a file, in fact)
+	// This file should ideally be a basis for Scheme and other consistently S-expression-only dialects of Lisp. Maybe.
+	//
 	name = "Lisp";
 	fileTypes = ( lisp, cl, l, mud, el, scm, sch );		// mud is for the Zork MDL source; el is Emacs lisp.
 														// Not that we really handle MDL, but it's a little more pleasant, at least.
@@ -39,6 +40,19 @@
 			match = "#(\\w|[\\\\+-=<>'\"&#])+";
 			foregroundColor = "#8B2252";
 		},
+
+// Need to think about how to make this work properly. Both atoms and lists can be quoted.
+//		{
+//			name = "Quoted Element1";
+//			match = "'(\\w|[\\\\+-=<>'\"&#\\(\\)])+";
+//			foregroundColor = "#0000CD";
+//		},
+		
+//		{
+//			name = "Quoted Element2";
+//			begin = "'\\("; end = "\\)";
+//			foregroundColor = "#0000CD";
+//		},
 		
 		{
 			name = "Global";

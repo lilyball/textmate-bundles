@@ -8,10 +8,29 @@ require (bundle + "/Tools/Builder.rb")
 
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)
+
+class << mup
+	
+	StatusMap = {	'A' => 'added',
+					'D' => 'deleted',
+					'M' => 'modified',
+					'C' => 'conflict',
+					'!' => 'missing',
+					'"' => 'typeconflict',
+					'?' => 'unknown',
+					'I' => 'ignore',
+					'X' => 'external' }
+	
+	def td_status!(status)
+		status.each_byte { |s| c = s.chr; td(c, "class" => StatusMap[c]) }
+	end
+end
+
 mup.html {
 	mup.head {
 			mup.title("Subversion status")
-			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_style.css';", "type" => "text/css")
+			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_style.css';
+						@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
 	}
 
 	mup.body { 
@@ -21,20 +40,20 @@ mup.html {
 		STDOUT.flush
 		mup.hr
 
-		mup.table {
+		mup.table("class" => "status") {
 			STDIN.each_line do |line|
 				
 				mup.tr {
 					if /^svn:/.match( line ).nil? then
-						match = /^(.*?)(?:\s+)(.*)\n/.match( line )
+						match = /^(.....)(?:\s+)(.*)\n/.match( line )
 						status	= match[1]
 						file	= match[2]
 					
 						if match.nil? then
 							mup.td(line)
 						else
-							mup.td(status)
-							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file ) }
+							mup.td_status!(status)
+							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathanme" ) }
 						end 
 					else
 						mup.td { mup.div( line, "class" => "error" ) }

@@ -11,7 +11,7 @@
    
 main:
    li       \$v0, 4            # call = 4 = print_string
-   la       \$a0, hello_string # set $a0 to point to the string
+   la       \$a0, hello_string # set \$a0 to point to the string
    syscall                    # print it.
    li       \$v0, 10           # call = 10 = exit
    syscall                    # done.
@@ -24,7 +24,7 @@ $1</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>MIPS Hello World!</string>
+	<string>Hello World (mips)</string>
 	<key>trigger</key>
 	<string>mips</string>
 	<key>uuid</key>

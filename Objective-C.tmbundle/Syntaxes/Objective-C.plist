@@ -14,10 +14,30 @@
 	foregroundColor = "#000000";
 	backgroundColor = "#FFFFFF";
 	patterns = (
-		{ name = "strings.double-quoted.objc"; begin = "@\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
-		{ name = "keywords.objc"; match = "\\<(id|BOOL|IBOutlet|IBAction|self|super|in|out|inout|oneway|YES|NO|nil)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
-		{ name = "keywords.objc.directives"; match = "@(catch|class||interface|implementation|protocol|selector|synchronized|try|end)\\>"; foregroundColor = "blue"; "fontStyle[1]" = ( underline ); },
-		{ name = "keywords.preprocessor.objc"; match = "^(\\s)*#\\s*(import)\\>"; fontStyle = ( bold ); foregroundColor = "#5C246E";},
+	   { name = "declaration.function.objc";
+	     begin = "^(-|\\+)\\s*"; end = "\\{|;"; swallow = "(//.*$)";
+	     patterns = (
+     		{ begin = "/\\*"; end = "\\*/"; foregroundColor = "#236B8E"; },
+	      { match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
+	      { match = ":\\s*(\\([^)]*\\))\\s*(\\<\\w+\\>)?";
+	        "foregroundColor[1]" = "#555555"; fontStyle = ( plain ); },
+         { match = "(\\([^)]*\\))\\s*(\\<\\w+\\>)?";
+           "foregroundColor[1]" = "#555555"; "fontStyle[2]" = ( bold ); },
+         { match = "\\<\\w+\\>(?=:)"; fontStyle = ( bold ); },
+	     );
+	   },
+		{ name = "strings.double-quoted.objc";
+		  begin = "@\""; end = "\""; swallow = "\\\\.";
+		  foregroundColor = "#224d14"; },
+		{ name = "keywords.objc";
+		  match = "\\<(id|BOOL|SEL|IBOutlet|IBAction|self|super|in|out|inout|oneway|YES|NO|nil)\\>";
+		  foregroundColor = "#51185c"; },
+		{ name = "keywords.objc.directives";
+		  match = "@(class|interface|implementation|synchronized|protocol|selector|defs|try|catch|finally|throw|end)\\>";
+		  "fontStyle[1]" = ( bold ); foregroundColor = "#51185c"; },
+		{ name = "keywords.preprocessor.objc";
+		  match = "^\\s*#\\s*(import)\\>.*$";
+		  "fontStyle[1]" = ( bold ); foregroundColor = "#4b3125";},
 		{ include = "C"; },
 	);
 	uuid = "F85CC716-6B1C-11D9-9A20-000D93589AF6";

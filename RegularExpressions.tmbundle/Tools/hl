@@ -1,0 +1,83 @@
+#!/usr/bin/perl
+
+# Originally by Aristotle. Found at http://perlmonks.org/index.pl?node_id=415533
+# Horribly hacked by Eric Hsu, April 4 2005.
+
+# use strict;
+# use warnings;
+
+# use Term::ANSIColor;
+# call this as hl -c "c1", "c2", "c3" `pbpaste` to get captures colored separately.
+
+$LT='#$#$#$#$#$'; # awful hack to avoid html escaping.
+$GT='%^%^%^%^%^';
+$LTq=quotemeta($LT)  ;
+$GTq=quotemeta($GT)  ;
+use List::Util qw( min );
+use Getopt::Std;
+
+getopts( 'c:x' );
+my @color = split /,/, our $opt_c || 'red';
+
+@ARGV or die <<"END_USAGE";
+usage: @{[ colored( 'hl [ -c colour ] [ -x ] pattern [ file... ] [ < input ]', 'bold' ) ]}
+       You can use capturing parens in your pattern. In that case,
+       you can supply multiple attributes separated by commas,
+       which will be used to individually colour the submatches.
+       @{[ colored( '-x', 'bold' ) ]} will supress lines without matches.
+END_USAGE
+
+my $rx = shift;
+$rx = qr/$rx/;
+my $out;
+
+while ( <> ) {
+    s{ $rx }{ colored_match() }gex or not( our $opt_x ) or next;
+    
+	s/&/&amp;/g; 
+	s/</&lt;/g;
+	s/>/&gt;/g;
+
+	s/$LTq/</g;
+	s/$GTq/>/g;
+	print;
+	print "<br/>";
+	
+}
+
+
+sub colored_match {
+    my @START = @-;
+    my @END = @+;
+    my $last = min( $#color, $#START );
+
+    if ( $last ) {
+        push @START, $END[ 0 ];
+        push @END, $END[ 0 ];
+        $END[ 0 ] = $START[ 0 ];
+        my $str;
+        for my $i ( 0 .. $last ) {
+            $str .= colored(
+                substr( $_, $START[ $i ], $END[ $i ] - $START[ $i ] ),
+                $color[ $i ],
+            ) unless $i == 0;
+            $str .= colored(
+                substr( $_, $END[ $i ], $START[ $i + 1 ] - $END[ $i ] ),
+                $color[ 0 ],
+            );
+        }
+        return $str;
+    }
+    else {
+        return colored(
+            substr( $_, $START[ 0 ], $END[ 0 ] - $START[ 0 ] ),
+            $color[ 0 ],
+        );
+    }
+}
+
+sub colored {
+	my ($text, $color)=@_;
+	
+	return $LT . "b". $GT . $LT . "font color=\"$color\"" . $GT . $text . $LT . "/font$GT" . $LT . "/b". $GT;
+}

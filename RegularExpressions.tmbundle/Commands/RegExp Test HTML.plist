@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># put a regular expression on the clipboard and select text to be searched. Output is your document with all matches highlighted.
+# add a -x before the -c to omit nonmatching lines.
+# Replace `pbpaste` with a regexp string if you don't like copying first.
+# You can replace or reorder the color list with any html-okay colors or #ffffff values.
+
+echo "&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;"
+echo "&lt;h3&gt;Results for /`pbpaste`/&lt;/h3&gt;&lt;tt&gt;"
+
+"$TM_BUNDLE_PATH/Tools/hl.pl" -c "Red","Dark Blue","Dark Purple","Brown","Burgundy","Forest Green","Yellow","Pastel Green","Light Purple","Pink","Turquoise","Light Blue","Dark Grey","Orange","Grass Green" `pbpaste`
+
+echo "&lt;/tt&gt;&lt;/body&gt;&lt;/html&gt;"</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@x</string>
+	<key>name</key>
+	<string>RegExp Test HTML</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>8FDBC987-A543-11D9-B374-000D9332809C</string>
+</dict>
+</plist>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Select a regular expression in your text; this command will show you matches in the rest of your text.
+# First line of input is expected to be a regular
+# expression. If we're doing matching, leave out the /slashes/, eg:
+# (.+)z
+# If we're doing substitution, use slashes to identify the expression as such:
+# /old/new/ 
+# Every line after the first is match fodder, used to test the regexp.
+
+ruby "$TM_BUNDLE_PATH/Tools/rx_helper.rb"</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@x</string>
+	<key>name</key>
+	<string>RegExp Test Tooltip</string>
+	<key>output</key>
+	<string>separateWindow</string>
+	<key>uuid</key>
+	<string>7EB957A4-A531-11D9-917B-000D9332809C</string>
+</dict>
+</plist>

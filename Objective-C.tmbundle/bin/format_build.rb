@@ -7,14 +7,33 @@ mup = Builder::XmlMarkup.new(:target => STDOUT)
 class << mup
 	
 	attr_accessor :current_class
+	attr_accessor :div_count
 	
 	# accumulative div
 	def new_div!( nclass, content = "" )
 		is_new = false
+		
+		@div_count = 0 unless defined?(@div_count)
+		
 		unless nclass === @current_class
-			_end_tag("div") if defined?( @current_class )
+			@div_count += 1
+			div_id = "xyz_" + @div_count.to_s
+			
+			# end the old div
+			end_div!
+			
+			# start the new div and the inner content div
 			@current_class = nclass
-			_start_tag( "div", "class" => nclass )
+			_start_tag( "div", "class" => nclass, "id" => div_id )
+
+			# add show/hide toggle above the inner content div
+			div( "class" => "showhide" ) {
+				a( "Show", 'href' => "javascript:showElement('#{div_id + "_c"}')")
+				a( "Hide", 'href' => "javascript:hideElement('#{div_id + "_c"}')")
+			}
+
+			_start_tag( "div", "class" => "inner", "id" => div_id + "_c" )
+			
 			is_new = true
 		end
 		text! content
@@ -23,7 +42,11 @@ class << mup
 
 	# wrap up any loose ends
 	def end_div!
-		_end_tag("div") if defined?( @current_class )
+		if defined?( @current_class ) then
+			_end_tag("div")
+			_end_tag("div")
+			@current_class = nil
+		end
 	end
 
 	def normal!(string)
@@ -34,6 +57,21 @@ class << mup
 end
 
 
+SCRIPT = <<ENDSCRIPT
+function showElement( div_id )
+{
+//	document.writeln(div_id)
+	document.getElementById( div_id ).style.display = 'block';
+}
+
+function hideElement( div_id )
+{
+//	document.writeln(div_id)
+	document.getElementById( div_id ).style.display = 'none';
+}
+
+ENDSCRIPT
+
 STYLE = <<ENDSTYLE
 /* general stuff.. */
 body {
@@ -41,7 +79,16 @@ body {
    font-size: 11pt;
 }
 
+div.showhide {
+	float: right;
+#	width: 10%;
+	font-size: 70%;
+
+	color: black;
+}
+
 div.normal {
+	border-style: solid none solid none;
 	color: #aaa;
 	font-size: 70%;
 	margin 0;
@@ -58,10 +105,17 @@ h1 {
 
 /* make horizontal rules slightly less heavy */
 hr {
-color: #ccc;
-background-color: #ccc;
-height: 1px;
-border: 0px;
+	color: #ccc;
+	background-color: #ccc;
+	height: 1px;
+	border: 0px;
+}
+
+div.inner {
+	color: inherit;
+	background-color: inherit;
+	font-family: inherit;
+	font-size: inherit;
 }
 
 /* for error formating */
@@ -121,8 +175,9 @@ last_line = ""
 
 mup.html {
 	mup.head {
-			mup.title("Build With Xcode")
-			mup.style( STYLE, "type" => "text/css")
+		mup.title("Build With Xcode")
+		mup.style( STYLE, "type" => "text/css")
+		mup.script( SCRIPT, "language" => "JavaScript" )
 	}
 
 	mup.body { 
@@ -175,6 +230,7 @@ mup.html {
 				
 				# highlight each target name
 				if /^===.*===$/.match(line) then
+					mup.end_div!
 					mup.h2(line, "class" => "targetname")
 					next													# =======> next
 				end

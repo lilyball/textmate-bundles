@@ -10,25 +10,49 @@
 # file/line information then plays a succes/failure sample
 # based on the final outcome
 
-# you may wish to change these two variables:
-PROJECT_FILE="`basename $TM_PROJECT_DIRECTORY`.xcode"
+# if there is no TM project, scan up the parent directories looking for an Xcode project
+if [[ -z $TM_PROJECT_DIRECTORY ]]; then
+	until [[ `pwd` == "/" ]];
+	do
+		Projects=`echo *.xcode`
+		if [[ -n $Projects ]]; then
+			break;
+		fi
+		cd ..;
+	done
+	PROJECT_FILE=""
+else
+	PROJECT_FILE="-project `basename $TM_PROJECT_DIRECTORY`.xcode"
+fi
+
 BUILD_STYLE="Deployment"
 
-echo '&lt;tt&gt;'
-res=`mktemp /tmp/build_status_XXX`
+# If we have an Xcode project, and it doesn't contain the build style we're looking for,
+# accept the active build style in the project.
+if [[ -d $PROJECT_FILE ]] &amp;&amp; grep -r $BUILD_STYLE "$PROJECT_FILE"; then
+	BUILD_STYLE="-buildstyle $BUILD_STYLE";
+else
+	BUILD_STYLE="-activebuildstyle"
+fi
 
-xcodebuild 2&gt;${res} -project $PROJECT_FILE -buildstyle $BUILD_STYLE \
+echo '&lt;tt&gt;'
+res=`mktemp /tmp/tm_build_status_XXX`
+
+xcodebuild 2&gt;${res} $PROJECT_FILE $BUILD_STYLE \
 | perl -pe '$| = 1; s/^(([^:]*\/)?([^\/:]+)):((\d+):)?/&lt;a href="txmt:\/\/open?url=file:\/\/$1&amp;line=$5"&gt;$3&lt;\/a&gt;:/; s/\n/&lt;br&gt;\n/'
 
 echo '&lt;h2&gt;' "$(&lt; ${res})" '&lt;/h2&gt;'
 
+BuildSucceeded="** BUILD SUCCEEDED **"
+
 cd "${TM_BUNDLE_PATH}"
-if [[ "$(&lt; ${res})" == "** BUILD SUCCEEDED **" ]]
+if [[ `tail -c -${#BuildSucceeded} ${res}` == $BuildSucceeded ]]
  then bin/play Sounds/Harp.wav    &amp;&gt;/dev/null &amp;
  else bin/play Sounds/Whistle.wav &amp;&gt;/dev/null &amp;
 fi
 
-rm ${res}</string>
+rm ${res}
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

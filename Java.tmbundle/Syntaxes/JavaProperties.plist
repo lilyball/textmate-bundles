@@ -8,37 +8,25 @@
 
 	foregroundColor = "#333333";
 	backgroundColor = "#ffffff";
+
 	patterns = (
-		/*
-		 * COMMENTS
-		 */	
+		/* comments */
 		{
 			name = "Comments";
 			match = "[#!].+$";
 			foregroundColor = "red";
 		},
 
-		/*
-		 * KEY = VALUE PAIRS
-         *
+ 		/* KEY = VALUE PAIRS */
+ 		/*
+         * Not compliant with the properties file spec, but this works me, and
+         * I'm the one who counts around here.
+ 		 */
 		{
 			name = "Key";
-			// match = "^[^=]+=";
-			match = "(([-A-Za-z0-9_./]|([ =:]))+)";
-			foregroundColor = "#00FF00";
+			match = "^([^:=]+)[:=](.*)$";
+			"foregroundColor[1]" = "#00FF00";
+			"foregroundColor[2]" = "#0000FF";
 		},
-		*/
-		{
-			name = "Value";
-			match = "^[\r\n]+";
-			foregroundColor = "#0000FF";
-		},
-
-		 {
-		     begin = "\\s*([^=:]+)[=:]";
-			 end = "(?!\\\\s*)$";
-			 "elementForegroundColor[1]" = "#0000FF";
-			 backgroundColor = "red";
-         },
 	);
 }

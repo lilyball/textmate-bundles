@@ -3,16 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
- 
-/** Logger for this class and subclasses */
- protected final Log logger = LogFactory.getLog(getClass());</string>
+	<string>/** Logger for this class and subclasses. */
+protected final Log logger = LogFactory.getLog(getClass());
+</string>
 	<key>name</key>
-	<string>Java logger</string>
-	<key>restrainToMode</key>
-	<true/>
-	<key>trigger</key>
+	<string>logger</string>
+	<key>tabTrigger</key>
 	<string>jlog</string>
 	<key>uuid</key>
 	<string>BC8B9129-5F16-11D9-B9C3-000D93589AF6</string>

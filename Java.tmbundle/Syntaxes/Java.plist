@@ -4,11 +4,14 @@
  **
  ** $URL$
  ** $Id$
+ ** 
+ ** http://www.javacamp.org/javaI/reservedWords.html
  **/
 {
 	name = "Java Source";
 	
-	fileTypes = ( java );
+	/* .bsh for BeanShell scripts */
+	fileTypes = ( java, bsh );
 	
 	foldingStartMarker = "\\{\\s*$";
 	foldingStopMarker = "^\\s*\\}";
@@ -34,6 +37,7 @@
 	
 	patterns = (
 
+        /* comments.block.java */
 		{
 			// Required to prevent the JavaDoc comment from taking over
 			name = "comments.block.java.empty";
@@ -71,54 +75,103 @@
 			foregroundColor = "#006633";
 		},
 		
+		/* comments.line.java */
 		{
 			name = "comments.line.java";
 			match = "//.*$";
 			foregroundColor = "red";
 			fontStyle = ( italic );
 		},
-		
-		{
-			name = "keywords.control.java";
-			match = "\\<(return|goto|if|else|case|default|switch|break|continue|while|do|for|instanceof|super|this|import|implements|extends|package|class|interface|throw|throws|try|catch|finally|void|new|null)\\>"; 
 
-			fontStyle = ( bold );
-			foregroundColor = "#0066ff";
-		},
-		
+		/* keywords.data-types.java */
 		{
-			name = "keywords.storage.java";
-			match = "\\<(public|protected|private|const|abstract|synchronized|final|static|threadsafe|transient|native|volatile)\\>";
-			fontStyle = ( bold );
-			foregroundColor = "blue";
+		    name = "keywords.data-types.java";
+		    match = "\\<(boolean|byte|char|int|long|short|float|double|[A-Z][A-Za-z0-9]+)\\>";
+
+		    "foregroundColor[1]" = "#CC33FF";
+		},
+
+		/* keywords.access-control.java 
+		 * @todo fix conflict with keywords.modifiers.java
+		 */
+		{
+		    name = "keywords.control.java";
+		    match = "\\<(private|protected|public)\\>";
+
+		    fontStyle = (bold);
+            foregroundColor = "#336699";
 		},
 		
+		/* keywords.modifiers.java */
+		{
+		    name = "keywords.modifiers.java";
+		    match = "\\<(abstract|final|native|private|protected|public|static|transient|synchronized|volatile|strictfp)\\>";
+
+		    fontStyle = (bold);
+		    foregroundColor = "#0000ff";
+		},
+		
+		/* keywords.catch-exception.java */
+		{
+		    name = "keywords.catch-exception.java";
+		    match = "\\<(try|catch|finally|throw)\\>";
+
+		    fontStyle = (bold);
+		    foregroundColor = "#663366";
+		},
+		
+		/* keywords.control.java */
+		{
+		    name = "keywords.control.java";
+		    match = "\\<(break|case|continue|default|do|while|for|switch|if|else)\\>";
+
+		    fontStyle = (bold);
+		    foregroundColor = "#0066ff";
+		},
+		
+        /* keywords.class-fns.java */
+        {
+            name = "keywords.class-fns.java";
+            match = "\\<(class|extends|implements|import|instanceof|new|package|return|interface|this|throws|void|super)\\>";
+
+            fontStyle = (bold);
+            foregroundColor = "#990033";
+        },
+
+        /* keywords.assigned-values.java */
+        {
+            name = "keywords.assigned-values.java";
+            match = "\\<(true|false|null)\\>";
+
+            "fontStyle[1]" = (bold);
+        },
+	
+		/* constants.numeric.java */
 		{
 			name = "constants.numeric.java";
 			match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul|)?\\>";
+
 			foregroundColor = "#009966";
 		},
 		
+		/* strings.double-quoted.java */
 		{
 			name = "strings.double-quoted.java";
 			begin = "\"";
 			end = "\"";
 			swallow = "\\\\.";
+
 			foregroundColor = "#FF0066";
 		},
 
+        /* strings.single-quoted.java */
 		{
 			name = "strings.single-quoted.java";
 			begin = "'";
 			end = "'";
 			swallow = "\\\\.";
+
 			foregroundColor = "#669933";
-		},
-		
-		{
-	        name = "keywords.types.java";
-	        match = "\\b([A-Z][A-Za-z0-9]+)\\b";
-	        "foregroundColor[1]" = "#CC33FF";
 		},
 	);
 	uuid = "2B449DF6-6B1D-11D9-94EC-000D93589AF6";

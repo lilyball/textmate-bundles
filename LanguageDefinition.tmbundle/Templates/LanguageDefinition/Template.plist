@@ -2,7 +2,7 @@
     /* The name as it will appear in the Syntax Highlight List */
     name = ""; 
 
-    /* so that we can always recognize this syntax */
+    /* So that we can always recognize this syntax */
     uuid = "__UUID_PLACEHOLDER__";
     
     /* Which filetypes this highlighting should be applied to automatically */
@@ -38,7 +38,7 @@
             swallow = "\\\\.";
             /* Patterns with begin and end can contain other patterns (nested as far as you want) */
             patterns = (
-                {   name = "Nested Pattern"; fontStyle = underline;
+                {   name = "Nested Pattern"; fontStyle = ( underline );
                     match = "[0-9]";
                 }
             )

@@ -242,6 +242,16 @@ class EntitiesCss(SortableByMainEntity):
 class EntitiesCss_html(EntitiesCss): pass
 class EntitiesCss_php(EntitiesCss): pass
 
+class EntitiesJavascript(SortableByMainEntity):
+    """
+    entity-matching handler for JavaScript (js) files
+    
+    NOTE: does not handle prototypes (i.e. creating a pseudo-class).  This can happen once I rewrite the sorting stuff -Kumar
+    """
+    entityMatchLine = re.compile(r'(?P<prefix>^\s*function\s+)(?P<main>[^$]+[&a-zA-Z0-9_]+)(?P<suffix>.*$)')
+    
+class EntitiesJs(EntitiesJavascript): pass
+
 class EntitiesLatex(SortableByMainEntity):
     """
     entity-matching handler for LaTeX (tex) files

@@ -46,12 +46,13 @@ mup.html {
 				mup.tr {
 					if /^svn:/.match( line ).nil? then
 						match = /^(.....)(?:\s+)(.*)\n/.match( line )
-						status	= match[1]
-						file	= match[2]
 					
 						if match.nil? then
 							mup.td(line)
 						else
+							status	= match[1]
+							file	= match[2]
+							
 							mup.td_status!(status)
 							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathanme" ) }
 						end 

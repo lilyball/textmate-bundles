@@ -4,12 +4,14 @@
 """
 Entitynav: Outputs a parsable list of functional entities for the given code file
 Usage:  entitynav -f <filename>
+        entitynav -f - -m $TM_MODE
         entitynav -f - -e <extension/type>
         entitynav -f - -E <filename>
 
  -f, --file <filename>|-        : parse <filename> or stdin if `-'
- -e, --ext <ext>                : set extension/type as <ext> when stdin
- -E, --ext-from-file <filename> : set extension/type to that of <filename>
+ -m, --mode <mode>              : set extension/mode to <mode>
+ -e, --ext <ext>                : set extension/mode as <ext> when stdin
+ -E, --ext-from-file <filename> : set extension/mode to extension of <filename>
  -h, --help                     : print usage
  -s, --sort                     : sort output by function/method/class name
 
@@ -22,19 +24,21 @@ def usage(reason=''):
     print usage
     """
     sys.stdout.flush()
+    reason = reason.__str__()
     if reason: sys.stderr.write('ERROR: %s\n' % reason)
-    usageMsg = string.lstrip(__doc__)
+    usageMsg = __doc__
     sys.stderr.write(usageMsg)
     sys.exit(1)
     
-def getHandler(ext):
+def getHandler(mode):
+    classSuffix = mode.capitalize()
     """
     gets an entity-matching handler for the mode in question
     """    
     try:
-        handler = globals()["Entities" + ext]
+        handler = globals()["Entities" + classSuffix]
     except KeyError:
-        raise HandlerError, "no handler for extension '%s'" % ext
+        raise HandlerException, "no handler for extension/mode '%s'" % mode
         
     return handler()
     
@@ -48,9 +52,20 @@ class EntityHandler:
     Interface/abstract class for language-specific Entity handlers
     
     Below are handler classes for specific languages, listed alphabetically.  
-    To create a new language handler, name the class Entities<Ext> where <Ext> is the extension
-    of a code file for the language.  I.E. EntitiesPy for Python files. 
-    If multiple extensions exist for the same language, make a subclass for each lang.
+    To create a new language handler, name the class Entities<Mode> where 
+    <Mode> is the $TM_MODE (TextMate file mode) converted to title case. 
+    I.E. HTML_PHP becomes Html_php.
+    
+    Also note that any non alphanumeric/underscore characters get converted to `_'.
+    It is also possible to set a mode using a filename extension.  Therefore you need to provide
+    subclasses of your main class to account for all possible TextMate modes or filename extensions.
+    
+    For example, 
+    EntitiesCss gets inherited like so:
+    class EntitiesCss_html(EntitiesCss): pass
+    class EntitiesCss_php(EntitiesCss): pass
+    
+    If you are unsure of a TextMate mode, just run this command on a file and you will see the error :)
     
     Currently the interface for Entity Handlers only suggests defining a match object,
     which matches lines that should be considered function/class/etc. entities
@@ -115,6 +130,18 @@ class EntitiesCss(EntityHandler):
     def __init__(self):
         self.entityMatchLine = re.compile(r'^[\s]*[a-zA-Z_\.,#]+[\sa-zA-Z_\.,#\{:]*[^;]+$')
         
+class EntitiesCss_html(EntitiesCss): pass
+class EntitiesCss_php(EntitiesCss): pass
+
+class EntitiesLatex(EntityHandler, SortableEntitiesIn3):
+    """
+    entity-matching handler for LaTeX (tex) files
+    """
+    def __init__(self):
+        self.entityMatchLine = re.compile(r'^\s*(?P<prefix>\\(sub)*section{|\\paragraph{)(?P<main>.*)(?P<suffix>}.*$)')
+        
+class EntitiesTex(EntitiesLatex): pass
+        
 class EntitiesPhp(EntityHandler, SortableEntities):
     """
     entity-matching handler for PHP (php) files
@@ -131,7 +158,7 @@ class EntitiesPhp(EntityHandler, SortableEntities):
     def sort(self,entities):
         """
         refactor me please!  Not being very agile with Python just yet, this is my "proof of concept" for sorting
-        PHP entities hierachically, by class, then by function
+        PHP entities hierachically, by class, then by function -Kumar
         """
         lineNums = entities.keys()
         entitiesAsCoded = map(lambda k: (k,entities[k]), lineNums)
@@ -168,18 +195,20 @@ class EntitiesPhp(EntityHandler, SortableEntities):
         
         return output
 
+class EntitiesHtml_php(EntitiesPhp): pass
 class EntitiesInc(EntitiesPhp): pass
         
-class EntitiesPl(EntityHandler, SortableEntitiesIn3):
+class EntitiesPerl(EntityHandler, SortableEntitiesIn3):
     """
     entity-matching handler for Perl (pl) files
     """
     def __init__(self):
         self.entityMatchLine = re.compile(r'^\s*(?P<prefix>sub\s+)(?P<main>.*)(?P<suffix>\s*$)')
 
-class EntitiesPm(EntitiesPl): pass
+class EntitiesPl(EntitiesPerl): pass
+class EntitiesPm(EntitiesPerl): pass
         
-class EntitiesPy(EntityHandler, SortableEntities):
+class EntitiesPython(EntityHandler, SortableEntities):
     """
     entity-matching handler for Python (py) files
     """
@@ -192,20 +221,17 @@ class EntitiesPy(EntityHandler, SortableEntities):
     def formatSortedLine(self, line):
         return "%s:%s\n" % (line[1],(line[0][0]+line[0][1]))
 
-class EntitiesRb(EntityHandler, SortableEntitiesIn3):
+class EntitiesPy(EntitiesPython): pass
+
+class EntitiesRuby(EntityHandler, SortableEntitiesIn3):
     """
     entity-matching handler for Ruby (rb) files
     """
     def __init__(self):
         self.entityMatchLine = re.compile(r'^\s*(?P<prefix>class|module|def)\s+(?P<main>.*)(?P<suffix>\s*$)')
-
-class EntitiesTex(EntityHandler, SortableEntitiesIn3):
-    """
-    entity-matching handler for LaTeX (tex) files
-    """
-    def __init__(self):
-        self.entityMatchLine = re.compile(r'^\s*(?P<prefix>\\(sub)*section{|\\paragraph{)(?P<main>.*)(?P<suffix>}.*$)')
-
+        
+class EntitiesHtml_ruby(EntitiesRuby): pass
+class EntitiesRb(EntitiesRuby): pass
 
 #-------------------------------------------------------------------------
 # END: ENTITY HANDLERS
@@ -234,13 +260,12 @@ class EntityNav:
             elif lineMatch:
                 self.entities[lineNum] = line
         if self.entities == {}:
-            raise HandlerNoEntitiesError
+            raise HandlerNoEntitiesException
             
     def getHandler(self):
-        mode = self.ext.capitalize()
-        self.handler = getHandler(mode)
+        self.handler = getHandler(self.mode)
         if self.sorted and not isinstance(self.handler, SortableEntities):
-            raise SortError, "Handler for mode '%s' does not support sorting" % mode
+            raise SortException, "Handler for mode '%s' does not support sorting" % mode
             
     def outputParsable(self):
         """
@@ -260,38 +285,43 @@ class EntityNav:
         try:
             self.file = open(filename).readlines()
         except IOError:
-            raise ParseError("could not open file '%s' for reading" % filename)
+            raise ParseException("could not open file '%s' for reading" % filename)
             
-        self.setExtFromFilename(filename)
+        self.setModeFromFileExt(filename)
         
     def parseInput(self, opts, args):
         file = None
         self.sorted = False
         for opt, arg in opts:
-            if opt in ("-h", "--help"):
-                raise UsageError
-            elif opt in ('-f', '--file'):
+            if opt in ('-f', '--file'):
                 file = arg
-            elif opt in ('-e', '--ext'):
-                self.ext = arg
+            elif opt in ('-m', '--mode'):
+                self.setModeFromArg(arg)
             elif opt in ('-E', '--ext-from-file'):
-                self.setExtFromFilename(arg)
+                self.setModeFromFileExt(arg)
             elif opt in ('-s', '--sort'):
                 self.sorted = True
+            elif opt in ('-e', '--ext'):
+                self.mode = arg
+            elif opt in ("-h", "--help"):
+                raise UsageException
             
         if file == None:
-            raise UsageError
+            raise UsageException
         self.parseFile(file)
         
     def parseStdin(self):
         self.file = sys.stdin.readlines()
         try:
-            self.ext
+            self.mode
         except AttributeError:
-            raise UsageError("did not receive filename extension")
+            raise UsageException("cannot parse stdin: did not receive extension/mode")
             
-    def setExtFromFilename(self, filename):
-        self.ext = filename.split('.')[-1]
+    def setModeFromArg(self, arg):
+        self.mode = re.sub(r'[^a-zA-Z_]+', '_', arg)
+            
+    def setModeFromFileExt(self, filename):
+        self.mode = filename.split('.')[-1]
     
     def splice(self, entities):
         """
@@ -302,28 +332,28 @@ class EntityNav:
         splicedEntities = zip(keys, map(entities.get, keys))
         return splicedEntities
         
-class HandlerError(Exception): pass
-class HandlerNoEntitiesError(HandlerError): pass
-class SortError(Exception): pass
-class ParseError(Exception): pass
-class UsageError(Exception): pass
+class HandlerException(Exception): pass
+class HandlerNoEntitiesException(HandlerException): pass
+class SortException(Exception): pass
+class ParseException(Exception): pass
+class UsageException(Exception): pass
         
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hf:e:E:s", ["help", "file=", "ext=", "ext-from-file=", "sort"])
+        opts, args = getopt.getopt(argv, "hf:e:E:m:s", ["help", "file=", "ext=", "ext-from-file=", "mode=", "sort"])
         entityNav = EntityNav(opts, args)
         entityNav.outputParsable()
     except getopt.GetoptError, err:
         usage(err)
-    except UsageError, err:
+    except UsageException, err:
         usage(err)
-    except HandlerNoEntitiesError:
+    except HandlerNoEntitiesException:
         print "0:NO ENTITIES FOUND"
-    except HandlerError, err:
+    except HandlerException, err:
         usage(err)
-    except SortError, err:
+    except SortException, err:
         usage(err)
-    except ParseError, err:
+    except ParseException, err:
         usage(err)
     return 0
 

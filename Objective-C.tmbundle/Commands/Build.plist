@@ -11,37 +11,39 @@
 # based on the final outcome
 
 # if there is no TM project, scan up the parent directories looking for an Xcode project
-if [[ -z $TM_PROJECT_FILEPATH ]]; then
+
+if [[ -n $TM_XCODE_PROJECT ]]; then
+	cd "$TM_DIRECTORY"
+	PROJECT_FILE="$TM_XCODE_PROJECT"
+elif [[ -z $TM_PROJECT_DIRECTORY ]]; then
+	cd "$TM_DIRECTORY"
+	PROJECT_FILE=""
 	until [[ `pwd` == "/" ]];
 	do
-		Projects=`ls *.xcode`
-#		echo "Projects:" $Projects
-#		echo "&lt;br&gt;"
+		Projects=`ls -d *.{xcode,pbproj} 2&gt;/dev/null`
 		if [[ -n $Projects ]]; then
-			break;
+			# Make sure we only got one project
+			if ! echo -n $Projects | grep [[:space:]] &amp;&gt;/dev/null; then
+				PROJECT_FILE=$Projects
+			fi
+			break
 		fi
-		cd ..;
+		cd ..
 	done
-	PROJECT_FILE=""
 else
-	PROJECT_FILE=`basename "$TM_PROJECT_DIRECTORY"`
-	if [[ -d $PROJECT_FILE ]]; then
-		echo ""
-#		echo using project directory
-	else
-		PROJECT_FILE=$(basename "$TM_PROJECT_FILEPATH" | perl -pe 's/.tmproj//')
-#		echo using "$PROJECT_FILE"
+	PROJECT_FILE=$(echo -n "$TM_PROJECT_FILEPATH" | perl -pe 's/.tmproj$//')
+	if [[ -d "${PROJECT_FILE}.xcode" ]]; then
+		PROJECT_FILE=${PROJECT_FILE}.xcode
+	elif [[ -d "${PROJECT_FILE}.pbproj" ]]; then
+		PROJECT_FILE=${PROJECT_FILE}.pbproj
 	fi
-
-	PROJECT_PARAM=$(echo -project "$PROJECT_FILE.xcode")
-#	echo $PROJECT_PARAM "&lt;br&gt;"
 fi
 
-BUILD_STYLE="Deployment"
+BUILD_STYLE="${TM_BUILDSTYLE:-Deployment}"
 
 # If we have an Xcode project, and it doesn't contain the build style we're looking for,
 # accept the active build style in the project.
-if [[ -d $PROJECT_FILE ]] &amp;&amp; grep -r $BUILD_STYLE "$PROJECT_FILE"; then
+if [[ -d $PROJECT_FILE ]] &amp;&amp; xcodebuild -project "$PROJECT_FILE" -list | awk 'display == "yes" { sub(/^[ \t]+/, ""); print }; /^Build styles/ { display = "yes" }' | grep -F "${BUILD_STYLE}" &amp;&gt;/dev/null; then
 	BUILD_STYLE="-buildstyle $BUILD_STYLE";
 else
 	BUILD_STYLE="-activebuildstyle"
@@ -49,7 +51,7 @@ fi
 
 export PROJECT_FILE
 
-xcodebuild $PROJECT_PARAM $BUILD_STYLE 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/bin/format_build.rb"
+xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} $BUILD_STYLE 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/bin/format_build.rb"
 </string>
 	<key>input</key>
 	<string>none</string>

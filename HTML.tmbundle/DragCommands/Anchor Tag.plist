@@ -5,4 +5,6 @@
     output = insertAsSnippet; 
     command = "title=`echo $TM_DROPPED_FILE | perl -pe 's/^(.*\\/)?(.*?)(\\..*)?$/$2/g'`
 echo -n \"<a href=\\\"$TM_DROPPED_FILE\\\">\\${1:$title}</a>\"";
+    scope = "language.html";
+    uuid = "B23D6E15-6B33-11D9-86C1-000D93589AF6";
 }

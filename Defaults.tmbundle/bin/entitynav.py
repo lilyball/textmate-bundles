@@ -120,13 +120,13 @@ class EntitiesPhp(EntityHandler, SortableEntities):
     entity-matching handler for PHP (php) files
     """
     def __init__(self):
-        self.entityMatchLine = re.compile(r'^\s*(?P<type>(final|abstract|public|private|protected|function|class|interface)(\s+(function|static))?)(?P<entity>\s+[&a-zA-Z0-9_]+)(?P<args>[^\n\r;]*[\s]*$)')
+        self.entityMatchLine = re.compile(r'(?P<indent>^\s*)(?P<visibility>(final|abstract)?\s?(public|private|protected)?\s?(static)?\s*)(?P<entity>(function|class|interface)\s+)(?P<name>[^$]+[&a-zA-Z0-9_]+)(?P<args>.*$)')
         
     def deconstructLine(self, lineMatch):
-        return (lineMatch.group('type'),lineMatch.group('entity'),lineMatch.group('args'))
+        return (lineMatch.group('entity'),lineMatch.group('name'),lineMatch.group('visibility'),lineMatch.group('args'),lineMatch.group('indent'))
         
     def formatSortedLine(self, line):
-        return "%s:%s\n" % (line[1],(line[0][0]+line[0][1]+line[0][2]))
+        return "%s:%s\n" % (line[1],(line[0][4]+line[0][2]+line[0][0]+line[0][1]+line[0][3]))
 
 class EntitiesInc(EntitiesPhp): pass
         

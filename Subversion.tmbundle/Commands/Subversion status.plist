@@ -5,8 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>
-# it's possible to make this work, but it seems unintuitive
+	<string># it's possible to make this work, but it seems unintuitive
 #SelectedFiles=($TM_SELECTED_FILES)
 #if [[ ${#SelectedFiles[*]} -gt 1 ]]; then
 #	WorkPath=$TM_SELECTED_FILES;
@@ -21,33 +20,8 @@
 #fi
 export WorkPath
 
-
 # show it..
-ruby &lt;&lt;END
-
-bundle = ENV['TM_BUNDLE_PATH']
-
-puts "&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Subversion status&lt;/title&gt;
-&lt;style type=\"text/css\"&gt;
-   @import 'file://"+bundle+"/Stylesheets/svn_style.css';
-&lt;/style&gt;
-&lt;/head&gt;
-
-&lt;body&gt;"
-END
-
-echo '&lt;h1&gt;Subversion status&lt;/h1&gt;'
-echo '&lt;hr /&gt;'
-echo 'checking &lt;tt&gt;' $WorkPath '&lt;/tt&gt;'
-echo '&lt;p&gt;'
-echo '&lt;tt&gt;'
-"${TM_SVN:=svn}" status "$WorkPath" | \
-perl -pe 's/$ENV{'WorkPath'}//' | \
-perl -pe 's/(.*?)(\s+)(.*)\n/&lt;b&gt;$1&lt;\/b&gt;&amp;nbsp;&lt;a href="txmt:\/\/open?url=file:\/\/$ENV{'WorkPath'}\/$3"&gt;$3&lt;\/a&gt;&lt;br&gt;/'
-
-echo "&lt;/tt&gt;&lt;/body&gt;&lt;/html&gt;"
+"${TM_SVN:=svn}" status "$WorkPath" 2&gt;&amp;1| /usr/local/bin/ruby16 -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"
 </string>
 	<key>input</key>
 	<string>none</string>

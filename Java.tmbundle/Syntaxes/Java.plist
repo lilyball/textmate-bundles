@@ -35,7 +35,7 @@
 	patterns = (
 
 		{
-			name = "C Comment";
+			name = "comments.block.java";
 			begin = "/\\*";
 			patterns = (
 			    {
@@ -56,14 +56,14 @@
 		},
 		
 		{
-			name = "C99 Comment";
+			name = "comments.line.java";
 			match = "//.*$";
 			foregroundColor = "red";
 			fontStyle = ( italic );
 		},
 		
 		{
-			name = "Keyword";
+			name = "keywords.control.java";
 			match = "\\<(return|goto|if|else|case|default|switch|break|continue|while|do|for|instanceof|super|this|import|implements|extends|package|class|interface|throw|throws|try|catch|finally|void|new|null)\\>"; 
 
 			fontStyle = ( bold );
@@ -71,20 +71,20 @@
 		},
 		
 		{
-			name = "Storage Keyword";
+			name = "keywords.storage.java";
 			match = "\\<(public|protected|private|const|abstract|synchronized|final|static|threadsafe|transient|native|volatile)\\>";
 			fontStyle = ( bold );
 			foregroundColor = "blue";
 		},
 		
 		{
-			name = "Numeric Constant";
+			name = "constants.numeric.java";
 			match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul|)?\\>";
 			foregroundColor = "#009966";
 		},
 		
 		{
-			name = "String";
+			name = "strings.double-quoted.java";
 			begin = "\"";
 			end = "\"";
 			swallow = "\\\\.";
@@ -92,7 +92,7 @@
 		},
 
 		{
-			name = "Character Constant";
+			name = "strings.single-quoted.java";
 			begin = "'";
 			end = "'";
 			swallow = "\\\\.";
@@ -100,7 +100,7 @@
 		},
 		
 		{
-	        name = "Types";
+	        name = "keywords.types.java";
 	        match = "\\b([A-Z][A-Za-z0-9]+)\\b";
 	        "foregroundColor[1]" = "#CC33FF";
 		},

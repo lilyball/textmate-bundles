@@ -70,7 +70,7 @@
 			<key>match</key>
 			<string>:-\s+(object|protocol|category)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.entity.opening-directives.logtalk</string>
+			<string>keywords.directives.entity.opening.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -78,7 +78,7 @@
 			<key>match</key>
 			<string>:-\s+end_(object|protocol|category)(?=[.])</string>
 			<key>name</key>
-			<string>keywords.entity.closing-directives.logtalk</string>
+			<string>keywords.directives.entity.closing.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -86,7 +86,7 @@
 			<key>match</key>
 			<string>\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.entity.relations.logtalk</string>
+			<string>keywords.directives.entity.relations.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -94,7 +94,7 @@
 			<key>match</key>
 			<string>:-\s+(calls|in(itialization|fo)|uses)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.entity.directives.logtalk</string>
+			<string>keywords.directives.entity.others.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -102,7 +102,7 @@
 			<key>match</key>
 			<string>:-\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.predicate-directives.logtalk</string>
+			<string>keywords.directives.predicate.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -174,7 +174,7 @@
 			<key>match</key>
 			<string>\&lt;(true|fail|repeat)\&gt;</string>
 			<key>name</key>
-			<string>keywords.control.logtalk.arity-0</string>
+			<string>keywords.predicates.control.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -182,7 +182,7 @@
 			<key>match</key>
 			<string>\&lt;(ca(ll|tch)|throw|once)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.control.logtalk</string>
+			<string>keywords.predicates.control.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -190,7 +190,7 @@
 			<key>match</key>
 			<string>\&lt;((get|peek|put)_(char|code|byte)|nl)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.io.logtalk.chars-and-bytes</string>
+			<string>keywords.predicates.chars-and-bytes-io.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -198,7 +198,7 @@
 			<key>match</key>
 			<string>\&lt;nl\&gt;</string>
 			<key>name</key>
-			<string>keywords.io.logtalk.chars-and-bytes</string>
+			<string>keywords.predicates.chars-and-bytes-io.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -206,7 +206,7 @@
 			<key>match</key>
 			<string>\&lt;(atom_(length|concat|chars|codes)|sub_atom|char_code|number_(chars|codes))(?=[(])</string>
 			<key>name</key>
-			<string>keywords.atom-term-processing.logtalk</string>
+			<string>keywords.predicates.atom-term-processing.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -214,7 +214,7 @@
 			<key>match</key>
 			<string>\&lt;(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])</string>
 			<key>name</key>
-			<string>keywords.term-testing.logtalk</string>
+			<string>keywords.predicates.term-testing.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -222,7 +222,7 @@
 			<key>match</key>
 			<string>\&lt;(read_term|read|write|writeq|write_(canonical|term)|op|current_op|char_conversion|current_char_conversion)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.term.io.logtalk</string>
+			<string>keywords.predicates.term-io.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -230,7 +230,7 @@
 			<key>match</key>
 			<string>\&lt;(arg|copy_term|functor)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.term-creation-and-decompisition.logtalk</string>
+			<string>keywords.predicates.term-creation-and-decomposition.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -238,7 +238,7 @@
 			<key>match</key>
 			<string>\&lt;(unify_with_occurs_check)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.term-unification.logtalk</string>
+			<string>keywords.predicates.term-unification.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -246,7 +246,7 @@
 			<key>match</key>
 			<string>\&lt;((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.stream-selection-and-control.logtalk</string>
+			<string>keywords.predicates.stream-selection-and-control.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -254,7 +254,7 @@
 			<key>match</key>
 			<string>\&lt;(flush_output|at_end_of_stream)\&gt;</string>
 			<key>name</key>
-			<string>keywords.stream-selection-and-control.logtalk.others</string>
+			<string>keywords.predicates.stream-selection-and-control.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -262,7 +262,7 @@
 			<key>match</key>
 			<string>\&lt;((set|current)_prolog_flag)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.flags.prolog.logtalk</string>
+			<string>keywords.predicates.prolog-flags.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -286,7 +286,7 @@
 			<key>match</key>
 			<string>\&lt;((current|set)_logtalk_flag|halt)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.hooks.implementation-defined.logtalk</string>
+			<string>keywords.predicates.hooks.implementation-defined.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -294,7 +294,7 @@
 			<key>match</key>
 			<string>\&lt;(halt)\&gt;</string>
 			<key>name</key>
-			<string>keywords.hooks.implementation-defined.logtalk.others</string>
+			<string>keywords.predicates.hooks.implementation-defined.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -326,7 +326,7 @@
 			<key>match</key>
 			<string>\&lt;(parameter|se(lf|nder)|this)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.functions.execution-context.logtalk</string>
+			<string>keywords.predicates.execution-context.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -334,7 +334,7 @@
 			<key>match</key>
 			<string>\&lt;(abolish|assert(a|z)|clause|retract|retractall)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.functions.database.logtalk</string>
+			<string>keywords.predicates.database.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -342,7 +342,7 @@
 			<key>match</key>
 			<string>\&lt;((bag|set)of|f(ind|or)all)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.functions.all-solutions.logtalk</string>
+			<string>keywords.predicates.all-solutions.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -350,7 +350,7 @@
 			<key>match</key>
 			<string>\&lt;(current_predicate|predicate_property)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.functions.reflection.logtalk</string>
+			<string>keywords.predicates.reflection.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -358,7 +358,7 @@
 			<key>match</key>
 			<string>\&lt;(before|after)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.functions.event-handler.logtalk</string>
+			<string>keywords.predicates.event-handler.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -366,7 +366,7 @@
 			<key>match</key>
 			<string>\&lt;(expand_term|phrase)(?=[(])</string>
 			<key>name</key>
-			<string>keywords.functions.grammar-rule.logtalk</string>
+			<string>keywords.predicates.grammar-rule.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -374,7 +374,7 @@
 			<key>match</key>
 			<string>\&lt;(0'[0-9a-zA-Z]|0b[0-1]+|0o[0-7]+|0x[0-9a-fA-F]+)\&gt;</string>
 			<key>name</key>
-			<string>strings.single-quoted.logtalk</string>
+			<string>constants.numeric.logtalk</string>
 		</dict>
 		<dict>
 			<key>foregroundColor</key>
@@ -392,7 +392,7 @@
 			<key>foregroundColor</key>
 			<string>#881314</string>
 			<key>name</key>
-			<string>keywords.variables.atoms.logtalk</string>
+			<string>strings.quoted-atoms.logtalk</string>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>

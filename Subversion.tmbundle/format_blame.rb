@@ -104,10 +104,10 @@ begin
       
       curr_add = (current == linecount) ? ' current_line' : ''
       
-      out += '<tr><td class="linecol">'+ linecount.to_s +'</td>' +
-                 '<td class="revcol'+ curr_add +'">' + $1 +'</td>' +
-                 '<td class="namecol'+ curr_add +'">' + $2 +'</td>' +
-                 '<td class="codecol'+ curr_add +'"><a href="' +
+      out += '<tr><td class="linecol">'+ linecount.to_s + '</td>' +
+                 '<td class="revcol'+curr_add+'">' + $1 + '</td>' +
+                 '<td class="namecol'+curr_add+'">' + $2 + '</td>' +
+                 '<td class="codecol'+curr_add+'"><a href="' +
                      make_tm_link( full_file, linecount) +'">'+ $3 +
                  '</a></td></tr>'
       

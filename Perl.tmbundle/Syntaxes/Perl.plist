@@ -26,26 +26,26 @@
 	patterns = (
 		
 		/* comments */
-		{ name = "Line comment"; match = "(#).*$"; foregroundColor = "#4F4F4F"; },
-		{ name = "RegExp"; match = "(\\/)(.*)(\\/)"; foregroundColor = "#009933"; },
+		{ name = "comments.line.perl"; match = "(#).*$"; foregroundColor = "#4F4F4F"; },
+		{ name = "strings.regexp.perl"; match = "(\\/)(.*)(\\/)"; foregroundColor = "#009933"; },
 		
 		/* language stuff */
-		{ name = "Control Structures"; fontStyle = ( italic ); foregroundColor = "#000099";	match = "\\<(continue|die|do|else|elsif|exit|for|foreach|goto|if|last|next|redo|return|select|unless|until|wait|while)\\>"; },
-		{ name = "Reserved Words"; foregroundColor = "#000099";fontStyle = ( bold ); 	match = "\\<(ARGV|DATA|ENV|SIG|STDERR|STDIN|STDOUT|atan2|bind|binmode|bless|caller|chdir|chmod|chomp|chop|chown|chr|chroot|close|closedir|cmp|connect|continue|cos|crypt|dbmclose|dbmopen|defined|delete|die|do|dump|each|else|elsif|endgrent|endhostent|endnetent|endprotoent|endpwent|endservent|eof|eq|eval|exec|exists|exit|exp|fcntl|fileno|flock|for|foreach|fork|format|formline|ge|getc|getgrent|getgrgid|getgrnam|gethostbyaddr|gethostbyname|gethostent|getlogin|getnetbyaddr|getnetbyname|getnetent|getpeername|getpgrp|getppid|getpriority|getprotobyname|getprotobynumber|getprotoent|getpwent|getpwnam|getpwuid|getservbyname|getservbyport|getservent|getsockname|getsockopt|glob|gmtime|goto|grep|gt|hex|import|index|int|ioctl|join|keys|kill|lc|lcfirst|le|length|link|listen|local|localtime|log|lstat|lt|m|map|mkdir|msgctl|msgget|msgrcv|msgsnd|my|ne|no|oct|open|opendir|ord|pack|package|pipe|pop|pos|print|printf|push|q|qq|quotemeta|qw|qx|rand|read|readdir|readlink|recv|redo|ref|rename|require|reset|return|reverse|rewinddir|rindex|rmdir|s|scalar|seek|seekdir|select|semctl|semget|semop|send|setgrent|sethostent|setnetent|setpgrp|setpriority|setprotoent|setpwent|setservent|setsockopt|shift|shmctl|shmget|shmread|shmwrite|shutdown|sin|sleep|socket|socketpair|sort|splice|split|sprintf|sqrt|srand|stat|study|sub|substr|symlink|syscall|sysopen|sysread|system|syswrite|tell|telldir|tie|tied|time|times|tr|truncate|uc|ucfirst|umask|undef|unless|unlink|unpack|unshift|untie|until|use|utime|values|vec|wait|waitpid|wantarray|warn|while|write|y|q|qw|qq|qx)\\>"; },
-		{ name = "File Test Operators";	foregroundColor = "#0066CC";	fontStyle = ( bold ); 			match = "\\-[rwx0RWXOezsfdlpSbctugkTBMAC]"; },		
-		{ name = "Comparision Operators";	foregroundColor = "#0066CC";	fontStyle = ( bold ); 			match = "\\<(and|or|xor|as)\\>"; },
-		{ name = "Misc. tokens"; 			foregroundColor = "#0066CC"; 	fontStyle = ( bold );			match = "(=>|->)"; },
+		{ name = "keywords.control.perl"; fontStyle = ( italic ); foregroundColor = "#000099";	match = "\\<(continue|die|do|else|elsif|exit|for|foreach|goto|if|last|next|redo|return|select|unless|until|wait|while)\\>"; },
+		{ name = "keywords.functions.perl"; foregroundColor = "#000099";fontStyle = ( bold ); 	match = "\\<(ARGV|DATA|ENV|SIG|STDERR|STDIN|STDOUT|atan2|bind|binmode|bless|caller|chdir|chmod|chomp|chop|chown|chr|chroot|close|closedir|cmp|connect|continue|cos|crypt|dbmclose|dbmopen|defined|delete|die|do|dump|each|else|elsif|endgrent|endhostent|endnetent|endprotoent|endpwent|endservent|eof|eq|eval|exec|exists|exit|exp|fcntl|fileno|flock|for|foreach|fork|format|formline|ge|getc|getgrent|getgrgid|getgrnam|gethostbyaddr|gethostbyname|gethostent|getlogin|getnetbyaddr|getnetbyname|getnetent|getpeername|getpgrp|getppid|getpriority|getprotobyname|getprotobynumber|getprotoent|getpwent|getpwnam|getpwuid|getservbyname|getservbyport|getservent|getsockname|getsockopt|glob|gmtime|goto|grep|gt|hex|import|index|int|ioctl|join|keys|kill|lc|lcfirst|le|length|link|listen|local|localtime|log|lstat|lt|m|map|mkdir|msgctl|msgget|msgrcv|msgsnd|my|ne|no|oct|open|opendir|ord|pack|package|pipe|pop|pos|print|printf|push|q|qq|quotemeta|qw|qx|rand|read|readdir|readlink|recv|redo|ref|rename|require|reset|return|reverse|rewinddir|rindex|rmdir|s|scalar|seek|seekdir|select|semctl|semget|semop|send|setgrent|sethostent|setnetent|setpgrp|setpriority|setprotoent|setpwent|setservent|setsockopt|shift|shmctl|shmget|shmread|shmwrite|shutdown|sin|sleep|socket|socketpair|sort|splice|split|sprintf|sqrt|srand|stat|study|sub|substr|symlink|syscall|sysopen|sysread|system|syswrite|tell|telldir|tie|tied|time|times|tr|truncate|uc|ucfirst|umask|undef|unless|unlink|unpack|unshift|untie|until|use|utime|values|vec|wait|waitpid|wantarray|warn|while|write|y|q|qw|qq|qx)\\>"; },
+		{ name = "keywords.functions.perl.filetest";	foregroundColor = "#0066CC";	fontStyle = ( bold ); 			match = "\\-[rwx0RWXOezsfdlpSbctugkTBMAC]"; },		
+		{ name = "keywords.functions.perl.comparison";	foregroundColor = "#0066CC";	fontStyle = ( bold ); 			match = "\\<(and|or|xor|as)\\>"; },
+		{ name = "keywords.functions.perl.arrows"; 			foregroundColor = "#0066CC"; 	fontStyle = ( bold );			match = "(=>|->)"; },
 		
 		/* numbers and strings */
-		{ name = "Quoted string"; 			foregroundColor = "#009933";	begin = "\""; end = "\""; swallow = "\\\\.";
+		{ name = "strings.double-quoted.perl"; 			foregroundColor = "#009933";	begin = "\""; end = "\""; swallow = "\\\\.";
 		},
-		{ name = "Pinged string"; 			foregroundColor = "#009933";	begin = "'"; end = "'"; swallow = "\\\\.";  },
-		{ name = "Backticked string"; 			foregroundColor = "#009933";	begin = "`"; end = "`"; swallow = "\\\\.";  },
+		{ name = "strings.single-quoted.perl"; 			foregroundColor = "#009933";	begin = "'"; end = "'"; swallow = "\\\\.";  },
+		{ name = "strings.backticked.perl"; 			foregroundColor = "#009933";	begin = "`"; end = "`"; swallow = "\\\\.";  },
 
-  	{ name = "q() quotes"; begin = "\\Wq[qwx]*\\("; end = "\\)";	 patterns = (
+  	{ name = "strings.double-quoted.perl.q"; begin = "\\Wq[qwx]*\\("; end = "\\)";	 patterns = (
 	      { match = "(\\<(.*)\\>)"; foregroundColor = "#009933";} );
 	},
-	{ name = "q() quotes, line start"; begin = "^q[qwx]*\\("; end = "\\)";	 patterns = (
+	{ name = "strings.double-quoted.perl.qlinestart"; begin = "^q[qwx]*\\("; end = "\\)";	 patterns = (
 	      { match = "(\\<(.*)\\>)"; foregroundColor = "#009933";} );
 	},
 /*	{ name = "autoquote before =>... doesn't work"; begin = "\\{"; end = "}";	 patterns = (
@@ -54,15 +54,15 @@
 	
 		/* Sections and POD */
 		
-		{ name = "Program section";	foregroundColor = "#0066CC"; begin = "__\\w+__"; end = "$";},
+		{ name = "strings.program-block.perl";	foregroundColor = "#0066CC"; begin = "__\\w+__"; end = "$";},
 				
-		{ name = "POD";	foregroundColor = "#0066CC"; begin = "^="; end = "^=cut";},		
+		{ name = "comments.perl.POD";	foregroundColor = "#0066CC"; begin = "^="; end = "^=cut";},		
 
 		/* variables */
-	{ name = "Variable"; foregroundColor = "#CC3333";     match = "[\\$\\@\\%][a-zA-Z\x7f-\xff\\$][a-zA-Z0-9_\x7f-\xff\\$]*\\>";  },
-	{ name = "Special Variables"; foregroundColor = "#CC3333";     match = "[\\$\\@\\%][0-9_]\\>";  },
-	{ name = "Variable#"; foregroundColor = "#CC3333";     match = "[\\$\\@\\%]#[a-zA-Z\x7f-\xff\\$][a-zA-Z0-9_\x7f-\xff\\$]*\\>";  },
-	{ name = "Special Variables#"; foregroundColor = "#CC3333";     match = "[\\$\\@\\%]#[0-9_]\\>";  }
+	{ name = "keywords.variables.perl"; foregroundColor = "#CC3333";     match = "[\\$\\@\\%][a-zA-Z\x7f-\xff\\$][a-zA-Z0-9_\x7f-\xff\\$]*\\>";  },
+	{ name = "keywords.variables.perl.special"; foregroundColor = "#CC3333";     match = "[\\$\\@\\%][0-9_]\\>";  },
+	{ name = "keywords.variables.perl.#"; foregroundColor = "#CC3333";     match = "[\\$\\@\\%]#[a-zA-Z\x7f-\xff\\$][a-zA-Z0-9_\x7f-\xff\\$]*\\>";  },
+	{ name = "keywords.variables.perl.special#"; foregroundColor = "#CC3333";     match = "[\\$\\@\\%]#[0-9_]\\>";  }
 
 	);
 	

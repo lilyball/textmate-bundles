@@ -5,7 +5,7 @@
 	//
 	// Note 1. We do not correctly handle the 'character' constant when used with a double quote: (position #\" string).
 	// This can be fixed simply by highlighting characters. This will be a simple future addition to this file.
-	// Note 2. This is a tiny, tiny subset of the enormous ANSI Common Lisp language. More may be added, but probably to a superset "Common Lisp" syntax... This file should ideally be a basis for Scheme and other consistently S-expression-only dialects of Lisp.
+	// This is a tiny, tiny subset of the enormous ANSI Common Lisp language. More may be added, but probably to a superset "Common Lisp" syntax... This file should ideally be a basis for Scheme and other consistently S-expression-only dialects of Lisp.
 	
 	name = "Lisp";
 	fileTypes = ( lisp, cl, l, mud, el, scm, sch );		// mud is for the Zork MDL source; el is Emacs lisp.
@@ -23,7 +23,7 @@
 	foregroundColor = "#000000";
 	backgroundColor = "#FFFFFF";
 	patterns = (
-		{ name = "Comment"; match = ";.*$"; end = ""; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
+		{ name = "Comment"; match = ";.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
 		
 		{
 			name = "Function";
@@ -33,7 +33,20 @@
 			 foregroundColor = "blue";
 		},
 		
-		{ name = "Keyword"; match = "\\<(?i:car|cdr|cons|cond|loop|lambda|format|setq|quote|do|eval|append|let|list|listp|null|memberp|nil|t||load|loop|if|eq|neq|and|or|when)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+		{
+			// better name? function #'+ or character constant #\a (might want to highlight these two constructs differently)
+			name = "Inline Constant";
+			match = "#(\\w|[\\\\+-=<>'\"&#])+";
+			foregroundColor = "#8B2252";
+		},
+		
+		{
+			name = "Global";
+			match = "\\*(\\S*)\\*";
+			foregroundColor = "#5C246E";
+		},
+		
+		{ name = "Keyword"; match = "\\<(?i:case|car|cdr|cons|cond|loop|lambda|format|setq|setf|quote|do|eval|append|let|list|listp|null|memberp|nil|t||load|loop|if|else|eq|neq|and|or|when|progn)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
 		{ name = "Numeric Constant"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
 		{ name = "String"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
 	);

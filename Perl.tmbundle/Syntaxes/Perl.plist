@@ -40,7 +40,8 @@
 		{ name = "Quoted string"; 			foregroundColor = "#009933";	begin = "\""; end = "\""; swallow = "\\\\.";
 		},
 		{ name = "Pinged string"; 			foregroundColor = "#009933";	begin = "'"; end = "'"; swallow = "\\\\.";  },
-		
+		{ name = "Backticked string"; 			foregroundColor = "#009933";	begin = "`"; end = "`"; swallow = "\\\\.";  },
+
   	{ name = "q() quotes"; begin = "\\Wq[qwx]*\\("; end = "\\)";	 patterns = (
 	      { match = "(\\<(.*)\\>)"; foregroundColor = "#009933";} );
 	},

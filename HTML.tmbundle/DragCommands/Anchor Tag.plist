@@ -4,7 +4,7 @@
 <dict>
 	<key>command</key>
 	<string>title=`echo $TM_DROPPED_FILE | perl -pe 's/^(.*\/)?(.*?)(\..*)?$/$2/g'`
-echo -n "&lt;a href=\"$TM_DROPPED_FILE\"&gt;\${1:$title}&lt;/a&gt;"</string>
+echo -n "&lt;a href=\"$TM_DROPPED_FILE\" id=\"\" title=\"\${1:$title}\"&gt;\${1:$title}&lt;/a&gt;"</string>
 	<key>documentExtensions</key>
 	<array>
 		<string>html</string>

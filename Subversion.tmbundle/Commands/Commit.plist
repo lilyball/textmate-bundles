@@ -5,28 +5,48 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>CommitWindow="$TM_BUNDLE_PATH/Tools/CommitWindow.app/Contents/MacOS/CommitWindow"
+	<string>CommitWindow="/Users/chris/Library/Application Support/TextMate/Bundles/Tools/CommitWindowProject/build/CommitWindow.app/Contents/MacOS/CommitWindow"
+ #"$TM_BUNDLE_PATH/Tools/CommitWindow.app/Contents/MacOS/CommitWindow"
+export CommitWindow
 
 if [[ -z $TM_SELECTED_FILES ]]; then
 	CommitPaths=`echo \'$TM_FILEPATH\'`;
 else
 	CommitPaths="$TM_SELECTED_FILES";
 fi
+export CommitPaths
 
-# Ignore files without changes
-CommitPaths=`echo svn status "$CommitPaths" | sh | ruby -pe 'gsub!(/^.(\s+)(.*)\n/) { %Q{"#{$~[2]}" } }'`
+# setup TM_SVN if need be
+echo "${TM_SVN:=svn}" &gt; /dev/null
+export TM_SVN
 
-if [[ -z $CommitPaths ]]; then
-	echo "File(s) not modified; nothing to commit.";
-else
-	CommitArgs=$(echo \"$CommitWindow\" $CommitPaths | sh | ruby -pe 'gsub!(/\n/, "\\\n")');
+ruby &lt;&lt;END
+	require 'English'
 
-	if [[ $? -eq 0 ]]; then
-		echo "${TM_SVN:=svn}" commit "$CommitArgs" | sh;
-	else
-		echo "Canceled";
-	fi;
-fi</string>
+	svn = ENV['TM_SVN']
+	commit_paths = ENV['CommitPaths']
+	commit_tool = ENV['CommitWindow']
+
+	# Ignore files without changes
+	commit_paths = %x{"#{svn}" status #{commit_paths}}.gsub(/^.(\s+)(.*)\n/) { %Q{'#{$~[2]}' } }
+
+	if commit_paths.nil? or commit_paths.size == 0
+		puts "File(s) not modified; nothing to commit."
+		exit 0
+	end
+
+	commit_args = %x{"#{commit_tool}" #{commit_paths}}
+
+	status = \$CHILD_STATUS
+	if status != 0
+		puts "Canceled (#{status})."
+		exit -1
+	end
+
+	puts %x{"#{svn}" commit #{commit_args}}
+
+END
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

@@ -34,7 +34,7 @@ mup.html {
 							mup.td(line)
 						else
 							mup.td(status)
-							mup.td { mup.a( file, "href" => 'txmt://open?url=file://' + file ) }
+							mup.td { mup.a( file.sub( /^#{pwd}\//, ""), "href" => 'txmt://open?url=file://' + file ) }
 						end 
 					else
 						mup.td { mup.div( line, "class" => "generic_error" ) }

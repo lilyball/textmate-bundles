@@ -5,7 +5,7 @@
 # Modified to work with TextMate by Andrew Ellis aellis@gmx.net (10-11-2004)
 # (Jan 14 05) Added -tuw, better help. 
 #	- Eric Hsu textmate@betterfilecabinet.com
-
+# Used wait code from Marcin <otheraccount@verizon.net>
 
 OPEN="open -a TextMate"
 CREATE="touch"
@@ -33,7 +33,7 @@ if (($HELP)); then
 	echo "    -h Show this help."
 	echo "    -t Specify a title for piped input. Overrides other flags."
 	echo "    -u Treat filenames as URLs (e.g. tm -u www.google.com). Uses curl."
-	echo "    -w Prompt for return to continue (good for use as external editor)."
+	echo "    -w Waits for the edited file window to close before ending (for external editing)"
 	echo ""
 	exit 1;
 fi
@@ -121,6 +121,14 @@ else
 fi
 
 if (($WAIT)); then
-	echo "Hit RETURN to continue..."
-	read answer			
+	# Old hack. echo "Hit RETURN to continue..."
+	# read answer			
+
+	# get ID of TM window:
+	TMwindowid=`osascript -e 'tell app "TextMate.app" to return id of front window'`
+
+	# wait until done editing the temp file:
+	while [[ `osascript -e 'tell app "TextMate.app" to return name of every window whose id is '"$TMwindowid"` != "" ]]; do
+	         sleep 1 # set this to something else if there's some need to
+	done
 fi

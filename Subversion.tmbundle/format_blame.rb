@@ -1,10 +1,3 @@
-# just a small to-html formater for what svn blame gives you.
-# made to be compatible with the ruby version included
-# in 10.3.7 (1.6.8) but runs also with 1.8
-#
-# copyright 2005 torsten becker <torsten.becker@gmail.com>
-# no warranty, that it doesn't crash your system.
-
 css = '
 body {
    font-family: sans-serif;
@@ -85,10 +78,26 @@ td.current_line {
 
 class NoMatchException < StandardError; end
 
-def make_tm_link( filename, line )
-   'txmt://open?url=file://' + filename + '&line=' + line.to_s
+def tm_make_link( filename, line )
+   'txmt://open?url=file://' + filename + '&amp;line=' + line.to_s
 end
 
+def tm_escape( string )
+   return string.gsub( /\<|\>|&| |\t/ ) do |match|
+      case match
+         when '<'
+         '&lt;'
+         when '>'
+         '&gt;'
+         when '&'
+         '&amp;'
+         when ' '
+         '&nbsp;'
+         when "\t"
+         '&nbsp;'*ENV['TM_TAB_SIZE'].to_i
+      end
+   end   
+end
 
 out       = ''
 full_file = ENV['TM_FILEPATH']
@@ -98,18 +107,18 @@ linecount = 1
 
 
 begin
-   out += '<table class="blame"> <tr> <th>line</th> <th>rev</th> <th>name</th> <th>code</th> </tr>'
+   out += "<table class=\"blame\"> <tr> <th>line</th> <th>rev</th> <th>name</th> <th>code</th> </tr>\n"
    $stdin.each_line do |line|
-      raise NoMatchException  unless line =~ /\s*(\d+)\s*(\w+)\s*(.*)/
+      raise NoMatchException  unless line =~ /\s*(\d+)\s*(\w+)\s(.*)/
       
       curr_add = (current == linecount) ? ' current_line' : ''
       
-      out += '<tr><td class="linecol">'+ linecount.to_s + '</td>' +
-                 '<td class="revcol'+curr_add+'">' + $1 + '</td>' +
-                 '<td class="namecol'+curr_add+'">' + $2 + '</td>' +
+      out += '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +
+                 '<td class="revcol'+curr_add+'">' + $1 + "</td>\n" +
+                 '<td class="namecol'+curr_add+'">' + $2 + "</td>\n" +
                  '<td class="codecol'+curr_add+'"><a href="' +
-                     make_tm_link( full_file, linecount) +'">'+ $3 +
-                 '</a></td></tr>'
+                     tm_make_link( full_file, linecount) +'">'+ tm_escape( $3 ) +
+                 "</a></td></tr>\n\n"
       
       linecount += 1
    end

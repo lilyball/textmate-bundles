@@ -3,17 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>case @request.method
-	when :post
-
-	when :get
-		$1
-end</string>
+	<string>redirect_to :controller =&gt; "$1", :action =&gt; "$2", :id =&gt; $3</string>
 	<key>name</key>
-	<string>rails request method case</string>
+	<string>recai</string>
 	<key>tabTrigger</key>
-	<string>casemethod</string>
+	<string>recai</string>
 	<key>uuid</key>
-	<string>ADBDB828-8763-11D9-897C-000393CBCE2E</string>
+	<string>18D3C1C3-73BA-11D9-B752-000D932CD5BA</string>
 </dict>
 </plist>

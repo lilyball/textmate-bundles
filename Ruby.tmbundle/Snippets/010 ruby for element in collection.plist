@@ -3,12 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>reject { |${1:element}| ${1:element}.$0 }</string>
+	<string>for ${1:element} in ${2:collection}
+  ${1:element}.$0
+end</string>
 	<key>name</key>
-	<string>ruby reject</string>
-	<key>trigger</key>
-	<string>reject</string>
+	<string>for element in collection</string>
+	<key>tabTrigger</key>
+	<string>forin</string>
 	<key>uuid</key>
-	<string>667081DE-62C3-11D9-B8CF-000D93589AF6</string>
+	<string>66708052-62C3-11D9-B8CF-000D93589AF6</string>
 </dict>
 </plist>

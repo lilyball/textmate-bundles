@@ -3,16 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>begin
-  $1
-rescue ${2:Exception} =&gt; ${3:e}
-  $0
+	<string>case ${1:object}
+  when ${2:condition}
+    $0
 end</string>
 	<key>name</key>
-	<string>ruby begin</string>
-	<key>trigger</key>
-	<string>begin</string>
+	<string>case</string>
+	<key>tabTrigger</key>
+	<string>case</string>
 	<key>uuid</key>
-	<string>66708470-62C3-11D9-B8CF-000D93589AF6</string>
+	<string>667083EE-62C3-11D9-B8CF-000D93589AF6</string>
 </dict>
 </plist>

@@ -5,6 +5,7 @@
 //
 // MIT license.
 //
+#import <Foundation/Foundation.h>
 
 @protocol XCVisitor
 - (void) visitGroup:(NSString *)group;
@@ -23,10 +24,6 @@
 - (id) initWithDictionary:(NSDictionary *)dict;
 
 - (id) root;
-- (void) visitFileGroupsDepthFirstWithDelegate:(id)delegate;
-
-// private
-- (void) visitFile:(id)file withDelegate:(id)delegate;
-- (id) unarchiveObjectForKey:(NSString *)objID;
+- (void) visitFileGroupsDepthFirstWithVisitor:(id<XCVisitor>)delegate;
 
 @end

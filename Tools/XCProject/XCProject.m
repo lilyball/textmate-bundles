@@ -8,13 +8,9 @@
 // FIX ME: need to review the code for memory leaks
 // TO DO: Archiving. To reverse the unarchive, we need to store the object ID in each class.
 //
-// cc -ObjC -lobjc -framework Foundation -std=c99 XcodeToTMProj.m
-//
 
-
-#import <Foundation/Foundation.h>
-#import "XCodeArchiveTypes.h"
 #import "XCProject.h"
+#import "XCodeArchiveTypes.h"
 
 // if 1, log each object to the console once it's fully unarchived
 #define LOG_UNARCHIVED_OBJECTS 0
@@ -56,6 +52,13 @@
 @implementation PBXTargetDependency
 @end
 
+@interface XCProject(Private)
+
+// private
+- (void) visitFile:(id)file withDelegate:(id)delegate;
+- (id) unarchiveObjectForKey:(NSString *)objID;
+
+@end
 
 
 @implementation XCProject
@@ -213,53 +216,10 @@
 	}
 }
 
-- (void) visitFileGroupsDepthFirstWithDelegate:(id)delegate
+- (void) visitFileGroupsDepthFirstWithVisitor:(id)delegate
 {
 	[self visitFile:[[self root] valueForKey:@"mainGroup"] withDelegate:delegate];
 }
 
 @end
-
-
-@interface TestDelegate : NSObject
-
-- (void) visitGroup:(NSString *)group;
-- (void) visitFile:(NSString *)name path:(NSString *)name;
-
-@end
-
-@implementation TestDelegate
-
-- (void) visitGroup:(NSString *)group
-{
-	fprintf( stdout, "Group: %s\n", [group UTF8String] );
-}
-- (void) visitFile:(NSString *)name path:(NSString *)path
-{
-	fprintf( stdout, "File: %s path:%s\n", [name UTF8String], [path UTF8String] );
-}
-
-@end
-
-int main( int argc, char ** argv )
-{
-	NSAutoreleasePool *	pool = [[NSAutoreleasePool alloc] init];
-	XCProject *			project = [XCProject alloc];
-	TestDelegate *		test = [[TestDelegate alloc] init];
-	
-	
-	if( argc > 1 )
-	{
-		NSDictionary *		dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithCString:argv[1]]];
-
-		[project initWithDictionary:dict];
-//		NSLog( @"Dude: %@", project );
-		
-		[project visitFileGroupsDepthFirstWithDelegate:test];
-		
-	}
-	
-	// don't bother deallocating the pool
-	return 0;
-}
 

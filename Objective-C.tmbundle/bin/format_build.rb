@@ -6,6 +6,10 @@ mup = Builder::XmlMarkup.new(:target => STDOUT)
 
 # N.B. This code is not a model of Ruby clarity.
 # I'm still experimenting with Builder.rb.
+#
+# TODO This really ought to be factored into two parts:
+# (1) a parsing layer and (2) a separate presentation layer
+# that would be called from the parser.
 
 class << mup
 	
@@ -111,7 +115,7 @@ class << mup
 		return if string.empty?
 		return if string === "\n"
 		
-		new_div!( "normal", string, true ) do
+		new_div!( "normal", string, false ) do
 			
 			if @next_div_name.nil?
 				title = "..."
@@ -179,7 +183,7 @@ div.normal h2 {
 }
 
 h1 {
-   font-size: 18pt;
+   font-size: 14pt;
    text-shadow: #ddd 2px 3px 3px;  /* ok this is just eye candy, but i love eye candy. ;) */
 }
 
@@ -199,53 +203,39 @@ div.inner {
 }
 
 /* for error formating */
+
+div.error h2, div.warning h2, div.info h2 {
+/*   font-size: 10pt;*/
+   font-family: sans-serif;
+   margin-top: 0;
+}
+
+div.inner :link {
+	font-family: "Bitstream Vera Sans Mono", monospace;
+}
+
+div.error, div.warning, div.info {
+	padding: 4px;
+	margin: 3px;
+	font-size: 7pt;
+}
+
 div.error {
    color: #f30;
    background-color: #fee;
    border: 2px solid #f52;
-   padding: 4px;
-   margin: 3px;
-   font-family: "Bitstream Vera Sans Mono", monospace;
-   font-size: 7pt;
-}
-
-div.error h2 {
-   font-size: 10pt;
-   font-family: sans-serif;
-   margin-top: 0;
 }
 
 div.warning {
    color: #CDC335;
    background-color: #FFD;
    border: 2px solid #CDC335;
-   padding: 4px;
-   margin: 3px;
-   font-family: "Bitstream Vera Sans Mono", monospace;
-   font-size: 7pt;
 }
-
-div.warning h2 {
-   font-size: 10pt;
-   font-family: sans-serif;
-   margin-top: 0;
-}
-
 
 div.info {
    color: #03f;
    background-color: #eef;
    border: 2px solid #25f;
-   padding: 4px;
-   margin: 3px;
-   font-family: "Bitstream Vera Sans Mono", monospace;
-   font-size: 7pt;
-}
-
-div.info h2 {
-   font-size: 10pt;
-   font-family: sans-serif;
-   margin-top: 0;
 }
 
 ENDSTYLE
@@ -271,6 +261,13 @@ mup.html {
 			last_line = line
 			
 			case line
+
+# TODO: xcodebuild generates lines like:
+# CompileC "file.o" Source/file.cpp normal ppc c++ com.apple.compilers.gcc.3_3 
+# We could parse these to provide build status delimited by file.
+# Then we might consider hiding the build details by default.
+
+				
 				# Handle error prefix text
 				when /^\s*((In file included from)|from)(\s*)(\/.*?):/
 					
@@ -307,9 +304,6 @@ mup.html {
 						mup.p {
 							mup.a_textmate!( path, line_number )
 							mup.text!(":" + error_desc)
-#							mup.a( "href" => "txmt://open?url=file://#{path}&line=#{line_number}" ) {
-#								mup.text!( File.basename(path) + ":" + line_number + ": " + error_desc )
-#							}
 						}
 					else
 						mup.normal!( line )

@@ -11,12 +11,12 @@
 # based on the final outcome
 
 # if there is no TM project, scan up the parent directories looking for an Xcode project
-if [[ -z $TM_PROJECT_DIRECTORY ]]; then
+if [[ -z $TM_PROJECT_FILEPATH ]]; then
 	until [[ `pwd` == "/" ]];
 	do
 		Projects=`ls *.xcode`
-		echo "Projects:" $Projects
-		echo "&lt;br&gt;"
+#		echo "Projects:" $Projects
+#		echo "&lt;br&gt;"
 		if [[ -n $Projects ]]; then
 			break;
 		fi
@@ -26,14 +26,15 @@ if [[ -z $TM_PROJECT_DIRECTORY ]]; then
 else
 	PROJECT_FILE=`basename "$TM_PROJECT_DIRECTORY"`
 	if [[ -d $PROJECT_FILE ]]; then
-		echo using project directory
+		echo ""
+#		echo using project directory
 	else
-		PROJECT_FILE=`basename "$TM_PROJECT_FILEPATH" | perl -pe 's/.tmproj//'`
-		echo using "$PROJECT_FILE"
+		PROJECT_FILE=$(basename "$TM_PROJECT_FILEPATH" | perl -pe 's/.tmproj//')
+#		echo using "$PROJECT_FILE"
 	fi
 
 	PROJECT_PARAM=$(echo -project "$PROJECT_FILE.xcode")
-	echo $PROJECT_PARAM "&lt;br&gt;"
+#	echo $PROJECT_PARAM "&lt;br&gt;"
 fi
 
 BUILD_STYLE="Deployment"
@@ -46,23 +47,9 @@ else
 	BUILD_STYLE="-activebuildstyle"
 fi
 
-echo '&lt;tt&gt;'
-res=`mktemp /tmp/tm_build_status_XXX`
+export PROJECT_FILE
 
-xcodebuild 2&gt;${res} $PROJECT_PARAM $BUILD_STYLE \
-| perl -pe '$| = 1; s/&amp;/&amp;amp;/g; s/&lt;/&amp;lt;/g; s/&gt;/&amp;gt;/g; s|^(([^:]*/)?([^/:]+)):((\d+):)?|&lt;a href="txmt://open?url=file://$1&amp;line=$5"&gt;$3&lt;/a&gt;:|; s/\n/&lt;br&gt;\n/'
-
-echo '&lt;h2&gt;' "$(&lt; ${res})" '&lt;/h2&gt;'
-
-BuildSucceeded="** BUILD SUCCEEDED **"
-
-cd "${TM_BUNDLE_PATH}"
-if [[ `tail -c -${#BuildSucceeded} ${res}` == $BuildSucceeded ]]
- then bin/play Sounds/Harp.wav    &amp;&gt;/dev/null &amp;
- else bin/play Sounds/Whistle.wav &amp;&gt;/dev/null &amp;
-fi
-
-rm ${res}
+xcodebuild $PROJECT_PARAM $BUILD_STYLE 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/bin/format_build.rb"
 </string>
 	<key>input</key>
 	<string>none</string>

@@ -5,9 +5,16 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>perl "$TM_BUNDLE_PATH/Tools/t2o.pl" &gt; /tmp/tm2oo.opml &amp;&amp; open -a "OmniOutliner Professional" /tmp/tm2oo.opml
+	<string># Change the application name if you are using OmniOutliner or another program. You can edit this command or go to Prefs/Advanced/ShellVariables and set TM_OPML_APPLICATION to the name of your favorite program.
 
-# Change the application name if you are using OmniOutliner</string>
+if [ -z $TM_OPML_APPLICATION ] ; then
+	TM_OPML_APPLICATION="OmniOutliner"
+fi
+
+perl "$TM_BUNDLE_PATH/Tools/t2o.pl" &gt; /tmp/tm2oo.opml
+
+open -a "$TM_OPML_APPLICATION" /tmp/tm2oo.opml ||	echo "$TM_OPML_APPLICATION can't be found. Edit the command and replace TM_OPML_APPLICATION with an existing application."
+</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
@@ -15,7 +22,7 @@
 	<key>name</key>
 	<string>Tabs to OmniOutliner</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>DBF2B50A-8303-11D9-8C1E-000D9332809C</string>
 </dict>

@@ -16,10 +16,16 @@
 	backgroundColor = "#FFFFFF";
 	patterns = (
 		{ include = "C"; },
-		{ name = "C++ Keyword";
-		match = "\\<(and|and_eq|bitand|bitor|catch|compl|const_cast|delete|dynamic_cast|explicit|export|friend|namespace|new|not|not_eq|or|or_eq|operator|private|protected|public|reinterpret_cast|static_cast|template|this|try|throw|typeid|using|virtual|xor|xor_eq)\\>";
+		{ name = "keywords.control.c++";
+		match = "\\<(explicit|export|catch|friend|namespace|operator|private|protected|public|template|this|try|throw|using|virtual)\\>";
 		fontStyle = ( bold );
 		foregroundColor = "blue"; },
-		{ name = "C++ Storage Keyword"; match = "\\<(bool|class|mutable|typename|true|false|wchar_t)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+		
+		{ name = "keywords.operators.c++";
+		match = "\\<(and|and_eq|bitand|bitor|compl|const_cast|delete|dynamic_cast|new|not|not_eq|or|or_eq|reinterpret_cast|static_cast|typeid|xor|xor_eq)\\>";
+		fontStyle = ( bold );
+		foregroundColor = "blue"; },
+
+		{ name = "keywords.storage.c++"; match = "\\<(bool|class|mutable|typename|true|false|wchar_t)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
 	);
 }

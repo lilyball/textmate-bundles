@@ -21,13 +21,13 @@
 	foregroundColor = "#000000";
 	backgroundColor = "#FFFFFF";
 	patterns = (
-		{ name = "C Comment"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#236B8E"; },
-		{ name = "C++ Comment"; match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
-		{ name = "Control Keyword"; match = "\\<(break|case|continue|default|do|else|for|goto|if|inline|_Pragma|return|sizeof|switch|while)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
-		{ name = "Storage Keyword"; match = "\\<(asm|__asm__|auto|_Bool|char|_Complex|const|double|enum|extern|float|_Imaginary|int|long|register|restrict|short|signed|static|struct|typedef|union|unsigned|void|volatile)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
-		{ name = "Numeric Constant"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
-		{ name = "String"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
-		{ name = "Character Constant"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#8B2252"; },
-		{ name = "Preprocessor Directive"; match = "^\\s*#\\s*(define|defined|else|elif|endif|error|if|ifdef|ifndef|include|line|pragma|undef|warning)\\>"; fontStyle = ( bold ); foregroundColor = "#5C246E";},
+		{ name = "comments.block.c"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#236B8E"; },
+		{ name = "comments.line.c++"; match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
+		{ name = "keywords.control.c"; match = "\\<(break|case|continue|default|do|else|for|goto|if|inline|_Pragma|return|sizeof|switch|while)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+		{ name = "keywords.storage.c"; match = "\\<(asm|__asm__|auto|_Bool|char|_Complex|const|double|enum|extern|float|_Imaginary|int|long|register|restrict|short|signed|static|struct|typedef|union|unsigned|void|volatile)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+		{ name = "keywords.constants.c"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
+		{ name = "strings.double-quoted.c"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+		{ name = "strings.single-quoted.c"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+		{ name = "keywords.preprocessor.c"; match = "^\\s*#\\s*(define|defined|else|elif|endif|error|if|ifdef|ifndef|include|line|pragma|undef|warning)\\>"; fontStyle = ( bold ); foregroundColor = "#5C246E";},
 	);
 }

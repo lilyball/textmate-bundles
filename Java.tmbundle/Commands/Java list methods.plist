@@ -4,8 +4,6 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
-	<key>restrainToMode</key>
-	<true/>
 	<key>command</key>
 	<string>cat `egrep -rnsl "class[ ]+$TM_SELECTED_TEXT[ ]+" .` | egrep "public[ ]+\&lt;.*\&gt;[ ]+\&lt;.*\&gt;\(.*\)[ ]+(throws .*|){"</string>
 	<key>input</key>
@@ -14,5 +12,9 @@
 	<string>Java list methods</string>
 	<key>output</key>
 	<string>separateWindow</string>
+	<key>restrainToMode</key>
+	<true/>
+	<key>uuid</key>
+	<string>DA0A58E2-5F16-11D9-B9C3-000D93589AF6</string>
 </dict>
 </plist>

@@ -9,7 +9,7 @@
 
 my $FIRST_LINE = 1;
 my $html     = "";
-my @type = (1,a,i,A,I); # first level uses type=1, second uses type=1, etc.
+my @type = (1,a,i,A,I,1,a,i,A,I,1,a,i,A,I,1,a,i,A,I); # first level uses type=1, second uses type=1, etc.
 
 while (<>) {
 

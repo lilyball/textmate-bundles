@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundlePath</key>
+	<string>/Users/duff/Oak/TextMate.app/Contents/SharedSupport/Bundles/HTML.tmbundle</string>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>action</key>
+				<string>replaceAll</string>
+				<key>findInProjectIgnoreCase</key>
+				<false/>
+				<key>findString</key>
+				<string>(&lt;)|(&gt;)|(&amp;)</string>
+				<key>ignoreCase</key>
+				<true/>
+				<key>regularExpression</key>
+				<true/>
+				<key>replaceAllScope</key>
+				<string>selection</string>
+				<key>replaceString</key>
+				<string>?1&amp;lt;:(?2&amp;gt;:&amp;amp;)</string>
+				<key>wrapAround</key>
+				<false/>
+			</dict>
+			<key>command</key>
+			<string>findWithOptions:</string>
+		</dict>
+	</array>
+	<key>name</key>
+	<string>HTML escape &lt;, &gt;, and &amp; in selection</string>
+</dict>
+</plist>

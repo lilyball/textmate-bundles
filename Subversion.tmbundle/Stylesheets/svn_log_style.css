@@ -44,6 +44,7 @@ td.msg_field {
 table.log_msg td ul li {
    margin-bottom: 2px;
    font-size: 96%;
+   padding: 1px;
 }
 
 li.added:before, li.modified:before, li.deleted:before, li.unknown:before {
@@ -56,7 +57,7 @@ li.added:before {
    color: green;
 }
 li.added {
-   background-color: #a0f595;
+   background-color: #bbffb3;
 }
 
 li.deleted:before {
@@ -69,10 +70,10 @@ li.deleted {
 
 li.modified:before {
    content: 'M ';
-   color: orange;
+   color: #eb6400;
 }
 li.modified {
-   background-color: #f5d996;
+   background-color: #f7e1ad;
 }
 
 li.unknown:before {

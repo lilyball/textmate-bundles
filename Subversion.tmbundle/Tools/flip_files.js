@@ -3,11 +3,11 @@
    
    copyright 2005 torsten becker <torsten.becker@gmail.com>
    no warranty, that it doesn't crash your system.
-   you are of course free to modify this. :)
+   you are of course free to modify this.
 */
 
 
-/* show files and hide button, erase show button.. */
+/* show: files + hide-button,  hide: show-button.. */
 function show_files( base_id )
 {
    document.getElementById( base_id ).style.display = 'block';
@@ -15,7 +15,7 @@ function show_files( base_id )
    document.getElementById( base_id+'_hide' ).style.display = 'inline';
 }
 
-/* hide files and hide button, show show button.. */
+/* hide: files + hide-button,  show: show-button.. */
 function hide_files( base_id )
 {
    document.getElementById( base_id ).style.display = 'none';

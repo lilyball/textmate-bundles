@@ -1,9 +1,9 @@
-# just some small methods to help with converting
-# the svn command output to html.
+# just some small methods and some exceptions to help
+# with converting some of the svn command outputs to html.
 # 
 # copyright 2005 torsten becker <torsten.becker@gmail.com>
 # no warranty, that it doesn't crash your system.
-# you are of course free to modify this. :)
+# you are of course free to modify this.
 
 
 module SVNHelper
@@ -37,13 +37,13 @@ module SVNHelper
             when '>';  '&gt;'
             when '&';  '&amp;'
             when ' ';  '&nbsp;'
-            when "\t"; ' '*tab_size
+            when "\t"; '&nbsp;'*tab_size
          end
       end   
    end
    
-   
-   def make_head( title, styles=Array.new, head_adds=''  )
+   # produces a generic header..
+   def make_head( title='', styles=Array.new, head_adds=''  )
       puts '<html><head><title>'+title+'</title>'
       puts '<style type="text/css">'
       
@@ -54,8 +54,9 @@ module SVNHelper
       puts '</style>'+head_adds+'</head><body><h1>'+title+'</h1><hr />'
    end
    
-   def make_foot
-      puts '</body></html>'
+   # .. and this a simple, matching footer ..
+   def make_foot( foot_adds='' )
+      puts foot_adds+'</body></html>'
    end
    
 end #module SVNHelper

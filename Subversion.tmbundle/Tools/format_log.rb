@@ -1,16 +1,16 @@
-# 'parses' the output of svn log and makes html
-# out of it, which it shows you.
+# 'parses' the output of svn log and makes html out of
+# it, which it shows you.  should also be compatible to ruby-1.6.8.
 # 
 # copyright 2005 torsten becker <torsten.becker@gmail.com>
 # no warranty, that it doesn't crash your system.
-# you are of course free to modify this. :)
+# you are of course free to modify this.
 
 
 # fetch some tm things..
-$tab_size  = ENV['TM_TAB_SIZE'].to_i
-$bundle    = ENV['TM_BUNDLE_PATH']
-$limit     = ENV['TM_SVN_LOG_LIMIT'].nil? ? 7 : ENV['TM_SVN_LOG_LIMIT'].to_i  # set default if none set
-$full_file = ENV['TM_FILEPATH']
+$tab_size   = ENV['TM_TAB_SIZE'].to_i
+$bundle     = ENV['TM_BUNDLE_PATH']
+$limit      = ENV['TM_SVN_LOG_LIMIT'].nil? ? 7 : ENV['TM_SVN_LOG_LIMIT'].to_i  # set default if none set
+$full_file  = ENV['TM_FILEPATH']
 
 
 # require the helper, it does some formating, etc:
@@ -18,17 +18,17 @@ require $bundle+'/Tools/svn_helper.rb'
 include SVNHelper
 
 
-msg_count     = 0    # used to count messages and to show tables in alternate colors
-comment_count = 0    # used to count the lines of comments
-rev           = ''   # the last fetched revision
-max_lines     = 0    # the maximum number of lines
+msg_count      = 0   # used to count messages and to show tables in alternate colors
+comment_count  = 0   # used to count the lines of comments
+rev            = ''  # the last fetched revision
+max_lines      = 0   # the maximum number of lines
 
 # about the states of the 'parser':
-#   seperator        initial state, assuming a ---..
-#   info             parsing the info line with rev, name, etc
-#   changed_paths    awaiting a changed paths thing or blank line
-#   path_list        parsing changed files
-#   comment          getting the comment
+#   seperator      initial state, assuming a ---..
+#   info           parsing the info line with rev, name, etc
+#   changed_paths  awaiting a changed paths thing or blank line
+#   path_list      parsing changed files
+#   comment        getting the comment
 state = :seperator
 
 
@@ -37,6 +37,7 @@ begin
               [ $bundle+'/Stylesheets/svn_style.css',
                 $bundle+'/Stylesheets/svn_log_style.css'],
               '<script src="file://'+$bundle+'/Tools/flip_files.js'+'" />' )
+   
    
    $stdin.each_line do |line|
       raise SVNErrorException, line  if line =~ /^svn:/ or line =~ /^Skipped/
@@ -133,10 +134,22 @@ rescue SVNErrorException
    puts '</div>'
    
 rescue UnknownStateException, NoMatchInStateException => e
-   puts '<div class="generic_error"><h2>'+e.class.to_s.gsub( /Exception$/, '').gsub( /^.+::/, '')+'</h2>'
-   puts 'state: <em>:'+state.to_s+'</em><br />'
-   puts 'line:  <em>:'+htmlize( $! )+'</em><br />'
+   puts '<div class="generic_error"><h2>'+e.class.to_s.gsub( /^.+::(.+)Exception$/, '\1')+'</h2>'
+   puts 'state: <em>'+state.to_s+'</em><br />'
+   puts 'line:&nbsp; <em>'+htmlize( $! )+'</em><br />'
    puts '</div>'
+   
+# catch unknown exceptions..
+rescue => e
+   puts '<div class="generic_error"><h2>'+e.class.to_s+'</h2>'
+   puts 'reason: <em>'+htmlize( $! )+'</em><br />'
+   
+   # could also be this oneliner in 1.8 but backward-compatibility
+   # is more important than fancy code. :)
+   # puts 'trace: <br />'+$@.inject('') { |a,b| a + htmlize('  '+b) + '<br />' }
+   
+   trace = ''; $@.each { |e| trace += htmlize( '  '+e ) + '<br />' }
+   puts 'trace: <br />'+trace+'</div>'
    
 ensure
    make_foot()

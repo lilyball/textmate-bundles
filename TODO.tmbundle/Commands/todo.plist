@@ -11,11 +11,13 @@ export WorkPath
 cd "`dirname "$TM_FILEPATH"`"
 echo "&lt;h1&gt;TODO LIST&lt;/h1&gt;"
 echo "&lt;ul&gt;"
-grep --with-filename --line-number --recursive TODO * | perl -pe '$| =1; s/(.*?):(.*?):.*?(TODO.*)\n/&lt;li&gt; &lt;a href="txmt:\/\/open?url=file:\/\/$ENV{'WorkPath'}\/$1&amp;line=$2"&gt;$3&lt;\/a&gt; ($1)&lt;\/li&gt;\n/'
+grep --with-filename --line-number --recursive TODO * | perl -pe '$| =1; s/(.*?):(.*?):.*?TODO[:](.*)\n/&lt;li&gt; $1: &lt;a href="txmt:\/\/open?url=file:\/\/$ENV{'WorkPath'}\/$1&amp;line=$2"&gt;$3&lt;\/a&gt;&lt;\/li&gt;\n/'
 echo "&lt;/ul&gt;"
 </string>
 	<key>input</key>
 	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
 	<key>name</key>
 	<string>Show TODO List</string>
 	<key>output</key>

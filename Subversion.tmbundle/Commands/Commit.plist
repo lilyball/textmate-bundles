@@ -50,8 +50,9 @@ ruby &lt;&lt;END
 	puts "&lt;hr&gt;"
 	puts "&lt;tt&gt;"
 	puts %Q{"#{svn}" commit #{commit_args}}
+	puts "&lt;/tt&gt;"
 	puts "&lt;hr&gt;"
-	puts "&lt;p&gt; &lt;tt&gt;"
+	puts "&lt;p&gt; &lt;pre&gt;"
 	STDOUT.flush
 	puts %x{"#{svn}" commit #{commit_args}}
 

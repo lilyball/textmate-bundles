@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>###	Refresh All Active Browsers - OmniWeb, Safari, Firefox &amp; IE
+### v1.0. 2005-03-29
+###
+#	Check if Safari is running, if so refresh
+[[ $(ps -xc|grep Safari) ]] &amp;&amp; printf 'tell app "Safari" \n activate \n do JavaScript "window.location.reload();" in first document \n end tell' | osascript
+#	Check if Firefox is running, if so refresh
+[[ $(ps -xc|grep -i firefox) ]] &amp;&amp; printf 'tell app "FireFox" \n activate \n Get URL "JavaScript:window.location.reload();" inside window 1 \n end tell' | osascript
+#	Check if Internet Explorer is running, if so refresh
+[[ $(ps -xc|grep "Internet Explorer") ]] &amp;&amp; printf 'tell app "Internet Explorer" \n activate \n OpenURL "JavaScript:window.location.reload();" toWindow -1 \n end tell' | osascript
+#	Check if OmniWeb is running, if so refresh
+[[ $(ps -xc|grep OmniWeb) ]] &amp;&amp; printf 'tell app "OmniWeb" \n activate \n reload first browser \n end tell' | osascript
+### end</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Refresh All Active Browsers</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>B8651C6E-A05E-11D9-86AC-000D93C8BE28</string>
+</dict>
+</plist>

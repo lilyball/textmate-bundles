@@ -11,6 +11,7 @@ Usage:  entitynav -f <filename>
  -e, --ext <ext>                : set extension/type as <ext> when stdin
  -E, --ext-from-file <filename> : set extension/type to that of <filename>
  -h, --help                     : print usage
+ -s, --sort                     : sort output by function/method/class name
 
 """
 

@@ -69,7 +69,14 @@
 		}
 	}
 	[fFilesController objectDidEndEditing:nil];
-	
+
+
+	//
+	// Map the enter key to the OK button
+	//
+	[fOKButton setKeyEquivalent:@"\x03"];
+	[fOKButton setKeyEquivalentModifierMask:0];
+
 	//
 	// Bring the window to absolute front.
 	// -[NSWindow orderFrontRegardless] doesn't work (maybe because we're an LSUIElement).

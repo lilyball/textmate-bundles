@@ -16,6 +16,8 @@
 	IBOutlet NSTextField *			fRequestText;
 	IBOutlet NSTextView *			fCommitMessage;
 	IBOutlet NSWindow *				fWindow;
+	IBOutlet NSButton *				fCancelButton;
+	IBOutlet NSButton *				fOKButton;
 }
 
 - (IBAction) commit:(id) sender;

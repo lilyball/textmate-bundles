@@ -1,12 +1,15 @@
 {
     IBClasses = (
+        {CLASS = CWTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {
             ACTIONS = {cancel = id; commit = id; }; 
             CLASS = CommitWindowController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                fCancelButton = NSButton; 
                 fCommitMessage = NSTextView; 
                 fFilesController = NSArrayController; 
+                fOKButton = NSButton; 
                 fRequestText = NSTextField; 
                 fWindow = NSWindow; 
             }; 

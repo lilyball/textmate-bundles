@@ -9,6 +9,8 @@
 			children = (
 				831C222207B6F2EC00397A7E,
 				831C222307B6F2EC00397A7E,
+				83BDF3B007DD4165005AC50F,
+				83BDF3B107DD4165005AC50F,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -294,6 +296,28 @@
 			settings = {
 			};
 		};
+		83BDF3B007DD4165005AC50F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = CWTextView.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		83BDF3B107DD4165005AC50F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = CWTextView.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		83BDF3B207DD4165005AC50F = {
+			fileRef = 83BDF3B107DD4165005AC50F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		83F6091C07B8A60400C21FE8 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
@@ -372,6 +396,7 @@
 			files = (
 				8D11072D0486CEB800E47090,
 				831C222407B6F2EC00397A7E,
+				83BDF3B207DD4165005AC50F,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

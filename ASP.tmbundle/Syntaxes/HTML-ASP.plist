@@ -1,7 +1,7 @@
 {
 	
 	/*
-	SOME IDEAS & ISSUES
+	ISSUES
 	- nesting of ASP (or whatever else) inside quoted strings of tags doesn't
 	  work yet... Allan knows, is working on it.
 	*/
@@ -26,7 +26,7 @@
 		{ name = "comments.block"; begin = "<!--"; end = "-->"; foregroundColor = "#bbbbbb"; },
 
 		{ 
-		 name = "inline.javascript";
+		 name = "embedded-language.javascript";
 		 begin = "<script [^>]*((type=(\"|')text/javascript(\"|'))|(language=(\"|')(?i:javascript)(\"|')))[^>]*>";
 		 end = "</script>";
 		 backgroundColor = "#FFF6D3";
@@ -36,7 +36,7 @@
 		},
 		
 		{ 
-		 name = "inline.css";
+		 name = "embedded-language.css";
 		 begin = "<style .*type=(\"|')text/css(\"|')[^>]*>";
 		 end = "</style>";
 		 backgroundColor = "#e5F2F2";
@@ -45,45 +45,47 @@
 			);
 		},
 		
-		{ name = "html.entities"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-		{ name = "html.entities.invalid"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+		{ name = "constants.entities.html"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+		{ name = "invalid.bad-ampersand.html"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
 		
-		{ name = "html.tags"; begin = "</?([a-zA-Z0-9]+)"; end = ">";
+		{ name = "keywords.markup.tag.html";
+			begin = "</?([a-zA-Z0-9]+)";
+			end = ">";
   			"elementFontStyle[1]" = ( underline ); 
 			foregroundColor = "#888888";
 			patterns = (
-	  			{ name = "html.tags.attributes"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "strings.double-quoted"; begin = "\""; end = "\"";
+	  			{ name = "keywords.markup.tags.options.html"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "strings.double-quoted.html"; begin = "\""; end = "\"";
 					patterns = (
 						{	begin = "<%=?"; end = "%>";
 							patterns = (
 								/*{ include = "ASP"; } commented out 'till supported by TM */
 							);
 						},
-						{ name = "html.entities"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-						{ name = "html.entities.ampersand.invalid"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+						{ name = "constants.entities.html"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+						{ name = "invalid.bad-ampersand.html"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
 					);
 	  			},
-				{ name = "strings.single-quoted"; begin = "'"; end = "'";
+				{ name = "strings.single-quoted.html"; begin = "'"; end = "'";
 					patterns = (
 						{	begin = "<%=?"; end = "%>";
 							patterns = (
 								/*{ include = "ASP"; } commented out 'till supported by TM */
 							);
 						},
-						{ name = "html.entities"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-						{ name = "html.entities.ampersand.invalid"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+						{ name = "constants.entities.html"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+						{ name = "invalid.bad-ampersand.html"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
 					);
 	  			},
 			);
 		},
 		
-		{ name = "html.doctype"; begin = "<!DOCTYPE"; end = ">";
+		{ name = "meta.docinfo.doctype.html"; begin = "<!DOCTYPE"; end = ">";
   			foregroundColor = "#aaaaaa";
  		},
 
  		{ 
- 		 name = "inline.asp";
+ 		 name = "embedded-language.asp.html";
  		 begin = "<%=?"; end = "%>";
  		 backgroundColor = "#F2F2F2";
  		 patterns = (

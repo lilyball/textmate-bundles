@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>
+:- object(${1:Instance},
+	implements(${2:Protocol}),
+	imports(${3:Category}),
+	instantiates(${4:Class})).
+
+	:- info([
+		version is 1.0,
+		author is '${5:Your Name}',
+		date is ${6:2004}/${7:10}/${8:18},
+		comment is '${9:Description}']).
+
+$0
+
+:- end_object.
+</string>
+	<key>name</key>
+	<string>    instance with all</string>
+	<key>uuid</key>
+	<string>8A27A016-73F7-11D9-8083-000D93589AF6</string>
+</dict>
+</plist>

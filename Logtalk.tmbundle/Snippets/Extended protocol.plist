@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>
+:- protocol(${1:Extended},
+	extends(${2:Minimal})).
+
+	:- info([
+		version is 1.0,
+		author is '${3:Your Name}',
+		date is ${4:2004}/${5:10}/${6:18},
+		comment is '${7:Description}']).
+
+$0
+
+:- end_protocol.
+</string>
+	<key>name</key>
+	<string>    extended protocol</string>
+	<key>uuid</key>
+	<string>8A277A4C-73F7-11D9-8083-000D93589AF6</string>
+</dict>
+</plist>

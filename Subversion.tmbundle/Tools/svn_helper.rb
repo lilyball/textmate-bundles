@@ -6,19 +6,14 @@
 # you are of course free to modify this.
 
 
-module SVNHelper
-   # (blame) raised if the 'parser' gets a line
-   # which doesnt match a certain scheme.
-   class NoMatchException < StandardError; end
-   
+module SVNHelper   
    # (log) raised, if the maximum number of log messages is shown.
    class LogLimitReachedException < StandardError; end
    
-   # (log) should get raised if the line was not expected in the current state.
-   class  NoMatchInStateException < StandardError; end
-   
-   # (log) if state is not a valid state
-   class UnknownStateException < StandardError; end
+   # (both) raised if the 'parser' gets a line
+   # which doesnt match a certain scheme or wasnt expected
+   # in a special state.
+   class NoMatchException < StandardError; end
    
    # (both) if we should go in error mode
    class SVNErrorException < StandardError; end

@@ -53,7 +53,7 @@ begin
                msg_count += 1
                
             else
-               raise NoMatchInStateException, line
+               raise NoMatchException, line
             end
             
          when :info
@@ -73,7 +73,7 @@ begin
                puts '<ul id="r'+$1+'" class="hidden">'
                
             else
-               raise NoMatchInStateException, line
+               raise NoMatchException, line
             end
             
          when :changed_paths
@@ -82,7 +82,7 @@ begin
             elsif line =~ /^\s*$/
                state = :comment
             else
-               raise NoMatchInStateException, line
+               raise NoMatchException, line
             end
             
          when :path_list
@@ -99,7 +99,7 @@ begin
             elsif line =~ /^\s*$/
                state = :comment
             else
-               raise NoMatchInStateException, line
+               raise NoMatchException, line
             end
             
          when :comment
@@ -121,7 +121,7 @@ begin
             end
             
          else
-            raise UnknownStateException, line
+            raise 'unknown state: '+state.to_s
             
       end #case state
       
@@ -133,8 +133,8 @@ rescue SVNErrorException
    $stdin.each_line { |line| puts htmlize( line )+'<br />' }
    puts '</div>'
    
-rescue UnknownStateException, NoMatchInStateException => e
-   puts '<div class="generic_error"><h2>'+e.class.to_s.gsub( /^.+::(.+)Exception$/, '\1')+'</h2>'
+rescue NoMatchException
+   puts '<div class="generic_error"><h2>NoMatch</h2>'
    puts 'state: <em>'+state.to_s+'</em><br />'
    puts 'line:&nbsp; <em>'+htmlize( $! )+'</em><br />'
    puts '</div>'

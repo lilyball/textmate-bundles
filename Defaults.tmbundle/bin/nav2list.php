@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<!-- copyright Max Williams 2005 -->
-		<style type='text/css'>
+		<style type="text/css">
 			pre, h1{
 				font-family:"Lucida Grande";
 				font-size:.9em;
@@ -25,7 +25,7 @@
 				border-color:grey;
 				}
 		</style>
-		<script type='text/javascript'>
+		<script type="text/javascript">
 			
 			var inc=-1;
 			var prev=0;
@@ -65,7 +65,7 @@
 			
 		</script>
 	</head>
-	<body onkeydown="key(event)">
+	<body onkeydown="javascript:key(event)">
 		<h1>Entities for <?php echo $_ENV['TM_FILENAME']; ?></h1>	
 		<ul id='list'>
 <?php
@@ -78,7 +78,7 @@
 	foreach( $split as $key => $value )
 	{
 		$tmp= explode(":", $value);
-		echo "\t\t\t<li> <a href='txmt://open?url=file://".$_ENV['TM_FILEPATH']."&amp;line=".$tmp[0]."' ".$close."> <pre>". $tmp[1]."</pre></a></li>";
+		echo "\t\t\t<li> <a id=\"$key\" href=\"txmt://open?url=file://".$_ENV['TM_FILEPATH']."&amp;line=".$tmp[0]."\" ".$close."> <pre>". $tmp[1]."</pre></a></li>";
 	}
 ?>
 		</ul>

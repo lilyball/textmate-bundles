@@ -5,9 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>pl</string>
+	<string>TEMP_FILE=`mktemp /tmp/TextMate_plist.XXXXXX`
+if [[ -n $TEMP_FILE ]]; then
+	cat &gt; "$TEMP_FILE"
+	plutil -lint "$TEMP_FILE"
+	rm "$TEMP_FILE"
+else
+	echo "Error: Temporary file could not be created"
+fi</string>
 	<key>input</key>
 	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^V</string>
 	<key>name</key>
 	<string>Validate PLIST</string>
 	<key>output</key>

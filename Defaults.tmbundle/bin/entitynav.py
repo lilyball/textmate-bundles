@@ -80,7 +80,7 @@ class EntitiesPl(EntityHandler):
     entity-matching handler for Perl (pl) files
     """
     def __init__(self):
-        self.entityMatchLine = re.compile(r'^\s*(sub)\b.*\s*$')
+        self.entityMatchLine = re.compile(r'^\s*(?P<prefix>sub)\b(?P<main>.*)(?P<suffix>\s*$)')
 
 class EntitiesPm(EntitiesPl): pass
 
@@ -96,14 +96,14 @@ class EntitiesPy(EntityHandler):
     entity-matching handler for Python (py) files
     """
     def __init__(self):
-        self.entityMatchLine = re.compile(r'^\s*(class|def)\b.*:\s*$')
+        self.entityMatchLine = re.compile(r'^\s*(?P<prefix>class|def)\b(?P<main>.*)(?P<suffix>:\s*$)')
 
 class EntitiesTex(EntityHandler):
     """
     entity-matching handler for LaTeX (tex) files
     """
     def __init__(self):
-        self.entityMatchLine = re.compile(r'^\s*(\\(sub)*section|\\paragraph){.*}.*$')
+        self.entityMatchLine = re.compile(r'^\s*(?P<prefix>\\(sub)*section{|\\paragraph{)(?P<main>.*)(?P<suffix>}.*$)')
 
 
 
@@ -127,8 +127,16 @@ class EntityNav:
     def findEntities(self):
         self.entities = {}
         for lineNum,line in self.fileDict.iteritems():
-            if self.handler.entityMatchLine.match(line):
-                self.entities[lineNum] = line
+            # TODO: make this match return a prefix a main part and a suffix so we can sort by name
+            if self.sorted:
+                m = self.handler.entityMatchLine.match(line)
+                if m:
+                    if len(m.groups()) < 3:   # check to make sure captures for sorting are in
+                        raise HandlerNoEntitiesError
+                    self.entities[lineNum] = (m.group('main'),m.group('prefix'),m.group('suffix'))
+            else:
+                if self.handler.entityMatchLine.match(line):
+                    self.entities[lineNum] = line
         if self.entities == {}:
             raise HandlerNoEntitiesError
             
@@ -137,7 +145,12 @@ class EntityNav:
         outputs a lineNum:line entity list
         """
         self.findEntities()
-        sys.stdout.write( "".join( ["%s:%s" % (k,v) for k,v in self.splice(self.entities)] ))
+        if self.sorted:
+            outList = self.sort_byval(self.entities)
+            for i in outList:
+                sys.stdout.write("%s:%s\n"%(i[1],(i[0][1]+i[0][0]+i[0][2])))
+        else:
+            sys.stdout.write( "".join( ["%s:%s" % (k,v) for k,v in self.splice(self.entities)] ))
             
     def parseFile(self, filename):
         if filename == '-':
@@ -151,6 +164,7 @@ class EntityNav:
         
     def parseInput(self, opts, args):
         file = None
+        self.sorted = False
         for opt, arg in opts:
             if opt in ("-h", "--help"):
                 raise UsageError
@@ -160,6 +174,8 @@ class EntityNav:
                 self.ext = arg
             elif opt in ('-E', '--ext-from-file'):
                 self.setExtFromFilename(arg)
+            elif opt in ('-s', '--sort'):
+                self.sorted = True
         if file == None:
             raise UsageError
         self.parseFile(file)
@@ -186,7 +202,7 @@ class EntityNav:
     def sort_byval(self,dict):         
         if type(dict) is not type({}): return []
         keys = dict.keys()
-        s = map(lambda k: (dict[k],k),keys)
+        s = map(lambda k: (dict[k],k), keys)
         s.sort()
         return s
         

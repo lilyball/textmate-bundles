@@ -9,7 +9,9 @@
 print '&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=\"Refresh\" content=\"0; URL='
 print 'http://jigsaw.w3.org/css-validator/validator?&amp;warning=1&amp;profile=none&amp;usermedium=all&amp;text='
 
-\$&lt;.each_byte do |b|
+((ENV['TM_SELECTED_TEXT'].size &gt; 0) ?
+  ENV['TM_SELECTED_TEXT'] : \$&lt; ).each_byte do |b|
+  
   if b == 32
     print '+'
   elsif (48..57).include? b or
@@ -23,7 +25,7 @@ end
 
 puts '#errors\"&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;'  "</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>^V</string>
 	<key>name</key>

@@ -4,22 +4,17 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
-	<key>captureFormatString</key>
-	<string>$2</string>
-	<key>capturePattern</key>
-	<string>^(\d+):(.*)$</string>
 	<key>command</key>
-	<string>grep -n "^sub "
-</string>
+	<string>perldoc -f $TM_CURRENT_WORD</string>
 	<key>input</key>
-	<string>document</string>
-	<key>lineCaptureRegister</key>
-	<string>1</string>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^@/</string>
 	<key>name</key>
-	<string>Perl List subroutines</string>
+	<string>Perldoc on Word</string>
 	<key>output</key>
 	<string>separateWindow</string>
 	<key>uuid</key>
-	<string>DA0A5EBA-5F16-11D9-B9C3-000D93589AF6</string>
+	<string>DA0A5D89-5F16-11D9-B9C3-000D93589AF6</string>
 </dict>
 </plist>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>echo "&lt;html&gt;&lt;body&gt;&lt;pre&gt;"
+cat "$TM_BUNDLE_PATH"/README
+echo "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@w</string>
+	<key>name</key>
+	<string>Read README</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>EC48C79A-82AA-11D9-8753-000D9332809C</string>
+</dict>
+</plist>

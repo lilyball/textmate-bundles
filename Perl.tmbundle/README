@@ -6,22 +6,28 @@ http://math.sfsu.edu/hsu/textmate
 
 Release Notes
 -------------
-
 The package consists of a syntax highlighting file and a few handy commands:
 
-Perl Comment Toggle (uncomments comments, comments code)
-Perldoc Search
-Perl Send to Affrus (requires Affrus, obviously)
-Perl List subroutines
-PerlTidy (requires PerlTidy from http://perltidy.sourceforge.net/, may need to tweak path)
-Perl Error Report
-Perl to One-liner (strips comments & extra whitespace, requires perltidy)
+	Perldoc Search
+	Perl Error Report
+	Send to Affrus (requires Affrus, obviously)
+	List Subroutines
+	PerlTidy 
+		(requires PerlTidy from http://perltidy.sourceforge.net/, may need to tweak path)
+	Perl to One-liner (strips comments & extra whitespace, requires perltidy)
+	Help (show this file)
+	
+Removed
+	Perl Comment Toggle (removed in favor of general UnComment package)
+
 
 To Do. Fix q, qq to deal with different matched delimiters. 
 	$i++ coloring. 
 	/dsds/g < /asdfd/g coloring.
 
-Done
+
+History
+
 	"last" colored as a control structure.
 (12-20-04) 
 	Martin Vetter added [] and () to the Perl folding syntax.

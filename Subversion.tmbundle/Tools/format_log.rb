@@ -41,7 +41,8 @@ begin
    make_head( 'Subversion Log',
               [ $bundle+'/Stylesheets/svn_style.css',
                 $bundle+'/Stylesheets/svn_log_style.css'],
-              '<script src="file://'+$bundle+'/Tools/flip_files.js'+'" />' )
+              '<script type="text/javascript">'+
+                 File.open($bundle+'/Tools/flip_files.js', 'r').readlines.join+'</script>' )
    
    
    $stdin.each_line do |line|

@@ -5,14 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>WorkPath=`dirname "$TM_FILEPATH"`
+	<string>${TM_SVN:=svn}
+WorkPath=`dirname "$TM_FILEPATH"`
 export WorkPath
 echo '&lt;h2&gt;Subversion status&lt;/h2&gt;'
 echo '&lt;hr /&gt;'
 echo 'checking &lt;tt&gt;' $WorkPath '&lt;/tt&gt;'
 echo '&lt;p&gt;'
 echo '&lt;tt&gt;'
-$TM_SVN status "$WorkPath" | \
+"$TM_SVN" status "$WorkPath" | \
 perl -pe 's/$ENV{'WorkPath'}//' | \
 perl -pe 's/(.*?)(\s+)(.*)\n/&lt;b&gt;$1&lt;\/b&gt;&amp;nbsp;&lt;a href="txmt:\/\/open?url=file:\/\/$ENV{'WorkPath'}\/$3"&gt;$3&lt;\/a&gt;&lt;br&gt;/'
 </string>

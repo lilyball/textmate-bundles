@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>$TM_SVN add "$TM_FILEPATH"</string>
+	<string>${TM_SVN:=svn}
+"$TM_SVN" add "$TM_FILEPATH"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>
+	<string>${TM_SVN:=svn}
+
 TMPFILE=`mktemp -u /tmp/tm-svn.XXXXXX` || exit 1
 TMPFILE="$TMPFILE.diff"
 

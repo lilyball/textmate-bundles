@@ -1,0 +1,44 @@
+{
+	/*----
+	basic java properties dictionary for textmate
+	------*/
+	
+	name = "Java Properties";
+	fileTypes = ( properties );
+
+	foregroundColor = "#333333";
+	backgroundColor = "#ffffff";
+	patterns = (
+		/*
+		 * COMMENTS
+		 */	
+		{
+			name = "Comments";
+			match = "[#!].+$";
+			foregroundColor = "red";
+		},
+
+		/*
+		 * KEY = VALUE PAIRS
+         *
+		{
+			name = "Key";
+			// match = "^[^=]+=";
+			match = "(([-A-Za-z0-9_./]|([ =:]))+)";
+			foregroundColor = "#00FF00";
+		},
+		*/
+		{
+			name = "Value";
+			match = "^[\r\n]+";
+			foregroundColor = "#0000FF";
+		},
+
+		 {
+		     begin = "\\s*([^=:]+)[=:]";
+			 end = "(?!\\\\s*)$";
+			 "elementForegroundColor[1]" = "#0000FF";
+			 backgroundColor = "red";
+         },
+	);
+}

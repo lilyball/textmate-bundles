@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>// {{{ set${1:METHOD_NAME}
+/**
+ * Setter for ${3:FIELD_NAME}.
+ * @param new${1:METHOD_NAME} new value for ${3:FIELD_NAME}
+ */
+public void set${1:METHOD_NAME}(${2:TYPE} new${1:METHOD_NAME}) {
+    ${3:FIELD_NAME} = new${1:METHOD_NAME};
+}
+// }}}
+
+// {{{ get${1:METHOD_NAME}
+/**
+ * Getter for ${3:FIELD_NAME}.
+ * @return ${3:FIELD_NAME}
+ */
+public ${2:TYPE} get${1:METHOD_NAME}() {
+    return ${3:FIELD_NAME};
+}
+// }}}    
+</string>
+	<key>keyEquivalent</key>
+	<string>@B</string>
+	<key>name</key>
+	<string>bean setter and getter</string>
+	<key>trigger</key>
+	<string>bean</string>
+</dict>
+</plist>

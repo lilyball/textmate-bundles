@@ -1,0 +1,102 @@
+{
+	name = "Java Source";
+	
+	fileTypes = ( java );
+	
+	foldingStartMarker = "(\\{\\s*$)";
+	foldingStopMarker = "(^\\s*\\})";
+	
+	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
+	
+	smartTypingPairs = (
+        ( "(", ")" ),
+	    ( "[", "]" ),
+	    ( "{", "}" ),
+        ( "\"", "\"" ), 
+	    ( "'", "'" )
+	);
+	
+	highlightPairs = (
+	    ( "(", ")" ),
+	    ( "[", "]" ),
+	    ( "{", "}" )
+	);
+	
+	foregroundColor = "black";
+	backgroundColor = "white";
+	
+	patterns = (
+
+		{
+			name = "C Comment";
+			begin = "/\\*";
+			patterns = (
+			    {
+					name = "javadoc params";
+					match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
+					"foregroundColor[1]" = "#669933";
+					"foregroundColor[2]" = "black";
+				},
+			    {
+					name = "misc javadoc attributes";
+					match = "\\\*\\s*@([a-zA-Z0-9_-]+)\\s*";
+					"foregroundColor[1]" = "#669933";
+				},
+			);
+			end = "\\*/";
+			fontStyle = ( italic );
+			foregroundColor = "red";
+		},
+		
+		{
+			name = "C99 Comment";
+			match = "//.*$";
+			foregroundColor = "red";
+			fontStyle = ( italic );
+		},
+		
+		{
+			name = "Keyword";
+			match = "\\<(return|goto|if|else|case|default|switch|break|continue|while|do|for|instanceof|super|this|import|implements|package|class|throw|throws|try|catch|finally|void|new|null)\\>"; 
+
+			fontStyle = ( bold );
+			foregroundColor = "#0066ff";
+		},
+		
+		{
+			name = "Storage Keyword";
+			match = "\\<(public|protected|private|const|abstract|synchronized|final|static|threadsafe|transient|native|volatile)\\>";
+			fontStyle = ( bold );
+			foregroundColor = "blue";
+		},
+		
+		{
+			name = "Numeric Constant";
+			match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>";
+			foregroundColor = "#009966";
+		},
+		
+		{
+			name = "String";
+			begin = "\"";
+			end = "\"";
+			swallow = "\\\\.";
+			foregroundColor = "#FF0066";
+		},
+
+		{
+			name = "Character Constant";
+			begin = "'";
+			end = "'";
+			swallow = "\\\\.";
+			foregroundColor = "#669933";
+		},
+		
+		{
+	        name = "Types";
+	        match = "\\b([A-Z][A-Za-z0-9]+)\\b";
+	        "foregroundColor[1]" = "#CC33FF";
+		},
+
+	);
+}

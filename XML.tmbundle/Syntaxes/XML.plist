@@ -1,0 +1,113 @@
+/**
+ ** Simple XML syntax dictionary for TextMate.
+ ** Author: Brian Lalor <blalor@bravo5.org>
+ **
+ ** Some patterns (and most colors) taken from the bundled HTML.plist.
+ **
+ ** $URL$
+ **
+ ** TODO
+ ** ----
+ ** • more thorough DOCTYPE scanning (less greedy)
+ **/
+
+{
+	name = "XML";
+	
+	fileTypes = ( xml, plist );
+/*
+	foldingStartMarker = "^\\s*<[^!?/]+";
+	foldingStopMarker  = "(</[^?]+?>|/>)\\s*$";
+*/
+	foldingStartMarker = "^\\s*(<[^!?/]+(?!.+?/>)|(<!--(?!.*?-->))\\s*$)";
+	foldingStopMarker  = "(</[^?]+?>|/>|-->)\\s*$";
+
+	/* increaseIndentPattern = "<[^/>]*>\\s*$"; */
+	increaseIndentPattern = "<[^/]+?";
+	
+	foregroundColor = "#333333";
+	backgroundColor = "#ffffff";
+
+	smartTypingPairs = (
+	    ( "(", ")" ),
+		( "[", "]" ),
+		( "{", "}" ),
+		( "\"", "\"" ),
+	);
+	 highlightPairs = (
+	    ( "(", ")" ),
+		( "[", "]" ),
+		( "{", "}" ),
+		( "\"", "\"" ),
+		( "<", ">" ),
+	);
+
+	patterns = (
+		/* processing instructions */
+		{
+			name = "processing instructions";
+			begin = "<\\?\\s*[-_a-zA-Z0-9]+";
+			end = "\\?>";
+
+			foregroundColor = "#888888";
+
+			patterns = (
+	  			{ name = "Option"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "Double Quoted String"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
+				{ name = "Single Quoted String"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
+			);
+		},
+		
+		/* doctype */
+		{
+			name = "doctype stuff";
+			begin = "<!(DOCTYPE)";
+			end = ">";
+
+			"elementForegroundColor[1]" = "#888888";
+
+			patterns = (
+				{
+					begin = "<!(ENTITY)\\s([-_a-zA-Z0-9]+)";
+					end = ">";
+					
+					"elementForegroundColor[1]" = "#888888";
+					"elementForegroundColor[2]" = "#6600CC";
+				
+					patterns = (
+	  					{ name = "Double Quoted String"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
+						{ name = "Single Quoted String"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
+					);
+				},
+			);
+		},
+		
+		/* comments */
+		{
+			name = "comments";
+			begin = "<!--";
+			end = "-->";
+			foregroundColor = "red";
+		},
+		
+		/* nodes */
+		{
+			name = "nodes";
+			begin = "</?([-_a-zA-Z0-9:]+)";
+			end = "(/?)>";
+	  		"elementFontStyle[1]" = ( underline ); 
+	
+			foregroundColor = "#0066CC";
+			
+			patterns = (
+	  			{ name = "Option"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "Double Quoted String"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
+				{ name = "Single Quoted String"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
+			);
+		},
+
+		/* entities */
+		{ name = "HTML Entities"; match = "&([a-zA-Z_-]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+		{ name = "Bad Ampersand"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+	);
+}

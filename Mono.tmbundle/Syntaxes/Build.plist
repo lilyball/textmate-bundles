@@ -27,7 +27,7 @@
 	patterns = (
 		/* comments */
 		{
-			name = "comments";
+			name = "comments.block.nant";
 			begin = "<!--";
 			end = "-->";
 			foregroundColor = "red";
@@ -35,7 +35,7 @@
 		
 		/* nodes */
 		{
-			name = "nodes";
+			name = "keywords.tags.nodes.nant";
 			begin = "</?([-_a-zA-Z0-9:]+)";
 			end = "/?>";
 	  		"elementFontStyle[1]" = ( bold ); 
@@ -43,14 +43,14 @@
 			foregroundColor = "#0066CC";
 			
 			patterns = (
-	  			{ name = "Option"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "Double Quoted String"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
-				{ name = "Single Quoted String"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
+	  			{ name = "keywords.tags.options.nant"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "strings.double-quoted.nant"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
+				{ name = "strings.single-quoted.nant"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
 			);
 		},
 
 		/* entities */
-		{ name = "HTML Entities"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-		{ name = "Bad Ampersand"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+		{ name = "constants.character-entities.nant"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+		{ name = "invalid.bad-ampersand.nant"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
 	);
 }

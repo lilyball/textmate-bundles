@@ -5,13 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>bundlePath</key>
-	<string>/Users/erichsu/Library/Application Support/TextMate/Bundles/Perl.tmbundle</string>
+	<string>/Users/erichsu/Library/Application Support/TextMate/Bundles/Latex.tmbundle</string>
 	<key>command</key>
-	<string>perl -e 'while(&lt;STDIN&gt;){unless ($com) {/(\S)/;if ($1 eq "#") {$com=1} else {$com=2};};if ($com==1){s/\#\s+//;} else {s/(\S)/# $1/}; print;}'</string>
+	<string>sed 's/^.*/\% &amp;/'</string>
 	<key>input</key>
 	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^/</string>
 	<key>name</key>
-	<string>Perl Comment Toggle</string>
+	<string>LaTeX Comment</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 </dict>

@@ -11,9 +11,10 @@ OPEN="open -a TextMate"
 CREATE="touch"
 
 CREATE_FILE=0
-while getopts chuw FLAG; do
+while getopts chtuw FLAG; do
 	case $FLAG in
 	c) CREATE_FILE=1;;
+	t) PIPETITLE=1;;
 	u) URL=1;;
 	w) WAIT=1;;
 	h|\?) HELP=1;;
@@ -24,12 +25,13 @@ done
 if (($HELP)); then
 	echo ""
 	echo "TextMate Command Line Tool"
-	echo "usage: tm [-chuw] filename [filename ...]"
+	echo "usage: tm [-chtuw] filename [filename ...]"
 	echo ""
 	echo "This tool opens files, directories or (with no filenames) standard input."
 	echo ""
 	echo "    -c Create a new file"
 	echo "    -h Print this help"
+	echo "    -t Specify a title for piped input. Overrides other flags."
 	echo "    -u filenames treated as URLs (e.g. tm -u www.google.com). Uses curl."
 	echo "    -w Prompt for return to continue (good for use as external editor)"
 	echo ""
@@ -48,6 +50,7 @@ if (( $URL )); then
 	exit 1;
 fi
 
+
 # are we dealing with a filename or are we using stdin?
 if (( $# == 0 )); then
 	if [ ! -t 0 ]; then
@@ -59,6 +62,31 @@ if (( $# == 0 )); then
 		$CREATE $filename
 		exec > $filename
 	
+		while read a1
+		do
+		echo $a1
+		done
+		open -a TextMate.app $filename
+		exec 0<&6 6<&-
+		exec 1<&7 7<&-
+	else
+		if [ ! -z ${1} ]; then
+			$CREATE ${1}
+			$OPEN ${1}
+		else
+			$OPEN
+		fi
+	fi
+elif (($PIPETITLE)); then
+	for filename; do
+		filename=$filename
+	done
+	if [ ! -t 0 ]; then
+		exec 6<&0
+		exec 7>&1
+		$CREATE $filename
+		exec > $filename
+
 		while read a1
 		do
 		echo $a1
@@ -89,9 +117,10 @@ else
 		else
 			echo "File \`$filename' does not exist."
 		fi
-		if (($WAIT)); then
-			echo "Hit RETURN to continue..."
-			read answer			
-		fi
 	done
+fi
+
+if (($WAIT)); then
+	echo "Hit RETURN to continue..."
+	read answer			
 fi

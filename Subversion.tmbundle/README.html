@@ -46,10 +46,13 @@
             content: "Target: ";
          }
          
-         div.description:before {
+/*       div.description:before {  seems redundant?
             font-weight: bold;
             content: "Description: ";
-         }
+         }*/
+
+		  div.description {margin-top: 4px;}
+
          
          div.connect:before {
             font-weight: bold;
@@ -66,9 +69,9 @@
    </head>
    
    <body>
-      <h1>Subversion Bundle README</h1>
+      <h1>Subversion Bundle</h1>
       
-      <h2>What you currently can do with this Bundle</h2>
+      <h2>Commands</h2>
          
          <dl>
             <dt>Log</dt>
@@ -76,8 +79,8 @@
                <div class="target">active file</div>
                <div class="connect">Yes</div>
                <div class="description">
-                   shows you the commit messages for the current file.
-                   configurable via some shell variables, see below.
+                   Displays the commit message history for the current file.
+                   Some parameters are configurable via shell variables; see the Configuration Options section below.
                </div>
             </dd>
             
@@ -86,8 +89,8 @@
                <div class="target">active file</div>
                <div class="connect">Yes</div>
                <div class="description">
-                   shows you who wrote which line in what revision.
-                   you can click a line to jump to this line in TM.
+                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.
+                   Click a line to jump to it in an editor window.
                </div>
             </dd>
             
@@ -97,7 +100,10 @@
                <div class="target">directory of active file</div>
                <div class="connect">No</div>
                <div class="description">
-                  gives you an overview over what files changed.
+
+                  Displays a list of files with changes in your working copy, along with the type of change for each file.
+
+<!--                  Displays a list of files with changes in your working copy, along with a href="http://svnbook.red-bean.com/en/1.1/ch03s05.html#svn-ch-3-sect-5.3.1" the type of change /a  for each file. -->
                </div>
             </dd>
             
@@ -106,67 +112,69 @@
                <div class="target">selected files in drawer</div>
                <div class="connect">No</div>
                <div class="description">
-                  gives you a list of information about this files. (url, last changed, etc)
+                  Displays detailed information about the selected files, including the type of file, who last changed the file, the date file was last changed, the repository URL to the file, and other information.
                </div>
             </dd>
             
-            <dt>Diff With Newest</dt>
+            <dt>Diff With Newest (HEAD)</dt>
             <dd>
                <div class="target">active file</div>
                <div class="connect">Yes</div>
                <div class="description">
-                  shows you a colored diff against the newest available revision of this file
-                  in the repository. (HEAD)
+               	Displays the differences between the active file and the newest available revision of the file on the server.
+               	Equivalent to <code>svn diff -rHEAD</code>.
                </div>
             </dd>
             
-            <dt>Diff With Working Copy</dt>
+            <dt>Diff With Working Copy (BASE)</dt>
             <dd>
                <div class="target">active file</div>
                <div class="connect">No</div>
                <div class="description">
-                  shows you a colored diff against the working copy revision, also called
-                  the <em>pristine copy</em>. (BASE)  it basicly shows you all your changes.
+                  Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
+                  Equivalent to <code>svn diff -rBASE</code>.
                </div>
             </dd>
             
-            <dt>Diff With Previous Revision</dt>
+            <dt>Diff With Previous Revision (PREV)</dt>
             <dd>
                <div class="target">active file</div>
                <div class="connect">Yes</div>
                <div class="description">
-                  shows you a colored diff against the previous revision of this file. (PREV)
+                  Displays the differences between the active file and the previous revision of the file.
+                  Equivalent to <code>svn diff -rPREV</code>.
                </div>
             </dd>
             
             <!-- FIXME: more detail. -->
             <dt>Commit</dt>
             <dd>
-               <div class="target">active file</div>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">Yes</div>
                <div class="description">
-                  pop up a fancy message window to describe your changes and
-                  then send your changes to the repository.
+                  	Commits your changed files to the repository. A custom window appears, in which you enter the description
+					of your changes and you may choose to exclude files from the commit. If no files are selected or active,
+					this command does nothing. If the target files have no local changes, nothing happens.
                </div>
             </dd>
             
             <!-- FIXME: more detail. -->
             <dt>Add to Repository</dt>
             <dd>
-               <div class="target">active file</div>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">No</div>
                <div class="description">
-                  adds the selected files to the repository.
+                  Adds the targets to the repository.
                </div>
             </dd>
             
             <!-- FIXME: more detail. -->
             <dt>Update to Latest</dt>
             <dd>
-               <div class="target">active file</div>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">Yes</div>
                <div class="description">
-                  updates the currently selected files to the newest available.
+                  Updates the targets with the newest changes from the repository.
                </div>
             </dd>
             
@@ -176,15 +184,15 @@
                <div class="target">project</div>
                <div class="connect">Yes</div>
                <div class="description">
-                  updates everything.
+                  If there is a project open, updates all of the files and folders in the project with the newest changes from the repository.
                </div>
             </dd>
 
          </dl>
       
       
-      <h2>Configuration Options</h2>
-         
+      <h2><a name="conf">Configuration Options</a></h2>
+
          <dl>
             <dt>$TM_SVN</dt>
             <dd>

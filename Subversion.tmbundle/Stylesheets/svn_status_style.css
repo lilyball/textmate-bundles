@@ -1,0 +1,47 @@
+
+table.status
+{
+	font-size: 93%;
+}
+
+table.status a:link, table.status a:visited {
+	font-size: inherited;
+}
+
+table.status a:hover, table.status a:active {
+	font-size: inherited;
+	background-color: #a3c8ff;
+	color: inherit;
+	text-decoration: none;
+}
+
+/* A */
+table.status td.added {
+   color: green;
+   background-color: #bbffb3;	
+}
+
+/* M */
+table.status td.modified {
+	color: #eb6400;
+	background-color: #f7e1ad;
+}
+
+/* D */
+table.status td.deleted {
+	color: red;
+	background-color: #f59696;
+}
+
+/* C, !, " */
+table.status td.conflict, table.status td.missing, table.status td.typeconflict {
+	color: teal;
+	background-color: #A3CED0;
+}
+
+/* ?, I, X */
+table.status td.unknown, table.status td.ignore, table.status td.external {
+	color: purple;
+	background-color: #edaef5;
+}
+

@@ -34,9 +34,9 @@ mup.html {
 	}
 
 	mup.body { 
-		mup.h1("Subversion status")
-		mup.hr
-		mup.div("class" => "command"){ mup.text!("checking "); mup.tt(work_path) }
+		mup.h1("Subversion Status for '#{File.basename(work_path)}'")
+#		mup.hr
+		mup.div("class" => "command"){ mup.text!(work_path) } #mup.text!("checking "); 
 		STDOUT.flush
 		mup.hr
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>- (NSString *)${1:thing}
+{
+	return ${2:fThing};
+}
+
+- (void) set${3:Thing}:(NSString *) ${1:thing}
+{
+	NSString * old${3:Thing} = ${2:fThing};
+	${2:fThing} = [${1:thing} copy];
+	[old${3:Thing} release];
+}
+</string>
+	<key>name</key>
+	<string>String Accessors (stracc)</string>
+	<key>tabTrigger</key>
+	<string>stracc</string>
+	<key>uuid</key>
+	<string>5449EC50-98FE-11D9-9BB8-000A95A89C98</string>
+</dict>
+</plist>

@@ -48,6 +48,12 @@
 	{ name = "strings.double-quoted.perl.qlinestart"; begin = "^q[qwx]*\\("; end = "\\)";	 patterns = (
 	      { match = "(\\<(.*)\\>)"; foregroundColor = "#009933";} );
 	},
+	{ name = "strings.double-quoted.perl.q-brace"; begin = "\\Wq[qwx]*\\{"; end = "\\}";	 patterns = (
+	      { match = "(\\<(.*)\\>)"; foregroundColor = "#009933";} );
+	},
+	{ name = "strings.double-quoted.perl.qlinestart-brace"; begin = "^q[qwx]*\\{"; end = "\\}";	 patterns = (
+	      { match = "(\\<(.*)\\>)"; foregroundColor = "#009933";} );
+	},
 /*	{ name = "autoquote before =>... doesn't work"; begin = "\\{"; end = "}";	 patterns = (
 	      { begin="\\s*,*"; end="\\=\\>"; foregroundColor = "#009933";} );
 	}, */

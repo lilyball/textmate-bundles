@@ -20,40 +20,38 @@
 	patterns = (
 		
 		/* comments */
-		{ name = "Comment"; match = "'.*$"; foregroundColor = "#999999"; },
+		{ name = "comments.line";
+		  match = "'.*$";
+		  foregroundColor = "#999999";
+		},
 		
 		/* language stuff */
-		{ name = "Control Structures";
+		{ name = "keywords.control";
 		  foregroundColor = "#0066CC";
 		  match = "(?i:\\<(If|Then|Else|ElseIf|End If|While|Wend|For|To|Each|Case|Select|End Select|Return|Continue|Do|Until|Loop|Next|With|Exit Do|Exit For|Exit Function|Exit Property|Exit Sub)\\>)";
 		},
-		{ name = "Language Constructs";
+		{ name = "keywords.language";
 		  foregroundColor = "#0066CC";
 		  fontStyle = ( bold );
 		  match = "(?i:\\<(Call|Class|Const|Dim|Redim|Function|Sub|End sub|End Function|Set|Let|Get|New|Private|Public|Default|Randomize|Option Explicit|On Error Resume Next|On Error GoTo)\\>)";
 		},
 		{ 
-		 name = "Keywords";
+		 name = "keywords";
 		 foregroundColor = "#0066CC";
 		 fontStyle = ( bold );
 		 match = "(?i:\\<(Empty|False|Nothing|Null|True)\\>)";
 		},
 		{
-		 name = "Operators";
+		 name = "keywords.operators";
 		 foregroundColor = "#0066CC";
 		 fontStyle = ( bold );
 		 match = "(?i:\\<(Mod|And|Not|Or|Xor)\\>)";
 		},
 		
 		/* numbers and strings */
-		{
-		 name = "Numeric Constant";
-		 foregroundColor = "#000000";
-		 match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>";
-		},
 
 		{
-		 name = "Quoted string";
+		 name = "strings.double-quoted";
 		 foregroundColor = "#CC3300";
 		 begin = "\"";
 		 end = "\"";
@@ -62,7 +60,7 @@
 
 		/* variables */		
 		{
-		 name = "Variable";
+		 name = "keywords.variables";
 		 foregroundColor = "#8B9B08";
 		 fontStyle = ( bold );
 		 match = "\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*?\\>";
@@ -70,7 +68,7 @@
 		
 		/* ASP Objects */
 		{
-		 name = "ASP Object";
+		 name = "keywords.objects";
 		 foregroundColor = "#000099";
 		 fontStyle = ( bold );
 		 match = "(?i:\\<(Application|ObjectContext|Request|Response|Server|Session)\\>)";
@@ -78,21 +76,21 @@
 
 		/* ASP Collections */
 		{
-		 name = "ASP Collection";
+		 name = "keywords.collections";
 		 foregroundColor = "#0066cc";
 		 match = "(?i:\\<(Contents|StaticObjects|ClientCertificate|Cookies|Form|QueryString|ServerVariables)\\>)";
 		},
 
 		/* ASP Properties */
 		{
-		 name = "ASP Property";
+		 name = "keywords.properties";
 		 foregroundColor = "#0066cc";
 		 match = "(?i:\\<(TotalBytes|Buffer|CacheControl|Charset|ContentType|Expires|ExpiresAbsolute|IsClientConnected|PICS|Status|ScriptTimeout|CodePage|LCID|SessionID|Timeout)\\>)";
 		},
 		
 		/* ASP Methods */
 		{
-		 name = "ASP Method";
+		 name = "keywords.methods";
 		 foregroundColor = "#6E84C4";
 		 fontStyle = ( bold );
 		 match = "(?i:\\<(Lock|Unlock|SetAbort|SetComplete|BianryRead|AddHeader|AppendToLog|BinaryWrite|Clear|End|Flush|Redirect|Write|CreateObject|HTMLEncode|MapPath|URLEncode|Abandon)\\>)";
@@ -100,30 +98,28 @@
 		
 		/* ASP Events */
 		{
-		 name = "ASP Event";
+		 name = "keywords.events";
 		 foregroundColor = "#0033cc";
 		 match = "(?i:\\<(Application_OnEnd|Application_OnStart|OnTransactionAbort|OnTransactionCommit|Session_OnEnd|Session_OnStart)\\>)";
 		},
 
 		/* ASP (VB) Functions */
 		{
-		 name = "ASP (VB) Functions";
+		 name = "keywords.functions";
 		 foregroundColor = "#6E84C4";
 		 fontStyle = ( bold );
-		 match = "(?i:\\<(Array|Asc|Atn|CBool|CByte|CCur|CDate|CDbl|Chr|CInt|CLng|Conversions|Cos|CreateObject|CSng|CStr|Date|DateAdd|DateDiff|DatePart|DateSerial|DateValue|Day|Derived|Math|Escape|Eval|Exp|Filter|FormatCurrency|FormatDateTime|FormatNumber|FormatPercent|GetLocale|GetObject|GetRef|Hex|Hour|InputBox|InStr|InStrRev|Int|Fix|IsArray|IsDate|IsEmpty|IsNull|IsNumeric|IsObject|Join|LBound|LCase|Left|Len|LoadPicture|Log|LTrim|RTrim|Trim|Maths|Mid|Minute|Month|MonthName|MsgBox|Now|Oct|Replace|RGB|Right|Rnd|Round|ScriptEngine|ScriptEngineBuildVersion|ScriptEngineMajorVersion|ScriptEngineMinorVersion|Second|SetLocale|Sgn|Sin|Space|Split|Sqr|StrComp|String|StrReverse|Tan|Time|Timer|TimeSerial|TimeValue|TypeName|UBound|UCase|Unescape|VarType|Weekday|WeekdayName|Year)\\>)";
-		},
-
-		/* Misc VB Methods/Properties */
-		{
-		 name = "ASP (VB) Functions";
-		 foregroundColor = "#6E84C4";
-		 fontStyle = ( bold );
-		 match = "(?i:\\<(Add|Exists|Item|Items|Keys|Remove|RemoveAll)\\>)";
+		 match = "(?i:\\<(Array|Add|Asc|Atn|CBool|CByte|CCur|CDate|CDbl|Chr|CInt|CLng|Conversions|Cos|CreateObject|CSng|CStr|Date|DateAdd|DateDiff|DatePart|DateSerial|DateValue|Day|Derived|Math|Escape|Eval|Exists|Exp|Filter|FormatCurrency|FormatDateTime|FormatNumber|FormatPercent|GetLocale|GetObject|GetRef|Hex|Hour|InputBox|InStr|InStrRev|Int|Fix|IsArray|IsDate|IsEmpty|IsNull|IsNumeric|IsObject|Item|Items|Join|Keys|LBound|LCase|Left|Len|LoadPicture|Log|LTrim|RTrim|Trim|Maths|Mid|Minute|Month|MonthName|MsgBox|Now|Oct|Remove|RemoveAll|Replace|RGB|Right|Rnd|Round|ScriptEngine|ScriptEngineBuildVersion|ScriptEngineMajorVersion|ScriptEngineMinorVersion|Second|SetLocale|Sgn|Sin|Space|Split|Sqr|StrComp|String|StrReverse|Tan|Time|Timer|TimeSerial|TimeValue|TypeName|UBound|UCase|Unescape|VarType|Weekday|WeekdayName|Year)\\>)";
 		},
 		
 		/* Constants */
 		{
-		 name = "Constants";
+		 name = "keywords.constants.numeric";
+		 foregroundColor = "#000000";
+		 match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>";
+		},
+		
+		{
+		 name = "keywords.constants";
 		 foregroundColor = "#33cc33";
 		 match = "(?i:\\<(vbtrue|fvbalse|vbcr|vbcrlf|vbformfeed|vblf|vbnewline|vbnullchar|vbnullstring|vbtab|vbverticaltab|vbbinarycompare|vbtextcomparevbsunday|vbmonday|vbtuesday|vbwednesday|vbthursday|vbfriday|vbsaturday|vbusesystemdayofweek|vbfirstjan1|vbfirstfourdays|vbfirstfullweek|vbgeneraldate|vblongdate|vbshortdate|vblongtime|vbshorttime|vbobjecterror|vbEmpty|vbNull|vbInteger|vbLong|vbSingle|vbDouble|vbCurrency|vbDate|vbString|vbObject|vbError|vbBoolean|vbVariant|vbDataObject|vbDecimal|vbByte|vbArray)\\>)";
 		},

@@ -18,7 +18,7 @@ cat &lt;&lt;EOF
 EOF
 
 cd "`dirname "$TM_FILEPATH"`"
-grep -HinrwE "TODO|FIXME|FIX ME" * | perl -pe '$|=1; s!(.*?):(.*?):.*?(?:TODO|FIXME|FIX ME)[:,]?(.*)$!&lt;li&gt; $1: &lt;a href="txmt://open?url=file://$ENV{'WorkPath'}/$1&amp;line=$2"&gt;$3&lt;/a&gt;&lt;/li&gt;!i'
+grep -HinrwE "TODO|FIXME|FIX ME" * | perl -pe '$|=1; s/&amp;/&amp;amp;/g; s/&lt;/&amp;lt;/g; s/&gt;/&amp;gt;/g; s!(.*?):(.*?):.*?(?:TODO|FIXME|FIX ME)[:,]?(.*)$!&lt;li&gt; $1: &lt;a href="txmt://open?url=file://$ENV{'WorkPath'}/$1&amp;line=$2"&gt;$3&lt;/a&gt;&lt;/li&gt;!i'
 
 echo "&lt;/ul&gt;&lt;/body&gt;"</string>
 	<key>input</key>

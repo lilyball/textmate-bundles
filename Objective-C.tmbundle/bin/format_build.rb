@@ -28,14 +28,14 @@ ENDSCRIPT
 STYLE = <<ENDSTYLE
 /* general stuff.. */
 body {
-   font-family: sans-serif;
+   font-family: "Lucida Grande", sans-serif;
    font-size: 11pt;
 }
 
 div.showhide {
 	float: right;
 	font-size: 8pt;
-	font-family: sans-serif;
+	font-family: "Lucida Grande", sans-serif;
 	margin-top: 2px;
 	margin-bottom: 2px;
 }
@@ -81,7 +81,7 @@ div.inner {
 
 div.error h2, div.warning h2, div.info h2 {
 /*   font-size: 10pt;*/
-   font-family: sans-serif;
+   font-family: "Lucida Grande", sans-serif;
    margin-top: 0;
 }
 

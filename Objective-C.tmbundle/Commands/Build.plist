@@ -31,7 +31,7 @@ elif [[ -z $TM_PROJECT_DIRECTORY ]]; then
 		cd ..
 	done
 else
-	cd $(dirname $TM_PROJECT_FILEPATH)
+	cd "$TM_PROJECT_DIRECTORY"
 	PROJECT_FILE=$(basename ${TM_PROJECT_FILEPATH%.tmproj})
 	if [[ -d "${PROJECT_FILE}.xcode" ]]; then
 		PROJECT_FILE=${PROJECT_FILE}.xcode

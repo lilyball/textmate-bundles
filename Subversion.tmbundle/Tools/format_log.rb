@@ -7,9 +7,10 @@
 
 
 # fetch some tm things..
-$tab_size   = ENV['TM_TAB_SIZE'].to_i
-$bundle     = ENV['TM_BUNDLE_PATH']
-$limit      = ENV['TM_SVN_LOG_LIMIT'].nil? ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i  # set default if none set
+$tab_size      = ENV['TM_TAB_SIZE'].to_i
+$bundle        = ENV['TM_BUNDLE_PATH']
+$limit         = ENV['TM_SVN_LOG_LIMIT'].nil?   ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i
+$date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
 
 
 # require the helper, it does some formating, etc:

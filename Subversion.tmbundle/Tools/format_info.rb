@@ -7,12 +7,13 @@
 
 
 # fetch some tm things..
-$bundle     = ENV['TM_BUNDLE_PATH']
-$show       = (ENV['TM_SVN_INFO_SHOW'].nil?) ?
-               [] : ENV['TM_SVN_INFO_SHOW'].split(/\s*,\s*/).each { |s| s.downcase! }
-$hide       = (ENV['TM_SVN_INFO_HIDE'].nil?) ?
-               [] : ENV['TM_SVN_INFO_HIDE'].split(/\s*,\s*/).each { |s| s.downcase! }
-$hide_all   = ($hide.include? '*') ? true : false
+$bundle        = ENV['TM_BUNDLE_PATH']
+$show          = ENV['TM_SVN_INFO_SHOW'].nil? ? [] :
+                   ENV['TM_SVN_INFO_SHOW'].split(/\s*,\s*/).each { |s| s.downcase! }
+$hide          = ENV['TM_SVN_INFO_HIDE'].nil? ? [] :
+                   ENV['TM_SVN_INFO_HIDE'].split(/\s*,\s*/).each { |s| s.downcase! }
+$date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
+$hide_all      = ($hide.include? '*') ? true : false
 
 
 # require the helper, it does some formating, etc:
@@ -66,6 +67,11 @@ begin
                dt = 'URL'
                # TODO: make URLs that use auths working or find a way to open them in safari.
                dd = '<a href="'+htmlize($2, false)+'">'+htmlize($2, false)+'</a>'
+               
+            # this 2 keys should be the only ones with dates:
+            elsif $1 == 'Last Changed Date' or $1 == 'Text Last Updated'
+               dt = htmlize( $1, false )
+               dd = htmlize( formated_date( $2 ), false )
                
             else
                dt = htmlize( $1, false )

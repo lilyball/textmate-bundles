@@ -49,9 +49,23 @@ module SVNHelper
    end
    
    
+   # formates you date (input should be a standart svn date)
+   # if format is nil it just gives you back the current date
+   def formated_date( input, format=$date_format )
+      if not format.nil? and input =~ /^\s*(\d+)-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2}) .+$/
+         #            year     month    day      hour     minutes  seconds
+         Time.mktime( $1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i ).strftime( format )
+      else
+         input
+      end
+      
+   end
+   
+   
    # produces a generic header..
    def make_head( title='', styles=Array.new, head_adds=''  )
       puts '<html><head><title>'+title+'</title>'
+      puts '<meta http-equiv="Content-Type" content="text/html; charset="UTF-8" />'
       puts '<style type="text/css">'
       
       styles.each do |style|

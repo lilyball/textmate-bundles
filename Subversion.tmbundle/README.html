@@ -194,12 +194,28 @@
          </dl>
       
       <h2><a name="conf">Configuration Options</a></h2>
-
+         
+         <p>All these Options are optinal, you can set them if you want to tweak the behaviour of the certain commands.</p>
+         
          <dl>
             <dt><a name="tm_svn">$TM_SVN</a></dt>
             <dd>
                <div class="default">svn</div>
                <div class="description">the path to your svn executable.</div>
+            </dd>
+            
+            <dt><a name="tm_svn">$TM_RUBY</a></dt>
+            <dd>
+               <div class="default">ruby</div>
+               <div class="description">Here you can tweak with what Ruby the formating Scripts will be executed.</div>
+            </dd>
+            
+            <dt><a name="tm_svn">$TM_SVN_DATE_FORMAT</a></dt>
+            <dd>
+               <div class="default"><em>nil</em> (No Changes, just show what SVN shows)</div>
+               <div class="description">
+                  A date format string that allows you to tweak the format in which <a href="#log">Log</a> and <a href="#info">Info</a> show you dates.  See <a href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html">strftime(3)</a> for what you can enter here.
+               </div>
             </dd>
             
             <dt><a name="tm_svn_log">$TM_SVN_LOG_RANGE</a></dt>

@@ -16,20 +16,13 @@ open -a TextMate "$TMPFILE" &amp;
 
 #rm "$TMPFILE" # ideally, we'd do this, but it creates a
                # race condition, because 'open' is asynchronous.
-#remove_tmp_file()
-#{
-#	sleep 2
-#	rm "$TMPFILE"
-#}
-#
-#remove_tmp_file &amp; # I'm told this should work, but it doesn't.
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>@b</string>
 	<key>name</key>
-	<string>Diff With Latest</string>
+	<string>Diff With Newest</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>

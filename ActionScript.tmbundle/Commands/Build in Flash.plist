@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>captureFormatString</key>
+	<string>$2, line $3: $4</string>
+	<key>capturePattern</key>
+	<string>^(.+):(.+):(\d+):(.*)$</string>
+	<key>command</key>
+	<string># run this command with the .fla file in your project, and selected
+# set FLASHCOMMAND to the location of your flashcommand binary.
+# get flashcommand here:
+# http://www.markme.com/mesh/archives/004419.cfm
+
+FLASHCOMMAND=~/bin/flashcommand
+
+#
+# end user changes
+#
+
+FLA=$TM_SELECTED_FILE
+SWF=$TM_DIRECTORY/temp.swf
+
+result=`"$FLASHCOMMAND" -e -s "$FLA" -o "$SWF"`
+test=`echo "$result" | grep -c Error`
+
+if [ "$test" != 0 ]
+then
+   #flashcommand output is very dirty and windoze like. Let's format it !
+echo $result | perl -p -i -e "s/\s*\*\*(Error|Warning)\*\*\s*/\n/g;" | perl -p -i -e "s/Total ActionScript Errors.+//g;" | awk 'BEGIN {FS=": Line "} { a=$1; b=$1; gsub(":","/",a); gsub("^.+:","",b); print a":"b":"$2}' | perl -p -i -e "s'^(.+?)/'/';" 
+exit 1;
+else
+  echo Built successfully.
+  open "$SWF"
+fi
+
+exit;</string>
+	<key>fileCaptureRegister</key>
+	<string>2</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@</string>
+	<key>lineCaptureRegister</key>
+	<string>3</string>
+	<key>name</key>
+	<string>Build in Flash</string>
+	<key>output</key>
+	<string>separateWindow</string>
+	<key>uuid</key>
+	<string>2197A196-78E3-11D9-8177-000A95C5F126</string>
+</dict>
+</plist>

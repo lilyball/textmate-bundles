@@ -4,17 +4,36 @@ require (bundle + "/bin/Builder.rb")
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)
 
+# N.B. This code is not a model of Ruby clarity.
+# I'm still experimenting with Builder.rb.
+
 class << mup
 	
 	attr_accessor :current_class
 	attr_accessor :div_count
 	attr_accessor :next_div_name
+	attr_accessor :accumulated_prefix
+	
+	
+	def a_textmate!( path, line_number )
+		line_number = 1 if line_number.nil?
+		a( "href" => "txmt://open?url=file://#{path}&line=#{line_number}" ) {
+			text!( File.basename(path) + ":" + line_number.to_s )
+		}
+	end
+	
+	# accumulate content that will prefix the next div
+	def accumulate!(content)
+		@accumulated_prefix = '' unless defined?(@accumulated_prefix)
+		@accumulated_prefix << content
+	end
 	
 	# accumulative div -- block yields the div title
 	def new_div!( nclass, content = "", hide = false, &block )
 		div_id = nil
 		
 		@div_count = 0 unless defined?(@div_count)
+		@accumulated_prefix = '' unless defined?(@accumulated_prefix)
 		
 		unless nclass === @current_class
 			@div_count += 1
@@ -27,39 +46,71 @@ class << mup
 			@current_class = nclass
 			_start_tag( "div", "class" => nclass, "id" => div_id )
 
+			hide_if_hidden_style = hide ? "display: none;" : "";
+			show_if_hidden_style = hide ? "" : "display: none;";
+
 			# add show/hide toggle above the inner content div
 			div( "class" => "showhide" ) {
-				
-				hide_style = hide ? "display: none;" : "";
-				show_style = hide ? "" : "display: none;";
-				
-				a( "Hide Details", 'href' => "javascript:hideElement('#{div_id}')", 'id' => div_id + '_hide', 'style' => hide_style )
-				a( "Show Details", 'href' => "javascript:showElement('#{div_id}')", 'id' => div_id + '_show', 'style' => show_style )
+								
+				a( "Hide Details", 'href' => "javascript:hideElement('#{div_id}')", 'id' => div_id + '_hide', 'style' => hide_if_hidden_style )
+				a( "Show Details", 'href' => "javascript:showElement('#{div_id}')", 'id' => div_id + '_show', 'style' => show_if_hidden_style )
 			}
 			
 			block.call
 
+			# show the user at least the title of the div
 			STDOUT.flush
 			
-			content_style = hide ? "display: none;" : "";
-			_start_tag( "div", "class" => "inner", "id" => div_id + "_c", 'style' => content_style )
+			_start_tag( "div", "class" => "inner", "id" => div_id + "_c", 'style' => hide_if_hidden_style )
 			
-			is_new = true
 		end
+		
+		# output the div prefix for error/message boxes
+		unless @accumulated_prefix.empty? || @current_class == 'normal'
+			
+			@accumulated_prefix.each_line do |prefixline|
+				
+				# process any file paths
+				match = /(\/.+?):(\d+)?/.match(prefixline)
+				
+				if match.nil? then
+					text!( prefixline )
+				else
+					first = match.begin(1)
+					last = match.end(2)
+					last = match.end(1) if last.nil?
+					
+					text!(prefixline[0...(first)])
+					
+					a_textmate!( match[1], match[2] )
+					
+					text!(prefixline[last...(prefixline.length - 1)])
+				end
+				br
+			end
+			
+			@accumulated_prefix = ''
+		end
+		
 		text! content
+		
 		div_id
 	end
 
 	# wrap up any loose ends
 	def end_div!
 		if defined?( @current_class ) then
-			_end_tag("div")
-			_end_tag("div")
+			_end_tag("div")	# inner
+			_end_tag("div") # outer
 			@current_class = nil
 		end
 	end
 
 	def normal!(string)
+		
+		return if string.empty?
+		return if string === "\n"
+		
 		new_div!( "normal", string, true ) do
 			
 			if @next_div_name.nil?
@@ -68,7 +119,7 @@ class << mup
 				title = @next_div_name
 				@next_div_name = nil
 			end
-			h3(title)
+			h2(title)
 		end
 		br
 	end
@@ -104,26 +155,27 @@ body {
 
 div.showhide {
 	float: right;
-#	width: 10%;
-	font-size: 90%;
-	margin: 10px;
-	
-	color: black;
+	font-size: 8pt;
+	font-family: sans-serif;
+	margin-top: 2px;
+	margin-bottom: 2px;
 }
 
 div.normal {
-	padding: 4px;
+	padding: 2px;
 	margin: 3px;
 
-	border-top: 2px;
+	border: 2px;
 	border-style: none none none solid;
 	color: #aaa;
 	font-size: 70%;
 	margin 0;
 }
 
-h2.targetname {
-	color: black;
+div.normal h2 {
+	font-size: 10pt;
+	margin-top: 2px;
+	margin-bottom: 2px;
 }
 
 h1 {
@@ -209,7 +261,7 @@ mup.html {
 	}
 
 	mup.body { 
-		mup.h1("Building '#{File.basename(ENV['TM_FILEPATH'])}'")
+		mup.h1("Building With Xcode")
 		mup.hr
 		STDOUT.flush
 
@@ -218,52 +270,68 @@ mup.html {
 			# remember the current line for later
 			last_line = line
 			
-			# <path>:<line>:[column:] error description
-			error_match = /^(.+?):(\d+):(?:\d*?:)?\s*(.*)/.match(line)
-			
-			unless error_match.nil?
-				
-				path		= error_match[1]
-				line_number	= error_match[2]
-				
-				# if the file doesn't exist, we probably snagged something that's not an error
-				if File.exist?(path)
+			case line
+				# Handle error prefix text
+				when /^\s*((In file included from)|from)(\s*)(\/.*?):/
+					
+#					if File.exist?("#$3")
+						mup.accumulate!( line )
+#					else
+#						mup.normal!( line )
+#					end
 
-					# parse for "error", "warning", and "info" and use appropriate CSS classes					
-					cssclass = /^\s*(error|warning|info|message)/i.match(error_match[3])
-					
-					cssclass = cssclass[0].downcase unless cssclass.nil?
-					cssclass = case cssclass
-						when nil
-							"error"
-						when "message"
-							"info"
-						else
-							cssclass
-					end
-										
-					mup.new_div!(cssclass) { mup.h2(cssclass) }
-					
-					mup.p {
-						mup.a( "href" => "txmt://open?url=file://#{path}&line=#{line_number}" ) {
-							mup.text!( File.basename(path) + ":" + line_number + ": " + error_match[3] )
-						}
-					}
-					next													# =======> next
-				end
-			else
+				# <path>:<line>:[column:] error description
+				when /^(.+?):(\d+):(?:\d*?:)?\s*(.*)/
+					path		= "#$1"
+					line_number = "#$2"
+					error_desc	= "#$3"
 				
+					# if the file doesn't exist, we probably snagged something that's not an error
+					if File.exist?(path)
+
+						# parse for "error", "warning", and "info" and use appropriate CSS classes					
+						cssclass = /^\s*(error|warning|info|message)/i.match(error_desc)
+					
+						cssclass = cssclass[0].downcase unless cssclass.nil?
+						cssclass = case cssclass
+							when nil
+								"error"
+							when "message"
+								"info"
+							else
+								cssclass
+						end
+										
+						mup.new_div!(cssclass) { mup.h2(cssclass) }
+					
+						mup.p {
+							mup.a_textmate!( path, line_number )
+							mup.text!(":" + error_desc)
+#							mup.a( "href" => "txmt://open?url=file://#{path}&line=#{line_number}" ) {
+#								mup.text!( File.basename(path) + ":" + line_number + ": " + error_desc )
+#							}
+						}
+					else
+						mup.normal!( line )
+					end
+
+				when /^\s*(\s*)(\/.*?):/
+					
+					if File.exist?("#$2")
+						mup.accumulate!( line )
+					else
+						mup.normal!( line )
+					end
+									
 				# highlight each target name
-				match = /^===(.*)===$/.match(line)
-				unless match.nil?
+				when /^===(.*)===$/
 					mup.end_div!
-					mup.next_div_name = match[1]
-					#mup.h2(line, "class" => "targetname")
-					next													# =======> next
-				end
+					mup.next_div_name = "#$1"
+				
+				else
+					mup.normal!( line )
 			end
 			
-			mup.normal!( line )
 		end
 		
 		# play sound on success/failure

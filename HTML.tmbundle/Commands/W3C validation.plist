@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>tmp=`mktemp -t w3c_result`.html
+curl -o $tmp -F uploaded_file=@"${TM_FILEPATH}"\;type=text/html http://validator.w3.org/check &amp;&amp; open $tmp</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>W3C validation</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>3F26240E-6E4A-11D9-B411-000D93589AF6</string>
+</dict>
+</plist>

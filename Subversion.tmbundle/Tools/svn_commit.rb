@@ -73,9 +73,9 @@ if status != 0
 	exit -1
 end
 
-puts "<div class=\"command\">"
-puts %Q{"#{svn}" commit #{commit_args}}
-puts "</div>"
+#puts "<div class=\"command\">"
+#puts %Q{"#{svn}" commit #{commit_args}}
+#puts "</div>"
 puts "<p> <pre>"
 STDOUT.flush
 puts %x{"#{svn}" commit #{commit_args}}

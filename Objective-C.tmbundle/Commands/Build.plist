@@ -50,7 +50,7 @@ echo '&lt;tt&gt;'
 res=`mktemp /tmp/tm_build_status_XXX`
 
 xcodebuild 2&gt;${res} $PROJECT_PARAM $BUILD_STYLE \
-| perl -pe '$| = 1; s/^(([^:]*\/)?([^\/:]+)):((\d+):)?/&lt;a href="txmt:\/\/open?url=file:\/\/$1&amp;line=$5"&gt;$3&lt;\/a&gt;:/; s/\n/&lt;br&gt;\n/'
+| perl -pe '$| = 1; s/&amp;/&amp;amp;/g; s/&lt;/&amp;lt;/g; s/&gt;/&amp;gt;/g; s|^(([^:]*/)?([^/:]+)):((\d+):)?|&lt;a href="txmt://open?url=file://$1&amp;line=$5"&gt;$3&lt;/a&gt;:|; s/\n/&lt;br&gt;\n/'
 
 echo '&lt;h2&gt;' "$(&lt; ${res})" '&lt;/h2&gt;'
 

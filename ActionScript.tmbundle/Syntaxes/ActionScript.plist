@@ -23,6 +23,7 @@
 		{ name = "keywords.functions.actionscript"; match = "\\<([a-zA-Z_]\\w*(?=\s*\\())\\>"; fontStyle = ( normal ); "foregroundColor[1]" = "#990017"; },
 		{ name = "constants.numeric.actionscript"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; fontStyle = ( normal ); foregroundColor = "#02991A"; },
 		{ name = "strings.double-quoted.actionscript"; begin = "\""; end = "\""; swallow = "\\\\."; fontStyle = ( normal ); foregroundColor = "#727272"; },
+		{ name = "strings.single-quoted.actionscript"; begin = "'"; end = "'"; swallow = "\\\\."; fontStyle = ( normal ); foregroundColor = "#727272"; },
 		{ name = "keywords.variables.constants.actionscript"; match = "\\<(BACKSPACE|CAPSLOCK|CONTROL|DELETEKEY|DOWN|END|ENTER|false|HOME|INSERT|LEFT|LN10|LN2|LOG10E|LOG2E|MAX_VALUE|MIN_VALUE|NEGATIVE_INFINITY|NaN|PGDN|PGUP|PI|POSITIVE_INFINITY|RIGHT|SPACE|SQRT1_2|SQRT2|true|UP)\\>"; fontStyle = ( normal ); foregroundColor = "#994C00"; },
 		{ name = "comments.block.actionscript"; begin = "/\\*"; end = "\\*/"; fontStyle = ( normal ); foregroundColor = "#236E25"; },
 		{ name = "comments.line.actionscript"; match = "//.*$"; fontStyle = ( normal ); foregroundColor = "#236E25"; },

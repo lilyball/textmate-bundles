@@ -246,59 +246,53 @@
 	return [[self valueForKey:@"sourceTree"] isEqualToString:@"<group>"];
 }
 
-// return the path for the first non-group-relative group above us in the hierarchy
-- (NSString *) XCParentPath;
-{
-	NSString *	parentPath;
-	
-	if( [self isGroupRelative] )
-	{
-		XCGroup *	parent = [self parent];
-		if( parent == nil )
-		{
-			parentPath = @"";
-		}
-		else
-		{
-			parentPath = [parent XCParentPath];	
-		}
-	}
-	else
-	{
-		parentPath = [self valueForKey:@"path"];
-	}
-	
-	return parentPath;
-}
-
+//
 // Return the path of this file ref.
 // If the file's path is not group-relative, the parent group is ignored.
+//
+// Xcode path reconstruction for group-relative paths concatenates the "path" ivars of
+// all the parent nodes. Stop when we get to the first non-group-relative parent node.
+//
 -(NSString *) relativePath
 {
-	NSString * pathForGroup;
-	NSString * leaf = [self valueForKey:@"path"];
+	NSString *	selfPath	= [self valueForKey:@"path"];
+	XCGroup *	current		= [self parent];
+
+	// paranoia
+	if(selfPath == nil)
+	{
+		selfPath = @"<nil>";
+	}
 	
 	if( [self isGroupRelative] )
 	{
-		NSString * parentPath = [self XCParentPath];
+		NSString *	segment;
 		
-		if( [parentPath isEqualToString:@""] )
+		while( current != nil && [current isGroupRelative] )	
 		{
-			pathForGroup = leaf;
+			segment = [current valueForKey:@"path"];
+			if( segment != nil )
+			{
+				selfPath = [segment stringByAppendingFormat:@"/%@", selfPath];
+			}
+			
+			current = [current parent];
 		}
-		else
+		
+		//
+		// The highest parent node that is not group relative will
+		// be the first element of the group-relative path.
+		//
+		segment = [current valueForKey:@"path"];
+		if( segment != nil )
 		{
-			pathForGroup = [NSString stringWithFormat:@"%@/%@", parentPath, leaf];
+			selfPath = [segment stringByAppendingFormat:@"/%@", selfPath];
 		}
 		
 	}
-	else
-	{
-		pathForGroup = leaf;
-	}
-	return pathForGroup;
+	
+	return selfPath;
 }
-
 
 - (XCGroup *) parent
 {

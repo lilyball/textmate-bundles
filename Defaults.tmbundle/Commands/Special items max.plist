@@ -4,23 +4,17 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
-	<key>captureFormatString</key>
-	<string>$2</string>
-	<key>capturePattern</key>
-	<string>^(\d+):(.*)$</string>
 	<key>command</key>
-	<string>"${TM_BUNDLE_PATH}/bin/entitynav.py" -f - -E "${TM_FILENAME}"</string>
+	<string>"${TM_BUNDLE_PATH}/bin/entitynav.py" -f - -E "${TM_FILENAME}" | php "${TM_BUNDLE_PATH}/bin/nav2list.php" </string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
 	<string></string>
-	<key>lineCaptureRegister</key>
-	<string>1</string>
 	<key>name</key>
-	<string>Special Items Window</string>
+	<string>Special Items List</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>E3B38F3D-90DC-11D9-B134-000A9584EC8C</string>
+	<string>BF77788B-9418-11D9-84BA-000A957B2E42</string>
 </dict>
 </plist>

@@ -19,57 +19,7 @@ export CommitPaths
 echo "${TM_SVN:=svn}" &gt; /dev/null
 export TM_SVN
 
-ruby &lt;&lt;END
-	require 'English'
-
-	svn			= ENV['TM_SVN']
-	commit_paths	= ENV['CommitPaths']
-	commit_tool	= ENV['CommitWindow']
-	bundle		= ENV['TM_BUNDLE_PATH']
-
-#	require bundle+'/Tools/svn_helper.rb'
-#	include SVNHelper
-
-	# Ignore files without changes
-	commit_paths = %x{"#{svn}" status #{commit_paths}}.gsub(/^.(\s+)(.*)\n/) { %Q{'#{$~[2]}' } }
-
-	if commit_paths.nil? or commit_paths.size == 0
-		puts "File(s) not modified; nothing to commit."
-		exit 0
-	end
-
-	# Nuke unnecessary bits of the path
-	current_dir = Dir.pwd + "/"
-	commit_paths.gsub!(/'#{current_dir}/, "'")
-
-	commit_args = %x{"#{commit_tool}" #{commit_paths}}
-
-	status = \$CHILD_STATUS
-	if status != 0
-		puts "Canceled (#{status})."
-		exit -1
-	end
-
-	puts "&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Subversion status&lt;/title&gt;
-&lt;style type=\"text/css\"&gt;
-   @import 'file://"+bundle+"/Stylesheets/svn_style.css';
-&lt;/style&gt;
-&lt;/head&gt;
-
-&lt;body&gt;"
-
-	puts "&lt;h1&gt;Commit results&lt;/h1&gt;"
-	puts "&lt;div class=\"command\"&gt;"
-	puts %Q{"#{svn}" commit #{commit_args}}
-	puts "&lt;/div&gt;"
-	puts "&lt;p&gt; &lt;pre&gt;"
-	STDOUT.flush
-	puts %x{"#{svn}" commit #{commit_args}}
-
-	puts "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"
-END
+ruby -- "${TM_BUNDLE_PATH}/Tools/svn_commit.rb"
 </string>
 	<key>input</key>
 	<string>none</string>

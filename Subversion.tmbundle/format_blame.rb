@@ -91,7 +91,7 @@ def tm_make_link( filename, line )
 end
 
 def tm_escape( string )
-   return string.gsub( /\<|\>|&| |\t/ ) do |match|
+   return string.gsub( /\<|\>|&|  |\t/ ) do |match|
       case match
          when '<'
          '&lt;'
@@ -99,8 +99,8 @@ def tm_escape( string )
          '&gt;'
          when '&'
          '&amp;'
-         when ' '
-         '&nbsp;'
+         when '  '
+         ' &nbsp;'
          when "\t"
          '&nbsp;'*ENV['TM_TAB_SIZE'].to_i
       end

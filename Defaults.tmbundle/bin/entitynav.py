@@ -48,8 +48,8 @@ class EntityHandler:
     """
     Interface/abstract class for language-specific Entity handlers
     
-    Below are handler classes for specific languages.  To create a new
-    language handler, name the class Entities<Ext> where <Ext> is the extension
+    Below are handler classes for specific languages, listed alphabetically.  
+    To create a new language handler, name the class Entities<Ext> where <Ext> is the extension
     of a code file for the language.  I.E. EntitiesPy for Python files. 
     If multiple extensions exist for the same language, make a subclass for each lang.
     
@@ -58,6 +58,13 @@ class EntityHandler:
     """
     def __init__(self):
         self.entityMatchLine = re.SRE_Pattern
+        
+class EntitiesCss(EntityHandler):
+    """
+    entity-matching handler for CSS (css) files
+    """
+    def __init__(self):
+        self.entityMatchLine = re.compile(r'^[\s]*[a-zA-Z_\.,#]+[\sa-zA-Z_\.,#\{:]*[^;]+$')
         
 class EntitiesPhp(EntityHandler):
     """
@@ -84,6 +91,10 @@ class EntitiesPy(EntityHandler):
     def __init__(self):
         self.entityMatchLine = re.compile(r'^\s*(class|def)\b.*:\s*$')
 
+#-------------------------------------------------------------------------
+# END: ENTITY HANDLERS
+#-------------------------------------------------------------------------
+
 class EntityNav:
     """
     Produces a parsable entity-navigation of a code file (designed for TextMate's command window)
@@ -102,6 +113,8 @@ class EntityNav:
         for lineNum,line in self.fileDict.iteritems():
             if self.handler.entityMatchLine.match(line):
                 self.entities[lineNum] = line
+        if self.entities == {}:
+            raise HandlerNoEntitiesError
             
     def outputParsable(self):
         """
@@ -155,6 +168,7 @@ class EntityNav:
         return splicedEntities
         
 class HandlerError(Exception): pass
+class HandlerNoEntitiesError(HandlerError): pass
 class ParseError(Exception): pass
 class UsageError(Exception): pass
         
@@ -164,13 +178,15 @@ def main(argv):
         entityNav = EntityNav(opts, args)
         entityNav.outputParsable()
     except getopt.GetoptError, err:
-        usage(err.__str__())
+        usage(err)
     except UsageError, err:
-        usage(err.__str__())
+        usage(err)
+    except HandlerNoEntitiesError:
+        print "0:NO ENTITIES FOUND"
     except HandlerError, err:
-        usage(err.__str__())
+        usage(err)
     except ParseError, err:
-        usage(err.__str__())
+        usage(err)
     return 0
 
 if __name__ == '__main__':

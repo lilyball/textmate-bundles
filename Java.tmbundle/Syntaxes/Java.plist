@@ -35,24 +35,40 @@
 	patterns = (
 
 		{
+			// Required to prevent the JavaDoc comment from taking over
+			name = "comments.block.java.empty";
+			match = "/\\*\\*/";
+			fontStyle = ( italic );
+			foregroundColor = "red";
+		},
+
+		{
 			name = "comments.block.java";
 			begin = "/\\*";
+			end = "\\*/";
+			fontStyle = ( italic );
+			foregroundColor = "red";
+		},
+
+		{
+			name = "comments.block.embedded-docs.java";
+			begin = "/\\*\\*";
 			patterns = (
 			    {
-					name = "javadoc params";
+					name = "keywords.embedded-docs.params.java";
 					match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
 					"foregroundColor[1]" = "#669933";
 					"foregroundColor[2]" = "black";
 				},
 			    {
-					name = "misc javadoc attributes";
+					name = "keywords.embedded-docs.misc-attributes.java";
 					match = "\\\*\\s*@([a-zA-Z0-9_-]+)\\s*";
 					"foregroundColor[1]" = "#669933";
 				},
 			);
 			end = "\\*/";
 			fontStyle = ( italic );
-			foregroundColor = "red";
+			foregroundColor = "#006633";
 		},
 		
 		{

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>beforeRunningScript</key>
+	<string>nop</string>
+	<key>captureFormatString</key>
+	<string>(1?$2:&lt;nop&gt;)</string>
+	<key>capturePattern</key>
+	<string>(^TM_(.*)$)?</string>
+	<key>command</key>
+	<string>env|grep ^TM_|sort</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Show variables</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>standardInput</key>
+	<string>selectedText</string>
+	<key>standardOutput</key>
+	<string>separateWindow</string>
+</dict>
+</plist>

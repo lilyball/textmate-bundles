@@ -11,27 +11,42 @@ OPEN="open -a TextMate"
 CREATE="touch"
 
 CREATE_FILE=0
-while getopts chw FLAG; do
+while getopts chuw FLAG; do
 	case $FLAG in
 	c) CREATE_FILE=1;;
+	u) URL=1;;
 	w) WAIT=1;;
 	h|\?) HELP=1;;
 	esac
+	shift $(($OPTIND - 1))
 done
 
 if (($HELP)); then
 	echo ""
 	echo "TextMate Command Line Tool"
-	echo "usage: tm [-chw] filename [filename ...]"
+	echo "usage: tm [-chuw] filename [filename ...]"
+	echo ""
+	echo "This tool opens files, directories or (with no filenames) standard input."
 	echo ""
 	echo "    -c Create a new file"
 	echo "    -h Print this help"
+	echo "    -u filenames treated as URLs (e.g. tm -u www.google.com). Uses curl."
 	echo "    -w Prompt for return to continue (good for use as external editor)"
 	echo ""
 	exit 1;
 fi
 
-shift $(($OPTIND - 1))
+if (( $URL )); then
+	for filename; do
+		echo "$filename";
+		prefix=/tmp/tm
+		suffix=$(date +%s)  # The "+%s" option to 'date' is GNU-specific.
+		tmpfile=$prefix.$suffix."html"
+		curl -N -# "$filename" > $tmpfile 
+		$OPEN "$tmpfile" 
+	done
+	exit 1;
+fi
 
 # are we dealing with a filename or are we using stdin?
 if (( $# == 0 )); then

@@ -8,9 +8,9 @@
 
 	:- info([
 		version is 1.0,
-		author is '${2:Your Name}',
-		date is ${3:2004}/${4:10}/${5:18},
-		comment is '${6:Description}']).
+		author is '`niutil -readprop / /users/$USER realname`}',
+		date is `date +%Y/%m/%d`,
+		comment is '${2:Description}']).
 
 $0
 

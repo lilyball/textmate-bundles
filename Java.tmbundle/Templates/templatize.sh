@@ -1,16 +1,29 @@
 #!/bin/bash
 
+## exec 2> /tmp/java_templatize.stderr
+## exec > /tmp/java_templatize.stdout
+## 
+## set -x
+## 
+## echo ">>>> set"
+## set
+## echo "<<<< set"
+## 
+## echo ">>>> env"
+## env
+## echo "<<<< env"
+
 template="$1"
 classname=${TM_NEW_FILE_BASENAME%.java}
 
 ## find package name
-pkg_path=${TM_NEW_FILE_DIRECTORY#$TM_PROJECT_DIRECTORY/}
-pkg_name=$(echo ${pkg_path} | tr / .)
-package="package ${pkg_name};"
-
-if [ -z "${pkg_path}" ] || [ "${TM_PROJECT_DIRECTORY}" = "${pkg_path}" ]; then
-    package="/* unable to determine package from $TM_NEW_FILE_DIRECTORY and $TM_PROJECT_DIRECTORY */"
+if [ -z "${org_bravo5_Java_pkgregexp}" ]; then
+    org_bravo5_Java_pkgregexp="^.*src/"
+    echo "using default package regexp: ${org_bravo5_Java_pkgregexp}"
 fi
+
+pkg_name=$(echo $TM_NEW_FILE_DIRECTORY | sed -e "s#${org_bravo5_Java_pkgregexp}##g" -e 's#/#.#g')
+package="package ${pkg_name};"
 
 ## build @author
 author=$(defaults read AddressBookME 2>/dev/null | awk -f ../addrbook.awk)

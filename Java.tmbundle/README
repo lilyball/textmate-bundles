@@ -17,22 +17,4 @@ Features the following:
 • "Java Class" and "Java Interface" templates, which attempt to set the
   package and @author tag automagically
 
-Lang Riley <lang@langriley.com> contributed the following:
-Commands
-• Find j-class declar
-• Find j-interf declar
-• Find j-senders
-• Java list methods
-• Find j-method declar
-Snippets
-• Java const def
-• Java if statement
-• Java if/else statement
-• Java JUnit test class def
-• Java logger
-• Java private method
-• Java private var
-• Java public method
-• Java try/catch/finally
-• Java while statement
-• JSTL c:out
+The templates now properly generate the package name based on the directory structure.  The templates assume that your .java files are in package structure in a directory named "src".  If this is not the case, add a shell variable named "org_bravo5_Java_pkgregexp"; the default value is a regexp (^.*src/) passed to sed that operates on the TM_NEW_FILE_DIRECTORY variable.

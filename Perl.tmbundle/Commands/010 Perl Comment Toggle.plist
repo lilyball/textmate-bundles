@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundlePath</key>
+	<string>/Users/erichsu/Library/Application Support/TextMate/Bundles/Perl.tmbundle</string>
+	<key>command</key>
+	<string>perl -e 'while(&lt;STDIN&gt;){unless ($com) {/(\S)/;if ($1 eq "#") {$com=1} else {$com=2};};if ($com==1){s/\#\s+//;} else {s/(\S)/# $1/}; print;}'</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Perl Comment Toggle</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+</dict>
+</plist>

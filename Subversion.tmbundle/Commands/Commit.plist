@@ -22,9 +22,13 @@ export TM_SVN
 ruby &lt;&lt;END
 	require 'English'
 
-	svn = ENV['TM_SVN']
-	commit_paths = ENV['CommitPaths']
-	commit_tool = ENV['CommitWindow']
+	svn			= ENV['TM_SVN']
+	commit_paths	= ENV['CommitPaths']
+	commit_tool	= ENV['CommitWindow']
+	bundle		= ENV['TM_BUNDLE_PATH']
+
+#	require bundle+'/Tools/svn_helper.rb'
+#	include SVNHelper
 
 	# Ignore files without changes
 	commit_paths = %x{"#{svn}" status #{commit_paths}}.gsub(/^.(\s+)(.*)\n/) { %Q{'#{$~[2]}' } }
@@ -46,7 +50,17 @@ ruby &lt;&lt;END
 		exit -1
 	end
 
-	puts "&lt;h3&gt;Commit results&lt;/h3&gt;"
+	puts "&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Subversion status&lt;/title&gt;
+&lt;style type=\"text/css\"&gt;
+   @import 'file://"+bundle+"/Stylesheets/svn_style.css';
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;"
+
+	puts "&lt;h1&gt;Commit results&lt;/h1&gt;"
 	puts "&lt;hr&gt;"
 	puts "&lt;tt&gt;"
 	puts %Q{"#{svn}" commit #{commit_args}}
@@ -56,6 +70,7 @@ ruby &lt;&lt;END
 	STDOUT.flush
 	puts %x{"#{svn}" commit #{commit_args}}
 
+	puts "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"
 END
 </string>
 	<key>input</key>

@@ -21,7 +21,24 @@
 #fi
 export WorkPath
 
-echo '&lt;h2&gt;Subversion status&lt;/h2&gt;'
+
+# show it..
+ruby &lt;&lt;END
+
+bundle = ENV['TM_BUNDLE_PATH']
+
+puts "&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Subversion status&lt;/title&gt;
+&lt;style type=\"text/css\"&gt;
+   @import 'file://"+bundle+"/Stylesheets/svn_style.css';
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;"
+END
+
+echo '&lt;h1&gt;Subversion status&lt;/h1&gt;'
 echo '&lt;hr /&gt;'
 echo 'checking &lt;tt&gt;' $WorkPath '&lt;/tt&gt;'
 echo '&lt;p&gt;'
@@ -29,6 +46,8 @@ echo '&lt;tt&gt;'
 "${TM_SVN:=svn}" status "$WorkPath" | \
 perl -pe 's/$ENV{'WorkPath'}//' | \
 perl -pe 's/(.*?)(\s+)(.*)\n/&lt;b&gt;$1&lt;\/b&gt;&amp;nbsp;&lt;a href="txmt:\/\/open?url=file:\/\/$ENV{'WorkPath'}\/$3"&gt;$3&lt;\/a&gt;&lt;br&gt;/'
+
+echo "&lt;/tt&gt;&lt;/body&gt;&lt;/html&gt;"
 </string>
 	<key>input</key>
 	<string>none</string>

@@ -5,15 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>perldoc -f $TM_CURRENT_WORD</string>
+	<string>echo "&lt;html&gt;&lt;body&gt;&lt;pre&gt;"
+perldoc -f $TM_CURRENT_WORD
+echo "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^@/</string>
 	<key>name</key>
-	<string>Perldoc on Word</string>
+	<string>Perldoc Selected Word</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
 	<string>DA0A5D89-5F16-11D9-B9C3-000D93589AF6</string>
 </dict>

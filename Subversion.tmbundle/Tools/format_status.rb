@@ -38,7 +38,7 @@ mup.html {
 #		mup.hr
 		mup.div("class" => "command"){ mup.text!(work_path) } #mup.text!("checking "); 
 		STDOUT.flush
-		mup.hr
+#		mup.hr
 
 		mup.table("class" => "status") {
 			STDIN.each_line do |line|

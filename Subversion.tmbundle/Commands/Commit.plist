@@ -61,11 +61,9 @@ ruby &lt;&lt;END
 &lt;body&gt;"
 
 	puts "&lt;h1&gt;Commit results&lt;/h1&gt;"
-	puts "&lt;hr&gt;"
-	puts "&lt;tt&gt;"
+	puts "&lt;div class=\"command\"&gt;"
 	puts %Q{"#{svn}" commit #{commit_args}}
-	puts "&lt;/tt&gt;"
-	puts "&lt;hr&gt;"
+	puts "&lt;/div&gt;"
 	puts "&lt;p&gt; &lt;pre&gt;"
 	STDOUT.flush
 	puts %x{"#{svn}" commit #{commit_args}}

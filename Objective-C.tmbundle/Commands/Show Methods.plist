@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>cat &lt;&lt;EOF
+&lt;html&gt;&lt;head&gt;
+&lt;style&gt;
+a, a:visited {
+   color: #998;
+   text-decoration: none;
+}
+a:hover {
+   color: #000;
+   text-decoration: none;
+}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;tt&gt;
+EOF
+egrep -n '^(-|+)[ \t]*\(.*\)[^;]*$' \
+| perl -pe 's/\(.*?\)//' \
+| perl -pe 's/(\w+:)[ \t]*\(.*?\)[ \t]*\w+[ \t]*/$1/g' \
+| sort -ft: -k2 \
+| perl -pe 's/^(\d+):(.*?)(\{.*)?$/&lt;a href="txmt:\/\/open?url=file:\/\/'"${TM_FILEPATH//\//\\/}"'&amp;line=$1" onClick="window.close()"&gt;$2&lt;\/a&gt;&lt;br&gt;/'</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Show Methods</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>0D841FB4-7320-11D9-89A0-000D93589AF6</string>
+</dict>
+</plist>

@@ -1,0 +1,99 @@
+{
+	
+	/*--------------------------------------------------------------------------
+	
+	CSS DICTIONARY
+	==============
+	Version 1.0 (Justin French, Sune Foldager, Allan Odgaard)
+		
+	
+	Quick CSS Reference:
+	--------------------
+	- <selectors> { <properties>:<values>; }
+	- <functions>()
+	- @<commands>
+	- bad commas are between the last selector and the opening {
+	
+	
+	Some Notes, Ideas and Limitations:
+	----------------------------------
+	
+	- For the moment, selectors are highlighted as a group, and we can't do much 
+	  with them yet, probably will be included in a later version, once TM can
+	  handle it -- pipe dreams of syntax highlighting the different selector
+	  patterns remain in the distance :)
+	
+	- Possibly something like match = "#([0-9a-z]{6})"; bgColor = "#$1"; so that
+	  we get a bgColor inline preview of the color... need to solve the issue of
+	  choosing an appropriate fgColor so that black text doesn't get lost on 
+	  black background, etc.
+
+	- Keywords for values like "bold", "italic", "solid", "visible", "block",
+	  etc need to be introduced.  The easy way is to just find all possible 
+	  value keywords and highlight them... the better way might be to make sure 
+	  they're valid in context, or something.
+	
+	- Much more needs to be done on @command { ... } blocks.
+	
+	- I've commented out the auto-indent pattern -- it doesn't work well with
+	  the folding pattern, and it tends to "get in the way" for people with 
+	  not-so-standard coding styles, like Sune & myself.
+	
+	--------------------------------------------------------------------------*/
+		
+	name = "CSS";
+	fileTypes = ( css );
+	
+	/* folding -- folds on blocks and comments */
+	foldingStartMarker = "(/\\*|\\{\\s*$)";	/* option: foldingStartMarker = "\\{\\s*$"; */
+	foldingStopMarker = "(\\*/|^\\s*\\})";	/* option: foldingStopMarker = "^\\s*\\}"; */
+	
+	/* auto-indent -- uncomment this for auto-indenting */
+	/* increaseIndentPattern = "\\{\\s*$"; */
+	
+	/* smart typing pairs and highlighting pairs */
+	smartTypingPairs	= ( ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" ), ( "'", "'" ) );
+	highlightPairs		= ( ( "(", ")" ), ( "[", "]" ), ( "{", "}" ) );
+	
+	/* basic colors */
+	foregroundColor = "#333333";
+	backgroundColor = "#ffffff";
+		
+	patterns = (
+
+		{ name = "Comment"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#999999"; },
+
+		{ name = "Bad Comma"; match = "[^} \\t{/@][^{,]*?(,)\\s*?(?=\\{)"; "foregroundColor[1]" = "#ffffff"; "backgroundColor[1]" = "#CC3300"; },
+
+		/*{ name = "Selectors"; match = "[^} \\t{/@][^{]*?(?=/\\*|\\{|\\s|$)"; foregroundColor = "#8B9B08"; },*/
+
+		{ name = "Command"; match = "^(@\\<(import|media|page|charset)\\>).*$"; foregroundColor = "#6600CC"; },
+
+		{ name = "Properties"; begin = "\\{"; end = "\\}";
+			patterns = (
+				{ name = "Comment"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#999999"; },
+				{ name = "Property"; foregroundColor = "#0066CC";	fontStyle = (  ); match = "\\<(azimuth|background|background-attachment|background-color|background-image|background-position|background-repeat|border|border-bottom|border-bottom-color|border-bottom-style|border-bottom-width|border-collapse|border-color|border-left|border-left-color|border-left-style|border-left-width|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-style|border-top-width|border-width|bottom|caption-side|clear|clip|color|content|counter-increment|counter-reset|cue|cue-after|cue-before|cursor|direction|display|elevation|empty-cells|float|font|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|height|left|letter-spacing|line-height|list-style|list-style-image|list-style-position|list-style-type|margin|margin-bottom|margin-left|margin-right|margin-top|marker-offset|marks|max-height|max-width|min-height|min-width|orphans|outline|outline-color|outline-style|outline-width|overflow|padding|padding-bottom|padding-left|padding-right|padding-top|page|page-break-after|page-break-before|page-break-inside|pause|pause-after|pause-before|pitch|pitch-range|play-during|position|quotes|richness|right|size|speak|speak-header|speak-numeral|speak-punctuation|speech-rate|stress|table-layout|text-align|text-decoration|text-indent|text-shadow|text-transform|top|unicode-bidi|vertical-align|visibility|voice-family|volume|white-space|widows|width|word-spacing|z-index)\\>"; },
+				{ name = "Value"; begin = ":"; end = "\\s*(;|(?=\\}))"; 
+					patterns = (
+ 						{ name = "Unit"; 		   "foregroundColor[3]" = "#6600CC"; match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?\\s*(px|pt|cm|mm|in|em|ex|pc|%)?"; },
+ 						{ name = "Color"; 		   "fontStyle[1]" = ( ); match = "(#)([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\\>";  },
+ 						{ name = "Functions";
+							foregroundColor = "#6600CC"; 
+							fontStyle = (  ); 
+							begin = "(rgb|url|attr|counter|counters)\\s*\\("; 
+							end = "\\)";
+							patterns = (
+								{ name = "String (single)"; fontStyle = ( plain ); foregroundColor = "#CC3300"; begin = "'"; end = "'"; swallow = "\\\\."; },
+								{ name = "String (double)"; fontStyle = ( plain ); foregroundColor = "#CC3300"; begin = "\""; end = "\""; swallow = "\\\\."; },
+								{ name = "RGB Value"; 		fontStyle = ( plain ); foregroundColor = "#000000"; match = "(\\<0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\s*,\\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\s*,\\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\>)"; }, /* matches 0-255,0-255,0-255 */
+								{ name = "RGB Percentage"; 	fontStyle = ( plain ); foregroundColor = "#000000"; match = "(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%\\s*,\\s*)(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%\\s*,\\s*)(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%)"; }, /* matches 0.0-100.0%,0.0-100.0%,0.0-100.0% */
+							);
+						},
+						{ name = "String (single)"; foregroundColor = "#CC3300"; begin = "'"; end = "'"; swallow = "\\\\."; },
+ 						{ name = "String (double)"; foregroundColor = "#CC3300"; begin = "\""; end = "\""; swallow = "\\\\."; },
+					);
+				},
+			);
+		},
+	);
+}

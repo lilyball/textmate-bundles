@@ -1,0 +1,8 @@
+{
+    documentExtensions = ( html, htm, rhtml, shtml, phtml, php, php3, php4, php5, inc, cfm, cfml, dbm, dbml );
+    draggedFileExtensions = ( html, htm, rhtml, shtml, phtml, php, php3, php4, php5, cfm, cfml, dbm, dbml );
+    name = "Insert <a> tag"; 
+    output = insertAsSnippet; 
+    command = "title=`echo $TM_DROPPED_FILE | perl -pe 's/^(.*\\/)?(.*?)(\\..*)?$/$2/g'`
+echo -n \"<a href=\\\"$TM_DROPPED_FILE\\\">\\${1:$title}</a>\"";
+}

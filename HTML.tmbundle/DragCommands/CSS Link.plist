@@ -1,0 +1,7 @@
+{
+    documentExtensions = ( html, htm, rhtml, shtml, phtml, php, php3, php4, php5, inc, cfm, cfml, dbm, dbml );
+    draggedFileExtensions = ( css );
+    name = "Insert CSS link tag"; 
+    output = insertAsSnippet; 
+    command = "echo \"<link href=\\\"$TM_DROPPED_FILE\\\" rel=\\\"stylesheet\\\" type=\\\"text/css\\\" />\"";
+}

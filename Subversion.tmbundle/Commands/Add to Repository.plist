@@ -6,12 +6,18 @@
 	<string>saveModifiedFiles</string>
 	<key>command</key>
 	<string>if [[ -z $TM_SELECTED_FILES ]]; then
-	SVNPaths=`echo \'$TM_FILEPATH\'`;
+	WorkPaths=`echo \'$TM_FILEPATH\'`;
 else
-	SVNPaths="$TM_SELECTED_FILES";
+	WorkPaths="$TM_SELECTED_FILES";
 fi
+export WorkPaths
 
-"${TM_SVN:=svn}" add $SVNPaths
+export "${TM_SVN:=svn}"
+
+ruby &lt;&lt;END
+	svn = ENV['TM_SVN']
+	puts %x{#{svn} add $WorkPaths}
+END
 </string>
 	<key>input</key>
 	<string>none</string>
@@ -20,7 +26,7 @@ fi
 	<key>name</key>
 	<string>Add to Repository</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
 	<string>CB149C8E-74CD-11D9-813D-000A95A89C98</string>
 </dict>

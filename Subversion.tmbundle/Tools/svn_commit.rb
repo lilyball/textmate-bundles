@@ -73,11 +73,12 @@ if status != 0
 	exit -1
 end
 
-#puts "<div class=\"command\">"
-#puts %Q{"#{svn}" commit #{commit_args}}
-#puts "</div>"
+puts "<div class=\"command\">"
+puts %Q{<strong>#{svn} commit </strong>#{commit_args.gsub("' '", "'<br>'").gsub("'\"'\"'", "'")}}
+puts "</div>"
 puts "<p> <pre>"
 STDOUT.flush
+
 puts %x{"#{svn}" commit #{commit_args}}
 
 puts "</pre></body></html>"

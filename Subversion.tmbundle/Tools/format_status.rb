@@ -1,8 +1,8 @@
 bundle				= ENV['TM_BUNDLE_PATH']
 work_path			= ENV['WorkPath']
 strip_path_prefix	= work_path # Dir.pwd
-#svn			= ENV['TM_SVN']
-#svn = "svn" if svn.nil?
+svn			= ENV['TM_SVN']
+svn = "svn" if svn.nil?
 
 require (bundle + "/Tools/Builder.rb")
 
@@ -35,10 +35,10 @@ mup.html {
 
 	mup.body { 
 		mup.h1("Subversion Status for '#{File.basename(work_path)}'")
-		mup.hr
-#		mup.div("class" => "command"){ mup.text!(work_path) } #mup.text!("checking "); 
-		STDOUT.flush
 #		mup.hr
+		mup.div("class" => "command"){ mup.strong("#{svn} status"); mup.text!(" " + work_path) } #mup.text!("checking "); 
+		STDOUT.flush
+		mup.hr
 
 		mup.table("class" => "status") {
 			STDIN.each_line do |line|

@@ -26,7 +26,7 @@ ruby &lt;&lt;END
 	command = %Q{#{svn} update "$WorkPaths"}
 	puts "&lt;h1&gt;Update Project&lt;/h1&gt;"
 	puts "&lt;div class=\"command\"&gt;"
-	puts command
+	puts "&lt;strong&gt;" + "#{svn} update" + "&lt;/strong&gt;" + "&amp;nbsp;" + "$WorkPaths"
 	puts "&lt;/div&gt;"
 	puts "&lt;hr&gt;"
 	puts "&lt;p&gt; &lt;pre&gt;"

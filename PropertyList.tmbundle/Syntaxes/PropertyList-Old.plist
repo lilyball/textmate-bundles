@@ -1,0 +1,44 @@
+{
+    name = "Property List (old-style)";
+    backgroundColor = "#FFFFFF";
+    fileTypes = (plist, dict);
+    foldingStartMarker = "(\\{|\\()"; 
+    foldingStopMarker = "(\\}|\\))"; 
+    foregroundColor = "#000000"; 
+    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
+    increaseIndentPattern = "(\\{|\\()\\s*$"; 
+    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
+    patterns = (
+        {
+            begin = "/\\*"; 
+            end = "\\*/"; 
+            foregroundColor = "#236B8E"; 
+            name = "C Comment"; 
+        }, 
+        {
+            fontStyle = (italic); 
+            foregroundColor = "#236B8E"; 
+            match = "//.*$"; 
+            name = "C++ Comment"; 
+        }, 
+        {
+            foregroundColor = "#0000CD"; 
+            match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; 
+            name = "Numeric Constant"; 
+        }, 
+        {
+            begin = "'"; 
+            end = "'"; 
+            foregroundColor = "#8B2252"; 
+            name = "Single String"; 
+            swallow = "\\\\."; 
+        }, 
+        {
+            begin = "\""; 
+            end = "\""; 
+            foregroundColor = "#8B2252"; 
+            name = "Double Quoted String"; 
+            swallow = "\\\\."; 
+        }
+    ); 
+}

@@ -1,0 +1,20 @@
+{
+	name = "Objective-C++";
+	fileTypes = ( mm, M, h );
+	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
+	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
+	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
+	smartTypingPairs = (
+	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
+	   ( "\"", "\"" ), ( "'", "'" )
+	);
+	highlightPairs = (
+	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
+	);
+	foregroundColor = "#000000";
+	backgroundColor = "#FFFFFF";
+	patterns = (
+		{ include = "Objective-C Source"; },
+		{ include = "C++ Source"; }
+	);
+}

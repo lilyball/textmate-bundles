@@ -1,0 +1,10 @@
+{
+	name = "Makefile";
+	fileTypes = ( GNUmakefile, makefile, Makefile );
+	patterns = (
+		{ name = "Variable declaration"; match = "^(\\w|[-_])+\\s*=.*"; fontStyle = ( bold ); foregroundColor = "red"; },
+		{ name = "Comment"; match = "^#.*"; fontStyle = ( italic ); foregroundColor = "gray"; },
+		{ name = "Directives"; match = "^(\\s*)\\<(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\>"; fontStyle = ( bold ); "foregroundColor[2]" = "#008800"; },
+		{ name = "Rule"; match = "^([^\\s]+:(?!\\=))[\\s]*.*"; "fontStyle[1]" = ( bold ); foregroundColor = "blue"; }
+	);
+}

@@ -1,0 +1,39 @@
+{
+	// Pascal -- GNU Pascal, specifically -- chris@cjack.com. Feel free to modify, distribute, be happy. Share and enjoy.
+	
+	name = "Pascal";
+	fileTypes = ( p, pas );
+	foldingStartMarker = "\\<(?i:(procedure|package|function|type))\\>";
+	foldingStopMarker = "\\<(?i:(end))\\>";
+	increaseIndentPattern = "\\<(?i:(loop|declare|begin|exception|when|procedure|for|if|else|task|type|package))\\>";
+	smartTypingPairs = (
+	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
+	   ( "\"", "\"" ), ( "'", "'" )
+	);
+	highlightPairs = (
+	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
+	);
+	foregroundColor = "#000000";
+	backgroundColor = "#FFFFFF";
+	patterns = (
+				
+		{
+			name = "Pascal Keywords";
+			match = "\\<(?i:(absolute|abstract|all|and|and_then|array|as|asm|attribute|begin|bindable|case|class|const|constructor|destructor|div|do|end|do|else|end|export|exports|external|far|file|finalization|for|forward|function|goto|if|implementation|import|in|inherited|initialization|interface|interrupt|is|label|library|mod|module|name|near|nil|not|object|of|only|operator|or|or_else|otherwise|packed|pow|private|procedure|program|property|protected|public|published|qualified|record|repeat|resident|restricted|segment|set|shl|shr|then|to|type|unit|until|uses|value|var|view|virtual|while|with|xor))\\>";
+			fontStyle = ( bold );
+			foregroundColor = "blue";
+		},
+		
+		{ name = "Numeric Constant"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
+		
+		{ name = "Ada/HyperTalk-style Comment"; match = "--(.*)$"; foregroundColor = "#236B8E"; fontStyle = ( italic );},
+		{ name = "Pascal-style Comment One"; begin = "\\(\\*"; end = "\\*\\)"; foregroundColor = "#236B8E"; },
+		{ name = "Pascal-style Comment Two"; begin = "\\{"; end = "\\}"; foregroundColor = "#236B8E"; },
+		{ name = "C++-style Comment"; match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
+
+		{ name = "String"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+		
+		{ name = "Character Constant"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+
+	);
+}

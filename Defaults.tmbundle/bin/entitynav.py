@@ -84,15 +84,16 @@ class SortableEntities:
         """
         return line
     
-    def sort(self,dict):
+    def sort(self,entities):
         """
-        takes in a dictionary that was created by EntityNav.findEntities() and outputs something
-        that SortableEntities.formatSortedLine() will understand
+        takes in a dictionary that was created by EntityNav.findEntities() 
+        (in other words, a dictionary indexed by line number holding the value returned by SortableEntities.deconstructLine()) 
+        and returns something that SortableEntities.formatSortedLine() will understand
         
         """ 
-        if type(dict) is not type({}): return []
-        keys = dict.keys()
-        s = map(lambda k: (dict[k],k), keys)
+        if type(entities) is not type({}): return []
+        keys = entities.keys()
+        s = map(lambda k: (entities[k],k), keys)
         s.sort()
         return s
         
@@ -102,7 +103,6 @@ class SortableEntitiesIn3(SortableEntities):
     """
     def deconstructLine(self, lineMatch):
         # TODO: exception if groups don't exist
-        # TODO: maybe a little more flexible if groups were not labelled?  i.e. 1, 2, 3, which would correspond to the sort level.
         return (lineMatch.group('main'),lineMatch.group('prefix'),lineMatch.group('suffix'))
         
     def formatSortedLine(self, line):
@@ -127,6 +127,46 @@ class EntitiesPhp(EntityHandler, SortableEntities):
         
     def formatSortedLine(self, line):
         return "%s:%s\n" % (line[1],(line[0][4]+line[0][2]+line[0][0]+line[0][1]+line[0][3]))
+        
+    def sort(self,entities):
+        """
+        refactor me please!  Not being very agile with Python just yet, this is my "proof of concept" for sorting
+        PHP entities hierachically, by class, then by function
+        """
+        lineNums = entities.keys()
+        entitiesAsCoded = map(lambda k: (k,entities[k]), lineNums)
+        entitiesAsCoded.sort() # i.e. by line number, as the lines were typed
+        
+        functionPtrn = re.compile(r'function', re.IGNORECASE)
+        classPtrn = re.compile(r'(class|interface)', re.IGNORECASE)
+        classes = []
+        functions = {}
+        parentClass = '___global' # ugly hack to force this alphabetically first
+        
+        for lineNum,line in entitiesAsCoded:
+            if classPtrn.match(line[0]):
+                classes.append((line,lineNum))
+                parentClass = line[1]
+            elif functionPtrn.match(line[0]):
+                try:
+                    functions[parentClass].append((line,lineNum))
+                except KeyError:
+                    functions[parentClass] = [(line,lineNum)]
+                    
+        # this won't even acknowledge global functions and will probably screw everything up
+        # if you put global functions at the bottom of your classes :
+        classes.sort()
+        output = []
+        for line,lineNum in classes:
+            output.append( (line, lineNum) )
+            try:
+                className = line[1] 
+                functions[className].sort()
+                output.extend(functions[className])
+            except KeyError:
+                pass
+        
+        return output
 
 class EntitiesInc(EntitiesPhp): pass
         

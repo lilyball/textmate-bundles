@@ -21,6 +21,7 @@ top.location.replace(new_local);
 }
 -->
 </script>
+<font style="font-size:11px">$ENV{"TM_FILEPATH"}</font>
 <form name="jump">
 <select name="local" onChange="jumpTo(); return false;">
 END
@@ -33,7 +34,7 @@ my $foot = <<END;
 END
 
 my $url = 'txmt://open?url=file://' . $ENV{"TM_FILEPATH"};
-my $results="<option value=\"$url\">Special Items for " . $ENV{"TM_FILEPATH"} . "</option>";; 
+my $results="<option value=\"$url\">Special Items for " . $ENV{"TM_FILENAME"} . "</option>";; 
 my ($line,$title);
 
 while (<>) {
@@ -43,6 +44,7 @@ while (<>) {
 }
 
 print $head . $results . $foot;
+
 
 sub space_entitized {
 	my $in = shift;

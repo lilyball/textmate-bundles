@@ -5,8 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>
-RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+	<string>if [[ -z ${TM_RMAN} || ! -x ${TM_RMAN} ]]; then
+	RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+else
+	RMAN=${TM_RMAN}
+fi
 
 [[ -n $TM_SELECTED_TEXT ]] &amp;&amp; TM_CURRENT_WORD=$TM_SELECTED_TEXT
 
@@ -14,7 +17,7 @@ RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugI
 if [[ -x "$RMAN" ]]; then
 	man $TM_CURRENT_WORD | "$RMAN" -fHTML;
 else
-	GROFF_TYPESETTER=html man -t $TM_CURRENT_WORD;
+	GROFF_TYPESETTER=html /usr/bin/man -t $TM_CURRENT_WORD;
 fi
 </string>
 	<key>dontFollowNewOutput</key>

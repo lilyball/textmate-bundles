@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>if [ ! -x "${TM_FILEPATH}" ]
+then
+	echo "Cannot execute '${TM_FILEPATH}' : permission error"
+else
+	"${TM_FILEPATH}"
+fi</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@X</string>
+	<key>name</key>
+	<string>Execute Current File in Window</string>
+	<key>output</key>
+	<string>separateWindow</string>
+	<key>uuid</key>
+	<string>7207ACC2-A64B-11D9-B384-000D93382786</string>
+</dict>
+</plist>

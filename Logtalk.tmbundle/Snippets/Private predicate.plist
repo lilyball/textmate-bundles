@@ -4,9 +4,10 @@
 <dict>
 	<key>content</key>
 	<string>	:- private(${1:Functor}/${2:Arity}).
-	:- mode(${3:Callable}, ${4:Solutions}).
-	:- info(${5:Functor}/${6:Arity}, [
-		comment is '${7:Description}']).
+	:- mode(${1:Functor}(${3:Arguments}), ${4:Solutions}).
+	:- info(${1:Functor}/${2:Arity}, [
+		comment is '${5:Description}',
+		argnames is ['$6']]).
 
 $0</string>
 	<key>name</key>

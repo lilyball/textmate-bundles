@@ -24,8 +24,9 @@ module SVNHelper
       'txmt://open?url=file://' + filename + '&amp;line=' + line.to_s
    end
    
+   
    # subsitutes some special chars for showing html..
-   def htmlize( string, tab_size = $tab_size )
+   def htmlize( string, blow_up_spaces = true, tab_size = $tab_size )
       return string.to_s.gsub( /\<|\>|&| |\t/ ) do |match|
          case match
             when '<';  '&lt;'
@@ -61,7 +62,7 @@ module SVNHelper
    end
    
    # .. see above.
-   def make_error_foot( food_adds='' )
+   def make_error_foot( foot_adds='' )
       puts foot_adds+'</div>'
    end
    

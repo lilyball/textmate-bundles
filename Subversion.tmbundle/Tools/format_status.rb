@@ -37,7 +37,7 @@ mup.html {
 							mup.td { mup.a( file.sub( /^#{pwd}\//, ""), "href" => 'txmt://open?url=file://' + file ) }
 						end 
 					else
-						mup.td { mup.div( line, "class" => "generic_error" ) }
+						mup.td { mup.div( line, "class" => "error" ) }
 					end
 				}
 			end

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>perl "$TM_BUNDLE_PATH/Tools/t2o.pl" &gt; /tmp/tm2oo.opml &amp;&amp; open -a "OmniOutliner Professional" /tmp/tm2oo.opml
+
+# Change the application name if you are using OmniOutliner</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^@o</string>
+	<key>name</key>
+	<string>Tabs to OmniOutliner</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>DBF2B50A-8303-11D9-8C1E-000D9332809C</string>
+</dict>
+</plist>

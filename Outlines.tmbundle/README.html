@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1st September 2004), see www.w3.org">
+
+  <title></title>
+</head>
+
+<body>
+  <b>Outline Tools</b><br>
+  (c) 2005 Eric Hsu, textmate@betterfilecabinet.com<br>
+  <br>
+  This bundle processes simple text outlines (where the level is
+  determined by the number of leading tabs).<br>
+  <br>
+  For instance,<br>
+  <pre>
+Coffee
+Tea
+        Black tea
+        Green tea
+                China
+                Africa
+Milk
+</pre>is a canonical one from
+http://www.w3schools.com/html/tryit.asp?filename=tryhtml_nestedlists2<br>
+
+  <br>
+  Anyway, this set of commands transforms tab-outlines into the
+  following forms:
+
+  <ol type="1">
+    <li>(inline)
+
+      <ol type="a">
+        <li>Markdown</li>
+
+        <li>Kwiki (and other wikis like PMWiki, the Textmate
+        Wiki)</li>
+
+        <li>HTML (both unordered and ordered)(yes, it validates as
+        HTML 4.01 Transitional)</li>
+      </ol>
+    </li>
+
+    <li>(in other applications)
+
+      <ol type="a">
+        <li>OmniOutliner (selection shows up in OO as an imported
+        OPML)</li>
+		
+      </ol>
+    </li>
+
+    <li>(in another document)
+
+      <ol type="a">
+        <li>OPML (since we need the non-obvious header to make it
+        real OPML)</li>
+      </ol>
+    </li>
+  </ol>
+
+
+Yes, this list was made with "Tab to HTML OL". If you don't
+  like the types of OL that I use down the hierarchy, edit the
+  script "t2ol.pl" and change the @type array.<br><br>
+
+The original reason this bundle was made was for the OmniOutliner command, since OO inexplicably lacks a 'paste tab outline as Outline' command. 
+</body>
+</html>

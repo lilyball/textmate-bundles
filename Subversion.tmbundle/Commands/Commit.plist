@@ -46,6 +46,11 @@ ruby &lt;&lt;END
 		exit -1
 	end
 
+	puts "&lt;h3&gt;Commit results&lt;/h3&gt;"
+	puts "&lt;tt&gt;"
+	puts %Q{"#{svn}" commit #{commit_args}}
+	puts "&lt;p&gt;"
+	STDOUT.flush
 	puts %x{"#{svn}" commit #{commit_args}}
 
 END
@@ -57,7 +62,7 @@ END
 	<key>name</key>
 	<string>Commit</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
 	<string>5F2BCB27-7A5B-11D9-A61B-000A95A89C98</string>
 </dict>

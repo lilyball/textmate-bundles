@@ -1,6 +1,6 @@
-bundle			= ENV['TM_BUNDLE_PATH']
-work_path		= ENV['WorkPath']
-pwd				= Dir.pwd
+bundle				= ENV['TM_BUNDLE_PATH']
+work_path			= ENV['WorkPath']
+strip_path_prefix	= work_path # Dir.pwd
 #svn			= ENV['TM_SVN']
 #svn = "svn" if svn.nil?
 
@@ -34,7 +34,7 @@ mup.html {
 							mup.td(line)
 						else
 							mup.td(status)
-							mup.td { mup.a( file.sub( /^#{pwd}\//, ""), "href" => 'txmt://open?url=file://' + file ) }
+							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file ) }
 						end 
 					else
 						mup.td { mup.div( line, "class" => "error" ) }

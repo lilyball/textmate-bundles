@@ -5,20 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string># it's possible to make this work, but it seems unintuitive
-#SelectedFiles=($TM_SELECTED_FILES)
-#if [[ ${#SelectedFiles[*]} -gt 1 ]]; then
-#	WorkPath=$TM_SELECTED_FILES;
-#else
-	if [[ -z $TM_PROJECT_DIRECTORY ]]; then
-		# no project dir
-		WorkPath=`dirname "$TM_FILEPATH"`
-	else
-		# TM_PROJECT_DIR it is, then
-		WorkPath="$TM_PROJECT_DIRECTORY";	
-	fi
-#fi
-export WorkPath
+	<string>export WorkPath="$TM_DIRECTORY"
 
 # show it..
 "${TM_SVN:=svn}" status "$WorkPath" 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"

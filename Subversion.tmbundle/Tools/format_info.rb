@@ -17,13 +17,14 @@ $hide_all      = ($hide.include? '*') ? true : false
 
 # find out if the window should get closed on a click
 $close      = ENV['TM_SVN_CLOSE'].nil? ? '' : ENV['TM_SVN_CLOSE']
-$close      = unless $close.empty?
-                 if $close.include? 'true' or $close.include? '1'
-                    ' onClick="window.close();"'
-                 else
-                    ''
-                  end
-              end
+unless $close.empty?
+   $close.strip!
+   if $close == 'true' or $close == '1'
+      $close = ' onClick="window.close();"'
+   else
+      $close = ''
+    end
+end
 
 
 # require the helper, it does some formating, etc:

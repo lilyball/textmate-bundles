@@ -3,7 +3,7 @@
 # Originally written by Rick Gardner (rick.gardner@mac.com)
 # and Kevin Ballard (kevin@sb.org)
 # Modified to work with TextMate by Andrew Ellis aellis@gmx.net (10-11-2004)
-# (Jan 14 05) Added -w, better help. 
+# (Jan 14 05) Added -tuw, better help. 
 #	- Eric Hsu textmate@betterfilecabinet.com
 
 
@@ -27,13 +27,13 @@ if (($HELP)); then
 	echo "TextMate Command Line Tool"
 	echo "usage: tm [-chtuw] filename [filename ...]"
 	echo ""
-	echo "This tool opens files, directories or (with no filenames) standard input."
+	echo "This tool opens files, directories, URLs or (with no filenames) standard input."
 	echo ""
-	echo "    -c Create a new file"
-	echo "    -h Print this help"
+	echo "    -c Create a new file."
+	echo "    -h Show this help."
 	echo "    -t Specify a title for piped input. Overrides other flags."
-	echo "    -u filenames treated as URLs (e.g. tm -u www.google.com). Uses curl."
-	echo "    -w Prompt for return to continue (good for use as external editor)"
+	echo "    -u Treat filenames as URLs (e.g. tm -u www.google.com). Uses curl."
+	echo "    -w Prompt for return to continue (good for use as external editor)."
 	echo ""
 	exit 1;
 fi

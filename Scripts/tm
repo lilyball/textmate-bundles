@@ -1,0 +1,82 @@
+#!/bin/sh
+
+# Originally written by Rick Gardner (rick.gardner@mac.com)
+# and Kevin Ballard (kevin@sb.org)
+# Modified to work with TextMate by Andrew Ellis aellis@gmx.net (10-11-2004)
+# (Jan 14 05) Added -w, better help. 
+#	- Eric Hsu textmate@betterfilecabinet.com
+
+
+OPEN="open -a TextMate"
+CREATE="touch"
+
+CREATE_FILE=0
+while getopts chw FLAG; do
+	case $FLAG in
+	c) CREATE_FILE=1;;
+	w) WAIT=1;;
+	h|\?) HELP=1;;
+	esac
+done
+
+if (($HELP)); then
+	echo ""
+	echo "TextMate Command Line Tool"
+	echo "usage: tm [-chw] filename [filename ...]"
+	echo ""
+	echo "    -c Create a new file"
+	echo "    -h Print this help"
+	echo "    -w Prompt for return to continue (good for use as external editor)"
+	echo ""
+	exit 1;
+fi
+
+shift $(($OPTIND - 1))
+
+# are we dealing with a filename or are we using stdin?
+if (( $# == 0 )); then
+	if [ ! -t 0 ]; then
+		exec 6<&0
+		exec 7>&1
+		prefix=/tmp/tm
+		suffix=$(date +%s)  # The "+%s" option to 'date' is GNU-specific.
+		filename=$prefix.$suffix
+		$CREATE $filename
+		exec > $filename
+	
+		while read a1
+		do
+		echo $a1
+		done
+		open -a TextMate.app $filename
+		exec 0<&6 6<&-
+		exec 1<&7 7<&-
+	else
+		if [ ! -z ${1} ]; then
+			$CREATE ${1}
+			$OPEN ${1}
+		else
+			$OPEN
+		fi
+	fi
+else
+	# iterate over the files
+	for filename; do
+		# create the file if requested
+		if (( $CREATE_FILE )); then
+			if [[ -f $filename ]]; then
+				echo "File \`$filename' already exists."
+			fi
+			$CREATE $filename
+		fi
+		if [[ -e $filename ]]; then		# now also opens directories
+			$OPEN "$filename"
+		else
+			echo "File \`$filename' does not exist."
+		fi
+		if (($WAIT)); then
+			echo "Hit RETURN to continue..."
+			read answer			
+		fi
+	done
+fi

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # @author kumar.mcmillan/gmail.com
+# Modifications to support sorted output by Brad Miller
 
 """
 Entitynav: Outputs a parsable list of functional entities for the given code file

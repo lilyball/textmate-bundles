@@ -9,7 +9,15 @@
 	<key>capturePattern</key>
 	<string>^(\d+):(.*)$</string>
 	<key>command</key>
-	<string>"${TM_PYTHON:=python}" "${TM_BUNDLE_PATH}/bin/entitynav.py" -f - -m "${TM_MODE}"</string>
+	<string>#
+# NOTE: to add a custom key binding, copy this command to 
+# Custom and set BUNDLE_PATH like so:
+#
+
+BUNDLE_PATH=${TM_BUNDLE_PATH}
+#BUNDLE_PATH=`dirname "${TM_BUNDLE_PATH}"`/Defaults.tmbundle
+
+"${TM_PYTHON:=python}" "${BUNDLE_PATH}/bin/entitynav.py" -f - -m "${TM_MODE}"</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

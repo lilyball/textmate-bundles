@@ -5,7 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_PYTHON:=python}" "${TM_BUNDLE_PATH}/bin/entitynav.py" -f - -m "${TM_MODE}" -S | php "${TM_BUNDLE_PATH}/bin/nav2list.php"</string>
+	<string>#
+# NOTE: to add a custom key binding, copy this command to 
+# Custom and set BUNDLE_PATH like so:
+#
+
+BUNDLE_PATH=${TM_BUNDLE_PATH}
+#BUNDLE_PATH=`dirname "${TM_BUNDLE_PATH}"`/Defaults.tmbundle
+
+"${TM_PYTHON:=python}" "${BUNDLE_PATH}/bin/entitynav.py" -f - -m "${TM_MODE}" -S | php "${BUNDLE_PATH}/bin/nav2list.php"</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

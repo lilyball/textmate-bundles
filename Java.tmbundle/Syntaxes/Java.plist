@@ -3,11 +3,11 @@
 	
 	fileTypes = ( java );
 	
-	foldingStartMarker = "(\\{\\s*$)";
-	foldingStopMarker = "(^\\s*\\})";
-	
+	foldingStartMarker = "\\{\\s*$";
+	foldingStopMarker = "^\\s*\\}";
+
 	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
-	
+
 	smartTypingPairs = (
         ( "(", ")" ),
 	    ( "[", "]" ),

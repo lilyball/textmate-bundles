@@ -21,7 +21,7 @@
 export WorkPath
 
 # show it..
-"${TM_SVN:=svn}" status "$WorkPath" 2&gt;&amp;1| /usr/local/bin/ruby16 -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"
+"${TM_SVN:=svn}" status "$WorkPath" 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"
 </string>
 	<key>input</key>
 	<string>none</string>

@@ -31,6 +31,7 @@
 
 @protocol XCVisitor
 - (void) visitGroup:(XCGroup *)group;
+- (void) exitGroup:(XCGroup *)group;
 - (void) visitFile:(XCFile *)file;
 @end
 

@@ -197,11 +197,14 @@
 		
 		[delegate visitGroup:(XCGroup *)file];
 		children = [file valueForKey:@"children"];
+		
 		for( unsigned int index = 0; index < [children count]; index += 1 )
 		{
 			id	object = [children objectAtIndex:index];
 			[self visitFile:object ofGroup:file withDelegate:delegate];
 		}
+		
+		[delegate exitGroup:(XCGroup *)file];
 	}
 	else
 	{

@@ -1,0 +1,30 @@
+{
+	
+	/*--------------------------------------------------------------------------
+	
+	SHOW INVISIBLES HACK
+	====================
+	Version 0.2 (Eric Hsu, textmate@betterfilecabinet.com) 
+	http://math.sfsu.edu/hsu/textmate
+	
+	- Made colors subtler.
+	- Restricted Gremlins to non-printing characters 00-20,80-A0.
+	--------------------------------------------------------------------------*/
+	
+	name = "Show Invisibles";
+	fileTypes = ( );
+	foldingStartMarker = "";
+	foldingStopMarker = "";
+		
+	foregroundColor = "#000000";
+	backgroundColor = "#ffffff";
+	patterns = (
+		
+		/* language stuff */
+		
+		{ name = "Tabs";	backgroundColor = "#E2FDFF";	fontStyle = (  ); 	match = "\t"; },
+		{ name = "Spaces"; backgroundColor = "#FFE4FA"; match = " "; },
+		{ name = "Gremlins?"; backgroundColor = "#FFE4C4"; match = "[\\x00-\\x20\\x80-\\xA0]"; },		
+	);  
+	
+}

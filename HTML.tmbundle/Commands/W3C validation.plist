@@ -4,15 +4,15 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
-	<key>dontFollowNewOutput</key>
-	<true/>
 	<key>command</key>
 	<string>curl 2&gt;/dev/null -F uploaded_file=@/dev/stdin\;type=text/html http://validator.w3.org/check \
 | perl -pe 's/(Line (\d+), column (\d+))/&lt;a href="txmt:\/\/open?line=$2&amp;column=@{[$3 + 1]}"&gt;$1&lt;\/a&gt;/'</string>
+	<key>dontFollowNewOutput</key>
+	<true/>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^V</string>
 	<key>name</key>
 	<string>W3C validation</string>
 	<key>output</key>

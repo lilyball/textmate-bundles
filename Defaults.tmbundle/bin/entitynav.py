@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # @author Kumar McMillan, Brad Miller
 
-"""
-Entitynav: Outputs a parsable list of functional entities for the given code file
+"""Entitynav: Outputs a parsable list of functional entities for the given code file
+
 Usage:  entitynav -f <filename> [ -m $TM_MODE ]
         entitynav -f - -m $TM_MODE
         entitynav -f - -e <mode as extension>
@@ -18,432 +18,23 @@ Usage:  entitynav -f <filename> [ -m $TM_MODE ]
 
 """
 
-import sys, os, re, string, getopt
+import sys, re, getopt
+from special_items.handlers import *
+from special_items.transform import *
+
+class UsageException(Exception): pass
         
 def usage(reason=''):
-    """
-    print usage
-    """
+    """print usage"""
     sys.stdout.flush()
     reason = reason.__str__()
     if reason: sys.stderr.write('ERROR: %s\n' % reason)
     usageMsg = __doc__
     sys.stderr.write(usageMsg)
-    sys.exit(1)
+    return 1
     
-def getHandler(mode):
-    classSuffix = mode.capitalize()
-    """
-    gets an entity-matching handler for the mode in question
-    """    
-    try:
-        handler = globals()["Entities" + classSuffix]
-    except KeyError:
-        raise HandlerException, "no handler for extension/mode '%s'" % mode
-        
-    return handler()
-    
-#-------------------------------------------------------------------------
-# ENTITY HANDLERS
-# see EntityHandler() / SortableEntities() for the interface and notes on creating new handlers
-#-------------------------------------------------------------------------
-    
-class EntityHandler:
-    """
-    abstract class for language-specific Entity handlers
-    
-    Below are handler classes for specific languages, listed alphabetically.  
-    To create a new language handler, name the class Entities<Mode> where 
-    <Mode> is the $TM_MODE (TextMate file mode) converted to title case. 
-    I.E. HTML_PHP becomes Html_php.
-    
-    Also note that any non alphanumeric/underscore characters get converted to `_'.
-    It is also possible to set a mode using a filename extension.  Therefore you need to provide
-    subclasses of your main class to account for all possible TextMate modes or filename extensions.
-    
-    For example, 
-    EntitiesCss gets inherited like so:
-    \class EntitiesCss_html(EntitiesCss): pass
-    \class EntitiesCss_php(EntitiesCss): pass
-    
-    If you are unsure of a TextMate mode, just run this command on a file and you will see the error :)
-    
-    To create sortable entity handlers, see the abstract SortableEntities class
-    
-    """
-    entities = {}
-    sortEntities = False
-    sortEntitiesSilently = False
-    entityMatchLine = None # re.compile() result, used in EntityHandler.readLine()
-        
-    def deconstructLine(self,lineMatch):
-        """
-        deconstructs a line into something meaningful, so that sorting can be applied
-        
-        @param (re.SRE_Match) lineMatch
-        @return (tuple) of each hierarchical group, like (<class>, <function>, <args>)
-        """
-        return lineMatch.string
-        
-    def foundEntities(self):
-        return (self.entities != {})
-        
-    def outputParsable(self):
-        """
-        takes dict of line numbers to file lines and outputs <line number>:<line>
-        """
-        sys.stdout.write( "".join(map(self.reconstructLine, self.sort())) )
-        #sys.stdout.write( "".join( ["%s:%s" % (lineNum,line) for lineNum,line in entitiesAsCoded] ))
-        
-    def readLine(self, lineNum, line):
-        if self.entityMatchLine.match is None:
-            raise HandlerException("there is no pattern to readLine() with")
-        lineMatch = self.entityMatchLine.match(line)
-        if lineMatch:
-            line = self.deconstructLine(lineMatch)
-            self.entities[lineNum] = line
-        return (line, lineMatch)
-        
-    def reconstructLine(self, line):
-        """
-        takes in a line that was deconstructed by deconstructLine and outputs it so that
-        the result is <line number>:<line>
-        
-        @param (mixed) line - the line the way it was returned by deconstructLine
-        """
-        return "%s:%s" % (line[0],line[1])
-        
-    def sort(self):
-        """
-        needs to sort entities and return a list that self.outputParsable() can understand
-        
-        default is to sort entities by line number :
-        """ 
-        entities = self.entities
-        lineNums = entities.keys()
-        lineNums.sort()
-        
-        entitiesAsCoded = zip(lineNums, map(entities.get, lineNums))
-        return entitiesAsCoded
-
-class SortableEntities(EntityHandler):
-    """
-    abstract class for sortable entities
-    
-    This can be inherited by any handler who wants to handle the --sort flag, so entities have 
-    some way to sort themselves, like alphabetically grouped by class, function ... etc
-    """    
-    def sort(self):
-        if not self.sortEntities:
-            return EntityHandler.sort(self)
-            
-        raise SortException("abstract: subclass must define sort() routine")
-        
-class SortableByMainEntity(SortableEntities):
-    """
-    abstract SortableEntities that sorts by an entity group named "main"
-    It also expects matches to be defined as 3 groups, "main", "prefix", "suffix"
-    """
-    def deconstructLine(self, lineMatch):
-        if not self.sortEntities:
-            return EntityHandler.deconstructLine(self, lineMatch)
-        try:
-            return (lineMatch.group('main'),lineMatch.group('prefix'),lineMatch.group('suffix'))
-        except IndexError:
-            raise SortException("expected lineMatch groups 'main', 'prefix', and 'suffix'")
-        
-    def reconstructLine(self, line):
-        if not self.sortEntities:
-            return EntityHandler.reconstructLine(self, line)
-        return "%s:%s\n" % (line[1],(line[0][1]+line[0][0]+line[0][2]))
-        
-    def sort(self):
-        if not self.sortEntities:
-            return EntityHandler.sort(self)
-            
-        lineNums = self.entities.keys()
-        sortedByMain = map(lambda lineNum: (self.entities[lineNum],lineNum), lineNums)
-        sortedByMain.sort()
-        return sortedByMain
-        
-class SortableByClass(SortableEntities):
-    """
-    abstract SortableEntities that sorts by matched groups matched as classes then groups matched as functions
-    Expects match groups: 'indent', 'entity', 'name', 'args'
-    """
-    # set these in the subclass:
-    functionPtrn = None
-    classPtrn = None
-    
-    # protected attributes:
-    classes = []
-    functions = {}
-    functionIndex = '__GLOBAL__'
-    
-    def deconstructLine(self, lineMatch):
-        """
-        takes in a successful lineMatch and returns something that self.reconstructLine() will understand
-        """
-        if not self.sortEntities:
-            return EntityHandler.deconstructLine(self, lineMatch)
-        try:
-            return (lineMatch.group('entity'),lineMatch.group('name'),lineMatch.group('args'),lineMatch.group('indent'))
-        except IndexError:
-            raise HandlerException("abstract SortableByClass must define match groups: 'indent', 'entity', 'name', 'args'")
-        
-    def readLine(self, lineNum, line):
-        """
-        extends EntityHandler.readLine() so that classes and functions can be extracted
-        """
-        (line, lineMatch) = EntityHandler.readLine(self, lineNum, line)
-        if lineMatch:
-            entity = lineMatch.group('entity')
-            name = lineMatch.group('name')
-            try:
-                functionMatch = self.functionPtrn.match
-                classMatch = self.classPtrn.match
-            except AttributeError:
-                raise HandlerException("abstract SortableByClass must define patterns self.functionPtrn and self.classPtrn")
-            
-            if functionMatch(entity):
-                try:
-                    self.functions[self.functionIndex].append((line, lineNum))
-                except KeyError:
-                    self.functions[self.functionIndex] = [(line, lineNum)]
-            elif classMatch(entity):
-                self.classes.append((line, lineNum))
-                # major assumption, that could use fixing...
-                # as we loop through lines (as they were typed), assume subsequent functions belong to the last class :
-                self.functionIndex = name
-            else:
-                raise HandlerException("unexpected entity: '" + entity + "'")
-        return (line, lineMatch)
-        
-    def reconstructLine(self, line):
-        """
-        reconstructs what was deconstructed by self.deconstructLine() and formats for proper output
-        """
-        if not self.sortEntities:
-            return EntityHandler.reconstructLine(self, line)
-        return "%s:%s\n" % (line[1],(line[0][3]+line[0][0]+line[0][1]+line[0][2]))
-        
-    def sort(self):
-        """
-        sort entities hierachically by class, then by function
-        """
-        if not self.sortEntities:
-            return EntityHandler.sort(self)
-            
-        sorted = []
-        try:
-            self.functions['__GLOBAL__'].sort()
-            sorted.extend(self.functions['__GLOBAL__'])
-        except KeyError:
-            pass
-        self.classes.sort()
-        for line,lineNum in self.classes:
-            sorted.append((line, lineNum))
-            className = line[1]
-            try:
-                self.functions[className].sort()
-                sorted.extend(self.functions[className])
-            except KeyError:
-                pass
-                
-        return sorted
-        
-class EntitiesCss(SortableByMainEntity):
-    """
-    entity-matching handler for CSS (css) files
-    """
-    entityMatchLine = re.compile(r'(?P<prefix>^[\s]*)(?P<main>([\*\s]+(html|body)\s+)?[a-zA-Z_\.,#]+[\sa-zA-Z_\.,#\{:]*)(?P<suffix>[^;]+)$')
-        
-class EntitiesCss_html(EntitiesCss): pass
-class EntitiesCss_php(EntitiesCss): pass
-
-class EntitiesJavascript(SortableByMainEntity):
-    """
-    entity-matching handler for JavaScript (js) files
-    
-    NOTE: does not handle prototypes (i.e. creating a pseudo-class).  This can happen once I rewrite the sorting stuff -Kumar
-    """
-    entityMatchLine = re.compile(r'(?P<prefix>^\s*function\s+)(?P<main>[^$]+[&a-zA-Z0-9_]+)(?P<suffix>.*$)')
-    
-class EntitiesJs(EntitiesJavascript): pass
-
-class EntitiesLatex(SortableByMainEntity):
-    """
-    entity-matching handler for LaTeX (tex) files
-    """
-    entityMatchLine = re.compile(r'^\s*(?P<prefix>\\(sub)*section{|\\paragraph{)(?P<main>.*)(?P<suffix>}.*$)')
-        
-class EntitiesTex(EntitiesLatex): pass
-        
-class EntitiesPhp(SortableByClass):
-    """
-    entity-matching handler for PHP (php) files
-    this adds to SortableByClass the 'visibility' group
-    """
-    entityMatchLine = re.compile(r'(?P<indent>^\s*)(?P<visibility>(final|abstract)?\s?(public|private|protected)?\s?(static)?\s*)(?P<entity>(function|class|interface)\s+)(?P<name>[^$]+[&a-zA-Z0-9_]+)(?P<args>.*$)')    
-    functionPtrn = re.compile(r'function', re.IGNORECASE)
-    classPtrn = re.compile(r'(class|interface)', re.IGNORECASE)
-        
-    def deconstructLine(self, lineMatch):
-        if not self.sortEntities:
-            return EntityHandler.deconstructLine(self, lineMatch)
-        return (lineMatch.group('entity'),lineMatch.group('name'),lineMatch.group('visibility'),lineMatch.group('args'),lineMatch.group('indent'))
-        
-    def reconstructLine(self, line):
-        if not self.sortEntities:
-            return EntityHandler.reconstructLine(self, line)
-        return "%s:%s\n" % (line[1],(line[0][4]+line[0][2]+line[0][0]+line[0][1]+line[0][3]))
-
-class EntitiesHtml_php(EntitiesPhp): pass
-class EntitiesInc(EntitiesPhp): pass
-        
-class EntitiesPerl(SortableByMainEntity):
-    """
-    entity-matching handler for Perl (pl) files
-    """
-    entityMatchLine = re.compile(r'^\s*(?P<prefix>sub\s+)(?P<main>.*)(?P<suffix>\s*$)')
-
-class EntitiesPl(EntitiesPerl): pass
-class EntitiesPm(EntitiesPerl): pass
-        
-class EntitiesPython(SortableByClass):
-    """
-    entity-matching handler for Python (py) files
-    """
-    entityMatchLine = re.compile(r'(?P<indent>^\s*)(?P<entity>(class|def)\s+)(?P<name>[a-zA-Z0-9_]+)(?P<args>.*:.*$)')
-    functionPtrn = re.compile(r'^def', re.IGNORECASE)
-    classPtrn = re.compile(r'^class', re.IGNORECASE)
-        
-    def readLine(self, lineNum, line):
-        """
-        extends EntityHandler.readLine() so that classes and functions can be extracted
-        """
-        (line, lineMatch) = EntityHandler.readLine(self, lineNum, line)
-        if lineMatch:
-            entity = lineMatch.group('entity')
-            name = lineMatch.group('name')
-            try:
-                functionMatch = self.functionPtrn.match
-                classMatch = self.classPtrn.match
-            except AttributeError:
-                raise HandlerException("abstract SortableByClass must define patterns self.functionPtrn and self.classPtrn")
-            
-            if functionMatch(entity):
-                index = self.functionIndex
-                if lineMatch.group('indent') is "":
-                    # assume this is a global function :
-                    index = '__GLOBAL__'
-                try:
-                    self.functions[index].append((line, lineNum))
-                except KeyError:
-                    self.functions[index] = [(line, lineNum)]
-            elif classMatch(entity):
-                self.classes.append((line, lineNum))
-                self.functionIndex = name
-            else:
-                raise HandlerException("unexpected entity: '" + entity + "'")
-        return (line, lineMatch)
-
-class EntitiesPy(EntitiesPython): pass
-
-class EntitiesRuby(SortableByClass):
-    """
-    entity-matching handler for Ruby (rb) files
-    """
-    entityMatchLine = re.compile(r'(?P<indent>^\s*)(?P<entity>(class|module|def)\s+)(?P<name>.*)(?P<args>\s*$)')
-    functionPtrn = re.compile(r'^def', re.IGNORECASE)
-    modulePtrn = re.compile(r'^module', re.IGNORECASE)
-    classPtrn = re.compile(r'^class', re.IGNORECASE)
-    modules = []
-    classes = {}
-    functions = {}
-    functionIndex = '__GLOBAL__'
-    moduleIndex = '__GLOBAL__'
-        
-    def readLine(self, lineNum, line):
-        """
-        extends EntityHandler.readLine() so that classes and functions can be extracted
-        """
-        (line, lineMatch) = EntityHandler.readLine(self, lineNum, line)
-        if lineMatch:
-            entity = lineMatch.group('entity')
-            name = lineMatch.group('name')
-                        
-            if self.functionPtrn.match(entity):
-                try:
-                    self.functions[self.functionIndex].append((line, lineNum))
-                except KeyError:
-                    self.functions[self.functionIndex] = [(line, lineNum)]
-            elif self.classPtrn.match(entity):
-                try:
-                    self.classes[self.moduleIndex].append((line, lineNum))
-                except KeyError:
-                    self.classes[self.moduleIndex] = [(line, lineNum)]
-                self.functionIndex = name
-            elif self.modulePtrn.match(entity):
-                self.modules.append((line, lineNum))
-                self.moduleIndex = name
-            else:
-                raise HandlerException("unexpected entity: '" + entity + "'")
-        return (line, lineMatch)
-                
-    def sort(self):
-        """
-        sort entities hierachically by module, class, function
-        """
-        if not self.sortEntities:
-            return EntityHandler.sort(self)
-            
-        sorted = []
-        try:
-            self.classes['__GLOBAL__'].sort()
-            sorted.extend(self.sortClassFunctions(self.classes['__GLOBAL__']))
-        except KeyError:
-            pass
-        try:
-            self.functions['__GLOBAL__'].sort()
-            sorted.extend(self.functions['__GLOBAL__'])
-        except KeyError:
-            pass
-        self.modules.sort()
-        for line,lineNum in self.modules:
-            sorted.append((line, lineNum))
-            moduleName = line[1]
-            try:
-                self.classes[moduleName].sort()
-                sorted.extend(self.sortClassFunctions(self.classes[moduleName]))
-            except KeyError:
-                pass
-                
-        return sorted
-        
-    def sortClassFunctions(self, classes):
-        sorted = []
-        for line, lineNum in classes:
-            sorted.append((line, lineNum))
-            className = line[1]
-            try:
-                self.functions[className].sort()
-                sorted.extend(self.functions[className])
-            except KeyError:
-                pass
-        return sorted
-        
-class EntitiesHtml_ruby(EntitiesRuby): pass
-class EntitiesRb(EntitiesRuby): pass
-
-#-------------------------------------------------------------------------
-# END: ENTITY HANDLERS
-#-------------------------------------------------------------------------
-
 class EntityNav:
-    """
-    Produces a parsable entity-navigation of a code file (designed for TextMate's command window)
-    """
+    """Produces a parsable entity-navigation of a code file (designed for TextMate's command window)"""
     sortEntities = False
     sortEntitiesSilently = False
     
@@ -473,8 +64,8 @@ class EntityNav:
         self.handler.sortEntitiesSilently = self.sortEntitiesSilently
             
     def outputParsable(self):
-        """
-        outputs a <line number>:<line> entity list 
+        """outputs a <line number>:<line> entity list 
+        
         @see EntityHandler.outputParsable()
         """
         self.findEntities()
@@ -527,29 +118,28 @@ class EntityNav:
     def setModeFromFileExt(self, filename):
         self.mode = filename.split('.')[-1]
         
-class HandlerException(Exception): pass
-class HandlerNoEntitiesException(HandlerException): pass
-class SortException(Exception): pass
-class ParseException(Exception): pass
-class UsageException(Exception): pass
-        
 def main(argv):
+    """runs entity nav from command line
+    
+    returns exit status
+    """
     try:
         opts, args = getopt.getopt(argv, "hsSf:e:E:m:", ["help", "sort", "sort-silently", "file=", "ext=", "ext-from-file=", "mode="])
         entityNav = EntityNav(opts, args)
         entityNav.outputParsable()
     except getopt.GetoptError, err:
-        usage(err)
+        return usage(err)
     except UsageException, err:
-        usage(err)
+        return usage(err)
     except HandlerNoEntitiesException:
         print "0:NO ENTITIES FOUND"
+        return 1
     except HandlerException, err:
-        usage(err)
+        return usage(err)
     except SortException, err:
-        usage(err)
+        return usage(err)
     except ParseException, err:
-        usage(err)
+        return usage(err)
     return 0
 
 if __name__ == '__main__':

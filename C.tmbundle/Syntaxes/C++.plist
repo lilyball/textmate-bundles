@@ -1,0 +1,25 @@
+{
+	name = "C++";
+	// I don't think anyone uses ".hp". .cp tends to be paired with .h. (I could be wrong. :) -- chris
+	fileTypes = ( cc, cpp, cp, cxx, "c++", C, h, hpp, "h++" );
+	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
+	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
+	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
+   smartTypingPairs = (
+      ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
+      ( "\"", "\"" ), ( "'", "'" )
+	);
+   highlightPairs = (
+      ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
+	);
+	foregroundColor = "#000000";
+	backgroundColor = "#FFFFFF";
+	patterns = (
+		{ include = "C Source"; },
+		{ name = "C++ Keyword";
+		match = "\\<(and|and_eq|bitand|bitor|catch|compl|const_cast|delete|dynamic_cast|explicit|export|friend|namespace|new|not|not_eq|or|or_eq|operator|private|protected|public|reinterpret_cast|static_cast|template|this|try|throw|typeid|using|virtual|xor|xor_eq)\\>";
+		fontStyle = ( bold );
+		foregroundColor = "blue"; },
+		{ name = "C++ Storage Keyword"; match = "\\<(bool|class|mutable|typename|true|false|wchar_t)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+	);
+}

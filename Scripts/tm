@@ -6,28 +6,35 @@
 # (Jan 14 05) Added -tuw, better help. 
 #	- Eric Hsu textmate@betterfilecabinet.com
 # Used wait code from Marcin <otheraccount@verizon.net>
+# Added Marcin's jump to line number. Autodetects Terminal or iTerm.
 
 OPEN="open -a TextMate"
 CREATE="touch"
 
 
 # If you don't want the script to switch back to the Terminal (or iTerm), comment out 
-# the definition of OPENTERMAPP.
+# the definition of OPENTERMAPP. Or if autodetect is messing up, hardcode your terminal.
 
-OPENTERMAPP="open -a iTerm"
-# OPENTERMAPP="open -a Terminal"
+if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
+	OPENTERMAPP="open -a iTerm";
+elif [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
+	OPENTERMAPP="open -a Terminal";	
+fi
+	
 
 CREATE_FILE=0
-while getopts chtuw FLAG; do
+while getopts chtuwl: FLAG; do
 	case $FLAG in
 	c) CREATE_FILE=1;;
+	l) LINE=$OPTARG;;
 	t) PIPETITLE=1;;
 	u) URL=1;;
 	w) WAIT=1;;
 	h|\?) HELP=1;;
 	esac
-	shift $(($OPTIND - 1))
 done
+
+shift $(($OPTIND - 1))
 
 if (($HELP)); then
 	echo ""
@@ -38,6 +45,7 @@ if (($HELP)); then
 	echo ""
 	echo "    -c Create a new file."
 	echo "    -h Show this help."
+	echo "    -l### Jump to line ###."
 	echo "    -t Specify a title for piped input. Overrides other flags."
 	echo "    -u Treat filenames as URLs (e.g. tm -u www.google.com). Uses curl."
 	echo "    -w Wait for the file window close before ending"
@@ -125,6 +133,29 @@ else
 			echo "File \`$filename' does not exist."
 		fi
 	done
+fi
+
+if (($LINE)); then
+osascript -e 'tell app "TextMate.app" to activate'
+osascript <<EofSCRIPT
+	tell app "System Events"
+	    tell process "TextMate"
+	        tell menu bar 1
+	            tell menu bar item "Navigation"
+	                tell menu "Navigation"
+	                    click menu item "Go to Line..."
+	                    -- delay 1
+	                end tell
+	            end tell
+	        end tell
+	        tell window "Go to Line"
+	            set value of text field 1 to "$LINE"
+	            -- delay 1
+	            click button "Go to Line"
+	        end tell
+	    end tell
+	end tell
+EofSCRIPT
 fi
 
 if (($WAIT)); then

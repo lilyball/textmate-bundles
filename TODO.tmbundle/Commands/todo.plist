@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># just to remind you of some useful environment variables
+# see Help / Shell Variables for the full list
+#echo File: "$TM_FILEPATH"
+#echo Word: "$TM_CURRENT_WORD"
+#echo Selection: "$TM_SELECTED_TEXT"
+WorkPath=`dirname "$TM_FILEPATH"`
+export WorkPath
+
+cd `dirname "$TM_FILEPATH"`
+echo "&lt;h1&gt;TODO LIST&lt;/h1&gt;"
+echo "&lt;ul&gt;"
+grep --with-filename --line-number  TODO * | perl -pe 's/(.*?):(.*?):.*?(TODO.*)\n/&lt;li&gt; &lt;a href="txmt:\/\/open?url=file:\/\/$ENV{'WorkPath'}\/$1&amp;line=$2"&gt;$3&lt;\/a&gt;&lt;\/li&gt;\n/'
+echo "&lt;/ul&gt;"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>todo</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>14C1643E-7D51-11D9-859D-000D93B6E43C</string>
+</dict>
+</plist>

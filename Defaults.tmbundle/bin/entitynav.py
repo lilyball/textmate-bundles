@@ -192,12 +192,20 @@ class EntitiesPy(EntityHandler, SortableEntities):
     def formatSortedLine(self, line):
         return "%s:%s\n" % (line[1],(line[0][0]+line[0][1]))
 
+class EntitiesRb(EntityHandler, SortableEntitiesIn3):
+    """
+    entity-matching handler for Ruby (rb) files
+    """
+    def __init__(self):
+        self.entityMatchLine = re.compile(r'^\s*(?P<prefix>class|module|def)\s+(?P<main>.*)(?P<suffix>\s*$)')
+
 class EntitiesTex(EntityHandler, SortableEntitiesIn3):
     """
     entity-matching handler for LaTeX (tex) files
     """
     def __init__(self):
         self.entityMatchLine = re.compile(r'^\s*(?P<prefix>\\(sub)*section{|\\paragraph{)(?P<main>.*)(?P<suffix>}.*$)')
+
 
 #-------------------------------------------------------------------------
 # END: ENTITY HANDLERS

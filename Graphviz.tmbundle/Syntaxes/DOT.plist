@@ -1,6 +1,11 @@
 {
    name = "Graphviz (DOT)";
    
+   // r3 (2005jan20, 2005jan21)
+   // - new naming-scheme, thanks to Chris Thomas.
+   // - added { to smart-typing, not sure why i didnt
+   //   do this from begining on
+   //   
    // r2 (2004dec09)
    // - changed version numbering to revisisions
    // 
@@ -19,7 +24,7 @@
    increaseIndentPattern = "^\\s*\\{";
    
    smartTypingPairs = (
-      ( "[", "]" ), ( "\"", "\"" ), ( "<", ">" )
+      ( "[", "]" ), ( "\"", "\"" ), ( "{", "}" ), ( "<", ">" )
    );
    
    highlightPairs = (

@@ -1,0 +1,128 @@
+{
+   name = "MIPS Assembler";
+   
+   // r5 (2005jan21)
+   // - new naming-scheme
+   // - rename from MIPS_ASM.plist to MIPS.plist
+   // 
+   // r4 (2004dec13)
+   // - added highlighting for floats
+   // 
+   // r3 (2004dec09)
+   // - changed version numbering to revisions
+   // 
+   // r2 (v1.2) (2004nov25)
+   // - changed keywords to those from
+   //   http://www.cs.wisc.edu/~larus/HP_AppA.pdf
+   //   (no gurantee, that all are included, because
+   //   automated extracting from this pdf is
+   //   pure pain)
+   // - changed color for pseudo instructions
+   // - added .set at and .set noat to
+   //   directives
+   // 
+   // r1 (v1.1) (2004nov23)
+   // - added identitation for lables
+   // - added " to smart typing
+   // - added spim to file extensions
+   // 
+   // r0 (v1.0) (unknown)
+   // - initial version
+   
+   
+   fileTypes = ( s, mips, spim, asm );
+   
+   smartTypingPairs = (
+      ( "(", ")" ), ( "\"", "\"" )
+   );
+   highlightPairs = (
+      ( "(", ")" )
+   );
+   
+   // white on black..
+   foregroundColor = "#eeeeee";
+   backgroundColor = "#181818";
+   
+   // a label increases:
+   increaseIndentPattern = "^\\s*[A-Za-z9-0_]+:\\s*$";
+   
+   patterns = (
+      {  name = "keywords.instructions.pseudo.mips";
+         match = "\\<(mul|abs|div|divu|mulo|mulou|neg|negu|not|rem|remu|rol|ror|li|seq|sge|sgeu|sgt|sgtu|sle|sleu|sne|b|beqz|bge|bgeu|bgt|bgtu|ble|bleu|blt|bltu|bnez|la|ld|ulh|ulhu|ulw|sd|ush|usw|move|mfc1\\.d|l\\.d|l\\.s|s\\.d|s\\.s)\\>";
+         foregroundColor = "#0d93df";
+      },
+      
+      {  name = "keywords.instructions.mips";
+         match = "\\<(abs\\.d|abs\\.s|add|add\\.d|add\\.s|addi|addiu|addu|and|andi|bc1f|bc1t|beq|bgez|bgezal|bgtz|blez|bltz|bltzal|bne|break|c\\.eq\\.d|c\\.eq\\.s|c\\.le\\.d|c\\.le\\.s|c\\.lt\\.d|c\\.lt\\.s|ceil\\.w\\.d|ceil\\.w\\.s|clo|clz|cvt\\.d\\.s|cvt\\.d\\.w|cvt\\.s\\.d|cvt\\.s\\.w|cvt\\.w\\.d|cvt\\.w\\.s|div|div\\.d|div\\.s|divu|eret|floor\\.w\\.d|floor\\.w\\.s|j|jal|jalr|jr|lb|lbu|lh|lhu|ll|lui|lw|lwc1|lwl|lwr|madd|maddu|mfc0|mfc1|mfhi|mflo|mov\\.d|mov\\.s|movf|movf\\.d|movf\\.s|movn|movn\\.d|movn\\.s|movt|movt\\.d|movt\\.s|movz|movz\\.d|movz\\.s|msub|mtc0|mtc1|mthi|mtlo|mul|mul\\.d|mul\\.s|mult|multu|neg\\.d|neg\\.s|nop|nor|or|ori|round\\.w\\.d|round\\.w\\.s|sb|sc|sdc1|sh|sll|sllv|slt|slti|sltiu|sltu|sqrt\\.d|sqrt\\.s|sra|srav|srl|srlv|sub|sub\\.d|sub\\.s|subu|sw|swc1|swl|swr|syscall|teq|teqi|tge|tgei|tgeiu|tgeu|tlt|tlti|tltiu|tltu|trunc\\.w\\.d|trunc\\.w\\.s|xor|xori)\\>";
+         foregroundColor = "#05e0e0";
+      },
+      
+      {  name = "keywords.assembler-directives.mips";
+         match = "\\.(align|ascii|asciiz|byte|data|double|extern|float|globl|half|kdata|ktext|space|text|word|set\\s*(noat|at))\\>";
+         foregroundColor = "#a072d0";
+         fontStyle = ( italic );
+      },
+      
+      {  name = "labels.mips";
+         match = "\\<([A-Za-z0-9_]+):";
+         foregroundColor = "#05e0e0";
+         "foregroundColor[1]" = "#128787";
+      },
+      
+      {  name = "registers.usable.by-number.mips";
+         match = "(\\$(0|[2-9]|1[0-9]|2[0-5]|2[89]|3[0-1])\\>";
+         foregroundColor = "#cf8d15";
+      },
+      
+      {  name = "registers.usable.by-name.mips";
+         match = "(\\$(zero|v[01]|a[0-3]|t[0-9]|s[0-7]|gp|sp|fp|ra)\\>";
+         foregroundColor = "#c65b38";
+      },
+      
+      {  name = "registers.reserved.mips";
+         match = "(\\$(at|k[01]|1|2[67])\\>";
+         foregroundColor = "#ff6fcf";
+      },
+      
+      {  name = "registers.usable.floating-point.mips";
+         match = "(\\$f([0-9]|1[0-9]|2[0-9]|3[0-1])\\>";
+         foregroundColor = "#cccc33";
+      },
+      
+      {  name = "special.aligning-relative-to-a-label.mips";
+         match = "(\\d+)\\(";
+         "foregroundColor[1]" = "#20b010";
+      },
+      
+      {  name = "constants.numeric.float.mips";
+         match = "\\<\\d+\\.\\d+\\>";
+         foregroundColor = "#2aed27";
+      },
+      
+      {  name = "constants.numeric.mips";
+         match = "\\<(\\d+|0(x|X)[a-fA-F0-9]+)\\>";
+         "foregroundColor[1]" = "#2aed27";
+      },
+      
+      {  name = "strings.double-quoted.mips";
+         begin = "\"";
+         end = "\"";
+         swallow = "\\\\.";
+         foregroundColor = "#b4f00a";
+      },
+      
+      {  name = "comments.line.attention.mips";
+         match = "#!!(.*)";
+         foregroundColor = "#ff6fcf";
+         fontStyle = ( italic );
+      },
+      
+      {  name = "comments.line.mips";
+         match = "#.*";
+         foregroundColor = "#808080";
+         fontStyle = ( italic );
+      }
+      
+   );
+   
+}

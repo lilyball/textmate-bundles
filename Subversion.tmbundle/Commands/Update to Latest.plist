@@ -12,7 +12,8 @@ else
 fi
 export WorkPaths
 
-export "${TM_SVN:=svn}"
+echo "${TM_SVN:=svn}" &gt; /dev/null
+export TM_SVN
 
 ruby &lt;&lt;END
 	svn = ENV['TM_SVN']

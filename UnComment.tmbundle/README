@@ -1,0 +1,72 @@
+Comment Toggle for TextMate. By Eric Hsu <textmate@betterfilecabinet.com>
+v9, December 23rd, 2004
+
+The package consists of a handy command to automatically toggle the comment status of lines with format depending on the filetype. There are options and you can add your own delimiters. 
+
+This is released as Niceware, which is like the Perl Artistic License, except you have to be nice to me when you criticize the code. 
+
+Files included:
+
+README (this document)
+comment-toggle.pl (source code)
+
+./Commands:
+010 Comment Toggle.plist (invoked as a 1-liner)
+020 Comment Toggle Source File.plist (invoked as a Perl script if it's where it should be... handy for debugging.)
+
+--
+
+What It Does
+============
+It parses the filetype from the filename ending and checks if the selection's first line is a comment; if so, it uncomments the rest of the selection. 
+If not, it comments the whole selection, line by line. 
+It tries to keep the selection's indentation.
+If a language has more than one kind of delimiter pair, it will use the first pair in the list for commenting, and will search for all listed pairs for uncommenting. 
+Notice this last feature improves on BBEdit's Text->Un/Comment functionality. 
+The delimiters are stored in $markers in the format "a,b,c"=>[$first, $last], where each of the file endings .a, .b and .c will use that delimiter pair. Roll your own!
+
+Installation
+============
+Most people can just double-click on the tmbundle. 
+
+To do it by hand:
+
+Invoke this as a TM command as a one-liner:
+ 
+	perl -e '$markers={"pl,pm,rb"=>["#",""],"plist,c,css,m+h,cp,cpp,h,p,pas,js,htc,c++,h++"=>["/*","*/","//",""],"java,cc,mm"=>["//","","/*","*/"],"html,htm,xml"=>["<!--","-->"],"bib,ltx,tex,ps,eps"=>["%",""],"php"=>["#","","/*","*/","<!--","-->","//",""],"mli,ml,mll,mly"=>["(*","*)"],"script,adb,ads,sql,ddl,dml"=>["--",""],"f,f77"=>["C ",""],"inf,f90"=>["!",""],};$tab=4;while(($k,$v)=each(%$markers)){foreach(split(/\s*,\s*/,$k)){$c{"$_"}=$v;}}$_=shift@ARGV;($type)=/\.([^.]*)$/;foreach$option(@ARGV){if($option=~/^\.(.*)$/){$type=$1;}$opt->{$option}++;}unless($c{"$type"}){$type="pl";}($start,$finish,@etc)=@{$c{$type}};$isntfirst=0;while(<STDIN>){push@in,$_;($indent)=/^([ \t]*)/;$indentl=0;foreach$j(1..(length($indent))){$ch=substr($indent,$j-1,1);if($ch eq" "){$indentl++;}else{unless($indentl%$tab){$indentl+=$tab;}else{$indentl+=$indentl%$tab;}}}unless($isntfirst){$indentmin=$indent;$indentminl=$indentl;$isntfirst++;}else{if($indentl<$indentminl||$indent eq""){$indentmin=$indent;$indentminl=$indentl;}}}$isntfirst=0;foreach(@in){$lineend="";if($opt->{"toggle"}){$iscomment=$isfirstofpair=$isntfirst=0;}if(chomp){$lineend="\n";}unless(/\S/){unless($opt->{"comment-whitespace"}){$out.=$_."\n";next;}}unless($isntfirst){$isntfirst=1;foreach$delimiter(@{$c{"$type"}}){$isfirstofpair=1-$isfirstofpair;$delimiterq=quotemeta($delimiter);if($isfirstofpair){if(/^\s*$delimiterq/){$iscomment=1;$start=$delimiter;$startq=$delimiterq;}}elsif($iscomment){$finish=$delimiter;$finishq=$delimiterq;last;}}}if($opt->{"uncomment"}){$iscomment=1;}if($opt->{"comment"}){$iscomment=0;}if($iscomment){s/^(\s*)$startq(\ )?/$1/;s/(\ )?$finishq(\s*)$/$1/;$out.=$_.$lineend;}else{if($opt->{"first-column"}){$out.=$start;unless($indentmin){$out.=" ";}$out.="$_";if($finish){$out.=" ".$finish;}$out.=$lineend;}else{s/^$indentmin//;$out.=$indentmin.$start." $_";if($finish){$out.=" ".$finish;}$out.=$lineend;}}}print$out;' "$TM_FILEPATH"
+	
+	Or put it the script like ~/bin/ct and  invoke it with ~/bin/ct "$TM_FILEPATH". In both cases, STDIN should be the selection and STDOUT should replace the selection. If you want to use options, then invoke it as 
+	perl -e '...' "$TM_FILEPATH" first-column comment .tex
+If you install this as a tmbundle, you can also install it as a command as 
+
+	Before: do nothing
+	Command:
+	~/Library/Application\ Support/TextMate/Bundles/UnComment.tmbundle/comment-toggle.pl "$TM_FILEPATH"
+	STDIN: Selected
+	STDOUT: Replace Selected
+
+Current Options
+==============
+'first-column' puts the first comment marker at the line start
+'comment' always comments (for people who want the smartness, but not the toggleness)
+'uncomment' always uncomments. If you foolishly use both comment and this, comment wins.
+'comment-whitespace' comments whitespace which we normally skip.
+'.tex' will force the use of TeX style comments. You can substitute your favorite 
+	ending, like '.java' or '.pl'. The leading dot is important. Last type listed wins.
+'toggle' changes the comment status line by line. Normally, the whole thing is a block.
+
+Notes
+=====
+v9. Added options. Bug fixes: Fixed bug with selections having newline endings for real. (Ollivier Robert); fix trailing space on right added when uncommenting; trailing space only when there is a comment marker.
+v8. Comments don't throw in an extra newline. (Ollivier Robert); Uses # as default for unknown filetypes. Borrowed comment styles from Chris Thomas.
+v7. fixed issue with spaces in path (use "$TM_FILEPATH"); Allan Odgaard fix for issue with periods in path
+v6. Fancy footwork to figure out which line is indented more (with spaces) according to TM. I.e. tabs actually round to the next multiple of 4.  (First Release.)
+v5. The default indent should be the least indent in the whole selection, not just the indent of the first line. Note that BBEdit starts the comment from the first column. I prefer the comment at the level of the selection's indent, so it's going to be my way. We arbitrarily decide a tab is 4 spaces (to compare indent lengths... why are you using spaces anyway?!). For people who like it another way, you are free to tweak the code. 
+v4. Odd space problem bug fixed.
+v3. C, Perl, PHP and HTML working. 
+v2. Wrapper detects if it's a comment and what the delimiter is. 
+v1. Universal commenter. 
+
+To Do
+=====
+Support for $TM_FILETYPE in next beta.

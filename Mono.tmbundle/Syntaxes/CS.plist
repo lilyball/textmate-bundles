@@ -1,0 +1,62 @@
+{
+    backgroundColor = "#aaaaaa"; 
+    fileTypes = (cc, cpp, cxx, "c++", C, h, hpp, "h++"); 
+    foldingStartMarker = "(/\\*\\*|\\{\\s*$)"; 
+    foldingStopMarker = "(\\*\\*/|^\\s*\\})"; 
+    foregroundColor = "#000000"; 
+    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
+    increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$"; 
+    name = "C#"; 
+    uuid = "1BA75B32-707C-11D9-A928-000D93589AF6";
+    patterns = (
+        {
+            begin = "/\\*"; 
+            end = "\\*/"; 
+            foregroundColor = "#ffffff"; 
+            name = "Multi Line Comment"; 
+        }, 
+        {
+            fontStyle = (italic); 
+            foregroundColor = "#ffffff"; 
+            match = "//.*$"; 
+            name = "Single Line Comment"; 
+        }, 
+        {
+            fontStyle = (bold); 
+            foregroundColor = "#4444ff";
+            match = "\\<(abstract|as|base|break|case|catch|checked|const|continue|default|delegate|do|else|event|explicit|extern|false|finally|fixed|for|foreach|goto|if|implicit|in|internal|is|lock|namespace|new|null|operator|out|override|params|private|protected|public|readonly|ref|return|sealed|sizeof|stackalloc|static|switch|this|throw|true|try|typeof|unckecked|unsafe|using|virtual|volatile|void|while)\\>"; 
+            name = "Keyword"; 
+        }, 
+        {
+            fontStyle = (bold); 
+            foregroundColor = "#2222ff"; 
+            match = "\\<(bool|byte|char|class|decimal|double|enum|float|int|nterface|long|object|sbyte|short|string|struct|uint|ulong|ushort)\\>"; 
+            name = "Storage Keyword"; 
+        }, 
+        {
+            foregroundColor = "#ffffff"; 
+            match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; 
+            name = "Numeric Constant"; 
+        }, 
+        {
+            begin = "\""; 
+            end = "\""; 
+            foregroundColor = "#ffffff"; 
+            name = "String"; 
+            swallow = "\\\\."; 
+        }, 
+        {
+            begin = "'"; 
+            end = "'"; 
+            foregroundColor = "#ffffff"; 
+            name = "Character Constant"; 
+            swallow = "\\\\."; 
+        }, 
+        {
+            fontStyle = (bold); 
+            match = "^#\\s*(if|else|elif|endif|define|undef|warning|error|line|region|endregion)\\>"; 
+            name = "Preprocessor Directive"; 
+        }
+    ); 
+    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
+}

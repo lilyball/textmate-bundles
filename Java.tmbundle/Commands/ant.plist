@@ -9,18 +9,23 @@
 	<key>capturePattern</key>
 	<string>^(.*?):([0-9]+):.*</string>
 	<key>command</key>
-	<string>cd $TM_DIRECTORY
-ant -emacs -s build.xml</string>
+	<string>cd "$TM_DIRECTORY"
+
+ant -s build.xml 2&gt;&amp;1 | "$TM_BUNDLE_PATH/Commands/htmlize_ant.py" 
+
+</string>
 	<key>fileCaptureRegister</key>
 	<string>1</string>
 	<key>input</key>
 	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
 	<key>lineCaptureRegister</key>
 	<string>2</string>
 	<key>name</key>
 	<string>ant</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
 	<string>DA0A5984-5F16-11D9-B9C3-000D93589AF6</string>
 </dict>

@@ -83,6 +83,13 @@ class EntitiesPl(EntityHandler):
         self.entityMatchLine = re.compile(r'^\s*(sub)\b.*\s*$')
 
 class EntitiesPm(EntitiesPl): pass
+
+class EntitiesCss(EntityHandler):
+    """
+    entity-matching handler for CSS files
+    """
+    def __init__(self):
+        self.entityMatchLine = re.compile(r'^.*\{$')
         
 class EntitiesPy(EntityHandler):
     """

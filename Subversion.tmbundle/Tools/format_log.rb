@@ -86,8 +86,8 @@ begin
                end
                
                
-               puts( ((msg_count % 2) == 0) ? '<table class="log_msg">' :
-                                              '<table class="log_msg alternate">' )
+               puts( ((msg_count % 2) == 0) ? '<table class="log">' :
+                                              '<table class="log alternate">' )
                msg_count += 1
                
                puts '<tr>  <th>Revision:</th>  <td>'+ $1 +'</td> </tr>'
@@ -113,6 +113,7 @@ begin
                raise NoMatchException, line
             end
             
+         # TODO: make this caching and show a sorted list..
          when :path_list
             if line =~ /^\s+([A-Z]) (.+)$/
                op = case $1

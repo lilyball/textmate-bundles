@@ -5,46 +5,48 @@
 }
 
 
-table.log_msg {
-   font-size: 93%;
+table.log {
+   font-size: inherit;
    width: 100%;
    margin-bottom: 5px;
 }
 
 
-table.log_msg th {
+table.log th {
    text-align: right;
    padding-left: 5px;
    vertical-align: top;
    white-space: nowrap;
 }
 
-table.log_msg td {
+table.log td {
    vertical-align: top;
    width: 100%;
 }
 
 
-table.log_msg td ul {
+td.msg_field {
+   font-family: "Bitstream Vera Sans Mono", monospace;
+   font-size: 12px;
+}
+
+
+table.log td ul {
    list-style-type: none;
    padding-left: 4px;
 }
 
-td.msg_field {
-   font-family: "Bitstream Vera Sans Mono", monospace;
-   font-size: 9pt;
-}
-
-
-table.log_msg td ul li {
+/* this the list of changed files: */
+table.log td ul li {
+   font-size: 12px;
    margin-bottom: 2px;
-   font-size: 96%;
    padding: 1px;
 }
 
+
 li.added:before, li.modified:before, li.deleted:before, li.unknown:before {
-   font-weight: bold;
    font-family: "Bitstream Vera Sans Mono", monospace;
+   font-weight: bold;
 }
 
 li.added:before {

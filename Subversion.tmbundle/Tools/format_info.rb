@@ -49,7 +49,8 @@ begin
          
          if $2 == '(Not a versioned resource)'
             make_error_head( 'Not a versioned resource:' )
-            make_error_foot( '<a href="'+make_tm_link( htmlize($1, false) )+'">'+htmlize($1, false)+'</a>' )
+            make_error_foot( '<a href="'+make_tm_link( $1 )+'">'+htmlize($1, false)+'</a>' )
+            count_dl -= 1
             
          else
             to_search = $1.downcase
@@ -59,7 +60,7 @@ begin
             
             if $1 == 'Path'
                dt = 'Path'
-               dd = '<a href="'+make_tm_link( htmlize($2, false) )+'">'+htmlize($2, false)+'</a>'
+               dd = '<a href="'+make_tm_link( $2 )+'">'+htmlize($2, false)+'</a>'
                
             elsif $1 == 'URL'
                dt = 'URL'

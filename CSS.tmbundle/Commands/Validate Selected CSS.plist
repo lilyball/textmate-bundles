@@ -14,16 +14,14 @@ print 'http://jigsaw.w3.org/css-validator/validator?&amp;warning=1&amp;profile=n
   
   if b == 32
     print '+'
-  elsif (48..57).include? b or
-        (65..90).include? b or
-        (97..122).include? b
+  elsif b.chr =~ /\w/
     print b.chr
   else
     printf '%%%02x', b
   end
 end
 
-puts '#errors\"&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;'  "</string>
+puts '#errors\"&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;' "</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

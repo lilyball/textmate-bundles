@@ -17,20 +17,23 @@ require $bundle+'/Tools/svn_helper.rb'
 include SVNHelper
 
 
-msg_count      = 0   # used to count messages and to show tables in alternate colors
-comment_count  = 0   # used to count the lines of comments
-rev            = ''  # the last fetched revision
-max_lines      = 0   # the maximum number of lines
-already_shown  = []  # to supress double messages (they could happen if you selected multiple files)
+msg_count      = 0      # used to count messages and to show tables in alternate colors
+comment_count  = 0      # used to count the lines of comments
+rev            = ''     # the last fetched revision
+max_lines      = 0      # the maximum number of lines
+already_shown  = []     # to supress double messages (they could happen if you selected multiple files)
+skipped_files  = false  # to remember this
+
 
 # about the states of the 'parser':
-#   seperator      initial state, assuming a ---..
-#   info           parsing the info line with rev, name, etc
-#   changed_paths  awaiting a changed paths thing or blank line
-#   path_list      parsing changed files
-#   comment        getting the comment
-#   skip           if doesnt show the next message because we already did
-state = :seperator
+#  skipped_files  if we wait for some Skipped: messages at the beginning
+#  seperator      initial state, assuming a ---..
+#  info           parsing the info line with rev, name, etc
+#  changed_paths  awaiting a changed paths thing or blank line
+#  path_list      parsing changed files
+#  comment        getting the comment
+#  skip_next      if doesnt show the next message because we already did
+state = :skipped_files
 
 
 begin
@@ -41,9 +44,25 @@ begin
    
    
    $stdin.each_line do |line|
-      raise SVNErrorException, line  if line =~ /^svn:/ or line =~ /^Skipped/
+      raise SVNErrorException, line  if line =~ /^svn:/
       
       case state
+         when :skipped_files
+            if line =~ /^-{72}$/
+               state = :info
+               make_error_foot  if skipped_files
+               
+            elsif line =~ /^Skipped '(.+)'$/
+               unless skipped_files
+                  make_error_head('Skipped:')
+                  skipped_files = true
+               end
+               puts '<a href="'+make_tm_link( $1 )+'">'+htmlize($1)+'</a><br />'
+               
+            else
+               raise NoMatchException, line
+            end
+            
          when :seperator
             raise LogLimitReachedException  if $limit != 0 and msg_count == $limit
             
@@ -60,7 +79,7 @@ begin
                max_lines  = $4.to_i
                
                if already_shown.include? rev.to_i
-                  state = :skip
+                  state = :skip_next
                   next
                else
                   already_shown << rev.to_i
@@ -129,7 +148,7 @@ begin
                puts "</td></tr></table>\n\n"
             end
             
-         when :skip
+         when :skip_next
             state = :info  if line =~ /^-{72}$/
             
          else

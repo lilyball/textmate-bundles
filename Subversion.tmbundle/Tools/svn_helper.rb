@@ -21,7 +21,16 @@ module SVNHelper
    
    # makes a txmt-link for the html output, the line arg is optional.
    def make_tm_link( filename, line=nil )
-      'txmt://open?url=file://' + filename + ((line.nil?) ? '' : '&amp;line='+line.to_s)
+      encoded_file_url = ''
+      ('file://'+filename).each_byte do |b|
+         if b.chr =~ /\w/
+            encoded_file_url << b.chr
+         else
+            encoded_file_url << sprintf( '%%%02x', b)
+         end
+      end
+      
+      'txmt://open?url=' + encoded_file_url + ((line.nil?) ? '' : '&amp;line='+line.to_s)
    end
    
    
@@ -33,7 +42,6 @@ module SVNHelper
             when '>';  '&gt;'
             when '&';  '&amp;'
             when ' ';  (blow_up_spaces) ? '&zwj;&#32;&zwj;' : ' '
-            # ok, this tab handling isn't optimal, but better than nothing:
             when "\t"; ((blow_up_spaces) ? '&zwj;&#32;&zwj;' : ' ')*tab_size
             else; raise 'this should never happen!'
          end

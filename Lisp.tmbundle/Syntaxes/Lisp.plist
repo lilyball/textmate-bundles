@@ -28,7 +28,7 @@
 		
 		{
 			name = "Function";
-			match = "(\\<(?i:defun|defmethod|defmacro)\\>)(\\s+)((\\w|\\-|\\!|\\?|\\&)*)";
+			match = "(\\<(?i:defun|defmethod|defmacro)\\>)(\\s+)((\\w|\\-|\\!|\\?)*)";
 			"fontStyle[1]" = ( bold );
 			"fontStyle[3]" = ( underline );
 			 foregroundColor = "blue";
@@ -42,23 +42,15 @@
 		},
 
 // Need to think about how to make this work properly. Both atoms and lists can be quoted.
-		{
-			name = "Quoted Element1";
-			begin = "'\\(";
-			end = "\\)";
-			patterns = (
-				{
-					name = "Eat Sublists";
-					match = "(?:\\(.+\\))*";
-				},
-			);
-
-			foregroundColor = "#0000CD";
-		},
+//		{
+//			name = "Quoted Element1";
+//			match = "'(\\w|[\\\\+-=<>'\"&#\\(\\)])+";
+//			foregroundColor = "#0000CD";
+//		},
 		
 //		{
 //			name = "Quoted Element2";
-//			match = "'(\\w|[\\\\+-=<>'\"&#\\(\\)])+";
+//			begin = "'\\("; end = "\\)";
 //			foregroundColor = "#0000CD";
 //		},
 		

@@ -5,12 +5,26 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string># this command calls xcodebuild giving the name of the project directory
+	<string>#!/bin/bash
+# this command calls xcodebuild giving the name of the project directory
 # as the project to build and parses the output for file/line information
+# then it plays a succes/failure sample based on the final outcome
 echo '&lt;tt&gt;'
-xcodebuild 2&gt;/dev/null -project `basename $TM_PROJECT_DIRECTORY`.xcode -buildstyle Deployment \
-| perl -pe 's/^(([^:]*\/)?([^\/:]+)):((\d+):)?/&lt;a href="txmt:\/\/open?url=file:\/\/$1&amp;line=$5"&gt;$3&lt;\/a&gt;:/' \
-| perl -pe 's/\n/&lt;br&gt;/'</string>
+
+tmp=`mktemp /tmp/build_status_XXX`
+
+xcodebuild 2&gt;${tmp} -project `basename $TM_PROJECT_DIRECTORY`.xcode -buildstyle Deployment \
+| perl -pe '$| = 1; s/^(([^:]*\/)?([^\/:]+)):((\d+):)?/&lt;a href="txmt:\/\/open?url=file:\/\/$1&amp;line=$5"&gt;$3&lt;\/a&gt;:/; s/\n/&lt;br&gt;\n/'
+
+echo '&lt;h2&gt;' "$(&lt; ${tmp})" '&lt;/h2&gt;'
+
+cd "${TM_BUNDLE_PATH}"
+if [[ "$(&lt; ${tmp})" == "** BUILD SUCCEEDED **" ]];
+ then bin/play Sounds/Harp.wav
+ else bin/play Sounds/Whistle.wav
+fi
+
+rm ${tmp}</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

@@ -31,7 +31,7 @@ elif [[ -z $TM_PROJECT_DIRECTORY ]]; then
 		cd ..
 	done
 else
-	PROJECT_FILE=$(echo -n "$TM_PROJECT_FILEPATH" | perl -pe 's/.tmproj$//')
+	PROJECT_FILE=${TM_PROJECT_FILEPATH%.tmproj}
 	if [[ -d "${PROJECT_FILE}.xcode" ]]; then
 		PROJECT_FILE=${PROJECT_FILE}.xcode
 	elif [[ -d "${PROJECT_FILE}.pbproj" ]]; then

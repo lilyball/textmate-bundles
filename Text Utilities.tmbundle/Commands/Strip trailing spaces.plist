@@ -3,18 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>/usr/local/bin/ruby "$TM_FILEPATH"</string>
+	<string>perl -pe 's/[\t ]+$//g'</string>
 	<key>input</key>
-	<string>none</string>
-	<key>keyEquivalent</key>
-	<string>@r</string>
+	<string>selection</string>
 	<key>name</key>
-	<string>Run Ruby</string>
+	<string>Strip trailing spaces</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>replaceSelectedText</string>
 	<key>uuid</key>
-	<string>8C102BE9-6E49-11D9-A933-000D93589AF6</string>
+	<string>0F8C1F78-6E4C-11D9-91AF-000D93589AF6</string>
 </dict>
 </plist>

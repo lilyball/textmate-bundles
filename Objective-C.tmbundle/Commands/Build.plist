@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string># this command calls xcodebuild giving the name of the project directory
+# as the project to build and parses the output for file/line information
+echo '&lt;tt&gt;'
+xcodebuild 2&gt;/dev/null -project `basename $TM_PROJECT_DIRECTORY`.xcode -buildstyle Deployment \
+| perl -pe 's/^(([^:]*\/)?([^\/:]+)):((\d+):)?/&lt;a href="txmt:\/\/open?url=file:\/\/$1&amp;line=$5"&gt;$3&lt;\/a&gt;:/' \
+| perl -pe 's/\n/&lt;br&gt;/'</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Build (using xcodebuild)</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>9656317E-73EB-11D9-9848-000D93589AF6</string>
+</dict>
+</plist>

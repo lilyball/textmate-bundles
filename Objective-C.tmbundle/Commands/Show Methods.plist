@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat &lt;&lt;EOF
+	<string># this is just proof-of-concept, not very useful. Shows all
+# methods in the current buffer as an alphabetized list of links.
+cat &lt;&lt;EOF
 &lt;html&gt;&lt;head&gt;
 &lt;style&gt;
 a, a:visited {

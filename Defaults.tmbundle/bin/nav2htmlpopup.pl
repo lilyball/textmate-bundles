@@ -18,6 +18,7 @@ Author: James  - 0
 function jumpTo() { 
 var new_local = document.jump.local.value;
 top.location.replace(new_local);
+window.close();
 }
 -->
 </script>

@@ -5,16 +5,16 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_PYTHON:=python}" "${TM_BUNDLE_PATH}/bin/entitynav.py" -f - -m "${TM_MODE}" | php "${TM_BUNDLE_PATH}/bin/nav2list.php"</string>
+	<string>"${TM_PYTHON:=python}" "${TM_BUNDLE_PATH}/bin/entitynav.py" -f - -m "${TM_MODE}" -S | php "${TM_BUNDLE_PATH}/bin/nav2list.php"</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>Special Items List</string>
+	<string>Special Items List -Sorted</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>BF77788B-9418-11D9-84BA-000A957B2E42</string>
+	<string>633B63A4-A065-11D9-A07B-000A9584EC8C</string>
 </dict>
 </plist>

@@ -6,7 +6,7 @@
 // MIT license.
 //
 
-// cc -ObjC -lobjc -framework Foundation -std=c99 ConvertXcodeToTMProj.m XCProject.m -o testconvert
+// cc -ObjC -lobjc -Os -framework Foundation -std=c99 ConvertXcodeToTMProj.m XCProject.m -o testconvert
 
 #include "XCProject.h"
 
@@ -42,24 +42,32 @@
 
 - (void) visitGroup:(XCGroup *)group
 {
+	NSString *	displayName = [group displayName];
 	// Add our entry to the parent group
-	NSMutableDictionary *	dictionary = [NSMutableDictionary dictionary];
 	
-	[fTMOffspring addObject:dictionary];
-	
-	// push previous group onto stack
-	[fGroupStack addObject:fTMOffspring];
-	
-	// make us the parent group
-	fTMOffspring = [NSMutableArray array];
-	[dictionary setObject:fTMOffspring forKey:@"children"];
-	
-	// fill in some default values
-	[dictionary setObject:[group displayName] forKey:@"name"];
-	[dictionary setObject:[NSNumber numberWithBool:NO] forKey:@"expanded"];
-	[dictionary setObject:[NSNumber numberWithBool:NO] forKey:@"selected"];
-	
-	fprintf( stdout, "Group: %s (%s)\n", [[group displayName] UTF8String], [[group valueForKey:@"path"] UTF8String] );
+	// the topmost node might not have a name -- but we don't need to distinguish between it and the top level anyway
+	if( displayName != nil )
+	{
+		NSMutableDictionary *	dictionary = [NSMutableDictionary dictionary];
+
+		[fTMOffspring addObject:dictionary];
+
+		// push previous group onto stack
+		[fGroupStack addObject:fTMOffspring];
+
+		// make us the parent group
+		fTMOffspring = [NSMutableArray array];
+		[dictionary setObject:fTMOffspring forKey:@"children"];
+
+		// fill in some default values
+		[dictionary setObject:displayName forKey:@"name"];
+		
+		// these should be command-line settings; if they're included at all, the value is assumed to be YES, otherwise NO.
+//		[dictionary setObject:[NSNumber numberWithBool:NO] forKey:@"expanded"];
+//		[dictionary setObject:[NSNumber numberWithBool:NO] forKey:@"selected"];
+
+		fprintf( stdout, "Group: %s (%s)\n", [[group displayName] UTF8String], [[group valueForKey:@"path"] UTF8String] );
+	}
 }
 
 - (void) exitGroup:(XCGroup *)group

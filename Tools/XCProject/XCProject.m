@@ -230,6 +230,11 @@
 	if(displayName == nil)
 	{
 		displayName = [self valueForKey:@"path"];
+		
+//		if(displayName == nil)
+//		{
+//			displayName = @"<root>";
+//		}
 	}
 	
 	return displayName;

@@ -66,6 +66,7 @@
 	id projectDirPath;
 	id targets;
 	id productRefGroup;
+	id knownRegions;
 }
 @end
 @interface PBXTarget : NSObject

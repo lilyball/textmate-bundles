@@ -92,11 +92,8 @@ class EntityHandler:
         """
         takes dict of line numbers to file lines and outputs <line number>:<line>
         """
-        entities = self.entities
-        lineNums = entities.keys()
-        lineNums.sort()
-        entitiesAsCoded = zip(lineNums, map(entities.get, lineNums))
-        sys.stdout.write( "".join( ["%s:%s" % (lineNum,line) for lineNum,line in entitiesAsCoded] ))
+        sys.stdout.write( "".join(map(self.reconstructLine, self.sort())) )
+        #sys.stdout.write( "".join( ["%s:%s" % (lineNum,line) for lineNum,line in entitiesAsCoded] ))
         
     def readLine(self, lineNum, line):
         if self.entityMatchLine.match is None:
@@ -109,11 +106,25 @@ class EntityHandler:
         
     def reconstructLine(self, line):
         """
-        takes in a line that was deconstructed by deconstructLine and outputs it to taste
+        takes in a line that was deconstructed by deconstructLine and outputs it so that
+        the result is <line number>:<line>
         
         @param (mixed) line - the line the way it was returned by deconstructLine
         """
-        return line
+        return "%s:%s" % (line[0],line[1])
+        
+    def sort(self):
+        """
+        needs to sort entities and return a list that self.outputParsable() can understand
+        
+        default is to sort entities by line number :
+        """ 
+        entities = self.entities
+        lineNums = entities.keys()
+        lineNums.sort()
+        
+        entitiesAsCoded = zip(lineNums, map(entities.get, lineNums))
+        return entitiesAsCoded
 
 class SortableEntities(EntityHandler):
     """
@@ -121,18 +132,12 @@ class SortableEntities(EntityHandler):
     
     This can be inherited by any handler who wants to handle the --sort flag, so entities have 
     some way to sort themselves, like alphabetically grouped by class, function ... etc
-    """            
-    def outputParsable(self):
-        try:
-            sys.stdout.write( "".join(map(self.reconstructLine, self.sort())) )
-        except AttributeError:
-            raise HandlerException("abstract class SortableEntities must be inherited alongside EntityHandler")
-    
+    """    
     def sort(self):
-        """
-        needs to sort entities and return a list that self.outputParsable() can understand
-        """ 
-        [ (self.entities[linNum], lineNum) for lineNum in self.entities ]
+        if not self.sortEntities:
+            return EntityHandler.sort(self)
+            
+        raise SortException("abstract: subclass must define sort() routine")
         
 class SortableByMainEntity(SortableEntities):
     """
@@ -140,15 +145,22 @@ class SortableByMainEntity(SortableEntities):
     It also expects matches to be defined as 3 groups, "main", "prefix", "suffix"
     """
     def deconstructLine(self, lineMatch):
+        if not self.sortEntities:
+            return EntityHandler.deconstructLine(self, lineMatch)
         try:
             return (lineMatch.group('main'),lineMatch.group('prefix'),lineMatch.group('suffix'))
         except IndexError:
             raise SortException("expected lineMatch groups 'main', 'prefix', and 'suffix'")
         
     def reconstructLine(self, line):
+        if not self.sortEntities:
+            return EntityHandler.reconstructLine(self, line)
         return "%s:%s\n" % (line[1],(line[0][1]+line[0][0]+line[0][2]))
         
     def sort(self):
+        if not self.sortEntities:
+            return EntityHandler.sort(self)
+            
         lineNums = self.entities.keys()
         sortedByMain = map(lambda lineNum: (self.entities[lineNum],lineNum), lineNums)
         sortedByMain.sort()
@@ -172,6 +184,8 @@ class SortableByClass(SortableEntities):
         """
         takes in a successful lineMatch and returns something that self.reconstructLine() will understand
         """
+        if not self.sortEntities:
+            return EntityHandler.deconstructLine(self, lineMatch)
         try:
             return (lineMatch.group('entity'),lineMatch.group('name'),lineMatch.group('args'),lineMatch.group('indent'))
         except IndexError:
@@ -209,12 +223,17 @@ class SortableByClass(SortableEntities):
         """
         reconstructs what was deconstructed by self.deconstructLine() and formats for proper output
         """
+        if not self.sortEntities:
+            return EntityHandler.reconstructLine(self, line)
         return "%s:%s\n" % (line[1],(line[0][3]+line[0][0]+line[0][1]+line[0][2]))
         
     def sort(self):
         """
         sort entities hierachically by class, then by function
         """
+        if not self.sortEntities:
+            return EntityHandler.sort(self)
+            
         sorted = []
         try:
             self.functions['__GLOBAL__'].sort()
@@ -270,9 +289,13 @@ class EntitiesPhp(SortableByClass):
     classPtrn = re.compile(r'(class|interface)', re.IGNORECASE)
         
     def deconstructLine(self, lineMatch):
+        if not self.sortEntities:
+            return EntityHandler.deconstructLine(self, lineMatch)
         return (lineMatch.group('entity'),lineMatch.group('name'),lineMatch.group('visibility'),lineMatch.group('args'),lineMatch.group('indent'))
         
     def reconstructLine(self, line):
+        if not self.sortEntities:
+            return EntityHandler.reconstructLine(self, line)
         return "%s:%s\n" % (line[1],(line[0][4]+line[0][2]+line[0][0]+line[0][1]+line[0][3]))
 
 class EntitiesHtml_php(EntitiesPhp): pass
@@ -372,6 +395,9 @@ class EntitiesRuby(SortableByClass):
         """
         sort entities hierachically by module, class, function
         """
+        if not self.sortEntities:
+            return EntityHandler.sort(self)
+            
         sorted = []
         try:
             self.classes['__GLOBAL__'].sort()
@@ -509,7 +535,7 @@ class UsageException(Exception): pass
         
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hf:e:E:m:sS", ["help", "file=", "ext=", "ext-from-file=", "mode=", "sort", "sort-silently"])
+        opts, args = getopt.getopt(argv, "hsSf:e:E:m:", ["help", "sort", "sort-silently", "file=", "ext=", "ext-from-file=", "mode="])
         entityNav = EntityNav(opts, args)
         entityNav.outputParsable()
     except getopt.GetoptError, err:

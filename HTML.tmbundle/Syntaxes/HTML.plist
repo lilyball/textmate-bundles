@@ -1,0 +1,153 @@
+{
+    name = "HTML (Basic)"; 
+    backgroundColor = "#ffffff"; 
+    fileTypes = (html, htm, shtml, xhtml); 
+    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)"; 
+    foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
+    foregroundColor = "#333333"; 
+    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\"")); 
+    increaseIndentPattern = "(<(head|title|table|tr|td|ul|ol|dl|div)\\>[^>]*>|\\{)\\s*$"; 
+    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("<", ">")); 
+    patterns = (
+        {
+            foregroundColor = "#88bb99"; 
+            match = "<\\?xml.*?\\?>"; 
+            name = "XML Declaration"; 
+        }, 
+        {
+            begin = "<!"; 
+            end = ">"; 
+            foregroundColor = "#999999"; 
+            name = "SGML Entities"; 
+            patterns = (
+                {
+                    backgroundColor = "#CC3300"; 
+                    foregroundColor = "#ECECEC"; 
+                    match = "(\\s*)(?!--|>)\\S(\\s*)"; 
+                    name = "Bad Comments or CDATA"; 
+                }, 
+                {
+                    begin = "--"; 
+                    end = "--"; 
+                    foregroundColor = "#999999"; 
+                    name = Comments; 
+                    patterns = (
+                        {
+                            backgroundColor = "#E0E7F0"; 
+                            begin = "^#\\s*(include|config|echo|exec|fsize|flastmod|printenv|set)"; 
+                            end = "(?=\\s*--|>)"; 
+                            foregroundColor = "#888888"; 
+                            name = "Server Side Includes"; 
+                        }, 
+                        {
+                            backgroundColor = "#CC3300"; 
+                            foregroundColor = "#ffffff"; 
+                            match = ">|<"; 
+                            name = "Bad Comment End"; 
+                        }
+                    ); 
+                }, 
+                {
+                    begin = DOCTYPE; 
+                    end = "(?=>)"; 
+                    foregroundColor = "#888888"; 
+                    name = "Document Type"; 
+                    patterns = (
+                        {fontStyle = (italic); match = "\"[^\">]*\""; name = "Identifiers and DTDs"; }
+                    ); 
+                }, 
+                {
+                    backgroundColor = "#fff3e7"; 
+                    begin = "\\[CDATA\\["; 
+                    end = "]](?=>)"; 
+                    name = "Character Data"; 
+                }
+            ); 
+        }, 
+        {
+            backgroundColor = "#E5E5E5"; 
+            begin = "<%"; 
+            end = "%>"; 
+            name = "Embedded Ruby"; 
+        }, 
+        {
+            backgroundColor = "#E5E5E5"; 
+            begin = "<\\?(php|=)?"; 
+            end = "\\?>"; 
+            name = "Embedded PHP"; 
+        }, 
+        {
+            backgroundColor = "#ECECEC"; 
+            begin = "(^\\s+)?<(?i:style)\\>.*?>?"; 
+            end = "</(?i:style)>(\\s+$)?"; 
+            name = "Embedded CSS"; 
+            patterns = ({include = CSS; }); 
+        }, 
+        {
+            foregroundColor = "#6600CC"; 
+            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
+            name = "HTML Entities"; 
+        }, 
+        {
+            begin = "</?([a-zA-Z0-9]+)"; 
+            "elementFontStyle[1]" = (underline); 
+            end = ">"; 
+            foregroundColor = "#0066CC"; 
+            name = Tags; 
+            patterns = (
+                {match = " ([a-zA-Z-]+)"; name = Option; }, 
+                {
+                    begin = "\""; 
+                    end = "\""; 
+                    foregroundColor = "#CC3300"; 
+                    name = "Double Quoted String"; 
+                    patterns = (
+                        {
+                            foregroundColor = "#6600CC"; 
+                            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
+                            name = "HTML Entities"; 
+                        }, 
+                        {
+                            backgroundColor = "#CC3300"; 
+                            foregroundColor = "#ffffff"; 
+                            match = "&"; 
+                            name = "Bad Ampersand"; 
+                        }
+                    ); 
+                }, 
+                {
+                    begin = "'"; 
+                    end = "'"; 
+                    fontStyle = (); 
+                    foregroundColor = "#CC3300"; 
+                    name = "Single Quoted String"; 
+                    patterns = (
+                        {
+                            foregroundColor = "#6600CC"; 
+                            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
+                            name = "HTML Entities"; 
+                        }, 
+                        {
+                            backgroundColor = "#CC3300"; 
+                            foregroundColor = "#ffffff"; 
+                            match = "&"; 
+                            name = "Bad Ampersand"; 
+                        }
+                    ); 
+                }
+            ); 
+        }, 
+        {
+            backgroundColor = "#3399ff"; 
+            foregroundColor = "#ffffff"; 
+            match = "<>"; 
+            name = "Incomplete Tag"; 
+        }, 
+        {
+            backgroundColor = "#CC3300"; 
+            foregroundColor = "#ffffff"; 
+            match = "<(?=\\W)|>|&"; 
+            name = "Bad Angle Bracket or Ampersand"; 
+        }
+    ); 
+}

@@ -31,13 +31,11 @@
 		  foregroundColor = "#224d14"; },
 		{ name = "keywords.objc";
 		  match = "\\<(id|BOOL|SEL|IBOutlet|IBAction|self|super|in|out|inout|oneway|YES|NO|nil)\\>";
-		  foregroundColor = "#51185c"; },
+		  foregroundColor = "blue";
+		  fontStyle = ( bold ); },
 		{ name = "keywords.objc.directives";
 		  match = "@(class|interface|implementation|synchronized|protocol|selector|defs|try|catch|finally|throw|end)\\>";
-		  "fontStyle[1]" = ( bold ); foregroundColor = "#51185c"; },
-		{ name = "keywords.preprocessor.objc";
-		  match = "^\\s*#\\s*(import)\\>.*$";
-		  "fontStyle[1]" = ( bold ); foregroundColor = "#4b3125";},
+		  "fontStyle[1]" = ( bold ); foregroundColor = "blue"; },
 		{ include = "C"; },
 	);
 	uuid = "F85CC716-6B1C-11D9-9A20-000D93589AF6";

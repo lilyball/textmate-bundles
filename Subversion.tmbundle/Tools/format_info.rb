@@ -7,8 +7,7 @@
 
 
 # fetch some tm things..
-$full_file  = ENV['TM_FILEPATH']
-$bundle     = ENV['TM_BUNDLE_PATH']
+$bundle = ENV['TM_BUNDLE_PATH']
 
 
 # require the helper, it does some formating, etc:
@@ -16,7 +15,7 @@ require $bundle+'/Tools/svn_helper.rb'
 include SVNHelper
 
 
-# to keep track of alternating rows, etc..
+# to keep track of alternating rows..
 count_dl = 0
 count_dd = 0
 
@@ -24,7 +23,7 @@ count_dd = 0
 got_newline = true
 
 begin
-   make_head( "Subversion info for '"+$full_file.sub( /^.*\//, '')+"'",
+   make_head( 'Subversion info',
               [ $bundle+"/Stylesheets/svn_style.css",
                 $bundle+"/Stylesheets/svn_info_style.css"] )
    

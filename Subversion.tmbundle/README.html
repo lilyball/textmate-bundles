@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+   <head>
+      <title>Subversion Bundle README</title>
+      <style type="text/css">
+         /* general stuff.. */
+         body {
+            font-family: sans-serif;
+            font-size: 14px;
+         }
+         
+         h1 {
+            font-size: 160%;
+            border-bottom: 3px solid #ccc;
+            padding-bottom: 4px;
+         }
+         
+         h2,h3,h4,h5,h6 {
+            font-size: 135%pt;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 4px;
+            margin-top: 23px;
+         }
+         
+         
+         /* formating the definition lists.. */
+         dt {
+            font-weight: bold;
+            margin-top: 8px;
+            margin-bottom: 2px;
+            font-size: 115%;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+         }
+         dl > dt:first-child {
+            border-top: 0;
+            padding-top: 0;
+         }
+         
+         
+         /* info fields: */
+         div.target:before {
+            font-weight: bold;
+            content: "Target: ";
+         }
+         
+         div.description:before {
+            font-weight: bold;
+            content: "Description: ";
+         }
+         
+         div.connect:before {
+            font-weight: bold;
+            content: "Needs Connection: ";
+         }
+         
+         div.default:before {
+            font-weight: bold;
+            content: "Default: ";
+         }
+         
+      </style>
+      
+   </head>
+   
+   <body>
+      <h1>Subversion Bundle README</h1>
+      
+      <h2>What you currently can do with this Bundle</h2>
+         
+         <dl>
+            <dt>Log</dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                   shows you the commit messages for the current file.
+                   configurable via some shell variables, see below.
+               </div>
+            </dd>
+            
+            <dt>Blame</dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                   shows you who wrote which line in what revision.
+                   you can click a line to jump to this line in TM.
+               </div>
+            </dd>
+            
+            <!-- FIXME: more detail. -->
+            <dt>Status</dt>
+            <dd>
+               <div class="target">directory of active file</div>
+               <div class="connect">No</div>
+               <div class="description">
+                  gives you an overview over what files changed.
+               </div>
+            </dd>
+            
+            <dt>Info</dt>
+            <dd>
+               <div class="target">selected files in drawer</div>
+               <div class="connect">No</div>
+               <div class="description">
+                  gives you a list of information about this files. (url, last changed, etc)
+               </div>
+            </dd>
+            
+            <dt>Diff With Newest</dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                  shows you a colored diff against the newest available revision of this file
+                  in the repository. (HEAD)
+               </div>
+            </dd>
+            
+            <dt>Diff With Working Copy</dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">No</div>
+               <div class="description">
+                  shows you a colored diff against the working copy revision, also called
+                  the <em>pristine copy</em>. (BASE)  it basicly shows you all your changes.
+               </div>
+            </dd>
+            
+            <dt>Diff With Previous Revision</dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                  shows you a colored diff against the previous revision of this file. (PREV)
+               </div>
+            </dd>
+            
+            <!-- FIXME: more detail. -->
+            <dt>Commit</dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                  pop up a fancy message window to describe your changes and
+                  then send your changes to the repository.
+               </div>
+            </dd>
+            
+            <!-- FIXME: more detail. -->
+            <dt>Add to Repository</dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">No</div>
+               <div class="description">
+                  adds the selected files to the repository.
+               </div>
+            </dd>
+            
+            <!-- FIXME: more detail. -->
+            <dt>Update to Latest</dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                  updates the currently selected files to the newest available.
+               </div>
+            </dd>
+            
+            <!-- FIXME: more detail. -->
+            <dt>Update Entire Project</dt>
+            <dd>
+               <div class="target">project</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                  updates everything.
+               </div>
+            </dd>
+
+         </dl>
+      
+      
+      <h2>Configuration Options</h2>
+         
+         <dl>
+            <dt>$TM_SVN</dt>
+            <dd>
+               <div class="default">svn</div>
+               <div class="description">the path to your svn executable.</div>
+            </dd>
+            
+            <dt>$TM_SVN_LOG_RANGE</dt>
+            <dd>
+               <div class="default">BASE:1</div>
+               <div class="description">the default range to query for log messages.</div>
+            </dd>
+            
+            <dt>$TM_SVN_LOG_LIMIT</dt>
+            <dd>
+               <div class="default">7</div>
+               <div class="description">the number of messages, to actually show.</div>
+            </dd>
+            
+         </dl>
+      
+      
+   </body>
+   
+</html>

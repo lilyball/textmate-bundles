@@ -4,7 +4,7 @@
 	
 	SHOW INVISIBLES HACK
 	====================
-	Version 0.2 (Eric Hsu, textmate@betterfilecabinet.com) 
+	Version 0.3 (Eric Hsu, textmate@betterfilecabinet.com) 
 	http://math.sfsu.edu/hsu/textmate
 	
 	- Made colors subtler.
@@ -24,7 +24,7 @@
 		
 		{ name = "invisibles.tabs";	backgroundColor = "#E2FDFF";	fontStyle = (  ); 	match = "\t"; },
 		{ name = "invisibles.spaces"; backgroundColor = "#FFE4FA"; match = " "; },
-		{ name = "invisibles.gremlins"; backgroundColor = "#FFE4C4"; match = "[\\x00-\\x20\\x80-\\xA0]"; },		
+		{ name = "invisibles.gremlins"; backgroundColor = "#FF4A3F"; match = "[^\t\\x20-\\x7E]"; },		
 	);  
 	
 }

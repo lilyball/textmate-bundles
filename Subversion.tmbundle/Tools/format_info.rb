@@ -7,7 +7,12 @@
 
 
 # fetch some tm things..
-$bundle = ENV['TM_BUNDLE_PATH']
+$bundle     = ENV['TM_BUNDLE_PATH']
+$show       = (ENV['TM_SVN_INFO_SHOW'].nil?) ?
+               [] : ENV['TM_SVN_INFO_SHOW'].split(/\s*,\s*/).each { |s| s.downcase! }
+$hide       = (ENV['TM_SVN_INFO_HIDE'].nil?) ?
+               [] : ENV['TM_SVN_INFO_HIDE'].split(/\s*,\s*/).each { |s| s.downcase! }
+$hide_all   = ($hide.include? '*') ? true : false
 
 
 # require the helper, it does some formating, etc:
@@ -15,15 +20,14 @@ require $bundle+'/Tools/svn_helper.rb'
 include SVNHelper
 
 
-# to keep track of alternating rows..
+# to keep track of alternating rows:
 count_dl = 0
-count_dd = 0
 
 # to keep track if we must close somthing:
 got_newline = true
 
 begin
-   make_head( 'Subversion info',
+   make_head( 'Subversion Info',
               [ $bundle+"/Stylesheets/svn_style.css",
                 $bundle+"/Stylesheets/svn_info_style.css"] )
    
@@ -38,7 +42,6 @@ begin
          
       elsif line =~ /^(.+?):\s*(.*)$/
          if got_newline
-#            puts( (count == 0) ? '' : '<hr />' )
             puts( ((count_dl % 2) == 0) ? '<dl class="info">' : '<dl class="info alternate">' )
             got_newline = false
             
@@ -49,13 +52,19 @@ begin
             make_error_foot( '<a href="'+make_tm_link( htmlize($1, false) )+'">'+htmlize($1, false)+'</a>' )
             
          else
+            to_search = $1.downcase
+            next  if $hide.include? to_search or
+                     $hide_all and not $show.include? to_search
+            
+            
             if $1 == 'Path'
                dt = 'Path'
                dd = '<a href="'+make_tm_link( htmlize($2, false) )+'">'+htmlize($2, false)+'</a>'
                
             elsif $1 == 'URL'
                dt = 'URL'
-               dd = '<a href="'+htmlize($2, false)+'" target="_blank">'+htmlize($2, false)+'</a>'
+               # TODO: make URLs that use auths working or find a way to open them in safari.
+               dd = '<a href="'+htmlize($2, false)+'">'+htmlize($2, false)+'</a>'
                
             else
                dt = htmlize( $1, false )
@@ -63,12 +72,10 @@ begin
                
             end
             
-            puts( (((count_dd % 2) == 1) ? '<dt>' : '<dt class="alternate">')+dt+'</dt>' )
-            puts( (((count_dd % 2) == 1) ? '<dd>' : '<dd class="alternate">')+dd+'</dd>' )
+            puts '<dt>'+dt+'</dt>'
+            puts '<dd>'+dd+'</dd>'
             
-         end
-         
-         count_dd += 1
+         end #if
          
       else
          raise NoMatchException, line

@@ -1,8 +1,18 @@
+/* formating the definition lists.. */
 dl.info dt {
    font-weight: bold;
    padding: 4px;
    padding-bottom: 0;
    margin: 0;
+   border-top: 1px dashed #ddd;
+}
+
+dl.info.alternate dt {
+   border-top: 1px dashed #ccc;
+}
+
+dl.info dt:first-child {
+   border-top: 0;
 }
 
 dl.info dt:after {
@@ -10,15 +20,8 @@ dl.info dt:after {
 }
 
 dl.info dd {
-   margin-left: 0;
+   margin: 0;
    padding: 4px;
    padding-top: 0;
-   padding-left: 23px;
-}
-
-/* i just wanted to play with the alpha-channel
-   and save one more rule this way..
-   TODO: find out why this rgba() doesnt validate via jigsaw. */
-dl.info dt.alternate, dl.info dd.alternate {
-   background-color: rgba(0, 0, 0, 0.04);
+   padding-left: 24px;
 }

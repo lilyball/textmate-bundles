@@ -8,20 +8,21 @@
          /* general stuff.. */
          body {
             font-family: sans-serif;
-            font-size: 14px;
+            font-size: 13px;
          }
          
          h1 {
             font-size: 160%;
             border-bottom: 3px solid #ccc;
             padding-bottom: 4px;
+            margin-bottom: 2px;
          }
          
          h2,h3,h4,h5,h6 {
-            font-size: 135%pt;
+            font-size: 135%;
             border-bottom: 2px solid #ddd;
             padding-bottom: 4px;
-            margin-top: 23px;
+            margin-top: 26px;
          }
          
          
@@ -34,6 +35,8 @@
             border-top: 1px dashed #ccc;
             padding-top: 10px;
          }
+         /* no top-border for the first thing, so it looks
+            like there is a hr between all. */
          dl > dt:first-child {
             border-top: 0;
             padding-top: 0;
@@ -46,13 +49,9 @@
             content: "Target: ";
          }
          
-/*       div.description:before {  seems redundant?
-            font-weight: bold;
-            content: "Description: ";
-         }*/
-
-		  div.description {margin-top: 4px;}
-
+         div.description {
+            margin-top: 4px;
+         }
          
          div.connect:before {
             font-weight: bold;
@@ -71,20 +70,20 @@
    <body>
       <h1>Subversion Bundle</h1>
       
-      <h2>Commands</h2>
+      <h2><a name="commands">Commands</a></h2>
          
          <dl>
-            <dt>Log</dt>
+            <dt><a name="log">Log</a></dt>
             <dd>
-               <div class="target">active file</div>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">Yes</div>
                <div class="description">
-                   Displays the commit message history for the current file.
-                   Some parameters are configurable via shell variables; see the Configuration Options section below.
+                   Displays the commit message history for the selected files.
+                   Some parameters are configurable via shell variables; see the <a href="#tm_svn_log">Configuration Options</a> section below.
                </div>
             </dd>
             
-            <dt>Blame</dt>
+            <dt><a name="blame">Blame</a></dt>
             <dd>
                <div class="target">active file</div>
                <div class="connect">Yes</div>
@@ -95,7 +94,7 @@
             </dd>
             
             <!-- FIXME: more detail. -->
-            <dt>Status</dt>
+            <dt><a name="status">Status</a></dt>
             <dd>
                <div class="target">directory of active file</div>
                <div class="connect">No</div>
@@ -107,16 +106,17 @@
                </div>
             </dd>
             
-            <dt>Info</dt>
+            <dt><a name="info">Info</a></dt>
             <dd>
-               <div class="target">selected files in drawer</div>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">No</div>
                <div class="description">
                   Displays detailed information about the selected files, including the type of file, who last changed the file, the date file was last changed, the repository URL to the file, and other information.
+                  Some parameters are configurable via shell variables; see the <a href="#tm_svn_info">Configuration Options</a> section below.
                </div>
             </dd>
             
-            <dt>Diff With Newest (HEAD)</dt>
+            <dt><a name="diff_head">Diff With Newest (HEAD)</a></dt>
             <dd>
                <div class="target">active file</div>
                <div class="connect">Yes</div>
@@ -126,7 +126,7 @@
                </div>
             </dd>
             
-            <dt>Diff With Working Copy (BASE)</dt>
+            <dt><a name="diff_base">Diff With Working Copy (BASE)</a></dt>
             <dd>
                <div class="target">active file</div>
                <div class="connect">No</div>
@@ -136,7 +136,7 @@
                </div>
             </dd>
             
-            <dt>Diff With Previous Revision (PREV)</dt>
+            <dt><a name="diff_prev">Diff With Previous Revision (PREV)</a></dt>
             <dd>
                <div class="target">active file</div>
                <div class="connect">Yes</div>
@@ -147,7 +147,7 @@
             </dd>
             
             <!-- FIXME: more detail. -->
-            <dt>Commit</dt>
+            <dt><a name="commit">Commit</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">Yes</div>
@@ -159,7 +159,7 @@
             </dd>
             
             <!-- FIXME: more detail. -->
-            <dt>Add to Repository</dt>
+            <dt><a name="add">Add to Repository</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">No</div>
@@ -169,7 +169,7 @@
             </dd>
             
             <!-- FIXME: more detail. -->
-            <dt>Update to Latest</dt>
+            <dt><a name="update">Update to Latest</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">Yes</div>
@@ -179,7 +179,7 @@
             </dd>
             
             <!-- FIXME: more detail. -->
-            <dt>Update Entire Project</dt>
+            <dt><a name="update_project">Update Entire Project</a></dt>
             <dd>
                <div class="target">project</div>
                <div class="connect">Yes</div>
@@ -190,17 +190,16 @@
 
          </dl>
       
-      
       <h2><a name="conf">Configuration Options</a></h2>
 
          <dl>
-            <dt>$TM_SVN</dt>
+            <dt><a name="tm_svn">$TM_SVN</a></dt>
             <dd>
                <div class="default">svn</div>
                <div class="description">the path to your svn executable.</div>
             </dd>
             
-            <dt>$TM_SVN_LOG_RANGE</dt>
+            <dt><a name="tm_svn_log">$TM_SVN_LOG_RANGE</a></dt>
             <dd>
                <div class="default">BASE:1</div>
                <div class="description">the default range to query for log messages.</div>
@@ -208,13 +207,35 @@
             
             <dt>$TM_SVN_LOG_LIMIT</dt>
             <dd>
-               <div class="default">7</div>
+               <div class="default">9</div>
                <div class="description">the number of messages, to actually show.</div>
+            </dd>
+            
+            <dt><a name="tm_svn_info">$TM_SVN_INFO_HIDE</a></dt>
+            <dd>
+               <div class="default"><em>nil</em> (nothing)</div>
+               <div class="description">
+                  here you can adjust what keys of the info stream you don't want to see, it is case insensitive and a comma (<em>,</em>) seperated list.  if you enter a <em>*</em>, it is assumend that you want to hide all vars, if so, you can make some values visible again with <strong>$TM_SVN_INFO_SHOW</strong>.
+               </div>
+            </dd>
+            
+            <dt>$TM_SVN_INFO_SHOW</dt>
+            <dd>
+               <div class="default"><em>nil</em> (everything else)</div>
+               <div class="description">
+                  this is also a commma seperated list of keys, it just makes sense if you did hide all with the above var.  <em>*</em> has no special meaning here. everything you enter here will be shown if you want to hide everything else.
+               </div>
             </dd>
             
          </dl>
       
-      
+      <h2><a name="authors">Authors</a></h2>
+         
+         <ul>
+            <li>Chris Thomas (Idea, Status, Diffs, Commit, Add and Updates)</li>
+            <li>Torsten Becker (Blame, Log and Info)</li>
+         </ul>
+         
    </body>
    
 </html>

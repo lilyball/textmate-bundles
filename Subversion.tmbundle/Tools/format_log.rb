@@ -9,8 +9,7 @@
 # fetch some tm things..
 $tab_size   = ENV['TM_TAB_SIZE'].to_i
 $bundle     = ENV['TM_BUNDLE_PATH']
-$limit      = ENV['TM_SVN_LOG_LIMIT'].nil? ? 7 : ENV['TM_SVN_LOG_LIMIT'].to_i  # set default if none set
-$full_file  = ENV['TM_FILEPATH']
+$limit      = ENV['TM_SVN_LOG_LIMIT'].nil? ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i  # set default if none set
 
 
 # require the helper, it does some formating, etc:
@@ -22,6 +21,7 @@ msg_count      = 0   # used to count messages and to show tables in alternate co
 comment_count  = 0   # used to count the lines of comments
 rev            = ''  # the last fetched revision
 max_lines      = 0   # the maximum number of lines
+already_shown  = []  # to supress double messages (they could happen if you selected multiple files)
 
 # about the states of the 'parser':
 #   seperator      initial state, assuming a ---..
@@ -29,11 +29,12 @@ max_lines      = 0   # the maximum number of lines
 #   changed_paths  awaiting a changed paths thing or blank line
 #   path_list      parsing changed files
 #   comment        getting the comment
+#   skip           if doesnt show the next message because we already did
 state = :seperator
 
 
 begin
-   make_head( "Subversion log for '"+$full_file.sub( /^.*\//, '')+"'",
+   make_head( 'Subversion Log',
               [ $bundle+'/Stylesheets/svn_style.css',
                 $bundle+'/Stylesheets/svn_log_style.css'],
               '<script src="file://'+$bundle+'/Tools/flip_files.js'+'" />' )
@@ -57,6 +58,14 @@ begin
                state      = :changed_paths
                rev        = $1
                max_lines  = $4.to_i
+               
+               if already_shown.include? rev.to_i
+                  state = :skip
+                  next
+               else
+                  already_shown << rev.to_i
+               end
+               
                
                puts( ((msg_count % 2) == 0) ? '<table class="log_msg">' :
                                               '<table class="log_msg alternate">' )
@@ -120,6 +129,9 @@ begin
                puts "</td></tr></table>\n\n"
             end
             
+         when :skip
+            state = :info  if line =~ /^-{72}$/
+            
          else
             raise 'unknown state: '+state.to_s
             
@@ -144,14 +156,11 @@ rescue NoMatchException
 # catch unknown exceptions..
 rescue => e
    make_error_head( e.class.to_s )
+   
    puts 'reason: <em>'+htmlize( $! )+'</em><br />'
-   
-   # could also be this oneliner in 1.8 but backward-compatibility
-   # is more important than fancy code. :)
-   # puts 'trace: <br />'+$@.inject('') { |a,b| a + htmlize('  '+b) + '<br />' }
    trace = ''; $@.each { |e| trace+=htmlize('  '+e)+'<br />' }
-   
    puts 'trace: <br />'+trace
+   
    make_error_foot()
    
 ensure

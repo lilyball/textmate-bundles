@@ -24,7 +24,7 @@ linecount = 1
 
 
 begin
-   make_head( "Subversion blame for '"+$full_file.sub( /^.*\//, '')+"'",
+   make_head( "Subversion Blame for '"+$full_file.sub( /^.*\//, '')+"'",
               [ $bundle+"/Stylesheets/svn_style.css",
                 $bundle+"/Stylesheets/svn_blame_style.css"] )
    

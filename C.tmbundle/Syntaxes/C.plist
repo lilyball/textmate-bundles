@@ -22,7 +22,8 @@
 	backgroundColor = "#FFFFFF";
 	patterns = (
 		{ name = "comments.block.c"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#236B8E"; },
-		{ name = "comments.line.c++"; match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
+									// C++ comments may be continued onto the next line with a trailing backslash
+		{ name = "comments.line.c++"; match = "//((.*\\\\(\\s*)\\n).*)*|//(.*)\$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
 		{ name = "keywords.control.c"; match = "\\<(break|case|continue|default|do|else|for|goto|if|inline|_Pragma|return|sizeof|switch|while)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
 		{ name = "keywords.storage.c"; match = "\\<(asm|__asm__|auto|_Bool|char|_Complex|const|double|enum|extern|float|_Imaginary|int|long|register|restrict|short|signed|static|struct|typedef|union|unsigned|void|volatile)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
 		{ name = "constants.numeric.c"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },

@@ -5,14 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>osascript -e 'tell application "Safari" to activate'
-osascript -e 'tell application "Safari" to do JavaScript "window.location.reload();" in first document'</string>
+	<string>if [[ $(ps -xc|grep OmniWeb) ]]; then
+   printf 'tell app "OmniWeb" \n activate \n reload first browser \n end tell' | osascript 
+elif [[ $(ps -xc|grep Safari) ]]; then
+   printf 'tell app "Safari" \n activate \n do JavaScript "window.location.reload();" in first document \n end tell' | osascript
+fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>@r</string>
 	<key>name</key>
-	<string>Refresh Safari</string>
+	<string>Refresh Browser</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>

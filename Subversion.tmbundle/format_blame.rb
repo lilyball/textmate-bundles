@@ -1,11 +1,12 @@
 # just a small to-html formater for what svn blame gives you.
 # made to be compatible with the ruby version included
 # in 10.3.7 (1.6.8) but runs also with 1.8
-#
+# 
 # copyright 2005 torsten becker <torsten.becker@gmail.com>
 # no warranty, that it doesn't crash your system.
 
 css = '
+/* general stuff.. */
 body {
    font-family: sans-serif;
    font-size: 11pt;
@@ -15,22 +16,47 @@ h1 {
    font-size: 18pt;
 }
 
+
+/* for error formating.. */
 div.error {
-   color: red;
+   color: #f7260c;
    font-weight: bold;
 }
 
+div.error:before { content: "ERROR: "; }
+
+div.svn_says {
+   color: #f04907;
+   font-weight: bold;
+}
+
+div.svn_says:before { content: "Subversion says: "; }
+
+
+/* about links.. */
 a, a:visited, a:link {
    background-color: inherit;
-   text-decoration: none;
    color: inherit;
 }
 
 a:hover, a:active {
-   background-color: #a3c8ff; /*#8ab9ff;*/
+   background-color: #000;
+   color: #fff;
+   text-decoration: none;
+}
+
+table.blame a, table.blame a:visited, table.blame a:link {
+   text-decoration: none;
+}
+
+table.blame a:hover, table.blame a:active {
+   background-color: #a3c8ff;
+   color: inherit;
+   text-decoration: none;
 }
 
 
+/* formating the table.. */
 table.blame {
    font-size: 9.5pt;
    padding: 1px;
@@ -45,6 +71,15 @@ table.blame th {
    padding-bottom: 1px;
    padding-top: 1px;
    color: #666;
+}
+
+th.revhead {
+   border-left: 1px solid #bbb;
+   border-right: 1px solid #bbb;
+}
+
+th.codehead {
+   border-left: 1px solid #bbb;
 }
 
 table.blame td {
@@ -82,44 +117,55 @@ td.current_line {
 }'
 
 
+module FormatBlame
+   class NoMatchException < StandardError; end
+   class SVNErrorException < StandardError; end
+   
+   def make_link( filename, line )
+      'txmt://open?url=file://' + filename + '&amp;line=' + line.to_s
+   end
+   
+   def htmlize( string, tab_size )
+      return string.to_s.gsub( /\<|\>|&| |\t/ ) do |match|
+         case match
+            when '<'
+            '&lt;'
+            when '>'
+            '&gt;'
+            when '&'
+            '&amp;'
+            when ' '
+            '&ensp;'
+            when "\t"
+            '&ensp;'*tab_size
+         end
+      end   
+   end
+   
+end #module FormatBlame
+include FormatBlame
 
-class NoMatchException < StandardError; end
-class NotWorkingCopyException < StandardError; end
 
-def tm_make_link( filename, line )
-   'txmt://open?url=file://' + filename + '&amp;line=' + line.to_s
-end
-
-def tm_escape( string )
-   return string.gsub( /\<|\>|&|  |\t/ ) do |match|
-      case match
-         when '<'
-         '&lt;'
-         when '>'
-         '&gt;'
-         when '&'
-         '&amp;'
-         when '  '
-         ' &nbsp;'
-         when "\t"
-         '&nbsp;'*ENV['TM_TAB_SIZE'].to_i
-      end
-   end   
-end
-
-
-out       = ''
 full_file = ENV['TM_FILEPATH']
-file      = full_file.sub( /^.*\//, '')
 current   = ENV['TM_LINE_NUMBER'].to_i
+tab_size  = ENV['TM_TAB_SIZE'].to_i
+
+file      = full_file.sub( /^.*\//, '')  # just get the filename without path
 linecount = 1
+out       = ''
 
 
 begin
-   out += "<table class=\"blame\"> <tr> <th>line</th> <th>rev</th> <th>name</th> <th>code</th> </tr>\n"
+   out += '<table class="blame"> <tr>' +
+            '<th>line</th>' +
+            '<th class="revhead">rev</th>' +
+            '<th>name</th>' +
+            '<th class="codehead">code</th>' +
+            "</tr>\n"
+   
    $stdin.each_line do |line|
-      raise NotWorkingCopyException  if line =~ /svn: .+ is not a working copy/
-      raise NoMatchException  unless line =~ /\s*(\d+)\s*(\w+)\s(.*)/
+      raise SVNErrorException  if line =~ /^svn: (.*)$/
+      raise NoMatchException   unless line =~ /\s*(\d+)\s*(\w+)\s(.*)/
       
       curr_add = (current == linecount) ? ' current_line' : ''
       
@@ -127,7 +173,7 @@ begin
                  '<td class="revcol'+curr_add+'">' + $1 + "</td>\n" +
                  '<td class="namecol'+curr_add+'">' + $2 + "</td>\n" +
                  '<td class="codecol'+curr_add+'"><a href="' +
-                     tm_make_link( full_file, linecount) +'">'+ tm_escape( $3 ) +
+                     make_link( full_file, linecount) +'">'+ htmlize( $3, tab_size ) +
                  "</a></td></tr>\n\n"
       
       linecount += 1
@@ -135,10 +181,11 @@ begin
    
    out += '</table>'
    
-rescue NotWorkingCopyException
-   out = '<div><b>ERROR:</b> this file seems not to be part of a working copy.</div>'
+rescue SVNErrorException
+   out = '<div class="svn_says"><br />&emsp;'+ htmlize( $1, tab_size ) + '.</div>'
 rescue NoMatchException
-   out = '<div class="error">ERROR: mhh, something with with the regex or svn must be wrong, please bug-report to <a href="mailto:torsten.becker@gmail.com" style="text-decoration: underline;">torsten.becker@gmail.com</a>.</div>'
+   out = '<div class="error"><br />&emsp;mhh, something with with the regex or svn must be wrong,
+   please bug-report to <a href="mailto:torsten.becker@gmail.com" class="mail_to">torsten.becker@gmail.com</a>.</div>'
 end
 
 

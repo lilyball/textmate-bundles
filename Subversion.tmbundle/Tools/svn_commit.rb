@@ -6,6 +6,8 @@ commit_paths	= ENV['CommitPaths']
 commit_tool		= ENV['CommitWindow']
 bundle			= ENV['TM_BUNDLE_PATH']
 
+CURRENT_DIR		= Dir.pwd + "/"
+
 
 puts "<html>
 <head>
@@ -27,7 +29,8 @@ paths = status_output.scan(/^(.)....(\s+)(.*)\n/)
 
 
 def matches_to_paths(matches)
-	matches.collect {|m| m[2] }
+	paths = matches.collect {|m| m[2] }
+	paths.collect{|path| path.sub(/^#{CURRENT_DIR}/, "") }
 end
 
 # Ignore files with '?', but report them to the user
@@ -60,8 +63,7 @@ STDOUT.flush
 commit_paths_array = matches_to_paths(commit_matches)
 
 # Nuke unnecessary bits of the path
-current_dir = Dir.pwd + "/"
-commit_paths_array.collect!{|path| path.sub(/^#{current_dir}/, "") }
+commit_paths_array.collect!{|path| path.sub(/^#{CURRENT_DIR}/, "") }
 
 commit_path_text = "'" + commit_paths_array.join("' '") + "'"
 

@@ -69,7 +69,7 @@
 	//
 	if( [fGroupStack count] == 0 )
 	{
-		fprintf( stderr, "fGroupStack has no elements -- probably shouldn't be here!" );
+		fprintf( stderr, "fGroupStack has no elements -- probably shouldn't be here!\n" );
 	}
 	else
 	{
@@ -118,7 +118,7 @@ int main( int argc, char ** argv )
 		
 		if(dict == nil)
 		{
-			fprintf(stderr, "Could not open project '%s'", argv[1]);
+			fprintf(stderr, "Could not open project '%s'\n", argv[1]);
 			exit(1);
 		}
 		converter = [[Converter alloc] init];
@@ -132,7 +132,7 @@ int main( int argc, char ** argv )
 	else
 	{
 		fprintf(stderr, "Need exactly 2 arguments, received %d arguments", argc - 1);
-		fprintf(stderr, "usage: %s <file>.xcode file.tmproj", argv[0]);
+		fprintf(stderr, "usage: %s <file>.xcode file.tmproj\n", argv[0]);
 		exit(1);
 	}
 	

@@ -1,0 +1,40 @@
+{
+	// Generic Lisp.
+	// chris@cjack.com
+	// Feel free to send additions and modifications.
+	//
+	// Note 1. We do not correctly handle the 'character' constant when used with a double quote: (position #\" string).
+	// This can be fixed simply by highlighting characters. This will be a simple future addition to this file.
+	// Note 2. This is a tiny, tiny subset of the enormous ANSI Common Lisp language. More may be added, but probably to a superset "Common Lisp" syntax... This file should ideally be a basis for Scheme and other consistently S-expression-only dialects of Lisp.
+	
+	name = "Lisp";
+	fileTypes = ( lisp, cl, l, mud, el, scm, sch );		// mud is for the Zork MDL source; el is Emacs lisp.
+														// Not that we really handle MDL, but it's a little more pleasant, at least.
+														// scm and sch are Scheme, which really needs a superset syntax file of it's own.
+	foldingStartMarker = "\\(";
+	foldingStopMarker = "\\)";
+	increaseIndentPattern = "^.*\\(.*[^)\"]$";
+	smartTypingPairs = (
+	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" )
+	);
+	highlightPairs = (
+	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
+	);
+	foregroundColor = "#000000";
+	backgroundColor = "#FFFFFF";
+	patterns = (
+		{ name = "Comment"; match = ";.*$"; end = ""; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
+		
+		{
+			name = "Function";
+			match = "(\\<(?i:defun|defmethod|defmacro)\\>)(\\s+)((\\w|\\-|\\!|\\?)*)";
+			"fontStyle[1]" = ( bold );
+			"fontStyle[3]" = ( underline );
+			 foregroundColor = "blue";
+		},
+		
+		{ name = "Keyword"; match = "\\<(?i:car|cdr|cons|cond|loop|lambda|format|setq|quote|do|eval|append|let|list|listp|null|memberp|nil|t||load|loop|if|eq|neq|and|or|when)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+		{ name = "Numeric Constant"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
+		{ name = "String"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
+	);
+}

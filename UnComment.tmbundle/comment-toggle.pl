@@ -100,18 +100,24 @@ foreach (@in) {
 			$isfirstofpair=1-$isfirstofpair; # toggle 'first of pair' flag. 
 			
 			$delimiterq= quotemeta($delimiter); 
-			if ($isfirstofpair) { 
-				if (/^\s*$delimiterq/) { 
-					$iscomment=1; 
-					$start=$delimiter; 
-					$startq=$delimiterq; 
-				} 
-			} elsif ($iscomment) { 
-				$finish=$delimiter; 
-				$finishq=$delimiterq; 
-				# this must be the second delimiter matching the found first delim. 
-				last; 
-			} 
+			if ($isfirstofpair) {
+				# if we want to comment first column only
+				# we must respect the inline colums that may be emdedded
+				$regex = ($opt->{"first-column"})
+					? /^$delimiterq\s*/
+					: /^\s*$delimiterq/;
+					
+				if ($regex) {
+					$iscomment=1;
+					$start=$delimiter;
+					$startq=$delimiterq;
+				}
+			} elsif ($iscomment) {
+				$finish=$delimiter;
+				$finishq=$delimiterq;
+				# this must be the second delimiter matching the found first delim.
+				last;
+			}
 		} 
 	}
 	

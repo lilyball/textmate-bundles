@@ -1,0 +1,37 @@
+{
+    name = "Language Definition (TextMate)";
+    uuid = "101D6FC2-6CBD-11D9-B329-000D93347A42";
+    fileTypes = (tm-language-def); 
+    foregroundColor = "#ffffff"; 
+    backgroundColor = "#000000"; 
+    foldingStartMarker = "(/\\*|\\{|\\()"; 
+    foldingStopMarker = "(\\*/|\\}|\\))"; 
+    highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") ); 
+    smartTypingPairs = ( ("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'") ); 
+
+    patterns = (
+        {   name = "keywords.tm-language-def"; foregroundColor = "#CC7833"; 
+            match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|increaseIndentPattern|smartTypingPairs|highlightPairs|foregroundColor|backgroundColor|patterns|foregroundColor|match|begin|end|swallow|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|include|uuid)\\>"; 
+        },
+        {   name = "comments.block.tm-language-def"; foregroundColor = "#00ffff"; begin = "/\\*"; end = "\\*/"; },
+        {   name = "comments.line.tm-language-def"; foregroundColor = "#00ffff"; match = "//.*$"; },  
+        {   name = "strings.single-quoted.tm-language-def";
+            begin = "'(?=.*\')";
+            end = "'";
+            swallow = "\\\\.";
+            patterns = (
+                {   name = "strings.regexp.tm-language-def"; foregroundColor = "#ff0000"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?(?)?|\\^|\\$|\\||\\.([*+?])?(?)?)|\\\\\\\\[Az<>bB]|\\\\\\\\)"; },
+                {   name = "constants.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
+            );
+        },
+        {   name = "strings.double-quoted.tm-language-def";
+            begin = "\"(?=.*\")";
+            end = "\"";
+            swallow = "\\\\.";
+            patterns = (
+                {   name = "strings.regexp.tm-language-def"; foregroundColor = "#ff0000"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?(?)?|\\^|\\$|\\||\\.([*+?])?(?)?)|\\\\\\\\[Az<>bB]|\\\\\\\\)"; },
+                {   name = "constants.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
+            );
+        },
+    ); 
+}

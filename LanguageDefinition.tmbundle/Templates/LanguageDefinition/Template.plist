@@ -1,0 +1,44 @@
+{
+    /* The name as it will appear in the Syntax Highlight List */
+    name = ""; 
+    
+    /* Which filetypes this highlighting should be applied to automatically */
+    fileTypes = (); 
+    
+    foregroundColor = "#000000"; 
+    backgroundColor = "#ffffff"; 
+    
+    /* Folding, this will start folds at comments (/*) and at {
+       Stop folding at their counterparts. 
+    */
+    foldingStartMarker = "(/\\*|\\{|\\()"; 
+    foldingStopMarker = "(\\*/|\\}|\\))"; 
+    
+    increaseIndentPattern = "\\{"; 
+
+    highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") ); 
+    smartTypingPairs = ( ("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'") ); 
+
+    /* This is where the actual highlighting is defined. */
+    patterns = (
+        {   
+            name = "keywords.languageName";
+            foregroundColor = "#ffffff";
+            backgroundColor = "#000000";
+            fontStyle = (bold, italic);
+            match = "\\<(list|of|keywords)\\>"; 
+        },
+        {   name = "string.double-quoted.languageName";
+            foregroundColor = "#78CC33";
+            begin = '"';
+            end = '"';
+            swallow = "\\\\.";
+            /* Patterns with begin and end can contain other patterns (nested as far as you want) */
+            patterns = (
+                {   name = "Nested Pattern"; fontStyle = underline;
+                    match = "[0-9]";
+                }
+            )
+        },
+    ); 
+}

@@ -11,7 +11,8 @@ Description:
    
 Links:
    - http://www.gnu.org/software/diffutils/manual/html_node/Output-Formats.html
-     -- where i got the specs from
+     -- where the diff syntax specs are from
 
-Author:
+Authors:
    Torsten Becker <torsten.becker@gmail.com>
+   Eric Hsu <textmate@betterfilecabinet.com>

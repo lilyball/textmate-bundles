@@ -5,14 +5,10 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># based on chris thomas' svn add and diff
-
-TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
+	<string>TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
 mv "$TMPFILE" "$TMPFILE.diff"; TMPFILE="$TMPFILE.diff"
 
-ruby &gt; "$TMPFILE" &lt;&lt;END
-  puts %x{diff -u $TM_SELECTED_FILES}
-END
+eval diff -u $TM_SELECTED_FILES &gt; "$TMPFILE"
 
 open -a TextMate "$TMPFILE" &amp;
 </string>
@@ -21,7 +17,7 @@ open -a TextMate "$TMPFILE" &amp;
 	<key>keyEquivalent</key>
 	<string>^D</string>
 	<key>name</key>
-	<string>Diff 2 selected Files</string>
+	<string>Diff Selected (Simple)</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>

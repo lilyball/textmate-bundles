@@ -189,14 +189,7 @@
 // recursive file visitor
 - (void) visitFile:(id)file ofGroup:(PBXGroup *)group withDelegate:(id)delegate
 {
-	// name = @"name"
-	// name ||= @"path"
-	NSString *	name = [file valueForKey:@"name"];
-
-	if(name == nil)
-	{
-		name = [file valueForKey:@"path"];
-	}
+	[file setParent:group];
 
 	if( [file isKindOfClass:[PBXGroup class]] )
 	{
@@ -207,12 +200,12 @@
 		for( unsigned int index = 0; index < [children count]; index += 1 )
 		{
 			id	object = [children objectAtIndex:index];
-			[self visitFile:object ofGroup:group withDelegate:delegate];
+			[self visitFile:object ofGroup:file withDelegate:delegate];
 		}
 	}
 	else
 	{
-		[delegate visitFile:file ofGroup:group];
+		[delegate visitFile:file];
 	}
 }
 
@@ -245,22 +238,68 @@
 	return [[self valueForKey:@"sourceTree"] isEqualToString:@"<group>"];
 }
 
+// return the path for the first non-group-relative group above us in the hierarchy
+- (NSString *) XCParentPath;
+{
+	NSString *	parentPath;
+	
+	if( [self isGroupRelative] )
+	{
+		XCGroup *	parent = [self parent];
+		if( parent == nil )
+		{
+			parentPath = @"";
+		}
+		else
+		{
+			parentPath = [parent XCParentPath];	
+		}
+	}
+	else
+	{
+		parentPath = [self valueForKey:@"path"];
+	}
+	
+	return parentPath;
+}
+
 // Return the path of this file ref.
 // If the file's path is not group-relative, the parent group is ignored.
--(NSString *) pathForGroup:(XCGroup *)group
+-(NSString *) relativePath
 {
 	NSString * pathForGroup;
 	NSString * leaf = [self valueForKey:@"path"];
 	
 	if( [self isGroupRelative] )
 	{
-		pathForGroup = [NSString stringWithFormat:@"%@/%@", [group valueForKey:@"path"], leaf];
+		NSString * parentPath = [self XCParentPath];
+		
+		if( [parentPath isEqualToString:@""] )
+		{
+			pathForGroup = leaf;
+		}
+		else
+		{
+			pathForGroup = [NSString stringWithFormat:@"%@/%@", parentPath, leaf];
+		}
+		
 	}
 	else
 	{
 		pathForGroup = leaf;
 	}
 	return pathForGroup;
+}
+
+
+- (XCGroup *) parent
+{
+	return XCParentGroup;
+}
+
+- (void) setParent:(XCGroup *) parent
+{
+	XCParentGroup = parent;
 }
 
 @end

@@ -47,6 +47,9 @@
 	id explicitFileType;
 	id languageSpecificationIdentifier;
 	id includeInIndex;
+	
+	// not part of the archived ivars
+	id XCParentGroup;
 }
 @end
 @interface PBXGroup : PBXFileReference

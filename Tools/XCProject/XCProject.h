@@ -23,12 +23,15 @@
 
 // Return the path of this file ref.
 // If the file's path is not group-relative, the parent group is ignored.
--(NSString *) pathForGroup:(XCGroup *)group;
+-(NSString *) relativePath;
+
+- (XCGroup *) parent;
+- (void) setParent:(XCGroup *) parent;
 @end
 
 @protocol XCVisitor
 - (void) visitGroup:(XCGroup *)group;
-- (void) visitFile:(XCFile *)file ofGroup:(XCGroup *)group;
+- (void) visitFile:(XCFile *)file;
 @end
 
 @interface XCProject : NSObject

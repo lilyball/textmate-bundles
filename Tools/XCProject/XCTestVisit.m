@@ -20,11 +20,11 @@
 
 - (void) visitGroup:(XCGroup *)group
 {
-	fprintf( stdout, "Group: %s\n", [[group displayName] UTF8String] );
+	fprintf( stdout, "Group: %s (%s)\n", [[group displayName] UTF8String], [[group valueForKey:@"path"] UTF8String] );
 }
-- (void) visitFile:(XCFile *)file ofGroup:(XCGroup *)group
+- (void) visitFile:(XCFile *)file
 {
-	fprintf( stdout, "File: %s\n", [[file displayName] UTF8String] );
+	fprintf( stdout, "%s -- %s\n", [[file displayName] UTF8String], [[file relativePath] UTF8String] );
 }
 
 @end

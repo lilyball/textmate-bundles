@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# @author kumar.mcmillan/gmail.com
-# Modifications to support sorted output by Brad Miller
+# @author Kumar McMillan, Brad Miller
 
 """
 Entitynav: Outputs a parsable list of functional entities for the given code file
@@ -39,17 +38,6 @@ def getHandler(ext):
         
     return handler()
     
-def getSorter(ext):
-    """
-    gets a sort object for the mode in question
-    """
-    try:
-        sorter = globals()["Sortable" + ext]
-    except KeyError:
-        raise SortError("No sorter defined for mode '%s'" % ext)
-        
-    return sorter()
-    
 #-------------------------------------------------------------------------
 # ENTITY, SORT HANDLERS
 # see EntityHandler() / SortableEntities() for the interface and notes on creating new handlers and sorters
@@ -74,7 +62,7 @@ class SortableEntities:
     """
     Interface/abstract class for sortable entities
     
-    This needs to be defined for any entity that can handle the --sort flag, so entities have 
+    This can be inherited by any handler that wants to handle the --sort flag, so entities have 
     some way to sort themselves, like alphabetically grouped by class, function ... etc
     
     TODO: need to pull out more of the sorting-specific methods from EntityNav?
@@ -127,25 +115,22 @@ class EntitiesCss(EntityHandler):
     def __init__(self):
         self.entityMatchLine = re.compile(r'^[\s]*[a-zA-Z_\.,#]+[\sa-zA-Z_\.,#\{:]*[^;]+$')
         
-class EntitiesPhp(EntityHandler):
+class EntitiesPhp(EntityHandler, SortableEntities):
     """
     entity-matching handler for PHP (php) files
     """
     def __init__(self):
         self.entityMatchLine = re.compile(r'^\s*(?P<type>(final|abstract|public|private|protected|function|class|interface)(\s+(function|static))?)(?P<entity>\s+[&a-zA-Z0-9_]+)(?P<args>.*$)')
-
-class EntitiesInc(EntitiesPhp): pass
-
-class SortablePhp(SortableEntities):        
+        
     def deconstructLine(self, lineMatch):
         return (lineMatch.group('type'),lineMatch.group('entity'),lineMatch.group('args'))
         
     def formatSortedLine(self, line):
         return "%s:%s\n" % (line[1],(line[0][0]+line[0][1]+line[0][2]))
+
+class EntitiesInc(EntitiesPhp): pass
         
-class SortableInc(SortablePhp): pass
-        
-class EntitiesPl(EntityHandler):
+class EntitiesPl(EntityHandler, SortableEntitiesIn3):
     """
     entity-matching handler for Perl (pl) files
     """
@@ -153,38 +138,26 @@ class EntitiesPl(EntityHandler):
         self.entityMatchLine = re.compile(r'^\s*(?P<prefix>sub\s+)(?P<main>.*)(?P<suffix>\s*$)')
 
 class EntitiesPm(EntitiesPl): pass
-class SortablePl(SortableEntitiesIn3): pass
-class SortablePm(SortablePl): pass
-
-class EntitiesCss(EntityHandler):
-    """
-    entity-matching handler for CSS files
-    """
-    def __init__(self):
-        self.entityMatchLine = re.compile(r'^.*\{$')
         
-class EntitiesPy(EntityHandler):
+class EntitiesPy(EntityHandler, SortableEntities):
     """
     entity-matching handler for Python (py) files
     """
     def __init__(self):
         self.entityMatchLine = re.compile(r'^\s*(?P<type>(class|def)\s+)(?P<entity>.*:\s*$)')
-
-class SortablePy(SortableEntities):
+        
     def deconstructLine(self, lineMatch):
         return (lineMatch.group('type'),lineMatch.group('entity'))
         
     def formatSortedLine(self, line):
         return "%s:%s\n" % (line[1],(line[0][0]+line[0][1]))
 
-class EntitiesTex(EntityHandler):
+class EntitiesTex(EntityHandler, SortableEntitiesIn3):
     """
     entity-matching handler for LaTeX (tex) files
     """
     def __init__(self):
         self.entityMatchLine = re.compile(r'^\s*(?P<prefix>\\(sub)*section{|\\paragraph{)(?P<main>.*)(?P<suffix>}.*$)')
-
-class SortableTex(SortableEntitiesIn3): pass
 
 #-------------------------------------------------------------------------
 # END: ENTITY, SORT HANDLERS
@@ -196,7 +169,7 @@ class EntityNav:
     """
     def __init__(self, opts, args):
         self.parseInput(opts, args)
-        self.handler = getHandler(self.ext.capitalize())
+        self.getHandler()
         self.constructFileDict(self.file)
         
     def constructFileDict(self, file):
@@ -209,11 +182,17 @@ class EntityNav:
             lineMatch = self.handler.entityMatchLine.match(line)
             
             if lineMatch and self.sorted:
-                self.entities[lineNum] = self.sorter.deconstructLine(lineMatch)
+                self.entities[lineNum] = self.handler.deconstructLine(lineMatch)
             elif lineMatch:
                 self.entities[lineNum] = line
         if self.entities == {}:
             raise HandlerNoEntitiesError
+            
+    def getHandler(self):
+        mode = self.ext.capitalize()
+        self.handler = getHandler(mode)
+        if self.sorted and isinstance(self.handler, SortableEntities) is not True:
+            raise SortError, "Handler for mode '%s' does not support sorting" % mode
             
     def outputParsable(self):
         """
@@ -221,9 +200,9 @@ class EntityNav:
         """
         self.findEntities()
         if self.sorted:
-            outList = self.sorter.sort(self.entities)
+            outList = self.handler.sort(self.entities)
             for outLine in outList:
-                sys.stdout.write(self.sorter.formatSortedLine(outLine))
+                sys.stdout.write(self.handler.formatSortedLine(outLine))
         else:
             sys.stdout.write( "".join( ["%s:%s" % (k,v) for k,v in self.splice(self.entities)] ))
             
@@ -251,9 +230,6 @@ class EntityNav:
                 self.setExtFromFilename(arg)
             elif opt in ('-s', '--sort'):
                 self.sorted = True
-                
-        if self.sorted:
-            self.sorter = getSorter(self.ext.capitalize())
             
         if file == None:
             raise UsageError

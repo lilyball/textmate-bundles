@@ -14,7 +14,8 @@
 if [[ -z $TM_PROJECT_DIRECTORY ]]; then
 	until [[ `pwd` == "/" ]];
 	do
-		Projects=`echo *.xcode`
+		Projects=`ls *.xcode`
+		echo "Projects:" $Projects
 		if [[ -n $Projects ]]; then
 			break;
 		fi

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>echo '&lt;h1&gt;Help for the TODO bundle&lt;/h1&gt;
+&lt;p&gt;The TODO bundle allows you to embed TODO comments in your source code.  When you run the Show TODO list command, it collects all of the TODOs and displays them as a list in an html window.  Clicking on one of the TODO items in the list brings you to the file and line where you noted the todo.&lt;/p&gt;
+&lt;p&gt;This simle list management system is helpful for leaving yourself notes as you are coding. for example&lt;/p&gt;
+&lt;pre&gt;
+//TODO test this later 
+//TODO this is broken, fix it.
+&lt;/pre&gt;
+&lt;p&gt; At this time, the serch for TODO is case sensitive.&lt;/p&gt;
+&lt;p&gt;The TODO bundle does not rely on any environment variables.&lt;/p&gt;
+'</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>46C3E5A1-7E04-11D9-AE69-000D93B6E43C</string>
+</dict>
+</plist>

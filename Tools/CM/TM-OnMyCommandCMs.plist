@@ -5,21 +5,8 @@
 	<key>COMMAND_LIST</key>
 	<array>
 		<dict>
-			<key>COMMAND</key>
-			<array>
-				<string>~/bin/tm -a </string>
-				<string>__OBJ_PATH__</string>
-			</array>
-			<key>EXECUTION_MODE</key>
-			<string>exe_silent_popen</string>
-			<key>NAME</key>
-			<string>Edit in TM</string>
-			<key>SUBMENU_NAME</key>
-			<string>..</string>
-			<key>VERSION</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_file_or_folder</string>
 			<key>COMMAND</key>
 			<array>
 				<string>if [ -d </string>
@@ -38,7 +25,248 @@ fi
 			<key>EXECUTION_MODE</key>
 			<string>exe_silent_popen</string>
 			<key>NAME</key>
-			<string>Edit New File Here in TM</string>
+			<string>New TexMete file here</string>
+			<key>SUBMENU_NAME</key>
+			<string>..</string>
+			<key>VERSION</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_file_or_folder</string>
+			<key>COMMAND</key>
+			<array>
+				<string>#!/usr/bin/ruby
+
+input= "</string>
+				<string>__DLG_INPUT_TEXT__</string>
+				<string>"
+path= "</string>
+				<string>__OBJ_PATH__</string>
+				<string>"
+
+if !File.directory?(path)
+	path="</string>
+				<string>__OBJ_PARENT_PATH__</string>
+				<string>"
+end
+
+file="#{path}/#{input}"
+
+if input.length &gt; 0
+
+	if !File.exists?("#{file}")
+	`touch "#{file}"`	
+	`open -a TextMate "#{file}"`		
+	else
+  `open -a TextMate "#{file}"`	
+	end
+end</string>
+			</array>
+			<key>EXECUTION_MODE</key>
+			<string>exe_shell_script</string>
+			<key>INPUT_DIALOG</key>
+			<dict>
+				<key>INPUT_TYPE</key>
+				<string>input_clear_text</string>
+				<key>MESSAGE</key>
+				<string>Enter a name for the new file:</string>
+			</dict>
+			<key>NAME</key>
+			<string>New TextMate file here (alt)</string>
+			<key>NOTES</key>
+			<string>Asks you to enter a name, then create a file with that name in the selected folder (or in the parent folder if you selected a file) and opens it in TextMate.If you enter the name of an existing file, it will open it without any change.Requires TextMate. ;)--FredB.</string>
+			<key>SUBMENU_NAME</key>
+			<string>..</string>
+			<key>VERSION</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_file_or_folder</string>
+			<key>COMMAND</key>
+			<array>
+				<string>#!/usr/bin/ruby
+
+input= "</string>
+				<string>__DLG_INPUT_TEXT__</string>
+				<string>"
+path= "</string>
+				<string>__OBJ_PATH__</string>
+				<string>"
+
+if !File.directory?(path)
+	path="</string>
+				<string>__OBJ_PARENT_PATH__</string>
+				<string>"
+end
+
+file="#{path}/#{input}"
+
+if input.length &gt; 0
+	if !File.exists?("#{file}")
+	f = File.new("#{file}", "w")
+	f.puts "</string>
+				<string>__OBJ_TEXT__</string>
+				<string>"
+	f.close
+	`open -a TextMate "#{file}"`		
+	else
+  `open -a TextMate "#{file}"`	
+	end
+end</string>
+			</array>
+			<key>EXECUTION_MODE</key>
+			<string>exe_shell_script</string>
+			<key>INPUT_DIALOG</key>
+			<dict>
+				<key>DEFAULT</key>
+				<string>clipboard text.txt</string>
+				<key>INPUT_TYPE</key>
+				<string>input_clear_text</string>
+				<key>MESSAGE</key>
+				<string>Enter a name for the file</string>
+			</dict>
+			<key>NAME</key>
+			<string>New TextMate file here w/Clipboard</string>
+			<key>NOTES</key>
+			<string>Asks you to enter a name, then create a file with that name in the selected folder (or in the parent folder if you selected a file), puts the Clipboard text in the file and opens it in TextMate.If you enter the name of an existing file, it will open it without any change.Requires TextMate.--FredB.</string>
+			<key>SUBMENU_NAME</key>
+			<string>..</string>
+			<key>VERSION</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_file</string>
+			<key>COMMAND</key>
+			<array>
+				<string>~/bin/tm -a </string>
+				<string>__OBJ_PATH__</string>
+			</array>
+			<key>EXECUTION_MODE</key>
+			<string>exe_silent_popen</string>
+			<key>NAME</key>
+			<string>Edit in TextMate</string>
+			<key>NOTES</key>
+			<string>Edit selected fle in TextMate.</string>
+			<key>SUBMENU_NAME</key>
+			<string>..</string>
+			<key>VERSION</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_selected_or_clipboard_text</string>
+			<key>COMMAND</key>
+			<array>
+				<string>echo '</string>
+				<string>__OBJ_TEXT__</string>
+				<string>' &gt; /tmp/TextMateTemp; open -a TextMate /tmp/TextMateTemp</string>
+			</array>
+			<key>ESCAPE_SPECIAL_CHARS</key>
+			<string>esc_none</string>
+			<key>EXECUTION_MODE</key>
+			<string>exe_silent_popen</string>
+			<key>NAME</key>
+			<string>Open text in TextMate</string>
+			<key>NOTES</key>
+			<string>Make a temp file with selected or Clipboard text and opens in TextMate.Adapted form "Open text in Wisp" by Scott P. Richert.Requires TextMate.--FredB.</string>
+			<key>SUBMENU_NAME</key>
+			<string>..</string>
+			<key>VERSION</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_file</string>
+			<key>COMMAND</key>
+			<array>
+				<string>/Developer/Tools/SetFile -t "TEXT"-c "TxMt" </string>
+				<string>__OBJ_PATH__</string>
+			</array>
+			<key>ESCAPE_SPECIAL_CHARS</key>
+			<string>esc_with_backslash</string>
+			<key>EXECUTION_MODE</key>
+			<string>exe_silent_popen</string>
+			<key>NAME</key>
+			<string>Set Type and Creator to TextMate</string>
+			<key>NOTES</key>
+			<string>Requires Developer Tools.</string>
+			<key>REFRESH_PATH</key>
+			<array>
+				<string>__OBJ_PATH__</string>
+			</array>
+			<key>VERSION</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_finder_window</string>
+			<key>COMMAND</key>
+			<array>
+				<string>open -a "TextMate" ~/Library/Preferences/com.abracode.OnMyCommandCMPrefs.plist</string>
+			</array>
+			<key>ESCAPE_SPECIAL_CHARS</key>
+			<string>esc_none</string>
+			<key>NAME</key>
+			<string>Edit Commands with TextMate</string>
+			<key>NOTES</key>
+			<string>Requires TextMate
+
+A modified version of the script "Edit Commands with BBEdit". Submitted by M. Rick.</string>
+			<key>VERSION</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_folder</string>
+			<key>COMMAND</key>
+			<array>
+				<string>ls -A1 </string>
+				<string>__OBJ_PATH__</string>
+				<string> &gt; /tmp/TextMateLSTemp; open -a TextMate /tmp/TextMateLSTemp</string>
+			</array>
+			<key>EXECUTION_MODE</key>
+			<string>exe_silent_popen</string>
+			<key>NAME</key>
+			<string>List folder content in TextMate</string>
+			<key>NOTES</key>
+			<string>tm command-line tool must be installed in /usr/local/bin/tm or you have to correct it's path.--FredB.</string>
+			<key>SUBMENU_NAME</key>
+			<string>..</string>
+			<key>VERSION</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>ACTIVATION_EXTENSIONS</key>
+			<array>
+				<string>pkg</string>
+				<string>mpkg</string>
+			</array>
+			<key>ACTIVATION_MODE</key>
+			<string>act_folder_not_finder_window</string>
+			<key>COMMAND</key>
+			<array>
+				<string>gzip -cd `find </string>
+				<string>__OBJ_PATH__</string>
+				<string> -name "*.pax.gz" -type f` | pax &gt;&gt; "</string>
+				<string>__OBJ_PATH_NO_EXTENSION__</string>
+				<string> Contents.txt" ; open -a "TextMate" "</string>
+				<string>__OBJ_PATH_NO_EXTENSION__</string>
+				<string> Contents.txt"</string>
+			</array>
+			<key>EXECUTION_MODE</key>
+			<string>exe_silent_popen</string>
+			<key>NAME</key>
+			<string>List pkg content in TextMate</string>
+			<key>NOTES</key>
+			<string>Avoids using Pacifist to quickly see a packages contents.  Submitted by Anonymous.
+Modified to edit the content in TextMate by FredB.</string>
+			<key>REFRESH_PATH</key>
+			<array>
+				<string>__OBJ_PARENT_PATH__</string>
+			</array>
 			<key>SUBMENU_NAME</key>
 			<string>..</string>
 			<key>VERSION</key>

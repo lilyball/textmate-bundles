@@ -1,7 +1,4 @@
-OnMyCommandCM (free at http://www.abracode.com/free/cmworkshop/) lets you write your own CMs using shell scripts. I just downloaded it and have quickly hacked out two contextual menu commands:
-
-Edit in TM (pop it up on a file)
-Edit New File Here in TM (pop it up on a directory; if you pick a file, it puts a new file in the same directory)
+OnMyCommandCM (free at http://www.abracode.com/free/cmworkshop/) lets you write your own CMs using shell scripts.
 
 To install:
 1. Download and install OMC.
@@ -10,18 +7,26 @@ To install:
 4. Import the commands using the OMC_Edit tool in the OMC folder.
 5. It expects ~/bin/tm to be the binary. If yours is elsewhere, use OMC_Edit to change the paths.
 
-- Eric Hsu <textmate@betterfilecabinet.com>
+Commands
+========
 
-----
+by Eric Hsu <textmate@betterfilecabinet.com>
 
-There is also an alternate version of the contextual menu, by Fred B.  He reports:
+-Edit in TextMate (pop it up on a file)
+-New TextMate file here (pop it up on a directory; if you pick a file, it puts a new file in the same directory)
 
-The command opens a dialog asking for a name for the new file and I used "open
--a" instead of "tm" CLI command ". IMO, the advantage is that the Syntax
-highlight is selected according to the extension you gave to the file name.
-Plus, with the tm CLI, the file doesn't "exists" until you save it and you have
-to "Saves as" to give it a proper name.
+by Frédéric Ballériaux <fredb7@starflam.com>
 
-And I made it in Ruby cause I'm lazy. ;)
+-New TextMate file here (alt)
 
-So, follow the Eric's recommendations to install and modify. Change the Ruby and TextMate path in OMCEdit if you have to.
+(Same as Eric's version, except it creates the file first (with a dialog asking you for a name) then opens it (with open-a instead of usr/bin/tm).
+That means:
+The language/Syntax-Highlight is selected according to the file extension
+If a file with the same name already exists in the directory, it opens it without any change)
+
+-New TextMate file here with Clipboard text (Same as above, but include the text in the Clipboard, if any.)
+-Open selected text in TextMate
+-Set type and creator to TextMate
+-Edit OMC commands in TextMate
+-List folder content in TextMate
+-List pkg content in TextMate

@@ -5,15 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># just to remind you of some useful environment variables
-# see Help / Shell Variables for the full list
-#echo File: "$TM_FILEPATH"
-#echo Word: "$TM_CURRENT_WORD"
-#echo Selection: "$TM_SELECTED_TEXT"
-
-mysql --user=$MYSQL_USER --password=$MYSQL_PWD --host=$MYSQL_HOST --html --execute "$TM_SELECTED_TEXT"  $MYSQL_DB</string>
+	<string>mysql --user=$MYSQL_USER --password=$MYSQL_PWD --host=${MYSQL_HOST:=localhost} --port=${MYSQL_PORT:=3306} --html $MYSQL_DB</string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^@m</string>
 	<key>name</key>

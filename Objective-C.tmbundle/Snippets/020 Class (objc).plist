@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundlePath</key>
+	<string>/Users/duff/Library/Application Support/TextMate/Bundles/ObjectiveC.tmbundle</string>
+	<key>content</key>
+	<string>@interface ${1:class} : NSObject
+{
+}
+@end
+
+@implementation ${1:class}
+- (id)init
+{
+	if(self = [super init])
+	{$0
+	}
+	return self;
+}
+@end
+</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Class (objc)</string>
+	<key>trigger</key>
+	<string>objc</string>
+</dict>
+</plist>

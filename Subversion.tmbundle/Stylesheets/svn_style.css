@@ -1,0 +1,36 @@
+/* general stuff.. */
+body {
+   font-family: sans-serif;
+   font-size: 11pt;
+}
+
+h1 {
+   font-size: 18pt;
+}
+
+
+/* for error formating.. */
+div.error {
+   color: #f7260c;
+   font-weight: bold;
+}
+div.error:before { content: "ERROR: "; }
+
+div.svn_says {
+   color: #f04907;
+   font-weight: bold;
+}
+div.svn_says:before { content: "Subversion says: "; }
+
+
+/* about links.. */
+a, a:visited, a:link {
+   background-color: inherit;
+   color: inherit;
+}
+
+a:hover, a:active {
+   background-color: #000;
+   color: #fff;
+   text-decoration: none;
+}

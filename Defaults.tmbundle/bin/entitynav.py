@@ -39,8 +39,8 @@ def getHandler(ext):
     return handler()
     
 #-------------------------------------------------------------------------
-# ENTITY, SORT HANDLERS
-# see EntityHandler() / SortableEntities() for the interface and notes on creating new handlers and sorters
+# ENTITY HANDLERS
+# see EntityHandler() / SortableEntities() for the interface and notes on creating new handlers
 #-------------------------------------------------------------------------
     
 class EntityHandler:
@@ -120,7 +120,7 @@ class EntitiesPhp(EntityHandler, SortableEntities):
     entity-matching handler for PHP (php) files
     """
     def __init__(self):
-        self.entityMatchLine = re.compile(r'^\s*(?P<type>(final|abstract|public|private|protected|function|class|interface)(\s+(function|static))?)(?P<entity>\s+[&a-zA-Z0-9_]+)(?P<args>.*$)')
+        self.entityMatchLine = re.compile(r'^\s*(?P<type>(final|abstract|public|private|protected|function|class|interface)(\s+(function|static))?)(?P<entity>\s+[&a-zA-Z0-9_]+)(?P<args>[^\n\r;]*[\s]*$)')
         
     def deconstructLine(self, lineMatch):
         return (lineMatch.group('type'),lineMatch.group('entity'),lineMatch.group('args'))
@@ -160,7 +160,7 @@ class EntitiesTex(EntityHandler, SortableEntitiesIn3):
         self.entityMatchLine = re.compile(r'^\s*(?P<prefix>\\(sub)*section{|\\paragraph{)(?P<main>.*)(?P<suffix>}.*$)')
 
 #-------------------------------------------------------------------------
-# END: ENTITY, SORT HANDLERS
+# END: ENTITY HANDLERS
 #-------------------------------------------------------------------------
 
 class EntityNav:

@@ -47,7 +47,7 @@ int|integer|interval\\(\\d+\\)|line|lseg|macaddr|money|numeric(\\(\\d+,\\d+\\))?
 		{ name = "keywords.object-comments.sql"; "foregroundColor[1]" = "#6699cc"; "foregroundColor[3]" = "#6699cc"; match = "^\\s*(comment\\s+on\\s+(table|column|aggregate|constraint|database|domain|function|index|operator|rule|schema|sequence|trigger|type|view))\\s+.*?\\s
 +(is)\\s+"; },
 
-		{ name = "comments.line.sql"; foregroundColor = "#9933CC"; match = "^\\s*--.*$"; },
+		{ name = "comments.line.sql"; foregroundColor = "#9933CC"; match = "--.*$"; },
 
  		{ name = "strings.double-quoted.sql"; begin = "\""; end = "\"";  foregroundColor = "#66CC33";
 			patterns = (

@@ -5,15 +5,22 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>WorkPath="`dirname "$TM_FILEPATH"`"
+	<string>WorkPath=`dirname "$TM_FILEPATH"`
+WorkPath=${WorkPath// /%20} # turn spaces into %20
 export WorkPath
 
+cat &lt;&lt;EOF
+ &lt;html&gt;&lt;head&gt;&lt;style&gt;
+ body { font: 12px 'Lucida Grande' }
+ &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+ &lt;h1&gt;TODO LIST&lt;/h1&gt;
+ &lt;ul&gt;
+EOF
+
 cd "`dirname "$TM_FILEPATH"`"
-echo "&lt;h1&gt;TODO LIST&lt;/h1&gt;"
-echo "&lt;ul&gt;"
-grep --with-filename --line-number --recursive TODO * | perl -pe '$| =1; s/(.*?):(.*?):.*?TODO[:](.*)\n/&lt;li&gt; $1: &lt;a href="txmt:\/\/open?url=file:\/\/$ENV{'WorkPath'}\/$1&amp;line=$2"&gt;$3&lt;\/a&gt;&lt;\/li&gt;\n/'
-echo "&lt;/ul&gt;"
-</string>
+grep -Hinrw TODO * | perl -pe '$|=1; s|(.*?):(.*?):.*?TODO:?(.*)$|&lt;li&gt; $1: &lt;a href="txmt://open?url=file://$ENV{'WorkPath'}/$1&amp;line=$2"&gt;$3&lt;/a&gt;&lt;/li&gt;|i'
+
+echo "&lt;/ul&gt;&lt;/body&gt;"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

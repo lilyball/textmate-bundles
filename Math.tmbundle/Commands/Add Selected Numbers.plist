@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>printf " = %s" `{ tr -d ,|tr -cs '[0-9.]' ' '|perl -pe 's/([0-9.]+) (?=[0-9.])/$1+/g'; echo; } | bc -l`</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^M</string>
+	<key>name</key>
+	<string>Add Selected Numbers</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>uuid</key>
+	<string>D6EEB6EA-77E9-11D9-B36F-000D93589AF6</string>
+</dict>
+</plist>

@@ -54,6 +54,11 @@
 	fTMOffspring = [NSMutableArray array];
 	[dictionary setObject:fTMOffspring forKey:@"children"];
 	
+	// fill in some default values
+	[dictionary setObject:[group displayName] forKey:@"name"];
+	[dictionary setObject:[NSNumber numberWithBool:NO] forKey:@"expanded"];
+	[dictionary setObject:[NSNumber numberWithBool:NO] forKey:@"selected"];
+	
 	fprintf( stdout, "Group: %s (%s)\n", [[group displayName] UTF8String], [[group valueForKey:@"path"] UTF8String] );
 }
 

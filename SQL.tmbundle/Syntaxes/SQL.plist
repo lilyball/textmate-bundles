@@ -17,55 +17,55 @@
 	backgroundColor = "#eeeeee";
 
 	patterns = (
-		{ name = "DDL Create Keywords"; foregroundColor = "#66CC33"; match = "^\\s*create\\s+(table|(unique\\s+)?index|view)\\s+"; },
+		{ name = "keywords.sql.DDL.create"; foregroundColor = "#66CC33"; match = "^\\s*create\\s+(table|(unique\\s+)?index|view)\\s+"; },
 
-		{ name = "DDL Create Keywords II"; foregroundColor = "#66CC33"; match = "\\s+(on\\s+|(not\\s+)?null)\\s*"; },
+		{ name = "keywords.sql.DDL.create.II"; foregroundColor = "#66CC33"; match = "\\s+(on\\s+|(not\\s+)?null)\\s*"; },
 
-		{ name = "DDL Drop Keywords"; foregroundColor = "#dd7733"; match = "^\\s*drop\\s+(table|index|view)"; },
+		{ name = "keywords.sql.DDL.drop"; foregroundColor = "#dd7733"; match = "^\\s*drop\\s+(table|index|view)"; },
 
-		{ name = "DDL Drop Keywords II"; "foregroundColor[1]" = "#dd7733"; "foregroundColor[2]" = "#dd7733"; match = "\\s*(drop\\s+table)\\s+\\w+(\\s+cascade)?\\s*"; },
+		{ name = "keywords.sql.DDL.drop.II"; "foregroundColor[1]" = "#dd7733"; "foregroundColor[2]" = "#dd7733"; match = "\\s*(drop\\s+table)\\s+\\w+(\\s+cascade)?\\s*"; },
 		
-		{ name = "DDL Alter Keywords"; foregroundColor = "#997733"; match = "^\\s*alter\\s+(table|index|view)\\s+"; },
+		{ name = "keywords.sql.DDL.alter"; foregroundColor = "#997733"; match = "^\\s*alter\\s+(table|index|view)\\s+"; },
 
-		{ name = "DML Keywords"; foregroundColor = "#CC7833"; match = "^\\s*(select(\\s+distinct)?|insert\\s+into|update|delete|from|where|group\\sby|and|union(\\s+all)?|having|order\\sby)\\b"; },
+		{ name = "keywords.sql.DML"; foregroundColor = "#CC7833"; match = "^\\s*(select(\\s+distinct)?|insert\\s+into|update|delete|from|where|group\\sby|and|union(\\s+all)?|having|order\\sby)\\b"; },
 
-		{ name = "DML Keywords II"; foregroundColor = "#CC7833"; match = "\\s+values\\s+"; },
+		{ name = "keywords.sql.DML.II"; foregroundColor = "#CC7833"; match = "\\s+values\\s+"; },
 
-		{ name = "LUW Keywords"; foregroundColor = "#CC38CC"; match = "(begin(\\s+work)?|commit(\\s+work)?|rollback(\\s+work)?)"; 	},
+		{ name = "keywords.sql.LUW"; foregroundColor = "#CC38CC"; match = "(begin(\\s+work)?|commit(\\s+work)?|rollback(\\s+work)?)"; 	},
 
-		{ name = "Authorization Keywords"; foregroundColor = "#CC7833"; match = "(grant(\\swith\\sgrant\\soption)?|revoke)"; },
+		{ name = "keywords.authorization.sql"; foregroundColor = "#CC7833"; match = "(grant(\\swith\\sgrant\\soption)?|revoke)"; },
 
-		{ name = "Data Types"; "foregroundColor[1]" = "#CCBA33"; match = "^\\s*\\w+\\s+(bigint|bigserial|bit|bit\\svarying\\(\\d+\\)|boolean|box|bytea|character\\s(varying)?\\(\\d+\\)|char\\(\\d+\\)|var\\schar\\(\\d+\\)|cidr|circle|date|double\\sprecision|inet|
+		{ name = "keywords.storage.sql"; "foregroundColor[1]" = "#CCBA33"; match = "^\\s*\\w+\\s+(bigint|bigserial|bit|bit\\svarying\\(\\d+\\)|boolean|box|bytea|character\\s(varying)?\\(\\d+\\)|char\\(\\d+\\)|var\\schar\\(\\d+\\)|cidr|circle|date|double\\sprecision|inet|
 int|integer|interval\\(\\d+\\)|line|lseg|macaddr|money|numeric(\\(\\d+,\\d+\\))?|oid|path|point|polygon|real|smallint|serial|text|time\s(\\(\\d+\\))(\\swithout\stime\szone)?|timestamp(\s(\\(\\d+\\))(\\swithout\stime\szone)?)?|varchar\\(\\d+\\))\\s*";	},
 
-		{ name = "Data Integrity"; foregroundColor = "#01babe"; match = "\\s+(primary\\s+key|references|on\\sdelete(\\s+cascade)?|check)\\s*"; },
+		{ name = "keywords.data-integrity.sql"; foregroundColor = "#01babe"; match = "\\s+(primary\\s+key|references|on\\sdelete(\\s+cascade)?|check)\\s*"; },
 
-		{ name = "Data Integrity II"; foregroundColor = "#01babe"; match = "\\s+in\\s+"; },
+		{ name = "keywords.data-integrity.sql.II"; foregroundColor = "#01babe"; match = "\\s+in\\s+"; },
 	
-		{ name = "Single String"; foregroundColor = "#669966"; begin = "'"; end = "'"; swallow = "\\\\."; },
+		{ name = "strings.single-quoted.sql"; foregroundColor = "#669966"; begin = "'"; end = "'"; swallow = "\\\\."; },
 
-		{ name = "Object Comments"; "foregroundColor[1]" = "#6699cc"; "foregroundColor[3]" = "#6699cc"; match = "^\\s*(comment\\s+on\\s+(table|column|aggregate|constraint|database|domain|function|index|operator|rule|schema|sequence|trigger|type|view))\\s+.*?\\s
+		{ name = "keywords.object-comments.sql"; "foregroundColor[1]" = "#6699cc"; "foregroundColor[3]" = "#6699cc"; match = "^\\s*(comment\\s+on\\s+(table|column|aggregate|constraint|database|domain|function|index|operator|rule|schema|sequence|trigger|type|view))\\s+.*?\\s
 +(is)\\s+"; },
 
-		{ name = "Comment"; foregroundColor = "#9933CC"; match = "^\\s*--.*$"; },
+		{ name = "comments.line.sql"; foregroundColor = "#9933CC"; match = "^\\s*--.*$"; },
 
- 		{ name = "Double Quoted String"; begin = "\""; end = "\"";  foregroundColor = "#66CC33";
+ 		{ name = "strings.double-quoted.sql"; begin = "\""; end = "\"";  foregroundColor = "#66CC33";
 			patterns = (
         		{ name = "Interpolated String"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; }
 			);
 		},
-		{ name = "Double Quoted String II"; begin = "%\\{"; end = "\\}";  foregroundColor = "#66CC33";
+		{ name = "strings.double-quoted.sql"; begin = "%\\{"; end = "\\}";  foregroundColor = "#66CC33";
 			patterns = (
 				{ name = "Interpolated String"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; }
 			);
 		},
-		{ name = "Regular Expression"; begin = "/"; end = "/";  foregroundColor = "#CCCC33";
+		{ name = "strings.regex.sql"; begin = "/"; end = "/";  foregroundColor = "#CCCC33";
 			patterns = (
 				{ name = "Interpolated String"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; },
 				{ name = "Escaped slash"; match = "\\\\/"; foregroundColor = "#CCCC33"; }
 			);
 		},
-		{ name = "Regular Expression II"; begin = "%r\\{"; end = "\\}";  foregroundColor = "#CCCC33";
+		{ name = "strings.regex.modr.sql"; begin = "%r\\{"; end = "\\}";  foregroundColor = "#CCCC33";
 			patterns = (
 				{ name = "Interpolated String"; match = "#\\{([^\\}]*)\\}"; foregroundColor = "#aaaaaa"; },
 				{ name = "Escaped slash"; match = "\\\\/"; foregroundColor = "#CCCC33"; }

@@ -1,5 +1,0 @@
-{
-	name = "ASP Script";
-	extension = "asp";
-	command = "perl -pe 's/\\$\\{([^}]*)\\}/$ENV{$1}/g' <default.asp >\"$TM_NEW_FILE\"";
-}

@@ -47,20 +47,20 @@ begin
             raise LogLimitReachedException  if $limit != 0 and msg_count == $limit
             
             if line =~ /^-{72}$/
-               puts( ((msg_count % 2) == 0) ? '<table class="log_msg">' :
-                                              '<table class="log_msg alternate">' )
-               state      = :info
-               msg_count += 1
-               
+               state = :info
             else
                raise NoMatchException, line
             end
             
          when :info
             if line =~ /^r(\d+) \| ([A-Za-z_0-9]+) \| (.+) \| (\d+) lines?$/
-               state     = :changed_paths
-               rev       = $1
-               max_lines = $4.to_i
+               state      = :changed_paths
+               rev        = $1
+               max_lines  = $4.to_i
+               
+               puts( ((msg_count % 2) == 0) ? '<table class="log_msg">' :
+                                              '<table class="log_msg alternate">' )
+               msg_count += 1
                
                puts '<tr>  <th>Revision:</th>  <td>'+ $1 +'</td> </tr>'
                puts '<tr>  <th>Author:</th>    <td>'+ $2 +'</td> </tr>'
@@ -129,27 +129,30 @@ begin
    
 rescue LogLimitReachedException
 rescue SVNErrorException
-   puts '<div class="generic_error"><h2>SVNError</h2>'+ htmlize( $! )+'<br />'
+   make_error_head( 'SVNError', htmlize( $! )+'<br />' )
    $stdin.each_line { |line| puts htmlize( line )+'<br />' }
-   puts '</div>'
+   make_error_foot()
    
 rescue NoMatchException
-   puts '<div class="generic_error"><h2>NoMatch</h2>'
+   make_error_head( 'NoMatch' )
+   
    puts 'state: <em>'+state.to_s+'</em><br />'
    puts 'line:&nbsp; <em>'+htmlize( $! )+'</em><br />'
-   puts '</div>'
+   
+   make_error_foot()
    
 # catch unknown exceptions..
 rescue => e
-   puts '<div class="generic_error"><h2>'+e.class.to_s+'</h2>'
+   make_error_head( e.class.to_s )
    puts 'reason: <em>'+htmlize( $! )+'</em><br />'
    
    # could also be this oneliner in 1.8 but backward-compatibility
    # is more important than fancy code. :)
    # puts 'trace: <br />'+$@.inject('') { |a,b| a + htmlize('  '+b) + '<br />' }
+   trace = ''; $@.each { |e| trace+=htmlize('  '+e)+'<br />' }
    
-   trace = ''; $@.each { |e| trace += htmlize( '  '+e ) + '<br />' }
-   puts 'trace: <br />'+trace+'</div>'
+   puts 'trace: <br />'+trace
+   make_error_foot()
    
 ensure
    make_foot()

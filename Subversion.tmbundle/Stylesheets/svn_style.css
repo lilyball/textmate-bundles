@@ -9,25 +9,9 @@ h1 {
 }
 
 
-/* for error formating.. */
+/* for error formating..
+   .svn_says and the old .error are deprecated! */
 div.error {
-   color: #f7260c;
-}
-div.error:before {
-   content: "ERROR: ";
-   font-weight: bold;
-}
-
-div.svn_says {
-   color: #f04907;
-}
-div.svn_says:before {
-   content: "Subversion says: ";
-   font-weight: bold;
-}
-
-/* .svn_says and .error are deprecated! */
-div.generic_error {
    color: #f30;
    background-color: #fee;
    border: 2px solid #f52;
@@ -36,7 +20,7 @@ div.generic_error {
    font-size: 9pt;
 }
 
-div.generic_error h2 {
+div.error h2 {
    font-size: 11pt;
    font-family: sans-serif;
    margin-top: 0;

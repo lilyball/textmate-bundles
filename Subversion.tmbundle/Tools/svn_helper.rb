@@ -31,8 +31,8 @@ module SVNHelper
             when '<';  '&lt;'
             when '>';  '&gt;'
             when '&';  '&amp;'
-            when ' ';  '&nbsp;'
-            when "\t"; '&nbsp;'*tab_size
+            when ' ';  '&zwj;&#32;&zwj;'           # woooh! it took some days to get this line!
+            when "\t"; '&zwj;&#32;&zwj;'*tab_size
          end
       end   
    end
@@ -52,6 +52,17 @@ module SVNHelper
    # .. and this a simple, matching footer ..
    def make_foot( foot_adds='' )
       puts foot_adds+'</body></html>'
+   end
+   
+   
+   # the same as the above 2 methods, just for errors.
+   def make_error_head( title='', head_adds='' )
+      puts '<div class="error"><h2>'+title+'</h2>'+head_adds
+   end
+   
+   # .. see above.
+   def make_error_foot( food_adds='' )
+      puts foot_adds+'</div>'
    end
    
 end #module SVNHelper

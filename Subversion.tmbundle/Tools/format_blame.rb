@@ -57,22 +57,27 @@ begin
    end #each_line
    
 rescue NoMatchException
-   puts '<div class="generic_error"><h2>NoMatchException</h2>'
+   make_error_head( 'NoMatch' )
+   
    puts 'mhh, something with with the regex or svn must be wrong.  this should never happen.<br />'
-   puts 'last line: <em>'+htmlize( $! )+'</em><br />please bug-report.</div>'
+   puts 'last line: <em>'+htmlize( $! )+'</em><br />please bug-report.'
+   
+   make_error_foot()
    
 rescue SVNErrorException
-   puts '<div class="generic_error"><h2>SVNError</h2>'+ htmlize( $! )+'<br />'
+   make_error_head( 'SVNError', htmlize( $! )+'<br />' )
    $stdin.each_line { |line| puts htmlize( line )+'<br />' }
-   puts '</div>'
+   make_error_foot()
    
 # catch unknown exceptions..
 rescue => e
-   puts '<div class="generic_error"><h2>'+e.class.to_s+'</h2>'
-   puts 'reason: <em>'+htmlize( $! )+'</em><br />'
+   make_error_head( e.class.to_s )
    
+   puts 'reason: <em>'+htmlize( $! )+'</em><br />'
    trace = ''; $@.each { |e| trace+=htmlize('  '+e)+'<br />' }
-   puts 'trace: <br />'+trace+'</div>'
+   puts 'trace: <br />'+trace
+   
+   make_error_foot()
    
 ensure
    make_foot( '</table>' )

@@ -98,6 +98,15 @@ class EntitiesPy(EntityHandler):
     def __init__(self):
         self.entityMatchLine = re.compile(r'^\s*(class|def)\b.*:\s*$')
 
+class EntitiesTex(EntityHandler):
+    """
+    entity-matching handler for LaTeX (tex) files
+    """
+    def __init__(self):
+        self.entityMatchLine = re.compile(r'^\s*(\\(sub)*section|\\paragraph){.*}.*$')
+
+
+
 #-------------------------------------------------------------------------
 # END: ENTITY HANDLERS
 #-------------------------------------------------------------------------
@@ -173,6 +182,13 @@ class EntityNav:
         keys.sort()
         splicedEntities = zip(keys, map(entities.get, keys))
         return splicedEntities
+
+    def sort_byval(self,dict):         
+        if type(dict) is not type({}): return []
+        keys = dict.keys()
+        s = map(lambda k: (dict[k],k),keys)
+        s.sort()
+        return s
         
 class HandlerError(Exception): pass
 class HandlerNoEntitiesError(HandlerError): pass

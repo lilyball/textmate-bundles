@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>
+TMPFILE=`mktemp -u /tmp/tm-svn.XXXXXX` || exit 1
+TMPFILE="$TMPFILE.diff"
+
+"$TM_SVN" diff -rPREV &amp;&gt; "$TMPFILE"
+
+open -a TextMate "$TMPFILE" &amp;
+
+#rm "$TMPFILE" # ideally, we'd do this, but it creates a race condition, because 'open' is asynchronous.
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Diff With Previous</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>37135380-74CE-11D9-813D-000A95A89C98</string>
+</dict>
+</plist>

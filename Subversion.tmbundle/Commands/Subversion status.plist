@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>WorkPath=`dirname "$TM_FILEPATH"`
+export WorkPath
+echo '&lt;h2&gt;Subversion status&lt;/h2&gt;'
+echo '&lt;hr /&gt;'
+echo 'checking &lt;tt&gt;' $WorkPath '&lt;/tt&gt;'
+echo '&lt;p&gt;'
+echo '&lt;tt&gt;'
+$TM_SVN status "$WorkPath" | \
+perl -pe 's/$ENV{'WorkPath'}//' | \
+perl -pe 's/(.*?)(\s+)(.*)\n/&lt;b&gt;$1&lt;\/b&gt;&amp;nbsp;&lt;a href="txmt:\/\/open?url=file:\/\/$ENV{'WorkPath'}\/$3"&gt;$3&lt;\/a&gt;&lt;br&gt;/'
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Status</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>01F140D9-749F-11D9-8199-000A95A89C98</string>
+</dict>
+</plist>

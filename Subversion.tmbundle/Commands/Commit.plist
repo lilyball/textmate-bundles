@@ -5,9 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>
-
-CommitWindow="$TM_BUNDLE_PATH/Tools/CommitWindow.app/Contents/MacOS/CommitWindow"
+	<string>CommitWindow="$TM_BUNDLE_PATH/Tools/CommitWindow.app/Contents/MacOS/CommitWindow"
 
 if [[ -z $TM_SELECTED_FILES ]]; then
 	CommitPaths=`echo \'$TM_FILEPATH\'`;
@@ -23,7 +21,7 @@ CommitArgs=$(echo \"$CommitWindow\" $CommitPaths | sh)
 
 if [[ $? -eq 0 ]]; then
 # do not place quotes around CommitArgs!
-	"${TM_SVN:=svn}" commit $CommitArgs;
+	echo "${TM_SVN:=svn}" commit $CommitArgs | sh;
 else
 	echo "Canceled";
 fi
@@ -35,7 +33,7 @@ fi
 	<key>name</key>
 	<string>Commit</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>separateWindow</string>
 	<key>uuid</key>
 	<string>5F2BCB27-7A5B-11D9-A61B-000A95A89C98</string>
 </dict>

@@ -5,7 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>"${TM_SVN:=svn}" add "$TM_FILEPATH"</string>
+	<string>if [[ -z $TM_SELECTED_FILES ]]; then
+	SVNPaths=`echo \'$TM_FILEPATH\'`;
+else
+	SVNPaths="$TM_SELECTED_FILES";
+fi
+
+"${TM_SVN:=svn}" add $SVNPaths
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

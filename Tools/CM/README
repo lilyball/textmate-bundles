@@ -1,0 +1,27 @@
+OnMyCommandCM (free at http://www.abracode.com/free/cmworkshop/) lets you write your own CMs using shell scripts. I just downloaded it and have quickly hacked out two contextual menu commands:
+
+Edit in TM (pop it up on a file)
+Edit New File Here in TM (pop it up on a directory; if you pick a file, it puts a new file in the same directory)
+
+To install:
+1. Download and install OMC.
+2. Make sure you have the 1.1b5 tm CLI command.
+3. Download OnMyCommandCMs from http://macromates.com/svn/Bundles/trunk/Tools/CM/
+4. Import the commands using the OMC_Edit tool in the OMC folder.
+5. It expects ~/bin/tm to be the binary. If yours is elsewhere, use OMC_Edit to change the paths.
+
+- Eric Hsu <textmate@betterfilecabinet.com>
+
+----
+
+There is also an alternate version of the contextual menu, by Fred B.  He reports:
+
+The command opens a dialog asking for a name for the new file and I used "open
+-a" instead of "tm" CLI command ". IMO, the advantage is that the Syntax
+highlight is selected according to the extension you gave to the file name.
+Plus, with the tm CLI, the file doesn't "exists" until you save it and you have
+to "Saves as" to give it a proper name.
+
+And I made it in Ruby cause I'm lazy. ;)
+
+So, follow the Eric's recommendations to install and modify. Change the Ruby and TextMate path in OMCEdit if you have to.

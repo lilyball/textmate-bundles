@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>COMMAND_LIST</key>
+	<array>
+		<dict>
+			<key>ACTIVATION_MODE</key>
+			<string>act_file_or_folder</string>
+			<key>COMMAND</key>
+			<array>
+				<string>#!/usr/local/bin/ruby
+
+input= "</string>
+				<string>__DLG_INPUT_TEXT__</string>
+				<string>"
+path= "</string>
+				<string>__OBJ_PATH__</string>
+				<string>"
+
+if !File.directory?(path)
+	path="</string>
+				<string>__OBJ_PARENT_PATH__</string>
+				<string>"
+end
+
+
+if input.length &gt; 0
+	`touch "#{path}/#{input}"`	
+	`open -a "/Applications/TextMate.app" "#{path}/#{input}"`		
+	0
+else
+  1
+end
+
+</string>
+			</array>
+			<key>EXECUTION_MODE</key>
+			<string>exe_shell_script</string>
+			<key>INPUT_DIALOG</key>
+			<dict>
+				<key>INPUT_TYPE</key>
+				<string>input_clear_text</string>
+				<key>MESSAGE</key>
+				<string>Enter a name for the new file:</string>
+			</dict>
+			<key>NAME</key>
+			<string>New TM file here</string>
+			<key>SUBMENU_NAME</key>
+			<string>..</string>
+			<key>VERSION</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>VERSION</key>
+	<integer>2</integer>
+</dict>
+</plist>

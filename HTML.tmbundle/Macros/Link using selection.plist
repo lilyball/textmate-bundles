@@ -16,7 +16,7 @@
 				<key>findInProjectIgnoreCase</key>
 				<false/>
 				<key>findString</key>
-				<string>^(img|br|hr|meta|link|input|base|area|col|frame|param)?|.*$</string>
+				<string>^(.*@.*\..*)|.*$</string>
 				<key>ignoreCase</key>
 				<true/>
 				<key>regularExpression</key>
@@ -24,31 +24,19 @@
 				<key>replaceAllScope</key>
 				<string>selection</string>
 				<key>replaceString</key>
-				<string>?1&lt;$0 /&gt;:&lt;$0&gt;&lt;/$0&gt;</string>
+				<string>&lt;a href="(?1mailto\:$0:$0.html)"&gt;$0&lt;/a&gt;</string>
 				<key>wrapAround</key>
 				<false/>
 			</dict>
 			<key>command</key>
 			<string>findWithOptions:</string>
 		</dict>
-		<dict>
-			<key>command</key>
-			<string>moveLeft:</string>
-		</dict>
-		<dict>
-			<key>command</key>
-			<string>moveWordRight:</string>
-		</dict>
-		<dict>
-			<key>command</key>
-			<string>moveRight:</string>
-		</dict>
 	</array>
 	<key>keyEquivalent</key>
-	<string>^ </string>
+	<string>^L</string>
 	<key>name</key>
-	<string>HTML start/end tag from previous word</string>
+	<string>Link using selection</string>
 	<key>uuid</key>
-	<string>F008FFAA-5F16-11D9-B9C3-000D93589AF6</string>
+	<string>F009004E-5F16-11D9-B9C3-000D93589AF6</string>
 </dict>
 </plist>

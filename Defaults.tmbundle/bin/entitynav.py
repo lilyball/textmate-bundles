@@ -237,7 +237,7 @@ class EntitiesCss(SortableByMainEntity):
     """
     entity-matching handler for CSS (css) files
     """
-    entityMatchLine = re.compile(r'(?P<prefix>^[\s]*)(?P<main>[a-zA-Z_\.,#]+[\sa-zA-Z_\.,#\{:]*)(?P<suffix>[^;]+)$')
+    entityMatchLine = re.compile(r'(?P<prefix>^[\s]*)(?P<main>([\*\s]+(html|body)\s+)?[a-zA-Z_\.,#]+[\sa-zA-Z_\.,#\{:]*)(?P<suffix>[^;]+)$')
         
 class EntitiesCss_html(EntitiesCss): pass
 class EntitiesCss_php(EntitiesCss): pass

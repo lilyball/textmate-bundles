@@ -160,22 +160,34 @@ end</string>
 			<string>act_selected_or_clipboard_text</string>
 			<key>COMMAND</key>
 			<array>
-				<string>echo "</string>
+				<string>#!/usr/bin/ruby
+
+path = "/tmp/tempText_" + `date "+%d-%m-%G_%H-%M-%S"`.chomp
+text = &lt;&lt;'YOUzWONTzMATCHzTHISzEVA:-D'
+</string>
 				<string>__OBJ_TEXT__</string>
-				<string>" &gt; /tmp/TextMateTemp; open -a TextMate /tmp/TextMateTemp</string>
+				<string>
+YOUzWONTzMATCHzTHISzEVA:-D
+
+f=File.new(path, "w") 
+f.puts text 
+f.close 
+`open -a TextMate "#{path}"`</string>
 			</array>
 			<key>ESCAPE_SPECIAL_CHARS</key>
 			<string>esc_none</string>
 			<key>EXECUTION_MODE</key>
-			<string>exe_silent_popen</string>
+			<string>exe_shell_script</string>
 			<key>NAME</key>
 			<string>Open text in TextMate</string>
 			<key>NOTES</key>
-			<string>Make a temp file with selected or Clipboard text and opens in TextMate.Adapted form "Open text in Wisp" by Scott P. Richert.Requires TextMate.--FredB.</string>
+			<string>Make a temp file with selected or Clipboard text and opens it in TextMate.Requires TextMate.--FredB.</string>
+			<key>OUTPUT_WINDOW_SETTINGS</key>
+			<dict/>
 			<key>SUBMENU_NAME</key>
 			<string>..</string>
 			<key>VERSION</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>ACTIVATION_MODE</key>

@@ -31,7 +31,7 @@ END
 $html .= '</head><body><tt>';
 
 my $files = $ENV{'TM_SELECTED_FILES'};
-$diffout = `diff -dsu $files 2> /dev/null`;
+$diffout = `diff -s -U99999 $files 2> /dev/null`;
 
 $diffout =~ s/\n\\ No newline at end of file\n/\n/g;
 

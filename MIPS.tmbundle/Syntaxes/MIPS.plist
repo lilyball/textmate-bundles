@@ -1,6 +1,10 @@
 {
    name = "MIPS Assembler";
    
+   // r6 (2005jan22)
+   // - renamed constants.numeric.mips to
+   //   constants.numeric.integer.mips
+   // 
    // r5 (2005jan21)
    // - new naming-scheme
    // - rename from MIPS_ASM.plist to MIPS.plist
@@ -102,7 +106,7 @@
          foregroundColor = "#2aed27";
       },
       
-      {  name = "constants.numeric.mips";
+      {  name = "constants.numeric.integer.mips";
          match = "\\<(\\d+|0(x|X)[a-fA-F0-9]+)\\>";
          "foregroundColor[1]" = "#2aed27";
       },

@@ -1,0 +1,55 @@
+{
+   name = "Quake3 Config";
+   
+   // r0 (2005jan22)
+   // - initial version
+   
+   fileTypes = ( cfg );
+   
+   uuid = "AAB8717E-6E5C-11D9-9BE0-0011242E4184";
+   
+   smartTypingPairs = (
+      ( "\"", "\"" )
+   );
+   
+   // white on black..
+   foregroundColor = "#eeeeee";
+   backgroundColor = "#181818";
+   
+   patterns = (
+      // the 2nd part of the regex is just to capture
+      // binds to number-keys and prevent them from getting
+      // highlighted as values.
+      {  name = "keywords.quake3";
+         match = "\\<(set(a|u|s)?|bind|undbind|unbindall|vstr|exec|kill|say|say_team|quit|echo)(\\s+\\d)?\\>";
+         foregroundColor = "#a072d0";
+         "foregroundColor[2]" = "#eeeeee";
+      },
+      
+      {  name = "constants.numeric.quake3";
+         match = "\\<\\d+(\\.\\d+)?\\>";
+         foregroundColor = "#b4f00a";
+      },
+      
+      {  name = "strings.double-quoted.quake3";
+         begin = "\"";
+         end = "\"";
+         swallow = "\\\\.";
+         patterns = (
+            {  name = "keywords.string-embedded.quake3";
+               match = "\\<(set(a|u|s)?|bind|unbindall|vstr|exec|kill|say|say_team|quit|echo)\\>";
+               foregroundColor = "#2aed27";
+            }
+         );
+         foregroundColor = "#b4f00a";
+      },
+      
+      {  name = "comments.line.quake3";
+         match = "//.*";
+         foregroundColor = "#cf8d15"; //"#61e01c"; //"#808080";
+         fontStyle = ( italic );
+      }
+      
+   );
+   
+}

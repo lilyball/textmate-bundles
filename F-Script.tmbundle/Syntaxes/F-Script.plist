@@ -1,0 +1,64 @@
+{
+	/* The name as it will appear in the Syntax Highlight List */
+	name = "F-Script";
+
+	/* So that we can always recognize this syntax */
+	uuid = "C2CB9A74-C9FC-4F63-8BAF-E64B72A60DD4";
+
+	/* Which filetypes this highlighting should be applied to automatically */
+	fileTypes = (fscript);
+
+	foregroundColor = "#000000";
+	backgroundColor = "#ffffff";
+
+	/* Folding, this will start folds at blocks ([) and stop
+	   at their counterparts.
+	*/
+	foldingStartMarker = "\\[";
+	foldingStopMarker = "\\]";
+
+	increaseIndentPattern = "\\[";
+
+	highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") );
+	smartTypingPairs = ( ("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'") );
+
+	/* This is where the actual highlighting is defined. */
+	patterns = (
+		{
+			name = "symbols.ignore.fscript";
+			match = "(:|\\w):";
+		},
+		{
+			name = "symbols.fscript";
+			foregroundColor = "#234B9E";
+			match = ":\\w+\\>";
+		},
+		{
+			name = "selectors.fscript";
+			foregroundColor = "#992299";
+			match = "#(\\l|[\\+=-/!%&*|])(\\w|[\\+=-/!%&*|])*";
+		},
+		{
+			name = "keywords.fscript";
+			foregroundColor = "#662288";
+			match = "\\<(true|false|sys)\\>";
+		},
+		{
+			name = "comments.fscript";
+			foregroundColor = "#489C03";
+			begin = '"';
+			end = '"';
+		},
+		{
+			name = "strings.fscript";
+			foregroundColor = "#DD8944";
+			begin = "'";
+			end = "'";
+		},
+		{
+			foregroundColor = "#0000CD";
+			match = "\\<((([0-9]+\\.?[0-9]*)|(\\.[0-9]+))\\>";
+			name = "constants.numeric.fscript";
+		},
+	);
+}

@@ -1,0 +1,105 @@
+{
+	
+	/*
+	
+	HTML WITH EMBEDDED ASP
+	
+	Following David and Justin's lead, taking a more monotone approach to HTML when there's
+	a combo of ASP and HTML -- otherwise, the colors clash, and everything gets
+	way too busy.
+	
+	
+	SOME IDEAS & ISSUES
+	- nesting of ASP (or whatever else) inside quoted strings of tags doesn't
+	  work yet... Allan knows, is working on it.
+	
+	*/
+	
+	
+	name = "HTML (ASP)";
+	fileTypes = ( asp );
+	foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)";
+	foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})";
+	increaseIndentPattern = "<(head|title|table|tr|td|ul|ol|dl|div)\\>[^>]*>\\s*$";
+
+	smartTypingPairs = (
+	    ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" )
+	);
+	 highlightPairs = (
+	    ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" )
+	);
+
+	foregroundColor = "#333333";
+	backgroundColor = "#ffffff";
+	patterns = (
+		
+		{ name = "Comments"; begin = "<!--"; end = "-->"; foregroundColor = "#999999"; },
+
+		{ 
+		 name = "Inline JavaScript";
+		 begin = "<script .*type=(\"|')text/javascript(\"|')>";
+		 end = "</script>";
+		 backgroundColor = "#FFF6D3";
+		 patterns = (
+				{ include = "JavaScript"; }
+			);
+		},
+		
+		{ 
+		 name = "Inline CSS";
+		 begin = "<style .*type=(\"|')text/css(\"|')[^>]*>";
+		 end = "</style>";
+		 backgroundColor = "#e5F2F2";
+		 patterns = (
+				{ include = "CSS"; }
+			);
+		},
+		
+		{ name = "HTML Entities"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+		{ name = "Bad Entities"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+		
+		{ name = "Tags"; begin = "</?([a-zA-Z0-9]+)"; end = ">";
+  		"elementFontStyle[1]" = ( underline ); 
+			foregroundColor = "#888888";
+			patterns = (
+	  			{ name = "Option"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "Double Quoted String"; begin = "\""; end = "\"";
+					patterns = (
+						{	begin = "<%=?"; end = "%>";
+							patterns = (
+								/*{ include = "ASP"; } commented out 'till supported by TM */
+							);
+						},
+						{ name = "HTML Entities"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+						{ name = "Bad Ampersand"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+					);
+	  			},
+				{ name = "Single Quoted String"; begin = "'"; end = "'";
+					patterns = (
+						{	begin = "<%=?"; end = "%>";
+							patterns = (
+								/*{ include = "ASP"; } commented out 'till supported by TM */
+							);
+						},
+						{ name = "HTML Entities"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+						{ name = "Bad Ampersand"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+					);
+	  			},
+			);
+		},
+		
+		{ name = "Document Type"; begin = "<!DOCTYPE"; end = ">";
+  			foregroundColor = "#aaaaaa";
+ 		},
+
+ 		{ 
+ 		 name = "Embedded ASP";
+ 		 begin = "<%(=)?"; end = "%>";
+ 		 backgroundColor = "#F2F2F2";
+ 		 patterns = (
+ 				{ include = "ASP"; }
+ 			);
+ 		}
+
+	);
+}

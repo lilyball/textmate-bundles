@@ -93,7 +93,7 @@ begin
                
                puts '<tr>  <th>Revision:</th>  <td>'+ $1 +'</td> </tr>'
                puts '<tr>  <th>Author:</th>    <td>'+ $2 +'</td> </tr>'
-               puts '<tr>  <th>Date:</th>      <td>'+ htmlize($3) +'</td></tr>'
+               puts '<tr>  <th>Date:</th>      <td>'+ htmlize( formated_date( $3 ), false ) +'</td></tr>'
                puts '<tr>  <th>Changed Files:</th><td>'
                
                puts '<a id="r'+$1+'_show" href="javascript:show_files(\'r'+$1+'\');">show</a>'

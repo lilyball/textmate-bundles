@@ -15,6 +15,16 @@ $hide          = ENV['TM_SVN_INFO_HIDE'].nil? ? [] :
 $date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
 $hide_all      = ($hide.include? '*') ? true : false
 
+# find out if the window should get closed on a click
+$close      = ENV['TM_SVN_CLOSE'].nil? ? '' : ENV['TM_SVN_CLOSE']
+$close      = unless $close.empty?
+                 if $close.include? 'true' or $close.include? '1'
+                    ' onClick="window.close();"'
+                 else
+                    ''
+                  end
+              end
+
 
 # require the helper, it does some formating, etc:
 require $bundle+'/Tools/svn_helper.rb'
@@ -61,7 +71,7 @@ begin
             
             if $1 == 'Path'
                dt = 'Path'
-               dd = '<a href="'+make_tm_link( $2 )+'">'+htmlize($2, false)+'</a>'
+               dd = '<a href="'+make_tm_link( $2 )+'"'+$close+'>'+htmlize($2, false)+'</a>'
                
             elsif $1 == 'URL'
                dt = 'URL'

@@ -13,6 +13,16 @@ $current    = ENV['TM_LINE_NUMBER'].to_i
 $tab_size   = ENV['TM_TAB_SIZE'].to_i
 $bundle     = ENV['TM_BUNDLE_PATH']
 
+# find out if the window should get closed on a click
+$close      = ENV['TM_SVN_CLOSE'].nil? ? '' : ENV['TM_SVN_CLOSE']
+$close      = unless $close.empty?
+                 if $close.include? 'true' or $close.include? '1'
+                    ' onClick="window.close();"'
+                 else
+                    ''
+                  end
+              end
+
 
 # require the helper, it does some formating, etc:
 require $bundle+'/Tools/svn_helper.rb'
@@ -45,7 +55,7 @@ begin
                   '<td class="revcol'+curr_add+'">' + $1 + "</td>\n" +
                   '<td class="namecol'+curr_add+'">' + $2 + "</td>\n" +
                   '<td class="codecol'+curr_add+'"><a href="' +
-                     make_tm_link( $full_file, linecount) +'">'+ htmlize( $3 ) +
+                     make_tm_link( $full_file, linecount) +'"'+$close+'>'+ htmlize( $3 ) +
                   "</a></td></tr>\n\n"
          
          linecount += 1

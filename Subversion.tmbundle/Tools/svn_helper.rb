@@ -65,7 +65,7 @@ module SVNHelper
    # produces a generic header..
    def make_head( title='', styles=Array.new, head_adds=''  )
       puts '<html><head><title>'+title+'</title>'
-      puts '<meta http-equiv="Content-Type" content="text/html; charset="UTF-8" />'
+      puts '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
       puts '<style type="text/css">'
       
       styles.each do |style|

@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html>
    <head>
@@ -67,11 +67,14 @@
          }
          
       </style>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
       
    </head>
    
    <body>
       <h1>Subversion Bundle</h1>
+      
+      <p>This README just documents what the certain commands of this Bundle do and how you can <a href="#conf">fine-tune</a> their behaviour, if you need general Subversion Help/Introduction, you should read the <a title="Version Control with Subversion" href="http://svnbook.red-bean.com/">big README</a>.</p>
       
       <h2><a name="commands">Commands</a></h2>
          
@@ -149,7 +152,6 @@
                </div>
             </dd>
             
-            <!-- FIXME: more detail. -->
             <dt><a name="commit">Commit</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
@@ -193,9 +195,10 @@
 
          </dl>
       
+      
       <h2><a name="conf">Configuration Options</a></h2>
          
-         <p>All these Options are optinal, you can set them if you want to tweak the behaviour of the certain commands.</p>
+         <p>All these Options are optinal, the default values should make sense for normal use, but you can set them if you want to tweak the behaviour of the certain commands.</p>
          
          <dl>
             <dt><a name="tm_svn">$TM_SVN</a></dt>
@@ -204,18 +207,24 @@
                <div class="description">the path to your svn executable.</div>
             </dd>
             
-            <dt><a name="tm_svn">$TM_RUBY</a></dt>
+            <dt><a name="tm_ruby">$TM_RUBY</a></dt>
             <dd>
                <div class="default">ruby</div>
                <div class="description">Here you can tweak with what Ruby the formating Scripts will be executed.</div>
             </dd>
             
-            <dt><a name="tm_svn">$TM_SVN_DATE_FORMAT</a></dt>
+            <dt><a name="tm_date_format">$TM_SVN_DATE_FORMAT</a></dt>
             <dd>
                <div class="default"><em>nil</em> (No Changes, just show what SVN shows)</div>
                <div class="description">
-                  A date format string that allows you to tweak the format in which <a href="#log">Log</a> and <a href="#info">Info</a> show you dates.  See <a href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html">strftime(3)</a> for what you can enter here.
+                  A date format string that allows you to tweak the format in which <a href="#log">Log</a> and <a href="#info">Info</a> show you dates.  See <a title="Manual Page For strftime(3)" href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html">strftime(3)</a> for what you can enter here.
                </div>
+            </dd>
+            
+            <dt><a name="tm_svn_close">$TM_SVN_CLOSE</a></dt>
+            <dd>
+               <div class="default">false</div>
+               <div class="description">With this option you can adjust if the windows of <a href="#blame">Blame</a> and <a href="#info">Info</a> close if you click on a link which opens a file in TM.</div>
             </dd>
             
             <dt><a name="tm_svn_log">$TM_SVN_LOG_RANGE</a></dt>
@@ -247,6 +256,7 @@
             </dd>
             
          </dl>
+      
       
       <h2><a name="authors">Authors</a></h2>
          

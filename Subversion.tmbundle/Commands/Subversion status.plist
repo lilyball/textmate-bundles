@@ -5,8 +5,22 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>WorkPath=`dirname "$TM_FILEPATH"`
+	<string>
+# it's possible to make this work, but it seems unintuitive
+#SelectedFiles=($TM_SELECTED_FILES)
+#if [[ ${#SelectedFiles[*]} -gt 1 ]]; then
+#	WorkPath=$TM_SELECTED_FILES;
+#else
+	if [[ -z $TM_PROJECT_DIRECTORY ]]; then
+		# no project dir
+		WorkPath=`dirname "$TM_FILEPATH"`
+	else
+		# TM_PROJECT_DIR it is, then
+		WorkPath="$TM_PROJECT_DIRECTORY";	
+	fi
+#fi
 export WorkPath
+
 echo '&lt;h2&gt;Subversion status&lt;/h2&gt;'
 echo '&lt;hr /&gt;'
 echo 'checking &lt;tt&gt;' $WorkPath '&lt;/tt&gt;'

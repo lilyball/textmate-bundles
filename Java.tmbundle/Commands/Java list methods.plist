@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>restrainToMode</key>
+	<true/>
+	<key>command</key>
+	<string>cat `egrep -rnsl "class[ ]+$TM_SELECTED_TEXT[ ]+" .` | egrep "public[ ]+\&lt;.*\&gt;[ ]+\&lt;.*\&gt;\(.*\)[ ]+(throws .*|){"</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Java list methods</string>
+	<key>output</key>
+	<string>separateWindow</string>
+</dict>
+</plist>

@@ -1,5 +1,8 @@
 <?xml version="1.0" ?>
 <%@ page whatever="foo" %>
+<%!
+    String bar = "foo";
+%>
 
 <project name="CDA" default="compile" basedir=".">
     <property environment="env" />
@@ -27,6 +30,11 @@
     <%
         String foo = "bar";
         System.out.println();
+        
+        
+        void foo () {
+        
+        }
     %>
 
     <%--

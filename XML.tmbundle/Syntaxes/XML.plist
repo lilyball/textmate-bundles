@@ -16,7 +16,7 @@
 	
 	fileTypes = ( xml, plist, tld, jsp );
 
-	foldingStartMarker = "^\\s*(<[^!?%/]+(?!.+?/>)|(<[!%]--(?!.*?--%?>)|(<%[^@=](?!.*?%>)))\\s*$)";
+	foldingStartMarker = "^\\s*(<[^!?%/]+(?!.+?/>)|<[!%]--(?!.+?--%?>)|<%[!]?(?!.+?%>))\\s*$";
 	foldingStopMarker  = "(</[^?]+?>|[/%]>|-->)\\s*$";
 
 	increaseIndentPattern = "^\\s*<[^/]+?(?!.+?/>)\\s*$";
@@ -29,9 +29,9 @@
 		( "[", "]" ),
 		( "{", "}" ),
 		( "\"", "\"" ),
-		( "<", ">" ),
 	);
-	 highlightPairs = (
+
+	highlightPairs = (
 	    ( "(", ")" ),
 		( "[", "]" ),
 		( "{", "}" ),
@@ -136,7 +136,7 @@
 		{
 			name = "Embedded Java";
 			backgroundColor = "#E5E5E5";
-			begin = "<%(?!([=@]|--))";
+			begin = "<%[!=]?(?!--)";
 			patterns = ( { include = "Java Source"; } );
 			end = "(?!--)%>";
 		},

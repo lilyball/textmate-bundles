@@ -41,8 +41,11 @@ $NEW = $NEW1 . $NEW2;
 
 $diffout =~ s/\n\@.*?\n/\n\n/;
 
-use HTML::Entities;
-encode_entities($diffout);
+#use HTML::Entities;
+#encode_entities($diffout);
+$diffout =~ s/</&lt;/g;
+$diffout =~ s/>/&gt;/g;
+$diffout =~ s/&/&amp;/g;
 
 $oldline = $newline = -2;
 

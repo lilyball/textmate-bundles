@@ -8,10 +8,11 @@ class << mup
 	
 	attr_accessor :current_class
 	attr_accessor :div_count
+	attr_accessor :next_div_name
 	
-	# accumulative div
-	def new_div!( nclass, content = "" )
-		is_new = false
+	# accumulative div -- block yields the div title
+	def new_div!( nclass, content = "", hide = false, &block )
+		div_id = nil
 		
 		@div_count = 0 unless defined?(@div_count)
 		
@@ -28,16 +29,25 @@ class << mup
 
 			# add show/hide toggle above the inner content div
 			div( "class" => "showhide" ) {
-				a( "Show", 'href' => "javascript:showElement('#{div_id + "_c"}')")
-				a( "Hide", 'href' => "javascript:hideElement('#{div_id + "_c"}')")
+				
+				hide_style = hide ? "display: none;" : "";
+				show_style = hide ? "" : "display: none;";
+				
+				a( "Hide Details", 'href' => "javascript:hideElement('#{div_id}')", 'id' => div_id + '_hide', 'style' => hide_style )
+				a( "Show Details", 'href' => "javascript:showElement('#{div_id}')", 'id' => div_id + '_show', 'style' => show_style )
 			}
+			
+			block.call
 
-			_start_tag( "div", "class" => "inner", "id" => div_id + "_c" )
+			STDOUT.flush
+			
+			content_style = hide ? "display: none;" : "";
+			_start_tag( "div", "class" => "inner", "id" => div_id + "_c", 'style' => content_style )
 			
 			is_new = true
 		end
 		text! content
-		is_new
+		div_id
 	end
 
 	# wrap up any loose ends
@@ -50,7 +60,16 @@ class << mup
 	end
 
 	def normal!(string)
-		new_div!( "normal", string )
+		new_div!( "normal", string, true ) do
+			
+			if @next_div_name.nil?
+				title = "..."
+			else
+				title = @next_div_name
+				@next_div_name = nil
+			end
+			h3(title)
+		end
 		br
 	end
 		
@@ -61,13 +80,17 @@ SCRIPT = <<ENDSCRIPT
 function showElement( div_id )
 {
 //	document.writeln(div_id)
-	document.getElementById( div_id ).style.display = 'block';
+	document.getElementById( div_id + '_c' ).style.display = 'block';
+	document.getElementById( div_id + '_hide' ).style.display = 'inline';
+	document.getElementById( div_id + '_show' ).style.display = 'none';
 }
 
 function hideElement( div_id )
 {
 //	document.writeln(div_id)
-	document.getElementById( div_id ).style.display = 'none';
+	document.getElementById( div_id + '_c' ).style.display = 'none';
+	document.getElementById( div_id + '_hide' ).style.display = 'none';
+	document.getElementById( div_id + '_show' ).style.display = 'inline';
 }
 
 ENDSCRIPT
@@ -82,13 +105,18 @@ body {
 div.showhide {
 	float: right;
 #	width: 10%;
-	font-size: 70%;
-
+	font-size: 90%;
+	margin: 10px;
+	
 	color: black;
 }
 
 div.normal {
-	border-style: solid none solid none;
+	padding: 4px;
+	margin: 3px;
+
+	border-top: 2px;
+	border-style: none none none solid;
 	color: #aaa;
 	font-size: 70%;
 	margin 0;
@@ -191,7 +219,7 @@ mup.html {
 			last_line = line
 			
 			# <path>:<line>:[column:] error description
-			error_match = /^(.+?):(\d+):(?:.*?:)?\s*(.*)/.match(line)
+			error_match = /^(.+?):(\d+):(?:\d*?:)?\s*(.*)/.match(line)
 			
 			unless error_match.nil?
 				
@@ -202,23 +230,20 @@ mup.html {
 				if File.exist?(path)
 
 					# parse for "error", "warning", and "info" and use appropriate CSS classes					
-					cssclass = /^\s*(error|warning|info|message|(?:syntax error))/i.match(error_match[3])
+					cssclass = /^\s*(error|warning|info|message)/i.match(error_match[3])
 					
 					cssclass = cssclass[0].downcase unless cssclass.nil?
 					cssclass = case cssclass
 						when nil
-							cssclass = "info"
+							"error"
 						when "message"
 							"info"
-						when "syntax error"
-							"error"
 						else
 							cssclass
 					end
 										
-					if mup.new_div!(cssclass) then String
-						mup.h2(cssclass)
-					end
+					mup.new_div!(cssclass) { mup.h2(cssclass) }
+					
 					mup.p {
 						mup.a( "href" => "txmt://open?url=file://#{path}&line=#{line_number}" ) {
 							mup.text!( File.basename(path) + ":" + line_number + ": " + error_match[3] )
@@ -229,9 +254,11 @@ mup.html {
 			else
 				
 				# highlight each target name
-				if /^===.*===$/.match(line) then
+				match = /^===(.*)===$/.match(line)
+				unless match.nil?
 					mup.end_div!
-					mup.h2(line, "class" => "targetname")
+					mup.next_div_name = match[1]
+					#mup.h2(line, "class" => "targetname")
 					next													# =======> next
 				end
 			end
@@ -244,12 +271,10 @@ mup.html {
 		success = success.nil? ? false : true
 		
 		sound = if success then
-			mup.new_div!("info")
-			mup.h2("Build Succeeded")
+			mup.new_div!("info") { mup.h2("Build Succeeded") }
 			'Harp.wav'
 		else
-			mup.new_div!("error")
-			mup.h2("Build Failed")
+			mup.new_div!("error") { mup.h2("Build Failed") }
 			'Whistle.wav'
 		end
 		mup.text!(last_line)

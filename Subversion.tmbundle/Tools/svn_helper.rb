@@ -19,9 +19,9 @@ module SVNHelper
    class SVNErrorException < StandardError; end
    
    
-   # makes a link for the tm html output..
-   def make_tm_link( filename, line )
-      'txmt://open?url=file://' + filename + '&amp;line=' + line.to_s
+   # makes a txmt-link for the html output, the line arg is optional.
+   def make_tm_link( filename, line=nil )
+      'txmt://open?url=file://' + filename + ((line.nil?) ? '' : '&amp;line='+line.to_s)
    end
    
    
@@ -32,11 +32,14 @@ module SVNHelper
             when '<';  '&lt;'
             when '>';  '&gt;'
             when '&';  '&amp;'
-            when ' ';  '&zwj;&#32;&zwj;'           # woooh! it took some days to get this line!
-            when "\t"; '&zwj;&#32;&zwj;'*tab_size
+            when ' ';  (blow_up_spaces) ? '&zwj;&#32;&zwj;' : ' '
+            # ok, this tab handling isn't optimal, but better than nothing:
+            when "\t"; ((blow_up_spaces) ? '&zwj;&#32;&zwj;' : ' ')*tab_size
+            else; raise 'this should never happen!'
          end
       end   
    end
+   
    
    # produces a generic header..
    def make_head( title='', styles=Array.new, head_adds=''  )

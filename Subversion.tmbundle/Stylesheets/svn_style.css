@@ -17,8 +17,8 @@ height: 1px;
 border: 0px;
 }
 
-/* for error formating..
-   .svn_says and the old .error are deprecated! */
+
+/* for error formating.. */
 div.error {
    color: #f30;
    background-color: #fee;
@@ -34,6 +34,13 @@ div.error h2 {
    font-family: sans-serif;
    margin-top: 0;
 }
+
+div.error a:hover, div.error a:active {
+   background-color: #f52;
+   text-decoration: none;
+   color: #fee;
+}
+
 
 /* for showing the path or other information about the current operation */
 div.command {
@@ -52,9 +59,10 @@ div.command h2 {
    margin-top: 0;
 }
 
+
 /* about links.. */
 :link, :visited {
-   background-color: inherit;
+   background-color: transparent;
    color: inherit;
 }
 
@@ -64,3 +72,8 @@ div.command h2 {
    text-decoration: none;
 }
 
+
+/* for everything alternating: */
+.alternate {
+   background-color: #eee;
+}

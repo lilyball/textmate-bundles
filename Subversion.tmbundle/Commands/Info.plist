@@ -5,16 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_SVN:=svn}" log -vr"${TM_SVN_LOG_RANGE:=BASE:1}" "$TM_FILEPATH" 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/Tools/format_log.rb"</string>
+	<string>eval "${TM_SVN:=svn}" info $TM_SELECTED_FILES 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/Tools/format_info.rb"
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>@b</string>
 	<key>name</key>
-	<string>Log</string>
+	<string>Info</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>51DFACA6-7B65-11D9-BA07-0011242E4184</string>
+	<string>56BE2092-806D-11D9-A0FB-0011242E4184</string>
 </dict>
 </plist>

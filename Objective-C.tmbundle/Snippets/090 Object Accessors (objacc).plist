@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (${1:id})get${2:Thing}
+	<string>- (${1:id})${2:thing}
 {
 	return ${3:fThing};
 }
 
-- (void) set${2:Thing}:(${1:id}) in${2:Thing}
+- (void) set${4:Thing}:(${1:id}) ${2:thing}
 {
-	${1:id} old${2:Thing} = ${3:fThing};
-	${3:fThing} = [in${2:Thing} retain];
-	[old${2:Thing} release];
+	${1:id} old${4:Thing} = ${3:fThing};
+	${3:fThing} = [${2:thing} retain];
+	[old${4:Thing} release];
 }
 </string>
 	<key>name</key>
 	<string>Object Accessors (objacc)</string>
-	<key>trigger</key>
+	<key>tabTrigger</key>
 	<string>objacc</string>
 	<key>uuid</key>
 	<string>65844040-1D13-4F29-98CC-E742F151527F</string>

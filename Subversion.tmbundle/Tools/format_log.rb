@@ -6,12 +6,12 @@
 # you are of course free to modify this.
 
 
-# fetch some tm things..
+# fetch some tm things or set useful defaults..
 $tab_size      = ENV['TM_TAB_SIZE'].to_i
 $bundle        = ENV['TM_BUNDLE_PATH']
 $limit         = ENV['TM_SVN_LOG_LIMIT'].nil?   ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i
 $date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
-
+$sort_order    = [ :added, :modified, :deleted ]
 
 # require the helper, it does some formating, etc:
 require $bundle+'/Tools/svn_helper.rb'
@@ -24,7 +24,7 @@ rev            = ''     # the last fetched revision
 max_lines      = 0      # the maximum number of lines
 already_shown  = []     # to supress double messages (they could happen if you selected multiple files)
 skipped_files  = false  # to remember this
-
+changed_files  = []     # just a array to sort the files
 
 # about the states of the 'parser':
 #  skipped_files  if we wait for some Skipped: messages at the beginning
@@ -41,7 +41,7 @@ begin
    make_head( 'Subversion Log',
               [ $bundle+'/Stylesheets/svn_style.css',
                 $bundle+'/Stylesheets/svn_log_style.css'],
-              '<script type="text/javascript">'+
+              "<script type=\"text/javascript\">\n"+
                  File.open($bundle+'/Tools/flip_files.js', 'r').readlines.join+'</script>' )
    
    
@@ -115,17 +115,16 @@ begin
                raise NoMatchException, line
             end
             
-         # TODO: make this caching and show a sorted list..
          when :path_list
             if line =~ /^\s+([A-Z]) (.+)$/
                op = case $1
-                       when 'A'; 'added'
-                       when 'M'; 'modified'
-                       when 'D'; 'deleted'
-                       else;     'unknown'
+                       when 'A'; :added
+                       when 'M'; :modified
+                       when 'D'; :deleted
+                       else;     raise NoMatchException, line
                     end
                
-               puts '  <li class="'+op+'">'+$2+"</li>\n"
+               changed_files << [ op, $2 ]
                
             elsif line =~ /^\s*$/
                state = :comment
@@ -134,6 +133,19 @@ begin
             end
             
          when :comment
+            unless changed_files.empty?
+               changed_files.sort! do |a, b|
+                  $sort_order.index( a[0] ) <=> $sort_order.index( b[0] )
+               end
+               
+               changed_files.each do |path|
+                  puts '  <li class="'+path[0].to_s+'">'+path[1]+"</li>"
+               end
+               
+               changed_files = []
+            end
+            
+            
             if comment_count == 0
                puts '</ul></td></tr>'
                puts '<tr> <th>Message:</th> <td class="msg_field">'
@@ -162,29 +174,8 @@ begin
    end #each_line
    
 rescue LogLimitReachedException
-rescue SVNErrorException
-   make_error_head( 'SVNError', htmlize( $! )+'<br />' )
-   $stdin.each_line { |line| puts htmlize( line )+'<br />' }
-   make_error_foot()
-   
-rescue NoMatchException
-   make_error_head( 'NoMatch' )
-   
-   puts 'state: <em>'+state.to_s+'</em><br />'
-   puts 'line:&nbsp; <em>'+htmlize( $! )+'</em><br />'
-   
-   make_error_foot()
-   
-# catch unknown exceptions..
 rescue => e
-   make_error_head( e.class.to_s )
-   
-   puts 'reason: <em>'+htmlize( $! )+'</em><br />'
-   trace = ''; $@.each { |e| trace+=htmlize('  '+e)+'<br />' }
-   puts 'trace: <br />'+trace
-   
-   make_error_foot()
-   
+   handle_default_exceptions( e )
 ensure
    make_foot()
 end

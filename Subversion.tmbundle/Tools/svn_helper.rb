@@ -10,12 +10,12 @@ module SVNHelper
    # (log) raised, if the maximum number of log messages is shown.
    class LogLimitReachedException < StandardError; end
    
-   # (both) raised if the 'parser' gets a line
+   # (all) raised if the 'parser' gets a line
    # which doesnt match a certain scheme or wasnt expected
    # in a special state.
    class NoMatchException < StandardError; end
    
-   # (both) if we should go in error mode
+   # (all) if we should go in error mode
    class SVNErrorException < StandardError; end
    
    
@@ -26,7 +26,7 @@ module SVNHelper
          if b.chr =~ /\w/
             encoded_file_url << b.chr
          else
-            encoded_file_url << sprintf( '%%%02x', b)
+            encoded_file_url << sprintf( '%%%02x', b )
          end
       end
       
@@ -36,7 +36,7 @@ module SVNHelper
    
    # subsitutes some special chars for showing html..
    def htmlize( string, blow_up_spaces = true, tab_size = $tab_size )
-      return string.to_s.gsub( /\<|\>|&| |\t/ ) do |match|
+      return string.to_s.gsub( /<|>|&| |\t/ ) do |match|
          case match
             when '<';  '&lt;'
             when '>';  '&gt;'
@@ -89,5 +89,37 @@ module SVNHelper
    def make_error_foot( foot_adds='' )
       puts foot_adds+'</div>'
    end
+   
+   
+   # used to handle the normal exceptions like
+   # NoMatchException, SVNErrorException and unknown exceptions.
+   def handle_default_exceptions( e, stdin=$stdin )
+   	case e
+   	when NoMatchException
+         make_error_head( 'NoMatch' )
+         
+         puts 'mhh, something with with the regex or svn must be wrong.  this should never happen.<br />'
+         puts 'last line: <em>'+htmlize( $! )+'</em><br />please bug-report.'
+         
+         make_error_foot()
+         
+      when SVNErrorException
+         make_error_head( 'SVNError', htmlize( $! )+'<br />' )
+         stdin.each_line { |line| puts htmlize( line )+'<br />' }
+         make_error_foot()
+         
+      # handle unknown exceptions..
+      else
+         make_error_head( e.class.to_s )
+         
+         puts 'reason: <em>'+htmlize( $! )+'</em><br />'
+         trace = ''; $@.each { |e| trace+=htmlize('  '+e)+'<br />' }
+         puts 'trace: <br />'+trace
+         
+         make_error_foot()
+         
+      end #case
+      
+   end #def handle_default_exceptions
    
 end #module SVNHelper

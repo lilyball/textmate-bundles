@@ -8,13 +8,14 @@
 
 
 # fetch some tm things..
-$full_file  = ENV['TM_FILEPATH']
-$current    = ENV['TM_LINE_NUMBER'].to_i
-$tab_size   = ENV['TM_TAB_SIZE'].to_i
-$bundle     = ENV['TM_BUNDLE_PATH']
+$full_file     = ENV['TM_FILEPATH']
+$current       = ENV['TM_LINE_NUMBER'].to_i
+$tab_size      = ENV['TM_TAB_SIZE'].to_i
+$bundle        = ENV['TM_BUNDLE_PATH']
+$date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
 
 # find out if the window should get closed on a click
-$close      = ENV['TM_SVN_CLOSE'].nil? ? '' : ENV['TM_SVN_CLOSE']
+$close = ENV['TM_SVN_CLOSE'].nil? ? '' : ENV['TM_SVN_CLOSE']
 unless $close.empty?
    $close.strip!
    if $close == 'true' or $close == '1'
@@ -49,15 +50,17 @@ begin
    $stdin.each_line do |line|
       raise SVNErrorException, line  if line =~ /^svn:/
       
-      if line =~ /\s*(\d+)\s*(\w+) (.*)/
+      # not a perfect pattern, but it works and is short:
+      #              rev     name  date                                                       text
+      if line =~ /\s*(\d+)\s+(\w+) (\d+-\d+-\d+ \d+:\d+:\d+ [-+]\d+ \(\w{3}, \d+ \w{3} \d+\)) (.*)/
          curr_add = ($current == linecount) ? ' current_line' : ''
          
-         puts '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +
-                  '<td class="revcol'+curr_add+'">' + $1 + "</td>\n" +
-                  '<td class="namecol'+curr_add+'">' + $2 + "</td>\n" +
-                  '<td class="codecol'+curr_add+'"><a href="' +
-                     make_tm_link( $full_file, linecount) +'"'+$close+'>'+ htmlize( $3 ) +
-                  "</a></td></tr>\n\n"
+         puts  '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +
+               '<td class="revcol'+curr_add+'" title="'+ formated_date( $3 ) +'">' + $1 + "</td>\n" +
+               '<td class="namecol'+curr_add+'" title="'+ formated_date( $3 ) +'">' + $2 + "</td>\n" +
+               '<td class="codecol'+curr_add+'"><a href="' +
+                  make_tm_link( $full_file, linecount) +'"'+$close+'>'+ htmlize( $4 ) +
+               "</a></td></tr>\n\n"
          
          linecount += 1
          
@@ -67,29 +70,8 @@ begin
       
    end #each_line
    
-rescue NoMatchException
-   make_error_head( 'NoMatch' )
-   
-   puts 'mhh, something with with the regex or svn must be wrong.  this should never happen.<br />'
-   puts 'last line: <em>'+htmlize( $! )+'</em><br />please bug-report.'
-   
-   make_error_foot()
-   
-rescue SVNErrorException
-   make_error_head( 'SVNError', htmlize( $! )+'<br />' )
-   $stdin.each_line { |line| puts htmlize( line )+'<br />' }
-   make_error_foot()
-   
-# catch unknown exceptions..
 rescue => e
-   make_error_head( e.class.to_s )
-   
-   puts 'reason: <em>'+htmlize( $! )+'</em><br />'
-   trace = ''; $@.each { |e| trace+=htmlize('  '+e)+'<br />' }
-   puts 'trace: <br />'+trace
-   
-   make_error_foot()
-   
+   handle_default_exceptions( e )
 ensure
    make_foot( '</table>' )
 end

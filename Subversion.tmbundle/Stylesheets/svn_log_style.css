@@ -44,7 +44,7 @@ table.log td ul li {
 }
 
 
-li.added:before, li.modified:before, li.deleted:before, li.unknown:before {
+li.added:before, li.modified:before, li.deleted:before {
    font-family: "Bitstream Vera Sans Mono", monospace;
    font-weight: bold;
 }
@@ -71,12 +71,4 @@ li.modified:before {
 }
 li.modified {
    background-color: #f7e1ad;
-}
-
-li.unknown:before {
-   content: '? ';
-   color: purple;
-}
-li.unknown {
-   background-color: #edaef5;
 }

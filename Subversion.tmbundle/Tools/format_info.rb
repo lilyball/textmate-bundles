@@ -23,7 +23,7 @@ unless $close.empty?
       $close = ' onClick="window.close();"'
    else
       $close = ''
-    end
+   end
 end
 
 
@@ -76,7 +76,6 @@ begin
                
             elsif $1 == 'URL'
                dt = 'URL'
-               # TODO: make URLs that use auths working or find a way to open them in safari.
                dd = '<a href="'+htmlize($2, false)+'">'+htmlize($2, false)+'</a>'
                
             # this 2 keys should be the only ones with dates:
@@ -101,29 +100,8 @@ begin
       
    end #each_line
    
-rescue SVNErrorException
-   make_error_head( 'SVNError', htmlize( $! )+'<br />' )
-   $stdin.each_line { |line| puts htmlize( line )+'<br />' }
-   make_error_foot()
-   
-rescue NoMatchException
-   make_error_head( 'NoMatch' )
-   
-   puts 'mhh, something with with the regex or svn must be wrong.  this should never happen.<br />'
-   puts 'last line: <em>'+htmlize( $! )+'</em><br />please bug-report.'
-   
-   make_error_foot()
-   
-# catch unknown exceptions..
 rescue => e
-   make_error_head( e.class.to_s )
-   
-   puts 'reason: <em>'+htmlize( $! )+'</em><br />'
-   trace = ''; $@.each { |e| trace+=htmlize('  '+e)+'<br />' }
-   puts 'trace: <br />'+trace
-   
-   make_error_foot()
-   
+   handle_default_exceptions( e )
 ensure
    make_foot( '</dl>' )
 end

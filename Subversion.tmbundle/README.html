@@ -79,6 +79,18 @@
       <h2><a name="commands">Commands</a></h2>
          
          <dl>
+            <dt><a name="status">Status</a></dt>
+            <dd>
+               <div class="target">directory of active file</div>
+               <div class="connect">No</div>
+               <div class="description">
+
+                  Displays a list of files with changes in your working copy, along with the type of change for each file.
+
+<!--                  Displays a list of files with changes in your working copy, along with a href="http://svnbook.red-bean.com/en/1.1/ch03s05.html#svn-ch-3-sect-5.3.1" the type of change /a  for each file. -->
+               </div>
+            </dd>
+            
             <dt><a name="log">Log</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
@@ -94,21 +106,7 @@
                <div class="target">active file</div>
                <div class="connect">Yes</div>
                <div class="description">
-                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.
-                   Click a line to jump to it in an editor window.
-               </div>
-            </dd>
-            
-            <!-- FIXME: more detail. -->
-            <dt><a name="status">Status</a></dt>
-            <dd>
-               <div class="target">directory of active file</div>
-               <div class="connect">No</div>
-               <div class="description">
-
-                  Displays a list of files with changes in your working copy, along with the type of change for each file.
-
-<!--                  Displays a list of files with changes in your working copy, along with a href="http://svnbook.red-bean.com/en/1.1/ch03s05.html#svn-ch-3-sect-5.3.1" the type of change /a  for each file. -->
+                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over the revision number or author name, to see when this line was last changed, the date format is <a href="#tm_svn_date_format">adjustable</a>.
                </div>
             </dd>
             
@@ -163,7 +161,6 @@
                </div>
             </dd>
             
-            <!-- FIXME: more detail. -->
             <dt><a name="add">Add to Repository</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
@@ -173,7 +170,6 @@
                </div>
             </dd>
             
-            <!-- FIXME: more detail. -->
             <dt><a name="update">Update to Latest</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
@@ -183,7 +179,6 @@
                </div>
             </dd>
             
-            <!-- FIXME: more detail. -->
             <dt><a name="update_project">Update Entire Project</a></dt>
             <dd>
                <div class="target">project</div>
@@ -203,55 +198,55 @@
          <dl>
             <dt><a name="tm_svn">$TM_SVN</a></dt>
             <dd>
-               <div class="default">svn</div>
+               <div class="default"><code>svn</code></div>
                <div class="description">the path to your svn executable.</div>
             </dd>
             
             <dt><a name="tm_ruby">$TM_RUBY</a></dt>
             <dd>
-               <div class="default">ruby</div>
-               <div class="description">Here you can tweak with what Ruby the formating Scripts will be executed.</div>
+               <div class="default"><code>ruby</code></div>
+               <div class="description">Here you can tweak with what Ruby the formating Scripts will be executed. (ATM only works for Blame, Log and Info)</div>
             </dd>
             
-            <dt><a name="tm_date_format">$TM_SVN_DATE_FORMAT</a></dt>
+            <dt><a name="tm_svn_date_format">$TM_SVN_DATE_FORMAT</a></dt>
             <dd>
-               <div class="default"><em>nil</em> (No Changes, just show what SVN shows)</div>
+               <div class="default"><em>not set</em> (No Changes, just show what SVN shows)</div>
                <div class="description">
-                  A date format string that allows you to tweak the format in which <a href="#log">Log</a> and <a href="#info">Info</a> show you dates.  See <a title="Manual Page For strftime(3)" href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html">strftime(3)</a> for what you can enter here.
+                  A date format string that allows you to tweak the format in which <a href="#blame">Blame</a>, <a href="#log">Log</a> and <a href="#info">Info</a> show you dates.  See <a title="Manual Page For strftime(3)" href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html">strftime(3)</a> for what you can enter here.
                </div>
             </dd>
             
             <dt><a name="tm_svn_close">$TM_SVN_CLOSE</a></dt>
             <dd>
-               <div class="default">false</div>
-               <div class="description">With this option you can adjust if the windows of <a href="#blame">Blame</a> and <a href="#info">Info</a> close if you click on a link which opens a file in TM.  Set it to <em>1</em> or <em>true</em> if windows should close or something else if they should not.</div>
+               <div class="default"><code>false</code></div>
+               <div class="description">With this option you can adjust if the windows of <a href="#blame">Blame</a> and <a href="#info">Info</a> close if you click on a link which opens a file in TM.  Set it to <code>1</code> or <code>true</code> if windows should close or to something else if they should not.</div>
             </dd>
             
             <dt><a name="tm_svn_log">$TM_SVN_LOG_RANGE</a></dt>
             <dd>
-               <div class="default">BASE:1</div>
-               <div class="description">the default range to query for log messages.</div>
+               <div class="default"><code>BASE:1</code></div>
+               <div class="description">The default range to query for log messages.</div>
             </dd>
             
             <dt>$TM_SVN_LOG_LIMIT</dt>
             <dd>
-               <div class="default">9</div>
-               <div class="description">the number of messages, to actually show.  0 means no limit.</div>
+               <div class="default"><code>9</code></div>
+               <div class="description">The number of messages, to actually show.  <code>0</code> means no limit.</div>
             </dd>
             
             <dt><a name="tm_svn_info">$TM_SVN_INFO_HIDE</a></dt>
             <dd>
-               <div class="default"><em>nil</em> (nothing)</div>
+               <div class="default"><em>not set</em> (nothing)</div>
                <div class="description">
-                  here you can adjust what keys of the info stream you don't want to see, it is case insensitive and a comma (<em>,</em>) seperated list.  if you enter a <em>*</em>, it is assumend that you want to hide all vars, if so, you can make some values visible again with <strong>$TM_SVN_INFO_SHOW</strong>.
+                  Here you can adjust what keys of the info stream you don't want to see, it is case insensitive and a comma (<code>,</code>) seperated list.  If you enter a <code>*</code>, it is assumend that you want to hide all vars, if so, you can make some values visible again with <strong>$TM_SVN_INFO_SHOW</strong>.
                </div>
             </dd>
             
             <dt>$TM_SVN_INFO_SHOW</dt>
             <dd>
-               <div class="default"><em>nil</em> (everything else)</div>
+               <div class="default"><em>not set</em> (everything else)</div>
                <div class="description">
-                  this is also a commma seperated list of keys, it just makes sense if you did hide all with the above var.  <em>*</em> has no special meaning here. everything you enter here will be shown if you want to hide everything else.
+                  This is also a commma seperated list of keys, it just makes sense if you did hide all with the above var.  <em>*</em> has no special meaning here. Everything you enter here will be shown if you want to hide everything else.
                </div>
             </dd>
             

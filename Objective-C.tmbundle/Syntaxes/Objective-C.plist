@@ -18,6 +18,6 @@
 		{ name = "Keyword"; match = "\\<(id|BOOL|IBAction|self|super|in|out|inout|oneway|YES|NO|nil)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
 		{ name = "Compiler Directive"; match = "@(catch|class||interface|implementation|protocol|selector|synchronized|try|end)\\>"; foregroundColor = "blue"; "fontStyle[1]" = ( underline ); },
 		{ name = "Preprocessor Directive"; match = "^(\\s)*#\\s*(import)\\>"; fontStyle = ( bold ); foregroundColor = "#5C246E";},
-		{ include = "C Source"; },
+		{ include = "C"; },
 	);
 }

@@ -1,0 +1,111 @@
+{
+   name = "Diff";
+   
+   // r2 (mon-2005jan31)
+   // - some more cleanups
+   // 
+   // r1 (sun-2005jan30)
+   // - some tweaks to make it 'releaseable'.
+   // 
+   // r0 (thu-2005jan27)
+   // - initial version
+   
+   
+   fileTypes = ( diff, patch );
+   
+   uuid = "7E848FF4-708E-11D9-97B4-0011242E4184";
+   
+   
+   foregroundColor = "#000000";
+   backgroundColor = "#ffffff";
+   
+   highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") );
+   
+   
+   patterns = (
+      
+      // sperators:
+      {  name = "seperator.meta.diff";
+         match = "^((\\*{15})|(={67})|(-{3}))$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#3467d1";
+      },
+      
+      
+      // the different ways of specifing a range ..
+      
+      // a 'normal' range, also called 'change command':
+      {  name = "range.meta.diff";
+         match = "^\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#3467d1";
+         fontStyle = ( italic );
+      },
+      
+      // a unified range:
+      {  name = "range.meta.diff";
+         match = "^@@.+@@$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#3467d1";
+         fontStyle = ( italic );
+      },
+      
+      // a context range, could be seperated into 2 range types,
+      // but i think this just would be overhead. :>
+      {  name = "range.meta.diff";
+         match = "^((\\-{3} .+ \\-{4})|(\\*{3} .+ \\*{4}))$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#3467d1";
+         fontStyle = ( italic );
+      },
+      
+      
+      // headers, the normal format shouldnt have this..
+      {  name = "from-file.header.meta.diff";
+         match = "^((-{3} .+)|(\\*{3} .+))$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#4f7ee0"; // orig: #4274dc
+         fontStyle = ( italic );
+      },
+      
+      {  name = "to-file.header.meta.diff";
+         match = "^\\+{3} .+$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#4f7ee0";
+         fontStyle = ( italic );
+      },
+      
+      
+      // how to say 'new', catches normal, unified and context.
+      {  name = "inserted.diff";
+         match = "^((>( .*)?)|(\\+.*))$";
+         foregroundColor = "#000000";
+         backgroundColor = "#73ff65";
+      },
+      
+      // just the context format knows changes:
+      {  name = "changed.diff";
+         match = "^!.*$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#f5c411";
+      },
+      
+      // .. deleted ..
+      {  name = "deleted.diff";
+         match = "^((<( .*)?)|(-.*))$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#ff3d3d";
+      },
+      
+      
+      // the Index: stuff, afaik just svn does it.
+      {  name = "index.meta.diff";
+         match = "^Index: .+$";
+         foregroundColor = "#ffffff";
+         backgroundColor = "#4274dc";
+         fontStyle = ( italic );
+      }
+      
+   );
+   
+}

@@ -22,7 +22,7 @@ egrep -n '^(-|+)[ \t]*\(.*\)[^;]*$' \
 | perl -pe 's/\(.*?\)//' \
 | perl -pe 's/(\w+:)[ \t]*\(.*?\)[ \t]*\w+[ \t]*/$1/g' \
 | sort -ft: -k2 \
-| perl -pe 's/^(\d+):(.*?)(\{.*)?$/&lt;a href="txmt:\/\/open?url=file:\/\/'"${TM_FILEPATH//\//\\/}"'&amp;line=$1" onClick="window.close()"&gt;$2&lt;\/a&gt;&lt;br&gt;/'</string>
+| perl -pe 's/^(\d+):(.*?)(\{.*)?$/&lt;a href="txmt:\/\/open?line=$1" onClick="window.close()"&gt;$2&lt;\/a&gt;&lt;br&gt;/'</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

@@ -4,7 +4,7 @@ DOC_PATH="`defaults 2>/dev/null read com.macromates.textmate.actionscript FlashD
 
 if ! [[ -d "$DOC_PATH" ]]; then
 	DOC_PATH="`osascript 2>/dev/null <<"EOF"
-		tell app "Finder"
+		tell app "System Events"
 			activate
 			return POSIX path of (choose folder with prompt "Select Flash Help Documentation Folder")
 		end tell

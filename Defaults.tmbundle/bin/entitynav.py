@@ -166,7 +166,10 @@ class SortableByClass(SortableEntities):
     functionIndex = '__GLOBAL__'
     
     def deconstructLine(self, lineMatch):
-        return (lineMatch.group('entity'),lineMatch.group('name'),lineMatch.group('args'),lineMatch.group('indent'))
+        try:
+            return (lineMatch.group('entity'),lineMatch.group('name'),lineMatch.group('args'),lineMatch.group('indent'))
+        except IndexError:
+            raise HandlerException("abstract SortableByClass must define match groups 'entity', 'name', 'args', and 'indent'")
         
     def readLine(self, lineNum, line):
         (line, lineMatch) = EntityHandler.readLine(self, lineNum, line)
@@ -198,7 +201,7 @@ class SortableByClass(SortableEntities):
         
     def sort(self):
         """
-        sort PHP entities hierachically by class, then by function -Kumar
+        sort entities hierachically by class, then by function
         """
         sorted = []
         try:

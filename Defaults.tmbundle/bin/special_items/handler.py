@@ -22,11 +22,7 @@ To create sortable entity handlers, see the abstract SortableEntities class
 """
 
 import sys, os, re, string, getopt
-
-class HandlerException(Exception): pass
-class HandlerNoEntitiesException(HandlerException): pass
-class SortException(Exception): pass
-class ParseException(Exception): pass
+from exceptions import *
 
 def getHandler(mode):
     """gets an entity-matching handler for the mode in question"""

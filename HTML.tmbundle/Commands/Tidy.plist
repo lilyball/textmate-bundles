@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>captureFormatString</key>
+	<string>$3</string>
+	<key>capturePattern</key>
+	<string>line (\d+) column (\d+) - (.*?)$</string>
+	<key>command</key>
+	<string># BEWARE. Errors show up in the header of your tidy-ed document. Use Tidy Error Display first!!
+
+~/bin/tidy -bicq "$TM_FILEPATH"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^@h</string>
+	<key>lineCaptureRegister</key>
+	<string>1</string>
+	<key>name</key>
+	<string>Tidy</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>uuid</key>
+	<string>45F92B81-6F0E-11D9-A1E4-000D9332809C</string>
+</dict>
+</plist>

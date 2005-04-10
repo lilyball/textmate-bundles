@@ -3,12 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for( ${1:int i = 0}; ${2:i &lt; count}; ${3:i++} )$4</string>
+	<string>do
+{
+	$0
+} while( $1 );</string>
 	<key>name</key>
-	<string>for loop (for)</string>
-	<key>trigger</key>
-	<string>for</string>
+	<string>do...while loop (do)</string>
+	<key>tabTrigger</key>
+	<string>do</string>
 	<key>uuid</key>
-	<string>489DA820-9C0E-4516-9D52-85E01445B099</string>
+	<string>D1F5A25E-A70F-11D9-A11A-000A95A89C98</string>
 </dict>
 </plist>

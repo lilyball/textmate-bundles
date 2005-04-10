@@ -3,11 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for( ${1:unsigned int} ${2:i} = ${3:0}; ${2:i} &lt; ${4:count}; ${2:i} += ${5:1} )$6</string>
+	<string>for( ${1:unsigned int} ${2:i} = ${3:0}; ${2:i} &lt; ${4:count}; ${2:i} += ${5:1} )
+{
+	$0
+}</string>
 	<key>name</key>
-	<string>for int loop (fori)</string>
-	<key>trigger</key>
-	<string>fori</string>
+	<string>for loop (for)</string>
+	<key>tabTrigger</key>
+	<string>for</string>
 	<key>uuid</key>
 	<string>78EF7134-0859-4475-89C3-30927865E855</string>
 </dict>

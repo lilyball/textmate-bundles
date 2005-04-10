@@ -20,7 +20,7 @@ FindInPaths=(/usr/include /System/Library/Frameworks/ApplicationServices.framewo
 CountPaths=${#FindInPaths[*]}
 FindInPaths[$CountPaths]="$TM_PROJECT_DIRECTORY"
 
-find "${FindInPaths[@]}" -name "$HeaderName" -print -exec open -a TextMate {} \; &amp;
+echo find "${FindInPaths[@]}" -name "$HeaderName" -print -exec open -a TextMate {} \\\; | sh
 </string>
 	<key>input</key>
 	<string>selection</string>

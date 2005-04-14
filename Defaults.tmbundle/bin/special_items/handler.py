@@ -228,6 +228,7 @@ class EntitiesLatex(SortableByMainEntity):
     entityMatchLine = re.compile(r'^\s*(?P<prefix>\\(sub)*section{|\\paragraph{)(?P<main>.*)(?P<suffix>}.*$)')
     
 EntitiesTex = EntitiesLatex
+EntitiesConTeXt = EntitiesLatex
         
 class EntitiesPhp(SortableByClass):
     """entity-matching handler for PHP (php) files

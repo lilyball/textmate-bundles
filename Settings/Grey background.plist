@@ -1,0 +1,73 @@
+{
+	name = "Grey background";
+	uuid = "04794F28-AE31-11D9-9527-000D93589AF6";
+	settings = (
+		{	scope = "";
+			settings = {
+				background = "#A0A0A0";
+				foreground = "#000000";
+				selection = "#E3D9DE";
+			};
+		},
+		
+		{	scope = "comments";
+			settings = {
+				foreground = "#D0D0FF";
+				fontStyle = "italic";
+			};
+		},
+		
+		{	scope = "strings, constants.numeric";
+			settings = {
+				foreground = "#FFFFFF";
+			};
+		},
+
+		{	scope = "keywords";
+			settings = {
+				fontStyle = "bold";
+			};
+		},
+
+		{	scope = "keywords.preprocessor";
+			settings = {
+				foreground = "#D0D0FF";
+				fontStyle = "plain";
+			};
+		},
+
+		{	scope = "keywords.preprocessor directive";
+			settings = {
+				fontStyle = "bold";
+			};
+		},
+		
+		{	scope = "keywords.functions";
+			settings = {
+				foreground = "#404060";
+				fontStyle = "plain";
+			};
+		},
+		
+		{	scope = "keywords.objc.directives name";
+			settings = {
+				fontStyle = "underline";
+			};
+		},
+		
+		/* ========================================== */
+		/* = Handling Objective-C method prototypes = */
+		/* ========================================== */
+
+		{	scope = "declaration.function type type";
+			settings = { foreground = "#D0D0FF"; }; },
+		{	scope = "declaration.function type name";
+			settings = { fontStyle = "bold"; }; },
+		{	scope = "declaration.function argument-name";
+			settings = { fontStyle = "bold"; }; },
+		{	scope = "declaration.function argument type";
+			settings = { foreground = "#D0D0FF"; }; },
+		{	scope = "declaration.function argument value";
+			settings = { fontStyle = "italic"; }; },
+	);
+}

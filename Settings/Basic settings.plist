@@ -1,0 +1,74 @@
+{
+	name = "Basic settings";
+	uuid = "04C16970-AE30-11D9-BE88-000D93589AF6";
+	settings = (
+		{	scope = "";
+			settings = {
+				smartTypingPairs = (
+					( "\"", "\""), ( "(", ")"), ( "{", "}"), ( "[", "]"), ( "“", "”")
+				);
+			};
+		},
+
+		{	scope = "source";
+			settings = {
+				increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
+				smartTypingPairs = (
+					( "\"", "\""), ( "(", ")"), ( "{", "}"), ( "[", "]"), ( "“", "”"), ( "'", "'")
+				);
+			};
+		},
+
+		{	scope = "strings.double-quoted, comments";
+			settings = {
+				smartTypingPairs = (
+					( "\"", "\""), ( "(", ")"), ( "{", "}"), ( "[", "]"), ( "“", "”")
+				);
+			};
+		},
+
+		{	scope = "source.objc";
+			settings = {
+				completions = (
+					"retain", "release", "autorelease", "description",
+					"stringWithFormat:", "componentsSeparatedByString:",
+					"isEqualToString:", "UTF8String", "lastPathComponent",
+					"pathExtension", "stringByAbbreviatingWithTildeInPath",
+					"stringByAppendingPathComponent:", "stringByAppendingPathExtension:",
+					"stringByDeletingLastPathComponent", "stringByDeletingPathExtension",
+					"stringByExpandingTildeInPath", "stringByResolvingSymlinksInPath",
+					"stringByStandardizingPath",
+
+					"valueForKey:", "valueForKeyPath:", "setValue:", "forKey:",
+					"forKeyPath:",
+
+					"NSArray", "NSDictionary", "NSMutableArray", "NSMutableDictionary",
+					"NSMutableString", "NSString",
+				);
+			};
+		},
+
+		{	scope = "text.html";
+			settings = {
+				increaseIndentPattern = "(<(head|title|table|tr|td|ul|ol|dl|div)\\>[^>]*>|\\{)\\s*$";
+				smartTypingPairs = (
+					( "\"", "\""), ( "(", ")"), ( "{", "}"), ( "[", "]"), ( "“", "”"), ( "<", ">")
+				);
+			};
+		},
+
+		{	scope = "text.html keywords.markup";
+			settings = {
+				smartTypingPairs = (
+					( "\"", "\""), ( "(", ")"), ( "{", "}"), ( "[", "]"), ( "“", "”"), ( "<", ">"), ( "'", "'")
+				);
+			};
+		},
+
+		{	scope = "text.html keywords, text.html constants";
+			settings = {
+				spellChecking = 0;
+			};
+		}
+	);
+}

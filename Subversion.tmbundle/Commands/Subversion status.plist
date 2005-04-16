@@ -8,12 +8,12 @@
 	<string>export WorkPath="$TM_DIRECTORY"
 
 # show it..
-"${TM_SVN:=svn}" status "$WorkPath" 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"
+"${TM_SVN:=svn}" status "$WorkPath" 2&gt;&amp;1| "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@b</string>
+	<string></string>
 	<key>name</key>
 	<string>Status</string>
 	<key>output</key>

@@ -84,10 +84,7 @@
                <div class="target">directory of active file</div>
                <div class="connect">No</div>
                <div class="description">
-
                   Displays a list of files with changes in your working copy, along with the type of change for each file.
-
-<!--                  Displays a list of files with changes in your working copy, along with a href="http://svnbook.red-bean.com/en/1.1/ch03s05.html#svn-ch-3-sect-5.3.1" the type of change /a  for each file. -->
                </div>
             </dd>
             
@@ -106,7 +103,7 @@
                <div class="target">active file</div>
                <div class="connect">Yes</div>
                <div class="description">
-                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over the revision number or author name, to see when this line was last changed, the date format is <a href="#tm_svn_date_format">adjustable</a>.
+                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href="#tm_svn_date_format">adjustable</a>.
                </div>
             </dd>
             
@@ -155,9 +152,10 @@
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="connect">Yes</div>
                <div class="description">
-                  	Commits your changed files to the repository. A custom window appears, in which you enter the description
-					of your changes and you may choose to exclude files from the commit. If no files are selected or active,
-					this command does nothing. If the target files have no local changes, nothing happens.
+                    Commits your changed files to the repository. A dialog asks you for the description of
+                    your changes; you may also choose to exclude files from the commit by unchecking them.
+                    If no files are selected or active, this command does nothing. If the target files
+                    have no local changes, nothing happens.
                </div>
             </dd>
             
@@ -189,11 +187,10 @@
             </dd>
 
          </dl>
-      
-      
+
       <h2><a name="conf">Configuration Options</a></h2>
          
-         <p>All these Options are optinal, the default values should make sense for normal use, but you can set them if you want to tweak the behaviour of the certain commands.</p>
+         <p>These shell variables allow you to tweak the behaviour of the certain commands if need be. The default values should make sense for normal use.</p>
          
          <dl>
             <dt><a name="tm_svn">$TM_SVN</a></dt>
@@ -205,7 +202,7 @@
             <dt><a name="tm_ruby">$TM_RUBY</a></dt>
             <dd>
                <div class="default"><code>ruby</code></div>
-               <div class="description">Here you can tweak with what Ruby the formating Scripts will be executed. (ATM only works for Blame, Log and Info)</div>
+               <div class="description">Here you can tweak with what Ruby the formatting scripts will be executed.</div>
             </dd>
             
             <dt><a name="tm_svn_date_format">$TM_SVN_DATE_FORMAT</a></dt>
@@ -219,7 +216,7 @@
             <dt><a name="tm_svn_close">$TM_SVN_CLOSE</a></dt>
             <dd>
                <div class="default"><code>false</code></div>
-               <div class="description">With this option you can adjust if the windows of <a href="#blame">Blame</a> and <a href="#info">Info</a> close if you click on a link which opens a file in TM.  Set it to <code>1</code> or <code>true</code> if windows should close or to something else if they should not.</div>
+               <div class="description">With this option you can adjust whether the windows of <a href="#blame">Blame</a> and <a href="#info">Info</a> close if you click on a link which opens a file in TM.  Set it to <code>1</code> or <code>true</code> if windows should close or to something else if they should not.</div>
             </dd>
             
             <dt><a name="tm_svn_log">$TM_SVN_LOG_RANGE</a></dt>
@@ -231,7 +228,7 @@
             <dt>$TM_SVN_LOG_LIMIT</dt>
             <dd>
                <div class="default"><code>9</code></div>
-               <div class="description">The number of messages, to actually show.  <code>0</code> means no limit.</div>
+               <div class="description">The number of messages to show.  <code>0</code> means no limit.</div>
             </dd>
             
             <dt><a name="tm_svn_info">$TM_SVN_INFO_HIDE</a></dt>

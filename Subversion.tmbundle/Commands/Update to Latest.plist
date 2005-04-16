@@ -15,7 +15,7 @@ export WorkPaths
 echo "${TM_SVN:=svn}" &gt; /dev/null
 export TM_SVN
 
-ruby &lt;&lt;END
+"${TM_RUBY:=ruby}" &lt;&lt;END
 	svn = ENV['TM_SVN']
 	puts %x{#{svn} update $WorkPaths}
 END
@@ -23,9 +23,9 @@ END
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@b</string>
+	<string></string>
 	<key>name</key>
-	<string>Update to Latest</string>
+	<string>Update to Newest</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>

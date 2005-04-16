@@ -19,12 +19,12 @@ export CommitPaths
 echo "${TM_SVN:=svn}" &gt; /dev/null
 export TM_SVN
 
-ruby -- "${TM_BUNDLE_PATH}/Tools/svn_commit.rb"
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/svn_commit.rb"
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@b</string>
+	<string></string>
 	<key>name</key>
 	<string>Commit</string>
 	<key>output</key>

@@ -10,7 +10,7 @@
 echo "${TM_SVN:=svn}" &gt; /dev/null
 export TM_SVN
 
-ruby &lt;&lt;END
+"${TM_RUBY:=ruby}" &lt;&lt;END
 	svn		= ENV['TM_SVN']
 	bundle	= ENV['TM_BUNDLE_PATH']
 
@@ -40,9 +40,9 @@ END
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@b</string>
+	<string></string>
 	<key>name</key>
-	<string>Update Entire Project</string>
+	<string>Update Entire Project to Newest</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

@@ -13,7 +13,7 @@ puts "<html>
 <head>
 <title>Subversion status</title>
 <style type=\"text/css\">
-  @import 'file://"+bundle+"/Stylesheets/svn_style.css';
+  @import 'file://#{bundle}/Stylesheets/svn_style.css';
 </style>
 </head>
 
@@ -34,7 +34,7 @@ def matches_to_paths(matches)
 end
 
 # Ignore files with '?', but report them to the user
-unknown_paths = paths.reject { |m| m[0] != '?' }
+unknown_paths = paths.select { |m| m[0] == '?' }
 
 if unknown_paths and unknown_paths.size > 0 then
 	puts "These files are not added to the repository, and so will not be committed:<p><ul><li>#{matches_to_paths(unknown_paths).join("</li><li>")}</li></ul><p>"
@@ -42,7 +42,7 @@ end
 
 # Fail if we have conflicts -- svn commit will fail, so let's
 # error out before the user gets too involved in the commit
-conflict_paths = paths.reject { |m| m[0] != 'C' }
+conflict_paths = paths.select { |m| m[0] == 'C' }
 
 if conflict_paths and conflict_paths.size > 0 then
 	puts "Cannot continue; there are merge conflicts in files:<p><ul><li>#{matches_to_paths(conflict_paths).join("</li><li>")}</li></ul><p>"
@@ -62,9 +62,6 @@ STDOUT.flush
 
 commit_paths_array = matches_to_paths(commit_matches)
 
-# Nuke unnecessary bits of the path
-commit_paths_array.collect!{|path| path.sub(/^#{CURRENT_DIR}/, "") }
-
 commit_path_text = "'" + commit_paths_array.join("' '") + "'"
 
 commit_args = %x{"#{commit_tool}" #{commit_path_text}}
@@ -81,6 +78,7 @@ puts "</div>"
 puts "<p> <pre>"
 STDOUT.flush
 
-puts %x{"#{svn}" commit #{commit_args}}
+fork { exec "#{svn} commit #{commit_args}" }
+Process.wait
 
 puts "</pre></body></html>"

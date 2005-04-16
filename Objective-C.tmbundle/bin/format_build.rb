@@ -51,6 +51,20 @@ div.normal {
 	margin 0;
 }
 
+div.file span.name {
+	font-size: 8pt;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	color: #000;
+}
+
+div.file span.method {
+	font-size: 8pt;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	color: #777;
+}
+
 div.normal h2 {
 	font-size: 10pt;
 	margin-top: 2px;
@@ -234,7 +248,7 @@ class Formatter
 				return if string.empty?
 				return if string === "\n"
 				
-				new_div!( "normal", string, false ) do
+				new_div!( "normal", string, true ) do
 					
 					if @next_div_name.nil?
 						title = "..."
@@ -277,7 +291,7 @@ class Formatter
 	
 	# error messages
 	# cssclass may be nil
-	def message_body( cssclass, path, line, error_desc )
+	def error_message( cssclass, path, line, error_desc )
 		
 		cssclass = cssclass.downcase
 		cssclass = case cssclass
@@ -297,6 +311,19 @@ class Formatter
 		}
 
 	end
+
+	def file_compiled( method, file )
+		@mup.end_div!
+#		@mup.next_div_name = method + " " + file
+		@mup.new_div!("normal", "", true) do
+			@mup.div("class" => "file") do
+				@mup.span( method + " ", "class" => "method")
+				@mup.span( File.basename(file), "class" => "name")
+			end
+		end
+
+	end
+
 	
 	# text that is part of a message to appear later
 	def message_prefix( line )

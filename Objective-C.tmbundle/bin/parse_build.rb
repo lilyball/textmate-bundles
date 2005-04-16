@@ -22,6 +22,12 @@ STDIN.each_line do |line|
 # Then we might consider hiding the build details by default.
 
 		
+		when /^(CompileC|Ld|PhaseScriptExecution)\s+(.*?)\s+(.*?)\s(.*?)\s(.*?).*$/
+			
+			formatter.file_compiled( "#$1", "#$4" )
+			formatter.build_noise( line )
+
+			
 		# Handle error prefix text
 		when /^\s*((In file included from)|from)(\s*)(\/.*?):/
 			
@@ -48,7 +54,7 @@ STDIN.each_line do |line|
 					cssclass = cssclass[1]
 				end
 
-				formatter.message_body( cssclass, path, line_number, error_desc )
+				formatter.error_message( cssclass, path, line_number, error_desc )
 			else
 				formatter.build_noise( line )
 			end

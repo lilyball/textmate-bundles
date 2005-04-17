@@ -148,15 +148,19 @@ class Formatter
 		
 		class << @mup
 			
-			attr_accessor :div_stack			# stack of nested div classes
+			attr_writer :div_stack			# stack of nested div classes
 #			attr_accessor :current_class	
 			attr_accessor :div_count			# absolute count of divs
 			attr_accessor :next_div_name		# title of next div
 			attr_accessor :accumulated_prefix	# prefix text to insert in next div
 			
-			def current_div
+			def div_stack
 				@div_stack = Array.new unless defined?(@div_stack)
-				@div_stack.last
+				@div_stack
+			end
+			
+			def current_div
+				div_stack.last
 			end
 			
 			def start_tag!(tag)
@@ -236,7 +240,6 @@ class Formatter
 				div_id = nil
 				
 				@div_count = 0 unless defined?(@div_count)
-				@div_stack = Array.new unless defined?(@div_stack)
 				@accumulated_prefix = '' unless defined?(@accumulated_prefix)
 				
 				unless nclass === current_div
@@ -247,7 +250,7 @@ class Formatter
 					autopop(nclass)
 					
 					# start the new div and the inner content div
-					@div_stack.push nclass
+					div_stack.push nclass
 #					@current_class = nclass
 					_start_tag( "div", "class" => nclass, "id" => div_id )
 
@@ -304,9 +307,9 @@ class Formatter
 
 			# wrap up any loose ends
 			def end_div!( popdiv )
-				if @div_stack.include?(popdiv)
+				if div_stack.include?(popdiv)
 					loop do
-#						puts "pop #{@div_stack.last}"
+#						puts "pop #{div_stack.last}"
 						_end_tag("div")	# inner
 						_end_tag("div")	# outer
 						break if (@div_stack.pop == popdiv || @div_stack.size == 0)
@@ -317,7 +320,7 @@ class Formatter
 			def end_div_count!( count )
 				count.times do
 #					puts "pop #{@div_stack.last}"
-					 @div_stack.pop
+					 div_stack.pop
 					_end_tag("div")	# inner
 					_end_tag("div")	# outer
 				end

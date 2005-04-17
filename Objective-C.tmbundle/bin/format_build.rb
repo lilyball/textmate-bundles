@@ -32,40 +32,49 @@ body {
    font-size: 11pt;
 }
 
+div{
+	position: relative;
+}
+
 div.showhide {
-	float: right;
+#	width: 100%;
+#	float: right;
+	position: absolute;
+	right: 20px;
 	font-size: 8pt;
 	font-family: "Lucida Grande", sans-serif;
 	margin-top: 2px;
 	margin-bottom: 2px;
+	margin-right: 0px;
 }
 
-div.normal {
+div.target {
 	padding: 2px;
 	margin: 3px;
 
 	border: 2px;
 	border-style: none none none solid;
 	color: #aaa;
+	background-color: #eee;
 	font-size: 70%;
 	margin 0;
 }
 
-div.file span.name {
+div.command span.name {
 	font-size: 8pt;
 	margin-top: 2px;
 	margin-bottom: 2px;
 	color: #000;
 }
 
-div.file span.method {
+div.command span.method {
 	font-size: 8pt;
 	margin-top: 2px;
 	margin-bottom: 2px;
 	color: #777;
 }
 
-div.normal h2 {
+div.target h2 {
 	font-size: 10pt;
 	margin-top: 2px;
 	margin-bottom: 2px;
@@ -99,7 +108,7 @@ div.error h2, div.warning h2, div.info h2 {
    margin-top: 0;
 }
 
-div.inner :link {
+div.error div.inner :link, div.warning div.inner :link, div.info div.inner :link {
 	font-family: "Bitstream Vera Sans Mono", monospace;
 }
 
@@ -139,10 +148,16 @@ class Formatter
 		
 		class << @mup
 			
-			attr_accessor :current_class
-			attr_accessor :div_count
-			attr_accessor :next_div_name
-			attr_accessor :accumulated_prefix
+			attr_accessor :div_stack			# stack of nested div classes
+#			attr_accessor :current_class	
+			attr_accessor :div_count			# absolute count of divs
+			attr_accessor :next_div_name		# title of next div
+			attr_accessor :accumulated_prefix	# prefix text to insert in next div
+			
+			def current_div
+				@div_stack = Array.new unless defined?(@div_stack)
+				@div_stack.last
+			end
 			
 			def start_tag!(tag)
 				_start_tag( tag, nil )
@@ -165,22 +180,75 @@ class Formatter
 				@accumulated_prefix << content
 			end
 			
+			# div hierarchy:
+			# 1. target; target (BUILD NATIVE TARGET "Frobozz" .*)
+			# 2.	command; build commands (CompileC .*)
+			# 3.		details; build details (g++-3.3 .*)
+			# 4.		info, warning, error; build warnings/errors -- actually a sibling of the build commands, so that they default to visible but are still hidden with the target.
+			# Note that the client is partly responsible for maintaining the hierarchy.
+
+			STACK_LEVEL_TOP = 1
+			STACK_LEVEL_COMMAND_AND_ERRORS = 2
+			STACK_LEVEL_DETAILS = 3
+
+			STACK_LEVEL_TABLE = {'target' => 1,
+								'command' => 2,
+								'details' => 3,
+								'info' => 2,
+								'error' => 2,
+								'warning' => 2}
+			
+			def stacklevel_for_class(newclass)
+				
+				stacklevel = STACK_LEVEL_TABLE[newclass]
+				stacklevel = 0 if stacklevel.nil?
+				stacklevel
+			end
+			
+			# pop appropriate divs for newclass
+			def autopop(newclass)
+				new_level		= stacklevel_for_class(newclass)
+				current_level	= stacklevel_for_class(current_div)
+
+				case
+					# top level replaces top level on the stack
+					when new_level == current_level
+						end_div!(current_div)
+					
+					when new_level > current_level
+						# only commands have details; errors do not.
+						if (newclass == 'details') and
+							(current_div != 'command') and
+							(current_level == STACK_LEVEL_COMMAND_AND_ERRORS)
+							end_div_count!(1)
+						end
+					
+					when new_level < current_level
+						end_div_count!(current_level - new_level)
+						# and recurse to check for equal level
+						autopop(newclass)
+				end
+				
+			end
+			
 			# accumulative div -- block yields the div title
 			def new_div!( nclass, content = "", hide = false, &block )
 				div_id = nil
 				
 				@div_count = 0 unless defined?(@div_count)
+				@div_stack = Array.new unless defined?(@div_stack)
 				@accumulated_prefix = '' unless defined?(@accumulated_prefix)
 				
-				unless nclass === @current_class
+				unless nclass === current_div
 					@div_count += 1
 					div_id = "xyz_" + @div_count.to_s
 					
 					# end the old div
-					end_div!
+					autopop(nclass)
 					
 					# start the new div and the inner content div
-					@current_class = nclass
+					@div_stack.push nclass
+#					@current_class = nclass
 					_start_tag( "div", "class" => nclass, "id" => div_id )
 
 					hide_if_hidden_style = hide ? "display: none;" : "";
@@ -203,7 +271,7 @@ class Formatter
 				end
 				
 				# output the div prefix for error/message boxes
-				unless @accumulated_prefix.empty? || @current_class == 'normal'
+				unless @accumulated_prefix.empty? || current_div == 'target'
 					
 					@accumulated_prefix.each_line do |prefixline|
 						
@@ -235,11 +303,23 @@ class Formatter
 			end
 
 			# wrap up any loose ends
-			def end_div!
-				if defined?( @current_class ) then
+			def end_div!( popdiv )
+				if @div_stack.include?(popdiv)
+					loop do
+#						puts "pop #{@div_stack.last}"
+						_end_tag("div")	# inner
+						_end_tag("div")	# outer
+						break if (@div_stack.pop == popdiv || @div_stack.size == 0)
+					end
+				end
+			end
+
+			def end_div_count!( count )
+				count.times do
+#					puts "pop #{@div_stack.last}"
+					 @div_stack.pop
 					_end_tag("div")	# inner
-					_end_tag("div") # outer
-					@current_class = nil
+					_end_tag("div")	# outer
 				end
 			end
 
@@ -248,7 +328,8 @@ class Formatter
 #				return if string.empty?
 #				return if string === "\n"
 				
-				new_div!( "normal", string, true ) do
+				divclass = (stacklevel_for_class(current_div) > STACK_LEVEL_TOP) ? "details" : "target"
+				new_div!( divclass, string, false ) do
 					
 					if @next_div_name.nil?
 						title = "..."
@@ -283,7 +364,7 @@ class Formatter
 	# end of stream
 	def complete
 		# wrap up any loose ends
-		@mup.end_div!
+		@mup.end_div!("target")
 
 		@mup.end_tag!("body")
 		@mup.end_tag!("html")
@@ -313,15 +394,14 @@ class Formatter
 	end
 
 	def file_compiled( method, file )
-		@mup.end_div!
+		@mup.end_div!("command")
 #		@mup.next_div_name = method + " " + file
-		@mup.new_div!("normal", "", true) do
-			@mup.div("class" => "file") do
+		@mup.new_div!("command", "", true) do
+#			@mup.div("class" => "command") do
 				@mup.span( method + " ", "class" => "method")
 				@mup.span( file, "class" => "name")
-			end
+#			end
 		end
-
 	end
 
 	
@@ -340,7 +420,7 @@ class Formatter
 	end
 	
 	def target_name(name)
-		@mup.end_div!
+		@mup.end_div!("target")
 		@mup.next_div_name = name
 	end
 	

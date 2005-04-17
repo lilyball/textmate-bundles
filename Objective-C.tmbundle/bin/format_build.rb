@@ -245,8 +245,8 @@ class Formatter
 
 			def normal!(string)
 				
-				return if string.empty?
-				return if string === "\n"
+#				return if string.empty?
+#				return if string === "\n"
 				
 				new_div!( "normal", string, true ) do
 					
@@ -318,7 +318,7 @@ class Formatter
 		@mup.new_div!("normal", "", true) do
 			@mup.div("class" => "file") do
 				@mup.span( method + " ", "class" => "method")
-				@mup.span( File.basename(file), "class" => "name")
+				@mup.span( file, "class" => "name")
 			end
 		end
 

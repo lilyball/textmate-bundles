@@ -120,7 +120,7 @@ STDIN.each_line do |line|
 			method_type = $1
 			method_params = MethodTypeMap[method_type]
 			
-			arguments = Regexp.last_match(2).tokenize
+			arguments = Regexp.last_match[2].tokenize
 			file_arg = arguments[method_params[1]]
 			file_arg.sub!(Dir.pwd, "")
 			

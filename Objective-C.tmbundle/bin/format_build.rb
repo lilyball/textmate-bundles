@@ -171,6 +171,17 @@ class Formatter
 				_end_tag(tag)
 			end
 			
+			def _start_tag( tag, thing, thingtwo = nil )
+#				puts "[start:#{tag}]"
+				super
+			end
+			
+			def _end_tag(tag)
+#				puts "[end:#{tag}]"
+				super
+			end
+			
+			
 			def a_textmate!( path, line_number )
 				line_number = 1 if line_number.nil?
 				a( "href" => "txmt://open?url=file://#{path}&line=#{line_number}" ) {
@@ -236,7 +247,8 @@ class Formatter
 			end
 			
 			# accumulative div -- block yields the div title
-			def new_div!( nclass, content = "", hide = false, &block )
+			# visibility can be :visible, :hidden, :always_visible
+			def new_div!( nclass, content = "", visibility = :show, &block )
 				div_id = nil
 				
 				@div_count = 0 unless defined?(@div_count)
@@ -244,25 +256,29 @@ class Formatter
 				
 				unless nclass === current_div
 					@div_count += 1
-					div_id = "xyz_" + @div_count.to_s
+					div_id = "z_" + @div_count.to_s
 					
 					# end the old div
 					autopop(nclass)
 					
 					# start the new div and the inner content div
 					div_stack.push nclass
-#					@current_class = nclass
+
 					_start_tag( "div", "class" => nclass, "id" => div_id )
 
-					hide_if_hidden_style = hide ? "display: none;" : "";
-					show_if_hidden_style = hide ? "" : "display: none;";
+#					visibility = :show_always   # debugging
+					if (visibility == :hide) or (visibility == :show) then
 
-					# add show/hide toggle above the inner content div
-					div( "class" => "showhide" ) {
-										
-						a( "Hide Details", 'href' => "javascript:hideElement('#{div_id}')", 'id' => div_id + '_hide', 'style' => hide_if_hidden_style )
-						a( "Show Details", 'href' => "javascript:showElement('#{div_id}')", 'id' => div_id + '_show', 'style' => show_if_hidden_style )
-					}
+						hide_if_hidden_style = (visibility == :hide) ? "display: none;" : "";
+						show_if_hidden_style = (visibility == :hide) ? "" : "display: none;";
+
+						# add show/hide toggle above the inner content div
+						div( "class" => "showhide" ) {
+						
+							a( "Hide Details", 'href' => "javascript:hideElement('#{div_id}')", 'id' => div_id + '_hide', 'style' => hide_if_hidden_style )
+							a( "Show Details", 'href' => "javascript:showElement('#{div_id}')", 'id' => div_id + '_show', 'style' => show_if_hidden_style )
+						}
+					end
 					
 					block.call
 
@@ -309,7 +325,7 @@ class Formatter
 			def end_div!( popdiv )
 				if div_stack.include?(popdiv)
 					loop do
-#						puts "pop #{div_stack.last}"
+#						puts "pop #{div_stack.last}: #{div_stack.inspect}"
 						_end_tag("div")	# inner
 						_end_tag("div")	# outer
 						break if (@div_stack.pop == popdiv || @div_stack.size == 0)
@@ -319,7 +335,7 @@ class Formatter
 
 			def end_div_count!( count )
 				count.times do
-#					puts "pop #{@div_stack.last}"
+#					puts "pop #{div_stack.last}: #{div_stack.inspect}"
 					 div_stack.pop
 					_end_tag("div")	# inner
 					_end_tag("div")	# outer
@@ -328,16 +344,15 @@ class Formatter
 
 			def normal!(string)
 				
-#				return if string.empty?
-#				return if string === "\n"
-				
+				# build noise, either part of the toplevel target info or part of the details of a build command
 				divclass = (stacklevel_for_class(current_div) > STACK_LEVEL_TOP) ? "details" : "target"
-				new_div!( divclass, string, false ) do
+				new_div!( divclass, string, (divclass == "target") ? :show : :always_show ) do
 					
 					if @next_div_name.nil?
 						title = "..."
 					else
 						title = @next_div_name
+#						h2(@next_div_name)
 						@next_div_name = nil
 					end
 					h2(title)
@@ -399,7 +414,7 @@ class Formatter
 	def file_compiled( method, file )
 		@mup.end_div!("command")
 #		@mup.next_div_name = method + " " + file
-		@mup.new_div!("command", "", true) do
+		@mup.new_div!("command", "", :hide) do
 #			@mup.div("class" => "command") do
 				@mup.span( method + " ", "class" => "method")
 				@mup.span( file, "class" => "name")

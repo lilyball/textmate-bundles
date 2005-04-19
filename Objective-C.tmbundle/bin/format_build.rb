@@ -60,6 +60,12 @@ div.target {
 	margin 0;
 }
 
+div.target span.name {
+	margin-top: 2px;
+	margin-bottom: 2px;
+	color: #777;
+}
+
 div.command span.name {
 	font-size: 8pt;
 	margin-top: 2px;
@@ -148,11 +154,9 @@ class Formatter
 		
 		class << @mup
 			
-			attr_writer :div_stack			# stack of nested div classes
-#			attr_accessor :current_class	
-			attr_accessor :div_count			# absolute count of divs
-			attr_accessor :next_div_name		# title of next div
-			attr_accessor :accumulated_prefix	# prefix text to insert in next div
+			attr_writer		:div_stack			# stack of nested div classes
+			attr_accessor	:div_count			# absolute count of divs
+			attr_accessor	:accumulated_prefix	# prefix text to insert in next div
 			
 			def div_stack
 				@div_stack = Array.new unless defined?(@div_stack)
@@ -280,7 +284,7 @@ class Formatter
 						}
 					end
 					
-					block.call
+					block.call unless block.nil?
 
 					# show the user at least the title of the div
 					STDOUT.flush
@@ -343,20 +347,9 @@ class Formatter
 			end
 
 			def normal!(string)
-				
 				# build noise, either part of the toplevel target info or part of the details of a build command
 				divclass = (stacklevel_for_class(current_div) > STACK_LEVEL_TOP) ? "details" : "target"
-				new_div!( divclass, string, (divclass == "target") ? :show : :always_show ) do
-					
-					if @next_div_name.nil?
-						title = "..."
-					else
-						title = @next_div_name
-#						h2(@next_div_name)
-						@next_div_name = nil
-					end
-					h2(title)
-				end
+				new_div!( divclass, string, (divclass == "target") ? :show : :always_show )
 				br
 			end
 				
@@ -413,7 +406,6 @@ class Formatter
 
 	def file_compiled( method, file )
 		@mup.end_div!("command")
-#		@mup.next_div_name = method + " " + file
 		@mup.new_div!("command", "", :hide) do
 #			@mup.div("class" => "command") do
 				@mup.span( method + " ", "class" => "method")
@@ -437,9 +429,23 @@ class Formatter
 		%x{cd "#{$bundle}"; bin/play Sounds/#{sound} &}
 	end
 	
-	def target_name(name)
+	def target_name(name, style = nil)
 		@mup.end_div!("target")
-		@mup.next_div_name = name
+		
+		@mup.new_div!("target") do
+		
+			if style.nil? or style.empty? then
+				@mup.h2(name)
+			else
+				@mup.h2 do
+					@mup.text!("Building ")
+					@mup.span(name, 'class' => 'name')
+					@mup.text!(" with build style ")
+					@mup.span(style, 'class' => 'name')
+				end
+
+			end	
+		end
 	end
 	
 	def success

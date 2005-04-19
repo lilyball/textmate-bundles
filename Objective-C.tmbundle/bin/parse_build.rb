@@ -139,9 +139,9 @@ STDIN.each_line do |line|
 
 		# <path>:<line>:[column:] error description
 		when /^(.+?):(\d+):(?:\d*?:)?\s*(.*)/
-			path		= "#$1"
-			line_number = "#$2"
-			error_desc	= "#$3"
+			path		= $1
+			line_number = $2
+			error_desc	= $3
 		
 			# if the file doesn't exist, we probably snagged something that's not an error
 			if File.exist?(path)
@@ -161,7 +161,7 @@ STDIN.each_line do |line|
 		# some random file path as the first element of a line
 		when /^\s*(\s*)(\/.*?):/
 			
-			if File.exist?("#$2")
+			if File.exist?($2)
 				formatter.message_prefix( line )
 			else
 				formatter.build_noise( line )
@@ -169,7 +169,15 @@ STDIN.each_line do |line|
 							
 		# highlight each target name
 		when /^===(.*)===$/
-			formatter.target_name( "#$1" )
+			
+			target_name = $1
+			matches = /BUILDING (?:.+) TARGET\s(.+)\sUSING BUILD STYLE\s(.+)/.match(target_name)
+			
+			if matches.nil? then
+				formatter.target_name( target_name )
+			else
+				formatter.target_name( matches[1], matches[2] )
+			end
 		
 		else
 			formatter.build_noise( line )

@@ -1,73 +1,177 @@
-{
-	name = "Grey background";
-	uuid = "04794F28-AE31-11D9-9527-000D93589AF6";
-	settings = (
-		{	scope = "";
-			settings = {
-				background = "#A0A0A0";
-				foreground = "#000000";
-				selection = "#E3D9DE";
-			};
-		},
-		
-		{	scope = "comments";
-			settings = {
-				foreground = "#D0D0FF";
-				fontStyle = "italic";
-			};
-		},
-		
-		{	scope = "strings, constants.numeric";
-			settings = {
-				foreground = "#FFFFFF";
-			};
-		},
-
-		{	scope = "keywords";
-			settings = {
-				fontStyle = "bold";
-			};
-		},
-
-		{	scope = "keywords.preprocessor";
-			settings = {
-				foreground = "#D0D0FF";
-				fontStyle = "plain";
-			};
-		},
-
-		{	scope = "keywords.preprocessor directive";
-			settings = {
-				fontStyle = "bold";
-			};
-		},
-		
-		{	scope = "keywords.functions";
-			settings = {
-				foreground = "#404060";
-				fontStyle = "plain";
-			};
-		},
-		
-		{	scope = "keywords.objc.directives name";
-			settings = {
-				fontStyle = "underline";
-			};
-		},
-		
-		/* ========================================== */
-		/* = Handling Objective-C method prototypes = */
-		/* ========================================== */
-
-		{	scope = "declaration.function type type";
-			settings = { foreground = "#D0D0FF"; }; },
-		{	scope = "declaration.function type name";
-			settings = { fontStyle = "bold"; }; },
-		{	scope = "declaration.function argument-name";
-			settings = { fontStyle = "bold"; }; },
-		{	scope = "declaration.function argument type";
-			settings = { foreground = "#D0D0FF"; }; },
-		{	scope = "declaration.function argument value";
-			settings = { fontStyle = "italic"; }; },
-	);
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Grey background</string>
+	<key>settings</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>Grey background</string>
+			<key>scope</key>
+			<string></string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#A0A0A0</string>
+				<key>foreground</key>
+				<string>#000000</string>
+				<key>selection</key>
+				<string>#E3D9DE</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Comments</string>
+			<key>scope</key>
+			<string>comments</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#D0D0FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Strings &amp; Numbers</string>
+			<key>scope</key>
+			<string>strings, constants.numeric</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Keywords</string>
+			<key>scope</key>
+			<string>keywords</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Pre-processor Line</string>
+			<key>scope</key>
+			<string>keywords.preprocessor</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>plain</string>
+				<key>foreground</key>
+				<string>#D0D0FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Pre-processor Directive</string>
+			<key>scope</key>
+			<string>keywords.preprocessor directive</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Functions</string>
+			<key>scope</key>
+			<string>keywords.functions</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>plain</string>
+				<key>foreground</key>
+				<string>#404060</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Objective-C Directives</string>
+			<key>scope</key>
+			<string>keywords.objc.directives name</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>underline</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Obj-C: Method result</string>
+			<key>scope</key>
+			<string>declaration.function type type</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#D0D0FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Obj-C: Method name</string>
+			<key>scope</key>
+			<string>declaration.function type name</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Obj-C: Named argument</string>
+			<key>scope</key>
+			<string>declaration.function argument-name</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Obj-C: Argument type</string>
+			<key>scope</key>
+			<string>declaration.function argument type</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#D0D0FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Obj-C: Argument variable</string>
+			<key>scope</key>
+			<string>declaration.function argument value</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>untitled</string>
+			<key>scope</key>
+			<string>source.objc++</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>misc. settings goes here!</string>
+			</dict>
+		</dict>
+	</array>
+	<key>uuid</key>
+	<string>04794F28-AE31-11D9-9527-000D93589AF6</string>
+</dict>
+</plist>

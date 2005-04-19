@@ -32,6 +32,33 @@
 				}
 		</style>
 		<script type="text/javascript">
+		
+		    function attachSelectedEvent()
+		    {
+		        anchors = document.getElementsByTagName('a');
+		        for (i=0; i<anchors.length; i++) {
+		            if (anchors[i].onclick) {
+		                anchors[i].postOnClick = anchors[i].onclick;
+		            }
+		            anchors[i].onclick = selectLink;
+		        }
+		    }
+		    
+		    function selectLink()
+		    {
+		        this.className = "selected";
+		        if (this.postOnClick) {
+		            return this.postOnClick();
+		        } else {
+		            return true;
+		        }
+		    }
+		
+		    function postLoadInit()
+		    {
+		        setf();
+		        attachSelectedEvent();
+		    }
 
 			function setf() 
 			{
@@ -43,7 +70,7 @@
 				focusAnchor.focus();
 			}
 			
-			window.onload=setf;
+			window.onload=postLoadInit;
 		</script>
 	</head>
 	<body>

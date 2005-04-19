@@ -214,6 +214,12 @@ class EntitiesCss(SortableByMainEntity):
 EntitiesCss_html = EntitiesCss
 EntitiesCss_php = EntitiesCss
 
+class EntitiesDiff(SortableByMainEntity):
+    """experimental handler for diff files 
+    
+    FIXME.  this is a hack basically to navigate huge rdiff files (like cvs rdiff)"""
+    entityMatchLine = re.compile(r'(?P<prefix>^diff(\s-[a-z]{1})?(\s-[a-z]{1})?(\s-[a-z]{1})?)(?P<main>.*)(?P<suffix>$)')
+
 class EntitiesJavascript(SortableByMainEntity):
     """entity-matching handler for JavaScript (js) files
     

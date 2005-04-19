@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#
+# NOTE: to add a custom key binding, copy this command to 
+# Custom and set BUNDLE_PATH like so:
+#
+
+BUNDLE_PATH=${TM_BUNDLE_PATH}
+#BUNDLE_PATH=`dirname "${TM_BUNDLE_PATH}"`/Defaults.tmbundle
+
+"${TM_PYTHON:=python}" "${BUNDLE_PATH}/bin/entitynav.py" -f - -m "${TM_MODE}" | php "${BUNDLE_PATH}/bin/nav2list.php" --keep-open</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Special Items List -Keep Open</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>D7699613-B10B-11D9-A31F-000A9584EC8C</string>
+</dict>
+</plist>

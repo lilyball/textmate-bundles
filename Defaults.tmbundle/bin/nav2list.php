@@ -60,8 +60,15 @@
 	        $lineNum = substr($line, 0, $token);
 	        $line = substr($line, $token + 1);
 	    }
+	    
+	    // a little hack to accept a keep-open argument (this will all be moved to python soon, I promise)
+	    $extra_tag_params = '';
+	    if (!in_array('--keep-open', (array)$_SERVER['argv'])) {
+	        $extra_tag_params .= 'onclick="javascript:window.close()"';
+	    }
+	    
 	    echo implode('', array(
-	        "\t\t\t<li> <a id=\"line_{$lineNum}\" href=\"txmt://open?url=file://", getenv('TM_FILEPATH'), "&amp;line={$lineNum}\" onclick=\"javascript:window.close()\">", 
+	        "\t\t\t<li> <a id=\"line_{$lineNum}\" href=\"txmt://open?url=file://", getenv('TM_FILEPATH'), "&amp;line={$lineNum}\" {$extra_tag_params}>", 
 	        $line, "</a></li>\n"));
 	}
 ?>

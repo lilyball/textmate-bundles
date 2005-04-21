@@ -1,7 +1,7 @@
 {
 	// This file should be current for the latest revision of the ISO C standard
-	// as of this writing (late 2004 -- C99).  If one got really worked up about
-	// exactness, this could be further broken out into a "base C" file with different
+	// as of this writing (late 2004 -- C99).  If one chooses to be pedantic,
+	// this might be further broken out into a "base C" file with different
 	// "subclass" syntaxes for C90 and C99. C++ would then inherit from the "base C"
 	// syntax, which would avoid the C99 non-C++ keywords. But this seems more
 	// pragmatic. -- chris.
@@ -19,33 +19,33 @@
 	highlightPairs = (
 	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
 	);
-	foregroundColor = "#000000";
-	backgroundColor = "#FFFFFF";
 	patterns = (
-		{ name = "comments.block.c"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
-		{ name = "comments.line.c++"; match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
-		{ name = "keywords.control.c"; match = "\\<(break|case|continue|default|do|else|for|goto|if|inline|_Pragma|return|sizeof|switch|while)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
-		{ name = "keywords.storage.c"; match = "\\<(asm|__asm__|auto|_Bool|char|_Complex|const|double|enum|extern|float|_Imaginary|int|long|register|restrict|short|signed|static|struct|typedef|union|unsigned|void|volatile|NULL|true|false|TRUE|FALSE)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
-		{ name = "constants.numeric.c"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; foregroundColor = "#0000CD"; },
-		{ name = "strings.double-quoted.c"; begin = "\""; end = "\""; swallow = "\\\\."; foregroundColor = "#8B2252"; },
-		{ name = "strings.single-quoted.c"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#8B2252"; },
-//		{ name = "keywords.preprocessor.c"; match = "^\\s*#\\s*(define|defined|else|elif|endif|error|if|ifdef|ifndef|include|line|pragma|undef|warning)\\>"; fontStyle = ( bold ); foregroundColor = "#5C246E";},
+		{ name = "comments.block.c"; begin = "/\\*"; end = "\\*/"; },
+		{ name = "comments.line.c++"; begin = "//"; end = "[^\\\\]\\s*$"; },    // could swallow backslash-newline instead
+		{ name = "keywords.control.c"; match = "\\<(break|case|continue|default|do|else|for|goto|if|inline|_Pragma|return|sizeof|switch|while)\\>"; },
+		{ name = "keywords.storage.c"; match = "\\<(asm|__asm__|auto|_Bool|char|_Complex|const|double|enum|extern|float|_Imaginary|int|long|register|restrict|short|signed|static|struct|typedef|union|unsigned|void|volatile|NULL|true|false|TRUE|FALSE)\\>"; },
+		{ name = "constants.numeric.c"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>";},
+		{ name = "strings.double-quoted.c"; begin = "\""; end = "\""; swallow = "\\\\."; },
+		{ name = "strings.single-quoted.c"; begin = "'"; end = "'"; swallow = "\\\\."; },
 		{ name = "keywords.preprocessor.c";
 		  match = "^\\s*#\\s*(define|defined|else|elif|endif|error|if|ifdef|ifndef|line|pragma|undef|warning)\\>";
-		  	"fontStyle[1]" = ( bold );
-			foregroundColor = "#661136";
 			captures = { 1 = { name = "directive"; }; };
 		},
 		{ name = "keywords.preprocessor.c.includes";
 		    match = "^\\s*#\\s*(include|import)\\>\\s+(?:\"|<).*?(?:\"|>)";
-		    "fontStyle[1]" = ( bold );
-			foregroundColor = "#661136";
 			captures = { 1 = { name = "directive"; }; };
 		},
-/*		{ name = "declaration.function.c";
-		    match = "\\s([a-zA-Z_][0-9a-zA-Z_]*)\\s*\\((?=.*\\)\\s*($|\\{))";
+		
+		// This is a horrible hack. It doesn't work for functions with names smaller than four characters.
+		// Comments in the wrong place, though legal C, can fool it.
+		// Some function calls can fool it.
+		// Various C++ constructs can fool it.
+		// Macros can easily fool it. Macros can easily fool most parsers, though.
+		{ name = "declaration.function.c";
+//		    match = "(?!\\<(?:if|do|while|switch|for)\\>)([A-Za-z][A-Za-z0-9:]{4,})\\s*\\(.*?\\)(?!\\s*[;,\\(])";
+            match = "(?!\\<(?:if|do|while|switch|for)\\>)([A-Za-z][A-Za-z0-9:]{4,})\\s*\\((?=.*\\)\\s*($|\\{))";
 		    captures = { 1 = { name = "name"; }; };
 		},
-*/	);
+	);
 	uuid = "25066DC2-6B1D-11D9-9D5B-000D93589AF6";
 }

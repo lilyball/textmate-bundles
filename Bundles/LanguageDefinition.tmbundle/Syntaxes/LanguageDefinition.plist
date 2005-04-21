@@ -2,17 +2,22 @@
     name = "Language Definition (TextMate)";
     scopeName = "source.plist.language-definition";
     uuid = "101D6FC2-6CBD-11D9-B329-000D93347A42";
-    fileTypes = (tm-language-def); 
+    fileTypes = (plist); 
     foregroundColor = "#ffffff"; 
     backgroundColor = "#000000"; 
     foldingStartMarker = "(/\\*|\\{|\\()"; 
     foldingStopMarker = "(\\*/|\\}|\\))"; 
     highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") ); 
-    smartTypingPairs = ( ("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'") ); 
+    smartTypingPairs = ( ("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'") );
+    increaseIndentPattern = "(\\{|\\()\\s*$"; 
+
 
     patterns = (
         {   name = "keywords.tm-language-def"; foregroundColor = "#CC7833"; 
-            match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|increaseIndentPattern|smartTypingPairs|highlightPairs|foregroundColor|backgroundColor|patterns|foregroundColor|match|begin|end|swallow|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|include|uuid)\\>"; 
+            match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|increaseIndentPattern|smartTypingPairs|highlightPairs|patterns|match|begin|end|swallow|include|uuid|scopeName|captures)\\>"; 
+        },
+        {   name = "invalid.deprecated.tm-language-def";
+            match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle)\\>";
         },
         {   name = "comments.block.tm-language-def"; foregroundColor = "#00ffff"; begin = "/\\*"; end = "\\*/"; },
         {   name = "comments.line.tm-language-def"; foregroundColor = "#00ffff"; match = "//.*$"; },  
@@ -22,9 +27,10 @@
             swallow = "\\\\.";
             patterns = (
                 {   name = "strings.regexp.tm-language-def"; foregroundColor = "#ff0000"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
-                {   name = "constants.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
+                {   name = "invalid.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
             );
         },
+
         {   name = "strings.double-quoted.tm-language-def";
             begin = "\"(?=.*\")";
             end = "\"";

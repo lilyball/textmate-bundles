@@ -26,8 +26,8 @@
             end = "'";
             swallow = "\\\\.";
             patterns = (
+                {   name = "invalid.deprecated.constants.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
                 {   name = "strings.regexp.tm-language-def"; foregroundColor = "#ff0000"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
-                {   name = "invalid.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
             );
         },
 
@@ -37,7 +37,7 @@
             swallow = "\\\\.";
             patterns = (
                 {   name = "strings.regexp.tm-language-def"; foregroundColor = "#ff0000"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
-                {   name = "constants.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
+                {   name = "invalid.deprecated.constants.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
             );
         },
     ); 

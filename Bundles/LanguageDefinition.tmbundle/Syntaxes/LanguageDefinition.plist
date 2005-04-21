@@ -3,8 +3,6 @@
     scopeName = "source.plist.language-definition";
     uuid = "101D6FC2-6CBD-11D9-B329-000D93347A42";
     fileTypes = (plist); 
-    foregroundColor = "#ffffff"; 
-    backgroundColor = "#000000"; 
     foldingStartMarker = "(/\\*|\\{|\\()"; 
     foldingStopMarker = "(\\*/|\\}|\\))"; 
     highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") ); 
@@ -13,21 +11,21 @@
 
 
     patterns = (
-        {   name = "keywords.tm-language-def"; foregroundColor = "#CC7833"; 
-            match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|increaseIndentPattern|smartTypingPairs|highlightPairs|patterns|match|begin|end|swallow|include|uuid|scopeName|captures)\\>"; 
+        {   name = "keywords.tm-language-def";
+            match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|increaseIndentPattern|smartTypingPairs|highlightPairs|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|firstLineMatch)\\>"; 
         },
         {   name = "invalid.deprecated.tm-language-def";
-            match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle)\\>";
+            match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode)\\>";
         },
-        {   name = "comments.block.tm-language-def"; foregroundColor = "#00ffff"; begin = "/\\*"; end = "\\*/"; },
-        {   name = "comments.line.tm-language-def"; foregroundColor = "#00ffff"; match = "//.*$"; },  
+        {   name = "comments.block.tm-language-def"; begin = "/\\*"; end = "\\*/"; },
+        {   name = "comments.line.tm-language-def"; match = "//.*$"; },  
         {   name = "strings.single-quoted.tm-language-def";
             begin = "'(?=.*\')";
             end = "'";
             swallow = "\\\\.";
             patterns = (
-                {   name = "invalid.deprecated.constants.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
-                {   name = "strings.regexp.tm-language-def"; foregroundColor = "#ff0000"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
+                {   name = "invalid.deprecated.constants.colors.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
+                {   name = "strings.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
             );
         },
 
@@ -36,8 +34,8 @@
             end = "\"";
             swallow = "\\\\.";
             patterns = (
-                {   name = "strings.regexp.tm-language-def"; foregroundColor = "#ff0000"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
-                {   name = "invalid.deprecated.constants.colors.tm-language-def"; foregroundColor = "#78CC33"; match = "#[0-9A-Fa-f]{6}"; },
+                {   name = "strings.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
+                {   name = "invalid.deprecated.constants.colors.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
             );
         },
     ); 

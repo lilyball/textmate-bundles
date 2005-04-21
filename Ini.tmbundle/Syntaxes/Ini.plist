@@ -1,112 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>backgroundColor</key>
-	<string>#000000</string>
-	<key>fileTypes</key>
-	<array>
-		<string>ini</string>
-		<string>conf</string>
-	</array>
-	<key>foldingStartMarker</key>
-	<string>\[</string>
-	<key>foldingStopMarker</key>
-	<string>\[</string>
-	<key>foregroundColor</key>
-	<string>#ffffff</string>
-	<key>highlightPairs</key>
-	<array>
-		<array>
-			<string>(</string>
-			<string>)</string>
-		</array>
-		<array>
-			<string>[</string>
-			<string>]</string>
-		</array>
-		<array>
-			<string>{</string>
-			<string>}</string>
-		</array>
-	</array>
-	<key>name</key>
-	<string>Ini</string>
-	<key>patterns</key>
-	<array>
-		<dict>
-			<key>foregroundColor[1]</key>
-			<string>#CC7833</string>
-			<key>foregroundColor[2]</key>
-			<string>#236B8E</string>
-			<key>match</key>
-			<string>\&lt;([a-zA-Z_]+)\&gt;\s*(=)</string>
-			<key>name</key>
-			<string>definition</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#9933CC</string>
-			<key>match</key>
-			<string>(^;.*)</string>
-			<key>name</key>
-			<string>comments</string>
-		</dict>
-		<dict>
-			<key>foregroundColor[1]</key>
-			<string>#AD9361</string>
-			<key>match</key>
-			<string>^\[(.*)\]</string>
-			<key>name</key>
-			<string>group-title</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>'</string>
-			<key>end</key>
-			<string>'</string>
-			<key>foregroundColor</key>
-			<string>#66CC33</string>
-			<key>name</key>
-			<string>strings.single-quoted</string>
-			<key>swallow</key>
-			<string>\\.</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>"</string>
-			<key>end</key>
-			<string>"</string>
-			<key>foregroundColor</key>
-			<string>#66CC33</string>
-			<key>name</key>
-			<string>strings.double-quoted</string>
-		</dict>
-	</array>
-	<key>smartTypingPairs</key>
-	<array>
-		<array>
-			<string>(</string>
-			<string>)</string>
-		</array>
-		<array>
-			<string>[</string>
-			<string>]</string>
-		</array>
-		<array>
-			<string>{</string>
-			<string>}</string>
-		</array>
-		<array>
-			<string>"</string>
-			<string>"</string>
-		</array>
-		<array>
-			<string>'</string>
-			<string>'</string>
-		</array>
-	</array>
-	<key>uuid</key>
-	<string>77DC23B6-8A90-11D9-BAA4-000A9584EC8C</string>
-</dict>
-</plist>
+{
+    backgroundColor = "#000000"; 
+    fileTypes = (ini, conf); 
+    foldingStartMarker = "\\["; 
+    foldingStopMarker = "\\["; 
+    foregroundColor = "#ffffff"; 
+    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
+    name = Ini; 
+    scopeName = "source.ini";
+    patterns = (
+        {
+            "foregroundColor[1]" = "#CC7833"; 
+            "foregroundColor[2]" = "#236B8E"; 
+            match = "\\<([a-zA-Z_]+)\\>\\s*(=)"; 
+            name = definition; 
+        }, 
+        {foregroundColor = "#9933CC"; match = "(^;.*)"; name = comments; }, 
+        {
+            "foregroundColor[1]" = "#AD9361"; 
+            match = "^\\[(.*)\\]"; 
+            name = "group-title"; 
+        }, 
+        {
+            begin = "'"; 
+            end = "'"; 
+            foregroundColor = "#66CC33"; 
+            name = "strings.single-quoted"; 
+            swallow = "\\\\."; 
+        }, 
+        {
+            begin = "\""; 
+            end = "\""; 
+            foregroundColor = "#66CC33"; 
+            name = "strings.double-quoted"; 
+        }
+    ); 
+    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
+    uuid = "77DC23B6-8A90-11D9-BAA4-000A9584EC8C"; 
+}

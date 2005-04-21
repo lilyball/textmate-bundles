@@ -1,5 +1,6 @@
 {
 	name = "C++";
+	scopeName = "source.c++";
 	// I don't think anyone uses ".hp". .cp tends to be paired with .h. (I could be wrong. :) -- chris
 	fileTypes = ( cc, cpp, cp, cxx, "c++", C, h, hpp, "h++" );
 	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
@@ -15,7 +16,7 @@
 	foregroundColor = "#000000";
 	backgroundColor = "#FFFFFF";
 	patterns = (
-		{ include = "C"; },
+		{ include = "source.c"; },
 		{ name = "keywords.control.c++";
 		match = "\\<(explicit|export|catch|friend|namespace|operator|private|protected|public|template|this|try|throw|using|virtual)\\>";
 		fontStyle = ( bold );

@@ -11,7 +11,9 @@
 	
 	
 	name = "Perl";
+	scopeName = "source.perl";
 	fileTypes = (pl, pm, pod);
+	firstLineMatch = "^#!/.*\\<perl\\>";
 	foldingStartMarker = "(/\\*|(\\{|\\[|\\()\\s*$)";
 	foldingStopMarker = "(\\*/|^\\s*(\\}|\\]|\\)))";
 	smartTypingPairs	= ( ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" ), ( "'", "'" ) );

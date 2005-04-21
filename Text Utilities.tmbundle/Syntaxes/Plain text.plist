@@ -1,0 +1,13 @@
+{
+    name = "Plain text"; 
+    uuid = "3130E4FA-B10E-11D9-9F75-000D93589AF6";
+    scopeName = "text.plain";
+    fileTypes = ( txt );
+    keyEquivalent = "~^P";
+
+    patterns = (
+        { name = "dummy.bullet-point.strong"; match = "^\\s*•.*$"; },
+        { name = "dummy.bullet-point.light"; match = "^\\s*·.*$"; },
+        { name = "dummy.bullet-point.star"; match = "^\\s*\\*.*$"; },
+    );
+}

@@ -1,21 +1,15 @@
 {
-	name = "Objective-C++";
-	fileTypes = ( mm, M, h );
-	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
-	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
-	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
-	smartTypingPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
-	   ( "\"", "\"" ), ( "'", "'" )
-	);
-	highlightPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
-	);
-	foregroundColor = "#000000";
-	backgroundColor = "#FFFFFF";
-	patterns = (
-		{ include = "Objective-C"; },
-		{ include = "C++"; }
-	);
-	uuid = "FDAB1813-6B1C-11D9-BCAC-000D93589AF6";
+    name = "Objective-C++"; 
+    scopeName = "source.objc++";
+    backgroundColor = "#FFFFFF"; 
+    keyEquivalent = "~^C";
+    fileTypes = (mm, M, h); 
+    foldingStartMarker = "(/\\*\\*|\\{\\s*$)"; 
+    foldingStopMarker = "(\\*\\*/|^\\s*\\})"; 
+    foregroundColor = "#000000"; 
+    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
+    increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$"; 
+    patterns = ({include = "source.objc"; }, {include = "source.c++"; }); 
+    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
+    uuid = "FDAB1813-6B1C-11D9-BCAC-000D93589AF6"; 
 }

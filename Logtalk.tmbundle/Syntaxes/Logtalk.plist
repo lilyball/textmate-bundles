@@ -1,446 +1,247 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>backgroundColor</key>
-	<string>#ffffff</string>
-	<key>fileTypes</key>
-	<array>
-		<string>lgt</string>
-		<string>mlgt</string>
-		<string>config</string>
-		<string>loader</string>
-	</array>
-	<key>foldingStartMarker</key>
-	<string>:-\s+(object|protocol|category)(?=[(])</string>
-	<key>foldingStopMarker</key>
-	<string>:-\s+end_(object|protocol|category)(?=[.])</string>
-	<key>foregroundColor</key>
-	<string>#000000</string>
-	<key>highlightPairs</key>
-	<array>
-		<array>
-			<string>(</string>
-			<string>)</string>
-		</array>
-		<array>
-			<string>[</string>
-			<string>]</string>
-		</array>
-		<array>
-			<string>{</string>
-			<string>}</string>
-		</array>
-	</array>
-	<key>increaseIndentPattern</key>
-	<string>:-$</string>
-	<key>name</key>
-	<string>Logtalk</string>
-	<key>patterns</key>
-	<array>
-		<dict>
-			<key>begin</key>
-			<string>/\*</string>
-			<key>end</key>
-			<string>\*/</string>
-			<key>fontStyle</key>
-			<array>
-				<string>italic</string>
-			</array>
-			<key>foregroundColor</key>
-			<string>#23763A</string>
-			<key>name</key>
-			<string>comments.block.logtalk</string>
-		</dict>
-		<dict>
-			<key>fontStyle</key>
-			<array>
-				<string>italic</string>
-			</array>
-			<key>foregroundColor</key>
-			<string>#23763A</string>
-			<key>match</key>
-			<string>%.*$</string>
-			<key>name</key>
-			<string>comments.line.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#881280</string>
-			<key>match</key>
-			<string>:-\s+(object|protocol|category)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.directives.entity.opening.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#881280</string>
-			<key>match</key>
-			<string>:-\s+end_(object|protocol|category)(?=[.])</string>
-			<key>name</key>
-			<string>keywords.directives.entity.closing.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#881280</string>
-			<key>match</key>
-			<string>\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.directives.entity.relations.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#881280</string>
-			<key>match</key>
-			<string>:-\s+(calls|encoding|in(itialization|fo)|uses)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.directives.entity.others.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#881280</string>
-			<key>match</key>
-			<string>:-\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.directives.predicate.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#0000ff</string>
-			<key>match</key>
-			<string>(::|\^\^)</string>
-			<key>name</key>
-			<string>keywords.operators.message-sending.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#0000ff</string>
-			<key>match</key>
-			<string>(\?|@)</string>
-			<key>name</key>
-			<string>keywords.operators.mode.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#0000ff</string>
-			<key>match</key>
-			<string>(@=&lt;|@&lt;|@&gt;|@&gt;=|==|\\==)</string>
-			<key>name</key>
-			<string>keywords.operators.term-comparison.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#0000ff</string>
-			<key>match</key>
-			<string>(=&lt;|&lt;|&gt;|&gt;=|=:=|=\\=)</string>
-			<key>name</key>
-			<string>keywords.operators.arithmetic-comparison.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#0000ff</string>
-			<key>match</key>
-			<string>(&lt;&lt;|&gt;&gt;|/\\|\\/|\\)</string>
-			<key>name</key>
-			<string>keywords.operators.bitwise.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#0000ff</string>
-			<key>match</key>
-			<string>\&lt;(mod|rem)\&gt;</string>
-			<key>name</key>
-			<string>keywords.operators.evaluable.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#0000ff</string>
-			<key>match</key>
-			<string>(\*\*|\+|-|\*|/|//)</string>
-			<key>name</key>
-			<string>keywords.operators.evaluable.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#0000ff</string>
-			<key>match</key>
-			<string>(:-|!|\\+|,|;|--&gt;|-&gt;|=|\=|\.|=\.\.|\&lt;is\&gt;)</string>
-			<key>name</key>
-			<string>keywords.operators.misc.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(true|fail|repeat)\&gt;</string>
-			<key>name</key>
-			<string>keywords.predicates.control.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(ca(ll|tch)|throw|once)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.control.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;((get|peek|put)_(char|code|byte)|nl)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.chars-and-bytes-io.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;nl\&gt;</string>
-			<key>name</key>
-			<string>keywords.predicates.chars-and-bytes-io.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(atom_(length|concat|chars|codes)|sub_atom|char_code|number_(chars|codes))(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.atom-term-processing.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.term-testing.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(read_term|read|write|writeq|write_(canonical|term)|op|current_op|char_conversion|current_char_conversion)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.term-io.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(arg|copy_term|functor)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.term-creation-and-decomposition.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(unify_with_occurs_check)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.term-unification.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.stream-selection-and-control.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(flush_output|at_end_of_stream)\&gt;</string>
-			<key>name</key>
-			<string>keywords.predicates.stream-selection-and-control.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;((set|current)_prolog_flag)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.prolog-flags.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(logtalk_(compile|l(ibrary_path|oad)))(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.compiling-and-loading.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;((abolish|define)_events|current_event)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.event-handling.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;((current|set)_logtalk_flag|halt)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.hooks.implementation-defined.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(halt)\&gt;</string>
-			<key>name</key>
-			<string>keywords.predicates.hooks.implementation-defined.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;((create|abolish)_(object|protocol|category))(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.entity-creation-and-abolishing.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(current_(object|protocol|category)|(object|protocol|category)_property||extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.reflection.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;((for|retract)all)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.misc.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(parameter|se(lf|nder)|this)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.execution-context.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(abolish|assert(a|z)|clause|retract|retractall)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.database.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;((bag|set)of|f(ind|or)all)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.all-solutions.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(current_predicate|predicate_property)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.reflection.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(before|after)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.event-handler.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#1A1AA6</string>
-			<key>match</key>
-			<string>\&lt;(expand_term|phrase)(?=[(])</string>
-			<key>name</key>
-			<string>keywords.predicates.grammar-rule.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#C44B45</string>
-			<key>match</key>
-			<string>\&lt;(0'[0-9a-zA-Z]|0b[0-1]+|0o[0-7]+|0x[0-9a-fA-F]+)\&gt;</string>
-			<key>name</key>
-			<string>constants.numeric.logtalk</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#C44B45</string>
-			<key>match</key>
-			<string>\&lt;([0-9]+\.?[0-9]*((e|E)(\+|-)[0-9]+)?)\&gt;</string>
-			<key>name</key>
-			<string>constants.numeric.logtalk</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>'</string>
-			<key>end</key>
-			<string>'</string>
-			<key>foregroundColor</key>
-			<string>#881314</string>
-			<key>name</key>
-			<string>strings.quoted-atoms.logtalk</string>
-			<key>swallow</key>
-			<string>\\.</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>"</string>
-			<key>end</key>
-			<string>"</string>
-			<key>foregroundColor</key>
-			<string>#881314</string>
-			<key>name</key>
-			<string>strings.double-quoted.logtalk</string>
-			<key>swallow</key>
-			<string>\\.</string>
-		</dict>
-		<dict>
-			<key>foregroundColor</key>
-			<string>#848AB9</string>
-			<key>match</key>
-			<string>\&lt;(\u|_)\w*\&gt;</string>
-			<key>name</key>
-			<string>keywords.variables.logtalk</string>
-		</dict>
-	</array>
-	<key>smartTypingPairs</key>
-	<array>
-		<array>
-			<string>(</string>
-			<string>)</string>
-		</array>
-		<array>
-			<string>[</string>
-			<string>]</string>
-		</array>
-		<array>
-			<string>{</string>
-			<string>}</string>
-		</array>
-		<array>
-			<string>"</string>
-			<string>"</string>
-		</array>
-		<array>
-			<string>'</string>
-			<string>'</string>
-		</array>
-	</array>
-	<key>uuid</key>
-	<string>C11FA1F2-6EDB-11D9-8798-000A95DAA580</string>
-</dict>
-</plist>
+{
+    backgroundColor = "#ffffff"; 
+    fileTypes = (lgt, mlgt, config, loader); 
+    foldingStartMarker = ":-\\s+(object|protocol|category)(?=[(])"; 
+    foldingStopMarker = ":-\\s+end_(object|protocol|category)(?=[.])"; 
+    foregroundColor = "#000000"; 
+    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
+    increaseIndentPattern = ":-$"; 
+    name = Logtalk; 
+    scopeName = "source.logtalk";
+    patterns = (
+        {
+            begin = "/\\*"; 
+            end = "\\*/"; 
+            fontStyle = (italic); 
+            foregroundColor = "#23763A"; 
+            name = "comments.block.logtalk"; 
+        }, 
+        {
+            fontStyle = (italic); 
+            foregroundColor = "#23763A"; 
+            match = "%.*$"; 
+            name = "comments.line.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#881280"; 
+            match = ":-\\s+(object|protocol|category)(?=[(])"; 
+            name = "keywords.directives.entity.opening.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#881280"; 
+            match = ":-\\s+end_(object|protocol|category)(?=[.])"; 
+            name = "keywords.directives.entity.closing.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#881280"; 
+            match = "\\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])"; 
+            name = "keywords.directives.entity.relations.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#881280"; 
+            match = ":-\\s+(calls|encoding|in(itialization|fo)|uses)(?=[(])"; 
+            name = "keywords.directives.entity.others.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#881280"; 
+            match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])"; 
+            name = "keywords.directives.predicate.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#0000ff"; 
+            match = "(::|\\^\\^)"; 
+            name = "keywords.operators.message-sending.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#0000ff"; 
+            match = "(\\?|@)"; 
+            name = "keywords.operators.mode.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#0000ff"; 
+            match = "(@=<|@<|@>|@>=|==|\\\\==)"; 
+            name = "keywords.operators.term-comparison.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#0000ff"; 
+            match = "(=<|<|>|>=|=:=|=\\\\=)"; 
+            name = "keywords.operators.arithmetic-comparison.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#0000ff"; 
+            match = "(<<|>>|/\\\\|\\\\/|\\\\)"; 
+            name = "keywords.operators.bitwise.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#0000ff"; 
+            match = "\\<(mod|rem)\\>"; 
+            name = "keywords.operators.evaluable.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#0000ff"; 
+            match = "(\\*\\*|\\+|-|\\*|/|//)"; 
+            name = "keywords.operators.evaluable.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#0000ff"; 
+            match = "(:-|!|\\\\+|,|;|-->|->|=|\\=|\\.|=\\.\\.|\\<is\\>)"; 
+            name = "keywords.operators.misc.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(true|fail|repeat)\\>"; 
+            name = "keywords.predicates.control.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(ca(ll|tch)|throw|once)(?=[(])"; 
+            name = "keywords.predicates.control.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<((get|peek|put)_(char|code|byte)|nl)(?=[(])"; 
+            name = "keywords.predicates.chars-and-bytes-io.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<nl\\>"; 
+            name = "keywords.predicates.chars-and-bytes-io.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(atom_(length|concat|chars|codes)|sub_atom|char_code|number_(chars|codes))(?=[(])"; 
+            name = "keywords.predicates.atom-term-processing.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])"; 
+            name = "keywords.predicates.term-testing.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(read_term|read|write|writeq|write_(canonical|term)|op|current_op|char_conversion|current_char_conversion)(?=[(])"; 
+            name = "keywords.predicates.term-io.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(arg|copy_term|functor)(?=[(])"; 
+            name = "keywords.predicates.term-creation-and-decomposition.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(unify_with_occurs_check)(?=[(])"; 
+            name = "keywords.predicates.term-unification.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])"; 
+            name = "keywords.predicates.stream-selection-and-control.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(flush_output|at_end_of_stream)\\>"; 
+            name = "keywords.predicates.stream-selection-and-control.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<((set|current)_prolog_flag)(?=[(])"; 
+            name = "keywords.predicates.prolog-flags.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(logtalk_(compile|l(ibrary_path|oad)))(?=[(])"; 
+            name = "keywords.predicates.compiling-and-loading.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<((abolish|define)_events|current_event)(?=[(])"; 
+            name = "keywords.predicates.event-handling.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<((current|set)_logtalk_flag|halt)(?=[(])"; 
+            name = "keywords.predicates.hooks.implementation-defined.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(halt)\\>"; 
+            name = "keywords.predicates.hooks.implementation-defined.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<((create|abolish)_(object|protocol|category))(?=[(])"; 
+            name = "keywords.predicates.entity-creation-and-abolishing.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(current_(object|protocol|category)|(object|protocol|category)_property||extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])"; 
+            name = "keywords.predicates.reflection.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<((for|retract)all)(?=[(])"; 
+            name = "keywords.predicates.misc.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(parameter|se(lf|nder)|this)(?=[(])"; 
+            name = "keywords.predicates.execution-context.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(abolish|assert(a|z)|clause|retract|retractall)(?=[(])"; 
+            name = "keywords.predicates.database.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<((bag|set)of|f(ind|or)all)(?=[(])"; 
+            name = "keywords.predicates.all-solutions.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(current_predicate|predicate_property)(?=[(])"; 
+            name = "keywords.predicates.reflection.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(before|after)(?=[(])"; 
+            name = "keywords.predicates.event-handler.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#1A1AA6"; 
+            match = "\\<(expand_term|phrase)(?=[(])"; 
+            name = "keywords.predicates.grammar-rule.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#C44B45"; 
+            match = "\\<(0'[0-9a-zA-Z]|0b[0-1]+|0o[0-7]+|0x[0-9a-fA-F]+)\\>"; 
+            name = "constants.numeric.logtalk"; 
+        }, 
+        {
+            foregroundColor = "#C44B45"; 
+            match = "\\<([0-9]+\\.?[0-9]*((e|E)(\\+|-)[0-9]+)?)\\>"; 
+            name = "constants.numeric.logtalk"; 
+        }, 
+        {
+            begin = "'"; 
+            end = "'"; 
+            foregroundColor = "#881314"; 
+            name = "strings.quoted-atoms.logtalk"; 
+            swallow = "\\\\."; 
+        }, 
+        {
+            begin = "\""; 
+            end = "\""; 
+            foregroundColor = "#881314"; 
+            name = "strings.double-quoted.logtalk"; 
+            swallow = "\\\\."; 
+        }, 
+        {
+            foregroundColor = "#848AB9"; 
+            match = "\\<(\\u|_)\\w*\\>"; 
+            name = "keywords.variables.logtalk"; 
+        }
+    ); 
+    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
+    uuid = "C11FA1F2-6EDB-11D9-8798-000A95DAA580"; 
+}

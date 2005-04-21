@@ -14,8 +14,9 @@
 
 {
 	name = "XML";
+	scopeName = "text.xml";
 	
-	fileTypes = ( xml, plist, tld, jsp, xslt );
+	fileTypes = ( xml, tld, jsp, xslt );
 
 	foldingStartMarker = "^\\s*(<[^!?%/](?!.+?(/>|</.+?>))|<[!%]--(?!.+?--%?>)|<%[!]?(?!.+?%>))";
 	foldingStopMarker  = "^\\s*(</[^>]+>|[/%]>|-->)\\s*$";

@@ -7,6 +7,7 @@
 	// pragmatic. -- chris.
 	
 	name = "C";
+	scopeName = "source.c";
 	fileTypes = ( c, h );
 	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
 	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
@@ -32,14 +33,19 @@
 		{ name = "keywords.preprocessor.c";
 		  match = "^\\s*#\\s*(define|defined|else|elif|endif|error|if|ifdef|ifndef|line|pragma|undef|warning)\\>";
 		  	"fontStyle[1]" = ( bold );
-			foregroundColor = "#661136";},
-		
+			foregroundColor = "#661136";
+			captures = { 1 = { name = "directive"; }; };
+		},
 		{ name = "keywords.preprocessor.c.includes";
 		    match = "^\\s*#\\s*(include|import)\\>\\s+(?:\"|<).*?(?:\"|>)";
 		    "fontStyle[1]" = ( bold );
-			foregroundColor = "#661136";},
-
-		
-	);
+			foregroundColor = "#661136";
+			captures = { 1 = { name = "directive"; }; };
+		},
+/*		{ name = "declaration.function.c";
+		    match = "\\s([a-zA-Z_][0-9a-zA-Z_]*)\\s*\\((?=.*\\)\\s*($|\\{))";
+		    captures = { 1 = { name = "name"; }; };
+		},
+*/	);
 	uuid = "25066DC2-6B1D-11D9-9D5B-000D93589AF6";
 }

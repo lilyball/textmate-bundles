@@ -1,5 +1,12 @@
 {
+	/*	TODO heredoc (<<[-]token...token)
+		TODO variables ($variable)
+		TODO command-interpolation (`...` + $(...))
+		TODO maybe do include of perl/ruby etc. for perl <<EOF or perl -e '...'
+	*/
 	name = "Unix shell (generic)";
+	scopeName = "source.shell";
+	keyEquivalent = "~^S";
 	fileTypes = ( sh, ss );
 
   foldingStartMarker = "\\{";
@@ -17,10 +24,16 @@
 
 	patterns = (
 		{ name = "keywords.functions.shell"; match = "\\<(.*)\\>(\s*)\\(\\)"; fontStyle = ( bold );},
+		{ name = "keywords.control.shell"; match = "\\<(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\\>"; },
+		{ name = "keywords.storage.shell"; match = "\\<(?:export)\\>"; },
 		{ name = "constants.numeric.shell"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#F0F8FF"; },
-		{ name = "strings.single-quoted.shell"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; },
-	    { name = "strings.double-quoted.shell"; begin = "\""; end = "\"";  foregroundColor = "#FFFCCF";   },
-	
+		{ name = "strings.single-quoted.shell"; begin = "'"; end = "'"; foregroundColor = "#FFFCCF"; },
+        { name = "strings.double-quoted.shell"; begin = "\""; end = "\"";  swallow = "\\\\."; foregroundColor = "#FFFCCF"; },
+        { name = "strings.back-quoted.shell"; begin = "`"; end = "`"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; },
+        { name = "strings.dollar-quoted.shell"; begin = "\\$'"; end = "'";  swallow = "\\\\."; foregroundColor = "#FFFCCF"; },
+        { name = "strings.shell-interpolation.shell"; begin = "\\$\\("; end = "\\)"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; },
+        { name = "strings.math.shell"; begin = "\\$\\(\\("; end = "\\)\\)"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; },
+
 		{ name = "comments.line.shell"; match = "#[^{](.*)"; "fontStyle" = ( italic ); foregroundColor = "#E6E8FA"; },
 		{ name = "comments.line.shell.lonepound"; match = "#$"; "fontStyle" = ( italic ); foregroundColor = "#E6E8FA"; }
 	);

@@ -1,245 +1,148 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>name</key>
-	<string>Basic settings</string>
-	<key>settings</key>
-	<array>
-		<dict>
-			<key>name</key>
-			<string>Default Smart typing</string>
-			<key>scope</key>
-			<string></string>
-			<key>settings</key>
-			<dict>
-				<key>smartTypingPairs</key>
-				<array>
-					<array>
-						<string>"</string>
-						<string>"</string>
-					</array>
-					<array>
-						<string>(</string>
-						<string>)</string>
-					</array>
-					<array>
-						<string>{</string>
-						<string>}</string>
-					</array>
-					<array>
-						<string>[</string>
-						<string>]</string>
-					</array>
-					<array>
-						<string>“</string>
-						<string>”</string>
-					</array>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Source settings</string>
-			<key>scope</key>
-			<string>source</string>
-			<key>settings</key>
-			<dict>
-				<key>increaseIndentPattern</key>
-				<string>^.*(\{[^}"']*|\([^)"']*)$</string>
-				<key>smartTypingPairs</key>
-				<array>
-					<array>
-						<string>"</string>
-						<string>"</string>
-					</array>
-					<array>
-						<string>(</string>
-						<string>)</string>
-					</array>
-					<array>
-						<string>{</string>
-						<string>}</string>
-					</array>
-					<array>
-						<string>[</string>
-						<string>]</string>
-					</array>
-					<array>
-						<string>“</string>
-						<string>”</string>
-					</array>
-					<array>
-						<string>'</string>
-						<string>'</string>
-					</array>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Strings/comments: No ' in ST</string>
-			<key>scope</key>
-			<string>strings.double-quoted, comments</string>
-			<key>settings</key>
-			<dict>
-				<key>smartTypingPairs</key>
-				<array>
-					<array>
-						<string>"</string>
-						<string>"</string>
-					</array>
-					<array>
-						<string>(</string>
-						<string>)</string>
-					</array>
-					<array>
-						<string>{</string>
-						<string>}</string>
-					</array>
-					<array>
-						<string>[</string>
-						<string>]</string>
-					</array>
-					<array>
-						<string>“</string>
-						<string>”</string>
-					</array>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Obj-C completions</string>
-			<key>scope</key>
-			<string>source.objc</string>
-			<key>settings</key>
-			<dict>
-				<key>completions</key>
-				<array>
-					<string>retain</string>
-					<string>release</string>
-					<string>autorelease</string>
-					<string>description</string>
-					<string>stringWithFormat:</string>
-					<string>componentsSeparatedByString:</string>
-					<string>isEqualToString:</string>
-					<string>UTF8String</string>
-					<string>lastPathComponent</string>
-					<string>pathExtension</string>
-					<string>stringByAbbreviatingWithTildeInPath</string>
-					<string>stringByAppendingPathComponent:</string>
-					<string>stringByAppendingPathExtension:</string>
-					<string>stringByDeletingLastPathComponent</string>
-					<string>stringByDeletingPathExtension</string>
-					<string>stringByExpandingTildeInPath</string>
-					<string>stringByResolvingSymlinksInPath</string>
-					<string>stringByStandardizingPath</string>
-					<string>valueForKey:</string>
-					<string>valueForKeyPath:</string>
-					<string>setValue:</string>
-					<string>forKey:</string>
-					<string>forKeyPath:</string>
-					<string>NSArray</string>
-					<string>NSDictionary</string>
-					<string>NSMutableArray</string>
-					<string>NSMutableDictionary</string>
-					<string>NSMutableString</string>
-					<string>NSString</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>HTML settings</string>
-			<key>scope</key>
-			<string>text.html</string>
-			<key>settings</key>
-			<dict>
-				<key>increaseIndentPattern</key>
-				<string>(&lt;(head|title|table|tr|td|ul|ol|dl|div)\&gt;[^&gt;]*&gt;|\{)\s*$</string>
-				<key>smartTypingPairs</key>
-				<array>
-					<array>
-						<string>"</string>
-						<string>"</string>
-					</array>
-					<array>
-						<string>(</string>
-						<string>)</string>
-					</array>
-					<array>
-						<string>{</string>
-						<string>}</string>
-					</array>
-					<array>
-						<string>[</string>
-						<string>]</string>
-					</array>
-					<array>
-						<string>“</string>
-						<string>”</string>
-					</array>
-					<array>
-						<string>&lt;</string>
-						<string>&gt;</string>
-					</array>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>HTML: Add ' to ST for tags</string>
-			<key>scope</key>
-			<string>text.html keywords.markup</string>
-			<key>settings</key>
-			<dict>
-				<key>smartTypingPairs</key>
-				<array>
-					<array>
-						<string>"</string>
-						<string>"</string>
-					</array>
-					<array>
-						<string>(</string>
-						<string>)</string>
-					</array>
-					<array>
-						<string>{</string>
-						<string>}</string>
-					</array>
-					<array>
-						<string>[</string>
-						<string>]</string>
-					</array>
-					<array>
-						<string>“</string>
-						<string>”</string>
-					</array>
-					<array>
-						<string>&lt;</string>
-						<string>&gt;</string>
-					</array>
-					<array>
-						<string>'</string>
-						<string>'</string>
-					</array>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>HTML: Disable spell checking for tags</string>
-			<key>scope</key>
-			<string>text.html keywords, text.html constants</string>
-			<key>settings</key>
-			<dict>
-				<key>spellChecking</key>
-				<string>0</string>
-			</dict>
-		</dict>
-	</array>
-	<key>uuid</key>
-	<string>04C16970-AE30-11D9-BE88-000D93589AF6</string>
-</dict>
-</plist>
+{
+    name = "Basic settings"; 
+    settings = (
+        {
+            name = "Default Smart typing"; 
+            scope = ""; 
+            settings = {
+                smartTypingPairs = (
+                    ("\"", "\""), 
+                    ("(", ")"), 
+                    ("{", "}"), 
+                    ("[", "]"), 
+                    ("\U201a\U00c4\U00fa", "\U201a\U00c4\U00f9")
+                ); 
+            }; 
+        }, 
+        {
+            name = "Default highlight pairs"; 
+            scope = ""; 
+            settings = {
+                highlightPairs = (
+                    ("(", ")"), 
+                    ("{", "}"), 
+                    ("[", "]"), 
+                    ("\U201a\U00c4\U00fa", "\U201a\U00c4\U00f9")
+                ); 
+            }; 
+        }, 
+        {
+            name = "Source settings"; 
+            scope = source; 
+            settings = {
+                increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$"; 
+                smartTypingPairs = (
+                    ("\"", "\""), 
+                    ("(", ")"), 
+                    ("{", "}"), 
+                    ("[", "]"), 
+                    ("\U201a\U00c4\U00fa", "\U201a\U00c4\U00f9"), 
+                    ("'", "'")
+                ); 
+            }; 
+        }, 
+        {
+            name = "Strings/comments: No ' in ST"; 
+            scope = "strings.double-quoted, comments"; 
+            settings = {
+                smartTypingPairs = (
+                    ("\"", "\""), 
+                    ("(", ")"), 
+                    ("{", "}"), 
+                    ("[", "]"), 
+                    ("\U201a\U00c4\U00fa", "\U201a\U00c4\U00f9")
+                ); 
+            }; 
+        }, 
+        {
+            name = "Obj-C completions"; 
+            scope = "source.objc"; 
+            settings = {
+                completions = (
+                    retain, 
+                    release, 
+                    autorelease, 
+                    description, 
+                    "stringWithFormat:", 
+                    "componentsSeparatedByString:", 
+                    "isEqualToString:", 
+                    UTF8String, 
+                    lastPathComponent, 
+                    pathExtension, 
+                    stringByAbbreviatingWithTildeInPath, 
+                    "stringByAppendingPathComponent:", 
+                    "stringByAppendingPathExtension:", 
+                    stringByDeletingLastPathComponent, 
+                    stringByDeletingPathExtension, 
+                    stringByExpandingTildeInPath, 
+                    stringByResolvingSymlinksInPath, 
+                    stringByStandardizingPath, 
+                    "valueForKey:", 
+                    "valueForKeyPath:", 
+                    "setValue:", 
+                    "forKey:", 
+                    "forKeyPath:", 
+                    NSArray, 
+                    NSDictionary, 
+                    NSMutableArray, 
+                    NSMutableDictionary, 
+                    NSMutableString, 
+                    NSString
+                ); 
+            }; 
+        }, 
+        {
+            name = "HTML settings"; 
+            scope = "text.html"; 
+            settings = {
+                highlightPairs = (
+                    ("(", ")"), 
+                    ("{", "}"), 
+                    ("[", "]"), 
+                    ("\U201a\U00c4\U00fa", "\U201a\U00c4\U00f9"), 
+                    ("<", ">")
+                ); 
+                increaseIndentPattern = "(<(head|title|table|tr|td|ul|ol|dl|div)\\>[^>]*>|\\{)\\s*$"; 
+                smartTypingPairs = (
+                    ("\"", "\""), 
+                    ("(", ")"), 
+                    ("{", "}"), 
+                    ("[", "]"), 
+                    ("\U201a\U00c4\U00fa", "\U201a\U00c4\U00f9"), 
+                    ("<", ">")
+                ); 
+            }; 
+        }, 
+        {
+            name = "HTML: Add ' to ST for tags"; 
+            scope = "text.html keywords.markup"; 
+            settings = {
+                smartTypingPairs = (
+                    ("\"", "\""), 
+                    ("(", ")"), 
+                    ("{", "}"), 
+                    ("[", "]"), 
+                    ("\U201a\U00c4\U00fa", "\U201a\U00c4\U00f9"), 
+                    ("<", ">"), 
+                    ("'", "'")
+                ); 
+            }; 
+        }, 
+        {
+            name = "HTML: Disable spell checking for tags"; 
+            scope = "text.html keywords, text.html constants"; 
+            settings = {spellChecking = 0; }; 
+        }, 
+        {
+            name = "PList tab settings"; 
+            scope = "source.plist"; 
+            settings = {softTabs = 1; tabSize = 4; }; 
+        }, 
+        {
+            name = "Obj-C method popup"; 
+            scope = "declaration.function name"; 
+            settings = {showInSymbolList = 1; }; 
+        }
+    ); 
+    uuid = "04C16970-AE30-11D9-BE88-000D93589AF6"; 
+}

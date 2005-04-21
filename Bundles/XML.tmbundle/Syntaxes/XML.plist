@@ -16,6 +16,7 @@
 	name = "XML";
 	scopeName = "text.xml";
 	
+	firstLineMatch = "^\\s*<\\?xml";
 	fileTypes = ( xml, tld, jsp, xslt );
 
 	foldingStartMarker = "^\\s*(<[^!?%/](?!.+?(/>|</.+?>))|<[!%]--(?!.+?--%?>)|<%[!]?(?!.+?%>))";

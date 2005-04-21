@@ -26,11 +26,12 @@ from exceptions import *
 
 def getHandler(mode):
     """gets an entity-matching handler for the mode in question"""
-    classSuffix = mode.capitalize()   
+    classSuffix = mode.capitalize()
+    handlerClass = "Entities" + classSuffix
     try:
-        handler = globals()["Entities" + classSuffix]
+        handler = globals()[handlerClass]
     except KeyError:
-        raise HandlerException, "no handler for extension/mode '%s'" % mode
+        raise HandlerException, "no handler for extension/mode '%s'; expected class '%s'" % (mode, handlerClass)
         
     return handler()
 
@@ -255,6 +256,7 @@ class EntitiesPhp(SortableByClass):
         return "%s:%s\n" % (line[1],(line[0][4]+line[0][2]+line[0][0]+line[0][1]+line[0][3]))
 
 EntitiesHtml_php = EntitiesPhp
+EntitiesHtml_php_ = EntitiesPhp # beta 6 issue?
 EntitiesInc = EntitiesPhp
         
 class EntitiesPerl(SortableByMainEntity):
@@ -299,6 +301,8 @@ class EntitiesPython(SortableByClass):
         return (line, lineMatch)
         
 EntitiesPy = EntitiesPython
+EntitiesPython_dark = EntitiesPython
+EntitiesPython_light = EntitiesPython
 
 class EntitiesRuby(SortableByClass):
     """entity-matching handler for Ruby (rb) files"""
@@ -378,4 +382,6 @@ class EntitiesRuby(SortableByClass):
         return sorted
         
 EntitiesHtml_ruby = EntitiesRuby
+EntitiesHtml_ruby_ = EntitiesRuby
 EntitiesRb = EntitiesRuby
+EntitiesRuby_on_rails = EntitiesRuby

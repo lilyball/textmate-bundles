@@ -26,19 +26,44 @@
 	foregroundColor = "#e0e0e0";
 	backgroundColor = "#404040";
 	patterns = (
-  	{ name = "comments.block.ocaml"; begin = "\\(\\*"; end = "\\*\\)"; swallow = "(\\(\\*.*\\*\\))+?"; fontStyle = ( italic ); foregroundColor = "#709070"; },
-  	{ name = "comments.block.ocamlyacc"; begin = "/\\*"; end = "\\*/"; swallow = "(/\\*.*\\*/)+?"; fontStyle = ( italic ); foregroundColor = "#709070"; },
-		{ name = "keywords.language.ocaml"; match = "\\<(and|as|assert|begin|class|constraint|do|done|downto|else|end|exception|external|false|for|fun|function|functor|if|in|include|inherit|initializer|land|lazy|let|lor|lsl|lsr|lxor|match|method|mod|module|mutable|new|object|of|open|or|private|rec|sig|struct|then|to|true|try|type|val|virtual|when|while|with)\\>"; fontStyle = ( bold ); foregroundColor = "#ffffa0"; },
-		{ name = "keywords.module"; match = "\\<([A-Z][a-zA-Z0-9_]*\\.)+"; fontStyle = ( bold ); foregroundColor = "#ff8000"; },
-		{ name = "keywords.module.open"; match = "open\\s+([A-Z][a-zA-Z0-9_]*(\\.[A-Z][a-zA-Z0-9_]*)*)"; "fontStyle[1]" = ( bold ); "foregroundColor[1]" = "#ff8000"; },
-		{ name = "keywords.types.storage"; match = "\\<(int|char|float|string|list|array|mutable|ref|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t|type)\\>"; foregroundColor = "#6080ff"; },
-		{ name = "keywords.types.variant"; match = "\\<[A-Z][a-zA-Z0-9_]*\\>"; fontStyle = ( bold ); foregroundColor = "#4080a0"; },
-		{ name = "keywords.types.variant.polymorphic"; match = "\\<`[A-Z][a-zA-Z0-9_]*\\>"; fontStyle = ( bold ); foregroundColor = "#4080a0"; },
-		{ name = "keywords.directives"; match = "^[ \\t]*#[a-zA-Z]+"; fontStyle = ( bold ); },
-		{ name = "keywords.operators"; match = "\\^{1,2}|(!|:)=|=(=|/)?|>=?/?|<(>|=?/?)|-(\\.|/)?|\\+(\\.|/)?|/(\\.|/)?|\\*(\\*/?|\\.|/)?|~(-\\.?)?|\\?|#"; foregroundColor = "#ffffa0"; },
-		{ name = "keywords.operators.symbols"; match = "[:\\(\\),;\\|&\\[\\]\\\{\\}@!]|\\<_\\>|<-|->"; foregroundColor = "#ffffa0"; },
-		{ name = "constants.numeric"; match = "\\<((0(x|X)[0-9a-fA-F_]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l)?|0(o|O)[0-7_]*|0(b|B)[01_]*\\>"; foregroundColor = "#40c0ff"; },
-		{ name = "constants.character"; match = "'(\\\\x[a-fA-F0-9][a-fA-F0-9]|\\\\\\d\\d\\d|.|\\\\[bnrt'\"]|\\\\\\\\)'"; foregroundColor = "#ff8080"; },
-		{ name = "strings.double-quoted"; begin = "(?=[^\\\\])(\")"; end = "\""; swallow = "\\\\."; foregroundColor = "#c03030"; }
+	{ name = "declaration.function"; match = "\\<(let|let\\s+rec)?\\s+([a-z][a-zA-Z0-9'_']*)\\s+([a-z][a-zA-Z0-9'_']*)+"; captures = {2 = { name = "function-name"; }; };
+	},
+  	{ name = "comment.block.ocaml"; begin = "\\(\\*"; end = "\\*\\)"; swallow = "(\\(\\*.*\\*\\))+?"; fontStyle = ( italic ); foregroundColor = "#709070"; },
+
+  	{ name = "comment.block.ocamlyacc"; begin = "/\\*"; end = "\\*/"; swallow = "(/\\*.*\\*/)+?"; fontStyle = ( italic ); foregroundColor = "#709070"; },
+
+		{ name = "keyword.language.ocaml"; match = "\\<(and|as|assert|begin|class|constraint|do|done|downto|else|end|exception|external|false|for|fun|function|functor|if|in|include|inherit|initializer|land|lazy|let|lor|lsl|lsr|lxor|match|method|mod|module|mutable|new|object|of|open|or|private|rec|sig|struct|then|to|true|try|type|val|virtual|when|while|with)\\>"; fontStyle = ( bold ); foregroundColor = "#ffffa0"; },
+
+		{ name = "keyword.module"; match = "\\<([A-Z][a-zA-Z0-9_]*\\.)+"; fontStyle = ( bold ); foregroundColor = "#ff8000"; },
+
+		{ name = "keyword.module.open"; match = "open\\s+([A-Z][a-zA-Z0-9_]*(\\.[A-Z][a-zA-Z0-9_]*)*)"; "fontStyle[1]" = ( bold ); "foregroundColor[1]" = "#ff8000"; },
+
+		{ name = "keyword.type.storage"; match = "\\<(int|char|float|string|list|array|mutable|ref|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t|type)\\>"; foregroundColor = "#6080ff"; },
+
+		{ name = "keyword.type.variant"; match = "\\<[A-Z][a-zA-Z0-9_]*\\>"; fontStyle = ( bold ); foregroundColor = "#4080a0"; },
+
+		{ name = "keyword.type.variant.polymorphic"; match = "\\<`[A-Z][a-zA-Z0-9_]*\\>"; fontStyle = ( bold ); foregroundColor = "#4080a0"; },
+
+		{ name = "keyword.directive"; match = "^[ \\t]*#[a-zA-Z]+"; fontStyle = ( bold ); },
+
+		{ name = "keyword.directive.line-number"; match = "^[ \\t]*#[0-9]*"; fontStyle = ( bold ); },
+
+		{ name = "constant.numeric.integer"; match = "\\<(-?(([0-9][0-9_]*)|(0(x|X)[0-9a-fA-F][0-9a-fA-F_]*)|(0(o|O)[0-7][0-7_]*)|(0(b|B)[01][01_]*)))\\>"; foregroundColor = "#40c0ff"; },
+
+		{ name = "constant.numeric.floating-point"; match = "\\<-?[0-9][0-9_]*((\\.([0-9][0-9_]*([eE][+-]??[0-9][0-9_]*)?)?)|([eE][+-]??[0-9][0-9_]*))"; foregroundColor = "#40c0ff"; },
+
+		{ name = "constant.character"; match = "'(\\\\x[a-fA-F0-9][a-fA-F0-9]|\\\\\\d\\d\\d|.|\\\\[bnrt'\"]|\\\\\\\\)'"; foregroundColor = "#ff8080"; },
+
+		{ name = "string.double-quoted"; begin = "(?=[^\\\\])(\")"; end = "\""; swallow = "\\\\."; foregroundColor = "#c03030"; },
+
+		{ name = "keyword.operator.symbol"; match = "\\<_|!=|[#|,)(\\]]|\\.{1,2}?|:[:=>]??|;{1,2}?|>[\\]}]|\\[[<>|]?|\\{<?|\\|]"; foregroundColor = "#ffffa0"; },
+		
+		{ name = "keyword.operator.symbol.infix.floating-point"; match = "[*+/-]\\."; foregroundColor = "#ffffa0"; },
+
+		{ name = "keyword.operator.symbol.prefix.floating-point"; match = "~-\\."; foregroundColor = "#ffffa0"; },
+		
+		{ name = "keyword.operator.symbol.infix"; match = "[=<>@^|&+\\-*/$%][!$%&*+./:<=>?@^|~-]*"; foregroundColor = "#ffffa0"; },
+
+		{ name = "keyword.operator.symbol.prefix"; match = "[!?~][!$%&*+./:<=>?@^|~-]*"; foregroundColor = "#ffffa0"; }
 	);
 }

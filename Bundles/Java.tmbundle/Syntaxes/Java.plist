@@ -42,14 +42,14 @@
         /* comments.block.java */
 		{
 			// Required to prevent the JavaDoc comment from taking over
-			name = "comments.block.java.empty";
+			name = "comment.block.java.empty";
 			match = "/\\*\\*/";
 			fontStyle = ( italic );
 			foregroundColor = "red";
 		},
 
 		{
-			name = "comments.block.java";
+			name = "comment.block.java";
 			begin = "/\\*";
 			end = "\\*/";
 			fontStyle = ( italic );
@@ -57,17 +57,17 @@
 		},
 
 		{
-			name = "comments.block.embedded-docs.java";
+			name = "comment.block.embedded-docs.java";
 			begin = "/\\*\\*";
 			patterns = (
 			    {
-					name = "keywords.embedded-docs.params.java";
+					name = "keyword.embedded-docs.params.java";
 					match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
 					"foregroundColor[1]" = "#669933";
 					"foregroundColor[2]" = "black";
 				},
 			    {
-					name = "keywords.embedded-docs.misc-attributes.java";
+					name = "keyword.embedded-docs.misc-attributes.java";
 					match = "\\\*\\s*@([a-zA-Z0-9_-]+)\\s*";
 					"foregroundColor[1]" = "#669933";
 				},
@@ -79,7 +79,7 @@
 		
 		/* comments.line.java */
 		{
-			name = "comments.line.java";
+			name = "comment.line.java";
 			match = "//.*$";
 			foregroundColor = "red";
 			fontStyle = ( italic );
@@ -87,7 +87,7 @@
 
 		/* keywords.data-types.java */
 		{
-		    name = "keywords.data-types.java";
+		    name = "keyword.data-types.java";
 		    match = "\\<(boolean|byte|char|int|long|short|float|double|[A-Z][A-Za-z0-9]+)\\>";
 
 		    "foregroundColor[1]" = "#CC33FF";
@@ -97,7 +97,7 @@
 		 * @todo fix conflict with keywords.modifiers.java
 		 */
 		{
-		    name = "keywords.control.java";
+		    name = "keyword.control.java";
 		    match = "\\<(private|protected|public)\\>";
 
 		    fontStyle = (bold);
@@ -106,7 +106,7 @@
 		
 		/* keywords.modifiers.java */
 		{
-		    name = "keywords.modifiers.java";
+		    name = "keyword.modifiers.java";
 		    match = "\\<(abstract|final|native|private|protected|public|static|transient|synchronized|volatile|strictfp)\\>";
 
 		    fontStyle = (bold);
@@ -115,7 +115,7 @@
 		
 		/* keywords.catch-exception.java */
 		{
-		    name = "keywords.catch-exception.java";
+		    name = "keyword.catch-exception.java";
 		    match = "\\<(try|catch|finally|throw)\\>";
 
 		    fontStyle = (bold);
@@ -124,7 +124,7 @@
 		
 		/* keywords.control.java */
 		{
-		    name = "keywords.control.java";
+		    name = "keyword.control.java";
 		    match = "\\<(break|case|continue|default|do|while|for|switch|if|else)\\>";
 
 		    fontStyle = (bold);
@@ -133,7 +133,7 @@
 		
         /* keywords.class-fns.java */
         {
-            name = "keywords.class-fns.java";
+            name = "keyword.class-fns.java";
             match = "\\<(class|extends|implements|import|instanceof|new|package|return|interface|this|throws|void|super)\\>";
 
             fontStyle = (bold);
@@ -142,7 +142,7 @@
 
         /* keywords.assigned-values.java */
         {
-            name = "keywords.assigned-values.java";
+            name = "keyword.assigned-values.java";
             match = "\\<(true|false|null)\\>";
 
             "fontStyle[1]" = (bold);
@@ -150,7 +150,7 @@
 	
 		/* constants.numeric.java */
 		{
-			name = "constants.numeric.java";
+			name = "constant.numeric.java";
 			match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul|)?\\>";
 
 			foregroundColor = "#009966";
@@ -158,7 +158,7 @@
 		
 		/* strings.double-quoted.java */
 		{
-			name = "strings.double-quoted.java";
+			name = "string.double-quoted.java";
 			begin = "\"";
 			end = "\"";
 			swallow = "\\\\.";
@@ -168,7 +168,7 @@
 
         /* strings.single-quoted.java */
 		{
-			name = "strings.single-quoted.java";
+			name = "string.single-quoted.java";
 			begin = "'";
 			end = "'";
 			swallow = "\\\\.";

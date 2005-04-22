@@ -19,7 +19,7 @@
             begin = "<!"; 
             end = ">"; 
             foregroundColor = "#999999"; 
-            name = "keywords.sgml"; 
+            name = "keyword.sgml"; 
             patterns = (
                 {
                     backgroundColor = "#CC3300"; 
@@ -31,14 +31,14 @@
                     begin = "--"; 
                     end = "--"; 
                     foregroundColor = "#999999"; 
-                    name = "comments.block.html"; 
+                    name = "comment.block.html"; 
                     patterns = (
                         {
                             backgroundColor = "#E0E7F0"; 
                             begin = "^#\\s*(include|config|echo|exec|fsize|flastmod|printenv|set)"; 
                             end = "(?=\\s*--|>)"; 
                             foregroundColor = "#888888"; 
-                            name = "macros.server-side-includes.html"; 
+                            name = "macro.server-side-includes.html"; 
                         }, 
                         {
                             backgroundColor = "#CC3300"; 
@@ -65,7 +65,7 @@
                     backgroundColor = "#fff3e7"; 
                     begin = "\\[CDATA\\["; 
                     end = "]](?=>)"; 
-                    name = "constants.inline-data.html"; 
+                    name = "constant.inline-data.html"; 
                 }
             ); 
         }, 
@@ -91,26 +91,26 @@
         {
             foregroundColor = "#6600CC"; 
             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-            name = "constants.character-entities.html"; 
+            name = "constant.character-entities.html"; 
         }, 
         {
             begin = "</?([a-zA-Z0-9]+)"; 
             "elementFontStyle[1]" = (underline); 
             end = ">"; 
             foregroundColor = "#0066CC"; 
-            name = "keywords.markup.tag.html"; 
+            name = "keyword.markup.tag.html"; 
             patterns = (
-                {match = " ([a-zA-Z-]+)"; name = "keywords.markup.tag.options.html"; }, 
+                {match = " ([a-zA-Z-]+)"; name = "keyword.markup.tag.options.html"; }, 
                 {
                     begin = "\""; 
                     end = "\""; 
                     foregroundColor = "#CC3300"; 
-                    name = "strings.double-quoted.html"; 
+                    name = "string.double-quoted.html"; 
                     patterns = (
                         {
                             foregroundColor = "#6600CC"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                            name = "constants.character-entities.html"; 
+                            name = "constant.character-entities.html"; 
                         }, 
                         {
                             backgroundColor = "#CC3300"; 
@@ -125,12 +125,12 @@
                     end = "'"; 
                     fontStyle = (); 
                     foregroundColor = "#CC3300"; 
-                    name = "strings.single-quoted.html"; 
+                    name = "string.single-quoted.html"; 
                     patterns = (
                         {
                             foregroundColor = "#6600CC"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                            name = "constants.character-entities.html"; 
+                            name = "constant.character-entities.html"; 
                         }, 
                         {
                             backgroundColor = "#CC3300"; 

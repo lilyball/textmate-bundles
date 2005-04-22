@@ -40,18 +40,18 @@
 			match = "#(\\l|_|[\\+=-/!%&*|><~?])(\\w|[\\+=-/!%&*|><~?:])*";
 		},
 		{
-			name = "keywords.fscript";
+			name = "keyword.fscript";
 			foregroundColor = "#662288";
 			match = "\\<(true|YES|false|NO|sys|nil)\\>";
 		},
 		{
-			name = "comments.fscript";
+			name = "comment.fscript";
 			foregroundColor = "#489C03";
 			begin = '"';
 			end = '"';
 		},
 		{
-			name = "strings.fscript";
+			name = "string.fscript";
 			foregroundColor = "#DD8944";
 			begin = "'";
 			end = "'";
@@ -59,7 +59,7 @@
 		{
 			foregroundColor = "#0000CD";
 			match = "\\<((([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\>";
-			name = "constants.numeric.fscript";
+			name = "constant.numeric.fscript";
 		},
 	);
 }

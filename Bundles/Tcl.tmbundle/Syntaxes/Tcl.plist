@@ -20,17 +20,17 @@
     /* This is where the actual highlighting is defined. */
     patterns = (
 		{
-			name = "comments.tcl";
+			name = "comment.tcl";
 			"foregroundColor[2]" = "#9933CC";
 			match = "(^|;)\\s*(#.*)$";
 		},
         {   
-            name = "keywords.tcl";
+            name = "keyword.tcl";
             "foregroundColor[1]" = "#CC7833";
             match = "(?:^|[[{;])\\s*(eval|expr|if|while|for|file|string|catch|source|info|set|unset|pid|global|array|puts|gets|read|open|close|socket|eof|fconfigure|parray|return|break|continue|switch|package|proc|exit|glob|regexp|regsub|foreach|llength|lindex|concat|list|split|join|incr|error)\\>";
         },
 		{
-			name = "keywords.if.tcl";
+			name = "keyword.if.tcl";
 			"foregroundColor[1]" = "#CC7833";
 			match = "(?:^|})\\s*(then|elseif|else)\\>";
 		},
@@ -39,18 +39,18 @@
 			match = "\\\\.";
 		},
 		{
-			name = "keywords.variables.tcl";
+			name = "keyword.variable.tcl";
 			"foregroundColor[1]" = "#3387CC";
 			"foregroundColor[2]" = "#3387CC";
 			match = "(\\$)(\\w+)";
 		}/*,
-        {   name = "strings.double-quoted.tcl";
+        {   name = "string.double-quoted.tcl";
             foregroundColor = "#78CC33";
             begin = '"';
             end = '"';
             swallow = "\\\\.";
             patterns = (
-                {   name = "strings.double-quoted.escapes.tcl";
+                {   name = "string.double-quoted.escapes.tcl";
                     match = "\\([abfnrtv]|0\d{2}|x[a-fA-F]{2})";
 					foregroundColor = "#aaaaaa";
                 }

@@ -13,7 +13,7 @@
 	patterns = (
 		/* comments */
 		{
-			name = "comments.line.java-props";
+			name = "comment.line.java-props";
 			match = "[#!].+$";
 			foregroundColor = "red";
 		},
@@ -24,7 +24,7 @@
          * I'm the one who counts around here.
  		 */
 		{
-			name = "keywords.variables.java-props";
+			name = "keyword.variable.java-props";
 			match = "^([^:=]+)[:=](.*)$";
 			"foregroundColor[1]" = "#d600d6";
 			"foregroundColor[2]" = "#d6d600";

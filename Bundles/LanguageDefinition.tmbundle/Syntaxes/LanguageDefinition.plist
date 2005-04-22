@@ -11,30 +11,30 @@
 
 
     patterns = (
-        {   name = "keywords.tm-language-def";
+        {   name = "keyword.tm-language-def";
             match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|increaseIndentPattern|smartTypingPairs|highlightPairs|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|firstLineMatch)\\>"; 
         },
         {   name = "invalid.deprecated.tm-language-def";
             match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode)\\>";
         },
-        {   name = "comments.block.tm-language-def"; begin = "/\\*"; end = "\\*/"; },
-        {   name = "comments.line.tm-language-def"; match = "//.*$"; },  
-        {   name = "strings.single-quoted.tm-language-def";
+        {   name = "comment.block.tm-language-def"; begin = "/\\*"; end = "\\*/"; },
+        {   name = "comment.line.tm-language-def"; match = "//.*$"; },  
+        {   name = "string.single-quoted.tm-language-def";
             begin = "'(?=.*\')";
             end = "'";
             swallow = "\\\\.";
             patterns = (
                 {   name = "invalid.deprecated.constants.colors.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
-                {   name = "strings.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
+                {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
             );
         },
 
-        {   name = "strings.double-quoted.tm-language-def";
+        {   name = "string.double-quoted.tm-language-def";
             begin = "\"(?=.*\")";
             end = "\"";
             swallow = "\\\\.";
             patterns = (
-                {   name = "strings.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
+                {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
                 {   name = "invalid.deprecated.constants.colors.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
             );
         },

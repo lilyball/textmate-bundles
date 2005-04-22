@@ -21,17 +21,17 @@
 	patterns = (
 		
 		/* comments */
-		{ name = "comments.line";
+		{ name = "comment.line";
 		  match = "'.*$";
 		  foregroundColor = "#999999";
 		},
 		
 		/* language stuff */
-		{ name = "keywords.control";
+		{ name = "keyword.control";
 		  foregroundColor = "#0066CC";
 		  match = "(?i:\\<(If|Then|Else|ElseIf|End If|While|Wend|For|To|Each|Case|Select|End Select|Return|Continue|Do|Until|Loop|Next|With|Exit Do|Exit For|Exit Function|Exit Property|Exit Sub)\\>)";
 		},
-		{ name = "keywords.language";
+		{ name = "keyword.language";
 		  foregroundColor = "#0066CC";
 		  fontStyle = ( bold );
 		  match = "(?i:\\<(Call|Class|Const|Dim|Redim|Function|Sub|End sub|End Function|Set|Let|Get|New|Private|Public|Default|Randomize|Option Explicit|On Error Resume Next|On Error GoTo)\\>)";
@@ -43,7 +43,7 @@
 		 match = "(?i:\\<(Empty|False|Nothing|Null|True)\\>)";
 		},
 		{
-		 name = "keywords.operators";
+		 name = "keyword.operator";
 		 foregroundColor = "#0066CC";
 		 fontStyle = ( bold );
 		 match = "(?i:\\<(Mod|And|Not|Or|Xor)\\>)";
@@ -52,7 +52,7 @@
 		/* numbers and strings */
 
 		{
-		 name = "strings.double-quoted";
+		 name = "string.double-quoted";
 		 foregroundColor = "#CC3300";
 		 begin = "\"";
 		 end = "\"";
@@ -61,7 +61,7 @@
 
 		/* variables */		
 		{
-		 name = "keywords.variables";
+		 name = "keyword.variable";
 		 foregroundColor = "#8B9B08";
 		 fontStyle = ( bold );
 		 match = "\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*?\\>";
@@ -69,7 +69,7 @@
 		
 		/* ASP Objects */
 		{
-		 name = "keywords.objects";
+		 name = "keyword.objects";
 		 foregroundColor = "#000099";
 		 fontStyle = ( bold );
 		 match = "(?i:\\<(Application|ObjectContext|Request|Response|Server|Session)\\>)";
@@ -77,21 +77,21 @@
 
 		/* ASP Collections */
 		{
-		 name = "keywords.collections";
+		 name = "keyword.collections";
 		 foregroundColor = "#0066cc";
 		 match = "(?i:\\<(Contents|StaticObjects|ClientCertificate|Cookies|Form|QueryString|ServerVariables)\\>)";
 		},
 
 		/* ASP Properties */
 		{
-		 name = "keywords.properties";
+		 name = "keyword.property";
 		 foregroundColor = "#0066cc";
 		 match = "(?i:\\<(TotalBytes|Buffer|CacheControl|Charset|ContentType|Expires|ExpiresAbsolute|IsClientConnected|PICS|Status|ScriptTimeout|CodePage|LCID|SessionID|Timeout)\\>)";
 		},
 		
 		/* ASP Methods */
 		{
-		 name = "keywords.methods";
+		 name = "keyword.method";
 		 foregroundColor = "#6E84C4";
 		 fontStyle = ( bold );
 		 match = "(?i:\\<(Lock|Unlock|SetAbort|SetComplete|BianryRead|AddHeader|AppendToLog|BinaryWrite|Clear|End|Flush|Redirect|Write|CreateObject|HTMLEncode|MapPath|URLEncode|Abandon)\\>)";
@@ -99,14 +99,14 @@
 		
 		/* ASP Events */
 		{
-		 name = "keywords.events";
+		 name = "keyword.events";
 		 foregroundColor = "#0033cc";
 		 match = "(?i:\\<(Application_OnEnd|Application_OnStart|OnTransactionAbort|OnTransactionCommit|Session_OnEnd|Session_OnStart)\\>)";
 		},
 
 		/* ASP (VB) Functions */
 		{
-		 name = "keywords.functions";
+		 name = "keyword.function";
 		 foregroundColor = "#6E84C4";
 		 fontStyle = ( bold );
 		 match = "(?i:\\<(Array|Add|Asc|Atn|CBool|CByte|CCur|CDate|CDbl|Chr|CInt|CLng|Conversions|Cos|CreateObject|CSng|CStr|Date|DateAdd|DateDiff|DatePart|DateSerial|DateValue|Day|Derived|Math|Escape|Eval|Exists|Exp|Filter|FormatCurrency|FormatDateTime|FormatNumber|FormatPercent|GetLocale|GetObject|GetRef|Hex|Hour|InputBox|InStr|InStrRev|Int|Fix|IsArray|IsDate|IsEmpty|IsNull|IsNumeric|IsObject|Item|Items|Join|Keys|LBound|LCase|Left|Len|LoadPicture|Log|LTrim|RTrim|Trim|Maths|Mid|Minute|Month|MonthName|MsgBox|Now|Oct|Remove|RemoveAll|Replace|RGB|Right|Rnd|Round|ScriptEngine|ScriptEngineBuildVersion|ScriptEngineMajorVersion|ScriptEngineMinorVersion|Second|SetLocale|Sgn|Sin|Space|Split|Sqr|StrComp|String|StrReverse|Tan|Time|Timer|TimeSerial|TimeValue|TypeName|UBound|UCase|Unescape|VarType|Weekday|WeekdayName|Year)\\>)";
@@ -114,13 +114,13 @@
 		
 		/* Constants */
 		{
-		 name = "keywords.constants.numeric";
+		 name = "keyword.constants.numeric";
 		 foregroundColor = "#000000";
 		 match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>";
 		},
 		
 		{
-		 name = "keywords.constants";
+		 name = "keyword.constants";
 		 foregroundColor = "#33cc33";
 		 match = "(?i:\\<(vbtrue|fvbalse|vbcr|vbcrlf|vbformfeed|vblf|vbnewline|vbnullchar|vbnullstring|vbtab|vbverticaltab|vbbinarycompare|vbtextcomparevbsunday|vbmonday|vbtuesday|vbwednesday|vbthursday|vbfriday|vbsaturday|vbusesystemdayofweek|vbfirstjan1|vbfirstfourdays|vbfirstfullweek|vbgeneraldate|vblongdate|vbshortdate|vblongtime|vbshorttime|vbobjecterror|vbEmpty|vbNull|vbInteger|vbLong|vbSingle|vbDouble|vbCurrency|vbDate|vbString|vbObject|vbError|vbBoolean|vbVariant|vbDataObject|vbDecimal|vbByte|vbArray)\\>)";
 		},

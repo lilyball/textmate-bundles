@@ -20,18 +20,18 @@
 	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
 	);
 	patterns = (
-		{ name = "comments.block.c"; begin = "/\\*"; end = "\\*/"; },
-		{ name = "comments.line.c++"; begin = "//"; end = "$"; swallow = "\\\\\\s*\\n"; },
-		{ name = "keywords.control.c"; match = "\\<(break|case|continue|default|do|else|for|goto|if|inline|_Pragma|return|sizeof|switch|while)\\>"; },
-		{ name = "keywords.storage.c"; match = "\\<(asm|__asm__|auto|_Bool|char|_Complex|const|double|enum|extern|float|_Imaginary|int|long|register|restrict|short|signed|static|struct|typedef|union|unsigned|void|volatile|NULL|true|false|TRUE|FALSE)\\>"; },
-		{ name = "constants.numeric.c"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>";},
-		{ name = "strings.double-quoted.c"; begin = "\""; end = "\""; swallow = "\\\\."; },
-		{ name = "strings.single-quoted.c"; begin = "'"; end = "'"; swallow = "\\\\."; },
-		{ name = "keywords.preprocessor.c";
+		{ name = "comment.block.c"; begin = "/\\*"; end = "\\*/"; },
+		{ name = "comment.line.c++"; begin = "//"; end = "$"; swallow = "\\\\\\s*\\n"; },
+		{ name = "keyword.control.c"; match = "\\<(break|case|continue|default|do|else|for|goto|if|inline|_Pragma|return|sizeof|switch|while)\\>"; },
+		{ name = "keyword.storage.c"; match = "\\<(asm|__asm__|auto|_Bool|char|_Complex|const|double|enum|extern|float|_Imaginary|int|long|register|restrict|short|signed|static|struct|typedef|union|unsigned|void|volatile|NULL|true|false|TRUE|FALSE)\\>"; },
+		{ name = "constant.numeric.c"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>";},
+		{ name = "string.double-quoted.c"; begin = "\""; end = "\""; swallow = "\\\\."; },
+		{ name = "string.single-quoted.c"; begin = "'"; end = "'"; swallow = "\\\\."; },
+		{ name = "keyword.preprocessor.c";
 		  match = "^\\s*#\\s*(define|defined|else|elif|endif|error|if|ifdef|ifndef|line|pragma|undef|warning)\\>";
 			captures = { 1 = { name = "directive"; }; };
 		},
-		{ name = "keywords.preprocessor.c.includes";
+		{ name = "keyword.preprocessor.c.includes";
 		    match = "^\\s*#\\s*(include|import)\\>\\s+(?:\"|<).*?(?:\"|>)";
 			captures = { 1 = { name = "directive"; }; };
 		},
@@ -41,11 +41,11 @@
 		// Some function calls can fool it.
 		// Various C++ constructs can fool it.
 		// Macros can easily fool it. Macros can easily fool most parsers, though.
-		{ name = "declaration.function.c";
+/*		{ name = "declaration.function.c";
 //		    match = "(?!\\<(?:if|do|while|switch|for)\\>)([A-Za-z][A-Za-z0-9:]{4,})\\s*\\(.*?\\)(?!\\s*[;,\\(])";
             match = "(?!\\<(?:if|do|while|switch|for)\\>)([A-Za-z][A-Za-z0-9:]{4,})\\s*\\((?=.*\\)\\s*($|\\{))";
 		    captures = { 1 = { name = "name"; }; };
 		},
-	);
+*/	);
 	uuid = "25066DC2-6B1D-11D9-9D5B-000D93589AF6";
 }

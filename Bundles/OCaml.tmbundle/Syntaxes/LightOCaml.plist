@@ -1,5 +1,5 @@
 {
-  // This syntox file is *mostly* correct per the 3.08.2 releose of the OCaml
+  // This syntax file is *mostly* correct per the 3.08.3 release of the OCaml
   //  language specification.  Some things that I know are missing are proper
   // recognition of infix symbol functions, but I'm sure there's a few other
   // things that could be added e.g. the Pervasives and Standard Library function
@@ -26,18 +26,19 @@
 	foregroundColor = "#000000";
 	backgroundColor = "#e0e0e0";
 	patterns = (
-		{ name = "comment.ocaml.ocaml"; begin = "\\(\\*"; end = "\\*\\)"; swallow = "(\\(\\*.*\\*\\))+?"; fontStyle = ( italic ); foregroundColor = "#406040"; },
-		{ name = "comment.ocamlyacc.ocaml"; begin = "/\\*"; end = "\\*/"; swallow = "(/\\*.*\\*/)+?"; fontStyle = ( italic ); foregroundColor = "#406040"; },
-		{ name = "keyword.language.ocaml"; match = "\\<(and|as|assert|begin|class|constraint|do|done|downto|else|end|exception|external|false|for|fun|function|functor|if|in|include|inherit|initializer|land|lazy|let|lor|lsl|lsr|lxor|match|method|mod|module|mutable|new|object|of|open|or|private|rec|sig|struct|then|to|true|try|type|val|virtual|when|while|with)\\>"; fontStyle = ( bold ); foregroundColor = "#000060"; },
-		{ name = "keyword.storage.ocaml"; match = "\\<(int|char|float|string|list|array|mutable|ref|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t|type)\\>"; foregroundColor = "#a08000"; },
-		{ name = "name.module.open.ocaml"; match = "open\\s+([A-Z][a-zA-Z0-9_]*(\\.[A-Z][a-zA-Z0-9_]*)*)"; "fontStyle[1]" = ( bold ); "foregroundColor[1]" = "#0080ff"; },
-		{ name = "name.module.ocaml"; match = "\\<([A-Z][a-zA-Z0-9_]*\\.)+"; fontStyle = ( bold ); foregroundColor = "#0080ff"; },
-		{ name = "type.variant.ocaml"; match = "\\<[A-Z][a-zA-Z0-9_]*\\>"; fontStyle = ( bold ); foregroundColor = "#c08060"; },
-		{ name = "type.polyvariant.ocaml"; match = "\\<`[A-Z][a-zA-Z0-9_]*\\>"; fontStyle = ( bold ); foregroundColor = "#c08060"; },		{ name = "constant.numeric.ocaml"; match = "\\<((0(x|X)[0-9a-fA-F_]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l)?|0(o|O)[0-7_]*|0(b|B)[01_]*\\>"; foregroundColor = "#0080a0"; },
-		{ name = "constant.string.ocaml"; begin = "(?=[^\\\\])(\")"; end = "\""; swallow = "\\\\."; foregroundColor = "#c03030"; },
-		{ name = "constant.character.ocaml"; match = "'(\\\\x[a-fA-F0-9][a-fA-F0-9]|\\\\\\d\\d\\d|.|\\\\[bnrt'\"]|\\\\\\\\)'"; foregroundColor = "#800000"; },
-		{ name = "constant.symbols.ocaml"; match = "[:\\(\\),;\\|&\\[\\]\\\{\\}@!]|\\<_\\>|<-|->"; foregroundColor = "#000060"; },
-		{ name = "constant.operators.ocaml"; match = "\\^{1,2}|(!|:)=|=(=|/)?|>=?/?|<(>|=?/?)|-(\\.|/)?|\\+(\\.|/)?|/(\\.|/)?|\\*(\\*/?|\\.|/)?|~(-\\.?)?|\\?|#"; foregroundColor = "#000060"; },
-		{ name = "keyword.directive.ocaml"; match = "^[ \\t]*#[a-zA-Z]+"; fontStyle = ( bold ); }
+		{ name = "comments.block.ocaml"; begin = "\\(\\*"; end = "\\*\\)"; swallow = "(\\(\\*.*\\*\\))+?"; fontStyle = ( italic ); foregroundColor = "#406040"; },
+		{ name = "comments.block.ocamlyacc"; begin = "/\\*"; end = "\\*/"; swallow = "(/\\*.*\\*/)+?"; fontStyle = ( italic ); foregroundColor = "#406040"; },
+		{ name = "keywords.language"; match = "\\<(and|as|assert|begin|class|constraint|do|done|downto|else|end|exception|external|false|for|fun|function|functor|if|in|include|inherit|initializer|land|lazy|let|lor|lsl|lsr|lxor|match|method|mod|module|mutable|new|object|of|open|or|private|rec|sig|struct|then|to|true|try|type|val|virtual|when|while|with)\\>"; fontStyle = ( bold ); foregroundColor = "#000060"; },
+		{ name = "keywords.module"; match = "\\<([A-Z][a-zA-Z0-9_]*\\.)+"; fontStyle = ( bold ); foregroundColor = "#0080ff"; },
+		{ name = "keywords.module.open"; match = "open\\s+([A-Z][a-zA-Z0-9_]*(\\.[A-Z][a-zA-Z0-9_]*)*)"; "fontStyle[1]" = ( bold ); "foregroundColor[1]" = "#0080ff"; },
+		{ name = "keywords.types.storage"; match = "\\<(int|char|float|string|list|array|mutable|ref|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t|type)\\>"; foregroundColor = "#a08000"; },
+		{ name = "keywords.types.variant"; match = "\\<[A-Z][a-zA-Z0-9_]*\\>"; fontStyle = ( bold ); foregroundColor = "#c08060"; },
+		{ name = "keywords.types.variant.polymorphic"; match = "\\<`[A-Z][a-zA-Z0-9_]*\\>"; fontStyle = ( bold ); foregroundColor = "#c08060"; },
+		{ name = "keywords.directives"; match = "^[ \\t]*#[a-zA-Z]+"; fontStyle = ( bold ); },
+		{ name = "keywords.operators"; match = "\\^{1,2}|(!|:)=|=(=|/)?|>=?/?|<(>|=?/?)|-(\\.|/)?|\\+(\\.|/)?|/(\\.|/)?|\\*(\\*/?|\\.|/)?|~(-\\.?)?|\\?|#"; foregroundColor = "#000060"; },
+		{ name = "keywords.operators.symbols"; match = "[:\\(\\),;\\|&\\[\\]\\\{\\}@!]|\\<_\\>|<-|->"; foregroundColor = "#000060"; },
+		{ name = "constants.numeric"; match = "\\<((0(x|X)[0-9a-fA-F_]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l)?|0(o|O)[0-7_]*|0(b|B)[01_]*\\>"; foregroundColor = "#0080a0"; },
+		{ name = "constants.character"; match = "'(\\\\x[a-fA-F0-9][a-fA-F0-9]|\\\\\\d\\d\\d|.|\\\\[bnrt'\"]|\\\\\\\\)'"; foregroundColor = "#800000"; },
+		{ name = "strings.double-quoted"; begin = "(?=[^\\\\])(\")"; end = "\""; swallow = "\\\\."; foregroundColor = "#c03030"; }
 	);
 }

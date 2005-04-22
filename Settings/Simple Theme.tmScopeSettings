@@ -18,7 +18,7 @@
 				<key>foreground</key>
 				<string>#000000</string>
 				<key>selection</key>
-				<string>#FFFF66</string>
+				<string>#FBED73</string>
 			</dict>
 		</dict>
 		<dict>
@@ -63,21 +63,17 @@
 			<string>keywords</string>
 			<key>settings</key>
 			<dict>
-				<key>fontStyle</key>
-				<string>plain</string>
 				<key>foreground</key>
 				<string>#0000FF</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Declaration.Functions</string>
+			<string>Declaration.Functions Name</string>
 			<key>scope</key>
 			<string>declaration.functions function-name</string>
 			<key>settings</key>
 			<dict>
-				<key>fontStyle</key>
-				<string>plain</string>
 				<key>foreground</key>
 				<string>#FF8000</string>
 			</dict>
@@ -100,8 +96,6 @@
 			<string>keywords.exceptions</string>
 			<key>settings</key>
 			<dict>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
 				<key>foreground</key>
 				<string>#990000</string>
 			</dict>
@@ -143,13 +137,11 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Function arguments</string>
+			<string>Declaration.Functions Arguments</string>
 			<key>scope</key>
-			<string>declaration.function function-arguments</string>
+			<string>declaration.functions function-argument</string>
 			<key>settings</key>
 			<dict>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
 				<key>fontStyle</key>
 				<string>italic</string>
 				<key>foreground</key>
@@ -163,8 +155,6 @@
 			<string>declaration.classes class-inheritance</string>
 			<key>settings</key>
 			<dict>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
 				<key>fontStyle</key>
 				<string>italic</string>
 				<key>foreground</key>
@@ -173,39 +163,24 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Decorators</string>
+			<string>Declaration (SymbolList)</string>
 			<key>scope</key>
-			<string>declaration.decorators</string>
-			<key>settings</key>
-			<dict>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
-				<key>foreground</key>
-				<string>#000080</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Declaration.SpecialFuncs</string>
-			<key>scope</key>
-			<string>declaration.functions.operators.py function-name</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-				<key>foreground</key>
-				<string>#FF000F</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>symbols</string>
-			<key>scope</key>
-			<string>source.python declaration</string>
+			<string>declaration name</string>
 			<key>settings</key>
 			<dict>
 				<key>showInSymbolList</key>
 				<string>1</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Invalid.Trailing-Whitespace</string>
+			<key>scope</key>
+			<string>invalid.trailing-whitespace</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FFD0D0</string>
 			</dict>
 		</dict>
 	</array>

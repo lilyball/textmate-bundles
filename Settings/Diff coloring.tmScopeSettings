@@ -8,13 +8,15 @@
 	<array>
 		<dict>
 			<key>name</key>
-			<string>Separators</string>
+			<string>Metadata</string>
 			<key>scope</key>
-			<string>separator.meta.diff</string>
+			<string>source.diff meta</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
 				<string>#3467D1</string>
+				<key>fontStyle</key>
+				<string>italic</string>
 				<key>foreground</key>
 				<string>#FFFFFF</string>
 			</dict>
@@ -23,30 +25,22 @@
 			<key>name</key>
 			<string>Ranges</string>
 			<key>scope</key>
-			<string>range.meta.diff</string>
+			<string>source.diff meta.range</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#3467D1</string>
 				<key>fontStyle</key>
-				<string>italic</string>
-				<key>foreground</key>
-				<string>#FFFFFF</string>
+				<string>plain</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>Headers</string>
 			<key>scope</key>
-			<string>from-file.header.meta.diff, to-file.header.meta.diff</string>
+			<string>source.diff meta.header</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
 				<string>#4F7EE0</string>
-				<key>fontStyle</key>
-				<string>italic</string>
-				<key>foreground</key>
-				<string>#FFFFFF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -84,21 +78,6 @@
 			<dict>
 				<key>background</key>
 				<string>#FF3D3D</string>
-				<key>foreground</key>
-				<string>#FFFFFF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Index (svn only?)</string>
-			<key>scope</key>
-			<string>index.meta.diff</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#4274DC</string>
-				<key>fontStyle</key>
-				<string>italic</string>
 				<key>foreground</key>
 				<string>#FFFFFF</string>
 			</dict>

@@ -20,15 +20,15 @@
 	     patterns = (
      		{ name = "block.comment"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#236B8E"; },
 	      { name = "line.comment"; match = "//.*$"; foregroundColor = "#236B8E"; fontStyle = ( italic ); },
-	      { name = "argument"; match = ":\\s*(\\([^)]*\\))\\s*(\\<\\w+\\>)?";
+	      { match = ":\\s*(\\([^)]*\\))\\s*(\\<\\w+\\>)?";
 	        "foregroundColor[1]" = "#555555"; fontStyle = ( plain );
-	        captures = { 1 = { name = "type"; }; 2 = { name = "value"; }; };
+	        captures = { 1 = { name = "function-arg-type"; }; 2 = { name = "function-arguments"; }; };
 	      },
-         { name = "type"; match = "(\\([^)]*\\))\\s*(\\<\\w+\\>)?";
+         { match = "(\\([^)]*\\))\\s*(\\<\\w+\\>)?";
            "foregroundColor[1]" = "#555555"; "fontStyle[2]" = ( bold );
-           captures = { 1 = { name = "type"; }; 2 = { name = "name"; }; };
+           captures = { 1 = { name = "function-result"; }; 2 = { name = "function-name"; }; };
          },
-         { name = "argument-name"; match = "\\<\\w+\\>(?=:)"; fontStyle = ( bold ); },
+         { name = "named-argument"; match = "\\<\\w+\\>(?=:)"; fontStyle = ( bold ); },
 	     );
 	   },
 		{ name = "strings.double-quoted.objc";

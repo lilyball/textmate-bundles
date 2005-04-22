@@ -1,9 +1,7 @@
 {
-    backgroundColor = "#ffffff"; 
     fileTypes = (lgt, mlgt, config, loader); 
     foldingStartMarker = ":-\\s+(object|protocol|category)(?=[(])"; 
     foldingStopMarker = ":-\\s+end_(object|protocol|category)(?=[.])"; 
-    foregroundColor = "#000000"; 
     highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
     increaseIndentPattern = ":-$"; 
     name = Logtalk; 
@@ -14,232 +12,232 @@
             end = "\\*/"; 
             fontStyle = (italic); 
             foregroundColor = "#23763A"; 
-            name = "comment.block.logtalk"; 
+            name = "comment.block"; 
         }, 
         {
             fontStyle = (italic); 
             foregroundColor = "#23763A"; 
             match = "%.*$"; 
-            name = "comment.line.logtalk"; 
+            name = "comment.line"; 
         }, 
         {
             foregroundColor = "#881280"; 
             match = ":-\\s+(object|protocol|category)(?=[(])"; 
-            name = "keyword.directives.entity.opening.logtalk"; 
+            name = "keyword.directive.entity.opening"; 
         }, 
         {
             foregroundColor = "#881280"; 
             match = ":-\\s+end_(object|protocol|category)(?=[.])"; 
-            name = "keyword.directives.entity.closing.logtalk"; 
+            name = "keyword.directive.entity.closing"; 
         }, 
         {
             foregroundColor = "#881280"; 
             match = "\\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])"; 
-            name = "keyword.directives.entity.relations.logtalk"; 
+            name = "keyword.directive.entity.relations"; 
         }, 
         {
             foregroundColor = "#881280"; 
             match = ":-\\s+(calls|encoding|in(itialization|fo)|uses)(?=[(])"; 
-            name = "keyword.directives.entity.others.logtalk"; 
+            name = "keyword.directive.entity.others"; 
         }, 
         {
             foregroundColor = "#881280"; 
             match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])"; 
-            name = "keyword.directives.predicate.logtalk"; 
+            name = "keyword.directive.predicate"; 
         }, 
         {
             foregroundColor = "#0000ff"; 
             match = "(::|\\^\\^)"; 
-            name = "keyword.operator.message-sending.logtalk"; 
+            name = "keyword.operator.message-sending"; 
         }, 
         {
             foregroundColor = "#0000ff"; 
             match = "(\\?|@)"; 
-            name = "keyword.operator.mode.logtalk"; 
+            name = "keyword.operator.mode"; 
         }, 
         {
             foregroundColor = "#0000ff"; 
             match = "(@=<|@<|@>|@>=|==|\\\\==)"; 
-            name = "keyword.operator.term-comparison.logtalk"; 
+            name = "keyword.operator.term-comparison"; 
         }, 
         {
             foregroundColor = "#0000ff"; 
             match = "(=<|<|>|>=|=:=|=\\\\=)"; 
-            name = "keyword.operator.arithmetic-comparison.logtalk"; 
+            name = "keyword.operator.arithmetic-comparison"; 
         }, 
         {
             foregroundColor = "#0000ff"; 
             match = "(<<|>>|/\\\\|\\\\/|\\\\)"; 
-            name = "keyword.operator.bitwise.logtalk"; 
+            name = "keyword.operator.bitwise"; 
         }, 
         {
             foregroundColor = "#0000ff"; 
             match = "\\<(mod|rem)\\>"; 
-            name = "keyword.operator.evaluable.logtalk"; 
+            name = "keyword.operator.evaluable"; 
         }, 
         {
             foregroundColor = "#0000ff"; 
             match = "(\\*\\*|\\+|-|\\*|/|//)"; 
-            name = "keyword.operator.evaluable.logtalk"; 
+            name = "keyword.operator.evaluable"; 
         }, 
         {
             foregroundColor = "#0000ff"; 
             match = "(:-|!|\\\\+|,|;|-->|->|=|\\=|\\.|=\\.\\.|\\<is\\>)"; 
-            name = "keyword.operator.misc.logtalk"; 
+            name = "keyword.operator.misc"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(true|fail|repeat)\\>"; 
-            name = "keyword.predicates.control.logtalk"; 
+            name = "keyword.predicate.control"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(ca(ll|tch)|throw|once)(?=[(])"; 
-            name = "keyword.predicates.control.logtalk"; 
+            name = "keyword.predicate.control"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<((get|peek|put)_(char|code|byte)|nl)(?=[(])"; 
-            name = "keyword.predicates.chars-and-bytes-io.logtalk"; 
+            name = "keyword.predicate.chars-and-bytes-io"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<nl\\>"; 
-            name = "keyword.predicates.chars-and-bytes-io.logtalk"; 
+            name = "keyword.predicate.chars-and-bytes-io"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(atom_(length|concat|chars|codes)|sub_atom|char_code|number_(chars|codes))(?=[(])"; 
-            name = "keyword.predicates.atom-term-processing.logtalk"; 
+            name = "keyword.predicate.atom-term-processing"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])"; 
-            name = "keyword.predicates.term-testing.logtalk"; 
+            name = "keyword.predicate.term-testing"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(read_term|read|write|writeq|write_(canonical|term)|op|current_op|char_conversion|current_char_conversion)(?=[(])"; 
-            name = "keyword.predicates.term-io.logtalk"; 
+            name = "keyword.predicate.term-io"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(arg|copy_term|functor)(?=[(])"; 
-            name = "keyword.predicates.term-creation-and-decomposition.logtalk"; 
+            name = "keyword.predicate.term-creation-and-decomposition"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(unify_with_occurs_check)(?=[(])"; 
-            name = "keyword.predicates.term-unification.logtalk"; 
+            name = "keyword.predicate.term-unification"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])"; 
-            name = "keyword.predicates.stream-selection-and-control.logtalk"; 
+            name = "keyword.predicate.stream-selection-and-control"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(flush_output|at_end_of_stream)\\>"; 
-            name = "keyword.predicates.stream-selection-and-control.logtalk"; 
+            name = "keyword.predicate.stream-selection-and-control"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<((set|current)_prolog_flag)(?=[(])"; 
-            name = "keyword.predicates.prolog-flags.logtalk"; 
+            name = "keyword.predicate.prolog-flags"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(logtalk_(compile|l(ibrary_path|oad)))(?=[(])"; 
-            name = "keyword.predicates.compiling-and-loading.logtalk"; 
+            name = "keyword.predicate.compiling-and-loading"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<((abolish|define)_events|current_event)(?=[(])"; 
-            name = "keyword.predicates.event-handling.logtalk"; 
+            name = "keyword.predicate.event-handling"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<((current|set)_logtalk_flag|halt)(?=[(])"; 
-            name = "keyword.predicates.hooks.implementation-defined.logtalk"; 
+            name = "keyword.predicate.hooks.implementation-defined"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(halt)\\>"; 
-            name = "keyword.predicates.hooks.implementation-defined.logtalk"; 
+            name = "keyword.predicate.hooks.implementation-defined"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<((create|abolish)_(object|protocol|category))(?=[(])"; 
-            name = "keyword.predicates.entity-creation-and-abolishing.logtalk"; 
+            name = "keyword.predicate.entity-creation-and-abolishing"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(current_(object|protocol|category)|(object|protocol|category)_property||extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])"; 
-            name = "keyword.predicates.reflection.logtalk"; 
+            name = "keyword.predicate.reflection"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<((for|retract)all)(?=[(])"; 
-            name = "keyword.predicates.misc.logtalk"; 
+            name = "keyword.predicate.misc"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(parameter|se(lf|nder)|this)(?=[(])"; 
-            name = "keyword.predicates.execution-context.logtalk"; 
+            name = "keyword.predicate.execution-context"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(abolish|assert(a|z)|clause|retract|retractall)(?=[(])"; 
-            name = "keyword.predicates.database.logtalk"; 
+            name = "keyword.predicate.database"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<((bag|set)of|f(ind|or)all)(?=[(])"; 
-            name = "keyword.predicates.all-solutions.logtalk"; 
+            name = "keyword.predicate.all-solutions"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(current_predicate|predicate_property)(?=[(])"; 
-            name = "keyword.predicates.reflection.logtalk"; 
+            name = "keyword.predicate.reflection"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(before|after)(?=[(])"; 
-            name = "keyword.predicates.event-handler.logtalk"; 
+            name = "keyword.predicate.event-handler"; 
         }, 
         {
             foregroundColor = "#1A1AA6"; 
             match = "\\<(expand_term|phrase)(?=[(])"; 
-            name = "keyword.predicates.grammar-rule.logtalk"; 
+            name = "keyword.predicate.grammar-rule"; 
         }, 
         {
             foregroundColor = "#C44B45"; 
             match = "\\<(0'[0-9a-zA-Z]|0b[0-1]+|0o[0-7]+|0x[0-9a-fA-F]+)\\>"; 
-            name = "constant.numeric.logtalk"; 
+            name = "constant.numeric"; 
         }, 
         {
             foregroundColor = "#C44B45"; 
             match = "\\<([0-9]+\\.?[0-9]*((e|E)(\\+|-)[0-9]+)?)\\>"; 
-            name = "constant.numeric.logtalk"; 
+            name = "constant.numeric"; 
         }, 
         {
             begin = "'"; 
             end = "'"; 
             foregroundColor = "#881314"; 
-            name = "string.quoted-atoms.logtalk"; 
+            name = "string.single-quoted"; 
             swallow = "\\\\."; 
         }, 
         {
             begin = "\""; 
             end = "\""; 
             foregroundColor = "#881314"; 
-            name = "string.double-quoted.logtalk"; 
+            name = "string.double-quoted"; 
             swallow = "\\\\."; 
         }, 
         {
             foregroundColor = "#848AB9"; 
             match = "\\<(\\u|_)\\w*\\>"; 
-            name = "keyword.variable.logtalk"; 
+            name = "keyword.variable"; 
         }
     ); 
     smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 

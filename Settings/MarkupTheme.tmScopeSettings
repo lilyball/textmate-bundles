@@ -23,48 +23,11 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Comments</string>
-			<key>scope</key>
-			<string>comment</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>italic</string>
-				<key>foreground</key>
-				<string>#0066FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Strings</string>
-			<key>scope</key>
-			<string>string</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#009933</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Numbers</string>
-			<key>scope</key>
-			<string>constant.numeric</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#0066FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>Keywords</string>
 			<key>scope</key>
-			<string>keyword.markup</string>
+			<string>keyword.function.latex</string>
 			<key>settings</key>
 			<dict>
-				<key>fontStyle</key>
-				<string>plain</string>
 				<key>foreground</key>
 				<string>#0000FF</string>
 			</dict>
@@ -73,7 +36,7 @@
 			<key>name</key>
 			<string>MarkupSections</string>
 			<key>scope</key>
-			<string>keyword.markup.section</string>
+			<string>keyword.function.section</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -84,9 +47,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Keywords.Identifiers</string>
+			<string>FontStyle markup</string>
 			<key>scope</key>
-			<string>keyword.identifier</string>
+			<string>keyword.function.latex.textit,keyword.function.latex.textbf</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -97,7 +60,7 @@
 			<key>name</key>
 			<string>Keywords.environments</string>
 			<key>scope</key>
-			<string>keyword.markup.environment</string>
+			<string>declaration.markup.environment</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -108,31 +71,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Invalid</string>
-			<key>scope</key>
-			<string>invalid</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#FF0000</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Strings.Regexp</string>
-			<key>scope</key>
-			<string>string.regexp</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#FF0080</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>textbf</string>
 			<key>scope</key>
-			<string>keyword.markup.latex.textbf</string>
+			<string>keyword.function function-argument.bf</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -145,22 +86,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Declaration.SpecialFuncs</string>
-			<key>scope</key>
-			<string>declaration.function.operator.py function-name</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-				<key>foreground</key>
-				<string>#FF000F</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>symbols</string>
 			<key>scope</key>
-			<string>text.latex keyword.markup.section</string>
+			<string>text.latex keyword.function.section</string>
 			<key>settings</key>
 			<dict>
 				<key>showInSymbolList</key>
@@ -169,22 +97,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>InlineMarkup</string>
-			<key>scope</key>
-			<string>keyword.markup.inline</string>
-			<key>settings</key>
-			<dict>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
-				<key>foreground</key>
-				<string>#B7077C</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>textit</string>
 			<key>scope</key>
-			<string>keyword.markup.latex.textit</string>
+			<string>keyword.function function-argument.it</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>

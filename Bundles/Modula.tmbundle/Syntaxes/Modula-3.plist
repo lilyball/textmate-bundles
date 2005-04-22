@@ -1,80 +1,47 @@
 {
-   name = "Modula-3";
-   scopeName = "source.modula-3";
-   
-   // r1 (2005jan29)
-   // - chris thomas fixed my stupid typos and
-   //   some bugs, thanks for this.
-   // 
-   // r0 (2004dec04)
-   // - initial version, afaik
-   //   based on http://research.compaq.com/SRC/m3defn/html/complete.html
-   
-   uuid = "479D53FA-6ED6-11D9-8471-0011242E4184";
-   
-   fileTypes = ( m3, cm3 );
-  
-//  foldingStartMarker = "^\\s*def\\>(?!.*\\<end\\>\\s*(#.*)?$)";
-//  foldingStopMarker = "(^\\s*end|;\\s*end)\\s*(#.*)?$";
-  
-//  increaseIndentPattern = "^\\s*(module|class|begin|def|if|else|elsif|unless|case|when|rescue|for|while|unless|[^#\"']*\\<do)\\>.*$";
-  
-   smartTypingPairs = (
-      ( "(", ")" ), ( "[", "]" )/*, ( "{", "}" )*/,
-      ( "\"", "\"" ), ( "'", "'" )/*, ( "|", "|" )*/
-   );
-   highlightPairs = (
-      ( "(", ")" ), ( "[", "]" )/*, ( "{", "}" )*/
-   );
-   
-   foregroundColor = "#eeeeee";
-   backgroundColor = "#181818";
-   
-   patterns = (
-      {  name = "keyword.modula-3";
-         foregroundColor = "#05e0e0";
-         match = "\\<(ANY|ARRAY|AS|BEGIN|BITS|BRANDED|BY|CASE|CONST|DIV|DO|ELSE|ELSIF|END|EVAL|EXCEPT|EXCEPTION|EXIT|EXPORTS|FINALLY|FOR|FROM|GENERIC|IF|IMPORT|INTERFACE|LOCK|LOOP|METHODS|MOD|MODULE|OBJECT|OF|OVERRIDES|PROCEDURE|RAISE|RAISES|READONLY|RECORD|REF|REPEAT|RETURN|REVEAL|ROOT|SET|THEN|TO|TRY|TYPE|TYPECASE|UNSAFE|UNTIL|UNTRACED|VALUE|VAR|WHILE|WITH)\\>";
-      },
-      
-      {  name = "keyword.identifier.reserved.modula-3";
-         foregroundColor = "#128787";
-         match = "\\<(ABS|ADDRESS|ADR|ADRSIZE|BITSIZE|BOOLEAN|BYTESIZE|CARDINAL|CEILING|CHAR|DEC|DISPOSE|EXTENDED|FALSE|FIRST|FLOAT|FLOOR|INC|INTEGER|ISTYPE|LAST|LONGREAL|LOOPHOLE|MAX|MIN|MUTEX|NARROW|NEW|NIL|NULL|NUMBER|ORD|REAL|REFANY|ROUND|SUBARRAY|TEXT|TRUE|TRUNC|TYPECODE|VAL)\\>";
-      },
-      
-      {  name = "keyword.logical.modula-3";
-         foregroundColor = "#0d93df"; //9fd8d8";
-         match = "\\<(IN|NOT|AND|OR)\\>";
-      },
-      
-    { name = "constant.numeric.modula-3";
-      "foregroundColor[2]" = "#61e01c";
-      match = "(\\s)((\\-){0,1}((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)";
-    },
+    name = "Modula-3";
+    scopeName = "source.modula-3";
+    uuid = "479D53FA-6ED6-11D9-8471-0011242E4184";
+    fileTypes = ( m3, cm3 );
     
+    smartTypingPairs = (
+        ( "(", ")" ), ( "[", "]" )/*, ( "{", "}" )*/,
+        ( "\"", "\"" ), ( "'", "'" )/*, ( "|", "|" )*/
+    );
+    highlightPairs = (
+        ( "(", ")" ), ( "[", "]" )/*, ( "{", "}" )*/
+    );
     
-      {  name = "string.single-quoted.modula-3";
-         foregroundColor = "#b4f00a";
-         begin = "'";
-         end = "'";
-         swallow = "\\\\.";
-      },
+    patterns = (
+        {   name = "keyword.modula-3";
+            match = "\\<(ANY|ARRAY|AS|BEGIN|BITS|BRANDED|BY|CASE|CONST|DIV|DO|ELSE|ELSIF|END|EVAL|EXCEPT|EXCEPTION|EXIT|EXPORTS|FINALLY|FOR|FROM|GENERIC|IF|IMPORT|INTERFACE|LOCK|LOOP|METHODS|MOD|MODULE|OBJECT|OF|OVERRIDES|PROCEDURE|RAISE|RAISES|READONLY|RECORD|REF|REPEAT|RETURN|REVEAL|ROOT|SET|THEN|TO|TRY|TYPE|TYPECASE|UNSAFE|UNTIL|UNTRACED|VALUE|VAR|WHILE|WITH|IN|NOT|AND|OR)\\>";
+        },
+        
+        {   name = "keyword.storage.modula-3";
+            match = "\\<(ABS|ADDRESS|ADR|ADRSIZE|BITSIZE|BOOLEAN|BYTESIZE|CARDINAL|CEILING|CHAR|DEC|DISPOSE|EXTENDED|FALSE|FIRST|FLOAT|FLOOR|INC|INTEGER|ISTYPE|LAST|LONGREAL|LOOPHOLE|MAX|MIN|MUTEX|NARROW|NEW|NIL|NULL|NUMBER|ORD|REAL|REFANY|ROUND|SUBARRAY|TEXT|TRUE|TRUNC|TYPECODE|VAL)\\>";
+        },
+        
+        {   name = "constant.numeric.modula-3";
+            match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>";
+        },
+        
+        {   name = "string.single-quoted.modula-3";
+            begin = "'";
+            end = "'";
+            swallow = "\\\\'";
+        },
+        
+        {   name = "string.double-quoted.modula-3";
+            begin = "\"";
+            end = "\"";
+            swallow = "\\\\.";
+        },
+        
+        {   name = "comment.block.modula-3";
+            begin = "\\(\\*";
+            end = "\\*\\)";
+        },
+        
+    );
     
-      {  name = "string.double-quoted.modula-3";
-         begin = "\"";
-         end = "\"";
-         swallow = "\\\\.";
-         foregroundColor = "#b4f00a";
-      },
-      
-      {  name = "comment.block.modula-3";
-         begin = "\\(\\*";
-         end = "\\*\\)";
-//      swallow = "\\\\.";
-//      foregroundColor = "#667799";
-         foregroundColor = "#888888";
-         fontStyle = ( italic );
-      },
-     
-  );
-  
 }

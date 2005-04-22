@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>MarkupTheme</string>
+	<string>LaTeX Theme</string>
 	<key>settings</key>
 	<array>
 		<dict>
@@ -25,7 +25,7 @@
 			<key>name</key>
 			<string>Keywords</string>
 			<key>scope</key>
-			<string>keyword.function.latex</string>
+			<string>keyword.function.latex,keyword.latex</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -34,7 +34,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>MarkupSections</string>
+			<string>Section</string>
 			<key>scope</key>
 			<string>keyword.function.section</string>
 			<key>settings</key>
@@ -42,7 +42,7 @@
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#FF8000</string>
+				<string>#C9011B</string>
 			</dict>
 		</dict>
 		<dict>
@@ -58,22 +58,20 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Keywords.environments</string>
+			<string>Environment</string>
 			<key>scope</key>
-			<string>declaration.markup.environment</string>
+			<string>keyword.function.environment</string>
 			<key>settings</key>
 			<dict>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
 				<key>foreground</key>
-				<string>#990000</string>
+				<string>#C9011B</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>textbf</string>
 			<key>scope</key>
-			<string>keyword.function function-argument.bf</string>
+			<string>keyword.function.latex function-argument.bf</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -99,7 +97,7 @@
 			<key>name</key>
 			<string>textit</string>
 			<key>scope</key>
-			<string>keyword.function function-argument.it</string>
+			<string>keyword.function.latex function-argument.it</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -114,13 +112,54 @@
 			<key>name</key>
 			<string>texttt</string>
 			<key>scope</key>
-			<string>keyword.markup.latex.texttt</string>
+			<string>keyword.function.latex.texttt</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
 				<string>misc. settings goes here!</string>
 				<key>fontStyle</key>
 				<string>underline</string>
+				<key>foreground</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>CrossRefs</string>
+			<key>scope</key>
+			<string>keyword.function.latex.ref,keyword.function.latex.cite</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#9700CC</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>LaTeXFunctionArgs</string>
+			<key>scope</key>
+			<string>keyword.function.latex function-argument</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>misc. settings goes here!</string>
+				<key>fontStyle</key>
+				<string>underline</string>
+				<key>foreground</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>EnvironmentArgs</string>
+			<key>scope</key>
+			<string>function-argument.environment</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>misc. settings goes here!</string>
+				<key>fontStyle</key>
+				<string>italic</string>
 				<key>foreground</key>
 				<string>#000000</string>
 			</dict>

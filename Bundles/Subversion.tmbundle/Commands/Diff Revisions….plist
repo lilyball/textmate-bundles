@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>revs=`"${TM_SVN:=svn}" log -q "$TM_FILEPATH"`
+#echo $revs
+
+revs=`echo "$revs" | sed '/^------------------------------------------------------------------------$/d' | sed '/^$/d'`
+
+revs=`osascript&lt;&lt;END
+	set AppleScript's text item delimiters to {"\n","\r"}
+	tell app "SystemUIServer" to activate
+	tell app "SystemUIServer" to choose from list (every text item of "$revs") with prompt "Please choose two revisions:" with multiple selections allowed
+	set theitems to the result
+	set the result to (item 1 of theitems) &amp; return &amp; (item 2 of theitems)
+END`
+echo $revs
+
+revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`
+
+#IFS=","
+revs=( $revs )
+
+echo $revs
+
+echo "0:" ${revs[0]}
+echo "1:" ${revs[1]}
+
+TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
+
+mv "$TMPFILE" "$TMPFILE.diff"
+TMPFILE="$TMPFILE.diff"
+
+"${TM_SVN:=svn}" diff -r${revs[0]#r}:${revs[1]#r} "$TM_FILEPATH" &amp;&gt; "$TMPFILE"
+
+open -a TextMate "$TMPFILE" &amp;
+
+#rm "$TMPFILE" # ideally, we'd do this, but it creates a
+               # race condition, because 'open' is asynchronous.
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^A</string>
+	<key>name</key>
+	<string>Diff Revisions…</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>C7802039-B3C4-11D9-8D63-000A95A89C98</string>
+</dict>
+</plist>

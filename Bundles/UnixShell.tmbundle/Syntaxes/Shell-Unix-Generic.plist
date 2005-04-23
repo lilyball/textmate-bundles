@@ -14,7 +14,7 @@
     foldingStopMarker = "\\}";
 
 	patterns = (
-		{   name = "declaration.function.shell"; match = "\\<(.*)\\s*\\(\\)";
+		{   name = "declaration.function.shell"; match = "\\<([^ \\t\\n]*)\\s*\\(\\)";
 		    captures = { 1 = { name = "function-name"; }; };
 		},
 		{   name = "keyword.control.shell"; match = "\\<(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\\>"; },

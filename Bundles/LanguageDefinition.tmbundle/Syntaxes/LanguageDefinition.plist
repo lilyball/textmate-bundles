@@ -5,17 +5,13 @@
     fileTypes = (plist); 
     foldingStartMarker = "(/\\*|\\{|\\()"; 
     foldingStopMarker = "(\\*/|\\}|\\))"; 
-    highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") ); 
-    smartTypingPairs = ( ("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'") );
-    increaseIndentPattern = "(\\{|\\()\\s*$"; 
-
 
     patterns = (
         {   name = "keyword.tm-language-def";
-            match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|increaseIndentPattern|smartTypingPairs|highlightPairs|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|firstLineMatch)\\>"; 
+            match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|firstLineMatch)\\>"; 
         },
         {   name = "invalid.deprecated.tm-language-def";
-            match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode)\\>";
+            match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\\>";
         },
         {   name = "comment.block.tm-language-def"; begin = "/\\*"; end = "\\*/"; },
         {   name = "comment.line.tm-language-def"; match = "//.*$"; },  

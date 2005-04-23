@@ -12,9 +12,11 @@ if(FILE* fp = fopen(${1:"filename"}, "r"))
 	fclose(fp);
 }</string>
 	<key>name</key>
-	<string>Read file into std::vector (readF)</string>
+	<string>Read file into std::vector (readFile)</string>
+	<key>scope</key>
+	<string>source.c, source.objc</string>
 	<key>tabTrigger</key>
-	<string>readF</string>
+	<string>readFile</string>
 	<key>uuid</key>
 	<string>E8C3B596-9045-11D9-AB38-000D93589AF6</string>
 </dict>

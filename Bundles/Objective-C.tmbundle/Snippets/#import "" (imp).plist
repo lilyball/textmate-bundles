@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>#import "${1:.h}"</string>
+	<string>#import "$1.h"</string>
 	<key>name</key>
 	<string>#import "" (imp)</string>
+	<key>scope</key>
+	<string>source.objc</string>
 	<key>tabTrigger</key>
 	<string>imp</string>
 	<key>uuid</key>

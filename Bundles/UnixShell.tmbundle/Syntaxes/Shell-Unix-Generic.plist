@@ -19,15 +19,14 @@
 		},
 		{   name = "keyword.control.shell"; match = "\\<(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\\>"; },
 		{   name = "keyword.storage.shell"; match = "\\<(?:export)\\>"; },
-/*		{   name = "constant.numeric.shell"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#F0F8FF"; },
-*/		{   name = "string.single-quoted.shell"; begin = "'"; end = "'"; },
+//		{   name = "constant.numeric.shell"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#F0F8FF"; },
+		{   name = "string.single-quoted.shell"; begin = "'"; end = "'"; },
         {   name = "string.double-quoted.shell"; begin = "\""; end = "\"";  swallow = "\\\\."; },
         {   name = "string.backticked.shell"; begin = "`"; end = "`"; swallow = "\\\\."; },
         {   name = "string.dollar-quoted.shell"; begin = "\\$'"; end = "'";  swallow = "\\\\."; },
         {   name = "string.shell-interpolation.shell"; begin = "\\$\\("; end = "\\)"; swallow = "\\\\."; },
         {   name = "string.math.shell"; begin = "\\$\\(\\("; end = "\\)\\)"; swallow = "\\\\."; },
-		{   name = "comment.line.shell"; match = "#[^{](.*)"; },
-		{   name = "comment.line.shell.lonepound"; match = "#$"; }
+		{   name = "comment.line.shell"; match = "#(?!\\{).*$"; },
 	);
 	uuid = "DDEEA3ED-6B1C-11D9-8B10-000D93589AF6";
 }

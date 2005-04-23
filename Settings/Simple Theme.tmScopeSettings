@@ -23,20 +23,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Comments</string>
-			<key>scope</key>
-			<string>comment</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>italic</string>
-				<key>foreground</key>
-				<string>#0066FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Strings</string>
+			<string>String</string>
 			<key>scope</key>
 			<string>string</string>
 			<key>settings</key>
@@ -47,7 +34,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Numbers</string>
+			<string>Number</string>
 			<key>scope</key>
 			<string>constant.numeric</string>
 			<key>settings</key>
@@ -58,7 +45,18 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Keywords</string>
+			<string>Regular expression</string>
+			<key>scope</key>
+			<string>string.regexp</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF0080</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Keyword</string>
 			<key>scope</key>
 			<string>keyword</string>
 			<key>settings</key>
@@ -69,18 +67,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Declaration.Functions Name</string>
-			<key>scope</key>
-			<string>declaration.function function-name</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#FF8000</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Keywords.Identifiers</string>
+			<string>Identifier</string>
 			<key>scope</key>
 			<string>keyword.identifier</string>
 			<key>settings</key>
@@ -91,7 +78,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Keywords.Exceptions</string>
+			<string>Exception</string>
 			<key>scope</key>
 			<string>keyword.exception</string>
 			<key>settings</key>
@@ -102,15 +89,65 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Declaration.Classes</string>
+			<string>Function name</string>
 			<key>scope</key>
-			<string>declaration.class class-name</string>
+			<string>function-name</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF8000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Function argument</string>
+			<key>scope</key>
+			<string>function-argument</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Class name</string>
+			<key>scope</key>
+			<string>class-name</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
 				<string>bold underline</string>
 				<key>foregroundColor</key>
 				<string>#ba5319</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Class inheritance</string>
+			<key>scope</key>
+			<string>class-inheritance</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Comment</string>
+			<key>scope</key>
+			<string>comment</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#0066FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -126,61 +163,26 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Strings.Regexp</string>
-			<key>scope</key>
-			<string>string.regexp</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#FF0080</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Declaration.Functions Arguments</string>
-			<key>scope</key>
-			<string>declaration.function function-argument</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>italic</string>
-				<key>foreground</key>
-				<string>#000000</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Class Inheritance</string>
-			<key>scope</key>
-			<string>declaration.class class-inheritance</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>italic</string>
-				<key>foreground</key>
-				<string>#000000</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Declaration (SymbolList)</string>
-			<key>scope</key>
-			<string>declaration name</string>
-			<key>settings</key>
-			<dict>
-				<key>showInSymbolList</key>
-				<string>1</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Invalid.Trailing-Whitespace</string>
+			<string>Trailing whitespace</string>
 			<key>scope</key>
 			<string>invalid.trailing-whitespace</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
 				<string>#FFD0D0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Declaration (symbol list)</string>
+			<key>scope</key>
+			<string>declaration name</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>This setting should be removed!</string>
+				<key>showInSymbolList</key>
+				<string>1</string>
 			</dict>
 		</dict>
 	</array>

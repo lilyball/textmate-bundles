@@ -13,15 +13,20 @@
 	    ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
 	);
 
-	foregroundColor = "#DBFEF8";
-	backgroundColor = "#2F4F4F";
-
 	patterns = (
-		{ name = "keyword.iCalendar.component-begin"; match = "^BEGIN:(.*)"; foregroundColor = "#00CCFF"; "fontStyle[1]" = ( italic );},
-		{ name = "keyword.iCalendar.component-end"; match = "^END:(.*)"; foregroundColor = "#00CCFF"; "fontStyle[1]" = ( italic );},
-		{ name = "constant.numeric.iCalendar"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#F0F8FF"; },
+		{
+		    name = "keyword.iCalendar.component-begin"; match = "^BEGIN:(.*)";
+			captures = { 1 = { name = "function-name"; }; }; // FIXME function-name is not correct
+		},
+		{
+		    name = "keyword.iCalendar.component-end"; match = "^END:(.*)";
+		    captures = { 1 = { name = "function-name"; }; }; // FIXME function-name is not correct
+        },
+		
+		
+		{ name = "constant.numeric.iCalendar"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; },
 		/* { name = "string.single-quoted.iCalendar"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; }, */
-		{ name = "string.double-quoted.iCalendar"; begin = "\""; end = "\"";  foregroundColor = "#FFFCCF";   },
+		{ name = "string.double-quoted.iCalendar"; begin = "\""; end = "\"";  },
 	);
 	uuid = "16771FA0-6B1D-11D9-A369-000D93589AF6";
 }

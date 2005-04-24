@@ -3,10 +3,14 @@
 	scopeName = "source.makefile";
 	fileTypes = ( GNUmakefile, makefile, Makefile );
 	patterns = (
-		{ name = "keyword.variable.makefile"; match = "^(\\w|[-_])+\\s*=.*"; fontStyle = ( bold ); foregroundColor = "red"; },
-		{ name = "comment.line.makefile"; match = "^#.*"; fontStyle = ( italic ); foregroundColor = "gray"; },
-		{ name = "keyword.directives.makefile"; match = "^(\\s*)\\<(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\>"; fontStyle = ( bold ); "foregroundColor[2]" = "#008800"; },
-		{ name = "rule.makefile"; match = "^([^\\t ]+:(?!\\=))\\s*.*"; "fontStyle[1]" = ( bold ); foregroundColor = "blue"; }
+		{ name = "keyword.variable.makefile"; match = "^(\\w|[-_])+\\s*=.*"; },
+		{ name = "comment.line.makefile"; match = "^#.*"; },
+		{ name = "keyword.directives.makefile"; match = "^(\\s*)\\<(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\>";},
+		{
+		    name = "declaration.function.makefile";
+    		match = "^([^\\t ]+:(?!\\=))\\s*.*";
+    		captures = { 1 = { name = "function-name"; }; };
+	    }
 	);
 	uuid = "FF1825E8-6B1C-11D9-B883-000D93589AF6";
 }

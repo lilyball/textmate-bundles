@@ -36,6 +36,14 @@
 			captures = { 1 = { name = "directive"; }; };
 		},
 		
+		{ name = "declaration.section";
+		  match = "^\\s*#\\s*(((pragma)(?:\\s+mark)?)\\s+(.*))\\>";
+			captures = { 1 = { name = "keyword.preprocessor.c"; };
+            			 3 = { name = "directive"; };
+            			 4 = { name = "section-name"; };
+			 };
+		},
+		
 		// This is a horrible hack. It doesn't work for functions with names smaller than four characters.
 		// Comments in the wrong place, though legal C, can fool it.
 		// Some function calls can fool it.

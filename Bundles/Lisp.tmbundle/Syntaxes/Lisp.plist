@@ -8,6 +8,9 @@
 	// More may be added, but probably to a superset "Common Lisp" syntax... (some of this should probably be moved to such a file, in fact)
 	// This file should ideally be a basis for Scheme and other consistently S-expression-only dialects of Lisp. Maybe.
 	//
+	
+	comment = "";
+	
 	name = "Lisp";
 	scopeName = "source.lisp";
 	fileTypes = ( lisp, cl, l, mud, el, scm, sch );		// mud is for the Zork MDL source; el is Emacs lisp.
@@ -27,10 +30,10 @@
 		
 		{
 			name = "declaration.function.lisp";
-			match = "(\\<(?i:defun|defmethod|defmacro)\\>)(\\s+)((\\w|\\-|\\!|\\?)*)";
+			match = "(\\<(?i:(defun|defmethod|defmacro))\\>)(\\s+)((\\w|\\-|\\!|\\?)*)";
 				captures = {
-				    1 = { name = "function-name"; };
-				    2 = { name = "function-argument"; };
+				    2 = { name = "function-type"; };
+				    4 = { name = "function-name"; };
 				};
 		},
 		

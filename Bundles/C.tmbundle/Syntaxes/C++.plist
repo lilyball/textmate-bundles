@@ -1,7 +1,7 @@
 {
 	name = "C++";
 	scopeName = "source.c++";
-	// I don't think anyone uses ".hp". .cp tends to be paired with .h. (I could be wrong. :) -- chris
+	comment = "I don't think anyone uses .hp. .cp tends to be paired with .h. (I could be wrong. :) -- chris";
 	fileTypes = ( cc, cpp, cp, cxx, "c++", C, h, hpp, "h++" );
 	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
 	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
@@ -13,21 +13,18 @@
    highlightPairs = (
       ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
 	);
-	foregroundColor = "#000000";
-	backgroundColor = "#FFFFFF";
 	patterns = (
 		{ include = "source.c"; },
-		{ name = "keyword.control.c++";
-		match = "\\<(explicit|export|catch|friend|namespace|operator|private|protected|public|template|this|try|throw|using|virtual)\\>";
-		fontStyle = ( bold );
-		foregroundColor = "blue"; },
-		
-		{ name = "keyword.operator.c++";
-		match = "\\<(and|and_eq|bitand|bitor|compl|const_cast|delete|dynamic_cast|new|not|not_eq|or|or_eq|reinterpret_cast|static_cast|typeid|xor|xor_eq)\\>";
-		fontStyle = ( bold );
-		foregroundColor = "blue"; },
+		{
+		    name = "keyword.control.c++";
+		    match = "\\<(explicit|export|catch|friend|namespace|operator|private|protected|public|template|this|try|throw|using|virtual)\\>";
+		},
+		{
+		    name = "keyword.operator.c++";
+		    match = "\\<(and|and_eq|bitand|bitor|compl|const_cast|delete|dynamic_cast|new|not|not_eq|or|or_eq|reinterpret_cast|static_cast|typeid|xor|xor_eq)\\>";
+        },
 
-		{ name = "keyword.storage.c++"; match = "\\<(bool|class|mutable|typename|wchar_t)\\>"; fontStyle = ( bold ); foregroundColor = "blue"; },
+		{ name = "keyword.storage.c++"; match = "\\<(bool|class|mutable|typename|wchar_t)\\>"; },
 	);
 	uuid = "26251B18-6B1D-11D9-AFDB-000D93589AF6";
 }

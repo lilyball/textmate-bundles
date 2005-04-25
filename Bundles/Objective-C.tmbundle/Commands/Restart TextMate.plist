@@ -5,11 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>{ osascript -e 'tell app "TextMate" to quit';
-  while [[ -n $(ps -xc|grep 'TextMate$') ]]; do
+	<string>{
+app_path=$( ps axw -o pid,command | \
+    grep TextMate.app | \
+    fgrep -v grep | \
+    sed -e 's#^[0-9]* \(/.*\)/Contents.*$#\1#g' )
+
+osascript -e 'tell app "TextMate" to quit'
+
+while [[ -n $(ps -xc|grep 'TextMate$') ]]; do
     sleep .1;
-  done
-  open ~/Oak/TextMate.app; } &amp;&gt;/dev/null &amp;</string>
+done
+
+open ${app_path}
+} &amp;&gt;/dev/null &amp;</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

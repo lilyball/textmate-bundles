@@ -17,7 +17,9 @@
 	scopeName = "text.xml";
 	
 	firstLineMatch = "^\\s*<\\?xml";
-	fileTypes = ( xml, tld, jsp, xslt );
+
+	// pt, cpt, and dtml comes from Zope development
+	fileTypes = ( xml, tld, jsp, xsl, xslt, pt, cpt, dtml );
 
 	foldingStartMarker = "^\\s*(<[^!?%/](?!.+?(/>|</.+?>))|<[!%]--(?!.+?--%?>)|<%[!]?(?!.+?%>))";
 	foldingStopMarker  = "^\\s*(</[^>]+>|[/%]>|-->)\\s*$";
@@ -143,10 +145,10 @@
 		
         /* embedded java */
 		{
-			name = "embedded.java";
+			name = "source.java.embedded";
 			backgroundColor = "#E5E5E5";
 			begin = "<%[!=]?(?!--)";
-			patterns = ( { include = "Java Source"; } );
+			patterns = ( { include = "source.java"; } );
 			end = "(?!--)%>";
 		},
 	);

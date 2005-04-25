@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>labels=`"$TM_P4" labels "$TM_FILEPATH" | cut -d " " -f 2`
+
+revs=`osascript&lt;&lt;END
+	set AppleScript's text item delimiters to {"\n","\r"}
+	tell app "SystemUIServer"
+		activate
+		set ourList to (every text item of "$labels")
+		if the count of items in ourList is 0 then
+			display dialog "No labels found" buttons ("OK")
+			set the result to false
+		else
+			choose from list ourList with prompt "Diff '$(basename "$TM_FILEPATH")' with version in label:"
+		end if
+	end tell
+END`
+
+# exit if user canceled
+if [ $revs = "false" ]
+then
+	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit 0	
+fi
+
+revs=( $revs )
+
+TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
+
+mv "$TMPFILE" "$TMPFILE.diff"
+TMPFILE="$TMPFILE.diff"
+
+"${TM_P4:=p4}" diff -du "$TM_FILEPATH""@$revs" &amp;&gt; "$TMPFILE"
+
+open -a TextMate "$TMPFILE" &amp;
+
+#rm "$TMPFILE" # ideally, we'd do this, but it creates a
+               # race condition, because 'open' is asynchronous.
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Diff With Revision In Label…</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>97E895A4-B5B9-11D9-80D4-000A95A89C98</string>
+</dict>
+</plist>

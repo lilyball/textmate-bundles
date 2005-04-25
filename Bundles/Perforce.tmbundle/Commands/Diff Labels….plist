@@ -8,12 +8,10 @@
 	<string>labels=`"$TM_P4" labels | cut -d " " -f 2`
 #echo $labels
 
-chooseListScript=
-
 difflabels=`osascript&lt;&lt;END
 	set AppleScript's text item delimiters to {"\n", "\r"}
 	tell app "SystemUIServer" to activate
-	tell app "SystemUIServer" to choose from list (every text item of "$labels") with multiple selections allowed
+	tell app "SystemUIServer" to choose from list (every text item of "$labels") with prompt "Please choose two labels:" with multiple selections allowed
 END`
 #echo $difflabels
 

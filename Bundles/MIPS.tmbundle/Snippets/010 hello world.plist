@@ -6,27 +6,29 @@
 	<string>#  a basic example in mips-assembler: hello world.
 #  tested with xspim-7.0
    
-   .text
-   .globl main
-   
+	.text
+	.globl main
+	
 main:
-   li       \$v0, 4            # call = 4 = print_string
-   la       \$a0, hello_string # set \$a0 to point to the string
-   syscall                    # print it.
-   li       \$v0, 10           # call = 10 = exit
-   syscall                    # done.
-   
-   
-   .data
-   
+	li       \$v0, 4            # call = 4 = print_string
+	la       \$a0, hello_string # set \$a0 to point to the string
+	syscall                    # print it.
+	li       \$v0, 10           # call = 10 = exit
+	syscall                    # done.
+	
+	
+	.data
+	
 hello_string:  .asciiz  "Hello World!"
 $1</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
 	<string>Hello World (mips)</string>
-	<key>trigger</key>
-	<string>mips</string>
+	<key>scope</key>
+	<string>source.mips</string>
+	<key>tabTrigger</key>
+	<string>hello</string>
 	<key>uuid</key>
 	<string>E670F342-6BE2-11D9-96CC-0011242E4184</string>
 </dict>

@@ -10,12 +10,34 @@
 revs=`echo "$revs" | sed '/^------------------------------------------------------------------------$/d' | sed '/^$/d'`
 
 revs=`osascript&lt;&lt;END
+	set theResult to false
 	set AppleScript's text item delimiters to {"\n","\r"}
-	tell app "SystemUIServer" to activate
-	tell app "SystemUIServer" to choose from list (every text item of "$revs") with prompt "Please choose two revisions:" with multiple selections allowed
-	set theitems to the result
-	set the result to (item 1 of theitems) &amp; return &amp; (item 2 of theitems)
+	tell app "SystemUIServer"
+		activate
+		set ourList to (every text item of "$revs")
+		if the count of items in ourList is 0 then
+			display dialog "No revisions of file '$(basename "$TM_FILEPATH")' found" buttons ("OK")
+		else
+			tell app "SystemUIServer" to choose from list (every text item of "$revs") with prompt "Please choose two revisions of '$(basename $TM_FILEPATH)':" with multiple selections allowed
+
+			set theitems to the result
+			if theitems is not false then
+				if the count of items in the theitems is less than 2 then
+					display dialog "Please select two revisions (hold down the shift key to select multiple revisions)." buttons ("OK")
+				else
+					set theResult to (item 1 of theitems) &amp; return &amp; (item 2 of theitems)
+				end if
+			end if 
+		end if
+		set the result to theResult
+	end tell
 END`
+
+# exit if user canceled
+if [ $revs = "false" ]
+then
+	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit 0
+fi
 
 revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`
 revs=( $revs )

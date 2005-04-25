@@ -15,6 +15,7 @@
 {
 	name = "XML";
 	scopeName = "text.xml";
+	uuid = "D3C4E6DA-6B1C-11D9-8CC2-000D93589AF6";
 	
 	firstLineMatch = "^\\s*<\\?xml";
 
@@ -24,41 +25,6 @@
 	foldingStartMarker = "^\\s*(<[^!?%/](?!.+?(/>|</.+?>))|<[!%]--(?!.+?--%?>)|<%[!]?(?!.+?%>))";
 	foldingStopMarker  = "^\\s*(</[^>]+>|[/%]>|-->)\\s*$";
 
-    /*
-     * Don't indent:
-     *  <?, </, <!
-     *  <whatever></whatever>
-     *  <whatever />
-     *  <% %>
-     *  <!-- -->
-     *  <%-- --%>
-     *
-     * Do indent:
-     *  <whatever>
-     *  <%
-     *  <!--
-     *  <%--
-     */
-    increaseIndentPattern = "^\\s*<([^!/?]|%)(?!.+?([/%]>|</.+?>))";
-    
-	foregroundColor = "#333333";
-	backgroundColor = "#ffffff";
-
-	smartTypingPairs = (
-	    ( "(", ")" ),
-		( "[", "]" ),
-		( "{", "}" ),
-		( "\"", "\"" ),
-	);
-
-	highlightPairs = (
-	    ( "(", ")" ),
-		( "[", "]" ),
-		( "{", "}" ),
-		( "\"", "\"" ),
-		( "<", ">" ),
-	);
-
 	patterns = (
 		/* processing instructions */
 		{
@@ -66,34 +32,42 @@
 			begin = "<\\?\\s*[-_a-zA-Z0-9]+";
 			end = "\\?>";
 
-			foregroundColor = "#888888";
-
 			patterns = (
 	  			{ name = "keyword.markup.tag.options.xml"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.double-quoted.html"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
-				{ name = "string.single-quoted.html"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
+	  			{ name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
+				{ name = "string.single-quoted.xml"; begin = "'"; end = "'";},
 			);
 		},
 		
 		/* doctype */
 		{
-			name = "meta.docinfo.doctype.html";
+			name = "meta.docinfo.doctype.xml";
 			begin = "<!(DOCTYPE)";
 			end = ">";
 
-			"elementForegroundColor[1]" = "#888888";
+			captures = {
+			    1 = {
+			        name = "meta.docinfo.doctype-literal.xml";
+			    };
+			};
 
 			patterns = (
 				{
 					begin = "<!(ENTITY)\\s([-_a-zA-Z0-9]+)";
 					end = ">";
 					
-					"elementForegroundColor[1]" = "#888888";
-					"elementForegroundColor[2]" = "#6600CC";
-				
+					captures = {
+					    1 = {
+					        name = "meta.docinfo.entity-literal.xml";
+					    };
+					    2 = {
+					        name = "meta.docinfo.entity-definition.xml";
+					    };
+					};
+
 					patterns = (
-	  					{ name = "string.double-quoted.html"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
-						{ name = "string.single-quoted.html"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
+	  					{ name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
+						{ name = "string.single-quoted.xml"; begin = "'"; end = "'";},
 					);
 				},
 			);
@@ -104,41 +78,42 @@
 			name = "comment.block.xml";
 			begin = "<[!%]--";
 			end = "--%?>";
-			foregroundColor = "red";
 		},
 		
 		/* nodes */
 		{
-			name = "keyword.markup.tags.xml";					// "tags" in HTML; want them to be colored similarly.
-			begin = "</?([-_a-zA-Z0-9]+)(:[-_a-zA-Z0-9:]+)?";
+			// "tags" in HTML; want them to be colored similarly.
+			name = "keyword.markup.tags.xml";
+			begin = "</?(([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)";
 			end = "(/?)>";
 			
-	  		"elementFontStyle[1]" = ( underline ); 
-	  		"elementFontStyle[2]" = ( underline ); 
+			captures = {
+			    2 = {
+			        name = "keyword.markup.tags.namespace.xml";
+			    };
+			    3 = {
+			        name = "keyword.markup.tags.xml";
+			    };
+			};
 
-	  		foregroundColor = "#0066CC";
-			"elementForegroundColor[1]" = "#0066CC";
-
-			"elementForegroundColor[2]" = "#670079";
-			
 			patterns = (
 	  			{ name = "keyword.markup.tag.options.xml"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.double-quoted.html"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
-				{ name = "string.single-quoted.html"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
+	  			{ name = "string.double-quoted.html"; begin = "\""; end = "\"";},
+				{ name = "string.single-quoted.html"; begin = "'"; end = "'";},
 			);
 		},
 
 		/* entities */
-		{ name = "constant.character-entities.html"; match = "&([a-zA-Z0-9_-]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-		{ name = "invalid.bad-ampersand.html"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+		{ name = "constant.character-entities.html"; match = "&([a-zA-Z0-9_-]+|#[0-9]+|#x[0-9a-fA-F]+);";},
+		{ name = "invalid.bad-ampersand.html"; match = "&";},
 		
         /* jsp page properties */
  		{
-			name = "embedded.jsp-props";  // JSP page properties
-			backgroundColor = "#A0C544";
+          // JSP page properties
+  			name = "embedded.jsp-props";
 			begin = "<%@";
 			patterns = (
-				{ match = "page|include|taglib"; foregroundColor = "red"; },
+				{ match = "page|include|taglib"; name = "embedded.jsp-props.page-props"; },
 			);
 			end = "%>";
 		},
@@ -146,11 +121,9 @@
         /* embedded java */
 		{
 			name = "source.java.embedded";
-			backgroundColor = "#E5E5E5";
 			begin = "<%[!=]?(?!--)";
 			patterns = ( { include = "source.java"; } );
 			end = "(?!--)%>";
 		},
 	);
-	uuid = "D3C4E6DA-6B1C-11D9-8CC2-000D93589AF6";
 }

@@ -8,172 +8,173 @@
  ** http://www.javacamp.org/javaI/reservedWords.html
  **/
 {
-	name = "Java";
-	scopeName = "source.java";
-	uuid = "2B449DF6-6B1D-11D9-94EC-000D93589AF6";
-	
-	/* .bsh for BeanShell scripts */
-	fileTypes = ( java, bsh );
-	
-	foldingStartMarker = "\\{\\s*$";
-	foldingStopMarker = "^\\s*\\}";
+    name = "Java";
+    scopeName = "source.java";
+    uuid = "2B449DF6-6B1D-11D9-94EC-000D93589AF6";
+    
+    /* .bsh for BeanShell scripts */
+    fileTypes = ( java, bsh );
+    
+    foldingStartMarker = "\\{\\s*$";
+    foldingStopMarker = "^\\s*\\}";
 
-	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
+    increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
 
-	smartTypingPairs = (
+    smartTypingPairs = (
         ( "(", ")" ),
-	    ( "[", "]" ),
-	    ( "{", "}" ),
+        ( "[", "]" ),
+        ( "{", "}" ),
         ( "\"", "\"" ), 
-	    ( "'", "'" )
-	);
-	
-	highlightPairs = (
-	    ( "(", ")" ),
-	    ( "[", "]" ),
-	    ( "{", "}" )
-	);
-	
-	foregroundColor = "black";
-	backgroundColor = "white";
-	
-	patterns = (
+        ( "'", "'" )
+    );
+    
+    highlightPairs = (
+        ( "(", ")" ),
+        ( "[", "]" ),
+        ( "{", "}" )
+    );
+    
+    patterns = (
 
         /* comments.block.java */
-		{
-			// Required to prevent the JavaDoc comment from taking over
-			name = "comment.block.java.empty";
-			match = "/\\*\\*/";
-			fontStyle = ( italic );
-			foregroundColor = "red";
-		},
+        {
+            // Required to prevent the JavaDoc comment from taking over
+            name = "comment.block.java.empty";
+            match = "/\\*\\*/";
+        },
 
-		{
-			name = "comment.block.java";
-			begin = "/\\*";
-			end = "\\*/";
-			fontStyle = ( italic );
-			foregroundColor = "red";
-		},
+        {
+            name = "comment.block.java";
+            begin = "/\\*";
+            end = "\\*/";
+        },
 
-		{
-			name = "comment.block.embedded-docs.java";
-			begin = "/\\*\\*";
-			patterns = (
-			    {
-					name = "keyword.embedded-docs.params.java";
-					match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
-					"foregroundColor[1]" = "#669933";
-					"foregroundColor[2]" = "black";
-				},
-			    {
-					name = "keyword.embedded-docs.misc-attributes.java";
-					match = "\\\*\\s*@([a-zA-Z0-9_-]+)\\s*";
-					"foregroundColor[1]" = "#669933";
-				},
-			);
-			end = "\\*/";
-			fontStyle = ( italic );
-			foregroundColor = "#006633";
-		},
-		
-		/* comments.line.java */
-		{
-			name = "comment.line.java";
-			match = "//.*$";
-			foregroundColor = "red";
-			fontStyle = ( italic );
-		},
+        {
+            name = "comment.block.embedded-docs.java";
+            begin = "/\\*\\*";
+            patterns = (
+                {
+                    match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
+                    captures = {
+                        1 = {
+                            name = "keyword.embedded-docs.params.java";
+                        };
+                        2 = {
+                            name = "keyword.embedded-docs.value.java";
+                        };
+                    };
+                },
 
-		/* keywords.data-types.java */
-		{
-		    name = "keyword.data-types.java";
-		    match = "\\<(boolean|byte|char|int|long|short|float|double|[A-Z][A-Za-z0-9]+)\\>";
+                {
+                    match = "\\\*\\s*@([a-zA-Z0-9_-]+)\\s*";
+                    captures = {
+                        1 = {
+                            name = "keyword.embedded-docs.params.java";
+                        };
+                    };
+                },
+            );
+            end = "\\*/";
+        },
+        
+        /* comments.line.java */
+        {
+            name = "comment.line.java";
+            match = "//.*$";
+        },
 
-		    "foregroundColor[1]" = "#CC33FF";
-		},
+        /* keywords.data-types.java */
+        {
+            match = "\\<(byte|short|char|int|long|float|double|boolean|[A-Z][A-Za-z0-9]+)\\>";
+            captures = {
+                1 = { name = "keyword.data-types.java"; };
+            };
+        },
 
-		/* keywords.access-control.java 
-		 * @todo fix conflict with keywords.modifiers.java
-		 */
-		{
-		    name = "keyword.control.java";
-		    match = "\\<(private|protected|public)\\>";
-
-		    fontStyle = (bold);
-            foregroundColor = "#336699";
-		},
-		
-		/* keywords.modifiers.java */
-		{
-		    name = "keyword.modifiers.java";
-		    match = "\\<(abstract|final|native|private|protected|public|static|transient|synchronized|volatile|strictfp)\\>";
-
-		    fontStyle = (bold);
-		    foregroundColor = "#0000ff";
-		},
-		
-		/* keywords.catch-exception.java */
-		{
-		    name = "keyword.catch-exception.java";
-		    match = "\\<(try|catch|finally|throw)\\>";
-
-		    fontStyle = (bold);
-		    foregroundColor = "#663366";
-		},
-		
-		/* keywords.control.java */
-		{
-		    name = "keyword.control.java";
-		    match = "\\<(break|case|continue|default|do|while|for|switch|if|else)\\>";
-
-		    fontStyle = (bold);
-		    foregroundColor = "#0066ff";
-		},
-		
+        /* keywords.access-control.java 
+         * @todo fix conflict with keywords.modifiers.java
+         */
+        {
+            match = "\\<(private|protected|public)\\>";
+            captures = {
+                1 = { name = "keyword.access-control.java"; };
+            };
+        },
+        
+        /* keywords.modifiers.java */
+        {
+            match = "\\<(abstract|final|native|private|protected|public|static|transient|synchronized|volatile|strictfp)\\>";
+            captures = {
+                1 = {
+                    name = "keyword.modifiers.java";
+                };
+            };
+        },
+        
+        /* keywords.catch-exception.java */
+        {
+            match = "\\<(try|catch|finally|throw)\\>";
+            captures = {
+                1 = {
+                    name = "keyword.catch-exception.java";
+                };
+            };
+        },
+        
+        /* keywords.control.java */
+        {
+            match = "\\<(break|case|continue|default|do|while|for|switch|if|else)\\>";
+            captures = {
+                1 = {
+                    name = "keyword.control.java";
+                };
+            };
+        },
+        
         /* keywords.class-fns.java */
         {
-            name = "keyword.class-fns.java";
             match = "\\<(class|extends|implements|import|instanceof|new|package|return|interface|this|throws|void|super)\\>";
-
-            fontStyle = (bold);
-            foregroundColor = "#990033";
+            captures = {
+                1 = {
+                    name = "keyword.class-fns.java";
+                };
+            };
         },
 
         /* keywords.assigned-values.java */
         {
-            name = "keyword.assigned-values.java";
             match = "\\<(true|false|null)\\>";
-
-            "fontStyle[1]" = (bold);
+            captures = {
+                1 = {
+                    name = "keyword.assigned-values.java";
+                };
+            };
         },
-	
-		/* constants.numeric.java */
-		{
-			name = "constant.numeric.java";
-			match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul|)?\\>";
-
-			foregroundColor = "#009966";
-		},
-		
-		/* strings.double-quoted.java */
-		{
-			name = "string.double-quoted.java";
-			begin = "\"";
-			end = "\"";
-			swallow = "\\\\.";
-
-			foregroundColor = "#FF0066";
-		},
+    
+        /* constants.numeric.java */
+        {
+            match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul|)?\\>";
+            captures = {
+                1 = {
+                    name = "constant.numeric.java";
+                };
+            };
+        },
+        
+        /* strings.double-quoted.java */
+        {
+            name = "string.double-quoted.java";
+            begin = "\"";
+            end = "\"";
+            swallow = "\\\\.";
+        },
 
         /* strings.single-quoted.java */
-		{
-			name = "string.single-quoted.java";
-			begin = "'";
-			end = "'";
-			swallow = "\\\\.";
-
-			foregroundColor = "#669933";
-		},
-	);
+        {
+            name = "string.single-quoted.java";
+            begin = "'";
+            end = "'";
+            swallow = "\\\\.";
+        },
+    );
 }

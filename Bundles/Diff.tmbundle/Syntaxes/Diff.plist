@@ -1,17 +1,17 @@
 {
-   name = "Diff";
-   scopeName = "source.diff";
-   firstLineMatch = "^(Index: |--- |\\*\\*\\* |\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$)";
-   fileTypes = ( diff, patch );
-   uuid = "7E848FF4-708E-11D9-97B4-0011242E4184";
-      
-   //highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") );
-   
-   
-   patterns = (
+    name = "Diff";
+    scopeName = "source.diff";
+    firstLineMatch = "^(Index: |--- |\\*\\*\\* |\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$)";
+    fileTypes = ( diff, patch );
+    uuid = "7E848FF4-708E-11D9-97B4-0011242E4184";
+    
+    //highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") );
+    
+    
+    patterns = (
       
       // sperators:
-      {  name = "meta.separator.diff";
+      {  name = "meta.diff.separator";
          match = "^((\\*{15})|(={67})|(-{3}))$";
       },
       
@@ -19,28 +19,28 @@
       // the different ways of specifing a range ..
       
       // a 'normal' range, also called 'change command':
-      {  name = "meta.range.normal.diff";
+      {  name = "meta.diff.range.normal";
          match = "^\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$";
       },
       
       // a unified range:
-      {  name = "meta.range.unified.diff";
+      {  name = "meta.diff.range.unified";
          match = "^@@.+@@$";
       },
       
       // a context range, could be seperated into 2 range types,
       // but i think this just would be overhead. :>
-      {  name = "meta.range.context.diff";
+      {  name = "meta.diff.range.context";
          match = "^((\\-{3} .+ \\-{4})|(\\*{3} .+ \\*{4}))$";
       },
       
       
       // headers, the normal format shouldnt have this..
-      {  name = "meta.header.from-file.diff";
+      {  name = "meta.diff.header.from-file";
          match = "^((-{3} .+)|(\\*{3} .+))$";
       },
       
-      {  name = "meta.header.to-file.diff";
+      {  name = "meta.diff.header.to-file";
          match = "^\\+{3} .+$";
       },
       
@@ -62,10 +62,10 @@
       
       
       // the Index: stuff, afaik just svn does it.
-      {  name = "meta.index.diff";
+      {  name = "meta.diff.index";
          match = "^Index: .+$";
       }
       
-   );
-   
+    );
+    
 }

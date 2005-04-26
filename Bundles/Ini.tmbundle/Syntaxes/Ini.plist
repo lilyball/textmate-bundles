@@ -1,36 +1,32 @@
 {
-    backgroundColor = "#000000"; 
     fileTypes = (ini, conf); 
     foldingStartMarker = "\\["; 
     foldingStopMarker = "\\["; 
-    foregroundColor = "#ffffff"; 
     highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
     name = Ini; 
     scopeName = "source.ini";
     patterns = (
-        {
-            "foregroundColor[1]" = "#CC7833"; 
-            "foregroundColor[2]" = "#236B8E"; 
-            match = "\\<([a-zA-Z_]+)\\>\\s*(=)"; 
-            name = definition; 
+        { 
+            match = "^[\\s]*(;|#).*"; 
+            name = comments; 
         }, 
-        {foregroundColor = "#9933CC"; match = "(^;.*)"; name = comments; }, 
         {
-            "foregroundColor[1]" = "#AD9361"; 
+            match = "\\<([a-zA-Z_]+)\\>\\s*(=)"; 
+            name = keyword.definition; 
+        }, 
+        {
             match = "^\\[(.*)\\]"; 
             name = "group-title"; 
         }, 
         {
             begin = "'"; 
             end = "'"; 
-            foregroundColor = "#66CC33"; 
             name = "string.single-quoted"; 
             swallow = "\\\\."; 
         }, 
         {
             begin = "\""; 
             end = "\""; 
-            foregroundColor = "#66CC33"; 
             name = "string.double-quoted"; 
         }
     ); 

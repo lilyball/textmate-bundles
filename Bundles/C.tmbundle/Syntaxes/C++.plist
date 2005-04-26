@@ -5,20 +5,18 @@
 	fileTypes = ( cc, cpp, cp, cxx, "c++", C, h, hpp, "h++" );
 	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
 	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
-	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
-   smartTypingPairs = (
-      ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
-      ( "\"", "\"" ), ( "'", "'" )
-	);
-   highlightPairs = (
-      ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
-	);
 	patterns = (
 		{ include = "source.c"; },
 		{
 		    name = "keyword.control.c++";
-		    match = "\\<(explicit|export|catch|friend|namespace|operator|private|protected|public|template|this|try|throw|using|virtual)\\>";
+		    match = "\\<(explicit|export|catch|friend|namespace|operator|private|protected|public|this|try|throw|using|virtual)\\>";
 		},
+
+		{
+		    name = "keyword.control.c++.template";
+		    match = "\\<template\\>\\s*";
+		},
+
 		{
 		    name = "keyword.operator.c++";
 		    match = "\\<(and|and_eq|bitand|bitor|compl|const_cast|delete|dynamic_cast|new|not|not_eq|or|or_eq|reinterpret_cast|static_cast|typeid|xor|xor_eq)\\>";

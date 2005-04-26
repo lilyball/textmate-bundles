@@ -11,14 +11,6 @@
 	fileTypes = ( c, h );
 	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
 	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
-	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
-	smartTypingPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
-	   ( "\"", "\"" ), ( "'", "'" )
-	);
-	highlightPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
-	);
 	patterns = (
 		{ name = "comment.block.c"; begin = "/\\*"; end = "\\*/"; },
 		{ name = "comment.line.c++"; begin = "//"; end = "$"; swallow = "\\\\\\s*\\n"; },
@@ -32,15 +24,17 @@
 			captures = { 1 = { name = "directive"; }; };
 		},
 		{ name = "keyword.preprocessor.c.includes";
-		    match = "^\\s*#\\s*(include|import)\\>\\s+(?:\"|<).*?(?:\"|>)";
+		    begin = "^\\s*#\\s*(include|import)\\>\\s+";
+		    end = "$";
 			captures = { 1 = { name = "directive"; }; };
 		},
 		
-		{ name = "declaration.section";
-		  match = "^\\s*#\\s*(((pragma)(?:\\s+mark)?)\\s+(.*))\\>";
+		
+		{   name = "declaration.section";
+    		match = "^\\s*(#\\s*((pragma)(\\s+mark)?)\\s+(?(4)(.*):.*))";
 			captures = { 1 = { name = "keyword.preprocessor.c"; };
-            			 3 = { name = "directive"; };
-            			 4 = { name = "section-name"; };
+            			 2 = { name = "directive"; };
+            			 5 = { name = "section-name"; };
 			 };
 		},
 		

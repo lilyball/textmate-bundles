@@ -30,23 +30,23 @@
         }, 
         {
             match = ":-\\s+(object|protocol|category)(?=[(])"; 
-            name = "keyword.directive.entity.opening"; 
+            name = "declaration.entity.opening"; 
         }, 
         {
             match = ":-\\s+end_(object|protocol|category)(?=[.])"; 
-            name = "keyword.directive.entity.closing"; 
+            name = "declaration.entity.closing"; 
         }, 
         {
             match = "\\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])"; 
-            name = "keyword.directive.entity.relations"; 
+            name = "declaration.entity.relations"; 
         }, 
         {
             match = ":-\\s+(calls|encoding|in(itialization|fo)|uses)(?=[(])"; 
-            name = "keyword.directive.entity.others"; 
+            name = "declaration.entity.others"; 
         }, 
         {
             match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])"; 
-            name = "keyword.directive.predicate"; 
+            name = "declaration.predicate"; 
         }, 
         {
             match = "(::|\\^\\^)"; 
@@ -202,7 +202,7 @@
         }, 
         {
             match = "\\<(\\u|_)\\w*\\>"; 
-            name = "keyword.variable"; 
+            name = "variable"; 
         }
     ); 
  

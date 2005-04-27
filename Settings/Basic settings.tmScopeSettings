@@ -449,6 +449,53 @@
 				</array>
 			</dict>
 		</dict>
+		<dict>
+			<key>name</key>
+			<string>Ruby indent</string>
+			<key>scope</key>
+			<string>source.ruby</string>
+			<key>settings</key>
+			<dict>
+				<key>increaseIndentPattern</key>
+				<string>^\s*(module|class|begin|def|if|else|elsif|unless|case|when|rescue|for|while|unless|[^#"']*\&lt;do)\&gt;(?!.*?;.*?\&lt;end\&gt;).*$</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Ruby smart pair block params</string>
+			<key>scope</key>
+			<string>keyword.control.ruby.start-block, meta.syntax.ruby.start-block</string>
+			<key>settings</key>
+			<dict>
+				<key>smartTypingPairs</key>
+				<array>
+					<array>
+						<string>"</string>
+						<string>"</string>
+					</array>
+					<array>
+						<string>(</string>
+						<string>)</string>
+					</array>
+					<array>
+						<string>{</string>
+						<string>}</string>
+					</array>
+					<array>
+						<string>[</string>
+						<string>]</string>
+					</array>
+					<array>
+						<string>“</string>
+						<string>”</string>
+					</array>
+					<array>
+						<string>|</string>
+						<string>|</string>
+					</array>
+				</array>
+			</dict>
+		</dict>
 	</array>
 	<key>uuid</key>
 	<string>04C16970-AE30-11D9-BE88-000D93589AF6</string>

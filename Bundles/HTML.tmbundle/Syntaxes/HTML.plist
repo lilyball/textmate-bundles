@@ -1,48 +1,35 @@
 {
-    backgroundColor = "#ffffff"; 
     fileTypes = (html, htm, shtml, xhtml); 
     foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)"; 
     foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
-    foregroundColor = "#333333"; 
-    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\"")); 
-    increaseIndentPattern = "(<(head|title|table|tr|td|ul|ol|dl|div)\\>[^>]*>|\\{)\\s*$"; 
     keyEquivalent = "^~H"; 
     name = "HTML (Basic)"; 
     scopeName = "text.html.basic";
     patterns = (
         {
-            foregroundColor = "#88bb99"; 
             match = "<\\?xml.*?\\?>"; 
             name = "meta.docinfo.processing.xml"; 
         }, 
         {
             begin = "<!"; 
             end = ">"; 
-            foregroundColor = "#999999"; 
             name = "keyword.sgml"; 
             patterns = (
                 {
-                    backgroundColor = "#CC3300"; 
-                    foregroundColor = "#ECECEC"; 
                     match = "(\\s*)(?!--|>)\\S(\\s*)"; 
                     name = "invalid.bad-comments-or-CDATA.html"; 
                 }, 
                 {
                     begin = "--"; 
                     end = "--"; 
-                    foregroundColor = "#999999"; 
                     name = "comment.block.html"; 
                     patterns = (
                         {
-                            backgroundColor = "#E0E7F0"; 
                             begin = "^#\\s*(include|config|echo|exec|fsize|flastmod|printenv|set)"; 
                             end = "(?=\\s*--|>)"; 
-                            foregroundColor = "#888888"; 
                             name = "macro.server-side-includes.html"; 
                         }, 
                         {
-                            backgroundColor = "#CC3300"; 
-                            foregroundColor = "#ffffff"; 
                             match = ">|<"; 
                             name = "invalid.bad-comment-end.html"; 
                         }
@@ -51,70 +38,57 @@
                 {
                     begin = DOCTYPE; 
                     end = "(?=>)"; 
-                    foregroundColor = "#888888"; 
                     name = "meta.docinfo.doctype.html"; 
                     patterns = (
                         {
-                            fontStyle = (italic); 
                             match = "\"[^\">]*\""; 
                             name = "meta.docinfo.doctype.identifiers-and-DTDs.html"; 
                         }
                     ); 
                 }, 
                 {
-                    backgroundColor = "#fff3e7"; 
                     begin = "\\[CDATA\\["; 
                     end = "]](?=>)"; 
                     name = "constant.inline-data.html"; 
                 }
             ); 
-        }, 
-        {
-            backgroundColor = "#E5E5E5"; 
+        },
+/*        {
             begin = "<%"; 
             end = "%>"; 
             name = "embedded.ruby.html"; 
         }, 
         {
-            backgroundColor = "#E5E5E5"; 
             begin = "<\\?(php|=)?"; 
             end = "\\?>"; 
             name = "embedded.php.html"; 
         }, 
-        {
-            backgroundColor = "#ECECEC"; 
+*/        {
             begin = "(^\\s+)?<(?i:style)\\>.*?>?"; 
             end = "</(?i:style)>(\\s+$)?"; 
             name = "embedded.css.html"; 
             patterns = ({include = CSS; }); 
         }, 
         {
-            foregroundColor = "#6600CC"; 
             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
             name = "constant.character-entities.html"; 
         }, 
         {
             begin = "</?([a-zA-Z0-9]+)"; 
-            "elementFontStyle[1]" = (underline); 
             end = ">"; 
-            foregroundColor = "#0066CC"; 
             name = "keyword.markup.tag.html"; 
             patterns = (
                 {match = " ([a-zA-Z-]+)"; name = "keyword.markup.tag.options.html"; }, 
                 {
                     begin = "\""; 
                     end = "\""; 
-                    foregroundColor = "#CC3300"; 
                     name = "string.double-quoted.html"; 
                     patterns = (
                         {
-                            foregroundColor = "#6600CC"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
                             name = "constant.character-entities.html"; 
                         }, 
                         {
-                            backgroundColor = "#CC3300"; 
-                            foregroundColor = "#ffffff"; 
                             match = "&"; 
                             name = "invalid.bad-ampersand.html"; 
                         }
@@ -123,18 +97,13 @@
                 {
                     begin = "'"; 
                     end = "'"; 
-                    fontStyle = (); 
-                    foregroundColor = "#CC3300"; 
                     name = "string.single-quoted.html"; 
                     patterns = (
                         {
-                            foregroundColor = "#6600CC"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
                             name = "constant.character-entities.html"; 
                         }, 
                         {
-                            backgroundColor = "#CC3300"; 
-                            foregroundColor = "#ffffff"; 
                             match = "&"; 
                             name = "invalid.bad-ampersand.html"; 
                         }
@@ -143,18 +112,13 @@
             ); 
         }, 
         {
-            backgroundColor = "#3399ff"; 
-            foregroundColor = "#ffffff"; 
             match = "<>"; 
             name = "invalid.incomplete.html"; 
         }, 
         {
-            backgroundColor = "#CC3300"; 
-            foregroundColor = "#ffffff"; 
             match = "<(?=\\W)|>|&"; 
             name = "invalid.bad-angle-bracket-or-ampersand.html"; 
         }
     ); 
-    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("<", ">")); 
     uuid = "17994EC8-6B1D-11D9-AC3A-000D93589AF6"; 
 }

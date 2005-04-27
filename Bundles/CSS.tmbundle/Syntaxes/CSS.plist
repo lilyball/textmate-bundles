@@ -51,47 +51,49 @@
 	
 	/* auto-indent -- uncomment this for auto-indenting */
 	/* increaseIndentPattern = "\\{\\s*$"; */
-	
-	/* smart typing pairs and highlighting pairs */
-	smartTypingPairs	= ( ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" ), ( "'", "'" ) );
-	highlightPairs		= ( ( "(", ")" ), ( "[", "]" ), ( "{", "}" ) );
-	
-	/* basic colors */
-	foregroundColor = "#333333";
-	backgroundColor = "#ffffff";
-		
+			
 	patterns = (
 
-		{ name = "comment.block.css"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#999999"; },
+		{ name = "comment.block.css"; begin = "/\\*"; end = "\\*/"; },
 
-		{ name = "invalid.bad-comma.css"; match = "[^} \\t{/@][^{,]*?(,)\\s*?(?=\\{)"; "foregroundColor[1]" = "#ffffff"; "backgroundColor[1]" = "#CC3300"; },
+		{ name = "invalid.bad-comma.css"; match = "[^} \\t{/@][^{,]*?(,)\\s*?(?=\\{)";},
 
 		/*{ name = "Selectors"; match = "[^} \\t{/@][^{]*?(?=/\\*|\\{|\\s|$)"; foregroundColor = "#8B9B08"; },*/
 
-		{ name = "keyword.commands.css"; match = "^(@\\<(import|media|page|charset)\\>).*$"; foregroundColor = "#6600CC"; },
+		{ name = "keyword.commands.css"; match = "^(@\\<(import|media|page|charset)\\>).*$"; },
 
-		{ name = "keyword.property-block.css"; begin = "\\{"; end = "\\}";
+		{ name = "meta.property-block.css"; begin = "\\{"; end = "\\}";
 			patterns = (
-				{ name = "comment.block.css"; begin = "/\\*"; end = "\\*/"; foregroundColor = "#999999"; },
-				{ name = "keyword.property.css"; foregroundColor = "#0066CC";	fontStyle = (  ); match = "\\<(azimuth|background|background-attachment|background-color|background-image|background-position|background-repeat|border|border-bottom|border-bottom-color|border-bottom-style|border-bottom-width|border-collapse|border-color|border-left|border-left-color|border-left-style|border-left-width|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-style|border-top-width|border-width|bottom|caption-side|clear|clip|color|content|counter-increment|counter-reset|cue|cue-after|cue-before|cursor|direction|display|elevation|empty-cells|float|font|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|height|left|letter-spacing|line-height|list-style|list-style-image|list-style-position|list-style-type|margin|margin-bottom|margin-left|margin-right|margin-top|marker-offset|marks|max-height|max-width|min-height|min-width|orphans|outline|outline-color|outline-style|outline-width|overflow|padding|padding-bottom|padding-left|padding-right|padding-top|page|page-break-after|page-break-before|page-break-inside|pause|pause-after|pause-before|pitch|pitch-range|play-during|position|quotes|richness|right|size|speak|speak-header|speak-numeral|speak-punctuation|speech-rate|stress|table-layout|text-align|text-decoration|text-indent|text-shadow|text-transform|top|unicode-bidi|vertical-align|visibility|voice-family|volume|white-space|widows|width|word-spacing|z-index)\\>"; },
+				{ name = "comment.block.css"; begin = "/\\*"; end = "\\*/"; },
+				{ name = "keyword.control.css"; match = "\\<(azimuth|background|background-attachment|background-color|background-image|background-position|background-repeat|border|border-bottom|border-bottom-color|border-bottom-style|border-bottom-width|border-collapse|border-color|border-left|border-left-color|border-left-style|border-left-width|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-style|border-top-width|border-width|bottom|caption-side|clear|clip|color|content|counter-increment|counter-reset|cue|cue-after|cue-before|cursor|direction|display|elevation|empty-cells|float|font|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|height|left|letter-spacing|line-height|list-style|list-style-image|list-style-position|list-style-type|margin|margin-bottom|margin-left|margin-right|margin-top|marker-offset|marks|max-height|max-width|min-height|min-width|orphans|outline|outline-color|outline-style|outline-width|overflow|padding|padding-bottom|padding-left|padding-right|padding-top|page|page-break-after|page-break-before|page-break-inside|pause|pause-after|pause-before|pitch|pitch-range|play-during|position|quotes|richness|right|size|speak|speak-header|speak-numeral|speak-punctuation|speech-rate|stress|table-layout|text-align|text-decoration|text-indent|text-shadow|text-transform|top|unicode-bidi|vertical-align|visibility|voice-family|volume|white-space|widows|width|word-spacing|z-index)\\>"; },
 				{ begin = ":"; end = "\\s*(;|(?=\\}))"; 
-					patterns = (
- 						{ name = "keyword.units.css"; 		   "foregroundColor[3]" = "#6600CC"; match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?\\s*(px|pt|cm|mm|in|em|ex|pc|%)?"; },
- 						{ name = "constant.colors.css"; 		   "fontStyle[1]" = ( ); match = "(#)([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\\>";  },
- 						{ name = "keyword.function.css";
-							foregroundColor = "#6600CC"; 
-							fontStyle = (  ); 
+					patterns =
+					(
+ 						{
+ 						    name = "constant.numeric.css";
+ 						    match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?\\s*(px|pt|cm|mm|in|em|ex|pc|%)?";
+ 						    captures = {
+ 						        3 = { name = "constant.numeric.css.units"; };
+ 						    };
+ 						    
+ 						},
+ 						{
+ 						    name = "constant.numeric.colors.css";
+     						match = "(#)([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\\>";
+     					},
+ 						{
+ 						    name = "keyword.function.css";
 							begin = "(rgb|url|attr|counter|counters)\\s*\\("; 
 							end = "\\)";
 							patterns = (
-								{ name = "string.single-quoted.css"; fontStyle = ( plain ); foregroundColor = "#CC3300"; begin = "'"; end = "'"; swallow = "\\\\."; },
-								{ name = "string.double-quoted.css"; fontStyle = ( plain ); foregroundColor = "#CC3300"; begin = "\""; end = "\""; swallow = "\\\\."; },
-								{ name = "constant.rgb-value.css"; 		fontStyle = ( plain ); foregroundColor = "#000000"; match = "(\\<0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\s*,\\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\s*,\\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\>)"; }, /* matches 0-255,0-255,0-255 */
-								{ name = "constant.rgb-percentage.css"; 	fontStyle = ( plain ); foregroundColor = "#000000"; match = "(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%\\s*,\\s*)(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%\\s*,\\s*)(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%)"; }, /* matches 0.0-100.0%,0.0-100.0%,0.0-100.0% */
+								{ name = "string.single-quoted.css"; begin = "'"; end = "'"; swallow = "\\\\."; },
+								{ name = "string.double-quoted.css"; begin = "\""; end = "\""; swallow = "\\\\."; },
+								{ name = "constant.rgb-value.css"; match = "(\\<0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\s*,\\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\s*,\\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\>)"; }, /* matches 0-255,0-255,0-255 */
+								{ name = "constant.rgb-percentage.css"; match = "(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%\\s*,\\s*)(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%\\s*,\\s*)(\\<0*(100(\\.0+)?|[0-9]{1,2}(\\.[0-9]+)?)\\s*%)"; }, /* matches 0.0-100.0%,0.0-100.0%,0.0-100.0% */
 							);
 						},
-						{ name = "string.single-quoted.css"; foregroundColor = "#CC3300"; begin = "'"; end = "'"; swallow = "\\\\."; },
- 						{ name = "string.double-quoted.css"; foregroundColor = "#CC3300"; begin = "\""; end = "\""; swallow = "\\\\."; },
+						{ name = "string.single-quoted.css"; begin = "'"; end = "'"; swallow = "\\\\."; },
+ 						{ name = "string.double-quoted.css"; begin = "\""; end = "\""; swallow = "\\\\."; },
 					);
 				},
 			);

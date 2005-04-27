@@ -1,23 +1,16 @@
 {
-   name = "Quake3 Config";
-   scopeName = "source.quake3-config";
-   
-   // r0 (2005jan22)
-   // - initial version
-   
-   fileTypes = ( cfg );
-   
-   uuid = "AAB8717E-6E5C-11D9-9BE0-0011242E4184";
-   
-   smartTypingPairs = (
-      ( "\"", "\"" )
-   );
-   
-   // white on black..
-   foregroundColor = "#eeeeee";
-   backgroundColor = "#181818";
-   
-   patterns = (
+    name = "Quake Style .cfg";
+    scopeName = "source.quake-config";
+    
+    fileTypes = ( cfg );
+    
+    uuid = "AAB8717E-6E5C-11D9-9BE0-0011242E4184";
+    
+    smartTypingPairs = (
+        ( "\"", "\"" )
+    );
+    
+    patterns = (
       // the 2nd part of the regex is just to capture
       // binds to number-keys and prevent them from getting
       // highlighted as values.
@@ -50,7 +43,7 @@
          foregroundColor = "#cf8d15"; //"#61e01c"; //"#808080";
          fontStyle = ( italic );
       }
-      
-   );
-   
+        
+    );
+    
 }

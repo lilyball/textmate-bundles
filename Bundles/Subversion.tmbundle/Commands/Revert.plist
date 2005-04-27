@@ -5,21 +5,21 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>set `${TM_RUBY:=ruby} --version`
-echo "using ruby-$2"
+	<string>"${TM_SVN:=svn}" revert "$TM_FILEPATH"
 
-"${TM_RUBY:=ruby}" -wc "$TM_FILEPATH"</string>
+# force TM to refresh the current file..
+osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "Dock" to activate' &amp;
+osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>^V</string>
+	<string>^A</string>
 	<key>name</key>
-	<string>Check Ruby Syntax</string>
+	<string>Revert</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
-	<key>scope</key>
-	<string>source.ruby</string>
 	<key>uuid</key>
-	<string>EE5F19BA-6C02-11D9-92BA-0011242E4184</string>
+	<string>B9F3EC5C-B299-11D9-9356-0011242E4184</string>
 </dict>
 </plist>

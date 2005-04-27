@@ -51,15 +51,15 @@
 			match = "(?i:(grant(\\swith\\sgrant\\soption)?|revoke))"; },
 
 		{   name = "keyword.storage.sql";
-			match = "(?i:^\\s*\\w+\\s+(bigint|bigserial|bit|bit\\svarying\\(\\d+\\)|boolean|box|bytea|character\\s(varying)?\\(\\d+\\)|char\\(\\d+\\)|var\\schar\\(\\d+\\)|cidr|circle|date|double\\sprecision|inet|int|integer|interval\\(\\d+\\)|line|lseg|macaddr|money|numeric(\\(\\d+,\\d+\\))?|oid|path|point|polygon|real|smallint|serial|text|time\s(\\(\\d+\\))(\\swithout\stime\szone)?|timestamp(\s(\\(\\d+\\))(\\swithout\stime\szone)?)?|varchar\\(\\d+\\))\\s*)";
+			match = "(?i:^\\s*([A-Za-z0-9'_])+\\s+(bigint|bigserial|bit|bit\\svarying\\(\\d+\\)|boolean|box|bytea|character\\s(varying)?\\(\\d+\\)|char\\(\\d+\\)|var\\schar\\(\\d+\\)|cidr|circle|date|double\\sprecision|inet|int|integer|interval\\(\\d+\\)|line|lseg|macaddr|money|numeric(\\(\\d+,\\d+\\))?|oid|path|point|polygon|real|smallint|serial|text|time\s(\\(\\d+\\))(\\swithout\stime\szone)?|timestamp(\s(\\(\\d+\\))(\\swithout\stime\szone)?)?|varchar(\\(\\d+\\))?)\\s*)";
         },
 
 		{   name = "keyword.data-integrity.sql";
-		    match = "(?i:\\s+(primary\\s+key|references|on\\sdelete(\\s+cascade)?|check)\\s*)";
+		    match = "(?i:\\<(primary\\s+key|references|on\\sdelete(\\s+cascade)?|check)\\>)";
 		},
 
 		{   name = "keyword.data-integrity.sql.II";
-		    match = "(?i:\\s+in\\s+)";
+		    match = "(?i:\\<in\\>)";
 		},
 	
 		{   name = "string.single-quoted.sql";

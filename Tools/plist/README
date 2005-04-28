@@ -1,0 +1,40 @@
+plist
+Kevin Ballard
+2005-04-22
+
+plist is a ruby extension that provides a means to read/write OS X property lists.
+
+It requires the presence of CoreFoundation, which means it currently only works under darwin.
+
+Usage:
+
+One new module is provided, named PropertyList. It has the following 2 methods:
+
+PropertyList.load(input, format = false)
+	Loads the property list from input, which is either an IO, StringIO, or a string. Format is an optional parameter - if false, the return value is the converted property list object. If true, the return value is a 2-element array, the first element being the returned value and the second being a symbol identifying the property list format.
+
+PropertyList.dump(output, obj, format = :xml1)
+	Dumps the property list object into output, which is either an IO or StringIO. Format determines the property list format to write out. The supported values are :xml1,, :binary1, and :openstep; however, OpenStep format appears to not be supported by the system for output anymore.
+
+The valid formats are :xml1, :binary1, and :openstep. When loading a property list, if the format is something else (not possible under any current OS, but perhaps if a future OS includes another type) then the format will be :unknown.
+
+This module also provides a method on Object:
+
+Object#to_plist(format = :xml1)
+	This is the same as PropertyList.dump except it outputs the property list as a string return value instead of writing it to a stream
+
+This module also provides 2 methods on String:
+
+String#blob?
+	Returns whether the string is a blob.
+
+String#blob=
+	Sets whether the string is a blob.
+
+A blob is a string that's been converted from a <data> property list item. When dumping to a property list, any strings that are blobs are written as <data> items rather than <string> items.
+
+INSTALLATION:
+	ruby extconf.rb
+	make
+	ruby test.rb
+	sudo make install

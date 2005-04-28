@@ -13,8 +13,9 @@
         {   name = "invalid.deprecated.tm-language-def";
             match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\\>";
         },
-        {   name = "comment.block.tm-language-def"; begin = "/\\*"; end = "\\*/"; },
-        {   name = "comment.line.tm-language-def"; match = "//.*$"; },  
+        {   name = "invalid.illegal.unknown-keyword.tm-language-def"; 
+            match = "[-a-zA-Z_.]+(?=\\s*=)";
+        },
         {   name = "string.single-quoted.tm-language-def";
             begin = "'(?=.*\')";
             end = "'";
@@ -24,7 +25,6 @@
                 {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
             );
         },
-
         {   name = "string.double-quoted.tm-language-def";
             begin = "\"(?=.*\")";
             end = "\"";
@@ -34,5 +34,6 @@
                 {   name = "invalid.deprecated.constants.colors.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
             );
         },
+        {   include = "source.plist"; }
     ); 
 }

@@ -1,45 +1,27 @@
 {
     name = "Property List (old-style)";
     scopeName = "source.plist";
-    backgroundColor = "#FFFFFF";
     fileTypes = (plist, dict);
     foldingStartMarker = "(\\{|\\()"; 
     foldingStopMarker = "(\\}|\\))"; 
-    foregroundColor = "#000000"; 
-    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
-    increaseIndentPattern = "(\\{|\\()\\s*$"; 
-    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
     patterns = (
-        {
-            begin = "/\\*"; 
-            end = "\\*/"; 
-            foregroundColor = "#236B8E"; 
-            name = "comment.block.old-plist"; 
+        {   name = "comment.block.old-plist"; 
+            begin = "/\\*"; end = "\\*/"; 
         }, 
-        {
-            fontStyle = (italic); 
-            foregroundColor = "#236B8E"; 
+        {   name = "comment.line.old-plist"; 
             match = "//.*$"; 
-            name = "comment.line.old-plist"; 
         }, 
-        {
-            foregroundColor = "#0000CD"; 
-            match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; 
-            name = "constant.numeric.old-plist"; 
+        {   name = "constant.numeric.old-plist"; 
+            match = "\\<[0-9]+\\>";
         }, 
-        {
-            begin = "'"; 
-            end = "'"; 
-            foregroundColor = "#8B2252"; 
-            name = "string.single-quoted.old-plist"; 
-            swallow = "\\\\."; 
+        {   name = "string.single-quoted.old-plist"; 
+            begin = "'"; end = "'"; swallow = "\\\\."; 
         }, 
-        {
-            begin = "\""; 
-            end = "\""; 
-            foregroundColor = "#8B2252"; 
-            name = "string.double-quoted.old-plist"; 
-            swallow = "\\\\."; 
+        {   name = "string.double-quoted.old-plist"; 
+            begin = "\""; end = "\""; swallow = "\\\\."; 
+        },
+        {   name = "keyword.dictionary-key.old-plist"; 
+            match = "[-a-zA-Z_.]+(?=\\s*=)";
         }
     ); 
 	uuid = "E62B2729-6B1C-11D9-AE35-000D93589AF6";

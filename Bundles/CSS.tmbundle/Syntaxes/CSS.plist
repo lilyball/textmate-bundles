@@ -53,8 +53,8 @@
                     end = "\\s*\\)\\s*";
                     patterns = (
                         {
-                            name = "keyword.at-rule.values.string.un-quoted.css";
-                            match = "[^'\"]";
+                            name = "keyword.at-rule.value.string.un-quoted.css";
+                            match = "[^'\"\)]";
                         },
                         {
                             name = "keyword.at-rule.value.string.single-quoted.css";

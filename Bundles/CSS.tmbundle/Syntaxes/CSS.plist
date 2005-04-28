@@ -6,7 +6,7 @@
     foldingStopMarker = "(\\*/|\\}|\\))"; 
     patterns = (
         {   name = "declaration.selector.css";
-            begin = "^(?=\\s*[.#a-zA-Z])";
+            begin = "^(?=\\s*[.*#a-zA-Z])";
             end = "(/\\*|(?=\\{)|\\s|$)";
             patterns = (
                 {   name = "keyword.markup.element-name.css";
@@ -24,6 +24,10 @@
                     // I made this “attribute-name”, but really it's the
                     // “attribute-value” -- though for now, this will work
                     match = "(#[a-zA-Z0-9_-]+)";
+                },
+                {   name = "keyword.markup.attribute-name.star.css";
+                    // don't know what this should be called but here it is anyway
+                    match = "(\\*)";
                 },
                 {   name = "keyword.markup.attribute-name.pseudo-class.css";
                     // this probably is an attribute name

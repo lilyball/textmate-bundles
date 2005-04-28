@@ -6,118 +6,99 @@
     name = "HTML (Basic)"; 
     scopeName = "text.html.basic";
     patterns = (
-        {
+        {   name = "meta.docinfo.processing.xml"; 
             match = "<\\?xml.*?\\?>"; 
-            name = "meta.docinfo.processing.xml"; 
         }, 
-        {
-            begin = "<!"; 
-            end = ">"; 
-            name = "keyword.sgml"; 
+        {   name = "keyword.sgml"; 
+            begin = "<!"; end = ">"; 
             patterns = (
-                {
+                {   name = "invalid.bad-comments-or-CDATA.html"; 
                     match = "(\\s*)(?!--|>)\\S(\\s*)"; 
-                    name = "invalid.bad-comments-or-CDATA.html"; 
                 }, 
-                {
-                    begin = "--"; 
-                    end = "--"; 
-                    name = "comment.block.html"; 
+                {   name = "comment.block.html"; 
+                    begin = "--"; end = "--"; 
                     patterns = (
-                        {
+                        {   name = "macro.server-side-includes.html"; 
                             begin = "^#\\s*(include|config|echo|exec|fsize|flastmod|printenv|set)"; 
                             end = "(?=\\s*--|>)"; 
-                            name = "macro.server-side-includes.html"; 
                         }, 
-                        {
+                        {   name = "invalid.bad-comment-end.html"; 
                             match = ">|<"; 
-                            name = "invalid.bad-comment-end.html"; 
                         }
                     ); 
                 }, 
-                {
-                    begin = DOCTYPE; 
-                    end = "(?=>)"; 
-                    name = "meta.docinfo.doctype.html"; 
+                {   name = "meta.docinfo.doctype.html"; 
+                    begin = DOCTYPE; end = "(?=>)"; 
                     patterns = (
-                        {
+                        {   name = "meta.docinfo.doctype.identifiers-and-DTDs.html"; 
                             match = "\"[^\">]*\""; 
-                            name = "meta.docinfo.doctype.identifiers-and-DTDs.html"; 
                         }
                     ); 
                 }, 
-                {
-                    begin = "\\[CDATA\\["; 
-                    end = "]](?=>)"; 
-                    name = "constant.inline-data.html"; 
+                {   name = "constant.inline-data.html"; 
+                    begin = "\\[CDATA\\["; end = "]](?=>)"; 
                 }
             ); 
         },
-/*        {
-            begin = "<%"; 
-            end = "%>"; 
-            name = "embedded.ruby.html"; 
+        {   name = "source.ruby.embedded.html"; 
+            begin = "<%"; end = "%>"; 
+            patterns = ({include = "source.ruby"; }); 
         }, 
-        {
-            begin = "<\\?(php|=)?"; 
-            end = "\\?>"; 
-            name = "embedded.php.html"; 
+        {   name = "source.embedded.php.html"; 
+            begin = "<\\?(php|=)?"; end = "\\?>"; 
+            patterns = ({include = "source.php"; }); 
         }, 
-*/        {
-            begin = "(^\\s+)?<(?i:style)\\>.*?>?"; 
-            end = "</(?i:style)>(\\s+$)?"; 
-            name = "embedded.css.html"; 
-            patterns = ({include = CSS; }); 
+        {   name = "source.css.embedded.html"; 
+            begin = "(?:^\\s+)?<((?i:style))\\>[^>]*>?"; 
+            end = "</((?i:style))>(?:\\s+$)?"; 
+            captures = { 1 = { name = "keyword.markup.element-name.html"; }; };
+            patterns = ({include = "source.css"; }); 
         }, 
-        {
+        {   name = "source.js.embedded.html"; 
+            begin = "(?:^\\s+)?<((?i:script))\\>[^>]*>?"; 
+            end = "</((?i:script))>(?:\\s+$)?"; 
+            captures = { 1 = { name = "keyword.markup.element-name.html"; }; };
+            patterns = ({include = "source.js"; }); 
+        }, 
+        {   name = "constant.character-entity.html"; 
             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-            name = "constant.character-entities.html"; 
         }, 
-        {
-            begin = "</?([a-zA-Z0-9]+)"; 
-            end = ">"; 
-            name = "keyword.markup.tag.html"; 
+        {   name = "declaration.tag.html"; 
+            begin = "</?([a-zA-Z0-9:]+)"; end = ">"; 
+            captures = { 1 = { name = "keyword.markup.element-name.html"; }; };
             patterns = (
-                {match = " ([a-zA-Z-]+)"; name = "keyword.markup.tag.options.html"; }, 
-                {
-                    begin = "\""; 
-                    end = "\""; 
-                    name = "string.double-quoted.html"; 
+                {   name = "keyword.markup.attribute-name.html";
+                    match = " ([a-zA-Z-:]+)";
+                }, 
+                {   name = "string.double-quoted.html"; 
+                    begin = "\""; end = "\""; 
                     patterns = (
-                        {
+                        {   name = "constant.character-entity.html"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                            name = "constant.character-entities.html"; 
                         }, 
-                        {
+                        {   name = "invalid.bad-ampersand.html"; 
                             match = "&"; 
-                            name = "invalid.bad-ampersand.html"; 
                         }
                     ); 
                 }, 
-                {
-                    begin = "'"; 
-                    end = "'"; 
-                    name = "string.single-quoted.html"; 
+                {   name = "string.single-quoted.html"; 
+                    begin = "'"; end = "'"; 
                     patterns = (
-                        {
+                        {   name = "constant.character-entity.html"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                            name = "constant.character-entities.html"; 
                         }, 
-                        {
+                        {   name = "invalid.bad-ampersand.html"; 
                             match = "&"; 
-                            name = "invalid.bad-ampersand.html"; 
                         }
                     ); 
                 }
             ); 
         }, 
-        {
+        {   name = "invalid.incomplete.html"; 
             match = "<>"; 
-            name = "invalid.incomplete.html"; 
         }, 
-        {
+        {   name = "invalid.bad-angle-bracket-or-ampersand.html"; 
             match = "<(?=\\W)|>|&"; 
-            name = "invalid.bad-angle-bracket-or-ampersand.html"; 
         }
     ); 
     uuid = "17994EC8-6B1D-11D9-AC3A-000D93589AF6"; 

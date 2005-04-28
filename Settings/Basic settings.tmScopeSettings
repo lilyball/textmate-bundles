@@ -8,7 +8,7 @@
 	<array>
 		<dict>
 			<key>name</key>
-			<string>Default Smart typing</string>
+			<string>Default smart typing</string>
 			<key>scope</key>
 			<string></string>
 			<key>settings</key>
@@ -106,7 +106,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Strings/comments: No ' in ST</string>
+			<string>No ' in smart typing</string>
 			<key>scope</key>
 			<string>string.double-quoted, comment</string>
 			<key>settings</key>
@@ -242,7 +242,7 @@
 			<key>name</key>
 			<string>HTML: Add ' to ST for tags</string>
 			<key>scope</key>
-			<string>text.html keyword.markup</string>
+			<string>declaration.tag</string>
 			<key>settings</key>
 			<dict>
 				<key>smartTypingPairs</key>
@@ -282,7 +282,7 @@
 			<key>name</key>
 			<string>Disable spell checking</string>
 			<key>scope</key>
-			<string>constant, keyword</string>
+			<string>constant, keyword, declaration</string>
 			<key>settings</key>
 			<dict>
 				<key>spellChecking</key>
@@ -307,17 +307,6 @@
 			<string>Function list (popup)</string>
 			<key>scope</key>
 			<string>function-name, section-name</string>
-			<key>settings</key>
-			<dict>
-				<key>showInSymbolList</key>
-				<string>1</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>PHP symbols</string>
-			<key>scope</key>
-			<string>source.php symbol</string>
 			<key>settings</key>
 			<dict>
 				<key>showInSymbolList</key>
@@ -505,6 +494,17 @@
 						<string>|</string>
 					</array>
 				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Embedded source</string>
+			<key>scope</key>
+			<string>text source</string>
+			<key>settings</key>
+			<dict>
+				<key>spellChecking</key>
+				<string>0</string>
 			</dict>
 		</dict>
 	</array>

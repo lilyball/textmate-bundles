@@ -9,7 +9,7 @@
         {   name = "meta.docinfo.processing.xml"; 
             match = "<\\?xml.*?\\?>"; 
         }, 
-        {   name = "keyword.sgml"; 
+        {   name = "keyword.sgml.html"; 
             begin = "<!"; end = ">"; 
             patterns = (
                 {   name = "invalid.bad-comments-or-CDATA.html"; 
@@ -44,7 +44,7 @@
             begin = "<%"; end = "%>"; 
             patterns = ({include = "source.ruby"; }); 
         }, 
-        {   name = "source.embedded.php.html"; 
+        {   name = "source.php.embedded.html"; 
             begin = "<\\?(php|=)?"; end = "\\?>"; 
             patterns = ({include = "source.php"; }); 
         }, 

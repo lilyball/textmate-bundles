@@ -7,7 +7,7 @@
     patterns = (
         {   name = "declaration.selector.css";
             begin = "^(?=\\s*[.#a-zA-Z])";
-            end = "(/\\*|\\{|\\s|$)";
+            end = "(/\\*|(?=\\{)|\\s|$)";
             patterns = (
                 {   name = "keyword.markup.element-name.css";
                     // this name is also used in HTML-PHP for tag names

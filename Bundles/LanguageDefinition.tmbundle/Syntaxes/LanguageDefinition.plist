@@ -5,10 +5,9 @@
     fileTypes = (plist); 
     foldingStartMarker = "(/\\*|\\{|\\()"; 
     foldingStopMarker = "(\\*/|\\}|\\))"; 
-
     patterns = (
         {   name = "keyword.tm-language-def";
-            match = "\\<(name|fileTypes|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|beginCaptures|endCaptures|firstLineMatch)\\>"; 
+            match = "\\<(name|fileTypes|keyEquivalent|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|beginCaptures|endCaptures|firstLineMatch)\\>"; 
         },
         {   name = "invalid.deprecated.tm-language-def";
             match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\\>";

@@ -68,7 +68,7 @@
             captures = { 1 = { name = "keyword.markup.element-name.html"; }; };
             patterns = (
                 {   // special handling of id="identifier"
-                    name = "keyword.markup.attribute-with-value.id.html";
+                    name = "declaration.attribute-with-value.id.html";
                     match = " (id)=((\"|')(.*?)\\3)";
                     captures = {
                         1 = { name = "keyword.markup.attribute-name.id.html"; };

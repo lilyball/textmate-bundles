@@ -78,8 +78,12 @@ int main (int argc, const char * argv[]) {
 	}
 	
 	// Now output the bundles list as a property list
+	NSSortDescriptor *sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name"
+																	ascending:YES] autorelease];
+	NSArray *bundleArray = [[bundles allValues] sortedArrayUsingDescriptors:
+														[NSArray arrayWithObject:sortDescriptor]];
 	NSString *errorStr = nil;
-	NSData *data = [NSPropertyListSerialization dataFromPropertyList:[bundles allValues]
+	NSData *data = [NSPropertyListSerialization dataFromPropertyList:bundleArray
 															  format:NSPropertyListXMLFormat_v1_0
 													errorDescription:&errorStr];
 	

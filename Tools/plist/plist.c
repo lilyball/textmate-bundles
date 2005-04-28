@@ -234,7 +234,7 @@ CFPropertyListRef convertObject(VALUE obj);
 VALUE convertPlistToString(CFPropertyListRef plist, CFPropertyListFormat format) {
 	CFWriteStreamRef writeStream = CFWriteStreamCreateWithAllocatedBuffers(kCFAllocatorDefault, kCFAllocatorDefault);
 	CFWriteStreamOpen(writeStream);
-	CFStringRef error;
+	CFStringRef error = NULL;
 	CFPropertyListWriteToStream(plist, writeStream, format, &error);
 	CFWriteStreamClose(writeStream);
 	if (error) {

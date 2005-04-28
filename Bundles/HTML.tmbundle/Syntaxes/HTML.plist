@@ -69,10 +69,11 @@
             patterns = (
                 {   // special handling of id="identifier"
                     name = "keyword.markup.attribute-with-value.id.html";
-                    match = " (id)=((\"|').*?\\3)";
+                    match = " (id)=((\"|')(.*?)\\3)";
                     captures = {
                         1 = { name = "keyword.markup.attribute-name.id.html"; };
                         2 = { name = "string.html"; };
+                        4 = { name = "value.html"; };
                     };
                 }, 
                 {   name = "keyword.markup.attribute-name.html";

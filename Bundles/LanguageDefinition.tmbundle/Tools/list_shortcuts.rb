@@ -16,6 +16,18 @@ SHORTCUT_TITLES = {
 	"trigger" => "Input Pattern",
 }
 
+def getShortcutType(child)
+	if child.has_key?('keyEquivalent')
+		'keyEquivalent'
+	elsif child.has_key?('tabTrigger')
+		'tabTrigger'
+	elsif child.has_key?('trigger')
+		'trigger'
+	else
+		nil
+	end
+end
+
 def getShortcut(child)
 	if child.has_key?('keyEquivalent')
 		["keyEquivalent", convertKeyEquivalent(child['keyEquivalent'])]
@@ -56,7 +68,7 @@ KEY_BYTES = {
 	"\xEF\x9C\x81"	=> "down",
 	"\xEF\x9C\x82"	=> "left",
 	"\xEF\x9C\x83"	=> "right",
-	"\xEF\x9C\A8"	=> "delete",
+	"\xEF\x9C\xA8"	=> "delete",
 	"\xEF\x9C\xA9"	=> "home",
 	"\xEF\x9C\xAB"	=> "end",
 	"\xEF\x9C\xAC"	=> "pageup",
@@ -77,7 +89,7 @@ def convertKeyEquivalent(text)
 	command = text.include?('@') ? KEY_GLYPHS['command'] : ''
 	shift = (text != text.downcase or text.include?('$')) ? KEY_GLYPHS['shift'] : ''
 	text.upcase!
-	keypad = text.include?('#') ? '&#x20E3' : ''
+	keypad = (text.include?('#') and not text.include?("\x03")) ? '&#x20E3' : ''
 	text.gsub!(/[~^@$#]/,'')
 	text.gsub!("&", "&amp;")
 	text.gsub!("<", "&lt;")
@@ -95,33 +107,94 @@ def addEntities(text)
 	text
 end
 
+#$scripturl = "file://#{$bundle}/Scripts/list_shortcuts.js"
+#$stylesheeturl = "file://#{$bundle}/Stylesheets/list_shortcuts.css"
+$scripturl = "#{$bundle}/Scripts/list_shortcuts.js"
+$stylesheeturl = "#{$bundle}/Stylesheets/list_shortcuts.css"
+
 puts '<html><head><title>Keyboard Shortcuts List</title>'
 puts '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
+#puts %{<script type="text/ecmascript" src="#{$scripturl}" charset="utf-8" />}
+#puts '<style type="text/css">'
+#puts "	@import '#{$stylesheeturl}';"
+#puts '</style></head>'
+#
+# I'm including the extra files directly in here to get around the caching issue
+puts '<script type="text/ecmascript">'
+IO.foreach($scripturl) { |line| puts line }
+puts '</script>'
 puts '<style type="text/css">'
-puts "	@import 'file://#{$bundle}/Stylesheets/list_shortcuts.css';"
-puts '</style></head>'
-puts '<body>'
+IO.foreach($stylesheeturl) { |line| puts line }
+puts '</style>'
+puts '<body onload="setup();">'
 puts '<h1>Keyboard Shortcuts List</h1><hr />'
 
 bundles = PropertyList::load(%x{"#{$bundle}/Tools/KeyboardShortcuts"})
 
+puts '<div id="header">'
+puts '<div class="jumpblock">'
+puts 'Jump:'
+puts '<select id="jump">'
+puts '<option>Bundles:</option>'
 bundles.each do |bundle|
+	name = addEntities(bundle['name'])
+	puts %{<option value="#{name.gsub(' ', '_')}">#{name}</option>}
+end
+puts '</select>'
+puts '</div>'
+puts '<div class="filter">'
+puts 'Filter:'
+puts '<select id="filter" onchange="jump">'
+puts '<option value="all">All</option>'
+puts '<option value="keyEquivalent">Key Equivalent</option>'
+puts '<option value="tabTrigger">Tab Trigger</option>'
+puts '<option value="trigger">Input Pattern</option>'
+puts '</select>'
+puts '</div>'
+puts '</div>'
+
+puts '<hr />'
+
+bundles.each do |bundle|
+	puts %{<a name="#{addEntities(bundle['name']).gsub(' ', '_')}"></a>}
 	puts "<h2>#{addEntities(bundle['name'])}</h2>"
 	['Commands', 'Macros', 'Snippets'].each do |type|
 		items = bundle[type]
-		puts "\t<h3>#{addEntities(type)}</h3>\n\t<table>" if not items.to_a.empty?
-		alternate = false
+		classes = Hash.new("");
 		items.each do |item|
-			shortcutType, shortcut = getShortcut(item)
-			puts "\t\t<tr class=\"#{shortcutType} #{alternate ? ' alternate' : ''}\">"
-			alternate = ! alternate
-			puts "\t\t\t<td>#{addEntities(item['name'])}</td>"
-			puts "\t\t\t<td>#{SHORTCUT_TITLES[shortcutType]}</td>"
-			puts "\t\t\t<td>#{shortcut}</td>"
-			puts "\t\t</tr>"
+			shortcutType = getShortcutType(item)
+			classes[shortcutType] = shortcutType + "Block"
 		end if not items.nil?
-		puts "\t</table>"
+		classes = classes.values.join(' ')
+		if not items.to_a.empty?
+			puts %{\t<div class="typeblock #{classes}">}
+			puts %{\t<h3>#{addEntities(type)}</h3>\n\t<table>}
+			items.each do |item|
+				shortcutType, shortcut = getShortcut(item)
+				puts "\t\t<tr class=\"#{shortcutType}\">"
+				puts %{\t\t\t<td class="name">#{addEntities(item['name'])}</td>}
+				puts %{\t\t\t<td class="type">#{SHORTCUT_TITLES[shortcutType]}</td>}
+				puts %{\t\t\t<td class="shortcut">#{shortcut}</td>}
+				puts "\t\t</tr>"
+			end
+			puts "\t</table>"
+			puts "\t</div>"
+		end
 	end
 end
+
+puts '<hr />'
+
+puts '<div id="footer">'
+puts '<div class="jump">'
+puts 'Jump:'
+puts '<select id="jump2">'
+puts '<option>Bundles:</option>'
+bundles.each do |bundle|
+	name = addEntities(bundle['name'])
+	puts %{<option value="#{name.gsub(' ', '_')}">#{name}</option>}
+end
+puts '</select>'
+puts '</div>'
 
 puts '</body></html>'

@@ -202,9 +202,15 @@ VALUE convertNumberRef(CFNumberRef plist) {
 		CFNumberGetValue(plist, kCFNumberDoubleType, &val);
 		return rb_float_new(val);
 	} else {
+#ifdef LL2NUM
 		long long val;
 		CFNumberGetValue(plist, kCFNumberLongLongType, &val);
 		return LL2NUM(val);
+#else
+		long val;
+		CFNumberGetValue(plist, kCFNumberLongType, &val);
+		return NUM2LONG(val);
+#endif
 	}
 }
 
@@ -365,7 +371,7 @@ int iterateHash(VALUE key, VALUE val, VALUE dict) {
 CFDictionaryRef convertHash(VALUE obj) {
 	CFIndex count = (CFIndex)RHASH(obj)->tbl->num_entries;
 	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, count, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-	rb_hash_foreach(obj, iterateHash, (VALUE)dict);
+	st_foreach(RHASH(obj)->tbl, iterateHash, (VALUE)dict);
 	return dict;
 }
 
@@ -398,9 +404,14 @@ CFNumberRef convertNumber(VALUE obj) {
 						  break;
 					   }
 		case T_BIGNUM: {
+#ifdef NUM2LL
 						  long long num = NUM2LL(obj);
-						  valuePtr = &num;
 						  type = kCFNumberLongLongType;
+#else
+						  long num = NUM2LONG(obj);
+						  type = kCFNumberLongType;
+#endif
+						  valuePtr = &num;
 						  break;
 					   }
 		default:

@@ -5,9 +5,11 @@
 #
 # Pass -b to get a list per-bundle instead of per-type
 
+$bundle = ENV['TM_BUNDLE_PATH'].chomp('/')
+
+$: << "#{$bundle}/Tools"
 require 'plist'
 
-$bundle = ENV['TM_BUNDLE_PATH'].chomp('/')
 
 def getShortcut(child)
 	if child.has_key?('keyEquivalent')

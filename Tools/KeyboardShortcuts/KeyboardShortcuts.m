@@ -48,9 +48,12 @@ int main (int argc, const char * argv[]) {
 					NSString *path = [plistPath stringByAppendingPathComponent:plist];
 					NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:path];
 					NSMutableDictionary *item = [NSMutableDictionary dictionary];
-					[item setValue:[dict objectForKey:@"keyEquivalent"] forKey:@"keyEquivalent"];
-					[item setValue:[dict objectForKey:@"tabTrigger"] forKey:@"tabTrigger"];
-					[item setValue:[dict objectForKey:@"trigger"] forKey:@"trigger"];
+					if ([[dict objectForKey:@"keyEquivalent"] length])
+						[item setObject:[dict objectForKey:@"keyEquivalent"] forKey:@"keyEquivalent"];
+					if ([[dict objectForKey:@"tabTrigger"] length])
+						[item setObject:[dict objectForKey:@"tabTrigger"] forKey:@"tabTrigger"];
+					if ([[dict objectForKey:@"trigger"] length])
+						[item setObject:[dict objectForKey:@"trigger"] forKey:@"trigger"];
 					if( [item count] > 0 ) {
 						[item setValue:[dict objectForKey:@"name"] forKey:@"name"];
 						[items addObject:item];

@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>@session['${1:whatever}']</string>
+	<string>@session[${1::user}]</string>
 	<key>keyEquivalent</key>
 	<string>^j</string>
 	<key>name</key>
-	<string>@session['..']</string>
+	<string>@session[…]</string>
 	<key>scope</key>
 	<string>source.ruby.rails</string>
 	<key>uuid</key>

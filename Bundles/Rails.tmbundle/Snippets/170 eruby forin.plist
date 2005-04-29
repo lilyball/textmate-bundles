@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;% for ${1:element} in ${2:collection} %&gt;
-	&lt;%= ${1:element}.${0:method} %&gt;
+	<string>&lt;% for ${1:item} in ${2:@items} %&gt;
+	&lt;%= ${1:item}.${0:name} %&gt;
 &lt;% end %&gt;</string>
 	<key>name</key>
-	<string>&lt;% for .. in .. end %&gt; (eforin)</string>
+	<string>erb: for .. in .. end… (eforin)</string>
 	<key>scope</key>
 	<string>text.html</string>
 	<key>tabTrigger</key>

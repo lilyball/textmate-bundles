@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;%= link_to "$1", :action =&gt; "$2" %&gt;</string>
+	<string>&lt;%= link_to "${1:link text...}", :action =&gt; "${2:index}" %&gt;</string>
 	<key>name</key>
-	<string>&lt;% link_to (action)... %&gt; (lia)</string>
+	<string>erb: link_to (action)… (lia)</string>
 	<key>scope</key>
 	<string>text.html</string>
 	<key>tabTrigger</key>

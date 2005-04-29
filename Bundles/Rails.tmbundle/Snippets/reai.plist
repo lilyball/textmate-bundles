@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>redirect_to :action =&gt; "$1", :id =&gt; $2</string>
+	<string>redirect_to :action =&gt; "${1:show}", :id =&gt; ${2:@item.id}</string>
 	<key>name</key>
-	<string>redirect_to (action, id)... (reai)</string>
+	<string>redirect_to (action, id)… (reai)</string>
 	<key>scope</key>
 	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>

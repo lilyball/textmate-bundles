@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>redirect_to :controller =&gt; "$1", :action =&gt; "$2"</string>
+	<string>redirect_to :controller =&gt; "${1:items}", :action =&gt; "${2:list}"</string>
 	<key>name</key>
-	<string>redirect_to (controller, action)... (reca)</string>
+	<string>redirect_to (controller, action)… (reca)</string>
 	<key>scope</key>
 	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>

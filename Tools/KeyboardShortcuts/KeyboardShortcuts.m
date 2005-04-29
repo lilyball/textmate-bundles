@@ -15,6 +15,10 @@ int main (int argc, const char * argv[]) {
 	NSArray *subPaths = [NSArray arrayWithObjects:@"Commands", @"Macros", @"Snippets", nil];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	
+	NSDictionary *textMateDefaults = [[NSUserDefaults standardUserDefaults]
+											persistentDomainForName:@"com.macromates.textmate"];
+	NSArray *disabledBundles = [textMateDefaults objectForKey:@"OakBundleManagerDisabledBundles"];
+	
 	NSMutableDictionary *bundles = [NSMutableDictionary dictionary];
 	
 	// First gather the bundle information we want
@@ -32,6 +36,11 @@ int main (int argc, const char * argv[]) {
 					stringByAppendingPathComponent:@"info.plist"]];
 			if( ! infoPlist )
 				continue;
+			if( [disabledBundles containsObject:[infoPlist objectForKey:@"uuid"]] ) {
+				// It's a disabled bundle
+				// Skip it
+				continue;
+			}
 			
 			NSAutoreleasePool *innerPool = [[NSAutoreleasePool alloc] init];
 			NSEnumerator *subEnum = [subPaths objectEnumerator];

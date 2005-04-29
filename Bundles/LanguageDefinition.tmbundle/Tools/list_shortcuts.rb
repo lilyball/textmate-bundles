@@ -27,7 +27,7 @@ def convertKeyEquivalent(text)
 	option = text.sub!('~','').nil? ? '' : '&#x2325;'
 	control = text.sub!('^','').nil? ? '' : '&#x2303;'
 	command = text.sub!('@','').nil? ? '' : '&#x2318;'
-	shift = text.upcase!.nil? ? '&#x21E7;' : ''
+	shift = (text.upcase!.nil? and not text.downcase!.nil?) ? '&#x21E7;' : ''
 	text.gsub!("&", "&amp;")
 	text.gsub!("<", "&lt;")
 	text.gsub!(">", "&gt;")

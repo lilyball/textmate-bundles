@@ -36,7 +36,7 @@
 		},
 
 		{   name = "keyword.sql.DML";
-			match = "(?i:^\\s*(select(\\s+distinct)?|insert\\s+into|update|delete|from|where|group\\sby|and|union(\\s+all)?|having|order\\sby)\\b)";
+			match = "(?i:^\\s*([\\(]{0,}select(\\s+distinct)?|insert\\s+into|update|delete|from|where|group\\sby|and|union(\\s+all)?|having|order\\sby)\\b)";
 		},
 
 		{   name = "keyword.sql.DML.II";

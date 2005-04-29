@@ -3,11 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;%= form_tag :action =&gt; "$0" %&gt;</string>
+	<string>&lt;%= form_tag :action =&gt; "${1:whatever}" %&gt;</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>form_tag</string>
+	<string>&lt;% form_tag... %&gt; (ft)</string>
+	<key>scope</key>
+	<string>text.html</string>
 	<key>tabTrigger</key>
 	<string>ft</string>
 	<key>uuid</key>

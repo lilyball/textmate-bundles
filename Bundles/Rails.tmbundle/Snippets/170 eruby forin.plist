@@ -4,11 +4,13 @@
 <dict>
 	<key>content</key>
 	<string>&lt;% for ${1:element} in ${2:collection} %&gt;
-  &lt;%= ${1:element}.$0 %&gt;
+	&lt;%= ${1:element}.${0:method} %&gt;
 &lt;% end %&gt;</string>
 	<key>name</key>
-	<string>eruby forin</string>
-	<key>trigger</key>
+	<string>&lt;% for .. in .. end %&gt; (eforin)</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>tabTrigger</key>
 	<string>eforin</string>
 	<key>uuid</key>
 	<string>F0F6D9C6-6A0B-11D9-BDC2-000D932CD5BA</string>

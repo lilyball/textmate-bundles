@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>flash['$1'] = $2</string>
+	<string>flash['${1:whatever}'] = ${0:whatever}</string>
 	<key>name</key>
-	<string>flash</string>
+	<string>flash['..'] = .. (f)</string>
 	<key>scope</key>
 	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>

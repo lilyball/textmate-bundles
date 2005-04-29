@@ -13,31 +13,36 @@ require 'plist'
 SHORTCUT_TITLES = {
 	"keyEquivalent" => "Key Equivalent",
 	"tabTrigger" => "Tab Trigger",
-	"trigger" => "Input Pattern",
+	"inputPattern" => "Input Pattern",
 }
 
-def getShortcutType(child)
+def getShortcutTypes(child)
+	types = []
 	if child.has_key?('keyEquivalent')
-		'keyEquivalent'
-	elsif child.has_key?('tabTrigger')
-		'tabTrigger'
-	elsif child.has_key?('trigger')
-		'trigger'
-	else
-		nil
+		types << 'keyEquivalent'
+	elsif child.has_key?('tabTrigger') or child.has_key?('trigger')
+		types << 'tabTrigger'
+	elsif child.has_key?('inputPattern')
+		types << 'inputPattern'
 	end
+	types
 end
 
-def getShortcut(child)
+def getShortcuts(child)
+	shortcuts = []
 	if child.has_key?('keyEquivalent')
-		["keyEquivalent", convertKeyEquivalent(child['keyEquivalent'])]
-	elsif child.has_key?('tabTrigger')
-		["tabTrigger", addEntities(child['tabTrigger'])]
-	elsif child.has_key?('trigger')
-		["trigger", addEntities(child['trigger'])]
-	else
-		nil
+		shortcuts << ["keyEquivalent", convertKeyEquivalent(child['keyEquivalent'])]
 	end
+	if child.has_key?('tabTrigger')
+		shortcuts << ["tabTrigger", addEntities(child['tabTrigger'])]
+	end
+	if child.has_key?('trigger')
+		shortcuts << ["tabTrigger", addEntities(child(['tabTrigger']))]
+	end
+	if child.has_key?('inputPattern')
+		shortcuts << ["inputPattern", addEntities(child['inputPattern'])]
+	end
+	shortcuts
 end
 
 KEY_GLYPHS = {
@@ -162,20 +167,25 @@ bundles.each do |bundle|
 		items = bundle[type]
 		classes = Hash.new("");
 		items.each do |item|
-			shortcutType = getShortcutType(item)
-			classes[shortcutType] = shortcutType + "Block"
+			shortcutTypes = getShortcutTypes(item)
+			shortcutTypes.each { |shortcutType| classes[shortcutType] = shortcutType + 'Block' }
 		end if not items.nil?
 		classes = classes.values.join(' ')
 		if not items.to_a.empty?
 			puts %{\t<div class="typeblock #{classes}">}
 			puts %{\t<h3>#{addEntities(type)}</h3>\n\t<table>}
 			items.each do |item|
-				shortcutType, shortcut = getShortcut(item)
-				puts "\t\t<tr class=\"#{shortcutType}\">"
-				puts %{\t\t\t<td class="name">#{addEntities(item['name'])}</td>}
-				puts %{\t\t\t<td class="type">#{SHORTCUT_TITLES[shortcutType]}</td>}
-				puts %{\t\t\t<td class="shortcut">#{shortcut}</td>}
-				puts "\t\t</tr>"
+				shortcuts = getShortcuts(item)
+				shortcuts.each do |shortcut|
+					shortcutType = shortcut[0]
+					shortcutValue = shortcut[1]
+					puts "\t\t<tr class=\"#{shortcutType}\">"
+					puts %{\t\t\t<td class="name">#{addEntities(item['name'])}</td>}
+					puts %{\t\t\t<td class="type">#{SHORTCUT_TITLES[shortcutType]}</td>}
+					puts %{\t\t\t<td class="shortcut">#{shortcutValue}</td>}
+					puts "\t\t</tr>"
+					item['name'] = ''
+				end
 			end
 			puts "\t</table>"
 			puts "\t</div>"

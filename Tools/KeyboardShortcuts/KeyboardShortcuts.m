@@ -62,7 +62,9 @@ int main (int argc, const char * argv[]) {
 					if ([[dict objectForKey:@"tabTrigger"] length])
 						[item setObject:[dict objectForKey:@"tabTrigger"] forKey:@"tabTrigger"];
 					if ([[dict objectForKey:@"trigger"] length])
-						[item setObject:[dict objectForKey:@"trigger"] forKey:@"trigger"];
+						[item setObject:[dict objectForKey:@"trigger"] forKey:@"tabTrigger"];
+					if ([[dict objectForKey:@"inputPattern"] length])
+						[item setObject:[dict objectForKey:@"inputPattern"] forKey:@"inputPattern"];
 					if( [item count] > 0 ) {
 						[item setValue:[dict objectForKey:@"name"] forKey:@"name"];
 						[items addObject:item];

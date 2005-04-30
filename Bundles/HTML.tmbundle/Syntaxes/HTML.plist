@@ -6,10 +6,40 @@
     name = "HTML (Basic)"; 
     scopeName = "text.html.basic";
     patterns = (
-        {   name = "meta.docinfo.processing.xml"; 
-            match = "<\\?xml.*?\\?>"; 
+        {   name = "declaration.xml-processing.html"; 
+            begin = "<\\?(xml)"; end = "\\?>"; 
+            captures = {
+                1 = { name = "keyword.markup.element-name.xml.html"; };
+            };
+            patterns = (
+                {   name = "keyword.markup.attribute-name.html";
+                    match = " ([a-zA-Z-:]+)";
+                }, 
+                {   name = "string.double-quoted.html"; 
+                    begin = "\""; end = "\""; 
+                    patterns = (
+                        {   name = "constant.character-entity.html"; 
+                            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
+                        }, 
+                        {   name = "invalid.bad-ampersand.html"; 
+                            match = "&"; 
+                        }
+                    ); 
+                }, 
+                {   name = "string.single-quoted.html"; 
+                    begin = "'"; end = "'"; 
+                    patterns = (
+                        {   name = "constant.character-entity.html"; 
+                            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
+                        }, 
+                        {   name = "invalid.bad-ampersand.html"; 
+                            match = "&"; 
+                        }
+                    ); 
+                }
+            );
         }, 
-        {   name = "keyword.sgml.html"; 
+        {   name = "declaration.sgml.html"; 
             begin = "<!"; end = ">"; 
             patterns = (
                 {   name = "invalid.bad-comments-or-CDATA.html"; 
@@ -27,10 +57,13 @@
                         }
                     ); 
                 }, 
-                {   name = "meta.docinfo.doctype.html"; 
-                    begin = DOCTYPE; end = "(?=>)"; 
+                {   name = "declaration.doctype.html"; 
+                    begin = "(DOCTYPE)"; end = "(?=>)"; 
+                    captures = {
+                        1 = { name = "keyword.markup.element-name.doctype.html"; };
+                    };
                     patterns = (
-                        {   name = "meta.docinfo.doctype.identifiers-and-DTDs.html"; 
+                        {   name = "string.double-quoted.doctype.identifiers-and-DTDs.html"; 
                             match = "\"[^\">]*\""; 
                         }
                     ); 
@@ -49,7 +82,7 @@
             patterns = ({include = "source.php"; }); 
         }, 
         {   name = "source.css.embedded.html"; 
-            begin = "(?:^\\s+)?<((?i:style))\\>[^>]*>?"; 
+            begin = "(?:^\\s+)?<((?i:style))\\>(?![^>]*/>)[^>]*>?"; 
             end = "</((?i:style))>(?:\\s+$)?"; 
             captures = { 1 = { name = "keyword.markup.element-name.html"; }; };
             patterns = ({include = "source.css"; }); 

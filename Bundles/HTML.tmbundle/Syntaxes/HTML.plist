@@ -55,7 +55,7 @@
             patterns = ({include = "source.css"; }); 
         }, 
         {   name = "source.js.embedded.html"; 
-            begin = "(?:^\\s+)?<((?i:script))\\>[^>]*>?"; 
+            begin = "(?:^\\s+)?<((?i:script))\\>(?![^>]*/>)[^>]*>?"; 
             end = "</((?i:script))>(?:\\s+$)?"; 
             captures = { 1 = { name = "keyword.markup.element-name.html"; }; };
             patterns = ({include = "source.js"; }); 

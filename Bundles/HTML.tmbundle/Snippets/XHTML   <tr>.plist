@@ -1,18 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>&lt;tr ${1:class=""}&gt;
-	$0
-&lt;/tr&gt;</string>
-	<key>name</key>
-	<string>TR (tr)</string>
-	<key>scope</key>
-	<string>text.xhtml</string>
-	<key>tabTrigger</key>
-	<string>tr</string>
-	<key>uuid</key>
-	<string>2973F3CD-A131-11D9-A5A2-000D93C8BE28</string>
-</dict>
-</plist>
+{
+    content = "<tr ${1:class=\"\"}>\n\t$0\n</tr>"; 
+    name = "TR (tr)"; 
+    tabTrigger = tr; 
+    uuid = "2973F3CD-A131-11D9-A5A2-000D93C8BE28"; 
+    scope = "text.html";
+}

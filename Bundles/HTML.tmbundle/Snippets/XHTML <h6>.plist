@@ -1,16 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>&lt;h6&gt;${1:`echo $TM_SELECTED_TEXT`}$0&lt;/h6&gt;</string>
-	<key>name</key>
-	<string>H6 (h6)</string>
-	<key>scope</key>
-	<string>text.xhtml</string>
-	<key>tabTrigger</key>
-	<string>h6</string>
-	<key>uuid</key>
-	<string>AF4E1AE4-A07F-11D9-A5A2-000D93C8BE28</string>
-</dict>
-</plist>
+{
+    content = "<h6>${1:`echo $TM_SELECTED_TEXT`}$0</h6>"; 
+    name = "H6 (h6)"; 
+    tabTrigger = h6; 
+    uuid = "AF4E1AE4-A07F-11D9-A5A2-000D93C8BE28"; 
+    scope = "text.html";
+}

@@ -1,18 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>&lt;table summary="${1:Summary}" class="${2:className}" width="${3:100%}" cellspacing="$4" cellpadding="$5" border="$6"&gt;
-	$0
-&lt;/table&gt;</string>
-	<key>name</key>
-	<string>Table (table)</string>
-	<key>scope</key>
-	<string>text.xhtml</string>
-	<key>tabTrigger</key>
-	<string>table</string>
-	<key>uuid</key>
-	<string>57176082-A12F-11D9-A5A2-000D93C8BE28</string>
-</dict>
-</plist>
+{
+    content = "<table summary=\"${1:Summary}\" class=\"${2:className}\" width=\"${3:100%}\" cellspacing=\"$4\" cellpadding=\"$5\" border=\"$6\">\n\t$0\n</table>"; 
+    name = "Table (table)"; 
+    tabTrigger = table; 
+    uuid = "57176082-A12F-11D9-A5A2-000D93C8BE28"; 
+    scope = "text.html";
+}

@@ -31,6 +31,9 @@
 		{   name = "keyword.objc";
 		    match = "\\<(id|BOOL|SEL|IBOutlet|IBAction|self|super|in|out|inout|oneway|YES|NO|nil)\\>";
 		},
+		{   name = "keyword.control.macro.objc";
+		    match = "\\<(NS_DURING|NS_HANDLER|NS_ENDHANDLER)\\>";
+		},
 		{   name = "declaration.class";
 		    match = "(@(interface|implementation))\\s+([A-Za-z]+)\\s*(?::\\s*([A-Za-z]+))?";
 		    captures = {

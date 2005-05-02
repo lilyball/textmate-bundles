@@ -83,7 +83,7 @@
 				<key>comment</key>
 				<string>misc. settings goes here!</string>
 				<key>foreground</key>
-				<string>#0000ff</string>
+				<string>#0000FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -97,6 +97,75 @@
 				<string>misc. settings goes here!</string>
 				<key>foreground</key>
 				<string>#C44B45</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>IncreaseIndent</string>
+			<key>scope</key>
+			<string>source.logtalk</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>Increase indent after :- for clause rules</string>
+				<key>increaseIndentPattern</key>
+				<string>:-$</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Default smart typing</string>
+			<key>scope</key>
+			<string>source.logtalk</string>
+			<key>settings</key>
+			<dict>
+				<key>smartTypingPairs</key>
+				<array>
+					<array>
+						<string>"</string>
+						<string>"</string>
+					</array>
+					<array>
+						<string>(</string>
+						<string>)</string>
+					</array>
+					<array>
+						<string>{</string>
+						<string>}</string>
+					</array>
+					<array>
+						<string>[</string>
+						<string>]</string>
+					</array>
+					<array>
+						<string>'</string>
+						<string>'</string>
+					</array>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Default highlight pairs</string>
+			<key>scope</key>
+			<string>source.logtalk</string>
+			<key>settings</key>
+			<dict>
+				<key>highlightPairs</key>
+				<array>
+					<array>
+						<string>(</string>
+						<string>)</string>
+					</array>
+					<array>
+						<string>{</string>
+						<string>}</string>
+					</array>
+					<array>
+						<string>[</string>
+						<string>]</string>
+					</array>
+				</array>
 			</dict>
 		</dict>
 	</array>

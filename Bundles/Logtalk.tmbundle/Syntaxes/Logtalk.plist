@@ -13,11 +13,6 @@
     foldingStartMarker = ":-\\s+(object|protocol|category)(?=[(])"; 
     foldingStopMarker = ":-\\s+end_(object|protocol|category)(?=[.])"; 
 
-    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
-    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
-
-    increaseIndentPattern = ":-$"; 
-
     patterns = (
         {
             begin = "/\\*"; 

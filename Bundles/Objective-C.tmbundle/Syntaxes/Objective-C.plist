@@ -12,17 +12,17 @@
                 {   name = "line.comment"; match = "//.*$";  },
                 {   match = ":\\s*(\\([^)]*\\))\\s*(\\<\\w+\\>)?";
                     captures = {
-                        1 = { name = "function-arg-type"; };
-                        2 = { name = "function-argument"; };
+                        1 = { name = "entity.type.parameter.function"; };
+                        2 = { name = "entity.parameter.variable.function"; };
                     };
                 },
                 {   match = "(\\([^)]*\\))\\s*(\\<\\w+\\>)?";
                     captures = {
-                        1 = { name = "function-result"; };
-                        2 = { name = "function-name"; };
+                        1 = { name = "entity.type.result.function"; };
+                        2 = { name = "entity.name.function"; };
                     };
                 },
-                {   name = "named-argument"; match = "\\<\\w+\\>(?=:)"; },
+                {   name = "keyword.entity.name-of-parameter.function"; match = "\\<\\w+\\>(?=:)"; },
             );
         },
 		{   name = "string.double-quoted.objc";
@@ -39,8 +39,8 @@
 		    captures = {
 		        1 = { name = "keyword.objc.directives"; };
 		        2 = { name = "directive-name"; };
-		        3 = { name = "class-name"; };
-		        4 = { name = "class-inheritance"; };
+		        3 = { name = "entity.name.class"; };
+		        4 = { name = "entity.parameter.parent.class"; };
 		    };
 		},
 		{   name = "keyword.objc.directives";

@@ -1,185 +1,63 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>name</key>
-	<string>Black background</string>
-	<key>settings</key>
-	<array>
-		<dict>
-			<key>name</key>
-			<string>Background</string>
-			<key>scope</key>
-			<string></string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#000000</string>
-				<key>caret</key>
-				<string>#FFFFFF</string>
-				<key>foreground</key>
-				<string>#AAAAAA</string>
-				<key>lineHighlight</key>
-				<string>#888800</string>
-				<key>selection</key>
-				<string>#73597EE0</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Comments</string>
-			<key>scope</key>
-			<string>comment</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>italic</string>
-				<key>foreground</key>
-				<string>#A0A0A0</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Strings &amp; Numbers</string>
-			<key>scope</key>
-			<string>string, constant.numeric</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#FFFF00</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Keywords</string>
-			<key>scope</key>
-			<string>keyword</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Pre-processor Line</string>
-			<key>scope</key>
-			<string>keyword.preprocessor</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>plain</string>
-				<key>foreground</key>
-				<string>#D0D0FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Pre-processor Directive</string>
-			<key>scope</key>
-			<string>keyword.preprocessor directive</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Functions</string>
-			<key>scope</key>
-			<string>keyword.function</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>plain</string>
-				<key>foreground</key>
-				<string>#404060</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Objective-C Directives</string>
-			<key>scope</key>
-			<string>keyword.objc.directive name</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>underline</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Obj-C: Method result</string>
-			<key>scope</key>
-			<string>declaration.function type type</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#D0D0FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Obj-C: Method name</string>
-			<key>scope</key>
-			<string>declaration.function type name</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Obj-C: Named argument</string>
-			<key>scope</key>
-			<string>declaration.function argument-name</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Obj-C: Argument type</string>
-			<key>scope</key>
-			<string>declaration.function argument type</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#D0D0FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Obj-C: Argument variable</string>
-			<key>scope</key>
-			<string>declaration.function argument value</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>italic</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Block Comments</string>
-			<key>scope</key>
-			<string>source comment.block</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#9B9B9B</string>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
-				<key>foreground</key>
-				<string>#FFFFFF</string>
-			</dict>
-		</dict>
-	</array>
-	<key>uuid</key>
-	<string>1CEFF4BE-AE49-11D9-BDAE-000D93589AF6</string>
-</dict>
-</plist>
+{
+    name = "Black background"; 
+    settings = (
+        {
+            name = Base; 
+            scope = ""; 
+            settings = {
+                background = "#000000"; 
+                caret = "#FFFFFF"; 
+                foreground = "#AAAAAA"; 
+                lineHighlight = "#888800"; 
+                selection = "#73597EE0"; 
+            }; 
+        }, 
+        {
+            name = Comment; 
+            scope = comment; 
+            settings = {fontStyle = italic; foreground = "#A0A0A0"; }; 
+        }, 
+        {
+            name = "Block comment"; 
+            scope = "comment.block"; 
+            settings = {background = "#9B9B9B"; foreground = "#FFFFFF"; }; 
+        }, 
+        {
+            name = "String & Number"; 
+            scope = "string, constant.numeric"; 
+            settings = {foreground = "#FFFF00"; }; 
+        }, 
+        {name = Keyword; scope = keyword; settings = {fontStyle = bold; }; }, 
+        {
+            name = "Pre-processor line"; 
+            scope = "keyword.preprocessor"; 
+            settings = {fontStyle = plain; foreground = "#D0D0FF"; }; 
+        }, 
+        {
+            name = "Pre-processor directive"; 
+            scope = "keyword.preprocessor directive"; 
+            settings = {fontStyle = bold; }; 
+        }, 
+        {
+            name = "Library function"; 
+            scope = "keyword.function"; 
+            settings = {fontStyle = plain; foreground = "#404060"; }; 
+        }, 
+        {
+            name = "Function, class and tag name"; 
+            scope = "entity.name"; 
+            settings = {fontStyle = bold; }; 
+        }, 
+        {
+            name = "Function variable name, tag attribute name, and parent class"; 
+            scope = "entity.parameter"; 
+            settings = {fontStyle = italic; }; 
+        }, 
+        {
+            name = "Type of function argument and result"; 
+            scope = "entity.type"; 
+            settings = {foreground = "#D0D0FF"; }; 
+        }
+    ); 
+    uuid = "1CEFF4BE-AE49-11D9-BDAE-000D93589AF6"; 
+}

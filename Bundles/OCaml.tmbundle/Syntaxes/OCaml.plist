@@ -26,7 +26,7 @@
 	foregroundColor = "#e0e0e0";
 	backgroundColor = "#404040";
 	patterns = (
-	{ name = "declaration.function"; match = "\\<(let|let\\s+rec)?\\s+([a-z][a-zA-Z0-9'_']*)\\s+([a-z][a-zA-Z0-9'_']*)+"; captures = {2 = { name = "function-name"; }; };
+	{ name = "declaration.function"; match = "\\<(let|let\\s+rec)?\\s+([a-z][a-zA-Z0-9'_']*)\\s+([a-z][a-zA-Z0-9'_']*)+"; captures = {2 = { name = "entity.name.function"; }; };
 	},
   	{ name = "comment.block.ocaml"; begin = "\\(\\*"; end = "\\*\\)"; swallow = "(\\(\\*.*\\*\\))+?"; fontStyle = ( italic ); foregroundColor = "#709070"; },
 

@@ -32,7 +32,7 @@
         
         {   name = "declaration.function.label.mips";
             match = "\\<([A-Za-z0-9_]+):";
-            captures = { 1 = { name = "function-name"; }; };
+            captures = { 1 = { name = "entity.name.function"; }; };
         },
         
         {   name = "variable.register.mips.usable.by-number";

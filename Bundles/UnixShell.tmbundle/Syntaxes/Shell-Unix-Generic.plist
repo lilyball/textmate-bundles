@@ -15,7 +15,7 @@
 
 	patterns = (
 		{   name = "declaration.function.shell"; match = "\\<([^ \\t\\n]*)\\s*\\(\\)";
-		    captures = { 1 = { name = "function-name"; }; };
+		    captures = { 1 = { name = "entity.name.function"; }; };
 		},
 		{   name = "keyword.control.shell"; match = "\\<(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\\>"; },
 		{   name = "keyword.storage.shell"; match = "\\<(?:export)\\>"; },

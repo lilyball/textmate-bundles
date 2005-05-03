@@ -8,9 +8,28 @@
 	<array>
 		<dict>
 			<key>name</key>
-			<string>Background</string>
+			<string>Text base</string>
 			<key>scope</key>
-			<string></string>
+			<string>text</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#434242</string>
+				<key>caret</key>
+				<string>#FFFFFF</string>
+				<key>foreground</key>
+				<string>#ffffff</string>
+				<key>lineHighlight</key>
+				<string>#888800</string>
+				<key>selection</key>
+				<string>#73597EE0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Source base</string>
+			<key>scope</key>
+			<string>source</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -27,7 +46,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Comments</string>
+			<string>Comment</string>
 			<key>scope</key>
 			<string>comment</string>
 			<key>settings</key>
@@ -38,7 +57,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Constants</string>
+			<string>Constant</string>
 			<key>scope</key>
 			<string>constant</string>
 			<key>settings</key>
@@ -49,7 +68,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Keywords</string>
+			<string>Keyword</string>
 			<key>scope</key>
 			<string>keyword</string>
 			<key>settings</key>
@@ -88,7 +107,7 @@
 			<key>name</key>
 			<string>Function name</string>
 			<key>scope</key>
-			<string>declaration.function function-name</string>
+			<string>entity.name.function</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -97,9 +116,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Function Argument</string>
+			<string>Function argument</string>
 			<key>scope</key>
-			<string>declaration.function function-argument</string>
+			<string>entity.parameter.variable.function</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -108,22 +127,20 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Block Comments</string>
+			<string>Block comment</string>
 			<key>scope</key>
 			<string>source comment.block</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
 				<string>#9B9B9B</string>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
 				<key>foreground</key>
 				<string>#FFFFFF</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Variables</string>
+			<string>Variable</string>
 			<key>scope</key>
 			<string>variable.readwrite</string>
 			<key>settings</key>
@@ -134,7 +151,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Strings</string>
+			<string>String</string>
 			<key>scope</key>
 			<string>string</string>
 			<key>settings</key>
@@ -145,7 +162,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>String Escapes</string>
+			<string>String escapes</string>
 			<key>scope</key>
 			<string>string.interpolation, string.escaped</string>
 			<key>settings</key>
@@ -156,7 +173,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Strings (executed)</string>
+			<string>String (executed)</string>
 			<key>scope</key>
 			<string>string.backticked</string>
 			<key>settings</key>
@@ -169,7 +186,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Regular Expressions</string>
+			<string>Regular expression</string>
 			<key>scope</key>
 			<string>string.regexp</string>
 			<key>settings</key>
@@ -180,7 +197,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Strings (literal)</string>
+			<string>String (literal)</string>
 			<key>scope</key>
 			<string>string.literal</string>
 			<key>settings</key>
@@ -191,7 +208,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Strings Escapes (executed)</string>
+			<string>String escapes (executed)</string>
 			<key>scope</key>
 			<string>string.backticked.escaped, string.backticked.interpolation</string>
 			<key>settings</key>
@@ -204,11 +221,9 @@
 			<key>name</key>
 			<string>Class name</string>
 			<key>scope</key>
-			<string>declaration.class class-name</string>
+			<string>entity.name.class</string>
 			<key>settings</key>
 			<dict>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
 				<key>fontStyle</key>
 				<string>underline</string>
 			</dict>
@@ -217,13 +232,33 @@
 			<key>name</key>
 			<string>Class inheritance</string>
 			<key>scope</key>
-			<string>declaration.class class-inheritance</string>
+			<string>entity.parameter.parent.class</string>
 			<key>settings</key>
 			<dict>
-				<key>comment</key>
-				<string>misc. settings goes here!</string>
 				<key>fontStyle</key>
 				<string>italic underline</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Tag name</string>
+			<key>scope</key>
+			<string>entity.name.tag</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>underline</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Tag attribute</string>
+			<key>scope</key>
+			<string>entity.parameter.attribute.tag</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
 			</dict>
 		</dict>
 	</array>

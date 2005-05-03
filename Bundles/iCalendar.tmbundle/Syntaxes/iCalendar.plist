@@ -16,11 +16,11 @@
 	patterns = (
 		{
 		    name = "keyword.iCalendar.component-begin"; match = "^BEGIN:(.*)";
-			captures = { 1 = { name = "function-name"; }; }; // FIXME function-name is not correct
+			captures = { 1 = { name = "entity.name.function"; }; }; // FIXME entity.name.function is not correct
 		},
 		{
 		    name = "keyword.iCalendar.component-end"; match = "^END:(.*)";
-		    captures = { 1 = { name = "function-name"; }; }; // FIXME function-name is not correct
+		    captures = { 1 = { name = "entity.name.function"; }; }; // FIXME entity.name.function is not correct
         },
 		
 		

@@ -33,7 +33,7 @@
 			match = "(\\<(?i:(defun|defmethod|defmacro))\\>)(\\s+)((\\w|\\-|\\!|\\?)*)";
 				captures = {
 				    2 = { name = "function-type"; };
-				    4 = { name = "function-name"; };
+				    4 = { name = "entity.name.function"; };
 				};
 		},
 		

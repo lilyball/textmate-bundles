@@ -21,21 +21,21 @@
 	patterns = (
 		
 		/* comments */
-		{ name = "comment.line";
+		{ name = "comment.line.number-sign.apache-config";
 		  match = "(#).*$";
 		  foregroundColor = "#8C8C8C";
 		},
 		
 		/* language */
 		{ 
-		 name = "keywords";
+		 name = "keyword.apache-config";
 		 foregroundColor = "#0066CC";
 		 match = "\\<(AcceptFilter|AcceptMutex|AcceptPathInfo|AccessConfig|AccessFileName|Action|AddAlt|AddAltByEncoding|AddAltByType|AddCharset|AddDefaultCharset|AddDescription|AddEncoding|AddHandler|AddIcon|AddIconByEncoding|AddIconByType|AddInputFilter|AddLanguage|AddModule|AddModuleInfo|AddOutputFilter|AddOutputFilterByType|AddType|AgentLog|Alias|AliasMatch|Allow|AllowCONNECT|AllowEncodedSlashes|AllowOverride|Anonymous|Anonymous_Authoritative|Anonymous_LogEmail|Anonymous_MustGiveEmail|Anonymous_NoUserID|Anonymous_VerifyEmail|AssignUserID|AuthAuthoritative|AuthDBAuthoritative|AuthDBGroupFile|AuthDBMAuthoritative|AuthDBMGroupFile|AuthDBMType|AuthDBMUserFile|AuthDBUserFile|AuthDigestAlgorithm|AuthDigestDomain|AuthDigestFile|AuthDigestGroupFile|AuthDigestNcCheck|AuthDigestNonceFormat|AuthDigestNonceLifetime|AuthDigestQop|AuthDigestShmemSize|AuthGroupFile|AuthLDAPAuthoritative|AuthLDAPBindDN|AuthLDAPBindPassword|AuthLDAPCharsetConfig|AuthLDAPCompareDNOnServer|AuthLDAPDereferenceAliases|AuthLDAPEnabled|AuthLDAPFrontPageHack|AuthLDAPGroupAttribute|AuthLDAPGroupAttributeIsDN|AuthLDAPRemoteUserIsDN|AuthLDAPUrl|AuthName|AuthType|AuthUserFile|BS2000Account|BindAddress|BrowserMatch|BrowserMatchNoCase|CGICommandArgs|CGIMapExtension|CacheDefaultExpire|CacheDirLength|CacheDirLevels|CacheDisable|CacheEnable|CacheExpiryCheck|CacheFile|CacheForceCompletion|CacheGcClean|CacheGcDaily|CacheGcInterval|CacheGcMemUsage|CacheGcUnused|CacheIgnoreCacheControl|CacheIgnoreNoLastMod|CacheLastModifiedFactor|CacheMaxExpire|CacheMaxFileSize|CacheMinFileSize|CacheNegotiatedDocs|CacheRoot|CacheSize|CacheTimeMargin|CharsetDefault|CharsetOptions|CharsetSourceEnc|CheckSpelling|ChildPerUserID|ClearModuleList|ContentDigest|CookieDomain|CookieExpires|CookieFormat|CookieLog|CookieLog|CookieName|CookiePrefix|CookieStyle|CookieTracking|CoreDumpDirectory|CustomLog|Dav|DavDepthInfinity|DavLockDB|DavMinTimeout|DefaultIcon|DefaultLanguage|DefaultType|DeflateBufferSize|DeflateCompressionLevel|DeflateFilterNote|DeflateMemLevel|DeflateWindowSize|Deny|Directory|DirectoryIndex|DirectoryMatch|DirectorySlash|DocumentRoot|EBCDICConvert|EBCDICConvertByType|EBCDICKludge|EnableExceptionHook|EnableMMAP|EnableSendfile|ErrorDocument|ErrorHeader|ErrorLog|Example|ExpiresActive|ExpiresByType|ExpiresDefault|ExtFilterDefine|ExtFilterOptions|ExtendedStatus|FancyIndexing|FileETag|Files|FilesMatch|ForceLanguagePriority|ForceType|ForensicLog|Group|Header|HeaderName|HostnameLookups|ISAPIAppendLogToErrors|ISAPIAppendLogToQuery|ISAPICacheFile|ISAPIFakeAsync|ISAPILogNotSupported|ISAPIReadAheadBuffer|IdentityCheck|IfDefine|IfModule|ImapBase|ImapDefault|ImapMenu|Include|IndexIgnore|IndexOptions|IndexOrderDefault|KeepAlive|KeepAliveTimeout|LDAPCacheEntries|LDAPCacheTTL|LDAPOpCacheEntries|LDAPOpCacheTTL|LDAPSharedCacheFile|LDAPSharedCacheSize|LDAPTrustedCA|LDAPTrustedCAType|LanguagePriority|Limit|LimitExcept|LimitInternalRecursion|LimitRequestBody|LimitRequestFieldSize|LimitRequestFields|LimitRequestFieldsize|LimitRequestLine|LimitXMLRequestBody|Listen|ListenBackLog|ListenBacklog|LoadFile|LoadModule|Location|LocationMatch|LockFile|LogFormat|LogLevel|MCacheMaxObjectCount|MCacheMaxObjectSize|MCacheMaxStreamingBuffer|MCacheMinObjectSize|MCacheRemovalAlgorithm|MCacheSize|MMapFile|MaxClients|MaxKeepAliveRequests|MaxMemFree|MaxRequestsPerChild|MaxRequestsPerThread|MaxSpareServers|MaxSpareThreads|MaxThreads|MaxThreadsPerChild|MetaDir|MetaFiles|MetaSuffix|MimeMagicFile|MinSpareServers|MinSpareThreads|ModMimeUsePathInfo|MultiviewsMatch|NWSSLTrustedCerts|NWSSLUpgradeable|NameVirtualHost|NoCache|NoProxy|NumServers|Options|Order|PassEnv|PidFile|Port|ProtocolEcho|ProtocolReqCheck|Proxy|ProxyBadHeader|ProxyBlock|ProxyDomain|ProxyErrorOverride|ProxyIOBufferSize|ProxyMatch|ProxyMaxForwards|ProxyPass|ProxyPassReverse|ProxyPreserveHost|ProxyReceiveBufferSize|ProxyRemote|ProxyRemoteMatch|ProxyRequests|ProxyTimeout|ProxyVia|RLimitCPU|RLimitMEM|RLimitNPROC|ReadmeName|Redirect|RedirectMatch|RedirectPermanent|RedirectTemp|RefererIgnore|RefererLog|RemoveCharset|RemoveEncoding|RemoveHandler|RemoveInputFilter|RemoveLanguage|RemoveOutputFilter|RemoveType|RequestHeader|Require|ResourceConfig|RewriteBase|RewriteCond|RewriteEngine|RewriteLock|RewriteLog|RewriteLogLevel|RewriteMap|RewriteOptions|RewriteRule|SSIEndTag|SSIErrorMsg|SSIStartTag|SSITimeFormat|SSIUndefinedEcho|SSLCACertificateFile|SSLCACertificatePath|SSLCARevocationFile|SSLCARevocationPath|SSLCertificateChainFile|SSLCertificateFile|SSLCertificateKeyFile|SSLCipherSuite|SSLEngine|SSLMutex|SSLOptions|SSLPassPhraseDialog|SSLProtocol|SSLProxyCACertificateFile|SSLProxyCACertificatePath|SSLProxyCARevocationFile|SSLProxyCARevocationPath|SSLProxyCipherSuite|SSLProxyEngine|SSLProxyMachineCertificateFile|SSLProxyMachineCertificatePath|SSLProxyProtocol|SSLProxyVerify|SSLProxyVerifyDepth|SSLRandomSeed|SSLRequire|SSLRequireSSL|SSLSessionCache|SSLSessionCacheTimeout|SSLVerifyClient|SSLVerifyDepth|Satisfy|ScoreBoardFile|Script|ScriptAlias|ScriptAliasMatch|ScriptInterpreterSource|ScriptLog|ScriptLogBuffer|ScriptLogLength|ScriptSock|SecureListen|SendBufferSize|ServerAdmin|ServerAlias|ServerLimit|ServerName|ServerPath|ServerRoot|ServerSignature|ServerTokens|ServerType|SetEnv|SetEnvIf|SetEnvIfNoCase|SetHandler|SetInputFilter|SetOutputFilter|ShmemUIDisUser|StartServers|StartThreads|SuexecUserGroup|ThreadLimit|ThreadStackSize|ThreadsPerChild|TimeOut|Timeout|TransferLog|TypesConfig|UnsetEnv|UseCanonicalName|User|UserDir|VirtualDocumentRoot|VirtualDocumentRootIP|VirtualHost|VirtualScriptAlias|VirtualScriptAliasIP|Win32DisableAcceptEx|XBitHack)\\>";
 		},
 		
 		/* modules - add here */
 		{
-		 name = "keyword.modules";
+		 name = "keyword.module.apache-config";
 		 foregroundColor = "#333333";
 		 match = "\\<(access_module|action_module|alias_module|anon_auth_module|asis_module|auth_module|autoindex_module|cern_meta_module|cgi_module|config_log_module|dav_module|dbm_auth_module|digest_module|dir_module|env_module|expires_module|foo_module|headers_module|hfs_apple_module|imap_module|includes_module|info_module|jk_module|mime_magic_module|mime_module|negotiation_module|perl_module|php4_module|php5_module|proxy_module|rendezvous_apple_module|rendezvous_module|rewrite_module|setenvif_module|speling_module|ssl_module|status_module|unique_id_module|userdir_module|usertrack_module|vhost_alias_module)\\>";
 		},
@@ -43,7 +43,7 @@
 		/*  strings and tags */
 
 		{
-		 name = "string.double-quoted";
+		 name = "string.double-quoted.apache-config";
 		 foregroundColor = "#CC3300";
 		 begin = "\"";
 		 end = "\"";
@@ -51,8 +51,11 @@
 		},
 				
 		{
-		  name = "keyword.markup.tags"; 
-		  match = "(<\/|<|>|\/>)";
+		  name = "declaration.tag.apache-config"; 
+		  begin = "</?([a-zA-Z]+)"; end = "/?>";
+		  captures = {
+		      1 = { name = "entity.name.tag.apache-config"; };
+		  };
 		  foregroundColor = "#0066CC";
 		},
 	);

@@ -1,15 +1,18 @@
+// syntax for ${TM_LANGUAGE} by ${TM_USERNAME}
 {
     /* The name as it will appear in the Syntax Highlight List */
-    name = ""; 
+    name = "${TM_BASENAME}"; 
+
+    /* Scope name used sometimes for styling or limiting the activation
+       of snippets, commands, and macros to files using this syntax
+    */
+    scopeName = "source.${TM_LANGUAGE}";
 
     /* So that we can always recognize this syntax */
-    uuid = "__UUID_PLACEHOLDER__";
+    uuid = "${TM_UUID}";
     
     /* Which filetypes this highlighting should be applied to automatically */
     fileTypes = (); 
-    
-    foregroundColor = "#000000"; 
-    backgroundColor = "#ffffff"; 
     
     /* Folding, this will start folds at comments (/*) and at {
        Stop folding at their counterparts. 
@@ -17,29 +20,17 @@
     foldingStartMarker = "(/\\*|\\{|\\()"; 
     foldingStopMarker = "(\\*/|\\}|\\))"; 
     
-    increaseIndentPattern = "\\{"; 
-
-    highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") ); 
-    smartTypingPairs = ( ("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'") ); 
-
     /* This is where the actual highlighting is defined. */
     patterns = (
-        {   
-            name = "keywords.languageName";
-            foregroundColor = "#ffffff";
-            backgroundColor = "#000000";
-            fontStyle = (bold, italic);
+        {   name = "keyword.control.${TM_LANGUAGE}";
             match = "\\<(list|of|keywords)\\>"; 
         },
-        {   name = "strings.double-quoted.languageName";
-            foregroundColor = "#78CC33";
-            begin = '"';
-            end = '"';
-            swallow = "\\\\.";
+        {   name = "string.double-quoted.${TM_LANGUAGE}";
+            begin = '"'; end = '"'; swallow = "\\\\.";
             /* Patterns with begin and end can contain other patterns (nested as far as you want) */
             patterns = (
-                {   name = "Nested Pattern"; fontStyle = ( underline );
-                    match = "[0-9]";
+                {   name = "constant.character.${TM_LANGUAGE}";
+                    match = "\\\\[a-zA-Z]";
                 }
             )
         },

@@ -1,99 +1,16 @@
 {
-	
-	/*
-	ISSUES
-	- nesting of ASP (or whatever else) inside quoted strings of tags doesn't
-	  work yet... Allan knows, is working on it.
-	*/
-	
-	name = "HTML (ASP)";
-	scopeName = "text.html.asp";
-	fileTypes = ( asp );
-	foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)";
-	foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})";
-	increaseIndentPattern = "<(head|title|table|tr|td|ul|ol|dl|div)\\>[^>]*>\\s*$";
-
-	smartTypingPairs = (
-	    ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" )
-	);
-	 highlightPairs = (
-	    ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" )
-	);
-
-	foregroundColor = "#333333";
-	backgroundColor = "#ffffff";
-	patterns = (
-		
-		{ name = "comment.block"; begin = "<!--"; end = "-->"; foregroundColor = "#bbbbbb"; },
-
-		{ 
-		 name = "embedded-language.javascript";
-		 begin = "<script [^>]*((type=(\"|')text/javascript(\"|'))|(language=(\"|')(?i:javascript)(\"|')))[^>]*>";
-		 end = "</script>";
-		 backgroundColor = "#FFF6D3";
-		 patterns = (
-				{ include = "JavaScript"; }
-			);
-		},
-		
-		{ 
-		 name = "embedded-language.css";
-		 begin = "<style .*type=(\"|')text/css(\"|')[^>]*>";
-		 end = "</style>";
-		 backgroundColor = "#e5F2F2";
-		 patterns = (
-				{ include = "CSS"; }
-			);
-		},
-		
-		{ name = "constant.entities.html"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-		{ name = "invalid.bad-ampersand.html"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
-		
-		{ name = "keyword.markup.tag.html";
-			begin = "</?([a-zA-Z0-9]+)";
-			end = ">";
-  			"elementFontStyle[1]" = ( underline ); 
-			foregroundColor = "#888888";
-			patterns = (
-	  			{ name = "keyword.markup.tags.options.html"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.double-quoted.html"; begin = "\""; end = "\"";
-					patterns = (
-						{	begin = "<%=?"; end = "%>";
-							patterns = (
-								/*{ include = "ASP"; } commented out 'till supported by TM */
-							);
-						},
-						{ name = "constant.entities.html"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-						{ name = "invalid.bad-ampersand.html"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
-					);
-	  			},
-				{ name = "string.single-quoted.html"; begin = "'"; end = "'";
-					patterns = (
-						{	begin = "<%=?"; end = "%>";
-							patterns = (
-								/*{ include = "ASP"; } commented out 'till supported by TM */
-							);
-						},
-						{ name = "constant.entities.html"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-						{ name = "invalid.bad-ampersand.html"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
-					);
-	  			},
-			);
-		},
-		
-		{ name = "meta.docinfo.doctype.html"; begin = "<!DOCTYPE"; end = ">";
-  			foregroundColor = "#aaaaaa";
- 		},
-
- 		{ 
- 		 name = "embedded-language.asp.html";
- 		 begin = "<%=?"; end = "%>";
- 		 backgroundColor = "#F2F2F2";
- 		 patterns = (
- 				{ include = "ASP"; }
- 			);
- 		}
-
-	);
-	uuid = "27798CC6-6B1D-11D9-B8FA-000D93589AF6";
+    fileTypes = (asp); 
+    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)"; 
+    foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
+    name = "HTML (ASP)"; 
+    patterns = (
+        {   name = "source.asp.embedded.html"; 
+            begin = "<%=?"; end = "%>"; 
+            patterns = ({include = "source.asp"; }); 
+        },
+        {   include = "text.html.basic";
+        },
+    ); 
+    scopeName = "text.html.asp"; 
+    uuid = "27798CC6-6B1D-11D9-B8FA-000D93589AF6"; 
 }

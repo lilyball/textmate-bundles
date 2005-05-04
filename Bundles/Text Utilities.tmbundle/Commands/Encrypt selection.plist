@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>openssl enc -e -aes128 -base64 -pass "pass:$(osascript &lt;&lt;"EOF"
+	tell app "System Events"
+		activate 
+		display dialog "Enter password:" default answer "mozart" buttons{"OK"} default button 1
+		return text returned of the result
+	end tell
+EOF)"
+osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~E</string>
+	<key>name</key>
+	<string>Encrypt selection</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>D39DC176-BC8D-11D9-8946-000D93589AF6</string>
+</dict>
+</plist>

@@ -1,70 +1,208 @@
-{
-    name = "Simple Theme"; 
-    settings = (
-        {
-            name = Base; 
-            scope = ""; 
-            settings = {background = "#EEEEEE"; foreground = "#000000"; }; 
-        }, 
-        {name = String; scope = string; settings = {foreground = "#009933"; }; }, 
-        {
-            name = Number; 
-            scope = "constant.numeric"; 
-            settings = {foreground = "#0066FF"; }; 
-        }, 
-        {name = Constant; scope = constant; settings = {foreground = "#6782D3"; }; }, 
-        {
-            name = "Regular expression"; 
-            scope = "string.regexp"; 
-            settings = {foreground = "#FF0080"; }; 
-        }, 
-        {name = Keyword; scope = keyword; settings = {foreground = "#0000FF"; }; }, 
-        {
-            name = Identifier; 
-            scope = "keyword.identifier"; 
-            settings = {foreground = "#9700CC"; }; 
-        }, 
-        {
-            name = Exception; 
-            scope = "keyword.exception"; 
-            settings = {foreground = "#990000"; }; 
-        }, 
-        {
-            name = "Function name"; 
-            scope = "entity.name.function"; 
-            settings = {foreground = "#FF8000"; }; 
-        }, 
-        {
-            name = "Class name"; 
-            scope = "entity.name.class"; 
-            settings = {fontStyle = "bold underline"; foregroundColor = "#ba5319"; }; 
-        }, 
-        {
-            name = "Tag name"; 
-            scope = "entity.name.tag"; 
-            settings = {fontStyle = underline; }; 
-        }, 
-        {
-            name = "Function variable name, tag attribute name, and parent class"; 
-            scope = "entity.parameter"; 
-            settings = {fontStyle = italic; }; 
-        }, 
-        {
-            name = Comment; 
-            scope = comment; 
-            settings = {fontStyle = italic; foreground = "#0066FF"; }; 
-        }, 
-        {name = Invalid; scope = invalid; settings = {foreground = "#FF0000"; }; }, 
-        {
-            name = "Trailing whitespace"; 
-            scope = "invalid.trailing-whitespace"; 
-            settings = {background = "#FFD9D9"; }; 
-        }, 
-        {
-            name = "Embedded source"; 
-            scope = "text source"; 
-            settings = {background = "#0000001A"; }; 
-        }
-    ); 
-    uuid = "4FCFA210-B247-11D9-9D00-000D93347A42"; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Simple Theme</string>
+	<key>settings</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>Background</string>
+			<key>scope</key>
+			<string></string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#EEEEEE</string>
+				<key>foreground</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>String</string>
+			<key>scope</key>
+			<string>string</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#009933</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Number</string>
+			<key>scope</key>
+			<string>constant.numeric</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#0066FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Regular expression</string>
+			<key>scope</key>
+			<string>string.regexp</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF0080</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Keyword</string>
+			<key>scope</key>
+			<string>keyword</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#0000FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Identifier</string>
+			<key>scope</key>
+			<string>keyword.identifier</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#9700CC</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Exception</string>
+			<key>scope</key>
+			<string>keyword.exception</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#990000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Function name</string>
+			<key>scope</key>
+			<string>entity.name.function</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF8000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Class name</string>
+			<key>scope</key>
+			<string>entity.name.class</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold underline</string>
+				<key>foregroundColor</key>
+				<string>#ba5319</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Arguments</string>
+			<key>scope</key>
+			<string>entity.parameter</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Comment</string>
+			<key>scope</key>
+			<string>comment</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#0066FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Invalid</string>
+			<key>scope</key>
+			<string>invalid</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF0000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Trailing whitespace</string>
+			<key>scope</key>
+			<string>invalid.trailing-whitespace</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>background = "#FFD9D9";</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Embedded source</string>
+			<key>scope</key>
+			<string>text source</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#0000001A</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Tag name</string>
+			<key>scope</key>
+			<string>keyword.markup.element-name</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>underline</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Attribute name</string>
+			<key>scope</key>
+			<string>keyword.markup.attribute-name</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Constant</string>
+			<key>scope</key>
+			<string>constant</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>misc. settings goes here!</string>
+				<key>foreground</key>
+				<string>#6782D3</string>
+			</dict>
+		</dict>
+	</array>
+	<key>uuid</key>
+	<string>4FCFA210-B247-11D9-9D00-000D93347A42</string>
+</dict>
+</plist>

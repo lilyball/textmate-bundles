@@ -19,8 +19,8 @@
 		{ name = "comment.line.inform"; match = "!(.*)";},
 		{   
 		    name = "declaration.function.inform";
-		    match = "(\\s*)\\[(\\s*)(.*)(\\s*);";
-		    captures = { 3 = { name = "entity.name.function"; }; };
+		    match = "(?:\\s*)\\[(?:\\s*)(.*)(?:\\s*);";
+		    captures = { 1 = { name = "entity.name.function"; }; };
 		},
 		{ name = "constant.numeric.inform"; match = "\\<((\\$[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; },
 		{ name = "string.single-quoted.inform"; begin = "'"; end = "'"; swallow = "\\\\."; },

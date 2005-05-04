@@ -28,12 +28,14 @@
 	patterns = (
 		/* processing instructions */
 		{
-			name = "meta.docinfo.processing.xml";
-			begin = "<\\?\\s*[-_a-zA-Z0-9]+";
+			name = "declaration.xml-processing.xml";
+			begin = "<\\?\\s*([-_a-zA-Z0-9]+)";
 			end = "\\?>";
-
+			captures = {
+			    1 = { name = "entity.name.tag.xml"; };
+			};
 			patterns = (
-	  			{ name = "keyword.markup.tag.options.xml"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "entity.parameter.attribute.tag.xml"; match = " ([a-zA-Z\-]+)"; },
 	  			{ name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
 				{ name = "string.single-quoted.xml"; begin = "'"; end = "'";},
 			);
@@ -41,33 +43,21 @@
 		
 		/* doctype */
 		{
-			name = "meta.docinfo.doctype.xml";
-			begin = "<!(DOCTYPE)";
-			end = ">";
-
+			name = "declaration.sgml.doctype.xml";
+			begin = "<!(DOCTYPE)"; end = ">";
 			captures = {
-			    1 = {
-			        name = "meta.docinfo.doctype-literal.xml";
-			    };
+		        1 = { name = "entity.name.tag.doctype.xml"; };
 			};
-
 			patterns = (
 				{
-					begin = "<!(ENTITY)\\s([-_a-zA-Z0-9]+)";
-					end = ">";
-					
-					captures = {
-					    1 = {
-					        name = "meta.docinfo.entity-literal.xml";
-					    };
-					    2 = {
-					        name = "meta.docinfo.entity-definition.xml";
-					    };
+					begin = "<!(ENTITY)\\s([-_a-zA-Z0-9]+)"; end = ">";
+				    captures = {
+				        1 = { name = "entity.name.tag.entity.xml"; };
+					    2 = { name = "declaration.entity.xml"; };
 					};
-
 					patterns = (
-	  					{ name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
-						{ name = "string.single-quoted.xml"; begin = "'"; end = "'";},
+                        { name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
+                        { name = "string.single-quoted.xml"; begin = "'"; end = "'";},
 					);
 				},
 			);
@@ -83,44 +73,38 @@
 		/* nodes */
 		{
 			// "tags" in HTML; want them to be colored similarly.
-			name = "keyword.markup.tags.xml";
-			begin = "</?(([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)";
-			end = "(/?)>";
-			
+			name = "declaration.tag.xml";
+			begin = "</?(?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)";
+			end = "/?>";
 			captures = {
-			    2 = {
-			        name = "keyword.markup.tags.namespace.xml";
-			    };
-			    3 = {
-			        name = "keyword.markup.tags.xml";
-			    };
+			    1 = { name = "entity.name.tag.namespace.xml"; };
+			    2 = { name = "entity.name.tag.xml"; };
 			};
-
 			patterns = (
 	  			{ name = "keyword.markup.tag.options.xml"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.double-quoted.html"; begin = "\""; end = "\"";},
-				{ name = "string.single-quoted.html"; begin = "'"; end = "'";},
+	  			{ name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
+				{ name = "string.single-quoted.xml"; begin = "'"; end = "'";},
 			);
 		},
 
 		/* entities */
-		{ name = "constant.character-entities.html"; match = "&([a-zA-Z0-9_-]+|#[0-9]+|#x[0-9a-fA-F]+);";},
-		{ name = "invalid.bad-ampersand.html"; match = "&";},
+		{ name = "constant.character-entity.xml"; match = "&([a-zA-Z0-9_-]+|#[0-9]+|#x[0-9a-fA-F]+);";},
+		{ name = "invalid.bad-ampersand.xml"; match = "&";},
 		
         /* jsp page properties */
  		{
           // JSP page properties
-  			name = "embedded.jsp-props";
+  			name = "source.java-props.embedded.xml";
 			begin = "<%@";
 			patterns = (
-				{ match = "page|include|taglib"; name = "embedded.jsp-props.page-props"; },
+				{ match = "page|include|taglib"; name = "keyword.page-props.xml"; },
 			);
 			end = "%>";
 		},
 		
         /* embedded java */
 		{
-			name = "source.java.embedded";
+			name = "source.java.embedded.xml";
 			begin = "<%[!=]?(?!--)";
 			patterns = ( { include = "source.java"; } );
 			end = "(?!--)%>";

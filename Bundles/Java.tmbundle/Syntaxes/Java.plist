@@ -87,7 +87,7 @@
         {
             match = "\\<(byte|short|char|int|long|float|double|boolean|[A-Z][A-Za-z0-9]+)\\>";
             captures = {
-                1 = { name = "keyword.data-types.java"; };
+                1 = { name = "keyword.storage.data-types.java"; };
             };
         },
 
@@ -97,7 +97,7 @@
         {
             match = "\\<(private|protected|public)\\>";
             captures = {
-                1 = { name = "keyword.access-control.java"; };
+                1 = { name = "keyword.storage.access-control.java"; };
             };
         },
         
@@ -106,7 +106,7 @@
             match = "\\<(abstract|final|native|private|protected|public|static|transient|synchronized|volatile|strictfp)\\>";
             captures = {
                 1 = {
-                    name = "keyword.modifiers.java";
+                    name = "keyword.storage.modifiers.java";
                 };
             };
         },
@@ -116,7 +116,7 @@
             match = "\\<(try|catch|finally|throw)\\>";
             captures = {
                 1 = {
-                    name = "keyword.catch-exception.java";
+                    name = "keyword.control.catch-exception.java";
                 };
             };
         },
@@ -146,7 +146,7 @@
             match = "\\<(true|false|null)\\>";
             captures = {
                 1 = {
-                    name = "keyword.assigned-values.java";
+                    name = "keyword.storage.assigned-values.java";
                 };
             };
         },

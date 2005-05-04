@@ -40,18 +40,18 @@
 			match = "#(\\l|_|[\\+=-/!%&*|><~?])(\\w|[\\+=-/!%&*|><~?:])*";
 		},
 		{
-			name = "keyword.fscript";
+			name = "keyword.storage.fscript";
 			foregroundColor = "#662288";
 			match = "\\<(true|YES|false|NO|sys|nil)\\>";
 		},
 		{
-			name = "comment.fscript";
+			name = "comment.block.quotes.fscript";
 			foregroundColor = "#489C03";
 			begin = '"';
 			end = '"';
 		},
 		{
-			name = "string.fscript";
+			name = "string.single-quoted.fscript";
 			foregroundColor = "#DD8944";
 			begin = "'";
 			end = "'";

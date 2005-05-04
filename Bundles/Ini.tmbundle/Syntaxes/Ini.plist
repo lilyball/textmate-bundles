@@ -8,26 +8,26 @@
     patterns = (
         { 
             match = "^[\\s]*(;|#).*"; 
-            name = comments; 
+            name = "comment.line.ini"; 
         }, 
         {
             match = "\\<([a-zA-Z_]+)\\>\\s*(=)"; 
-            name = keyword.definition; 
+            name = "keyword.definition.ini"; 
         }, 
         {
             match = "^\\[(.*)\\]"; 
-            name = "group-title"; 
+            name = "entity.name.group-title.ini"; 
         }, 
         {
             begin = "'"; 
             end = "'"; 
-            name = "string.single-quoted"; 
+            name = "string.single-quoted.ini"; 
             swallow = "\\\\."; 
         }, 
         {
             begin = "\""; 
             end = "\""; 
-            name = "string.double-quoted"; 
+            name = "string.double-quoted.ini"; 
         }
     ); 
     smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 

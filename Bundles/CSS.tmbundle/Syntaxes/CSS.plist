@@ -10,19 +10,12 @@
             end = "(/\\*|(?=\\{)|\\s|$)";
             patterns = (
                 {   name = "entity.name.tag.css";
-                    // this name is also used in HTML-PHP for tag names
-                    // in the future though, we'll switch to something 
-                    // like: user.name.(tag|function|class)
                     match = "\\<(a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\\>";
                 },
                 {   name = "entity.parameter.attribute.tag.class.css";
-                    // I made this “attribute-name”, but really it's the
-                    // “attribute-value” -- though for now, this will work
                     match = "(\\.[a-zA-Z0-9_-]+)";
                 },
                 {   name = "entity.parameter.attribute.tag.id.css";
-                    // I made this “attribute-name”, but really it's the
-                    // “attribute-value” -- though for now, this will work
                     match = "(#[a-zA-Z0-9_-]+)";
                 },
                 {   name = "entity.parameter.attribute.tag.star.css";

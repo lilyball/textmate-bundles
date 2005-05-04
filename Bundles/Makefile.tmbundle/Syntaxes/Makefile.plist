@@ -5,11 +5,11 @@
 	patterns = (
 		{ name = "keyword.variable.makefile"; match = "^(\\w|[-_])+\\s*=.*"; },
 		{ name = "comment.line.makefile"; match = "^#.*"; },
-		{ name = "keyword.directives.makefile"; match = "^(\\s*)\\<(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\>";},
+		{ name = "keyword.control.makefile"; match = "^(\\s*)\\<(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\>";},
 		{
 		    name = "declaration.function.makefile";
     		match = "^([^\\t ]+:(?!\\=))\\s*.*";
-    		captures = { 1 = { name = "entity.name.function"; }; };
+    		captures = { 1 = { name = "entity.name.function.makefile"; }; };
 	    }
 	);
 	uuid = "FF1825E8-6B1C-11D9-B883-000D93589AF6";

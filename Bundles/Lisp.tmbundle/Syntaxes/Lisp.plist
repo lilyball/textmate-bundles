@@ -32,8 +32,8 @@
 			name = "declaration.function.lisp";
 			match = "(\\<(?i:(defun|defmethod|defmacro))\\>)(\\s+)((\\w|\\-|\\!|\\?)*)";
 				captures = {
-				    2 = { name = "function-type"; };
-				    4 = { name = "entity.name.function"; };
+				    2 = { name = "keyword.storage.function-type.lisp"; };
+				    4 = { name = "entity.name.function.lisp"; };
 				};
 		},
 		

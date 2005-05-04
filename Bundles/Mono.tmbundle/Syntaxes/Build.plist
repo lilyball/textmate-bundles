@@ -36,22 +36,21 @@
 		
 		/* nodes */
 		{
-			name = "keyword.tag.node.nant";
-			begin = "</?([-_a-zA-Z0-9:]+)";
-			end = "/?>";
-	  		"elementFontStyle[1]" = ( bold ); 
-	
-			foregroundColor = "#0066CC";
+			name = "declaration.tag.nant";
+			begin = "</?([-_a-zA-Z0-9:]+)"; end = "/?>";
+			captures = {
+			    1 = { name = "entity.name.tag.nant"; };
+			};
 			
 			patterns = (
-	  			{ name = "keyword.tag.option.nant"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "entity.parameter.attribute.tag.nant"; match = " ([a-zA-Z\-]+)"; },
 	  			{ name = "string.double-quoted.nant"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
 				{ name = "string.single-quoted.nant"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
 			);
 		},
 
 		/* entities */
-		{ name = "constant.character-entities.nant"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+		{ name = "constant.character-entity.nant"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
 		{ name = "invalid.bad-ampersand.nant"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
 	);
 }

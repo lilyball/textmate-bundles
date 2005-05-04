@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>String.rcontains_from ${1:str} ${2:start} ${3:ch}</string>
-	<key>name</key>
-	<string>String.rcontains_from</string>
-	<key>tabTrigger</key>
-	<string>String.</string>
-	<key>uuid</key>
-	<string>4F412914-758F-11D9-8C3A-003065F3078C</string>
-</dict>
-</plist>
+{
+    content = "String.rcontains_from ${1:str} ${2:start} ${3:ch}"; 
+    name = "String.rcontains_from"; 
+    tabTrigger = "String."; 
+    uuid = "4F412914-758F-11D9-8C3A-003065F3078C"; 
+    scope = "source.ocaml";
+}

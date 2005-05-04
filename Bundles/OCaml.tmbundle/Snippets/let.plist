@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>let ${1:var(s)} = ${2:expr}</string>
-	<key>name</key>
-	<string>let</string>
-	<key>tabTrigger</key>
-	<string>let</string>
-	<key>uuid</key>
-	<string>62BB8982-7475-11D9-AAF2-000A95AFE286</string>
-</dict>
-</plist>
+{
+    content = "let ${1:var(s)} = ${2:expr}"; 
+    name = let; 
+    tabTrigger = let; 
+    uuid = "62BB8982-7475-11D9-AAF2-000A95AFE286"; 
+    scope = "source.ocaml";
+}

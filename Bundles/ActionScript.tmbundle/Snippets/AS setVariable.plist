@@ -1,16 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>set( ${1:name}, ${2:value} );</string>
-	<key>inputPattern</key>
-	<string>MovieClip</string>
-	<key>name</key>
-	<string>AS setVariable</string>
-	<key>tabTrigger</key>
-	<string>sv</string>
-	<key>uuid</key>
-	<string>439EC92E-7515-11D9-8FBA-00039398C572</string>
-</dict>
-</plist>
+{
+    content = "set( ${1:name}, ${2:value} );"; 
+    inputPattern = MovieClip; 
+    name = "AS setVariable"; 
+    tabTrigger = sv; 
+    uuid = "439EC92E-7515-11D9-8FBA-00039398C572"; 
+    scope = "source.actionscript";
+}

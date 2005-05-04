@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>List.exists ${1:f} ${2:lst}</string>
-	<key>name</key>
-	<string>List.exists</string>
-	<key>tabTrigger</key>
-	<string>List.</string>
-	<key>uuid</key>
-	<string>0B34F054-7567-11D9-B7C0-000A95AFE286</string>
-</dict>
-</plist>
+{
+    content = "List.exists ${1:f} ${2:lst}"; 
+    name = "List.exists"; 
+    tabTrigger = "List."; 
+    uuid = "0B34F054-7567-11D9-B7C0-000A95AFE286"; 
+    scope = "source.ocaml";
+}

@@ -1,15 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>do {
-	$1} while (${2:condition});</string>
-	<key>name</key>
-	<string>AS do while</string>
-	<key>tabTrigger</key>
-	<string>do</string>
-	<key>uuid</key>
-	<string>E33B1F84-751A-11D9-8FBA-00039398C572</string>
-</dict>
-</plist>
+{
+    content = "do {\n\t$1} while (${2:condition});"; 
+    name = "AS do while"; 
+    tabTrigger = do; 
+    uuid = "E33B1F84-751A-11D9-8FBA-00039398C572"; 
+    scope = "source.actionscript";
+}

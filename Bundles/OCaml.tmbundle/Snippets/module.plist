@@ -1,17 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>module ${1:name} =
-	struct
-		${2:contents}
-	end</string>
-	<key>name</key>
-	<string>module</string>
-	<key>tabTrigger</key>
-	<string>mod</string>
-	<key>uuid</key>
-	<string>A7ED7818-7473-11D9-8C1B-000A95AFE286</string>
-</dict>
-</plist>
+{
+    content = "module ${1:name} =\n\tstruct\n\t\t${2:contents}\n\tend"; 
+    name = module; 
+    tabTrigger = mod; 
+    uuid = "A7ED7818-7473-11D9-8C1B-000A95AFE286"; 
+    scope = "source.ocaml";
+}

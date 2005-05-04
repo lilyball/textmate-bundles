@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>Digest.substring ${1:str} ${2:ofs} ${3:len}</string>
-	<key>name</key>
-	<string>Digest.substring</string>
-	<key>tabTrigger</key>
-	<string>Digest.</string>
-	<key>uuid</key>
-	<string>4FF52778-7537-11D9-AF11-000A95AFE286</string>
-</dict>
-</plist>
+{
+    content = "Digest.substring ${1:str} ${2:ofs} ${3:len}"; 
+    name = "Digest.substring"; 
+    tabTrigger = "Digest."; 
+    uuid = "4FF52778-7537-11D9-AF11-000A95AFE286"; 
+    scope = "source.ocaml";
+}

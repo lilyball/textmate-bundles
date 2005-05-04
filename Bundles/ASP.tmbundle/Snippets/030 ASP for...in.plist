@@ -1,16 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>For ${1:var} in ${2:array}
-	$3
-Next$0</string>
-	<key>name</key>
-	<string>ASP for...in</string>
-	<key>trigger</key>
-	<string>forin</string>
-	<key>uuid</key>
-	<string>6D6BE8AC-63AB-11D9-B316-000A95CA2CD0</string>
-</dict>
-</plist>
+{
+    content = "For ${1:var} in ${2:array}\n\t$3\nNext$0"; 
+    name = "ASP for...in"; 
+    trigger = forin; 
+    uuid = "6D6BE8AC-63AB-11D9-B316-000A95CA2CD0"; 
+    scope = "source.asp";
+}

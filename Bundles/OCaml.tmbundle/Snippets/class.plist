@@ -1,17 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>class ${1:name} =
-	object ${2:(self)}
-		${3:contents}
-	end</string>
-	<key>name</key>
-	<string>class</string>
-	<key>tabTrigger</key>
-	<string>class</string>
-	<key>uuid</key>
-	<string>65713FCA-7473-11D9-8C1B-000A95AFE286</string>
-</dict>
-</plist>
+{
+    content = "class ${1:name} =\n\tobject ${2:(self)}\n\t\t${3:contents}\n\tend"; 
+    name = class; 
+    tabTrigger = class; 
+    uuid = "65713FCA-7473-11D9-8C1B-000A95AFE286"; 
+    scope = "source.ocaml";
+}

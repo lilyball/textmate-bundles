@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>Array.fill ${1:arr} ${2:ofs} ${3:len} ${4:x} </string>
-	<key>name</key>
-	<string>Array.fill</string>
-	<key>tabTrigger</key>
-	<string>Array.</string>
-	<key>uuid</key>
-	<string>1ED9ECDF-7532-11D9-87B3-000A95AFE286</string>
-</dict>
-</plist>
+{
+    content = "Array.fill ${1:arr} ${2:ofs} ${3:len} ${4:x} "; 
+    name = "Array.fill"; 
+    tabTrigger = "Array."; 
+    uuid = "1ED9ECDF-7532-11D9-87B3-000A95AFE286"; 
+    scope = "source.ocaml";
+}

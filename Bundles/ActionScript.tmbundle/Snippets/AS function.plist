@@ -1,16 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>function $1($2):$3{
-	$4
-};</string>
-	<key>name</key>
-	<string>AS function</string>
-	<key>tabTrigger</key>
-	<string>fn</string>
-	<key>uuid</key>
-	<string>5D7F2CAD-7470-11D9-A57F-00039398C572</string>
-</dict>
-</plist>
+{
+    content = "function $1($2):$3{\n\t$4\n};"; 
+    name = "AS function"; 
+    tabTrigger = fn; 
+    uuid = "5D7F2CAD-7470-11D9-A57F-00039398C572"; 
+    scope = "source.actionscript";
+}

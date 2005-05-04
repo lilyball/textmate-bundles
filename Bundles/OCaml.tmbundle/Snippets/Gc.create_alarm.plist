@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>Gc.create_alarm ${1:f}</string>
-	<key>name</key>
-	<string>Gc.create_alarm</string>
-	<key>tabTrigger</key>
-	<string>Gc.</string>
-	<key>uuid</key>
-	<string>9056D3A0-7552-11D9-928F-000A95AFE286</string>
-</dict>
-</plist>
+{
+    content = "Gc.create_alarm ${1:f}"; 
+    name = "Gc.create_alarm"; 
+    tabTrigger = "Gc."; 
+    uuid = "9056D3A0-7552-11D9-928F-000A95AFE286"; 
+    scope = "source.ocaml";
+}

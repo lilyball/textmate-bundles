@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>String.blit ${1:src} ${2:srcoff} ${3:dest} ${4:destoff} ${5:len}</string>
-	<key>name</key>
-	<string>String.blit</string>
-	<key>tabTrigger</key>
-	<string>String.</string>
-	<key>uuid</key>
-	<string>6D9E0219-758E-11D9-8C3A-003065F3078C</string>
-</dict>
-</plist>
+{
+    content = "String.blit ${1:src} ${2:srcoff} ${3:dest} ${4:destoff} ${5:len}"; 
+    name = "String.blit"; 
+    tabTrigger = "String."; 
+    uuid = "6D9E0219-758E-11D9-8C3A-003065F3078C"; 
+    scope = "source.ocaml";
+}

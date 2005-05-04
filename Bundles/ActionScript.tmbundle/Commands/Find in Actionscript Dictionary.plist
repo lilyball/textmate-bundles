@@ -1,22 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>beforeRunningCommand</key>
-	<string>nop</string>
-	<key>command</key>
-	<string>"$TM_BUNDLE_PATH/Tools/asd.pl"</string>
-	<key>dontFollowNewOutput</key>
-	<true/>
-	<key>input</key>
-	<string>none</string>
-	<key>keyEquivalent</key>
-	<string>~@/</string>
-	<key>name</key>
-	<string>Find in Actionscript Dictionary</string>
-	<key>output</key>
-	<string>showAsHTML</string>
-	<key>uuid</key>
-	<string>8B98F650-78F7-11D9-B2B4-000A95C5F126</string>
-</dict>
-</plist>
+{
+    beforeRunningCommand = nop; 
+    command = "\"$TM_BUNDLE_PATH/Tools/asd.pl\""; 
+    dontFollowNewOutput = 1; 
+    input = none; 
+    keyEquivalent = "~@/"; 
+    name = "Find in Actionscript Dictionary"; 
+    output = showAsHTML; 
+    uuid = "8B98F650-78F7-11D9-B2B4-000A95C5F126"; 
+    scope = "source.actionscript";
+}

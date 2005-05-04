@@ -1,26 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>
-:- object(${1:Instance},
-	imports(${2:Category}),
-	instantiates(${3:Class})).
-
-	:- info([
-		version is 1.0,
-		author is '`niutil -readprop / /users/$USER realname`',
-		date is `date +%Y/%m/%d`,
-		comment is '${4:Description}']).
-
-$0
-
-:- end_object.
-</string>
-	<key>name</key>
-	<string>    Instance with category</string>
-	<key>uuid</key>
-	<string>8A27C6D7-73F7-11D9-8083-000D93589AF6</string>
-</dict>
-</plist>
+{
+    content = "\n:- object(${1:Instance},\n\timports(${2:Category}),\n\tinstantiates(${3:Class})).\n\n\t:- info([\n\t\tversion is 1.0,\n\t\tauthor is '`niutil -readprop / /users/$USER realname`',\n\t\tdate is `date +%Y/%m/%d`,\n\t\tcomment is '${4:Description}']).\n\n$0\n\n:- end_object.\n"; 
+    name = "    Instance with category"; 
+    uuid = "8A27C6D7-73F7-11D9-8083-000D93589AF6"; 
+    scope = "source.logtalk";
+}

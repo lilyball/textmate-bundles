@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>content</key>
-	<string>Array.get ${1:arr} ${2:pos}</string>
-	<key>name</key>
-	<string>Array.get</string>
-	<key>tabTrigger</key>
-	<string>Array.</string>
-	<key>uuid</key>
-	<string>CD3A1BDB-7530-11D9-87B3-000A95AFE286</string>
-</dict>
-</plist>
+{
+    content = "Array.get ${1:arr} ${2:pos}"; 
+    name = "Array.get"; 
+    tabTrigger = "Array."; 
+    uuid = "CD3A1BDB-7530-11D9-87B3-000A95AFE286"; 
+    scope = "source.ocaml";
+}

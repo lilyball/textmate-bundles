@@ -5,15 +5,26 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -d $TM_DIRECTORY ]]; then
-	osascript -e 'tell application "Terminal"' -e 'activate' -e "do script \"cd '$TM_DIRECTORY'\"" -e 'end tell'
-fi</string>
+	<string>if [[ -d $TM_SELECTED_FILE ]]; then
+   TM_PATH="$TM_SELECTED_FILE"
+elif [[ -f $TM_SELECTED_FILE ]]; then
+   TM_PATH="`dirname "$TM_SELECTED_FILE"`"
+else
+   TM_PATH="`dirname "$TM_FILEPATH"`"
+fi
+
+osascript &lt;&lt;EOF
+   tell application "Terminal"
+      activate
+      do script "cd '$TM_PATH'"
+   end tell
+EOF</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>^O</string>
+	<string>~@o</string>
 	<key>name</key>
-	<string>Open directory in Terminal</string>
+	<string>Open Terminal</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>

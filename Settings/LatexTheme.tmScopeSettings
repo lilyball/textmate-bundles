@@ -71,7 +71,7 @@
 			<key>name</key>
 			<string>textbf</string>
 			<key>scope</key>
-			<string>keyword.function.latex function-argument.bf</string>
+			<string>entity.parameter.variable.function.bf</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -97,7 +97,7 @@
 			<key>name</key>
 			<string>textit</string>
 			<key>scope</key>
-			<string>keyword.function.latex function-argument.it</string>
+			<string>entity.parameter.variable.function.it</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -112,7 +112,7 @@
 			<key>name</key>
 			<string>texttt</string>
 			<key>scope</key>
-			<string>keyword.function.latex.texttt</string>
+			<string>entity.parameter.variable.function.tt</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -138,7 +138,7 @@
 			<key>name</key>
 			<string>LaTeXFunctionArgs</string>
 			<key>scope</key>
-			<string>keyword.function.latex function-argument</string>
+			<string>entity.parameter.variable.function.ref</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -153,7 +153,7 @@
 			<key>name</key>
 			<string>EnvironmentArgs</string>
 			<key>scope</key>
-			<string>function-argument.environment</string>
+			<string>entity.parameter.function.section.latex</string>
 			<key>settings</key>
 			<dict>
 				<key>comment</key>
@@ -175,6 +175,19 @@
 				<string>Begin end environments should increase indent</string>
 				<key>increaseIndentPattern</key>
 				<string>^\s*\\begin\{.*\}</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Embedded source</string>
+			<key>scope</key>
+			<string>text.latex source.python</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>misc. settings goes here!</string>
+				<key>spellChecking</key>
+				<string>0</string>
 			</dict>
 		</dict>
 	</array>

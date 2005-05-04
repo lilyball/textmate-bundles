@@ -6,8 +6,16 @@
     foldingStartMarker = "(/\\*|\\{|\\()"; 
     foldingStopMarker = "(\\*/|\\}|\\))"; 
     patterns = (
+        {   name = "declaration.rule.tm-language-def";
+            match = "\\<(name)\\s*=\\s*((\"|')?(.*?)\\3)\\s*;";
+            captures = {
+                1 = { name = "keyword.tm-language-def"; };
+                2 = { name = "string.tm-language-def"; };
+                4 = { name = "entity.name.function.tm-language-def"; };
+            };
+        },
         {   name = "keyword.tm-language-def";
-            match = "\\<(name|fileTypes|keyEquivalent|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|beginCaptures|endCaptures|firstLineMatch)\\>"; 
+            match = "\\<(fileTypes|keyEquivalent|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|beginCaptures|endCaptures|firstLineMatch)\\>"; 
         },
         {   name = "invalid.deprecated.tm-language-def";
             match = "\\<(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\\>";

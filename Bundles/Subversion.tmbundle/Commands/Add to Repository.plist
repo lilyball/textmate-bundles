@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveModifiedFiles</string>
+	<string>nop</string>
 	<key>command</key>
 	<string>if [[ -z $TM_SELECTED_FILES ]]; then
 	WorkPaths=`echo \'$TM_FILEPATH\'`;

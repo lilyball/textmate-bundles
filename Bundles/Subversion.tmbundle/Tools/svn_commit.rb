@@ -1,13 +1,13 @@
-require 'English'
-# you are angry, english!
+require 'English' # you are angry, english!
 
 svn				= ENV['TM_SVN']
-commit_paths	= ENV['CommitPaths']
+#commit_paths	= ENV['CommitPaths']
 commit_tool		= ENV['CommitWindow']
 bundle			= ENV['TM_BUNDLE_PATH']
 
 CURRENT_DIR		= Dir.pwd + "/"
 
+require (bundle + '/Tools/shelltokenize.rb')
 
 puts "<html>
 <head>
@@ -23,8 +23,11 @@ puts "<h1>Subversion Commit</h1>"
 puts "<hr>"
 
 # Ignore files without changes
-status_output = %x{"#{svn}" status #{commit_paths}}
-
+#puts TextMate::selected_paths_for_shell
+status_command = %Q{"#{svn}" status #{TextMate::selected_paths_for_shell}}
+#puts status_command
+status_output = %x{#{status_command}}
+#puts status_output
 paths = status_output.scan(/^(.)....(\s+)(.*)\n/)
 
 
@@ -62,13 +65,14 @@ STDOUT.flush
 
 commit_paths_array = matches_to_paths(commit_matches)
 
-commit_path_text = "'" + commit_paths_array.join("' '") + "'"
+commit_path_text = commit_paths_array.collect{|path| path.quote_filename_for_shell }.join(" ")
 
+#puts commit_path_text
 commit_args = %x{"#{commit_tool}" #{commit_path_text}}
 
 status = $CHILD_STATUS
 if status != 0
-	puts "Canceled (#{status})."
+	puts "Canceled (#{status >> 8})."
 	exit -1
 end
 

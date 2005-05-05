@@ -32,7 +32,8 @@ export TM_SVN
 	puts "&lt;p&gt; &lt;pre&gt;"
 
 	STDOUT.flush
-	puts %x{#{command}}
+	fork { exec "#{command}" }
+	Process.wait
 
 	puts "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"
 END

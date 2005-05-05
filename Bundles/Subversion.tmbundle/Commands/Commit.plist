@@ -8,13 +8,6 @@
 	<string>CommitWindow="$TM_BUNDLE_PATH/Tools/CommitWindow.app/Contents/MacOS/CommitWindow"
 export CommitWindow
 
-if [[ -z $TM_SELECTED_FILES ]]; then
-	CommitPaths=`echo \'$TM_FILEPATH\'`;
-else
-	CommitPaths="$TM_SELECTED_FILES";
-fi
-export CommitPaths
-
 # setup TM_SVN if need be
 echo "${TM_SVN:=svn}" &gt; /dev/null
 export TM_SVN

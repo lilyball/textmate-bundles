@@ -5,21 +5,10 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -z $TM_SELECTED_FILES ]]; then
-	WorkPaths=`echo \'$TM_FILEPATH\'`;
-else
-	WorkPaths="$TM_SELECTED_FILES";
-fi
-export WorkPaths
-
-echo "${TM_SVN:=svn}" &gt; /dev/null
-export TM_SVN
-
-"${TM_RUBY:=ruby}" &lt;&lt;END
-	svn = ENV['TM_SVN']
-	puts %x{#{svn} add $WorkPaths}
-END
-</string>
+	<string>"${TM_RUBY:=ruby}" -r "$TM_BUNDLE_PATH/Tools/shelltokenize.rb" &lt;&lt;END
+	svn = ENV['TM_SVN'] || "svn"
+	puts %x{#{svn} add #{TextMate.selected_paths_for_shell}}
+END</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

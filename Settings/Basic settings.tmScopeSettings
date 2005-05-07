@@ -9,8 +9,6 @@
 		<dict>
 			<key>name</key>
 			<string>Default smart typing</string>
-			<key>scope</key>
-			<string></string>
 			<key>settings</key>
 			<dict>
 				<key>smartTypingPairs</key>
@@ -73,6 +71,8 @@
 			<string>source</string>
 			<key>settings</key>
 			<dict>
+				<key>decreaseIndentPattern</key>
+				<string>^\s+\}$</string>
 				<key>increaseIndentPattern</key>
 				<string>^.*(\{[^}"']*|\([^)"']*)$</string>
 				<key>smartTypingPairs</key>
@@ -456,6 +456,8 @@
 			<string>source.ruby</string>
 			<key>settings</key>
 			<dict>
+				<key>decreaseIndentPattern</key>
+				<string>^\s+(\}|end)$</string>
 				<key>increaseIndentPattern</key>
 				<string>^\s*(module|class|begin|def|if|else|elsif|unless|case|when|rescue|for|while|unless|[^#"']*\&lt;do)\&gt;(?!.*?;.*?\&lt;end\&gt;).*$</string>
 			</dict>

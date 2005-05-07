@@ -146,6 +146,24 @@
                   Equivalent to <code>svn diff -rPREV</code>.
                </div>
             </dd>
+
+            <dt><a name="diff_prev">Diff With Revision...</a></dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                  Displays the differences between the active file and a different revision of the same file. This command presents you with a list of revisions to choose from.
+               </div>
+            </dd>
+
+            <dt><a name="diff_prev">Diff Revisions...</a></dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">Yes</div>
+               <div class="description">
+                  Displays the differences between two specific revisions of the active file. You will be presented with a list of revisions; please select two.
+               </div>
+            </dd>
             
             <dt><a name="commit">Commit</a></dt>
             <dd>
@@ -183,8 +201,19 @@
                <div class="connect">Yes</div>
                <div class="description">
                   If there is a project open, updates all of the files and folders in the project with the newest changes from the repository.
+				  (The folders must be rooted beneath TM_PROJECT_PATH. Projects containing only groups created in TextMate won't work.)
                </div>
             </dd>
+
+            <dt><a name="update">Revert to Latest</a></dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="connect">No</div>
+               <div class="description">
+	               Reverts the file to the base revision. Any modifications to the file will be lost.
+               </div>
+            </dd>
+
 
          </dl>
 
@@ -253,8 +282,8 @@
       <h2><a name="authors">Authors</a></h2>
          
          <ul>
-            <li>Chris Thomas (Idea, Status, Diffs, Commit, Add and Updates)</li>
-            <li>Torsten Becker (Blame, Log and Info)</li>
+            <li>Chris Thomas (Idea, Status, Diffs, Commit, Add, and Updates)</li>
+            <li>Torsten Becker (Blame, Log, Info, and Revert)</li>
          </ul>
          
    </body>

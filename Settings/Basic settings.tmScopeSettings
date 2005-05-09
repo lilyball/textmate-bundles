@@ -306,7 +306,7 @@
 			<key>name</key>
 			<string>Function list (popup)</string>
 			<key>scope</key>
-			<string>entity.name.function, section-name, declaration.attribute-with-value.id string value</string>
+			<string>entity.name.function, declaration.attribute-with-value.id string value, text.latex declaration.section entity</string>
 			<key>settings</key>
 			<dict>
 				<key>showInSymbolList</key>
@@ -315,11 +315,13 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>LaTeX character pairs</string>
+			<string>LaTeX stuff</string>
 			<key>scope</key>
 			<string>text.latex</string>
 			<key>settings</key>
 			<dict>
+				<key>decreaseIndentPattern</key>
+				<string>^\s+\\end$</string>
 				<key>highlightPairs</key>
 				<array>
 					<array>
@@ -351,6 +353,8 @@
 						<string>'</string>
 					</array>
 				</array>
+				<key>increaseIndentPattern</key>
+				<string>^\s*\\begin\{.*\}</string>
 				<key>smartTypingPairs</key>
 				<array>
 					<array>

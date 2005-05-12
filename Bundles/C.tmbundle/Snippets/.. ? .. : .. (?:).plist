@@ -3,17 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>struct ${1:name}
-{
-	${0:/* data */}
-};</string>
+	<string>${1:condition} ? ${2:true} : ${0:false};</string>
 	<key>name</key>
-	<string>struct .. (struct)</string>
+	<string>.. ? .. : .. (?:)</string>
 	<key>scope</key>
 	<string>source.c, source.objc</string>
 	<key>tabTrigger</key>
-	<string>struct</string>
+	<string>?:</string>
 	<key>uuid</key>
-	<string>1D14B92E-8819-11D9-8661-000D93589AF6</string>
+	<string>325CF5AE-BCC9-11D9-B7FE-000D93589AF6</string>
 </dict>
 </plist>

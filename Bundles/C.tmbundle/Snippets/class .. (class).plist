@@ -3,17 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>struct ${1:name}
+	<string>class ${1:name}
 {
+public:
+	${1:name} (${2:arguments});
+	virtual ~${1:name} ();
+
+private:
 	${0:/* data */}
 };</string>
 	<key>name</key>
-	<string>struct .. (struct)</string>
+	<string>class .. (class)</string>
 	<key>scope</key>
-	<string>source.c, source.objc</string>
+	<string>source.c++, source.objc++</string>
 	<key>tabTrigger</key>
-	<string>struct</string>
+	<string>class</string>
 	<key>uuid</key>
-	<string>1D14B92E-8819-11D9-8661-000D93589AF6</string>
+	<string>523B30D4-C28A-11D9-8CEF-000D93589AF6</string>
 </dict>
 </plist>

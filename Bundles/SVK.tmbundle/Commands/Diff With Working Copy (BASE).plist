@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>TMPFILE=`mktemp /tmp/tm-svk.XXXXXX` || exit 1
+
+mv "$TMPFILE" "$TMPFILE.diff"
+TMPFILE="$TMPFILE.diff"
+
+# -rBASE is the same as specifying no revision -- it's the version that you have checked out.
+"${TM_SVK:=svk}" diff -rBASE "$TM_FILEPATH" &amp;&gt; "$TMPFILE"
+
+open -a TextMate "$TMPFILE" &amp;
+
+#rm "$TMPFILE" # ideally, we'd do this, but it creates a race condition, because 'open' is asynchronous.
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^A</string>
+	<key>name</key>
+	<string>Diff With Working Copy (BASE)</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>0987069A-C370-11D9-AAA6-000A95BCAFA8</string>
+</dict>
+</plist>

@@ -3,22 +3,25 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>export WorkPath="$TM_DIRECTORY"
+	<string>CommitWindow="$TM_BUNDLE_PATH/Tools/CommitWindow.app/Contents/MacOS/CommitWindow"
+export CommitWindow
 
-# show it..
-"${TM_SVK:=svk}" status "$WorkPath" 2&gt;&amp;1| "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"
+TM_SVK="${TM_SVK:=svk}"
+export TM_SVK
+
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/svk_commit.rb"
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^A</string>
 	<key>name</key>
-	<string>Status</string>
+	<string>Commit</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>C17472A0-C36B-11D9-954B-000A95BCAFA8</string>
+	<string>C03C7374-C371-11D9-AAA6-000A95BCAFA8</string>
 </dict>
 </plist>

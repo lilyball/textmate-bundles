@@ -5,20 +5,19 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>export WorkPath="$TM_DIRECTORY"
-
-# show it..
-"${TM_SVK:=svk}" status "$WorkPath" 2&gt;&amp;1| "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"
-</string>
+	<string>"${TM_RUBY:=ruby}" -r "$TM_BUNDLE_PATH/Tools/shelltokenize.rb" &lt;&lt;END
+	svk = ENV['TM_SVK'] || "svk"
+	puts %x{#{svk} add #{TextMate.selected_paths_for_shell}}
+END</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^A</string>
 	<key>name</key>
-	<string>Status</string>
+	<string>Add to Repository</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
-	<string>C17472A0-C36B-11D9-954B-000A95BCAFA8</string>
+	<string>F41366B2-C373-11D9-8A81-000A95BCAFA8</string>
 </dict>
 </plist>

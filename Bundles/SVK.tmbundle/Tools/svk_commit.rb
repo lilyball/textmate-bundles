@@ -1,6 +1,6 @@
 require 'English' # you are angry, english!
 
-svn				= ENV['TM_SVN']
+svk				= ENV['TM_SVK']
 #commit_paths	= ENV['CommitPaths']
 commit_tool		= ENV['CommitWindow']
 bundle			= ENV['TM_BUNDLE_PATH']
@@ -14,26 +14,26 @@ mup = Builder::XmlMarkup.new(:target => STDOUT)
 
 mup.html {
 	mup.head {
-			mup.title("Subversion status")
-			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_style.css';", "type" => "text/css")
+			mup.title("SVK status")
+			mup.style( "@import 'file://"+bundle+"/Stylesheets/svk_style.css';", "type" => "text/css")
 	}
 
 	mup.body { 
-		mup.h1("Subversion Commit")
+ 		mup.h1("SVK Commit")
 		STDOUT.flush
 		mup.hr
 
 		# Ignore files without changes
 #puts TextMate::selected_paths_for_shell
-		status_command = %Q{"#{svn}" status #{TextMate::selected_paths_for_shell}}
+		status_command = %Q{"#{svk}" status #{TextMate::selected_paths_for_shell}}
 #puts status_command
 		status_output = %x{#{status_command}}
 #puts status_output
-		paths = status_output.scan(/^(.)....(\s+)(.*)\n/)
+		paths = status_output.scan(/^(.).. (.*)\n/)
 
 
 		def matches_to_paths(matches)
-			paths = matches.collect {|m| m[2] }
+			paths = matches.collect {|m| m[1] }
 			paths.collect{|path| path.sub(/^#{CURRENT_DIR}/, "") }
 		end
 
@@ -47,7 +47,7 @@ mup.html {
 			}
 		end
 
-		# Fail if we have conflicts -- svn commit will fail, so let's
+		# Fail if we have conflicts -- svk commit will fail, so let's
 		# error out before the user gets too involved in the commit
 		conflict_paths = paths.select { |m| m[0] == 'C' }
 
@@ -87,12 +87,12 @@ mup.html {
 			exit -1
 		end
 
-		mup.div("class" => "command"){ mup.strong(%Q{#{svn} commit}); mup.text!(commit_args) }
+		mup.div("class" => "command"){ mup.strong(%Q{#{svk} commit}); mup.text!(commit_args) }
 		
 		mup.pre {
 			STDOUT.flush
 
-			IO.popen("#{svn} commit #{commit_args}", "r+") do |pipe|
+			IO.popen("#{svk} commit #{commit_args}", "r+") do |pipe|
 				pipe.each {|line| mup.text! line }
 			end
 		}

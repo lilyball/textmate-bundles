@@ -1,5 +1,7 @@
 # 'parses' the output of svk log and makes html out of
 # it, which it shows you.  should also be compatible to ruby-1.6.8.
+#
+# TODO: the script to call svk that pipes into this only works with one file
 # 
 # copyright 2005 david glasser <glasser@mit.edu>
 # based on svn version:
@@ -147,7 +149,6 @@ begin
                   # TODO: should do a secondary sort based on prop op
                end
                
-               # TODO: actually write out the prop op
                changed_files.each do |path|
                   puts '  <li class="'+path[0].to_s+'_'+path[1].to_s+'">'+path[2]+"</li>"
                end

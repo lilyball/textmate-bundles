@@ -74,7 +74,7 @@
    <body>
       <h1>SVK Bundle</h1>
       
-      <p>This README just documents what the certain commands of this Bundle do and how you can <a href="#conf">fine-tune</a> their behaviour, if you need general SVK Help/Introduction, you should look at the <a href="http://svk.elixus.org/">SVK homepage</a>.</p>
+      <p>This README just documents what the commands of this Bundle do and how you can <a href="#conf">fine-tune</a> their behaviour; if you need general SVK Help/Introduction, you should look at the <a href="http://svk.elixus.org/">SVK homepage</a>.</p>
       
       <h2><a name="commands">Commands</a></h2>
          
@@ -82,7 +82,6 @@
             <dt><a name="status">Status</a></dt>
             <dd>
                <div class="target">directory of active file</div>
-               <div class="connect">No</div>
                <div class="description">
                   Displays a list of files with changes in your working copy, along with the type of change for each file.
                </div>
@@ -91,84 +90,51 @@
             <dt><a name="log">Log</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">Yes</div>
                <div class="description">
                    Displays the commit message history for the selected files.
-                   Some parameters are configurable via shell variables; see the <a href="#tm_svk_log">Configuration Options</a> section below.
+                   Some parameters are configurable via shell variables; see the <a href="#tm_svk_log">Configuration Options</a> section below.  (TODO: if multiple files are selected, only
+                   the logs from the first are shown.)
                </div>
             </dd>
             
             <dt><a name="blame">Blame</a></dt>
             <dd>
                <div class="target">active file</div>
-               <div class="connect">Yes</div>
                <div class="description">
-                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href="#tm_svk_date_format">adjustable</a>.
+                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href="#tm_svk_date_format">adjustable</a>.  
+                     "wc" means the last change was in your working copy.
                </div>
             </dd>
             
             <dt><a name="info">Info</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">No</div>
                <div class="description">
-                  Displays detailed information about the selected files, including the type of file, who last changed the file, the date file was last changed, the repository URL to the file, and other information.
+                  Displays detailed information about the selected files.
                   Some parameters are configurable via shell variables; see the <a href="#tm_svk_info">Configuration Options</a> section below.
                </div>
             </dd>
-            
-            <dt><a name="diff_head">Diff With Newest (HEAD)</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-               	Displays the differences between the active file and the newest available revision of the file on the server.
-               	Equivalent to <code>svk diff -rHEAD</code>.
-               </div>
-            </dd>
-            
+                        
             <dt><a name="diff_base">Diff With Working Copy (BASE)</a></dt>
             <dd>
                <div class="target">active file</div>
-               <div class="connect">No</div>
                <div class="description">
                   Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
                   Equivalent to <code>svk diff -rBASE</code>.
                </div>
             </dd>
             
-            <dt><a name="diff_prev">Diff With Previous Revision (PREV)</a></dt>
+            <dt><a name="add">Add to Repository</a></dt>
             <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="description">
-                  Displays the differences between the active file and the previous revision of the file.
-                  Equivalent to <code>svk diff -rPREV</code>.
-               </div>
-            </dd>
-
-            <dt><a name="diff_prev">Diff With Revision&hellip;</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                  Displays the differences between the active file and a different revision of the same file. This command presents you with a list of revisions to choose from.
-               </div>
-            </dd>
-
-            <dt><a name="diff_prev">Diff Revisions&hellip;</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                  Displays the differences between two specific revisions of the active file. You will be presented with a list of revisions; please select two.
+                  Adds the targets to the repository.
                </div>
             </dd>
             
             <dt><a name="commit">Commit</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">Yes</div>
                <div class="description">
                     Commits your changed files to the repository. A dialog asks you for the description of
                     your changes; you may also choose to exclude files from the commit by unchecking them.
@@ -176,44 +142,16 @@
                     have no local changes, nothing happens.
                </div>
             </dd>
+
             
-            <dt><a name="add">Add to Repository</a></dt>
+            <dt><a name="update">Update to Newest</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">No</div>
-               <div class="description">
-                  Adds the targets to the repository.
-               </div>
-            </dd>
-            
-            <dt><a name="update">Update to Latest</a></dt>
-            <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">Yes</div>
                <div class="description">
                   Updates the targets with the newest changes from the repository.
                </div>
             </dd>
             
-            <dt><a name="update_project">Update Entire Project</a></dt>
-            <dd>
-               <div class="target">project</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                  If there is a project open, updates all of the files and folders in the project with the newest changes from the repository.
-				  (The folders must be rooted beneath TM_PROJECT_PATH. Projects containing only groups created in TextMate won't work.)
-               </div>
-            </dd>
-
-            <dt><a name="update">Revert to Latest</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">No</div>
-               <div class="description">
-	               Reverts the file to the base revision. Any modifications to the file will be lost.
-               </div>
-            </dd>
-
 
          </dl>
 
@@ -282,8 +220,9 @@
       <h2><a name="authors">Authors</a></h2>
          
          <ul>
-            <li>Chris Thomas (Idea, Status, Diffs, Commit, Add, and Updates)</li>
-            <li>Torsten Becker (Blame, Log, Info, and Revert)</li>
+            <li> <a href="mailto:glasser@mit.edu">David Glasser</a>, ported to SVK from Subversion</li>
+            <li>Chris Thomas (Subversion bundle) (Idea, Status, Diffs, Commit, Add, and Updates)</li>
+            <li>Torsten Becker (Subversion bundle) (Blame, Log, Info, and Revert)</li>
          </ul>
          
    </body>

@@ -1,0 +1,127 @@
+/* helps with the implementation of the changed
+   files list.. */
+.hidden {
+   display: none;
+}
+
+
+table.log {
+   font-size: inherit;
+   width: 100%;
+   margin-bottom: 5px;
+}
+
+
+table.log th {
+   text-align: right;
+   padding-left: 5px;
+   vertical-align: top;
+   white-space: nowrap;
+}
+
+table.log td {
+   vertical-align: top;
+   width: 100%;
+}
+
+
+td.msg_field {
+   font-family: "Bitstream Vera Sans Mono", monospace;
+   font-size: 12px;
+}
+
+
+table.log td ul {
+   list-style-type: none;
+   padding-left: 4px;
+}
+
+/* this the list of changed files: */
+table.log td ul li {
+   font-size: 12px;
+   margin-bottom: 2px;
+   padding: 1px;
+}
+
+
+/* li.added:before, li.modified:before, li.deleted:before { */
+table.log td ul li:before {
+   font-family: "Bitstream Vera Sans Mono", monospace;
+   font-weight: bold;
+}
+
+li.added_added:before {
+   content: 'AA ';
+   color: green;
+}
+li.added_modified:before {
+   content: 'AM ';
+   color: green;
+}
+li.added_deleted:before {
+   content: 'AD ';
+   color: green;
+}
+li.added_none:before {
+   content: 'A ';
+   color: green;
+}
+li.added_added, li.added_modified, li.added_deleted, li.added_none {
+   background-color: #bbffb3;
+}
+
+li.deleted_added:before {
+   content: 'DA ';
+   color: red;
+}
+li.deleted_modified:before {
+   content: 'DM ';
+   color: red;
+}
+li.deleted_deleted:before {
+   content: 'DD ';
+   color: red;
+}
+li.deleted_none:before {
+   content: 'D ';
+   color: red;
+}
+li.deleted_added, li.deleted_modified, li.deleted_deleted, li.deleted_none {
+   background-color: #f59696;
+}
+
+li.modified_added:before {
+   content: 'MA ';
+   color: #eb6400;
+}
+li.modified_modified:before {
+   content: 'MM ';
+   color: #eb6400;
+}
+li.modified_deleted:before {
+   content: 'MD ';
+   color: #eb6400;
+}
+li.modified_none:before {
+   content: 'M ';
+   color: #eb6400;
+}
+li.modified_added, li.modified_modified, li.modified_deleted, li.modified_none {
+   background-color: #f7e1ad;
+}
+
+li.none_added:before {
+   content: '_A ';
+   color: black;
+}
+li.none_modified:before {
+   content: '_M ';
+   color: black;
+}
+li.none_deleted:before {
+   content: '_D ';
+   color: black;
+}
+li.none_added, li.none_modified, li.none_deleted, li.none_none {
+   background-color: blue;
+}

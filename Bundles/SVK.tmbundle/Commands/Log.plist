@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># XXX: svk log doesn't support multiple paths
+#      so if multiple files are selected, it will
+#      only do the first one!
+
+TM_SVK="${TM_SVK:=svk}"
+TM_RUBY="${TM_RUBY:=ruby}"
+FORMAT_LOG="${TM_BUNDLE_PATH}/Tools/format_log.rb"
+TM_SVK_LOG_RANGE="${TM_SVK_LOG_RANGE:=BASE:1}"
+
+if [[ -z $TM_SELECTED_FILES ]]; then
+   "$TM_SVK" log -vr"$TM_SVK_LOG_RANGE" "$TM_FILEPATH" \
+   2&gt;&amp;1| "$TM_RUBY" -- "$FORMAT_LOG"
+else
+   eval "$TM_SVK" log -vr"$TM_SVK_LOG_RANGE" $TM_SELECTED_FILES \
+   2&gt;&amp;1| "$TM_RUBY" -- "$FORMAT_LOG"
+fi</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^A</string>
+	<key>name</key>
+	<string>Log</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>9BF6E13C-C31A-11D9-820C-000A95BCAFA8</string>
+</dict>
+</plist>

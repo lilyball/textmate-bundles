@@ -1,4 +1,4 @@
-# just a small to-html formater for what svn blame gives you.
+# just a small to-html formater for what svk blame gives you.
 # made to be compatible with the ruby version included
 # in 10.3.7 (1.6.8) but runs also with 1.8
 # 

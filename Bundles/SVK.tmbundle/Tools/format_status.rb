@@ -1,8 +1,8 @@
 bundle				= ENV['TM_BUNDLE_PATH']
 work_path			= ENV['WorkPath']
 strip_path_prefix	= work_path # Dir.pwd
-svn			= ENV['TM_SVN']
-svn = "svn" if svn.nil?
+svk			= ENV['TM_SVK']
+svk = "svk" if svk.nil?
 
 require (bundle + "/Tools/Builder.rb")
 
@@ -10,7 +10,8 @@ require (bundle + "/Tools/Builder.rb")
 mup = Builder::XmlMarkup.new(:target => STDOUT)
 
 class << mup
-	
+	# TODO this is the svn StatusMap, really need a new one here
+	#      but these classes aren't used anyway
 	StatusMap = {	'A' => 'added',
 					'D' => 'deleted',
 					'M' => 'modified',
@@ -28,15 +29,15 @@ end
 
 mup.html {
 	mup.head {
-			mup.title("Subversion status")
-			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_style.css';
-						@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
+			mup.title("SVK status")
+			mup.style( "@import 'file://"+bundle+"/Stylesheets/svk_style.css';
+						@import 'file://"+bundle+"/Stylesheets/svk_status_style.css';", "type" => "text/css")
 	}
 
 	mup.body { 
-		mup.h1("Subversion Status for '#{File.basename(work_path)}'")
+		mup.h1("SVK Status for '#{File.basename(work_path)}'")
 #		mup.hr
-		mup.div("class" => "command"){ mup.strong("#{svn} status"); mup.text!(" " + work_path) } #mup.text!("checking "); 
+		mup.div("class" => "command"){ mup.strong("#{svk} status"); mup.text!(" " + work_path) } #mup.text!("checking "); 
 		STDOUT.flush
 		mup.hr
 
@@ -44,8 +45,8 @@ mup.html {
 			STDIN.each_line do |line|
 				
 				mup.tr {
-					if /^svn:/.match( line ).nil? then
-						match = /^(.....)(?:\s+)(.*)\n/.match( line )
+					if /^svk:/.match( line ).nil? then
+						match = /^(...) (.*)/.match( line )
 					
 						if match.nil? then
 							mup.td(line)
@@ -54,7 +55,7 @@ mup.html {
 							file	= match[2]
 							
 							mup.td_status!(status)
-							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathanme" ) }
+							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathname" ) }
 						end 
 					else
 						mup.td { mup.div( line, "class" => "error" ) }

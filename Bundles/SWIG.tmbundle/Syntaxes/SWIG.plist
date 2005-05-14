@@ -2,7 +2,7 @@
     name = "SWIG";
     scopeName = "source.swig";
 
-    fileTypes = ( i );
+    fileTypes = ( i, swg );
 
     uuid = "C781B0D0-BED9-11D9-A141-000393A143CC";
 
@@ -12,7 +12,6 @@
     patterns = (
         // SWIG files contain C code, so it's logical to derive from the C rules
         { include = "source.c"; },
-
         { name = "keyword.directive.inlinecode.swig";
           match = "%(header|init|inline|native|runtime|wrapper)\\b"; },
         { name = "keyword.function.parameter.swig";
@@ -21,30 +20,27 @@
           match = "\\b(in|out|typecheck|arginit|default|check|argout|freearg|newfree|memberin|varin|varout|throws|numinputs)\\b";
         },
         { name = "keyword.directive.swig";
-          match = "%(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|makedefault|module|nocallback|nodefault|rename|typemap|varargs)\\b"; },
-        { name = "macro.swig";
-          match = "%(aggregate_check|allocators|array_class|array_functions|calloc|cdata|cstring_bounded_output|cstring_bounded_mutable|cstring_chunk_output|cstring_mutable|cstring_output_allocate|cstring_output_allocate_size|cstring_output_maxsize|cstring_output_withsize|free|malloc|newobject|pointer_class|pointer_cast|realloc|sizeof)\\b";
-          fontStyle = ( italic );
+          match = "%(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|insert|makedefault|module|nocallback|nodefault|rename|typemap|varargs)\\b"; },
+        { name = "keyword.preprocessor";
+          match = "\\(\\s*(allegrocl|chicken|csharp|guile|java|modula3|mzscheme|ocaml|perl|php|pike|python|ruby|sexp|tcl|xml)\\b";
+          captures = { 1 = { name = "directive"; }; };
         },
-        { name = "keyword.preprocessor.swig.includes";
-            begin = "^\\s*%\\s*(include|import)\\b\\s+\"([A-Za-z_\\.]+)\"";
-            end = "$";
-        	captures = {
+        { name = "keyword.preprocessor";
+          begin = "^\\s*%\\s*(include|import)\\b\\s+\"?([A-Za-z0-9\\._]+)\"?";
+          end = "$";
+          captures = {
         	    1 = { name = "directive"; };
         	    2 = { name = "filename"; };
-        	};
+          };
+        },
+        { name = "keyword.preprocessor.swig.macro";
+          match = "%([A-Za-z]+[A-Za-z0-9_]*)\\b";
         },
         { name = "constant.swig";
           match = "\\bSWIG_TYPECHECK_(POINTER|VOIDPTR|BOOL|UINT8|INT8|UINT16|INT16|UINT32|INT32|UINT64|INT64|UINT128|INT128|INTEGER|FLOAT|DOUBLE|COMPLEX|UNICHAR|UNISTRING|CHAR|STRING|BOOL_ARRAY|INT8_ARRAY|INT16_ARRAY|INT32_ARRAY|INT64_ARRAY|INT128_ARRAY|FLOAT_ARRAY|DOUBLE_ARRAY|CHAR_ARRAY|STRING_ARRAY)\\b";
         },
         { name = "source.swig.codeblock";
           match = "(%\\{|%\\})";
-        },
-        { name = "keyword.preprocessor";
-          match = "\\(\\s*(allegrocl|chicken|csharp|guile|java|modula3|mzscheme|ocaml|perl|php|pike|python|ruby|sexp|tcl|xml)\\b";
-          captures = {
-              1 = { name = "directive"; };
-          };
         },
     );
 }

@@ -1,6 +1,6 @@
 {
     fileTypes = (html, htm, shtml, xhtml, rhtml); 
-    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)"; 
+    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\b.*?>|\\{)"; 
     foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
     keyEquivalent = "^~H"; 
     name = "HTML (Basic)"; 
@@ -82,13 +82,13 @@
             patterns = ({include = "source.php"; }); 
         }, 
         {   name = "source.css.embedded.html"; 
-            begin = "(?:^\\s+)?<((?i:style))\\>(?![^>]*/>)[^>]*>?"; 
-            end = "</((?i:style))>(?:\\s+$)?"; 
+            begin = "(?:^\\s+)?<((?i:style))\\b(?![^>]*/>)[^>]*>?"; 
+            end = "</((?i:style))>(?:\\s+$)?\\n?"; 
             captures = { 1 = { name = "entity.name.tag.html"; }; };
             patterns = ({include = "source.css"; }); 
         }, 
         {   name = "source.js.embedded.html"; 
-            begin = "(?:^\\s+)?<((?i:script))\\>(?![^>]*/>)[^>]*>?"; 
+            begin = "(?:^\\s+)?<((?i:script))\\b(?![^>]*/>)[^>]*>?"; 
             end = "</((?i:script))>(?:\\s+$)?"; 
             captures = { 1 = { name = "entity.name.tag.html"; }; };
             patterns = ({include = "source.js"; }); 

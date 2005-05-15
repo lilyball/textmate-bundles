@@ -22,11 +22,11 @@
 		    match = "(?:\\s*)\\[(?:\\s*)(.*)(?:\\s*);";
 		    captures = { 1 = { name = "entity.name.function"; }; };
 		},
-		{ name = "constant.numeric.inform"; match = "\\<((\\$[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; },
+		{ name = "constant.numeric.inform"; match = "\\b((\\$[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"; },
 		{ name = "string.single-quoted.inform"; begin = "'"; end = "'"; swallow = "\\\\."; },
         { name = "string.double-quoted.inform"; begin = "\""; end = "\""; },
-		{ name = "keyword.control.inform"; match = "\\<(box|break|continue|do|else|font(\\s+)(on|off)|for|give|if|jump|new_line|objectloop|print|print_ret|remove|return|rfalse|rtrue|spaces|string|style(\\s+)(roman|bold|underline|reverse|fixed)|switch|until|while|has|hasnt|in|notin|ofclass|provides|or)\\>";},
-		{ name = "keyword.directives.inform"; match = "\\<(Abbreviate|Array|Attribute|Class|Constant|Default|End|Endif|Extend|Global|Ifdef|Ifndef|Ifnot|Iftrue|Iffalse|Import|Include|Link|Lowstring|Message|Object|Property|Release|Replace|Serial|Switches|Statusline(\\s+)(score|time)|System_file|Verb|Zcharacter)\\>"; },
+		{ name = "keyword.control.inform"; match = "\\b(box|break|continue|do|else|font(\\s+)(on|off)|for|give|if|jump|new_line|objectloop|print|print_ret|remove|return|rfalse|rtrue|spaces|string|style(\\s+)(roman|bold|underline|reverse|fixed)|switch|until|while|has|hasnt|in|notin|ofclass|provides|or)\\b";},
+		{ name = "keyword.directives.inform"; match = "\\b(Abbreviate|Array|Attribute|Class|Constant|Default|End|Endif|Extend|Global|Ifdef|Ifndef|Ifnot|Iftrue|Iffalse|Import|Include|Link|Lowstring|Message|Object|Property|Release|Replace|Serial|Switches|Statusline(\\s+)(score|time)|System_file|Verb|Zcharacter)\\b"; },
 	);
 	uuid = "1510B8C7-6B1D-11D9-B82B-000D93589AF6";
 }

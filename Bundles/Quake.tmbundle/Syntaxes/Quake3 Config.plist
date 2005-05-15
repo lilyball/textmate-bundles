@@ -15,13 +15,13 @@
       // binds to number-keys and prevent them from getting
       // highlighted as values.
       {  name = "keyword.quake3";
-         match = "\\<(set(a|u|s)?|bind|undbind|unbindall|vstr|exec|kill|say|say_team|quit|echo)(\\s+\\d)?\\>";
+         match = "\\b(set(a|u|s)?|bind|undbind|unbindall|vstr|exec|kill|say|say_team|quit|echo)(\\s+\\d)?\\b";
          foregroundColor = "#a072d0";
          "foregroundColor[2]" = "#eeeeee";
       },
       
       {  name = "constant.numeric.quake3";
-         match = "\\<\\d+(\\.\\d+)?\\>";
+         match = "\\b\\d+(\\.\\d+)?\\b";
          foregroundColor = "#b4f00a";
       },
       
@@ -31,7 +31,7 @@
          swallow = "\\\\.";
          patterns = (
             {  name = "keyword.string-embedded.quake3";
-               match = "\\<(set(a|u|s)?|bind|unbindall|vstr|exec|kill|say|say_team|quit|echo)\\>";
+               match = "\\b(set(a|u|s)?|bind|unbindall|vstr|exec|kill|say|say_team|quit|echo)\\b";
                foregroundColor = "#2aed27";
             }
          );

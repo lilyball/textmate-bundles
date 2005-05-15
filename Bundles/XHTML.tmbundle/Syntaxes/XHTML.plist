@@ -1,6 +1,6 @@
 {
     fileTypes = (html, htm, tmpl, tpl, php); 
-    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)"; 
+    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\b.*?>|\\{)"; 
     foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
     keyEquivalent = "@\Uf704"; 
     name = "XHTML (v1)"; 
@@ -28,13 +28,13 @@
             patterns = ({include = "source.php"; }); 
         }, 
         {
-            begin = "(^\\s+)?<(?i:style)\\>.*?>?"; 
+            begin = "(^\\s+)?<(?i:style)\\b.*?>?"; 
             end = "</(?i:style)>(\\s+$)?"; 
             name = "source.css.embedded.xhtml"; 
             patterns = ({include = "source.css"; }); 
         }, 
         {
-            begin = "(^\\s+)?<(?i:script)\\>.*?>?"; 
+            begin = "(^\\s+)?<(?i:script)\\b.*?>?"; 
             end = "</(?i:script)>(\\s+$)?"; 
             name = "source.js.embedded.xhtml"; 
             patterns = ({include = "source.js"; }); 

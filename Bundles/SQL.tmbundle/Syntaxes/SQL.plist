@@ -55,11 +55,11 @@
         },
 
 		{   name = "keyword.data-integrity.sql";
-		    match = "(?i:\\<(primary\\s+key|references|on\\sdelete(\\s+cascade)?|check)\\>)";
+		    match = "(?i:\\b(primary\\s+key|references|on\\sdelete(\\s+cascade)?|check)\\b)";
 		},
 
 		{   name = "keyword.data-integrity.sql.II";
-		    match = "(?i:\\<in\\>)";
+		    match = "(?i:\\bin\\b)";
 		},
 	
 		{   name = "string.single-quoted.sql";

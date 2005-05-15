@@ -17,41 +17,41 @@
     patterns = (
         // ok actually this are instructions, but one also could call them funtions..
         {   name = "keyword.function.mips.pseudo";
-            match = "\\<(mul|abs|div|divu|mulo|mulou|neg|negu|not|rem|remu|rol|ror|li|seq|sge|sgeu|sgt|sgtu|sle|sleu|sne|b|beqz|bge|bgeu|bgt|bgtu|ble|bleu|blt|bltu|bnez|la|ld|ulh|ulhu|ulw|sd|ush|usw|move|mfc1\\.d|l\\.d|l\\.s|s\\.d|s\\.s)\\>";
+            match = "\\b(mul|abs|div|divu|mulo|mulou|neg|negu|not|rem|remu|rol|ror|li|seq|sge|sgeu|sgt|sgtu|sle|sleu|sne|b|beqz|bge|bgeu|bgt|bgtu|ble|bleu|blt|bltu|bnez|la|ld|ulh|ulhu|ulw|sd|ush|usw|move|mfc1\\.d|l\\.d|l\\.s|s\\.d|s\\.s)\\b";
             foregroundColor = "#0d93df";
         },
         
         {   name = "keyword.function.mips";
-            match = "\\<(abs\\.d|abs\\.s|add|add\\.d|add\\.s|addi|addiu|addu|and|andi|bc1f|bc1t|beq|bgez|bgezal|bgtz|blez|bltz|bltzal|bne|break|c\\.eq\\.d|c\\.eq\\.s|c\\.le\\.d|c\\.le\\.s|c\\.lt\\.d|c\\.lt\\.s|ceil\\.w\\.d|ceil\\.w\\.s|clo|clz|cvt\\.d\\.s|cvt\\.d\\.w|cvt\\.s\\.d|cvt\\.s\\.w|cvt\\.w\\.d|cvt\\.w\\.s|div|div\\.d|div\\.s|divu|eret|floor\\.w\\.d|floor\\.w\\.s|j|jal|jalr|jr|lb|lbu|lh|lhu|ll|lui|lw|lwc1|lwl|lwr|madd|maddu|mfc0|mfc1|mfhi|mflo|mov\\.d|mov\\.s|movf|movf\\.d|movf\\.s|movn|movn\\.d|movn\\.s|movt|movt\\.d|movt\\.s|movz|movz\\.d|movz\\.s|msub|mtc0|mtc1|mthi|mtlo|mul|mul\\.d|mul\\.s|mult|multu|neg\\.d|neg\\.s|nop|nor|or|ori|round\\.w\\.d|round\\.w\\.s|sb|sc|sdc1|sh|sll|sllv|slt|slti|sltiu|sltu|sqrt\\.d|sqrt\\.s|sra|srav|srl|srlv|sub|sub\\.d|sub\\.s|subu|sw|swc1|swl|swr|syscall|teq|teqi|tge|tgei|tgeiu|tgeu|tlt|tlti|tltiu|tltu|trunc\\.w\\.d|trunc\\.w\\.s|xor|xori)\\>";
+            match = "\\b(abs\\.d|abs\\.s|add|add\\.d|add\\.s|addi|addiu|addu|and|andi|bc1f|bc1t|beq|bgez|bgezal|bgtz|blez|bltz|bltzal|bne|break|c\\.eq\\.d|c\\.eq\\.s|c\\.le\\.d|c\\.le\\.s|c\\.lt\\.d|c\\.lt\\.s|ceil\\.w\\.d|ceil\\.w\\.s|clo|clz|cvt\\.d\\.s|cvt\\.d\\.w|cvt\\.s\\.d|cvt\\.s\\.w|cvt\\.w\\.d|cvt\\.w\\.s|div|div\\.d|div\\.s|divu|eret|floor\\.w\\.d|floor\\.w\\.s|j|jal|jalr|jr|lb|lbu|lh|lhu|ll|lui|lw|lwc1|lwl|lwr|madd|maddu|mfc0|mfc1|mfhi|mflo|mov\\.d|mov\\.s|movf|movf\\.d|movf\\.s|movn|movn\\.d|movn\\.s|movt|movt\\.d|movt\\.s|movz|movz\\.d|movz\\.s|msub|mtc0|mtc1|mthi|mtlo|mul|mul\\.d|mul\\.s|mult|multu|neg\\.d|neg\\.s|nop|nor|or|ori|round\\.w\\.d|round\\.w\\.s|sb|sc|sdc1|sh|sll|sllv|slt|slti|sltiu|sltu|sqrt\\.d|sqrt\\.s|sra|srav|srl|srlv|sub|sub\\.d|sub\\.s|subu|sw|swc1|swl|swr|syscall|teq|teqi|tge|tgei|tgeiu|tgeu|tlt|tlti|tltiu|tltu|trunc\\.w\\.d|trunc\\.w\\.s|xor|xori)\\b";
             foregroundColor = "#05e0e0";
         },
         
         {   name = "keyword.storage.mips.assembler-directive";
-            match = "\\.(align|ascii|asciiz|byte|data|double|extern|float|globl|half|kdata|ktext|space|text|word|set\\s*(noat|at))\\>";
+            match = "\\.(align|ascii|asciiz|byte|data|double|extern|float|globl|half|kdata|ktext|space|text|word|set\\s*(noat|at))\\b";
         },
         
         {   name = "declaration.function.label.mips";
-            match = "\\<([A-Za-z0-9_]+):";
+            match = "\\b([A-Za-z0-9_]+):";
             captures = { 1 = { name = "entity.name.function.label.mips"; }; };
         },
         
         {   name = "variable.register.mips.usable.by-number";
-            match = "\\$(0|[2-9]|1[0-9]|2[0-5]|2[89]|3[0-1])\\>";
+            match = "\\$(0|[2-9]|1[0-9]|2[0-5]|2[89]|3[0-1])\\b";
             foregroundColor = "#cf8d15";
         },
         
         {   name = "variable.register.mips.usable.by-name";
-            match = "\\$(zero|v[01]|a[0-3]|t[0-9]|s[0-7]|gp|sp|fp|ra)\\>";
+            match = "\\$(zero|v[01]|a[0-3]|t[0-9]|s[0-7]|gp|sp|fp|ra)\\b";
             foregroundColor = "#c65b38";
         },
         
         {   name = "variable.register.mips.reserved";
-            match = "\\$(at|k[01]|1|2[67])\\>";
+            match = "\\$(at|k[01]|1|2[67])\\b";
             foregroundColor = "#ff6fcf";
         },
         
         {   name = "variable.register.mips.usable.floating-point";
-            match = "\\$f([0-9]|1[0-9]|2[0-9]|3[0-1])\\>";
+            match = "\\$f([0-9]|1[0-9]|2[0-9]|3[0-1])\\b";
             foregroundColor = "#cccc33";
         },
         
@@ -61,11 +61,11 @@
         },*/
         
         {   name = "constant.numeric.float.mips";
-            match = "\\<\\d+\\.\\d+\\>";
+            match = "\\b\\d+\\.\\d+\\b";
         },
         
         {   name = "constant.numeric.integer.mips";
-            match = "\\<(\\d+|0(x|X)[a-fA-F0-9]+)\\>";
+            match = "\\b(\\d+|0(x|X)[a-fA-F0-9]+)\\b";
         },
         
         {   name = "string.double-quoted.mips";

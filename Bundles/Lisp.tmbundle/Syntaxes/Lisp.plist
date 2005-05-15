@@ -30,7 +30,7 @@
 		
 		{
 			name = "declaration.function.lisp";
-			match = "(\\<(?i:(defun|defmethod|defmacro))\\>)(\\s+)((\\w|\\-|\\!|\\?)*)";
+			match = "(\\b(?i:(defun|defmethod|defmacro))\\b)(\\s+)((\\w|\\-|\\!|\\?)*)";
 				captures = {
 				    2 = { name = "keyword.storage.function-type.lisp"; };
 				    4 = { name = "entity.name.function.lisp"; };
@@ -61,8 +61,8 @@
 			match = "\\*(\\S*)\\*";
 		},
 		
-		{ name = "keyword.lisp"; match = "\\<(?i:case|car|cdr|cons|cond|loop|lambda|format|setq|setf|quote|do|eval|append|let|list|listp|null|memberp|nil|t||load|loop|if|else|eq|neq|and|or|when|progn)\\>"; },
-		{ name = "constant.numeric.lisp"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>";},
+		{ name = "keyword.lisp"; match = "\\b(?i:case|car|cdr|cons|cond|loop|lambda|format|setq|setf|quote|do|eval|append|let|list|listp|null|memberp|nil|t||load|loop|if|else|eq|neq|and|or|when|progn)\\b"; },
+		{ name = "constant.numeric.lisp"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b";},
 		{ name = "string.double-quoted.lisp"; begin = "\""; end = "\""; swallow = "\\\\."; },
 	);
 	uuid = "00D451C9-6B1D-11D9-8DFA-000D93589AF6";

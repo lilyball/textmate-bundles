@@ -14,12 +14,12 @@
     foldingStopMarker = "\\}";
 
 	patterns = (
-		{   name = "declaration.function.shell"; match = "\\<([^ \\t\\n]*)\\s*\\(\\)";
+		{   name = "declaration.function.shell"; match = "\\b([^ \\t\\n]*)\\s*\\(\\)";
 		    captures = { 1 = { name = "entity.name.function"; }; };
 		},
-		{   name = "keyword.control.shell"; match = "\\<(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\\>"; },
-		{   name = "keyword.storage.shell"; match = "\\<(?:export)\\>"; },
-//		{   name = "constant.numeric.shell"; match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; foregroundColor = "#F0F8FF"; },
+		{   name = "keyword.control.shell"; match = "\\b(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\\b"; },
+		{   name = "keyword.storage.shell"; match = "\\b(?:export)\\b"; },
+//		{   name = "constant.numeric.shell"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"; foregroundColor = "#F0F8FF"; },
 		{   name = "string.single-quoted.shell"; begin = "'"; end = "'"; },
         {   name = "string.double-quoted.shell"; begin = "\""; end = "\"";  swallow = "\\\\."; },
         {   name = "string.backticked.shell"; begin = "`"; end = "`"; swallow = "\\\\."; },

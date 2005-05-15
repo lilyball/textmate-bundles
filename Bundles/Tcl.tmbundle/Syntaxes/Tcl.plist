@@ -27,12 +27,12 @@
         {   
             name = "keyword.tcl";
             "foregroundColor[1]" = "#CC7833";
-            match = "(?:^|[[{;])\\s*(eval|expr|if|while|for|file|string|catch|source|info|set|unset|pid|global|array|puts|gets|read|open|close|socket|eof|fconfigure|parray|return|break|continue|switch|package|proc|exit|glob|regexp|regsub|foreach|llength|lindex|concat|list|split|join|incr|error)\\>";
+            match = "(?:^|[[{;])\\s*(eval|expr|if|while|for|file|string|catch|source|info|set|unset|pid|global|array|puts|gets|read|open|close|socket|eof|fconfigure|parray|return|break|continue|switch|package|proc|exit|glob|regexp|regsub|foreach|llength|lindex|concat|list|split|join|incr|error)\\b";
         },
 		{
 			name = "keyword.if.tcl";
 			"foregroundColor[1]" = "#CC7833";
-			match = "(?:^|})\\s*(then|elseif|else)\\>";
+			match = "(?:^|})\\s*(then|elseif|else)\\b";
 		},
 		{
 			name = "dummy.escapes.tcl";

@@ -32,7 +32,7 @@
 		{
 			name = "symbols.fscript";
 			foregroundColor = "#234B9E";
-			match = ":\\w+\\>";
+			match = ":\\w+\\b";
 		},
 		{
 			name = "blocks.compact.fscript";
@@ -42,7 +42,7 @@
 		{
 			name = "keyword.storage.fscript";
 			foregroundColor = "#662288";
-			match = "\\<(true|YES|false|NO|sys|nil)\\>";
+			match = "\\b(true|YES|false|NO|sys|nil)\\b";
 		},
 		{
 			name = "comment.block.quotes.fscript";
@@ -58,7 +58,7 @@
 		},
 		{
 			foregroundColor = "#0000CD";
-			match = "\\<((([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\>";
+			match = "\\b((([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b";
 			name = "constant.numeric.fscript";
 		},
 	);

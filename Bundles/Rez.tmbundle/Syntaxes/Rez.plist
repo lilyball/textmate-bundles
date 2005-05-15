@@ -22,15 +22,15 @@
 		
 		// Note that Xcode gets case sensitivity wrong (last checked Xcode 2.0).
 		// I'm not sure built-in functions are case-insensitive, though, so we might too.
-		{ name = "keyword.control.rez"; match = "\\<(?i:(change|data|delete|include|read|resource|type))\\>"; },
-		{ name = "keyword.storage.rez"; match = "\\<(?i:(align|array|binary|bit|bitstring|boolean|byte|case|char|cstring|decimal|enum|fill|hex|integer|key|literal|long|longint|nibble|octal|point|pstring|rect|string|switch|unsigned|wide|word|wstring))\\>"; },
-		{ name = "keyword.attributes.rez"; match = "\\<(?i:(appheap|locked|nonpurgeable|purgeable|sysheap|unlocked))\\>"; },
+		{ name = "keyword.control.rez"; match = "\\b(?i:(change|data|delete|include|read|resource|type))\\b"; },
+		{ name = "keyword.storage.rez"; match = "\\b(?i:(align|array|binary|bit|bitstring|boolean|byte|case|char|cstring|decimal|enum|fill|hex|integer|key|literal|long|longint|nibble|octal|point|pstring|rect|string|switch|unsigned|wide|word|wstring))\\b"; },
+		{ name = "keyword.attributes.rez"; match = "\\b(?i:(appheap|locked|nonpurgeable|purgeable|sysheap|unlocked))\\b"; },
 		{ name = "keyword.function.built-in.rez"; match = "\\$\\$(?i:(ArrayIndex|Attributes|BitField|Byte|CountOf|Date|Day|Format|Hour|ID|Long|Minute|Month|Name|PackedSize|Read|Resource|ResourceSize|Second|Shell|Time|Type|Version|Weekday|Word|Year))"; },
-		{ name = "constant.numeric.rez"; match = "\\<(((0(x|X|B)|\\\$)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\>"; },
+		{ name = "constant.numeric.rez"; match = "\\b(((0(x|X|B)|\\\$)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b"; },
 		{ name = "string.double-quoted.rez"; begin = "\""; end = "\""; swallow = "\\\\."; },
 		{ name = "string.single-quoted.rez"; begin = "'"; end = "'"; swallow = "\\\\."; },
 		{ name = "string.hex.rez"; begin = "\\\$\""; end = "\""; swallow = "\\\\."; },
-		{ name = "keyword.preprocessor.rez"; match = "^\\s*#\\s*(define|defined|else|elif|endif|if|ifdef|ifndef|include|line|printf|undef)\\>";},
+		{ name = "keyword.preprocessor.rez"; match = "^\\s*#\\s*(define|defined|else|elif|endif|if|ifdef|ifndef|include|line|printf|undef)\\b";},
 	);
 	uuid = "F3EB29E9-8DB7-4052-9D48-5CDD2491D8D3";
 }

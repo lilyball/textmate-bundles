@@ -25,18 +25,18 @@
         {
             fontStyle = (bold); 
             foregroundColor = "#4444ff";
-            match = "\\<(abstract|as|base|break|case|catch|checked|const|continue|default|delegate|do|else|event|explicit|extern|false|finally|fixed|for|foreach|goto|if|implicit|in|internal|is|lock|namespace|new|null|operator|out|override|params|private|protected|public|readonly|ref|return|sealed|sizeof|stackalloc|static|switch|this|throw|true|try|typeof|unckecked|unsafe|using|virtual|volatile|void|while)\\>"; 
+            match = "\\b(abstract|as|base|break|case|catch|checked|const|continue|default|delegate|do|else|event|explicit|extern|false|finally|fixed|for|foreach|goto|if|implicit|in|internal|is|lock|namespace|new|null|operator|out|override|params|private|protected|public|readonly|ref|return|sealed|sizeof|stackalloc|static|switch|this|throw|true|try|typeof|unckecked|unsafe|using|virtual|volatile|void|while)\\b"; 
             name = "keyword.control.c#"; 
         }, 
         {
             fontStyle = (bold); 
             foregroundColor = "#2222ff"; 
-            match = "\\<(bool|byte|char|class|decimal|double|enum|float|int|nterface|long|object|sbyte|short|string|struct|uint|ulong|ushort)\\>"; 
+            match = "\\b(bool|byte|char|class|decimal|double|enum|float|int|nterface|long|object|sbyte|short|string|struct|uint|ulong|ushort)\\b"; 
             name = "keyword.storage.c#"; 
         }, 
         {
             foregroundColor = "#ffffff"; 
-            match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\>"; 
+            match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"; 
             name = "constant.numeric.c#"; 
         }, 
         {
@@ -55,7 +55,7 @@
         }, 
         {
             fontStyle = (bold); 
-            match = "^#\\s*(if|else|elif|endif|define|undef|warning|error|line|region|endregion)\\>"; 
+            match = "^#\\s*(if|else|elif|endif|define|undef|warning|error|line|region|endregion)\\b"; 
             name = "keyword.preprocessor.c#"; 
         }
     ); 

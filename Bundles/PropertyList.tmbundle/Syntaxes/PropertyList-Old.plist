@@ -12,7 +12,7 @@
             match = "//.*$"; 
         }, 
         {   name = "constant.numeric.old-plist"; 
-            match = "\\<[0-9]+\\>";
+            match = "\\b[0-9]+\\b";
         }, 
         {   name = "string.single-quoted.old-plist"; 
             begin = "'"; end = "'"; swallow = "\\\\."; 

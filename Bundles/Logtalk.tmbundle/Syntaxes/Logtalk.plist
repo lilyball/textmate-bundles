@@ -64,7 +64,7 @@
             name = "keyword.operator.bitwise"; 
         }, 
         {
-            match = "\\<(mod|rem)\\>"; 
+            match = "\\b(mod|rem)\\b"; 
             name = "keyword.operator.evaluable"; 
         }, 
         {
@@ -72,115 +72,115 @@
             name = "keyword.operator.evaluable"; 
         }, 
         {
-            match = "(:-|!|\\\\+|,|;|-->|->|=|\\=|\\.|=\\.\\.|\\<is\\>)"; 
+            match = "(:-|!|\\\\+|,|;|-->|->|=|\\=|\\.|=\\.\\.|\\bis\\b)"; 
             name = "keyword.operator.misc"; 
         }, 
         {
-            match = "\\<(true|fail|repeat)\\>"; 
+            match = "\\b(true|fail|repeat)\\b"; 
             name = "keyword.predicate.control"; 
         }, 
         {
-            match = "\\<(ca(ll|tch)|throw|once)(?=[(])"; 
+            match = "\\b(ca(ll|tch)|throw|once)(?=[(])"; 
             name = "keyword.predicate.control"; 
         }, 
         {
-            match = "\\<((get|peek|put)_(char|code|byte)|nl)(?=[(])"; 
+            match = "\\b((get|peek|put)_(char|code|byte)|nl)(?=[(])"; 
             name = "keyword.predicate.chars-and-bytes-io"; 
         }, 
         {
-            match = "\\<nl\\>"; 
+            match = "\\bnl\\b"; 
             name = "keyword.predicate.chars-and-bytes-io"; 
         }, 
         {
-            match = "\\<(atom_(length|concat|chars|codes)|sub_atom|char_code|number_(chars|codes))(?=[(])"; 
+            match = "\\b(atom_(length|concat|chars|codes)|sub_atom|char_code|number_(chars|codes))(?=[(])"; 
             name = "keyword.predicate.atom-term-processing"; 
         }, 
         {
-            match = "\\<(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])"; 
+            match = "\\b(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])"; 
             name = "keyword.predicate.term-testing"; 
         }, 
         {
-            match = "\\<(read_term|read|write|writeq|write_(canonical|term)|op|current_op|char_conversion|current_char_conversion)(?=[(])"; 
+            match = "\\b(read_term|read|write|writeq|write_(canonical|term)|op|current_op|char_conversion|current_char_conversion)(?=[(])"; 
             name = "keyword.predicate.term-io"; 
         }, 
         {
-            match = "\\<(arg|copy_term|functor)(?=[(])"; 
+            match = "\\b(arg|copy_term|functor)(?=[(])"; 
             name = "keyword.predicate.term-creation-and-decomposition"; 
         }, 
         {
-            match = "\\<(unify_with_occurs_check)(?=[(])"; 
+            match = "\\b(unify_with_occurs_check)(?=[(])"; 
             name = "keyword.predicate.term-unification"; 
         }, 
         {
-            match = "\\<((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])"; 
+            match = "\\b((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])"; 
             name = "keyword.predicate.stream-selection-and-control"; 
         }, 
         {
-            match = "\\<(flush_output|at_end_of_stream)\\>"; 
+            match = "\\b(flush_output|at_end_of_stream)\\b"; 
             name = "keyword.predicate.stream-selection-and-control"; 
         }, 
         {
-            match = "\\<((set|current)_prolog_flag)(?=[(])"; 
+            match = "\\b((set|current)_prolog_flag)(?=[(])"; 
             name = "keyword.predicate.prolog-flags"; 
         }, 
         {
-            match = "\\<(logtalk_(compile|l(ibrary_path|oad)))(?=[(])"; 
+            match = "\\b(logtalk_(compile|l(ibrary_path|oad)))(?=[(])"; 
             name = "keyword.predicate.compiling-and-loading"; 
         }, 
         {
-            match = "\\<((abolish|define)_events|current_event)(?=[(])"; 
+            match = "\\b((abolish|define)_events|current_event)(?=[(])"; 
             name = "keyword.predicate.event-handling"; 
         }, 
         {
-            match = "\\<((current|set)_logtalk_flag|halt)(?=[(])"; 
+            match = "\\b((current|set)_logtalk_flag|halt)(?=[(])"; 
             name = "keyword.predicate.hooks.implementation-defined"; 
         }, 
         {
-            match = "\\<(halt)\\>"; 
+            match = "\\b(halt)\\b"; 
             name = "keyword.predicate.hooks.implementation-defined"; 
         }, 
         {
-            match = "\\<((create|abolish)_(object|protocol|category))(?=[(])"; 
+            match = "\\b((create|abolish)_(object|protocol|category))(?=[(])"; 
             name = "keyword.predicate.entity-creation-and-abolishing"; 
         }, 
         {
-            match = "\\<(current_(object|protocol|category)|(object|protocol|category)_property||extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])"; 
+            match = "\\b(current_(object|protocol|category)|(object|protocol|category)_property||extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])"; 
             name = "keyword.predicate.reflection"; 
         }, 
         {
-            match = "\\<((for|retract)all)(?=[(])"; 
+            match = "\\b((for|retract)all)(?=[(])"; 
             name = "keyword.predicate.misc"; 
         }, 
         {
-            match = "\\<(parameter|se(lf|nder)|this)(?=[(])"; 
+            match = "\\b(parameter|se(lf|nder)|this)(?=[(])"; 
             name = "keyword.predicate.execution-context"; 
         }, 
         {
-            match = "\\<(abolish|assert(a|z)|clause|retract|retractall)(?=[(])"; 
+            match = "\\b(abolish|assert(a|z)|clause|retract|retractall)(?=[(])"; 
             name = "keyword.predicate.database"; 
         }, 
         {
-            match = "\\<((bag|set)of|f(ind|or)all)(?=[(])"; 
+            match = "\\b((bag|set)of|f(ind|or)all)(?=[(])"; 
             name = "keyword.predicate.all-solutions"; 
         }, 
         {
-            match = "\\<(current_predicate|predicate_property)(?=[(])"; 
+            match = "\\b(current_predicate|predicate_property)(?=[(])"; 
             name = "keyword.predicate.reflection"; 
         }, 
         {
-            match = "\\<(before|after)(?=[(])"; 
+            match = "\\b(before|after)(?=[(])"; 
             name = "keyword.predicate.event-handler"; 
         }, 
         {
-            match = "\\<(expand_term|phrase)(?=[(])"; 
+            match = "\\b(expand_term|phrase)(?=[(])"; 
             name = "keyword.predicate.grammar-rule"; 
         }, 
         {
-            match = "\\<(0'[0-9a-zA-Z]|0b[0-1]+|0o[0-7]+|0x[0-9a-fA-F]+)\\>"; 
+            match = "\\b(0'[0-9a-zA-Z]|0b[0-1]+|0o[0-7]+|0x[0-9a-fA-F]+)\\b"; 
             name = "constant.numeric"; 
         }, 
         {
-            match = "\\<([0-9]+\\.?[0-9]*((e|E)(\\+|-)[0-9]+)?)\\>"; 
+            match = "\\b([0-9]+\\.?[0-9]*((e|E)(\\+|-)[0-9]+)?)\\b"; 
             name = "constant.numeric"; 
         }, 
         {
@@ -196,7 +196,7 @@
             swallow = "\\\\."; 
         }, 
         {
-            match = "\\<(\\u|_)\\w*\\>"; 
+            match = "\\b(\\u|_)\\w*\\b"; 
             name = "variable"; 
         }
     ); 

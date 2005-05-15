@@ -5,7 +5,7 @@
 	patterns = (
 		{ name = "keyword.variable.makefile"; match = "^(\\w|[-_])+\\s*=.*"; },
 		{ name = "comment.line.makefile"; match = "^#.*"; },
-		{ name = "keyword.control.makefile"; match = "^(\\s*)\\<(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\>";},
+		{ name = "keyword.control.makefile"; match = "^(\\s*)\\b(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\b";},
 		{
 		    name = "declaration.function.makefile";
     		match = "^([^\\t ]+:(?!\\=))\\s*.*";

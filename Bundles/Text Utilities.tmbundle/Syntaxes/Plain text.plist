@@ -9,5 +9,21 @@
         { name = "declaration.bullet-point.strong"; match = "^\\s*•.*$"; },
         { name = "declaration.bullet-point.light"; match = "^\\s*·.*$"; },
         { name = "declaration.bullet-point.star"; match = "^\\s*\\*.*$"; },
+        { name = "text.html";
+          begin = "%\\{<(?i:HTML)>"; end = "</(?i:HTML)>\\}%";
+          patterns = ( { include = "text.html.basic"; } );
+        },
+        { name = "source.shell";
+          begin = "%\\{<(?i:Shell)>"; end = "</(?i:Shell)>\\}%";
+          patterns = ( { include = "source.shell"; } );
+        },
+        { name = "source.objc";
+          begin = "%\\{<(?i:Objective-C)>"; end = "</(?i:Objective-C)>\\}%";
+          patterns = ( { include = "source.objc"; } );
+        },
+        { name = "text.latex";
+          begin = "%\\{<(?i:LaTeX)>"; end = "</(?i:LaTeX)>\\}%";
+          patterns = ( { include = "text.latex"; } );
+        },
     );
 }

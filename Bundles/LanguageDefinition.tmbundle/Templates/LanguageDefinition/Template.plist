@@ -2,6 +2,7 @@
 {
     /* The name as it will appear in the Syntax Highlight List */
     name = "${TM_BASENAME}"; 
+    keyEquivalent = "~^${TM_KEY}";
 
     /* Scope name used sometimes for styling or limiting the activation
        of snippets, commands, and macros to files using this syntax
@@ -23,7 +24,7 @@
     /* This is where the actual highlighting is defined. */
     patterns = (
         {   name = "keyword.control.${TM_LANGUAGE}";
-            match = "\\<(list|of|keywords)\\>"; 
+            match = "\\b(list|of|keywords)\\b"; 
         },
         {   name = "string.double-quoted.${TM_LANGUAGE}";
             begin = '"'; end = '"'; swallow = "\\\\.";

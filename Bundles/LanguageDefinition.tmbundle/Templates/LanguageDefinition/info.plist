@@ -8,6 +8,7 @@
        -e "/\${TM_BASENAME}/s//${TM_NEW_FILE_BASENAME}/" \
        -e "/\${TM_USERNAME}/s//`niutil -readprop / /users/\$USER realname`/" \
        -e "/\${TM_UUID}/s//`uuidgen|tr -d '\n'`/" \
+       -e "/\${TM_KEY}/s//${TM_NEW_FILE_BASENAME:0:1}/" \
        Template.plist &gt;"$TM_NEW_FILE"
 fi</string>
 	<key>extension</key>

@@ -6,6 +6,13 @@
 	<string>nop</string>
 	<key>command</key>
 	<string># Make use of the Dictionary Built-in to Tiger.
+
+# there's a bug causing it to ignore first word
+# if not already running
+if [[ !$(ps -xc|grep -w Dictionary) ]]; then
+   open dict:///"$TM_CURRENT_WORD"
+fi
+
 open dict:///"$TM_CURRENT_WORD"</string>
 	<key>input</key>
 	<string>none</string>

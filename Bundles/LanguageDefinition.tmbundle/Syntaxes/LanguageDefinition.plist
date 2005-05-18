@@ -29,7 +29,7 @@
             swallow = "\\\\.";
             patterns = (
                 {   name = "invalid.deprecated.constants.colors.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
-                {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
+                {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??|\\\\\\\\[Az<>bB])"; },
             );
         },
         {   name = "string.double-quoted.tm-language-def";
@@ -37,7 +37,7 @@
             end = "\"";
             swallow = "\\\\.";
             patterns = (
-                {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??)|\\\\\\\\[Az<>bB])"; },
+                {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??|\\\\\\\\[Az<>bB])"; },
                 {   name = "invalid.deprecated.constants.colors.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
             );
         },

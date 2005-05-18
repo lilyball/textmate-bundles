@@ -32,10 +32,10 @@
 		
 		
 		{   name = "declaration.section";
-    		match = "^\\s*(#\\s*((pragma)(\\s+mark)?)\\s+(?(4)(.*):.*))";
+    		match = "^\\s*(#\\s*(pragma\\s+mark)\\s+(.*))";
 			captures = { 1 = { name = "keyword.preprocessor.c"; };
             			 2 = { name = "directive"; };
-            			 5 = { name = "section-name"; };
+            			 3 = { name = "entity.name.section"; };
 			 };
 		},
 		

@@ -1,86 +1,81 @@
 {
     fileTypes = (html, htm, tmpl, tpl, php); 
-    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\b.*?>|\\{)"; 
+    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)"; 
     foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
     keyEquivalent = "@\Uf704"; 
     name = "XHTML (v1)"; 
     patterns = (
-        {
+        {   name = "comment.xhtml";
             begin = "<!--"; 
-            end = "-->"; 
-            name = "comment.xhtml"; 
+            end = "-->";             
             patterns = (
-                {
+                {   name = "server-side-include.xhtml";
                     begin = "^#\\s*(include|config|echo|exec|fsize|flastmod|printenv|set)"; 
                     end = "(?=\\s*--|>)"; 
-                    name = "server-side-include.xhtml"; 
                 },
-                {
-                    name = "invalid.bad-comment-end.xhtml"; 
+                /* * /
+                {   name = "invalid.bad-comment-end.xhtml"; 
                     match = "(\s+>)|(<\s+)"; 
                 }
+                /* */
             ); 
         }, 
-        {
+        {   name = "source.ruby.embedded.xhtml"; 
+            begin = "<%";
+            end = "%>"; 
+            patterns = ({include = "source.ruby"; }); 
+        }, 
+        {   name = "source.php.embedded.xhtml";
             begin = "<\\?(php|=)?"; 
             end = "\\?>"; 
-            name = "source.php.embedded.xhtml"; 
             patterns = ({include = "source.php"; }); 
         }, 
-        {
-            begin = "(^\\s+)?<(?i:style)\\b.*?>?"; 
-            end = "</(?i:style)>(\\s+$)?"; 
-            name = "source.css.embedded.xhtml"; 
+        {   name = "source.css.embedded.xhtml"; 
+            begin = "(?:^\\s+)?<((?i:style))\\b(?![^>]*/>)[^>]*>?"; 
+            end = "</((?i:style))>(?:\\s+$)?\\n?"; 
+            captures = { 1 = { name = "entity.name.tag.xhtml"; }; };
             patterns = ({include = "source.css"; }); 
         }, 
-        {
-            begin = "(^\\s+)?<(?i:script)\\b.*?>?"; 
-            end = "</(?i:script)>(\\s+$)?"; 
-            name = "source.js.embedded.xhtml"; 
+        {   name = "source.js.embedded.xhtml"; 
+            begin = "(?:^\\s+)?<(script)\\b(?![^>]*/>)[^>]*>?"; 
+            end = "</(script)>(?:\\s+$)?"; 
+            captures = { 1 = { name = "entity.name.tag.xhtml"; }; };
             patterns = ({include = "source.js"; }); 
         }, 
-        {   
-            name = "declaration.xml-processing.xhtml"; 
+        {   name = "declaration.xml-processing.xhtml"; 
             match = "<\\?xml.*?\\?>";
         }, 
-        {
+        {   name = "declaration.doctype.xhtml";
             begin = "<!DOCTYPE"; 
             end = ">"; 
-            name = "declaration.doctype.xhtml"; 
             patterns = (
-                {   
-                    name = "declaration.doctype.DTD.xhtml";
+                {   name = "declaration.doctype.DTD.xhtml";
                     match = "\"[^\">]*\"";
                 }
             ); 
         }, 
-        {
+        {   name = "declaration.tag.xhtml";
             begin = "</?(a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)"; 
-            captures = {    1 = {   name = "entity.name.tag.xhtml"; }; }; 
-            end = "/?>"; 
-            name = "declaration.tag.xhtml"; 
+            captures = {    1 = {   name = "keyword.markup.element-name.xhtml"; }; }; 
+            end = "/?>";
             patterns = (
-                {
+                {   name = "declaration.attribute-with-value.xhtml";
                     begin = "(abbr|accept-charset|accept|accesskey|action|align|alt|archive|axis|border|cellpadding|cellspacing|char|charoff|charset|checked|cite|class|classid|codebase|codetype|cols|colspan|content|coords|data|datetime|declare|defer|dir|disabled|encoding|enctype|for|frame|frameborder|headers|height|href|hreflang|http-equiv|id|ismap|label|lang|language|longdesc|marginheight|marginwidth|maxlength|media|method|multiple|name|nohref|noresize|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onselect|onsubmit|onunload|profile|readonly|rel|rev|rows|rowspan|rules|scheme|scope|scrolling|selected|shape|size|span|src|standby|style|summary|tabindex|target|title|type|usemap|valign|value|valuetype|version|width|xmlns|xmlns:isbn|xml:lang)=(?=\")"; 
-                    captures = {1 = {name = "entity.parameter.attribute.tag.xhtml"; }; }; 
-                    end = "(?=\\s|>)"; 
-                    name = "declaration.attribute-with-value.xhtml"; 
+                    captures = {1 = {name = "keyword.markup.attribute-name.xhtml"; }; }; 
+                    end = "(?=\\s|>)";
                     patterns = (
-                        {
+                        {   name = "string.double-quoted.xhtml";
                             begin = "\""; 
-                            end = "\""; 
-                            name = "string.double-quoted.xhtml"; 
+                            end = "\"";                              
                             patterns = (
-                                {
+                                {   name = "source.php.embedded.xhtml";
                                     begin = "<\\?(php|=)?"; 
-                                    end = "\\?>"; 
-                                    name = "source.php.embedded.xhtml"; 
+                                    end = "\\?>";                                     
                                     patterns = ({include = "source.php"; }); 
                                 },
-                                {
+                                {   name = "source.js.embedded.xhtml"; 
                                     begin = "(?i:javascript):"; 
-                                    end = ";"; 
-                                    name = "source.js.embedded.xhtml"; 
+                                    end = ";";                                    
                                     patterns = ({include = "source.js"; }); 
                                 }, 
                                 {   name = "invalid.illegal.xhtml";
@@ -92,9 +87,8 @@
                 }
             ); 
         }, 
-        {
-            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-            name = "constant.character.xhtml"; 
+        {   name = "constant.character.xhtml";
+            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);";             
         },
         {   name = "invalid.illegal.xhtml";
             match = "&"; 

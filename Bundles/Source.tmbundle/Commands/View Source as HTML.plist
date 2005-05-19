@@ -5,23 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># Using source-highlight convert python code to html
-# this will be better when we can use this to 
-# create a new document. --But we can???
+	<string># Using source-highlight convert source code to html
+# see Source to HTML for more comments
 
 lang=$(tr &lt;&lt;&lt;$TM_SCOPE \  \\n|grep source.|tail -n1|perl -pe 's/source\.([^.]*).*/$1/')
 
 case "$lang" in
-    c)
-        lang="cpp"
-        ;;
-    c++)
-        lang="cpp"
-        ;;
-    objc)
-        lang="cpp"
-        ;;
-    objc++)
+     c|c++|objc|objc++)
         lang="cpp"
         ;;
     php)

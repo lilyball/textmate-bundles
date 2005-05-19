@@ -25,16 +25,7 @@
 lang=$(tr &lt;&lt;&lt;$TM_SCOPE \  \\n|grep source.|tail -n1|perl -pe 's/source\.([^.]*).*/$1/')
 
 case "$lang" in
-    c)
-        lang="cpp"
-        ;;
-    c++)
-        lang="cpp"
-        ;;
-    objc)
-        lang="cpp"
-        ;;
-    objc++)
+    c|c++|objc|objc++)
         lang="cpp"
         ;;
     php)

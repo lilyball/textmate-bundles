@@ -1,0 +1,1360 @@
+{
+	/*
+		CSS EXPERIMENTAL
+		================
+		
+		Firstly thanks to the original authors. Hope this extends your good work.
+		
+		The idea behind this syntax is to scope properties as named entities, therefore 
+		being very handy for code-completion which can be more specific.
+		
+		Each property is based on the first letters of its "property-name" and some are in groups.
+		
+		Property-values can therefore be specific to the property eg only colors show up
+		in the "property.color property-value" scope, not things like "left" or "no-repeat"
+		
+		It's quite a big task, so feel free to chip in or give me feedback.
+		
+		Max Williams (max at machinate dot org)
+		
+		things to do:
+		=============
+		
+		* get all the properties in there
+		* make sure things aren't missing
+		* be more specific in some of the groups
+		* add internal comments
+		* make everything more efficient :)
+		
+	*/
+	name = "CSS experimental"; 
+	scopeName = "source.css";
+	/*
+	uncomment when more complete*/
+	fileTypes = (css); 
+	foldingStartMarker = "(/\\*|\\{|\\()"; 
+	foldingStopMarker = "(\\*/|\\}|\\))"; 
+	patterns = (
+	    {   name = "declaration.selector.css";
+	        begin = "^(?=\\s*[.*#a-zA-Z])";
+	        end = "(/\\*|(?=\\{))";
+	        patterns = (
+	            {   name = "entity.name.tag.css";
+	                match = "\\b(?i:a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\\b";
+	            },
+	            {   name = "entity.parameter.attribute.tag.class.css";
+	                match = "(\\.[a-zA-Z0-9_-]+)";
+	            },
+	            {   name = "entity.parameter.attribute.tag.id.css";
+	                match = "(#[a-zA-Z0-9_-]+)";
+	            },
+	            {   name = "entity.parameter.attribute.tag.star.css";
+	                // don't know what this should be called but here it is anyway
+	                match = "(\\*)";
+	            },
+	            {   name = "entity.parameter.attribute.tag.pseudo-class.css";
+	                // this probably is an attribute name
+	                match = ":(active|after|before|first-(letter|line)|hover|link|visited)";
+	            }
+	        );
+	    },
+		{	name = "comment.block.css";
+			begin = "/\\*"; end = "\\*/";
+		},
+		{	name = "invalid.bad-comma.css";
+			match = "[^} \\t{/@][^{,]*?(,)\\s*?(?=\\{)";
+		},
+		{	name = "declaration.at-rule.import.css";
+			begin = "^\\s*(@import)"; end = "\\s*((?=;|\\}))";
+			captures = { 1 = { name = "keyword.at-rule.import.css"; }; };
+			patterns = (
+				{	name = "string.double-quoted.css";
+					begin = "\""; end = "\""; swallow = "\\\\.";
+				},
+				{	// keyword.function.url.css 
+					begin = "(url)\\s*\\(\\s*"; end = "\\s*\\)\\s*"; 
+					captures = { 1 = { name = "keyword.function.url.css"; }; };
+					patterns = (
+						{	// I'm really torn on this one, we do sort of
+							// want special markup of the argument to url(),
+							// but entity.parameter.variable.function is really more for declarations
+							name = "entity.parameter.variable.function.css";
+							match = "[^'\") \\t]+";
+						},
+						{	name = "string.single-quoted.css";
+							begin = "'"; end = "'"; swallow = "\\\\.";
+						},
+						{	name = "string.double-quoted.css";
+							begin = "\""; end = "\""; swallow = "\\\\.";
+						}
+					);
+				},
+			);
+		},
+		{	name = "declaration.at-rule.media.css";
+			begin = "^\\s*(@media)"; end = "\\s*((?=;|\\}))";
+			captures = { 1 = { name = "keyword.at-rule.media.css"; }; };
+			patterns = (
+				{	name = "entity.parameter.variable.function.css"; // maybe this should be keyword.*
+					match = "(all|aural|braille|embossed|handheld|pr(int|ojection)|screen|tty|tv),?";
+				}
+			);
+		},
+		{	name = "declaration.property-list.css";
+			begin = "\\{"; end = "\\}";
+			patterns = (
+				{	name = "comment.block.css";
+					begin = "/\\*"; end = "\\*/";
+				},
+				/* azimuth */
+				{
+					name = "declaration.property.azimuth.css";
+					begin = "(?=az)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "azimuth";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "((left|right)(-side|wards)?|(center|far)?(-left|-right)?|behind)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* background */
+				{
+					name = "declaration.property.background.css";
+					begin = "(?=back)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (			
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "background(-attachment|-color|-image|-position|-repeat)?";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "comment.block.css";
+									begin = "/\\*"; end = "\\*/";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},	
+								{	name = "constant.color.rgb-value.css";
+									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
+								},
+								{	name = "keyword.named-color.css";
+									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "((no-repeat)|repeat(-x|-y)?)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(none)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(top|left|right|bottom|center)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "fixed";
+								},
+								{	// keyword.function.css 
+									begin = "(url)\\s*\\((?=([^)]*))";
+									end = "\\)";
+									name = "keyword.function.css"; 
+									captures = { 
+									    1 = { name = "keyword.function-name.css"; }; 
+									    2 = { name = "constant.uri.css"; }; 
+									};
+									patterns = (
+										{	name = "string.single-quoted.css";
+											begin = "'"; end = "'"; swallow = "\\\\.";
+										},
+										{	name = "string.double-quoted.css";
+											begin = "\""; end = "\""; swallow = "\\\\."; 
+										},
+									);
+								}													
+							);
+						},					
+					);				
+				},
+				/* border */
+				{
+					name = "declaration.property.border.css";
+					begin = "(?=bor)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "border(((-bottom|-left|-right|-top)(-color|-style|-width)?)|-collapse|-spacing)?";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(collapse|dashed|dotted|double|groove|hidden|inset|medium|outset|ridge|separate|solid|thick|thin)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "none";
+								},
+								{	name = "keyword.named-color.css";
+									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
+								},
+								{	name = "constant.color.rgb-value.css";
+									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* caption */
+				{
+					name = "declaration.property.caption.css";
+					begin = "(?=cap)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "caption-side";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(top|bottom|left|right)";
+								},														
+							);
+						},					
+					);
+				},
+				/* clear */
+				{
+					name = "declaration.property.clear.css";
+					begin = "(?=cle)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "clear";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(left|right|both|none)";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},											
+							);
+						},					
+					);				
+				},
+				/* clip */
+				{
+					name = "declaration.property.clip.css";
+					begin = "(?=cli)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "clip";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},	
+								/* shape */
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},											
+							);
+						},					
+					);				
+				},
+				/* color */
+				{
+					name = "declaration.property.color.css";
+					begin = "(?=col)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "color";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.color.rgb-value.css";
+									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},	
+								{	name = "keyword.named-color.css";
+									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
+								},
+							);
+						},					
+					);				
+				},
+				/* content */
+				{
+					name = "declaration.property.content.css";
+					begin = "(?=con)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "content";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								/*
+								 <string> | <uri> | <counter> | attr(X) | open-quote | close-quote | no-open-quote | no-close-quote ]+
+								*/
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* 
+				'counter-increment' [ <identifier> <integer>? ]+ | none | inherit
+				'counter-reset' [ <identifier> <integer>? ]+ | none | inherit
+				cue group
+				*/
+				/*cursor */
+				{
+					name = "declaration.property.cursor.css";
+					begin = "(?=cur)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "cursor";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								/*
+								[ [<uri> ,]* 
+								*/
+								{	name = "keyword.property-value.css";
+									match = "(auto|crosshair|default|pointer|move|e-resize|ne-resize|nw-resize|n-resize|se-resize|sw-resize|s-resize|w-resize|text|wait|help)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* direction */
+				{
+					name = "declaration.property.direction.css";
+					begin = "(?=dir)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "direction";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(ltr|rtl)";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* display */
+				{
+					name = "declaration.property.display.css";
+					begin = "(?=dis)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "display";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+							    {	name = "keyword.property-value.css";
+							    	match = "(block|list-item|run-in|compact|marker|inline(-table|-block)?|table(((-row|-header|-footer|-column)-group)|-column|-row|-cell|-caption)?|none)";
+							    },
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},															
+							);
+						},					
+					);				
+				},
+				/*
+				'elevation' <angle> | below | level | above | higher | lower | inherit
+				'empty-cells'	show | hide | inherit
+				*/
+				/* float */
+				{
+					name = "declaration.property.float.css";
+					begin = "(?=flo)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "float";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(none|left|right)";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* font */
+				{
+					name = "declaration.property.font.css";
+					begin = "(?=fo)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "font(-family|-size(-adjust)?|-stretch|-style|-variant|-weight)?";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.font-name.css";
+									match = "((?i:arial( black)?|century|comic|courier|garamond|georgia|geneva|helvetica|impact|lucida( grande)?|symbol|system|tahoma|times( new roman)?|trebuchet|utopia|verdana|webdings|sans-serif|serif|monospace))";
+								},
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(normal|bold(er)?|lighter|100|200|300|400|500|600|700|800|900)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(ultra-condensed)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(none|italic|bold|bolder|small-caps|oblique)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},				
+							);
+						},					
+					);				
+				},
+				/* letter-spacing */
+				{
+					name = "declaration.property.letter-spacing.css";
+					begin = "(?=let)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "letter-spacing";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(normal)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},				
+							);
+						},					
+					);				
+				},
+				/*line-height*/	
+				{
+					name = "declaration.property.line-height.css";
+					begin = "(?=line-h)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "line-height";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(normal)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},				
+							);
+						},					
+					);				
+				},
+				/*line-break*/	
+				{
+					name = "declaration.property.line-height.css";
+					begin = "(?=line-b)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "line-break";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(emergency)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},				
+							);
+						},					
+					);				
+				},
+				/* list */
+				{
+					name = "declaration.property.list.css";
+					begin = "(?=lis)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "list(-style(-image|-position|-type)?)?";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(disc|circle|square|none)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(decimal(-leading-zero)?|lower(-roman|-alpha|-greek|-alpha|-latin)?|upper(-roman|-alpha|-greek|-alpha|-latin)?|hebrew|armenian|georgian|cjk-ideographic|hiragana(-iroha)?|katakana(-iroha)?)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inside|outside)";
+								},
+								{	// keyword.function.css 
+									begin = "(url)\\s*\\(";
+									end = "\\)";
+									captures = { 1 = { name = "keyword.function.css"; }; };
+									patterns = (
+										{	name = "string.single-quoted.css";
+											begin = "'"; end = "'"; swallow = "\\\\.";
+										},
+										{	name = "string.double-quoted.css";
+											begin = "\""; end = "\""; swallow = "\\\\."; 
+										},
+									);
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},										
+							);
+						},					
+					);
+				},
+				/*margin */
+				{
+					name = "declaration.property.margin.css";
+					begin = "(?=mar)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "margin(-bottom|-left|-right|-top)?";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/*
+				'marker-offset' <length> | auto | inherit
+				'marks' [ crop || cross ] | none | inherit
+				*/
+				/*opacity */
+				{
+					name = "declaration.property.opacity.css";
+					begin = "(?=opa)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "opacity";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+							    {	name = "constant.numeric.css";
+							    	match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+							    },
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/*
+				'orphans'	<integer> | inherit 
+				*/
+				/* outline */
+				{
+					name = "declaration.property.outline.css";
+					begin = "(?=out)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "outline(-color|-style|-width)?";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+							    {	name = "constant.numeric.css";
+							    	match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+							    },
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(collapse|dashed|dotted|double|groove|hidden|inset|medium|outset|ridge|separate|solid|thick|thin)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(invert)";
+								},
+								{	name = "keyword.named-color.css";
+									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
+								},
+								{	name = "constant.color.rgb-value.css";
+									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* overflow */	
+				{
+					name = "declaration.property.overflow.css";
+					begin = "(?=over)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "overflow";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(visible|hidden|scroll)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* padding */
+				{
+					name = "declaration.property.padding.css";
+					begin = "(?=pa)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "padding(-bottom|-left|-right|-top)?";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* page */
+				{
+					name = "declaration.property.page.css";
+					begin = "(?=pag)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	
+							name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "page(-break-(after|before|inside))?";
+								},	
+							);
+						},
+						{	
+							name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+							    /* include =identifier */
+								{	name = "keyword.property-value.css";
+									match = "(always|avoid|left|right)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},				
+							);
+						},					
+					);				
+				},
+				/*
+				pause 
+				pitch
+				play
+				*/
+				/* position */
+				{
+					name = "declaration.property.position.css";
+					begin = "(?=po)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "position";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(relative|fixed|absolute|static)";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},														
+							);
+						},					
+					);
+				},
+				/*
+				quotes
+				richness
+				*/
+				/* placement */
+				{
+					name = "declaration.property.placement.css";
+					begin = "(?=(bot|lef|rig|top))"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "(bottom|left|right|top)";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);														
+						},					
+					);
+				},
+				/* size (elem) */
+				{
+					name = "declaration.property.size.css";
+					begin = "(?=(min|max|hei|wid))"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "(min-|max-)?(width|height)";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},															
+							);
+						},					
+					);
+				},
+				/*
+				'size'	<length>{1,2} | auto | portrait | landscape | inherit	auto	the page context	N/A		visual, paged
+				'speak' normal | none | spell-out | inherit normal		yes		aural
+				'speak-header'	once | always | inherit once	elements that have table header information yes		aural
+				'speak-numeral' digits | continuous | inherit	continuous		yes		aural
+				'speak-punctuation' code | none | inherit	none		yes		aural
+				'speech-rate'	<number> | x-slow | slow | medium | fast | x-fast | faster | slower | inherit	medium		yes		aural
+				'stress'	<number> | inherit	50		yes		aural
+				'table-layout'	auto | fixed | inherit
+				*/
+				/* text */
+				{
+					name = "declaration.property.text.css";
+					begin = "(?=te)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "text(-align|-decoration|-indent|-shadow|-transform)?";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(left|right|center|justify)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(underline|overline|line-through|blink)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(none|uppercase|lowercase|capitalize)";
+								},		
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},												
+							);
+						},					
+					);
+				},
+				/* v-align */
+				{
+					name = "declaration.property.vertical-align.css";
+					begin = "(?=ver)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "vertical-align";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(baseline|sub|super|top|text-top|middle|bottom|text-bottom)";
+								},	
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* unicode-bidi */
+				{
+					name = "declaration.property.unicode-bidi.css";
+					begin = "(?=uni)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "unicode-bidi";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(normal|embed|bidi-override)";
+								},	
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},				
+				/* visibility */
+				{
+					name = "declaration.property.visible.css";
+					begin = "(?=vis)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "visibility";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(visible|hidden|collapse)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/*
+				'voice-family'	[[<specific-voice> | <generic-voice> ],]* [<specific-voice> | <generic-voice> ] | inherit	depends on user agent		yes		aural
+				'volume'	<number> | <percentage> | silent | x-soft | soft | medium | loud | x-loud | inherit medium		yes refer to inherited value	aural
+				*/
+				/*'white-space'*/
+				{
+					name = "declaration.property.white-space.css";
+					begin = "(?=white)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "white-space";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(normal|pre|nowrap)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/*
+				'widows'	<integer> | inherit 2	block-level elements	yes		visual, paged
+				'width' <length> | <percentage> | auto | inherit	auto	all elements but non-replaced inline elements, table rows, and row groups	no	refer to width of containing block	visual
+				*/
+				/*word-spacing*/
+				{
+					name = "declaration.property.word-spacing.css";
+					begin = "(?=word)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "word-spacing";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "normal";
+								},
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/* z-index */
+				{
+					name = "declaration.property.z-index.css";
+					begin = "(?=z-index)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "z-index";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},
+								{	name = "constant.numeric.css";
+									match = "[0-9]+";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+			);
+		}
+	);
+	uuid = "5A0E986A-BE73-11D9-8214-000A957B2E42";
+}

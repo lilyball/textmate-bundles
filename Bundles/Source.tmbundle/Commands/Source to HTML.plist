@@ -22,18 +22,23 @@
 # sml (for Sml)
 # log (for log files, e.g., system logs, apache and IpTables)
 
+lang=$(tr &lt;&lt;&lt;$TM_SCOPE \  \\n|grep source.|tail -n1|perl -pe 's/source\.([^.]*).*/$1/')
 
-lang=`echo "$TM_MODE" |tr "[:upper:]" "[:lower:]"`
 case "$lang" in
-
+    c)
+        lang="cpp"
+        ;;
     c++)
         lang="cpp"
         ;;
-    html\ \(php\))
-        lang="php3"
+    objc)
+        lang="cpp"
         ;;
-    ruby\ on\ rails)
-        lang="ruby"
+    objc++)
+        lang="cpp"
+        ;;
+    php)
+        lang="php3"
         ;;
     ocaml)
         lang="caml"
@@ -43,7 +48,7 @@ expand -3 | "$TM_SUPPORT_PATH"/source-highlight --line-number --src-lang=$lang -
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
-	<string>^~h</string>
+	<string>^H</string>
 	<key>name</key>
 	<string>Source to HTML</string>
 	<key>output</key>

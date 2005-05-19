@@ -6,7 +6,7 @@
     foldingStopMarker = "(\\*/|\\}|\\))"; 
     patterns = (
         {   name = "declaration.selector.css";
-            begin = "^(?=\\s*[.*#a-zA-Z])";
+            begin = "^(?=\\s*[.,*#a-zA-Z])";
             end = "(/\\*|(?=\\{)|\\s|$)";
             patterns = (
                 {   name = "entity.name.tag.css";

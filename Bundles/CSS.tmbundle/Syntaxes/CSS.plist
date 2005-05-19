@@ -1,26 +1,30 @@
 {
     name = "CSS"; 
     scopeName = "source.css";
+    keyEquivalent = "~^C";
     fileTypes = (css); 
     foldingStartMarker = "(/\\*|\\{|\\()"; 
     foldingStopMarker = "(\\*/|\\}|\\))"; 
     patterns = (
         {   name = "declaration.selector.css";
-            begin = "^(?=\\s*[.,*#a-zA-Z])";
-            end = "(/\\*|(?=\\{)|\\s|$)";
+            begin = "^(?=\\s*[.*#a-zA-Z])";
+            end = "(?=\\{)";
             patterns = (
+                {   name = "comment.black.css";
+                    begin = "/\\*"; end = "\\*/";
+                },
                 {   name = "entity.name.tag.css";
                     match = "\\b(a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\\b";
                 },
                 {   name = "entity.parameter.attribute.tag.class.css";
-                    match = "(\\.[a-zA-Z0-9_-]+)";
+                    match = "\\.[a-zA-Z0-9_-]+";
                 },
                 {   name = "entity.parameter.attribute.tag.id.css";
-                    match = "(#[a-zA-Z0-9_-]+)";
+                    match = "#[a-zA-Z0-9_-]+";
                 },
                 {   name = "entity.parameter.attribute.tag.star.css";
                     // don't know what this should be called but here it is anyway
-                    match = "(\\*)";
+                    match = "\\*";
                 },
                 {   name = "entity.parameter.attribute.tag.pseudo-class.css";
                     // this probably is an attribute name
@@ -31,10 +35,10 @@
         {   name = "comment.block.css";
             begin = "/\\*"; end = "\\*/";
         },
-        {   name = "invalid.bad-comma.css";
+/*      {   name = "invalid.bad-comma.css";
             match = "[^} \\t{/@][^{,]*?(,)\\s*?(?=\\{)";
         },
-        {   name = "declaration.at-rule.import.css";
+*/      {   name = "declaration.at-rule.import.css";
             begin = "^\\s*(@import\\b)"; end = "\\s*((?=;|\\}))";
             captures = { 1 = { name = "keyword.at-rule.import.css"; }; };
             patterns = (
@@ -76,10 +80,8 @@
                 {   name = "comment.block.css";
                     begin = "/\\*"; end = "\\*/";
                 },
-
                 {   name = "declaration.property-name.css"; //added this to give a scope for name completions
-                    begin = "\\s*(?=[a-z])"; 
-                    end = "\\s*(?=:)";  
+                    begin = "\\s*(?=[a-z])"; end = "\\s*(?=:)";  
                     patterns = ( 
                     {           
                         name = "keyword.property-name.css";

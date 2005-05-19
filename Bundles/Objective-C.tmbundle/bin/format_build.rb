@@ -1,6 +1,7 @@
 $bundle				= ENV['TM_BUNDLE_PATH']
+$support			= ENV['TM_SUPPORT_PATH']
 
-require ($bundle + "/bin/Builder.rb")
+require ($support + "/bin/Builder.rb")
 
 # N.B. This code is not a model of Ruby clarity.
 # I'm still experimenting with Builder.rb.

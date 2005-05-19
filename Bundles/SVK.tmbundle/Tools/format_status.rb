@@ -1,10 +1,11 @@
 bundle				= ENV['TM_BUNDLE_PATH']
+support				= ENV['TM_SUPPORT_PATH']
 work_path			= ENV['WorkPath']
 strip_path_prefix	= work_path # Dir.pwd
 svk			= ENV['TM_SVK']
 svk = "svk" if svk.nil?
 
-require (bundle + "/Tools/Builder.rb")
+require (support + "/bin/Builder.rb")
 
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)

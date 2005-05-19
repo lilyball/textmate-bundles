@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>"${TM_RUBY:=ruby}" -r "$TM_BUNDLE_PATH/Tools/shelltokenize.rb" &lt;&lt;END
+	<string>"${TM_RUBY:=ruby}" -r "$TM_SUPPORT_PATH/bin/shelltokenize.rb" &lt;&lt;END
 	svn = ENV['TM_SVN'] || "svn"
 	puts %x{#{svn} update #{TextMate.selected_paths_for_shell}}
 END

@@ -5,10 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>CommitWindow="$TM_BUNDLE_PATH/Tools/CommitWindow.app/Contents/MacOS/CommitWindow"
+	<string>CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"
 export CommitWindow
 
-# setup TM_SVN if need be
 echo "${TM_SVN:=svn}" &gt; /dev/null
 export TM_SVN
 

@@ -78,18 +78,18 @@
             patterns = ({include = "source.ruby"; }); 
         }, 
         {   name = "source.php.embedded.html"; 
-            begin = "<\\?(php|=)?"; end = "\\?>"; 
+            begin = "(?:^\\s+)?<\\?(php|=)?"; end = "\\?>(?:\\s*\\n)?"; 
             patterns = ({include = "source.php"; }); 
         }, 
         {   name = "source.css.embedded.html"; 
             begin = "(?:^\\s+)?<((?i:style))\\b(?![^>]*/>)[^>]*>?"; 
-            end = "</((?i:style))>(?:\\s+$)?\\n?"; 
+            end = "</((?i:style))>(?:\\s*\\n)?"; 
             captures = { 1 = { name = "entity.name.tag.html"; }; };
             patterns = ({include = "source.css"; }); 
         }, 
         {   name = "source.js.embedded.html"; 
             begin = "(?:^\\s+)?<((?i:script))\\b(?![^>]*/>)[^>]*>?"; 
-            end = "</((?i:script))>(?:\\s+$)?"; 
+            end = "</((?i:script))>(?:\\s*\n)?"; 
             captures = { 1 = { name = "entity.name.tag.html"; }; };
             patterns = ({include = "source.js"; }); 
         }, 

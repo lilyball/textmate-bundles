@@ -8,17 +8,20 @@
 	<string>if [ ! -x "${TM_FILEPATH}" ]
 then
 	echo "Cannot execute '${TM_FILEPATH}' : permission error"
+	echo "You can make the file executable by pressing: option-shift-command-X"
 else
 	"${TM_FILEPATH}"
 fi</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
-	<string>@X</string>
+	<string>@r</string>
 	<key>name</key>
 	<string>Execute Current File in Window</string>
 	<key>output</key>
 	<string>separateWindow</string>
+	<key>scope</key>
+	<string>source.shell</string>
 	<key>uuid</key>
 	<string>7207ACC2-A64B-11D9-B384-000D93382786</string>
 </dict>

@@ -1,138 +1,337 @@
-{
-    name = "White background"; 
-    settings = (
-        {
-            name = Base; 
-            scope = ""; 
-            settings = {background = "#FFFFFF"; foreground = "#000000"; selection = "#C3DCFF"; }; 
-        }, 
-        {
-            name = Comment; 
-            scope = comment; 
-            settings = {fontStyle = italic; foreground = "#0066FF"; }; 
-        }, 
-        {
-            name = "Block comment"; 
-            scope = "comment.block"; 
-            settings = {background = "#F0F0F0"; }; 
-        }, 
-        {name = String; scope = string; settings = {foreground = "#8B2252"; }; }, 
-        {
-            name = Number; 
-            scope = "constant.numeric"; 
-            settings = {foreground = "#0000CD"; }; 
-        }, 
-        {
-            name = Keyword; 
-            scope = keyword; 
-            settings = {fontStyle = bold; foreground = "#0000FF"; }; 
-        }, 
-        {
-            name = "Preprocessor line"; 
-            scope = "keyword.preprocessor"; 
-            settings = {fontStyle = plain; foreground = "#2F006E"; }; 
-        }, 
-        {
-            name = "Preprocessor directive"; 
-            scope = "keyword.preprocessor directive"; 
-            settings = {fontStyle = bold; }; 
-        }, 
-        {
-            name = "Library function"; 
-            scope = "keyword.function"; 
-            settings = {fontStyle = plain; foreground = "#404060"; }; 
-        }, 
-        {
-            name = "Function name"; 
-            scope = "entity.name.function"; 
-            settings = {fontStyle = bold; }; 
-        }, 
-        {
-            name = "Tag and class name"; 
-            scope = "entity.name.class, entity.name.tag"; 
-            settings = {fontStyle = underline; }; 
-        }, 
-        {
-            name = "Function variable name, tag attribute name, and parent class"; 
-            scope = "entity.parameter"; 
-            settings = {fontStyle = italic; }; 
-        }, 
-        {
-            name = "Type of function argument and result"; 
-            scope = "entity.type"; 
-            settings = {foreground = "#0000FF"; }; 
-        }, 
-        {
-            name = Invalid; 
-            scope = invalid; 
-            settings = {background = "#990000"; foreground = "#FFFFFF"; }; 
-        }, 
-        {
-            name = "Invalid trailing whitespace"; 
-            scope = "invalid.trailing-whitespace"; 
-            settings = {background = "#FFD0D0"; }; 
-        }, 
-        {
-            name = Section; 
-            scope = "declaration.section section-name"; 
-            settings = {fontStyle = italic; }; 
-        }, 
-        {
-            name = "JS: Object"; 
-            scope = "keyword.object"; 
-            settings = {foreground = "#2D709E"; }; 
-        }, 
-        {
-            name = "JS: Method"; 
-            scope = "keyword.method"; 
-            settings = {foreground = "#ED6F07"; }; 
-        }, 
-        {
-            name = "JS: Property"; 
-            scope = "keyword.property"; 
-            settings = {foreground = "#06960E"; }; 
-        }, 
-        {
-            name = "JS: Event Handler"; 
-            scope = "keyword.event-handler"; 
-            settings = {foreground = "#21439C"; }; 
-        }, 
-        {
-            name = "JS: Operator"; 
-            scope = "keyword.operator.js"; 
-            settings = {foreground = "#687687"; }; 
-        }, 
-        {
-            name = "JS: Constant"; 
-            scope = "constant.js"; 
-            settings = {foreground = "#C50D9C"; }; 
-        }, 
-        {
-            name = "JS: Function name"; 
-            scope = "keyword.declaration.js"; 
-            settings = {fontStyle = bold; foreground = "#0000A2"; }; 
-        }, 
-        {
-            name = Interpolation; 
-            scope = "string.interpolation"; 
-            settings = {foreground = "#C10006"; }; 
-        }, 
-        {
-            name = "Regular expression"; 
-            scope = "string.regexp"; 
-            settings = {foreground = "#8B3B05"; }; 
-        }, 
-        {
-            name = Variable; 
-            scope = "variable.readwrite"; 
-            settings = {foreground = "#6303C3"; }; 
-        }, 
-        {name = Constant; scope = constant; settings = {foreground = "#6782D3"; }; }, 
-        {
-            name = "Embedded source"; 
-            scope = "text source"; 
-            settings = {background = "#E7DCD559"; }; 
-        }
-    ); 
-    uuid = "71D40D9D-AE48-11D9-920A-000D93589AF6"; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Colorset: Black on white</string>
+	<key>settings</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>Base</string>
+			<key>scope</key>
+			<string></string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FFFFFF</string>
+				<key>foreground</key>
+				<string>#000000</string>
+				<key>selection</key>
+				<string>#C3DCFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Comment</string>
+			<key>scope</key>
+			<string>comment</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#0066FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Block comment</string>
+			<key>scope</key>
+			<string>comment.block</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#F0F0F0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>String</string>
+			<key>scope</key>
+			<string>string</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#8B2252</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Number</string>
+			<key>scope</key>
+			<string>constant.numeric</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#0000CD</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Keyword</string>
+			<key>scope</key>
+			<string>keyword</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#0000FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Preprocessor line</string>
+			<key>scope</key>
+			<string>keyword.preprocessor</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>plain</string>
+				<key>foreground</key>
+				<string>#2F006E</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Preprocessor directive</string>
+			<key>scope</key>
+			<string>keyword.preprocessor directive</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Library function</string>
+			<key>scope</key>
+			<string>keyword.function</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>plain</string>
+				<key>foreground</key>
+				<string>#404060</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Function name</string>
+			<key>scope</key>
+			<string>entity.name.function</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Tag and class name</string>
+			<key>scope</key>
+			<string>entity.name.class, entity.name.tag</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>underline</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Function variable name, tag attribute name, and parent class</string>
+			<key>scope</key>
+			<string>entity.parameter</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Type of function argument and result</string>
+			<key>scope</key>
+			<string>entity.type</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#0000FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Invalid</string>
+			<key>scope</key>
+			<string>invalid</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#990000</string>
+				<key>foreground</key>
+				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Invalid trailing whitespace</string>
+			<key>scope</key>
+			<string>invalid.trailing-whitespace</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FFD0D0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Section</string>
+			<key>scope</key>
+			<string>declaration.section section-name</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>JS: Object</string>
+			<key>scope</key>
+			<string>keyword.object</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#2D709E</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>JS: Method</string>
+			<key>scope</key>
+			<string>keyword.method</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#ED6F07</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>JS: Property</string>
+			<key>scope</key>
+			<string>keyword.property</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#06960E</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>JS: Event Handler</string>
+			<key>scope</key>
+			<string>keyword.event-handler</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#21439C</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>JS: Operator</string>
+			<key>scope</key>
+			<string>keyword.operator.js</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#687687</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>JS: Constant</string>
+			<key>scope</key>
+			<string>constant.js</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#C50D9C</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>JS: Function name</string>
+			<key>scope</key>
+			<string>keyword.declaration.js</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#0000A2</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Interpolation</string>
+			<key>scope</key>
+			<string>string.interpolation</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#C10006</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Regular expression</string>
+			<key>scope</key>
+			<string>string.regexp</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#8B3B05</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Variable</string>
+			<key>scope</key>
+			<string>variable.readwrite</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#6303C3</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Constant</string>
+			<key>scope</key>
+			<string>constant</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#6782D3</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Embedded source</string>
+			<key>scope</key>
+			<string>text source</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#E7DCD559</string>
+			</dict>
+		</dict>
+	</array>
+	<key>uuid</key>
+	<string>71D40D9D-AE48-11D9-920A-000D93589AF6</string>
+</dict>
+</plist>

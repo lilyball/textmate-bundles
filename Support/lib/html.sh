@@ -24,7 +24,7 @@ delayedJS() {
 # Redirect to a given URL.
 # USAGE: redirect <url>
 redirect() {
-	javaScript 'document.url="'$1'"'
+	javaScript 'window.location="'$1'"'
 }
 
 # Close the HTML window, after a delay (in milliseconds). Defaults to 1 second.
@@ -33,5 +33,25 @@ closeWin() {
    local to=$1
    [ ${to:=1000} ]
 	delayedJS $to 'window.close();'
+}
+
+# Typesets the arguments in <em> tags.
+# USAGE: emph <text...>
+emph() {
+   echo "<em>$@</em>"
+}
+
+# Typesets the arguments in <strong> tags.
+# USAGE: strong <text...>
+strong() {
+   echo "<strong>$@</strong>"
+}
+
+# Creates a link (HTML anchor tag)
+# USAGE: link <url> <text...>
+link() {
+   local url=$1
+   shift
+   echo "<a href=\"${url}\">$@</a>"
 }
 

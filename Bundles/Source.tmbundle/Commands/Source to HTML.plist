@@ -35,7 +35,7 @@ case "$lang" in
         lang="caml"
         ;;
 esac
-expand -3 | "$TM_SUPPORT_PATH"/source-highlight --line-number --src-lang=$lang --out-format=xhtml</string>
+expand -3 | "$TM_SUPPORT_PATH/bin/source-highlight" --line-number --src-lang=$lang --out-format=xhtml</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

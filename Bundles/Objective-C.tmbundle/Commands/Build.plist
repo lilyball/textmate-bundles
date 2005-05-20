@@ -15,8 +15,12 @@
 if [[ -n $TM_XCODE_PROJECT ]]; then
 	cd "$TM_DIRECTORY"
 	PROJECT_FILE="$TM_XCODE_PROJECT"
-elif [[ -z $TM_PROJECT_DIRECTORY ]]; then
-	cd "$TM_DIRECTORY"
+elif [[ -z $TM_PROJECT_FILEPATH ]]; then
+	if [[ -d $TM_PROJECT_DIRECTORY ]]; then
+		cd "$TM_PROJECT_DIRECTORY"
+	else
+		cd "$TM_DIRECTORY"
+	fi
 	PROJECT_FILE=""
 	until [[ `pwd` == "/" ]];
 	do

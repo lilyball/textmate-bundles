@@ -29,8 +29,6 @@
 	*/
 	name = "CSS experimental"; 
 	scopeName = "source.css";
-	/*
-	uncomment when more complete*/
 	fileTypes = (css); 
 	foldingStartMarker = "(/\\*|\\{|\\()"; 
 	foldingStopMarker = "(\\*/|\\}|\\))"; 
@@ -127,7 +125,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "keyword.property-value.css";
-									match = "((left|right)(-side|wards)?|(center|far)?(-left|-right)?|behind)";
+									match = "((left|right)(-side|wards)?|(center|far)(-left|-right)?|behind)";
 								},
 								{	name = "keyword.property-value.css";
 									match = "(inherit|!important)";
@@ -168,7 +166,7 @@
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
 								},
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},	
 								{	name = "constant.color.rgb-value.css";
 									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
@@ -204,6 +202,22 @@
 											begin = "\""; end = "\""; swallow = "\\\\."; 
 										},
 									);
+								},
+								{	// keyword.function.css 
+									begin = "(rgb)\\s*\\((?=([^)]*))";
+									end = "\\)";
+									name = "keyword.function.css"; 
+									captures = { 
+									    1 = { name = "keyword.function-name.css"; }; 
+									};
+									patterns = (
+									    {	name = "keyword.rgb-value.css";
+									    	match = "[12]?[0-9]?[0-9]?"; 
+									    },
+									    {	name = "keyword.rgb-value.css";
+									    	match = "(100|[0-9]{1,2})%"; 
+									    },
+									);
 								}													
 							);
 						},					
@@ -222,7 +236,7 @@
 							patterns = ( 
 								{									
 									name = "keyword.property-name.css";
-									match = "border(((-bottom|-left|-right|-top)(-color|-style|-width)?)|-collapse|-spacing)?";
+									match = "border(((-bottom|-left|-right|-top)?(-color|-style|-width)?)|-collapse|-spacing)?";
 								},	
 							);
 						},
@@ -231,6 +245,9 @@
 							begin = ":\\s*"; 
 							end = "\\s*(?=[;}])";
 							patterns = (
+							    {	name = "constant.numeric.css";
+							    	match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+							    },
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
 								},
@@ -508,14 +525,41 @@
 						},					
 					);				
 				},
-				/*
-				'elevation' <angle> | below | level | above | higher | lower | inherit
-				'empty-cells'	show | hide | inherit
-				*/
+				/* elevation' <angle> | below|level|above|higher|lower | inherit */
+				/* empty-cells */
+				{
+					name = "declaration.property.empty-cells.css";
+					begin = "(?=empty)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "empty-cells";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(show|hide)";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
 				/* float */
 				{
 					name = "declaration.property.float.css";
-					begin = "(?=flo)"; 
+					begin = "(?=float)"; 
 					end = "\\s*(?=[;}])";	
 					patterns = (				
 						{	name = "declaration.property-name.css"; 
@@ -565,10 +609,10 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "keyword.font-name.css";
-									match = "((?i:arial( black)?|century|comic|courier|garamond|georgia|geneva|helvetica|impact|lucida( grande)?|symbol|system|tahoma|times( new roman)?|trebuchet|utopia|verdana|webdings|sans-serif|serif|monospace))";
+									match = "((?i:arial( black)?|century|comic|courier|garamond|georgia|geneva|helvetica|impact|lucida( sans)?( grande)?( unicode)?|symbol|system|tahoma|times( new roman)?|trebuchet( ms)?|utopia|verdana|webdings|sans-serif|serif|monospace))";
 								},
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -584,6 +628,9 @@
 								},
 								{	name = "keyword.property-value.css";
 									match = "(inherit|!important)";
+								},	
+								{	name = "keyword.property-value.css";
+									match = "(?i:[a-z]+[^,;\"']*)";
 								},				
 							);
 						},					
@@ -612,7 +659,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -650,7 +697,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -688,7 +735,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -773,7 +820,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -815,7 +862,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+							    	match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 							    },
 								{	name = "keyword.property-value.css";
 									match = "(inherit|!important)";
@@ -824,9 +871,36 @@
 						},					
 					);				
 				},
-				/*
-				'orphans'	<integer> | inherit 
-				*/
+				/* orphans */
+				{
+					name = "declaration.property.orphans.css";
+					begin = "(?=orphans)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "orphans";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "[0-9]+";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
 				/* outline */
 				{
 					name = "declaration.property.outline.css";
@@ -850,7 +924,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+							    	match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 							    },
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -930,7 +1004,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1041,7 +1115,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1058,7 +1132,7 @@
 				},
 				/* size (elem) */
 				{
-					name = "declaration.property.size.css";
+					name = "declaration.property.elem-size.css";
 					begin = "(?=(min|max|hei|wid))"; 
 					end = "\\s*(?=[;}])";	
 					patterns = (				
@@ -1077,7 +1151,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1092,16 +1166,82 @@
 						},					
 					);
 				},
+				/* size */
+				{
+					name = "declaration.property.size.css";
+					begin = "(?=size)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "size";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+								},
+								{	name = "keyword.unit.css";
+									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(portrait|landscape)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "auto";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},															
+							);
+						},					
+					);
+				},
 				/*
-				'size'	<length>{1,2} | auto | portrait | landscape | inherit	auto	the page context	N/A		visual, paged
 				'speak' normal | none | spell-out | inherit normal		yes		aural
 				'speak-header'	once | always | inherit once	elements that have table header information yes		aural
 				'speak-numeral' digits | continuous | inherit	continuous		yes		aural
 				'speak-punctuation' code | none | inherit	none		yes		aural
 				'speech-rate'	<number> | x-slow | slow | medium | fast | x-fast | faster | slower | inherit	medium		yes		aural
 				'stress'	<number> | inherit	50		yes		aural
-				'table-layout'	auto | fixed | inherit
-				*/
+				/*'table-layout */
+				{
+					name = "declaration.property.table-layout.css";
+					begin = "(?=tab)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "table-layout";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(auto|fixed)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},												
+							);
+						},					
+					);
+				},
 				/* text */
 				{
 					name = "declaration.property.text.css";
@@ -1123,7 +1263,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1168,7 +1308,7 @@
 									match = "(baseline|sub|super|top|text-top|middle|bottom|text-bottom)";
 								},	
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1204,7 +1344,7 @@
 									match = "(normal|embed|bidi-override)";
 								},	
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1280,10 +1420,36 @@
 						},					
 					);				
 				},
-				/*
-				'widows'	<integer> | inherit 2	block-level elements	yes		visual, paged
-				'width' <length> | <percentage> | auto | inherit	auto	all elements but non-replaced inline elements, table rows, and row groups	no	refer to width of containing block	visual
-				*/
+				/* widows */
+				{
+					name = "declaration.property.widows.css";
+					begin = "(?=widows)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "widows";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "[0-9]+";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
 				/*word-spacing*/
 				{
 					name = "declaration.property.word-spacing.css";
@@ -1308,7 +1474,7 @@
 									match = "normal";
 								},
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";

@@ -24,7 +24,7 @@
 		{ name = "constant.numeric.ada"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"; },
 		{ name = "string.double-quoted.ada"; begin = "\""; end = "\""; swallow = "\\\\.";},
 		
-		{ name = "comment.line.ada"; match = "--(.*)$";},
+		{ name = "comment.line.double-dash.ada"; match = "--(.*)$";},
 		
 	);
 	uuid = "0AB8A36E-6B1D-11D9-B034-000D93589AF6";

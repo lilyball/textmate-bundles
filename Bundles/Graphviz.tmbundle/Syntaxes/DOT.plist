@@ -40,8 +40,12 @@
             swallow = "\\\\.";
         },
         
-        {   name = "comment.line.dot";
-            match = "(#|//).*$";
+        {   name = "comment.line.double-slash.dot";
+            match = "//.*$";
+        },
+
+        {   name = "comment.line.number-sign.dot";
+            match = "#.*$";
         },
         
         {   name = "comment.block.dot";

@@ -29,8 +29,8 @@
 		
 		{ name = "constant.numeric.pascal"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"; },
 		
-		{ name = "comment.line.pascal.one"; match = "--(.*)$"; },
-		{ name = "comment.line.pascal.two"; match = "//.*$"; },
+		{ name = "comment.line.double-dash.pascal.one"; match = "--(.*)$"; },
+		{ name = "comment.line.double-slash.pascal.two"; match = "//.*$"; },
 		{ name = "comment.block.pascal.one"; begin = "\\(\\*"; end = "\\*\\)"; },
 		{ name = "comment.block.pascal.two"; begin = "\\{"; end = "\\}"; },
 

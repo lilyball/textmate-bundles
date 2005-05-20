@@ -14,8 +14,8 @@
         {
             fontStyle = (italic); 
             foregroundColor = "#005E1F"; 
-            match = "#.*$ %"; 
-            name = "comment.line.MATLAB"; 
+            match = "#.*$"; 
+            name = "comment.line.number-sign.MATLAB"; 
         }, 
         {
             foregroundColor = "#000000"; 
@@ -36,7 +36,7 @@
             name = "string.double-quoted.MATLAB"; 
             swallow = "\\\\."; 
         }, 
-        {foregroundColor = "#00AA00"; match = "%.*$"; name = "comment.line.MATLAB"; },
+        {foregroundColor = "#00AA00"; match = "%.*$"; name = "comment.line.percentage.MATLAB"; },
         {
             fontStyle = (bold); 
             foregroundColor = "#2626FF"; 

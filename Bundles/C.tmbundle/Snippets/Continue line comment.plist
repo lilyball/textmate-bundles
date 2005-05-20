@@ -4,7 +4,7 @@
 <dict>
 	<key>content</key>
 	<string>
-`CH=$(perl &lt;&lt;&lt;$TM_SCOPE -pe 's/.*comment\.line\.([^.]*).*/$1/')
+`CH=$(perl &lt;&lt;&lt;$TM_SCOPE -pe 's/.*comment\.line\.([^. ]*).*/$1/')
 grep -w ^$CH &lt;&lt;EOF|cut -d: -f2|tr -d \n
 double-slash://
 double-dash:--

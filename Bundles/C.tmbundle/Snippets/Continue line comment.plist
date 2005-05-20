@@ -4,7 +4,13 @@
 <dict>
 	<key>content</key>
 	<string>
-// $0</string>
+`CH=$(perl &lt;&lt;&lt;$TM_SCOPE -pe 's/.*comment\.line\.([^.]*).*/$1/')
+grep -w ^$CH &lt;&lt;EOF|cut -d: -f2|tr -d \n
+double-slash://
+double-dash:--
+number-sign:#
+percentage:%
+EOF` $0</string>
 	<key>keyEquivalent</key>
 	<string>#</string>
 	<key>name</key>

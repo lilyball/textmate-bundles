@@ -29,7 +29,7 @@ redirect() {
 
 # Close the HTML window, after a delay (in milliseconds). Defaults to 1 second.
 # USAGE: closeWindow <delay in ms>
-closeWin() {
+closeWindow() {
    local to=$1
    [ ${to:=1000} ]
 	delayedJS $to 'window.close();'

@@ -10,7 +10,7 @@
 # Generate JavaScript code (i.e. wrap arguments in script tags). A final ; is added.
 # USAGE: javaScript <code...>
 javaScript() {
-	echo '<script type="text/javascript">'$@';</script>'
+	echo "<script type=\"text/javascript\">${@};</script>"
 }
 
 # Execute JavaScript code after a delay (in milliseconds).
@@ -25,6 +25,20 @@ delayedJS() {
 # USAGE: redirect <url>
 redirect() {
 	javaScript 'window.location="'$1'"'
+}
+
+# Generate CSS (i.e. wrap arguments in style tags).
+# USAGE: css <styles...>
+css() {
+   echo "<style type=\"text/css\">$@</style>"
+}
+
+# Import a CSS script.
+# USAGE: importCSS <filename>
+importCSS() {
+   echo '<style type="text/css">'
+   cat $1
+   echo '</style>'
 }
 
 # Close the HTML window, after a delay (in milliseconds). Defaults to 1 second.

@@ -1,10 +1,26 @@
-{
-    beforeRunningCommand = nop; 
-    command = "# views the disassembled bytecodes for the exported .swf\n# obtain flasm from http://www.nowrap.de/flasm.html\n# change path to binary as needed\n\nflasm -d \"$TM_SELECTED_FILE\""; 
-    input = none; 
-    keyEquivalent = "~\U00d4\U00fa\U00e8"; 
-    name = "Disassemble .SWF"; 
-    output = openAsNewDocument; 
-    uuid = "022C9B78-88E9-11D9-9236-000A95C5F126"; 
-    scope = "source.actionscript";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># views the disassembled bytecodes for the exported .swf
+# obtain flasm from http://www.nowrap.de/flasm.html
+# change path to binary as needed
+
+flasm -d "$TM_SELECTED_FILE"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>Disassemble .SWF</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>source.actionscript</string>
+	<key>uuid</key>
+	<string>022C9B78-88E9-11D9-9236-000A95C5F126</string>
+</dict>
+</plist>

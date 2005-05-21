@@ -1,7 +1,16 @@
-{
-    content = "<title>${1:PageTitle}</title>$0"; 
-    name = "Title (title)"; 
-    tabTrigger = title; 
-    uuid = "B62ECABE-A086-11D9-A5A2-000D93C8BE28"; 
-    scope = "text.html";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;title&gt;${1:`if [[ -z $TM_FILENAME ]]; then printf "Page title"; else basename "$TM_FILENAME"|sed 's/\(.*\)\..*$/\1/'; fi`}&lt;/title&gt;</string>
+	<key>name</key>
+	<string>Title (title)</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>tabTrigger</key>
+	<string>title</string>
+	<key>uuid</key>
+	<string>B62ECABE-A086-11D9-A5A2-000D93C8BE28</string>
+</dict>
+</plist>

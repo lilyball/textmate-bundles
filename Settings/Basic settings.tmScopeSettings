@@ -75,6 +75,27 @@
 				<string>^\s+\}$</string>
 				<key>increaseIndentPattern</key>
 				<string>^.*(\{[^}"']*|\([^)"']*)$</string>
+				<key>shellVariables</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>TM_COMMENT_START</string>
+						<key>value</key>
+						<string>/*</string>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>TM_COMMENT_END</string>
+						<key>value</key>
+						<string>*/</string>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>TM_COMMENT_MODE</string>
+						<key>value</key>
+						<string>block</string>
+					</dict>
+				</array>
 				<key>smartTypingPairs</key>
 				<array>
 					<array>
@@ -455,7 +476,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Ruby indent</string>
+			<string>Ruby settings</string>
 			<key>scope</key>
 			<string>source.ruby</string>
 			<key>settings</key>
@@ -464,6 +485,27 @@
 				<string>^\s+(\}|end|rescue|else|elsif|when)$</string>
 				<key>increaseIndentPattern</key>
 				<string>^(\s*(module|class|begin|def|if|else|elsif|unless|case|when|rescue|for|while|unless|[^#"']*\&lt;do)\&gt;(?!.*?;.*?\&lt;end\&gt;)|[^#"']*\{(?!.*?\})).*$</string>
+				<key>shellVariables</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>TM_COMMENT_START</string>
+						<key>value</key>
+						<string># </string>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>TM_COMMENT_END</string>
+						<key>value</key>
+						<string></string>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>TM_COMMENT_MODE</string>
+						<key>value</key>
+						<string>line</string>
+					</dict>
+				</array>
 			</dict>
 		</dict>
 		<dict>

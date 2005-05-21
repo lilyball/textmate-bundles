@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+$s      = ENV['TM_COMMENT_START']
+$e      = ENV['TM_COMMENT_END']
+$m      = ENV['TM_COMMENT_MODE']
+$t      = STDIN.read
+
+$s_esc  = $s.gsub(/./, '\\\\\&amp;')
+$e_esc  = $e.gsub(/./, '\\\\\&amp;')
+
+case $m
+when "line"
+  if $t =~ /\A\s*#{$s_esc}/
+    print $t.gsub(/^(\s*)#{$s_esc}(.*)#{$e_esc}(\s*)$/, '\1\2\3')
+  else
+    print $t.gsub(/^.*$/, "#{$s}\\&amp;#{$e}")
+  end
+when "block"
+  $re = /\A(\s*)#{$s_esc}(.*)#{$e_esc}(\s*)\z/m
+  if $t =~ $re
+    print $t.gsub($re, '\1\2\3')
+  else
+    print $s, $t, $e
+  end
+end</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@/</string>
+	<key>name</key>
+	<string>Toggle comment</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source</string>
+	<key>uuid</key>
+	<string>73EAE95D-A09C-4FC2-B4E3-42505678B57E</string>
+</dict>
+</plist>

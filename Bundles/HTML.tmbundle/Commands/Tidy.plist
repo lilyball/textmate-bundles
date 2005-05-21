@@ -9,11 +9,10 @@
 	<key>capturePattern</key>
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
-	<string># BEWARE. Errors show up in the header of your tidy-ed document. Use Tidy Error Display first!!
-
-~/bin/tidy -bicq "$TM_FILEPATH"</string>
+	<string># BEWARE. Errors are suppressed. Use Tidy Error Display first!
+"$TM_SUPPORT_PATH/bin/tidy" -utf8 -bicq 2&gt;/dev/null</string>
 	<key>input</key>
-	<string>none</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>^@h</string>
 	<key>lineCaptureRegister</key>

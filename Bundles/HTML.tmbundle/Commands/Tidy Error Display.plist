@@ -9,7 +9,7 @@
 	<key>capturePattern</key>
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
-	<string>~/bin/tidy -e "$TM_FILEPATH"</string>
+	<string>"$TM_SUPPORT_PATH/bin/tidy" -utf8 -e "$TM_FILEPATH"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

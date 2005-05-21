@@ -7,22 +7,30 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
+# read shell variables (set these per language)
 $s      = ENV['TM_COMMENT_START']
 $e      = ENV['TM_COMMENT_END']
 $m      = ENV['TM_COMMENT_MODE']
 $t      = STDIN.read
 
+# default values
+$s      = "# "   if $s.nil?
+$e      = ""     if $e.nil?
+$m      = "line" if $m.nil?
+
+# needs to escape them for use in regex
+# because we can't do \Q...\E
 $s_esc  = $s.gsub(/./, '\\\\\&amp;')
 $e_esc  = $e.gsub(/./, '\\\\\&amp;')
 
 case $m
-when "line"
+when "line"  # apply comment line-by-line
   if $t =~ /\A\s*#{$s_esc}/
     print $t.gsub(/^(\s*)#{$s_esc}(.*)#{$e_esc}(\s*)$/, '\1\2\3')
   else
     print $t.gsub(/^.*$/, "#{$s}\\&amp;#{$e}")
   end
-when "block"
+when "block" # apply comment around selection
   $re = /\A(\s*)#{$s_esc}(.*)#{$e_esc}(\s*)\z/m
   if $t =~ $re
     print $t.gsub($re, '\1\2\3')

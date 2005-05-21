@@ -59,7 +59,12 @@ importCSS() {
 # stylesheet and javascript.
 # USAGE: htmlHeader [optional <head> stuff...]
 htmlHeader() {
-   echo '<html><head>'
+   echo '<?xml version="1.0" encoding="utf-8"?>'
+   echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"'
+   echo '	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
+   echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>'
+   echo '<meta http-equiv="content-type" content="text/html; charset=utf-8" />'
+#  echo "<title>$1</title>"
    importCSS "${TM_SUPPORT_PATH}/css/default.css"
    importJS "${TM_SUPPORT_PATH}/script/default.js"
    [ -n "$1" ] && echo "$@"

@@ -1,5 +1,6 @@
 {
     fileTypes = (html, htm, shtml, xhtml, rhtml); 
+    firstLineMatch = "<!DOCTYPE|<(?i:html)";
     foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\b.*?>|\\{)"; 
     foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
     keyEquivalent = "^~H"; 

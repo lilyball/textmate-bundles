@@ -1,7 +1,7 @@
 {
     content = "match ${1:value} with\n| ${2:patt} -> ${3:expr}\n| ${4:_} -> ${5:expr2}"; 
-    name = match; 
+    scope = "source.ocaml"; 
     tabTrigger = mat; 
     uuid = "C332D848-7472-11D9-8C1B-000A95AFE286"; 
-    scope = "source.ocaml";
+    name = "match (mat)";
 }

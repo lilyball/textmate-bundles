@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>echo '&lt;pre&gt;'
+cd "$TM_DIRECTORY"
+javac -verbose "$TM_FILENAME" 2&gt; &gt;(perl -pe 's|(.*?):(\d+):(.*)|&lt;a href="txmt://open?line=$2"&gt;$&amp;&lt;/a&gt;|')
+if (($? &gt;= 1)); then exit; fi
+java "${TM_FILENAME%.java}"
+
+# # if you want to run the program in Terminal.app
+# osascript &lt;&lt;EOF
+#    tell application "Terminal"
+#       activate
+#       do script "cd '$TM_DIRECTORY'; java '${TM_FILENAME%.java}'"
+#    end tell
+# EOF
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Compile &amp; run java file</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.java</string>
+	<key>uuid</key>
+	<string>05283F87-438D-45C1-ADFD-B8BF1CD17429</string>
+</dict>
+</plist>

@@ -21,6 +21,13 @@ case "$lang" in
         lang="caml"
         ;;
 esac
+
+if [[ -z $TM_FILENAME ]]
+  then title="Source as HTML"
+  else title="$TM_FILENAME as HTML"
+fi
+echo "&lt;html&gt;&lt;head&gt;&lt;title&gt;$title&lt;/title&gt;&lt;/head&gt;"
+
 expand -3 | "$TM_SUPPORT_PATH/bin/source-highlight" --line-number --src-lang=$lang --out-format=xhtml</string>
 	<key>input</key>
 	<string>document</string>

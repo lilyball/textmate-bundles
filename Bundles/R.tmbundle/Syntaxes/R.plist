@@ -1,30 +1,51 @@
 {
-    backgroundColor = "#FFFFFF"; 
     fileTypes = (r, s, R, S); 
     foldingStartMarker = "(/\\*\\*|\\{\\s*$)"; 
     foldingStopMarker = "(\\*\\*/|^\\s*\\})"; 
-    foregroundColor = "#000000"; 
     highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
     increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$"; 
     name = "R Source"; 
     scopeName = "source.r";
     patterns = (
-        {   name = "comment.line.number-sign.r"; foregroundColor = "#236B8E"; match = "#.*$"; }, 
+        {   name = "comment.line.r"; match = "#.*$"; }, 
         {   name = "keyword.control.r"; 
-            fontStyle = (bold); 
-            foregroundColor = blue; 
-            match = "\\b(function|if|break|case|continue|do|else|for|return|while)\\b"; 
+            match = "function|if|break|case|continue|do|else|for|return|while"; 
         }, 
+        {   name = "keyword.operator.arithmetic.r"; 
+            match = "(\\-|\\+|\\*|\\/|%\\/%|%%|[^])"; 
+        }, 
+        {   name = "keyword.operator.assignment.r"; 
+            match = "(=|<-)"; 
+        },
+        {   name = "keyword.operator.comparison.r"; 
+            match = "(==|!=|<>|<|>|<=|>=)"; 
+        },
+        {   name = "keyword.operator.logical.r"; 
+            match = "(!|&&|\\|\\||\\|\\|)"; 
+        }, 
+   
         {   name = "constant.numeric.r"; 
-            foregroundColor = "#0000CD"; 
-            match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"; 
+            match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; 
         }, 
         {   name = "string.double-quoted.r"; 
             begin = "\""; 
             end = "\""; 
-            foregroundColor = "#8B2252"; 
             swallow = "\\\\."; 
-        }
+        },
+        {   name = "string.single-quoted.r"; 
+            begin = "'"; 
+            end = "'"; 
+            swallow = "\\\\."; 
+        },
+        
+        {   name = "declaration.function.r";
+            match = "([a-zA-Z._][a-zA-Z0-9._]*)\s*(<-|=)\s*function\\(([^\\)]*\\)";
+            captures = {
+                1 = { name = "entity.name.function"; };
+                2 = { name = "keyword.operator.assignment.r"; };
+            };
+        },
+        
     ); 
     smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
     uuid = "B2E6B78D-6E70-11D9-A369-000D93B3A10E"; 

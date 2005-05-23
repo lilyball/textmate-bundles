@@ -427,7 +427,7 @@ class Formatter
 	end
 	
 	def play_sound(sound)
-		%x{cd "#{$support}"; bin/play Sounds/#{sound} &}
+		%x{cd "#{$support}"; bin/play Sounds/#{sound} &>/dev/null &}
 	end
 	
 	def target_name(name, style = nil)

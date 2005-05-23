@@ -7,7 +7,7 @@ By Sune Foldager.
 
 function showElement(id)
 {
-   var b = document.getElementById(id);
+   var b = document.getElementById(id + "_b");
    var s = document.getElementById(id + "_s");
    var h = document.getElementById(id + "_h");
    b.style.display = "block";
@@ -17,7 +17,7 @@ function showElement(id)
 
 function hideElement(id)
 {
-   var b = document.getElementById(id);
+   var b = document.getElementById(id + "_b");
    var s = document.getElementById(id + "_s");
    var h = document.getElementById(id + "_h");
    b.style.display = "none";

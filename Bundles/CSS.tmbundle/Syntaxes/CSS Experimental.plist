@@ -27,7 +27,7 @@
 		* make everything more efficient :)
 		
 	*/
-	name = "CSS experimental"; 
+	name = "CSS v2 beta"; 
 	scopeName = "source.css";
 	fileTypes = (css); 
 	foldingStartMarker = "(/\\*|\\{|\\()"; 
@@ -40,14 +40,19 @@
 	            {   name = "entity.name.tag.css";
 	                match = "\\b(?i:a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\\b";
 	            },
+	            /* don't know what to call this as thes names are getting a bit long 
+	            {   name = "entity.parameter.attribute.tag.attribute?.css";
+	                begin = "\\[";
+	                end = "\\]";
+	            },
+	            */
 	            {   name = "entity.parameter.attribute.tag.class.css";
 	                match = "(\\.[a-zA-Z0-9_-]+)";
 	            },
 	            {   name = "entity.parameter.attribute.tag.id.css";
 	                match = "(#[a-zA-Z0-9_-]+)";
 	            },
-	            {   name = "entity.parameter.attribute.tag.star.css";
-	                // don't know what this should be called but here it is anyway
+	            {   name = "entity.parameter.attribute.tag.universal.css";
 	                match = "(\\*)";
 	            },
 	            {   name = "entity.parameter.attribute.tag.pseudo-class.css";
@@ -166,7 +171,7 @@
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
 								},
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},	
 								{	name = "constant.color.rgb-value.css";
 									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
@@ -187,13 +192,13 @@
 									match = "fixed";
 								},
 								{	// keyword.function.css 
-									begin = "(url)\\s*\\((?=([^)]*))";
-									end = "\\)";
+									begin = "(url)\\s*\\(['\"]?";
+									end = "['\"]?\\)";
 									name = "keyword.function.css"; 
 									captures = { 
 									    1 = { name = "keyword.function-name.css"; }; 
-									    2 = { name = "constant.uri.css"; }; 
 									};
+									/*
 									patterns = (
 										{	name = "string.single-quoted.css";
 											begin = "'"; end = "'"; swallow = "\\\\.";
@@ -202,6 +207,7 @@
 											begin = "\""; end = "\""; swallow = "\\\\."; 
 										},
 									);
+									*/
 								},
 								{	// keyword.function.css 
 									begin = "(rgb)\\s*\\((?=([^)]*))";
@@ -212,7 +218,7 @@
 									};
 									patterns = (
 									    {	name = "keyword.rgb-value.css";
-									    	match = "[12]?[0-9]?[0-9]?"; 
+									    	match = "[12]?[0-9]?[0-9]"; 
 									    },
 									    {	name = "keyword.rgb-value.css";
 									    	match = "(100|[0-9]{1,2})%"; 
@@ -236,7 +242,7 @@
 							patterns = ( 
 								{									
 									name = "keyword.property-name.css";
-									match = "border(((-bottom|-left|-right|-top)?(-color|-style|-width)?)|-collapse|-spacing)?";
+									match = "border(-collapse|-spacing|((-bottom|-left|-right|-top)?(-color|-style|-width)?))?";
 								},	
 							);
 						},
@@ -246,7 +252,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 							    },
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -416,8 +422,11 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								/*
-								 <string> | <uri> | <counter> | attr(X) | open-quote | close-quote | no-open-quote | no-close-quote ]+
+								 <string> | <uri> | <counter> | attr(X) |]+
 								*/
+								{	name = "keyword.property-value.css";
+									match = "(open-quote|close-quote|no-open-quote|no-close-quote)";
+								},	
 								{	name = "keyword.property-value.css";
 									match = "(inherit|!important)";
 								},													
@@ -426,10 +435,39 @@
 					);				
 				},
 				/* 
-				'counter-increment' [ <identifier> <integer>? ]+ | none | inherit
-				'counter-reset' [ <identifier> <integer>? ]+ | none | inherit
-				cue group
+				'counter
 				*/
+				{
+					name = "declaration.property.counter.css";
+					begin = "(?=count)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "counter-(increment|reset)";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(none)";
+								},
+								/*selector */
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);
+						},					
+					);				
+				},
+				/*cue group*/
 				/*cursor */
 				{
 					name = "declaration.property.cursor.css";
@@ -611,8 +649,11 @@
 								{	name = "keyword.font-name.css";
 									match = "((?i:arial( black)?|century|comic|courier|garamond|georgia|geneva|helvetica|impact|lucida( sans)?( grande)?( unicode)?|symbol|system|tahoma|times( new roman)?|trebuchet( ms)?|utopia|verdana|webdings|sans-serif|serif|monospace))";
 								},
+								{	name = "keyword.font-name.css";
+									match = "(serif|sans-serif|cursive|fantasy|monospace)";
+								},
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -621,10 +662,13 @@
 									match = "(normal|bold(er)?|lighter|100|200|300|400|500|600|700|800|900)";
 								},
 								{	name = "keyword.property-value.css";
-									match = "(ultra-condensed)";
+									match = "(normal|wider|narrower|ultra-condensed|extra-condensed|condensed|semi-condensed|semi-expanded|expanded|extra-expanded|ultra-expanded)";
 								},
 								{	name = "keyword.property-value.css";
-									match = "(none|italic|bold|bolder|small-caps|oblique)";
+									match = "(none|italic|small-caps|oblique)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(caption|icon|menu|message-box|small-caption|status-bar)";
 								},
 								{	name = "keyword.property-value.css";
 									match = "(inherit|!important)";
@@ -659,7 +703,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -697,7 +741,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -735,7 +779,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -820,7 +864,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -862,7 +906,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 							    },
 								{	name = "keyword.property-value.css";
 									match = "(inherit|!important)";
@@ -924,7 +968,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 							    },
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1004,7 +1048,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1055,11 +1099,79 @@
 						},					
 					);				
 				},
-				/*
-				pause 
-				pitch
-				play
-				*/
+				/*pause */
+				{
+					name = "declaration.property.pause.css";
+					begin = "(?=pause)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "pause(-after|-before)?";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+							    {	name = "constant.numeric.css";
+							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+							    },
+							    {	name = "constant.unit.css";
+							    	match = "(m)?s";
+							    },
+							    {	name = "constant.unit.css";
+							    	match = "%";
+							    },
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},														
+							);
+						},					
+					);
+				},
+				/*pitch*/
+				{
+					name = "declaration.property.pitch.css";
+					begin = "(?=pitch)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "pitch(-range)?";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+							    {	name = "constant.numeric.css";
+							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+							    },
+							    {	name = "constant.unit.css";
+							    	match = "(k)?Hz";
+							    },
+							    {	name = "keyword.property-value.css";
+							    	match = "(x-low|low|medium|high|x-high)";
+							    },
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},														
+							);
+						},					
+					);
+				},
+				/*play-during*/
 				/* position */
 				{
 					name = "declaration.property.position.css";
@@ -1090,10 +1202,64 @@
 						},					
 					);
 				},
-				/*
-				quotes
-				richness
-				*/
+				/* quotes */
+				{
+					name = "declaration.property.quotes.css";
+					begin = "(?=(quotes))"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "quotes";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+                                /* include strings */
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);														
+						},					
+					);
+				},
+				/* richness */
+				{
+					name = "declaration.property.richness.css";
+					begin = "(?=richness)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])";	 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "richness";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},													
+							);														
+						},					
+					);
+				},
 				/* placement */
 				{
 					name = "declaration.property.placement.css";
@@ -1115,7 +1281,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1151,7 +1317,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1187,7 +1353,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1205,13 +1371,108 @@
 						},					
 					);
 				},
-				/*
-				'speak' normal | none | spell-out | inherit normal		yes		aural
-				'speak-header'	once | always | inherit once	elements that have table header information yes		aural
-				'speak-numeral' digits | continuous | inherit	continuous		yes		aural
-				'speak-punctuation' code | none | inherit	none		yes		aural
-				'speech-rate'	<number> | x-slow | slow | medium | fast | x-fast | faster | slower | inherit	medium		yes		aural
-				'stress'	<number> | inherit	50		yes		aural
+				/*speak*/
+	    		{
+    				name = "declaration.property.speak.css";
+    				begin = "(?=speak)"; 
+    				end = "\\s*(?=[;}])";	
+    				patterns = (				
+    					{	name = "declaration.property-name.css"; 
+    						begin = "(?=[a-z])"; 
+    						end = "\\s*(?=:)";	
+    						patterns = ( 
+    							{									
+    								name = "keyword.property-name.css";
+    								match = "speak(-header|-numeral|-punctuation)?";
+    							},	
+    						);
+    					},
+    					{	name = "declaration.property-value.css";
+    						begin = ":\\s*"; 
+    						end = "\\s*(?=[;}])";
+    						patterns = (
+    							{	name = "keyword.property-value.css";
+    								match = "(normal|none|spell-out)";
+    							},
+    							{	name = "keyword.property-value.css";
+    								match = "(once|always)";
+    							},
+    							{	name = "keyword.property-value.css";
+    								match = "(digits|continuous)";
+    							},
+    							{	name = "keyword.property-value.css";
+    								match = "(code|none)";
+    							},
+    							{	name = "keyword.property-value.css";
+    								match = "(inherit|!important)";
+    							},												
+    						);
+    					},					
+    				);
+    			},
+				/* speech-rate */
+				{
+					name = "declaration.property.speech-rate.css";
+					begin = "(?=speech)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "speech-rate";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(x-slow|slow|medium|fast|x-fast|faster|slower|inherit)";
+								},
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},												
+							);
+						},					
+					);
+				},
+				/*'stress'*/
+				{
+					name = "declaration.property.speech-rate.css";
+					begin = "(?=stress)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "stress";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},												
+							);
+						},					
+					);
+				},
 				/*'table-layout */
 				{
 					name = "declaration.property.table-layout.css";
@@ -1245,7 +1506,7 @@
 				/* text */
 				{
 					name = "declaration.property.text.css";
-					begin = "(?=te)"; 
+					begin = "(?=text)"; 
 					end = "\\s*(?=[;}])";	
 					patterns = (				
 						{	name = "declaration.property-name.css"; 
@@ -1263,7 +1524,7 @@
 							end = "\\s*(?=[;}])";
 							patterns = (
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1308,7 +1569,7 @@
 									match = "(baseline|sub|super|top|text-top|middle|bottom|text-bottom)";
 								},	
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1344,7 +1605,7 @@
 									match = "(normal|embed|bidi-override)";
 								},	
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
@@ -1387,9 +1648,69 @@
 					);				
 				},
 				/*
-				'voice-family'	[[<specific-voice> | <generic-voice> ],]* [<specific-voice> | <generic-voice> ] | inherit	depends on user agent		yes		aural
-				'volume'	<number> | <percentage> | silent | x-soft | soft | medium | loud | x-loud | inherit medium		yes refer to inherited value	aural
-				*/
+				'voice-family'	*/
+				{
+					name = "declaration.property.voice-family.css";
+					begin = "(?=voice)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "voice-family";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(male|female|child)";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},												
+							);
+						},					
+					);
+				},
+				/*'volume'*/
+				{
+					name = "declaration.property.volume.css";
+					begin = "(?=volume)"; 
+					end = "\\s*(?=[;}])";	
+					patterns = (				
+						{	name = "declaration.property-name.css"; 
+							begin = "(?=[a-z])"; 
+							end = "\\s*(?=:)";	
+							patterns = ( 
+								{									
+									name = "keyword.property-name.css";
+									match = "volume";
+								},	
+							);
+						},
+						{	name = "declaration.property-value.css";
+							begin = ":\\s*"; 
+							end = "\\s*(?=[;}])";
+							patterns = (
+								{	name = "keyword.property-value.css";
+									match = "(silent|x-soft|soft|medium|loud|x-loud)";
+								},
+								{	name = "constant.numeric.css";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+								},
+								{	name = "keyword.property-value.css";
+									match = "(inherit|!important)";
+								},												
+							);
+						},					
+					);
+				},
 				/*'white-space'*/
 				{
 					name = "declaration.property.white-space.css";
@@ -1474,7 +1795,7 @@
 									match = "normal";
 								},
 								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.[0-9]+)?";
+									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},
 								{	name = "keyword.unit.css";
 									match = "(px|pt|cm|mm|in|em|ex|pc|%)";

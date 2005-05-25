@@ -47,13 +47,37 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Keyword</string>
+			<key>scope</key>
+			<string>keyword</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#0000FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>String</string>
 			<key>scope</key>
 			<string>string</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#8B2252</string>
+				<string>#8B1B21</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>String Interpolation</string>
+			<key>scope</key>
+			<string>string.interpolation</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#C10006</string>
 			</dict>
 		</dict>
 		<dict>
@@ -69,15 +93,24 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Keyword</string>
+			<string>Variable</string>
 			<key>scope</key>
-			<string>keyword</string>
+			<string>variable.readwrite</string>
 			<key>settings</key>
 			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
 				<key>foreground</key>
-				<string>#0000FF</string>
+				<string>#6303C3</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Constant</string>
+			<key>scope</key>
+			<string>constant</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#C50D9C</string>
 			</dict>
 		</dict>
 		<dict>
@@ -102,19 +135,6 @@
 			<dict>
 				<key>fontStyle</key>
 				<string>bold</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Library function</string>
-			<key>scope</key>
-			<string>keyword.function</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>plain</string>
-				<key>foreground</key>
-				<string>#404060</string>
 			</dict>
 		</dict>
 		<dict>
@@ -198,7 +218,20 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>JS: Object</string>
+			<string>Library function</string>
+			<key>scope</key>
+			<string>keyword.function</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>plain</string>
+				<key>foreground</key>
+				<string>#545969</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Library object</string>
 			<key>scope</key>
 			<string>keyword.object</string>
 			<key>settings</key>
@@ -209,9 +242,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>JS: Method</string>
+			<string>Library method</string>
 			<key>scope</key>
-			<string>keyword.method</string>
+			<string>keyword.function.method</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -253,17 +286,6 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>JS: Constant</string>
-			<key>scope</key>
-			<string>constant.js</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#C50D9C</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>JS: Function name</string>
 			<key>scope</key>
 			<string>keyword.declaration.js</string>
@@ -273,50 +295,6 @@
 				<string>bold</string>
 				<key>foreground</key>
 				<string>#0000A2</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Interpolation</string>
-			<key>scope</key>
-			<string>string.interpolation</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#C10006</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Regular expression</string>
-			<key>scope</key>
-			<string>string.regexp</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#8B3B05</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Variable</string>
-			<key>scope</key>
-			<string>variable.readwrite</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#6303C3</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Constant</string>
-			<key>scope</key>
-			<string>constant</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#6782D3</string>
 			</dict>
 		</dict>
 		<dict>

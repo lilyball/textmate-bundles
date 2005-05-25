@@ -23,7 +23,7 @@ revs=`osascript&lt;&lt;END
 			set theitems to the result
 			if theitems is not false then
 				if the count of items in the theitems is less than 2 then
-					display dialog "Please select two revisions (hold down the shift key to select multiple revisions)." buttons ("OK")
+					display dialog "Please select two revisions (hold down the shift key to select multiple revisions)." buttons ("Continue") default button 1
 				else
 					set theResult to (item 1 of theitems) &amp; return &amp; (item 2 of theitems)
 				end if

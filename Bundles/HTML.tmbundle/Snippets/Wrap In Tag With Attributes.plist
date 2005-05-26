@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;${1:p} ${2:attributes}&gt;`printenv TM_SELECTED_TEXT|sed <<p>p</p>></<p>p</p>>'s/\$/\\$/g'`&lt;/${1:p}&gt;$0</string>
+	<string>&lt;${1:p} ${2:attributes}&gt;`printenv TM_SELECTED_TEXT|sed &lt;&lt;p&gt;p&lt;/p&gt;&gt;&lt;/&lt;p&gt;p&lt;/p&gt;&gt;'s/\$/\\$/g'`&amp;lt;/${1:p}&amp;gt;$0</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
@@ -11,6 +11,6 @@
 	<key>scope</key>
 	<string>text.html</string>
 	<key>uuid</key>
-	<string>BC8B8AE2-5F16-11D9-B9C3-000D93589AF6</string>
+	<string>804A5B06-DA54-4634-90A6-C071622A52E0</string>
 </dict>
 </plist>

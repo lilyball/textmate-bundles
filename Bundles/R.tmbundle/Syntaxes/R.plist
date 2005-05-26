@@ -21,7 +21,7 @@
             match = "(==|!=|<>|<|>|<=|>=)"; 
         },
         {   name = "keyword.operator.logical.r"; 
-            match = "(!|&&|\\|\\|)"; 
+            match = "(!|&{1,2}|[|]{1,2})"; 
         }, 
    
         {   name = "constant.numeric.r"; 

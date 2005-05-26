@@ -16,7 +16,7 @@ revs=`osascript&lt;&lt;END
 		activate
 		set ourList to (every text item of "$revs")
 		if the count of items in ourList is 0 then
-			display dialog "No revisions of file '$(basename "$TM_FILEPATH")' found" buttons ("OK")
+			display dialog "No revisions of file '$(basename "$TM_FILEPATH")' found" buttons ("Continue") default button 1
 		else
 			tell app "SystemUIServer" to choose from list (every text item of "$revs") with prompt "Please choose two revisions of '$(basename $TM_FILEPATH)':" with multiple selections allowed
 

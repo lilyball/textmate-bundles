@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;${1:p} ${2:attributes}&gt;`printenv TM_SELECTED_TEXT|sed &lt;&lt;p&gt;p&lt;/p&gt;&gt;&lt;/&lt;p&gt;p&lt;/p&gt;&gt;'s/\$/\\$/g'`&amp;lt;/${1:p}&amp;gt;$0</string>
+	<string>&lt;${1:p} ${2:attributes}&gt;`printenv TM_SELECTED_TEXT|sed 's/\$/\\$/g'`&lt;/${1:p}&gt;$0</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>

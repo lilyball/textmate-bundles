@@ -46,6 +46,8 @@
 		{ name = "keyword.operator.comparison.perl"; 				match = "(<=>| =>|->)"; },
 		
 		/* numbers and strings */
+		{ name = "string.unquoted"; begin = "<< *(['\"`]?)([^;]+)(\\1);"; end = "^\\2$";
+		 }, 
 		{ name = "string.double-quoted.perl"; 				begin = "\""; end = "\""; swallow = "\\\\.";
 		},
 		{ name = "string.single-quoted.perl"; 				begin = "'"; end = "'"; swallow = "\\\\.";  },

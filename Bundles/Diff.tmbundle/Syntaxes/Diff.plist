@@ -12,7 +12,7 @@
       
       // sperators:
       {  name = "meta.diff.separator";
-         match = "^((\\*{15})|(={67})|(-{3}))$";
+         match = "^((\\*{15})|(={67})|(-{3}))$\\n?";
       },
       
       
@@ -20,50 +20,50 @@
       
       // a 'normal' range, also called 'change command':
       {  name = "meta.diff.range.normal";
-         match = "^\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$";
+         match = "^\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$\\n?";
       },
       
       // a unified range:
       {  name = "meta.diff.range.unified";
-         match = "^@@.+@@$";
+         match = "^@@.+@@$\\n?";
       },
       
       // a context range, could be seperated into 2 range types,
       // but i think this just would be overhead. :>
       {  name = "meta.diff.range.context";
-         match = "^((\\-{3} .+ \\-{4})|(\\*{3} .+ \\*{4}))$";
+         match = "^((\\-{3} .+ \\-{4})|(\\*{3} .+ \\*{4}))$\\n?";
       },
       
       
       // headers, the normal format shouldnt have this..
       {  name = "meta.diff.header.from-file";
-         match = "^((-{3} .+)|(\\*{3} .+))$";
+         match = "^((-{3} .+)|(\\*{3} .+))$\\n?";
       },
       
       {  name = "meta.diff.header.to-file";
-         match = "^\\+{3} .+$";
+         match = "^\\+{3} .+$\\n?";
       },
       
       
       // how to say 'new', catches normal, unified and context.
       {  name = "inserted.diff";
-         match = "^((>( .*)?)|(\\+.*))$";
+         match = "^((>( .*)?)|(\\+.*))$\\n?";
       },
       
       // just the context format knows changes:
       {  name = "changed.diff";
-         match = "^!.*$";
+         match = "^!.*$\\n?";
       },
       
       // .. deleted ..
       {  name = "deleted.diff";
-         match = "^((<( .*)?)|(-.*))$";
+         match = "^((<( .*)?)|(-.*))$\\n?";
       },
       
       
       // the Index: stuff, afaik just svn does it.
       {  name = "meta.diff.index";
-         match = "^Index: .+$";
+         match = "^Index: .+$\\n?";
       }
       
     );

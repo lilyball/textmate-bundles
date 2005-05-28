@@ -27,7 +27,7 @@ fi
 #	2.	Check if Safari is running if so open in the same window else open a new window 
 if [[ $(ps -xc|grep Safari) ]];
 then
-	printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Safari\" \n activate \n set the URL of document 1 to theActiveURL \n end tell" | osascript
+	printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Safari\" \n activate \n if not (exists document 1) then \n make new document \n set the URL of document 1 to theActiveURL \n else \n set the URL of document 1 to theActiveURL \n end if \n end tell" | osascript
 else
 	open -a Safari "$activeURL" 
 fi 
@@ -39,7 +39,7 @@ fi
 	<key>output</key>
 	<string>discard</string>
 	<key>scope</key>
-	<string>text.html</string>
+	<string>text.html, text.xhtml</string>
 	<key>uuid</key>
 	<string>84910F5F-A528-11D9-A4E3-000D93C8BE28</string>
 </dict>

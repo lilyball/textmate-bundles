@@ -3,16 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveModifiedFiles</string>
+	<string>nop</string>
 	<key>command</key>
-	<string># this command calls xcodebuild giving the name of the project
-# directory as the project to build and parses the output for
-# file/line information then plays a succes/failure sample
-# based on the final outcome
-
-# if there is no TM project, scan up the parent directories looking for an Xcode project
-
-# more or less copy/paste from “Build (using xcodebuild)”
+	<string># more or less copy/paste from “Build (using xcodebuild)”
 if [[ -n $TM_XCODE_PROJECT ]]; then
 	cd "$TM_DIRECTORY"
 	PROJECT_FILE="$TM_XCODE_PROJECT"
@@ -45,31 +38,53 @@ else
 	fi
 fi
 
-BUILD_STYLE="${TM_BUILDSTYLE:-Deployment}"
-
-# If we have an Xcode project, and it doesn't contain the build style we're looking for,
-# accept the active build style in the project.
-if [[ -d $PROJECT_FILE ]] &amp;&amp; xcodebuild -project "$PROJECT_FILE" -list | awk 'display == "yes" { sub(/^[ \t]+/, ""); print }; /^Build styles/ { display = "yes" }' | grep -F "${BUILD_STYLE}" &amp;&gt;/dev/null; then
-	BUILD_STYLE="-buildstyle $BUILD_STYLE";
-else
-	BUILD_STYLE="-activebuildstyle"
+export project="${PROJECT_FILE}/project.pbxproj"
+if [[ ! -f ${project} ]]; then
+   echo "Didn't find an Xcode project file."
+   echo "You may want to set TM_XCODE_PROJECT."
+   exit -1
 fi
 
-export PROJECT_FILE
+"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
+require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
-xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} $BUILD_STYLE 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/bin/format_build.rb"
-</string>
+def shell_escape (str)
+   str.gsub(/[`'" $]/, '\\\\\&amp;')
+end
+
+prefs = PropertyList::load(%x{defaults read com.apple.Xcode})
+dir   = prefs['PBXProductDirectory']
+
+if dir.nil?
+   dir = "#{ENV['PWD']}/build"
+end
+
+name  = ENV['project']
+proj  = PropertyList::load(File.new(name))
+objs  = proj['objects']
+
+rootObj = objs[proj['rootObject']]
+targets = rootObj['targets']
+if targets.size == 1
+   target = objs[targets[0]]
+   productKey = target['productReference']
+   product = objs[productKey]
+   file = product['path']
+   %x{cd #{shell_escape dir}; open ./#{shell_escape file}}
+end
+
+EOF</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@b</string>
+	<string>@r</string>
 	<key>name</key>
-	<string>Build (using xcodebuild)</string>
+	<string>Run (xcode target)</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source</string>
 	<key>uuid</key>
-	<string>9656317E-73EB-11D9-9848-000D93589AF6</string>
+	<string>779DEA3C-D310-4B66-9531-DF9007434878</string>
 </dict>
 </plist>

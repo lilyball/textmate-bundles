@@ -8,7 +8,7 @@
 $bundle = ENV['TM_BUNDLE_PATH'].chomp('/')
 
 $: << "#{$bundle}/Tools"
-require 'plist'
+require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
 SHORTCUT_TITLES = {
 	"keyEquivalent" => "Key Equivalent",

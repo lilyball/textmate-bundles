@@ -5,7 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>mysql --user=$MYSQL_USER --password=$MYSQL_PWD --host=${MYSQL_HOST:=localhost} --port=${MYSQL_PORT:=3306} --html $MYSQL_DB</string>
+	<string>{  if [[ "$TM_SELECTED_TEXT" ]]
+      then cat
+      else printenv TM_CURRENT_LINE
+   fi
+} | mysql --html -u$MYSQL_USER -p$MYSQL_PWD -h${MYSQL_HOST:=localhost} -P${MYSQL_PORT:=3306} $MYSQL_DB</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

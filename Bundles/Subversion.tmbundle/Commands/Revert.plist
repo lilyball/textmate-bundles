@@ -8,8 +8,9 @@
 	<string>"${TM_SVN:=svn}" revert "$TM_FILEPATH"
 
 # force TM to refresh the current file..
-osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "Dock" to activate' &amp;
-osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;
+osascript &amp;&gt;/dev/null \
+   -e 'tell application "Dock" to activate' \
+   -e 'tell application "TextMate" to activate' &amp;
 </string>
 	<key>input</key>
 	<string>none</string>

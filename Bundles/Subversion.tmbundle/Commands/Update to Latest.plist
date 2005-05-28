@@ -9,6 +9,11 @@
 	svn = ENV['TM_SVN'] || "svn"
 	puts %x{#{svn} update #{TextMate.selected_paths_for_shell}}
 END
+
+# force TM to refresh the current file..
+osascript &amp;&gt;/dev/null \
+   -e 'tell application "Dock" to activate' \
+   -e 'tell application "TextMate" to activate' &amp;
 </string>
 	<key>input</key>
 	<string>none</string>

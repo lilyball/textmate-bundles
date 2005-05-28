@@ -17,6 +17,8 @@ else
    eval "$TM_SVN" log -vr"$TM_SVN_LOG_RANGE" $TM_SELECTED_FILES \
    2&gt;&amp;1| "$TM_RUBY" -- "$FORMAT_LOG"
 fi</string>
+	<key>dontFollowNewOutput</key>
+	<true/>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

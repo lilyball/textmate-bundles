@@ -6,9 +6,7 @@
 	<string>saveModifiedFiles</string>
 	<key>command</key>
 	<string>export WorkPaths="$TM_PROJECT_DIRECTORY"
-
-echo "${TM_SVN:=svn}" &gt; /dev/null
-export TM_SVN
+: "${TM_SVN:=svn}" &amp;&amp; export TM_SVN
 
 "${TM_RUBY:=ruby}" &lt;&lt;END
 	svn		= ENV['TM_SVN']
@@ -37,6 +35,11 @@ export TM_SVN
 
 	puts "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"
 END
+
+# force TM to refresh the current file..
+osascript &amp;&gt;/dev/null \
+   -e 'tell application "Dock" to activate' \
+   -e 'tell application "TextMate" to activate' &amp;
 </string>
 	<key>input</key>
 	<string>none</string>

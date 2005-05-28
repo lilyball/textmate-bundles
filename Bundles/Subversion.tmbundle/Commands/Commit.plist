@@ -5,14 +5,10 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"
-export CommitWindow
+	<string>export CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"
+: "${TM_SVN:=svn}" &amp;&amp; export TM_SVN
 
-echo "${TM_SVN:=svn}" &gt; /dev/null
-export TM_SVN
-
-"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/svn_commit.rb"
-</string>
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/svn_commit.rb"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

@@ -5,11 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>export WorkPath="$TM_DIRECTORY"
+	<string>if [[ -d "$TM_PROJECT_DIRECTORY" ]]
+   then export WorkPath="$TM_PROJECT_DIRECTORY"
+   else export WorkPath="$TM_DIRECTORY"
+fi
 
 # show it..
-"${TM_SVN:=svn}" status "$WorkPath" 2&gt;&amp;1| "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"
-</string>
+"${TM_SVN:=svn}" status "$WorkPath" 2&gt;&amp;1| "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/format_status.rb"</string>
 	<key>dontFollowNewOutput</key>
 	<true/>
 	<key>input</key>

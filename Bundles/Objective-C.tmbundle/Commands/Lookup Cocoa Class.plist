@@ -9,9 +9,9 @@
 appkit="/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/ObjC_classic/Classes/${TM_CURRENT_WORD}.html"
 
 if [[ -f $fkit ]]; then
-   echo '&lt;meta http-equiv="Refresh" content="0;URL=file://'${fkit// /%20}'"&gt;'
+   echo '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${fkit// /%20}'"&gt;'
 elif [[ -f $appkit ]]; then
-   echo '&lt;meta http-equiv="Refresh" content="0;URL=file://'${appkit// /%20}'"&gt;'
+   echo '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${appkit// /%20}'"&gt;'
 else
    echo '&lt;h2&gt;Class:' $TM_CURRENT_WORD 'not found!&lt;/h2&gt;'
 fi

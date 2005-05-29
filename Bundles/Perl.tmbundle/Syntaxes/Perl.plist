@@ -26,7 +26,10 @@
 		/* comments */
 		{ name = "comment.line.number-sign.perl"; match = "(#).*$";  },
 		{ name = "string.regexp.perl.find"; match = "(?<!\\\\)(\\/)(.*?)(?<!\\\\)(\\\\{2})*(\\/)";  },
-		{ name = "string.regexp.perl.replace"; match = "(\\bs\\s*)(\\/)(.*?)(?<!\\\\)(\\\\{2})*(\\/)(.*?)(?<!\\\\)(\\\\{2})*(\\/)";  
+		{ name = "string.regexp.perl.find-m"; match = "\\b(m)\\s*(?<!\\\\)([^A-Za-z0-9\\s])(.*?)(?<!\\\\)(\\\\{2})*(\\2)";  
+		captures = { 1 = { name = "keyword.function.perl"; }; };  
+		},
+		{ name = "string.regexp.perl.replace"; match = "\\b(s|tr|y)\\s*([^A-Za-z0-9\\s])(.*?)(?<!\\\\)(\\\\{2})*(\\2)(.*?)(?<!\\\\)(\\\\{2})*(\\2)";  
 		captures = { 1 = { name = "keyword.function.perl"; }; };  
 		}, 
 		/* This crazy regexp just looks for text surrounded by /, except for escapes ones (which are disallowed by the look-behind ?<!) and allowing a possible even number of backslashes (by (\\{2})*), which are escaped backslashes.  */

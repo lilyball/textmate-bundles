@@ -25,9 +25,13 @@
 		
 		/* comments */
 		{ name = "comment.line.number-sign.perl"; match = "(#).*$";  },
-		{ name = "string.regexp.perl"; match = "(\\/)(.*)(\\/)";  },
-		
-		/* language stuff */
+		{ name = "string.regexp.perl.find"; match = "(?<!\\\\)(\\/)(.*?)(?<!\\\\)(\\\\{2})*(\\/)";  },
+		{ name = "string.regexp.perl.replace"; match = "(\\bs\\s*)(\\/)(.*?)(?<!\\\\)(\\\\{2})*(\\/)(.*?)(?<!\\\\)(\\\\{2})*(\\/)";  
+		captures = { 1 = { name = "keyword.function.perl"; }; };  
+		}, 
+		/* This crazy regexp just looks for text surrounded by /, except for escapes ones (which are disallowed by the look-behind ?<!) and allowing a possible even number of backslashes (by (\\{2})*), which are escaped backslashes.  */
+		/* fix: add s,m, tr, etc operators? */
+
 		{ name = "variable.constant.perl";	match = "\\b(__FILE__|__LINE__|__PACKAGE__)\\b"; },
 		{ name = "keyword.control.perl";	match = "\\b(continue|die|do|else|elsif|exit|for|foreach|goto|if|last|next|redo|return|select|unless|until|wait|while|switch|case|package|require|use|eval)\\b"; },
 

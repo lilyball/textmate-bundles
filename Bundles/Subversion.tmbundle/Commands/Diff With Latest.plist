@@ -5,25 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>export PATH="$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS:$PATH"
-
-TMP_DIR=`mktemp -d /tmp/TextMate_svn_diff.XXXXXX` || exit 1
-FILE="$TMP_DIR/$TM_FILENAME.diff"
-PIPE="$TMP_DIR/pipe"
-
-mkfifo "$PIPE"
-CocoaDialog progressbar --indeterminate --title "Diff With Newest (HEAD)" --text "Contacting subversion server…" &lt;"$PIPE" &amp;&gt;/dev/null &amp;
-
-# associate file descriptor 3 with that pipe and send a character through the pipe
-exec 3&lt;&gt; "$PIPE"
-echo -n . &gt;&amp;3
-
-"${TM_SVN:=svn}" diff -rHEAD "$TM_FILEPATH" &amp;&gt;"$FILE"
-
-exec 3&gt;&amp;-
-open -a TextMate "$FILE" &amp;
-
-{ sleep 30; rm -rf "$TMP_DIR"; } &lt;/dev/null &amp;&gt;/dev/null &amp;</string>
+	<string>. "$TM_BUNDLE_PATH/Tools/svn_diff.sh"
+svn_diff "HEAD" "Diff With Newest (HEAD)"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

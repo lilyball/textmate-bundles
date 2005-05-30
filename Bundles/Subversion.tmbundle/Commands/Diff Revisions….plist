@@ -42,18 +42,8 @@ fi
 revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`
 revs=( $revs )
 
-TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
-
-mv "$TMPFILE" "$TMPFILE.diff"
-TMPFILE="$TMPFILE.diff"
-
-"${TM_SVN:=svn}" diff -r${revs[0]#r}:${revs[1]#r} "$TM_FILEPATH" &amp;&gt; "$TMPFILE"
-
-open -a TextMate "$TMPFILE" &amp;
-
-#rm "$TMPFILE" # ideally, we'd do this, but it creates a
-               # race condition, because 'open' is asynchronous.
-</string>
+. "$TM_BUNDLE_PATH/Tools/svn_diff.sh"
+svn_diff "${revs[0]#r}:${revs[1]#r}" "Diff Revisions…"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

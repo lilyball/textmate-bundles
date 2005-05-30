@@ -5,18 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
-
-mv "$TMPFILE" "$TMPFILE.diff"
-TMPFILE="$TMPFILE.diff"
-
-# -rBASE is the same as specifying no revision -- it's the version that you have checked out.
-"${TM_SVN:=svn}" diff -rBASE "$TM_FILEPATH" &amp;&gt; "$TMPFILE"
-
-open -a TextMate "$TMPFILE" &amp;
-
-#rm "$TMPFILE" # ideally, we'd do this, but it creates a race condition, because 'open' is asynchronous.
-</string>
+	<string>. "$TM_BUNDLE_PATH/Tools/svn_diff.sh"
+svn_diff "BASE" "Diff With Working Copy (BASE)"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

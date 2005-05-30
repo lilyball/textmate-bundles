@@ -5,17 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
-
-mv "$TMPFILE" "$TMPFILE.diff"
-TMPFILE="$TMPFILE.diff"
-
-"${TM_SVN:=svn}" diff -rPREV "$TM_FILEPATH" &amp;&gt; "$TMPFILE"
-
-open -a TextMate "$TMPFILE" &amp;
-
-#rm "$TMPFILE" # ideally, we'd do this, but it creates a race condition, because 'open' is asynchronous.
-</string>
+	<string>. "$TM_BUNDLE_PATH/Tools/svn_diff.sh"
+svn_diff "PREV" "Diff With Previous Revision (PREV)"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

@@ -20,12 +20,13 @@ line, it falls back to the current (saved!) file.
 """
 
 import sys
+import os
 import sre
 import getopt
 
 def getModuleNameFromLine(word, line, column):
     # Take part of the line until column to make sure we don't get any matches after that.
-    match = sre.findall(r'(?:[a-z_][a-zA-Z0-9_]*\.)+'+word, line[:column])
+    match = sre.findall(r'(?:[a-zA-Z0-9_]*\.)+'+word, line[:column])
     if not match:
         # We're not completing a modulename, so we return None
         return None
@@ -98,10 +99,10 @@ def main(argv=None):
             raise Usage(__doc__)
         
     except Usage, err:
-        print >>sys.stderr, str(err.msg)
-        print >>sys.stderr, "\t for help use --help"
         return 2
 
+    # Add the current directory to the pythonpath so that it can find the modules there
+    sys.path.append(os.path.dirname(tmFilename))
     for match in complete(word=tmWord, line=tmLine, column=tmColumn, filename=tmFilename):
         print match
     

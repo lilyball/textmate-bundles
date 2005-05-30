@@ -44,7 +44,8 @@ begin
               "<script type=\"text/javascript\">\n"+
                  File.open($bundle+'/Tools/flip_files.js', 'r').readlines.join+'</script>' )
    
-   
+   STDOUT.flush
+
    $stdin.each_line do |line|
       raise SVNErrorException, line  if line =~ /^svn:/
       

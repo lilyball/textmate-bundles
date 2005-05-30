@@ -51,7 +51,7 @@
 			<key>settings</key>
 			<dict>
 				<key>completionCommand</key>
-				<string>"${TM_SUPPORT_PATH}/bin/pythonCompletion.py" -w $TM_CURRENT_WORD -l $TM_CURRENT_LINE -c $TM_COLUMN_NUMBER -f "$TM_FILEPATH"</string>
+				<string>"${TM_SUPPORT_PATH}/bin/pythonCompletion.py" -w "$TM_CURRENT_WORD" -l "$TM_CURRENT_LINE" -c $TM_COLUMN_NUMBER -f "$TM_FILEPATH"</string>
 				<key>disableDefaultCompletion</key>
 				<string>1</string>
 			</dict>

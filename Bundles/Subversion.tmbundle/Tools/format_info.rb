@@ -43,6 +43,7 @@ begin
               [ $bundle+"/Stylesheets/svn_style.css",
                 $bundle+"/Stylesheets/svn_info_style.css"] )
    
+   STDOUT.flush
    
    $stdin.each_line do |line|
       raise SVNErrorException, line  if line =~ /^svn:/

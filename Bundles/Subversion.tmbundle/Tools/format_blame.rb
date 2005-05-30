@@ -39,7 +39,9 @@ begin
    make_head( "Subversion Blame for '"+$full_file.sub( /^.*\//, '')+"'",
               [ $bundle+"/Stylesheets/svn_style.css",
                 $bundle+"/Stylesheets/svn_blame_style.css"] )
-   
+
+   STDOUT.flush
+
    puts '<table class="blame"> <tr>' +
             '<th>line</th>' +
             '<th class="revhead">rev</th>' +

@@ -16,10 +16,15 @@ CocoaDialog progressbar --indeterminate --title "$TITLE" --text "Contacting subv
 # associate file descriptor 3 with that pipe and send a character through the pipe
 exec 3<> "$PIPE"
 echo -n . >&3
-
 "${TM_SVN:=svn}" diff -r"$REV" "$TM_FILEPATH" &>"$FILE"
-
 exec 3>&-
 
 { open -a TextMate "$FILE"; sleep 30; rm -rf "$TMP_DIR"; } </dev/null &>/dev/null &	
+
+# this gives open enough time to re-activate the TM window
+# which did lose key when we brought up the progress bar,
+# but since this commnad blocks TM, the window hasn't been
+# rendered as having lost key (yet)
+sleep 0.1
+
 }

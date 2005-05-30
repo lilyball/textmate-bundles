@@ -61,10 +61,17 @@ def getSuggestionListFile(word, filename):
     
 def complete(word, line, column, filename=None):
     moduleName = getModuleNameFromLine(word, line, column)
-    if not moduleName:
+    # We have no module or the module refers to itself
+    if not moduleName or moduleName == "self":
         return getSuggestionListFile(word=word, filename=filename)
-    return getSuggestionListModule(word, moduleName)
-
+    else:
+        # We found some module name, let's try to get some matches from it.
+        matches = getSuggestionListModule(word, moduleName)
+        # We haven't found any matches, let's try our luck on the file itself.
+        if not matches:
+            return  getSuggestionListFile(word=word, filename=filename)
+        else:
+            return matches
 
 class Usage(Exception):
     def __init__(self, msg):

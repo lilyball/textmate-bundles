@@ -1,6 +1,8 @@
 bundle				= ENV['TM_BUNDLE_PATH']
 support				= ENV['TM_SUPPORT_PATH']
 work_path			= ENV['WorkPath']
+ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
+
 strip_path_prefix	= work_path # Dir.pwd
 svn			= ENV['TM_SVN']
 svn = "svn" if svn.nil?
@@ -53,9 +55,14 @@ mup.html {
 						else
 							status	= match[1]
 							file	= match[2]
-							
-							mup.td_status!(status)
-							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathanme" ) }
+
+							if status == '?    ' and ignore_file_pattern =~ file
+							    # This is a file that we don't want to know about
+							    nil
+							else
+    							mup.td_status!(status)
+    							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathanme" ) }
+                            end
 						end 
 					else
 						mup.td { mup.div( line, "class" => "error" ) }

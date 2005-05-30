@@ -5,6 +5,7 @@ svn				= ENV['TM_SVN']
 commit_tool		= ENV['CommitWindow']
 bundle			= ENV['TM_BUNDLE_PATH']
 support			= ENV['TM_SUPPORT_PATH']
+ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 
 CURRENT_DIR		= Dir.pwd + "/"
 
@@ -40,11 +41,12 @@ mup.html {
 
 		# Ignore files with '?', but report them to the user
 		unknown_paths = paths.select { |m| m[0] == '?' }
-
-		if unknown_paths and unknown_paths.size > 0 then
+        unknown_to_report_paths = paths.select{ |m| m[0] == '?' and not ignore_file_pattern =~ m[2]}
+		if unknown_to_report_paths and unknown_to_report_paths.size > 0 then
+		    
 			mup.div( "class" => "info" ) {
 				mup.text! "These files are not added to the repository, and so will not be committed:"		
-				mup.ul{ matches_to_paths(unknown_paths).each{ |path| mup.li(path) } }
+				mup.ul{ matches_to_paths(unknown_to_report_paths).each{ |path| mup.li(path) } }
 			}
 		end
 

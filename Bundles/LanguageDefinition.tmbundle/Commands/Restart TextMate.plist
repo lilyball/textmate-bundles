@@ -13,11 +13,17 @@ app_path=$( ps axw -o pid,command | \
 
 osascript -e 'tell app "TextMate" to quit'
 
-while [[ -n $(ps -xc|grep 'TextMate$') ]]; do
-    sleep .1;
+for (( i = 0; i &lt; 20; i++ )); do
+    if [[ ! -n $(ps -xc|grep 'TextMate$') ]]; then
+        break;
+    else
+        sleep .1;
+    fi
 done
 
-open "$app_path"
+if [[ ! -n $(ps -xc|grep 'TextMate$') ]]; then
+    open "$app_path"
+fi
 } &amp;&gt;/dev/null &amp;</string>
 	<key>input</key>
 	<string>none</string>

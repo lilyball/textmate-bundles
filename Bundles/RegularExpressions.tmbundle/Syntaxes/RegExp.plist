@@ -1,0 +1,79 @@
+// language definition for regular expressions by chris@cjack.com
+{
+    /* The name as it will appear in the Syntax Highlight List */
+    name = "Regular Expression"; 
+    comment = "Matches Oniguruma's Ruby regexp syntax (TextMate uses Oniguruma in Ruby mode).";
+
+    /* Scope name used sometimes for styling or limiting the activation
+       of snippets, commands, and macros to files using this syntax
+    */
+    scopeName = "source.regexp";
+
+    /* So that we can always recognize this syntax */
+    uuid = "BAFE4C4F-8D59-48CD-A3BC-52A2084531C9";
+    
+    /* Which filetypes this highlighting should be applied to automatically */
+    fileTypes = ("re"); 
+    
+    /* Folding, this will start folds at comments (/*) and at {
+       Stop folding at their counterparts. 
+    */
+    foldingStartMarker = "(/\\*|\\{|\\()"; 
+    foldingStopMarker = "(\\*/|\\}|\\))"; 
+    
+    patterns = (
+        {   name = "keyword.operator.regexp";
+            match = "(\\|)"; 
+        },
+        {   name = "keyword.control.anchors.regexp";
+            match = "(\\\\[bBAZzG]|\\^|\\$)";
+        },
+        {   name = "keyword.control.set.regexp";
+            begin = "\\["; end = "\\]";
+            patterns = (
+                { include = "source.regexp"; },
+                {   name = "constant.other.range.regexp";
+                    match = ".-.";
+                },
+                {   name = "keyword.operator.intersection.regexp";
+                    match = ".&&.";
+                }
+            );
+        },
+        {   name = "string.unquoted.regexp";
+            begin = "\\("; end = "\\)";
+            patterns = (
+                { include = "source.regexp"; },
+                {   name = "constant.other.assertion.regexp";
+                    match = "(?<=\\()\\?(<[=!]|>|=|:|!)";
+                },
+                {   name = "comment.line.regexp";
+                    match = "(?<=\\()\\?#";
+                },
+            );
+        },
+        {   name = "keyword.control.character-class.regexp";
+            match = "\\\\([wWsSdDhH])";
+        },
+        {   name = "keyword.other.backref-and-recursion.regexp";
+            match = "\\\\(\\n\\d+|\\k\\w+|(?<!\\|)\\g\\w+)";
+        },
+        {
+        //name = "constant.character.regexp";
+            name = "keyword.function.regexp";
+            match = "\\\\([tvnrbfae]|[0-8]{3}|x\\H\\H\\{7\\H{7}\\}|x\\H\\H|c\\d+|C-\\d+|M-\\d+|M-\\\\C-\\d+)";
+        },
+        {
+        //name = "constant.character.regexp";
+            name = "keyword.function.method.quantifier.regexp";
+            match = "((?<!\\()[?*+][?+]?)|\\{\\d*,\\d*\\}";
+        },
+        {   name = "string.single-quoted.regexp";
+            comment = "double backslash";
+            match = "\\\\\\\\"; 
+
+//            begin = '"'; end = '"'; swallow = "\\\\.";
+
+        },
+    ); 
+}

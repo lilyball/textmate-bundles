@@ -1,0 +1,29 @@
+{
+    name = "Inline Setext"; 
+    scopeName = "text.setext.inline"; 
+    patterns = (
+        {   name = "markup.italic.setext";
+            match = "~\\w+~";
+        },
+        {   name = "markup.bold.setext";
+            match = "[*]{2}.+?[*]{2}";
+        },
+        {   name = "markup.underline.setext";
+            match = "\\b_\\w+(?<!_)_\\b|\\b_.+(?<!_)_\\b"; 
+        },
+        {   name = "markup.underline.link.hotword.setext";
+            match = "\\b[\\w.]*\\w(?<!_)_\\b"; 
+        },
+        // This isn't actually part of setext, added because Tidbits uses it.
+        {   name = "markup.underline.link.setext";
+            match = "<(?i:mailto|https?|ftp|news)://.*?>";
+        },
+        {   name = "markup.other.raw";
+            match = "`.*`";
+        },
+        {   name = "markup.other.document_divider";
+            match = "\\s*\\$\\$($|\\n)";
+        },
+    ); 
+    uuid = "40A9752F-18D9-4466-8C11-CF369152BA59"; 
+}

@@ -1,0 +1,65 @@
+{
+    name = "Setext";
+    fileTypes = ( etx, etx.txt );
+    firstLineMatch = "setext";
+    scopeName = "text.setext";
+    patterns = (
+        // Inline formatting
+        { include = "text.setext.inline"; },
+
+        // Block formatting
+        {   name = "markup.other.mail_header.setext";
+            match = "^((Subject|Date|From):) (.+)";
+            captures = {
+                1 = { name = "markup.other.mail_header.name.setext"; };
+                3 = { name = "markup.other.mail_header.value.setext"; };
+            };
+        },
+        {   name = "markup.other.heading.1.setext";
+            match = "^={3,}$";
+        },
+        {   name = "markup.other.heading.2.setext";
+            match = "^-{3,}$";
+        },
+        {   name = "markup.other.include.setext";
+            begin = "^>\\s";
+            end = "$";
+            patterns = (
+                { include = "text.setext.inline"; }
+            );
+        },
+        {   name = "markup.other.bullet.setext";
+            begin = "^[*]\\s";
+            end = "$";
+            patterns = (
+                { include = "text.setext.inline"; }
+            );
+        },
+        {   name = "markup.other.raw.setext";
+            begin = "`";
+            end = "`";
+        },
+        {   name = "markup.other.note_def.setext";
+            match = "^\\.{2} (_[\\w.]+) +(\\(.+)$";
+            captures = {
+                1 = { name = "markup.other.hotword.setext"; };
+                2 = { name = "markup.other.note.setext"; };
+            };
+        },
+        {   name = "markup.other.href_def.setext";
+            match = "^\\.{2} (_[\\w.]+) +(.{2,})$";
+            captures = {
+                1 = { name = "markup.other.hotword.setext"; };
+                2 = { name = "markup.underline.link.setext"; };
+            };
+        },
+        {   name = "comment.line.double-dot.setext";
+            match = "^\\.{2} (?![.]).+";
+        },
+        {   name = "comment.block.logical_end_of_text.setext";
+            begin = "^\\.{2}$";
+            end = "dummy text you should never find";
+        },
+    );
+    uuid = "FB227CE6-DC4C-4632-BCA3-965AE0D8E419";
+}

@@ -32,8 +32,11 @@ fi
 revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`
 revs=( $revs )
 
-. "$TM_BUNDLE_PATH/Tools/svn_diff.sh"
-svn_diff "${revs[0]#r}" "Diff With Revision…"</string>
+ruby -I "$TM_BUNDLE_PATH/Tools/"&lt;&lt;END
+	require 'svn_diff'
+	Subversion::diff_active_file("${revs[0]#r}", "Subversion—Diff With Revision…")
+END
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -41,7 +44,7 @@ svn_diff "${revs[0]#r}" "Diff With Revision…"</string>
 	<key>name</key>
 	<string>Diff With Revision…</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>discard</string>
 	<key>uuid</key>
 	<string>32E15B26-B444-11D9-8D63-000A95A89C98</string>
 </dict>

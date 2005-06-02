@@ -29,17 +29,10 @@ fi
 
 revs=( $revs )
 
-TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
-
-mv "$TMPFILE" "$TMPFILE.diff"
-TMPFILE="$TMPFILE.diff"
-
-"${TM_P4:=p4}" diff -du "$TM_FILEPATH""@$revs" &amp;&gt; "$TMPFILE"
-
-open -a TextMate "$TMPFILE" &amp;
-
-#rm "$TMPFILE" # ideally, we'd do this, but it creates a
-               # race condition, because 'open' is asynchronous.
+ruby -I "$TM_BUNDLE_PATH/Tools/"&lt;&lt;END
+	require 'p4_diff'
+	Perforce::diff_active_file("@$revs", "Perforce—Diff With Revision in Label…")
+END
 </string>
 	<key>input</key>
 	<string>none</string>

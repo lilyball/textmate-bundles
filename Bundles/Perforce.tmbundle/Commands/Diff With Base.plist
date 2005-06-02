@@ -5,17 +5,12 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
+	<string>#!/usr/bin/env ruby -w
 
-mv "$TMPFILE" "$TMPFILE.diff"
-TMPFILE="$TMPFILE.diff"
+$LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_PATH'] + "/lib"
+require 'p4_diff'
 
-"${TM_P4:=p4}" diff -f -du "$TM_FILEPATH" &amp;&gt; "$TMPFILE"
-
-open -a TextMate "$TMPFILE" &amp;
-
-#rm "$TMPFILE" # ideally, we'd do this, but it creates a
-               # race condition, because 'open' is asynchronous.
+Perforce::diff_active_file("", "Perforce—Diff With Base")
 </string>
 	<key>input</key>
 	<string>none</string>

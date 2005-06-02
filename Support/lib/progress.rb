@@ -1,4 +1,6 @@
 
+require 'English'
+
 module TextMate
 
 	def TextMate.call_with_progress( args, &block )
@@ -15,7 +17,13 @@ module TextMate
 			pipe = IO.popen( %Q("#{cocoa_dialog}" progressbar --indeterminate --title "#{title}" --text "#{message}"), "w+")
 			begin
 				pipe.puts ""
-				block.call
+				data = block.call
+				if data != nil
+					File.open(output_filepath, "w") do |file|
+						file.write(data)
+					end
+				end
+				
 				%x({ open -a TextMate "#{output_filepath}"; sleep 30; rm -rf "#{tempdir}"; } </dev/null &>/dev/null &)
 			ensure
 

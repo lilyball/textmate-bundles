@@ -1,8 +1,10 @@
 {
     fileTypes = (html, htm, shtml, xhtml, rhtml); 
     firstLineMatch = "<!DOCTYPE|<(?i:html)";
-    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\b.*?>|\\{)"; 
-    foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
+    /* */
+    foldingStartMarker = "(<(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\\b.*?>|\\{\\{?(if|foreach|capture|literal|foreach|php|section|strip)|\\{\\s*$)";
+    foldingStopMarker = "(</(?i:(head|table|tr|div|style|script|ul|ol|form|dl))>|\\{\\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\\s)\\})";
+    /* */
     keyEquivalent = "^~H"; 
     name = "HTML (Basic)"; 
     scopeName = "text.html.basic";
@@ -78,6 +80,11 @@
             begin = "<%"; end = "%>"; 
             patterns = ({include = "source.ruby"; }); 
         }, 
+        {   name = "source.smarty.embedded.html"; 
+            begin = "{{|{";
+            end = "}}|}"; 
+            patterns = ({include = "source.smarty"; }); 
+        }, 
         {   name = "source.php.embedded.html"; 
             begin = "(?:^\\s+)?<\\?(php|=)?"; end = "\\?>(?:\\s*\\n)?"; 
             patterns = ({include = "source.php"; }); 
@@ -116,6 +123,11 @@
                 {   name = "string.double-quoted.html"; 
                     begin = "\""; end = "\""; 
                     patterns = (
+                        {   name = "source.smarty.embedded.xhtml"; 
+                            begin = "{{|{";
+                            end = "}}|}"; 
+                            patterns = ({include = "source.smarty"; }); 
+                        }, 
                         {   name = "constant.character-entity.html"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
                         }, 
@@ -127,6 +139,11 @@
                 {   name = "string.single-quoted.html"; 
                     begin = "'"; end = "'"; 
                     patterns = (
+                        {   name = "source.smarty.embedded.xhtml"; 
+                            begin = "{{|{";
+                            end = "}}|}"; 
+                            patterns = ({include = "source.smarty"; }); 
+                        }, 
                         {   name = "constant.character-entity.html"; 
                             match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
                         }, 

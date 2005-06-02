@@ -1,7 +1,9 @@
 {
     fileTypes = (html, htm, rhtml, tmpl, tpl, php); 
-    foldingStartMarker = "(<(?i:(head|table|div|style|script|ul|ol|form|dl))\\>.*?>|\\{)"; 
-    foldingStopMarker = "(</(?i:(head|table|div|style|script|ul|ol|form|dl))>|\\})"; 
+    /* */
+    foldingStartMarker = "(<(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\\b.*?>|\\{\\{?(if|foreach|capture|literal|foreach|php|section|strip)|\\{\\s*$)";
+    foldingStopMarker = "(</(?i:(head|table|tr|div|style|script|ul|ol|form|dl))>|\\{\\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\\s)\\})";
+    /* */
     keyEquivalent = "@\Uf704"; 
     name = "XHTML (v1)"; 
     patterns = (
@@ -24,6 +26,11 @@
             begin = "<%";
             end = "%>"; 
             patterns = ({include = "source.ruby"; }); 
+        }, 
+        {   name = "source.smarty.embedded.xhtml"; 
+            begin = "{{|{";
+            end = "}}|}"; 
+            patterns = ({include = "source.smarty"; }); 
         }, 
         {   name = "source.php.embedded.xhtml";
             begin = "<\\?(php|=)?"; 
@@ -77,6 +84,11 @@
                                     begin = "(?i:javascript):"; 
                                     end = ";";                                    
                                     patterns = ({include = "source.js"; }); 
+                                }, 
+                                {   name = "source.smarty.embedded.xhtml"; 
+                                    begin = "{{|{";
+                                    end = "}}|}"; 
+                                    patterns = ({include = "source.smarty"; }); 
                                 }, 
                                 {   name = "invalid.illegal.xhtml";
                                     match = "\\s*&\\s+"; 

@@ -22,16 +22,33 @@ end
 
 search_for_header_dot_h = search_for_header + ".h"
 
-FindPaths = %w[/usr/include /System/Library/Frameworks/ApplicationServices.framework /System/Library/Frameworks/AppKit.framework /System/Library/Frameworks/Foundation.framework /System/Library/Frameworks/Kernel.framework]
+# List of paths to search.
+FindPaths = %w[/usr/include
+/System/Library/Frameworks/AppKit.framework/Headers/
+/System/Library/Frameworks/Foundation.framework/Headers/
+/System/Library/Frameworks/IOKit.framework/Headers/
+/System/Library/Frameworks/CoreAudio.framework/Headers/
+/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework/Headers/
+/System/Library/Frameworks/QuickTime.framework/Headers
+/System/Library/Frameworks/QTKit.framework/Headers
+/System/Library/Frameworks/Carbon.framework
+/System/Library/Frameworks/Kernel.framework
+/System/Library/Frameworks/ApplicationServices.framework
+]
 
 FindPaths.each do |find_path|
 	Find.find(find_path) do |path|
-		unless File.directory?(path)
-			if search_for_header == File.basename(path) or
-			   search_for_header_dot_h == File.basename(path) then
+
+		# usually, the only symlinks in frameworks are links within the framework
+		Find.prune if File.symlink?(path)
+
+		unless File.directory?(path) 
+			path_filename = File.basename(path)
+			if path_filename == search_for_header or
+			   path_filename == search_for_header_dot_h then
 					# TODO if we were really cool, we'd gather up
-					# all candidates and present them in a list.
-					%x{ open -a TextMate "#{path}" }
+					# all candidates and present them in a list. Maybe.
+					%x{ open -a TextMate "#{path}" &amp; }
 			end
 		end
 	end

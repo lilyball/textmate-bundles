@@ -162,27 +162,19 @@
         {
             match = "\\b((bag|set)of|f(ind|or)all)(?=[(])"; 
             name = "keyword.predicate.all-solutions"; 
-        }, 
+        },
         {
             match = "\\b(current_predicate|predicate_property)(?=[(])"; 
             name = "keyword.predicate.reflection"; 
-        }, 
+        },
         {
             match = "\\b(before|after)(?=[(])"; 
             name = "keyword.predicate.event-handler"; 
-        }, 
+        },
         {
             match = "\\b(expand_term|phrase)(?=[(])"; 
             name = "keyword.predicate.grammar-rule"; 
-        }, 
-        {
-            match = "\\b(0'[0-9a-zA-Z]|0b[0-1]+|0o[0-7]+|0x[0-9a-fA-F]+)\\b"; 
-            name = "constant.numeric"; 
-        }, 
-        {
-            match = "\\b([0-9]+\\.?[0-9]*((e|E)(\\+|-)[0-9]+)?)\\b"; 
-            name = "constant.numeric"; 
-        }, 
+        },
         {
             begin = "'"; 
             end = "'"; 
@@ -194,7 +186,19 @@
             end = "\""; 
             name = "string.double-quoted"; 
             swallow = "\\\\."; 
-        }, 
+        },
+        {
+            match = "\\b(0b[0-1]+|0o[0-7]+|0x\\h+)\\b"; 
+            name = "constant.numeric"; 
+        },
+        {
+            match = "\\b(0'.|0''|0'\")"; 
+            name = "constant.numeric"; 
+        },
+        {
+            match = "\\b(\\d+\\.?\\d*((e|E)(\\+|-)?\\d+)?)\\b"; 
+            name = "constant.numeric"; 
+        },
         {
             match = "\\b([A-Z_][A-Za-z0-9_]*)\\b"; 
             name = "variable"; 

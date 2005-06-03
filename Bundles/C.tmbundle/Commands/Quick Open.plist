@@ -5,7 +5,40 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>
+	<string>#!/usr/bin/env ruby -w
+require 'Find'
+
+# TODO we should restore the fuzzy include line lookup capability, see the old implementation after the __END__
+cocoa_dialog		= "#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog"
+search_for_header	= ENV['TM_SELECTED_TEXT']
+
+if search_for_header.nil? || search_for_header.empty? then
+	search_for_header = `"#{cocoa_dialog}" inputbox --title "Open Header Quickly" --no-newline --informative-text "Header name?"  --text "foobar"  --button1 "Open" --button2 "Cancel"`
+
+	exit if search_for_header[0].chr == '2'
+
+	search_for_header = search_for_header[2..search_for_header.size]
+end
+
+search_for_header_dot_h = search_for_header + ".h"
+
+FindPaths = %w[/usr/include /System/Library/Frameworks/ApplicationServices.framework /System/Library/Frameworks/AppKit.framework /System/Library/Frameworks/Foundation.framework /System/Library/Frameworks/Kernel.framework]
+
+FindPaths.each do |find_path|
+	Find.find(find_path) do |path|
+		unless File.directory?(path)
+			if search_for_header == File.basename(path) or
+			   search_for_header_dot_h == File.basename(path) then
+					# TODO if we were really cool, we'd gather up
+					# all candidates and present them in a list.
+					%x{ open -a TextMate "#{path}" }
+			end
+		end
+	end
+end
+
+__END__
+
 # is there a selection?
 if [[ -z $TM_SELECTED_TEXT ]]; then
 	# nope, assume TM_CURRENT_LINE is an include line
@@ -15,7 +48,7 @@ else
 	HeaderName=$TM_SELECTED_TEXT
 fi
 
-FindInPaths=(/usr/include /System/Library/Frameworks/ApplicationServices.framework /System/Library/Frameworks/AppKit.framework /System/Library/Frameworks/Foundation.framework /System/Library/Frameworks/Kernel.framework)
+FindInPaths=()
 
 CountPaths=${#FindInPaths[*]}
 FindInPaths[$CountPaths]="$TM_PROJECT_DIRECTORY"

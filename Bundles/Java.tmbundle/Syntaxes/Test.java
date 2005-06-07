@@ -13,6 +13,16 @@ public final class Test {
         "$Id$",
     };
     
+    class Bar {
+        Bar() {
+            System.out.println("in Bar");
+        }
+        
+        void doFoo() {
+            
+        };
+    };
+    
 	// {{{ Test constructor
     /**
      * 
@@ -28,9 +38,23 @@ public final class Test {
 	 *
 	 * @return the value of Foo.
 	 */
-	public String getFoo(boolean baz) {
-	    
+	String getFoo() {
+	    if (true) {
+	        
+	    }
 	}
 	// }}}
-	
+
+    void setFoo() {
+        
+    }
+    // {{{ x
+    /**
+     * z
+     */
+    public Ya xz() {
+        
+    }
+    // }}}
+    
 }

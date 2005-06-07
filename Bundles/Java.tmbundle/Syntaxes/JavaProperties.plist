@@ -1,31 +1,31 @@
 {
-	/*----
-	basic java properties dictionary for textmate
-	------*/
-	
-	name = "Java Properties";
-	scopeName = "source.java-props";
-	fileTypes = ( properties );
+    /*----
+    basic java properties dictionary for textmate
+    ------*/
+    
+    name = "Java Properties";
+    scopeName = "source.java-props";
+    fileTypes = ( properties );
 
-	patterns = (
-		/* comments */
-		{
-			name = "comment.line.number-sign.java-props";
-			match = "[#!](.+)?$";
-		},
+    patterns = (
+        /* comments */
+        {
+            name = "comment.line.number-sign.java-props";
+            match = "[#!](.+)?$";
+        },
 
- 		/* KEY = VALUE PAIRS */
- 		/*
+        /* KEY = VALUE PAIRS */
+        /*
          * Not compliant with the properties file spec, but this works for me,
          * and I'm the one who counts around here.
- 		 */
-		{
-			match = "^([^:=]+)[:=](.*)$";
-			captures = {
-			    1 = { name = "keyword.java-props"; };
-			};
-		},
-	);
+         */
+        {
+            match = "^([^:=]+)[:=](.*)$";
+            captures = {
+                1 = { name = "keyword.java-props"; };
+            };
+        },
+    );
 
-	uuid = "2A28E50A-6B1D-11D9-8689-000D93589AF6";
+    uuid = "2A28E50A-6B1D-11D9-8689-000D93589AF6";
 }

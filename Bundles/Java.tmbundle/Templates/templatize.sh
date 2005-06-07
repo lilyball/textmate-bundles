@@ -26,7 +26,7 @@ pkg_name=$(echo $TM_NEW_FILE_DIRECTORY | sed -e "s#${org_bravo5_Java_pkgregexp}#
 package="package ${pkg_name};"
 
 ## build @author
-author=$(defaults read AddressBookME 2>/dev/null | awk -f ../addrbook.awk)
+author=$(defaults read AddressBookMe 2>/dev/null | awk -f ../addrbook.awk)
 
 sed -e "s#@@CLASSNAME@@#${classname}#g" \
     -e "s#@@PROJECT@@#${package}#g" \

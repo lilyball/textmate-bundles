@@ -1,5 +1,5 @@
 
-require 'English'
+#require 'English'
 
 module TextMate
 
@@ -13,22 +13,21 @@ module TextMate
 
 		tempdir = "/tmp/TextMate_progress_cmd_tmp.#{$PID}"
 		Dir.mkdir(tempdir)
-		Dir.chdir(tempdir) do
-			pipe = IO.popen( %Q("#{cocoa_dialog}" progressbar --indeterminate --title "#{title}" --text "#{message}"), "w+")
-			begin
-				pipe.puts ""
-				data = block.call
-				if data != nil
-					File.open(output_filepath, "w") do |file|
-						file.write(data)
-					end
+		Dir.chdir(tempdir)
+		pipe = IO.popen( %Q("#{cocoa_dialog}" progressbar --indeterminate --title "#{title}" --text "#{message}"), "w+")
+		begin
+			pipe.puts ""
+			data = block.call
+			if data != nil
+				File.open(output_filepath, "w") do |file|
+					file.write(data)
 				end
-				
-				%x({ open -a TextMate "#{output_filepath}"; sleep 30; rm -rf "#{tempdir}"; } </dev/null &>/dev/null &)
-			ensure
-
-				pipe.close
 			end
+			
+			%x({ open -a TextMate "#{output_filepath}"; sleep 30; rm -rf "#{tempdir}"; } </dev/null &>/dev/null &)
+		ensure
+
+			pipe.close
 		end
 
 		sleep 0.1

@@ -1,5 +1,5 @@
 
-#require 'English'
+require 'English'
 
 module TextMate
 

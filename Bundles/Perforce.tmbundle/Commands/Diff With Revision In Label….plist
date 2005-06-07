@@ -29,7 +29,7 @@ fi
 
 revs=( $revs )
 
-ruby -I "$TM_BUNDLE_PATH/Tools/"&lt;&lt;END
+ruby -I "$TM_BUNDLE_PATH/lib/"&lt;&lt;END
 	require 'p4_diff'
 	Perforce::diff_active_file("@$revs", "Perforce—Diff With Revision in Label…")
 END

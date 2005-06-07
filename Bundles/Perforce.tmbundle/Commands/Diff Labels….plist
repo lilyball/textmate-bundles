@@ -22,9 +22,9 @@ difflabels=( $difflabels )
 #echo "0:" ${difflabels[0]}
 #echo "1:" ${difflabels[1]}
 
-ruby -I "$TM_BUNDLE_PATH/Tools/"&lt;&lt;END
+ruby -I "$TM_BUNDLE_PATH/lib/"&lt;&lt;END
 	require 'p4_diff'
-	Perforce::diff_two_revisions("@${difflabels[0]}", "@${difflabels[1]}", "Perforce—Diff Labels…")
+	Perforce::diff_files_in_revisions("@${difflabels[0]}", "@${difflabels[1]}", "Perforce—Diff Labels…")
 END
 </string>
 	<key>input</key>

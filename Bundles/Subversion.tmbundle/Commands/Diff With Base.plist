@@ -5,13 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -w
+	<string>"${TM_RUBY:=ruby}" &lt;&lt;END
+#!/usr/bin/env ruby -w
 
 $LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_PATH'] + "/Tools"
 require 'svn_diff'
 
 Subversion::diff_active_file('BASE', "Subversion—Diff With Working Copy")
-</string>
+END</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

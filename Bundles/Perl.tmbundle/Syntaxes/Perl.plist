@@ -9,7 +9,7 @@
 		<string>pod</string>
 	</array>
 	<key>firstLineMatch</key>
-	<string>^#!/.*\bperl\b</string>
+	<string>^#!.*\bperl\b</string>
 	<key>foldingStartMarker</key>
 	<string>(/\*|(\{|\[|\()\s*$)</string>
 	<key>foldingStopMarker</key>
@@ -127,6 +127,23 @@
 			<string>^\2$</string>
 			<key>name</key>
 			<string>string.unquoted</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>qq(.)</string>
+			<key>end</key>
+			<string>\1</string>
+			<key>name</key>
+			<string>string.unquoted.qq</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\1\b.*\b\1</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>

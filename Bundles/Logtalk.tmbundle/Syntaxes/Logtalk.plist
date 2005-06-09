@@ -10,8 +10,8 @@
 
     fileTypes = (lgt, config); 
 
-    foldingStartMarker = ":-\\s+(object|protocol|category)(?=[(])"; 
-    foldingStopMarker = ":-\\s+end_(object|protocol|category)(?=[.])"; 
+    foldingStartMarker = "(/\\*|:-\\s+(object|protocol|category)(?=[(]))"; 
+    foldingStopMarker = "(\\*/|:-\\s+end_(object|protocol|category)(?=[.]))"; 
 
     patterns = (
         {

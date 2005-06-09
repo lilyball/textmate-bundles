@@ -1,97 +1,267 @@
-{
-	
-	/*--------------------------------------------------------------------------
-	
-	PERL SCRIPTING DICTIONARY
-	=========================
-	Originally by Eric Hsu, textmate@betterfilecabinet.com
-	http://math.sfsu.edu/hsu/textmate
-	
-	--------------------------------------------------------------------------*/
-	
-	
-	name = "Perl";
-	scopeName = "source.perl";
-	fileTypes = (pl, pm, pod);
-	firstLineMatch = "^#!/.*\\bperl\\b";
-	foldingStartMarker = "(/\\*|(\\{|\\[|\\()\\s*$)";
-	foldingStopMarker = "(\\*/|^\\s*(\\}|\\]|\\)))";
-	
-	/*Auto Indenting -- comment out the next line for PEAR-style auto-indenting*/
- /*	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$"; */ 
-	
-	
-	patterns = (
-		
-		/* comments */
-		{ name = "comment.line.number-sign.perl"; match = "(#).*$";  },
-		{ name = "string.regexp.perl.find"; match = "(?<!\\\\)(\\/)(.*?)(?<!\\\\)(\\\\{2})*(\\/)";  },
-		{ name = "string.regexp.perl.find-m"; match = "\\b(m)\\s*(?<!\\\\)([^A-Za-z0-9\\s])(.*?)(?<!\\\\)(\\\\{2})*(\\2)";  
-		captures = { 1 = { name = "keyword.function.perl"; }; };  
-		},
-		{ name = "string.regexp.perl.replace"; match = "\\b(s|tr|y)\\s*([^A-Za-z0-9\\s])(.*?)(?<!\\\\)(\\\\{2})*(\\2)(.*?)(?<!\\\\)(\\\\{2})*(\\2)";  
-		captures = { 1 = { name = "keyword.function.perl"; }; };  
-		}, 
-		/* This crazy regexp just looks for text surrounded by /, except for escapes ones (which are disallowed by the look-behind ?<!) and allowing a possible even number of backslashes (by (\\{2})*), which are escaped backslashes.  */
-		/* fix: add s,m, tr, etc operators? */
-
-		{ name = "variable.constant.perl";	match = "\\b(__FILE__|__LINE__|__PACKAGE__)\\b"; },
-		{ name = "keyword.control.perl";	match = "\\b(continue|die|do|else|elsif|exit|for|foreach|goto|if|last|next|redo|return|select|unless|until|wait|while|switch|case|package|require|use|eval)\\b"; },
-
-		{ name = "keyword.storage.modifier.perl";	match = "\\b(my|our|local)\\b"; },		
-
-		{   name = "keyword.control.perl";
-		    match = "\\b(continue|die|do|else|elsif|exit|for|foreach|goto|if|last|next|redo|return|select|unless|until|wait|while|switch|case)\\b"; },
-		
-		{ name = "keyword.function.perl";	match = "\\b(ARGV|DATA|ENV|SIG|STDERR|STDIN|STDOUT|atan2|bind|binmode|bless|caller|chdir|chmod|chomp|chop|chown|chr|chroot|close|closedir|cmp|connect|cos|crypt|dbmclose|dbmopen|defined|delete|dump|each|endgrent|endhostent|endnetent|endprotoent|endpwent|endservent|eof|eq|eval|exec|exists|exp|fcntl|fileno|flock|fork|format|formline|ge|getc|getgrent|getgrgid|getgrnam|gethostbyaddr|gethostbyname|gethostent|getlogin|getnetbyaddr|getnetbyname|getnetent|getpeername|getpgrp|getppid|getpriority|getprotobyname|getprotobynumber|getprotoent|getpwent|getpwnam|getpwuid|getservbyname|getservbyport|getservent|getsockname|getsockopt|glob|gmtime|grep|gt|hex|import|index|int|ioctl|join|keys|kill|lc|lcfirst|le|length|link|listen|local|localtime|log|lstat|lt|m|map|mkdir|msgctl|msgget|msgrcv|msgsnd|ne|no|oct|open|opendir|ord|pack|pipe|pop|pos|print|printf|push|q|qq|quotemeta|qw|qx|rand|read|readdir|readlink|recv|ref|rename|reset|reverse|rewinddir|rindex|rmdir|s|scalar|seek|seekdir|semctl|semget|semop|send|setgrent|sethostent|setnetent|setpgrp|setpriority|setprotoent|setpwent|setservent|setsockopt|shift|shmctl|shmget|shmread|shmwrite|shutdown|sin|sleep|socket|socketpair|sort|splice|split|sprintf|sqrt|srand|stat|study|substr|symlink|syscall|sysopen|sysread|system|syswrite|tell|telldir|tie|tied|time|times|tr|truncate|uc|ucfirst|umask|undef|unlink|unpack|unshift|untie|utime|values|vec|waitpid|wantarray|warn|write|y|q|qw|qq|qx)\\b"; },
-
-		{  name = "declaration.function";  match = "\\bsub\\s+([^\\n{]*)";
-      captures = { 1 = { name = "entity.name.function"; }; };
-},
-		{ name = "keyword.operator.filetest.perl";					match = "\\W\\-[rwx0RWXOezsfdlpSbctugkTBMAC]\\b"; },		
-		{ name = "keyword.operator.logical.perl";					match = "\\b(and|or|xor|as)\\b"; },
-		{ name = "keyword.operator.comparison.perl"; 				match = "(<=>| =>|->)"; },
-		
-		/* numbers and strings */
-		{ name = "string.unquoted"; begin = "<< *(['\"`]?)([^;]+)(\\1);"; end = "^\\2$";
-		 }, 
-		{ name = "string.double-quoted.perl"; 				begin = "\""; end = "\""; swallow = "\\\\.";
-		},
-		{ name = "string.single-quoted.perl"; 				begin = "'"; end = "'"; swallow = "\\\\.";  },
-		{ name = "string.backticked.perl"; 				begin = "`"; end = "`"; swallow = "\\\\.";  },
-
-  	{ name = "string.double-quoted.q.perl"; begin = "\\Wq[qwx]*\\("; end = "\\)";	 patterns = (
-	      { match = "(\\b(.*)\\b)"; } );
-	},
-	{ name = "string.double-quoted.qlinestart.perl"; begin = "^q[qwx]*\\("; end = "\\)";	 patterns = (
-	      { match = "(\\b(.*)\\b)"; } );
-	},
-	{ name = "string.double-quoted.q-brace.perl"; begin = "\\Wq[qwx]*\\{"; end = "\\}";	 patterns = (
-	      { match = "(\\b(.*)\\b)"; } );
-	},
-	{ name = "string.double-quoted.qlinestart-brace.perl"; begin = "^q[qwx]*\\{"; end = "\\}";	 patterns = (
-	      { match = "(\\b(.*)\\b)"; } );
-	},
-/*	{ name = "autoquote before =>... doesn't work"; begin = "\\{"; end = "}";	 patterns = (
-	      { begin="\\s*,*"; end="\\=\\b"; } );
-	}, */
-	
-	
-	
-	
-		/* Sections and POD */
-		
-		{ name = "string.program-block.perl";	 begin = "^__\\w+__"; end = "$";},
-				
-		{ name = "comment.block.embedded-docs.perl";	 begin = "^="; end = "^=cut";},		
-
-		/* variables */
-	{ name = "variable.readwrite.global.perl";      match = "[\\$\\@\\%][a-zA-Z\x7f-\xff\\$][a-zA-Z0-9_\x7f-\xff\\$]*\\b";  },
-	{ name = "variable.readwrite.global.special.perl";      match = "[\\$\\@\\%][0-9_]\\b";  },
-	{ name = "variable.readwrite.global.#.perl";      match = "[\\$\\@\\%]#[a-zA-Z\x7f-\xff\\$][a-zA-Z0-9_\x7f-\xff\\$]*\\b";  },
-	{ name = "variable.readwrite.global.special#.perl";      match = "[\\$\\@\\%]#[0-9_]\\b";  }
-
-	);
-	
-	uuid = "EDBFE125-6B1C-11D9-9189-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>pl</string>
+		<string>pm</string>
+		<string>pod</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>^#!/.*\bperl\b</string>
+	<key>foldingStartMarker</key>
+	<string>(/\*|(\{|\[|\()\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(\*/|^\s*(\}|\]|\)))</string>
+	<key>name</key>
+	<string>Perl</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>(#).*$</string>
+			<key>name</key>
+			<string>comment.line.number-sign.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;!\\)(\/)(.*?)(?&lt;!\\)(\\{2})*(\/)</string>
+			<key>name</key>
+			<string>string.regexp.perl.find</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.function.perl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(m)\s*(?&lt;!\\)([^A-Za-z0-9\s])(.*?)(?&lt;!\\)(\\{2})*(\2)</string>
+			<key>name</key>
+			<string>string.regexp.perl.find-m</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.function.perl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(s|tr|y)\s*([^A-Za-z0-9\s])(.*?)(?&lt;!\\)(\\{2})*(\2)(.*?)(?&lt;!\\)(\\{2})*(\2)</string>
+			<key>name</key>
+			<string>string.regexp.perl.replace</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(__FILE__|__LINE__|__PACKAGE__)\b</string>
+			<key>name</key>
+			<string>variable.constant.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(continue|die|do|else|elsif|exit|for|foreach|goto|if|last|next|redo|return|select|unless|until|wait|while|switch|case|package|require|use|eval)\b</string>
+			<key>name</key>
+			<string>keyword.control.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(my|our|local)\b</string>
+			<key>name</key>
+			<string>keyword.storage.modifier.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(continue|die|do|else|elsif|exit|for|foreach|goto|if|last|next|redo|return|select|unless|until|wait|while|switch|case)\b</string>
+			<key>name</key>
+			<string>keyword.control.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(ARGV|DATA|ENV|SIG|STDERR|STDIN|STDOUT|atan2|bind|binmode|bless|caller|chdir|chmod|chomp|chop|chown|chr|chroot|close|closedir|cmp|connect|cos|crypt|dbmclose|dbmopen|defined|delete|dump|each|endgrent|endhostent|endnetent|endprotoent|endpwent|endservent|eof|eq|eval|exec|exists|exp|fcntl|fileno|flock|fork|format|formline|ge|getc|getgrent|getgrgid|getgrnam|gethostbyaddr|gethostbyname|gethostent|getlogin|getnetbyaddr|getnetbyname|getnetent|getpeername|getpgrp|getppid|getpriority|getprotobyname|getprotobynumber|getprotoent|getpwent|getpwnam|getpwuid|getservbyname|getservbyport|getservent|getsockname|getsockopt|glob|gmtime|grep|gt|hex|import|index|int|ioctl|join|keys|kill|lc|lcfirst|le|length|link|listen|local|localtime|log|lstat|lt|m|map|mkdir|msgctl|msgget|msgrcv|msgsnd|ne|no|oct|open|opendir|ord|pack|pipe|pop|pos|print|printf|push|q|qq|quotemeta|qw|qx|rand|read|readdir|readlink|recv|ref|rename|reset|reverse|rewinddir|rindex|rmdir|s|scalar|seek|seekdir|semctl|semget|semop|send|setgrent|sethostent|setnetent|setpgrp|setpriority|setprotoent|setpwent|setservent|setsockopt|shift|shmctl|shmget|shmread|shmwrite|shutdown|sin|sleep|socket|socketpair|sort|splice|split|sprintf|sqrt|srand|stat|study|substr|symlink|syscall|sysopen|sysread|system|syswrite|tell|telldir|tie|tied|time|times|tr|truncate|uc|ucfirst|umask|undef|unlink|unpack|unshift|untie|utime|values|vec|waitpid|wantarray|warn|write|y|q|qw|qq|qx)\b</string>
+			<key>name</key>
+			<string>keyword.function.perl</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\bsub\s+([^\n{]*)</string>
+			<key>name</key>
+			<string>declaration.function</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\W\-[rwx0RWXOezsfdlpSbctugkTBMAC]\b</string>
+			<key>name</key>
+			<string>keyword.operator.filetest.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(and|or|xor|as)\b</string>
+			<key>name</key>
+			<string>keyword.operator.logical.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(&lt;=&gt;| =&gt;|-&gt;)</string>
+			<key>name</key>
+			<string>keyword.operator.comparison.perl</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;&lt; *(['"`]?)([^;]*)(\1);</string>
+			<key>end</key>
+			<string>^\2$</string>
+			<key>name</key>
+			<string>string.unquoted</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.double-quoted.perl</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.single-quoted.perl</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>`</string>
+			<key>end</key>
+			<string>`</string>
+			<key>name</key>
+			<string>string.backticked.perl</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\Wq[qwx]*\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>string.double-quoted.q.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\b(.*)\b)</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^q[qwx]*\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>string.double-quoted.qlinestart.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\b(.*)\b)</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\Wq[qwx]*\{</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>name</key>
+			<string>string.double-quoted.q-brace.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\b(.*)\b)</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^q[qwx]*\{</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>name</key>
+			<string>string.double-quoted.qlinestart-brace.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\b(.*)\b)</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^__\w+__</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>string.program-block.perl</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^=</string>
+			<key>end</key>
+			<string>^=cut</string>
+			<key>name</key>
+			<string>comment.block.embedded-docs.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>[\$\@\%][a-zA-Zx7f-xff\$][a-zA-Z0-9_x7f-xff\$]*\b</string>
+			<key>name</key>
+			<string>variable.readwrite.global.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>[\$\@\%][0-9_]\b</string>
+			<key>name</key>
+			<string>variable.readwrite.global.special.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>[\$\@\%]#[a-zA-Zx7f-xff\$][a-zA-Z0-9_x7f-xff\$]*\b</string>
+			<key>name</key>
+			<string>variable.readwrite.global.#.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>[\$\@\%]#[0-9_]\b</string>
+			<key>name</key>
+			<string>variable.readwrite.global.special#.perl</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.perl</string>
+	<key>uuid</key>
+	<string>EDBFE125-6B1C-11D9-9189-000D93589AF6</string>
+</dict>
+</plist>

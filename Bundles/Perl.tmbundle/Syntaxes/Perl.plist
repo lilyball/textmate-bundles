@@ -130,18 +130,11 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>qq(.)</string>
+			<string>qq([^\(\{\[])</string>
 			<key>end</key>
 			<string>\1</string>
 			<key>name</key>
 			<string>string.unquoted.qq</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\1\b.*\b\1</string>
-				</dict>
-			</array>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -227,6 +220,36 @@
 			<string>\}</string>
 			<key>name</key>
 			<string>string.double-quoted.qlinestart-brace.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\b(.*)\b)</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\Wq[qwx]*\[</string>
+			<key>end</key>
+			<string>\]</string>
+			<key>name</key>
+			<string>string.double-quoted.q-bracket.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\b(.*)\b)</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^q[qwx]*\[</string>
+			<key>end</key>
+			<string>\]</string>
+			<key>name</key>
+			<string>string.double-quoted.qlinestart-bracket.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>

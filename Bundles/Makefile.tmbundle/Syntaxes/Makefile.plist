@@ -3,7 +3,7 @@
 	scopeName = "source.makefile";
 	fileTypes = ( GNUmakefile, makefile, Makefile );
 	patterns = (
-		{ name = "keyword.variable.makefile"; match = "^(\\w|[-_])+\\s*=.*"; },
+		{ name = "variable.other.makefile"; match = "^(\\w|[-_])+\\s*=.*"; },
 		{ name = "comment.line.number-sign.makefile"; match = "^#.*"; },
 		{ name = "keyword.control.makefile"; match = "^(\\s*)\\b(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\b";},
 		{

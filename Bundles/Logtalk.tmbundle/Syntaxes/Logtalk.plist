@@ -5,7 +5,7 @@
  **/
 
 {
-    name = "Logtalk"; 
+    name = "Logtalk.logtalk"; 
     scopeName = "source.logtalk";
 
     fileTypes = (lgt, config); 
@@ -14,194 +14,153 @@
     foldingStopMarker = "(\\*/|:-\\s+end_(object|protocol|category)(?=[.]))"; 
 
     patterns = (
-        {
-            begin = "/\\*"; 
-            end = "\\*/"; 
-            name = "comment.block"; 
+        {   name = "comment.block.logtalk"; 
+            begin = "/\\*"; end = "\\*/"; 
         }, 
-        {
+        {   name = "comment.line.percentage.logtalk"; 
             match = "%.*$"; 
-            name = "comment.line.percentage"; 
         }, 
-        {
+        {   name = "declaration.entity.opening.logtalk"; 
             match = ":-\\s+(object|protocol|category)(?=[(])"; 
-            name = "declaration.entity.opening"; 
+            captures = {
+                1 = { name = "keyword.control.logtalk"; };
+            };
         }, 
         {
-            match = ":-\\s+end_(object|protocol|category)(?=[.])"; 
-            name = "declaration.entity.closing"; 
+            match = ":-\\s+(end_(object|protocol|category))(?=[.])"; 
+            name = "declaration.entity.closing.logtalk"; 
+            captures = {
+                1 = { name = "keyword.control.logtalk"; };
+            };
         }, 
-        {
+        {   name = "storage.modifier.relations.logtalk"; 
             match = "\\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])"; 
-            name = "declaration.entity.relations"; 
         }, 
-        {
+        {   name = "declaration.entity.others.logtalk"; 
             match = ":-\\s+(calls|encoding|in(itialization|fo)|uses)(?=[(])"; 
-            name = "declaration.entity.others"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.logtalk"; 
             match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])"; 
-            name = "declaration.predicate"; 
         }, 
-        {
+        {   name = "keyword.operator.message-sending.logtalk"; 
             match = "(::|\\^\\^)"; 
-            name = "keyword.operator.message-sending"; 
         }, 
-        {
+        {   name = "keyword.operator.mode.logtalk"; 
             match = "(\\?|@)"; 
-            name = "keyword.operator.mode"; 
         }, 
-        {
+        {   name = "keyword.operator.term-comparison.logtalk"; 
             match = "(@=<|@<|@>|@>=|==|\\\\==)"; 
-            name = "keyword.operator.term-comparison"; 
         }, 
-        {
+        {   name = "keyword.operator.arithmetic-comparison.logtalk"; 
             match = "(=<|<|>|>=|=:=|=\\\\=)"; 
-            name = "keyword.operator.arithmetic-comparison"; 
         }, 
-        {
+        {   name = "keyword.operator.bitwise.logtalk"; 
             match = "(<<|>>|/\\\\|\\\\/|\\\\)"; 
-            name = "keyword.operator.bitwise"; 
         }, 
-        {
+        {   name = "keyword.operator.evaluable.logtalk"; 
             match = "\\b(mod|rem)\\b"; 
-            name = "keyword.operator.evaluable"; 
         }, 
-        {
+        {   name = "keyword.operator.evaluable.logtalk"; 
             match = "(\\*\\*|\\+|-|\\*|/|//)"; 
-            name = "keyword.operator.evaluable"; 
         }, 
-        {
+        {   name = "keyword.operator.misc.logtalk"; 
             match = "(:-|!|\\\\+|,|;|-->|->|=|\\=|\\.|=\\.\\.|\\bis\\b)"; 
-            name = "keyword.operator.misc"; 
         }, 
-        {
+        {   name = "keyword.control.predicate.logtalk"; 
             match = "\\b(true|fail|repeat)\\b"; 
-            name = "keyword.predicate.control"; 
         }, 
-        {
+        {   name = "keyword.control.predicate.logtalk"; 
             match = "\\b(ca(ll|tch)|throw|once)(?=[(])"; 
-            name = "keyword.predicate.control"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.chars-and-bytes-io.logtalk"; 
             match = "\\b((get|peek|put)_(char|code|byte)|nl)(?=[(])"; 
-            name = "keyword.predicate.chars-and-bytes-io"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.chars-and-bytes-io.logtalk"; 
             match = "\\bnl\\b"; 
-            name = "keyword.predicate.chars-and-bytes-io"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.atom-term-processing.logtalk"; 
             match = "\\b(atom_(length|c(hars|o(ncat|des)))|sub_atom|char_code|number_c(hars|odes))(?=[(])"; 
-            name = "keyword.predicate.atom-term-processing"; 
         }, 
-        {
+        {   name = "storage.type.term-testing.logtalk"; 
             match = "\\b(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])"; 
-            name = "keyword.predicate.term-testing"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.term-io.logtalk"; 
             match = "\\b(read_term|read|write|write(q|_(canonical|term))|op|current_op|char_conversion|current_char_conversion)(?=[(])"; 
-            name = "keyword.predicate.term-io"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.term-creation-and-decomposition.logtalk"; 
             match = "\\b(arg|copy_term|functor)(?=[(])"; 
-            name = "keyword.predicate.term-creation-and-decomposition"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.term-unification.logtalk"; 
             match = "\\b(unify_with_occurs_check)(?=[(])"; 
-            name = "keyword.predicate.term-unification"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.stream-selection-and-control.logtalk"; 
             match = "\\b((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])"; 
-            name = "keyword.predicate.stream-selection-and-control"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.stream-selection-and-control.logtalk"; 
             match = "\\b(flush_output|at_end_of_stream)\\b"; 
-            name = "keyword.predicate.stream-selection-and-control"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.prolog-flags.logtalk"; 
             match = "\\b((set|current)_prolog_flag)(?=[(])"; 
-            name = "keyword.predicate.prolog-flags"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.compiling-and-loading.logtalk"; 
             match = "\\b(logtalk_(compile|l(ibrary_path|oad)))(?=[(])"; 
-            name = "keyword.predicate.compiling-and-loading"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.event-handling.logtalk"; 
             match = "\\b((abolish|define)_events|current_event)(?=[(])"; 
-            name = "keyword.predicate.event-handling"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.hooks.implementation-defined.logtalk"; 
             match = "\\b((current|set)_logtalk_flag|halt)(?=[(])"; 
-            name = "keyword.predicate.hooks.implementation-defined"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.hooks.implementation-defined.logtalk"; 
             match = "\\b(halt)\\b"; 
-            name = "keyword.predicate.hooks.implementation-defined"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.entity-creation-and-abolishing.logtalk"; 
             match = "\\b((c(reate|urrent)|abolish)_(object|protocol|category))(?=[(])"; 
-            name = "keyword.predicate.entity-creation-and-abolishing"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.reflection.logtalk"; 
             match = "\\b((object|protocol|category)_property|extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])"; 
-            name = "keyword.predicate.reflection"; 
         }, 
-        {
+        {   name = "keyword.control.logtalk"; 
             match = "\\b((for|retract)all)(?=[(])"; 
-            name = "keyword.predicate.misc"; 
         }, 
-        {
-            match = "\\b(parameter|se(lf|nder)|this)(?=[(])"; 
-            name = "keyword.predicate.execution-context"; 
+        {   name = "keyword.other.predicate.execution-context.logtalk"; 
+            match = "\\b(parameter)(?=[(])"; 
         }, 
-        {
+        {   name = "constant.language.logtalk"; 
+            match = "\\b(se(lf|nder)|this)(?=[(])"; 
+        }, 
+        {   name = "keyword.other.predicate.database.logtalk"; 
             match = "\\b(a(bolish|ssert(a|z))|clause|retract|retractall)(?=[(])"; 
-            name = "keyword.predicate.database"; 
         }, 
-        {
+        {   name = "keyword.other.predicate.all-solutions.logtalk"; 
             match = "\\b((bag|set)of|f(ind|or)all)(?=[(])"; 
-            name = "keyword.predicate.all-solutions"; 
         },
-        {
+        {   name = "keyword.other.predicate.reflection.logtalk"; 
             match = "\\b(current_predicate|predicate_property)(?=[(])"; 
-            name = "keyword.predicate.reflection"; 
         },
-        {
+        {   name = "keyword.other.predicate.event-handler.logtalk"; 
             match = "\\b(before|after)(?=[(])"; 
-            name = "keyword.predicate.event-handler"; 
         },
-        {
+        {   name = "keyword.other.predicate.grammar-rule.logtalk"; 
             match = "\\b(expand_term|phrase)(?=[(])"; 
-            name = "keyword.predicate.grammar-rule"; 
         },
-        {
-            begin = "'"; 
-            end = "'"; 
-            name = "string.single-quoted"; 
-            swallow = "\\\\."; 
+        {   name = "string.quoted.single.logtalk"; 
+            begin = "'"; end = "'"; swallow = "\\\\."; 
         }, 
-        {
-            begin = "\""; 
-            end = "\""; 
-            name = "string.double-quoted"; 
-            swallow = "\\\\."; 
+        {   name = "string.quoted.double.logtalk"; 
+            begin = "\""; end = "\""; swallow = "\\\\."; 
         },
-        {
+        {   name = "constant.numeric.logtalk"; 
             match = "\\b(0b[0-1]+|0o[0-7]+|0x\\h+)\\b"; 
-            name = "constant.numeric"; 
         },
-        {
+        {   name = "constant.numeric.logtalk"; 
             match = "\\b(0'.|0''|0'\")"; 
-            name = "constant.numeric"; 
         },
-        {
+        {   name = "constant.numeric.logtalk"; 
             match = "\\b(\\d+\\.?\\d*((e|E)(\\+|-)?\\d+)?)\\b"; 
-            name = "constant.numeric"; 
         },
-        {
+        {   name = "variable.other.logtalk"; 
             match = "\\b([A-Z_][A-Za-z0-9_]*)\\b"; 
-            name = "variable"; 
         }
     ); 
  

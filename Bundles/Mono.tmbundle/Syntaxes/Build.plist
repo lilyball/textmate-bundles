@@ -43,14 +43,14 @@
 			};
 			
 			patterns = (
-	  			{ name = "entity.parameter.attribute.tag.nant"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.double-quoted.nant"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
-				{ name = "string.single-quoted.nant"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
+	  			{ name = "entity.other.attribute-name.nant"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "string.quoted.double.nant"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
+				{ name = "string.quoted.single.nant"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
 			);
 		},
 
 		/* entities */
-		{ name = "constant.character-entity.nant"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-		{ name = "invalid.bad-ampersand.nant"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
+		{ name = "constant.character.entity.nant"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
+		{ name = "invalid.illegal.bad-ampersand.nant"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
 	);
 }

@@ -7,22 +7,14 @@
 	foldingStartMarker = "\\b(?i:(procedure|package|function|task|type|loop))\\b";
 	foldingStopMarker = "\\b(?i:(end))\\b";
 	increaseIndentPattern = "\\b(?i:(loop|declare|begin|exception|when|procedure|for|if|else|task|type|package))\\b";
-	smartTypingPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
-	   ( "\"", "\"" ), ( "'", "'" )
-	);
-	highlightPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
-	);
 	patterns = (
 				
-		{
-			name = "keyword.control.ada";
-			match = "\\b(?i:(abort|else|new|return|abs|elsif|not|reverse|abstract|end|null|accept|entry|select|access|exception|of|separate|aliased|exit|or|subtype|all|others|and|for|out|tagged|array|function|task|at|package|terminate|generic|pragma|then|begin|goto|private|type|body|procedure|if|protected|until|case|in|use|constant|is|raise|range|when|declare|limited|record|while|delay|loop|rem|with|delta|renames|digits|mod|requeue|xor|do))\\b";
+		{ name = "keyword.control.ada";
+		  match = "\\b(?i:(abort|else|new|return|abs|elsif|not|reverse|abstract|end|null|accept|entry|select|access|exception|of|separate|aliased|exit|or|subtype|all|others|and|for|out|tagged|array|function|task|at|package|terminate|generic|pragma|then|begin|goto|private|type|body|procedure|if|protected|until|case|in|use|constant|is|raise|range|when|declare|limited|record|while|delay|loop|rem|with|delta|renames|digits|mod|requeue|xor|do))\\b";
 		},
 		
 		{ name = "constant.numeric.ada"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"; },
-		{ name = "string.double-quoted.ada"; begin = "\""; end = "\""; swallow = "\\\\.";},
+		{ name = "string.quoted.double.ada"; begin = "\""; end = "\""; swallow = "\\\\.";},
 		
 		{ name = "comment.line.double-dash.ada"; match = "--(.*)$";},
 		

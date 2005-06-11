@@ -20,35 +20,27 @@
 
     patterns = (
 
-        /* comments.block.java */
-        {
+        {   name = "comment.block.java.empty";
             // Required to prevent the JavaDoc comment from taking over
-            name = "comment.block.java.empty";
             match = "/\\*\\*/";
         },
-
-        {
-            name = "comment.block.java";
+        {   name = "comment.block.java";
             begin = "/\\*";
             end = "\\*/";
         },
-
-        {
-            name = "comment.block.embedded-docs.java";
-            begin = "/\\*\\*";
+        {   name = "comment.documentation.java";
+            begin = "/\\*\\*"; end = "\\*/";
             patterns = (
-                {
-                    match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
+                {   match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
                     captures = {
                         1 = {
-                            name = "keyword.embedded-docs.params.java";
+                            name = "keyword.other.documentation.params.java";
                         };
                         2 = {
-                            name = "keyword.embedded-docs.value.java";
+                            name = "keyword.other.documentation.value.java";
                         };
                     };
                 },
-
                 {
                     match = "\\\*\\s*@([a-zA-Z0-9_-]+)\\s*";
                     captures = {
@@ -58,79 +50,48 @@
                     };
                 },
             );
-            end = "\\*/";
         },
-        
-        /* comments.line.java */
-        {
-            name = "comment.line.double-slash.java";
+        {   name = "comment.line.double-slash.java";
             match = "//.*$";
         },
-
-        /* keywords.data-types.java */
-        {
-            match = "\\b(byte|short|char|int|long|float|double|boolean|[A-Z][A-Za-z0-9]+)\\b";
-            name = "keyword.storage.data-types.java";
+        {   name = "storage.type.java";
+            match = "\\b(void|byte|short|char|int|long|float|double|boolean|[A-Z][A-Za-z0-9]+)\\b";
         },
-
-        /* keywords.access-control.java 
-         * @todo fix conflict with keywords.modifiers.java
-         */
-        {
+        {   name = "storage.modifier.access-control.java";
             match = "\\b(private|protected|public)\\b";
-            name = "keyword.storage.access-control.java";
         },
-        
-        /* keywords.modifiers.java */
-        {
-            match = "\\b(abstract|final|native|private|protected|public|static|transient|synchronized|volatile|strictfp)\\b";
-            name = "keyword.storage.modifiers.java";
+        {   name = "storage.modifier.java";
+            match = "\\b(abstract|final|native|static|transient|synchronized|volatile|strictfp|extends|implements)\\b";
         },
-        
-        /* keywords.catch-exception.java */
-        {
+        {   name = "storage.type.java";
+            match = "\\b(class|interface)\\b";
+        },
+        {   name = "keyword.control.catch-exception.java";
             match = "\\b(try|catch|finally|throw)\\b";
-            name = "keyword.control.catch-exception.java";
         },
-        
-        /* keywords.control.java */
-        {
-            match = "\\b(break|case|continue|default|do|while|for|switch|if|else)\\b";
-            name = "keyword.control.java";
+        {   name = "keyword.control.java";
+            match = "\\b(return|break|case|continue|default|do|while|for|switch|if|else)\\b";
         },
-        
-        /* keywords.class-fns.java */
-        {
-            match = "\\b(class|extends|implements|import|instanceof|new|package|return|interface|this|throws|void|super)\\b";
-            name = "keyword.class-fns.java";
+        {   name = "keyword.other.class-fns.java";
+            match = "\\b(import|new|package|throws)\\b";
         },
-
-        /* keywords.assigned-values.java */
-        {
+        {   name = "keyword.operator.java";
+            match = "\\b(instanceof)\\b";
+        },
+        {   name = "constant.language.java";
             match = "\\b(true|false|null)\\b";
-            name = "keyword.storage.assigned-values.java";
         },
-    
-        /* constants.numeric.java */
-        {
+        {   name = "variable.other.java";
+            match = "\\b(this|super)\\b";
+        },
+        {   name = "constant.numeric.java";
             match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul)?\\b";
-            name = "constant.numeric.java";
         },
-        
-        /* strings.double-quoted.java */
-        {
-            name = "string.double-quoted.java";
-            begin = "\"";
-            end = "\"";
-            swallow = "\\\\.";
+        {   name = "string.quoted.double.java";
+            begin = "\""; end = "\""; swallow = "\\\\.";
         },
-
-        /* strings.single-quoted.java */
-        {
-            name = "string.single-quoted.java";
-            begin = "'";
-            end = "'";
-            swallow = "\\\\.";
+        {   name = "string.quoted.single.java";
+            begin = "'"; end = "'"; swallow = "\\\\.";
         },
         
         // /* match methods */

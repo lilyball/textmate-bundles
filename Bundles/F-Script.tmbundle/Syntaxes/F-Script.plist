@@ -2,64 +2,35 @@
 	/* The name as it will appear in the Syntax Highlight List */
 	name = "F-Script";
 	scopeName = "source.f-script";
-
-	/* So that we can always recognize this syntax */
 	uuid = "C2CB9A74-C9FC-4F63-8BAF-E64B72A60DD4";
-
-	/* Which filetypes this highlighting should be applied to automatically */
 	fileTypes = (fscript);
 
-	foregroundColor = "#000000";
-	backgroundColor = "#ffffff";
-
-	/* Folding, this will start folds at blocks ([) and stop
-	   at their counterparts.
-	*/
 	foldingStartMarker = "\\[";
 	foldingStopMarker = "\\]";
 
 	increaseIndentPattern = "\\[";
 
-	highlightPairs = ( ("(", ")"), ("[", "]"), ("{", "}") );
-	smartTypingPairs = ( ("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'") );
-
-	/* This is where the actual highlighting is defined. */
 	patterns = (
-		{
-			name = "symbols.ignore.fscript";
+		{   name = "dummy.symbols.ignore.fscript";
 			match = "(:|\\w):";
 		},
-		{
-			name = "symbols.fscript";
-			foregroundColor = "#234B9E";
+		{   name = "other.symbols.fscript";
 			match = ":\\w+\\b";
 		},
-		{
-			name = "blocks.compact.fscript";
-			foregroundColor = "#992299";
+		{   name = "other.blocks.compact.fscript";
 			match = "#(\\l|_|[\\+=-/!%&*|><~?])(\\w|[\\+=-/!%&*|><~?:])*";
 		},
-		{
-			name = "keyword.storage.fscript";
-			foregroundColor = "#662288";
+		{   name = "constant.language.fscript";
 			match = "\\b(true|YES|false|NO|sys|nil)\\b";
 		},
-		{
-			name = "comment.block.quotes.fscript";
-			foregroundColor = "#489C03";
-			begin = '"';
-			end = '"';
+		{   name = "comment.block.quotes.fscript";
+			begin = '"'; end = '"';
 		},
-		{
-			name = "string.single-quoted.fscript";
-			foregroundColor = "#DD8944";
-			begin = "'";
-			end = "'";
+		{   name = "string.quoted.single.fscript";
+			begin = "'"; end = "'";
 		},
-		{
-			foregroundColor = "#0000CD";
+		{   name = "constant.numeric.fscript";
 			match = "\\b((([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b";
-			name = "constant.numeric.fscript";
 		},
 	);
 }

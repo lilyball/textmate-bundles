@@ -16,17 +16,17 @@
                 {   name = "entity.name.tag.css";
                     match = "\\b(a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\\b";
                 },
-                {   name = "entity.parameter.attribute.tag.class.css";
+                {   name = "entity.other.attribute-name.class.css";
                     match = "\\.[a-zA-Z0-9_-]+";
                 },
-                {   name = "entity.parameter.attribute.tag.id.css";
+                {   name = "entity.other.attribute-name.id.css";
                     match = "#[a-zA-Z0-9_-]+";
                 },
-                {   name = "entity.parameter.attribute.tag.star.css";
+                {   name = "entity.name.tag.wildcard.css";
                     // don't know what this should be called but here it is anyway
                     match = "\\*";
                 },
-                {   name = "entity.parameter.attribute.tag.pseudo-class.css";
+                {   name = "entity.other.attribute-name.pseudo-class.css";
                     // this probably is an attribute name
                     match = ":\\b(active|after|before|first-letter|first-line|hover|link|visited)\\b";
                 }
@@ -40,25 +40,22 @@
         },
 */      {   name = "declaration.at-rule.import.css";
             begin = "^\\s*(@import\\b)"; end = "\\s*((?=;|\\}))";
-            captures = { 1 = { name = "keyword.at-rule.import.css"; }; };
+            captures = { 1 = { name = "keyword.control.at-rule.import.css"; }; };
             patterns = (
-                {   name = "string.double-quoted.css";
+                {   name = "string.quoted.double.css";
                     begin = "\""; end = "\""; swallow = "\\\\.";
                 },
                 {   // keyword.function.url.css 
                     begin = "(url)\\s*\\(\\s*"; end = "\\s*\\)\\s*"; 
-                    captures = { 1 = { name = "keyword.function.url.css"; }; };
+                    captures = { 1 = { name = "support.function.url.css"; }; };
                     patterns = (
-                        {   // I'm really torn on this one, we do sort of
-                            // want special markup of the argument to url(),
-                            // but entity.parameter.variable.function is really more for declarations
-                            name = "entity.parameter.variable.function.css";
+                        {   name = "variable.parameter.url.css";
                             match = "[^'\") \\t]+";
                         },
-                        {   name = "string.single-quoted.css";
+                        {   name = "string.quoted.single.css";
                             begin = "'"; end = "'"; swallow = "\\\\.";
                         },
-                        {   name = "string.double-quoted.css";
+                        {   name = "string.quoted.double.css";
                             begin = "\""; end = "\""; swallow = "\\\\.";
                         }
                     );
@@ -67,9 +64,9 @@
         },
         {   name = "declaration.at-rule.media.css";
             begin = "^\\s*(@media)\\b"; end = "\\s*((?=;|\\}))";
-            captures = { 1 = { name = "keyword.at-rule.media.css"; }; };
+            captures = { 1 = { name = "keyword.control.at-rule.media.css"; }; };
             patterns = (
-                {   name = "entity.parameter.variable.function.css"; // maybe this should be keyword.*
+                {   name = "support.constant.media.css";
                     match = "\\b(all|aural|braille|embossed|handheld|print|projection|screen|tty|tv)\\b,?";
                 }
             );
@@ -84,7 +81,7 @@
                     begin = "\\s*(?=[a-z])"; end = "\\s*(?=:)";  
                     patterns = ( 
                     {           
-                        name = "keyword.property-name.css";
+                        name = "support.constant.property-name.css";
                         match = "\\b(azimuth|background-attachment|background-color|background-image|background-position|background-repeat|background|border-bottom-color|border-bottom-style|border-bottom-width|border-bottom|border-collapse|border-color|border-left-color|border-left-style|border-left-width|border-left|border-right-color|border-right-style|border-right-width|border-right|border-spacing|border-style|border-top-color|border-top-style|border-top-width|border-top|border-width|border|bottom|caption-side|clear|clip|color|content|counter-increment|counter-reset|cue-after|cue-before|cue|cursor|direction|display|elevation|empty-cells|float|font-family|font-size-adjust|font-size|font-stretch|font-style|font-variant|font-weight|font|height|left|letter-spacing|line-height|list-style-image|list-style-position|list-style-type|list-style|margin-bottom|margin-left|margin-right|margin-top|marker-offset|margin|marks|max-height|max-width|min-height|min-width|-moz-border-radius|orphans|outline-color|outline-style|outline-width|outline|overflow|padding-bottom|padding-left|padding-right|padding-top|padding|page-break-after|page-break-before|page-break-inside|page|pause-after|pause-before|pause|pitch-range|pitch|play-during|position|quotes|richness|right|size|speak-header|speak-numeral|speak-punctuation|speech-rate|speak|stress|table-layout|text-align|text-decoration|text-indent|text-shadow|text-transform|top|unicode-bidi|vertical-align|visibility|voice-family|volume|white-space|widows|width|word-spacing|z-index)\\b";
                     },
                     );
@@ -92,45 +89,45 @@
                 {   name = "declaration.property-value.css";
                     begin = ":\\s*"; end = "\\s*(;|(?=\\}))";
                     patterns = (
-                        {   name = "keyword.property-value.css";
+                        {   name = "support.constant.property-value.css";
                             match = "\\b(absolute|all-scroll|always|auto|baseline|below|bidi-override|block|bold|bolder|both|bottom|break-all|break-word|capitalize|center|char|circle|col-resize|collapse|crosshair|dashed|decimal|default|disabled|disc|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ellipsis|fixed|groove|hand|help|hidden|horizontal|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|inactive|inherit|inline-block|inline|inset|inside|inter-ideograph|inter-word|italic|justify|keep-all|left|lighter|line-edge|line-through|line|list-item|loose|lower-alpha|lower-roman|lowercase|lr-tb|ltr|medium|middle|move|n-resize|ne-resize|newspaper|no-drop|no-repeat|nw-resize|none|normal|not-allowed|nowrap|oblique|outset|outside|overline|pointer|progress|\nrelative|repeat-x|repeat-y|repeat|right|ridge|row-resize|rtl|s-resize|scroll|se-resize|separate|small-caps|solid|square|static|strict|super|sw-resize|table-footer-group|table-header-group|tb-rl|text-bottom|text-top|text|thick|thin|top|transparent|underline|upper-alpha|upper-roman|uppercase|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace)\\b";
                         },
-                        {   name = "keyword.font-name.css";
+                        {   name = "support.constant.font-name.css";
                             match = "(\\b(?i:arial|century|comic|courier|garamond|georgia|helvetica|impact|lucida|symbol|system|tahoma|times|trebuchet|utopia|verdana|webdings|sans-serif|serif|monospace)\\b)";
                         },
                         {   name = "constant.numeric.css";
                             match = "(-|\\+)?\\s*[0-9]+(\\.[0-9]+)?";
                         },
-                        {   name = "keyword.unit.css";
+                        {   name = "constant.other.unit.css";
                             match = "(px|pt|cm|mm|in|em|ex|pc|%)";
                         },
-                        {   name = "constant.color.rgb-value.css";
+                        {   name = "constant.other.rgb-value.css";
                             match = "(#)([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\\b";
                         },
-                        {   name = "string.double-quoted.css";
+                        {   name = "string.quoted.double.css";
                             begin = "\""; end = "\""; swallow = "\\\\.";
                         },
-                        {   name = "string.single-quoted.css";
+                        {   name = "string.quoted.single.css";
                             begin = "\'"; end = "\'"; swallow = "\\\\.";
                         },
                         {   // keyword.function.css 
                             begin = "(rgb|url|attr|counter|counters)\\s*\\(";
                             end = "\\)";
-                            captures = { 1 = { name = "keyword.function.css"; }; };
+                            captures = { 1 = { name = "support.function.misc.css"; }; };
                             patterns = (
-                                {   name = "string.single-quoted.css";
+                                {   name = "string.quoted.single.css";
                                     begin = "'"; end = "'"; swallow = "\\\\.";
                                 },
-                                {   name = "string.double-quoted.css";
+                                {   name = "string.quoted.double.css";
                                     begin = "\""; end = "\""; swallow = "\\\\."; 
                                 },
-                                {   name = "constant.color.rgb-value.css";
+                                {   name = "constant.other.rgb-value.css";
                                     match = "(\\b0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\s*,\\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\s*,\\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\\b)";
                                 },
-                                {   name = "constant.color.rgb-percentage.css";
+                                {   name = "constant.other.rgb-percentage.css";
                                     match = "\\b([0-9]{1,2}|100)\\s*%,\\s*([0-9]{1,2}|100)\\s*%,\\s*([0-9]{1,2}|100)\\s*%";
                                 },
-                                {   name = "entity.parameter.variable.function.css";
+                                {   name = "variable.parameter.misc.css";
                                     match = "[^'\") \\t]+";
                                 },
                             );

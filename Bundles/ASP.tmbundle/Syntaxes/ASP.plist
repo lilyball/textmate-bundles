@@ -13,102 +13,69 @@
 	name = "ASP";
 	scopeName = "source.asp";
 	fileTypes = ( asa ); /* .asp is handled by asp/html */
-	smartTypingPairs	= ( ( "(", ")" ), ( "\"", "\"" ) );
-	highlightPairs		= ( ( "(", ")" ) );
 	
-	foregroundColor = "#333333";
-	backgroundColor = "#ffffff";
 	patterns = (
-		
-		/* comments */
 		{ name = "comment.line.apostrophe.asp";
 		  match = "'.*$";
-		  foregroundColor = "#999999";
 		},
-		
-		/* language stuff */
 		{ name = "keyword.control.asp";
-		  foregroundColor = "#0066CC";
 		  match = "(?i:\\b(If|Then|Else|ElseIf|End If|While|Wend|For|To|Each|Case|Select|End Select|Return|Continue|Do|Until|Loop|Next|With|Exit Do|Exit For|Exit Function|Exit Property|Exit Sub)\\b)";
 		},
-		{ name = "keyword.storage.asp";
-		  foregroundColor = "#0066CC";
-		  fontStyle = ( bold );
-		  match = "(?i:\\b(Call|Class|Const|Dim|Redim|Function|Sub|End sub|End Function|Set|Let|Get|New|Private|Public|Default|Randomize|Option Explicit|On Error Resume Next|On Error GoTo)\\b)";
+		{ name = "keyword.operator.asp";
+		  match = "(?i:\\b(Mod|And|Not|Or|Xor)\\b)";
 		},
-		{ 
-		 name = "keyword.storage.asp";
-		 foregroundColor = "#0066CC";
-		 fontStyle = ( bold );
-		 match = "(?i:\\b(Empty|False|Nothing|Null|True)\\b)";
+		{ name = "storage.type.asp";
+		  match = "(?i:\\b(Call|Class|Const|Dim|Redim|Function|Sub|End sub|End Function|Set|Let|Get|New|Randomize|Option Explicit|On Error Resume Next|On Error GoTo)\\b)";
 		},
-		{
-		 name = "keyword.operator.asp";
-		 foregroundColor = "#0066CC";
-		 fontStyle = ( bold );
-		 match = "(?i:\\b(Mod|And|Not|Or|Xor)\\b)";
+		{ name = "storage.modifier.asp";
+		  match = "(?i:\\b(Private|Public|Default)\\b)";
+		},
+		{ name = "constant.language.asp";
+		  match = "(?i:\\b(Empty|False|Nothing|Null|True)\\b)";
 		},
 		
 		/* numbers and strings */
 
-		{
-		 name = "string.double-quoted.asp";
-		 foregroundColor = "#CC3300";
-		 begin = "\"";
-		 end = "\"";
-		 swallow = "\"\"";
+		{ name = "string.quoted.double.asp";
+		  begin = "\""; end = "\""; swallow = "\"\"";
 		},
 
 		/* variables */		
-		{
-		 name = "variable.asp";
-		 foregroundColor = "#8B9B08";
-		 fontStyle = ( bold );
-		 match = "\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*?\\b";
+		{ name = "variable.other.asp";
+		  match = "\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*?\\b";
 		},
 		
 		/* ASP Objects */
-		{
-		 name = "keyword.object.asp";
-		 foregroundColor = "#000099";
-		 fontStyle = ( bold );
-		 match = "(?i:\\b(Application|ObjectContext|Request|Response|Server|Session)\\b)";
+		{ name = "support.class.asp";
+		  match = "(?i:\\b(Application|ObjectContext|Request|Response|Server|Session)\\b)";
 		},
 
 		/* ASP Collections */
-		{
-		 name = "keyword.collection.asp";
-		 foregroundColor = "#0066cc";
-		 match = "(?i:\\b(Contents|StaticObjects|ClientCertificate|Cookies|Form|QueryString|ServerVariables)\\b)";
+		{ name = "support.class.collection.asp";
+		  match = "(?i:\\b(Contents|StaticObjects|ClientCertificate|Cookies|Form|QueryString|ServerVariables)\\b)";
 		},
 
 		/* ASP Properties */
 		{
-		 name = "keyword.property.asp";
-		 foregroundColor = "#0066cc";
+		 name = "support.constant.asp";
 		 match = "(?i:\\b(TotalBytes|Buffer|CacheControl|Charset|ContentType|Expires|ExpiresAbsolute|IsClientConnected|PICS|Status|ScriptTimeout|CodePage|LCID|SessionID|Timeout)\\b)";
 		},
 		
 		/* ASP Methods */
 		{
-		 name = "keyword.function.method.asp";
-		 foregroundColor = "#6E84C4";
-		 fontStyle = ( bold );
+		 name = "support.function.asp";
 		 match = "(?i:\\b(Lock|Unlock|SetAbort|SetComplete|BianryRead|AddHeader|AppendToLog|BinaryWrite|Clear|End|Flush|Redirect|Write|CreateObject|HTMLEncode|MapPath|URLEncode|Abandon)\\b)";
 		},
 		
 		/* ASP Events */
 		{
-		 name = "keyword.event";
-		 foregroundColor = "#0033cc";
+		 name = "support.function.event.asp";
 		 match = "(?i:\\b(Application_OnEnd|Application_OnStart|OnTransactionAbort|OnTransactionCommit|Session_OnEnd|Session_OnStart)\\b)";
 		},
 
 		/* ASP (VB) Functions */
 		{
-		 name = "keyword.function.asp";
-		 foregroundColor = "#6E84C4";
-		 fontStyle = ( bold );
+		 name = "support.function.vb.asp";
 		 match = "(?i:\\b(Array|Add|Asc|Atn|CBool|CByte|CCur|CDate|CDbl|Chr|CInt|CLng|Conversions|Cos|CreateObject|CSng|CStr|Date|DateAdd|DateDiff|DatePart|DateSerial|DateValue|Day|Derived|Math|Escape|Eval|Exists|Exp|Filter|FormatCurrency|FormatDateTime|FormatNumber|FormatPercent|GetLocale|GetObject|GetRef|Hex|Hour|InputBox|InStr|InStrRev|Int|Fix|IsArray|IsDate|IsEmpty|IsNull|IsNumeric|IsObject|Item|Items|Join|Keys|LBound|LCase|Left|Len|LoadPicture|Log|LTrim|RTrim|Trim|Maths|Mid|Minute|Month|MonthName|MsgBox|Now|Oct|Remove|RemoveAll|Replace|RGB|Right|Rnd|Round|ScriptEngine|ScriptEngineBuildVersion|ScriptEngineMajorVersion|ScriptEngineMinorVersion|Second|SetLocale|Sgn|Sin|Space|Split|Sqr|StrComp|String|StrReverse|Tan|Time|Timer|TimeSerial|TimeValue|TypeName|UBound|UCase|Unescape|VarType|Weekday|WeekdayName|Year)\\b)";
 		},
 		
@@ -120,8 +87,7 @@
 		},
 		
 		{
-		 name = "keyword.storage.asp";
-		 foregroundColor = "#33cc33";
+		 name = "support.type.vb.asp";
 		 match = "(?i:\\b(vbtrue|fvbalse|vbcr|vbcrlf|vbformfeed|vblf|vbnewline|vbnullchar|vbnullstring|vbtab|vbverticaltab|vbbinarycompare|vbtextcomparevbsunday|vbmonday|vbtuesday|vbwednesday|vbthursday|vbfriday|vbsaturday|vbusesystemdayofweek|vbfirstjan1|vbfirstfourdays|vbfirstfullweek|vbgeneraldate|vblongdate|vbshortdate|vblongtime|vbshorttime|vbobjecterror|vbEmpty|vbNull|vbInteger|vbLong|vbSingle|vbDouble|vbCurrency|vbDate|vbString|vbObject|vbError|vbBoolean|vbVariant|vbDataObject|vbDecimal|vbByte|vbArray)\\b)";
 		},
 		

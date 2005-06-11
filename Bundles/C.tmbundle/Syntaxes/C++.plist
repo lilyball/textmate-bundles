@@ -7,28 +7,27 @@
 	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
 	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
 	patterns = (
-		{ include = "source.c"; },
-		{
-		    name = "keyword.control.c++";
-		    match = "\\b(explicit|export|catch|friend|namespace|operator|private|protected|public|this|try|throw|using|virtual)\\b";
+		{   include = "source.c"; },
+	    {   name = "storage.modifier.c++";
+	        match = "\\b(friend|explicit|private|protected|public|virtual)\\b";
+        },
+		{   name = "keyword.control.c++";
+		    match = "\\b(catch|namespace|operator|try|throw|using)\\b";
 		},
-
-		{
-		    name = "keyword.control.c++.template";
+		{   name = "constant.language";
+		    match = "\\b(this)\\b";
+		},
+		{   name = "storage.type.c++.template";
 		    match = "\\btemplate\\b\\s*";
 		},
-
-		{
-		    name = "keyword.operator.c++.cast";
+		{   name = "keyword.operator.c++.cast";
 		    match = "\\b(const_cast|dynamic_cast|reinterpret_cast|static_cast)\\b\\s*";
 		},
-
-		{
-		    name = "keyword.operator.c++";
+		{   name = "keyword.operator.c++";
 		    match = "\\b(and|and_eq|bitand|bitor|compl|delete|new|not|not_eq|or|or_eq|typeid|xor|xor_eq)\\b";
         },
-
-		{ name = "keyword.storage.c++"; match = "\\b(bool|class|mutable|typename|wchar_t)\\b"; },
+		{   name = "storage.type.c++"; match = "\\b(bool|class|wchar_t)\\b"; },
+		{   name = "storage.modifier.c++"; match = "\\b(export|mutable|typename)\\b"; },
 	);
 	uuid = "26251B18-6B1D-11D9-AFDB-000D93589AF6";
 }

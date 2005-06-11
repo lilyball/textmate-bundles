@@ -12,7 +12,7 @@
         }, 
         {
             match = "\\b([a-zA-Z_]+)\\b\\s*(=)"; 
-            name = "keyword.definition.ini"; 
+            name = "keyword.other.definition.ini"; 
         }, 
         {
             match = "^\\[(.*)\\]"; 
@@ -21,13 +21,13 @@
         {
             begin = "'"; 
             end = "'"; 
-            name = "string.single-quoted.ini"; 
+            name = "string.quoted.single.ini"; 
             swallow = "\\\\."; 
         }, 
         {
             begin = "\""; 
             end = "\""; 
-            name = "string.double-quoted.ini"; 
+            name = "string.quoted.double.ini"; 
         }
     ); 
     smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 

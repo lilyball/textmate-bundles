@@ -14,13 +14,13 @@
         {   name = "constant.numeric.old-plist"; 
             match = "\\b[0-9]+\\b";
         }, 
-        {   name = "string.single-quoted.old-plist"; 
+        {   name = "string.quoted.single.old-plist"; 
             begin = "'"; end = "'"; swallow = "\\\\."; 
         }, 
-        {   name = "string.double-quoted.old-plist"; 
+        {   name = "string.quoted.double.old-plist"; 
             begin = "\""; end = "\""; swallow = "\\\\."; 
         },
-        {   name = "keyword.dictionary-key.old-plist"; 
+        {   name = "keyword.other.dictionary-key.old-plist"; 
             match = "[-a-zA-Z_.]+(?=\\s*=)";
         }
     ); 

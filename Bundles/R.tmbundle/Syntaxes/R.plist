@@ -27,12 +27,12 @@
         {   name = "constant.numeric.r"; 
             match = "\\<((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\>"; 
         }, 
-        {   name = "string.double-quoted.r"; 
+        {   name = "string.quoted.double.r"; 
             begin = "\""; 
             end = "\""; 
             swallow = "\\\\."; 
         },
-        {   name = "string.single-quoted.r"; 
+        {   name = "string.quoted.single.r"; 
             begin = "'"; 
             end = "'"; 
             swallow = "\\\\."; 

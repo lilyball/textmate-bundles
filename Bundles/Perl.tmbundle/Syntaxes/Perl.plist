@@ -62,7 +62,7 @@
 			<key>match</key>
 			<string>\b(__FILE__|__LINE__|__PACKAGE__)\b</string>
 			<key>name</key>
-			<string>variable.constant.perl</string>
+			<string>constant.language.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -74,19 +74,13 @@
 			<key>match</key>
 			<string>\b(my|our|local)\b</string>
 			<key>name</key>
-			<string>keyword.storage.modifier.perl</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(continue|die|do|else|elsif|exit|for|foreach|goto|if|last|next|redo|return|select|unless|until|wait|while|switch|case)\b</string>
-			<key>name</key>
-			<string>keyword.control.perl</string>
+			<string>storage.modifier.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(ARGV|DATA|ENV|SIG|STDERR|STDIN|STDOUT|atan2|bind|binmode|bless|caller|chdir|chmod|chomp|chop|chown|chr|chroot|close|closedir|cmp|connect|cos|crypt|dbmclose|dbmopen|defined|delete|dump|each|endgrent|endhostent|endnetent|endprotoent|endpwent|endservent|eof|eq|eval|exec|exists|exp|fcntl|fileno|flock|fork|format|formline|ge|getc|getgrent|getgrgid|getgrnam|gethostbyaddr|gethostbyname|gethostent|getlogin|getnetbyaddr|getnetbyname|getnetent|getpeername|getpgrp|getppid|getpriority|getprotobyname|getprotobynumber|getprotoent|getpwent|getpwnam|getpwuid|getservbyname|getservbyport|getservent|getsockname|getsockopt|glob|gmtime|grep|gt|hex|import|index|int|ioctl|join|keys|kill|lc|lcfirst|le|length|link|listen|local|localtime|log|lstat|lt|m|map|mkdir|msgctl|msgget|msgrcv|msgsnd|ne|no|oct|open|opendir|ord|pack|pipe|pop|pos|print|printf|push|q|qq|quotemeta|qw|qx|rand|read|readdir|readlink|recv|ref|rename|reset|reverse|rewinddir|rindex|rmdir|s|scalar|seek|seekdir|semctl|semget|semop|send|setgrent|sethostent|setnetent|setpgrp|setpriority|setprotoent|setpwent|setservent|setsockopt|shift|shmctl|shmget|shmread|shmwrite|shutdown|sin|sleep|socket|socketpair|sort|splice|split|sprintf|sqrt|srand|stat|study|substr|symlink|syscall|sysopen|sysread|system|syswrite|tell|telldir|tie|tied|time|times|tr|truncate|uc|ucfirst|umask|undef|unlink|unpack|unshift|untie|utime|values|vec|waitpid|wantarray|warn|write|y|q|qw|qq|qx)\b</string>
 			<key>name</key>
-			<string>keyword.function.perl</string>
+			<string>support.function.perl</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -94,13 +88,13 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function</string>
+					<string>entity.name.function.perl</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>\bsub\s+([^\n{]*)</string>
 			<key>name</key>
-			<string>declaration.function</string>
+			<string>declaration.function.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -126,7 +120,7 @@
 			<key>end</key>
 			<string>^\2$</string>
 			<key>name</key>
-			<string>string.unquoted</string>
+			<string>string.unquoted.heredoc.perl</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -134,7 +128,7 @@
 			<key>end</key>
 			<string>\1</string>
 			<key>name</key>
-			<string>string.unquoted.qq</string>
+			<string>string.unquoted.qq.perl</string>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -144,7 +138,7 @@
 			<key>end</key>
 			<string>"</string>
 			<key>name</key>
-			<string>string.double-quoted.perl</string>
+			<string>string.quoted.double.perl</string>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -154,7 +148,7 @@
 			<key>end</key>
 			<string>'</string>
 			<key>name</key>
-			<string>string.single-quoted.perl</string>
+			<string>string.quoted.single.perl</string>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -164,7 +158,7 @@
 			<key>end</key>
 			<string>`</string>
 			<key>name</key>
-			<string>string.backticked.perl</string>
+			<string>string.interpolated.perl</string>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -174,7 +168,7 @@
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>string.double-quoted.q.perl</string>
+			<string>string.quoted.double.q.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -189,7 +183,7 @@
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>string.double-quoted.qlinestart.perl</string>
+			<string>string.quoted.double.qlinestart.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -204,7 +198,7 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>string.double-quoted.q-brace.perl</string>
+			<string>string.quoted.double.q-brace.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -219,7 +213,7 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>string.double-quoted.qlinestart-brace.perl</string>
+			<string>string.quoted.double.qlinestart-brace.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -234,7 +228,7 @@
 			<key>end</key>
 			<string>\]</string>
 			<key>name</key>
-			<string>string.double-quoted.q-bracket.perl</string>
+			<string>string.quoted.double.q-bracket.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -249,7 +243,7 @@
 			<key>end</key>
 			<string>\]</string>
 			<key>name</key>
-			<string>string.double-quoted.qlinestart-bracket.perl</string>
+			<string>string.quoted.double.qlinestart-bracket.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -264,7 +258,7 @@
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
-			<string>string.program-block.perl</string>
+			<string>string.unquoted.program-block.perl</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -272,31 +266,31 @@
 			<key>end</key>
 			<string>^=cut</string>
 			<key>name</key>
-			<string>comment.block.embedded-docs.perl</string>
+			<string>comment.documentation.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>[\$\@\%][a-zA-Zx7f-xff\$][a-zA-Z0-9_x7f-xff\$]*\b</string>
 			<key>name</key>
-			<string>variable.readwrite.global.perl</string>
+			<string>variable.other.readwrite.global.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>[\$\@\%][0-9_]\b</string>
 			<key>name</key>
-			<string>variable.readwrite.global.special.perl</string>
+			<string>variable.other.readwrite.global.special.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>[\$\@\%]#[a-zA-Zx7f-xff\$][a-zA-Z0-9_x7f-xff\$]*\b</string>
 			<key>name</key>
-			<string>variable.readwrite.global.#.perl</string>
+			<string>variable.other.readwrite.global.#.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>[\$\@\%]#[0-9_]\b</string>
 			<key>name</key>
-			<string>variable.readwrite.global.special#.perl</string>
+			<string>variable.other.readwrite.global.special#.perl</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

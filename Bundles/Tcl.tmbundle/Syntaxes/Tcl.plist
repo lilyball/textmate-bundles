@@ -15,23 +15,28 @@
     patterns = (
 		{   match = "(^|;)\\s*(#.*)$";
 			captures = {
-			    2 = { name = "comment.line.pound.tcl"; };
+			    2 = { name = "comment.line.number-sign.tcl"; };
 			};
 		},
-        {   match = "(?:^|[\\[{;])\\s*(eval|expr|if|while|for|file|string|catch|source|info|set|unset|pid|global|array|puts|gets|read|open|close|socket|eof|fconfigure|parray|return|break|continue|switch|package|proc|exit|glob|regexp|regsub|foreach|llength|lindex|concat|list|split|join|incr|error)\\b";
-            captures = {
-                1 = { name = "keyword.tcl"; };
-            };
-        },
-		{   match = "(?:^|})\\s*(then|elseif|else)\\b";
+		{   match = "(?:^|[\\[{;])\\s*(if|while|for|catch|return|break|continue|switch|exit|foreach)\\b";
 		    captures = {
-		        1 = { name = "keyword.if.tcl"; };
+		        1 = { name = "keyword.control.tcl"; };
 		    };
 		},
+		{   match = "(?:^|})\\s*(then|elseif|else)\\b";
+		    captures = {
+		        1 = { name = "keyword.control.tcl"; };
+		    };
+		},
+        {   match = "(?:^|[\\[{;])\\s*(eval|expr|file|string|source|info|set|unset|pid|global|array|puts|gets|read|open|close|socket|eof|fconfigure|parray|package|proc|glob|regexp|regsub|llength|lindex|concat|list|split|join|incr|error)\\b";
+            captures = {
+                1 = { name = "keyword.other.tcl"; };
+            };
+        },
 		{   name = "dummy.escapes.tcl";
 			match = "\\\\.";
 		},
-		{   name = "keyword.variable.tcl";
+		{   name = "variable.other.tcl";
 			match = "(\\$)(\\w+)";
 		},
         {   name = "string.quoted.double.tcl";

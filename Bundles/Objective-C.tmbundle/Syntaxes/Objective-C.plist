@@ -9,8 +9,8 @@
         {   name = "declaration.function.objc";
             begin = "^(-|\\+)\\s*"; end = "\\{|;"; swallow = "(//.*$)";
             patterns = (
-                {   name = "block.comment"; begin = "/\\*"; end = "\\*/"; },
-                {   name = "line.comment"; match = "//.*$";  },
+                {   name = "comment.block.objc"; begin = "/\\*"; end = "\\*/"; },
+                {   name = "comment.line.double-slash.objc"; match = "//.*$";  },
                 {   match = ":\\s*(\\([^)]*\\))\\s*(\\b\\w+\\b)?";
                     captures = {
                         1 = { name = "storage.type.method.parameter.objc"; };
@@ -32,11 +32,11 @@
 		{   name = "keyword.control.macro.objc";
 		    match = "\\b(NS_DURING|NS_HANDLER|NS_ENDHANDLER)\\b";
 		},
-		{   name = "declaration.class";
+		{   name = "declaration.class.objc";
 		    match = "(@(interface|implementation))\\s+([A-Za-z]+)\\s*(?::\\s*([A-Za-z]+))?";
 		    captures = {
 		        1 = { name = "storage.type.objc"; };
-		        3 = { name = "entity.name.class"; };
+		        3 = { name = "entity.name.class.objc"; };
 		        4 = { name = "entity.other.inherited-class"; };
 		    };
 		},

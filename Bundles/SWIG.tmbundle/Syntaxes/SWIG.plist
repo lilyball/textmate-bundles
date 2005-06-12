@@ -12,31 +12,31 @@
     patterns = (
         // SWIG files contain C code, so it's logical to derive from the C rules
         { include = "source.c"; },
-        { name = "keyword.directive.inlinecode.swig";
+        { name = "keyword.other.directive.inlinecode.swig";
           match = "%(header|init|inline|native|runtime|wrapper)\\b"; },
-        { name = "keyword.function.parameter.swig";
+        { name = "keyword.other.function-parameter.swig";
           match = "\\$([\\*&]*[1-9]+(_name|_type|_ltype|_basetype|_mangle|_descriptor){0,1}|action|input|result|symname)\\b"; },
         { name = "entity.type.swig";
           match = "\\b(in|out|typecheck|arginit|default|check|argout|freearg|newfree|memberin|varin|varout|throws|numinputs)\\b";
         },
-        { name = "keyword.directive.swig";
+        { name = "keyword.other.directive.swig";
           match = "%(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|insert|makedefault|module|nocallback|nodefault|rename|typemap|varargs)\\b"; },
-        { name = "keyword.preprocessor";
+        { name = "other.preprocessor.swig";
           match = "\\(\\s*(allegrocl|chicken|csharp|guile|java|modula3|mzscheme|ocaml|perl|php|pike|python|ruby|sexp|tcl|xml)\\b";
-          captures = { 1 = { name = "directive"; }; };
+          captures = { 1 = { name = "entity.name.preprocessor.swig"; }; };
         },
-        { name = "keyword.preprocessor";
-          begin = "^\\s*%\\s*(include|import)\\b\\s+\"?([A-Za-z0-9\\._]+)\"?";
+        { name = "other.preprocessor.swig";
+          begin = "^\\s*%\\s*(include|import)\\b\\s+(\"?[A-Za-z0-9\\._]+\"?)";
           end = "$";
           captures = {
-        	    1 = { name = "directive"; };
-        	    2 = { name = "filename"; };
+        	    1 = { name = "entity.name.preprocessor.swig"; };
+        	    2 = { name = "string.quoted.double.swig"; };
           };
         },
-        { name = "keyword.preprocessor.swig.macro";
+        { name = "other.preprocessor.macro.swig";
           match = "%([A-Za-z]+[A-Za-z0-9_]*)\\b";
         },
-        { name = "constant.swig";
+        { name = "storage.type.swig";
           match = "\\bSWIG_TYPECHECK_(POINTER|VOIDPTR|BOOL|UINT8|INT8|UINT16|INT16|UINT32|INT32|UINT64|INT64|UINT128|INT128|INTEGER|FLOAT|DOUBLE|COMPLEX|UNICHAR|UNISTRING|CHAR|STRING|BOOL_ARRAY|INT8_ARRAY|INT16_ARRAY|INT32_ARRAY|INT64_ARRAY|INT128_ARRAY|FLOAT_ARRAY|DOUBLE_ARRAY|CHAR_ARRAY|STRING_ARRAY)\\b";
         },
         { name = "source.swig.codeblock";

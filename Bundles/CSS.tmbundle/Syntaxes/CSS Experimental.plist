@@ -71,7 +71,7 @@
 			begin = "^\\s*(@import)"; end = "\\s*((?=;|\\}))";
 			captures = { 1 = { name = "keyword.at-rule.import.css"; }; };
 			patterns = (
-				{	name = "string.double-quoted.css";
+				{	name = "string.quoted.double.css";
 					begin = "\""; end = "\""; swallow = "\\\\.";
 				},
 				{	// keyword.function.url.css 
@@ -84,10 +84,10 @@
 							name = "entity.parameter.variable.function.css";
 							match = "[^'\") \\t]+";
 						},
-						{	name = "string.single-quoted.css";
+						{	name = "string.quoted.single.css";
 							begin = "'"; end = "'"; swallow = "\\\\.";
 						},
-						{	name = "string.double-quoted.css";
+						{	name = "string.quoted.double.css";
 							begin = "\""; end = "\""; swallow = "\\\\.";
 						}
 					);
@@ -173,7 +173,7 @@
 								{	name = "constant.numeric.css";
 									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 								},	
-								{	name = "constant.color.rgb-value.css";
+								{	name = "constant.other.color.rgb-value.css";
 									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
 								},
 								{	name = "keyword.named-color.css";
@@ -200,10 +200,10 @@
 									};
 									/*
 									patterns = (
-										{	name = "string.single-quoted.css";
+										{	name = "string.quoted.single.css";
 											begin = "'"; end = "'"; swallow = "\\\\.";
 										},
-										{	name = "string.double-quoted.css";
+										{	name = "string.quoted.double.css";
 											begin = "\""; end = "\""; swallow = "\\\\."; 
 										},
 									);
@@ -266,7 +266,7 @@
 								{	name = "keyword.named-color.css";
 									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
 								},
-								{	name = "constant.color.rgb-value.css";
+								{	name = "constant.other.color.rgb-value.css";
 									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
 								},
 								{	name = "keyword.property-value.css";
@@ -388,7 +388,7 @@
 							begin = ":\\s*"; 
 							end = "\\s*(?=[;}])";
 							patterns = (
-								{	name = "constant.color.rgb-value.css";
+								{	name = "constant.other.color.rgb-value.css";
 									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
 								},
 								{	name = "keyword.property-value.css";
@@ -828,10 +828,10 @@
 									end = "\\)";
 									captures = { 1 = { name = "keyword.function.css"; }; };
 									patterns = (
-										{	name = "string.single-quoted.css";
+										{	name = "string.quoted.single.css";
 											begin = "'"; end = "'"; swallow = "\\\\.";
 										},
-										{	name = "string.double-quoted.css";
+										{	name = "string.quoted.double.css";
 											begin = "\""; end = "\""; swallow = "\\\\."; 
 										},
 									);
@@ -982,7 +982,7 @@
 								{	name = "keyword.named-color.css";
 									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
 								},
-								{	name = "constant.color.rgb-value.css";
+								{	name = "constant.other.color.rgb-value.css";
 									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
 								},
 								{	name = "keyword.property-value.css";
@@ -1122,10 +1122,10 @@
 							    {	name = "constant.numeric.css";
 							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 							    },
-							    {	name = "constant.unit.css";
+							    {	name = "constant.other.unit.css";
 							    	match = "(m)?s";
 							    },
-							    {	name = "constant.unit.css";
+							    {	name = "constant.other.unit.css";
 							    	match = "%";
 							    },
 								{	name = "keyword.property-value.css";
@@ -1158,7 +1158,7 @@
 							    {	name = "constant.numeric.css";
 							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
 							    },
-							    {	name = "constant.unit.css";
+							    {	name = "constant.other.unit.css";
 							    	match = "(k)?Hz";
 							    },
 							    {	name = "keyword.property-value.css";

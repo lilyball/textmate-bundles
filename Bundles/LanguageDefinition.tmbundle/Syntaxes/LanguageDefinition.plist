@@ -26,7 +26,7 @@
         {   name = "string.quoted.single.tm-language-def";
             begin = "'(?=.*\')"; end = "'"; swallow = "\\\\.";
             patterns = (
-                {   name = "invalid.deprecated.constant.color.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
+                {   name = "invalid.deprecated.constant.other.color.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
                 {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??|\\\\\\\\[Az<>bB])"; },
             );
         },

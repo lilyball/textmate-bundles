@@ -9,7 +9,7 @@
   //
   // William D. Neumann
   
-	name = "OCaml Source";
+	name = "OCaml Source.ocaml";
 	scopeName = "source.ocaml";
 	uuid = "F816FA69-6EE8-11D9-BF2D-000D93589AF6";
 	fileTypes = (ml, mli, mll, mly);
@@ -42,30 +42,30 @@
 
 		{ name = "storage.type.ocaml"; match = "\\b(int|char|float|string|list|array|mutable|ref|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t|type)\\b"; foregroundColor = "#6080ff"; },
 
-		{ name = "storage.type.other.variant"; match = "\\b[A-Z][a-zA-Z0-9_]*\\b"; fontStyle = ( bold ); foregroundColor = "#4080a0"; },
+		{ name = "storage.type.other.variant.ocaml"; match = "\\b[A-Z][a-zA-Z0-9_]*\\b"; fontStyle = ( bold ); foregroundColor = "#4080a0"; },
 
-		{ name = "storage.type.other.variant.polymorphic"; match = "\\b`[A-Z][a-zA-Z0-9_]*\\b"; fontStyle = ( bold ); foregroundColor = "#4080a0"; },
+		{ name = "storage.type.other.variant.polymorphic.ocaml"; match = "\\b`[A-Z][a-zA-Z0-9_]*\\b"; fontStyle = ( bold ); foregroundColor = "#4080a0"; },
 
-		{ name = "keyword.other.directive"; match = "^[ \\t]*#[a-zA-Z]+"; fontStyle = ( bold ); },
+		{ name = "keyword.other.directive.ocaml"; match = "^[ \\t]*#[a-zA-Z]+"; fontStyle = ( bold ); },
 
-		{ name = "keyword.other.directive.line-number"; match = "^[ \\t]*#[0-9]*"; fontStyle = ( bold ); },
+		{ name = "keyword.other.directive.line-number.ocaml"; match = "^[ \\t]*#[0-9]*"; fontStyle = ( bold ); },
 
-		{ name = "constant.numeric.integer"; match = "\\b(-?(([0-9][0-9_]*)|(0(x|X)[0-9a-fA-F][0-9a-fA-F_]*)|(0(o|O)[0-7][0-7_]*)|(0(b|B)[01][01_]*)))\\b"; foregroundColor = "#40c0ff"; },
+		{ name = "constant.numeric.integer.ocaml"; match = "\\b(-?(([0-9][0-9_]*)|(0(x|X)[0-9a-fA-F][0-9a-fA-F_]*)|(0(o|O)[0-7][0-7_]*)|(0(b|B)[01][01_]*)))\\b"; foregroundColor = "#40c0ff"; },
 
-		{ name = "constant.numeric.floating-point"; match = "\\b-?[0-9][0-9_]*((\\.([0-9][0-9_]*([eE][+-]??[0-9][0-9_]*)?)?)|([eE][+-]??[0-9][0-9_]*))"; foregroundColor = "#40c0ff"; },
+		{ name = "constant.numeric.floating-point.ocaml"; match = "\\b-?[0-9][0-9_]*((\\.([0-9][0-9_]*([eE][+-]??[0-9][0-9_]*)?)?)|([eE][+-]??[0-9][0-9_]*))"; foregroundColor = "#40c0ff"; },
 
-		{ name = "constant.character"; match = "'(\\\\x[a-fA-F0-9][a-fA-F0-9]|\\\\\\d\\d\\d|.|\\\\[bnrt'\"]|\\\\\\\\)'"; foregroundColor = "#ff8080"; },
+		{ name = "constant.character.ocaml"; match = "'(\\\\x[a-fA-F0-9][a-fA-F0-9]|\\\\\\d\\d\\d|.|\\\\[bnrt'\"]|\\\\\\\\)'"; foregroundColor = "#ff8080"; },
 
-		{ name = "string.quoted.double"; begin = "(?=[^\\\\])(\")"; end = "\""; swallow = "\\\\."; foregroundColor = "#c03030"; },
+		{ name = "string.quoted.double.ocaml"; begin = "(?=[^\\\\])(\")"; end = "\""; swallow = "\\\\."; foregroundColor = "#c03030"; },
 
-		{ name = "keyword.operator.symbol"; match = "\\b_|!=|[#|,)(\\]]|\\.{1,2}?|:[:=>]??|;{1,2}?|>[\\]}]|\\[[<>|]?|\\{<?|\\|]"; foregroundColor = "#ffffa0"; },
+		{ name = "keyword.operator.symbol.ocaml"; match = "\\b_|!=|[#|,)(\\]]|\\.{1,2}?|:[:=>]??|;{1,2}?|>[\\]}]|\\[[<>|]?|\\{<?|\\|]"; foregroundColor = "#ffffa0"; },
 		
-		{ name = "keyword.operator.symbol.infix.floating-point"; match = "[*+/-]\\."; foregroundColor = "#ffffa0"; },
+		{ name = "keyword.operator.symbol.infix.floating-point.ocaml"; match = "[*+/-]\\."; foregroundColor = "#ffffa0"; },
 
-		{ name = "keyword.operator.symbol.prefix.floating-point"; match = "~-\\."; foregroundColor = "#ffffa0"; },
+		{ name = "keyword.operator.symbol.prefix.floating-point.ocaml"; match = "~-\\."; foregroundColor = "#ffffa0"; },
 		
-		{ name = "keyword.operator.symbol.infix"; match = "[=<>@^|&+\\-*/$%][!$%&*+./:<=>?@^|~-]*"; foregroundColor = "#ffffa0"; },
+		{ name = "keyword.operator.symbol.infix.ocaml"; match = "[=<>@^|&+\\-*/$%][!$%&*+./:<=>?@^|~-]*"; foregroundColor = "#ffffa0"; },
 
-		{ name = "keyword.operator.symbol.prefix"; match = "[!?~][!$%&*+./:<=>?@^|~-]*"; foregroundColor = "#ffffa0"; }
+		{ name = "keyword.operator.symbol.prefix.ocaml"; match = "[!?~][!$%&*+./:<=>?@^|~-]*"; foregroundColor = "#ffffa0"; }
 	);
 }

@@ -15,19 +15,34 @@
 
 	patterns = (
 		{   name = "declaration.function.shell"; match = "\\b([^ \\t\\n]*)\\s*\\(\\)";
-		    captures = { 1 = { name = "entity.name.function"; }; };
+		    captures = { 1 = { name = "entity.name.function.shell"; }; };
 		},
 		{   name = "keyword.control.shell"; match = "\\b(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\\b"; },
-		{   name = "keyword.storage.shell"; match = "\\b(?:export)\\b"; },
+		{   name = "storage.modifier.shell"; match = "\\b(?:export)\\b"; },
 //		{   name = "constant.numeric.shell"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"; foregroundColor = "#F0F8FF"; },
-		{   name = "string.single-quoted.shell"; begin = "'"; end = "'"; },
-        {   name = "string.double-quoted.shell"; begin = "\""; end = "\"";  swallow = "\\\\."; },
-        {   name = "string.backticked.shell"; begin = "`"; end = "`"; swallow = "\\\\."; },
-        {   name = "string.dollar-quoted.shell"; begin = "\\$'"; end = "'";  swallow = "\\\\."; },
-        {   name = "string.shell-interpolation.shell"; begin = "\\$\\("; end = "\\)"; swallow = "\\\\."; },
-        {   name = "string.math.shell"; begin = "\\$\\(\\("; end = "\\)\\)"; swallow = "\\\\."; },
+		{   name = "string.quoted.single.shell"; begin = "'"; end = "'"; },
+        {   name = "string.quoted.double.shell"; begin = "\""; end = "\"";  swallow = "\\\\."; },
+        {   name = "string.interpolated.shell"; begin = "`"; end = "`"; swallow = "\\\\."; },
+        {   name = "string.quoted.dollar.shell"; begin = "\\$'"; end = "'";  swallow = "\\\\."; },
+        {   name = "string.interpolated.shell"; begin = "\\$\\("; end = "\\)"; swallow = "\\\\."; },
+        {   name = "string.other.math.shell"; begin = "\\$\\(\\("; end = "\\)\\)"; swallow = "\\\\."; },
 		{   name = "comment.line.number-sign.shell"; match = "(?<!\\$)#(?!\\{).*$"; },
+		{   name = "declaration.here-string.shell"; match = "(<<<)([^ ]+)";
+		    captures = {
+		        1 = { name = "keyword.operator.here-string.shell"; };
+		        2 = { name = "string.unquoted.here-string.shell"; };
+		    };
+		},
+		{   name = "string.unquoted.heredoc.shell";
+		    begin = "(<<)-?(\\S+)"; end = "^(\\2)(?=\\s*$)";
+		    beginCaptures = {
+		        1 = { name = "keyword.operator.heredoc.shell"; };
+		        2 = { name = "keyword.control.heredoc-token.shell"; };
+		    };
+		    endCaptures = {
+		        1 = { name = "keyword.control.heredoc-token.shell"; };
+		    };
+		},
 	);
 	uuid = "DDEEA3ED-6B1C-11D9-8B10-000D93589AF6";
 }
-

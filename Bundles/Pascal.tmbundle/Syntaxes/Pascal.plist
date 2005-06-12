@@ -21,7 +21,7 @@
 		},
 		
 		{
-		    name = "declaration.function";
+		    name = "declaration.function.pascal";
 		    match = "\\b(?i:(function|procedure))\\b\\s+(\\w+)";
 			captures = { 1 = { name = "storage.type.pascal"; };
 			             2 = { name = "entity.name.function.pascal"; }; };

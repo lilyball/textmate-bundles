@@ -33,19 +33,15 @@
 		},
 		{   name = "keyword.variable.tcl";
 			match = "(\\$)(\\w+)";
-		}/*,
-        {   name = "string.double-quoted.tcl";
-            foregroundColor = "#78CC33";
-            begin = '"';
-            end = '"';
-            swallow = "\\\\.";
+		},
+        {   name = "string.quoted.double.tcl";
+            begin = '"'; end = '"';
             patterns = (
-                {   name = "string.double-quoted.escapes.tcl";
+                {   name = "constant.character.escape.tcl";
                     match = "\\([abfnrtv]|0\d{2}|x[a-fA-F]{2})";
-					foregroundColor = "#aaaaaa";
                 }
             );
-        }*/
+        }
     );
 	
 	uuid = "F01F22AC-7CBB-11D9-9B10-000A95E13C98";

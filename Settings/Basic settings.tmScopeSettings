@@ -40,7 +40,7 @@
 			<key>name</key>
 			<string>Default highlight pairs</string>
 			<key>scope</key>
-			<string></string>
+			<string>source, text, </string>
 			<key>settings</key>
 			<dict>
 				<key>highlightPairs</key>
@@ -123,13 +123,15 @@
 						<string>'</string>
 					</array>
 				</array>
+				<key>softWrap</key>
+				<string>0</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>No ' in smart typing</string>
 			<key>scope</key>
-			<string>string.double-quoted, comment</string>
+			<string>string.quoted.double, comment</string>
 			<key>settings</key>
 			<dict>
 				<key>smartTypingPairs</key>
@@ -324,7 +326,7 @@
 			<key>name</key>
 			<string>Disable spell checking</string>
 			<key>scope</key>
-			<string>constant, keyword, declaration</string>
+			<string>constant, keyword, declaration, storage, support, variable</string>
 			<key>settings</key>
 			<dict>
 				<key>spellChecking</key>
@@ -348,7 +350,7 @@
 			<key>name</key>
 			<string>Function list (popup)</string>
 			<key>scope</key>
-			<string>entity.name.function, declaration.attribute-with-value.id string value, declaration.section entity, declaration.selector</string>
+			<string>meta.toc-list, entity.name.function, declaration.selector, declaration.section variable.parameter</string>
 			<key>settings</key>
 			<dict>
 				<key>showInSymbolList</key>
@@ -434,7 +436,7 @@
 			<key>name</key>
 			<string>C includes</string>
 			<key>scope</key>
-			<string>keyword.preprocessor.c.includes</string>
+			<string>other.preprocessor.c.includes</string>
 			<key>settings</key>
 			<dict>
 				<key>highlightPairs</key>
@@ -465,7 +467,7 @@
 			<key>name</key>
 			<string>C++ smart pair angle brackets</string>
 			<key>scope</key>
-			<string>keyword.control.c++.template, keyword.operator.c++.cast</string>
+			<string>storage.type.c++.template, keyword.operator.c++.cast</string>
 			<key>settings</key>
 			<dict>
 				<key>highlightPairs</key>
@@ -607,6 +609,17 @@
 			<dict>
 				<key>fontStyle</key>
 				<string>underline</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Text settings</string>
+			<key>scope</key>
+			<string>text, source.plist</string>
+			<key>settings</key>
+			<dict>
+				<key>softWrap</key>
+				<string>1</string>
 			</dict>
 		</dict>
 	</array>

@@ -56,7 +56,7 @@
 			<key>name</key>
 			<string>Keyword</string>
 			<key>scope</key>
-			<string>keyword, storage</string>
+			<string>keyword</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -113,7 +113,7 @@
 			<key>name</key>
 			<string>Arguments</string>
 			<key>scope</key>
-			<string>declaration.parameter</string>
+			<string>variable.parameter</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -150,7 +150,7 @@
 			<key>name</key>
 			<string>Trailing whitespace</string>
 			<key>scope</key>
-			<string>invalid.trailing-whitespace</string>
+			<string>invalid.deprecated.trailing-whitespace</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -167,7 +167,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#FAFAFA</string>
+				<string>#FAFAFAFC</string>
 				<key>foreground</key>
 				<string>#000000</string>
 			</dict>
@@ -201,8 +201,23 @@
 			<string>support</string>
 			<key>settings</key>
 			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
 				<key>foreground</key>
 				<string>#6666FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Storage</string>
+			<key>scope</key>
+			<string>storage</string>
+			<key>settings</key>
+			<dict>
+				<key>comment</key>
+				<string>test</string>
+				<key>fontStyle</key>
+				<string>bold</string>
 			</dict>
 		</dict>
 	</array>

@@ -8,15 +8,10 @@
 	<string>#!/usr/bin/env ruby
 
 # read shell variables (set these per language)
-$s      = ENV['TM_COMMENT_START']
-$e      = ENV['TM_COMMENT_END']
-$m      = ENV['TM_COMMENT_MODE']
+$s      = ENV['TM_COMMENT_START'] || "# "
+$e      = ENV['TM_COMMENT_END']   || ""
+$m      = ENV['TM_COMMENT_MODE']  || "line"
 $t      = STDIN.read
-
-# default values
-$s      = "# "   if $s.nil?
-$e      = ""     if $e.nil?
-$m      = "line" if $m.nil?
 
 # needs to escape them for use in regex
 # because we can't do \Q...\E

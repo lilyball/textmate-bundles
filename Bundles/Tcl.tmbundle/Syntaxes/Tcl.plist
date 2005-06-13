@@ -42,8 +42,9 @@
         {   name = "string.quoted.double.tcl";
             begin = '"'; end = '"';
             patterns = (
-                {   name = "constant.character.escape.tcl";
-                    match = "\\([abfnrtv]|0\d{2}|x[a-fA-F]{2})";
+                {   comment = "FIXME not sure this is the proper way to do Tcl escape sequences --Allan";
+                    name = "constant.character.escape.tcl";
+                    match = "\\([abfnrtv]|0\d{2}|x[a-fA-F]{2}\\)";
                 }
             );
         }

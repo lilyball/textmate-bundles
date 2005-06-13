@@ -51,23 +51,23 @@
             name = "support.function.general.matlab"; 
         }, 
         {
-            match = "\\b(lin2mu|mu2lin|record|setaudio|loadaudio|playaudio|saveaudio\n\n\t)\\b"; 
+            match = "\\b(lin2mu|mu2lin|record|setaudio|loadaudio|playaudio|saveaudio)\\b"; 
             name = "support.function.audio.matlab"; 
         }, 
         {
-            match = "\\b\n\n\tDEMOcontrol|bode_bounds|dlqe|lqe|obsv|__bodquist__|controldemo|dlqr|lqg|place|__freqresp__|ctrb|dlyap|lqr|pzmap|__stepimp__|damp|dre|lsim|rldemo|analdemo|dare|frdemo|ltifr|rlocus|are|dcgain|freqchkw|lyap|step|bddemo|dgram|gram|nichols|tzero|bode|dkalman|impulse|nyquist|tzero2\n\n\t)\\b"; 
+            match = "\\b(DEMOcontrol|bode_bounds|dlqe|lqe|obsv|__bodquist__|controldemo|dlqr|lqg|place|__freqresp__|ctrb|dlyap|lqr|pzmap|__stepimp__|damp|dre|lsim|rldemo|analdemo|dare|frdemo|ltifr|rlocus|are|dcgain|freqchkw|lyap|step|bddemo|dgram|gram|nichols|tzero|bode|dkalman|impulse|nyquist|tzero2)\\b"; 
             name = "support.function.control.base.matlab"; 
         }, 
         {
-            match = "\\b(\n\n\tdgkfdemo|h2syn|hinfnorm|hinfsyn_ric|dhinfdemo|hinf_ctr|hinfsyn|is_dgkf|h2norm|hinfdemo|hinfsyn_chk|wgt1o\n\n\t)\\b"; 
+            match = "\\b(dgkfdemo|h2syn|hinfnorm|hinfsyn_ric|dhinfdemo|hinf_ctr|hinfsyn|is_dgkf|h2norm|hinfdemo|hinfsyn_chk|wgt1o)\\b"; 
             name = "support.function.control.hinf.matlab"; 
         }, 
         {
-            match = "\\b(\n\n\tdezero|packsys|series|syschnames|dlqg|qzval|swapcols|unpacksys|minfo|rotg|swaprows\n\n\t)\\b"; 
+            match = "\\b(dezero|packsys|series|syschnames|dlqg|qzval|swapcols|unpacksys|minfo|rotg|swaprows)\\b"; 
             name = "invalid.deprecated.obsolete.function.control.matlab"; 
         }, 
         {
-            match = "\\b\n\n\t__abcddims__|is_observable|sys2tf|sysprune|__syschnamesl__|is_sample|sys2zp|sysreorder|__syscont_disc__|is_signal_list|sysadd|sysrepdemo|__sysdefioname__|is_siso|sysappend|sysscale|__sysdefstname__|is_stabilizable|syschtsam|syssetsignals|__sysgroupn__|is_stable|sysconnect|syssub|__tf2sysl__|jet707|syscont|sysupdate|__zp2ssg2__|listidx|sysdimensions|tf2ss|abcddim|moddemo|sysdisc|tf2sys|buildssic|ord2|sysdup|tf2zp|c2d|packedform|sysgetsignals|tfout|d2c|parallel|sysgettsam|ugain|dmr2d|ss2sys|sysgettype|zp2ss|fir2sys|ss2tf|sysgroup|zp2sys|is_abcd|ss2zp|sysidx|zp2tf|is_controllable|starp|sysmin|zpout|is_detectable|sys2fir|sysmult|is_digital|sys2ss|sysout)\\b"; 
+            match = "\\b(__abcddims__|is_observable|sys2tf|sysprune|__syschnamesl__|is_sample|sys2zp|sysreorder|__syscont_disc__|is_signal_list|sysadd|sysrepdemo|__sysdefioname__|is_siso|sysappend|sysscale|__sysdefstname__|is_stabilizable|syschtsam|syssetsignals|__sysgroupn__|is_stable|sysconnect|syssub|__tf2sysl__|jet707|syscont|sysupdate|__zp2ssg2__|listidx|sysdimensions|tf2ss|abcddim|moddemo|sysdisc|tf2sys|buildssic|ord2|sysdup|tf2zp|c2d|packedform|sysgetsignals|tfout|d2c|parallel|sysgettsam|ugain|dmr2d|ss2sys|sysgettype|zp2ss|fir2sys|ss2tf|sysgroup|zp2sys|is_abcd|ss2zp|sysidx|zp2tf|is_controllable|starp|sysmin|zpout|is_detectable|sys2fir|sysmult|is_digital|sys2ss|sysout)\\b"; 
             name = "support.function.control.system.matlab"; 
         }, 
         {

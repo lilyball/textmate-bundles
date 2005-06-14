@@ -1,7 +1,7 @@
 {
     name = "Diff";
     scopeName = "source.diff";
-    firstLineMatch = "^(Index: |--- |\\*\\*\\* |\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$)";
+    firstLineMatch = "^(Index: |--- [^%]|\\*\\*\\* |\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$)";
     fileTypes = ( diff, patch );
     uuid = "7E848FF4-708E-11D9-97B4-0011242E4184";
     

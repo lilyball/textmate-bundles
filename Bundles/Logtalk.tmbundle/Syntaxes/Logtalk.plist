@@ -22,24 +22,18 @@
         }, 
         {   name = "declaration.entity.opening.logtalk"; 
             match = ":-\\s+(object|protocol|category)(?=[(])"; 
-            captures = {
-                1 = { name = "keyword.control.logtalk"; };
-            };
         }, 
         {
-            match = ":-\\s+(end_(object|protocol|category))(?=[.])"; 
             name = "declaration.entity.closing.logtalk"; 
-            captures = {
-                1 = { name = "keyword.control.logtalk"; };
-            };
+            match = ":-\\s+(end_(object|protocol|category))(?=[.])"; 
         }, 
-        {   name = "storage.modifier.relations.logtalk"; 
+        {   name = "declaration.entity.relations.logtalk"; 
             match = "\\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])"; 
         }, 
         {   name = "declaration.entity.others.logtalk"; 
             match = ":-\\s+(calls|encoding|in(itialization|fo)|uses)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.logtalk"; 
+        {   name = "declaration.predicate.others.logtalk"; 
             match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])"; 
         }, 
         {   name = "keyword.operator.message-sending.logtalk"; 
@@ -124,10 +118,7 @@
             match = "\\b((for|retract)all)(?=[(])"; 
         }, 
         {   name = "keyword.other.predicate.execution-context.logtalk"; 
-            match = "\\b(parameter)(?=[(])"; 
-        }, 
-        {   name = "constant.language.logtalk"; 
-            match = "\\b(se(lf|nder)|this)(?=[(])"; 
+            match = "\\b(parameter|se(lf|nder)|this)(?=[(])"; 
         }, 
         {   name = "keyword.other.predicate.database.logtalk"; 
             match = "\\b(a(bolish|ssert(a|z))|clause|retract|retractall)(?=[(])"; 

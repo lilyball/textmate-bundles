@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Colorset: Black on white</string>
+	<string>Colorset: Mac Classic</string>
 	<key>settings</key>
 	<array>
 		<dict>
@@ -36,20 +36,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Block comment</string>
-			<key>scope</key>
-			<string>comment.block</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#F0F0F0</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>Keyword</string>
 			<key>scope</key>
-			<string>keyword</string>
+			<string>keyword, storage</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -66,18 +55,18 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#8B1B21</string>
+				<string>#6A6CA5</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>String Interpolation</string>
+			<string>String interpolation</string>
 			<key>scope</key>
-			<string>string.interpolation</string>
+			<string>constant.character.escaped, string source</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#C10006</string>
+				<string>#A0A3F9</string>
 			</dict>
 		</dict>
 		<dict>
@@ -95,7 +84,7 @@
 			<key>name</key>
 			<string>Variable</string>
 			<key>scope</key>
-			<string>variable.readwrite</string>
+			<string>variable.other.readwrite</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -110,14 +99,14 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#C50D9C</string>
+				<string>#065CC5</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>Preprocessor line</string>
 			<key>scope</key>
-			<string>keyword.preprocessor</string>
+			<string>other.preprocessor.c</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -130,7 +119,7 @@
 			<key>name</key>
 			<string>Preprocessor directive</string>
 			<key>scope</key>
-			<string>keyword.preprocessor directive</string>
+			<string>entity.name.preprocessor</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -146,13 +135,15 @@
 			<dict>
 				<key>fontStyle</key>
 				<string>bold</string>
+				<key>foreground</key>
+				<string>#0000A2</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Tag and class name</string>
+			<string>Class name</string>
 			<key>scope</key>
-			<string>entity.name.class, entity.name.tag</string>
+			<string>entity.name.class</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -161,9 +152,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Function variable name, tag attribute name, and parent class</string>
+			<string>Function parameter</string>
 			<key>scope</key>
-			<string>entity.parameter</string>
+			<string>variable.parameter</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -172,13 +163,15 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Type of function argument and result</string>
+			<string>Function argument and result types</string>
 			<key>scope</key>
-			<string>entity.type</string>
+			<string>storage.type.method</string>
 			<key>settings</key>
 			<dict>
+				<key>fontStyle</key>
+				<string>plain</string>
 				<key>foreground</key>
-				<string>#0000FF</string>
+				<string>#70727E</string>
 			</dict>
 		</dict>
 		<dict>
@@ -209,7 +202,7 @@
 			<key>name</key>
 			<string>Section</string>
 			<key>scope</key>
-			<string>declaration.section section-name</string>
+			<string>declaration.section entity.name.section</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -220,7 +213,7 @@
 			<key>name</key>
 			<string>Library function</string>
 			<key>scope</key>
-			<string>keyword.function</string>
+			<string>support.function</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -233,7 +226,7 @@
 			<key>name</key>
 			<string>Library object</string>
 			<key>scope</key>
-			<string>keyword.object</string>
+			<string>support.class</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -242,20 +235,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Library method</string>
+			<string>Library constant</string>
 			<key>scope</key>
-			<string>keyword.function.method</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#ED6F07</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>JS: Property</string>
-			<key>scope</key>
-			<string>keyword.property</string>
+			<string>support.constant</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -266,7 +248,7 @@
 			<key>name</key>
 			<string>JS: Event Handler</string>
 			<key>scope</key>
-			<string>keyword.event-handler</string>
+			<string>support.function.event-handler</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -282,19 +264,6 @@
 			<dict>
 				<key>foreground</key>
 				<string>#687687</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>JS: Function name</string>
-			<key>scope</key>
-			<string>keyword.declaration.js</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-				<key>foreground</key>
-				<string>#0000A2</string>
 			</dict>
 		</dict>
 		<dict>
@@ -361,7 +330,29 @@
 				<key>fontStyle</key>
 				<string>plain</string>
 				<key>foreground</key>
+				<string>#4B0492</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markup name of tag</string>
+			<key>scope</key>
+			<string>entity.name.tag</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
 				<string>#6C03D6</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Inherited class name</string>
+			<key>scope</key>
+			<string>entity.other.inherited-class</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
 			</dict>
 		</dict>
 	</array>

@@ -1,57 +1,178 @@
-{
-	// This file should be current for the latest revision of the ISO C standard
-	// as of this writing (late 2004 -- C99).  If one chooses to be pedantic,
-	// this might be further broken out into a "base C" file with different
-	// "subclass" syntaxes for C90 and C99. C++ would then inherit from the "base C"
-	// syntax, which would avoid the C99 non-C++ keywords. But this seems more
-	// pragmatic. -- chris.
-	
-	name = "C";
-	keyEquivalent = "~^C";
-	scopeName = "source.c";
-	fileTypes = ( c, h );
-	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
-	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
-	patterns = (
-		{ name = "comment.block.c"; begin = "/\\*"; end = "\\*/"; },
-		{ name = "comment.line.double-slash.c++"; begin = "//"; end = "$"; swallow = "\\\\\\s*\\n"; },
-		{ name = "keyword.control.c"; match = "\\b(break|case|continue|default|do|else|for|goto|if|_Pragma|return|switch|while)\\b"; },
-		{ name = "storage.type.c"; match = "\\b(asm|__asm__|auto|_Bool|char|_Complex|double|enum|float|_Imaginary|int|long|short|signed|struct|typedef|union|unsigned|void)\\b"; },
-        { name = "storage.modifier.c"; match = "\\b(const|extern|register|restrict|static|volatile|inline)\\b"; },
-        { name = "constant.language.c"; match = "\\b(NULL|true|false|TRUE|FALSE)\\b"; },
-        { name = "support.function.c"; match = "\\b(sizeof)\\b"; },
-		{ name = "constant.numeric.c"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b";},
-		{ name = "string.quoted.double.c"; begin = "\""; end = "\""; swallow = "\\\\."; },
-		{ name = "string.quoted.single.c"; begin = "'"; end = "'"; swallow = "\\\\."; },
-		{ name = "other.preprocessor.c";
-		  match = "^\\s*#\\s*(define|defined|else|elif|endif|error|if|ifdef|ifndef|line|pragma|undef|warning)\\b";
-			captures = { 1 = { name = "entity.name.preprocessor.c"; }; };
-		},
-		{ name = "other.preprocessor.c.include";
-		    begin = "^\\s*#\\s*(include|import)\\b\\s+";
-		    end = "$";
-			captures = { 1 = { name = "entity.name.preprocessor.include.c"; }; };
-		},
-		
-		
-		{   name = "declaration.section";
-    		match = "^\\s*(#\\s*(pragma\\s+mark)\\s+(.*))";
-			captures = { 1 = { name = "other.preprocessor.c"; };
-            			 2 = { name = "entity.name.preprocessor.pragma.c"; };
-            			 3 = { name = "entity.name.section"; };
-			 };
-		},
-		
-		// This is a horrible hack. It doesn't work for functions with names smaller than four characters.
-		// Comments in the wrong place, though legal C, can fool it.
-		// Some function calls can fool it.
-		// Various C++ constructs can fool it.
-		// Macros can easily fool it. Macros can easily fool most parsers, though.
-/*		{ name = "declaration.function.c";
-//		    match = "(?!\\b(?:if|do|while|switch|for)\\b)([A-Za-z][A-Za-z0-9:]{4,})\\s*\\(.*?\\)(?!\\s*[;,\\(])";
-            match = "(?!\\b(?:if|do|while|switch|for)\\b)([A-Za-z][A-Za-z0-9:]{4,})\\s*\\((?=.*\\)\\s*($|\\{))";
-		    captures = { 1 = { name = "name"; }; };
-		},
-*/	);
-	uuid = "25066DC2-6B1D-11D9-9D5B-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>c</string>
+		<string>h</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(/\*\*|\{\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(\*\*/|^\s*\})</string>
+	<key>keyEquivalent</key>
+	<string>~^C</string>
+	<key>name</key>
+	<string>C</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.c</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>//</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.line.double-slash.c++</string>
+			<key>swallow</key>
+			<string>\\\s*\n</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(break|case|continue|default|do|else|for|goto|if|_Pragma|return|switch|while)\b</string>
+			<key>name</key>
+			<string>keyword.control.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(asm|__asm__|auto|_Bool|char|_Complex|double|enum|float|_Imaginary|int|long|short|signed|struct|typedef|union|unsigned|void)\b</string>
+			<key>name</key>
+			<string>storage.type.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(const|extern|register|restrict|static|volatile|inline)\b</string>
+			<key>name</key>
+			<string>storage.modifier.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(NULL|true|false|TRUE|FALSE)\b</string>
+			<key>name</key>
+			<string>constant.language.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(sizeof)\b</string>
+			<key>name</key>
+			<string>support.function.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.c</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.c</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.c</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#\s*(define|defined|else|elif|endif|if|ifdef|ifndef|line|pragma|undef)\b</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=(?://|/\*))|$</string>
+			<key>name</key>
+			<string>other.preprocessor.c</string>
+			<key>swallow</key>
+			<string>\\\s*\n</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#\s*(error|warning)\b</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>other.preprocessor.diagnostic.c</string>
+			<key>swallow</key>
+			<string>\\\s*\n</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#\s*(include|import)\b\s+</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.include.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=(?://|/\*))|$</string>
+			<key>name</key>
+			<string>other.preprocessor.c.include</string>
+			<key>swallow</key>
+			<string>\\\s*\n</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>other.preprocessor.c</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.pragma.c</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.section</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(#\s*(pragma\s+mark)\s+(.*))</string>
+			<key>name</key>
+			<string>declaration.section</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.c</string>
+	<key>uuid</key>
+	<string>25066DC2-6B1D-11D9-9D5B-000D93589AF6</string>
+</dict>
+</plist>

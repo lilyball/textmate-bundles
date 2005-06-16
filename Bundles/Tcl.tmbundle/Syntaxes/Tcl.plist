@@ -1,54 +1,130 @@
-{
-    name = "Tcl"; 
-    scopeName = "source.tcl";
-    
-    fileTypes = ( tcl ); 
-    
-    foldingStartMarker = "\\{\\s*\\\\?$}"; 
-    foldingStopMarker = "^\\s*\\}"; 
-    
-    increaseIndentPattern = "\\{[^\"']*$"; 
-
-    highlightPairs = ( ("[", "]"), ("{", "}") ); 
-    smartTypingPairs = ( ("[", "]"), ("{", "}"), ("\"", "\"") ); 
-
-    patterns = (
-		{   match = "(^|;)\\s*(#.*)$";
-			captures = {
-			    2 = { name = "comment.line.number-sign.tcl"; };
-			};
-		},
-		{   match = "(?:^|[\\[{;])\\s*(if|while|for|catch|return|break|continue|switch|exit|foreach)\\b";
-		    captures = {
-		        1 = { name = "keyword.control.tcl"; };
-		    };
-		},
-		{   match = "(?:^|})\\s*(then|elseif|else)\\b";
-		    captures = {
-		        1 = { name = "keyword.control.tcl"; };
-		    };
-		},
-        {   match = "(?:^|[\\[{;])\\s*(eval|expr|file|string|source|info|set|unset|pid|global|array|puts|gets|read|open|close|socket|eof|fconfigure|parray|package|proc|glob|regexp|regsub|llength|lindex|concat|list|split|join|incr|error)\\b";
-            captures = {
-                1 = { name = "keyword.other.tcl"; };
-            };
-        },
-		{   name = "dummy.escapes.tcl";
-			match = "\\\\.";
-		},
-		{   name = "variable.other.tcl";
-			match = "(\\$)(\\w+)";
-		},
-        {   name = "string.quoted.double.tcl";
-            begin = '"'; end = '"';
-            patterns = (
-                {   comment = "FIXME not sure this is the proper way to do Tcl escape sequences --Allan";
-                    name = "constant.character.escape.tcl";
-                    match = "\\([abfnrtv]|0\d{2}|x[a-fA-F]{2}\\)";
-                }
-            );
-        }
-    );
-	
-	uuid = "F01F22AC-7CBB-11D9-9B10-000A95E13C98";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>tcl</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>\{\s*\\?$}</string>
+	<key>foldingStopMarker</key>
+	<string>^\s*\}</string>
+	<key>highlightPairs</key>
+	<array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+	</array>
+	<key>increaseIndentPattern</key>
+	<string>\{[^"']*$</string>
+	<key>name</key>
+	<string>Tcl</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>comment.line.number-sign.tcl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(^|;)\s*(#.*)$</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.tcl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?:^|[\[{;])\s*(if|while|for|catch|return|break|continue|switch|exit|foreach)\b</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.tcl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?:^|})\s*(then|elseif|else)\b</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tcl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?:^|[\[{;])\s*(after|append|array|auto_execok|auto_import|auto_load|auto_mkindex|auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|file|fileevent|filename|flush|format|gets|glob|global|history|http|incr|info|interp|join|lappend|library|lindex|linsert|list|llength|load|lrange|lreplace|lsearch|lset|lsort|memory|msgcat|namespace|open|package|parray|pid|pkg::create|pkg_mkIndex|proc|puts|pwd|re_syntax|read|regexp|registry|regsub|rename|resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|unknown|unset|update|uplevel|upvar|variable|vwait)\b</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\\.</string>
+			<key>name</key>
+			<string>dummy.escapes.tcl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\$)(\w+)</string>
+			<key>name</key>
+			<string>variable.other.tcl</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.tcl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>comment</key>
+					<string>FIXME not sure this is the proper way to do Tcl escape sequences --Allan</string>
+					<key>match</key>
+					<string>\([abfnrtv]|0d{2}|x[a-fA-F]{2}\)</string>
+					<key>name</key>
+					<string>constant.character.escape.tcl</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.tcl</string>
+	<key>smartTypingPairs</key>
+	<array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+	</array>
+	<key>uuid</key>
+	<string>F01F22AC-7CBB-11D9-9B10-000A95E13C98</string>
+</dict>
+</plist>

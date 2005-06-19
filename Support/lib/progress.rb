@@ -23,8 +23,8 @@ module TextMate
 					file.write(data)
 				end
 			end
-			
-			%x({ open -a TextMate "#{output_filepath}"; sleep 30; rm -rf "#{tempdir}"; } </dev/null &>/dev/null &)
+
+			%x({ open -a "$(ps xw -o command|grep '\\.app/Contents/MacOS/TextMate'|grep -v grep|sed 's/\\(.*\\.app\\).*/\\1/')" "#{output_filepath}"; sleep 30; rm -rf "#{tempdir}"; } </dev/null &>/dev/null &)
 		ensure
 
 			pipe.close

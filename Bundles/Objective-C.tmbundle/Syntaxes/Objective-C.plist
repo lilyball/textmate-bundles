@@ -1,67 +1,253 @@
-{
-	name = "Objective-C";
-	keyEquivalent = "~^O";
-	scopeName = "source.objc";
-	fileTypes = ( m, h );
-	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
-	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
-	patterns = (
-        {   name = "declaration.function.objc";
-            begin = "^(-|\\+)\\s*"; end = "\\{|;"; swallow = "(//.*$)";
-            patterns = (
-                {   name = "comment.block.objc"; begin = "/\\*"; end = "\\*/"; },
-                {   name = "comment.line.double-slash.objc"; match = "//.*$";  },
-                {   match = ":\\s*(\\([^)]*\\))\\s*(\\b\\w+\\b)?";
-                    captures = {
-                        1 = { name = "storage.type.method.parameter.objc"; };
-                        2 = { name = "variable.parameter.method.objc"; };
-                    };
-                },
-                {   match = "(\\([^)]*\\))\\s*(\\b\\w+\\b)?";
-                    captures = {
-                        1 = { name = "storage.type.method.result.objc"; };
-                        2 = { name = "entity.name.function.objc"; };
-                    };
-                },
-                {   name = "keyword.other.name-of-parameter.objc"; match = "\\b\\w+\\b(?=:)"; },
-            );
-        },
-		{   name = "string.quoted.double.objc";
-		    begin = "@\""; end = "\""; swallow = "\\\\.";
-		},
-		{   name = "keyword.control.macro.objc";
-		    match = "\\b(NS_DURING|NS_HANDLER|NS_ENDHANDLER)\\b";
-		},
-		{   name = "declaration.class.objc";
-		    match = "(@(interface|implementation))\\s+([A-Za-z]+)\\s*(?::\\s*([A-Za-z]+))?";
-		    captures = {
-		        1 = { name = "storage.type.objc"; };
-		        3 = { name = "entity.name.class.objc"; };
-		        4 = { name = "entity.other.inherited-class"; };
-		    };
-		},
-
-        {   name = "keyword.control.objc"; match = "@(try|catch|finally|throw)\\b"; },
-        {   name = "keyword.other.objc"; match = "@(defs|encode)\\b"; },
-        {   name = "storage.type.objc"; match = "\\b(IBOutlet|IBAction|BOOL|SEL|id)\\b"; },
-        {   name = "storage.type.objc"; match = "@(class|protocol|end|selector)\\b"; },
-        {   name = "storage.modifier.objc"; match = "@(synchronized|public|private|protected)\\b"; },
-        {   name = "storage.modifier.objc"; match = "\\b(in|out|inout|oneway)\\b"; },
-        {   name = "constant.language.objc"; match = "\\b(YES|NO|nil)\\b"; },
-
-		{   include = "source.c"; },
-		{ 	name = "support.function.foundation";
-			match = "\\bNS(?:AllHashTableObjects|AllMapTableKeys|AllMapTableValues|AllocateMemoryPages|Assert|Assert1|Assert2|Assert3|Assert4|Assert5|CAssert|CAssert1|CAssert2|CAssert3|CAssert4|CAssert5|ClassFromString|CompareHashTables|ContainsRect|ConvertHostDoubleToSwapped|ConvertHostFloatToSwapped|ConvertSwappedDoubleToHost|ConvertSwappedFloatToHost|CopyHashTableWithZone|CountHashTable|CountMapTable|CParameterAssert|CreateHashTable|CreateHashTableWithZone|DeallocateObject|DecimalAdd|DecimalCompact|DecimalCompare|DecimalCopy|DecimalDivide|DecimalIsNotANumber|DecimalMultiply|DecimalMultiplyByPowerOf10|DecimalNormalize|DecimalPower|DecimalRound|DecimalString|DecimalSubtract|DecrementExtraRefCountWasZero|DefaultMallocZone|EndHashTableEnumeration|EndMapTableEnumeration|EnumerateHashTable|EnumerateMapTable|EqualPoints|EqualRanges|EqualRects|EqualSizes|ExtraRefCount|FileTypeForHFSTypeCode|FreeHashTable|FreeMapTable|FullUserName|GetUncaughtExceptionHandler|HashGet|HashInsert|HashInsertIfAbsent|HashInsertKnownAbsent|HashRemove|Height|HFSTypeCodeFromFileType|HFSTypeOfFile|HomeDirectory|HomeDirectoryForUser|HostByteOrder|IncrementExtraRefCount|InsetRect|IntegralRect|IntersectionRect|IntersectsRect|IsEmptyRect|JavaBundleCleanup|JavaBundleSetup|JavaClassesForBundle|JavaClassesFromPath|JavaNeedsToLoadClasses|JavaNeedsVirtualMachine|JavaObjectNamedInPath|JavaProvidesClasses|JavaSetup|JavaSetupVirtualMachine|LocalizedString|LocalizedStringFromTable|LocalizedStringFromTableInBundle|LocalizedStringWithDefaultValue|Log|LogPageSize|Logv|MakePoint|MakeSize|MapGet|MapRemove|MaxRange|MaxX|MaxY|MidX|MidY|MinX|MinY|NextHashEnumeratorItem|OffsetRect|OpenStepRootDirectory|PageSize|ParameterAssert|PointFromString|PointInRect|RangeFromString|RealMemoryAvailable|RectFromString|RecycleZone|ResetHashTable|ResetMapTable|SelectorFromString|SetZoneName|SizeFromString|StringFromClass|StringFromHashTable|StringFromMapTable|StringFromPoint|StringFromRange|StringFromRect|StringFromSelector|StringFromSize|SwapBigDoubleToHost|SwapBigFloatToHost|SwapBigIntToHost|SwapBigLongLongToHost|SwapBigLongToHost|SwapBigShortToHost|SwapDouble|SwapFloat|SwapHostDoubleToBig|SwapHostDoubleToLittle|SwapHostFloatToBig|SwapHostFloatToLittle|SwapHostIntToBig|SwapHostIntToLittle|SwapHostLongLongToBig|SwapHostLongLongToLittle|SwapHostLongToBig|SwapHostLongToLittle|SwapHostShortToBig|SwapHostShortToLittle|SwapInt|SwapLittleDoubleToHost|SwapLittleFloatToHost|SwapLittleIntToHost|SwapLittleLongLongToHost|SwapLittleLongToHost|SwapLittleShortToHost|SwapLong|SwapLongLong|SwapShort|TemporaryDirectory|UnionRange|UnionRect|UserName|Width|ZoneFree|ZoneFromPointer|ZoneMalloc|ZoneName)\\b"; 
-		},
-		{ 	name = "support.class.foundation";
-			match = "\\bNS(?:AppleEventDescriptor|AppleEventManager|AppleScript|Archiver|Array|AssertionHandler|AttributedString|AutoreleasePool|Bundle|CachedURLResponse|CalendarDate|CharacterSet|ClassDescription|CloneCommand|CloseCommand|Coder|ConditionLock|Connection|CountCommand|CountedSet|CreateCommand|Data|Date|DateFormatter|DecimalNumber|DecimalNumberHandler|DeleteCommand|Deserializer|Dictionary|DirectoryEnumerator|DistantObject|DistantObjectRequest|DistributedLock|DistributedNotificationCenter|Enumerator|Error|Exception|ExistsCommand|FileHandle|FileManager|Formatter|GetCommand|Host|HTTPCookie|HTTPCookieStorage|HTTPURLResponse|IndexSet|IndexSpecifier|InputStream|Invocation|KeyedArchiver|KeyedUnarchiver|Lock|LogicalTest|MachBootstrapServer|MachPort|MessagePort|MessagePortNameServer|MethodSignature|MiddleSpecifier|MoveCommand|MutableArray|MutableAttributedString|MutableCharacterSet|MutableData|MutableDictionary|MutableIndexSet|MutableSet|MutableString|MutableURLRequest|NameSpecifier|NetService|NetServiceBrowser|Notification|NotificationCenter|NotificationQueue|Null|Number|NumberFormatter|Object|OutputStream|Pipe|Port|PortCoder|PortMessage|PortNameServer|PositionalSpecifier|ProcessInfo|PropertyListSerialization|PropertySpecifier|ProtocolChecker|Proxy|QuitCommand|RandomSpecifier|RangeSpecifier|RecursiveLock|RelativeSpecifier|RunLoop|Scanner|ScriptClassDescription|ScriptCoercionHandler|ScriptCommand|ScriptCommandDescription|ScriptExecutionContext|ScriptObjectSpecifier|ScriptSuiteRegistry|ScriptWhoseTest|Serializer|Set|SetCommand|SocketPort|SocketPortNameServer|SortDescriptor|SpecifierTest|SpellServer|Stream|String|Task|Thread|Timer|TimeZone|Unarchiver|UndoManager|UniqueIDSpecifier|URL|URLAuthenticationChallenge|URLCache|URLConnection|URLCredential|URLCredentialStorage|URLDownload|URLHandle|URLProtectionSpace|URLProtocol|URLRequest|URLResponse|UserDefaults|Value|ValueTransformer|WhoseSpecifier|XMLParser)\\b"; 
-		},
-		{ 	name = "support.function.appkit";
-			match = "\\bNS(?:AccessibilityPostNotification|AccessibilityRaiseBadArgumentException|AccessibilityUnignoredAncestor|AccessibilityUnignoredChildren|AccessibilityUnignoredChildrenForOnlyChild|AccessibilityUnignoredDescendant|ApplicationLoad|ApplicationMain|AvailableWindowDepths|Beep|BeginAlertSheet|BeginCriticalAlertSheet|BeginInformationalAlertSheet|BestDepth|BitsPerPixelFromDepth|BitsPerSampleFromDepth|ColorSpaceFromDepth|ConvertGlyphsToPackedGlyphs|CopyBits|CountWindows|CountWindowsForContext|CreateFileContentsPboardType|CreateFilenamePboardType|DisableScreenUpdates|DottedFrameRect|DrawBitmap|DrawButton|DrawColorTiledRects|DrawDarkBezel|DrawGrayBezel|DrawGroove|DrawLightBezel|DrawTiledRects|DrawWhiteBezel|DrawWindowBackground|EnableScreenUpdates|EraseRect|EventMaskFromType|FrameRect|FrameRectWithWidth|FrameRectWithWidthUsingOperation|GetAlertPanel|GetCriticalAlertPanel|GetFileType|GetFileTypes|GetInformationalAlertPanel|GetWindowServerMemory|GlyphInfoAtIndex|HighlightRect|InterfaceStyleForKey|IsControllerMarker|MultipleValuesMarker|NoSelectionMarker|NotApplicableMarker|NumberOfColorComponents|OpenGLGetOption|OpenGLGetVersion|OpenGLSetOption|PerformService|PlanarFromDepth|ReadPixel|RectClip|RectClipList|RectFill|RectFillList|RectFillListUsingOperation|RectFillListWithColors|RectFillListWithColorsUsingOperation|RectFillListWithGrays|RectFillUsingOperation|RegisterServicesProvider|ReleaseAlertPanel|RunAlertPanel|RunCriticalAlertPanel|RunInformationalAlertPanel|SetFocusRingStyle|SetShowsServicesMenuItem|ShowAnimationEffect|ShowsServicesMenuItem|UnRegisterServicesProvider|UpdateDynamicServices|WindowList|WindowListForContext)\\b"; 
-		},
-		{ 	name = "support.class.appkit";
-			match = "\\bNS(?:ActionCell|AffineTransform|Alert|Application|ArrayController|ATSTypesetter|BezierPath|BitmapImageRep|Box|Browser|BrowserCell|Button|ButtonCell|CachedImageRep|Cell|ClipView|Color|ColorList|ColorPanel|ColorPicker|ColorWell|ComboBox|ComboBoxCell|Control|Controller|Cursor|CustomImageRep|Document|DocumentController|Drawer|EPSImageRep|Event|FileWrapper|Font|FontDescriptor|FontManager|FontPanel|Form|FormCell|GlyphGenerator|GlyphInfo|GraphicsContext|HelpManager|Image|ImageCell|ImageRep|ImageView|InputManager|InputServer|LayoutManager|Matrix|Menu|MenuItem|MenuItemCell|MenuView|Movie|MovieView|MutableParagraphStyle|Nib|NibConnector|NibControlConnector|NibOutletConnector|ObjectController|OpenGLContext|OpenGLPixelBuffer|OpenGLPixelFormat|OpenGLView|OpenPanel|OutlineView|PageLayout|Panel|ParagraphStyle|Pasteboard|PDFImageRep|PICTImageRep|PopUpButton|PopUpButtonCell|Printer|PrintInfo|PrintOperation|PrintPanel|ProgressIndicator|QuickDrawView|Responder|RulerMarker|RulerView|SavePanel|Screen|Scroller|ScrollView|SearchField|SearchFieldCell|SecureTextField|SecureTextFieldCell|SegmentedCell|SegmentedControl|Shadow|SimpleHorizontalTypesetter|Slider|SliderCell|Sound|SpeechRecognizer|SpeechSynthesizer|SpellChecker|SplitView|StatusBar|StatusItem|Stepper|StepperCell|TableColumn|TableHeaderCell|TableHeaderView|TableView|TabView|TabViewItem|Text|TextAttachment|TextAttachmentCell|TextContainer|TextField|TextFieldCell|TextStorage|TextTab|TextView|Toolbar|ToolbarItem|Typesetter|UserDefaultsController|View|Window|WindowController|Workspace)\\b"; 
-		},
-	);
-	uuid = "F85CC716-6B1C-11D9-9A20-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>m</string>
+		<string>h</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(/\*\*|\{\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(\*\*/|^\s*\})</string>
+	<key>keyEquivalent</key>
+	<string>~^O</string>
+	<key>name</key>
+	<string>Objective-C</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>(@(interface))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.objc</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.class.objc</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.inherited-class</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>meta.scope.interface.objc</string>
+			<key>end</key>
+			<string>(@end)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(@(implementation))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.objc</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.class.objc</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.inherited-class</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>meta.scope.implementation.objc</string>
+			<key>end</key>
+			<string>(@end)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^(-|\+)\s*</string>
+			<key>end</key>
+			<string>\{|;</string>
+			<key>name</key>
+			<string>declaration.function.objc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>/\*</string>
+					<key>end</key>
+					<string>\*/</string>
+					<key>name</key>
+					<string>comment.block.objc</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>/\*</string>
+					<key>end</key>
+					<string>\*/</string>
+					<key>name</key>
+					<string>comment.block.objc</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>//.*$</string>
+					<key>name</key>
+					<string>comment.line.double-slash.objc</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.method.parameter.objc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.method.objc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>:\s*(\([^)]*\))\s*(\b\w+\b)?</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.method.result.objc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.objc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\([^)]*\))\s*(\b\w+\b)?</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b\w+\b(?=:)</string>
+					<key>name</key>
+					<string>keyword.other.name-of-parameter.objc</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>(//.*$)</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>@"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.objc</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(NS_DURING|NS_HANDLER|NS_ENDHANDLER)\b</string>
+			<key>name</key>
+			<string>keyword.control.macro.objc</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>@(try|catch|finally|throw)\b</string>
+			<key>name</key>
+			<string>keyword.control.objc</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>@(defs|encode)\b</string>
+			<key>name</key>
+			<string>keyword.other.objc</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(IBOutlet|IBAction|BOOL|SEL|id)\b</string>
+			<key>name</key>
+			<string>storage.type.objc</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>@(class|protocol|selector)\b</string>
+			<key>name</key>
+			<string>storage.type.objc</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>@(synchronized|public|private|protected)\b</string>
+			<key>name</key>
+			<string>storage.modifier.objc</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(in|out|inout|oneway)\b</string>
+			<key>name</key>
+			<string>storage.modifier.objc</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(YES|NO|nil)\b</string>
+			<key>name</key>
+			<string>constant.language.objc</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bNS(?:AllHashTableObjects|AllMapTableKeys|AllMapTableValues|AllocateMemoryPages|Assert|Assert1|Assert2|Assert3|Assert4|Assert5|CAssert|CAssert1|CAssert2|CAssert3|CAssert4|CAssert5|ClassFromString|CompareHashTables|ContainsRect|ConvertHostDoubleToSwapped|ConvertHostFloatToSwapped|ConvertSwappedDoubleToHost|ConvertSwappedFloatToHost|CopyHashTableWithZone|CountHashTable|CountMapTable|CParameterAssert|CreateHashTable|CreateHashTableWithZone|DeallocateObject|DecimalAdd|DecimalCompact|DecimalCompare|DecimalCopy|DecimalDivide|DecimalIsNotANumber|DecimalMultiply|DecimalMultiplyByPowerOf10|DecimalNormalize|DecimalPower|DecimalRound|DecimalString|DecimalSubtract|DecrementExtraRefCountWasZero|DefaultMallocZone|EndHashTableEnumeration|EndMapTableEnumeration|EnumerateHashTable|EnumerateMapTable|EqualPoints|EqualRanges|EqualRects|EqualSizes|ExtraRefCount|FileTypeForHFSTypeCode|FreeHashTable|FreeMapTable|FullUserName|GetUncaughtExceptionHandler|HashGet|HashInsert|HashInsertIfAbsent|HashInsertKnownAbsent|HashRemove|Height|HFSTypeCodeFromFileType|HFSTypeOfFile|HomeDirectory|HomeDirectoryForUser|HostByteOrder|IncrementExtraRefCount|InsetRect|IntegralRect|IntersectionRect|IntersectsRect|IsEmptyRect|JavaBundleCleanup|JavaBundleSetup|JavaClassesForBundle|JavaClassesFromPath|JavaNeedsToLoadClasses|JavaNeedsVirtualMachine|JavaObjectNamedInPath|JavaProvidesClasses|JavaSetup|JavaSetupVirtualMachine|LocalizedString|LocalizedStringFromTable|LocalizedStringFromTableInBundle|LocalizedStringWithDefaultValue|Log|LogPageSize|Logv|MakePoint|MakeSize|MapGet|MapRemove|MaxRange|MaxX|MaxY|MidX|MidY|MinX|MinY|NextHashEnumeratorItem|OffsetRect|OpenStepRootDirectory|PageSize|ParameterAssert|PointFromString|PointInRect|RangeFromString|RealMemoryAvailable|RectFromString|RecycleZone|ResetHashTable|ResetMapTable|SelectorFromString|SetZoneName|SizeFromString|StringFromClass|StringFromHashTable|StringFromMapTable|StringFromPoint|StringFromRange|StringFromRect|StringFromSelector|StringFromSize|SwapBigDoubleToHost|SwapBigFloatToHost|SwapBigIntToHost|SwapBigLongLongToHost|SwapBigLongToHost|SwapBigShortToHost|SwapDouble|SwapFloat|SwapHostDoubleToBig|SwapHostDoubleToLittle|SwapHostFloatToBig|SwapHostFloatToLittle|SwapHostIntToBig|SwapHostIntToLittle|SwapHostLongLongToBig|SwapHostLongLongToLittle|SwapHostLongToBig|SwapHostLongToLittle|SwapHostShortToBig|SwapHostShortToLittle|SwapInt|SwapLittleDoubleToHost|SwapLittleFloatToHost|SwapLittleIntToHost|SwapLittleLongLongToHost|SwapLittleLongToHost|SwapLittleShortToHost|SwapLong|SwapLongLong|SwapShort|TemporaryDirectory|UnionRange|UnionRect|UserName|Width|ZoneFree|ZoneFromPointer|ZoneMalloc|ZoneName)\b</string>
+			<key>name</key>
+			<string>support.function.foundation</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bNS(?:AppleEventDescriptor|AppleEventManager|AppleScript|Archiver|Array|AssertionHandler|AttributedString|AutoreleasePool|Bundle|CachedURLResponse|CalendarDate|CharacterSet|ClassDescription|CloneCommand|CloseCommand|Coder|ConditionLock|Connection|CountCommand|CountedSet|CreateCommand|Data|Date|DateFormatter|DecimalNumber|DecimalNumberHandler|DeleteCommand|Deserializer|Dictionary|DirectoryEnumerator|DistantObject|DistantObjectRequest|DistributedLock|DistributedNotificationCenter|Enumerator|Error|Exception|ExistsCommand|FileHandle|FileManager|Formatter|GetCommand|Host|HTTPCookie|HTTPCookieStorage|HTTPURLResponse|IndexSet|IndexSpecifier|InputStream|Invocation|KeyedArchiver|KeyedUnarchiver|Lock|LogicalTest|MachBootstrapServer|MachPort|MessagePort|MessagePortNameServer|MethodSignature|MiddleSpecifier|MoveCommand|MutableArray|MutableAttributedString|MutableCharacterSet|MutableData|MutableDictionary|MutableIndexSet|MutableSet|MutableString|MutableURLRequest|NameSpecifier|NetService|NetServiceBrowser|Notification|NotificationCenter|NotificationQueue|Null|Number|NumberFormatter|Object|OutputStream|Pipe|Port|PortCoder|PortMessage|PortNameServer|PositionalSpecifier|ProcessInfo|PropertyListSerialization|PropertySpecifier|ProtocolChecker|Proxy|QuitCommand|RandomSpecifier|RangeSpecifier|RecursiveLock|RelativeSpecifier|RunLoop|Scanner|ScriptClassDescription|ScriptCoercionHandler|ScriptCommand|ScriptCommandDescription|ScriptExecutionContext|ScriptObjectSpecifier|ScriptSuiteRegistry|ScriptWhoseTest|Serializer|Set|SetCommand|SocketPort|SocketPortNameServer|SortDescriptor|SpecifierTest|SpellServer|Stream|String|Task|Thread|Timer|TimeZone|Unarchiver|UndoManager|UniqueIDSpecifier|URL|URLAuthenticationChallenge|URLCache|URLConnection|URLCredential|URLCredentialStorage|URLDownload|URLHandle|URLProtectionSpace|URLProtocol|URLRequest|URLResponse|UserDefaults|Value|ValueTransformer|WhoseSpecifier|XMLParser)\b</string>
+			<key>name</key>
+			<string>support.class.foundation</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bNS(?:AccessibilityPostNotification|AccessibilityRaiseBadArgumentException|AccessibilityUnignoredAncestor|AccessibilityUnignoredChildren|AccessibilityUnignoredChildrenForOnlyChild|AccessibilityUnignoredDescendant|ApplicationLoad|ApplicationMain|AvailableWindowDepths|Beep|BeginAlertSheet|BeginCriticalAlertSheet|BeginInformationalAlertSheet|BestDepth|BitsPerPixelFromDepth|BitsPerSampleFromDepth|ColorSpaceFromDepth|ConvertGlyphsToPackedGlyphs|CopyBits|CountWindows|CountWindowsForContext|CreateFileContentsPboardType|CreateFilenamePboardType|DisableScreenUpdates|DottedFrameRect|DrawBitmap|DrawButton|DrawColorTiledRects|DrawDarkBezel|DrawGrayBezel|DrawGroove|DrawLightBezel|DrawTiledRects|DrawWhiteBezel|DrawWindowBackground|EnableScreenUpdates|EraseRect|EventMaskFromType|FrameRect|FrameRectWithWidth|FrameRectWithWidthUsingOperation|GetAlertPanel|GetCriticalAlertPanel|GetFileType|GetFileTypes|GetInformationalAlertPanel|GetWindowServerMemory|GlyphInfoAtIndex|HighlightRect|InterfaceStyleForKey|IsControllerMarker|MultipleValuesMarker|NoSelectionMarker|NotApplicableMarker|NumberOfColorComponents|OpenGLGetOption|OpenGLGetVersion|OpenGLSetOption|PerformService|PlanarFromDepth|ReadPixel|RectClip|RectClipList|RectFill|RectFillList|RectFillListUsingOperation|RectFillListWithColors|RectFillListWithColorsUsingOperation|RectFillListWithGrays|RectFillUsingOperation|RegisterServicesProvider|ReleaseAlertPanel|RunAlertPanel|RunCriticalAlertPanel|RunInformationalAlertPanel|SetFocusRingStyle|SetShowsServicesMenuItem|ShowAnimationEffect|ShowsServicesMenuItem|UnRegisterServicesProvider|UpdateDynamicServices|WindowList|WindowListForContext)\b</string>
+			<key>name</key>
+			<string>support.function.appkit</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bNS(?:ActionCell|AffineTransform|Alert|Application|ArrayController|ATSTypesetter|BezierPath|BitmapImageRep|Box|Browser|BrowserCell|Button|ButtonCell|CachedImageRep|Cell|ClipView|Color|ColorList|ColorPanel|ColorPicker|ColorWell|ComboBox|ComboBoxCell|Control|Controller|Cursor|CustomImageRep|Document|DocumentController|Drawer|EPSImageRep|Event|FileWrapper|Font|FontDescriptor|FontManager|FontPanel|Form|FormCell|GlyphGenerator|GlyphInfo|GraphicsContext|HelpManager|Image|ImageCell|ImageRep|ImageView|InputManager|InputServer|LayoutManager|Matrix|Menu|MenuItem|MenuItemCell|MenuView|Movie|MovieView|MutableParagraphStyle|Nib|NibConnector|NibControlConnector|NibOutletConnector|ObjectController|OpenGLContext|OpenGLPixelBuffer|OpenGLPixelFormat|OpenGLView|OpenPanel|OutlineView|PageLayout|Panel|ParagraphStyle|Pasteboard|PDFImageRep|PICTImageRep|PopUpButton|PopUpButtonCell|Printer|PrintInfo|PrintOperation|PrintPanel|ProgressIndicator|QuickDrawView|Responder|RulerMarker|RulerView|SavePanel|Screen|Scroller|ScrollView|SearchField|SearchFieldCell|SecureTextField|SecureTextFieldCell|SegmentedCell|SegmentedControl|Shadow|SimpleHorizontalTypesetter|Slider|SliderCell|Sound|SpeechRecognizer|SpeechSynthesizer|SpellChecker|SplitView|StatusBar|StatusItem|Stepper|StepperCell|TableColumn|TableHeaderCell|TableHeaderView|TableView|TabView|TabViewItem|Text|TextAttachment|TextAttachmentCell|TextContainer|TextField|TextFieldCell|TextStorage|TextTab|TextView|Toolbar|ToolbarItem|Typesetter|UserDefaultsController|View|Window|WindowController|Workspace)\b</string>
+			<key>name</key>
+			<string>support.class.appkit</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.objc</string>
+	<key>uuid</key>
+	<string>F85CC716-6B1C-11D9-9A20-000D93589AF6</string>
+</dict>
+</plist>

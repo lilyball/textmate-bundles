@@ -18,6 +18,18 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>include</key>
+			<string>#preprocessor-rule-enabled</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#preprocessor-rule-disabled</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#preprocessor-rule-other</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>/\*</string>
 			<key>end</key>
@@ -93,7 +105,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*#\s*(define|defined|else|elif|endif|if|ifdef|ifndef|line|pragma|undef)\b</string>
+			<string>^\s*#\s*(define|defined|elif|if|ifdef|ifndef|line|pragma|undef)\b</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -170,6 +182,137 @@
 			<string>declaration.section</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>disabled</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#\s*if(n?def)?\b.*$</string>
+			<key>end</key>
+			<string>^\s*#\s*endif\b.*$</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#disabled</string>
+				</dict>
+			</array>
+		</dict>
+		<key>preprocessor-rule-disabled</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#(if)\s+0\b.*$</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.preprocessor.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>^\s*#\s*(endif)\b.*$</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string></string>
+					<key>end</key>
+					<string>(?=^\s*#\s*(else|endif)\b.*$)</string>
+					<key>name</key>
+					<string>comment.block.preprocessor.if-branch</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#disabled</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*#\s*else\b.*$</string>
+					<key>end</key>
+					<string>(?=^\s*#\s*endif\b.*$)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>preprocessor-rule-enabled</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#(if)\s+0*1\b.*$</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.preprocessor.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>^\s*#\s*(endif)\b.*$</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string></string>
+					<key>end</key>
+					<string>(?=^\s*#\s*(else|endif)\b.*$)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*#\s*else\b.*$</string>
+					<key>contentName</key>
+					<string>comment.block.preprocessor.else-branch</string>
+					<key>end</key>
+					<string>(?=^\s*#\s*endif\b.*$)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#disabled</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>preprocessor-rule-other</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#\s*(if(n?def)?)\b.*$</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.preprocessor.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>^\s*#\s*(endif)\b.*$</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.c</string>
 	<key>uuid</key>

@@ -1,114 +1,230 @@
-/**
- ** Simple XML syntax dictionary for TextMate.
- ** Author: Brian Lalor <blalor@bravo5.org>
- **
- ** Some patterns (and most colors) taken from the bundled HTML.plist.
- **
- ** $URL$
- ** $Id$
- **
- ** TODO
- ** ----
- ** • more thorough DOCTYPE scanning (less greedy)
- **/
-
-{
-	name = "XML";
-	scopeName = "text.xml";
-	keyEquivalent = "~^X";
-	uuid = "D3C4E6DA-6B1C-11D9-8CC2-000D93589AF6";
-	
-	firstLineMatch = "^\\s*<\\?xml";
-
-	// pt, cpt, and dtml comes from Zope development
-	fileTypes = ( xml, tld, jsp, xsl, xslt, pt, cpt, dtml );
-
-	foldingStartMarker = "^\\s*(<[^!?%/](?!.+?(/>|</.+?>))|<[!%]--(?!.+?--%?>)|<%[!]?(?!.+?%>))";
-	foldingStopMarker  = "^\\s*(</[^>]+>|[/%]>|-->)\\s*$";
-
-	patterns = (
-		/* processing instructions */
-		{
-			name = "declaration.xml-processing.xml";
-			begin = "<\\?\\s*([-_a-zA-Z0-9]+)";
-			end = "\\?>";
-			captures = {
-			    1 = { name = "entity.name.tag.xml"; };
-			};
-			patterns = (
-	  			{ name = "entity.other.attribute-name.xml"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.quoted.double.xml"; begin = "\""; end = "\"";},
-				{ name = "string.quoted.single.xml"; begin = "'"; end = "'";},
-			);
-		},
-		
-		/* doctype */
-		{
-			name = "declaration.sgml.doctype.xml";
-			begin = "<!(DOCTYPE)"; end = ">";
-			captures = {
-		        1 = { name = "entity.name.tag.doctype.xml"; };
-			};
-			patterns = (
-				{
-					begin = "<!(ENTITY)\\s([-_a-zA-Z0-9]+)"; end = ">";
-				    captures = {
-				        1 = { name = "entity.name.tag.entity.xml"; };
-					    2 = { name = "declaration.entity.xml"; };
-					};
-					patterns = (
-                        { name = "string.quoted.double.xml"; begin = "\""; end = "\"";},
-                        { name = "string.quoted.single.xml"; begin = "'"; end = "'";},
-					);
-				},
-			);
-		},
-		
-		/* comments */
-		{
-			name = "comment.block.xml";
-			begin = "<[!%]--";
-			end = "--%?>";
-		},
-		
-		/* nodes */
-		{
-			// "tags" in HTML; want them to be colored similarly.
-			name = "declaration.tag.xml";
-			begin = "</?(?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)";
-			end = "/?>";
-			captures = {
-			    1 = { name = "entity.name.tag.namespace.xml"; };
-			    2 = { name = "entity.name.tag.xml"; };
-			};
-			patterns = (
-	  			{ name = "entity.other.attribute-name.xml"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.quoted.double.xml"; begin = "\""; end = "\"";},
-				{ name = "string.quoted.single.xml"; begin = "'"; end = "'";},
-			);
-		},
-
-		/* entities */
-		{ name = "constant.character.entity.xml"; match = "&([a-zA-Z0-9_-]+|#[0-9]+|#x[0-9a-fA-F]+);";},
-		{ name = "invalid.illegal.bad-ampersand.xml"; match = "&";},
-		
-        /* jsp page properties */
- 		{
-          // JSP page properties
-  			name = "source.java-props.embedded.xml";
-			begin = "<%@";
-			patterns = (
-				{ match = "page|include|taglib"; name = "keyword.page-props.xml"; },
-			);
-			end = "%>";
-		},
-		
-        /* embedded java */
-		{
-			name = "source.java.embedded.xml";
-			begin = "<%[!=]?(?!--)";
-			patterns = ( { include = "source.java"; } );
-			end = "(?!--)%>";
-		},
-	);
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>xml</string>
+		<string>tld</string>
+		<string>jsp</string>
+		<string>xsl</string>
+		<string>xslt</string>
+		<string>pt</string>
+		<string>cpt</string>
+		<string>dtml</string>
+	</array>
+	<key>firstLineMatch_disabled</key>
+	<string>^\s*&lt;\?xml</string>
+	<key>foldingStartMarker</key>
+	<string>^\s*(&lt;[^!?%/](?!.+?(/&gt;|&lt;/.+?&gt;))|&lt;[!%]--(?!.+?--%?&gt;)|&lt;%[!]?(?!.+?%&gt;))</string>
+	<key>foldingStopMarker</key>
+	<string>^\s*(&lt;/[^&gt;]+&gt;|[/%]&gt;|--&gt;)\s*$</string>
+	<key>keyEquivalent</key>
+	<string>~^X</string>
+	<key>name</key>
+	<string>XML</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>&lt;\?\s*([-_a-zA-Z0-9]+)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\?&gt;</string>
+			<key>name</key>
+			<string>declaration.xml-processing.xml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string> ([a-zA-Z-]+)</string>
+					<key>name</key>
+					<string>entity.parameter.attribute.tag.xml</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.xml</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>string.quoted.single.xml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;!(DOCTYPE)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.doctype.xml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>name</key>
+			<string>declaration.sgml.doctype.xml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>&lt;!(ENTITY)\s([-_a-zA-Z0-9]+)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.entity.xml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>declaration.entity.xml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>&gt;</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>"</string>
+							<key>end</key>
+							<string>"</string>
+							<key>name</key>
+							<string>string.quoted.double.xml</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>'</string>
+							<key>end</key>
+							<string>'</string>
+							<key>name</key>
+							<string>string.quoted.single.xml</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;[!%]--</string>
+			<key>end</key>
+			<string>--%?&gt;</string>
+			<key>name</key>
+			<string>comment.block.xml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;/?(?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.namespace.xml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>/?&gt;</string>
+			<key>name</key>
+			<string>declaration.tag.xml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string> ([a-zA-Z-]+)</string>
+					<key>name</key>
+					<string>entity.parameter.attribute.tag.xml</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.xml</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>string.quoted.single.xml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&amp;([a-zA-Z0-9_-]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+			<key>name</key>
+			<string>constant.character.entity.xml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&amp;</string>
+			<key>name</key>
+			<string>invalid.bad-ampersand.xml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;%@</string>
+			<key>end</key>
+			<string>%&gt;</string>
+			<key>name</key>
+			<string>source.java-props.embedded.xml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>page|include|taglib</string>
+					<key>name</key>
+					<string>keyword.page-props.xml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;%[!=]?(?!--)</string>
+			<key>end</key>
+			<string>(?!--)%&gt;</string>
+			<key>name</key>
+			<string>source.java.embedded.xml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.java</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.xml</string>
+	<key>uuid</key>
+	<string>D3C4E6DA-6B1C-11D9-8CC2-000D93589AF6</string>
+</dict>
+</plist>

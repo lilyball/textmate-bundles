@@ -9,7 +9,7 @@
         { name = "declaration.bullet-point.strong"; match = "^\\s*•.*$"; },
         { name = "declaration.bullet-point.light"; match = "^\\s*·.*$"; },
         { name = "declaration.bullet-point.star"; match = "^\\s*\\*.*$"; },
-        { name = "markup.underline.link"; match = "(https?|ftp|mailto):\\S+?(?=[),.';\"]*(\\s|$)|$)"; },
+        { name = "markup.underline.link"; match = "(https?|ftp|mailto):\\S+?(?=[)>,.';\"]*(\\s|$)|$)"; },
         { name = "text.html";
           begin = "%\\{<(?i:HTML)>"; end = "</(?i:HTML)>\\}%";
           patterns = ( { include = "text.html.basic"; } );

@@ -36,9 +36,9 @@
 			    1 = { name = "entity.name.tag.xml"; };
 			};
 			patterns = (
-	  			{ name = "entity.parameter.attribute.tag.xml"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
-				{ name = "string.single-quoted.xml"; begin = "'"; end = "'";},
+	  			{ name = "entity.other.attribute-name.xml"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "string.quoted.double.xml"; begin = "\""; end = "\"";},
+				{ name = "string.quoted.single.xml"; begin = "'"; end = "'";},
 			);
 		},
 		
@@ -57,8 +57,8 @@
 					    2 = { name = "declaration.entity.xml"; };
 					};
 					patterns = (
-                        { name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
-                        { name = "string.single-quoted.xml"; begin = "'"; end = "'";},
+                        { name = "string.quoted.double.xml"; begin = "\""; end = "\"";},
+                        { name = "string.quoted.single.xml"; begin = "'"; end = "'";},
 					);
 				},
 			);
@@ -82,15 +82,15 @@
 			    2 = { name = "entity.name.tag.xml"; };
 			};
 			patterns = (
-	  			{ name = "entity.parameter.attribute.tag.xml"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.double-quoted.xml"; begin = "\""; end = "\"";},
-				{ name = "string.single-quoted.xml"; begin = "'"; end = "'";},
+	  			{ name = "entity.other.attribute-name.xml"; match = " ([a-zA-Z\-]+)"; },
+	  			{ name = "string.quoted.double.xml"; begin = "\""; end = "\"";},
+				{ name = "string.quoted.single.xml"; begin = "'"; end = "'";},
 			);
 		},
 
 		/* entities */
-		{ name = "constant.character-entity.xml"; match = "&([a-zA-Z0-9_-]+|#[0-9]+|#x[0-9a-fA-F]+);";},
-		{ name = "invalid.bad-ampersand.xml"; match = "&";},
+		{ name = "constant.character.entity.xml"; match = "&([a-zA-Z0-9_-]+|#[0-9]+|#x[0-9a-fA-F]+);";},
+		{ name = "invalid.illegal.bad-ampersand.xml"; match = "&";},
 		
         /* jsp page properties */
  		{

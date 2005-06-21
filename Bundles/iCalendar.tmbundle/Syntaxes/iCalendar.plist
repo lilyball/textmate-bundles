@@ -5,28 +5,21 @@
 
 	foldingStartMarker = "^BEGIN:";
 	foldingStopMarker = "^END:";
-	smartTypingPairs = (
-	    ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
-	    ( "\"", "\"" ), ( "'", "'" )
-	);
-	highlightPairs = (
-	    ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
-	);
 
 	patterns = (
 		{
-		    name = "keyword.iCalendar.component-begin"; match = "^BEGIN:(.*)";
+		    name = "keyword.other.iCalendar.component-begin"; match = "^BEGIN:(.*)";
 			captures = { 1 = { name = "entity.name.function"; }; }; // FIXME entity.name.function is not correct
 		},
 		{
-		    name = "keyword.iCalendar.component-end"; match = "^END:(.*)";
+		    name = "keyword.other.iCalendar.component-end"; match = "^END:(.*)";
 		    captures = { 1 = { name = "entity.name.function"; }; }; // FIXME entity.name.function is not correct
         },
 		
 		
 		{ name = "constant.numeric.iCalendar"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"; },
-		/* { name = "string.single-quoted.iCalendar"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; }, */
-		{ name = "string.double-quoted.iCalendar"; begin = "\""; end = "\"";  },
+		/* { name = "string.quoted.single.iCalendar"; begin = "'"; end = "'"; swallow = "\\\\."; foregroundColor = "#FFFCCF"; }, */
+		{ name = "string.quoted.double.iCalendar"; begin = "\""; end = "\"";  },
 	);
 	uuid = "16771FA0-6B1D-11D9-A369-000D93589AF6";
 }

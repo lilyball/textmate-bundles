@@ -10,41 +10,7 @@
 # file/line information then plays a succes/failure sample
 # based on the final outcome
 
-# if there is no TM project, scan up the parent directories looking for an Xcode project
-
-# more or less copy/paste from “Build (using xcodebuild)”
-if [[ -n $TM_XCODE_PROJECT ]]; then
-	cd "$TM_DIRECTORY"
-	PROJECT_FILE="$TM_XCODE_PROJECT"
-elif [[ -z $TM_PROJECT_FILEPATH ]]; then
-	if [[ -d $TM_PROJECT_DIRECTORY ]]; then
-		cd "$TM_PROJECT_DIRECTORY"
-	else
-		cd "$TM_DIRECTORY"
-	fi
-	PROJECT_FILE=""
-	until [[ `pwd` == "/" ]];
-	do
-		if [[ $(ls 2&gt;/dev/null -d *.xcode|wc -l) -eq 1 ]]; then
-			PROJECT_FILE=$(ls 2&gt;/dev/null -d *.xcode)
-		elif [[ $(ls 2&gt;/dev/null -d *.pbproj|wc -l) -eq 1 ]]; then
-			PROJECT_FILE=$(ls 2&gt;/dev/null -d *.pbproj)
-		else
-			cd ..
-			continue
-		fi
-		break
-	done
-else
-	cd "$TM_PROJECT_DIRECTORY"
-	PROJECT_FILE=$(basename "${TM_PROJECT_FILEPATH%.tmproj}")
-	if [[ -d "${PROJECT_FILE}.xcode" ]]; then
-		PROJECT_FILE=${PROJECT_FILE}.xcode
-	elif [[ -d "${PROJECT_FILE}.pbproj" ]]; then
-		PROJECT_FILE=${PROJECT_FILE}.pbproj
-	fi
-fi
-
+PROJECT_FILE=$(ruby -- "${TM_BUNDLE_PATH}/bin/find_xcode_project.rb")
 BUILD_STYLE="${TM_BUILDSTYLE:-Deployment}"
 
 # If we have an Xcode project, and it doesn't contain the build style we're looking for,

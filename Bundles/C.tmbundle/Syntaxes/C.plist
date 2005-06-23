@@ -158,28 +158,8 @@
 			<string>\\\s*\n</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>other.preprocessor.c</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.preprocessor.pragma.c</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.section</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>^\s*(#\s*(pragma\s+mark)\s+(.*))</string>
-			<key>name</key>
-			<string>declaration.section</string>
+			<key>include</key>
+			<string>#pragma-mark</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -218,6 +198,8 @@
 		<dict>
 			<key>begin</key>
 			<string>^\s*#\s*if(n?def)?\b.*$</string>
+			<key>comment</key>
+			<string>eat nested preprocessor if(def)s</string>
 			<key>end</key>
 			<string>^\s*#\s*endif\b.*$</string>
 			<key>patterns</key>
@@ -226,22 +208,56 @@
 					<key>include</key>
 					<string>#disabled</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#pragma-mark</string>
+				</dict>
 			</array>
 		</dict>
-		<key>preprocessor-rule-disabled</key>
+		<key>pragma-mark</key>
 		<dict>
-			<key>begin</key>
-			<string>^\s*#(if)\s+0\b.*$</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.preprocessor.c</string>
+					<string>other.preprocessor.c</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.pragma.c</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.section.c</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(#\s*(pragma\s+mark)\s+(.*))</string>
+			<key>name</key>
+			<string>declaration.section</string>
+		</dict>
+		<key>preprocessor-rule-disabled</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*(#(if)\s+0\b)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>other.preprocessor.c</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.c</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^\s*#\s*(endif)\b.*$</string>
+			<string>^\s*(#\s*(endif)\b)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -257,11 +273,28 @@
 							<key>include</key>
 							<string>#disabled</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#pragma-mark</string>
+						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^\s*#\s*else\b.*$</string>
+					<string>^\s*(#\s*(else)\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>other.preprocessor.c</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.preprocessor.c</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>(?=^\s*#\s*endif\b.*$)</string>
 					<key>patterns</key>
@@ -277,17 +310,22 @@
 		<key>preprocessor-rule-enabled</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*#(if)\s+0*1\b.*$</string>
+			<string>^\s*(#(if)\s+0*1\b)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.preprocessor.c</string>
+					<string>other.preprocessor.c</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.c</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^\s*#\s*(endif)\b.*$</string>
+			<string>^\s*(#\s*(endif)\b)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -305,7 +343,20 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^\s*#\s*else\b.*$</string>
+					<string>^\s*(#\s*(else)\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>other.preprocessor.c</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.preprocessor.c</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>comment.block.preprocessor.else-branch</string>
 					<key>end</key>
@@ -316,6 +367,10 @@
 							<key>include</key>
 							<string>#disabled</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#pragma-mark</string>
+						</dict>
 					</array>
 				</dict>
 			</array>
@@ -323,17 +378,22 @@
 		<key>preprocessor-rule-other</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*#\s*(if(n?def)?)\b.*$</string>
+			<string>^\s*(#\s*(if(n?def)?)\b)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.preprocessor.c</string>
+					<string>other.preprocessor.c</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.c</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^\s*#\s*(endif)\b.*$</string>
+			<string>^\s*(#\s*(endif)\b).*$</string>
 			<key>patterns</key>
 			<array>
 				<dict>

@@ -5,7 +5,7 @@
  **/
 
 {
-    name = "Logtalk.logtalk"; 
+    name = "Logtalk"; 
     scopeName = "source.logtalk";
 
     fileTypes = (lgt, config); 
@@ -20,20 +20,20 @@
         {   name = "comment.line.percentage.logtalk"; 
             match = "%.*$"; 
         }, 
-        {   name = "declaration.entity.opening.logtalk"; 
+        {   name = "storage.type.opening.logtalk"; 
             match = ":-\\s+(object|protocol|category)(?=[(])"; 
         }, 
         {
-            name = "declaration.entity.closing.logtalk"; 
+            name = "storage.type.closing.logtalk"; 
             match = ":-\\s+(end_(object|protocol|category))(?=[.])"; 
         }, 
-        {   name = "declaration.entity.relations.logtalk"; 
+        {   name = "storage.type.relations.logtalk"; 
             match = "\\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])"; 
         }, 
-        {   name = "declaration.entity.others.logtalk"; 
+        {   name = "storage.modifier.others.logtalk"; 
             match = ":-\\s+(calls|encoding|in(itialization|fo)|uses)(?=[(])"; 
         }, 
-        {   name = "declaration.predicate.others.logtalk"; 
+        {   name = "storage.modifier.others.logtalk"; 
             match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])"; 
         }, 
         {   name = "keyword.operator.message-sending.logtalk"; 
@@ -60,79 +60,79 @@
         {   name = "keyword.operator.misc.logtalk"; 
             match = "(:-|!|\\\\+|,|;|-->|->|=|\\=|\\.|=\\.\\.|\\bis\\b)"; 
         }, 
-        {   name = "keyword.control.predicate.logtalk"; 
+        {   name = "support.function.control.logtalk"; 
             match = "\\b(true|fail|repeat)\\b"; 
         }, 
-        {   name = "keyword.control.predicate.logtalk"; 
+        {   name = "support.function.control.logtalk"; 
             match = "\\b(ca(ll|tch)|throw|once)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.chars-and-bytes-io.logtalk"; 
+        {   name = "support.function.chars-and-bytes-io.logtalk"; 
             match = "\\b((get|peek|put)_(char|code|byte)|nl)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.chars-and-bytes-io.logtalk"; 
+        {   name = "support.function.chars-and-bytes-io.logtalk"; 
             match = "\\bnl\\b"; 
         }, 
-        {   name = "keyword.other.predicate.atom-term-processing.logtalk"; 
+        {   name = "support.function.atom-term-processing.logtalk"; 
             match = "\\b(atom_(length|c(hars|o(ncat|des)))|sub_atom|char_code|number_c(hars|odes))(?=[(])"; 
         }, 
-        {   name = "storage.type.term-testing.logtalk"; 
+        {   name = "support.function.term-testing.logtalk"; 
             match = "\\b(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.term-io.logtalk"; 
+        {   name = "support.function.term-io.logtalk"; 
             match = "\\b(read_term|read|write|write(q|_(canonical|term))|op|current_op|char_conversion|current_char_conversion)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.term-creation-and-decomposition.logtalk"; 
+        {   name = "support.function.term-creation-and-decomposition.logtalk"; 
             match = "\\b(arg|copy_term|functor)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.term-unification.logtalk"; 
+        {   name = "support.function.term-unification.logtalk"; 
             match = "\\b(unify_with_occurs_check)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.stream-selection-and-control.logtalk"; 
+        {   name = "support.function.stream-selection-and-control.logtalk"; 
             match = "\\b((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.stream-selection-and-control.logtalk"; 
+        {   name = "support.function.stream-selection-and-control.logtalk"; 
             match = "\\b(flush_output|at_end_of_stream)\\b"; 
         }, 
-        {   name = "keyword.other.predicate.prolog-flags.logtalk"; 
+        {   name = "support.function.prolog-flags.logtalk"; 
             match = "\\b((set|current)_prolog_flag)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.compiling-and-loading.logtalk"; 
+        {   name = "support.function.compiling-and-loading.logtalk"; 
             match = "\\b(logtalk_(compile|l(ibrary_path|oad)))(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.event-handling.logtalk"; 
+        {   name = "support.function.event-handling.logtalk"; 
             match = "\\b((abolish|define)_events|current_event)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.hooks.implementation-defined.logtalk"; 
+        {   name = "support.function.implementation-defined-hooks.logtalk"; 
             match = "\\b((current|set)_logtalk_flag|halt)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.hooks.implementation-defined.logtalk"; 
+        {   name = "support.function.implementation-defined-hooks.logtalk"; 
             match = "\\b(halt)\\b"; 
         }, 
-        {   name = "keyword.other.predicate.entity-creation-and-abolishing.logtalk"; 
+        {   name = "support.function.entity-creation-and-abolishing.logtalk"; 
             match = "\\b((c(reate|urrent)|abolish)_(object|protocol|category))(?=[(])"; 
         }, 
         {   name = "keyword.other.predicate.reflection.logtalk"; 
             match = "\\b((object|protocol|category)_property|extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])"; 
         }, 
-        {   name = "keyword.control.logtalk"; 
+        {   name = "support.function.logtalk"; 
             match = "\\b((for|retract)all)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.execution-context.logtalk"; 
+        {   name = "support.function.execution-context.logtalk"; 
             match = "\\b(parameter|se(lf|nder)|this)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.database.logtalk"; 
+        {   name = "support.function.database.logtalk"; 
             match = "\\b(a(bolish|ssert(a|z))|clause|retract|retractall)(?=[(])"; 
         }, 
-        {   name = "keyword.other.predicate.all-solutions.logtalk"; 
+        {   name = "support.function.all-solutions.logtalk"; 
             match = "\\b((bag|set)of|f(ind|or)all)(?=[(])"; 
         },
-        {   name = "keyword.other.predicate.reflection.logtalk"; 
+        {   name = "support.function.reflection.logtalk"; 
             match = "\\b(current_predicate|predicate_property)(?=[(])"; 
         },
-        {   name = "keyword.other.predicate.event-handler.logtalk"; 
+        {   name = "support.function.event-handler.logtalk"; 
             match = "\\b(before|after)(?=[(])"; 
         },
-        {   name = "keyword.other.predicate.grammar-rule.logtalk"; 
+        {   name = "support.function.grammar-rule.logtalk"; 
             match = "\\b(expand_term|phrase)(?=[(])"; 
         },
         {   name = "string.quoted.single.logtalk"; 

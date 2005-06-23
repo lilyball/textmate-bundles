@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>if [[ -z $TM_SELECTED_FILES ]]; then
+	DARCSPaths=`echo \'$TM_FILEPATH\'`;
+else
+	DARCSPaths="$TM_SELECTED_FILES";
+fi
+
+cd "$TM_DIRECTORY";
+"${TM_DARCS:=/usr/local/bin/darcs}" add -r $DARCSPaths</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@d</string>
+	<key>name</key>
+	<string>Add to repository</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>81229AD0-DE5C-11D9-823F-000A95A51A76</string>
+</dict>
+</plist>

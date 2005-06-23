@@ -128,7 +128,7 @@
 			<key>end</key>
 			<string>\1</string>
 			<key>name</key>
-			<string>string.unquoted.qq.perl</string>
+			<string>string.quoted.double.q.perl</string>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -168,7 +168,7 @@
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>string.quoted.double.q.perl</string>
+			<string>string.quoted.double.q-paren.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -208,6 +208,23 @@
 				<dict>
 					<key>match</key>
 					<string>(\b([^\]]*)\b)</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\bq[qwx]*\|</string>
+			<key>end</key>
+			<string>\|</string>
+			<key>name</key>
+			<string>string.quoted.double.q-pipe.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\b([^\|]*)\b)</string>
 				</dict>
 			</array>
 			<key>swallow</key>

@@ -171,7 +171,7 @@ STDIN.each_line do |line|
 		when /^===(.*)===$/
 			
 			target_name = $1
-			matches = /BUILDING (?:.+) TARGET\s(.+)\sUSING BUILD STYLE\s(.+)/.match(target_name)
+			matches = /BUILDING (?:.+) TARGET\s(.+)\s(?:USING BUILD STYLE|WITH CONFIGURATION)\s(.+)/.match(target_name)
 			
 			if matches.nil? then
 				formatter.target_name( target_name )

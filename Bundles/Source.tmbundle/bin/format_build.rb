@@ -2,6 +2,7 @@ $bundle				= ENV['TM_BUNDLE_PATH']
 $support			= ENV['TM_SUPPORT_PATH']
 
 require ($support + "/bin/Builder.rb")
+require ($bundle + "/bin/xcode_version.rb")
 
 # N.B. This code is not a model of Ruby clarity.
 # I'm still experimenting with Builder.rb.
@@ -442,7 +443,11 @@ class Formatter
 				@mup.h2 do
 					@mup.text!("Building ")
 					@mup.span(name, 'class' => 'name')
-					@mup.text!(" with build style ")
+					if Xcode.supports_configurations? then
+						@mup.text!(" with configuration ")
+					else
+						@mup.text!(" with build style ")
+					end
 					@mup.span(style, 'class' => 'name')
 				end
 

@@ -11,14 +11,23 @@
 # based on the final outcome
 
 PROJECT_FILE=$(ruby -- "${TM_BUNDLE_PATH}/bin/find_xcode_project.rb")
-BUILD_STYLE="${TM_BUILDSTYLE:-Deployment}"
+USE_CONFIGURATIONS=$(ruby -- "${TM_BUNDLE_PATH}/bin/xcode_version.rb")
+
+STYLEARGNAME="buildstyle"
+
+if [[ $USE_CONFIGURATIONS -eq "0" ]]; then
+	BUILD_STYLE="${TM_BUILDSTYLE:-Deployment}"
+else	
+	BUILD_STYLE="${TM_BUILDSTYLE:-Release}"
+	STYLEARGNAME="configuration"
+fi
 
 # If we have an Xcode project, and it doesn't contain the build style we're looking for,
 # accept the active build style in the project.
 if [[ -d $PROJECT_FILE ]] &amp;&amp; xcodebuild -project "$PROJECT_FILE" -list | awk 'display == "yes" { sub(/^[ \t]+/, ""); print }; /^Build styles/ { display = "yes" }' | grep -F "${BUILD_STYLE}" &amp;&gt;/dev/null; then
-	BUILD_STYLE="-buildstyle $BUILD_STYLE";
+	BUILD_STYLE="-$STYLEARGNAME $BUILD_STYLE";
 else
-	BUILD_STYLE="-activebuildstyle"
+	BUILD_STYLE="-active$STYLEARGNAME"
 fi
 
 export PROJECT_FILE

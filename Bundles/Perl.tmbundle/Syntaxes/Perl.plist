@@ -148,7 +148,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>qq([^\(\{\[])</string>
+			<string>\bqq([^\(\{\[])</string>
 			<key>end</key>
 			<string>\1</string>
 			<key>name</key>
@@ -293,6 +293,8 @@
 					<string>#nested_braces</string>
 				</dict>
 			</array>
+			<key>swallow</key>
+			<string>\\.</string>
 		</dict>
 		<key>nested_brackets</key>
 		<dict>
@@ -307,6 +309,8 @@
 					<string>#nested_brackets</string>
 				</dict>
 			</array>
+			<key>swallow</key>
+			<string>\\.</string>
 		</dict>
 		<key>nested_parens</key>
 		<dict>
@@ -321,6 +325,8 @@
 					<string>#nested_parens</string>
 				</dict>
 			</array>
+			<key>swallow</key>
+			<string>\\.</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>

@@ -37,6 +37,12 @@
 			<string>markup.underline.link</string>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>\[(NEW|FIXED|CHANGED|INFO)\]</string>
+			<key>name</key>
+			<string>keyword.other.release-notes</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>%\{&lt;(?i:HTML)&gt;</string>
 			<key>end</key>

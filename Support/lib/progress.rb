@@ -18,16 +18,22 @@ module TextMate
 		begin
 			pipe.puts ""
 			data = block.call
-			if data != nil
-				File.open(output_filepath, "w") do |file|
-					file.write(data)
-				end
-			end
 
-			%x({ open -a "$(ps xw -o command|grep '\\.app/Contents/MacOS/TextMate'|grep -v grep|sed 's/\\(.*\\.app\\).*/\\1/')" "#{output_filepath}"; sleep 30; rm -rf "#{tempdir}"; } </dev/null &>/dev/null &)
+			puts data
+
+# 			if data != nil
+# 				File.open(output_filepath, "w") do |file|
+# 					file.write(data)
+# 				end
+# 			end
+
+# this is very fragile
+#			%x({ open -a "$(ps xw -o command|grep '\\.app/Contents/MacOS/TextMate'|grep -v grep|sed 's/\\(.*\\.app\\).*/\\1/')" "#{output_filepath}"; sleep 30; rm -rf "#{tempdir}"; } </dev/null &>/dev/null &)
 		ensure
 
 			pipe.close
+			
+			%x{rm -rf "#{tempdir}"}
 		end
 
 		sleep 0.1

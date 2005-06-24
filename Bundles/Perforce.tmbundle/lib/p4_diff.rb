@@ -20,8 +20,6 @@ module Perforce
 
 	def Perforce.diff_two_revisions( rev1, rev2, command )
 		p4			= ENV['TM_P4'] || 'p4'
-		target_path	= ENV['TM_FILEPATH']
-
 		output_path	= "#{rev1}:#{rev2}.diff"
 
 		TextMate::call_with_progress(:title => command,
@@ -33,8 +31,6 @@ module Perforce
 	
 	def Perforce.diff_files_in_revisions( rev1, rev2, command )
 		p4			= ENV['TM_P4'] || 'p4'
-		target_path	= ENV['TM_FILEPATH']
-
 		output_path	= "Files in #{rev1} and #{rev2}.diff"
 
 		TextMate::call_with_progress(:title => command,

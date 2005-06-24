@@ -24,7 +24,7 @@ revs=`osascript&lt;&lt;END
 END`
 
 # exit if user canceled
-if [ $revs = "false" ]
+if [[ $revs = "false" ]]
 then
 	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit 0	
 fi
@@ -44,7 +44,7 @@ END
 	<key>name</key>
 	<string>Diff With Revision…</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>openAsNewDocument</string>
 	<key>uuid</key>
 	<string>32E15B26-B444-11D9-8D63-000A95A89C98</string>
 </dict>

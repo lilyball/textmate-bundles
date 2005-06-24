@@ -124,7 +124,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>qq([^\(\{\[])</string>
+			<string>qq([^\|\(\{\[])</string>
 			<key>end</key>
 			<string>\1</string>
 			<key>name</key>
@@ -172,8 +172,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>(\b([^\)]*)\b)</string>
+					<key>include</key>
+					<string>#nested_parens</string>
 				</dict>
 			</array>
 			<key>swallow</key>
@@ -189,8 +189,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>(\b([^\}]*)\b)</string>
+					<key>include</key>
+					<string>#nested_braces</string>
 				</dict>
 			</array>
 			<key>swallow</key>
@@ -206,8 +206,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>(\b([^\]]*)\b)</string>
+					<key>include</key>
+					<string>#nested_brackets</string>
 				</dict>
 			</array>
 			<key>swallow</key>
@@ -271,6 +271,51 @@
 			<string>variable.other.readwrite.global.special#.perl</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>nested_braces</key>
+		<dict>
+			<key>begin</key>
+			<string>\{</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#nested_braces</string>
+				</dict>
+			</array>
+		</dict>
+		<key>nested_brackets</key>
+		<dict>
+			<key>begin</key>
+			<string>\[</string>
+			<key>end</key>
+			<string>\]</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#nested_brackets</string>
+				</dict>
+			</array>
+		</dict>
+		<key>nested_parens</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#nested_parens</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.perl</string>
 	<key>uuid</key>

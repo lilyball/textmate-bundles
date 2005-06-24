@@ -18,7 +18,7 @@
 				<key>caret</key>
 				<string>#FFFFFF</string>
 				<key>foreground</key>
-				<string>#ffffff</string>
+				<string>#FFFFFF</string>
 				<key>lineHighlight</key>
 				<string>#888800</string>
 				<key>selection</key>
@@ -118,7 +118,7 @@
 			<key>name</key>
 			<string>Function argument</string>
 			<key>scope</key>
-			<string>entity.parameter.variable.function</string>
+			<string>variable.parameter</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -142,7 +142,7 @@
 			<key>name</key>
 			<string>Variable</string>
 			<key>scope</key>
-			<string>variable.readwrite</string>
+			<string>variable.other</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -164,7 +164,7 @@
 			<key>name</key>
 			<string>String escapes</string>
 			<key>scope</key>
-			<string>string.interpolation, string.escaped</string>
+			<string>string constant.character.escape</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -175,7 +175,7 @@
 			<key>name</key>
 			<string>String (executed)</string>
 			<key>scope</key>
-			<string>string.backticked</string>
+			<string>string.interpolated</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -210,7 +210,7 @@
 			<key>name</key>
 			<string>String escapes (executed)</string>
 			<key>scope</key>
-			<string>string.backticked.escaped, string.backticked.interpolation</string>
+			<string>string.interpolated constant.character.escape</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -232,7 +232,7 @@
 			<key>name</key>
 			<string>Class inheritance</string>
 			<key>scope</key>
-			<string>entity.parameter.parent.class</string>
+			<string>entity.other.inherited-class</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -254,7 +254,7 @@
 			<key>name</key>
 			<string>Tag attribute</string>
 			<key>scope</key>
-			<string>entity.parameter.attribute.tag</string>
+			<string>entity.other.attribute-name</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>

@@ -124,7 +124,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>qq([^\|\(\{\[])</string>
+			<string>qq([^\(\{\[])</string>
 			<key>end</key>
 			<string>\1</string>
 			<key>name</key>
@@ -208,23 +208,6 @@
 				<dict>
 					<key>include</key>
 					<string>#nested_brackets</string>
-				</dict>
-			</array>
-			<key>swallow</key>
-			<string>\\.</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\bq[qwx]*\|</string>
-			<key>end</key>
-			<string>\|</string>
-			<key>name</key>
-			<string>string.quoted.double.q-pipe.perl</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>(\b([^\|]*)\b)</string>
 				</dict>
 			</array>
 			<key>swallow</key>

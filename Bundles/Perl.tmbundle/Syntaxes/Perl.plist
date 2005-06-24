@@ -116,9 +116,33 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;&lt; *(['"`]?)([^;]*)(\1);</string>
+			<string>&lt;&lt; *"([^"]*)(")</string>
 			<key>end</key>
-			<string>^\2$</string>
+			<string>^\1$</string>
+			<key>name</key>
+			<string>string.unquoted.heredoc.doublequote.perl</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;&lt; *'([^']*)(')</string>
+			<key>end</key>
+			<string>^\1$</string>
+			<key>name</key>
+			<string>string.unquoted.heredoc.quote.perl</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;&lt; *`([^`]*)</string>
+			<key>end</key>
+			<string>^\1$</string>
+			<key>name</key>
+			<string>string.unquoted.heredoc.backtick.perl</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;&lt; *([^;'"`]+)</string>
+			<key>end</key>
+			<string>^\1$</string>
 			<key>name</key>
 			<string>string.unquoted.heredoc.perl</string>
 		</dict>

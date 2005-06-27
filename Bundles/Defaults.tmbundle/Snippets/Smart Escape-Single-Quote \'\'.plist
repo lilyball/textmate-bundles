@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>\\'`printenv TM_SELECTED_TEXT`$0\\'</string>
+	<string>\\'`printenv TM_SELECTED_TEXT|sed 's/[$\\]/\\&amp;/g'`$0\\'</string>
 	<key>keyEquivalent</key>
 	<string>~@"</string>
 	<key>name</key>

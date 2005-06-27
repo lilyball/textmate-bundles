@@ -1,162 +1,412 @@
-{
-    fileTypes = (html, htm, shtml, xhtml, rhtml); 
-    firstLineMatch = "<!DOCTYPE|<(?i:html)";
-    /* */
-    foldingStartMarker = "(<(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\\b.*?>|\\{\\{?(if|foreach|capture|literal|foreach|php|section|strip)|\\{\\s*$)";
-    foldingStopMarker = "(</(?i:(head|table|tr|div|style|script|ul|ol|form|dl))>|\\{\\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\\s)\\})";
-    /* */
-    keyEquivalent = "^~H"; 
-    name = "HTML (Basic)"; 
-    scopeName = "text.html.basic";
-    patterns = (
-        {   name = "declaration.xml-processing.html"; 
-            begin = "<\\?(xml)"; end = "\\?>"; 
-            captures = {
-                1 = { name = "entity.name.tag.xml.html"; };
-            };
-            patterns = (
-                {   name = "entity.other.attribute-name.html";
-                    match = " ([a-zA-Z-:]+)";
-                }, 
-                {   name = "string.quoted.double.html"; 
-                    begin = "\""; end = "\""; 
-                    patterns = (
-                        {   name = "constant.character.entity.html"; 
-                            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                        }, 
-                        {   name = "invalid.illegal.bad-ampersand.html"; 
-                            match = "&"; 
-                        }
-                    ); 
-                }, 
-                {   name = "string.quoted.single.html"; 
-                    begin = "'"; end = "'"; 
-                    patterns = (
-                        {   name = "constant.character.entity.html"; 
-                            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                        }, 
-                        {   name = "invalid.illegal.bad-ampersand.html"; 
-                            match = "&"; 
-                        }
-                    ); 
-                }
-            );
-        }, 
-        {   name = "declaration.sgml.html"; 
-            begin = "<!"; end = ">"; 
-            patterns = (
-                {   name = "invalid.illegal.bad-comments-or-CDATA.html"; 
-                    match = "(\\s*)(?!--|>)\\S(\\s*)"; 
-                }, 
-                {   name = "comment.block.html"; 
-                    begin = "--"; end = "--"; 
-                    patterns = (
-                        {   name = "other.preprocessor.server-side-includes.html"; 
-                            begin = "^#\\s*(include|config|echo|exec|fsize|flastmod|printenv|set)"; 
-                            end = "(?=\\s*--|>)"; 
-                        }, 
-                    ); 
-                }, 
-                {   name = "declaration.doctype.html"; 
-                    begin = "(DOCTYPE)"; end = "(?=>)"; 
-                    captures = {
-                        1 = { name = "entity.name.tag.doctype.html"; };
-                    };
-                    patterns = (
-                        {   name = "string.quoted.double.doctype.identifiers-and-DTDs.html"; 
-                            match = "\"[^\">]*\""; 
-                        }
-                    ); 
-                }, 
-                {   name = "constant.other.inline-data.html"; 
-                    begin = "\\[CDATA\\["; end = "]](?=>)"; 
-                }
-            ); 
-        },
-        {   name = "source.ruby.embedded.html"; 
-            begin = "<%"; end = "%>"; 
-            patterns = ({include = "source.ruby"; }); 
-        }, 
-        {   name = "source.smarty.embedded.html"; 
-            begin = "{{|{";
-            end = "}}|}"; 
-            patterns = ({include = "source.smarty"; }); 
-        }, 
-        {   name = "source.php.embedded.html"; 
-            begin = "(?:^\\s+)?<\\?(php|=)?"; end = "\\?>(?:\\s*\\n)?"; 
-            patterns = ({include = "source.php"; }); 
-        }, 
-        {   name = "source.css.embedded.html"; 
-            begin = "(?:^\\s+)?<((?i:style))\\b(?![^>]*/>)[^>]*>?"; 
-            end = "</((?i:style))>(?:\\s*\\n)?"; 
-            captures = { 1 = { name = "entity.name.tag.html"; }; };
-            patterns = ({include = "source.css"; }); 
-        }, 
-        {   name = "source.js.embedded.html"; 
-            begin = "(?:^\\s+)?<((?i:script))\\b(?![^>]*/>)[^>]*>?"; 
-            end = "</((?i:script))>(?:\\s*\n)?"; 
-            captures = { 1 = { name = "entity.name.tag.html"; }; };
-            patterns = ({include = "source.js"; }); 
-        }, 
-        {   name = "constant.character.entity.html"; 
-            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-        }, 
-        {   name = "declaration.tag.html"; 
-            begin = "</?([a-zA-Z0-9:]+)"; end = ">"; 
-            captures = { 1 = { name = "entity.name.tag.html"; }; };
-            patterns = (
-                {   // special handling of id="identifier"
-                    name = "declaration.attribute-with-value.id.html";
-                    match = " (id)=((\"|')(.*?)\\3)";
-                    captures = {
-                        1 = { name = "entity.other.attribute-name.id.html"; };
-                        2 = { name = "string.quoted.html"; };
-                        4 = { name = "meta.toc-list.id.html"; };
-                    };
-                }, 
-                {   name = "entity.other.attribute-name.html";
-                    match = " ([a-zA-Z-:]+)";
-                }, 
-                {   name = "string.quoted.double.html"; 
-                    begin = "\""; end = "\""; 
-                    patterns = (
-                        {   name = "source.smarty.embedded.xhtml"; 
-                            begin = "{{|{";
-                            end = "}}|}"; 
-                            patterns = ({include = "source.smarty"; }); 
-                        }, 
-                        {   name = "constant.character.entity.html"; 
-                            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                        }, 
-                        {   name = "invalid.illegal.bad-ampersand.html"; 
-                            match = "&"; 
-                        }
-                    ); 
-                }, 
-                {   name = "string.quoted.single.html"; 
-                    begin = "'"; end = "'"; 
-                    patterns = (
-                        {   name = "source.smarty.embedded.xhtml"; 
-                            begin = "{{|{";
-                            end = "}}|}"; 
-                            patterns = ({include = "source.smarty"; }); 
-                        }, 
-                        {   name = "constant.character.entity.html"; 
-                            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; 
-                        }, 
-                        {   name = "invalid.illegal.bad-ampersand.html"; 
-                            match = "&"; 
-                        }
-                    ); 
-                }
-            ); 
-        }, 
-        {   name = "invalid.illegal.incomplete.html"; 
-            match = "<>"; 
-        }, 
-        {   name = "invalid.illegal.bad-angle-bracket-or-ampersand.html"; 
-            match = "<(?=\\W)|>|&"; 
-        }
-    ); 
-    uuid = "17994EC8-6B1D-11D9-AC3A-000D93589AF6"; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>html</string>
+		<string>htm</string>
+		<string>shtml</string>
+		<string>xhtml</string>
+		<string>rhtml</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>&lt;!DOCTYPE|&lt;(?i:html)</string>
+	<key>foldingStartMarker</key>
+	<string>(&lt;(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\b.*?&gt;|\{\{?(if|foreach|capture|literal|foreach|php|section|strip)|\{\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(&lt;/(?i:(head|table|tr|div|style|script|ul|ol|form|dl))&gt;|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\s)\})</string>
+	<key>keyEquivalent</key>
+	<string>^~H</string>
+	<key>name</key>
+	<string>HTML (Basic)</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>&lt;\?(xml)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xml.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\?&gt;</string>
+			<key>name</key>
+			<string>declaration.xml-processing.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string> ([a-zA-Z-:]+)</string>
+					<key>name</key>
+					<string>entity.other.attribute-name.html</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+							<key>name</key>
+							<string>constant.character.entity.html</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>&amp;</string>
+							<key>name</key>
+							<string>invalid.illegal.bad-ampersand.html</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>string.quoted.single.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+							<key>name</key>
+							<string>constant.character.entity.html</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>&amp;</string>
+							<key>name</key>
+							<string>invalid.illegal.bad-ampersand.html</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;!</string>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>name</key>
+			<string>declaration.sgml.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\s*)(?!--|&gt;)\S(\s*)</string>
+					<key>name</key>
+					<string>invalid.illegal.bad-comments-or-CDATA.html</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>--</string>
+					<key>end</key>
+					<string>--</string>
+					<key>name</key>
+					<string>comment.block.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>^#\s*(include|config|echo|exec|fsize|flastmod|printenv|set)</string>
+							<key>end</key>
+							<string>(?=\s*--|&gt;)</string>
+							<key>name</key>
+							<string>other.preprocessor.server-side-includes.html</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(DOCTYPE)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.doctype.html</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=&gt;)</string>
+					<key>name</key>
+					<string>declaration.doctype.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>"[^"&gt;]*"</string>
+							<key>name</key>
+							<string>string.quoted.double.doctype.identifiers-and-DTDs.html</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\[CDATA\[</string>
+					<key>end</key>
+					<string>]](?=&gt;)</string>
+					<key>name</key>
+					<string>constant.other.inline-data.html</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;%</string>
+			<key>end</key>
+			<string>%&gt;</string>
+			<key>name</key>
+			<string>source.ruby.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>#.*?(?=%&gt;)</string>
+					<key>name</key>
+					<string>comment.line.number-sign.ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>{{|{</string>
+			<key>end</key>
+			<string>}}|}</string>
+			<key>name</key>
+			<string>source.smarty.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.smarty</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;\?(php|=)?</string>
+			<key>end</key>
+			<string>\?&gt;(?:\s*\n)?</string>
+			<key>name</key>
+			<string>source.php.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.php</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;((?i:style))\b(?![^&gt;]*/&gt;)[^&gt;]*&gt;?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&lt;/((?i:style))&gt;(?:\s*\n)?</string>
+			<key>name</key>
+			<string>source.css.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.css</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;((?i:script))\b(?![^&gt;]*/&gt;)[^&gt;]*&gt;?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&lt;/((?i:script))&gt;(?:\s*
+)?</string>
+			<key>name</key>
+			<string>source.js.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.js</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+			<key>name</key>
+			<string>constant.character.entity.html</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;/?([a-zA-Z0-9:]+)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>name</key>
+			<string>declaration.tag.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.id.html</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.html</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>meta.toc-list.id.html</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string> (id)=(("|')(.*?)\3)</string>
+					<key>name</key>
+					<string>declaration.attribute-with-value.id.html</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string> ([a-zA-Z-:]+)</string>
+					<key>name</key>
+					<string>entity.other.attribute-name.html</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>{{|{</string>
+							<key>end</key>
+							<string>}}|}</string>
+							<key>name</key>
+							<string>source.smarty.embedded.xhtml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>source.smarty</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+							<key>name</key>
+							<string>constant.character.entity.html</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>&amp;</string>
+							<key>name</key>
+							<string>invalid.illegal.bad-ampersand.html</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>string.quoted.single.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>{{|{</string>
+							<key>end</key>
+							<string>}}|}</string>
+							<key>name</key>
+							<string>source.smarty.embedded.xhtml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>source.smarty</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+							<key>name</key>
+							<string>constant.character.entity.html</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>&amp;</string>
+							<key>name</key>
+							<string>invalid.illegal.bad-ampersand.html</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&lt;&gt;</string>
+			<key>name</key>
+			<string>invalid.illegal.incomplete.html</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&lt;(?=\W)|&gt;|&amp;</string>
+			<key>name</key>
+			<string>invalid.illegal.bad-angle-bracket-or-ampersand.html</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.html.basic</string>
+	<key>uuid</key>
+	<string>17994EC8-6B1D-11D9-AC3A-000D93589AF6</string>
+</dict>
+</plist>

@@ -1,42 +1,119 @@
-{
-    name = "Language Definition (TextMate)";
-    scopeName = "source.plist.language-definition";
-    uuid = "101D6FC2-6CBD-11D9-B329-000D93347A42";
-    fileTypes = (plist); 
-    foldingStartMarker = "(/\\*|\\{|\\()"; 
-    foldingStopMarker = "(\\*/|\\}|\\))"; 
-    patterns = (
-        {   name = "declaration.rule.tm-language-def";
-            match = "\\b(name)\\s*=\\s*((\"|')?(.*?)\\3)\\s*;";
-            captures = {
-                1 = { name = "support.constant.name.tm-language-def"; };
-                2 = { name = "string.quoted.tm-language-def"; };
-                4 = { name = "entity.name.function.tm-language-def"; };
-            };
-        },
-        {   name = "support.constant.tm-language-def";
-            match = "\\b(fileTypes|keyEquivalent|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|beginCaptures|endCaptures|firstLineMatch)\\b"; 
-        },
-        {   name = "invalid.deprecated.constant.tm-language-def";
-            match = "\\b(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\\b";
-        },
-        {   name = "invalid.illegal.unknown-keyword.tm-language-def"; 
-            match = "[-a-zA-Z_.]+(?=\\s*=)";
-        },
-        {   name = "string.quoted.single.tm-language-def";
-            begin = "'(?=.*\')"; end = "'"; swallow = "\\\\.";
-            patterns = (
-                {   name = "invalid.deprecated.constant.other.color.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
-                {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??|\\\\\\\\[Az<>bB])"; },
-            );
-        },
-        {   name = "string.quoted.double.tm-language-def";
-            begin = "\"(?=.*\")"; end = "\""; swallow = "\\\\.";
-            patterns = (
-                {   name = "string.regexp.tm-language-def"; match = "(\\\\\\\\[tvnrfaewWdDsSuUlL]([*+?])?\\??|\\^|\\$|\\||\\.([*+?])?\\??|\\\\\\\\[Az<>bB])"; },
-                {   name = "invalid.deprecated.constants.colors.tm-language-def"; match = "#[0-9A-Fa-f]{6}"; },
-            );
-        },
-        {   include = "source.plist"; }
-    ); 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>plist</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(/\*|\{|\()</string>
+	<key>foldingStopMarker</key>
+	<string>(\*/|\}|\))</string>
+	<key>name</key>
+	<string>Language Definition (TextMate)</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.constant.name.tm-language-def</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.tm-language-def</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.tm-language-def</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(name)\s*=\s*(("|')?(.*?)\3)\s*;</string>
+			<key>name</key>
+			<string>declaration.rule.tm-language-def</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(fileTypes|keyEquivalent|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|beginCaptures|endCaptures|firstLineMatch|comment|repository)\b</string>
+			<key>name</key>
+			<string>support.constant.tm-language-def</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(foregroundColor|backgroundColor|foregroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\b</string>
+			<key>name</key>
+			<string>invalid.deprecated.constant.tm-language-def</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>[-a-zA-Z_.]+(?=\s*=)</string>
+			<key>name</key>
+			<string>invalid.illegal.unknown-keyword.tm-language-def</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'(?=.*')</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.tm-language-def</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>#[0-9A-Fa-f]{6}</string>
+					<key>name</key>
+					<string>invalid.deprecated.constant.other.color.tm-language-def</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(\\\\[tvnrfaewWdDsSuUlL]([*+?])?\??|\^|\$|\||\.([*+?])?\??|\\\\[Az&lt;&gt;bB])</string>
+					<key>name</key>
+					<string>string.regexp.tm-language-def</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"(?=.*")</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.tm-language-def</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\\\\[tvnrfaewWdDsSuUlL]([*+?])?\??|\^|\$|\||\.([*+?])?\??|\\\\[Az&lt;&gt;bB])</string>
+					<key>name</key>
+					<string>string.regexp.tm-language-def</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>#[0-9A-Fa-f]{6}</string>
+					<key>name</key>
+					<string>invalid.deprecated.constants.colors.tm-language-def</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.plist</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.plist.language-definition</string>
+	<key>uuid</key>
+	<string>101D6FC2-6CBD-11D9-B329-000D93347A42</string>
+</dict>
+</plist>

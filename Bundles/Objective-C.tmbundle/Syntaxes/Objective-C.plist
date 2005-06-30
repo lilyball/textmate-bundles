@@ -41,7 +41,7 @@
 			<key>contentName</key>
 			<string>meta.scope.interface.objc</string>
 			<key>end</key>
-			<string>(@end)</string>
+			<string>(@end)\b</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -74,7 +74,7 @@
 			<key>contentName</key>
 			<string>meta.scope.implementation.objc</string>
 			<key>end</key>
-			<string>(@end)</string>
+			<string>(@end)\b</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -92,14 +92,6 @@
 			<string>declaration.function.objc</string>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>begin</key>
-					<string>/\*</string>
-					<key>end</key>
-					<string>\*/</string>
-					<key>name</key>
-					<string>comment.block.objc</string>
-				</dict>
 				<dict>
 					<key>begin</key>
 					<string>/\*</string>

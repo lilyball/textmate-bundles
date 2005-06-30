@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>revs=`"${TM_SVN:=svn}" log -q "$TM_FILEPATH"`
+
+revs=`echo "$revs" | sed '/^------------------------------------------------------------------------$/d' | sed '/^$/d'`
+
+revs=`osascript&lt;&lt;END
+	set AppleScript's text item delimiters to {"\n","\r"}
+	tell app "SystemUIServer"
+		activate
+		set ourList to (every text item of "$revs")
+		if the count of items in ourList is 0 then
+			display dialog "No older revisions of file '$(basename "$TM_FILEPATH")' found" buttons ("OK")
+			set the result to false
+		else
+			choose from list ourList with prompt "Diff '$(basename "$TM_FILEPATH")' with older revision:"
+		end if
+	end tell
+END`
+
+# exit if user canceled
+if [[ $revs = "false" ]]
+then
+	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit 0	
+fi
+
+revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`
+revs=( $revs )
+
+rev1=${revs[0]#r}
+
+"$TM_SVN" cat -r "$rev1" "$TM_FILEPATH"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^A</string>
+	<key>name</key>
+	<string>View Revision…</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>uuid</key>
+	<string>05DF9B5B-AB88-4597-ACD3-DD1DCEDC0BE8</string>
+</dict>
+</plist>

@@ -1,48 +1,447 @@
-{
-	/*	TODO heredoc (<<[-]token...token)
-		TODO variables ($variable)
-		TODO command-interpolation (`...` + $(...))
-		TODO maybe do include of perl/ruby etc. for perl <<EOF or perl -e '...'
-	*/
-	name = "Unix shell (generic)";
-	scopeName = "source.shell";
-	keyEquivalent = "~^S";
-	fileTypes = ( sh, ss );
-	firstLineMatch = "^#!.*/(bash|zsh|sh|tcsh)";
-
-    foldingStartMarker = "\\{";
-    foldingStopMarker = "\\}";
-
-	patterns = (
-		{   name = "declaration.function.shell"; match = "\\b([^ \\t\\n]*)\\s*\\(\\)";
-		    captures = { 1 = { name = "entity.name.function.shell"; }; };
-		},
-		{   name = "keyword.control.shell"; match = "\\b(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\\b"; },
-		{   name = "storage.modifier.shell"; match = "\\b(?:export)\\b"; },
-//		{   name = "constant.numeric.shell"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"; foregroundColor = "#F0F8FF"; },
-		{   name = "string.quoted.single.shell"; begin = "'"; end = "'"; },
-        {   name = "string.quoted.double.shell"; begin = "\""; end = "\"";  swallow = "\\\\."; },
-        {   name = "string.interpolated.shell"; begin = "`"; end = "`"; swallow = "\\\\."; },
-        {   name = "string.quoted.dollar.shell"; begin = "\\$'"; end = "'";  swallow = "\\\\."; },
-        {   name = "string.interpolated.shell"; begin = "\\$\\("; end = "\\)"; swallow = "\\\\."; },
-        {   name = "string.other.math.shell"; begin = "\\$\\(\\("; end = "\\)\\)"; swallow = "\\\\."; },
-		{   name = "comment.line.number-sign.shell"; match = "(?<!\\$)#(?!\\{).*$"; },
-		{   name = "declaration.here-string.shell"; match = "(<<<)([^ ]+)";
-		    captures = {
-		        1 = { name = "keyword.operator.here-string.shell"; };
-		        2 = { name = "string.unquoted.here-string.shell"; };
-		    };
-		},
-		{   name = "string.unquoted.heredoc.shell";
-		    begin = "(<<)-?(\\S+)"; end = "^(\\2)(?=\\s*$)";
-		    beginCaptures = {
-		        1 = { name = "keyword.operator.heredoc.shell"; };
-		        2 = { name = "keyword.control.heredoc-token.shell"; };
-		    };
-		    endCaptures = {
-		        1 = { name = "keyword.control.heredoc-token.shell"; };
-		    };
-		},
-	);
-	uuid = "DDEEA3ED-6B1C-11D9-8B10-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>sh</string>
+		<string>ss</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>^#!.*/(bash|zsh|sh|tcsh)</string>
+	<key>foldingStartMarker</key>
+	<string>\{</string>
+	<key>foldingStopMarker</key>
+	<string>\}</string>
+	<key>keyEquivalent</key>
+	<string>~^S</string>
+	<key>name</key>
+	<string>Unix shell (generic)</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>;|&amp;&amp;|&amp;|\|\|</string>
+			<key>name</key>
+			<string>keyword.operator.list.shell</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>[|!]</string>
+			<key>name</key>
+			<string>keyword.operator.pipe.shell</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(time)\b</string>
+			<key>name</key>
+			<string>support.function.shell</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\({2})</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.expression.shell</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\){2})</string>
+			<key>name</key>
+			<string>meta.scope.expression.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\[{2})</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.logical-expression.shell</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\]{2})</string>
+			<key>name</key>
+			<string>meta.scope.logical-expression.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>comment</key>
+					<string>do we want a special rule for ( expr )?</string>
+					<key>match</key>
+					<string>==|!=|&amp;&amp;|!|\|\|</string>
+					<key>name</key>
+					<string>keyword.operator.logical.shell</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\()</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.subshell.shell</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\))</string>
+			<key>name</key>
+			<string>meta.scope.subshell.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?&lt;=\s|^)(\{)(?=\s|$)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.group.shell</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(;\s*\})</string>
+			<key>name</key>
+			<string>meta.scope.group.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\\.</string>
+			<key>name</key>
+			<string>constant.character.escape.shell</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.shell</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\$?"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\(\$|`|"|\|\n)</string>
+					<key>name</key>
+					<string>constant.character.escape.shell</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable_1</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable_2</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable_3</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable_4</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\$'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.dollar.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\(a|b|e|f|n|r|t|v|\\|')</string>
+					<key>name</key>
+					<string>constant.character.escape.ansi-c.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\[0-9]{3}</string>
+					<key>name</key>
+					<string>constant.character.escape.octal.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\x[0-9a-fA-F]{2}</string>
+					<key>name</key>
+					<string>constant.character.escape.hex.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\c.</string>
+					<key>name</key>
+					<string>constant.character.escape.control-char.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s|:|=|^)~</string>
+			<key>name</key>
+			<string>keyword.operator.tilde.shell</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#variable_1</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#variable_2</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#variable_3</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#variable_4</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>`</string>
+			<key>end</key>
+			<string>`</string>
+			<key>name</key>
+			<string>string.interpolated.backtick.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\[`\\$]</string>
+					<key>name</key>
+					<string>constant.escape.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\$\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>string.interpolated.dollar.shell</string>
+			<key>patterns</key>
+			<array/>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\$\([2]</string>
+			<key>end</key>
+			<string>\)[2]</string>
+			<key>name</key>
+			<string>string.other.math.shell</string>
+			<key>patterns</key>
+			<array/>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>[&gt;&lt;]\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>string.interpolation.process-substitution.shell</string>
+			<key>patterns</key>
+			<array/>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>valid: &amp;&gt;word &gt;&amp;word &gt;word [n]&gt;&amp;[n] [n]&lt;word [n]&gt;word [n]&gt;&gt;word [n]&lt;&amp;word (last one is duplicate)</string>
+			<key>match</key>
+			<string>&amp;&gt;|\d*&gt;&amp;\d*|\d*(&gt;&gt;|&gt;|&lt;)|\d*&lt;&amp;|\d*&lt;&gt;</string>
+			<key>name</key>
+			<string>keyword.operator.redirect.shell</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt;)-("')?(\w+)\2</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.heredoc.shell</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>^\t*(\3)$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.unquoted.heredoc.no-indent.shell</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt;)("')?(\w+)\2</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.heredoc.shell</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>^(\3)$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.unquoted.heredoc.shell</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.here-string.shell</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.here-string.shell</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(&lt;&lt;&lt;)([^ ]+)</string>
+			<key>name</key>
+			<string>declaration.here-string.shell</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;!\$)#(?!\{).*$</string>
+			<key>name</key>
+			<string>comment.line.number-sign.shell</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.shell</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b([^ \t\n]*)\s*\(\)</string>
+			<key>name</key>
+			<string>declaration.function.shell</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\b</string>
+			<key>name</key>
+			<string>keyword.control.shell</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?:export)\b</string>
+			<key>name</key>
+			<string>storage.modifier.shell</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>variable_1</key>
+		<dict>
+			<key>match</key>
+			<string>\$[-*@#?$!0_]</string>
+			<key>name</key>
+			<string>variable.other.special.shell</string>
+		</dict>
+		<key>variable_2</key>
+		<dict>
+			<key>match</key>
+			<string>\$[1-9]</string>
+			<key>name</key>
+			<string>variable.other.positional.shell</string>
+		</dict>
+		<key>variable_3</key>
+		<dict>
+			<key>match</key>
+			<string>\$[a-zA-Z_][a-zA-Z0-9_]*</string>
+			<key>name</key>
+			<string>variable.other.normal.shell</string>
+		</dict>
+		<key>variable_4</key>
+		<dict>
+			<key>begin</key>
+			<string>\$\{</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>name</key>
+			<string>variable.other.bracket.shell</string>
+		</dict>
+	</dict>
+	<key>scopeName</key>
+	<string>source.shell</string>
+	<key>uuid</key>
+	<string>DDEEA3ED-6B1C-11D9-8B10-000D93589AF6</string>
+</dict>
+</plist>

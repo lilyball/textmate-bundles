@@ -19,7 +19,7 @@
 	<key>keyEquivalent</key>
 	<string>^~H</string>
 	<key>name</key>
-	<string>HTML (Basic)</string>
+	<string>HTML</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -40,56 +40,16 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string> ([a-zA-Z-:]+)</string>
-					<key>name</key>
-					<string>entity.other.attribute-name.html</string>
+					<key>include</key>
+					<string>#tag-generic-attribute</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>"</string>
-					<key>end</key>
-					<string>"</string>
-					<key>name</key>
-					<string>string.quoted.double.html</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>match</key>
-							<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
-							<key>name</key>
-							<string>constant.character.entity.html</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>&amp;</string>
-							<key>name</key>
-							<string>invalid.illegal.bad-ampersand.html</string>
-						</dict>
-					</array>
+					<key>include</key>
+					<string>#string-double-quoted</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>'</string>
-					<key>end</key>
-					<string>'</string>
-					<key>name</key>
-					<string>string.quoted.single.html</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>match</key>
-							<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
-							<key>name</key>
-							<string>constant.character.entity.html</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>&amp;</string>
-							<key>name</key>
-							<string>invalid.illegal.bad-ampersand.html</string>
-						</dict>
-					</array>
+					<key>include</key>
+					<string>#string-single-quoted</string>
 				</dict>
 			</array>
 		</dict>
@@ -163,6 +123,203 @@
 			</array>
 		</dict>
 		<dict>
+			<key>include</key>
+			<string>#php</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#ruby</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#smarty</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;((?i:style))\b(?![^&gt;]*/&gt;)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&lt;/((?i:style))&gt;(?:\s*\n)?</string>
+			<key>name</key>
+			<string>source.css.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tag-id-attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tag-generic-attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-double-quoted</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-single-quoted</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>&gt;</string>
+					<key>end</key>
+					<string>(?=&lt;/(?i:style))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.css</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;((?i:script))\b(?![^&gt;]*/&gt;)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?&lt;=&lt;/(script|SCRIPT))&gt;(?:\s*\n)?</string>
+			<key>name</key>
+			<string>source.js.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tag-id-attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tag-generic-attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-double-quoted</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-single-quoted</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>&gt;</string>
+					<key>end</key>
+					<string>&lt;/((?i:script))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.js</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;/?([a-zA-Z0-9:]+)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>name</key>
+			<string>declaration.tag.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tag-id-attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tag-generic-attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-double-quoted</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-single-quoted</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#entity_1</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#entity_2</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&lt;&gt;</string>
+			<key>name</key>
+			<string>invalid.illegal.incomplete.html</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&lt;(?=\W)|&gt;</string>
+			<key>name</key>
+			<string>invalid.illegal.bad-angle-bracket.html</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>entity_1</key>
+		<dict>
+			<key>match</key>
+			<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+			<key>name</key>
+			<string>constant.character.entity.html</string>
+		</dict>
+		<key>entity_2</key>
+		<dict>
+			<key>match</key>
+			<string>&amp;</string>
+			<key>name</key>
+			<string>invalid.illegal.bad-ampersand.html</string>
+		</dict>
+		<key>php</key>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;\?(php|=)?</string>
+			<key>end</key>
+			<string>\?&gt;(?:\s*\n)?</string>
+			<key>name</key>
+			<string>source.php.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.php</string>
+				</dict>
+			</array>
+		</dict>
+		<key>ruby</key>
+		<dict>
 			<key>begin</key>
 			<string>&lt;%</string>
 			<key>end</key>
@@ -183,13 +340,14 @@
 				</dict>
 			</array>
 		</dict>
+		<key>smarty</key>
 		<dict>
 			<key>begin</key>
 			<string>{{|{</string>
 			<key>end</key>
 			<string>}}|}</string>
 			<key>name</key>
-			<string>source.smarty.embedded.html</string>
+			<string>source.smarty.embedded.xhtml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -198,212 +356,103 @@
 				</dict>
 			</array>
 		</dict>
+		<key>string-double-quoted</key>
 		<dict>
 			<key>begin</key>
-			<string>(?:^\s+)?&lt;\?(php|=)?</string>
+			<string>"</string>
 			<key>end</key>
-			<string>\?&gt;(?:\s*\n)?</string>
+			<string>"</string>
 			<key>name</key>
-			<string>source.php.embedded.html</string>
+			<string>string.quoted.double.html</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>source.php</string>
+					<string>#php</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#smarty</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#entity_1</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#entity_2</string>
 				</dict>
 			</array>
 		</dict>
+		<key>string-single-quoted</key>
 		<dict>
 			<key>begin</key>
-			<string>(?:^\s+)?&lt;((?i:style))\b(?![^&gt;]*/&gt;)[^&gt;]*&gt;?</string>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#php</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#smarty</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#entity_1</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#entity_2</string>
+				</dict>
+			</array>
+		</dict>
+		<key>tag-generic-attribute</key>
+		<dict>
+			<key>match</key>
+			<string> ([a-zA-Z-:]+)</string>
+			<key>name</key>
+			<string>entity.other.attribute-name.html</string>
+		</dict>
+		<key>tag-id-attribute</key>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.html</string>
+					<string>entity.other.attribute-name.id.html</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.html</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.id.html</string>
 				</dict>
 			</dict>
-			<key>end</key>
-			<string>&lt;/((?i:style))&gt;(?:\s*\n)?</string>
-			<key>name</key>
-			<string>source.css.embedded.html</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>source.css</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(?:^\s+)?&lt;((?i:script))\b(?![^&gt;]*/&gt;)[^&gt;]*&gt;?</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.html</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>&lt;/((?i:script))&gt;(?:\s*
-)?</string>
-			<key>name</key>
-			<string>source.js.embedded.html</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>source.js</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
 			<key>match</key>
-			<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+			<string> (id)=(("|')(.*?)\3)</string>
 			<key>name</key>
-			<string>constant.character.entity.html</string>
+			<string>declaration.attribute-with-value.id.html</string>
 		</dict>
-		<dict>
-			<key>begin</key>
-			<string>&lt;/?([a-zA-Z0-9:]+)</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.html</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>&gt;</string>
-			<key>name</key>
-			<string>declaration.tag.html</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>entity.other.attribute-name.id.html</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>string.quoted.html</string>
-						</dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
-							<string>meta.toc-list.id.html</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string> (id)=(("|')(.*?)\3)</string>
-					<key>name</key>
-					<string>declaration.attribute-with-value.id.html</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string> ([a-zA-Z-:]+)</string>
-					<key>name</key>
-					<string>entity.other.attribute-name.html</string>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>"</string>
-					<key>end</key>
-					<string>"</string>
-					<key>name</key>
-					<string>string.quoted.double.html</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>begin</key>
-							<string>{{|{</string>
-							<key>end</key>
-							<string>}}|}</string>
-							<key>name</key>
-							<string>source.smarty.embedded.xhtml</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>include</key>
-									<string>source.smarty</string>
-								</dict>
-							</array>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
-							<key>name</key>
-							<string>constant.character.entity.html</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>&amp;</string>
-							<key>name</key>
-							<string>invalid.illegal.bad-ampersand.html</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>'</string>
-					<key>end</key>
-					<string>'</string>
-					<key>name</key>
-					<string>string.quoted.single.html</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>begin</key>
-							<string>{{|{</string>
-							<key>end</key>
-							<string>}}|}</string>
-							<key>name</key>
-							<string>source.smarty.embedded.xhtml</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>include</key>
-									<string>source.smarty</string>
-								</dict>
-							</array>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
-							<key>name</key>
-							<string>constant.character.entity.html</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>&amp;</string>
-							<key>name</key>
-							<string>invalid.illegal.bad-ampersand.html</string>
-						</dict>
-					</array>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>&lt;&gt;</string>
-			<key>name</key>
-			<string>invalid.illegal.incomplete.html</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>&lt;(?=\W)|&gt;|&amp;</string>
-			<key>name</key>
-			<string>invalid.illegal.bad-angle-bracket-or-ampersand.html</string>
-		</dict>
-	</array>
+	</dict>
 	<key>scopeName</key>
 	<string>text.html.basic</string>
 	<key>uuid</key>

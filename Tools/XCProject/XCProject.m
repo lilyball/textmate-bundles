@@ -15,6 +15,12 @@
 // if 1, log each object to the console once it's fully unarchived
 #define LOG_UNARCHIVED_OBJECTS 0
 
+@implementation XCBuildConfiguration
+@end
+@implementation PBXBuildSettingsParent
+@end
+@implementation XCConfigurationList
+@end
 @implementation PBXBuildFile
 @end
 @implementation PBXBuildRule
@@ -56,7 +62,7 @@
 @implementation PBXObject
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
-	NSLog(@"Tried to set value '%@' for undefined key '%@'", value, key);
+	NSLog(@"Tried to set undefined key '%@' of class '%@' to '%@'", key, [[self class] className], value);
 }
 @end
 

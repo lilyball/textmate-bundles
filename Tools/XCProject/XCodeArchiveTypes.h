@@ -14,6 +14,28 @@
 @interface PBXObject : NSObject
 @end
 
+@interface PBXBuildSettingsParent : PBXObject
+{
+	id name;
+	id buildSettings;
+}
+@end
+
+@interface XCBuildConfiguration : PBXBuildSettingsParent
+@end
+
+@interface PBXBuildStyle : PBXBuildSettingsParent
+@end
+
+
+@interface XCConfigurationList : PBXObject
+{
+	id buildConfigurations;
+	id defaultConfigurationName;
+	id defaultConfigurationIsVisible;
+}
+@end
+
 @interface PBXBuildFile : PBXObject
 {
 	id	fileRef;
@@ -29,12 +51,7 @@
 	id script;
 }
 @end
-@interface PBXBuildStyle : PBXObject
-{
-	id name;
-	id buildSettings;
-}
-@end
+
 @interface PBXContainerItemProxy : PBXObject
 {
 	id containerPortal;
@@ -68,6 +85,7 @@
 @end
 @interface PBXProject : PBXObject
 {
+	id buildConfigurationList;
 	id buildSettings;
 	id buildStyles;
 	id hasScannedForEncodings;
@@ -85,6 +103,7 @@
 	id buildRules;
 	id buildPhases;
 	id buildSettings;
+	id buildConfigurationList;
 	id dependencies;
 	id name;
 	id productName;

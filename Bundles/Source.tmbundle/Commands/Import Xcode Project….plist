@@ -14,7 +14,7 @@ source_path = %x{osascript -e 'tell application "SystemUIServer"
 	get the POSIX path of the result
 end tell'}.chomp
 
-dest_path = source_path.chomp.sub(/\.(xcode|pbproj)\/?$/, ".tmproj")
+dest_path = source_path.chomp.sub(/\.(xcodeproj|xcode|pbproj)\/?$/, ".tmproj")
 
 # FIXME probably should move the old dest_path somewhere and only nuke it if the conversion is successful
 

@@ -2,7 +2,6 @@
 # Copyright 2005 Chris Thomas. All rights reserved.
 # MIT license; share and enjoy.
 
-
 class Xcode
 	
 	def Xcode.supports_configurations?
@@ -10,7 +9,9 @@ class Xcode
 		unless defined? @@xcode2dot1_or_later
 			version_str = %x{ xcodebuild -version }
 			version_match = /DevToolsCore-(\d+).\d+;/.match(version_str)
-			@@xcode2dot1_or_later = (version_match[1].to_i >= 620)
+			@@xcode2dot1_or_later = (version_match != nil &&
+										version_match.length > 0 &&
+										version_match[1].to_i >= 620)
 		end
 
 		@@xcode2dot1_or_later

@@ -157,8 +157,21 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.objc</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\(\\|[abfnrtv'"?]|[0-3]\d{,2}|[4-7]\d?|x[a-zA-Z0-9]+)</string>
+					<key>name</key>
+					<string>constant.character.escape.objc</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>invalid.illegal.unknown-escape.objc</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>

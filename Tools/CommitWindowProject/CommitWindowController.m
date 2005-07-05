@@ -10,6 +10,7 @@
 
 //FIX ME HIServices/Processes.h doesn't work -- is this a Tiger-specific problem?
 #import </System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/Headers/HIServices.h>
+#import "VersionControlColors.h"
 
 @implementation CommitWindowController
 
@@ -58,6 +59,23 @@
 			argument	= [args objectAtIndex:i];
 			[fRequestText setStringValue:argument];
 		}
+		else if( [argument isEqualToString:@"--status"] )
+		{
+
+			//
+			// Next argument should be a colon-seperated list of status strings, one for each path, in order
+			//
+			if( i >= (argc - 1) )
+			{
+				fprintf(stderr, "commit window: missing text: --status \"A:D:M:M:M\"\n");
+				[self cancel:nil];
+			}
+			
+			i += 1;
+			argument	= [args objectAtIndex:i];
+			fFileStatusStrings = [[argument componentsSeparatedByString:@":"] retain];
+			
+		}
 		else
 		{
 			
@@ -68,6 +86,20 @@
 			[fFilesController addObject:dictionary];
 		}
 	}
+	
+	//
+	// Done processing arguments, now add status to each item
+	//
+	if( fFileStatusStrings != nil )
+	{
+		NSArray * files = [fFilesController arrangedObjects];
+		for( i = 0; i < [files count]; i += 1 )
+		{
+			NSMutableDictionary *	dictionary = [files objectAtIndex:i];
+			[dictionary setObject:[fFileStatusStrings objectAtIndex:i] forKey:@"status"];
+		}
+	}
+	
 	[fFilesController objectDidEndEditing:nil];
 
 
@@ -161,5 +193,38 @@
 	fprintf(stdout, "commit window: cancel\n");
 	exit(-128);
 }
+
+//
+// Attempt to mirror the appearance of the status and info displays
+//
+- (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(int)row
+{
+	// Set colors if appropriate
+	if(fFileStatusStrings != nil && tableColumn == fPathColumn || tableColumn == fStatusColumn )
+	{
+
+		NSArray * 				files		= [fFilesController arrangedObjects];
+		NSMutableDictionary *	dictionary	= [files objectAtIndex:row];
+		NSString * 				status		= [dictionary objectForKey:@"status"];
+		NSColor *				foreColor;
+		NSColor *				backColor;
+
+		backColor = BackColorFromStatus(status);
+		
+		[cell setDrawsBackground:YES];
+		[cell setBackgroundColor:backColor];
+		
+		if( tableColumn == fStatusColumn )
+		{
+			foreColor = ForeColorFromStatus(status);
+			[cell setTextColor:foreColor];
+		}
+		else
+		{
+			[cell setTextColor:[NSColor blackColor]];
+		}
+	}
+}
+
 
 @end

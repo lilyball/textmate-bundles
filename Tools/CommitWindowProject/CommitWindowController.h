@@ -18,6 +18,12 @@
 	IBOutlet NSWindow *				fWindow;
 	IBOutlet NSButton *				fCancelButton;
 	IBOutlet NSButton *				fOKButton;
+
+	IBOutlet NSTableColumn *		fCheckBoxColumn;
+	IBOutlet NSTableColumn *		fStatusColumn;
+	IBOutlet NSTableColumn *		fPathColumn;
+	
+	NSArray *						fFileStatusStrings;
 }
 
 - (IBAction) commit:(id) sender;

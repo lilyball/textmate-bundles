@@ -39,6 +39,10 @@ mup.html {
 			paths.collect{|path| path.sub(/^#{CURRENT_DIR}/, "") }
 		end
 
+		def matches_to_status(matches)
+			matches.collect {|m| m[0]}
+		end
+
 		# Ignore files with '?', but report them to the user
 		unknown_paths = paths.select { |m| m[0] == '?' }
         unknown_to_report_paths = paths.select{ |m| m[0] == '?' and not ignore_file_pattern =~ m[2]}
@@ -77,10 +81,11 @@ mup.html {
 		STDOUT.flush
 
 		commit_paths_array = matches_to_paths(commit_matches)
+		commit_status = matches_to_status(commit_matches).join(":")
 
 		commit_path_text = commit_paths_array.collect{|path| path.quote_filename_for_shell }.join(" ")
 
-		commit_args = %x{"#{commit_tool}" #{commit_path_text}}
+		commit_args = %x{"#{commit_tool}" --status #{commit_status} #{commit_path_text}}
 
 		status = $CHILD_STATUS
 		if status != 0

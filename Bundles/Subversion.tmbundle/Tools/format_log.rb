@@ -146,7 +146,7 @@ begin
                
                changed_files.each do |path|
                   $file = path[1].gsub(/(.*) \(from .*:\d+\)/, '\1')
-                  $base_url = $svn_url.split($file.slice(%r(/.*?/)))[0]
+                  $base_url = $svn_url.split($file.slice(%r(/[^/]*)))[0]
                   $full_url = $base_url + $file
                   $filename = $file.gsub(%r(.*/(.*)$), '\1')
                   $filename_escaped = $filename.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')

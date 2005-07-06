@@ -6,6 +6,17 @@
    you are of course free to modify this.
 */
 
+function didFinishCommand ()
+{
+   TextMate.isBusy = false;
+}
+
+// filename is already shell-escaped, URL is %-escaped
+function export_file ( url, rev, filename )
+{
+   TextMate.isBusy = true;
+   TextMate.system("svn cat -r" + rev + " '" + url + "' >/tmp/" + filename + " && open -a TextMate /tmp/" + filename, didFinishCommand);
+}
 
 /* show: files + hide-button,  hide: show-button.. */
 function show_files( base_id )

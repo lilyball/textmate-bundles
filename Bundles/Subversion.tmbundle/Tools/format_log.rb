@@ -11,10 +11,12 @@ $tab_size      = ENV['TM_TAB_SIZE'].to_i
 $bundle        = ENV['TM_BUNDLE_PATH']
 $limit         = ENV['TM_SVN_LOG_LIMIT'].nil?   ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i
 $date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
+$support       = ENV['TM_SUPPORT_PATH']
 $sort_order    = [ :added, :modified, :deleted ]
 
 # require the helper, it does some formating, etc:
 require $bundle+'/Tools/svn_helper.rb'
+require $support+'/bin/shelltokenize.rb'
 include SVNHelper
 
 
@@ -45,6 +47,9 @@ begin
                  File.open($bundle+'/Tools/flip_files.js', 'r').readlines.join+'</script>' )
    
    STDOUT.flush
+
+   # assume PWD is under revision control
+   $svn_url = `svn info #{ENV['PWD'].quote_filename_for_shell}|grep URL|cut -b6-`.chop
 
    $stdin.each_line do |line|
       raise SVNErrorException, line  if line =~ /^svn:/
@@ -140,7 +145,13 @@ begin
                end
                
                changed_files.each do |path|
-                  puts '  <li class="'+path[0].to_s+'">'+path[1]+"</li>"
+                  $file = path[1].gsub(/(.*) \(from .*:\d+\)/, '\1')
+                  $base_url = $svn_url.split($file.slice(%r(/.*?/)))[0]
+                  $full_url = $base_url + $file
+                  $filename = $file.gsub(%r(.*/(.*)$), '\1')
+                  $filename_escaped = $filename.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')
+                  $full_url_escaped = $full_url.gsub(/[^a-zA-Z0-9_:.\/]/) { |m| sprintf("%%%02X", m[0] ) }
+                  puts '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(&quot;' + $full_url_escaped + '&quot;, ' + rev + ', &quot;' + $filename_escaped + '&quot;); return false">'+htmlize(path[1])+"</a></li>"
                end
                
                changed_files = []

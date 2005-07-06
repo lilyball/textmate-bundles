@@ -1,15 +1,5 @@
 
-
-static inline float RGB8ComponentTransform( unsigned char component )
-{
-	// prevent division by zero
-	if(component == 0)
-	{
-		return 0.0;
-	}
-	
-	return (1.0/(255.0/component));
-}
+#define RGB8ComponentTransform(component) (component == 0 ? 0.0 : 1.0/(255.0/component))
 #define NoDivisionByZero(x, y) ((x) == 0) ? 0 : y
 
 #define OneShotNSColorFromTriplet(accessorName,r,g,b) \

@@ -200,7 +200,7 @@
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(int)row
 {
 	// Set colors if appropriate
-	if(fFileStatusStrings != nil && tableColumn == fPathColumn || tableColumn == fStatusColumn )
+	if(fFileStatusStrings != nil && tableColumn == fStatusColumn )
 	{
 
 		NSArray * 				files		= [fFilesController arrangedObjects];

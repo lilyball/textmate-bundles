@@ -222,6 +222,18 @@
 			<string>constant.language.objc</string>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>\b(self|super)\b</string>
+			<key>name</key>
+			<string>variable.language</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bNS(App)\b</string>
+			<key>name</key>
+			<string>support.other.variable.foundation</string>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>source.c</string>
 		</dict>

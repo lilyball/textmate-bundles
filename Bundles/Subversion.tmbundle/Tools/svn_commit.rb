@@ -16,7 +16,7 @@ mup = Builder::XmlMarkup.new(:target => STDOUT)
 
 mup.html {
 	mup.head {
-			mup.title("Subversion status")
+			mup.title("Subversion commit")
 			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_style.css';", "type" => "text/css")
 	}
 

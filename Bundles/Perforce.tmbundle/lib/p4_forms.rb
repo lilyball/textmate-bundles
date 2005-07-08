@@ -8,21 +8,41 @@ module Perforce
 
 	class Form
 
-		attr_accessor	:form
+		attr_accessor	:fields
 
 		def Form.from_path(pathname)
 			Form.new(File.read(pathname))
 		end
 
 		def initialize(data)
-			@form = Hash.new
+			@fields = Hash.new
 	
 			form_entries = data.scan( /^(\w*?):\s*(.*?)\n\n/m )
-			form_entries.each { |entry| @form[entry[0]] = entry[1] }
+			form_entries.each { |entry| @fields[entry[0]] = entry[1] }
 		end
 
 		def paths_from_entry(entryname)
-			@form[entryname].split("\n\t")
+			@fields[entryname].split("\n\t")
+		end
+
+		# (re)construct the form
+		def to_s
+			
+			outstring = @fields.keys.inject("") do |outstring, field|
+				value = @fields[field]
+				
+				# multiline fields begin on the next line
+				# each line of a multiline field should begin with a tab
+				if value.include?("\n") then
+					value.gsub!(/^\t?/, "\t")
+					value.chomp!("\n")
+					outstring + field + (":\n#{value}\n\n")
+				else
+					outstring + field + (":\t#{value}\n\n")
+				end
+			end
+			
+			"\m" + outstring
 		end
 
 	end

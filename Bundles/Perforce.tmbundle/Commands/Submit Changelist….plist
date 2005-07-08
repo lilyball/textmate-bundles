@@ -8,7 +8,10 @@
 	<string>#!/usr/bin/env ruby -w
 
 $LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_PATH'] + "/lib"
+$LOAD_PATH &lt;&lt; ENV['TM_SUPPORT_PATH'] + "/bin"
+
 require 'p4_forms'
+require 'shelltokenize'
 
 p4				= ENV['TM_P4'] || '~/bin/p4'
 #commit_paths	= ENV['CommitPaths']
@@ -28,7 +31,7 @@ output = %x{"#{p4}" change -o}
 puts output
 
 commit_form = Perforce::Form.new(output)
-puts commit_form.inspect
+#puts commit_form.inspect
 
 raw_paths = commit_form.paths_from_entry("Files")
 commit_paths = []
@@ -43,12 +46,29 @@ end
 # map to CVS-like status for CommitWindow display
 commit_status = commit_status.collect{|status| StatusMap[status]}
 
-commit_path_text = "'" + commit_paths.join("' '") + "'"
+commit_paths = commit_paths.collect {|path| path.p4_to_local_path }
+commit_path_text = commit_paths.join_p4_to_local_paths
 
-puts commit_path_text
+#puts commit_path_text
+#puts "--------------"
 
 commit_args = %x{"#{commit_tool}" --status #{commit_status.join(":")} #{commit_path_text}}
-puts commit_args
+#puts commit_args
+#puts "--------------"
+
+commit_tokens = commit_args.tokenize
+
+#puts commit_tokens.inspect
+
+commit_form.fields['Status'] = 'pending'
+commit_form.fields['Description'] = commit_tokens[1]
+commit_form.fields['Files'] = commit_tokens[2...commit_tokens.size].local_to_p4_paths.inject("") {|out, path| out += "#{path}\n" }
+
+
+puts commit_form.to_s
+
+IO.popen(%Q{"#{p4}" submit -i}, "w+" ) {|p| p.puts commit_form.to_s }
+
 </string>
 	<key>input</key>
 	<string>none</string>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -w
+
+$LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_PATH'] + "/lib"
+require 'p4_forms'
+
+p4				= ENV['TM_P4'] || '~/bin/p4'
+#commit_paths	= ENV['CommitPaths']
+bundle			= ENV['TM_BUNDLE_PATH']
+support			= ENV['TM_SUPPORT_PATH']
+commit_tool		= support + "/bin/CommitWindow.app/Contents/MacOS/CommitWindow"
+
+ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
+
+
+StatusMap = {	'edit' 		=&gt; 'M',
+			'add'		=&gt; 'A',
+			'delete'	=&gt; 'D'}
+	# TODO others probably needed
+		
+output = %x{"#{p4}" change -o}
+puts output
+
+commit_form = Perforce::Form.new(output)
+puts commit_form.inspect
+
+raw_paths = commit_form.paths_from_entry("Files")
+commit_paths = []
+commit_status = []
+
+raw_paths.each do |path|
+	match = /^(.*)\s#\s(\w*)/.match(path)
+	commit_paths.push(match[1])
+	commit_status.push(match[2])
+end
+		
+# map to CVS-like status for CommitWindow display
+commit_status = commit_status.collect{|status| StatusMap[status]}
+
+commit_path_text = "'" + commit_paths.join("' '") + "'"
+
+puts commit_path_text
+
+commit_args = %x{"#{commit_tool}" --status #{commit_status.join(":")} #{commit_path_text}}
+puts commit_args
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Submit Changelist…</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>uuid</key>
+	<string>BE2B6161-2E23-4C08-B438-409BB1E82DA8</string>
+</dict>
+</plist>

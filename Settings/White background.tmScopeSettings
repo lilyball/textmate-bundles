@@ -84,7 +84,7 @@
 			<key>name</key>
 			<string>Variable</string>
 			<key>scope</key>
-			<string>variable.other</string>
+			<string>variable.language, variable.other</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -191,7 +191,7 @@
 			<key>name</key>
 			<string>Invalid trailing whitespace</string>
 			<key>scope</key>
-			<string>invalid.deprecated.trailing-whitespace</string>
+			<string>invalid.trailing-whitespace</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -202,7 +202,7 @@
 			<key>name</key>
 			<string>Section</string>
 			<key>scope</key>
-			<string>entity.name.section</string>
+			<string>declaration.section entity.name.section</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -219,18 +219,20 @@
 				<key>fontStyle</key>
 				<string>plain</string>
 				<key>foreground</key>
-				<string>#545969</string>
+				<string>#3C4C72</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>Library object</string>
 			<key>scope</key>
-			<string>support.class</string>
+			<string>support.class, support.type</string>
 			<key>settings</key>
 			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
 				<key>foreground</key>
-				<string>#2D709E</string>
+				<string>#7A88F6</string>
 			</dict>
 		</dict>
 		<dict>
@@ -246,11 +248,13 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>JS: Event Handler</string>
+			<string>Library variable</string>
 			<key>scope</key>
-			<string>support.function.event-handler</string>
+			<string>support.other.variable</string>
 			<key>settings</key>
 			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
 				<key>foreground</key>
 				<string>#21439C</string>
 			</dict>
@@ -359,7 +363,7 @@
 			<key>name</key>
 			<string>Markup tag attribute</string>
 			<key>scope</key>
-			<string>entity.other.attribute-name</string>
+			<string>entity.parameter.attribute</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>

@@ -11,7 +11,7 @@
 lang=$(tr &lt;&lt;&lt;$TM_SCOPE \  \\n|grep source.|tail -n1|perl -pe 's/source\.([^.]*).*/$1/')
 
 case "$lang" in
-     c|c++|objc|objc++)
+    c|c++|objc|objc++)
         lang="cpp"
         ;;
     php)
@@ -38,7 +38,7 @@ expand -3 | "$TM_SUPPORT_PATH/bin/source-highlight" --line-number --src-lang=$la
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>source</string>
+	<string>source.java, source.c, source.objc, source.perl, source.python, source.ruby, source.lua</string>
 	<key>uuid</key>
 	<string>88FEF123-77CA-11D9-AC33-000D93B6E43C</string>
 </dict>

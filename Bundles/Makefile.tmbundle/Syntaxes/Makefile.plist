@@ -1,16 +1,62 @@
-{
-	name = "Makefile";
-	scopeName = "source.makefile";
-	fileTypes = ( GNUmakefile, makefile, Makefile );
-	patterns = (
-		{ name = "variable.other.makefile"; match = "^(\\w|[-_])+\\s*=.*"; },
-		{ name = "comment.line.number-sign.makefile"; match = "^#.*"; },
-		{ name = "keyword.control.makefile"; match = "^(\\s*)\\b(\\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\\b";},
-		{
-		    name = "declaration.function.makefile";
-    		match = "^([^\\t ]+:(?!\\=))\\s*.*";
-    		captures = { 1 = { name = "entity.name.function.makefile"; }; };
-	    }
-	);
-	uuid = "FF1825E8-6B1C-11D9-B883-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>GNUmakefile</string>
+		<string>makefile</string>
+		<string>Makefile</string>
+	</array>
+	<key>name</key>
+	<string>Makefile</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>^(\w|[-_])+\s*=</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>variable.other.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\\n</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^#.*</string>
+			<key>name</key>
+			<string>comment.line.number-sign.makefile</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^(\s*)\b(\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\b</string>
+			<key>name</key>
+			<string>keyword.control.makefile</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.makefile</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^([^\t ]+:(?!\=))\s*.*</string>
+			<key>name</key>
+			<string>declaration.function.makefile</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.makefile</string>
+	<key>uuid</key>
+	<string>FF1825E8-6B1C-11D9-B883-000D93589AF6</string>
+</dict>
+</plist>

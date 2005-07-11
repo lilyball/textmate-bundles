@@ -50,6 +50,10 @@ static NSColor * ForeColorFromStatus( NSString * status )
 	{
 		outColor = ForeColorForFileDeleted();
 	}
+	else
+	{
+		outColor = [NSColor controlTextColor];
+	}
 
 	return outColor;
 }
@@ -69,6 +73,10 @@ static NSColor * BackColorFromStatus( NSString * status )
 	else if([status isEqualToString:@"D"])
 	{
 		outColor = BackColorForFileDeleted();
+	}
+	else
+	{
+		outColor = [NSColor controlBackgroundColor];
 	}
 
 	return outColor;

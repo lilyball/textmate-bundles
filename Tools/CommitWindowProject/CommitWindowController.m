@@ -93,7 +93,7 @@
 	if( fFileStatusStrings != nil )
 	{
 		NSArray * files = [fFilesController arrangedObjects];
-		for( i = 0; i < [files count]; i += 1 )
+		for( i = 0; i < MIN([files count], [fFileStatusStrings count]); i += 1 )
 		{
 			NSMutableDictionary *	dictionary = [files objectAtIndex:i];
 			[dictionary setObject:[fFileStatusStrings objectAtIndex:i] forKey:@"status"];

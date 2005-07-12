@@ -13,7 +13,7 @@
 	<key>firstLineMatch</key>
 	<string>&lt;!DOCTYPE|&lt;(?i:html)</string>
 	<key>foldingStartMarker</key>
-	<string>(&lt;(?i:(head|table|tr|div|fieldset|style|script|ul|ol|form|dl))\b.*?&gt;|\{\{?(if|foreach|capture|literal|foreach|php|section|strip)|\{\s*$)</string>
+	<string>(&lt;(?i:(head|table|thead|tbody|tfoot|tr|div|fieldset|style|script|ul|ol|form|dl))\b.*?&gt;|\{\{?(if|foreach|capture|literal|foreach|php|section|strip)|\{\s*$)</string>
 	<key>foldingStopMarker</key>
 	<string>(&lt;/(?i:(head|table|tr|div|fieldset|style|script|ul|ol|form|dl))&gt;|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\s)\})</string>
 	<key>keyEquivalent</key>
@@ -22,6 +22,30 @@
 	<string>HTML</string>
 	<key>patterns</key>
 	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.scope.between-tag-pair.html</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>&lt;(?i:(head|table|thead|tbody|tfoot|tr|td|div|fieldset|style|script|ul|ol|li|form|dl))\b.*?(&gt;)&lt;/(\1)&gt;</string>
+			<key>name</key>
+			<string>declaration.tag.html</string>
+		</dict>
 		<dict>
 			<key>begin</key>
 			<string>&lt;\?(xml)</string>

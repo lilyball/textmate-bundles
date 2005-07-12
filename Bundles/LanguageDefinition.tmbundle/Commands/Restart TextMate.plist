@@ -6,10 +6,11 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>{
-app_path=$( ps axw -o pid,command | \
-    grep TextMate.app | \
-    fgrep -v grep | \
-    sed -e 's#^ *[0-9]* \(/.*\)/Contents.*$#\1#g' )
+app_path=$(
+    ps -axw -o command -p $PPID | \
+    tail -1 | \
+    sed -e 's#^\(/.*\)/Contents.*$#\1#g' \
+)
 
 osascript -e 'tell app "TextMate" to quit'
 

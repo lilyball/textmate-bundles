@@ -8,7 +8,7 @@
 	<string>{
 app_path=$(
     ps -axw -o command -p $PPID | \
-    tail -1 | \
+    tail -n 1 | \
     sed -e 's#^\(/.*\)/Contents.*$#\1#g' \
 )
 

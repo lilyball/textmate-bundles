@@ -1,115 +1,280 @@
-{
-    fileTypes = (html, htm, rhtml, tmpl, tpl, php); 
-    /* */
-    foldingStartMarker = "(<(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\\b.*?>|\\{\\{?(if|foreach|capture|literal|foreach|php|section|strip)|\\{\\s*$)";
-    foldingStopMarker = "(</(?i:(head|table|tr|div|style|script|ul|ol|form|dl))>|\\{\\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\\s)\\})";
-    /* */
-    keyEquivalent = "@\Uf704"; 
-    name = "XHTML (v1)"; 
-    patterns = (
-        {   name = "comment.block.xhtml";
-            begin = "<!--"; 
-            end = "-->";             
-            patterns = (
-                {   name = "other.server-side-include.xhtml";
-                    begin = "^#\\s*(include|config|echo|exec|fsize|flastmod|printenv|set)"; 
-                    end = "(?=\\s*--|>)"; 
-                },
-                /* * /
-                {   name = "invalid.illegal.bad-comment-end.xhtml"; 
-                    match = "(\s+>)|(<\s+)"; 
-                }
-                /* */
-            ); 
-        }, 
-        {   name = "source.ruby.embedded.xhtml"; 
-            begin = "<%";
-            end = "%>"; 
-            patterns = ({include = "source.ruby"; }); 
-        }, 
-        {   name = "source.smarty.embedded.xhtml"; 
-            begin = "{{|{";
-            end = "}}|}"; 
-            patterns = ({include = "source.smarty"; }); 
-        }, 
-        {   name = "source.php.embedded.xhtml";
-            begin = "<\\?(php|=)?"; 
-            end = "\\?>"; 
-            patterns = ({include = "source.php"; }); 
-        }, 
-        {   name = "source.css.embedded.xhtml"; 
-            begin = "(?:^\\s+)?<((?i:style))\\b(?![^>]*/>)[^>]*>?"; 
-            end = "</((?i:style))>(?:\\s+$)?\\n?"; 
-            captures = { 1 = { name = "entity.name.tag.xhtml"; }; };
-            patterns = ({include = "source.css"; }); 
-        }, 
-        {   name = "source.js.embedded.xhtml"; 
-            begin = "(?:^\\s+)?<(script)\\b(?![^>]*/>)[^>]*>?"; 
-            end = "</(script)>(?:\\s+$)?"; 
-            captures = { 1 = { name = "entity.name.tag.xhtml"; }; };
-            patterns = ({include = "source.js"; }); 
-        }, 
-        {   name = "declaration.xml-processing.xhtml"; 
-            match = "<\\?xml.*?\\?>";
-        }, 
-        {   name = "declaration.doctype.xhtml";
-            begin = "<!DOCTYPE"; 
-            end = ">"; 
-            patterns = (
-                {   name = "declaration.doctype.DTD.xhtml";
-                    match = "\"[^\">]*\"";
-                }
-            ); 
-        }, 
-        {   name = "declaration.tag.xhtml";
-            begin = "</?(a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)"; 
-            captures = {    1 = {   name = "entity.name.tag.xhtml"; }; }; 
-            end = "/?>";
-            patterns = (
-                {   name = "declaration.attribute-with-value.xhtml";
-                    begin = "(abbr|accept-charset|accept|accesskey|action|align|alt|archive|axis|border|cellpadding|cellspacing|char|charoff|charset|checked|cite|class|classid|codebase|codetype|cols|colspan|content|coords|data|datetime|declare|defer|dir|disabled|encoding|enctype|for|frame|frameborder|headers|height|href|hreflang|http-equiv|id|ismap|label|lang|language|longdesc|marginheight|marginwidth|maxlength|media|method|multiple|name|nohref|noresize|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onselect|onsubmit|onunload|profile|readonly|rel|rev|rows|rowspan|rules|scheme|scope|scrolling|selected|shape|size|span|src|standby|style|summary|tabindex|target|title|type|usemap|valign|value|valuetype|version|width|xmlns|xmlns:isbn|xml:lang)=(?=\")"; 
-                    captures = {1 = {name = "entity.other.attribute-name.xhtml"; }; }; 
-                    end = "(?=\\s|>)";
-                    patterns = (
-                        {   name = "string.quoted.double.xhtml";
-                            begin = "\""; 
-                            end = "\"";                              
-                            patterns = (
-                                {   name = "source.php.embedded.xhtml";
-                                    begin = "<\\?(php|=)?"; 
-                                    end = "\\?>";                                     
-                                    patterns = ({include = "source.php"; }); 
-                                },
-                                {   name = "source.js.embedded.xhtml"; 
-                                    begin = "(?i:javascript):"; 
-                                    end = ";";                                    
-                                    patterns = ({include = "source.js"; }); 
-                                }, 
-                                {   name = "source.smarty.embedded.xhtml"; 
-                                    begin = "{{|{";
-                                    end = "}}|}"; 
-                                    patterns = ({include = "source.smarty"; }); 
-                                }, 
-                                {   name = "invalid.illegal.xhtml";
-                                    match = "\\s*&\\s+"; 
-                                }                                
-                            ); 
-                        }
-                    ); 
-                }
-            ); 
-        }, 
-        {   name = "constant.character.xhtml";
-            match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);";             
-        },
-        {   name = "invalid.illegal.xhtml";
-            match = "\\s*&\\s+"; 
-        },        
-        {   name = "invalid.illegal.incomplete.xhtml"; 
-            match = "(-->)|(<!--)|&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+)"; 
-        }, 
-        
-    ); 
-    scopeName = "text.xhtml"; 
-    uuid = "27E30A96-9C08-4AF8-9FE9-61159AA42B43"; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>html</string>
+		<string>htm</string>
+		<string>tmpl</string>
+		<string>tpl</string>
+		<string>php</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(&lt;(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\b.*?&gt;|\{\{?(if|foreach|capture|literal|foreach|php|section|strip)|\{\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(&lt;/(?i:(head|table|tr|div|style|script|ul|ol|form|dl))&gt;|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\s)\})</string>
+	<key>keyEquivalent</key>
+	<string>@</string>
+	<key>name</key>
+	<string>XHTML (v1)</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>&lt;!--</string>
+			<key>end</key>
+			<string>--&gt;</string>
+			<key>name</key>
+			<string>comment.block.xhtml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>^#\s*(include|config|echo|exec|fsize|flastmod|printenv|set)</string>
+					<key>end</key>
+					<string>(?=\s*--|&gt;)</string>
+					<key>name</key>
+					<string>other.server-side-include.xhtml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;%</string>
+			<key>end</key>
+			<string>%&gt;</string>
+			<key>name</key>
+			<string>source.ruby.embedded.xhtml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>{{|{</string>
+			<key>end</key>
+			<string>}}|}</string>
+			<key>name</key>
+			<string>source.smarty.embedded.xhtml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.smarty</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;\?(php|=)?</string>
+			<key>end</key>
+			<string>\?&gt;</string>
+			<key>name</key>
+			<string>source.php.embedded.xhtml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.php</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;((?i:style))\b(?![^&gt;]*/&gt;)[^&gt;]*&gt;?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xhtml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&lt;/((?i:style))&gt;(?:\s+$)?\n?</string>
+			<key>name</key>
+			<string>source.css.embedded.xhtml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.css</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;(script)\b(?![^&gt;]*/&gt;)[^&gt;]*&gt;?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xhtml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&lt;/(script)&gt;(?:\s+$)?</string>
+			<key>name</key>
+			<string>source.js.embedded.xhtml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.js</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&lt;\?xml.*?\?&gt;</string>
+			<key>name</key>
+			<string>declaration.xml-processing.xhtml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;!DOCTYPE</string>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>name</key>
+			<string>declaration.doctype.xhtml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>"[^"&gt;]*"</string>
+					<key>name</key>
+					<string>declaration.doctype.DTD.xhtml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;/?(a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xhtml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>/?&gt;</string>
+			<key>name</key>
+			<string>declaration.tag.xhtml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(abbr|accept-charset|accept|accesskey|action|align|alt|archive|axis|border|cellpadding|cellspacing|char|charoff|charset|checked|cite|class|classid|codebase|codetype|cols|colspan|content|coords|data|datetime|declare|defer|dir|disabled|encoding|enctype|for|frame|frameborder|headers|height|href|hreflang|http-equiv|id|ismap|label|lang|language|longdesc|marginheight|marginwidth|maxlength|media|method|multiple|name|nohref|noresize|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onselect|onsubmit|onunload|profile|readonly|rel|rev|rows|rowspan|rules|scheme|scope|scrolling|selected|shape|size|span|src|standby|style|summary|tabindex|target|title|type|usemap|valign|value|valuetype|version|width|xmlns|xmlns:isbn|xml:lang)=(?=")</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.xhtml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\s|&gt;)</string>
+					<key>name</key>
+					<string>declaration.attribute-with-value.xhtml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>"</string>
+							<key>end</key>
+							<string>"</string>
+							<key>name</key>
+							<string>string.quoted.double.xhtml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>begin</key>
+									<string>&lt;\?(php|=)?</string>
+									<key>end</key>
+									<string>\?&gt;</string>
+									<key>name</key>
+									<string>source.php.embedded.xhtml</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>source.php</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>begin</key>
+									<string>(?i:javascript):</string>
+									<key>end</key>
+									<string>;</string>
+									<key>name</key>
+									<string>source.js.embedded.xhtml</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>source.js</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>begin</key>
+									<string>{{|{</string>
+									<key>end</key>
+									<string>}}|}</string>
+									<key>name</key>
+									<string>source.smarty.embedded.xhtml</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>source.smarty</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>\s*&amp;\s+</string>
+									<key>name</key>
+									<string>invalid.illegal.xhtml</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+			<key>name</key>
+			<string>constant.character.xhtml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\s*&amp;\s+</string>
+			<key>name</key>
+			<string>invalid.illegal.xhtml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(--&gt;)|(&lt;!--)|&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+)</string>
+			<key>name</key>
+			<string>invalid.illegal.incomplete.xhtml</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.xhtml</string>
+	<key>uuid</key>
+	<string>27E30A96-9C08-4AF8-9FE9-61159AA42B43</string>
+</dict>
+</plist>

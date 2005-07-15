@@ -1,36 +1,95 @@
-{
-	name = "C++";
-	keyEquivalent = "~^C";
-	scopeName = "source.c++";
-	comment = "I don't think anyone uses .hp. .cp tends to be paired with .h. (I could be wrong. :) -- chris";
-	fileTypes = ( cc, cpp, cp, cxx, "c++", C, h, hpp, "h++" );
-	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
-	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
-	patterns = (
-		{   include = "source.c"; },
-	    {   name = "storage.modifier.c++";
-	        match = "\\b(friend|explicit|private|protected|public|virtual)\\b";
-        },
-		{   name = "keyword.control.c++";
-		    match = "\\b(catch|namespace|operator|try|throw|using)\\b";
-		},
-		{   name = "keyword.control.c++";
-		    match = "\\bdelete\\b(\\s*\\[\\])?|\\bnew\\b";
-		},
-		{   name = "constant.language.c++";
-		    match = "\\b(this)\\b";
-		},
-		{   name = "storage.type.c++.template";
-		    match = "\\btemplate\\b\\s*";
-		},
-		{   name = "keyword.operator.c++.cast";
-		    match = "\\b(const_cast|dynamic_cast|reinterpret_cast|static_cast)\\b\\s*";
-		},
-		{   name = "keyword.operator.c++";
-		    match = "\\b(and|and_eq|bitand|bitor|compl|not|not_eq|or|or_eq|typeid|xor|xor_eq)\\b";
-        },
-		{   name = "storage.type.c++"; match = "\\b(bool|class|wchar_t)\\b"; },
-		{   name = "storage.modifier.c++"; match = "\\b(export|mutable|typename)\\b"; },
-	);
-	uuid = "26251B18-6B1D-11D9-AFDB-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>I don't think anyone uses .hp. .cp tends to be paired with .h. (I could be wrong. :) -- chris</string>
+	<key>fileTypes</key>
+	<array>
+		<string>cc</string>
+		<string>cpp</string>
+		<string>cp</string>
+		<string>cxx</string>
+		<string>c++</string>
+		<string>C</string>
+		<string>h</string>
+		<string>hpp</string>
+		<string>h++</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>-\*- C\+\+ -\*-</string>
+	<key>foldingStartMarker</key>
+	<string>(/\*\*|\{\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(\*\*/|^\s*\})</string>
+	<key>keyEquivalent</key>
+	<string>~^C</string>
+	<key>name</key>
+	<string>C++</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>include</key>
+			<string>source.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(friend|explicit|private|protected|public|virtual)\b</string>
+			<key>name</key>
+			<string>storage.modifier.c++</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(catch|namespace|operator|try|throw|using)\b</string>
+			<key>name</key>
+			<string>keyword.control.c++</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bdelete\b(\s*\[\])?|\bnew\b</string>
+			<key>name</key>
+			<string>keyword.control.c++</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(this)\b</string>
+			<key>name</key>
+			<string>constant.language.c++</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\btemplate\b\s*</string>
+			<key>name</key>
+			<string>storage.type.c++.template</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(const_cast|dynamic_cast|reinterpret_cast|static_cast)\b\s*</string>
+			<key>name</key>
+			<string>keyword.operator.c++.cast</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(and|and_eq|bitand|bitor|compl|not|not_eq|or|or_eq|typeid|xor|xor_eq)\b</string>
+			<key>name</key>
+			<string>keyword.operator.c++</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(bool|class|wchar_t)\b</string>
+			<key>name</key>
+			<string>storage.type.c++</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(export|mutable|typename)\b</string>
+			<key>name</key>
+			<string>storage.modifier.c++</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.c++</string>
+	<key>uuid</key>
+	<string>26251B18-6B1D-11D9-AFDB-000D93589AF6</string>
+</dict>
+</plist>

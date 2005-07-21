@@ -1,6 +1,5 @@
 
-#define RGB8ComponentTransform(component) (component == 0 ? 0.0 : 1.0/(255.0/component))
-#define NoDivisionByZero(x, y) ((x) == 0) ? 0 : y
+#define RGB8ComponentTransform(component) ((component) == 0 ? 0.0 : 1.0/(255.0/(component)))
 
 #define OneShotNSColorFromTriplet(accessorName,r,g,b) \
 static inline NSColor * accessorName(void)\
@@ -34,7 +33,7 @@ OneShotNSColorFromTriplet(ForeColorForFileIgnore,		0x80, 0x00, 0x80)
 OneShotNSColorFromTriplet(BackColorForFileIgnore,		0xED, 0xAE, 0xF5)
 
 
-static NSColor * ForeColorFromStatus( NSString * status )
+static inline NSColor * ForeColorFromStatus( NSString * status )
 {
 	NSColor *	outColor = nil;
 
@@ -58,7 +57,7 @@ static NSColor * ForeColorFromStatus( NSString * status )
 	return outColor;
 }
 
-static NSColor * BackColorFromStatus( NSString * status )
+static inline NSColor * BackColorFromStatus( NSString * status )
 {
 	NSColor *	outColor = nil;
 

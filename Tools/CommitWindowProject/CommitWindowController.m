@@ -31,14 +31,14 @@
 	}
 	
 	//
-	// Program name is the first argument -- get rid of it
+	// Parse the command line.
 	//
+	
+	// Program name is the first argument -- get rid of it. (COW semantics should make this cheaper than it looks.)
 	argc -= 1;
 	args = [args subarrayWithRange:NSMakeRange(1, argc)];
-	
-	//
+
 	// Populate our NSArrayController with the command line arguments
-	//
 	[fFilesController objectDidBeginEditing:nil];
 	for( i = 0; i < argc; i += 1 )
 	{
@@ -46,9 +46,7 @@
 		
 		if( [argument isEqualToString:@"--ask"] )
 		{
-			//
 			// Next argument should be the query text.
-			//
 			if( i >= (argc - 1) )
 			{
 				fprintf(stderr, "commit window: missing text: --ask \"some text\"\n");
@@ -61,10 +59,7 @@
 		}
 		else if( [argument isEqualToString:@"--status"] )
 		{
-
-			//
 			// Next argument should be a colon-seperated list of status strings, one for each path, in order
-			//
 			if( i >= (argc - 1) )
 			{
 				fprintf(stderr, "commit window: missing text: --status \"A:D:M:M:M\"\n");
@@ -74,11 +69,9 @@
 			i += 1;
 			argument	= [args objectAtIndex:i];
 			fFileStatusStrings = [[argument componentsSeparatedByString:@":"] retain];
-			
 		}
 		else
 		{
-			
 			NSMutableDictionary *	dictionary	= [fFilesController newObject];
 
 			[dictionary setObject:[argument stringByAbbreviatingWithTildeInPath] forKey:@"path"];
@@ -123,9 +116,49 @@
 	}
 	
 	
-	
 	[self setWindow:fWindow];
 	[fWindow setLevel:NSModalPanelWindowLevel];
+	[fWindow center];
+	
+	//
+	// Grow the window to fit as much of the file list onscreen as possible
+	//
+	{
+		NSScreen *		screen		= [fWindow screen];
+		NSRect			usableRect	= [screen visibleFrame];
+		NSRect			windowRect	= [fWindow frame];
+		NSTableView *	tableView	= [fPathColumn tableView];
+		float			rowHeight	= [tableView rowHeight];
+		int				rowCount	= [[fFilesController arrangedObjects] count];
+		float			idealVisibleHeight;
+		float			currentVisibleHeight;
+		float			deltaVisibleHeight;
+		
+		currentVisibleHeight	= [[tableView superview] frame].size.height;
+		idealVisibleHeight		= (rowHeight * rowCount) + [[tableView headerView] frame].size.height;
+		
+//		NSLog(@"current: %g ideal:%g", currentVisibleHeight, idealVisibleHeight );
+		
+		// Don't bother shrinking the window
+		if(currentVisibleHeight < idealVisibleHeight)
+		{
+			deltaVisibleHeight = (idealVisibleHeight - currentVisibleHeight);
+
+//			NSLog( @"old windowRect: %@", NSStringFromRect(windowRect) );
+
+			// reasonable margin
+			usableRect = NSInsetRect( usableRect, 20, 20 );
+			windowRect = NSIntersectionRect(usableRect, NSInsetRect(windowRect, 0, -deltaVisibleHeight));
+			
+//			NSLog( @"new windowRect: %@", NSStringFromRect(windowRect) );
+			
+			[fWindow setFrame:windowRect display:NO];
+		}
+	}
+	
+	
+	// center again after resize
+	[fWindow center];
 	[fWindow makeKeyAndOrderFront:self];
 	
 }

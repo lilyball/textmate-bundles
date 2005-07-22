@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>render :text =&gt; "$1"</string>
+	<string>render :partial =&gt; "${1:item}", :status =&gt; ${2:500}</string>
 	<key>name</key>
-	<string>render (text)… (rt)</string>
+	<string>render (partial,status)… (rps)</string>
 	<key>scope</key>
 	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>
-	<string>rt</string>
+	<string>rps</string>
 	<key>uuid</key>
-	<string>67C5082F-5011-434A-8EAA-6B8D3600935F</string>
+	<string>CBB06A4E-3A82-45F3-91AA-259F02314B9D</string>
 </dict>
 </plist>

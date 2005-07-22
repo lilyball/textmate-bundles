@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>tpl</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(&lt;(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\b.*?&gt;|\{\{?(if|foreach|capture|literal|foreach|php|section|strip)|\{\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(&lt;/(?i:(head|table|tr|div|style|script|ul|ol|form|dl))&gt;|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\s)\})</string>
+	<key>name</key>
+	<string>HTML (Smarty)</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>{{|{</string>
+			<key>end</key>
+			<string>}}|}</string>
+			<key>name</key>
+			<string>source.smarty.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.smarty</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>This is set to use XHTML standards, but you can change that by changing .strict to .basic for HTML standards</string>
+			<key>include</key>
+			<string>text.html.strict</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.html.smarty</string>
+	<key>uuid</key>
+	<string>F295C947-9A82-4CAA-A16A-9782B5A0B43D</string>
+</dict>
+</plist>

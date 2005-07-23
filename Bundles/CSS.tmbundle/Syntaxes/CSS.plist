@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>comment</key>
+	<string></string>
 	<key>fileTypes</key>
 	<array>
 		<string>css</string>
@@ -22,7 +24,7 @@
 			<key>end</key>
 			<string>(?=\{)</string>
 			<key>name</key>
-			<string>declaration.selector.css</string>
+			<string>meta.selector.css</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -133,7 +135,7 @@
 			<key>end</key>
 			<string>\s*((?=;|\}))</string>
 			<key>name</key>
-			<string>declaration.at-rule.media.css</string>
+			<string>meta.at-rule.media.css</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -150,7 +152,7 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>declaration.property-list.css</string>
+			<string>meta.property-list.css</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -163,7 +165,7 @@
 					<key>end</key>
 					<string>\s*(?=:)</string>
 					<key>name</key>
-					<string>declaration.property-name.css</string>
+					<string>meta.property-name.css</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -180,13 +182,12 @@
 					<key>end</key>
 					<string>\s*(;|(?=\}))</string>
 					<key>name</key>
-					<string>declaration.property-value.css</string>
+					<string>meta.property-value.css</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>match</key>
-							<string>\b(absolute|all-scroll|always|auto|baseline|below|bidi-override|block|bold|bolder|both|bottom|break-all|break-word|capitalize|center|char|circle|col-resize|collapse|crosshair|dashed|decimal|default|disabled|disc|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ellipsis|fixed|groove|hand|help|hidden|horizontal|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|inactive|inherit|inline-block|inline|inset|inside|inter-ideograph|inter-word|italic|justify|keep-all|left|lighter|line-edge|line-through|line|list-item|loose|lower-alpha|lower-roman|lowercase|lr-tb|ltr|medium|middle|move|n-resize|ne-resize|newspaper|no-drop|no-repeat|nw-resize|none|normal|not-allowed|nowrap|oblique|outset|outside|overline|pointer|progress|
-relative|repeat-x|repeat-y|repeat|right|ridge|row-resize|rtl|s-resize|scroll|se-resize|separate|small-caps|solid|square|static|strict|super|sw-resize|table-footer-group|table-header-group|tb-rl|text-bottom|text-top|text|thick|thin|top|transparent|underline|upper-alpha|upper-roman|uppercase|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace)\b</string>
+							<string>\b(absolute|all-scroll|always|auto|baseline|below|bidi-override|block|bold|bolder|both|bottom|break-all|break-word|capitalize|center|char|circle|col-resize|collapse|crosshair|dashed|decimal|default|disabled|disc|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ellipsis|fixed|groove|hand|help|hidden|horizontal|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|inactive|inherit|inline-block|inline|inset|inside|inter-ideograph|inter-word|italic|justify|keep-all|left|lighter|line-edge|line-through|line|list-item|loose|lower-alpha|lower-roman|lowercase|lr-tb|ltr|medium|middle|move|n-resize|ne-resize|newspaper|no-drop|no-repeat|nw-resize|none|normal|not-allowed|nowrap|oblique|outset|outside|overline|pointer|progress|relative|repeat-x|repeat-y|repeat|right|ridge|row-resize|rtl|s-resize|scroll|se-resize|separate|small-caps|solid|square|static|strict|super|sw-resize|table-footer-group|table-header-group|tb-rl|text-bottom|text-top|text|thick|thin|top|transparent|underline|upper-alpha|upper-roman|uppercase|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace)\b</string>
 							<key>name</key>
 							<string>support.constant.property-value.css</string>
 						</dict>

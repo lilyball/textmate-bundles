@@ -165,7 +165,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.html</string>
+					<string>entity.name.tag.style.html</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -176,19 +176,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#tag-id-attribute</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#tag-generic-attribute</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-double-quoted</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-single-quoted</string>
+					<string>#tag-stuff</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -213,7 +201,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.html</string>
+					<string>entity.name.tag.script.html</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -224,19 +212,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#tag-id-attribute</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#tag-generic-attribute</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-double-quoted</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-single-quoted</string>
+					<string>#tag-stuff</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -272,29 +248,13 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#tag-id-attribute</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#tag-generic-attribute</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-double-quoted</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-single-quoted</string>
+					<string>#tag-stuff</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#entity_1</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#entity_2</string>
+			<string>#entities</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -311,19 +271,23 @@
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>entity_1</key>
+		<key>entities</key>
 		<dict>
-			<key>match</key>
-			<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
-			<key>name</key>
-			<string>constant.character.entity.html</string>
-		</dict>
-		<key>entity_2</key>
-		<dict>
-			<key>match</key>
-			<string>&amp;</string>
-			<key>name</key>
-			<string>invalid.illegal.bad-ampersand.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+					<key>name</key>
+					<string>constant.character.entity.html</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>&amp;</string>
+					<key>name</key>
+					<string>invalid.illegal.bad-ampersand.html</string>
+				</dict>
+			</array>
 		</dict>
 		<key>php</key>
 		<dict>
@@ -344,16 +308,16 @@
 		<key>ruby</key>
 		<dict>
 			<key>begin</key>
-			<string>&lt;%</string>
+			<string>&lt;%=?</string>
 			<key>end</key>
-			<string>%&gt;</string>
+			<string>-?%&gt;</string>
 			<key>name</key>
 			<string>source.ruby.embedded.html</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
-					<string>#.*?(?=%&gt;)</string>
+					<string>#.*?(?=-?%&gt;)</string>
 					<key>name</key>
 					<string>comment.line.number-sign.ruby</string>
 				</dict>
@@ -405,11 +369,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#entity_1</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#entity_2</string>
+					<string>#entities</string>
 				</dict>
 			</array>
 		</dict>
@@ -437,11 +397,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#entity_1</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#entity_2</string>
+					<string>#entities</string>
 				</dict>
 			</array>
 		</dict>
@@ -476,6 +432,28 @@
 			<string> (id)=(("|')(.*?)\3)</string>
 			<key>name</key>
 			<string>declaration.attribute-with-value.id.html</string>
+		</dict>
+		<key>tag-stuff</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tag-id-attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tag-generic-attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-double-quoted</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-single-quoted</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

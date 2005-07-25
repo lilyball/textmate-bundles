@@ -7,8 +7,6 @@
 	<key>settings</key>
 	<array>
 		<dict>
-			<key>name</key>
-			<string>Base</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -17,6 +15,8 @@
 				<string>#FFFFFF</string>
 				<key>foreground</key>
 				<string>#FFFFFF</string>
+				<key>invisibles</key>
+				<string>#404040</string>
 				<key>lineHighlight</key>
 				<string>#333300</string>
 				<key>selection</key>
@@ -88,11 +88,11 @@
 			<key>name</key>
 			<string>Pre-processor Line</string>
 			<key>scope</key>
-			<string>keyword.preprocessor</string>
+			<string>other.preprocessor.c</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
-				<string>plain</string>
+				<string></string>
 				<key>foreground</key>
 				<string>#D0D0FF</string>
 			</dict>
@@ -101,7 +101,7 @@
 			<key>name</key>
 			<string>Pre-processor Directive</string>
 			<key>scope</key>
-			<string>keyword.preprocessor directive</string>
+			<string>entity.name.preprocessor</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>

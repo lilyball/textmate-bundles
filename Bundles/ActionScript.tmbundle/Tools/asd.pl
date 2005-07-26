@@ -32,7 +32,7 @@ elsif ($#arr > 0)
 {
    for $term (@arr)
    {
-      print qq#<a href="file://$HELPDIR/$RESULTS{$term}">$term</a><br/>#;
+      print qq#<a href="tm-file://$HELPDIR/$RESULTS{$term}">$term</a><br/>#;
    }
 }
 else

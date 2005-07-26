@@ -26,6 +26,7 @@ while(<IN>)
 my @arr = sort(keys(%RESULTS));
 if ($#arr == 0)
 {
+   print "<base href='tm-file://$HELPDIR'>";
    system("cat $HELPDIR/$RESULTS{$arr[0]}");
 }
 elsif ($#arr > 0)

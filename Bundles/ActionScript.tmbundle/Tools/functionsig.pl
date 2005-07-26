@@ -7,7 +7,9 @@ my %RESULTS;
 
 $WORD =~ s/[()]//g;
 
-open(IN, '<', "$HELPDIR/$HELPTOC") || die "please find your Actionscript Dictionary folder in your flash installation and set it to $TM_FLASH_HELP in your TextMate preferences. e.g. /Applications/Macromedia Flash MX 2004/First Run/HelpPanel/Help/ActionScriptDictionary";
+open(IN, '<', "$HELPDIR/$HELPTOC") || die "Please find your Actionscript Dictionary folder in your flash installation\nand set TM_FLASH_HELP in your TextMate preferences to its path. e.g.\n/Applications/Macromedia Flash MX 2004/First Run/HelpPanel/Help/ActionScriptDictionary\n\n";
+
+
 INDEX: while(<IN>)
 {
    if (m#href="([^"]+)"\s+name="([^"]+)"#)

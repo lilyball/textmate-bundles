@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>session[:${1:user}]</string>
-	<key>keyEquivalent</key>
-	<string>^j</string>
+	<string>unless ${1:condition}
+	$0
+end</string>
 	<key>name</key>
-	<string>session[…]</string>
+	<string>unless (unless)</string>
 	<key>scope</key>
-	<string>source.ruby.rails</string>
+	<string>source.ruby</string>
+	<key>tabTrigger</key>
+	<string>unless</string>
 	<key>uuid</key>
-	<string>7B02ABF8-8763-11D9-897C-000393CBCE2E</string>
+	<string>F53E098D-D08E-4CE2-990A-B0BD70E60614</string>
 </dict>
 </plist>

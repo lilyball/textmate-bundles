@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>render :partial =&gt; "${1:item}", :locals =&gt; { ${2::name} =&gt; "${3:value}"$4 }</string>
+	<string>render :partial =&gt; "${1:item}", :locals =&gt; { :${2:name} =&gt; "${3:value}"$4 }</string>
 	<key>name</key>
 	<string>render (partial,locals)… (rpl)</string>
 	<key>scope</key>

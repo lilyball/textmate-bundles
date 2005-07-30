@@ -17,3 +17,7 @@ if [[ -d "$TM_SUPPORT_PATH/bin" ]]; then
 	fi
 	export PATH
 fi
+
+if [[ -d "$TM_BUNDLE_PATH/bin" ]]; then
+   export PATH="$TM_BUNDLE_PATH/bin:$PATH"
+fi

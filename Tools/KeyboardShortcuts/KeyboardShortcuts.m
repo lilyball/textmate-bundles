@@ -3,15 +3,21 @@
 //
 // Copyright © 2005, Kevin Ballard
 
+#import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 
 int main (int argc, const char * argv[]) {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSArray *sourcePaths = [NSArray arrayWithObjects:
+
+	NSMutableArray *sourcePaths = [NSMutableArray arrayWithObjects:
 		@"/Library/Application Support/TextMate/Bundles",
 		[@"~/Library/Application Support/TextMate/Bundles" stringByExpandingTildeInPath],
 		nil];
+
+	NSString *defaultBundles = [[[NSWorkspace sharedWorkspace] fullPathForApplication:@"TextMate"] stringByAppendingPathComponent:@"Contents/SharedSupport/Bundles"];
+	if(defaultBundles)
+		[sourcePaths insertObject:defaultBundles atIndex:0];
+
 	NSArray *subPaths = [NSArray arrayWithObjects:@"Commands", @"Macros", @"Snippets", nil];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	

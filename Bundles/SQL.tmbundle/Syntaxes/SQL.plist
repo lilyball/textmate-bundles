@@ -12,8 +12,6 @@
 	<string>\s*\(\s*$</string>
 	<key>foldingStopMarker</key>
 	<string>^\s*\)</string>
-	<key>increaseIndentPattern</key>
-	<string>^\s*(create|grant|insert|delete|update)\s*</string>
 	<key>name</key>
 	<string>SQL</string>
 	<key>patterns</key>
@@ -24,21 +22,21 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.function.create.sql</string>
+					<string>keyword.other.create.sql</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.sql</string>
 				</dict>
-				<key>4</key>
+				<key>5</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.function.sql</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i:^\s*(create)\s+(table|(unique\s+)?index|view)\s+)(\w+)</string>
+			<string>(?i:^\s*(create)\s+(aggregate|conversion|database|domain|function|group|(unique\s+)?index|language|operator class|operator|rule|schema|sequence|table|tablespace|trigger|type|user|view)\s+)(['"`])?(\w+)\4</string>
 			<key>name</key>
 			<string>declaration.create.sql</string>
 		</dict>
@@ -63,7 +61,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i:^\s*(drop)\s+(table|index|view))</string>
+			<string>(?i:^\s*(drop)\s+(aggregate|conversion|database|domain|function|group|index|language|operator class|operator|rule|schema|sequence|table|tablespace|trigger|type|user|view))</string>
 			<key>name</key>
 			<string>declaration.drop.sql</string>
 		</dict>
@@ -111,7 +109,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i:^\s*(alter)\s+(table|index|view)\s+)</string>
+			<string>(?i:^\s*(alter)\s+(aggregate|conversion|database|domain|function|group|index|language|operator class|operator|rule|schema|sequence|table|tablespace|trigger|type|user|view)\s+)</string>
 			<key>name</key>
 			<string>declaration.alter.sql</string>
 		</dict>
@@ -168,6 +166,16 @@
 			<string>\\.</string>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>`</string>
+			<key>end</key>
+			<string>`</string>
+			<key>name</key>
+			<string>string.quoted.other.backtick.sql</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>(?i:^\s*(comment\s+on\s+(table|column|aggregate|constraint|database|domain|function|index|operator|rule|schema|sequence|trigger|type|view))\s+.*?\s+(is)\s+)</string>
 			<key>name</key>
@@ -178,6 +186,12 @@
 			<string>--.*$</string>
 			<key>name</key>
 			<string>comment.line.double-dash.sql</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>#.*$</string>
+			<key>name</key>
+			<string>comment.line.number-sign.sql</string>
 		</dict>
 		<dict>
 			<key>begin</key>

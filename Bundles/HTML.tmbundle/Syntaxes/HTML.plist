@@ -291,17 +291,39 @@
 		</dict>
 		<key>php</key>
 		<dict>
-			<key>begin</key>
-			<string>(?:^\s+)?&lt;\?(php|=)?</string>
-			<key>end</key>
-			<string>\?&gt;(?:\s*\n)?</string>
-			<key>name</key>
-			<string>source.php.embedded.html</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>source.php</string>
+					<key>begin</key>
+					<string>(?:^\s+)&lt;\?(php|=)?(?!.*\?&gt;)</string>
+					<key>comment</key>
+					<string>match only multi-line PHP with leading whitespace</string>
+					<key>end</key>
+					<string>\?&gt;(?:\s*$\n)?</string>
+					<key>name</key>
+					<string>source.php.embedded.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.php</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>&lt;\?(php|=)?</string>
+					<key>end</key>
+					<string>\?&gt;</string>
+					<key>name</key>
+					<string>source.php.embedded.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.php</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

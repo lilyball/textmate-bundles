@@ -46,7 +46,7 @@
 					<key>match</key>
 					<string> ([a-zA-Z-]+)</string>
 					<key>name</key>
-					<string>entity.parameter.attribute.tag.xml</string>
+					<string>entity.other.attribute-name.xml</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -139,7 +139,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.namespace.xml</string>
+					<string>entity.other.namespace.xml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -154,10 +154,21 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.namespace.xml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.xml</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string> ([a-zA-Z-]+)</string>
-					<key>name</key>
-					<string>entity.parameter.attribute.tag.xml</string>
+					<string> (?:([-_a-zA-Z0-9]+):)?([a-zA-Z-]+)</string>
 				</dict>
 				<dict>
 					<key>begin</key>

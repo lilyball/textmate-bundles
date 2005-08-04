@@ -49,7 +49,7 @@ begin
    STDOUT.flush
 
    # assume PWD is under revision control
-   $svn_url = `svn info #{ENV['PWD'].quote_filename_for_shell}|grep URL|cut -b6-`.chop
+   $svn_url = `"${TM_SVN:=svn}" info #{ENV['PWD'].quote_filename_for_shell}|grep URL|cut -b6-`.chop
 
    $stdin.each_line do |line|
       raise SVNErrorException, line  if line =~ /^svn:/

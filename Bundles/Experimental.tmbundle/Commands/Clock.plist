@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>cat &lt;&lt;'EOF'
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Clock&lt;/title&gt;&lt;script&gt;
+var myCommand = null;
+
+function start () {
+   document.getElementById("start").style.display = "none";
+   document.getElementById("stop").style.display = "inline";
+   var cmd = "while true; do date; sleep 1; done"
+   myCommand = TextMate.system(cmd, function (task) { });
+   myCommand.onreadoutput = output;
+}
+
+function stop () {
+   document.getElementById("start").style.display = "inline";
+   document.getElementById("stop").style.display = "none";
+   myCommand.cancel();
+}
+
+function output (str) {
+   document.getElementById("date").innerText = str;
+}
+&lt;/script&gt;&lt;/head&gt;
+&lt;body onLoad="window.resizeTo(400, 250); start()" onUnload="stop()"&gt;
+&lt;pre&gt;&lt;div id="date"&gt;&lt;/div&gt;&lt;/pre&gt;
+&lt;span id="start"&gt;&lt;a onClick="start()" href="#"&gt;Start&lt;/a&gt;&lt;/span&gt;
+&lt;span id="stop"&gt;&lt;a onClick="stop()" href="#"&gt;Stop&lt;/a&gt;&lt;/span&gt;
+&lt;/body&gt;&lt;/html&gt;
+EOF
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~T</string>
+	<key>name</key>
+	<string>Clock</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>8FC2E9FA-A9CE-42CD-9910-4FC9A9248BF9</string>
+</dict>
+</plist>

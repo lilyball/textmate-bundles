@@ -209,7 +209,7 @@ VALUE convertNumberRef(CFNumberRef plist) {
 #else
 		long val;
 		CFNumberGetValue(plist, kCFNumberLongType, &val);
-		return NUM2LONG(val);
+		return LONG2NUM(val);
 #endif
 	}
 }

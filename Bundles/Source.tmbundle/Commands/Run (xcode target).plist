@@ -5,10 +5,10 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>PROJECT_FILE=$(ruby -- "${TM_BUNDLE_PATH}/bin/find_xcode_project.rb")
+	<string>export PROJECT_DIR=$(ruby -- "${TM_BUNDLE_PATH}/bin/find_xcode_project.rb")
 
-export project="${PROJECT_FILE}/project.pbxproj"
-if [[ ! -f ${project} ]]; then
+export PROJECT="${PROJECT_DIR}/project.pbxproj"
+if [[ ! -f ${PROJECT} ]]; then
    echo "Didn't find an Xcode project file."
    echo "You may want to set TM_XCODE_PROJECT."
    exit -1
@@ -21,18 +21,28 @@ def shell_escape (str)
    str.gsub(/[`'" $]/, '\\\\\&amp;')
 end
 
-prefs = PropertyList::load(%x{defaults read com.apple.Xcode})
+prefs = PropertyList::load(File.new("#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"))
 dir   = prefs['PBXProductDirectory']
 
 if dir.nil?
    dir = "#{ENV['PWD']}/build"
 end
 
-name  = ENV['project']
-proj  = PropertyList::load(File.new(name))
-objs  = proj['objects']
+name         = ENV['PROJECT']
+proj         = PropertyList::load(File.new(name))
+objs         = proj['objects']
+rootObj      = objs[proj['rootObject']]
 
-rootObj = objs[proj['rootObject']]
+userFile     = "#{ENV['PROJECT_DIR']}/#{ENV['USER']}.pbxuser"
+user         = PropertyList::load(File.new(userFile))
+activeConfig = user[proj['rootObject']]['activeBuildConfigurationName']
+
+if activeConfig
+   dir = dir + "/" + activeConfig
+else
+   dir = dir + "/Development"
+end
+
 targets = rootObj['targets']
 if targets.size == 1
    target = objs[targets[0]]

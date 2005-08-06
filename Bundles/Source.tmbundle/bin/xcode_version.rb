@@ -7,7 +7,7 @@ class Xcode
 	def Xcode.supports_configurations?
 		
 		unless defined? @@xcode2dot1_or_later
-			version_str = %x{ xcodebuild -version }
+			version_str = %x{ xcodebuild 2>/dev/null -version }
 			version_match = /DevToolsCore-(\d+).\d+;/.match(version_str)
 			@@xcode2dot1_or_later = (version_match != nil &&
 										version_match.length > 0 &&

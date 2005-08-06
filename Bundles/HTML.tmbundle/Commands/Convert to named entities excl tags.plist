@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>## Convert all applicable characters to HTML entities except &lt;, &gt;, and &amp; (when used in an entity).
+
+  perl -pe 's/&lt;/\xEF\xBF\xBC/g' \
+| perl -pe 's/&gt;/\xEF\xBF\xBD/g' \
+| perl -pe 's/&amp;(?=([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);)/\xEF\xBF\xBE/g' \
+| php -r 'echo htmlentities( file_get_contents("/dev/stdin"), ENT_NOQUOTES, "UTF-8" );' \
+| perl -pe 's/\xEF\xBF\xBC/&lt;/g' \
+| perl -pe 's/\xEF\xBF\xBD/&gt;/g' \
+| perl -pe 's/\xEF\xBF\xBE/&amp;/g'
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@&amp;</string>
+	<key>name</key>
+	<string>Convert to named entities excl tags</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>43C9E8AE-3E53-4B82-A1AF-56697BB3EF09</string>
+</dict>
+</plist>

@@ -14,6 +14,8 @@ if [[ ! -f ${PROJECT} ]]; then
    exit -1
 fi
 
+cd `dirname "${PROJECT_DIR}"`
+
 "${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 

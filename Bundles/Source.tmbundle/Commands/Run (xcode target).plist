@@ -18,6 +18,7 @@ cd `dirname "${PROJECT_DIR}"`
 
 "${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_BUNDLE_PATH']}/bin/xcode_version"
 
 def shell_escape (str)
    str.gsub(/[`'" $]/, '\\\\\&amp;')
@@ -39,10 +40,11 @@ userFile     = "#{ENV['PROJECT_DIR']}/#{ENV['USER']}.pbxuser"
 user         = PropertyList::load(File.new(userFile))
 activeConfig = user[proj['rootObject']]['activeBuildConfigurationName']
 
-if activeConfig
-   dir = dir + "/" + activeConfig
-else
-   dir = dir + "/Development"
+if Xcode.supports_configurations? then
+   activeConfig = user[proj['rootObject']]['activeBuildConfigurationName']
+   activeConfig = "Development" if activeConfig.nil?
+
+   dir += "/#{activeConfig}"
 end
 
 targets = rootObj['targets']
@@ -52,6 +54,8 @@ if targets.size == 1
    product = objs[productKey]
    file = product['path']
    %x{cd #{shell_escape dir}; open ./#{shell_escape file}}
+else
+   puts "The project had multiple targets.\nDidn't know which to pick."
 end
 
 EOF</string>

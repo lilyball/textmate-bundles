@@ -10,7 +10,8 @@
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
 	<string># BEWARE. Errors are suppressed. Use Tidy Error Display first!
-"$TM_SUPPORT_PATH/bin/tidy" -utf8 -bicq 2&gt;/dev/null</string>
+"${TM_TIDY:=tidy}" -utf-8 -biq -asxhtml 2&gt;/dev/null
+</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

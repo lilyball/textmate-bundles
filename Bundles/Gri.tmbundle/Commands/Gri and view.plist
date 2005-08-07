@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string># Run Gri, convert the PostScript to PDF, and then show the latter.
+# The code is patterned on that for the "LaTeX and view" command.
+# GPL 2005 Dan Kelley.
+# (I hope it's OK to GPL something in TM!)
+
+. "${TM_SUPPORT_PATH}/lib/html.sh"
+
+# The comment and line below are copied from the "LaTeX and view" command.
+# Get the viewer program. Any program (that works with open -a &lt;name&gt;) can be used,
+# except 'html' which is reserved to mean the internal HTML window. This is also the
+# default option.
+V=${TM_LATEX_VIEWER:=html}
+
+GRI=gri
+DIR=`dirname "$TM_FILEPATH"`
+FILE=`basename "$TM_FILEPATH"`
+PSFILE=`basename $FILE .gri`.ps
+PDFFILE=`basename $FILE .gri`.pdf
+CWD="`pwd`/"
+
+# Switch to the right directory.
+cd "$TM_PROJECT_DIRECTORY"
+cd "$DIR"
+
+# Prepare output window.
+htmlHeader "Running Gri on file ${FILE}"
+echo "&lt;h1&gt;Running Gri on ${FILE}...&lt;/h1&gt;";
+
+# Function to close window if the error level is low enough.
+close() {
+	if (($RC == 0)); then closeWindow; fi
+}
+
+
+# Compile. Bail out on errors.
+echo "gri -output ${DIR}/${PSFILE} ${TM_FILEPATH}";
+echo "&lt;BR&gt;";
+gri -output ${DIR}/${PSFILE} ${TM_FILEPATH};
+RC=$?
+if (($RC != 0)); then exit; fi
+echo "convert ${DIR}/$PSFILE ${DIR}/$PDFFILE";
+echo "&lt;BR&gt;";
+convert "${DIR}/$PSFILE" "${DIR}/$PDFFILE";
+
+# View...
+if [ "$V" == html ]; then
+	if [ -s "${PDFFILE}" ]; then
+		WEB_LOC="tm-file://${DIR}/${PDFFILE}"
+		if (($RC != 0)); then
+			link "${WEB_LOC}" 'Click Here to Preview'
+		else
+			redirect "${WEB_LOC}"
+		fi
+	else
+		strong "Error: PDF file not written to disk"
+	fi
+	htmlFooter
+else
+	echo "HUH?&lt;br&gt;"
+	open -a "$V" "${DIR}/${PDFFILE}"
+	close
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Gri and view</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.gri</string>
+	<key>uuid</key>
+	<string>41A8F343-48CB-482E-A395-34C31CE9A5AB</string>
+</dict>
+</plist>

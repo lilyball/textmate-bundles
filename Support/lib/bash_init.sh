@@ -11,7 +11,7 @@ elif [ -f ~/.profile ];      then . ~/.profile      &>/dev/null
 fi
 
 if [[ -d "$TM_SUPPORT_PATH/bin" ]]; then
-	PATH="$TM_SUPPORT_PATH/bin:$PATH"
+	PATH="$PATH:$TM_SUPPORT_PATH/bin"
 	if [[ -d "$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS" ]]; then
 		PATH="$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS:$PATH"
 	fi

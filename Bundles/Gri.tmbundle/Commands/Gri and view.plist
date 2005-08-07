@@ -21,8 +21,8 @@ V=${TM_LATEX_VIEWER:=html}
 GRI=gri
 DIR=`dirname "$TM_FILEPATH"`
 FILE=`basename "$TM_FILEPATH"`
-PSFILE=`basename $FILE .gri`.ps
-PDFFILE=`basename $FILE .gri`.pdf
+PSFILE=`basename "$FILE" .gri`.ps
+PDFFILE=`basename "$FILE" .gri`.pdf
 CWD="`pwd`/"
 
 # Switch to the right directory.
@@ -42,7 +42,7 @@ close() {
 # Compile. Bail out on errors.
 echo "gri -output ${DIR}/${PSFILE} ${TM_FILEPATH}";
 echo "&lt;BR&gt;";
-gri -output ${DIR}/${PSFILE} ${TM_FILEPATH};
+gri -output "${DIR}/${PSFILE}" "${TM_FILEPATH}";
 RC=$?
 if (($RC != 0)); then exit; fi
 echo "convert ${DIR}/$PSFILE ${DIR}/$PDFFILE";
@@ -71,13 +71,13 @@ fi
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@r</string>
+	<string>@b</string>
 	<key>name</key>
 	<string>Gri and view</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>text.gri</string>
+	<string>source.gri</string>
 	<key>uuid</key>
 	<string>41A8F343-48CB-482E-A395-34C31CE9A5AB</string>
 </dict>

@@ -8,7 +8,7 @@
 	<string># Using source-highlight convert source code to html
 # see Source to HTML for more comments
 
-lang=$(tr &lt;&lt;&lt;$TM_SCOPE \  \\n|grep source.|tail -n1|perl -pe 's/source\.([^.]*).*/$1/')
+lang=$(perl &lt;&lt;&lt;$TM_SCOPE -pe 's/.*\bsource\.([^. ]*).*/$1/')
 
 case "$lang" in
     c|c++|objc|objc++)
@@ -28,7 +28,7 @@ if [[ -z $TM_FILENAME ]]
 fi
 echo "&lt;html&gt;&lt;head&gt;&lt;title&gt;$title&lt;/title&gt;&lt;/head&gt;"
 
-expand -3 | "$TM_SUPPORT_PATH/bin/source-highlight" --line-number --src-lang=$lang --out-format=xhtml</string>
+expand -t $TM_TAB_SIZE | "${TM_SRC_HIGHLIGHT:=source-highlight}" --line-number --src-lang=$lang --out-format=xhtml</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

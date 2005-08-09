@@ -7,16 +7,20 @@
 	<key>settings</key>
 	<array>
 		<dict>
-			<key>name</key>
-			<string>Background</string>
-			<key>scope</key>
-			<string></string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
 				<string>#EEEEEEF0</string>
+				<key>caret</key>
+				<string>#000000</string>
 				<key>foreground</key>
 				<string>#000000</string>
+				<key>invisibles</key>
+				<string>#B3B3B3F4</string>
+				<key>lineHighlight</key>
+				<string>#00000012</string>
+				<key>selection</key>
+				<string>#BAD6FD</string>
 			</dict>
 		</dict>
 		<dict>
@@ -105,8 +109,6 @@
 			<dict>
 				<key>fontStyle</key>
 				<string>bold underline</string>
-				<key>foregroundColor</key>
-				<string>#ba5319</string>
 			</dict>
 		</dict>
 		<dict>
@@ -155,8 +157,6 @@
 			<dict>
 				<key>background</key>
 				<string>#E71A1100</string>
-				<key>comment</key>
-				<string>background = "#FFD9D9";</string>
 			</dict>
 		</dict>
 		<dict>
@@ -176,7 +176,7 @@
 			<key>name</key>
 			<string>Tag</string>
 			<key>scope</key>
-			<string>entity.name.tag</string>
+			<string>declaration.tag</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -214,8 +214,6 @@
 			<string>storage</string>
 			<key>settings</key>
 			<dict>
-				<key>comment</key>
-				<string>test</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 			</dict>
@@ -229,8 +227,39 @@
 			<dict>
 				<key>fontStyle</key>
 				<string>bold underline</string>
-				<key>foregroundColor</key>
-				<string>#ba5319</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>XML Declaration</string>
+			<key>scope</key>
+			<string>declaration.xml-processing</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#666666</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Tag Name</string>
+			<key>scope</key>
+			<string>entity.name.tag</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Tag Attribute</string>
+			<key>scope</key>
+			<string>entity.parameter.attribute.tag</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
 			</dict>
 		</dict>
 	</array>

@@ -14,14 +14,14 @@ if [[ ! -f ${PROJECT} ]]; then
    exit -1
 fi
 
-cd `dirname "${PROJECT_DIR}"`
+cd "`dirname "${PROJECT_DIR}"`"
 
 "${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 require "#{ENV['TM_BUNDLE_PATH']}/bin/xcode_version"
 
 def shell_escape (str)
-   str.gsub(/[`'" $]/, '\\\\\&amp;')
+   str.gsub(/[`'"\\; $]/, '\\\\\&amp;')
 end
 
 prefs = PropertyList::load(File.new("#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"))
@@ -47,13 +47,19 @@ if Xcode.supports_configurations? then
    dir += "/#{activeConfig}"
 end
 
-targets = rootObj['targets']
+# just use rootObj['targets'] for Ruby 1.6
+targets = rootObj['targets'].reject { |t| not ['com.apple.product-type.tool', 'com.apple.product-type.application'].include?(objs[t]['productType']) }
 if targets.size == 1
    target = objs[targets[0]]
    productKey = target['productReference']
+   run = target['productType'] == 'com.apple.product-type.application' ? 'open' : ''
    product = objs[productKey]
    file = product['path']
-   %x{cd #{shell_escape dir}; open ./#{shell_escape file}}
+   escaped_dir = shell_escape(dir)
+   escaped_file = shell_escape(file)
+   cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} #{run} ./#{escaped_file}; exit;"
+   osascript = "tell app \"Terminal\" to do script \"#{shell_escape cmd}\"".gsub(/\\([ ;])/, '\1')
+   %x{osascript -e #{shell_escape osascript}}
 else
    puts "The project had multiple targets.\nDidn't know which to pick."
 end

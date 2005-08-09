@@ -57,7 +57,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(asm|__asm__|auto|_Bool|char|_Complex|double|enum|float|_Imaginary|int|long|short|signed|struct|typedef|union|unsigned|void)\b</string>
+			<string>\b(asm|__asm__|auto|bool|_Bool|char|_Complex|double|enum|float|_Imaginary|int|long|short|signed|struct|typedef|union|unsigned|void)\b</string>
 			<key>name</key>
 			<string>storage.type.c</string>
 		</dict>
@@ -95,16 +95,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\\(\\|[abfnrtv'"?]|[0-3]\d{,2}|[4-7]\d?|x[a-zA-Z0-9]+)</string>
-					<key>name</key>
-					<string>constant.character.escape.c</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\\.</string>
-					<key>name</key>
-					<string>invalid.illegal.unknown-escape.objc</string>
+					<key>include</key>
+					<string>#string_escaped_char</string>
 				</dict>
 			</array>
 		</dict>
@@ -118,16 +110,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\\(\\|[abfnrtv'"?]|[0-3]\d{,2}|[4-7]\d?|x[a-zA-Z0-9]+)</string>
-					<key>name</key>
-					<string>constant.character.escape.c</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\\.</string>
-					<key>name</key>
-					<string>invalid.illegal.unknown-escape.objc</string>
+					<key>include</key>
+					<string>#string_escaped_char</string>
 				</dict>
 			</array>
 		</dict>
@@ -427,6 +411,24 @@
 				<dict>
 					<key>include</key>
 					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string_escaped_char</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\(\\|[abefnrtv'"?]|[0-3]\d{,2}|[4-7]\d?|x[a-zA-Z0-9]+)</string>
+					<key>name</key>
+					<string>constant.character.escape.c</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>invalid.illegal.unknown-escape.objc</string>
 				</dict>
 			</array>
 		</dict>

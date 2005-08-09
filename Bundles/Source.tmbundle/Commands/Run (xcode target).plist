@@ -47,7 +47,6 @@ if Xcode.supports_configurations? then
    dir += "/#{activeConfig}"
 end
 
-# just use rootObj['targets'] for Ruby 1.6
 targets = rootObj['targets'].reject { |t| not ['com.apple.product-type.tool', 'com.apple.product-type.application'].include?(objs[t]['productType']) }
 if targets.size == 1
    target = objs[targets[0]]

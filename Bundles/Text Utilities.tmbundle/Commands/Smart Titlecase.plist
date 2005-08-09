@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/python2.3
+
+# Convert all the selected words to Titlecase except those in the dont_cap array.
+# Warning:  This script normalizes all the words to have a single space between them and removes any newlines....
+
+
+import sys
+
+dont_cap =  ["of","a","the","and","an","or","nor","but","if","then","else","when","up","at","from","by","on","off","for","in","out","over","to"]
+lines = sys.stdin.read()
+words = lines.split()
+for i in range(len(words)):
+    if words[i] not in dont_cap:
+        words[i] = words[i].capitalize()
+sys.stdout.write(' '.join(words))
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~u</string>
+	<key>name</key>
+	<string>Smart Titlecase</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text</string>
+	<key>uuid</key>
+	<string>0FAB58A3-1C75-4A4A-AA4B-868C1F694C10</string>
+</dict>
+</plist>

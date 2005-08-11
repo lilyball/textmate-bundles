@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># This command wraps the selection in an &lt;a href=""&gt;&lt;/a&gt; tag
+# and, if there is a single line of text on the clipboard,
+# uses that as the link in the href="" argument.
+#
+# After insertion, you can use tab to move caret past the &lt;/a&gt;
+
+if [[ $(pbpaste|wc -l) -eq 0 ]]
+   then link=$(pbpaste|perl -pe 's/[\$\`\\]/\\$&amp;/g')
+   else link="http://site.com/"
+fi
+
+printf '&lt;a href="${1:%s}"&gt;' "$link"
+perl -pe 's/[\$\`\\]/\\$&amp;/g'
+printf '&lt;/a&gt;'</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^L</string>
+	<key>name</key>
+	<string>Wrap selection as link</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>33730C3C-CD9F-44FD-B89B-E654ACDA593A</string>
+</dict>
+</plist>

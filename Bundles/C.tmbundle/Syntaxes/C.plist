@@ -254,7 +254,8 @@
 		<key>preprocessor-rule-disabled</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(#(if)\s+0\b)</string>
+			<string>^\s*(#(if)\s+0\b).*
+</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -355,7 +356,8 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^\s*(#\s*(else)\b)</string>
+					<string>^\s*(#\s*(else)\b).*
+</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>

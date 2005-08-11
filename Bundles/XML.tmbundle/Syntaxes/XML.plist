@@ -133,24 +133,29 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;/?(?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)</string>
+			<string>&lt;((?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+))</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.other.namespace.xml</string>
+					<string>entity.name.tag.xml</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.xml</string>
+					<string>entity.other.namespace.xml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.tag.localname.xml</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>/?&gt;</string>
 			<key>name</key>
-			<string>declaration.tag.xml</string>
+			<string>declaration.tag.start.xml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -164,11 +169,13 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.other.attribute-name.xml</string>
+							<string>entity.other.attribute.localname.xml</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string> (?:([-_a-zA-Z0-9]+):)?([a-zA-Z-]+)</string>
+					<string>\s+(?:([-_a-zA-Z0-9]+):)?([a-zA-Z-]+)=</string>
+					<key>name</key>
+					<string>entity.other.attribute.name.xml</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -187,6 +194,30 @@
 					<string>string.quoted.single.xml</string>
 				</dict>
 			</array>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.namespace.xml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.tag.localname.xml</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>&lt;/((?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+))\s*&gt;</string>
+			<key>name</key>
+			<string>declaration.tag.end.xml</string>
 		</dict>
 		<dict>
 			<key>match</key>

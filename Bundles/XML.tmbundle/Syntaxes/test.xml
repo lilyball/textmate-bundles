@@ -3,6 +3,13 @@
 <%!
     String bar = "foo";
 %>
+<!DOCTYPE rdf:RDF [
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+]>
+
+<rdf:testtag rdf:attribute="value" />
+
+<invalid "tag" attribute=/>
 
 <project name="CDA" default="compile" basedir=".">
     <property environment="env" />

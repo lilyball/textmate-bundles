@@ -5,11 +5,11 @@ require 'test/unit'
 class TestPlist < Test::Unit::TestCase
 	def test_string
 		plist = PropertyList.load("{foo = bar; }")
-		assert_equal(plist, { "foo" => "bar" } )
+		assert_equal( { "foo" => "bar" }, plist )
 
-		plist, format = PropertyList.load("{foo = bar; }", true);
-		assert_equal({ "foo" => "bar" }, plist)
-		assert_equal(format, :openstep)
+		plist, format = PropertyList.load("{foo = bar; }", true)
+		assert_equal( { "foo" => "bar" }, plist )
+		assert_equal( :openstep, format )
 	end
 
 	def setup_hash

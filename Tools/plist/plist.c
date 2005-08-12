@@ -116,6 +116,7 @@ VALUE plist_load(int argc, VALUE *argv, VALUE self) {
 	CFRelease(readStream);
 	if (error) {
 		raiseError(error);
+		CFRelease(error);
 		return Qnil;
 	}
 	VALUE obj = convertPropertyListRef(plist);

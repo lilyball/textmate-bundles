@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
+	<string>cd "$TM_DIRECTORY";
+
+"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 output = `CocoaDialog inputbox --title Input --informative-text 'Record Message' --button1 Record --button2 'Abort'`
 output = output.split("\n")
 
@@ -14,7 +16,7 @@ if(output[0] !~ /^1$/)
 	exit
 end
 
-output = `darcs record -a -m '#{output[1].strip.gsub(/'/, '\\\\1')}'`
+output = `darcs record -a -m '#{output[1].strip.gsub(/'/, '\\\\1')}' '#{ENV['TM_FILEPATH'][/[^\/]+$/].gsub(/'/, '\\\\1')}'`
 
 puts(output)</string>
 	<key>input</key>
@@ -22,9 +24,9 @@ puts(output)</string>
 	<key>keyEquivalent</key>
 	<string>@d</string>
 	<key>name</key>
-	<string>Record</string>
+	<string>Record File</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>5E76D8C8-DE61-11D9-823F-000A95A51A76</string>
 </dict>

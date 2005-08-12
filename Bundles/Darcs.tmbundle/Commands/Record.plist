@@ -5,8 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cd "$TM_DIRECTORY";
-"${TM_DARCS:=/usr/local/bin/darcs}" record -a</string>
+	<string>"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
+output = `CocoaDialog inputbox --title Input --informative-text 'Record Message' --button1 Record --button2 'Abort'`
+output = output.split("\n")
+
+# check the button pressed, exit if it wasn't Record
+if(output[0] !~ /^1$/)
+	exit
+end
+
+output = `darcs record -a -m '#{output[1].strip.gsub(/'/, '\\\\1')}'`
+
+puts(output)</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

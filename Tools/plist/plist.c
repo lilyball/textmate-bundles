@@ -15,7 +15,7 @@
  *     Takes either an IO stream open for reading or a String object
  *     Returns an object representing the property list
  *
- *     Optionall takes a boolean format argument. If true, the
+ *     Optionally takes a boolean format argument. If true, the
  *     return value is an array with the second value being
  *     the format of the plist, which can be one of
  *     :xml1, :binary1, or :openstep

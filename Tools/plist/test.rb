@@ -60,6 +60,8 @@ class TestPlist < Test::Unit::TestCase
 	def test_to_plist
 		assert_raise(PropertyListError) { "foo".to_plist(:openstep) }
 		assert_equal("foo", PropertyList.load("foo".to_plist))
+		hash = setup_hash()
+		assert_equal(hash, PropertyList.load(hash.to_plist))
 	end
 end
 

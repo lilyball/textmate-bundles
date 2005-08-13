@@ -40,13 +40,15 @@ class TestPlist < Test::Unit::TestCase
 	end
 
 	def test_io
-		plist = PropertyList.load(DATA)
+		plist, format = PropertyList.load(DATA, true)
 
 		hash = setup_hash
 
 		assert_equal(hash, plist)
 		assert_equal(true, plist['foo']['random'].blob?)
 		assert_equal(false, plist['string!'].blob?)
+		
+		assert_equal(:xml1, format)
 	end
 
 	def test_dump

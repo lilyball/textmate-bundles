@@ -22,7 +22,7 @@
 # sml (for Sml)
 # log (for log files, e.g., system logs, apache and IpTables)
 
-lang=$(perl &lt;&lt;&lt;$TM_SCOPE -pe 's/.*?\b(source|text)\.([^. ]*).*/$1/')
+lang=$(perl &lt;&lt;&lt;$TM_SCOPE -pe 's/.*?\b(?:source|text)\.([^. ]*).*/$1/')
 
 case "$lang" in
     c|c++|objc|objc++)

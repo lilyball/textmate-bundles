@@ -8,7 +8,7 @@
 	<string># Using source-highlight convert source code to html
 # see Source to HTML for more comments
 
-lang=$(perl &lt;&lt;&lt;$TM_SCOPE -pe 's/.*?\b(source|text)\.([^. ]*).*/$1/')
+lang=$(perl &lt;&lt;&lt;$TM_SCOPE -pe 's/.*?\b(?:source|text)\.([^. ]*).*/$1/')
 
 case "$lang" in
     c|c++|objc|objc++)

@@ -10,6 +10,17 @@ class TestPlist < Test::Unit::TestCase
 		plist, format = PropertyList.load("{foo = bar; }", true)
 		assert_equal( { "foo" => "bar" }, plist )
 		assert_equal( :openstep, format )
+		
+		# make sure sources < 6 characters work
+		plist = PropertyList.load("foo")
+		assert_equal( "foo", plist )
+		
+		# make sure it works with format too
+		plist, format = PropertyList.load("foo", true)
+		assert_equal( "foo", plist )
+		assert_equal( :openstep, format )
+		
+		assert_raise(PropertyListError) { PropertyList.load("") }
 	end
 
 	def setup_hash

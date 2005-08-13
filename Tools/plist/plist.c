@@ -67,6 +67,8 @@ static VALUE id_xml;
 static VALUE id_binary;
 static VALUE id_openstep;
 
+static VALUE id_blob;
+
 VALUE convertPropertyListRef(CFPropertyListRef plist);
 VALUE convertStringRef(CFStringRef plist);
 VALUE convertDictionaryRef(CFDictionaryRef plist);
@@ -99,7 +101,6 @@ VALUE plist_load(int argc, VALUE *argv, VALUE self) {
 	int count = rb_scan_args(argc, argv, "11", &io, &retFormat);
 	if (count < 2) retFormat = Qfalse;
 	VALUE buffer;
-	//if (RTEST(rb_obj_is_kind_of(io, rb_cIO))) {
 	if (RTEST(rb_respond_to(io, id_read))) {
 		// Read from IO
 		buffer = rb_funcall(io, id_read, 0);
@@ -107,19 +108,46 @@ VALUE plist_load(int argc, VALUE *argv, VALUE self) {
 		StringValue(io);
 		buffer = io;
 	}
-	CFReadStreamRef readStream = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)RSTRING(buffer)->ptr, RSTRING(buffer)->len, kCFAllocatorNull);
+	// For some reason, the CFReadStream version doesn't work with input < 6 characters
+	// but the CFDataRef version doesn't return format
+	// So lets use the CFDataRef version unless format is requested
 	CFStringRef error = NULL;
+	CFPropertyListRef plist;
 	CFPropertyListFormat format;
-	CFReadStreamOpen(readStream);
-	CFPropertyListRef plist = CFPropertyListCreateFromStream(kCFAllocatorDefault, readStream, 0, kCFPropertyListImmutable, &format, &error);
-	CFReadStreamClose(readStream);
-	CFRelease(readStream);
+	if (RTEST(retFormat)) {
+		// Format was requested
+		// now just in case, if the input is < 6 characters, we will pad it out with newlines
+		// we could do this in all cases, but I don't think it will work with binary
+		// even though binary shouldn't be < 6 characters
+		UInt8 *bytes;
+		int len;
+		if (RSTRING(buffer)->len < 6) {
+			bytes = ALLOC_N(UInt8, 6);
+			memset(bytes, '\n', 6);
+			MEMCPY(bytes, RSTRING(buffer)->ptr, UInt8, RSTRING(buffer)->len);
+			len = 6;
+		} else {
+			bytes = (UInt8 *)RSTRING(buffer)->ptr;
+			len = RSTRING(buffer)->len;
+		}
+		CFReadStreamRef readStream = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, bytes, len, kCFAllocatorNull);
+		CFReadStreamOpen(readStream);
+		plist = CFPropertyListCreateFromStream(kCFAllocatorDefault, readStream, 0, kCFPropertyListImmutable, &format, &error);
+		CFReadStreamClose(readStream);
+		CFRelease(readStream);
+	} else {
+		// Format wasn't requested
+		CFDataRef data = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)RSTRING(buffer)->ptr, RSTRING(buffer)->len, kCFAllocatorNull);
+		plist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, data, kCFPropertyListImmutable, &error);
+		CFRelease(data);
+	}
 	if (error) {
 		raiseError(error);
 		CFRelease(error);
 		return Qnil;
 	}
 	VALUE obj = convertPropertyListRef(plist);
+	CFRelease(plist);
 	if (RTEST(retFormat)) {
 		VALUE ary = rb_ary_new();
 		rb_ary_push(ary, obj);
@@ -393,31 +421,31 @@ CFNumberRef convertNumber(VALUE obj) {
 	CFNumberType type;
 	switch (TYPE(obj)) {
 		case T_FLOAT: {
-						  double num = NUM2DBL(obj);
-						  valuePtr = &num;
-						  type = kCFNumberDoubleType;
-						  break;
-					  }
+			double num = NUM2DBL(obj);
+			valuePtr = &num;
+			type = kCFNumberDoubleType;
+			break;
+		}
 		case T_FIXNUM: {
-						  int num = NUM2INT(obj);
-						  valuePtr = &num;
-						  type = kCFNumberIntType;
-						  break;
-					   }
+			int num = NUM2INT(obj);
+			valuePtr = &num;
+			type = kCFNumberIntType;
+			break;
+		}
 		case T_BIGNUM: {
 #ifdef NUM2LL
-						  long long num = NUM2LL(obj);
-						  type = kCFNumberLongLongType;
+			long long num = NUM2LL(obj);
+			type = kCFNumberLongLongType;
 #else
-						  long num = NUM2LONG(obj);
-						  type = kCFNumberLongType;
+			long num = NUM2LONG(obj);
+			type = kCFNumberLongType;
 #endif
-						  valuePtr = &num;
-						  break;
-					   }
+			valuePtr = &num;
+			break;
+		}
 		default:
-						  rb_raise(rb_eStandardError, "ERROR: Wrong object type passed to convertNumber");
-						  return NULL;
+			rb_raise(rb_eStandardError, "ERROR: Wrong object type passed to convertNumber");
+			return NULL;
 	}
 	CFNumberRef number = CFNumberCreate(kCFAllocatorDefault, type, valuePtr);
 	return number;
@@ -431,7 +459,7 @@ CFDateRef convertTime(VALUE obj) {
 
 
 VALUE str_blob(VALUE self) {
-	VALUE blob = rb_iv_get(self, "@blob");
+	VALUE blob = rb_attr_get(self, id_blob);
 	if (NIL_P(blob)) {
 		return Qfalse;
 	} else {
@@ -441,7 +469,7 @@ VALUE str_blob(VALUE self) {
 
 VALUE str_setBlob(VALUE self, VALUE b) {
 	if (TYPE(b) == T_TRUE || TYPE(b) ==  T_FALSE) {
-		return rb_iv_set(self, "@blob", b);
+		return rb_ivar_set(self, id_blob, b);
 	} else {
 		rb_raise(rb_eArgError, "Argument 1 must be true or false");
 		return Qnil;
@@ -465,4 +493,5 @@ void Init_plist() {
 	id_xml = rb_intern("xml1");
 	id_binary = rb_intern("binary1");
 	id_openstep = rb_intern("openstep");
+	id_blob = rb_intern("@blob");
 }

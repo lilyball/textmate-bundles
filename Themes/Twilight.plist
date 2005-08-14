@@ -80,6 +80,8 @@
 			<string>storage</string>
 			<key>settings</key>
 			<dict>
+				<key>fontStyle</key>
+				<string></string>
 				<key>foreground</key>
 				<string>#F9EE98</string>
 			</dict>
@@ -91,6 +93,8 @@
 			<string>string</string>
 			<key>settings</key>
 			<dict>
+				<key>fontStyle</key>
+				<string></string>
 				<key>foreground</key>
 				<string>#8F9D6A</string>
 			</dict>
@@ -212,9 +216,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>♦ String.regex</string>
+			<string>♦ String.regexp</string>
 			<key>scope</key>
-			<string>string.regex</string>
+			<string>string.regexp</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -223,9 +227,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>♦ String.regex.«special»</string>
+			<string>♦ String.regexp.«special»</string>
 			<key>scope</key>
-			<string>string.regex constant.character.escaped, string.regex source.ruby.embedded, string.regex string.regexp.arbitrary-repitition</string>
+			<string>string.regexp constant.character.escaped, string.regexp source.ruby.embedded, string.regexp string.regexp.arbitrary-repitition</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -339,7 +343,7 @@
 			<key>name</key>
 			<string>§ css:pseudo-class</string>
 			<key>scope</key>
-			<string>declaration.selector.css entity.parameter.attribute.tag.pseudo-class</string>
+			<string>declaration.selector.css entity.other.attribute-name.tag.pseudo-class</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -350,7 +354,7 @@
 			<key>name</key>
 			<string>§ css#id</string>
 			<key>scope</key>
-			<string>declaration.selector.css entity.parameter.attribute.tag.id</string>
+			<string>declaration.selector.css entity.other.attribute-name.id</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -361,7 +365,7 @@
 			<key>name</key>
 			<string>§ css.class</string>
 			<key>scope</key>
-			<string>declaration.selector.css entity.parameter.attribute.tag.class</string>
+			<string>declaration.selector.css entity.other.attribute-name.class</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -377,6 +381,17 @@
 			<dict>
 				<key>foreground</key>
 				<string>#F9EE98</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>§ css @at-rule</string>
+			<key>scope</key>
+			<string>declaration.at-rule keyword.at-rule</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#8693A5</string>
 			</dict>
 		</dict>
 		<dict>

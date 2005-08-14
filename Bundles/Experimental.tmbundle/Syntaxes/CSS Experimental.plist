@@ -1,1847 +1,2325 @@
 {
-	/*
-		CSS EXPERIMENTAL
-		================
-		
-		Firstly thanks to the original authors. Hope this extends your good work.
-		
-		The idea behind this syntax is to scope properties as named entities, therefore 
-		being very handy for code-completion which can be more specific.
-		
-		Each property is based on the first letters of its "property-name" and some are in groups.
-		
-		Property-values can therefore be specific to the property eg only colors show up
-		in the "property.color property-value" scope, not things like "left" or "no-repeat"
-		
-		It's quite a big task, so feel free to chip in or give me feedback.
-		
-		Max Williams (max at machinate dot org)
-		
-		things to do:
-		=============
-		
-		* get all the properties in there
-		* make sure things aren't missing
-		* be more specific in some of the groups
-		* add internal comments
-		* make everything more efficient :)
-		
-	*/
-	name = "CSS v2 beta"; 
-	scopeName = "source.css.experimental";
-	fileTypes = (); 
-	foldingStartMarker = "(/\\*|\\{|\\()"; 
-	foldingStopMarker = "(\\*/|\\}|\\))"; 
+	fileTypes = (css);
+	foldingStartMarker = "(/\\*|\\{|\\()";
+	foldingStopMarker = "(\\*/|\\}|\\))";
+	name = "CSS v3 beta";
 	patterns = (
-	    {   name = "declaration.selector.css";
-	        begin = "^(?=\\s*[.*#a-zA-Z])";
-	        end = "(/\\*|(?=\\{))";
-	        patterns = (
-	            {   name = "entity.name.tag.css";
-	                match = "\\b(?i:a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\\b";
-	            },
-	            /* don't know what to call this as thes names are getting a bit long 
-	            {   name = "entity.parameter.attribute.tag.attribute?.css";
-	                begin = "\\[";
-	                end = "\\]";
-	            },
-	            */
-	            {   name = "entity.parameter.attribute.tag.class.css";
-	                match = "(\\.[a-zA-Z0-9_-]+)";
-	            },
-	            {   name = "entity.parameter.attribute.tag.id.css";
-	                match = "(#[a-zA-Z0-9_-]+)";
-	            },
-	            {   name = "entity.parameter.attribute.tag.universal.css";
-	                match = "(\\*)";
-	            },
-	            {   name = "entity.parameter.attribute.tag.pseudo-class.css";
-	                // this probably is an attribute name
-	                match = ":(active|after|before|first-(letter|line)|hover|link|visited)";
-	            }
-	        );
-	    },
-		{	name = "comment.block.css";
-			begin = "/\\*"; end = "\\*/";
-		},
-		{	name = "invalid.bad-comma.css";
-			match = "[^} \\t{/@][^{,]*?(,)\\s*?(?=\\{)";
-		},
-		{	name = "declaration.at-rule.import.css";
-			begin = "^\\s*(@import)"; end = "\\s*((?=;|\\}))";
-			captures = { 1 = { name = "keyword.at-rule.import.css"; }; };
+		{
+			begin = "(^)?(?=\\s*[.*#a-zA-Z])";
+			end = "(/\\*|(?=\\{))";
+			name = "declaration.selector.css";
 			patterns = (
-				{	name = "string.quoted.double.css";
-					begin = "\""; end = "\""; swallow = "\\\\.";
+				{
+					match = "\\b(?i:a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|embed|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\\b";
+					name = "entity.name.tag.css";
 				},
-				{	// keyword.function.url.css 
-					begin = "(url)\\s*\\(\\s*"; end = "\\s*\\)\\s*"; 
-					captures = { 1 = { name = "keyword.function.url.css"; }; };
-					patterns = (
-						{	// I'm really torn on this one, we do sort of
-							// want special markup of the argument to url(),
-							// but entity.parameter.variable.function is really more for declarations
-							name = "entity.parameter.variable.function.css";
-							match = "[^'\") \\t]+";
-						},
-						{	name = "string.quoted.single.css";
-							begin = "'"; end = "'"; swallow = "\\\\.";
-						},
-						{	name = "string.quoted.double.css";
-							begin = "\""; end = "\""; swallow = "\\\\.";
-						}
-					);
+				{
+					begin = "\\[";
+					end = "\\]";
+					name = "entity.parameter.attribute.tag.attribute-match.css";
 				},
-			);
-		},
-		{	name = "declaration.at-rule.media.css";
-			begin = "^\\s*(@media)"; end = "\\s*((?=;|\\}))";
-			captures = { 1 = { name = "keyword.at-rule.media.css"; }; };
-			patterns = (
-				{	name = "entity.parameter.variable.function.css"; // maybe this should be keyword.*
-					match = "(all|aural|braille|embossed|handheld|pr(int|ojection)|screen|tty|tv),?";
+				{
+					match = "(\\.[a-zA-Z0-9_-]+)";
+					name = "entity.other.attribute-name.class.css";
+				},
+				{match = "(#[a-zA-Z0-9_-]+)"; name = "entity.other.attribute-name.id.css"; },
+				{match = "(\\*)"; name = "entity.other.attribute-name.universal.css"; },
+				{
+					match = ":(active|after|before|first-(letter|line)|focus|hover|link|visited)";
+					name = "entity.other.attribute-name.tag.pseudo-class.css";
 				}
 			);
 		},
-		{	name = "declaration.property-list.css";
-			begin = "\\{"; end = "\\}";
+		{ include = "#comment-block"; },
+		{ match = "[^} \\t{/@][^{,]*?(,)\\s*?(?=\\{)"; name = "invalid.bad-comma.css"; },
+		{
+			begin = "(^\\s*)?(@import)";
+			captures = {2 = {name = "keyword.at-rule.import.css"; }; };
+			end = "((?=;|\\}))";
+			name = "declaration.at-rule.import.css";
 			patterns = (
-				{	name = "comment.block.css";
-					begin = "/\\*"; end = "\\*/";
-				},
-				/* azimuth */
 				{
-					name = "declaration.property.azimuth.css";
-					begin = "(?=az)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "azimuth";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "((left|right)(-side|wards)?|(center|far)(-left|-right)?|behind)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
+					begin = "\"";
+					end = "\"";
+					name = "string.double-quoted.css";
+					swallow = "\\\\.";
 				},
-				/* background */
+				{ include = "#uri";},
+			);
+		},
+		{
+			begin = "(^\\s*)?(@media)";
+			captures = {1 = {name = "keyword.at-rule.media.css"; }; };
+			end = "((?=;|\\}))";
+			name = "declaration.at-rule.media.css";
+			patterns = (
 				{
-					name = "declaration.property.background.css";
-					begin = "(?=back)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (			
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "background(-attachment|-color|-image|-position|-repeat)?";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "comment.block.css";
-									begin = "/\\*"; end = "\\*/";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},	
-								{	name = "constant.other.color.rgb-value.css";
-									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
-								},
-								{	name = "keyword.named-color.css";
-									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "((no-repeat)|repeat(-x|-y)?)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(none)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(top|left|right|bottom|center)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "fixed";
-								},
-								{	// keyword.function.css 
-									begin = "(url)\\s*\\(['\"]?";
-									end = "['\"]?\\)";
-									name = "keyword.function.css"; 
-									captures = { 
-									    1 = { name = "keyword.function-name.css"; }; 
-									};
-									/*
-									patterns = (
-										{	name = "string.quoted.single.css";
-											begin = "'"; end = "'"; swallow = "\\\\.";
-										},
-										{	name = "string.quoted.double.css";
-											begin = "\""; end = "\""; swallow = "\\\\."; 
-										},
-									);
-									*/
-								},
-								{	// keyword.function.css 
-									begin = "(rgb)\\s*\\((?=([^)]*))";
-									end = "\\)";
-									name = "keyword.function.css"; 
-									captures = { 
-									    1 = { name = "keyword.function-name.css"; }; 
-									};
-									patterns = (
-									    {	name = "keyword.rgb-value.css";
-									    	match = "[12]?[0-9]?[0-9]"; 
-									    },
-									    {	name = "keyword.rgb-value.css";
-									    	match = "(100|[0-9]{1,2})%"; 
-									    },
-									);
-								}													
-							);
-						},					
-					);				
-				},
-				/* border */
-				{
-					name = "declaration.property.border.css";
-					begin = "(?=bor)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "border(-collapse|-spacing|((-bottom|-left|-right|-top)?(-color|-style|-width)?))?";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-							    },
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(collapse|dashed|dotted|double|groove|hidden|inset|medium|outset|ridge|separate|solid|thick|thin)";
-								},
+					match = "(all|aural|braille|embossed|handheld|pr(int|ojection)|screen|tty|tv),?";
+					name = "entity.parameter.variable.function.css";
+				}
+			);
+		},
+		{
+			begin = "\\{";
+			end = "\\}";
+			name = "declaration.property-list.css";
+			patterns = (
+				{ include = "#comment-block"; },
+			    /* azimuth */
+			    {
+			    	name = "declaration.property.azimuth.css";
+			    	begin = "(azimuth)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "((left|right)(-side|wards)?|(center|far)(-left|-right)?|behind)";
+			    				},
+			    				{	include = "#comment-block"; },
+			    				{	include = "#angle"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* background */
+			    {
+			    	name = "declaration.property-group.background.css";
+			    	begin = "(?=background)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property.background.css";
+			    			begin = "(background)(?=[:\\s])";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#color-hex"; },
+			    						{	include = "#color-rgb"; },
+			    						{	include = "#color-named"; },
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	include = "#length"; },
+			    						{	include = "#percentage"; },
+			    						{	include = "#uri"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "((no-repeat)|repeat(-x|-y)?)";
+			    						},
+			    						{	name = "keyword.property-value.css";
+			    							match = "(none)";
+			    						},
+			    						{	name = "keyword.property-value.css";
+			    							match = "(top|left|right|bottom|center)";
+			    						},
+			    						{	name = "keyword.property-value.css";
+			    							match = "(fixed|scroll)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.background-attachment.css";
+			    			begin = "(background-attachment)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "(scroll|fixed)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.background-color.css";
+			    			begin = "(background-color)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#color-hex"; },
+			    						{	include = "#color-rgb"; },
+			    						{	include = "#color-named"; },
+
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.background-image.css";
+			    			begin = "(background-image)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	include = "#uri"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "(none)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.background-position.css";
+			    			begin = "(background-position)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	include = "#length"; },
+			    						{	include = "#percentage"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "(top|left|right|bottom|center)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.background-repeat.css";
+			    			begin = "(background-repeat)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "((no-repeat)|repeat(-x|-y)?)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /* border */
+			    {
+			    	name = "declaration.property-group.border.css";
+			    	begin = "(?=border)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property.border.css";
+			    			begin = "(border(-bottom|-left|-right|-top)?)(?=[:\\s])";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#color-hex"; },
+			    						{	include = "#color-rgb"; },
+			    						{	include = "#color-named"; },
+			    						{	include = "#length"; },
+			    						{	include = "#border-style"; },
+			    						{	include = "#border-width"; },
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "none";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.border-collapse.css";
+			    			begin = "(border-collapse)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "(collapse|separate)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.border-spacing.css";
+			    			begin = "(border-spacing)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#length"; },
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.border-color.css";
+			    			begin = "(border((-bottom|-left|-right|-top)?(-color)))";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#color-hex"; },
+			    						{	include = "#color-rgb"; },
+			    						{	include = "#color-named"; },
+
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.border-style.css";
+			    			begin = "(border((-bottom|-left|-right|-top)?(-style)))";
+			    			end = "(?=[;}])";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#border-style"; },
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.border-width.css";
+			    			begin = "(border((-bottom|-left|-right|-top)?(-width)))";
+			    			end = "(?=[;}])";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#length"; },
+			    						{	include = "#border-width"; },
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /* caption-side */
+			    {
+			    	name = "declaration.property.caption-side.css";
+			    	begin = "(caption-side)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(top|bottom|left|right)";
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /* clear */
+			    {
+			    	name = "declaration.property.clear.css";
+			    	begin = "(clear)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(left|right|both|none)";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* clip */
+			    {
+			    	name = "declaration.property.clip.css";
+			    	begin = "(clip)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    				{	include = "#shape"; },
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* color */
+			    {
+			    	name = "declaration.property.color.css";
+			    	begin = "(color)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#color-hex"; },
+			    				{	include = "#color-rgb"; },
+			    				{	include = "#color-named"; },
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* content */
+			    {
+			    	name = "declaration.property.content.css";
+			    	begin = "(content)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{   include="#counter";},
+			    				{   include= "#string-double";},
+			    				{   include= "#string-single";},
+			    				{	include = "#uri"; },
+			    				{	include = "#attr"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "(open-quote|close-quote|no-open-quote|no-close-quote)";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* 'counter todo: counter	*/
+			    {
+			    	name = "declaration.property-group.counter.css";
+			    	begin = "(?=counter)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property.counter-increment.css";
+			    			begin = "(counter-increment)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						/* <identifier> <integer>? ]+*/
+			    						{	name = "keyword.property-value.css";
+			    							match = "(none)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.counter-reset.css";
+			    			begin = "(counter-reset)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						/* <identifier> <integer>? ]+*/
+			    						{	name = "keyword.property-value.css";
+			    							match = "(none)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /*cue*/
+			    {
+			    	name = "declaration.property-group.cue.css";
+			    	begin = "(?=cue)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property.cue.css";
+			    			begin = "(cue[:|\\s])";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	include = "#uri"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "(none)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.cue-after.css";
+			    			begin = "(cue-after)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	include = "#uri"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "(none)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.cue-before.css";
+			    			begin = "(cue-before)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	include = "#uri"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "(none)";
+			    						},
+			    					);
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /*cursor */
+			    {
+			    	name = "declaration.property.cursor.css";
+			    	begin = "(cursor)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+								{	include = "#uri"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "(auto|crosshair|default|pointer|move|e-resize|ne-resize|nw-resize|n-resize|se-resize|sw-resize|s-resize|w-resize|text|wait|help)";
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /* direction */
+			    {
+			    	name = "declaration.property.direction.css";
+			    	begin = "(direction)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(ltr|rtl)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* display */
+			    {
+			    	name = "declaration.property.display.css";
+			    	begin = "(display)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(block|list-item|run-in|compact|marker|inline(-table|-block)?|table(((-row|-header|-footer|-column)-group)|-column|-row|-cell|-caption)?|none)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* elevation*/
+			    {
+			    	name = "declaration.property.elevation.css";
+			    	begin = "(elevation)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(below|level|above|higher|lower)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    				{	include = "#angle"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* empty-cells */
+			    {
+			    	name = "declaration.property.empty-cells.css";
+			    	begin = "(empty-cells)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(show|hide)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* float */
+			    {
+			    	name = "declaration.property.float.css";
+			    	begin = "(float)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(none|left|right)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* font */
+			    {
+			    	name = "declaration.property-group.font.css";
+			    	begin = "(?=font)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property.font.css";
+			    			begin = "(font)(?=[:\\s])";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	include = "#length"; },
+			    						{	include = "#percentage"; },
+			    						{	include = "#string-double"; },
+			    						{	include = "#string-single"; },
+			    						{ include="#font-specific"; },
+			    						{ include="#font-generic"; },
+			    						{ include="#font-weight"; },
+			    						{ include="#font-stretch"; },
+			    						{ include="#font-style"; },
+			    						{ include="#font-variant"; },
+			    						{ include="#font-other"; },
+			    						{ include="#font-absolute"; },
+			    						{ include="#font-relative"; },
+			    						{ include="#font-adjust"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.font-family.css";
+			    			begin = "(font-family)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+										{ include="#font-specific"; },
+										{ include="#font-generic"; },
+										{	include = "#string-double"; },
+										{	include = "#string-single"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.font-size.css";
+			    			begin = "(font-size(-adjust)?)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{	include = "#length"; },
+			    						{	include = "#percentage"; },
+			    						{ include="#font-absolute"; },
+			    						{ include="#font-relative"; },
+			    						{ include="#font-adjust"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.font-stretch.css";
+			    			begin = "(font-stretch)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{ include="#font-stretch"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.font-style.css";
+			    			begin = "(font-style)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{ include="#font-style"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.font-variant.css";
+			    			begin = "(font-variant)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{ include="#font-variant"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.font-weight.css";
+			    			begin = "(font-weight)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{
+			    					name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    						{ include="#font-weight"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /* letter-spacing */
+			    {
+			    	name = "declaration.property.letter-spacing.css";
+			    	begin = "(letter-spacing)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "(normal)";
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /*line-height*/
+			    {
+			    	name = "declaration.property.line-height.css";
+			    	begin = "(line-height)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	include = "#percentage"; },
+			    				/* number */
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "(normal)";
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /*line-break*/
+			    /* not sure where I saw this, but it doesn't seem to be in the spec
+			    {
+			    	name = "declaration.property.line-height.css";
+			    	begin = "(?=line-b)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-name.css";
+			    			begin = "(?=[a-z])";
+			    			end = "(?=:)";
+			    			patterns = (
+			    				{
+			    					name = "keyword.property-name.css";
+			    					match = "line-break";
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "(emergency)";
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    */
+			    /* list  */
+			    {
+			    	name = "declaration.property-group.list-style.css";
+			    	begin = "(?=list)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property.list-style.css";
+			    			begin = "(list-style[:|\\s])";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	name = "keyword.property-value.css";
+			    							match = "(disc|circle|square|none)";
+			    						},
+			    						{   include = "#list-style-type"; },
+			    						{	name = "keyword.property-value.css";
+			    							match = "(inside|outside)";
+			    						},
+			    						{	include = "#uri"; },
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.list-style-image.css";
+			    			begin = "(list-style-image)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	name = "keyword.property-value.css";
+			    							match = "(none)";
+			    						},
+			    						{	include = "#uri"; },
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.list-style-position.css";
+			    			begin = "(list-style-position)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	name = "keyword.property-value.css";
+			    							match = "(inside|outside)";
+			    						},
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    		{
+			    			name = "declaration.property.list-style-type.css";
+			    			begin = "(list-style-type)";
+			    			captures = {
+			    				1 = { name = "keyword.property-name.css"; };
+			    			};
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "declaration.property-value.css";
+			    					begin = ":";
+			    					end = "(?=[;}])";
+			    					patterns = (
+			    						{	name = "keyword.property-value.css";
+			    							match = "(disc|circle|square|none)";
+			    						},
+			    						{	include = "#list-style-type"; },
+			    						{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    					);
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /*margin */
+			    {
+			    	name = "declaration.property.margin.css";
+			    	begin = "(margin(-bottom|-left|-right|-top)?)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* marker-offset */
+			    {
+			    	name = "declaration.property.marker-offset.css";
+			    	begin = "(marker-offset)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* marks */
+			    {
+			    	name = "declaration.property.marks.css";
+			    	begin = "(marks)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(crop|cross|none)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*opacity */
+			    {
+			    	name = "declaration.property.opacity.css";
+			    	begin = "(opacity)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "constant.numeric.css";
+			    					match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* orphans */
+			    {
+			    	name = "declaration.property.orphans.css";
+			    	begin = "(orphans)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "constant.numeric.css";
+			    					match = "[0-9]+";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* outline */
+			    {
+			    	name = "declaration.property-group.outline.css";
+			    	begin = "(?=outline)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			            {
+        			    	name = "declaration.property.outline.css";
+        			    	begin = "(outline)[:\\s]";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{
+        			    			name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+
+        			    				{	name = "keyword.property-value.css";
+        			    					match = "(invert)";
+        			    				},
+        			    				{	include = "#length"; },
+        			    				{	include = "#border-style"; },
+        			    				{	include = "#border-width"; },
+        			    				{	include = "#color-hex"; },
+        			    				{	include = "#color-rgb"; },
+        			    				{	include = "#color-named"; },
+        			    				{	include = "#comment-block"; },
+        								{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			    {
+        			    	name = "declaration.property.outline-style.css";
+        			    	begin = "(outline-style)";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{
+        			    			name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+        			    				{	include = "#border-style"; },
+        			    				{	include = "#comment-block"; },
+        			    				{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			    {
+        			    	name = "declaration.property.outline-color.css";
+        			    	begin = "(outline-color)";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{
+        			    			name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+
+        			    				{	name = "keyword.property-value.css";
+        			    					match = "(invert)";
+        			    				},
+        			    				{	include = "#color-hex"; },
+        			    				{	include = "#color-rgb"; },
+        			    				{	include = "#color-named"; },
+        			    				{	include = "#comment-block"; },
+        			    				{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			    {
+        			    	name = "declaration.property.outline-width.css";
+        			    	begin = "(outline-width)";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{
+        			    			name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+        			    				{	include = "#length"; },
+        			    				{	include = "#border-width"; },
+        			    				{	include = "#comment-block"; },
+        			    				{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			);
+        		},
+			    /* overflow */
+			    {
+			    	name = "declaration.property.overflow.css";
+			    	begin = "(overflow)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(visible|hidden|scroll)";
+			    				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* padding */
+			    {
+			    	name = "declaration.property.padding.css";
+			    	begin = "(padding(-bottom|-left|-right|-top)?)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* page */
+			    {
+			    	name = "declaration.property.page.css";
+			    	begin = "(page)(?=[:\\s])";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				/* include =identifier */
+			    				{	name = "keyword.property-value.css";
+			    					match = "(always|avoid|left|right)";
+			    				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* page todo: sort this lot out */
+			    {
+			    	name = "declaration.property.page.css";
+			    	begin = "(page-break-(before|after|inside)?)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{
+			    			name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				/* include =identifier */
+			    				{	name = "keyword.property-value.css";
+			    					match = "(always|avoid|left|right)";
+			    				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    				{	include = "#comment-block"; },
+			    				{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*pause todo*/
+			    {
+			    	name = "declaration.property.pause.css";
+			    	begin = "(pause(-after|-before)?)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "constant.numeric.css";
+			    					match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+			    				},
+			    				{	name = "constant.other.unit.css";
+			    					match = "(m)?s";
+			    				},
+			    				{	name = "constant.other.unit.css";
+			    					match = "%";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*pitch todo: pitch-range*/
+			    {
+			    	name = "declaration.property.pitch.css";
+			    	begin = "(pitch(-range)?)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "constant.numeric.css";
+			    					match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+			    				},
+			    				{	name = "constant.other.unit.css";
+			    					match = "(k)?Hz";
+			    				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "(x-low|low|medium|high|x-high)";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*play-during*/
+			    {
+			    	name = "declaration.property.play-during.css";
+			    	begin = "(play-during)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(mix|repeat|auto|none)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    				{	include = "#uri"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* position */
+			    {
+			    	name = "declaration.property.position.css";
+			    	begin = "(position)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(relative|fixed|absolute|static)";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* quotes */
+			    {
+			    	name = "declaration.property.quotes.css";
+			    	begin = "(quotes)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{   include= "#string-double";},
+			    				{   include= "#string-single";},
+			    				{	name = "keyword.property-value.css";
+			    					match = "none";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* richness */
+			    {
+			    	name = "declaration.property.richness.css";
+			    	begin = "(richness)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "constant.numeric.css";
+			    					match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* placement */
+			    {
+			    	name = "declaration.property.placement.css";
+			    	begin = "(bottom|left|right|top)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	include = "#percentage"; },
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /* size (elem) */
+			    {
+			    	name = "declaration.property.elem-size.css";
+			    	begin = "(((min|max)-)?(height|width))";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	include = "#percentage"; },
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+								/*should really only apply to max-height/width */
 								{	name = "keyword.property-value.css";
 									match = "none";
 								},
-								{	name = "keyword.named-color.css";
-									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
-								},
-								{	name = "constant.other.color.rgb-value.css";
-									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* caption */
-				{
-					name = "declaration.property.caption.css";
-					begin = "(?=cap)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "caption-side";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(top|bottom|left|right)";
-								},														
-							);
-						},					
-					);
-				},
-				/* clear */
-				{
-					name = "declaration.property.clear.css";
-					begin = "(?=cle)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "clear";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(left|right|both|none)";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},											
-							);
-						},					
-					);				
-				},
-				/* clip */
-				{
-					name = "declaration.property.clip.css";
-					begin = "(?=cli)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "clip";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},	
-								/* shape */
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},											
-							);
-						},					
-					);				
-				},
-				/* color */
-				{
-					name = "declaration.property.color.css";
-					begin = "(?=col)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "color";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.other.color.rgb-value.css";
-									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},	
-								{	name = "keyword.named-color.css";
-									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
-								},
-							);
-						},					
-					);				
-				},
-				/* content */
-				{
-					name = "declaration.property.content.css";
-					begin = "(?=con)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "content";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								/*
-								 <string> | <uri> | <counter> | attr(X) |]+
-								*/
-								{	name = "keyword.property-value.css";
-									match = "(open-quote|close-quote|no-open-quote|no-close-quote)";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* 
-				'counter
-				*/
-				{
-					name = "declaration.property.counter.css";
-					begin = "(?=count)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "counter-(increment|reset)";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(none)";
-								},
-								/*selector */
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/*cue group*/
-				/*cursor */
-				{
-					name = "declaration.property.cursor.css";
-					begin = "(?=cur)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "cursor";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								/*
-								[ [<uri> ,]* 
-								*/
-								{	name = "keyword.property-value.css";
-									match = "(auto|crosshair|default|pointer|move|e-resize|ne-resize|nw-resize|n-resize|se-resize|sw-resize|s-resize|w-resize|text|wait|help)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* direction */
-				{
-					name = "declaration.property.direction.css";
-					begin = "(?=dir)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "direction";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(ltr|rtl)";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* display */
-				{
-					name = "declaration.property.display.css";
-					begin = "(?=dis)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "display";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-							    {	name = "keyword.property-value.css";
-							    	match = "(block|list-item|run-in|compact|marker|inline(-table|-block)?|table(((-row|-header|-footer|-column)-group)|-column|-row|-cell|-caption)?|none)";
-							    },
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},															
-							);
-						},					
-					);				
-				},
-				/* elevation' <angle> | below|level|above|higher|lower | inherit */
-				/* empty-cells */
-				{
-					name = "declaration.property.empty-cells.css";
-					begin = "(?=empty)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "empty-cells";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(show|hide)";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* float */
-				{
-					name = "declaration.property.float.css";
-					begin = "(?=float)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "float";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(none|left|right)";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* font */
-				{
-					name = "declaration.property.font.css";
-					begin = "(?=fo)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "font(-family|-size(-adjust)?|-stretch|-style|-variant|-weight)?";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.font-name.css";
-									match = "((?i:arial( black)?|century|comic|courier|garamond|georgia|geneva|helvetica|impact|lucida( sans)?( grande)?( unicode)?|symbol|system|tahoma|times( new roman)?|trebuchet( ms)?|utopia|verdana|webdings|sans-serif|serif|monospace))";
-								},
-								{	name = "keyword.font-name.css";
-									match = "(serif|sans-serif|cursive|fantasy|monospace)";
-								},
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(normal|bold(er)?|lighter|100|200|300|400|500|600|700|800|900)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(normal|wider|narrower|ultra-condensed|extra-condensed|condensed|semi-condensed|semi-expanded|expanded|extra-expanded|ultra-expanded)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(none|italic|small-caps|oblique)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(caption|icon|menu|message-box|small-caption|status-bar)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(?i:[a-z]+[^,;\"']*)";
-								},				
-							);
-						},					
-					);				
-				},
-				/* letter-spacing */
-				{
-					name = "declaration.property.letter-spacing.css";
-					begin = "(?=let)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "letter-spacing";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(normal)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},				
-							);
-						},					
-					);				
-				},
-				/*line-height*/	
-				{
-					name = "declaration.property.line-height.css";
-					begin = "(?=line-h)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "line-height";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(normal)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},				
-							);
-						},					
-					);				
-				},
-				/*line-break*/	
-				{
-					name = "declaration.property.line-height.css";
-					begin = "(?=line-b)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "line-break";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(emergency)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},				
-							);
-						},					
-					);				
-				},
-				/* list */
-				{
-					name = "declaration.property.list.css";
-					begin = "(?=lis)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "list(-style(-image|-position|-type)?)?";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(disc|circle|square|none)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(decimal(-leading-zero)?|lower(-roman|-alpha|-greek|-alpha|-latin)?|upper(-roman|-alpha|-greek|-alpha|-latin)?|hebrew|armenian|georgian|cjk-ideographic|hiragana(-iroha)?|katakana(-iroha)?)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inside|outside)";
-								},
-								{	// keyword.function.css 
-									begin = "(url)\\s*\\(";
-									end = "\\)";
-									captures = { 1 = { name = "keyword.function.css"; }; };
-									patterns = (
-										{	name = "string.quoted.single.css";
-											begin = "'"; end = "'"; swallow = "\\\\.";
-										},
-										{	name = "string.quoted.double.css";
-											begin = "\""; end = "\""; swallow = "\\\\."; 
-										},
-									);
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},										
-							);
-						},					
-					);
-				},
-				/*margin */
-				{
-					name = "declaration.property.margin.css";
-					begin = "(?=mar)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "margin(-bottom|-left|-right|-top)?";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/*
-				'marker-offset' <length> | auto | inherit
-				'marks' [ crop || cross ] | none | inherit
-				*/
-				/*opacity */
-				{
-					name = "declaration.property.opacity.css";
-					begin = "(?=opa)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "opacity";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-							    },
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* orphans */
-				{
-					name = "declaration.property.orphans.css";
-					begin = "(?=orphans)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "orphans";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "[0-9]+";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* outline */
-				{
-					name = "declaration.property.outline.css";
-					begin = "(?=out)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "outline(-color|-style|-width)?";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-							    },
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(collapse|dashed|dotted|double|groove|hidden|inset|medium|outset|ridge|separate|solid|thick|thin)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(invert)";
-								},
-								{	name = "keyword.named-color.css";
-									match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
-								},
-								{	name = "constant.other.color.rgb-value.css";
-									match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* overflow */	
-				{
-					name = "declaration.property.overflow.css";
-					begin = "(?=over)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "overflow";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(visible|hidden|scroll)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* padding */
-				{
-					name = "declaration.property.padding.css";
-					begin = "(?=pa)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "padding(-bottom|-left|-right|-top)?";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* page */
-				{
-					name = "declaration.property.page.css";
-					begin = "(?=pag)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	
-							name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "page(-break-(after|before|inside))?";
-								},	
-							);
-						},
-						{	
-							name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-							    /* include =identifier */
-								{	name = "keyword.property-value.css";
-									match = "(always|avoid|left|right)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},				
-							);
-						},					
-					);				
-				},
-				/*pause */
-				{
-					name = "declaration.property.pause.css";
-					begin = "(?=pause)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "pause(-after|-before)?";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-							    },
-							    {	name = "constant.other.unit.css";
-							    	match = "(m)?s";
-							    },
-							    {	name = "constant.other.unit.css";
-							    	match = "%";
-							    },
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},														
-							);
-						},					
-					);
-				},
-				/*pitch*/
-				{
-					name = "declaration.property.pitch.css";
-					begin = "(?=pitch)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "pitch(-range)?";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-							    {	name = "constant.numeric.css";
-							    	match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-							    },
-							    {	name = "constant.other.unit.css";
-							    	match = "(k)?Hz";
-							    },
-							    {	name = "keyword.property-value.css";
-							    	match = "(x-low|low|medium|high|x-high)";
-							    },
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},														
-							);
-						},					
-					);
-				},
-				/*play-during*/
-				/* position */
-				{
-					name = "declaration.property.position.css";
-					begin = "(?=po)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "position";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(relative|fixed|absolute|static)";
-								},	
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},														
-							);
-						},					
-					);
-				},
-				/* quotes */
-				{
-					name = "declaration.property.quotes.css";
-					begin = "(?=(quotes))"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "quotes";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-                                /* include strings */
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);														
-						},					
-					);
-				},
-				/* richness */
-				{
-					name = "declaration.property.richness.css";
-					begin = "(?=richness)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "richness";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);														
-						},					
-					);
-				},
-				/* placement */
-				{
-					name = "declaration.property.placement.css";
-					begin = "(?=(bot|lef|rig|top))"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "(bottom|left|right|top)";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);														
-						},					
-					);
-				},
-				/* size (elem) */
-				{
-					name = "declaration.property.elem-size.css";
-					begin = "(?=(min|max|hei|wid))"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "(min-|max-)?(width|height)";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},															
-							);
-						},					
-					);
-				},
-				/* size */
-				{
-					name = "declaration.property.size.css";
-					begin = "(?=size)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])";	 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "size";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(portrait|landscape)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},															
-							);
-						},					
-					);
-				},
-				/*speak*/
-	    		{
-    				name = "declaration.property.speak.css";
-    				begin = "(?=speak)"; 
-    				end = "\\s*(?=[;}])";	
-    				patterns = (				
-    					{	name = "declaration.property-name.css"; 
-    						begin = "(?=[a-z])"; 
-    						end = "\\s*(?=:)";	
-    						patterns = ( 
-    							{									
-    								name = "keyword.property-name.css";
-    								match = "speak(-header|-numeral|-punctuation)?";
-    							},	
-    						);
-    					},
-    					{	name = "declaration.property-value.css";
-    						begin = ":\\s*"; 
-    						end = "\\s*(?=[;}])";
-    						patterns = (
-    							{	name = "keyword.property-value.css";
-    								match = "(normal|none|spell-out)";
-    							},
-    							{	name = "keyword.property-value.css";
-    								match = "(once|always)";
-    							},
-    							{	name = "keyword.property-value.css";
-    								match = "(digits|continuous)";
-    							},
-    							{	name = "keyword.property-value.css";
-    								match = "(code|none)";
-    							},
-    							{	name = "keyword.property-value.css";
-    								match = "(inherit|!important)";
-    							},												
-    						);
-    					},					
-    				);
-    			},
-				/* speech-rate */
-				{
-					name = "declaration.property.speech-rate.css";
-					begin = "(?=speech)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "speech-rate";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(x-slow|slow|medium|fast|x-fast|faster|slower|inherit)";
-								},
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},												
-							);
-						},					
-					);
-				},
-				/*'stress'*/
-				{
-					name = "declaration.property.speech-rate.css";
-					begin = "(?=stress)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "stress";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},												
-							);
-						},					
-					);
-				},
-				/*'table-layout */
-				{
-					name = "declaration.property.table-layout.css";
-					begin = "(?=tab)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "table-layout";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(auto|fixed)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},												
-							);
-						},					
-					);
-				},
-				/* text */
-				{
-					name = "declaration.property.text.css";
-					begin = "(?=text)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "text(-align|-decoration|-indent|-shadow|-transform)?";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(left|right|center|justify)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(underline|overline|line-through|blink)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(none|uppercase|lowercase|capitalize)";
-								},		
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},												
-							);
-						},					
-					);
-				},
-				/* v-align */
-				{
-					name = "declaration.property.vertical-align.css";
-					begin = "(?=ver)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "vertical-align";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(baseline|sub|super|top|text-top|middle|bottom|text-bottom)";
-								},	
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* unicode-bidi */
-				{
-					name = "declaration.property.unicode-bidi.css";
-					begin = "(?=uni)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "unicode-bidi";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(normal|embed|bidi-override)";
-								},	
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},				
-				/* visibility */
-				{
-					name = "declaration.property.visible.css";
-					begin = "(?=vis)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "visibility";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(visible|hidden|collapse)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/*
-				'voice-family'	*/
-				{
-					name = "declaration.property.voice-family.css";
-					begin = "(?=voice)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "voice-family";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(male|female|child)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},												
-							);
-						},					
-					);
-				},
-				/*'volume'*/
-				{
-					name = "declaration.property.volume.css";
-					begin = "(?=volume)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "volume";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(silent|x-soft|soft|medium|loud|x-loud)";
-								},
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},												
-							);
-						},					
-					);
-				},
-				/*'white-space'*/
-				{
-					name = "declaration.property.white-space.css";
-					begin = "(?=white)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "white-space";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "(normal|pre|nowrap)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* widows */
-				{
-					name = "declaration.property.widows.css";
-					begin = "(?=widows)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "widows";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "constant.numeric.css";
-									match = "[0-9]+";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/*word-spacing*/
-				{
-					name = "declaration.property.word-spacing.css";
-					begin = "(?=word)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "word-spacing";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "normal";
-								},
-								{	name = "constant.numeric.css";
-									match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
-								},
-								{	name = "keyword.unit.css";
-									match = "(px|pt|cm|mm|in|em|ex|pc|%)";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
-				/* z-index */
-				{
-					name = "declaration.property.z-index.css";
-					begin = "(?=z-index)"; 
-					end = "\\s*(?=[;}])";	
-					patterns = (				
-						{	name = "declaration.property-name.css"; 
-							begin = "(?=[a-z])"; 
-							end = "\\s*(?=:)";	
-							patterns = ( 
-								{									
-									name = "keyword.property-name.css";
-									match = "z-index";
-								},	
-							);
-						},
-						{	name = "declaration.property-value.css";
-							begin = ":\\s*"; 
-							end = "\\s*(?=[;}])";
-							patterns = (
-								{	name = "keyword.property-value.css";
-									match = "auto";
-								},
-								{	name = "constant.numeric.css";
-									match = "[0-9]+";
-								},
-								{	name = "keyword.property-value.css";
-									match = "(inherit|!important)";
-								},													
-							);
-						},					
-					);				
-				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /* size */
+			    {
+			    	name = "declaration.property.size.css";
+			    	begin = "(size)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	include = "#length"; },
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    				{	name = "keyword.property-value.css";
+			    					match = "(portrait|landscape)";
+			    				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    			);
+			    		},
+			    	);
+			    },
+			    /*speak - todo:speak header etc*/
+			    {
+			    	name = "declaration.property.speak.css";
+			    	begin = "(speak(-(header|numeral|punctuation))?)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(normal|none|spell-out)";
+			    				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "(once|always)";
+			    				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "(digits|continuous)";
+			    				},
+			    				{	name = "keyword.property-value.css";
+			    					match = "(code|none)";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* speech-rate */
+			    {
+			    	name = "declaration.property.speech-rate.css";
+			    	begin = "(speech-rate)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(x-slow|slow(er)?|medium|fast(er)?|x-fast|inherit)";
+			    				},
+			    				{	name = "constant.numeric.css";
+			    					match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*'stress'*/
+			    {
+			    	name = "declaration.property.stress.css";
+			    	begin = "(stress)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "constant.numeric.css";
+			    					match = "(-|\\+)?\\s*[0-9]*(\\.)?[0-9]+";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*'table-layout */
+			    {
+			    	name = "declaration.property.table-layout.css";
+			    	begin = "(table-layout)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(auto|fixed)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* text */
+			    {
+			    	name = "declaration.property-group.text.css";
+			    	begin = "(?=text)";
+			    	end = "(?=[;}])";
+			    	patterns = (
+			            {
+        			    	name = "declaration.property.text-align.css";
+        			    	begin = "(text-align)";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{	name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+        			    				{	name = "keyword.property-value.css";
+        			    					match = "(left|right|center|justify)";
+        			    				},
+        			    				{   include= "#string-double";},
+        			    				{   include= "#string-single";},
+        			    				{	include = "#comment-block"; },
+        								{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			    {
+        			    	name = "declaration.property.text-decoration.css";
+        			    	begin = "(text-decoration)";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{	name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+        			    				{	name = "keyword.property-value.css";
+        			    					match = "(none|underline|overline|line-through|blink)";
+        			    				},
+        			    				{	include = "#comment-block"; },
+        			    				{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			    {
+        			    	name = "declaration.property.text-indent.css";
+        			    	begin = "(text-indent)";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{	name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+        			    				{	include = "#length"; },
+        			    				{	include = "#percentage"; },
+        			    				{	include = "#comment-block"; },
+        			    				{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			    {
+        			    	name = "declaration.property.text-shadow.css";
+        			    	begin = "(text-shadow)";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{	name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+        			    			    {	name = "keyword.property-value.css";
+        			    			    	match = "none";
+        			    			    },
+        			    				{	include = "#length"; },
+        			    				{	include = "#color-hex"; },
+			    						{	include = "#color-rgb"; },
+			    						{	include = "#color-named"; },
+        			    				{	include = "#comment-block"; },
+        			    				{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			    {
+        			    	name = "declaration.property.text-transform.css";
+        			    	begin = "(text-transform)";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{	name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+        			    				{	name = "keyword.property-value.css";
+        			    					match = "(none|uppercase|lowercase|capitalize)";
+        			    				},
+        			    				{	include = "#comment-block"; },
+        			    				{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			    {
+        			    	name = "declaration.property.text.css";
+        			    	begin = "(text)[-\\s]";
+        			    	captures = {
+        			    		1 = { name = "keyword.property-name.css"; };
+        			    	};
+        			    	end = "(?=[;}])";
+        			    	patterns = (
+        			    		{	name = "declaration.property-value.css";
+        			    			begin = ":";
+        			    			end = "(?=[;}])";
+        			    			patterns = (
+        			    				{	include = "#length"; },
+        			    				{	name = "keyword.property-value.css";
+        			    					match = "(left|right|center|justify)";
+        			    				},
+        			    				{	name = "keyword.property-value.css";
+        			    					match = "(underline|overline|line-through|blink)";
+        			    				},
+        			    				{	name = "keyword.property-value.css";
+        			    					match = "(none|uppercase|lowercase|capitalize)";
+        			    				},
+        			    				{	include = "#comment-block"; },
+        			    						{	include = "#important"; },
+        			    			);
+        			    		},
+        			    	);
+        			    },
+        			);
+        		},
+			    /* v-align */
+			    {
+			    	name = "declaration.property.vertical-align.css";
+			    	begin = "(vertical-align)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(baseline|sub|super|top|text-top|middle|bottom|text-bottom)";
+			    				},
+			    				{	include = "#length"; },
+			    				{	include = "#percentage"; },
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* unicode-bidi */
+			    {
+			    	name = "declaration.property.unicode-bidi.css";
+			    	begin = "(unicode-bidi)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-name.css";
+			    			begin = "(?=[a-z])";
+			    			end = "(?=:)";
+			    			patterns = (
+			    				{
+			    					name = "keyword.property-name.css";
+			    					match = "unicode-bidi";
+			    				},
+			    			);
+			    		},
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(normal|embed|bidi-override)";
+			    				},
+			    				{	include = "#length"; },
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* visibility */
+			    {
+			    	name = "declaration.property.visibility.css";
+			    	begin = "(visibility)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(visible|hidden|collapse)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*'voice-family'	*/
+			    {
+			    	name = "declaration.property.voice-family.css";
+			    	begin = "(voice-family)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(male|female|child)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*'volume'*/
+			    {
+			    	name = "declaration.property.volume.css";
+			    	begin = "(volume)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(silent|x-soft|soft|medium|loud|x-loud)";
+			    				},
+			    				{	include = "#percentage"; },
+			    				{	name = "constant.numeric.css";
+			    					match = "([-+]?[0-9]*(\\.)?[0-9]+)\\b";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*'white-space'*/
+			    {
+			    	name = "declaration.property.white-space.css";
+			    	begin = "(white-space)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "(normal|pre|nowrap)";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* widows */
+			    {
+			    	name = "declaration.property.widows.css";
+			    	begin = "(widows)";
+			    	captures = {
+			    		1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	end = "(?=[;}])";
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "constant.numeric.css";
+			    					match = "[0-9]+";
+			    				},
+			    				{	include = "#comment-block"; },
+										{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /*word-spacing*/
+			    {
+			    	name = "declaration.property.word-spacing.css";
+			    	begin = "(word-spacing)";
+			    	end = "(?=[;}])";
+			    	captures = {
+			    	    1 = { name = "keyword.property-name.css"; };
+			    	};
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "normal";
+			    				},
+			    				{	include = "#length"; },
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
+			    /* z-index */
+			    {
+			    	name = "declaration.property.z-index.css";
+			    	begin = "(z-index)";
+			    	end = "(?=[;}])";
+			    	captures = {
+			    	    1 = { name = "keyword.property-name.css"; };
+		    	    };
+			    	patterns = (
+			    		{	name = "declaration.property-value.css";
+			    			begin = ":";
+			    			end = "(?=[;}])";
+			    			patterns = (
+			    				{	name = "keyword.property-value.css";
+			    					match = "auto";
+			    				},
+			    				{	name = "constant.numeric.css";
+			    					match = "[0-9]+";
+			    				},
+			    				{	include = "#comment-block"; },
+								{	include = "#important"; },
+			    			);
+			    		},
+			    	);
+			    },
 			);
 		}
 	);
+	repository = {
+		comment-block = {
+			name = "comment.block.css";
+			begin = "/\\*"; end = "\\*/";
+		};
+		uri = { // keyword.function.css
+			begin = "(url)\\s*\\(\\s*";
+			end = "\\)";
+			name = "declaration.function.css";
+			captures = {
+				1 = { name = "keyword.function-name.css"; };
+			};
+			contentName = "declaration.function-argument.css";
+			patterns = (
+				{include ="#string-single";},
+				{include ="#string-double";}
+			);
+		};
+		shape = { // keyword.function.css
+			begin = "(rect)\\s*\\(";
+			end = "\\)";
+			name = "declaration.function.css";
+			captures = {
+				1 = { name = "keyword.function-name.css"; };
+			};
+			contentName = "declaration.function-argument.css";
+			patterns = (
+				{include ="#length";},
+				{include ="#percentage";},
+				{
+					name = "keyword.property-value.css";
+					match = "auto";
+				},
+			);
+		};
+		counter = { // keyword.function.css todo:sort this out
+			begin = "(counter)\\s*\\(";
+			end = "\\)";
+			name = "declaration.function.css";
+			captures = {
+				1 = { name = "keyword.function-name.css"; };
+			};
+			contentName = "declaration.function-argument.css";
+			patterns = (
+			    {include="#list-style-type";}, 
+			);
+		};
+		attr = { // keyword.function.css todo:sort this out
+		    begin = "(attr)\\s*\\(";
+		    end = "\\)";
+		    name = "declaration.function.css";
+		    captures = {
+		    	1 = { name = "keyword.function-name.css"; };
+		    };
+		    contentName = "declaration.function-argument.css";
+		    patterns = (
+				{match = "[^'\") \\t]+"; name = "entity.parameter.variable.function.css"; },
+			);
+		};
+		color-rgb = {	// keyword.function.css
+			begin = "(rgb)\\s*\\(";
+			end = "\\)";
+			name = "declaration.function.css";
+			captures = {
+				1 = { name = "keyword.function-name.css"; };
+			};
+			contentName = "declaration.function-argument.css";
+			patterns = (
+				{	name = "constant.numeric.css";
+					match = "[12]?[0-9]?[0-9]";
+				},
+				{	include = "#percentage"; },
+			);
+		};
+		string-single = {
+			begin = "'";
+			end = "'";
+			name = "string.single-quoted.css";
+			swallow = "\\\\.";
+		};
+		string-double = {
+			begin = "\"";
+			end = "\"";
+			name = "string.double-quoted.css";
+			swallow = "\\\\.";
+		};
+		angle = {
+			match = "([-+]?(3([1-5][0-9]|60)|[12]?([0-9]?[0-9]))(deg|rad|grad))";
+			captures = {
+			    1 = {name = "constant.numeric.degree.css"; };
+			    5 = {name = "constant.other.unit.css"; };
+			};
+		};
+		important = {
+			name = "keyword.property-value.css";
+			match = "(inherit|!important)";
+		};
+		border-style = {
+			name = "keyword.property-value.css";
+			match = "(dashed|dotted|double|groove|hidden|inset|outset|ridge|solid|collapse|separate)";
+		};
+		border-width = {
+			name = "keyword.property-value.css";
+			match = "(thin|thick|medium)";
+		};
+		color-hex = {
+			name = "constant.other.color.rgb-value.css";
+			match = "(#)([0-9a-fA-F]{6}|[0-9a-fA-F]{3})";
+		};
+		color-named = {	name = "keyword.named-color.css";
+			match = "(transparent|aqua|black|blue|fuchsia|gr[ae]y|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow)";
+		};
+
+		font-specific = {
+			name = "keyword.font-name.css";
+			match = "((?i:arial( black)?|century|comic|courier|garamond|georgia|geneva|helvetica|impact|lucida( sans)?( grande)?( unicode)?|symbol|system|tahoma|times( new roman)?|trebuchet( ms)?|utopia|verdana|webdings|monospace))";
+		};
+		font-generic = {
+			name = "keyword.font-family.css";
+			match = "(serif|sans-serif|cursive|fantasy|monospace)";
+		};
+		/* font-weight */
+		font-weight = {
+			match = "((normal|bold(er)?|lighter)|(100|200|300|400|500|600|700|800|900))";
+			captures = {
+				2 = { name = "keyword.property-value.css";};
+				4 = { name = "constant.numeric.css";};
+			};
+		};
+		/* font-stretch */
+		font-stretch = {
+			name = "keyword.property-value.css";
+			match = "(normal|wider|narrower|ultra-condensed|extra-condensed|condensed|semi-condensed|semi-expanded|expanded|extra-expanded|ultra-expanded)";
+		};
+		/* font-style */
+		font-style = {
+			name = "keyword.property-value.css";
+			match = "(normal|italic|oblique)";
+		};
+		/* font-variant */
+		font-variant = {
+			name = "keyword.property-value.css";
+			match = "(normal|small-caps)";
+		};
+		/* font - things */
+		font-other = {
+			name = "keyword.property-value.css";
+			match = "(caption|icon|menu|message-box|small-caption|status-bar)";
+		};
+		/* font-size absolute */
+		font-absolute = {
+			name = "keyword.property-value.css";
+			match = "(xx-small|x-small|small|medium|large|x-large|xx-large)\\b";
+		};
+		/* font-size relative */
+		font-relative = {
+			name = "keyword.property-value.css";
+			match = "(larger|smaller)";
+		};
+		/* font-size-adjust */
+		font-adjust = {
+			name = "keyword.property-value.css";
+			match = "(none)";
+		};
+		list-style-type = {	
+		    name = "keyword.property-value.css";
+			match = "(none|decimal(-leading-zero)?|lower(-roman|-alpha|-greek|-alpha|-latin)?|upper(-roman|-alpha|-greek|-alpha|-latin)?|hebrew|armenian|georgian|cjk-ideographic|hiragana(-iroha)?|katakana(-iroha)?)";
+		};
+		length = {
+		 	match = "(((-|\\+)?\\s*[0-9]*(\\.)?[0-9]+)(px|pt|cm|mm|in|em|ex|pc)|(0))";
+			captures = {
+				5 = { name = "constant.other.unit.css";};
+				2 = { name = "constant.numeric.css";};
+				6 = { name = "constant.numeric.css";};				
+			};
+		};
+		percentage = {
+			/*match = "(100|[0-9]{1,2})(%)";*/
+			match = "([0-9]+)(%)";			
+			captures = {
+				2 = { name = "constant.other.unit.css";};
+				1 = { name = "constant.numeric.css";};
+			};
+		};
+	};
+	scopeName = "source.css";
 	uuid = "5A0E986A-BE73-11D9-8214-000A957B2E42";
 }

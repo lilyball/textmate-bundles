@@ -21,6 +21,8 @@ sub convert_item
 	chomp(my $uuid = `uuidgen`);
 	my $i = 1;
 
+	$allItems{$uuid} = $name;
+
 	$_ = `cat "$file"`;
 	s/[\$`]/\\$&/g;
 	s/#indent#//g;
@@ -32,9 +34,12 @@ sub convert_item
 sub convert_dir
 {
 	my ($src, $dst, $prefix) = @_;
-	foreach(glob("\"$src\"/*"))
+	foreach(($src =~ m/ /) ? glob("\"$src/*\"") :  glob("$src/*"))
 	{
-		if(-f) {
+		if(/\.(zip|jpg|gif)$/) {
+			print " skip $_\n";
+		}
+		elsif(-f) {
 			my $itemName = basename($_);
 			open(FILE, "> $dst/$itemName.plist") || die("can't create bundle item: $!");
 			print " creating item $itemName\n";
@@ -43,6 +48,9 @@ sub convert_dir
 		}
 		elsif(-d) {
 			&convert_dir($_, $dst, ($prefix ? "$prefix / " : "") . basename($_));
+		}
+		else {
+			print "unhandled item : $_\n";
 		}
 	}
 }
@@ -60,11 +68,25 @@ $scope = (shift, shift) if(@ARGV[0] eq '-s');
 while($ARGV = shift)
 {
 	my ($bundleName) = basename($ARGV) =~ /([^.]*)/;
+	$bundleName .= " Snippets";
 	my $bundlePath = "$dst/$bundleName.tmbundle";
 
 	die "$bundleName bundle already exist error" if(-d $bundlePath);
 	print "creating $bundleName.tmbundle\n";
 
 	&create_dir("$bundlePath/Snippets");
+
+	%allItems = ( );
 	&convert_dir($ARGV, "$bundlePath/Snippets");
+
+	chomp(my $uuid = `uuidgen`);
+	open(FILE, "> $bundlePath/info.plist") || die("can't create bundle meta info: $!");
+	print " creating bundle meta info\n";
+	printf FILE "{ name = \"%s\";\nuuid = \"%s\";\nordering = (\n", $bundleName, $uuid;
+	foreach (sort { uc($allItems{$a}) cmp uc($allItems{$b}) } keys %allItems)
+	{
+		printf FILE "\t\"%s\",\n", $_;
+	}
+	print FILE ");\n}";
+	close FILE;
 }

@@ -68,6 +68,26 @@
 			<string>storage.modifier.c</string>
 		</dict>
 		<dict>
+			<key>comment</key>
+			<string>common C constant naming idiom -- kConstantVariable</string>
+			<key>match</key>
+			<string>\bk[A-Z]\w*\b</string>
+			<key>name</key>
+			<string>constant.variable.mac-classic.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bg[A-Z]\w*\b</string>
+			<key>name</key>
+			<string>variable.other.readwrite.global.mac-classic.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bs[A-Z]\w*\b</string>
+			<key>name</key>
+			<string>variable.other.readwrite.static.mac-classic.c</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\b(NULL|true|false|TRUE|FALSE)\b</string>
 			<key>name</key>

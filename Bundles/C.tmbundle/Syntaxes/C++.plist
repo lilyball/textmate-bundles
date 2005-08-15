@@ -51,6 +51,14 @@
 			<string>keyword.control.c++</string>
 		</dict>
 		<dict>
+			<key>comment</key>
+			<string>common C++ instance var naming idiom -- fMemberName</string>
+			<key>match</key>
+			<string>\b(f|m)[A-Z]\w*\b</string>
+			<key>name</key>
+			<string>variable.other.readwrite.member.c++</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\b(this)\b</string>
 			<key>name</key>

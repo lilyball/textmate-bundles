@@ -332,7 +332,7 @@
 			<key>name</key>
 			<string>§ css tag-name</string>
 			<key>scope</key>
-			<string>declaration.selector entity.name.tag</string>
+			<string>meta.selector.css entity.name.tag</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -343,7 +343,7 @@
 			<key>name</key>
 			<string>§ css:pseudo-class</string>
 			<key>scope</key>
-			<string>declaration.selector.css entity.other.attribute-name.tag.pseudo-class</string>
+			<string>meta.selector.css entity.other.attribute-name.tag.pseudo-class</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -354,18 +354,18 @@
 			<key>name</key>
 			<string>§ css#id</string>
 			<key>scope</key>
-			<string>declaration.selector.css entity.other.attribute-name.id</string>
+			<string>meta.selector.css entity.other.attribute-name.id</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#758090</string>
+				<string>#8B98AB</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>§ css.class</string>
 			<key>scope</key>
-			<string>declaration.selector.css entity.other.attribute-name.class</string>
+			<string>meta.selector.css entity.other.attribute-name.class</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -374,9 +374,20 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>§ css: property-value;</string>
+			<string>§ css property-name:</string>
 			<key>scope</key>
-			<string>source.css keyword.property-value</string>
+			<string>support.type.property-name.css</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#C5AF75</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>§ css property-value;</string>
+			<key>scope</key>
+			<string>meta.property-group support.constant.property-value.css, meta.property-value support.constant.property-value.css</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -387,7 +398,7 @@
 			<key>name</key>
 			<string>§ css @at-rule</string>
 			<key>scope</key>
-			<string>declaration.at-rule keyword.at-rule</string>
+			<string>meta.preprocessor.at-rule keyword.control.at-rule</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -398,11 +409,22 @@
 			<key>name</key>
 			<string>§ css additional-constants</string>
 			<key>scope</key>
-			<string>source.css keyword.named-color</string>
+			<string>meta.property-value keyword.other.named-color.css, meta.property-value constant</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#CF6A4C</string>
+				<string>#CA713E</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>§ css constructor.argument</string>
+			<key>scope</key>
+			<string>meta.constructor.argument.css</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#8F9D6A</string>
 			</dict>
 		</dict>
 		<dict>

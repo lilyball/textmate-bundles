@@ -7,7 +7,7 @@
 		{
 			begin = "(^)?(?=\\s*[.*#a-zA-Z])";
 			end = "(/\\*|(?=\\{))";
-			name = "declaration.selector.css";
+			name = "meta.css-selector";
 			patterns = (
 				{
 					match = "\\b(?i:a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|embed|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\\b";
@@ -36,7 +36,7 @@
 			begin = "(^\\s*)?(@import)";
 			captures = {2 = {name = "keyword.at-rule.import.css"; }; };
 			end = "((?=;|\\}))";
-			name = "declaration.at-rule.import.css";
+			name = "meta.preprocessor.at-rule.import.css";
 			patterns = (
 				{
 					begin = "\"";
@@ -51,7 +51,7 @@
 			begin = "(^\\s*)?(@media)";
 			captures = {1 = {name = "keyword.at-rule.media.css"; }; };
 			end = "((?=;|\\}))";
-			name = "declaration.at-rule.media.css";
+			name = "meta.preprocessor.at-rule.media.css";
 			patterns = (
 				{
 					match = "(all|aural|braille|embossed|handheld|pr(int|ojection)|screen|tty|tv),?";
@@ -62,19 +62,19 @@
 		{
 			begin = "\\{";
 			end = "\\}";
-			name = "declaration.property-list.css";
+			name = "meta.scope.property-list.css";
 			patterns = (
 				{ include = "#comment-block"; },
 			    /* azimuth */
 			    {
-			    	name = "declaration.property.azimuth.css";
+			    	name = "meta.property.azimuth.css";
 			    	begin = "(azimuth)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -90,12 +90,12 @@
 			    },
 			    /* background */
 			    {
-			    	name = "declaration.property-group.background.css";
+			    	name = "meta.property-group.background.css";
 			    	begin = "(?=background)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property.background.css";
+			    			name = "meta.property.background.css";
 			    			begin = "(background)(?=[:\\s])";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -103,7 +103,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -132,7 +132,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.background-attachment.css";
+			    			name = "meta.property.background-attachment.css";
 			    			begin = "(background-attachment)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -140,7 +140,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -154,7 +154,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.background-color.css";
+			    			name = "meta.property.background-color.css";
 			    			begin = "(background-color)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -162,7 +162,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -177,7 +177,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.background-image.css";
+			    			name = "meta.property.background-image.css";
 			    			begin = "(background-image)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -185,7 +185,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -200,7 +200,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.background-position.css";
+			    			name = "meta.property.background-position.css";
 			    			begin = "(background-position)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -208,7 +208,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -224,7 +224,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.background-repeat.css";
+			    			name = "meta.property.background-repeat.css";
 			    			begin = "(background-repeat)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -232,7 +232,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -249,12 +249,12 @@
 			    },
 			    /* border */
 			    {
-			    	name = "declaration.property-group.border.css";
+			    	name = "meta.property-group.border.css";
 			    	begin = "(?=border)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property.border.css";
+			    			name = "meta.property.border.css";
 			    			begin = "(border(-bottom|-left|-right|-top)?)(?=[:\\s])";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -262,7 +262,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -282,7 +282,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.border-collapse.css";
+			    			name = "meta.property.border-collapse.css";
 			    			begin = "(border-collapse)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -290,7 +290,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -304,7 +304,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.border-spacing.css";
+			    			name = "meta.property.border-spacing.css";
 			    			begin = "(border-spacing)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -312,7 +312,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -324,7 +324,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.border-color.css";
+			    			name = "meta.property.border-color.css";
 			    			begin = "(border((-bottom|-left|-right|-top)?(-color)))";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -332,7 +332,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -347,7 +347,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.border-style.css";
+			    			name = "meta.property.border-style.css";
 			    			begin = "(border((-bottom|-left|-right|-top)?(-style)))";
 			    			end = "(?=[;}])";
 			    			captures = {
@@ -355,7 +355,7 @@
 			    			};
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -367,7 +367,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.border-width.css";
+			    			name = "meta.property.border-width.css";
 			    			begin = "(border((-bottom|-left|-right|-top)?(-width)))";
 			    			end = "(?=[;}])";
 			    			captures = {
@@ -375,7 +375,7 @@
 			    			};
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -391,14 +391,14 @@
 			    },
 			    /* caption-side */
 			    {
-			    	name = "declaration.property.caption-side.css";
+			    	name = "meta.property.caption-side.css";
 			    	begin = "(caption-side)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -411,7 +411,7 @@
 			    },
 			    /* clear */
 			    {
-			    	name = "declaration.property.clear.css";
+			    	name = "meta.property.clear.css";
 			    	begin = "(clear)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -419,7 +419,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -434,7 +434,7 @@
 			    },
 			    /* clip */
 			    {
-			    	name = "declaration.property.clip.css";
+			    	name = "meta.property.clip.css";
 			    	begin = "(clip)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -442,7 +442,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -458,14 +458,14 @@
 			    },
 			    /* color */
 			    {
-			    	name = "declaration.property.color.css";
+			    	name = "meta.property.color.css";
 			    	begin = "(color)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -480,14 +480,14 @@
 			    },
 			    /* content */
 			    {
-			    	name = "declaration.property.content.css";
+			    	name = "meta.property.content.css";
 			    	begin = "(content)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -507,12 +507,12 @@
 			    },
 			    /* 'counter todo: counter	*/
 			    {
-			    	name = "declaration.property-group.counter.css";
+			    	name = "meta.property-group.counter.css";
 			    	begin = "(?=counter)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property.counter-increment.css";
+			    			name = "meta.property.counter-increment.css";
 			    			begin = "(counter-increment)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -520,7 +520,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -535,7 +535,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.counter-reset.css";
+			    			name = "meta.property.counter-reset.css";
 			    			begin = "(counter-reset)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -543,7 +543,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -561,12 +561,12 @@
 			    },
 			    /*cue*/
 			    {
-			    	name = "declaration.property-group.cue.css";
+			    	name = "meta.property-group.cue.css";
 			    	begin = "(?=cue)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property.cue.css";
+			    			name = "meta.property.cue.css";
 			    			begin = "(cue[:|\\s])";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -574,7 +574,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -589,7 +589,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.cue-after.css";
+			    			name = "meta.property.cue-after.css";
 			    			begin = "(cue-after)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -597,7 +597,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -612,7 +612,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.cue-before.css";
+			    			name = "meta.property.cue-before.css";
 			    			begin = "(cue-before)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -620,7 +620,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -638,14 +638,14 @@
 			    },
 			    /*cursor */
 			    {
-			    	name = "declaration.property.cursor.css";
+			    	name = "meta.property.cursor.css";
 			    	begin = "(cursor)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -661,14 +661,14 @@
 			    },
 			    /* direction */
 			    {
-			    	name = "declaration.property.direction.css";
+			    	name = "meta.property.direction.css";
 			    	begin = "(direction)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -683,7 +683,7 @@
 			    },
 			    /* display */
 			    {
-			    	name = "declaration.property.display.css";
+			    	name = "meta.property.display.css";
 			    	begin = "(display)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -691,7 +691,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -706,14 +706,14 @@
 			    },
 			    /* elevation*/
 			    {
-			    	name = "declaration.property.elevation.css";
+			    	name = "meta.property.elevation.css";
 			    	begin = "(elevation)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -729,14 +729,14 @@
 			    },
 			    /* empty-cells */
 			    {
-			    	name = "declaration.property.empty-cells.css";
+			    	name = "meta.property.empty-cells.css";
 			    	begin = "(empty-cells)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -751,14 +751,14 @@
 			    },
 			    /* float */
 			    {
-			    	name = "declaration.property.float.css";
+			    	name = "meta.property.float.css";
 			    	begin = "(float)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -773,12 +773,12 @@
 			    },
 			    /* font */
 			    {
-			    	name = "declaration.property-group.font.css";
+			    	name = "meta.property-group.font.css";
 			    	begin = "(?=font)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property.font.css";
+			    			name = "meta.property.font.css";
 			    			begin = "(font)(?=[:\\s])";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -786,7 +786,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -811,7 +811,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.font-family.css";
+			    			name = "meta.property.font-family.css";
 			    			begin = "(font-family)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -819,7 +819,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -834,7 +834,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.font-size.css";
+			    			name = "meta.property.font-size.css";
 			    			begin = "(font-size(-adjust)?)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -842,7 +842,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -858,7 +858,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.font-stretch.css";
+			    			name = "meta.property.font-stretch.css";
 			    			begin = "(font-stretch)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -866,7 +866,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -878,7 +878,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.font-style.css";
+			    			name = "meta.property.font-style.css";
 			    			begin = "(font-style)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -886,7 +886,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -898,7 +898,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.font-variant.css";
+			    			name = "meta.property.font-variant.css";
 			    			begin = "(font-variant)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -906,7 +906,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -918,7 +918,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.font-weight.css";
+			    			name = "meta.property.font-weight.css";
 			    			begin = "(font-weight)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
@@ -926,7 +926,7 @@
 			    			end = "(?=[;}])";
 			    			patterns = (
 			    				{
-			    					name = "declaration.property-value.css";
+			    					name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -941,7 +941,7 @@
 			    },
 			    /* letter-spacing */
 			    {
-			    	name = "declaration.property.letter-spacing.css";
+			    	name = "meta.property.letter-spacing.css";
 			    	begin = "(letter-spacing)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -949,7 +949,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -965,7 +965,7 @@
 			    },
 			    /*line-height*/
 			    {
-			    	name = "declaration.property.line-height.css";
+			    	name = "meta.property.line-height.css";
 			    	begin = "(line-height)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -973,7 +973,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -992,12 +992,12 @@
 			    /*line-break*/
 			    /* not sure where I saw this, but it doesn't seem to be in the spec
 			    {
-			    	name = "declaration.property.line-height.css";
+			    	name = "meta.property.line-height.css";
 			    	begin = "(?=line-b)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-name.css";
+			    			name = "meta.property-name.css";
 			    			begin = "(?=[a-z])";
 			    			end = "(?=:)";
 			    			patterns = (
@@ -1008,7 +1008,7 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1025,19 +1025,19 @@
 			    */
 			    /* list  */
 			    {
-			    	name = "declaration.property-group.list-style.css";
+			    	name = "meta.property-group.list-style.css";
 			    	begin = "(?=list)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property.list-style.css";
+			    			name = "meta.property.list-style.css";
 			    			begin = "(list-style[:|\\s])";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
 			    			};
 			    			end = "(?=[;}])";
 			    			patterns = (
-			    				{	name = "declaration.property-value.css";
+			    				{	name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -1056,14 +1056,14 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.list-style-image.css";
+			    			name = "meta.property.list-style-image.css";
 			    			begin = "(list-style-image)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
 			    			};
 			    			end = "(?=[;}])";
 			    			patterns = (
-			    				{	name = "declaration.property-value.css";
+			    				{	name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -1078,14 +1078,14 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.list-style-position.css";
+			    			name = "meta.property.list-style-position.css";
 			    			begin = "(list-style-position)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
 			    			};
 			    			end = "(?=[;}])";
 			    			patterns = (
-			    				{	name = "declaration.property-value.css";
+			    				{	name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -1099,14 +1099,14 @@
 			    			);
 			    		},
 			    		{
-			    			name = "declaration.property.list-style-type.css";
+			    			name = "meta.property.list-style-type.css";
 			    			begin = "(list-style-type)";
 			    			captures = {
 			    				1 = { name = "keyword.property-name.css"; };
 			    			};
 			    			end = "(?=[;}])";
 			    			patterns = (
-			    				{	name = "declaration.property-value.css";
+			    				{	name = "meta.property-value.css";
 			    					begin = ":";
 			    					end = "(?=[;}])";
 			    					patterns = (
@@ -1124,14 +1124,14 @@
 			    },
 			    /*margin */
 			    {
-			    	name = "declaration.property.margin.css";
+			    	name = "meta.property.margin.css";
 			    	begin = "(margin(-bottom|-left|-right|-top)?)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1147,14 +1147,14 @@
 			    },
 			    /* marker-offset */
 			    {
-			    	name = "declaration.property.marker-offset.css";
+			    	name = "meta.property.marker-offset.css";
 			    	begin = "(marker-offset)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1170,14 +1170,14 @@
 			    },
 			    /* marks */
 			    {
-			    	name = "declaration.property.marks.css";
+			    	name = "meta.property.marks.css";
 			    	begin = "(marks)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1192,7 +1192,7 @@
 			    },
 			    /*opacity */
 			    {
-			    	name = "declaration.property.opacity.css";
+			    	name = "meta.property.opacity.css";
 			    	begin = "(opacity)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -1200,7 +1200,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1215,14 +1215,14 @@
 			    },
 			    /* orphans */
 			    {
-			    	name = "declaration.property.orphans.css";
+			    	name = "meta.property.orphans.css";
 			    	begin = "(orphans)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1237,12 +1237,12 @@
 			    },
 			    /* outline */
 			    {
-			    	name = "declaration.property-group.outline.css";
+			    	name = "meta.property-group.outline.css";
 			    	begin = "(?=outline)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			            {
-        			    	name = "declaration.property.outline.css";
+        			    	name = "meta.property.outline.css";
         			    	begin = "(outline)[:\\s]";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
@@ -1250,7 +1250,7 @@
         			    	end = "(?=[;}])";
         			    	patterns = (
         			    		{
-        			    			name = "declaration.property-value.css";
+        			    			name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1271,7 +1271,7 @@
         			    	);
         			    },
         			    {
-        			    	name = "declaration.property.outline-style.css";
+        			    	name = "meta.property.outline-style.css";
         			    	begin = "(outline-style)";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
@@ -1279,7 +1279,7 @@
         			    	end = "(?=[;}])";
         			    	patterns = (
         			    		{
-        			    			name = "declaration.property-value.css";
+        			    			name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1291,7 +1291,7 @@
         			    	);
         			    },
         			    {
-        			    	name = "declaration.property.outline-color.css";
+        			    	name = "meta.property.outline-color.css";
         			    	begin = "(outline-color)";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
@@ -1299,7 +1299,7 @@
         			    	end = "(?=[;}])";
         			    	patterns = (
         			    		{
-        			    			name = "declaration.property-value.css";
+        			    			name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1317,7 +1317,7 @@
         			    	);
         			    },
         			    {
-        			    	name = "declaration.property.outline-width.css";
+        			    	name = "meta.property.outline-width.css";
         			    	begin = "(outline-width)";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
@@ -1325,7 +1325,7 @@
         			    	end = "(?=[;}])";
         			    	patterns = (
         			    		{
-        			    			name = "declaration.property-value.css";
+        			    			name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1341,7 +1341,7 @@
         		},
 			    /* overflow */
 			    {
-			    	name = "declaration.property.overflow.css";
+			    	name = "meta.property.overflow.css";
 			    	begin = "(overflow)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -1349,7 +1349,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1367,14 +1367,14 @@
 			    },
 			    /* padding */
 			    {
-			    	name = "declaration.property.padding.css";
+			    	name = "meta.property.padding.css";
 			    	begin = "(padding(-bottom|-left|-right|-top)?)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1390,7 +1390,7 @@
 			    },
 			    /* page */
 			    {
-			    	name = "declaration.property.page.css";
+			    	name = "meta.property.page.css";
 			    	begin = "(page)(?=[:\\s])";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -1398,7 +1398,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1417,7 +1417,7 @@
 			    },
 			    /* page todo: sort this lot out */
 			    {
-			    	name = "declaration.property.page.css";
+			    	name = "meta.property.page.css";
 			    	begin = "(page-break-(before|after|inside)?)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
@@ -1425,7 +1425,7 @@
 			    	end = "(?=[;}])";
 			    	patterns = (
 			    		{
-			    			name = "declaration.property-value.css";
+			    			name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1444,14 +1444,14 @@
 			    },
 			    /*pause todo*/
 			    {
-			    	name = "declaration.property.pause.css";
+			    	name = "meta.property.pause.css";
 			    	begin = "(pause(-after|-before)?)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1472,14 +1472,14 @@
 			    },
 			    /*pitch todo: pitch-range*/
 			    {
-			    	name = "declaration.property.pitch.css";
+			    	name = "meta.property.pitch.css";
 			    	begin = "(pitch(-range)?)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1500,14 +1500,14 @@
 			    },
 			    /*play-during*/
 			    {
-			    	name = "declaration.property.play-during.css";
+			    	name = "meta.property.play-during.css";
 			    	begin = "(play-during)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1523,14 +1523,14 @@
 			    },
 			    /* position */
 			    {
-			    	name = "declaration.property.position.css";
+			    	name = "meta.property.position.css";
 			    	begin = "(position)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1545,14 +1545,14 @@
 			    },
 			    /* quotes */
 			    {
-			    	name = "declaration.property.quotes.css";
+			    	name = "meta.property.quotes.css";
 			    	begin = "(quotes)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1569,14 +1569,14 @@
 			    },
 			    /* richness */
 			    {
-			    	name = "declaration.property.richness.css";
+			    	name = "meta.property.richness.css";
 			    	begin = "(richness)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1591,14 +1591,14 @@
 			    },
 			    /* placement */
 			    {
-			    	name = "declaration.property.placement.css";
+			    	name = "meta.property.placement.css";
 			    	begin = "(bottom|left|right|top)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1615,14 +1615,14 @@
 			    },
 			    /* size (elem) */
 			    {
-			    	name = "declaration.property.elem-size.css";
+			    	name = "meta.property.elem-size.css";
 			    	begin = "(((min|max)-)?(height|width))";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1643,14 +1643,14 @@
 			    },
 			    /* size */
 			    {
-			    	name = "declaration.property.size.css";
+			    	name = "meta.property.size.css";
 			    	begin = "(size)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1669,14 +1669,14 @@
 			    },
 			    /*speak - todo:speak header etc*/
 			    {
-			    	name = "declaration.property.speak.css";
+			    	name = "meta.property.speak.css";
 			    	begin = "(speak(-(header|numeral|punctuation))?)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1700,14 +1700,14 @@
 			    },
 			    /* speech-rate */
 			    {
-			    	name = "declaration.property.speech-rate.css";
+			    	name = "meta.property.speech-rate.css";
 			    	begin = "(speech-rate)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1725,14 +1725,14 @@
 			    },
 			    /*'stress'*/
 			    {
-			    	name = "declaration.property.stress.css";
+			    	name = "meta.property.stress.css";
 			    	begin = "(stress)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1747,14 +1747,14 @@
 			    },
 			    /*'table-layout */
 			    {
-			    	name = "declaration.property.table-layout.css";
+			    	name = "meta.property.table-layout.css";
 			    	begin = "(table-layout)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1769,19 +1769,19 @@
 			    },
 			    /* text */
 			    {
-			    	name = "declaration.property-group.text.css";
+			    	name = "meta.property-group.text.css";
 			    	begin = "(?=text)";
 			    	end = "(?=[;}])";
 			    	patterns = (
 			            {
-        			    	name = "declaration.property.text-align.css";
+        			    	name = "meta.property.text-align.css";
         			    	begin = "(text-align)";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
         			    	};
         			    	end = "(?=[;}])";
         			    	patterns = (
-        			    		{	name = "declaration.property-value.css";
+        			    		{	name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1797,14 +1797,14 @@
         			    	);
         			    },
         			    {
-        			    	name = "declaration.property.text-decoration.css";
+        			    	name = "meta.property.text-decoration.css";
         			    	begin = "(text-decoration)";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
         			    	};
         			    	end = "(?=[;}])";
         			    	patterns = (
-        			    		{	name = "declaration.property-value.css";
+        			    		{	name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1818,14 +1818,14 @@
         			    	);
         			    },
         			    {
-        			    	name = "declaration.property.text-indent.css";
+        			    	name = "meta.property.text-indent.css";
         			    	begin = "(text-indent)";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
         			    	};
         			    	end = "(?=[;}])";
         			    	patterns = (
-        			    		{	name = "declaration.property-value.css";
+        			    		{	name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1838,14 +1838,14 @@
         			    	);
         			    },
         			    {
-        			    	name = "declaration.property.text-shadow.css";
+        			    	name = "meta.property.text-shadow.css";
         			    	begin = "(text-shadow)";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
         			    	};
         			    	end = "(?=[;}])";
         			    	patterns = (
-        			    		{	name = "declaration.property-value.css";
+        			    		{	name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1863,14 +1863,14 @@
         			    	);
         			    },
         			    {
-        			    	name = "declaration.property.text-transform.css";
+        			    	name = "meta.property.text-transform.css";
         			    	begin = "(text-transform)";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
         			    	};
         			    	end = "(?=[;}])";
         			    	patterns = (
-        			    		{	name = "declaration.property-value.css";
+        			    		{	name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1884,14 +1884,14 @@
         			    	);
         			    },
         			    {
-        			    	name = "declaration.property.text.css";
+        			    	name = "meta.property.text.css";
         			    	begin = "(text)[-\\s]";
         			    	captures = {
         			    		1 = { name = "keyword.property-name.css"; };
         			    	};
         			    	end = "(?=[;}])";
         			    	patterns = (
-        			    		{	name = "declaration.property-value.css";
+        			    		{	name = "meta.property-value.css";
         			    			begin = ":";
         			    			end = "(?=[;}])";
         			    			patterns = (
@@ -1915,14 +1915,14 @@
         		},
 			    /* v-align */
 			    {
-			    	name = "declaration.property.vertical-align.css";
+			    	name = "meta.property.vertical-align.css";
 			    	begin = "(vertical-align)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1939,14 +1939,14 @@
 			    },
 			    /* unicode-bidi */
 			    {
-			    	name = "declaration.property.unicode-bidi.css";
+			    	name = "meta.property.unicode-bidi.css";
 			    	begin = "(unicode-bidi)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-name.css";
+			    		{	name = "meta.property-name.css";
 			    			begin = "(?=[a-z])";
 			    			end = "(?=:)";
 			    			patterns = (
@@ -1956,7 +1956,7 @@
 			    				},
 			    			);
 			    		},
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1972,14 +1972,14 @@
 			    },
 			    /* visibility */
 			    {
-			    	name = "declaration.property.visibility.css";
+			    	name = "meta.property.visibility.css";
 			    	begin = "(visibility)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -1994,14 +1994,14 @@
 			    },
 			    /*'voice-family'	*/
 			    {
-			    	name = "declaration.property.voice-family.css";
+			    	name = "meta.property.voice-family.css";
 			    	begin = "(voice-family)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -2016,14 +2016,14 @@
 			    },
 			    /*'volume'*/
 			    {
-			    	name = "declaration.property.volume.css";
+			    	name = "meta.property.volume.css";
 			    	begin = "(volume)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -2042,14 +2042,14 @@
 			    },
 			    /*'white-space'*/
 			    {
-			    	name = "declaration.property.white-space.css";
+			    	name = "meta.property.white-space.css";
 			    	begin = "(white-space)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -2064,14 +2064,14 @@
 			    },
 			    /* widows */
 			    {
-			    	name = "declaration.property.widows.css";
+			    	name = "meta.property.widows.css";
 			    	begin = "(widows)";
 			    	captures = {
 			    		1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	end = "(?=[;}])";
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -2086,14 +2086,14 @@
 			    },
 			    /*word-spacing*/
 			    {
-			    	name = "declaration.property.word-spacing.css";
+			    	name = "meta.property.word-spacing.css";
 			    	begin = "(word-spacing)";
 			    	end = "(?=[;}])";
 			    	captures = {
 			    	    1 = { name = "keyword.property-name.css"; };
 			    	};
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -2109,14 +2109,14 @@
 			    },
 			    /* z-index */
 			    {
-			    	name = "declaration.property.z-index.css";
+			    	name = "meta.property.z-index.css";
 			    	begin = "(z-index)";
 			    	end = "(?=[;}])";
 			    	captures = {
 			    	    1 = { name = "keyword.property-name.css"; };
 		    	    };
 			    	patterns = (
-			    		{	name = "declaration.property-value.css";
+			    		{	name = "meta.property-value.css";
 			    			begin = ":";
 			    			end = "(?=[;}])";
 			    			patterns = (
@@ -2143,11 +2143,11 @@
 		uri = { // keyword.function.css
 			begin = "(url)\\s*\\(\\s*";
 			end = "\\)";
-			name = "declaration.function.css";
+			name = "meta.constructor.css";
 			captures = {
 				1 = { name = "keyword.function-name.css"; };
 			};
-			contentName = "declaration.function-argument.css";
+			contentName = "meta.constructor.argument.css";
 			patterns = (
 				{include ="#string-single";},
 				{include ="#string-double";}
@@ -2156,11 +2156,11 @@
 		shape = { // keyword.function.css
 			begin = "(rect)\\s*\\(";
 			end = "\\)";
-			name = "declaration.function.css";
+			name = "meta.constructor.css";
 			captures = {
 				1 = { name = "keyword.function-name.css"; };
 			};
-			contentName = "declaration.function-argument.css";
+			contentName = "meta.constructor.argument.css";
 			patterns = (
 				{include ="#length";},
 				{include ="#percentage";},
@@ -2173,11 +2173,11 @@
 		counter = { // keyword.function.css todo:sort this out
 			begin = "(counter)\\s*\\(";
 			end = "\\)";
-			name = "declaration.function.css";
+			name = "meta.constructor.css";
 			captures = {
 				1 = { name = "keyword.function-name.css"; };
 			};
-			contentName = "declaration.function-argument.css";
+			contentName = "meta.constructor.argument.css";
 			patterns = (
 			    {include="#list-style-type";}, 
 			);
@@ -2185,11 +2185,11 @@
 		attr = { // keyword.function.css todo:sort this out
 		    begin = "(attr)\\s*\\(";
 		    end = "\\)";
-		    name = "declaration.function.css";
+		    name = "meta.constructor.css";
 		    captures = {
 		    	1 = { name = "keyword.function-name.css"; };
 		    };
-		    contentName = "declaration.function-argument.css";
+		    contentName = "meta.constructor.argument.css";
 		    patterns = (
 				{match = "[^'\") \\t]+"; name = "entity.parameter.variable.function.css"; },
 			);
@@ -2197,11 +2197,11 @@
 		color-rgb = {	// keyword.function.css
 			begin = "(rgb)\\s*\\(";
 			end = "\\)";
-			name = "declaration.function.css";
+			name = "meta.constructor.css";
 			captures = {
 				1 = { name = "keyword.function-name.css"; };
 			};
-			contentName = "declaration.function-argument.css";
+			contentName = "meta.constructor.argument.css";
 			patterns = (
 				{	name = "constant.numeric.css";
 					match = "[12]?[0-9]?[0-9]";

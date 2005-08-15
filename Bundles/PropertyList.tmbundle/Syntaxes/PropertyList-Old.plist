@@ -1,29 +1,72 @@
-{
-    name = "Property List (old-style)";
-    scopeName = "source.plist";
-    fileTypes = (plist, dict);
-    keyEquivalent = "^~P"; 
-    foldingStartMarker = "(\\{|\\()"; 
-    foldingStopMarker = "(\\}|\\))"; 
-    patterns = (
-        {   name = "comment.block.old-plist"; 
-            begin = "/\\*"; end = "\\*/"; 
-        }, 
-        {   name = "comment.line.double-slash.old-plist"; 
-            match = "//.*$"; 
-        }, 
-        {   name = "constant.numeric.old-plist"; 
-            match = "\\b[0-9]+\\b";
-        }, 
-        {   name = "string.quoted.single.old-plist"; 
-            begin = "'"; end = "'"; swallow = "\\\\."; 
-        }, 
-        {   name = "string.quoted.double.old-plist"; 
-            begin = "\""; end = "\""; swallow = "\\\\."; 
-        },
-        {   name = "keyword.other.dictionary-key.old-plist"; 
-            match = "[-a-zA-Z_.]+(?=\\s*=)";
-        }
-    ); 
-	uuid = "E62B2729-6B1C-11D9-AE35-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>plist</string>
+		<string>dict</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(\{|\()</string>
+	<key>foldingStopMarker</key>
+	<string>(\}|\))</string>
+	<key>keyEquivalent</key>
+	<string>^~P</string>
+	<key>name</key>
+	<string>Property List (old style)</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.old-plist</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>//.*$</string>
+			<key>name</key>
+			<string>comment.line.double-slash.old-plist</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b[0-9]+\b</string>
+			<key>name</key>
+			<string>constant.numeric.old-plist</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.old-plist</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.old-plist</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>[-a-zA-Z_.]+(?=\s*=)</string>
+			<key>name</key>
+			<string>keyword.other.dictionary-key.old-plist</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.plist</string>
+	<key>uuid</key>
+	<string>E62B2729-6B1C-11D9-AE35-000D93589AF6</string>
+</dict>
+</plist>

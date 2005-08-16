@@ -5,9 +5,9 @@
 	<key>fileTypes</key>
 	<array/>
 	<key>foldingStartMarker</key>
-	<string>/\*\*|\{\s*$</string>
+	<string>^\s*(&lt;[^!?%/](?!.+?(/&gt;|&lt;/.+?&gt;))|&lt;[!%]--(?!.+?--%?&gt;)|&lt;%[!]?(?!.+?%&gt;))</string>
 	<key>foldingStopMarker</key>
-	<string>\*\*/|^\s*\}</string>
+	<string>^\s*(&lt;/[^&gt;]+&gt;|[/%]&gt;|--&gt;)\s*$</string>
 	<key>keyEquivalent</key>
 	<string>^~X</string>
 	<key>name</key>
@@ -64,7 +64,7 @@
 			<key>end</key>
 			<string>/&gt;|&lt;/((\2)(\3)(\4))&gt;|(&lt;/[-_a-zA-Z0-9:]+&gt;)</string>
 			<key>name</key>
-			<string>meta.tag.start.xml</string>
+			<string>meta.tag.xml</string>
 			<key>patterns</key>
 			<array>
 				<dict>

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
 	<string>if [[ -z $TM_SELECTED_FILES ]]; then
 	DARCSPaths=`echo \'$TM_FILEPATH\'`;
@@ -12,7 +12,18 @@ else
 fi
 
 cd "$TM_DIRECTORY";
-"${TM_DARCS:=/usr/local/bin/darcs}" add -r $DARCSPaths</string>
+
+"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
+require 'pathname'
+
+basedir = Pathname.new(ENV['TM_DIRECTORY']).realpath()
+addlist = Array.new()
+ENV['TM_SELECTED_FILES'].split(/' '/).each() { |addfile|
+  addfile = addfile[/^'?(.*?)'?$/, 1]
+  addlist &lt;&lt; "'#{Pathname.new(addfile).realpath.relative_path_from(basedir).to_s.gsub(/(')/, "\\\1")}'"
+}
+output = `darcs add -r #{addlist.join(' ')}`
+puts(output)</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -20,7 +31,7 @@ cd "$TM_DIRECTORY";
 	<key>name</key>
 	<string>Add to repository</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>discard</string>
 	<key>uuid</key>
 	<string>81229AD0-DE5C-11D9-823F-000A95A51A76</string>
 </dict>

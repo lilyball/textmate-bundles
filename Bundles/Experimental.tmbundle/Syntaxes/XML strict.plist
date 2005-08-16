@@ -32,7 +32,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;((?:([-_a-zA-Z0-9]+)(:))?([-_a-zA-Z0-9:]+))</string>
+			<string>&lt;((?:([-_[:alnum:]]+)(:))?([-_.:[:alnum:]]+))</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -62,7 +62,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>/&gt;|&lt;/((\2)(\3)(\4))&gt;|(&lt;/[-_a-zA-Z0-9:]+&gt;)</string>
+			<string>/&gt;|&lt;/((\2)(\3)(\4))&gt;|(&lt;/[-_.:[:alnum:]]+&gt;)</string>
 			<key>name</key>
 			<string>meta.tag.xml</string>
 			<key>patterns</key>

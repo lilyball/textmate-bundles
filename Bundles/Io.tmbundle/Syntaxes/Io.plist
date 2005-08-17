@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>backgroundColor</key>
-	<string>#FFFFFF</string>
 	<key>fileTypes</key>
 	<array>
 		<string>io</string>
@@ -12,10 +10,6 @@
 	<string>(/\*\*|\([^\)]*$|if\()</string>
 	<key>foldingStopMarker</key>
 	<string>(\*\*/|^\s*\))</string>
-	<key>foregroundColor</key>
-	<string>#000000</string>
-	<key>increaseIndentPattern</key>
-	<string>^.*(\([^)"']*|\([^)"']*)$</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
@@ -42,6 +36,12 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>\bGL[\w_]+\b</string>
+			<key>name</key>
+			<string>constant.other.io</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>\b([A-Z]\w+)\b</string>
 			<key>name</key>
 			<string>support.class.io</string>
@@ -54,7 +54,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(GL\w+|gl(u|ut)?[A-Z]\w+)</string>
+			<string>\b(gl(u|ut)?[A-Z]\w+)\b</string>
 			<key>name</key>
 			<string>support.function.OpenGL.io</string>
 		</dict>
@@ -94,7 +94,7 @@
 			<key>end</key>
 			<string>"""</string>
 			<key>name</key>
-			<string>string.quoted.double.io</string>
+			<string>string.quoted.triple.io</string>
 			<key>swallow</key>
 			<string>\\.|"</string>
 		</dict>

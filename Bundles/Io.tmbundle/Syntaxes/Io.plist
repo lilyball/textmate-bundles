@@ -11,11 +11,25 @@
 	<key>foldingStopMarker</key>
 	<string>(\*\*/|^\s*\))</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^~I</string>
 	<key>name</key>
 	<string>Io</string>
 	<key>patterns</key>
 	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.empty-parenthesis.io</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>we match this to overload return inside () --Allan</string>
+			<key>match</key>
+			<string>(\()\)</string>
+		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(if|ifTrue|ifFalse|ifTrueIfFalse|for|loop|reverseForeach|foreach|map|continue|break|while|do|return)\b</string>
@@ -23,6 +37,8 @@
 			<string>keyword.control.io</string>
 		</dict>
 		<dict>
+			<key>comment</key>
+			<string>I wonder if some of this isn't variable.other.language? --Allan</string>
 			<key>match</key>
 			<string>\b(self|sender|target|proto|parent|protos)\b</string>
 			<key>name</key>
@@ -76,7 +92,7 @@
 			<key>match</key>
 			<string>#.*$</string>
 			<key>name</key>
-			<string>comment.line.pound.io</string>
+			<string>comment.line.number-sign.io</string>
 		</dict>
 		<dict>
 			<key>begin</key>

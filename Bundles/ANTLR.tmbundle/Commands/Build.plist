@@ -6,10 +6,10 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>cd "`dirname "$TM_FILEPATH"`"
-antlr "$TM_FILENAME"
+#antlr "$TM_FILENAME"
 
-## for this you need to set CLASSPATH to your antlr.jar
-#java antlr/Tool "$TM_FILENAME"
+# for this you need to set CLASSPATH to your antlr.jar
+java antlr/Tool "$TM_FILENAME"
 </string>
 	<key>input</key>
 	<string>none</string>
@@ -20,7 +20,7 @@ antlr "$TM_FILENAME"
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>
-	<string>source.antlr</string>
+	<string>source.antlr, source.antlr source.java</string>
 	<key>uuid</key>
 	<string>EA5073FF-4ABB-44FA-95E3-6CB4B8818106</string>
 </dict>

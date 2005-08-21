@@ -165,7 +165,7 @@
                         { include = "#tag-title"; },
                         { include = "#tag-meta"; },
                         { include = "#tag-link"; },
-                        { include = "#tag-object"; },
+                        { include = "#tag-object-inheader"; },
                         { include = "#tag-script"; },
                         { include = "#tag-style"; },
                         { include = "#stray-char"; },
@@ -264,15 +264,16 @@
             );
         }; 
         "tag-script" = {
+            comment = "Bug: Invalid chars are sometimes picked up by the js syntax first.";
             begin = "(<(script))";
-            end = "((script)>)";
+            end = "((/>)|((script)>))";
             captures = {
                 1 = { name = "meta.tag.inline.script.html.strict"; };
-                2 = { name = "entity.name.tag.inline.script.html.strict"; };
+                4 = { name = "entity.name.tag.inline.script.html.strict"; };
             };
             patterns = (
                 {
-                    begin = "(?<=>)";
+                    begin = "(?<=[^/]>)";
                     end = "(</(?=script))";
                     endCaptures = {
                         1 = { name = "meta.tag.inline.script.html.strict"; };
@@ -296,13 +297,124 @@
                 },
                 {   name = "meta.tag.inline.script.html.strict";
                     begin = "";
-                    end = ">";
+                    end = "((?=/>)|>)";
                     patterns = (
                         { include = "#attribute-xml:space"; },
                         { include = "#attribute-defer"; },
                         { include = "#attribute-src"; },
                         { include = "#attribute-type"; },
                         { include = "#attribute-charset"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-style" = {
+            comment = "Bug: Invalid chars are sometimes picked up by the js syntax first.";
+            begin = "(<(style))";
+            end = "((style)>)";
+            captures = {
+                1 = { name = "meta.tag.inline.style.html.strict"; };
+                2 = { name = "entity.name.tag.inline.style.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=style))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.inline.style.html.strict"; };
+                    };
+                    contentName = "source.css.embedded.html.strict";
+                    patterns = (
+                        { include = "#sgml-comment"; },
+                        {   name = "meta.scope.xml-cdata.html";
+                            begin = "<!\\[CDATA\\["; 
+                            end = "]]>"; 
+                            patterns = (
+                                { include = "source.css"; },
+                            );
+                        },
+                        {   name = "invalid.illegal.char_not_allowed";
+                            match = "<|>|]]>|--";
+                        },
+                        { include = "#entities"; },
+                        { include = "source.css"; },
+                    );
+                },
+                {   name = "meta.tag.inline.style.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-xml:space"; },
+                        { include = "#attribute-title"; },
+                        { include = "#attribute-media"; },
+                        { include = "#attribute-type"; },
+                        { include = "#attributes-group-I18n"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-object-inheader" = {
+            begin = "(<(object))";
+            end = "((/>)|((object)>))";
+            captures = {
+                1 = { name = "meta.tag.inline.object.html.strict"; };
+                4 = { name = "entity.name.tag.inline.object.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=[^/]>)";
+                    end = "(</(?=object))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.inline.object.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-param"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.inline.object.html.strict";
+                    begin = "";
+                    end = "((?=/>)|>)";
+                    patterns = (
+                        { include = "#attribute-classid"; },
+                        { include = "#attribute-codebase"; },
+                        { include = "#attribute-codetype"; },
+                        { include = "#attribute-data"; },
+                        { include = "#attribute-declare"; },
+                        { include = "#attribute-height"; },
+                        { include = "#attribute-name"; },
+                        { include = "#attribute-standby"; },
+                        { include = "#attribute-tabindex"; },
+                        { include = "#attribute-type"; },
+                        { include = "#attribute-width"; },
+                        { include = "#attribute-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-param" = {
+            begin = "(<(param))";
+            end = "(/>)";
+            captures = {
+                1 = { name = "meta.tag.inline.param.html.strict"; };
+                2 = { name = "entity.name.tag.inline.param.html.strict"; };
+            };
+            patterns = (
+                {   name = "meta.tag.inline.param.html.strict";
+                    begin = "";
+                    end = "(?=/>)";
+                    patterns = (
+                        { include = "#attribute-id"; },
+                        { include = "#attribute-name"; },
+                        { include = "#attribute-type"; },
+                        { include = "#attribute-value"; },
+                        { include = "#attribute-valuetype"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
@@ -324,8 +436,21 @@
         }; 
         "values-generic-valid" = {
             patterns = (
-                { include = "#entities"; },
-            );
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { include = "#entities"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { include = "#entities"; },
+                    ); 
+                },
+            ); 
         }; 
         "values-generic-invalid" = {
             patterns = (
@@ -382,28 +507,13 @@
                 },
             ); 
         }; 
-        "attribute-id" = {
+        "attribute-charset" = {
             name = "meta.attribute-with-value.html.strict";
-            begin = "(id)=(?=([\"']).*?[\"'])";
+            begin = "(charset)=(?=([\"']).*?[\"'])";
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { match = "(?<=\"|')[a-zA-Z][a-zA-Z0-9\\-_:.]*(?=\"|')"; },
-                        { include = "#values-generic-invalid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { match = "(?<=\"|')[a-zA-Z][a-zA-Z0-9\\-_:.]*(?=\"|')"; },
-                        { include = "#values-generic-invalid"; },
-                    ); 
-                },
+                { include = "#values-generic-valid"; },
             ); 
         }; 
         "attribute-class" = {
@@ -412,64 +522,34 @@
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
+                { include = "#values-generic-valid"; },
             ); 
         }; 
-        "attribute-title" = {
+        "attribute-classid" = {
             name = "meta.attribute-with-value.html.strict";
-            begin = "(title)=(?=([\"']).*?[\"'])";
+            begin = "(classid)=(?=([\"']).*?[\"'])";
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
+                { include = "#values-generic-valid"; },
             ); 
         }; 
-        "attribute-profile" = {
+        "attribute-codebase" = {
             name = "meta.attribute-with-value.html.strict";
-            begin = "(profile)=(?=([\"']).*?[\"'])";
+            begin = "(codebase)=(?=([\"']).*?[\"'])";
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-codetype" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(codetype)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
             ); 
         }; 
         "attribute-content" = {
@@ -478,25 +558,21 @@
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
+                { include = "#values-generic-valid"; },
             ); 
         }; 
-        "attribute-scheme" = {
+        "attribute-data" = {
             name = "meta.attribute-with-value.html.strict";
-            begin = "(scheme)=(?=([\"']).*?[\"'])";
+            begin = "(data)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-declare" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(declare)=(?=([\"']).*?[\"'])";
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
@@ -504,51 +580,7 @@
                     begin = "\"";
                     end = "\"";
                     patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-charset" = {
-            name = "meta.attribute-with-value.html.strict";
-            begin = "(charset)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-media" = {
-            name = "meta.attribute-with-value.html.strict";
-            begin = "(media)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { match = "(?<=\"|')(screen|tty|tv|projection|handheld|print|braille|aural|all)(?=\"|')"; },
+                        { match = "(?<=\"|')declare(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
@@ -556,168 +588,8 @@
                     begin = "'";
                     end = "'";
                     patterns = (
-                        { match = "(?<=\"|')(screen|tty|tv|projection|handheld|print|braille|aural|all)(?=\"|')"; },
+                        { match = "(?<=\"|')declare(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-rev" = {
-            name = "meta.attribute-with-value.html.strict";
-            begin = "(rev)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-rel" = {
-            name = "meta.attribute-with-value.html.strict";
-            begin = "(rel)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-href" = {
-            name = "meta.attribute-with-value.html.strict";
-            begin = "(href)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-src" = {
-            name = "meta.attribute-with-value.html.strict";
-            begin = "(src)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-name" = {
-            name = "meta.attribute-with-value.html.strict";
-            comment = "Bug: This may not take into account all possible characters in NMTOKEN.";
-            begin = "(name)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        {   match = "[\\w\\-:]+"; },
-                        { include = "#values-generic-invalid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        {   match = "[\\w\\-:]+"; },
-                        { include = "#values-generic-invalid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-hreflang" = {
-            name = "meta.attribute-with-value.html.strict";
-            comment = "Bug: This may not take into account all possible characters in NMTOKEN.";
-            begin = "(hreflang)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        {   match = "[\\w\\-:]+"; },
-                        { include = "#values-generic-invalid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        {   match = "[\\w\\-:]+"; },
-                        { include = "#values-generic-invalid"; },
-                    ); 
-                },
-            ); 
-        }; 
-        "attribute-type" = {
-            name = "meta.attribute-with-value.html.strict";
-            begin = "(type)=(?=([\"']).*?[\"'])";
-            end = "";
-            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-            patterns = (
-                {   name = "string.quoted.double";
-                    begin = "\"";
-                    end = "\"";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
-                    ); 
-                },
-                {   name = "string.quoted.single";
-                    begin = "'";
-                    end = "'";
-                    patterns = (
-                        { include = "#values-generic-valid"; },
                     ); 
                 },
             ); 
@@ -746,6 +618,64 @@
                 },
             ); 
         }; 
+        "attribute-height" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(height)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-href" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(href)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-hreflang" = {
+            name = "meta.attribute-with-value.html.strict";
+            comment = "Bug: This may not take into account all possible characters in NMTOKEN.";
+            begin = "(hreflang)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        {   match = "[\\w\\-:]+"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        {   match = "[\\w\\-:]+"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
         "attribute-http-equiv" = {
             name = "meta.attribute-with-value.html.strict";
             comment = "Bug: This may not take into account all possible characters in NMTOKEN.";
@@ -766,6 +696,232 @@
                     end = "'";
                     patterns = (
                         {   match = "[\\w\\-:]+"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-id" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(id)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[a-zA-Z][a-zA-Z0-9\\-_:.]*(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[a-zA-Z][a-zA-Z0-9\\-_:.]*(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-media" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(media)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(screen|tty|tv|projection|handheld|print|braille|aural|all)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(screen|tty|tv|projection|handheld|print|braille|aural|all)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-name" = {
+            name = "meta.attribute-with-value.html.strict";
+            comment = "Bug: This may not take into account all possible characters in NMTOKEN.";
+            begin = "(name)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        {   match = "[\\w\\-:.]+"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        {   match = "[\\w\\-:.]+"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-profile" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(profile)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-rev" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(rev)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-rel" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(rel)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-scheme" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(scheme)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-src" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(src)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+           ); 
+        }; 
+        "attribute-standby" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(standby)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-tabindex" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(tabindex)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-title" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(title)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-type" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(type)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-value" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(value)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-valuetype" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(valuetype)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(?i:data|ref|object)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(?i:data|ref|object)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-width" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(width)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },

@@ -421,6 +421,39 @@
                 },
             );
         }; 
+        "tag-body" = {
+            begin = "(<(body))";
+            end = "((body)>)";
+            captures = {
+                1 = { name = "meta.tag.block.body.html.strict"; };
+                2 = { name = "entity.name.tag.block.body.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=body))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.body.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-heading"; },
+                        { include = "#tag-group-block"; },
+                        { include = "#tag-group-list"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#stray-char"; },
+                    );
+                },
+                {   name = "meta.tag.block.body.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "entities" = {
             patterns = (
                 {   name = "constant.character.html.strict";
@@ -1015,6 +1048,77 @@
                 { include = "#attributes-group-core"; },
                 { include = "#attributes-group-events"; },
                 { include = "#attributes-group-I18n"; },
+            );
+        }; 
+        "tag-group-heading" = {
+            patterns = (
+                { include = "#tag-h1"; },
+                { include = "#tag-h2"; },
+                { include = "#tag-h3"; },
+                { include = "#tag-h4"; },
+                { include = "#tag-h5"; },
+                { include = "#tag-h6"; },
+            );
+        }; 
+        "tag-group-block" = {
+            patterns = (
+                { include = "#tag-form"; },
+                { include = "#tag-hr"; },
+                { include = "#tag-script"; },
+                { include = "#tag-noscript"; },
+                { include = "#tag-address"; },
+                { include = "#tag-blockquote"; },
+                { include = "#tag-div"; },
+                { include = "#tag-pre"; },
+                { include = "#tag-p"; },
+            );
+        }; 
+        "tag-group-list" = {
+            patterns = (
+                { include = "#tag-dl"; },
+                { include = "#tag-ol"; },
+                { include = "#tag-ul"; },
+            );
+        }; 
+        "tag-group-inline" = {
+            patterns = (
+                { include = "#tag-a"; },
+                { include = "#tag-applet"; },
+                { include = "#tag-bdo"; },
+                { include = "#tag-b"; },
+                { include = "#tag-big"; },
+                { include = "#tag-i"; },
+                { include = "#tag-small"; },
+                { include = "#tag-sub"; },
+                { include = "#tag-sup"; },
+                { include = "#tag-tt"; },
+                { include = "#tag-del"; },
+                { include = "#tag-ins"; },
+                { include = "#tag-map"; },
+                { include = "#tag-iframe"; },
+                { include = "#tag-script"; },
+                { include = "#tag-noscript"; },
+                { include = "#tag-abbr"; },
+                { include = "#tag-acronym"; },
+                { include = "#tag-br"; },
+                { include = "#tag-cite"; },
+                { include = "#tag-code"; },
+                { include = "#tag-dfn"; },
+                { include = "#tag-em"; },
+                { include = "#tag-kbd"; },
+                { include = "#tag-q"; },
+                { include = "#tag-samp"; },
+                { include = "#tag-span"; },
+                { include = "#tag-strong"; },
+                { include = "#tag-var"; },
+            );
+        }; 
+        "tag-group-flow" = {
+            patterns = (
+                { include = "#tag-group-heading"; },
+                { include = "#tag-group-block"; },
+                { include = "#tag-group-inline"; },
+                { include = "#tag-group-list"; },
             );
         }; 
     }; 

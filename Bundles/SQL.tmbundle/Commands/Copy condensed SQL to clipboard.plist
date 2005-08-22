@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"$TM_SUPPORT_PATH/bin/onelinecopy.py" -d '^[\s]*--'</string>
+	<string>grep -E -v '^[ \t\s]*\-\-' | tr -s ' \n\t' ' ' | pbcopy
+echo "copied SQL to clipboard"</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

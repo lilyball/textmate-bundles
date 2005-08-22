@@ -100,9 +100,32 @@
 					<key>comment</key>
 					<string>FIXME not sure this is the proper way to do Tcl escape sequences --Allan</string>
 					<key>match</key>
-					<string>\([abfnrtv]|0d{2}|x[a-fA-F]{2}\)</string>
+					<string>\\([abfnrtv"\\]|0\d{2}|x[a-fA-F0-9]{2}|u[a-fA-F0-9]{4})</string>
 					<key>name</key>
 					<string>constant.character.escape.tcl</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>FIXME what are legal variable characters? --Allan</string>
+					<key>match</key>
+					<string>\$[a-zA-Z]+</string>
+					<key>name</key>
+					<string>variable.other.tcl</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\[</string>
+					<key>end</key>
+					<string>\]</string>
+					<key>name</key>
+					<string>source.tcl.embedded</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.tcl</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

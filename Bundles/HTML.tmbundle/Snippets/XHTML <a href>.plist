@@ -1,7 +1,16 @@
-{
-    content = "<a href=\"$1\" id=\"${2:id}\" title=\"${3:title}\">$0</a>"; 
-    name = "A HRef (ref)"; 
-    tabTrigger = ref; 
-    uuid = "B33843A6-A12E-11D9-A5A2-000D93C8BE28"; 
-    scope = "text.html";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;a href="$1" id="${2:id}" title="${3:title}"&gt;${0:link text...}&lt;/a&gt;</string>
+	<key>name</key>
+	<string>A HRef (ref)</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>tabTrigger</key>
+	<string>ref</string>
+	<key>uuid</key>
+	<string>B33843A6-A12E-11D9-A5A2-000D93C8BE28</string>
+</dict>
+</plist>

@@ -1,7 +1,16 @@
-{
-    content = "<p class=\"${1:className}\">${2:`echo $TM_SELECTED_TEXT`}</p>$0"; 
-    name = "P class (pc)"; 
-    tabTrigger = pc; 
-    uuid = "3FB1C383-A132-11D9-A5A2-000D93C8BE28"; 
-    scope = "text.html";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;p class="${1:className}"&gt;${2:`echo $TM_SELECTED_TEXT`}&lt;/p&gt;</string>
+	<key>name</key>
+	<string>P class (pc)</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>tabTrigger</key>
+	<string>pc</string>
+	<key>uuid</key>
+	<string>3FB1C383-A132-11D9-A5A2-000D93C8BE28</string>
+</dict>
+</plist>

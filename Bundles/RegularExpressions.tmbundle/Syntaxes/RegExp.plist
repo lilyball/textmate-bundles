@@ -1,79 +1,129 @@
-// language definition for regular expressions by chris@cjack.com
-{
-    /* The name as it will appear in the Syntax Highlight List */
-    name = "Regular Expression"; 
-    comment = "Matches Oniguruma's Ruby regexp syntax (TextMate uses Oniguruma in Ruby mode).";
-
-    /* Scope name used sometimes for styling or limiting the activation
-       of snippets, commands, and macros to files using this syntax
-    */
-    scopeName = "source.regexp";
-
-    /* So that we can always recognize this syntax */
-    uuid = "BAFE4C4F-8D59-48CD-A3BC-52A2084531C9";
-    
-    /* Which filetypes this highlighting should be applied to automatically */
-    fileTypes = ("re"); 
-    
-    /* Folding, this will start folds at comments (/*) and at {
-       Stop folding at their counterparts. 
-    */
-    foldingStartMarker = "(/\\*|\\{|\\()"; 
-    foldingStopMarker = "(\\*/|\\}|\\))"; 
-    
-    patterns = (
-        {   name = "keyword.operator.regexp";
-            match = "(\\|)"; 
-        },
-        {   name = "keyword.control.anchors.regexp";
-            match = "(\\\\[bBAZzG]|\\^|\\$)";
-        },
-        {   name = "keyword.control.set.regexp";
-            begin = "\\["; end = "\\]";
-            patterns = (
-                { include = "source.regexp"; },
-                {   name = "constant.other.range.regexp";
-                    match = ".-.";
-                },
-                {   name = "keyword.operator.intersection.regexp";
-                    match = ".&&.";
-                }
-            );
-        },
-        {   name = "string.unquoted.regexp";
-            begin = "\\("; end = "\\)";
-            patterns = (
-                { include = "source.regexp"; },
-                {   name = "constant.other.assertion.regexp";
-                    match = "(?<=\\()\\?(<[=!]|>|=|:|!)";
-                },
-                {   name = "comment.line.regexp";
-                    match = "(?<=\\()\\?#";
-                },
-            );
-        },
-        {   name = "keyword.control.character-class.regexp";
-            match = "\\\\([wWsSdDhH])";
-        },
-        {   name = "keyword.other.backref-and-recursion.regexp";
-            match = "\\\\(\\n\\d+|\\k\\w+|(?<!\\|)\\g\\w+)";
-        },
-        {
-        //name = "constant.character.regexp";
-            name = "keyword.function.regexp";
-            match = "\\\\([tvnrbfae]|[0-8]{3}|x\\H\\H\\{7\\H{7}\\}|x\\H\\H|c\\d+|C-\\d+|M-\\d+|M-\\\\C-\\d+)";
-        },
-        {
-        //name = "constant.character.regexp";
-            name = "keyword.function.method.quantifier.regexp";
-            match = "((?<!\\()[?*+][?+]?)|\\{\\d*,\\d*\\}";
-        },
-        {   name = "string.quoted.single.regexp";
-            comment = "double backslash";
-            match = "\\\\\\\\"; 
-
-//            begin = '"'; end = '"'; swallow = "\\\\.";
-
-        },
-    ); 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>Matches Oniguruma's Ruby regexp syntax (TextMate uses Oniguruma in Ruby mode).</string>
+	<key>fileTypes</key>
+	<array>
+		<string>re</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(/\*|\{|\()</string>
+	<key>foldingStopMarker</key>
+	<string>(\*/|\}|\))</string>
+	<key>name</key>
+	<string>Regular Expression</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>(\|)</string>
+			<key>name</key>
+			<string>keyword.operator.regexp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\\[bBAZzG]|\^|\$)</string>
+			<key>name</key>
+			<string>keyword.control.anchors.regexp</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\[(?:\^?\])?</string>
+			<key>end</key>
+			<string>\]</string>
+			<key>name</key>
+			<string>keyword.control.set.regexp</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#keyword.control.character-class.regexp</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>.-.</string>
+					<key>name</key>
+					<string>constant.other.range.regexp</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>.&amp;&amp;.</string>
+					<key>name</key>
+					<string>keyword.operator.intersection.regexp</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>string.unquoted.regexp</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.regexp</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=\()\?(&lt;[=!]|&gt;|=|:|!)</string>
+					<key>name</key>
+					<string>constant.other.assertion.regexp</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=\()\?#</string>
+					<key>name</key>
+					<string>comment.line.regexp</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#keyword.control.character-class.regexp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\\(\n\d+|\k\w+|(?&lt;!\|)\g\w+)</string>
+			<key>name</key>
+			<string>keyword.other.backref-and-recursion.regexp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\\([tvnrbfae]|[0-8]{3}|x\H\H\{7\H{7}\}|x\H\H|c\d+|C-\d+|M-\d+|M-\\C-\d+)</string>
+			<key>name</key>
+			<string>keyword.function.regexp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>((?&lt;!\()[?*+][?+]?)|\{\d*,\d*\}</string>
+			<key>name</key>
+			<string>keyword.function.method.quantifier.regexp</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>double backslash</string>
+			<key>match</key>
+			<string>\\\\</string>
+			<key>name</key>
+			<string>string.quoted.single.regexp</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>keyword.control.character-class.regexp</key>
+		<dict>
+			<key>match</key>
+			<string>\\([wWsSdDhH])</string>
+		</dict>
+	</dict>
+	<key>scopeName</key>
+	<string>source.regexp</string>
+	<key>uuid</key>
+	<string>BAFE4C4F-8D59-48CD-A3BC-52A2084531C9</string>
+</dict>
+</plist>

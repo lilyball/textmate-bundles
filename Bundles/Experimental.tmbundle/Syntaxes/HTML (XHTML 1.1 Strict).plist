@@ -32,7 +32,7 @@
             end = "(?<=>)"; 
             patterns = (
                 {   name = "meta.tag.sgml-declaration.doctype.html";
-                    begin = "<!(DOCTYPE)"; 
+                    begin = "<!(DOCTYPE\\b)"; 
                     end = ">"; 
                     captures = { 1 = { name = "entity.name.tag.doctype.html"; }; };
                     patterns = (
@@ -92,8 +92,202 @@
                 }
             ); 
         }; 
+        "tag-a" = {
+            begin = "(<(a)\\b)";
+            end = "((a)>)";
+            captures = {
+                1 = { name = "meta.tag.block.a.html.strict"; };
+                2 = { name = "entity.name.tag.block.a.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=a))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.a.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline-no_a"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.a.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-accesskey"; },
+                        { include = "#attribute-charset"; },
+                        { include = "#attribute-href"; },
+                        { include = "#attribute-hreflang"; },
+                        { include = "#attribute-rel"; },
+                        { include = "#attribute-rev"; },
+                        { include = "#attribute-tabindex"; },
+                        { include = "#attribute-type"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-abbr" = {
+            begin = "(<(abbr)\\b)";
+            end = "((abbr)>)";
+            captures = {
+                1 = { name = "meta.tag.block.abbr.html.strict"; };
+                2 = { name = "entity.name.tag.block.abbr.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=abbr))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.abbr.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.abbr.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-acronym" = {
+            begin = "(<(acronym)\\b)";
+            end = "((acronym)>)";
+            captures = {
+                1 = { name = "meta.tag.block.acronym.html.strict"; };
+                2 = { name = "entity.name.tag.block.acronym.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=acronym))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.acronym.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.acronym.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-address" = {
+            begin = "(<(address)\\b)";
+            end = "((address)>)";
+            captures = {
+                1 = { name = "meta.tag.block.address.html.strict"; };
+                2 = { name = "entity.name.tag.block.address.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=address))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.address.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.address.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-b" = {
+            begin = "(<(b)\\b)";
+            end = "((b)>)";
+            captures = {
+                1 = { name = "meta.tag.block.b.html.strict"; };
+                2 = { name = "entity.name.tag.block.b.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=b))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.b.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.b.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-big" = {
+            begin = "(<(big)\\b)";
+            end = "((big)>)";
+            captures = {
+                1 = { name = "meta.tag.block.big.html.strict"; };
+                2 = { name = "entity.name.tag.block.big.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=big))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.big.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.big.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-blockquote" = {
-            begin = "(<(blockquote))";
+            begin = "(<(blockquote)\\b)";
             end = "((blockquote)>)";
             captures = {
                 1 = { name = "meta.tag.block.blockquote.html.strict"; };
@@ -127,7 +321,7 @@
             );
         }; 
         "tag-body" = {
-            begin = "(<(body))";
+            begin = "(<(body)\\b)";
             end = "((body)>)";
             captures = {
                 1 = { name = "meta.tag.block.body.html.strict"; };
@@ -161,8 +355,151 @@
                 },
             );
         }; 
+        "tag-br" = {
+            begin = "(<(br)\\b)";
+            end = "(/>)";
+            captures = {
+                1 = { name = "meta.tag.inline.br.html.strict"; };
+                2 = { name = "entity.name.tag.inline.br.html.strict"; };
+            };
+            patterns = (
+                {   name = "meta.tag.inline.br.html.strict";
+                    begin = "";
+                    end = "(?=/>)";
+                    patterns = (
+                        { include = "#attributes-group-core"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-cite" = {
+            begin = "(<(cite)\\b)";
+            end = "((cite)>)";
+            captures = {
+                1 = { name = "meta.tag.block.cite.html.strict"; };
+                2 = { name = "entity.name.tag.block.cite.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=cite))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.cite.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.cite.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-code" = {
+            begin = "(<(code)\\b)";
+            end = "((code)>)";
+            captures = {
+                1 = { name = "meta.tag.block.code.html.strict"; };
+                2 = { name = "entity.name.tag.block.code.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=code))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.code.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.code.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-dd" = {
+            begin = "(<(dd)\\b)";
+            end = "((dd)>)";
+            captures = {
+                1 = { name = "meta.tag.block.dd.html.strict"; };
+                2 = { name = "entity.name.tag.block.dd.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=dd))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.dd.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-flow"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.dd.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-dfn" = {
+            begin = "(<(dfn)\\b)";
+            end = "((dfn)>)";
+            captures = {
+                1 = { name = "meta.tag.block.dfn.html.strict"; };
+                2 = { name = "entity.name.tag.block.dfn.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=dfn))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.dfn.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.dfn.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-div" = {
-            begin = "(<(div))";
+            begin = "(<(div)\\b)";
             end = "((div)>)";
             captures = {
                 1 = { name = "meta.tag.block.div.html.strict"; };
@@ -192,8 +529,102 @@
                 },
             );
         }; 
+        "tag-dl" = {
+            begin = "(<(dl)\\b)";
+            end = "((dl)>)";
+            captures = {
+                1 = { name = "meta.tag.block.dl.html.strict"; };
+                2 = { name = "entity.name.tag.block.dl.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=dl))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.dl.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-dt"; },
+                        { include = "#tag-dd"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#stray-char"; },
+                    );
+                },
+                {   name = "meta.tag.block.dl.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-dt" = {
+            begin = "(<(dt)\\b)";
+            end = "((dt)>)";
+            captures = {
+                1 = { name = "meta.tag.block.dt.html.strict"; };
+                2 = { name = "entity.name.tag.block.dt.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=dt))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.dt.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.dt.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-em" = {
+            begin = "(<(em)\\b)";
+            end = "((em)>)";
+            captures = {
+                1 = { name = "meta.tag.block.em.html.strict"; };
+                2 = { name = "entity.name.tag.block.em.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=em))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.em.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.em.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-h1" = {
-            begin = "(<(h1))";
+            begin = "(<(h1)\\b)";
             end = "((h1)>)";
             captures = {
                 1 = { name = "meta.tag.block.h1.html.strict"; };
@@ -224,7 +655,7 @@
             );
         }; 
         "tag-h2" = {
-            begin = "(<(h2))";
+            begin = "(<(h2)\\b)";
             end = "((h2)>)";
             captures = {
                 1 = { name = "meta.tag.block.h2.html.strict"; };
@@ -255,7 +686,7 @@
             );
         }; 
         "tag-h3" = {
-            begin = "(<(h3))";
+            begin = "(<(h3)\\b)";
             end = "((h3)>)";
             captures = {
                 1 = { name = "meta.tag.block.h3.html.strict"; };
@@ -286,7 +717,7 @@
             );
         }; 
         "tag-h4" = {
-            begin = "(<(h4))";
+            begin = "(<(h4)\\b)";
             end = "((h4)>)";
             captures = {
                 1 = { name = "meta.tag.block.h4.html.strict"; };
@@ -317,7 +748,7 @@
             );
         }; 
         "tag-h5" = {
-            begin = "(<(h5))";
+            begin = "(<(h5)\\b)";
             end = "((h5)>)";
             captures = {
                 1 = { name = "meta.tag.block.h5.html.strict"; };
@@ -348,7 +779,7 @@
             );
         }; 
         "tag-h6" = {
-            begin = "(<(h6))";
+            begin = "(<(h6)\\b)";
             end = "((h6)>)";
             captures = {
                 1 = { name = "meta.tag.block.h6.html.strict"; };
@@ -379,7 +810,7 @@
             );
         }; 
         "tag-head" = {
-            begin = "(<(head))";
+            begin = "(<(head)\\b)";
             end = "((head)>)";
             captures = {
                 1 = { name = "meta.tag.block.head.html.strict"; };
@@ -415,8 +846,27 @@
                 },
             );
         }; 
+        "tag-hr" = {
+            begin = "(<(hr)\\b)";
+            end = "(/>)";
+            captures = {
+                1 = { name = "meta.tag.inline.hr.html.strict"; };
+                2 = { name = "entity.name.tag.inline.hr.html.strict"; };
+            };
+            patterns = (
+                {   name = "meta.tag.inline.hr.html.strict";
+                    begin = "";
+                    end = "(?=/>)";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-html" = {
-            begin = "(<(html))";
+            begin = "(<(html)\\b)";
             end = "((html)>)";
             captures = {
                 1 = { name = "meta.tag.block.html.html.strict"; };
@@ -470,8 +920,125 @@
                 },
             );
         }; 
+        "tag-i" = {
+            begin = "(<(i)\\b)";
+            end = "((i)>)";
+            captures = {
+                1 = { name = "meta.tag.block.i.html.strict"; };
+                2 = { name = "entity.name.tag.block.i.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=i))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.i.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.i.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-img" = {
+            begin = "(<(img)\\b)";
+            end = "(/>)";
+            captures = {
+                1 = { name = "meta.tag.inline.img.html.strict"; };
+                2 = { name = "entity.name.tag.inline.img.html.strict"; };
+            };
+            patterns = (
+                {   name = "meta.tag.inline.img.html.strict";
+                    begin = "";
+                    end = "(?=/>)";
+                    patterns = (
+                        { include = "#attribute-alt"; },
+                        { include = "#attribute-height"; },
+                        { include = "#attribute-longdesc"; },
+                        { include = "#attribute-src"; },
+                        { include = "#attribute-width"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-kbd" = {
+            begin = "(<(kbd)\\b)";
+            end = "((kbd)>)";
+            captures = {
+                1 = { name = "meta.tag.block.kbd.html.strict"; };
+                2 = { name = "entity.name.tag.block.kbd.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=kbd))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.kbd.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.kbd.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-li" = {
+            begin = "(<(li)\\b)";
+            end = "((li)>)";
+            captures = {
+                1 = { name = "meta.tag.block.li.html.strict"; };
+                2 = { name = "entity.name.tag.block.li.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=li))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.li.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-flow"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.li.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-link" = {
-            begin = "(<(link))";
+            begin = "(<(link)\\b)";
             end = "(/>)";
             captures = {
                 1 = { name = "meta.tag.inline.link.html.strict"; };
@@ -497,7 +1064,7 @@
             );
         }; 
         "tag-meta" = {
-            begin = "(<(meta))";
+            begin = "(<(meta)\\b)";
             end = "(/>)";
             captures = {
                 1 = { name = "meta.tag.inline.meta.html.strict"; };
@@ -520,7 +1087,7 @@
             );
         }; 
         "tag-object-inheader" = {
-            begin = "(<(object))";
+            begin = "(<(object)\\b)";
             end = "((/>)|((object)>))";
             captures = {
                 1 = { name = "meta.tag.inline.object.html.strict"; };
@@ -560,8 +1127,39 @@
                 },
             );
         }; 
+        "tag-ol" = {
+            begin = "(<(ol)\\b)";
+            end = "((ol)>)";
+            captures = {
+                1 = { name = "meta.tag.block.ol.html.strict"; };
+                2 = { name = "entity.name.tag.block.ol.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=ol))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.ol.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-li"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#stray-char"; },
+                    );
+                },
+                {   name = "meta.tag.block.ol.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-p" = {
-            begin = "(<(p))";
+            begin = "(<(p)\\b)";
             end = "((p)>)";
             captures = {
                 1 = { name = "meta.tag.block.p.html.strict"; };
@@ -591,8 +1189,40 @@
                 },
             );
         }; 
+        "tag-pre" = {
+            begin = "(<(pre)\\b)";
+            end = "((pre)>)";
+            captures = {
+                1 = { name = "meta.tag.block.pre.html.strict"; };
+                2 = { name = "entity.name.tag.block.pre.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=pre))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.pre.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.pre.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-xml:space"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-param" = {
-            begin = "(<(param))";
+            begin = "(<(param)\\b)";
             end = "(/>)";
             captures = {
                 1 = { name = "meta.tag.inline.param.html.strict"; };
@@ -614,9 +1244,72 @@
                 },
             );
         }; 
+        "tag-q" = {
+            begin = "(<(q)\\b)";
+            end = "((q)>)";
+            captures = {
+                1 = { name = "meta.tag.block.q.html.strict"; };
+                2 = { name = "entity.name.tag.block.q.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=q))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.q.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.q.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-cite"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-samp" = {
+            begin = "(<(samp)\\b)";
+            end = "((samp)>)";
+            captures = {
+                1 = { name = "meta.tag.block.samp.html.strict"; };
+                2 = { name = "entity.name.tag.block.samp.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=samp))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.samp.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.samp.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-script" = {
             comment = "Bug: Invalid chars are sometimes picked up by the js syntax first.";
-            begin = "(<(script))";
+            begin = "(<(script)\\b)";
             end = "((/>)|((script)>))";
             captures = {
                 1 = { name = "meta.tag.inline.script.html.strict"; };
@@ -661,9 +1354,102 @@
                 },
             );
         }; 
+        "tag-small" = {
+            begin = "(<(small)\\b)";
+            end = "((small)>)";
+            captures = {
+                1 = { name = "meta.tag.block.small.html.strict"; };
+                2 = { name = "entity.name.tag.block.small.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=small))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.small.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.small.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-span" = {
+            begin = "(<(span)\\b)";
+            end = "((span)>)";
+            captures = {
+                1 = { name = "meta.tag.block.span.html.strict"; };
+                2 = { name = "entity.name.tag.block.span.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=span))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.span.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.span.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-strong" = {
+            begin = "(<(strong)\\b)";
+            end = "((strong)>)";
+            captures = {
+                1 = { name = "meta.tag.block.strong.html.strict"; };
+                2 = { name = "entity.name.tag.block.strong.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=strong))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.strong.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.strong.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-style" = {
             comment = "Bug: Invalid chars are sometimes picked up by the js syntax first.";
-            begin = "(<(style))";
+            begin = "(<(style)\\b)";
             end = "((style)>)";
             captures = {
                 1 = { name = "meta.tag.inline.style.html.strict"; };
@@ -708,8 +1494,70 @@
                 },
             );
         }; 
+        "tag-sub" = {
+            begin = "(<(sub)\\b)";
+            end = "((sub)>)";
+            captures = {
+                1 = { name = "meta.tag.block.sub.html.strict"; };
+                2 = { name = "entity.name.tag.block.sub.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=sub))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.sub.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.sub.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-sup" = {
+            begin = "(<(sup)\\b)";
+            end = "((sup)>)";
+            captures = {
+                1 = { name = "meta.tag.block.sup.html.strict"; };
+                2 = { name = "entity.name.tag.block.sup.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=sup))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.sup.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.sup.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-title" = {
-            begin = "(<(title))";
+            begin = "(<(title)\\b)";
             end = "((title)>)";
             captures = {
                 1 = { name = "meta.tag.inline.title.html.strict"; };
@@ -733,6 +1581,99 @@
                     patterns = (
                         { include = "#attribute-profile"; },
                         { include = "#attributes-group-I18n"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-tt" = {
+            begin = "(<(tt)\\b)";
+            end = "((tt)>)";
+            captures = {
+                1 = { name = "meta.tag.block.tt.html.strict"; };
+                2 = { name = "entity.name.tag.block.tt.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=tt))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.tt.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.tt.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-ul" = {
+            begin = "(<(ul)\\b)";
+            end = "((ul)>)";
+            captures = {
+                1 = { name = "meta.tag.block.ul.html.strict"; };
+                2 = { name = "entity.name.tag.block.ul.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=ul))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.ul.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-li"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#stray-char"; },
+                    );
+                },
+                {   name = "meta.tag.block.ul.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-var" = {
+            begin = "(<(var)\\b)";
+            end = "((var)>)";
+            captures = {
+                1 = { name = "meta.tag.block.var.html.strict"; };
+                2 = { name = "entity.name.tag.block.var.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=var))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.var.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.var.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
@@ -825,6 +1766,40 @@
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
+            ); 
+        }; 
+        "attribute-accesskey" = {
+            name = "meta.attribute-with-value.html.strict";
+            comment = "Bug: Does not correctly represent the single Character attribute.";
+            begin = "(accesskey)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[[:alnum:]](?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[[:alnum:]](?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-alt" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(alt)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
             ); 
         }; 
         "attribute-charset" = {
@@ -1052,6 +2027,15 @@
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
+            ); 
+        }; 
+        "attribute-longdesc" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(longdesc)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
             ); 
         }; 
         "attribute-media" = {
@@ -1410,7 +2394,7 @@
                     begin = "\"";
                     end = "\"";
                     patterns = (
-                        { match = "(?<=\"|')(?i:data|ref|object)(?=\"|')"; },
+                        { match = "(?<=\"|')(data|ref|object)(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
@@ -1418,7 +2402,7 @@
                     begin = "'";
                     end = "'";
                     patterns = (
-                        { match = "(?<=\"|')(?i:data|ref|object)(?=\"|')"; },
+                        { match = "(?<=\"|')(data|ref|object)(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
@@ -1579,6 +2563,40 @@
         "tag-group-inline" = {
             patterns = (
                 { include = "#tag-a"; },
+                { include = "#tag-abbr"; },
+                { include = "#tag-acronym"; },
+                { include = "#tag-applet"; },
+                { include = "#tag-b"; },
+                { include = "#tag-bdo"; },
+                { include = "#tag-big"; },
+                { include = "#tag-br"; },
+                { include = "#tag-cite"; },
+                { include = "#tag-code"; },
+                { include = "#tag-del"; },
+                { include = "#tag-dfn"; },
+                { include = "#tag-em"; },
+                { include = "#tag-i"; },
+                { include = "#tag-iframe"; },
+                { include = "#tag-img"; },
+                { include = "#tag-ins"; },
+                { include = "#tag-kbd"; },
+                { include = "#tag-map"; },
+                { include = "#tag-noscript"; },
+                { include = "#tag-q"; },
+                { include = "#tag-samp"; },
+                { include = "#tag-script"; },
+                { include = "#tag-span"; },
+                { include = "#tag-small"; },
+                { include = "#tag-strong"; },
+                { include = "#tag-sub"; },
+                { include = "#tag-sup"; },
+                { include = "#tag-tt"; },
+                { include = "#tag-var"; },
+                { include = "#tag-group-formctrl"; },
+            );
+        }; 
+        "tag-group-inline-no_a" = {
+            patterns = (
                 { include = "#tag-abbr"; },
                 { include = "#tag-acronym"; },
                 { include = "#tag-applet"; },

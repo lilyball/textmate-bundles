@@ -45,6 +45,11 @@ function displayImage(path) {
 	document.getElementById('slider').disabled=false
 	scaleImage(3)
 }
+function insert(text) {
+	// Ripped shamelessly from Max Williams.. Thanks.
+	TextMate.system("osascript -e 'tell app \"TextMate\" to insert \""+text+"\"' &", null)
+	window.close();
+}
 </script>
 </head>
 
@@ -53,7 +58,7 @@ function displayImage(path) {
 <% Dir.chdir(PROJECT_ROOT) %>
 <% Dir.glob("**/*.{gif,png,jpg,jpeg}") do |f| %>
 	<a href='#' class='item' onclick='displayImage("<%= f %>"); return false;'>
-	<img src='file://<%= PROJECT_ROOT %>/<%= f %>' class='thumb' />
+	<img src='file://<%= PROJECT_ROOT %>/<%= f %>' class='thumb' onclick='insert("<%= f %>")' title='Insert path' />
 	<div class='filename'><%= f %></div>
 	<div class='details'>
 	<%#=	puts "<span>"+IO.read(f)[0x10..0x18].unpack('LL').join(" x ")+"</span>" if f =~ /png/ # orig %>

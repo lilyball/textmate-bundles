@@ -374,6 +374,39 @@
                 },
             );
         }; 
+        "tag-caption" = {
+            begin = "(<(caption)\\b)";
+            end = "((caption)>)";
+            captures = {
+                1 = { name = "meta.tag.block.caption.html.strict"; };
+                2 = { name = "entity.name.tag.block.caption.html.strict"; };
+            };
+            patterns = (
+                {
+                    name = "test";
+                    begin = "(?<=>)";
+                    end = "(</(?=caption))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.caption.html.strict"; };
+                        2 = { name = "entity.name.tag.block.caption.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#entities"; },
+                        { include = "#sgml-declarations"; },
+                    );
+                },
+                {   name = "meta.tag.block.caption.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-cite" = {
             begin = "(<(cite)\\b)";
             end = "((cite)>)";
@@ -429,6 +462,68 @@
                     begin = "";
                     end = ">";
                     patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-col" = {
+            begin = "(<(col)\\b)";
+            end = "(/>)";
+            captures = {
+                1 = { name = "meta.tag.inline.col.html.strict"; };
+                2 = { name = "entity.name.tag.inline.col.html.strict"; };
+            };
+            patterns = (
+                {   name = "meta.tag.inline.col.html.strict";
+                    begin = "";
+                    end = "(?=/>)";
+                    patterns = (
+                        { include = "#attribute-align"; },
+                        { include = "#attribute-char"; },
+                        { include = "#attribute-charoff"; },
+                        { include = "#attribute-span"; },
+                        { include = "#attribute-valign"; },
+                        { include = "#attribute-width-multi"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-colgroup" = {
+            begin = "(<(colgroup)\\b)";
+            end = "((/>)|((colgroup)>))";
+            captures = {
+                1 = { name = "meta.tag.block.colgroup.html.strict"; };
+                4 = { name = "entity.name.tag.block.colgroup.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=[^/]>)";
+                    end = "(</(?=colgroup))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.colgroup.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-col"; },
+                        { include = "#stray-char"; },
+                        { include = "#sgml-declarations"; },
+                    );
+                },
+                {   name = "meta.tag.block.colgroup.html.strict";
+                    begin = "";
+                    end = "((?=/>)|>)";
+                    patterns = (
+                        { include = "#attribute-align"; },
+                        { include = "#attribute-char"; },
+                        { include = "#attribute-charoff"; },
+                        { include = "#attribute-span"; },
+                        { include = "#attribute-valign"; },
+                        { include = "#attribute-width-multi"; },
                         { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
@@ -1556,6 +1651,93 @@
                 },
             );
         }; 
+        "tag-table" = {
+            begin = "(<(table)\\b)";
+            end = "((table)>)";
+            captures = {
+                1 = { name = "meta.tag.block.table.html.strict"; };
+                2 = { name = "entity.name.tag.block.table.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=table))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.table.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-caption"; },
+                        { include = "#stray-char"; },
+                        { include = "#sgml-declarations"; },
+                        {   begin = "(?<=</caption>)";
+                            end = "(?=<(?!/?caption))";
+                            patterns = (
+                                { include = "#stray-char"; },
+                                { include = "#sgml-declarations"; },
+                            );
+                        },
+                        {   begin = "(?=<(?!/?table))";
+                            end = "(?=</table)";
+                            patterns = (
+                                {   comment = "Bug: This should use the generic invalid tag.";
+                                    begin = "(?=<(colgroup|col))";
+                                    end = "(?=<)";
+                                    patterns = (
+                                        {   begin = "(?=<colgroup)";
+                                            end = "(?=<(?!colgroup|col))";
+                                            patterns = (
+                                                { include = "#tag-colgroup"; },
+                                                { include = "#stray-char"; },
+                                                { include = "#sgml-declarations"; },
+                                            );
+                                        },
+                                        {   begin = "(?=<col)";
+                                            end = "(?=<(?!colgroup|col))";
+                                            patterns = (
+                                                { include = "#tag-col"; },
+                                                { include = "#stray-char"; },
+                                                { include = "#sgml-declarations"; },
+                                            );
+                                        },
+                                    );
+                                },
+                                {   
+                                    begin = "(?=<(?!/?table))";
+                                    end = "(?=</table)";
+                                    patterns = (
+                                        { include = "#tag-thead"; },
+                                        { include = "#tag-tfoot"; },
+                                        { include = "#tag-tbody"; },
+                                        { include = "#tag-tr"; },
+                                        { include = "#stray-char"; },
+                                        { include = "#sgml-declarations"; },
+                                    );
+                                },
+                                { include = "#stray-char"; },
+                                { include = "#sgml-declarations"; },
+                            );
+                        },
+                    );
+                },
+                {   name = "meta.tag.block.table.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-border"; },
+                        { include = "#attribute-cellpadding"; },
+                        { include = "#attribute-cellspacing"; },
+                        { include = "#attribute-datapagesize"; },
+                        { include = "#attribute-frame"; },
+                        { include = "#attribute-rules"; },
+                        { include = "#attribute-summary"; },
+                        { include = "#attribute-width"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-title" = {
             begin = "(<(title)\\b)";
             end = "((title)>)";
@@ -1793,6 +1975,30 @@
                 },
             ); 
         }; 
+        "attribute-align" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(align)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(left|center|right|justify|char)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(left|center|right|justify|char)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
         "attribute-alt" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(alt)=(?=([\"']).*?[\"'])";
@@ -1802,6 +2008,79 @@
                 { include = "#values-generic-valid"; },
             ); 
         }; 
+        "attribute-border" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(border)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-char" = {
+            name = "meta.attribute-with-value.html.strict";
+            comment = "Bug: Does not correctly represent the single Character attribute.";
+            begin = "(char)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[[:alnum:]](?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[[:alnum:]](?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-charoff" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(charoff)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
         "attribute-charset" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(charset)=(?=([\"']).*?[\"'])";
@@ -1809,6 +2088,54 @@
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
                 { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-cellpadding" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(cellpadding)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-cellspacing" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(cellpadding)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
             ); 
         }; 
         "attribute-cite" = {
@@ -1874,6 +2201,15 @@
                 { include = "#values-generic-valid"; },
             ); 
         }; 
+        "attribute-datapagesize" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(datapagesize)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
         "attribute-declare" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(declare)=(?=([\"']).*?[\"'])";
@@ -1916,7 +2252,31 @@
                     begin = "'";
                     end = "'";
                     patterns = (
-                        { match = "(?<=\"|')preserve(?=\"|')"; },
+                        { match = "(?<=\"|')defer(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-frame" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(frame)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(void|above|below|hsides|lhs|rhs|vsides|box|border)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(void|above|below|hsides|lhs|rhs|vsides|box|border)(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
@@ -2282,6 +2642,30 @@
                 { include = "#values-generic-valid"; },
             ); 
         }; 
+        "attribute-rules" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(rules)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(none|groups|rows|cols|all)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(none|groups|rows|cols|all)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
         "attribute-scheme" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(scheme)=(?=([\"']).*?[\"'])";
@@ -2289,6 +2673,30 @@
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
                 { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-span" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(span)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
             ); 
         }; 
         "attribute-src" = {
@@ -2333,6 +2741,15 @@
                 },
             ); 
         }; 
+        "attribute-summary" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(summary)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
         "attribute-tabindex" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(tabindex)=(?=([\"']).*?[\"'])";
@@ -2373,6 +2790,30 @@
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
                 { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-valign" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(valign)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(top|middle|bottom|baseline)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(top|middle|bottom|baseline)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
             ); 
         }; 
         "attribute-value" = {
@@ -2427,6 +2868,30 @@
                     end = "'";
                     patterns = (
                         { match = "(?<=\"|')([0-9]{0,5}|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-width-multi" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(width)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}*?|[0-9]{0,4}%)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{0,5}*?|[0-9]{0,4}%)(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },

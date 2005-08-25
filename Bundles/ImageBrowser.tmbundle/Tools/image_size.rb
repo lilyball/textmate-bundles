@@ -1,3 +1,6 @@
+#
+# ImageSize by Keisuke Minami
+#
 class ImageSize
 # Image Type Constants
 	module Type

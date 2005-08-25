@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>Image Browser</title>
+<link rel='stylesheet' media='all' href='file://<%= RESOURCES_DIR %>/browser.css' />
+<script type='text/javascript'>
+var orig_w = 0
+var orig_h = 0
+
+scales_pct = [10, 20, 50, 100, 200, 500, 1000]
+scales_txt = ['0.1x', '0.2x', '0.5x', '1x', '2x', '5x', '10x']
+
+function scaleImage(value)
+{
+	var zoom = document.getElementById('zoom')
+	var pp = document.getElementById('preview_pane')
+	var pimg = document.getElementById('previewImage')
+	var pp_width = pp.clientWidth
+	var pp_height = pp.clientHeight
+	var pimg_orig_width = orig_w
+	var pimg_orig_height = orig_h
+	
+	var pimg_width_n = parseInt((orig_w*scales_pct[value])/100)
+	var pimg_height_n = parseInt((orig_h*scales_pct[value])/100)
+	
+	pimg.style.width = pimg_width_n + "px"
+	pimg.style.height = pimg_height_n + "px"
+	
+	pimg.style.left = ((pp_width/2) - (pimg_width_n/2))+'px'
+	pimg.style.top = ((pp_height/2) - (pimg_height_n/2))+'px'
+	zoom.innerHTML = scales_txt[value] + ' (' + pimg.clientWidth + " &times; " + pimg.clientHeight + ')'
+	pp.style.overflow = 'auto'
+}
+
+function displayImage(path) {
+	var path = 'file://<%= PROJECT_ROOT %>/'+path
+	var zoom = document.getElementById('zoom')
+	var p_img = document.getElementById('previewImage')
+	
+	p_img.src = path
+	p_img.style.height = 'auto'
+	p_img.style.width = 'auto'
+	orig_w = p_img.clientWidth
+	orig_h = p_img.clientHeight
+	document.getElementById('slider').value=3
+	document.getElementById('slider').disabled=false
+	scaleImage(3)
+}
+</script>
+</head>
+
+<body>
+<div id='list_box'>
+<% Dir.chdir(PROJECT_ROOT) %>
+<% Dir.glob("**/*.{gif,png,jpg,jpeg}") do |f| %>
+	<a href='#' class='item' onclick='displayImage("<%= f %>"); return false;'>
+	<img src='file://<%= PROJECT_ROOT %>/<%= f %>' class='thumb' />
+	<div class='filename'><%= f %></div>
+	<div class='details'>
+	<%#=	puts "<span>"+IO.read(f)[0x10..0x18].unpack('LL').join(" x ")+"</span>" if f =~ /png/ # orig %>
+	<%#=	puts "<span>"+IO.read(f, 8, 0x10).unpack('LL').join(' x ')+"</span>" if f =~ /png/ # working %>
+	<span>
+	<% File.open(f, "rb") do |fh|
+		img = ImageSize.new(fh.read) %>
+		<%= img.get_width %> &times; <%= img.get_height %>
+	<% end %>
+	</span>
+	</div>
+	</a>
+<% end %>
+</div>
+
+<div id='preview_box'>
+	<div id='preview_pane'><img id='previewImage' src='' /></div>
+	<div id='controls_box'>
+		<input id="slider" type="range" min="0" max="6" value="3" disabled="disabled" oninput="scaleImage(this.value)" /> <div id="zoom"></div>
+	</div>
+</div>
+</body>
+</html>

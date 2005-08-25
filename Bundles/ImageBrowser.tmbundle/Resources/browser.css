@@ -1,0 +1,77 @@
+BODY { margin: 0; padding: 0; font-size: 12px; }
+
+DIV#list_box {
+	width: 50%;
+	overflow: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+}
+DIV#preview_box
+{
+	width: 50%;
+	float: right;
+}
+A { text-decoration: none; }
+DIV.details {
+	font-size: 10px;
+	color: #666;
+}
+A.item
+{
+	display: block;
+	padding: 4px;
+	height: 42px;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+A.item:hover {
+	background: #dfebfe;
+	cursor: pointer;
+}
+DIV A.item:first
+{
+	border-top: none;
+}
+DIV.filename
+{
+	color: #333;
+	font-weight: bold;
+	font-family: "Lucida Grande";
+}
+IMG.thumb
+{
+	float: right;
+	width: 30px;
+	height: 30px;
+	padding: 6px;
+	background: transparent url(well.png) top left no-repeat;
+}
+
+
+DIV#preview_pane
+{
+	margin: 20px;
+	height: 300px;
+	overflow: auto;
+	border: 1px solid #999;
+	background: #e5e5e5 url(xparent.png) top left repeat;
+	position: relative;
+}
+#previewImage
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+DIV#controls_box
+{
+	width: 80%;
+	margin: auto;
+	text-align: center;
+}
+INPUT#slider
+{
+	width: 100%;
+}

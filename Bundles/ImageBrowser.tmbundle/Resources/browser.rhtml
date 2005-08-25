@@ -46,7 +46,7 @@ function displayImage(path) {
 	scaleImage(3)
 }
 function insert(text) {
-	// Ripped shamelessly from Max Williams.. Thanks.
+	// Ripped shamelessly (again) from Max Williams. Thanks.
 	TextMate.system("osascript -e 'tell app \"TextMate\" to insert \""+text+"\"' &", null)
 	window.close();
 }
@@ -61,8 +61,6 @@ function insert(text) {
 	<img src='file://<%= PROJECT_ROOT %>/<%= f %>' class='thumb' onclick='insert("<%= f %>")' title='Insert path' />
 	<div class='filename'><%= f %></div>
 	<div class='details'>
-	<%#=	puts "<span>"+IO.read(f)[0x10..0x18].unpack('LL').join(" x ")+"</span>" if f =~ /png/ # orig %>
-	<%#=	puts "<span>"+IO.read(f, 8, 0x10).unpack('LL').join(' x ')+"</span>" if f =~ /png/ # working %>
 	<span>
 	<% File.open(f, "rb") do |fh|
 		img = ImageSize.new(fh.read) %>

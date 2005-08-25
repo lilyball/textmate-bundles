@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>##	PHPCodeCompletion .tmbundle
+##	Version: 1.0b5 - 2005-08-25
+##	Created by Mats Persson [mats@imediatec.co.uk]
+##	(C) Copyright 2005
+##	Licence: Free for anyone to use and distribute
+##
+##	Inspired by and partly based on phpcc by ian@ardes.com
+	
+#	check if we have SELECTED_TEXT
+[[ "$TM_SELECTED_TEXT" != "" ]] &amp;&amp; MY_FUNC_TO_CHECK="$TM_SELECTED_TEXT"
+#	check if we have MY_FUNC_TO_CHECK
+[[ "$MY_FUNC_TO_CHECK" == "" ]] &amp;&amp; MY_FUNC_TO_CHECK="$TM_CURRENT_WORD"
+
+${TM_PHP:=php} "$TM_BUNDLE_PATH"/bin/phpcc.ShowTooltip.php "$MY_FUNC_TO_CHECK"
+
+# ${TM_PHP:=php} "$TM_BUNDLE_PATH"/bin/phpcc.ShowTooltip.php "$TM_CURRENT_WORD"</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>Show ToolTip</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.php</string>
+	<key>uuid</key>
+	<string>FFF1041A-C7A7-11D9-93B0-000D93C8BE28</string>
+</dict>
+</plist>

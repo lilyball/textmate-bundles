@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>##	PHPCodeCompletion .tmbundle
+##	Version: 1.0b5 - 2005-08-25
+##	Created by Mats Persson [mats@imediatec.co.uk]
+##	(C) Copyright 2005
+##	Licence: Free for anyone to use and distribute
+##
+##	Inspired by and partly based on phpcc by ian@ardes.com
+
+${TM_PHP:=php} "$TM_BUNDLE_PATH"/bin/phpcc.ManageLookups.php</string>
+	<key>dontFollowNewOutput</key>
+	<integer>1</integer>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^</string>
+	<key>name</key>
+	<string>Manage Completions</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.php</string>
+	<key>uuid</key>
+	<string>F31409B6-38F3-41BD-8AD9-60D95357F228</string>
+</dict>
+</plist>

@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Language" content="en-us" />
+		
+		<title>PHPCodeCompletion 1.0b3 ToDoList</title>
+		
+		<meta name="ROBOTS" content="ALL" />
+		<meta http-equiv="imagetoolbar" content="no" />
+		<meta name="MSSmartTagsPreventParsing" content="true" />
+		<meta name="Copyright" content="(c) 2005 Copyright content:  Copyright design: Mats Persson" />
+		<!-- (c) Copyright 2005 by Mats Persson All Rights Reserved. -->
+		
+		<meta name="Keywords" content="__KEYWORDS__" />
+		<meta name="Description" content="__DESCRIPTION__" />
+		
+		<style type="text/css">
+			body { margin: 10px; padding: 10px; font-size: 90%; font-family: "Lucida Grande", Helvetica, Arial; }
+			div { border: 1px solid grey; margin: 0em; padding: 0.1em 1em; }
+			#Header h2 { text-align: left; font-weight: bold; font-size: 140%; color: black; margin: 4px 0px; padding: 2px 0px; text-shadow: 0.3em 0.3em 0.2em #CCC; }
+			#Header p, p { margin: 5px 0 8px 0; padding: 0; font-size: 100%; line-height: 140%; }
+			h3 { text-align: left; font-weight: bold; font-size: 120%; color: black; margin: 4px 0px; padding: 2px 0px; }
+			pre, code {	font-size: 100%; font-family: Monaco; border: 1px solid #ccc; margin: 5px; padding: 5px; }
+			a { text-decoration: none; color: black; font-weight: bold; }
+			#Menu { font-size: 120%; border: 1px solid grey; margin: 0em; padding: 0.2em 2em 0em 2em; }
+			li { margin: 10px; padding: 2px; }				
+		</style>
+		<script type="text/javascript">
+			function scrollTop(){
+				//	scrolls window to top of page
+				window.scroll(0,0);
+			}
+		</script>		
+	</head>
+	
+	<body>
+
+	<div id="Header">
+
+		<h2>PHPCodeCompletion ToDo List</h2>		
+		<p>Version: 1.0b3 - 2005-06-03</p>
+	</div>
+	<div id="Content">
+		
+		<p>This is a reworking of Ian Ardes' [ http://ian.ardes.com/phpcc/ ] phpcc solution. The fundamental idea behind this PHPCodeCompletion bundle is as a concept of what is possible within TM, it is my hope that it, one day soonish, will be good enough to be included in the PHP.tmbundle by default.</p>
+		
+		<h3>Changes in Beta3:</h3>
+			<ol>
+				<li><strong>Optimizations:</strong>: Numerous ones to improve the speed and feel of things.</li>
+				<li><strong>'Crash proofing'</strong>: The previous version did not check what text it took as input, so now we do. (should save TM from creating a 6000+ lines tooltip :) )</li>
+				<li><strong>PHPCC Completions information</strong>: Improved the output of this and added the ability to easily edit the completions in TM.</li>
+				<li><strong>Offline Documentation Support:</strong> Much improved handling of Documentation both local and external.</li>
+			</ol>
+
+		
+		
+		<h3>What is still outstanding and/or planned:</h3>
+		
+		<ol>
+			
+			<li><strong>Support for Per Project Completions:</strong> Yes, PHPCC will one day support completions from your source code files on a per project basis. This is a bit more complex than it seems, so I will continue working on it with the help of others.</li>
+			
+			<li><strong>Improved input of User Defined Completions:</strong> YES, I would love to have an easier way for users to add and define their own completions, I just have not yet worked out how to do that successfully. Ideas &amp; suggestions very much appreciated.</li>
+		
+			<li><strong>Missing Completion Information:</strong> This is too much work for me to go through, and it's too boring anyway, so I'll leave it up to you, the end users to sort this out :)</li>
+			
+			<li><strong>Improved Offline Documentation Support:</strong> The default PHP Manual documents contains such incredibly ugly HTML that I want to try to rewrite them for better output in the TM HTML window. This will be done as and when I'm in the mood for it (= might never happen).</li>
+			
+			<li><strong>Further Optimizations:</strong> Things can still be improved to make the bundle smaller to distribute and faster to execute.</li>
+			
+			<li><strong>...</strong> Probably a lot more things than this, but that's all I can remember right now.</li>
+		</ol>
+		
+		<p>If you have any ideas or suggestions, please send them to me in an e-mail.</p>
+		
+	</div>
+	
+	<!-- begin div.Footer -->
+	<div id="Footer">
+		<p>created by Mats Persson [ mats@imediatec.co.uk ]</p>
+	</div>
+	<!-- end div.Footer -->
+	
+	</body>
+</html>
+

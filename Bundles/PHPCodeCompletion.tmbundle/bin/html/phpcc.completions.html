@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Language" content="en-us" />
+
+		<title>PHPCodeCompletion Available Completions</title>
+
+		<style type="text/css">
+			body { margin: 5px; padding: 0px; font-size: 90%; font-family: "Lucida Grande", Helvetica, Arial; }
+			#Header { border: 1px solid grey; margin: 0em; padding: 0.1em 1em; }
+			#Header h2 { text-align: left; font-weight: bold; font-size: 1.2em; color: black; margin: 4px 0px; padding: 2px 0px; text-shadow: 0.3em 0.3em 0.2em #CCC; }
+			#Header p { margin: 5px 0 8px 0; padding: 0; font-size: 100%; line-height: 140%; }
+			#Header p, p { margin: 5px 0 8px 0; padding: 0; font-size: 100%; line-height: 140%; }
+			#Header #editLink { float: right; margin: -1.8em 0 0 0; }
+			#Header #editLink a { color: black; font-weight: bold; }
+			#Notes, #Content { border: 1px solid grey; margin: 0em; padding: 1em; }
+			h3 { text-align: left; font-weight: bold; font-size: 120%; color: black; margin: 4px 0px; padding: 2px 0px; }
+			h3.divTitle:before { content: "::"; padding-right: 4px; font-family: Verdana; color: gray; font-weight: bold; }
+			pre, code {	font-size: 100%; font-family: Monaco; border: 1px solid #ccc; margin: 5px; padding: 5px; }
+			a { text-decoration: none; color: black; font-weight: normal; }
+			a.editLink { color: gray; font-weight: normal; }
+			#Menu { font-size: 100%; border: 1px solid grey; margin: 0em; padding: 0.2em 2em 0em 2em; }
+			#navlist { margin: 0; padding: 4px 0 20px 10px; border-bottom: 2px solid #ddd; text-align: center; }
+			#navlist ul, #navlist li { margin: 0; padding: 0; display: inline; list-style-type: none;}
+			#navlist a:link, #navlist a:visited { float: left; line-height: 14px; font-weight: bold; margin: 0 8px 4px 8px;  text-decoration: none; color: #999;	}
+			#navlist a:link #current, #navlist a:visited #current, #navlist a:hover { border-bottom: 4px solid #ddd; padding-bottom: 2px; background: transparent; color: #000; }
+			#navlist a:hover { color: #000; }
+			div.infoContainer { border: 1px solid #ccc; margin: 8px 0; padding: 10px 0; }
+			.hidden { display: none; }
+			div.infoContainer p { margin: 0 0 0 2em; padding: 0; color: grey; }
+			div.infoContainer a { margin: 0; padding: 0; color: grey; }	
+			#Footer p { color: gray; font-size: 80%; text-align: center; }
+			.floatRight { float: right; }
+			.noteTxt { color: red; font-size: 80%;}				
+		</style>
+		<script type="text/javascript">
+			function toggleObject( item ) {
+				//	Hides/Shows an object dependent upon current status
+				if ( document.getElementById( item ).style.display == 'block' )
+				{
+					document.getElementById( item ).style.display = 'none';
+					document.getElementById( item + '_toggle').firstChild.nodeValue = 'View these Completions';
+					// window.alert( "Debug::toggle false [" + item + "]" );
+				} else {
+					document.getElementById( item ).style.display = 'block';
+					document.getElementById( item + '_toggle').firstChild.nodeValue = 'Hide these Completions';
+					// window.alert( "Debug::toggle true [" + item + "]" );
+				}
+			}
+			function toggleAll( tagName ){
+				// check if we should Show or Hide 
+				if ( document.getElementById( 'ShowHideToggle' ).firstChild.nodeValue == 'Show All' ){
+					// we need to expand all
+					expandAll( tagName );
+					// then reset the toggleAll link value
+					document.getElementById( 'ShowHideToggle' ).firstChild.nodeValue = 'Hide All';
+				}else{
+					// we need to hide all of them
+					collapseAll( tagName );
+					// then reset the toggleAll link value
+					document.getElementById( 'ShowHideToggle' ).firstChild.nodeValue = 'Show All';
+				}
+			}
+			function collapseAll( tagName ) {
+				tmp = document.getElementsByTagName( tagName );
+				for (i=0;i<tmp.length;i++) {
+					// hide all
+					tmp[i].style.display = 'none';
+					document.getElementById( tmp[i].id + '_toggle').firstChild.nodeValue = 'Show Info';
+				} // and then we have to change the text on the toggle link
+			}
+			function expandAll( tagName ) {
+				tmp = document.getElementsByTagName( tagName );
+				for (i=0;i<tmp.length;i++){
+					// show all
+					tmp[i].style.display = 'block';
+					document.getElementById( tmp[i].id + '_toggle').firstChild.nodeValue = 'Hide Info';
+				}
+			}
+			function scrollTop(){
+				//	scrolls window to top of page
+				window.scroll(0,0);
+			}
+		</script>
+	</head>
+	<body>
+			
+		<div id="Header">
+			<h2><strong>TextMate PHPCodeCompletions Completions Editor</strong>:: Version: __PHPCC_VERSION__</h2>
+			<p id="editLink">[ <a href="txmt://open?url=file://__PHPCC_PREFS_FILE__">Edit Preferences</a> ]</p>
+		</div>
+		
+		<!--
+		<div id="Notes">	
+			<p><strong>Please Note!</strong> This is still very much work in progress, but at least you can easily edit a particular group of Completions and control the output format (through the preferences settings). More options will come later as I have worked those out.</p>
+			<p>There are currently <strong>__PHPCC_NUM_FUNCS__</strong> completions supported.
+			<br />
+			<span class="noteTxt">Unfortunately 683 of those completions are missing some information. If you have the time and energy, please help fill them out and then make those changes available to the rest of the PHPCC users (SVN setup coming soon). It can only be done by hand due to the nature of the PHP manuals.</span></p>
+		</div>
+		-->
+		
+		<div id="Menu">
+			<ul id="navlist">
+				<li><a href="#div_a" title="Jump to A"> A </a></li>
+				<li><a href="#div_b" title="Jump to B"> B </a></li>
+				<li><a href="#div_c" title="Jump to C"> C </a></li>
+				<li><a href="#div_d" title="Jump to D"> D </a></li>
+				<li><a href="#div_e" title="Jump to E"> E </a></li>
+				<li><a href="#div_f" title="Jump to F"> F </a></li>
+				<li><a href="#div_g" title="Jump to G"> G </a></li>
+				<li><a href="#div_h" title="Jump to H"> H </a></li>
+				<li><a href="#div_i" title="Jump to I"> I </a></li>
+				<li><a href="#div_j" title="Jump to J"> J </a></li>
+				<li><a href="#div_k" title="Jump to K"> K </a></li>
+				<li><a href="#div_l" title="Jump to L"> L </a></li>
+				<li><a href="#div_m" title="Jump to M"> M </a></li>
+				<li><a href="#div_n" title="Jump to N"> N </a></li>
+				<li><a href="#div_o" title="Jump to O"> O </a></li>
+				<li><a href="#div_p" title="Jump to P"> P </a></li>
+				<li><a href="#div_q" title="Jump to Q"> Q </a></li>
+				<li><a href="#div_r" title="Jump to R"> R </a></li>
+				<li><a href="#div_s" title="Jump to S"> S </a></li>
+				<li><a href="#div_t" title="Jump to T"> T </a></li>
+				<li><a href="#div_u" title="Jump to U"> U </a></li>
+				<li><a href="#div_v" title="Jump to V"> V </a></li>
+				<li><a href="#div_w" title="Jump to W"> W </a></li>
+				<li><a href="#div_x" title="Jump to X"> X </a></li>
+				<li><a href="#div_y" title="Jump to Y"> Y </a></li>
+				<li><a href="#div_z" title="Jump to Z"> Z </a></li>
+			</ul>
+		</div>
+
+		<div id="Content">
+			<h3>Available Completions::</h3>
+			
+				__PHPCC_COMPLETIONS_LOOP__
+				
+			<p>&nbsp; &nbsp; <a href="javascript:scrollTop();" title="Scroll to top of page">&laquo;&laquo; Go To Top</a></p>
+		
+		</div>
+
+
+		<div id="Footer">
+			<p>__PHPCC_CREDIT_STRING__</p>
+		</div>			
+
+	</body>
+</html>

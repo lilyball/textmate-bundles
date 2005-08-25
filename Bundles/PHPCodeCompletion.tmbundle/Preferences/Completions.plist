@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Completions</string>
+	<key>scope</key>
+	<string>source.php</string>
+	<key>settings</key>
+	<dict>
+		<key>completionCommand</key>
+		<string>MY_BUNDLENAME=PHPCodeCompletion.tmbundle
+MY_LIB_BUNDLES_PATH="/Library/Application Support/TextMate/Bundles"
+if [ -d "$HOME/$MY_LIB_BUNDLES_PATH/$MY_BUNDLENAME" ]
+then
+	PHPCC_BUNDLE_PATH="$HOME/$MY_LIB_BUNDLES_PATH/$MY_BUNDLENAME"
+else
+	# ok not in UserBundles, so check in Lib Bundles and set path, else do nothing
+	[[ -d "/$MY_LIB_BUNDLES_PATH/$MY_BUNDLENAME" ]] &amp;&amp; PHPCC_BUNDLE_PATH="/$MY_LIB_BUNDLES_PATH/$MY_BUNDLENAME"
+fi
+export PHPCC_BUNDLE_PATH
+cat "${PHPCC_BUNDLE_PATH}/bin/includes/phpcc.functionslist.txt"|grep "^$TM_CURRENT_WORD"|sort</string>
+		<key>disableDefaultCompletion</key>
+		<string>0</string>
+	</dict>
+	<key>uuid</key>
+	<string>F7EDDD59-EFA0-44BE-9B67-A4D44CB38CAD</string>
+</dict>
+</plist>

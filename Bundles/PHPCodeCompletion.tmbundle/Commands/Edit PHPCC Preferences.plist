@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>	##	PHPCodeCompletion .tmbundle
+	##	Version: 1.0b5 - 2005-08-25
+	##	Created by Mats Persson [mats@imediatec.co.uk]
+	##	(C) Copyright 2005
+	##	Licence: Free for anyone to use and distribute
+	##
+	##	Inspired by and partly based on phpcc by ian@ardes.com
+	
+	##	PHPCodeCompletion Edit Preferences
+open -a TextMate "${TM_BUNDLE_PATH}/bin/phpcc.preferences.php"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^</string>
+	<key>name</key>
+	<string>Edit PHPCC Preferences</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.php</string>
+	<key>uuid</key>
+	<string>61D05096-E15D-4D23-B1FD-AAE29176FFE8</string>
+</dict>
+</plist>

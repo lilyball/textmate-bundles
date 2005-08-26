@@ -224,6 +224,32 @@
                 },
             );
         }; 
+        "tag-area" = {
+            begin = "(<(area)\\b)";
+            end = "(/>)";
+            captures = {
+                1 = { name = "meta.tag.inline.area.html.strict"; };
+                2 = { name = "entity.name.tag.inline.area.html.strict"; };
+            };
+            patterns = (
+                {   name = "meta.tag.inline.area.html.strict";
+                    begin = "";
+                    end = "(?=/>)";
+                    patterns = (
+                        { include = "#attribute-accesskey"; },
+                        { include = "#attribute-alt"; },
+                        { include = "#attribute-coords"; },
+                        { include = "#attribute-href"; },
+                        { include = "#attribute-nohref"; },
+                        { include = "#attribute-shape"; },
+                        { include = "#attribute-tabindex"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-b" = {
             begin = "(<(b)\\b)";
             end = "((b)>)";
@@ -249,6 +275,57 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-base" = {
+            begin = "(<(base)\\b)";
+            end = "(/>)";
+            captures = {
+                1 = { name = "meta.tag.inline.base.html.strict"; };
+                2 = { name = "entity.name.tag.inline.base.html.strict"; };
+            };
+            patterns = (
+                {   name = "meta.tag.inline.base.html.strict";
+                    begin = "";
+                    end = "(?=/>)";
+                    patterns = (
+                        { include = "#attribute-href"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-bdo" = {
+            begin = "(<(bdo)\\b)";
+            end = "((bdo)>)";
+            captures = {
+                1 = { name = "meta.tag.block.bdo.html.strict"; };
+                2 = { name = "entity.name.tag.block.bdo.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=bdo))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.bdo.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.bdo.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-dir"; },
+                        { include = "#attributes-group-core"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
@@ -562,6 +639,39 @@
                 },
             );
         }; 
+        "tag-del" = {
+            begin = "(<(del)\\b)";
+            end = "((del)>)";
+            captures = {
+                1 = { name = "meta.tag.block.del.html.strict"; };
+                2 = { name = "entity.name.tag.block.del.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=del))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.del.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-flow"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.del.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-cite"; },
+                        { include = "#attribute-datetime"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-dfn" = {
             begin = "(<(dfn)\\b)";
             end = "((dfn)>)";
@@ -711,6 +821,77 @@
                     begin = "";
                     end = ">";
                     patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-fieldset" = {
+            begin = "(<(fieldset)\\b)";
+            end = "((fieldset)>)";
+            captures = {
+                1 = { name = "meta.tag.block.fieldset.html.strict"; };
+                2 = { name = "entity.name.tag.block.fieldset.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=fieldset))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.fieldset.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-legend"; },
+                        { include = "#tag-group-flow"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.fieldset.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-form" = {
+            begin = "(<(form)\\b)";
+            end = "((form)>)";
+            captures = {
+                1 = { name = "meta.tag.block.form.html.strict"; };
+                2 = { name = "entity.name.tag.block.form.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=form))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.form.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-fieldset"; },
+                        { include = "#tag-group-heading"; },
+                        { include = "#tag-group-list"; },
+                        { include = "#tag-group-block-no_form"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#stray-char"; },
+                    );
+                },
+                {   name = "meta.tag.block.form.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-accept"; },
+                        { include = "#attribute-accept-charset"; },
+                        { include = "#attribute-action"; },
+                        { include = "#attribute-method"; },
+                        { include = "#attribute-enctype"; },
                         { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
@@ -921,6 +1102,7 @@
                     patterns = (
                         { include = "#sgml-declarations"; },
                         { include = "#tag-title"; },
+                        { include = "#tag-base"; },
                         { include = "#tag-meta"; },
                         { include = "#tag-link"; },
                         { include = "#tag-object-inheader"; },
@@ -1060,9 +1242,43 @@
                     patterns = (
                         { include = "#attribute-alt"; },
                         { include = "#attribute-height"; },
+                        { include = "#attribute-ismap"; },
                         { include = "#attribute-longdesc"; },
                         { include = "#attribute-src"; },
                         { include = "#attribute-width"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-ins" = {
+            begin = "(<(ins)\\b)";
+            end = "((ins)>)";
+            captures = {
+                1 = { name = "meta.tag.block.ins.html.strict"; };
+                2 = { name = "entity.name.tag.block.ins.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=ins))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.ins.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-flow"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.ins.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-cite"; },
+                        { include = "#attribute-datetime"; },
                         { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
@@ -1094,6 +1310,38 @@
                     begin = "";
                     end = ">";
                     patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-legend" = {
+            begin = "(<(legend)\\b)";
+            end = "((legend)>)";
+            captures = {
+                1 = { name = "meta.tag.block.legend.html.strict"; };
+                2 = { name = "entity.name.tag.block.legend.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=legend))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.legend.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-inline"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.block.legend.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-accesskey"; },
                         { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
@@ -1158,6 +1406,57 @@
                 },
             );
         }; 
+        "tag-map" = {
+            begin = "(<(map)\\b)";
+            end = "((map)>)";
+            captures = {
+                1 = { name = "meta.tag.block.map.html.strict"; };
+                2 = { name = "entity.name.tag.block.map.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=map))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.map.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#stray-char"; },
+                        { include = "#sgml-declarations"; },
+                        {   begin = "(?=<area)";
+                            end = "(?=</map)";
+                            patterns = (
+                                { include = "#tag-area"; },
+                                { include = "#stray-char"; },
+                                { include = "#sgml-declarations"; },
+                            );
+                        },
+                        {   begin = "(?=<(?!/?(map|area)))";
+                            end = "(?=</map)";
+                            patterns = (
+                                { include = "#tag-group-heading"; },
+                                { include = "#tag-group-block"; },
+                                { include = "#stray-char"; },
+                                { include = "#sgml-declarations"; },
+                            );
+                        },
+                    );
+                },
+                {   name = "meta.tag.block.map.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-class"; },
+                        { include = "#attribute-id"; },
+                        { include = "#attribute-title"; },
+                        { include = "#attributes-group-events"; },
+                        { include = "#attributes-group-I18n"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
         "tag-meta" = {
             begin = "(<(meta)\\b)";
             end = "(/>)";
@@ -1175,6 +1474,81 @@
                         { include = "#attribute-name"; },
                         { include = "#attribute-scheme"; },
                         { include = "#attributes-group-I18n"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-noscript" = {
+            begin = "(<(noscript)\\b)";
+            end = "((noscript)>)";
+            captures = {
+                1 = { name = "meta.tag.block.noscript.html.strict"; };
+                2 = { name = "entity.name.tag.block.noscript.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=noscript))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.noscript.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-heading"; },
+                        { include = "#tag-group-list"; },
+                        { include = "#tag-group-block"; },
+                        { include = "#sgml-declarations"; },
+                        { include = "#stray-char"; },
+                    );
+                },
+                {   name = "meta.tag.block.noscript.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-object" = {
+            begin = "(<(object)\\b)";
+            end = "((/>)|((object)>))";
+            captures = {
+                1 = { name = "meta.tag.inline.object.html.strict"; };
+                4 = { name = "entity.name.tag.inline.object.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=[^/]>)";
+                    end = "(</(?=object))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.inline.object.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-param"; },
+                        { include = "#tag-param"; },
+                        { include = "#entities"; },
+                    );
+                },
+                {   name = "meta.tag.inline.object.html.strict";
+                    begin = "";
+                    end = "((?=/>)|>)";
+                    patterns = (
+                        { include = "#attribute-classid"; },
+                        { include = "#attribute-codebase"; },
+                        { include = "#attribute-codetype"; },
+                        { include = "#attribute-data"; },
+                        { include = "#attribute-declare"; },
+                        { include = "#attribute-height"; },
+                        { include = "#attribute-name"; },
+                        { include = "#attribute-standby"; },
+                        { include = "#attribute-tabindex"; },
+                        { include = "#attribute-type"; },
+                        { include = "#attribute-width"; },
+                        { include = "#attribute-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
@@ -1706,9 +2080,73 @@
                                     end = "(?=</table)";
                                     patterns = (
                                         { include = "#tag-thead"; },
-                                        { include = "#tag-tfoot"; },
-                                        { include = "#tag-tbody"; },
-                                        { include = "#tag-tr"; },
+                                        {   begin = "(?<=</thead>)";
+                                            end = "(?=</table)";
+                                            patterns = (
+                                                { include = "#tag-tfoot"; },
+                                                {   begin = "(?<=</tfoot>)";
+                                                    end = "(?=</table)";
+                                                    patterns = (
+                                                        { include = "#tag-tbody"; },
+                                                        { include = "#stray-char"; },
+                                                        { include = "#sgml-declarations"; },
+                                                    );
+                                                },
+                                                {   
+                                                    begin = "(?=<(?!/?table))";
+                                                    end = "(?=</table)";
+                                                    patterns = (
+                                                        { include = "#tag-tbody"; },
+                                                        { include = "#stray-char"; },
+                                                        { include = "#sgml-declarations"; },
+                                                    );
+                                                },
+                                                { include = "#stray-char"; },
+                                                { include = "#sgml-declarations"; },
+                                            );
+                                        },
+                                        {   
+                                            begin = "(?=<(?!/?table))";
+                                            end = "(?=</table)";
+                                            patterns = (
+                                                { include = "#tag-tfoot"; },
+                                                {   begin = "(?<=</tfoot>)";
+                                                    end = "(?=</table)";
+                                                    patterns = (
+                                                        { include = "#tag-tbody"; },
+                                                        { include = "#stray-char"; },
+                                                        { include = "#sgml-declarations"; },
+                                                    );
+                                                },
+                                                {   
+                                                    begin = "(?=<(?!/?table))";
+                                                    end = "(?=</table)";
+                                                    patterns = (
+                                                        {   begin = "(?=<tbody)";
+                                                            end = "(?=</table)";
+                                                            patterns = (
+                                                                { include = "#tag-tbody"; },
+                                                                { include = "#stray-char"; },
+                                                                { include = "#sgml-declarations"; },
+                                                            );
+                                                        },
+                                                        {   
+                                                            begin = "(?=<tr)";
+                                                            end = "(?=</table)";
+                                                            patterns = (
+                                                                { include = "#tag-tr"; },
+                                                                { include = "#stray-char"; },
+                                                                { include = "#sgml-declarations"; },
+                                                            );
+                                                        },
+                                                        { include = "#stray-char"; },
+                                                        { include = "#sgml-declarations"; },
+                                                    );
+                                                },
+                                                { include = "#stray-char"; },
+                                                { include = "#sgml-declarations"; },
+                                            );
+                                        },
                                         { include = "#stray-char"; },
                                         { include = "#sgml-declarations"; },
                                     );
@@ -1731,6 +2169,193 @@
                         { include = "#attribute-rules"; },
                         { include = "#attribute-summary"; },
                         { include = "#attribute-width"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-tbody" = {
+            begin = "(<(tbody)\\b)";
+            end = "((tbody)>)";
+            captures = {
+                1 = { name = "meta.tag.block.tbody.html.strict"; };
+                2 = { name = "entity.name.tag.block.tbody.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=tbody))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.tbody.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-tr"; },
+                        { include = "#stray-char"; },
+                        { include = "#sgml-declarations"; },
+                    );
+                },
+                {   name = "meta.tag.block.tbody.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-align"; },
+                        { include = "#attribute-char"; },
+                        { include = "#attribute-charoff"; },
+                        { include = "#attribute-valign"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-td" = {
+            begin = "(<(td)\\b)";
+            end = "((/>)|((td)>))";
+            captures = {
+                1 = { name = "meta.tag.block.td.html.strict"; };
+                4 = { name = "entity.name.tag.block.td.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=[^/]>)";
+                    end = "(</(?=td))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.td.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-flow"; },
+                        { include = "#entities"; },
+                        { include = "#sgml-declarations"; },
+                    );
+                },
+                {   name = "meta.tag.block.td.html.strict";
+                    begin = "";
+                    end = "((?=/>)|>)";
+                    patterns = (
+                        { include = "#attribute-abbr"; },
+                        { include = "#attribute-align"; },
+                        { include = "#attribute-axis"; },
+                        { include = "#attribute-char"; },
+                        { include = "#attribute-charoff"; },
+                        { include = "#attribute-colspan"; },
+                        { include = "#attribute-headers"; },
+                        { include = "#attribute-rowspan"; },
+                        { include = "#attribute-scope"; },
+                        { include = "#attribute-valign"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-tfoot" = {
+            begin = "(<(tfoot)\\b)";
+            end = "((tfoot)>)";
+            captures = {
+                1 = { name = "meta.tag.block.tfoot.html.strict"; };
+                2 = { name = "entity.name.tag.block.tfoot.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=tfoot))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.tfoot.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-tr"; },
+                        { include = "#stray-char"; },
+                        { include = "#sgml-declarations"; },
+                    );
+                },
+                {   name = "meta.tag.block.tfoot.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-align"; },
+                        { include = "#attribute-char"; },
+                        { include = "#attribute-charoff"; },
+                        { include = "#attribute-valign"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-th" = {
+            begin = "(<(th)\\b)";
+            end = "((/>)|((th)>))";
+            captures = {
+                1 = { name = "meta.tag.block.th.html.strict"; };
+                4 = { name = "entity.name.tag.block.th.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=[^/]>)";
+                    end = "(</(?=th))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.th.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-group-flow"; },
+                        { include = "#entities"; },
+                        { include = "#sgml-declarations"; },
+                    );
+                },
+                {   name = "meta.tag.block.th.html.strict";
+                    begin = "";
+                    end = "((?=/>)|>)";
+                    patterns = (
+                        { include = "#attribute-abbr"; },
+                        { include = "#attribute-align"; },
+                        { include = "#attribute-axis"; },
+                        { include = "#attribute-char"; },
+                        { include = "#attribute-charoff"; },
+                        { include = "#attribute-colspan"; },
+                        { include = "#attribute-headers"; },
+                        { include = "#attribute-rowspan"; },
+                        { include = "#attribute-scope"; },
+                        { include = "#attribute-valign"; },
+                        { include = "#attributes-group-common"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-thead" = {
+            begin = "(<(thead)\\b)";
+            end = "((thead)>)";
+            captures = {
+                1 = { name = "meta.tag.block.thead.html.strict"; };
+                2 = { name = "entity.name.tag.block.thead.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=thead))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.thead.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-tr"; },
+                        { include = "#stray-char"; },
+                        { include = "#sgml-declarations"; },
+                    );
+                },
+                {   name = "meta.tag.block.thead.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-align"; },
+                        { include = "#attribute-char"; },
+                        { include = "#attribute-charoff"; },
+                        { include = "#attribute-valign"; },
                         { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
@@ -1763,6 +2388,42 @@
                     patterns = (
                         { include = "#attribute-profile"; },
                         { include = "#attributes-group-I18n"; },
+                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-illegal_char"; },
+                    );
+                },
+            );
+        }; 
+        "tag-tr" = {
+            begin = "(<(tr)\\b)";
+            end = "((tr)>)";
+            captures = {
+                1 = { name = "meta.tag.block.tr.html.strict"; };
+                2 = { name = "entity.name.tag.block.tr.html.strict"; };
+            };
+            patterns = (
+                {
+                    begin = "(?<=>)";
+                    end = "(</(?=tr))";
+                    endCaptures = {
+                        1 = { name = "meta.tag.block.tr.html.strict"; };
+                    };
+                    patterns = (
+                        { include = "#tag-td"; },
+                        { include = "#tag-th"; },
+                        { include = "#stray-char"; },
+                        { include = "#sgml-declarations"; },
+                    );
+                },
+                {   name = "meta.tag.block.tr.html.strict";
+                    begin = "";
+                    end = ">";
+                    patterns = (
+                        { include = "#attribute-align"; },
+                        { include = "#attribute-char"; },
+                        { include = "#attribute-charoff"; },
+                        { include = "#attribute-valign"; },
+                        { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
@@ -1950,6 +2611,24 @@
                 },
             ); 
         }; 
+        "attribute-accept" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(accept)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-accept-charset" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(accept-charset)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
         "attribute-accesskey" = {
             name = "meta.attribute-with-value.html.strict";
             comment = "Bug: Does not correctly represent the single Character attribute.";
@@ -1973,6 +2652,24 @@
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
+            ); 
+        }; 
+        "attribute-action" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(action)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-abbr" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(abbr)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
             ); 
         }; 
         "attribute-align" = {
@@ -2002,6 +2699,15 @@
         "attribute-alt" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(alt)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-axis" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(axis)=(?=([\"']).*?[\"'])";
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
@@ -2183,9 +2889,42 @@
                 { include = "#values-generic-valid"; },
             ); 
         }; 
+        "attribute-colspan" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(colspan)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
         "attribute-content" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(content)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-coords" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(coords)=(?=([\"']).*?[\"'])";
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
@@ -2208,6 +2947,30 @@
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
                 { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-datetime" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(datetime)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{4}-(0[1-9]|1[012])-((?!00|3[2-9])[0-3][0-9])T((?!2[4-9])[0-2][0-9]):[0-5][0-9]:[0-5][0-9](Z|[-+]((?!2[4-9])[0-2][0-9]):[0-5][0-9]))(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')([0-9]{4}-(0[1-9]|1[012])-((?!00|3[2-9])[0-3][0-9])T((?!2[4-9])[0-2][0-9]):[0-5][0-9]:[0-5][0-9](Z|[-+]((?!2[4-9])[0-2][0-9]):[0-5][0-9]))(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
             ); 
         }; 
         "attribute-declare" = {
@@ -2256,6 +3019,15 @@
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
+            ); 
+        }; 
+        "attribute-enctype" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(enctype)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
             ); 
         }; 
         "attribute-frame" = {
@@ -2389,6 +3161,30 @@
                 },
             ); 
         }; 
+        "attribute-ismap" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(ismap)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')ismap(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')ismap(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
         "attribute-longdesc" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(longdesc)=(?=([\"']).*?[\"'])";
@@ -2422,6 +3218,30 @@
                 },
             ); 
         }; 
+        "attribute-method" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(method)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(get|post)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(get|post)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
         "attribute-name" = {
             name = "meta.attribute-with-value.html.strict";
             comment = "Bug: This may not take into account all possible characters in NMTOKEN.";
@@ -2442,6 +3262,30 @@
                     end = "'";
                     patterns = (
                         {   match = "[\\w\\-:.]+"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-nohref" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(nohref)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')nohref(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')nohref(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
@@ -2642,6 +3486,30 @@
                 { include = "#values-generic-valid"; },
             ); 
         }; 
+        "attribute-rowspan" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(rowspan)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[0-9]+(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
         "attribute-rules" = {
             name = "meta.attribute-with-value.html.strict";
             begin = "(rules)=(?=([\"']).*?[\"'])";
@@ -2673,6 +3541,54 @@
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
                 { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-scope" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(scope)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(row|col|rowgroup|colgroup)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(row|col|rowgroup|colgroup)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-shape" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(shape)=(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')(rect|circle|poly|default)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')(rect|circle|poly|default)(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
             ); 
         }; 
         "attribute-span" = {
@@ -2883,7 +3799,7 @@
                     begin = "\"";
                     end = "\"";
                     patterns = (
-                        { match = "(?<=\"|')([0-9]{0,5}*?|[0-9]{0,4}%)(?=\"|')"; },
+                        { match = "(?<=\"|')([0-9]{0,5}\\*?|[0-9]{0,4}%)(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
@@ -2891,7 +3807,7 @@
                     begin = "'";
                     end = "'";
                     patterns = (
-                        { match = "(?<=\"|')([0-9]{0,5}*?|[0-9]{0,4}%)(?=\"|')"; },
+                        { match = "(?<=\"|')([0-9]{0,5}\\*?|[0-9]{0,4}%)(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },
@@ -3018,6 +3934,20 @@
                 { include = "#tag-group-form"; },
             );
         }; 
+        "tag-group-block-no_form" = {
+            patterns = (
+                { include = "#tag-hr"; },
+                { include = "#tag-script"; },
+                { include = "#tag-noscript"; },
+                { include = "#tag-address"; },
+                { include = "#tag-blockquote"; },
+                { include = "#tag-div"; },
+                { include = "#tag-pre"; },
+                { include = "#tag-p"; },
+                { include = "#tag-table"; },
+                { include = "#tag-group-form"; },
+            );
+        }; 
         "tag-group-list" = {
             patterns = (
                 { include = "#tag-dl"; },
@@ -3030,7 +3960,113 @@
                 { include = "#tag-a"; },
                 { include = "#tag-abbr"; },
                 { include = "#tag-acronym"; },
-                { include = "#tag-applet"; },
+                { include = "#tag-b"; },
+                { include = "#tag-bdo"; },
+                { include = "#tag-big"; },
+                { include = "#tag-br"; },
+                { include = "#tag-cite"; },
+                { include = "#tag-code"; },
+                { include = "#tag-del"; },
+                { include = "#tag-dfn"; },
+                { include = "#tag-em"; },
+                { include = "#tag-i"; },
+                { include = "#tag-iframe"; },
+                { include = "#tag-img"; },
+                { include = "#tag-ins"; },
+                { include = "#tag-kbd"; },
+                { include = "#tag-map"; },
+                { include = "#tag-noscript"; },
+                { include = "#tag-q"; },
+                { include = "#tag-ruby"; },
+                { include = "#tag-samp"; },
+                { include = "#tag-script"; },
+                { include = "#tag-span"; },
+                { include = "#tag-small"; },
+                { include = "#tag-strong"; },
+                { include = "#tag-sub"; },
+                { include = "#tag-sup"; },
+                { include = "#tag-tt"; },
+                { include = "#tag-var"; },
+                { include = "#tag-group-formctrl"; },
+            );
+        }; 
+        "tag-group-inline-no_label" = {
+            patterns = (
+                { include = "#tag-a"; },
+                { include = "#tag-abbr"; },
+                { include = "#tag-acronym"; },
+                { include = "#tag-b"; },
+                { include = "#tag-bdo"; },
+                { include = "#tag-big"; },
+                { include = "#tag-br"; },
+                { include = "#tag-cite"; },
+                { include = "#tag-code"; },
+                { include = "#tag-del"; },
+                { include = "#tag-dfn"; },
+                { include = "#tag-em"; },
+                { include = "#tag-i"; },
+                { include = "#tag-iframe"; },
+                { include = "#tag-img"; },
+                { include = "#tag-ins"; },
+                { include = "#tag-kbd"; },
+                { include = "#tag-map"; },
+                { include = "#tag-noscript"; },
+                { include = "#tag-q"; },
+                { include = "#tag-ruby"; },
+                { include = "#tag-samp"; },
+                { include = "#tag-script"; },
+                { include = "#tag-span"; },
+                { include = "#tag-small"; },
+                { include = "#tag-strong"; },
+                { include = "#tag-sub"; },
+                { include = "#tag-sup"; },
+                { include = "#tag-tt"; },
+                { include = "#tag-var"; },
+                { include = "#tag-input"; },
+                { include = "#tag-select"; },
+                { include = "#tag-textarea"; },
+                { include = "#tag-button"; },
+            );
+        }; 
+        "tag-group-inline-no_formctrl" = {
+            patterns = (
+                { include = "#tag-a"; },
+                { include = "#tag-abbr"; },
+                { include = "#tag-acronym"; },
+                { include = "#tag-b"; },
+                { include = "#tag-bdo"; },
+                { include = "#tag-big"; },
+                { include = "#tag-br"; },
+                { include = "#tag-cite"; },
+                { include = "#tag-code"; },
+                { include = "#tag-del"; },
+                { include = "#tag-dfn"; },
+                { include = "#tag-em"; },
+                { include = "#tag-i"; },
+                { include = "#tag-iframe"; },
+                { include = "#tag-img"; },
+                { include = "#tag-ins"; },
+                { include = "#tag-kbd"; },
+                { include = "#tag-map"; },
+                { include = "#tag-noscript"; },
+                { include = "#tag-q"; },
+                { include = "#tag-ruby"; },
+                { include = "#tag-samp"; },
+                { include = "#tag-script"; },
+                { include = "#tag-span"; },
+                { include = "#tag-small"; },
+                { include = "#tag-strong"; },
+                { include = "#tag-sub"; },
+                { include = "#tag-sup"; },
+                { include = "#tag-tt"; },
+                { include = "#tag-var"; },
+            );
+        }; 
+        "tag-group-inline-no_ruby" = {
+            patterns = (
+                { include = "#tag-a"; },
+                { include = "#tag-abbr"; },
+                { include = "#tag-acronym"; },
                 { include = "#tag-b"; },
                 { include = "#tag-bdo"; },
                 { include = "#tag-big"; },
@@ -3064,7 +4100,6 @@
             patterns = (
                 { include = "#tag-abbr"; },
                 { include = "#tag-acronym"; },
-                { include = "#tag-applet"; },
                 { include = "#tag-b"; },
                 { include = "#tag-bdo"; },
                 { include = "#tag-big"; },
@@ -3102,11 +4137,11 @@
         }; 
         "tag-group-formctrl" = {
             patterns = (
-                { include = "#tag-group-input"; },
-                { include = "#tag-group-select"; },
-                { include = "#tag-group-textarea"; },
-                { include = "#tag-group-label"; },
-                { include = "#tag-group-button"; },
+                { include = "#tag-input"; },
+                { include = "#tag-select"; },
+                { include = "#tag-textarea"; },
+                { include = "#tag-label"; },
+                { include = "#tag-button"; },
             );
         }; 
         "tag-group-flow" = {

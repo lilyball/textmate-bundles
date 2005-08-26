@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
+
+if [[ -z $TM_FILENAME ]]
+  then title="Markdown as HTML"
+  else title="$TM_FILENAME as HTML"
+fi
+
+htmlHeader "$title" '&lt;style type="text/css"&gt;
+	body {	
+		background-color: #eee;
+	}
+	.contents {	
+		background: white;
+		font-family: Georgia, serif;
+		font-size: 13px;
+		border: 1px #888 solid;
+		padding: 0 1em;
+	}
+	&lt;/style&gt;'
+beginTag div 'contents'
+	"$TM_SUPPORT_PATH/bin/Textile.rb"
+endTag
+htmlFooter</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>~@P</string>
+	<key>name</key>
+	<string>Textile preview</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.html.textile</string>
+	<key>uuid</key>
+	<string>2684F52C-663F-47F3-8320-C8FCB71E276F</string>
+</dict>
+</plist>

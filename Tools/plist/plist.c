@@ -21,7 +21,7 @@
  *     :xml1, :binary1, or :openstep
  *
  * PropertyList::dump(io, obj, type = :xml1)
- *     Takes an IO stream (open for writing) and an  object
+ *     Takes an IO stream (open for writing) and an object
  *     Writes the object to the IO stream as a property list
  *     Posible type values are :xml1 and :binary1
  *
@@ -41,6 +41,19 @@
  *
  * A blob string is turned into a CFData when dumped
  *
+ */
+
+/*
+ * Document-class: PropertyList
+ *
+ * The PropertyList module provides a means of converting a
+ * Ruby Object to a Property List.
+ *
+ * The various Objects that can be converted are the ones
+ * with an equivalent in CoreFoundation. This includes: String,
+ * Integer, Float, Boolean, Time, Hash, and Array.
+ *
+ * See also: String#blob?, String#blob=, and Object#to_plist
  */
 
 #include <ruby.h>
@@ -80,6 +93,7 @@ VALUE convertDateRef(CFDateRef plist);
 VALUE str_blob(VALUE self);
 VALUE str_setBlob(VALUE self, VALUE b);
 
+// Raises a Ruby exception with the given string
 void raiseError(CFStringRef error) {
 		char *errBuffer = (char *)CFStringGetCStringPtr(error, kCFStringEncodingUTF8);
 		int freeBuffer = 0;
@@ -96,6 +110,16 @@ void raiseError(CFStringRef error) {
 		if (freeBuffer) free(errBuffer);
 }
 
+/* call-seq:
+ *    PropertyList.load(obj)         -> object
+ *    PropertyList.load(obj, format) -> [object, format]
+ *
+ * Loads a property list from an IO stream or a String and creates
+ * an equivalent Object from it.
+ *
+ * If +format+ is provided, it returns one of
+ * <tt>:xml1</tt>, <tt>:binary1</tt>, or <tt>:openstep</tt>.
+ */
 VALUE plist_load(int argc, VALUE *argv, VALUE self) {
 	VALUE io, retFormat;
 	int count = rb_scan_args(argc, argv, "11", &io, &retFormat);
@@ -167,6 +191,7 @@ VALUE plist_load(int argc, VALUE *argv, VALUE self) {
 	}
 }
 
+// Maps the property list object to a ruby object
 VALUE convertPropertyListRef(CFPropertyListRef plist) {
 	CFTypeID typeID = CFGetTypeID(plist);
 	if (typeID == CFStringGetTypeID()) {
@@ -188,6 +213,7 @@ VALUE convertPropertyListRef(CFPropertyListRef plist) {
 	}
 }
 
+// Converts a CFStringRef to a String
 VALUE convertStringRef(CFStringRef plist) {
 	CFIndex byteCount;
 	CFRange range = CFRangeMake(0, CFStringGetLength(plist));
@@ -204,20 +230,24 @@ VALUE convertStringRef(CFStringRef plist) {
 	return retval;
 }
 
+// Converts the keys and values of a CFDictionaryRef
 void dictionaryConverter(const void *key, const void *value, void *context) {
 	rb_hash_aset((VALUE)context, convertPropertyListRef(key), convertPropertyListRef(value));
 }
 
+// Converts a CFDictionaryRef to a Hash
 VALUE convertDictionaryRef(CFDictionaryRef plist) {
 	VALUE hash = rb_hash_new();
 	CFDictionaryApplyFunction(plist, dictionaryConverter, (void *)hash);
 	return hash;
 }
 
+// Converts the values of a CFArrayRef
 void arrayConverter(const void *value, void *context) {
 	rb_ary_push((VALUE)context, convertPropertyListRef(value));
 }
 
+// Converts a CFArrayRef to an Array
 VALUE convertArrayRef(CFArrayRef plist) {
 	VALUE array = rb_ary_new();
 	CFRange range = CFRangeMake(0, CFArrayGetCount(plist));
@@ -225,6 +255,7 @@ VALUE convertArrayRef(CFArrayRef plist) {
 	return array;
 }
 
+// Converts a CFNumberRef to a Number
 VALUE convertNumberRef(CFNumberRef plist) {
 	if (CFNumberIsFloatType(plist)) {
 		double val;
@@ -243,6 +274,7 @@ VALUE convertNumberRef(CFNumberRef plist) {
 	}
 }
 
+// Converts a CFBooleanRef to a Boolean
 VALUE convertBooleanRef(CFBooleanRef plist) {
 	if (CFBooleanGetValue(plist)) {
 		return Qtrue;
@@ -251,6 +283,7 @@ VALUE convertBooleanRef(CFBooleanRef plist) {
 	}
 }
 
+// Converts a CFDataRef to a String (with blob set to true)
 VALUE convertDataRef(CFDataRef plist) {
 	const UInt8 *bytes = CFDataGetBytePtr(plist);
 	CFIndex len = CFDataGetLength(plist);
@@ -259,6 +292,7 @@ VALUE convertDataRef(CFDataRef plist) {
 	return str;
 }
 
+// Converts a CFDateRef to a Time
 VALUE convertDateRef(CFDateRef plist) {
 	CFAbsoluteTime seconds = CFDateGetAbsoluteTime(plist);
 	return rb_funcall(timeEpoch, id_plus, 1, rb_float_new(seconds));
@@ -266,6 +300,7 @@ VALUE convertDateRef(CFDateRef plist) {
 
 CFPropertyListRef convertObject(VALUE obj);
 
+// Converts a PropertyList object to a string representation
 VALUE convertPlistToString(CFPropertyListRef plist, CFPropertyListFormat format) {
 	CFWriteStreamRef writeStream = CFWriteStreamCreateWithAllocatedBuffers(kCFAllocatorDefault, kCFAllocatorDefault);
 	CFWriteStreamOpen(writeStream);
@@ -283,8 +318,18 @@ VALUE convertPlistToString(CFPropertyListRef plist, CFPropertyListFormat format)
 	return plistData;
 }
 
-// io, obj, type = :xml1
-// also takes :binary1
+/* call-seq:
+ *    PropertyList.dump(io, obj)         -> Integer
+ *    PropertyList.dump(io, obj, format) -> Integer
+ *
+ * Writes the property list representation of +obj+
+ * to the IO stream (must be open for writing).
+ *
+ * +format+ can be one of <tt>:xml1</tt> or <tt>:binary1</tt>.
+ *
+ * Returns the number of bytes written, or +nil+ if
+ * the object could not be represented as a property list
+ */
 VALUE plist_dump(int argc, VALUE *argv, VALUE self) {
 	VALUE io, obj, type;
 	int count = rb_scan_args(argc, argv, "21", &io, &obj, &type);
@@ -318,7 +363,15 @@ VALUE plist_dump(int argc, VALUE *argv, VALUE self) {
 	}
 }
 
-// type = :xml1
+/* call-seq:
+ *    object.to_plist         -> String
+ *    object.to_plist(format) -> String
+ *
+ * Converts the object to a property list representation
+ * and returns it as a string.
+ *
+ * +format+ can be one of <tt>:xml1</tt> or <tt>:binary1</tt>.
+ */
 VALUE obj_to_plist(int argc, VALUE *argv, VALUE self) {
 	VALUE type;
 	int count = rb_scan_args(argc, argv, "01", &type);
@@ -354,6 +407,7 @@ CFArrayRef convertArray(VALUE obj);
 CFNumberRef convertNumber(VALUE obj);
 CFDateRef convertTime(VALUE obj);
 
+// Converts an Object to a CFTypeRef
 CFPropertyListRef convertObject(VALUE obj) {
 	switch (TYPE(obj)) {
 		case T_STRING: return convertString(obj); break;
@@ -370,6 +424,7 @@ CFPropertyListRef convertObject(VALUE obj) {
 	return NULL;
 }
 
+// Converts a String to a CFStringRef
 CFPropertyListRef convertString(VALUE obj) {
 	if (RTEST(str_blob(obj))) {
 		// convert to CFDataRef
@@ -388,6 +443,7 @@ CFPropertyListRef convertString(VALUE obj) {
 	}
 }
 
+// Converts the keys and values of a Hash to CFTypeRefs
 int iterateHash(VALUE key, VALUE val, VALUE dict) {
 	CFPropertyListRef dKey = convertObject(key);
 	CFPropertyListRef dVal = convertObject(val);
@@ -397,6 +453,7 @@ int iterateHash(VALUE key, VALUE val, VALUE dict) {
 	return ST_CONTINUE;
 }
 
+// Converts a Hash to a CFDictionaryREf
 CFDictionaryRef convertHash(VALUE obj) {
 	CFIndex count = (CFIndex)RHASH(obj)->tbl->num_entries;
 	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, count, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
@@ -404,6 +461,7 @@ CFDictionaryRef convertHash(VALUE obj) {
 	return dict;
 }
 
+// Converts an Array to a CFArrayRef
 CFArrayRef convertArray(VALUE obj) {
 	CFIndex count = (CFIndex)RARRAY(obj)->len;
 	CFMutableArrayRef array = CFArrayCreateMutable(kCFAllocatorDefault, count, &kCFTypeArrayCallBacks);
@@ -416,6 +474,7 @@ CFArrayRef convertArray(VALUE obj) {
 	return array;
 }
 
+// Converts a Number to a CFNumberRef
 CFNumberRef convertNumber(VALUE obj) {
 	void *valuePtr;
 	CFNumberType type;
@@ -451,13 +510,18 @@ CFNumberRef convertNumber(VALUE obj) {
 	return number;
 }
 
+// Converts a Time to a CFDateRef
 CFDateRef convertTime(VALUE obj) {
 	VALUE secs = rb_funcall(obj, id_minus, 1, timeEpoch);
 	CFDateRef date = CFDateCreate(kCFAllocatorDefault, NUM2DBL(secs));
 	return date;
 }
 
-
+/* call-seq:
+ *    str.blob? -> Boolean
+ *
+ * Returns whether or not +str+ is a blob.
+ */
 VALUE str_blob(VALUE self) {
 	VALUE blob = rb_attr_get(self, id_blob);
 	if (NIL_P(blob)) {
@@ -467,6 +531,11 @@ VALUE str_blob(VALUE self) {
 	}
 }
 
+/* call-seq:
+ *    str.blob = bool -> bool
+ *
+ * Sets the blob status of +str+.
+ */
 VALUE str_setBlob(VALUE self, VALUE b) {
 	if (TYPE(b) == T_TRUE || TYPE(b) ==  T_FALSE) {
 		return rb_ivar_set(self, id_blob, b);
@@ -476,6 +545,9 @@ VALUE str_setBlob(VALUE self, VALUE b) {
 	}
 }
 
+/* Bridge to CoreFoundation for reading/writing Property Lists.
+ * Only works when CoreFoundation is available.
+ */
 void Init_plist() {
 	mPlist = rb_define_module("PropertyList");
 	rb_define_module_function(mPlist, "load", plist_load, -1);

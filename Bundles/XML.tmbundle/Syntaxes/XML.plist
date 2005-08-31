@@ -49,20 +49,12 @@
 					<string>entity.other.attribute-name.xml</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>"</string>
-					<key>end</key>
-					<string>"</string>
-					<key>name</key>
-					<string>string.quoted.double.xml</string>
+					<key>include</key>
+					<string>#doublequotedString</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>'</string>
-					<key>end</key>
-					<string>'</string>
-					<key>name</key>
-					<string>string.quoted.single.xml</string>
+					<key>include</key>
+					<string>#singlequotedString</string>
 				</dict>
 			</array>
 		</dict>
@@ -104,20 +96,12 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>begin</key>
-							<string>"</string>
-							<key>end</key>
-							<string>"</string>
-							<key>name</key>
-							<string>string.quoted.double.xml</string>
+							<key>include</key>
+							<string>#doublequotedString</string>
 						</dict>
 						<dict>
-							<key>begin</key>
-							<string>'</string>
-							<key>end</key>
-							<string>'</string>
-							<key>name</key>
-							<string>string.quoted.single.xml</string>
+							<key>include</key>
+							<string>#singlequotedString</string>
 						</dict>
 					</array>
 				</dict>
@@ -133,29 +117,24 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;((?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+))</string>
+			<string>&lt;/?(?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.xml</string>
+					<string>entity.other.namespace.xml</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.other.namespace.xml</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.tag.localname.xml</string>
+					<string>entity.name.tag.xml</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>/?&gt;</string>
 			<key>name</key>
-			<string>declaration.tag.start.xml</string>
+			<string>declaration.tag.xml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -169,55 +148,21 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.other.attribute.localname.xml</string>
+							<string>entity.other.attribute-name.xml</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\s+(?:([-_a-zA-Z0-9]+):)?([a-zA-Z-]+)=</string>
-					<key>name</key>
-					<string>entity.other.attribute.name.xml</string>
+					<string> (?:([-_a-zA-Z0-9]+):)?([a-zA-Z-]+)</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>"</string>
-					<key>end</key>
-					<string>"</string>
-					<key>name</key>
-					<string>string.quoted.double.xml</string>
+					<key>include</key>
+					<string>#doublequotedString</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>'</string>
-					<key>end</key>
-					<string>'</string>
-					<key>name</key>
-					<string>string.quoted.single.xml</string>
+					<key>include</key>
+					<string>#singlequotedString</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.xml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.namespace.xml</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.tag.localname.xml</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>&lt;/((?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+))\s*&gt;</string>
-			<key>name</key>
-			<string>declaration.tag.end.xml</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -272,6 +217,27 @@
 			<string>string.unquoted.xml.cdata</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>doublequotedString</key>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.xml</string>
+		</dict>
+		<key>singlequotedString</key>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.xml</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>text.xml</string>
 	<key>uuid</key>

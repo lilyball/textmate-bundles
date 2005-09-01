@@ -4,6 +4,7 @@
 <dict>
 	<key>content</key>
 	<string>&lt;a href="${1:`
+   # if the clipboard contains a single line, let's use that
    if [[ $(pbpaste|wc -l) -eq 0 ]]
       then pbpaste|sed 's/&amp;/&amp;amp;/g'
       else echo http://site.com/

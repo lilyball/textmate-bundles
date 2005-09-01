@@ -16,7 +16,7 @@
 	<key>keyEquivalent</key>
 	<string>~^S</string>
 	<key>name</key>
-	<string>Unix shell (generic)</string>
+	<string>Unix shell (bash)</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -168,19 +168,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#variable_1</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#variable_2</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#variable_3</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#variable_4</string>
+					<string>#variable</string>
 				</dict>
 			</array>
 		</dict>
@@ -227,19 +215,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#variable_1</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#variable_2</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#variable_3</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#variable_4</string>
+			<string>#variable</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -408,35 +384,37 @@
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>variable_1</key>
+		<key>variable</key>
 		<dict>
-			<key>match</key>
-			<string>\$[-*@#?$!0_]</string>
-			<key>name</key>
-			<string>variable.other.special.shell</string>
-		</dict>
-		<key>variable_2</key>
-		<dict>
-			<key>match</key>
-			<string>\$[1-9]</string>
-			<key>name</key>
-			<string>variable.other.positional.shell</string>
-		</dict>
-		<key>variable_3</key>
-		<dict>
-			<key>match</key>
-			<string>\$[a-zA-Z_][a-zA-Z0-9_]*</string>
-			<key>name</key>
-			<string>variable.other.normal.shell</string>
-		</dict>
-		<key>variable_4</key>
-		<dict>
-			<key>begin</key>
-			<string>\$\{</string>
-			<key>end</key>
-			<string>\}</string>
-			<key>name</key>
-			<string>variable.other.bracket.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\$[-*@#?$!0_]</string>
+					<key>name</key>
+					<string>variable.other.special.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\$[1-9]</string>
+					<key>name</key>
+					<string>variable.other.positional.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\$[a-zA-Z_][a-zA-Z0-9_]*</string>
+					<key>name</key>
+					<string>variable.other.normal.shell</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\$\{</string>
+					<key>end</key>
+					<string>\}</string>
+					<key>name</key>
+					<string>variable.other.bracket.shell</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

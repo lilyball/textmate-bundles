@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (${1:id})${2:method}
+	<string>- (${1:id})${2:method}${3::(${4:id})${5:anArgument}}
 {
-	[super ${2:method}];$0
+	[super ${2:method}${5/.+/:$0/}];$0
 }</string>
 	<key>keyEquivalent</key>
 	<string></string>

@@ -3,9 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>+ (${1:id})${2:method}
+	<string>+ (${1:id})${2:method}${3::(${4:id})${5:anArgument}}
 {$0
-}</string>
+${1/(^(void|IBAction)$)?.*/(?1::	return nil;
+)/}}</string>
 	<key>name</key>
 	<string>Class Method (M)</string>
 	<key>scope</key>

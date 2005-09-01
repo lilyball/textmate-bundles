@@ -5,16 +5,15 @@
 	<key>content</key>
 	<string>- (${1:id})${2:thing}
 {
-	return ${3:fThing};
+	return $2;
 }
 
-- (void) set${4:Thing}:(${1:id}) ${2:thing}
+- (void)set${2/./\u$0/}:($1)aValue
 {
-	${1:id} old${4:Thing} = ${3:fThing};
-	${3:fThing} = [${2:thing} retain];
-	[old${4:Thing} release];
-}
-</string>
+	$0${1/( \*)?$/(?1:$1: )/}old${2/./\u$0/} = $2;
+	$2 = [aValue retain];
+	[old${2/./\u$0/} release];
+}</string>
 	<key>name</key>
 	<string>Object Accessors (objacc)</string>
 	<key>scope</key>

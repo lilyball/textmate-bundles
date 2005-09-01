@@ -21,7 +21,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 require "#{ENV['TM_BUNDLE_PATH']}/bin/xcode_version"
 
 def shell_escape (str)
-   str.gsub(/[`'"\\; $]/, '\\\\\&amp;')
+   str.gsub(/[{}()`'"\\; $]/, '\\\\\&amp;')
 end
 
 prefs = PropertyList::load(File.new("#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"))
@@ -57,8 +57,8 @@ if targets.size == 1
    escaped_dir = shell_escape(dir)
    escaped_file = shell_escape(file)
    cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} #{run} ./#{escaped_file}; exit;"
-   osascript = "tell app \"Terminal\" to do script \"#{shell_escape cmd}\"".gsub(/\\([ ;])/, '\1')
-   %x{osascript -e #{shell_escape osascript}}
+   osascript = "tell app \"Terminal\" to do script \"#{cmd.gsub(/\\/, '\\\\\\\\')}\""
+   %x{osascript 1&gt;&amp;2 -e #{shell_escape osascript}}
 else
    puts "The project had multiple targets.\nDidn't know which to pick."
 end

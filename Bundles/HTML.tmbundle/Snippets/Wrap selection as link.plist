@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;a href="${1:`
+   if [[ $(pbpaste|wc -l) -eq 0 ]]
+      then pbpaste|sed 's/&amp;/&amp;amp;/g'
+      else echo http://site.com/
+   fi
+`}"&gt;${TM_SELECTED_TEXT:Link text...}&lt;/a&gt;</string>
+	<key>keyEquivalent</key>
+	<string>^L</string>
+	<key>name</key>
+	<string>Wrap selection as link</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>tabTrigger</key>
+	<string>ref</string>
+	<key>uuid</key>
+	<string>44F60595-F6BC-42BB-94B8-DF0FE455A283</string>
+</dict>
+</plist>

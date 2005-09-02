@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
 
 if [[ -z $TM_FILENAME ]]
-  then title="Markdown as HTML"
+  then title="Textile as HTML"
   else title="$TM_FILENAME as HTML"
 fi
 

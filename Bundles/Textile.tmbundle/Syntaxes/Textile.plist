@@ -39,14 +39,16 @@
 			<string>markup.list.numbered</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>^h[1-6]\.\s+.*</string>
+			<key>begin</key>
+			<string>^h[1-6]\.\s+</string>
+			<key>end</key>
+			<string>^$</string>
 			<key>name</key>
 			<string>markup.heading</string>
 		</dict>
 		<dict>
 			<key>comment</key>
-			<string>Since html is valid in Markdown include the html patterns</string>
+			<string>Since html is valid in Textile include the html patterns</string>
 			<key>include</key>
 			<string>text.html.basic</string>
 		</dict>

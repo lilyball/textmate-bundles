@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>cd "$TM_DIRECTORY";
+	<string>cd "${TM_PROJECT_DIRECTORY:=$TM_DIRECTORY}";
 
 "${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 output = `CocoaDialog inputbox --title Input --informative-text 'Record Message' --button1 Record --button2 'Abort'`

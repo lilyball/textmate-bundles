@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cd "$TM_DIRECTORY";
+	<string>cd "${TM_PROJECT_DIRECTORY:=$TM_DIRECTORY}"
+
 darcs push -a </string>
 	<key>input</key>
 	<string>none</string>

@@ -5,13 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -z $TM_SELECTED_FILES ]]; then
+	<string>cd "$TM_DIRECTORY"
+
+if [[ -z $TM_SELECTED_FILES ]]; then
 	DARCSPaths=`echo \'$TM_FILEPATH\'`;
 else
 	DARCSPaths="$TM_SELECTED_FILES";
 fi
 
-cd "$TM_DIRECTORY";
 
 "${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 require 'pathname'
@@ -29,7 +30,7 @@ puts(output)</string>
 	<key>keyEquivalent</key>
 	<string>@d</string>
 	<key>name</key>
-	<string>Add to repository</string>
+	<string>Add file(s) to repository</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>

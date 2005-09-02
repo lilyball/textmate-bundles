@@ -5,8 +5,44 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cd "$TM_DIRECTORY";
-darcs changes --xml</string>
+	<string>cd "${TM_PROJECT_DIRECTORY:=$TM_DIRECTORY}";
+
+"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
+require 'rexml/document'
+require 'time'
+
+puts("&lt;html&gt;")
+puts("&lt;head&gt;")
+puts("  &lt;style type=\"text/css\"&gt;")
+puts("    html {")
+puts("      font-size: small;")
+puts("    }")
+puts("    body {")
+puts("      border: 0px;")
+puts("      margin: 0px;")
+puts("    }")
+puts("    .chunk {")
+puts("      padding: 7px;")
+puts("    }")
+puts("  &lt;/style&gt;")
+puts("&lt;/head&gt;")
+puts("&lt;body&gt;")
+output = `darcs changes --xml`
+xmldoc = REXML::Document.new(output)
+count = 0
+xmldoc.root.each_element('patch') { |patch|
+   print("&lt;div class=\"chunk\" ")
+   if(count % 2 == 0)
+     print("style=\"background-color: white\"")
+   else
+     print("style=\"background-color: lightblue\"")
+   end
+   print("&gt;&lt;tt style=\"color: gray\"&gt;#{Time.parse(patch.attributes['local_date']).strftime("%m/%d/%y %I:%M %p").downcase()}, #{patch.attributes['author']}&lt;/tt&gt;&lt;br/&gt; #{patch.elements['name'].text()}&lt;br/&gt;")
+   print("&lt;/div&gt;")
+   count = count + 1
+}
+puts("&lt;/body&gt;")
+puts("&lt;/html&gt;")</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -14,7 +50,7 @@ darcs changes --xml</string>
 	<key>name</key>
 	<string>Changes</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
 	<string>5CEA8FE0-E28A-11D9-9477-000A95A51A76</string>
 </dict>

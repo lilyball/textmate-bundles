@@ -496,7 +496,7 @@
 		<key>tag-generic-attribute</key>
 		<dict>
 			<key>match</key>
-			<string> ([a-zA-Z-:]+)</string>
+			<string>\b([a-zA-Z-:]+)</string>
 			<key>name</key>
 			<string>entity.other.attribute-name.html</string>
 		</dict>
@@ -521,7 +521,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string> (id)=(("|')(.*?)\3)</string>
+			<string>\b(id)=(("|')(.*?)\3)</string>
 			<key>name</key>
 			<string>declaration.attribute-with-value.id.html</string>
 		</dict>

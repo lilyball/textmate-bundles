@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>elif ${1:[[ condition ]]}; then
+	<string>elif [[ ${1:condition} ]]; then
 	$0</string>
 	<key>name</key>
 	<string>elif .. (elif)</string>

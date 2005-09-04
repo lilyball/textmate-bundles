@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>curl 2&gt;/dev/null -F uploaded_file=@-\;type=text/html http://validator.w3.org/check \
+| perl -pe 's|(Line (\d+) column (\d+))|&lt;a href="txmt://open?line=$2&amp;column=@{[$3 + 1]}"&gt;$1&lt;/a&gt;|' \
+| perl -pe 's|&lt;/title&gt;|&lt;/title&gt;\\n\\t\\t&lt;base href="http://validator.w3.org/"/&gt;|'</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^V</string>
+	<key>name</key>
+	<string>Validate HTML</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>9D20CF03-0DF0-4FE0-AA0D-EA9D936DEC60</string>
+</dict>
+</plist>

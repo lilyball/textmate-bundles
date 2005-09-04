@@ -12,6 +12,7 @@
     repository = {
         "xml-preprocessor" = {
             name = "meta.tag.preprocessor.xml.html"; 
+            comment = "Bug: Too general, needs to highlight errors better.";
             begin = "<\\?([\\w-]*)"; 
             end = "\\?>"; 
             captures = { 1 = { name = "entity.name.tag.xml.html"; }; };
@@ -1749,7 +1750,7 @@
                         { include = "#attribute-tabindex"; },
                         { include = "#attribute-type"; },
                         { include = "#attribute-width"; },
-                        { include = "#attribute-common"; },
+                        { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
@@ -1790,7 +1791,7 @@
                         { include = "#attribute-tabindex"; },
                         { include = "#attribute-type"; },
                         { include = "#attribute-width"; },
-                        { include = "#attribute-common"; },
+                        { include = "#attributes-group-common"; },
                         { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
@@ -3532,6 +3533,30 @@
                     end = "'";
                     patterns = (
                         { match = "(?<=\"|')[01](?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+            ); 
+        }; 
+        "attribute-headers" = {
+            name = "meta.attribute-with-value.html.strict";
+            begin = "(headers)\\s*=\\s*(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                {   name = "string.quoted.double";
+                    begin = "\"";
+                    end = "\"";
+                    patterns = (
+                        { match = "(?<=\"|')[a-zA-Z][a-zA-Z0-9\\-_:.]*(\\s+[a-zA-Z][a-zA-Z0-9\\-_:.]*)*(?=\"|')"; },
+                        { include = "#values-generic-invalid"; },
+                    ); 
+                },
+                {   name = "string.quoted.single";
+                    begin = "'";
+                    end = "'";
+                    patterns = (
+                        { match = "(?<=\"|')[a-zA-Z][a-zA-Z0-9\\-_:.]*(\\s+[a-zA-Z][a-zA-Z0-9\\-_:.]*)*(?=\"|')"; },
                         { include = "#values-generic-invalid"; },
                     ); 
                 },

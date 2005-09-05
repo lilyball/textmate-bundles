@@ -94,6 +94,19 @@
                 }
             ); 
         }; 
+        "pcdata" = {
+            patterns = (
+                { include = "#sgml-declarations"; },
+                { include = "#entities"; },
+            ); 
+        }; 
+        "no-pcdata" = {
+            patterns = (
+                { include = "#sgml-declarations"; },
+                { include = "#entities"; },
+                { include = "#stray-char"; },
+            ); 
+        }; 
         "tag-a" = {
             begin = "(<(a)\\b)";
             end = "((a)>)";
@@ -109,29 +122,25 @@
                         1 = { name = "meta.tag.block.a.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline-no_a"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-a.content"; },
                     );
                 },
                 {   name = "meta.tag.block.a.html";
                     begin = "";
                     end = ">";
                     patterns = (
-                        { include = "#attribute-accesskey"; },
                         { include = "#attribute-charset"; },
                         { include = "#attribute-href"; },
                         { include = "#attribute-hreflang"; },
                         { include = "#attribute-name"; },
-                        { include = "#attribute-onblur"; },
-                        { include = "#attribute-onfocus"; },
                         { include = "#attribute-rel"; },
                         { include = "#attribute-rev"; },
-                        { include = "#attribute-tabindex"; },
                         { include = "#attribute-target"; },
                         { include = "#attribute-type"; },
+                        { include = "#attribute-shape"; },
+                        { include = "#attribute-coords"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-focus"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -152,9 +161,7 @@
                         1 = { name = "meta.tag.block.abbr.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.abbr.html";
@@ -162,7 +169,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -183,9 +189,7 @@
                         1 = { name = "meta.tag.block.acronym.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.acronym.html";
@@ -193,7 +197,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -214,9 +217,7 @@
                         1 = { name = "meta.tag.block.address.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.address.html";
@@ -224,7 +225,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -246,18 +246,13 @@
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
-                        { include = "#attribute-accesskey"; },
                         { include = "#attribute-alt"; },
                         { include = "#attribute-coords"; },
                         { include = "#attribute-href"; },
                         { include = "#attribute-nohref"; },
-                        { include = "#attribute-onblur"; },
-                        { include = "#attribute-onfocus"; },
                         { include = "#attribute-shape"; },
-                        { include = "#attribute-tabindex"; },
-                        { include = "#attribute-target"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-focus"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -278,9 +273,7 @@
                         1 = { name = "meta.tag.block.b.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.b.html";
@@ -288,7 +281,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -310,9 +302,8 @@
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
-                        { include = "#attribute-target"; },
+                        { include = "#attribute-id"; },
                         { include = "#attribute-href"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -333,9 +324,7 @@
                         1 = { name = "meta.tag.block.bdo.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.bdo.html";
@@ -344,7 +333,8 @@
                     patterns = (
                         { include = "#attribute-dir"; },
                         { include = "#attributes-group-core"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-events"; },
+                        { include = "#attributes-group-i18n"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -365,9 +355,7 @@
                         1 = { name = "meta.tag.block.big.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.big.html";
@@ -375,7 +363,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -396,11 +383,8 @@
                         1 = { name = "meta.tag.block.blockquote.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-heading"; },
-                        { include = "#tag-group-block"; },
-                        { include = "#tag-group-list"; },
-                        { include = "#stray-char"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-block-master"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.blockquote.html";
@@ -409,7 +393,6 @@
                     patterns = (
                         { include = "#attribute-cite"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -430,11 +413,8 @@
                         1 = { name = "meta.tag.block.body.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-heading"; },
-                        { include = "#tag-group-block"; },
-                        { include = "#tag-group-list"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#stray-char"; },
+                        { include = "#tag-group-block-master"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.body.html";
@@ -444,7 +424,6 @@
                         { include = "#attribute-onload"; },
                         { include = "#attribute-onunload"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -467,7 +446,6 @@
                     end = "(?=/>|>)";
                     patterns = (
                         { include = "#attributes-group-core"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -488,28 +466,19 @@
                         1 = { name = "meta.tag.block.button.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-heading"; },
-                        { include = "#tag-group-list"; },
-                        { include = "#tag-group-block-no_form"; },
-                        { include = "#tag-group-inline-no_formctrl"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-button.content"; },
                     );
                 },
                 {   name = "meta.tag.block.button.html";
                     begin = "";
                     end = "((?=/>)|>)";
                     patterns = (
-                        { include = "#attribute-accesskey"; },
                         { include = "#attribute-disabled"; },
                         { include = "#attribute-name"; },
-                        { include = "#attribute-onblur"; },
-                        { include = "#attribute-onfocus"; },
-                        { include = "#attribute-tabindex"; },
                         { include = "#attribute-type-button"; },
                         { include = "#attribute-value"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-focus"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -532,9 +501,7 @@
                         2 = { name = "entity.name.tag.block.caption.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.caption.html";
@@ -542,7 +509,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -563,9 +529,7 @@
                         1 = { name = "meta.tag.block.cite.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.cite.html";
@@ -573,7 +537,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -594,9 +557,7 @@
                         1 = { name = "meta.tag.block.code.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.code.html";
@@ -604,7 +565,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -633,7 +593,6 @@
                         { include = "#attribute-valign"; },
                         { include = "#attribute-width-multi"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -655,8 +614,7 @@
                     };
                     patterns = (
                         { include = "#tag-col"; },
-                        { include = "#stray-char"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.colgroup.html";
@@ -670,7 +628,6 @@
                         { include = "#attribute-valign"; },
                         { include = "#attribute-width-multi"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -692,8 +649,6 @@
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
                     );
                 },
                 {   name = "meta.tag.block.dd.html";
@@ -701,7 +656,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -723,8 +677,6 @@
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
                     );
                 },
                 {   name = "meta.tag.block.del.html";
@@ -734,7 +686,6 @@
                         { include = "#attribute-cite"; },
                         { include = "#attribute-datetime"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -755,9 +706,7 @@
                         1 = { name = "meta.tag.block.dfn.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.dfn.html";
@@ -765,7 +714,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -787,8 +735,6 @@
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
                     );
                 },
                 {   name = "meta.tag.block.div.html";
@@ -796,7 +742,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -819,8 +764,7 @@
                     patterns = (
                         { include = "#tag-dt"; },
                         { include = "#tag-dd"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#stray-char"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.dl.html";
@@ -828,7 +772,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -849,9 +792,7 @@
                         1 = { name = "meta.tag.block.dt.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.dt.html";
@@ -859,7 +800,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -880,9 +820,7 @@
                         1 = { name = "meta.tag.block.em.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.em.html";
@@ -890,7 +828,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -912,9 +849,11 @@
                     };
                     patterns = (
                         { include = "#tag-legend"; },
-                        { include = "#tag-group-flow"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-form"; },
+                        { include = "#tag-group-block"; },
+                        { include = "#tag-group-inline"; },
+                        { include = "#tag-group-misc"; },
+                        { include = "#pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.fieldset.html";
@@ -922,7 +861,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -943,12 +881,8 @@
                         1 = { name = "meta.tag.block.form.html"; };
                     };
                     patterns = (
-                        { include = "#tag-fieldset"; },
-                        { include = "#tag-group-heading"; },
-                        { include = "#tag-group-list"; },
-                        { include = "#tag-group-block-no_form"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#stray-char"; },
+                        { include = "#tag-group-form.content"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.form.html";
@@ -961,10 +895,8 @@
                         { include = "#attribute-method"; },
                         { include = "#attribute-onreset"; },
                         { include = "#attribute-onsubmit"; },
-                        { include = "#attribute-target"; },
                         { include = "#attribute-enctype"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -985,9 +917,7 @@
                         1 = { name = "meta.tag.block.h1.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.h1.html";
@@ -995,7 +925,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1016,9 +945,7 @@
                         1 = { name = "meta.tag.block.h2.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.h2.html";
@@ -1026,7 +953,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1047,9 +973,7 @@
                         1 = { name = "meta.tag.block.h3.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.h3.html";
@@ -1057,7 +981,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1078,9 +1001,7 @@
                         1 = { name = "meta.tag.block.h4.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.h4.html";
@@ -1088,7 +1009,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1109,9 +1029,7 @@
                         1 = { name = "meta.tag.block.h5.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.h5.html";
@@ -1119,7 +1037,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1140,9 +1057,7 @@
                         1 = { name = "meta.tag.block.h6.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.h6.html";
@@ -1150,7 +1065,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1171,24 +1085,23 @@
                         1 = { name = "meta.tag.block.head.html"; };
                     };
                     patterns = (
-                        { include = "#sgml-declarations"; },
                         { include = "#tag-title"; },
                         { include = "#tag-base"; },
                         { include = "#tag-meta"; },
                         { include = "#tag-link"; },
-                        { include = "#tag-object-inheader"; },
+                        { include = "#tag-object"; },
                         { include = "#tag-script"; },
                         { include = "#tag-style"; },
-                        { include = "#stray-char"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.head.html";
                     begin = "";
                     end = ">";
                     patterns = (
+                        { include = "#attribute-id"; },
                         { include = "#attribute-profile"; },
-                        { include = "#attributes-group-I18n"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-i18n"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1211,7 +1124,6 @@
                     end = "(?=/>|>)";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1232,41 +1144,17 @@
                         1 = { name = "meta.tag.block.html.html"; };
                     };
                     patterns = (
-                        { include = "#sgml-declarations"; },
                         { include = "#tag-head"; },
                         { include = "#tag-body"; },
-                        { include = "#stray-char"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.html.html";
                     begin = "";
                     end = ">";
                     patterns = (
-                        {   name = "meta.attribute-with-value.html";
-                            begin = "(version)=(?=([\"']).*?[\"'])";
-                            end = "";
-                            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-                            patterns = (
-                                {   name = "string.quoted.double";
-                                    begin = "\"";
-                                    end = "\"";
-                                    patterns = (
-                                        { match = "(?<=\"|')-//W3C//DTD XHTML 1\\.1//EN(?=\"|')"; },
-                                        { include = "#values-generic-invalid"; },
-                                    ); 
-                                },
-                                {   name = "string.quoted.single";
-                                    begin = "'";
-                                    end = "'";
-                                    patterns = (
-                                        { match = "(?<=\"|')-//W3C//DTD XHTML 1\\.1//EN(?=\"|')"; },
-                                        { include = "#values-generic-invalid"; },
-                                    ); 
-                                },
-                            ); 
-                        },
-                        { include = "#attributes-group-I18n"; },
                         { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-i18n"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1287,9 +1175,7 @@
                         1 = { name = "meta.tag.block.i.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.i.html";
@@ -1297,7 +1183,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1336,7 +1221,6 @@
                         { include = "#attribute-src"; },
                         { include = "#attribute-width"; },
                         { include = "#attributes-group-core"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1360,12 +1244,12 @@
                     patterns = (
                         { include = "#attribute-alt"; },
                         { include = "#attribute-height"; },
+                        { include = "#attribute-usemap"; },
                         { include = "#attribute-ismap"; },
                         { include = "#attribute-longdesc"; },
                         { include = "#attribute-src"; },
                         { include = "#attribute-width"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1388,24 +1272,21 @@
                     end = "(?=/>|>)";
                     patterns = (
                         { include = "#attribute-accept"; },
-                        { include = "#attribute-accesskey"; },
                         { include = "#attribute-alt"; },
                         { include = "#attribute-checked"; },
                         { include = "#attribute-disabled"; },
                         { include = "#attribute-maxlength"; },
                         { include = "#attribute-name"; },
-                        { include = "#attribute-onblur"; },
-                        { include = "#attribute-onfocus"; },
                         { include = "#attribute-onchange"; },
                         { include = "#attribute-onselect"; },
                         { include = "#attribute-readonly"; },
                         { include = "#attribute-size"; },
                         { include = "#attribute-src"; },
-                        { include = "#attribute-tabindex"; },
                         { include = "#attribute-type-input"; },
+                        { include = "#attribute-usemap"; },
                         { include = "#attribute-value"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-focus"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1427,8 +1308,6 @@
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
                     );
                 },
                 {   name = "meta.tag.block.ins.html";
@@ -1438,7 +1317,6 @@
                         { include = "#attribute-cite"; },
                         { include = "#attribute-datetime"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1459,9 +1337,7 @@
                         1 = { name = "meta.tag.block.kbd.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.kbd.html";
@@ -1469,7 +1345,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1490,9 +1365,7 @@
                         1 = { name = "meta.tag.block.label.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline-no_label"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.label.html";
@@ -1504,7 +1377,6 @@
                         { include = "#attribute-onblur"; },
                         { include = "#attribute-onfocus"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1525,9 +1397,7 @@
                         1 = { name = "meta.tag.block.legend.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.legend.html";
@@ -1536,7 +1406,6 @@
                     patterns = (
                         { include = "#attribute-accesskey"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1558,8 +1427,6 @@
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
                     );
                 },
                 {   name = "meta.tag.block.li.html";
@@ -1567,7 +1434,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1595,10 +1461,8 @@
                         { include = "#attribute-media"; },
                         { include = "#attribute-rel"; },
                         { include = "#attribute-rev"; },
-                        { include = "#attribute-target"; },
                         { include = "#attribute-type"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1625,17 +1489,16 @@
                             end = "(?=</map)";
                             patterns = (
                                 { include = "#tag-area"; },
-                                { include = "#stray-char"; },
-                                { include = "#sgml-declarations"; },
+                                { include = "#no-pcdata"; },
                             );
                         },
                         {   begin = "(?=<(?!/?(map|area)))";
                             end = "(?=</map)";
                             patterns = (
-                                { include = "#tag-group-heading"; },
+                                { include = "#tag-group-misc"; },
                                 { include = "#tag-group-block"; },
-                                { include = "#stray-char"; },
-                                { include = "#sgml-declarations"; },
+                                { include = "#tag-form"; },
+                                { include = "#no-pcdata"; },
                             );
                         },
                     );
@@ -1646,11 +1509,11 @@
                     patterns = (
                         { include = "#attribute-class"; },
                         { include = "#attribute-id"; },
+                        { include = "#attribute-style"; },
                         { include = "#attribute-name"; },
                         { include = "#attribute-title"; },
                         { include = "#attributes-group-events"; },
-                        { include = "#attributes-group-I18n"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-i18n"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1672,12 +1535,12 @@
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
+                        { include = "#attribute-id"; },
                         { include = "#attribute-content"; },
                         { include = "#attribute-http-equiv"; },
                         { include = "#attribute-name"; },
                         { include = "#attribute-scheme"; },
-                        { include = "#attributes-group-I18n"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-i18n"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1698,11 +1561,8 @@
                         1 = { name = "meta.tag.block.noscript.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-heading"; },
-                        { include = "#tag-group-list"; },
-                        { include = "#tag-group-block"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#stray-char"; },
+                        { include = "#tag-group-block-master"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.noscript.html";
@@ -1710,7 +1570,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1731,9 +1590,12 @@
                         1 = { name = "meta.tag.inline.object.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-param"; },
+                        { include = "#tag-group-block"; },
+                        { include = "#tag-group-inline"; },
+                        { include = "#tag-group-misc"; },
                         { include = "#tag-param"; },
-                        { include = "#entities"; },
+                        { include = "#tag-form"; },
+                        { include = "#pcdata"; },
                     );
                 },
                 {   name = "meta.tag.inline.object.html";
@@ -1750,50 +1612,9 @@
                         { include = "#attribute-standby"; },
                         { include = "#attribute-tabindex"; },
                         { include = "#attribute-type"; },
+                        { include = "#attribute-usemap"; },
                         { include = "#attribute-width"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
-                        { include = "#attributes-illegal_char"; },
-                    );
-                },
-            );
-        }; 
-        "tag-object-inheader" = {
-            begin = "(<(object)\\b)";
-            end = "((/>)|((object)>))";
-            captures = {
-                1 = { name = "meta.tag.inline.object.html"; };
-                4 = { name = "entity.name.tag.inline.object.html"; };
-            };
-            patterns = (
-                {
-                    begin = "(?<=[^/]>)";
-                    end = "(</(?=object))";
-                    endCaptures = {
-                        1 = { name = "meta.tag.inline.object.html"; };
-                    };
-                    patterns = (
-                        { include = "#tag-param"; },
-                        { include = "#entities"; },
-                    );
-                },
-                {   name = "meta.tag.inline.object.html";
-                    begin = "";
-                    end = "((?=/>)|>)";
-                    patterns = (
-                        { include = "#attribute-classid"; },
-                        { include = "#attribute-codebase"; },
-                        { include = "#attribute-codetype"; },
-                        { include = "#attribute-data"; },
-                        { include = "#attribute-declare"; },
-                        { include = "#attribute-height"; },
-                        { include = "#attribute-name"; },
-                        { include = "#attribute-standby"; },
-                        { include = "#attribute-tabindex"; },
-                        { include = "#attribute-type"; },
-                        { include = "#attribute-width"; },
-                        { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1815,8 +1636,7 @@
                     };
                     patterns = (
                         { include = "#tag-li"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#stray-char"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.ol.html";
@@ -1824,7 +1644,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1846,8 +1665,7 @@
                     };
                     patterns = (
                         { include = "#tag-option"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#stray-char"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.optgroup.html";
@@ -1857,7 +1675,6 @@
                         { include = "#attribute-disabled"; },
                         { include = "#attribute-label"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1878,8 +1695,7 @@
                         1 = { name = "meta.tag.inline.option.html"; };
                     };
                     patterns = (
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#pcdata"; },
                     );
                 },
                 {   name = "meta.tag.inline.option.html";
@@ -1891,7 +1707,6 @@
                         { include = "#attribute-selected"; },
                         { include = "#attribute-value"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1912,9 +1727,7 @@
                         1 = { name = "meta.tag.block.p.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.p.html";
@@ -1922,7 +1735,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1943,9 +1755,7 @@
                         1 = { name = "meta.tag.block.pre.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-pre.content"; },
                     );
                 },
                 {   name = "meta.tag.block.pre.html";
@@ -1954,7 +1764,6 @@
                     patterns = (
                         { include = "#attribute-xml:space"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -1981,7 +1790,6 @@
                         { include = "#attribute-type"; },
                         { include = "#attribute-value"; },
                         { include = "#attribute-valuetype"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2002,9 +1810,7 @@
                         1 = { name = "meta.tag.block.q.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.q.html";
@@ -2013,7 +1819,6 @@
                     patterns = (
                         { include = "#attribute-cite"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2034,9 +1839,7 @@
                         1 = { name = "meta.tag.block.samp.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.samp.html";
@@ -2044,7 +1847,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2087,11 +1889,11 @@
                     end = "((?=/>)|>)";
                     patterns = (
                         { include = "#attribute-xml:space"; },
+                        { include = "#attribute-id"; },
                         { include = "#attribute-defer"; },
                         { include = "#attribute-src"; },
                         { include = "#attribute-type"; },
                         { include = "#attribute-charset"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2114,8 +1916,7 @@
                     patterns = (
                         { include = "#tag-optgroup"; },
                         { include = "#tag-option"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#stray-char"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.select.html";
@@ -2131,7 +1932,6 @@
                         { include = "#attribute-size"; },
                         { include = "#attribute-tabindex"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2152,9 +1952,7 @@
                         1 = { name = "meta.tag.block.small.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.small.html";
@@ -2162,7 +1960,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2172,28 +1969,25 @@
             begin = "(<(span)\\b)";
             end = "((span)>)";
             captures = {
-                1 = { name = "meta.tag.block.span.html"; };
-                2 = { name = "entity.name.tag.block.span.html"; };
+                1 = { name = "meta.tag.inline.span.html"; };
+                2 = { name = "entity.name.tag.inline.span.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=span))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.span.html"; };
+                        1 = { name = "meta.tag.inline.span.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.span.html";
+                {   name = "meta.tag.inline.span.html";
                     begin = "";
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2214,9 +2008,7 @@
                         1 = { name = "meta.tag.block.strong.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.strong.html";
@@ -2224,7 +2016,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2267,11 +2058,11 @@
                     end = ">";
                     patterns = (
                         { include = "#attribute-xml:space"; },
+                        { include = "#attribute-id"; },
                         { include = "#attribute-title"; },
                         { include = "#attribute-media"; },
                         { include = "#attribute-type"; },
-                        { include = "#attributes-group-I18n"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-i18n"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2292,9 +2083,7 @@
                         1 = { name = "meta.tag.block.sub.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.sub.html";
@@ -2302,7 +2091,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2323,9 +2111,7 @@
                         1 = { name = "meta.tag.block.sup.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.sup.html";
@@ -2333,7 +2119,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2355,8 +2140,7 @@
                     };
                     patterns = (
                         { include = "#tag-caption"; },
-                        { include = "#stray-char"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#no-pcdata"; },
                         {   begin = "(?<=</caption>)";
                             end = "(?=<(?!/?caption))";
                             patterns = (
@@ -2478,13 +2262,11 @@
                         { include = "#attribute-border"; },
                         { include = "#attribute-cellpadding"; },
                         { include = "#attribute-cellspacing"; },
-                        { include = "#attribute-datapagesize"; },
                         { include = "#attribute-frame"; },
                         { include = "#attribute-rules"; },
                         { include = "#attribute-summary"; },
                         { include = "#attribute-width"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2506,8 +2288,7 @@
                     };
                     patterns = (
                         { include = "#tag-tr"; },
-                        { include = "#stray-char"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.tbody.html";
@@ -2519,7 +2300,6 @@
                         { include = "#attribute-charoff"; },
                         { include = "#attribute-valign"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2541,8 +2321,6 @@
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
                     );
                 },
                 {   name = "meta.tag.block.td.html";
@@ -2560,7 +2338,6 @@
                         { include = "#attribute-scope"; },
                         { include = "#attribute-valign"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2581,27 +2358,22 @@
                         1 = { name = "meta.tag.block.textarea.html"; };
                     };
                     patterns = (
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.textarea.html";
                     begin = "";
                     end = "((?=/>)|>)";
                     patterns = (
-                        { include = "#attribute-accesskey"; },
                         { include = "#attribute-cols"; },
                         { include = "#attribute-disabled"; },
                         { include = "#attribute-name"; },
-                        { include = "#attribute-onblur"; },
-                        { include = "#attribute-onfocus"; },
                         { include = "#attribute-onchange"; },
                         { include = "#attribute-onselect"; },
                         { include = "#attribute-readonly"; },
                         { include = "#attribute-rows"; },
-                        { include = "#attribute-tabindex"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attributes-group-focus"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2623,8 +2395,7 @@
                     };
                     patterns = (
                         { include = "#tag-tr"; },
-                        { include = "#stray-char"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.tfoot.html";
@@ -2636,7 +2407,6 @@
                         { include = "#attribute-charoff"; },
                         { include = "#attribute-valign"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2658,8 +2428,6 @@
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
-                        { include = "#entities"; },
-                        { include = "#sgml-declarations"; },
                     );
                 },
                 {   name = "meta.tag.block.th.html";
@@ -2677,7 +2445,6 @@
                         { include = "#attribute-scope"; },
                         { include = "#attribute-valign"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2699,8 +2466,7 @@
                     };
                     patterns = (
                         { include = "#tag-tr"; },
-                        { include = "#stray-char"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.thead.html";
@@ -2712,7 +2478,6 @@
                         { include = "#attribute-charoff"; },
                         { include = "#attribute-valign"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2733,17 +2498,15 @@
                         1 = { name = "meta.tag.inline.title.html"; };
                     };
                     patterns = (
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#pcdata"; },
                     );
                 },
                 {   name = "meta.tag.inline.title.html";
                     begin = "";
                     end = ">";
                     patterns = (
-                        { include = "#attribute-profile"; },
-                        { include = "#attributes-group-I18n"; },
-                        { include = "#attribute-xmlns"; },
+                        { include = "#attribute-id"; },
+                        { include = "#attributes-group-i18n"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2766,8 +2529,7 @@
                     patterns = (
                         { include = "#tag-td"; },
                         { include = "#tag-th"; },
-                        { include = "#stray-char"; },
-                        { include = "#sgml-declarations"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.tr.html";
@@ -2779,7 +2541,6 @@
                         { include = "#attribute-charoff"; },
                         { include = "#attribute-valign"; },
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2800,9 +2561,7 @@
                         1 = { name = "meta.tag.block.tt.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.tt.html";
@@ -2810,7 +2569,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2832,8 +2590,7 @@
                     };
                     patterns = (
                         { include = "#tag-li"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#stray-char"; },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.ul.html";
@@ -2841,7 +2598,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -2862,9 +2618,7 @@
                         1 = { name = "meta.tag.block.var.html"; };
                     };
                     patterns = (
-                        { include = "#tag-group-inline"; },
-                        { include = "#sgml-declarations"; },
-                        { include = "#entities"; },
+                        { include = "#tag-group-inline-master"; },
                     );
                 },
                 {   name = "meta.tag.block.var.html";
@@ -2872,7 +2626,6 @@
                     end = ">";
                     patterns = (
                         { include = "#attributes-group-common"; },
-                        { include = "#attribute-xmlns"; },
                         { include = "#attributes-illegal_char"; },
                     );
                 },
@@ -3079,6 +2832,15 @@
         "attribute-alt" = {
             name = "meta.attribute-with-value.html";
             begin = "(alt)\\s*=\\s*(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
+        "attribute-archive" = {
+            name = "meta.attribute-with-value.html";
+            begin = "(archive)\\s*=\\s*(?=([\"']).*?[\"'])";
             end = "";
             beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
             patterns = (
@@ -4524,6 +4286,15 @@
                 },
             ); 
         }; 
+        "attribute-usemap" = {
+            name = "meta.attribute-with-value.html";
+            begin = "(usemap)\\s*=\\s*(?=([\"']).*?[\"'])";
+            end = "";
+            beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+            patterns = (
+                { include = "#values-generic-valid"; },
+            ); 
+        }; 
         "attribute-valign" = {
             name = "meta.attribute-with-value.html";
             begin = "(valign)\\s*=\\s*(?=([\"']).*?[\"'])";
@@ -4638,35 +4409,10 @@
                 { include = "#attribute-class"; },
                 { include = "#attribute-id"; },
                 { include = "#attribute-title"; },
-            );
-        }; 
-        "attributes-group-style" = {
-            patterns = (
                 { include = "#attribute-style"; },
             );
         }; 
-        "attributes-group-events" = {
-            patterns = (
-                {   name = "meta.attribute-with-value.html";
-                    begin = "(onclick|ondblclick|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)\\s*=\\s*(?=([\"']).*?[\"'])";
-                    end = "";
-                    beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
-                    patterns = (
-                        {   name = "string.quoted.double";
-                            begin = "(?<!\"|')\"";
-                            end = "\"";
-                            contentName = "source.js.embedded.html";
-                        },
-                        {   name = "string.quoted.single";
-                            begin = "(?<!\"|')'";
-                            end = "'";
-                            contentName = "source.js.embedded.html";
-                        },
-                    ); 
-                },
-            );
-        }; 
-        "attributes-group-I18n" = {
+        "attributes-group-i18n" = {
             patterns = (
                 {   name = "meta.attribute-with-value.html";
                     begin = "(dir)\\s*=\\s*(?=([\"']).*?[\"'])";
@@ -4695,12 +4441,122 @@
                 { include = "#attribute-lang"; },
             ); 
         }; 
+        "attributes-group-events" = {
+            patterns = (
+                {   name = "meta.attribute-with-value.html";
+                    begin = "(onclick|ondblclick|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)\\s*=\\s*(?=([\"']).*?[\"'])";
+                    end = "";
+                    beginCaptures = { 1 = { name = "entity.other.attribute-name.html"; }; };
+                    patterns = (
+                        {   name = "string.quoted.double";
+                            begin = "(?<!\"|')\"";
+                            end = "\"";
+                            contentName = "source.js.embedded.html";
+                        },
+                        {   name = "string.quoted.single";
+                            begin = "(?<!\"|')'";
+                            end = "'";
+                            contentName = "source.js.embedded.html";
+                        },
+                    ); 
+                },
+            );
+        }; 
+        "attributes-group-focus" = {
+            patterns = (
+                { include = "#attribute-accesskey"; },
+                { include = "#attribute-tabindex"; },
+                { include = "#attribute-onfocus"; },
+                { include = "#attribute-onblur"; },
+            );
+        }; 
         "attributes-group-common" = {
             patterns = (
                 { include = "#attributes-group-core"; },
                 { include = "#attributes-group-events"; },
-                { include = "#attributes-group-I18n"; },
-                { include = "#attributes-group-style"; },
+                { include = "#attributes-group-i18n"; },
+            );
+        }; 
+        "tag-group-special.pre" = {
+            patterns = (
+                { include = "#tag-br"; },
+                { include = "#tag-span"; },
+                { include = "#tag-bdo"; },
+                { include = "#tag-map"; },
+            );
+        }; 
+        "tag-group-special" = {
+            patterns = (
+                { include = "#tag-group-special.pre"; },
+                { include = "#tag-object"; },
+                { include = "#tag-img"; },
+                { include = "#tag-h4"; },
+                { include = "#tag-h5"; },
+                { include = "#tag-h6"; },
+            );
+        }; 
+        "tag-group-fontstyle" = {
+            patterns = (
+                { include = "#tag-tt"; },
+                { include = "#tag-i"; },
+                { include = "#tag-b"; },
+                { include = "#tag-big"; },
+                { include = "#tag-small"; },
+            );
+        }; 
+        "tag-group-phrase" = {
+            patterns = (
+                { include = "#tag-em"; },
+                { include = "#tag-strong"; },
+                { include = "#tag-dfn"; },
+                { include = "#tag-code"; },
+                { include = "#tag-q"; },
+                { include = "#tag-samp"; },
+                { include = "#tag-kbd"; },
+                { include = "#tag-var"; },
+                { include = "#tag-cite"; },
+                { include = "#tag-abbr"; },
+                { include = "#tag-acronym"; },
+                { include = "#tag-sub"; },
+                { include = "#tag-sup"; },
+            );
+        }; 
+        "tag-group-inline.forms" = {
+            patterns = (
+                { include = "#tag-input"; },
+                { include = "#tag-select"; },
+                { include = "#tag-textarea"; },
+                { include = "#tag-label"; },
+                { include = "#tag-button"; },
+            );
+        }; 
+        "tag-group-misc.inline" = {
+            patterns = (
+                { include = "#tag-ins"; },
+                { include = "#tag-del"; },
+                { include = "#tag-script"; },
+            );
+        }; 
+        "tag-group-misc" = {
+            patterns = (
+                { include = "#tag-group-misc.inline"; },
+                { include = "#tag-noscript"; },
+            );
+        }; 
+        "tag-group-inline" = {
+            patterns = (
+                { include = "#tag-a"; },
+                { include = "#tag-group-special"; },
+                { include = "#tag-group-fontstyle"; },
+                { include = "#tag-group-phrase"; },
+                { include = "#tag-group-inline.forms"; },
+            );
+        }; 
+        "tag-group-inline-master" = {
+            patterns = (
+                { include = "#pcdata"; },
+                { include = "#tag-group-inline"; },
+                { include = "#tag-group-misc.inline"; },
             );
         }; 
         "tag-group-heading" = {
@@ -4713,200 +4569,88 @@
                 { include = "#tag-h6"; },
             );
         }; 
+        "tag-group-lists" = {
+            patterns = (
+                { include = "#tag-ul"; },
+                { include = "#tag-ol"; },
+                { include = "#tag-dl"; },
+            );
+        }; 
+        "tag-group-blocktext" = {
+            patterns = (
+                { include = "#tag-pre"; },
+                { include = "#tag-hr"; },
+                { include = "#tag-blockquote"; },
+                { include = "#tag-address"; },
+            );
+        }; 
         "tag-group-block" = {
             patterns = (
-                { include = "#tag-form"; },
-                { include = "#tag-hr"; },
-                { include = "#tag-script"; },
-                { include = "#tag-noscript"; },
-                { include = "#tag-address"; },
-                { include = "#tag-blockquote"; },
-                { include = "#tag-div"; },
-                { include = "#tag-pre"; },
                 { include = "#tag-p"; },
-                { include = "#tag-table"; },
-                { include = "#tag-group-form"; },
-            );
-        }; 
-        "tag-group-block-no_form" = {
-            patterns = (
-                { include = "#tag-hr"; },
-                { include = "#tag-script"; },
-                { include = "#tag-noscript"; },
-                { include = "#tag-address"; },
-                { include = "#tag-blockquote"; },
                 { include = "#tag-div"; },
-                { include = "#tag-pre"; },
-                { include = "#tag-p"; },
-                { include = "#tag-table"; },
-                { include = "#tag-group-form"; },
-            );
-        }; 
-        "tag-group-list" = {
-            patterns = (
-                { include = "#tag-dl"; },
-                { include = "#tag-ol"; },
-                { include = "#tag-ul"; },
-            );
-        }; 
-        "tag-group-inline" = {
-            patterns = (
-                { include = "#tag-a"; },
-                { include = "#tag-abbr"; },
-                { include = "#tag-acronym"; },
-                { include = "#tag-b"; },
-                { include = "#tag-bdo"; },
-                { include = "#tag-big"; },
-                { include = "#tag-br"; },
-                { include = "#tag-cite"; },
-                { include = "#tag-code"; },
-                { include = "#tag-del"; },
-                { include = "#tag-dfn"; },
-                { include = "#tag-em"; },
-                { include = "#tag-i"; },
-                { include = "#tag-iframe"; },
-                { include = "#tag-img"; },
-                { include = "#tag-ins"; },
-                { include = "#tag-kbd"; },
-                { include = "#tag-map"; },
-                { include = "#tag-noscript"; },
-                { include = "#tag-q"; },
-                { include = "#tag-samp"; },
-                { include = "#tag-script"; },
-                { include = "#tag-span"; },
-                { include = "#tag-small"; },
-                { include = "#tag-strong"; },
-                { include = "#tag-sub"; },
-                { include = "#tag-sup"; },
-                { include = "#tag-tt"; },
-                { include = "#tag-var"; },
-                { include = "#tag-group-formctrl"; },
-            );
-        }; 
-        "tag-group-inline-no_label" = {
-            patterns = (
-                { include = "#tag-a"; },
-                { include = "#tag-abbr"; },
-                { include = "#tag-acronym"; },
-                { include = "#tag-b"; },
-                { include = "#tag-bdo"; },
-                { include = "#tag-big"; },
-                { include = "#tag-br"; },
-                { include = "#tag-cite"; },
-                { include = "#tag-code"; },
-                { include = "#tag-del"; },
-                { include = "#tag-dfn"; },
-                { include = "#tag-em"; },
-                { include = "#tag-i"; },
-                { include = "#tag-iframe"; },
-                { include = "#tag-img"; },
-                { include = "#tag-ins"; },
-                { include = "#tag-kbd"; },
-                { include = "#tag-map"; },
-                { include = "#tag-noscript"; },
-                { include = "#tag-q"; },
-                { include = "#tag-samp"; },
-                { include = "#tag-script"; },
-                { include = "#tag-span"; },
-                { include = "#tag-small"; },
-                { include = "#tag-strong"; },
-                { include = "#tag-sub"; },
-                { include = "#tag-sup"; },
-                { include = "#tag-tt"; },
-                { include = "#tag-var"; },
-                { include = "#tag-input"; },
-                { include = "#tag-select"; },
-                { include = "#tag-textarea"; },
-                { include = "#tag-button"; },
-            );
-        }; 
-        "tag-group-inline-no_formctrl" = {
-            patterns = (
-                { include = "#tag-a"; },
-                { include = "#tag-abbr"; },
-                { include = "#tag-acronym"; },
-                { include = "#tag-b"; },
-                { include = "#tag-bdo"; },
-                { include = "#tag-big"; },
-                { include = "#tag-br"; },
-                { include = "#tag-cite"; },
-                { include = "#tag-code"; },
-                { include = "#tag-del"; },
-                { include = "#tag-dfn"; },
-                { include = "#tag-em"; },
-                { include = "#tag-i"; },
-                { include = "#tag-iframe"; },
-                { include = "#tag-img"; },
-                { include = "#tag-ins"; },
-                { include = "#tag-kbd"; },
-                { include = "#tag-map"; },
-                { include = "#tag-noscript"; },
-                { include = "#tag-q"; },
-                { include = "#tag-samp"; },
-                { include = "#tag-script"; },
-                { include = "#tag-span"; },
-                { include = "#tag-small"; },
-                { include = "#tag-strong"; },
-                { include = "#tag-sub"; },
-                { include = "#tag-sup"; },
-                { include = "#tag-tt"; },
-                { include = "#tag-var"; },
-            );
-        }; 
-        "tag-group-inline-no_a" = {
-            patterns = (
-                { include = "#tag-abbr"; },
-                { include = "#tag-acronym"; },
-                { include = "#tag-b"; },
-                { include = "#tag-bdo"; },
-                { include = "#tag-big"; },
-                { include = "#tag-br"; },
-                { include = "#tag-cite"; },
-                { include = "#tag-code"; },
-                { include = "#tag-del"; },
-                { include = "#tag-dfn"; },
-                { include = "#tag-em"; },
-                { include = "#tag-i"; },
-                { include = "#tag-iframe"; },
-                { include = "#tag-img"; },
-                { include = "#tag-ins"; },
-                { include = "#tag-kbd"; },
-                { include = "#tag-map"; },
-                { include = "#tag-noscript"; },
-                { include = "#tag-q"; },
-                { include = "#tag-samp"; },
-                { include = "#tag-script"; },
-                { include = "#tag-span"; },
-                { include = "#tag-small"; },
-                { include = "#tag-strong"; },
-                { include = "#tag-sub"; },
-                { include = "#tag-sup"; },
-                { include = "#tag-tt"; },
-                { include = "#tag-var"; },
-                { include = "#tag-group-formctrl"; },
-            );
-        }; 
-        "tag-group-form" = {
-            patterns = (
-                { include = "#tag-form"; },
                 { include = "#tag-fieldset"; },
+                { include = "#tag-table"; },
+                { include = "#tag-group-heading"; },
+                { include = "#tag-group-lists"; },
+                { include = "#tag-group-blocktext"; },
             );
         }; 
-        "tag-group-formctrl" = {
+        "tag-group-block-master" = {
             patterns = (
-                { include = "#tag-input"; },
-                { include = "#tag-select"; },
-                { include = "#tag-textarea"; },
-                { include = "#tag-label"; },
-                { include = "#tag-button"; },
+                { include = "#tag-group-block"; },
+                { include = "#tag-group-misc"; },
+                { include = "#tag-form"; },
             );
         }; 
         "tag-group-flow" = {
             patterns = (
-                { include = "#tag-group-heading"; },
+                { include = "#pcdata"; },
                 { include = "#tag-group-block"; },
                 { include = "#tag-group-inline"; },
-                { include = "#tag-group-list"; },
+                { include = "#tag-group-misc"; },
+                { include = "#tag-form"; },
+            );
+        }; 
+        "tag-group-a.content" = {
+            patterns = (
+                { include = "#pcdata"; },
+                { include = "#tag-group-special"; },
+                { include = "#tag-group-fontstyle"; },
+                { include = "#tag-group-phrase"; },
+                { include = "#tag-group-inline.forms"; },
+                { include = "#tag-group-misc.inline"; },
+            );
+        }; 
+        "tag-group-pre.content" = {
+            patterns = (
+                { include = "#pcdata"; },
+                { include = "#tag-a"; },
+                { include = "#tag-group-fontstyle"; },
+                { include = "#tag-group-phrase"; },
+                { include = "#tag-group-special.pre"; },
+                { include = "#tag-group-misc.inline"; },
+                { include = "#tag-group-inline.forms"; },
+            );
+        }; 
+        "tag-group-form.content" = {
+            patterns = (
+                { include = "#tag-group-block"; },
+                { include = "#tag-group-misc"; },
+            );
+        }; 
+        "tag-group-button.content" = {
+            patterns = (
+                { include = "#pcdata"; },
+                { include = "#tag-p"; },
+                { include = "#tag-group-heading"; },
+                { include = "#tag-div"; },
+                { include = "#tag-group-lists"; },
+                { include = "#tag-group-blocktext"; },
+                { include = "#tag-table"; },
+                { include = "#tag-group-special"; },
+                { include = "#tag-group-fontstyle"; },
+                { include = "#tag-group-phrase"; },
+                { include = "#tag-group-misc"; },
             );
         }; 
     }; 

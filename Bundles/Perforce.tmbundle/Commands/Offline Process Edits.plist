@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>
+# if we have offline edits, send them now (assumes we're actually online again)
+if [[ -e  "$HOME/P4Cache/OfflineEdits.txt" ]]; then
+	"$TM_P4" -x "$HOME/P4Cache/OfflineEdits.txt" edit &amp;&amp; rm "$HOME/P4Cache/OfflineEdits.txt"
+fi
+
+# if we have offline adds, send them now (assumes we're actually online again)
+if [ -e  "$HOME/P4Cache/OfflineAdds.txt" ]; then
+	"$TM_P4" -x add "$HOME/P4Cache/OfflineAdds.txt" &amp;&amp; rm "$HOME/P4Cache/OfflineAdds.txt"
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Offline Send Offline Edits</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>A1DCDF0B-628B-4590-87C0-A551DC1F5F3A</string>
+</dict>
+</plist>

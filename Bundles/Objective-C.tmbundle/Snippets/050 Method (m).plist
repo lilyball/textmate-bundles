@@ -4,9 +4,9 @@
 <dict>
 	<key>content</key>
 	<string>- (${1:id})${2:method}${3::(${4:id})${5:anArgument}}
-{$0
-${1/(^(void|IBAction)$)?.*/(?1::	return nil;
-)/}}</string>
+{$0${1/^(void|IBAction)$|(.*)/(?2:
+	return nil;)/}
+}</string>
 	<key>name</key>
 	<string>Method (m)</string>
 	<key>scope</key>

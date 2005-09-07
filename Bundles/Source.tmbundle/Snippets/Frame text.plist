@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>$TM_COMMENT_START ==${1/./=/g}== $TM_COMMENT_END
-$TM_COMMENT_START = ${1:${TM_SELECTED_TEXT:Banner}} = $TM_COMMENT_END
-$TM_COMMENT_START ==${1/./=/g}== $TM_COMMENT_END</string>
+	<string>${TM_COMMENT_START/\s*$/ /}==${1/(.)|(?m:\n.*)/(?1:=)/g}==${TM_COMMENT_END/^\s*(.+)/ $1/}
+${TM_COMMENT_START/\s*$/ /}= ${1:${TM_SELECTED_TEXT:Banner}} =${TM_COMMENT_END/\s*(.+)/ $1/}
+${TM_COMMENT_START/\s*$/ /}==${1/(.)|(?m:\n.*)/(?1:=)/g}==${TM_COMMENT_END/\s*(.+)/ $1/}</string>
 	<key>keyEquivalent</key>
 	<string>^B</string>
 	<key>name</key>

@@ -49,6 +49,13 @@
 			<string>keyword.other.release-notes</string>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>^\[REVISION \d+\]$
+</string>
+			<key>name</key>
+			<string>meta.diff.separator.release-notes</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>%\{&lt;(?i:HTML)&gt;</string>
 			<key>end</key>

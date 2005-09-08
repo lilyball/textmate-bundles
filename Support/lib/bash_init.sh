@@ -15,9 +15,14 @@ if [[ -d "$TM_SUPPORT_PATH/bin" ]]; then
 	if [[ -d "$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS" ]]; then
 		PATH="$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS:$PATH"
 	fi
-	export PATH
 fi
 
 if [[ -d "$TM_BUNDLE_PATH/bin" ]]; then
-   export PATH="$TM_BUNDLE_PATH/bin:$PATH"
+   PATH="$TM_BUNDLE_PATH/bin:$PATH"
 fi
+
+if [[ -d "$TM_BUNDLE_SUPPORT/bin" ]]; then
+   PATH="$TM_BUNDLE_SUPPORT/bin:$PATH"
+fi
+
+export PATH

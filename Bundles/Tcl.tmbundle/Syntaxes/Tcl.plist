@@ -17,14 +17,14 @@
 		<dict>
 			<key>captures</key>
 			<dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>comment.line.number-sign.tcl</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(^|;)\s*(#.*)$</string>
+			<string>(?&lt;=^|;)\s*(#.*)$</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -36,7 +36,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?:^|[\[{;])\s*(if|while|for|catch|return|break|continue|switch|exit|foreach)\b</string>
+			<string>(?&lt;=^|[\[{;])\s*(if|while|for|catch|return|break|continue|switch|exit|foreach)\b</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -48,7 +48,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?:^|})\s*(then|elseif|else)\b</string>
+			<string>(?&lt;=^|})\s*(then|elseif|else)\b</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -60,13 +60,13 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?:^|[\[{;])\s*(after|append|array|auto_execok|auto_import|auto_load|auto_mkindex|auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|file|fileevent|filename|flush|format|gets|glob|global|history|http|incr|info|interp|join|lappend|library|lindex|linsert|list|llength|load|lrange|lreplace|lsearch|lset|lsort|memory|msgcat|namespace|open|package|parray|pid|pkg::create|pkg_mkIndex|proc|puts|pwd|re_syntax|read|regexp|registry|regsub|rename|resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|unknown|unset|update|uplevel|upvar|variable|vwait)\b</string>
+			<string>(?&lt;=^|[\[{;])\s*(after|append|array|auto_execok|auto_import|auto_load|auto_mkindex|auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|file|fileevent|filename|flush|format|gets|glob|global|history|http|incr|info|interp|join|lappend|library|lindex|linsert|list|llength|load|lrange|lreplace|lsearch|lset|lsort|memory|msgcat|namespace|open|package|parray|pid|pkg::create|pkg_mkIndex|proc|puts|pwd|re_syntax|read|regexp|registry|regsub|rename|resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|unknown|unset|update|uplevel|upvar|variable|vwait)\b</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\\.</string>
 			<key>name</key>
-			<string>dummy.escapes.tcl</string>
+			<string>constant.character.escape.tcl</string>
 		</dict>
 		<dict>
 			<key>match</key>

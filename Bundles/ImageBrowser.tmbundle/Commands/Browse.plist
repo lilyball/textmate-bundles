@@ -6,8 +6,10 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>TM_RUBY="${TM_RUBY:=ruby}"
-BROWSER="${TM_BUNDLE_PATH}/Tools/browser.rb"
-$TM_RUBY "$BROWSER" "$TM_DIRECTORY" "$TM_BUNDLE_PATH"</string>
+SUPPORT_PATH=${TM_BUNDLE_SUPPORT:="$TM_BUNDLE_PATH/Support"}
+BROWSER="${SUPPORT_PATH}/browser.rb"
+
+$TM_RUBY "$BROWSER" "$TM_DIRECTORY" "$SUPPORT_PATH"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

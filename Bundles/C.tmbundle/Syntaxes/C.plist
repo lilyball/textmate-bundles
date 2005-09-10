@@ -303,25 +303,6 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string></string>
-					<key>end</key>
-					<string>(?=^\s*#\s*(else|endif)\b.*$)</string>
-					<key>name</key>
-					<string>comment.block.preprocessor.if-branch</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#disabled</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#pragma-mark</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
 					<string>^\s*(#\s*(else)\b)</string>
 					<key>captures</key>
 					<dict>
@@ -343,6 +324,25 @@
 						<dict>
 							<key>include</key>
 							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string></string>
+					<key>end</key>
+					<string>(?=^\s*#\s*(else|endif)\b.*$)</string>
+					<key>name</key>
+					<string>comment.block.preprocessor.if-branch</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#disabled</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#pragma-mark</string>
 						</dict>
 					</array>
 				</dict>
@@ -369,19 +369,6 @@
 			<string>^\s*(#\s*(endif)\b)</string>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>begin</key>
-					<string></string>
-					<key>end</key>
-					<string>(?=^\s*#\s*(else|endif)\b.*$)</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>$base</string>
-						</dict>
-					</array>
-				</dict>
 				<dict>
 					<key>begin</key>
 					<string>^\s*(#\s*(else)\b).*
@@ -412,6 +399,19 @@
 						<dict>
 							<key>include</key>
 							<string>#pragma-mark</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string></string>
+					<key>end</key>
+					<string>(?=^\s*#\s*(else|endif)\b.*$)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
 						</dict>
 					</array>
 				</dict>

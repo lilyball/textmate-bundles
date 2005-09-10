@@ -12,8 +12,8 @@
 # file/line information then plays a succes/failure sample
 # based on the final outcome
 
-PROJECT_FILE=$(ruby -- "${TM_BUNDLE_PATH}/bin/find_xcode_project.rb")
-USE_CONFIGURATIONS=$(ruby -- "${TM_BUNDLE_PATH}/bin/xcode_version.rb")
+PROJECT_FILE=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
+USE_CONFIGURATIONS=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/xcode_version.rb")
 
 STYLEARGNAME="buildstyle"
 
@@ -35,7 +35,7 @@ else
 fi
 
 export PROJECT_FILE
-xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} $BUILD_STYLE 2&gt;&amp;1| ruby -- "${TM_BUNDLE_PATH}/bin/format_build.rb"
+xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} $BUILD_STYLE 2&gt;&amp;1| ruby -- "${TM_BUNDLE_SUPPORT}/bin/format_build.rb"
 </string>
 	<key>input</key>
 	<string>none</string>

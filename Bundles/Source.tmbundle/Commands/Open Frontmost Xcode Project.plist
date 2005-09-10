@@ -14,7 +14,7 @@ dest_path="${dest_path}.tmproj"
 
 # FIXME probably should move the old dest_path somewhere and only nuke it if the conversion is successful
 
-"$TM_BUNDLE_PATH/bin/xcode_to_tmproj" "$source_path/project.pbxproj" "$dest_path" &amp;&amp; open "$dest_path"
+"$TM_BUNDLE_SUPPORT/bin/xcode_to_tmproj" "$source_path/project.pbxproj" "$dest_path" &amp;&amp; open "$dest_path"
 
 </string>
 	<key>input</key>

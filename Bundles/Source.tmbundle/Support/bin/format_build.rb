@@ -1,4 +1,4 @@
-$bundle				= ENV['TM_BUNDLE_PATH']
+$bundle				= ENV['TM_BUNDLE_SUPPORT']
 $support			= ENV['TM_SUPPORT_PATH']
 
 require ($support + "/bin/Builder.rb")

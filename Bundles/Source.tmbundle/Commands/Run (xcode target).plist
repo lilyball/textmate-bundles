@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>export PROJECT_DIR=$(ruby -- "${TM_BUNDLE_PATH}/bin/find_xcode_project.rb")
+	<string>export PROJECT_DIR=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
 
 export PROJECT="${PROJECT_DIR}/project.pbxproj"
 if [[ ! -f ${PROJECT} ]]; then
@@ -18,7 +18,7 @@ cd "`dirname "${PROJECT_DIR}"`"
 
 "${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
-require "#{ENV['TM_BUNDLE_PATH']}/bin/xcode_version"
+require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
 
 def shell_escape (str)
    str.gsub(/[{}()`'"\\; $]/, '\\\\\&amp;')

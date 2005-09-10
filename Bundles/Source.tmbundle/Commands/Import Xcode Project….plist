@@ -18,7 +18,7 @@ dest_path = source_path.chomp.sub(/\.(xcodeproj|xcode|pbproj)\/?$/, ".tmproj")
 
 # FIXME probably should move the old dest_path somewhere and only nuke it if the conversion is successful
 
-%x{"#{ENV['TM_BUNDLE_PATH']}/bin/xcode_to_tmproj" "#{source_path}/project.pbxproj" "#{dest_path}" &amp;&amp; open "#{dest_path}"}</string>
+%x{"#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_to_tmproj" "#{source_path}/project.pbxproj" "#{dest_path}" &amp;&amp; open "#{dest_path}"}</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

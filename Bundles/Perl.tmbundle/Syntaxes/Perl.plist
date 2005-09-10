@@ -257,27 +257,15 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>[\$\@\%][a-zA-Zx7f-xff\$][a-zA-Z0-9_x7f-xff\$]*\b</string>
+			<string>[\$\@\%](#)?([a-zA-Zx7f-xff\$]|::)([a-zA-Z0-9_x7f-xff\$]|::)*\b</string>
 			<key>name</key>
 			<string>variable.other.readwrite.global.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>[\$\@\%][0-9_]\b</string>
+			<string>[\$\@\%](#)?[0-9_]\b</string>
 			<key>name</key>
 			<string>variable.other.readwrite.global.special.perl</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>[\$\@\%]#[a-zA-Zx7f-xff\$][a-zA-Z0-9_x7f-xff\$]*\b</string>
-			<key>name</key>
-			<string>variable.other.readwrite.global.#.perl</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>[\$\@\%]#[0-9_]\b</string>
-			<key>name</key>
-			<string>variable.other.readwrite.global.special#.perl</string>
 		</dict>
 	</array>
 	<key>repository</key>

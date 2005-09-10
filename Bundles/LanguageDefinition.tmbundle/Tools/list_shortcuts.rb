@@ -5,9 +5,9 @@
 #
 # Pass -b to get a list per-bundle instead of per-type
 
-$bundle = ENV['TM_BUNDLE_PATH'].chomp('/')
+$bundle = ENV['TM_BUNDLE_SUPPORT'].chomp('/')
 
-$: << "#{$bundle}/Tools"
+$: << "#{$bundle}"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
 SHORTCUT_TITLES = {
@@ -134,7 +134,7 @@ puts '</style>'
 puts '<body onload="setup();">'
 puts '<h1>Keyboard Shortcuts List</h1><hr />'
 
-bundles = PropertyList::load(%x{"#{$bundle}/Tools/KeyboardShortcuts"})
+bundles = PropertyList::load(%x{"#{$bundle}/bin/KeyboardShortcuts"})
 
 puts '<div id="header">'
 puts '<div class="jumpblock">'

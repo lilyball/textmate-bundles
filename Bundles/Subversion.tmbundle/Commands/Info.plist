@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>TM_SVN="${TM_SVN:=svn}"
 TM_RUBY="${TM_RUBY:=ruby}"
-FORMAT_INFO="${TM_BUNDLE_PATH}/Tools/format_info.rb"
+FORMAT_INFO="${TM_BUNDLE_SUPPORT}/format_info.rb"
 
 if [[ -z $TM_SELECTED_FILES ]]; then
    "$TM_SVN" info "$TM_FILEPATH" \

@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>"${TM_SVN:=svn}" blame -v "$TM_FILEPATH" \
-2&gt;&amp;1| "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_PATH}/Tools/format_blame.rb"</string>
+2&gt;&amp;1| "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/format_blame.rb"</string>
 	<key>dontFollowNewOutput</key>
 	<true/>
 	<key>input</key>

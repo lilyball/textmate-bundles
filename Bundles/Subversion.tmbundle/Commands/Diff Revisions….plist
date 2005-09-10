@@ -44,7 +44,7 @@ revs=( $revs )
 
 rev1=${revs[0]#r}
 rev2=${revs[1]#r}
-"${TM_RUBY:=ruby}" -I "$TM_BUNDLE_PATH/Tools/" &lt;&lt;END
+"${TM_RUBY:=ruby}" -I "$TM_BUNDLE_SUPPORT/" &lt;&lt;END
 	require 'svn_diff'
 	Subversion::diff_active_file("$rev1:$rev2", "Subversion—Diff Revisions…")
 END

@@ -32,7 +32,7 @@ fi
 revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`
 revs=( $revs )
 
-"${TM_RUBY:=ruby}" -I "$TM_BUNDLE_PATH/Tools/"&lt;&lt;END
+"${TM_RUBY:=ruby}" -I "$TM_BUNDLE_SUPPORT/"&lt;&lt;END
 	require 'svn_diff'
 	Subversion::diff_active_file("${revs[0]#r}", "Subversion—Diff With Revision…")
 END

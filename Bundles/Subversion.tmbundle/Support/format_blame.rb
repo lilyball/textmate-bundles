@@ -11,7 +11,7 @@
 $full_file     = ENV['TM_FILEPATH']
 $current       = ENV['TM_LINE_NUMBER'].to_i
 $tab_size      = ENV['TM_TAB_SIZE'].to_i
-$bundle        = ENV['TM_BUNDLE_PATH']
+$bundle        = ENV['TM_BUNDLE_SUPPORT']
 $date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
 
 # find out if the window should get closed on a click
@@ -27,7 +27,7 @@ end
 
 
 # require the helper, it does some formating, etc:
-require $bundle+'/Tools/svn_helper.rb'
+require $bundle+'/svn_helper.rb'
 include SVNHelper
 
 

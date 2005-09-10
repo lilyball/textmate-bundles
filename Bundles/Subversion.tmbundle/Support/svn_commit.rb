@@ -3,7 +3,7 @@ require 'English' # you are angry, english!
 svn				= ENV['TM_SVN']
 #commit_paths	= ENV['CommitPaths']
 commit_tool		= ENV['CommitWindow']
-bundle			= ENV['TM_BUNDLE_PATH']
+bundle			= ENV['TM_BUNDLE_SUPPORT']
 support			= ENV['TM_SUPPORT_PATH']
 ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 

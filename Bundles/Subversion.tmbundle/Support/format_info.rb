@@ -7,7 +7,7 @@
 
 
 # fetch some tm things..
-$bundle        = ENV['TM_BUNDLE_PATH']
+$bundle        = ENV['TM_BUNDLE_SUPPORT']
 $show          = ENV['TM_SVN_INFO_SHOW'].nil? ? [] :
                    ENV['TM_SVN_INFO_SHOW'].split(/\s*,\s*/).each { |s| s.downcase! }
 $hide          = ENV['TM_SVN_INFO_HIDE'].nil? ? [] :
@@ -28,7 +28,7 @@ end
 
 
 # require the helper, it does some formating, etc:
-require $bundle+'/Tools/svn_helper.rb'
+require $bundle+'/svn_helper.rb'
 include SVNHelper
 
 

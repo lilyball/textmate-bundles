@@ -8,14 +8,14 @@
 
 # fetch some tm things or set useful defaults..
 $tab_size      = ENV['TM_TAB_SIZE'].to_i
-$bundle        = ENV['TM_BUNDLE_PATH']
+$bundle        = ENV['TM_BUNDLE_SUPPORT']
 $limit         = ENV['TM_SVN_LOG_LIMIT'].nil?   ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i
 $date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
 $support       = ENV['TM_SUPPORT_PATH']
 $sort_order    = [ :added, :modified, :deleted ]
 
 # require the helper, it does some formating, etc:
-require $bundle+'/Tools/svn_helper.rb'
+require $bundle+'/svn_helper.rb'
 require $support+'/bin/shelltokenize.rb'
 include SVNHelper
 
@@ -44,7 +44,7 @@ begin
               [ $bundle+'/Stylesheets/svn_style.css',
                 $bundle+'/Stylesheets/svn_log_style.css'],
               "<script type=\"text/javascript\">\n"+
-                 File.open($bundle+'/Tools/flip_files.js', 'r').readlines.join+'</script>' )
+                 File.open($bundle+'/flip_files.js', 'r').readlines.join+'</script>' )
    
    STDOUT.flush
 

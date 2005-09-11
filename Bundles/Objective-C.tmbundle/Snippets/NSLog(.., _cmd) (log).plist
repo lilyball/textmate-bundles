@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSLog(@"$1"${1/[^%]*(%)?.*/(?1:, :\);)/}$2${1/[^%]*(%)?.*/(?1:\);)/}</string>
+	<string>NSLog(@"%s$1", _cmd${1/[^%]*(%)?.*/(?1:, :\);)/}$2${1/[^%]*(%)?.*/(?1:\);)/}</string>
 	<key>name</key>
-	<string>NSLog(..) (log)</string>
+	<string>NSLog(.., _cmd) (log)</string>
 	<key>scope</key>
-	<string>source.objc, source.objc++</string>
+	<string>source.objc meta.scope.implementation, source.objc++ meta.scope.implementation</string>
 	<key>tabTrigger</key>
 	<string>log</string>
 	<key>uuid</key>
-	<string>1251B7E8-6BF0-11D9-8384-000D93589AF6</string>
+	<string>A3555C49-D367-4CF5-8032-13B291820CD3</string>
 </dict>
 </plist>

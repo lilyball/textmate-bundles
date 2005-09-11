@@ -5,6 +5,7 @@
     patterns = (
         {   begin = "(?=<?xml)";
             end = "this_is_something_you_will_never_match"; 
+            name = "text.xml.plist";
             patterns = (
                 { include = "text.xml.plist"; },
             );

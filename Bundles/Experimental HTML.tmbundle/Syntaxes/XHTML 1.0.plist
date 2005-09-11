@@ -32,6 +32,7 @@
         "sgml-declarations-preprocessor" = {
             begin = "(?=<!)"; 
             end = "(?<=>)"; 
+            applyEndPatternLast = 1;
             patterns = (
                 {   name = "meta.tag.sgml-declaration.doctype.html";
                     begin = "<!(DOCTYPE\\b)"; 
@@ -50,6 +51,7 @@
         "sgml-declarations" = {
             begin = "(?=<!)"; 
             end = "(?<=>)"; 
+            applyEndPatternLast = 1;
             patterns = (
                 {   name = "meta.tag.sgml.empty.html";
                     match = "<!\\s*>";
@@ -2154,6 +2156,7 @@
                                 {   comment = "Bug: This should use the generic invalid tag.";
                                     begin = "(?=<(colgroup|col))";
                                     end = "(?=<)";
+                                    applyEndPatternLast = 1;
                                     patterns = (
                                         {   begin = "(?=<colgroup)";
                                             end = "(?=<(?!colgroup|col))";

@@ -87,12 +87,6 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>(\s*)(?!--|&gt;)\S(\s*)</string>
-					<key>name</key>
-					<string>invalid.illegal.bad-comments-or-CDATA.html</string>
-				</dict>
-				<dict>
 					<key>begin</key>
 					<string>--</string>
 					<key>end</key>
@@ -143,6 +137,12 @@
 					<string>]](?=&gt;)</string>
 					<key>name</key>
 					<string>constant.other.inline-data.html</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(\s*)(?!--|&gt;)\S(\s*)</string>
+					<key>name</key>
+					<string>invalid.illegal.bad-comments-or-CDATA.html</string>
 				</dict>
 			</array>
 		</dict>
@@ -387,6 +387,33 @@
 					<string>\?&gt;</string>
 					<key>name</key>
 					<string>source.php.embedded.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#php-source</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>php-source</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>#.*?(?=\?&gt;)</string>
+					<key>name</key>
+					<string>comment.line.number-sign.ruby</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>//.*?(?=\?&gt;)</string>
+					<key>name</key>
+					<string>comment.line.double-slash.ruby</string>
+				</dict>
+				<dict>
 					<key>patterns</key>
 					<array>
 						<dict>

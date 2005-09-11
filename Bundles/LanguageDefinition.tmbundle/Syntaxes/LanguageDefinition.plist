@@ -3,7 +3,8 @@
     foldingStopMarker = "(\\*/|\\}|\\))"; 
     name = "Language Definition (TextMate)"; 
     patterns = (
-        {   begin = "(?=<?xml)";
+        {   name = "text.xml.plist";
+            begin = "(?=<?xml)";
             end = "this_is_something_you_will_never_match"; 
             name = "text.xml.plist";
             patterns = (

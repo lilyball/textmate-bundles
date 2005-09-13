@@ -113,21 +113,21 @@
             begin = "(<(a)\\b)";
             end = "((a)>)";
             captures = {
-                1 = { name = "meta.tag.block.a.html"; };
-                2 = { name = "entity.name.tag.block.a.html"; };
+                1 = { name = "meta.tag.inline.a.html"; };
+                2 = { name = "entity.name.tag.inline.a.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=a))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.a.html"; };
+                        1 = { name = "meta.tag.inline.a.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-a.content"; },
                     );
                 },
-                {   name = "meta.tag.block.a.html";
+                {   name = "meta.tag.inline.a.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -152,21 +152,21 @@
             begin = "(<(abbr)\\b)";
             end = "((abbr)>)";
             captures = {
-                1 = { name = "meta.tag.block.abbr.html"; };
-                2 = { name = "entity.name.tag.block.abbr.html"; };
+                1 = { name = "meta.tag.inline.abbr.html"; };
+                2 = { name = "entity.name.tag.inline.abbr.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=abbr))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.abbr.html"; };
+                        1 = { name = "meta.tag.inline.abbr.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.abbr.html";
+                {   name = "meta.tag.inline.abbr.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -180,21 +180,21 @@
             begin = "(<(acronym)\\b)";
             end = "((acronym)>)";
             captures = {
-                1 = { name = "meta.tag.block.acronym.html"; };
-                2 = { name = "entity.name.tag.block.acronym.html"; };
+                1 = { name = "meta.tag.inline.acronym.html"; };
+                2 = { name = "entity.name.tag.inline.acronym.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=acronym))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.acronym.html"; };
+                        1 = { name = "meta.tag.inline.acronym.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.acronym.html";
+                {   name = "meta.tag.inline.acronym.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -236,15 +236,15 @@
             begin = "(<(area)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.area.html"; };
-                2 = { name = "entity.name.tag.inline.area.html"; };
+                1 = { name = "meta.tag.meta.area.html"; };
+                2 = { name = "entity.name.tag.meta.area.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.area.html"; };
+                1 = { name = "meta.tag.meta.area.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.area.html";
+                {   name = "meta.tag.meta.area.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -264,21 +264,21 @@
             begin = "(<(b)\\b)";
             end = "((b)>)";
             captures = {
-                1 = { name = "meta.tag.block.b.html"; };
-                2 = { name = "entity.name.tag.block.b.html"; };
+                1 = { name = "meta.tag.inline.b.html"; };
+                2 = { name = "entity.name.tag.inline.b.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=b))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.b.html"; };
+                        1 = { name = "meta.tag.inline.b.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.b.html";
+                {   name = "meta.tag.inline.b.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -292,15 +292,15 @@
             begin = "(<(base)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.base.html"; };
-                2 = { name = "entity.name.tag.inline.base.html"; };
+                1 = { name = "meta.tag.meta.base.html"; };
+                2 = { name = "entity.name.tag.meta.base.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.base.html"; };
+                1 = { name = "meta.tag.meta.base.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.base.html";
+                {   name = "meta.tag.meta.base.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -346,21 +346,21 @@
             begin = "(<(big)\\b)";
             end = "((big)>)";
             captures = {
-                1 = { name = "meta.tag.block.big.html"; };
-                2 = { name = "entity.name.tag.block.big.html"; };
+                1 = { name = "meta.tag.inline.big.html"; };
+                2 = { name = "entity.name.tag.inline.big.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=big))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.big.html"; };
+                        1 = { name = "meta.tag.inline.big.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.big.html";
+                {   name = "meta.tag.inline.big.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -401,25 +401,26 @@
             );
         }; 
         "tag-body" = {
+            name = "meta.section.html.body.xhtml.1-strict";
             begin = "(<(body)\\b)";
             end = "((body)>)";
             captures = {
-                1 = { name = "meta.tag.block.body.html"; };
-                2 = { name = "entity.name.tag.block.body.html"; };
+                1 = { name = "meta.tag.segment.body.html"; };
+                2 = { name = "entity.name.tag.segment.body.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=body))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.body.html"; };
+                        1 = { name = "meta.tag.segment.body.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-block-master"; },
                         { include = "#no-pcdata"; },
                     );
                 },
-                {   name = "meta.tag.block.body.html";
+                {   name = "meta.tag.segment.body.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -435,15 +436,15 @@
             begin = "(<(br)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.br.html"; };
-                2 = { name = "entity.name.tag.inline.br.html"; };
+                1 = { name = "meta.tag.block.br.html"; };
+                2 = { name = "entity.name.tag.block.br.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.br.html"; };
+                1 = { name = "meta.tag.block.br.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.br.html";
+                {   name = "meta.tag.block.br.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -457,21 +458,21 @@
             begin = "(<(button)\\b)";
             end = "((/>)|((button)>))";
             captures = {
-                1 = { name = "meta.tag.block.button.html"; };
-                4 = { name = "entity.name.tag.block.button.html"; };
+                1 = { name = "meta.tag.form.button.html"; };
+                4 = { name = "entity.name.tag.form.button.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=[^/]>)";
                     end = "(</(?=button))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.button.html"; };
+                        1 = { name = "meta.tag.form.button.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-button.content"; },
                     );
                 },
-                {   name = "meta.tag.block.button.html";
+                {   name = "meta.tag.form.button.html";
                     begin = "";
                     end = "((?=/>)|>)";
                     patterns = (
@@ -520,21 +521,21 @@
             begin = "(<(cite)\\b)";
             end = "((cite)>)";
             captures = {
-                1 = { name = "meta.tag.block.cite.html"; };
-                2 = { name = "entity.name.tag.block.cite.html"; };
+                1 = { name = "meta.tag.inline.cite.html"; };
+                2 = { name = "entity.name.tag.inline.cite.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=cite))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.cite.html"; };
+                        1 = { name = "meta.tag.inline.cite.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.cite.html";
+                {   name = "meta.tag.inline.cite.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -548,21 +549,21 @@
             begin = "(<(code)\\b)";
             end = "((code)>)";
             captures = {
-                1 = { name = "meta.tag.block.code.html"; };
-                2 = { name = "entity.name.tag.block.code.html"; };
+                1 = { name = "meta.tag.inline.code.html"; };
+                2 = { name = "entity.name.tag.inline.code.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=code))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.code.html"; };
+                        1 = { name = "meta.tag.inline.code.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.code.html";
+                {   name = "meta.tag.inline.code.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -576,15 +577,15 @@
             begin = "(<(col)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.col.html"; };
-                2 = { name = "entity.name.tag.inline.col.html"; };
+                1 = { name = "meta.tag.block.col.html"; };
+                2 = { name = "entity.name.tag.block.col.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.col.html"; };
+                1 = { name = "meta.tag.block.col.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.col.html";
+                {   name = "meta.tag.block.col.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -667,21 +668,21 @@
             begin = "(<(del)\\b)";
             end = "((del)>)";
             captures = {
-                1 = { name = "meta.tag.block.del.html"; };
-                2 = { name = "entity.name.tag.block.del.html"; };
+                1 = { name = "meta.tag.inline.del.html"; };
+                2 = { name = "entity.name.tag.inline.del.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=del))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.del.html"; };
+                        1 = { name = "meta.tag.inline.del.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
                     );
                 },
-                {   name = "meta.tag.block.del.html";
+                {   name = "meta.tag.inline.del.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -697,21 +698,21 @@
             begin = "(<(dfn)\\b)";
             end = "((dfn)>)";
             captures = {
-                1 = { name = "meta.tag.block.dfn.html"; };
-                2 = { name = "entity.name.tag.block.dfn.html"; };
+                1 = { name = "meta.tag.inline.dfn.html"; };
+                2 = { name = "entity.name.tag.inline.dfn.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=dfn))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.dfn.html"; };
+                        1 = { name = "meta.tag.inline.dfn.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.dfn.html";
+                {   name = "meta.tag.inline.dfn.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -750,6 +751,7 @@
             );
         }; 
         "tag-dl" = {
+            name = "meta.section.html.dl.xhtml.1-strict";
             begin = "(<(dl)\\b)";
             end = "((dl)>)";
             captures = {
@@ -811,21 +813,21 @@
             begin = "(<(em)\\b)";
             end = "((em)>)";
             captures = {
-                1 = { name = "meta.tag.block.em.html"; };
-                2 = { name = "entity.name.tag.block.em.html"; };
+                1 = { name = "meta.tag.inline.em.html"; };
+                2 = { name = "entity.name.tag.inline.em.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=em))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.em.html"; };
+                        1 = { name = "meta.tag.inline.em.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.em.html";
+                {   name = "meta.tag.inline.em.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -869,6 +871,7 @@
             );
         }; 
         "tag-form" = {
+            name = "meta.section.html.form.xhtml.1-strict";
             begin = "(<(form)\\b)";
             end = "((form)>)";
             captures = {
@@ -1073,18 +1076,19 @@
             );
         }; 
         "tag-head" = {
+            name = "meta.section.html.head.xhtml.1-strict";
             begin = "(<(head)\\b)";
             end = "((head)>)";
             captures = {
-                1 = { name = "meta.tag.block.head.html"; };
-                2 = { name = "entity.name.tag.block.head.html"; };
+                1 = { name = "meta.tag.segment.head.html"; };
+                2 = { name = "entity.name.tag.segment.head.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=head))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.head.html"; };
+                        1 = { name = "meta.tag.segment.head.html"; };
                     };
                     patterns = (
                         { include = "#tag-title"; },
@@ -1097,7 +1101,7 @@
                         { include = "#no-pcdata"; },
                     );
                 },
-                {   name = "meta.tag.block.head.html";
+                {   name = "meta.tag.segment.head.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1113,15 +1117,15 @@
             begin = "(<(hr)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.hr.html"; };
-                2 = { name = "entity.name.tag.inline.hr.html"; };
+                1 = { name = "meta.tag.block.hr.html"; };
+                2 = { name = "entity.name.tag.block.hr.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.hr.html"; };
+                1 = { name = "meta.tag.block.hr.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.hr.html";
+                {   name = "meta.tag.block.hr.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -1132,18 +1136,19 @@
             );
         }; 
         "tag-html" = {
+            name = "meta.section.html.html.xhtml.1-strict";
             begin = "(<(html)\\b)";
             end = "((html)>)";
             captures = {
-                1 = { name = "meta.tag.block.html.html"; };
-                2 = { name = "entity.name.tag.block.html.html"; };
+                1 = { name = "meta.tag.segment.html.html"; };
+                2 = { name = "entity.name.tag.segment.html.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=html))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.html.html"; };
+                        1 = { name = "meta.tag.segment.html.html"; };
                     };
                     patterns = (
                         { include = "#tag-head"; },
@@ -1151,7 +1156,7 @@
                         { include = "#no-pcdata"; },
                     );
                 },
-                {   name = "meta.tag.block.html.html";
+                {   name = "meta.tag.segment.html.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1166,21 +1171,21 @@
             begin = "(<(i)\\b)";
             end = "((i)>)";
             captures = {
-                1 = { name = "meta.tag.block.i.html"; };
-                2 = { name = "entity.name.tag.block.i.html"; };
+                1 = { name = "meta.tag.inline.i.html"; };
+                2 = { name = "entity.name.tag.inline.i.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=i))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.i.html"; };
+                        1 = { name = "meta.tag.inline.i.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.i.html";
+                {   name = "meta.tag.inline.i.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1232,15 +1237,15 @@
             begin = "(<(img)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.img.html"; };
-                2 = { name = "entity.name.tag.inline.img.html"; };
+                1 = { name = "meta.tag.object.img.html"; };
+                2 = { name = "entity.name.tag.object.img.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.img.html"; };
+                1 = { name = "meta.tag.object.img.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.img.html";
+                {   name = "meta.tag.object.img.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -1261,15 +1266,15 @@
             begin = "(<(input)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.input.html"; };
-                2 = { name = "entity.name.tag.inline.input.html"; };
+                1 = { name = "meta.tag.form.input.html"; };
+                2 = { name = "entity.name.tag.form.input.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.input.html"; };
+                1 = { name = "meta.tag.form.input.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.input.html";
+                {   name = "meta.tag.form.input.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -1298,21 +1303,21 @@
             begin = "(<(ins)\\b)";
             end = "((ins)>)";
             captures = {
-                1 = { name = "meta.tag.block.ins.html"; };
-                2 = { name = "entity.name.tag.block.ins.html"; };
+                1 = { name = "meta.tag.inline.ins.html"; };
+                2 = { name = "entity.name.tag.inline.ins.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=ins))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.ins.html"; };
+                        1 = { name = "meta.tag.inline.ins.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-flow"; },
                     );
                 },
-                {   name = "meta.tag.block.ins.html";
+                {   name = "meta.tag.inline.ins.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1328,21 +1333,21 @@
             begin = "(<(kbd)\\b)";
             end = "((kbd)>)";
             captures = {
-                1 = { name = "meta.tag.block.kbd.html"; };
-                2 = { name = "entity.name.tag.block.kbd.html"; };
+                1 = { name = "meta.tag.inline.kbd.html"; };
+                2 = { name = "entity.name.tag.inline.kbd.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=kbd))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.kbd.html"; };
+                        1 = { name = "meta.tag.inline.kbd.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.kbd.html";
+                {   name = "meta.tag.inline.kbd.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1356,21 +1361,21 @@
             begin = "(<(label)\\b)";
             end = "((label)>)";
             captures = {
-                1 = { name = "meta.tag.block.label.html"; };
-                2 = { name = "entity.name.tag.block.label.html"; };
+                1 = { name = "meta.tag.inline.label.html"; };
+                2 = { name = "entity.name.tag.inline.label.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=label))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.label.html"; };
+                        1 = { name = "meta.tag.inline.label.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.label.html";
+                {   name = "meta.tag.inline.label.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1445,15 +1450,15 @@
             begin = "(<(link)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.link.html"; };
-                2 = { name = "entity.name.tag.inline.link.html"; };
+                1 = { name = "meta.tag.meta.link.html"; };
+                2 = { name = "entity.name.tag.meta.link.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.link.html"; };
+                1 = { name = "meta.tag.meta.link.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.link.html";
+                {   name = "meta.tag.meta.link.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -1525,15 +1530,15 @@
             begin = "(<(meta)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.meta.html"; };
-                2 = { name = "entity.name.tag.inline.meta.html"; };
+                1 = { name = "meta.tag.meta.meta.html"; };
+                2 = { name = "entity.name.tag.meta.meta.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.meta.html"; };
+                1 = { name = "meta.tag.meta.meta.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.meta.html";
+                {   name = "meta.tag.meta.meta.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -1581,15 +1586,15 @@
             begin = "(<(object)\\b)";
             end = "((/>)|((object)>))";
             captures = {
-                1 = { name = "meta.tag.inline.object.html"; };
-                4 = { name = "entity.name.tag.inline.object.html"; };
+                1 = { name = "meta.tag.object.object.html"; };
+                4 = { name = "entity.name.tag.object.object.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=[^/]>)";
                     end = "(</(?=object))";
                     endCaptures = {
-                        1 = { name = "meta.tag.inline.object.html"; };
+                        1 = { name = "meta.tag.object.object.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-block"; },
@@ -1600,7 +1605,7 @@
                         { include = "#pcdata"; },
                     );
                 },
-                {   name = "meta.tag.inline.object.html";
+                {   name = "meta.tag.object.object.html";
                     begin = "";
                     end = "((?=/>)|>)";
                     patterns = (
@@ -1623,6 +1628,7 @@
             );
         }; 
         "tag-ol" = {
+            name = "meta.section.html.ol.xhtml.1-strict";
             begin = "(<(ol)\\b)";
             end = "((ol)>)";
             captures = {
@@ -1686,21 +1692,21 @@
             begin = "(<(option)\\b)";
             end = "((/>)|((option)>))";
             captures = {
-                1 = { name = "meta.tag.inline.option.html"; };
-                4 = { name = "entity.name.tag.inline.option.html"; };
+                1 = { name = "meta.tag.block.option.html"; };
+                4 = { name = "entity.name.tag.block.option.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=[^/]>)";
                     end = "(</(?=option))";
                     endCaptures = {
-                        1 = { name = "meta.tag.inline.option.html"; };
+                        1 = { name = "meta.tag.block.option.html"; };
                     };
                     patterns = (
                         { include = "#pcdata"; },
                     );
                 },
-                {   name = "meta.tag.inline.option.html";
+                {   name = "meta.tag.block.option.html";
                     begin = "";
                     end = "((?=/>)|>)";
                     patterns = (
@@ -1775,15 +1781,15 @@
             begin = "(<(param)\\b)";
             end = "(/>|(>))";
             beginCaptures = {
-                1 = { name = "meta.tag.inline.param.html"; };
-                2 = { name = "entity.name.tag.inline.param.html"; };
+                1 = { name = "meta.tag.meta.param.html"; };
+                2 = { name = "entity.name.tag.meta.param.html"; };
             };
             endCaptures = {
-                1 = { name = "meta.tag.inline.param.html"; };
+                1 = { name = "meta.tag.meta.param.html"; };
                 2 = { name = "invalid.illegal.terminator.html"; };
             };
             patterns = (
-                {   name = "meta.tag.inline.param.html";
+                {   name = "meta.tag.meta.param.html";
                     begin = "";
                     end = "(?=/>|>)";
                     patterns = (
@@ -1801,21 +1807,21 @@
             begin = "(<(q)\\b)";
             end = "((q)>)";
             captures = {
-                1 = { name = "meta.tag.block.q.html"; };
-                2 = { name = "entity.name.tag.block.q.html"; };
+                1 = { name = "meta.tag.inline.q.html"; };
+                2 = { name = "entity.name.tag.inline.q.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=q))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.q.html"; };
+                        1 = { name = "meta.tag.inline.q.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.q.html";
+                {   name = "meta.tag.inline.q.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1830,21 +1836,21 @@
             begin = "(<(samp)\\b)";
             end = "((samp)>)";
             captures = {
-                1 = { name = "meta.tag.block.samp.html"; };
-                2 = { name = "entity.name.tag.block.samp.html"; };
+                1 = { name = "meta.tag.inline.samp.html"; };
+                2 = { name = "entity.name.tag.inline.samp.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=samp))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.samp.html"; };
+                        1 = { name = "meta.tag.inline.samp.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.samp.html";
+                {   name = "meta.tag.inline.samp.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1859,15 +1865,15 @@
             begin = "(<(script)\\b)";
             end = "((/>)|((script)>))";
             captures = {
-                1 = { name = "meta.tag.inline.script.html"; };
-                4 = { name = "entity.name.tag.inline.script.html"; };
+                1 = { name = "meta.tag.block.script.html"; };
+                4 = { name = "entity.name.tag.block.script.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=[^/]>)";
                     end = "(</(?=script))";
                     endCaptures = {
-                        1 = { name = "meta.tag.inline.script.html"; };
+                        1 = { name = "meta.tag.block.script.html"; };
                     };
                     contentName = "source.js.embedded.html";
                     patterns = (
@@ -1886,7 +1892,7 @@
                         { include = "source.js"; },
                     );
                 },
-                {   name = "meta.tag.inline.script.html";
+                {   name = "meta.tag.block.script.html";
                     begin = "";
                     end = "((?=/>)|>)";
                     patterns = (
@@ -1905,15 +1911,15 @@
             begin = "(<(select)\\b)";
             end = "((select)>)";
             captures = {
-                1 = { name = "meta.tag.block.select.html"; };
-                2 = { name = "entity.name.tag.block.select.html"; };
+                1 = { name = "meta.tag.form.select.html"; };
+                2 = { name = "entity.name.tag.form.select.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=select))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.select.html"; };
+                        1 = { name = "meta.tag.form.select.html"; };
                     };
                     patterns = (
                         { include = "#tag-optgroup"; },
@@ -1921,7 +1927,7 @@
                         { include = "#no-pcdata"; },
                     );
                 },
-                {   name = "meta.tag.block.select.html";
+                {   name = "meta.tag.form.select.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1943,21 +1949,21 @@
             begin = "(<(small)\\b)";
             end = "((small)>)";
             captures = {
-                1 = { name = "meta.tag.block.small.html"; };
-                2 = { name = "entity.name.tag.block.small.html"; };
+                1 = { name = "meta.tag.inline.small.html"; };
+                2 = { name = "entity.name.tag.inline.small.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=small))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.small.html"; };
+                        1 = { name = "meta.tag.inline.small.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.small.html";
+                {   name = "meta.tag.inline.small.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -1999,21 +2005,21 @@
             begin = "(<(strong)\\b)";
             end = "((strong)>)";
             captures = {
-                1 = { name = "meta.tag.block.strong.html"; };
-                2 = { name = "entity.name.tag.block.strong.html"; };
+                1 = { name = "meta.tag.inline.strong.html"; };
+                2 = { name = "entity.name.tag.inline.strong.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=strong))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.strong.html"; };
+                        1 = { name = "meta.tag.inline.strong.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.strong.html";
+                {   name = "meta.tag.inline.strong.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -2028,15 +2034,15 @@
             begin = "(<(style)\\b)";
             end = "((style)>)";
             captures = {
-                1 = { name = "meta.tag.inline.style.html"; };
-                2 = { name = "entity.name.tag.inline.style.html"; };
+                1 = { name = "meta.tag.meta.style.html"; };
+                2 = { name = "entity.name.tag.meta.style.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=style))";
                     endCaptures = {
-                        1 = { name = "meta.tag.inline.style.html"; };
+                        1 = { name = "meta.tag.meta.style.html"; };
                     };
                     contentName = "source.css.embedded.html";
                     patterns = (
@@ -2055,7 +2061,7 @@
                         { include = "source.css"; },
                     );
                 },
-                {   name = "meta.tag.inline.style.html";
+                {   name = "meta.tag.meta.style.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -2074,21 +2080,21 @@
             begin = "(<(sub)\\b)";
             end = "((sub)>)";
             captures = {
-                1 = { name = "meta.tag.block.sub.html"; };
-                2 = { name = "entity.name.tag.block.sub.html"; };
+                1 = { name = "meta.tag.inline.sub.html"; };
+                2 = { name = "entity.name.tag.inline.sub.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=sub))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.sub.html"; };
+                        1 = { name = "meta.tag.inline.sub.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.sub.html";
+                {   name = "meta.tag.inline.sub.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -2102,21 +2108,21 @@
             begin = "(<(sup)\\b)";
             end = "((sup)>)";
             captures = {
-                1 = { name = "meta.tag.block.sup.html"; };
-                2 = { name = "entity.name.tag.block.sup.html"; };
+                1 = { name = "meta.tag.inline.sup.html"; };
+                2 = { name = "entity.name.tag.inline.sup.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=sup))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.sup.html"; };
+                        1 = { name = "meta.tag.inline.sup.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.sup.html";
+                {   name = "meta.tag.inline.sup.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -2127,6 +2133,7 @@
             );
         }; 
         "tag-table" = {
+            name = "meta.section.html.table.xhtml.1-strict";
             begin = "(<(table)\\b)";
             end = "((table)>)";
             captures = {
@@ -2350,21 +2357,21 @@
             begin = "(<(textarea)\\b)";
             end = "((/>)|((textarea)>))";
             captures = {
-                1 = { name = "meta.tag.block.textarea.html"; };
-                4 = { name = "entity.name.tag.block.textarea.html"; };
+                1 = { name = "meta.tag.form.textarea.html"; };
+                4 = { name = "entity.name.tag.form.textarea.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=[^/]>)";
                     end = "(</(?=option))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.textarea.html"; };
+                        1 = { name = "meta.tag.form.textarea.html"; };
                     };
                     patterns = (
                         { include = "#pcdata"; },
                     );
                 },
-                {   name = "meta.tag.block.textarea.html";
+                {   name = "meta.tag.form.textarea.html";
                     begin = "";
                     end = "((?=/>)|>)";
                     patterns = (
@@ -2490,21 +2497,21 @@
             begin = "(<(title)\\b)";
             end = "((title)>)";
             captures = {
-                1 = { name = "meta.tag.inline.title.html"; };
-                2 = { name = "entity.name.tag.inline.title.html"; };
+                1 = { name = "meta.tag.block.title.html"; };
+                2 = { name = "entity.name.tag.block.title.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=title))";
                     endCaptures = {
-                        1 = { name = "meta.tag.inline.title.html"; };
+                        1 = { name = "meta.tag.block.title.html"; };
                     };
                     patterns = (
                         { include = "#pcdata"; },
                     );
                 },
-                {   name = "meta.tag.inline.title.html";
+                {   name = "meta.tag.block.title.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -2553,21 +2560,21 @@
             begin = "(<(tt)\\b)";
             end = "((tt)>)";
             captures = {
-                1 = { name = "meta.tag.block.tt.html"; };
-                2 = { name = "entity.name.tag.block.tt.html"; };
+                1 = { name = "meta.tag.inline.tt.html"; };
+                2 = { name = "entity.name.tag.inline.tt.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=tt))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.tt.html"; };
+                        1 = { name = "meta.tag.inline.tt.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.tt.html";
+                {   name = "meta.tag.inline.tt.html";
                     begin = "";
                     end = ">";
                     patterns = (
@@ -2578,6 +2585,7 @@
             );
         }; 
         "tag-ul" = {
+            name = "meta.section.html.ul.xhtml.1-strict";
             begin = "(<(ul)\\b)";
             end = "((ul)>)";
             captures = {
@@ -2610,21 +2618,21 @@
             begin = "(<(var)\\b)";
             end = "((var)>)";
             captures = {
-                1 = { name = "meta.tag.block.var.html"; };
-                2 = { name = "entity.name.tag.block.var.html"; };
+                1 = { name = "meta.tag.inline.var.html"; };
+                2 = { name = "entity.name.tag.inline.var.html"; };
             };
             patterns = (
                 {
                     begin = "(?<=>)";
                     end = "(</(?=var))";
                     endCaptures = {
-                        1 = { name = "meta.tag.block.var.html"; };
+                        1 = { name = "meta.tag.inline.var.html"; };
                     };
                     patterns = (
                         { include = "#tag-group-inline-master"; },
                     );
                 },
-                {   name = "meta.tag.block.var.html";
+                {   name = "meta.tag.inline.var.html";
                     begin = "";
                     end = ">";
                     patterns = (

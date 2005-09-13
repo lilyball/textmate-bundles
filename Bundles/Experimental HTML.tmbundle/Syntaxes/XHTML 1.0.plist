@@ -481,7 +481,11 @@
         "tag-button" = {
             begin = "(<(button)\\b)";
             end = "((/>)|((button)>))";
-            captures = {
+            beginCaptures = {
+                1 = { name = "meta.tag.form.button.html"; };
+                2 = { name = "entity.name.tag.form.button.html"; };
+            };
+            endCaptures = {
                 1 = { name = "meta.tag.form.button.html"; };
                 4 = { name = "entity.name.tag.form.button.html"; };
             };
@@ -628,7 +632,11 @@
         "tag-colgroup" = {
             begin = "(<(colgroup)\\b)";
             end = "((/>)|((colgroup)>))";
-            captures = {
+            beginCaptures = {
+                1 = { name = "meta.tag.block.colgroup.html"; };
+                2 = { name = "entity.name.tag.block.colgroup.html"; };
+            };
+            endCaptures = {
                 1 = { name = "meta.tag.block.colgroup.html"; };
                 4 = { name = "entity.name.tag.block.colgroup.html"; };
             };
@@ -1609,7 +1617,11 @@
         "tag-object" = {
             begin = "(<(object)\\b)";
             end = "((/>)|((object)>))";
-            captures = {
+            beginCaptures = {
+                1 = { name = "meta.tag.object.object.html"; };
+                2 = { name = "entity.name.tag.object.object.html"; };
+            };
+            endCaptures = {
                 1 = { name = "meta.tag.object.object.html"; };
                 4 = { name = "entity.name.tag.object.object.html"; };
             };
@@ -1715,7 +1727,11 @@
         "tag-option" = {
             begin = "(<(option)\\b)";
             end = "((/>)|((option)>))";
-            captures = {
+            beginCaptures = {
+                1 = { name = "meta.tag.block.option.html"; };
+                2 = { name = "entity.name.tag.block.option.html"; };
+            };
+            endCaptures = {
                 1 = { name = "meta.tag.block.option.html"; };
                 4 = { name = "entity.name.tag.block.option.html"; };
             };
@@ -1888,7 +1904,11 @@
             comment = "Bug: Invalid chars are sometimes picked up by the js syntax first.";
             begin = "(<(script)\\b)";
             end = "((/>)|((script)>))";
-            captures = {
+            beginCaptures = {
+                1 = { name = "meta.tag.block.script.html"; };
+                2 = { name = "entity.name.tag.block.script.html"; };
+            };
+            endCaptures = {
                 1 = { name = "meta.tag.block.script.html"; };
                 4 = { name = "entity.name.tag.block.script.html"; };
             };
@@ -2342,7 +2362,11 @@
         "tag-td" = {
             begin = "(<(td)\\b)";
             end = "((/>)|((td)>))";
-            captures = {
+            beginCaptures = {
+                1 = { name = "meta.tag.block.td.html"; };
+                2 = { name = "entity.name.tag.block.td.html"; };
+            };
+            endCaptures = {
                 1 = { name = "meta.tag.block.td.html"; };
                 4 = { name = "entity.name.tag.block.td.html"; };
             };
@@ -2380,7 +2404,11 @@
         "tag-textarea" = {
             begin = "(<(textarea)\\b)";
             end = "((/>)|((textarea)>))";
-            captures = {
+            beginCaptures = {
+                1 = { name = "meta.tag.form.textarea.html"; };
+                2 = { name = "entity.name.tag.form.textarea.html"; };
+            };
+            endCaptures = {
                 1 = { name = "meta.tag.form.textarea.html"; };
                 4 = { name = "entity.name.tag.form.textarea.html"; };
             };
@@ -2449,7 +2477,11 @@
         "tag-th" = {
             begin = "(<(th)\\b)";
             end = "((/>)|((th)>))";
-            captures = {
+            beginCaptures = {
+                1 = { name = "meta.tag.block.th.html"; };
+                2 = { name = "entity.name.tag.block.th.html"; };
+            };
+            endCaptures = {
                 1 = { name = "meta.tag.block.th.html"; };
                 4 = { name = "entity.name.tag.block.th.html"; };
             };

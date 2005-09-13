@@ -93,13 +93,36 @@
             patterns = (
                 {   name = "invalid.deprecated.bad-comment-ending-token.html";
                     match = "--(?!\\s*>)"; 
-                }
+                },
+            ); 
+        }; 
+        "bad-tags" = {
+            patterns = (
+                {   name = "invalid.illegal.invalid_placement";
+                    begin = "<(a|abbr|acronym|address|area|b|base|bdo|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|h1|h2|h3|h4|h5|h6|head|hr|html|i|img|input|ins|kbd|label|legend|li|link|map|meta|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)";
+                    end = ">";
+                    captures = {
+                        1 = { name = "invalid.deprecated.invalid_placement"; };
+                    };
+                },
+                {   name = "invalid.illegal.unrecognized_tag";
+                    begin = "<(basefont|center|dir|font|isindex|menu|s|strike|u)";
+                    end = ">";
+                    captures = {
+                        1 = { name = "invalid.deprecated.no_longer_valid"; };
+                    };
+                },
+                {   name = "invalid.illegal.unrecognized_tag";
+                    begin = "<";
+                    end = ">";
+                },
             ); 
         }; 
         "pcdata" = {
             patterns = (
                 { include = "#sgml-declarations"; },
                 { include = "#entities"; },
+                { include = "#bad-tags"; },
             ); 
         }; 
         "no-pcdata" = {
@@ -107,6 +130,7 @@
                 { include = "#sgml-declarations"; },
                 { include = "#entities"; },
                 { include = "#stray-char"; },
+                { include = "#bad-tags"; },
             ); 
         }; 
         "tag-a" = {
@@ -4661,9 +4685,9 @@
         }; 
         "tag-group-inline-master" = {
             patterns = (
-                { include = "#pcdata"; },
                 { include = "#tag-group-inline"; },
                 { include = "#tag-group-misc.inline"; },
+                { include = "#pcdata"; },
             );
         }; 
         "tag-group-heading" = {
@@ -4711,32 +4735,32 @@
         }; 
         "tag-group-flow" = {
             patterns = (
-                { include = "#pcdata"; },
                 { include = "#tag-group-block"; },
                 { include = "#tag-group-inline"; },
                 { include = "#tag-group-misc"; },
                 { include = "#tag-form"; },
+                { include = "#pcdata"; },
             );
         }; 
         "tag-group-a.content" = {
             patterns = (
-                { include = "#pcdata"; },
                 { include = "#tag-group-special"; },
                 { include = "#tag-group-fontstyle"; },
                 { include = "#tag-group-phrase"; },
                 { include = "#tag-group-inline.forms"; },
                 { include = "#tag-group-misc.inline"; },
+                { include = "#pcdata"; },
             );
         }; 
         "tag-group-pre.content" = {
             patterns = (
-                { include = "#pcdata"; },
                 { include = "#tag-a"; },
                 { include = "#tag-group-fontstyle"; },
                 { include = "#tag-group-phrase"; },
                 { include = "#tag-group-special.pre"; },
                 { include = "#tag-group-misc.inline"; },
                 { include = "#tag-group-inline.forms"; },
+                { include = "#pcdata"; },
             );
         }; 
         "tag-group-form.content" = {
@@ -4747,7 +4771,6 @@
         }; 
         "tag-group-button.content" = {
             patterns = (
-                { include = "#pcdata"; },
                 { include = "#tag-p"; },
                 { include = "#tag-group-heading"; },
                 { include = "#tag-div"; },
@@ -4758,6 +4781,7 @@
                 { include = "#tag-group-fontstyle"; },
                 { include = "#tag-group-phrase"; },
                 { include = "#tag-group-misc"; },
+                { include = "#pcdata"; },
             );
         }; 
     }; 

@@ -2193,7 +2193,6 @@
                     };
                     patterns = (
                         { include = "#tag-caption"; },
-                        { include = "#no-pcdata"; },
                         {   begin = "(?<=</caption>)";
                             end = "(?=<(?!/?caption))";
                             patterns = (
@@ -2307,6 +2306,7 @@
                                 { include = "#sgml-declarations"; },
                             );
                         },
+                        { include = "#no-pcdata"; },
                     );
                 },
                 {   name = "meta.tag.block.table.html";

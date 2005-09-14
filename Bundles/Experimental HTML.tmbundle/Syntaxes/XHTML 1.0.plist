@@ -3,7 +3,7 @@
     scopeName = "text.html.xhtml.1-strict"; 
     keyEquivalent = "^~X"; 
     foldingStartMarker = "(<(?i:(head|table|thead|tbody|tfoot|tr|div|fieldset|style|script|ul|ol|form|dl))\\b.*?>|\\{\\{?(if|foreach|capture|literal|foreach|php|section|strip)|\\{\\s*$)"; 
-    foldingStopMarker = "(</(?i:(head|table|tr|div|fieldset|style|script|ul|ol|form|dl))>|\\{\\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\\s)\\})"; 
+    foldingStopMarker = "(</(?i:(head|table|thead|tbody|tfoot|tr|div|fieldset|style|script|ul|ol|form|dl))>|\\{\\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\\s)\\})"; 
     patterns = (
         { include = "#xml-preprocessor"; },
         { include = "#sgml-declarations-preprocessor"; },

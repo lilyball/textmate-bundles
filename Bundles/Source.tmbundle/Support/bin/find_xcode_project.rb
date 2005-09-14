@@ -35,7 +35,7 @@ module XcodeProjectSearch
 			Dir.chdir(save_dir)
 		end
 	
-		project
+		current_dir + "/" + project
 	end
 
 	def XcodeProjectSearch.find_project

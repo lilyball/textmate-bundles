@@ -3,289 +3,307 @@
 
 <html>
    <head>
-      <title>Subversion Bundle README</title>
-      <style type="text/css">
-         /* general stuff.. */
-         body {
-            font-family: "Lucida Grande", Verdana, Arial, sans-serif;
-            font-size: 13px;
-         }
-         
-         h1 {
-            font-size: 165%;
-            border-bottom: 3px solid #ccc;
-            padding-bottom: 4px;
-            margin-bottom: 2px;
-            color: #222;
-         }
-         
-         h2,h3,h4,h5,h6 {
-            font-size: 135%;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 4px;
-            margin-top: 26px;
-            color: #333;
-         }
-         
-         
-         /* formating the definition lists.. */
-         dt {
-            font-weight: bold;
-            margin-top: 8px;
-            margin-bottom: 2px;
-            font-size: 115%;
-            border-top: 1px dashed #ccc;
-            padding-top: 10px;
-            color: #333;
-         }
-         /* no top-border for the first thing, so it looks
-            like there is a hr between all. */
-         dl > dt:first-child {
-            border-top: 0;
-            padding-top: 0;
-         }
-         
-         
-         /* info fields: */
-         div.target:before {
-            font-weight: bold;
-            content: "Target: ";
-         }
-         
-         div.description {
-            margin-top: 4px;
-         }
-         
-         div.connect:before {
-            font-weight: bold;
-            content: "Needs Connection: ";
-         }
-         
-         div.default:before {
-            font-weight: bold;
-            content: "Default: ";
-         }
-         
-      </style>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      
+	  <title>Subversion Help</title>
+	  <style type="text/css">
+		 /* general stuff.. */
+		 body {
+			font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+			font-size: 11px;
+		 }
+		 
+		 h1 {
+			font-size: 165%;
+			border-bottom: 3px solid #ccc;
+			padding-bottom: 4px;
+			margin-bottom: 2px;
+			color: #222;
+		 }
+		 
+		 h2,h3,h4,h5,h6 {
+			font-size: 135%;
+			border-bottom: 2px solid #ddd;
+			padding-bottom: 4px;
+			margin-top: 26px;
+			color: #333;
+		 }
+		 
+		 
+		 /* formating the definition lists.. */
+		 dt {
+			font-weight: bold;
+			margin-top: 8px;
+			margin-bottom: 2px;
+			font-size: 115%;
+			border-top: 1px dashed #ccc;
+			padding-top: 10px;
+			color: #333;
+		 }
+		 /* no top-border for the first thing, so it looks
+			like there is a hr between all. */
+		 dl > dt:first-child {
+			border-top: 0;
+			padding-top: 0;
+		 }
+		 
+		 
+		 /* info fields: */
+		 div.target:before {
+			font-weight: bold;
+			content: "Target: ";
+		 }
+		 
+		 div.description {
+			margin-top: 4px;
+		 }
+		 
+		 div.connect:before {
+			font-weight: bold;
+			content: "Needs Connection: ";
+		 }
+		 
+		 div.default:before {
+			font-weight: bold;
+			content: "Default: ";
+		 }
+		 
+	  </style>
+	  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	  
    </head>
    
    <body>
-      <h1>Subversion Bundle</h1>
-      
-      <p>This README just documents what the certain commands of this Bundle do and how you can <a href="#conf">fine-tune</a> their behaviour, if you need general Subversion Help/Introduction, you should read the <a title="Version Control with Subversion" href="http://svnbook.red-bean.com/">big README</a>.</p>
-      
-      <h2><a name="commands">Commands</a></h2>
-         
-         <dl>
-            <dt><a name="status">Status</a></dt>
-            <dd>
-               <div class="target">directory of active file</div>
-               <div class="connect">No</div>
-               <div class="description">
-                  Displays a list of files with changes in your working copy, along with the type of change for each file.
-               </div>
-            </dd>
-            
-            <dt><a name="log">Log</a></dt>
-            <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                   Displays the commit message history for the selected files.
-                   Some parameters are configurable via shell variables; see the <a href="#tm_svn_log">Configuration Options</a> section below.
-               </div>
-            </dd>
-            
-            <dt><a name="blame">Blame</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href="#tm_svn_date_format">adjustable</a>.
-               </div>
-            </dd>
-            
-            <dt><a name="info">Info</a></dt>
-            <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">No</div>
-               <div class="description">
-                  Displays detailed information about the selected files, including the type of file, who last changed the file, the date file was last changed, the repository URL to the file, and other information.
-                  Some parameters are configurable via shell variables; see the <a href="#tm_svn_info">Configuration Options</a> section below.
-               </div>
-            </dd>
-            
-            <dt><a name="diff_head">Diff With Newest (HEAD)</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-               	Displays the differences between the active file and the newest available revision of the file on the server.
-               	Equivalent to <code>svn diff -rHEAD</code>.
-               </div>
-            </dd>
-            
-            <dt><a name="diff_base">Diff With Working Copy (BASE)</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">No</div>
-               <div class="description">
-                  Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
-                  Equivalent to <code>svn diff -rBASE</code>.
-               </div>
-            </dd>
-            
-            <dt><a name="diff_prev">Diff With Previous Revision (PREV)</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                  Displays the differences between the active file and the previous revision of the file.
-                  Equivalent to <code>svn diff -rPREV</code>.
-               </div>
-            </dd>
+	  <h1>Subversion Help</h1>
+	  
+	  <p>This document describes the commands of the TextMate Subversion bundle and how you can <a href="#conf">fine-tune</a> their behaviour. For general Subversion help and tutorial, you should read the <a title="Version Control with Subversion" href="http://svnbook.red-bean.com/">Subversion book</a>.</p>
+	  
+	  <h2><a name="commands">Commands</a></h2>
+		 
+		 <dl>
 
-            <dt><a name="diff_prev">Diff With Revision&hellip;</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                  Displays the differences between the active file and a different revision of the same file. This command presents you with a list of revisions to choose from.
-               </div>
-            </dd>
+			 <dt><a name="add">Add to Repository</a></dt>
+			 <dd>
+				<div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+				<div class="connect">No</div>
+				<div class="description">
+				   Adds the targets to the repository.
+				</div>
+			 </dd>
+		 
+			 <dt><a name="blame">Blame</a></dt>
+			 <dd>
+				<div class="target">active file</div>
+				<div class="connect">Yes</div>
+				<div class="description">
+					Displays a line-by-line history of the file, showing you who wrote which line in what revision.	 Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href="#tm_svn_date_format">adjustable</a>.
+				</div>
+			 </dd>
+			
+			<dt><a name="commit">Commit</a></dt>
+			<dd>
+			   <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+					Commits your changed files to the repository. A dialog asks you for the description of
+					your changes; you may also choose to exclude files from the commit by unchecking them.
+					If no files are selected or active, this command does nothing. If the target files
+					have no local changes, nothing happens.
+			   </div>
+			</dd>
 
-            <dt><a name="diff_prev">Diff Revisions&hellip;</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                  Displays the differences between two specific revisions of the active file. You will be presented with a list of revisions; please select two.
-               </div>
-            </dd>
-            
-            <dt><a name="commit">Commit</a></dt>
-            <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                    Commits your changed files to the repository. A dialog asks you for the description of
-                    your changes; you may also choose to exclude files from the commit by unchecking them.
-                    If no files are selected or active, this command does nothing. If the target files
-                    have no local changes, nothing happens.
-               </div>
-            </dd>
-            
-            <dt><a name="add">Add to Repository</a></dt>
-            <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">No</div>
-               <div class="description">
-                  Adds the targets to the repository.
-               </div>
-            </dd>
-            
-            <dt><a name="update">Update to Latest</a></dt>
-            <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                  Updates the targets with the newest changes from the repository.
-               </div>
-            </dd>
-            
-            <dt><a name="update_project">Update Entire Project</a></dt>
-            <dd>
-               <div class="target">project</div>
-               <div class="connect">Yes</div>
-               <div class="description">
-                  If there is a project open, updates all of the files and folders in the project with the newest changes from the repository.
+			<dt><a name="diff_prev">Diff Revisions&hellip;</a></dt>
+			<dd>
+			   <div class="target">active file</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+				  Displays the differences between two specific revisions of the active file. You will be presented with a list of revisions; please select two.
+			   </div>
+			</dd>
+
+			<dt><a name="diff_head">Diff With Newest (HEAD)</a></dt>
+			<dd>
+			   <div class="target">active file</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+				Displays the differences between the active file and the newest available revision of the file on the server.
+				Equivalent to <code>svn diff -rHEAD</code>.
+			   </div>
+			</dd>
+			
+			<dt><a name="diff_base">Diff With Working Copy (BASE)</a></dt>
+			<dd>
+			   <div class="target">active file</div>
+			   <div class="connect">No</div>
+			   <div class="description">
+				  Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
+				  Equivalent to <code>svn diff -rBASE</code>.
+			   </div>
+			</dd>
+			
+			<dt><a name="diff_prev">Diff With Previous Revision (PREV)</a></dt>
+			<dd>
+			   <div class="target">active file</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+				  Displays the differences between the active file and the previous revision of the file.
+				  Equivalent to <code>svn diff -rPREV</code>.
+			   </div>
+			</dd>
+
+			<dt><a name="diff_prev">Diff With Revision&hellip;</a></dt>
+			<dd>
+			   <div class="target">active file</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+				  Displays the differences between the active file and a different revision of the same file. This command presents you with a list of revisions to choose from.
+			   </div>
+			</dd>
+			
+			<dt><a name="info">Info</a></dt>
+			<dd>
+			   <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+			   <div class="connect">No</div>
+			   <div class="description">
+				  Displays detailed information about the selected files, including the type of file, who last changed the file, the date file was last changed, the repository URL to the file, and other information.
+				  Some parameters are configurable via shell variables; see the <a href="#tm_svn_info">Configuration Options</a> section below.
+			   </div>
+			</dd>			
+
+			<dt><a name="log">Log</a></dt>
+			<dd>
+			   <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+				   Displays the commit message history for the selected files.
+				   Some parameters are configurable via shell variables; see the <a href="#tm_svn_log">Configuration Options</a> section below.
+			   </div>
+			</dd>
+			
+			<dt><a name="update">Resolved</a></dt>
+			<dd>
+			   <div class="target">active file</div>
+			   <div class="connect">No</div>
+			   <div class="description">
+				   Removing the conflict-related artifact files, allowing the file to be committed. Does not remove conflict markers or resolve textual conflicts.
+			   </div>
+			</dd>
+			<dt><a name="update">Revert</a></dt>
+			<dd>
+			   <div class="target">active file</div>
+			   <div class="connect">No</div>
+			   <div class="description">
+				   Reverts the file to the base revision. Any modifications to the file will be lost.
+			   </div>
+			</dd>
+
+
+			<dt><a name="status">Status</a></dt>
+			<dd>
+			   <div class="target">directory of active file</div>
+			   <div class="connect">No</div>
+			   <div class="description">
+				  Displays a list of files with changes in your working copy, along with the type of change for each file.
+			   </div>
+			</dd>
+						
+			<dt><a name="update">Update to Newest</a></dt>
+			<dd>
+			   <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+				  Updates the targets with the newest changes from the repository.
+			   </div>
+			</dd>
+			
+			<dt><a name="update_project">Update Entire Project to Newest</a></dt>
+			<dd>
+			   <div class="target">project</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+				  If there is a project open, updates all of the files and folders in the project with the newest changes from the repository.
 				  (The folders must be rooted beneath TM_PROJECT_PATH. Projects containing only groups created in TextMate won't work.)
-               </div>
-            </dd>
+			   </div>
+			</dd>
+			
+			<dt><a name="diff_prev">View Revision&hellip;</a></dt>
+			<dd>
+			   <div class="target">active file</div>
+			   <div class="connect">Yes</div>
+			   <div class="description">
+				  Displays a different revision of the active file. This command presents you with a list of revisions to choose from.
+			   </div>
+			</dd>
+			
+		 </dl>
 
-            <dt><a name="update">Revert to Latest</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="connect">No</div>
-               <div class="description">
-	               Reverts the file to the base revision. Any modifications to the file will be lost.
-               </div>
-            </dd>
-
-
-         </dl>
-
-      <h2><a name="conf">Configuration Options</a></h2>
-         
-         <p>These shell variables allow you to tweak the behaviour of the certain commands if need be. The default values should make sense for normal use.</p>
-         
-         <dl>
-            <dt><a name="tm_svn">$TM_SVN</a></dt>
-            <dd>
-               <div class="default"><code>svn</code></div>
-               <div class="description">the path to your svn executable.</div>
-            </dd>
-            
-            <dt><a name="tm_ruby">$TM_RUBY</a></dt>
-            <dd>
-               <div class="default"><code>ruby</code></div>
-               <div class="description">Here you can tweak with what Ruby the formatting scripts will be executed.</div>
-            </dd>
-            
-            <dt><a name="tm_svn_date_format">$TM_SVN_DATE_FORMAT</a></dt>
-            <dd>
-               <div class="default"><em>not set</em> (No Changes, just show what SVN shows)</div>
-               <div class="description">
-                  A date format string that allows you to tweak the format in which <a href="#blame">Blame</a>, <a href="#log">Log</a> and <a href="#info">Info</a> show you dates.  See <a title="Manual Page For strftime(3)" href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html">strftime(3)</a> for what you can enter here.
-               </div>
-            </dd>
-            
-            <dt><a name="tm_svn_close">$TM_SVN_CLOSE</a></dt>
-            <dd>
-               <div class="default"><code>false</code></div>
-               <div class="description">With this option you can adjust whether the windows of <a href="#blame">Blame</a> and <a href="#info">Info</a> close if you click on a link which opens a file in TM.  Set it to <code>1</code> or <code>true</code> if windows should close or to something else if they should not.</div>
-            </dd>
-            
-            <dt><a name="tm_svn_log">$TM_SVN_LOG_RANGE</a></dt>
-            <dd>
-               <div class="default"><code>BASE:1</code></div>
-               <div class="description">The default range to query for log messages.</div>
-            </dd>
-            
-            <dt>$TM_SVN_LOG_LIMIT</dt>
-            <dd>
-               <div class="default"><code>9</code></div>
-               <div class="description">The number of messages to show.  <code>0</code> means no limit.</div>
-            </dd>
-            
-            <dt><a name="tm_svn_info">$TM_SVN_INFO_HIDE</a></dt>
-            <dd>
-               <div class="default"><em>not set</em> (nothing)</div>
-               <div class="description">
-                  Here you can adjust what keys of the info stream you don't want to see, it is case insensitive and a comma (<code>,</code>) seperated list.  If you enter a <code>*</code>, it is assumend that you want to hide all vars, if so, you can make some values visible again with <strong>$TM_SVN_INFO_SHOW</strong>.
-               </div>
-            </dd>
-            
-            <dt>$TM_SVN_INFO_SHOW</dt>
-            <dd>
-               <div class="default"><em>not set</em> (everything else)</div>
-               <div class="description">
-                  This is also a commma seperated list of keys, it just makes sense if you did hide all with the above var.  <em>*</em> has no special meaning here. Everything you enter here will be shown if you want to hide everything else.
-               </div>
-            </dd>
-            
-         </dl>
-      
-      
-      <h2><a name="authors">Authors</a></h2>
-         
-         <ul>
-            <li>Chris Thomas (Idea, Status, Diffs, Commit, Add, and Updates)</li>
-            <li>Torsten Becker (Blame, Log, Info, and Revert)</li>
-         </ul>
-         
+	  <h2><a name="conf">Configuration Options</a></h2>
+		 
+		 <p>These shell variables allow you to tweak the behaviour of the certain commands if need be. The default values should make sense for normal use.</p>
+		 
+		 <dl>
+			<dt><a name="tm_svn">$TM_SVN</a></dt>
+			<dd>
+			   <div class="default"><code>svn</code></div>
+			   <div class="description">the path to your svn executable.</div>
+			</dd>
+			
+			<dt><a name="tm_ruby">$TM_RUBY</a></dt>
+			<dd>
+			   <div class="default"><code>ruby</code></div>
+			   <div class="description">Here you can tweak with what Ruby the formatting scripts will be executed.</div>
+			</dd>
+			
+			<dt><a name="tm_svn_date_format">$TM_SVN_DATE_FORMAT</a></dt>
+			<dd>
+			   <div class="default"><em>not set</em> (No Changes, just show what SVN shows)</div>
+			   <div class="description">
+				  A date format string that allows you to tweak the format in which <a href="#blame">Blame</a>, <a href="#log">Log</a> and <a href="#info">Info</a> show you dates.	 See <a title="Manual Page For strftime(3)" href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html">strftime(3)</a> for what you can enter here.
+			   </div>
+			</dd>
+			
+			<dt><a name="tm_svn_close">$TM_SVN_CLOSE</a></dt>
+			<dd>
+			   <div class="default"><code>false</code></div>
+			   <div class="description">With this option you can adjust whether the windows of <a href="#blame">Blame</a> and <a href="#info">Info</a> close if you click on a link which opens a file in TM.  Set it to <code>1</code> or <code>true</code> if windows should close or to something else if they should not.</div>
+			</dd>
+			
+			<dt><a name="tm_svn_log">$TM_SVN_LOG_RANGE</a></dt>
+			<dd>
+			   <div class="default"><code>BASE:1</code></div>
+			   <div class="description">The default range to query for log messages.</div>
+			</dd>
+			
+			<dt>$TM_SVN_LOG_LIMIT</dt>
+			<dd>
+			   <div class="default"><code>9</code></div>
+			   <div class="description">The number of messages to show.	 <code>0</code> means no limit.</div>
+			</dd>
+			
+			<dt><a name="tm_svn_info">$TM_SVN_INFO_HIDE</a></dt>
+			<dd>
+			   <div class="default"><em>not set</em> (nothing)</div>
+			   <div class="description">
+				  Here you can adjust what keys of the info stream you don't want to see, it is case insensitive and a comma (<code>,</code>) seperated list.  If you enter a <code>*</code>, it is assumend that you want to hide all vars, if so, you can make some values visible again with <strong>$TM_SVN_INFO_SHOW</strong>.
+			   </div>
+			</dd>
+			
+			<dt>$TM_SVN_INFO_SHOW</dt>
+			<dd>
+			   <div class="default"><em>not set</em> (everything else)</div>
+			   <div class="description">
+				  This is also a commma seperated list of keys, it just makes sense if you did hide all with the above var.	 <em>*</em> has no special meaning here. Everything you enter here will be shown if you want to hide everything else.
+			   </div>
+			</dd>
+			
+		 </dl>
+	  
+	  
+	  <h2><a name="authors">Authors</a></h2>
+		 
+		 <ul>
+			<li>Chris Thomas (Idea, Status, Diffs, Commit, Add, and Updates)</li>
+			<li>Torsten Becker (Blame, Log, Info, and Revert)</li>
+		 </ul>
+		 
    </body>
    
 </html>

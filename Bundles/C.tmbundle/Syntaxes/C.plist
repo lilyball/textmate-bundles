@@ -141,7 +141,46 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*#\s*(define|defined|elif|if|ifdef|ifndef|line|pragma|undef)\b</string>
+			<string>^\s*#\s*(define)\s+([a-zA-Z_][a-zA-Z0-9_]*)(?:\(((?:\s*[a-zA-Z_][a-zA-Z0-9_]*\s*,?)*)\)|\b)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.c</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.preprocessor.c</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.preprocessor.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=(?://|/\*))|$</string>
+			<key>name</key>
+			<string>other.preprocessor.c</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\\s*\n</string>
+					<key>name</key>
+					<string>constant.character.escape.preprocessor.c</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#\s*(defined|elif|if|ifdef|ifndef|line|pragma|undef)\b</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>

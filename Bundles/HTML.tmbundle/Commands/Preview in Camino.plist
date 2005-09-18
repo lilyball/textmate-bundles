@@ -24,14 +24,14 @@ else
 	activeURL=file://$TM_FILEPATH
 	#echo Debug::TM_SUBDIR value "$activeURL"
 fi
-#	2.	Check if OmniWeb is running, if so open a new tab in the same window else open a new window 
+#	2.	Check if Camino is running, if so open a new tab in the same window else open a new window 
 if [[ $(ps -xc|grep -i Camino ) ]];
 then
 	# echo OmniWeb is running, so open the url in a new window
 	printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Camino\" \n activate \n Get URL theActiveURL \n end tell" | osascript
 
 else
-	# echo OmniWeb is NOT running, so open the url in the front window
+	# echo Camino is NOT running, so open the url in the front window
 	printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Camino\" \n activate \n Get URL theActiveURL \n end tell" | osascript
 fi
 ### end

@@ -5,8 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>###	Preview in OmniWeb  = UNTESTED!! Please confirm that it is working
-### v1.0. 2005-03-29
+	<string>###	Preview in Camino
+### v1.0. 2005-09-18
 ###
 ###	CONFIG OPTION::	Set the TM_PROJECT_SITEURL in your TM Project Window Info Button in the following form: [ http://your.site.ext/ ]
 ###
@@ -25,26 +25,26 @@ else
 	#echo Debug::TM_SUBDIR value "$activeURL"
 fi
 #	2.	Check if OmniWeb is running, if so open a new tab in the same window else open a new window 
-if [[ $(ps -xc|grep -i OmniWeb ) ]];
+if [[ $(ps -xc|grep -i Camino ) ]];
 then
 	# echo OmniWeb is running, so open the url in a new window
-	printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"OmniWeb\" \n activate \n GetURL theActiveURL \n end tell" | osascript
+	printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Camino\" \n activate \n Get URL theActiveURL \n end tell" | osascript
 
 else
 	# echo OmniWeb is NOT running, so open the url in the front window
-	printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"OmniWeb\" \n activate \n GetURL theActiveURL \n end tell" | osascript
+	printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Camino\" \n activate \n Get URL theActiveURL \n end tell" | osascript
 fi
 ### end
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>
-	<string>Preview in OmniWeb</string>
+	<string>Preview in Camino</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>scope</key>
 	<string>text.html</string>
 	<key>uuid</key>
-	<string>CB0784DB-A102-11D9-A5A2-000D93C8BE28</string>
+	<string>6A055C10-F8CF-4F90-9B43-0C3E2B7F2AD5</string>
 </dict>
 </plist>

@@ -27,10 +27,6 @@ fi
 
 export PATH
 
-if [[ -d "$TM_DIRECTORY" ]];				then cd "$TM_DIRECTORY"
-elif [[ -d "$TM_PROJECT_DIRECTORY" ]];	then cd "$TM_PROJECT_DIRECTORY"
-fi
-
 if [[ -e "$HOME/Library/Application Support/TextMate/bash_init.sh" ]]; then
 	. "$HOME/Library/Application Support/TextMate/bash_init.sh"
 fi

@@ -16,7 +16,7 @@ if(output[0] !~ /^1$/)
 	exit
 end
 
-output = `darcs record -a -m '#{output[1].strip.gsub(/'/, '\\\\1')}'`
+output = `darcs record -a -m '#{output[1].strip.gsub(/(')/, '\\\\1')}'`
 
 puts(output)</string>
 	<key>input</key>

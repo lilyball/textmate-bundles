@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>Markdown.pl &lt;&lt;'EOF'
+
+# reStructeredText (2005-09-21)
+## What is it
+Bla bla bla
+
+## Requirements
+To install using Darwin Ports:
+
+    sudo port install py-docutils
+
+## Syntax
+Information about RST can be found [here](http://docutils.sourceforge.net/rst.html)
+
+## Using it
+This bundle contain an *rst2html* command which create an HTML version of the current file, and show potential eroros in the error panel. The resulting HTML file is left in the same folder as the current file.
+
+EOF</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>481BD550-B156-4FA0-B14C-265BF74EFBFE</string>
+</dict>
+</plist>

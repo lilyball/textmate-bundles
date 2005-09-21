@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>rst</string>
+		<string>rest</string>
+	</array>
+	<key>name</key>
+	<string>reStructuredText</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>comment</key>
+			<string>headings</string>
+			<key>match</key>
+			<string>^(=|-|~|`|#|"|^|\+|\*){3,}\s*$</string>
+			<key>name</key>
+			<string>markup.heading</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>directives</string>
+			<key>match</key>
+			<string>\.\.\s[A-z][A-z0-9-_]+::</string>
+			<key>name</key>
+			<string>meta.directive.rst</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>strong emphasis</string>
+			<key>match</key>
+			<string>\*\*[^*]+\*\*</string>
+			<key>name</key>
+			<string>markup.emphasis</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>semphasis</string>
+			<key>match</key>
+			<string>\*[^*]+\*</string>
+			<key>name</key>
+			<string>markup.emphasis</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>replacement</string>
+			<key>match</key>
+			<string>\.\.\s\|[^|]+\|</string>
+			<key>name</key>
+			<string>markup.link</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>substitution</string>
+			<key>match</key>
+			<string>\|[^|]+\|</string>
+			<key>name</key>
+			<string>markup.link</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>links `...`_ or `...`__</string>
+			<key>match</key>
+			<string>`[A-z0-9]+[^`]+`_{1,2}</string>
+			<key>name</key>
+			<string>markup.link</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>footnote reference: [0]_</string>
+			<key>match</key>
+			<string>\[[0-9]+\]_</string>
+			<key>name</key>
+			<string>markup.link.footnote</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>footnote reference [#]_ or [#foo]_</string>
+			<key>match</key>
+			<string>\[#[A-z0-9_]*\]_</string>
+			<key>name</key>
+			<string>markup.link.footnote</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>footnote reference [*]_</string>
+			<key>match</key>
+			<string>\[*\]_</string>
+			<key>name</key>
+			<string>markup.link.footnote</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>citation reference</string>
+			<key>match</key>
+			<string>\[[A-z][A-z0-9_-]*\]_</string>
+			<key>name</key>
+			<string>markup.link.citation</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>``</string>
+			<key>comment</key>
+			<string>inline literal</string>
+			<key>end</key>
+			<string>``</string>
+			<key>name</key>
+			<string>constant.string</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>intepreted text</string>
+			<key>match</key>
+			<string>`[^`]`</string>
+			<key>name</key>
+			<string>constant.string</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>field list</string>
+			<key>match</key>
+			<string>:[A-z][A-z0-9 	=\s\t_]*:</string>
+			<key>name</key>
+			<string>constant.string</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>table</string>
+			<key>match</key>
+			<string>\+-[+-]+</string>
+			<key>name</key>
+			<string>constant.string</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>table</string>
+			<key>match</key>
+			<string>\+=[+=]+</string>
+			<key>name</key>
+			<string>constant.string</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\.\.</string>
+			<key>comment</key>
+			<string>comment</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.restructuredtext</string>
+	<key>uuid</key>
+	<string>62DA9AD6-36E1-4AB7-BB87-E933AD9FD1A4</string>
+</dict>
+</plist>

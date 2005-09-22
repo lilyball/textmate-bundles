@@ -185,6 +185,7 @@ class Formatter
 			def _end_tag(tag)
 #				puts "[end:#{tag}]"
 				super
+				STDOUT.flush
 			end
 			
 			
@@ -193,7 +194,6 @@ class Formatter
 				a( "href" => "txmt://open?url=file://#{path}&line=#{line_number}" ) {
 					text!( File.basename(path) + ":" + line_number.to_s )
 				}
-				STDOUT.flush
 			end
 			
 			# accumulate content that will prefix the next div

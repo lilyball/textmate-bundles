@@ -8,10 +8,45 @@
 	<string>TRST=${TM_PYTHON:=rst2html.py}
 # TRST = "/System/Library/Frameworks/Python.framework/Versions/2.3/bin/rst2html.py"
 # Send the current file through rst2html.py
-$TRST "$TM_FILEPATH" "${TM_FILEPATH%.*}.html"
-open "${TM_FILEPATH%.*}.html"</string>
+
+if [[ -f "$TM_DIRECTORY/default.css" ]]
+	then stylesheet="$TM_DIRECTORY/default.css"
+elif [[ -f "$TM_PROJECT_DIRECTORY/default.css" ]]
+	then stylesheet="$TM_PROJECT_DIRECTORY/default.css"
+else
+	css=`mktemp -t /tmp`
+	echo 'body {	
+		background-color: #eee;
+	}
+	.document {
+		background: white;
+		font-family: Georgia, serif;
+		font-size: 13px;
+		border: 1px #888 solid;
+		padding: 0 1em;
+	}' &gt; $css
+	stylesheet=$css
+fi
+
+if [[ -n $stylesheet ]]
+	then flags="--embed-stylesheet --stylesheet=$stylesheet"
+	else flags=""
+fi
+
+out=`mktemp -t /tmp`
+echo "Running: $TRST $flags \"$TM_FILEPATH\" \"$out.html\""
+$TRST $flags "$TM_FILEPATH" "$out.html"
+open -a Safari "$out.html"
+
+#rm "$out.html"
+if [[ -n $css ]]
+	then rm $css
+fi
+
+
+</string>
 	<key>input</key>
-	<string>none</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>^M</string>
 	<key>name</key>

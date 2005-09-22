@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>TRST=${TM_PYTHON:=rst2html.py}
+# TRST = "/System/Library/Frameworks/Python.framework/Versions/2.3/bin/rst2html.py"
+# Send the current file through rst2html.py
+$TRST $TM_FILEPATH</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~@p</string>
+	<key>name</key>
+	<string>Preview</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.restructuredtext</string>
+	<key>uuid</key>
+	<string>7A099026-D785-48D9-ACAD-318ECF2A3BE4</string>
+</dict>
+</plist>

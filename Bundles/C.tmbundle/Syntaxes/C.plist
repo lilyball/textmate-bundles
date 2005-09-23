@@ -229,6 +229,25 @@
 			<string>(?=(?://|/\*))|$</string>
 			<key>name</key>
 			<string>other.preprocessor.c.include</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.include.c</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>&lt;</string>
+					<key>end</key>
+					<string>&gt;</string>
+					<key>name</key>
+					<string>string.quoted.lt-gt.include.c</string>
+				</dict>
+			</array>
 			<key>swallow</key>
 			<string>\\\s*\n</string>
 		</dict>
@@ -321,7 +340,7 @@
 		<key>preprocessor-rule-disabled</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(#(if)\s+0\b).*
+			<string>^\s*(#(if)\s+(0)\b).*
 </string>
 			<key>captures</key>
 			<dict>
@@ -334,6 +353,11 @@
 				<dict>
 					<key>name</key>
 					<string>entity.name.preprocessor.c</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.preprocessor.c</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -390,7 +414,7 @@
 		<key>preprocessor-rule-enabled</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(#(if)\s+0*1\b)</string>
+			<string>^\s*(#(if)\s+(0*1)\b)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -402,6 +426,11 @@
 				<dict>
 					<key>name</key>
 					<string>entity.name.preprocessor.c</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.preprocessor.c</string>
 				</dict>
 			</dict>
 			<key>end</key>

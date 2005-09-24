@@ -16,7 +16,7 @@
 				<key>findInProjectIgnoreCase</key>
 				<false/>
 				<key>findString</key>
-				<string>^(img|br|hr|meta|link|input|base|area|col|frame|param)?|.*$</string>
+				<string>^(img|br|hr|meta|link|input|base|area|col|frame|param)|.+$</string>
 				<key>ignoreCase</key>
 				<true/>
 				<key>regularExpression</key>
@@ -24,7 +24,7 @@
 				<key>replaceAllScope</key>
 				<string>selection</string>
 				<key>replaceString</key>
-				<string>?1&lt;$0 /&gt;:&lt;$0&gt;&lt;/$0&gt;</string>
+				<string>(?1:&lt;$0 /&gt;:&lt;$0&gt;&lt;/$0&gt;)</string>
 				<key>wrapAround</key>
 				<false/>
 			</dict>

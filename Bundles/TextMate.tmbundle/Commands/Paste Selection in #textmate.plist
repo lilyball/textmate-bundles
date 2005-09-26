@@ -5,10 +5,10 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>url=$(curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text="$TM_SELECTED_TEXT")
+	<string>url=$(curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text="$(expand -t $TM_TAB_SIZE)")
 osascript -e 'tell application "Colloquy" to send message "I just pasted: '"$url"'" to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'</string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^~V</string>
 	<key>name</key>

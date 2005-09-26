@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>url=$(curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text="$TM_SELECTED_TEXT")
+osascript -e 'tell application "Colloquy" to send message "I just pasted: '"$url"'" to chat room "##textmate" of connection 1'</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~V</string>
+	<key>name</key>
+	<string>Paste Selection in #textmate</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>uuid</key>
+	<string>20B6054F-965B-4C9B-91DA-E6868A721954</string>
+</dict>
+</plist>

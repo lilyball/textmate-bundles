@@ -13,7 +13,7 @@ def strip_tags(html)
   # Strip html tags
   html = html.gsub(/<\/?                      # opening tag with optional slash
                       (
-                        [^>"']+         |     # match anything unquoted
+                        [^>"']          |     # match anything unquoted
                         ".*?"           |     # match double quotes…
                         '.*?'                 # and single ones
                       )*                      # any combination of the three
@@ -38,13 +38,12 @@ def strip_embedded(html)
   # PHP
   #html = html.gsub(/<\?(php|=)?.*?\?>/m, '')
   html = html.gsub(/<\?(php|=)?                       # opening tag with optional php or =
-                      (
+                      (?>
                         \/\*.*?\*\/               |   # block comments
-                        <<<([a-zA-Z]+[a-zA-Z0-9_]*).*?^\5;?$  |
+                        <<<([a-zA-Z_][a-zA-Z0-9_]*).*?^\2;?$  |
                                                       # heredoc
-                        <(?!<<)                   |   # match any < that's not a heredoc
                         \?(?!>)                   |   # match any ? that's not an end tag
-                        [^<"'?]                   |   # match everything else, except strings
+                        [^"'?]                    |   # match everything else, except strings
                         "(\\("|\\)|[^"])*"        |   # double quoted strings…
                         '(\\('|\\)|[^'])*'            # …and single
                       )*

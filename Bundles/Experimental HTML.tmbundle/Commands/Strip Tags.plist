@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+load "#{ENV['TM_BUNDLE_SUPPORT']}/utilities.rb"
+html = ENV['TM_SELECTED_TEXT']
+
+unless html.to_s.empty?
+	html = strip_tags(html)
+end
+
+print html || ""</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Strip Tags</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>8CF50B01-E68B-4A6E-8532-998808E07B61</string>
+</dict>
+</plist>

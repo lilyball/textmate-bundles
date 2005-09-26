@@ -21,6 +21,12 @@
 	<array>
 		<dict>
 			<key>match</key>
+			<string>\b(time)\b</string>
+			<key>name</key>
+			<string>support.function.shell</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>;|&amp;&amp;|&amp;|\|\|</string>
 			<key>name</key>
 			<string>keyword.operator.list.shell</string>
@@ -30,35 +36,6 @@
 			<string>[|!]</string>
 			<key>name</key>
 			<string>keyword.operator.pipe.shell</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(time)\b</string>
-			<key>name</key>
-			<string>support.function.shell</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(\({2})</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.expression.shell</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(\){2})</string>
-			<key>name</key>
-			<string>meta.scope.expression.shell</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -85,6 +62,29 @@
 					<key>name</key>
 					<string>keyword.operator.logical.shell</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\({2})</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.expression.shell</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\){2})</string>
+			<key>name</key>
+			<string>meta.scope.expression.shell</string>
+			<key>patterns</key>
+			<array>
 				<dict>
 					<key>include</key>
 					<string>$self</string>
@@ -236,23 +236,19 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>\$\({2}</string>
+			<key>end</key>
+			<string>\){2}</string>
+			<key>name</key>
+			<string>string.other.math.shell</string>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>\$\(</string>
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
 			<string>string.interpolated.dollar.shell</string>
-			<key>patterns</key>
-			<array/>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\$\([2]</string>
-			<key>end</key>
-			<string>\)[2]</string>
-			<key>name</key>
-			<string>string.other.math.shell</string>
-			<key>patterns</key>
-			<array/>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -261,20 +257,10 @@
 			<string>\)</string>
 			<key>name</key>
 			<string>string.interpolation.process-substitution.shell</string>
-			<key>patterns</key>
-			<array/>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>valid: &amp;&gt;word &gt;&amp;word &gt;word [n]&gt;&amp;[n] [n]&lt;word [n]&gt;word [n]&gt;&gt;word [n]&lt;&amp;word (last one is duplicate)</string>
-			<key>match</key>
-			<string>&amp;&gt;|\d*&gt;&amp;\d*|\d*(&gt;&gt;|&gt;|&lt;)|\d*&lt;&amp;|\d*&lt;&gt;</string>
-			<key>name</key>
-			<string>keyword.operator.redirect.shell</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;&lt;)-("')?(\w+)\2</string>
+			<string>(&lt;&lt;)-("|'|)(\w+)\2</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -303,7 +289,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;&lt;)("')?(\w+)\2</string>
+			<string>(&lt;&lt;)("|'|)(\w+)\2</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -341,13 +327,40 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>string.quoted.here-string.shell</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(&lt;&lt;&lt;)('[^']*'|"(\\("|\\)|[^"])*")</string>
+			<key>name</key>
+			<string>declaration.here-string.shell</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.here-string.shell</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>string.unquoted.here-string.shell</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(&lt;&lt;&lt;)([^ ]+)</string>
+			<string>(&lt;&lt;&lt;)(([^\s\\]|\\.)+)</string>
 			<key>name</key>
 			<string>declaration.here-string.shell</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>valid: &amp;&gt;word &gt;&amp;word &gt;word [n]&gt;&amp;[n] [n]&lt;word [n]&gt;word [n]&gt;&gt;word [n]&lt;&amp;word (last one is duplicate)</string>
+			<key>match</key>
+			<string>&amp;&gt;|\d*&gt;&amp;\d*|\d*(&gt;&gt;|&gt;|&lt;)|\d*&lt;&amp;|\d*&lt;&gt;</string>
+			<key>name</key>
+			<string>keyword.operator.redirect.shell</string>
 		</dict>
 		<dict>
 			<key>match</key>

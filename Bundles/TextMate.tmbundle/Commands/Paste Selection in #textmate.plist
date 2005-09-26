@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>url=$(curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text="$(expand -t $TM_TAB_SIZE)")
-osascript -e 'tell application "Colloquy" to send message "I just pasted: '"$url"'" to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'</string>
+osascript -e 'tell application "Colloquy" to send message "pasted this '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
@@ -14,7 +14,7 @@ osascript -e 'tell application "Colloquy" to send message "I just pasted: '"$url
 	<key>name</key>
 	<string>Paste Selection in #textmate</string>
 	<key>output</key>
-	<string>afterSelectedText</string>
+	<string>discard</string>
 	<key>uuid</key>
 	<string>20B6054F-965B-4C9B-91DA-E6868A721954</string>
 </dict>

@@ -1,24 +1,37 @@
 #!/usr/bin/env ruby -w
 
+# HTML Utilities for TextMate v.beta
+# Michael Sheets - Sept 27, 2005
+# 
+# Special thanks to allan for listening to my regex whining :)
+
 def strip_tags(html)
   # First we need to get rid of any embedded code.
   html = strip_embedded(html)
 
   # Remove comments
-  html = html.gsub(/<!--.*?--\s*>/m, '')
+  html = html.gsub(/<!--.*?--\s*>/m, "\xEF\xBF\xBC")
 
   # SGML Declarations
-  html = html.gsub(/<!.*?>/m, '')
+  html = html.gsub(/<!.*?>/m, "\xEF\xBF\xBC")
+
+  # Remove script and css blocks
+  html = html.gsub(/<script.*?>.*?<\/script>/m, "\xEF\xBF\xBC")
+  html = html.gsub(/<style.*?>.*?<\/style>/m, "\xEF\xBF\xBC")
 
   # Strip html tags
   html = html.gsub(/<\/?                      # opening tag with optional slash
                       (
-                        [^>"']          |     # match anything unquoted
+                        [^<>"']          |     # match anything unquoted
                         ".*?"           |     # match double quotes…
                         '.*?'                 # and single ones
                       )*                      # any combination of the three
                     >                         # close tag
-                   /xm, '')
+                   /xm, "\xEF\xBF\xBC")       # placeholder
+
+  # Handle placeholders
+  html = html.gsub(/^[ \t]*\xEF\xBF\xBC[ \t]*(\n|\r)/xm, '')  # Remove lines with only tags
+  html = html.gsub(/\xEF\xBF\xBC/xm, '')                      # Remove other placeholders
 end
 
 def html2text(html, script_path)
@@ -34,7 +47,7 @@ private
 
 def strip_embedded(html)
   # Ruby (and some php)
-  html = html.gsub(/<%(?!%).*?%>/m, '')
+  html = html.gsub(/<%(?!%).*?%>/m, "\xEF\xBF\xBC")
   # PHP
   #html = html.gsub(/<\?(php|=)?.*?\?>/m, '')
   html = html.gsub(/<\?(php|=)?                       # opening tag with optional php or =
@@ -48,11 +61,15 @@ def strip_embedded(html)
                         '(\\('|\\)|[^'])*'            # …and single
                       )*
                     \?>                               # close tag
-                   /xm, '')
-  html = html.gsub(/<script language=['"]php['"].*?\/script>/m, '')
+                   /xm, "\xEF\xBF\xBC")
+  html = html.gsub(/<script language=['"]php['"].*?\/script>/m, "\xEF\xBF\xBC")
   # Movable Type
-  html = html.gsub(/<\$MT.*?\$>/m, '')
-  html = html.gsub(/<\/?MT.*?>/m, '')
+  html = html.gsub(/<\$MT.*?\$>/m, "\xEF\xBF\xBC")
+  html = html.gsub(/<\/?MT.*?>/m, "\xEF\xBF\xBC")
+
+  # Handle placeholders
+  html = html.gsub(/^[ \t]*\xEF\xBF\xBC[ \t]*(\n|\r)/xm, '')  # Remove lines with only tags
+  html = html.gsub(/\xEF\xBF\xBC/xm, '')                      # Remove other placeholders
 end
 
 

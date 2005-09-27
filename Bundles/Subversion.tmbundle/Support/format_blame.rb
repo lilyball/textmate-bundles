@@ -45,7 +45,7 @@ begin
    puts '<table class="blame"> <tr>' +
             '<th>line</th>' +
             '<th class="revhead">rev</th>' +
-            '<th>name</th>' +
+            '<th>user</th>' +
             '<th class="codehead">code</th></tr>'
    
    
@@ -53,7 +53,7 @@ begin
       raise SVNErrorException, line  if line =~ /^svn:/
       
       # not a perfect pattern, but it works and is short:
-      #              rev     name  date                                                       text
+      #              rev     user  date                                                       text
       if line =~ /\s*(\d+)\s+(\w+) (\d+-\d+-\d+ \d+:\d+:\d+ [-+]\d+ \(\w{3}, \d+ \w{3} \d+\)) (.*)/
          curr_add = ($current == linecount) ? ' current_line' : ''
          

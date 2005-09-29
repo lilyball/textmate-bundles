@@ -5,15 +5,16 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
-
-if [[ -z $TM_FILENAME ]]
-  then title="Textile as HTML"
-  else title="${TM_FILENAME%.*} as HTML"
+	<string>if [[ -z $TM_FILENAME ]]
+  then title="Textile Preview"
+  else title="${TM_FILENAME%.*}"
 fi
 
+TEMPFILE=`mktemp "/tmp/textile_XXXXXX"`
+{
+. "$TM_SUPPORT_PATH/lib/html.sh"
 htmlHeader "$title" '&lt;style type="text/css"&gt;
-	body {	
+	body {
 		background-color: #eee;
 	}
 	.contents {	
@@ -24,21 +25,23 @@ htmlHeader "$title" '&lt;style type="text/css"&gt;
 		padding: 0 1em;
 	}
 	&lt;/style&gt;'
-beginTag div 'contents'
+brginTag div 'contents'
 	"$TM_SUPPORT_PATH/bin/Textile.rb"
 endTag
-htmlFooter</string>
+htmlFooter; } &gt;"$TEMPFILE.html"
+rm "$TEMPFILE"
+open "$TEMPFILE.html"</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
-	<string>^~@p</string>
+	<string>^M</string>
 	<key>name</key>
-	<string>Preview</string>
+	<string>Preview In Browser</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>text.html.textile</string>
 	<key>uuid</key>
-	<string>2684F52C-663F-47F3-8320-C8FCB71E276F</string>
+	<string>A90B97AF-6C00-4F54-B7AA-A6985006F787</string>
 </dict>
 </plist>

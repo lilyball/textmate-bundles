@@ -5,8 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>url=$(curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text="$(expand -t $TM_TAB_SIZE)")
-osascript -e 'tell application "Colloquy" to send message "pasted this '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'</string>
+	<string>if [[ -z "$TM_SELECTED_TEXT" ]]; then
+	echo "Nothing is selected."
+	exit
+fi
+
+url=$(curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text="$(expand -t $TM_TAB_SIZE)")
+
+if [[ -n "$url" ]]; then
+	osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'
+else
+	echo "Got no URL back from pasting service."
+fi</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
@@ -14,7 +24,7 @@ osascript -e 'tell application "Colloquy" to send message "pasted this '"$url"'"
 	<key>name</key>
 	<string>Paste Selection in #textmate</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>20B6054F-965B-4C9B-91DA-E6868A721954</string>
 </dict>

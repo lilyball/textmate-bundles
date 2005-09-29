@@ -7,10 +7,8 @@
 	<key>command</key>
 	<string>query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
 
-cat &lt;&lt;EOF
-	&lt;title&gt;MySQL Query&lt;/title&gt;
-	&lt;pre&gt;$query&lt;/pre&gt;
-EOF
+printf '&lt;title&gt;MySQL Query&lt;/title&gt;&lt;pre&gt;%s&lt;/pre&gt;' \
+	"$(perl &lt;&lt;&lt;$query -pe 's/&amp;/&amp;amp;/g; s/&lt;/&amp;lt;/g')"
 
 mysql -e "$query" \
 	-u${MYSQL_USER:-$USER} -p$MYSQL_PWD \

@@ -5,20 +5,21 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat &lt;&lt;'EOF'
-&lt;html&gt;&lt;head&gt;&lt;style&gt;
-body { font: 12px 'Lucida Grande' }
-&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
-&lt;h1&gt;Help for SQL bundle&lt;/h1&gt;
-&lt;p&gt;The runSQL command takes the selected text and submit it as a query to mysql.  It assumes that the mysql command line program is already in your $PATH.  Using the --html flag the output from the query is formated and displayed in an HTML window. The runSQL command assumes the following environment variables are properly set:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$MYSQL_USER  No default&lt;/li&gt;
-&lt;li&gt;$MYSQL_PWD  No default&lt;/li&gt;
-&lt;li&gt;$MYSQL_HOST defaults to localhost if not set&lt;/li&gt;
-&lt;li&gt;$MYSQL_PORT defaults to 3306 if not set&lt;/li&gt;
-&lt;li&gt;$MYSQL_DB  No default&lt;/li&gt;
-&lt;/ul&gt;
-These variables may be set in the parent shell of TextMate, global varialbes in TextMate preferences, or as project local variables.
+	<string>Markdown.pl &lt;&lt;'EOF'
+&lt;style&gt;body { font: 12px 'Lucida Grande' }&lt;/style&gt;
+# Help for SQL bundle
+
+The _MySQL Query_ command takes the selected text or current line and submit it as a query to mysql.  It assumes that the `mysql` command line program is already in your `$PATH`.  Using the `--html` flag the output from the query is formated and displayed in an HTML window.
+
+The command assumes the following environment variables are properly set:
+
+* `$MYSQL_USER` — defaults to the value of `$USER`
+* `$MYSQL_PWD ` — no default
+* `$MYSQL_HOST` — defaults to localhost if not set
+* `$MYSQL_PORT` — defaults to 3306 if not set
+* `$MYSQL_DB  ` — no default
+
+These variables may be set in the parent shell of TextMate, global variables in TextMate preferences, or as project local variables.
 EOF</string>
 	<key>input</key>
 	<string>none</string>

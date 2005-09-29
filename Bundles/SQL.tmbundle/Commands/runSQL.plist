@@ -5,17 +5,16 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>{  if [[ "$TM_SELECTED_TEXT" ]]
-      then cat
-      else printenv TM_CURRENT_LINE
-   fi
-} | mysql --html -u$MYSQL_USER -p$MYSQL_PWD -h${MYSQL_HOST:=localhost} -P${MYSQL_PORT:=3306} $MYSQL_DB</string>
+	<string>mysql -e "${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}" \
+	-u${MYSQL_USER:-$USER} -p$MYSQL_PWD \
+	-h${MYSQL_HOST:-localhost} -P${MYSQL_PORT:-3306} \
+	--html $MYSQL_DB</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^Q</string>
 	<key>name</key>
-	<string>Query using selection</string>
+	<string>MySQL Query</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

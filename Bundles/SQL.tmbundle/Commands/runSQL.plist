@@ -5,10 +5,19 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>mysql -e "${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}" \
+	<string>query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
+
+cat &lt;&lt;EOF
+	&lt;title&gt;MySQL Query&lt;/title&gt;
+	&lt;pre&gt;$query&lt;/pre&gt;
+EOF
+
+mysql -e "$query" \
 	-u${MYSQL_USER:-$USER} -p$MYSQL_PWD \
 	-h${MYSQL_HOST:-localhost} -P${MYSQL_PORT:-3306} \
-	--html $MYSQL_DB</string>
+	--html $MYSQL_DB
+
+echo '&lt;pre&gt;Query completed&lt;/pre&gt;'</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

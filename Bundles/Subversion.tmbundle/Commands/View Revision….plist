@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>revs=`"${TM_SVN:=svn}" log -q "$TM_FILEPATH"`
+	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+
+revs=`"$TM_SVN" log -q "$TM_FILEPATH"`
 
 revs=`echo "$revs" | sed '/^------------------------------------------------------------------------$/d' | sed '/^$/d'`
 
@@ -24,8 +26,7 @@ revs=`osascript&lt;&lt;END
 END`
 
 # exit if user canceled
-if [[ $revs = "false" ]]
-then
+if [[ $revs = "false" ]]; then
 	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit 0	
 fi
 

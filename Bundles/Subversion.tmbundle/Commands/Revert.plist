@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_SVN:=svn}" revert "$TM_FILEPATH"
+	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+
+"$TM_SVN" revert "$TM_FILEPATH"
 
 # force TM to refresh the current file..
 osascript &amp;&gt;/dev/null \

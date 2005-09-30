@@ -5,17 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>TM_SVN="${TM_SVN:=svn}"
-TM_RUBY="${TM_RUBY:=ruby}"
+	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+
+: ${TM_RUBY:=ruby}
 FORMAT_LOG="${TM_BUNDLE_SUPPORT}/format_log.rb"
 TM_SVN_LOG_RANGE="${TM_SVN_LOG_RANGE:=BASE:1}"
 
 if [[ -z $TM_SELECTED_FILES ]]; then
-   "$TM_SVN" log -vr"$TM_SVN_LOG_RANGE" "$TM_FILEPATH" \
-   2&gt;&amp;1| "$TM_RUBY" -- "$FORMAT_LOG"
+   "$TM_SVN" log -vr"$TM_SVN_LOG_RANGE" "$TM_FILEPATH" 2&gt;&amp;1 \
+   |"$TM_RUBY" -- "$FORMAT_LOG"
 else
-   eval "$TM_SVN" log -vr"$TM_SVN_LOG_RANGE" $TM_SELECTED_FILES \
-   2&gt;&amp;1| "$TM_RUBY" -- "$FORMAT_LOG"
+   eval "$TM_SVN" log -vr"$TM_SVN_LOG_RANGE" $TM_SELECTED_FILES 2&gt;&amp;1 \
+   |"$TM_RUBY" -- "$FORMAT_LOG"
 fi</string>
 	<key>dontFollowNewOutput</key>
 	<true/>

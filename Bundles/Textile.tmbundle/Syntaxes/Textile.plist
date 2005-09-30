@@ -29,7 +29,7 @@
 					<key>name</key>
 					<string>entity.name.class.textile</string>
 				</dict>
-				<key>7</key>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.heading.textile</string>
@@ -66,7 +66,7 @@
 					<key>name</key>
 					<string>entity.name.class.textile</string>
 				</dict>
-				<key>7</key>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.blockquote.textile</string>
@@ -103,7 +103,7 @@
 					<key>name</key>
 					<string>entity.name.class.textile</string>
 				</dict>
-				<key>7</key>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.footnote.textile</string>
@@ -140,7 +140,7 @@
 					<key>name</key>
 					<string>entity.name.class.textile</string>
 				</dict>
-				<key>7</key>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.footnote.textile</string>
@@ -184,7 +184,7 @@
 							<key>name</key>
 							<string>entity.name.class.textile</string>
 						</dict>
-						<key>7</key>
+						<key>4</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.tag.paragraph.textile</string>
@@ -275,48 +275,62 @@
 				<dict>
 					<key>captures</key>
 					<dict>
-						<key>3</key>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.class.textile</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(^|(?&lt;=[.?!()]|\s))\*((\([^)]*\)|{[^}]*})*\s+)?(\S.*?\S|\S)\*(?=($|[.?!()]|\s))</string>
+					<string>\B\*((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\*\B</string>
 					<key>name</key>
 					<string>markup.bold.textile</string>
 				</dict>
 				<dict>
 					<key>captures</key>
 					<dict>
-						<key>3</key>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.class.textile</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(^|(?&lt;=[.?!()]|\s))-((\([^)]*\)|{[^}]*})*\s+)?(\S.*?\S|\S)-(?=($|[.?!()]|\s))</string>
+					<string>\B-((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)-\B</string>
 					<key>name</key>
 					<string>markup.deleted.textile</string>
 				</dict>
 				<dict>
 					<key>captures</key>
 					<dict>
-						<key>3</key>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.class.textile</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(^|(?&lt;=[.?!()]|\s))\+((\([^)]*\)|{[^}]*})*\s+)?(\S.*?\S|\S)\+(?=($|[.?!()]|\s))</string>
+					<string>\B\+((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\+\B</string>
 					<key>name</key>
 					<string>markup.inserted.textile</string>
 				</dict>
 				<dict>
 					<key>captures</key>
 					<dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.class.textile</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\B_((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)_\B</string>
+					<key>name</key>
+					<string>markup.italic.textile</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -324,21 +338,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(^|(?&lt;=[.?!()]|\s))_((\([^)]*\)|{[^}]*})*\s+)?(\S.*?\S|\S)_(?=($|[.?!()]|\s))</string>
-					<key>name</key>
-					<string>markup.italic.textile</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
-							<string>entity.name.class.textile</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(^|(?&lt;=[.?!()]|\s))([\^~%])((\([^)]*\)|{[^}]*})*\s+)?(\S.*?\S|\S)\2(?=($|[.?!()]|\s))</string>
+					<string>\B([\^~%])((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\1\B</string>
 					<key>name</key>
 					<string>markup.italic.phrasemodifiers.textile</string>
 				</dict>

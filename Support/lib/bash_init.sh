@@ -33,13 +33,16 @@ fi
 
 require_cmd () {
 	if ! type -p "$1" >/dev/null; then
-		cat <<-EOF
-			<h3 class="error">Couldn't find $1</h3>
-			${2:+<p>$2</p>}
-			<p>Locations searched:</p>
-			<p><pre>${PATH//:/<br>}</pre></p>
-			<p><em>Contact your system administrator if you do not know what this means.</em></p>
-			EOF
+		cat <<EOF
+<h3 class="error">Couldn't find $1</h3>
+${2:+<p>$2</p>}
+<p>Locations searched:</p>
+<p><pre>
+${PATH//:/
+}
+</pre></p>
+<p><em>Contact your system administrator if you do not know what this means.</em></p>
+EOF
 		exit;
 	fi
 }

@@ -5,15 +5,22 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>{ APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
+	<string>{ app_path=$(ps -xwwp $PPID -o command|grep -o '.*.app')
+  echo -n "$(date +%H:%M) " &gt;&gt;/tmp/restart.log
+  ps -xp $PPID|tail -n1 &gt;&gt;/tmp/restart.log
   osascript -e 'tell app "TextMate" to quit'
 
-  for (( i = 0; i &lt; 300 &amp;&amp; $(ps -xp $PPID|wc -l) == 2; i++ )); do
+  for (( i = 0; i &lt; 5 &amp;&amp; $(echo $(ps -xp $PPID|wc -l))-1; i++ )); do
     sleep .2;
   done
 
+  echo -n "$(date +%H:%M) " &gt;&gt;/tmp/restart.log
+  ps -xp $PPID|wc -l &gt;&gt;/tmp/restart.log
+
   if [[ $(ps -xp $PPID|wc -l) -ne 2 ]]; then
-    open "$APP_PATH"
+    echo -n "$(date +%H:%M) " &gt;&gt;/tmp/restart.log
+    echo "$app_path" &gt;&gt;/tmp/restart.log
+    open "$app_path"
   fi
 
 } &amp;&gt;/dev/null &amp;</string>

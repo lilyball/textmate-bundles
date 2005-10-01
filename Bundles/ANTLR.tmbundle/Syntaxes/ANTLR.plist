@@ -34,7 +34,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b[[:upper:]_]{2,}\b</string>
+			<string>\b[[:upper:]_][[:upper:][:digit:]_]*\b</string>
 			<key>name</key>
 			<string>constant.other.token.antlr</string>
 		</dict>
@@ -64,7 +64,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\\.</string>
+					<string>\\(u\h{4}|.)</string>
 					<key>name</key>
 					<string>constant.character.escaped.antlr</string>
 				</dict>
@@ -81,7 +81,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\\.</string>
+					<string>\\(u\h{4}|.)</string>
 					<key>name</key>
 					<string>constant.character.escaped.untitled</string>
 				</dict>

@@ -5,26 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>{
-app_path=$(
-    ps -axw -o command -p $PPID | \
-    tail -n 1 | \
-    sed -e 's#^\(/.*\)/Contents.*$#\1#g' \
-)
+	<string>{ APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
+  osascript -e 'tell app "TextMate" to quit'
 
-osascript -e 'tell app "TextMate" to quit'
+  for (( i = 0; i &lt; 300 &amp;&amp; $(ps -xp $PPID|wc -l) == 2; i++ )); do
+    sleep .2;
+  done
 
-for (( i = 0; i &lt; 300; i++ )); do
-    if [[ ! -n $(ps -xc|grep 'TextMate$') ]]; then
-        break;
-    else
-        sleep .2;
-    fi
-done
+  if [[ $(ps -xp $PPID|wc -l) -ne 2 ]]; then
+    open "$APP_PATH"
+  fi
 
-if [[ ! -n $(ps -xc|grep 'TextMate$') ]]; then
-    open "$app_path"
-fi
 } &amp;&gt;/dev/null &amp;</string>
 	<key>input</key>
 	<string>none</string>

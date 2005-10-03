@@ -5,10 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cd "$TM_DIRECTORY";
-
-"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
-ENV['TM_SELECTED_TEXT'].each_line() { |line|
+	<string>#!/usr/bin/env ruby
+ENV['TM_SELECTED_TEXT'].to_s.each_line() { |line|
 	if(line =~ /^#/)
 		print("##{line}")
 	else

@@ -12,7 +12,7 @@
 				<key>findInProjectIgnoreCase</key>
 				<integer>0</integer>
 				<key>findString</key>
-				<string>\A[ \t\n]+</string>
+				<string>(?=\S)|\s+</string>
 				<key>ignoreCase</key>
 				<integer>0</integer>
 				<key>regularExpression</key>
@@ -24,10 +24,6 @@
 			</dict>
 			<key>command</key>
 			<string>findWithOptions:</string>
-		</dict>
-		<dict>
-			<key>command</key>
-			<string>centerSelectionInVisibleArea:</string>
 		</dict>
 		<dict>
 			<key>command</key>

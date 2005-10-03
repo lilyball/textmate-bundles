@@ -219,6 +219,14 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>comment</key>
+					<string>&amp; is handled automagically by textile, so we match it to avoid text.html.basic from flagging it</string>
+					<key>match</key>
+					<string>&amp;(?![A-Za-z0-9]+;)</string>
+					<key>name</key>
+					<string>text.html.textile</string>
+				</dict>
+				<dict>
 					<key>captures</key>
 					<dict>
 						<key>1</key>

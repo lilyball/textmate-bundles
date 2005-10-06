@@ -9,18 +9,36 @@
 . "${TM_SUPPORT_PATH}/lib/html.sh"
 cd "${TM_PROJECT_DIRECTORY:=$TM_DIRECTORY}";
 htmlHeader "Summary of Changes"
-echo "&lt;h2&gt;Summary of Changes in ${TM_PROJECT_DIRECTORY}&lt;/h2&gt;"
+echo "&lt;h3&gt;Summary of Changes in ${TM_PROJECT_DIRECTORY}&lt;/h3&gt;"
 "${TM_PYTHON:=python}" &lt;&lt;'EOF'
 import os
+import re
+from struct import *
+cl = {'a':'added', 'M':'modified', 'D':'deleted', 'C':'conflict', '?':'unknown'}
+def percent_escape(str):
+	return re.sub('[\x80-\xff /&amp;]', lambda x: '%%%02X' % unpack('B', x.group(0))[0], str)
+
+def make_link(file):
+	return 'txmt://open?url=file:%2F%2F' + percent_escape(file)
+
+def removeNums(s):
+    l = re.compile('(.*?)(\s+[-]*\d*\s+[+]*\d*)')
+    x = l.match(s)
+    if x:
+       return x.group(1)
+    else:
+       return s
+   
 res = os.popen('darcs whatsnew -s -l')
 print '&lt;table cellpadding="3"&gt;&lt;tr&gt;'
 for line in  res:
     print '&lt;tr&gt;',
-    if line[0] == 'a':
-        print '&lt;td class="new"&gt;', 
-    else:
-        print '&lt;td&gt;',
-    print line[0], '&lt;/td&gt;&lt;td&gt;',line[1:-1], '&lt;/td&gt;&lt;/tr&gt;'
+    print '&lt;td class="'+cl[line[0]]+'\"&gt;', 
+    print line[0], '&lt;/td&gt;&lt;td&gt;&lt;a href="',
+    fname = removeNums(line[1:-1])
+    print make_link(os.getcwd()+fname[2:]),'"&gt;',fname, '&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;'
+
+
 </string>
 	<key>input</key>
 	<string>none</string>

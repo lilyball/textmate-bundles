@@ -108,9 +108,34 @@ div.box strong {
     color: red;
 }
 
-td.new {
-    color: blue;
-    background-color: #E895A9;
+/* a */
+td.added {
+   color: green;
+   background-color: #bbffb3;	
+}
+
+/* M */
+td.modified {
+	color: #eb6400;
+	background-color: #f7e1ad;
+}
+
+/* D */
+td.deleted {
+	color: red;
+	background-color: #f59696;
+}
+
+/* C, !, " */
+td.conflict, td.missing, td.typeconflict {
+	color: teal;
+	background-color: #A3CED0;
+}
+
+/* ?, I, X */
+td.unknown, td.ignore, td.external {
+	color: purple;
+	background-color: #edaef5;
 }
 
 pre {

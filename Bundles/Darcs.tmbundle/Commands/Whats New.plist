@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Source some support functions we need.
+. "${TM_SUPPORT_PATH}/lib/html.sh"
+cd "${TM_PROJECT_DIRECTORY:=$TM_DIRECTORY}";
+htmlHeader "Summary of Changes"
+echo "&lt;h2&gt;Summary of Changes in ${TM_PROJECT_DIRECTORY}&lt;/h2&gt;"
+"${TM_PYTHON:=python}" &lt;&lt;'EOF'
+import os
+res = os.popen('darcs whatsnew -s -l')
+print '&lt;table cellpadding="3"&gt;&lt;tr&gt;'
+for line in  res:
+    print '&lt;tr&gt;',
+    if line[0] == 'a':
+        print '&lt;td class="new"&gt;', 
+    else:
+        print '&lt;td&gt;',
+    print line[0], '&lt;/td&gt;&lt;td&gt;',line[1:-1], '&lt;/td&gt;&lt;/tr&gt;'
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@d</string>
+	<key>name</key>
+	<string>Whats New</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>F68A0A7A-75AF-4471-A9F8-3A618DD81306</string>
+</dict>
+</plist>

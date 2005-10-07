@@ -9,12 +9,14 @@
 
 eval arr=($TM_SELECTED_FILES)
 if [[ ${#arr[@]} == 2 ]];
-   then opendiff "${arr[0]}" "${arr[1]}"
+   then opendiff "${arr[0]}" "${arr[1]}"; rescan_project
    else echo -e "You need to select exactly two\nfiles in the project drawer."
 fi
 </string>
 	<key>input</key>
 	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~D</string>
 	<key>name</key>
 	<string>Merge Selected Files</string>
 	<key>output</key>

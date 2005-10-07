@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if [[ -e "$TM_FILEPATH" ]]
+   then diff -u "$TM_FILEPATH" -
+   else echo "There's no file on disk"
+fi</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~D</string>
+	<key>name</key>
+	<string>Diff Buffer With File on Disk</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>uuid</key>
+	<string>0979659D-126E-467F-AC07-599979A42D67</string>
+</dict>
+</plist>

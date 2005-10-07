@@ -31,6 +31,13 @@ if [[ -e "$HOME/Library/Application Support/TextMate/bash_init.sh" ]]; then
 	. "$HOME/Library/Application Support/TextMate/bash_init.sh"
 fi
 
+rescan_project () {
+	# force TM to refresh current file and project drawer
+	osascript &>/dev/null \
+	   -e 'tell app "SystemUIServer" to activate' \
+	   -e 'tell app "TextMate" to activate' &
+}
+
 require_cmd () {
 	if ! type -p "$1" >/dev/null; then
 		cat <<EOF

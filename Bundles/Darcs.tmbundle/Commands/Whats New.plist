@@ -14,7 +14,7 @@ echo "&lt;h3&gt;Summary of Changes in ${TM_PROJECT_DIRECTORY}&lt;/h3&gt;"
 import os
 import re
 from struct import *
-cl = {'a':'added', 'M':'modified', 'D':'deleted', 'C':'conflict', '?':'unknown'}
+cl = {'a':'unknown', 'M':'modified', 'D':'deleted', 'C':'conflict', '?':'unknown', 'A':'added'}
 def percent_escape(str):
 	return re.sub('[\x80-\xff /&amp;]', lambda x: '%%%02X' % unpack('B', x.group(0))[0], str)
 
@@ -32,8 +32,11 @@ def removeNums(s):
 res = os.popen('darcs whatsnew -s -l')
 print '&lt;table cellpadding="3"&gt;&lt;tr&gt;'
 for line in  res:
+    statClass = ""
+    if cl.has_key(line[0]):
+        statClass = cl[line[0]]
     print '&lt;tr&gt;',
-    print '&lt;td class="'+cl[line[0]]+'\"&gt;', 
+    print '&lt;td class="'+statClass+'\"&gt;', 
     print line[0], '&lt;/td&gt;&lt;td&gt;&lt;a href="',
     fname = removeNums(line[1:-1])
     print make_link(os.getcwd()+fname[2:]),'"&gt;',fname, '&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;'

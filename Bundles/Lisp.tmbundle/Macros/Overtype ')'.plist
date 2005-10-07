@@ -5,6 +5,20 @@
 	<key>commands</key>
 	<array>
 		<dict>
+			<key>argument</key>
+			<string>x</string>
+			<key>command</key>
+			<string>insertText:</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<string>moveLeft:</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<string>moveRightAndModifySelection:</string>
+		</dict>
+		<dict>
 			<key>command</key>
 			<string>moveRightAndModifySelection:</string>
 		</dict>
@@ -15,10 +29,8 @@
 				<string>replaceAll</string>
 				<key>findInProjectIgnoreCase</key>
 				<false/>
-				<key>findInProjectRegularExpression</key>
-				<false/>
 				<key>findString</key>
-				<string>(\))|[^)]</string>
+				<string>x(\)|(.?))</string>
 				<key>ignoreCase</key>
 				<false/>
 				<key>regularExpression</key>
@@ -26,7 +38,7 @@
 				<key>replaceAllScope</key>
 				<string>selection</string>
 				<key>replaceString</key>
-				<string>(?1:\):\)$0)</string>
+				<string>(?2:\))$1</string>
 				<key>wrapAround</key>
 				<false/>
 			</dict>

@@ -11,8 +11,7 @@
 
 # Stylesheet switching from http://old.alistapart.com/stories/alternate/
 
-my $bundle = $ENV{'TM_BUNDLE_PATH'};
-my $css= $bundle . "/Tools";
+my $css = $ENV{'TM_BUNDLE_SUPPORT'};
 
 my $html = <<END;
 <html><head>

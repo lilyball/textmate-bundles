@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>eval arr=($TM_SELECTED_FILES)
 if [[ ${#arr[@]} != 2 ]]; then
-   echo -e "You need to select exactly two\nfiles in the project drawer."
+   echo -e "You need to select exactly two files in the project drawer."
    exit
 fi
 

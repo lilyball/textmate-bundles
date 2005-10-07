@@ -54,7 +54,7 @@ begin
       
       # not a perfect pattern, but it works and is short:
       #              rev     user  date                                                       text
-      if line =~ /\s*(\d+)\s+(\w+) (\d+-\d+-\d+ \d+:\d+:\d+ [-+]\d+ \(\w{3}, \d+ \w{3} \d+\)) (.*)/
+      if line =~ /\s*(\d+)\s+([-\w.]+) (\d+-\d+-\d+ \d+:\d+:\d+ [-+]\d+ \(\w{3}, \d+ \w{3} \d+\)) (.*)/
          curr_add = ($current == linecount) ? ' current_line' : ''
          
          puts  '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +

@@ -290,7 +290,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\B\*((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\*\B</string>
+					<string>\B\*\*?((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\*\*?\B</string>
 					<key>name</key>
 					<string>markup.bold.textile</string>
 				</dict>
@@ -346,7 +346,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\B([\^~%])((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\1</string>
+					<string>\B([@\^~%]|\?\?)((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\1</string>
 					<key>name</key>
 					<string>markup.italic.phrasemodifiers.textile</string>
 				</dict>

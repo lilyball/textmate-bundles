@@ -9,4 +9,4 @@ $stdin.each_line() { |line|
 	contents << line
 }
 
-puts(RedCloth.new(contents.join()).to_html())
+puts(RedCloth.new(contents.join()).to_html(:textile))

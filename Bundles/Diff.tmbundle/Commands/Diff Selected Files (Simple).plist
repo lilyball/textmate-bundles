@@ -5,7 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
+	<string>eval arr=($TM_SELECTED_FILES)
+if [[ ${#arr[@]} != 2 ]]; then
+   echo -e "You need to select exactly two\nfiles in the project drawer."
+   exit
+fi
+
+TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
 mv "$TMPFILE" "$TMPFILE.diff"; TMPFILE="$TMPFILE.diff"
 
 eval diff -u $TM_SELECTED_FILES &gt; "$TMPFILE"
@@ -17,7 +23,7 @@ open -a TextMate "$TMPFILE" &amp;
 	<key>keyEquivalent</key>
 	<string>^~D</string>
 	<key>name</key>
-	<string>Diff Selected (Simple)</string>
+	<string>Diff Selected Files</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>

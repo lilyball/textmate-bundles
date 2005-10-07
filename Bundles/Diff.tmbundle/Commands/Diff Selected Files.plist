@@ -5,14 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>perl "$TM_BUNDLE_PATH/Tools/diff.pl"
+	<string>eval arr=($TM_SELECTED_FILES)
+if [[ ${#arr[@]} != 2 ]]; then
+   echo -e "You need to select exactly two\nfiles in the project drawer."
+   exit
+fi
+
+perl "$TM_BUNDLE_SUPPORT/diff.pl"
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^~D</string>
 	<key>name</key>
-	<string>Diff Selected in HTML</string>
+	<string>Diff Selected Files (HTML)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

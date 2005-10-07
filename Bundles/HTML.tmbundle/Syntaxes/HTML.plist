@@ -87,6 +87,23 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>&lt;!--</string>
+			<key>end</key>
+			<string>--&gt;</string>
+			<key>name</key>
+			<string>comment.block.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>--</string>
+					<key>name</key>
+					<string>invalid.illegal.bad-comments-or-CDATA.html</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>&lt;!</string>
 			<key>end</key>
 			<string>&gt;</string>
@@ -94,25 +111,6 @@
 			<string>meta.sgml.html</string>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>begin</key>
-					<string>--</string>
-					<key>end</key>
-					<string>--</string>
-					<key>name</key>
-					<string>comment.block.html</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>begin</key>
-							<string>^#\s*(include|config|echo|exec|fsize|flastmod|printenv|set)</string>
-							<key>end</key>
-							<string>(?=\s*--|&gt;)</string>
-							<key>name</key>
-							<string>other.preprocessor.server-side-includes.html</string>
-						</dict>
-					</array>
-				</dict>
 				<dict>
 					<key>begin</key>
 					<string>(DOCTYPE)</string>

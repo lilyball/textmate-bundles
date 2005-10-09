@@ -56,14 +56,15 @@ begin
       #              rev     user  date                                                       text
       if line =~ /\s*(\d+)\s+([-\w.]+) (\d+-\d+-\d+ \d+:\d+:\d+ [-+]\d+ \(\w{3}, \d+ \w{3} \d+\)) (.*)/
          curr_add = ($current == linecount) ? ' current_line' : ''
+         line_id = ($current == linecount + 10) ? ' id="current_line"' : ''
          
-         puts  '<tr><td class="linecol">'+ linecount.to_s + "</td>\n" +
+         puts  '<tr><td class="linecol"><span'+ line_id +'>'+ linecount.to_s + "</span></td>\n" +
                '<td class="revcol'+curr_add+'" title="'+ formated_date( $3 ) +'">' + $1 + "</td>\n" +
                '<td class="namecol'+curr_add+'" title="'+ formated_date( $3 ) +'">' + $2 + "</td>\n" +
                '<td class="codecol'+curr_add+'"><a href="' +
                   make_tm_link( $full_file, linecount) +'"'+$close+'>'+ htmlize( $4 ) +
                "</a></td></tr>\n\n"
-         
+
          linecount += 1
          
       else
@@ -71,9 +72,10 @@ begin
       end
       
    end #each_line
-   
+
 rescue => e
    handle_default_exceptions( e )
 ensure
+   puts '<script>window.location.hash = "current_line";</script>'
    make_foot( '</table>' )
 end

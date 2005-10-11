@@ -40,7 +40,7 @@ int main (int argc, const char * argv[]) {
 			NSDictionary *infoPlist = [NSDictionary dictionaryWithContentsOfFile:
 				[[sourcePath stringByAppendingPathComponent:bundlePath]
 					stringByAppendingPathComponent:@"info.plist"]];
-			if( ! infoPlist )
+			if( ! infoPlist || ! [infoPlist objectForKey:@"name"] || ! [infoPlist objectForKey:@"uuid"] )
 				continue;
 			if( [disabledBundles containsObject:[infoPlist objectForKey:@"uuid"]] ) {
 				// It's a disabled bundle

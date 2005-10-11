@@ -17,11 +17,11 @@ if [[ -d "$TM_SUPPORT_PATH/bin" ]]; then
 	fi
 fi
 
-if [[ -d "$TM_BUNDLE_PATH/bin" ]]; then
+if [[ -d "$TM_BUNDLE_PATH" && -d "$TM_BUNDLE_PATH/bin" ]]; then
    PATH="$TM_BUNDLE_PATH/bin:$PATH"
 fi
 
-if [[ -d "$TM_BUNDLE_SUPPORT/bin" ]]; then
+if [[ -d "$TM_BUNDLE_SUPPORT" && -d "$TM_BUNDLE_SUPPORT/bin" ]]; then
    PATH="$TM_BUNDLE_SUPPORT/bin:$PATH"
 fi
 

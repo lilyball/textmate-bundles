@@ -21,7 +21,7 @@
             match = "%.*$"; 
         }, 
         {   name = "storage.type.opening.logtalk"; 
-            match = ":-\\s+(object|protocol|category)(?=[(])"; 
+            match = ":-\\s+(object|protocol|category|module)(?=[(])"; 
         }, 
         {
             name = "storage.type.closing.logtalk"; 
@@ -31,10 +31,10 @@
             match = "\\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])"; 
         }, 
         {   name = "storage.modifier.others.logtalk"; 
-            match = ":-\\s+(calls|encoding|in(itialization|fo)|uses)(?=[(])"; 
+            match = ":-\\s+(calls|e(ncoding|xport)|in(itialization|fo)|uses)(?=[(])"; 
         }, 
         {   name = "storage.modifier.others.logtalk"; 
-            match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|uses)(?=[(])"; 
+            match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|use(s|_module))(?=[(])"; 
         }, 
         {   name = "keyword.operator.message-sending.logtalk"; 
             match = "(::|\\^\\^)"; 

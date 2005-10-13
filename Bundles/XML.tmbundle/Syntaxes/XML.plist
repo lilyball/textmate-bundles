@@ -26,6 +26,30 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.scope.between-tag-pair.xml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.xml</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>&lt;(\w+)[^&gt;]*(&gt;)&lt;/(\1)&gt;</string>
+			<key>name</key>
+			<string>meta.tag.xml</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>&lt;\?\s*([-_a-zA-Z0-9]+)</string>
 			<key>captures</key>
@@ -39,7 +63,7 @@
 			<key>end</key>
 			<string>\?&gt;</string>
 			<key>name</key>
-			<string>declaration.xml-processing.xml</string>
+			<string>meta.xml-processing.xml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -72,7 +96,7 @@
 			<key>end</key>
 			<string>&gt;</string>
 			<key>name</key>
-			<string>declaration.sgml.doctype.xml</string>
+			<string>meta.sgml.doctype.xml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -88,7 +112,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>declaration.entity.xml</string>
+							<string>meta.entity.xml</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -134,7 +158,7 @@
 			<key>end</key>
 			<string>/?&gt;</string>
 			<key>name</key>
-			<string>declaration.tag.xml</string>
+			<string>meta.tag.xml</string>
 			<key>patterns</key>
 			<array>
 				<dict>

@@ -52,7 +52,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>&lt;(?i:(head|table|thead|tbody|tfoot|tr|td|div|fieldset|style|script|ul|ol|li|form|dl))\b[^&gt;]*(&gt;)&lt;/(\1)&gt;</string>
+			<string>&lt;(\w+)[^&gt;]*(&gt;)&lt;/(\1)&gt;</string>
 			<key>name</key>
 			<string>meta.tag.html</string>
 		</dict>

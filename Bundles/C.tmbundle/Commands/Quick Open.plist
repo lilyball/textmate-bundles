@@ -5,75 +5,45 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -w
-require 'Find'
+	<string>arr=("/usr/include"
+   "/System/Library/Frameworks/AppKit.framework/Headers"
+   "/System/Library/Frameworks/Foundation.framework/Headers"
+   "/System/Library/Frameworks/IOKit.framework/Headers"
+   "/System/Library/Frameworks/CoreAudio.framework/Headers"
+   "/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework/Headers"
+   "/System/Library/Frameworks/QuickTime.framework/Headers"
+   "/System/Library/Frameworks/QTKit.framework/Headers"
+   "/System/Library/Frameworks/Carbon.framework"
+#  "/System/Library/Frameworks/Kernel.framework"
+   "/System/Library/Frameworks/ApplicationServices.framework"
+   "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
+)
 
-# TODO we should restore the fuzzy include line lookup capability, see the old implementation after the __END__
-cocoa_dialog		= "#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog"
-search_for_header	= ENV['TM_SELECTED_TEXT']
+line=$TM_CURRENT_LINE
+header=$TM_SELECTED_TEXT
 
-if search_for_header.nil? || search_for_header.empty? then
-	search_for_header = `"#{cocoa_dialog}" inputbox --title "Open Header Quickly" --no-newline --informative-text "Header name?"  --text "foobar"  --button1 "Open" --button2 "Cancel"`
-
-	exit if search_for_header[0].chr == '2'
-
-	search_for_header = search_for_header[2..search_for_header.size]
-end
-
-search_for_header_dot_h = search_for_header + ".h"
-
-# List of paths to search.
-FindPaths = %w[/usr/include
-/System/Library/Frameworks/AppKit.framework/Headers/
-/System/Library/Frameworks/Foundation.framework/Headers/
-/System/Library/Frameworks/IOKit.framework/Headers/
-/System/Library/Frameworks/CoreAudio.framework/Headers/
-/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework/Headers/
-/System/Library/Frameworks/QuickTime.framework/Headers
-/System/Library/Frameworks/QTKit.framework/Headers
-/System/Library/Frameworks/Carbon.framework
-/System/Library/Frameworks/Kernel.framework
-/System/Library/Frameworks/ApplicationServices.framework
-]
-
-FindPaths.each do |find_path|
-	Find.find(find_path) do |path|
-
-		# usually, the only symlinks in frameworks are links within the framework
-		Find.prune if File.symlink?(path)
-
-		unless File.directory?(path) 
-			path_filename = File.basename(path)
-			if path_filename == search_for_header or
-			   path_filename == search_for_header_dot_h then
-					# TODO if we were really cool, we'd gather up
-					# all candidates and present them in a list. Maybe.
-					%x{ open -a TextMate "#{path}" &amp; }
-			end
-		end
-	end
-end
-
-__END__
-
-# is there a selection?
-if [[ -z $TM_SELECTED_TEXT ]]; then
-	# nope, assume TM_CURRENT_LINE is an include line
-	HeaderName=`echo $TM_CURRENT_LINE | perl -pe 's/#(?:import|include)(?:\s+)(?:&lt;|")(.*)(?:&gt;|")/\$1/'`;
-else
-	# use the selection
-	HeaderName=$TM_SELECTED_TEXT
+# extract header from current line
+if [[ -z "$header" ]] &amp;&amp; $(egrep -q &lt;&lt;&lt;"$line" '#(import|include)'); then
+   header=$(sed -n &lt;&lt;&lt;"$line" 's/[^&lt;"]*[&lt;"]\([^"&gt;]*\).*/\1/p')
 fi
 
-FindInPaths=()
+# ask user about header
+if [[ -z "$header" ]]; then
+   res=$(CocoaDialog inputbox --title "Open Header Quickly" --no-newline --informative-text "Header name?"  --text "foobar"  --button1 "Open" --button2 "Cancel")
+   [[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit
+   header=$(tail -n1 &lt;&lt;&lt;"$res")
+fi
 
-CountPaths=${#FindInPaths[*]}
-FindInPaths[$CountPaths]="$TM_PROJECT_DIRECTORY"
+files=$(for dir in "${arr[@]}";
+   do find "$dir" -path "*/$header"; done|sort|uniq)
 
-echo find "${FindInPaths[@]}" -name "$HeaderName" -print -exec open -a TextMate {} \\\; | sh
+if [[ -n "$files" ]];
+   then xargs &lt;&lt;&lt;"$files" mate &amp;&gt;/dev/null &amp;
+   else echo "No headers found."
+fi
 </string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>@D</string>
 	<key>name</key>

@@ -38,7 +38,7 @@ files=$(for dir in "${arr[@]}";
    do find "$dir" -path "*/$header"; done|sort|uniq)
 
 if [[ -n "$files" ]];
-   then xargs &lt;&lt;&lt;"$files" mate &amp;&gt;/dev/null &amp;
+   then IFS=$(echo -e \\n\\r); mate $files &amp;&gt;/dev/null &amp;
    else echo "No headers found."
 fi
 </string>

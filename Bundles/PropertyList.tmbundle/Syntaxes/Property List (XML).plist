@@ -8,19 +8,15 @@
 		<string>dict</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(\{|\()</string>
+	<string>^\s*(&lt;[^!?%/](?!.+?(/&gt;|&lt;/.+?&gt;))|&lt;[!%]--(?!.+?--%?&gt;)|&lt;%[!]?(?!.+?%&gt;))</string>
 	<key>foldingStopMarker</key>
-	<string>(\}|\))</string>
+	<string>^\s*(&lt;/[^&gt;]+&gt;|[/%]&gt;|--&gt;)\s*$</string>
 	<key>keyEquivalent</key>
 	<string>^~P</string>
 	<key>name</key>
 	<string>Property List (XML)</string>
 	<key>patterns</key>
 	<array>
-		<dict>
-			<key>include</key>
-			<string>text.xml</string>
-		</dict>
 		<dict>
 			<key>captures</key>
 			<dict>
@@ -55,7 +51,11 @@
 			<key>match</key>
 			<string>&lt;((key))&gt;(.*)&lt;/((key))&gt;</string>
 			<key>name</key>
-			<string>declaration.tag.key.xml-plist</string>
+			<string>meta.tag.key.xml-plist</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>text.xml</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

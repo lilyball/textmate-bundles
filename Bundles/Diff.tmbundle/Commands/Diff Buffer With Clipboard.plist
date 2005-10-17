@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># set defaultCStringEncoding to UTF-8 for UID 0x1F5 (501)
+__CF_USER_TEXT_ENCODING=0x1F5:0x8000100:0x8000100 diff -u - &lt;(pbpaste)
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~D</string>
+	<key>name</key>
+	<string>Diff Buffer With Clipboard</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>uuid</key>
+	<string>674E54F5-065E-4224-9626-673903B7C0E0</string>
+</dict>
+</plist>

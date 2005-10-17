@@ -5,18 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -z "$TM_SELECTED_TEXT" ]]; then
-	echo "Nothing is selected."
-	exit
-fi
+	<string>[[ -z "$TM_SELECTED_TEXT" ]] &amp;&amp; echo "Nothing is selected." &amp;&amp; exit
 
-url=$(curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text="$(expand -t $TM_TAB_SIZE)")
+url=$(expand -t $TM_TAB_SIZE|curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text='&lt;-')
 
-if [[ -n "$url" ]]; then
-	osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'
-else
-	echo "Got no URL back from pasting service."
-fi</string>
+[[ -z "$url" ]] &amp;&amp; echo "Got no URL back from pasting service." &amp;&amp; exit
+
+osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'
+</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

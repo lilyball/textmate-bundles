@@ -58,7 +58,7 @@ begin
          curr_add = ($current == linecount) ? ' current_line' : ''
          line_id = ($current == linecount + 10) ? ' id="current_line"' : ''
          
-         puts  '<tr><td class="linecol"><span'+ line_id +'>'+ linecount.to_s + "</span></td>\n" +
+         puts  '<tr><td class="linecol"><span'+ line_id.to_s + '>'+ linecount.to_s + "</span></td>\n" +
                '<td class="revcol'+curr_add+'" title="'+ formated_date( $3 ) +'">' + $1 + "</td>\n" +
                '<td class="namecol'+curr_add+'" title="'+ formated_date( $3 ) +'">' + $2 + "</td>\n" +
                '<td class="codecol'+curr_add+'"><a href="' +

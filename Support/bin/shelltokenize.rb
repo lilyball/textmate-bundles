@@ -96,6 +96,11 @@ module TextMate
 #				paths.push ENV['TM_FILEPATH']
 #			end
 		end
+
+		if paths.nil?
+			paths = [ ]
+		end
+
 		paths
 	end
 

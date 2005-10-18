@@ -9,42 +9,10 @@
 	<key>capturePattern</key>
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
-
-require 'tempfile'
-
-input = Tempfile.new('tmtidy')
-input.close()
-
-if(ENV['TM_TIDY'])
-	tidy = ENV['TM_TIDY']
-else
-	tidy = 'tidy'
-end
-
-File.open(input.path, File::WRONLY) { |fp|
-	ENV['TM_SELECTED_TEXT'].to_s.each_line() { |line|
-		fp.print(line)
-	}
-}
-
-output = `\"#{tidy}\" -utf8 -biq -asxhtml \"#{input.path}\" 2&gt;/dev/null`
-
-inbody = false
-output.each_line() { |line|
-	if(inbody)
-		if(line =~ /^\s*&lt;\/body&gt;\s*$/)
-			inbody = false
-			break
-		else
-			print(line)
-		end
-	elsif(line =~ /^\s*&lt;body[^&gt;]*&gt;\s*$/)
-		inbody = true
-	end
-}</string>
+	<string>"${TM_TIDY:-tidy}" -utf8 -biq -asxhtml 2&gt;/dev/null -config &lt;(echo show-body-only:y)
+</string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^@H</string>
 	<key>lineCaptureRegister</key>

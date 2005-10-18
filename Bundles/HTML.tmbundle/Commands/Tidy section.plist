@@ -9,7 +9,7 @@
 	<key>capturePattern</key>
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
-	<string>"${TM_TIDY:-tidy}" -utf8 -biq -asxhtml 2&gt;/dev/null -config &lt;(echo show-body-only:y)
+	<string>"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE --show-body-only yes
 </string>
 	<key>input</key>
 	<string>selection</string>

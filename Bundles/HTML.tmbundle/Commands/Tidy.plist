@@ -9,8 +9,8 @@
 	<key>capturePattern</key>
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
-	<string># BEWARE. Errors are suppressed. Use Tidy Error Display first!
-"${TM_TIDY:=tidy}" -utf8 -biq -asxhtml 2&gt;/dev/null
+	<string># BEWARE. Errors are suppressed.
+"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE
 </string>
 	<key>input</key>
 	<string>document</string>

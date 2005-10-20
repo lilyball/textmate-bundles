@@ -7,11 +7,19 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
+# single tags
+single = /^img|br|hr|meta|link|input|base|area|col|frame|param$/i
+
 # if we have something selected, turn it into a tag,
 # if we are just in a word, use that, otherwise - a blank
 # tag
 if(ENV['TM_SELECTED_TEXT'].to_s.strip != '')
-	print("&lt;#{ENV['TM_SELECTED_TEXT'].strip[/^\S+/]}#{ENV['TM_SELECTED_TEXT'].strip[/^\S+(\s+.*)/, 1]}&gt;$1&lt;/#{ENV['TM_SELECTED_TEXT'].strip[/^\S+/]}&gt;$0")
+	tag = ENV['TM_SELECTED_TEXT'].strip[/^\S+/]
+	if(single.match(tag))
+		print("&lt;#{tag}#{ENV['TM_SELECTED_TEXT'].strip[/^\S+(\s+.*)/, 1]} /&gt;$0")
+	else
+		print("&lt;#{tag}#{ENV['TM_SELECTED_TEXT'].strip[/^\S+(\s+.*)/, 1]}&gt;$1&lt;/#{tag}&gt;$0")
+	end
 else
 	print("&lt;${1:p}&gt;$2&lt;/${1/\\s.*//}&gt;$0")
 end

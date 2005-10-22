@@ -44,7 +44,7 @@ rescan_project () {
 # raw output to show as such in the HTML output
 pre () {
 	echo -n '<pre>'
-	perl -pe 's/&/&amp;/g; s/</&lt;/g; s/>/&gt;/g'
+	perl -pe 's/&/&amp;/g; s/</&lt;/g; s/>/&gt;/g; s/$\\n/<br>/'
 	echo '</pre>'
 }
 

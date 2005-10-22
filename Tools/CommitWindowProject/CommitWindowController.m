@@ -16,6 +16,10 @@
 
 - (void) awakeFromNib
 {
+	NSCell * cell = [fPathColumn dataCell];
+	if([cell respondsToSelector:@selector(setLineBreakMode:)])
+		[cell setLineBreakMode:NSLineBreakByTruncatingHead];
+
 	NSProcessInfo * processInfo = [NSProcessInfo processInfo];
 	NSArray *		args;
 	int				i;

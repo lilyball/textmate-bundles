@@ -1,5 +1,8 @@
+// g++ -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -DDATE=\"`date +%Y-%m-%d`\" -Os "$TM_FILEPATH" -o ~/Library/tm/Support/bin/play -framework Cocoa && strip ~/Library/tm/Support/bin/play
+
 #import <Cocoa/Cocoa.h>
 #import <unistd.h>
+#import <libgen.h>
 
 @interface SoundDelegate : NSObject { }
 @end
@@ -25,6 +28,10 @@ int main (int argc, char const* argv[])
 			[snd play];
 			[NSApp run];
 		}
+	}
+	else
+	{
+		fprintf(stderr, "%s (%s)\nUsage: %1$s file\n", basename(argv[0]), DATE);
 	}
 
 	[pool release];

@@ -5,14 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>grep -E -v '^[ \t\s]*\-\-' | tr -s ' \n\t' ' ' | pbcopy
-echo "copied SQL to clipboard"</string>
+	<string># set defaultCStringEncoding to UTF-8
+export __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100
+
+grep -E -v '^[ \t\s]*\-\-' | tr -s ' \n\t' ' ' | pbcopy
+echo "Copied SQL to Clipboard"</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>~@C</string>
 	<key>name</key>
-	<string>Copy condensed SQL to clipboard</string>
+	<string>Copy Condensed SQL to Clipboard</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

@@ -7,17 +7,18 @@
 	<key>command</key>
 	<string>query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
 
-printf '&lt;title&gt;MySQL Query&lt;/title&gt;&lt;pre&gt;%s&lt;/pre&gt;' \
-	"$(perl &lt;&lt;&lt;$query -pe 's/&amp;/&amp;amp;/g; s/&lt;/&amp;lt;/g')"
+printf '&lt;title&gt;MySQL Query&lt;/title&gt;'
+echo -n "$query"|pre
 
 mysql -e "$query" \
-	-u${MYSQL_USER:-$USER} -p$MYSQL_PWD \
-	-h${MYSQL_HOST:-localhost} -P${MYSQL_PORT:-3306} \
-	--html $MYSQL_DB
+	-u"${MYSQL_USER:-$USER}" -p"$MYSQL_PWD" \
+	-h"${MYSQL_HOST:-localhost}" -P"${MYSQL_PORT:-3306}" \
+	--html "$MYSQL_DB"
 
-echo '&lt;pre&gt;Query completed&lt;/pre&gt;'</string>
+echo -n "Query completed"|pre
+</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^Q</string>
 	<key>name</key>

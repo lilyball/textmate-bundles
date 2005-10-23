@@ -10,8 +10,25 @@
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
 	<string># BEWARE. Errors are suppressed.
-"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE
-</string>
+"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE|\
+if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -e '
+	in_pre = false
+	tab_size = ENV["TM_TAB_SIZE"].to_i
+	STDIN.each { |line|
+
+		# convert leading spaces to tabs
+		r = line.match(/^( *)(.*)$/)
+		puts in_pre ? line : "\t" * (r[1].length / tab_size).floor +
+			" " * (r[1].length % tab_size) + r[2]
+
+		if(line =~ /&lt;pre&gt;(?!.*&lt;\/pre&gt;)/)
+			in_pre = true
+		elsif(line =~ /&lt;\/pre&gt;/)
+			in_pre = false
+		end
+
+	}'
+fi</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

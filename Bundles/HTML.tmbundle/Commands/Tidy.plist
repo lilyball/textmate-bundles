@@ -11,23 +11,18 @@
 	<key>command</key>
 	<string># BEWARE. Errors are suppressed.
 "${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE|\
-if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -e '
-	in_pre = false
-	tab_size = ENV["TM_TAB_SIZE"].to_i
-	STDIN.each { |line|
+if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -pe '
 
-		# convert leading spaces to tabs
-		indent, text = line.match(/^( *)(.*)$/)[1..2]
-		puts in_pre ? line : "\t" * (indent.length / tab_size).floor +
-			" " * (indent.length % tab_size) + text
+	if(!$in_pre)
+		tab_size = ENV["TM_TAB_SIZE"].to_i
+		space, text = $_.match(/( *)(.*)/m)[1..2]
+		$_ = "\t" * (space.length / tab_size).floor +
+		     " "  * (space.length % tab_size) + text
+	end
 
-		if(line =~ /&lt;pre&gt;(?!.*&lt;\/pre&gt;)/)
-			in_pre = true
-		elsif(line =~ /&lt;\/pre&gt;/)
-			in_pre = false
-		end
-
-	}'
+	$in_pre = true	if(/&lt;pre&gt;/)
+	$in_pre = false	if(/&lt;\/pre&gt;/)
+	'
 fi</string>
 	<key>input</key>
 	<string>document</string>

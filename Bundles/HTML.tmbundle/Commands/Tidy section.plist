@@ -9,8 +9,25 @@
 	<key>capturePattern</key>
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
-	<string>"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE --show-body-only yes
-</string>
+	<string>"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE --show-body-only yes|\
+if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -e '
+	in_pre = false
+	tab_size = ENV["TM_TAB_SIZE"].to_i
+	STDIN.each { |line|
+
+		# convert leading spaces to tabs
+		indent, text = line.match(/^( *)(.*)$/)[1..2]
+		puts in_pre ? line : "\t" * (indent.length / tab_size).floor +
+			" " * (indent.length % tab_size) + text
+
+		if(line =~ /&lt;pre&gt;(?!.*&lt;\/pre&gt;)/)
+			in_pre = true
+		elsif(line =~ /&lt;\/pre&gt;/)
+			in_pre = false
+		end
+
+	}'
+fi</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

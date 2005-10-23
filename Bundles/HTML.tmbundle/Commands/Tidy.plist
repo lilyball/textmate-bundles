@@ -17,9 +17,9 @@ if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -e '
 	STDIN.each { |line|
 
 		# convert leading spaces to tabs
-		r = line.match(/^( *)(.*)$/)
-		puts in_pre ? line : "\t" * (r[1].length / tab_size).floor +
-			" " * (r[1].length % tab_size) + r[2]
+		indent, text = line.match(/^( *)(.*)$/)[1..2]
+		puts in_pre ? line : "\t" * (indent.length / tab_size).floor +
+			" " * (indent.length % tab_size) + text
 
 		if(line =~ /&lt;pre&gt;(?!.*&lt;\/pre&gt;)/)
 			in_pre = true

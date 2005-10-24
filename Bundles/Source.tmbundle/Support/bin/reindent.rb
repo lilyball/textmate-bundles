@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 #
 # ReIndent v0.1
 # By Sune Foldager <cryo at cyanite.org>
@@ -11,6 +10,8 @@ require 'optparse'
 increase = nil
 decrease = nil
 line_indent = nil
+skip_line = nil
+skip_indent = nil
 indent = nil
 use_tabs = false
 
@@ -18,14 +19,24 @@ opts = OptionParser.new do |o|
 
   # Increase indent pattern.
   o.on("-i", "--increase [PATTERN]", Regexp,
-  "Regex pattern to increase the indentation level.") { |p|
+  "Pattern to increase the indentation level.") { |p|
     increase = p
   }
 
   # Decrease indent pattern.
   o.on("-d", "--decrease [PATTERN]", Regexp,
-  "Regex pattern to decrease the indentation level.") { |p|
+  "Pattern to decrease the indentation level.") { |p|
     decrease = p
+  }
+
+  # Ignore patterns.
+  o.on("--skip-line [PATTERN]", Regexp,
+  "Lines matching this pattern will be passed through verbatim, and otherwise ignored.") { |p|
+    skip_line = p
+  }
+  o.on("--skip-indent [PATTERN]", Regexp,
+  "Lines matching this pattern will be stripped, not indented, and otherwise ignored.") { |p|
+    skip_indent = p
   }
 
   # Indent size.
@@ -67,33 +78,41 @@ opts = OptionParser.new do |o|
 
 end
 
-# Perform re-indentation.
+# Perform re-indentation...
 level = 0
 extra = 0
 indent = (use_tabs ? 1 : 2) unless indent
 space = (use_tabs ? "\t" : " ") * indent
 while l = gets
 
-  # remove leading whitespace
-  l = l.lstrip
-
-  # Handle de-indentation.
-  if decrease and l =~ decrease
-    level -= 1 unless level == 0
+  # Ignore lines matching the skip-line pattern.
+  if l =~ skip_line
+    print l
+    next
   end
 
-  # Indent and output.
+  # Remove leading whitespace.
+  l.lstrip!
+
+  # Ignore empty lines and those matching the skip-indent.
+  if l.length == 0 or l =~ skip_indent
+    print l
+    next
+  end
+
+  # Handle de-indentation.
+  level -= 1 if level > 0 and l =~ decrease
+
+  # Handle "indent-increase cancels next-line indent".
+  extra = 0 if l =~ increase
+
+  # Indent and output. 
   print space * (level+extra) if level+extra > 0
   print l
 
   # Handle indentation.
-  if increase and l =~ increase
-    level += 1
-  end
-  extra = 0
-  if line_indent and l =~ line_indent
-    extra = 1
-  end
+  level += 1 if l =~ increase
+  extra = (l =~ line_indent) ? 1 : 0
 
 end
 

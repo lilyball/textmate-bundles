@@ -70,7 +70,7 @@ level = 0
 extra = 0
 indent = (use_tabs ? 1 : 2) unless indent
 space = (use_tabs ? "\t" : " ") * indent
-while l = gets
+while l = gets.lstrip
 
   # Handle de-indentation.
   if decrease and l =~ decrease

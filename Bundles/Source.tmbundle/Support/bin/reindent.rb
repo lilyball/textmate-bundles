@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 #
 # ReIndent v0.1
 # By Sune Foldager <cryo at cyanite.org>
@@ -70,7 +72,10 @@ level = 0
 extra = 0
 indent = (use_tabs ? 1 : 2) unless indent
 space = (use_tabs ? "\t" : " ") * indent
-while l = gets.lstrip
+while l = gets
+
+  # remove leading whitespace
+  l = l.lstrip
 
   # Handle de-indentation.
   if decrease and l =~ decrease

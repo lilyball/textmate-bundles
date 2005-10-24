@@ -33,6 +33,15 @@ if [[ -f "$TM_BASH_INIT" ]]; then
 	. "$TM_BASH_INIT"
 fi
 
+# an abstract way to change the output option of the running command
+exit_discard ()					{ echo -n "$1"; exit 200; }
+exit_replace_text ()				{ echo -n "$1"; exit 201; }
+exit_replace_document ()		{ echo -n "$1"; exit 202; }
+exit_insert_text ()				{ echo -n "$1"; exit 203; }
+exit_insert_snippet ()			{ echo -n "$1"; exit 204; }
+exit_show_tool_tip ()			{ echo -n "$1"; exit 206; }
+exit_create_new_document ()	{ echo -n "$1"; exit 207; }
+
 # force TM to refresh current file and project drawer
 rescan_project () {
 	osascript &>/dev/null \

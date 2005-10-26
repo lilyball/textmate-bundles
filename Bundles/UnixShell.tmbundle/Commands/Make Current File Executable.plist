@@ -5,14 +5,16 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>chmod +x "${TM_FILEPATH}"
-echo "${TM_FILEPATH} is now executable"</string>
+	<string>if chmod +x "${TM_FILEPATH}" &amp;&amp; [[ -x "${TM_FILEPATH}" ]]
+   then echo "${TM_FILEPATH} is now executable"
+   else echo "Failed making ${TM_FILEPATH} executable"
+fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>~@X</string>
+	<string>^@X</string>
 	<key>name</key>
-	<string>Make Current File Executable</string>
+	<string>Make Script Executable</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>

@@ -5,19 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -z ${TM_RMAN} || ! -x ${TM_RMAN} ]]; then
-	RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
-else
-	RMAN=${TM_RMAN}
+	<string>if [[ -z ${TM_RMAN} || ! -x ${TM_RMAN} ]]
+   then RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+   else RMAN=${TM_RMAN}
 fi
 
-[[ -n $TM_SELECTED_TEXT ]] &amp;&amp; TM_CURRENT_WORD=$TM_SELECTED_TEXT
-
 # PolyglotMan has nicer output
-if [[ -x "$RMAN" ]]; then
-	man $TM_CURRENT_WORD | "$RMAN" -fHTML;
-else
-	GROFF_TYPESETTER=html /usr/bin/man -t $TM_CURRENT_WORD;
+if [[ -x "$RMAN" ]]
+   then man "${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}" | "$RMAN" -fHTML;
+   else GROFF_TYPESETTER=html /usr/bin/man -t $TM_CURRENT_WORD;
 fi
 </string>
 	<key>dontFollowNewOutput</key>
@@ -25,9 +21,9 @@ fi
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^h</string>
 	<key>name</key>
-	<string>man…</string>
+	<string>Documentation for Current Word (man)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

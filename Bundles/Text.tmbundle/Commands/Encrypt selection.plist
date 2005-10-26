@@ -5,21 +5,19 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>openssl enc -e -aes128 -base64 -pass "pass:$(osascript &lt;&lt;"EOF"
-	tell app "System Events"
-		activate 
-		display dialog "Enter password:" default answer "mozart" buttons{"OK"} default button 1
-		return text returned of the result
-	end tell
-EOF)"
-osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;
+	<string>res=$(CocoaDialog inputbox --title "Encrypt Text With AES 128" --informative-text "What password should be used?"  --text "s3cr37"  --button1 "Encrypt" --button2 "Cancel")
+
+[[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit_discard
+passwd=$(tail -n1 &lt;&lt;&lt;"$res")
+
+openssl enc -e -aes128 -base64 -pass "pass:$passwd"
 </string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^~E</string>
+	<string>^@E</string>
 	<key>name</key>
-	<string>Encrypt selection</string>
+	<string>AES Encrypt With Password…</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>uuid</key>

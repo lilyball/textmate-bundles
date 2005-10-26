@@ -5,13 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>ruby -e 'STDIN.each_byte { |i| printf "\\x%02X", i }'</string>
+	<string>iconv -f utf-8 -t ucs-2|hexdump -ve '"\\\x" 1/2 "%02x"'</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^X</string>
 	<key>name</key>
-	<string>Convert to hex</string>
+	<string>Convert Characters to Hex</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>uuid</key>

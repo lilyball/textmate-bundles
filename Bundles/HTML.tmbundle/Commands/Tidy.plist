@@ -10,7 +10,7 @@
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
 	<string># BEWARE. Errors are suppressed.
-"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE|\
+"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml -wrap 0 --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE|\
 if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -pe '
 
 	if(!$in_pre)

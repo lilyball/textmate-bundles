@@ -6,7 +6,10 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>JAVADOC=${TM_JAVADOC:-"/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/docs/index.html"}
-echo "&lt;meta http-equiv=\"refresh\" content=\"0; tm-file://$JAVADOC\"&gt;"</string>
+if [[ -f $JAVADOC ]]
+   then echo "&lt;meta http-equiv=\"refresh\" content=\"0; tm-file://$JAVADOC\"&gt;"
+   else echo "&lt;p&gt;Couldn't find Java documentation.&lt;p&gt;You may need to set &lt;tt&gt;TM_JAVADOC&lt;/tt&gt; to the location of the root documentation file."
+fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

@@ -7,20 +7,22 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-revs=`"$TM_SVN" log -q "$TM_FILEPATH"`
+revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
+	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
+		--title "Subversion—Diff Revisions…" \
+		--text "Retrieving List of Revisions" \
+	))
 
-revs=`echo "$revs" | sed '/^------------------------------------------------------------------------$/d' | sed '/^$/d'`
-
-revs=`osascript&lt;&lt;END
+revs=`osascript &lt;&lt;END
 	set theResult to false
 	set AppleScript's text item delimiters to {"\n","\r"}
 	tell app "SystemUIServer"
 		activate
 		set ourList to (every text item of "$revs")
 		if the count of items in ourList is 0 then
-			display dialog "No revisions of file '$(basename "$TM_FILEPATH")' found" buttons ("Continue") default button 1
+			display dialog "No revisions of file '$TM_FILENAME' found" buttons ("Continue") default button 1
 		else
-			tell app "SystemUIServer" to choose from list (every text item of "$revs") with prompt "Please choose two revisions of '$(basename $TM_FILEPATH)':" with multiple selections allowed
+			tell app "SystemUIServer" to choose from list (every text item of "$revs") with prompt "Please choose two revisions of '$TM_FILENAME':" with multiple selections allowed
 
 			set theitems to the result
 			if theitems is not false then
@@ -36,9 +38,8 @@ revs=`osascript&lt;&lt;END
 END`
 
 # exit if user canceled
-if [[ $revs = "false" ]]
-then
-	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit 0
+if [[ $revs = "false" ]]; then
+	osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;	exit_discard
 fi
 
 revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`

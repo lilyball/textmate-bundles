@@ -5,9 +5,10 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
+	<string>echo '&lt;title&gt;MySQL Query&lt;/title&gt;'
+echo '&lt;style&gt;table { font-size: 9pt; }&lt;/style&gt;'
 
-printf '&lt;title&gt;MySQL Query&lt;/title&gt;'
+query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
 echo -n "$query"|pre
 
 mysql -e "$query" \

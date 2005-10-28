@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+
+# Convert all camelCase words to lowercase with hyphens (selector-style).
+
+import re
+import sys
+
+data = sys.stdin.read()
+data = re.sub('([a-z])([A-Z])', lambda m: "%s-%s" % (m.group(1), m.group(2).lower()), data)
+print data</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^@c</string>
+	<key>name</key>
+	<string>Convert camelCase to selector-style</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>5B762B5D-FD41-456B-AE04-494CC88BEDD2</string>
+</dict>
+</plist>

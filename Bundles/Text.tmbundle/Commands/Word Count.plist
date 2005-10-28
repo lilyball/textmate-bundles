@@ -5,7 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>wc -lwc|awk '{ printf("Number of lines: %i\nNumber of words: %i\nNumber of characters: %i", $1, $2, $3) }'</string>
+	<string>res=$(echo `wc -lwc`)
+
+pretty () { rev &lt;&lt;&lt;$1|perl -pe 's/(\d{3})(?=.)/$1,/g'|rev; }
+printf "%11.11s lines\n" $(pretty $(cut &lt;&lt;&lt;$res -d\  -f1))
+printf "%11.11s words\n" $(pretty $(cut &lt;&lt;&lt;$res -d\  -f2))
+printf "%11.11s bytes\n" $(pretty $(cut &lt;&lt;&lt;$res -d\  -f3))
+</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

@@ -9,7 +9,7 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>^\s*\}$</string>
+		<string>^(.*\*/)?\s*\}[;\s]*$</string>
 		<key>increaseIndentPattern</key>
 		<string>^.*(\{[^}"']*|\([^)"']*)$</string>
 		<key>shellVariables</key>
@@ -64,6 +64,8 @@
 				<string>`</string>
 			</array>
 		</array>
+		<key>unIndentedLinePattern</key>
+		<string>^\s*$</string>
 	</dict>
 	<key>uuid</key>
 	<string>9D03129B-D636-4F5B-A862-E52FD1F912F5</string>

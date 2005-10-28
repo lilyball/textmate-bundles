@@ -7,7 +7,7 @@
 		<string>tcl</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>\{\s*\\?$}</string>
+	<string>\{\s*$</string>
 	<key>foldingStopMarker</key>
 	<string>^\s*\}</string>
 	<key>keyEquivalent</key>
@@ -97,7 +97,7 @@
 					<key>comment</key>
 					<string>FIXME what are legal variable characters? --Allan</string>
 					<key>match</key>
-					<string>\$([a-zA-Z]+|\{[a-zA-Z ]*\})</string>
+					<string>\$([a-zA-Z_.:][a-zA-Z_0-9.:]+(\([^)]+\))?|\{[a-zA-Z ]*\})</string>
 					<key>name</key>
 					<string>variable.other.tcl</string>
 				</dict>

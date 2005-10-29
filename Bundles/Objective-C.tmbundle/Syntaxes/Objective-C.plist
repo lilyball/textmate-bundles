@@ -8,9 +8,9 @@
 		<string>h</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(/\*\*|\{\s*$)</string>
+	<string>(/\*\*|\{\s*$)|^@(interface|protocol|implementation)\b</string>
 	<key>foldingStopMarker</key>
-	<string>(\*\*/|^\s*\})</string>
+	<string>(\*\*/|^\s*\})|^@end\b</string>
 	<key>keyEquivalent</key>
 	<string>~^O</string>
 	<key>name</key>
@@ -19,7 +19,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(@(interface))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
+			<string>(@(interface|protocol))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -205,7 +205,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>@(class|protocol|selector)\b</string>
+			<string>@(class|selector)\b</string>
 			<key>name</key>
 			<string>storage.type.objc</string>
 		</dict>

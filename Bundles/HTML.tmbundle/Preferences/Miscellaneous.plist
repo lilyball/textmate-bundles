@@ -9,7 +9,13 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>^\s*(&lt;/(html|head|body|title|table|tr|td|ul|ol|dl|div)&gt;|\})$</string>
+		<string>(?x)
+		^\s*
+		(&lt;/(?!html)
+		  [A-Za-z0-9]+\b[^&gt;]*&gt;
+		|--&gt;
+		|\}
+		)</string>
 		<key>highlightPairs</key>
 		<array>
 			<array>
@@ -34,7 +40,14 @@
 			</array>
 		</array>
 		<key>increaseIndentPattern</key>
-		<string>(&lt;(html|head|body|title|table|tr|td|ul|ol|dl|div)\b[^&gt;]*&gt;|\{)\s*$</string>
+		<string>(?x)
+		(&lt;(?!area|base|br|col|frame|hr|html|img|input|link|meta|param|[^&gt;]*/&gt;)
+		  ([A-Za-z0-9]+)\b[^&gt;]*&gt;(?!.*&lt;/\2&gt;)
+		|&lt;!--(?!.*--&gt;)
+		|\{[^}"']*$
+		)</string>
+		<key>indentNextLinePattern</key>
+		<string>&lt;!DOCTYPE(?!.*&gt;)</string>
 		<key>shellVariables</key>
 		<array>
 			<dict>

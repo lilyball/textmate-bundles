@@ -16,13 +16,15 @@
 	<string>&lt;!DOCTYPE|&lt;(?i:html)</string>
 	<key>foldingStartMarker</key>
 	<string>(?x)
-		(&lt;(?i:head|table|thead|tbody|tfoot|tr|div|fieldset|style|script|ul|ol|form|dl)\b.*?&gt;
+		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|fieldset|style|script|ul|ol|form|dl)\b.*?&gt;
+		|&lt;!--(?!.*--&gt;)
 		|\{\{?(if|foreach|capture|literal|foreach|php|section|strip)
 		|\{\s*($|//|/\*(.*\*/\s*$|(?!.*?\*/)))
 		)</string>
 	<key>foldingStopMarker</key>
 	<string>(?x)
-		(&lt;/(?i:head|table|thead|tbody|tfoot|tr|div|fieldset|style|script|ul|ol|form|dl)&gt;
+		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|fieldset|style|script|ul|ol|form|dl)&gt;
+		|^\s*--&gt;
 		|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)
 		|(^|\s)\}
 		)</string>

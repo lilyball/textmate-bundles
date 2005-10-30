@@ -24,7 +24,14 @@
      *  &lt;%
      *  &lt;!--
      *  &lt;%--
+     *
+     * Decrease indent for:
+     *  &lt;/whatever&gt;
+     *  --&gt;
+     *  --%&gt;
      */</string>
+		<key>decreaseIndentPattern</key>
+		<string>^\s*(&lt;/[^&gt;]+&gt;|--&gt;|--%&gt;)</string>
 		<key>highlightPairs</key>
 		<array>
 			<array>
@@ -49,7 +56,7 @@
 			</array>
 		</array>
 		<key>increaseIndentPattern</key>
-		<string>^\s*&lt;([^!/?]|%)(?!.+?([/%]&gt;|&lt;/.+?&gt;))</string>
+		<string>^\s*&lt;(([^!/?]|%)(?!.+?([/%]&gt;|&lt;/.+?&gt;))|[%!]--\s*$)</string>
 		<key>shellVariables</key>
 		<array>
 			<dict>
@@ -70,25 +77,6 @@
 				<key>value</key>
 				<string>line</string>
 			</dict>
-		</array>
-		<key>smartTypingPairs</key>
-		<array>
-			<array>
-				<string>(</string>
-				<string>)</string>
-			</array>
-			<array>
-				<string>[</string>
-				<string>]</string>
-			</array>
-			<array>
-				<string>${</string>
-				<string>}</string>
-			</array>
-			<array>
-				<string>"</string>
-				<string>"</string>
-			</array>
 		</array>
 	</dict>
 	<key>uuid</key>

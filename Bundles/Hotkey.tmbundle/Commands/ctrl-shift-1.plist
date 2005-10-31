@@ -15,7 +15,7 @@ if($? == 0)
   exit()
 end
 
-output = `CocoaDialog inputbox --title Input --informative-text 'What command should be run' --button1 Record --button2 'Abort'`
+output = `CocoaDialog inputbox --title Input --informative-text 'What command should be run?' --button1 Record --button2 'Cancel'`
 output = output.split("\n")
 
 # check the button pressed, exit if it wasn't Record

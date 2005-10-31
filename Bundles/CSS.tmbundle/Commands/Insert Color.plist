@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+def_col = ""
+if ENV["TM_SELECTED_TEXT"] =~ /#?([0-9A-Fa-f]{6})/ then
+  def_col += " default color {";
+  def_col += $1.scan(/../).map { |i| 257*eval("0x" + i) }.join(",")
+  def_col += "}"
+end
+
+col = %x{ osascript 2&gt;/dev/null \
+  -e 'tell app "SystemUIServer"' \
+  -e 'activate' \
+  -e 'choose color#{def_col}' \
+  -e 'end tell'
+}
+
+%x{ osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;}
+exit 200 if col == ""
+
+col = col.split(",").map { |i| i.to_i / 257 }
+printf '#%02X%02X%02X', *col
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Insert Color…</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>uuid</key>
+	<string>CC30D708-6E49-11D9-B411-000D93589AF6</string>
+</dict>
+</plist>

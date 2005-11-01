@@ -7,9 +7,11 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-revs=`"$TM_SVN" log -q "$TM_FILEPATH"`
-
-revs=`echo "$revs" | sed '/^------------------------------------------------------------------------$/d' | sed '/^$/d'`
+revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
+	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
+		--title "Subversion—Diff Revisions…" \
+		--text "Retrieving List of Revisions" \
+	))
 
 revs=`osascript&lt;&lt;END
 	set AppleScript's text item delimiters to {"\n","\r"}
@@ -26,9 +28,8 @@ revs=`osascript&lt;&lt;END
 END`
 
 # exit if user canceled
-if [[ $revs = "false" ]]
-then
-	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit 0	
+if [[ $revs = "false" ]]; then
+	osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;	exit_discard
 fi
 
 revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`

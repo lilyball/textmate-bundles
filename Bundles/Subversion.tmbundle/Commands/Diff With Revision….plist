@@ -9,7 +9,7 @@
 
 revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
 	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
-		--title "Subversion—Diff Revisions…" \
+		--title "Subversion—Diff Revision…" \
 		--text "Retrieving List of Revisions" \
 	))
 

@@ -51,6 +51,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#data</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#comment</string>
 				</dict>
 				<dict>
@@ -155,6 +159,38 @@
 					<string>//.*$</string>
 					<key>name</key>
 					<string>comment.line.double-slash.old-plist</string>
+				</dict>
+			</array>
+		</dict>
+		<key>data</key>
+		<dict>
+			<key>begin</key>
+			<string>&lt;</string>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>name</key>
+			<string>constant.data.old-plist</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\h\h</string>
+					<key>name</key>
+					<string>constant.numeric.hex.old-plist</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string> </string>
+					<key>name</key>
+					<string>meta.space.old-plist</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>.</string>
+					<key>end</key>
+					<string>this-will-never-happen</string>
+					<key>name</key>
+					<string>invalid.illegal.old-plist</string>
 				</dict>
 			</array>
 		</dict>

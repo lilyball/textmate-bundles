@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>lhs</string>
+	</array>
+	<key>name</key>
+	<string>Literate Haskell</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>^\\begin{code}</string>
+			<key>end</key>
+			<string>^\\end{code}</string>
+			<key>name</key>
+			<string>source.haskell.embedded.latex</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.haskell</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>text.latex</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.latex.haskell</string>
+	<key>uuid</key>
+	<string>439807F5-7129-487D-B5DC-95D5272B43DD</string>
+</dict>
+</plist>

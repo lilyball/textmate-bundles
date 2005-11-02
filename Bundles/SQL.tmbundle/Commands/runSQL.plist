@@ -8,6 +8,8 @@
 	<string>echo '&lt;title&gt;MySQL Query&lt;/title&gt;'
 echo '&lt;style&gt;table { font-size: 9pt; }&lt;/style&gt;'
 
+require_cmd mysql
+
 query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
 echo -n "$query"|pre
 

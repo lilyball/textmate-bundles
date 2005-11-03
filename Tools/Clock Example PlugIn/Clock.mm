@@ -8,9 +8,32 @@
 
 #import "Clock.h"
 
+@interface NSWindowPoser : NSWindow
+{
+}
+@end
+
+@implementation NSWindowPoser
+// called when the user switches tabs (or load files)
+- (void)setRepresentedFilename:(NSString*)aPath
+{
+//	NSLog(@"%s %@", _cmd, aPath);
+	[super setRepresentedFilename:aPath];
+}
+
+// called when a document change state (e.g. when saved to disk)
+- (void)setDocumentEdited:(BOOL)flag
+{
+//	NSLog(@"%s %s", _cmd, flag ? "YES" : "NO");
+	[super setDocumentEdited:flag];
+}
+@end
+
 @implementation Clock
 - (id)initWithPlugInController:(id <TMPlugInController>)aController
 {
+//	[NSWindowPoser poseAsClass:[NSWindow class]];
+
 	NSApp = [NSApplication sharedApplication];
 	if(self = [super init])
 		[self installMenuItem];

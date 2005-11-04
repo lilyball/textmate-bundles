@@ -1,118 +1,285 @@
-/**
- ** Java syntax dictionary for TextMate.
- ** Author: Brian Lalor <blalor@bravo5.org>
- **
- ** $URL$
- ** $Id$
- ** 
- ** http://www.javacamp.org/javaI/reservedWords.html
- **/
-{
-    name = "Java";
-    scopeName = "source.java";
-    uuid = "2B449DF6-6B1D-11D9-94EC-000D93589AF6";
-    
-    /* .bsh for BeanShell scripts */
-    fileTypes = ( java, bsh );
-    
-    foldingStartMarker = "\\{\\s*$";
-    foldingStopMarker = "^\\s*\\}";
-
-    patterns = (
-
-        {   name = "comment.block.java.empty";
-            // Required to prevent the JavaDoc comment from taking over
-            match = "/\\*\\*/";
-        },
-        {   name = "comment.block.java";
-            begin = "/\\*";
-            end = "\\*/";
-        },
-        {   name = "comment.documentation.java";
-            begin = "/\\*\\*"; end = "\\*/";
-            patterns = (
-                {   match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
-                    captures = {
-                        1 = {
-                            name = "keyword.other.documentation.params.java";
-                        };
-                        2 = {
-                            name = "keyword.other.documentation.value.java";
-                        };
-                    };
-                },
-                {
-                    match = "\\\*\\s*@([a-zA-Z0-9_-]+)\\s*";
-                    captures = {
-                        1 = {
-                            name = "keyword.embedded-docs.params.java";
-                        };
-                    };
-                },
-            );
-        },
-        {   name = "comment.line.double-slash.java";
-            match = "//.*$";
-        },
-        {   name = "storage.type.java";
-            match = "\\b(void|byte|short|char|int|long|float|double|boolean|[A-Z][A-Za-z0-9]+)\\b";
-        },
-        {   name = "storage.modifier.access-control.java";
-            match = "\\b(private|protected|public)\\b";
-        },
-        {   name = "storage.modifier.java";
-            match = "\\b(abstract|final|native|static|transient|synchronized|volatile|strictfp|extends|implements)\\b";
-        },
-        {   name = "storage.type.java";
-            match = "\\b(class|interface)\\b";
-        },
-        {   name = "keyword.control.catch-exception.java";
-            match = "\\b(try|catch|finally|throw)\\b";
-        },
-        {   name = "keyword.control.java";
-            match = "\\b(return|break|case|continue|default|do|while|for|switch|if|else)\\b";
-        },
-        {   name = "keyword.other.class-fns.java";
-            match = "\\b(import|new|package|throws)\\b";
-        },
-        {   name = "keyword.operator.java";
-            match = "\\b(instanceof)\\b";
-        },
-        {   name = "constant.language.java";
-            match = "\\b(true|false|null)\\b";
-        },
-        {   name = "variable.language.java";
-            match = "\\b(this|super)\\b";
-        },
-        {   name = "constant.numeric.java";
-            match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul)?\\b";
-        },
-        {   name = "string.quoted.double.java";
-            begin = "\""; end = "\""; swallow = "\\\\.";
-        },
-        {   name = "string.quoted.single.java";
-            begin = "'"; end = "'"; swallow = "\\\\.";
-        },
-        
-        // /* match methods */
-        // {
-        //     // match = "(?s:([A-Za-z0-9]+)\\s*\\(((byte|short|char|int|long|float|double|boolean|[A-Z][A-Za-z0-9]+?)\\s*([a-z][A-Za-z0-9]+?)(,\\s*)??)*?\\)\\s*[^{]+?)";
-        //     //           [------------]       [------------------------------------------------------------------------------------------------]
-        //     //                                 [-----argument type--------------------------------------------------[-----arg name----][-----]
-        // 
-        //     match = "String (getFoo)\\(((Baz) (baz)(,\\s+)?)*\\)";
-        // 
-        //     captures = {
-        //         1 = {
-        //             name = "function-name.x";
-        //         };
-        //         3 = {
-        //             name = "keyword.data-types.java.x";
-        //         };
-        //         4 = {
-        //             name = "function-argument.x";
-        //         };
-        //     };
-        // },
-    );
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>
+    	Credits to Brian Lalor, who wrote the Java syntax included in TM.
+    	I might have adapted some of his syntax.
+	
+    	Soryu
+	
+    	Comments:
+    	• I excluded overridden anonymous Constructors from "declaration.function.method.java", so they won't show up in the Goto Symbol popup to reduce clutter a little.
+	</string>
+	<key>fileTypes</key>
+	<array>
+		<string>java</string>
+		<string>bsh</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>/\*\*(?!.*\*/)|\{\s*$</string>
+	<key>foldingStopMarker</key>
+	<string>^\s*\*\*/|^\s*\}</string>
+	<key>name</key>
+	<string>Java</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>//</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.line.double-slash.java</string>
+			<key>swallow</key>
+			<string>\\\s*\n</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>/\*\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.documentation.java</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.documentation.control</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.documentation.params.java</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.documentation.value.java</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\*\s*(@)(param)\s*([a-z][a-zA-Z0-9_]+)\s*</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.embedded-docs.control.java</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.embedded-docs.params.java</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\*\s*(@)([a-zA-Z0-9_-]+)\s*</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.java</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.java</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.package.java</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(package)\s+([^ ;]+?)\s*;</string>
+			<key>name</key>
+			<string>meta.package.java</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.java</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.class.java</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(import)\s+([^ ;]+?);</string>
+			<key>name</key>
+			<string>meta.import.java</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.class.java</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(?&lt;=class|interface|enum)\s+(\w+)</string>
+			<key>name</key>
+			<string>declaration.class.java</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.class.java</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>TODO: implements has multiple Parameters, Extends does not</string>
+			<key>match</key>
+			<string>\b(?&lt;=extends|implements)\s+(\w+)</string>
+			<key>name</key>
+			<string>other.inheritance.class.java</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\b(?&lt;!new)\s+(\w+)\s*\(</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.java</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)\s*{</string>
+			<key>name</key>
+			<string>declaration.function.method.java</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#keywords</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>stolen from c syntax without looking very much at it</string>
+			<key>match</key>
+			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(if|else|while|for|return|continue|break|switch|do|goto|case|try|catch|finally|throw)\b</string>
+			<key>name</key>
+			<string>keyword.flow.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(int|char|float|long|double|boolean|byte|short)\b</string>
+			<key>name</key>
+			<string>keyword.other.simple-types.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(==|!=|&lt;=|&gt;=|&lt;&gt;|&lt;|&gt;)</string>
+			<key>name</key>
+			<string>keyword.operator.comparison.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\-\-|\+\+)</string>
+			<key>name</key>
+			<string>keyword.operator.increment-decrement.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\-|\+|\*|\/|%)</string>
+			<key>name</key>
+			<string>keyword.operator.arithmetic.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(!|&amp;&amp;|\|\|)</string>
+			<key>name</key>
+			<string>keyword.operator.logical.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(private|public|protected|static|transient|final|abstract|native|threadsafe|synchronized|volatile|strictfp)\b</string>
+			<key>name</key>
+			<string>storage.modifier.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(class|interface|enum)\b</string>
+			<key>name</key>
+			<string>storage.type.java</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#string-double-quoted</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#keywords</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>keywords</key>
+		<dict>
+			<key>match</key>
+			<string>\b(new|abstract|assert|default|synchronized|private|protected|public|throws|enum|instanceof|transient|final|interface|static|void|null|class|finally|strictfp|volatile|const|native|import|package|extends|implements|this|super|true|false|if|else|while|for|return|continue|break|switch|do|goto|case|try|catch|finally|throw|int|char|float|long|double|boolean|byte|short)\b</string>
+			<key>name</key>
+			<string>keyword.other.java</string>
+		</dict>
+		<key>string-double-quoted</key>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.java</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escaped.java</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>scopeName</key>
+	<string>source.java</string>
+	<key>uuid</key>
+	<string>2B449DF6-6B1D-11D9-94EC-000D93589AF6</string>
+</dict>
+</plist>

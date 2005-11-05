@@ -5,13 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>echo "&lt;html&gt;&lt;body&gt;&lt;pre&gt;"
-perldoc -f $TM_CURRENT_WORD
-echo "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"</string>
+	<string>word=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
+echo "&lt;title&gt;Perl Documentation — $word&lt;/title&gt;"
+perldoc -f "$word"|pre
+</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^h</string>
 	<key>name</key>
 	<string>Perldoc Selected Word</string>
 	<key>output</key>

@@ -18,7 +18,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(module|where|import|do|data|type|infixl|infixr|case|of|if|then|else|let|in|instance|deriving|class|newtype)\b</string>
+			<string>\b(module|where|import|do|data|type|infixl|infixr|case|of|if|then|else|let|in|instance|deriving|class|newtype|default|hiding|as)\b</string>
 			<key>name</key>
 			<string>keyword.haskell</string>
 		</dict>
@@ -81,6 +81,14 @@
 			<string>-}</string>
 			<key>name</key>
 			<string>comment.long.haskell</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>::</string>
+			<key>end</key>
+			<string>$|(?=[;}])</string>
+			<key>name</key>
+			<string>storage.type.haskell</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

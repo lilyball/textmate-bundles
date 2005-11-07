@@ -292,16 +292,8 @@
 			<string>comment.documentation.perl</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>[\$\@\%](#)?([a-zA-Zx7f-xff\$]|::)([a-zA-Z0-9_x7f-xff\$]|::)*\b</string>
-			<key>name</key>
-			<string>variable.other.readwrite.global.perl</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>[\$\@\%](#)?[0-9_]\b</string>
-			<key>name</key>
-			<string>variable.other.readwrite.global.special.perl</string>
+			<key>include</key>
+			<string>#variable</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -359,6 +351,48 @@
 			</array>
 			<key>swallow</key>
 			<string>\\.</string>
+		</dict>
+		<key>variable</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\$&amp;</string>
+					<key>name</key>
+					<string>variable.other.regexp.match.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\$`</string>
+					<key>name</key>
+					<string>variable.other.regexp.pre-match.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\$'</string>
+					<key>name</key>
+					<string>variable.other.regexp.post-match.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\$\+</string>
+					<key>name</key>
+					<string>variable.other.regexp.last-paren-match.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[\$\@\%](#)?([a-zA-Zx7f-xff\$]|::)([a-zA-Z0-9_x7f-xff\$]|::)*\b</string>
+					<key>name</key>
+					<string>variable.other.readwrite.global.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[\$\@\%](#)?[0-9_]\b</string>
+					<key>name</key>
+					<string>variable.other.readwrite.global.special.perl</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

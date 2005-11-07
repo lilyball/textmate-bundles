@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 
 if ENV['TM_SELECTED_TEXT'].nil?
-   puts "No selection"
+   puts "Toggle Comment: Requires a selection"
    exit 206 # this is a hardcoded value, we should source some common ruby script and get an exit function from there
 end
 

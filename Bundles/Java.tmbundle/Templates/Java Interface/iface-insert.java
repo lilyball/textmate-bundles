@@ -1,4 +1,4 @@
-@@PROJECT@@
+package @@PACKAGE@@;
 
 /**
  * <<Class summary>>

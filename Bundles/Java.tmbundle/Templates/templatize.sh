@@ -23,13 +23,12 @@ if [ -z "${org_bravo5_Java_pkgregexp}" ]; then
 fi
 
 pkg_name=$(echo $TM_NEW_FILE_DIRECTORY | sed -e "s#${org_bravo5_Java_pkgregexp}##g" -e 's#/#.#g')
-package="package ${pkg_name};"
 
 ## build @author
 author=$(defaults read AddressBookMe 2>/dev/null | awk -f ../addrbook.awk)
 
 sed -e "s#@@CLASSNAME@@#${classname}#g" \
-    -e "s#@@PROJECT@@#${package}#g" \
+    -e "s#@@PACKAGE@@#${pkg_name}#g" \
     -e "s#@@AUTHOR@@#${author}#g" \
     < ${template} > "${TM_NEW_FILE}"
 

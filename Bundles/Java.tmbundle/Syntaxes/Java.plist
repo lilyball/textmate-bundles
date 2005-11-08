@@ -1,0 +1,118 @@
+/**
+ ** Java syntax dictionary for TextMate.
+ ** Author: Brian Lalor <blalor@bravo5.org>
+ **
+ ** $URL$
+ ** $Id$
+ ** 
+ ** http://www.javacamp.org/javaI/reservedWords.html
+ **/
+{
+    name = "Java";
+    scopeName = "source.java";
+    uuid = "2B449DF6-6B1D-11D9-94EC-000D93589AF6";
+    
+    /* .bsh for BeanShell scripts */
+    fileTypes = ( java, bsh );
+    
+    foldingStartMarker = "\\{\\s*$";
+    foldingStopMarker = "^\\s*\\}";
+
+    patterns = (
+
+        {   name = "comment.block.java.empty";
+            // Required to prevent the JavaDoc comment from taking over
+            match = "/\\*\\*/";
+        },
+        {   name = "comment.block.java";
+            begin = "/\\*";
+            end = "\\*/";
+        },
+        {   name = "comment.documentation.java";
+            begin = "/\\*\\*"; end = "\\*/";
+            patterns = (
+                {   match = "\\\*\\s*@(param)\\s*([a-z][a-zA-Z0-9_]+)\\s*";
+                    captures = {
+                        1 = {
+                            name = "keyword.other.documentation.params.java";
+                        };
+                        2 = {
+                            name = "keyword.other.documentation.value.java";
+                        };
+                    };
+                },
+                {
+                    match = "\\\*\\s*@([a-zA-Z0-9_-]+)\\s*";
+                    captures = {
+                        1 = {
+                            name = "keyword.embedded-docs.params.java";
+                        };
+                    };
+                },
+            );
+        },
+        {   name = "comment.line.double-slash.java";
+            match = "//.*$";
+        },
+        {   name = "storage.type.java";
+            match = "\\b(void|byte|short|char|int|long|float|double|boolean|[A-Z][A-Za-z0-9]+)\\b";
+        },
+        {   name = "storage.modifier.access-control.java";
+            match = "\\b(private|protected|public)\\b";
+        },
+        {   name = "storage.modifier.java";
+            match = "\\b(abstract|final|native|static|transient|synchronized|volatile|strictfp|extends|implements)\\b";
+        },
+        {   name = "storage.type.java";
+            match = "\\b(class|interface)\\b";
+        },
+        {   name = "keyword.control.catch-exception.java";
+            match = "\\b(try|catch|finally|throw)\\b";
+        },
+        {   name = "keyword.control.java";
+            match = "\\b(return|break|case|continue|default|do|while|for|switch|if|else)\\b";
+        },
+        {   name = "keyword.other.class-fns.java";
+            match = "\\b(import|new|package|throws)\\b";
+        },
+        {   name = "keyword.operator.java";
+            match = "\\b(instanceof)\\b";
+        },
+        {   name = "constant.language.java";
+            match = "\\b(true|false|null)\\b";
+        },
+        {   name = "variable.language.java";
+            match = "\\b(this|super)\\b";
+        },
+        {   name = "constant.numeric.java";
+            match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul)?\\b";
+        },
+        {   name = "string.quoted.double.java";
+            begin = "\""; end = "\""; swallow = "\\\\.";
+        },
+        {   name = "string.quoted.single.java";
+            begin = "'"; end = "'"; swallow = "\\\\.";
+        },
+        
+        // /* match methods */
+        // {
+        //     // match = "(?s:([A-Za-z0-9]+)\\s*\\(((byte|short|char|int|long|float|double|boolean|[A-Z][A-Za-z0-9]+?)\\s*([a-z][A-Za-z0-9]+?)(,\\s*)??)*?\\)\\s*[^{]+?)";
+        //     //           [------------]       [------------------------------------------------------------------------------------------------]
+        //     //                                 [-----argument type--------------------------------------------------[-----arg name----][-----]
+        // 
+        //     match = "String (getFoo)\\(((Baz) (baz)(,\\s+)?)*\\)";
+        // 
+        //     captures = {
+        //         1 = {
+        //             name = "function-name.x";
+        //         };
+        //         3 = {
+        //             name = "keyword.data-types.java.x";
+        //         };
+        //         4 = {
+        //             name = "function-argument.x";
+        //         };
+        //     };
+        // },
+    );
+}

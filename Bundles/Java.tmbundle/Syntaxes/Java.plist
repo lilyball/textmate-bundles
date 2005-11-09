@@ -154,6 +154,7 @@
 			<string>(?x)^\s*
 					(\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)\b)*\s* # modifier
 					(\w+)\s* # identifier
+					(?!.*;)  # abort if line has a ;
 					(?=\()</string>
 			<key>captures</key>
 			<dict>

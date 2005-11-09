@@ -39,6 +39,7 @@ exit_replace_text ()				{ echo -n "$1"; exit 201; }
 exit_replace_document ()		{ echo -n "$1"; exit 202; }
 exit_insert_text ()				{ echo -n "$1"; exit 203; }
 exit_insert_snippet ()			{ echo -n "$1"; exit 204; }
+exit_show_html ()					{ echo -n "$1"; exit 205; }
 exit_show_tool_tip ()			{ echo -n "$1"; exit 206; }
 exit_create_new_document ()	{ echo -n "$1"; exit 207; }
 
@@ -71,6 +72,6 @@ ${PATH//:/
 </pre></p>
 <p><em>Contact your system administrator if you do not know what this means.</em></p>
 EOF
-		exit;
+		exit_show_html;
 	fi
 }

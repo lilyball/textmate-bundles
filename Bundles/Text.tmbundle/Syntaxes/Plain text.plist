@@ -49,8 +49,16 @@
 			<string>keyword.other.release-notes</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.release-notes</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\[REVISION \d+\]$
+			<string>^\[(REVISION \d+)\]$
 </string>
 			<key>name</key>
 			<string>meta.diff.separator.release-notes</string>

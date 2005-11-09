@@ -16,7 +16,7 @@ if [ `osascript -e 'tell application "System Events" to exists (application proc
   echo "The selection was pasted to #textmate."
   exit
 else
-  echo "$url" | pbcopy
+  echo -n "$url" | pbcopy
   echo "The selection is available as $url"
   echo "For your convenience, the URL was placed on the clipboard."
 fi</string>

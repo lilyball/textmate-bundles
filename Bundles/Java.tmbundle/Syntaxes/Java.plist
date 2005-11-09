@@ -62,6 +62,153 @@
 			</array>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>(?x)^\s*
+					((?:\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)\b\s*)*) # modifier
+					(class|interface)\s+
+					(\w+)\s* # identifier</string>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.java</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.java</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.class.java</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?={)</string>
+			<key>name</key>
+			<string>meta.definition.class.java</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b(extends)\b\s+</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.java</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?={|implements)</string>
+					<key>name</key>
+					<string>meta.definition.class.extends.java</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#all-types</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b(implements)\b\s+</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.java</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?={|extends)</string>
+					<key>name</key>
+					<string>meta.definition.class.implements.java</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#all-types</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?x)^\s*
+					((?:\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)\b\s*)*) # modifier
+					((?!(if|while))\w+)\s* # identifier
+					(?!.*;)  # abort if line has a ;
+					(?=\()</string>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.java</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.constructor.java</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?={)</string>
+			<key>name</key>
+			<string>meta.definition.constructor.java</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#statement-remainder</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?x)^\s*
+					((?:\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)\b\s*)*) # modifier
+					(\b(void|boolean|byte|char|short|int|float|long|double|(\w+\.)*[A-Z]\w+)\b(\[\s*\])?)\s* # type
+					(\w+)\s* # identifier
+					(?=\()</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.java</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.java</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.java</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?={)</string>
+			<key>name</key>
+			<string>meta.definition.method.java</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#statement-remainder</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\b([A-Z][A-Z0-9_]+)\b</string>
 			<key>name</key>
@@ -116,8 +263,46 @@
 			<string>keyword.control.java</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.class-fns.java</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.class.java</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\b(import|package|new|throws)\b</string>
+			<string>^\s*(import)\s+([^ ;]+?);</string>
+			<key>name</key>
+			<string>meta.import.java</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.class-fns.java</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.package.java</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(package)\s+([^ ;]+?);</string>
+			<key>name</key>
+			<string>meta.package.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(new|throws)\b</string>
 			<key>name</key>
 			<string>keyword.other.class-fns.java</string>
 		</dict>
@@ -150,73 +335,28 @@
 			<string>#string-quoted-double</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>(?x)^\s*
-					(\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)\b)*\s* # modifier
-					(\w+)\s* # identifier
-					(?!.*;)  # abort if line has a ;
-					(?=\()</string>
-			<key>captures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.java</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.constructor.java</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?={)</string>
+			<key>match</key>
+			<string>(==|!=|&lt;=|&gt;=|&lt;&gt;|&lt;|&gt;)</string>
 			<key>name</key>
-			<string>meta.definition.constructor.java</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#statement-remainder</string>
-				</dict>
-			</array>
+			<string>keyword.operator.comparison.java</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>(?x)^\s*
-					(\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)\b)*\s* # modifier
-					(\b(boolean|byte|char|short|int|float|long|double|(\w+\.)*[A-Z]\w+)\b(\[\s*\])?)\s* # type
-					(\w+)\s* # identifier
-					(?=\()</string>
-			<key>captures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.java</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.java</string>
-				</dict>
-				<key>7</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.java</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?={)</string>
+			<key>match</key>
+			<string>(\-\-|\+\+)</string>
 			<key>name</key>
-			<string>meta.definition.method.java</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#statement-remainder</string>
-				</dict>
-			</array>
+			<string>keyword.operator.increment-decrement.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\-|\+|\*|\/|%)</string>
+			<key>name</key>
+			<string>keyword.operator.arithmetic.java</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(!|&amp;&amp;|\|\|)</string>
+			<key>name</key>
+			<string>keyword.operator.logical.java</string>
 		</dict>
 	</array>
 	<key>repository</key>

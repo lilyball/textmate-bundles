@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>// {{{ set${1:FieldName}
+	<string>// {{{ set${1/./\u$0/}
 /**
- * Setter for ${3:fieldName}.
- * @param new${1:FieldName} new value for ${3:fieldName}
+ * Setter for ${1:fieldName}.
+ * @param new${1/./\u$0/} new value for ${1:fieldName}
  */
-public void set${1:FieldName}(${2:String} new${1:FieldName}) {
-    ${3:fieldName} = new${1:FieldName};
+public void set${1/./\u$0/}(${2:String} new${1/./\u$0/}) {
+    ${1:fieldName} = new${1/./\u$0/};
 }
 // }}}
 
-// {{{ get${1:FieldName}
+// {{{ get${1/./\u$0/}
 /**
- * Getter for ${3:fieldName}.
- * @return ${3:fieldName}
+ * Getter for ${1:fieldName}.
+ * @return ${1:fieldName}
  */
-public ${2:String} get${1:FieldName}() {
-    return ${3:fieldName};
+public ${2:String} get${1/./\u$0/}() {
+    return ${1:fieldName};
 }
 // }}}    
 </string>

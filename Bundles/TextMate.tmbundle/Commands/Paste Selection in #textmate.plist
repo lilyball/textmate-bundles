@@ -11,8 +11,15 @@ url=$(expand -t $TM_TAB_SIZE|curl 2&gt;/dev/null http://paste.textmate.org/submi
 
 [[ -z "$url" ]] &amp;&amp; echo "Got no URL back from pasting service." &amp;&amp; exit
 
-osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'
-</string>
+if [ `osascript -e 'tell application "System Events" to exists (application processes whose name is "Colloquy")'` = "true" ]; then
+  osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'
+  echo "The selection was pasted to #textmate."
+  exit
+else
+  echo "$url" | pbcopy
+  echo "The selection is available as $url"
+  echo "For your convenience, the URL was placed on the clipboard."
+fi</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

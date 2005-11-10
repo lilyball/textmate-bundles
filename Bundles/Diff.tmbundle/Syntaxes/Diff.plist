@@ -1,68 +1,98 @@
-{
-    name = "Diff";
-    scopeName = "source.diff";
-    firstLineMatch = "^(Index: |--- [^%]|\\*\\*\\* |\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$)";
-    fileTypes = ( diff, patch );
-    uuid = "7E848FF4-708E-11D9-97B4-0011242E4184";
-    
-    patterns = (
-      
-      // sperators:
-      {  name = "meta.diff.separator";
-         match = "^((\\*{15})|(={67})|(-{3}))$\\n?";
-      },
-      
-      
-      // the different ways of specifing a range ..
-      
-      // a 'normal' range, also called 'change command':
-      {  name = "meta.diff.range.normal";
-         match = "^\\d+(,\\d+)*(a|d|c)\\d+(,\\d+)*$\\n?";
-      },
-      
-      // a unified range:
-      {  name = "meta.diff.range.unified";
-         match = "^@@.+@@$\\n?";
-      },
-      
-      // a context range, could be seperated into 2 range types,
-      // but i think this just would be overhead. :>
-      {  name = "meta.diff.range.context";
-         match = "^((\\-{3} .+ \\-{4})|(\\*{3} .+ \\*{4}))$\\n?";
-      },
-      
-      
-      // headers, the normal format shouldnt have this..
-      {  name = "meta.diff.header.from-file";
-         match = "^((-{3} .+)|(\\*{3} .+))$\\n?";
-      },
-      
-      {  name = "meta.diff.header.to-file";
-         match = "^\\+{3} .+$\\n?";
-      },
-      
-      
-      // how to say 'new', catches normal, unified and context.
-      {  name = "markup.inserted.diff";
-         match = "^((>( .*)?)|(\\+.*))$\\n?";
-      },
-      
-      // just the context format knows changes:
-      {  name = "markup.changed.diff";
-         match = "^!.*$\\n?";
-      },
-      
-      // .. deleted ..
-      {  name = "markup.deleted.diff";
-         match = "^((<( .*)?)|(-.*))$\\n?";
-      },
-      
-      
-      // the Index: stuff, afaik just svn does it.
-      {  name = "meta.diff.index";
-         match = "^Index: .+$\\n?";
-      }
-      
-    );
-    
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>diff</string>
+		<string>patch</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>^(Index: |--- [^%]|\*\*\* |\d+(,\d+)*(a|d|c)\d+(,\d+)*$)</string>
+	<key>name</key>
+	<string>Diff</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>^((\*{15})|(={67})|(-{3}))$\n?</string>
+			<key>name</key>
+			<string>meta.diff.separator</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\d+(,\d+)*(a|d|c)\d+(,\d+)*$\n?</string>
+			<key>name</key>
+			<string>meta.diff.range.normal</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.line-number.diff</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^@@\s*(.+?)\s*@@$\n?</string>
+			<key>name</key>
+			<string>meta.diff.range.unified</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^((\-{3} .+ \-{4})|(\*{3} .+ \*{4}))$\n?</string>
+			<key>name</key>
+			<string>meta.diff.range.context</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^((-{3} .+)|(\*{3} .+))$\n?</string>
+			<key>name</key>
+			<string>meta.diff.header.from-file</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\+{3} .+$\n?</string>
+			<key>name</key>
+			<string>meta.diff.header.to-file</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^((&gt;( .*)?)|(\+.*))$\n?</string>
+			<key>name</key>
+			<string>markup.inserted.diff</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^!.*$\n?</string>
+			<key>name</key>
+			<string>markup.changed.diff</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^((&lt;( .*)?)|(-.*))$\n?</string>
+			<key>name</key>
+			<string>markup.deleted.diff</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.file-name.diff</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^Index: (.+)$\n?</string>
+			<key>name</key>
+			<string>meta.diff.index</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.diff</string>
+	<key>uuid</key>
+	<string>7E848FF4-708E-11D9-97B4-0011242E4184</string>
+</dict>
+</plist>

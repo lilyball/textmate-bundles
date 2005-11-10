@@ -5,16 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>[[ -z "$TM_SELECTED_TEXT" ]] &amp;&amp; echo "Nothing is selected." &amp;&amp; exit
+	<string>[[ -z "$TM_SELECTED_TEXT" ]] &amp;&amp; exit_show_tool_tip "Nothing is selected."
 
 url=$(expand -t $TM_TAB_SIZE|curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text='&lt;-')
 
-[[ -z "$url" ]] &amp;&amp; echo "Got no URL back from pasting service." &amp;&amp; exit
+[[ -z "$url" ]] &amp;&amp; exit_show_tool_tip "Got no URL back from pasting service."
 
-if [ `osascript -e 'tell application "System Events" to exists (application processes whose name is "Colloquy")'` = "true" ]; then
+if grep &lt;&lt;&lt;"$(ps -xc)" -sq "Colloquy$"; then
   osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'
   echo "The selection was pasted to #textmate."
-  exit
 else
   echo -n "$url" | pbcopy
   echo "The selection is available as $url"

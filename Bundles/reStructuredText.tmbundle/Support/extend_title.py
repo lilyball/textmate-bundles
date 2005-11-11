@@ -13,11 +13,11 @@ cur_column = int(os.environ['TM_COLUMN_NUMBER'])
 buffer = sys.stdin.readlines()
 mark_line = -1
 # We're either on the title line or the marker line
-if (cur_line > 1) and \
+if (cur_line >= 1) and \
 	re.search(r'^(=|-|~|`|#|"|\^|\+|\*)+', buffer[cur_line]):
 	title_line = cur_line - 1
 	mark_line = cur_line
-elif (cur_line < len(buffer)) and \
+elif (cur_line < (len(buffer) - 1)) and \
 	re.search(r'^(=|-|~|`|#|"|\^|\+|\*)+', buffer[cur_line + 1]):
 	title_line = cur_line
 	mark_line = cur_line + 1

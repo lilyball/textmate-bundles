@@ -42,6 +42,8 @@
 			<string>meta.scope.interface.objc</string>
 			<key>end</key>
 			<string>(@end)\b</string>
+			<key>name</key>
+			<string>meta.interface-or-protocol.objc</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -75,6 +77,8 @@
 			<string>meta.scope.implementation.objc</string>
 			<key>end</key>
 			<string>(@end)\b</string>
+			<key>name</key>
+			<string>meta.implementation.objc</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -93,7 +97,7 @@
 			<key>begin</key>
 			<string>^(-|\+)\s*</string>
 			<key>end</key>
-			<string>\{|;</string>
+			<string>(?=\{|;)</string>
 			<key>name</key>
 			<string>declaration.function.objc</string>
 			<key>patterns</key>
@@ -153,8 +157,6 @@
 					<string>keyword.other.name-of-parameter.objc</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>(//.*$)</string>
 		</dict>
 		<dict>
 			<key>begin</key>

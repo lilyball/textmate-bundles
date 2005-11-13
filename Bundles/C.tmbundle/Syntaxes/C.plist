@@ -180,24 +180,6 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*#\s*(defined|elif|if|ifdef|ifndef|line|pragma|undef)\b</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.preprocessor.c</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?=(?://|/\*))|$</string>
-			<key>name</key>
-			<string>other.preprocessor.c</string>
-			<key>swallow</key>
-			<string>\\\s*\n</string>
-		</dict>
-		<dict>
-			<key>begin</key>
 			<string>^\s*#\s*(error|warning)\b</string>
 			<key>captures</key>
 			<dict>
@@ -254,6 +236,24 @@
 		<dict>
 			<key>include</key>
 			<string>#pragma-mark</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#\s*(defined|elif|if|ifdef|ifndef|line|pragma|undef)\b</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=(?://|/\*))|$</string>
+			<key>name</key>
+			<string>other.preprocessor.c</string>
+			<key>swallow</key>
+			<string>\\\s*\n</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -329,7 +329,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.section.c</string>
+					<string>meta.toc-list.pragma-mark.c</string>
 				</dict>
 			</dict>
 			<key>match</key>

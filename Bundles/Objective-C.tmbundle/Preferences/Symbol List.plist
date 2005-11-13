@@ -11,7 +11,10 @@
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolTransformation</key>
-		<string>s/^([-+])\s*\(.*?\)\s*/ $1 /; s/:\s*\(.*?\)\s*\w+\s*/:/g</string>
+		<string>
+		s/^([-+])\s*\(.*?\)\s*/ $1 /; # strip result type
+		s/:\s*\(.*?\)\s*\w+\s*/:/g;   # strip argument variables
+	</string>
 	</dict>
 	<key>uuid</key>
 	<string>ADFCD53A-3CC4-4C31-88C4-BB607684951A</string>

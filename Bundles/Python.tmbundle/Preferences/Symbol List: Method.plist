@@ -3,15 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Symbo List: Class</string>
+	<string>Symbol List: Method</string>
 	<key>scope</key>
-	<string>source.ruby declaration.class entity.name</string>
+	<string>source.python declaration.function</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>s/^\s*def\s+(.*):$/ $1/</string>
 	</dict>
 	<key>uuid</key>
-	<string>F3E7F07E-084D-42B9-A05C-6DD08945E03D</string>
+	<string>0B54D7DC-3FC9-41F5-A415-25FFDBB83817</string>
 </dict>
 </plist>

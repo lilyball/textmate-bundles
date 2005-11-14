@@ -286,6 +286,12 @@
 			<string>support.type.mac-classic.c</string>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>(?&lt;=[\w])(\s+|^)([A-Za-z_][A-Za-z0-9_]+)\s*\(.+\)(?=\s*(\{|\n))</string>
+			<key>name</key>
+			<string>declaration.function.c</string>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>source.open-gl</string>
 		</dict>

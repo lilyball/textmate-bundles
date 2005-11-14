@@ -1,8 +1,9 @@
 # This script simulates the behavior of a login shell
 # This is done to give the user a full PATH
 
-: ${TM_BASH_INIT:=$HOME/Library/Application Support/TextMate/bash_init.sh}
+unset BASH_ENV # avoid recursively running this script
 
+: ${TM_BASH_INIT:=$HOME/Library/Application Support/TextMate/bash_init.sh}
 if [ ! -f "$TM_BASH_INIT" ]; then
 
 	# First read the system-wide profile

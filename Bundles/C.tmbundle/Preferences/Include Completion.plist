@@ -9,7 +9,7 @@
 	<key>settings</key>
 	<dict>
 		<key>completionCommand</key>
-		<string>find "$TM_DIRECTORY" -name "$TM_CURRENT_WORD*.h" -exec basename "{}" \;|sort</string>
+		<string>find "$TM_DIRECTORY" -name "$TM_CURRENT_WORD*.h" -maxdepth 2 -exec basename "{}" \;|sort</string>
 		<key>disableDefaultCompletion</key>
 		<integer>1</integer>
 	</dict>

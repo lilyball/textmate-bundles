@@ -287,7 +287,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?:^|(?&lt;=[\w*&amp;&gt;])(?&lt;!else|new|&amp;&amp;)\s+)([A-Za-z_][A-Za-z0-9_:]+)\s*\((?=.*?\)(\s+const)?\s*(\{|\n))</string>
+			<string>(?:^|(?&lt;=[\w*&amp;&gt;])(?&lt;!else|new|&amp;&amp;)\s+)([A-Za-z_][A-Za-z0-9_:]+)\s*\((?=[^)]*\)(\s+const)?\s*(\{|\n))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

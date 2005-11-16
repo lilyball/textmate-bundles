@@ -24,25 +24,87 @@
 			<key>match</key>
 			<string>:\w+\b</string>
 			<key>name</key>
-			<string>constant.other.symbol.fscript</string>
+			<string>constant.symbol.fscript</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)\b</string>
+			<key>name</key>
+			<string>constant.numeric.fscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>#([[:lower:]]|_|[+=\-/!%&amp;*|&gt;&lt;~?])(\w|[+=\-/!%&amp;*|&gt;&lt;~?:])*</string>
 			<key>name</key>
-			<string>other.blocks.compact.fscript</string>
+			<string>constant.block.compact.fscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\[\s*\]</string>
 			<key>name</key>
-			<string>other.blocks.empty.fscript</string>
+			<string>meta.block.empty.fscript</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\[(?:\s*((?::\w+\s+)*:\w+)\s*\|)?(?:)?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.block.fscript</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\]</string>
+			<key>name</key>
+			<string>meta.block.fscript</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?:\|((?:\w+\s+)*\w+)?\||(?=[^\s|]))</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>variable.other.local.fscript</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\])</string>
+					<key>name</key>
+					<string>meta.block.content.fscript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(true|YES|false|NO|sys|nil)\b</string>
 			<key>name</key>
 			<string>constant.language.fscript</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.fscript</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>a hack for the symbol popup</string>
+			<key>match</key>
+			<string>^(\w+)\s*:=\s*(?=\[)</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -59,12 +121,6 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.fscript</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b((([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)\b</string>
-			<key>name</key>
-			<string>constant.numeric.fscript</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

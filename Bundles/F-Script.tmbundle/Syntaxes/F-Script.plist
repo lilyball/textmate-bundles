@@ -1,36 +1,75 @@
-{
-	/* The name as it will appear in the Syntax Highlight List */
-	name = "F-Script";
-	scopeName = "source.f-script";
-	uuid = "C2CB9A74-C9FC-4F63-8BAF-E64B72A60DD4";
-	fileTypes = (fscript);
-
-	foldingStartMarker = "\\[";
-	foldingStopMarker = "\\]";
-
-	increaseIndentPattern = "\\[";
-
-	patterns = (
-		{   name = "dummy.symbols.ignore.fscript";
-			match = "(:|\\w):";
-		},
-		{   name = "other.symbols.fscript";
-			match = ":\\w+\\b";
-		},
-		{   name = "other.blocks.compact.fscript";
-			match = "#(\\l|_|[+=\\-/!%&*|><~?])(\\w|[+=\\-/!%&*|><~?:])*";
-		},
-		{   name = "constant.language.fscript";
-			match = "\\b(true|YES|false|NO|sys|nil)\\b";
-		},
-		{   name = "comment.block.quotes.fscript";
-			begin = '"'; end = '"';
-		},
-		{   name = "string.quoted.single.fscript";
-			begin = "'"; end = "'";
-		},
-		{   name = "constant.numeric.fscript";
-			match = "\\b((([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b";
-		},
-	);
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>fscript</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>\[</string>
+	<key>foldingStopMarker</key>
+	<string>\]</string>
+	<key>name</key>
+	<string>F-Script</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>(:|\w):</string>
+			<key>name</key>
+			<string>dummy.symbol.ignore.fscript</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>:\w+\b</string>
+			<key>name</key>
+			<string>constant.other.symbol.fscript</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>#([[:lower:]]|_|[+=\-/!%&amp;*|&gt;&lt;~?])(\w|[+=\-/!%&amp;*|&gt;&lt;~?:])*</string>
+			<key>name</key>
+			<string>other.blocks.compact.fscript</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\[\s*\]</string>
+			<key>name</key>
+			<string>other.blocks.empty.fscript</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(true|YES|false|NO|sys|nil)\b</string>
+			<key>name</key>
+			<string>constant.language.fscript</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>comment.block.quotes.fscript</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.fscript</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)\b</string>
+			<key>name</key>
+			<string>constant.numeric.fscript</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.fscript</string>
+	<key>uuid</key>
+	<string>C2CB9A74-C9FC-4F63-8BAF-E64B72A60DD4</string>
+</dict>
+</plist>

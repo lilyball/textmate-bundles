@@ -7,11 +7,6 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-if ENV['TM_SELECTED_TEXT'].nil?
-   puts "Toggle Comment: Requires a selection"
-   exit 206 # this is a hardcoded value, we should source some common ruby script and get an exit function from there
-end
-
 # read shell variables (set these per language)
 $s      = ENV['TM_COMMENT_START'] || "# "
 $e      = ENV['TM_COMMENT_END']   || ""
@@ -38,6 +33,8 @@ when "block" # apply comment around selection
     print $s, $t, $e
   end
 end</string>
+	<key>fallbackInput</key>
+	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

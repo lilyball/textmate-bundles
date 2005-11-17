@@ -6,6 +6,8 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>iconv -f utf-8 -t ucs-2|hexdump -ve '"\\\x" 1/2 "%02x"'</string>
+	<key>fallbackInput</key>
+	<string>character</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

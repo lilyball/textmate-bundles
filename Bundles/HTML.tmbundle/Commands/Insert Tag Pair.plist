@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+# single tags
+single = /^img|meta|link|input|base|area|col|frame|param$/i
+single_no_arguments = /^br|hr$/i
+
+tag = STDIN.read
+if(tag == '')
+	print("&lt;${1:p}&gt;$2&lt;/${1/\\s.*//}&gt;")
+elsif(single.match(tag))
+	print("&lt;#{tag} $1/&gt;")
+elsif(single_no_arguments.match(tag))
+	print("&lt;#{tag} /&gt;")
+else
+	print("&lt;#{tag}&gt;$1&lt;/#{tag.strip[/^\S+/]}&gt;")
+end
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^&lt;</string>
+	<key>name</key>
+	<string>Insert Tag Pair</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>2ED44A32-C353-447F-BAE4-E3522DB6944D</string>
+</dict>
+</plist>

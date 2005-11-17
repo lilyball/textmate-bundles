@@ -72,6 +72,12 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>match</key>
+					<string>\s+</string>
+					<key>name</key>
+					<string>meta.block.header.fscript</string>
+				</dict>
+				<dict>
 					<key>begin</key>
 					<string>(?:\|(\s*(?:\w+\s+)*\w+\s*)?\||(?=[^\s|]))</string>
 					<key>captures</key>

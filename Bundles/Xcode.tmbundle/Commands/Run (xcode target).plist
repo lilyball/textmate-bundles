@@ -58,9 +58,10 @@ if targets.size == 1
    escaped_file = shell_escape(file)
    cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} #{run} ./#{escaped_file}; exit;"
    cmd = cmd.gsub(/\\/, '\\\\\\\\')
-   osascript_1 = "tell app \"Terminal\" to do script \"#{cmd}\""
-   osascript_2 = "tell app \"Terminal\" to close first window"
-   %x{osascript 1&gt;&amp;2 -e #{shell_escape osascript_1} -e "delay 1" -e #{shell_escape osascript_2}}
+   %x{#{cmd}}
+#  osascript_1 = "tell app \"Terminal\" to do script \"#{cmd}\""
+#  osascript_2 = "tell app \"Terminal\" to close first window"
+#  %x{osascript 1&gt;&amp;2 -e #{shell_escape osascript_1} -e "delay 1" -e #{shell_escape osascript_2}}
 else
    puts "The project had multiple targets.\nDidn't know which to pick."
 end

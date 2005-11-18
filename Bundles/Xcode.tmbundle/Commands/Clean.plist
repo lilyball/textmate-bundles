@@ -3,16 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>autoScrollOutput</key>
-	<true/>
+	<integer>1</integer>
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string># this command calls xcodebuild giving the name of the project
-# directory as the project to build and parses the output for
-# file/line information then plays a succes/failure sample
-# based on the final outcome
-
-PROJECT_FILE=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
+	<string>PROJECT_FILE=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
 USE_CONFIGURATIONS=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/xcode_version.rb")
 
 STYLEARGNAME="buildstyle"
@@ -34,20 +29,19 @@ else
 	BUILD_STYLE="-active$STYLEARGNAME"
 fi
 
-export PROJECT_FILE
-xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} $BUILD_STYLE 2&gt;&amp;1| ruby -- "${TM_BUNDLE_SUPPORT}/bin/format_build.rb"
+xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} $BUILD_STYLE clean 2&gt;&amp;1|pre
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@b</string>
+	<string></string>
 	<key>name</key>
-	<string>Build (using xcodebuild)</string>
+	<string>Clean</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.c, source.objc, source.c++, source.objc++</string>
 	<key>uuid</key>
-	<string>9656317E-73EB-11D9-9848-000D93589AF6</string>
+	<string>392068ED-4C79-42D8-9DE8-53867928B3B0</string>
 </dict>
 </plist>

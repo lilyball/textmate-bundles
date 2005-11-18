@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>f=`find . "$HOME/matlab" /Applications/MATLAB* -name "${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}.m"|head -1`
+
+if [[ -e "$f" ]]
+  then open -a TextMate "$f"
+  else echo "File could not be found."
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@O</string>
+	<key>name</key>
+	<string>Open Function</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.matlab</string>
+	<key>uuid</key>
+	<string>D7A8ED42-49E0-4CF3-A6C8-BE8DAB76267A</string>
+</dict>
+</plist>

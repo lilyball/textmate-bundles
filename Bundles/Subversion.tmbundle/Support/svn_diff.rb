@@ -12,7 +12,7 @@ module Subversion
 		output_path	= File.basename(target_path) + ".diff"
 
 		TextMate::call_with_progress(:title => command,
-									:message => "Accessing Subversion repository",
+									:message => "Accessing Subversion Repository…",
 									:output_filepath => output_path) do
 			%x{"#{svn}" diff "-r#{revision}" "#{target_path}"}
 		end

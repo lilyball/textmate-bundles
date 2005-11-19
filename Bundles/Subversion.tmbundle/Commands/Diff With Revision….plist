@@ -9,8 +9,8 @@
 
 revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
 	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
-		--title "Subversion—Diff Revision…" \
-		--text "Retrieving List of Revisions" \
+		--title "Diff Revision…" \
+		--text "Retrieving List of Revisions…" \
 	))
 
 revs=`osascript&lt;&lt;END
@@ -37,7 +37,7 @@ revs=( $revs )
 
 "${TM_RUBY:=ruby}" -I "$TM_BUNDLE_SUPPORT/"&lt;&lt;END
 	require 'svn_diff'
-	Subversion::diff_active_file("${revs[0]#r}", "Subversion—Diff With Revision…")
+	Subversion::diff_active_file("${revs[0]#r}", "Diff With Revision…")
 END
 </string>
 	<key>input</key>

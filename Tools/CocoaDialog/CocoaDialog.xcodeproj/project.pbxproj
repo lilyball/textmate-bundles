@@ -1,0 +1,548 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0E53CED00634B34100E74888 /* Changelog in Resources */ = {isa = PBXBuildFile; fileRef = 0E53CECF0634B34100E74888 /* Changelog */; };
+		1716F125092FD1A300A65EC0 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F116092FD1A300A65EC0 /* AppController.m */; };
+		1716F126092FD1A300A65EC0 /* CDControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F117092FD1A300A65EC0 /* CDControl.m */; };
+		1716F127092FD1A300A65EC0 /* CDFileSelectControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F118092FD1A300A65EC0 /* CDFileSelectControl.m */; };
+		1716F128092FD1A300A65EC0 /* CDInputboxControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F119092FD1A300A65EC0 /* CDInputboxControl.m */; };
+		1716F129092FD1A300A65EC0 /* CDMsgboxControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F11A092FD1A300A65EC0 /* CDMsgboxControl.m */; };
+		1716F12A092FD1A300A65EC0 /* CDOkMsgboxControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F11B092FD1A300A65EC0 /* CDOkMsgboxControl.m */; };
+		1716F12B092FD1A300A65EC0 /* CDOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F11C092FD1A300A65EC0 /* CDOptions.m */; };
+		1716F12C092FD1A300A65EC0 /* CDPopUpButtonControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F11D092FD1A300A65EC0 /* CDPopUpButtonControl.m */; };
+		1716F12D092FD1A300A65EC0 /* CDProgressbarControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F11E092FD1A300A65EC0 /* CDProgressbarControl.m */; };
+		1716F12E092FD1A300A65EC0 /* CDStandardInputboxControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F11F092FD1A300A65EC0 /* CDStandardInputboxControl.m */; };
+		1716F12F092FD1A300A65EC0 /* CDStandardPopUpButtonControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F120092FD1A300A65EC0 /* CDStandardPopUpButtonControl.m */; };
+		1716F130092FD1A300A65EC0 /* CDTextboxControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F121092FD1A300A65EC0 /* CDTextboxControl.m */; };
+		1716F131092FD1A300A65EC0 /* CDYesNoMsgboxControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F122092FD1A300A65EC0 /* CDYesNoMsgboxControl.m */; };
+		1716F132092FD1A300A65EC0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1716F124092FD1A300A65EC0 /* main.m */; };
+		1716F141092FD1B700A65EC0 /* Inputbox.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1716F133092FD1B700A65EC0 /* Inputbox.nib */; };
+		1716F142092FD1B700A65EC0 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1716F135092FD1B700A65EC0 /* MainMenu.nib */; };
+		1716F143092FD1B700A65EC0 /* msgbox.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1716F137092FD1B700A65EC0 /* msgbox.nib */; };
+		1716F144092FD1B700A65EC0 /* PopUpButton.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1716F139092FD1B700A65EC0 /* PopUpButton.nib */; };
+		1716F145092FD1B700A65EC0 /* Progressbar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1716F13B092FD1B700A65EC0 /* Progressbar.nib */; };
+		1716F146092FD1B700A65EC0 /* SecureInputbox.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1716F13D092FD1B700A65EC0 /* SecureInputbox.nib */; };
+		1716F147092FD1B700A65EC0 /* Textbox.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1716F13F092FD1B700A65EC0 /* Textbox.nib */; };
+		1716F14B092FD1DB00A65EC0 /* cocoaDialog.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1716F14A092FD1DB00A65EC0 /* cocoaDialog.icns */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				PRODUCT_NAME = CocoaDialog;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		0E02DC1E062C16AC00C594F1 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		0E53CECF0634B34100E74888 /* Changelog */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Changelog; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		1716F116092FD1A300A65EC0 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppController.m; path = src/AppController.m; sourceTree = "<group>"; };
+		1716F117092FD1A300A65EC0 /* CDControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDControl.m; path = src/CDControl.m; sourceTree = "<group>"; };
+		1716F118092FD1A300A65EC0 /* CDFileSelectControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDFileSelectControl.m; path = src/CDFileSelectControl.m; sourceTree = "<group>"; };
+		1716F119092FD1A300A65EC0 /* CDInputboxControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDInputboxControl.m; path = src/CDInputboxControl.m; sourceTree = "<group>"; };
+		1716F11A092FD1A300A65EC0 /* CDMsgboxControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDMsgboxControl.m; path = src/CDMsgboxControl.m; sourceTree = "<group>"; };
+		1716F11B092FD1A300A65EC0 /* CDOkMsgboxControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDOkMsgboxControl.m; path = src/CDOkMsgboxControl.m; sourceTree = "<group>"; };
+		1716F11C092FD1A300A65EC0 /* CDOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDOptions.m; path = src/CDOptions.m; sourceTree = "<group>"; };
+		1716F11D092FD1A300A65EC0 /* CDPopUpButtonControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDPopUpButtonControl.m; path = src/CDPopUpButtonControl.m; sourceTree = "<group>"; };
+		1716F11E092FD1A300A65EC0 /* CDProgressbarControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDProgressbarControl.m; path = src/CDProgressbarControl.m; sourceTree = "<group>"; };
+		1716F11F092FD1A300A65EC0 /* CDStandardInputboxControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDStandardInputboxControl.m; path = src/CDStandardInputboxControl.m; sourceTree = "<group>"; };
+		1716F120092FD1A300A65EC0 /* CDStandardPopUpButtonControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDStandardPopUpButtonControl.m; path = src/CDStandardPopUpButtonControl.m; sourceTree = "<group>"; };
+		1716F121092FD1A300A65EC0 /* CDTextboxControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTextboxControl.m; path = src/CDTextboxControl.m; sourceTree = "<group>"; };
+		1716F122092FD1A300A65EC0 /* CDYesNoMsgboxControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDYesNoMsgboxControl.m; path = src/CDYesNoMsgboxControl.m; sourceTree = "<group>"; };
+		1716F123092FD1A300A65EC0 /* CocoaDialog_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaDialog_Prefix.pch; path = src/CocoaDialog_Prefix.pch; sourceTree = "<group>"; };
+		1716F124092FD1A300A65EC0 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = "<group>"; };
+		1716F134092FD1B700A65EC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = resources/English.lproj/Inputbox.nib; sourceTree = "<group>"; };
+		1716F136092FD1B700A65EC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = resources/English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		1716F138092FD1B700A65EC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = resources/English.lproj/msgbox.nib; sourceTree = "<group>"; };
+		1716F13A092FD1B700A65EC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = resources/English.lproj/PopUpButton.nib; sourceTree = "<group>"; };
+		1716F13C092FD1B700A65EC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = resources/English.lproj/Progressbar.nib; sourceTree = "<group>"; };
+		1716F13E092FD1B700A65EC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = resources/English.lproj/SecureInputbox.nib; sourceTree = "<group>"; };
+		1716F140092FD1B700A65EC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = resources/English.lproj/Textbox.nib; sourceTree = "<group>"; };
+		1716F148092FD1CA00A65EC0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		1716F14A092FD1DB00A65EC0 /* cocoaDialog.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = cocoaDialog.icns; path = resources/cocoaDialog.icns; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		8D1107320486CEB800E47090 /* CocoaDialog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoaDialog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		1716F113092FD16700A65EC0 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				1716F116092FD1A300A65EC0 /* AppController.m */,
+				1716F117092FD1A300A65EC0 /* CDControl.m */,
+				1716F118092FD1A300A65EC0 /* CDFileSelectControl.m */,
+				1716F119092FD1A300A65EC0 /* CDInputboxControl.m */,
+				1716F11A092FD1A300A65EC0 /* CDMsgboxControl.m */,
+				1716F11B092FD1A300A65EC0 /* CDOkMsgboxControl.m */,
+				1716F11C092FD1A300A65EC0 /* CDOptions.m */,
+				1716F11D092FD1A300A65EC0 /* CDPopUpButtonControl.m */,
+				1716F11E092FD1A300A65EC0 /* CDProgressbarControl.m */,
+				1716F11F092FD1A300A65EC0 /* CDStandardInputboxControl.m */,
+				1716F120092FD1A300A65EC0 /* CDStandardPopUpButtonControl.m */,
+				1716F121092FD1A300A65EC0 /* CDTextboxControl.m */,
+				1716F122092FD1A300A65EC0 /* CDYesNoMsgboxControl.m */,
+				1716F123092FD1A300A65EC0 /* CocoaDialog_Prefix.pch */,
+				1716F124092FD1A300A65EC0 /* main.m */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		1716F114092FD16C00A65EC0 /* nibs */ = {
+			isa = PBXGroup;
+			children = (
+				1716F133092FD1B700A65EC0 /* Inputbox.nib */,
+				1716F135092FD1B700A65EC0 /* MainMenu.nib */,
+				1716F137092FD1B700A65EC0 /* msgbox.nib */,
+				1716F139092FD1B700A65EC0 /* PopUpButton.nib */,
+				1716F13B092FD1B700A65EC0 /* Progressbar.nib */,
+				1716F13D092FD1B700A65EC0 /* SecureInputbox.nib */,
+				1716F13F092FD1B700A65EC0 /* Textbox.nib */,
+			);
+			name = nibs;
+			sourceTree = "<group>";
+		};
+		1716F115092FD17500A65EC0 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				1716F14A092FD1DB00A65EC0 /* cocoaDialog.icns */,
+			);
+			name = resources;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* CocoaDialog.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CocoaDialog */ = {
+			isa = PBXGroup;
+			children = (
+				1716F113092FD16700A65EC0 /* src */,
+				1716F114092FD16C00A65EC0 /* nibs */,
+				1716F115092FD17500A65EC0 /* resources */,
+				1716F148092FD1CA00A65EC0 /* Info.plist */,
+				0E53CECF0634B34100E74888 /* Changelog */,
+				0E02DC1E062C16AC00C594F1 /* COPYING */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CocoaDialog;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* CocoaDialog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17656E0909097434000672E6 /* Build configuration list for PBXNativeTarget "CocoaDialog" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				174305830930EBCC00860EB4 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = CocoaDialog_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = CocoaDialog;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = CocoaDialog;
+			productInstallPath = "$(HOME)/Applications";
+			productName = CocoaDialog;
+			productReference = 8D1107320486CEB800E47090 /* CocoaDialog.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 17656E0D09097434000672E6 /* Build configuration list for PBXProject "CocoaDialog" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA /* Development */,
+				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CocoaDialog */;
+			projectDirPath = "";
+			targets = (
+				8D1107260486CEB800E47090 /* CocoaDialog */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E53CED00634B34100E74888 /* Changelog in Resources */,
+				1716F141092FD1B700A65EC0 /* Inputbox.nib in Resources */,
+				1716F142092FD1B700A65EC0 /* MainMenu.nib in Resources */,
+				1716F143092FD1B700A65EC0 /* msgbox.nib in Resources */,
+				1716F144092FD1B700A65EC0 /* PopUpButton.nib in Resources */,
+				1716F145092FD1B700A65EC0 /* Progressbar.nib in Resources */,
+				1716F146092FD1B700A65EC0 /* SecureInputbox.nib in Resources */,
+				1716F147092FD1B700A65EC0 /* Textbox.nib in Resources */,
+				1716F14B092FD1DB00A65EC0 /* cocoaDialog.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		174305830930EBCC00860EB4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ \"$ACTION\" == \"build\" && \"$BUILD_STYLE\" == \"Deployment\" ]]; then\n  rsync -a \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app\" \"$SRCROOT/../../Support/bin/\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1716F125092FD1A300A65EC0 /* AppController.m in Sources */,
+				1716F126092FD1A300A65EC0 /* CDControl.m in Sources */,
+				1716F127092FD1A300A65EC0 /* CDFileSelectControl.m in Sources */,
+				1716F128092FD1A300A65EC0 /* CDInputboxControl.m in Sources */,
+				1716F129092FD1A300A65EC0 /* CDMsgboxControl.m in Sources */,
+				1716F12A092FD1A300A65EC0 /* CDOkMsgboxControl.m in Sources */,
+				1716F12B092FD1A300A65EC0 /* CDOptions.m in Sources */,
+				1716F12C092FD1A300A65EC0 /* CDPopUpButtonControl.m in Sources */,
+				1716F12D092FD1A300A65EC0 /* CDProgressbarControl.m in Sources */,
+				1716F12E092FD1A300A65EC0 /* CDStandardInputboxControl.m in Sources */,
+				1716F12F092FD1A300A65EC0 /* CDStandardPopUpButtonControl.m in Sources */,
+				1716F130092FD1A300A65EC0 /* CDTextboxControl.m in Sources */,
+				1716F131092FD1A300A65EC0 /* CDYesNoMsgboxControl.m in Sources */,
+				1716F132092FD1A300A65EC0 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1716F133092FD1B700A65EC0 /* Inputbox.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1716F134092FD1B700A65EC0 /* English */,
+			);
+			name = Inputbox.nib;
+			sourceTree = "<group>";
+		};
+		1716F135092FD1B700A65EC0 /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1716F136092FD1B700A65EC0 /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		1716F137092FD1B700A65EC0 /* msgbox.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1716F138092FD1B700A65EC0 /* English */,
+			);
+			name = msgbox.nib;
+			sourceTree = "<group>";
+		};
+		1716F139092FD1B700A65EC0 /* PopUpButton.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1716F13A092FD1B700A65EC0 /* English */,
+			);
+			name = PopUpButton.nib;
+			sourceTree = "<group>";
+		};
+		1716F13B092FD1B700A65EC0 /* Progressbar.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1716F13C092FD1B700A65EC0 /* English */,
+			);
+			name = Progressbar.nib;
+			sourceTree = "<group>";
+		};
+		1716F13D092FD1B700A65EC0 /* SecureInputbox.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1716F13E092FD1B700A65EC0 /* English */,
+			);
+			name = SecureInputbox.nib;
+			sourceTree = "<group>";
+		};
+		1716F13F092FD1B700A65EC0 /* Textbox.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1716F140092FD1B700A65EC0 /* English */,
+			);
+			name = Textbox.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		17656E0A09097434000672E6 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/CocoaDialog_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = CocoaDialog;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		17656E0B09097434000672E6 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/CocoaDialog_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = CocoaDialog;
+				SECTORDER_FLAGS = "";
+				STRIP_INSTALLED_PRODUCT = YES;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		17656E0C09097434000672E6 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/CocoaDialog_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = CocoaDialog;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		17656E0E09097434000672E6 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DEAD_CODE_STRIPPING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Development;
+		};
+		17656E0F09097434000672E6 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DEAD_CODE_STRIPPING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Deployment;
+		};
+		17656E1009097434000672E6 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DEAD_CODE_STRIPPING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		17656E0909097434000672E6 /* Build configuration list for PBXNativeTarget "CocoaDialog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17656E0A09097434000672E6 /* Development */,
+				17656E0B09097434000672E6 /* Deployment */,
+				17656E0C09097434000672E6 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		17656E0D09097434000672E6 /* Build configuration list for PBXProject "CocoaDialog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17656E0E09097434000672E6 /* Development */,
+				17656E0F09097434000672E6 /* Deployment */,
+				17656E1009097434000672E6 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

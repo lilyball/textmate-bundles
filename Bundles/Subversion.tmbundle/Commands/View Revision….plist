@@ -29,7 +29,7 @@ END`
 
 # exit if user canceled
 if [[ $revs = "false" ]]; then
-	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit 0	
+	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit_discard
 fi
 
 revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`

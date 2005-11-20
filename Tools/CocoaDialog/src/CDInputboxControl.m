@@ -137,30 +137,55 @@
 	return [NSArray arrayWithObjects:returnString, inputText, nil];
 }
 
+- (void) setTitle:(NSString*)aTitle forButton:(NSButton*)aButton
+{
+	if (aTitle && ![aTitle isEqualToString:@""])
+	{
+		[aButton setTitle:aTitle];
+		if ([aTitle isEqualToString:@"Cancel"])
+			[aButton setKeyEquivalent:@"\e"];
+
+		float maxX = NSMaxX([aButton frame]);
+		[aButton sizeToFit];
+		NSRect r = [aButton frame];
+		r.size.width += 12.0f;
+		if(maxX > 100.0f) // button is in the right side
+			r.origin.x = maxX - NSWidth(r);
+		[aButton setFrame:r];
+	}
+	else
+	{
+		[aButton setEnabled:NO];
+		[aButton setHidden:YES];
+	}
+}
+
 - (void) setButtons
 {
+	unsigned i;
+	struct { NSString *key; NSButton *button; } const buttons[] = {
+		{ @"button1", button1 },
+		{ @"button2", button2 },
+		{ @"button3", button3 }
+	};
+
 	CDOptions *options = [self options];
-	[button1 setTitle:[options optValue:@"button1"]];
-	if ([options optValue:@"button2"]) {
-		[button2 setTitle:[options optValue:@"button2"]];
-		if ([[options optValue:@"button2"] isEqualToString:@"Cancel"]) {
-			[button2 setKeyEquivalent:@"\e"];
-		}
-		if ([options optValue:@"button3"]) {
-			[button3 setTitle:[options optValue:@"button3"]];
-			if ([[options optValue:@"button3"] isEqualToString:@"Cancel"]) {
-				[button3 setKeyEquivalent:@"\e"];
-			}
-		} else {
-			[button3 setEnabled:NO];
-			[button3 setHidden:YES];
-		}
-	} else {
-		[button2 setEnabled:NO];
-		[button2 setHidden:YES];
-		[button3 setEnabled:NO];
-		[button3 setHidden:YES];
+	float minWidth = 2 * 20.0f; // margin
+	for (i = 0; i != sizeof(buttons)/sizeof(buttons[0]); i++) {
+		[self setTitle:[options optValue:buttons[i].key] forButton:buttons[i].button];
+		if([buttons[i].button isHidden] == NO)
+			minWidth += NSWidth([buttons[i].button frame]);
 	}
+
+	// ensure that the buttons never gets clipped
+	NSSize s = [panel contentMinSize];
+	s.width = minWidth;
+	[panel setContentMinSize:s];
+
+	// move button2 so that it aligns with button1
+	NSRect r = [button2 frame];
+	r.origin.x = NSMinX([button1 frame]) - NSWidth(r);
+	[button2 setFrame:r];
 }
 
 - (IBAction) timeout:(id)sender

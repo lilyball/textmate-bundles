@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>echo '&lt;title&gt;Postgresql Query&lt;/title&gt;'
+echo '&lt;style&gt;table { font-size: 9pt; }&lt;/style&gt;'
+echo '&lt;p&gt;To use a password with Postgres and TextMate you should store your password in ~/.pgpass.  See the Postgres documentation for the file format.'
+
+require_cmd psql8
+
+query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
+echo -n "$query"|pre
+
+psql8 -c "$query" \
+	--user="${PGUSER:-$USER}"  --html --table-attr border=0  \
+	--host="${PGHOST:-localhost}" --port="${PGPORT:-5432}" \
+     "${PGDATABASE:-$USER}"
+
+echo -n "Query completed"|pre
+
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^Q</string>
+	<key>name</key>
+	<string>Postgresql Query</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>05568393-3E2F-4733-B04B-24FC5E1E5723</string>
+</dict>
+</plist>

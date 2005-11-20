@@ -20,6 +20,19 @@ The command assumes the following environment variables are properly set:
 * `$MYSQL_DB  ` — no default
 
 These variables may be set in the parent shell of TextMate, global variables in TextMate preferences, or as project local variables.
+
+If you are a Postgres user and have the psql8 command installed (as from darwinports for example) You can also send commands to postgresql:
+
+* `$PGUSER` — defaults to the value of `$USER`
+* `$PGHOST` — defaults to localhost if not set
+* `$PGPORT` — defaults to 3306 if not set
+* `$PGDATABASE  ` - defaults to user
+
+Postgres users should also note that there is not a command line argument to provide your password.  To use Postgresql on a database with a password from TextMate you should set up a ~/.pgpass file.  This file should contain lines of the following format:
+&lt;pre&gt;
+hostname:port:database:username:password
+&lt;/pre&gt;
+
 EOF</string>
 	<key>input</key>
 	<string>none</string>

@@ -6,15 +6,21 @@
 	<string>/Users/kumar/Library/Application Support/TextMate/Bundles/PHPDoc.tmbundle</string>
 	<key>content</key>
 	<string>/**
- * ${1:undocumented constant}$2
- **/$0</string>
+ * ${3:undocumented class}
+ *
+ * @package ${4:default}
+ * @author ${PHPDOC_AUTHOR:`niutil -readprop / "/users/$USER" realname`}
+ **/
+$1class $2
+{$0
+} // END $1class $2</string>
 	<key>name</key>
-	<string>PHPDoc constant definition - post doc</string>
+	<string>Class (doc_c)</string>
 	<key>scope</key>
 	<string>source.php</string>
 	<key>tabTrigger</key>
-	<string>phpdoc_dp</string>
+	<string>doc_c</string>
 	<key>uuid</key>
-	<string>13266D30-956E-11D9-B0A1-000D93382786</string>
+	<string>9086BA3F-87E7-11D9-A6A3-000D93589AF6</string>
 </dict>
 </plist>

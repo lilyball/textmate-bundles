@@ -6,21 +6,21 @@
 	<string>/Users/kumar/Library/Application Support/TextMate/Bundles/PHPDoc.tmbundle</string>
 	<key>content</key>
 	<string>/**
- * ${3:undocumented class}
+ * ${4:undocumented function}
  *
- * @package ${4:default}
- * @author ${PHPDOC_AUTHOR:`niutil -readprop / "/users/$USER" realname`}
+ * @return ${5:void}
+ * @author ${PHPDOC_AUTHOR:`niutil -readprop / "/users/$USER" realname`}$6
  **/
-$1class $2
+$1function $2($3)
 {$0
-} // END $1class $2</string>
+}</string>
 	<key>name</key>
-	<string>PHPDoc class</string>
+	<string>Function (doc_f)</string>
 	<key>scope</key>
 	<string>source.php</string>
 	<key>tabTrigger</key>
-	<string>phpdoc_c</string>
+	<string>doc_f</string>
 	<key>uuid</key>
-	<string>9086BA3F-87E7-11D9-A6A3-000D93589AF6</string>
+	<string>9087051B-87E7-11D9-A6A3-000D93589AF6</string>
 </dict>
 </plist>

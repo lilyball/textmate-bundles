@@ -6,18 +6,25 @@
 	<string>/Users/kumar/Library/Application Support/TextMate/Bundles/PHPDoc.tmbundle</string>
 	<key>content</key>
 	<string>/**
- * ${3:undocumented class variable}
+ * $1
  *
- * @var ${4:string}
+ * @author ${PHPDOC_AUTHOR:`niutil -readprop / "/users/$USER" realname`}
+ * @version \$Id\$
+ * @copyright `echo $TM_ORGANIZATION_NAME`, `date +"%e %B, %Y"`
+ * @package ${3:default}
  **/
-${1:var} \$$2;$0</string>
+
+/**
+ * Define DocBlock
+ **/
+</string>
 	<key>name</key>
-	<string>PHPDoc class var</string>
+	<string>Header (doc_h)</string>
 	<key>scope</key>
 	<string>source.php</string>
 	<key>tabTrigger</key>
-	<string>phpdoc_v</string>
+	<string>doc_h</string>
 	<key>uuid</key>
-	<string>90879700-87E7-11D9-A6A3-000D93589AF6</string>
+	<string>90872B90-87E7-11D9-A6A3-000D93589AF6</string>
 </dict>
 </plist>

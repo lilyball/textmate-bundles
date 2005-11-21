@@ -6,6 +6,15 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
+#
+# This script will expand the current word into: &lt;word&gt;&lt;/word&gt;
+# It will recognize HTML 4.0 tags that need no close tag.
+#
+# With no current word, it will insert: &lt;p&gt;&lt;/p&gt; and allows you
+# to overwrite the tag name and add potential arguments.
+#
+# The result is inserted as a snippet, so it's
+# possible to tab through the place holders.
 
 # single tags
 single = /^img|meta|link|input|base|area|col|frame|param$/i
@@ -29,7 +38,7 @@ end
 	<key>keyEquivalent</key>
 	<string>^&lt;</string>
 	<key>name</key>
-	<string>Insert Tag Pair</string>
+	<string>Insert Open/Close Tag</string>
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>

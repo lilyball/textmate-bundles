@@ -1,7 +1,16 @@
-{
-    content = "<textarea id=\"${1:ID}\" name=\"${2:Name}\" rows=\"$3\" cols=\"$4\" tabindex=\"$5\" ${6:readonly=\"readonly\"} >$0</textarea>"; 
-    name = "Text area (txtarea)"; 
-    tabTrigger = txtarea; 
-    uuid = "AAC9D7B8-A12C-11D9-A5A2-000D93C8BE28"; 
-    scope = "text.html";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;textarea id="${1:ID}" name="${2:Name}" rows="$3" cols="$4" tabindex="$5" ${6:readonly="readonly"} &gt;$0&lt;/textarea&gt;</string>
+	<key>name</key>
+	<string>Text Area (textarea)</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>tabTrigger</key>
+	<string>textarea</string>
+	<key>uuid</key>
+	<string>AAC9D7B8-A12C-11D9-A5A2-000D93C8BE28</string>
+</dict>
+</plist>

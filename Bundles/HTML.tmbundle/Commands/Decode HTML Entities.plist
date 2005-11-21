@@ -9,6 +9,8 @@
 php -r 'echo html_entity_decode( file_get_contents("/dev/stdin"), ENT_QUOTES );'
 
 ### PLEASE NOTE!  Due to a known PHP bug, this command is NOT UTF-8 safe, so use only with caution.</string>
+	<key>fallbackInput</key>
+	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

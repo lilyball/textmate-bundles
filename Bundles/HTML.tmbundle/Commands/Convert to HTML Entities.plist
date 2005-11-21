@@ -7,6 +7,8 @@
 	<key>command</key>
 	<string>## Convert all applicable characters to HTML entities, but will leave both double and single quotes unconverted.
 php -r 'echo htmlentities( file_get_contents("/dev/stdin"), ENT_NOQUOTES, "UTF-8" );'</string>
+	<key>fallbackInput</key>
+	<string>character</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

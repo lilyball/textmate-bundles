@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>#ifndef _$1_H_
-#define _$1_H_
+	<string>#ifndef _${1:${TM_FILENAME/([. ])|./(?1:_:\u$0)/g}}_
+#define _$1_
 
 $0
 
 #endif /* $1 */</string>
 	<key>name</key>
-	<string>Header multiple-inclusion guard (once)</string>
+	<string>Header Include-Guard (once)</string>
 	<key>scope</key>
 	<string>source.c, source.objc, source.c++, source.objc++</string>
 	<key>tabTrigger</key>

@@ -8,15 +8,15 @@ if(FILE* fp = fopen(${1:"filename"}, "r"))
 {
 	uint8_t buf[1024];
 	while(size_t len = fread(buf, 1, sizeof(buf), fp))
-		copy(buf, buf + len, back_inserter(v));
+		v.insert(v.end(), buf, buf + len);
 	fclose(fp);
 }</string>
 	<key>name</key>
-	<string>Read file into std::vector (readFile)</string>
+	<string>Read File Into Vector (readfile)</string>
 	<key>scope</key>
 	<string>source.c++, source.objc++</string>
 	<key>tabTrigger</key>
-	<string>readFile</string>
+	<string>readfile</string>
 	<key>uuid</key>
 	<string>E8C3B596-9045-11D9-AB38-000D93589AF6</string>
 </dict>

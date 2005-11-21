@@ -10,9 +10,7 @@
    else cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
 fi
 
-: "${TM_SVN:=svn}"
-"$TM_SVN" status|grep ^M|cut -b8-|tr \\n \\0|xargs -0 "$TM_SVN" diff -rBASE
-</string>
+"${TM_SVN:-svn}" diff</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

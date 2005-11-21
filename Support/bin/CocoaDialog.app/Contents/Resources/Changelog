@@ -34,3 +34,10 @@
 	- turned into a background app so that the dialog icon does not show
 	up in the menu bar. This, together with float, is very useful for
 	loginhooks.
+
+1.2.2  Nov, 2005
+	- the progress bar won't show until a small delay has passed (so <1 seconds actions won't show a flashing window)
+	- the progress bar use left-aligned label text which is only one line high, and the actual progress bar is set to use the small GUI style (to match the text)
+	- CocoaDialog builds as a universal binary
+	- buttons in the input box are now sized to fit and the minimum size of the window is set accordingly
+	- label text in the input box is left-aligned and use the standard system font (instead of the small one) and is made only one line high (probably “sizeToFit” would make sense here)

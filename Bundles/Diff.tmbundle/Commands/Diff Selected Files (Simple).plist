@@ -8,16 +8,10 @@
 	<string>eval arr=($TM_SELECTED_FILES)
 if [[ ${#arr[@]} != 2 ]]; then
    echo -e "You need to select exactly two\nfiles in the project drawer."
-   exit
+   exit_show_tool_tip
 fi
 
-TMPFILE=`mktemp /tmp/tm-svn.XXXXXX` || exit 1
-mv "$TMPFILE" "$TMPFILE.diff"; TMPFILE="$TMPFILE.diff"
-
-eval diff -u $TM_SELECTED_FILES &gt; "$TMPFILE"
-
-open -a TextMate "$TMPFILE" &amp;
-</string>
+eval diff -u $TM_SELECTED_FILES</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -25,7 +19,7 @@ open -a TextMate "$TMPFILE" &amp;
 	<key>name</key>
 	<string>Selected Files in Project Drawer</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>openAsNewDocument</string>
 	<key>uuid</key>
 	<string>D04AFBD3-8110-11D9-8E5B-0011242E4184</string>
 </dict>

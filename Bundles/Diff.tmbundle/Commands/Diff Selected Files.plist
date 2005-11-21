@@ -8,7 +8,7 @@
 	<string>eval arr=($TM_SELECTED_FILES)
 if [[ ${#arr[@]} != 2 ]]; then
    echo -e "You need to select exactly two files in the project drawer."
-   exit
+   exit_show_tool_tip
 fi
 
 perl "$TM_BUNDLE_SUPPORT/diff.pl"

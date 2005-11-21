@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>if [[ -e "$TM_FILEPATH" ]]
    then diff -u "$TM_FILEPATH" -
-   else echo "There's no file on disk"
+   else exit_show_tool_tip "There's no file on disk"
 fi</string>
 	<key>input</key>
 	<string>document</string>

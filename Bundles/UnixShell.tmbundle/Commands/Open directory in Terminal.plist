@@ -16,7 +16,7 @@ fi
 osascript &lt;&lt;EOF
    tell application "Terminal"
       activate
-      do script "cd '$TM_PATH'"
+      do script "cd '$TM_PATH'; clear; pwd"
    end tell
 EOF</string>
 	<key>input</key>

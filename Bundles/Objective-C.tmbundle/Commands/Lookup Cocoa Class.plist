@@ -9,11 +9,11 @@
 appkit="/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/ObjC_classic/Classes/${TM_CURRENT_WORD}.html"
 
 if [[ -f $fkit ]]; then
-   echo '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${fkit// /%20}'"&gt;'
+   exit_show_html '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${fkit// /%20}'"&gt;'
 elif [[ -f $appkit ]]; then
-   echo '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${appkit// /%20}'"&gt;'
+   exit_show_html '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${appkit// /%20}'"&gt;'
 else
-   echo '&lt;h2&gt;Class:' $TM_CURRENT_WORD 'not found!&lt;/h2&gt;'
+   echo "Class: $TM_CURRENT_WORD not found!"
 fi
 </string>
 	<key>input</key>
@@ -21,9 +21,9 @@ fi
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>Lookup Cocoa Class</string>
+	<string>Documentation For Class</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>uuid</key>

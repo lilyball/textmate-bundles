@@ -12,9 +12,11 @@ module XcodeProjectSearch
 		# Explicit precedence: Xcode >= 2.1, then Xcode <= 2.0, then Project Builder
 		# This allows you to keep old projects around but always builds using the
 		# newest Xcode.
-		entries.detect {|entry| entry =~ /.xcodeproj$/}	||
-			entries.detect {|entry| entry =~ /.xcode$/}	||
+		project = entries.detect {|entry| entry =~ /.xcodeproj$/} ||
+			entries.detect {|entry| entry =~ /.xcode$/} ||
 			entries.detect {|entry| entry =~ /.pbproj$/}
+
+		project ? path + "/" + project : nil
 	end
 	
 	def XcodeProjectSearch.project_by_walking_up( start_dir = Dir.pwd )
@@ -35,7 +37,7 @@ module XcodeProjectSearch
 			Dir.chdir(save_dir)
 		end
 	
-		current_dir + "/" + project
+		project
 	end
 
 	def XcodeProjectSearch.find_project
@@ -48,11 +50,14 @@ module XcodeProjectSearch
 			
 			# If we have an open file in a saved project (or a scratch project)
 			if (not active_project_dir.nil?) and (not active_project_dir.empty?)
-				xcode_project = project_by_walking_up(active_project_dir)
+				xcode_project = project_in_dir(active_project_dir)
+			end
 				
-			else # We have a file not attached to an open project
+			# If we didn't find an xcode project in the project directoy, search from current dir and upwards
+			if (xcode_project.nil?) or (xcode_project.empty?)
 				xcode_project = project_by_walking_up(active_file_dir)
 			end
+
 		end
 	
 		xcode_project

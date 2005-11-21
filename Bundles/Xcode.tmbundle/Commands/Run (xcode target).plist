@@ -21,7 +21,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
 
 def shell_escape (str)
-   str.gsub(/[{}()`'"\\; $]/, '\\\\\&amp;')
+   str.gsub(/[{}()`'"\\; $&lt;&gt;&amp;]/, '\\\\\&amp;')
 end
 
 prefs = PropertyList::load(File.new("#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"))
@@ -36,32 +36,40 @@ proj         = PropertyList::load(File.new(name))
 objs         = proj['objects']
 rootObj      = objs[proj['rootObject']]
 
-userFile     = "#{ENV['PROJECT_DIR']}/#{ENV['USER']}.pbxuser"
-user         = PropertyList::load(File.new(userFile))
-activeConfig = user[proj['rootObject']]['activeBuildConfigurationName']
-
 if Xcode.supports_configurations? then
+   userFile     = "#{ENV['PROJECT_DIR']}/#{ENV['USER']}.pbxuser"
+   user         = PropertyList::load(File.new(userFile))
    activeConfig = user[proj['rootObject']]['activeBuildConfigurationName']
-   activeConfig = "Development" if activeConfig.nil?
-
-   dir += "/#{activeConfig}"
+   dir += "/#{activeConfig || "Development"}"
 end
 
 targets = rootObj['targets'].reject { |t| not ['com.apple.product-type.tool', 'com.apple.product-type.application'].include?(objs[t]['productType']) }
 if targets.size == 1
    target = objs[targets[0]]
    productKey = target['productReference']
-   run = target['productType'] == 'com.apple.product-type.application' ? 'open' : ''
    product = objs[productKey]
    file = product['path']
    escaped_dir = shell_escape(dir)
    escaped_file = shell_escape(file)
-   cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} #{run} ./#{escaped_file}; exit;"
-   cmd = cmd.gsub(/\\/, '\\\\\\\\')
-   %x{#{cmd}}
-#  osascript_1 = "tell app \"Terminal\" to do script \"#{cmd}\""
-#  osascript_2 = "tell app \"Terminal\" to close first window"
-#  %x{osascript 1&gt;&amp;2 -e #{shell_escape osascript_1} -e "delay 1" -e #{shell_escape osascript_2}}
+   expanded_dir = escaped_dir.gsub(/^~/, ENV['HOME'])
+   if target['productType'] == 'com.apple.product-type.application' then
+      cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{expanded_dir} DYLD_LIBRARY_PATH=#{expanded_dir} open ./#{escaped_file}"
+      %x{#{cmd}}
+   else
+      cmd  = "clear; cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{expanded_dir} DYLD_LIBRARY_PATH=#{expanded_dir} ./#{escaped_file}; echo -ne \\\\n\\\\nPress RETURN to Continue...; read foo;"
+      cmd += 'osascript &amp;&gt;/dev/null'
+      cmd += ' -e "tell app \"TextMate\" to activate"'
+      cmd += ' -e "tell app \"Terminal\" to close first window" &amp;'
+
+      %x{osascript \
+         -e 'tell app "Terminal"' \
+         -e 'activate' \
+         -e 'do script "#{cmd.gsub(/[\\"]/, '\\\\\\0')}"' \
+         -e 'set position of first window to { 100, 100 }' \
+         -e 'set custom title of first window to "#{file}"' \
+         -e 'end tell'
+      }
+   end
 else
    puts "The project had multiple targets.\nDidn't know which to pick."
 end

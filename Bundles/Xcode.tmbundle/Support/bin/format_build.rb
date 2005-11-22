@@ -429,7 +429,9 @@ class Formatter
 	end
 	
 	def play_sound(sound)
-		%x{cd "#{$support}"; bin/play Sounds/#{sound} &>/dev/null &}
+		if ENV['TM_MUTE'].nil? then
+		  %x{cd "#{$support}"; bin/play Sounds/#{sound} &>/dev/null &}
+		end
 	end
 	
 	def target_name(name, style = nil)

@@ -27,14 +27,13 @@ if targets.size == 1
   productKey = target['productReference']
   product = objs[productKey]
   file = product['path']
-  escaped_dir = shell_escape(dir)
+  escaped_dir = shell_escape(File.expand_path(dir))
   escaped_file = shell_escape(file)
-  expanded_dir = escaped_dir.gsub(/^~/, ENV['HOME'])
   if target['productType'] == 'com.apple.product-type.application' then
-    cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{expanded_dir} DYLD_LIBRARY_PATH=#{expanded_dir} open ./#{escaped_file}"
+    cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} open ./#{escaped_file}"
     %x{#{cmd}}
   else
-    cmd  = "clear; cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{expanded_dir} DYLD_LIBRARY_PATH=#{expanded_dir} ./#{escaped_file}; echo -ne \\\\n\\\\nPress RETURN to Continue...; read foo;"
+    cmd  = "clear; cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} ./#{escaped_file}; echo -ne \\\\n\\\\nPress RETURN to Continue...; read foo;"
     cmd += 'osascript &>/dev/null'
     cmd += ' -e "tell app \"TextMate\" to activate"'
     cmd += ' -e "tell app \"Terminal\" to close first window" &'

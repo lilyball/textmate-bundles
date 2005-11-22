@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoScrollOutput</key>
+	<integer>1</integer>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string># this command calls xcodebuild giving the name of the project
+# directory as the project to build and parses the output for
+# file/line information then plays a succes/failure sample
+# based on the final outcome
+#
+# if the build succeeds, it will run the target
+
+PROJECT_FILE=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
+USE_CONFIGURATIONS=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/xcode_version.rb")
+
+STYLEARGNAME="buildstyle"
+
+if [[ $USE_CONFIGURATIONS -eq "0" ]]; then
+	BUILD_STYLE="${TM_BUILDSTYLE:-Deployment}"
+else	
+	BUILD_STYLE="${TM_BUILDSTYLE:-Release}"
+	STYLEARGNAME="configuration"
+fi
+
+cd "`dirname "$PROJECT_FILE"`"
+PROJECT_FILE=`basename "$PROJECT_FILE"`
+# If we have an Xcode project, and it doesn't contain the build style we're looking for,
+# accept the active build style in the project.
+if [[ -d $PROJECT_FILE ]] &amp;&amp; xcodebuild -project "$PROJECT_FILE" -list | awk 'display == "yes" { sub(/^[ \t]+/, ""); print }; /^Build styles/ { display = "yes" }' | grep -F "${BUILD_STYLE}" &amp;&gt;/dev/null; then
+	BUILD_STYLE="-$STYLEARGNAME $BUILD_STYLE";
+else
+	BUILD_STYLE="-active$STYLEARGNAME"
+fi
+
+export PROJECT_FILE
+xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} $BUILD_STYLE 2&gt;&amp;1 1&gt; &gt;(ruby -- "${TM_BUNDLE_SUPPORT}/bin/format_build.rb") &amp;&amp; "${TM_BUNDLE_SUPPORT}/bin/run_xcode_target.rb" -project_dir="$PROJECT_FILE"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@R</string>
+	<key>name</key>
+	<string>Build &amp; Run</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.c, source.objc, source.c++, source.objc++</string>
+	<key>uuid</key>
+	<string>B0254A99-7750-4A06-937A-9A453ECE3A6C</string>
+</dict>
+</plist>

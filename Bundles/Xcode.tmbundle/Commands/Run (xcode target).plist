@@ -5,76 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>export PROJECT_DIR=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
-
-export PROJECT="${PROJECT_DIR}/project.pbxproj"
-if [[ ! -f ${PROJECT} ]]; then
+	<string>PROJECT=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
+if [[ -f "${PROJECT}/project.pbxproj" ]]; then
+   "${TM_BUNDLE_SUPPORT}/bin/run_xcode_target.rb" -project_dir="$PROJECT"
+else
    echo "Didn't find an Xcode project file."
    echo "You may want to set TM_XCODE_PROJECT."
-   exit -1
 fi
-
-cd "`dirname "${PROJECT_DIR}"`"
-
-"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
-require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
-require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
-
-def shell_escape (str)
-   str.gsub(/[{}()`'"\\; $&lt;&gt;&amp;]/, '\\\\\&amp;')
-end
-
-prefs = PropertyList::load(File.new("#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"))
-dir   = prefs['PBXProductDirectory']
-
-if dir.nil?
-   dir = "#{ENV['PWD']}/build"
-end
-
-name         = ENV['PROJECT']
-proj         = PropertyList::load(File.new(name))
-objs         = proj['objects']
-rootObj      = objs[proj['rootObject']]
-
-if Xcode.supports_configurations? then
-   userFile     = "#{ENV['PROJECT_DIR']}/#{ENV['USER']}.pbxuser"
-   user         = PropertyList::load(File.new(userFile))
-   activeConfig = user[proj['rootObject']]['activeBuildConfigurationName']
-   dir += "/#{activeConfig || "Development"}"
-end
-
-targets = rootObj['targets'].reject { |t| not ['com.apple.product-type.tool', 'com.apple.product-type.application'].include?(objs[t]['productType']) }
-if targets.size == 1
-   target = objs[targets[0]]
-   productKey = target['productReference']
-   product = objs[productKey]
-   file = product['path']
-   escaped_dir = shell_escape(dir)
-   escaped_file = shell_escape(file)
-   expanded_dir = escaped_dir.gsub(/^~/, ENV['HOME'])
-   if target['productType'] == 'com.apple.product-type.application' then
-      cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{expanded_dir} DYLD_LIBRARY_PATH=#{expanded_dir} open ./#{escaped_file}"
-      %x{#{cmd}}
-   else
-      cmd  = "clear; cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{expanded_dir} DYLD_LIBRARY_PATH=#{expanded_dir} ./#{escaped_file}; echo -ne \\\\n\\\\nPress RETURN to Continue...; read foo;"
-      cmd += 'osascript &amp;&gt;/dev/null'
-      cmd += ' -e "tell app \"TextMate\" to activate"'
-      cmd += ' -e "tell app \"Terminal\" to close first window" &amp;'
-
-      %x{osascript \
-         -e 'tell app "Terminal"' \
-         -e 'activate' \
-         -e 'do script "#{cmd.gsub(/[\\"]/, '\\\\\\0')}"' \
-         -e 'set position of first window to { 100, 100 }' \
-         -e 'set custom title of first window to "#{file}"' \
-         -e 'end tell'
-      }
-   end
-else
-   puts "The project had multiple targets.\nDidn't know which to pick."
-end
-
-EOF</string>
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

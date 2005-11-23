@@ -77,7 +77,7 @@
 		8391B1EF093212210016DB7E /* CXBrowserTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXBrowserTableView.m; path = Source/CXBrowserTableView.m; sourceTree = "<group>"; };
 		8391B293093417FB0016DB7E /* storehouse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = storehouse; sourceTree = BUILT_PRODUCTS_DIR; };
 		8391B29C093418400016DB7E /* StorehouseToolMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StorehouseToolMain.m; path = Source/StorehouseToolMain.m; sourceTree = "<group>"; };
-		8391B2FD0934AE450016DB7E /* Storehouse.tmplugin */ = {isa = PBXFileReference; explicitFileType = folder; includeInIndex = 0; path = Storehouse.tmplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		8391B2FD0934AE450016DB7E /* Storehouse.tmplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Storehouse.tmplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		83E0197909293E2B004D9294 /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageAndTextCell.h; path = Source/ImageAndTextCell.h; sourceTree = "<group>"; };
 		83E0197A09293E2B004D9294 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageAndTextCell.m; path = Source/ImageAndTextCell.m; sourceTree = "<group>"; };
 		83F143C8092BA4EA0010D233 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SVNRepoBrowser.nib; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		83F143E0092BB58A0010D233 /* CXSVNTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXSVNTask.h; path = Source/CXSVNTask.h; sourceTree = "<group>"; };
 		83F143E1092BB5930010D233 /* CXSVNTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXSVNTask.m; path = Source/CXSVNTask.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* CXBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CXBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* CXBrowser.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CXBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -486,7 +486,7 @@
 				GCC_PREFIX_HEADER = CXBrowser_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "TMPLUGIN=1";
 				GCC_USE_GCC3_PFE_SUPPORT = YES;
-				INFOPLIST_FILE = /Users/chris/Code/CXBrowser/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "TMPLUGIN=1";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -515,7 +515,7 @@
 				GCC_PREFIX_HEADER = CXBrowser_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "TMPLUGIN=1";
 				GCC_USE_GCC3_PFE_SUPPORT = YES;
-				INFOPLIST_FILE = /Users/chris/Code/CXBrowser/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "TMPLUGIN=1";
 				INSTALL_PATH = "$(HOME)/Applications";

@@ -5,15 +5,21 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>XMLLINT_INDENT=`echo -e '\t'|expand -t $TM_TAB_SIZE` xmllint --format -</string>
+	<string>if [[ $TM_SOFT_TABS == "YES" ]];
+   then export XMLLINT_INDENT=$(printf "%${TM_TAB_SIZE}s")
+   else export XMLLINT_INDENT="	" # one tab
+fi
+
+xmllint --format -
+</string>
 	<key>input</key>
-	<string>document</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^H</string>
 	<key>name</key>
 	<string>Tidy XML</string>
 	<key>output</key>
-	<string>replaceDocument</string>
+	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>text.xml</string>
 	<key>uuid</key>

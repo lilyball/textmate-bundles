@@ -1,0 +1,39 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {newBrowser = id; }; 
+            CLASS = CXSVNRepoAppDelegate; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                getRootURLFromField = id; 
+                sheetCancel = id; 
+                sheetOK = id; 
+                takeRootURLFrom = id; 
+            }; 
+            CLASS = CXSVNRepoBrowser; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fCommitAnswerField = NSTextField; 
+                fCommitPromptField = NSTextField; 
+                fCommitPromptWindow = NSPanel; 
+                fGoButton = NSButton; 
+                fOutlineView = NSOutlineView; 
+                fSpinner = NSProgressIndicator; 
+                fURLField = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = CXSVNRepoNode; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {delegate = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }
+    ); 
+    IBVersion = 1; 
+}

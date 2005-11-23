@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>Markdown.pl &lt;&lt;'EOF'
+
+# Help for Xcode Bundle
+
+This bundle contains a set of useful commands for Xcode users.
+
+Several of the commands will use your Xcode project file and will try to find this by first checking the root folder of your project (`TM_PROJECT_DIRECTORY`) searching for a project with the extensions `xcodeproj`, `xcode`, or `pbproj`. If nothing is found, the folder of the currently open file (`TM_DIRECTORY`) will be checked, and then the parent and ancestor folders of this (until the project file is found).
+
+Normally it should work out-of-the-box when dragging the folder containing your Xcode project and sources to TextMate. But if you have an atypical setup, you may need to explicitly set the project file, see Settings below for details.
+
+## Commands
+
+*   __Run__ (&amp;#x2318;R)
+
+    Scan the project file for a target of type _application_ or _tool_ and run it.
+    
+    For _application_ targets, TextMate will use the [`open`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/open.1.html) command to run the application. This means that output is sent to the shared console log, which is viewable by &lt;a href="javascript:TextMate.system('open -a Console.app', null)"&gt;launching the Console utility&lt;/a&gt;.
+
+    For _tool_ targets, TextMate will use the Terminal application to run the tool.
+
+    The `DYLD_FRAMEWORK_PATH` and `DYLD_LIBRARY_PATH` environment variables are set to the targets folder before running the target.
+
+    If the project has multiple _tool_ and _application_ targets, the command will currently show an error (rather than pick the active).
+
+*   __Build__ (&amp;#x2318;B)
+
+    Build the project using [`xcodebuild`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html) with the active build configuration and show the result pretty-printed and with potential source references shown as clickable links.
+
+    A sample will be played based on the success/failure of the build. See Settings below for how to disable this.
+
+*   __Build &amp; Run__ (&amp;#x21E7;&amp;#x2318;R)
+
+    First do a normal build, if that succeeds, run the target.
+
+*   __Clean__
+
+    This will clear the target (done by running `xcodebuild clean` with the project and active build configuration as arguments).
+
+*   __Import Project…__
+
+    Asks you for an Xcode project, and will then create (and open) a TextMate project that mimics the groups and files present in that project.
+
+*   __Import Frontmost Project__
+
+    Create a TextMate project with groups and files like the frontmost project which is open in Xcode.
+    
+## Settings
+
+*   `TM_XCODE_PROJECT`
+
+    If your file structure is so that TextMate can't automatically find your Xcode project, then you can set this environment variable to the full path of the project file.
+    
+    It makes the most sense to set this as a project specific variable (as opposed to a global variable). This is done by deselecting everything in the project drawer and then clicking the small circled I button in the lower right corner of the drawer.
+
+*   `TM_MUTE`
+
+    If you do not like the samples being played after a build, you can set this variable to 1. This can be done in Preferences &amp;#x2192; Advanced &amp;#x2192; Shell Variables.
+
+## Credits
+
+Majority of work done by Chris Thomas. Additional work by Allan Odgaard with support from Mark Rowe and Rob Rix.
+
+EOF</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>31F1A06C-0990-4BD7-8E63-D65E7BCD485D</string>
+</dict>
+</plist>

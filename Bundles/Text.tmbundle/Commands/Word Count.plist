@@ -12,12 +12,14 @@ printf "%11.11s lines\n" $(pretty $(cut &lt;&lt;&lt;$res -d\  -f1))
 printf "%11.11s words\n" $(pretty $(cut &lt;&lt;&lt;$res -d\  -f2))
 printf "%11.11s bytes\n" $(pretty $(cut &lt;&lt;&lt;$res -d\  -f3))
 </string>
+	<key>fallbackInput</key>
+	<string>document</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^N</string>
 	<key>name</key>
-	<string>Document Statistics (Word Count)</string>
+	<string>Statistics for Document / Selection (Word Count)</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>

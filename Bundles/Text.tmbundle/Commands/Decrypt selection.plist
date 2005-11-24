@@ -11,15 +11,17 @@
 passwd=$(tail -n1 &lt;&lt;&lt;"$res")
 
 if ! openssl enc -d -aes128 -base64 -pass "pass:$passwd"; then
-   exit_show_tool_tip "Error"
+   exit_show_tool_tip
 fi
 </string>
+	<key>fallbackInput</key>
+	<string>document</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^@E</string>
 	<key>name</key>
-	<string>AES Decrypt With Password…</string>
+	<string>AES Decrypt Document / Selection With Password…</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>uuid</key>

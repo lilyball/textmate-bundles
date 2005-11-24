@@ -12,12 +12,14 @@ passwd=$(tail -n1 &lt;&lt;&lt;"$res")
 
 openssl enc -e -aes128 -base64 -pass "pass:$passwd"
 </string>
+	<key>fallbackInput</key>
+	<string>document</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^@E</string>
 	<key>name</key>
-	<string>AES Encrypt With Password…</string>
+	<string>AES Encrypt Document / Selection With Password…</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>uuid</key>

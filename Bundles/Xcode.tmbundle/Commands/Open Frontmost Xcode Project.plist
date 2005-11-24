@@ -8,9 +8,7 @@
 	<string># import the frontmost opened project window in Xcode
 
 source_path=$(osascript -e 'tell application "Xcode" to get the path of project 1')
-dest_path="${source_path%.xcode}"
-dest_path="${dest_path%.pbproj}"
-dest_path="${dest_path}.tmproj"
+dest_path="${source_path%.*}.tmproj"
 
 # FIXME probably should move the old dest_path somewhere and only nuke it if the conversion is successful
 

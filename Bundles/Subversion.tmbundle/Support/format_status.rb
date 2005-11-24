@@ -1,3 +1,15 @@
+
+# status or update?
+$is_status = false
+
+ARGV.each {|arg| $is_status = true if arg == "--status"}
+
+command_name = if $is_status then
+	"status"
+else
+	"update"
+end
+
 bundle				= ENV['TM_BUNDLE_SUPPORT']
 support				= ENV['TM_SUPPORT_PATH']
 work_path			= ENV['WorkPath']
@@ -16,6 +28,8 @@ class << mup
 	
 	StatusMap = {	'A' => 'added',
 					'D' => 'deleted',
+					'G' => 'merged',
+					'U' => 'updated',
 					'M' => 'modified',
 					'C' => 'conflict',
 					'!' => 'missing',
@@ -31,15 +45,15 @@ end
 
 mup.html {
 	mup.head {
-			mup.title("Subversion status")
+			mup.title("Subversion #{command_name}")
 			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_style.css';
 						@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
 	}
 
 	mup.body { 
-		mup.h1("Subversion Status for '#{File.basename(work_path)}'")
+		mup.h1("Subversion #{command_name} for '#{File.basename(work_path)}'")
 #		mup.hr
-		mup.div("class" => "command"){ mup.strong("#{svn} status"); mup.text!(" " + work_path) } #mup.text!("checking "); 
+		mup.div("class" => "command"){ mup.strong("#{svn} #{command_name}"); mup.text!(" " + work_path) } #mup.text!("checking "); 
 		STDOUT.flush
 		mup.hr
 
@@ -48,9 +62,15 @@ mup.html {
 				
 				mup.tr {
 					if /^svn:/.match( line ).nil? then
-						match = /^(.....)(?:\s+)(.*)\n/.match( line )
-					
+						
+						match = if $is_status then
+							/^(.....)(?:\s+)(.*)\n/.match( line )
+						else
+							/^(.)(?:\s+)(.*)\n/.match( line )
+						end
+						
 						if match.nil? then
+							mup.td("")
 							mup.td(line)
 						else
 							status	= match[1]

@@ -8,35 +8,10 @@
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
 export TM_SVN
-export WorkPaths="$TM_PROJECT_DIRECTORY"
+export WorkPath="$TM_PROJECT_DIRECTORY"
 
-"${TM_RUBY:-ruby}" &lt;&lt;END
-	svn		= ENV['TM_SVN']
-	bundle	= ENV['TM_BUNDLE_SUPPORT']
-
-	puts "&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Update Project&lt;/title&gt;
-&lt;style type=\"text/css\"&gt;
-   @import 'file://"+bundle+"/Stylesheets/svn_style.css';
-&lt;/style&gt;
-&lt;/head&gt;
-
-&lt;body&gt;"
-	command = %Q{#{svn} update "$WorkPaths"}
-	puts "&lt;h1&gt;Update Project&lt;/h1&gt;"
-	puts "&lt;div class=\"command\"&gt;"
-	puts "&lt;strong&gt;" + "#{svn} update" + "&lt;/strong&gt;" + "&amp;nbsp;" + "$WorkPaths"
-	puts "&lt;/div&gt;"
-	puts "&lt;hr&gt;"
-	puts "&lt;p&gt; &lt;pre&gt;"
-
-	STDOUT.flush
-	fork { exec "#{command}" }
-	Process.wait
-
-	puts "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"
-END
+"$TM_SVN" update "$WorkPath" 2&gt;&amp;1 \
+|"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb"
 
 # force TM to refresh the current file..
 osascript &amp;&gt;/dev/null \

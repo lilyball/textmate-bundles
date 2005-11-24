@@ -14,7 +14,7 @@ fi
 
 # show it..
 "$TM_SVN" status "$WorkPath" 2&gt;&amp;1 \
-|"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb"</string>
+|"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"</string>
 	<key>dontFollowNewOutput</key>
 	<true/>
 	<key>input</key>

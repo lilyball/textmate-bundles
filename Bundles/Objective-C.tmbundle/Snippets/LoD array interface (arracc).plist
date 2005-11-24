@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>-(void)add${1:Thing}:(${2:id})${3:thing};
+-(void)insert${1:Thing}:(${2:id})${3:thing} atIndex:(unsigned)i;
+-(${2:id})${3:thing}AtIndex:(unsigned)i;
+-(unsigned)indexOf${1:Thing}:(${2:id})${3:thing};
+-(void)remove${1:Thing}AtIndex:(unsigned)i;
+-(NSArray *)${3:thing}s;
+-(void)set${1:Thing}s:(NSArray *)new${1:Thing}s;
+</string>
+	<key>name</key>
+	<string>LoD array interface (arracc)</string>
+	<key>scope</key>
+	<string>source.objc meta.scope.interface, source.objc++ meta.scope.interface</string>
+	<key>tabTrigger</key>
+	<string>arracc</string>
+	<key>uuid</key>
+	<string>C125E6DB-7FB5-4B19-8648-0A5617B1B5BC</string>
+</dict>
+</plist>

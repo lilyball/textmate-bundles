@@ -1,7 +1,16 @@
-{
-    content = "Session(\"$1\")$0"; 
-    name = "Session(\"\")"; 
-    trigger = sess; 
-    uuid = "6D6BF39D-63AB-11D9-B316-000A95CA2CD0"; 
-    scope = "source.asp";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Session("${1:whatever}")</string>
+	<key>name</key>
+	<string>Session("…") (sess)</string>
+	<key>scope</key>
+	<string>source.asp</string>
+	<key>tabTrigger</key>
+	<string>sess</string>
+	<key>uuid</key>
+	<string>6D6BF39D-63AB-11D9-B316-000A95CA2CD0</string>
+</dict>
+</plist>

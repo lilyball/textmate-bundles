@@ -1,7 +1,20 @@
-{
-    content = "If $1 Then\n\t$2\nElse\n\t$3\nEnd if$0"; 
-    name = "ASP if-else"; 
-    trigger = ifelse; 
-    uuid = "6D6BE9FA-63AB-11D9-B316-000A95CA2CD0"; 
-    scope = "source.asp";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>If ${1:condition} Then
+	${2:' true}
+Else
+	${3:' false}
+End if</string>
+	<key>name</key>
+	<string>If … End if (ifelse)</string>
+	<key>scope</key>
+	<string>source.asp</string>
+	<key>tabTrigger</key>
+	<string>ifelse</string>
+	<key>uuid</key>
+	<string>6D6BE9FA-63AB-11D9-B316-000A95CA2CD0</string>
+</dict>
+</plist>

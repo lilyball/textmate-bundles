@@ -1,7 +1,16 @@
-{
-    content = "Response.Redirect($0)"; 
-    name = "Response.Redirect"; 
-    trigger = "r.r"; 
-    uuid = "6D6BF08E-63AB-11D9-B316-000A95CA2CD0"; 
-    scope = "source.asp";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Response.Redirect(${1:to})</string>
+	<key>name</key>
+	<string>Response.Redirect (r.r)</string>
+	<key>scope</key>
+	<string>source.asp</string>
+	<key>tabTrigger</key>
+	<string>r.r</string>
+	<key>uuid</key>
+	<string>6D6BF08E-63AB-11D9-B316-000A95CA2CD0</string>
+</dict>
+</plist>

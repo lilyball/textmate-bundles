@@ -1,7 +1,16 @@
-{
-    content = "Request.Form(\"${1:field}\")$0"; 
-    name = "Request.Form(\"\")"; 
-    trigger = "r.f"; 
-    uuid = "6D6BECA3-63AB-11D9-B316-000A95CA2CD0"; 
-    scope = "source.asp";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Request.Form("${1:field}")</string>
+	<key>name</key>
+	<string>Request.Form("…") (r.f)</string>
+	<key>scope</key>
+	<string>source.asp</string>
+	<key>tabTrigger</key>
+	<string>r.f</string>
+	<key>uuid</key>
+	<string>6D6BECA3-63AB-11D9-B316-000A95CA2CD0</string>
+</dict>
+</plist>

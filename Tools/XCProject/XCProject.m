@@ -235,7 +235,7 @@
 	}
 }
 
-- (void) visitFileGroupsDepthFirstWithVisitor:(id)delegate
+- (void) visitFileGroupsDepthFirstWithVisitor:(id<XCVisitor>)delegate
 {
 	[self visitFile:[[self root] valueForKey:@"mainGroup"] ofGroup:nil withDelegate:delegate];
 }

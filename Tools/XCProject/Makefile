@@ -6,4 +6,4 @@ xcode_to_tmproj: ConvertXcodeToTMProj.m XCProject.m XCProject.h XCodeArchiveType
 	cc -ObjC -lobjc -Os -framework Foundation -std=c99 ConvertXcodeToTMProj.m XCProject.m -o xcode_to_tmproj
 
 install: xcode_to_tmproj
-	cp xcode_to_tmproj ../../Bundles/Source.tmbundle/bin/
+	cp xcode_to_tmproj ../../Bundles/Xcode.tmbundle/Support/bin/

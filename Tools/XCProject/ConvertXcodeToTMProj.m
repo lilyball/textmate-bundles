@@ -105,6 +105,8 @@ popd
 
 - (void) writeProjectToPath:(NSString *)path
 {
+	// unfold last (and only) child (if it exists)
+	[[[fTMProj objectForKey:@"documents"] lastObject] setObject:[NSNumber numberWithBool:YES] forKey:@"expanded"];
 	[fTMProj writeToFile:path atomically:NO];
 }
 

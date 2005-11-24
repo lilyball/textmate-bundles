@@ -5,14 +5,16 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>/usr/bin/perltidy -st -q "$TM_FILEPATH"
+	<string>require_cmd perltidy 'Perltidy is available &lt;a href="javascript:TextMate.system(&amp;quot;open http://perltidy.sourceforge.net/&amp;quot;, null)"&gt;from here&lt;/a&gt;.'
+
+perltidy -st -q "$TM_FILEPATH"
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>^@p</string>
+	<string>^H</string>
 	<key>name</key>
-	<string>PerlTidy</string>
+	<string>Tidy</string>
 	<key>output</key>
 	<string>replaceDocument</string>
 	<key>scope</key>

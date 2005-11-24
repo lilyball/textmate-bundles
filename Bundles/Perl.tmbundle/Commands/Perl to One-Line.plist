@@ -9,10 +9,12 @@
 	<key>capturePattern</key>
 	<string>^(.*)line (\d+)(.*)$</string>
 	<key>command</key>
-	<string>perltidy -st -dac -mangle "$TM_FILEPATH" | perl -e '        local $/;$_=&lt;&gt;;s/^#(.*?)\n//;s/\n//g;print;'
+	<string>require_cmd perltidy 'Perltidy is available &lt;a href="javascript:TextMate.system(&amp;quot;open http://perltidy.sourceforge.net/&amp;quot;, null)"&gt;from here&lt;/a&gt;.'
+
+perltidy -st -dac -mangle "$TM_FILEPATH" | perl -e '        local $/;$_=&lt;&gt;;s/^#(.*?)\n//;s/\n//g;print;'
 </string>
 	<key>input</key>
-	<string>document</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>lineCaptureRegister</key>
@@ -20,7 +22,7 @@
 	<key>name</key>
 	<string>Perl to One-Line</string>
 	<key>output</key>
-	<string>replaceDocument</string>
+	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>source.perl</string>
 	<key>uuid</key>

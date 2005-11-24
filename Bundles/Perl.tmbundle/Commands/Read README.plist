@@ -5,15 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>echo "&lt;html&gt;&lt;body&gt;&lt;pre&gt;"
-cat "$TM_BUNDLE_PATH"/README
-echo "&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"</string>
+	<string>cat "$TM_BUNDLE_SUPPORT/Help.txt"|pre
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>Read README</string>
+	<string>Help</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

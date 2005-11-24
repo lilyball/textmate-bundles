@@ -19,12 +19,14 @@ mysql -e "$query" \
 
 echo -n "Query completed"|pre
 </string>
+	<key>fallbackInput</key>
+	<string>line</string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^Q</string>
 	<key>name</key>
-	<string>MySQL Query</string>
+	<string>Execute Line / Selection as MySQL Query</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

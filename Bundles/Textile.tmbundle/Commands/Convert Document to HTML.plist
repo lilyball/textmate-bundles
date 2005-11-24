@@ -5,18 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># This command works well when you use the TextMate service from a web-log editor like Ecto or 
-# MarsEdit.  You can write in markdown and then convert back to html before save and close.
-
-"$TM_SUPPORT_PATH/bin/Textile.rb"</string>
-	<key>input</key>
+	<string>"$TM_SUPPORT_PATH/bin/Textile.rb"</string>
+	<key>fallbackInput</key>
 	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^H</string>
 	<key>name</key>
-	<string>Convert Document to HTML</string>
+	<string>Convert Document / Selection to HTML</string>
 	<key>output</key>
-	<string>replaceDocument</string>
+	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>text.html.textile</string>
 	<key>uuid</key>

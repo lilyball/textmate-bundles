@@ -9,7 +9,7 @@
 	<key>capturePattern</key>
 	<string>^.*\/(\w+\.java):(\d+):.*</string>
 	<key>command</key>
-	<string>egrep -rns "class[ ]+$TM_SELECTED_TEXT[ ]+" $TM_PROJECT_DIRECTORY | grep "\.java"</string>
+	<string>egrep -rns "class[ ]+${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}[ ]+" "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}" | grep "\.java"</string>
 	<key>fileCaptureRegister</key>
 	<string>1</string>
 	<key>input</key>
@@ -17,7 +17,7 @@
 	<key>lineCaptureRegister</key>
 	<string>2</string>
 	<key>name</key>
-	<string>Find j-class declar</string>
+	<string>Find Class Declaration for Word / Selection</string>
 	<key>output</key>
 	<string>separateWindow</string>
 	<key>scope</key>

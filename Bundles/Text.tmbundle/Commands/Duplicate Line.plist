@@ -12,6 +12,8 @@ if [[ -z "$TM_SELECTED_TEXT" ]]
 ${TM_CURRENT_LINE:0:$TM_COLUMN_NUMBER-1}"
    else echo -n "$TM_SELECTED_TEXT"
 fi</string>
+	<key>fallbackInput</key>
+	<string>line</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

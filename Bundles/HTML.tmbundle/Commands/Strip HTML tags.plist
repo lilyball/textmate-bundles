@@ -11,12 +11,14 @@ php -r 'echo strip_tags( file_get_contents("/dev/stdin") );'
 ###  If you want to keep a particular tag, such as &lt;p&gt; comment the above line and uncomment the next line
 # php -r 'echo strip_tags( file_get_contents("/dev/stdin"), "&lt;p&gt;" );'
 ### end</string>
+	<key>fallbackInput</key>
+	<string>document</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>Strip HTML Tags</string>
+	<string>Strip HTML Tags from Document / Selection</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>

@@ -15,6 +15,7 @@
 
 template="$1"
 classname=${TM_NEW_FILE_BASENAME%.java}
+projname=`basename "$TM_PROJECT_DIRECTORY"`
 
 ## find package name
 if [ -z "${org_bravo5_Java_pkgregexp}" ]; then
@@ -29,6 +30,7 @@ author=$(defaults read AddressBookMe 2>/dev/null | awk -f ../addrbook.awk)
 
 sed -e "s#@@CLASSNAME@@#${classname}#g" \
     -e "s#@@PACKAGE@@#${pkg_name}#g" \
+    -e "s#@@PROJECT@@#${projname}#g" \
     -e "s#@@AUTHOR@@#${author}#g" \
     < ${template} > "${TM_NEW_FILE}"
 

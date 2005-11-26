@@ -9,7 +9,11 @@
 	<key>CFBundleIconFile</key>
 	<string>SVNLogo</string>
 	<key>CFBundleIdentifier</key>
+#if TMPLUGIN
+	<string>com.cjack.tmplugin.svn.browser</string>
+#else
 	<string>com.cjack.svn.browser</string>
+#endif
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -22,12 +26,10 @@
 	<string>1.0</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
-	
 	<key>NSPrincipalClass</key>
 #if TMPLUGIN
 	<string>CXSVNRepoAppDelegate</string>
 #else
-#error fuck
 	<string>NSApplication</string>
 #endif
 </dict>

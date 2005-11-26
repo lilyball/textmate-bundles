@@ -29,6 +29,13 @@ static NSMutableArray *			sBrowsers = nil;
 	[sBrowsers release];
 	[super dealloc];
 }
+#else
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+	[self vend];
+	[self newBrowser:self];
+}
+
 #endif
 
 - (IBAction) newBrowser:(id)sender
@@ -98,13 +105,6 @@ static NSMutableArray *			sBrowsers = nil;
 	{
 		NSRunAlertPanel(@"Can't vend Storehouse browser object.", @"I can't vend the browser object. I can't tell you why, either, because AppKit won't tell me. (In plain English, this means that the Browse Subversion Repository command won't work.)", @"OK", nil, nil);
 	}
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-	
-	[self vend];
-	[self newBrowser:self];
 }
 
 @end

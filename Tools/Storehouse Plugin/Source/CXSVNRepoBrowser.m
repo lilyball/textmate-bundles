@@ -370,13 +370,23 @@
 	{
 		NSString *	string = [pboard stringForType: NSStringPboardType];
 		NSArray *	URLsToCopy;
+		SEL			action = @selector(copyURLAction:);
 
 		URLsToCopy = [string componentsSeparatedByString:@"\n"];
 
 		// get us out of the drag and drop loop
-		[self performSelector:@selector(copyURLAction:) withObject:[NSArray arrayWithObjects:item, URLsToCopy, nil] afterDelay:0.0];
+		
+		if (([info draggingSourceOperationMask] & NSDragOperationMove) == NSDragOperationMove)
+		{
+			action = @selector(moveURLAction:);
+		}
+
+		[self performSelector:action
+					withObject:[NSArray arrayWithObjects:[URLsToCopy objectAtIndex:0], [item URL], nil]
+					afterDelay:0.0];
 		accepted = YES;
 	}
+
 
 //	[outlineView reloadData];
 //	[outlineView selectItems:item byExtendingSelection:NO];
@@ -384,34 +394,31 @@
 	return accepted;
 }
 
-- (void) copyURLAction:(NSArray *)args
-{
-	CXSVNRepoNode *			destinationNode	= [args objectAtIndex:0];
-	NSArray *				copyURLs		= [args objectAtIndex:1];	
-	NSMutableDictionary	*	dict 			= [NSMutableDictionary dictionary];
-	
-	// FIXME: only displays first URL
-	NSString *				pathFrom		= [copyURLs objectAtIndex:0];
-	NSString *				pathTo			= [destinationNode URL];
 
-	[dict setObject:copyURLs forKey:@"URLs"];
-	[dict setObject:destinationNode forKey:@"node"];
-		
-	[self askForCommitWithVerb:@"Copy:"
-				prompt:@"Reason for the copy?"
-				source:pathFrom
-				destination:pathTo
-				action:@selector(copyURLComplete:context:)
-				context:dict];
+// for one-URL commands: - (void) doSomethingWithURL:(NSString *)string
+// for two-URL commands: - (void) doSomethingFromURL:(NSString *)source toURL:(NSString *)destination
+// for multi-URL commands: - (void) doSomethingWithURLs:(NSArray *)arrayOfStringURLs
+
+- (void) moveURLAction:(NSArray *)args
+{
+	NSString *				pathFrom		= [args objectAtIndex:0];
+	NSString *				pathTo			= [args objectAtIndex:1];
+
+	[self askForCommitWithVerb:@"Move:"
+				prompt:@"Reason for the move?"
+				URLs:[NSArray arrayWithObjects:pathFrom, pathTo, nil]
+				action:@selector(moveURL:toURL:withDescription:)];
 }
 
-- (void) copyURLComplete:(NSString *)description context:(NSDictionary *)args
+- (void) copyURLAction:(NSArray *)args
 {
-	CXSVNRepoNode *	destinationNode	= [args objectForKey:@"node"];
-	NSArray *		copyURLs		= [args objectForKey:@"URLs"];
-	NSString *		destURL			= [args objectForKey:@"destinationURL"];
-	
-	[destinationNode copyURL:[copyURLs objectAtIndex:0] toURL:destURL withDescription:description];
+	NSString *				pathFrom		= [args objectAtIndex:0];
+	NSString *				pathTo			= [args objectAtIndex:1];
+
+	[self askForCommitWithVerb:@"Copy:"
+				prompt:@"Reason for the copy?"
+				URLs:[NSArray arrayWithObjects:pathFrom, pathTo, nil]
+				action:@selector(copyURL:toURL:withDescription:)];
 }
 
 
@@ -487,63 +494,111 @@
 
 
 #if 0
+#pragma mark -
 #pragma mark Sheet Sheet
 #endif
 
-- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt source:(NSString *)sourceURL destination:(NSString *)destURL action:(SEL)selector context:(NSDictionary *)dictionary
+- (void) configureCommitSheetForOneURL
 {
-	NSValue *				value = [NSValue value:&selector withObjCType:@encode(SEL)];
-	NSMutableDictionary *	context = [NSMutableDictionary dictionaryWithDictionary:dictionary];
+	// Verb may stretch out if there's no source URL
+
 	NSSize					verbFieldSize = [fCommitVerbField frame].size;
+
+	[fCommitURLSource setHidden:YES];
+	
+	[fCommitVerbField setFrameSize:NSMakeSize(verbFieldSize.width + [fCommitURLSource frame].size.width, verbFieldSize.height)];
+	[fCommitVerbField setAlignment:NSLeftTextAlignment];
+	
+}
+
+- (void) configureCommitSheetForTwoURLs
+{
+	[fCommitVerbField setFrameSize:NSMakeSize(71, [fCommitVerbField frame].size.height)];
+	[fCommitVerbField setAlignment:NSRightTextAlignment];
+	
+	[fCommitURLSource setHidden:NO];
+}
+
+- (void) configureCommitSheetForMultipleURLs
+{
+	[NSException raise:@"NotImplemented" format:@"multiple URLs aren't supported yet"];
+}
+
+- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector
+{
+	NSMutableDictionary *	context  	= [[NSMutableDictionary alloc] init];
+	NSValue *				value		= [NSValue value:&selector withObjCType:@encode(SEL)];
+	unsigned int			URLCount	= [URLs count];
 	
 	[context setObject:value forKey:@"action"];
+	[context setObject:URLs forKey:@"URLs"];
 	
 	[fCommitVerbField setStringValue:verb];
 	[fCommitPromptField setStringValue:prompt];
 
-	// Verb may stretch out if there's no source URL
-	if( [sourceURL isEqualToString:@""] )
+	[fCommitURLSource setStringValue:[URLs objectAtIndex:0]];
+
+	if( URLCount == 1 )
 	{
-		[fCommitURLSource setHidden:YES];
-		
-		[fCommitVerbField setFrameSize:NSMakeSize(verbFieldSize.width + [fCommitURLSource frame].size.width, verbFieldSize.height)];
-		[fCommitVerbField setAlignment:NSLeftTextAlignment];
+		[fCommitURLDestination setStringValue:[URLs objectAtIndex:0]];
+		[self configureCommitSheetForOneURL];
+	}
+	else if( URLCount == 2 )
+	{	
+		[fCommitURLDestination setStringValue:[URLs objectAtIndex:1]];
+		[self configureCommitSheetForTwoURLs];
 	}
 	else
 	{
-		[fCommitVerbField setFrameSize:NSMakeSize(71, [fCommitVerbField frame].size.height)];
-		[fCommitVerbField setAlignment:NSRightTextAlignment];
-		
-		[fCommitURLSource setHidden:NO];
-		[fCommitURLSource setStringValue:sourceURL];
+		[self configureCommitSheetForMultipleURLs];
 	}
-	[fCommitURLDestination setStringValue:destURL];
+
 	
-	[context retain];
 	[NSApp	beginSheet:fCommitPromptWindow
 			modalForWindow:[fOutlineView window]
 			modalDelegate:self
 			didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
 			contextInfo:context];
-	
+}
+
+- (void) performSelector:(SEL)selector withObject:(id)one withObject:(id)two withObject:(id)three
+{
+	(void)objc_msgSend(self, selector, one, two, three);
 }
 
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	NSMutableDictionary *	contextDict = (NSMutableDictionary *)contextInfo;
+	NSDictionary *		contextDict = (NSDictionary *)contextInfo;
 	
 	if (returnCode == NSOKButton)
 	{
-		SEL			selector;
-		NSValue *	action = [contextDict objectForKey:@"action"];
-		NSString *	outString;
+		NSValue *			action		= [contextDict objectForKey:@"action"];
+		NSArray *			URLs		= [contextDict objectForKey:@"URLs"];
+		SEL					selector;
+		NSString *			description;
+		unsigned int		countURLs;
+
+		description = [fCommitAnswerField stringValue];
 		
 		[action getValue:&selector];
 		
-		outString = [fCommitAnswerField stringValue];
-		
-		[contextDict setObject:[fCommitURLDestination stringValue] forKey:@"destinationURL"];
-		[self performSelector:selector withObject:outString withObject:contextDict];
+		countURLs = [URLs count];
+		if( countURLs == 1 )
+		{
+			[self performSelector:selector	withObject:[fCommitURLDestination stringValue]
+											withObject:description];
+		}
+		else if( countURLs == 2 )
+		{
+			[self performSelector:selector	withObject:[URLs objectAtIndex:0]
+											withObject:[fCommitURLDestination stringValue]
+											withObject:description];
+		}
+		else if( countURLs > 2 )
+		{
+			[self performSelector:selector	withObject:URLs
+											withObject:description];
+		}
 	}
 	else
 	{
@@ -572,33 +627,17 @@
 #pragma mark Task core
 #endif
 
-// TODO: add/import, delete, mkdir, export, move
+// TODO: checkout, delete, export, add/import?
+// TODO: if the target node is visible, refresh it -- requires finding the target node given the URL
 
 - (void) makeDirAtNode:(CXSVNRepoNode *)node
 {
-	NSMutableDictionary	*	dict 			= [NSMutableDictionary dictionary];
-	
-	// FIXME: only displays first URL
-	NSString *				pathTo			= [node URL];
-
-	[dict setObject:node forKey:@"node"];
-		
 	[self askForCommitWithVerb:@"New Folder"
 				prompt:@"Purpose of the new folder?"
-				source:@""
-				destination:pathTo
-				action:@selector(makeDirURLComplete:context:)
-				context:dict];
+				URLs:[NSArray arrayWithObject:[node URL]]
+				action:@selector(makeDirAtURL:withDescription:)];
 }
 
-- (void) makeDirURLComplete:(NSString *)description context:(NSDictionary *)args
-{
-	NSString *		destURL			= [args objectForKey:@"destinationURL"];
-	
-	[self makeDirAtURL:destURL withDescription:description];
-}
-
-// TODO: if the target node is visible, refresh it -- requires finding the target node given the URL
 - (void) copyURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc
 {
 	// FIXME: copy more than one
@@ -627,7 +666,7 @@
 
 - (void) moveURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc
 {
-	NSArray *	arguments = [NSArray arrayWithObjects:@"move", @"-m", desc, destURL, nil];
+	NSArray *	arguments = [NSArray arrayWithObjects:@"move", @"-m", desc, sourceURL, destURL, nil];
 
 	[self willStartSVNNode:fRootNode];
 	
@@ -654,6 +693,20 @@
 	{
 		[self didStopSVNNode:fRootNode];
 	}
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+	[self release];
+}
+
+- (void) dealloc
+{
+	[fStatusWindow release];
+	[fRootNode release];
+	[fRepoLocation release];
+	
+	[super dealloc];
 }
 
 @end

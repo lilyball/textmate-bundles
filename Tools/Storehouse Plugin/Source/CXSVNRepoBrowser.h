@@ -9,11 +9,12 @@
 @interface CXSVNRepoBrowser : NSObject
 {
 				NSString *				fRepoLocation;
+				CXSVNRepoNode *			fRootNode;
+
 	IBOutlet	NSOutlineView *			fOutlineView;
 	IBOutlet	NSProgressIndicator *	fSpinner;
 	IBOutlet	NSTextField *			fURLField;
 	IBOutlet	NSButton *				fGoButton;
-				CXSVNRepoNode *			fRootNode;
 		
 	IBOutlet	NSTextField *			fCommitVerbField;
 	IBOutlet	NSTextField *			fCommitPromptField;
@@ -38,12 +39,10 @@
 - (IBAction) takeRootURLFrom:(id)sender;
 - (IBAction) getRootURLFromField:(id)sender;
 
-- (IBAction)close:(id)sender;
-
 - (IBAction)sheetCancel:(id)sender;
 - (IBAction)sheetOK:(id)sender;
 
-- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt source:(NSString *)sourceURL destination:(NSString *)destURL action:(SEL)selector context:(NSDictionary *)dictionary;
+- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector;
 
 - (IBAction) contextRefresh:(id)sender;
 - (IBAction) contextMakeDir:(id)sender;

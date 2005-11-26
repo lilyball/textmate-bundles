@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		835744B20937EDD00030AB66 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8379C2D809252ADB00481DBE /* CXSVNRepoNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8379C2D709252ADB00481DBE /* CXSVNRepoNode.m */; };
 		8379C2E1092535E300481DBE /* CXSVNRepoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8379C2E0092535E300481DBE /* CXSVNRepoBrowser.m */; };
 		8391B117092E50BB0016DB7E /* SVNLogo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8391B115092E50BB0016DB7E /* SVNLogo.icns */; };
@@ -34,7 +35,6 @@
 		83F143C9092BA4EA0010D233 /* SVNRepoBrowser.nib in Resources */ = {isa = PBXBuildFile; fileRef = 83F143C7092BA4EA0010D233 /* SVNRepoBrowser.nib */; };
 		83F143D3092BAD540010D233 /* CXSVNRepoDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F143D2092BAD540010D233 /* CXSVNRepoDelegate.m */; };
 		83F143E2092BB5930010D233 /* CXSVNTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F143E1092BB5930010D233 /* CXSVNTask.m */; };
-		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -86,7 +86,7 @@
 		83F143E0092BB58A0010D233 /* CXSVNTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXSVNTask.h; path = Source/CXSVNTask.h; sourceTree = "<group>"; };
 		83F143E1092BB5930010D233 /* CXSVNTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXSVNTask.m; path = Source/CXSVNTask.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* CXBrowser.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CXBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Storehouse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Storehouse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,7 +161,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* CXBrowser.app */,
+				8D1107320486CEB800E47090 /* Storehouse.app */,
 				8391B293093417FB0016DB7E /* storehouse */,
 				8391B2FD0934AE450016DB7E /* Storehouse.tmplugin */,
 			);
@@ -291,7 +291,7 @@
 			name = Storehouse;
 			productInstallPath = "$(HOME)/Applications";
 			productName = CXBrowser;
-			productReference = 8D1107320486CEB800E47090 /* CXBrowser.app */;
+			productReference = 8D1107320486CEB800E47090 /* Storehouse.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -333,11 +333,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				83F143C9092BA4EA0010D233 /* SVNRepoBrowser.nib in Resources */,
 				8391B117092E50BB0016DB7E /* SVNLogo.icns in Resources */,
 				8391B3440934B2D30016DB7E /* Info.plist in Resources */,
+				835744B20937EDD00030AB66 /* MainMenu.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,7 +531,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -539,9 +539,9 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = CXBrowser;
+				PRODUCT_NAME = Storehouse;
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
+				ZERO_LINK = NO;
 			};
 			name = Debug;
 		};
@@ -552,6 +552,7 @@
 					ppc,
 					i386,
 				);
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -559,8 +560,9 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = CXBrowser;
+				PRODUCT_NAME = Storehouse;
 				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};

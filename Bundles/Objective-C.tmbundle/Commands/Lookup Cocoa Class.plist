@@ -5,16 +5,22 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>fkit="/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation/ObjC_classic/Classes/${TM_CURRENT_WORD}.html"
-appkit="/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/ObjC_classic/Classes/${TM_CURRENT_WORD}.html"
+	<string>folders=(
+	"/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation"
+	"/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit"
+	"/Developer/ADC Reference Library/documentation/Cocoa/Reference/WebKit"
+)
 
-if [[ -f $fkit ]]; then
-   exit_show_html '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${fkit// /%20}'"&gt;'
-elif [[ -f $appkit ]]; then
-   exit_show_html '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${appkit// /%20}'"&gt;'
-else
-   echo "Class: $TM_CURRENT_WORD not found!"
-fi
+class=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
+
+for (( i = 0; i &lt; ${#folders[@]}; i++ )); do
+	file="${folders[$i]}/ObjC_classic/Classes/${class}.html"
+	if [[ -f $file ]]; then
+		exit_show_html '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${file// /%20}'"&gt;'
+	fi
+done
+
+echo "Couldn’t find class: “${class}”"
 </string>
 	<key>input</key>
 	<string>none</string>

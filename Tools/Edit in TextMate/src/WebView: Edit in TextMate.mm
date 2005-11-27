@@ -12,6 +12,43 @@
 - (void)editInTextMate:(id)sender;
 @end
 
+@interface NSString (EditInTextMate)
+- (NSString*)stringByTrimmingWhitespace;
+- (NSString*)stringByReplacingString:(NSString*)aSearchString withString:(NSString*)aReplaceString;
+- (NSString*)stringByNbspEscapingSpaces;
+@end
+
+@implementation NSString (EditInTextMate)
+- (NSString*)stringByTrimmingWhitespace
+{
+	NSString* str = self;
+	while([str hasPrefix:@" "])
+		str = [str substringFromIndex:1];
+
+	while([str hasSuffix:@"  "])
+		str = [str substringToIndex:[str length]-1];
+	return str;
+}
+
+- (NSString*)stringByReplacingString:(NSString*)aSearchString withString:(NSString*)aReplaceString
+{
+	return [[self componentsSeparatedByString:aSearchString] componentsJoinedByString:aReplaceString];
+}
+
+- (NSString*)stringByNbspEscapingSpaces
+{
+	unsigned len = [self length];
+	unichar* buf = new unichar[len];
+	[self getCharacters:buf];
+	for(unsigned i = 0; i != len; i++)
+	{
+		if(buf[i] == ' ' && (i+1 == len || buf[i+1] == ' '))
+			buf[i] = 0xA0;
+	}
+	return [NSString stringWithCharacters:buf length:len];
+}
+@end
+
 struct convert_dom_to_text
 {
 	convert_dom_to_text (DOMTreeWalker* treeWalker) : string([NSMutableString new]), quoteLevel(0), pendingFlush(NO), didOutputText(NO), atBeginOfLine(YES) { visit_nodes(treeWalker); }
@@ -33,19 +70,11 @@ private:
 
 	void output_text (NSString* str)
 	{
-/*		NSMutableCharacterSet* whitespace = [NSMutableCharacterSet whitespaceCharacterSet];
-		[whitespace removeCharactersInRange:NSMakeRange(0xA0, 1)];
-		str = [str stringByTrimmingCharactersInSet:whitespace];
-*/
-		while([str hasPrefix:@" "])
-			str = [str substringFromIndex:1];
-
-		while([str hasSuffix:@"  "])
-			str = [str substringToIndex:[str length]-1];
-
+		str = [str stringByTrimmingWhitespace];
 		if([str isEqualToString:@""])
 			return;
-		str = [[str componentsSeparatedByString:[NSString stringWithUTF8String:" "]] componentsJoinedByString:@" "];
+
+		str = [str stringByReplacingString:[NSString stringWithUTF8String:" "] withString:@" "];
 
 		if(pendingFlush)
 		{
@@ -107,32 +136,29 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 @implementation WebView (EditInTextMate)
 - (void)editInTextMate:(id)sender
 {
+	NSLog(@"%s %@", _cmd, [(DOMHTMLElement*)[[[self mainFrame] DOMDocument] documentElement] outerHTML]);
 	if(![self isEditable])
 		return (void)NSBeep();
 
-	DOMDocumentFragment* selection = [[self selectedDOMRange] cloneContents];
-	if(!selection)
-		selection = ([self selectAll:nil], [[self selectedDOMRange] cloneContents]);
-
-	NSLog(@"%s %@", _cmd, [(DOMHTMLElement*)[[[self mainFrame] DOMDocument] documentElement] outerHTML]);
-	NSString* str = convert_dom_to_text([[[self mainFrame] DOMDocument] createTreeWalker:selection :DOM_SHOW_ALL :nil :YES]);
-	if(![str isEqualToString:@""])
+	NSString* str = @"";
+	if(DOMDocumentFragment* selection = [[self selectedDOMRange] cloneContents] ?: ([self selectAll:nil], [[self selectedDOMRange] cloneContents]))
 	{
+		str = convert_dom_to_text([[[self mainFrame] DOMDocument] createTreeWalker:selection :DOM_SHOW_ALL :nil :YES]);
 		while([str hasSuffix:@"\n\n"])
 			str = [str substringToIndex:[str length]-1];
-
-		[EditInTextMate externalEditString:str forView:self];
 	}
+	[EditInTextMate externalEditString:str forView:self];
 }
 
 - (void)didModifyString:(NSString*)newString
 {
+	NSArray* lines = [newString componentsSeparatedByString:@"\n"];
 	NSMutableString* res = [NSMutableString string];
 	unsigned quoteLevel = 0;
-	NSArray* lines = [newString componentsSeparatedByString:@"\n"];
 	for(unsigned i = 0; i != [lines count]; i++)
 	{
 		NSString* line = [lines objectAtIndex:i];
+
 		unsigned newQuoteLevel = 0;
 		while([line hasPrefix:@"> "])
 		{
@@ -158,37 +184,14 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 		}
 		else
 		{
-			[res appendString:@"<DIV>"];
-
-//			if([line rangeOfString:@"  "].location != NSNotFound)
-			{
-				char const* str = [line UTF8String];
-				size_t len = strlen(str);
-				char* buf = new char[len+1];
-				size_t j = 0;
-				for(size_t i = 0; i != len; i++)
-				{
-					if(str[i] == ' ' && (str[i+1] == ' ' || !str[i+1]))
-					{
-						buf[j++] = '\xC2';
-						buf[j++] = '\xA0';
-					}
-					else
-					{
-						buf[j++] = str[i];
-					}	
-				}
-				buf[j] = 0;
-				line = [NSString stringWithUTF8String:buf] ?: @"";
-			}
-
-			line = [[line componentsSeparatedByString:@"&"] componentsJoinedByString:@"&amp;"];
-			line = [[line componentsSeparatedByString:@"<"] componentsJoinedByString:@"&lt;"];
-			line = [[line componentsSeparatedByString:@">"] componentsJoinedByString:@"&gt;"];
-			[res appendString:line];
-			[res appendString:@"</DIV>"];
+			line = [line stringByNbspEscapingSpaces];
+			line = [line stringByReplacingString:@"&" withString:@"&amp;"];
+			line = [line stringByReplacingString:@"<" withString:@"&lt;"];
+			line = [line stringByReplacingString:@">" withString:@"&gt;"];
+			[res appendFormat:@"<DIV>%@</DIV>", line];
 		}
 	}
+
 	NSLog(@"%s %@", _cmd, res);
 
 	[self replaceSelectionWithMarkupString:res];

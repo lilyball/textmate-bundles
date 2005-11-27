@@ -28,10 +28,6 @@ static NSMutableDictionary* OpenFiles;
 {
 	NSAutoreleasePool* pool = [NSAutoreleasePool new];
 
-	NSString* aString = [someOptions objectForKey:@"string"];
-	NSString* fileName = [someOptions objectForKey:@"fileName"];
-	[[aString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileName atomically:NO];
-
 	BOOL success = [[NSWorkspace sharedWorkspace] launchAppWithBundleIdentifier:@"com.macromates.textmate" options:0L additionalEventParamDescriptor:nil launchIdentifier:nil];
 	if(!success)
 		return;
@@ -45,6 +41,7 @@ static NSMutableDictionary* OpenFiles;
 	NSAppleEventDescriptor* errorDescriptor = nil;
 	AEDesc reply = { typeNull, NULL };														
 
+	NSString* fileName = [someOptions objectForKey:@"fileName"];
 	[appleEvent setParamDescriptor:[NSAppleEventDescriptor descriptorWithDescriptorType:typeFileURL data:[[[NSURL fileURLWithPath:fileName] absoluteString] dataUsingEncoding:NSUTF8StringEncoding]] forKeyword:keyDirectObject];
 
 	UInt32 packageType = 0, packageCreator = 0;
@@ -72,7 +69,10 @@ static NSMutableDictionary* OpenFiles;
 	NSString* windowTitle = [[aView window] title] ?: @"untitled";
 	windowTitle = [[windowTitle componentsSeparatedByString:@"/"] componentsJoinedByString:@"-"];
 
-	NSString* fileName = [[NSString stringWithFormat:@"%@/%@.%@", NSTemporaryDirectory(), windowTitle, appName] stringByStandardizingPath];
+	NSString* fileName = [NSString stringWithFormat:@"%@/%@.%@", NSTemporaryDirectory(), windowTitle, appName];
+	[[aString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileName atomically:NO];
+	fileName = [fileName stringByStandardizingPath];
+
 	NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
 		aString,    @"string",
 		aView,      @"view",
@@ -97,7 +97,7 @@ static NSMutableDictionary* OpenFiles;
 	else
 	{
 		NSLog(@"%s view %p, %@, window %@", _cmd, view, view, [view window]);
-		NSLog(@"%s options %@", _cmd, [[OpenFiles objectForKey:fileName] description]);
+		NSLog(@"%s file name %@, options %@", _cmd, fileName, [[OpenFiles objectForKey:fileName] description]);
 		NSLog(@"%s all %@", _cmd, [OpenFiles description]);
 		NSBeep();
 	}

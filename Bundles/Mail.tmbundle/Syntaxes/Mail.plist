@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>mail</string>
+	</array>
+	<key>name</key>
+	<string>Mail</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.quote.mail.single</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>markup.quote.mail.double</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>markup.quote.mail.many</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^(&gt; )(&gt; )(&gt; .*)$</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.quote.mail.single</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>markup.quote.mail.double</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^(&gt; )(&gt; .*)$</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^&gt; .*$</string>
+			<key>name</key>
+			<string>markup.quote.mail.single</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^-- $\n</string>
+			<key>name</key>
+			<string>meta.diff.separator.signature.mail</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>text.plain</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.plain.mail</string>
+	<key>uuid</key>
+	<string>15615A0C-37B0-4B3F-9105-53ED536AFBB4</string>
+</dict>
+</plist>

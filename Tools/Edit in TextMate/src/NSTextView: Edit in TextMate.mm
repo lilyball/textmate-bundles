@@ -27,13 +27,12 @@
 
 - (void)didModifyString:(NSString*)newString
 {
-	BOOL skipReselect = NO;
 	NSRange selectedRange = [self selectedRange];
-	if(skipReselect = selectedRange.length == 0)
-		selectedRange = NSMakeRange(0, [[self textStorage] length]);
-
-	[[self textStorage] replaceCharactersInRange:selectedRange withString:newString];
-	if(!skipReselect)
+	BOOL hadSelection = selectedRange.length != 0;
+	if(!hadSelection)
+		[self setSelectedRange:NSMakeRange(0, [[self textStorage] length])];
+	[self insertText:newString];
+	if(hadSelection)
 		[self setSelectedRange:NSMakeRange(selectedRange.location, [newString length])];
 }
 @end

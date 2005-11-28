@@ -17,11 +17,18 @@
 static NSMutableDictionary* OpenFiles;
 
 @implementation EditInTextMate
-+ (void)willProcessFirstEventNotification:(id)aNotification
++ (void)setODBEventHandlers
 {
 	NSAppleEventManager* eventManager = [NSAppleEventManager sharedAppleEventManager];
 	[eventManager setEventHandler:self andSelector:@selector(handleModifiedFileEvent:withReplyEvent:) forEventClass:kODBEditorSuite andEventID:kAEModifiedFile];
 	[eventManager setEventHandler:self andSelector:@selector(handleClosedFileEvent:withReplyEvent:) forEventClass:kODBEditorSuite andEventID:kAEClosedFile];
+}
+
++ (void)removeODBEventHandlers
+{
+	NSAppleEventManager* eventManager = [NSAppleEventManager sharedAppleEventManager];
+	[eventManager removeEventHandlerForEventClass:kODBEditorSuite andEventID:kAEModifiedFile];
+	[eventManager removeEventHandlerForEventClass:kODBEditorSuite andEventID:kAEClosedFile];
 }
 
 + (void)asyncEditStringWithOptions:(NSDictionary*)someOptions
@@ -57,7 +64,7 @@ static NSMutableDictionary* OpenFiles;
 			status = [errorDescriptor int32Value];
 		
 		if(status != noErr)
-			return;
+			NSLog(@"%s error %d", _cmd, status), NSBeep();
 	}
 
 	[pool release];
@@ -70,6 +77,9 @@ static NSMutableDictionary* OpenFiles;
 	windowTitle = [[windowTitle componentsSeparatedByString:@"/"] componentsJoinedByString:@"-"];
 
 	NSString* fileName = [NSString stringWithFormat:@"%@/%@.%@", NSTemporaryDirectory(), windowTitle, appName];
+	for(unsigned i = 2; [[NSFileManager defaultManager] fileExistsAtPath:fileName]; i++)
+		fileName = [NSString stringWithFormat:@"%@/%@ %u.%@", NSTemporaryDirectory(), windowTitle, i, appName];
+
 	[[aString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileName atomically:NO];
 	fileName = [fileName stringByStandardizingPath];
 
@@ -80,6 +90,8 @@ static NSMutableDictionary* OpenFiles;
 		nil];
 
 	[OpenFiles setObject:options forKey:fileName];
+	if([OpenFiles count] == 1)
+		[self setODBEventHandlers];
 	[NSThread detachNewThreadSelector:@selector(asyncEditStringWithOptions:) toTarget:self withObject:options];
 }
 
@@ -108,13 +120,15 @@ static NSMutableDictionary* OpenFiles;
 	NSAppleEventDescriptor* fileURL = [[event paramDescriptorForKeyword:keyDirectObject] coerceToDescriptorType:typeFileURL];
 	NSString* urlString = [[[NSString alloc] initWithData:[fileURL data] encoding:NSUTF8StringEncoding] autorelease];
 	NSString* fileName = [[[NSURL URLWithString:urlString] path] stringByStandardizingPath];
-	[OpenFiles removeObjectForKey:fileName];
+	[[NSFileManager defaultManager] removeFileAtPath:fileName handler:nil];
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+	[OpenFiles removeObjectForKey:fileName];
+	if([OpenFiles count] == 0)
+		[self removeODBEventHandlers];
 }
 
 + (void)load
 {
 	OpenFiles = [NSMutableDictionary new];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willProcessFirstEventNotification:) name:NSAppleEventManagerWillProcessFirstEventNotification object:nil];
 }
 @end

@@ -1,6 +1,6 @@
 
 # Cocoa Functions
-find /System/Library/Frameworks/{AppKit,Foundation}.framework -name \*.h -exec grep '^[A-Z][A-Z_]* .* NS[A-Z][A-Za-z]*\s*(' '{}' \;|perl -pe 's/.*?\s(\w+)\s*\(.*/$1/'|sort|uniq
+find /System/Library/Frameworks/{AppKit,Foundation}.framework -name \*.h -exec grep '^[A-Z][A-Z_]* [^;]* \**NS[A-Z][A-Za-z]* *(' '{}' \;|perl -pe 's/.*?\s\*?(NS\w+)\s*\(.*/$1/'|sort|uniq
 
 # Cocoa Classes
 find /System/Library/Frameworks/{AppKit,Foundation}.framework -name \*.h -exec grep '@interface NS[A-Za-z]*' '{}' \;|perl -pe 's/.*?(NS[A-Za-z]+).*/$1/'|sort|uniq

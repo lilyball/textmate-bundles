@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array/>
+	<key>foldingStartMarker</key>
+	<string>(&lt;(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\b.*?&gt;|{% (block|comment|filter|for|if|ifchanged|ifequal|ifnotequal))</string>
+	<key>foldingStopMarker</key>
+	<string>(&lt;/(?i:(head|table|tr|div|style|script|ul|ol|form|dl))&gt;|{% (endblock|endcomment|endfilter|endfor|endif|endifchanged|endifequal|endifnotequal) %})</string>
+	<key>keyEquivalent</key>
+	<string>^d</string>
+	<key>name</key>
+	<string>HTML (Django)</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>{% comment %}</string>
+			<key>end</key>
+			<string>{% endcomment %}</string>
+			<key>name</key>
+			<string>comment.block.django</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>{%|{{</string>
+			<key>end</key>
+			<string>%}|}}</string>
+			<key>name</key>
+			<string>source.django.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.django</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>text.html.basic</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.html.django</string>
+	<key>uuid</key>
+	<string>F4B0A70C-ECF6-4660-BC26-785216E3CF02</string>
+</dict>
+</plist>

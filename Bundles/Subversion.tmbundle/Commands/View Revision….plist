@@ -22,7 +22,7 @@ revs=`osascript&lt;&lt;END
 			display dialog "No older revisions of file '$(basename "$TM_FILEPATH")' found" buttons ("OK")
 			set the result to false
 		else
-			choose from list ourList with prompt "Diff '$(basename "$TM_FILEPATH")' with older revision:"
+			choose from list ourList with prompt "View '$(basename "$TM_FILEPATH")' revision:"
 		end if
 	end tell
 END`

@@ -11,3 +11,5 @@ find /System/Library/Frameworks/{AppKit,Foundation}.framework -name \*.h -exec g
 # Cocoa Types
 find /System/Library/Frameworks/{AppKit,Foundation}.framework -name \*.h -exec grep 'typedef .* _*NS[A-Za-z]*' '{}' \;|perl -pe 's/.*?(NS[A-Za-z]+);.*/$1/'|perl -pe 's/typedef .*? _?(NS[A-Za-z0-9]+) \{.*/$1/'|grep -v typedef|sort|uniq
 
+# Cocoa Constants
+find /System/Library/Frameworks/{AppKit,Foundation}.framework -name \*.h -exec awk '/\}/ { pr = 0; } { if(pr) print $0; } /^(typedef )?enum .*\{[^}]*$/ { pr = 1; }' '{}' \;|expand|grep '^ *NS[A-Z]'|perl -pe 's/^\s*(NS[A-Z][A-Za-z0-9]*).*/$1/'|sort|uniq

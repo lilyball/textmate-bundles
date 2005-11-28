@@ -20,6 +20,8 @@ int main (int argc, char const* argv[])
 		exit(1);
 	}
 	
+//	fprintf(stderr, "%s: looking for proxy...\n", argv[0]);
+	
 	proxy = [[NSConnection rootProxyForConnectionWithRegisteredName:@"CXSVNRepoBrowser" host:nil] retain];
 
 	if(proxy == nil)
@@ -27,6 +29,8 @@ int main (int argc, char const* argv[])
 		fprintf(stderr, "%s: cannot find Storehouse app:\n", argv[0]);
 		exit(1);
 	}
+	
+//	fprintf(stderr, "%s: found proxy\n", argv[0]);
 	
 	[proxy newBrowserAtURL:[NSString stringWithUTF8String:argv[1]]];
 	

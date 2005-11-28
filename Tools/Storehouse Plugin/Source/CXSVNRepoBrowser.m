@@ -63,6 +63,18 @@
 	return [outBrowser autorelease];
 }
 
+- (CXSVNRepoNode *) visibleNodeForURL:(NSString *)URL
+{
+	CXSVNRepoNode *	node = [fRootNode visibleNodeForURL:URL];
+	
+	if(node == nil)
+	{
+		NSLog(@"No visible node for %@", URL);
+	}
+
+	return node;
+}
+
 - (NSString *) URL
 {
 	return [fURLField stringValue];
@@ -72,7 +84,7 @@
 {
 //	NSBrowserCell *	cell = [[[NSBrowserCell alloc] init] autorelease];
 	ImageAndTextCell *	cell = [[[ImageAndTextCell alloc] init] autorelease];
-	NSZombieEnabled = 1;
+//	NSZombieEnabled = 1;
 
 	[cell setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
 	
@@ -341,7 +353,7 @@
 
 	if(![item isBranch])
 	{
-		[outlineView setDropItem:[item parent] dropChildIndex:NSOutlineViewDropOnItemIndex];
+		[outlineView setDropItem:[item parentNode] dropChildIndex:NSOutlineViewDropOnItemIndex];
 	}
 	else if(index != NSOutlineViewDropOnItemIndex)
 	{
@@ -394,10 +406,20 @@
 	return accepted;
 }
 
-
-// for one-URL commands: - (void) doSomethingWithURL:(NSString *)string
-// for two-URL commands: - (void) doSomethingFromURL:(NSString *)source toURL:(NSString *)destination
-// for multi-URL commands: - (void) doSomethingWithURLs:(NSArray *)arrayOfStringURLs
+// Support renames
+- (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
+{
+	if( item == nil )
+	{
+		[NSException raise:@"Root item renamed" format:@"Shouldn't be able to set the value of the root item"];
+	}
+	
+	[self askForCommitWithVerb:@"Rename:"
+				prompt:@"Reason for the rename?"
+				URLs:[NSArray arrayWithObjects:[item URL], [item URL], nil]
+				action:@selector(moveURL:toURL:withDescription:)];
+	
+}
 
 - (void) moveURLAction:(NSArray *)args
 {
@@ -424,6 +446,7 @@
 
 
 #if 0
+#pragma mark -
 #pragma mark SVN delegate
 #endif
 
@@ -524,7 +547,13 @@
 	[NSException raise:@"NotImplemented" format:@"multiple URLs aren't supported yet"];
 }
 
-- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector
+- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector 
+{
+	[self askForCommitWithVerb:verb prompt:prompt URLs:URLs action:selector options:kCXNone];
+}
+
+
+- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector options:(CXSVNCommitOptions)options
 {
 	NSMutableDictionary *	context  	= [[NSMutableDictionary alloc] init];
 	NSValue *				value		= [NSValue value:&selector withObjCType:@encode(SEL)];
@@ -532,6 +561,7 @@
 	
 	[context setObject:value forKey:@"action"];
 	[context setObject:URLs forKey:@"URLs"];
+	[context setObject:[NSNumber numberWithUnsignedLong:(unsigned long)options] forKey:@"options"];
 	
 	[fCommitVerbField setStringValue:verb];
 	[fCommitPromptField setStringValue:prompt];
@@ -540,7 +570,22 @@
 
 	if( URLCount == 1 )
 	{
-		[fCommitURLDestination setStringValue:[URLs objectAtIndex:0]];
+		NSString *	suggestion = @"";
+		
+		if( (options & kCXAppendName) != 0 )
+		{
+			suggestion = @"Untitled Folder";
+		}
+		else if( (options & kCXReplaceName) != 0 )
+		{
+			// TODO get last component of URL
+		}
+		else
+		{
+			suggestion = [URLs objectAtIndex:0];
+		}
+		
+		[fCommitURLDestination setStringValue:suggestion];
 		[self configureCommitSheetForOneURL];
 	}
 	else if( URLCount == 2 )
@@ -574,6 +619,7 @@
 	{
 		NSValue *			action		= [contextDict objectForKey:@"action"];
 		NSArray *			URLs		= [contextDict objectForKey:@"URLs"];
+		CXSVNCommitOptions	options		= [[contextDict objectForKey:@"options"] unsignedLongValue];
 		SEL					selector;
 		NSString *			description;
 		unsigned int		countURLs;
@@ -585,14 +631,46 @@
 		countURLs = [URLs count];
 		if( countURLs == 1 )
 		{
-			[self performSelector:selector	withObject:[fCommitURLDestination stringValue]
-											withObject:description];
+			NSString *			firstURL = [URLs objectAtIndex:0];	// refresh the original URL
+			CXSVNRepoNode *		firstNode;
+			
+			if( (options & kCXAppendName) == kCXAppendName )
+			{
+				[self performSelector:selector	withObject:[firstURL stringByAppendingString:[fCommitURLDestination stringValue]]
+												withObject:description];
+			}
+			else
+			{
+				[self performSelector:selector	withObject:[fCommitURLDestination stringValue]
+												withObject:description];
+			}
+
+			firstNode = [self visibleNodeForURL:firstURL];
+			
+			[firstNode invalidateChildren];
+			[firstNode loadChildrenWithQueueKey:fRootNode];
 		}
 		else if( countURLs == 2 )
 		{
-			[self performSelector:selector	withObject:[URLs objectAtIndex:0]
-											withObject:[fCommitURLDestination stringValue]
+			NSString *			firstURL	= [URLs objectAtIndex:0];
+			NSString *			secondURL	= [fCommitURLDestination stringValue];
+			CXSVNRepoNode *		firstNode;
+			CXSVNRepoNode *		secondNode;
+			
+			[self performSelector:selector	withObject:firstURL
+											withObject:secondURL
 											withObject:description];
+			
+			// svn cp A B  -- copy A to B -- update B
+			// svn mv A B  -- move A to B -- update [A parent] and B
+			// svn rename A B -- rename A to B -- update [A parent] and [B parent], which should be the same object
+			firstNode = [[self visibleNodeForURL:firstURL] parentNode];
+			secondNode = [self visibleNodeForURL:secondURL];
+			
+			[firstNode invalidateChildren];
+			[firstNode loadChildrenWithQueueKey:fRootNode];
+			[secondNode invalidateChildren];
+			[secondNode loadChildrenWithQueueKey:fRootNode];
 		}
 		else if( countURLs > 2 )
 		{
@@ -628,14 +706,14 @@
 #endif
 
 // TODO: checkout, delete, export, add/import?
-// TODO: if the target node is visible, refresh it -- requires finding the target node given the URL
 
 - (void) makeDirAtNode:(CXSVNRepoNode *)node
 {
 	[self askForCommitWithVerb:@"New Folder"
 				prompt:@"Purpose of the new folder?"
 				URLs:[NSArray arrayWithObject:[node URL]]
-				action:@selector(makeDirAtURL:withDescription:)];
+				action:@selector(makeDirAtURL:withDescription:)
+				options:kCXAppendName];
 }
 
 - (void) copyURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc
@@ -700,8 +778,20 @@
 	[self release];
 }
 
+- (void) setDelegate:(id)delegate
+{
+	fDelegate = delegate;
+}
+
+- (id) delegate
+{
+	return fDelegate;
+}
+
 - (void) dealloc
 {
+	[fDelegate SVNRepoBrowserDidTerminate:self];
+	
 	[fStatusWindow release];
 	[fRootNode release];
 	[fRepoLocation release];

@@ -38,6 +38,11 @@ static NSMutableArray *			sBrowsers = nil;
 
 #endif
 
+- (void) SVNRepoBrowserDidTerminate:(CXSVNRepoBrowser *)browser
+{
+	[sBrowsers removeObject:browser];
+}
+
 - (IBAction) newBrowser:(id)sender
 {
 	[self newBrowserAtURL:nil];
@@ -89,6 +94,8 @@ static NSMutableArray *			sBrowsers = nil;
 			
 			[sBrowsers addObject:newBrowser];
 		}
+		
+		[newBrowser setDelegate:self];
 	}
 	else
 	{
@@ -98,13 +105,15 @@ static NSMutableArray *			sBrowsers = nil;
 
 - (void) vend
 {
-	NSConnection *	connection = [NSConnection defaultConnection];
+	NSPort *		newPort			= [NSPort port];
+	NSConnection *	connection		= [NSConnection connectionWithReceivePort:newPort sendPort:newPort];
 
 	[connection setRootObject:self];
 	if ([connection registerName:@"CXSVNRepoBrowser"] == NO)
 	{
 		NSRunAlertPanel(@"Can't vend Storehouse browser object.", @"I can't vend the browser object. I can't tell you why, either, because AppKit won't tell me. (In plain English, this means that the Browse Subversion Repository command won't work.)", @"OK", nil, nil);
 	}
+	[connection retain];
 }
 
 @end

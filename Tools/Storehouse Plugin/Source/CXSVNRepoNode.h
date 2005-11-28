@@ -25,6 +25,7 @@
 + (CXSVNRepoNode *) nodeWithName:(NSString *)name parent:(CXSVNRepoNode *)parent;
 
 - (NSString *) URL;
+- (CXSVNRepoNode *) visibleNodeForURL:(NSString *)URL;
 
 - (void) setIsBranch:(BOOL)branch;
 - (BOOL) isBranch;
@@ -32,20 +33,21 @@
 - (BOOL) isBusy;
 
 // data access
-- (CXSVNRepoNode *) parent;
+- (CXSVNRepoNode *) parentNode;
 - (NSString *) displayName;
 - (NSString *) nameForURL;
 
 // svn ls
 - (void) loadChildren;
+- (void) loadChildrenWithQueueKey:(id)key;
 - (void) invalidateChildren;
 - (NSArray *)children;
 
 
 // svn cp
 // Copy URLs from the array to this node.
-- (void) copyURLs:(NSArray *)URLs withDescription:(NSString *)desc;
-- (void) copyURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc;
+//- (void) copyURLs:(NSArray *)URLs withDescription:(NSString *)desc;
+//- (void) copyURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc;
 
 - (void) error:(NSString *)string fromTask:(CXSVNTask *)task;
 
@@ -56,7 +58,7 @@
 - (void) willStartSVNNode:(CXSVNRepoNode *)node;
 - (void) didStopSVNNode:(CXSVNRepoNode *)node;
 
-- (void) statusLine:(NSString *)status forSVNNode:(CXSVNRepoNode *)node;
+//- (void) statusLine:(NSString *)status forSVNNode:(CXSVNRepoNode *)node;
 - (void) error:(NSString *)errorText usingSVNNode:(CXSVNRepoNode *)node;
 
 - (void) didUpdateChildrenAtSVNNode:(CXSVNRepoNode *)node;

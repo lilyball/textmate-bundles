@@ -6,10 +6,19 @@
 
 // TODO: wrap in NSWindowController
 
+typedef enum
+{
+	kCXNone			= 0,
+	kCXAppendName	= (1UL << 0),
+	kCXReplaceName	= (1UL << 1)
+} CXSVNCommitOptions;
+
+
 @interface CXSVNRepoBrowser : NSObject
 {
 				NSString *				fRepoLocation;
 				CXSVNRepoNode *			fRootNode;
+				id 						fDelegate;
 
 	IBOutlet	NSOutlineView *			fOutlineView;
 	IBOutlet	NSProgressIndicator *	fSpinner;
@@ -30,6 +39,9 @@
 + (CXSVNRepoBrowser *) browser;
 + (CXSVNRepoBrowser *) browserAtURL:(NSString *)URL;	// may be nil
 
+- (void) setDelegate:(id)delegate;
+- (id) delegate;
+
 - (NSString *)URL;
 
 - (void)loadURL:(NSString *)URL;
@@ -43,6 +55,8 @@
 - (IBAction)sheetOK:(id)sender;
 
 - (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector;
+- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector options:(CXSVNCommitOptions)options;
+
 
 - (IBAction) contextRefresh:(id)sender;
 - (IBAction) contextMakeDir:(id)sender;
@@ -52,6 +66,10 @@
 
 - (void) syncNextBrowserWindowFrame:(CXSVNRepoBrowser *)browser;
 
+@end
+
+@interface NSObject(CXSVNRepoBrowserDelegate)
+- (void) SVNRepoBrowserDidTerminate:(CXSVNRepoBrowser *)browser;
 @end
 
 #endif /* _CXSVNRepoBrowser_H_ */

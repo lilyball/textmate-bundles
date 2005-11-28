@@ -41,6 +41,45 @@
 	return nodeName;
 }
 
+- (CXSVNRepoNode *) visibleNodeForURL:(NSString *)URL
+{
+	NSRange 		range;
+	CXSVNRepoNode *	outNode	= nil;
+	
+	NSLog(@"node:%@ match:%@", [self nameForURL], URL);
+	
+	if ( [URL isEqualToString:[self nameForURL]] )
+	{
+		outNode = self;
+	}
+	else
+	{
+		range = [URL rangeOfString:[self nameForURL]];
+		if(range.location != NSNotFound)
+		{
+			NSString *	subURL = [URL substringFromIndex:NSMaxRange(range)];
+
+			// now find the rest of the string in child
+
+			for( unsigned int index = 0; index < [fChildren count]; index += 1 )
+			{
+				CXSVNRepoNode *	child = [fChildren objectAtIndex:index];
+				CXSVNRepoNode *	node;
+
+				node = [child visibleNodeForURL:subURL];
+				if(node != nil)
+				{
+					outNode = node;
+					break;
+				}
+			}
+		}
+	}
+	
+	return outNode;
+}
+
+
 + (CXSVNRepoNode *) rootNodeWithURL:(NSString *)URL
 {
 	CXSVNRepoNode * node = [[CXSVNRepoNode alloc] init];
@@ -78,7 +117,7 @@
 	[super dealloc];
 }
 
-- (CXSVNRepoNode *) parent
+- (CXSVNRepoNode *) parentNode
 {
 	return fParent;
 }
@@ -109,8 +148,12 @@
 	fChildren = nil;
 }
 
-
 - (void) loadChildren
+{	
+	[self loadChildrenWithQueueKey:self];
+}
+
+- (void) loadChildrenWithQueueKey:(id)key
 {
 	if( fChildren == nil )
 	{
@@ -124,7 +167,7 @@
 		[CXSVNTask	launchWithArguments:arguments
 				notifying:self
 				outputAction:@selector(listOutput:)
-				queueKey:self];
+				queueKey:key];
 	}
 }
 
@@ -257,7 +300,7 @@
 	}
 }
 
-- (void) copyURLs:(NSArray *)URLs withDescription:(NSString *)desc
+/*- (void) copyURLs:(NSArray *)URLs withDescription:(NSString *)desc
 {
 	// FIXME: copy more than one
 	// FIXME: add description entry dialog
@@ -305,7 +348,7 @@
 		[self stopActivity];
 	}
 }
-
+*/
 - (void) error:(NSString *)string fromTask:(CXSVNTask *)task
 {
 	[fDelegate error:string usingSVNNode:self];

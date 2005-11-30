@@ -5,16 +5,16 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>open -a "Transmit" "$TM_FILEPATH"</string>
+	<string>osascript -e "tell application \"Transmit\" to open POSIX file \"$TM_DIRECTORY\""</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@T</string>
 	<key>name</key>
-	<string>DockSend File</string>
+	<string>DockSend Folder</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>
-	<string>91FC4F89-ADA9-4435-B159-9BA348FDE590</string>
+	<string>C4006FCA-85FF-4476-BDA8-34EF355FD0E4</string>
 </dict>
 </plist>

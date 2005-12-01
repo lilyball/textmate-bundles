@@ -8,7 +8,8 @@
 
 $0
 
-#endif /* $1 */</string>
+#endif /* _${1:`basename ${TM_FILEPATH%.*}`}_H_ */
+</string>
 	<key>name</key>
 	<string>Header Include-Guard (once)</string>
 	<key>scope</key>

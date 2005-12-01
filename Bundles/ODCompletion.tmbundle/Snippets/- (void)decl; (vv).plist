@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (void)${1:method}:${2:(id)sender};</string>
+	<string>- (void)${1:method}${2::(id)sender};</string>
 	<key>name</key>
-	<string>- (void)decl; (vv)</string>
+	<string>- (void)decl; (v)</string>
 	<key>scope</key>
-	<string>source.objc, source.objc++</string>
+	<string>source.objc meta.scope.interface, source.objc++ meta.scope.interface</string>
 	<key>tabTrigger</key>
-	<string>vv</string>
+	<string>v</string>
 	<key>uuid</key>
 	<string>9DAAFC70-B8BA-11D9-AE51-000393A143CC</string>
 </dict>

@@ -5,21 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>arr=("/usr/include"
-   "/System/Library/Frameworks/AppKit.framework/Headers/"
-   "/System/Library/Frameworks/Foundation.framework/Headers/"
-   "/System/Library/Frameworks/IOKit.framework/Headers/"
-   "/System/Library/Frameworks/CoreAudio.framework/Headers/"
-   "/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework/Headers/"
-   "/System/Library/Frameworks/QuickTime.framework/Headers/"
-   "/System/Library/Frameworks/QTKit.framework/Headers/"
-   "/System/Library/Frameworks/Carbon.framework"
-#  "/System/Library/Frameworks/Kernel.framework"
-   "/System/Library/Frameworks/ApplicationServices.framework"
-   "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
-)
-
-line=$TM_CURRENT_LINE
+	<string>line=$TM_CURRENT_LINE
 header=$TM_SELECTED_TEXT
 
 # extract header from current line
@@ -34,8 +20,36 @@ if [[ -z "$header" ]]; then
    header=$(tail -n1 &lt;&lt;&lt;"$res")
 fi
 
-files=$(for dir in "${arr[@]}";
-   do find "$dir" -path "*/$header"; done|sort|uniq)
+# If Spotlight is available, avail ourselves of it.
+# otherwise, use the old 'find'-based method.
+#
+# The Spotlight method has the advantage of being
+# both reasonably fast and catching all the corner
+# cases, many of which are missed by the old method.
+#
+if [[ `which mdfind` != *"not found" ]]; then
+	# we have Spotlight
+	files=`${TM_RUBY:-ruby} "$TM_BUNDLE_SUPPORT/SpotlightSearch.rb" "$header"`
+
+else
+	# old method
+	arr=("/usr/include"
+	"/System/Library/Frameworks/AppKit.framework/Headers/"
+	"/System/Library/Frameworks/Foundation.framework/Headers/"
+	"/System/Library/Frameworks/IOKit.framework/Headers/"
+	"/System/Library/Frameworks/CoreAudio.framework/Headers/"
+	"/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework/Headers/"
+	"/System/Library/Frameworks/QuickTime.framework/Headers/"
+	"/System/Library/Frameworks/QTKit.framework/Headers/"
+	"/System/Library/Frameworks/Carbon.framework"
+#	"/System/Library/Frameworks/Kernel.framework"
+	"/System/Library/Frameworks/ApplicationServices.framework"
+	"${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
+	)
+
+	files=$(for dir in "${arr[@]}";
+		do find "$dir" -path "*/$header"; done|sort|uniq)
+fi
 
 if [[ -n "$files" ]];
    then IFS=$(echo -e \\n\\r); mate $files &amp;&gt;/dev/null &amp;

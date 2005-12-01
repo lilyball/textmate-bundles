@@ -29,8 +29,10 @@
 			<string>comment.block.django</string>
 		</dict>
 		<dict>
+			<key>comment</key>
+			<string>TODO: specify scope (matches in plain HTML presently)</string>
 			<key>match</key>
-			<string>\b(block|endblock|debug|extends|filter|firstof|for|endfor|if|endif|ifchanged|endifchanged|ifequal|endifequal|ifnotequal|endifnotequal|load|now|regroup|ssi|templatetag|widthratio)\b</string>
+			<string>\b(block|endblock|debug|extends|filter|firstof|for|endfor|if|include|else|endif|ifchanged|endifchanged|ifequal|endifequal|ifnotequal|endifnotequal|load|now|regroup|ssi|templatetag|widthratio)\b</string>
 			<key>name</key>
 			<string>keyword.control.django</string>
 		</dict>

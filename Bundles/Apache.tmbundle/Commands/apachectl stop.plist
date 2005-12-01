@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>RESPONSE=`exec osascript &lt;&lt;EOF | tr "\r" "\n"
+	do shell script "apachectl restart" with administrator privileges
+	--If you'd like to call without the pop up, and are happy with your password readable here then....
+	--do shell script "apachectl restart" password "your password" with administrator privileges
+
+EOF`
+
+echo $RESPONSE</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>apachectl stop</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.apache-config</string>
+	<key>uuid</key>
+	<string>F86D90AC-AF81-48A7-9E04-BA4AA95668B1</string>
+</dict>
+</plist>

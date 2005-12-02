@@ -7,7 +7,11 @@
 	<key>command</key>
 	<string>[[ -z "$TM_SELECTED_TEXT" ]] &amp;&amp; exit_show_tool_tip "Nothing is selected."
 
-url=$(expand -t $TM_TAB_SIZE|curl 2&gt;/dev/null http://paste.textmate.org/submit -F user="$USER" -F text='&lt;-')
+url=$(expand -t $TM_TAB_SIZE|curl -s http://paste.textmate.org/submit -F user="$USER" -F text='&lt;-' \
+	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
+		--title "Paste in #textmate…" \
+		--text "Contacting Server “paste.textmate.org”…" \
+	))
 
 [[ -z "$url" ]] &amp;&amp; exit_show_tool_tip "Got no URL back from pasting service."
 

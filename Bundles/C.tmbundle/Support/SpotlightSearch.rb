@@ -1,4 +1,7 @@
-SearchFolders = ["${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}" "/System/Library/Frameworks", "/usr/include"]
+
+UserSearchFolder = ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']
+
+SearchFolders = [UserSearchFolder, "/System/Library/Frameworks", "/usr/include"]
 
 header = ARGV[0]
 fragment_path_to_header = header.split("/")
@@ -39,4 +42,4 @@ if result_paths.size > 0 and fragment_path_to_header.size > 0
 	result_paths = filtered_result_paths if filtered_result_paths.size > 0	
 end
 
-puts result_paths.join("\n")
+puts result_paths.compact.join("\n")

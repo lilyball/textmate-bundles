@@ -5,16 +5,23 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>apachectl configtest</string>
+	<string>#To select a specific user from all available.
+"${TM_BUNDLE_SUPPORT}/EditUserConf.sh"
+
+#To open all users as a tmproj.
+#open -a TextMate "/private/etc/httpd/users"
+
+
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>
-	<string>apachectl configtest</string>
+	<string>Open users.conf</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.apache-config</string>
 	<key>uuid</key>
-	<string>46DBB57A-D7F8-4049-9BE8-4ACABFF5F056</string>
+	<string>0BB34044-0A2C-4D11-A2DE-30107D622ECF</string>
 </dict>
 </plist>

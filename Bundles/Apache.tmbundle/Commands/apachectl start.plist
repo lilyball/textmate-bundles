@@ -5,13 +5,26 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>RESPONSE=`exec osascript &lt;&lt;EOF | tr "\r" "\n"
-	do shell script "apachectl start" with administrator privileges
-	--If you'd like to call without the pop up, and are happy with your password readable here then....
-	--do shell script "apachectl start" password "your password" with administrator privileges
+	<string># Use this for a simple solution..
+RESPONSE=`exec osascript &lt;&lt;EOF | tr "\r" "\n"
+ 	
+ 	--To be asked for your password each time then use:
+ 	do shell script "apachectl start" with administrator privileges
+ 	
+ 	--To skip password vaildation then change this... not for the security conscious.
+ 	--do shell script "apachectl start" password "the_password" with administrator privileges
+ 	
 EOF`
+ 
+echo $RESPONSE
 
-echo $RESPONSE</string>
+# Otherwise, to store your password in the Keychain check this script in the Bundle Support folder.
+#
+# To use the Keychain to store the admin password then open /Applications/Utilities/Keychain Access.app
+# Add a new keychain called "TextMate" 
+# Add a Key with the name "ApacheBundle" to the new Keychaing then store your admin password in it.
+
+#"${TM_BUNDLE_SUPPORT}/apachectlUsingKeychain.sh" start</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

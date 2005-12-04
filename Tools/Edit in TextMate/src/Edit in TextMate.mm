@@ -15,6 +15,7 @@
 #define kAEClosedFile   'FCls'
 
 static NSMutableDictionary* OpenFiles;
+static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 
 @implementation EditInTextMate
 + (void)setODBEventHandlers
@@ -31,17 +32,27 @@ static NSMutableDictionary* OpenFiles;
 	[eventManager removeEventHandlerForEventClass:kODBEditorSuite andEventID:kAEClosedFile];
 }
 
++ (BOOL)launchTextMate
+{
+	NSArray* array = [[NSWorkspace sharedWorkspace] launchedApplications];
+	for(unsigned i = [array count]; --i; )
+	{
+		if([[[array objectAtIndex:i] objectForKey:@"NSApplicationBundleIdentifier"] isEqualToString:TextMateBundleIdentifier])
+			return YES;
+	}
+	return [[NSWorkspace sharedWorkspace] launchAppWithBundleIdentifier:TextMateBundleIdentifier options:0L additionalEventParamDescriptor:nil launchIdentifier:nil];
+}
+
 + (void)asyncEditStringWithOptions:(NSDictionary*)someOptions
 {
 	NSAutoreleasePool* pool = [NSAutoreleasePool new];
 
-	BOOL success = [[NSWorkspace sharedWorkspace] launchAppWithBundleIdentifier:@"com.macromates.textmate" options:0L additionalEventParamDescriptor:nil launchIdentifier:nil];
-	if(!success)
+	if(![self launchTextMate])
 		return;
 
 	/* =========== */
 
-	NSData* targetBundleID = [@"com.macromates.textmate" dataUsingEncoding:NSUTF8StringEncoding];
+	NSData* targetBundleID = [TextMateBundleIdentifier dataUsingEncoding:NSUTF8StringEncoding];
 	NSAppleEventDescriptor* targetDescriptor = [NSAppleEventDescriptor descriptorWithDescriptorType:typeApplicationBundleID data:targetBundleID];
 	NSAppleEventDescriptor* appleEvent = [NSAppleEventDescriptor appleEventWithEventClass:kCoreEventClass eventID:kAEOpenDocuments targetDescriptor:targetDescriptor returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
 	NSAppleEventDescriptor* replyDescriptor = nil;

@@ -5,39 +5,39 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>###	Preview in All Active Browsers  == OmniWeb is commented out as I can't test it Please confirm that it is working
+	<string>### Preview in All Active Browsers
 ### v1.0. 2005-03-29
+### v1.1. 2005-12-04
 ###
-###	CONFIG OPTION::	Set the TM_PROJECT_SITEURL in your TM Project Window Info Button in the following form: [ http://your.site.ext/ ]
+###	CONFIG OPTION:: Set TM_PROJECT_SITEURL in your TM Project Window Info Button in the following form: [ http://your.site.ext/ ]
 ###
 
-# 1. Check if we have a SITE_URL or not
-if [ "$TM_PROJECT_SITEURL" != "" ]
-then
-	#	Yes, we do have a SITE URL defined, so we need to work out which subdir we're in, if any
-	TM_SubDirs=`echo $TM_FILEPATH | sed "s|^$TM_PROJECT_DIRECTORY/\(.*\)$TM_FILENAME\$|\1|"`
-	#echo Debug::TM_SUBDIR value "$TM_SubDirs"
-	activeURL=$TM_PROJECT_SITEURL$TM_SubDirs$TM_FILENAME
-	#echo Debug::TM_SUBDIR value "$activeURL"
-else
-	#	No, we don't have a SITE URL
-	activeURL=file://$TM_FILEPATH
-	#echo Debug::TM_SUBDIR value "$activeURL"
+# 1. Check if we have a SITE_URL
+if [[ -n "$TM_PROJECT_SITEURL" ]]
+	then activeURL=$TM_PROJECT_SITEURL${TM_FILEPATH##$TM_PROJECT_DIRECTORY}
+	else activeURL=file://$TM_FILEPATH
 fi
-#	2.	Now check if any browser is running, if so open a new window
+
+# 2. Now check if any browser is running, if so, point it to the URL
 ## Safari
-[[ $(ps -xc|grep Safari) ]] &amp;&amp; printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Safari\" \n activate \n set the URL of document 1 to theActiveURL \n end tell" | osascript
+[[ $(ps -xc|grep Safari) ]] &amp;&amp; osascript -e 'tell app "Safari"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell'
+
 ## FireFox
-[[ $(ps -xc|grep -i firefox) ]] &amp;&amp; printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Firefox\" \n activate \n Get URL theActiveURL inside window 1 \n end tell" | osascript
+[[ $(ps -xc|grep -i firefox) ]] &amp;&amp; osascript -e 'tell app "Firefox"' -e activate -e "Get URL \"$activeURL\" inside window 1" -e "end tell"
+
 ## Internet Explorer
-[[ $(ps -xc|grep "Internet Explorer") ]] &amp;&amp; printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"Internet Explorer\" \n activate \n OpenURL theActiveURL toWindow 0 Flags 1 \n end tell" | 
-## OmniWeb Uncomment the next line to make it work
-##[[ $(ps -xc|grep -i OmniWeb ) ]] &amp;&amp; printf "set theActiveURL to \"$(echo $activeURL)\" \n tell application \"OmniWeb\" \n activate \n to GetURL theActiveURL \n end tell" | osascript
-### end</string>
+[[ $(ps -xc|grep "Internet Explorer") ]] &amp;&amp; osascript -e 'tell app "Internet Explorer"' -e "activate OpenURL \"$activeURL\" toWindow 0 Flags 1" -e 'end tell'
+
+## OmniWeb
+[[ $(ps -xc|grep -i OmniWeb ) ]] &amp;&amp; osascript -e 'tell app "OmniWeb"' -e activate -e "GetURL \"$activeURL\"" -e 'end tell'
+
+## Camino
+[[ $(ps -xc|grep -i Camino ) ]] &amp;&amp; osascript -e 'tell app "Camino"' -e activate -e "Get URL \"$activeURL\"" -e 'end tell'
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>
-	<string>Preview in Running Browsers</string>
+	<string>Open Document in Running Browser(s)</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>scope</key>

@@ -14,7 +14,7 @@ module Subversion
 		TextMate::call_with_progress(:title => command,
 									:message => "Accessing Subversion Repository…",
 									:output_filepath => output_path) do
-			%x{"#{svn}" diff "-r#{revision}" "#{target_path}"}
+			%x{"#{svn}" diff --diff-cmd diff "-r#{revision}" "#{target_path}"}
 		end
 	end
 end

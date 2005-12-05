@@ -34,6 +34,8 @@ if [[ -f "$TM_BASH_INIT" ]]; then
 	. "$TM_BASH_INIT"
 fi
 
+export RUBYLIB="$RUBYLIB:$TM_SUPPORT_PATH/lib"
+
 # an abstract way to change the output option of the running command
 exit_discard ()					{ echo -n "$1"; exit 200; }
 exit_replace_text ()				{ echo -n "$1"; exit 201; }

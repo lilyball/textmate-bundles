@@ -47,6 +47,10 @@ if targets.size == 1
       -e 'end tell'
     }
   end
+elsif targets.size == 0
+  puts "The project had no recognizable target to run.\n\n"
+  rootObj['targets'].each { |t| puts objs[t].inspect.gsub(/, /, ",\n ") }
 else
-  puts "The project had multiple targets.\nDidn't know which to pick."
+  puts "The project had multiple targets.\nDidn't know which to pick.\n\n"
+  rootObj['targets'].each { |t| puts objs[t].inspect.gsub(/, /, ",\n ") }
 end

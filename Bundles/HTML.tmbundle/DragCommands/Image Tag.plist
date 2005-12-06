@@ -4,8 +4,16 @@
 <dict>
 	<key>command</key>
 	<string>img="$TM_DROPPED_FILE"
-alt=`perl &lt;&lt;&lt;$img -pe 's/^(.*\/)?(.*?)(\..*)?$/$2/g; y/_-/ /'`
-sips -g pixelWidth -g pixelHeight "$img" | awk '/pixelWidth/ { w=$2 } /pixelHeight/ { h=$2 } END { printf("&lt;img src=\"'"$img"'\" width=\"%d\" height=\"%d\" alt=\"${0:'"$alt"'}\" /&gt;", w, h) }'</string>
+echo -n "&lt;img src=\"$img\" "
+
+sips -g pixelWidth -g pixelHeight "$img" \
+|awk '/pixelWidth/  { printf("width=\"%d\" ",  $2) }
+      /pixelHeight/ { printf("height=\"%d\" ", $2) }'
+
+base=${img##*/}
+alt=$(tr &lt;&lt;&lt;${base%.*} '[_-]' ' '|perl -pe 's/(\w+)/\u$1/g')
+echo -n "alt=\"\${1:$alt}\" /&gt;"
+</string>
 	<key>documentExtensions</key>
 	<array>
 		<string>html</string>

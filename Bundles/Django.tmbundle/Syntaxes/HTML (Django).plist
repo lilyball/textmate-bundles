@@ -26,27 +26,7 @@
 			<key>end</key>
 			<string>{% endcomment %}</string>
 			<key>name</key>
-			<string>comment.block.django</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>TODO: specify scope (matches in plain HTML presently)</string>
-			<key>match</key>
-			<string>\b(block|endblock|debug|extends|filter|firstof|for|endfor|if|include|else|endif|ifchanged|endifchanged|ifequal|endifequal|ifnotequal|endifnotequal|load|now|regroup|ssi|templatetag|widthratio)\b</string>
-			<key>name</key>
-			<string>keyword.control.django</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(and|or|not|in|by|as)\b</string>
-			<key>name</key>
-			<string>keyword.operator.django</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\|(add|addslashes|capfirst|center|cut|date|default|dictsort|dictsortreversed|divisibleby|escape|filesizeformat|first|fix_ampersands|floatformat|get_digit|join|length|length_is|linebreaks|linebreaksbr|linenumbers|ljust|lower|make_list|phone2numeric|pluralize|pprint|random|removetags|rjust|slice|slugify|stringformat|striptags|time|timesince|title|truncatewords|unordered_list|upper|urlencode|urlize|urlizetrunc|wordcount|wordwrap|yesno)\b</string>
-			<key>name</key>
-			<string>support.function.filter.django</string>
+			<string>comment.block.django.template</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -54,7 +34,58 @@
 			<key>end</key>
 			<string>}}</string>
 			<key>name</key>
-			<string>variable.other.django</string>
+			<string>variable.other.django.template</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>({%)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.django.tagbraces</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(%})</string>
+			<key>name</key>
+			<string>meta.scope.django.template.tag</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(block|endblock|debug|extends|filter|firstof|for|endfor|if|include|else|endif|ifchanged|endifchanged|ifequal|endifequal|ifnotequal|endifnotequal|load|now|regroup|ssi|templatetag|widthratio)\b</string>
+					<key>name</key>
+					<string>keyword.control.django.template</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(and|or|not|in|by|as)\b</string>
+					<key>name</key>
+					<string>keyword.operator.django.template</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\|(add|addslashes|capfirst|center|cut|date|default|dictsort|dictsortreversed|divisibleby|escape|filesizeformat|first|fix_ampersands|floatformat|get_digit|join|length|length_is|linebreaks|linebreaksbr|linenumbers|ljust|lower|make_list|phone2numeric|pluralize|pprint|random|removetags|rjust|slice|slugify|stringformat|striptags|time|timesince|title|truncatewords|unordered_list|upper|urlencode|urlize|urlizetrunc|wordcount|wordwrap|yesno)\b</string>
+					<key>name</key>
+					<string>support.function.filter.django</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'|"</string>
+					<key>end</key>
+					<string>'|"</string>
+					<key>name</key>
+					<string>string.other.django.template.tag</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[a-zA-Z_]+</string>
+					<key>name</key>
+					<string>string.unquoted.django.template.tag</string>
+				</dict>
+			</array>
 		</dict>
 	</array>
 	<key>scopeName</key>

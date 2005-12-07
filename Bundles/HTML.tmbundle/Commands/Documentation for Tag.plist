@@ -10,9 +10,9 @@
 # Lookup current word as a tag name on w3c.org
 #
 # The mapping below was generated using:
-# echo "tags = {"; curl -s http://www.w3.org/TR/html4/index/elements.html|grep '&lt;td title="Name"&gt;&lt;a href=".*"&gt;.*&lt;/a&gt;&lt;/td&gt;'|perl -pe 's|&lt;td title="Name"&gt;&lt;a href="(.*?)"&gt;(.*?)&lt;/a&gt;&lt;/td&gt;|\t"$2"\t=&gt; "$1",|'; echo "}"
+# echo "$tags = {"; curl -s http://www.w3.org/TR/html4/index/elements.html|grep '&lt;td title="Name"&gt;&lt;a href=".*"&gt;.*&lt;/a&gt;&lt;/td&gt;'|perl -pe 's|&lt;td title="Name"&gt;&lt;a href="(.*?)"&gt;(.*?)&lt;/a&gt;&lt;/td&gt;|\t"$2"\t=&gt; "$1",|'; echo "}"
 
-tags = {
+$tags = {
 	"A"	=&gt; "../struct/links.html#edef-A",
 	"ABBR"	=&gt; "../struct/text.html#edef-ABBR",
 	"ACRONYM"	=&gt; "../struct/text.html#edef-ACRONYM",
@@ -97,8 +97,18 @@ tags = {
 	"VAR"	=&gt; "../struct/text.html#edef-VAR"
 }
 
-tag_name = ENV["TM_CURRENT_WORD"]
-tag_url = tags[tag_name.upcase] or "elements.html"
+$tag_name = ENV["TM_CURRENT_WORD"]
+
+def request_tag_name
+  s = `\"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" inputbox --title 'Documentation for Tag' --informative-text 'What tag would you like to lookup?' --text '#{$tag_name}' --button1 'Lookup' --button2 'Cancel' --button3 'Show All Tags'`
+  case (a = s.split("\n"))[0].to_i
+  when 1: ($tags[a[1].to_s.upcase] or "elements.html")
+  when 2: puts "Abort"; abort
+  when 3: "elements.html"
+  end
+end
+
+tag_url = ($tags[$tag_name.upcase] or request_tag_name)
 url = "http://www.w3.org/TR/html4/index/" + tag_url
 puts "&lt;meta http-equiv='Refresh' content='0;URL=#{url}'&gt;"
 </string>

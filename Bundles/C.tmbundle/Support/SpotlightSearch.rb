@@ -1,7 +1,10 @@
 
-UserSearchFolder = ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']
+user_folder = ENV['TM_PROJECT_DIRECTORY'] 
 
-SearchFolders = [UserSearchFolder, "/System/Library/Frameworks", "/usr/include"]
+(user_folder = ENV['TM_DIRECTORY']) if user_folder.nil? or user_folder.empty? or user_folder == '/'
+(user_folder = nil) if user_folder.nil? or user_folder.empty? or user_folder == '/'
+
+SearchFolders = [user_folder, "/System/Library/Frameworks", "/usr/include"].compact
 
 header = ARGV[0]
 fragment_path_to_header = header.split("/")

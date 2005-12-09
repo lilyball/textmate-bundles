@@ -100,7 +100,7 @@ mup.html {
 		mup.pre {
 			STDOUT.flush
 
-			IO.popen("#{svn} commit --force-log #{commit_args}", "r+") do |pipe|
+			IO.popen("#{svn} commit --non-interactive --force-log #{commit_args}", "r+") do |pipe|
 				pipe.each {|line| mup.text! line }
 			end
 		}

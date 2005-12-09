@@ -5,29 +5,39 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>folders=(
-	"/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation"
-	"/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit"
-	"/Developer/ADC Reference Library/documentation/Cocoa/Reference/WebKit"
-)
+	<string>doc_path="/Developer/ADC Reference Library/documentation/Cocoa/Reference"
+word=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
 
-class=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
+# first check our doc_references.txt
+reference=$(zgrep -w "^$word" "$TM_BUNDLE_SUPPORT/doc_references.txt.gz"|cut -f2)
+if [[ -n "$reference" ]]; then
+	file="$doc_path/$reference"
+	exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://${file// /%20}'&gt;"
+fi
 
+# then see if there's a file named after the word (class)
+folders=( "Foundation" "ApplicationKit" "WebKit" )
 for (( i = 0; i &lt; ${#folders[@]}; i++ )); do
-	file="${folders[$i]}/ObjC_classic/Classes/${class}.html"
-	if [[ -f $file ]]; then
-		exit_show_html '&lt;meta http-equiv="Refresh" content="0;URL=tm-file://'${file// /%20}'"&gt;'
-	fi
+	file="$doc_path/${folders[$i]}/ObjC_classic/Classes/$word.html"
+	[[ -f $file ]] &amp;&amp; exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://${file// /%20}'&gt;"
 done
 
-echo "Couldn’t find class: “${class}”"
+# finally try man (PolyglotMan)
+RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+if [[ -x "$RMAN" ]] &amp;&amp; man -w "$word" &amp;&gt;/dev/null; then
+	man -a "$word"|"$RMAN" -fHTML; exit_show_html
+fi
+
+echo "Couldn’t find documentation for “${word}”"
 </string>
+	<key>fallbackInput</key>
+	<string>word</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^h</string>
 	<key>name</key>
-	<string>Documentation for Class</string>
+	<string>Documentation for Word / Selection</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

@@ -29,10 +29,13 @@ fi
 [[ $(ps -xc|grep "Internet Explorer") ]] &amp;&amp; osascript -e 'tell app "Internet Explorer"' -e "activate OpenURL \"$activeURL\" toWindow 0 Flags 1" -e 'end tell'
 
 ## OmniWeb
-[[ $(ps -xc|grep -i OmniWeb ) ]] &amp;&amp; osascript -e 'tell app "OmniWeb"' -e activate -e "GetURL \"$activeURL\"" -e 'end tell'
+[[ $(ps -xc|grep -i OmniWeb) ]] &amp;&amp; osascript -e 'tell app "OmniWeb"' -e activate -e "GetURL \"$activeURL\"" -e 'end tell'
 
 ## Camino
-[[ $(ps -xc|grep -i Camino ) ]] &amp;&amp; osascript -e 'tell app "Camino"' -e activate -e "Get URL \"$activeURL\"" -e 'end tell'
+[[ $(ps -xc|grep -i Camino) ]] &amp;&amp; osascript -e 'tell app "Camino"' -e activate -e "Get URL \"$activeURL\"" -e 'end tell'
+
+## Xyle scope
+[[ $(ps -xc|grep "Xyle scope") ]] &amp;&amp; osascript -e 'tell app "Xyle scope"' -e activate -e "Get URL \"$activeURL\"" -e 'end tell'
 </string>
 	<key>input</key>
 	<string>none</string>

@@ -5,13 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># if there's no selected text, we output the current line
-# otherwise we output the selection (again)
-if [[ -z "$TM_SELECTED_TEXT" ]]
-   then echo -n "${TM_CURRENT_LINE:$TM_COLUMN_NUMBER-1}
-${TM_CURRENT_LINE:0:$TM_COLUMN_NUMBER-1}"
-   else echo -n "$TM_SELECTED_TEXT"
-fi</string>
+	<string>: ${TM_LINE_INDEX:=$((TM_COLUMN_NUMBER-1))} # backwards compatibility
+
+# if there's a selection, output that (to have it duplicated) otherwise
+# split the current line around the caret and output “right, left” to
+# duplicate the line, leaving the caret in the same place on the new line
+
+echo -n "${TM_SELECTED_TEXT:-${TM_CURRENT_LINE:TM_LINE_INDEX}
+${TM_CURRENT_LINE:0:TM_LINE_INDEX}}"
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

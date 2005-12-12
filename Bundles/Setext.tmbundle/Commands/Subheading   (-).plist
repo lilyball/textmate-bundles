@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>head -n $(($TM_LINE_NUMBER -1))|tail -n 1|sed 's/./-/g'|tail -c +"$TM_COLUMN_NUMBER"</string>
+	<string>head -n$((TM_LINE_NUMBER-1))|tail -n1|sed 's/./-/g'|tail -c +$((TM_LINE_INDEX+1))</string>
 	<key>input</key>
 	<string>document</string>
 	<key>name</key>

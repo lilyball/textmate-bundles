@@ -471,19 +471,43 @@
 		</dict>
 		<key>smarty</key>
 		<dict>
-			<key>begin</key>
-			<string>{{|{</string>
-			<key>disabled</key>
-			<string>1</string>
-			<key>end</key>
-			<string>}}|}</string>
-			<key>name</key>
-			<string>source.smarty.embedded.xhtml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>source.smarty</string>
+					<key>begin</key>
+					<string>(\{(literal)\})</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>source.smarty.embedded.html</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.built-in.smarty</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\{/(literal)\})</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>{{|{</string>
+					<key>disabled</key>
+					<integer>1</integer>
+					<key>end</key>
+					<string>}}|}</string>
+					<key>name</key>
+					<string>source.smarty.embedded.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.smarty</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

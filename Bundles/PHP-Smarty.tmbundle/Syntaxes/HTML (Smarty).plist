@@ -21,6 +21,11 @@
 			<string>\{(literal)\}</string>
 			<key>captures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>source.smarty</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
@@ -33,7 +38,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>text.html.strict</string>
+					<string>text.html.basic</string>
 				</dict>
 			</array>
 		</dict>
@@ -56,7 +61,7 @@
 			<key>comment</key>
 			<string>This is set to use XHTML standards, but you can change that by changing .strict to .basic for HTML standards</string>
 			<key>include</key>
-			<string>text.html.strict</string>
+			<string>text.html.basic</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

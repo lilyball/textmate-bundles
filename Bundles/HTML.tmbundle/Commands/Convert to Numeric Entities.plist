@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>iconv -f utf-8 -t ucs-2 | hexdump -ve '/2 "&amp;#%d;"' | perl -pe 's/&amp;#10;/\n/g'</string>
+	<string>iconv -f utf-8 -t ucs-2 | hexdump -ve '/2 "&amp;#%X;"' | perl -pe 's/&amp;#10;/\n/g'</string>
 	<key>fallbackInput</key>
 	<string>character</string>
 	<key>input</key>

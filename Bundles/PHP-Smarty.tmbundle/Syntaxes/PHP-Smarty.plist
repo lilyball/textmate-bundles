@@ -9,14 +9,14 @@
 	<key>foldingStopMarker</key>
 	<string>(&lt;/(?i:(head|table|tr|div|style|script|ul|ol|form|dl))&gt;|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\s)\})</string>
 	<key>name</key>
-	<string>PHP (Smarty)</string>
+	<string>Smarty</string>
 	<key>patterns</key>
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>\*</string>
+			<string>\{\*</string>
 			<key>end</key>
-			<string>\*</string>
+			<string>\*\}</string>
 			<key>name</key>
 			<string>comment.block.smarty</string>
 		</dict>

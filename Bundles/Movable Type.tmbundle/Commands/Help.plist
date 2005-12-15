@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>Markdown.pl &lt;&lt;'EOF'
+Help for Movable Type Bundle
+============================
+
+Template Preview commands
+-------------------------
+
+In order to properly execute previews, you will need to configure TextMate or your project with the following shell variables:
+
+* `$MT_HOME` — The working directory of your local MT installation.
+* `$MT_BLOG` — The blog id of a weblog you wish to run your previews against.
+
+Customizing your MT syntax highlighting
+---------------------------------------
+
+You can customize the colors used to highlight MT container and variable tags. To do this, you can use these custom scopes for new color settings:
+
+* mt.variable.tag.html: Scope that covers the entire variable tag block (from '&lt;$' to '$&gt;').
+* mt.container.tag.html: Scope that covers the entire container tag block (from '&lt;' to '&gt;').
+* entity.name.tag.mt: Scope for the inner portion of a MT container tag.
+* variable.other.mt: Scope for the inner portion of a MT variable tag.
+
+A note about the syntax highlighting of variable tags. Variable tags are written as &lt;$MTEntryTitle$&gt; to be recognized properly. Movable Type allows you to omit the '$' characters, but this language bundle requires them so they are distinguishable from the container tags.
+
+Help
+----
+
+A context-sensitive help command (^H) is available when the cursor is on a standard MT tag. It will display the online help for that tag from the Six Apart web site.
+
+And More!
+---------
+
+Several templates and snippets are also included with this bundle. The tab-triggered snippets are grouped by keyword ("entry", "blog", "category", "archive", etc.).
+
+Author
+------
+
+This bundle is maintained by [Brad Choate][1]. Brad works at [Six Apart][2], the company that publishes [Movable Type][3]. This bundle is not officially supported by Six Apart, but you're welcome to [contact Brad][4] if you have questions or feedback regarding it.
+
+[1]: http://bradchoate.com/
+[2]: http://www.sixapart.com/
+[3]: http://www.sixapart.com/movabletype/
+[4]: mailto:brad@bradchoate.com?subject=Movable%20Type%20TextMate%20Bundle
+
+EOF</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.html.mt</string>
+	<key>uuid</key>
+	<string>0122D7D0-A9D5-4FDC-95BA-BD61E52C2BAF</string>
+</dict>
+</plist>

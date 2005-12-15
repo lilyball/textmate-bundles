@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="sixapart-standard">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=<$MTPublishCharset$>" />
+   <meta name="generator" content="Movable Type <$MTVersion$>" />
+
+   <link rel="stylesheet" href="<$MTBlogURL$>styles-site.css" type="text/css" />
+   <link rel="alternate" type="application/atom+xml" title="Atom" href="<$MTBlogURL$>atom.xml" />
+   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="<$MTBlogURL$>index.xml" />
+
+   <title><$MTBlogName encode_html="1"$>: <$MTEntryTitle remove_html="1"$></title>
+
+   <link rel="start" href="<$MTBlogURL$>" title="Home" />
+   <MTEntryPrevious><link rel="prev" href="<$MTEntryPermalink$>" title="<$MTEntryTitle encode_html="1"$>" /></MTEntryPrevious>
+   <MTEntryNext><link rel="next" href="<$MTEntryPermalink$>" title="<$MTEntryTitle encode_html="1"$>" /></MTEntryNext>
+
+   <$MTEntryTrackbackData$>
+
+   <MTBlogIfCCLicense>
+   <$MTCCLicenseRDF$>
+   </MTBlogIfCCLicense>
+
+   <script type="text/javascript" src="<$MTBlogURL$>mt-site.js"></script>
+</head>
+<body class="layout-one-column" onload="individualArchivesOnLoad(commenter_name)">
+   <div id="container">
+      <div id="container-inner" class="pkg">
+
+         <div id="banner">
+            <div id="banner-inner" class="pkg">
+               <h1 id="banner-header"><a href="<$MTBlogURL$>" accesskey="1"><$MTBlogName encode_html="1"$></a></h1>
+               <h2 id="banner-description"><$MTBlogDescription$></h2>
+            </div>
+         </div>
+
+         <div id="pagebody">
+            <div id="pagebody-inner" class="pkg">
+               <div id="alpha">
+                  <div id="alpha-inner" class="pkg">
+
+                     <p class="content-nav">
+                        <MTEntryPrevious><a href="<$MTEntryPermalink$>">&laquo; <$MTEntryTitle$></a> |</MTEntryPrevious>
+                        <a href="<$MTBlogURL$>">Main</a>
+                        <MTEntryNext>| <a href="<$MTEntryPermalink$>"><$MTEntryTitle$> &raquo;</a></MTEntryNext>
+                     </p>
+
+                     <a id="a<$MTEntryID pad="1"$>"></a>
+                     <div class="entry" id="entry-<$MTEntryID$>">
+                        <h3 class="entry-header"><$MTEntryTitle$></h3>
+                        <div class="entry-content">
+                           <div class="entry-body">
+                              <$MTEntryBody$>
+                           </div>
+                           <div id="more" class="entry-more">
+                              <$MTEntryMore$>
+                           </div>
+                        </div>
+                        <p class="entry-footer">
+                           <span class="post-footers">Posted by <$MTEntryAuthorDisplayName$> on <$MTEntryDate$></span> <span class="separator">|</span> <a class="permalink" href="<$MTEntryPermalink$>">Permalink</a>
+                        </p>
+                     </div>
+
+                     <MTIfPingsActive>
+                     <div class="trackbacks">
+                        <h3 id="trackback" class="trackbacks-header">TrackBack</h3>
+                        <div id="trackbacks-info">
+                           <MTIfPingsAccepted><p>TrackBack URL for this entry:<br /><$MTEntryTrackbackLink$></p></MTIfPingsAccepted>
+                        </div>
+                        <div class="trackbacks-content">
+                           <MTPings>
+                           <MTPingsHeader>
+                           <p>Listed below are links to weblogs that reference <a href="<$MTEntryPermalink$>"><$MTEntryTitle$></a>:</p>
+                           </MTPingsHeader>
+                           <a id="p<$MTPingID pad="1"$>"></a>
+                           <div class="trackback" id="ping-<$MTPingID$>">
+                              <div class="trackback-content">
+                                 <p>
+                                    &raquo; <a rel="nofollow" href="<$MTPingURL$>"><$MTPingTitle$></a> from <$MTPingBlogName$><br />
+                                    <$MTPingExcerpt$> <a rel="nofollow" href="<$MTPingURL$>">[Read More]</a>
+                                 </p>
+                              </div>
+                              <p class="trackback-footer">
+                                 Tracked on <a href="#ping-<$MTPingID$>"><$MTPingDate$></a>
+                              </p>
+                           </div>
+                           </MTPings>
+                        </div>
+                     </div>
+                     </MTIfPingsActive>
+
+                     <MTIfCommentsActive>
+                     <div id="comments" class="comments">
+                        <div class="comments-content">
+                           <MTComments>
+                           <MTCommentsHeader><h3 class="comments-header">Comments</h3></MTCommentsHeader>
+                           <a id="c<$MTCommentID pad="1"$>"></a>
+                           <div class="comment" id="comment-<$MTCommentID$>">
+                              <div class="comment-content">
+                                 <$MTCommentBody$>
+                              </div>
+                              <p class="comment-footer">
+                                 Posted by:
+                                 <$MTCommentAuthorLink default_name="Anonymous"$> <$MTCommentAuthorIdentity$> |
+                                 <a href="#comment-<$MTCommentID$>"><$MTCommentDate$></a>
+                              </p>
+                           </div>
+                           </MTComments>
+                        </div>
+
+                        <MTEntryIfCommentsOpen> 
+                        <form method="post" action="<$MTCGIPath$><$MTCommentScript$>" name="comments_form" onsubmit="if (this.bakecookie.checked) rememberMe(this)">
+                           <input type="hidden" name="static" value="1" />
+                           <input type="hidden" name="entry_id" value="<$MTEntryID$>" />
+                           
+                           <div class="comments-open" id="comments-open">
+                              <h2 class="comments-open-header">Post a comment</h2>
+                              
+                              <div class="comments-open-content">
+                                 <script type="text/javascript">
+                                 <!--
+                                 writeTypeKeyGreeting(commenter_name, <$MTEntryID$>);
+                                 //-->
+                                 </script>
+                              
+                                 <MTIfCommentsModerated>
+                                 <p class="comments-open-moderated">
+                                    (If you haven't left a comment here before, you may need to be approved by the site owner before your comment will appear. Until then, it won't appear on the entry. Thanks for waiting.)
+                                 </p>
+                                 </MTIfCommentsModerated>
+
+                                 <div id="comments-open-data">
+                                    <div id="name-email">
+                                       <p>
+                                          <label for="comment-author">Name:</label>
+                                          <input id="comment-author" name="author" size="30" />
+                                       </p>
+                                       <p>
+                                          <label for="comment-email">Email Address:</label>
+                                          <input id="comment-email" name="email" size="30" />
+                                       </p>
+                                    </div>
+
+                                    <p>
+                                       <label for="comment-url">URL:</label>
+                                       <input id="comment-url" name="url" size="30" />
+                                    </p>
+                                    <p>
+                                       <label for="comment-bake-cookie"><input type="checkbox"
+                                          id="comment-bake-cookie" name="bakecookie" onclick="if (!this.checked) forgetMe(document.comments_form)" value="1" />
+                                          Remember personal info?</label>
+                                    </p>
+                                 </div>
+
+                                 <p id="comments-open-text">
+                                    <label for="comment-text">Comments: <MTIfAllowCommentHTML>(you may use HTML tags for style)</MTIfAllowCommentHTML></label>
+                                    <textarea id="comment-text" name="text" rows="10" cols="30"></textarea>
+                                 </p>
+                                 <div id="comments-open-footer" class="comments-open-footer">
+                                    <input type="submit" accesskey="v" name="preview" id="comment-preview" value="Preview" />
+                                    <input type="submit" accesskey="s" name="post" id="comment-post" value="Post" />
+                                 </div>
+                              </div>
+                           </div>
+                        </form>
+                        </MTEntryIfCommentsOpen>
+                     </div>
+                     </MTIfCommentsActive>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</body>
+</html>

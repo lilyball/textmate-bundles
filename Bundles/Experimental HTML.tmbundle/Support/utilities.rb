@@ -22,7 +22,7 @@ def strip_tags(html)
   # Strip html tags
   html = html.gsub(/<\/?                      # opening tag with optional slash
                       (
-                        [^<>"']          |     # match anything unquoted
+                        [^<>"']         |     # match anything unquoted
                         ".*?"           |     # match double quotes…
                         '.*?'                 # and single ones
                       )*                      # any combination of the three
@@ -30,8 +30,8 @@ def strip_tags(html)
                    /xm, "\xEF\xBF\xBC")       # placeholder
 
   # Handle placeholders
-  html = html.gsub(/^[ \t]*\xEF\xBF\xBC[ \t]*(\n|\r)/xm, '')  # Remove lines with only tags
-  html = html.gsub(/\xEF\xBF\xBC/xm, '')                      # Remove other placeholders
+  html = html.gsub(/^[ \t]*\xEF\xBF\xBC[ \t]*(\n|\r|\r\n)/xm, '')  # Remove lines with only tags
+  html = html.gsub(/\xEF\xBF\xBC/xm, '')                           # Remove other placeholders
 end
 
 def html2text(html, script_path)
@@ -46,10 +46,21 @@ end
 private
 
 def strip_embedded(html)
-  # Ruby (and some php)
-  html = html.gsub(/<%(?!%).*?%>/m, "\xEF\xBF\xBC")
+  # Ruby and some PHP
+  html = html.gsub(/<%(?!%)
+                      (?>                             # opening tag (negate is for an
+                                                      #  escaped char)
+                        <<<([a-zA-Z_][a-zA-Z0-9_]*).*?^\2;?$  |
+                                                      # php heredoc, hopefully doesn't
+                                                      #  colide with erb
+                        %(?!>)                    |   # match any % that's not an end tag
+                        [^"'%]                    |   # match everything else, except strings
+                        "(\\("|\\)|[^"])*"        |   # double quoted strings…
+                        '(\\('|\\)|[^'])*'            # …and single
+                      )
+                    %>                                # close tag
+                   /xm, "\xEF\xBF\xBC")
   # PHP
-  #html = html.gsub(/<\?(php|=)?.*?\?>/m, '')
   html = html.gsub(/<\?(php|=)?                       # opening tag with optional php or =
                       (?>
                         \/\*.*?\*\/               |   # block comments
@@ -68,8 +79,8 @@ def strip_embedded(html)
   html = html.gsub(/<\/?MT.*?>/m, "\xEF\xBF\xBC")
 
   # Handle placeholders
-  html = html.gsub(/^[ \t]*\xEF\xBF\xBC[ \t]*(\n|\r)/xm, '')  # Remove lines with only tags
-  html = html.gsub(/\xEF\xBF\xBC/xm, '')                      # Remove other placeholders
+  html = html.gsub(/^[ \t]*\xEF\xBF\xBC[ \t]*(\n|\r|\r\n)/xm, '')  # Remove lines with only tags
+  html = html.gsub(/\xEF\xBF\xBC/xm, '')                           # Remove other placeholders
 end
 
 

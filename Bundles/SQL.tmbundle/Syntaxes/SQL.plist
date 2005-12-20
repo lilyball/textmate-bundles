@@ -36,7 +36,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i:^\s*(create)\s+(aggregate|conversion|database|domain|function|group|(unique\s+)?index|language|operator class|operator|rule|schema|sequence|table|tablespace|trigger|type|user|view)\s+)(['"`])?(\w+)\4</string>
+			<string>(?i:^\s*(create)\s+(aggregate|conversion|database|domain|function|group|(unique\s+)?index|language|operator class|operator|rule|schema|sequence|table|tablespace|trigger|type|user|view)\s+)(['"`])?(\w+)</string>
 			<key>name</key>
 			<string>declaration.create.sql</string>
 		</dict>
@@ -114,10 +114,23 @@
 			<string>declaration.alter.sql</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.select.sql</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.sql</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(?i:^\s*([\(]{0,}select(\s+distinct)?|insert\s+into|update|delete|from|where|group\sby|and|union(\s+all)?|having|order\sby)\b)</string>
+			<string>(?i:\s*[\(]*(select(\s+distinct)?|insert\s+into|update|delete|from|where|group\sby|and|union(\s+all)?|having|order\sby)\b)</string>
 			<key>name</key>
-			<string>keyword.other.DML.sql</string>
+			<string>meta.other.DML.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>

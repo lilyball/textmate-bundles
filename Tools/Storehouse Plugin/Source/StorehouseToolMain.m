@@ -10,7 +10,7 @@
 
 int main (int argc, char const* argv[])
 {
-	NSAutoreleasePool *		pool = [[NSAutoreleasePool alloc] init];	
+	NSAutoreleasePool *		pool = [[NSAutoreleasePool alloc] init];
 	id  					proxy;
 	
 	if(argc != 2)
@@ -26,7 +26,7 @@ int main (int argc, char const* argv[])
 
 	if(proxy == nil)
 	{
-		fprintf(stderr, "%s: cannot find Storehouse app:\n", argv[0]);
+		fprintf(stderr, "%s: cannot find Storehouse:\n", argv[0]);
 		exit(1);
 	}
 	

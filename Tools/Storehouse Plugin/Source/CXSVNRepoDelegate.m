@@ -6,6 +6,10 @@
 - (float)version;
 @end
 
+@interface CXSVNRepoAppDelegate(RelativelyPrivate)
+- (void) vend;
+@end
+
 @implementation CXSVNRepoAppDelegate
 
 static NSMutableArray *			sBrowsers = nil;
@@ -38,7 +42,7 @@ static NSMutableArray *			sBrowsers = nil;
 
 #endif
 
-- (void) SVNRepoBrowserDidTerminate:(CXSVNRepoBrowser *)browser
+- (void) SVNRepoBrowserWillClose:(CXSVNRepoBrowser *)browser
 {
 	[sBrowsers removeObject:browser];
 }
@@ -75,6 +79,7 @@ static NSMutableArray *			sBrowsers = nil;
 	
 	newBrowser = [self firstEmptyBrowser];
 	
+	// Keep a list of browsers
 	if(newBrowser == nil)
 	{
 		if( sBrowsers == nil )
@@ -88,7 +93,6 @@ static NSMutableArray *			sBrowsers = nil;
 		{
 			if( [sBrowsers count] > 0 )
 			{
-				
 				[[sBrowsers lastObject] syncNextBrowserWindowFrame:newBrowser];
 			}
 			

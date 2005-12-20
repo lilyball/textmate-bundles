@@ -117,6 +117,8 @@
 	frame.origin.x += frame.size.width + 2;
 	
 	[[browser->fOutlineView window] setFrameOrigin:frame.origin];
+	
+	
 }
 
 - (void)loadURL:(NSString *)URL
@@ -772,12 +774,6 @@
 		[self didStopSVNNode:fRootNode];
 	}
 }
-
-- (void)windowWillClose:(NSNotification *)notification
-{
-	[self release];
-}
-
 - (void) setDelegate:(id)delegate
 {
 	fDelegate = delegate;
@@ -788,10 +784,32 @@
 	return fDelegate;
 }
 
+#if 0
+#pragma mark -
+#pragma mark Destruction
+#endif
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+	[self closeBrowser];
+}
+
+- (void) closeBrowser
+{
+	//
+	// SVNRepoBrowserWillClose notification may release us, so keep us alive
+	// long enough to safely order out the window.
+	//
+	[self retain];
+
+	[fDelegate SVNRepoBrowserWillClose:self];
+	[[fOutlineView window] orderOut:nil];
+
+	[self autorelease];
+}
+
 - (void) dealloc
 {
-	[fDelegate SVNRepoBrowserDidTerminate:self];
-	
 	[fStatusWindow release];
 	[fRootNode release];
 	[fRepoLocation release];

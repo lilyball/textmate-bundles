@@ -39,6 +39,9 @@ typedef enum
 + (CXSVNRepoBrowser *) browser;
 + (CXSVNRepoBrowser *) browserAtURL:(NSString *)URL;	// may be nil
 
+- (void) closeBrowser;
+
+
 - (void) setDelegate:(id)delegate;
 - (id) delegate;
 
@@ -69,7 +72,7 @@ typedef enum
 @end
 
 @interface NSObject(CXSVNRepoBrowserDelegate)
-- (void) SVNRepoBrowserDidTerminate:(CXSVNRepoBrowser *)browser;
+- (void) SVNRepoBrowserWillClose:(CXSVNRepoBrowser *)browser;
 @end
 
 #endif /* _CXSVNRepoBrowser_H_ */

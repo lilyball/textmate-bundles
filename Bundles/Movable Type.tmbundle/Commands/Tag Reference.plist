@@ -8,14 +8,14 @@
 	<string># Context-sensitive help lookup for MT tags.
 if grep &lt;&lt;&lt;${TM_CURRENT_WORD:-!} -Esq '[a-zA-Z0-9_]+'
 	then exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=http://www.sixapart.com/movabletype/docs/$TM_CURRENT_WORD'&gt;"
-	else echo "Nothing to lookup (hint: place the caret on a function name)"
+	else echo "Nothing to lookup (hint: place the caret on a tag name)"
 fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^h</string>
 	<key>name</key>
-	<string>Tag Reference</string>
+	<string>Documentation for Tag</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

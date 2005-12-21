@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;title&gt;${1:`if [[ -z $TM_FILENAME ]]; then printf "Page title"; else basename "$TM_FILENAME"|sed 's/\(.*\)\..*$/\1/'; fi`}&lt;/title&gt;</string>
+	<string>&lt;title&gt;${1:${TM_FILENAME/((.+)\..*)?/(?2:$2:Page Title)/}}&lt;/title&gt;</string>
 	<key>name</key>
 	<string>Title (title)</string>
 	<key>scope</key>

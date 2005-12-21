@@ -5,7 +5,7 @@
 	<key>content</key>
 	<string>&lt;head&gt;
 	&lt;meta http-equiv="Content-type" content="text/html; charset=utf-8" /&gt;
-	&lt;title&gt;${1:`if [[ -z $TM_FILENAME ]]; then printf "Page title"; else basename "$TM_FILENAME"|sed 's/\(.*\)\..*$/\1/'; fi`}&lt;/title&gt;
+	&lt;title&gt;${1:${TM_FILENAME/((.+)\..*)?/(?2:$2:Page Title)/}}&lt;/title&gt;
 	$0
 &lt;/head&gt;</string>
 	<key>name</key>

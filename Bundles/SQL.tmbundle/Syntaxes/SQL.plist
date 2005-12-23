@@ -42,7 +42,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i:\s+(on\s+|(not\s+)?null)\b)</string>
+			<string>(?i:\b(on\s+|(not\s+)?null)\b)</string>
 			<key>name</key>
 			<string>keyword.other.DDL.create.II.sql</string>
 		</dict>
@@ -52,7 +52,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.function.create.sql</string>
+					<string>keyword.other.create.sql</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -71,7 +71,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.function.create.sql</string>
+					<string>keyword.other.create.sql</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -100,7 +100,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.function.create.sql</string>
+					<string>keyword.other.create.sql</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -114,45 +114,32 @@
 			<string>declaration.alter.sql</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>support.function.select.sql</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.sql</string>
-				</dict>
-			</dict>
 			<key>match</key>
-			<string>(?i:\s*[\(]*(select(\s+distinct)?|insert\s+into|update|delete|from|where|group\sby|and|union(\s+all)?|having|order\sby)\b)</string>
+			<string>(?i:\b(select(\s+distinct)?|insert\s+into|update|delete|from|where|group\sby|and|union(\s+all)?|having|order\sby)\b)</string>
 			<key>name</key>
-			<string>meta.other.DML.sql</string>
+			<string>keyword.other.DML.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i:\s+values\s+)</string>
+			<string>(?i:\bvalues\b)</string>
 			<key>name</key>
 			<string>keyword.other.DML.II.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i:(begin(\s+work)?|start\s+transaction|commit(\s+work)?|rollback(\s+work)?))</string>
+			<string>(?i:\b(begin(\s+work)?|start\s+transaction|commit(\s+work)?|rollback(\s+work)?)\b)</string>
 			<key>name</key>
 			<string>keyword.other.sql.LUW.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i:(grant(\swith\sgrant\soption)?|revoke))</string>
+			<string>(?i:\b(grant(\swith\sgrant\soption)?|revoke)\b)</string>
 			<key>name</key>
 			<string>keyword.other.authorization.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i:^\s*([A-Za-z0-9_])+\s+(bigint|bigserial|bit|bit\svarying\(\d+\)|boolean|box|bytea|character\s(varying)?\(\d+\)|char\(\d+\)|var\schar\(\d+\)|cidr|circle|date|double\sprecision|float\(\d+\)|inet|int|integer|interval\(\d+\)|line|lseg|macaddr|money|numeric(\(\d+,\d+\))?|oid|path|point|polygon|real|smallint|serial|text|times(\(\d+\))(\swithoutstimeszone)?|timestamp(s(\(\d+\))(\swithoutstimeszone)?)?|tinyint\(\d+\)|varchar(\(\d+\))?)\s*)\b</string>
+			<string>(?i:\b(bigint|bigserial|bit|bit\svarying\(\d+\)|boolean|box|bytea|character\s(varying)?\(\d+\)|char\(\d+\)|var\schar\(\d+\)|char(\(\d+\))?|cidr|circle|date|double\sprecision|float\(\d+\)|inet|int|integer|interval\(\d+\)|line|lseg|macaddr|money|number(\(\d+\))?|numeric(\(\d+,\d+\))?|oid|path|point|polygon|real|smallint|serial|sysdate|text|times(\(\d+\))(\swithoutstimeszone)?|timestamp(s(\(\d+\))(\swithoutstimeszone)?)?|tinyint\(\d+\)|varchar\d?(\(\d+\))?)\s*)\b</string>
 			<key>name</key>
 			<string>storage.type.sql</string>
 		</dict>
@@ -205,6 +192,14 @@
 			<string>#.*$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.sql</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.c</string>
 		</dict>
 		<dict>
 			<key>begin</key>

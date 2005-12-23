@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>TPERL=${TM_PERL:-perl}
+
+cd "${TM_DIRECTORY}"
+"$TPERL" "$TM_FILEPATH" | pre</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run Script (plain)</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.perl</string>
+	<key>uuid</key>
+	<string>2F3DB2EF-6B9E-4E5F-87A8-3675680E5C0D</string>
+</dict>
+</plist>

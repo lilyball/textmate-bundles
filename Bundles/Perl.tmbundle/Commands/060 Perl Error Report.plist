@@ -9,8 +9,15 @@
 	<key>capturePattern</key>
 	<string>^(.*)line (\d+)(.*)$</string>
 	<key>command</key>
-	<string>perl -cw "$TM_FILEPATH"
-</string>
+	<string>. "${TM_SUPPORT_PATH}/lib/html.sh"
+cd "${TM_DIRECTORY}"
+out=`"${TM_BUNDLE_SUPPORT}/perlcheckmate.pl" "${TM_FILEPATH}"`
+if [[ $out ]]
+  then htmlHeader "Perl syntax errors for ${TM_FILENAME}";
+       exit_show_html "$out";
+       htmlFooter
+  else exit_show_tool_tip "No errors!"
+fi</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
@@ -20,7 +27,7 @@
 	<key>name</key>
 	<string>Validate Syntax</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>source.perl</string>
 	<key>uuid</key>

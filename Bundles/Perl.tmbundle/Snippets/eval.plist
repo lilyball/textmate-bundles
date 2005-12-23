@@ -3,17 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>sub ${1:function_name} {
-	${2:# body...}
+	<string>eval {
+	${1:# do something risky...}
+};
+if ($@) {
+	${2:# handle failure...}
 }
 </string>
 	<key>name</key>
-	<string>Function (sub)</string>
+	<string>Try/Except (eval)</string>
 	<key>scope</key>
 	<string>source.perl</string>
 	<key>tabTrigger</key>
-	<string>sub</string>
+	<string>eval</string>
 	<key>uuid</key>
-	<string>4734090D-F23D-4D6B-8581-AC1E1B776DCD</string>
+	<string>3A524B0E-C793-429A-AC49-6FB8370D4B77</string>
 </dict>
 </plist>

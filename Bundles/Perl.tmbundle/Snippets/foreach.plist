@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>sub ${1:function_name} {
-	${2:# body...}
+	<string>foreach ${1:my \$${2:x} }(@${3:array}) {
+	${4:# body...}
 }
 </string>
 	<key>name</key>
-	<string>Function (sub)</string>
+	<string>Loop (fore)</string>
 	<key>scope</key>
 	<string>source.perl</string>
 	<key>tabTrigger</key>
-	<string>sub</string>
+	<string>fore</string>
 	<key>uuid</key>
-	<string>4734090D-F23D-4D6B-8581-AC1E1B776DCD</string>
+	<string>92CEBA9A-D9C9-477B-9B34-931B0521EC79</string>
 </dict>
 </plist>

@@ -1,6 +1,6 @@
 *Perl Bundle for TextMate*
 
-by Eric Hsu, Noah Daniels, and Martin Vetter 
+by Eric Hsu, Noah Daniels, Martin Vetter and Brad Choate
 textmate@betterfilecabinet.com
 http://math.sfsu.edu/hsu/textmate
 
@@ -9,12 +9,13 @@ Release Notes
 The package consists of a syntax highlighting file and a few handy commands:
 
 	Documentation for Word (using perldoc)
-	Perl Error Report (this is missing?)
+	Perl Validate Syntax
+    Run Script
 	Send to Affrus (requires Affrus, obviously)
 	Tidy (requires PerlTidy from http://perltidy.sourceforge.net/, may need to tweak path)
 	Perl to One-liner (strips comments & extra whitespace, requires perltidy)
 	Help (show this file)
-	
+
 Removed
 	Perl Comment Toggle (removed in favor of Source / Toggle Comment)
 	List Subroutines (removed in favor of native function pop-up)
@@ -26,6 +27,12 @@ To Do. Fix q, qq to deal with different matched delimiters.
 
 
 History
+
+(12-23-05)
+	Brad Choate fancied up Validate Syntax command.
+    Added Run Script command.
+    Improved documentation lookup (internal links are converted to refer to perldoc.perl.org queries)
+    Added several snippets for various language constructs.
 
 	"last" colored as a control structure.
 (12-20-04) 

@@ -3,17 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>sub ${1:function_name} {
+	<string>if ($1) {
 	${2:# body...}
+} elsif ($3) {
+	${4:# elsif...}
+} else {
+	${5:# else...}
 }
 </string>
 	<key>name</key>
-	<string>Function (sub)</string>
+	<string>Conditional if..elsif..else (ifee)</string>
 	<key>scope</key>
 	<string>source.perl</string>
 	<key>tabTrigger</key>
-	<string>sub</string>
+	<string>ifee</string>
 	<key>uuid</key>
-	<string>4734090D-F23D-4D6B-8581-AC1E1B776DCD</string>
+	<string>4EA1224E-2FBA-496D-87F4-9C92CEC2F86F</string>
 </dict>
 </plist>

@@ -3,17 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>sub ${1:function_name} {
-	${2:# body...}
-}
+	<string>my \$${1:var};
+{ local \$/ = undef; local *FILE; open FILE, "&lt;${2:file}"; \$$1 = &lt;FILE&gt;; close FILE }
 </string>
 	<key>name</key>
-	<string>Function (sub)</string>
+	<string>Read File (slurp)</string>
 	<key>scope</key>
 	<string>source.perl</string>
 	<key>tabTrigger</key>
-	<string>sub</string>
+	<string>slurp</string>
 	<key>uuid</key>
-	<string>4734090D-F23D-4D6B-8581-AC1E1B776DCD</string>
+	<string>CEE866A5-FA4B-4C5D-A80C-137A620E825E</string>
 </dict>
 </plist>

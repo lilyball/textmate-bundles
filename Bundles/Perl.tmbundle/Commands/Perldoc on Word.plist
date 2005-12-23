@@ -6,9 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>word=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
-echo "&lt;title&gt;Perl Documentation — $word&lt;/title&gt;"
-perldoc -f "$word"|pre
-</string>
+perldoc -u -f "$word" | pod2html --q --title "Perl Documentation - $word" | sed -E 's|&lt;a href="#([^"]+)"&gt;|&lt;a href="http://perldoc.perl.org/search.html?q=\1"&gt;|g'</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>

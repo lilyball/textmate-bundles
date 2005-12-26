@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>## Convert all HTML entities to their applicable characters, including both double and single quotes.
-php -r 'echo html_entity_decode( file_get_contents("/dev/stdin"), ENT_QUOTES );'
+php -r 'echo html_entity_decode( file_get_contents("/dev/stdin"), ENT_QUOTES );'|iconv -f iso-8859-1 -t utf-8
 
 ### PLEASE NOTE!  Due to a known PHP bug, this command is NOT UTF-8 safe, so use only with caution.</string>
 	<key>fallbackInput</key>

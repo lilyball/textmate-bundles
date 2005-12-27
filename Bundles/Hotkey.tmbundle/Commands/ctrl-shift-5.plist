@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
+	<string>cd ${TM_PROJECT_DIRECTORY}
+"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 
 num = 5
 

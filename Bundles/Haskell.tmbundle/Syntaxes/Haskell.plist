@@ -18,7 +18,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(module|where|import|do|data|type|infixl|infixr|case|of|if|then|else|let|in|instance|deriving|class|newtype|default|hiding|as)\b</string>
+			<string>\b(otherwise|module|where|import|do|data|type|infixl|infixr|case|of|if|then|else|let|in|instance|deriving|class|newtype|default|hiding|as)\b</string>
 			<key>name</key>
 			<string>keyword.haskell</string>
 		</dict>
@@ -59,6 +59,29 @@
 					<string>\\.</string>
 					<key>name</key>
 					<string>constant.character.escaped.haskell</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^(?=\s*[\(a-z][a-zA-Z0-9'\)]*\s*::)</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>meta.function.initial.haskell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>[\(a-z][a-zA-Z0-9'\)]*(?=\s*::)</string>
+					<key>name</key>
+					<string>entity.name.function.haskell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[\[\]a-zA-Z0-9,()]+</string>
+					<key>name</key>
+					<string>variable.parameter.haskell</string>
 				</dict>
 			</array>
 		</dict>

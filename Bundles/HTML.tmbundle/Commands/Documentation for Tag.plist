@@ -98,7 +98,7 @@ $tags = {
 	"VAR"	=&gt; "../struct/text.html#edef-VAR",
 }
 
-$tag_name = ENV["TM_CURRENT_WORD"]
+$tag_name = ENV["TM_CURRENT_WORD"].to_s
 
 def request_tag_name
   s = `\"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" inputbox --title 'Documentation for Tag' --informative-text 'What tag would you like to lookup?' --text '#{$tag_name}' --button1 'Lookup' --button2 'Cancel' --button3 'Show All Tags'`

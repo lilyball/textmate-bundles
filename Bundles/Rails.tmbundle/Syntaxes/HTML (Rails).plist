@@ -7,9 +7,17 @@
 		<string>rhtml</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(&lt;(?i:(head|table|div|style|script|ul|ol|form|dl))\b.*?&gt;|\{)</string>
+	<string>(?x)
+		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl)\b.*?&gt;
+		|&lt;!--(?!.*--&gt;)
+		|\{\s*($|\?&gt;\s*$|//|/\*(.*\*/\s*$|(?!.*?\*/)))
+		)</string>
 	<key>foldingStopMarker</key>
-	<string>(&lt;/(?i:(head|table|div|style|script|ul|ol|form|dl))&gt;|\})</string>
+	<string>(?x)
+		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl)&gt;
+		|^\s*--&gt;
+		|(^|\s)\}
+		)</string>
 	<key>name</key>
 	<string>HTML (Rails)</string>
 	<key>patterns</key>

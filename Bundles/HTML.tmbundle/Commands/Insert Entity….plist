@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>entity_file="$TM_BUNDLE_SUPPORT/entities.txt"
+entity_list () {
+   ${TM_RUBY:-ruby} &lt;"$entity_file" -pe '
+     gsub(/^(\d+)\t(.+)$/) { |_|
+       puts "#{[$1.to_i].pack("U")} — #{$2}"
+     }'
+}
+
+IFS=$(echo -e '\n\r')
+res=$(CocoaDialog dropdown --title "Insert Entity" \
+   --text "Select the character to insert" \
+   --button1 Okay \
+   --button2 Cancel \
+   --pulldown \
+   --exit-onchange \
+   --items "Character…" $(&lt; &lt;(entity_list))
+)
+
+[[ ${res:0:1} != "2" ]] &amp;&amp; echo -n "&amp;$(head -n${res:2} "$entity_file"|tail -n1|cut -f2);"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@&amp;</string>
+	<key>name</key>
+	<string>Insert Entity…</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>89E5CC0A-3EFF-4DEF-A299-2E9651DE6529</string>
+</dict>
+</plist>

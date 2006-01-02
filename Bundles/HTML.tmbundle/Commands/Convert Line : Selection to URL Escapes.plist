@@ -5,7 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>${TM_RUBY:-ruby} -pe 'gsub(/[^\w.-]/) { |match| sprintf("%%%02X", match[0]) }'</string>
+	<string>#!/usr/bin/env ruby -KA
+
+res = STDIN.read.gsub(/[^a-zA-Z.-]/) do |m|
+  sprintf("%%%02X", m[0])
+end
+
+print res
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

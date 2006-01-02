@@ -5,8 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>## Convert all applicable characters to HTML entities, but will leave both double and single quotes unconverted.
-php -r 'echo htmlentities( file_get_contents("/dev/stdin"), ENT_NOQUOTES, "UTF-8" );'</string>
+	<string>#!/usr/bin/env ruby -KU -rjcode
+
+char_to_entity = { }
+File.open("#{ENV['TM_BUNDLE_SUPPORT']}/entities.txt").read.gsub(/^(\d+)\t(.+)$/) do |_|
+  char_to_entity[[$1.to_i].pack('U')] = $2
+end
+
+res = STDIN.read.gsub(/[^\x00-\x7F]|["'&lt;&gt;&amp;]/) do |ch|
+  ent = char_to_entity[ch]
+  ent ? "&amp;#{ent};" : sprintf("&amp;#x%02X;", ch.unpack("U")[0])
+end
+
+print res
+</string>
 	<key>fallbackInput</key>
 	<string>character</string>
 	<key>input</key>
@@ -14,7 +26,7 @@ php -r 'echo htmlentities( file_get_contents("/dev/stdin"), ENT_NOQUOTES, "UTF-8
 	<key>keyEquivalent</key>
 	<string>@&amp;</string>
 	<key>name</key>
-	<string>Convert Character / Selection to Named Entities</string>
+	<string>Convert Character / Selection to Entities</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>

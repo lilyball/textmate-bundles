@@ -5,7 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>${TM_RUBY:-ruby} -pe 'gsub(/%([0-9A-Z]{2})/i) { |match| $1.to_i(16).chr }'</string>
+	<string>#!/usr/bin/env ruby -KA
+
+res = STDIN.read.gsub(/%([0-9A-Z]{2})/i) do |_|
+  $1.to_i(16).chr
+end
+
+print res
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

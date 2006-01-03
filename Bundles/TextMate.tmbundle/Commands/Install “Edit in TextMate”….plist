@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>SRC="$(ps -xwwp $PPID -o command|grep -o '.*.app')/Contents/Resources/Edit in TextMate"
+
+# check if we have the input manager in TextMate.app
+[[ ! -d "$SRC" ]] &amp;&amp; { echo "&lt;h1&gt;Error&lt;/h1&gt;&lt;p&gt;The input manager (&lt;tt&gt;$SRC&lt;/tt&gt;) was not found in the TextMate application bundle.&lt;p&gt;You may need a newer version of TextMate."; exit; }
+
+# javascript which creates the link (by calling out to the shell)
+cat &lt;&lt;EOF
+&lt;script&gt;
+function installInputManager () {
+  var cmd = TextMate.system(
+    "{ mkdir -p ~/Library/InputManagers" +
+    " &amp;&amp; ln -s '$SRC' ~/Library/InputManagers" +
+    " &amp;&amp; echo '&lt;strong&gt;Success!&lt;/strong&gt; Link to &lt;tt&gt;$SRC&lt;/tt&gt; created in &lt;tt&gt;~/Library/InputManagers&lt;/tt&gt;.'; } 2&gt;&amp;1", null);
+  var res = document.getElementById("result");
+  res.innerHTML = "&lt;p&gt;" + cmd.outputString + "&lt;/p&gt;";
+}
+&lt;/script&gt;
+EOF
+
+# documentation which links to the script above
+Markdown.pl &lt;&lt;"EOF"
+# The Edit in TextMate Action
+
+## Intro
+
+Included with TextMate is an input manager which can add an “Edit in TextMate” menu item to the Edit menu of other applications.
+
+This allow you to call upon TextMate to edit the text in the current web form (Safari) or current letter that you are writing (Mail) by pressing &amp;#x2303;&amp;#x2318;E and when done editing the text in TextMate, press &amp;#x2318;S + &amp;#x2318;W to save, close, and have focus (plus edited text) return to the application from which you invoked the Edit in TextMate action.
+
+## Installation
+
+The Input Manager is preferably installed by creating a symbolic link in `~/Library/InputManagers` which point to the location of the input manager (inside the TextMate application bundle).
+
+You can create this link by using the button below.
+
+&lt;div id="result"&gt;&lt;input type="Button" value="Create Symbolic Link" onClick="installInputManager();"&gt;&lt;/div&gt;
+
+_After creating the link you need to relaunch the applications in which you want to test the functionality (e.g. Mail, Safari, …)_
+
+## Excluding Applications
+
+If you do not want the menu item to appear in a certain application, you can set the `DisableEditInTextMateMenuItem` defaults key to `1` for that application.
+
+For example to disable the menu item for `Console` we would do:
+
+	defaults write -app Console DisableEditInTextMateMenuItem 1  
+
+We can also disable it for all applications using:
+
+	defaults write NSGlobalDomain DisableEditInTextMateMenuItem 1   
+
+## Custom Key Bindings
+
+You can use System Preferences &amp;#x2192; Keyboard &amp; Mouse to change the default key equivalent. This however only works as long as the key binding includes the command modifier (&amp;#x2318;). If you want to give it a key that does not include this modifier, you can add an entry to your `~/Library/KeyBindings/DefaultKeyBinding.dict` with the action method set to `editInTextMate:`. With this key binding, you do not need to have the menu item (so you can disable that in the global domain).
+
+For example I have the following line in my `DefaultKeyBinding.dict`:
+
+	"^E" = "editInTextMate:";
+
+This puts the action on &amp;#x2303;&amp;#x21E7;E.
+
+## Compatibility
+
+The input manager works by adding a category to `NSTextView` and `WebView` (which is used by Mail to edit text). So it will only work for Cocoa applications (and those which use these controls).
+
+Previously the functionality was provided by a Service, but the synchronous nature of services, and the need to select text first, made it less than ideal.
+
+Generally the input manager approach works better, but it is a hack, so e.g. if you call upon the Edit in TextMate action and close the window which held the text, or was calling the service from the field editors text view and advance focus, before the text has been returned, do not be surprised if the text does not show up in the proper text view.
+
+That said, it should be rather robust, and you can even call “Edit in TextMate” from within TextMate (in its Cocoa text views used e.g. in the Bundle Editor).
+EOF</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Install “Edit in TextMate”…</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>61F92184-1A50-4310-9F75-C9CD2C8819FA</string>
+</dict>
+</plist>

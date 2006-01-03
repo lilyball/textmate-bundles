@@ -136,7 +136,7 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 @implementation WebView (EditInTextMate)
 - (void)editInTextMate:(id)sender
 {
-	NSLog(@"%s %@", _cmd, [(DOMHTMLElement*)[[[self mainFrame] DOMDocument] documentElement] outerHTML]);
+//	NSLog(@"%s %@", _cmd, [(DOMHTMLElement*)[[[self mainFrame] DOMDocument] documentElement] outerHTML]);
 	if(![self isEditable])
 		return (void)NSBeep();
 
@@ -192,7 +192,7 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 		}
 	}
 
-	NSLog(@"%s %@", _cmd, res);
+//	NSLog(@"%s %@", _cmd, res);
 
 	[self replaceSelectionWithMarkupString:res];
 	if(![[self selectedDOMRange] cloneContents])

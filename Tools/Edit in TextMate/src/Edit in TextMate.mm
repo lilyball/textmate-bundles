@@ -138,8 +138,21 @@ static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 		[self removeODBEventHandlers];
 }
 
++ (void)installMenuItem:(id)sender
+{
+	if(NSMenu* editMenu = [[[NSApp mainMenu] itemWithTitle:@"Edit"] submenu])
+	{
+		[editMenu addItem:[NSMenuItem separatorItem]];
+		id <NSMenuItem> menuItem = [editMenu addItemWithTitle:[NSString stringWithUTF8String:"Edit in TextMate…"] action:@selector(editInTextMate:) keyEquivalent:@"e"];
+		[menuItem setKeyEquivalentModifierMask:NSControlKeyMask | NSCommandKeyMask];
+	}
+}
+
 + (void)load
 {
 	OpenFiles = [NSMutableDictionary new];
+//	NSString* bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableEditInTextMateMenuItem"] == NO)
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installMenuItem:) name:NSApplicationDidFinishLaunchingNotification object:[NSApplication sharedApplication]];
 }
 @end

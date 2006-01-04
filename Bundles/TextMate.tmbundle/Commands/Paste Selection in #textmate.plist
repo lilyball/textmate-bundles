@@ -5,24 +5,56 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>[[ -z "$TM_SELECTED_TEXT" ]] &amp;&amp; exit_show_tool_tip "Nothing is selected."
+	<string>if [[ -z "$TM_IRC_CHANNEL" ]] &amp;&amp; ps -xc|grep -sq 'Colloquy$'; then
+  channels=$(osascript \
+    -e 'tell application "Colloquy"' \
+      -e 'set names to ""' \
+      -e 'repeat with p in panels' \
+        -e 'set names to names &amp; name of p &amp; " "' \
+      -e 'end repeat' \
+    -e 'end tell')
 
-url=$(expand -t $TM_TAB_SIZE|curl -s http://paste.textmate.org/submit -F user="$USER" -F text='&lt;-' \
-	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
-		--title "Paste in #textmate…" \
-		--text "Contacting Server “paste.textmate.org”…" \
-	))
+  result=$(CocoaDialog dropdown \
+    --title 'Paste to IRC' \
+    --text 'Choose a channel to paste into' \
+    --button1 Paste --button2 Cancel \
+    --string-output --no-newline \
+    --items $channels)
 
-[[ -z "$url" ]] &amp;&amp; exit_show_tool_tip "Got no URL back from pasting service."
+  if [[ "${result:0:5}" == "Paste" ]];
+    then TM_IRC_CHANNEL="${result:6}"
+    else exit_discard
+  fi
+fi
 
-if grep &lt;&lt;&lt;"$(ps -xc)" -sq "Colloquy$"; then
-  osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "##textmate" of (first connection where server address is equal to "irc.freenode.net"))'
-  echo "The selection was pasted to #textmate."
+# set the language to one rafb.net supports
+case $TM_MODE in
+  C89|C|C++|C\#|Java|Pascal|Perl|PHP|PL/I|Python|Ruby|SQL|VB)
+    # do nothing
+  ;;
+  *)
+    TM_MODE="Plain Text"
+  ;;
+esac
+
+: ${TM_PASTE_URL:=http://rafb.net/paste/paste.php}
+url=$(curl "${TM_PASTE_URL}" -F nick="$USER" -F cvt_tabs="$TM_TAB_SIZE" -F text='&lt;-' -F lang="$TM_MODE" -s -L -o /dev/null -w "%{url_effective}" \
+  2&gt; &gt;(CocoaDialog progressbar --indeterminate \
+    --title "Paste to #${TM_IRC_CHANNEL}…" \
+    --text "Contacting Server “${TM_PASTE_URL}”…" \
+  ))
+
+[[ -z "$url" ]] &amp;&amp; exit_show_tool_tip "Error: Got no URL back from pasting service."
+
+if ps -xc|grep -sq 'Colloquy$'; then
+  osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "#'"$TM_IRC_CHANNEL"'" of first connection)'
+  echo "The text was pasted to #$TM_IRC_CHANNEL."
 else
   echo -n "$url" | pbcopy
-  echo "The selection is available as $url"
+  echo "The text is available as $url"
   echo "For your convenience, the URL was placed on the clipboard."
-fi</string>
+fi
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
@@ -30,7 +62,7 @@ fi</string>
 	<key>keyEquivalent</key>
 	<string>^~V</string>
 	<key>name</key>
-	<string>Paste Line / Selection in #textmate</string>
+	<string>Paste Line / Selection to IRC…</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>

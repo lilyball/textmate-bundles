@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSWorkspace * ${1:workspace} = [NSWorkspace sharedWorkspace];</string>
+	<string>[self lockFocus];
+$0
+[self unlockFocus];</string>
 	<key>name</key>
-	<string>NSWorkspace (workspace)</string>
+	<string>Lock Focus (focus)</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>
-	<string>workspace</string>
+	<string>focus</string>
 	<key>uuid</key>
-	<string>AD9FC665-98FF-11D9-9BB8-000A95A89C98</string>
+	<string>3F57DB1B-9373-46A6-9B6E-19F2D25658DE</string>
 </dict>
 </plist>

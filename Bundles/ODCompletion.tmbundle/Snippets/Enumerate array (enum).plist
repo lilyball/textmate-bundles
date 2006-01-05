@@ -3,16 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSEnumerator *enumerator = [${1:array} objectEnumerator];
-id object;
+	<string>NSEnumerator *${2:${1:string}Enum} = [${3:$1Array} objectEnumerator];
+${5:id} ${4:curr${1/(.)(.*)/\U$1\E$2/}};
 
-while (object = [enumerator nextObject])
-{
-	$0
-}
-</string>
+while (($4 = [$2 nextObject])) {
+    $0
+}</string>
 	<key>name</key>
-	<string>Enumerate array (enum)</string>
+	<string>NSEnumerator Loop (enum)</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>

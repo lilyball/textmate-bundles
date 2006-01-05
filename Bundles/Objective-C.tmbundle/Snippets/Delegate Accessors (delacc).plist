@@ -5,16 +5,16 @@
 	<key>content</key>
 	<string>- (void) setDelegate:(id)delegate
 {
-	fDelegate = delegate;
+	${1:fDelegate} = delegate;
 }
 
 - (id) delegate
 {
-	return delegate;
+	return $1;
 }
 </string>
 	<key>name</key>
-	<string>Delegate Accessors (delacc)</string>
+	<string>Delegate Accessors Implementation (delacc)</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>

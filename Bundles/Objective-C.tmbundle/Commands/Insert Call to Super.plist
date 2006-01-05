@@ -5,19 +5,28 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>printf "[super %s];" \
-	$(head -n$TM_LINE_NUMBER \
-	 |egrep '^(-|\+)[ \t]*\(.*\)[^;]*$' \
-	 |tail -n1 \
-	 |perl -pe 's/(-|\+)\s*\(.*?\)//; s/(\w+:)\s*\(.*?\)\s*(\w+)/$1$2/g' \
-	)
+	<string># Inserts a [super method] call suitable for the current method.
+# Inserted as a snippet with the incoming arguments used as defaults.
+#
+# The default behavior is to add brackets if there is no "[" to the left
+# of the caret (ignoring the tab trigger). This can be changed by changing
+# from "automatic" to one of "always" and "never". The last argument
+# is appended at the end of the result (some prefer the empty string, others
+# a semicolon.
+#
+# The command uses heuristics to find which method implementation is
+# being edited. It should be reasonably tolerant to various coding styles,
+# including different bracket and indentation styles.
+
+python "${TM_BUNDLE_SUPPORT}/insert_super.py" automatic ''
+#python "${TM_BUNDLE_SUPPORT}/insert_super.py" always ';'
 </string>
 	<key>input</key>
 	<string>document</string>
 	<key>name</key>
-	<string>Insert Call to Super</string>
+	<string>Insert Call to Super (super)</string>
 	<key>output</key>
-	<string>afterSelectedText</string>
+	<string>insertAsSnippet</string>
 	<key>scope</key>
 	<string>source.objc meta.scope.implementation, source.objc++ meta.scope.implementation</string>
 	<key>tabTrigger</key>

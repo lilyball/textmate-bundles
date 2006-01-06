@@ -3,14 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>command</key>
-	<string>[ -f "$TM_NEW_FILE" ] ||  perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' &lt;index.html &gt;"$TM_NEW_FILE"</string>
+	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
+   TM_DATE=`date +%Y-%m-%d` \
+   TM_USERNAME=`niutil -readprop / /users/\$USER realname` \
+   perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
+      &lt; index.html &gt; "$TM_NEW_FILE"
+fi</string>
 	<key>extension</key>
 	<string>html</string>
 	<key>name</key>
-	<string>XHTML — 1.0 Strict</string>
+	<string>HTML — 4.0 Transitional</string>
 	<key>scope</key>
 	<string>text.html</string>
 	<key>uuid</key>
-	<string>EBEE6B51-29C7-4362-818F-A190CACD5296</string>
+	<string>E6F19171-F664-4B4F-92DA-3E15E6CAD35C</string>
 </dict>
 </plist>

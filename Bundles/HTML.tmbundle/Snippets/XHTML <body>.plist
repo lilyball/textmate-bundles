@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;body id="$1"${2: onload="$3"}&gt;
+	<string>&lt;body id="${1:${TM_FILENAME/(.*)\..*/\L$1/}}"${2: onload="$3"}&gt;
 	$0
 &lt;/body&gt;</string>
 	<key>name</key>

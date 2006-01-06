@@ -14,7 +14,7 @@ entity_list () {
 }
 
 IFS=$(echo -e '\n\r')
-res=$(CocoaDialog dropdown --title "Insert Entity" \
+res=$("$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" dropdown --title "Insert Entity" \
    --text "Select the character to insert" \
    --button1 Okay \
    --button2 Cancel \

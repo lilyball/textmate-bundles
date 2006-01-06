@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#This script will open a terminal window and then attempt to tail the default apache error_log
+
+openTerminalWindow=`exec osascript &lt;&lt;EOF | tr "\r" "\n"
+tell application "Terminal"
+	activate
+	with timeout of 1800 seconds
+		do script with command "tail -f /var/log/httpd/error_log"
+		tell window 1
+			set title displays shell path to false
+			set title displays window size to false
+			set title displays device name to true
+			set title displays file name to true
+			set title displays custom title to true
+			set custom title to "httpd Error Log"
+			set number of columns to 80
+			set number of rows to 20
+		end tell
+	end timeout
+end tell
+EOF`</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>tail error log</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.apache-config</string>
+	<key>uuid</key>
+	<string>9460A02A-EC2A-4A03-9F99-21201D7B7988</string>
+</dict>
+</plist>

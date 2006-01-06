@@ -8,9 +8,9 @@
 		<string>h</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(/\*\*|\{\s*$)|^@(interface|protocol|implementation)\b</string>
+	<string>/\*\*(?!\*)|\{\s*($|//|/\*(?!.*?\*/.*\S))|^@(interface|protocol|implementation)\b</string>
 	<key>foldingStopMarker</key>
-	<string>(\*\*/|^\s*\})|^@end\b</string>
+	<string>(?&lt;!\*)\*\*/|^\s*\}|^@end\b</string>
 	<key>keyEquivalent</key>
 	<string>~^O</string>
 	<key>name</key>

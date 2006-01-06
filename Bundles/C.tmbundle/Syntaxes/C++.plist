@@ -20,9 +20,9 @@
 	<key>firstLineMatch</key>
 	<string>-\*- C\+\+ -\*-</string>
 	<key>foldingStartMarker</key>
-	<string>(/\*\*|\{\s*$)</string>
+	<string>/\*\*(?!\*)|\{\s*($|//|/\*(?!.*?\*/.*\S))|^@(interface|protocol|implementation)\b</string>
 	<key>foldingStopMarker</key>
-	<string>(\*\*/|^\s*\})</string>
+	<string>(?&lt;!\*)\*\*/|^\s*\}|^@end\b</string>
 	<key>keyEquivalent</key>
 	<string>~^C</string>
 	<key>name</key>

@@ -123,13 +123,18 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(@media)\b</string>
+			<string>^\s*(@media)\s+(((all|aural|braille|embossed|handheld|print|projection|screen|tty|tv)\s*,?\s*)+)\s*{</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.control.at-rule.media.css</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.constant.media.css</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -139,10 +144,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\b(all|aural|braille|embossed|handheld|print|projection|screen|tty|tv)\b,?</string>
-					<key>name</key>
-					<string>support.constant.media.css</string>
+					<key>include</key>
+					<string>$self</string>
 				</dict>
 			</array>
 		</dict>

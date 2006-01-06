@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSLog(@"$1");</string>
+	<string>NSLog(@"${1:%@}"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}</string>
 	<key>name</key>
 	<string>NSLog(@"") (l)</string>
 	<key>scope</key>

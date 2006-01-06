@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>printf("${1:%s}\\n"${1/[^%]*(%)?.*/(?1:, :\);)/}$2${1/[^%]*(%)?.*/(?1:\);)/}</string>
+	<string>printf("${1:%s}\\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}</string>
 	<key>name</key>
 	<string>printf .. (printf)</string>
 	<key>scope</key>

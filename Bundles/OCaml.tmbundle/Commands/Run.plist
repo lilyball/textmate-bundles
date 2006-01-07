@@ -8,7 +8,7 @@
 	<string>TOCAML=${TM_OCAML:=ocaml}
 require_cmd "$TOCAML"
 
-"$TOCAML" "$TM_FILEPATH"</string>
+"$TOCAML" -w A  str.cma "$TM_FILEPATH"</string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>

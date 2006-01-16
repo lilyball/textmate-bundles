@@ -319,6 +319,39 @@
 			</array>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>(?x)
+				(?:  ^                                 # begin-of-line
+				  |  (?: (?&lt;!else|new) (?&lt;=\w)\s+      #  or word + space before name
+				       | (?&lt;!&amp;&amp;)       (?&lt;=[*&amp;])\s*    #  or type modifier before name
+				     )
+				)
+				([A-Za-z_][A-Za-z0-9_:]+)              # actual name
+				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				 (\s+const)?\s*                        # optional const modifier
+				 (;))                                  # start bracket or end-of-line
+			</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>declaration.function.prototype.c</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>source.open-gl</string>
 		</dict>

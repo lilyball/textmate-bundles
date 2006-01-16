@@ -95,6 +95,126 @@
 			<key>name</key>
 			<string>storage.modifier.c++</string>
 		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?x)
+				(?:  ^                                 # begin-of-line
+				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
+				)
+				([A-Za-z_]*[A-Za-z0-9_:]*~[A-Za-z_][A-Za-z0-9_]+) # actual name
+				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				 (\s*=\s*0)?\s*                        # optional pure modifier
+				 (\{|\n))                              # start bracket or end-of-line
+			</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>declaration.function.destructor.c++</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?x)
+				(?:  ^                                 # begin-of-line
+				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
+				)
+				([A-Za-z_]*[A-Za-z0-9_:]*~[A-Za-z_][A-Za-z0-9_]+) # actual name
+				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				 (\s*=\s*0)?\s*                        # optional pure modifier
+				 (;))                                  # start bracket or end-of-line
+			</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>declaration.function.destructor.prototype.c++</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?x)
+				(?:  ^\s*)                             # begin-of-line
+				([A-Za-z_][A-Za-z0-9_:]+)              # actual name
+				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				 (\s*:\s*([A-Za-z_][A-Za-z0-9_]+)\([^)]*\))*\s* # optional base constructors
+				 (\{|\n))                              # start bracket or end-of-line
+			</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>declaration.function.constructor.c++</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?x)
+				(?:  ^\s*)                             # begin-of-line
+				([A-Za-z_][A-Za-z0-9_:]+)              # actual name
+				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				 (\s*:\s*([A-Za-z_][A-Za-z0-9_]+)\([^)]*\))*\s* # optional base constructors
+				 (;))                                  # start bracket or end-of-line
+			</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>declaration.function.constructor.prototype.c++</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
 	</array>
 	<key>scopeName</key>
 	<string>source.c++</string>

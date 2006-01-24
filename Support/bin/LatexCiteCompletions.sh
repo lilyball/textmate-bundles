@@ -1,3 +1,4 @@
+#!/bin/sh
 if [[ -z $TM_SELECTED_TEXT ]]
    then 
 # If the cursor is inside empty braces {}, then offer
@@ -9,7 +10,30 @@ if [[ -z $TM_SELECTED_TEXT ]]
 	fi
    else phrase=$TM_SELECTED_TEXT
 fi
-if [[ -z $phrase ]]
+# Find user's preference for bibfile.
+if [[ -n $TM_LATEX_BIB ]]
+# Case where user explicitly defined a particular file. Call the LatexCitekeys.rb script.
+# This could hopefully accept more than one files, separated by space.
+	then 
+	cd "$TM_SUPPORT_PATH/bin"
+	res2=`pwd`
+	if [[ -z $phrase ]]
+		then res=`./LatexCitekeys.rb $TM_LATEX_BIB`
+		else res=`./LatexCitekeys.rb -p=$phrase $TM_LATEX_BIB`
+	fi
+elif [[ -n $TM_LATEX_MASTER ]]
+# If there is a master file, look in it for \bibliography{bibfile} lines and use those bibfile's instead.
+# LatexCitekeys.rb must be so designed as to deal differently with tex files and with bib files.
+	then 
+	cd "$TM_SUPPORT_PATH/bin"
+	res2=`pwd`
+	if [[ -z $phrase ]]
+		then res=`./LatexCitekeys.rb $TM_LATEX_MASTER`
+		else res=`./LatexCitekeys.rb -p=$phrase $TM_LATEX_MASTER`
+	fi
+else
+# Look at BibDesk as a last resort
+	if [[ -z $phrase ]]
 	then 
 # Case where $phrase is not defined
 
@@ -25,7 +49,6 @@ tell application "Bibdesk"
 EOF`
 	else 
 # Case where $phrase is defined
-
 res=`osascript <<EOF
 	tell application "Bibdesk" 
 	set publist to search for "$phrase" without for completion
@@ -36,19 +59,7 @@ res=`osascript <<EOF
 	end tell
     return candidates
 EOF`
+	fi
 fi
-
+if [[ $? != 0 ]]; then exit; fi
 sed <<<$res -e $'s/, /\\\n/g'
-# 
-# NEED TO ADD HANDLING OF PRESSING "Cancel"
-# 
-# osascript -e 'tell app "TextMate" to activate' &>/dev/null &
-# 
-# res=`perl -pe <<<$res 's/^(.*?)(\s*)%.*/$1/'` # strip comment
-# res="${res//\\\\/\\\\}"                       # \ -> \\
-# res="${res//$/\\$}"                           # $ -> \$
-# 
-# if [[ -z $TM_SELECTED_TEXT ]] && [[ -n $phrase ]]
-#    then echo -n ${res:${#TM_CURRENT_WORD}}
-#    else echo -n ${res}
-# fi

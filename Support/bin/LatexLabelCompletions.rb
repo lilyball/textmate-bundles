@@ -17,7 +17,7 @@ else
   filelist = Array.new
   File.open("#{masterfile}") do |theFile|
     theFile.each { |line|
-      if line.match(/\\include\{([^}]*)(\.tex)?\}/)
+      if line.match(/\\include\{([^}]*)(\.tex)?\}/) then
         filelist << (filepath + $1 + ".tex")
       end
     }

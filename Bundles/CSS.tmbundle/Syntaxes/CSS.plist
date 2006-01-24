@@ -9,9 +9,9 @@
 		<string>css</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(/\*|\{|\()</string>
+	<string>/\*\*(?!\*)|\{\s*($|/\*(?!.*?\*/.*\S))</string>
 	<key>foldingStopMarker</key>
-	<string>(\*/|\}|\))</string>
+	<string>(?&lt;!\*)\*\*/|^\s*\}</string>
 	<key>keyEquivalent</key>
 	<string>~^C</string>
 	<key>name</key>

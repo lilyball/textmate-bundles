@@ -18,8 +18,8 @@ if [[ -n $TM_LATEX_BIB ]]
 	cd "$TM_SUPPORT_PATH/bin"
 	res2=`pwd`
 	if [[ -z $phrase ]]
-		then res=`./LatexCitekeys.rb $TM_LATEX_BIB`
-		else res=`./LatexCitekeys.rb -p=$phrase $TM_LATEX_BIB`
+		then res=`./LatexCitekeys.rb $TM_LATEX_BIB $TM_FILEPATH`
+		else res=`./LatexCitekeys.rb -p=$phrase $TM_LATEX_BIB $TM_FILEPATH`
 	fi
 elif [[ -n $TM_LATEX_MASTER ]]
 # If there is a master file, look in it for \bibliography{bibfile} lines and use those bibfile's instead.
@@ -28,8 +28,8 @@ elif [[ -n $TM_LATEX_MASTER ]]
 	cd "$TM_SUPPORT_PATH/bin"
 	res2=`pwd`
 	if [[ -z $phrase ]]
-		then res=`./LatexCitekeys.rb $TM_LATEX_MASTER`
-		else res=`./LatexCitekeys.rb -p=$phrase $TM_LATEX_MASTER`
+		then res=`./LatexCitekeys.rb $TM_LATEX_MASTER $TM_FILEPATH`
+		else res=`./LatexCitekeys.rb -p=$phrase $TM_LATEX_MASTER $TM_FILEPATH`
 	fi
 else
 # Look at BibDesk as a last resort

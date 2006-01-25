@@ -37,14 +37,16 @@ else
   end
 end
 # Process the filelist looking for \label{} commands.
+
+completionslist= Array.new
 filelist.each {|filename|
   File.open("#{filename}") do |theFile|
     theFile.each { |line|
       if line.match(matchregex)
         m = $~
-        puts "#{m[1]}"
+        completionslist << "#{m[1]}"
       end
     }
   end
-  
 }
+print completionslist.sort.join("\n")

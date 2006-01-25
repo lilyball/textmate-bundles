@@ -5,23 +5,20 @@
 #
 # If TM_LATEX_MASTER is present, look for all \include commands in it, and add those files to the search.
 # Otherwise, work with current file.
-if !(ENV.has_key?("TM_LATEX_MASTER")) then
-  if ENV.has_key?("TM_FILEPATH") then 
-    filelist = [ENV["TM_FILEPATH"]]
-  else
-    exit 1
-  end
+if (ENV.has_key?("TM_LATEX_MASTER")) then
+  masterfile = ENV["TM_LATEX_MASTER"].to_s
 else
-  masterfile = ENV["TM_LATEX_MASTER"]
-  filepath = File.dirname(masterfile) + "/"
-  filelist = Array.new
-  File.open("#{masterfile}") do |theFile|
-    theFile.each { |line|
-      if line.match(/\\include\{([^}]*)(\.tex)?\}/) then
-        filelist << (filepath + $1 + ".tex")
-      end
-    }
-  end
+  masterfile = ENV["TM_FILEPATH"].to_s
+end
+filepath = File.dirname(masterfile) + "/"
+filelist = Array.new
+filelist << ENV["TM_FILEPATH"].to_s
+File.open("#{masterfile}") do |theFile|
+  theFile.each { |line|
+    if line.match(/\\include\{([^}]*)(\.tex)?\}/) then
+      filelist << (filepath + $1 + ".tex")
+    end
+  }
 end
 
 # Get label prefix to expand

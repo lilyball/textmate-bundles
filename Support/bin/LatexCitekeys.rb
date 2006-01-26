@@ -17,8 +17,13 @@ ARGV.each do |filename|
     filepath = File.dirname(filename) + "/"
     File.open(filename) do |file|
       file.each { |line|
-        if line.match(/\\bibliography\{([^}]*)(\.bib)?\}/) then
-          filelist << (filepath + $1 + ".bib")
+        if line.match(/\\bibliography\{([^}]*)\}/) then
+          m = $1
+          # Need to deal with the case of multiple words here, separated by comma.
+          list = m.split(',')
+          list.each {|item|
+            filelist << (filepath + item.strip.sub('.bib','') + ".bib")
+          }
         end
       }
     end
@@ -26,13 +31,36 @@ ARGV.each do |filename|
 end
 # Now, process list of files, and add to completions list
 completionslist = Array.new
-filelist.each do |filename|
-  File.open(filename) do |file|
-    file.each do |line|
-      if line.match(/@[^{]*\{([^, ]*)/) then
-        m = $1
-        if ($p.nil? || m.downcase.index($p.downcase)==0) then
-          completionslist << m
+if ($full.nil?) then  
+# Case where we don't need the titles as comments
+  filelist.each do |filename|
+    File.open(filename) do |file|
+      file.each do |line|
+        if line.match(/@[^{]*\{([^, ]*)/) then
+          m = $1
+          if ($p.nil? || m.downcase.index($p.downcase)==0) then
+            completionslist << m
+          end
+        end
+      end
+    end
+  end
+else
+# Case where we return the titles as well, results are in the form "citekey % title".
+  filelist.each do |filename|
+    File.open(filename) do |file|
+      file.each do |line|
+        if line.match(/@[^{]*\{([^, ]*)/) then
+          m = $1
+          if ($p.nil? || m.downcase.index($p.downcase)==0) then
+#            completionslist << m
+            titleline=file.readline
+            while !(titleline.match(/Title *= *\{(.*)\}/)) do
+              titleline=file.readline
+            end
+            title = $1
+            completionslist << ("'#{m} \% #{title}'")
+          end
         end
       end
     end

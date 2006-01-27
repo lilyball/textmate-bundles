@@ -76,7 +76,7 @@ fi
 if [[ $? != 0 ]]; then exit; fi
 if [[ -n $res ]]
 then
-	sed <<<$res -e $'s/, /\\\n/g'
+	sed <<<"$res" -e $'s/, /\\\n/g'
 else
 	exit
 fi

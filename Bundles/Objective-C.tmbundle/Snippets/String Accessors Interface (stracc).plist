@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (${1:id}) ${2:thing};
-- (void) set${2/./\u$0/}:($1)aValue;
+	<string>- (NSString *)${1:thing};
+- (void)set${1/./\u$0/}:(NSString *)$1;
 </string>
 	<key>name</key>
-	<string>Object Accessors Interface (objacc)</string>
+	<string>String Accessors Interface (stracc)</string>
 	<key>scope</key>
 	<string>source.objc meta.scope.interface, source.objc++ meta.scope.interface</string>
 	<key>tabTrigger</key>
-	<string>objacc</string>
+	<string>stracc</string>
 	<key>uuid</key>
-	<string>013BFEBB-A744-46F1-94A5-F851635E00FA</string>
+	<string>35EB2F86-DEA0-443B-8DC2-4815F0478F67</string>
 </dict>
 </plist>

@@ -3,17 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>+ (${1:id}) ${2:method}${3::(${4:id})${5:anArgument}}
-{$0${1/^(void|IBAction)$|(.*)/(?2:
-	return nil;)/}
-}</string>
+	<string>[NSGraphicsContext saveGraphicsState];
+	$0
+[NSGraphicsContext restoreGraphicsState];
+</string>
+	<key>keyEquivalent</key>
+	<string></string>
 	<key>name</key>
-	<string>Class Method Implementation (M)</string>
+	<string>Save and Restore Graphics Context (gsave)</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>
-	<string>M</string>
+	<string>gsave</string>
 	<key>uuid</key>
-	<string>1251B9E2-6BF0-11D9-8384-000D93589AF6</string>
+	<string>F2D5B215-2C10-40BC-B973-0A859A3E3CBD</string>
 </dict>
 </plist>

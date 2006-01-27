@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (${1:id})${2:thing}
+	<string>- (${1:id}) ${2:thing}
 {
 	return $2;
 }
 
-- (void)set${2/./\u$0/}:($1)aValue
+- (void) set${2/./\u$0/}:($1)aValue
 {
 	$0${1/( \*)?$/(?1:$1: )/}old${2/./\u$0/} = $2;
 	$2 = [aValue retain];

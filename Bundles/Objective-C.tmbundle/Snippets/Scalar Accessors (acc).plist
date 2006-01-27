@@ -3,11 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>-(${1:unsigned})${2:thing} {
+	<string>- (${1:unsigned int})${2:thing}
+{
 	return ${3:fThing};
 }
 
--(void)set${2/./\u$0/}:(${1:unsigned})new${2/./\u$0/} {
+- (void)set${2/./\u$0/}:(${1:unsigned int})new${2/./\u$0/}
+{
 	${3:fThing} = new${2/./\u$0/};
 }
 </string>

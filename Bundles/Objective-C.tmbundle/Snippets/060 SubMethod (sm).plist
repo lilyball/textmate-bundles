@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (${1:id})${2:method}${3::(${4:id})${5:anArgument}}
+	<string>- (${1:id}) ${2:method}${3::(${4:id})${5:anArgument}}
 {
 	${1/^(void|IBAction)$|(.*)/(?2:$2 res = )/}[super ${2:method}${5/.+/:$0/}];$0${1/^(void|IBAction)$|(.*)/(?2:
 	return res;)/}

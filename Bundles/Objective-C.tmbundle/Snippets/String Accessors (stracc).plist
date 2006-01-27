@@ -3,18 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (NSString *)${1:thing}
+	<string>- (NSString *) ${1:thing}
 {
 	return ${2:f${1/(.)(.*)/\U$1\E$2/}};
 }
 
-- (void) set${3:${1/(.)(.*)/\U$1\E$2/}}:(NSString *) ${1:thing}
+- (void) set${3:${1/(.)(.*)/\U$1\E$2/}}:(NSString *) $1
 {
 	NSString * old${3:Thing} = ${2:fThing};
 	$2 = [${1:thing} copy];
 	[old${3:Thing} release];
-}
-</string>
+}</string>
 	<key>name</key>
 	<string>String Accessors Implementation (stracc)</string>
 	<key>scope</key>

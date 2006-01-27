@@ -80,24 +80,28 @@
 			<string>storage.modifier.perl</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>\b(ARGV|DATA|ENV|SIG|STDERR|STDIN|STDOUT|atan2|bind|binmode|bless|caller|chdir|chmod|chomp|chop|chown|chr|chroot|close|closedir|cmp|connect|cos|crypt|dbmclose|dbmopen|defined|delete|dump|each|endgrent|endhostent|endnetent|endprotoent|endpwent|endservent|eof|eq|eval|exec|exists|exp|fcntl|fileno|flock|fork|format|formline|ge|getc|getgrent|getgrgid|getgrnam|gethostbyaddr|gethostbyname|gethostent|getlogin|getnetbyaddr|getnetbyname|getnetent|getpeername|getpgrp|getppid|getpriority|getprotobyname|getprotobynumber|getprotoent|getpwent|getpwnam|getpwuid|getservbyname|getservbyport|getservent|getsockname|getsockopt|glob|gmtime|grep|gt|hex|import|index|int|ioctl|join|keys|kill|lc|lcfirst|le|length|link|listen|local|localtime|log|lstat|lt|m|map|mkdir|msgctl|msgget|msgrcv|msgsnd|ne|no|oct|open|opendir|ord|pack|pipe|pop|pos|print|printf|push|q|qq|quotemeta|qw|qx|rand|read|readdir|readlink|recv|ref|rename|reset|reverse|rewinddir|rindex|rmdir|s|scalar|seek|seekdir|semctl|semget|semop|send|setgrent|sethostent|setnetent|setpgrp|setpriority|setprotoent|setpwent|setservent|setsockopt|shift|shmctl|shmget|shmread|shmwrite|shutdown|sin|sleep|socket|socketpair|sort|splice|split|sprintf|sqrt|srand|stat|study|substr|symlink|syscall|sysopen|sysread|system|syswrite|tell|telldir|tie|tied|time|times|tr|truncate|uc|ucfirst|umask|undef|unlink|unpack|unshift|untie|utime|values|vec|waitpid|wantarray|warn|write|y|q|qw|qq|qx)\b</string>
-			<key>name</key>
-			<string>support.function.perl</string>
-		</dict>
-		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>storage.type.sub.perl</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>entity.name.function.perl</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.perl</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\bsub\s+([^\n{]*)</string>
+			<string>^\s*(sub)\s*([-a-zA-Z0-9_]+)\s*(?:\((.*?)\))?</string>
 			<key>name</key>
-			<string>declaration.function.perl</string>
+			<string>meta.function.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -119,35 +123,67 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;&lt; *"([^"]*)(")</string>
-			<key>end</key>
-			<string>^\1$</string>
-			<key>name</key>
+			<string>(&lt;&lt; *"([^"]*)").*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.doublequote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
 			<string>string.unquoted.heredoc.doublequote.perl</string>
+			<key>end</key>
+			<string>(^\2$)</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;&lt; *'([^']*)(')</string>
-			<key>end</key>
-			<string>^\1$</string>
-			<key>name</key>
+			<string>(&lt;&lt; *'([^']*)').*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.quote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
 			<string>string.unquoted.heredoc.quote.perl</string>
+			<key>end</key>
+			<string>(^\2$)</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;&lt; *`([^`]*)</string>
-			<key>end</key>
-			<string>^\1$</string>
-			<key>name</key>
+			<string>(&lt;&lt; *`([^`]*)`).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.backtick.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
 			<string>string.unquoted.heredoc.backtick.perl</string>
+			<key>end</key>
+			<string>(^\2$)</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;&lt; *((?![\d\$ ])[^.,;'"`\) ]*)</string>
-			<key>end</key>
-			<string>^\1$</string>
-			<key>name</key>
+			<string>(&lt;&lt; *((?![\d\$ ])[^;'"` )]*)).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
 			<string>string.unquoted.heredoc.perl</string>
+			<key>end</key>
+			<string>(^\2$)</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -257,28 +293,14 @@
 			<string>comment.documentation.perl</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>[\$\@\%][a-zA-Zx7f-xff\$][a-zA-Z0-9_x7f-xff\$]*\b</string>
-			<key>name</key>
-			<string>variable.other.readwrite.global.perl</string>
+			<key>include</key>
+			<string>#variable</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>[\$\@\%][0-9_]\b</string>
+			<string>\b(ARGV|DATA|ENV|SIG|STDERR|STDIN|STDOUT|atan2|bind|binmode|bless|caller|chdir|chmod|chomp|chop|chown|chr|chroot|close|closedir|cmp|connect|cos|crypt|dbmclose|dbmopen|defined|delete|dump|each|endgrent|endhostent|endnetent|endprotoent|endpwent|endservent|eof|eq|eval|exec|exists|exp|fcntl|fileno|flock|fork|format|formline|ge|getc|getgrent|getgrgid|getgrnam|gethostbyaddr|gethostbyname|gethostent|getlogin|getnetbyaddr|getnetbyname|getnetent|getpeername|getpgrp|getppid|getpriority|getprotobyname|getprotobynumber|getprotoent|getpwent|getpwnam|getpwuid|getservbyname|getservbyport|getservent|getsockname|getsockopt|glob|gmtime|grep|gt|hex|import|index|int|ioctl|join|keys|kill|lc|lcfirst|le|length|link|listen|local|localtime|log|lstat|lt|m|map|mkdir|msgctl|msgget|msgrcv|msgsnd|ne|no|oct|open|opendir|ord|pack|pipe|pop|pos|print|printf|push|q|qq|quotemeta|qw|qx|rand|read|readdir|readlink|recv|ref|rename|reset|reverse|rewinddir|rindex|rmdir|s|scalar|seek|seekdir|semctl|semget|semop|send|setgrent|sethostent|setnetent|setpgrp|setpriority|setprotoent|setpwent|setservent|setsockopt|shift|shmctl|shmget|shmread|shmwrite|shutdown|sin|sleep|socket|socketpair|sort|splice|split|sprintf|sqrt|srand|stat|study|substr|symlink|syscall|sysopen|sysread|system|syswrite|tell|telldir|tie|tied|time|times|tr|truncate|uc|ucfirst|umask|undef|unlink|unpack|unshift|untie|utime|values|vec|waitpid|wantarray|warn|write|y|q|qw|qq|qx)\b</string>
 			<key>name</key>
-			<string>variable.other.readwrite.global.special.perl</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>[\$\@\%]#[a-zA-Zx7f-xff\$][a-zA-Z0-9_x7f-xff\$]*\b</string>
-			<key>name</key>
-			<string>variable.other.readwrite.global.#.perl</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>[\$\@\%]#[0-9_]\b</string>
-			<key>name</key>
-			<string>variable.other.readwrite.global.special#.perl</string>
+			<string>support.function.perl</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -331,13 +353,51 @@
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
+		<key>variable</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\$&amp;</string>
+					<key>name</key>
+					<string>variable.other.regexp.match.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\$`</string>
+					<key>name</key>
+					<string>variable.other.regexp.pre-match.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\$'</string>
+					<key>name</key>
+					<string>variable.other.regexp.post-match.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\$\+</string>
+					<key>name</key>
+					<string>variable.other.regexp.last-paren-match.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[\$\@\%](#)?([a-zA-Zx7f-xff\$]|::)([a-zA-Z0-9_x7f-xff\$]|::)*\b</string>
+					<key>name</key>
+					<string>variable.other.readwrite.global.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[\$\@\%](#)?[0-9_]\b</string>
+					<key>name</key>
+					<string>variable.other.readwrite.global.special.perl</string>
+				</dict>
+			</array>
+		</dict>
 	</dict>
 	<key>scopeName</key>
 	<string>source.perl</string>
-	<key>softTabs</key>
-	<string>1</string>
-	<key>tabSize</key>
-	<string>4</string>
 	<key>uuid</key>
 	<string>EDBFE125-6B1C-11D9-9189-000D93589AF6</string>
 </dict>

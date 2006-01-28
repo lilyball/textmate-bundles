@@ -10,139 +10,126 @@
 # Shell option -p=phrase allows the search for the phrase p. It is stored in variable $p.
 #
 #################################
-#  Helper class for parsing the bib files
+#  Helper functions for parsing the bib files
 
-class BibfileParser
-# To be used with a block. Feeds to the block hash tables with entries: citekey author and title
-# file is supposed to be a string with the contents of the bibfile
-  def parsefile(file)
-    info = Hash.new
-    array = file.split("\n")
-    line = ""
-    until (array.empty? || line.match(/@[^{]*\{([^, ]*),/))
-      line = array.shift
-    end
-    until (array.empty?)
-      info["citekey"] = $1
-      line = array.shift.strip
-      until (array.empty? || line.match(/@[^{]*\{([^, ]*),/))
-        if line.match(/(Editor|Author|Title) *= *\{(.*)\},$/i) then
-          m1, m2 = $1, $2
-          info[m1.downcase.sub("editor","author")] = m2
-        end
-        line = array.shift.strip
-      end
-      yield info
-    end
-    return
+# To be used with a block. Sends to the block hash tables with entries: citekey author and title.
+# File is supposed to be a string with the contents of the bibfile
+def parsefile(file)
+  info = Hash.new
+  array = file.split("\n")
+  line = ""
+  until (array.empty? || line.match(/@[^{]*\{([^, ]*),/)) do
+    line = array.shift
   end
+  until (array.empty?) do
+    info["citekey"] = $1
+    line = array.shift.strip
+    until (array.empty? || line.match(/@[^{]*\{([^, ]*),/)) do
+      if line.match(/(Editor|Author|Title) *= *\{(.*)\},$/i) then
+        m1, m2 = $1, $2
+        info[m1.downcase.sub("editor","author")] = m2
+      end
+      line = array.shift.strip
+    end
+    yield info
+    info.clear
+  end
+  return
 end
+
+#Returns a list of files with extension fileExt recursively searching in the files in 
+# initialList for \include{} or \bibliography{}, removing duplicates. If given a block, runs 
+# it on them. Uses kpsewhich to find paths of interest not derived from each file.
+def recursiveFileSearch(initialList,fileExt)
+  extraPathList = `kpsewhich -show-path=#{fileExt}`.split(/:!!|:/)
+  extraPathList.unshift("")
+  case fileExt 
+    when "bib" then regexp = /\\bibliography\{([^}]*)\}/
+    when "tex" then regexp = /\\(?:include|input)\{([^}]*)\}/
+    else return
+  end
+  visitedFilesList = Hash.new
+  tempFileList = initialList.clone
+  listToReturn = Array.new
+  until (tempFileList.empty?) 
+    filename = tempFileList.shift
+    # Have we visited this file already?
+    unless visitedFilesList.has_key?(filename) then
+      visitedFilesList[filename] = filename
+      # First, find file's path.
+      filepath = File.dirname(filename) + "/"
+      File.open(filename) do |file|
+        file.each do |line|
+          # search for links
+          if line.match(regexp) then
+            m = $1
+            # Need to deal with the case of multiple words here, separated by comma.
+            list = m.split(',')
+            list.each do |item|
+              # need to look at all paths in extraPathList for the file
+              (extraPathList << filepath).each do |path|
+                testFilePath = path + if (item.strip.slice(-4,4) != ".#{fileExt}") then item + ".#{fileExt}" else item end
+                if File.exist?(testFilePath) then
+                  listToReturn << testFilePath
+                  if (fileExt == "tex") then tempFileList << testFilePath end
+                  if block_given? then 
+                    File.open(testFilePath) {|file| yield file}
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  return listToReturn
+end
+
+
 ##############################
 #### Actual program
 #
 #
 # First, create list of files to be processed
-bibfilelist = Array.new
-texfilelist = Array.new
-bibpathlist = `kpsewhich -show-path=bib`.split(/:!!|:/) # list to locations for bib files
-bibpathlist.unshift("")
-texpathlist = `kpsewhich -show-path=tex`.split(/:!!|:/) # list to locations for tex files
-texpathlist.unshift("")
-initialfilelist = Array.new
-ARGV.each {|filename| if File.exist?(filename) then initialfilelist << filename end}
-initialfilelist.each do |filename|
+initialFileList = Array.new
+ARGV.each {|filename| 
+  if File.exist?(filename) then
+     initialFileList << filename 
+  end}
+bibFileList = Array.new
+texFileList = Array.new
+initialFileList.each do |filename|
   if File.exist?(filename) then
     if (filename.match(/\.bib$/)) then
       # It's a bib file! Pass it into the list for further work.
-      bibfilelist << filename
+      bibFileList << filename
     else
-      # It's a tex file! pass it to the texfilelist
-      texfilelist << filename
+      # It's a tex file! pass it to the texFileList
+      texFileList << filename
     end
   end
 end
-visitedfiles = Hash.new
 ### Create list of bib files by recursively traversing texfiles and files \included in them.
-until (texfilelist.empty?)
-  filename = texfilelist.shift
-  # Have we visited this file already?
-  unless visitedfiles.has_key?(filename) then
-    visitedfiles[filename] = filename
-    # First, find file's path.
-    filepath = File.dirname(filename) + "/"
-    File.open(filename) do |file|
-      file.each do |line|
-        # search for bibliography links
-        if line.match(/\\bibliography\{([^}]*)\}/) then
-          m = $1
-          # Need to deal with the case of multiple words here, separated by comma.
-          list = m.split(',')
-          list.each do |item|
-            # need to look at all paths in bibpathlist for the file
-#puts (bibpathlist << filepath)
-            (bibpathlist << filepath).each do |path|
-              testfilepath = path + item.strip.sub(/\.bib$/,'') + ".bib"
-#puts testfilepath
-              if File.exist?(testfilepath) then
-#puts testfilepath
-                bibfilelist << testfilepath
-                # Found first file with this filename
-#                break
-              end
-            end
-          end
-        end
-        # search for texfile include links
-        if line.match(/\\include\{([^}]*)\}/) then
-          m = $1
-          # Need to deal with the case of multiple words here, separated by comma.
-          list = m.split(',')
-          list.each do |item|
-            # need to look at all paths in texpathlist for the file
-            (texpathlist << filepath).each do |path|
-              testfilepath = path + item.strip.sub(/\.tex$/,'') + ".tex"
-              if File.exist?(testfilepath) then
-                texfilelist << testfilepath
-                # Found first file with this filename
-                break
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-end
-### Now, process list of files, and add to completions list
-completionslist = Array.new
-if ($full.nil?) then  
-# Case where we don't need the titles as comments
-  bibfilelist.each do |filename|
-    File.open(filename) do |file|
-      BibfileParser.new.parsefile(file.read) do |info|
+texFileList += recursiveFileSearch(texFileList,"tex")
+completionsList = Array.new
+recursiveFileSearch(texFileList.uniq,"bib") { |file|
+  parsefile(file.read) do |info|
+    if ($full.nil?) then
+      if ($p.nil? || (info["citekey"]).index($p) == 0) then
         # This is the case when it's used from the inline completion command. 
         # Just searches for phrase in beginning of citekey.
         # NOTE: The case must also match.
-        if ($p.nil? || (info["citekey"]).index($p) == 0) then
-           completionslist << info["citekey"]
-        end
+        completionsList << info["citekey"]
       end
+    elsif ($p.nil? || ((info["citekey"] + info["author"]) + info["title"]).downcase.match($p.downcase)) then
+      # Case where we return the titles and authors as well.
+      # Results are in the form "citekey % author % title".
+      citekey = info["citekey"]
+      author = info["author"].gsub(/\\\'|\'/,'')
+      title = info["title"].gsub(/\\\'|\'/,'')
+      completionsList << ("'#{citekey} \% #{author} \% #{title}'")
     end
   end
-else
-# Case where we return the titles and authors as well.
-# Results are in the form "citekey % author % title".
-  bibfilelist.each do |filename|
-    File.open(filename) do |file|
-      BibfileParser.new.parsefile(file.read) do |info|
-        if ($p.nil? || ((info["citekey"] + info["author"]) + info["title"]).downcase.match($p.downcase)) then
-          citekey = info["citekey"]
-          author = info["author"].gsub(/\\\'|\'/,'')
-          title = info["title"].gsub(/\\\'|\'/,'')
-          completionslist << ("'#{citekey} \% #{author} \% #{title}'")
-        end
-      end
-    end
-  end
-end
-print completionslist.sort.join(", ")
+}
+print completionsList.uniq.sort.join(", ")

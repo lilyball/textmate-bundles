@@ -17,11 +17,11 @@ if [[ -z $phrase ]]
 	else res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb -p=$phrase $TM_LATEX_BIB $TM_LATEX_MASTER $TM_FILENAME`
 fi
 if [[ $? != 0 ]]
- then exit 200
+ then exit
 fi
 if [[ -n $res ]]
 then
 	sed <<<"$res" -e $'s/, /\\\n/g'
 else
-	exit 200
+	exit
 fi

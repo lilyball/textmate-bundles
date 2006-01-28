@@ -3,37 +3,37 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (void) add${1:Thing}:(${2:id})${3:thing}
+	<string>- (void)add${1:Thing}:(${2:id})${3:thing}
 {
 	[${4:array} addObject: ${3:thing}];
 }
 
-- (void) insert${1:Thing}:(${2:id})${3:thing} atIndex:(unsigned int)i 
+- (void)insert${1:Thing}:(${2:id})${3:thing} atIndex:(unsigned int)i 
 {
 	[${4:array} insertObject: ${3:thing} atIndex: i];
 }
 
-- (${2:id}) ${3:thing}AtIndex:(unsigned int)i
+- (${2:id})${3:thing}AtIndex:(unsigned int)i
 {
 	return [${4:array} objectAtIndex: i];
 }
 
-- (unsigned int) indexOf${1:Thing}:(${2:id})${3:thing}
+- (unsigned int)indexOf${1:Thing}:(${2:id})${3:thing}
 {
 	return [${4:array} indexOfObject: ${3:thing}];
 }
 
-- (void) remove${1:Thing}AtIndex:(unsigned int)i
+- (void)remove${1:Thing}AtIndex:(unsigned int)i
 {
 	[${4:array} removeObjectAtIndex: i];
 }
 
-- (NSArray *) ${3:thing}s
+- (NSArray *)${3:thing}s
 {
 	return ${4:array};
 }
 
-- (void) set${1:Thing}s:(NSArray *)new${1:Thing}s
+- (void)set${1:Thing}s:(NSArray *)new${1:Thing}s
 {
 	[${4:array} setArray: new${1:Thing}s];
 }

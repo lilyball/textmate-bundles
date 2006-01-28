@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (void) add${1:Thing}:(${2:id})${3:thing};
-- (void) insert${1:Thing}:(${2:id})${3:thing} atIndex:(unsigned int)i;
-- (${2:id}) ${3:thing}AtIndex:(unsigned int)i;
-- (unsigned int) indexOf${1:Thing}:(${2:id})${3:thing};
-- (void) remove${1:Thing}AtIndex:(unsigned int)i;
-- (NSArray *) ${3:thing}s;
-- (void) set${1:Thing}s:(NSArray *)new${1:Thing}s;
+	<string>- (void)add${1:Thing}:(${2:id})${3:thing};
+- (void)insert${1:Thing}:(${2:id})${3:thing} atIndex:(unsigned int)i;
+- (${2:id})${3:thing}AtIndex:(unsigned int)i;
+- (unsigned int)indexOf${1:Thing}:(${2:id})${3:thing};
+- (void)remove${1:Thing}AtIndex:(unsigned int)i;
+- (NSArray *)${3:thing}s;
+- (void)set${1:Thing}s:(NSArray *)new${1:Thing}s;
 </string>
 	<key>name</key>
 	<string>LoD Array Interface (arracc)</string>

@@ -11,7 +11,8 @@
 @implementation ${1:class}
 - (id)init
 {
-	if(self = [super init])
+	self = [super init];
+	if(self != nil)
 	{$0
 	}
 	return self;

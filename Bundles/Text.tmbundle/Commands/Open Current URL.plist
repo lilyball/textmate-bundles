@@ -8,7 +8,7 @@
 	<string># this will open the URL the caret is on, by searching backwards for an http, ftp, or mailto URL scheme
 
 for (( i = $TM_LINE_INDEX; i &gt;= 0; i-- )); do
-	res=$(perl -pe &lt;&lt;&lt;${TM_CURRENT_LINE:$i} 's/^(((https?|ftp|mailto):\S+?)(?=[),.]*(\s|$)|$)|).*/$1/')
+	res=$(perl -pe &lt;&lt;&lt;${TM_CURRENT_LINE:$i} 's/^(((https?|ftp|mailto):\S+?)(?=[),.&gt;"'\'']*(\s|$)|$)|).*/$1/')
 	if [[ -n $res ]]; then
 		open "$res"
 		break

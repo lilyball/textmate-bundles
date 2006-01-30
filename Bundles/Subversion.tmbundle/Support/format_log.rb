@@ -81,7 +81,7 @@ begin
             end
             
          when :info
-            if line =~ /^r(\d+) \| ([A-Za-z_0-9]+) \| (.+) \| (\d+) lines?$/
+            if line =~ /^r(\d+) \| ([A-Za-z_0-9@.]+) \| (.+) \| (\d+) lines?$/
                state      = :changed_paths
                rev        = $1
                max_lines  = $4.to_i

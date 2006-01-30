@@ -89,9 +89,10 @@ end
 
 ##############################
 #### Actual program
-#
+##############################
 #
 # First, create list of files to be processed
+#
 initialFileList = Array.new
 ARGV.each {|filename| 
    if File.exist?(filename) then
@@ -121,10 +122,10 @@ bibFileList.uniq.each { |filename|
   File.open(filename) do |file|
   parsefile(file.read) do |info|
     if ($full.nil?) then
-      if ($p.nil? || (info["citekey"]).index($p) == 0) then
+      if ($p.nil? || (info["citekey"]).downcase.index($p.downcase) == 0) then
         # This is the case when it's used from the inline completion command. 
         # Just searches for phrase in beginning of citekey.
-        # NOTE: The case must also match.
+        # NOTE: The case must also match. CORRECTION: IT DOESN'T HAVE TO, BibTeX ignores it.
         completionsList << info["citekey"]
       end
     elsif ($p.nil? || ((info["citekey"] + info["author"]) + info["title"]).downcase.match($p.downcase)) then

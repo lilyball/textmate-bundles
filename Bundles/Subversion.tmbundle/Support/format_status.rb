@@ -12,7 +12,7 @@ end
 
 bundle				= ENV['TM_BUNDLE_SUPPORT']
 support				= ENV['TM_SUPPORT_PATH']
-work_path			= ENV['WorkPath']
+work_path			= ENV['WorkPath'] || "(selected files)"
 ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 
 strip_path_prefix	= work_path # Dir.pwd

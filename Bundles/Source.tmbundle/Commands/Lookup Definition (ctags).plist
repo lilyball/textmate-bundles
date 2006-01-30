@@ -5,16 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env python
-import os
-import sys
-path = os.path.join(os.environ['TM_BUNDLE_SUPPORT'], 'bin')
-sys.path.append(path)
-sys.path.append(os.path.join(path, 'pytags.zip'))
-import pytags.LookupTag
-print pytags.LookupTag.lookup()[0]</string>
+	<string>
+"$TM_BUNDLE_SUPPORT"/bin/lookup_tag.py
+</string>
 	<key>fallbackInput</key>
-	<string>word</string>
+	<string>none</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

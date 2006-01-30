@@ -158,6 +158,10 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#python</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#php</string>
 		</dict>
 		<dict>
@@ -367,6 +371,10 @@
 					<key>include</key>
 					<string>#smarty</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#python</string>
+				</dict>
 			</array>
 		</dict>
 		<key>entities</key>
@@ -444,6 +452,22 @@
 				<dict>
 					<key>include</key>
 					<string>source.php</string>
+				</dict>
+			</array>
+		</dict>
+		<key>python</key>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s*)&lt;\?python(?!.*\?&gt;)</string>
+			<key>end</key>
+			<string>\?&gt;(?:\s*$\n)?</string>
+			<key>name</key>
+			<string>source.python.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.python</string>
 				</dict>
 			</array>
 		</dict>

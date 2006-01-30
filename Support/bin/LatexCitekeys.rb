@@ -15,7 +15,7 @@
 # To be used with a block. Sends to the block hash tables with entries: citekey author and title.
 # File is supposed to be a string with the contents of the bibfile
 def parsefile(file)
-  info = Hash.new
+  info = Hash.new("") # Set default hash value to empty string instead of nil
   array = file.split("\n")
   line = ""
   until (array.empty? || line.match(/@[^{]*\{([^, ]*),/)) do
@@ -94,9 +94,11 @@ end
 # First, create list of files to be processed
 initialFileList = Array.new
 ARGV.each {|filename| 
-  if File.exist?(filename) then
+   if File.exist?(filename) then
      initialFileList << filename 
-  end}
+   end
+}
+  
 bibFileList = Array.new
 texFileList = Array.new
 initialFileList.each do |filename|
@@ -110,10 +112,13 @@ initialFileList.each do |filename|
     end
   end
 end
+
 ### Create list of bib files by recursively traversing texfiles and files \included in them.
 texFileList += recursiveFileSearch(texFileList,"tex")
 completionsList = Array.new
-recursiveFileSearch(texFileList.uniq,"bib") { |file|
+bibFileList += recursiveFileSearch(texFileList.uniq,"bib") 
+bibFileList.uniq.each { |filename|
+  File.open(filename) do |file|
   parsefile(file.read) do |info|
     if ($full.nil?) then
       if ($p.nil? || (info["citekey"]).index($p) == 0) then
@@ -131,5 +136,6 @@ recursiveFileSearch(texFileList.uniq,"bib") { |file|
       completionsList << ("'#{citekey} \% #{author} \% #{title}'")
     end
   end
+end
 }
 print completionsList.uniq.sort.join(", ")

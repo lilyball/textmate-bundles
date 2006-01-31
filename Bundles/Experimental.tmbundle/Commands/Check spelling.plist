@@ -7,8 +7,11 @@
 	<key>command</key>
 	<string># Offers spelling alternatives for current word.
 # You MUST have installed aspell for this to work.
+# See http://skiadas.dcostanet.net/afterthought/2006/01/30/textmate-spelling-commands/
+# For some installation instructions
 #
 #
+require_cmd aspell
 res=$(aspell &lt;&lt;&lt;"$TM_CURRENT_WORD" -a --mode=none|tail -n2|cut -f2 -d:|tr -d ,)
 if [[ "${res:0:1}" == "*" ]]
 then

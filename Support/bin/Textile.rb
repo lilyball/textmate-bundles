@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "RedCloth/lib/redcloth"
+require "redcloth"
 
 contents = Array.new()
 $stdin.each_line() { |line|

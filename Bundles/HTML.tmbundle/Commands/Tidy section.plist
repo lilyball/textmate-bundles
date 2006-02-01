@@ -12,9 +12,9 @@
 	<string>"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml -wrap 0 --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE --show-body-only yes|\
 if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -pe '
 
-	if(!$in_pre)
+	unless $in_pre
 		tab_size = ENV["TM_TAB_SIZE"].to_i
-		space, text = $_.match(/( *)(.*)/m)[1..2]
+		space, text = /( *)(.*)/m.match($_)[1..2]
 		$_ = "\t" * (space.length / tab_size).floor +
 		     " "  * (space.length % tab_size) + text
 	end

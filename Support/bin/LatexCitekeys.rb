@@ -18,13 +18,19 @@ def parsefile(file)
   info = Hash.new("") # Set default hash value to empty string instead of nil
   array = file.split("\n")
   line = ""
-  until (array.empty? || line.match(/@[^{]*\{([^, ]*),/)) do
+  until (array.empty? || line.match(/@[^{]*\{/)) do
     line = array.shift
   end
   until (array.empty?) do
-    info["citekey"] = $1
+    if (line.match(/@[^{]*\{([^,]*),/)) then
+      # citekey is in the same line. Just pick it up.
+      info["citekey"] = $1.strip
+    else
+      # citekey is in the next line. Find it there. Look at next line.
+      info["citekey"] = (array.shift.strip)[/[^, ]*/]
+    end
     line = array.shift.strip
-    until (array.empty? || line.match(/@[^{]*\{([^, ]*),/)) do
+    until (array.empty? || line.match(/@[^{]*\{/)) do
       if line.match(/(Editor|Author|Title) *= *\{(.*)\},$/i) then
         m1, m2 = $1, $2
         info[m1.downcase.sub("editor","author")] = m2

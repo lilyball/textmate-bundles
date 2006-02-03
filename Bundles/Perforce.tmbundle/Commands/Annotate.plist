@@ -5,22 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -w
-
-$LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_PATH'] + "/lib"
-require 'p4_diff'
-
-Perforce::diff_active_file("", "Perforce—Diff With Base")
+	<string>"${TM_P4:=p4}" annotate -c -i -q "$TM_FILEPATH"
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^S</string>
 	<key>name</key>
-	<string>Diff With Base</string>
+	<string>Annotate</string>
 	<key>output</key>
 	<string>openAsNewDocument</string>
 	<key>uuid</key>
-	<string>38C6DE3A-7664-11D9-B58C-000A95A89C98</string>
+	<string>D6F5F368-C476-4882-82EA-D11E22A445BF</string>
 </dict>
 </plist>

@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;column name="${1:name}" type="${2:type}"${3: required="${4:true}"}${5: default="${6:}"} /&gt;</string>
+	<string>&lt;unique name="unique_${1:key}"&gt;
+	&lt;unique-column name="${1:key}" /&gt;
+&lt;/unique&gt;</string>
 	<key>name</key>
-	<string>xml - column</string>
+	<string>xml - unique</string>
 	<key>scope</key>
 	<string>text.xml</string>
 	<key>tabTrigger</key>
-	<string>&lt;c</string>
+	<string>&lt;u</string>
 	<key>uuid</key>
-	<string>8A4ECDB9-F980-4CDE-B098-1ADA7B3C1928</string>
+	<string>2340D768-1E9F-455C-AC2E-1F1570A1424F</string>
 </dict>
 </plist>

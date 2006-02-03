@@ -4,9 +4,8 @@
 <dict>
 	<key>content</key>
 	<string>&lt;foreign-key foreignTable="${1:table}"&gt;
-  &lt;reference local="${1:table}_id" foreign="id"/&gt;
-&lt;/foreign-key&gt;
-</string>
+	&lt;reference local="${1:table}_id" foreign="${2:id}"/&gt;
+&lt;/foreign-key&gt;</string>
 	<key>name</key>
 	<string>xml - foreign key</string>
 	<key>scope</key>

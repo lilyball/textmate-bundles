@@ -3,10 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;table name="${1:name}" phpName="${2:php_name}"&gt;
-  $0
-&lt;/table&gt;
-</string>
+	<string>&lt;table name="${1:name}"${2: phpName="${3:php_name}"}&gt;
+	$0
+&lt;/table&gt;</string>
 	<key>name</key>
 	<string>xml - table</string>
 	<key>scope</key>

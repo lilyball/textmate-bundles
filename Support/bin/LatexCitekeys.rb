@@ -47,7 +47,8 @@ end
 # initialList for \include{} or \bibliography{}, removing duplicates. If given a block, runs 
 # it on them. Uses kpsewhich to find paths of interest not derived from each file.
 def recursiveFileSearch(initialList,fileExt)
-  extraPathList = `kpsewhich -show-path=#{fileExt}`.split(/:!!|:/)
+# Get path list from same place BibTeX is using. Make sure to normalize the end of the path.
+  extraPathList = ([`kpsewhich -show-path=#{fileExt}`.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')})
   extraPathList.unshift("")
   case fileExt 
     when "bib" then regexp = /\\bibliography\{([^}]*)\}/
@@ -107,7 +108,7 @@ ARGV.each {|filename|
      initialFileList << filename 
    end
 }
-  
+
 bibFileList = Array.new
 texFileList = Array.new
 initialFileList.each do |filename|

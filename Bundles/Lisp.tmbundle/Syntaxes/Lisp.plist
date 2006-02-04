@@ -1,72 +1,142 @@
-{
-	//
-	// Generic Lisp.
-	// chris@cjack.com
-	// Feel free to send additions and modifications.
-	//
-	// This is a tiny, tiny subset of the enormous ANSI Common Lisp language.
-	// More may be added, but probably to a superset "Common Lisp" syntax... (some of this should probably be moved to such a file, in fact)
-	// This file should ideally be a basis for Scheme and other consistently S-expression-only dialects of Lisp. Maybe.
-	//
-	
-	comment = "";
-	
-	name = "Lisp";
-	scopeName = "source.lisp";
-	fileTypes = ( lisp, cl, l, mud, el, scm, sch );		// mud is for the Zork MDL source; el is Emacs lisp.
-														// Not that we really handle MDL, but it's a little more pleasant, at least.
-														// scm and sch are Scheme, which really needs a superset syntax file of it's own.
-	foldingStartMarker = "\\(";
-	foldingStopMarker = "\\)";
-	increaseIndentPattern = "^.*\\(.*[^)\"]$";
-	smartTypingPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ), ( "\"", "\"" )
-	);
-	highlightPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
-	);
-	patterns = (
-		{ name = "comment.line.lisp"; match = ";.*$"; },
-		
-		{
-			name = "declaration.function.lisp";
-			match = "(\\b(?i:(defun|defmethod|defmacro))\\b)(\\s+)((\\w|\\-|\\!|\\?)*)";
-				captures = {
-				    2 = { name = "storage.type.function-type.lisp"; };
-				    4 = { name = "entity.name.function.lisp"; };
-				};
-		},
-		
-		{
-			// better class? function #'+ or character constant #\a (might want to highlight these two constructs differently)
-			name = "constant.character.lisp";
-			match = "#(\\w|[\\\\+-=<>'\"&#])+";
-		},
-
-// Need to think about how to make this work properly. Both atoms and lists can be quoted.
-//		{
-//			name = "Quoted Element1";
-//			match = "'(\\w|[\\\\+-=<>'\"&#\\(\\)])+";
-//			foregroundColor = "#0000CD";
-//		},
-		
-//		{
-//			name = "Quoted Element2";
-//			begin = "'\\("; end = "\\)";
-//			foregroundColor = "#0000CD";
-//		},
-		
-		{   name = "variable.other.global.lisp";
-			match = "\\*(\\S*)\\*";
-		},
-		
-		{ name = "keyword.control.lisp"; match = "\\b(?i:case|do|let|loop|if|else|when)\\b"; },
-		{ name = "keyword.operator.lisp"; match = "\\b(?i:eq|neq|and|or)\\b"; },
-		{ name = "constant.language.lisp"; match = "\\b(?i:null|nil)\\b"; },
-		{ name = "support.function.lisp"; match = "\\b(?i:cons|car|cdr|cond|lambda|format|setq|setf|quote|eval|append|list|listp|memberp|t|load|progn)\\b"; },
-
-		{ name = "constant.numeric.lisp"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b";},
-		{ name = "string.quoted.double.lisp"; begin = "\""; end = "\""; swallow = "\\\\."; },
-	);
-	uuid = "00D451C9-6B1D-11D9-8DFA-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string></string>
+	<key>fileTypes</key>
+	<array>
+		<string>lisp</string>
+		<string>cl</string>
+		<string>l</string>
+		<string>mud</string>
+		<string>el</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>\(</string>
+	<key>foldingStopMarker</key>
+	<string>\)</string>
+	<key>highlightPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+	</array>
+	<key>increaseIndentPattern</key>
+	<string>^.*\(.*[^)"]$</string>
+	<key>name</key>
+	<string>Lisp</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>;.*$</string>
+			<key>name</key>
+			<string>comment.line.lisp</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.function-type.lisp</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.lisp</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\b(?i:(defun|defmethod|defmacro))\b)(\s+)((\w|\-|\!|\?)*)</string>
+			<key>name</key>
+			<string>declaration.function.lisp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>#(\w|[\\+-=&lt;&gt;'"&amp;#])+</string>
+			<key>name</key>
+			<string>constant.character.lisp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\*(\S*)\*</string>
+			<key>name</key>
+			<string>variable.other.global.lisp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:case|do|let|loop|if|else|when)\b</string>
+			<key>name</key>
+			<string>keyword.control.lisp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:eq|neq|and|or)\b</string>
+			<key>name</key>
+			<string>keyword.operator.lisp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:null|nil)\b</string>
+			<key>name</key>
+			<string>constant.language.lisp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:cons|car|cdr|cond|lambda|format|setq|setf|quote|eval|append|list|listp|memberp|t|load|progn)\b</string>
+			<key>name</key>
+			<string>support.function.lisp</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.lisp</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.lisp</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.lisp</string>
+	<key>smartTypingPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+	</array>
+	<key>uuid</key>
+	<string>00D451C9-6B1D-11D9-8DFA-000D93589AF6</string>
+</dict>
+</plist>

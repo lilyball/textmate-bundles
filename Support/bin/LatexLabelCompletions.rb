@@ -7,7 +7,7 @@
 # Helper function
 #####################
 def recursiveFileSearch(initialList,fileExt)
-  extraPathList = `kpsewhich -show-path=#{fileExt}`.split(/:!!|:/)
+  extraPathList = ([`kpsewhich -show-path=#{fileExt}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')})
   extraPathList.unshift("")
   case fileExt 
     when "bib" then regexp = /\\bibliography\{([^}]*)\}/
@@ -32,9 +32,10 @@ def recursiveFileSearch(initialList,fileExt)
             # Need to deal with the case of multiple words here, separated by comma.
             list = m.split(',')
             list.each do |item|
+              item.strip!
               # need to look at all paths in extraPathList for the file
               (extraPathList << filepath).each do |path|
-                testFilePath = path + if (item.strip.slice(-4,4) != ".#{fileExt}") then item + ".#{fileExt}" else item end
+                testFilePath = path + if (item.slice(-4,4) != ".#{fileExt}") then item + ".#{fileExt}" else item end
                 if File.exist?(testFilePath) then
                   listToReturn << testFilePath
                   if (fileExt == "tex") then tempFileList << testFilePath end
@@ -56,8 +57,8 @@ end
 ######################
 #
 # Work with the current file; if TM_LATEX_MASTER is set, work with both
-#
 # Thanks to Alan Schussman
+#
 filelist = if (ENV.has_key?("TM_LATEX_MASTER")) then
           [ENV["TM_FILEPATH"], ENV["TM_LATEX_MASTER"]]
         else

@@ -72,9 +72,11 @@ def recursiveFileSearch(initialList,fileExt)
             # Need to deal with the case of multiple words here, separated by comma.
             list = m.split(',')
             list.each do |item|
+              # remove spaces
+              item.strip!
               # need to look at all paths in extraPathList for the file
               (extraPathList << filepath).each do |path|
-                testFilePath = path + if (item.strip.slice(-4,4) != ".#{fileExt}") then item + ".#{fileExt}" else item end
+                testFilePath = path + if (item.slice(-4,4) != ".#{fileExt}") then item + ".#{fileExt}" else item end
                 if File.exist?(testFilePath) then
                   listToReturn << testFilePath
                   if (fileExt == "tex") then tempFileList << testFilePath end

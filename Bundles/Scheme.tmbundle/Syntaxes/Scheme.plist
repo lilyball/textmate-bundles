@@ -24,6 +24,30 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>parameters</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>meta.declaration.procedure.parameters</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>[[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*</string>
+					<key>name</key>
+					<string>variable.parameter</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[._]</string>
+					<key>name</key>
+					<string>variable.parameter</string>
+				</dict>
+			</array>
+		</dict>
 		<key>sexp</key>
 		<dict>
 			<key>begin</key>
@@ -42,7 +66,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;=\()(define)\s\((([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*)\s*(([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|\.)\s*)*)\)</string>
+					<string>(?&lt;=\()(define)\s+\(([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*)((\s+([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._]))*)\)</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -56,6 +80,34 @@
 							<string>entity.name.function</string>
 						</dict>
 						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\))</string>
+					<key>name</key>
+					<string>meta.declaration.procedure</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#sexp</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=\()(lambda)\s+\(((([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._])\s*)*)\)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword</string>
+						</dict>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>variable.parameter</string>
@@ -93,34 +145,6 @@
 					<string>(?=\))</string>
 					<key>name</key>
 					<string>meta.declaration.variable</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#sexp</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(?&lt;=\()(lambda)\s\(((([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|\.)\s*)*)\)</string>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(?=\))</string>
-					<key>name</key>
-					<string>meta.declaration.procedure</string>
 					<key>patterns</key>
 					<array>
 						<dict>

@@ -48,7 +48,7 @@ end
 # it on them. Uses kpsewhich to find paths of interest not derived from each file.
 def recursiveFileSearch(initialList,fileExt)
 # Get path list from same place BibTeX is using. Make sure to normalize the end of the path.
-  extraPathList = ([`kpsewhich -show-path=#{fileExt}`.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')})
+  extraPathList = ([`kpsewhich -show-path=#{fileExt}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')})
   extraPathList.unshift("")
   case fileExt 
     when "bib" then regexp = /\\bibliography\{([^}]*)\}/

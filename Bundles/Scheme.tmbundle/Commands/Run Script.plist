@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string># Run the current document in our Scheme interpreter.
+#
+# The interpreter you use should be set in the environment
+# variable TM_SCHEME_INTERPRETER.
+#
+INTERPRET=${TM_SCHEME_INTERPRETER:=csi}
+CMD=$(basename "$INTERPRET")
+SHOWOUTPUT="$TM_BUNDLE_SUPPORT/showoutput.rb"
+ERRORTEMP=$(mktemp -t scheme)
+
+# Run depending on the system are we on?
+if [ $CMD == "mzscheme" ] ; then
+	"$INTERPRET" -M errortrace -r "$TM_FILEPATH" 2&gt;"$ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$ERRORTEMP"
+fi
+if [ $CMD == "csi" ] ; then
+	"$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$ERRORTEMP"
+fi
+
+# Delete tempfiles
+rm -f "$ERRORTEMP"
+rm -f "$OUTTEMP"
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run Script</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.scheme</string>
+	<key>uuid</key>
+	<string>CBFEB6F9-D38C-4726-BD16-325E3FCC0C6B</string>
+</dict>
+</plist>

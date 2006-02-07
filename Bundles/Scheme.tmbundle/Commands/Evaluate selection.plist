@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Evaluate the current seletion in our Scheme interpreter
+#
+# The interpreter you use should be set in the environment
+# variable TM_SCHEME_EVALUATOR 
+
+INTERPRET=${TM_SCHEME_INTERPRETER:=csi}
+CMD=$(basename "$INTERPRET")
+
+# Run depending on the system are we on?
+if [ $CMD == "mzscheme" ] ; then
+	"$INTERPRET" -vm -e "$TM_SELECTED_TEXT"
+fi
+if [ $CMD == "csi" ] ; then
+	"$INTERPRET" -e "$TM_SELECTED_TEXT"
+fi
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^E</string>
+	<key>name</key>
+	<string>Evaluate selection</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.scheme</string>
+	<key>uuid</key>
+	<string>B270255C-1AE7-47FA-B3A7-38E983402C36</string>
+</dict>
+</plist>

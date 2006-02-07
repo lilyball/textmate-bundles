@@ -3,23 +3,24 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string># This presumes you have mzscheme in your $PATH
-# http://download.plt-scheme.org/
-mzscheme -r "$TM_FILEPATH"
+	<string>osascript -e "tell application \"Terminal\"
+   do script \"clear; ${TM_SCHEME_INTERPRETER:=csi}\"
+   activate
+end tell"
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^I</string>
 	<key>name</key>
-	<string>Run</string>
+	<string>Start Interpreter</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>source.scheme</string>
 	<key>uuid</key>
-	<string>2F7E711A-41FC-45B1-A3BA-4A387DA6056A</string>
+	<string>887AF89E-004D-42AC-B29E-D90B0147F6DC</string>
 </dict>
 </plist>

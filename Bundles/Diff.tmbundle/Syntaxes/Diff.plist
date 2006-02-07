@@ -8,7 +8,9 @@
 		<string>patch</string>
 	</array>
 	<key>firstLineMatch</key>
-	<string>^(Index: |--- [^%]|\*\*\* |\d+(,\d+)*(a|d|c)\d+(,\d+)*$)</string>
+	<string>^(====\s*//.+\s-\s.+\s+====|Index: |--- [^%]|\*\*\* |\d+(,\d+)*(a|d|c)\d+(,\d+)*$)</string>
+	<key>keyEquivalent</key>
+	<string>^~D</string>
 	<key>name</key>
 	<string>Diff</string>
 	<key>patterns</key>
@@ -47,13 +49,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^((-{3} .+)|(\*{3} .+))$\n?</string>
+			<string>(^((-{3} .+)|(\*{3} .+))$\n?|^={4} .+(?= - ))</string>
 			<key>name</key>
 			<string>meta.diff.header.from-file</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\+{3} .+$\n?</string>
+			<string>(^\+{3} .+$\n?| - .* ={4}$\n?)</string>
 			<key>name</key>
 			<string>meta.diff.header.to-file</string>
 		</dict>

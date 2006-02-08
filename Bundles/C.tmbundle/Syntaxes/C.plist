@@ -321,15 +321,15 @@
 		<dict>
 			<key>begin</key>
 			<string>(?x)
-				(?:  ^                                 # begin-of-line
-				  |  (?: (?&lt;!else|new) (?&lt;=\w)\s+      #  or word + space before name
-				       | (?&lt;!&amp;&amp;)       (?&lt;=[*&amp;])\s*    #  or type modifier before name
+				(?:  ^                                        # begin-of-line
+				  |  (?: (?&lt;!else|new|return) (?&lt;=\w)\s+      #  or word + space before name
+				       | (?&lt;!&amp;&amp;)              (?&lt;=[*&amp;])\s*    #  or type modifier before name
 				     )
 				)
 				([A-Za-z_][A-Za-z0-9_:]+)              # actual name
 				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s+const)?\s*                        # optional const modifier
-				 (;))                                  # start bracket or end-of-line
+				 ;)                                    # terminating semi-colon
 			</string>
 			<key>beginCaptures</key>
 			<dict>

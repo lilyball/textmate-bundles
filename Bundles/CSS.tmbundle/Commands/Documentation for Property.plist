@@ -10,7 +10,7 @@
 # Lookup current word as a CSS property on w3c.org
 #
 # The mapping below was generated using:
-# echo '$props = {'; curl -s http://www.w3.org/TR/CSS2/propidx.html|grep "&lt;tr&gt;&lt;td&gt;&lt;a href=\".*\" class=\"noxref\"&gt;&lt;span class=\".*\"&gt;'.*'&lt;/span&gt;&lt;/a&gt;"|perl -pe "s|&lt;tr&gt;&lt;td&gt;&lt;a href=\"(.*)\" class=\"noxref\"&gt;&lt;span class=\".*\"&gt;'(.*)'&lt;/span&gt;&lt;/a&gt;|\t\"\$2\"\t=&gt; \"\$1\",|"; echo '}'
+# echo '$props = {'; curl -s http://www.w3.org/TR/CSS2/propidx.html|egrep "(^|&lt;tr&gt;&lt;td&gt;)&lt;a href=\".*\" class=\"noxref\"&gt;&lt;span class=\".*\"&gt;'.*'&lt;/span&gt;&lt;/a&gt;"|perl -pe "s|(?:&lt;tr&gt;&lt;td&gt;)?&lt;a href=\"(.*)\" class=\"noxref\"&gt;&lt;span class=\".*\"&gt;'(.*)'&lt;/span&gt;&lt;/a&gt;|\t\"\$2\"\t=&gt; \"\$1\",|"; echo '}'
 
 $props = {
 	"azimuth"	=&gt; "aural.html#propdef-azimuth",
@@ -26,9 +26,21 @@ $props = {
 	"border-spacing"	=&gt; "tables.html#propdef-border-spacing",
 	"border-style"	=&gt; "box.html#propdef-border-style",
 	"border-top"	=&gt; "box.html#propdef-border-top",
+	"border-right"	=&gt; "box.html#propdef-border-right",
+	"border-bottom"	=&gt; "box.html#propdef-border-bottom",
+	"border-left"	=&gt; "box.html#propdef-border-left",
 	"border-top-color"	=&gt; "box.html#propdef-border-top-color",
+	"border-right-color"	=&gt; "box.html#propdef-border-right-color",
+	"border-bottom-color"	=&gt; "box.html#propdef-border-bottom-color",
+	"border-left-color"	=&gt; "box.html#propdef-border-left-color",
 	"border-top-style"	=&gt; "box.html#propdef-border-top-style",
+	"border-right-style"	=&gt; "box.html#propdef-border-right-style",
+	"border-bottom-style"	=&gt; "box.html#propdef-border-bottom-style",
+	"border-left-style"	=&gt; "box.html#propdef-border-left-style",
 	"border-top-width"	=&gt; "box.html#propdef-border-top-width",
+	"border-right-width"	=&gt; "box.html#propdef-border-right-width",
+	"border-bottom-width"	=&gt; "box.html#propdef-border-bottom-width",
+	"border-left-width"	=&gt; "box.html#propdef-border-left-width",
 	"border-width"	=&gt; "box.html#propdef-border-width",
 	"bottom"	=&gt; "visuren.html#propdef-bottom",
 	"caption-side"	=&gt; "tables.html#propdef-caption-side",
@@ -65,6 +77,9 @@ $props = {
 	"list-style-type"	=&gt; "generate.html#propdef-list-style-type",
 	"margin"	=&gt; "box.html#propdef-margin",
 	"margin-top"	=&gt; "box.html#propdef-margin-top",
+	"margin-right"	=&gt; "box.html#propdef-margin-right",
+	"margin-bottom"	=&gt; "box.html#propdef-margin-bottom",
+	"margin-left"	=&gt; "box.html#propdef-margin-left",
 	"marker-offset"	=&gt; "generate.html#propdef-marker-offset",
 	"marks"	=&gt; "page.html#propdef-marks",
 	"max-height"	=&gt; "visudet.html#propdef-max-height",
@@ -79,6 +94,9 @@ $props = {
 	"overflow"	=&gt; "visufx.html#propdef-overflow",
 	"padding"	=&gt; "box.html#propdef-padding",
 	"padding-top"	=&gt; "box.html#propdef-padding-top",
+	"padding-right"	=&gt; "box.html#propdef-padding-right",
+	"padding-bottom"	=&gt; "box.html#propdef-padding-bottom",
+	"padding-left"	=&gt; "box.html#propdef-padding-left",
 	"page"	=&gt; "page.html#propdef-page",
 	"page-break-after"	=&gt; "page.html#propdef-page-break-after",
 	"page-break-before"	=&gt; "page.html#propdef-page-break-before",

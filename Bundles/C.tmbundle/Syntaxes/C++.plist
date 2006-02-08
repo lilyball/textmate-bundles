@@ -135,7 +135,7 @@
 				([A-Za-z_]*[A-Za-z0-9_:]*~[A-Za-z_][A-Za-z0-9_]+) # actual name
 				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s*=\s*0)?\s*                        # optional pure modifier
-				 (;))                                  # start bracket or end-of-line
+				 ;)                                    # terminating semi-colon
 			</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -161,7 +161,7 @@
 			<key>begin</key>
 			<string>(?x)
 				(?:  ^\s*)                             # begin-of-line
-				((?!while|for|do|if|else)[A-Za-z_][A-Za-z0-9_:]+)              # actual name
+				((?!while|for|do|if|else|switch)[A-Za-z_][A-Za-z0-9_:]+) # actual name
 				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s*:\s*([A-Za-z_][A-Za-z0-9_]+)\([^)]*\))*\s* # optional base constructors
 				 (\{|\n))                              # start bracket or end-of-line

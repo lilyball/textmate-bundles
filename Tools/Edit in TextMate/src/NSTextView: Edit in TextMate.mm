@@ -29,10 +29,20 @@
 {
 	NSRange selectedRange = [self selectedRange];
 	BOOL hadSelection = selectedRange.length != 0;
-	if(!hadSelection)
-		[self setSelectedRange:NSMakeRange(0, [[self textStorage] length])];
-	[self insertText:newString];
-	if(hadSelection)
-		[self setSelectedRange:NSMakeRange(selectedRange.location, [newString length])];
+	selectedRange = hadSelection ? selectedRange : NSMakeRange(0, [[self textStorage] length]);
+	if([self shouldChangeTextInRange:selectedRange replacementString:newString])
+	{
+		if(!hadSelection)
+			[self setSelectedRange:NSMakeRange(0, [[self textStorage] length])];
+		[self insertText:newString];
+		if(hadSelection)
+			[self setSelectedRange:NSMakeRange(selectedRange.location, [newString length])];
+		[self didChangeText];
+	}
+	else
+	{
+		NSBeep();
+		NSLog(@"%s couldn't edit text", _cmd);
+	}
 }
 @end

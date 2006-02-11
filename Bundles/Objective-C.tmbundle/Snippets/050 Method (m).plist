@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (${1:id})${2:method}${3::(${4:id})${5:${4/(NS(\w+).*)|(.)?.*/(?1:a$2:(?3:anArgument))/}}}
+	<string>- (${1:id})${2:method}${3::(${4:id})${5:${4/(NS([AEIOQUY])?(\w+).*)|(.)?.*/(?1:a(?2:n$2)$3:(?4:anArgument))/}}}
 {$0${1/^(void|IBAction)$|(.*)/(?2:
 	return nil;)/}
 }</string>

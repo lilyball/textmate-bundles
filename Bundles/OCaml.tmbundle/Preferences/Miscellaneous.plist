@@ -10,6 +10,27 @@
 	<dict>
 		<key>increaseIndentPattern</key>
 		<string>^.*(\([^)"']*|begin)$|\blet\s+[a-z][a-zA-Z0-9_']*.*(?!in$)|match\s+.*\s+with\s*$|\b(class|object|struct|sig)\b</string>
+		<key>shellVariables</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>TM_COMMENT_START</string>
+				<key>value</key>
+				<string>(*</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>TM_COMMENT_END</string>
+				<key>value</key>
+				<string>*)</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>TM_COMMENT_MODE</string>
+				<key>value</key>
+				<string>block</string>
+			</dict>
+		</array>
 		<key>smartTypingPairs</key>
 		<array>
 			<array>

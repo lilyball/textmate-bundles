@@ -14,7 +14,19 @@ module Subversion
 		TextMate::call_with_progress(:title => command,
 									:message => "Accessing Subversion Repository…",
 									:output_filepath => output_path) do
-			%x{"#{svn}" diff --diff-cmd diff "-r#{revision}" "#{target_path}"}
+			have_data = false
+			
+			# idea here is to stream the data rather than submit it in one big block
+			%x{"#{svn}" diff --diff-cmd diff "-r#{revision}" "#{target_path}"}.each_line do |line|
+				have_data = true unless line.empty?
+				puts line
+			end
+			
+			if not have_data then
+				# switch to tooltip output to report lack of differences
+				puts "No differences found."
+				exit 206;
+			end
 		end
 	end
 end

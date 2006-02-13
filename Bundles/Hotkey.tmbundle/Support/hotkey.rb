@@ -25,11 +25,11 @@ module HotKey
         options["check"] = true
       }
       
-			opts.on_tail("-h", "--help", "Print this message") {
-				print(opts)
-				exit()
-			}
-		}
+	opts.on_tail("-h", "--help", "Print this message") {
+		print(opts)
+		exit()
+	}
+    }
 			
 		opts.parse(ARGV)
 		

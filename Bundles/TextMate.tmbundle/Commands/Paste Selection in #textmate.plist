@@ -6,20 +6,12 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>if [[ -z "$TM_IRC_CHANNEL" ]] &amp;&amp; ps -xc|grep -sq 'Colloquy$'; then
-  channels=$(osascript \
-    -e 'tell application "Colloquy"' \
-      -e 'set names to ""' \
-      -e 'repeat with p in panels' \
-        -e 'set names to names &amp; name of p &amp; " "' \
-      -e 'end repeat' \
-    -e 'end tell')
-
   result=$(CocoaDialog dropdown \
     --title 'Paste to IRC' \
-    --text 'Choose a channel to paste into' \
+    --text 'Choose a chat room or user:' \
     --button1 Paste --button2 Cancel \
     --string-output --no-newline \
-    --items $channels)
+    --items $(osascript -e 'tell app "Colloquy" to name of panels'|tr -d ,))
 
   if [[ "${result:0:5}" == "Paste" ]];
     then TM_IRC_CHANNEL="${result:6}"
@@ -40,15 +32,15 @@ esac
 : ${TM_PASTE_URL:=http://rafb.net/paste/paste.php}
 url=$(curl "${TM_PASTE_URL}" -F nick="$USER" -F cvt_tabs="$TM_TAB_SIZE" -F text='&lt;-' -F lang="$TM_MODE" -s -L -o /dev/null -w "%{url_effective}" \
   2&gt; &gt;(CocoaDialog progressbar --indeterminate \
-    --title "Paste to #${TM_IRC_CHANNEL}…" \
+    --title "Paste to ${TM_IRC_CHANNEL}…" \
     --text "Contacting Server “${TM_PASTE_URL}”…" \
   ))
 
 [[ -z "$url" ]] &amp;&amp; exit_show_tool_tip "Error: Got no URL back from pasting service."
 
 if ps -xc|grep -sq 'Colloquy$'; then
-  osascript -e 'tell application "Colloquy" to send message "pasted '"$url"'" action tense yes to (get chat room "#'"$TM_IRC_CHANNEL"'" of first connection)'
-  echo "The text was pasted to #$TM_IRC_CHANNEL."
+  osascript -e "tell application \"Colloquy\" to send message \"pasted $url\" action tense yes to target of item 1 of (panels where name = \"$TM_IRC_CHANNEL\")"
+  echo "The text was pasted to $TM_IRC_CHANNEL."
 else
   echo -n "$url" | pbcopy
   echo "The text is available as $url"

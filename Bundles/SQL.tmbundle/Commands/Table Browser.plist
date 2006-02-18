@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># just to remind you of some useful environment variables
+# see Help / Environment Variables for the full list
+PGDATABASE=${PGDATABASE:=$USER}
+. "${TM_SUPPORT_PATH}/lib/html.sh"
+
+htmlHeader "Schema Browser"
+tableBrowser.py --database=$PGDATABASE</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^B</string>
+	<key>name</key>
+	<string>Table Browser</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.sql</string>
+	<key>uuid</key>
+	<string>CDD74FE0-32E1-4604-BFC9-96173A557550</string>
+</dict>
+</plist>

@@ -8,7 +8,9 @@
 	<string>Markdown.pl &lt;&lt;'EOF'
 # Help for the SQL Bundle
 
-The _Execute Line / Selection as MySQL Query_ command takes the selected text or current line and submit it as a query to mysql.  It assumes that the `mysql` command line program is already in your `$PATH`.  Using the `--html` flag the output from the query is formated and displayed in an HTML window.
+## Execute Line / Selection as {MySQL/Postgresql} Query
+
+The _Execute Line / Selection as MySQL Query_ command takes the selected text or current line and submits it as a query to mysql.  It assumes that the `mysql` command line program is already in your `$PATH`.  Using the `--html` flag the output from the query is formated and displayed in an HTML window.
 
 The command assumes the following environment variables are properly set:
 
@@ -30,6 +32,11 @@ If you are a Postgres user and have the `psql8` command installed (as from [Darw
 Postgres users should also note that there is not a command line argument to provide your password.  To use Postgresql on a database with a password from TextMate you should set up a `~/.pgpass` file.  This file should contain lines of the following format:
 
 	hostname:port:database:username:password
+
+## Table Broswer
+
+The table browser command displays a list of tables in whatever database you are currently working in using either Postgresql or MySql.  The server used is determined by the value of TM_DB_SERVER, which defaults to Postgresql.
+The current database is specified by either PGDATABASE, or MYSQL_DB.  If neither is set the table browser will default to using your username.  For mysql to work you must have the MYSQL_PWD environment variable set.  For Postgresql you must have an entry in your .pgpass file.
 
 EOF</string>
 	<key>input</key>

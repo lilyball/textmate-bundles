@@ -10,21 +10,17 @@ if 'postgresql' in sys.argv or True:
     try:
         import pgdb
     except:
-        print "no pgdb installed"
+        print "pgdb module is not installed"
 
-if 'mysql' in sys.argv or True:
+if 'mysql' in sys.argv:
     try:    
         import MySQLdb
     except:
-        print "no _mysql installed"
+        print "MySQLdb module is not installed"
 
 # TODO:  Convert this to an object so we can do connection sharing.
 # Add support for mysql
 #
-
-help_message = '''
-The help message goes here.
-'''
 
 
 class Usage(Exception):
@@ -35,12 +31,18 @@ class Usage(Exception):
 def main(argv=None):
     if argv is None:
         argv = sys.argv
+    # set up default values... This only matters for the table listing as 
+    # everything we need to know is fully specified on the command line
+    # for the column list.
     user = os.getenv('USER')
-    dbName = os.getenv('PGDATABASE',user)
+    serverType = os.getenv('TM_DB_SERVER','postgresql')
+    if serverType == 'postgresql':
+        dbName = os.getenv('PGDATABASE',user)
+        dbHost = os.getenv('PGHOST','localhost')        
+    else:
+        dbName = os.getenv('MYSQL_DB',user)
+        dbHost = os.getenv('MYSQL_HOST','localhost')
     tblName = None
-    dbHost = os.getenv('PGHOST','localhost')
-    dbHost = 'localhost'
-    serverType='mysql'
     passwd = os.getenv('MYSQL_PWD',None)
     try:
         try:

@@ -7,11 +7,12 @@
 	<key>command</key>
 	<string># just to remind you of some useful environment variables
 # see Help / Environment Variables for the full list
-PGDATABASE=${PGDATABASE:=$USER}
 . "${TM_SUPPORT_PATH}/lib/html.sh"
 
+export TM_DB_SERVER=${TM_DB_SERVER:=postgresql}
+
 htmlHeader "Schema Browser"
-tableBrowser.py --database=$PGDATABASE --server=postgresql</string>
+tableBrowser.py --server=$TM_DB_SERVER</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

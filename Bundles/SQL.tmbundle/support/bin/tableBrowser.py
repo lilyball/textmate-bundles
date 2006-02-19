@@ -5,6 +5,11 @@ import sys
 import os
 import getopt
 from pg import DB
+import pgdb
+
+# TODO  Convert this to an object so we can do connection sharing.
+# Add support for mysql
+#
 
 help_message = '''
 The help message goes here.
@@ -54,38 +59,41 @@ def main(argv=None):
 
 
 def listTables(dbName,dbHost):
-    cnx = DB(dbName,host=dbHost)
-    tList = cnx.get_tables()    # use the built in functionto get all tables.
+    qstr = "select table_name from information_schema.tables where table_schema = 'public'"
+    mycon = pgdb.connect(database=dbName,host=dbHost)
+    curs = mycon.cursor()
+    curs.execute(qstr)
+    tList = curs.fetchall()
     formatTableList(dbName,dbHost,tList)
     
 def formatTableList(dbName,dbHost,tList,includeSys=False):
     print "<h2>Tables in database: "+dbName+"</h2>"
     print "<ul class='tableList'>"
     for t in tList:
-        tblLink = "<li><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t + "%22,%22" + dbHost + "%22)'>" + t + "</a></li>"        
-        if t.find("information_schema") == 0:
-            if includeSys:
-                print tblLink
-        else:
-            print tblLink
+        tblLink = "<li><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t[0] + "%22,%22" + dbHost + "%22)'>" + t[0] + "</a></li>"        
+        print tblLink
     print "</ul><hr>"
     print """<div id="result"></div>"""
 
 
-def listColumns(db,dbhost,tbl):
-    schema,tname = tbl.split('.')
+def listColumns(dbName,dbHost,tbl):
+    if tbl.find(".") >= 0:
+        schema,tname = tbl.split('.')
+    else:
+        tname = tbl
     qstr = """select ordinal_position, column_name, data_type, is_nullable, column_default 
     from information_schema.columns 
     where table_name='%s'
     order by ordinal_position"""%(tname)
-    cnx = DB(db,host=dbhost)
-    cList = cnx.query(qstr)
-    resList = cList.dictresult()
+    mycon = pgdb.connect(database=dbName,host=dbHost)
+    curs = mycon.cursor()
+    curs.execute(qstr)
+    resList = curs.fetchall()    
     print "<h2>Columns in table: " + tbl + "</h2>"
     print "<table width='75%'>"
     print "<tr><th align='left'>Name</th><th align='left'>Type</th><th align='left'>Nullable</th><th align='left'>Default</th></tr>"
     for row in resList:
-        print "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"%(row['column_name'],row['data_type'],row['is_nullable'],row['column_default'])
+        print "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"%(row[1],row[2],row[3],row[4])
     print "</table>"  
 
       

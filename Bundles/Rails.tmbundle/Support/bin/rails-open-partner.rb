@@ -23,4 +23,4 @@ find_parents = parents.collect { |parent| File.join(ENV['TM_PROJECT_DIRECTORY'],
  
 matches = `find #{find_parents.collect { |str| shell_escape str } * ' '} -name #{shell_escape file_name}`.strip.split("\n").collect {|match| match.strip}
 
-`mate #{matches.collect { |str| shell_escape str }}` unless matches.empty?
+`mate #{matches.collect { |str| shell_escape str } * ' '}` unless matches.empty?

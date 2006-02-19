@@ -11,7 +11,7 @@ PGDATABASE=${PGDATABASE:=$USER}
 . "${TM_SUPPORT_PATH}/lib/html.sh"
 
 htmlHeader "Schema Browser"
-tableBrowser.py --database=$PGDATABASE</string>
+tableBrowser.py --database=$PGDATABASE --server=postgresql</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

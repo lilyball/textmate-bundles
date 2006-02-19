@@ -22,6 +22,6 @@ end
 find_parents = parents.collect { |parent| File.join(ENV['TM_PROJECT_DIRECTORY'], parent) }
 find_parents = find_parents.find_all { |file| File.exists?(file) }
  
-matches = `find #{find_parents.collect { |str| shell_escape str } * ' '} -name #{shell_escape file_name}`.strip.split("\n").collect {|match| match.strip} unless find_parents.empty?
+matches = `find #{find_parents.collect { |str| shell_escape str } * ' '} -name #{shell_escape file_name} -maxdepth 1`.strip.split("\n").collect {|match| match.strip} unless find_parents.empty?
 
 `mate #{matches.collect { |str| shell_escape str } * ' '} &>/dev/null &` unless matches.empty?

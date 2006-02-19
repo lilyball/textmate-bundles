@@ -10,13 +10,17 @@ end].flatten
  
 file_name = File.basename path
 if parents.any? { |parent| parent =~ %r{test(/|$)} }
-  file_name.gsub! /\.rb$/, '_test.rb'
+  file_name.gsub!(/\.rb$/, '_test.rb')
 else
-  file_name.gsub! /_test\.rb$/, '.rb'
+  file_name.gsub!(/_test\.rb$/, '.rb')
+end
+
+def shell_escape (str)
+  "'" + str.gsub(/'/, "'\\\\''") + "'"
 end
  
 find_parents = parents.collect { |parent| File.join(ENV['TM_PROJECT_DIRECTORY'], parent).inspect }
  
-matches = `find #{find_parents * ' '} -name #{file_name}`.strip.split("\n").collect {|match| match.strip}
+matches = `find #{find_parents.collect { |str| shell_escape str } * ' '} -name #{shell_escape file_name}`.strip.split("\n").collect {|match| match.strip}
 
-`mate #{matches}` unless matches.empty?
+`mate #{matches.collect { |str| shell_escape str }}` unless matches.empty?

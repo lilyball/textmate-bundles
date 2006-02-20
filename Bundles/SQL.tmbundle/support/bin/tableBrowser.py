@@ -6,20 +6,20 @@ import os
 import getopt
 
 # import the right driver based on the command line args. (default to postgres)
-if 'postgresql' in sys.argv or True:
+if '--server=postgresql' in sys.argv or True:
     try:
         import pgdb
     except:
         print "pgdb module is not installed"
 
-if 'mysql' in sys.argv:
+if '--server=mysql' in sys.argv:
     try:    
         import MySQLdb
     except:
         print "MySQLdb module is not installed"
 
-# TODO:  Convert this to an object so we can do connection sharing.
-# Add support for mysql
+# TODO:  Add support for non-standard ports
+# TODO:  Fix default variable processing....
 #
 
 

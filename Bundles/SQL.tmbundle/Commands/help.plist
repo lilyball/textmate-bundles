@@ -33,7 +33,7 @@ Postgres users should also note that there is not a command line argument to pro
 
 	hostname:port:database:username:password
 
-## Table Broswer
+## Table Browser
 
 The table browser command displays a list of tables in whatever database you are currently working in using either Postgresql or MySql.  The server used is determined by the value of TM_DB_SERVER, which defaults to Postgresql.
 The current database is specified by either PGDATABASE, or MYSQL_DB.  If neither is set the table browser will default to using your username.  For mysql to work you must have the MYSQL_PWD environment variable set.  For Postgresql you must have an entry in your .pgpass file.

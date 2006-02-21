@@ -5,7 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>echo '&lt;style&gt;table { font-size: 9pt; }&lt;/style&gt;'
+	<string>cat &lt;&lt;CSS
+   &lt;link href='file://$TM_SUPPORT_PATH/css/default.css' type='text/css'&gt;
+   &lt;style&gt;table { font-size: 9pt; } td { text-align: right; }&lt;/style&gt;
+CSS
+echo '&lt;style&gt;table { font-size: 9pt; }&lt;/style&gt;'
 echo '&lt;p&gt;To use a password with Postgres and TextMate you should store your password in &lt;tt&gt;~/.pgpass&lt;/tt&gt;.  See the Postgres documentation for the file format.&lt;/p&gt;'
 
 require_cmd psql8
@@ -14,9 +18,9 @@ query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
 echo -n "$query"|pre
 
 psql8 -c "$query" \
-	--user="${PGUSER:-$USER}"  --html --table-attr border=0  \
+	--user="${PGUSER:-$USER}"  --html  \
 	--host="${PGHOST:-localhost}" --port="${PGPORT:-5432}" \
-     "${PGDATABASE:-$USER}"
+     "${PGDATABASE:-$USER}" |perl -pe 's/(?&lt;=&lt;table )border="1"/class="graybox" cellspacing="0" cellpadding="5"/'
 
 echo -n "Query completed"|pre
 

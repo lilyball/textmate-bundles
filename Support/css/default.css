@@ -39,6 +39,47 @@ hr {
 	border: 0px;
 }
 
+/** The “pro” table look (used in Apple’s documentation)
+
+	Example:
+
+		<table class="graybox" cellspacing="0" cellpadding="5">
+			<tr>
+				<th>First</th>
+				<th>Last</th>
+			</tr>
+
+			<tr>
+				<td><p>Allan</p></td>
+				<td><p>Odgaard</p></td>
+			</tr>
+		</table>
+
+**/
+
+.graybox {
+	border-top: 1px solid #919699;
+	border-left: 1px solid #919699;
+}
+.graybox th {
+	background: #E2E2E2;
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+	font-weight: bold;
+	padding: 4px 8px 4px 8px;
+}
+.graybox td {
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+	padding: 4px;
+	vertical-align: top;
+}
+.graybox p {
+	margin: 0;
+}
+.graybox p + p {
+	margin-top: 1em;
+}
 
 /* Sidebars and boxes. */
 

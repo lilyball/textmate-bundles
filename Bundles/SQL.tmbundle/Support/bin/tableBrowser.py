@@ -105,7 +105,7 @@ def listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser):
         mycon = pgdb.connect(database=dbName,host=dbHost+':'+dbPort,user=dbUser)
         qstr = "select table_name from information_schema.tables where table_schema = 'public'"        
     else:
-        mycon = MySQLdb.connect(db=dbName,host=dbHost+':'+dbPort,user=dbUser,passwd=passwd)
+        mycon = MySQLdb.connect(db=dbName,host=dbHost,port=dbPort,user=dbUser,passwd=passwd)
         qstr = "show tables"
     curs = mycon.cursor()
     curs.execute(qstr)
@@ -140,7 +140,7 @@ def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
     where table_name='%s'
     order by ordinal_position"""%(tname)        
     else:
-        mycon = MySQLdb.connect(db=dbName,host=dbHost+':'+dbPort,user=dbUser,passwd=passwd)
+        mycon = MySQLdb.connect(db=dbName,host=dbHost,port=dbPort,user=dbUser,passwd=passwd)
         qstr = "show columns in " + tname
     curs = mycon.cursor()
     curs.execute(qstr)

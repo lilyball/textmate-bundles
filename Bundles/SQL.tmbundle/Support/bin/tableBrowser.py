@@ -32,7 +32,7 @@ def main(argv=None):
     # set up default values... This only matters for the table listing as 
     # everything we need to know is fully specified on the command line
     # for the column list.
-    serverType = None
+    serverType = os.getenv('TM_DB_SERVER','postgresql')    
     dbHost = None
     dbPort = None
     dbName = None
@@ -41,7 +41,7 @@ def main(argv=None):
     passwd = None        
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "hodtps:v", ["host=", "output=", "database=", "table=", "server=", "passwd="])
+            opts, args = getopt.getopt(argv[1:], "hodtpsnu:v", ["host=", "output=", "database=", "table=", "server=", "passwd=", "user=", "port="])
         except getopt.error, msg:
             raise Usage(msg)
     
@@ -59,6 +59,10 @@ def main(argv=None):
                 serverType = value
             if option in ("-p", "--passwd"):  # useful only for mysql
                 passwd = value
+            if option in ("-u", "--user"):  # useful only for mysql
+                dbUser = value
+            if option in ("-n", "--port"):  # useful only for mysql
+                dbPort = value
     except Usage, err:
         print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
         print >> sys.stderr, "\t for help use --help"
@@ -66,7 +70,6 @@ def main(argv=None):
 
     # option parsing done, now handle any fallback values for parameters.
     osuser = os.getenv('USER')
-    serverType = os.getenv('TM_DB_SERVER','postgresql')
     if serverType == 'postgresql':
         if dbName == None:
             dbName = os.getenv('PGDATABASE',osuser)
@@ -105,18 +108,18 @@ def listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser):
         mycon = pgdb.connect(database=dbName,host=dbHost+':'+dbPort,user=dbUser)
         qstr = "select table_name from information_schema.tables where table_schema = 'public'"        
     else:
-        mycon = MySQLdb.connect(db=dbName,host=dbHost,port=dbPort,user=dbUser,passwd=passwd)
+        mycon = MySQLdb.connect(db=dbName,host=dbHost,port=int(dbPort),user=dbUser,passwd=passwd)
         qstr = "show tables"
     curs = mycon.cursor()
     curs.execute(qstr)
     tList = curs.fetchall()
-    formatTableList(dbName,dbHost,tList,serverType,passwd)
+    formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort)
     
-def formatTableList(dbName,dbHost,tList,serverType,passwd):
+def formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort):
     print "<h2>Tables in database: "+dbName+"</h2>"
     print "<ul class='tableList'>"
     for t in tList:
-        tblLink = "<li><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t[0] + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22)'>" + t[0] + "</a></li>"        
+        tblLink = "<li><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t[0] + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>" + t[0] + "</a></li>"        
         print tblLink
     print "</ul><hr>"
     print """<div id="debug"></div>"""
@@ -140,7 +143,8 @@ def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
     where table_name='%s'
     order by ordinal_position"""%(tname)        
     else:
-        mycon = MySQLdb.connect(db=dbName,host=dbHost,port=dbPort,user=dbUser,passwd=passwd)
+        print "before connect"
+        mycon = MySQLdb.connect(db=dbName,host=dbHost,port=int(dbPort),user=dbUser,passwd=passwd)
         qstr = "show columns in " + tname
     curs = mycon.cursor()
     curs.execute(qstr)
@@ -157,10 +161,12 @@ def printScriptTag():
     path = os.getenv("TM_BUNDLE_SUPPORT")
     path = path + '/bin/tableBrowser.py'
     print """<script>
-       function tb(db,tbl,hname,stype,pw) {
-          var cmd = "%s --database=" + db + " --table=" + tbl + " --host=" + hname + " --server=" + stype + " --passwd=" + pw;
+       function tb(db,tbl,hname,stype,pw,dbuser,dbport) {
+          var cmd = "%s --database=" + db + " --table=" + tbl + " --host=" + hname + " --server=" + stype + " --passwd=" + pw + " --user=" + dbuser + " --port=" + dbport;
+          document.getElementById("debug").innerText = cmd;                    
           cmd = cmd.replace(" ","\\\\ ")
           var res = TextMate.system(cmd, null).outputString;
+          document.getElementById("debug").innerText = cmd;                                        
           document.getElementById("result").innerHTML = res;
           window.location.hash = "result";
        }
@@ -171,4 +177,3 @@ def printScriptTag():
 #
 if __name__ == "__main__":
     sys.exit(main())
-

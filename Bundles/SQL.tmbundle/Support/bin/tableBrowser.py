@@ -84,7 +84,7 @@ def main(argv=None):
         if dbHost == None:
             dbHost = os.getenv('MYSQL_HOST','localhost')
         if dbPort == None:
-            dbPort = os.getenv('MYSQL_PORT','3306')
+            dbPort = int(os.getenv('MYSQL_PORT','3306'))
         if dbUser == None:
             dbUser = os.getenv('MYSQL_USER',osuser)
         if passwd == None:

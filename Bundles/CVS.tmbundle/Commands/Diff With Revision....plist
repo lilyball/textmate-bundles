@@ -35,8 +35,15 @@ if [[ $revs = "false" ]]; then
 	osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;	exit_discard
 fi
 
-cd $TM_DIRECTORY &amp;&amp;
-"$TM_CVS" diff -r $revs $TM_FILENAME</string>
+export REVS="$revs"
+"${TM_RUBY:-ruby}" &lt;&lt;'END'
+
+ENV['CVS_PATH'] = ENV['TM_CVS']
+$LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_SUPPORT']
+require 'cvs_diff'
+
+CVS::diff_active_file(ENV['REVS'], "Diff With Revision...")
+END</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

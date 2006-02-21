@@ -19,7 +19,7 @@ module TextMate
 			pipe.puts ""
 			data = block.call
 
-			puts data
+			puts data if data
 
 # 			if data != nil
 # 				File.open(output_filepath, "w") do |file|

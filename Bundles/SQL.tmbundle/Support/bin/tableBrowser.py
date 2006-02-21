@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python
 # encoding: utf-8
 
 import sys
@@ -18,9 +18,7 @@ if '--server=mysql' in sys.argv:
     except:
         print "MySQLdb module is not installed"
 
-# TODO:  Add support for non-standard ports
-# TODO:  Fix default variable processing....
-#
+# TODO:  Add option to view (partial) table contents
 
 
 class Usage(Exception):
@@ -34,16 +32,13 @@ def main(argv=None):
     # set up default values... This only matters for the table listing as 
     # everything we need to know is fully specified on the command line
     # for the column list.
-    user = os.getenv('USER')
-    serverType = os.getenv('TM_DB_SERVER','postgresql')
-    if serverType == 'postgresql':
-        dbName = os.getenv('PGDATABASE',user)
-        dbHost = os.getenv('PGHOST','localhost')        
-    else:
-        dbName = os.getenv('MYSQL_DB',user)
-        dbHost = os.getenv('MYSQL_HOST','localhost')
+    serverType = None
+    dbHost = None
+    dbPort = None
+    dbName = None
     tblName = None
-    passwd = os.getenv('MYSQL_PWD',None)
+    dbUser = None
+    passwd = None        
     try:
         try:
             opts, args = getopt.getopt(argv[1:], "hodtps:v", ["host=", "output=", "database=", "table=", "server=", "passwd="])
@@ -64,27 +59,53 @@ def main(argv=None):
                 serverType = value
             if option in ("-p", "--passwd"):  # useful only for mysql
                 passwd = value
-
-
     except Usage, err:
         print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
         print >> sys.stderr, "\t for help use --help"
         return 2
-        
+
+    # option parsing done, now handle any fallback values for parameters.
+    osuser = os.getenv('USER')
+    serverType = os.getenv('TM_DB_SERVER','postgresql')
+    if serverType == 'postgresql':
+        if dbName == None:
+            dbName = os.getenv('PGDATABASE',osuser)
+        if dbHost == None:
+            dbHost = os.getenv('PGHOST','localhost')
+        if dbPort == None:
+            dbPort = os.getenv('PGPORT','5432')
+        if dbUser == None:
+            dbUser = os.getenv('PGUSER',osuser)
+        if passwd == None:
+            passwd = ""  # postgres password must come from ~/.pgpass file
+    elif serverType == 'mysql':
+        if dbName == None:
+            dbName = os.getenv('MYSQL_DB',osuser)
+        if dbHost == None:
+            dbHost = os.getenv('MYSQL_HOST','localhost')
+        if dbPort == None:
+            dbPort = os.getenv('MYSQL_PORT','3306')
+        if dbUser == None:
+            dbUser = os.getenv('MYSQL_USER',osuser)
+        if passwd == None:
+            passwd = os.getenv('MYSQL_PWD',"")
+    else:
+        print "Error: Unsupport server type: ", serverType
+
     # option parsing done, now start browsing the database.
     if tblName == None:
         printScriptTag()
-        listTables(dbName,dbHost,serverType,passwd)
+        listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser)
     else:
-        listColumns(dbName,dbHost,tblName,serverType,passwd)
+        listColumns(dbName,dbHost,dbPort,tblName,serverType,passwd,dbUser)
 
 
-def listTables(dbName,dbHost,serverType,passwd):
+def listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser):
     if serverType == 'postgresql':
-        mycon = pgdb.connect(database=dbName,host=dbHost)
+        mycon = pgdb.connect(database=dbName,host=dbHost+':'+dbPort,user=dbUser)
         qstr = "select table_name from information_schema.tables where table_schema = 'public'"        
     else:
-        mycon = MySQLdb.connect(db=dbName,host=dbHost,passwd=passwd)
+        mycon = MySQLdb.connect(db=dbName,host=dbHost+':'+dbPort,user=dbUser,passwd=passwd)
         qstr = "show tables"
     curs = mycon.cursor()
     curs.execute(qstr)
@@ -102,7 +123,7 @@ def formatTableList(dbName,dbHost,tList,serverType,passwd):
     print """<div id="result"></div>"""
 
 
-def listColumns(dbName,dbHost,tbl,serverType,passwd):
+def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
     if tbl.find(".") >= 0:
         schema,tname = tbl.split('.')
     else:
@@ -113,13 +134,13 @@ def listColumns(dbName,dbHost,tbl,serverType,passwd):
     order by ordinal_position"""%(tname)
     #for mysql qstr = show columns in <<table>>
     if serverType == 'postgresql':
-        mycon = pgdb.connect(database=dbName,host=dbHost)
+        mycon = pgdb.connect(database=dbName,host=dbHost+':'+dbPort,user=dbUser)
         qstr = """select ordinal_position, column_name, data_type, is_nullable, column_default 
     from information_schema.columns 
     where table_name='%s'
     order by ordinal_position"""%(tname)        
     else:
-        mycon = MySQLdb.connect(db=dbName,host=dbHost,passwd=passwd)
+        mycon = MySQLdb.connect(db=dbName,host=dbHost+':'+dbPort,user=dbUser,passwd=passwd)
         qstr = "show columns in " + tname
     curs = mycon.cursor()
     curs.execute(qstr)

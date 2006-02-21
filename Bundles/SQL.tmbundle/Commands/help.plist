@@ -8,11 +8,15 @@
 	<string>Markdown.pl &lt;&lt;'EOF'
 # Help for the SQL Bundle
 
-## Execute Line / Selection as {MySQL/Postgresql} Query
+## Execute Line / Selection as SQL Query
 
-The _Execute Line / Selection as MySQL Query_ command takes the selected text or current line and submits it as a query to mysql.  It assumes that the `mysql` command line program is already in your `$PATH`.  Using the `--html` flag the output from the query is formated and displayed in an HTML window.
+The _Execute Line / Selection as SQL Query_ command takes the selected text or current line and submits it as a query to either MySQL or PostgreSQL.
 
-The command assumes the following environment variables are properly set:
+You can set `TM_DB_SERVER` to either `mysql` or `postgresql` to select the database software to use. If this variable is unset, the command will check to see if there is either a `mysql` or `psql8` shell command in your path, if only there is one of these, this one will be used, otherwise a dialog will ask you about which database software should be used for the query.
+
+### MySQL
+
+When submitting the query to MySQL, the command assumes the following environment variables are properly set:
 
 * `$MYSQL_USER` — defaults to the value of `$USER`
 * `$MYSQL_PWD ` — no default
@@ -22,21 +26,24 @@ The command assumes the following environment variables are properly set:
 
 These variables may be set in the parent shell of TextMate, global variables in TextMate preferences, or as project local variables.
 
-If you are a Postgres user and have the `psql8` command installed (as from [DarwinPorts](http://darwinports.opendarwin.org/) for example) You can also send commands to postgresql:
+### PostgreSQL
+
+If you are a Postgres user and have the `psql8` command installed (as from [DarwinPorts](http://darwinports.opendarwin.org/) for example) the following variables will be used:
 
 * `$PGUSER` — defaults to the value of `$USER`
 * `$PGHOST` — defaults to localhost if not set
 * `$PGPORT` — defaults to 3306 if not set
 * `$PGDATABASE` — defaults to user
 
-Postgres users should also note that there is not a command line argument to provide your password.  To use Postgresql on a database with a password from TextMate you should set up a `~/.pgpass` file.  This file should contain lines of the following format:
+PostgreSQL users should also note that there is not a command line argument to provide your password.  To use PostgreSQL on a database with a password from TextMate you should set up a `~/.pgpass` file.  This file should contain lines of the following format:
 
 	hostname:port:database:username:password
 
 ## Table Browser
 
-The table browser command displays a list of tables in whatever database you are currently working in using either Postgresql or MySql.  The server used is determined by the value of TM_DB_SERVER, which defaults to Postgresql.
-The current database is specified by either PGDATABASE, or MYSQL_DB.  If neither is set the table browser will default to using your username.  For mysql to work you must have the MYSQL_PWD environment variable set.  For Postgresql you must have an entry in your .pgpass file.
+The table browser command displays a list of tables in whatever database you are currently working in using either PostgreSQL or MySQL.  Which one is determined like with the _Execute Line / Selection as SQL Query_ command.
+
+The current database is specified by either `PGDATABASE`, or `MYSQL_DB`.  If neither is set the table browser will default to using your username.  For MySQL to work you must have the `MYSQL_PWD` environment variable set.  For PostgreSQL you must have an entry in your `.pgpass` file.
 
 EOF</string>
 	<key>input</key>

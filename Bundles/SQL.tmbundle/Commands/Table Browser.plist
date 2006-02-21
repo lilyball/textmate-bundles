@@ -5,14 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># just to remind you of some useful environment variables
-# see Help / Environment Variables for the full list
-. "${TM_SUPPORT_PATH}/lib/html.sh"
-
-export TM_DB_SERVER=${TM_DB_SERVER:=postgresql}
+	<string>. "${TM_SUPPORT_PATH}/lib/html.sh"
+. "${TM_BUNDLE_SUPPORT}/lib/misc.sh"
 
 htmlHeader "Schema Browser"
-tableBrowser.py --server=$TM_DB_SERVER</string>
+tableBrowser.py --server=$(database_choice)</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

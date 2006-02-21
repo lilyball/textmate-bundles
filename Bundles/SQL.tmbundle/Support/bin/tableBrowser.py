@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # encoding: utf-8
 
 import sys
@@ -6,7 +6,7 @@ import os
 import getopt
 
 # import the right driver based on the command line args. (default to postgres)
-if '--server=postgresql' in sys.argv or True:
+if '--server=postgresql' in sys.argv:
     try:
         import pgdb
     except:

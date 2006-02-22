@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>create_table "${1:table}" do |t|
+    $0
+end
+${2:drop_table "$1"}</string>
+	<key>name</key>
+	<string>Migration Create and Drop Table (mcdt)</string>
+	<key>scope</key>
+	<string></string>
+	<key>tabTrigger</key>
+	<string>mcdt</string>
+	<key>uuid</key>
+	<string>1E16C197-9649-4C7A-98B1-789309430CEE</string>
+</dict>
+</plist>

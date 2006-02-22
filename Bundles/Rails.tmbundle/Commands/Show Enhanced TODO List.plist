@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Credit goes to Brad Miller, the original author of the TODO bundle, as well
+# as Niko for the colors, and Soryu and Allan Odgard for some fixes.
+
+WorkPath="${TM_PROJECT_DIRECTORY:-`dirname "$TM_FILEPATH"`}"
+WorkPath=${WorkPath// /%20} # turn spaces into %20
+export WorkPath
+
+cat &lt;&lt;EOF
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+        "http://www.w3.org/TR/REC-html40/loose.dtd"&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta http-equiv="content-type" content="text/html; charset=UTF-8"&gt;
+		&lt;style type="text/css"&gt;
+ 			body { font: 12px 'Lucida Grande'; }
+			.FIXME   { color:red; }
+ 			.TODO    { color:orange; }
+ 			.CHANGED { color:green; }
+ 		&lt;/style&gt;
+		&lt;script language="JavaScript" type="text/javascript"&gt;
+		&lt;!--
+			function toggleDisplayByClass(t,c,v1,v2) {
+				var elements = document.getElementsByTagName(t);
+				for(var i = 0; i &lt; elements.length; i++){
+					var node = elements.item(i);
+					if(node.className != c)
+						continue;
+					if(node.style.display == v1)
+						node.style.display = v2;
+					else
+						node.style.display = v1;
+				}
+			}
+		--&gt;
+		&lt;/script&gt;
+		&lt;title&gt;Todo List&lt;/title&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+ 		&lt;h1&gt;TODO LIST&lt;/h1&gt;
+		&lt;button type="button" style="background-color:#af9" onClick='toggleDisplayByClass("li","CHANGED","none", "list-item");'&gt;
+			Toggle CHANGED
+		&lt;/button&gt;
+		&amp;nbsp;&amp;nbsp;
+		&lt;button type="button" style="background-color:#fc0" onClick='toggleDisplayByClass("li","TODO","none", "list-item");'&gt;
+			Toggle TODO
+		&lt;/button&gt;
+		&amp;nbsp;&amp;nbsp;
+		&lt;button type="button" style="background-color:#f33" onClick='toggleDisplayByClass("li","FIXME","none", "list-item");'&gt;
+			Toggle FIXME
+		&lt;/button&gt;
+		
+
+		&lt;ul&gt;
+EOF
+
+# NOTE: The following 'find' command skips everything in the
+# vendor/, bundles/ and engine_files/ directories.
+
+cd "${TM_PROJECT_DIRECTORY:-`dirname "$TM_FILEPATH"`}"
+find . -name '.svn' -type d -prune -or -name 'vendor' -type d -prune -or -name 'bundles' -type d -prune -or -name 'engine_files' -type d -prune -or -type f -exec grep -HnwE "TODO|FIXME|FIX ME|CHANGED" '{}' \; | perl -pe '$|=1; s/&amp;/&amp;amp;/g; s/&lt;/&amp;lt;/g; s/&gt;/&amp;gt;/g; s!(.*?):(.*?):.*?(TODO|FIXME|CHANGED)[:,]?(.*)$!&lt;li class="$3"&gt; $1: &lt;a class="$3" href="txmt://open?url=file://$ENV{'WorkPath'}/$1&amp;amp;line=$2"&gt;$3: $4&lt;/a&gt;&lt;/li&gt;!'
+
+echo "&lt;/ul&gt;&lt;/body&gt;"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^T</string>
+	<key>name</key>
+	<string>Show Enhanced TODO List</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>7F64FC7D-8C06-4957-980C-4E63FFF515A3</string>
+</dict>
+</plist>

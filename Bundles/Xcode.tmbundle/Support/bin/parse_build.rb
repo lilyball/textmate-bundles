@@ -65,6 +65,8 @@ MethodTypeMap = {
 	'DataModelCompile'		=> ['Compiling', 1],
 	'CompileC'				=> ['Compiling', 1],
 	'OSACompile'			=> ['Compiling', 1],
+	
+	'CreateUniversalBinary' => ['Creating universal binary', 0],
 	'Ld'					=> ['Linking', 0],
 	'PhaseScriptExecution'	=> ['Running script', 0],
 	'Libtool'				=> ['Creating library', 0],

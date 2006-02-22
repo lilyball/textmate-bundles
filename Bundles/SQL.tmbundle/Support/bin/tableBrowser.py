@@ -59,9 +59,9 @@ def main(argv=None):
                 serverType = value
             if option in ("-p", "--passwd"):  # useful only for mysql
                 passwd = value
-            if option in ("-u", "--user"):  # useful only for mysql
+            if option in ("-u", "--user"):  
                 dbUser = value
-            if option in ("-n", "--port"):  # useful only for mysql
+            if option in ("-n", "--port"):  
                 dbPort = value
     except Usage, err:
         print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
@@ -96,6 +96,8 @@ def main(argv=None):
         print "Error: Unsupport server type: ", serverType
 
     # option parsing done, now start browsing the database.
+    # listDatabases()
+    
     if tblName == None:
         printScriptTag()
         listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser)
@@ -116,6 +118,8 @@ def listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser):
     formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort)
     
 def formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort):
+
+    print '<div id="main">'
     print "<h2>Tables in database: "+dbName+"</h2>"
     print "<ul class='tableList'>"
     for t in tList:
@@ -124,6 +128,7 @@ def formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort):
     print "</ul><hr>"
     print """<div id="debug"></div>"""
     print """<div id="result"></div>"""
+    print '</div>'
 
 
 def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
@@ -143,14 +148,13 @@ def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
     where table_name='%s'
     order by ordinal_position"""%(tname)        
     else:
-        print "before connect"
         mycon = MySQLdb.connect(db=dbName,host=dbHost,port=int(dbPort),user=dbUser,passwd=passwd)
         qstr = "show columns in " + tname
     curs = mycon.cursor()
     curs.execute(qstr)
     resList = curs.fetchall()    
     print "<h2>Columns in table: " + tbl + "</h2>"
-    print "<table width='75%'>"
+    print "<table width='75%' class='graybox' cellspacing='0' cellpadding='5'>"
     print "<tr><th align='left'>Name</th><th align='left'>Type</th><th align='left'>Nullable</th><th align='left'>Default</th></tr>"
     for row in resList:
         print "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"%(row[1],row[2],row[3],row[4])
@@ -163,15 +167,23 @@ def printScriptTag():
     print """<script>
        function tb(db,tbl,hname,stype,pw,dbuser,dbport) {
           var cmd = "%s --database=" + db + " --table=" + tbl + " --host=" + hname + " --server=" + stype + " --passwd=" + pw + " --user=" + dbuser + " --port=" + dbport;
-          document.getElementById("debug").innerText = cmd;                    
           cmd = cmd.replace(" ","\\\\ ")
           var res = TextMate.system(cmd, null).outputString;
-          document.getElementById("debug").innerText = cmd;                                        
           document.getElementById("result").innerHTML = res;
           window.location.hash = "result";
        }
     </script>"""%(path)
-
+    
+def listDatabases(serverType):
+    print '<div id="dbbar">'
+    if serverType == 'postgresql':
+        dbList = os.popen('psql8 -l --html')
+    else:
+        dbList = os.popen("mysql  -e 'show databases' -p --html")
+    for i in dbList:
+        print i
+    print '</div>'        
+    
 #           <div id="debug"></div>
 #          document.getElementById("debug").innerText = cmd;                    
 #

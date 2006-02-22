@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>/* ${4:Send $2 to $1, if it supports it.} */
+	<string>${TM_COMMENT_START} ${4:Send $2 to $1, if $1 supports it}${TM_COMMENT_END}
 if ([${1:self} respondsToSelector:@selector(${2:someSelector:})])
 {
     [$1 ${3:${2/((:\s*$)|(:\s*))/:&lt;&gt;(?3: )/g}}];

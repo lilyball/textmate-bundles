@@ -18,15 +18,23 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>(\|)</string>
+			<string>\|</string>
 			<key>name</key>
 			<string>keyword.operator.regexp</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(\\[bBAZzG]|\^|\$)</string>
+			<string>\\[bBAZzG^$]</string>
 			<key>name</key>
 			<string>keyword.control.anchors.regexp</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#character_class</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#escaped_char</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -39,7 +47,11 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#keyword.control.character-class.regexp</string>
+					<string>#character_class</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -58,10 +70,12 @@
 		<dict>
 			<key>begin</key>
 			<string>\(</string>
+			<key>comment</key>
+			<string>I disagree on the name here, but it has been this way for a while</string>
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>string.unquoted.regexp</string>
+			<string>string.quoted.regexp</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -83,10 +97,6 @@
 			</array>
 		</dict>
 		<dict>
-			<key>include</key>
-			<string>#keyword.control.character-class.regexp</string>
-		</dict>
-		<dict>
 			<key>match</key>
 			<string>\\(\n\d+|\k\w+|(?&lt;!\|)\g\w+)</string>
 			<key>name</key>
@@ -104,21 +114,24 @@
 			<key>name</key>
 			<string>keyword.function.method.quantifier.regexp</string>
 		</dict>
-		<dict>
-			<key>comment</key>
-			<string>double backslash</string>
-			<key>match</key>
-			<string>\\\\</string>
-			<key>name</key>
-			<string>string.quoted.single.regexp</string>
-		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>keyword.control.character-class.regexp</key>
+		<key>character_class</key>
 		<dict>
 			<key>match</key>
-			<string>\\([wWsSdDhH])</string>
+			<string>\\[wWsSdDhH]</string>
+			<key>name</key>
+			<string>keyword.control.character-class.regexp</string>
+		</dict>
+		<key>escaped_char</key>
+		<dict>
+			<key>comment</key>
+			<string>escaped character</string>
+			<key>match</key>
+			<string>\\.</string>
+			<key>name</key>
+			<string>constant.character.escaped.regexp</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>

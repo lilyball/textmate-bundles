@@ -17,12 +17,7 @@ module CVS
     end
     
     def status
-      case cvs :status
-      when /Status: Up-to-date/i then       :current
-      when /Status: Locally Modified/i then :modified
-      when /Status: Locally Added/i then    :added
-      when /Status: Needs Merge/i then      :stale
-      end
+      status_from_line cvs(:update, :pretend => true, :quiet => true)
     end
     
     def revision
@@ -48,8 +43,23 @@ module CVS
       cvs(:update, "-p -r #{expand_revision(revision)}")
     end
     
-    def cvs(command, options='')
-      %x{cd "#{dirname}"; "#{CVS_PATH}" #{command} #{options} "#{basename}"}
+    def commit(options={})
+      options = options.dup
+      options[:command_options] = "-m '#{options.delete(:message).gsub(/'/, "\\'")}'" if options.key?(:message)
+      cvs(:commit, options)
+    end
+    
+    def cvs(command, options={})
+      options = {:command_options => options} if options.is_a? String
+      cvs_options = [options[:cvs_options]].flatten.compact
+      cvs_options << '-n' if options[:pretend]
+      cvs_options << '-q' if options[:quiet]
+      cvs_options << '-Q' if options[:silent]
+      cvs_options = cvs_options.join(' ')
+      
+      files = options[:files] || [basename]
+      files = files.map { |file| %("#{file.gsub(/"/, '\\"')}") }.join(' ')
+      %x{cd "#{dirname}"; "#{CVS_PATH}" #{cvs_options} #{command} #{options[:command_options]} #{files} 2> /dev/null}
     end
 
     %w(status revisions diff revision version cvs).each do |method|
@@ -65,6 +75,18 @@ module CVS
       when :prev then revisions[revisions.index(self.revision)+1] rescue nil
       else revision
       end
+    end
+    
+    def status_from_line(line)
+      case line
+      when /^(U|P) /i then :stale
+      when /^A /i then     :added
+      when /^M /i then     :modified
+      when /^C /i then     :conflicted
+      when /^\? /i then    :unknown
+      when /^R /i then     :removed
+      else                 :current
+      end      
     end
   end
 end

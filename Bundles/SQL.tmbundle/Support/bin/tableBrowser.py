@@ -4,6 +4,7 @@
 import sys
 import os
 import getopt
+import re
 
 # import the right driver based on the command line args. (default to postgres)
 if '--server=postgresql' in sys.argv:
@@ -19,7 +20,7 @@ if '--server=mysql' in sys.argv:
         print "MySQLdb module is not installed"
 
 # TODO:  Add option to view (partial) table contents
-
+# TODO:  How to replace the original table list with a new one....
 
 class Usage(Exception):
     def __init__(self, msg):
@@ -100,6 +101,16 @@ def main(argv=None):
     
     if tblName == None:
         printScriptTag()
+        listDatabases(dbHost,dbPort,serverType,passwd,dbUser)
+        print '<div id="main">'
+        print '<div id="tablist">'
+        listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser)
+        print '</div>'
+        print """<div id="debug"></div>"""
+        print """<div id="result"></div>"""
+        print """<div id="tablist"></div>"""
+        print '</div>'
+    elif tblName == '__none__':
         listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser)
     else:
         listColumns(dbName,dbHost,dbPort,tblName,serverType,passwd,dbUser)
@@ -116,19 +127,15 @@ def listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser):
     curs.execute(qstr)
     tList = curs.fetchall()
     formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort)
-    
-def formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort):
 
-    print '<div id="main">'
+# TODO rewrite formatTableLilst to remove all the divs...    
+def formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort):
     print "<h2>Tables in database: "+dbName+"</h2>"
     print "<ul class='tableList'>"
     for t in tList:
         tblLink = "<li><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t[0] + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>" + t[0] + "</a></li>"        
         print tblLink
     print "</ul><hr>"
-    print """<div id="debug"></div>"""
-    print """<div id="result"></div>"""
-    print '</div>'
 
 
 def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
@@ -169,21 +176,51 @@ def printScriptTag():
           var cmd = "%s --database=" + db + " --table=" + tbl + " --host=" + hname + " --server=" + stype + " --passwd=" + pw + " --user=" + dbuser + " --port=" + dbport;
           cmd = cmd.replace(" ","\\\\ ")
           var res = TextMate.system(cmd, null).outputString;
-          document.getElementById("result").innerHTML = res;
+          if(tbl == '__none__') {
+             document.getElementById("tablist").innerHTML = res;
+          } else {
+             document.getElementById("result").innerHTML = res;
+             }
           window.location.hash = "result";
        }
     </script>"""%(path)
-    
-def listDatabases(serverType):
+
+def listDatabases(dbHost,dbPort,serverType,passwd,dbUser):
     print '<div id="dbbar">'
     if serverType == 'postgresql':
-        dbList = os.popen('psql8 -l --html')
+        dbList = os.popen('psql8 -l --host=' + dbHost + ' --port=' + dbPort + ' --user=' + dbUser + ' --html')
+        i = dbList.readline()
+        while i:
+            if re.match('<table',i):
+                print """<table class="graybox" cellspacing='0' cellpadding='5'> """
+            elif re.search('rows\)',i):
+                pass
+            elif re.search('<tr valign',i):  # start of a row
+                print i
+                i = dbList.readline()
+                x = re.match('\s+(<td align=.*?>)(.*?)(</td>)',i)
+                dbLink = "<a href='javascript:tb(" +"%22" + x.group(2) +"%22,%22" + '__none__' + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>"
+                print x.group(1) + dbLink + x.group(2) + "</a>" + x.group(3)
+            else:
+                print i
+            i = dbList.readline()
     else:
-        dbList = os.popen("mysql  -e 'show databases' -p --html")
-    for i in dbList:
-        print i
-    print '</div>'        
-    
+        dbList = os.popen("mysql  -e 'show databases' --host=" + dbHost + " --port=" + str(dbPort) + " --user=" + dbUser + " --password="+passwd+" --xml")
+        print """<table class="graybox" cellspacing='0' cellpadding='5'>"""
+        for i in dbList:
+            if re.search('<row>',i):
+                print """<tr><td>"""
+            elif re.search('</row>',i):
+                print """</td></tr>"""
+            elif re.search('<Database>',i):
+                x = re.match('\s+(<Database>)(.*?)(</Database>)',i)
+                dbLink = "<a href='javascript:tb(" +"%22" + x.group(2) +"%22,%22" + '__none__' + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>"
+                print dbLink + x.group(2) + "</a>"
+            else:
+                pass
+        print """</table>"""
+    print '</div>'
+
 #           <div id="debug"></div>
 #          document.getElementById("debug").innerText = cmd;                    
 #

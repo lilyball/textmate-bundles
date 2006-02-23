@@ -217,8 +217,8 @@ def listDatabases(dbHost,dbPort,serverType,passwd,dbUser):
                 print """<tr><td>"""
             elif re.search('</row>',i):
                 print """</td></tr>"""
-            elif re.search('<Database>',i):
-                x = re.match('\s+(<Database>)(.*?)(</Database>)',i)
+            elif re.search('<Database>|<field name',i):
+                x = re.match('\s+(<Database>|<field name=.*?>)(.*?)(</Database>|</field>)',i)
                 dbLink = "<a href='javascript:tb(" +"%22" + x.group(2) +"%22,%22" + '__none__' + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>"
                 print dbLink + x.group(2) + "</a>"
             else:

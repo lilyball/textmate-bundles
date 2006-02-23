@@ -193,7 +193,7 @@ def printScriptTag():
 def listDatabases(dbHost,dbPort,serverType,passwd,dbUser):
     print '<div id="dbbar">'
     if serverType == 'postgresql':
-        dbList = os.popen('psql8 -l --host=' + dbHost + ' --port=' + dbPort + ' --user=' + dbUser + ' --html')
+        dbList = os.popen('psql -l --host=' + dbHost + ' --port=' + dbPort + ' --user=' + dbUser + ' --html')
         i = dbList.readline()
         while i:
             if re.match('<table',i):

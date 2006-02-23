@@ -143,6 +143,9 @@ def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
         schema,tname = tbl.split('.')
     else:
         tname = tbl
+    print "<h2>Columns in table: " + tbl + "</h2>"
+    print "<table width='75%' class='graybox' cellspacing='0' cellpadding='5'>"
+    print "<tr><th align='left'>Name</th><th align='left'>Type</th><th align='left'>Nullable</th><th align='left'>Default</th></tr>"
     qstr = """select ordinal_position, column_name, data_type, is_nullable, column_default 
     from information_schema.columns 
     where table_name='%s'
@@ -151,20 +154,22 @@ def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
     if serverType == 'postgresql':
         mycon = pgdb.connect(database=dbName,host=dbHost+':'+dbPort,user=dbUser)
         qstr = """select ordinal_position, column_name, data_type, is_nullable, column_default 
-    from information_schema.columns 
-    where table_name='%s'
-    order by ordinal_position"""%(tname)        
+                 from information_schema.columns 
+                 where table_name='%s'
+                 order by ordinal_position"""%(tname)        
+        curs = mycon.cursor()
+        curs.execute(qstr)
+        resList = curs.fetchall()    
+        for row in resList:
+            print "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"%(row[1],row[2],row[3],row[4])
     else:
         mycon = MySQLdb.connect(db=dbName,host=dbHost,port=int(dbPort),user=dbUser,passwd=passwd)
         qstr = "show columns in " + tname
-    curs = mycon.cursor()
-    curs.execute(qstr)
-    resList = curs.fetchall()    
-    print "<h2>Columns in table: " + tbl + "</h2>"
-    print "<table width='75%' class='graybox' cellspacing='0' cellpadding='5'>"
-    print "<tr><th align='left'>Name</th><th align='left'>Type</th><th align='left'>Nullable</th><th align='left'>Default</th></tr>"
-    for row in resList:
-        print "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"%(row[1],row[2],row[3],row[4])
+        curs = mycon.cursor()
+        curs.execute(qstr)
+        resList = curs.fetchall()  
+        for row in resList:
+            print "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"%(row[0],row[1],row[2],row[4])
     print "</table>"  
 
 

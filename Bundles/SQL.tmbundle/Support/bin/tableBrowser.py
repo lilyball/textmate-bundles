@@ -7,7 +7,7 @@ import getopt
 import re
 
 # import the right driver based on the command line args. (default to postgres)
-if '--server=postgresql' in sys.argv or True:
+if '--server=postgresql' in sys.argv:
     try:
         import pgdb
     except:

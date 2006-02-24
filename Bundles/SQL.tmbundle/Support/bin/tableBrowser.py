@@ -264,7 +264,7 @@ def printData(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
     for row in resList:
         print "<tr>"
         for col in row:
-            print "<td>%s</td>"%(col)
+            print "<td>%s</td>"%(str(col)[0:30])
         print "</tr>"
     print "</table>"
 #           <div id="debug"></div>

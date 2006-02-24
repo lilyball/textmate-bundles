@@ -137,13 +137,12 @@ def listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser):
 # TODO rewrite formatTableLilst to remove all the divs...    
 def formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort):
     print "<h2>Tables in database: "+dbName+"</h2>"
-    print "<table class='graybox' cellspacing='0' cellpadding='5' width=50%>"
+    print "<ul class='tableList'>"
     for t in tList:
-        print """<tr><td>%s</td>"""%(t[0])
-        tblLink = "<td><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t[0] + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>  show columns </a></td>"        
+        tblLink = "<li><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t[0] + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>" + t[0] + "</a></li>"
         print tblLink
 #        print  """<td>show data</td></tr>"""
-    print "</table>"
+    print "</ul>"
     print "<hr>"
 
 
@@ -170,7 +169,7 @@ def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
         curs.execute(qstr)
         resList = curs.fetchall()    
         for row in resList:
-            print "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"%(row[1],row[2],row[3],row[4])
+            print "<tr><td>%s</td><td class=\"datatype\">%s</td><td>%s</td><td>%s</td></tr>"%(row[1],row[2],row[3],row[4])
     else:
         mycon = MySQLdb.connect(db=dbName,host=dbHost,port=int(dbPort),user=dbUser,passwd=passwd)
         qstr = "show columns in " + tname
@@ -178,7 +177,7 @@ def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
         curs.execute(qstr)
         resList = curs.fetchall()  
         for row in resList:
-            print "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"%(row[0],row[1],row[2],row[4])
+            print "<tr><td>%s</td><td class=\"datatype\">%s</td><td>%s</td><td>%s</td></tr>"%(row[0],row[1],row[2],row[4])
     print "</table>"  
 
 

@@ -183,6 +183,7 @@ def printScriptTag():
           var res = TextMate.system(cmd, null).outputString;
           if(tbl == '__none__') {
              document.getElementById("tablist").innerHTML = res;
+             document.getElementById("result").innerHTML = "";             
           } else {
              document.getElementById("result").innerHTML = res;
              }

@@ -7,7 +7,7 @@ import getopt
 import re
 
 # import the right driver based on the command line args. (default to postgres)
-if '--server=postgresql' in sys.argv:
+if '--server=postgresql' in sys.argv or True:
     try:
         import pgdb
     except:
@@ -39,10 +39,11 @@ def main(argv=None):
     dbName = None
     tblName = None
     dbUser = None
-    passwd = None        
+    passwd = None   
+    showData = False     
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "hodtpsnu:v", ["host=", "output=", "database=", "table=", "server=", "passwd=", "user=", "port="])
+            opts, args = getopt.getopt(argv[1:], "hodtpsnu:vd", ["host=", "output=", "database=", "table=", "server=", "passwd=", "user=", "port="])
         except getopt.error, msg:
             raise Usage(msg)
     
@@ -50,6 +51,8 @@ def main(argv=None):
         for option, value in opts:
             if option == "-v":
                 verbose = True
+            if option == "-d":
+                showData = True
             if option in ("-h", "--host"):
                 dbHost = value
             if option in ("-d", "--database"):
@@ -98,7 +101,6 @@ def main(argv=None):
 
     # option parsing done, now start browsing the database.
     # listDatabases()
-    
     if tblName == None:
         printScriptTag()
         listDatabases(dbHost,dbPort,serverType,passwd,dbUser)
@@ -109,11 +111,15 @@ def main(argv=None):
         print """<div id="debug"></div>"""
         print """<div id="result"></div>"""
         print """<div id="tablist"></div>"""
+        print """<div id="sampleData"></div>"""        
         print '</div>'
+    elif showData == True:
+        printData(dbName,dbHost,dbPort,tblName,serverType,passwd,dbUser)
     elif tblName == '__none__':
         listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser)
     else:
         listColumns(dbName,dbHost,dbPort,tblName,serverType,passwd,dbUser)
+        printData(dbName,dbHost,dbPort,tblName,serverType,passwd,dbUser)        
 
 
 def listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser):
@@ -131,11 +137,14 @@ def listTables(dbName,dbHost,dbPort,serverType,passwd,dbUser):
 # TODO rewrite formatTableLilst to remove all the divs...    
 def formatTableList(dbName,dbHost,tList,serverType,passwd,dbUser,dbPort):
     print "<h2>Tables in database: "+dbName+"</h2>"
-    print "<ul class='tableList'>"
+    print "<table class='graybox' cellspacing='0' cellpadding='5' width=50%>"
     for t in tList:
-        tblLink = "<li><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t[0] + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>" + t[0] + "</a></li>"        
+        print """<tr><td>%s</td>"""%(t[0])
+        tblLink = "<td><a href='javascript:tb(" +"%22" + dbName +"%22,%22" + t[0] + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>  show columns </a></td>"        
         print tblLink
-    print "</ul><hr>"
+#        print  """<td>show data</td></tr>"""
+    print "</table>"
+    print "<hr>"
 
 
 def listColumns(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
@@ -193,6 +202,7 @@ def printScriptTag():
 
 def listDatabases(dbHost,dbPort,serverType,passwd,dbUser):
     print '<div id="dbbar">'
+    print '<h2 align="center">Databases</h2>'
     if serverType == 'postgresql':
         dbList = os.popen('psql -l --host=' + dbHost + ' --port=' + dbPort + ' --user=' + dbUser + ' --html')
         i = dbList.readline()
@@ -207,6 +217,8 @@ def listDatabases(dbHost,dbPort,serverType,passwd,dbUser):
                 x = re.match('\s+(<td align=.*?>)(.*?)(</td>)',i)
                 dbLink = "<a href='javascript:tb(" +"%22" + x.group(2) +"%22,%22" + '__none__' + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>"
                 print x.group(1) + dbLink + x.group(2) + "</a>" + x.group(3)
+            elif re.search('List of databases',i):
+                pass
             else:
                 print i
             i = dbList.readline()
@@ -226,7 +238,35 @@ def listDatabases(dbHost,dbPort,serverType,passwd,dbUser):
                 pass
         print """</table>"""
     print '</div>'
-
+    
+def printData(dbName,dbHost,dbPort,tbl,serverType,passwd,dbUser):
+    if tbl.find(".") >= 0:
+        schema,tname = tbl.split('.')
+    else:
+        tname = tbl
+    print "<h2>Sample of Data in: " + tbl + "</h2>"
+    print "<table class='graybox' cellspacing='0' cellpadding='5'>"
+    #for mysql qstr = show columns in <<table>>
+    if serverType == 'postgresql':
+        mycon = pgdb.connect(database=dbName,host=dbHost+':'+dbPort,user=dbUser)
+    else:
+        mycon = MySQLdb.connect(db=dbName,host=dbHost,port=int(dbPort),user=dbUser,passwd=passwd)
+    qstr = """select * 
+    from %s
+    limit 10"""%(tname)
+    curs = mycon.cursor()
+    curs.execute(qstr)
+    resList = curs.fetchall() 
+    print "<tr>"
+    for col in curs.description:
+        print "<th>%s</th>"%(col[0])
+    print "</tr>"
+    for row in resList:
+        print "<tr>"
+        for col in row:
+            print "<td>%s</td>"%(col)
+        print "</tr>"
+    print "</table>"
 #           <div id="debug"></div>
 #          document.getElementById("debug").innerText = cmd;                    
 #

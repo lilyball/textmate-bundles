@@ -195,7 +195,7 @@ def printScriptTag():
           } else {
              document.getElementById("result").innerHTML = res;
              }
-          window.location.hash = "result";
+          
        }
     </script>"""%(path)
 

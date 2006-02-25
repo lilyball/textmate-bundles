@@ -108,6 +108,7 @@ class RailsPath
     @file_type =
       case @filepath
       when %r{/controllers/(.+_controller\.(rb))$}   then :controller
+      when %r{/controllers/(application\.(rb))$}     then :controller
       when %r{/helpers/(.+_helper\.rb)$}             then :helper
       when %r{/views/(.+\.(rhtml|rxml|rxhtml|rjs))$} then :view
       when %r{/models/(.+\.(rb))$}                   then :model
@@ -173,10 +174,16 @@ class RailsPath
   
   def rails_path_for(type)
     return rails_path_for_view if type == :view
-    RailsPath.new(File.join(rails_root, stubs[type], modules, controller_name_modified_for(type) + default_extension_for(type)))
+    if TextMate.project_directory
+      RailsPath.new(File.join(rails_root, stubs[type], modules, controller_name_modified_for(type) + default_extension_for(type)))
+    else
+      puts "There needs to be a project associated with this file."
+    end
   end
   
   def rails_path_for_view
+    return nil if action_name.nil?
+    
     # Look for a view file with any of the following extensions
     candidate_extensions = %w(rhtml rxhtml rxml rjs)
     file_exists = false

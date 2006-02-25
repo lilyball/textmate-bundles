@@ -51,7 +51,7 @@ case TextMate.current_line
         TextMate.open(current_file, search[1])
       end
     else
-      print "Don't know where to go when rendering an action from outside a controller"
+      puts "Don't know where to go when rendering an action from outside a controller"
       exit
     end
 
@@ -62,7 +62,7 @@ case TextMate.current_line
     action = $1 if TextMate.current_line =~ /.*:action\s*=>\s*['"](.+?)['"]/
 
     unless current_file.file_type == :controller
-      print "Don't know where to go when redirecting from outside a controller"
+      puts "Don't know where to go when redirecting from outside a controller"
       exit
     end
     
@@ -82,7 +82,7 @@ case TextMate.current_line
     if search = controller_file.buffer.find(:direction => :backwards) { /def\s+#{action}\b/ }
       TextMate.open(controller_file, search[1])
     else
-      print "Couldn't find the #{action} action inside '#{controller_file.basename}'"
+      puts "Couldn't find the #{action} action inside '#{controller_file.basename}'"
       exit
     end
 
@@ -106,7 +106,7 @@ case TextMate.current_line
       public_file = javascript[0..0] == "/" ? javascript[1..-1] : "javascripts/#{javascript}"
       TextMate.open File.join(current_file.rails_root, 'public', public_file)
     else
-      print "No javascript identified"
+      puts "No javascript identified"
     end
 
   # Example: <link href="/stylesheets/application.css">
@@ -129,10 +129,10 @@ case TextMate.current_line
       public_file = stylesheet[0..0] == "/" ? stylesheet[1..-1] : "stylesheets/#{stylesheet}"
       TextMate.open File.join(current_file.rails_root, 'public', public_file)
     else
-      print "No stylesheet identified"
+      puts "No stylesheet identified"
     end
   
   else
-    print "No 'go to file' directives found on this line."
+    puts "No 'go to file' directives found on this line."
     # Do nothing -- beep?
 end

@@ -51,11 +51,15 @@ module TextMate
     def column_number
       env(:column_number).to_i - 1
     end
+
+    def project_directory
+      env(:project_directory)
+    end
     
     def env(var)
       ENV['TM_' + var.to_s.upcase]
     end
-
+    
     # Forward to the TM_* environment variables if method is missing.  Some useful variables include:
     #   selected_text, current_line, column_number, line_number, support_path
     def method_missing(method, *args)

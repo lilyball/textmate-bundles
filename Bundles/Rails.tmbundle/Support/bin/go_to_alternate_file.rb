@@ -13,7 +13,18 @@ require 'rails_bundle_tools'
 current_file = RailsPath.new
 
 if ARGV.empty?
-  choice = current_file.associations[current_file.file_type].first
+  # Best match
+  choice = 
+    case current_file.file_type
+    when :controller
+      if current_file.action_name
+        :view
+      else
+        :functional_test
+      end
+    else
+      current_file.associations[current_file.file_type].first
+    end
 else
   choice = ARGV.shift
 end
@@ -21,5 +32,5 @@ end
 if rails_path = current_file.rails_path_for(choice.to_sym)
   TextMate.open rails_path
 else
-  print "#{current_file.basename} does not have a #{choice}"
+  puts "#{current_file.basename} does not have a #{choice}"
 end

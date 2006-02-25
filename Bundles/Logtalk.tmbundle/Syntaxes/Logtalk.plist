@@ -1,159 +1,310 @@
-/**
- ** Logtalk syntax dictionary for TextMate.
- **
- ** Paulo Moura <pmoura@logtalk.org>
- **/
-
-{
-    name = "Logtalk"; 
-    scopeName = "source.logtalk";
-
-    fileTypes = (lgt, config); 
-
-    foldingStartMarker = "(/\\*|:-\\s+(object|protocol|category)(?=[(]))"; 
-    foldingStopMarker = "(\\*/|:-\\s+end_(object|protocol|category)(?=[.]))"; 
-
-    patterns = (
-        {   name = "comment.block.logtalk"; 
-            begin = "/\\*"; end = "\\*/"; 
-        }, 
-        {   name = "comment.line.percentage.logtalk"; 
-            match = "%.*$"; 
-        }, 
-        {   name = "storage.type.opening.logtalk"; 
-            match = ":-\\s+(object|protocol|category|module)(?=[(])"; 
-        }, 
-        {
-            name = "storage.type.closing.logtalk"; 
-            match = ":-\\s+(end_(object|protocol|category))(?=[.])"; 
-        }, 
-        {   name = "storage.type.relations.logtalk"; 
-            match = "\\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])"; 
-        }, 
-        {   name = "storage.modifier.others.logtalk"; 
-            match = ":-\\s+(calls|e(ncoding|xport)|in(itialization|fo)|uses)(?=[(])"; 
-        }, 
-        {   name = "storage.modifier.others.logtalk"; 
-            match = ":-\\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|use(s|_module))(?=[(])"; 
-        }, 
-        {   name = "keyword.operator.message-sending.logtalk"; 
-            match = "(::|\\^\\^)"; 
-        }, 
-        {   name = "keyword.operator.mode.logtalk"; 
-            match = "(\\?|@)"; 
-        }, 
-        {   name = "keyword.operator.term-comparison.logtalk"; 
-            match = "(@=<|@<|@>|@>=|==|\\\\==)"; 
-        }, 
-        {   name = "keyword.operator.arithmetic-comparison.logtalk"; 
-            match = "(=<|<|>|>=|=:=|=\\\\=)"; 
-        }, 
-        {   name = "keyword.operator.bitwise.logtalk"; 
-            match = "(<<|>>|/\\\\|\\\\/|\\\\)"; 
-        }, 
-        {   name = "keyword.operator.evaluable.logtalk"; 
-            match = "\\b(mod|rem)\\b"; 
-        }, 
-        {   name = "keyword.operator.evaluable.logtalk"; 
-            match = "(\\*\\*|\\+|-|\\*|/|//)"; 
-        }, 
-        {   name = "keyword.operator.misc.logtalk"; 
-            match = "(:-|!|\\\\+|,|;|-->|->|=|\\=|\\.|=\\.\\.|\\bis\\b)"; 
-        }, 
-        {   name = "support.function.control.logtalk"; 
-            match = "\\b(true|fail|repeat)\\b"; 
-        }, 
-        {   name = "support.function.control.logtalk"; 
-            match = "\\b(ca(ll|tch)|throw|once)(?=[(])"; 
-        }, 
-        {   name = "support.function.chars-and-bytes-io.logtalk"; 
-            match = "\\b((get|peek|put)_(char|code|byte)|nl)(?=[(])"; 
-        }, 
-        {   name = "support.function.chars-and-bytes-io.logtalk"; 
-            match = "\\bnl\\b"; 
-        }, 
-        {   name = "support.function.atom-term-processing.logtalk"; 
-            match = "\\b(atom_(length|c(hars|o(ncat|des)))|sub_atom|char_code|number_c(hars|odes))(?=[(])"; 
-        }, 
-        {   name = "support.function.term-testing.logtalk"; 
-            match = "\\b(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])"; 
-        }, 
-        {   name = "support.function.term-io.logtalk"; 
-            match = "\\b(read_term|read|write|write(q|_(canonical|term))|op|current_op|char_conversion|current_char_conversion)(?=[(])"; 
-        }, 
-        {   name = "support.function.term-creation-and-decomposition.logtalk"; 
-            match = "\\b(arg|copy_term|functor)(?=[(])"; 
-        }, 
-        {   name = "support.function.term-unification.logtalk"; 
-            match = "\\b(unify_with_occurs_check)(?=[(])"; 
-        }, 
-        {   name = "support.function.stream-selection-and-control.logtalk"; 
-            match = "\\b((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])"; 
-        }, 
-        {   name = "support.function.stream-selection-and-control.logtalk"; 
-            match = "\\b(flush_output|at_end_of_stream)\\b"; 
-        }, 
-        {   name = "support.function.prolog-flags.logtalk"; 
-            match = "\\b((set|current)_prolog_flag)(?=[(])"; 
-        }, 
-        {   name = "support.function.compiling-and-loading.logtalk"; 
-            match = "\\b(logtalk_(compile|l(ibrary_path|oad)))(?=[(])"; 
-        }, 
-        {   name = "support.function.event-handling.logtalk"; 
-            match = "\\b((abolish|define)_events|current_event)(?=[(])"; 
-        }, 
-        {   name = "support.function.implementation-defined-hooks.logtalk"; 
-            match = "\\b((current|set)_logtalk_flag|halt)(?=[(])"; 
-        }, 
-        {   name = "support.function.implementation-defined-hooks.logtalk"; 
-            match = "\\b(halt)\\b"; 
-        }, 
-        {   name = "support.function.entity-creation-and-abolishing.logtalk"; 
-            match = "\\b((c(reate|urrent)|abolish)_(object|protocol|category))(?=[(])"; 
-        }, 
-        {   name = "keyword.other.predicate.reflection.logtalk"; 
-            match = "\\b((object|protocol|category)_property|extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])"; 
-        }, 
-        {   name = "support.function.logtalk"; 
-            match = "\\b((for|retract)all)(?=[(])"; 
-        }, 
-        {   name = "support.function.execution-context.logtalk"; 
-            match = "\\b(parameter|se(lf|nder)|this)(?=[(])"; 
-        }, 
-        {   name = "support.function.database.logtalk"; 
-            match = "\\b(a(bolish|ssert(a|z))|clause|retract|retractall)(?=[(])"; 
-        }, 
-        {   name = "support.function.all-solutions.logtalk"; 
-            match = "\\b((bag|set)of|f(ind|or)all)(?=[(])"; 
-        },
-        {   name = "support.function.reflection.logtalk"; 
-            match = "\\b(current_predicate|predicate_property)(?=[(])"; 
-        },
-        {   name = "support.function.event-handler.logtalk"; 
-            match = "\\b(before|after)(?=[(])"; 
-        },
-        {   name = "support.function.grammar-rule.logtalk"; 
-            match = "\\b(expand_term|phrase)(?=[(])"; 
-        },
-        {   name = "string.quoted.single.logtalk"; 
-            begin = "'"; end = "'"; swallow = "\\\\."; 
-        }, 
-        {   name = "string.quoted.double.logtalk"; 
-            begin = "\""; end = "\""; swallow = "\\\\."; 
-        },
-        {   name = "constant.numeric.logtalk"; 
-            match = "\\b(0b[0-1]+|0o[0-7]+|0x\\h+)\\b"; 
-        },
-        {   name = "constant.numeric.logtalk"; 
-            match = "\\b(0'.|0''|0'\")"; 
-        },
-        {   name = "constant.numeric.logtalk"; 
-            match = "\\b(\\d+\\.?\\d*((e|E)(\\+|-)?\\d+)?)\\b"; 
-        },
-        {   name = "variable.other.logtalk"; 
-            match = "\\b([A-Z_][A-Za-z0-9_]*)\\b"; 
-        }
-    ); 
- 
-    uuid = "C11FA1F2-6EDB-11D9-8798-000A95DAA580"; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>lgt</string>
+		<string>config</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(/\*|:-\s+(object|protocol|category)(?=[(]))</string>
+	<key>foldingStopMarker</key>
+	<string>(\*/|:-\s+end_(object|protocol|category)(?=[.]))</string>
+	<key>name</key>
+	<string>Logtalk</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>%.*$</string>
+			<key>name</key>
+			<string>comment.line.percentage.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>:-\s+(object|protocol|category|module)(?=[(])</string>
+			<key>name</key>
+			<string>storage.type.opening.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>:-\s+(end_(object|protocol|category))(?=[.])</string>
+			<key>name</key>
+			<string>storage.type.closing.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])</string>
+			<key>name</key>
+			<string>storage.type.relations.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>:-\s+(calls|e(ncoding|xport)|in(itialization|fo)|uses)(?=[(])</string>
+			<key>name</key>
+			<string>storage.modifier.others.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>:-\s+(alias|info|d(ynamic|iscontiguous)|m(etapredicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|use(s|_module))(?=[(])</string>
+			<key>name</key>
+			<string>storage.modifier.others.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(::|\^\^)</string>
+			<key>name</key>
+			<string>keyword.operator.message-sending.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\?|@)</string>
+			<key>name</key>
+			<string>keyword.operator.mode.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(@=&lt;|@&lt;|@&gt;|@&gt;=|==|\\==)</string>
+			<key>name</key>
+			<string>keyword.operator.term-comparison.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(=&lt;|&lt;|&gt;|&gt;=|=:=|=\\=)</string>
+			<key>name</key>
+			<string>keyword.operator.arithmetic-comparison.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(&lt;&lt;|&gt;&gt;|/\\|\\/|\\)</string>
+			<key>name</key>
+			<string>keyword.operator.bitwise.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(mod|rem)\b</string>
+			<key>name</key>
+			<string>keyword.operator.evaluable.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\*\*|\+|-|\*|/|//)</string>
+			<key>name</key>
+			<string>keyword.operator.evaluable.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(:-|!|\\+|,|;|--&gt;|-&gt;|=|\=|\.|=\.\.|\bis\b)</string>
+			<key>name</key>
+			<string>keyword.operator.misc.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(true|fail|repeat)\b</string>
+			<key>name</key>
+			<string>support.function.control.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(ca(ll|tch)|throw|once)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.control.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((get|peek|put)_(char|code|byte)|nl)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.chars-and-bytes-io.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bnl\b</string>
+			<key>name</key>
+			<string>support.function.chars-and-bytes-io.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(atom_(length|c(hars|o(ncat|des)))|sub_atom|char_code|number_c(hars|odes))(?=[(])</string>
+			<key>name</key>
+			<string>support.function.atom-term-processing.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])</string>
+			<key>name</key>
+			<string>support.function.term-testing.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(read_term|read|write|write(q|_(canonical|term))|op|current_op|char_conversion|current_char_conversion)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.term-io.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(arg|copy_term|functor)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.term-creation-and-decomposition.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(unify_with_occurs_check)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.term-unification.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.stream-selection-and-control.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(flush_output|at_end_of_stream)\b</string>
+			<key>name</key>
+			<string>support.function.stream-selection-and-control.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((set|current)_prolog_flag)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.prolog-flags.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(logtalk_(compile|l(ibrary_path|oad)))(?=[(])</string>
+			<key>name</key>
+			<string>support.function.compiling-and-loading.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((abolish|define)_events|current_event)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.event-handling.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((current|set)_logtalk_flag|halt)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.implementation-defined-hooks.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(halt)\b</string>
+			<key>name</key>
+			<string>support.function.implementation-defined-hooks.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((c(reate|urrent)|abolish)_(object|protocol|category))(?=[(])</string>
+			<key>name</key>
+			<string>support.function.entity-creation-and-abolishing.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((object|protocol|category)_property|extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])</string>
+			<key>name</key>
+			<string>keyword.other.predicate.reflection.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((for|retract)all)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(parameter|se(lf|nder)|this)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.execution-context.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(a(bolish|ssert(a|z))|clause|retract|retractall)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.database.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((bag|set)of|f(ind|or)all)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.all-solutions.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(current_predicate|predicate_property)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.reflection.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(before|after)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.event-handler.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(expand_term|term_expansion|phrase)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.grammar-rule.logtalk</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.logtalk</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.logtalk</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(0b[0-1]+|0o[0-7]+|0x\h+)\b</string>
+			<key>name</key>
+			<string>constant.numeric.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(0'.|0''|0'")</string>
+			<key>name</key>
+			<string>constant.numeric.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(\d+\.?\d*((e|E)(\+|-)?\d+)?)\b</string>
+			<key>name</key>
+			<string>constant.numeric.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b([A-Z_][A-Za-z0-9_]*)\b</string>
+			<key>name</key>
+			<string>variable.other.logtalk</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.logtalk</string>
+	<key>uuid</key>
+	<string>C11FA1F2-6EDB-11D9-8798-000A95DAA580</string>
+</dict>
+</plist>

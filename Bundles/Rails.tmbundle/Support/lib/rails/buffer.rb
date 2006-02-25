@@ -19,7 +19,7 @@ class Buffer
 
   # Init from a String or Buffer object
   def initialize(buffer, line_number = nil, column_number = nil)
-    @lines = buffer.to_a
+    self.text = buffer
     @line_number   = line_number   || TextMate.line_number
     @column_number = column_number || TextMate.column_number
     @stack = []
@@ -50,6 +50,19 @@ class Buffer
   
   def to_a
     @lines
+  end
+
+  def text
+    @text ||= lines.join
+  end
+  
+  def text=(buffer)
+    @text = buffer
+    @lines = @text.to_a
+  end
+
+  def =~(other)
+    text =~ other
   end
 
   # Searches a region of the buffer, lines :from to :to

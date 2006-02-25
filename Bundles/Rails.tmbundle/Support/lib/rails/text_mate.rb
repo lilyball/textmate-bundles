@@ -22,12 +22,13 @@ module TextMate
       `open "#{url}"`
     end
 
+    # Open a file in textmate using the txmt:// protocol.  Uses 0-based line and column indices.
     def open(filename, line_number = nil, column_number = nil)
       filename = filename.filepath if filename.is_a? RailsPath
       options = []
       options << "url=file://#{filename}"
-      options << "line=#{line_number}" if line_number
-      options << "column=#{column_number}" if column_number
+      options << "line=#{line_number + 1}" if line_number
+      options << "column=#{column_number + 1}" if column_number
       open_url "txmt://open?" + options.join("&")
     end
 
@@ -35,9 +36,20 @@ module TextMate
     def refresh_project_drawer
       `osascript -e 'tell application "Dock" to activate'; osascript -e 'tell application "TextMate" to activate'`
     end
-    
+
+    # Always return something, or nil, for selected_text
     def selected_text
       env(:selected_text)
+    end
+    
+    # Make line_number 0-base index
+    def line_number
+      env(:line_number).to_i - 1
+    end
+    
+    # Make column_number 0-base as well
+    def column_number
+      env(:column_number).to_i - 1
     end
     
     def env(var)

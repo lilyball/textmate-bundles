@@ -13,6 +13,132 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>begin</key>
+			<string>(^\s*)(?=class\s+(([.a-zA-Z0-9_:]+ControllerTest(\s*&lt;\s*[.a-zA-Z0-9_:]+)?)))</string>
+			<key>comment</key>
+			<string>Uses lookahead to match classes with the ControllerTest suffix; includes 'source.ruby' to avoid infinite recursion</string>
+			<key>end</key>
+			<string>^\1(?=end)\b</string>
+			<key>name</key>
+			<string>meta.rails.functional_test</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(^\s*)(?=class\s+(([.a-zA-Z0-9_:]+Controller\b(\s*&lt;\s*[.a-zA-Z0-9_:]+)?)|(&lt;&lt;\s*[.a-zA-Z0-9_:]+)))(?!.+\bend\b)</string>
+			<key>comment</key>
+			<string>Uses lookahead to match classes with the Controller suffix; includes 'source.ruby' to avoid infinite recursion</string>
+			<key>end</key>
+			<string>^\1(?=end)\b</string>
+			<key>name</key>
+			<string>meta.rails.controller</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(^\s*)(?=module\s+((([A-Z]\w*::)*)[A-Z]\w*)Helper)</string>
+			<key>comment</key>
+			<string>Uses lookahead to match modules with the Helper suffix; includes 'source.ruby' to avoid infinite recursion</string>
+			<key>end</key>
+			<string>^\1(?=end)\b</string>
+			<key>name</key>
+			<string>meta.rails.helper</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(^\s*)(?=class\s+(([.a-zA-Z0-9_:]+(\s*&lt;\s*ActionMailer::Base))))</string>
+			<key>comment</key>
+			<string>Uses lookahead to match classes that inherit from ActionMailer::Base; includes 'source.ruby' to avoid infinite recursion</string>
+			<key>end</key>
+			<string>^\1(?=end)\b</string>
+			<key>name</key>
+			<string>meta.rails.mailer</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(^\s*)(?=class\s+.+ActiveRecord::Base)</string>
+			<key>comment</key>
+			<string>Uses lookahead to match classes that (may) inherit from ActiveRecord::Base; includes 'source.ruby' to avoid infinite recursion</string>
+			<key>end</key>
+			<string>^\1(?=end)\b</string>
+			<key>name</key>
+			<string>meta.rails.model</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(^\s*)(?=class\s+(?![.a-zA-Z0-9_:]+ControllerTest)(([.a-zA-Z0-9_:]+Test(\s*&lt;\s*[.a-zA-Z0-9_:]+)?)|(&lt;&lt;\s*[.a-zA-Z0-9_:]+)))</string>
+			<key>comment</key>
+			<string>Uses lookahead to match classes with the Test suffix; includes 'source.ruby' to avoid infinite recursion</string>
+			<key>end</key>
+			<string>^\1(?=end)\b</string>
+			<key>name</key>
+			<string>meta.rails.unit_test</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\b(before_filter|skip_before_filter|skip_after_filter|after_filter|filter|layout|require_dependency|render|render_action|render_text|render_file|render_template|render_nothing|render_component|render_without_layout|url_for|redirect_to|redirect_to_path|redirect_to_url|helper|helper_method|model|service|observer|serialize|scaffold|verify)\b</string>
 			<key>name</key>

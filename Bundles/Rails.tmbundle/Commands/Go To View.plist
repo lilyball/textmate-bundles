@@ -3,24 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveModifiedFiles</string>
+	<string>nop</string>
 	<key>command</key>
 	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
-create_partial_from_selection.rb
-</string>
-	<key>fallbackInput</key>
-	<string>line</string>
+go_to_alternate_file.rb view</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>^"</string>
+	<string>~@#</string>
 	<key>name</key>
-	<string>Create Partial from Selection</string>
+	<string>Go To View</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>afterSelectedText</string>
 	<key>scope</key>
-	<string>source.ruby.rails, text.html.ruby, comment.line.number-sign.ruby</string>
+	<string>meta.rails.controller, meta.rails.mailer, source.js, source.css</string>
 	<key>uuid</key>
-	<string>1DD8A214-1C97-45BA-ADEE-8F888DDE8570</string>
+	<string>EE862691-A624-4797-90CF-EDD39EFB2D8E</string>
 </dict>
 </plist>

@@ -5,21 +5,51 @@
 # Description:
 #   Makes analyzing of a Rails path + filename easier.
 
-class RailsPath
-  attr_reader :filepath
-  
-  def initialize(filepath = ENV['TM_FILEPATH'])
-    @filepath = filepath
-  end
-  
-  # Read in the entire text file
-  def read
-    @read ||= IO.read(@filepath)
+require 'rails/misc'
+require 'rails/text_mate'
+require 'rails/buffer'
+
+module AssociationMessages
+  # Return associated_with_*? methods
+  def method_missing(method, *args)
+    case method.to_s
+    when /^associated_with_(.+)\?$/
+      return associations[$1.to_sym].include?(file_type)
+    else
+      super(method, *args)
+    end
   end
 
-  # Convert the text file in to an array of lines
-  def lines
-    @lines ||= read.to_a
+  @@associations = {
+    :controller => [:view, :helper, :functional_test, :javascript, :stylesheet],
+    :helper => [:controller, :unit_test, :javascript, :stylesheet],
+    :view => [:controller, :javascript, :stylesheet, :model],
+    :model => [:unit_test, :fixture, :view],
+    :fixture => [:unit_test],
+    :functional_test => [:controller],
+    :unit_test => [:model, :helper],
+    :javascript => [:helper, :controller],
+    :stylesheet => [:helper, :controller] }
+
+  # Make associations hash publicly available to each object
+  def associations; self.class.class_eval("@@associations") end
+end
+
+class RailsPath
+  attr_reader :filepath
+
+  include AssociationMessages
+
+  def initialize(filepath = TextMate.filepath)
+    @filepath = filepath
+  end
+
+  def buffer
+    @buffer ||= Buffer.new_from_file(self)
+  end
+
+  def exists?
+    File.file?(@filepath)
   end
   
   def basename
@@ -30,124 +60,256 @@ class RailsPath
     File.dirname(@filepath)
   end
   
-  def rails_root
-    self.class.root_indicators.each do |i|
-      if index = @filepath.index(i)
-        return @filepath[0...index]
-      end
-    end
-
-    # Fallback plan if not found through TM_FILEPATH:
-    return ENV['TM_PROJECT_DIRECTORY']
-    # TODO: Look for the root_indicators inside TM_PROJECT_DIRECTORY and return nil if not found
-  end
-
-  def exists?
-    File.file?(@filepath)
-  end
-
-  def model_name
-    basename.scan(/^(.+)\.rb$/).flatten.first
-  end
-
-  def model?(check_file_exists = false)
-    match = @filepath =~ %r{/models/(.+\.rb)$}
-    @tail = $1
-    match and (!check_file_exists or exists?)
-  end
-
-  def helper_name
-    basename.scan(/^(.+)_helper\.rb$/).flatten.first
-  end
-
-  def helper?(check_file_exists = false)
-    match = @filepath =~ %r{/helpers/(.+_helper\.rb)$}
-    @tail = $1
-    match and (!check_file_exists or exists?)
-  end
-
   def controller_name
-    basename.scan(/^(.+)_controller\.rb$/).flatten.first
-  end
-
-  def controller?(check_file_exists = false)
-    match = @filepath =~ %r{/controllers/(.+_controller\.rb)$}
-    @tail = $1
-    match and (!check_file_exists or exists?)
+    name = basename
+    # Remove extension
+    name.sub!(/\.\w+$/, '')
+    # Remove extras
+    case file_type
+    when :controller then name.sub!(/_controller$/, '')
+    when :helper     then name.sub!(/_helper$/, '')
+    when :unit_test  then name.sub!(/_test$/, '')
+    when :view       then name = dirname.split('/').pop
+    when :functional_test then name.sub!(/_controller_test$/, '')
+    end
+    
+    return name
   end
   
-  def view_name
-    basename.scan(/^(.+)\.(rhtml|rxhtml|rxml|rjs)$/).flatten.first
+  def action_name
+    name =
+      case file_type
+      when :controller, :model
+        buffer.find_method(:direction => :backwards).first rescue nil
+      when :view
+        basename
+      when :functional_test
+        buffer.find_method(:direction => :backwards).first.sub('^test_', '')
+      else nil
+      end
+    
+    return name.sub(/\.\w+$/, '') rescue nil # Remove extension
   end
   
-  def view?(check_file_exists = false)
-    match = @filepath =~ %r{/views/(.+\.(rhtml|rxml|rxhtml|rjs))$}
-    @tail = $1
-    match and (!check_file_exists or exists?)
+  def rails_root
+    return TextMate.project_directory
+    # TODO: Look for the root_indicators inside TM_PROJECT_DIRECTORY and return nil if not found
+
+    #self.class.root_indicators.each do |i|
+    #  if index = @filepath.index(i)
+    #    return @filepath[0...index]
+    #  end
+    #end
   end
 
+  def file_type
+    return @file_type if @file_type
+    
+    @file_type =
+      case @filepath
+      when %r{/controllers/(.+_controller\.(rb))$}   then :controller
+      when %r{/helpers/(.+_helper\.rb)$}             then :helper
+      when %r{/views/(.+\.(rhtml|rxml|rxhtml|rjs))$} then :view
+      when %r{/models/(.+\.(rb))$}                   then :model
+      when %r{/test/fixtures/(.+\.(yml|csv))$}       then :fixture
+      when %r{/test/functional/(.+\.(rb))$}          then :functional_test
+      when %r{/test/unit/(.+\.(rb))$}                then :unit_test
+      when %r{/public/javascripts/(.+\.(js))$}       then :javascript
+      when %r{/public/stylesheets/(.+\.(css))$}      then :stylesheet
+      else nil
+      end
+    # Store the tail (modules + file) after the regexp
+    # The first set of parens in each case will become the "tail"
+    @tail = $1
+    # Store the file extension
+    @extension = $2
+    return @file_type
+  end
+  
+  def tail
+    # Get the tail if it's not set yet
+    file_type unless @tail
+    return @tail
+  end
+  
+  def extension
+    # Get the extension if it's not set yet
+    file_type unless @extension
+    return @extension
+  end
+  
   # View file that does not begin with _
-  def view_action?
-    view? and basename !~ /^_/
+  def partial?
+    file_type == :view and basename !~ /^_/
+  end
+  
+  def modules
+    case file_type
+    when :view
+      @tail.split('/').slice(0...-2)
+    else
+      @tail.split('/').slice(0...-1)
+    end
+  end
+  
+  def controller_name_modified_for(type)
+    case type
+    when :controller then controller_name + '_controller'
+    when :helper     then controller_name + '_helper'
+    when :functional_test then controller_name + '_controller_test'
+    when :unit_test  then controller_name + '_test'
+    else controller_name
+    end
   end
 
-  # View file that begins with _
-  def view_partial?
-    view? and basename =~ /^_/
-  end
-  
-  def controller_for_view
-    modules
-    @controller_for_view
-  end
-  
-  def modules(discard_controller = true)
-    if view?
-      @modules = File.dirname(@tail).split('/')
-      @controller_for_view = @modules.pop if discard_controller
-    elsif controller? or helper?
-      @modules = File.dirname(@tail).split('/')
+  def default_extension_for(type)
+    case type
+    when :javascript then '.js'
+    when :stylesheet then '.css'
+    when :view       then '.rhtml' # Default extension for view
+    else '.rb'
     end
-    @modules
   end
   
-  def default_line_number
-    TextMate.line_number.to_i
+  def rails_path_for(type)
+    return rails_path_for_view if type == :view
+    RailsPath.new(File.join(rails_root, stubs[type], modules, controller_name_modified_for(type) + default_extension_for(type)))
   end
   
-  def find(start_line = default_line_number)
-    (start_line - 1).upto(lines.size - 1) do |i|
-      value = yield(lines[i])
-      if value.is_a? Regexp
-        value = lines[i].scan(value).flatten.first
-      end
-      if value
-        return value, i + 1
-      end
+  def rails_path_for_view
+    # Look for a view file with any of the following extensions
+    candidate_extensions = %w(rhtml rxhtml rxml rjs)
+    file_exists = false
+    candidate_extensions.each do |e|
+      filename_with_extension = action_name + "." + e
+      existing_view = File.join(rails_root, stubs[:view], modules, controller_name, filename_with_extension)
+      return RailsPath.new(existing_view) if File.exist?(existing_view)
+    end
+    default_view = File.join(rails_root, stubs[:view], modules, controller_name, action_name + default_extension_for(:view))
+    return RailsPath.new(default_view)
+  end
+  
+  def ask_for_view(default_name = action_name)
+    if designated_name = TextMate.input("Enter the name of the new view file:", default_name + default_extension_for(:view))
+      view_file = File.join(rails_root, stubs[:view], modules, controller_name, designated_name)
+      f = File.open(view_file, "w"); f.close
+      # FIXME: For some reason the following line freezes TextMate
+      # TextMate.refresh_project_drawer
+      return RailsPath.new(view_file)
     end
     return nil
   end
-
-  def find_method(start_line = default_line_number)
-    find(start_line) { %r{def\s+(\w+)} }
+  
+  def self.stubs
+    { :controller => 'app/controllers',
+      :model => 'app/models',
+      :helper => '/app/helpers/',
+      :view => '/app/views/',
+      :config => 'config',
+      :lib => 'lib',
+      :log => 'log',
+      :javascript => 'public/javascripts',
+      :stylesheet => 'public/stylesheets',
+      :functional_test => 'test/functional',
+      :unit_test => 'test/unit',
+      :fixture => 'test/fixtures'}
   end
   
-  def find_backwards(start_line = default_line_number)
-    (start_line - 1).downto(0) do |i|
-      value = yield(lines[i])
-      if value.is_a? Regexp
-        value = lines[i].scan(value).flatten.first
-      end
-      return value, i+1 if value
-    end
-    return nil
-  end
-
-  def find_method_backwards(start_line = default_line_number)
-    find_backwards(start_line) { %r{def\s+(\w+)} }
-  end
-  
-  def self.root_indicators
-    %w(/app/controllers/ /app/models/ /app/helpers/ /app/views/ /config/ /db/ /doc/ /lib/ /log/ /public/ /script/ /test/ /vendor/)
+  def stubs; self.class.stubs end
+    
+  def ==(other)
+    other = other.filepath if other.respond_to?(:filepath)
+    @filepath == other
   end
 end
+
+
+
+#def find_or_name_view_file(filename, current_file)
+#  # Look for a view file with any of the following extensions
+#  extensions = %w(rhtml rxhtml rxml rjs)
+#  file_exists = false
+#  extensions.each do |e|
+#    filename_with_extension = filename + "." + e
+#    view_file = File.join(current_file.rails_root, 'app', 'views', current_file.modules, current_file.controller_name, filename_with_extension)
+#    return view_file if File.exist?(view_file)
+#  end
+#  
+#  # No view files found, so ask for the name of a new one
+#  if filename = TextMate.input("Enter the name of the new view file:", filename + '.rhtml')
+#    view_file = File.join(current_file.rails_root, 'app', 'views', current_file.modules, current_file.controller_name, filename)
+#    # Create the file and notify TextMate of its existence
+#    f = File.open(view_file, "w"); f.close
+#    # FIXME: For some reason the following line freezes TextMate
+#    # TextMate.refresh_project_drawer
+#    return view_file
+#  else
+#    return nil
+#  end
+#end
+#
+## Controllers can go to Views or Helpers
+#if current_file.controller?
+#  # Jump to the view that corresponds with this action
+#  if result = current_file.find_method_backwards
+#    if view_file = find_or_name_view_file(result[0], current_file)
+#      TextMate.open view_file
+#    end
+#  else
+#    # Try to find a corresponding helper file instead of an action or view
+#    helper_file = File.join(current_file.rails_root, 'app', 'helpers', current_file.modules, current_file.controller_name + '_helper.rb')
+#    TextMate.open helper_file
+#  end
+#
+## Helpers can go to Controllers
+#elsif current_file.helper?
+#  controller_file = File.join(current_file.rails_root, 'app', 'controllers', current_file.modules, current_file.helper_name + '_controller.rb')
+#  TextMate.open controller_file
+#
+## ActionMailer Models can go to Views
+#elsif current_file.model?
+#  if current_file.read.include?("ActionMailer::Base")
+#    if result = current_file.find_method_backwards
+#      full_path = File.join(current_file.rails_root, 'app', 'views', current_file.model_name, result[0] + ".rhtml")
+#      TextMate.open full_path
+#    else
+#      TextMate.message "No action found"
+#    end
+#  else
+#    TextMate.message "Don't know where to go from a non-actionmailer model"
+#  end
+#
+## Views can go to Controllers or ActionMailer Models
+#elsif current_file.view_action?  
+#  # Jump to the controller action that corresponds with this view
+#  full_path =
+#    File.join(current_file.rails_root, 'app', 'controllers',
+#      current_file.modules.join('/'),
+#      current_file.controller_for_view + '_controller.rb')
+#  
+#  if !File.exist?(full_path)
+#    # Maybe it's an ActionMailer Model?
+#    full_path =
+#      File.join(current_file.rails_root, 'app', 'models',
+#        current_file.controller_for_view + '.rb')
+#  end
+#  
+#  if !File.exist?(full_path)
+#    TextMate.message "Couldn't find a controller or ActionMailer model for this view"
+#    TextMate.exit_discard
+#  end
+#  
+#  lines = IO.read(full_path).to_a
+#  line_number = nil
+#  for i in 0..(lines.size)
+#    if lines[i] =~ %r{def\s+(#{current_file.view_name})}
+#      line_number = i + 1
+#      break
+#    end
+#  end
+#
+#  TextMate.open full_path, line_number
+#else
+#  TextMate.message("Nowhere to go.")
+#end
+#

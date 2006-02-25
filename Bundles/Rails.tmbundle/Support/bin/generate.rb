@@ -68,7 +68,7 @@ generators = [
   Generator["controller", "Name the new controller:",       "admin/user_accounts"],
   Generator["model",      "Name the new model:",            "User"],
   Generator["mailer",     "Name the new mailer:",           "Notify"],
-  Generator["migration",  "Name the new migration:",        "CreateUsersTable"],
+  Generator["migration",  "Name the new migration:",        "CreateUserTable"],
   Generator["plugin",     "Name the new plugin:",           "ActsAsPlugin"]
 ]
 

@@ -5,18 +5,19 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>rails-open-partner.rb "$TM_FILEPATH"</string>
+	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
+go_to_alternate_file.rb stylesheet</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>~@#</string>
 	<key>name</key>
-	<string>Open Test Case</string>
+	<string>Go To Stylesheet</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>afterSelectedText</string>
 	<key>scope</key>
-	<string>source.ruby.rails</string>
+	<string>text.html.ruby, source.ruby.rails.embedded.html, meta.rails.controller, meta.rails.helper</string>
 	<key>uuid</key>
-	<string>AE976A74-D33B-4DA8-8CB0-12DE91DDD728</string>
+	<string>B207BBD4-D6AA-41E9-9530-27210F2D7B66</string>
 </dict>
 </plist>

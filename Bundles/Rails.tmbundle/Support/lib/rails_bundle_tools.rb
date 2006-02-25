@@ -8,16 +8,4 @@
 require 'rails/text_mate'
 require 'rails/rails_path'
 require 'rails/unobtrusive_logger'
-
-class String
-  def line_from_index(index)
-    lines = self.to_a
-    running_length = 0
-    lines.each_with_index do |line, i|
-      running_length += line.length
-      if running_length > index
-        return i
-      end
-    end
-  end
-end
+require 'rails/misc'

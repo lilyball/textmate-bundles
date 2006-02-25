@@ -3,24 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveModifiedFiles</string>
+	<string>nop</string>
 	<key>command</key>
 	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
-create_partial_from_selection.rb
-</string>
+intelligent_migration_snippet.rb create_drop_table</string>
 	<key>fallbackInput</key>
-	<string>line</string>
+	<string>none</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^"</string>
+	<string></string>
 	<key>name</key>
-	<string>Create Partial from Selection</string>
+	<string>Migration Create and Drop Table</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>insertAsSnippet</string>
 	<key>scope</key>
-	<string>source.ruby.rails, text.html.ruby, comment.line.number-sign.ruby</string>
+	<string>source.ruby.rails</string>
 	<key>uuid</key>
-	<string>1DD8A214-1C97-45BA-ADEE-8F888DDE8570</string>
+	<string>2BB5A1B8-2995-4560-B109-E37CFB8F5D9A</string>
 </dict>
 </plist>

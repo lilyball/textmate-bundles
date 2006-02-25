@@ -155,7 +155,12 @@ class RailsPath
   
   def controller_name_modified_for(type)
     case type
-    when :controller then controller_name + '_controller'
+    when :controller
+      if controller_name == 'application'
+        controller_name
+      else
+        controller_name + '_controller'
+      end
     when :helper     then controller_name + '_helper'
     when :functional_test then controller_name + '_controller_test'
     when :unit_test  then controller_name + '_test'

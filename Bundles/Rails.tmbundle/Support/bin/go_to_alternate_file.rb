@@ -20,7 +20,11 @@ if ARGV.empty?
       if current_file.action_name
         :view
       else
-        :functional_test
+        if current_file.rails_path_for(:functional_test).exists?
+          :functional_test
+        elsif current_file.rails_path_for(:helper).exists?
+          :helper
+        end
       end
     else
       current_file.associations[current_file.file_type].first

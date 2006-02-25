@@ -11,13 +11,15 @@ require 'rails_bundle_tools'
 
 
 current_file = RailsPath.new
-choice = ARGV.shift
 
-if current_file.send("associated_with_#{choice}?")
-  if rails_path = current_file.rails_path_for(choice.to_sym)
-    TextMate.open rails_path
-  end
+if ARGV.empty?
+  choice = current_file.associations[current_file.file_type].first
 else
-  TextMate.message "#{current_file.basename} does not have a #{choice}"
+  choice = ARGV.shift
 end
 
+if rails_path = current_file.rails_path_for(choice.to_sym)
+  TextMate.open rails_path
+else
+  print "#{current_file.basename} does not have a #{choice}"
+end

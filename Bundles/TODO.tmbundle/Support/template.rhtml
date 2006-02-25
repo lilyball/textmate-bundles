@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<style type="text/css">
+			/* <![CDATA[ */
+ 			body { font: 12px 'Lucida Grande'; }
+			.fixme { color:red; }
+ 			.todo { color:orange; }
+ 			.changed { color:green; }
+			/* ]]> */
+ 		</style>
+		<title>Todo List</title>
+	</head>
+	<body>
+ 		<h1>TODO LIST</h1>
+		<p><a href="#todo" class="todo">TODO</a> ||
+		<a href="#fixme" class="fixme">FIXME</a> ||
+		<a href="#changed" class="changed">CHANGED</a></p>
+		<h2>TODO</h2>
+		<ol id="todo">
+		   <% for line in $todo %>
+<!-- 				txmt://open/?url=file://~/.bash_profile&line=11 -->
+		      <li class="todo"><a title="<%= line[:line_contents] %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
+		   <% end %>
+		</ol>
+		<h2>FIXME</h2>
+		<ol id="fixme">
+		   <% for line in $fixme %>
+		      <li class="fixme"><a title="<%= line[:line_contents] %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
+		   <% end %>
+		</ol>
+		<h2>CHANGED</h2>
+		<ol id="changed">
+		   <% for line in $changed %>
+		      <li class="changed"><a title="<%= line[:line_contents] %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
+		   <% end %>
+		</ol>
+	</body>
+</html>

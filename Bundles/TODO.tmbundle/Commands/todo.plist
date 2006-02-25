@@ -5,22 +5,35 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>WorkPath=`dirname "$TM_FILEPATH"`
-WorkPath=${WorkPath// /%20} # turn spaces into %20
-export WorkPath
+	<string>#!/usr/bin/env ruby
 
-cat &lt;&lt;EOF
- &lt;html&gt;&lt;head&gt;&lt;style&gt;
- body { font: 12px 'Lucida Grande' }
- &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
- &lt;h1&gt;TODO LIST&lt;/h1&gt;
- &lt;ul&gt;
-EOF
+require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
+require "erb"
+include ERB::Util
 
-cd "`dirname "$TM_FILEPATH"`"
-find . -name '.svn' -type d -prune -or -type f -exec grep -HinwE "TODO|FIXME|FIX ME" '{}' \; | perl -pe '$|=1; s/&amp;/&amp;amp;/g; s/&lt;/&amp;lt;/g; s/&gt;/&amp;gt;/g; s!(.*?):(.*?):.*?(?:TODO|FIXME|FIX ME)[:,]?(.*)$!&lt;li&gt; $1: &lt;a href="txmt://open?url=file://$ENV{'WorkPath'}/$1&amp;line=$2"&gt;$3&lt;/a&gt;&lt;/li&gt;!i'
+$todo = []
+$fixme = []
+$changed = []
 
-echo "&lt;/ul&gt;&lt;/body&gt;"</string>
+TextMate.each_text_file do |filepath|
+
+  File.open(filepath) do |f|
+    filename = File.basename(filepath)
+    f.each_line do |line|
+      if(m = line.match(/(TODO)([\s,:])+(\w.*)$/i))
+        $todo.push({ :filepath =&gt; filepath, :filename =&gt; html_escape(filename), :item =&gt; html_escape(m[3]), :line_contents =&gt; html_escape(line), :lineno =&gt; f.lineno })
+      elsif(m = line.match(/(FIXME|FIX ME)([\s,:])+(\w.*)$/i))
+        $fixme.push({ :filepath =&gt; filepath, :filename =&gt; html_escape(filename), :item =&gt; html_escape(m[3]), :line_contents =&gt; html_escape(line), :lineno =&gt; f.lineno})
+      elsif(m = line.match(/(CHANGED)([\s,:])+(\w.*)$/))
+        $changed.push({ :filepath =&gt; filepath, :filename =&gt; html_escape(filename), :item =&gt; html_escape(m[3]), :line_contents =&gt; html_escape(line), :lineno =&gt; f.lineno})
+      end
+    end
+  end
+
+end
+
+puts ERB.new(File.open("#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"), 0, '&lt;&gt;').result
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

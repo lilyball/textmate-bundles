@@ -24,19 +24,19 @@
 		<ol id="todo">
 		   <% for line in $todo %>
 <!-- 				txmt://open/?url=file://~/.bash_profile&line=11 -->
-		      <li class="todo"><a title="<%= line[:line_contents] %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
+		      <li class="todo"><a title="<%= line[:line_contents].strip %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
 		   <% end %>
 		</ol>
 		<h2>FIXME</h2>
 		<ol id="fixme">
 		   <% for line in $fixme %>
-		      <li class="fixme"><a title="<%= line[:line_contents] %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
+		      <li class="fixme"><a title="<%= line[:line_contents].strip %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
 		   <% end %>
 		</ol>
 		<h2>CHANGED</h2>
 		<ol id="changed">
 		   <% for line in $changed %>
-		      <li class="changed"><a title="<%= line[:line_contents] %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
+		      <li class="changed"><a title="<%= line[:line_contents].strip %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
 		   <% end %>
 		</ol>
 	</body>

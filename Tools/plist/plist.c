@@ -295,6 +295,12 @@ VALUE convertDataRef(CFDataRef plist) {
 // Converts a CFDateRef to a Time
 VALUE convertDateRef(CFDateRef plist) {
 	CFAbsoluteTime seconds = CFDateGetAbsoluteTime(plist);
+
+	// trunace the time since Ruby's Time object stores it as a 32 bit signed offset from 1970 (undocumented)
+	const float min_time = -3124310400.0f;
+	const float max_time =  1169098047.0f;
+	seconds = seconds < min_time ? min_time : (seconds > max_time ? max_time : seconds);
+
 	return rb_funcall(timeEpoch, id_plus, 1, rb_float_new(seconds));
 }
 

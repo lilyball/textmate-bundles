@@ -73,7 +73,7 @@ module TextMate
 
     if project_dir then
       TextMate.scan_dir(project_dir, block, ProjectFileFilter.new)
-    else
+    elsif current_file then
       block.call(current_file)
     end
   end

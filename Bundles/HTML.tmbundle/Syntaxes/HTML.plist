@@ -11,6 +11,8 @@
 		<string>phtml</string>
 		<string>php</string>
 		<string>inc</string>
+		<string>tmpl</string>
+		<string>tpl</string>
 	</array>
 	<key>firstLineMatch</key>
 	<string>&lt;!DOCTYPE|&lt;(?i:html)</string>
@@ -26,7 +28,7 @@
 		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl)&gt;
 		|^\s*--&gt;
 		|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)
-		|(^|\s)\}
+		|^[^{]*\}
 		)</string>
 	<key>keyEquivalent</key>
 	<string>^~H</string>

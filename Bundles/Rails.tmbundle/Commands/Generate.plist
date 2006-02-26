@@ -5,8 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>source "$HOME/.profile" &gt;&amp;/dev/null
-RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
+	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
 generate.rb &amp;&gt;/dev/null &amp;
 </string>
 	<key>input</key>
@@ -14,7 +13,7 @@ generate.rb &amp;&gt;/dev/null &amp;
 	<key>keyEquivalent</key>
 	<string>^|</string>
 	<key>name</key>
-	<string>Call Generator Script</string>
+	<string>Generate</string>
 	<key>output</key>
 	<string>afterSelectedText</string>
 	<key>uuid</key>

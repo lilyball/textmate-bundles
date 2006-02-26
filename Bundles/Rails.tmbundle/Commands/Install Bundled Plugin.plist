@@ -5,8 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>source "$HOME/.profile" &gt;&amp;/dev/null
-RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
+	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
 install_plugin.rb</string>
 	<key>input</key>
 	<string>none</string>

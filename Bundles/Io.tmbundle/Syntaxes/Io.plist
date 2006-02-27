@@ -37,6 +37,26 @@
 			<string>keyword.control.io</string>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>/\*|'</string>
+			<key>end</key>
+			<string>'|\*/</string>
+			<key>name</key>
+			<string>comment.block.io</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>//.*$</string>
+			<key>name</key>
+			<string>comment.line.double-slash.io</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>#.*$</string>
+			<key>name</key>
+			<string>comment.line.number-sign.io</string>
+		</dict>
+		<dict>
 			<key>comment</key>
 			<string>I wonder if some of this isn't variable.other.language? --Allan</string>
 			<key>match</key>
@@ -73,26 +93,6 @@
 			<string>\b(gl(u|ut)?[A-Z]\w+)\b</string>
 			<key>name</key>
 			<string>support.function.OpenGL.io</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>/\*|'</string>
-			<key>end</key>
-			<string>'|\*/</string>
-			<key>name</key>
-			<string>comment.block.io</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>//.*$</string>
-			<key>name</key>
-			<string>comment.line.double-slash.io</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>#.*$</string>
-			<key>name</key>
-			<string>comment.line.number-sign.io</string>
 		</dict>
 		<dict>
 			<key>begin</key>

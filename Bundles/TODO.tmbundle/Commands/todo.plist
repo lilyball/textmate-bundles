@@ -11,21 +11,27 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
 include ERB::Util
 
-$todo = []
-$fixme = []
-$changed = []
+$items = [
+  { :label =&gt; "TODO",     :matches =&gt; [ ], :regexp =&gt; /TODO[\s,:]+(\w.*)$/i    },
+  { :label =&gt; "FIXME",    :matches =&gt; [ ], :regexp =&gt; /FIX ?ME[\s,:]+(\w.*)$/i },
+  { :label =&gt; "CHANGED",  :matches =&gt; [ ], :regexp =&gt; /CHANGED[\s,:]+(\w.*)$/  },
+]
 
 TextMate.each_text_file do |filepath|
 
   File.open(filepath) do |f|
-    filename = File.basename(filepath)
     f.each_line do |line|
-      if(m = line.match(/(TODO)([\s,:])+(\w.*)$/i))
-        $todo.push({ :filepath =&gt; filepath, :filename =&gt; html_escape(filename), :item =&gt; html_escape(m[3]), :line_contents =&gt; html_escape(line), :lineno =&gt; f.lineno })
-      elsif(m = line.match(/(FIXME|FIX ME)([\s,:])+(\w.*)$/i))
-        $fixme.push({ :filepath =&gt; filepath, :filename =&gt; html_escape(filename), :item =&gt; html_escape(m[3]), :line_contents =&gt; html_escape(line), :lineno =&gt; f.lineno})
-      elsif(m = line.match(/(CHANGED)([\s,:])+(\w.*)$/))
-        $changed.push({ :filepath =&gt; filepath, :filename =&gt; html_escape(filename), :item =&gt; html_escape(m[3]), :line_contents =&gt; html_escape(line), :lineno =&gt; f.lineno})
+      $items.each do |item|
+
+        if(m = item[:regexp].match(line)) then
+          item[:matches].push({
+            :file =&gt; filepath,
+            :line =&gt; f.lineno,
+            :content =&gt; line,
+            :match =&gt; m[1],
+          })
+        end
+
       end
     end
   end

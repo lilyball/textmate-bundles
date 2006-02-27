@@ -7,37 +7,34 @@
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<style type="text/css">
 			/* <![CDATA[ */
- 			body { font: 12px 'Lucida Grande'; }
-			.fixme { color:red; }
- 			.todo { color:orange; }
- 			.changed { color:green; }
+			body		{  font: 12px 'Lucida Grande'; }
+			.FIXME	{ color: red;		}
+			.TODO		{ color: orange;	}
+			.CHANGED { color: green;	}
 			/* ]]> */
- 		</style>
-		<title>Todo List</title>
+		</style>
+		<title>TODO List</title>
 	</head>
 	<body>
- 		<h1>TODO LIST</h1>
-		<p><a href="#todo" class="todo">TODO</a> ||
-		<a href="#fixme" class="fixme">FIXME</a> ||
-		<a href="#changed" class="changed">CHANGED</a></p>
-		<h2>TODO</h2>
-		<ol id="todo">
-		   <% for line in $todo %>
-<!-- 				txmt://open/?url=file://~/.bash_profile&line=11 -->
-		      <li class="todo"><a title="<%= line[:line_contents].strip %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
-		   <% end %>
-		</ol>
-		<h2>FIXME</h2>
-		<ol id="fixme">
-		   <% for line in $fixme %>
-		      <li class="fixme"><a title="<%= line[:line_contents].strip %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
-		   <% end %>
-		</ol>
-		<h2>CHANGED</h2>
-		<ol id="changed">
-		   <% for line in $changed %>
-		      <li class="changed"><a title="<%= line[:line_contents].strip %>" href="txmt://open/?url=file://<%= line[:filepath] %>&amp;line=<%= line[:lineno] %>"><%= line[:filename] %> (<%= line[:lineno] %>)</a>: <%= line[:item] %></li>
-		   <% end %>
-		</ol>
+
+		<p><%= $items.collect do |item|
+				"<a href='##{item[:label]}' class='#{item[:label]}'>#{item[:label]}</a>"
+			end.join(" || ") %></p>
+
+		<% $items.each do |item| %>
+			<h2><%= item[:label] %></h2>
+			<ol id="<%= item[:label] %>">
+			<% item[:matches].each do |match| %>
+
+				<li class="<%= item[:label] %>">
+					<a title="<%= html_escape(match[:content].strip) %>" href="txmt://open/?url=<%= "file://#{match[:file].gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) }}&amp;line=#{match[:line]}" %>">
+						<%= "#{html_escape(File.basename(match[:file]))} (#{match[:line]})" %></a>:
+						<%= html_escape(match[:match]) %>
+				</li>
+
+			<% end %>
+			</ol>
+		<% end %>
+
 	</body>
 </html>

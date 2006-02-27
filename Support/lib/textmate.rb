@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'set'
-
 module TextMate
 
   class ProjectFileFilter
@@ -9,8 +7,8 @@ module TextMate
       @file_pattern = load_pattern('OakFolderReferenceFilePattern', '!(/\.(?!htaccess)[^/]*|\.(tmproj|o|pyc)|/Icon\r)$')
       @folder_pattern = load_pattern('OakFolderReferenceFolderPattern', '!.*/(\.[^/]*|CVS|_darcs|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$')
 
-      @text_types = [ ].to_set          # prefs_for_key('OakProjectTextFiles')
-      @binary_types = [ ".nib" ].to_set # prefs_for_key('OakProjectBinaryFiles')
+      @text_types = [ ]           # prefs_for_key('OakProjectTextFiles')
+      @binary_types = [ ".nib" ]  # prefs_for_key('OakProjectBinaryFiles')
     end
 
     # # this can’t be used ATM because of range error from plist
@@ -38,10 +36,10 @@ module TextMate
 
       type = %x{file '#{file.gsub(/'/, "'\\''")}'}
       if /\btext\b/.match(type) then
-        @text_types.add(ext) unless(ext == "")
+        @text_types.push(ext) unless(ext == "")
         return false
       else
-        @binary_types.add(ext) unless(ext == "")
+        @binary_types.push(ext) unless(ext == "")
         return true
       end
     end
@@ -79,3 +77,5 @@ module TextMate
   end
 
 end
+
+# TextMate.each_text_file { |f| puts f }

@@ -10,7 +10,7 @@ These keys are often specialized for a language:
 
     command-B          --  build
     command-R          --  run
-    F3                 --  lookup current word/selection in the documentation
+    ctrl-H             --  lookup current word/selection in the documentation
     ctrl-shift-V       --  validate (show syntactical errors)
     ctrl-shift-W       --  wrap selection (e.g. in begin/end tags for HTML)
     shift-return       --  create a function/method body with previous word as name
@@ -19,6 +19,15 @@ These keys are often specialized for a language:
     cmd-option-return  --  move to end of line and insert potential end-of-line symbol (; in many sources, . in prose)
     cmd-shift-return   --  as cmd-option-return, but also insert a newline
     enter              --  insert a newline and start a new “item” (e.g. line comment, bullet point, etc.)
+
+Naming Bundle Items
+===================
+
+Bundle items should use Title Case.
+
+Avoid repeating the name of the bundle in the command name. For example under Ruby we have Run Script and not Run Ruby Script and under Xcode we have Build, not Build Xcode Project, etc.
+
+Be concise in the name, i.e. make it evident what the command does without writing a page full of information. Refrain from using abbreviations.
 
 Snippets
 ========

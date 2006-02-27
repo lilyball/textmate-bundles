@@ -34,6 +34,15 @@ else
 end
 
 if rails_path = current_file.rails_path_for(choice.to_sym)
+  if choice == :view and !rails_path.exists?
+    if filename = TextMate.input("Enter the name of the new view file:", rails_path.basename)
+      rails_path = RailsPath.new(File.join(rails_path.dirname, filename))
+      rails_path.touch
+    else
+      TextMate.exit_discard
+    end
+  end
+  
   TextMate.open rails_path
 else
   puts "#{current_file.basename} does not have a #{choice}"

@@ -76,37 +76,28 @@ case TextMate.current_line
   # Example: render :partial => 'account/login'
   when /render[\s\(].*:partial\s*=>\s*['"](.+?)['"]/
     partial_name = $1
-    modules = current_file.modules(false)
+    modules = current_file.modules
   
-    # Check for modules
+    # Check for absolute path to partial
     if partial_name.include?('/')
       pieces = partial_name.split('/')
       partial_name = pieces.pop
       modules = pieces
     end
-  
-    # FIXME: Check if it's ok to comment the modules.empty? out
-    if current_file.view?
-      #if modules.empty?
-      #  partial = File.join(current_file.dirname, "_#{partial_name}.rhtml")
-      #else
-        partial = File.join(current_file.rails_root, 'app', 'views', modules, "_#{partial_name}.rhtml")
-      #end
-    else
-      partial = File.join(current_file.rails_root, 'app', 'views', modules, current_file.controller_name, "_#{partial_name}.rhtml")
-    end
 
+    partial = File.join(current_file.rails_root, 'app', 'views', modules, current_file.controller_name, "_#{partial_name}.rhtml")
     TextMate.open(partial)
 
   # Example: render :action => 'login'
   when /render[\s\(].*:action\s*=>\s*['"](.+?)['"]/
     action = $1
-    if current_file.controller?
-      if search = current_file.find(1) { %r{def\s+(#{action})} }
+    if current_file.file_type == :controller
+      if search = current_file.buffer.find(:direction => :backwards) { /def\s+#{action}\b/ }
         TextMate.open(current_file, search[1])
       end
     else
-      TextMate.message "Don't know where to go when rendering an action from outside a controller"
+      puts "Don't know where to go when rendering an action from outside a controller"
+      exit
     end
 
   # Example: redirect_to :action => 'login'
@@ -115,9 +106,9 @@ case TextMate.current_line
     controller = $1 if TextMate.current_line =~ /.*:controller\s*=>\s*['"](.+?)['"]/
     action = $1 if TextMate.current_line =~ /.*:action\s*=>\s*['"](.+?)['"]/
 
-    unless current_file.controller?
-      TextMate.message "Don't know where to go when redirecting from outside a controller"
-      TextMate.exit_discard
+    unless current_file.file_type == :controller
+      puts "Don't know where to go when redirecting from outside a controller"
+      exit
     end
     
     if controller.nil?
@@ -133,10 +124,11 @@ case TextMate.current_line
       controller_file = RailsPath.new(other_path)
     end
 
-    if search = controller_file.find(1) { %r{def\s+(#{action})} }
+    if search = controller_file.buffer.find(:direction => :backwards) { /def\s+#{action}\b/ }
       TextMate.open(controller_file, search[1])
     else
-      TextMate.message "Couldn't find the #{action} action inside '#{controller_file.basename}'"
+      puts "Couldn't find the #{action} action inside '#{controller_file.basename}'"
+      exit
     end
 
   # Example: <script src="/javascripts/controls.js">
@@ -150,22 +142,16 @@ case TextMate.current_line
     end
 
   # Example: <%= javascript_include_tag 'general' %>
-  when /(require_javascript|javascript_include_tag)[\s\(]([^\)]+)/
-    javascripts = remove_quotes_or_colon(args_except_hash(strip_erb($2)))
-    javascripts = javascripts.map { |j| j =~ /\.js$/ ? j : j + ".js" }
-    if javascripts.size == 1
-      if javascripts.first[0..0] == "/"
-        full_path = File.join(current_file.rails_root, 'public', javascripts.first[1..-1])
-      else
-        full_path = File.join(current_file.rails_root, 'public', 'javascripts', javascripts.first)
-      end
-      TextMate.open full_path
-    elsif (filename = string_near_column(TextMate.current_line, TextMate.column_number.to_i-1))
-      filename += '.js' if not filename =~ /\.js$/
-      full_path = File.join(current_file.rails_root, 'public', 'javascripts', filename)
-      TextMate.open full_path
+  # require_javascript is used by bundled_resource plugin
+  when /(require_javascript|javascript_include_tag)\b/
+    if match = TextMate.current_line.unstringify_hash_arguments.find_nearest_string_or_symbol(TextMate.column_number)
+      javascript = match[0]
+      javascript += '.js' if not javascript =~ /\.js$/
+      # If there is no leading slash, assume it's a js from the public/javascripts dir
+      public_file = javascript[0..0] == "/" ? javascript[1..-1] : "javascripts/#{javascript}"
+      TextMate.open File.join(current_file.rails_root, 'public', public_file)
     else
-      TextMate.message "There is more than one javascript on this line."
+      puts "No javascript identified"
     end
 
   # Example: <link href="/stylesheets/application.css">
@@ -180,28 +166,25 @@ case TextMate.current_line
     end
 
   # Example: <%= stylesheet_link_tag 'application' %>
-  when /(require_stylesheet|stylesheet_link_tag)[\s\(]([^\)]+)/
-    stylesheets = remove_quotes_or_colon(args_except_hash(strip_erb($2)))
-    stylesheets = stylesheets.map { |j| j =~ /\.css$/ ? j : j + ".css" }
-    if stylesheets.size == 1
-      if stylesheets.first[0..0] == "/"
-        full_path = File.join(current_file.rails_root, 'public', stylesheets.first[1..-1])
-      else
-        full_path = File.join(current_file.rails_root, 'public', 'stylesheets', stylesheets.first)
-      end
-      TextMate.open full_path
+  when /(require_stylesheet|stylesheet_link_tag)\b/
+    if match = TextMate.current_line.unstringify_hash_arguments.find_nearest_string_or_symbol(TextMate.column_number)
+      stylesheet = match[0]
+      stylesheet += '.css' if not stylesheet =~ /\.css$/
+      # If there is no leading slash, assume it's a js from the public/javascripts dir
+      public_file = stylesheet[0..0] == "/" ? stylesheet[1..-1] : "stylesheets/#{stylesheet}"
+      TextMate.open File.join(current_file.rails_root, 'public', public_file)
     else
-      TextMate.message "There is more than one stylesheet on this line."
+      puts "No stylesheet identified"
     end
-  
+
   # Other checks...
   else
     # If there's nothing specific on the current line, then try something a little more "out of the box"
     
     # Controllers can go to Views or Helpers
-    if current_file.controller?
+    if current_file.file_type == :controller
       # Jump to the view that corresponds with this action
-      if result = current_file.find_method_backwards
+      if result = current_file.buffer.find_method(:direction => :backwards)
         if view_file = find_or_name_view_file(result[0], current_file)
           TextMate.open view_file
         end
@@ -212,14 +195,14 @@ case TextMate.current_line
       end
     
     # Helpers can go to Controllers
-    elsif current_file.helper?
-      controller_file = File.join(current_file.rails_root, 'app', 'controllers', current_file.modules, current_file.helper_name + '_controller.rb')
+    elsif current_file.file_type == :helper
+      controller_file = current_file.rails_path_for(:controller)
       TextMate.open controller_file
     
     # ActionMailer Models can go to Views
-    elsif current_file.model?
-      if current_file.read.include?("ActionMailer::Base")
-        if result = current_file.find_method_backwards
+    elsif current_file.file_type == :model
+      if current_file.buffer.text.include?("ActionMailer::Base")
+        if result = current_file.buffer.find_method(:direction => :backwards)
           full_path = File.join(current_file.rails_root, 'app', 'views', current_file.model_name, result[0] + ".rhtml")
           TextMate.open full_path
         else
@@ -230,7 +213,7 @@ case TextMate.current_line
       end
     
     # Views can go to Controllers or ActionMailer Models
-    elsif current_file.view_action?  
+    elsif current_file.file_type == :view
       # Jump to the controller action that corresponds with this view
       full_path =
         File.join(current_file.rails_root, 'app', 'controllers',

@@ -59,6 +59,23 @@ class RailsPath
   def dirname
     File.dirname(@filepath)
   end
+
+  def touch_directories
+    return if dirname[0..0] != '/'
+    dirs = dirname[1..-1].split('/')
+    for i in 0..(dirs.size)
+      new_dir = '/' + File.join(dirs[0..i])
+      Dir.mkdir(new_dir) if !File.exist?(new_dir)
+    end
+  end
+  
+  # Make sure the file exists by creating it if it doesn't
+  def touch
+    if !exists?
+      touch_directories
+      f = File.open(@filepath, "w"); f.close
+    end
+  end
   
   def controller_name
     name = basename

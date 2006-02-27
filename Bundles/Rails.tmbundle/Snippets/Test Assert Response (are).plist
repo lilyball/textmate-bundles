@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>rename_table "${1:old_table_name}", "${2:new_table_name}"</string>
+	<string>assert_response :${1:success}</string>
 	<key>name</key>
-	<string>Migration Rename Table (mrnt)</string>
+	<string>Test Assert Response (are)</string>
 	<key>scope</key>
-	<string></string>
+	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>
-	<string>mrnt</string>
+	<string>are</string>
 	<key>uuid</key>
-	<string>BCD61C1D-CFA5-46A5-B829-6F7740AC8651</string>
+	<string>2BD82DCB-1F19-4C8F-BC70-C0BBB06A2138</string>
 </dict>
 </plist>

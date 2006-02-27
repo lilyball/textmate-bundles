@@ -102,6 +102,11 @@ module TextMate
       return cocoa_dialog('msgbox', options)[0] == "1"
     end
 
+    def textbox(informative_text, text, options = {})
+      options = {:title => "Message", :informative_text => informative_text, :text => text, :button1 => "Ok"}.update(options)
+      return cocoa_dialog('textbox', options)[0] == "1"
+    end
+
     def message_yes_no_cancel(text, options = {})
       options = {:title => "Message", :text => text}.update(options)
       return cocoa_dialog('yesno-msgbox', options)[0] == "1"

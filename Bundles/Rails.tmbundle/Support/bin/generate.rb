@@ -10,34 +10,9 @@
 require 'rails_bundle_tools'
 require 'fileutils'
 
-def locomotive?
-  File.directory? "/Applications/Locomotive"
-end
-
 # Look for (created) files and return an array of them
 def files_from_generator_output(output, type = 'create')
-  output.to_a.map { |line| line.scan(/#{type}\s+([^\s]+)$/).flatten.first }.compact
-end
-
-def ruby_in_locomotive_environment(command)
-  locomotive_root = "/Applications/Locomotive"
-  bundle_root = locomotive_root + "/Bundles"
-  bundle = Dir.glob bundle_root + '/rails*max*'
-  bundle = Dir.glob bundle_root + '/rails*min*' if bundle.empty?
-
-  rubylibs =
-    ["#{bundle}/Contents/Resources/ports/lib/ruby/site_ruby/1.8",
-     "#{bundle}/Contents/Resources/ports/lib/ruby/site_ruby/1.8/powerpc-darwin7.9.0",
-     "#{bundle}/Contents/Resources/ports/lib/ruby/1.8",
-     "#{bundle}/Contents/Resources/ports/lib/ruby/1.8/powerpc-darwin7.9.0"]
-
-  command_in_environment =
-    "PATH=\"#{bundle}/Contents/Resources/ports/bin:#{ENV['PATH']}\";" +
-    "DYLD_FALLBACK_LIBRARY_PATH=\"#{bundle}/Contents/Resources/ports/lib\";" +
-    "/usr/bin/env ruby #{rubylibs.map{|r| "\"-I" + r + "\"" }.join(' ')} #{command}"
-  
-  # $logger.debug "Command: #{command_in_environment}"
-  `#{command_in_environment}`
+  output.to_a.map { |line| line.scan(/#{type}\s+([^\s]+)$/).flatten.first }.compact.select { |f| File.exist?(f) and !File.directory?(f) }
 end
 
 def ruby(command)
@@ -73,16 +48,13 @@ generators = [
 ]
 
 if choice = TextMate.choose("Generate:", Generator.names, :title => "Rails Generator")
-  $logger.warn "1"
   name =
     TextMate.input(
       generators[choice].question, generators[choice].default_answer,
       :title => "#{generators[choice].name.capitalize} Generator")
-  $logger.warn "2"
   if name
     options = ""
     
-    $logger.warn "3"
     case choice
     when 0
       options = TextMate.input("Name the new controller for the scaffold:", "", :title => "Scaffold Controller Name")
@@ -95,12 +67,13 @@ if choice = TextMate.choose("Generate:", Generator.names, :title => "Rails Gener
     rails_root = RailsPath.new.rails_root
     FileUtils.cd rails_root
     command = "\"script/generate\" #{generators[choice].name} #{name} #{options}"
+    $logger.debug "Command: #{command}"
     
-    output = (locomotive?) ? ruby_in_locomotive_environment(command) : ruby(command)
-    $logger.warn "Output from command #{command}: #{output}"
+    output = ruby(command)
+    $logger.debug "Output: #{output}"
     TextMate.refresh_project_drawer
     files = files_from_generator_output(output)
     files.each { |f| TextMate.open(File.join(rails_root, f)) }
-    TextMate.message("Done generating #{generators[choice].downcase}", :title => "Done")
+    TextMate.textbox("Done generating #{generators[choice].name}", output, :title => "Done")
   end
 end

@@ -7,17 +7,27 @@
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<style type="text/css">
 			/* <![CDATA[ */
-			body     {  font: 12px 'Lucida Grande'; }
-			.FIXME   { color: red;     }
-			.TODO    { color: orange;  }
-			.CHANGED { color: green;   }
+			body {
+				font: 12px 'Lucida Grande';
+			}
+			h2 {
+				font-size: 120%;
+			}
+			a {
+				color: #666;
+			}
+			<% $tags.each do |tag| %>
+				#<%= tag[:label] %> {
+					color: <%= tag[:color] %>;
+				}
+			<% end %>
 			/* ]]> */
 		</style>
 		<title>TODO List</title>
 	</head>
 	<body>
 
-		<!-- Output “TODO || FIXME || CHANGED” -->
+		<!-- Output as “TODO || FIXME || CHANGED” -->
 		<p><%= $tags.collect do |tag|
 				"<a href='##{tag[:label]}' class='#{tag[:label]}'>#{tag[:label]}</a>"
 			end.join(" || ") %></p>
@@ -30,8 +40,8 @@
 				<ol id="<%= tag[:label] %>">
 				<% tag[:matches].each do |match| %>
 
-					<li class="<%= tag[:label] %>">
-						<a title="<%= html_escape(match[:content].strip) %>" href="txmt://open/?url=<%= "file://#{match[:file].gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) }}&amp;line=#{match[:line]}" %>">
+					<li>
+						<a title="<%= html_escape(match[:content].strip) %>" href="<%= TextMate.file_link(match[:file], match[:line]) %>">
 							<%= "#{html_escape(File.basename(match[:file]))} (#{match[:line]})" %></a>:
 							<%= html_escape(match[:match]) %>
 					</li>

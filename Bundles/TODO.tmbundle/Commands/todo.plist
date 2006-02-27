@@ -7,15 +7,21 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
+$tags = [
+  { :label =&gt; "TODO",    :color =&gt; "#A00000", :regexp =&gt; /TODO[\s,:]+(\w.*)$/i    },
+  { :label =&gt; "FIXME",   :color =&gt; "#CF830D", :regexp =&gt; /FIX ?ME[\s,:]+(\w.*)$/i },
+  { :label =&gt; "CHANGED", :color =&gt; "#008000", :regexp =&gt; /CHANGED[\s,:]+(\w.*)$/  },
+]
+
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
 include ERB::Util
 
-$tags = [
-  { :label =&gt; "TODO",     :regexp =&gt; /TODO[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "FIXME",    :regexp =&gt; /FIX ?ME[\s,:]+(\w.*)$/i },
-  { :label =&gt; "CHANGED",  :regexp =&gt; /CHANGED[\s,:]+(\w.*)$/  },
-]
+def TextMate.file_link (file, line = 0)
+  return "txmt://open/?url=file://" +
+    file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
+    "&amp;amp;line=" + line.to_s
+end
 
 # setup empty array for per tag results
 $tags.each { |tag| tag[:matches] = [ ] }

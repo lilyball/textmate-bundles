@@ -11,34 +11,30 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
 include ERB::Util
 
-$items = [
-  { :label =&gt; "TODO",     :matches =&gt; [ ], :regexp =&gt; /TODO[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "FIXME",    :matches =&gt; [ ], :regexp =&gt; /FIX ?ME[\s,:]+(\w.*)$/i },
-  { :label =&gt; "CHANGED",  :matches =&gt; [ ], :regexp =&gt; /CHANGED[\s,:]+(\w.*)$/  },
+$tags = [
+  { :label =&gt; "TODO",     :regexp =&gt; /TODO[\s,:]+(\w.*)$/i    },
+  { :label =&gt; "FIXME",    :regexp =&gt; /FIX ?ME[\s,:]+(\w.*)$/i },
+  { :label =&gt; "CHANGED",  :regexp =&gt; /CHANGED[\s,:]+(\w.*)$/  },
 ]
 
-TextMate.each_text_file do |filepath|
+# setup empty array for per tag results
+$tags.each { |tag| tag[:matches] = [ ] }
 
-  File.open(filepath) do |f|
-    f.each_line do |line|
-      $items.each do |item|
-
-        if(m = item[:regexp].match(line)) then
-          item[:matches].push({
-            :file =&gt; filepath,
-            :line =&gt; f.lineno,
-            :content =&gt; line,
-            :match =&gt; m[1],
-          })
-        end
-
+TextMate.each_text_file do |file|
+  $tags.each do |tag|
+    File.open(file) do |io|
+      io.grep(tag[:regexp]) do |content|
+        tag[:matches] &lt;&lt; {
+          :file =&gt; file, :line =&gt; io.lineno,
+          :content =&gt; content, :match =&gt; $1,
+        }
       end
     end
   end
-
 end
 
-puts ERB.new(File.open("#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"), 0, '&lt;&gt;').result
+tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"
+puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result
 </string>
 	<key>input</key>
 	<string>none</string>

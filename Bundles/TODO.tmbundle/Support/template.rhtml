@@ -7,33 +7,39 @@
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<style type="text/css">
 			/* <![CDATA[ */
-			body		{  font: 12px 'Lucida Grande'; }
-			.FIXME	{ color: red;		}
-			.TODO		{ color: orange;	}
-			.CHANGED { color: green;	}
+			body     {  font: 12px 'Lucida Grande'; }
+			.FIXME   { color: red;     }
+			.TODO    { color: orange;  }
+			.CHANGED { color: green;   }
 			/* ]]> */
 		</style>
 		<title>TODO List</title>
 	</head>
 	<body>
 
-		<p><%= $items.collect do |item|
-				"<a href='##{item[:label]}' class='#{item[:label]}'>#{item[:label]}</a>"
+		<!-- Output “TODO || FIXME || CHANGED” -->
+		<p><%= $tags.collect do |tag|
+				"<a href='##{tag[:label]}' class='#{tag[:label]}'>#{tag[:label]}</a>"
 			end.join(" || ") %></p>
 
-		<% $items.each do |item| %>
-			<h2><%= item[:label] %></h2>
-			<ol id="<%= item[:label] %>">
-			<% item[:matches].each do |match| %>
+		<% $tags.each do |tag| %>
+			<h2><%= tag[:label] %></h2>
+			<% if tag[:matches].empty? then %>
+				<p>No matches found.</p>
+			<% else %>
+				<ol id="<%= tag[:label] %>">
+				<% tag[:matches].each do |match| %>
 
-				<li class="<%= item[:label] %>">
-					<a title="<%= html_escape(match[:content].strip) %>" href="txmt://open/?url=<%= "file://#{match[:file].gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) }}&amp;line=#{match[:line]}" %>">
-						<%= "#{html_escape(File.basename(match[:file]))} (#{match[:line]})" %></a>:
-						<%= html_escape(match[:match]) %>
-				</li>
+					<li class="<%= tag[:label] %>">
+						<a title="<%= html_escape(match[:content].strip) %>" href="txmt://open/?url=<%= "file://#{match[:file].gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) }}&amp;line=#{match[:line]}" %>">
+							<%= "#{html_escape(File.basename(match[:file]))} (#{match[:line]})" %></a>:
+							<%= html_escape(match[:match]) %>
+					</li>
 
+				<% end %>
+				</ol>
 			<% end %>
-			</ol>
+
 		<% end %>
 
 	</body>

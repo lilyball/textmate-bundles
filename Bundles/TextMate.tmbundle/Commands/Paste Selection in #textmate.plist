@@ -5,13 +5,22 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -z "$TM_IRC_CHANNEL" ]] &amp;&amp; ps -xc|grep -sq 'Colloquy$'; then
+	<string>paste_targets () {
+   osascript &lt;&lt;"EOF"
+      tell application "Colloquy"
+         set AppleScript's text item delimiters to " "
+         (name of chat room panels &amp; name of direct chat panels) as string
+      end tell
+EOF
+}
+
+if [[ -z "$TM_IRC_CHANNEL" ]] &amp;&amp; ps -xc|grep -sq 'Colloquy$'; then
   result=$(CocoaDialog dropdown \
     --title 'Paste to IRC' \
     --text 'Choose a chat room or user:' \
     --button1 Paste --button2 Cancel \
     --string-output --no-newline \
-    --items $(osascript -e 'tell app "Colloquy" to name of panels'|tr -d ,))
+    --items $(paste_targets))
 
   if [[ "${result:0:5}" == "Paste" ]];
     then TM_IRC_CHANNEL="${result:6}"

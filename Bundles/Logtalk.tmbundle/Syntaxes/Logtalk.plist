@@ -30,10 +30,23 @@
 			<string>comment.line.percentage.logtalk</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.opening.logtalk</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>:-\s+(object|protocol|category|module)(?=[(])</string>
+			<string>(:-\s+)(object|protocol|category|module)(\()([^(,]+)</string>
 			<key>name</key>
-			<string>storage.type.opening.logtalk</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>match</key>

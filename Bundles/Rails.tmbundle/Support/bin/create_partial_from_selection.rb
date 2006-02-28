@@ -64,7 +64,7 @@ else
       text << line
       if line =~ /render[\s\(].*:partial\s*=>\s*['"](.+?)['"]/
         partial_name = $1
-        modules = current_file.modules
+        modules = current_file.modules + [current_file.controller_name]
 
         # Check for absolute path to partial file
         if partial_name.include?('/')

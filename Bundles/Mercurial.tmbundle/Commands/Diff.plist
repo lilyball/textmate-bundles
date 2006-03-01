@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>cd "$TM_DIRECTORY"
+echo "Index: changes in working copy of $TM_FILENAME"
+${TM_HG:=hg} diff "$TM_FILENAME"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@h</string>
+	<key>name</key>
+	<string>Diff with previous</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>uuid</key>
+	<string>627E8652-2B23-4E68-ADF9-103BA2B16074</string>
+</dict>
+</plist>

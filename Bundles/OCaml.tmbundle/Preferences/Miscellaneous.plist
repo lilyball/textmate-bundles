@@ -8,8 +8,10 @@
 	<string>source.ocaml</string>
 	<key>settings</key>
 	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>^\s*done\s*$</string>
 		<key>increaseIndentPattern</key>
-		<string>^.*(\([^)"']*|begin)$|\blet\s+[a-z][a-zA-Z0-9_']*.*(?!in$)|match\s+.*\s+with\s*$|\b(class|object|struct|sig)\b</string>
+		<string>^.*(\([^)"']*|begin)$|\blet\s+[a-z][a-zA-Z0-9_']*.*(?!in$)|match\s+.*\s+with\s*$|\b(class|object|struct|sig)\b|\b(for|while)\s+.*\bdo\s*$</string>
 		<key>shellVariables</key>
 		<array>
 			<dict>

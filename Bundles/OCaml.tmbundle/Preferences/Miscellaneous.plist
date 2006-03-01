@@ -8,23 +8,19 @@
 	<string>source.ocaml</string>
 	<key>settings</key>
 	<dict>
-		<key>decreaseIndentPattern</key>
-		<string>^\s*done\s*$</string>
-		<key>increaseIndentPattern</key>
-		<string>^.*(\([^)"']*|begin)$|\blet\s+[a-z][a-zA-Z0-9_']*.*(?!in$)|match\s+.*\s+with\s*$|\b(class|object|struct|sig)\b|\b(for|while)\s+.*\bdo\s*$</string>
 		<key>shellVariables</key>
 		<array>
 			<dict>
 				<key>name</key>
 				<string>TM_COMMENT_START</string>
 				<key>value</key>
-				<string>(*</string>
+				<string>(* </string>
 			</dict>
 			<dict>
 				<key>name</key>
 				<string>TM_COMMENT_END</string>
 				<key>value</key>
-				<string>*)</string>
+				<string> *)</string>
 			</dict>
 			<dict>
 				<key>name</key>
@@ -33,27 +29,8 @@
 				<string>block</string>
 			</dict>
 		</array>
-		<key>smartTypingPairs</key>
-		<array>
-			<array>
-				<string>(</string>
-				<string>)</string>
-			</array>
-			<array>
-				<string>[</string>
-				<string>]</string>
-			</array>
-			<array>
-				<string>{</string>
-				<string>}</string>
-			</array>
-			<array>
-				<string>"</string>
-				<string>"</string>
-			</array>
-		</array>
 	</dict>
 	<key>uuid</key>
-	<string>AD257FE4-8F09-4FE6-A0C3-CD5E15F75C5D</string>
+	<string>4C99F5E7-F7D2-47A3-B232-C1E99C828F5D</string>
 </dict>
 </plist>

@@ -31,7 +31,7 @@ case TextMate.current_line
   # Example: render :partial => 'account/login'
   when /render[\s\(].*:partial\s*=>\s*['"](.+?)['"]/
     partial_name = $1
-    modules = current_file.modules
+    modules = current_file.modules + [current_file.controller_name]
   
     # Check for absolute path to partial
     if partial_name.include?('/')
@@ -40,7 +40,7 @@ case TextMate.current_line
       modules = pieces
     end
 
-    partial = File.join(current_file.rails_root, 'app', 'views', modules, current_file.controller_name, "_#{partial_name}.rhtml")
+    partial = File.join(current_file.rails_root, 'app', 'views', modules, "_#{partial_name}.rhtml")
     TextMate.open(partial)
 
   # Example: render :action => 'login'

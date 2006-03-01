@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>t.column "${1:title}", :${2:string}$0</string>
+	<string>has_one :${1:object}${2:, :class_name =&gt; "${3:ClassName}", :foreign_key =&gt; "${4:${1}_id}"}</string>
 	<key>name</key>
-	<string>Migration Create Column (mcc)</string>
+	<string>has_one (ho)</string>
 	<key>scope</key>
-	<string></string>
+	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>
-	<string>mcc</string>
+	<string>ho</string>
 	<key>uuid</key>
-	<string>7592CA99-75D7-48B6-9133-00B9F148FF43</string>
+	<string>BD2E4045-54E6-450E-B31B-5E1865CFFBC9</string>
 </dict>
 </plist>

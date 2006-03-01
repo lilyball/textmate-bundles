@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>t.column "${1:title}", :${2:string}$0</string>
+	<string>validates_presence_of :${1:attribute}${2:, :on =&gt; "${3:create}", :message =&gt; "${4:must be present}"}</string>
 	<key>name</key>
-	<string>Migration Create Column (mcc)</string>
+	<string>validates_presence_of (vp)</string>
 	<key>scope</key>
-	<string></string>
+	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>
-	<string>mcc</string>
+	<string>vp</string>
 	<key>uuid</key>
-	<string>7592CA99-75D7-48B6-9133-00B9F148FF43</string>
+	<string>5DAC28A7-33C8-4DA7-9E85-56618D6BEC9F</string>
 </dict>
 </plist>

@@ -9,7 +9,7 @@ module CVS
     end
     
     def dirname
-      File.dirname @path
+      (File.dirname(@path) =~ %r{/$}) ? File.dirname(@path) : "#{File.dirname(@path)}/"
     end
     
     def basename
@@ -66,7 +66,7 @@ module CVS
       class_eval "def self.#{method}(path, *args); new(path).#{method}(*args); end"
     end
     
-    private
+    protected
     
     def expand_revision(revision)
       case revision

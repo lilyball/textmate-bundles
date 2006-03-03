@@ -20,9 +20,12 @@
 	<key>firstLineMatch</key>
 	<string>-\*- C\+\+ -\*-</string>
 	<key>foldingStartMarker</key>
-	<string>/\*\*(?!\*)|\{\s*($|//|/\*(?!.*?\*/.*\S))|^@(interface|protocol|implementation)\b</string>
+	<string>(?x)
+		 /\*\*(?!\*)
+		|^(?![^{]*?//|[^{]*?/\*(?!.*?\*/.*?\{)).*?\{\s*($|//|/\*(?!.*?\*/.*\S))
+	</string>
 	<key>foldingStopMarker</key>
-	<string>(?&lt;!\*)\*\*/|^\s*\}|^@end\b</string>
+	<string>(?&lt;!\*)\*\*/|^\s*\}</string>
 	<key>keyEquivalent</key>
 	<string>~^C</string>
 	<key>name</key>
@@ -161,7 +164,7 @@
 			<key>begin</key>
 			<string>(?x)
 				(?:  ^\s*)                             # begin-of-line
-				((?!while|for|do|if|else|switch|catch)[A-Za-z_][A-Za-z0-9_:]+) # actual name
+				((?!while|for|do|if|else|switch|catch|enumerate|iterate)[A-Za-z_][A-Za-z0-9_:]+) # actual name
 				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s*:\s*([A-Za-z_][A-Za-z0-9_]+)\([^)]*\))*\s* # optional base constructors
 				 (\{|\n))                              # start bracket or end-of-line

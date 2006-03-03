@@ -10,9 +10,12 @@
 	<key>firstLineMatch</key>
 	<string>-[*]-( Mode:)? C -[*]-</string>
 	<key>foldingStartMarker</key>
-	<string>/\*\*(?!\*)|\{\s*($|//|/\*(?!.*?\*/.*\S))|^@(interface|protocol|implementation)\b</string>
+	<string>(?x)
+		 /\*\*(?!\*)
+		|^(?![^{]*?//|[^{]*?/\*(?!.*?\*/.*?\{)).*?\{\s*($|//|/\*(?!.*?\*/.*\S))
+	</string>
 	<key>foldingStopMarker</key>
-	<string>(?&lt;!\*)\*\*/|^\s*\}|^@end\b</string>
+	<string>(?&lt;!\*)\*\*/|^\s*\}</string>
 	<key>keyEquivalent</key>
 	<string>~^C</string>
 	<key>name</key>

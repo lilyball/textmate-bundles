@@ -3,16 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>create_table "${1:table}" do |t|
-    $0
-end</string>
+	<string>drop_table "${1:table}"${2: [press tab twice to generate create_table]}</string>
 	<key>name</key>
-	<string>Migration Create Table (mct)</string>
+	<string>Migration Drop and Create Table (mdct)</string>
 	<key>scope</key>
 	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>
-	<string>mct</string>
+	<string>mdct</string>
 	<key>uuid</key>
-	<string>59A47C33-97C5-411D-ADBE-ABD2324BD130</string>
+	<string>20375601-B13F-4314-B8E4-362706566636</string>
 </dict>
 </plist>

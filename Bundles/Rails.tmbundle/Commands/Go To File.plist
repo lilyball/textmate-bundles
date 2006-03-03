@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
 "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/go_to_alternate_file.rb"</string>
@@ -12,7 +12,7 @@
 	<key>keyEquivalent</key>
 	<string>~@#</string>
 	<key>name</key>
-	<string>Go To File</string>
+	<string>Go To Alternate File</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

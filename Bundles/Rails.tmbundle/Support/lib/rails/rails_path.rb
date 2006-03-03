@@ -41,7 +41,13 @@ class RailsPath
   include AssociationMessages
 
   def initialize(filepath = TextMate.filepath)
-    @filepath = filepath
+    if filepath[0..0] == '/'
+      # Absolute file, treat as is
+      @filepath = filepath
+    else
+      # Relative file, prepend rails_root
+      @filepath = File.join(rails_root, filepath)
+    end
   end
 
   def buffer

@@ -10,6 +10,10 @@ snippets = {
   'rename_column' =>
     { :up   => 'rename_column "${1:table}", "${2:column}", "${3:new_name}"$0',
       :down => 'rename_column "$1", "$3", "$2"' },
+
+  'rename_table' =>
+    { :up   => 'rename_table "${1:old_table}", "${2:new_table}"$0',
+      :down => 'rename_table "$2", "$1"' },
   
   'add_remove_column' =>
     { :up   => 'add_column "${1:table}", "${2:column}", :${3:string}$0',

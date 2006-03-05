@@ -5,14 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>: ${TM_LINE_INDEX:=$((TM_COLUMN_NUMBER-1))} # backwards compatibility
+	<string># If there’s a selection, output that twice (as a snippet)
+# leaving the duplicate as the new selected text.
+# Otherwise split the current line around the caret and
+# output “right, left” to duplicate the line, leaving the
+# caret in the same place on the new line
 
-# if there's a selection, output that (to have it duplicated) otherwise
-# split the current line around the caret and output “right, left” to
-# duplicate the line, leaving the caret in the same place on the new line
-
-echo -n "${TM_SELECTED_TEXT:-${TM_CURRENT_LINE:TM_LINE_INDEX}
-${TM_CURRENT_LINE:0:TM_LINE_INDEX}}"
+if [[ -n "$TM_SELECTED_TEXT" ]]
+   then exit_insert_snippet '$TM_SELECTED_TEXT${0:$TM_SELECTED_TEXT}'
+   else exit_insert_text "${TM_CURRENT_LINE:TM_LINE_INDEX}
+${TM_CURRENT_LINE:0:TM_LINE_INDEX}"
+fi
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

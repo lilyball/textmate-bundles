@@ -24,6 +24,7 @@ FILE=`basename "$TM_FILEPATH"`
 PSFILE=`basename "$FILE" .gri`.ps
 PDFFILE=`basename "$FILE" .gri`.pdf
 CWD="`pwd`/"
+TOPDF="epstopdf"
 
 # Switch to the right directory.
 cd "$TM_PROJECT_DIRECTORY"
@@ -45,9 +46,9 @@ echo "&lt;BR&gt;";
 gri -output "${DIR}/${PSFILE}" "${TM_FILEPATH}";
 RC=$?
 if (($RC != 0)); then exit; fi
-echo "convert ${DIR}/$PSFILE ${DIR}/$PDFFILE";
+echo "${TOPDF} ${DIR}/$PSFILE ${DIR}/$PDFFILE";
 echo "&lt;BR&gt;";
-convert "${DIR}/$PSFILE" "${DIR}/$PDFFILE";
+${TOPDF} "${DIR}/$PSFILE" &gt; "${DIR}/$PDFFILE";
 
 # View...
 if [ "$V" == html ]; then

@@ -10,7 +10,7 @@ module CVS
       @changes = nil if reload
       @changes ||= @raw.split(/\n/)[5..-1].select { |l| l =~ /^\d/ }.inject({}) do |changes,line|
         changes.merge change_from_hunk_header(line)
-      end
+      end rescue []
     end
     
 #     def source_line_status(n)

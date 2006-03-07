@@ -348,7 +348,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;&lt;)-("|'|)(\w+)\2</string>
+			<string>(&lt;&lt;)-("|'|)\\?(\w+)\2</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -377,7 +377,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;&lt;)("|'|)(\w+)\2</string>
+			<string>(&lt;&lt;)("|'|)\\?(\w+)\2</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

@@ -19,7 +19,10 @@ lines = Array.new()
 line = $stdin.gets()
 while(line != nil)
 	lines &lt;&lt; line
-	if(line =~ /^[ ]+\S/)
+	if(line =~ /^\t/)  # mixed tabs with spaces, use TM's tab setting
+		spacing = ENV['TM_TAB_SIZE']
+		break
+	elsif(line =~ /^[ ]+\S/)
 		spacing = line[/^([ ]+)\S/, 1].length
 		break
 	end

@@ -188,17 +188,19 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(and|as|assert|begin|class|constraint|do|done|downto|else|end|exception|external|false|for|fun|function|functor|if|in|include|inherit|initializer|land|lazy|let|lor|lsl|lsr|lxor|match|mod|module|mutable|new|object|of|open|or|private|rec|sig|struct|then|to|true|try|type|val|virtual|when|while|with)\b</string>
-			<key>name</key>
-			<string>keyword.language.ocaml</string>
-		</dict>
-		<dict>
-			<key>match</key>
 			<string>\b([A-Z][a-zA-Z0-9_]*\.)+</string>
 			<key>name</key>
-			<string>keyword.module</string>
+			<string>support.other.module</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.other.module</string>
+				</dict>
+			</dict>
 			<key>match</key>
 			<string>open\s+([A-Z][a-zA-Z0-9_]*(\.[A-Z][a-zA-Z0-9_]*)*)</string>
 			<key>name</key>
@@ -291,6 +293,12 @@
 			<string>[!?~][!$%&amp;*+./:&lt;=&gt;?@^|~-]*</string>
 			<key>name</key>
 			<string>keyword.operator.symbol.prefix</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(and|as|assert|begin|class|constraint|do|done|downto|else|end|exception|external|false|for|fun|function|functor|if|in|include|inherit|initializer|land|lazy|let|lor|lsl|lsr|lxor|match|mod|module|mutable|new|object|of|open|or|private|rec|sig|struct|then|to|true|try|type|val|virtual|when|while|with)\b</string>
+			<key>name</key>
+			<string>keyword.language.ocaml</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

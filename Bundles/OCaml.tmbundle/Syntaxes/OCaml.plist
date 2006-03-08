@@ -188,7 +188,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b([A-Z][a-zA-Z0-9_]*\.)+</string>
+			<string>\b([A-Z][a-zA-Z0-9_]*)(?=(?:\.[a-zA-Z0-9_]+)+)</string>
 			<key>name</key>
 			<string>support.other.module</string>
 		</dict>
@@ -202,9 +202,23 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>open\s+([A-Z][a-zA-Z0-9_]*(\.[A-Z][a-zA-Z0-9_]*)*)</string>
+			<string>\bopen\s+([A-Z][a-zA-Z0-9_]*(\.[A-Z][a-zA-Z0-9_]*)*)</string>
 			<key>name</key>
 			<string>keyword.module.open</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.exception</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\bexception\s+([A-Z][a-zA-Z0-9_]*)\b</string>
+			<key>name</key>
+			<string>keyword.exception</string>
 		</dict>
 		<dict>
 			<key>match</key>

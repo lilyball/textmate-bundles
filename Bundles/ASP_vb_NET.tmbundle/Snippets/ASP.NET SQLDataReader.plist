@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Dim con$4 as new System.Data.SQLClient.SQLConnection(System.Configuration.ConfigurationSettings.AppSettings("${3:MM_CONNECTION_STRING_TIW_LIVE}")) 
+con$4.Open()
+	Dim strSQL$4 as String = "${1:${TM_SELECTED_TEXT:SELECT * FROM Users WHERE Clue &gt; 0}}"
+	Dim    com$4 as new System.Data.SQLClient.SQLCommand(strSQL$4, Con$4)
+	Dim      r$4 as System.Data.SQLClient.SQLDataReader = Com$4.ExecuteReader()
+	While    r$4.Read()
+		${5:r$4(0)}$0
+	End While
+	r$4.Close()
+con$4.close()
+</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>SQLDataReader Loop</string>
+	<key>scope</key>
+	<string>source.asp</string>
+	<key>tabTrigger</key>
+	<string>sql</string>
+	<key>uuid</key>
+	<string>A20AA1B8-4F3E-492B-B619-2EF46832CB69</string>
+</dict>
+</plist>

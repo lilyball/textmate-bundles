@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;TABLE&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;
+      &lt;B&gt;Server Varriable&lt;/B&gt;
+    &lt;/TD&gt;
+    &lt;TD&gt;
+      &lt;B&gt;Value&lt;/B&gt;
+    &lt;/TD&gt;
+  &lt;/TR&gt;
+  &lt;% dim name as string %&gt;
+  &lt;% For Each name In Request.ServerVariables %&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;
+      &lt;%= name %&gt;
+    &lt;/TD&gt;
+    &lt;TD&gt;
+      &lt;%= Request.ServerVariables(name) %&gt;
+    &lt;/TD&gt;
+  &lt;/TR&gt;
+  &lt;% Next %&gt;
+&lt;/TABLE&gt;
+</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>ServerVariables</string>
+	<key>scope</key>
+	<string>text.html.asp.net</string>
+	<key>uuid</key>
+	<string>D24D1AAC-F745-4120-A9A3-85C22083A927</string>
+</dict>
+</plist>

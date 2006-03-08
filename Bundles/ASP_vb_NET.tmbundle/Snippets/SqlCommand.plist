@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Dim $4_CON As New System.Data.SQLClient.SQLConnection(System.Configuration.ConfigurationSettings.AppSettings("MM_CONNECTION_STRING_${2:CFC_LIVE}"))
+Dim $4_COM As New System.Data.SQLClient.SqlCommand( "${1:${TM_SELECTED_TEXT:UPDATE Users SET Clue = 1 WHERE username = 'taylott'}}", $4_CON)
+$4_COM.Connection.Open()
+$4_COM.ExecuteNonQuery()
+$4_COM.Connection.Close()
+</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>SqlCommand</string>
+	<key>scope</key>
+	<string>source.asp</string>
+	<key>tabTrigger</key>
+	<string>sql</string>
+	<key>uuid</key>
+	<string>142C4861-B95A-4DBB-A693-1996AF4A62A5</string>
+</dict>
+</plist>

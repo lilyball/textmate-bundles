@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${3:IIf(Request.Querystring("s")&lt;&gt;"",Regex.Replace(${1:${TM_SELECTED_TEXT:"Hello World!!!1!"}}, "("&amp; Request.Querystring("s") &amp;")", "&lt;${2:span} class='ss'&gt;\$1&lt;/${2:span}&gt;"),$1)}</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>Hilight Search Terms(TEXT)</string>
+	<key>scope</key>
+	<string>source.asp</string>
+	<key>tabTrigger</key>
+	<string>format</string>
+	<key>uuid</key>
+	<string>4BC9912E-93CF-4C5D-A264-425D0151C542</string>
+</dict>
+</plist>

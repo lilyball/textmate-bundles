@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Dim conn$1 as New SqlConnection(ConfigurationSettings.AppSettings("${4:MM_CONNECTION_STRING_TIW_LIVE}"))'1. Create a connection
+Const strSQL$1 as String = "${2:SELECT * FROM Users WHERE Clue &gt; 0}"'2. Create the command object, passing in the SQL string
+Dim comm$1 as New SqlCommand(strSQL$1, conn$1)
+conn$1.Open()
+  ${1:${TM_SELECTED_TEXT:IdOfThinggy}}.DataSource = comm$1.ExecuteReader(CommandBehavior.CloseConnection)
+  ${1:${TM_SELECTED_TEXT:IdOfThinggy}}.DataBind()'Set the datagrid's datasource to the datareader and databind 
+conn$1.Close()$0</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>SQLDataReader Bound</string>
+	<key>scope</key>
+	<string>source.asp</string>
+	<key>tabTrigger</key>
+	<string>sql</string>
+	<key>uuid</key>
+	<string>AF62ECDD-219A-44A8-B47F-7B1F538DC241</string>
+</dict>
+</plist>

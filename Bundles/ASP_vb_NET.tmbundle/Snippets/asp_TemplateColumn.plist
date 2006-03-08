@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;asp:TemplateColumn HeaderText="${1:${TM_SELECTED_TEXT:ColumnName}}" ${2:ReadOnly="True" ${3:FooterText="${1:${TM_SELECTED_TEXT:ColumnName}}" }}&gt;
+	&lt;ItemTemplate&gt;${9:
+		&lt;%# DataBinder.Eval(Container.DataItem, "${1:${TM_SELECTED_TEXT:ColumnName}}"${8:, "{0:C\}"}) %&gt;$0
+	}&lt;/ItemTemplate&gt;${10:
+	&lt;EditItemTemplate&gt;${11:
+		&lt;input name="${1:${TM_SELECTED_TEXT:ColumnName}}" type="text" value="&lt;%# DataBinder.Eval(Container.DataItem, "${1:${TM_SELECTED_TEXT:ColumnName}}"${8:, "{0:C\}"}) %&gt;" size="" maxlength="" /&gt;
+	}&lt;/EditItemTemplate&gt;}
+&lt;/asp:TemplateColumn&gt;</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>asp:TemplateColumn</string>
+	<key>scope</key>
+	<string>text.html.asp.net</string>
+	<key>tabTrigger</key>
+	<string>asp:</string>
+	<key>uuid</key>
+	<string>D49E16DC-34E3-480F-903C-6AB0E2408B93</string>
+</dict>
+</plist>

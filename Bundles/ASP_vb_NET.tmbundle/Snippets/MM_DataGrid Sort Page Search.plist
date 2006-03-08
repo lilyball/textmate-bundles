@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${9:&lt;div id="search_${1:Orders}"&gt;
+  &lt;form action="" method="get"&gt;
+    Search &lt;input name="s" value="&lt;%= Request.Querystring("s") %&gt;" /&gt;
+    &lt;input type="submit" value="Search ${1:Orders}" /&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+}&lt;div id="${1:Orders}"&gt;
+${7:	&lt;%@ Register TagPrefix="MM" Namespace="DreamweaverCtrls" Assembly="DreamweaverCtrls,version=1.0.0.0,publicKeyToken=836f606ede05d46a,culture=neutral" %&gt;
+	&lt;mm:pagebind runat="server" PostBackBind="true" /&gt;
+}	&lt;mm:dataset ID="${1:Orders}"
+	 runat="Server"
+	 IsStoredProcedure="false"
+	 ConnectionString='&lt;%# System.Configuration.ConfigurationSettings.AppSettings("MM_CONNECTION_STRING_${3:Common_LIVE}") %&gt;'
+	 DatabaseType='&lt;%# System.Configuration.ConfigurationSettings.AppSettings("MM_CONNECTION_DATABASETYPE_${3:Common_LIVE}") %&gt;'
+	 CommandText='&lt;%# "${2:select * from users where clue is not null}    ORDER BY "+ IIf((Not Request.Querystring("sortOn") Is Nothing), Request.Querystring("sortOn"), "${4:username}") +" "+ Request.Querystring("sortDir") %&gt;'
+	 Debug="true" PageSize="25"
+	 &gt;
+		&lt;parameters&gt;${5:
+			&lt;parameter  name="@s"  value='&lt;%# "%" + IIf((Not Request.Querystring("s") Is Nothing), Request.Querystring("s"), "") + "%" %&gt;'  type="VarChar"   /&gt;
+		}&lt;/parameters&gt;
+	&lt;/mm:dataset&gt;
+	&lt;script runat="server"&gt;
+	Sub ${1:Orders}_sortCommand(sender as Object, e as DataGridSortCommandEventArgs)
+		dim sortDir as string = ""
+		if Request.QueryString("sortOn") = e.SortExpression then
+			if (Request.QueryString("sortDir") = "")
+				sortDir = "ASC"
+			else if (Request.QueryString("sortDir") = "ASC")
+				sortDir = "DESC"
+			else if (Request.QueryString("sortDir") = "DESC")
+				sortDir = "ASC"
+			end if
+		else
+			sortDir = "ASC"
+		end if
+		Response.Redirect(Request.ServerVariables("SCRIPT_NAME") + "?sortOn=" + e.SortExpression + "&amp;sortDir=" + sortDir + "&amp;s=" + Request.Querystring("s"))
+	end sub
+	&lt;/script&gt;
+	&lt;asp:DataGrid ID="${1:Orders}_DG"
+				DataKeyField="${4:username}"
+				AutoGenerateColumns="true"
+				
+				runat="server"
+				AllowSorting="true"
+				OnSortCommand="${1:Orders}_sortCommand"
+				
+				DataSource="&lt;%# ${1:Orders}.DefaultView %&gt;"
+				OnItemDataBound="${1:Orders}.OnDataGridItemDataBound"
+				
+				AllowPaging="true"
+				AllowCustomPaging="true"
+				PageSize="&lt;%# ${1:Orders}.PageSize %&gt;"
+				OnPageIndexChanged="${1:Orders}.OnDataGridPageIndexChanged"
+				virtualitemcount="&lt;%# ${1:Orders}.RecordCount %&gt;"
+				PagerStyle-Mode="NumericPages"
+				PagerStyle-Position="${10:Bottom|Top|TopAndBottom}"
+				
+				ShowHeader="true"
+				ShowFooter="false"
+				EnableViewstate="false"
+		&gt;
+		&lt;headerstyle           CssClass="headerstyle"          /&gt;
+		&lt;itemstyle             CssClass="itemstyle"            /&gt;
+		&lt;alternatingitemstyle  CssClass="alternatingitemstyle" /&gt;
+		&lt;footerstyle           CssClass="footerstyle"          /&gt;
+		&lt;pagerstyle            CssClass="pagerstyle"           /&gt;
+		&lt;columns&gt;
+			$0
+		&lt;/columns&gt;
+	&lt;/asp:DataGrid&gt;
+&lt;/div&gt;
+</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>MM:DataGrid Sort Page Search</string>
+	<key>scope</key>
+	<string>text.html.asp</string>
+	<key>tabTrigger</key>
+	<string>datagrid</string>
+	<key>uuid</key>
+	<string>0DAEDF6F-7009-4CBC-B175-3146F02903ED</string>
+</dict>
+</plist>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${9:&lt;div id="search_${1:Orders}"&gt;
+  &lt;form action="" method="get"&gt;
+    Search &lt;input name="s" value="&lt;%= Request.Querystring("s") %&gt;" /&gt;
+    &lt;input type="submit" value="Search ${1:Orders}" /&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+}&lt;div id="${1:Orders}"&gt;
+${7:	&lt;%@ Register TagPrefix="MM" Namespace="DreamweaverCtrls" Assembly="DreamweaverCtrls,version=1.0.0.0,publicKeyToken=836f606ede05d46a,culture=neutral" %&gt;
+	&lt;mm:pagebind runat="server" PostBackBind="true" /&gt;
+}	&lt;mm:dataset ID="${1:Orders}"
+	 runat="Server"
+	 IsStoredProcedure="false"
+	 ConnectionString='&lt;%# System.Configuration.ConfigurationSettings.AppSettings("MM_CONNECTION_STRING_${3:Common_LIVE}") %&gt;'
+	 DatabaseType='&lt;%# System.Configuration.ConfigurationSettings.AppSettings("MM_CONNECTION_DATABASETYPE_${3:Common_LIVE}") %&gt;'
+	 CommandText='&lt;%# "${2:select * from users where clue is not null}    ORDER BY "+ IIf((Not Request.Querystring("sortOn") Is Nothing), Request.Querystring("sortOn"), "${4:username}") +" "+ Request.Querystring("sortDir") %&gt;'
+	 Debug="true" PageSize="25"
+	 &gt;
+		&lt;parameters&gt;${5:
+			&lt;parameter  name="@s"  value='&lt;%# "%" + IIf((Not Request.Querystring("s") Is Nothing), Request.Querystring("s"), "") + "%" %&gt;'  type="VarChar"   /&gt;
+		}&lt;/parameters&gt;${6:
+		&lt;editops&gt;
+			&lt;editopstable name="dbo.tblFedExSecurity" /&gt;
+			&lt;parameter name="password"          type="NVarChar" /&gt;
+			&lt;parameter name="customerid"        type="NVarChar" /&gt;
+			&lt;parameter name="locationid"        type="Int"      /&gt;
+			&lt;parameter name="style"             type="NVarChar" /&gt;
+			&lt;parameter name="sub_style"         type="SmallInt" /&gt;
+			&lt;parameter name="make_style"        type="SmallInt" /&gt;
+			&lt;parameter name="shipping_method"   type="SmallInt" /&gt;
+			&lt;parameter name="type"              type="NVarChar" /&gt;
+			&lt;parameter name="role"              type="NVarChar" /&gt;
+			&lt;parameter name="phone"             type="NVarChar" /&gt;
+			&lt;parameter name="email"             type="VarChar"  /&gt;
+			&lt;parameter name="viewreport"        type="Bit"      /&gt;
+			&lt;parameter name="viewreportnumbers" type="Bit"      /&gt;
+			&lt;parameter name="viewreportmoney"   type="Bit"      /&gt;
+			&lt;parameter name="viewtracking"      type="Bit"      /&gt;
+			&lt;parameter name="addlocations"      type="Bit"      /&gt;
+			&lt;parameter name="viewlocations"     type="Bit"      /&gt;
+			&lt;parameter name="sendemail"         type="Bit"      /&gt;
+			&lt;parameter name="fundsallocation"   type="Bit"      /&gt;
+			&lt;parameter name="supplyordering"    type="Bit"      /&gt;
+			&lt;parameter name="generatecalltag"   type="Bit"      /&gt;
+			&lt;parameter name="generateprp"       type="Bit"      /&gt;
+			&lt;parameter name="viewlogins"        type="Bit"      /&gt;
+			&lt;parameter name="createlogins"      type="Bit"      /&gt;
+			&lt;parameter name="${4:username}" type="NVarChar" isprimary="true" /&gt;
+		&lt;/editops&gt;}
+	&lt;/mm:dataset&gt;
+	&lt;script runat="server"&gt;
+	Sub ${1:Orders}_sortCommand(sender as Object, e as DataGridSortCommandEventArgs)
+		dim sortDir as string = ""
+		if Request.QueryString("sortOn") = e.SortExpression then
+			if (Request.QueryString("sortDir") = "")
+				sortDir = "ASC"
+			else if (Request.QueryString("sortDir") = "ASC")
+				sortDir = "DESC"
+			else if (Request.QueryString("sortDir") = "DESC")
+				sortDir = "ASC"
+			end if
+		else
+			sortDir = "ASC"
+		end if
+		Response.Redirect(Request.ServerVariables("SCRIPT_NAME") + "?sortOn=" + e.SortExpression + "&amp;sortDir=" + sortDir + "&amp;s=" + Request.Querystring("s"))
+	end sub
+	&lt;/script&gt;
+	&lt;asp:DataGrid ID="${1:Orders}_DG"
+				DataKeyField="${4:username}"
+				AutoGenerateColumns="true"
+			
+				runat="server"
+				AllowSorting="true"
+				OnSortCommand="${1:Orders}_sortCommand"
+			
+				DataSource="&lt;%# ${1:Orders}.DefaultView %&gt;"
+				OnItemDataBound="${1:Orders}.OnDataGridItemDataBound"
+				OnEditCommand="${1:Orders}.OnDataGridEdit"
+				OnUpdateCommand="${1:Orders}.OnDataGridUpdate"
+				OnDeleteCommand="${1:Orders}.OnDataGridDelete"
+				OnCancelCommand="${1:Orders}.OnDataGridCancel"
+			
+				AllowPaging="true"
+				AllowCustomPaging="true"
+				PageSize="&lt;%# ${1:Orders}.PageSize %&gt;"
+				OnPageIndexChanged="${1:Orders}.OnDataGridPageIndexChanged"
+				virtualitemcount="&lt;%# ${1:Orders}.RecordCount %&gt;"
+				PagerStyle-Mode="NumericPages"
+			
+				ShowHeader="true"
+				ShowFooter="false"
+		&gt;
+		&lt;headerstyle           CssClass="headerstyle"          /&gt;
+		&lt;itemstyle             CssClass="itemstyle"            /&gt;
+		&lt;alternatingitemstyle  CssClass="alternatingitemstyle" /&gt;
+		&lt;footerstyle           CssClass="footerstyle"          /&gt;
+		&lt;pagerstyle            CssClass="pagerstyle"           /&gt;
+		&lt;columns&gt;
+			&lt;asp:EditCommandColumn  ButtonType="LinkButton"  CancelText="Cancel"  EditText="Edit"  HeaderText="Edit"  UpdateText="Update"  visible="True"/&gt;
+			$0
+		&lt;/columns&gt;
+	&lt;/asp:DataGrid&gt;
+&lt;/div&gt;
+</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>MM:DataGrid Sort Page Edit</string>
+	<key>scope</key>
+	<string>text.html.asp</string>
+	<key>tabTrigger</key>
+	<string>datagrid</string>
+	<key>uuid</key>
+	<string>68A09D9A-8324-4CCC-AC4A-6D175536EF38</string>
+</dict>
+</plist>

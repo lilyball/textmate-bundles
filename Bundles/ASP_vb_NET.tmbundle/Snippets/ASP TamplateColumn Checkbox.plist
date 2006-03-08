@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;asp:TemplateColumn HeaderText="${1:`echo $TM_SELECTED_TEXT`}" Visible="True"&gt;
+	&lt;itemtemplate&gt;&lt;asp:CheckBox ID="${1:`echo $TM_SELECTED_TEXT`}" runat="server" Checked='&lt;%# Users.FieldValue("${1:`echo $TM_SELECTED_TEXT`}", Container) %&gt;' enabled="false" /&gt;&lt;/itemtemplate&gt;
+	&lt;edititemtemplate&gt;
+		&lt;asp:CheckBox ID="${1:`echo $TM_SELECTED_TEXT`}" runat="server" Checked='&lt;%# Users.FieldValue("${1:`echo $TM_SELECTED_TEXT`}", Container) %&gt;' /&gt;
+	&lt;/edititemtemplate&gt;
+&lt;/asp:TemplateColumn&gt;
+</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>asp:TemplateColumn Checkbox</string>
+	<key>scope</key>
+	<string>text.html.asp.net</string>
+	<key>tabTrigger</key>
+	<string>asp:</string>
+	<key>uuid</key>
+	<string>E740C23F-7520-4685-9165-045CD52DDF21</string>
+</dict>
+</plist>

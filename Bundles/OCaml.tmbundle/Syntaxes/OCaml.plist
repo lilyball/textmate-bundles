@@ -48,11 +48,16 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
+					<string>variable.function.ocaml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
 					<string>keyword.language.ocaml</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(let(?:\s+rec)?+|and)\s+([a-z_][a-zA-Z0-9'_]*)[ \t]+(?:(?:(?:(?:\?|\()?\s*\(*|\(+)[a-z][a-zA-Z0-9'_]*)|.*=\s*(fun(ction)?))</string>
+			<string>\b(let(?:\s+rec)?+|and)\s+([a-z_][a-zA-Z0-9'_]*)[ \t]+(?:((?:(?:(?:\?|\()?\s*\(*|\(+)[a-z][a-zA-Z0-9'_]*)+)|.*=\s*(fun(ction)?))</string>
 			<key>name</key>
 			<string>declaration.function</string>
 		</dict>
@@ -74,9 +79,14 @@
 					<key>name</key>
 					<string>entity.name.function</string>
 				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>variable.method.ocaml</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(method)\s+(virtual\s+)?([a-z_][a-zA-Z0-9'_]*)\b</string>
+			<string>\b(method)\s+(virtual\s+)?([a-z_][a-zA-Z0-9'_]*)((?:\s(?:[a-z_][a-zA-Z0-9'_]*))*)</string>
 			<key>name</key>
 			<string>declaration.method</string>
 		</dict>

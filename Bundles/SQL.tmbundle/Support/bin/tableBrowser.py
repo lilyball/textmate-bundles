@@ -223,7 +223,11 @@ def listDatabases(dbHost,dbPort,serverType,passwd,dbUser):
                 x = re.match('\s+(<td align=.*?>)(.*?)(</td>)',i)
                 dbLink = "<a href='javascript:tb(" +"%22" + x.group(2) +"%22,%22" + '__none__' + "%22,%22" + dbHost + "%22,%22" + serverType + "%22,%22" + passwd + "%22,%22" + dbUser + "%22,%22" + str(dbPort) + "%22)'>"
                 print x.group(1) + dbLink + x.group(2) + "</a>" + x.group(3)
+                print dbList.readline()
+                dbList.readline()
             elif re.search('List of databases',i):
+                pass
+            elif re.search('>Encoding<',i):
                 pass
             else:
                 print i

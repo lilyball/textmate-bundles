@@ -185,10 +185,17 @@ def printScriptTag():
     path = os.getenv("TM_BUNDLE_SUPPORT")
     path = path + '/bin/tableBrowser.py'
     print """<script>
+       function shell_run(cmd) {
+           TextMate.isBusy = true;
+           var res = TextMate.system(cmd, null).outputString;
+           TextMate.isBusy = false;
+           return res;
+       }
+
        function tb(db,tbl,hname,stype,pw,dbuser,dbport) {
           var cmd = "%s --database=" + db + " --table=" + tbl + " --host=" + hname + " --server=" + stype + " --passwd=" + pw + " --user=" + dbuser + " --port=" + dbport;
           cmd = cmd.replace(" ","\\\\ ")
-          var res = TextMate.system(cmd, null).outputString;
+          var res = shell_run(cmd);
           if(tbl == '__none__') {
              document.getElementById("tablist").innerHTML = res;
              document.getElementById("result").innerHTML = "";             

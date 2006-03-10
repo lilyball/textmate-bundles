@@ -21,11 +21,17 @@ table {
     border-collapse:collapse;
     width:100%;
 }
+#dbbar table {
+    width:90%;
+    margin-left:4px;
+}
 #dbbar table td {
     border-bottom:1px solid #3C75AA;
     border-top:1px solid #3C75AA;
     text-align:left;
     padding:0;
+    padding-left:18px;
+    background: #FFF url(database.png) no-repeat 2px 2px;
 }
 
 #dbbar table td a {
@@ -59,7 +65,8 @@ ul.tableList li {
     float:left;
     display:block;
     border:1px solid #DDD;
-    background-color: #FFF;
+    background: #FFF url(database_table.png) no-repeat 2px 2px;
+    padding-left:18px;
     margin-right:1px;
     margin-bottom:1px;
     width:150px;

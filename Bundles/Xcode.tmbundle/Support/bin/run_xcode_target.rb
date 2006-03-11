@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -s
+#!/usr/bin/env ruby -s
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"

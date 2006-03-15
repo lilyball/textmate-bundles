@@ -47,7 +47,8 @@ case TextMate.current_line
   when /render[\s\(].*:action\s*=>\s*['"](.+?)['"]/
     action = $1
     if current_file.file_type == :controller
-      if search = current_file.buffer.find(:direction => :backwards) { /def\s+#{action}\b/ }
+      current_file.buffer.line_number = 0
+      if search = current_file.buffer.find { /def\s+#{action}\b/ }
         TextMate.open(current_file, search[1])
       end
     else

@@ -15,8 +15,8 @@ $t      = STDIN.read
 
 # needs to escape them for use in regex
 # because we can't do \Q...\E
-$s_esc  = $s.gsub(/./, '\\\\\&amp;')
-$e_esc  = $e.gsub(/./, '\\\\\&amp;')
+$s_esc  = $s.gsub(/[\\|()\[\].?*+{}^$]/, '\\\\\&amp;')
+$e_esc  = $e.gsub(/[\\|()\[\].?*+{}^$]/, '\\\\\&amp;')
 
 case $m
 when "line"  # apply comment line-by-line

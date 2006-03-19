@@ -6,13 +6,9 @@
 	<string>This is a modified version of the HTML language that uses ASP VB.NET for embedded source code instead of ruby. Thomas Aylott subtleGradient.com</string>
 	<key>fileTypes</key>
 	<array>
-		<string>asp</string>
 		<string>aspx</string>
-		<string>inc</string>
 		<string>ascx</string>
 	</array>
-	<key>firstLineMatch</key>
-	<string>&lt;!DOCTYPE|&lt;(?i:html)</string>
 	<key>foldingStartMarker</key>
 	<string>(?x)
 		(&lt;(?i:mm:dataset|mm:insert|mm:update|asp:DataGrid|asp:Repeater|asp:TemplateColumn|head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl)\b
@@ -199,7 +195,7 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>source.js.bracketed</string>
+							<string>source.js</string>
 						</dict>
 					</array>
 				</dict>

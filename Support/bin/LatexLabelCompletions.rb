@@ -1,7 +1,8 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -s
 # Searches current file for \label{} commands. If in a project setting, and if TM_LATEX_MASTER is set, then
 # searches all files \include'd in the master latex file.
 #
+# if -e the option is set, then it will escape any resulting slashes one more level.
 #
 #####################
 # Helper function
@@ -87,7 +88,8 @@ filelist.uniq.each {|filename|
     theFile.each { |line|
       if line.match(matchregex)
         m = $~
-        completionslist << "#{m[1]}"
+# Escape \ if -e is set
+        completionslist << if $e then "#{m[1]}".gsub('\\','\\\\\\\\') else "#{m[1]}" end
       end
     }
   end

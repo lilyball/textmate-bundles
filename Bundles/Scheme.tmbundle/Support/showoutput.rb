@@ -66,13 +66,13 @@ end
 def makeerrorlink(line, system)
   case system
   when "mzscheme"
-    a = line.split(':')
+    a = line.split(':', 4)
     file = a[0]
     line = a[1]
     column = a[2]
     exp = a[3]
     "<tr><td width='50'></td><td><div class='errorinfo'>" +
-    File.basename(file) + "line #{line}, column #{column}</div></td>" +
+    File.basename(file) + " line #{line}, column #{column}</div></td>" +
     '<td width="30"></td><td><div class="errorexp"><a href="txmt://open?url=file://' + 
     File.expand_path(a[0]) + '&line=' + line + '&column=' + column + '">' + 
     escape(exp) + "</a></div></td></tr>"
@@ -88,7 +88,7 @@ def printerrors(errorfile, system)
       errors = 1
       case system
       when "mzscheme"
-        if line =~ /^\// then
+        if line =~ /:[0-9]+:[0-9]+:/ then
           puts makeerrorlink(line, system)
         else
           puts "<div class='errorline'>"

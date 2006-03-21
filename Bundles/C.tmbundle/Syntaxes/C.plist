@@ -299,7 +299,7 @@
 				([A-Za-z_][A-Za-z0-9_:]+)              # actual name
 				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s+const)?\s*                        # optional const modifier
-				 (\{|\n))                              # start bracket or end-of-line
+				 (\{|\n|//|/*))                        # start bracket or end-of-line
 			</string>
 			<key>beginCaptures</key>
 			<dict>

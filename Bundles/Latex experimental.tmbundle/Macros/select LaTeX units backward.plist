@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>action</key>
+				<string>findPrevious</string>
+				<key>findInProjectIgnoreCase</key>
+				<true/>
+				<key>findString</key>
+				<string>(\${2}|(?&lt;!\$)\$)[^$\n]+\1|(?:\\[A-Za-z]+)\{[^}]*\}|(?&lt;=\{)[^}]*(?=\})|\[[^\]]*\]|\\item(?:&lt;.+&gt;|\[.+\])?.*$</string>
+				<key>ignoreCase</key>
+				<true/>
+				<key>regularExpression</key>
+				<true/>
+				<key>replaceAllScope</key>
+				<string>selection</string>
+				<key>replaceString</key>
+				<string>g</string>
+				<key>wrapAround</key>
+				<true/>
+			</dict>
+			<key>command</key>
+			<string>findWithOptions:</string>
+		</dict>
+	</array>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>select LaTeX units backward</string>
+	<key>scope</key>
+	<string>text.latex</string>
+	<key>scopeType</key>
+	<string>local</string>
+	<key>uuid</key>
+	<string>1721F51E-67A8-4C24-ACA3-97AB2CFE00D6</string>
+</dict>
+</plist>

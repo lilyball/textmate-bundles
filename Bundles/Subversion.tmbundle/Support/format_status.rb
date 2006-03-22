@@ -31,6 +31,7 @@ class << mup
 					'G' => 'merged',
 					'U' => 'updated',
 					'M' => 'modified',
+					'R' => 'replaced',
 					'C' => 'conflict',
 					'!' => 'missing',
 					'"' => 'typeconflict',

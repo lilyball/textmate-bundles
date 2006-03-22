@@ -12,7 +12,7 @@ $bundle        = ENV['TM_BUNDLE_SUPPORT']
 $limit         = ENV['TM_SVN_LOG_LIMIT'].nil?   ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i
 $date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
 $support       = ENV['TM_SUPPORT_PATH']
-$sort_order    = [ :added, :modified, :deleted ]
+$sort_order    = [ :added, :modified, :deleted, :replaced ]
 
 # require the helper, it does some formating, etc:
 require $bundle+'/svn_helper.rb'
@@ -127,6 +127,7 @@ begin
                        when 'A'; :added
                        when 'M'; :modified
                        when 'D'; :deleted
+                       when 'R'; :replaced
                        else;     raise NoMatchException, line
                     end
                

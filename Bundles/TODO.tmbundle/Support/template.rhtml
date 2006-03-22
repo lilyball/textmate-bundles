@@ -35,7 +35,7 @@
 		<% $tags.each do |tag| %>
 			<h2><%= tag[:label] %></h2>
 			<% if tag[:matches].empty? then %>
-				<p>No matches found.</p>
+				<p>No matches.</p>
 			<% else %>
 				<ol id="<%= tag[:label] %>">
 				<% tag[:matches].each do |match| %>
@@ -43,7 +43,7 @@
 					<li>
 						<a title="<%= html_escape(match[:content].strip) %>" href="<%= TextMate.file_link(match[:file], match[:line]) %>">
 							<%= "#{html_escape(File.basename(match[:file]))} (#{match[:line]})" %></a>:
-							<%= html_escape(match[:match]) %>
+							<%= match[:match] %>
 					</li>
 
 				<% end %>

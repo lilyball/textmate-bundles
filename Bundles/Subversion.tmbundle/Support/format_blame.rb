@@ -36,6 +36,19 @@ linecount = 1
 
 
 begin
+    revision_comment = []
+    revision_number = 0
+   `"${TM_SVN:=svn}" log "$TM_FILEPATH" 2>&1`.each_line {|line|
+      if line =~ /^r(\d*)/ then
+        revision_number = $1.to_i
+        revision_comment[revision_number] = ''
+      else
+        if line !~ /^-----/ then
+          revision_comment[revision_number] += line
+        end
+      end
+   }
+   
    make_head( "Subversion Blame for '"+$full_file.sub( /^.*\//, '')+"'",
               [ $bundle+"/Stylesheets/svn_style.css",
                 $bundle+"/Stylesheets/svn_blame_style.css"] )
@@ -60,6 +73,8 @@ begin
          curr_add = ($current == linecount) ? ' current_line' : ''
          line_id = ($current == linecount + 10) ? ' id="current_line"' : ''
          
+         revision = $1.to_i
+         
          if $1.to_i != prev_rev
           if color == 'color_a'
             color = 'color_b'
@@ -69,9 +84,9 @@ begin
          end
          puts '<tr class ="' + color + '">'
          puts  '<td class="linecol"><span'+ line_id.to_s + '>'+ linecount.to_s + "</span></td>\n" +
-               '<td class="revcol'+curr_add+'" title="'+ formated_date( $3 ) +'">' + $1 + "</td>\n" +
-               '<td class="namecol'+curr_add+'" title="'+ formated_date( $3 ) +'">' + $2 + "</td>\n" +
-               '<td class="codecol'+curr_add+'"><a href="' +
+               '<td class="revcol' +curr_add+'" title="'+ formated_date( $3 ) + (revision_comment[revision].nil? ? '' : "\n" + revision_comment[revision]) + '">' + $1 + "</td>\n" +
+               '<td class="namecol'+curr_add+'" title="'+ formated_date( $3 ) + (revision_comment[revision].nil? ? '' : "\n" + revision_comment[revision]) + '">' + $2 + "</td>\n" +
+               '<td class="codecol'+curr_add+'" title="'+ formated_date( $3 ) + (revision_comment[revision].nil? ? '' : "\n" + revision_comment[revision]) + '"><a href="' +
                   make_tm_link( $full_file, linecount) +'"'+$close+'>'+ htmlize( $4 ) +
                "</a></td></tr>\n\n"
 

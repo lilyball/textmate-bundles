@@ -5,20 +5,51 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat &lt;&lt;EOF
-&lt;html&gt;&lt;head&gt;&lt;style&gt;
-body { font: 12px 'Lucida Grande' }
-&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
-&lt;h1&gt;Help for the TODO bundle&lt;/h1&gt;
-&lt;p&gt;The TODO bundle allows you to embed TODO, FIXME, or FIX ME comments in your source code.  When you run the Show TODO List command, it collects these items and displays them as a list in an html window.  Clicking on one of the items in the list brings you to the file and line where you noted the todo.&lt;/p&gt;
-&lt;p&gt;This simple list management system is helpful for leaving yourself notes as you are coding. for example&lt;/p&gt;
-&lt;pre&gt;
-//TODO test this later 
-//FIXME this is broken.
-&lt;/pre&gt;
-&lt;p&gt;The search for TODO, FIXME and FIX ME is case insensitive.&lt;/p&gt;
-&lt;p&gt;The TODO bundle does not rely on any environment variables.&lt;/p&gt;
-EOF</string>
+	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
+
+htmlHeader "TODO Bundle Help file" '&lt;style type="text/css"&gt;
+	body {
+		background-color: #eee;
+	}
+	.contents {
+		background: white;
+		font-family: Georgia, serif;
+		font-size: 13px;
+		border: 1px #888 solid;
+		padding: 0 1em;
+	}
+	code {
+		font-size: 90%;
+	}
+	&lt;/style&gt;'
+
+beginTag div 'contents'
+
+Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
+# TODO Bundle Help
+
+The "Show TODO List" command will scan your current document (on disk) or documents in your project for lines containing certain tags (see below).
+It will show an ordered list of these tags and their context which can be clicked to jump to that line in that file.
+
+## Tags
+
+Preconfigured tags are:
+
+- &lt;span style="color: #A00000;"&gt;FIXME&lt;/span&gt;
+- &lt;span style="color: #CF830D;"&gt;TODO&lt;/span&gt;
+- &lt;span style="color: #008000;"&gt;CHANGED&lt;/span&gt;
+- &lt;span style="color: #0090C8;"&gt;RADAR&lt;/span&gt;
+
+Those tags consist of a label (like "TODO"), a color in which they will be printed and a regular expression to transform them. They can be adapted in the "Show TODO List" command (which is written in ruby 1.8 -- it will not work on Panther, sorry) by changing or adding to the `$tags` variable. Rearranging the entries will rearrange them in the output, too.
+
+## Hints
+
+The list is not directly printable, but you can _Select All_ and use the _TextEdit_ Service ("New Window containing Selection") from the _Services_ Menu (in the _TextMate_ menu)
+EOF
+
+endTag
+htmlFooter
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

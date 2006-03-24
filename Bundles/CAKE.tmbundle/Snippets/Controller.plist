@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;?php
+/** \brief  ${2:undocumented class}
+	
+	&amp;copy; Copyright `date +%Y` `echo $TM_ORGANIZATION_NAME` - `echo $TM_AUTHOR`. All Rights Reserved.
+
+	\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
+	\\author \$LastChangedBy\$
+ 	\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
+	\\date \$LastChangedDate\$
+	\\version \$Rev\$
+	\\sa
+**/
+class ${1:PluralPart}sController extends AppController 
+{
+	var \$name = '$1s';
+	${3:var \$scaffold;}
+	${4:var \$helpers = array(${5:'html', 'ajax', 'text', 'time'}${6:,helpers});}
+	${7:var \$components = array(${8:'email'}${9:,components});}
+	$0
+
+	/** \\brief index the model for return to a view
+		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
+		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
+
+		\\sa
+	**/
+	function index()
+	{
+		  \$this-&gt;set('data',\$this-&gt;$1-&gt;findAll());
+	} // END function index
+	
+	/** \\brief view a single model item
+		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
+		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
+		\\param id id of model item to pass to view
+		\\sa
+	**/
+	function view(\$id)
+	{
+		\$this-&gt;$1-&gt;setId(\$id);
+		\$this-&gt;set('data', \$this-&gt;$1-&gt;read());
+	}
+	
+	/** \\brief add a single model item
+		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
+		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
+
+		\\sa
+	**/
+	function add()
+	{
+		if (empty(\$this-&gt;params['data']))
+		{
+			\$this-&gt;render();
+		}
+		else
+		{
+			if (\$this-&gt;$1-&gt;save(\$this-&gt;params['data']))
+			{
+				\$this-&gt;Session-&gt;setFlash('Your $1 has been saved');
+				\$this-&gt;redirect('/');
+			}
+			else
+			{
+				\$this-&gt;set('data', \$this-&gt;params['data']);
+				\$this-&gt;validateErrors(\$this-&gt;$1);
+				\$this-&gt;render();
+			}
+		}
+	} // END function add
+	
+	/** \\brief delete a single model item
+		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
+		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
+		\\param id id of model item delete
+		\\sa
+	**/
+	function delete(\$id) {
+		if (\$this-&gt;$1-&gt;del(\$id))
+		{
+			\$this-&gt;Session-&gt;setFlash('The $1 with id: '.\$id.' has been deleted.');
+			\$this-&gt;redirect('/');
+		}
+	} // END function delete
+	
+	/** \\brief edit a single model item
+		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
+		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
+		\\param id id of model item to edit
+		\\sa
+	**/
+	function edit(\$id=null) 	{
+		if (empty(\$this-&gt;params['data']))
+		{
+			\$this-&gt;$1-&gt;setId(\$id);
+			\$this-&gt;params['data'] = \$this-&gt;$1-&gt;read();
+			\$this-&gt;set('data', \$this-&gt;params['data']);	
+			\$this-&gt;render();
+		}
+		else
+		{
+			\$this-&gt;$1-&gt;set(\$this-&gt;params['data']);
+			if ( \$this-&gt;$1-&gt;save())
+			{
+				
+				\$this-&gt;Session-&gt;setFlash('Your $1 has been updated.');
+				\$this-&gt;redirect('/');
+			}
+			else
+			{
+				\$this-&gt;set('data', \$this-&gt;params['data']);
+				\$this-&gt;validateErrors(\$this-&gt;$1);
+				\$this-&gt;render();
+			}
+		}
+	}
+	
+} // END class $1sController
+?&gt;</string>
+	<key>name</key>
+	<string>Controller (ccontroller)</string>
+	<key>scope</key>
+	<string>source.php, text.html.basic</string>
+	<key>tabTrigger</key>
+	<string>ccontrol</string>
+	<key>uuid</key>
+	<string>03D809B4-7F9C-4F30-A402-60DDF7F8EBE6</string>
+</dict>
+</plist>

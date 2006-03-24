@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;?php
+/*! \brief  ${2:undocumented class}
+	
+	&amp;copy; Copyright `date +%Y` `echo $TM_ORGANIZATION_NAME` - `echo $TM_AUTHOR`. All Rights Reserved.
+
+	\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
+	\\author \$LastChangedBy\$
+ 	\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
+	\\date \$LastChangedDate\$
+	\\version \$Rev\$
+	\sa
+*/
+class ${1:Singular} extends AppModel {
+	var \$name = '$1';
+	$0
+} // END class $1
+
+?&gt;</string>
+	<key>name</key>
+	<string>Model (cmodel)</string>
+	<key>scope</key>
+	<string>source.php, text.html.basic</string>
+	<key>tabTrigger</key>
+	<string>cmodel</string>
+	<key>uuid</key>
+	<string>91FFD2A3-AAC0-40AF-9807-1963325EBCD9</string>
+</dict>
+</plist>

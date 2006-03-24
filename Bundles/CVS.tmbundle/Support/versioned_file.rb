@@ -29,6 +29,18 @@ module CVS
       @revisions ||= cvs(:log).inject([]) { |list,line| list << $1 if line =~ /^revision ([\d\.]+)/i; list}
     end
     
+    def update(options={})
+      options = options.dup
+      if options.key?(:tag)
+        options[:tag] = expand_revision(options[:tag])
+        options[:sticky] = true unless options.key?(:sticky)
+        options[:command_options] = "#{options[:sticky] ? '-r' : '-j'} #{options[:tag]}"
+      elsif options[:reset_tags]
+        options[:command_options] = '-A'
+      end
+      cvs(:update, options)
+    end
+    
     def diff(revision, other_revision = nil)
       revision, other_revision = expand_revision(revision), expand_revision(other_revision)
       

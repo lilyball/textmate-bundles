@@ -14,6 +14,8 @@
         |^\s*--&gt;
         |(^|\s)\}
         )</string>
+	<key>keyEquivalent</key>
+	<string>^~B</string>
 	<key>name</key>
 	<string>Bulletin Board</string>
 	<key>patterns</key>
@@ -390,13 +392,23 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:img)\]</string>
+			<string>\[(?i:img)(:((?i:right|left|top))|([^\]]+))?\]</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.other.alignment.bbcode</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>invalid.illegal.expected-an-alignment.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>

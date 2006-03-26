@@ -138,9 +138,25 @@ static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 		[self removeODBEventHandlers];
 }
 
++ (NSMenu*)findEditMenu
+{
+	NSMenu* mainMenu = [NSApp mainMenu];
+	for(int i = 0; i != [mainMenu numberOfItems]; i++)
+	{
+		NSMenu* candidate = [[mainMenu itemAtIndex:i] submenu];
+		static SEL const actions[] = { @selector(undo:), @selector(redo:), @selector(cut:), @selector(copy:), @selector(paste:), @selector(delete:), @selector(selectAll:) };
+		for(int j = 0; j != sizeof(actions)/sizeof(actions[0]); j++)
+		{
+			if(-1 != [candidate indexOfItemWithTarget:nil andAction:actions[j]])
+				return candidate;
+		}
+	}
+	return nil;
+}
+
 + (void)installMenuItem:(id)sender
 {
-	if(NSMenu* editMenu = [[[NSApp mainMenu] itemWithTitle:@"Edit"] submenu])
+	if(NSMenu* editMenu = [self findEditMenu])
 	{
 		[editMenu addItem:[NSMenuItem separatorItem]];
 		id <NSMenuItem> menuItem = [editMenu addItemWithTitle:[NSString stringWithUTF8String:"Edit in TextMate…"] action:@selector(editInTextMate:) keyEquivalent:@"e"];

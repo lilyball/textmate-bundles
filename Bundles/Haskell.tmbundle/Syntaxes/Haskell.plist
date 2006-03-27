@@ -11,14 +11,24 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>match</key>
-			<string>`.*`</string>
+			<key>begin</key>
+			<string>--</string>
+			<key>end</key>
+			<string>$</string>
 			<key>name</key>
-			<string>string.other</string>
+			<string>comment.line.haskell</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>{-</string>
+			<key>end</key>
+			<string>-}</string>
+			<key>name</key>
+			<string>comment.block.haskell</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(otherwise|module|where|import|do|data|type|infixl|infixr|case|of|if|then|else|let|in|instance|deriving|class|newtype|default|hiding|as)\b</string>
+			<string>\b(module|where|import|do|data|type|infixl|infixr|case|of|if|then|else|let|in|instance|deriving|class|newtype|default|hiding|as|qualified)\b</string>
 			<key>name</key>
 			<string>keyword.haskell</string>
 		</dict>
@@ -63,55 +73,45 @@
 			</array>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>\b\d*\.?\d+\b</string>
+			<key>name</key>
+			<string>constant.numeric</string>
+		</dict>
+		<dict>
 			<key>begin</key>
-			<string>^(?=\s*[\(a-z][a-zA-Z0-9'\)]*\s*::)</string>
+			<string>(?=\s*[\(a-z_][_a-zA-Z0-9'\)]*\s*::)</string>
 			<key>end</key>
-			<string>$</string>
+			<string>(?=--)|$</string>
 			<key>name</key>
 			<string>meta.function.initial.haskell</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
-					<string>[\(a-z][a-zA-Z0-9'\)]*(?=\s*::)</string>
+					<string>[\(a-z_][a-zA-Z0-9_'\)]*(?=\s*::)</string>
 					<key>name</key>
 					<string>entity.name.function.haskell</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>[\[\]a-zA-Z0-9,()]+</string>
+					<string>[\[\]a-zA-Z0-9_,()]+</string>
 					<key>name</key>
-					<string>variable.parameter.haskell</string>
+					<string>storage.type.haskell</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b[A-Z]\w*\b</string>
+			<string>(`[a-z_][a-zA-Z0-9_']*`|(\||==+|[^= ]=+|-|\+|\*|%|#|@|\!|~|&lt;|&gt;|:|\^|\$)+)</string>
 			<key>name</key>
-			<string>constant.haskell</string>
+			<string>keyword.operator.haskell</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>--.*$</string>
+			<string>\b[_A-Z][a-zA-Z0-9_]*\b</string>
 			<key>name</key>
-			<string>comment.eol.haskell</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>{-</string>
-			<key>end</key>
-			<string>-}</string>
-			<key>name</key>
-			<string>comment.long.haskell</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>::</string>
-			<key>end</key>
-			<string>$|(?=[;}])</string>
-			<key>name</key>
-			<string>storage.type.haskell</string>
+			<string>entity.name.class</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

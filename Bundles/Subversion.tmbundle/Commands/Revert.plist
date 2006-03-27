@@ -9,10 +9,8 @@
 
 "$TM_SVN" revert "$TM_FILEPATH"
 
-# force TM to refresh the current file..
-osascript &amp;&gt;/dev/null \
-   -e 'tell application "Dock" to activate' \
-   -e 'tell application "TextMate" to activate' &amp;
+# will cause current file to be re-loaded
+rescan_project
 </string>
 	<key>input</key>
 	<string>none</string>

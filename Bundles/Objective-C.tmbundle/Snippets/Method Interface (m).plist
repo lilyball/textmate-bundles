@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (${1:id})${2:method}${3::(${4:id})${5:${4/(NS([AEIOQUY])?(\w+).*)|(.)?.*/(?1:a(?2:n$2)$3:(?4:anArgument))/}}};</string>
+	<string>- (${1:id})${2:${TM_SELECTED_TEXT:method}}${3::(${4:id})${5:${4/(NS([AEIOQUY])?(\w+).*)|(.)?.*/(?1:a(?2:n$2)$3:(?4:anArgument))/}}};</string>
+	<key>keyEquivalent</key>
+	<string>^M</string>
 	<key>name</key>
 	<string>Method Interface (m)</string>
 	<key>scope</key>

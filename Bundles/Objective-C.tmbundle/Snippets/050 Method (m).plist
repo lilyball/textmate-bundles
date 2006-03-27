@@ -3,10 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (${1:id})${2:method}${3::(${4:id})${5:${4/(NS([AEIOQUY])?(\w+).*)|(.)?.*/(?1:a(?2:n$2)$3:(?4:anArgument))/}}}
+	<string>- (${1:id})${2:${TM_SELECTED_TEXT:method}}${3::(${4:id})${5:${4/(NS([AEIOQUY])?(\w+).*)|(.)?.*/(?1:a(?2:n$2)$3:(?4:anArgument))/}}}
 {$0${1/^(void|IBAction)$|(.*)/(?2:
 	return nil;)/}
 }</string>
+	<key>keyEquivalent</key>
+	<string>^M</string>
 	<key>name</key>
 	<string>Method Implementation (m)</string>
 	<key>scope</key>

@@ -3,14 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>#import "$1"</string>
+	<string>NSAutoreleasePool *pool = [NSAutoreleasePool new];
+</string>
 	<key>name</key>
-	<string>#import ".." (imp)</string>
+	<string>NSAutoreleasePool (pool)</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>
-	<string>imp</string>
+	<string>pool</string>
 	<key>uuid</key>
-	<string>1E3A92DA-7299-11D9-813A-000D93589AF6</string>
+	<string>D402B10A-149B-414D-9961-110880389A8E</string>
 </dict>
 </plist>

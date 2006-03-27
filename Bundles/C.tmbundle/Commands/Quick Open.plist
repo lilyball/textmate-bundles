@@ -30,7 +30,6 @@ fi
 if [[ `which mdfind` != *"not found" ]]; then
 	# we have Spotlight
 	files=`${TM_RUBY:-ruby} "$TM_BUNDLE_SUPPORT/SpotlightSearch.rb" "$header"`
-
 else
 	# old method
 	arr=("/usr/include"
@@ -52,7 +51,7 @@ else
 fi
 
 if [[ -n "$files" ]];
-   then IFS=$(echo -e \\n\\r); mate $files &amp;&gt;/dev/null &amp;
+   then IFS=$'\n'; mate $files &amp;&gt;/dev/null &amp;
    else echo "No headers found."
 fi
 </string>

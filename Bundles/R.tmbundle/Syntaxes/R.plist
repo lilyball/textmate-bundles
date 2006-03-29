@@ -25,13 +25,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(logical|numeric|character|complex|array|data\.frame|list|factor)(?=\s*\()</string>
+			<string>\b(logical|numeric|character|complex|matrix|array|data\.frame|list|factor)(?=\s*\()</string>
 			<key>name</key>
 			<string>storage.type.r</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(function|if|break|next|repeat|else|for|return|switch|while|in)\b</string>
+			<string>\b(function|if|break|next|repeat|else|for|return|switch|while|in|invisible)\b</string>
 			<key>name</key>
 			<string>keyword.control.r</string>
 		</dict>
@@ -46,6 +46,12 @@
 			<string>\b(TRUE|FALSE|NULL|NA|Inf|NaN)\b</string>
 			<key>name</key>
 			<string>constant.language.r</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(pi|letters|LETTERS|month\.abb|month\.name)\b</string>
+			<key>name</key>
+			<string>constant.misc.r</string>
 		</dict>
 		<dict>
 			<key>match</key>

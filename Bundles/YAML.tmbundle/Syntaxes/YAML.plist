@@ -142,6 +142,35 @@
 				</dict>
 			</array>
 		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;%+#</string>
+			<key>end</key>
+			<string>%&gt;</string>
+			<key>name</key>
+			<string>comment.block.erb</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;%+(?!&gt;)=?</string>
+			<key>end</key>
+			<string>-?%&gt;</string>
+			<key>name</key>
+			<string>source.ruby.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>#.*?(?=-?%&gt;)</string>
+					<key>name</key>
+					<string>comment.line.number-sign.ruby</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+			</array>
+		</dict>
 	</array>
 	<key>scopeName</key>
 	<string>source.yaml</string>

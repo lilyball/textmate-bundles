@@ -119,7 +119,7 @@ else
 	line = $line
 end
 
-print line[0..$caret], "]${0:}", line[($caret + 1)..(line.length)]
+print line[0..$caret], "]${0:}", (line[($caret + 1)..(line.length)] || "")
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+=begin
+tested on:
+
+fishsticks everyone
+[obj setThing:other thing]
+[obj method:NSArray arrayWithObject:arg]
+[obj method:value1 arg:NSArray arrayWithObject:someObject]
+[obj setFish: fish thing: other thing]
+[obj setFish: fish thing: [other thing]]
+[obj setFish: other fish: thing]
+fish = NSArray alloc
+fish = [NSArray alloc] init
+
+If any part of it doesn't work, blame Allan, cos I'm sure I don't care :D
+
+Rob
+
+=end
+
+$line = ENV['TM_CURRENT_LINE']
+$caret = ENV['TM_LINE_INDEX'].to_i
+
+def message_context(string)
+	mes = message string, false
+	#print mes
+	if mes
+		[string[0, string.length - mes.length], string[((string.length - mes.length)), mes.length]]
+	else
+		[nil, nil]
+	end
+end
+
+def message(string, check_brackets = true)
+# 	if not string then return nil end
+	out = ""
+	if check_brackets
+		b = string[/\]\s*$/]
+		if b
+			string = string[0, string.length - b.length]
+			out = b + out
+		else
+			return nil
+		end
+	end
+	sel = selector(string)
+	if sel
+# 		print sel
+		string = string[0, string.length - sel.length]
+		rec = receiver(string)
+		if rec
+# 			print rec
+			string = string[0, string.length - rec.length]
+#			print '"', string, '"'
+			out = rec + sel + out
+#			print '"', out, '"'
+		else
+			return nil
+		end
+	else
+		return nil
+	end
+	if check_brackets
+		b = string[/\[\s*$/]
+		if b
+			string = string[0, string.length - b.length]
+			out = b + out
+		else
+			return nil
+		end
+	end
+	out
+end
+
+def receiver(string)
+# 	if not string then return nil end
+	string[/[^\[\]\s:]+\s*$/] || message(string)
+end
+
+def selector(string)
+# 	if not string then return nil end
+	rec = receiver string
+	if rec
+		string = string[0, string.length - rec.length]
+		sel = string[/\w+:\s*$/]
+		if sel
+			sel + rec
+		else
+			rec
+		end
+	end
+end
+
+def balance_close_bracket(line)
+	before_caret, after_caret = line[0..($caret - 1)], line[$caret..-1]
+	start, rest = message_context before_caret
+	if start.nil? or rest.nil? then
+		line.gsub /^(\s*)(.+)$/, '\1[\2'
+	else
+		start + "[" + rest + (after_caret || "")
+	end
+end
+
+open_count = $line.count "["
+close_count = $line.count "]"
+will_unbalance = open_count == close_count
+
+if will_unbalance
+	#line = line.gsub /^(\s*)(.*)$/, '\1[\2'
+	line = balance_close_bracket $line[0..$caret]
+else
+	line = $line
+end
+
+print line[0..$caret], "]${0:}", line[($caret + 1)..(line.length)]
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>]</string>
+	<key>name</key>
+	<string>Insert Matching Start Bracket</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.objc - string - comment, source.objc++ - string - comment</string>
+	<key>uuid</key>
+	<string>DB16585F-4D78-412B-B468-38AD54C254B5</string>
+</dict>
+</plist>

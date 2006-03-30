@@ -108,18 +108,20 @@ def balance_close_bracket(line)
 	end
 end
 
-open_count = $line.count "["
-close_count = $line.count "]"
-will_unbalance = open_count == close_count
-
-if will_unbalance
-	#line = line.gsub /^(\s*)(.*)$/, '\1[\2'
-	line = balance_close_bracket $line[0..$caret]
-else
-	line = $line
+def snippet_escape(str)
+#	these characters have special meaning in snippets
+	str.gsub(/[$`\\]/, '\\\\\0')
 end
 
-print line[0..$caret], "]${0:}", (line[($caret + 1)..(line.length)] || "")
+open_count = $line.count "["
+close_count = $line.count "]"
+
+left = $line[0...$caret]
+left = balance_close_bracket left if open_count == close_count
+
+right = $line[$caret..-1]
+
+print "#{snippet_escape left}]${0}#{snippet_escape right}"
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

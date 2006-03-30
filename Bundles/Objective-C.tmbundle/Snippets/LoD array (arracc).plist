@@ -13,7 +13,7 @@
 	[${4:array} insertObject: ${3:thing} atIndex: i];
 }
 
-- (${2:id})${3:thing}AtIndex:(unsigned int)i
+- (${2:id})${1/./\l$0/}AtIndex:(unsigned int)i
 {
 	return [${4:array} objectAtIndex: i];
 }
@@ -28,7 +28,17 @@
 	[${4:array} removeObjectAtIndex: i];
 }
 
-- (NSArray *)${3:thing}s
+- (void)remove${1:Thing}:(${2:id})${3:thing}
+{
+	[${4:array} removeObject: ${3:thing}];
+}
+
+- (unsigned int)countOf${1:Thing}s
+{
+	return [${4:array} count];
+}
+
+- (NSArray *)${1/./\l$0/}s
 {
 	return ${4:array};
 }

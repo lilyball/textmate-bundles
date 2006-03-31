@@ -10,6 +10,7 @@
 tested on:
 
 fishsticks everyone
+[obj fishsticks
 [obj setThing:other thing]
 [obj method:NSArray arrayWithObject:arg]
 [obj method:value1 arg:NSArray arrayWithObject:someObject]
@@ -18,8 +19,9 @@ fishsticks everyone
 [obj setFish: other fish: thing]
 fish = NSArray alloc
 fish = [NSArray alloc] init
+glPushName(self index)
 
-If any part of it doesn't work, blame Allan, cos I'm sure I don't care :D
+Enjoy the fishness.
 
 Rob
 
@@ -81,7 +83,7 @@ end
 
 def receiver(string)
 # 	if not string then return nil end
-	string[/[^\[\]\s:]+\s*$/] || message(string)
+	string[/[^\[\]\(\)\s:]+\s*$/] || message(string)
 end
 
 def selector(string)

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>cat &lt;&lt;"HTML"
+&lt;style type="text/css"&gt;
+   body {
+      font-family: "Bitstream Vera Sans Mono", "Monaco", monospace;
+   }
+   .comment {
+      font-style: italic;
+      color: #AAA;
+   }
+   .keyword {
+      font-weight: bold;
+   }
+   .string {
+      color: #00F;
+   }
+   .entity {
+      text-decoration: underline;
+   }
+   .storage {
+      color: #888;
+   }
+   .support {
+      color: #0F0;
+   }
+   .constant, .variable {
+      color: #F0F;
+   }
+&lt;/style&gt;
+&lt;body&gt;
+HTML
+
+perl -pe 's/&lt;\/[^&gt;]+&gt;/&lt;\/span&gt;/g' \
+| perl -pe 's/&lt;([^\/.&gt;]+)[^&gt;]*&gt;/&lt;span class="\1"&gt;/g' \
+| perl -pe 's/\n/&lt;br&gt;\n/g' \
+| perl -pe 's/\t/&amp;nbsp;&amp;nbsp;&amp;nbsp;/g'
+</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>xml</string>
+	<key>keyEquivalent</key>
+	<string>^~@p</string>
+	<key>name</key>
+	<string>View Document as HTML</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>BB66B370-D68B-4AFA-A228-C28F34E2AED2</string>
+</dict>
+</plist>

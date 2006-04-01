@@ -24,6 +24,7 @@ done
 
 # finally try man (PolyglotMan)
 RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+export MANSECT=2:3:4:5:6:7:8:9 # exclude shell commands
 if [[ -x "$RMAN" ]] &amp;&amp; man -w "$word" &amp;&gt;/dev/null; then
 	man -a "$word"|"$RMAN" -fHTML; exit_show_html
 fi

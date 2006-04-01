@@ -5,16 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -z ${TM_RMAN} || ! -x ${TM_RMAN} ]]
-   then RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
-   else RMAN=${TM_RMAN}
+	<string>word=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
+RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+export MANSECT=2:3:4:5:6:7:8:9 # exclude shell commands
+if [[ -x "$RMAN" ]] &amp;&amp; man -w "$word" &amp;&gt;/dev/null; then
+	man -a "$word"|"$RMAN" -fHTML; exit_show_html
 fi
 
-# PolyglotMan has nicer output
-if [[ -x "$RMAN" ]]
-   then man "${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}" | "$RMAN" -fHTML;
-   else GROFF_TYPESETTER=html /usr/bin/man -t $TM_CURRENT_WORD;
-fi
+echo "Couldn’t find documentation for “${word}”"
 </string>
 	<key>dontFollowNewOutput</key>
 	<true/>
@@ -27,7 +25,7 @@ fi
 	<key>name</key>
 	<string>Documentation for Word / Selection (man)</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>776163E4-730B-11D9-BCD0-000D93589AF6</string>
 </dict>

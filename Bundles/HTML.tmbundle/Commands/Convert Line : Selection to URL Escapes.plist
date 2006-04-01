@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -KA
 
-res = STDIN.read.gsub(/[^a-zA-Z.-]/) do |m|
+res = STDIN.read.gsub(/[^a-zA-Z0-9.-]/) do |m|
   sprintf("%%%02X", m[0])
 end
 

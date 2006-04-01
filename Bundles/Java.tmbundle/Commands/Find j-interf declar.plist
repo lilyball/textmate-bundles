@@ -10,10 +10,12 @@
 	<string>^.*\/(\w+\.java):(\d+):.*</string>
 	<key>command</key>
 	<string>egrep -rn "interface[ ]+${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}" "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}" | grep "\.java"</string>
+	<key>fallbackInput</key>
+	<string>word</string>
 	<key>fileCaptureRegister</key>
 	<string>1</string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>lineCaptureRegister</key>
 	<string>2</string>
 	<key>name</key>

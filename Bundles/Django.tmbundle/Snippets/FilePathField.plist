@@ -3,23 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:Modelname}(models.Model):
-	"""${2:($1 description)}"""
-	$0
-	class Admin:
-		list_display = ('',)
-		search_fields = ('',)
-
-	def __str__(self):
-		return "$1"
-</string>
+	<string>${1:FIELDNAME} = models.FilePathField(path="${1:/location/of/choices}"${2:, match="${3:regex}"}${4:, recursive=True})</string>
 	<key>name</key>
-	<string>Model Skeleton (model)</string>
+	<string>FilePathField (filepath)</string>
 	<key>scope</key>
 	<string>source.python.django</string>
 	<key>tabTrigger</key>
-	<string>model</string>
+	<string>filepath</string>
 	<key>uuid</key>
-	<string>311C17C5-A556-48D4-B91F-DD28BB0CF4E7</string>
+	<string>D9BD861A-B03E-4765-92B2-55AE10067066</string>
 </dict>
 </plist>

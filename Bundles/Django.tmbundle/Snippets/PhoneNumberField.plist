@@ -3,23 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:Modelname}(models.Model):
-	"""${2:($1 description)}"""
-	$0
-	class Admin:
-		list_display = ('',)
-		search_fields = ('',)
-
-	def __str__(self):
-		return "$1"
-</string>
+	<string>${1:FIELDNAME} = models.PhoneNumberField(${2:blank=True})</string>
 	<key>name</key>
-	<string>Model Skeleton (model)</string>
+	<string>PhoneNumberField (phonenumber)</string>
 	<key>scope</key>
 	<string>source.python.django</string>
 	<key>tabTrigger</key>
-	<string>model</string>
+	<string>phonenumber</string>
 	<key>uuid</key>
-	<string>311C17C5-A556-48D4-B91F-DD28BB0CF4E7</string>
+	<string>611E7330-56E2-4B20-A364-265666458121</string>
 </dict>
 </plist>

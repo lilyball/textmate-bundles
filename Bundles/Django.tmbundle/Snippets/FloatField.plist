@@ -3,23 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:Modelname}(models.Model):
-	"""${2:($1 description)}"""
-	$0
-	class Admin:
-		list_display = ('',)
-		search_fields = ('',)
-
-	def __str__(self):
-		return "$1"
-</string>
+	<string>${1:FIELDNAME} = models.FloatField(max_digits=$1, decimal_places=$2)</string>
 	<key>name</key>
-	<string>Model Skeleton (model)</string>
+	<string>FloatField (float)</string>
 	<key>scope</key>
 	<string>source.python.django</string>
 	<key>tabTrigger</key>
-	<string>model</string>
+	<string>filepath</string>
 	<key>uuid</key>
-	<string>311C17C5-A556-48D4-B91F-DD28BB0CF4E7</string>
+	<string>B2BDB25E-E626-443B-8B6D-2E09FD75876A</string>
 </dict>
 </plist>

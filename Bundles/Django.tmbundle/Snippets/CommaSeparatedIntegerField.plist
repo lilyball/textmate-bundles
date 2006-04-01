@@ -3,23 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:Modelname}(models.Model):
-	"""${2:($1 description)}"""
-	$0
-	class Admin:
-		list_display = ('',)
-		search_fields = ('',)
-
-	def __str__(self):
-		return "$1"
-</string>
+	<string>${1:FIELDNAME} = models.CommaSeparatedIntegerField(maxlength=$2)</string>
 	<key>name</key>
-	<string>Model Skeleton (model)</string>
+	<string>CommaSeparatedIntegerField (commaseparatedinteger)</string>
 	<key>scope</key>
 	<string>source.python.django</string>
 	<key>tabTrigger</key>
-	<string>model</string>
+	<string>commaseparatedinteger</string>
 	<key>uuid</key>
-	<string>311C17C5-A556-48D4-B91F-DD28BB0CF4E7</string>
+	<string>8FA6C6F3-4F38-4560-A565-39FB0C498B74</string>
 </dict>
 </plist>

@@ -3,23 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:Modelname}(models.Model):
-	"""${2:($1 description)}"""
-	$0
-	class Admin:
-		list_display = ('',)
-		search_fields = ('',)
-
-	def __str__(self):
-		return "$1"
-</string>
+	<string>${1:FIELDNAME} = models.ForeignKey(${2:RELATED_MODEL})</string>
 	<key>name</key>
-	<string>Model Skeleton (model)</string>
+	<string>ForeignKey (fk)</string>
 	<key>scope</key>
 	<string>source.python.django</string>
 	<key>tabTrigger</key>
-	<string>model</string>
+	<string>fk</string>
 	<key>uuid</key>
-	<string>311C17C5-A556-48D4-B91F-DD28BB0CF4E7</string>
+	<string>F497C0D3-812E-4339-8260-8D906337023B</string>
 </dict>
 </plist>

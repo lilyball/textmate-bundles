@@ -3,17 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>// {{{ set${1/./\u$0/}
-/**
+	<string>/**
  * Setter for ${1:fieldName}.
  * @param new${1/./\u$0/} new value for ${1:fieldName}
  */
 public void set${1/./\u$0/}(${2:String} new${1/./\u$0/}) {
     ${1:fieldName} = new${1/./\u$0/};
 }
-// }}}
 
-// {{{ get${1/./\u$0/}
 /**
  * Getter for ${1:fieldName}.
  * @return ${1:fieldName}
@@ -21,12 +18,11 @@ public void set${1/./\u$0/}(${2:String} new${1/./\u$0/}) {
 public ${2:String} get${1/./\u$0/}() {
     return ${1:fieldName};
 }
-// }}}    
 </string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>setter and getter</string>
+	<string>Set/Get (bean)</string>
 	<key>scope</key>
 	<string>source.java</string>
 	<key>tabTrigger</key>

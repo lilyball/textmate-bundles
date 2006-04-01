@@ -3,24 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>/**
- * $2
- *
- * @param $4 $5
- * ${6:@return} $7
- */
-public ${1:void} ${2:method}(${3:String} $4) {
-	$0
+	<string>${1:public }class ${2:${TM_FILENAME/(.*?)(\..+)/$1/}} extends ${3:Object}
+{
+	$2 (${4:arguments}) {
+		${0:// expression}
+	}
 }
-
 </string>
 	<key>name</key>
-	<string>Public Method (pum)</string>
+	<string>Class (class)</string>
 	<key>scope</key>
 	<string>source.java</string>
 	<key>tabTrigger</key>
-	<string>pum</string>
+	<string>class</string>
 	<key>uuid</key>
-	<string>BC8B9318-5F16-11D9-B9C3-000D93589AF6</string>
+	<string>8092FC08-5291-4A9F-BAF3-DB352DDB6043</string>
 </dict>
 </plist>

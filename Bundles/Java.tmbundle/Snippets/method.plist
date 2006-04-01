@@ -3,19 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>// {{{ ${1:METHOD}
-/**
- * $0
+	<string>/**
+ * $2
  */
-public ${2:RETURN} ${1:METHOD}() {
-    $0
+public ${1:void} ${2:method}() {
+	${0:// expression}
 }
-// }}}
 </string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>method</string>
+	<string>Method (meth)</string>
 	<key>scope</key>
 	<string>source.java</string>
 	<key>tabTrigger</key>

@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>SRC="$(ps -xwwp $PPID -o command|grep -o '.*.app')/Contents/Resources/Edit in TextMate"
+	<string>SRC="$(ps -xwwp $PPID -o command|grep TextMate.app|perl -pe 's/(.*?.app).*/\1/')/Contents/Resources/Edit in TextMate"
 
 # check if we have the input manager in TextMate.app
 [[ ! -d "$SRC" ]] &amp;&amp; { echo "&lt;h1&gt;Error&lt;/h1&gt;&lt;p&gt;The input manager (&lt;tt&gt;$SRC&lt;/tt&gt;) was not found in the TextMate application bundle.&lt;p&gt;You may need a newer version of TextMate."; exit; }

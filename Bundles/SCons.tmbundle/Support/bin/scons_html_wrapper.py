@@ -59,15 +59,18 @@ def filterOutput(cmd):
             break
         
     
-def runSCons():
+def runSCons(args):
     """Run SCons in a not-very-flexible way."""
-    cmd = "scons -u 2>&1"
+    # Watch me screw this up...
+    cmd = "scons %s 2>&1" % " ".join([repr(a) for a in args])
+        
     print "<i># Working dir: %s</i><br/>" % cgi.escape(os.getcwd())
     print "<b>%s</b><br/>" % cgi.escape(cmd)
     filterOutput(cmd)
     
 def main():
-    runSCons()
+    args = sys.argv[1:] or []
+    runSCons(args)
     
 if __name__ == "__main__":
     main()

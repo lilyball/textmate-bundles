@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string># TM_IGNORE_WARNINGS is a sequence of glob patterns of files in which to ignore
+# warnings.  Right now it doesn't support escaped ':" -- the separator character.
+# export TM_IGNORE_WARNINGS="mitchcode_*.h:*/MitchCode/*"
+
+# Look at other bundles to see if there are conventions for using 'defaults'.
+PREF_DOMAIN=com.macromates.textmate.scons_prefs
+lastTarget=`defaults read ${PREF_DOMAIN} last_target`
+
+res=$(CocoaDialog inputbox --title "Target" \
+    --informative-text "Build Target:" \
+    --text "${lastTarget}" \
+    --button1 "Build" --button2 "Cancel")
+
+[[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit_discard
+
+target=""
+reslines=`(wc -l &lt;&lt;&lt;"$res")|sed -e 's/ //g'`
+[[ "${reslines}" == "2" ]] &amp;&amp; target=$(tail -n1 &lt;&lt;&lt;"$res")
+
+defaults write ${PREF_DOMAIN} last_target -string "${target}"
+defaults write ${PREF_DOMAIN} last_build_dir -string "${TM_DIRECTORY}"
+
+# Allow spaces to delimit arguments in ${target} -- bad idea?
+python -u "${TM_BUNDLE_SUPPORT}/bin/scons_html_wrapper.py" ${target}</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Build ...</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.c, source.objc, source.c++, source.objc++, source.python</string>
+	<key>uuid</key>
+	<string>88F36C61-F809-4FCE-97AF-D36019891F31</string>
+</dict>
+</plist>

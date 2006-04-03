@@ -8,20 +8,31 @@
 	<string># TM_IGNORE_WARNINGS is a sequence of glob patterns of files in which to ignore
 # warnings.  Right now it doesn't support escaped ':" -- the separator character.
 # export TM_IGNORE_WARNINGS="mitchcode_*.h:*/MitchCode/*"
-python -u "${TM_BUNDLE_SUPPORT}/bin/scons_html_wrapper.py"</string>
+
+# Look at other bundles to see if there are conventions for using 'defaults'.
+PREF_DOMAIN=com.macromates.textmate.scons_prefs
+lastTarget=`defaults read ${PREF_DOMAIN} last_target 2>/dev/null`
+lastBuildDir=`defaults read ${PREF_DOMAIN} last_build_dir 2>/dev/null`
+
+if [ "x$lastBuildDir" != "x" ]; then
+    cd ${lastBuildDir}
+fi
+
+# Allow spaces to delimit arguments in ${target} -- bad idea?
+python -u "${TM_BUNDLE_SUPPORT}/bin/scons_html_wrapper.py" ${lastTarget}</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>@b</string>
 	<key>name</key>
-	<string>Build</string>
+	<string>Rebuild</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.c, source.objc, source.c++, source.objc++, source.python</string>
 	<key>uuid</key>
-	<string>C0F342BE-9F5F-4D62-A3C8-D9C95B46F4CD</string>
+	<string>2CDB078C-78E9-4DDA-9DF9-6F18D1E92BAE</string>
 </dict>
 </plist>

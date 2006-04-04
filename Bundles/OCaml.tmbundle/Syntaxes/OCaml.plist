@@ -59,7 +59,7 @@
 			<key>match</key>
 			<string>\b(let(?:\s+rec)?+|and)\s+([a-z_][a-zA-Z0-9'_]*)((?:\s*(?:\(\s*\)|\s+(?:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|~[a-z][a-zA-Z0-9'_]*:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|\?(?:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*=\s*\w+\s*\)+)))))+|.*=\s*(fun(ction)?))</string>
 			<key>name</key>
-			<string>declaration.function</string>
+			<string>meta.function</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -88,7 +88,7 @@
 			<key>match</key>
 			<string>\b(method)\s+(virtual\s+)?([a-z_][a-zA-Z0-9'_]*)((?:\s(?:[a-z_][a-zA-Z0-9'_]*))*)</string>
 			<key>name</key>
-			<string>declaration.method</string>
+			<string>meta.method</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -107,7 +107,7 @@
 			<key>match</key>
 			<string>^[ \t]*(type)\s+((?:(?:\(?\s*'[A-Za-z][a-zA-Z0-9_]*\s*\)?)|(?:\(\s*'[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*\s*\))\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
 			<key>name</key>
-			<string>declaration.type</string>
+			<string>meta.type</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -126,7 +126,7 @@
 			<key>match</key>
 			<string>^[ \t]*(class)(?:\s+(?!(?:virtual|type)\s+))((?:\[\s*'[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
 			<key>name</key>
-			<string>declaration.class</string>
+			<string>meta.class</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -145,7 +145,7 @@
 			<key>match</key>
 			<string>^[ \t]*(class\s+virtual\s+)((?:\[\s*'[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
 			<key>name</key>
-			<string>declaration.class.virtual</string>
+			<string>meta.class.virtual</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -164,7 +164,7 @@
 			<key>match</key>
 			<string>^[ \t]*(class\s+type\s+)((?:\[\s*'[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
 			<key>name</key>
-			<string>declaration.class.type</string>
+			<string>meta.class.type</string>
 		</dict>
 		<dict>
 			<key>begin</key>

@@ -32,6 +32,12 @@ postgresql)
 		--host="${PGHOST:-localhost}" --port="${PGPORT:-5432}" \
 	     "${PGDATABASE:-$USER}" |perl -pe 's/(?&lt;=&lt;table )border="1"/class="graybox" cellspacing="0" cellpadding="5"/'
 ;;
+sqlite3)
+	require_cmd sqlite3
+	echo '&lt;table class="graybox" cellspacing="0" cellpadding="5"&gt;'
+	sqlite3 -html "$SQLITE3_DB" "$query"
+	echo '&lt;/table&gt;'
+;;
 esac
 
 echo -n "Query completed"|pre</string>

@@ -11,10 +11,9 @@ database_choice () {
 		 	--text "Which database should be used?" \
 			--button1 Okay \
 			--button2 Cancel \
-		   --button3 "Make Default" \
 			--string-output \
 			--no-newline \
-			--items mysql postgresql)
+			--items mysql postgresql sqlite3)
 
 		if [[ "${res:0:4}" == "Okay" ]]; then
 			echo -n "${res:5}"

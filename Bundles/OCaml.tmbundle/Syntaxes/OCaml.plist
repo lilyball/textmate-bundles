@@ -57,7 +57,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(let(?:\s+rec)?+|and)\s+([a-z_][a-zA-Z0-9'_]*)[ \t]+(?:((?:(?:(?:\?|\()?\s*\(*|\(+)[a-z][a-zA-Z0-9'_]*)+)|.*=\s*(fun(ction)?))</string>
+			<string>\b(let(?:\s+rec)?+|and)\s+([a-z_][a-zA-Z0-9'_]*)((?:\s*(?:\(\s*\)|\s+(?:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|~[a-z][a-zA-Z0-9'_]*:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|\?(?:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*=\s*\w+\s*\)+)))))+|.*=\s*(fun(ction)?))</string>
 			<key>name</key>
 			<string>declaration.function</string>
 		</dict>

@@ -14,7 +14,7 @@ int main (int argc, const char * argv[]) {
 		[@"~/Library/Application Support/TextMate/Bundles" stringByExpandingTildeInPath],
 		nil];
 
-	NSString *defaultBundles = [[[NSWorkspace sharedWorkspace] fullPathForApplication:@"TextMate"] stringByAppendingPathComponent:@"Contents/SharedSupport/Bundles"];
+	NSString *defaultBundles = [[[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.macromates.textmate"] stringByAppendingPathComponent:@"Contents/SharedSupport/Bundles"];
 	if(defaultBundles)
 		[sourcePaths insertObject:defaultBundles atIndex:0];
 

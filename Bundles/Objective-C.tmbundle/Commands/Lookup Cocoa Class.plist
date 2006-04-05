@@ -26,7 +26,9 @@ done
 RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
 export MANSECT=2:3:4:5:6:7:8:9 # exclude shell commands
 if [[ -x "$RMAN" ]] &amp;&amp; man -w "$word" &amp;&gt;/dev/null; then
-	man -a "$word"|"$RMAN" -fHTML; exit_show_html
+	page=$("$TM_SUPPORT_PATH/bin/html_man.sh" -a "$word")
+	echo "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://$page'&gt;"
+	exit_show_html
 fi
 
 echo "Couldn’t find documentation for “${word}”"

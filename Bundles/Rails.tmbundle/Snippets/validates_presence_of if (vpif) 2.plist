@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>validates_associated :${1:attribute}${2:, :on =&gt; :${3:create}}</string>
+	<string>validates_presence_of :${1:attribute}${2:, :on =&gt; :${3:create}, :message =&gt; "${4:can't be blank}"}, :if =&gt; proc { |obj| ${5:obj.condition?} }}</string>
 	<key>name</key>
-	<string>validates_associated (va)</string>
+	<string>validates_presence_of if (vpif)</string>
 	<key>scope</key>
 	<string>source.ruby.rails</string>
 	<key>tabTrigger</key>
-	<string>va</string>
+	<string>vpif</string>
 	<key>uuid</key>
-	<string>47944705-F605-4ED4-B4C0-9E823EE25138</string>
+	<string>F5CBBE16-F5CC-4EDA-8BC6-30281BD7D854</string>
 </dict>
 </plist>

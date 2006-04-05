@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>validates_presence_of :${1:attribute}${2:, :on =&gt; "${3:create}", :message =&gt; "${4:must be present}", :if =&gt; proc { |obj| ${6:obj.condition?} }}</string>
+	<string>validates_presence_of :${1:attribute}${2:, :on =&gt; :${3:create}, :message =&gt; "${4:must be present}", :if =&gt; proc { |obj| ${6:obj.condition?} }}</string>
 	<key>name</key>
 	<string>validates_presence_of if (vpif)</string>
 	<key>scope</key>

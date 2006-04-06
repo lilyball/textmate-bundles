@@ -32,6 +32,6 @@ HTML
 | perl -pe 's/(<TITLE>).*(<\/TITLE>)/$1Documentation for “'"$WORD"'”$2/' \
 | perl >>"$DST" -pe 's/HREF="([^#][^".]*)\.(\d+)"/HREF="javascript:man($2, &quot;$1&quot;)"/'
 
-{ sleep 300; rm "$DST"; } &>/dev/null &
+{ sleep 300; rm "$DST"; rm "${DST%.html}"; } &>/dev/null &
 
 echo -n "$DST"

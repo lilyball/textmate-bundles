@@ -7,32 +7,78 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-# read shell variables (set these per language)
-$s      = ENV['TM_COMMENT_START'] || "# "
-$e      = ENV['TM_COMMENT_END']   || ""
-$m      = ENV['TM_COMMENT_MODE']  || "line"
-$t      = STDIN.read
+# by James Edward Gray II &lt;james (at) grayproductions.net&gt;
 
-# needs to escape them for use in regex
-# because we can't do \Q...\E
-$s_esc  = $s.gsub(/[\\|()\[\].?*+{}^$]/, '\\\\\&amp;')
-$e_esc  = $e.gsub(/[\\|()\[\].?*+{}^$]/, '\\\\\&amp;')
-
-case $m
-when "line"  # apply comment line-by-line
-  if $t =~ /\A\s*#{$s_esc}/
-    print $t.gsub(/^(\s*)#{$s_esc}(.*)#{$e_esc}(\s*)$/, '\1\2\3')
+# find all available comment variables
+var_suffixes = [""]
+2.upto(1.0/0.0) do |n|
+  if ENV.include? "TM_COMMENT_START_#{n}"
+    var_suffixes &lt;&lt; "_#{n}"
   else
-    print $t.gsub(/^.*$/, "#{$s}\\&amp;#{$e}")
+    break
+  end
+end
+
+text    = STDIN.read
+default = nil  # the comment we will insert, if none are removed
+
+# try a removal for each comment...
+var_suffixes.each do |suffix|
+  # build comment
+  com = { :start     =&gt; ENV["TM_COMMENT_START#{suffix}"] || "# ",
+          :end       =&gt; ENV["TM_COMMENT_END#{suffix}"]   || "",
+          :mode      =&gt; ENV["TM_COMMENT_MODE#{suffix}"]  || "line",
+          :no_indent =&gt; ENV["TM_COMMENT_DISABLE_INDENT#{suffix}"] }
+  
+  com[:esc_start], com[:esc_end] = com.values_at(:start, :end).map do |str|
+    str.gsub(/[\\|()\[\].?*+{}^$]/, '\\\\\&amp;').
+        gsub(/\s+\Z/, '(?:\&amp;)?')
+  end
+  
+  # save the first one as our insertion default
+  default = com if default.nil?
+  
+  # try a removal
+  case com[:mode]
+  when "line"  # line by line comment
+    if text.all? { |line| line =~ /\A\s*#{com[:esc_start]}/ }
+      print text.gsub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
+                       '\1\2\3' )
+      exit
+    end
+  when "block" # block comment
+    regex = /\A(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)\z/m
+    if text =~ regex
+      # if end is the only thing on the line, remove the line
+      if text =~ /^[ \t]*#{com[:esc_end]}[ \t]*$/
+        print *text.sub(regex, '\1\2\3').to_a[0..-2]
+      else
+        print text.sub(regex, '\1\2\3')
+      end
+      exit
+    end
+  end
+end
+
+# none of our removals worked, so preform an insert (minding indent setting)
+case default[:mode]
+when "line"  # apply comment line by line
+  if default[:no_indent]
+    print text.gsub(/^.*$/, "#{default[:start]}\\&amp;#{default[:end]}")
+  else
+    print text.gsub(/^(\s*)(.*)$/, "\\1#{default[:start]}\\2#{default[:end]}")
   end
 when "block" # apply comment around selection
-  $re = /\A(\s*)#{$s_esc}(.*)#{$e_esc}(\s*)\z/m
-  if $t =~ $re
-    print $t.gsub($re, '\1\2\3')
+  if default[:no_indent]
+    print default[:start], text, default[:end]
   else
-    print $s, $t, $e
+    lines = text.to_a
+    print lines.shift.gsub(/^(\s*)(.*)$/, "\\1#{default[:start]}\\2")
+    print *lines
+    print $1, default[:end], "\n"
   end
-end</string>
+end
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

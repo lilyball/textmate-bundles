@@ -6,6 +6,7 @@
 //
 
 #import <Carbon/Carbon.h>
+#import <map>
 #import "Edit in TextMate.h"
 
 // from ODBEditorSuite.h
@@ -141,17 +142,22 @@ static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 + (NSMenu*)findEditMenu
 {
 	NSMenu* mainMenu = [NSApp mainMenu];
+	std::map<size_t, NSMenu*> ranked;
 	for(int i = 0; i != [mainMenu numberOfItems]; i++)
 	{
 		NSMenu* candidate = [[mainMenu itemAtIndex:i] submenu];
 		static SEL const actions[] = { @selector(undo:), @selector(redo:), @selector(cut:), @selector(copy:), @selector(paste:), @selector(delete:), @selector(selectAll:) };
+		size_t score = 0;
 		for(int j = 0; j != sizeof(actions)/sizeof(actions[0]); j++)
 		{
 			if(-1 != [candidate indexOfItemWithTarget:nil andAction:actions[j]])
-				return candidate;
+				score++;
 		}
+
+		if(score > 0 && ranked.find(score) == ranked.end())
+			ranked[score] = candidate;
 	}
-	return nil;
+	return ranked.empty() ? nil : (--ranked.end())->second;
 }
 
 + (void)installMenuItem:(id)sender

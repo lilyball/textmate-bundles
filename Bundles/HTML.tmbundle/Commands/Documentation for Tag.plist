@@ -98,19 +98,25 @@ $tags = {
 	"VAR"	=&gt; "../struct/text.html#edef-VAR",
 }
 
-$tag_name = ENV["TM_CURRENT_WORD"].to_s
-
-def request_tag_name
-  s = `\"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" inputbox --title 'Documentation for Tag' --informative-text 'What tag would you like to lookup?' --text '#{$tag_name}' --button1 'Lookup' --button2 'Cancel' --button3 'Show All Tags'`
-  case (a = s.split("\n"))[0].to_i
-  when 1: ($tags[a[1].to_s.upcase] or "elements.html")
-  when 2: puts "Abort"; abort
+def request_tag_name (default_tag = "body")
+  res, tag = %x{ "$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" \
+    inputbox --title 'Documentation for Tag' \
+    --informative-text 'What tag would you like to lookup?' \
+    --text '#{default_tag}' --button1 'Lookup' --button2 'Cancel' \
+    --button3 'Show All Tags'
+  }.split("\n")
+  case res.to_i
+  when 1: $tags[tag.to_s.upcase] || "elements.html"
+  when 2: puts "&lt;script&gt;window.close()&lt;/script&gt;"; abort
   when 3: "elements.html"
   end
 end
 
-tag_url = ($tags[$tag_name.upcase] or request_tag_name)
-url = "http://www.w3.org/TR/html4/index/" + tag_url
+line, col = ENV["TM_CURRENT_LINE"].to_s, ENV["TM_LINE_INDEX"].to_i
+tag = line =~ /\A.{0,#{col}}&lt;\s*(\w+)/ ? $1 : ENV["TM_CURRENT_WORD"].to_s
+
+path = $tags[tag.upcase] || request_tag_name(tag)
+url  = "http://www.w3.org/TR/html4/index/" + path
 puts "&lt;meta http-equiv='Refresh' content='0;URL=#{url}'&gt;"
 </string>
 	<key>input</key>

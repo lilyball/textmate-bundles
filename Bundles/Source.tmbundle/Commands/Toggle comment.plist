@@ -32,7 +32,7 @@ var_suffixes.each do |suffix|
   
   com[:esc_start], com[:esc_end] = com.values_at(:start, :end).map do |str|
     str.gsub(/[\\|()\[\].?*+{}^$]/, '\\\\\&amp;').
-        gsub(/\s+\Z/, '(?:\&amp;)?')
+        gsub(/\A\s+|\s+\z/, '(?:\&amp;)?')
   end
   
   # save the first one as our insertion default
@@ -41,20 +41,15 @@ var_suffixes.each do |suffix|
   # try a removal
   case com[:mode]
   when "line"  # line by line comment
-    if text.all? { |line| line =~ /\A\s*#{com[:esc_start]}/ }
+    if text != "" &amp;&amp; text.all? { |line| line =~ /\A\s*(#{com[:esc_start]}|$)/ }
       print text.gsub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
                        '\1\2\3' )
       exit
     end
   when "block" # block comment
-    regex = /\A(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)\z/m
+    regex = /\A(\s*)#{com[:esc_start]}(.*?)#{com[:esc_end]}(\s*)\z/m
     if text =~ regex
-      # if end is the only thing on the line, remove the line
-      if text =~ /^[ \t]*#{com[:esc_end]}[ \t]*$/
-        print *text.sub(regex, '\1\2\3').to_a[0..-2]
-      else
-        print text.sub(regex, '\1\2\3')
-      end
+      print text.sub(regex, '\1\2\3')
       exit
     end
   end
@@ -63,19 +58,26 @@ end
 # none of our removals worked, so preform an insert (minding indent setting)
 case default[:mode]
 when "line"  # apply comment line by line
-  if default[:no_indent]
+  if default[:no_indent] || text == ""
     print text.gsub(/^.*$/, "#{default[:start]}\\&amp;#{default[:end]}")
   else
-    print text.gsub(/^(\s*)(.*)$/, "\\1#{default[:start]}\\2#{default[:end]}")
+    indent = text.reject { |line| line =~ /^\s*$/ }.
+             collect { |line| /^(\s*)/.match(line)[1] }.
+             min { |lhs, rhs| lhs.length &lt;=&gt; rhs.length } || ""
+    print text.gsub(/^(#{indent}|[ \t]*)(.+)$/, "\\1#{default[:start]}\\2#{default[:end]}")
   end
 when "block" # apply comment around selection
   if default[:no_indent]
     print default[:start], text, default[:end]
   else
     lines = text.to_a
-    print lines.shift.gsub(/^(\s*)(.*)$/, "\\1#{default[:start]}\\2")
-    print *lines
-    print $1, default[:end], "\n"
+    if lines.empty?
+      print default[:start], default[:end]
+    else
+      lines[-1].sub!(/^(.*)$/, "\\1#{default[:end]}")
+      print lines.shift.sub(/^(\s*)(.*)$/, "\\1#{default[:start]}\\2")
+      print *lines unless lines.empty?
+    end
   end
 end
 </string>

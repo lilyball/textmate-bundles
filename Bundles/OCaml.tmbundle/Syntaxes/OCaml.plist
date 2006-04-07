@@ -77,16 +77,21 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function</string>
+					<string>keyword.language.ocaml</string>
 				</dict>
 				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function</string>
+				</dict>
+				<key>5</key>
 				<dict>
 					<key>name</key>
 					<string>variable.method.ocaml</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(method)\s+(virtual\s+)?([a-z_][a-zA-Z0-9'_]*)((?:\s(?:[a-z_][a-zA-Z0-9'_]*))*)</string>
+			<string>\b(method)\s+(virtual\s+)?(private\s+)?([a-z_][a-zA-Z0-9'_]*)((?:\s(?:[a-z_][a-zA-Z0-9'_]*))*)</string>
 			<key>name</key>
 			<string>meta.method</string>
 		</dict>

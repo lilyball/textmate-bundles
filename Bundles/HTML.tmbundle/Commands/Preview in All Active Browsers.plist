@@ -22,6 +22,9 @@ fi
 ## Safari
 [[ $(ps -xc|grep Safari) ]] &amp;&amp; osascript -e 'tell app "Safari"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell'
 
+## Shiira
+[[ $(ps -xc|grep Shiira) ]] &amp;&amp; osascript -e 'tell app "Shiira"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell'
+
 ## FireFox
 [[ $(ps -xc|grep -i firefox) ]] &amp;&amp; osascript -e 'tell app "Firefox"' -e activate -e "Get URL \"$activeURL\" inside window 1" -e "end tell"
 

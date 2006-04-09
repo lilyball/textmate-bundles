@@ -30,7 +30,9 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^(&gt; )(&gt; )(&gt; .*)$</string>
+			<string>^(&gt; )(&gt; )(&gt; .*)$\n?</string>
+			<key>name</key>
+			<string>markup.quote.mail</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -47,11 +49,13 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^(&gt; )(&gt; .*)$</string>
+			<string>^(&gt; )(&gt; .*)$\n?</string>
+			<key>name</key>
+			<string>markup.quote.mail</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^&gt; .*$</string>
+			<string>^&gt;( .*)?$\n?</string>
 			<key>name</key>
 			<string>markup.quote.mail.single</string>
 		</dict>

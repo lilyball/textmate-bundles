@@ -18,7 +18,7 @@
 
 	patterns = (
 		{ name = "comment.block.rez"; begin = "/\\*"; end = "\\*/"; },
-		{ name = "comment.line.double-slash.rez"; match = "//.*$"; },
+		{ name = "comment.line.double-slash.rez"; match = "//.*$\n?"; },
 		
 		// Note that Xcode gets case sensitivity wrong (last checked Xcode 2.0).
 		// I'm not sure built-in functions are case-insensitive, though, so we might too.

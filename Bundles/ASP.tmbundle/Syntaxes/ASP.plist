@@ -16,7 +16,7 @@
 	
 	patterns = (
 		{ name = "comment.line.apostrophe.asp";
-		  match = "'.*$";
+		  match = "'.*$\n?";
 		},
 		{ name = "keyword.control.asp";
 		  match = "(?i:\\b(If|Then|Else|ElseIf|End If|While|Wend|For|To|Each|Case|Select|End Select|Return|Continue|Do|Until|Loop|Next|With|Exit Do|Exit For|Exit Function|Exit Property|Exit Sub)\\b)";

@@ -20,7 +20,7 @@
 		{ name = "string.quoted.single.actionscript"; begin = "'"; end = "'"; swallow = "\\\\."; },
 		{ name = "support.constant.actionscript"; match = "\\b(BACKSPACE|CAPSLOCK|CONTROL|DELETEKEY|DOWN|END|ENTER|false|HOME|INSERT|LEFT|LN10|LN2|LOG10E|LOG2E|MAX_VALUE|MIN_VALUE|NEGATIVE_INFINITY|NaN|PGDN|PGUP|PI|POSITIVE_INFINITY|RIGHT|SPACE|SQRT1_2|SQRT2|true|UP)\\b"; },
 		{ name = "comment.block.actionscript"; begin = "/\\*"; end = "\\*/"; },
-		{ name = "comment.line.double-slash.actionscript"; match = "//.*$"; },
+		{ name = "comment.line.double-slash.actionscript"; match = "//.*$\n?"; },
 		{ name = "keyword.operator.actionscript"; match = "\\b(instanceof)\\b"; },
 		{ name = "keyword.operator.symbolic.actionscript"; match = "[-\!\%\&\*\+\=\/\?\:]"; },
 		{ name = "other.preprocessor.actionscript"; match = "^[ \\t]*#[a-zA-Z]+"; },

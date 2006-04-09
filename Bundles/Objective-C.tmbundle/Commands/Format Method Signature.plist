@@ -6,26 +6,29 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-text = ENV['TM_SELECTED_TEXT']
+text = STDIN.read
 
 offset_to_first_colon = text.index(':')
 
 argument_triplets = text.scan /(.+?):\s*\((.+?)\)\s*([^\s]*)/
 
-argument_triplets.each do |triplet|
-	printf "%#{offset_to_first_colon}s:(%s)%s\n", triplet[0], triplet[1], triplet[2]
-end
-</string>
+print(argument_triplets.collect do |triplet|
+	sprintf "%#{offset_to_first_colon}s:(%s)%s", triplet[0], triplet[1], triplet[2]
+end.join("\n"))
+
+print $1 if text.match /(\n+)\z/</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^q</string>
 	<key>name</key>
 	<string>Format Method Signature</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>declaration.function.objc</string>
 	<key>uuid</key>
 	<string>122E10C1-DFA2-4A9E-9B17-8EBFA6E10CC7</string>
 </dict>

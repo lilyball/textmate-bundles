@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+text = ENV['TM_SELECTED_TEXT']
+
+offset_to_first_colon = text.index(':')
+
+argument_triplets = text.scan /(.+?):\s*\((.+?)\)\s*([^\s]*)/
+
+argument_triplets.each do |triplet|
+	printf "%#{offset_to_first_colon}s:(%s)%s\n", triplet[0], triplet[1], triplet[2]
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Format Method Signature</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>122E10C1-DFA2-4A9E-9B17-8EBFA6E10CC7</string>
+</dict>
+</plist>

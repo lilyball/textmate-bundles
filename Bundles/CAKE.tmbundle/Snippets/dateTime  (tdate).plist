@@ -3,8 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;p&gt;${6:&lt;label for id='$5'&gt;${7:text for label}&lt;/label&gt;}&lt;?php echo \$html-&gt;dateTimeOptionTag('${1:Model}/${2:field}', ${3:'DMY'},${4:12},NULL, array('id'=&gt;'${5:$1_$2}')) ?&gt;${8:
-	 &lt;?php echo \$html-&gt;tagErrorMsg('$1/$2', '${9:validation error message.}') ?&gt;}&lt;/p&gt;$0</string>
+	<string>&lt;p&gt;${6:&lt;label for="$5"&gt;${7:text for label}&lt;/label&gt;}
+&lt;?php echo \$html-&gt;tagErrorMsg('$1/$2', '${9:validation error message.}') ?&gt;
+&lt;?php echo \$html-&gt;dateTimeOptionTag('${1:Model}/${2:field}', ${3:'DMY'},${4:12},NULL, array('id'=&gt;'${5:$1_$2}')) ?&gt;${8:
+}&lt;/p&gt;$0</string>
 	<key>name</key>
 	<string>dateTime  (tdate)</string>
 	<key>scope</key>

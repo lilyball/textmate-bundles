@@ -23,6 +23,12 @@ class ${1:PluralPart}sController extends AppController
 	${7:var \$components = array(${8:'email'}${9:,components});}
 	$0
 
+
+	function __construct() {
+		parent::__construct();
+	}
+	
+	
 	/** \\brief index the model for return to a view
 		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
 		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
@@ -34,91 +40,14 @@ class ${1:PluralPart}sController extends AppController
 		  \$this-&gt;set('data',\$this-&gt;$1-&gt;findAll());
 	} // END function index
 	
-	/** \\brief view a single model item
-		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
-		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
-		\\param id id of model item to pass to view
-		\\sa
-	**/
-	function view(\$id)
+	function ${10}view(\$id)
 	{
 		\$this-&gt;$1-&gt;setId(\$id);
 		\$this-&gt;set('data', \$this-&gt;$1-&gt;read());
 	}
 	
-	/** \\brief add a single model item
-		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
-		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
 
-		\\sa
-	**/
-	function add()
-	{
-		if (empty(\$this-&gt;params['data']))
-		{
-			\$this-&gt;render();
-		}
-		else
-		{
-			if (\$this-&gt;$1-&gt;save(\$this-&gt;params['data']))
-			{
-				\$this-&gt;Session-&gt;setFlash('Your $1 has been saved');
-				\$this-&gt;redirect('/');
-			}
-			else
-			{
-				\$this-&gt;set('data', \$this-&gt;params['data']);
-				\$this-&gt;validateErrors(\$this-&gt;$1);
-				\$this-&gt;render();
-			}
-		}
-	} // END function add
-	
-	/** \\brief delete a single model item
-		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
-		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
-		\\param id id of model item delete
-		\\sa
-	**/
-	function delete(\$id) {
-		if (\$this-&gt;$1-&gt;del(\$id))
-		{
-			\$this-&gt;Session-&gt;setFlash('The $1 with id: '.\$id.' has been deleted.');
-			\$this-&gt;redirect('/');
-		}
-	} // END function delete
-	
-	/** \\brief edit a single model item
-		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
-		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
-		\\param id id of model item to edit
-		\\sa
-	**/
-	function edit(\$id=null) 	{
-		if (empty(\$this-&gt;params['data']))
-		{
-			\$this-&gt;$1-&gt;setId(\$id);
-			\$this-&gt;params['data'] = \$this-&gt;$1-&gt;read();
-			\$this-&gt;set('data', \$this-&gt;params['data']);	
-			\$this-&gt;render();
-		}
-		else
-		{
-			\$this-&gt;$1-&gt;set(\$this-&gt;params['data']);
-			if ( \$this-&gt;$1-&gt;save())
-			{
-				
-				\$this-&gt;Session-&gt;setFlash('Your $1 has been updated.');
-				\$this-&gt;redirect('/');
-			}
-			else
-			{
-				\$this-&gt;set('data', \$this-&gt;params['data']);
-				\$this-&gt;validateErrors(\$this-&gt;$1);
-				\$this-&gt;render();
-			}
-		}
-	}
+
 	
 } // END class $1sController
 ?&gt;</string>

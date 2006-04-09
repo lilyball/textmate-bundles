@@ -3,8 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;p&gt;${7:&lt;label for id='${8:$6}'&gt;${9:text for label}&lt;/label&gt;}&lt;?php echo \$ajax-&gt;autoComplete('${1:Model}/${2:field}', '/bare/${3:controller}/${4:action}', array('cols'=&gt;'${5:cols}','id'=&gt;'${6:$1_$2}')) ?&gt;${10:
-	&lt;?php echo \$html-&gt;tagErrorMsg('$1/$2', '${11:validation error message.}') ?&gt;}&lt;/p&gt;
+	<string>&lt;p&gt;${7:&lt;label for="${8:$6}"&gt;${9:text for label}&lt;/label&gt;}
+&lt;?php echo \$html-&gt;tagErrorMsg('$1/$2', '${11:validation error message.}') ?&gt;
+&lt;?php echo \$ajax-&gt;autoComplete('${1:Model}/${2:field}', '/bare/${3:controller}/${4:action}', array('cols'=&gt;'${5:cols}','id'=&gt;'${6:$1_$2}')) ?&gt;${10:}	&lt;/p&gt;
 $0</string>
 	<key>name</key>
 	<string>autoComplete (tauto)</string>

@@ -3,8 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;p&gt;${5:&lt;label for id='$4'&gt;${6:text for label}&lt;/label&gt;}&lt;?php echo \$html-&gt;input('${1:Model}/${2:field}', array('cols'=&gt;'${3:cols}','id'=&gt;'${4:$1_$2}')) ?&gt;${7:
-	 &lt;?php echo \$html-&gt;tagErrorMsg('$1/$2', '${8:validation error message.}') ?&gt;}&lt;/p&gt;$0</string>
+	<string>&lt;p&gt;${5:&lt;label for="$4"&gt;${6:text for label}&lt;/label&gt;}
+&lt;?php echo \$html-&gt;tagErrorMsg('$1/$2', '${8:validation error message.}') ?&gt;
+&lt;?php echo \$html-&gt;input('${1:Model}/${2:field}', array('cols'=&gt;'${3:cols}','id'=&gt;'${4:$1_$2}')) ?&gt;${7:
+}&lt;/p&gt;$0</string>
 	<key>name</key>
 	<string>input (tinput)</string>
 	<key>scope</key>

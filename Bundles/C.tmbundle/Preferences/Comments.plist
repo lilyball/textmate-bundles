@@ -5,7 +5,7 @@
 	<key>name</key>
 	<string>Comments</string>
 	<key>scope</key>
-	<string>source.php</string>
+	<string>source.c, source.c++, source.objc, source.objc++</string>
 	<key>settings</key>
 	<dict>
 		<key>shellVariables</key>
@@ -14,35 +14,35 @@
 				<key>name</key>
 				<string>TM_COMMENT_START</string>
 				<key>value</key>
-				<string>// </string>
-			</dict>
-			<dict>
-				<key>name</key>
-				<string>TM_COMMENT_START_2</string>
-				<key>value</key>
-				<string># </string>
-			</dict>
-			<dict>
-				<key>name</key>
-				<string>TM_COMMENT_START_3</string>
-				<key>value</key>
 				<string>/*</string>
 			</dict>
 			<dict>
 				<key>name</key>
-				<string>TM_COMMENT_END_3</string>
+				<string>TM_COMMENT_END</string>
 				<key>value</key>
 				<string>*/</string>
 			</dict>
 			<dict>
 				<key>name</key>
-				<string>TM_COMMENT_MODE_3</string>
+				<string>TM_COMMENT_MODE</string>
 				<key>value</key>
 				<string>block</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>TM_COMMENT_DISABLE_INDENT</string>
+				<key>value</key>
+				<string>yes</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>TM_COMMENT_START_2</string>
+				<key>value</key>
+				<string>//</string>
 			</dict>
 		</array>
 	</dict>
 	<key>uuid</key>
-	<string>06276449-AA4E-424F-A2B6-9F4138416E50</string>
+	<string>A468007A-1960-4E1A-9F09-81EBFE04429C</string>
 </dict>
 </plist>

@@ -3,17 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Miscellaneous</string>
+	<string>Comments</string>
 	<key>scope</key>
 	<string>source.shell</string>
 	<key>settings</key>
 	<dict>
-		<key>decreaseIndentPattern</key>
-		<string>^\s*(elif|fi|esac|done)\b</string>
-		<key>increaseIndentPattern</key>
-		<string>^\s*(if|elif|for|while|until)\b.*</string>
+		<key>shellVariables</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>TM_COMMENT_START</string>
+				<key>value</key>
+				<string># </string>
+			</dict>
+		</array>
 	</dict>
 	<key>uuid</key>
-	<string>E3637B21-3DAB-41D2-AD9D-03735778D7EE</string>
+	<string>858E140E-51E5-4863-829F-EF6B4B8FA816</string>
 </dict>
 </plist>

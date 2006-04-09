@@ -10,7 +10,7 @@ cd "$TM_DIRECTORY"
 javac -encoding UTF8 "$TM_FILENAME" &amp;&gt; &gt;("${TM_RUBY:-ruby}" -rtm_parser -eTextMate.parse_errors)
 if (($? &gt;= 1)); then exit; fi
 
-java "${TM_FILENAME%.java}"
+java "${TM_FILENAME%.java}"|pre
 echo "Program exited with status $?."
 
 # # if you want to run the program in Terminal.app

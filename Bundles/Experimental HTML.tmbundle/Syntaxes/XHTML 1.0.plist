@@ -34,7 +34,7 @@
             end = "(?<=>)"; 
             applyEndPatternLast = 1;
             patterns = (
-                {   name = "meta.tag.sgml-declaration.doctype.html";
+                {   name = "meta.tag.sgml.doctype.html";
                     begin = "<!(DOCTYPE\\b)"; 
                     end = ">"; 
                     captures = { 1 = { name = "entity.name.tag.doctype.html"; }; };

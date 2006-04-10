@@ -21,6 +21,9 @@ fish = NSArray alloc
 fish = [NSArray alloc] init
 glPushName(self index)
 fish=NSArray alloc
+obj doMethodWithString:@" "
+NSString stringWithUTF8String: "fish wich"
+fish = test with: 0.09f
 
 Enjoy the fishness.
 
@@ -28,13 +31,23 @@ Rob
 
 =end
 
-$line = ENV['TM_CURRENT_LINE']
+$line = STDIN.read
 $caret = ENV['TM_LINE_INDEX'].to_i
+
+class String
+	def without_suffix(suffix)
+		self[0, self.length - suffix.length]
+	end
+	
+	def without_suffix!(suffix)
+		self.replace(self.without_suffix(suffix))
+	end
+end
 
 def message_context(string)
 	mes = message string, false
 	if mes
-		[string[0, string.length - mes.length], string[((string.length - mes.length)), mes.length]]
+		[string.without_suffix(mes), string[(string.length - mes.length), mes.length]]
 	else
 		[nil, nil]
 	end
@@ -45,7 +58,7 @@ def message(string, check_brackets = true)
 	if check_brackets
 		b = string[/\]\s*$/]
 		if b
-			string = string[0, string.length - b.length]
+			string = string.without_suffix b
 			out = b + out
 		else
 			return nil
@@ -53,10 +66,10 @@ def message(string, check_brackets = true)
 	end
 	sel = selector(string)
 	if sel
-		string = string[0, string.length - sel.length]
+		string = string.without_suffix sel
 		rec = receiver(string)
 		if rec
-			string = string[0, string.length - rec.length]
+			string = string.without_suffix rec
 			out = rec + sel + out
 		else
 			return nil
@@ -67,7 +80,7 @@ def message(string, check_brackets = true)
 	if check_brackets
 		b = string[/\[\s*$/]
 		if b
-			string = string[0, string.length - b.length]
+			string = string.without_suffix b
 			out = b + out
 		else
 			return nil
@@ -77,23 +90,35 @@ def message(string, check_brackets = true)
 end
 
 def receiver(string)
-	string[/[^\[\]\(\)\s\=\+\-\*\/,\\:]+\s*$/] || message(string)
-	#string[/\w+\s*$/] || message(string)
+	string[/[^"'\[\]\(\)\s\=\+\-\*\/,\\:]+\s*$/] || message(string) || at_string(string)
+end
+
+def at_string(string)
+	string[/@".*?"\s*$/]
+end
+
+def c_string(string)
+	string[/(["']).*?\1\s*$/]
 end
 
 def argument(string)
-	arg = (string[/([\w]+\s*)+$/] || message(string))
-# 	needs to handle arg list
-# 	if arg
-# 		
-# 	end
+	string[/[^"'\[\]\(\)\s\=\+\-\*\/,\\:]+\s*$/] || message(string) || at_string(string) || c_string(string)
+end
+
+def argument_list(string)
+	accum = ""
+	while match = (string[/,\s*$/] || argument(string))
+		accum = match + accum
+		string = string.without_suffix match
+	end
+	accum.empty? ? nil : accum
 end
 
 def selector(string)
-	arg = receiver string
+	arg = argument string
 	if arg
-		string = string[0, string.length - arg.length]
-		sel = string[/\w+:\s*$/]
+		string = string.without_suffix arg
+		sel = string[/[^"'\[\]\(\)\s\=\+\-\*\/,\\:]+:\s*$/]
 		if sel
 			sel + arg
 		else
@@ -138,7 +163,7 @@ print "#{snippet_escape left}]${0}#{snippet_escape right}"
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>
-	<string>source.objc - string - comment, source.objc++ - string - comment</string>
+	<string>source.objc - string - comment, source.objc++ - string- comment</string>
 	<key>uuid</key>
 	<string>DB16585F-4D78-412B-B468-38AD54C254B5</string>
 </dict>

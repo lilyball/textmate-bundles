@@ -42,7 +42,7 @@ class ${1:PluralPart}sController extends AppController
 	
 	function ${10}view(\$id)
 	{
-		\$this-&gt;$1-&gt;setId(\$id);
+		\$this-&gt;$1-&gt;id = \$id;
 		\$this-&gt;set('data', \$this-&gt;$1-&gt;read());
 	}
 	

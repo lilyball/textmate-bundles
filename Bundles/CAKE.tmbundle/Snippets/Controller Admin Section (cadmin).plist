@@ -16,7 +16,7 @@
 **/
 function ${2:admin_}index()
 {
-	\$this-&gt;layout = 'admin';
+	\$this-&gt;layout = '${5:admin}';
 	\$data = \$this-&gt;$1-&gt;findAll($conditions=null, $fields=null, $this-&gt;order, $this-&gt;show, $this-&gt;page);
 
 	//\$paging['style'] = 'ajax';
@@ -42,7 +42,8 @@ function ${2:admin_}index()
 **/
 function ${2}view(\$id)
 {
-	\$this-&gt;$1-&gt;setId(\$id);
+	\$this-&gt;layout = '${5}';
+     \$this-&gt;$1-&gt;id = \$id;
 	\$this-&gt;set('data', \$this-&gt;$1-&gt;read());
 }
 
@@ -54,6 +55,7 @@ function ${2}view(\$id)
 **/
 function ${2}add()
 {
+	\$this-&gt;layout = '${5}';
 	if (empty(\$this-&gt;params['data']))
 	{
 		\$this-&gt;render();
@@ -81,6 +83,7 @@ function ${2}add()
 	\\sa
 **/
 function ${2}delete(\$id) {
+	\$this-&gt;layout = '${5:admin}';
 	if (\$this-&gt;$1-&gt;del(\$id))
 	{
 		\$this-&gt;Session-&gt;setFlash('The $1 with id: '.\$id.' has been deleted.');
@@ -95,6 +98,7 @@ function ${2}delete(\$id) {
 	\\sa
 **/
 function ${2}edit(\$id=null) 	{
+	\$this-&gt;layout = '${5:admin}';
 	if (empty(\$this-&gt;params['data']))
 	{
 		\$this-&gt;$1-&gt;setId(\$id);

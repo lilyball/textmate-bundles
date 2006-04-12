@@ -6,6 +6,8 @@
 	<array>
 		<string>mail</string>
 	</array>
+	<key>keyEquivalent</key>
+	<string>^~M</string>
 	<key>name</key>
 	<string>Mail</string>
 	<key>patterns</key>
@@ -30,7 +32,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^(&gt; )(&gt; )(&gt; .*)$\n?</string>
+			<string>^(&gt; ?)(&gt; ?)(&gt;(?: .*)?)$\n?</string>
 			<key>name</key>
 			<string>markup.quote.mail</string>
 		</dict>
@@ -49,13 +51,13 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^(&gt; )(&gt; .*)$\n?</string>
+			<string>^(&gt; ?)(&gt;(?: .*)?)$\n?</string>
 			<key>name</key>
 			<string>markup.quote.mail</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^&gt;( .*)?$\n?</string>
+			<string>^&gt;(?: .*)?$\n?</string>
 			<key>name</key>
 			<string>markup.quote.mail.single</string>
 		</dict>

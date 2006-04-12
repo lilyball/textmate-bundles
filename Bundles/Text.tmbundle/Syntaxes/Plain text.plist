@@ -13,48 +13,22 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>^([ \t]*)(?=\S)</string>
-			<key>contentName</key>
-			<string>meta.paragraph.text</string>
-			<key>end</key>
-			<string>^(?!\1(?=\S))</string>
-		</dict>
-		<dict>
 			<key>match</key>
 			<string>^\s*•.*$\n?</string>
 			<key>name</key>
-			<string>declaration.bullet-point.strong</string>
+			<string>meta.bullet-point.strong</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>^\s*·.*$\n?</string>
 			<key>name</key>
-			<string>declaration.bullet-point.light</string>
+			<string>meta.bullet-point.light</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>^\s*\*.*$\n?</string>
 			<key>name</key>
-			<string>declaration.bullet-point.star</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b([vV]\d{1,2}\.\d(\.\d)?([abdf]\d{1,3})?|\d{1,2}\.\d(\.\d)?[abdf]\d{1,3})\b</string>
-			<key>name</key>
-			<string>constant.numeric.version-string</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(https?|ftp|mailto):\S+?(?=[)&gt;,.':;"]*(\s|$)|$)</string>
-			<key>name</key>
-			<string>markup.underline.link</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\[(NEW|FIXED|CHANGED|REMOVED|INFO)\]</string>
-			<key>name</key>
-			<string>keyword.other.release-notes</string>
+			<string>meta.bullet-point.star</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -73,61 +47,30 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>%\{&lt;(?i:HTML)&gt;</string>
+			<string>^([ \t]*)(?=\S)</string>
+			<key>contentName</key>
+			<string>meta.paragraph.text</string>
 			<key>end</key>
-			<string>&lt;/(?i:HTML)&gt;\}%</string>
-			<key>name</key>
-			<string>text.html</string>
+			<string>^(?!\1(?=\S))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>text.html.basic</string>
+					<key>match</key>
+					<string>(https?|ftp|mailto):\S+?(?=[)&gt;,.':;"]*(\s|$)|$)</string>
+					<key>name</key>
+					<string>markup.underline.link</string>
 				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>%\{&lt;(?i:Shell)&gt;</string>
-			<key>end</key>
-			<string>&lt;/(?i:Shell)&gt;\}%</string>
-			<key>name</key>
-			<string>source.shell</string>
-			<key>patterns</key>
-			<array>
 				<dict>
-					<key>include</key>
-					<string>source.shell</string>
+					<key>match</key>
+					<string>\b([vV]\d{1,2}\.\d(\.\d)?([abdf]\d{1,3})?|\d{1,2}\.\d(\.\d)?[abdf]\d{1,3})\b</string>
+					<key>name</key>
+					<string>constant.numeric.version-string</string>
 				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>%\{&lt;(?i:Objective-C)&gt;</string>
-			<key>end</key>
-			<string>&lt;/(?i:Objective-C)&gt;\}%</string>
-			<key>name</key>
-			<string>source.objc</string>
-			<key>patterns</key>
-			<array>
 				<dict>
-					<key>include</key>
-					<string>source.objc</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>%\{&lt;(?i:LaTeX)&gt;</string>
-			<key>end</key>
-			<string>&lt;/(?i:LaTeX)&gt;\}%</string>
-			<key>name</key>
-			<string>text.latex</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>text.latex</string>
+					<key>match</key>
+					<string>\[(NEW|FIXED|CHANGED|REMOVED|INFO)\]</string>
+					<key>name</key>
+					<string>keyword.other.release-notes</string>
 				</dict>
 			</array>
 		</dict>

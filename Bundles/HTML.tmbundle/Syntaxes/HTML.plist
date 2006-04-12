@@ -37,28 +37,40 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>&lt;([a-zA-Z0-9:]+)(?=[^&gt;]*&gt;&lt;/\1&gt;)</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.html</string>
 				</dict>
-				<key>2</key>
+			</dict>
+			<key>end</key>
+			<string>&gt;(&lt;)/(\1)&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>meta.scope.between-tag-pair.html</string>
 				</dict>
-				<key>3</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.html</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>&lt;(\w+)[^&gt;]*(&gt;)&lt;/(\1)&gt;</string>
 			<key>name</key>
-			<string>meta.tag.html</string>
+			<string>meta.tag.any.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tag-stuff</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>

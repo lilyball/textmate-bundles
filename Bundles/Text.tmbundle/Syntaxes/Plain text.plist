@@ -13,6 +13,14 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>begin</key>
+			<string>^([ \t]*)(?=\S)</string>
+			<key>contentName</key>
+			<string>meta.paragraph.text</string>
+			<key>end</key>
+			<string>^(?!\1(?=\S))</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>^\s*•.*$\n?</string>
 			<key>name</key>

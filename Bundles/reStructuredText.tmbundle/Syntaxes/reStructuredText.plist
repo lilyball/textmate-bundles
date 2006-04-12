@@ -16,6 +16,14 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>begin</key>
+			<string>^([ \t]*)(?=\S)</string>
+			<key>contentName</key>
+			<string>meta.paragraph.restructuredtext</string>
+			<key>end</key>
+			<string>^(?!\1(?=\S))</string>
+		</dict>
+		<dict>
 			<key>comment</key>
 			<string>headings</string>
 			<key>match</key>
@@ -125,7 +133,7 @@
 			<key>comment</key>
 			<string>field list</string>
 			<key>match</key>
-			<string>:[A-z][A-z0-9 	=\s\t_]*:</string>
+			<string>:[A-z][A-z0-9  =\s\t_]*:</string>
 			<key>name</key>
 			<string>constant.string</string>
 		</dict>

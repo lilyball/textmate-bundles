@@ -3,10 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for(unsigned int index = 0; index &lt; [${1:array} count]; index += 1)
+	<string>unsigned int	${1:object}Count = [${2:array} count];
+
+for(unsigned int index = 0; index &lt; ${1}Count; index += 1)
 {
-	${2:id}	object = [${1:array} objectAtIndex:index];
-	$4
+	${3:id}	${1} = [$2 objectAtIndex:index];
+	$0
 }</string>
 	<key>name</key>
 	<string>NSArray Loop (forarray)</string>

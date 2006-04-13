@@ -5,12 +5,12 @@
 	<key>content</key>
 	<string>- (${1:unsigned int})${2:thing}
 {
-	return ${3:fThing};
+	return ${3:$2};
 }
 
 - (void)set${2/./\u$0/}:(${1:unsigned int})new${2/./\u$0/}
 {
-	${3:fThing} = new${2/./\u$0/};
+	$3 = new${2/./\u$0/};
 }
 </string>
 	<key>name</key>

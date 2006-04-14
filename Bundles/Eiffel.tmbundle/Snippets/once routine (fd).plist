@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${1:routine}${2: (${3:args}: ${4:TYPE})}${5:: ${6:TYPE}} is${7:
+	require
+		${8:assertion}}${9:
+	local
+		${10:l}:${11:TYPE}} 
+	once
+		${12:instruction}${13:
+	ensure
+		${14:assertion}}${15:
+	rescue
+		${16:instruction}}
+	end -- $1</string>
+	<key>name</key>
+	<string>once routine (fd)</string>
+	<key>scope</key>
+	<string>source.eiffel</string>
+	<key>tabTrigger</key>
+	<string>fd</string>
+	<key>uuid</key>
+	<string>09734164-39B2-48C6-88A7-155D81145C86</string>
+</dict>
+</plist>

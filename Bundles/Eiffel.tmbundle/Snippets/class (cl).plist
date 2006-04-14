@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>-- ${1:class_name}
+
+class
+	${1/(.*)/\U$0\E/}
+inherit
+
+create
+
+feature
+
+invariant
+
+end -- ${1/(.*)/\U$0\E/}
+</string>
+	<key>name</key>
+	<string>class (cl)</string>
+	<key>scope</key>
+	<string>source.eiffel</string>
+	<key>tabTrigger</key>
+	<string>cl</string>
+	<key>uuid</key>
+	<string>4F146DFF-8856-48BD-8E62-E10915C937F0</string>
+</dict>
+</plist>

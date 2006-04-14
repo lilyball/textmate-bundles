@@ -7,16 +7,18 @@
 	<key>command</key>
 	<string>TPY=${TM_PYTHON:-pythonw}
 "$TPY" "$TM_BUNDLE_SUPPORT/extend_title.py"</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
 	<key>input</key>
-	<string>document</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^T</string>
 	<key>name</key>
 	<string>Extend Title</string>
 	<key>output</key>
-	<string>replaceDocument</string>
+	<string>insertAsSnippet</string>
 	<key>scope</key>
-	<string>text.restructuredtext</string>
+	<string>meta.paragraph.restructuredtext </string>
 	<key>uuid</key>
 	<string>D2EF8647-6586-464B-B759-6F2A8A50E542</string>
 </dict>

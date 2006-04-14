@@ -63,6 +63,12 @@ if choice = TextMate.choose("Generate:", Generator.names, :title => "Rails Gener
       options = TextMate.input("List any actions you would like created for the controller:",
         "index new create edit update destroy", :title => "Controller Actions")
     end
+    
+    # add the --svn option, if needed
+    proj_dir = ENV["TM_PROJECT_DIRECTORY"]
+    if proj_dir and File.exist?(File.join(proj_dir, ".svn"))
+      options << " --svn"
+    end
 
     rails_root = RailsPath.new.rails_root
     FileUtils.cd rails_root

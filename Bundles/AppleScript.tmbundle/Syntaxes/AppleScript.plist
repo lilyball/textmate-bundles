@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>applescript</string>
+		<string>script editor</string>
+	</array>
+	<key>keyEquivalent</key>
+	<string>^~A</string>
+	<key>name</key>
+	<string>AppleScript</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>\b(tell|end tell|return)\b</string>
+			<key>name</key>
+			<string>keyword.control.applescript</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.untitled</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escaped.untitled</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.applescript</string>
+	<key>uuid</key>
+	<string>777CF925-14B9-428E-B07B-17FAAB8FA27E</string>
+</dict>
+</plist>

@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>osascript|pre</string>
+	<string>osascript|pre
+echo "Program exited with status $?."
+</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

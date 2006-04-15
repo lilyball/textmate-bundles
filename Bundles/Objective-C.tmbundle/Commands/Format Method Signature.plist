@@ -10,7 +10,7 @@ text = STDIN.read
 
 offset_to_first_colon = text.index(':')
 
-argument_triplets = text.scan /(.+?):\s*\((.+?)\)\s*([^\s]*)/
+argument_triplets = text.scan /(.+?):\s*\((.+?)\)\s*([^\s]*)\s*/
 
 print(argument_triplets.collect do |triplet|
 	sprintf "%#{offset_to_first_colon}s:(%s)%s", triplet[0], triplet[1], triplet[2]

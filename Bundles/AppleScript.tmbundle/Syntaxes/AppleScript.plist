@@ -20,6 +20,20 @@
 			<string>keyword.control.applescript</string>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>--.*$\n?</string>
+			<key>name</key>
+			<string>comment.line.double-dash.applescript</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\(\*</string>
+			<key>end</key>
+			<string>\*\)</string>
+			<key>name</key>
+			<string>comment.block.applescript</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>"</string>
 			<key>end</key>

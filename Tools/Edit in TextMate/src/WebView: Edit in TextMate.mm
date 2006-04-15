@@ -166,6 +166,12 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 			newQuoteLevel++;
 		}
 
+		if([line isEqualToString:@">"])
+		{
+			line = @"";
+			newQuoteLevel++;
+		}
+
 		if(newQuoteLevel > quoteLevel)
 		{
 			for(unsigned j = 0; j != newQuoteLevel - quoteLevel; j++)

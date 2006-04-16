@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>sfConfig::get('`echo $TM_SELECTED_TEXT | tr "[A-Z]" "[a-z]"`')</string>
+	<string>sfConfig::get('${TM_SELECTED_TEXT/.*/\L$0/}')</string>
 	<key>keyEquivalent</key>
 	<string>@b</string>
 	<key>name</key>

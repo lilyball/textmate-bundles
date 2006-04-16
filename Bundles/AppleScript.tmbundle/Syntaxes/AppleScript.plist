@@ -7,6 +7,17 @@
 		<string>applescript</string>
 		<string>script editor</string>
 	</array>
+	<key>foldingStartMarker</key>
+	<string>(?x)
+		(tell \s+ (the \s+ )? app(lication)?\b (?! \s+ "[^"]*" \s+ to)
+		|if\b .* \bthen\s*$
+		|repeat\b .* \btimes\s*
+		)
+	</string>
+	<key>foldingStopMarker</key>
+	<string>(?x)
+		end \s (tell|if|repeat)
+	</string>
 	<key>keyEquivalent</key>
 	<string>^~A</string>
 	<key>name</key>
@@ -15,9 +26,23 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>\b(tell|end tell|return)\b</string>
+			<string>\b(tell|if|then|else|repeat|times|end (tell|repeat|if)|return)\b</string>
 			<key>name</key>
 			<string>keyword.control.applescript</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>yes/no can’t always be used as booleans, e.g. in an if() expression. But they work e.g. for boolean arguments.</string>
+			<key>match</key>
+			<string>\b(?i:true|false|yes|no)\b</string>
+			<key>name</key>
+			<string>constant.language.applescript</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b\d+\b</string>
+			<key>name</key>
+			<string>constant.numeric.applescript</string>
 		</dict>
 		<dict>
 			<key>match</key>

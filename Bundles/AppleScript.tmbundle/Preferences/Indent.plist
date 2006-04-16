@@ -8,8 +8,17 @@
 	<string>source.applescript</string>
 	<key>settings</key>
 	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>(?x)
+		end \s (tell|if|repeat)
+	</string>
 		<key>increaseIndentPattern</key>
-		<string>tell app(lication)?\b(?!\s+"[^"]*"\s+to)</string>
+		<string>(?x)
+		(\btell \s+ (the \s+ )? app(lication)?\b (?! \s+ "[^"]*" \s+ to)
+		|\bif \s+ .* \bthen \s* $
+		|\brepeat \s+ .* \btimes \s* $
+		)
+	</string>
 	</dict>
 	<key>uuid</key>
 	<string>8F2DBD25-3DED-44CE-A902-05DCBC185A99</string>

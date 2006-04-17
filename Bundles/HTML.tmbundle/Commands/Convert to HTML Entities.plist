@@ -7,17 +7,19 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -KU
 
-char_to_entity = { }
-File.open("#{ENV['TM_BUNDLE_SUPPORT']}/entities.txt").read.gsub(/^(\d+)\t(.+)$/) do |_|
-  char_to_entity[[$1.to_i].pack('U')] = $2
+$char_to_entity = { }
+File.open("#{ENV['TM_BUNDLE_SUPPORT']}/entities.txt").read.scan(/^(\d+)\t(.+)$/) do |key, value|
+  $char_to_entity[[key.to_i].pack('U')] = value
 end
 
-res = STDIN.read.gsub(/[^\x00-\x7F]|["'&lt;&gt;&amp;]/) do |ch|
-  ent = char_to_entity[ch]
-  ent ? "&amp;#{ent};" : sprintf("&amp;#x%02X;", ch.unpack("U")[0])
+def encode (text)
+  text.gsub(/[^\x00-\x7F]|["'&lt;&gt;&amp;]/) do |ch|
+    ent = $char_to_entity[ch]
+    ent ? "&amp;#{ent};" : sprintf("&amp;#x%02X;", ch.unpack("U")[0])
+  end
 end
 
-print res
+print encode(STDIN.read)
 </string>
 	<key>fallbackInput</key>
 	<string>character</string>

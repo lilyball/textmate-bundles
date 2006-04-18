@@ -25,63 +25,99 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>match</key>
-			<string>--.*$\n?</string>
-			<key>name</key>
-			<string>comment.line.double-dash.applescript</string>
-		</dict>
-		<dict>
 			<key>begin</key>
-			<string>\(\*</string>
+			<string>(?&lt;=¬)$</string>
 			<key>end</key>
-			<string>\*\)</string>
+			<string>(?&lt;!¬)$(\n?)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.end-of-line-continuation.applescript</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>comment.block.applescript</string>
+			<string>meta.line-continuation.applescript</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#rules</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>\b(is not greater than or equal( to)?|isn't greater than or equal( to)?|(is )?greater than or equal( to)?|is not less than or equal( to)?|isn't less than or equal( to)?|(is )?less than or equal( to)?|(a )?(ref( to)|reference to)|does not come before|doesn't come before|is not greater than|does not come after|is not contained by|is not equal( to)?|(is )?greater than|doesn't come after|isn't contained by|isn't equal( to)?|is not less than|does not contain|(is )?less than|isn't less than|doesn't contain|is contained by|(is )?equal to|does not equal|start(s)? with|begin(s)? with|doesn't equal|isn't greater|comes before|end(s)? with|comes after|contain(s)?|is not in|equals|is not|equal|isn't|is in|than|and|div|mod|not|or|is|as)\b|(≠|≥|≤|&gt;=|&lt;=|÷|&amp;|=|&gt;|&lt;|\*|\+|-|/|\^)</string>
-			<key>name</key>
-			<string>keyword.operator.applescript</string>
+			<key>include</key>
+			<string>#rules</string>
 		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>rules</key>
 		<dict>
-			<key>match</key>
-			<string>\b(set|copy|to|exit|tell|if|then|else if|else|repeat( (while|until|with))?|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout)|end|return|of|my)\b</string>
-			<key>name</key>
-			<string>keyword.control.applescript</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>yes/no can’t always be used as booleans, e.g. in an if() expression. But they work e.g. for boolean arguments.</string>
-			<key>match</key>
-			<string>\b(?i:true|false|yes|no)\b</string>
-			<key>name</key>
-			<string>constant.language.applescript</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b\d+\b</string>
-			<key>name</key>
-			<string>constant.numeric.applescript</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>"</string>
-			<key>end</key>
-			<string>"</string>
-			<key>name</key>
-			<string>string.quoted.double.applescript</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\\.</string>
+					<string>--.*$\n?</string>
 					<key>name</key>
-					<string>constant.character.escaped.applescript</string>
+					<string>comment.line.double-dash.applescript</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\(\*</string>
+					<key>end</key>
+					<string>\*\)</string>
+					<key>name</key>
+					<string>comment.block.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(is not greater than or equal( to)?|isn't greater than or equal( to)?|(is )?greater than or equal( to)?|is not less than or equal( to)?|isn't less than or equal( to)?|(is )?less than or equal( to)?|(a )?(ref( to)|reference to)|does not come before|doesn't come before|is not greater than|does not come after|is not contained by|is not equal( to)?|(is )?greater than|doesn't come after|isn't contained by|isn't equal( to)?|is not less than|does not contain|(is )?less than|isn't less than|doesn't contain|is contained by|(is )?equal to|does not equal|start(s)? with|begin(s)? with|doesn't equal|isn't greater|comes before|end(s)? with|comes after|contain(s)?|is not in|equals|is not|equal|isn't|is in|than|and|div|mod|not|or|is|as)\b|(≠|≥|≤|&gt;=|&lt;=|÷|&amp;|=|&gt;|&lt;|\*|\+|-|/|\^)</string>
+					<key>name</key>
+					<string>keyword.operator.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(set|copy|to|exit|tell|if|then|else if|else|repeat( (while|until|with))?|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout)|end|return|of|my)\b</string>
+					<key>name</key>
+					<string>keyword.control.applescript</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>yes/no can’t always be used as booleans, e.g. in an if() expression. But they work e.g. for boolean arguments.</string>
+					<key>match</key>
+					<string>\b(?i:true|false|yes|no)\b</string>
+					<key>name</key>
+					<string>constant.language.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b\d+\b</string>
+					<key>name</key>
+					<string>constant.numeric.applescript</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\.</string>
+							<key>name</key>
+							<string>constant.character.escaped.applescript</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
-	</array>
+	</dict>
 	<key>scopeName</key>
 	<string>source.applescript</string>
 	<key>uuid</key>

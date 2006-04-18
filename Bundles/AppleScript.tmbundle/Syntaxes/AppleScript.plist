@@ -26,7 +26,11 @@
 	<array>
 		<dict>
 			<key>match</key>
+<<<<<<< .mine
+			<string>\b(tell|end (tell)?|return)\b</string>
+=======
 			<string>\b(tell|if|then|else|repeat|times|end (tell|repeat|if)|return)\b</string>
+>>>>>>> .r3051
 			<key>name</key>
 			<string>keyword.control.applescript</string>
 		</dict>
@@ -64,7 +68,7 @@
 			<key>end</key>
 			<string>"</string>
 			<key>name</key>
-			<string>string.quoted.double.untitled</string>
+			<string>string.quoted.double.applescript</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -74,6 +78,14 @@
 					<string>constant.character.escaped.untitled</string>
 				</dict>
 			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string></string>
+			<key>end</key>
+			<string>end (tell)?</string>
+			<key>name</key>
+			<string>meta.block.tell.applescript</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

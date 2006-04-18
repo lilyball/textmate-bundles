@@ -26,7 +26,13 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>\b(tell|if|then|else|repeat|times|end (tell|repeat|if)|return)\b</string>
+			<string>\b(is not greater than or equal( to)?|isn't greater than or equal( to)?|(is )?greater than or equal( to)?|is not less than or equal( to)?|isn't less than or equal( to)?|(is )?less than or equal( to)?|(a )?(ref( to)|reference to)|does not come before|doesn't come before|is not greater than|does not come after|is not contained by|is not equal( to)?|(is )?greater than|doesn't come after|isn't contained by|isn't equal( to)?|is not less than|does not contain|(is )?less than|isn't less than|doesn't contain|is contained by|(is )?equal to|does not equal|start(s)? with|begin(s)? with|doesn't equal|isn't greater|comes before|end(s)? with|comes after|contain(s)?|is not in|equals|is not|equal|isn't|is in|than|and|div|mod|not|or|is|as)\b|(≠|≥|≤|&gt;=|&lt;=|÷|&amp;|=|&gt;|&lt;|\*|\+|-|/|\^)</string>
+			<key>name</key>
+			<string>keyword.operator.applescript</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(set|copy|to|exit|tell|if|then|else if|else|repeat( (while|until|with))?|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout)|end|return|of|my)\b</string>
 			<key>name</key>
 			<string>keyword.control.applescript</string>
 		</dict>
@@ -71,17 +77,9 @@
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escaped.untitled</string>
+					<string>constant.character.escaped.applescript</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string></string>
-			<key>end</key>
-			<string>end (tell)?</string>
-			<key>name</key>
-			<string>meta.block.tell.applescript</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

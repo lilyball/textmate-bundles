@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+def snippet_escape(str)
+#	these characters have special meaning in snippets
+	str.gsub(/[$`\\]/, '\\\\\0')
+end
+
+line = ENV['TM_CURRENT_LINE']
+caret = ENV['TM_LINE_INDEX'].to_i
+selected_text = ENV['TM_SELECTED_TEXT'].nil? ? nil : gets
+
+if selected_text
+	prior = ""
+	at = line.rindex(selected_text, caret + selected_text.length)
+	prior = " " if line[0..at - 1] =~ /[^\s]$/
+	print prior + snippet_escape(selected_text[1..-2]) + "$0"
+end</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^</string>
+	<key>name</key>
+	<string>Smart Delete Outer Characters</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>uuid</key>
+	<string>AE00FFF1-C436-4826-808A-3AF6C2ABD18B</string>
+</dict>
+</plist>

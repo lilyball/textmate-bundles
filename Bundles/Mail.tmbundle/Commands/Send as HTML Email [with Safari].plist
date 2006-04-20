@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># This requires that 'enable access for assistive devices' is enabled
+# 
+open -a Safari "$TM_FILEPATH"
+osascript -e 'activate application "Safari.app"' -e 'tell application "System Events"' -e ' tell process "Safari"' -e ' keystroke "i" using {command down}' -e ' end tell' -e 'end tell' -e 'tell the application "Safari" to close window 1'
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@D</string>
+	<key>name</key>
+	<string>Send as HTML Email [with Safari]</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>B3BF8765-30D5-46E7-8331-860B47CDD348</string>
+</dict>
+</plist>

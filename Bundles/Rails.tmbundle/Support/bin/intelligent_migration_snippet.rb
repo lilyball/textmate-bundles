@@ -21,7 +21,7 @@ snippets = {
 
   'create_drop_table' =>
     { :up   => 'create_table "${1:table}" do |t|
-  $0
+  mccc$0
 end',
       :down => 'drop_table "$1"' },
 

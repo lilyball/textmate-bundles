@@ -26,7 +26,7 @@
 	<key>foldingStopMarker</key>
 	<string>(?x)
 		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl)&gt;
-		|^\s*--&gt;
+		|^(?!.*?&lt;!--).*?--&gt;
 		|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)
 		|^[^{]*\}
 		)</string>

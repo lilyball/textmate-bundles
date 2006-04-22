@@ -17,12 +17,12 @@
 function ${2:admin_}index()
 {
 	\$this-&gt;layout = '${5:admin}';
-	\$data = \$this-&gt;$1-&gt;findAll($conditions=null, $fields=null, $this-&gt;order, $this-&gt;show, $this-&gt;page);
+	\$data = \$this-&gt;$1-&gt;findAll(\$conditions=null, \$fields=null, \$this-&gt;order, \$this-&gt;show, \$this-&gt;page);
 
 	//\$paging['style'] = 'ajax';
 	\$paging['link'] = '/admin/$3/?show='.\$this-&gt;show.'&amp;sort='.\$this-&gt;sortBy.'&amp;direction='.\$this-&gt;direction.'&amp;page=';
 
-	\$paging['count'] = \$this-&gt;$1-&gt;findCount($conditions=null);
+	\$paging['count'] = \$this-&gt;$1-&gt;findCount(\$conditions=null);
 	\$paging['show'] = array('10','25','50');
 	\$paging['page'] = \$this-&gt;page;
 	\$paging['limit'] = \$this-&gt;show;
@@ -30,8 +30,8 @@ function ${2:admin_}index()
 
 	\$this-&gt;set('paging',\$paging);
 	\$this-&gt;set('data',\$data);
-	\$this-&gt;set('paging',$paging);
-	 \$this-&gt;set('data',\$this-&gt;$1-&gt;findAll());
+	\$this-&gt;set('paging',\$paging);
+	\$this-&gt;set('data',\$this-&gt;$1-&gt;findAll());
 } // END function ${2}index
 
 /** \\brief view a single model item

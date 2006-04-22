@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#
+# $Id: FileMerge%20With%20Working%20Copy%20(BASE).plist 949 2006-04-21 18:02:26Z aparajita $
+#
+
+require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+
+require_cmd opendiff "You must install the Apple developer tools to run FileMerge."
+
+# See if the current file is under svn control
+FILE=`basename "$TM_FILEPATH"`
+INFO_LINES=`svn info "$FILE" 2&gt;&amp;1 | grep "^Path\: .*\$" | wc -l`
+
+if [ $INFO_LINES -eq 0 ]; then
+	echo "The current file is not under subversion control"
+	exit_show_tool_tip
+fi
+
+"$TM_BUNDLE_SUPPORT/bin/filemerge.sh" BASE -
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^@A</string>
+	<key>name</key>
+	<string>Working Copy (BASE)</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>9F8B60D0-0535-4B92-8A02-A5AF47BE5306</string>
+</dict>
+</plist>

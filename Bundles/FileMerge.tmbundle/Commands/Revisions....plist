@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#
+# $Id: FileMerge%20Revisions....plist 949 2006-04-21 18:02:26Z aparajita $
+#
+
+require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+
+require_cmd opendiff "You must install the Apple developer tools to run FileMerge."
+
+# See if the current file is under svn control
+FILE=`basename "$TM_FILEPATH"`
+INFO_LINES=`svn info "$FILE" 2&gt;&amp;1 | grep "^Path\: .*\$" | wc -l`
+
+if [ $INFO_LINES -eq 0 ]; then
+	echo "The current file is not under subversion control"
+	exit_show_tool_tip
+fi
+
+revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
+	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
+		--title "Diff Revisions…" \
+		--text "Retrieving List of Revisions…" \
+	))
+
+revs=`osascript &lt;&lt;END
+	set theResult to false
+	set AppleScript's text item delimiters to {"\n","\r"}
+	tell app "SystemUIServer"
+		activate
+		set ourList to (every text item of "$revs")
+		if the count of items in ourList is 0 then
+			display dialog "No revisions of file '$TM_FILENAME' found" buttons ("Continue") default button 1
+		else
+			tell app "SystemUIServer" to choose from list (every text item of "$revs") with prompt "Please choose two revisions of '$TM_FILENAME':" with multiple selections allowed
+
+			set theitems to the result
+			if theitems is not false then
+				if the count of items in the theitems is not 2 then
+					display dialog "Please select exactly two revisions (hold down the Apple key to select multiple revisions)." buttons ("Continue") default button 1
+				else
+					set theResult to (item 1 of theitems) &amp; return &amp; (item 2 of theitems)
+				end if
+			end if 
+		end if
+		set the result to theResult
+	end tell
+END`
+
+# exit if user canceled
+if [[ $revs = "false" ]]; then
+	osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;	exit_discard
+fi
+
+revs=`echo -n "$revs" | awk -F '|' 'BEGIN { RS="\r"} { print substr($1, 2) }'`
+revs=( $revs )
+"$TM_BUNDLE_SUPPORT/bin/filemerge.sh" ${revs[1]} ${revs[0]}
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^@A</string>
+	<key>name</key>
+	<string>Revisions...</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>9029E141-4526-4ED8-95B2-2A4E19BAD402</string>
+</dict>
+</plist>

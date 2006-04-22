@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>\$this-&gt;${1:ModelName}-&gt;find(${2:array('$1.created'=&gt;'&lt;= now()'})}${3:, ${4:array('id','created','title')}}${5:, ${6:'created DESC'}}${7:, ${8:\$recursive=null}});
+$0</string>
+	<key>name</key>
+	<string>$this-&gt;ModelName-&gt;find (cmf)</string>
+	<key>scope</key>
+	<string>source.php</string>
+	<key>tabTrigger</key>
+	<string>cmf</string>
+	<key>uuid</key>
+	<string>33AEB7D5-8837-4204-B0CD-8B9E3906AB84</string>
+</dict>
+</plist>

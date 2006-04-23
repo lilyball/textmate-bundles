@@ -17,18 +17,14 @@
 # possible to tab through the place holders.
 
 # single tags
-single = /^img|meta|link|input|base|area|col|frame|param$/i
-single_no_arguments = /^br|hr$/i
+single_no_arg = /^br|hr$/i
+single        = /^img|meta|link|input|base|area|col|frame|param$/i
 
-tag = STDIN.read
-if(tag == '')
-	print("&lt;${1:p}&gt;$2&lt;/${1/\\s.*//}&gt;")
-elsif(single.match(tag))
-	print("&lt;#{tag} $1/&gt;")
-elsif(single_no_arguments.match(tag))
-	print("&lt;#{tag} /&gt;")
-else
-	print("&lt;#{tag}&gt;$1&lt;/#{tag.strip[/^\S+/]}&gt;")
+print case tag = STDIN.read
+when single_no_arg: "&lt;#{tag} /&gt;"
+when single:        "&lt;#{tag} $1/&gt;"
+when '':            "&lt;${1:p}&gt;$2&lt;/${1/\\s.*//}&gt;"
+else                "&lt;#{tag}&gt;$1&lt;/#{tag.strip[/^\S+/]}&gt;"
 end
 </string>
 	<key>fallbackInput</key>

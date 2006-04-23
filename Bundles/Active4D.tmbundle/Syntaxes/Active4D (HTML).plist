@@ -240,6 +240,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#embedded-js</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>source.js</string>
 						</dict>
 					</array>
@@ -380,12 +384,30 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>source.active4d.embedded.html</string>
+			<string>source.embedded.active4d</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
 					<string>source.active4d</string>
+				</dict>
+			</array>
+		</dict>
+		<key>embedded-js</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string-double-quoted-js</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-single-quoted-js</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#embedded-code</string>
 				</dict>
 			</array>
 		</dict>
@@ -427,6 +449,22 @@
 				</dict>
 			</array>
 		</dict>
+		<key>string-double-quoted-js</key>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.js</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#embedded-code</string>
+				</dict>
+			</array>
+		</dict>
 		<key>string-single-quoted</key>
 		<dict>
 			<key>begin</key>
@@ -444,6 +482,22 @@
 				<dict>
 					<key>include</key>
 					<string>#entities</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string-single-quoted-js</key>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.js</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#embedded-code</string>
 				</dict>
 			</array>
 		</dict>
@@ -544,7 +598,7 @@
 		</dict>
 	</dict>
 	<key>scopeName</key>
-	<string>text.html.basic</string>
+	<string>text.html.active4d</string>
 	<key>uuid</key>
 	<string>E666209C-4477-4D83-8B49-9463DFBACD9F</string>
 </dict>

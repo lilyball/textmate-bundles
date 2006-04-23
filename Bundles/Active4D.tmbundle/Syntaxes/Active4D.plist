@@ -87,7 +87,7 @@
 			<key>end</key>
 			<string>'</string>
 			<key>name</key>
-			<string>string.quoted.single.interpolated.active4d</string>
+			<string>string.interpolated.quoted.single.active4d</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -102,7 +102,7 @@
 			<key>end</key>
 			<string>'''</string>
 			<key>name</key>
-			<string>string.quoted.single.interpolated.heredoc.active4d</string>
+			<string>string.interpolated.quoted.single.heredoc.active4d</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -127,31 +127,31 @@
 			<key>match</key>
 			<string>\$[\w_]+</string>
 			<key>name</key>
-			<string>variable.local.active4d</string>
+			<string>variable.other.local.active4d</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\&lt;\&gt;[\w_]+</string>
 			<key>name</key>
-			<string>variable.interprocess.active4d</string>
+			<string>variable.other.interprocess.active4d</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\[.+?\]([\w_ ]+)?</string>
 			<key>name</key>
-			<string>variable.table_field.active4d</string>
+			<string>variable.other.table-field.active4d</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>!\d{1,2}/\d{1,2}/\d{2,4}!</string>
 			<key>name</key>
-			<string>constant.date.active4d</string>
+			<string>constant.other.date.active4d</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\?\d{1,2}:\d{1,2}:\d{1,2}\?</string>
 			<key>name</key>
-			<string>constant.time.active4d</string>
+			<string>constant.other.time.active4d</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -187,7 +187,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function-call.active4d</string>
+					<string>entity.name.function.call.active4d</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -317,7 +317,7 @@
 			<key>end</key>
 			<string>`</string>
 			<key>name</key>
-			<string>source.active4d.interpolated</string>
+			<string>source.interpolated.active4d</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -331,7 +331,7 @@
 			<key>match</key>
 			<string>(_form|_query|_request|globals|session)({(".+?"|\d+|\$[\w_]+)})+(\[\[\d+\]\])*</string>
 			<key>name</key>
-			<string>interpolated.collection_ref</string>
+			<string>variable.other.interpolated.collection-ref.active4d</string>
 		</dict>
 		<key>interpolated_string</key>
 		<dict>
@@ -364,14 +364,14 @@
 			<key>match</key>
 			<string>\[\w[\w_ ]*\][\w_]+(\[\[\d+\]\])*</string>
 			<key>name</key>
-			<string>interpolated.table_field</string>
+			<string>variable.other.interpolated.table-field.active4d</string>
 		</dict>
 		<key>interpolated_variable</key>
 		<dict>
 			<key>match</key>
 			<string>\$[\w_]+({(".+?"|\d+|\$[\w_]+)})*(\[\[\d+\]\])*</string>
 			<key>name</key>
-			<string>interpolated.variable</string>
+			<string>variable.other.interpolated.local.active4d</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>

@@ -18,10 +18,6 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>include</key>
-			<string>text.html.basic</string>
-		</dict>
-		<dict>
 			<key>match</key>
 			<string>\b(bindModel|unbindModel|hasField|read|field|save|saveField|remove|del|delete|exists|hasAny|find|findAll|findCount|execute|query|validates|invalidate|invalidFields|isForeignKey|getDisplayField|generateList|getID|getLastInsertID|getInsertID|getNumRows|getAffectedRows|setDatasource|beforeFind|afterFind|beforeSave|afterSave|beforeDelete|afterDelete)\b</string>
 			<key>name</key>
@@ -65,7 +61,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(addCrumb|charset|url|link|submit|password|textarea|checkbox|css|file|getCrumbs|hidden|image|input|radio|tableHeaders|tableCells|validate|tagIsValid|validateErrors|tagErrorMessage|selectTag|(day|year|month|hour|minute|meridian|date)OptionTag)\b</string>
+			<string>\b(addCrumb|charset|url|link|submit|password|textarea|checkbox|css|file|getCrumbs|hidden|image|input|radio|tableHeaders|tableCells|validate|tagIsValid|validateErrors|tagErrorMsg|selectTag|(day|year|month|hour|minute|meridian|date)OptionTag)\b</string>
 			<key>name</key>
 			<string>support.function.helper.html.cake</string>
 		</dict>
@@ -152,6 +148,14 @@
 			<string>\b(load(Models|PluginModels|View|Model|Controllers|PluginController)|listClasses|config|gendor|debug|aa|ha|a|e|low|up|r|pr|params|am|setUri|env|cache|clearCache|stripslashes_deep|countDim|LogError|fileExistsInPAth|convertSlash)\b</string>
 			<key>name</key>
 			<string>support.function.basics.cake</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.php</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>text.html.basic</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

@@ -27,7 +27,7 @@
 			<key>name</key>
 			<string>Embedded source</string>
 			<key>scope</key>
-			<string>text source.active4d</string>
+			<string>source.embedded</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -36,13 +36,37 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Comment</string>
+			<string>Plain XML text</string>
 			<key>scope</key>
-			<string>comment - text.xml</string>
+			<string>text.xml</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#FF403F</string>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Line comment</string>
+			<key>scope</key>
+			<string>comment.line</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#D33535</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Block comment</string>
+			<key>scope</key>
+			<string>comment.block</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#D33435</string>
 			</dict>
 		</dict>
 		<dict>
@@ -52,6 +76,8 @@
 			<string>string</string>
 			<key>settings</key>
 			<dict>
+				<key>fontStyle</key>
+				<string></string>
 				<key>foreground</key>
 				<string>#666666</string>
 			</dict>
@@ -60,7 +86,7 @@
 			<key>name</key>
 			<string>Interpolated entity</string>
 			<key>scope</key>
-			<string>interpolated</string>
+			<string>string.interpolated variable</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -82,9 +108,17 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>User-defined constant</string>
+			<key>scope</key>
+			<string>constant.character, constant.other</string>
+			<key>settings</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Date/time literal</string>
 			<key>scope</key>
-			<string>constant.date, constant.time</string>
+			<string>constant.other.date, constant.other.time</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -106,17 +140,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>User-defined constant</string>
-			<key>scope</key>
-			<string>constant.character, constant.other</string>
-			<key>settings</key>
-			<dict/>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>Local variable</string>
 			<key>scope</key>
-			<string>variable.local</string>
+			<string>variable.other.local</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -127,9 +153,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Interprocess variable</string>
+			<string>Variable</string>
 			<key>scope</key>
-			<string>variable.interprocess</string>
+			<string>variable</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -142,7 +168,7 @@
 			<key>name</key>
 			<string>Table/field</string>
 			<key>scope</key>
-			<string>variable.table_field</string>
+			<string>variable.other.table-field</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -165,6 +191,8 @@
 		<dict>
 			<key>name</key>
 			<string>Operator</string>
+			<key>scope</key>
+			<string>keyword.operator</string>
 			<key>settings</key>
 			<dict/>
 		</dict>
@@ -202,7 +230,7 @@
 			<key>name</key>
 			<string>Function name</string>
 			<key>scope</key>
-			<string>entity.name.function, entity.name.function-call</string>
+			<string>entity.name.function</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -221,9 +249,12 @@
 			<key>name</key>
 			<string>Tag container</string>
 			<key>scope</key>
-			<string>meta.tag - comment</string>
+			<string>meta.tag</string>
 			<key>settings</key>
-			<dict/>
+			<dict>
+				<key>foreground</key>
+				<string>#7A7A7A</string>
+			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -249,9 +280,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>4D command</string>
+			<string>Command</string>
 			<key>scope</key>
-			<string>support.function.4d</string>
+			<string>support.function</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -281,7 +312,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#C4AA54</string>
+				<string>#B7734C</string>
 			</dict>
 		</dict>
 		<dict>

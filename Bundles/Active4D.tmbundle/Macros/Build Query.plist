@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>argument</key>
+			<string>;</string>
+			<key>command</key>
+			<string>insertText:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<string> </string>
+			<key>command</key>
+			<string>insertText:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<string>*</string>
+			<key>command</key>
+			<string>insertText:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>beforeRunningCommand</key>
+				<string>nop</string>
+				<key>bundlePath</key>
+				<string>/Users/aparajita/Library/Application Support/TextMate/Bundles/Active4D.tmbundle</string>
+				<key>command</key>
+				<string># Build on the current query using the current line's table.
+# First thing to do is to see if the current line begins with "query([table]..."
+
+if [[ `echo "$TM_CURRENT_LINE" | egrep "^\s*(query|QUERY|Query)\s*\(\[.*?\]"` ]]; then
+  # Extract the table name from the query
+  TABLE=`echo "$TM_CURRENT_LINE" | awk '{ match($0, "[\[]\[^]\]+[\]]"); print substr($0, RSTART + 1, RLENGTH - 2) }'`
+  echo '${TM_CURRENT_LINE}'
+  echo -n "query([$TABLE]; \${1:conjunction}; [$TABLE]\${2:field})"
+fi</string>
+				<key>fallbackInput</key>
+				<string>line</string>
+				<key>input</key>
+				<string>selection</string>
+				<key>keyEquivalent</key>
+				<string></string>
+				<key>name</key>
+				<string>Build Query — Active4D</string>
+				<key>output</key>
+				<string>insertAsSnippet</string>
+				<key>scope</key>
+				<string>source.active4d</string>
+				<key>tabTrigger</key>
+				<string>qq</string>
+				<key>uuid</key>
+				<string>693C1CFB-85A8-4807-B7F6-41380BAE8B8C</string>
+			</dict>
+			<key>command</key>
+			<string>executeCommandWithOptions:</string>
+		</dict>
+	</array>
+	<key>keyEquivalent</key>
+	<string>@+</string>
+	<key>name</key>
+	<string>Build Query</string>
+	<key>scope</key>
+	<string>source.active4d</string>
+	<key>scopeType</key>
+	<string>local</string>
+	<key>uuid</key>
+	<string>A5FE321C-0EFB-4C21-82F1-B3AFC93628F3</string>
+</dict>
+</plist>

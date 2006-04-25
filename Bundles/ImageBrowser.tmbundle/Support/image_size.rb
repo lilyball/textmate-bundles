@@ -107,7 +107,7 @@ class ImageSize
 
 	def measure_GIF()
 		@img_data.read_o(6)
-		@img_data.read_o(4).unpack('nn') #vv
+		@img_data.read_o(4).unpack('vv')
 	end
 	private(:measure_GIF)
 
@@ -122,11 +122,11 @@ class ImageSize
 		c_marker = "\xFF"   # Section marker.
 		@img_data.read_o(2)
 		while(true)
-			marker, code, length = @img_data.read_o(4).unpack('aav') #aan
+			marker, code, length = @img_data.read_o(4).unpack('aan')
 			raise "JPEG marker not found!" if marker != c_marker
 
 			if JpegCodeCheck.include?(code)
-				height, width = @img_data.read_o(5).unpack('xvv') #xnn
+				height, width = @img_data.read_o(5).unpack('xnn')
 				return([width, height])
 			end
 			@img_data.read_o(length - 2)

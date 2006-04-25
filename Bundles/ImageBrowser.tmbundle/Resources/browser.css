@@ -4,14 +4,28 @@ DIV#list_box {
 	width: 50%;
 	overflow: auto;
 	position: absolute;
-	top: 0;
+	top: 31px;
 	bottom: 0;
 	left: 0;
+	background: #eee;
 }
 DIV#preview_box
 {
 	width: 50%;
 	float: right;
+}
+DIV#filter {
+	height: 30px;
+	width: 50%;
+	line-height: 30px;
+	vertical-align: middle;
+	text-shadow: #fff 2px 2px 2px;
+	border-bottom: 1px solid #999;
+	background: transparent url(filter_bg.jpg) top left repeat-x;
+}
+DIV#filter DIV {
+	border-right: 1px solid #999;
+	padding-left: 4px;
 }
 A { text-decoration: none; }
 DIV.details {
@@ -25,6 +39,7 @@ A.item
 	height: 42px;
 	border-right: 1px solid #999;
 	border-bottom: 1px solid #999;
+	background: #fff;
 }
 A.item:hover {
 	background: #dfebfe;

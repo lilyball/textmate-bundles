@@ -9,7 +9,7 @@
 SUPPORT_PATH=${TM_BUNDLE_SUPPORT:="$TM_BUNDLE_PATH/Support"}
 BROWSER="${SUPPORT_PATH}/browser.rb"
 
-$TM_RUBY "$BROWSER" "$TM_DIRECTORY" "$SUPPORT_PATH"</string>
+$TM_RUBY "$BROWSER" "${TM_PROJECT_DIRECTORY:-TM_DIRECTORY}" "$SUPPORT_PATH"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

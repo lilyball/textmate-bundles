@@ -11,6 +11,83 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>begin</key>
+			<string>(\({2})</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.expression.matlab</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\){2})</string>
+			<key>name</key>
+			<string>meta.scope.expression.matlab</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\[{2})</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.logical-expression.matlab</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\]{2})</string>
+			<key>name</key>
+			<string>meta.scope.logical-expression.matlab</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>comment</key>
+					<string>do we want a special rule for ( expr )?</string>
+					<key>match</key>
+					<string>==|~=|&amp;|~|\|</string>
+					<key>name</key>
+					<string>keyword.operator.logical.matlab</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\()</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.parens.matlab</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\))</string>
+			<key>name</key>
+			<string>meta.scope.parens.matlab</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>%.*$\n?</string>
 			<key>name</key>
@@ -26,7 +103,7 @@
 			<key>begin</key>
 			<string>'</string>
 			<key>end</key>
-			<string>'</string>
+			<string>['\n]</string>
 			<key>name</key>
 			<string>string.quoted.single.matlab</string>
 			<key>swallow</key>

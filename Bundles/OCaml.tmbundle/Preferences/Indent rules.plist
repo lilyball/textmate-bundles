@@ -11,7 +11,7 @@
 		<key>decreaseIndentPattern</key>
 		<string>^[ \t]*(and|end|done)|^[^\("]*\)</string>
 		<key>increaseIndentPattern</key>
-		<string>^.*(\([^)"\n]*|begin)$|\blet\s+[a-z][a-zA-Z0-9_']*.*(?!in$)|match[ \t]+.*[ \t]+with[ \t]*$|\b(class|object|struct|sig)\b|method[ \t]+.*=[ \t]*$|-&gt;[ \t]*$|(for|while)[ \t]+.*[ \t]+do[ \t]*$</string>
+		<string>^.*(\([^)"\n]*|begin)$|\b(and|let)\s+[a-z][a-zA-Z0-9_']*.*(?!in$)|match[ \t]+.*[ \t]+with[ \t]*$|\b(class|object|struct|sig)\b|method[ \t]+.*=[ \t]*$|-&gt;[ \t]*$|(for|while)[ \t]+.*[ \t]+do[ \t]*$</string>
 		<key>indentNextLinePattern</key>
 		<string>(?!\bif.*then.*(else.*|(;|[ \t]in)[ \t]*$))\bif|\bthen[ \t]*$|\belse[ \t]*$</string>
 	</dict>

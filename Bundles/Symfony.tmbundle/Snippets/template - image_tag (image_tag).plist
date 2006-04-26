@@ -3,16 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;?php if (${1:condition}): ?&gt;
-	${0}
-&lt;?php endif ?&gt;</string>
+	<string>&lt;?php echo image_tag('${1:image_name}'${2:, array(${0})}) ?&gt;</string>
 	<key>name</key>
-	<string>template - if</string>
+	<string>template - image_tag (image_tag)</string>
 	<key>scope</key>
 	<string>text.html</string>
 	<key>tabTrigger</key>
-	<string>tif</string>
+	<string>image_tag</string>
 	<key>uuid</key>
-	<string>667B8643-6740-4305-B588-7A60C439E281</string>
+	<string>708EF370-0D5B-4ABC-96E5-DE28F9FDA54D</string>
 </dict>
 </plist>

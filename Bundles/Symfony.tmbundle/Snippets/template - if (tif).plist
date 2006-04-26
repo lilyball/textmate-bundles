@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;?php foreach (\$${1:variable} as \$${2:key}${3: =&gt; \$${4:value}}): ?&gt;
-	${0}
-&lt;?php endforeach ?&gt;</string>
+	<string>&lt;?php if (${1:condition}): ?&gt;
+  ${0}
+&lt;?php endif ?&gt;</string>
 	<key>name</key>
-	<string>template - foreach</string>
+	<string>template - if (tif)</string>
 	<key>scope</key>
 	<string>text.html</string>
 	<key>tabTrigger</key>
-	<string>tforeach</string>
+	<string>tif</string>
 	<key>uuid</key>
-	<string>A0F93A27-72DE-42BD-B1DC-640F04970CBB</string>
+	<string>667B8643-6740-4305-B588-7A60C439E281</string>
 </dict>
 </plist>

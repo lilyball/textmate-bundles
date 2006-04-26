@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>\$this-&gt;hasRequestParameter('${1:id}')$0</string>
+	<string>&lt;?php foreach (\$${1:variable} as \$${2:key}${3: =&gt; \$${4:value}}): ?&gt;
+  ${0}
+&lt;?php endforeach ?&gt;</string>
 	<key>name</key>
-	<string>action - hasRequestParameter</string>
+	<string>template - foreach (tforeach)</string>
 	<key>scope</key>
-	<string>source.php</string>
+	<string>text.html</string>
 	<key>tabTrigger</key>
-	<string>hasparam</string>
+	<string>tforeach</string>
 	<key>uuid</key>
-	<string>08332FF6-3475-4046-B176-5AC8B1B88325</string>
+	<string>A0F93A27-72DE-42BD-B1DC-640F04970CBB</string>
 </dict>
 </plist>

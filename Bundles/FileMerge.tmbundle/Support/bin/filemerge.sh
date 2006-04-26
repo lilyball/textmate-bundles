@@ -3,7 +3,7 @@
 # $1 = svn old revision
 # $2 = svn new revision ('-' for working copy)
 #
-# $Id: filemerge.sh 947 2006-04-21 16:09:29Z aparajita $
+# $Id$
 #
 
 # Build the revision spec
@@ -38,4 +38,4 @@ else
 	NEWPATH="$TM_FILEPATH"
 fi
 
-opendiff "$OLDPATH" "$NEWPATH"
+opendiff "$OLDPATH" "$NEWPATH" &>/dev/null &

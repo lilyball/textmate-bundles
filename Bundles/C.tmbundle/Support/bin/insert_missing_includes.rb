@@ -50,4 +50,4 @@ parts[0].sub!(/\A (?:
    |                                    # blank lines
   ) \s* $ \n )*/x, '\0' + new_includes)
 
-print parts.collect { |part| esc part }.join('$0')
+print parts.collect { |part| esc part }.join('${0}')

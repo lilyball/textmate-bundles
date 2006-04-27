@@ -64,7 +64,7 @@ when "line"  # apply comment line by line
     indent = text.reject { |line| line =~ /^\s*$/ }.
              collect { |line| /^(\s*)/.match(line)[1] }.
              min { |lhs, rhs| lhs.length &lt;=&gt; rhs.length } || ""
-    print text.gsub(/^(#{indent}|[ \t]*)(.+)$/, "\\1#{default[:start]}\\2#{default[:end]}")
+    print text.map { |line| line.gsub!(/^(#{indent})(.+)$/, "\\1#{default[:start]}\\2#{default[:end]}") || "#{indent}#{default[:start]}#{line}#{default[:end]}" }
   end
 when "block" # apply comment around selection
   if default[:no_indent]

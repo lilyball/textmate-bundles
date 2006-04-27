@@ -7,27 +7,34 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-def snippet_escape(str)
-#	these characters have special meaning in snippets
-	str.gsub(/[$`\\]/, '\\\\\0')
+MARK = [0xFFFC].pack("U").freeze
+def snippet_escape (str); str.gsub(/[$`\\]/, '\\\\\0'); end
+
+def strip_bracket (txt)
+  if idx = txt.index(/[\[("']/) then
+    chr_map = { ?[ =&gt; ?], ?( =&gt; ?), ?" =&gt; ?", ?' =&gt; ?' }
+    stop_chr = chr_map[txt[idx]]
+    if ridx = txt.rindex(stop_chr) then
+      return txt[0...idx] + txt[idx+1...ridx] + txt[ridx+1..-1]
+    end
+  end
+  return txt
 end
 
-line = ENV['TM_CURRENT_LINE']
-caret = ENV['TM_LINE_INDEX'].to_i
-selected_text = ENV['TM_SELECTED_TEXT'].nil? ? nil : gets
-
-if selected_text
-	prior = ""
-	at = line.rindex(selected_text, caret + selected_text.length)
-	prior = " " if line[0..at - 1] =~ /[^\s]$/
-	print prior + snippet_escape(selected_text[1..-2]) + "$0"
-end</string>
+line = STDIN.gets
+unless ENV.has_key?('TM_SELECTED_TEXT') then
+  col = ENV['TM_LINE_INDEX'].to_i
+  left, right = line[0...col], line[col..-1]
+  line = left + MARK + right
+end
+print snippet_escape(strip_bracket(line)).sub(/#{MARK}/, '${0}')
+</string>
 	<key>fallbackInput</key>
-	<string>scope</string>
+	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^</string>
+	<string>^$</string>
 	<key>name</key>
 	<string>Smart Delete Outer Characters</string>
 	<key>output</key>

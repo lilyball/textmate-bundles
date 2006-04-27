@@ -9,8 +9,7 @@
 	<key>capturePattern</key>
 	<string>line (\d+) column (\d+) - (.*?)$</string>
 	<key>command</key>
-	<string># BEWARE. Errors are suppressed.
-"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml -wrap 0 --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE|\
+	<string>"${TM_TIDY:-tidy}" -f /dev/null -iq -utf8 -asxhtml -wrap 0 --tab-size $TM_TAB_SIZE --indent-spaces $TM_TAB_SIZE ${TM_SELECTED_TEXT:+--show-body-only yes}|\
 if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -pe '
 
 	unless $in_pre
@@ -25,7 +24,7 @@ if [[ "$TM_SOFT_TABS" == "YES" ]]; then cat; else ruby -pe '
 	'
 fi</string>
 	<key>input</key>
-	<string>document</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^H</string>
 	<key>lineCaptureRegister</key>
@@ -33,7 +32,7 @@ fi</string>
 	<key>name</key>
 	<string>Tidy</string>
 	<key>output</key>
-	<string>replaceDocument</string>
+	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>text.html</string>
 	<key>uuid</key>

@@ -34,11 +34,11 @@
    }
 &lt;/style&gt;
 &lt;body&gt;
+&lt;div style="white-space: pre; -khtml-line-break: after-white-space;"&gt;
 HTML
 
 perl -pe 's/&lt;\/[^&gt;]+&gt;/&lt;\/span&gt;/g' \
-| perl -pe 's/&lt;([^\/.&gt;]+)[^&gt;]*&gt;/&lt;span class="\1"&gt;/g' \
-| perl -pe 's/\n/&lt;br&gt;\n/g' \
+| perl -pe 's/&lt;([^\/.&gt;]+)[^&gt;]*&gt;/&lt;span class="$1"&gt;/g' \
 | perl -pe 's/\t/&amp;nbsp;&amp;nbsp;&amp;nbsp;/g'
 </string>
 	<key>fallbackInput</key>

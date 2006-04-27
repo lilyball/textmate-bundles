@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+def quote_level (line)
+  /^[&gt; ]*/.match(line)[0].count "&gt;"
+end
+
+def blank_line? (line)
+  line.nil? || line.sub(/^[&gt; ]*/, '').strip.empty?
+end
+
+def reformat_lines (lines)
+  non_quoted = lines.collect { |line| line.sub(/^[&gt; ]*/, '').strip }
+  indent = /^[&gt; ]*/.match(lines.first)[0]
+  indent + non_quoted.join(" ")
+end
+
+lines = STDIN.read.to_a
+
+cur_qlevel = 0
+par_bounds = [ 0 ]
+
+lines.each_with_index do |line, i|
+  if blank_line?(line) then
+    par_bounds &lt;&lt; i
+    par_bounds &lt;&lt; i+1
+  elsif cur_qlevel != quote_level(line) then
+    par_bounds &lt;&lt; i
+  end
+  cur_qlevel = quote_level(line)
+end
+
+par_bounds.uniq!.each_with_index do |i, idx|
+  j = idx+1 &lt; par_bounds.size ? par_bounds[idx+1] : lines.size
+  if i+1 == j then
+    print lines[i]
+  else
+    puts reformat_lines(lines[i...j])
+  end
+end
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^Q</string>
+	<key>name</key>
+	<string>Unwrap Paragraphs</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.plain.mail</string>
+	<key>uuid</key>
+	<string>72DCB8FA-2DAF-46D2-A77C-3459EE982EF6</string>
+</dict>
+</plist>

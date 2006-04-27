@@ -13,9 +13,9 @@ def snippet_escape (str); str.gsub(/[$`\\]/, '\\\\\0'); end
 def strip_bracket (txt)
   if idx = txt.index(/[\[("']/) then
     chr_map = { ?[ =&gt; ?], ?( =&gt; ?), ?" =&gt; ?", ?' =&gt; ?' }
-    stop_chr = chr_map[txt[idx]]
-    if ridx = txt.rindex(stop_chr) then
-      return txt[0...idx] + txt[idx+1...ridx] + txt[ridx+1..-1]
+    if ridx = txt.rindex(chr_map[txt[idx]]) then
+      txt[ridx, 1] = ""
+      txt[idx, 1] = ""
     end
   end
   return txt
@@ -23,9 +23,7 @@ end
 
 line = STDIN.gets
 unless ENV.has_key?('TM_SELECTED_TEXT') then
-  col = ENV['TM_LINE_INDEX'].to_i
-  left, right = line[0...col], line[col..-1]
-  line = left + MARK + right
+  line.insert(ENV['TM_LINE_INDEX'].to_i, MARK)
 end
 print snippet_escape(strip_bracket(line)).sub(/#{MARK}/, '${0}')
 </string>

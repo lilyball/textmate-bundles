@@ -3,7 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>#!/usr/bin/env ${1:${TM_SCOPE/(?:source|.*)\.(\w+).*/$1/}}</string>
+	<string>#!/usr/bin/env ${1:${TM_SCOPE/(?:source|.*)\.(\w+).*/$1/}}
+</string>
 	<key>name</key>
 	<string>#!/usr/bin/env (!env)</string>
 	<key>scope</key>

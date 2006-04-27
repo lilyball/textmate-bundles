@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>sfConfig::get('${TM_SELECTED_TEXT/.*/\L$0/}')</string>
+	<string>sfConfig::get('${1:${TM_SELECTED_TEXT/.*/\L$0/}}')$0</string>
 	<key>keyEquivalent</key>
 	<string>@b</string>
 	<key>name</key>

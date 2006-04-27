@@ -19,14 +19,14 @@
 		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl)\b.*?&gt;
 		|&lt;!--(?!.*--&gt;)
 		|^\s*&lt;%(?!.*%&gt;)
-		|(^\s*|&lt;%\s*)(?i:if|while|for\ each|for|case\ of|repeat|method)\b
+		|(^\s*|&lt;%\s*)(?i:if|while|for\ each|for|case\ of|repeat|method|save\ output)\b
 		)</string>
 	<key>foldingStopMarker</key>
 	<string>(?x)
 		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl)&gt;
 		|^(?!.*?&lt;!--).*?--&gt;
 		|^\s*%&gt;
-		|(^\s*|&lt;%\s*)(?i:end\ (if|while|for\ each|for|case|method)|until)\b
+		|(^\s*|&lt;%\s*)(?i:end\ (if|while|for\ each|for|case|method|save\ output)|until)\b
 		)</string>
 	<key>name</key>
 	<string>Active4D (HTML)</string>

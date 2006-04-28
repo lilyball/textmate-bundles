@@ -76,7 +76,7 @@ else
         partial = File.join(current_file.rails_root, 'app', 'views', modules, "_#{partial_name}.rhtml")
 
         text << "<!-- [[ Partial '#{partial}' Begin ]] -->\n"
-        text << IO.read(partial)
+        text << IO.read(partial).gsub("\r\n", "\n")
         text << "<!-- [[ Partial '#{partial}' End ]] -->\n"
       end
     end

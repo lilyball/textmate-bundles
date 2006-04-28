@@ -57,7 +57,7 @@ class Buffer
   end
   
   def text=(buffer)
-    @text = buffer
+    @text = buffer.gsub("\r\n", "\n")
     @lines = @text.to_a
   end
 

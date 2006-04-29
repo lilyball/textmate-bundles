@@ -330,7 +330,7 @@
 				     )
 				)
 				([A-Za-z_][A-Za-z0-9_:]+)              # actual name
-				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				 \s+\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s+const)?\s*                        # optional const modifier
 				 ;)                                    # terminating semi-colon
 			</string>

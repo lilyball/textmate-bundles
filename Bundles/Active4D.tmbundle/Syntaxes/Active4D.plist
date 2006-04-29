@@ -176,13 +176,13 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(method)\s*(".+?")\s*(\()</string>
+			<string>^\s*(method)\s*("[^"]+")\s*\(</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.active4d</string>
+					<string>keyword.operator.active4d</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -193,14 +193,50 @@
 			<key>comment</key>
 			<string>method definition with parameters</string>
 			<key>end</key>
-			<string>\)\s*:</string>
+			<string>\)\s*(?:(?:\\\\|//|`).*)?$</string>
 			<key>name</key>
 			<string>meta.function.active4d</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>$self</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.active4d</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.active4d</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(&amp;)?\$[\w_]+(;)?</string>
+					<key>name</key>
+					<string>variable.parameter.active4d</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(=)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.active4d</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(;)|(?=\))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

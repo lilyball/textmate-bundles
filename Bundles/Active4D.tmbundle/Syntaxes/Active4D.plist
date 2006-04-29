@@ -154,8 +154,6 @@
 			<string>constant.other.time.active4d</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>^\s*(method)\s*(".+?")\s*\(?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -169,8 +167,33 @@
 					<string>entity.name.function.active4d</string>
 				</dict>
 			</dict>
+			<key>comment</key>
+			<string>method definition without parameters</string>
+			<key>match</key>
+			<string>^\s*(method)\s*("[^"]+")\s*(?!\()</string>
+			<key>name</key>
+			<string>meta.function.active4d</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*(method)\s*(".+?")\s*(\()</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.active4d</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.active4d</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>method definition with parameters</string>
 			<key>end</key>
-			<string>\)</string>
+			<string>\)\s*:</string>
 			<key>name</key>
 			<string>meta.function.active4d</string>
 			<key>patterns</key>

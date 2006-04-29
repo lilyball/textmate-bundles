@@ -19,7 +19,8 @@ class XcodeProject < Object
 								"set proj_path to POSIX file #{q project}",
 								"set proj to item proj_path",
 								"end tell",
-								"open proj"]
+								"open proj"] unless xcode_command("project #{q project_name_from_path(project)}").include? "project"
+			xcode_command "project #{q project_name_from_path(project)}"
 			self.name = "project #{q project_name_from_path(project)}"
 		elsif project
 			self.name = "project #{q project}"

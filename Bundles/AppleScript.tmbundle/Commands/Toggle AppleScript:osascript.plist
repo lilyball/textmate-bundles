@@ -11,7 +11,9 @@ scrpt = STDIN.read
 
 if scrpt =~ /\A\s*osascript\s+-e\s*(.*)\z/m then
   scrpt = $1.gsub(/\s+-e\s*/, "\n")
-  print scrpt.gsub(/\\(')|'([^']*)'/, '\1\2')
+  scrpt.gsub!(/\\(')|'([^']*)'/, '\1\2')
+  print "${0:", scrpt.gsub(/[$`\\]/, '\\\\\1'), "}"
+  exit 204 # this signals exit_insert_as_snippet
 else
   lines = scrpt.collect { |line| line.chomp.gsub(/'/, "'\\\\''") }
   lines.collect! { |line| "-e '#{line.strip}'" }

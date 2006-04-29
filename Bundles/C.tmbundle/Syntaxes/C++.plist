@@ -166,7 +166,7 @@
 				(?:  ^\s*)                             # begin-of-line
 				((?!while|for|do|if|else|switch|catch|enumerate|iterate)[A-Za-z_][A-Za-z0-9_:]+) # actual name
 				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
-				 (\s*:\s*([A-Za-z_][A-Za-z0-9_]+)\([^)]*\))*\s* # optional base constructors
+				 (\s* : (?&lt;base&gt; \s* [A-Za-z_][A-Za-z0-9_]+ \([^)]*\) ) (, \g&lt;base&gt;)* (, (?=\s*\n))? )? \s*  # optional base constructors
 				 (\{|\n))                              # start bracket or end-of-line
 			</string>
 			<key>beginCaptures</key>

@@ -14,7 +14,12 @@ class XcodeProject < Object
 	attr_accessor :name
 	
 	def initialize(project = nil)
-		if project and project.match(/\.xcodeproj$/)
+		if project and project.match(/\.xcodeproj\/?$/)
+			xcode_command ["tell application \"Finder\"",
+								"set proj_path to POSIX file #{q project}",
+								"set proj to item proj_path",
+								"end tell",
+								"open proj"]
 			self.name = "project #{q project_name_from_path(project)}"
 		elsif project
 			self.name = "project #{q project}"

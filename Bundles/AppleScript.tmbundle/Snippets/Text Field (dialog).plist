@@ -4,12 +4,12 @@
 <dict>
 	<key>content</key>
 	<string>display dialog "${1:text}" ¬
-	${2:default answer "${3:type here}"}
-	${4:with icon ${5:1}} ¬
-	buttons {"${7:Cancel}", "${6:OK}"} ¬
-	default button "$6"
+	default answer "${2:type here}" ¬
+	${3:with icon ${4:1} ¬
+	}buttons {"${6:Cancel}", "${5:OK}"} ¬
+	default button "$5"
 set button_pressed to button returned of result
-if button_pressed is "$6" then
+if button_pressed is "$5" then
 	${7:-- action for default button button goes here}
 else
 	-- action for cancel button goes here

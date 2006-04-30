@@ -4,8 +4,8 @@
 <dict>
 	<key>content</key>
 	<string>display dialog "${1:text}" ¬
-	${2:with icon ${3:1}} ¬
-	buttons {"${5:Cancel}", "${4:OK}"} ¬
+	${2:with icon ${3:1} ¬
+	}buttons {"${5:Cancel}", "${4:OK}"} ¬
 	default button "$4"
 set button_pressed to button returned of result
 if button_pressed is "$4" then

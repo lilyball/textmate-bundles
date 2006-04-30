@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>content () {
-	perl -pe 's/["\\]/\\$&amp;/g'
+	iconv -cs -f utf-8 -t macroman//TRANSLIT | perl -pe 's/["\\]/\\$&amp;/g'
 }
  
 osascript &lt;&lt;AS
@@ -15,8 +15,12 @@ osascript &lt;&lt;AS
 		set theDocument to make new document
 		tell theDocument
 			set contents of selection to "$(content)"
-			check syntax
-			compile
+			try
+				check syntax
+				compile
+			on error the error_message number the error_number
+				display dialog "Error: " &amp; the error_number &amp; ". " &amp; the error_message buttons {"OK"} default button 1
+end try
 		end tell
 	end tell
 AS</string>

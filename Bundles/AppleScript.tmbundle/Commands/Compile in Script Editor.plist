@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>content () {
+	perl -pe 's/["\\]/\\$&amp;/g'
+}
+ 
+osascript &lt;&lt;AS
+	tell application "Script Editor"
+		activate
+		set theDocument to make new document
+		tell theDocument
+			set contents of selection to "$(content)"
+			check syntax
+			compile
+		end tell
+	end tell
+AS</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Compile in Script Editor</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.applescript</string>
+	<key>uuid</key>
+	<string>E3DD341F-94E6-460C-8EDA-D1184B67866F</string>
+</dict>
+</plist>

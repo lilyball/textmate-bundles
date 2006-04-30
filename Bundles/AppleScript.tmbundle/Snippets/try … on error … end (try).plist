@@ -3,16 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>repeat ${1:${2:number} times}
-	${0:-- insert actions here}
-end repeat</string>
+	<string>try
+	${0:--actions to try}
+on error
+	--error handling
+end try</string>
 	<key>name</key>
-	<string>repeat … end (repeat)</string>
+	<string>try … on error … end (try)</string>
 	<key>scope</key>
 	<string>source.applescript</string>
 	<key>tabTrigger</key>
-	<string>repeat</string>
+	<string>try</string>
 	<key>uuid</key>
-	<string>4FFDA694-2B17-41AF-B92A-2172612CC82D</string>
+	<string>A7169FD9-63FB-46EB-974F-6B31FFF4C52B</string>
 </dict>
 </plist>

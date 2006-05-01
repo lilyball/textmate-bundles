@@ -31,6 +31,20 @@
 			<string>(\()\)</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.comma-parenthesis.io</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>We want to do the same for ,) -- Seckar</string>
+			<key>match</key>
+			<string>(\,)\)</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\b(if|ifTrue|ifFalse|ifTrueIfFalse|for|loop|reverseForeach|foreach|map|continue|break|while|do|return)\b</string>
 			<key>name</key>
@@ -60,7 +74,7 @@
 			<key>comment</key>
 			<string>I wonder if some of this isn't variable.other.language? --Allan</string>
 			<key>match</key>
-			<string>\b(self|sender|target|proto|parent|protos)\b</string>
+			<string>\b(self|sender|target|proto|protos)\b</string>
 			<key>name</key>
 			<string>keyword.other.io</string>
 		</dict>
@@ -84,7 +98,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(clone|init|method|list|vector|block|(\w+(?=\s*\()))\b</string>
+			<string>\b(clone|call|init|method|list|vector|block|(\w+(?=\s*\()))\b</string>
 			<key>name</key>
 			<string>support.function.io</string>
 		</dict>

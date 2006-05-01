@@ -45,7 +45,7 @@ def main():
 	if (end - start == 0):
 		print "No filename found"
 		sys.exit(206)
-	else:	
+	else:
 		os.system('mate "%s" &>/dev/null &' % (os.path.join(os.environ['TM_DIRECTORY'], line[start:end])))
 	
 

@@ -160,6 +160,37 @@
 			</array>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>(&lt;%)(?=%&gt;)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.active4d</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(%)&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.scope.between-tag-pair.html</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.tag.processor.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#embedded-code</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>#embedded-code</string>
 		</dict>
@@ -591,7 +622,7 @@
 		</dict>
 	</dict>
 	<key>scopeName</key>
-	<string>text.html.active4d</string>
+	<string>text.html.strict.active4d</string>
 	<key>uuid</key>
 	<string>E666209C-4477-4D83-8B49-9463DFBACD9F</string>
 </dict>

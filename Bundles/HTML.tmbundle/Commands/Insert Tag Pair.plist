@@ -17,8 +17,8 @@
 # possible to tab through the place holders.
 
 # single tags
-single_no_arg = /^br|hr$/i
-single        = /^img|meta|link|input|base|area|col|frame|param$/i
+single_no_arg = /^(?:br|hr)$/i
+single        = /^(?:img|meta|link|input|base|area|col|frame|param)$/i
 
 print case tag = STDIN.read
 when single_no_arg: "&lt;#{tag} /&gt;"

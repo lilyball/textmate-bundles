@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for ${1:i} in ${2:words}; do
-	${0:#statements}
-done</string>
+	<string>&lt;&lt;- ${1:TOKEN}
+	$0
+${1/['"`](.+)['"`]/$1/}</string>
 	<key>name</key>
-	<string>for … done (for)</string>
+	<string>here document (here)</string>
 	<key>scope</key>
 	<string>source.shell</string>
 	<key>tabTrigger</key>
-	<string>for</string>
+	<string>here</string>
 	<key>uuid</key>
-	<string>E7807C18-AA17-11D9-AB33-000D93589AF6</string>
+	<string>ED7D1DEB-B124-4428-9C87-D1D9F360D78C</string>
 </dict>
 </plist>

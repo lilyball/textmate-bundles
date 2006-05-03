@@ -1,7 +1,6 @@
 require 'English' # you are angry, english!
 
-hg				= ENV['TM_HG']
-#commit_paths	= ENV['CommitPaths']
+hg				   = ENV['TM_HG']
 commit_tool		= ENV['CommitWindow']
 bundle			= ENV['TM_BUNDLE_SUPPORT']
 support			= ENV['TM_SUPPORT_PATH']
@@ -42,6 +41,8 @@ mup.html {
 		def matches_to_status(matches)
 			matches.collect {|m| m[0]}
 		end
+		
+		#TODO: Removed files 'R' is not styled in the commit window as hg uses 'R' instead of the svn 'D'
 
 		# Ignore files with '?', but report them to the user
 		unknown_paths = paths.select { |m| m[0] == '?' }
@@ -100,7 +101,7 @@ mup.html {
 		mup.pre {
 			STDOUT.flush
 
-			IO.popen("#{hg} commit  #{commit_args}", "r+") do |pipe|
+			IO.popen("#{hg} commit #{commit_args}", "r+") do |pipe|
 				pipe.each {|line| mup.text! line }
 			end
 		}

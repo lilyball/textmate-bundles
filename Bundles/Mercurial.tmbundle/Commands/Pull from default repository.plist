@@ -3,20 +3,29 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveModifiedFiles</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>cd "${TM_PROJECT_DIRECTORY:=$TM_DIRECTORY}"
+	<string>require_cmd "${TM_HG:=hg}" "If you have installed hg, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_HG&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-${TM_HG:=hg} pull -m</string>
+if [[ -d "$TM_PROJECT_DIRECTORY" ]]
+   then export WorkPath="$TM_PROJECT_DIRECTORY"; cd "$TM_PROJECT_DIRECTORY"
+   else export WorkPath="$TM_DIRECTORY"
+fi
+
+export TM_HG
+
+cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
+"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/hg_pull.rb"
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^M</string>
 	<key>name</key>
-	<string>Pull from default repository</string>
+	<string>Pull from default repo</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
-	<string>242ECD6E-DE5D-11D9-823F-000A95A51A76</string>
+	<string>46E15B5C-A621-48E5-AD2B-A893532695A6</string>
 </dict>
 </plist>

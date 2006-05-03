@@ -7,24 +7,17 @@
 	<key>command</key>
 	<string>require_cmd "${TM_HG:=hg}" "If you have installed hg, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_HG&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-if [[ -d "$TM_PROJECT_DIRECTORY" ]]
-   then export WorkPath="$TM_PROJECT_DIRECTORY"; cd "$TM_PROJECT_DIRECTORY"
-   else export WorkPath="$TM_DIRECTORY"; cd "$TM_DIRECTORY"
-fi
-
-# show it..
-"$TM_HG" status "$WorkPath" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
-
-</string>
+"$TM_HG" annotate -nud "$TM_FILEPATH" 2&gt;&amp;1 \
+|"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_annotate.rb"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^M</string>
 	<key>name</key>
-	<string>Status</string>
+	<string>Annotate</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>ED977BA9-3604-4EC9-999B-39C588CD4801</string>
+	<string>2593B8FB-279E-4BD1-8935-0D9B1699526F</string>
 </dict>
 </plist>

@@ -5,21 +5,21 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>require_cmd "${TM_HG:=hg}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_HG&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+	<string>require_cmd "${TM_HG:=hg}" "If you have installed hg, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_HG&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
 "${TM_RUBY:-ruby}" -r "$TM_SUPPORT_PATH/bin/shelltokenize.rb" &lt;&lt;END
 	hg = ENV['TM_HG'] || "hg"
-	puts %x{#{hg} add #{TextMate.selected_paths_for_shell}}
+	puts %x{#{hg} remove #{TextMate.selected_paths_for_shell}}
 END</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^M</string>
 	<key>name</key>
-	<string>Add to repository</string>
+	<string>Remove</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
-	<string>81229AD0-DE5C-11D9-823F-000A95A51A76</string>
+	<string>0210BC81-D701-4836-A188-42D9A79F292B</string>
 </dict>
 </plist>

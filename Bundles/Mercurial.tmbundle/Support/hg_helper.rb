@@ -1,10 +1,12 @@
 # just some small methods and some exceptions to help
 # with converting some of the hg command outputs to html.
 # 
-# copyright 2005 torsten becker <torsten.becker@gmail.com>
+# Based on the svn bundle (copyright 2005 torsten becker <torsten.becker@gmail.com>)
 # no warranty, that it doesn't crash your system.
 # you are of course free to modify this.
 
+# Needed to easily convert date
+require 'parsedate' 
 
 module HGHelper   
    # (log) raised, if the maximum number of log messages is shown.
@@ -52,9 +54,9 @@ module HGHelper
    # formates you date (input should be a standart hg date)
    # if format is nil it just gives you back the current date
    def formated_date( input, format=$date_format )
-      if not format.nil? and input =~ /^\s*(\d+)-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2}) .+$/
-         #            year     month    day      hour     minutes  seconds
-         Time.mktime( $1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i ).strftime( format )
+      if not format.nil? and not input.nil?
+         res = ParseDate.parsedate( input )
+         Time.local(*res).strftime( format )
       else
          input
       end

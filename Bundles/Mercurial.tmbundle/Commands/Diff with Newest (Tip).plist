@@ -9,22 +9,23 @@
 
 if [[ -d "$TM_PROJECT_DIRECTORY" ]]
    then export WorkPath="$TM_PROJECT_DIRECTORY"; cd "$TM_PROJECT_DIRECTORY"
-   else export WorkPath="$TM_DIRECTORY"; cd "$TM_DIRECTORY"
+   else export WorkPath="$TM_DIRECTORY"; cd "$TM_PROJECT_DIRECTORY"
 fi
 
-# show it..
-"$TM_HG" status "$WorkPath" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
-
+"${TM_RUBY:=ruby}" -I "$TM_BUNDLE_SUPPORT/" &lt;&lt;END
+	require 'hg_diff'
+	Mercurial::diff_active_file("-r tip", "Diff With Tip")
+END
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^M</string>
 	<key>name</key>
-	<string>Status</string>
+	<string>Diff with Newest (Tip)</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>openAsNewDocument</string>
 	<key>uuid</key>
-	<string>ED977BA9-3604-4EC9-999B-39C588CD4801</string>
+	<string>F56EB32C-F574-4865-83BF-976D8A826FC1</string>
 </dict>
 </plist>

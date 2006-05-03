@@ -5,19 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cd "$TM_DIRECTORY"
-echo "Index: changes in working copy of $TM_FILENAME"
-${TM_HG:=hg} diff "$TM_FILENAME"
-</string>
+	<string>require_cmd "${TM_HG:=hg}" "If you have installed hg, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_HG&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+
+hg undo</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^M</string>
 	<key>name</key>
-	<string>Diff with previous</string>
+	<string>Undo</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
-	<string>627E8652-2B23-4E68-ADF9-103BA2B16074</string>
+	<string>11743544-9E2A-49BF-BA5D-655EAD6445AA</string>
 </dict>
 </plist>

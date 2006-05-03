@@ -1,0 +1,23 @@
+changeset = " <%=(({rev} % 2) == 0) ? '<table class=\"log\">' : '<table class=\"log alternate\">'%> \n<tr> <th>Changeset:</th><td>{rev}:{node|short}</td></tr>{tags}<tr><th>User:</th> <td>{author|person}</td></tr><tr> <th>Description:</th> <td><pre>{desc|firstline|fill68|strip}</pre></td></tr></table>\n\n"
+
+
+changeset_quiet = '{date|shortdate}  {author|person}  <{author|email}>\n\n\t* {desc|firstline|fill68|tabindent|strip}\n\n'
+
+changeset_verbose = " <%=(({rev} % 2) == 0) ? '<table class=\"log\">' : '<table class=\"log alternate\">'%> \n<tr> <th>Revision:</th> <td>{rev} <small>({node})</small></td> </tr>\n{tags}<tr> <th>User:</th> <td>{author|person} &lt;{author|email}&gt;</td> </tr>\n<tr> <th>Date:</th> <td>{date|isodate}</td> </tr>\n{file_adds|stringify}{file_dels|stringify}{files|stringify}<tr> <th>Description:</th> <td><pre>{desc|fill68|strip}</pre></td></tr></table>\n\n"
+
+start_tags = '<tr> <th>Tag(s):</th> <td>'
+tag = '{tag}, '
+last_tag = '{tag}</td> </tr>\n'
+
+start_files = "<tr> <th>Files:</th>\n <td><a id=\"r{node|short}_show\" href=\"javascript:show_files('r{node|short}');\">show</a>\n<a id=\"r{node|short}_hide\" href=\"javascript:hide_files('r{node|short}');\" class=\"hidden\">hide</a>\n<ul id=\"r{node|short}\" class=\"hidden\">\n"
+file = '<li class="file_list"><a href=\"txmt://open?url=file%3a%2f%2f<%= u("#{$work_path}{file}") %>\">{file}</a></li>\n'
+last_file = '<li class="file_list"><a href=\"txmt://open?url=file%3a%2f%2f<%= u"#{$work_path}{file}" %>\">{file}</a></li></td></tr>\n</ul>\n'
+
+start_file_adds = "<tr> <th>Added Files:</th>\n <td><a id=\"r{node|short}_show\" href=\"javascript:show_files('r{node|short}');\">show</a>\n<a id=\"r{node|short}_hide\" href=\"javascript:hide_files('r{node|short}');\" class=\"hidden\">hide</a>\n<ul id=\"r{node|short}\" class=\"hidden\">\n"
+file_add = '<li class="file_list"><a href=\"txmt://open?url=file%3a%2f%2f<%= u("#{$work_path}{file}") %>\">{file}</a></li>\n'
+last_file_add = '<li class="file_list"><a href=\"txmt://open?url=file%3a%2f%2f<%= u"#{$work_path}{file}" %>\">{file}</a></li></td></tr>\n</ul>\n'
+
+start_file_dels = "<tr> <th>Deleted Files:</th>\n <td><a id=\"r{node|short}_show\" href=\"javascript:show_files('r{node|short}');\">show</a>\n<a id=\"r{node|short}_hide\" href=\"javascript:hide_files('r{node|short}');\" class=\"hidden\">hide</a>\n<ul id=\"r{node|short}\" class=\"hidden\">\n"
+file_del = '<li class="file_list"><a href=\"txmt://open?url=file%3a%2f%2f<%= u("#{$work_path}{file}") %>\">{file}</a></li>\n'
+last_file_del ='<li class="file_list"><a href=\"txmt://open?url=file%3a%2f%2f<%= u"#{$work_path}{file}" %>\">{file}</a></li></td></tr>\n</ul>\n'
+

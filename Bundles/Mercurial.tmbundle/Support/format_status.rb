@@ -16,8 +16,7 @@ work_path			= ENV['WorkPath']
 ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 
 strip_path_prefix	= work_path # Dir.pwd
-hg			= ENV['TM_HG']
-hg = "hg" if hg.nil?
+hg			         = ENV['TM_HG'].nil? ? "hg" : ENV['TM_HG']
 
 require (support + "/bin/Builder.rb")
 
@@ -27,16 +26,16 @@ mup = Builder::XmlMarkup.new(:target => STDOUT)
 class << mup
 	
 	StatusMap = {	'A' => 'added',
-					'D' => 'deleted',
-					'G' => 'merged',
-					'U' => 'updated',
-					'M' => 'modified',
-					'C' => 'conflict',
-					'!' => 'missing',
-					'"' => 'typeconflict',
-					'?' => 'unknown',
-					'I' => 'ignore',
-					'X' => 'external' }
+   					'R' => 'deleted',
+   					'G' => 'merged',
+   					'U' => 'updated',
+   					'M' => 'modified',
+   					'C' => 'conflict',
+   					'!' => 'missing',
+   					'"' => 'typeconflict',
+   					'?' => 'unknown',
+   					'I' => 'ignore',
+   					'X' => 'external' }
 	
 	def td_status!(status)
 		status.each_byte { |s| c = s.chr; td(c, "class" => StatusMap[c]) }
@@ -52,7 +51,6 @@ mup.html {
 
 	mup.body { 
 		mup.h1("Mercurial #{command_name} for '#{File.basename(work_path)}'")
-#		mup.hr
 		mup.div("class" => "command"){ mup.strong("#{hg} #{command_name}"); mup.text!(" " + work_path) } #mup.text!("checking "); 
 		STDOUT.flush
 		mup.hr
@@ -79,9 +77,13 @@ mup.html {
 							if status == '?    ' and ignore_file_pattern =~ file
 							    # This is a file that we don't want to know about
 							    nil
+						   elsif status == '!' or status == 'R'
+						      # No need to link to Deleted or missing files.
+						      mup.td_status!(status)
+    							mup.td( file.sub( /^#{strip_path_prefix}\//, "") )
 							else
     							mup.td_status!(status)
-    							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathanme" ) }
+    							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + work_path + '/' + file, "class" => "pathanme" ) }
                             end
 						end 
 					else

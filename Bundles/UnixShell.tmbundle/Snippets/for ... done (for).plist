@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for ${1:i} in ${2:words}; do
+	<string>for (( i = 0; i &lt; ${1:10}; i++} )); do
 	${0:#statements}
 done</string>
 	<key>name</key>

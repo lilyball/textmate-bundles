@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>while [[ ${1:condition} ]]; do
+	<string>for ${1:i} in ${2:words}; do
 	${0:#statements}
 done</string>
 	<key>name</key>
-	<string>while … done (while)</string>
+	<string>for … in … done (forin)</string>
 	<key>scope</key>
 	<string>source.shell</string>
 	<key>tabTrigger</key>
-	<string>while</string>
+	<string>forin</string>
 	<key>uuid</key>
-	<string>2C961068-7683-4899-8569-DDA80ED33BC0</string>
+	<string>04CBE1A5-313E-4E2C-946B-255C461B8406</string>
 </dict>
 </plist>

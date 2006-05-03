@@ -5,18 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>osascript -e 'tell application "R" to activate' -e "tell application \"R\" to cmd \"${TM_SELECTED_TEXT//\"/\\\"}\""</string>
+	<string>"$TM_BUNDLE_SUPPORT/tmR.rb"</string>
+	<key>fallbackInput</key>
+	<string>line</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
-	<string>@R</string>
+	<string>@r</string>
 	<key>name</key>
-	<string>Send selection to R</string>
+	<string>Execute Document In R</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.r</string>
 	<key>uuid</key>
-	<string>B2E62E8B-6E70-11D9-A369-000D93B3A10E</string>
+	<string>F5D7F00C-6DEE-469E-AFEE-6E4B7CDD4148</string>
 </dict>
 </plist>

@@ -1,9 +1,9 @@
-changeset = " <%=(({rev} % 2) == 0) ? '<table class=\"log\">' : '<table class=\"log alternate\">'%> \n<tr> <th>Changeset:</th><td>{rev}:{node|short}</td></tr>{tags}<tr><th>User:</th> <td>{author|person}</td></tr><tr> <th>Description:</th> <td><pre>{desc|firstline|fill68|strip}</pre></td></tr></table>\n\n"
+changeset = " <%=((msg_count % 2) == 0) ? '<table class=\"log\">' : '<table class=\"log alternate\">'%><% msg_count +=1 %> \n<tr> <th>Changeset:</th><td>{rev}:{node|short}</td></tr>{tags}<tr><th>User:</th> <td>{author|person}</td></tr><tr> <th>Description:</th> <td><pre>{desc|firstline|fill68|strip}</pre></td></tr></table>\n\n"
 
 
 changeset_quiet = '{date|shortdate}  {author|person}  <{author|email}>\n\n\t* {desc|firstline|fill68|tabindent|strip}\n\n'
 
-changeset_verbose = " <%=(({rev} % 2) == 0) ? '<table class=\"log\">' : '<table class=\"log alternate\">'%> \n<tr> <th>Revision:</th> <td>{rev} <small>({node})</small></td> </tr>\n{tags}<tr> <th>User:</th> <td>{author|person} &lt;{author|email}&gt;</td> </tr>\n<tr> <th>Date:</th> <td>{date|isodate}</td> </tr>\n{file_adds|stringify}{file_dels|stringify}{files|stringify}<tr> <th>Description:</th> <td><pre>{desc|fill68|strip}</pre></td></tr></table>\n\n"
+changeset_verbose = " <%=((msg_count % 2) == 0) ? '<table class=\"log\">' : '<table class=\"log alternate\">'%><% msg_count +=1 %> \n<tr> <th>Revision:</th> <td>{rev} <small>({node})</small></td> </tr>\n{tags}<tr> <th>User:</th> <td>{author|person} &lt;{author|email}&gt;</td> </tr>\n<tr> <th>Date:</th> <td>{date|isodate}</td> </tr>\n{file_adds|stringify}{file_dels|stringify}{files|stringify}<tr> <th>Description:</th> <td><pre>{desc|fill68|strip}</pre></td></tr></table>\n\n"
 
 start_tags = '<tr> <th>Tag(s):</th> <td>'
 tag = '{tag}, '

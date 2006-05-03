@@ -7,15 +7,8 @@
 	<key>command</key>
 	<string>require_cmd "${TM_HG:=hg}" "If you have installed hg, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_HG&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-if [[ -d "$TM_PROJECT_DIRECTORY" ]]
-   then export WorkPath="$TM_PROJECT_DIRECTORY"; cd "$TM_PROJECT_DIRECTORY"
-   else export WorkPath="$TM_DIRECTORY"
-fi
-
-
 : ${TM_RUBY:=ruby}
 FORMAT_LOG="${TM_BUNDLE_SUPPORT}/format_log.rb"
-TM_HG_LOG_RANGE="${TM_HG_LOG_RANGE:=tip}"
 HG_STYLE="${TM_BUNDLE_SUPPORT}/map-cmdline.changelog"
 
 if [[ $TM_HG_LOG_LIMIT != 0 ]]
@@ -23,9 +16,9 @@ if [[ $TM_HG_LOG_LIMIT != 0 ]]
 fi
 
 if [[ -z $TM_SELECTED_FILES ]]; then
-   "$TM_HG" log -v $HG_LIMIT --style "'$HG_STYLE'" "$TM_FILEPATH" 2&gt;&amp;1 |"$TM_RUBY" -- "$FORMAT_LOG"
+   "$TM_HG" log -v $HG_LIMIT --style "$HG_STYLE" "$TM_FILEPATH" 2&gt;&amp;1 |"$TM_RUBY" -- "$FORMAT_LOG"
 else
-   eval "$TM_HG" log -v $HG_LIMIT --style "'$HG_STYLE'" $TM_SELECTED_FILES 2&gt;&amp;1 |"$TM_RUBY" -- "$FORMAT_LOG"
+   eval "'$TM_HG'" log -v $HG_LIMIT --style "'$HG_STYLE'" "$TM_SELECTED_FILES" 2&gt;&amp;1 |"$TM_RUBY" -- "$FORMAT_LOG"
 fi</string>
 	<key>input</key>
 	<string>none</string>

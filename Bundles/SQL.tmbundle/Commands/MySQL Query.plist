@@ -19,7 +19,7 @@ case "$(database_choice)" in
 mysql)
 	require_cmd mysql
 	mysql -e "$query" \
-		-u"${MYSQL_USER:-$USER}" -p"$MYSQL_PWD" \
+		-u"${MYSQL_USER:-$USER}" --password="$MYSQL_PWD" \
 		-h"${MYSQL_HOST:-localhost}" -P"${MYSQL_PORT:-3306}" \
 		--html "$MYSQL_DB"|perl -pe 's/(?&lt;=&lt;TABLE )BORDER=1/class="graybox" cellspacing="0" cellpadding="5"/'
 ;;

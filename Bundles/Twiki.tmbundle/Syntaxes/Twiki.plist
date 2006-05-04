@@ -6,10 +6,6 @@
 	<array>
 		<string>txt</string>
 	</array>
-	<key>foldingStartMarker</key>
-	<string>^-{3}\+{1,6}.*$</string>
-	<key>foldingStopMarker</key>
-	<string>^(?=\S)</string>
 	<key>name</key>
 	<string>Twiki</string>
 	<key>patterns</key>
@@ -85,7 +81,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.def.twiki</string>
 			<key>patterns</key>
@@ -115,7 +111,7 @@
 			<key>begin</key>
 			<string>^ {3}\*</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.1.twiki</string>
 			<key>patterns</key>
@@ -130,7 +126,7 @@
 			<key>begin</key>
 			<string>^ {6}\*</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.2.twiki</string>
 			<key>patterns</key>
@@ -145,7 +141,7 @@
 			<key>begin</key>
 			<string>^ {9}\*</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.3.twiki</string>
 			<key>patterns</key>
@@ -160,7 +156,7 @@
 			<key>begin</key>
 			<string>^ {12}\*</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.4.twiki</string>
 			<key>patterns</key>
@@ -175,7 +171,7 @@
 			<key>begin</key>
 			<string>^ {15}\*</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.5.twiki</string>
 			<key>patterns</key>
@@ -190,7 +186,7 @@
 			<key>begin</key>
 			<string>^ {18}\*</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.6.twiki</string>
 			<key>patterns</key>
@@ -205,14 +201,14 @@
 			<key>begin</key>
 			<string>^ {3}\d</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.numlist.1.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#list-paragraph</string>
+					<string>#numlist-paragraph</string>
 				</dict>
 			</array>
 		</dict>
@@ -220,14 +216,14 @@
 			<key>begin</key>
 			<string>^ {6}\d</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.numlist.2.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#list-paragraph</string>
+					<string>#numlist-paragraph</string>
 				</dict>
 			</array>
 		</dict>
@@ -235,14 +231,14 @@
 			<key>begin</key>
 			<string>^ {9}\d</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.numlist.3.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#list-paragraph</string>
+					<string>#numlist-paragraph</string>
 				</dict>
 			</array>
 		</dict>
@@ -250,14 +246,14 @@
 			<key>begin</key>
 			<string>^ {12}\d</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.numlist.4.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#list-paragraph</string>
+					<string>#numlist-paragraph</string>
 				</dict>
 			</array>
 		</dict>
@@ -265,14 +261,14 @@
 			<key>begin</key>
 			<string>^ {15}\d</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.numlist.5.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#list-paragraph</string>
+					<string>#numlist-paragraph</string>
 				</dict>
 			</array>
 		</dict>
@@ -280,14 +276,14 @@
 			<key>begin</key>
 			<string>^ {18}\d</string>
 			<key>end</key>
-			<string>^(?=\S)</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.numlist.6.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#list-paragraph</string>
+					<string>#numlist-paragraph</string>
 				</dict>
 			</array>
 		</dict>
@@ -391,6 +387,31 @@
 					<string>^\s*$</string>
 					<key>name</key>
 					<string>markup.list.paragraph</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>text.html.basic</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>numlist-paragraph</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\G\s+\S</string>
+					<key>end</key>
+					<string>^\s*$</string>
+					<key>name</key>
+					<string>markup.numlist.paragraph</string>
 					<key>patterns</key>
 					<array>
 						<dict>

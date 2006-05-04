@@ -14,9 +14,7 @@ export WorkPath="$TM_PROJECT_DIRECTORY"
 |"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb"
 
 # force TM to refresh the current file..
-osascript &amp;&gt;/dev/null \
-   -e 'tell application "Dock" to activate' \
-   -e 'tell application "TextMate" to activate' &amp;
+rescan_project
 </string>
 	<key>input</key>
 	<string>none</string>

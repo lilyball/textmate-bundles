@@ -12,6 +12,24 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>match</key>
+			<string>^\s*•.*$\n?</string>
+			<key>name</key>
+			<string>meta.bullet-point.strong</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\s*·.*$\n?</string>
+			<key>name</key>
+			<string>meta.bullet-point.light</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\s*\*.*$\n?</string>
+			<key>name</key>
+			<string>meta.bullet-point.star</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>(^--This line, and those below, will be ignored--$\n?)</string>
 			<key>beginCaptures</key>
@@ -47,10 +65,6 @@
 					<string>markup.deleted.svn</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>text.plain</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

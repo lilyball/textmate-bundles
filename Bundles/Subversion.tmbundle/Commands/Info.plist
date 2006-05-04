@@ -14,7 +14,7 @@ if [[ -z $TM_SELECTED_FILES ]]; then
    "$TM_SVN" info "$TM_FILEPATH" 2&gt;&amp;1 \
    |"$TM_RUBY" -- "$FORMAT_INFO"
 else
-   eval "$TM_SVN" info $TM_SELECTED_FILES 2&gt;&amp;1 \
+   eval "$TM_SVN" info "$TM_SELECTED_FILES" 2&gt;&amp;1 \
    |"$TM_RUBY" -- "$FORMAT_INFO"
 fi</string>
 	<key>dontFollowNewOutput</key>

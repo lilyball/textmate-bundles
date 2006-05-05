@@ -30,7 +30,7 @@ var_suffixes.each do |suffix|
           :mode      =&gt; ENV["TM_COMMENT_MODE#{suffix}"]  || (ENV["TM_COMMENT_END#{suffix}"] ? "block" : "line"),
           :no_indent =&gt; ENV["TM_COMMENT_DISABLE_INDENT#{suffix}"] }
   
-  com[:esc_start], com[:esc_end] = com.values_at(:start, :end).map do |str|
+  com[:esc_start], com[:esc_end] = [com[:start], com[:end]].map do |str|
     str.gsub(/[\\|()\[\].?*+{}^$]/, '\\\\\&amp;').
         gsub(/\A\s+|\s+\z/, '(?:\&amp;)?')
   end

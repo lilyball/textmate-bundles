@@ -7,7 +7,7 @@
 		<string>yml</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>^\s*.*:(\s*\[?| &amp;.+)?$</string>
+	<string>^[^#]\s*.*:(\s*\[?| &amp;.+)?$</string>
 	<key>foldingStopMarker</key>
 	<string>^\s*$|^\s*\}|^\s*\]|^\s*\)</string>
 	<key>keyEquivalent</key>
@@ -17,6 +17,10 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>include</key>
+			<string>#erb</string>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -24,9 +28,19 @@
 					<key>name</key>
 					<string>entity.name.tag.yaml</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.pipe.yaml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.yaml</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>(\w.*?):</string>
+			<string>(\w.*?): ?(\|)?(\!\!omap)?</string>
 			<key>name</key>
 			<string>meta.tag.yaml</string>
 		</dict>
@@ -43,6 +57,47 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.yaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#erb</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.yaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#erb</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>`</string>
+			<key>end</key>
+			<string>`</string>
+			<key>name</key>
+			<string>string.interpolated.yaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#erb</string>
+				</dict>
+			</array>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -64,16 +119,6 @@
 			<string>(\&lt;\&lt;): (\*.*)$</string>
 			<key>name</key>
 			<string>entity.other.merge-key.yaml</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>'</string>
-			<key>end</key>
-			<string>'</string>
-			<key>name</key>
-			<string>string.quoted.single.yaml</string>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -110,7 +155,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;!\$)#(?!\{).*$\n?</string>
+			<string>(?&lt;!\$)#(?!\{).*$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.yaml</string>
 		</dict>
@@ -142,36 +187,32 @@
 				</dict>
 			</array>
 		</dict>
-		<dict>
-			<key>begin</key>
-			<string>&lt;%+#</string>
-			<key>end</key>
-			<string>%&gt;</string>
-			<key>name</key>
-			<string>comment.block.erb</string>
-		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>erb</key>
 		<dict>
 			<key>begin</key>
 			<string>&lt;%+(?!&gt;)=?</string>
 			<key>end</key>
-			<string>-?%&gt;</string>
+			<string>%&gt;</string>
 			<key>name</key>
-			<string>source.ruby.embedded.html</string>
+			<string>source.ruby.rails.embedded.html</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
-					<string>#.*?(?=-?%&gt;)</string>
+					<string>#.*?(?=%&gt;)</string>
 					<key>name</key>
 					<string>comment.line.number-sign.ruby</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>source.ruby</string>
+					<string>source.ruby.rails</string>
 				</dict>
 			</array>
 		</dict>
-	</array>
+	</dict>
 	<key>scopeName</key>
 	<string>source.yaml</string>
 	<key>uuid</key>

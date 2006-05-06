@@ -51,8 +51,8 @@ def generate_stylesheet_from_theme
 	end
 
 	theme_name = theme_plist['name']
-	font_name = prefs['OakTextViewNormalFontName'] or 'Monaco'
-	font_size = (prefs['OakTextViewNormalFontSize'] or 11).to_s
+	font_name = prefs['OakTextViewNormalFontName'] || 'Monaco'
+	font_size = (prefs['OakTextViewNormalFontSize'] || 11).to_s
 	font_size.sub! /\.\d+$/, ''
 
 	theme_styles = ''
@@ -61,8 +61,8 @@ def generate_stylesheet_from_theme
 
 	theme_plist['settings'].each do | setting |
 		if (!setting['name'] and setting['settings'])
-			body_bg = setting['settings']['background'] or '#ffffff'
-			body_fg = setting['settings']['foreground'] or '#000000'
+			body_bg = setting['settings']['background'] || '#ffffff'
+			body_fg = setting['settings']['foreground'] || '#000000'
 			body_bg = to_rgba(body_bg) if body_bg =~ /#.{8}/
 			body_fg = to_rgba(body_fg) if body_fg =~ /#.{8}/
 			next
@@ -105,26 +105,44 @@ body {
 EOT
 end
 
-# Read the source document / selection
-input = STDIN.read
-# Convert tabs to spaces using configured tab width
-tab_size = ENV['TM_TAB_SIZE'] or '8'
-input.gsub! /\t/, ' ' * tab_size.to_i
+def detab(str, width)
+	lines = str.split(/\n/)
+	lines.each do | line |
+		while line.index "\t"
+			tab = (line.index "\t")
+			stop = (tab - 1) / width
+			next_stop = (stop + 1) * width
+			padding = (next_stop - tab) + 1
+			line.sub! /\t/, ' ' * padding
+		end
+	end
+	return lines.join("\n")
+end
 
+# Read the source document / selection
+# Convert tabs to spaces using configured tab width
+input = detab(STDIN.read, (ENV['TM_TAB_SIZE'] || '8').to_i)
+
+# If you declare a 'http://...' link as a TM_SOURCE_STYLESHEET
+# shell variable, that will be used instead of generating a stylesheet
+# based on the current theme.
 if (ENV['TM_SOURCE_STYLESHEET'])
 	styles = "&lt;link rel=\"stylesheet\" src=\"#{ENV['TM_SOURCE_STYLESHEET']}\" type=\"text/css\" /&gt;"
 else
 	styles = generate_stylesheet_from_theme()
 end
 
+# Head block
 print "&lt;html&gt;
 &lt;head&gt;
-&lt;title&gt;#{ ENV['TM_FILENAME'] or 'untitled' }&lt;/title&gt;
+&lt;title&gt;#{ ENV['TM_FILENAME'] || 'untitled' }&lt;/title&gt;
 #{styles}
 &lt;/head&gt;
 
 &lt;body&gt;"
 
+# Meat. The poor-man's tokenizer. Fortunately, our input is simple
+# and easy to parse.
 tokens = input.split(/(&lt;.+?&gt;)/)
 for token in tokens
 	case token
@@ -142,6 +160,7 @@ for token in tokens
 	end
 end
 
+# Closing
 print "
 &lt;/body&gt;
 &lt;/html&gt;"

@@ -5,13 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -KA
-
-res = STDIN.read.gsub(/[^a-zA-Z0-9.-]/) do |m|
-  sprintf("%%%02X", m[0])
-end
-
-print res
+	<string>#!/usr/bin/env ruby -KA -rcgi
+print CGI.escape(STDIN.read)
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

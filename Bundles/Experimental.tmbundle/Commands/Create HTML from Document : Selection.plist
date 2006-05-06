@@ -78,7 +78,7 @@ def generate_stylesheet_from_theme
 			theme_styles += "\tcolor: " + color + ";\n"
 		end
 		if (style = setting['settings']['fontStyle'])
-			theme_styles += "\tfont-variant: italic;\n" if style =~ /\bitalic\b/i
+			theme_styles += "\tfont-style: italic;\n" if style =~ /\bitalic\b/i
 			theme_styles += "\ttext-decoration: underline;\n" if style =~ /\bunderline\b/i
 			theme_styles += "\tfont-weight: bold\n" if style =~ /\bbold\b/i
 		end

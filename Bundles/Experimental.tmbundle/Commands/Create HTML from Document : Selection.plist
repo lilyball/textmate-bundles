@@ -90,7 +90,7 @@ def generate_stylesheet_from_theme
 	end
 
 	return &lt;&lt;EOT
-&lt;style type="text/css"&gt;
+	&lt;style type="text/css"&gt;
 /* Stylesheet generated from theme: #{theme_name} */
 
 body {
@@ -101,7 +101,7 @@ body {
 	background-color: #{body_bg};
 }
 #{theme_styles}
-&lt;/style&gt;
+	&lt;/style&gt;
 EOT
 end
 
@@ -127,17 +127,20 @@ input = detab(STDIN.read, (ENV['TM_TAB_SIZE'] || '8').to_i)
 # shell variable, that will be used instead of generating a stylesheet
 # based on the current theme.
 if (ENV['TM_SOURCE_STYLESHEET'])
-	styles = "&lt;link rel=\"stylesheet\" src=\"#{ENV['TM_SOURCE_STYLESHEET']}\" type=\"text/css\" /&gt;"
+	styles = "	&lt;link rel=\"stylesheet\" src=\"#{ENV['TM_SOURCE_STYLESHEET']}\" type=\"text/css\" /&gt;\n"
 else
 	styles = generate_stylesheet_from_theme()
 end
 
 # Head block
-print "&lt;html&gt;
+print "&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
+	\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"&gt;
+
+&lt;html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"&gt;
 &lt;head&gt;
-&lt;title&gt;#{ ENV['TM_FILENAME'] || 'untitled' }&lt;/title&gt;
-#{styles}
-&lt;/head&gt;
+	&lt;meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/&gt;
+	&lt;title&gt;#{ ENV['TM_FILENAME'] || 'untitled' }&lt;/title&gt;
+#{styles}&lt;/head&gt;
 
 &lt;body&gt;"
 

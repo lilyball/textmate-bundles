@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
+	<string>#!/usr/bin/env ruby -rjcode -Ku
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
@@ -90,7 +90,7 @@ def generate_stylesheet_from_theme
 	end
 
 	return &lt;&lt;EOT
-&lt;style&gt;
+&lt;style type="text/css"&gt;
 /* Stylesheet generated from theme: #{theme_name} */
 
 body {
@@ -108,12 +108,12 @@ end
 def detab(str, width)
 	lines = str.split(/\n/)
 	lines.each do | line |
-		while line.index "\t"
-			tab = (line.index "\t")
-			stop = (tab - 1) / width
-			next_stop = (stop + 1) * width
-			padding = (next_stop - tab) + 1
-			line.sub! /\t/, ' ' * padding
+		line_sans_markup = line.gsub(/&lt;[^&gt;]+&gt;/, '')
+		while (index = line_sans_markup.index("\t"))
+			tab = line_sans_markup[0..index].jlength - 1
+			padding = " " * ((tab / width + 1) * width - tab)
+			line_sans_markup.sub!("\t", padding)
+			line.sub!("\t", padding)
 		end
 	end
 	return lines.join("\n")

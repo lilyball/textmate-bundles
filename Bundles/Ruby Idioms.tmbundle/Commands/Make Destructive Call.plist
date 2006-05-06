@@ -9,7 +9,7 @@
 
 if [ "$res" = "" ]
   then exit_show_tool_tip "Retry this command without a selection."
-  else echo $res
+  else echo -n "$res"
 fi</string>
 	<key>fallbackInput</key>
 	<string>line</string>

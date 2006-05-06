@@ -80,6 +80,7 @@ def generate_stylesheet_from_theme
 		if (style = setting['settings']['fontStyle'])
 			theme_styles += "\tfont-variant: italic;\n" if style =~ /\bitalic\b/i
 			theme_styles += "\ttext-decoration: underline;\n" if style =~ /\bunderline\b/i
+			theme_styles += "\tfont-weight: bold\n" if style =~ /\bbold\b/i
 		end
 		if (color = setting['settings']['background'])
 			color = to_rgba(color) if color =~ /#.{8}/
@@ -135,7 +136,7 @@ for token in tokens
 			begin
 				list.push(classes.join('_'))
 			end while classes.pop
-			print "&lt;span class=\"#{ list.reverse.join(' ') }\"&gt;"
+			print "&lt;span class=\"#{ list.reverse.join(' ').sub(/^\s+/, '') }\"&gt;"
 		else
 			print token
 	end
@@ -147,12 +148,12 @@ print "
 </string>
 	<key>input</key>
 	<string>selection</string>
+	<key>inputFormat</key>
+	<string>xml</string>
 	<key>keyEquivalent</key>
 	<string>^H</string>
 	<key>name</key>
-	<string>Create HTML from Selection / Document</string>
-    <key>inputFormat</key>
-    <string>xml</string>
+	<string>Create HTML from Document / Selection</string>
 	<key>output</key>
 	<string>openAsNewDocument</string>
 	<key>uuid</key>

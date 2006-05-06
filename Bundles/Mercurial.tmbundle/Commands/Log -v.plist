@@ -15,10 +15,13 @@ if [[ $TM_HG_LOG_LIMIT != 0 ]]
 	then HG_LIMIT="-l ${TM_HG_LOG_LIMIT:=10}"
 fi
 
+HG_STYLE_TMP='"$HG_STYLE"'
+TM_HG_TMP='"$TM_HG"'
+
 if [[ -z $TM_SELECTED_FILES ]]; then
    "$TM_HG" log -v $HG_LIMIT --style "$HG_STYLE" "$TM_FILEPATH" 2&gt;&amp;1 |"$TM_RUBY" -- "$FORMAT_LOG"
 else
-   eval "'$TM_HG'" log -v $HG_LIMIT --style "'$HG_STYLE'" "$TM_SELECTED_FILES" 2&gt;&amp;1 |"$TM_RUBY" -- "$FORMAT_LOG"
+   eval "$TM_HG_TMP" log -v $HG_LIMIT --style "$HG_STYLE_TMP" "$TM_SELECTED_FILES" 2&gt;&amp;1 |"$TM_RUBY" -- "$FORMAT_LOG"
 fi</string>
 	<key>input</key>
 	<string>none</string>

@@ -9,16 +9,18 @@
 	</array>
 	<key>foldingStartMarker</key>
 	<string>(?x)
-		^\s*(tell \s+ (the \s+ )? app(lication)?\b (?! \s+ "[^"]*" \s+ to)
+		^\s*
+		(tell \s+ (. (?! \b to \b) )*
 		|if\b .* \bthen \b .*
-		|repeat(\b .* \b times\s*| \s+ (while|until) \b .*)?
+		|repeat.*
+		|( on | to ) \b .*
 		|try
-		|with \s+ timeout.*
+		|with \s+ timeout .*
 		)\s*$
 	</string>
 	<key>foldingStopMarker</key>
 	<string>(?x)
-		end \s+ (tell|if|repeat|try|timeout)
+		^\s* end \b .*$
 	</string>
 	<key>keyEquivalent</key>
 	<string>^~A</string>
@@ -82,7 +84,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(on error|try|set|copy|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout)|end|return|of|my)\b</string>
+					<string>\b(on error|try|set|copy|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout)|end|return|of|my|whose)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>

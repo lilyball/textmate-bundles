@@ -10,14 +10,18 @@
 	<dict>
 		<key>decreaseIndentPattern</key>
 		<string>(?x)
-		end \s (tell|if|repeat)
+		^\s* end \b .*$
 	</string>
 		<key>increaseIndentPattern</key>
 		<string>(?x)
-		(\btell \s+ (the \s+ )? app(lication)?\b (?! \s+ "[^"]*" \s+ to)
-		|\bif \s+ .* \bthen \s* $
-		|\brepeat \s+ .* \btimes \s* $
-		)
+		^\s*
+		(tell \s+ (. (?! \b to \b) )*
+		|if\b .* \bthen \b .*
+		|repeat.*
+		|( on | to ) \b .*
+		|try
+		|with \s+ timeout .*
+		)\s*$
 	</string>
 		<key>indentNextLinePattern</key>
 		<string>¬$</string>

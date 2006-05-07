@@ -19,6 +19,7 @@ def encode (text)
   end
 end
 
+STDIN.read.scan(/(&lt;\?(?:[^?]*|\?(?!&gt;))*\?&gt;|&lt;(?:[^&lt;&gt;"']|"[^"]*"|'[^']*')*&gt;|&amp;(?:[a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);)|([^&lt;&amp;]+|[&lt;&amp;])/) do |tag, text|
 STDIN.read.scan(/(&lt;(?:[^&lt;&gt;"']|"[^"]*"|'[^']*')*&gt;|&amp;(?:[a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);)|([^&lt;&amp;]+|[&lt;&amp;])/) do |tag, text|
   print tag.to_s, encode(text.to_s)
 end

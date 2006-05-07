@@ -72,40 +72,6 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.language.ocaml</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>variable.method.ocaml</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>\b(method)\s+(virtual\s+)?(private\s+)?([a-z_][a-zA-Z0-9'_]*)((?:\s(?:[a-z_][a-zA-Z0-9'_]*))*)</string>
-			<key>name</key>
-			<string>meta.method</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.language.ocaml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
 					<string>entity.name.type</string>
 				</dict>
 			</dict>
@@ -174,7 +140,7 @@
 		<dict>
 			<key>begin</key>
 			<string>^(\s*)(object)\s*(?:(\()[a-z]+(\)))?\s*$</string>
-			<key>captures</key>
+			<key>beginCaptures</key>
 			<dict>
 				<key>2</key>
 				<dict>
@@ -193,11 +159,53 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^$1end\s*$</string>
+			<string>^\1(end)\s*$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.language.ocaml</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.object</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.language.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.language.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.language.ocaml</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>variable.method.ocaml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(method)\s+(virtual\s+)?(private\s+)?([a-z_][a-zA-Z0-9'_]*)((?:\s(?:[a-z_][a-zA-Z0-9'_]*))*)</string>
+					<key>name</key>
+					<string>meta.method</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>$self</string>

@@ -9,14 +9,16 @@
 	</array>
 	<key>foldingStartMarker</key>
 	<string>(?x)
-		(tell \s+ (the \s+ )? app(lication)?\b (?! \s+ "[^"]*" \s+ to)
-		|if\b .* \bthen\s*$
-		|repeat\b .* \btimes\s*
-		)
+		^\s*(tell \s+ (the \s+ )? app(lication)?\b (?! \s+ "[^"]*" \s+ to)
+		|if\b .* \bthen \b .*
+		|repeat(\b .* \b times\s*| \s+ (while|until) \b .*)?
+		|try
+		|with \s+ timeout.*
+		)\s*$
 	</string>
 	<key>foldingStopMarker</key>
 	<string>(?x)
-		end \s (tell|if|repeat)
+		end \s+ (tell|if|repeat|try|timeout)
 	</string>
 	<key>keyEquivalent</key>
 	<string>^~A</string>

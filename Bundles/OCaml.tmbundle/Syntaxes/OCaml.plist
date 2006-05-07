@@ -173,6 +173,39 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>^(\s*)(object)\s*(?:(\()[a-z]+(\)))?\s*$</string>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.language.ocaml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.symbol</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.symbol</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>^$1end\s*$</string>
+			<key>name</key>
+			<string>meta.object</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>\(\*</string>
 			<key>end</key>
 			<string>\*\)</string>

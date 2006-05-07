@@ -10,7 +10,7 @@
 	<key>foldingStartMarker</key>
 	<string>(?x)
 		^\s*
-		(tell \s+ (. (?! \b to \b) )*
+		(tell \s+ (?! .* \b to \b) .*
 		|if\b .* \bthen \b .*
 		|repeat.*
 		|( on | to ) \b .*

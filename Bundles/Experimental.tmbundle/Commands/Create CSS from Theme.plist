@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+# By Brad Choate -- http://bradchoate.com/
+
+# Search heuristic is based on the Theme Builder bundle's
+# "Create for Current Language" command
+def find_theme(uuid)
+	theme_dirs = [
+		File.expand_path('~/Library/Application Support/TextMate/Themes'),
+		'/Library/Application Support/TextMate/Themes',
+		'/Applications/TextMate.app/Contents/SharedSupport/Themes'
+	]
+
+	theme_dirs.each do |theme_dir|
+		if File.exists? theme_dir then
+			themes = Dir.entries(theme_dir).find_all { |theme| theme =~ /.+\.tmTheme$/ }
+			themes.each do |theme|
+				plist = PropertyList.load(File.open("#{theme_dir}/#{theme}"))
+				return plist if plist["uuid"] == uuid
+			end
+		end
+	end
+	return nil
+end
+
+def to_rgba(color)
+	colors = color.scan /^#(..)(..)(..)(..)/
+	r = colors[0][0].hex
+	g = colors[0][1].hex
+	b = colors[0][2].hex
+	a = colors[0][3].hex
+	return "rgba(#{r}, #{g}, #{b}, #{ format '%0.02f', a / 255.0 })"
+end
+
+def generate_stylesheet_from_theme
+	require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+
+	# Load TM preferences to discover the current theme and font settings
+	prefs = PropertyList.load(File.open(File.expand_path('~/Library/Preferences/com.macromates.textmate.plist')))
+	theme_uuid = prefs['OakThemeManagerSelectedTheme']
+	# Load the active theme. Unfortunately, this requires us to scan through
+	# all discoverable theme files...
+	unless theme_plist = find_theme(theme_uuid)
+		print "Could not locate your theme file!"
+		abort
+	end
+
+	theme_name = theme_plist['name']
+	font_name = prefs['OakTextViewNormalFontName'] || 'Monaco'
+	font_size = (prefs['OakTextViewNormalFontSize'] || 11).to_s
+	font_size.sub! /\.\d+$/, ''
+
+	theme_styles = ''
+	body_fg = ''
+	body_bg = ''
+
+	theme_plist['settings'].each do | setting |
+		if (!setting['name'] and setting['settings'])
+			body_bg = setting['settings']['background'] || '#ffffff'
+			body_fg = setting['settings']['foreground'] || '#000000'
+			body_bg = to_rgba(body_bg) if body_bg =~ /#.{8}/
+			body_fg = to_rgba(body_fg) if body_fg =~ /#.{8}/
+			next
+		end
+		next unless setting['name'] and setting['scope']
+		theme_styles += "/* " + setting['name'] + " */\n"
+		scope_name = setting['scope']
+		scope_name.gsub! /\./, '_'
+		scope_name.gsub! /(^| )/, '\1.'
+		theme_styles += scope_name + " {\n"
+		if (color = setting['settings']['foreground'])
+			color = to_rgba(color) if color =~ /#.{8}/
+			theme_styles += "\tcolor: " + color + ";\n"
+		end
+		if (style = setting['settings']['fontStyle'])
+			theme_styles += "\tfont-style: italic;\n" if style =~ /\bitalic\b/i
+			theme_styles += "\ttext-decoration: underline;\n" if style =~ /\bunderline\b/i
+			theme_styles += "\tfont-weight: bold\n" if style =~ /\bbold\b/i
+		end
+		if (color = setting['settings']['background'])
+			color = to_rgba(color) if color =~ /#.{8}/
+			theme_styles += "\tbackground-color: " + color + ";\n"
+		end
+		theme_styles += "}\n\n"
+	end
+
+	return &lt;&lt;EOT
+/* Stylesheet generated from theme: #{theme_name} */
+
+/* Mostly to improve view within TextMate's preview window */
+body {
+	margin: 0;
+	padding: 0;
+}
+
+pre.textmate-source {
+	margin: 0;
+	padding: 0;
+	font-family: "#{font_name}", monospace;
+	font-size: #{font_size}px;
+	color: #{body_fg};
+	background-color: #{body_bg};
+}
+#{theme_styles}
+EOT
+end
+
+print generate_stylesheet_from_theme()</string>
+	<key>input</key>
+	<string>none</string>
+	<key>inputFormat</key>
+	<string>xml</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Create CSS from Theme</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>uuid</key>
+	<string>ED204720-38FC-427C-B91E-D6AE866DAE3A</string>
+</dict>
+</plist>

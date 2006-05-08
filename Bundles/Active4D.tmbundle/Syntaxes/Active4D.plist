@@ -299,7 +299,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i)(end method|method|define|include|return|exit|self|import|require|global|throw)\b</string>
+			<string>\b(?i)(end method|method|define|return|exit|self|import|require|global|throw)\b</string>
 			<key>name</key>
 			<string>keyword.other.active4d</string>
 		</dict>
@@ -317,9 +317,23 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i)\b(OK|Document)\b</string>
+			<string>(?i)\b(OK|Document|fusebox\.conf\.fuseaction)\b</string>
 			<key>name</key>
 			<string>support.other.variable.active4d</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.active4d</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?&lt;!\$)\b(?:(?:a4d\.(?:debug|lists|utils|web)|Batch|Breadcrumbs|fusebox\.conf|fusebox\.head|fusebox|RowSet)\.)([[:alpha:]][[[:alnum:]]_ ]+[[:alnum:]])</string>
+			<key>name</key>
+			<string>support.class.active4d</string>
 		</dict>
 	</array>
 	<key>repository</key>

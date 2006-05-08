@@ -6,8 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -rjcode -Ku
-
-require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+# By Brad Choate -- http://bradchoate.com/
 
 # Search heuristic is based on the Theme Builder bundle's
 # "Create for Current Language" command
@@ -40,6 +39,8 @@ def to_rgba(color)
 end
 
 def generate_stylesheet_from_theme
+	require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+
 	# Load TM preferences to discover the current theme and font settings
 	prefs = PropertyList.load(File.open(File.expand_path('~/Library/Preferences/com.macromates.textmate.plist')))
 	theme_uuid = prefs['OakThemeManagerSelectedTheme']
@@ -93,8 +94,15 @@ def generate_stylesheet_from_theme
 	&lt;style type="text/css"&gt;
 /* Stylesheet generated from theme: #{theme_name} */
 
+/* Mostly to improve view within TextMate's preview window */
 body {
-	white-space: pre;
+	margin: 0;
+	padding: 0;
+}
+
+pre.textmate-source {
+	margin: 0;
+	padding: 0;
 	font-family: "#{font_name}", monospace;
 	font-size: #{font_size}px;
 	color: #{body_fg};
@@ -123,18 +131,19 @@ end
 # Convert tabs to spaces using configured tab width
 input = detab(STDIN.read, (ENV['TM_TAB_SIZE'] || '8').to_i)
 
+if (!ENV['TM_SELECTED_TEXT'])
 # If you declare a 'http://...' link as a TM_SOURCE_STYLESHEET
 # shell variable, that will be used instead of generating a stylesheet
 # based on the current theme.
-if (ENV['TM_SOURCE_STYLESHEET'])
-	styles = "	&lt;link rel=\"stylesheet\" src=\"#{ENV['TM_SOURCE_STYLESHEET']}\" type=\"text/css\" /&gt;\n"
-else
-	styles = generate_stylesheet_from_theme()
-end
+	if (ENV['TM_SOURCE_STYLESHEET'])
+		styles = "\t&lt;link rel=\"stylesheet\" src=\"#{ENV['TM_SOURCE_STYLESHEET']}\" type=\"text/css\" /&gt;\n"
+	else
+		styles = generate_stylesheet_from_theme()
+	end
 
 # Head block
-print "&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
-	\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"&gt;
+	print "&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
+		\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"&gt;
 
 &lt;html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"&gt;
 &lt;head&gt;
@@ -143,6 +152,9 @@ print "&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
 #{styles}&lt;/head&gt;
 
 &lt;body&gt;"
+end
+
+print "&lt;pre class=\"textmate-source\"&gt;"
 
 # Meat. The poor-man's tokenizer. Fortunately, our input is simple
 # and easy to parse.
@@ -163,10 +175,14 @@ for token in tokens
 	end
 end
 
+print "&lt;/pre&gt;"
+
+if (!ENV['TM_SELECTED_TEXT'])
 # Closing
-print "
+	print "
 &lt;/body&gt;
 &lt;/html&gt;"
+end
 </string>
 	<key>input</key>
 	<string>selection</string>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require 'rexml/streamlistener'
+require 'rexml/parsers/baseparser'
+require 'rexml/parsers/streamparser'
+
+
+$useparens = ['source.ruby']
+$stripcommas = ['source.ruby']
+$usecommas = ['source.ruby']
+
+
+class FunctionExtractor
+	include REXML::StreamListener
+	
+	def initialize(findfunction)
+		@findfunction = findfunction
+		@functiontagregex = /^declaration\.function|^meta\.method/
+		@functionnameregex = /^entity\.name\.function/
+		@argumentregex = /^variable/
+		@infunction = false
+		@currenttag = ""
+		@currentfunction = ""
+		@args = []
+	end
+	
+	
+	def tag_start(name, attrs)
+		if !@infunction and @functiontagregex.match(name)
+			@infunction = name
+		elsif @infunction
+			@currenttag = name
+		end
+	end
+	
+	
+	def text(txt)
+		if @infunction
+			if @functionnameregex.match(@currenttag)
+				@currentfunction = txt.strip()
+			elsif @argumentregex.match(@currenttag)
+				@args &lt;&lt; txt.strip()
+			end
+		end
+	end
+	
+	
+	def tag_end(name)
+		if @infunction
+			if name == @infunction
+				if @currentfunction == @findfunction
+					print "#{make_args()}$0"
+					exit(0)
+				end
+				
+				@args = []
+				@infunction = false
+			elsif name == @currenttag
+				@currenttag = ""
+			end
+		end
+	end
+
+	
+	private
+	
+	def make_args()
+		scope = ENV['TM_SCOPE'].split(/ /)[0]
+		joinstr = " "
+		if $usecommas.include?(scope)
+			joinstr = ", "
+		end
+
+		if $stripcommas.include?(scope)
+			@args = @args.map { |s| s.split(/,/) }.flatten.map { |s| s.strip() }
+		end
+		
+		final = []
+		@args.each_index() do |i|
+			final &lt;&lt; "${#{i+1}:#{@args[i]}}"
+		end
+
+		final = final.join(joinstr)
+		if $useparens.include?(scope)
+			final = "(#{final})"
+		else
+			final = " #{final}"
+		end
+		
+		final
+	end
+	
+end
+
+begin
+	listener = FunctionExtractor.new(ENV['TM_CURRENT_WORD'].strip())
+	parser = REXML::Parsers::StreamParser.new($stdin, listener)
+	parser.parse()
+rescue
+	# if we fail for any reason, we want to fail silently to avoid cluttering up the document
+end</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>xml</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>Complete Local Function</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source</string>
+	<key>uuid</key>
+	<string>08741F60-A1F1-4294-B9A9-FFF43253A687</string>
+</dict>
+</plist>

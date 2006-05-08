@@ -9,9 +9,36 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>^\s*((?i:end\ (if|while|for\ each|for|case|method)|until)\b|%&gt;)</string>
+		<string>^\s*((?i:end\ (if|while|for\ each|for|case|method)|until|else)\b|%&gt;)</string>
+		<key>highlightPairs</key>
+		<array>
+			<array>
+				<string>"</string>
+				<string>"</string>
+			</array>
+			<array>
+				<string>(</string>
+				<string>)</string>
+			</array>
+			<array>
+				<string>{</string>
+				<string>}</string>
+			</array>
+			<array>
+				<string>[</string>
+				<string>]</string>
+			</array>
+			<array>
+				<string>'</string>
+				<string>'</string>
+			</array>
+			<array>
+				<string>`</string>
+				<string>`</string>
+			</array>
+		</array>
 		<key>increaseIndentPattern</key>
-		<string>^\s*((?i:if|while|for\ each|for|case\ of|repeat|method)\b|&lt;%)</string>
+		<string>^\s*((?i:if|while|for\ each|for|case\ of|repeat|method|else)\b|&lt;%|:\()</string>
 		<key>smartTypingPairs</key>
 		<array>
 			<array>

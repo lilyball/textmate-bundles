@@ -45,8 +45,8 @@
 @end
 @implementation PBXBuildPhase
 @end
-@implementation PBXShellScriptBuildPhase
-@end
+//@implementation PBXShellScriptBuildPhase		-- commented out for testing “fault-tolerance”
+//@end
 @implementation PBXSourcesBuildPhase
 @end
 @implementation PBXHeadersBuildPhase
@@ -139,64 +139,68 @@
 		{
 			NSLog(@"unknown class:%@", localisa);
 		}
-		
-		NSParameterAssert(theClass);
-
-		object = [[theClass alloc] init];
-		NSParameterAssert(object);
-		
-		// Add the new object to the dictionary immediately, so that subsequent recursive references are filled in with the current object
-		[fUnarchivedObjects setObject:object forKey:objID];
-
-		for( i = 0; i < [keys count]; i += 1 )
+		else
 		{
-			NSString *		ivarName		= [keys objectAtIndex:i];
-			
-			if( ! [ivarName isEqualToString:@"isa"] )
+			object = [[theClass alloc] init];
+			NSParameterAssert(object);
+
+			// Add the new object to the dictionary immediately, so that subsequent recursive references are filled in with the current object
+			[fUnarchivedObjects setObject:object forKey:objID];
+
+			for( i = 0; i < [keys count]; i += 1 )
 			{
-				id				value	= [dict objectForKey:ivarName];
-				
-				//
-				// Recursion time.
-				// If the value is an object ID or a container, unarchive it.
-				// FIX ME: right now we only handle array containers. Not sure if Xcode uses dictionaries.
-				//
-				if( [fArchivedObjects objectForKey:value] != nil )
+				NSString *		ivarName		= [keys objectAtIndex:i];
+
+				if( ! [ivarName isEqualToString:@"isa"] )
 				{
-					value = [self unarchiveObjectForKey:value];
-				}
-				else if( [value isKindOfClass:[NSArray class]] )
-				{
-					NSMutableArray *	array = [[NSMutableArray alloc] init];
-					
-					for( unsigned int arrayIndex = 0; arrayIndex < [value count]; arrayIndex += 1 )
+					id				value	= [dict objectForKey:ivarName];
+
+					//
+					// Recursion time.
+					// If the value is an object ID or a container, unarchive it.
+					// FIX ME: right now we only handle array containers. Not sure if Xcode uses dictionaries.
+					//
+					if( [fArchivedObjects objectForKey:value] != nil )
 					{
-						id	subObjID	= [value objectAtIndex:arrayIndex];
-						id	subObject;
-						
-						if( [fArchivedObjects objectForKey:subObjID] != nil )
-						{
-							subObject = [self unarchiveObjectForKey:subObjID];
-						}
-						else
-						{
-							subObject = subObjID;
-						}
-						[array addObject:subObject];
+						value = [self unarchiveObjectForKey:value];
 					}
-					
-					value = array;
+					else if( [value isKindOfClass:[NSArray class]] )
+					{
+						NSMutableArray *	array = [[NSMutableArray alloc] init];
+
+						for( unsigned int arrayIndex = 0; arrayIndex < [value count]; arrayIndex += 1 )
+						{
+							id	subObjID	= [value objectAtIndex:arrayIndex];
+							id	subObject;
+
+							if( [fArchivedObjects objectForKey:subObjID] != nil )
+							{
+								subObject = [self unarchiveObjectForKey:subObjID];
+							}
+							else
+							{
+								subObject = subObjID;
+							}
+							if( subObject != nil )
+							{
+								[array addObject:subObject];
+							}
+						}
+
+						value = array;
+					}
+
+					// Use key-value coding to set the ivar
+					[object setValue:value forKey:ivarName];
 				}
-				
-				// Use key-value coding to set the ivar
-				[object setValue:value forKey:ivarName];
+			}
+
+			if(LOG_UNARCHIVED_OBJECTS)
+			{
+				fprintf( stdout, "%s: %s\n", [[objID description] UTF8String], [[object description] UTF8String] );
 			}
 		}
-		
-		if(LOG_UNARCHIVED_OBJECTS)
-		{
-			fprintf( stdout, "%s: %s\n", [[objID description] UTF8String], [[object description] UTF8String] );
-		}
+
 	}
 	else
 	{

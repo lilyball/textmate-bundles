@@ -123,14 +123,14 @@
 	id runOnlyForDeploymentPostprocessing;
 }
 @end
-@interface PBXShellScriptBuildPhase : PBXBuildPhase
-{
-	id inputPaths;
-	id outputPaths;
-	id shellPath;
-	id shellScript;
-}
-@end
+//@interface PBXShellScriptBuildPhase : PBXBuildPhase
+//{
+//	id inputPaths;
+//	id outputPaths;
+//	id shellPath;
+//	id shellScript;
+//}
+//@end
 @interface PBXSourcesBuildPhase : PBXBuildPhase
 @end
 @interface PBXHeadersBuildPhase : PBXBuildPhase

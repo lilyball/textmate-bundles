@@ -8,7 +8,7 @@
 
 #if 0
 pushd "$HOME/Library/Application Support/TextMate/Tools/XCProject";
-cc -ObjC -lobjc -Os -framework Foundation -std=c99 ConvertXcodeToTMProj.m XCProject.m -o xcode_to_tmproj
+cc -arch i386 -arch ppc -ObjC -lobjc -Os -framework Foundation -std=c99 ConvertXcodeToTMProj.m XCProject.m -o xcode_to_tmproj
 cp xcode_to_tmproj ../../Bundles/Source.tmbundle/bin/
 date
 popd

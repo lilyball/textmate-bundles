@@ -13,7 +13,6 @@ require 'rexml/parsers/streamparser'
 
 
 $useparens = ['source.ruby']
-$stripcommas = ['source.ruby']
 $usecommas = ['source.ruby']
 
 
@@ -78,8 +77,10 @@ class FunctionExtractor
 			joinstr = ", "
 		end
 
-		if $stripcommas.include?(scope)
+		if $usecommas.include?(scope)
 			@args = @args.map { |s| s.split(/,/) }.flatten.map { |s| s.strip() }
+		else
+			@args = @args.map { |s| s.split(/\s+/) }.flatten.map { |s| s.strip() }
 		end
 		
 		final = []

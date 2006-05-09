@@ -12,8 +12,8 @@ require 'rexml/parsers/baseparser'
 require 'rexml/parsers/streamparser'
 
 
-$useparens = ['source.ruby', 'source.python']
-$usecommas = ['source.ruby', 'source.python']
+$noparens = ['source.ocaml']
+$nocommas = ['source.ocaml']
 
 
 class FunctionExtractor
@@ -72,12 +72,12 @@ class FunctionExtractor
 	
 	def make_args()
 		scope = ENV['TM_SCOPE'].split(/ /)[0]
-		joinstr = " "
-		if $usecommas.include?(scope)
-			joinstr = ", "
+		joinstr = ", "
+		if $nocommas.include?(scope)
+			joinstr = " "
 		end
 
-		if $usecommas.include?(scope)
+		if !$nocommas.include?(scope)
 			@args = @args.map { |s| s.split(/,/) }.flatten.map { |s| s.strip() }
 		else
 			@args = @args.map { |s| s.split(/\s+/) }.flatten.map { |s| s.strip() }
@@ -89,10 +89,10 @@ class FunctionExtractor
 		end
 
 		final = final.join(joinstr)
-		if $useparens.include?(scope)
-			final = "(#{final})"
+		if $noparens.include?(scope)
+			final = " #{final}"			
 		else
-			final = " #{final}"
+			final = "(#{final})"
 		end
 		
 		final

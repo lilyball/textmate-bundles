@@ -8,8 +8,8 @@ parts = STDIN.read.split(MARK)
 src = parts.join
 
 # find all function calls
+src.gsub!(/(if|while|for|switch|sizeof|sizeofA)\s*\(/, '')
 functions = src.scan(/(?:(?!->).(?!@|\.).|^\s*)\b([a-z]+)(?=\()/).flatten.to_set
-functions = functions - %w{ if while for switch sizeof sizeofA }
 
 # collect paths to all man files involved
 paths = functions.collect do |func|

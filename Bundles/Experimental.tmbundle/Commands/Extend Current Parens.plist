@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+def escape_snippet(str)
+	str.gsub(/([$`\\])/, "\\\\\\1")
+end
+
+def insert_open(str)
+	if str =~ /^\s*\S+\s*$/
+		str.sub(/^(\s*)/, "\\1(")
+	else
+		str.sub(/([ ])(?=\S+\s*$)/, "\\1(")
+	end
+end
+
+line = $stdin.read()
+index = ENV['TM_LINE_INDEX'].to_i()
+currentchar = line[index - 1].chr()
+
+if currentchar == ')'
+	# backtrack to find the open
+	depth = 1
+	line[0..(index - 2)].reverse.split(//).each_index() do |i|
+		ch = line[i].chr()
+		if ch == ')'
+			depth += 1
+		elsif ch == '('
+			depth -= 1
+		end
+
+		if depth == 0
+			if i == 0 or line[0..(i-1)] =~ /^(\s|\()*$/
+				line = escape_snippet(line[0..(index - 1)]) + '$0' + escape_snippet(line[index..-1])
+				break
+			end
+
+			firstpart = insert_open(line[0..(i-1)])
+			line = escape_snippet(firstpart + line[(i+1)..(index-1)]) + '$0' + escape_snippet(line[index..-1])
+			break
+		end
+	end
+else
+	line = escape_snippet(insert_open(line[0..(index - 1)])) + ')$0' + escape_snippet(line[index..-1])
+end
+
+print "#{line}"</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@)</string>
+	<key>name</key>
+	<string>Extend Current Parens</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source</string>
+	<key>uuid</key>
+	<string>775D0733-3804-463C-A0EF-65B2998F5CE1</string>
+</dict>
+</plist>

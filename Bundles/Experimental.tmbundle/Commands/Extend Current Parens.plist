@@ -7,49 +7,55 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-def escape_snippet(str)
-	str.gsub(/([$`\\])/, "\\\\\\1")
+# short for escape_snippet - escapes special snippet characters in str
+def es(str)
+	str.to_s.gsub(/([$`\\])/, "\\\\\\1")
 end
 
+
+# given a string, insert an open parenthesis in the first, best
+# spot starting from the end
 def insert_open(str)
-	if str =~ /^\s*\S+\s*$/
-		str.sub(/^(\s*)/, "\\1(")
-	else
-		str.sub(/([ ])(?=\S+\s*$)/, "\\1(")
-	end
+	str.sub(/(.*)\b([(a-z0-9]+.*?)$/i, "\\1(\\2")
 end
+
 
 line = $stdin.read()
 index = ENV['TM_LINE_INDEX'].to_i()
 currentchar = line[index - 1].chr()
 
 if currentchar == ')'
-	# backtrack to find the open
+	# backtrack to find the open of this paren
 	depth = 1
-	line[0..(index - 2)].reverse.split(//).each_index() do |i|
-		ch = line[i].chr()
+	searchline = line[0..(index - 2)].reverse
+	searchline.split(//).each_index() do |i|
+		ch = searchline[i].chr()
 		if ch == ')'
 			depth += 1
 		elsif ch == '('
 			depth -= 1
 		end
 
+		# at a depth of zero we should be sitting on the opening paren
 		if depth == 0
-			if i == 0 or line[0..(i-1)] =~ /^(\s|\()*$/
-				line = escape_snippet(line[0..(index - 1)]) + '$0' + escape_snippet(line[index..-1])
+			parenindex = [(index - 3 - i), 0].max()
+			firstpart = insert_open(line[0..parenindex])
+			if firstpart == line[0..parenindex]
+				line = es(line[0..(index)]) + '$0' + es(line[(index + 1)..-1])
 				break
 			end
-
-			firstpart = insert_open(line[0..(i-1)])
-			line = escape_snippet(firstpart + line[(i+1)..(index-1)]) + '$0' + escape_snippet(line[index..-1])
+			
+			secondpart = es(line[(parenindex + 2)..(index - 2)]) + ')$0' + es(line[index..-1])
+			line = es(firstpart) + secondpart
 			break
 		end
 	end
 else
-	line = escape_snippet(insert_open(line[0..(index - 1)])) + ')$0' + escape_snippet(line[index..-1])
+	line = es(insert_open(line[0..(index - 1)])) + ')$0' + es(line[index..-1])
 end
 
-print "#{line}"</string>
+print "#{line}"
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

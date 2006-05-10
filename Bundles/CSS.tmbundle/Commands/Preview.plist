@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+LIPSUM = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+
+def tag_preview(selector_list)
+	html = 'TEXT_INSERT'
+	selectors = selector_list.split(/\s+/)
+	last_tag = ''
+	text_insert = "Generated preview for CSS selector #{selector_list}."
+	selectors.reverse.each do | selector |
+		tag = "#{selector}"
+		if (tag =~ /#(.+)/)
+			id = (tag.scan(/#(.+)/))[0][0]
+		else
+			id = nil
+		end
+		if (tag =~ /\.(.+)/)
+			cls = (tag.scan(/\.(.+)/))[0][0]
+			cls.gsub!(/\./, ' ')
+		else
+			cls = nil
+		end
+
+		tag.tr!('[A-Z]', '[a-z]')
+		tag.sub!(/#(.+)/, '');
+		tag.sub!(/\.(.+)/, '');
+		tag.sub!(/:.+/, '')
+		next if tag == '*'
+		if selector =~ /^[#.]/
+			case last_tag
+			when 'li'
+				tag = 'ul'
+			when 'td'
+				tag = 'tr'
+			when 'tr'
+				tag = 'table'
+			when /^h\d/
+				tag = 'div'
+			else
+				tag = 'span'
+			end
+		end
+
+		part = "&lt;" + tag
+		part += " id=\"#{id}\"" if id
+		part += " class=\"#{cls}\"" if cls
+
+		# defaults for img tag
+		case tag
+		when 'img'
+			part += " src=\"http://www.google.com/intl/en/images/logo.gif\""
+			part += " alt=\"Preview of #{selector_list}\""
+		when 'a'
+			part += " href=\"\#\""
+		end
+
+		# defaults for object tags?
+
+		part += "" if tag == 'img'
+		part += "&gt;"
+		part += html
+		part += "&lt;/" + tag + "&gt;"
+
+		case tag
+		when /^h\d/
+			text_insert = tag.sub(/^h(\d+)/, "Heading \\1")
+		when 'p'
+			text_insert = LIPSUM
+		when 'object', 'img'
+			text_insert = ""
+		end
+
+		html = part
+		last_tag = tag
+	end
+
+	if (last_tag)
+		case last_tag
+		when 'em', 'strong', 'b', 'i'
+			html = "&lt;p&gt;#{html}&lt;/p&gt;"
+		when 'li'
+			html = "&lt;ul&gt;#{html}&lt;/ul&gt;"
+		when 'td'
+			html = "&lt;table&gt;&lt;tr&gt;#{html}&lt;/tr&gt;&lt;/table&gt;"
+		when 'tr'
+			html = "&lt;table&gt;#{html}&lt;/table&gt;"
+		end
+	end
+
+	html = "&lt;div&gt;#{html}&lt;/div&gt;"
+	html.sub!(/TEXT_INSERT/, text_insert)
+
+	return html
+end
+
+def preview_css(str)
+	orig_css = "#{str}"
+	orig_css.gsub!(/&lt;.+?&gt;/, '')
+
+	#meta.selector.css -&gt; wraps the selector
+	#meta.property-list.css -&gt; wraps the properties
+	rules = str.scan(/&lt;meta\.selector\.css&gt;\s*(.+?)\s*&lt;\/meta\.selector\.css&gt;/m)
+
+	html = ''
+	css = ''
+	rules.each do | rule |
+		selector = rule[0].gsub(/&lt;.+?&gt;/, '')
+		selectors = selector.split(/\s*,\s*/m)
+		selectors.each do | single_selector |
+			html += "&lt;hr style=\"clear:both\"/&gt;\n\n" if html != ''
+			html += "&lt;p&gt;&lt;tt&gt;#{single_selector}:&lt;/tt&gt;&lt;/p&gt;\n"
+			html += tag_preview(single_selector) + "\n\n"
+		end
+	end
+	return &lt;&lt;EOT
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
+	&lt;head&gt;
+		&lt;meta http-equiv="Content-type" content="text/html; charset=utf-8" /&gt;
+		&lt;meta http-equiv="Content-Language" content="en-us" /&gt;
+		&lt;title&gt;CSS Preview for #{ENV['TM_FILENAME']}&lt;/title&gt;
+		&lt;style type="text/css"&gt;
+#{orig_css}
+		&lt;/style&gt;
+	&lt;/head&gt;
+	
+	&lt;body&gt;
+#{html}
+	&lt;/body&gt;
+&lt;/html&gt;
+EOT
+end
+
+print preview_css(STDIN.read)
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>xml</string>
+	<key>keyEquivalent</key>
+	<string>^~@p</string>
+	<key>name</key>
+	<string>Preview</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.css</string>
+	<key>uuid</key>
+	<string>05554FE0-4A70-4F3E-81C5-72855D7EB428</string>
+</dict>
+</plist>

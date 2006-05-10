@@ -18,6 +18,11 @@ snippets = {
   'add_remove_column' =>
     { :up   => 'add_column "${1:table}", "${2:column}", :${3:string}$0',
       :down => 'remove_column "$1", "$2"' },
+  
+  'add_remove_column_continue' =>
+    { :up   => 'add_column "${1:table}", "${2:column}", :${3:string}
+marcc$0',
+      :down => 'remove_column "$1", "$2"' },
 
   'create_drop_table' =>
     { :up   => 'create_table "${1:table}" do |t|

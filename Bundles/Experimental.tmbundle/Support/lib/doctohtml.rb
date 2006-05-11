@@ -38,7 +38,7 @@ def to_rgba(color)
 	return "rgba(#{r}, #{g}, #{b}, #{ format '%0.02f', a / 255.0 })"
 end
 
-def generate_stylesheet_from_theme
+def generate_stylesheet_from_theme(theme_class)
 	require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
 	# Load TM preferences to discover the current theme and font settings
@@ -53,6 +53,11 @@ def generate_stylesheet_from_theme
 	end
 
 	theme_name = theme_plist['name']
+	theme_class.replace(theme_name)
+	theme_class.downcase!
+	theme_class.gsub!(/[^a-z0-9_-]/, '_')
+	theme_class.gsub!(/_+/, '_')
+
 	font_name = prefs['OakTextViewNormalFontName'] || 'Monaco'
 	font_size = (prefs['OakTextViewNormalFontSize'] || 11).to_s
 	font_size.sub! /\.\d+$/, ''
@@ -63,6 +68,7 @@ def generate_stylesheet_from_theme
 			break
 		end
 	end
+
 	font_name = '"' + font_name + '"' if font_name.include?(' ') &&
 		!font_name.include?('"')
 
@@ -88,7 +94,7 @@ def generate_stylesheet_from_theme
 		scope_name.gsub! /(^|[ ])-[^ ]+/, '' # strip negated scopes
 		scope_name.gsub! /\./, '_'
 		scope_name.gsub! /(^|[ ])/, '\1.'
-		theme_styles += "pre.textmate-source " + scope_name + " {\n"
+		theme_styles += "pre.textmate-source.#{theme_class} #{scope_name} {\n"
 		if (color = setting['settings']['foreground'])
 			color = to_rgba(color) if color =~ /#.{8}/
 			theme_styles += "\tcolor: " + color + ";\n"
@@ -108,7 +114,7 @@ def generate_stylesheet_from_theme
 	if (selection_bg)
 		# currently, -moz-selection doesn't appear to support alpha transparency
 		# so, i'm not assigning it until it does.
-		selection_style = "pre.textmate-source ::selection {
+		selection_style = "pre.textmate-source.#{theme_class} ::selection {
 	background-color: #{selection_bg};
 }"
 	else
@@ -130,14 +136,18 @@ pre.textmate-source {
 	font-family: #{font_name}, monospace;
 	font-size: #{font_size}px;
 	line-height: #{font_size}px;
-	color: #{body_fg};
-	background-color: #{body_bg};
 	word-wrap: break-word;
 	white-space: pre;
 	white-space: pre-wrap;
 	white-space: -moz-pre-wrap;
 	white-space: -o-pre-wrap;
 }
+
+pre.textmate-source.#{theme_class} {
+	color: #{body_fg};
+	background-color: #{body_bg};
+}
+
 pre.textmate-source .linenum {
     width: 75px;
     padding-right: 1em;
@@ -181,6 +191,7 @@ def document_to_html(input, opt = {})
 
 	html = ''
 
+	theme_class = ''
 	if (!ENV['TM_SELECTED_TEXT'])
 		# If you declare a 'http://...' link as a TM_SOURCE_STYLESHEET
 		# shell variable, that will be used instead of generating a stylesheet
@@ -188,7 +199,7 @@ def document_to_html(input, opt = {})
 		if (ENV['TM_SOURCE_STYLESHEET'])
 			styles = "\t<link rel=\"stylesheet\" src=\"#{ENV['TM_SOURCE_STYLESHEET']}\" type=\"text/css\" />\n"
 		else
-			styles = generate_stylesheet_from_theme()
+			styles = generate_stylesheet_from_theme(theme_class)
 		end
 
 		# Head block
@@ -229,7 +240,9 @@ def document_to_html(input, opt = {})
 
 	code_html = number(code_html) if opt && opt['number']
 
-	html += "<pre class=\"textmate-source\">#{code_html}</pre>"
+	html += "<pre class=\"textmate-source"
+	html += " #{theme_class}" unless theme_class.empty?
+	html += "\">#{code_html}</pre>"
 
 	if (!ENV['TM_SELECTED_TEXT'])
 		# Closing

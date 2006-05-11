@@ -7,10 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-termchar = ";"
-if ENV['TM_LINE_TERMINATOR']
-	termchar = ENV['TM_LINE_TERMINATOR']
-end
+termchar = ENV['TM_LINE_TERMINATOR'] || ";"
 
 # short for escape_snippet - escapes special snippet characters in str
 def es(str)

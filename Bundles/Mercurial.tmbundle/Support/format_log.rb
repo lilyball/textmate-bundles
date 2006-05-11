@@ -1,5 +1,6 @@
 $bundle        = ENV['TM_BUNDLE_SUPPORT']
 $support       = ENV['TM_SUPPORT_PATH']
+$work_path     = ENV['WorkPath'] + "/"
 
 msg_count      = 0      # used to count messages and to show tables in alternate colors
 

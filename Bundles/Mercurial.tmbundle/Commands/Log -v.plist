@@ -7,6 +7,12 @@
 	<key>command</key>
 	<string>require_cmd "${TM_HG:=hg}" "If you have installed hg, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_HG&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
+
+if [[ -d "$TM_PROJECT_DIRECTORY" ]]
+   then export WorkPath="$TM_PROJECT_DIRECTORY"; cd "$TM_PROJECT_DIRECTORY"
+   else export WorkPath="$TM_DIRECTORY"; cd "$TM_DIRECTORY"
+fi
+      
 : ${TM_RUBY:=ruby}
 FORMAT_LOG="${TM_BUNDLE_SUPPORT}/format_log.rb"
 HG_STYLE="${TM_BUNDLE_SUPPORT}/map-cmdline.changelog"

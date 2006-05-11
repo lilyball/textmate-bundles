@@ -32,7 +32,7 @@ def tag_preview(selector_list)
 		tag.sub!(/#(.+)/, '');
 		tag.sub!(/\.(.+)/, '');
 		tag.sub!(/:.+/, '')
-		next if tag == '*'
+		next if tag == '*' or tag == '+'
 		if selector =~ /^[#.]/
 			case last_tag
 			when 'li'

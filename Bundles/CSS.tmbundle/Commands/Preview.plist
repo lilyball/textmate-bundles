@@ -15,7 +15,8 @@ def tag_preview(selector_list)
 	last_tag = ''
 	text_insert = "Generated preview for CSS selector #{selector_list}."
 	selectors.reverse.each do | selector |
-		tag = "#{selector}"
+		singlet = false
+		tag = selector.clone
 		if (tag =~ /#(.+)/)
 			id = (tag.scan(/#(.+)/))[0][0]
 		else
@@ -28,7 +29,7 @@ def tag_preview(selector_list)
 			cls = nil
 		end
 
-		tag.tr!('[A-Z]', '[a-z]')
+		tag.downcase!
 		tag.sub!(/#(.+)/, '');
 		tag.sub!(/\.(.+)/, '');
 		tag.sub!(/:.+/, '')
@@ -48,7 +49,14 @@ def tag_preview(selector_list)
 			end
 		end
 
+		if (tag =~ /\[(.+?)\]/)
+			tag_attr = (tag.scan(/\[(.+?)\]/))[0][0]
+			tag.gsub!(/\[.+?\]/, '')
+		else
+			tag_attr = nil
+		end
 		part = "&lt;" + tag
+		part += " #{tag_attr}" if tag_attr
 		part += " id=\"#{id}\"" if id
 		part += " class=\"#{cls}\"" if cls
 
@@ -57,23 +65,32 @@ def tag_preview(selector_list)
 		when 'img'
 			part += " src=\"http://www.google.com/intl/en/images/logo.gif\""
 			part += " alt=\"Preview of #{selector_list}\""
+			singlet = true
 		when 'a'
 			part += " href=\"\#\""
+		when 'input'
+			open_tag = part.clone
+			part += " type=\"radio\" /&gt; Radio"
+			part += "#{open_tag} type=\"checkbox\" /&gt; Checkbox&lt;br /&gt;"
+			part += "#{open_tag} type=\"text\" value=\"Text Field\" /&gt;"
+			part += "#{open_tag} type=\"button\" value=\"Button\""
+			singlet = true
 		end
 
-		# defaults for object tags?
-
-		part += "" if tag == 'img'
-		part += "&gt;"
-		part += html
-		part += "&lt;/" + tag + "&gt;"
+		if (singlet)
+			part += " /&gt;"
+		else
+			part += "&gt;"
+			part += html
+			part += "&lt;/" + tag + "&gt;"
+		end
 
 		case tag
 		when /^h\d/
 			text_insert = tag.sub(/^h(\d+)/, "Heading \\1")
 		when 'p'
 			text_insert = LIPSUM
-		when 'object', 'img'
+		when 'object', 'img', 'input'
 			text_insert = ""
 		end
 
@@ -101,8 +118,10 @@ def tag_preview(selector_list)
 end
 
 def preview_css(str)
-	orig_css = "#{str}"
+	orig_css = str.clone
 	orig_css.gsub!(/&lt;.+?&gt;/, '')
+	orig_css.gsub!(/&amp;lt;\/?style\b.*?&amp;gt;/m, '')
+	orig_css.strip!
 
 	#meta.selector.css -&gt; wraps the selector
 	#meta.property-list.css -&gt; wraps the properties
@@ -142,6 +161,8 @@ end
 
 print preview_css(STDIN.read)
 </string>
+	<key>fallbackInput</key>
+	<string>scope</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>inputFormat</key>

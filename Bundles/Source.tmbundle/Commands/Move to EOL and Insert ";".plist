@@ -7,12 +7,17 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
+termchar = ";"
+if ENV['TM_LINE_TERMINATOR']
+	termchar = ENV['TM_LINE_TERMINATOR']
+end
+
 # short for escape_snippet - escapes special snippet characters in str
 def es(str)
 	str.to_s.gsub(/([$`\\])/, "\\\\\\1")
 end
 
-puts es($stdin.read()[/^(.*?);*\s*$/, 1]) + ";$0"</string>
+print es($stdin.read()[/^(.*?);*\s*$/, 1]) + "#{es(termchar)}$0"</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
@@ -20,7 +25,7 @@ puts es($stdin.read()[/^(.*?);*\s*$/, 1]) + ";$0"</string>
 	<key>keyEquivalent</key>
 	<string>~@</string>
 	<key>name</key>
-	<string>Move to EOL and Insert ";"</string>
+	<string>Move to EOL and Insert Terminator</string>
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>

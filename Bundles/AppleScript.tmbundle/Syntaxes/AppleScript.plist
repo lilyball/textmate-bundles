@@ -48,9 +48,17 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#standard-additions</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#rules</string>
 				</dict>
 			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#standard-additions</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -119,6 +127,66 @@
 							<string>constant.character.escaped.applescript</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>standard-additions</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(info for|list (disks|folder)|mount volume|path to( resource)?)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.file.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(beep|choose (application|color|file( name)?|folder|from list|remote application|URL)|delay|display (alert|dialog)|say)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.user-interaction.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(ASCII (character|number)|localized string|offset|summarize)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.string.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(set the clipboard to|the clipboard|clipboard info)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.clipboard.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(open for access|close access|read|write|get eof|set eof)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.file-i/o.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b((load|store|run) script|scripting components)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.scripting.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(current date|do shell script|get volume settings|random number|round|set volume|system attribute|system info|time to GMT)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.miscellaneous.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(opening folder|(closing|moving) folder window for|adding folder items to|removing folder items from)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.folder-actions.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(open location|handle CGI request)\b</string>
+					<key>name</key>
+					<string>support.function.standard-additions.internet.applescript</string>
 				</dict>
 			</array>
 		</dict>

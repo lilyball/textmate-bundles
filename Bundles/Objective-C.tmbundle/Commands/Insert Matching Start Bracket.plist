@@ -29,6 +29,12 @@ Enjoy the fishness.
 
 Rob
 
+Cases not handled (but which shouldn’t be ambiguous):
+
+   foo-&gt;field method^              =&gt;   foo-[&gt;field method]
+   fun(@"foo", obj method:@"str"^) =&gt;   [fun(@"foo", obj method:@"str"])
+
+
 =end
 
 $line = STDIN.read

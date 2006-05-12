@@ -4,9 +4,9 @@
 <dict>
 	<key>content</key>
 	<string>[% IF ${1:condition} %]
-    $0
+	$2
 [% ELSE %]
-
+	$3
 [% END %]</string>
 	<key>name</key>
 	<string>if</string>

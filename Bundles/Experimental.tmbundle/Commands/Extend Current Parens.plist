@@ -15,8 +15,36 @@ end
 
 # given a string, insert an open parenthesis in the first, best
 # spot starting from the end
-def insert_open(str)
-	str.sub(/(.*)\b([(a-z0-9]+.*?)$/i, "\\1(\\2")
+def insert_open(str)	
+	# this needs to be done as a state machine so we can properly jump
+	# paren groups
+	prev = nil
+	cur = nil
+	closuredepth = 0
+	(str.length - 1).downto(0) do |i|
+		prev = cur
+		cur = str[i].chr()
+		
+		if prev != nil
+			if prev == '('
+				closuredepth -= 1
+			elsif prev == ')'
+				closuredepth += 1
+			end
+			
+			# look for the start of a token next to a boundary
+			if closuredepth == 0 and "#{cur}#{prev}" =~ /(\b|\s)[a-zA-Z0-9\(]$/
+				return str[0..i] + '(' + str[i+1..-1]
+			end
+		end
+	end
+	
+	# if we bailed, check for start of str positioning
+	if str =~ /^[a-zA-Z0-9\(]/
+		return '(' + str
+	else
+		return str	
+	end
 end
 
 
@@ -39,7 +67,10 @@ if currentchar == ')'
 		# at a depth of zero we should be sitting on the opening paren
 		if depth == 0
 			parenindex = [(index - 3 - i), 0].max()
-			firstpart = insert_open(line[0..parenindex])
+			firstpart = line[0].chr()
+			if parenindex &gt; 0
+				firstpart = insert_open(line[0..parenindex])
+			end
 			if firstpart == line[0..parenindex]
 				line = es(line[0..(index)]) + '$0' + es(line[(index + 1)..-1])
 				break

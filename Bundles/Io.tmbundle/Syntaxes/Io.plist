@@ -26,9 +26,9 @@
 				</dict>
 			</dict>
 			<key>comment</key>
-			<string>we match this to overload return inside () --Allan</string>
+			<string>we match this to overload return inside () --Allan; scoping rules for what gets the scope have changed, so we now group the ) instead of the ( -- Rob</string>
 			<key>match</key>
-			<string>(\()\)</string>
+			<string>\((\))</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -40,9 +40,9 @@
 				</dict>
 			</dict>
 			<key>comment</key>
-			<string>We want to do the same for ,) -- Seckar</string>
+			<string>We want to do the same for ,) -- Seckar; same as above -- Rob</string>
 			<key>match</key>
-			<string>(\,)\)</string>
+			<string>\,(\))</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -72,11 +72,11 @@
 		</dict>
 		<dict>
 			<key>comment</key>
-			<string>I wonder if some of this isn't variable.other.language? --Allan</string>
+			<string>I wonder if some of this isn't variable.other.language? --Allan; scoping this as variable.language to match Objective-C's handling of 'self', which is inconsistent with C++'s handling of 'this' but perhaps intentionally so -- Rob</string>
 			<key>match</key>
-			<string>\b(self|sender|target|proto|protos)\b</string>
+			<string>\b(self|sender|target|proto|protos|parent)\b</string>
 			<key>name</key>
-			<string>keyword.other.io</string>
+			<string>variable.language.io</string>
 		</dict>
 		<dict>
 			<key>match</key>

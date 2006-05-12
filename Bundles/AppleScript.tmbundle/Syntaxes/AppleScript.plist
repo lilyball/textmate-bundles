@@ -11,6 +11,7 @@
 	<string>(?x)
 		^\s*
 		(tell \s+ (?! .* \b to \b) .*
+		|using \s+ terms \s+ from \s+ .*
 		|if\b .* \bthen \b .*
 		|repeat\b .*
 		|( on | to ) \b .*
@@ -84,7 +85,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(on error|try|set|copy|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout)|end|return|of|my|whose)\b</string>
+					<string>\b(on error|try|set|copy|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|end|return|of|my|whose)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>

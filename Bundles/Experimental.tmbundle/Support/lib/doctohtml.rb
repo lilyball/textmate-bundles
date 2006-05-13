@@ -38,7 +38,8 @@ def to_rgba(color)
 	return "rgba(#{r}, #{g}, #{b}, #{ format '%0.02f', a / 255.0 })"
 end
 
-def generate_stylesheet_from_theme(theme_class)
+def generate_stylesheet_from_theme(theme_class = nil)
+	theme_class = '' if theme_class == nil
 	require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
 	# Load TM preferences to discover the current theme and font settings
@@ -76,6 +77,7 @@ def generate_stylesheet_from_theme(theme_class)
 	body_fg = ''
 	body_bg = ''
 	selection_bg = ''
+	pre_selector = "pre.textmate-source.#{theme_class}"
 
 	theme_plist['settings'].each do | setting |
 		if (!setting['name'] and setting['settings'])
@@ -84,17 +86,17 @@ def generate_stylesheet_from_theme(theme_class)
 			selection_bg = setting['settings']['selection']
 			body_bg = to_rgba(body_bg) if body_bg =~ /#.{8}/
 			body_fg = to_rgba(body_fg) if body_fg =~ /#.{8}/
-			selection_bg = to_rgba(selection_bg) if selection_bg &&
-				(selection_bg =~ /#.{8}/)
+			selection_bg = to_rgba(selection_bg) if selection_bg && selection_bg =~ /#.{8}/
 			next
 		end
 		next unless setting['name'] and setting['scope']
 		theme_styles += "/* " + setting['name'] + " */\n"
 		scope_name = setting['scope']
 		scope_name.gsub! /(^|[ ])-[^ ]+/, '' # strip negated scopes
-		scope_name.gsub! /\./, '_'
+		scope_name.gsub! /\./, '_' # change inner '.' to '_'
 		scope_name.gsub! /(^|[ ])/, '\1.'
-		theme_styles += "pre.textmate-source.#{theme_class} #{scope_name} {\n"
+		scope_name.gsub! /(^|,\s+)/m, '\1' + pre_selector + ' '
+		theme_styles += "#{scope_name} {\n"
 		if (color = setting['settings']['foreground'])
 			color = to_rgba(color) if color =~ /#.{8}/
 			theme_styles += "\tcolor: " + color + ";\n"
@@ -114,7 +116,7 @@ def generate_stylesheet_from_theme(theme_class)
 	if (selection_bg)
 		# currently, -moz-selection doesn't appear to support alpha transparency
 		# so, i'm not assigning it until it does.
-		selection_style = "pre.textmate-source.#{theme_class} ::selection {
+		selection_style = "#{pre_selector} ::selection {
 	background-color: #{selection_bg};
 }"
 	else

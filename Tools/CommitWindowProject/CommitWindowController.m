@@ -256,7 +256,7 @@
 	NSUserDefaults *  	defaults		= [NSUserDefaults standardUserDefaults];
 	NSString *			latestSummary	= [fCommitMessage string];
 	
-	NSLog(@"%s%@", _cmd, latestSummary);
+//	NSLog(@"%s%@", _cmd, latestSummary);
 	
 	// avoid empty string
 	if( ! [latestSummary isEqualToString:@""] )

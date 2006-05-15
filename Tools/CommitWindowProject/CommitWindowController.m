@@ -7,10 +7,11 @@
 //
 
 #import "CommitWindowController.h"
-
-//FIX ME HIServices/Processes.h doesn't work -- is this a Tiger-specific problem?
-#import </System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/Headers/HIServices.h>
 #import "VersionControlColors.h"
+
+@interface CommitWindowController (Private)
+- (void) populatePreviousSummaryMenu;
+@end
 
 @implementation CommitWindowController
 
@@ -63,7 +64,7 @@
 		}
 		else if( [argument isEqualToString:@"--status"] )
 		{
-			// Next argument should be a colon-seperated list of status strings, one for each path, in order
+			// Next argument should be a colon-seperated list of status strings, one for each path
 			if( i >= (argc - 1) )
 			{
 				fprintf(stderr, "commit window: missing text: --status \"A:D:M:M:M\"\n");
@@ -77,9 +78,23 @@
 		else
 		{
 			NSMutableDictionary *	dictionary	= [fFilesController newObject];
+			BOOL					itemSelectedForCommit;
 
 			[dictionary setObject:[argument stringByAbbreviatingWithTildeInPath] forKey:@"path"];
-	//		[dictionary setObject:[NSNumber numberWithBool:YES] forKey:@"commit"]; not needed; the binding defaults to YES
+			if( fFileStatusStrings != nil )
+			{
+				// Deselect external commits by default
+				if([[fFileStatusStrings objectAtIndex:[[fFilesController content] count]] hasPrefix:@"X"])
+				{
+					itemSelectedForCommit = NO;
+				}
+				else
+				{
+					itemSelectedForCommit = YES;
+				}
+				[dictionary setObject:[NSNumber numberWithBool:itemSelectedForCommit] forKey:@"commit"]; 
+			}
+	
 			[fFilesController addObject:dictionary];
 		}
 	}
@@ -99,6 +114,11 @@
 	
 	[fFilesController objectDidEndEditing:nil];
 
+	
+	//
+	// Populate previous summary menu
+	//
+	[self populatePreviousSummaryMenu];
 
 	//
 	// Map the enter key to the OK button
@@ -160,12 +180,131 @@
 		}
 	}
 	
-	
 	// center again after resize
 	[fWindow center];
 	[fWindow makeKeyAndOrderFront:self];
 	
 }
+
+#if 0
+#pragma mark -
+#pragma mark Summary save/restore
+#endif
+
+#define kMaxSavedSummariesCount					5
+#define kDisplayCharsOfSummaryInMenuItemCount	30
+#define kPreviousSummariesKey					"prev-summaries"
+#define kPreviousSummariesItemTitle				"Previous Summaries"
+
+- (void) populatePreviousSummaryMenu
+{
+	NSUserDefaults *  	defaults		= [NSUserDefaults standardUserDefaults];
+	NSArray *			summaries		= [defaults arrayForKey:@kPreviousSummariesKey];
+	
+	if( summaries == nil )
+	{
+		// No previous summaries, no menu
+		[fPreviousSummaryPopUp setEnabled:NO];
+	}
+	else
+	{
+		NSMenu *			menu = [[NSMenu alloc] initWithTitle:@kPreviousSummariesItemTitle];
+		NSMenuItem *		item;
+
+		unsigned int	summaryCount = [summaries count];
+		unsigned int	index;
+
+		// PopUp title
+		[menu addItemWithTitle:@kPreviousSummariesItemTitle action:@selector(restoreSummary:) keyEquivalent:@""];
+		
+		for(index = 0; index < summaryCount; index += 1)
+		{
+			NSString *	summary = [summaries objectAtIndex:index];
+			NSString *	itemName;
+			
+			itemName = summary;
+			
+			// Limit length of menu item names
+			if( [itemName length] > kDisplayCharsOfSummaryInMenuItemCount )
+			{
+				itemName = [itemName substringToIndex:kDisplayCharsOfSummaryInMenuItemCount];
+				
+				// append ellipsis
+				itemName = [itemName stringByAppendingFormat: @"%C", 0x2026];
+			}
+
+			item = [menu addItemWithTitle:itemName action:@selector(restoreSummary:) keyEquivalent:@""];
+			[item setTarget:self];
+			
+			[item setRepresentedObject:summary];
+		}
+
+		[fPreviousSummaryPopUp setMenu:menu];
+	}
+}
+
+- (void) restoreSummary:(id)sender
+{
+	NSString *	summary = [sender representedObject];
+
+	[fCommitMessage setString:summary];
+}
+
+// Save, in an LRU list, the most recent commit summary
+- (void) saveSummary
+{
+	NSUserDefaults *  	defaults		= [NSUserDefaults standardUserDefaults];
+	NSString *			latestSummary	= [fCommitMessage string];
+	
+	NSLog(@"%s%@", _cmd, latestSummary);
+	
+	// avoid empty string
+	if( ! [latestSummary isEqualToString:@""] )
+	{
+		NSArray *			oldSummaries = [defaults arrayForKey:@kPreviousSummariesKey];
+		NSMutableArray *	newSummaries;
+
+		if( oldSummaries != nil )
+		{
+			unsigned int	oldIndex;
+			
+			newSummaries = [oldSummaries mutableCopy];
+			
+			// Already in the array? Move it to latest position
+			oldIndex = [newSummaries indexOfObject:latestSummary];
+			if( oldIndex != NSNotFound )
+			{
+				[newSummaries exchangeObjectAtIndex:oldIndex withObjectAtIndex:[newSummaries count] - 1];
+			}
+			else
+			{
+				// Add object, remove oldest object
+				[newSummaries addObject:latestSummary];
+				if( [newSummaries count] > kMaxSavedSummariesCount )
+				{
+					[newSummaries removeObjectAtIndex:0];
+				}
+			}
+		}
+		else
+		{
+			// First time
+			newSummaries = [NSMutableArray arrayWithObject:latestSummary];
+		}
+
+		[defaults setObject:newSummaries forKey:@kPreviousSummariesKey];
+
+		// Write the defaults to disk
+		[defaults synchronize];
+	}
+}
+
+#if 0
+#pragma mark -
+#pragma mark Actions
+#endif
+
+
 
 - (IBAction) commit:(id) sender
 {
@@ -173,6 +312,8 @@
 	int					i;
 	int					pathsToCommitCount = 0;
 	NSMutableString *	commitString;
+	
+	[self saveSummary];
 	
 	//
 	// Quote any single-quotes in the commit message
@@ -227,6 +368,8 @@
 
 - (IBAction) cancel:(id) sender
 {
+	[self saveSummary];
+		
 	fprintf(stdout, "commit window: cancel\n");
 	exit(-128);
 }

@@ -13,9 +13,13 @@
 {
 //	NSMutableArray *	fFiles;		// {@"commit", @"path"}
 	IBOutlet NSArrayController *	fFilesController;
+
+	IBOutlet NSWindow *				fWindow;
+
 	IBOutlet NSTextField *			fRequestText;
 	IBOutlet NSTextView *			fCommitMessage;
-	IBOutlet NSWindow *				fWindow;
+	IBOutlet NSPopUpButton *		fPreviousSummaryPopUp;
+
 	IBOutlet NSButton *				fCancelButton;
 	IBOutlet NSButton *				fOKButton;
 

@@ -75,7 +75,7 @@
 			<key>end</key>
 			<string>^$</string>
 			<key>name</key>
-			<string>markup.other.blockquote.textile</string>
+			<string>markup.quote.textile</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -283,14 +283,14 @@
 				<dict>
 					<key>captures</key>
 					<dict>
-						<key>2</key>
+						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.class.textile</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\B\*\*?((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\*\*?\B</string>
+					<string>\B(\*\*?)((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\1\B</string>
 					<key>name</key>
 					<string>markup.bold.textile</string>
 				</dict>
@@ -332,7 +332,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;!\w)((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)_(?!\w)</string>
+					<string>(?:\b|\s)_((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)_(?:\b|\s)</string>
 					<key>name</key>
 					<string>markup.italic.textile</string>
 				</dict>

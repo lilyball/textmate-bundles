@@ -75,40 +75,55 @@
 			argument	= [args objectAtIndex:i];
 			fFileStatusStrings = [[argument componentsSeparatedByString:@":"] retain];
 		}
+		else if( [argument isEqualToString:@"--diff-cmd"] )
+		{
+			// Next argument should be a colon-seperated list of status strings, one for each path
+			if( i >= (argc - 1) )
+			{
+				fprintf(stderr, "commit window: missing text: --diff-cmd \"/usr/bin/svn\"\n");
+				[self cancel:nil];
+			}
+			
+			i += 1;
+			argument	= [args objectAtIndex:i];
+			fDiffCommand = [argument retain];
+		}
 		else
 		{
 			NSMutableDictionary *	dictionary	= [fFilesController newObject];
-			BOOL					itemSelectedForCommit;
 
 			[dictionary setObject:[argument stringByAbbreviatingWithTildeInPath] forKey:@"path"];
-			if( fFileStatusStrings != nil )
-			{
-				// Deselect external commits by default
-				if([[fFileStatusStrings objectAtIndex:[[fFilesController content] count]] hasPrefix:@"X"])
-				{
-					itemSelectedForCommit = NO;
-				}
-				else
-				{
-					itemSelectedForCommit = YES;
-				}
-				[dictionary setObject:[NSNumber numberWithBool:itemSelectedForCommit] forKey:@"commit"]; 
-			}
-	
 			[fFilesController addObject:dictionary];
 		}
 	}
 	
 	//
 	// Done processing arguments, now add status to each item
+	// 								and choose default commit state
 	//
 	if( fFileStatusStrings != nil )
 	{
-		NSArray * files = [fFilesController arrangedObjects];
-		for( i = 0; i < MIN([files count], [fFileStatusStrings count]); i += 1 )
+		NSArray *	files = [fFilesController arrangedObjects];
+		int			count = MIN([files count], [fFileStatusStrings count]);
+		
+		for( i = 0; i < count; i += 1 )
 		{
 			NSMutableDictionary *	dictionary = [files objectAtIndex:i];
-			[dictionary setObject:[fFileStatusStrings objectAtIndex:i] forKey:@"status"];
+			NSString *				status = [fFileStatusStrings objectAtIndex:i];
+			BOOL					itemSelectedForCommit;
+			
+			[dictionary setObject:status forKey:@"status"];
+
+			// Deselect external commits by default
+			if([status hasPrefix:@"X"])
+			{
+				itemSelectedForCommit = NO;
+			}
+			else
+			{
+				itemSelectedForCommit = YES;
+			}
+			[dictionary setObject:[NSNumber numberWithBool:itemSelectedForCommit] forKey:@"commit"]; 
 		}
 	}
 	
@@ -119,6 +134,9 @@
 	// Populate previous summary menu
 	//
 	[self populatePreviousSummaryMenu];
+
+	[fTableView setTarget:self];
+	[fTableView setDoubleAction:@selector(doubleClickRowInTable:)];
 
 	//
 	// Map the enter key to the OK button
@@ -250,13 +268,11 @@
 	[fCommitMessage setString:summary];
 }
 
-// Save, in an LRU list, the most recent commit summary
+// Save, in a MRU list, the most recent commit summary
 - (void) saveSummary
 {
 	NSUserDefaults *  	defaults		= [NSUserDefaults standardUserDefaults];
 	NSString *			latestSummary	= [fCommitMessage string];
-	
-//	NSLog(@"%s%@", _cmd, latestSummary);
 	
 	// avoid empty string
 	if( ! [latestSummary isEqualToString:@""] )
@@ -374,6 +390,21 @@
 	exit(-128);
 }
 
+- (IBAction) doubleClickRowInTable:(id)sender
+{
+	if(fDiffCommand != nil)
+	{
+		NSString *	filePath	= [[[fFilesController arrangedObjects] objectAtIndex:[sender selectedRow]] objectForKey:@"path"];
+		NSString *	command		= [NSString stringWithFormat:@"\"%@\" diff \"%@\" | \"%s/bin/mate\" &> /dev/null &",
+									fDiffCommand,
+									filePath,
+									getenv("TM_SUPPORT_PATH")];
+
+		system([command UTF8String]);
+	}
+	
+}
+
 //
 // Attempt to mirror the appearance of the status and info displays
 //
@@ -389,20 +420,11 @@
 		NSColor *				foreColor;
 		NSColor *				backColor;
 
-		backColor = BackColorFromStatus(status);
+		ColorsFromStatus( status, &foreColor, &backColor );
 		
 		[cell setDrawsBackground:YES];
 		[cell setBackgroundColor:backColor];
-		
-		if( tableColumn == fStatusColumn )
-		{
-			foreColor = ForeColorFromStatus(status);
-			[cell setTextColor:foreColor];
-		}
-		else
-		{
-			[cell setTextColor:[NSColor blackColor]];
-		}
+		[cell setTextColor:foreColor];
 	}
 }
 

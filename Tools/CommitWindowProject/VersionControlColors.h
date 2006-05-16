@@ -32,51 +32,36 @@ OneShotNSColorFromTriplet(BackColorForFileConflict,		0xA3, 0xCE, 0xD0)
 OneShotNSColorFromTriplet(ForeColorForFileIgnore,		0x80, 0x00, 0x80)
 OneShotNSColorFromTriplet(BackColorForFileIgnore,		0xED, 0xAE, 0xF5)
 
+OneShotNSColorFromTriplet(ForeColorForExternal,			0xFF, 0xFF, 0xFF)
+OneShotNSColorFromTriplet(BackColorForExternal,			0x00, 0x00, 0x00)
 
-static inline NSColor * ForeColorFromStatus( NSString * status )
+
+static inline void ColorsFromStatus( NSString * status, NSColor ** foreColor, NSColor ** backColor )
 {
-	NSColor *	outColor = nil;
-
 	if([status isEqualToString:@"M"])
 	{
-		outColor = ForeColorForFileModified();
+		*foreColor = ForeColorForFileModified();
+		*backColor = BackColorForFileModified();
+	}
+	else if([status isEqualToString:@"X"])
+	{
+		*foreColor = ForeColorForExternal();
+		*backColor = BackColorForExternal();
 	}
 	else if([status isEqualToString:@"A"])
 	{
-		outColor = ForeColorForFileAdded();
+		*foreColor = ForeColorForFileAdded();
+		*backColor = BackColorForFileAdded();
 	}
-	else if([status isEqualToString:@"D"])
+	else if([status isEqualToString:@"D"]
+		|| [status isEqualToString:@"R"])
 	{
-		outColor = ForeColorForFileDeleted();
+		*foreColor = ForeColorForFileDeleted();
+		*backColor = BackColorForFileDeleted();
 	}
 	else
 	{
-		outColor = [NSColor controlTextColor];
+		*foreColor = [NSColor controlTextColor];
+		*backColor = [NSColor controlBackgroundColor];
 	}
-
-	return outColor;
-}
-
-static inline NSColor * BackColorFromStatus( NSString * status )
-{
-	NSColor *	outColor = nil;
-
-	if([status isEqualToString:@"M"])
-	{
-		outColor = BackColorForFileModified();
-	}
-	else if([status isEqualToString:@"A"])
-	{
-		outColor = BackColorForFileAdded();
-	}
-	else if([status isEqualToString:@"D"])
-	{
-		outColor = BackColorForFileDeleted();
-	}
-	else
-	{
-		outColor = [NSColor controlBackgroundColor];
-	}
-
-	return outColor;
 }

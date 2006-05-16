@@ -2,7 +2,7 @@
     IBClasses = (
         {CLASS = CWTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {
-            ACTIONS = {cancel = id; commit = id; }; 
+            ACTIONS = {cancel = id; commit = id; doubleClickFileTable = id; }; 
             CLASS = CommitWindowController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
@@ -15,6 +15,7 @@
                 fPreviousSummaryPopUp = NSPopUpButton; 
                 fRequestText = NSTextField; 
                 fStatusColumn = NSTableColumn; 
+                fTableView = NSTableView; 
                 fWindow = NSWindow; 
             }; 
             SUPERCLASS = NSWindowController; 

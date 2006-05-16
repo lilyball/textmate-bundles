@@ -23,9 +23,12 @@
 	IBOutlet NSButton *				fCancelButton;
 	IBOutlet NSButton *				fOKButton;
 
+	IBOutlet NSTableView *			fTableView;
 	IBOutlet NSTableColumn *		fCheckBoxColumn;
 	IBOutlet NSTableColumn *		fStatusColumn;
 	IBOutlet NSTableColumn *		fPathColumn;
+
+	NSString *						fDiffCommand;
 	
 	NSArray *						fFileStatusStrings;
 }

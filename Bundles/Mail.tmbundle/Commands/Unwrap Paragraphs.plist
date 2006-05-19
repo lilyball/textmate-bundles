@@ -38,11 +38,7 @@ end
 
 par_bounds.uniq!.each_with_index do |i, idx|
   j = idx+1 &lt; par_bounds.size ? par_bounds[idx+1] : lines.size
-  if i+1 == j then
-    print lines[i]
-  else
-    puts reformat_lines(lines[i...j])
-  end
+  puts reformat_lines(lines[i...j])
 end
 </string>
 	<key>input</key>

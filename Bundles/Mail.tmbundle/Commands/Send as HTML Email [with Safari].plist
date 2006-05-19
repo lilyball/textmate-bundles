@@ -6,10 +6,20 @@
 	<string>nop</string>
 	<key>command</key>
 	<string># This requires that 'enable access for assistive devices' is enabled
-# 
-open -a Safari "$TM_FILEPATH"
+
+# Create a temporary file so that this works with unsaved documents
+TM_TMPFILE="$(mktemp /tmp/tm_mail_XXXXXX).html" || exit
+
+# Create a title based on the filename, if there is one
+TM_TITLE=${TM_FILENAME:-untitled}
+
+cat   &gt;"$TM_TMPFILE"
+echo &gt;&gt;"$TM_TMPFILE" "&lt;title&gt;${TM_TITLE%.*}&lt;/title&gt;"
+
+open -a Safari "$TM_TMPFILE"
 osascript -e 'activate application "Safari.app"' -e 'tell application "System Events"' -e ' tell process "Safari"' -e ' keystroke "i" using {command down}' -e ' end tell' -e 'end tell' -e 'tell the application "Safari" to close window 1'
-</string>
+
+rm -f "$TM_TMPFILE" "${TM_TMPFILE%.html}"</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
@@ -17,7 +27,7 @@ osascript -e 'activate application "Safari.app"' -e 'tell application "System Ev
 	<key>name</key>
 	<string>Send as HTML Email [With Safari]</string>
 	<key>output</key>
-	<string>insertAsSnippet</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>text.html</string>
 	<key>uuid</key>

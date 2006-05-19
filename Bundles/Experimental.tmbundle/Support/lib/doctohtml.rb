@@ -53,6 +53,7 @@ def generate_stylesheet_from_theme(theme_class = nil)
 		abort
 	end
 
+	theme_comment = theme_plist['comment']
 	theme_name = theme_plist['name']
 	theme_class.replace(theme_name)
 	theme_class.downcase!
@@ -124,7 +125,12 @@ def generate_stylesheet_from_theme(theme_class = nil)
 	end
 
 	return <<EOT
-/* Stylesheet generated from TextMate theme: #{theme_name} */
+/* Stylesheet generated from TextMate theme
+ *
+ * #{theme_name}
+ * #{theme_comment}
+ *
+ */
 
 /* Mostly to improve view within the TextMate HTML viewer */
 body {
@@ -137,7 +143,7 @@ pre.textmate-source {
 	padding: 0;
 	font-family: #{font_name}, monospace;
 	font-size: #{font_size}px;
-	line-height: #{font_size}px;
+	line-height: 1.3em;
 	word-wrap: break-word;
 	white-space: pre;
 	white-space: pre-wrap;
@@ -151,10 +157,14 @@ pre.textmate-source.#{theme_class} {
 }
 
 pre.textmate-source .linenum {
-    width: 75px;
-    padding-right: 1em;
-    color: #888;
-    background-color: #eee;
+	width: 75px;
+	padding: 0.1em 1em 0.2em 0;
+	color: #888;
+	background-color: #eee;
+}
+pre.textmate-source.#{theme_class} span {
+   padding-top: 0.2em;
+   padding-bottom: 0.1em;
 }
 #{selection_style}
 #{theme_styles}
@@ -205,7 +215,8 @@ def document_to_html(input, opt = {})
 		end
 
 		# Head block
-		html = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
+		html = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
 	\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
 
 <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">

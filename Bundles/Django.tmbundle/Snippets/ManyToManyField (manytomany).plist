@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:FIELDNAME} = models.ImageField(upload_to="${2:/dir/path}"${3:, height_field=$4}${5:, width_field=$6})</string>
+	<string>${1:FIELDNAME} = models.ManyToManyField(${2:RELATED_MODEL})</string>
 	<key>name</key>
-	<string>ImageField (image)</string>
+	<string>ManyToManyField (manytomany)</string>
 	<key>scope</key>
 	<string>source.python.django</string>
 	<key>tabTrigger</key>
-	<string>image</string>
+	<string>manytomany</string>
 	<key>uuid</key>
-	<string>1E41208D-8E7E-42ED-A23C-376075EC6ADB</string>
+	<string>449AB31C-BAB7-4D30-AF04-6A070CBE4EF4</string>
 </dict>
 </plist>

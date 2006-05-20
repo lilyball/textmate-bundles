@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:FIELDNAME} = models.ImageField(upload_to="${2:/dir/path}"${3:, height_field=$4}${5:, width_field=$6})</string>
+	<string>${1:FIELDNAME} = models.URLField(${2:blank=True}, verify_exists=${3:True})</string>
 	<key>name</key>
-	<string>ImageField (image)</string>
+	<string>URLField (url)</string>
 	<key>scope</key>
 	<string>source.python.django</string>
 	<key>tabTrigger</key>
-	<string>image</string>
+	<string>url</string>
 	<key>uuid</key>
-	<string>1E41208D-8E7E-42ED-A23C-376075EC6ADB</string>
+	<string>4D06CE4E-A856-4607-8D58-A03ED5EB90B1</string>
 </dict>
 </plist>

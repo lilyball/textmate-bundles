@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:FIELDNAME} = models.ImageField(upload_to="${2:/dir/path}"${3:, height_field=$4}${5:, width_field=$6})</string>
+	<string>${1:slug} = models.SlugField(${2:prepopulate_from=("$3",$4)})</string>
 	<key>name</key>
-	<string>ImageField (image)</string>
+	<string>SlugField (slug)</string>
 	<key>scope</key>
 	<string>source.python.django</string>
 	<key>tabTrigger</key>
-	<string>image</string>
+	<string>slug</string>
 	<key>uuid</key>
-	<string>1E41208D-8E7E-42ED-A23C-376075EC6ADB</string>
+	<string>8F14D580-0910-40DE-95B4-10825F3CD656</string>
 </dict>
 </plist>

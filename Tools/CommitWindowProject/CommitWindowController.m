@@ -229,13 +229,14 @@
 		NSMenu *			menu = [[NSMenu alloc] initWithTitle:@kPreviousSummariesItemTitle];
 		NSMenuItem *		item;
 
-		unsigned int	summaryCount = [summaries count];
-		unsigned int	index;
+		int	summaryCount = [summaries count];
+		int	index;
 
 		// PopUp title
 		[menu addItemWithTitle:@kPreviousSummariesItemTitle action:@selector(restoreSummary:) keyEquivalent:@""];
 		
-		for(index = 0; index < summaryCount; index += 1)
+		// Add items in reverse-chronological order
+		for(index = (summaryCount - 1); index >= 0; index -= 1)
 		{
 			NSString *	summary = [summaries objectAtIndex:index];
 			NSString *	itemName;

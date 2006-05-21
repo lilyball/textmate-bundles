@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+line = ENV['TM_CURRENT_LINE']
+if line =~ /^\s*(NS(?:Mutable)?([A-Za-z_0-9]+))\s*\*\s*[A-Za-z_][A-Za-z_0-9]*\s*$/ then
+	klass = $1
+	method = $2[0..0].downcase + $2[1..-1]
+	space = if line[-1..-1] =~ /\s/ then '' else ' ' end
+	print "#{space}= [#{klass} #{method}];"
+end</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^=</string>
+	<key>name</key>
+	<string>Insert Object Instantiation</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>scope</key>
+	<string>source.objc, source.objc++</string>
+	<key>uuid</key>
+	<string>FEB8D9A0-AC6A-4409-B352-D032D7E7445A</string>
+</dict>
+</plist>

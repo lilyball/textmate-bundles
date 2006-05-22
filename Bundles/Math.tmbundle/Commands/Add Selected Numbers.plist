@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>printf " = %s" `{ tr -d ,|tr -cs '[0-9.]' ' '|perl -pe 's/([0-9.]+) (?=[0-9.])/$1+/g'; echo; } | bc -l`| perl -pe 's/(\.[^0]+)0+$|\.0+$/$1/'</string>
+	<string>#!/usr/bin/env ruby
+
+puts " = " + $stdin.read.scan(/\b([0-9]+(?:\.[0-9]+)?)\b/).inject(0.0) { |t,s| t + s[0].to_f() }.to_s[/^.*(?=(\.0$)?)/]</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

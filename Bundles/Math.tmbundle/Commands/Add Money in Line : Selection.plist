@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+content = $stdin.read()
+
+numbers = []
+moneyregex = /\$([0-9]+(\.[0-9]{2})?)\b/
+content.each_line() do |line|
+	match = moneyregex.match(line)
+	while match
+		numbers &lt;&lt; match[1]
+		match = moneyregex.match(match.post_match)
+	end
+end
+
+fp = IO.popen("bc -l", 'r+')
+fp.puts(numbers.join(' + '))
+answer = fp.gets()
+fp.close()
+
+puts " = #{answer}"</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^C</string>
+	<key>name</key>
+	<string>Add Money in Line / Selection</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>uuid</key>
+	<string>4BDDCE4F-634B-4BAD-BAB5-6B5754F38EAA</string>
+</dict>
+</plist>

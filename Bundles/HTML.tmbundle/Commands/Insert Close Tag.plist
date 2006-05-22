@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+doc = STDIN.read
+line = ENV['TM_LINE_NUMBER'].to_i
+line_index = ENV['TM_LINE_INDEX'].to_i
+
+before = doc.match(/(.*\n){#{line-1}}.{#{line_index}}/)[0]
+before.gsub!(/&lt;(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param)\b[^&gt;]*&gt;|&lt;[^&gt;]+\/\s*&gt;/, '') # remove all self-closing tags
+
+stack = [ ]
+before.scan(/&lt;\s*(\/)?\s*(\w[\w:-]*)[^&gt;]*&gt;/) do |m|
+  if m[0].nil? then
+    stack &lt;&lt; m[1]
+  else
+    until stack.empty? do
+      close_tag = stack.pop
+      break if close_tag == m[1]
+    end
+  end
+end
+
+if stack.empty? then
+  %x{ osascript -e beep &amp;&gt;/dev/null &amp; }
+else
+  print "&lt;/#{stack.pop}&gt;"
+end</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>~@.</string>
+	<key>name</key>
+	<string>Insert Close Tag</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>uuid</key>
+	<string>0658019F-3635-462E-AAC2-74E4FE508A9B</string>
+</dict>
+</plist>

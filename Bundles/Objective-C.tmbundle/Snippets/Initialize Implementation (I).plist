@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>+ (void)initialize
+{
+	[[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+		$0@"value", @"key",
+		nil]];
+}
+</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Initialize Implementation (I)</string>
+	<key>scope</key>
+	<string>source.objc meta.implementation, source.objc++ meta.implementation</string>
+	<key>tabTrigger</key>
+	<string>I</string>
+	<key>uuid</key>
+	<string>366DBAB0-554B-4A38-966E-793DFE13A1EC</string>
+</dict>
+</plist>

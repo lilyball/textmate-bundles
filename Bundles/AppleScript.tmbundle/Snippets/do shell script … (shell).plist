@@ -3,15 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>set the_choice to choose from list ${1:{"${2:choices}"\}}
-$0 </string>
+	<string>${1:set shell_stdout to }do shell script ${2:¬
+	"${3:#script}"}${4: ¬
+	with administrator priviledges}${5: ¬
+	without altering line endings}
+$0</string>
 	<key>name</key>
-	<string>Item from list (choose)</string>
+	<string>do shell script … (shell)</string>
 	<key>scope</key>
 	<string>source.applescript</string>
 	<key>tabTrigger</key>
-	<string>choose</string>
+	<string>shell</string>
 	<key>uuid</key>
-	<string>1D418F08-770F-4407-AE6A-3CCF2CD9FA6E</string>
+	<string>A26CF48B-F79C-4AEC-B2DC-9063DA264DDB</string>
 </dict>
 </plist>

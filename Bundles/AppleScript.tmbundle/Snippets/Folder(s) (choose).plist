@@ -3,7 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>set the_folder to choose folder with prompt "${1:Pick a folder:}"
+	<string>${1:set the_folder to }choose folder with prompt "${2:Pick a folder:}"${3: ¬
+	default location path to home folder}${4: ¬
+	with invisibles}${5: ¬
+	with multiple selections allowed}${6: ¬
+	with showing package contents}
 $0</string>
 	<key>name</key>
 	<string>Folder(s) (choose)</string>

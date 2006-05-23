@@ -8,15 +8,15 @@
    TM_DATE=`date +%Y-%m-%d` \
    TM_USERNAME=`niutil -readprop / /users/\$USER realname` \
    perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
-      &lt; template.applescript &gt; "$TM_NEW_FILE"
+      &lt; template.applescript "$TM_NEW_FILE"
 fi</string>
 	<key>extension</key>
 	<string>applescript</string>
 	<key>name</key>
-	<string>Folder Action Script</string>
+	<string>Quicksilver Action</string>
 	<key>scope</key>
 	<string>source.applescript</string>
 	<key>uuid</key>
-	<string>91A9ACD3-7233-475C-A7AE-8B20CC04FF75</string>
+	<string>CF6E1EB5-1F27-48FE-9DF9-EBEE11D2B5AC</string>
 </dict>
 </plist>

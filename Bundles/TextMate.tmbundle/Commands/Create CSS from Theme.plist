@@ -5,20 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -rjcode -Ku
+	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/doctohtml.rb"
-print document_to_html( STDIN.read )</string>
+print generate_stylesheet_from_theme()</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>inputFormat</key>
 	<string>xml</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>Create HTML from Document / Selection</string>
+	<string>Create CSS From Theme</string>
 	<key>output</key>
 	<string>openAsNewDocument</string>
 	<key>uuid</key>
-	<string>950B3108-E2E3-414E-9C4C-EE068F59A895</string>
+	<string>ED204720-38FC-427C-B91E-D6AE866DAE3A</string>
 </dict>
 </plist>

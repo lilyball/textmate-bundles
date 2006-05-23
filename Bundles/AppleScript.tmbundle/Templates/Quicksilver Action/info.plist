@@ -8,7 +8,7 @@
    TM_DATE=`date +%Y-%m-%d` \
    TM_USERNAME=`niutil -readprop / /users/\$USER realname` \
    perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
-      &lt; template.applescript "$TM_NEW_FILE"
+      &lt; template.applescript &gt; "$TM_NEW_FILE"
 fi</string>
 	<key>extension</key>
 	<string>applescript</string>

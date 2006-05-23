@@ -41,7 +41,8 @@ var_suffixes.each do |suffix|
   # try a removal
   case com[:mode]
   when "line"  # line by line comment
-    if text != "" &amp;&amp; text.all? { |line| line =~ /\A\s*(#{com[:esc_start]}|$)/ }
+    if text != "" &amp;&amp; text.map { |l| !!(l =~ /\A\s*(#{com[:esc_start]}|$)/) }.
+                          uniq == [true]
       print text.gsub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
                        '\1\2\3' )
       exit

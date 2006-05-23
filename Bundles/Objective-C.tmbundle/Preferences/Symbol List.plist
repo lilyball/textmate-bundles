@@ -14,7 +14,7 @@
 		<string>
 		s/^([-+])\s*\(.*?\)\s*/ $1 /; # strip result type
 		s/:\s*\(.*?\)\s*\w+\s*/:/g;   # strip argument variables
-		s/;$//g;                      # strip terminating semi-colon
+		s/\s*;?$//g;                  # strip terminating ws + semi-colon
 	</string>
 	</dict>
 	<key>uuid</key>

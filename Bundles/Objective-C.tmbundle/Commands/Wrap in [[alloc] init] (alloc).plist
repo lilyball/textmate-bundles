@@ -17,8 +17,8 @@ left, right = line[0...col], line[col..-1]
 if left =~ /(.*?)(\[)?(\w+)\s+$/ then
   lead, bracket, cl = $1, $2, $3
   right = line[col+1..-1] unless bracket.nil?
-  print "#{e lead}[[#{e cl} alloc] init]"
-  print right.empty? ? ";$0" : "$0#{e right}"
+  print "#{e lead}${1/.+/[/}[[#{e cl} alloc] init$0]${1: autorelease]}"
+  print right.empty? ? ";" : "#{e right}"
 else
   # this is only if we were not able to interpret the line
   print "#{e left}$0#{e right}"

@@ -31,9 +31,9 @@ Rob
 
 Cases not handled (but which shouldn’t be ambiguous):
 
-   foo-&gt;field method^              =&gt;   foo-[&gt;field method]
-   fun(@"foo", obj method:@"str"^) =&gt;   [fun(@"foo", obj method:@"str"])
-
+   foo-&gt;field method^                             =&gt; foo-[&gt;field method]
+   fun(@"foo", obj method:@"str"^)                =&gt; [fun(@"foo", obj method:@"str"])
+   return [obj msg] otherMsg:@selector(method:)^  =&gt; [return [obj msg] otherMsg:@selector(method:)]
 
 =end
 

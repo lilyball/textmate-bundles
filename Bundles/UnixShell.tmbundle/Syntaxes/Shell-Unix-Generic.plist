@@ -19,7 +19,7 @@
 	<key>foldingStopMarker</key>
 	<string>\}</string>
 	<key>keyEquivalent</key>
-	<string>~^S</string>
+	<string>^~S</string>
 	<key>name</key>
 	<string>Unix Shell (Bash)</string>
 	<key>patterns</key>
@@ -343,6 +343,82 @@
 				<dict>
 					<key>include</key>
 					<string>source.ruby</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt;)-("|'|)(APPLESCRIPT)\2</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.heredoc.shell</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.applescript.embedded.shell</string>
+			<key>end</key>
+			<string>^\t*(APPLESCRIPT)$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.unquoted.heredoc.no-indent.applescript.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.applescript</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt;)("|'|)(APPLESCRIPT)\2</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.heredoc.shell</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.applescript.embedded.shell</string>
+			<key>end</key>
+			<string>^(APPLESCRIPT)$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.unquoted.heredoc.applescript.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.applescript</string>
 				</dict>
 			</array>
 		</dict>

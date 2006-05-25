@@ -16,7 +16,7 @@
 	<key>foldingStopMarker</key>
 	<string>(?&lt;!\*)\*\*/|^\s*\}|^@end\b</string>
 	<key>keyEquivalent</key>
-	<string>~^O</string>
+	<string>^~O</string>
 	<key>name</key>
 	<string>Objective-C</string>
 	<key>patterns</key>
@@ -50,6 +50,10 @@
 			<string>meta.interface-or-protocol.objc</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#method</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>$base</string>
@@ -93,72 +97,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#method</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>$base</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^(-|\+)\s*</string>
-			<key>end</key>
-			<string>(?=\{)|;</string>
-			<key>name</key>
-			<string>declaration.function.objc</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>begin</key>
-					<string>/\*</string>
-					<key>end</key>
-					<string>\*/</string>
-					<key>name</key>
-					<string>comment.block.objc</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>//.*$\n?</string>
-					<key>name</key>
-					<string>comment.line.double-slash.objc</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>storage.type.method.parameter.objc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.method.objc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>:\s*(\([^)]*\))\s*(\b\w+\b)?</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>storage.type.method.result.objc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>entity.name.function.objc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(\([^)]*\))\s*(\b\w+\b)?</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\b\w+\b(?=:)</string>
-					<key>name</key>
-					<string>keyword.other.name-of-parameter.objc</string>
 				</dict>
 			</array>
 		</dict>
@@ -195,7 +138,13 @@
 			<key>match</key>
 			<string>@(try|catch|finally|throw)\b</string>
 			<key>name</key>
-			<string>keyword.control.objc</string>
+			<string>keyword.control.exception.objc</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>@(synchronized)\b</string>
+			<key>name</key>
+			<string>keyword.control.synchronize.objc</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -205,7 +154,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(IBOutlet|IBAction|BOOL|SEL|id|unichar)\b</string>
+			<string>\b(IBOutlet|IBAction|BOOL|SEL|id|unichar|IMP|Class)\b</string>
 			<key>name</key>
 			<string>storage.type.objc</string>
 		</dict>
@@ -223,13 +172,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(in|out|inout|oneway)\b</string>
-			<key>name</key>
-			<string>storage.modifier.objc</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(YES|NO|nil)\b</string>
+			<string>\b(YES|NO|Nil|nil)\b</string>
 			<key>name</key>
 			<string>constant.language.objc</string>
 		</dict>
@@ -280,6 +223,112 @@
 			<string>support.constant.cocoa</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>comment</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>/\*</string>
+					<key>end</key>
+					<string>\*/</string>
+					<key>name</key>
+					<string>comment.block.objc</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>//</string>
+					<key>end</key>
+					<string>$\n?</string>
+					<key>name</key>
+					<string>comment.line.double-slash.c++</string>
+					<key>swallow</key>
+					<string>\\\s*\n</string>
+				</dict>
+			</array>
+		</dict>
+		<key>method</key>
+		<dict>
+			<key>begin</key>
+			<string>^(-|\+)\s*</string>
+			<key>end</key>
+			<string>(?=\{)|;</string>
+			<key>name</key>
+			<string>meta.function.objc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\(</string>
+					<key>end</key>
+					<string>\)\s*(\w+\b)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.objc</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#protocol_type_qualifier</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b\w+(?=:)</string>
+					<key>name</key>
+					<string>keyword.other.name-of-parameter.objc</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>:\s*\(</string>
+					<key>end</key>
+					<string>\)\s*(\w+\b)?</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.method.objc</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#protocol_type_qualifier</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+			</array>
+		</dict>
+		<key>protocol_type_qualifier</key>
+		<dict>
+			<key>match</key>
+			<string>\b(in|out|inout|oneway|bycopy|byref)\b</string>
+			<key>name</key>
+			<string>storage.modifier.protocol.objc</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.objc</string>
 	<key>uuid</key>

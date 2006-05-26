@@ -5,13 +5,15 @@
 	<key>command</key>
 	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
    perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
-      &lt; fbx_layouts.a4d &gt; "$TM_NEW_FILE"
+      &lt; fbx_switch.a4d &gt; "$TM_NEW_FILE"
 fi</string>
 	<key>extension</key>
 	<string>a4d</string>
+	<key>keyEquivalent</key>
+	<string></string>
 	<key>name</key>
-	<string>Active4D - Layouts Fuse</string>
+	<string>Active4D - Switch Fuse</string>
 	<key>uuid</key>
-	<string>E0D50B15-A7B4-4837-ABD6-5534C3B0E872</string>
+	<string>A05BCAF5-F98E-4CF9-81EB-051838965EDD</string>
 </dict>
 </plist>

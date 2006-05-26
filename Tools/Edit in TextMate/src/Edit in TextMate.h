@@ -10,5 +10,5 @@
 @interface EditInTextMate : NSObject
 {
 }
-+ (void)externalEditString:(NSString*)aString forView:(NSView*)aView;
++ (void)externalEditString:(NSString*)aString startingAtLine:(int)aLine forView:(NSView*)aView;
 @end

@@ -140,14 +140,32 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 	if(![self isEditable])
 		return (void)NSBeep();
 
+	NSString* const CARET = [NSString stringWithFormat:@"%C", 0xFFFD];
 	NSString* str = @"";
-	if(DOMDocumentFragment* selection = [[self selectedDOMRange] cloneContents] ?: ([self selectAll:nil], [[self selectedDOMRange] cloneContents]))
+	int lineNumber = 0;
+
+	DOMDocumentFragment* selection = [[self selectedDOMRange] cloneContents];
+	if(!selection)
+	{
+		[self insertText:CARET];
+		[self selectAll:nil];
+		selection = [[self selectedDOMRange] cloneContents];
+	}
+
+	if(selection)
 	{
 		str = convert_dom_to_text([[[self mainFrame] DOMDocument] createTreeWalker:selection :DOM_SHOW_ALL :nil :YES]);
 		while([str hasSuffix:@"\n\n"])
 			str = [str substringToIndex:[str length]-1];
+
+		NSArray* split = [str componentsSeparatedByString:CARET];
+		if([split count] == 2)
+		{
+			lineNumber = [[[split objectAtIndex:0] componentsSeparatedByString:@"\n"] count] - 1;
+			str = [split componentsJoinedByString:@""];
+		}
 	}
-	[EditInTextMate externalEditString:str forView:self];
+	[EditInTextMate externalEditString:str startingAtLine:lineNumber forView:self];
 }
 
 - (void)didModifyString:(NSString*)newString

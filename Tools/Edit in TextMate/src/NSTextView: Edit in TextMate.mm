@@ -19,10 +19,20 @@
 
 	NSString* str = [[self textStorage] string];
 	NSRange selectedRange = [self selectedRange];
+	int lineNumber = 0;
 	if(selectedRange.length == 0)
+	{
+		NSRange range = NSMakeRange(0, 0);
+		do {
+			range = [str lineRangeForRange:NSMakeRange(NSMaxRange(range), 0)];
+			if(selectedRange.location < NSMaxRange(range))
+				break;
+			lineNumber++;
+		} while(true);
 		selectedRange = NSMakeRange(0, [str length]);
+	}
 
-	[EditInTextMate externalEditString:[str substringWithRange:selectedRange] forView:self];
+	[EditInTextMate externalEditString:[str substringWithRange:selectedRange] startingAtLine:lineNumber forView:self];
 }
 
 - (void)didModifyString:(NSString*)newString

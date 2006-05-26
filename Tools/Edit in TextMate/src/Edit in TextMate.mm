@@ -18,6 +18,18 @@
 static NSMutableDictionary* OpenFiles;
 static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 
+#pragma options align=mac68k
+struct PBX_SelectionRange
+{
+	short unused1;		// 0 (not used)
+	short lineNum;		// line to select (<0 to specify range)
+	long startRange;	// start of selection range (if line < 0)
+	long endRange;		// end of selection range (if line < 0)
+	long unused2;		// 0 (not used)
+	long theDate;		// modification date/time
+};
+#pragma options align=reset
+
 @implementation EditInTextMate
 + (void)setODBEventHandlers
 {
@@ -67,6 +79,13 @@ static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 	CFBundleGetPackageInfo(CFBundleGetMainBundle(), &packageType, &packageCreator);
 	[appleEvent setParamDescriptor:[NSAppleEventDescriptor descriptorWithTypeCode:packageCreator] forKeyword:keyFileSender];
 
+	if(int line = [[someOptions objectForKey:@"line"] intValue])
+	{
+		PBX_SelectionRange pos = { };
+		pos.lineNum = line;
+		[appleEvent setParamDescriptor:[NSAppleEventDescriptor descriptorWithDescriptorType:'????' bytes:&pos length:sizeof(pos)] forKeyword:keyAEPosition];
+	}
+
 	OSStatus status = AESend([appleEvent aeDesc], &reply, kAEWaitReply, kAENormalPriority, kAEDefaultTimeout, NULL, NULL);
 	if(status == noErr)
 	{
@@ -82,7 +101,7 @@ static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 	[pool release];
 }
 
-+ (void)externalEditString:(NSString*)aString forView:(NSView*)aView
++ (void)externalEditString:(NSString*)aString startingAtLine:(int)aLine forView:(NSView*)aView
 {
 	NSString* appName = [[[[NSWorkspace sharedWorkspace] activeApplication] objectForKey:@"NSApplicationName"] lowercaseString];
 	NSString* windowTitle = [[aView window] title] ?: @"untitled";
@@ -96,9 +115,10 @@ static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 	fileName = [fileName stringByStandardizingPath];
 
 	NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
-		aString,    @"string",
-		aView,      @"view",
-		fileName,   @"fileName",
+		aString,                         @"string",
+		aView,                           @"view",
+		fileName,                        @"fileName",
+		[NSNumber numberWithInt:aLine],  @"line",
 		nil];
 
 	[OpenFiles setObject:options forKey:fileName];

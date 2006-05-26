@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+$tags = [
+  { :label =&gt; "TODO",    :color =&gt; "#ff0000", :regexp =&gt; /TODO[\s,:]+(\w.*)$/i    },
+  { :label =&gt; "CALL",    :color =&gt; "#00ff00", :regexp =&gt; /CALL[\s,:]+(\w.*)$/i    },
+  { :label =&gt; "EMAIL",    :color =&gt; "#0000ff", :regexp =&gt; /EMAIL[\s,:]+(\w.*)$/i    },
+  { :label =&gt; "BUY",    :color =&gt; "#0055ff", :regexp =&gt; /BUY[\s,:]+(\w.*)$/i    },
+  { :label =&gt; "WAIT",    :color =&gt; "#CF830d", :regexp =&gt; /WAIT[\s,:]+(\w.*)$/i    },
+]
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
+require "erb"
+include ERB::Util
+
+def TextMate.file_link (file, line = 0)
+  return "txmt://open/?url=file://" +
+    file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
+    "&amp;amp;line=" + line.to_s
+end
+
+# setup empty array for per tag results
+$tags.each { |tag| tag[:matches] = [ ] }
+
+TextMate.each_text_file do |file|
+  $tags.each do |tag|
+    File.open(file) do |io|
+      io.grep(tag[:regexp]) do |content|
+        results = {
+          :file =&gt; file,
+          :line =&gt; io.lineno,
+          :content =&gt; content
+        }
+        if tag[:label] == "RADAR" then
+          url = "rdar://" + $2
+          results[:match] = html_escape($1) + "&lt;a href=\"" + url + "\"&gt;" + html_escape(url) + "&lt;/a&gt;" + html_escape($3)
+        else
+          results[:match] = html_escape($1)
+        end
+        tag[:matches] &lt;&lt; results
+      end
+    end
+  end
+end
+
+tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"
+puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^M</string>
+	<key>name</key>
+	<string>Show Active GTD List</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>1793B364-4AB7-4A65-8137-72E557F53ACD</string>
+</dict>
+</plist>

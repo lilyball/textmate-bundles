@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
+
+htmlHeader "GTD Bundle Help file" '&lt;style type="text/css"&gt;
+	body {
+		background-color: #eee;
+	}
+	.contents {
+		background: white;
+		font-family: Georgia, serif;
+		font-size: 13px;
+		border: 1px #888 solid;
+		padding: 0 1em;
+	}
+	code {
+		font-size: 90%;
+	}
+	&lt;/style&gt;'
+
+beginTag div 'contents'
+
+Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
+# GTD Bundle Help
+This bundle is shamelessly taken from the TODO bundle and reconfigured for GTD.  For more info on GTD see &lt;http://www.davidco.com&gt;
+
+The "Show GTD List" command will scan your current  project for lines containing certain tags (see below).
+It will show an ordered list of these tags and their context which can be clicked to jump to that line in that file.
+
+## Tags
+
+Preconfigured tags are:
+
+- TODO
+- EMAIL
+- CALL
+- BUY
+- WAIT
+- DONE
+
+EOF
+
+endTag
+htmlFooter
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>091FD666-D283-49C5-B79A-CF32CCF853AA</string>
+</dict>
+</plist>

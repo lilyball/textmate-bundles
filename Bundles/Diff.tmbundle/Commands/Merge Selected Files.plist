@@ -7,6 +7,9 @@
 	<key>command</key>
 	<string>require_cmd opendiff "Opendiff comes with Apple's developer tools."
 
+# set utf-8 as the default encoding (used by opendiff)
+export __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100
+
 eval arr=($TM_SELECTED_FILES)
 if [[ ${#arr[@]} == 2 ]];
    then opendiff "${arr[0]}" "${arr[1]}"; rescan_project

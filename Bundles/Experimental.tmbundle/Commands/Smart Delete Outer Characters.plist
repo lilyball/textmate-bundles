@@ -16,6 +16,7 @@ def strip_bracket (txt)
     if ridx = txt.rindex(chr_map[txt[idx]]) then
       txt[ridx, 1] = ""
       txt[idx, 1] = ""
+      txt.insert idx, " " if txt[idx - 1, 1] =~ /[^\[\]\(\)\{\}\s]/
     end
   end
   return txt
@@ -34,7 +35,7 @@ print snippet_escape(strip_bracket(line)).sub(/#{MARK}/, '${0}')
 	<key>keyEquivalent</key>
 	<string>^$</string>
 	<key>name</key>
-	<string>Smart Delete Outer Characters</string>
+	<string>Smart Delete Brackets</string>
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>uuid</key>

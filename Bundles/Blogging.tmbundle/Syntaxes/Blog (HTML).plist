@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>blog.html</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>^Type: Blog Post \(HTML\)</string>
+	<key>name</key>
+	<string>Blog (HTML)</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.blogger.name</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.blogger.value</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^([A-Za-z0-9]+):\s*(.+?)$\n?</string>
+			<key>name</key>
+			<string>meta.headers.blogger</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^(?![A-Za-z0-9]+:)</string>
+			<key>end</key>
+			<string>^(?!not)not</string>
+			<key>name</key>
+			<string>meta.content.blogger</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>text.html</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.html.blog</string>
+	<key>uuid</key>
+	<string>E46F5C50-5D16-4B5C-8FBB-686BD3768284</string>
+</dict>
+</plist>

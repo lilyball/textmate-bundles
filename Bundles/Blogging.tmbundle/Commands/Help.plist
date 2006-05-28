@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>Markdown.pl &lt;&lt;'EOF'
+Blogging Bundle Configuration Settings
+--------------------------------------
+
+This bundle requires the following environment variables to be preset.
+
+* TM\_BLOG\_ENDPOINT: The XMLRPC endpoint to post to. Should be in the form: http://host/xmlrpcscript or http://user@host/xmlrpcscript.
+* TM\_BLOG\_BLOG\_ID: The weblog id (if applicable) for the weblog to post to (overridden by the "Blog:" heading).
+* TM\_BLOG\_FORMAT: Your preferred formatting choice (default will derive from current blog template selected).
+* TM\_BLOG\_MODE: 'mt' and 'wp' are valid settings for this. Influences the posting API to be as compatible as possible with Movable Type, Blogger and WordPress variants of the metaWebLog API (default will derive from endpoint URL, or will default to 'mt').
+
+This bundle is maintained by [Brad Choate][1].
+
+[1]: http://bradchoate.com/
+
+EOF</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.html.blog,text.plain.blog,text.html.markdown.blog,text.html.textile.blog</string>
+	<key>uuid</key>
+	<string>17B2F39B-5CCB-4B0E-B305-8C27BED56887</string>
+</dict>
+</plist>

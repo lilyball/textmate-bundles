@@ -83,7 +83,7 @@ def init
 	if ($mode == nil)
 		if ($endpoint.match(/mt-xmlrpc/))
 			$mode = 'mt'
-		elsif ($endpoint.mtatch(/xmlrpc\.php/))
+		elsif ($endpoint.match(/xmlrpc\.php/))
 			$mode = 'wp'
 		else
 			$mode = 'mt'
@@ -303,6 +303,10 @@ def return_post(post)
 	print "Title: " + post['title'] + "\n"
 	print "Keywords: " + post['keywords'] + "\n" if post['keywords']
 	print "Tags: " + post['mt_tags'] + "\n" if post['mt_tags']
+	if (($mode == 'wp') && (post['category']))
+		cats = post['category'].split(/,/)
+		cats.each { | cat | print "Category: #{cat}\n" }
+	end
 	print "Format: " + post['mt_convert_breaks'] + "\n" if post['mt_convert_breaks']
 	printf "Date: %04d-%02d-%02d %02d:%02d:%02d\n", post['dateCreated'].year, post['dateCreated'].month, post['dateCreated'].day, post['dateCreated'].hour, post['dateCreated'].min, post['dateCreated'].sec
 	if (post['mt_allow_pings'] && (post['mt_allow_pings'] == 1))

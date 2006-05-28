@@ -64,7 +64,7 @@ def fetch_credentials_from_keychain
 				print "Cancelled"
 				exit_show_tool_tip
 			else
-				save_internet_password
+				$save_password_on_success = 1
 			end
 		end
 	end
@@ -195,6 +195,19 @@ def post_parse(lines)
 	return post
 end
 
+def show_post_page(post_id)
+	require 'xmlrpc/client'
+
+	begin
+		server = XMLRPC::Client.new($host, $path)
+		result = server.call("metaWeblog.getPost", post_id, $username, $password)
+		link = result['permaLink']
+		%x{open "#{link}"} if link
+	rescue XMLRPC::FaultException => e
+		# ignore for now?
+	end
+end
+
 def post_or_update
 	require 'xmlrpc/client'
 
@@ -225,11 +238,19 @@ def post_or_update
 		if (post_id)
 			result = server.call("metaWeblog.editPost",
 				post_id, $username, $password, post, publish)
+			if ($save_password_on_success)
+				save_internet_password
+			end
+			show_post_page(post_id) if publish
 			print "Updated!"
 		else
 			result = server.call("metaWeblog.newPost",
 				$blog_id, $username, $password, post, publish)
+			if ($save_password_on_success)
+				save_internet_password
+			end
 			post_id = result
+			show_post_page(post_id) if publish
 			print "Post: #{post_id}\n"
 			doc.each { | line | print line }
 			exit_replace_document
@@ -281,14 +302,18 @@ def return_post(post)
 	print "Post: " + post['postid'] + "\n"
 	print "Title: " + post['title'] + "\n"
 	print "Keywords: " + post['keywords'] + "\n" if post['keywords']
-	print "Tags: " + post['mt_tags'] if post['mt_tags']
+	print "Tags: " + post['mt_tags'] + "\n" if post['mt_tags']
 	print "Format: " + post['mt_convert_breaks'] + "\n" if post['mt_convert_breaks']
 	printf "Date: %04d-%02d-%02d %02d:%02d:%02d\n", post['dateCreated'].year, post['dateCreated'].month, post['dateCreated'].day, post['dateCreated'].hour, post['dateCreated'].min, post['dateCreated'].sec
 	if (post['mt_allow_pings'] && (post['mt_allow_pings'] == 1))
 		print "Pings: On\n"
+	else
+		print "Pings: Off\n"
 	end
 	if (post['mt_allow_comments'] && (post['mt_allow_comments'] == 1))
 		print "Comments: On\n"
+	else
+		print "Comments: Off\n"
 	end
 	print "Basename: " + post['mt_basename'] + "\n" if post['mt_basename']
 	if (post['categories'])
@@ -311,6 +336,9 @@ def fetch_post
 	begin
 		result = server.call("metaWeblog.getRecentPosts",
 			$blog_id, $username, $password, 20)
+		if ($save_password_on_success)
+			save_internet_password
+		end
 		if (!result.length)
 			print "Error: No posts available!"
 			exit_show_tool_tip

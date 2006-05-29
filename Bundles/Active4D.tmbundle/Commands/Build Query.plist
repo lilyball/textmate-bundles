@@ -5,21 +5,32 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># Build on the current query using the current line's table.
-# First thing to do is to see if the current line begins with "query([table]..."
+	<string>#!/usr/bin/env ruby
 
-if [[ `echo "$TM_CURRENT_LINE" | egrep "^\s*(query|QUERY|Query)\s*\(\[.*?\]"` ]]; then
-  # Extract the table name from the query
-  TABLE=`echo "$TM_CURRENT_LINE" | awk '{ match($0, "[\[]\[^]\]+[\]]"); print substr($0, RSTART + 1, RLENGTH - 2) }'`
-  echo '${TM_CURRENT_LINE}'
-  echo -n "query([$TABLE]; \${1:conjunction}; [$TABLE]\${2:field})"
-fi</string>
+s = ENV['TM_CURRENT_LINE']
+
+# See if the current line is a query. If it is, process it.
+
+if s =~ /^\s*query\s*\((\[[^\]]+\])/i then
+	table = $1
+
+	if not s =~ %r{(^.*)(;\s*\*\s*\)\s*(`|//)?.*$)}i then
+		s = s.gsub(%r{(^.*)(\s*\)\s*(`|//)?.*$)}i, '\1; *\2')
+	end
+
+	print s.gsub(/[\$`]/) { |s| "\\#{s}" }
+	print "\nquery(#{table}; ${1:conjunction}; #{table}${2:field})"
+else
+	# Current line is not a query, discard the output, which does nothing
+	exit(200)
+end
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>@*</string>
 	<key>name</key>
 	<string>Build Query</string>
 	<key>output</key>

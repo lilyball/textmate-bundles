@@ -17,7 +17,7 @@
 	<key>foldingStopMarker</key>
 	<string>(?&lt;!\*)\*\*/|^\s*\}</string>
 	<key>keyEquivalent</key>
-	<string>~^C</string>
+	<string>^~C</string>
 	<key>name</key>
 	<string>C</string>
 	<key>patterns</key>
@@ -303,8 +303,10 @@
 				       | (?&lt;!&amp;&amp;)       (?&lt;=[*&amp;&gt;])\s*   #  or type modifier before name
 				     )
 				)
-				([A-Za-z_][A-Za-z0-9_:]+)              # actual name
-				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				([A-Za-z_][A-Za-z0-9_:]*)              # actual name
+				 \s*\( (?=                             # match "("
+				           (?&lt;fun&gt; [^()]++ | \( \g&lt;fun&gt;*+ \) )*+   # function arguments
+				    \)                                 # match ")"
 				 (\s+const)?\s*                        # optional const modifier
 				 (\{|\n|//|/\*))                       # start bracket or end-of-line
 			</string>
@@ -319,7 +321,7 @@
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>declaration.function.c</string>
+			<string>meta.function.c</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -336,8 +338,10 @@
 				       | (?&lt;!&amp;&amp;)              (?&lt;=[*&amp;])\s*    #  or type modifier before name
 				     )
 				)
-				([A-Za-z_][A-Za-z0-9_:]+)              # actual name
-				 \s+\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				([A-Za-z_][A-Za-z0-9_:]*)              # actual name
+				 \s+\( (?=                             # match "("
+				           (?&lt;fun&gt; [^()]++ | \( \g&lt;fun&gt;*+ \) )*+   # function arguments
+				    \)                                 # match ")"
 				 (\s+const)?\s*                        # optional const modifier
 				 ;)                                    # terminating semi-colon
 			</string>
@@ -352,7 +356,7 @@
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>declaration.function.prototype.c</string>
+			<string>meta.function.prototype.c</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -411,7 +415,7 @@
 			<key>match</key>
 			<string>^\s*(#\s*(pragma\s+mark)\s+(.*))</string>
 			<key>name</key>
-			<string>declaration.section</string>
+			<string>meta.section</string>
 		</dict>
 		<key>preprocessor-rule-disabled</key>
 		<dict>

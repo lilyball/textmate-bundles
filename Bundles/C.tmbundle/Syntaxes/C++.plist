@@ -27,7 +27,7 @@
 	<key>foldingStopMarker</key>
 	<string>(?&lt;!\*)\*\*/|^\s*\}</string>
 	<key>keyEquivalent</key>
-	<string>~^C</string>
+	<string>^~C</string>
 	<key>name</key>
 	<string>C++</string>
 	<key>patterns</key>
@@ -104,7 +104,7 @@
 				(?:  ^                                 # begin-of-line
 				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
 				)
-				([A-Za-z_]*[A-Za-z0-9_:]*~[A-Za-z_][A-Za-z0-9_]+) # actual name
+				((?:[A-Za-z_][A-Za-z0-9_]*::)*+~[A-Za-z_][A-Za-z0-9_]*) # actual name
 				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s*=\s*0)?\s*                        # optional pure modifier
 				 (\{|\n))                              # start bracket or end-of-line
@@ -120,7 +120,7 @@
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>declaration.function.destructor.c++</string>
+			<string>meta.function.destructor.c++</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -135,7 +135,7 @@
 				(?:  ^                                 # begin-of-line
 				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
 				)
-				([A-Za-z_]*[A-Za-z0-9_:]*~[A-Za-z_][A-Za-z0-9_]+) # actual name
+				((?:[A-Za-z_][A-Za-z0-9_]*::)*+~[A-Za-z_][A-Za-z0-9_]*) # actual name
 				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s*=\s*0)?\s*                        # optional pure modifier
 				 ;)                                    # terminating semi-colon
@@ -151,7 +151,7 @@
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>declaration.function.destructor.prototype.c++</string>
+			<string>meta.function.destructor.prototype.c++</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -164,9 +164,11 @@
 			<key>begin</key>
 			<string>(?x)
 				(?:  ^\s*)                             # begin-of-line
-				((?!while|for|do|if|else|switch|catch|enumerate|iterate)[A-Za-z_][A-Za-z0-9_:]+) # actual name
-				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
-				 (\s* : (?&lt;base&gt; \s* [A-Za-z_][A-Za-z0-9_]+ \([^)]*\) ) (, \g&lt;base&gt;)* (, (?=\s*\n))? )? \s*  # optional base constructors
+				((?!while|for|do|if|else|switch|catch|enumerate|iterate)[A-Za-z_][A-Za-z0-9_:]*) # actual name
+				 \s*\( (?=                             # match "("
+				           (?&lt;arg&gt; [^()]++ | \( \g&lt;arg&gt;*+ \) )*+   # function arguments
+				    \)                                 # match ")"
+				 (\s* : (?&lt;base&gt; \s* [A-Za-z_][A-Za-z0-9_]* \( \g&lt;arg&gt;*+ \) ) (, \g&lt;base&gt;)* (, (?=\s*\n))? )? \s*  # optional base constructors
 				 (\{|\n))                              # start bracket or end-of-line
 			</string>
 			<key>beginCaptures</key>
@@ -180,7 +182,7 @@
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>declaration.function.constructor.c++</string>
+			<string>meta.function.constructor.c++</string>
 			<key>patterns</key>
 			<array>
 				<dict>

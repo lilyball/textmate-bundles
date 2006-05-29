@@ -11,7 +11,7 @@ s = ENV['TM_CURRENT_LINE']
 
 # See if the current line is a query. If it is, process it.
 
-if s =~ /^\s*query\s*\((\[[^\]]+\])/i then
+if s =~ /^\s*query\s*\(\[([^\]]+)\]/i then
 	table = $1
 
 	if not s =~ %r{(^.*)(;\s*\*\s*\)\s*(`|//)?.*$)}i then
@@ -19,7 +19,7 @@ if s =~ /^\s*query\s*\((\[[^\]]+\])/i then
 	end
 
 	print s.gsub(/[\$`]/) { |s| "\\#{s}" }
-	print "\nquery(#{table}; ${1:conjunction}; #{table}${2:field})"
+	print "\nquery([${1:#{table}}]; ${2:conjunction}; [$1]${3:field})"
 else
 	# Current line is not a query, discard the output, which does nothing
 	exit(200)

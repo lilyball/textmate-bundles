@@ -10,7 +10,7 @@ module Subversion
     diff_arg    = diff_cmd ? "--diff-cmd #{diff_cmd}" : ''
 
     target_path = ENV['TM_FILEPATH']
-    svn_header  = /\AIndex: #{target_path}\n=+\n\z/
+    svn_header  = /\AIndex: #{Regexp.escape(target_path)}\n=+\n\z/
 
     TextMate::call_with_progress(:title => command, :message => "Accessing Subversion Repository…") do
       res = %x{"#{svn}" 2>&1 diff "-r#{revision}" #{diff_arg} "#{target_path}"}

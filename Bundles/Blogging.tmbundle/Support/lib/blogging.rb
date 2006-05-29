@@ -15,7 +15,9 @@ def exit_create_new_document; exit 207 end
 
 def find_internet_password
 	proto = $endpoint.match(/^https/) ? 'https' : 'http'
-	result = %x{security find-internet-password -g -a "#{$username}" -s "#{$host}" -p "#{$path}" -r #{proto} 2>&1 >/dev/null}
+	path = $path.clone
+	path.sub!(/#\d+/, '') if path.match(/#\d+/)
+	result = %x{security find-internet-password -g -a "#{$username}" -s "#{$host}" -p "#{path}" -r #{proto} 2>&1 >/dev/null}
 	if (result.match(/^password: "(.*)"$/))
 		return $1
 	end
@@ -70,28 +72,18 @@ def fetch_credentials_from_keychain
 	end
 end
 
-def init
-	$blog_id = ENV['TM_BLOG_BLOG_ID'] || '0'
-	$endpoint = ENV['TM_BLOG_ENDPOINT']
-	$format = ENV['TM_BLOG_FORMAT']
-	$mode = ENV['TM_BLOG_MODE']
+def parse_endpoint(str)
+	$endpoint = str.clone
 
-	if (!$endpoint)
-		print "Setup required. Please see Help."
-		exit_show_tool_tip
+	mode = nil
+	if ($endpoint.match(/mt-xmlrpc/))
+		mode = 'mt'
+	elsif ($endpoint.match(/xmlrpc\.php/))
+		mode = 'wp'
+	else
+		mode = ENV['TM_BLOG_MODE'] || 'mt'
 	end
-	if ($mode == nil)
-		if ($endpoint.match(/mt-xmlrpc/))
-			$mode = 'mt'
-		elsif ($endpoint.match(/xmlrpc\.php/))
-			$mode = 'wp'
-		else
-			$mode = 'mt'
-		end
-	end
-
-	$username = nil
-	$password = nil
+	$mode = mode
 
 	if (match = $endpoint.match(/^https?:\/\/([^\/]+?)(\/.+)$/))
 		$host = match[1]
@@ -106,8 +98,24 @@ def init
 		exit_show_tool_tip
 	end
 
-	if (($username == nil) || ($password == nil))
-		fetch_credentials_from_keychain
+	if ($endpoint.match(/#(\d+)/))
+		$blog_id = $1.to_i
+	end
+end
+
+def init
+	$username = nil
+	$password = nil
+	$blog_id = nil
+
+	if (ENV['TM_BLOG_ENDPOINT'])
+		parse_endpoint(ENV['TM_BLOG_ENDPOINT'])
+	end
+	$format = ENV['TM_BLOG_FORMAT']
+
+	if (!$endpoint)
+		print "Setup required. Please see Help."
+		exit_show_tool_tip
 	end
 end
 
@@ -140,12 +148,12 @@ def post_parse(lines)
 			if (matches = line.match(/^(\w+):[ ]*(.+)/))
 				if (matches[1] == 'Ping')
 					post['mt_tbping_urls'].push(matches[2])
-				elsif (matches[1] == 'Blog')
-					$blog_id = matches[2].to_i
 				elsif (matches[1] == 'Category')
 					post['categories'].push(matches[2])
 				elsif (matches[1] == 'Status')
 					post['publish'] = FALSE if matches[2].match(/draft/i)
+				elsif (matches[1] == 'Blog')
+					parse_endpoint(matches[2])
 				else
 					headers[matches[1]] = matches[2]
 				end
@@ -192,6 +200,7 @@ def post_parse(lines)
 	end
 	post['mt_keywords'] = headers['Keywords'] if headers['Keywords']
 	post['mt_tags'] = headers['Tags'] if headers['Tags']
+	post['mt_basename'] = headers['Basename'] if headers['Basename']
 	return post
 end
 
@@ -234,6 +243,7 @@ def post_or_update
 	post.delete('publish')
 
 	begin
+		fetch_credentials_from_keychain
 		server = XMLRPC::Client.new($host, $path)
 		if (post_id)
 			result = server.call("metaWeblog.editPost",
@@ -299,10 +309,11 @@ def return_post(post)
 		end
 	end
 	print "Type: Blog Post (#{format})\n"
+	print "Blog: #{$endpoint}\n"
 	print "Post: " + post['postid'] + "\n"
 	print "Title: " + post['title'] + "\n"
 	print "Keywords: " + post['keywords'] + "\n" if post['keywords']
-	print "Tags: " + post['mt_tags'] + "\n" if post['mt_tags']
+	print "Tags: " + post['mt_tags'] + "\n" if post['mt_tags'] && (post['mt_tags'] != '')
 	if (($mode == 'wp') && (post['category']))
 		cats = post['category'].split(/,/)
 		cats.each { | cat | print "Category: #{cat}\n" }
@@ -338,6 +349,8 @@ def fetch_post
 
 	server = XMLRPC::Client.new($host, $path)
 	begin
+		fetch_credentials_from_keychain
+		$blog_id = 0 if !$blog_id
 		result = server.call("metaWeblog.getRecentPosts",
 			$blog_id, $username, $password, 20)
 		if ($save_password_on_success)
@@ -362,25 +375,34 @@ end
 def preview_post
 	require 'FileTest'
 
-	blog_preview = "#{ENV['TM_BUNDLE_PATH']}/Templates/Preview Template/preview_#{ENV['TM_BLOG_BLOG_ID']}.txt"
+	blog_preview = nil
+	if ($blog_id)
+		blog_preview = "#{ENV['TM_BUNDLE_PATH']}/Templates/Preview Template/preview_#{$blog_id}.txt"
+	end
 
 	default_preview = "#{ENV['TM_BUNDLE_PATH']}/Templates/Preview Template/preview.txt"
 
-	if (File.exist?(blog_preview))
-	    preview_file = blog_preview
+	if (blog_preview && (File.exist?(blog_preview)))
+		preview_file = blog_preview
 	elsif (File.exist?(default_preview))
-	    preview_file = default_preview
+		preview_file = default_preview
 	else
-	    print "Couldn't find preview template!"
+		print "Couldn't find preview template!"
 	end
-
 	input = IO.readlines(preview_file)
-
 	post = post_parse(doc)
 end
 
 def view_post
-	post = post_parse(doc)
+	post = post_parse(STDIN.readlines)
+	if (post['id'])
+		fetch_credentials_from_keychain
+		show_post_page(post['id'])
+		exit_discard
+	else
+		print "A Post ID is required to view the post."
+		exit_show_tool_tip
+	end
 end
 
 init

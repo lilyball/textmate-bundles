@@ -2,7 +2,7 @@ require 'date'
 
 $KCODE = 'u'
 
-$blog_accounts_file = "#{ENV['HOME']}/Library/Preferences/Blogging Bundle Accounts.txt"
+$blog_accounts_file = "#{ENV['HOME']}/Library/Preferences/com.macromates.blogging"
 
 $endpoints = {}
 

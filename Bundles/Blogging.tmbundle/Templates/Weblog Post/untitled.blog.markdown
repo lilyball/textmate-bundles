@@ -1,5 +1,5 @@
-Title: Your Post Title Goes Here
-Date: ${TM_ISO_DATE}
+Title: 
+${TM_BLOG_HEADER}Date: ${TM_ISO_DATE}
 
 Main entry text
 

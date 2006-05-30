@@ -38,6 +38,11 @@ def resolve_endpoint
 		$endpoint = ENV['TM_BLOG_ENDPOINT'].clone
 	end
 
+	if ($endpoint == nil)
+		print "Blog header or TM_BLOG_ENDPOINT is not declared.\nPlease see Help."
+		exit_show_tool_tip
+	end
+
 	# we have an endpoint that looks like a URL
 	if ($endpoint.match(/^https?:\/\//))
 		if ($endpoints[$endpoint])
@@ -222,7 +227,7 @@ def request_title(default)
 	s = `\"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" inputbox --title 'Title of Post' --informative-text 'Enter a title for this post.' --text "#{default.gsub(/"/,'\"')}" --button1 'Post' --button2 'Cancel'`
 	case (a = s.split(/\n/))[0].to_i
 		when 1: (a[1])
-		when 2: print "Post cancelled."; exit_show_tool_tip
+		when 2: print "Cancelled"; exit_show_tool_tip
 	end
 end
 
@@ -293,17 +298,18 @@ def parse_post(lines)
 		end
 	end
 	dateCreated = DateTime.parse(headers['Date']) if headers['Date']
-	post['dateCreated'] = dateCreated if dateCreated
 	if ($mode == 'mt')
+		post['dateCreated'] = dateCreated.strftime('%FT%T') if dateCreated
 		post['mt_allow_comments'] = headers['Comments'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if headers['Comments']
 		post['mt_allow_pings'] = headers['Pings'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if headers['Pings']
+		post['mt_tags'] = headers['Tags'] if headers['Tags']
+		post['mt_basename'] = headers['Basename'] if headers['Basename']
 	elsif ($mode == 'wp')
+		post['dateCreated'] = dateCreated if dateCreated
 		post['mt_allow_comments'] = headers['Comments'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if headers['Comments']
 		post['mt_allow_pings'] = headers['Pings'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if headers['Pings']
 	end
 	post['mt_keywords'] = headers['Keywords'] if headers['Keywords']
-	post['mt_tags'] = headers['Tags'] if headers['Tags']
-	post['mt_basename'] = headers['Basename'] if headers['Basename']
 	return post
 end
 

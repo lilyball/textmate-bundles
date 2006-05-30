@@ -3,10 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:set shell_stdout to }do shell script ${2:¬
-	"${3:#script}"}${4: ¬
-	with administrator priviledges}${5: ¬
-	without altering line endings}
+	<string>${1:set shell_stdout to }do shell script ${3:¬
+	"${2:#script}"} ¬
+	without altering line endings
 $0</string>
 	<key>name</key>
 	<string>do shell script … (shell)</string>

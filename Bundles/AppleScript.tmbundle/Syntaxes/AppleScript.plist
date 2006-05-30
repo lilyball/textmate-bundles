@@ -52,6 +52,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#built-in-commands</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#rules</string>
 				</dict>
 			</array>
@@ -62,11 +66,27 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#built-in-commands</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#rules</string>
 		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>built-in-commands</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(count (each|every)|number of|copy|put|error|get|run|set)\b</string>
+					<key>name</key>
+					<string>support.function.script-commands.applescript</string>
+				</dict>
+			</array>
+		</dict>
 		<key>rules</key>
 		<dict>
 			<key>patterns</key>
@@ -87,13 +107,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(is not greater than or equal( to)?|isn't greater than or equal( to)?|(is )?greater than or equal( to)?|is not less than or equal( to)?|isn't less than or equal( to)?|(is )?less than or equal( to)?|(a )?(ref( to)|reference to)|does not come before|doesn't come before|is not greater than|does not come after|is not contained by|is not equal( to)?|(is )?greater than|doesn't come after|isn't contained by|isn't equal( to)?|is not less than|does not contain|(is )?less than|isn't less than|doesn't contain|is contained by|(is )?equal to|does not equal|start(s)? with|begin(s)? with|doesn't equal|isn't greater|comes before|end(s)? with|comes after|contain(s)?|is not in|equals|is not|equal|isn't|is in|than|and|div|mod|not|or|is|as)\b|(≠|≥|≤|&gt;=|&lt;=|÷|&amp;|=|&gt;|&lt;|\*|\+|-|/|\^)</string>
+					<string>\b((a )?(ref( to)|reference to)|(does not|doesn't) (come (before|after)|contain|equal)|(start|begin)s? with|comes (before|after)|is(n't| not)?( (in|contained by|(less than|greater than)( or equal( to)?)?|equal( to)?))?|ends? with|contains?|equals?|than|and|div|mod|not|or|as)\b|(≠|≥|≤|&gt;=|&lt;=|÷|&amp;|=|&gt;|&lt;|\*|\+|-|/|\^)</string>
 					<key>name</key>
 					<string>keyword.operator.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(on error|try|set|copy|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|end|return|of|my|whose)\b</string>
+					<string>\b(on error|try|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|end|return|of|my|whose)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>
@@ -110,6 +130,23 @@
 					<string>\b\d+((\.(\d+\b)?)?(?i:e\+?\d*\b)?|\b)</string>
 					<key>name</key>
 					<string>constant.numeric.applescript</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=application )"|(?&lt;=app )"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.application-name.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\.</string>
+							<key>name</key>
+							<string>constant.character.escaped.applescript</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>

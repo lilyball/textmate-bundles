@@ -177,6 +177,8 @@ def parse_endpoint
 
 	if ($endpoint.match(/#(\d+)/))
 		$blog_id = $1.to_i
+	else
+		$blog_id = 0
 	end
 end
 
@@ -492,7 +494,6 @@ def fetch_post
 		resolve_endpoint
 		fetch_credentials_from_keychain
 		server = XMLRPC::Client.new($host, $path)
-		$blog_id = 0 if !$blog_id
 		result = server.call("metaWeblog.getRecentPosts",
 			$blog_id, $username, $password, 20)
 		if ($save_password_on_success)

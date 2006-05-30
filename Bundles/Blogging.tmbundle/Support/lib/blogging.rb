@@ -158,13 +158,14 @@ end
 
 def parse_endpoint
 	mode = nil
-	if ($endpoint.match(/mt-xmlrpc/))
-		mode = 'mt'
-	elsif ($endpoint.match(/xmlrpc\.php/))
-		mode = 'wp'
-	else
-		mode = ENV['TM_BLOG_MODE'] || 'mt'
-	end
+	case $endpoint
+  when /mt-xmlrpc/, %r{/backend/xmlrpc}
+    mode = 'mt'
+  when /xmlrpc\.php/
+    mode = 'wp'
+  else
+    mode = ENV['TM_BLOG_MODE'] || 'mt'
+  end
 	$mode = mode
 
 	if (match = $endpoint.match(/^https?:\/\/([^\/]+?)(\/.+)$/))

@@ -2,6 +2,10 @@ require 'date'
 
 $KCODE = 'u'
 
+$blog_accounts_file = "#{ENV['HOME']}/Library/Preferences/Blogging Bundle Accounts.txt"
+
+$endpoints = {}
+
 # Man, these should be in SharedSupport/Support/lib/textmate.rb !!
 
 def exit_discard; exit 200 end
@@ -12,6 +16,71 @@ def exit_insert_snippet; exit 204 end
 def exit_show_html; exit 205 end
 def exit_show_tool_tip; exit 206 end
 def exit_create_new_document; exit 207 end
+
+def read_endpoints
+	if File.exist?($blog_accounts_file)
+		accounts = IO.readlines($blog_accounts_file)
+		accounts.each do | line |
+			next if line.match(/^\s*#/)
+			if (line.match(/^(.+?)\s+(https?:\/\/.+)/))
+				$endpoints[$1] = $2
+				$endpoints[$2] = $1
+			end
+		end
+	end
+end
+
+def resolve_endpoint
+	# This is called after parsing the post; if an endpoint was specified
+	# within the post, $endpoint will already be assigned to a name or URL.
+
+	if (!$endpoint && ENV['TM_BLOG_ENDPOINT'])
+		$endpoint = ENV['TM_BLOG_ENDPOINT'].clone
+	end
+
+	# we have an endpoint that looks like a URL
+	if ($endpoint.match(/^https?:\/\//))
+		if ($endpoints[$endpoint])
+			# The endpoint is a recognized URL; nothing else to do
+		else
+			# the endpoint is a URL but unrecognized... ask for a pretty name
+			name = standard_input_box("Enter a name for this endpoint: #{$endpoint}")
+			if (name != nil)
+				$endpoints[name] = $endpoint.clone
+				$endpoints[$endpoint] = name
+				$save_endpoint_on_success = 1
+			else
+				print "Cancelled"
+				exit_show_tool_tip
+			end
+		end
+	else
+		if (!$endpoints[$endpoint])
+			url = standard_input_box("Enter an endpoint URL for blog #{$endpoint}")
+			if (url != nil)
+				$endpoints[$endpoint] = url
+				$endpoints[url] = $endpoint.clone
+				$endpoint = url
+				$save_endpoint_on_success = 1
+			else
+				print "Cancelled"
+				exit_show_tool_tip
+			end
+		else
+			# we had a named endpoint; swap with the URL...
+			$endpoint = $endpoints[$endpoint]
+		end
+	end
+
+	if (!$endpoint)
+		print "Setup required. Please see Help."
+		exit_show_tool_tip
+	end
+
+	# At this point we should have a valid URL for our endpoint. Parse it
+	# into the respective parts...
+	parse_endpoint
+end
 
 def find_internet_password
 	proto = $endpoint.match(/^https/) ? 'https' : 'http'
@@ -27,6 +96,16 @@ end
 def save_internet_password
 	proto = $endpoint.match(/^https/) ? 'https' : 'http'
 	%x{security add-internet-password -a "#{$username}" -s "#{$host}" -r "#{proto}" -p "#{$path}" -w "#{$password}" 2>/dev/null}
+end
+
+def save_new_endpoint
+	if File.exist?($blog_accounts_file)
+		endpoints = IO.readlines($blog_accounts_file)
+	end
+	endpoints.push($endpoints[$endpoint] + " " + $endpoint + "\n")
+	file = File.new($blog_accounts_file, "w")
+	file.write(endpoints.join)
+	file.close
 end
 
 def standard_input_box(prompt)
@@ -72,9 +151,7 @@ def fetch_credentials_from_keychain
 	end
 end
 
-def parse_endpoint(str)
-	$endpoint = str.clone
-
+def parse_endpoint
 	mode = nil
 	if ($endpoint.match(/mt-xmlrpc/))
 		mode = 'mt'
@@ -107,16 +184,34 @@ def init
 	$username = nil
 	$password = nil
 	$blog_id = nil
+	$format = nil
+	$endpoint = nil
+	read_endpoints
+end
 
-	if (ENV['TM_BLOG_ENDPOINT'])
-		parse_endpoint(ENV['TM_BLOG_ENDPOINT'])
-	end
-	$format = ENV['TM_BLOG_FORMAT']
+def choose_blog_endpoint
+	read_endpoints
 
-	if (!$endpoint)
-		print "Setup required. Please see Help."
-		exit_show_tool_tip
+	endpoint_titles = []
+	$endpoints.each_key do | name |
+		next if name.match(/^https?:/)
+		endpoint_titles.push( '"' + name.gsub(/"/, '\"') + '"' )
 	end
+
+	result = %x{"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog"  dropdown \
+    --title 'Select Blog' \
+    --text 'Choose a blog' \
+    --button1 Ok --button2 Cancel \
+    --items #{endpoint_titles.join(' ')}}
+
+	result = result.split(/\n/)
+
+	if result[0] == "1"
+		print "Blog: " + endpoint_titles[result[1].to_i].gsub(/^"|"$/, '') + '$0'
+	else
+		print 'blog$0'
+	end
+	exit_insert_snippet
 end
 
 # Post/Update
@@ -129,7 +224,7 @@ def request_title(default)
 	end
 end
 
-def post_parse(lines)
+def parse_post(lines)
 	post = {}
 	headers = {}
 	post['mt_text_more'] = ''
@@ -153,7 +248,7 @@ def post_parse(lines)
 				elsif (matches[1] == 'Status')
 					post['publish'] = FALSE if matches[2].match(/draft/i)
 				elsif (matches[1] == 'Blog')
-					parse_endpoint(matches[2])
+					$endpoint = matches[2]
 				else
 					headers[matches[1]] = matches[2]
 				end
@@ -170,6 +265,8 @@ def post_parse(lines)
 		lastLine = line
 	end
 
+	resolve_endpoint
+
 	post['description'] = post['description'].strip!
 	post['mt_text_more'] = post['mt_text_more'].strip!
 	if ((post['mt_text_more'] == '') || (post['mt_text_more'] == nil))
@@ -182,10 +279,14 @@ def post_parse(lines)
 	if (!format)
 		# scope-based sniffing of format; these are MT-specific.
 		if ($mode == 'mt')
-			if (/markdown/ =~ ENV['TM_SCOPE'])
+			if (ENV['TM_SCOPE'] =~ /markdown/)
 				post['mt_convert_breaks'] = 'markdown_with_smartypants'
-			elsif (/textile/ =~ ENV['TM_SCOPE'])
+			elsif (ENV['TM_SCOPE'] =~ /textile/)
 				post['mt_convert_breaks'] = 'textile_2'
+			elsif (ENV['TM_SCOPE'] =~ /text\.plain\.blog/)
+				post['mt_convert_breaks'] = '__default__'
+			elsif (ENV['TM_SCOPE'] =~ /text\.html\.blog/)
+				post['mt_convert_breaks'] = '0'
 			end
 		end
 	end
@@ -220,6 +321,7 @@ end
 def post_or_update
 	require 'xmlrpc/client'
 
+	init
 	doc = STDIN.readlines
 
 	filename = ENV['TM_FILENAME'] || ''
@@ -228,7 +330,7 @@ def post_or_update
 	end
 
 	post_id = nil
-	post = post_parse(doc)
+	post = parse_post(doc)
 
 	if (post['id'])
 		post_id = post['id']
@@ -243,6 +345,7 @@ def post_or_update
 	post.delete('publish')
 
 	begin
+		resolve_endpoint if $endpoint == nil
 		fetch_credentials_from_keychain
 		server = XMLRPC::Client.new($host, $path)
 		if (post_id)
@@ -251,6 +354,9 @@ def post_or_update
 			if ($save_password_on_success)
 				save_internet_password
 			end
+			if ($save_endpoint_on_success)
+				save_new_endpoint
+			end
 			show_post_page(post_id) if publish
 			print "Updated!"
 		else
@@ -258,6 +364,9 @@ def post_or_update
 				$blog_id, $username, $password, post, publish)
 			if ($save_password_on_success)
 				save_internet_password
+			end
+			if ($save_endpoint_on_success)
+				save_new_endpoint
 			end
 			post_id = result
 			show_post_page(post_id) if publish
@@ -308,8 +417,9 @@ def return_post(post)
 			format = formats[post['mt_convert_breaks']]
 		end
 	end
+	blog = $endpoints[$endpoint] || $endpoint
 	print "Type: Blog Post (#{format})\n"
-	print "Blog: #{$endpoint}\n"
+	print "Blog: #{blog}\n"
 	print "Post: " + post['postid'] + "\n"
 	print "Title: " + post['title'] + "\n"
 	print "Keywords: " + post['keywords'] + "\n" if post['keywords']
@@ -344,17 +454,52 @@ def return_post(post)
 	end
 end
 
+def select_endpoint
+	endpoint_titles = []
+	$endpoints.each_key do | name |
+		next if name.match(/^https?:/)
+		endpoint_titles.push( '"' + name.gsub(/"/, '\"') + '"' )
+	end
+
+	result = %x{"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog"  dropdown \
+    --title 'Select Blog' \
+    --text 'Choose a blog' \
+    --button1 Ok --button2 Cancel \
+    --items #{endpoint_titles.join(' ')}}
+
+	result = result.split(/\n/)
+
+	if result[0] == "1"
+		name = endpoint_titles[result[1].to_i].gsub(/^"|"$/, '')
+		return $endpoints[name]
+	end
+	return nil
+end
+
 def fetch_post
 	require 'xmlrpc/client'
 
-	server = XMLRPC::Client.new($host, $path)
+	init
 	begin
+		if (!ENV['TM_BLOG_ENDPOINT'])
+			# only one endpoint, so select it by default
+			if ($endpoints.keys.length == 2)
+				$endpoint = $endpoints.keys[0]
+			else
+				$endpoint = select_endpoint
+			end
+		end
+		resolve_endpoint
 		fetch_credentials_from_keychain
+		server = XMLRPC::Client.new($host, $path)
 		$blog_id = 0 if !$blog_id
 		result = server.call("metaWeblog.getRecentPosts",
 			$blog_id, $username, $password, 20)
 		if ($save_password_on_success)
 			save_internet_password
+		end
+		if ($save_endpoint_on_success)
+			save_new_endpoint
 		end
 		if (!result.length)
 			print "Error: No posts available!"
@@ -390,12 +535,14 @@ def preview_post
 		print "Couldn't find preview template!"
 	end
 	input = IO.readlines(preview_file)
-	post = post_parse(doc)
+	post = parse_post(doc)
 end
 
 def view_post
-	post = post_parse(STDIN.readlines)
+	init
+	post = parse_post(STDIN.readlines)
 	if (post['id'])
+		resolve_endpoint
 		fetch_credentials_from_keychain
 		show_post_page(post['id'])
 		exit_discard
@@ -404,5 +551,3 @@ def view_post
 		exit_show_tool_tip
 	end
 end
-
-init

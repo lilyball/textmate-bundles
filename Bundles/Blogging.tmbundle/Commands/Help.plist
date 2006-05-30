@@ -6,19 +6,16 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>Markdown.pl &lt;&lt;'EOF'
-Blogging Bundle Configuration Settings
---------------------------------------
-
-This bundle requires the following environment variables to be preset.
-
-* TM\_BLOG\_ENDPOINT: The XMLRPC endpoint to post to. Should be in the form: http://host/xmlrpcscript#blog\_id or http://user@host/xmlrpcscript#blog\_id (the "#blog_id" portion is optional if your blogging software doesn't require it). This value can be overriden by a "Blog" header within a post.
-* TM\_BLOG\_FORMAT: Your preferred formatting choice (default will derive from current blog template selected).
-* TM\_BLOG\_MODE: 'mt' and 'wp' are valid settings for this. Influences the posting API to be as compatible as possible with Movable Type, Blogger and WordPress variants of the metaWeblog API (default will derive from endpoint URL, or will default to 'mt').
 
 Getting Started
 ---------------
 
-After you've configured for your weblog, try the "Fetch Post" command to retrieve an existing post for editing. This is the easiest way to confirm that your configuration is correct. Once you have that working, you should have no problem publishing a new post.
+You should first use the "Setup Blogs" command to identify any weblogs you wish to post to. This command will load a file for editing. Within this file, you simply specify a blog name and the XMLRPC URL for it. For example:
+
+    My MT Blog          http://myusername@mydomain.com/mt/mt-xmlrpc.cgi
+    My WordPress Blog   http://myusername@mydomain.com/blog/xmlrpc.php
+
+After you've configured for your weblog(s), try the "Fetch Post" command to retrieve an existing post for editing. This is the easiest way to confirm that your configuration is correct. You will be prompted for your password upon initially connecting to your blog. Once you have that working, you should have no problem publishing a new post.
 
 To create a new weblog entry, create a new document from one of the Blogging templates:
 
@@ -29,17 +26,32 @@ To create a new weblog entry, create a new document from one of the Blogging tem
 
 Each of these will give you a basic heading section followed with the text of the post itself. Additional headers are defined as snippets within this bundle. Once you've composed your post, use the "Post to Blog" command to publish it. Upon a successful post (and assuming you elected to publish the post, instead of setting it to a draft state), your browser will open to the published page.
 
+Feel free to customize these templates to suit your preferences.
+
 Commands
 --------
 
 * **Post to Blog**: Takes a new or edited post and publishes it to your configured blog.
 * **Fetch Post**: Selects the last 20 posts and lets you choose one for editing. This will create a new document locally that you can edit and then republish using the Post to Blog command.
 * **View Post**: For a published post (one with a Post ID within the document), this command will take you to the permalink for that post.
+* **Setup Blogs**: Loads the blog accounts file for editing the list of weblogs that you want to publish to.
 
-Posting to Multiple Blogs
--------------------------
+Environment Variables
+---------------------
 
-A post's headers may contain a "Blog" header. This header lets you target any weblog endpoint. To make selection of the endpoint easier, I recommend modifying this bundle by adding additional "Blog" header snippets. An example snippet is provided and ready for you to customize.
+The following settings are available, but optional. They can either be specified in the TextMate's global Shell Variables or within a specific project.
+
+* TM\_BLOG\_ENDPOINT: You may either specify a named blog endpoint (as configured with the "Setup Blogs" command) or a endpoint URL. This value can be overriden by a "Blog" header within a post.
+* TM\_BLOG\_FORMAT: Your preferred formatting choice (default will derive from current blog template selected).
+* TM\_BLOG\_MODE: 'mt' and 'wp' are valid settings for this. Influences the posting API to be as compatible as possible with Movable Type, Blogger and WordPress variants of the metaWeblog API (default will derive from endpoint URL, or will default to 'mt').
+
+Troubleshooting
+---------------
+
+* If you change your blog password, you will need to also change your local password. The password is stored in your Keychain, so you'll have to search for it and update it or delete the Keychain record to be prompted to reauthenticate.
+
+Credits
+-------
 
 This bundle is maintained by [Brad Choate][1].
 

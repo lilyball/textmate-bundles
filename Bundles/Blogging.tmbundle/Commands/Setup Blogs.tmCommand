@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>AccountFile="$HOME/Library/Preferences/Blogging Bundle Accounts.txt"
+if [[ ! -e $AccountFile ]]; then
+    echo "# Blogging Weblog List
+# Enter a weblog name followed by the endpoint URL
+# Weblog Name    URL
+example        http://user@example.com/xmlrpc" &gt; "$AccountFile"
+fi
+AccountFile=${AccountFile// /%20} # turn spaces into %20
+`open txmt://open?url=file://$AccountFile`</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Setup Blogs</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>8DCBE1EB-A3CC-4559-872E-34A3643F0BC4</string>
+</dict>
+</plist>

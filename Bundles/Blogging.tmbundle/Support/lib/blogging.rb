@@ -2,7 +2,7 @@ require 'date'
 
 $KCODE = 'u'
 
-$blog_accounts_file = "#{ENV['HOME']}/Library/Preferences/com.macromates.blogging"
+$blog_accounts_file = "#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.blogging.txt"
 
 $endpoints = {}
 
@@ -208,10 +208,10 @@ def choose_blog_endpoint
 
 	if result[0] == "1"
 		print "Blog: " + endpoint_titles[result[1].to_i].gsub(/^"|"$/, '') + '$0'
-	else
-		print 'blog$0'
+		exit_insert_snippet
 	end
-	exit_insert_snippet
+	print "No weblogs have been configured.\nUse the \"Setup Blogs\" command."
+	exit_show_tool_tip
 end
 
 # Post/Update

@@ -5,14 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_RUBY:-ruby}" -r "$TM_SUPPORT_PATH/bin/shelltokenize.rb" &lt;&lt;END
-	xcode_project = ENV['TM_BUNDLE_SUPPORT'] + "/bin/xcode_project.rb"
-	project_file = %x{"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb"}.strip
-	adds = TextMate.selected_paths_for_shell.split(" ").collect{|path| "add=" + path}
-	command = "\"#{xcode_project}\" \"project=#{project_file}\" #{adds.join(" ")}"
-	puts %x{#{command}}
-	#puts command
-END</string>
+	<string>PROJECT="project=$(find_xcode_project.rb)"
+
+if [[ -n "$TM_SELECTED_FILES" ]]; then
+  eval arr=("$TM_SELECTED_FILES")
+  xcode_project.rb "$PROJECT" "${arr[@]/#/add=}"
+elif [[ -n "$TM_FILEPATH" ]]; then
+  xcode_project.rb "$PROJECT" add="$TM_FILEPATH"
+else
+  exit_show_tool_tip "No files selected."
+fi
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

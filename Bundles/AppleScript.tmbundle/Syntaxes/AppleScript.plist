@@ -48,46 +48,26 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#standard-additions</string>
+					<string>#standardadditions</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#built-in-commands</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#rules</string>
+					<string>#built-in</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#standard-additions</string>
+			<string>#standardadditions</string>
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#built-in-commands</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#rules</string>
+			<string>#built-in</string>
 		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>built-in-commands</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\b(count (each|every)|number of|copy|put|error|get|run|set)\b</string>
-					<key>name</key>
-					<string>support.function.script-commands.applescript</string>
-				</dict>
-			</array>
-		</dict>
-		<key>rules</key>
+		<key>built-in</key>
 		<dict>
 			<key>patterns</key>
 			<array>
@@ -113,9 +93,27 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(on error|try|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|end|return|of|my|whose)\b</string>
+					<string>\b(on error|try|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|return|end|of|my|whose)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(result|space|return|tab|minutes|hours|days|weeks|pi|print length|print depth|text item delimiters|AppleScript)\b</string>
+					<key>name</key>
+					<string>support.constant.built-in.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(count (each|every)|number of|copy|put|error|get|run|set)\b</string>
+					<key>name</key>
+					<string>support.function.built-in.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(booleans?|integers?|reals?|numbers?|(linked )?lists?|vectors?|records?|items?|scripts?|events?|propertys?|constants?|prepositions?|reference forms?|handlers?|data|characters?|writing code( infos?)?|missing values?|references?|anything|upper case|app(lications?)?|text items?|((international|styled( Clipboard|Unicode)?|Unicode) )?text|(C | encoded| Pascal )?strings?|(type )?class(es)?|RGB colors?|pictures?|sounds?|versions?|file specifications?|alias(es)?|machines?|zones?|keystrokes?|seconds|dates?|months?|January|February|March|April|May|June|July|August|September|October|November|December|weekdays?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|(cubic |square |cubic centi|square kilo|centi|kilo)met(er|re)s|(square |cubic )?(yards|feet)|(square )?miles|(cubic )?inches|lit(re|er)s|gallons|quarts|(kilo)?grams|ounces|pounds|degrees (Celsius|Fahrenheit|Kelvin))\b</string>
+					<key>name</key>
+					<string>support.class.built-in.applescript</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -167,63 +165,285 @@
 				</dict>
 			</array>
 		</dict>
-		<key>standard-additions</key>
+		<key>finder</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
+					<string>\b(item|container|(computer|disk|trash)-object|disk|folder|((alias|application|document|internet location) )?file|clipping|package)s?\b</string>
+					<key>name</key>
+					<string>support.class.finder.items.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b((Finder|desktop|information|preferences|clipping) )windows?\b</string>
+					<key>name</key>
+					<string>support.class.finder.window-classes.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(preferences|(icon|column|list) view options|(label|column|alias list)s?)\b</string>
+					<key>name</key>
+					<string>support.class.finder.type-definitions.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(copy|find|sort|clean up|eject|empty( trash)|erase|reveal|update)\b</string>
+					<key>name</key>
+					<string>support.function.finder.items.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(insertion location|product version|startup disk|desktop|trash|home|computer container|finder preferences)\b</string>
+					<key>name</key>
+					<string>support.constant.finder.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(visible|)\b</string>
+					<key>name</key>
+					<string>support.variable.finder.applescript</string>
+				</dict>
+			</array>
+		</dict>
+		<key>itunes</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(artwork|application|encoder|EQ preset|item|source|visual|(EQ |browser )?window|((audio CD|device|shared|URL|file) )?track|playlist window|((audio CD|device|radio tuner|library|folder|user) )?playlist)s?\b</string>
+					<key>name</key>
+					<string>support.class.itunes.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(add|back track|convert|fast forward|(next|previous) track|pause|play(pause)?|refresh|resume|rewind|search|stop|update|eject|subscribe|update(Podcast|AllPodcasts)|download)\b</string>
+					<key>name</key>
+					<string>support.function.itunes.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(current (playlist|stream (title|URL)|track)|player state)\b</string>
+					<key>name</key>
+					<string>support.constant.itunes.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(current (encoder|EQ preset|visual)|EQ enabled|fixed indexing|full screen|mute|player position|sound volume|visuals enabled|visual size)\b</string>
+					<key>name</key>
+					<string>support.variable.itunes.applescript</string>
+				</dict>
+			</array>
+		</dict>
+		<key>standard-suite</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(colors?|documents?|items?|windows?)\b</string>
+					<key>name</key>
+					<string>support.class.standard-suite.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(close|count|delete|duplicate|exists|make|move|open|print|quit|save|activate|select|data size)\b</string>
+					<key>name</key>
+					<string>support.function.standard-suite.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(name|frontmost|version)\b</string>
+					<key>name</key>
+					<string>support.constant.standard-suite.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(selection)\b</string>
+					<key>name</key>
+					<string>support.variable.standard-suite.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(attachments?|attribute runs?|characters?|paragraphs?|texts?|words?)\b</string>
+					<key>name</key>
+					<string>support.class.text-suite.applescript</string>
+				</dict>
+			</array>
+		</dict>
+		<key>standardadditions</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b((alert|dialog) reply)\b</string>
+					<key>name</key>
+					<string>support.class.standardadditions.user-interaction.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(file information)\b</string>
+					<key>name</key>
+					<string>support.class.standardadditions.file.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(POSIX files?|system information|volume settings)\b</string>
+					<key>name</key>
+					<string>support.class.standardadditions.miscellaneous.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(URLs?|internet address(es)?|web pages?|FTP items?)\b</string>
+					<key>name</key>
+					<string>support.class.standardadditions.internet.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
 					<string>\b(info for|list (disks|folder)|mount volume|path to( resource)?)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.file.applescript</string>
+					<string>support.function.standardadditions.file.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(beep|choose (application|color|file( name)?|folder|from list|remote application|URL)|delay|display (alert|dialog)|say)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.user-interaction.applescript</string>
+					<string>support.function.standardadditions.user-interaction.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(ASCII (character|number)|localized string|offset|summarize)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.string.applescript</string>
+					<string>support.function.standardadditions.string.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(set the clipboard to|the clipboard|clipboard info)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.clipboard.applescript</string>
+					<string>support.function.standardadditions.clipboard.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(open for access|close access|read|write|get eof|set eof)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.file-i/o.applescript</string>
+					<string>support.function.standardadditions.file-i/o.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b((load|store|run) script|scripting components)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.scripting.applescript</string>
+					<string>support.function.standardadditions.scripting.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(current date|do shell script|get volume settings|random number|round|set volume|system attribute|system info|time to GMT)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.miscellaneous.applescript</string>
+					<string>support.function.standardadditions.miscellaneous.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(opening folder|(closing|moving) folder window for|adding folder items to|removing folder items from)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.folder-actions.applescript</string>
+					<string>support.function.standardadditions.folder-actions.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(open location|handle CGI request)\b</string>
 					<key>name</key>
-					<string>support.function.standard-additions.internet.applescript</string>
+					<string>support.function.standardadditions.internet.applescript</string>
+				</dict>
+			</array>
+		</dict>
+		<key>system-events</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(audio (data|file))\b</string>
+					<key>name</key>
+					<string>support.class.system-events.audio-file.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(alias(es)?|(Classic|local|network|system|user) domain objects?|disk( item)?s?|domains?|file( package)?s?|folders?|items?)\b</string>
+					<key>name</key>
+					<string>support.class.system-events.disk-folder-file.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(delete|open|move)\b</string>
+					<key>name</key>
+					<string>support.function.system-events.disk-folder-file.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(folder actions?|scripts?)\b</string>
+					<key>name</key>
+					<string>support.class.system-events.folder-actions.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(attach action to|attached scripts|edit action of|remove action from)\b</string>
+					<key>name</key>
+					<string>support.function.system-events.folder-actions.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(movie data|movie file)\b</string>
+					<key>name</key>
+					<string>support.class.system-events.movie-file.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(log out|restart|shut down|sleep)\b</string>
+					<key>name</key>
+					<string>support.function.system-events.power.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(((application |desk accessory )?process|(check|combo )?box)(es)?|(action|attribute|browser|(busy|progress|relevance) indicator|color well|column|drawer|group|grow area|image|incrementor|list|menu( bar)?( item)?|(menu |pop up |radio )?button|outline|(radio|tab|splitter) group|row|scroll (area|bar)|sheet|slider|splitter|static text|table|text (area|field)|tool bar|UI element|window)s?)\b</string>
+					<key>name</key>
+					<string>support.class.system-events.processes.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(click|key code|keystroke|perform|select)\b</string>
+					<key>name</key>
+					<string>support.function.system-events.processes.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(property list (file|item))\b</string>
+					<key>name</key>
+					<string>support.class.system-events.property-list.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(annotation|QuickTime (data|file)|track)s?\b</string>
+					<key>name</key>
+					<string>support.class.system-events.quicktime-file.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b((abort|begin|end) transaction)\b</string>
+					<key>name</key>
+					<string>support.function.system-events.system-events.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(XML (attribute|data|element|file)s?)\b</string>
+					<key>name</key>
+					<string>support.class.system-events.xml.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(print settings|users?|login items?)\b</string>
+					<key>name</key>
+					<string>support.class.sytem-events.other.applescript</string>
 				</dict>
 			</array>
 		</dict>

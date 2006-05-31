@@ -8,6 +8,7 @@
 	<string>read appname
 osascript &lt;&lt;-APPLESCRIPT
 	tell app "Script Editor"
+	    launch
 	    open path to application ${appname}
 	    activate
 	end tell

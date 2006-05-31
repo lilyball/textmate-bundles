@@ -14,23 +14,6 @@ base=${img##*/}
 alt=$(tr &lt;&lt;&lt;${base%.*} '[_-]' ' '|perl -pe 's/(\w+)/\u$1/g')
 echo -n "alt=\"\${1:$alt}\" /&gt;"
 </string>
-	<key>documentExtensions</key>
-	<array>
-		<string>html</string>
-		<string>htm</string>
-		<string>rhtml</string>
-		<string>shtml</string>
-		<string>phtml</string>
-		<string>php</string>
-		<string>php3</string>
-		<string>php4</string>
-		<string>php5</string>
-		<string>inc</string>
-		<string>cfm</string>
-		<string>cfml</string>
-		<string>dbm</string>
-		<string>dbml</string>
-	</array>
 	<key>draggedFileExtensions</key>
 	<array>
 		<string>png</string>

@@ -44,6 +44,11 @@ module XcodeProjectSearch
 		xcode_project		= ENV['TM_XCODE_PROJECT']
 		active_file_dir		= ENV['TM_DIRECTORY']
 		active_project_dir	= ENV['TM_PROJECT_DIRECTORY']
+		
+		# Allow paths relative to TM_PROJECT_DIRECTORY
+		if xcode_project && !xcode_project[%r{^/}]
+		  xcode_project = active_project_dir + "/" + xcode_project
+	  end
 	
 		# user-specified TM_XCODE_PROJECT overrides everything else
 		if (xcode_project.nil?) or (xcode_project.empty?)

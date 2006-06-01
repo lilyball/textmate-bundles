@@ -101,7 +101,7 @@ if result.readline.chomp == "1" then  # OK clicked
 					sed -E '
 					/^([[:space:]]*)%>/i\\
 					$fusebox{"circuits"}{"#{circuitName}"} := "#{root}/#{circuitPath}"
-					' #{circuits}
+					' '#{circuits}'
 				SED
 
 				result = IO.popen("#{sedCmd}")

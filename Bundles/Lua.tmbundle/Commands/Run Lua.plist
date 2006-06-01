@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>${TM_LUA:=lua} "$TM_FILEPATH"</string>
+	<string>: ${TM_LUA:=lua}
+require_cmd "$TM_LUA"
+"$TM_LUA" "$TM_FILEPATH"|pre</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -13,7 +15,7 @@
 	<key>name</key>
 	<string>Run Lua</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.lua</string>
 	<key>uuid</key>

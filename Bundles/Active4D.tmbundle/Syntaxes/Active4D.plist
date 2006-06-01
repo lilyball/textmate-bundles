@@ -338,13 +338,16 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>support.class.active4d</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>support.function.active4d</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?&lt;!\$)\b(?:(?:a4d\.(?:console|debug|lists|utils|web)|Batch|Breadcrumbs|fusebox\.conf|fusebox\.head|fusebox|RowSet)\.)([[:alpha:]][[[:alnum:]]_ ]+[[:alnum:]])</string>
-			<key>name</key>
-			<string>support.class.active4d</string>
+			<string>(?&lt;!\$)\b((?:a4d\.(?:console|debug|lists|utils|web)|Batch|Breadcrumbs|fusebox\.conf|fusebox\.head|fusebox|RowSet))\.([[:alpha:]][[[:alnum:]]_ ]+[[:alnum:]])</string>
 		</dict>
 	</array>
 	<key>repository</key>

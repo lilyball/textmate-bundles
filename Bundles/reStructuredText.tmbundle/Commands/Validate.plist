@@ -12,7 +12,7 @@
 	<string>TRST=${TM_PYTHON:=rst2html.py}
 # TRST = "/System/Library/Frameworks/Python.framework/Versions/2.3/bin/rst2html.py"
 # Send the current file through rst2html.py
-$TRST "$TM_FILEPATH" 1&gt;/dev/null</string>
+$TRST "$TM_FILEPATH" 1&gt;/dev/null|pre</string>
 	<key>fileCaptureRegister</key>
 	<string>1</string>
 	<key>input</key>
@@ -24,7 +24,7 @@ $TRST "$TM_FILEPATH" 1&gt;/dev/null</string>
 	<key>name</key>
 	<string>Validate Syntax</string>
 	<key>output</key>
-	<string>separateWindow</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>text.restructuredtext</string>
 	<key>uuid</key>

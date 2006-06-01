@@ -22,6 +22,15 @@ for (( i = 0; i &lt; ${#folders[@]}; i++ )); do
 	[[ -f "$file" ]] &amp;&amp; exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://${file// /%20}'&gt;"
 done
 
+# then see if there's a file named after the class in Xcode 2.3 or later
+folders=( "Foundation" "ApplicationKit" "WebKit" )
+for (( i = 0; i &lt; ${#folders[@]}; i++ )); do
+	file="$doc_path/${folders[$i]}/Classes/${word}_Class/index.html"
+	echo "$file"
+	[[ -f "$file" ]] &amp;&amp; exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://${file// /%20}'&gt;"
+done
+
+
 # finally try man (PolyglotMan)
 RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
 export MANSECT=${MANSECT:-2:3:4:5:6:7:8:9} # exclude shell commands
@@ -31,7 +40,7 @@ if [[ -x "$RMAN" ]] &amp;&amp; man -w "$word" &amp;&gt;/dev/null; then
 	exit_show_html
 fi
 
-echo "Couldn’t find documentation for “${word}”"
+#echo "Couldn’t find documentation for “${word}”"
 </string>
 	<key>fallbackInput</key>
 	<string>word</string>

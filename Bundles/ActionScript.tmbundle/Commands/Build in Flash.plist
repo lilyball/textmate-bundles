@@ -1,14 +1,54 @@
-{
-    beforeRunningCommand = saveModifiedFiles; 
-    captureFormatString = "$2, line $3: $4"; 
-    capturePattern = "^(.+):(.+):(\\d+):(.*)$"; 
-    command = "# run this command with the .fla file in your project, and selected\n# set FLASHCOMMAND to the location of your flashcommand binary.\n# get flashcommand here:\n# http://www.markme.com/mesh/archives/004419.cfm\n\nFLASHCOMMAND=~/bin/flashcommand\n\n#\n# end user changes\n#\n\nFLA=$TM_SELECTED_FILE\nSWF=$TM_DIRECTORY/temp.swf\n\nresult=`\"$FLASHCOMMAND\" -e -s \"$FLA\" -o \"$SWF\"`\ntest=`echo \"$result\" | grep -c Error`\n\nif [ \"$test\" != 0 ]\nthen\n   #flashcommand output is very dirty and windoze like. Let's format it !\necho $result | perl -p -i -e \"s/\\s*\\*\\*(Error|Warning)\\*\\*\\s*/\\n/g;\" | perl -p -i -e \"s/Total ActionScript Errors.+//g;\" | awk 'BEGIN {FS=\": Line \"} { a=$1; b=$1; gsub(\":\",\"/\",a); gsub(\"^.+:\",\"\",b); print a\":\"b\":\"$2}' | perl -p -i -e \"s'^(.+?)/'/';\" \nexit 1;\nelse\n  echo Built successfully.\n  open \"$SWF\"\nfi\n\nexit;"; 
-    fileCaptureRegister = 2; 
-    input = none; 
-    keyEquivalent = "~@"; 
-    lineCaptureRegister = 3; 
-    name = "Build in Flash"; 
-    output = separateWindow; 
-    uuid = "2197A196-78E3-11D9-8177-000A95C5F126"; 
-    scope = "source.actionscript";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>captureFormatString</key>
+	<string>$2, line $3: $4</string>
+	<key>capturePattern</key>
+	<string>^(.+):(.+):(\d+):(.*)$</string>
+	<key>command</key>
+	<string># run this command with the .fla file in your project, and selected
+# set FLASHCOMMAND to the location of your flashcommand binary.
+# get flashcommand here:
+# http://www.markme.com/mesh/archives/004419.cfm
+require_cmd flashcommand
+FLASHCOMMAND=flashcommand
+
+#
+# end user changes
+#
+
+FLA=$TM_SELECTED_FILE
+SWF=$TM_DIRECTORY/temp.swf
+
+result=`"$FLASHCOMMAND" -e -s "$FLA" -o "$SWF"`
+test=`echo "$result" | grep -c Error`
+
+if [ "$test" != 0 ]; then
+  #flashcommand output is very dirty and windoze like. Let's format it !
+  echo $result | perl -p -i -e "s/\s*\*\*(Error|Warning)\*\*\s*/\n/g;" | perl -p -i -e "s/Total ActionScript Errors.+//g;" | awk 'BEGIN {FS=": Line "} { a=$1; b=$1; gsub(":","/",a); gsub("^.+:","",b); print a":"b":"$2}' | perl -p -i -e "s'^(.+?)/'/';" | pre
+else
+  echo Built successfully.
+  open "$SWF"
+fi
+</string>
+	<key>fileCaptureRegister</key>
+	<string>2</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@</string>
+	<key>lineCaptureRegister</key>
+	<string>3</string>
+	<key>name</key>
+	<string>Build in Flash</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.actionscript</string>
+	<key>uuid</key>
+	<string>2197A196-78E3-11D9-8177-000A95C5F126</string>
+</dict>
+</plist>

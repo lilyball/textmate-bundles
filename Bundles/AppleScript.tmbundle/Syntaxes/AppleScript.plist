@@ -17,6 +17,7 @@
 		|( on | to ) \b .*
 		|try
 		|with \s+ timeout .*
+		|script\b .*
 		)\s*$
 	</string>
 	<key>foldingStopMarker</key>
@@ -93,7 +94,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(on error|try|to|on|exit|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|return|end|of|my|whose)\b</string>
+					<string>\b(on error|try|to|on|exit|tell|script|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try|script)|return|end|of|my|whose)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>

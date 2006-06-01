@@ -3,15 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;a href="${1:http://somesite.com/}"&gt;${2:${TM_SELECTED_TEXT:Link text...}}&lt;/a&gt;</string>
+	<string>&lt;a href="${1:`
+   # if the clipboard contains a single line, let’s use that
+   if [[ $(pbpaste|wc -l) -eq 0 ]]
+      then pbpaste|sed 's/&amp;/&amp;amp;/g'
+      else echo http://site.com/
+   fi
+`}"&gt;${TM_SELECTED_TEXT:Link text...}&lt;/a&gt;</string>
 	<key>keyEquivalent</key>
 	<string>^L</string>
 	<key>name</key>
 	<string>Wrap Selection as Link</string>
 	<key>scope</key>
 	<string>text.html</string>
-	<key>tabTrigger</key>
-	<string>ref</string>
 	<key>uuid</key>
 	<string>44F60595-F6BC-42BB-94B8-DF0FE455A283</string>
 </dict>

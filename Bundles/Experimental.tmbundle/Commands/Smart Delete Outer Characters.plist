@@ -16,7 +16,7 @@ def strip_bracket (txt)
     if ridx = txt.rindex(chr_map[txt[idx]]) then
       txt[ridx, 1] = ""
       txt[idx, 1] = ""
-      txt.insert idx, " " if txt[idx - 1, 1] =~ /[^\[\]\(\)\{\}\s]/
+      txt.insert idx, " " if txt[idx - 1, 1] =~ /[^\[\]\(\)\{\}\s]/ &amp;&amp; ENV['TM_SELECTED_TEXT'].nil?
     end
   end
   return txt

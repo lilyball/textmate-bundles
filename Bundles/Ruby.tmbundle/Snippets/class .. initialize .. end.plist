@@ -4,7 +4,7 @@
 <dict>
 	<key>content</key>
 	<string>class ${1:ClassName}
-	def initialize${2/(^(?&lt;var&gt;\s*[*&amp;]?[a-z_][a-zA-Z0-9_]*\s*)(,\g&lt;var&gt;)*,?\s*$)|.*/(?1:\( )/}${2:args}${2/(^(?&lt;var&gt;\s*[*&amp;]?[a-z_][a-zA-Z0-9_]*\s*)(,\g&lt;var&gt;)*,?\s*$)|.*/(?1: \))/}
+	def initialize${2/(^.*?\S.*)|.*/(?1:\()/}${2:args}${2/(^.*?\S.*)|.*/(?1:\))/}
 		$0
 	end
 	

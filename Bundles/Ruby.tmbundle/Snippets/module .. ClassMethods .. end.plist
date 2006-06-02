@@ -3,16 +3,27 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>def method_missing( meth, *args, &amp;block )
-	$0
+	<string>module ${1:ModuleName}
+	module ClassMethods
+		$0
+	end
+	
+	extend ClassMethods
+	
+	def self.append_feature(cls)
+		super
+		cls.extend(ClassMethods)
+	end
+	
+	
 end</string>
 	<key>name</key>
-	<string>def method_missing .. end  (mm)</string>
+	<string>module .. ClassMethods .. end  (mod)</string>
 	<key>scope</key>
 	<string>source.ruby</string>
 	<key>tabTrigger</key>
-	<string>mm</string>
+	<string>mod</string>
 	<key>uuid</key>
-	<string>87D5F8AD-8DA6-4AED-A0D8-B51CAC980445</string>
+	<string>A71A18CF-2D71-4BFF-AA0C-D9B8C59BC4EB</string>
 </dict>
 </plist>

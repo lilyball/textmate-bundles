@@ -3,27 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>module ${1:ModuleName}
-	module ClassMethods
+	<string>class ${1:ClassName} &lt; DelegateClass(${2:ParentClass})
+	def initialize${3/(^.*?\S.*)|.*/(?1:\()/}${3:args}${3/(^.*?\S.*)|.*/(?1:\))/}
+		super(${4:del_obj})
+		
 		$0
-	end
-	
-	extend ClassMethods
-	
-	def self.append_feature( cls )
-		super
-		cls.extend(ClassMethods)
 	end
 	
 	
 end</string>
 	<key>name</key>
-	<string>module .. ClassMethods .. end  (mod)</string>
+	<string>class .. &lt; DelegateClass .. initialize .. end  (cla-)</string>
 	<key>scope</key>
 	<string>source.ruby</string>
 	<key>tabTrigger</key>
-	<string>mod</string>
+	<string>cla-</string>
 	<key>uuid</key>
-	<string>A71A18CF-2D71-4BFF-AA0C-D9B8C59BC4EB</string>
+	<string>AFE1D078-EA16-45F5-AD8A-FAC1B523D861</string>
 </dict>
 </plist>

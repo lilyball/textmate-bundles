@@ -5,14 +5,21 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>if [ ! -x "${TM_FILEPATH}" ]; then
-   echo "Cannot execute '${TM_FILENAME}' : permission error"
-   echo "You can make the file executable by pressing:"
-   echo
-   echo "   control-shift-command X"
-else
-   "${TM_FILEPATH}"
-fi|pre</string>
+	<string>if [ ! -x "$TM_FILEPATH" ]; then
+
+  res=$(iconv &lt;&lt;APPLESCRIPT -f utf-8 -t mac|osascript 2&gt;/dev/null
+  tell app "TextMate" to return button returned of ¬
+    (display dialog "To run “${TM_FILENAME}” as a shell script it needs to be executable.\n\nWould you like to make it executable?" ¬
+      buttons {"Cancel", "Make Executable"} ¬
+      with icon 1 default button 2)
+APPLESCRIPT)
+
+  if [[ "$res" != "Make Executable" ]]; then echo '&lt;script&gt;window.close()&lt;/script&gt;'; abort; exit; fi
+  chmod a+x "$TM_FILEPATH"
+fi
+
+{ "$TM_FILEPATH"; echo -e "\nProcess terminated with status $?"; }|pre
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

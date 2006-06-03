@@ -228,10 +228,10 @@ example          http://user@example.com/xmlrpc\n}]
 					post['mt_convert_breaks'] = 'markdown_with_smartypants'
 				when /textile/
 					post['mt_convert_breaks'] = 'textile_2'
-				when /text\.plain\.blog/
-					post['mt_convert_breaks'] = '__default__'
-				when /text\.html\.blog/
+				when /text\.blog\.html/
 					post['mt_convert_breaks'] = '0'
+				else
+					post['mt_convert_breaks'] = '__default__'
 				end
 			end
 		end
@@ -431,6 +431,15 @@ example          http://user@example.com/xmlrpc\n}]
 	end
 
 	def select_endpoint
+		if endpoints.length == 2
+			# there's only one endpoint here (we store two keys for each)
+			# return the first one
+			endpoints.each_key do | _name |
+				return _name if _name !~ /^https?:/
+				return endpoints[_name]
+			end
+		end
+
 		_titles = []
 		endpoints.each_key do | _name |
 			next if _name =~ /^https?:/
@@ -510,6 +519,19 @@ example          http://user@example.com/xmlrpc\n}]
 	# 'blog' Command (snippet)
 
 	def choose_blog_endpoint
+		if endpoints.length == 2
+			_endpoint = nil
+			endpoints.each_key do | _name |
+				if _name !~ /^https?:/
+					_endpoint = _name
+				else
+					_endpoint = endpoints[_name]
+				end
+				break
+			end
+			TextMate.exit_insert_snippet("Blog: #{_endpoint}")
+		end
+
 		_titles = []
 		endpoints.each_key do | _name |
 			next if _name =~ /^https?:/

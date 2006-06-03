@@ -46,7 +46,7 @@ module TextMate
 			return _standard_input_box('standard-inputbox', title, prompt)
 		end
 
-		def secure_input_box(prompt)
+		def secure_standard_input_box(title, prompt)
 			return _standard_input_box('secure-standard-inputbox', title, prompt)
 		end
 

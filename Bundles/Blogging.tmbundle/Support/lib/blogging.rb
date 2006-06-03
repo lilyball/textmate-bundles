@@ -73,6 +73,8 @@ example          http://user@example.com/xmlrpc\n}]
 		if @password == nil
 			@password = _find_internet_password
 			if @password == nil
+				# Allan: change "standard_input_box" to "secure_standard_input_box"
+				# once CocoaDialog has been updated in TextMate.app
 				@password = TextMate.standard_input_box("Blogging",
 					"Enter the password to login at #{endpoint}")
 				TextMate.exit_show_tool_tip("Cancelled") if password == nil

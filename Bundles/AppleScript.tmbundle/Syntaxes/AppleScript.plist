@@ -18,6 +18,7 @@
 		|try
 		|with \s+ timeout .*
 		|script\b .*
+		|( considering | ignoring )\b .*
 		)\s*$
 	</string>
 	<key>foldingStopMarker</key>
@@ -93,16 +94,64 @@
 					<string>keyword.operator.applescript</string>
 				</dict>
 				<dict>
+					<key>comment</key>
+					<string>make sure that "return" is not preceded by something else, to disambiguate with the constant</string>
 					<key>match</key>
-					<string>\b(on error|try|to|on|exit|tell|script|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|in|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try|script)|return|end|of|my|whose)\b</string>
+					<string>(?&lt;!\S |\S)\breturn\b|\b(prop(erty)?|global|local|continue|on error|try|to|on|exit|tell|script|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try|script)|end|my|where|whose|considering|ignoring)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(result|space|return|tab|minutes|hours|days|weeks|pi|print length|print depth|text item delimiters|AppleScript)\b</string>
+					<string>\b(every|some|index|named|from|to|through|thru|before|(in )?front of|after|(in )?back of|beginning of|end of|in|of|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|\d+(st|nd|rd|th)|last|front|back|middle)\b</string>
 					<key>name</key>
-					<string>support.constant.built-in.applescript</string>
+					<string>keyword.control.reference.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(all (caps|lowercase)|bold|condensed|expanded|hidden|italic|outline|plain|shadow|small caps|strikethrough|(sub|super)script|underline)\b</string>
+					<key>name</key>
+					<string>constant.language.text-styles.applescript</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>yes/no can’t always be used as booleans, e.g. in an if() expression. But they work e.g. for boolean arguments.</string>
+					<key>match</key>
+					<string>\b(?i:true|false|yes|no)\b</string>
+					<key>name</key>
+					<string>constant.language.boolean.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sep(tember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?|weekdays?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)\b</string>
+					<key>name</key>
+					<string>constant.language.date-time.applescript</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>these are used in considering/ignoring statements</string>
+					<key>match</key>
+					<string>\b(?&lt;=considering|ignoring) (application responses|current application|case|diacriticals|expansion|hyphens|punctuation|white space)\b</string>
+					<key>name</key>
+					<string>constant.language.considering-ignoring-attributes.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(space|return|tab)\b</string>
+					<key>name</key>
+					<string>constant.language.characters.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(null|current application|it|me|version|result|pi|AppleScript)\b</string>
+					<key>name</key>
+					<string>constant.language.miscellaneous.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(text item delimiters|print length|print depth)\b</string>
+					<key>name</key>
+					<string>variable.language.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -112,17 +161,9 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(booleans?|integers?|reals?|numbers?|(linked )?lists?|vectors?|records?|items?|scripts?|events?|propertys?|constants?|prepositions?|reference forms?|handlers?|data|characters?|writing code( infos?)?|missing values?|references?|anything|upper case|app(lications?)?|text items?|((international|styled( Clipboard|Unicode)?|Unicode) )?text|(C | encoded| Pascal )?strings?|(type )?class(es)?|RGB colors?|pictures?|sounds?|versions?|file specifications?|alias(es)?|machines?|zones?|keystrokes?|seconds|dates?|months?|January|February|March|April|May|June|July|August|September|October|November|December|weekdays?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|(cubic |square |cubic centi|square kilo|centi|kilo)met(er|re)s|(square |cubic )?(yards|feet)|(square )?miles|(cubic )?inches|lit(re|er)s|gallons|quarts|(kilo)?grams|ounces|pounds|degrees (Celsius|Fahrenheit|Kelvin))\b</string>
+					<string>\b(booleans?|integers?|reals?|numbers?|(linked )?lists?|vectors?|records?|items?|scripts?|events?|propertys?|constants?|prepositions?|reference forms?|handlers?|data|characters?|writing code( infos?)?|missing values?|references?|anything|missing value|upper case|app(lications?)?|text items?|((international|styled( Clipboard|Unicode)?|Unicode) )?text|(C | encoded| Pascal )?strings?|(type )?class(es)?|RGB colors?|pictures?|sounds?|versions?|file specifications?|alias(es)?|machines?|zones?|keystrokes?|seconds|dates?|months?|(cubic |square |cubic centi|square kilo|centi|kilo)met(er|re)s|(square |cubic )?(yards|feet)|(square )?miles|(cubic )?inches|lit(re|er)s|gallons|quarts|(kilo)?grams|ounces|pounds|degrees (Celsius|Fahrenheit|Kelvin))\b</string>
 					<key>name</key>
 					<string>support.class.built-in.applescript</string>
-				</dict>
-				<dict>
-					<key>comment</key>
-					<string>yes/no can’t always be used as booleans, e.g. in an if() expression. But they work e.g. for boolean arguments.</string>
-					<key>match</key>
-					<string>\b(?i:true|false|yes|no)\b</string>
-					<key>name</key>
-					<string>constant.language.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>

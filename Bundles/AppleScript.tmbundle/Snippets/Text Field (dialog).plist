@@ -3,12 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>display dialog "${1:text}" ¬
+	<string>set the_result to display dialog "${1:text}" ¬
 	default answer "${2:type here}" ¬
 	${3:with icon ${4:1} ¬
 	}buttons {"${6:Cancel}", "${5:OK}"} ¬
 	default button "$5"
-set button_pressed to button returned of result
+set button_pressed to button returned of the_result
+set text_typed to text returned of the_result
 if button_pressed is "$5" then
 	${7:-- action for default button button goes here}
 else

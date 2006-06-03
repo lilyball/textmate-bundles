@@ -25,15 +25,44 @@ To create a new weblog entry, create a new document from one of the Blogging tem
 * Weblog Post (HTML)
 * Weblog Post (Text)
 
-Each of these will give you a basic heading section followed with the text of the post itself. Additional headers are defined as snippets within this bundle. Once you've composed your post, use the "Post to Blog" command to publish it. Upon a successful post (and assuming you elected to publish the post, instead of setting it to a draft state), your browser will open to the published page.
+Each of these will give you a basic heading section followed with the text of the post itself. Additional headers are defined as snippets within this bundle. Once you've composed your post, use the "Post to Blog" command to publish it. Upon a successful post (and assuming you elected to publish the post, instead of setting it to a draft state), your browser will open to the published page. The document window you were working in will also be refreshed with the post as retrieved from your weblog (which will add other missing headers, such as the post ID).
 
 Feel free to customize these templates to suit your preferences.
+
+Headers
+-------
+
+To specify all the relevant metadata along with your post, add one of the following items to the top of the document:
+
+* Title - The title for your entry.
+* Post - The ID of the weblog entry (this is meant to be assigned by the server; you shouldn't have to enter this yourself).
+* Date - The date of the post. Omit this header to post with the current time.
+* Category - One or more headers to specify the categories for the entry.
+* Ping - One or more TrackBack URLs you wish to ping.
+* Keywords - A list of keywords to associate with the entry.
+* Tags - A list of tags to assign to the entry.
+* Pings - "On" or "Off"; used to control whether the entry accepts TrackBacks.
+* Comments - "On" or "Off"; used to control whether the entry accepts comments.
+* Format - Typically server assigned; the format of the template you're using should control this.
+* Blog - An XMLRPC endpoint URL or weblog identifier (from your weblog accounts file).
+
+Header lines are written with the heading keyword followed with a colon (":") and then the value for the keyword follows.
+
+    Title: Title of the post
+
+The headers listed above with a "*" may be repeated, allowing you to assign your post to multiple categories (with the "Category" header) or to ping multiple blogs (with the "Ping" header).
+
+All of these headers are optional. If you don't specify any of them, they will typically be assigned a default value by your weblog software. The "Title" field is the only thing that will be requested if it is omitted. If you try to post an entry without a title, you will be asked for a title. However when prompted, you may still leave it blank if you wish.
+
+The "Date" header must be specified with this format: YYYY-MM-DD HH:MM:SS. You may omit the time, but it will be replaced with 12 AM if you do so. Leaving the date header out altogether will cause your entry to be posted with the current time.
+
+You weblog software may not support some of these headers. I recommend that you issue a Fetch command to retrieve an existing post and take note of the headers returned with the post. That will give you an indication of which headers are supported for new posts.
 
 Commands
 --------
 
 * **Post to Blog**: Takes a new or edited post and publishes it to your configured blog.
-* **Fetch Post**: Selects the last 20 posts and lets you choose one for editing. This will create a new document locally that you can edit and then republish using the Post to Blog command.
+* **Fetch Post**: Selects the last available posts (up to 20) and lets you choose one for editing. This will create a new document locally that you can edit and then republish using the Post to Blog command.
 * **View Post**: For a published post (one with a Post ID within the document), this command will take you to the permalink for that post.
 * **Setup Blogs**: Loads the blog accounts file for editing the list of weblogs that you want to publish to.
 
@@ -42,14 +71,14 @@ Environment Variables
 
 The following settings are available, but optional. They can either be specified in the TextMate's global Shell Variables or within a specific project.
 
-* TM\_BLOG\_ENDPOINT: You may either specify a named blog endpoint (as configured with the "Setup Blogs" command) or a endpoint URL. This value can be overriden by a "Blog" header within a post.
+* TM\_BLOG\_ENDPOINT: You may either specify a named blog endpoint (as configured with the "Setup Blogs" command) or a endpoint URL. This value can be overriden by a "Blog" header within a post. If this is unset **and** your document doesn't have a "Blog" header, you will be prompted for which blog to use.
 * TM\_BLOG\_FORMAT: Your preferred formatting choice (default will derive from current blog template selected).
-* TM\_BLOG\_MODE: 'mt' and 'wp' are valid settings for this. Influences the posting API to be as compatible as possible with Movable Type, Blogger and WordPress variants of the metaWeblog API (default will derive from endpoint URL, or will default to 'mt').
+* TM\_BLOG\_MODE: 'mt' and 'wp' are valid settings for this. Influences the posting API to be as compatible as possible with Movable Type, TypePad, Blogger, Typo and WordPress variants of the metaWeblog API (default will derive from endpoint URL, or will default to 'mt').
 
 Troubleshooting
 ---------------
 
-* If you change your blog password, you will need to also change your local password. The password is stored in your Keychain, so you'll have to search for it and update it or delete the Keychain record to be prompted to reauthenticate.
+* If you change your blog password, you will need to also change your local password. The password is stored in your KeyChain, so you'll have to search for it and update it or delete the Keychain record to be prompted to reauthenticate.
 
 Credits
 -------

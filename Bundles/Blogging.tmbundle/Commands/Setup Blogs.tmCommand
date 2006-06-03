@@ -10,7 +10,7 @@ if [[ ! -e $AccountFile ]]; then
     echo "# Blogging Weblog List
 # Enter a weblog name followed by the endpoint URL
 # Weblog Name    URL
-example        http://user@example.com/xmlrpc" &gt; "$AccountFile"
+example          http://user@example.com/xmlrpc" &gt; "$AccountFile"
 fi
 AccountFile=${AccountFile// /%20} # turn spaces into %20
 `open txmt://open?url=file://$AccountFile`</string>

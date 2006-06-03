@@ -18,28 +18,34 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.blogger.name</string>
+					<string>keyword.other.blog</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>string.blogger.value</string>
+					<string>string.unquoted.blog</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^([A-Za-z0-9]+):\s*(.+?)$\n?</string>
+			<string>^([A-Za-z0-9]+):\s*(.*)$\n?</string>
 			<key>name</key>
-			<string>meta.headers.blogger</string>
+			<string>meta.headers.blog</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>^(?![A-Za-z0-9]+:)</string>
 			<key>end</key>
-			<string>^(?!not)not</string>
+			<string>^(?=not)possible$</string>
 			<key>name</key>
-			<string>meta.content.blogger</string>
+			<string>text.plain</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>match</key>
+					<string>^(✂-{6})+$\n</string>
+					<key>name</key>
+					<string>meta.separator.blog</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>text.plain</string>
@@ -48,7 +54,7 @@
 		</dict>
 	</array>
 	<key>scopeName</key>
-	<string>text.plain.blog</string>
+	<string>text.blog</string>
 	<key>uuid</key>
 	<string>B2CCDFF8-0FB3-492A-8761-D31FF0FAC448</string>
 </dict>

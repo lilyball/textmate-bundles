@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>Markdown.pl &lt;&lt;'EOF'
+	<string>Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl
 
 Getting Started
 ---------------
@@ -56,7 +56,7 @@ All of these headers are optional. If you don't specify any of them, they will t
 
 The "Date" header must be specified with this format: YYYY-MM-DD HH:MM:SS. You may omit the time, but it will be replaced with 12 AM if you do so. Leaving the date header out altogether will cause your entry to be posted with the current time.
 
-You weblog software may not support some of these headers. I recommend that you issue a Fetch command to retrieve an existing post and take note of the headers returned with the post. That will give you an indication of which headers are supported for new posts.
+Your weblog software may not support some of these headers. I recommend that you issue a Fetch command to retrieve an existing post and take note of the headers returned with the post. That will give you an indication of which headers are supported for new posts.
 
 Commands
 --------
@@ -69,11 +69,11 @@ Commands
 Environment Variables
 ---------------------
 
-The following settings are available, but optional. They can either be specified in the TextMate's global Shell Variables or within a specific project.
+The following settings are available, but optional. They can either be specified in TextMate's global Shell Variables or within a specific project.
 
-* TM\_BLOG\_ENDPOINT: You may either specify a named blog endpoint (as configured with the "Setup Blogs" command) or a endpoint URL. This value can be overriden by a "Blog" header within a post. If this is unset **and** your document doesn't have a "Blog" header, you will be prompted for which blog to use.
-* TM\_BLOG\_FORMAT: Your preferred formatting choice (default will derive from current blog template selected).
-* TM\_BLOG\_MODE: 'mt' and 'wp' are valid settings for this. Influences the posting API to be as compatible as possible with Movable Type, TypePad, Blogger, Typo and WordPress variants of the metaWeblog API (default will derive from endpoint URL, or will default to 'mt').
+* `TM_BLOG_ENDPOINT`: You may either specify a named blog endpoint (as configured with the "Setup Blogs" command) or an endpoint URL. This value can be overriden by a "Blog" header within a post. If this is unset **and** your document doesn't have a "Blog" header, you will be prompted for which blog to use.
+* `TM_BLOG_FORMAT`: Your preferred formatting choice (default will derive from current blog template selected).
+* `TM_BLOG_MODE`: 'mt' and 'wp' are valid settings for this. Influences the posting API to be as compatible as possible with Movable Type, TypePad, Blogger, Typo and WordPress variants of the metaWeblog API (default will derive from endpoint URL, or will default to 'mt').
 
 Troubleshooting
 ---------------

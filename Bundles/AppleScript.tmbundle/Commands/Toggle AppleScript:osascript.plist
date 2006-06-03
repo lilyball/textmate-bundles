@@ -12,7 +12,8 @@ scrpt = STDIN.read
 if scrpt =~ /\A\s*osascript\s+-e\s*(.*)\z/m then
   scrpt = $1.gsub(/\s+-e\s*/, "\n")
   scrpt.gsub!(/\\(')|'([^']*)'/, '\1\2')
-  print "${0:", scrpt.gsub(/[$`\\]/, '\\\\\1'), "}"
+  print "${0:", scrpt.gsub(/[$`\\}]/, '\\\\\0'), "}"
+  %x{ { sleep .1; osascript -e 'tell app "System Events" to keystroke "[" using {command down, option down}'; } &amp;&gt;/dev/null &amp; } # Indent Selection
   exit 204 # this signals exit_insert_as_snippet
 else
   lines = scrpt.collect { |line| line.chomp.gsub(/'/, "'\\\\''") }

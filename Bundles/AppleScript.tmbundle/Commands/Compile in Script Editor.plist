@@ -8,22 +8,22 @@
 	<string>content () {
 	iconv -cs -f utf-8 -t macroman//TRANSLIT | perl -pe 's/["\\]/\\$&amp;/g'
 }
- 
-osascript &lt;&lt;AS
+
+osascript &lt;&lt;-APPLESCRIPT
 	tell application "Script Editor"
-		activate
-		set theDocument to make new document
-		tell theDocument
-			set contents of selection to "$(content)"
-			try
-				check syntax
-				compile
-			on error the error_message number the error_number
-				display dialog "Error: " &amp; the error_number &amp; ". " &amp; the error_message buttons {"OK"} default button 1
-end try
-		end tell
+	    activate
+	    set theDocument to make new document
+	    tell theDocument
+	        set contents of selection to "$(content)"
+	        try
+	            check syntax
+	            compile
+	        on error error_message number the error_number
+	            display dialog "Error: " &amp; the error_number &amp; ". " &amp; the error_message buttons {"OK"} default button 1
+	        end try
+	    end tell
 	end tell
-AS</string>
+APPLESCRIPT</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

@@ -5,27 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>read appname
-osascript &lt;&lt;-APPLESCRIPT
-	tell app "Script Editor"
-	    launch
-	    activate
-	    open path to application ${appname}
-	end tell
+	<string>osascript &lt;&lt;-APPLESCRIPT
+	open location "file:///Developer/ADC%20Reference%20Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/index.html?file:///Developer/ADC%20Reference%20Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/AppleScript.1.html"
 APPLESCRIPT</string>
 	<key>fallbackInput</key>
 	<string>scope</string>
 	<key>input</key>
-	<string>selection</string>
-	<key>keyEquivalent</key>
-	<string>^h</string>
+	<string>none</string>
 	<key>name</key>
-	<string>Documentation for Application</string>
+	<string>AppleScript Language Guide</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>scope</key>
-	<string>string.quoted.double.application-name.applescript</string>
+	<string>source.applescript</string>
 	<key>uuid</key>
-	<string>2263B3B6-8D09-4B98-B056-3DF129226C78</string>
+	<string>C744043F-79AE-47D7-9E7A-F476F44437AC</string>
 </dict>
 </plist>

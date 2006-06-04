@@ -73,9 +73,11 @@ example          http://user@example.com/xmlrpc\n}]
 		if @password == nil
 			@password = _find_internet_password
 			if @password == nil
+				_endpoint = endpoint
+				_endpoint.sub!(/#\d+/, '') if _endpoint =~ /#\d+/
 				@password = TextMate.secure_standard_input_box("Blogging",
-					"Enter the password to login at #{endpoint}")
-				TextMate.exit_show_tool_tip("Cancelled") if password == nil
+					"Enter the password to login at #{_endpoint}")
+				TextMate.exit_show_tool_tip("Cancelled") if @password == nil
 				@save_password_on_success = true
 			end
 		end
@@ -450,6 +452,7 @@ example          http://user@example.com/xmlrpc\n}]
 			TextMate.exit_show_tool_tip("No blog accounts are configured.\nPlease see Help or run Setup Blogs command.")
 		end
 
+		_titles.sort!
 		_result = TextMate.dropdown(%Q{--title 'Select Blog' \
 			--text 'Choose a blog' \
 			--button1 Ok --button2 Cancel \
@@ -537,6 +540,7 @@ example          http://user@example.com/xmlrpc\n}]
 			next if _name =~ /^https?:/
 			_titles.push( '"' + _name.gsub(/"/, '\"') + '"' )
 		end
+		_titles.sort!
 
 		_result = TextMate.dropdown(%Q{--title 'Select Blog' \
 			--text 'Choose a blog' \

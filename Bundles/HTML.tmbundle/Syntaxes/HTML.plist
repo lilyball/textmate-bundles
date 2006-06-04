@@ -255,6 +255,20 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>match</key>
+							<string>//.*?((?=&lt;/script)|$\n?)</string>
+							<key>name</key>
+							<string>comment.line.double-slash.js</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>/\*</string>
+							<key>end</key>
+							<string>\*/|(?=&lt;/script)</string>
+							<key>name</key>
+							<string>comment.block.js</string>
+						</dict>
+						<dict>
 							<key>include</key>
 							<string>source.js</string>
 						</dict>

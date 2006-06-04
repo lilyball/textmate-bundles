@@ -97,7 +97,7 @@
 					<key>comment</key>
 					<string>make sure that "return" is not preceded by something else, to disambiguate with the constant</string>
 					<key>match</key>
-					<string>(?&lt;!\S |\S)\breturn\b|\b(prop(erty)?|global|local|continue|on error|try|to|on|exit|tell|script|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try|script)|end|my|where|whose|considering|ignoring)\b</string>
+					<string>(?&lt;=^|then|to)\s*\breturn\b(?!\s*&amp;)|\b(prop(erty)?|global|local|continue|on error|try|to|on|exit|tell|script|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try|script)|end|my|where|whose|considering|ignoring)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>

@@ -2,6 +2,7 @@
 # This is done to give the user a full PATH
 
 unset BASH_ENV # avoid recursively running this script
+export LC_CTYPE="en_US.UTF-8"
 
 : ${TM_BASH_INIT:=$HOME/Library/Application Support/TextMate/bash_init.sh}
 if [ ! -f "$TM_BASH_INIT" ]; then
@@ -67,7 +68,7 @@ pre () {
 # prints an (HTML) error + exists if it's not there
 require_cmd () {
 	if ! type -p "$1" >/dev/null; then
-		cat <<EOF
+		cat <<HTML
 <h3 class="error">Couldn't find $1</h3>
 ${2:+<p>$2</p>}
 <p>Locations searched:</p>
@@ -75,8 +76,7 @@ ${2:+<p>$2</p>}
 ${PATH//:/
 }
 </pre></p>
-<p><em>Contact your system administrator if you do not know what this means.</em></p>
-EOF
+HTML
 		exit_show_html;
 	fi
 }

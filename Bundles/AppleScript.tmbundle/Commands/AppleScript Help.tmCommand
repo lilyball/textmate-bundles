@@ -5,13 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>osascript &lt;&lt;-APPLESCRIPT
-	tell application "Help Viewer"
-	    launch
-	    activate
-	    open "file:///"
+	<string>if ps -xc|grep -sq 'Help Viewer$'; then
+	osascript -e 'tell application "Help Viewer" to open "file:///"'
+fi
+osascript &lt;&lt;-APPLESCRIPT
+	tell app "Help Viewer"
 	    handle url "file:///Library/Documentation/Help/AppleScript.help/Contents/Resources/English.lproj/AppleScript.html"
-	end tell
+	    activate
+	end tell	
 APPLESCRIPT</string>
 	<key>fallbackInput</key>
 	<string>scope</string>

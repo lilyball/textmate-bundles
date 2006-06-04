@@ -5,9 +5,12 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>osascript &lt;&lt;-APPLESCRIPT
-	open location "file:///Developer/ADC%20Reference%20Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/index.html?file:///Developer/ADC%20Reference%20Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/AppleScript.1.html"
-APPLESCRIPT</string>
+	<string>if [ -d "/Developer/ADC Reference Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/" ]; then
+	open "file:///Developer/ADC%20Reference%20Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/index.html"
+else
+	open "http://developer.apple.com/documentation/AppleScript/Conceptual/AppleScriptLangGuide/"
+fi
+</string>
 	<key>fallbackInput</key>
 	<string>scope</string>
 	<key>input</key>

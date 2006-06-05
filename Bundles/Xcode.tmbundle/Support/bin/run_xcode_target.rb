@@ -43,7 +43,11 @@ rootObj    = objs[proj['rootObject']]
 if Xcode.supports_configurations? then
   userFile      = $project_dir + "/#{ENV['USER']}.pbxuser"
   user          = PropertyList::load(File.new(userFile)) if File.exists?(userFile)
+  userBuild     = user && user[proj['rootObject']]['userBuildSettings']
   activeConfig  = user && user[proj['rootObject']]['activeBuildConfigurationName']
+  if userBuild['SYMROOT']
+    dir = userBuild['SYMROOT']
+  end
   dir += "/#{activeConfig || "Development"}"
 end
 

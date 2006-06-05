@@ -7,32 +7,27 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-def_col = ""
-if ENV["TM_SELECTED_TEXT"] =~ /#?([0-9A-Fa-f]{6})/ then
-  def_col += " default color {";
-  def_col += $1.scan(/../).map { |i| 257*eval("0x" + i) }.join(",")
-  def_col += "}"
+prefix, def_col = '#', ''
+if STDIN.read =~ /(#?)([0-9A-Fa-f]{6})/ then
+  prefix = $1
+  rgb = $2.scan(/../).map { |i| i.hex * 257 }
+  def_col = ' default color {' + rgb.join(",") + '}'
 end
 
-col = %x{ osascript 2&gt;/dev/null \
-  -e 'tell app "SystemUIServer"' \
-  -e 'activate' \
-  -e 'choose color#{def_col}' \
-  -e 'end tell'
-}
-
-%x{ osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;}
+col = `osascript 2&gt;/dev/null -e 'tell app "TextMate" to choose color#{def_col}'`
 exit 200 if col == ""
 
 col = col.split(",").map { |i| i.to_i / 257 }
-printf '#%02X%02X%02X', *col
+printf '%s%02X%02X%02X', prefix, *col
 </string>
+	<key>fallbackInput</key>
+	<string>word</string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>name</key>
 	<string>Insert Color…</string>
 	<key>output</key>
-	<string>insertAsSnippet</string>
+	<string>replaceSelectedText</string>
 	<key>uuid</key>
 	<string>CC30D708-6E49-11D9-B411-000D93589AF6</string>
 </dict>

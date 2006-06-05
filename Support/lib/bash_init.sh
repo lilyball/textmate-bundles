@@ -37,7 +37,16 @@ if [[ -f "$TM_BASH_INIT" ]]; then
 	. "$TM_BASH_INIT"
 fi
 
-export RUBYLIB="$RUBYLIB:$TM_SUPPORT_PATH/lib"
+export RUBYLIB="${RUBYLIB:+:$RUBYLIB}$TM_SUPPORT_PATH/lib"
+
+textmate_init () {
+	[[ "$1" != ~ && "$1" != / ]] && textmate_init "$(dirname "$1")"
+	[[ -f "$1/.textmate_init" ]] && . "$1/.textmate_init"
+}
+
+if [[ -n "$TM_DIRECTORY" && -d "$TM_DIRECTORY" ]]; then
+	textmate_init "$TM_DIRECTORY"
+fi
 
 # an abstract way to change the output option of the running command
 exit_discard ()					{ echo -n "$1"; exit 200; }

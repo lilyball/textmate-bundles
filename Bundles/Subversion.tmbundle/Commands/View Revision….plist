@@ -13,28 +13,23 @@ revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
 		--text "Retrieving List of Revisions…" \
 	))
 
-revs=`osascript&lt;&lt;END
+revs=`iconv -f utf-8 -t mac &lt;&lt;END|osascript
 	set AppleScript's text item delimiters to {"\n","\r"}
-	tell app "SystemUIServer"
-		activate
+	tell app "TextMate"
 		set ourList to (every text item of "$revs")
-		if the count of items in ourList is 0 then
-			display dialog "No older revisions of file '$(basename "$TM_FILEPATH")' found" buttons ("OK")
+		if the count of items in ourList is 0 or "$revs" is "" then
+			display dialog "No older revisions of file “${TM_FILENAME}” found" buttons ("Continue") with icon 1 default button 1
 			set the result to false
 		else
-			choose from list ourList with prompt "View '$(basename "$TM_FILEPATH")' revision:"
+			choose from list ourList with prompt "View “${TM_FILENAME}” revision:"
 		end if
 	end tell
 END`
 
 # exit if user canceled
-if [[ $revs = "false" ]]; then
-	osascript &gt;/dev/null 2&gt;&amp;1 -e 'tell application "TextMate" to activate' &amp;	exit_discard
-fi
+[[ $revs = "false" ]] &amp;&amp; exit_discard
 
-revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`
-revs=( $revs )
-
+revs=( $(tr &lt;&lt;&lt;"$revs" \\r \\n|cut -d\| -f1) )
 rev1=${revs[0]#r}
 
 "$TM_SVN" cat -r "$rev1" "$TM_FILEPATH" \

@@ -13,21 +13,20 @@ revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
 		--text "Retrieving List of Revisions…" \
 	))
 
-revs=`osascript &lt;&lt;END
+revs=`iconv -f utf-8 -t mac &lt;&lt;END|osascript
 	set theResult to false
 	set AppleScript's text item delimiters to {"\n","\r"}
-	tell app "SystemUIServer"
-		activate
+	tell app "TextMate"
 		set ourList to (every text item of "$revs")
-		if the count of items in ourList is 0 then
-			display dialog "No revisions of file '$TM_FILENAME' found" buttons ("Continue") default button 1
+		if the count of items in ourList is 0 or "$revs" is "" then
+			display dialog "No revisions of file “${TM_FILENAME}” found" buttons ("Continue") with icon 1 default button 1
 		else
-			tell app "SystemUIServer" to choose from list (every text item of "$revs") with prompt "Please choose two revisions of '$TM_FILENAME':" with multiple selections allowed
+			choose from list (every text item of "$revs") with prompt "Please choose two revisions of “${TM_FILENAME}”:" with multiple selections allowed
 
 			set theitems to the result
 			if theitems is not false then
 				if the count of items in the theitems is less than 2 then
-					display dialog "Please select two revisions (hold down the shift key to select multiple revisions)." buttons ("Continue") default button 1
+					display dialog "Please select two revisions (hold down the shift key to select multiple revisions)." buttons ("Continue") with icon 1 default button 1
 				else
 					set theResult to (item 1 of theitems) &amp; return &amp; (item 2 of theitems)
 				end if
@@ -38,16 +37,13 @@ revs=`osascript &lt;&lt;END
 END`
 
 # exit if user canceled
-if [[ $revs = "false" ]]; then
-	osascript -e 'tell app "TextMate" to activate' &amp;&gt;/dev/null &amp;	exit_discard
-fi
+[[ "$revs" = "false" ]] &amp;&amp; exit_discard
 
-revs=`echo "$revs" | tr '\r' '\n' | cut -d "|" -f 1`
-revs=( $revs )
-
+revs=( $(tr &lt;&lt;&lt;"$revs" \\r \\n|cut -d\| -f1) )
 rev1=${revs[0]#r}
 rev2=${revs[1]#r}
-"${TM_RUBY:=ruby}" -I "$TM_BUNDLE_SUPPORT/" &lt;&lt;END
+
+"${TM_RUBY:-ruby}" -I "$TM_BUNDLE_SUPPORT" &lt;&lt;END
 	require 'svn_diff'
 	Subversion::diff_active_file("$rev2:$rev1", "Diff Revisions…")
 END

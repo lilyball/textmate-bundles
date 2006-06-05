@@ -23,9 +23,9 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>/\*\*</string>
+			<string>(^\s*)?/\*\*</string>
 			<key>end</key>
-			<string>\*/</string>
+			<string>\*/(\s*\n)?</string>
 			<key>name</key>
 			<string>comment.documentation.java</string>
 			<key>patterns</key>
@@ -38,14 +38,20 @@
 							<key>name</key>
 							<string>keyword.other.documentation.params.java</string>
 						</dict>
-						<key>2</key>
+						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>keyword.other.documentation.value.java</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\*\s*@(param)\s*([a-z]\w+)\s*</string>
+					<string>\*\s*(@(param|throws))\s*([a-z]\w+)\s*</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>{@link\s+\S*\s+(\S*)}</string>
+					<key>name</key>
+					<string>keyword.other.documentation.link.java</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -57,7 +63,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\*\s*@([a-zA-Z0-9_-]+)\s*</string>
+					<string>\*\s*(@[a-zA-Z0-9_-]+)\s*</string>
 				</dict>
 			</array>
 		</dict>

@@ -58,10 +58,12 @@ end
 # Xcode build input parser
 #
 
-#	XcodeMethodType => [Name to display for method, index of pathname to display (zero-based)]
+#	XcodeMethodType => [Name to display for method, index of argument to display as pathname]
 MethodTypeMap = {
-	'ProcessPCH++'			=> ['Precompiling', 1],
+	'ProcessPCH++'			=> ['Precompiling', 0],
 	'ProcessPCH'			=> ['Precompiling', 1],
+	'Processing'			=> ['Processing', 0],
+	'Preprocessing'			=> ['Preprocessing', 1],
 	'DataModelCompile'		=> ['Compiling', 1],
 	'CompileC'				=> ['Compiling', 1],
 	'OSACompile'			=> ['Compiling', 1],
@@ -124,7 +126,7 @@ STDIN.each_line do |line|
 			
 			arguments = Regexp.last_match[2].tokenize
 			file_arg = arguments[method_params[1]]
-			file_arg.sub!(Dir.pwd, "")
+			file_arg.sub!(Dir.pwd + "/", "")
 			
 			formatter.file_compiled( method_params[0], file_arg )
 			formatter.build_noise( line )

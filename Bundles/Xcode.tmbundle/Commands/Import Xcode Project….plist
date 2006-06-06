@@ -8,8 +8,7 @@
 	<string>#!/usr/bin/env ruby
 # import the frontmost opened project window in Xcode
 
-source_path = %x{osascript -e 'tell application "SystemUIServer"
-	activate
+source_path = %x{osascript -e 'tell application "TextMate"
 	choose file with prompt "Please choose an Xcode project:"
 	get the POSIX path of the result
 end tell'}.chomp
@@ -21,8 +20,6 @@ dest_path = source_path.chomp.sub(/\.(xcodeproj|xcode|pbproj)\/?$/, ".tmproj")
 %x{"#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_to_tmproj" "#{source_path}/project.pbxproj" "#{dest_path}" &amp;&amp; open "#{dest_path}"}</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Import Project…</string>
 	<key>output</key>

@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>bc &lt;&lt;&lt;"ibase=16;$(cat)"|tr -d \\n</string>
+	<string>bc &lt;&lt;&lt;"ibase=16;$(tr '[a-z]' '[A-Z]')"|tr -d \\n</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>

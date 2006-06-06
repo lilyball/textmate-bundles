@@ -5,12 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>res=$(CocoaDialog inputbox --title "Decrypt AES 128 Encrypted Text" --informative-text "What is the password?"  --text "s3cr37"  --button1 "Decrypt" --button2 "Cancel")
+	<string>get_pw () {
+  res=$(CocoaDialog secure-inputbox --no-newline \
+    --title 'Decrypt AES 128 Encrypted Text' \
+    --informative-text "$1" \
+    --button1 "$2" --button2 Cancel)
+  [[ ${res:0:1} == 1 ]] &amp;&amp; echo -n "${res:2}"
+}
 
-[[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit_discard
-passwd=$(tail -n1 &lt;&lt;&lt;"$res")
+pw=$(get_pw 'What is the password?' Decrypt)
+[[ -z "$pw" ]] &amp;&amp; exit_discard
 
-if ! openssl enc -d -aes128 -base64 -pass "pass:$passwd"; then
+if ! openssl enc -d -aes128 -base64 -pass "pass:$pw"; then
    exit_show_tool_tip
 fi
 </string>

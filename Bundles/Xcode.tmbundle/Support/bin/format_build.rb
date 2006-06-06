@@ -8,7 +8,7 @@ require ($bundle + "/bin/xcode_version.rb")
 # I'm still experimenting with Builder.rb.
 
 
-SCRIPT = <<ENDSCRIPT
+SCRIPT = <<ENDSCRIPT #javascript
 function showElement( div_id )
 {
 //	document.writeln(div_id)
@@ -27,7 +27,7 @@ function hideElement( div_id )
 
 ENDSCRIPT
 
-STYLE = <<ENDSTYLE
+STYLE = <<ENDSTYLE #css
 /* general stuff.. */
 body {
    font-family: "Lucida Grande", sans-serif;

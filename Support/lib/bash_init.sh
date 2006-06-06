@@ -37,7 +37,7 @@ if [[ -f "$TM_BASH_INIT" ]]; then
 	. "$TM_BASH_INIT"
 fi
 
-export RUBYLIB="${RUBYLIB:+:$RUBYLIB}$TM_SUPPORT_PATH/lib"
+export RUBYLIB="${RUBYLIB:+$RUBYLIB:}$TM_SUPPORT_PATH/lib"
 
 textmate_init () {
 	[[ "$1" != ~ && "$1" != / ]] && textmate_init "$(dirname "$1")"

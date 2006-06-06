@@ -37,7 +37,7 @@ class Blogging
     _proto = endpoint =~ /^https:/ ? 'https' : 'http'
     _path = path.clone
     _path.sub!(/#\d+/, '') if _path =~ /#\d+/
-    KeyChain.add_internet_password(username, _proto, host, path, password)
+    KeyChain.add_internet_password(username, _proto, host, _path, password)
   end
 
   def _finally_save_new_endpoint
@@ -420,8 +420,8 @@ example          http://user@example.com/xmlrpc\n}]
     _titles = []
     _posts.each { |_p| _titles.push( '"' + _p['title'].gsub(/"/, '\"') + '"' ) }
 
-    _result = TextMate.dropdown(%Q{--title 'Select Blog' \
-      --text 'Fetch Post' \
+    _result = TextMate.dropdown(%Q{--title 'Fetch Post' \
+      --text 'Select a recent post to edit' \
       --button1 Load --button2 Cancel \
       --items #{_titles.join(' ')}})
 

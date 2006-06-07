@@ -9,23 +9,6 @@
 # encoding: utf-8
 
 
-module Active4D
-	
-	def Active4D.open_url(url)
-	  `open "#{url}"`
-	end
-
-# Open a file in textmate using the txmt:// protocol.  Uses 0-based line and column indices.
-	def Active4D.open(filename, line_number = nil, column_number = nil)
-	  options = []
-	  options << "url=file://#{filename}"
-	  options << "line=#{line_number + 1}" if line_number
-	  options << "column=#{column_number + 1}" if column_number
-	  open_url "txmt://open?" + options.join("&")
-	end
-end
-
-
 line = ENV['TM_CURRENT_LINE']
 selected = ENV['TM_SELECTED_TEXT']
 col = Integer(ENV['TM_LINE_INDEX']) - 1  # Start at character before caret
@@ -66,7 +49,7 @@ else
 	filename = File.join(ENV['TM_DIRECTORY'], line[first..last])
 	
 	if test(?f, filename)
-		Active4D.open(filename)
+		system("mate '#{filename}'")
 	else
 		print "File not found"
 		exit(206)

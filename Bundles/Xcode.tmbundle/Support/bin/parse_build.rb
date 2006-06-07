@@ -91,7 +91,7 @@ MethodExpression		= /^(#{MethodTypes.collect{|t| Regexp.escape(t) }.join("|")})\
 formatter = Formatter.new
 
 last_line = ""
-seen_first_line = false
+#seen_first_line = false
 
 formatter.start
 
@@ -134,12 +134,7 @@ STDIN.each_line do |line|
 			
 		# Error prefix text
 		when /^\s*((In file included from)|from)(\s*)(\/.*?):/
-			
-#					if File.exist?("#$3")
-				formatter.message_prefix( line )
-#					else
-#						mup.normal!( line )
-#					end
+			formatter.message_prefix( line )
 
 		# <path>:<line>:[column:] error description
 		when /^(.+?):(\d+):(?:\d*?:)?\s*(.*)/

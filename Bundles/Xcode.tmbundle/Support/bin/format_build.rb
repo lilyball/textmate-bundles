@@ -31,7 +31,8 @@ STYLE = <<ENDSTYLE #css
 /* general stuff.. */
 body {
    font-family: "Lucida Grande", sans-serif;
-   font-size: 11pt;
+   font-size: 11pt;	
+   background-color: #004181; /*#336699; */
 }
 
 div{
@@ -39,8 +40,8 @@ div{
 }
 
 div.showhide {
-#	width: 100%;
-#	float: right;
+/*	width: 100%; */
+/*	float: right;*/
 	position: absolute;
 	right: 20px;
 	font-size: 8pt;
@@ -55,9 +56,11 @@ div.target {
 	margin: 3px;
 
 	border: 2px;
-	border-style: none none none solid;
-	color: #aaa;
-	background-color: #eee;
+/*	border-width: thin thin thin thin;*/
+	border-style: none solid solid none;
+	border-color: #002E59;
+	color: #888;
+	background-color: #fff;
 	font-size: 70%;
 	margin 0;
 }
@@ -65,7 +68,7 @@ div.target {
 div.target span.name {
 	margin-top: 2px;
 	margin-bottom: 2px;
-	color: #777;
+	color: #555;
 }
 
 div.command span.name {
@@ -79,7 +82,7 @@ div.command span.method {
 	font-size: 8pt;
 	margin-top: 2px;
 	margin-bottom: 2px;
-	color: #777;
+	color: #555;
 }
 
 div.target h2 {
@@ -88,9 +91,15 @@ div.target h2 {
 	margin-bottom: 2px;
 }
 
+p.backgroundtext {
+	color: #fff;
+	font-weight: bold;
+	text-shadow: #000 2px 3px 3px;
+}
+
 h1 {
    font-size: 14pt;
-   text-shadow: #ddd 2px 3px 3px;  /* ok this is just eye candy, but i love eye candy. ;) */
+   text-shadow: #ddd 2px 3px 3px;
 }
 
 /* make horizontal rules slightly less heavy */
@@ -123,25 +132,35 @@ div.error div.inner :link, div.warning div.inner :link, div.info div.inner :link
 div.error, div.warning, div.info {
 	padding: 4px;
 	margin: 3px;
-	font-size: 7pt;
+	font-size: 8pt;
+	border-style: none none none solid;
+   	border-width: thin thin thin thick;
 }
 
 div.error {
    color: #f30;
    background-color: #fee;
-   border: 2px solid #f52;
 }
 
 div.warning {
-   color: #CDC335;
+   color: #D9AF29;
    background-color: #FFD;
-   border: 2px solid #CDC335;
 }
 
 div.info {
    color: #03f;
-   background-color: #eef;
-   border: 2px solid #25f;
+   background-color: #DEE9FE;
+}
+
+img.backgroundicon {
+	float: left;
+	margin-right: 2px;
+	margin-left: 2px;
+}
+
+img.icon {	
+	margin-right: 2px;
+	margin-left: 2px;
 }
 
 ENDSTYLE
@@ -159,6 +178,11 @@ class Formatter
 			attr_writer		:div_stack			# stack of nested div classes
 			attr_accessor	:div_count			# absolute count of divs
 			attr_accessor	:accumulated_prefix	# prefix text to insert in next div
+			
+			def borrow_xcode_icon(icon_name, background=false)
+				image(	:class => background ? "backgroundicon" : "icon",
+						:src => "file:///System/Library/PrivateFrameworks/DevToolsInterface.framework/Versions/A/Resources/#{icon_name}" )
+			end
 			
 			def div_stack
 				@div_stack = Array.new unless defined?(@div_stack)
@@ -369,9 +393,12 @@ class Formatter
 			@mup.script( SCRIPT, "language" => "JavaScript" )
 		}
 		@mup.start_tag!("body")
-
-		@mup.h1("Building With Xcode")
-		@mup.hr
+		
+		@mup.p( :class => "backgroundtext" ) do
+			@mup.borrow_xcode_icon("build-32.tiff", true)	# true -> background icon
+			@mup.text("Building With Xcode")
+		end
+#		@mup.hr
 		STDOUT.flush
 	end
 		
@@ -389,16 +416,25 @@ class Formatter
 	def error_message( cssclass, path, line, error_desc )
 		
 		cssclass = cssclass.downcase
-		cssclass = case cssclass
-			when ""
-				"error"
-			when "message"
-				"info"
+		cssclass, icon = case cssclass
+			when "", "error"
+				["error", "PBXBuildErrorIcon.tiff"]
+			when "message", "info"
+				["info", "globe.tiff"]
+			when "warning"
+				["warning", "PBXBuildWarningIcon.tiff"]
 			else
-				cssclass
+				[cssclass, "globe.tiff"]
 		end
-
-		@mup.new_div!(cssclass) { @mup.h2(cssclass) }
+		
+		@mup.new_div!(cssclass) do
+ 			@mup.h2 do
+				@mup.borrow_xcode_icon(icon)
+				@mup.text(cssclass)
+			end
+		end
+		
+#		@mup.new_div!(cssclass) { @mup.h2(cssclass) }
 	
 		@mup.p {
 			@mup.a_textmate!( path, line )
@@ -443,6 +479,9 @@ class Formatter
 				@mup.h2(name)
 			else
 				@mup.h2 do
+					@mup.borrow_xcode_icon("Target.tiff", true)
+#					@mup.borrow_xcode_icon("Targets.tiff")
+#					@mup.borrow_xcode_icon("HeaderTarget.tiff")
 					@mup.text!("Building ")
 					@mup.span(name, 'class' => 'name')
 					if Xcode.supports_configurations? then
@@ -458,13 +497,24 @@ class Formatter
 	end
 	
 	def success
-		@mup.new_div!("info") { @mup.h2("Build Succeeded") }
+		@mup.new_div!("info", "", :hide) do
+ 			@mup.h2 do
+				@mup.borrow_xcode_icon("globe.tiff", true)
+				@mup.text("Build Succeeded")
+			end
+		end
+
 		play_sound 'Harp.wav'
 
 	end
 	
 	def failure
-		@mup.new_div!("error") { @mup.h2("Build Failed") }
+		@mup.new_div!("error", "", :show) do
+ 			@mup.h2 do
+				@mup.borrow_xcode_icon("PBXBuildErrorIcon.tiff")
+				@mup.text("Build Failed")
+			end
+		end
 		play_sound 'Whistle.wav'
 	end
 	

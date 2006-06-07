@@ -7,34 +7,12 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>PROJECT_FILE=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
-USE_CONFIGURATIONS=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/xcode_version.rb")
-
-STYLEARGNAME="buildstyle"
-
-if [[ $USE_CONFIGURATIONS -eq "0" ]]; then
-	BUILD_STYLE="${TM_BUILDSTYLE:-Deployment}"
-else	
-	BUILD_STYLE="${TM_BUILDSTYLE:-Release}"
-	STYLEARGNAME="configuration"
-fi
-
-cd "`dirname "$PROJECT_FILE"`"
-PROJECT_FILE=`basename "$PROJECT_FILE"`
-# If we have an Xcode project, and it doesn't contain the build style we're looking for,
-# accept the active build style in the project.
-if [[ -d $PROJECT_FILE ]] &amp;&amp; xcodebuild -project "$PROJECT_FILE" -list | awk 'display == "yes" { sub(/^[ \t]+/, ""); print }; /^Build styles/ { display = "yes" }' | grep -F "${BUILD_STYLE}" &amp;&gt;/dev/null; then
-	BUILD_STYLE="-$STYLEARGNAME $BUILD_STYLE";
-else
-	BUILD_STYLE="-active$STYLEARGNAME"
-fi
-
-xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} $BUILD_STYLE clean 2&gt;&amp;1|pre
+	<string>XCODE_BUILD_VERB="clean"
+export XCODE_BUILD_VERB
+"${TM_BUNDLE_SUPPORT}/bin/run_xcodebuild.sh"
 </string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Clean</string>
 	<key>output</key>

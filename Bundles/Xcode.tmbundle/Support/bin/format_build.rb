@@ -470,7 +470,7 @@ class Formatter
 		end
 	end
 	
-	def target_name(name, style = nil)
+	def target_name(verb, name, style = nil)
 		@mup.end_div!("target")
 		
 		@mup.new_div!("target") do
@@ -482,7 +482,7 @@ class Formatter
 					@mup.borrow_xcode_icon("Target.tiff", true)
 #					@mup.borrow_xcode_icon("Targets.tiff")
 #					@mup.borrow_xcode_icon("HeaderTarget.tiff")
-					@mup.text!("Building ")
+					@mup.text!(verb.capitalize + " ")
 					@mup.span(name, 'class' => 'name')
 					if Xcode.supports_configurations? then
 						@mup.text!(" with configuration ")
@@ -496,11 +496,11 @@ class Formatter
 		end
 	end
 	
-	def success
+	def success(message)
 		@mup.new_div!("info", "", :hide) do
  			@mup.h2 do
 				@mup.borrow_xcode_icon("globe.tiff", true)
-				@mup.text("Build Succeeded")
+				@mup.text(message.split(" ").collect { |word| word.capitalize }.join(" ") )
 			end
 		end
 

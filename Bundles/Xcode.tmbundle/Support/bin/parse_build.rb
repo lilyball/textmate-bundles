@@ -79,8 +79,7 @@ MethodTypeMap = {
 	"SymLink"				=> ['Creating symbolic link', 0],
 	"Touch"					=> ['Touching', 0],   # FIXME: Need better verb for "setting the modification date of X to right now?"
 	
-	# not likely to encounter this yet, as we don't implement clean
-#	"Clean.Remove"			=> ['Removing', 1],
+	"Clean.Remove"			=> ['Removing', 1],
 	
 	'Building ZeroLink launcher'				=> ['Building ZeroLink launcher', 0]
 }
@@ -170,12 +169,12 @@ STDIN.each_line do |line|
 		when /^===(.*)===$/
 			
 			target_name = $1
-			matches = /BUILDING (?:.+) TARGET\s(.+)\s(?:USING BUILD STYLE|WITH (?:THE DEFAULT )?CONFIGURATION)\s(.+)/.match(target_name)
+			matches = /(BUILDING|CLEANING) (?:.+) TARGET\s(.+)\s(?:USING BUILD STYLE|WITH (?:THE DEFAULT )?CONFIGURATION)\s(.+)/.match(target_name)
 			
 			if matches.nil? then
-				formatter.target_name( target_name )
+				formatter.target_name( "Building", target_name )
 			else
-				formatter.target_name( matches[1], matches[2] )
+				formatter.target_name( matches[1], matches[2], matches[3] )
 			end
 		
 		else
@@ -185,15 +184,17 @@ STDIN.each_line do |line|
 end
 
 # report success/failure
-success = /\*\* BUILD SUCCEEDED \*\*/.match(last_line)
-success = success.nil? ? false : true
+success = /\*\* ((BUILD|CLEAN) SUCCEEDED) \*\*/.match(last_line)
 
 formatter.message_prefix(last_line)
 
-if success then
-	formatter.success
+unless success.nil? then
+	formatter.success( success[1] )
 else
 	formatter.failure
 end
 formatter.complete
+
+exit 667 if success.nil?
+
 

@@ -5,7 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>wc -lwc | awk '{ printf "%s lines\n%s words\n%s bytes", $1, $2, $3 }'</string>
+	<string>wc -lwc|tr \  \\n|grep '..*'|rev|perl -pe 's/\d{3}(?=.)/$&amp;,/g'|rev|{
+  for unit in lines words bytes; do
+    read cnt
+    printf "%11.11s %s\n" $cnt $unit
+  done
+}
+</string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>

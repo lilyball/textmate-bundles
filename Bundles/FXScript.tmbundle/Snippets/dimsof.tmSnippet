@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>float ${1:w}, ${2:h};
+DimensionsOf(${3:dest}, $1, $2);
+image ${4:img0}[$1][$2];
+</string>
+	<key>name</key>
+	<string>DimensionsOf() w/ float vars</string>
+	<key>scope</key>
+	<string>source.fxscript</string>
+	<key>tabTrigger</key>
+	<string>dimsof</string>
+	<key>uuid</key>
+	<string>1E65AC5C-A779-42C8-809C-0AA198107A6E</string>
+</dict>
+</plist>

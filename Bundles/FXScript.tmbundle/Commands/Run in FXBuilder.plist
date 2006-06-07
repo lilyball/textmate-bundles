@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string># this takes the current selection in a TextMate document and runs it in FXBuilder. Anything in the existing FXBuilder window will be overwritten.
+
+# The keystroke command-K matches FXBuilder's Run keystroke in FCP, differing from TextMate's run = command-R convention
+
+
+echo "Sending current document to FXBuilder..."
+
+
+# create a temp file for getting the source into an AppleScript variable. This is such a hack...
+# Store the name for later cleanup:
+TEMPFILE=`date "+preview-temp%y%m%d-%H%M%S.fxscript"`	
+
+# send stdin (the contents of the TextMate window) to $TEMPFILE in /tmp
+cat &lt;&amp;0 &gt;/tmp/$TEMPFILE 
+
+
+
+
+
+
+osascript &lt;&lt; END
+property loopcount : 0
+
+on FCPdismissStartupWindows()
+	log "FCPdismissStartupWindows()"
+	--	set loopcount to loopcount + 1
+	-- this checks for every startup window I can find, closes one then calls itself again until it returns true
+	-- check for window "Offline Files"
+	tell application "Final Cut Pro" to activate -- bring FCP to front
+	
+	tell application "System Events"
+		tell process "Final Cut Pro"
+			
+			try
+				with timeout of 300 seconds
+					set windowList to name of every window
+					(* FCP will occasionally fail to respond to System Events during launch and restoration of exising projects. I've never had a 5 minute wait, but who knows... *)
+				end timeout
+				
+				if windowList contains "External A/V" then
+					(key code 53) -- press escape
+					my FCPdismissStartupWindows()
+				end if
+				
+				if windowList contains "Offline Files" then
+					click button "Continue" of window "Offline Files"
+					my FCPdismissStartupWindows()
+				end if
+				
+			on error the error_message number the error_number
+				-- i don't think is is ever getting called...
+				log "FAILED on: " &amp; loopcount &amp; ", " &amp; error_number &amp; " (" &amp; error_number &amp; ") retrying..."
+				
+				if loopcount &lt; 100 then my FCPdismissStartupWindows() -- loopcount is a check to prevent runaway loops
+				
+			end try
+			
+		end tell
+	end tell
+	return true
+	
+end FCPdismissStartupWindows
+
+
+on FXBuilderBringToFront() -- makes sure frontmost window is FXBuilder
+	log "FXBuilderBringToFront()"
+	tell application "System Events"
+		log "*** GETTING PROCESSES ***"
+		log name of every process as list
+		log "FCP EXISTS? " &amp; (exists process "Final Cut Pro")
+		
+		if not (exists process "Final Cut Pro") then
+			log "Restarting FCP"
+		end if
+	end tell
+	
+	FCPdismissStartupWindows()
+	
+	tell application "System Events"
+		tell process "Final Cut Pro"
+			set windowList to name of every window
+			if windowList contains "FXBuilder" then
+				set FXBcount to 0
+				repeat with theWindow in windowList
+					if theWindow as string is "FXBuilder" then set FXBcount to FXBcount + 1
+				end repeat
+				
+				repeat FXBcount times
+					perform action "AXRaise" of window "FXBuilder"
+					
+					
+					if scroll bar 1 of window "FXBuilder" exists then
+						return true -- end, we found a workable window
+					end if
+					
+					if size of window "FXBuilder" is {322, 320} then
+						keystroke "w" using command down -- close preview window
+					end if
+					
+					(* if there's a controls window, do nothing, which is a problem since it will remain frontmost
+					this will fail gracefully however and eventually open a new FXBuilder window *)
+					
+				end repeat
+			end if
+			
+			if value of attribute "AXEnabled" of menu item "FXBuilder" of menu "Tools" of menu bar 1 is false then
+				log "FXBuilder menu disabled. loopcount: " &amp; loopcount
+				log "loopcount: " &amp; loopcount
+				if loopcount &lt; 200 then my FCPdismissStartupWindows()
+			end if
+			click menu item "FXBuilder" of menu "Tools" of menu bar 1
+		end tell
+	end tell
+	
+end FXBuilderBringToFront
+
+
+on FXBuilderPasteText(sourceText) -- places sourceText into an FXBuilder window
+	
+	FXBuilderBringToFront()
+	set the clipboard to sourceText as text
+	
+	tell application "System Events"
+		tell process "Final Cut Pro"
+			tell application "Final Cut Pro" to activate
+			keystroke "a" using command down -- select all
+			key code 51 -- (delete key) delete current selected text
+			keystroke "v" using command down -- paste and select all			
+		end tell
+	end tell
+end FXBuilderPasteText
+
+
+on FXBuilderRunScript(sourceText)
+	FXBuilderPasteText(sourceText)
+	tell application "System Events"
+		tell process "Final Cut Pro"
+			keystroke "k" using command down
+		end tell
+	end tell
+end FXBuilderRunScript
+
+set theSource to do shell script "cat /tmp/$TEMPFILE"
+FXBuilderRunScript(theSource)
+
+END
+
+
+
+rm /tmp/$TEMPFILE  #cleanup the temp file
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@k</string>
+	<key>name</key>
+	<string>Run in FXBuilder</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.fxscript</string>
+	<key>uuid</key>
+	<string>F23D244D-E15F-4EC8-8DC0-FA196437C8C3</string>
+</dict>
+</plist>

@@ -24,8 +24,9 @@
 	{
 		NSRange range = NSMakeRange(0, 0);
 		do {
+			NSRange oldRange = range;
 			range = [str lineRangeForRange:NSMakeRange(NSMaxRange(range), 0)];
-			if(selectedRange.location < NSMaxRange(range))
+			if(NSMaxRange(oldRange) == NSMaxRange(range) || selectedRange.location < NSMaxRange(range))
 				break;
 			lineNumber++;
 		} while(true);

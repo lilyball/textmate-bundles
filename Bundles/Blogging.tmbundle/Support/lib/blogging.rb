@@ -346,7 +346,7 @@ example          http://user@example.com/xmlrpc\n}]
       if _formats[post['mt_convert_breaks']]
         _format = _formats[post['mt_convert_breaks']]
       end
-    else if ENV['TM_BLOG_FORMAT']
+    elsif ENV['TM_BLOG_FORMAT']
       _format = ENV['TM_BLOG_FORMAT']
     else
       # derive format from existing scope

@@ -346,6 +346,20 @@ example          http://user@example.com/xmlrpc\n}]
       if _formats[post['mt_convert_breaks']]
         _format = _formats[post['mt_convert_breaks']]
       end
+    else if ENV['TM_BLOG_FORMAT']
+      _format = ENV['TM_BLOG_FORMAT']
+    else
+      # derive format from existing scope
+      case ENV['TM_SCOPE']
+      when /markdown/
+        _format = "Markdown"
+      when /textile/
+        _format = "Textile"
+      when /text\.blog\.html/
+        _format = "HTML"
+      when /text\.blog\.plain/
+        _format = "Text"
+      end
     end
     _blog = endpoints[endpoint] || endpoint
     _doc += "Type: Blog Post (#{_format})\n"

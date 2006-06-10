@@ -3,13 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for $1 = $2 to $3
-	${0: // insert code here}
+	<string>for ${1:var} = ${2:min} to ${3:max}
+	${0:${TM_SELECTED_TEXT/(.*)$/$1/: // insert code here}}
 next;</string>
 	<key>name</key>
 	<string>for ... next</string>
 	<key>scope</key>
 	<string>source.fxscript</string>
+	<key>tabTrigger</key>
+	<string>for</string>
 	<key>uuid</key>
 	<string>317C63E1-3870-4A66-A66C-4605D0E07BBE</string>
 </dict>

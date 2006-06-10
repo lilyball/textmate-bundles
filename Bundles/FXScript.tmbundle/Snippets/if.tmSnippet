@@ -4,7 +4,7 @@
 <dict>
 	<key>content</key>
 	<string>if (${1:Condition})
-	${0: // insert code here}
+	${0:${TM_SELECTED_TEXT/(.*)$/$1/: // insert code here}}
 end if
 </string>
 	<key>name</key>

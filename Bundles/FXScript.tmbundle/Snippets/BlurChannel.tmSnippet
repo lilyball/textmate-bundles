@@ -3,16 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>Repeat While (${1:Condition})
-	${0:${TM_SELECTED_TEXT/(.*)$/$1/: // insert code here}}
-End Repeat;</string>
+	<string>BlurChannel(${1:srcImage}, ${2:destImage}, ${3:radius}, ${4:doAlpha}, ${5:doRed}, ${6:doGreen}, ${7:doBlue}, ${8:AspectOf(dest)});
+</string>
 	<key>name</key>
-	<string>Repeat While</string>
+	<string>BlurChannel</string>
 	<key>scope</key>
 	<string>source.fxscript</string>
 	<key>tabTrigger</key>
-	<string>repeat</string>
+	<string>blur</string>
 	<key>uuid</key>
-	<string>74D5E8B6-39DB-4A78-B5C7-10C89A60878D</string>
+	<string>102CD34A-DE6E-4E07-96BF-3BA54AB57501</string>
 </dict>
 </plist>

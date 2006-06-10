@@ -150,6 +150,12 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>\b0x([a-fA-F0-9]*)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.hex.fxscript</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>(?i:kBlack|kBlue|kCyan|kGray|kGreen|kMagenta|kRed|kWhite|kYellow)</string>
 			<key>name</key>
 			<string>constant.color.fxscript</string>
@@ -328,7 +334,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i:getNativeAspect|getNativeSize)</string>
+			<string>\b(?i:getNativeAspect|getNativeSize|FilteredBlitRect|BlurChannel_alt)\b</string>
 			<key>name</key>
 			<string>support.function.undocumented.fxscript</string>
 		</dict>

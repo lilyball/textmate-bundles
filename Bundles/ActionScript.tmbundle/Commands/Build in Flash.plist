@@ -4,36 +4,56 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
-	<key>captureFormatString</key>
-	<string>$2, line $3: $4</string>
-	<key>capturePattern</key>
-	<string>^(.+):(.+):(\d+):(.*)$</string>
 	<key>command</key>
-	<string># run this command with the .fla file in your project, and selected
-# set FLASHCOMMAND to the location of your flashcommand binary.
-# get flashcommand here:
+	<string># In order to use this command, you need this to install flashcommand:
 # http://www.markme.com/mesh/archives/004419.cfm
+#
+#
+# You can optionally set these shell variables in the project information:
+#
+# FLASH_FLA_PATH     	/path/to/the/fla/file
+# FLASH_TEST_URL     	http://localhost/my_page_displaying_the_swf.php
+# FLASH_SWF_SAVE_PATH 	/path/where/copy/the/compiled/swf/file if successful
+#
+# If FLASH_FLA_PATH is not set, the selected .fla file in the project drawer will be used.
+# If FLASH_TEST_URL is not set, the resulting .swf is used directly
+#
+
 require_cmd flashcommand
+
+SWF="$TM_DIRECTORY/temp.swf"
 FLASHCOMMAND=flashcommand
 
-#
-# end user changes
-#
+# if a .fla file is selected, build it
+# if not, try to build $FLASH_FLA_PATH
 
-FLA=$TM_SELECTED_FILE
-SWF=$TM_DIRECTORY/temp.swf
+if [ "${TM_SELECTED_FILE##*.}" == "fla" ]
+then
+	FLA="$TM_SELECTED_FILE"
+elif [ $FLASH_FLA_PATH ]
+then
+	FLA="$FLASH_FLA_PATH"
+fi
 
 result=`"$FLASHCOMMAND" -e -s "$FLA" -o "$SWF"`
-test=`echo "$result" | grep -c Error`
 
-if [ "$test" != 0 ]; then
-  #flashcommand output is very dirty and windoze like. Let's format it !
-  echo $result | perl -p -i -e "s/\s*\*\*(Error|Warning)\*\*\s*/\n/g;" | perl -p -i -e "s/Total ActionScript Errors.+//g;" | awk 'BEGIN {FS=": Line "} { a=$1; b=$1; gsub(":","/",a); gsub("^.+:","",b); print a":"b":"$2}' | perl -p -i -e "s'^(.+?)/'/';" | pre
-else
-  echo Built successfully.
-  open "$SWF"
-fi
-</string>
+#flashcommand output is very dirty and windoze like. Let's format it!
+"${TM_RUBY:-ruby}" "${TM_BUNDLE_SUPPORT}/formatBuildInFlashOutput.rb" "$result"
+
+if [ "$?" == 0 ]
+then
+	if [ $FLASH_SWF_SAVE_PATH ]
+	then
+		cp "$SWF" "$FLASH_SWF_SAVE_PATH"
+	fi
+
+	if [ $FLASH_TEST_URL ]
+	then
+		open "$FLASH_TEST_URL"
+	else
+		open "$SWF"
+	fi
+fi</string>
 	<key>fileCaptureRegister</key>
 	<string>2</string>
 	<key>input</key>

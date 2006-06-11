@@ -75,17 +75,17 @@ class S5 < String
     # file directory
     _path = nil
     if ENV['TM_DIRECTORY']
-      _path = ENV['TM_DIRECTORY'] if File.directory?(ENV['TM_DIRECTORY'] + '/ui/' + theme)
+      _path = '.' if File.directory?(ENV['TM_DIRECTORY'] + '/ui/' + theme)
     end
     if !_path && ENV['TM_PROJECT_DIRECTORY']
-      _path = ENV['TM_DIRECTORY'] if File.directory?(ENV['TM_PROJECT_DIRECTORY'] + '/ui' + theme)
+      _path = 'file://' + ENV['TM_PROJECT_DIRECTORY'] if File.directory?(ENV['TM_PROJECT_DIRECTORY'] + '/ui' + theme)
     end
     if !_path
-      _path = ENV['TM_BUNDLE_SUPPORT']
+      _path = 'file://' + ENV['TM_BUNDLE_SUPPORT']
       @theme = 'default'
     end
 
-    theme_base = 'file://' + _path
+    theme_base = _path
 
     content = nil
     handout = nil

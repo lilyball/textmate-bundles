@@ -29,6 +29,7 @@ The S5 document format supports a set of "header" lines that are always placed a
 * Date - The date the presentation will be given.
 * Controls - Specifies whether the navigation controls are always visible or not. The value for this should be either "hidden" or "visible" (the default is to be visible).
 * View - Specifies the default view of the presentation. Should be either "slideshow" or "outline" (the default is "slideshow").
+* Theme - The name of a S5 theme directory. This should be a directory name that contains a S5 compatible theme. The directory should be immediately under the "ui" directory (see Directory Layout section below). The default value for theme is "default".
 
 Header lines are written with the heading keyword followed with a colon (":") and then the value for the keyword follows.
 
@@ -41,6 +42,30 @@ Commands
 
 * **Present**: Formats the presentation and opens it in your web browser.
 * **Convert to HTML**: Converts the presentation into HTML, creating a new document.
+* **Copy theme files**: Places a copy of the S5 support files into the same directory where your presentation resides.
+
+Directory Layout
+----------------
+
+The S5 bundle includes a copy of the S5 default theme. Executing the "Present" command will load the default theme files from the S5 Bundle directory. If you want to include a copy of the S5 support files with your presentation document, use the "Copy theme files" command to make a copy of the S5 support files into the directory your presentation document is in. Additional custom themes can be copied into the "ui" folder. The theme can be specified using the "Theme" header (as described above). If you have a file named "MyPresentation.s5", the S5 "ui" folder should be placed in the same folder, and the directory would look something like this:
+
+&lt;pre&gt;MyPresentation.s5
+ui/
+ui/default/
+ui/default/blank.gif
+ui/default/bodybg.gif
+ui/default/framing.css
+ui/default/iepngfix.htc
+ui/default/opera.css
+ui/default/outline.css
+ui/default/pretty.css
+ui/default/print.css
+ui/default/s5-core.css
+ui/default/slides.css
+ui/default/slides.js
+&lt;/pre&gt;
+
+Note that if your presentation is part of a TextMate project, the S5 Bundle will look for the "ui" directory first in the directory of your presentation file and if not found there, it will also check the top-level project directory as well.
 
 Credits
 -------

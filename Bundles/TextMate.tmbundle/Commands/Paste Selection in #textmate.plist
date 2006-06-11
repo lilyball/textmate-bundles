@@ -6,12 +6,12 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>paste_targets () {
-   osascript &lt;&lt;"EOF"
-      tell application "Colloquy"
-         set AppleScript's text item delimiters to " "
-         (name of chat room panels &amp; name of direct chat panels) as string
-      end tell
-EOF
+  osascript &lt;&lt;"APPLESCRIPT"
+    tell application "Colloquy"
+      set AppleScript's text item delimiters to " "
+      (name of chat room panels &amp; name of direct chat panels) as string
+    end tell
+APPLESCRIPT
 }
 
 if [[ -z "$TM_IRC_CHANNEL" ]] &amp;&amp; ps -xc|grep -sq 'Colloquy$'; then
@@ -28,18 +28,28 @@ if [[ -z "$TM_IRC_CHANNEL" ]] &amp;&amp; ps -xc|grep -sq 'Colloquy$'; then
   fi
 fi
 
-# set the language to one rafb.net supports
-case $TM_MODE in
-  C89|C|C++|C\#|Java|Pascal|Perl|PHP|PL/I|Python|Ruby|SQL|VB)
-    # do nothing
-  ;;
+# set the language to one pastie supports
+TM_LANG=$(cut &lt;&lt;&lt;"$TM_SCOPE" -d. -f2)
+case "$TM_LANG" in
+  diff|javascript|ruby|sql|html)
+    ;;
+  c++|objc|objc++)
+    TM_LANG=c
+    ;;
   *)
-    TM_MODE="Plain Text"
-  ;;
+    TM_LANG=plaintext
 esac
 
-: ${TM_PASTE_URL:=http://rafb.net/paste/paste.php}
-url=$(curl "${TM_PASTE_URL}" -F nick="$USER" -F cvt_tabs="$TM_TAB_SIZE" -F text='&lt;-' -F lang="$TM_MODE" -s -L -o /dev/null -w "%{url_effective}" \
+TM_HTML=$("${TM_RUBY:-ruby}" -rjcode -Ku -r"$TM_BUNDLE_SUPPORT/lib/doctohtml.rb" -e 'print document_to_html(STDIN.read)')
+
+url=$(echo -n "$TM_SELECTED_TEXT"|curl http://pastie.caboo.se/pastes/create \
+    -s -L -o /dev/null -w "%{url_effective}" \
+    -H "Expect:" \
+    -F "paste[nick]=$USER" \
+    -F "paste[parser]=$TM_LANG" \
+    -F "paste[tab_size]=$TM_TAB_SIZE" \
+    -F "paste[body]=&lt;-" \
+    -F "paste[textmate_html]=&amp;zwj;$TM_HTML" \
   2&gt; &gt;(CocoaDialog progressbar --indeterminate \
     --title "Paste to ${TM_IRC_CHANNEL}…" \
     --text "Contacting Server “${TM_PASTE_URL}”…" \
@@ -60,6 +70,8 @@ fi
 	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
+	<key>inputFormat</key>
+	<string>xml</string>
 	<key>keyEquivalent</key>
 	<string>^~V</string>
 	<key>name</key>

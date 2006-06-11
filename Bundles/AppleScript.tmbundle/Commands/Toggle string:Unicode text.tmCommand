@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># for now this doesn't really toggle at all, it
+# just converts the selection to unicode text.
+# If the selection is a string, this will include
+# the quotation marks.  Still, it's a start :).
+
+UNICODE_DATA=`iconv -f utf-8 -t ucs-2|hexdump -ve '"" 1/2 "%04x"'`
+echo "«data utxt${UNICODE_DATA}» as Unicode text"</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Toggle string/Unicode text</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>7B6716C8-A890-4803-8C61-5E31F1A4BE63</string>
+</dict>
+</plist>

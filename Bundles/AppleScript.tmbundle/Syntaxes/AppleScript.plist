@@ -94,10 +94,22 @@
 					<string>keyword.operator.applescript</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
 					<key>comment</key>
-					<string>make sure that "return" is not preceded by something else, to disambiguate with the constant</string>
+					<string>make sure that "return", "property", and other keywords are not preceded by something else, to disambiguate</string>
 					<key>match</key>
-					<string>(?&lt;=^|then|to)\s*\breturn\b(?!\s*&amp;)|\b(prop(erty)?|global|local|continue|on error|try|to|on|exit|tell|script|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try|script)|end|my|where|whose|considering|ignoring)\b</string>
+					<string>(?&lt;=^|then|to)\s*\b(return|prop(erty)?)\b</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(on error|try|to|on|tell|script|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try|script)|end|my|where|whose|considering|ignoring|global|local|exit|continue|set|copy|put)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>
@@ -155,13 +167,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(count (each|every)|number of|copy|put|error|get|run|set)\b</string>
+					<string>\b(count (each|every)|number of|error|get|run)\b</string>
 					<key>name</key>
 					<string>support.function.built-in.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(booleans?|integers?|reals?|numbers?|(linked )?lists?|vectors?|records?|items?|scripts?|events?|propertys?|constants?|prepositions?|reference forms?|handlers?|data|characters?|writing code( infos?)?|missing values?|references?|anything|missing value|upper case|app(lications?)?|text items?|((international|styled( Clipboard|Unicode)?|Unicode) )?text|(C | encoded| Pascal )?strings?|(type )?class(es)?|RGB colors?|pictures?|sounds?|versions?|file specifications?|alias(es)?|machines?|zones?|keystrokes?|seconds|dates?|months?|(cubic |square |cubic centi|square kilo|centi|kilo)met(er|re)s|(square |cubic )?(yards|feet)|(square )?miles|(cubic )?inches|lit(re|er)s|gallons|quarts|(kilo)?grams|ounces|pounds|degrees (Celsius|Fahrenheit|Kelvin))\b</string>
+					<string>\b(booleans?|integers?|reals?|numbers?|(linked )?lists?|vectors?|records?|items?|scripts?|events?|propert(y|ies)|constants?|prepositions?|reference forms?|handlers?|data|characters?|writing code( infos?)?|missing values?|references?|anything|missing value|upper case|app(lications?)?|text items?|((international|styled( Clipboard|Unicode)?|Unicode) )?text|(C | encoded| Pascal )?strings?|(type )?class(es)?|RGB colors?|pictures?|sounds?|versions?|file specifications?|alias(es)?|machines?|zones?|keystrokes?|seconds|dates?|months?|(cubic |square |cubic centi|square kilo|centi|kilo)met(er|re)s|(square |cubic )?(yards|feet)|(square )?miles|(cubic )?inches|lit(re|er)s|gallons|quarts|(kilo)?grams|ounces|pounds|degrees (Celsius|Fahrenheit|Kelvin))\b</string>
 					<key>name</key>
 					<string>support.class.built-in.applescript</string>
 				</dict>

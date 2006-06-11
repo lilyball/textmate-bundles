@@ -7,7 +7,7 @@ class S5 < String
   HANDOUT = '__________'
 
   attr_reader :title, :subtitle, :location, :presenter, :organization,
-    :date, :slides, :theme
+    :date, :slides, :theme, :defaultView, :controlVis
 
   private
 
@@ -50,6 +50,8 @@ class S5 < String
     @presenter = _headers['Presenter'] || _headers['Author']
     @organization = _headers['Organization'] || _headers['Company']
     @theme = _headers['Theme'] || 'default'
+    @defaultView = _headers['View'] || 'slideshow'
+    @controlVis = _headers['Controls'] || 'visible'
   end
 
   public

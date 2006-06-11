@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl
+
+Getting Started
+---------------
+
+The best way to start a new presentation is to use the "New from Template" option from the "File" menu, choosing "S5 Presentation" from the "S5" menu. This will give you a basic presentation file which you can then start modifying.
+
+To quickly enter a new slide, type "slide" and hit the tab key. If you just want to create the dividing marker inbetween slides, type "cut" and hit the tab key.
+
+The formatting of the slides themselves is Markdown, which is pretty ideal for entering lots of bullet lists and headings. S5 does support most any HTML you enter into the slide as well, including images. Refer to the [S5 project site][3] for further documentation on writing slides.
+
+Headers
+-------
+
+The S5 document format supports a set of "header" lines that are always placed at the top of the document. These provide extra metadata regarding the presentation itself. If you create a blank presentation using the above instructions, you will see some of these. The list of headers you may specify include:
+
+* Title - The title of the presentation.
+* Subtitle - The subtitle of the presentation (optional).
+* Presenter (or Author) - Your name or the name of the person that will be presenting the presentation.
+* Company (or Organization) - The name of the presenter's company.
+* Location - The location where the presentation will be given.
+* Date - The date the presentation will be given.
+* Controls - Specifies whether the navigation controls are always visible or not. The value for this should be either "hidden" or "visible" (the default is to be visible).
+* View - Specifies the default view of the presentation. Should be either "slideshow" or "outline" (the default is "slideshow").
+
+Header lines are written with the heading keyword followed with a colon (":") and then the value for the keyword follows.
+
+    Title: Presentation title
+
+Many of these headings are optional, but some are required in the sense that omitting them will adversely affect the appearance of the presentation.
+
+Commands
+--------
+
+* **Present**: Formats the presentation and opens it in your web browser.
+* **Convert to HTML**: Converts the presentation into HTML, creating a new document.
+
+Credits
+-------
+
+This bundle is maintained by [Brad Choate][1]. The S5 CSS and HTML framework was developed by [Eric Meyer][2]. Many additional resources regarding S5, including documentation and additional themes may be found at the [S5 project site][3].
+
+[1]: http://bradchoate.com/
+[2]: http://www.meyerweb.com/eric/
+[3]: http://www.meyerweb.com/eric/tools/s5/
+
+EOF</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@?</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.s5</string>
+	<key>uuid</key>
+	<string>0A8006CB-834C-4AC5-BAFE-672EB5F19417</string>
+</dict>
+</plist>

@@ -1,6 +1,7 @@
 # Module for S5 presenation; S5 by Eric Meyer; module by Brad Choate
 
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/bluecloth.rb"
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/rubypants.rb"
 
 class S5 < String
   DIVIDER = '✂------'
@@ -99,7 +100,7 @@ class S5 < String
         content = _slide
         handout = nil
       end
-      content = BlueCloth.new(content).to_html
+      content = RubyPants.new(BlueCloth.new(content).to_html).to_html
       _slides += eval '%Q{' + _slide_tmpl + '}'
     end
     _s5tmpl.sub!(/##SLIDE_START.+##SLIDE_END/m, _slides)

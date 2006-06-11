@@ -40,6 +40,8 @@ while ( <> ) {
 
 	s/$LTq/</g;
 	s/$GTq/>/g;
+	s/\t/&nbsp;&nbsp;&nbsp;&nbsp;/g;
+	s/(<[^>]+>)|( )/$1?$1:'&nbsp;'/ges;
 	print;
 	print "<br/>";
 	

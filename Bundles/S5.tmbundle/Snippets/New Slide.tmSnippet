@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>✂------✂------✂------✂------✂------✂------✂------✂------✂------✂------
+
+${1:Heading}
+${1/(.)|(?m:\n.*)/(?1:=)/g}
+${2:Subheading}
+${2/(.)|(?m:\n.*)/(?1:-)/g}
+
+${3:* Point One
+* Point Two
+  * Subpoint
+* Point Three}
+</string>
+	<key>name</key>
+	<string>New Slide</string>
+	<key>scope</key>
+	<string>source.s5</string>
+	<key>tabTrigger</key>
+	<string>slide</string>
+	<key>uuid</key>
+	<string>9338A42C-2B70-4E7B-BBD2-34369E8B0418</string>
+</dict>
+</plist>

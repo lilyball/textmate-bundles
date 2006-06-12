@@ -14,7 +14,7 @@
 		|using \s+ terms \s+ from \s+ .*
 		|if\b .* \bthen \b .*
 		|repeat\b .*
-		|( on | to ) \b .*
+		|( on | to ) \b (?!\s+error) .*
 		|try
 		|with \s+ timeout .*
 		|script\b .*

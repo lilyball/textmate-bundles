@@ -5,13 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>echo "&lt;h2&gt;Compiling $TM_FILENAME&lt;/h2&gt;&lt;pre&gt;"
+	<string>echo "&lt;h2&gt;Compiling $TM_FILENAME&lt;/h2&gt;"
 cd "$TM_DIRECTORY"
 javac -encoding UTF8 "$TM_FILENAME" &amp;&gt; &gt;("${TM_RUBY:-ruby}" -rtm_parser -eTextMate.parse_errors)
 if (($? &gt;= 1)); then exit; fi
 
-java "${TM_FILENAME%.java}"|pre
-echo "Program exited with status $?."
+{ java -Dfile.encoding=utf-8 "${TM_FILENAME%.java}"
+  echo -e "\nProgram exited with status $?."; }|pre
 
 # # if you want to run the program in Terminal.app
 # osascript &lt;&lt;EOF

@@ -75,10 +75,13 @@ if openApps contains "Quicksilver" then
 	set the_list to the_list &amp; "Send to Quicksilver"
 end if
 
+set default_items to defaultChoices()
 tell app "TextMate"
 	set the_choices to choose from list the_list ¬
 		with multiple selections allowed OK button name "Paste" ¬
-		with prompt "Pick actions for paste:" with title "Paste Selection to Pastebin"
+		with prompt "Pick actions for paste:" ¬
+		with title "Paste Selection to Pastebin" ¬
+		default items default_items
 end tell
 
 
@@ -88,6 +91,7 @@ end tell
 
 set the_url to ""
 if the_choices is not false then
+	saveChoices(the_choices)
 	set the_url to do shell script ¬
 		"mkfifo /tmp/cd_tm_pipe
 		\"$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" progressbar --indeterminate \\
@@ -135,10 +139,6 @@ on actOnURL(the_url, the_choices)
 			open location the_url
 		
 		-- paste the URL to the requested chat
-
---  I'm having a bit of trouble with this one not quite working
---  the way it is supposed to.  Needs testing to figure out how
---  to send messages to a chat, given the name of the chat.
 		else if startswith(each_choice, "\t&gt; ") then
 			set each_choice to striplength(each_choice, 3)
 			tell app "Adium" to ¬
@@ -155,6 +155,30 @@ on actOnURL(the_url, the_choices)
 		end if
 	end repeat
 end actOnURL
+
+
+-- load default choices
+on defaultChoices()
+	try
+		set prefs_file to (path to preferences folder from user domain as text) &amp; "com.macromates.textmate.paste_to_server.as_record"
+	    set f to open for access prefs_file
+	    set the_list to read f as list
+	    close access f
+	on error
+	    set the_list to { "\t- #textmate" }
+	end try
+
+	return the_list
+end defaultChoices
+
+
+-- save choices
+on saveChoices(the_list)
+	set prefs_file to (path to preferences folder from user domain as text) &amp; "com.macromates.textmate.paste_to_server.as_record"
+	set f to open for access prefs_file with write permission 
+	write the_list to f 
+	close access f
+end saveChoices
 
 
 -- test if 'longstring' starts with 'startstring'.  If not, return false
@@ -186,7 +210,7 @@ APPLESCRIPT
 	<key>keyEquivalent</key>
 	<string>^~V</string>
 	<key>name</key>
-	<string>Paste Line / Selection to IRC…</string>
+	<string>Paste Line / Selection to Paste Bin…</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>

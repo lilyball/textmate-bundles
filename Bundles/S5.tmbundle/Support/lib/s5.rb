@@ -8,7 +8,7 @@ class S5 < String
   HANDOUT = '__________'
 
   attr_reader :title, :subtitle, :location, :presenter, :organization,
-    :date, :slides, :theme, :defaultView, :controlVis
+    :date, :slides, :theme, :defaultView, :controlVis, :current_slide_number
 
   private
 
@@ -19,18 +19,30 @@ class S5 < String
     _in_headers = true
 
     _lines = split(/\n/)
+    _current_line = ENV['TM_LINE_NUMBER'].to_i if ENV['TM_LINE_NUMBER']
+    _current_line ||= 0
     _slide = ''
+    _line_num = 0
+    _slide_num = 0
+
     _lines.each do | _line |
+      _line_num += 1
+      if _line_num == _current_line
+        @current_slide_number = _slide_num + 1
+      end
+
       if _in_headers
         if _line =~ /^(\w+):[ ]*(.+)/
           _headers[$1] = $2
         else
+          @current_slide_number = nil
           _in_headers = false
         end
         next
       else
         if (_line =~ %r{^(#{DIVIDER})+})
           if _slide.strip != ''
+            _slide_num += 1
             @slides.push(_slide)
           end
           _slide = ''

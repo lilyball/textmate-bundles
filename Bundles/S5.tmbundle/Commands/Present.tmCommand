@@ -7,7 +7,12 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/s5.rb"
-html = S5.new(STDIN.readlines.join).to_html
+s5 = S5.new(STDIN.readlines.join)
+html = s5.to_html
+slide_anchor = ''
+if s5.current_slide_number
+  slide_anchor = "#slide#{s5.current_slide_number}"
+end
 filename = ENV['TM_FILEPATH'].dup
 if (filename =~ /\.s5$/)
   filename.sub!(/\.s5$/, '.html')
@@ -17,7 +22,9 @@ end
 File.open(filename, "w") do | fout |
   fout.print html
 end
-%x{open '#{filename}'}</string>
+filename.gsub!(/ /, '%20')
+%x{open file://#{filename}#{slide_anchor}}
+exit 200</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
@@ -25,7 +32,7 @@ end
 	<key>name</key>
 	<string>Present</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.s5</string>
 	<key>uuid</key>

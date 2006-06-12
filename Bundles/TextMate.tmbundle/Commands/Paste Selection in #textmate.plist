@@ -5,66 +5,175 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>paste_targets () {
-  osascript &lt;&lt;"APPLESCRIPT"
-    tell application "Colloquy"
-      set AppleScript's text item delimiters to " "
-      (name of chat room panels &amp; name of direct chat panels) as string
-    end tell
+	<string>exec 3&lt;&amp;0
+iconv -f utf-8 -t mac &lt;&lt;'APPLESCRIPT'|osascript -
+(* paste.applescript
+ * 
+ * Created by Jacob Rus on 2006-05-26.
+ * 
+ * This script sets up a list of options, allows TextMate to paste the
+ * selected text to a pastebin, sets up a list of possible actions to
+ * perform with the link, depending on what applications are available,
+ * and carries those actions out.  Some options include:
+ * 
+ *   - Copy the URL to the clipboard
+ *   - Send the URL to Quicksilver
+ *   - Open the URL in the default browser
+ *   - Paste the URL to an open IRC channel in Colloquy
+ *   - Paste the URL to an open chat in Adium
+ *   
+ * Note that for these last two, if multiple channels or chats are open with
+ * the same name, this Applescript will not attempt to distinguish between
+ * them, and will paste to the first available channel or chat which matches
+ * the user's choice.
+ * 
+ *)
+
+
+-- ==========================
+-- = SET UP LIST OF OPTIONS =
+-- ==========================
+
+-- initialize the list
+set the_list to {}
+
+-- get a list of open applications, so that we can decide which actions to
+-- present as options
+tell app "System Events"
+	set openApps to name of application processes
+end tell
+
+-- get open IRC channels from Colloquy, if it is open;
+-- preface the actions with -
+if openApps contains "Colloquy" then	
+	tell app "Colloquy" to set colloquy_channels to ¬
+		(name of direct chat panels &amp; name of chat room panels)
+	if colloquy_channels is not {} then
+		set the_list to the_list &amp; "Paste to Colloquy IRC:"
+	end if
+	repeat with each_channel in colloquy_channels
+		set the_list to the_list &amp; {"\t- " &amp; each_channel}
+	end repeat
+end if
+
+-- get open chats from Adium, if it is open;
+-- preface the actions with &gt;
+if openApps contains "Adium" then
+	tell app "Adium" to set adium_chats to (chat name of chats)		
+	if adium_chats is not {} then
+		set the_list to the_list &amp; "Paste to Adium chat:"
+	end if
+	repeat with each_chat in adium_chats
+		set the_list to the_list &amp; {"\t&gt; " &amp; each_chat}
+	end repeat
+end if
+
+-- add singular actions
+set the_list to the_list &amp; "Open in browser"
+set the_list to the_list &amp; "Copy link to clipboard"
+if openApps contains "Quicksilver" then
+	set the_list to the_list &amp; "Send to Quicksilver"
+end if
+
+tell app "TextMate"
+	set the_choices to choose from list the_list ¬
+		with multiple selections allowed OK button name "Paste" ¬
+		with prompt "Pick actions for paste:" with title "Paste Selection to Pastebin"
+end tell
+
+
+-- ==============================
+-- = PASTE TEXT TO THE PASTEBIN =
+-- ==============================
+
+set the_url to do shell script ¬
+	"mkfifo /tmp/cd_tm_pipe
+	\"$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" progressbar --indeterminate \\
+	  --title \"Paste to Pasting Server…\" \\
+	  --text \"Contacting Server “pastie.caboo.se”…\" &lt; /tmp/cd_tm_pipe &amp;
+	exec 4&lt;&gt;/tmp/cd_tm_pipe
+	echo -n . &gt;&amp;4
+	TM_HTML=$(\"${TM_RUBY:-ruby}\" -rjcode -Ku -r\"$TM_BUNDLE_SUPPORT/lib/doctohtml.rb\" -e 'print document_to_html(IO.for_fd(3).read)')
+	echo -n \"$TM_SELECTED_TEXT\"|curl http://pastie.caboo.se/pastes/create \\
+		-s -L -o /dev/null -w \"%{url_effective}\" \\
+		-H \"Expect:\" \\
+		-F \"paste[body]=&lt;-\" \\
+		-F \"paste[textmate_html]=&amp;zwj;$TM_HTML\"
+	exec 4&gt;&amp;-
+	wait
+	rm -f /tmp/cd_tm_pipe
+"
+
+-- =============================
+-- = PERFORM REQUESTED OPTIONS =
+-- =============================
+
+if the_choices is not false and the_url is not "" then
+	actOnURL(the_url, the_choices)
+end if
+
+
+on actOnURL(the_url, the_choices)
+	repeat with each_choice in the_choices
+		set each_choice to each_choice as string
+		
+		-- send the URL to Quicksilver
+		if (each_choice is "Send to Quicksilver") then
+			tell app "Quicksilver"
+				activate
+				set selection to the_url
+			end tell
+		
+		-- send the URL to the clipboard
+		else if each_choice is "Copy link to clipboard" then
+			set the clipboard to the_url
+			
+		-- open the URL in the default browser
+		else if each_choice is "Open in browser" then
+			open location the_url
+		
+		-- paste the URL to the requested chat
+
+--  I'm having a bit of trouble with this one not quite working
+--  the way it is supposed to.  Needs testing to figure out how
+--  to send messages to a chat, given the name of the chat.
+		else if startswith(each_choice, "\t&gt; ") then
+			set each_choice to striplength(each_choice, 3)
+			tell app "Adium" to ¬
+				tell item 1 of (chats whose chat name is each_choice) to ¬
+				    send message ("pasted " &amp; the_url)
+		
+		-- paste the URL to the requested IRC channel/chat
+		else if startswith(each_choice, "\t- ") then
+			set each_choice to striplength(each_choice, 3)
+			tell app "Colloquy"
+				set the_channel to target of item 1 of (panels whose name is each_choice)
+				send message ("pasted " &amp; the_url) to the_channel action tense yes
+			end tell
+		end if
+	end repeat
+end actOnURL
+
+
+-- test if 'longstring' starts with 'startstring'.  If not, return false
+on startswith(longstring, startstring)
+	if length of startstring &gt; length of longstring then
+		return false
+	end if
+	repeat with i from 1 to length of startstring
+		if (character i of startstring) is not (character i of longstring) then
+			return false
+		end if
+	end repeat
+	return true
+end startswith
+
+
+-- strip the first 'num' characters from 'longstring', returning the result
+on striplength(longstring, num)
+	return (characters (num + 1) through (length of longstring) of longstring) as string
+end striplength
 APPLESCRIPT
-}
-
-if [[ -z "$TM_IRC_CHANNEL" ]] &amp;&amp; ps -xc|grep -sq 'Colloquy$'; then
-  result=$(CocoaDialog dropdown \
-    --title 'Paste to IRC' \
-    --text 'Choose a chat room or user:' \
-    --button1 Paste --button2 Cancel \
-    --string-output --no-newline \
-    --items $(paste_targets))
-
-  if [[ "${result:0:5}" == "Paste" ]];
-    then TM_IRC_CHANNEL="${result:6}"
-    else exit_discard
-  fi
-fi
-
-# set the language to one pastie supports
-TM_LANG=$(cut &lt;&lt;&lt;"$TM_SCOPE" -d. -f2)
-case "$TM_LANG" in
-  diff|javascript|ruby|sql|html)
-    ;;
-  c++|objc|objc++)
-    TM_LANG=c
-    ;;
-  *)
-    TM_LANG=plaintext
-esac
-
-TM_HTML=$("${TM_RUBY:-ruby}" -rjcode -Ku -r"$TM_BUNDLE_SUPPORT/lib/doctohtml.rb" -e 'print document_to_html(STDIN.read)')
-
-url=$(echo -n "$TM_SELECTED_TEXT"|curl http://pastie.caboo.se/pastes/create \
-    -s -L -o /dev/null -w "%{url_effective}" \
-    -H "Expect:" \
-    -F "paste[nick]=$USER" \
-    -F "paste[parser]=$TM_LANG" \
-    -F "paste[tab_size]=$TM_TAB_SIZE" \
-    -F "paste[body]=&lt;-" \
-    -F "paste[textmate_html]=&amp;zwj;$TM_HTML" \
-  2&gt; &gt;(CocoaDialog progressbar --indeterminate \
-    --title "Paste to ${TM_IRC_CHANNEL}…" \
-    --text "Contacting Server “${TM_PASTE_URL}”…" \
-  ))
-
-[[ -z "$url" ]] &amp;&amp; exit_show_tool_tip "Error: Got no URL back from pasting service."
-
-if ps -xc|grep -sq 'Colloquy$'; then
-  osascript -e "tell application \"Colloquy\" to send message \"pasted $url\" action tense yes to target of item 1 of (panels where name = \"$TM_IRC_CHANNEL\")"
-  echo "The text was pasted to $TM_IRC_CHANNEL."
-else
-  echo -n "$url" | pbcopy
-  echo "The text is available as $url"
-  echo "For your convenience, the URL was placed on the clipboard."
-fi
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

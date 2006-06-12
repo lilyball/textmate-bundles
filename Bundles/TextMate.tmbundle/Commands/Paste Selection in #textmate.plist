@@ -5,8 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>osascript "$TM_BUNDLE_SUPPORT/pastebin.scpt"
-</string>
+	<string># since osascript wants to “update” the script we run it with a copy
+SCRIPT=$(mktemp -t tm_pastebin)
+cp "$TM_BUNDLE_SUPPORT/pastebin.scpt" "$SCRIPT"
+osascript "$SCRIPT"
+rm -f "$SCRIPT"</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

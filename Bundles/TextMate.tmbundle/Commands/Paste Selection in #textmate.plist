@@ -86,29 +86,31 @@ end tell
 -- = PASTE TEXT TO THE PASTEBIN =
 -- ==============================
 
-set the_url to do shell script ¬
-	"mkfifo /tmp/cd_tm_pipe
-	\"$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" progressbar --indeterminate \\
-	  --title \"Paste to Pasting Server…\" \\
-	  --text \"Contacting Server “pastie.caboo.se”…\" &lt; /tmp/cd_tm_pipe &amp;
-	exec 4&lt;&gt;/tmp/cd_tm_pipe
-	echo -n . &gt;&amp;4
-	TM_HTML=$(\"${TM_RUBY:-ruby}\" -rjcode -Ku -r\"$TM_BUNDLE_SUPPORT/lib/doctohtml.rb\" -e 'print document_to_html(IO.for_fd(3).read)')
-	echo -n \"$TM_SELECTED_TEXT\"|curl http://pastie.caboo.se/pastes/create \\
-		-s -L -o /dev/null -w \"%{url_effective}\" \\
-		-H \"Expect:\" \\
-		-F \"paste[body]=&lt;-\" \\
-		-F \"paste[textmate_html]=&amp;zwj;$TM_HTML\"
-	exec 4&gt;&amp;-
-	wait
-	rm -f /tmp/cd_tm_pipe
-"
+set the_url to ""
+if the_choices is not false then
+	set the_url to do shell script ¬
+		"mkfifo /tmp/cd_tm_pipe
+		\"$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" progressbar --indeterminate \\
+		  --title \"Paste to Pasting Server…\" \\
+		  --text \"Contacting Server “pastie.caboo.se”…\" &lt; /tmp/cd_tm_pipe &amp;
+		exec 4&lt;&gt;/tmp/cd_tm_pipe
+		echo -n . &gt;&amp;4
+		TM_HTML=$(\"${TM_RUBY:-ruby}\" -rjcode -Ku -r\"$TM_BUNDLE_SUPPORT/lib/doctohtml.rb\" -e 'print document_to_html(IO.for_fd(3).read)')
+		echo -n \"$TM_SELECTED_TEXT\"|curl http://pastie.caboo.se/pastes/create \\
+			-s -L -o /dev/null -w \"%{url_effective}\" \\
+			-H \"Expect:\" \\
+			-F \"paste[body]=&lt;-\" \\
+			-F \"paste[textmate_html]=&amp;zwj;$TM_HTML\"
+		exec 4&gt;&amp;-
+		wait
+		rm -f /tmp/cd_tm_pipe"
+end if
 
 -- =============================
 -- = PERFORM REQUESTED OPTIONS =
 -- =============================
 
-if the_choices is not false and the_url is not "" then
+if the_url is not "" then
 	actOnURL(the_url, the_choices)
 end if
 

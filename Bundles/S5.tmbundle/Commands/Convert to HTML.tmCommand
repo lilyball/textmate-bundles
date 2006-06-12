@@ -10,12 +10,14 @@ require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/s5.rb"
 print S5.new(STDIN.readlines.join).to_html</string>
 	<key>input</key>
 	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^H</string>
 	<key>name</key>
 	<string>Convert to HTML</string>
 	<key>output</key>
 	<string>openAsNewDocument</string>
 	<key>scope</key>
-	<string>source.s5</string>
+	<string>source.s5, source.s5 text.html.markdown</string>
 	<key>uuid</key>
 	<string>C1EC9501-B96E-4E6E-8F0A-2BECF19D0F30</string>
 </dict>

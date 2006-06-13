@@ -204,7 +204,7 @@ def document_to_html(input, opt = {})
 	html = ''
 
 	theme_class = ''
-	if (!ENV['TM_SELECTED_TEXT'])
+  if opt[:include_css]
 		# If you declare a 'http://...' link as a TM_SOURCE_STYLESHEET
 		# shell variable, that will be used instead of generating a stylesheet
 		# based on the current theme.
@@ -215,20 +215,20 @@ def document_to_html(input, opt = {})
 		end
 
 		# Head block
-		html = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
-	\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
+		html = %{<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title>#{ ENV['TM_FILENAME'] || 'untitled' }</title>
-	<style type=\"text/css\">
+	<style type="text/css">
 #{styles}
 	</style>
 </head>
 
-<body>"
+<body>}
 	end
 
 	# Meat. The poor-man's tokenizer. Fortunately, our input is simple
@@ -251,17 +251,15 @@ def document_to_html(input, opt = {})
 		end
 	end
 
-	code_html = number(code_html) if opt && opt['number']
+	code_html = number(code_html) if opt[:line_numbers]
 
 	html += "<pre class=\"textmate-source"
 	html += " #{theme_class}" unless theme_class.empty?
 	html += "\">#{code_html}</pre>"
 
-	if (!ENV['TM_SELECTED_TEXT'])
+  if opt[:include_css]
 		# Closing
-		html += "
-</body>
-</html>"
+		html += "\n</body>\n</html>"
 	end
 
 	return html

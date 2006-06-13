@@ -7,13 +7,11 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -rjcode -Ku
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/doctohtml.rb"
-print document_to_html( STDIN.read, { 'number' =&gt; 1 } )</string>
+print document_to_html( STDIN.read, { :line_numbers =&gt; true, :include_css =&gt; !ENV.has_key?('TM_SELECTED_TEXT') } )</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>inputFormat</key>
 	<string>xml</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Create HTML From Document / Selection With Line Numbers</string>
 	<key>output</key>

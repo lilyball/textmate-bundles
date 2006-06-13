@@ -15,10 +15,14 @@ div.section {
 	border: 2px;
 	border-style: none solid solid none;
 	border-color: #545458;
-	color: #888;
+	color: #111;
 	background-color: #fff;
 	font-size: 70%;
 	margin 0;
+}
+
+div.section pre {
+	font-size: 120%;
 }
 
 div.target h2 {
@@ -85,11 +89,23 @@ div.info {
    background-color: #DEE9FE;
 }
 
+div.info li,p {
+   color: #000;
+}
+
+div.error li,p {
+   color: #000;
+}
+
+div.warning li,p {
+   color: #000;
+}
+
 table.status {
 	font-size: 93%;
 }
 
-/* center all of the status characters */
+/* center the status characters */
 table.status td[class] {
 	text-align: center;
 }

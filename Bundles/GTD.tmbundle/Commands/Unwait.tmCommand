@@ -2,30 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env python
 import sys, os
 
 oldtask = os.environ['TM_CURRENT_LINE']
-if (oldtask[0:4] == "DONE"):
-	sys.stdout.write(oldtask)
-elif  (oldtask[0:4] == "WAIT"):
-	sys.stdout.write("DONE " + oldtask[5:])
+if (oldtask[0:4] == "WAIT"):
+	sys.stdout.write(oldtask[5:])
 else:
-	sys.stdout.write("DONE " + oldtask)</string>
+	sys.stdout.write(oldtask)</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>name</key>
-	<string>Done</string>
+	<string>Unwait</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>text.plain.gtd</string>
 	<key>tabTrigger</key>
-	<string>d</string>
+	<string>u</string>
 	<key>uuid</key>
-	<string>6039C5E6-B596-4EBE-BA55-66742DE17955</string>
+	<string>69DAAF9A-78D4-49F4-9D67-93AD7975B960</string>
 </dict>
 </plist>

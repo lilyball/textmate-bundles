@@ -9,7 +9,10 @@
 import sys, os
 
 oldtask = os.environ['TM_CURRENT_LINE']
-sys.stdout.write("WAIT " + oldtask[5:])</string>
+if (oldtask[0:4] == "WAIT") or (oldtask[0:4] == "DONE"):
+	sys.stdout.write(oldtask)
+else:
+	sys.stdout.write("WAIT " + oldtask)</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

@@ -5,19 +5,27 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># for now this doesn't really toggle at all, it
-# just converts the selection to unicode text.
-# If the selection is a string, this will include
-# the quotation marks.  Still, it's a start :).
+	<string>#!/usr/bin/env ruby -Ku
 
-UNICODE_DATA=`iconv -f utf-8 -t ucs-2|hexdump -ve '"" 1/2 "%04x"'`
-echo "«data utxt${UNICODE_DATA}» as Unicode text"</string>
+case txt = STDIN.read
+  when /\A«data utxt([0-9A-F]+)»(?: as Unicode text)?\z/i
+    decoded = $1.gsub(/([0-9A-F]{4})/i) { |m| [$1.hex].pack("U") }
+    print '"' + decoded + '"'
+
+  when /\A"(.*)"\z/
+    encoded = $1.gsub(/./) { |ch| sprintf("%04X", ch.unpack("U")[0]) }
+    print '«data utxt' + encoded + '» as Unicode text'
+
+  else
+    print txt
+end
+</string>
 	<key>fallbackInput</key>
 	<string>scope</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>name</key>
-	<string>Toggle string/Unicode text</string>
+	<string>Toggle ASCII / Unicode («data utxt»)</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>

@@ -86,26 +86,17 @@ on FXBuilderBringToFront() -- makes sure frontmost window is FXBuilder
 	tell application "System Events"
 		tell process "Final Cut Pro"
 			set windowList to name of every window
+			set windowList to name of every window
 			if windowList contains "FXBuilder" then
 				set FXBcount to 0
-				repeat with theWindow in windowList
-					if theWindow as string is "FXBuilder" then set FXBcount to FXBcount + 1
-				end repeat
-				
-				repeat FXBcount times
-					perform action "AXRaise" of window "FXBuilder"
+				repeat with theWindow from 1 to (count windowList)
 					
-					
-					if scroll bar 1 of window "FXBuilder" exists then
-						return true -- end, we found a workable window
+					if name of window theWindow as string is "FXBuilder" then
+						if scroll bar 1 of window theWindow exists then -- this is a text entry window
+							perform action "AXRaise" of window theWindow -- bring window to front
+							return true -- end, we found a workable window
+						end if
 					end if
-					
-					if size of window "FXBuilder" is {322, 320} then
-						keystroke "w" using command down -- close preview window
-					end if
-					
-					(* if there's a controls window, do nothing, which is a problem since it will remain frontmost
-					this will fail gracefully however and eventually open a new FXBuilder window *)
 					
 				end repeat
 			end if
@@ -142,7 +133,8 @@ on FXBuilderRunScript(sourceText)
 	FXBuilderPasteText(sourceText)
 	tell application "System Events"
 		tell process "Final Cut Pro"
-			keystroke "k" using command down
+			click menu item "Stop" of menu "FXBuilder" of menu bar 1
+			click menu item "Run" of menu "FXBuilder" of menu bar 1
 		end tell
 	end tell
 end FXBuilderRunScript

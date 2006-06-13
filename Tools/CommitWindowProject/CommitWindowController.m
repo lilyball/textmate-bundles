@@ -9,8 +9,11 @@
 #import "CommitWindowController.h"
 #import "VersionControlColors.h"
 
+#define kStatusColumnWidthForSingleChar	16
+
 @interface CommitWindowController (Private)
 - (void) populatePreviousSummaryMenu;
+- (NSAttributedString *) attributedStatusString:(NSString *)statusString;
 @end
 
 @implementation CommitWindowController
@@ -106,13 +109,24 @@
 		NSArray *	files = [fFilesController arrangedObjects];
 		int			count = MIN([files count], [fFileStatusStrings count]);
 		
+		UInt32		maxCharsToDisplay = 0;
+		
 		for( i = 0; i < count; i += 1 )
 		{
-			NSMutableDictionary *	dictionary = [files objectAtIndex:i];
-			NSString *				status = [fFileStatusStrings objectAtIndex:i];
+			NSMutableDictionary *	dictionary	= [files objectAtIndex:i];
+			NSString *				status		= [fFileStatusStrings objectAtIndex:i];
 			BOOL					itemSelectedForCommit;
+			UInt32					statusLength;
+			
+			// Set high-water mark
+			statusLength = [status length];
+			if( statusLength > maxCharsToDisplay )
+			{
+				maxCharsToDisplay = statusLength;
+			}
 			
 			[dictionary setObject:status forKey:@"status"];
+			[dictionary setObject:[self attributedStatusString:status] forKey:@"attributedStatus"];
 
 			// Deselect external commits by default
 			if([status hasPrefix:@"X"])
@@ -125,6 +139,9 @@
 			}
 			[dictionary setObject:[NSNumber numberWithBool:itemSelectedForCommit] forKey:@"commit"]; 
 		}
+
+		// Set status column size
+		[fStatusColumn setWidth:maxCharsToDisplay * kStatusColumnWidthForSingleChar];
 	}
 	
 	[fFilesController objectDidEndEditing:nil];
@@ -409,25 +426,45 @@
 //
 // Attempt to mirror the appearance of the status and info displays
 //
-- (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(int)row
-{
-	// Set colors if appropriate
-	if(fFileStatusStrings != nil && tableColumn == fStatusColumn )
-	{
 
-		NSArray * 				files		= [fFilesController arrangedObjects];
-		NSMutableDictionary *	dictionary	= [files objectAtIndex:row];
-		NSString * 				status		= [dictionary objectForKey:@"status"];
+- (NSAttributedString *) attributedStatusString:(NSString *)statusString
+{
+	UInt32						length = [statusString length];
+	NSMutableAttributedString *	attributedStatusString = [[[NSMutableAttributedString alloc] init] autorelease];
+	unsigned int				i;
+	unichar						emSpace		= 0x2003;
+	unichar						hairSpace	= 0x200A;
+	NSAttributedString *		spaceString	= [[[NSAttributedString alloc] initWithString:@" " attributes:nil] autorelease];
+	
+	for( i = 0; i < length; i += 1 )
+	{
+		unichar 				character = [statusString characterAtIndex:i];
+		NSString *				charString;
+		NSAttributedString *	attributedCharString;
 		NSColor *				foreColor;
 		NSColor *				backColor;
-
-		ColorsFromStatus( status, &foreColor, &backColor );
+		NSDictionary *			attributes;
 		
-		[cell setDrawsBackground:YES];
-		[cell setBackgroundColor:backColor];
-		[cell setTextColor:foreColor];
-	}
-}
+		// We pass in underscores for empty multicolumn attributes
+		if(character == '_')
+		{
+			character = emSpace;
+		}
+		charString = [NSString stringWithCharacters:&character length:1];
+		
+		ColorsFromStatus( charString, &foreColor, &backColor );
 
+		attributes = [NSDictionary dictionaryWithObjectsAndKeys:foreColor,	NSForegroundColorAttributeName,
+																backColor,	NSBackgroundColorAttributeName,
+																nil];
+
+		attributedCharString = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%C%@%C", hairSpace, charString, hairSpace] attributes:attributes] autorelease];
+		
+		[attributedStatusString appendAttributedString:attributedCharString];
+		[attributedStatusString appendAttributedString:spaceString];
+	}
+	
+	return attributedStatusString;
+}
 
 @end

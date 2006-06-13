@@ -16,13 +16,16 @@ TextMate.call_with_progress(:title => "Paste to Pastie", :message => "Contacting
   html = document_to_html(xml)
   open(html_file, "w") { |io| io.write(html); }
 
+  ext = File.extname(ENV['TM_FILENAME'].to_s).sub(/\A\./, '')
+
   print %x{
     curl http://pastie.caboo.se/pastes/create \
     	-s -L -o /dev/null -w "%{url_effective}" \
     	-H "Expect:" \
     	-F "paste[parser]=plaintext" \
+    	-F "paste[file_extension]=#{ext}" \
     	-F "paste[body]=<#{text_file}" \
-    	-F "paste[textmate_html]=<#{html_file}"    
+    	-F "paste[textmate_html]=<#{html_file}"
   }
 
   File.unlink(text_file)

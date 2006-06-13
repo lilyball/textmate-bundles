@@ -9,12 +9,25 @@
 #import "CommitWindowController.h"
 #import "VersionControlColors.h"
 
-#define kStatusColumnWidthForSingleChar	16
+#define kStatusColumnWidthForSingleChar	18
 
 @interface CommitWindowController (Private)
 - (void) populatePreviousSummaryMenu;
 - (NSAttributedString *) attributedStatusString:(NSString *)statusString;
 @end
+
+// Forward string comparisons
+@interface NSAttributedString (CommitWindowExtensions)
+- (NSComparisonResult)compare:(id)anArgument;
+@end
+
+@implementation NSAttributedString (CommitWindowExtensions)
+- (NSComparisonResult)compare:(id)aString
+{
+	return [[self string] compare:[aString string]];
+}
+@end
+
 
 @implementation CommitWindowController
 

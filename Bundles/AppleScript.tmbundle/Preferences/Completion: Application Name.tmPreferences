@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Completion: Application Name</string>
+	<key>scope</key>
+	<string>string.quoted.double.application-name.applescript</string>
+	<key>settings</key>
+	<dict>
+		<key>completionCommand</key>
+		<string>ps -xco command|grep "^$TM_CURRENT_WORD"|sort|uniq</string>
+	</dict>
+	<key>uuid</key>
+	<string>F4324AFF-97E6-4D2D-B425-B24E99383AA3</string>
+</dict>
+</plist>

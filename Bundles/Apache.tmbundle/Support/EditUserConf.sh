@@ -35,19 +35,13 @@ if [ "$REPLY" == "" ]
 fi
 	
 selectedFile=`exec osascript <<EOF | tr "\r" "\n"
-	tell app "SystemUIServer"
-	   	activate	    
+	tell app "TextMate"
 		set file_list to { $REPLY }
 		set open_list to (choose from list file_list with prompt "Select the user.conf files you wish to open")
 	end tell
 EOF`
 	
-if [ "$selectedFile" == "false" ]
+if [ "$selectedFile" != "false" ]
 	then
-	open -a TextMate
-	exit 0;
+	open -a TextMate "$SEARCH_DIR/$selectedFile"
 fi
-
-open -a TextMate "$SEARCH_DIR/$selectedFile";
-
-exit 0;

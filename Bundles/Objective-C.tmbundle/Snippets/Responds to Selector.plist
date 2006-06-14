@@ -9,7 +9,7 @@ if ([${1:self} respondsToSelector:@selector(${2:someSelector:})])
     [$1 ${3:${2/((:\s*$)|(:\s*))/:&lt;&gt;(?3: )/g}}];
 }</string>
 	<key>name</key>
-	<string>Responds to Selector (responds)</string>
+	<string>Responds to Selector</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>

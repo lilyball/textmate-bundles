@@ -1,42 +1,146 @@
-{
-	comment = "Pascal -- GNU Pascal, specifically -- chris@cjack.com. Feel free to modify, distribute, be happy. Share and enjoy.";
-	name = "Pascal";
-	scopeName = "source.pascal";
-	fileTypes = ( p, pas );
-	foldingStartMarker = "\\b(?i:(procedure|package|function|type))\\b";
-	foldingStopMarker = "\\b(?i:(end))\\b";
-	increaseIndentPattern = "\\b(?i:(loop|declare|begin|exception|when|procedure|for|if|else|task|type|package))\\b";
-	smartTypingPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
-	   ( "\"", "\"" ), ( "'", "'" )
-	);
-	highlightPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
-	);
-	patterns = (
-				
-		{
-			name = "keyword.control.pascal";
-			match = "\\b(?i:(absolute|abstract|all|and|and_then|array|as|asm|attribute|begin|bindable|case|class|const|constructor|destructor|div|do|end|do|else|end|export|exports|external|far|file|finalization|for|forward|goto|if|implementation|import|in|inherited|initialization|interface|interrupt|is|label|library|mod|module|name|near|nil|not|object|of|only|operator|or|or_else|otherwise|packed|pow|private|program|property|protected|public|published|qualified|record|repeat|resident|restricted|segment|set|shl|shr|then|to|type|unit|until|uses|value|var|view|virtual|while|with|xor))\\b";
-		},
-		
-		{
-		    name = "declaration.function.pascal";
-		    match = "\\b(?i:(function|procedure))\\b\\s+(\\w+)";
-			captures = { 1 = { name = "storage.type.pascal"; };
-			             2 = { name = "entity.name.function.pascal"; }; };
-		},
-		
-		{ name = "constant.numeric.pascal"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"; },
-		
-		{ name = "comment.line.double-dash.pascal.one"; match = "--(.*)$"; },
-		{ name = "comment.line.double-slash.pascal.two"; match = "//.*$\n?"; },
-		{ name = "comment.block.pascal.one"; begin = "\\(\\*"; end = "\\*\\)"; },
-		{ name = "comment.block.pascal.two"; begin = "\\{"; end = "\\}"; },
-
-		{ name = "string.quoted.double.pascal"; begin = "\""; end = "\""; swallow = "\\\\."; },
-		{ name = "string.quoted.single.pascal"; begin = "'"; end = "'"; swallow = "\\\\."; },
-
-	);
-	uuid = "F42FA544-6B1C-11D9-9517-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>Pascal -- GNU Pascal, specifically -- chris@cjack.com. Share and enjoy.</string>
+	<key>fileTypes</key>
+	<array>
+		<string>p</string>
+		<string>pas</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>\b(?i:(procedure|package|function|type))\b</string>
+	<key>foldingStopMarker</key>
+	<string>\b(?i:(end))\b</string>
+	<key>highlightPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+	</array>
+	<key>increaseIndentPattern</key>
+	<string>\b(?i:(loop|declare|begin|exception|when|procedure|for|if|else|task|type|package))\b</string>
+	<key>name</key>
+	<string>Pascal</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:(absolute|abstract|all|and|and_then|array|as|asm|attribute|begin|bindable|case|class|const|constructor|destructor|div|do|end|do|else|end|export|exports|external|far|file|finalization|for|forward|goto|if|implementation|import|in|inherited|initialization|interface|interrupt|is|label|library|mod|module|name|near|nil|not|object|of|only|operator|or|or_else|otherwise|packed|pow|private|program|property|protected|public|published|qualified|record|repeat|resident|restricted|segment|set|shl|shr|then|to|type|unit|until|uses|value|var|view|virtual|while|with|xor))\b</string>
+			<key>name</key>
+			<string>keyword.control.pascal</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.pascal</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.pascal</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(?i:(function|procedure))\b\s+(\w+)</string>
+			<key>name</key>
+			<string>declaration.function.pascal</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.pascal</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>--(.*)$</string>
+			<key>name</key>
+			<string>comment.line.double-dash.pascal.one</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>//.*$
+?</string>
+			<key>name</key>
+			<string>comment.line.double-slash.pascal.two</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\(\*</string>
+			<key>end</key>
+			<string>\*\)</string>
+			<key>name</key>
+			<string>comment.block.pascal.one</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\{</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>name</key>
+			<string>comment.block.pascal.two</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.pascal</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.pascal</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.pascal</string>
+	<key>smartTypingPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+		<array>
+			<string>'</string>
+			<string>'</string>
+		</array>
+	</array>
+	<key>uuid</key>
+	<string>F42FA544-6B1C-11D9-9517-000D93589AF6</string>
+</dict>
+</plist>

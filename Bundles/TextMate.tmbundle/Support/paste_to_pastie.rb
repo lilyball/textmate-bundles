@@ -11,11 +11,12 @@ TextMate.call_with_progress(:title => "Paste to Pastie", :message => "Contacting
   xml = STDIN.read
 
   text = CGI::unescapeHTML(xml.gsub(/<[^>]+>/, ''))
-  open(text_file, "w") { |io| io.write(text); }
+  open(text_file, "w") { |io| io.write(text) }
 
   html = document_to_html(xml)
-  open(html_file, "w") { |io| io.write(html); }
+  open(html_file, "w") { |io| io.write(html) }
 
+  author = "#{`niutil -readprop / "/users/$USER" realname`.chomp} (#{ENV['USER']})"
   ext = File.extname(ENV['TM_FILENAME'].to_s).sub(/\A\./, '')
 
   print %x{
@@ -23,6 +24,7 @@ TextMate.call_with_progress(:title => "Paste to Pastie", :message => "Contacting
     	-s -L -o /dev/null -w "%{url_effective}" \
     	-H "Expect:" \
     	-F "paste[parser]=plaintext" \
+    	-F "paste[display_name]=#{author}" \
     	-F "paste[file_extension]=#{ext}" \
     	-F "paste[body]=<#{text_file}" \
     	-F "paste[textmate_html]=<#{html_file}"

@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>xmllint --htmlout - 2&gt;&amp;1|perl -pe 's|^((?:&lt;/?[^&gt;]+&gt;)*)(.*?):(\d+):(.*error.*)|$1&lt;a href="txmt://open?line=$3"&gt;$4&lt;/a&gt;|'</string>
+	<string>xmllint --htmlout --valid - 2&gt;&amp;1|perl -pe 's|^((?:&lt;/?[^&gt;]+&gt;)*)(.*?):(\d+):(.*error.*)|$1&lt;a href="txmt://open?line=$3"&gt;$4&lt;/a&gt;|'</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

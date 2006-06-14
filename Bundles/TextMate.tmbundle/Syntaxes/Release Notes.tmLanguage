@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>tmReleaseNotes</string>
+	</array>
+	<key>keyEquivalent</key>
+	<string>^~P</string>
+	<key>name</key>
+	<string>Release Notes</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.release-notes</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\[(?:[\d-]+: )?(REVISION \d+)\]$
+</string>
+			<key>name</key>
+			<string>meta.separator.release-notes</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^([ \t]*)(?=\S)</string>
+			<key>contentName</key>
+			<string>meta.paragraph.text</string>
+			<key>end</key>
+			<string>^(?!\1(?=\S))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(https?|ftp|mailto):\S+?(?=[)&gt;,.':;"]*(\s|$)|$)</string>
+					<key>name</key>
+					<string>markup.underline.link</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\[(NEW|FIXED|CHANGED|REMOVED|INFO)\]</string>
+					<key>name</key>
+					<string>keyword.other.release-notes</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.ticket.release-notes</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.ticket.release-notes</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>([Tt]icket) ([0-9A-F]{8})\b</string>
+					<key>name</key>
+					<string>meta.ticket.release-notes</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.plain.release-notes</string>
+	<key>uuid</key>
+	<string>8926CAFE-1CF3-4CF9-A056-4FF90F596E9A</string>
+</dict>
+</plist>

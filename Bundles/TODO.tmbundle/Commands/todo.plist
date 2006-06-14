@@ -14,6 +14,15 @@ $tags = [
   { :label =&gt; "RADAR",   :color =&gt; "#0090C8", :regexp =&gt; /(.*&lt;)ra?dar:\/(?:\/problem|)\/([&amp;0-9]+)(&gt;.*)$/  },
 ]
 
+if RUBY_VERSION =~ /^1\.6\./ then
+  puts &lt;&lt;-HTML
+&lt;p&gt;Sorry, but this function requires Ruby 1.8.&lt;/p&gt;
+&lt;p&gt;If you do have Ruby 1.8 installed (default for Tiger users) then you need to setup the path variable in &lt;tt&gt; ~/.MacOSX/environment.plist&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;For detailed instructions see &lt;a href="http://macromates.com/textmate/manual/shell_commands#search_path"&gt;the manual&lt;/a&gt; (scroll down to the paragraph starting with &lt;em&gt;Important&lt;/em&gt;.)&lt;/p&gt;
+HTML
+  abort
+end
+
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
 include ERB::Util

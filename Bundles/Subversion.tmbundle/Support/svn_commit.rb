@@ -129,10 +129,12 @@ mup.html {
 
 		mup.div( :class => 'section' ) do
 			mup.pre {
+				mup.text("...\n")
 				STDOUT.flush
 
 				IO.popen("#{svn} commit --non-interactive --force-log #{commit_args}", "r+") do |pipe|
-					pipe.each {|line| mup.text! line }
+					# WebKit needs <br> instead of \n inside <pre>, otherwise the text won't flush
+					pipe.each_line {|line| mup.text! line.chomp; mup << "<br>"; STDOUT.flush}
 				end
 			}
 		end

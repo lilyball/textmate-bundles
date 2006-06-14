@@ -45,10 +45,10 @@ if Xcode.supports_configurations? then
   user          = PropertyList::load(File.new(userFile)) if File.exists?(userFile)
   userBuild     = user && user[proj['rootObject']]['userBuildSettings']
   activeConfig  = user && user[proj['rootObject']]['activeBuildConfigurationName']
-  if userBuild['SYMROOT']
+  if userBuild && userBuild['SYMROOT']
     dir = userBuild['SYMROOT']
   end
-  dir += "/#{activeConfig || "Development"}"
+  dir += "/#{activeConfig || "Release"}"
 end
 
 targets = rootObj['targets'].reject { |t| not ['com.apple.product-type.tool', 'com.apple.product-type.application'].include?(objs[t]['productType']) }

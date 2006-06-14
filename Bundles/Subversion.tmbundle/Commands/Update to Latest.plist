@@ -9,7 +9,19 @@
 
 "${TM_RUBY:-ruby}" -r "$TM_SUPPORT_PATH/bin/shelltokenize.rb" &lt;&lt;END
 	svn = ENV['TM_SVN'] || "svn"
-	puts %x{#{svn} update #{TextMate.selected_paths_for_shell}}
+	ruby = ENV['TM_RUBY'] || "ruby"
+	support = ENV['TM_BUNDLE_SUPPORT']
+	paths = TextMate.selected_paths_array
+	
+	# TODO: Ideally, we'd like to use a tooltip for one and not others, but we can't switch from a tooltip
+	# to dynamic HTML output (or maybe we could double-fork a process?)
+	# if ((paths.size == 1) and not (File.directory? paths[0]))
+	#	puts %x{#{svn} update #{TextMate.selected_paths_for_shell}}
+	# else
+		update = IO.popen("'#{svn}' update #{TextMate.selected_paths_for_shell}", 'r')
+		format = IO.popen("'#{ruby}' -- '#{support}/format_status.rb'", 'w')
+		update.each_line { |line| format.puts(line) }
+	# end	
 END
 
 # force TM to refresh the current file..
@@ -20,9 +32,9 @@ rescan_project
 	<key>keyEquivalent</key>
 	<string>^A</string>
 	<key>name</key>
-	<string>Update to Newest</string>
+	<string>Update to Newest (HEAD)</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
 	<string>175D3D76-74CE-11D9-813D-000A95A89C98</string>
 </dict>

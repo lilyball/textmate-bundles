@@ -7,8 +7,13 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
+if [[ -n "$TM_SELECTED_FILE" &amp;&amp; -d "$TM_SELECTED_FILE" ]]
+   then WorkPath="$TM_SELECTED_FILE"
+   else WorkPath="${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
+fi
+
 export TM_SVN
-export WorkPath="$TM_PROJECT_DIRECTORY"
+export WorkPath
 
 "$TM_SVN" update "$WorkPath" 2&gt;&amp;1 \
 |"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb"
@@ -18,10 +23,8 @@ rescan_project
 </string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string>^A</string>
 	<key>name</key>
-	<string>Update Entire Project to Newest</string>
+	<string>Update Selected Files to Newest (HEAD)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

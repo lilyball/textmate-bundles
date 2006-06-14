@@ -52,7 +52,7 @@ begin
       end
    }
    
-   make_head( "Subversion Blame for '"+$full_file.sub( /^.*\//, '')+"'",
+   make_head( "Subversion Annotate for '"+$full_file.sub( /^.*\//, '')+"'",
               [ $bundle+"/Stylesheets/svn_style.css",
                 $bundle+"/Stylesheets/svn_blame_style.css"] )
 

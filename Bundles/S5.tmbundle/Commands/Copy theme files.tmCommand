@@ -3,26 +3,28 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-dir = ENV['TM_DIRECTORY'].dup
-if !File.directory?(dir + "/ui")
-    from = ENV['TM_BUNDLE_SUPPORT'] + "/ui"
-    %x{cp -r '#{from}' '#{dir}'}
-    if File.directory?(dir + "/ui")
-        print "Theme files copied successfully."
-    else
-        print "Error copying files."
-    end
-else
-    print "The S5 'ui' directory already exists."
+require 'fileutils'
+
+src = ENV['TM_BUNDLE_SUPPORT'] + "/ui"
+dst = ENV['TM_DIRECTORY']
+
+abort "This action only works for saved documents." if dst.nil?
+abort "The S5 ‘ui’ directory already exists."       if File.directory?(dst + "/ui")
+
+begin
+  FileUtils.cp_r(src, dst)
+  puts "Theme files copied successfully."
+rescue Exception =&gt; e
+  puts "Error copying files to “#{dst}”.", e
 end
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>
-	<string>Copy theme files</string>
+	<string>Copy Theme to Document Location</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

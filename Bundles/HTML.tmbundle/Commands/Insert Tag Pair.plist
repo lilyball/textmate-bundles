@@ -21,10 +21,10 @@ single_no_arg = /^(?:br|hr)$/i
 single        = /^(?:img|meta|link|input|base|area|col|frame|param)$/i
 
 print case tag = STDIN.read
-when single_no_arg: "&lt;#{tag} /&gt;"
-when single:        "&lt;#{tag} $1/&gt;"
-when '':            "&lt;${1:p}&gt;$2&lt;/${1/\\s.*//}&gt;"
-else                "&lt;#{tag}&gt;$1&lt;/#{tag.strip[/^\S+/]}&gt;"
+  when single_no_arg then "&lt;#{tag} /&gt;"
+  when single then        "&lt;#{tag} $1/&gt;"
+  when '' then            "&lt;${1:p}&gt;$2&lt;/${1/\\s.*//}&gt;"
+  else                    "&lt;#{tag}&gt;$1&lt;/#{tag.strip[/^\S+/]}&gt;"
 end
 </string>
 	<key>fallbackInput</key>

@@ -106,9 +106,9 @@ def request_tag_name (default_tag = "body")
     --button3 'Show All Tags'
   }.split("\n")
   case res.to_i
-  when 1: $tags[tag.to_s.upcase] || "elements.html"
-  when 2: puts "&lt;script&gt;window.close()&lt;/script&gt;"; abort
-  when 3: "elements.html"
+    when 1 then $tags[tag.to_s.upcase] || "elements.html"
+    when 2 then abort "&lt;script&gt;window.close()&lt;/script&gt;"
+    when 3 then "elements.html"
   end
 end
 

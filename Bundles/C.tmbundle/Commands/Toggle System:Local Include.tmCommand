@@ -8,8 +8,8 @@
 	<string>#!/usr/bin/env ruby
 
 print case str = STDIN.read
-  when /\A"(.*)"\z/m: "&lt;" + $1 + "&gt;"
-  when /\A&lt;(.*)&gt;\z/m: '"' + $1 + '"'
+  when /\A"(.*)"\z/m then "&lt;" + $1 + "&gt;"
+  when /\A&lt;(.*)&gt;\z/m then '"' + $1 + '"'
   else str
 end
 </string>

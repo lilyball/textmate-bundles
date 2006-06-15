@@ -141,7 +141,7 @@ cur_line = ENV['TM_CURRENT_LINE']
 cur_word = ENV['TM_CURRENT_WORD']
 
 # since dash (‘-’) is not a word character, extend current word to neighboring word and dash characters
-$prop_name = /[-\w]*#{cur_word}[-\w]*/.match(cur_line)[0]
+$prop_name = /[-\w]*#{Regexp.escape cur_word}[-\w]*/.match(cur_line)[0]
 
 def request_prop_name
   s = `\"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog\" inputbox --title 'Documentation for Property' --informative-text 'What property would you like to lookup?' --text '#{$prop_name}' --button1 'Lookup' --button2 'Cancel' --button3 'Show All Properties'`

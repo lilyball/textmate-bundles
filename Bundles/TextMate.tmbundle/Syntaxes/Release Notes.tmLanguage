@@ -67,6 +67,14 @@
 					<key>name</key>
 					<string>meta.ticket.release-notes</string>
 				</dict>
+				<dict>
+					<key>comment</key>
+					<string>I do not want spell checking for CamelCase words. Since this is generally when quoting various API’s, I have deliberetly used A-Z and a-z (ASCII) -- Allan</string>
+					<key>match</key>
+					<string>\b[A-Z]+[a-z]+[A-Z]\w*\b</string>
+					<key>name</key>
+					<string>meta.word.camel-case</string>
+				</dict>
 			</array>
 		</dict>
 	</array>

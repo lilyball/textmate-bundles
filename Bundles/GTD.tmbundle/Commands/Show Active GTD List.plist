@@ -39,7 +39,7 @@ TextMate.each_text_file do |file|
     File.open(file) do |io|
       io.grep(tag[:regexp]) do |content|
         results = {
-          :file =&gt; file,
+          :file =&gt; file[1..-5],
           :line =&gt; io.lineno,
           :content =&gt; content
         }

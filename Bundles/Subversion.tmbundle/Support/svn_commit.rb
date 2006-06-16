@@ -49,20 +49,16 @@ mup.html {
 			matches.collect {|m| m[0]}.map {|m| m.rstrip.gsub(/\s/, '_')}
 		end
 
-		def select_files_with_status_prefix(paths, char, exclude_ignores = false)
+		def select_files_with_status_prefix(paths, char)
 			paths.select do |m|
 				index = m[0].index(char)
-				select_it = (index != nil) and (index == 0) 
-				if select_it and exclude_ignores
-					select_it = (not IgnoreFilePattern =~ m[2])
-				end
-				select_it
+				((index != nil) and (index == 0))
 			end
 		end
 
 		# Ignore files with '?', but report them to the user String.index
-		unknown_paths = select_files_with_status_prefix(paths, '?', true)
-        unknown_to_report_paths = select_files_with_status_prefix(paths, '?', false)
+		unknown_paths = select_files_with_status_prefix(paths, '?')
+        unknown_to_report_paths = unknown_paths.reject{ |m| IgnoreFilePattern =~ m[2] }
 		if unknown_to_report_paths and unknown_to_report_paths.size > 0 then
 			mup.div( "class" => "warning" ) {
 				mup.p "These files are not under version control, and so will not be committed:"
@@ -71,8 +67,8 @@ mup.html {
 		end
 
 		# Ignore files with '!', but report them to the user
-		missing_paths = select_files_with_status_prefix(paths, '!', true)
-        missing_to_report_paths = select_files_with_status_prefix(paths, '!', false)
+		missing_paths = select_files_with_status_prefix(paths, '!')
+        missing_to_report_paths = missing_paths.reject{ |m| IgnoreFilePattern =~ m[2] }
 		if missing_to_report_paths and missing_to_report_paths.size > 0 then
     
 			mup.div( "class" => "warning" ) {
@@ -83,7 +79,7 @@ mup.html {
 
 		# Fail if we have conflicts -- svn commit will fail, so let's
 		# error out before the user gets too involved in the commit
-		conflict_paths = select_files_with_status_prefix(paths, 'C', false)
+		conflict_paths = select_files_with_status_prefix(paths, 'C')
 
 		if conflict_paths and conflict_paths.size > 0 then
 			mup.div( "class" => "error" ) {

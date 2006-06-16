@@ -211,6 +211,8 @@ example          http://user@example.com/xmlrpc\n}]
 
     if (@post['mt_text_more'] == '') || (@post['mt_text_more'] == nil)
       @post.delete('mt_text_more')
+    else
+      @post['description'] += "\n\n"
     end
     @post['title'] = @headers['Title'] if @headers['Title']
     self.post_id = @headers['Post'].to_i if @headers['Post']

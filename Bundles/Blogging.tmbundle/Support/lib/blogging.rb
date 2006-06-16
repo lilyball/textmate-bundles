@@ -199,9 +199,16 @@ example          http://user@example.com/xmlrpc\n}]
           _in_headers = false
         end
       end
-      if !_sep && (_line =~ %r{^(#{DIVIDER})+})
-        _sep = true
-        next
+      if _line =~ %r{^(#{DIVIDER})+}
+        if !_sep
+          _sep = true
+          next
+        else
+          _endpoint = endpoint # establish endpoint, which sets mode
+          if mode == 'wp'
+            _line = '<!--more-->'
+          end
+        end
       end
       @post[ _sep ? 'mt_text_more' : 'description' ] += _line
     end
@@ -402,7 +409,11 @@ example          http://user@example.com/xmlrpc\n}]
     _doc += post['description'] + "\n"
     if post['mt_text_more'] && (post['mt_text_more'] != '')
       _doc += "\n#{DIVIDER * 10}\n\n"
-      _doc += post['mt_text_more'] + "\n"
+      _more = post['mt_text_more'].strip
+      if (mode == 'wp')
+        _more.gsub!('<!--more-->', DIVIDER * 10)
+      end
+      _doc += _more + "\n"
     end
     _doc
   end

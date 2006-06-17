@@ -373,6 +373,7 @@ example          http://user@example.com/xmlrpc\n}]
     _blog = endpoints[endpoint] || endpoint
     _doc += "Type: Blog Post (#{_format})\n"
     _doc += "Blog: #{_blog}\n"
+    _doc += "Link: #{post['permaLink']}\n" if post['permaLink']
     _doc += "Post: #{post_id}\n"
     _doc += "Title: #{post['title']}\n"
     _doc += "Keywords: #{post['keywords']}\n" if post['keywords']
@@ -588,6 +589,51 @@ example          http://user@example.com/xmlrpc\n}]
     end
     TextMate.exit_show_tool_tip(%Q{No weblogs have been configured.\n} +
       %q{Use the "Setup Blogs" command."})
+  end
+
+  def to_html
+    # endpoint doesn't matter here so set to something bogus
+    # to prevent TM from asking for one...
+    @endpoint = 'x'
+    _format = ENV['TM_SCOPE']
+    _doc = "#{post['description']}"
+    _doc += "#{post['mt_text_more']}" if post['mt_text_more']
+    _base = %Q{<base href="#{headers['Link']}" />} if headers['Link']
+    print %Q{<html><head><title>#{post['title']}</title>
+#{_base}
+<style type="text/css">
+  body {  
+    background-color: #eee;
+  }
+  body > h1 {
+    font-size: large;
+  }
+  .contents { 
+    background: white;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    border: 1px #888 solid;
+    padding: 0 1em;
+  }
+</style>
+</head>
+<body>
+<h1>#{post['title']}</h1>
+<div class="contents">}
+    case _format
+      when /textile/
+        require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth.rb"
+        print RedCloth.new(_doc).to_html
+      when /markdown/
+        require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/bluecloth.rb"
+        require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/rubypants.rb"
+        print RubyPants.new(BlueCloth.new(_doc).to_html).to_html
+      when /html/
+        print _doc
+      when /text/
+        print %Q{<div style="white-space: pre">#{_doc}</div>}
+    end
+    print "</div></body></html>"
   end
 
 end

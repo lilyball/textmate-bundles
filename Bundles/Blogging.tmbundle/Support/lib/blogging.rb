@@ -523,8 +523,12 @@ example          http://user@example.com/xmlrpc\n}]
     begin
       # Makes sure endpoint is determined and elements are parsed
       _password = password
-      _result = client.getRecentPosts(blog_id, username, _password, 20)
-      if !_result.length
+      require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+      _result = nil
+      TextMate.call_with_progress(:title => "Fetch Post", :message => "Contacting Server “#{@host}”…") do
+        _result = client.getRecentPosts(blog_id, username, _password, 20)
+      end
+      if !_result || !_result.length
         TextMate.exit_show_tool_tip("No posts are available!")
       end
       @mw_success = true

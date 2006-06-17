@@ -534,6 +534,8 @@ example          http://user@example.com/xmlrpc\n}]
       @mw_success = true
       if self.post = select_post(_result)
         TextMate.exit_create_new_document(post_to_document)
+      else
+        TextMate.exit_show_tool_tip("Cancelled")
       end
     rescue XMLRPC::FaultException => e
       TextMate.exit_show_tool_tip("Error retrieving posts. Check your configuration and try again.")

@@ -407,10 +407,9 @@ example          http://user@example.com/xmlrpc\n}]
       end
     end
     _doc += "\n"
-    _doc += post['description'] + "\n"
-    if post['mt_text_more'] && (post['mt_text_more'] != '')
+    _doc += post['description'].strip + "\n"
+    if (_more = post['mt_text_more'].strip) && _more != ''
       _doc += "\n#{DIVIDER * 10}\n\n"
-      _more = post['mt_text_more'].strip
       if (mode == 'wp')
         _more.gsub!('<!--more-->', DIVIDER * 10)
       end

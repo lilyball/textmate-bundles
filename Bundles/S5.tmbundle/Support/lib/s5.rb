@@ -1,7 +1,7 @@
 # Module for S5 presenation; S5 by Eric Meyer; module by Brad Choate
 
-require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/bluecloth.rb"
-require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/rubypants.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/bluecloth.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/rubypants.rb"
 
 class S5 < String
   DIVIDER = '✂------'

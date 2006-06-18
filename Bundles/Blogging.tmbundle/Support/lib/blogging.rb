@@ -631,8 +631,8 @@ HTML
         require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth.rb"
         print RedCloth.new(_doc).to_html
       when /markdown/
-        require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/bluecloth.rb"
-        require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/rubypants.rb"
+        require "#{ENV['TM_SUPPORT_PATH']}/lib/bluecloth.rb"
+        require "#{ENV['TM_SUPPORT_PATH']}/lib/rubypants.rb"
         print RubyPants.new(BlueCloth.new(_doc).to_html).to_html
       when /html/
         print _doc

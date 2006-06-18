@@ -599,27 +599,31 @@ example          http://user@example.com/xmlrpc\n}]
     _doc = "#{post['description']}"
     _doc += "#{post['mt_text_more']}" if post['mt_text_more']
     _base = %Q{<base href="#{headers['Link']}" />} if headers['Link']
-    print %Q{<html><head><title>#{post['title']}</title>
-#{_base}
-<style type="text/css">
-  body {  
-    background-color: #eee;
-  }
-  body > h1 {
-    font-size: large;
-  }
-  .contents { 
-    background: white;
-    font-family: Georgia, serif;
-    font-size: 13px;
-    border: 1px #888 solid;
-    padding: 0 1em;
-  }
-</style>
+    print <<-HTML
+<html>
+<head>
+  <title>#{post['title']}</title>
+  #{_base}
+  <style type="text/css">
+    body {  
+      background-color: #eee;
+    }
+    body > h1 {
+      font-size: large;
+    }
+    .contents { 
+      background: white;
+      font-family: Georgia, serif;
+      font-size: 13px;
+      border: 1px #888 solid;
+      padding: 0 1em;
+    }
+  </style>
 </head>
 <body>
 <h1>#{post['title']}</h1>
-<div class="contents">}
+<div class="contents">
+HTML
     case _format
       when /textile/
         require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth.rb"
@@ -648,18 +652,14 @@ example          http://user@example.com/xmlrpc\n}]
       _file = File.basename(_path)
       _height_width = ""
       if _sips_hw = %x{sips -g pixelWidth -g pixelHeight "#{_path}"}
-        if _sips_hw.match(/pixelHeight:[ ]*(\d+)/)
-          _height = $1
-        end
-        if _sips_hw.match(/pixelWidth:[ ]*(\d+)/)
-          _width = $1
-        end
+        _height = $1 if _sips_hw.match(/pixelHeight:[ ]*(\d+)/)
+        _width = $1 if _sips_hw.match(/pixelWidth:[ ]*(\d+)/)
         if _height && _width
           _height_width = %Q{ height="#{_height}" width="#{_width}"}
         end
       end
       _name = _file
-      if mode != 'wp'
+      unless mode == 'wp'
         # WordPress automatically places files into dated paths
         _date = Time.now.strftime("%Y-%m-%d")
         _name = "#{_date}_#{_file}"

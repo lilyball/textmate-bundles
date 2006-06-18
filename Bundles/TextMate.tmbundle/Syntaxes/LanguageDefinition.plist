@@ -12,18 +12,17 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^(?=&lt;\?xml)</string>
+			<string>/\*</string>
 			<key>end</key>
-			<string>this_is_something_you_will_never_match</string>
+			<string>\*/</string>
 			<key>name</key>
-			<string>text.xml.plist</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>text.xml.plist</string>
-				</dict>
-			</array>
+			<string>comment.block.old-plist</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>//.*$\n?</string>
+			<key>name</key>
+			<string>comment.line.double-slash.old-plist</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -47,17 +46,17 @@
 			<key>match</key>
 			<string>\b(name)\s*=\s*(("|')?(.*?)\3)\s*;</string>
 			<key>name</key>
-			<string>declaration.rule.tm-language-def</string>
+			<string>meta.rule.tm-language-def</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(fileTypes|keyEquivalent|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|swallow|include|uuid|scopeName|captures|beginCaptures|endCaptures|firstLineMatch|comment|repository|disabled|contentName|applyEndPatternLast)\b</string>
+			<string>\b(fileTypes|foldingStartMarker|foldingStopMarker|patterns|match|begin|end|include|scopeName|captures|beginCaptures|endCaptures|firstLineMatch|comment|repository|disabled|contentName|applyEndPatternLast)\b</string>
 			<key>name</key>
 			<string>support.constant.tm-language-def</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(foregroundColor|backgroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\b</string>
+			<string>\b(swallow|foregroundColor|backgroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\b</string>
 			<key>name</key>
 			<string>invalid.deprecated.constant.tm-language-def</string>
 		</dict>
@@ -68,6 +67,8 @@
 			<string>invalid.illegal.unknown-keyword.tm-language-def</string>
 		</dict>
 		<dict>
+			<key>applyEndPatternLast</key>
+			<integer>1</integer>
 			<key>begin</key>
 			<string>'(?=.*')</string>
 			<key>end</key>
@@ -78,19 +79,11 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>#[0-9A-Fa-f]{6}</string>
+					<string>''</string>
 					<key>name</key>
-					<string>invalid.deprecated.constant.other.color.tm-language-def</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(\\\\[tvnrfaewWdDsSuUlL]([*+?])?\??|\^|\$|\||\.([*+?])?\??|\\\\[Az&lt;&gt;bB])</string>
-					<key>name</key>
-					<string>string.regexp.tm-language-def</string>
+					<string>constant.character.escape.apostrophe.tm-language-def</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -103,23 +96,17 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(\\\\[tvnrfaewWdDsSuUlL]([*+?])?\??|\^|\$|\||\.([*+?])?\??|\\\\[Az&lt;&gt;bB])</string>
+					<string>\\[\\"]</string>
 					<key>name</key>
-					<string>string.regexp.tm-language-def</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>#[0-9A-Fa-f]{6}</string>
-					<key>name</key>
-					<string>invalid.deprecated.constants.colors.tm-language-def</string>
+					<string>constant.character.escape.tm-language-def</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
-			<key>include</key>
-			<string>source.plist</string>
+			<key>match</key>
+			<string>\d+</string>
+			<key>name</key>
+			<string>constant.numeric.tm-language-def</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

@@ -13,6 +13,9 @@ class MetaWeblogClient < XMLRPC::Client
   def get_recent_posts(blog_id, username, password, number)
     call("metaWeblog.getRecentPosts", "#{blog_id}", "#{username}", "#{password}", number)
   end
+  def new_media_object(blog_id, username, password, data)
+    call("metaWeblog.newMediaObject", "#{blog_id}", "#{username}", "#{password}", data)
+  end
 
   # These methods are properCased to match the XMLRPC method names.
   def getPost(post_id, username, password)
@@ -26,5 +29,8 @@ class MetaWeblogClient < XMLRPC::Client
   end
   def getRecentPosts(blog_id, username, password, number)
     call("metaWeblog.getRecentPosts", "#{blog_id}", "#{username}", "#{password}", number)
+  end
+  def newMediaObject(blog_id, username, password, data)
+    call("metaWeblog.newMediaObject", "#{blog_id}", "#{username}", "#{password}", data)
   end
 end

@@ -636,4 +636,59 @@ example          http://user@example.com/xmlrpc\n}]
     print "</div></body></html>"
   end
 
+  def upload_image
+    # Makes sure endpoint is determined and elements are parsed
+    _password = password
+
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+    _result = nil
+    TextMate.call_with_progress(:title => "Upload Image", :message => "Uploading to Server “#{@host}”…") do
+      _path = ENV['TM_DROPPED_FILEPATH']
+      _data = {}
+      _file = File.basename(_path)
+      _height_width = ""
+      if _sips_hw = %x{sips -g pixelWidth -g pixelHeight "#{_path}"}
+        if _sips_hw.match(/pixelHeight:[ ]*(\d+)/)
+          _height = $1
+        end
+        if _sips_hw.match(/pixelWidth:[ ]*(\d+)/)
+          _width = $1
+        end
+        if _height && _width
+          _height_width = %Q{ height="#{_height}" width="#{_width}"}
+        end
+      end
+      _name = _file
+      if mode != 'wp'
+        # WordPress automatically places files into dated paths
+        _date = Time.now.strftime("%Y-%m-%d")
+        _name = "#{_date}_#{_file}"
+      end
+      # Replace spaces with a dash
+      _name.gsub!(/[ ]+/, '-')
+      _data['name'] = _name
+      require 'xmlrpc/base64'
+      _data['bits'] = XMLRPC::Base64.new(IO.read(_path))
+      begin
+        _result = client.newMediaObject(blog_id, username, _password, _data)
+        _url = _result['url']
+        if (_url)
+          _alt = _file.split('.').first.gsub(/[_-]/, ' ').gsub(/\w+/) { |m| m.capitalize }
+          case ENV['TM_SCOPE']
+            when /\.markdown/
+              print "![#{_alt}](#{_url})"
+            when /\.textile/
+              print "!#{_url} (#{_alt})!"
+            else
+              print %Q{<img src="#{_url}" alt="#{_alt}"#{_height_width} />}
+          end
+        else
+          TextMate.exit_show_tool_tip("Error uploading image.")
+        end
+      rescue XMLRPC::FaultException => e
+        TextMate.exit_show_tool_tip("Error uploading image. Check your configuration and try again. -- #{e.to_str}")
+      end
+    end
+  end
+
 end

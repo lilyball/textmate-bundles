@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/blogging.rb"
+ENV["TM_SCOPE"] ||= "text.blog.html"
+Blogging.new.upload_image</string>
+	<key>draggedFileExtensions</key>
+	<array>
+		<string>png</string>
+		<string>jpg</string>
+		<string>jpeg</string>
+		<string>gif</string>
+	</array>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Upload Image (HTML)</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.blog text.html, text.blog text.plain</string>
+	<key>uuid</key>
+	<string>E41D6B15-7CA5-4E45-BCE6-93A1AF85C424</string>
+</dict>
+</plist>

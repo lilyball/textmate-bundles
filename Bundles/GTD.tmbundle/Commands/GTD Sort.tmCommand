@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/ruby -w
+
+# The following lines (without #'s) need to be placed in 
+# your GTD project.
+#
+# The format is CONTEXT|tacCommand|tabString|regex|color
+# where
+# CONTEXT is the name of the context
+# tabCommand is the tab command letters for a "@@" command (not yet ready)
+# tabString is the code that the tabCommand executes (not yet ready)
+# regex is the regex string to match (may possibly be different from CONTEXT)
+# color is the color for the list view (not yet ready)
+#
+# Important! Add whatever you want to the list, but the last
+# two contexts must be OTHER and DONE!
+#
+# TASK|t|TASK ${1:new task}|^TASK|00000f
+# EMAIL|e|EMAIL ${1:person} re: ${0:subject}|^EMAIL|0000ff
+# CALL|c|CALL ${1:person} re: ${2:subject} ${0:#}|^CALL|000fff
+# OTHER|o|other|^OTHER|00ffff
+# DONE|d|done|^DONE|0fffff
+
+
+# This is where the GTD files are kept
+$myPath = ENV['TM_DIRECTORY'] 
+$fileName = STDIN.read
+
+$contexts = [] #user defined contexts
+def readContexts(a,re)
+  # processes contexts.gtd into script
+  if a =~ re
+    context = "#{$`}"
+    a = "#{$'}"
+    if a =~ re
+      tabCommand = "#{$`}"
+      a = "#{$'}"
+      if a =~ re
+        tabString = "#{$`}"
+         a = "#{$'}"
+        if a =~ re
+          regex = "#{$`}"
+          color = "#{$'}"
+        end
+      end
+    end
+  end
+  tasks = []
+  $contexts.push({:context =&gt; context, :tabCommand =&gt; tabCommand, :tabString =&gt; tabString, :regex =&gt; regex, :color =&gt; color, :tasks =&gt; tasks})   
+end
+
+def resetTasks
+  # resets list of tasks after a file is processed
+  $contexts.each do |tag|
+    tag[:tasks] = []
+  end
+end
+
+def reportContexts
+  # a simple test
+  $contexts.each do |tag|
+    puts("Context: " + tag[:context])
+    puts("tabCommand: " + tag[:tabCommand])
+    puts("tabString: " + tag[:tabString])
+    puts("Search String: " + tag[:regex])
+    puts("Color: " + tag[:color])
+    i = 0
+    while i &lt; tag[:tasks].length
+      puts "Task: " + tag[:tasks][i]
+      i = i + 1
+    end
+  end
+end
+
+def myParse line
+  cmatch = 0
+  $contexts.each do |tag|
+    re = Regexp.new(tag[:regex])
+    if (line =~ re) and (cmatch == 0)
+      if (line =~ /\s/) and (line.length &gt; 2)
+        a = "#{$'}"
+        tag[:tasks].push line
+        cmatch = 1
+      end
+    end
+  end
+  if (cmatch == 0) and (line.length &gt; 2)
+    numContexts = $contexts.length
+    $contexts[(numContexts - 2)][:tasks].push line
+  end
+end
+
+def mySort fileName
+  #opens lists and sends them to be sorted
+  a = fileName.to_s + "\n"
+  re = /\n/
+  list = []
+  while a.length &gt; 0
+    if a =~ re
+      task = "#{$`}" + "\n"
+      list.push task
+      a = "#{$'}"
+    end
+  end
+  list.each do |line|
+    myParse line
+  end
+end
+
+def reportTasks
+  outPut = ""
+  # how to get the info out
+  $contexts.each do |tag|
+    numberOfTasks = tag[:tasks].length
+    i = 0
+    while i &lt; numberOfTasks
+      outPut = outPut + tag[:tasks][i]
+      i = i + 1
+    end
+  end
+  puts outPut
+end
+
+# the contexts.gtd file is read, and converted into $contexts
+file = File.open($myPath+"/contexts.gtd", "r")
+file.each do |line|
+  readContexts(line.chomp,/\|/)
+end    
+ 
+#  various commands below
+#reportContexts
+#resetTasks
+mySort $fileName
+reportTasks</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>GTD Sort</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>text.plain.gtd</string>
+	<key>uuid</key>
+	<string>8CA1D39A-1E57-4EA7-8EA4-20DF3DC1280B</string>
+</dict>
+</plist>

@@ -436,9 +436,9 @@ example          http://user@example.com/xmlrpc\n}]
     begin
       _password = password
       self.post = client.getPost(post_id, username, _password)
-      if publish
-        link = post['permaLink']
-        %x{open "#{link}"} if link
+      if publish && link = post['permaLink']
+        require "#{ENV['TM_SUPPORT_PATH']}/lib/browser"
+        Browser.load_url(link)
       end
       @mw_success = true
     rescue XMLRPC::FaultException => e

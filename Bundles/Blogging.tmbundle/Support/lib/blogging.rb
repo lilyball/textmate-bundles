@@ -676,11 +676,11 @@ HTML
           _alt = _file.split('.').first.gsub(/[_-]/, ' ').gsub(/\w+/) { |m| m.capitalize }
           case ENV['TM_SCOPE']
             when /\.markdown/
-              print "![#{_alt}](#{_url})"
+              print "![${1:#{_alt}}](#{_url})"
             when /\.textile/
-              print "!#{_url} (#{_alt})!"
+              print "!#{_url} (${1:#{_alt}})!"
             else
-              print %Q{<img src="#{_url}" alt="#{_alt}"#{_height_width} />}
+              print %Q{<img src="#{_url}" alt="${1:#{_alt}}"#{_height_width} />}
           end
         else
           TextMate.exit_show_tool_tip("Error uploading image.")

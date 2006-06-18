@@ -350,7 +350,10 @@ example          http://user@example.com/xmlrpc\n}]
       'Markdown' => 'Markdown',
       '__default__' => 'Text',
     }
-    _format = 'HTML'
+    _format = 'Markdown'
+    if (post['description'] + post['mt_text_more'].to_s) =~ /<(p|a|img|h[1-6]|strong|em|tt|code|pre)\b.*?>/i
+      _format = 'HTML'
+    end
     if post['mt_convert_breaks']
       if _formats[post['mt_convert_breaks']]
         _format = _formats[post['mt_convert_breaks']]

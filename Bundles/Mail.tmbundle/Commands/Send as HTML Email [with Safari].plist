@@ -16,8 +16,8 @@ TM_TITLE=${TM_FILENAME:-untitled}
 cat   &gt;"$TM_TMPFILE"
 echo &gt;&gt;"$TM_TMPFILE" "&lt;title&gt;${TM_TITLE%.*}&lt;/title&gt;"
 
-open -a Safari "$TM_TMPFILE"
-osascript -e 'activate application "Safari.app"' -e 'tell application "System Events"' -e ' tell process "Safari"' -e ' keystroke "i" using {command down}' -e ' end tell' -e 'end tell' -e 'tell the application "Safari" to close window 1'
+osascript -e 'tell app "Safari" to make new document with properties { URL:"file://'"$TM_TMPFILE"'" }'
+osascript -e 'tell app "Safari"' -e 'email contents of first document' -e 'close first document' -e 'end tell'
 
 rm -f "$TM_TMPFILE" "${TM_TMPFILE%.html}"</string>
 	<key>input</key>

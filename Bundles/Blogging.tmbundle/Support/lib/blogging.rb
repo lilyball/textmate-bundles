@@ -138,7 +138,7 @@ example          http://user@example.com/xmlrpc\n}]
       case @endpoint
       when %r{/mt-xmlrpc\.cgi}, %r{/backend/xmlrpc}
         @mode = 'mt'
-      when %r{/xmlrpc\.php}
+      when %r{/xmlrpc(\.php)?}
         @mode = 'wp'
       else
         # our default

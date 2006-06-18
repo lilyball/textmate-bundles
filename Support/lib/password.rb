@@ -3,7 +3,7 @@
 #   require "password"
 # 
 #   TextMate.call_with_password({ :user => 'duff', :url => 'http://example.com/blog/xmlrpc.php' }) do |pw|
-#     pw == "foo" ? :retry : :save_password
+#     pw == "foo" ? :reject_pw : :accept_pw
 #   end
 
 module TextMate
@@ -13,12 +13,12 @@ module TextMate
     abort "misformed URL #{url}" unless url =~ %r{^(\w+)://([^/]+)(.*?/?)[^/]*$}
     proto, host, path = $1, $2, $3
 
-    action = :retry
+    action = :reject_pw
 
     res = %x{security find-internet-password -g -a "#{user}" -s "#{host}" -p "#{path}" -r #{proto} 2>&1 >/dev/null}
     action = block.call($1) if res =~ /^password: "(.*)"$/
     
-    while action == :retry
+    while action == :reject_pw
       cd_path = ENV['TM_SUPPORT_PATH'] + '/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog'
       res = %x{"#{cd_path}" secure-standard-inputbox \
         --title "Enter Password" \
@@ -27,10 +27,12 @@ module TextMate
       break if res[0] == ?2
 
       action = block.call(res[2..-2])
-      if action == :save_password then
+      if action == :accept_pw then
         %x{security add-internet-password -a "#{user}" -s "#{host}" -r "#{proto}" -p "#{path}" -w "#{res[2..-2]}"}
       end
     end
+
+    return action
   end
 
 end

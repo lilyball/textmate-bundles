@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string># since osascript wants to “update” the script we run it with a copy
-SCRIPT=$(mktemp -t tm_pastebin)
+SCRIPT=$(/usr/bin/mktemp -t tm_pastebin)
 cp "$TM_BUNDLE_SUPPORT/pastebin.scpt" "$SCRIPT"
 osascript "$SCRIPT"
 rm -f "$SCRIPT"</string>

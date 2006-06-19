@@ -72,7 +72,7 @@ TEXT
     if @username == nil
       @username = TextMate.standard_input_box("Blogging",
         "Enter the username to login at #{self.endpoint}")
-      TextMate.exit_show_tool_tip("Cancelled") if self.username == nil
+      TextMate.exit_discard if self.username == nil
     end
 
     if @password == nil
@@ -82,7 +82,7 @@ TEXT
         current_endpoint.sub!(/#\d+/, '') if current_endpoint =~ /#\d+/
         @password = TextMate.secure_standard_input_box("Blogging",
           "Enter the password to login at #{current_endpoint}")
-        TextMate.exit_show_tool_tip("Cancelled") if @password == nil
+        TextMate.exit_discard if @password == nil
         @save_password_on_success = true
       end
     end
@@ -116,7 +116,7 @@ TEXT
           self.endpoints[@endpoint] = name
           @save_endpoint_on_success = true
         else
-          TextMate.exit_show_tool_tip("Cancelled")
+          TextMate.exit_discard
         end
       end
     else
@@ -129,7 +129,7 @@ TEXT
           @endpoint = url
           @save_endpoint_on_success = true
         else
-          TextMate.exit_show_tool_tip("Cancelled")
+          TextMate.exit_discard
         end
       else
         # we had a named endpoint; swap with the URL...
@@ -324,7 +324,7 @@ TEXT
     # Still no luck? Ask the user using endpoints in their config.
     current_endpoint ||= select_endpoint()
 
-    TextMate.exit_show_tool_tip("Cancelled") if current_endpoint.nil?
+    TextMate.exit_discard if current_endpoint.nil?
 
     self.endpoint = current_endpoint
   end
@@ -433,7 +433,7 @@ TEXT
       --button1 'Post' --button2 'Cancel'})
     case (a = s.split(/\n/))[0].to_i
       when 1: "#{a[1]}"
-      when 2: TextMate.exit_show_tool_tip("Cancelled")
+      when 2: TextMate.exit_discard
     end
   end
 
@@ -546,7 +546,7 @@ TEXT
       if self.post = select_post(result)
         TextMate.exit_create_new_document(post_to_document())
       else
-        TextMate.exit_show_tool_tip("Cancelled")
+        TextMate.exit_discard
       end
     rescue XMLRPC::FaultException => e
       TextMate.exit_show_tool_tip("Error retrieving posts. Check your configuration and try again.")

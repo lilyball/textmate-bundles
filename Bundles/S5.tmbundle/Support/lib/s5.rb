@@ -12,72 +12,70 @@ class S5 < String
 
   private
 
-  def _parse
+  def parse
     @slides = []
-    _headers = {}
+    headers = {}
 
-    _in_headers = true
+    in_headers = true
 
-    _lines = split(/\n/)
-    _current_line = ENV['TM_LINE_NUMBER'].to_i if ENV['TM_LINE_NUMBER']
-    _current_line ||= 0
-    _slide = ''
-    _line_num = 0
-    _slide_num = 0
+    lines = split(/\n/)
+    current_line = ENV['TM_LINE_NUMBER'].to_i if ENV['TM_LINE_NUMBER']
+    current_line ||= 0
+    slide = ''
+    line_num = 0
+    slide_num = 0
 
-    _lines.each do | _line |
-      _line_num += 1
-      if _line_num == _current_line
-        @current_slide_number = _slide_num + 1
+    lines.each do | line |
+      line_num += 1
+      if line_num == current_line
+        @current_slide_number = slide_num + 1
       end
 
-      if _in_headers
-        if _line =~ /^(\w+):[ ]*(.+)/
-          _headers[$1] = $2
+      if in_headers
+        if line =~ /^(\w+):[ ]*(.+)/
+          headers[$1] = $2
         else
           @current_slide_number = nil
-          _in_headers = false
+          in_headers = false
         end
         next
       else
-        if (_line =~ %r{^(#{DIVIDER})+})
-          if _slide.strip != ''
-            _slide_num += 1
-            @slides.push(_slide)
+        if line =~ %r{^(#{DIVIDER})+}
+          if slide.strip != ''
+            slide_num += 1
+            @slides.push(slide)
           end
-          _slide = ''
+          slide = ''
           next
         end
       end
-      _slide += _line + "\n"
+      slide += line + "\n"
     end
-    if _slide.strip != ''
-      @slides.push(_slide)
-    end
+    @slides.push(slide) unless slide.strip.empty?
 
     # set values for template
-    @title = _headers['Title']
-    @date = _headers['Date']
-    @subtitle = _headers['Subtitle']
-    @location = _headers['Location']
-    @presenter = _headers['Presenter'] || _headers['Author']
-    @organization = _headers['Organization'] || _headers['Company']
-    @theme = _headers['Theme'] || 'default'
-    @defaultView = _headers['View'] || 'slideshow'
-    @controlVis = _headers['Controls'] || 'visible'
+    @title = headers['Title']
+    @date = headers['Date']
+    @subtitle = headers['Subtitle']
+    @location = headers['Location']
+    @presenter = headers['Presenter'] || headers['Author']
+    @organization = headers['Organization'] || headers['Company']
+    @theme = headers['Theme'] || 'default'
+    @defaultView = headers['View'] || 'slideshow'
+    @controlVis = headers['Controls'] || 'visible'
   end
 
   public
 
   def to_html
-    _s5tmpl = IO.readlines(ENV["TM_BUNDLE_SUPPORT"] + "/s5.tmpl").join
+    s5tmpl = IO.readlines(ENV["TM_BUNDLE_SUPPORT"] + "/s5.tmpl").join
 
-    _s5tmpl =~ /##SLIDE_START(.+)##SLIDE_END/m
-    _slide_tmpl = $1
+    s5tmpl =~ /##SLIDE_START(.+)##SLIDE_END/m
+    slide_tmpl = $1
 
     # merge str and s5tmpl
 
-    _parse
+    parse()
 
     # read in input; process headers and split slides
 
@@ -86,38 +84,38 @@ class S5 < String
     @organization ||= ENV['TM_ORGANIZATION_NAME'] if ENV['TM_ORGANIZATION_NAME']
 
     # file directory
-    _path = nil
+    path = nil
     if ENV['TM_DIRECTORY']
-      _path = '.' if File.directory?(ENV['TM_DIRECTORY'] + '/ui/' + theme)
+      path = '.' if File.directory?(ENV['TM_DIRECTORY'] + '/ui/' + theme)
     end
-    if !_path && ENV['TM_PROJECT_DIRECTORY']
-      _path = 'file://' + ENV['TM_PROJECT_DIRECTORY'] if File.directory?(ENV['TM_PROJECT_DIRECTORY'] + '/ui' + theme)
+    if !path && ENV['TM_PROJECT_DIRECTORY']
+      path = 'file://' + ENV['TM_PROJECT_DIRECTORY'] if File.directory?(ENV['TM_PROJECT_DIRECTORY'] + '/ui' + theme)
     end
-    if !_path
-      _path = 'file://' + ENV['TM_BUNDLE_SUPPORT']
+    if !path
+      path = 'file://' + ENV['TM_BUNDLE_SUPPORT']
       @theme = 'default'
     end
 
-    theme_base = _path
+    theme_base = path
 
     content = nil
     handout = nil
-    _slides = ''
-    slides.each do | _slide |
-      if _slide =~ %r{^#{HANDOUT}$}m
-        _parts = _slide.split(%r{^#{HANDOUT}$})
-        content = _parts[0]
-        handout = _parts[1]
+    all_slides = ''
+    self.slides.each do | slide |
+      if slide =~ %r{^#{HANDOUT}$}m
+        parts = slide.split(%r{^#{HANDOUT}$})
+        content = parts[0]
+        handout = parts[1]
       else
-        content = _slide
+        content = slide
         handout = nil
       end
       content = RubyPants.new(BlueCloth.new(content).to_html).to_html
-      _slides += eval '%Q{' + _slide_tmpl + '}'
+      all_slides += eval '%Q{' + slide_tmpl + '}'
     end
-    _s5tmpl.sub!(/##SLIDE_START.+##SLIDE_END/m, _slides)
-    _s5tmpl = eval '%Q{' + _s5tmpl + '}'
+    s5tmpl.sub!(/##SLIDE_START.+##SLIDE_END/m, all_slides)
+    s5tmpl = eval '%Q{' + s5tmpl + '}'
 
-    return _s5tmpl
+    return s5tmpl
   end
 end

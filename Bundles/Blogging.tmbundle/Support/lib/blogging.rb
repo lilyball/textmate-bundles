@@ -512,12 +512,15 @@ TEXT
 
     begin
       current_password = self.password
-      if post_id
-        result = client.editPost(self.post_id, self.username, current_password, self.post, self.publish)
-      else
-        self.post_id = client.newPost(self.blog_id, self.username, current_password, self.post, self.publish)
+      require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+      TextMate.call_with_progress(:title => "Posting to Weblog", :message => "Contacting Server “#{@host}”…") do
+        if post_id
+          result = client.editPost(self.post_id, self.username, current_password, self.post, self.publish)
+        else
+          self.post_id = client.newPost(self.blog_id, self.username, current_password, self.post, self.publish)
+        end
+        show_post_page()
       end
-      show_post_page()
       @mw_success = true
       TextMate.exit_replace_document(post_to_document())
     rescue XMLRPC::FaultException => e

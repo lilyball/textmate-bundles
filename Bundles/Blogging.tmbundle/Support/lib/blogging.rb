@@ -416,12 +416,14 @@ TEXT
     end
     doc += "\n"
     doc += self.post['description'].strip + "\n"
-    if (more = self.post['mt_text_more'].strip) && more != ''
-      doc += "\n#{DIVIDER * 10}\n\n"
-      if (self.mode == 'wp')
-        more.gsub!('<!--more-->', DIVIDER * 10)
+    unless self.post['mt_text_more'].nil?
+      if (more = self.post['mt_text_more'].strip) && more != ''
+        doc += "\n#{DIVIDER * 10}\n\n"
+        if (self.mode == 'wp')
+          more.gsub!('<!--more-->', DIVIDER * 10)
+        end
+        doc += more + "\n"
       end
-      doc += more + "\n"
     end
     doc
   end

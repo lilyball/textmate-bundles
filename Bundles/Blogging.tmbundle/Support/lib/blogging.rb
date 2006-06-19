@@ -664,30 +664,42 @@ HTML
     current_password = password
 
     require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
-    result = nil
+    file_path = ENV['TM_DROPPED_FILEPATH']
+    data = {}
+    file = File.basename(file_path)
+    height_width = ""
+    if sips_hw = %x{sips -g pixelWidth -g pixelHeight "#{file_path}"}
+      height = $1 if sips_hw.match(/pixelHeight:[ ]*(\d+)/)
+      width = $1 if sips_hw.match(/pixelWidth:[ ]*(\d+)/)
+      if height && width
+        height_width = %Q{ height="#{height}" width="#{width}"}
+      end
+    end
+    name = file
+    unless mode == 'wp'
+      # WordPress automatically places files into dated paths
+      date = Time.now.strftime("%Y-%m-%d")
+      name = "#{date}_#{file}"
+    end
+    # Replace spaces with a dash
+    name.gsub!(/[ ]+/, '-')
+
+    if ENV['TM_MODIFIER_FLAGS'] =~ /OPTION/
+      result = TextMate.inputbox(%Q{--title 'Rename Uploaded File' \
+        --informative-text 'Enter the filename for this image' \
+        --text "#{name.gsub(/"/,'\"')}" \
+        --button1 'Upload' --button2 'Cancel'})
+      case (a = result.split(/\n/))[0].to_i
+        when 1: name = "#{a[1]}"
+        when 2: TextMate.exit_discard
+      end
+    end
+
+    data['name'] = name
+    require 'xmlrpc/base64'
+    data['bits'] = XMLRPC::Base64.new(IO.read(file_path))
+
     TextMate.call_with_progress(:title => "Upload Image", :message => "Uploading to Server “#{@host}”…") do
-      file_path = ENV['TM_DROPPED_FILEPATH']
-      data = {}
-      file = File.basename(file_path)
-      height_width = ""
-      if sips_hw = %x{sips -g pixelWidth -g pixelHeight "#{file_path}"}
-        height = $1 if sips_hw.match(/pixelHeight:[ ]*(\d+)/)
-        width = $1 if sips_hw.match(/pixelWidth:[ ]*(\d+)/)
-        if height && width
-          height_width = %Q{ height="#{height}" width="#{width}"}
-        end
-      end
-      name = file
-      unless mode == 'wp'
-        # WordPress automatically places files into dated paths
-        date = Time.now.strftime("%Y-%m-%d")
-        name = "#{date}_#{file}"
-      end
-      # Replace spaces with a dash
-      name.gsub!(/[ ]+/, '-')
-      data['name'] = name
-      require 'xmlrpc/base64'
-      data['bits'] = XMLRPC::Base64.new(IO.read(file_path))
       begin
         result = client.newMediaObject(self.blog_id, self.username, current_password, data)
         url = result['url']

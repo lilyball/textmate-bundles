@@ -46,9 +46,9 @@ class Blogging
       endpoint_list = IO.readlines(BLOG_ACCOUNTS_FILE)
     else
       endpoint_list = [ <<-TEXT ]
-# Blogging Weblog List
-# Enter a weblog name followed by the endpoint URL
-# Weblog Name    URL
+# Blogging Account List
+# Enter a blog name followed by the endpoint URL
+# Blog Name      URL
 # example        http://user@example.com/xmlrpc
 TEXT
     end
@@ -513,7 +513,7 @@ TEXT
     begin
       current_password = self.password
       require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
-      TextMate.call_with_progress(:title => "Posting to Weblog", :message => "Contacting Server “#{@host}”…") do
+      TextMate.call_with_progress(:title => "Posting to Blog", :message => "Contacting Server “#{@host}”…") do
         if post_id
           result = client.editPost(self.post_id, self.username, current_password, self.post, self.publish)
         else
@@ -587,7 +587,7 @@ TEXT
     titles.sort!
 
     result = TextMate.dropdown(%Q{--title 'Select Blog' \
-      --text 'Choose a blog' \
+      --text 'Choose a Blog' \
       --button1 Ok --button2 Cancel \
       --items #{titles.join(' ')}})
 
@@ -597,7 +597,7 @@ TEXT
       TextMate.exit_insert_snippet("Blog: " +
         titles[result[1].to_i].gsub(/^"|"$/, '') + '$0')
     end
-    TextMate.exit_show_tool_tip(%Q{No weblogs have been configured.\n} +
+    TextMate.exit_show_tool_tip(%Q{No blogs have been configured.\n} +
       %q{Use the "Setup Blogs" command."})
   end
 
@@ -651,9 +651,13 @@ HTML
     html
   end
 
+  # Command: Preview
+
   def preview
     print to_html()
   end
+
+  # Drag Command: Upload Image
 
   def upload_image
     # Makes sure endpoint is determined and elements are parsed

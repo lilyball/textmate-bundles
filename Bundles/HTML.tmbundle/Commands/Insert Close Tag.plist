@@ -11,7 +11,7 @@ doc = STDIN.read
 line = ENV['TM_LINE_NUMBER'].to_i
 line_index = ENV['TM_LINE_INDEX'].to_i
 
-before = doc.match(/(.*\n){#{line-1}}.{#{line_index}}/)[0]
+before = /(.*\n){#{line-1}}.{#{line_index}}/.match(doc)[0]
 before.gsub!(/&lt;(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param)\b[^&gt;]*&gt;|&lt;[^&gt;]+\/\s*&gt;/, '') # remove all self-closing tags
 
 stack = [ ]

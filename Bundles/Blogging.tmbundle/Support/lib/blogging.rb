@@ -18,77 +18,82 @@ class Blogging
   private
 
   def initialize
-    at_exit { _finalize }
+    at_exit { finalize() }
   end
 
-  def _finalize
+  def finalize
     if @mw_success
       # If an internet password was gathered during this process, and our
       # connection was successful, save it for the next request.
-      _finally_save_internet_password if @save_password_on_success
+      finally_save_internet_password() if @save_password_on_success
 
       # If an endpoint was used for the first time during this command, and
       # the connection to it was successful, save it for the next request.
-      _finally_save_new_endpoint if @save_endpoint_on_success
+      finally_save_new_endpoint() if @save_endpoint_on_success
     end
   end
 
-  def _finally_save_internet_password
-    _proto = endpoint =~ /^https:/ ? 'https' : 'http'
-    _path = path.clone
-    _path.sub!(/#\d+/, '') if _path =~ /#\d+/
-    KeyChain.add_internet_password(username, _proto, host, _path, password)
+  def finally_save_internet_password
+    protocol = self.endpoint =~ /^https:/ ? 'https' : 'http'
+    endpoint_path = self.path.clone
+    endpoint_path.sub!(/#\d+/, '') if endpoint_path =~ /#\d+/
+    KeyChain.add_internet_password(self.username, protocol, self.host,
+      endpoint_path, self.password)
   end
 
-  def _finally_save_new_endpoint
+  def finally_save_new_endpoint
     if File.exist?(BLOG_ACCOUNTS_FILE)
-      _endpoints = IO.readlines(BLOG_ACCOUNTS_FILE)
+      endpoint_list = IO.readlines(BLOG_ACCOUNTS_FILE)
     else
-      _endpoints = [%Q{# Blogging Weblog List
+      endpoint_list = [ <<-TEXT ]
+# Blogging Weblog List
 # Enter a weblog name followed by the endpoint URL
 # Weblog Name    URL
-example          http://user@example.com/xmlrpc\n}]
+# example        http://user@example.com/xmlrpc
+TEXT
     end
-    _endpoints.push(endpoints[endpoint] + " " + endpoint + "\n")
-    file = File.new(BLOG_ACCOUNTS_FILE, "w")
-    file.write(_endpoints.join)
-    file.close
+    endpoint_list.push(self.endpoints[self.endpoint] + " " + self.endpoint +
+      "\n")
+    File.open(BLOG_ACCOUNTS_FILE, "w") do | file |
+      file.write(endpoint_list.join)
+    end
   end
 
-  def _find_internet_password
-    _proto = endpoint =~ /^https:/ ? 'https' : 'http'
-    _path = path.clone
-    _path.sub!(/#\d+/, '') if _path =~ /#\d+/
-    KeyChain.find_internet_password(username, _proto, host, _path)
+  def find_internet_password
+    protocol = self.endpoint =~ /^https:/ ? 'https' : 'http'
+    endpoint_path = self.path.clone
+    endpoint_path.sub!(/#\d+/, '') if endpoint_path =~ /#\d+/
+    KeyChain.find_internet_password(self.username, protocol, self.host,
+      endpoint_path)
   end
 
-  def _fetch_credentials_from_keychain
+  def fetch_credentials_from_keychain
     # we have @endpoint and possibly @username. fill in the blanks...
     if @username == nil
       @username = TextMate.standard_input_box("Blogging",
-        "Enter the username to login at #{endpoint}")
-      TextMate.exit_show_tool_tip("Cancelled") if username == nil
+        "Enter the username to login at #{self.endpoint}")
+      TextMate.exit_show_tool_tip("Cancelled") if self.username == nil
     end
 
     if @password == nil
-      @password = _find_internet_password
+      @password = find_internet_password()
       if @password == nil
-        _endpoint = endpoint
-        _endpoint.sub!(/#\d+/, '') if _endpoint =~ /#\d+/
+        current_endpoint = self.endpoint
+        current_endpoint.sub!(/#\d+/, '') if current_endpoint =~ /#\d+/
         @password = TextMate.secure_standard_input_box("Blogging",
-          "Enter the password to login at #{_endpoint}")
+          "Enter the password to login at #{current_endpoint}")
         TextMate.exit_show_tool_tip("Cancelled") if @password == nil
         @save_password_on_success = true
       end
     end
   end
 
-  def _read_endpoints
+  def read_endpoints
     @endpoints = {}
     if File.exist?(BLOG_ACCOUNTS_FILE)
-      IO.readlines(BLOG_ACCOUNTS_FILE).each do | _line |
-        next if _line =~ /^\s*#/
-        if _line =~ /^(.+?)\s+(https?:\/\/.+)/
+      IO.readlines(BLOG_ACCOUNTS_FILE).each do | line |
+        next if line =~ /^\s*#/
+        if line =~ /^(.+?)\s+(https?:\/\/.+)/
           @endpoints[$1] = $2
           @endpoints[$2] = $1
         end
@@ -97,38 +102,38 @@ example          http://user@example.com/xmlrpc\n}]
     @endpoints
   end
 
-  def _parse_endpoint
+  def parse_endpoint
     # we have an endpoint that looks like a URL
     if @endpoint =~ /^https?:\/\//
-      if endpoints[@endpoint]
+      if self.endpoints[@endpoint]
         # The endpoint is a recognized URL; nothing else to do
       else
         # the endpoint is a URL but unrecognized... ask for a pretty name
-        _name = TextMate.standard_input_box("Blogging",
+        name = TextMate.standard_input_box("Blogging",
           "Enter a name for this endpoint: #{@endpoint}")
-        if _name != nil
-          endpoints[_name] = @endpoint
-          endpoints[@endpoint] = _name
+        if name != nil
+          self.endpoints[name] = @endpoint
+          self.endpoints[@endpoint] = name
           @save_endpoint_on_success = true
         else
           TextMate.exit_show_tool_tip("Cancelled")
         end
       end
     else
-      if !endpoints[@endpoint]
-        _url = TextMate.standard_input_box("Blogging",
+      if !self.endpoints[@endpoint]
+        url = TextMate.standard_input_box("Blogging",
           "Enter an endpoint URL for blog #{@endpoint}")
-        if _url != nil
-          endpoints[@endpoint] = _url
-          endpoints[_url] = @endpoint
-          @endpoint = _url
+        if url != nil
+          self.endpoints[@endpoint] = url
+          self.endpoints[url] = @endpoint
+          @endpoint = url
           @save_endpoint_on_success = true
         else
           TextMate.exit_show_tool_tip("Cancelled")
         end
       else
         # we had a named endpoint; swap with the URL...
-        @endpoint = endpoints[@endpoint]
+        @endpoint = self.endpoints[@endpoint]
       end
     end
 
@@ -165,24 +170,24 @@ example          http://user@example.com/xmlrpc\n}]
     end
   end
 
-  def _parse_post
-    _lines = STDIN.readlines
+  def parse_post
+    lines = STDIN.readlines
 
     @post = {}
     @headers = {}
 
-    return if _lines.length == 0
+    return if lines.length == 0
 
     @post['mt_text_more'] = ''
     @post['description'] = ''
     @publish = true
 
-    _in_headers = true
-    _sep = false
+    in_headers = true
+    separator = false
 
-    _lines.each do | _line |
-      if _in_headers
-        if _line =~ /^(\w+):[ ]*(.+)/
+    lines.each do | line |
+      if in_headers
+        if line =~ /^(\w+):[ ]*(.+)/
           case $1
           when 'Ping'
             @post['mt_tbping_urls'] = [] unless @post['mt_tbping_urls']
@@ -196,21 +201,22 @@ example          http://user@example.com/xmlrpc\n}]
           @headers[$1] = $2
           next
         else
-          _in_headers = false
+          in_headers = false
         end
       end
-      if _line =~ %r{^(#{DIVIDER})+}
-        if !_sep
-          _sep = true
+      if line =~ %r{^(#{DIVIDER})+}
+        if !separator
+          separator = true
           next
         else
-          _endpoint = endpoint # establish endpoint, which sets mode
-          if mode == 'wp'
-            _line = '<!--more-->'
+          # establish endpoint, which sets mode
+          current_endpoint = self.endpoint
+          if self.mode == 'wp'
+            line = '<!--more-->'
           end
         end
       end
-      @post[ _sep ? 'mt_text_more' : 'description' ] += _line
+      @post[ separator ? 'mt_text_more' : 'description' ] += line
     end
 
     @post['description'].strip!
@@ -224,37 +230,37 @@ example          http://user@example.com/xmlrpc\n}]
     @post['title'] = @headers['Title'] if @headers['Title']
     self.post_id = @headers['Post'].to_i if @headers['Post']
 
-    _format = @headers['Format']
-    post['mt_convert_breaks'] = _format if _format
-    if !_format
+    format = @headers['Format']
+    self.post['mt_convert_breaks'] = format if format
+    if !format
       # we have to parse endpoint before
       # examining the mode variable, since it can be assigned by
       # the format of the endpoint url
-      _endpoint = endpoint
+      current_endpoint = self.endpoint
 
       # scope-based sniffing of format; these are MT-specific.
-      if mode == 'mt'
+      if self.mode == 'mt'
         case ENV['TM_SCOPE']
         when /markdown/
-          post['mt_convert_breaks'] = 'markdown_with_smartypants'
+          self.post['mt_convert_breaks'] = 'markdown_with_smartypants'
         when /textile/
-          post['mt_convert_breaks'] = 'textile_2'
+          self.post['mt_convert_breaks'] = 'textile_2'
         when /text\.blog\.html/
-          post['mt_convert_breaks'] = '0'
+          self.post['mt_convert_breaks'] = '0'
         else
-          post['mt_convert_breaks'] = '__default__'
+          self.post['mt_convert_breaks'] = '__default__'
         end
       end
     end
 
-    _date_created = DateTime.parse(@headers['Date']) if @headers['Date']
-    if mode == 'mt'
-      @post['dateCreated'] = _date_created.strftime('%FT%T') if _date_created
+    date_created = DateTime.parse(@headers['Date']) if @headers['Date']
+    if self.mode == 'mt'
+      @post['dateCreated'] = date_created.strftime('%FT%T') if date_created
       @post['mt_allow_comments'] = @headers['Comments'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['Comments']
       @post['mt_allow_pings'] = @headers['Pings'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['Pings']
       @post['mt_tags'] = @headers['Tags'] if @headers['Tags']
       @post['mt_basename'] = @headers['Basename'] if @headers['Basename']
-    elsif mode == 'wp'
+    elsif self.mode == 'wp'
       @post['dateCreated'] = @dateCreated if @dateCreated
       @post['mt_allow_comments'] = @headers['Comments'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['Comments']
       @post['mt_allow_pings'] = @headers['Pings'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['Pings']
@@ -269,65 +275,62 @@ example          http://user@example.com/xmlrpc\n}]
   def password
     # The password can be embedded within the endpoint, so resolve
     # the endpoint first, which may set @password for us.
-    _endpoint = endpoint
-    _fetch_credentials_from_keychain unless @password
+    self.endpoint
+    fetch_credentials_from_keychain() unless @password
     @password
   end
 
   def post
-    _parse_post if @post == nil
+    parse_post() if @post == nil
     @post
   end
 
-  def post=(_post)
-    @post = _post
-    @post_id = post['postid'] if post['postid']
+  def post=(new_post)
+    @post = new_post
+    @post_id = self.post['postid'] if self.post['postid']
   end
 
   def post_id
-    _parse_post if @post == nil
+    parse_post() if @post == nil
     @post_id
   end
 
   def publish
-    _parse_post if @post == nil
+    parse_post() if @post == nil
     @publish
   end
 
   def headers
-    _parse_post if @post == nil
+    parse_post() if @post == nil
     @headers
   end
 
-  def endpoint=(_endpoint)
-    @endpoint = _endpoint
-    _parse_endpoint
+  def endpoint=(new_endpoint)
+    @endpoint = new_endpoint
+    parse_endpoint()
   end
 
   def endpoint
     return @endpoint if @endpoint != nil
 
+    current_endpoint = nil
+
     # Check the headers for a 'Blog' which is an endpoint
-    if headers && headers['Blog']
-      _endpoint = headers['Blog']
-    end
+    current_endpoint = self.headers['Blog']
 
     # Check TM_BLOG_ENDPOINT as a fallback
-    if !_endpoint && ENV['TM_BLOG_ENDPOINT']
-      _endpoint = ENV['TM_BLOG_ENDPOINT']
-    end
+    current_endpoint ||= ENV['TM_BLOG_ENDPOINT']
 
     # Still no luck? Ask the user using endpoints in their config.
-    if (_endpoint == nil)
-      _endpoint = select_endpoint
-      TextMate.exit_show_tool_tip("Cancelled") if _endpoint == nil
-    end
+    current_endpoint ||= select_endpoint()
 
-    self.endpoint = _endpoint
+    TextMate.exit_show_tool_tip("Cancelled") if current_endpoint.nil?
+
+    self.endpoint = current_endpoint
   end
 
   def endpoints
-    _read_endpoints unless @endpoints
+    read_endpoints() unless @endpoints
     @endpoints
   end
 
@@ -339,8 +342,8 @@ example          http://user@example.com/xmlrpc\n}]
   # Utility methods
 
   def post_to_document
-    _doc = ''
-    _formats = {
+    doc = ''
+    formats = {
       'textile_1' => 'Textile',
       'textile_2' => 'Textile',
       'markdown_with_smartypants' => 'Markdown',
@@ -350,75 +353,77 @@ example          http://user@example.com/xmlrpc\n}]
       'Markdown' => 'Markdown',
       '__default__' => 'Text',
     }
-    _format = 'Markdown'
-    if (post['description'] + post['mt_text_more'].to_s) =~ /<(p|a|img|h[1-6]|strong|em|tt|code|pre)\b.*?>/i
-      _format = 'HTML'
-    end
+
+    format = 'Markdown'
+    format = 'HTML' if "#{self.post['description']}#{self.post['mt_text_more']}" =~
+      /<(p|a|img|h[1-6]|strong|em|tt|code|pre)\b.*?>/i
+
     if post['mt_convert_breaks']
-      if _formats[post['mt_convert_breaks']]
-        _format = _formats[post['mt_convert_breaks']]
+      if formats[self.post['mt_convert_breaks']]
+        format = formats[self.post['mt_convert_breaks']]
       end
     elsif ENV['TM_BLOG_FORMAT']
-      _format = ENV['TM_BLOG_FORMAT']
+      format = ENV['TM_BLOG_FORMAT']
     else
       # derive format from existing scope
       case ENV['TM_SCOPE']
-      when /markdown/
-        _format = "Markdown"
-      when /textile/
-        _format = "Textile"
+      when /\.markdown/
+        format = "Markdown"
+      when /\.textile/
+        format = "Textile"
       when /text\.blog\.html/
-        _format = "HTML"
+        format = "HTML"
       when /text\.blog\.plain/
-        _format = "Text"
+        format = "Text"
       end
     end
-    _blog = endpoints[endpoint] || endpoint
-    _doc += "Type: Blog Post (#{_format})\n"
-    _doc += "Blog: #{_blog}\n"
-    _doc += "Link: #{post['permaLink']}\n" if post['permaLink']
-    _doc += "Post: #{post_id}\n"
-    _doc += "Title: #{post['title']}\n"
-    _doc += "Keywords: #{post['keywords']}\n" if post['keywords']
-    _doc += "Tags: #{post['mt_tags']}\n" if post['mt_tags'] && (post['mt_tags'] != '')
-    if (mode == 'wp') && post['category']
-      _cats = post['category'].split(/,/)
-      _cats.each { | _cat | _doc += "Category: #{_cat}\n" }
+
+    blog = self.endpoints[self.endpoint] || self.endpoint
+    doc += "Type: Blog Post (#{format})\n"
+    doc += "Blog: #{blog}\n"
+    doc += "Link: #{self.post['permaLink']}\n" if self.post['permaLink']
+    doc += "Post: #{self.post_id}\n"
+    doc += "Title: #{self.post['title']}\n"
+    doc += "Keywords: #{self.post['keywords']}\n" if self.post['keywords']
+    doc += "Tags: #{self.post['mt_tags']}\n" if self.post['mt_tags'] && (self.post['mt_tags'] != '')
+    if (self.mode == 'wp') && self.post['category']
+      cats = self.post['category'].split(/,/)
+      cats.each { | cat | doc += "Category: #{cat}\n" }
     end
-    _doc += "Format: #{post['mt_convert_breaks']}\n" if post['mt_convert_breaks']
-    _doc += sprintf "Date: %04d-%02d-%02d %02d:%02d:%02d\n",
-      post['dateCreated'].year,
-      post['dateCreated'].month,
-      post['dateCreated'].day,
-      post['dateCreated'].hour,
-      post['dateCreated'].min,
-      post['dateCreated'].sec
-    if post['mt_allow_pings'] && (post['mt_allow_pings'] == 1)
-      _doc += "Pings: On\n"
+    doc += "Format: #{self.post['mt_convert_breaks']}\n" if self.post['mt_convert_breaks']
+    doc += sprintf "Date: %04d-%02d-%02d %02d:%02d:%02d\n",
+      self.post['dateCreated'].year,
+      self.post['dateCreated'].month,
+      self.post['dateCreated'].day,
+      self.post['dateCreated'].hour,
+      self.post['dateCreated'].min,
+      self.post['dateCreated'].sec
+    if self.post['mt_allow_pings'] && (self.post['mt_allow_pings'] == 1)
+      doc += "Pings: On\n"
     else
-      _doc += "Pings: Off\n"
+      doc += "Pings: Off\n"
     end
-    if post['mt_allow_comments'] && (post['mt_allow_comments'] == 1)
-      _doc += "Comments: On\n"
+    if self.post['mt_allow_comments'] && (self.post['mt_allow_comments'] == 1)
+      doc += "Comments: On\n"
     else
-      _doc += "Comments: Off\n"
+      doc += "Comments: Off\n"
     end
-    _doc += "Basename: " + post['mt_basename'] + "\n" if post['mt_basename']
-    if post['categories']
-      post['categories'].each do | _cat |
-        _doc += "Category: #{_cat}\n"
+    doc += "Basename: " + self.post['mt_basename'] + "\n" if self.post['mt_basename']
+    if self.post['categories']
+      self.post['categories'].each do | cat |
+        doc += "Category: #{cat}\n"
       end
     end
-    _doc += "\n"
-    _doc += post['description'].strip + "\n"
-    if (_more = post['mt_text_more'].strip) && _more != ''
-      _doc += "\n#{DIVIDER * 10}\n\n"
-      if (mode == 'wp')
-        _more.gsub!('<!--more-->', DIVIDER * 10)
+    doc += "\n"
+    doc += self.post['description'].strip + "\n"
+    if (more = self.post['mt_text_more'].strip) && more != ''
+      doc += "\n#{DIVIDER * 10}\n\n"
+      if (self.mode == 'wp')
+        more.gsub!('<!--more-->', DIVIDER * 10)
       end
-      _doc += _more + "\n"
+      doc += more + "\n"
     end
-    _doc
+    doc
   end
 
   def request_title(default)
@@ -434,9 +439,9 @@ example          http://user@example.com/xmlrpc\n}]
 
   def show_post_page
     begin
-      _password = password
-      self.post = client.getPost(post_id, username, _password)
-      if publish && link = post['permaLink']
+      current_password = self.password
+      self.post = client.getPost(self.post_id, self.username, current_password)
+      if self.publish && link = self.post['permaLink']
         require "#{ENV['TM_SUPPORT_PATH']}/lib/browser"
         Browser.load_url(link)
       end
@@ -446,52 +451,52 @@ example          http://user@example.com/xmlrpc\n}]
     end
   end
 
-  def select_post(_posts)
-    _titles = []
-    _posts.each { |_p| _titles.push( '"' + _p['title'].gsub(/"/, '\"') + '"' ) }
+  def select_post(posts)
+    titles = []
+    posts.each { |p| titles.push( '"' + p['title'].gsub(/"/, '\"') + '"' ) }
 
-    _result = TextMate.dropdown(%Q{--title 'Fetch Post' \
+    result = TextMate.dropdown(%Q{--title 'Fetch Post' \
       --text 'Select a recent post to edit' \
       --button1 Load --button2 Cancel \
-      --items #{_titles.join(' ')}})
+      --items #{titles.join(' ')}})
 
-    _result = _result.split(/\n/)
-    if _result[0] == "1"
-      return _posts[_result[1].to_i]
+    result = result.split(/\n/)
+    if result[0] == "1"
+      return posts[result[1].to_i]
     end
     nil
   end
 
   def select_endpoint
-    if endpoints.length == 2
+    if self.endpoints.length == 2
       # there's only one endpoint here (we store two keys for each)
       # return the first one
-      endpoints.each_key do | _name |
-        return _name if _name !~ /^https?:/
-        return endpoints[_name]
+      self.endpoints.each_key do | name |
+        return name if name !~ /^https?:/
+        return self.endpoints[name]
       end
     end
 
-    _titles = []
-    endpoints.each_key do | _name |
-      next if _name =~ /^https?:/
-      _titles.push( '"' + _name.gsub(/"/, '\"') + '"' )
+    titles = []
+    self.endpoints.each_key do | name |
+      next if name =~ /^https?:/
+      titles.push( '"' + name.gsub(/"/, '\"') + '"' )
     end
 
-    if _titles.length == 0
+    if titles.length == 0
       TextMate.exit_show_tool_tip("No blog accounts are configured.\nPlease see Help or run Setup Blogs command.")
     end
 
-    _titles.sort!
-    _result = TextMate.dropdown(%Q{--title 'Select Blog' \
+    titles.sort!
+    result = TextMate.dropdown(%Q{--title 'Select Blog' \
       --text 'Choose a blog' \
       --button1 Ok --button2 Cancel \
-      --items #{_titles.join(' ')}})
+      --items #{titles.join(' ')}})
 
-    _result = _result.split(/\n/)
-    if _result[0] == "1"
-      _name = _titles[_result[1].to_i].gsub(/^"|"$/, '')
-      return endpoints[_name]
+    result = result.split(/\n/)
+    if result[0] == "1"
+      name = titles[result[1].to_i].gsub(/^"|"$/, '')
+      return self.endpoints[name]
     end
     nil
   end
@@ -500,21 +505,21 @@ example          http://user@example.com/xmlrpc\n}]
 
   def post_or_update
     if !post['title']
-      _filename = ENV['TM_FILENAME'] || ''
-      _filename.sub!(/\.[a-z]+$/, '') if _filename
-      post['title'] = request_title(_filename)
+      filename = ENV['TM_FILENAME'] || ''
+      filename.sub!(/\.[a-z]+$/, '') if filename
+      self.post['title'] = request_title(filename)
     end
 
     begin
-      _password = password
+      current_password = self.password
       if post_id
-        result = client.editPost(post_id, username, _password, post, publish)
+        result = client.editPost(self.post_id, self.username, current_password, self.post, self.publish)
       else
-        self.post_id = client.newPost(blog_id, username, _password, post, publish)
+        self.post_id = client.newPost(self.blog_id, self.username, current_password, self.post, self.publish)
       end
-      show_post_page
+      show_post_page()
       @mw_success = true
-      TextMate.exit_replace_document(post_to_document)
+      TextMate.exit_replace_document(post_to_document())
     rescue XMLRPC::FaultException => e
       TextMate.exit_show_tool_tip("Error: #{e.faultString} (#{e.faultCode})")
     end
@@ -525,18 +530,18 @@ example          http://user@example.com/xmlrpc\n}]
   def fetch
     begin
       # Makes sure endpoint is determined and elements are parsed
-      _password = password
+      current_password = self.password
       require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
-      _result = nil
+      result = nil
       TextMate.call_with_progress(:title => "Fetch Post", :message => "Contacting Server “#{@host}”…") do
-        _result = client.getRecentPosts(blog_id, username, _password, 20)
+        result = self.client.getRecentPosts(self.blog_id, self.username, current_password, 20)
       end
-      if !_result || !_result.length
+      if !result || !result.length
         TextMate.exit_show_tool_tip("No posts are available!")
       end
       @mw_success = true
-      if self.post = select_post(_result)
-        TextMate.exit_create_new_document(post_to_document)
+      if self.post = select_post(result)
+        TextMate.exit_create_new_document(post_to_document())
       else
         TextMate.exit_show_tool_tip("Cancelled")
       end
@@ -548,8 +553,8 @@ example          http://user@example.com/xmlrpc\n}]
   # Command: View
 
   def view
-    if post_id
-      show_post_page
+    if self.post_id
+      show_post_page()
     else
       TextMate.exit_show_tool_tip("A Post ID is required to view the post.")
     end
@@ -558,36 +563,36 @@ example          http://user@example.com/xmlrpc\n}]
   # 'blog' Command (snippet)
 
   def choose_blog_endpoint
-    if endpoints.length == 2
-      _endpoint = nil
-      endpoints.each_key do | _name |
-        if _name !~ /^https?:/
-          _endpoint = _name
+    if self.endpoints.length == 2
+      current_endpoint = nil
+      self.endpoints.each_key do | name |
+        if name !~ /^https?:/
+          current_endpoint = name
         else
-          _endpoint = endpoints[_name]
+          current_endpoint = self.endpoints[name]
         end
         break
       end
-      TextMate.exit_insert_snippet("Blog: #{_endpoint}")
+      TextMate.exit_insert_snippet("Blog: #{current_endpoint}")
     end
 
-    _titles = []
-    endpoints.each_key do | _name |
-      next if _name =~ /^https?:/
-      _titles.push( '"' + _name.gsub(/"/, '\"') + '"' )
+    titles = []
+    self.endpoints.each_key do | name |
+      next if name =~ /^https?:/
+      titles.push( '"' + name.gsub(/"/, '\"') + '"' )
     end
-    _titles.sort!
+    titles.sort!
 
-    _result = TextMate.dropdown(%Q{--title 'Select Blog' \
+    result = TextMate.dropdown(%Q{--title 'Select Blog' \
       --text 'Choose a blog' \
       --button1 Ok --button2 Cancel \
-      --items #{_titles.join(' ')}})
+      --items #{titles.join(' ')}})
 
-    _result = _result.split(/\n/)
+    result = result.split(/\n/)
 
-    if _result[0] == "1"
+    if result[0] == "1"
       TextMate.exit_insert_snippet("Blog: " +
-        _titles[_result[1].to_i].gsub(/^"|"$/, '') + '$0')
+        titles[result[1].to_i].gsub(/^"|"$/, '') + '$0')
     end
     TextMate.exit_show_tool_tip(%Q{No weblogs have been configured.\n} +
       %q{Use the "Setup Blogs" command."})
@@ -597,15 +602,15 @@ example          http://user@example.com/xmlrpc\n}]
     # endpoint doesn't matter here so set to something bogus
     # to prevent TM from asking for one...
     @endpoint = 'x'
-    _format = ENV['TM_SCOPE']
-    _doc = "#{post['description']}"
-    _doc += "#{post['mt_text_more']}" if post['mt_text_more']
-    _base = %Q{<base href="#{headers['Link']}" />} if headers['Link']
-    print <<-HTML
+    format = ENV['TM_SCOPE']
+    doc = "#{self.post['description']}"
+    doc += "#{self.post['mt_text_more']}" if self.post['mt_text_more']
+    base = %Q{<base href="#{self.headers['Link']}" />} if self.headers['Link']
+    html = <<-HTML
 <html>
 <head>
-  <title>#{post['title']}</title>
-  #{_base}
+  <title>#{self.post['title']}</title>
+  #{base}
   <style type="text/css">
     body {  
       background-color: #eee;
@@ -626,69 +631,74 @@ example          http://user@example.com/xmlrpc\n}]
 <h1>#{post['title']}</h1>
 <div class="contents">
 HTML
-    case _format
-      when /textile/
+    case format
+      when /\.textile/
         require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth.rb"
-        print RedCloth.new(_doc).to_html
-      when /markdown/
+        html += RedCloth.new(doc).to_html
+      when /\.markdown/
         require "#{ENV['TM_SUPPORT_PATH']}/lib/bluecloth.rb"
         require "#{ENV['TM_SUPPORT_PATH']}/lib/rubypants.rb"
-        print RubyPants.new(BlueCloth.new(_doc).to_html).to_html
-      when /html/
-        print _doc
-      when /text/
-        print %Q{<div style="white-space: pre">#{_doc}</div>}
+        html += RubyPants.new(BlueCloth.new(doc).to_html).to_html
+      when /\.html/
+        html += doc
+      when /\.text/
+        html += %Q{<div style="white-space: pre">#{doc}</div>}
     end
-    print "</div></body></html>"
+    html += "</div></body></html>"
+    html
+  end
+
+  def preview
+    print to_html()
   end
 
   def upload_image
     # Makes sure endpoint is determined and elements are parsed
-    _password = password
+    current_password = password
 
     require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
-    _result = nil
+    result = nil
     TextMate.call_with_progress(:title => "Upload Image", :message => "Uploading to Server “#{@host}”…") do
-      _path = ENV['TM_DROPPED_FILEPATH']
-      _data = {}
-      _file = File.basename(_path)
-      _height_width = ""
-      if _sips_hw = %x{sips -g pixelWidth -g pixelHeight "#{_path}"}
-        _height = $1 if _sips_hw.match(/pixelHeight:[ ]*(\d+)/)
-        _width = $1 if _sips_hw.match(/pixelWidth:[ ]*(\d+)/)
-        if _height && _width
-          _height_width = %Q{ height="#{_height}" width="#{_width}"}
+      file_path = ENV['TM_DROPPED_FILEPATH']
+      data = {}
+      file = File.basename(file_path)
+      height_width = ""
+      if sips_hw = %x{sips -g pixelWidth -g pixelHeight "#{file_path}"}
+        height = $1 if sips_hw.match(/pixelHeight:[ ]*(\d+)/)
+        width = $1 if sips_hw.match(/pixelWidth:[ ]*(\d+)/)
+        if height && width
+          height_width = %Q{ height="#{height}" width="#{width}"}
         end
       end
-      _name = _file
+      name = file
       unless mode == 'wp'
         # WordPress automatically places files into dated paths
-        _date = Time.now.strftime("%Y-%m-%d")
-        _name = "#{_date}_#{_file}"
+        date = Time.now.strftime("%Y-%m-%d")
+        name = "#{date}_#{file}"
       end
       # Replace spaces with a dash
-      _name.gsub!(/[ ]+/, '-')
-      _data['name'] = _name
+      name.gsub!(/[ ]+/, '-')
+      data['name'] = name
       require 'xmlrpc/base64'
-      _data['bits'] = XMLRPC::Base64.new(IO.read(_path))
+      data['bits'] = XMLRPC::Base64.new(IO.read(file_path))
       begin
-        _result = client.newMediaObject(blog_id, username, _password, _data)
-        _url = _result['url']
-        if (_url)
-          _alt = _file.split('.').first.gsub(/[_-]/, ' ').gsub(/\w+/) { |m| m.capitalize }
+        result = client.newMediaObject(self.blog_id, self.username, current_password, data)
+        url = result['url']
+        if url
+          alt = file.split('.').first.gsub(/[_-]/, ' ').gsub(/\w+/) { |m| m.capitalize }
           case ENV['TM_SCOPE']
             when /\.markdown/
-              print "![${1:#{_alt}}](#{_url})"
+              print "![${1:#{alt}}](#{url})"
             when /\.textile/
-              print "!#{_url} (${1:#{_alt}})!"
+              print "!#{url} (${1:#{alt}})!"
             else
-              print %Q{<img src="#{_url}" alt="${1:#{_alt}}"#{_height_width} />}
+              print %Q{<img src="#{url}" alt="${1:#{alt}}"#{height_width} />}
           end
         else
           TextMate.exit_show_tool_tip("Error uploading image.")
         end
       rescue XMLRPC::FaultException => e
-        TextMate.exit_show_tool_tip("Error uploading image. Check your configuration and try again. -- #{e.to_str}")
+        TextMate.exit_show_tool_tip("Error uploading image. Check your configuration and try again.")
       end
     end
   end

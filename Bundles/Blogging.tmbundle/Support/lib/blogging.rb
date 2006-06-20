@@ -204,7 +204,7 @@ TEXT
           in_headers = false
         end
       end
-      if line =~ %r{^(#{DIVIDER})+}
+      if line =~ %r{^✂-[✂-]+}
         if !separator
           separator = true
           next

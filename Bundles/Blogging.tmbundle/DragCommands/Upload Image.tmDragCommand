@@ -7,7 +7,6 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/blogging.rb"
-ENV["TM_SCOPE"] ||= "text.blog.markdown"
 Blogging.new.upload_image</string>
 	<key>draggedFileExtensions</key>
 	<array>
@@ -19,11 +18,11 @@ Blogging.new.upload_image</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>name</key>
-	<string>Upload Image (Markdown)</string>
+	<string>Upload Image</string>
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>
-	<string>text.blog text.html.markdown</string>
+	<string>text.blog text.html.markdown, text.blog text.html.textile, text.blog text.html, text.blog text.plain</string>
 	<key>uuid</key>
 	<string>7A2373C1-A300-49B5-9F83-676612D8D5B5</string>
 </dict>

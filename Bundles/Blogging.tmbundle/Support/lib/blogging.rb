@@ -78,7 +78,7 @@ TEXT
     if @password == nil
       @password = find_internet_password()
       if @password == nil
-        current_endpoint = self.endpoint
+        current_endpoint = self.endpoint.clone
         current_endpoint.sub!(/#\d+/, '') if current_endpoint =~ /#\d+/
         @password = TextMate.secure_standard_input_box("Blogging",
           "Enter the password to login at #{current_endpoint}")

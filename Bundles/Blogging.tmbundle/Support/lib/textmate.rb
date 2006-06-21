@@ -61,7 +61,7 @@ module TextMate
     private
 
     def _dialog(type, options)
-      %x{"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" #{type} #{options}}
+      %x{"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" 2>/dev/console #{type} #{options}}
     end
 
     def _standard_input_box(type, title, prompt)

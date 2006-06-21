@@ -3,7 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>set oldDelims to AppleScript's text item delimitersset AppleScript's text item delimiters to {"${1:,}"}${0:-- insert actions here}set AppleScript's text item delimiters to oldDelims</string>
+	<string>set oldDelims to AppleScript's text item delimiters
+set AppleScript's text item delimiters to {"${1:,}"}
+${0:-- insert actions here}
+set AppleScript's text item delimiters to oldDelims</string>
 	<key>name</key>
 	<string>change text item delimiters</string>
 	<key>scope</key>

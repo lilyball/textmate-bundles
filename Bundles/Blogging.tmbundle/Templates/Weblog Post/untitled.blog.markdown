@@ -4,4 +4,4 @@ Main entry text
 
 ✂------✂------✂------✂------✂------✂------✂------✂------✂------✂------
 
-Extended entry text
+Main entry continued

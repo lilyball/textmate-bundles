@@ -335,7 +335,9 @@ TEXT
   end
 
   def client
-    @client ||= MetaWeblogClient.new(@host, @path)
+    current_endpoint = endpoint
+    current_endpoint.sub!(/#\d+$/, '') if current_endpoint =~ /#\d+$/
+    @client ||= MetaWeblogClient.new2(current_endpoint)
     @client
   end
 

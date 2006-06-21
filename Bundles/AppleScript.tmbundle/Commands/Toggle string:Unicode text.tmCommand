@@ -8,11 +8,11 @@
 	<string>#!/usr/bin/env ruby -Ku
 
 case txt = STDIN.read
-  when /\A«data utxt([0-9A-F]+)»(?: as Unicode text)?\z/i
+  when /\A«data utxt([0-9A-F]+)»(?: as Unicode text)?\z/i then
     decoded = $1.gsub(/([0-9A-F]{4})/i) { |m| [$1.hex].pack("U") }
     print '"' + decoded + '"'
 
-  when /\A"(.*)"\z/
+  when /\A"(.*)"\z/ then
     encoded = $1.gsub(/./) { |ch| sprintf("%04X", ch.unpack("U")[0]) }
     print '«data utxt' + encoded + '» as Unicode text'
 

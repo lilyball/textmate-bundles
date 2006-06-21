@@ -9,7 +9,7 @@
 src = CGI.escape(STDIN.read)
 src = src.gsub('+', '%20')
 src = 'applescript://com.apple.scripteditor?action=new&amp;script=' + src
-`echo -n "#{src}" | pbcopy`
+open('|pbcopy', 'w') { |io| io.write src }
 print "The URL encoded AppleScript was copied to the clipboard"</string>
 	<key>fallbackInput</key>
 	<string>document</string>

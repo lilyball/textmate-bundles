@@ -6,7 +6,7 @@ require 'fileutils'
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/doctohtml.rb"
 
 TextMate.call_with_progress(:title => "Paste to Pastie", :message => "Contacting Server “pastie.caboo.se”…") do
-  text_file, html_file = `mktemp -t tm_paste && mktemp -t tm_paste`.split("\n")
+  text_file, html_file = `/usr/bin/mktemp -t tm_paste && /usr/bin/mktemp -t tm_paste`.split("\n")
 
   xml = STDIN.read
 

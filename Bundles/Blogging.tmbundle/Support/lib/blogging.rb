@@ -188,17 +188,18 @@ TEXT
     lines.each do | line |
       if in_headers
         if line =~ /^(\w+):[ ]*(.+)/
-          case $1
-          when 'Ping'
+          key = $1.downcase
+          case key
+          when 'ping'
             @post['mt_tbping_urls'] = [] unless @post['mt_tbping_urls']
             @post['mt_tbping_urls'].push($2)
-          when 'Category'
+          when 'category'
             @post['categories'] = [] unless @post['categories']
             @post['categories'].push($2)
-          when 'Status'
+          when 'status'
             @publish = false if $2 =~ /draft/i
           end
-          @headers[$1] = $2
+          @headers[key] = $2
           next
         else
           in_headers = false
@@ -227,10 +228,10 @@ TEXT
     else
       @post['description'] += "\n\n"
     end
-    @post['title'] = @headers['Title'] if @headers['Title']
-    self.post_id = @headers['Post'].to_i if @headers['Post']
+    @post['title'] = @headers['title'] if @headers['title']
+    self.post_id = @headers['post'].to_i if @headers['post']
 
-    format = @headers['Format']
+    format = @headers['format']
     self.post['mt_convert_breaks'] = format if format
     if !format
       # we have to parse endpoint before
@@ -253,19 +254,19 @@ TEXT
       end
     end
 
-    date_created = DateTime.parse(@headers['Date']) if @headers['Date']
+    date_created = DateTime.parse(@headers['date']) if @headers['date']
     if self.mode == 'mt'
       @post['dateCreated'] = date_created.strftime('%FT%T') if date_created
-      @post['mt_allow_comments'] = @headers['Comments'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['Comments']
-      @post['mt_allow_pings'] = @headers['Pings'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['Pings']
-      @post['mt_tags'] = @headers['Tags'] if @headers['Tags']
-      @post['mt_basename'] = @headers['Basename'] if @headers['Basename']
+      @post['mt_allow_comments'] = @headers['comments'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['comments']
+      @post['mt_allow_pings'] = @headers['pings'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['pings']
+      @post['mt_tags'] = @headers['tags'] if @headers['tags']
+      @post['mt_basename'] = @headers['basename'] if @headers['basename']
     elsif self.mode == 'wp'
       @post['dateCreated'] = @dateCreated if @dateCreated
-      @post['mt_allow_comments'] = @headers['Comments'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['Comments']
-      @post['mt_allow_pings'] = @headers['Pings'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['Pings']
+      @post['mt_allow_comments'] = @headers['comments'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['comments']
+      @post['mt_allow_pings'] = @headers['pings'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['pings']
     end
-    @post['mt_keywords'] = @headers['Keywords'] if @headers['Keywords']
+    @post['mt_keywords'] = @headers['keywords'] if @headers['keywords']
   end
 
   public
@@ -316,7 +317,7 @@ TEXT
     current_endpoint = nil
 
     # Check the headers for a 'Blog' which is an endpoint
-    current_endpoint = self.headers['Blog']
+    current_endpoint = self.headers['blog']
 
     # Check TM_BLOG_ENDPOINT as a fallback
     current_endpoint ||= ENV['TM_BLOG_ENDPOINT']
@@ -612,7 +613,7 @@ TEXT
     format = ENV['TM_SCOPE']
     doc = "#{self.post['description']}"
     doc += "#{self.post['mt_text_more']}" if self.post['mt_text_more']
-    base = %Q{<base href="#{self.headers['Link']}" />} if self.headers['Link']
+    base = %Q{<base href="#{self.headers['link']}" />} if self.headers['link']
     html = <<-HTML
 <html>
 <head>

@@ -44,9 +44,15 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^([A-Za-z0-9]+):\s*(.*)$\n?</string>
+			<string>^([Tt]itle|[Dd]ate|[Bb]asename|[Kk]eywords|[Bb]log|[Tt]ype|[Ll]ink|[Pp]ost|[Tt]ags|[Cc]omments|[Pp]ings?|[Cc]ategory|[Ss]tatus):\s*(.*)$\n?</string>
 			<key>name</key>
 			<string>meta.headers.blog</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^([A-Za-z0-9]+):\s*(.*)$\n?</string>
+			<key>name</key>
+			<string>invalid.illegal.meta.headers.blog</string>
 		</dict>
 		<dict>
 			<key>begin</key>

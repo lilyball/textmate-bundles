@@ -81,6 +81,12 @@ class String
 		
 end
 
+class Array
+	def quote_for_shell_arguments
+		self.collect{|path| path.quote_filename_for_shell}.join(" ")
+	end
+end
+
 module TextMate
 	
 	# parse TM environment variables
@@ -105,7 +111,7 @@ module TextMate
 	end
 
 	def TextMate.selected_paths_for_shell
-		selected_paths_array.collect{|path| path.quote_filename_for_shell}.join(" ")
+		selected_paths_array.quote_for_shell_arguments
 	end
 
 end

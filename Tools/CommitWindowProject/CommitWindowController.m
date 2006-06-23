@@ -93,10 +93,10 @@
 		}
 		else if( [argument isEqualToString:@"--diff-cmd"] )
 		{
-			// Next argument should be a colon-seperated list of status strings, one for each path
+			// Next argument should be a comma-seperated list of command arguments to use to execute the diff
 			if( i >= (argc - 1) )
 			{
-				fprintf(stderr, "commit window: missing text: --diff-cmd \"/usr/bin/svn\"\n");
+				fprintf(stderr, "commit window: missing text: --diff-cmd \"/usr/bin/svn,diff\"\n");
 				[self cancel:nil];
 			}
 			
@@ -425,13 +425,27 @@
 {
 	if(fDiffCommand != nil)
 	{
-		NSString *	filePath	= [[[fFilesController arrangedObjects] objectAtIndex:[sender selectedRow]] objectForKey:@"path"];
-		NSString *	command		= [NSString stringWithFormat:@"\"%@\" diff \"%@\" | \"%s/bin/mate\" &> /dev/null &",
-									fDiffCommand,
-									filePath,
-									getenv("TM_SUPPORT_PATH")];
+		NSArray *			unquotedArguments	= [fDiffCommand componentsSeparatedByString:@","];
+		NSString *			quoteArgument		= @"\"%@\"";
+		NSString *			diffCommand			= @"";
+		NSString *			mateCommand			= [NSString stringWithFormat:@"\"%s/bin/mate\" &> /dev/null &", getenv("TM_SUPPORT_PATH")];
+		NSString *			filePath			= [[[fFilesController arrangedObjects] objectAtIndex:[sender selectedRow]] objectForKey:@"path"];
+		unsigned int	argumentCount = [unquotedArguments count];
+		unsigned int	index;
+		
+		for(index = 0; index < argumentCount; index += 1)
+		{
+			NSString *	argument = [unquotedArguments objectAtIndex:index];
+			NSString *	quotedArgument = [NSString stringWithFormat:quoteArgument, argument];
+			
+			diffCommand = [diffCommand stringByAppendingString:quotedArgument];
+			diffCommand = [diffCommand stringByAppendingString:@" "];
+		}
 
-		system([command UTF8String]);
+		diffCommand = [diffCommand stringByAppendingString:[NSString stringWithFormat:quoteArgument, filePath]];
+		diffCommand = [diffCommand stringByAppendingString:[NSString stringWithFormat:@" | %@", mateCommand]];
+		
+		system([diffCommand UTF8String]);
 	}
 	
 }

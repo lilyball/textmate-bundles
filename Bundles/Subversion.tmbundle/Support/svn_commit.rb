@@ -1,19 +1,64 @@
-require 'English' # you are angry, english!
+require 'English'
 
-svn				= ENV['TM_SVN']
-#commit_paths	= ENV['CommitPaths']
-commit_tool		= ENV['CommitWindow']
-bundle			= ENV['TM_BUNDLE_SUPPORT']
-support			= ENV['TM_SUPPORT_PATH']
+svn				= ENV['TM_SVN']				|| `which svn`.chomp
+bundle			= ENV['TM_BUNDLE_SUPPORT']	|| File.dirname(__FILE__)
+support			= ENV['TM_SUPPORT_PATH']	|| File.dirname(File.dirname(File.dirname(File.dirname(__FILE__)))) + '/Support'
+commit_tool		= ENV['CommitWindow']		|| support + '/bin/CommitWindow.app/Contents/MacOS/CommitWindow'
+diff_cmd	    = ENV['TM_SVN_DIFF_CMD']	|| 'diff'
 
-IgnoreFilePattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
-
-CURRENT_DIR		= Dir.pwd + "/"
+IgnoreFilePattern	= /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
+CurrentDir			= Dir.pwd + "/"
 
 require (support + '/bin/shelltokenize.rb')
 require (support + "/bin/Builder.rb")
 
-mup = Builder::XmlMarkup.new(:target => STDOUT)
+mup				= nil			# markup builder
+paths_to_commit = Array.new		# array of paths to commit
+$dry_run		= false			# don't commit anything?
+
+#
+# Run from Terminal or run from TextMate?
+# 
+if ARGV.include? '--console-output'
+	# Terminal
+	ARGV.delete '--console-output'
+	
+	$console_output	= true
+	
+	require (bundle + '/terminal_markup')
+	require 'optparse'
+	
+	opts = OptionParser.new do |opts|
+	        opts.banner = "Usage: #{File.basename(__FILE__)} --console-output [options] [files]"
+	        opts.separator ""
+	        opts.separator "Specific options:"
+
+			opts.on_tail("--help", "Display help.") do
+				puts opts
+				exit
+			end
+	
+			opts.on_tail("--dry-run", "Go through the motions, but don't actually commit anything.") do
+				$dry_run = true
+			end
+	end
+	
+	opts.parse!
+
+	# any file arguments?
+	if ARGV.size > 0
+		paths_to_commit = ARGV
+	else
+		paths_to_commit = [Dir.pwd]
+	end
+	
+	mup = TerminalMarkup.new
+else 
+	# TextMate
+	$console_output = false
+	paths_to_commit = TextMate::selected_paths_array
+	mup = Builder::XmlMarkup.new(:target => STDOUT)
+end
 
 mup.html {
 	mup.head do
@@ -22,18 +67,20 @@ mup.html {
 	end
 
 	mup.body { 
-		mup.h1 do 
-			mup.img( :src => "file://"+bundle+"/Stylesheets/subversion_logo.tiff",
-						:height => 21,
-						:width => 32 )
-			mup.text " Commit"
+		unless $console_output
+			mup.h1 do 
+				mup.img( :src => "file://"+bundle+"/Stylesheets/subversion_logo.tiff",
+							:height => 21,
+							:width => 32 )
+				mup.text " Commit"
+			end
 		end
 		
 		STDOUT.flush
 
 		# Ignore files without changes
 #puts TextMate::selected_paths_for_shell
-		status_command = %Q{"#{svn}" status #{TextMate::selected_paths_for_shell}}
+		status_command = %Q{"#{svn}" status #{paths_to_commit.quote_for_shell_arguments}}
 #puts status_command
 		status_output = %x{#{status_command}}
 #puts status_output
@@ -41,7 +88,7 @@ mup.html {
 
 		def matches_to_paths(matches)
 			paths = matches.collect {|m| m[2] }
-			paths.collect{|path| path.sub(/^#{CURRENT_DIR}/, "") }
+			paths.collect{|path| path.sub(/^#{CurrentDir}/, "") }
 		end
 
 		def matches_to_status(matches)
@@ -60,7 +107,7 @@ mup.html {
 		unknown_paths = select_files_with_status_prefix(paths, '?')
         unknown_to_report_paths = unknown_paths.reject{ |m| IgnoreFilePattern =~ m[2] }
 		if unknown_to_report_paths and unknown_to_report_paths.size > 0 then
-			mup.div( "class" => "warning" ) {
+			mup.div( :class => "warning" ) {
 				mup.p "These files are not under version control, and so will not be committed:"
 				mup.ul{ matches_to_paths(unknown_to_report_paths).each{ |path| mup.li(path) } }
 			}
@@ -71,7 +118,7 @@ mup.html {
         missing_to_report_paths = missing_paths.reject{ |m| IgnoreFilePattern =~ m[2] }
 		if missing_to_report_paths and missing_to_report_paths.size > 0 then
     
-			mup.div( "class" => "warning" ) {
+			mup.div( :class => "warning" ) {
 				mup.p "These files are missing from the working copy:"
 				mup.ul{ matches_to_paths(missing_to_report_paths).each{ |path| mup.li(path) } }
 			}
@@ -82,7 +129,7 @@ mup.html {
 		conflict_paths = select_files_with_status_prefix(paths, 'C')
 
 		if conflict_paths and conflict_paths.size > 0 then
-			mup.div( "class" => "error" ) {
+			mup.div( :class => "error" ) {
 				mup.p "Cannot continue; there are merge conflicts in files:"		
 				mup.ul{ matches_to_paths(conflict_paths).each{ |path| mup.li(path) } }
 				mup.text! "Canceled."
@@ -97,7 +144,7 @@ mup.html {
 		commit_matches = commit_matches - missing_paths
 
 		if commit_matches.nil? or commit_matches.size == 0
-			mup.div( "class" => "info" ) {
+			mup.div( :class => "info" ) {
 				mup.text! "File(s) not modified; nothing to commit."
 				mup.ul{ matches_to_paths(unknown_paths).each{ |path| mup.li(path) } }
 			}
@@ -111,18 +158,23 @@ mup.html {
 
 		commit_path_text = commit_paths_array.collect{|path| path.quote_filename_for_shell }.join(" ")
 
-		commit_args = %x{"#{commit_tool}" --diff-cmd "#{svn}" --status #{commit_status} #{commit_path_text}}
+		# need to reexport the support directory for CommitWindow's benefit, or double-click diff doesn't work.
+		ENV['TM_SUPPORT_PATH'] = support if $console_output
+		commit_args = %x{"#{commit_tool}" --diff-cmd "#{svn},diff,--diff-cmd,#{diff_cmd}" --status #{commit_status} #{commit_path_text}}
 
 		status = $CHILD_STATUS
 		if status != 0
-			mup.div( "class" => "error" ) {
+			mup.div( :class => "error" ) {
 				mup.text! "Canceled (#{status >> 8})."
 			}	
 			exit -1
 		end
 
-#			mup.div("class" => "command"){ mup.strong(%Q{#{svn} commit}); mup.text!(commit_args) }
+		if $console_output
+			mup.div(:class => "command"){ mup.strong(%Q{#{svn} commit}); mup.text!(commit_args) }
+		end
 
+		exit 0 if $dry_run
 		mup.div( :class => 'section' ) do
 			mup.pre {
 				mup.text("...\n")

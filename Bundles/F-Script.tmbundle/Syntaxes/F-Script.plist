@@ -129,6 +129,15 @@
 			<string>"</string>
 			<key>name</key>
 			<string>comment.block.quotes.fscript</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escaped.fscript</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -137,6 +146,15 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.fscript</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escaped.fscript</string>
+				</dict>
+			</array>
 		</dict>
 	</array>
 	<key>scopeName</key>

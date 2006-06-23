@@ -387,7 +387,7 @@ TEXT
     doc += "Link: #{self.post['permaLink']}\n" if self.post['permaLink']
     doc += "Post: #{self.post_id}\n"
     doc += "Title: #{self.post['title']}\n"
-    doc += "Keywords: #{self.post['keywords']}\n" if self.post['keywords']
+    doc += "Keywords: #{self.post['mt_keywords']}\n" if self.post['mt_keywords']
     doc += "Tags: #{self.post['mt_tags']}\n" if self.post['mt_tags'] && (self.post['mt_tags'] != '')
     if (self.mode == 'wp') && self.post['category']
       cats = self.post['category'].split(/,/)

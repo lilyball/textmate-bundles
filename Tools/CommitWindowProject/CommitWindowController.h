@@ -33,7 +33,7 @@
 	NSArray *						fFileStatusStrings;
 }
 
-- (IBAction) commit:(id) sender;
-- (IBAction) cancel:(id) sender;
+- (void) setupUserInterface;
+- (void) saveSummary;
 
 @end

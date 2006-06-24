@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8316703B0A4DB58500199564 /* NSString+StatusString.m in Sources */ = {isa = PBXBuildFile; fileRef = 8316703A0A4DB58500199564 /* NSString+StatusString.m */; };
+		831670450A4DB70A00199564 /* CommitWindowCommandLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 831670440A4DB70A00199564 /* CommitWindowCommandLine.m */; };
 		831C222407B6F2EC00397A7E /* CommitWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 831C222307B6F2EC00397A7E /* CommitWindowController.m */; };
 		83BDF3B207DD4165005AC50F /* CWTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BDF3B107DD4165005AC50F /* CWTextView.m */; };
 		83F6091D07B8A60400C21FE8 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F6091C07B8A60400C21FE8 /* ApplicationServices.framework */; };
@@ -24,7 +26,10 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* CommitWindow_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitWindow_Prefix.pch; sourceTree = "<group>"; };
-		83189C69087A3EE2007473C7 /* VersionControlColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionControlColors.h; sourceTree = "<group>"; };
+		831670390A4DB58500199564 /* NSString+StatusString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+StatusString.h"; sourceTree = "<group>"; };
+		8316703A0A4DB58500199564 /* NSString+StatusString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+StatusString.m"; sourceTree = "<group>"; };
+		831670430A4DB70A00199564 /* CommitWindowCommandLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitWindowCommandLine.h; sourceTree = "<group>"; };
+		831670440A4DB70A00199564 /* CommitWindowCommandLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitWindowCommandLine.m; sourceTree = "<group>"; };
 		831C222207B6F2EC00397A7E /* CommitWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitWindowController.h; sourceTree = "<group>"; };
 		831C222307B6F2EC00397A7E /* CommitWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitWindowController.m; sourceTree = "<group>"; };
 		83BDF3B007DD4165005AC50F /* CWTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWTextView.h; sourceTree = "<group>"; };
@@ -52,6 +57,10 @@
 			children = (
 				831C222207B6F2EC00397A7E /* CommitWindowController.h */,
 				831C222307B6F2EC00397A7E /* CommitWindowController.m */,
+				831670430A4DB70A00199564 /* CommitWindowCommandLine.h */,
+				831670440A4DB70A00199564 /* CommitWindowCommandLine.m */,
+				831670390A4DB58500199564 /* NSString+StatusString.h */,
+				8316703A0A4DB58500199564 /* NSString+StatusString.m */,
 				83BDF3B007DD4165005AC50F /* CWTextView.h */,
 				83BDF3B107DD4165005AC50F /* CWTextView.m */,
 			);
@@ -87,7 +96,6 @@
 		29B97314FDCFA39411CA2CEA /* AskForString */ = {
 			isa = PBXGroup;
 			children = (
-				83189C69087A3EE2007473C7 /* VersionControlColors.h */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -200,6 +208,8 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				831C222407B6F2EC00397A7E /* CommitWindowController.m in Sources */,
 				83BDF3B207DD4165005AC50F /* CWTextView.m in Sources */,
+				8316703B0A4DB58500199564 /* NSString+StatusString.m in Sources */,
+				831670450A4DB70A00199564 /* CommitWindowCommandLine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

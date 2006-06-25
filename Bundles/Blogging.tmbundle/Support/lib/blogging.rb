@@ -665,43 +665,35 @@ HTML
   # Drag Command: Upload Image
 
   def upload_image
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
+    require 'xmlrpc/base64'
+
     # Makes sure endpoint is determined and elements are parsed
     current_password = password
 
-    require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
-    file_path = ENV['TM_DROPPED_FILEPATH']
+    # The packet we will be constructing
     data = {}
-    file = File.basename(file_path)
-    height_width = ""
-    if sips_hw = %x{sips -g pixelWidth -g pixelHeight "#{file_path}"}
-      height = $1 if sips_hw.match(/pixelHeight:[ ]*(\d+)/)
-      width = $1 if sips_hw.match(/pixelWidth:[ ]*(\d+)/)
-      if height && width
-        height_width = %Q{ height="#{height}" width="#{width}"}
-      end
-    end
-    name = file
-    unless mode == 'wp'
-      # WordPress automatically places files into dated paths
-      date = Time.now.strftime("%Y-%m-%d")
-      name = "#{date}_#{file}"
-    end
-    # Replace spaces with a dash
-    name.gsub!(/[ ]+/, '-')
+
+    file_path = ENV['TM_DROPPED_FILEPATH']
+    name = File.basename(file_path)
+
+    # WordPress automatically places files into dated paths
+    prefix = mode == 'wp' ? '' : Time.now.strftime('%F_')
+    base   = name.sub(/\.[^.]+\z/, '')
+    ext    = name[(base.length)..-1]
 
     if ENV['TM_MODIFIER_FLAGS'] =~ /OPTION/
-      result = TextMate.inputbox(%Q{--title 'Rename Uploaded File' \
-        --informative-text 'Enter the filename for this image' \
-        --text "#{name.gsub(/"/,'\"')}" \
-        --button1 'Upload' --button2 'Cancel'})
+      result = TextMate.inputbox(%Q{--title 'Upload Image' \
+        --informative-text 'Name to use for uploaded file:' \
+        --text #{e_sh base} --button1 'Upload' --button2 'Cancel'})
       case (a = result.split(/\n/))[0].to_i
-        when 1: name = "#{a[1]}"
+        when 1: base = "#{a[1]}"
         when 2: TextMate.exit_discard
       end
     end
 
-    data['name'] = name
-    require 'xmlrpc/base64'
+    data['name'] = prefix + base + ext
     data['bits'] = XMLRPC::Base64.new(IO.read(file_path))
 
     TextMate.call_with_progress(:title => "Upload Image", :message => "Uploading to Server “#{@host}”…") do
@@ -709,14 +701,23 @@ HTML
         result = client.newMediaObject(self.blog_id, self.username, current_password, data)
         url = result['url']
         if url
-          alt = file.split('.').first.gsub(/[_-]/, ' ').gsub(/\w+/) { |m| m.capitalize }
+          alt = base.gsub(/[_-]/, ' ').gsub(/\w{4,}/) { |m| m.capitalize }
           case ENV['TM_SCOPE']
             when /\.markdown/
               print "![${1:#{alt}}](#{url})"
             when /\.textile/
               print "!#{url} (${1:#{alt}})!"
             else
-              print %Q{<img src="#{url}" alt="${1:#{alt}}"#{height_width} />}
+              require 'cgi'
+              height_width = ""
+              if sips_hw = %x{sips -g pixelWidth -g pixelHeight #{e_sh file_path}}
+                height = $1 if sips_hw.match(/pixelHeight:[ ]*(\d+)/)
+                width = $1 if sips_hw.match(/pixelWidth:[ ]*(\d+)/)
+                if height && width
+                  height_width = %Q{ height="#{height}" width="#{width}"}
+                end
+              end
+              print %Q{<img src="#{url}" alt="${1:#{CGI::escapeHTML alt}}"#{height_width} />}
           end
         else
           TextMate.exit_show_tool_tip("Error uploading image.")

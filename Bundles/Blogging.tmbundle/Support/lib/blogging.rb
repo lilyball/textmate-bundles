@@ -664,6 +664,52 @@ HTML
 
   # Drag Command: Upload Image
 
+  def upload_name_for_path(full_path)
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
+
+    # WordPress automatically places files into dated paths
+    prefix = mode == 'wp' ? '' : Time.now.strftime('%F_')
+    file   = File.basename(full_path)
+
+    if ENV['TM_MODIFIER_FLAGS'] =~ /OPTION/
+
+      suggested_name = prefix + file.gsub(/[ ]+/, '-')
+      result = TextMate.inputbox(%Q{--title 'Upload Image' \
+        --informative-text 'Name to use for uploaded file:' \
+        --text #{e_sh suggested_name} --button1 'Upload' --button2 'Cancel'})
+      case (a = result.split(/\n/))[0].to_i
+        when 1: suggested_name = "#{a[1]}"
+        when 2: TextMate.exit_discard
+      end
+
+      alt = suggested_name.sub(/\.[^.]+\z/, '').gsub(/[_-]/, ' ').gsub(/\w{4,}/) { |m| m.capitalize }
+      [ suggested_name, alt ]
+
+    else
+
+      base          = file.sub(/\.[^.]+\z/, '')
+      ext           = file[(base.length)..-1]
+      suggested_alt = base.gsub(/[_-]/, ' ').gsub(/[a-z](?=[A-Z0-9])/, '\0 ').gsub(/\w{4,}/) { |m| m.capitalize }
+
+      result = TextMate.inputbox(%Q{--title 'Upload Image' \
+        --informative-text 'Image description (a filename will be derived from it):' \
+        --text #{e_sh suggested_alt} --button1 'Upload' --button2 'Cancel'})
+      case (a = result.split(/\n/))[0].to_i
+        when 1: suggested_alt = "#{a[1]}"
+        when 2: TextMate.exit_discard
+      end
+
+      require "iconv"
+      name = Iconv.new('ASCII//TRANSLIT', 'UTF-8').iconv(suggested_alt)
+
+      name.gsub!(/[^-_ \/\w]/, '') # remove strange stuff
+      name.gsub!(/[-_ \/]+/, '_')  # collapse word separators into one underscore
+      name.downcase!
+      [ prefix + name + ext, suggested_alt ]
+
+    end
+  end
+
   def upload_image
     require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
     require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
@@ -675,33 +721,17 @@ HTML
     # The packet we will be constructing
     data = {}
 
-    file_path = ENV['TM_DROPPED_FILEPATH']
-    name = File.basename(file_path)
+    full_path = ENV['TM_DROPPED_FILEPATH']
+    upload_name, alt = upload_name_for_path(full_path)
 
-    # WordPress automatically places files into dated paths
-    prefix = mode == 'wp' ? '' : Time.now.strftime('%F_')
-    base   = name.sub(/\.[^.]+\z/, '')
-    ext    = name[(base.length)..-1]
-
-    if ENV['TM_MODIFIER_FLAGS'] =~ /OPTION/
-      result = TextMate.inputbox(%Q{--title 'Upload Image' \
-        --informative-text 'Name to use for uploaded file:' \
-        --text #{e_sh base} --button1 'Upload' --button2 'Cancel'})
-      case (a = result.split(/\n/))[0].to_i
-        when 1: base = "#{a[1]}"
-        when 2: TextMate.exit_discard
-      end
-    end
-
-    data['name'] = prefix + base + ext
-    data['bits'] = XMLRPC::Base64.new(IO.read(file_path))
+    data['name'] = upload_name
+    data['bits'] = XMLRPC::Base64.new(IO.read(full_path))
 
     TextMate.call_with_progress(:title => "Upload Image", :message => "Uploading to Server “#{@host}”…") do
       begin
         result = client.newMediaObject(self.blog_id, self.username, current_password, data)
         url = result['url']
         if url
-          alt = base.gsub(/[_-]/, ' ').gsub(/\w{4,}/) { |m| m.capitalize }
           case ENV['TM_SCOPE']
             when /\.markdown/
               print "![${1:#{alt}}](#{url})"
@@ -710,9 +740,9 @@ HTML
             else
               require 'cgi'
               height_width = ""
-              if sips_hw = %x{sips -g pixelWidth -g pixelHeight #{e_sh file_path}}
+              if sips_hw = %x{sips -g pixelWidth -g pixelHeight #{e_sh full_path}}
                 height = $1 if sips_hw.match(/pixelHeight:[ ]*(\d+)/)
-                width = $1 if sips_hw.match(/pixelWidth:[ ]*(\d+)/)
+                width  = $1 if sips_hw.match(/pixelWidth:[ ]*(\d+)/)
                 if height && width
                   height_width = %Q{ height="#{height}" width="#{width}"}
                 end

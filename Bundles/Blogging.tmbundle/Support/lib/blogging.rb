@@ -432,14 +432,9 @@ TEXT
   end
 
   def request_title(default)
-    s = TextMate.inputbox(%Q{--title 'Title of Post' \
-      --informative-text 'Enter a title for this post.' \
-      --text "#{default.gsub(/"/,'\"')}" \
-      --button1 'Post' --button2 'Cancel'})
-    case (a = s.split(/\n/))[0].to_i
-      when 1: "#{a[1]}"
-      when 2: TextMate.exit_discard
-    end
+    result = TextMate.input_box('Title of Post', 'Enter a title for this post.', default, 'Post')
+    TextMate.exit_discard if result.nil?
+    result
   end
 
   def show_post_page
@@ -674,15 +669,10 @@ HTML
     if ENV['TM_MODIFIER_FLAGS'] =~ /OPTION/
 
       suggested_name = prefix + file.gsub(/[ ]+/, '-')
-      result = TextMate.inputbox(%Q{--title 'Upload Image' \
-        --informative-text 'Name to use for uploaded file:' \
-        --text #{e_sh suggested_name} --button1 'Upload' --button2 'Cancel'})
-      case (a = result.split(/\n/))[0].to_i
-        when 1: suggested_name = "#{a[1]}"
-        when 2: TextMate.exit_discard
-      end
+      result = TextMate.input_box('Upload Image', 'Name to use for uploaded file:', suggested_name, 'Upload')
+      TextMate.exit_discard if result.nil?
 
-      alt = suggested_name.sub(/\.[^.]+\z/, '').gsub(/[_-]/, ' ').gsub(/\w{4,}/) { |m| m.capitalize }
+      alt = result.sub(/\.[^.]+\z/, '').gsub(/[_-]/, ' ').gsub(/\w{4,}/) { |m| m.capitalize }
       [ suggested_name, alt ]
 
     else
@@ -691,16 +681,11 @@ HTML
       ext           = file[(base.length)..-1]
       suggested_alt = base.gsub(/[_-]/, ' ').gsub(/[a-z](?=[A-Z0-9])/, '\0 ').gsub(/\w{4,}/) { |m| m.capitalize }
 
-      result = TextMate.inputbox(%Q{--title 'Upload Image' \
-        --informative-text 'Image description (a filename will be derived from it):' \
-        --text #{e_sh suggested_alt} --button1 'Upload' --button2 'Cancel'})
-      case (a = result.split(/\n/))[0].to_i
-        when 1: suggested_alt = "#{a[1]}"
-        when 2: TextMate.exit_discard
-      end
+      result = TextMate.input_box('Upload Image', 'Image description (a filename will be derived from it):', suggested_alt, 'Upload')
+      TextMate.exit_discard if result.nil?
 
       require "iconv"
-      name = Iconv.new('ASCII//TRANSLIT', 'UTF-8').iconv(suggested_alt)
+      name = Iconv.new('ASCII//TRANSLIT', 'UTF-8').iconv(result)
 
       name.gsub!(/[^-_ \/\w]/, '') # remove strange stuff
       name.gsub!(/[-_ \/]+/, '_')  # collapse word separators into one underscore

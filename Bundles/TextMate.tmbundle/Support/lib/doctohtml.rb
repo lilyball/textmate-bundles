@@ -233,12 +233,14 @@ def document_to_html(input, opt = {})
 
 	# Meat. The poor-man's tokenizer. Fortunately, our input is simple
 	# and easy to parse.
-	tokens = input.split(/(<.+?>)/)
+	tokens = input.split(/(<[^>]*>)/)
 	code_html = ''
 	for token in tokens
 		case token
 		when /^<\//
 			code_html += "</span>"
+		when /^<>$/
+		  # skip empty tags, resulting from name = ''
 		when /^</
 		  if token =~ /^<([^>]+)>$/
 			  classes = $1.split(/\./)
@@ -247,8 +249,6 @@ def document_to_html(input, opt = {})
   				list.push(classes.join('_'))
   			end while classes.pop
   			code_html += "<span class=\"#{ list.reverse.join(' ').sub(/^\s+/, '') }\">"
-  		else
-  		  open('/dev/console', 'w') { |io| io.write "#{Time.now.strftime("%F %T")} doctohtml.rb: error didn’t match #{token} as tag\n" }
 			end
 		else
 			code_html += token

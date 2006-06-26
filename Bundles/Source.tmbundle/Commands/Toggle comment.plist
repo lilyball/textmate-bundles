@@ -59,13 +59,17 @@ end
 # none of our removals worked, so preform an insert (minding indent setting)
 case default[:mode]
 when "line"  # apply comment line by line
-  if default[:no_indent] || text == ""
+  if default[:no_indent] || text.empty?
     print text.gsub(/^.*$/, "#{default[:start]}\\&amp;#{default[:end]}")
   else
-    indent = text.reject { |line| line =~ /^\s*$/ }.
-             collect { |line| /^(\s*)/.match(line)[1] }.
-             min { |lhs, rhs| lhs.length &lt;=&gt; rhs.length } || ""
-    print text.map { |line| line.gsub!(/^(#{indent})(.+)$/, "\\1#{default[:start]}\\2#{default[:end]}") || "#{indent}#{default[:start]}#{line}#{default[:end]}" }
+    indent = text.scan(/^[\t ]*(?=\S)/).min { |lhs, rhs| lhs.length &lt;=&gt; rhs.length } || ""
+    text.map do |line|
+      if line =~ /^(#{indent})(.*)$(\n?)/ then
+        print $1 + default[:start] + $2 + default[:end] + $3
+      elsif line =~ /^(.*)$(\n?)/ then
+        print indent + default[:start] + $1 + default[:end] + $2
+      end
+    end
   end
 when "block" # apply comment around selection
   if default[:no_indent]

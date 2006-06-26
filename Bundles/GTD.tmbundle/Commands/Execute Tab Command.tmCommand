@@ -7,11 +7,10 @@
 	<key>command</key>
 	<string>#!/usr/bin/ruby -w
 
-# To use this function, type the desired tab trigger plus "@@" (minus quotes)
+# To use this function, type the desired key followed by "Enter"
 #
-# Notes - for some reason, you need to pause before hitting the tab key.
-# Also, the search for the tab command will stop at the first match,
-# so put shorter commands before longer, e.g., t before tw.
+# Note - the search for the tab command will stop at the first match,
+# so put longer commands before shorter, e.g., tw before t.
 
 # This is where the GTD files are kept
 $myPath = ENV['TM_DIRECTORY'] 
@@ -80,6 +79,8 @@ myParse tabCommand</string>
 	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
 	<key>name</key>
 	<string>Execute Tab Command</string>
 	<key>output</key>

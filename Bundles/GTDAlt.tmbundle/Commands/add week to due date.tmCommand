@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTDUtils.rb"
+print STDIN.read.sub(/ due:\[(\d{4}-\d{2}-\d{2})\]$/) {|text| " due:[#{DateUtils::addToDate($1,7)}]"}
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^.</string>
+	<key>name</key>
+	<string>Add Week to Due Date</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.gtdalt meta.action</string>
+	<key>uuid</key>
+	<string>FE6C1916-A524-493F-B81A-304BA6FF7B67</string>
+</dict>
+</plist>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+include GTD
+line = STDIN.read
+GTDFile.process_directory
+contextList = GTDFile.get_contexts
+print line.gsub(/@(\S+)/) {|text| "@"+contextList.next(text[1..-1])}
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^c</string>
+	<key>name</key>
+	<string>Change Context</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.gtdalt meta.action</string>
+	<key>uuid</key>
+	<string>B68706F9-891B-46FB-ABC0-39FCE6DB7819</string>
+</dict>
+</plist>

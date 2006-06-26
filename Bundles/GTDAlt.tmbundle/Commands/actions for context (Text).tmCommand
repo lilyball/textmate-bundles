@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+word = STDIN.read
+case word
+when /^@?(\w+)$/
+  w = $1
+when /\s+@(\w+)\s*.*/
+  w = $1
+end
+if get_contexts.include?(word) then
+	context = word
+else
+  newPath = ENV['TM_SUPPORT_PATH']+"/bin/CocoaDialog.app/Contents/MacOS"
+  result=`"#{newPath}/CocoaDialog" dropdown \
+    --title 'Listing actions for context' \
+    --text 'Choose the new context' \
+    --button1 Ok --button2 Cancel \
+    --string-output --no-newline \
+    --items #{get_contexts.join(" ")}`
+  answer, choice = *result.split("\n")
+  if answer.downcase != "ok"
+  	exit
+  else
+  	context = choice
+  end
+end
+#puts context
+actions = actions_for_context(context).map{|r| [r[0],r[1].to_s,r[2]]}
+puts prettify(actions)
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Actions for Context (Text)</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>C78ECFD8-DABE-4E2C-B628-0DDF2A3A3B21</string>
+</dict>
+</plist>

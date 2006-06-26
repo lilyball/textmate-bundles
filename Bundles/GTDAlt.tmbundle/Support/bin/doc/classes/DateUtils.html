@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: DateUtils</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">DateUtils</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/GTDUtils_rb.html">
+                GTDUtils.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Utilities for converting a date in various ways.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000041">addMonth</a>&nbsp;&nbsp;
+      <a href="#M000040">addToDate</a>&nbsp;&nbsp;
+      <a href="#M000039">convert_date</a>&nbsp;&nbsp;
+      <a href="#M000042">subtractMonth</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000041" class="method-detail">
+        <a name="M000041"></a>
+
+        <div class="method-heading">
+          <a href="DateUtils.src/M000041.html" target="Code" class="method-signature"
+            onclick="popupCode('DateUtils.src/M000041.html');return false;">
+          <span class="method-name">addMonth</span><span class="method-args">(dateString)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Adds a month to the date described by <tt>dateString</tt>.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000040" class="method-detail">
+        <a name="M000040"></a>
+
+        <div class="method-heading">
+          <a href="DateUtils.src/M000040.html" target="Code" class="method-signature"
+            onclick="popupCode('DateUtils.src/M000040.html');return false;">
+          <span class="method-name">addToDate</span><span class="method-args">(dateString,days)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Adds <tt>days</tt> to the date described by <tt>dateString</tt>.
+<tt>days</tt> can be negative.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000039" class="method-detail">
+        <a name="M000039"></a>
+
+        <div class="method-heading">
+          <a href="DateUtils.src/M000039.html" target="Code" class="method-signature"
+            onclick="popupCode('DateUtils.src/M000039.html');return false;">
+          <span class="method-name">convert_date</span><span class="method-args">(string)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Attempts to convert the given string to a date. It can understand
+expressions like:
+</p>
+<pre>
+ * &lt;em&gt;today&lt;/em&gt;
+ * &lt;em&gt;next Tuesday&lt;/em&gt;
+ * &lt;em&gt;3 months&lt;/em&gt;
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000042" class="method-detail">
+        <a name="M000042"></a>
+
+        <div class="method-heading">
+          <a href="DateUtils.src/M000042.html" target="Code" class="method-signature"
+            onclick="popupCode('DateUtils.src/M000042.html');return false;">
+          <span class="method-name">subtractMonth</span><span class="method-args">(dateString)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Subtracts a month from the date described by <tt>dateString</tt>.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

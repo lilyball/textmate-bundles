@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+include GTD
+file = ENV['TM_FILEPATH']
+obj = GTDFile.new(file)
+obj.cleanup_projects
+log = File.open(File.join(File.dirname(file),"GTD.gtdlog"),"a")
+	log.write MyLogger.dump + "\n"
+log.close
+puts obj.dump_object</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@/</string>
+	<key>name</key>
+	<string>Clean-up Current File</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>2803EE1A-6878-47C7-BB7F-3C1B69315209</string>
+</dict>
+</plist>

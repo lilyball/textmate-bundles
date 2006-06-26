@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+lines = STDIN.readlines
+row = ENV['TM_LINE_NUMBER'].to_i
+currentLine = lines[row-1]
+found = currentLine[/\[\d+\]/]
+if found then
+  note = lines.find{ |line| line[/^\[\d+\]/] == found }
+  note.slice!(/^\[\d+\]\s+/)
+  print note
+else
+  print "This action does not have a note."
+end</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^?</string>
+	<key>name</key>
+	<string>For Action (tooltip)</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>text.gtdalt meta.action</string>
+	<key>uuid</key>
+	<string>3BF349AD-3452-4CA4-AAA7-8836565E3A5F</string>
+</dict>
+</plist>

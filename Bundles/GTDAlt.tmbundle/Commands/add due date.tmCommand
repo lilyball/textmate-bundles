@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTDUtils.rb"
+#include DateUtils
+require 'pp'
+line = STDIN.read
+newPath = ENV['TM_SUPPORT_PATH']+"/bin/CocoaDialog.app/Contents/MacOS"
+result=`"#{newPath}/CocoaDialog" standard-inputbox --title "Due date" --no-newline \
+      --informative-text "Set due date" \
+	--text "today"`
+answer, text = *result.split("\n")
+if answer != "1"
+	print line
+else
+  print line.gsub(/ due:\[\d{4}-\d{2}-\d{2}\]$/,"") + " due:[#{DateUtils::convert_date(text)}]"
+end
+
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>#</string>
+	<key>name</key>
+	<string>Add New</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.gtdalt meta.action</string>
+	<key>uuid</key>
+	<string>63E3139D-7608-4DB8-8B0B-2968DCC63CAF</string>
+</dict>
+</plist>

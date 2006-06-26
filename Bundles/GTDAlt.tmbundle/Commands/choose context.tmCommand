@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+include GTD
+line = STDIN.read
+GTDFile.process_directory
+contextList = GTDFile.get_contexts.map{|i| "\""+i+"\""}
+newPath = ENV['TM_SUPPORT_PATH']+"/bin/CocoaDialog.app/Contents/MacOS"
+result=`"#{newPath}/CocoaDialog" dropdown \
+  --title 'Changing the context' \
+  --text 'Choose the new context' \
+  --button1 Ok --button2 Cancel \
+  --string-output --no-newline \
+  --items #{contextList.join(" ")}`
+answer, choice = *result.split("\n")
+if answer.downcase != "ok"
+	print line
+else
+  print line.gsub(/@(\S+)/) {|text| "@"+choice}
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~c</string>
+	<key>name</key>
+	<string>Choose Context</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.gtdalt meta.action</string>
+	<key>uuid</key>
+	<string>2B282247-5930-462F-8D6E-54ADF228EC49</string>
+</dict>
+</plist>

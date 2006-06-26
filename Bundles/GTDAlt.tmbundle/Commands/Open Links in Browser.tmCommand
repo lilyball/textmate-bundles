@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+links = STDIN.read.scan(/&lt;([^&gt;]*)&gt;/)
+links.each do |link|
+  `open #{link}`
+end</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^l</string>
+	<key>name</key>
+	<string>Open Links in Browser</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>65E842B0-D1A6-40E7-91C0-3215930AC0EA</string>
+</dict>
+</plist>

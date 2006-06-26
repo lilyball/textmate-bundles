@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>html_actions_for_context (GTD)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File GTD.rb, line 254</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">html_actions_for_context</span>(<span class="ruby-identifier">context</span>)
+    <span class="ruby-comment cmt"># require 'CGI'</span>
+    <span class="ruby-identifier">actions</span> = <span class="ruby-identifier">actions_for_context</span>(<span class="ruby-identifier">context</span>)
+    <span class="ruby-identifier">ar</span> = []
+    <span class="ruby-identifier">ar</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;div&gt;&quot;</span>
+    <span class="ruby-identifier">ar</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&lt;h1&gt;Actions for context: #{context}&lt;/h1&gt;&quot;</span>
+    <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">name</span>,<span class="ruby-identifier">proj</span>,<span class="ruby-identifier">due_by</span>,<span class="ruby-identifier">location</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">actions</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-identifier">pp</span> <span class="ruby-identifier">due_by</span>
+      <span class="ruby-identifier">ar</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&lt;li&gt;&lt;a href=\&quot;txmt://open/?url=file://#{location[0].to_s}&amp;line=#{location[1]}\&quot;&gt;#{name}&lt;/a&gt;\
+      in #{proj} #{if due_by != &quot;&quot; then if Date.parse(due_by) &lt; Date.today then 'due by: '+due_by else &quot;&lt;span style=\&quot;color:red\&quot;&gt;due by:#{due_by}&lt;/span&gt;&quot; end else '' end}&lt;/li&gt;&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">ar</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;/div&gt;&quot;</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">ar</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+include GTD
+word = STDIN.read
+case word
+when /^@?(\w+)$/
+  w = $1
+when /\s+@(\w+)\s*.*/
+  w = $1
+end
+GTDFile.process_directory
+contexts = GTDFile.get_contexts
+if contexts.include?(word) then
+	context = word
+else
+  newPath = ENV['TM_SUPPORT_PATH']+"/bin/CocoaDialog.app/Contents/MacOS"
+  result=`"#{newPath}/CocoaDialog" dropdown \
+    --title 'Listing actions for context' \
+    --text 'Choose the new context' \
+    --button1 Ok --button2 Cancel \
+    --string-output --no-newline \
+    --items #{contexts.join(" ")}`
+  answer, choice = *result.split("\n")
+  if answer.downcase != "ok"
+  	exit
+  else
+  	context = choice
+  end
+end
+
+acts = GTDFile.next_actions.find_all{|a| a.context == context}
+
+pr = Printer.new
+pr.table do
+  pr.title("Next Actions for context: #{context}")
+  pr.headers(["Action name", "Project", "Due_by"])
+  acts.each do |a|
+    proj = if a.project != nil then a.project.link else "none" end
+    due = case a.due
+      when "",nil
+        ""
+      when DateLate
+        "&lt;span style=\"color:red\"&gt;#{a.due}&lt;/span&gt;"
+      else
+        a.due
+    end
+  pr.row([a.link,proj,due])
+  end
+end # pr.table
+puts pr.to_html
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^5</string>
+	<key>name</key>
+	<string>All Next for Context</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>DF60A353-8FFE-4516-8F7C-4B9552E6AC27</string>
+</dict>
+</plist>

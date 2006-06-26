@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+include GTD
+files = GTDFile.process_directory
+projects = files.map{|i| i.projects}.flatten
+projectNames = projects.map{|i| "\""+i.name+"\""}
+
+newPath = ENV['TM_SUPPORT_PATH']+"/bin/CocoaDialog.app/Contents/MacOS"
+result=`"#{newPath}/CocoaDialog" dropdown \
+  --title 'Listing projects' \
+  --text 'Choose the new project' \
+  --button1 Ok --button2 Cancel \
+  --string-output --no-newline \
+  --items #{projectNames.join(" ")}`
+answer, choice = *result.split("\n")
+if answer.downcase != "ok"
+	exit
+else
+	projectName = choice
+  project = projects.find{|i| i.name == projectName}
+	link = "\"txmt://open?url=file://#{project.file.to_s.gsub(/ /,"%20")}&amp;line=#{project.line}\""
+  `open #{link}`
+end</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~p</string>
+	<key>name</key>
+	<string>Go to Project</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>A54CF0C9-ECBF-4A20-B345-3EA167ABD6A0</string>
+</dict>
+</plist>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+text = STDIN.read
+lines = text.split("\n")
+row = ENV['TM_LINE_NUMBER'].to_i
+col = ENV['TM_LINE_INDEX'].to_i
+currentLine = lines[row-1]
+found = currentLine.scan(/\[\d+\]/)[0]
+if found then
+  print text.insert(text.rindex(found),"$0")
+else
+  m = text.scan(/\[(\d+)\]/).map{|i| i[0].to_i}.max || 0
+  before = []
+  (row-1).times do before &lt;&lt; lines.shift end
+  # cl = lines.shift
+  if lines[0] =~ /due:/ then
+    before &lt;&lt; lines[0].slice!(/^.*(?=\sdue:)/)
+  else
+    before &lt;&lt; lines.shift
+    lines.unshift("")
+  end
+  print before.join("\n") + " [#{m+1}]" + lines.join("\n") + "\n[#{m+1}] $0"
+end</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^{</string>
+	<key>name</key>
+	<string>For Action</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.gtdalt - meta.note</string>
+	<key>uuid</key>
+	<string>BF20459A-D83B-4821-A68D-06F3D885309C</string>
+</dict>
+</plist>

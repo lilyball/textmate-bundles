@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+include GTD
+GTDFile.process_directory
+acts = GTDFile.next_actions
+
+pr = Printer.new
+pr.table do
+  pr.title("All Next Actions")
+  pr.headers(["Context", "Action Name", "Project", "Due_by"])
+  acts.sort{|a,b| a.context &lt;=&gt; b.context}.each do |a|
+    proj = if a.project != nil then a.project.link else "none" end
+    due = case a.due
+      when "",nil
+        ""
+      when DateLate
+        "&lt;span style=\"color:red\"&gt;#{a.due}&lt;/span&gt;"
+      else
+        a.due
+    end
+    pr.row([a.context,a.link,proj,due])
+  end
+end # pr.table
+puts pr.to_html
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^5</string>
+	<key>name</key>
+	<string>All Next</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>0DE9B1EC-09AA-4C2D-BA25-0DFC00536B25</string>
+</dict>
+</plist>

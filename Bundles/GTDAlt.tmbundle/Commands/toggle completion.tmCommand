@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require 'date'
+lines = STDIN.readlines
+for line in lines
+  if line =~ /^(#completed:)(\[\d{4}-\d{2}-\d{2}\])(.*)/ then
+  	print $3
+  elsif line =~ /^\s*@/
+	print "#completed:[#{Date.today}]#{line}"
+  else
+	print line
+  end
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@/</string>
+	<key>name</key>
+	<string>Mark Actions as Complete</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>A9C04B17-6A04-4D4D-81ED-2F4EFCD61FA3</string>
+</dict>
+</plist>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+include GTD
+objects = GTDFile.process_directory
+acts = objects.map{|o| o.actions}.flatten
+acts.sort! do |a,b|
+  da, db = *[a.due, b.due].map {|i| i || ""}  # convert nils to empty strings
+#  puts a,b, da, db
+  if da == db then
+    a.name &lt;=&gt; b.name
+  else
+    da &lt;=&gt; db
+  end
+end
+pr = Printer.new
+pr.table do
+  pr.title "List of all Actions"
+  pr.headers([ "Context", "Action", "Project", "Due by"])
+  acts.each do |a|
+    proj = if a.project != nil then a.project.link else "none" end
+    due = case a.due
+      when "",nil
+        ""
+      when DateLate
+        "&lt;span style=\"color:red\"&gt;#{a.due}&lt;/span&gt;"
+      else
+        a.due
+    end
+    note_part = (a.note != "") ? " title=\"#{a.note}\"" : ""
+    text = "&lt;a href=\"#{a.txmt}\"#{note_part}&gt;#{a.name}&lt;/a&gt;"
+    pr.row([a.context, text, proj , due])
+  end
+end
+puts pr.to_html</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^%</string>
+	<key>name</key>
+	<string>All</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>F4884C32-9046-48E8-AB57-1784AF8C264C</string>
+</dict>
+</plist>

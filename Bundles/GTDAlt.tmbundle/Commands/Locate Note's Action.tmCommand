@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+text = STDIN.read
+lines = text.split("\n")
+row = ENV['TM_LINE_NUMBER'].to_i
+m = lines[row-1].scan(/^\[\d+\]/)[0]
+print text.insert(text.index(m),"$0")
+</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^{</string>
+	<key>name</key>
+	<string>Find Corresponding Action</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.gtdalt meta.note</string>
+	<key>uuid</key>
+	<string>14CE2968-B4F4-4AB5-8A26-5F0EC156E1D0</string>
+</dict>
+</plist>

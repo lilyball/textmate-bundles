@@ -200,7 +200,7 @@ module GTD
     def cleanup_projects
       until @completed_actions.empty? do
         a = @completed_actions.shift
-        MyLogger.log "/#{a.due}/#{a.project.name}/@#{a.context} #{a.name}"
+        MyLogger.log "/#{a.due}/#{if a.project then a.project.name else "none" end}/@#{a.context} #{a.name}"
       end
       comp, @projects = *@projects.partition {|i| i.completed?}
       comp.each do |p|

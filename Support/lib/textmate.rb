@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+$: << "#{ENV['TM_SUPPORT_PATH']}/lib"
 require 'plist'
 
 module TextMate

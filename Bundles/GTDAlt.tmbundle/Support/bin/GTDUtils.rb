@@ -154,7 +154,7 @@ class Printer
         when :title
           s << "<caption>#{item}</caption>"
         when :table_begin
-          s << "<table>"
+          s << '<table class="graybox" cellspacing="0" cellpadding="5">'
         when :table_end
           s << "</table>"
         when :row

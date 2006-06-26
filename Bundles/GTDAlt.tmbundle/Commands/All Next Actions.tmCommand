@@ -15,7 +15,7 @@ pr = Printer.new
 b = &lt;&lt;HTML
 &lt;html&gt;
   &lt;head&gt;
-    &lt;link rel="stylesheet" href="file://#{ENV['TM_BUNDLE_SUPPORT']}/stylesheet.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
+    &lt;link rel="stylesheet" href="tm-file://#{ENV['TM_SUPPORT_PATH']}/css/default.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
   &lt;/head&gt;
   &lt;body&gt;
 HTML

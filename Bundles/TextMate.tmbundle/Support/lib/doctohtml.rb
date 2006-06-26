@@ -248,7 +248,6 @@ def document_to_html(input, opt = {})
   			end while classes.pop
   			code_html += "<span class=\"#{ list.reverse.join(' ').sub(/^\s+/, '') }\">"
   		else
-  		  token = "foo"
   		  open('/dev/console', 'w') { |io| io.write "#{Time.now.strftime("%F %T")} doctohtml.rb: error didn’t match #{token} as tag\n" }
 			end
 		else

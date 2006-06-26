@@ -240,12 +240,17 @@ def document_to_html(input, opt = {})
 		when /^<\//
 			code_html += "</span>"
 		when /^</
-			classes = token.scan(/^<([^>]+)>$/)[0][0].split(/\./)
-			list = []
-			begin
-				list.push(classes.join('_'))
-			end while classes.pop
-			code_html += "<span class=\"#{ list.reverse.join(' ').sub(/^\s+/, '') }\">"
+		  if token =~ /^<([^>]+)>$/
+			  classes = $1.split(/\./)
+  			list = []
+  			begin
+  				list.push(classes.join('_'))
+  			end while classes.pop
+  			code_html += "<span class=\"#{ list.reverse.join(' ').sub(/^\s+/, '') }\">"
+  		else
+  		  token = "foo"
+  		  open('/dev/console', 'w') { |io| io.write "#{Time.now.strftime("%F %T")} doctohtml.rb: error didn’t match #{token} as tag\n" }
+			end
 		else
 			code_html += token
 		end

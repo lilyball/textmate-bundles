@@ -12,6 +12,18 @@ GTDFile.process_directory
 acts = GTDFile.next_actions
 
 pr = Printer.new
+b = &lt;&lt;HTML
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="file://#{ENV['TM_BUNDLE_SUPPORT']}/stylesheet.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+HTML
+e = &lt;&lt;HTML
+  &lt;/body&gt;
+&lt;/html&gt;
+HTML
+pr.raw b
 pr.table do
   pr.title("All Next Actions")
   pr.headers(["Context", "Action Name", "Project", "Due_by"])
@@ -28,6 +40,7 @@ pr.table do
     pr.row([a.context,a.link,proj,due])
   end
 end # pr.table
+pr.raw e
 puts pr.to_html
 </string>
 	<key>fallbackInput</key>

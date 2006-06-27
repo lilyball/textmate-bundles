@@ -36,7 +36,7 @@ for text in lines do
     m = text.match(/^\s*@(\S+)\s+([^>]+)(?:>\s*(.*))?$/)
     raise(NormalException, text.match(/^\s*$/) ? "" : "Malformed Input Line: #{text}") unless m
     context, action, project = m[1..3]
-    newContext = contexts.find_all{|c| c.index(context) != nil}
+    newContext = contexts.find_all{|c| c.downcase.index(context.downcase) != nil}
     case newContext.length
     when 0
       contexts = GTDFile.add_contexts(context)
@@ -52,7 +52,7 @@ for text in lines do
       file = inbox_object.file
       line = 1
     else
-      proj = projects.find_all{|pro| pro.name.index(project) != nil}
+      proj = projects.find_all{|pro| pro.name.downcase.index(project.downcase) != nil}
       case proj.length
         when 0
           raise NormalException, "Did not find any project matching: #{project}."

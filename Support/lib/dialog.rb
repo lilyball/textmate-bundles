@@ -18,18 +18,18 @@ class << self
     _options["text"] = options[:default] || ""
     dialog(_options,&block)
   end
-  def drop_down(options = Hash.new,&block)
+  def request_item(options = Hash.new,&block)
     items = options[:items] || []
-    if items.empty? then
-      block_given? ? raise(SystemExit) : nil
-    elsif items.length == 1 then
-      block_given? ? yield(items[0]) : items[0]
-    else
-      _options = self.default_hash(options)
-      _options["type"] = "dropdown"
-      _options["title"] = options[:title] || "Select Item"
-      _options["text"] = options[:prompt] || ""
-      dialog(_options,&block)
+    case items.size
+      when 0 then block_given? ? raise(SystemExit) : nil
+      when 1 then block_given? ? yield(items[0]) : items[0]
+      else
+        _options = default_hash(options)
+        _options["type"] = "dropdown"
+        _options["title"] = options[:title] || "Select Item"
+        _options["text"] = options[:prompt] || ""
+        _options["items"] = items
+        dialog(_options,&block)
     end
   end
   def yes_no(options = Hash.new,&block)

@@ -3,19 +3,17 @@ module Dialog
 class << self
   def request_string(options = Hash.new,&block)
     _options = default_hash(options)
-    _options["type"] = "inputbox"
     _options["title"] = options[:title] || "Enter String"
     _options["informative-text"] = options[:prompt] || ""
     _options["text"] = options[:default] || ""
-    dialog(_options,&block)
+    dialog("inputbox", _options,&block)
   end
   def request_secure_string(options = Hash.new,&block)
     _options = default_hash(options)
-    _options["type"] = "secure-inputbox"
     _options["title"] = options[:title] || "Enter Password"
     _options["informative-text"] = options[:prompt] || ""
     _options["text"] = options[:default] || ""
-    dialog(_options,&block)
+    dialog("secure-inputbox", _options,&block)
   end
   def request_item(options = Hash.new,&block)
     items = options[:items] || []
@@ -24,36 +22,36 @@ class << self
     when 1 then block_given? ? yield(items[0]) : items[0]
     else
       _options = default_hash(options)
-      _options["type"] = "dropdown"
       _options["title"] = options[:title] || "Select Item"
       _options["text"] = options[:prompt] || ""
       _options["items"] = items
-      dialog(_options,&block)
+      dialog("dropdown", _options,&block)
     end
   end
   def request_confirmation(options = Hash.new,&block)
     _options = Hash.new
-    _options["type"] = "yesno-msgbox"
     _options["string-output"] = ""
     _options["title"] = options[:title] || "Yes or No?"
     _options["text"] =  options[:prompt] || "Please answer Yes or No."
     _options["informative-text"] = options[:information]
-    dialog(_options,&block)    
+    dialog("yesno-msgbox", _options,&block)    
   end
   def show_alert(options = Hash.new,&block)
     _options = Hash.new
-    _options["type"] = "ok-msgbox"
     _options["string-output"] = ""
     _options["title"] = options[:title] || "Alert"
     _options["text"] = options[:prompt] || "Is this Ok?"
     _options["informative-text"] = options[:information]
-    dialog(_options,&block)
+    _options["icon-file"] = textmate_path + '/Contents/Resources/TextMate.icns'
+    dialog("ok-msgbox", _options,&block)
   end
 
   private
 
-  def dialog(options)
-    type = options.delete("type")
+  def textmate_path
+    %x{ps -xww -o command|grep TextMate.app|grep -v grep}.sub(%r{/Contents/MacOS/TextMate.*\n}, '')
+  end
+  def dialog(type, options)
     str = ""
     options.each_pair do |key, value|
       unless value.nil?

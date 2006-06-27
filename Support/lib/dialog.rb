@@ -1,35 +1,35 @@
 require "escape.rb"
-module CocaDialog
+module Dialog
   module_function
 
-  def request_string(hash = Hash.new,&block)
-    options = self.default_hash
-    options["type"] = "inputbox"
-    options["title"] = hash[:title] || "Enter String"
-    options["informative-text"] = hash[:prompt] || ""
-    options["text"] = hash[:default] || ""
-    return self.dialog(options,&block)
+  def request_string(options = Hash.new,&block)
+    _options = self.default_hash
+    _options["type"] = "inputbox"
+    _options["title"] = options[:title] || "Enter String"
+    _options["informative-text"] = options[:prompt] || ""
+    _options["text"] = options[:default] || ""
+    return self.dialog(_options,&block)
   end
-  def request_secure_string(hash = Hash.new,&block)
-    options = self.default_hash
-    options["type"] = "secure-inputbox"
-    options["title"] = hash[:title] || "Enter Password"
-    options["informative-text"] = hash[:prompt] || ""
-    options["text"] = hash[:default] || ""
-    return self.dialog(options,&block)
+  def request_secure_string(options = Hash.new,&block)
+    _options = self.default_hash
+    _options["type"] = "secure-inputbox"
+    _options["title"] = options[:title] || "Enter Password"
+    _options["informative-text"] = options[:prompt] || ""
+    _options["text"] = options[:default] || ""
+    return self.dialog(_options,&block)
   end
-  def drop_down(hash = Hash.new,&block)
-    items = hash[:items] || []
+  def drop_down(options = Hash.new,&block)
+    items = options[:items] || []
     if items.empty? then
       block_given? raise SystemExit : return nil
     elsif items.length == 1 then
       block_given? yield items[0] : return items[0]
     else
-      options = self.default_hash
-      options["type"] = "dropdown"
-      options["title"] = hash[:title] || "Select Item"
-      options["text"] = hash[:prompt] || ""
-      return self.dialog(options,&block)
+      _options = self.default_hash
+      _options["type"] = "dropdown"
+      _options["title"] = options[:title] || "Select Item"
+      _options["text"] = options[:prompt] || ""
+      return self.dialog(_options,&block)
     end
   end
 

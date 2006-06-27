@@ -14,7 +14,7 @@ module GTD
   PROJECT_END_REGEXP   = /^\s*(end)\s*$/
   ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+due:\[(\d{4}-\d{2}-\d{2})\])?\s*$/
   NOTE_REGEXP          = /^\[(\d+)\]\s+(.*)$/
-  COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+due:\[(\d{4}-\d{2}-\d{2})\])?\s*$/
+  COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+([^\[]+)(?:\s*\[\d+\])?(?:\s+due:\[(?:\d{4}-\d{2}-\d{2})\])?\s*$/
   COMMENT_REGEXP       = /^\s*#(.*)$/
 #++
   def GTD::parse(data)
@@ -62,7 +62,7 @@ module GTD
               else
                 Pathname.new(`pwd`.chomp)
               end
-      return  Dir::glob("*.gtd").map{|f| path + f}
+      return  Dir::glob(File.join(directory,"*.gtd"))
     end
     # Reads all files in given directory and processes them. Returns an array of
     # GTDFile objects, one for each file.
@@ -89,22 +89,31 @@ module GTD
     def self.next_actions
       return @@objects.map { |i| i.next_actions }.flatten.compact
     end
+    def self.actions
+      return @@objects.map{|i| i.actions}.flatten
+    end
+    def self.projects
+      return @@objects.map { |i| i.projects }.flatten
+    end
 
-    attr_reader :projects, :actions, :notes, :completed_actions, :current_file, :other_lines
+    attr_reader :projects, :actions, :notes, :completed_actions, :file, :current_file, :other_lines
     # Loads the data in filename and creates an object representing all projects/actions.
     def initialize(filename)
       @current_project = nil
-      @@files << @current_file
       @current_file = filename
+      @file = @current_file
+      @@files << @current_file
       # @current_line = 0
       @projects = Array.new
       @actions = Array.new
       @notes = Hash.new
       @other_lines = Array.new
       @completed_actions = Array.new
-      File.open(filename, "r") do |f|
+      if File.exist?(filename) then
+        f = File.open(filename, "r")
         instructions = GTD::parse(f.read)
         process_instructions(instructions)
+        f.close
       end
     end
     # Processes an array of instructions. Not to be called directly.
@@ -129,7 +138,7 @@ module GTD
             thename, noteid = $1, $2
             act = Action.new(thename,context, @current_project, @current_file, @current_line,due)
             @actions << act
-            act.note = noteid
+            act.note = noteid || ""
             @notes[noteid] = act if noteid != ""
             @@contexts |= [context]
             @current_project.subitems << act  if @current_project
@@ -155,11 +164,15 @@ module GTD
     def next_actions
       return @projects.map { |i| i.next_action }
     end
+    def all_lines
+      @actions + @projects + @other_lines + @completed_actions
+    end
     # Returns the string representing the object.
     def dump_object
-      objects = @actions + @projects + @other_lines + @completed_actions
-      objects += @projects.map{|p| EndMarker.new(p.end_line)}
+      objects = all_lines
+      objects += @projects.map{|p| EndMarker.new(p.name,p.end_line)}
       objects = objects.sort {|a,b| a.line <=> b.line}
+      # pp objects.map{|o| [o.name,o.line]}
       indent = 0
       indent_inc = 2
       s = []
@@ -172,15 +185,28 @@ module GTD
           s << t + "project #{o.name}"
           indent += indent_inc
         when Action
-          t = " " * indent
-          t << "@#{o.context} #{o.name}"
-          if o.note != nil then
-            index += 1
-            t << " [#{index}]"
-            endA << "[#{index}] #{o.note}"
-          end
-          if o.due != nil  then
-            t << " due:[#{o.due}]"
+          if o.completed? then
+            t = "\#completed:[#{o.due}]" + " " * indent
+            t << "@#{o.context} #{o.name}"
+            # if o.note != nil then
+            #   index += 1
+            #   t << " [#{index}]"
+            #   endA << "[#{index}] #{o.note}"
+            # end
+            # if o.due != nil  then
+            #   t << " due:[#{o.due}]"
+            # end
+          else
+            t = " " * indent
+            t << "@#{o.context} #{o.name}"
+            if o.note != "" then
+              index += 1
+              t << " [#{index}]"
+              endA << "[#{index}] #{o.note}"
+            end
+            if o.due != nil  then
+              t << " due:[#{o.due}]"
+            end
           end
           s << t
         when Comment
@@ -240,7 +266,7 @@ module GTD
     include Linkable
     # If the action is completed, then its completion date. Otherwise its due date or +nil+.
     attr_accessor :due
-    # The text in the note, not the actual Note object.
+    # The text in the note, not the actual Note object. Empty if no note.
     attr_accessor :note
     attr_accessor :context, :name, :project, :file, :line, :completed
     def initialize(name,context,project,file,line,due = nil)
@@ -269,9 +295,10 @@ module GTD
     end
   end
   class EndMarker
-    attr_reader :line
-    def initialize(line)
+    attr_reader :line,:name
+    def initialize(name,line)
       @line = line
+      @name = name
     end
   end
 end

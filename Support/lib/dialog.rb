@@ -34,6 +34,7 @@ class << self
     _options["title"] = options[:title] || "Yes or No?"
     _options["text"] =  options[:prompt] || "Please answer Yes or No."
     _options["informative-text"] = options[:information]
+    _options["no-cancel"] = options.has_key?(:cancel) ? nil : ""
     dialog("yesno-msgbox", _options,&block)    
   end
   def show_alert(options = Hash.new,&block)

@@ -64,7 +64,7 @@ module TextMate
       %x{"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" 2>/dev/console #{type} #{options}}
     end
 
-    def _standard_input_box(type, title, prompt, text, button1 = "Okay", button2 = "Cancel")
+    def _standard_input_box(type, title, prompt, text = "", button1 = "Okay", button2 = "Cancel")
       require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
       _result = _dialog(type, %Q{--title #{e_sh title} \
         --informative-text #{e_sh prompt} --text #{e_sh text} \

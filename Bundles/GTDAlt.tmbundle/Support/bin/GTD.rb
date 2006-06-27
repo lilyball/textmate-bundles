@@ -115,7 +115,7 @@ module GTD
         process_instructions(instructions)
         f.close
       else
-        File.touch(filename)
+        File.open(filename, "a"){|f|}
       end
     end
     # Processes an array of instructions. Not to be called directly.

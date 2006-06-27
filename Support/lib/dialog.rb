@@ -20,23 +20,34 @@ class << self
   def request_item(options = Hash.new,&block)
     items = options[:items] || []
     case items.size
-      when 0 then block_given? ? raise(SystemExit) : nil
-      when 1 then block_given? ? yield(items[0]) : items[0]
-      else
-        _options = default_hash(options)
-        _options["type"] = "dropdown"
-        _options["title"] = options[:title] || "Select Item"
-        _options["text"] = options[:prompt] || ""
-        _options["items"] = items
-        dialog(_options,&block)
+    when 0 then block_given? ? raise(SystemExit) : nil
+    when 1 then block_given? ? yield(items[0]) : items[0]
+    else
+      _options = default_hash(options)
+      _options["type"] = "dropdown"
+      _options["title"] = options[:title] || "Select Item"
+      _options["text"] = options[:prompt] || ""
+      _options["items"] = items
+      dialog(_options,&block)
     end
   end
   def request_confirmation(options = Hash.new,&block)
     _options = Hash.new
     _options["type"] = "yesno-msgbox"
+    _options["string-output"] = ""
     _options["title"] = options[:title] || "Yes or No?"
     _options["text"] =  options[:prompt] || "Please answer Yes or No."
     _options["informative-text"] = options[:information]
+    dialog(_options,&block)    
+  end
+  def show_alert(options = Hash.new,&block)
+    _options = Hash.new
+    _options["type"] = "ok-msgbox"
+    _options["string-output"] = ""
+    _options["title"] = options[:title] || "Alert"
+    _options["text"] = options[:prompt] || "Is this Ok?"
+    _options["informative-text"] = options[:information]
+    dialog(_options,&block)
   end
 
   private

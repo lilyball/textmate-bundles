@@ -22,9 +22,6 @@ inbox_object = objects.find{|o| o.file == tempInboxFilename}
 objects << (inbox_object = GTDFile.new(tempInboxFilename)) unless inbox_object
 projects = GTDFile.projects
 contexts = GTDFile.get_contexts
-# pp projects.map { |p| p.name }
-# pp projects
-# 
 f = File.open(inboxfile, "r")
 lines = f.readlines.map{|i| i.chomp}
 f.close
@@ -47,8 +44,8 @@ for text in lines do
     else
       raise NormalException, "Too many contexts matching: #{context}."
     end
+    targetProj = nil
     if project == nil or project == "" then
-      targetProj = nil
       file = inbox_object.file
       line = 1
     else
@@ -60,17 +57,16 @@ for text in lines do
           targetProj = proj[0]
           line = targetProj.end_line
           file = targetProj.file
-        when 2
+        else
           raise NormalException, "Too many projects matching: #{project}."
       end
     end
     act = Action.new(action,newContext,targetProj,file,line,nil)
-    ob = objects.find{|o| o.file == act.file}
+    ob = objects.find{|o| o.file.to_s == act.file.to_s}
+    raise "Could not find object for file: #{act.file}" unless ob
     objs = ob.all_lines.find_all{|l| l.line >= line}
-    # puts "Found: #{objs.map{|ob| ob.name}}"
     objs.each{|l| l.line += 1}
     objs = ob.projects.find_all{|i| i.end_line >= line}
-    # puts "Found: #{objs.map{|ob| ob.name}}"
     objs.each{|i| i.end_line += 1}
     targetProj.subitems << act if targetProj
     ob.actions << act

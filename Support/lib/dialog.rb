@@ -1,9 +1,9 @@
 require "escape.rb"
 module Dialog
-  module_function
+class << self
 
   def request_string(options = Hash.new,&block)
-    _options = self.default_hash(options)
+    _options = default_hash(options)
     _options["type"] = "inputbox"
     _options["title"] = options[:title] || "Enter String"
     _options["informative-text"] = options[:prompt] || ""
@@ -11,7 +11,7 @@ module Dialog
     dialog(_options,&block)
   end
   def request_secure_string(options = Hash.new,&block)
-    _options = self.default_hash(options)
+    _options = default_hash(options)
     _options["type"] = "secure-inputbox"
     _options["title"] = options[:title] || "Enter Password"
     _options["informative-text"] = options[:prompt] || ""
@@ -21,9 +21,9 @@ module Dialog
   def drop_down(options = Hash.new,&block)
     items = options[:items] || []
     if items.empty? then
-      block_given? raise SystemExit : return nil
+      block_given? ? raise(SystemExit) : nil
     elsif items.length == 1 then
-      block_given? yield items[0] : return items[0]
+      block_given? ? yield(items[0]) : items[0]
     else
       _options = self.default_hash(options)
       _options["type"] = "dropdown"
@@ -46,7 +46,7 @@ module Dialog
     type = options.delete("type")
     str = ""
     options.each_pair do |key, value|
-      unless value == nil do
+      unless value.nil?
         str << " --#{e_sh key} "
         str << Array(value).map { |s| e_sh s }.join(" ")
       end
@@ -61,14 +61,15 @@ module Dialog
         return nil
       end
     else
-      block_given? ? yield result : result
+      block_given? ? yield(result) : result
     end
   end
   def default_hash(user_options = Hash.new)
     options = Hash.new
-    options["string-output"] == ""
+    options["string-output"] = ""
     options["button1"] = user_options[:button1] || "Okay"
     options["button2"] = user_options[:button2] || "Cancel"
     options
   end
+end
 end

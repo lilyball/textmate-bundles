@@ -92,7 +92,7 @@ def myParse line
   end
   if (cmatch == 0) and (line.length &gt; 2)
     numContexts = $contexts.length
-    $contexts[(numContexts - 2)][:tasks].push line
+    $contexts[0][:tasks].push line
   end
 end
 

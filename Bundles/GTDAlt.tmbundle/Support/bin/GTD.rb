@@ -62,13 +62,14 @@ module GTD
               else
                 Pathname.new(`pwd`.chomp)
               end
-      return  Dir::glob(File.join(directory,"*.gtd"))
+      return  Dir::glob(File.join(path,"*.gtd"))
     end
     # Reads all files in given directory and processes them. Returns an array of
     # GTDFile objects, one for each file.
     def self.process_directory(directory = nil)
       files = get_files(directory)
       for filename in files do
+        # puts "processing #{filename}."
         @@objects << self.new(filename)
       end
       @@objects

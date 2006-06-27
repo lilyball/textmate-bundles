@@ -1,42 +1,49 @@
-module TextMate
+module CocaDialog
+  require "escape.rb"
   module_function
 
-  def standard_input_box(title, prompt)
-    _standard_input_box('standard-inputbox', title, prompt)
+  def request_string(hash = Hash.new,&block)
+    options["type"] = "inputbox"
+    options["title"] = hash[:title] || "Enter String"
+    options["informative-text"] = hash[:prompt] || ""
+    options["text"] = hash[:default] || ""
+    options["button1"] = "Ok"
+    options["button2"] = "Cancel"
+    return self.dialog(options,&block)
   end
-
-  def secure_standard_input_box(title, prompt)
-    _standard_input_box('secure-standard-inputbox', title, prompt)
+  def request_secure_string(hash = Hash.new,&block)
+    options["type"] = "secure-inputbox"
+    options["title"] = hash[:title] || "Enter Password"
+    options["informative-text"] = hash[:prompt] || ""
+    options["text"] = hash[:default] || ""
+    options["button1"] = "Ok"
+    options["button2"] = "Cancel"
+    return self.dialog(options,&block)
   end
-
-  def input_box(title, prompt, text = "", button1 = "Okay", button2 = "Cancel")
-    _standard_input_box('inputbox', title, prompt, text, button1, button2)
-  end
-
-  def dropdown(options)
-    _dialog('dropdown', options)
+  def drop_down(hash = Hash.new,&block)
+    # FIX _dialog('dropdown', options)
   end
 
   private
 
-  def _dialog(options)
-    type = options[:type]
-    string = ""
+  def dialog(options)
+    type = options.delete("type")
+    str = ""
     options.each_pair do |key, value|
-      string << " --#{key}"
-      Array(value).each do |i|
-          i.
-        end
+      str << " --#{e_sh key} "
+      str << Array(value).map { |s| e_sh s }.join(" ")
     end
-    %x{"#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" 2>/dev/console #{type} #{options}}
-  end
-
-  def _standard_input_box(type, title, prompt, text, button1 = "Okay", button2 = "Cancel")
-    require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
-    _result = _dialog(type, %Q{--title #{e_sh title} \
-      --informative-text #{e_sh prompt} --text #{e_sh text} \
-      --button1 #{e_sh button1} --button2 #{e_sh button2}})
-    _result = _result.split(/\n/)
-    _result[0] == '1' ? _result[1] : nil
+    cd = ENV['TM_SUPPORT_PATH'] + '/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog'
+    result = %x{#{e_sh cd} 2>/dev/console #{e_sh type} #{str}}
+    return_value, result = result.to_a.map{|line| line.chomp}
+    if return_value == "Cancel" then
+      if block_given? then
+        raise SystemExit
+      else
+        return nil
+      end
+    else
+      block_given? ? yield result : result
+    end
   end
 end

@@ -1,5 +1,5 @@
 module TextMate
-module_function
+  module_function
 
   def standard_input_box(title, prompt)
     _standard_input_box('standard-inputbox', title, prompt)

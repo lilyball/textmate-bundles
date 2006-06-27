@@ -13,7 +13,7 @@ end
 
 dir = ENV['TM_GTD_DIRECTORY']
 inboxfile = ENV['TM_GTD_INBOX']
-unless dir && inboxfile && FIle.exist?(dir) && File.exist?(inboxfile) then
+unless dir && inboxfile && File.exist?(dir) && File.exist?(inboxfile) then
   TextMate.exit_show_html("<h1>Some files need to be created first!</h1>" + `#{e_sh File.join(ENV['TM_SUPPORT_PATH'],'bin',"MarkDown.pl")} #{e_sh File.join(ENV['TM_BUNDLE_SUPPORT'],"/INBOX.txt")} `)
 end
 tempInboxFilename = dir + "temp.gtd"

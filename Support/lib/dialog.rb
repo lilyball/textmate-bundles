@@ -1,7 +1,6 @@
 require "escape.rb"
 module Dialog
 class << self
-
   def request_string(options = Hash.new,&block)
     _options = default_hash(options)
     _options["type"] = "inputbox"
@@ -55,11 +54,7 @@ class << self
     result = %x{#{e_sh cd} 2>/dev/console #{e_sh type} #{str} --float}
     return_value, result = result.to_a.map{|line| line.chomp}
     if return_value == options["button2"] then
-      if block_given? then
-        raise SystemExit
-      else
-        return nil
-      end
+      block_given? ? raise(SystemExit) : nil
     else
       block_given? ? yield(result) : result
     end

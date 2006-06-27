@@ -18,10 +18,10 @@ unless dir && inboxfile && File.exist?(dir) && File.exist?(inboxfile) then
 end
 tempInboxFilename = dir + "temp.gtd"
 objects = GTDFile.process_directory(dir)
+inbox_object = objects.find{|o| o.file == tempInboxFilename}
 objects << (inbox_object = GTDFile.new(tempInboxFilename)) unless inbox_object
 projects = GTDFile.projects
 contexts = GTDFile.get_contexts
-inbox_object = objects.find{|o| o.file == tempInboxFilename}
 # pp projects.map { |p| p.name }
 # pp projects
 # 

@@ -114,6 +114,8 @@ module GTD
         instructions = GTD::parse(f.read)
         process_instructions(instructions)
         f.close
+      else
+        File.touch(filename)
       end
     end
     # Processes an array of instructions. Not to be called directly.

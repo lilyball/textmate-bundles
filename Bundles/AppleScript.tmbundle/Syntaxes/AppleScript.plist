@@ -10,11 +10,11 @@
 	<key>foldingStartMarker</key>
 	<string>(?x)
 		^\s*
-		(tell \s+ (?! .* \b to \b) .*
+		(tell \s+ (?! .* \bto\b) .*
 		|using \s+ terms \s+ from \s+ .*
-		|if\b .* \bthen \b .*
+		|if\b .* \bthen\b .*
 		|repeat\b .*
-		|( on | to ) \b (?!\s+error) .*
+		|( on | to )\b (?!\s+ error) .*
 		|try
 		|with \s+ timeout .*
 		|script\b .*
@@ -22,9 +22,7 @@
 		)\s*$
 	</string>
 	<key>foldingStopMarker</key>
-	<string>(?x)
-		^\s* end \b .*$
-	</string>
+	<string>^\s*end\b.*$</string>
 	<key>keyEquivalent</key>
 	<string>^~A</string>
 	<key>name</key>
@@ -50,6 +48,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#tell-blocks</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#standardadditions</string>
 				</dict>
 				<dict>
@@ -57,6 +59,10 @@
 					<string>#built-in</string>
 				</dict>
 			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#tell-blocks</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -417,7 +423,7 @@
 					<key>match</key>
 					<string>\b(open for access|close access|read|write|get eof|set eof)\b</string>
 					<key>name</key>
-					<string>support.function.standardadditions.file-i/o.applescript</string>
+					<string>support.function.standardadditions.file-i-o.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -532,6 +538,214 @@
 					<string>\b(print settings|users?|login items?)\b</string>
 					<key>name</key>
 					<string>support.class.sytem-events.other.applescript</string>
+				</dict>
+			</array>
+		</dict>
+		<key>tell-blocks</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(tell)\s+(?=app(lication)?\s+"(?i:textmate)")(?!.*\bto\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>tell Textmate</string>
+					<key>end</key>
+					<string>^\s*(end tell)</string>
+					<key>name</key>
+					<string>meta.tell-block.application.textmate.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#textmate</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#standard-suite</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(tell)\s+(?=app(lication)?\s+"(?i:finder)")(?!.*\bto\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>tell Finder</string>
+					<key>end</key>
+					<string>^\s*(end tell)</string>
+					<key>name</key>
+					<string>meta.tell-block.application.finder.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#finder</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#standard-suite</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(tell)\s+(?=app(lication)?\s+"(?i:system events)")(?!.*\bto\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>tell System Events</string>
+					<key>end</key>
+					<string>^\s*(end tell)</string>
+					<key>name</key>
+					<string>meta.tell-block.application.system-events.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#system-events</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#standard-suite</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(tell)\s+(?=app(lication)?\s+"(?i:itunes)")(?!.*\bto\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>tell iTunes</string>
+					<key>end</key>
+					<string>^\s*(end tell)</string>
+					<key>name</key>
+					<string>meta.tell-block.application.itunes.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#itunes</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#standard-suite</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(tell)\s+(?=app(lication)?\b)(?!.*\bto\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>tell generic application</string>
+					<key>end</key>
+					<string>^\s*(end tell)</string>
+					<key>name</key>
+					<string>meta.tell-block.application.generic.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#standard-suite</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(tell)\s+(?!.*\bto\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>generic tell block</string>
+					<key>end</key>
+					<string>^\s*(end tell)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>textmate</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(print settings)\b</string>
+					<key>name</key>
+					<string>support.class.textmate.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(get url|insert|reload bundles)\b</string>
+					<key>name</key>
+					<string>support.function.textmate.applescript</string>
 				</dict>
 			</array>
 		</dict>

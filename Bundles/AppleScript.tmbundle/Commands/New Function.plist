@@ -5,7 +5,12 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat &lt;&lt;SNIPPET
+	<string>#!/bin/bash
+
+# Turn the selected text into a function with positional
+# arguments.
+
+cat &lt;&lt;SNIPPET
 on ${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}(\${2:arguments})
 	\${4:--function actions}
 end ${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}

@@ -5,7 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if ps -xc|grep -sq 'Help Viewer$'; then
+	<string>#!/bin/bash
+
+# Use ps to test for Help Viewer, because if we try
+# to use osascript, then it will open Help Viewer
+# before the test, during script compilation.
+
+if ps -xc|grep -sq 'Help Viewer$'; then
 	osascript -e 'tell application "Help Viewer" to open "file:///"'
 fi
 osascript &lt;&lt;-APPLESCRIPT

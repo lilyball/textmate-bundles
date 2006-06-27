@@ -5,7 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [ -d "/Developer/ADC Reference Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/" ]; then
+	<string>#!/bin/bash
+
+# If there is a local copy of the Applescript
+# documentation, open it.  Otherwise, use the
+# online copy.
+
+if [ -d "/Developer/ADC Reference Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/" ]; then
 	open "file:///Developer/ADC%20Reference%20Library/documentation/AppleScript/Conceptual/AppleScriptLangGuide/index.html"
 else
 	open "http://developer.apple.com/documentation/AppleScript/Conceptual/AppleScriptLangGuide/"

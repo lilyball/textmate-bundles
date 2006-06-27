@@ -8,7 +8,7 @@ module Dialog
     _options["title"] = options[:title] || "Enter String"
     _options["informative-text"] = options[:prompt] || ""
     _options["text"] = options[:default] || ""
-    return self.dialog(_options,&block)
+    dialog(_options,&block)
   end
   def request_secure_string(options = Hash.new,&block)
     _options = self.default_hash
@@ -16,7 +16,7 @@ module Dialog
     _options["title"] = options[:title] || "Enter Password"
     _options["informative-text"] = options[:prompt] || ""
     _options["text"] = options[:default] || ""
-    return self.dialog(_options,&block)
+    dialog(_options,&block)
   end
   def drop_down(options = Hash.new,&block)
     items = options[:items] || []
@@ -29,7 +29,7 @@ module Dialog
       _options["type"] = "dropdown"
       _options["title"] = options[:title] || "Select Item"
       _options["text"] = options[:prompt] || ""
-      return self.dialog(_options,&block)
+      dialog(_options,&block)
     end
   end
 

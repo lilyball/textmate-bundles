@@ -1,0 +1,30 @@
+The GTDALT bundle now contains a script that processes and “Inbox file” for actions, and distributes them to appropriate places. The Inbox file consists of lines of the form:
+
+    @context action name >project name
+    @context another action
+
+Here `context` and `project name` need not be matching the exact context of project name, but they each need to be *full* substrings of a *unique* item. In the absence of a project name, the action is added as a stand-alone action in a file with extension `temp.gtd`. If the context does not match any substring of an existing context, then a new context is created.
+
+The script attempts to find a unique place for each such line, and if it does so then it removes the line from the inbox and adds it at the appropriate place. At the end, it presents you with a log of the actions that took place.
+
+The purpose of this script is to be used in conjunction with a program like [Quicksilver](http://quicksilver.blacktree.com/). You use Quicksilver to append such lines to the inbox as described [here](http://www.43folders.com/2004/09/04/quicksilver-append-to-a-text-file-from-anywhere/). Then when you are ready to review things, you run the script.
+
+**Note:** I have taken some care to guarantee that no data loss results as a consequence of running this script. But please, take care to double-check the first couple of runs of the program, to make sure items go to the appropriate locations.
+
+The script, in order to replace the old “.gtd” files, takes the following steps, stopping if at any point it encounters a system error:
+
+1. Writes the entire contents of the desired new file to files with the same name and extension “.gtd~~”
+2. Writes the new inbox file adding “~~” to the extension.
+3. Renames the old “.gtd” files so that they have extension “.gtd~”.
+4. Renames the old inbox file adding “~” to the extension.
+5. Renames the new “.gtd~~” files so that they have extension “.gtd”.
+6. Renames the new inbox file so that it doesn't have the “~~”.
+
+So if the script fails at some point, you know where to look, and at the end of the day you end up with backups as “.gtd~”.
+
+In order to use the script, you need to do some work first, namely to set two environment variables:
+
+1. A variable named `TM_GTD_DIRECTORY` needs to point to an *existing* directory containing your default GTD files. You can have multiple directories containing GTD files, and work with each individual set (they are completely independent), but the script needs to know which of these directories you want it to work with.
+2. A variable named `TM_GTD_INBOX` needs to point to an *existing* “inbox file”, just a plain text file with lines as described above. (The script will just ignore malformed lines). I suggest calling it `inbox.txt` and placing somewhere in your `Documents`, but you can use any name you want.
+
+Now you should be ready to go!

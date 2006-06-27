@@ -31,7 +31,7 @@ class << self
         dialog(_options,&block)
     end
   end
-  def yes_no(options = Hash.new,&block)
+  def request_confirmation(options = Hash.new,&block)
     _options = Hash.new
     _options["type"] = "yesno-msgbox"
     _options["title"] = options[:title] || "Yes or No?"

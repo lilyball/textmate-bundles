@@ -22,6 +22,16 @@ module DateUtils
       return Date.today
     when /^tomorrow$/
       return Date.today + 1
+    when /^(?:next )?(week|month|year)$/
+      tod = Date.today
+      case $1
+      when "week"
+        return tod + 7
+      when "month"
+        return tod + 30
+      when "year"
+        return tod + 365
+      end
     when /^(?:next )?(\w+)$/
       day = Date::ABBR_DAYS[$1] || Date::DAYS[$1]
       raise unless day

@@ -56,7 +56,7 @@ int main (int argc, const char * argv[]) {
 				NSString *plistPath = [[sourcePath stringByAppendingPathComponent:bundlePath]
 											stringByAppendingPathComponent:subPath];
 				NSArray *plists = [[fm directoryContentsAtPath:plistPath]
-										pathsMatchingExtensions:[NSArray arrayWithObject:@"plist"]];
+										pathsMatchingExtensions:[NSArray arrayWithObjects:@"plist", @"tmCommand", @"tmSnippet", @"tmMacro", nil]];
 				NSEnumerator *plistEnum = [plists objectEnumerator];
 				NSString *plist;
 				while( plist = [plistEnum nextObject] ) {

@@ -94,27 +94,27 @@ def generate_stylesheet_from_theme(theme_class = nil)
 			next
 		end
 		next unless setting['name'] and setting['scope']
-		theme_styles += "/* " + setting['name'] + " */\n"
+		theme_styles << "/* " + setting['name'] + " */\n"
 		scope_name = setting['scope']
 		scope_name.gsub! /(^|[ ])-[^ ]+/, '' # strip negated scopes
 		scope_name.gsub! /\./, '_' # change inner '.' to '_'
 		scope_name.gsub! /(^|[ ])/, '\1.'
 		scope_name.gsub! /(^|,\s+)/m, '\1' + pre_selector + ' '
-		theme_styles += "#{scope_name} {\n"
+		theme_styles << "#{scope_name} {\n"
 		if (color = setting['settings']['foreground'])
 			color = to_rgba(color) if color =~ /#.{8}/
-			theme_styles += "\tcolor: " + color + ";\n"
+			theme_styles << "\tcolor: " + color + ";\n"
 		end
 		if (style = setting['settings']['fontStyle'])
-			theme_styles += "\tfont-style: italic;\n" if style =~ /\bitalic\b/i
-			theme_styles += "\ttext-decoration: underline;\n" if style =~ /\bunderline\b/i
-			theme_styles += "\tfont-weight: bold\n" if style =~ /\bbold\b/i
+			theme_styles << "\tfont-style: italic;\n" if style =~ /\bitalic\b/i
+			theme_styles << "\ttext-decoration: underline;\n" if style =~ /\bunderline\b/i
+			theme_styles << "\tfont-weight: bold\n" if style =~ /\bbold\b/i
 		end
 		if (color = setting['settings']['background'])
 			color = to_rgba(color) if color =~ /#.{8}/
-			theme_styles += "\tbackground-color: " + color + ";\n"
+			theme_styles << "\tbackground-color: " + color + ";\n"
 		end
-		theme_styles += "}\n\n"
+		theme_styles << "}\n\n"
 	end
 
 	if (selection_bg)
@@ -238,10 +238,10 @@ def document_to_html(input, opt = {})
 	# and easy to parse.
 	tokens = input.split(/(<[^>]*>)/)
 	code_html = ''
-	for token in tokens
+	tokens.each do |token|
 		case token
 		when /^<\//
-			code_html += "</span>"
+		  code_html << "</span>"
 		when /^<>$/
 		  # skip empty tags, resulting from name = ''
 		when /^</
@@ -251,22 +251,22 @@ def document_to_html(input, opt = {})
   			begin
   				list.push(classes.join('_'))
   			end while classes.pop
-  			code_html += "<span class=\"#{ list.reverse.join(' ').sub(/^\s+/, '') }\">"
+				code_html << "<span class=\"#{ list.reverse.join(' ').lstrip }\">"
 			end
 		else
-			code_html += token
+			code_html << token
 		end
 	end
 
 	code_html = number(code_html) if opt[:line_numbers]
 
-	html += "<pre class=\"textmate-source"
-	html += " #{theme_class}" unless theme_class.empty?
-	html += "\">#{code_html}</pre>"
+	html << "<pre class=\"textmate-source"
+	html << " #{theme_class}" unless theme_class.empty?
+	html << "\">#{code_html}</pre>"
 
   if opt[:include_css]
 		# Closing
-		html += "\n</body>\n</html>"
+		html << "\n</body>\n</html>"
 	end
 
 	return html

@@ -50,7 +50,8 @@ class << self
   private
 
   def textmate_path
-    %x{ps -xww -o command|grep TextMate.app|grep -v grep}.sub(%r{/Contents/MacOS/TextMate.*\n}, '')
+    require "textmate"
+    TextMate.app_path
   end
   def dialog(type, options)
     str = ""

@@ -4,6 +4,12 @@ require 'plist'
 
 module TextMate
 
+  class << self
+    def app_path
+      %x{ps -xww -o command|grep TextMate.app|grep -v grep}.sub(%r{/Contents/MacOS/TextMate.*\n}, '')
+    end
+  end
+
   class ProjectFileFilter
     def initialize
       @file_pattern = load_pattern('OakFolderReferenceFilePattern', '!(/\.(?!htaccess)[^/]*|\.(tmproj|o|pyc)|/Icon\r)$')

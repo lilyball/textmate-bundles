@@ -22,7 +22,7 @@ answer, choice = *result.split("\n")
 if answer.downcase != "ok"
 	print line
 else
-  print line.gsub(/@(\S+)/) {|text| "@"+choice}
+  print line.sub(/@(\S+)/) {|text| "@"+choice}
 end
 </string>
 	<key>fallbackInput</key>

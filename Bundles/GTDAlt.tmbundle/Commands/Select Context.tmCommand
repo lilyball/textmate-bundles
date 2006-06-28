@@ -12,7 +12,7 @@ require 'lib/escape'
 include GTD
 line = STDIN.read
 GTDFile.process_directory
-print e_sn(line).gsub(/@(\S+)/,'@${1:\1}')
+print e_sn(line).gsub(/(\S+)/,'@${1:\1}')
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

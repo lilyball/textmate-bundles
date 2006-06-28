@@ -11,7 +11,7 @@ include GTD
 line = STDIN.read
 GTDFile.process_directory
 contextList = GTDFile.get_contexts
-print line.gsub(/@(\S+)/) {|text| "@"+contextList.next(text[1..-1])}
+print line.sub(/@(\S+)/) {|text| "@"+contextList.next(text[1..-1])}
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

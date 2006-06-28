@@ -7,7 +7,12 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -rjcode -Ku
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/doctohtml.rb"
-print document_to_html( STDIN.read, :include_css =&gt; !ENV.has_key?('TM_SELECTED_TEXT') )</string>
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+unit = ENV.has_key?('TM_SELECTED_TEXT') ? 'selection' : 'document'
+TextMate.call_with_progress(:message =&gt; "Creating HTML version of #{unit}…") do
+  print document_to_html( STDIN.read, :include_css =&gt; !ENV.has_key?('TM_SELECTED_TEXT') )
+end
+</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>inputFormat</key>

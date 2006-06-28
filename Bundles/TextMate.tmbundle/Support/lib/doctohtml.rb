@@ -1,5 +1,8 @@
 # By Brad Choate -- http://bradchoate.com/
 
+$: << ENV['TM_SUPPORT_PATH'] + '/lib'
+require "textmate"
+
 # Provides CSS-friendly variations of common Mac fonts that you
 # may use in TextMate. Feel free to edit these to your liking...
 FONT_MAP = {
@@ -14,7 +17,7 @@ def find_theme(uuid)
 	theme_dirs = [
 		File.expand_path('~/Library/Application Support/TextMate/Themes'),
 		'/Library/Application Support/TextMate/Themes',
-		'/Applications/TextMate.app/Contents/SharedSupport/Themes'
+		TextMate.app_path + '/Contents/SharedSupport/Themes'
 	]
 
 	theme_dirs.each do |theme_dir|

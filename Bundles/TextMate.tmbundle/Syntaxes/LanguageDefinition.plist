@@ -5,9 +5,9 @@
 	<key>firstLineMatch</key>
 	<string>^\{(\s*[a-zA-Z])?$</string>
 	<key>foldingStartMarker</key>
-	<string>(\{|\()</string>
+	<string>^\s*([a-z_-]+ = )?[{(](?!.*[)}][;,]?\s*$)</string>
 	<key>foldingStopMarker</key>
-	<string>(\}|\))</string>
+	<string>^\s*(\}|\))</string>
 	<key>keyEquivalent</key>
 	<string>^~L</string>
 	<key>name</key>

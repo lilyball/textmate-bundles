@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+$:&lt;&lt;ENV['TM_SUPPORT_PATH']
+require 'lib/escape'
+p = File.expand_path(ENV['TM_DROPPED_FILE'])
+print "&lt;file:\/\/#{e_url p}&gt;"</string>
+	<key>draggedFileExtensions</key>
+	<array>
+		<string>txt</string>
+		<string>gtd</string>
+		<string>markdown</string>
+	</array>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Link to Dragged File</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>FFECDABA-E216-4182-B0CB-7031D279EEDE</string>
+</dict>
+</plist>

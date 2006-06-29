@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl
+
+CTags.tmbundle
+---------------
+
+The CTags bundle allows you to quickly look up function definitions, variables etc. It uses the [Exuberant CTags][1] program freely available under the terms of the [GNU General Public License][2] to generate a list of definitions, and presents any match for the current word when invoked.
+
+Usage
+-----
+
+With the cursor over a word for which you want to see the definition, select *CTags/Find Tags* or press the assigned shortcut. A window will show up listing all locations where the term was defined, as well as your current location so you can easily find your way back. If only one location is found, TextMate will jump there (this behavior can be changed with the  *TmCtagsAutoJump* environment variable, see below).
+
+**Note:** Find tags will only find definitions inside the current project.
+
+If you modify the source code, the definition list will become out of sync with your code. Invoke *CTags/Update Tags* to update it.
+
+**Note:** The definitions are stored in a file named *tmtags* in your project root directory. It is safe to delete this file when no longer needed. The bundle will recreate it on the fly whenever needed.
+
+Configuration
+-------------
+
+The CTags bundle can be configured by adding environment variables, either to a project to only change the behavior within a project, or globally (TextMate/Preferences/Advanced/Shell Variables). The following variables are honored:
+
+* TmCtagsAutoJump
+
+Set this variable to 0 to avoid TextMate jumping when a unique definition is found. Default value: *1*.
+
+* TmCtagsTagFileName
+
+The file name used to store tags in. Default is *tmtags*.
+
+* TM\_TAGS\_FILE
+
+For backward-compatibility with the *Lookup Definition (ctags)* command from the Source bundle. Only makes sense inside a project. If set must contain the full path and filename for the tags file ctags will use. The path also is the root from which ctags does its work.
+
+* TmCtagsSoundDir
+
+Directory in which sound files are expected. Default is *'/System/Library/Sounds'*.
+
+* TmCtagsOkSingleSound
+
+The name for the sound file played when a unique definition is found. If the extension is *.aiff* it can be omitted. Set to empty string for no sound. Default is an empty string.
+
+* TmCtagsOkMultiSound
+
+The name for the sound file played when multiple definitions are found. If the extension is *.aiff* it can be omitted. Set to empty string for no sound. Default is *Frog*.
+
+* TmCtagsErrorSound
+
+The name for the sound file played when no definitions are found. If the extension is *.aiff* it can be omitted. Set to empty string for no sound. Default is *Sosumi*.
+
+
+Credits
+-------
+
+This bundle is maintained by [Gerd Knops][3].
+
+Feedback is welcome: gerti-ctagstmb@bitart.com
+
+[1]: http://ctags.sourceforge.net/
+[2]: http://www.gnu.org/copyleft/gpl.html
+[3]: http://gerd.knops.com/
+
+EOF
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source</string>
+	<key>uuid</key>
+	<string>CF06E855-A45F-4AC0-A5F3-D9A99B2D7059</string>
+</dict>
+</plist>

@@ -1,0 +1,399 @@
+#!/usr/bin/perl -w
+###############################################################################
+#	Copyright 2005, 2005 BITart Gerd Knops,  All rights reserved.
+#
+#	Project	: BITart
+#	File	: tmctags
+#	Author	: Gerd Knops gerti@BITart.com
+#
+###############################################################################
+#
+#	History:
+#	051101 Creation of file
+#	060628 Modified for use inside CTags.tmbundle
+#
+###############################################################################
+#
+#	Description:
+#	ctags support for TextMate
+#
+#	$Id:$
+#
+###############################################################################
+#
+# DISCLAIMER
+#
+# BITart and Gerd Knops make no warranties, representations or commitments
+# with regard to the contents of this software. BITart and Gerd Knops
+# specifically disclaim any and all warranties, whether express, implied or
+# statutory, including, but not limited to, any warranty of merchantability
+# or fitness for a particular purpose, and non-infringement. Under no
+# circumstances will BITart or Gerd Knops be liable for loss of data,
+# special, incidental or consequential damages out of the use of this
+# software, even if those damages were foreseeable, or BITart or Gerd Knops
+# was informed of their potential.
+#
+###############################################################################
+# Configuration
+###############################################################################
+	
+	use strict;
+	
+	our $TagFileName=&setFromEnv('TmCtagsTagFileName','tmtags');
+	our $CtagsFlags="--fields=Kn --excmd=pattern -R";
+	our $CtagsPGM="$ENV{'TM_BUNDLE_SUPPORT'}/bin/ctags";
+	our $CtagsPGMtmplugin="$ENV{'HOME'}/Library/Application Support/TextMate/PlugIns/TmCodeBrowser.tmplugin/Contents/Resources/ctags";
+	our $CtagsTimeout=15;	# timeout if ctags does not finish within x seconds
+	
+	our $AutoJump=&setFromEnv('TmCtagsAutoJump',1);
+	
+	#our $OkSingleSound=&setFromEnv('TmCtagsOkSingleSound','Ping');
+	our $OkSingleSound=&setFromEnv('TmCtagsOkSingleSound','');
+	our $OkMultiSound=&setFromEnv('TmCtagsOkMultiSound','Frog');
+	our $ErrorSound=&setFromEnv('TmCtagsErrorSound','Sosumi');
+	our $SoundDir=&setFromEnv('TmCtagsSoundDir','/System/Library/Sounds');
+	
+	our $ExitDiscard=200;
+	our $ExitReplaceText=201;
+	our $ExitReplaceDopcument=202;
+	our $ExitInsertText=203;
+	our $ExitInsertSnippet=204;
+	our $ExitShowHtml=205;
+	our $ExitShowToolTip=206;
+	our $ExitCreateNewDocument=207;
+	
+
+###############################################################################
+# Main
+###############################################################################
+	
+	my $cmd='';
+	$cmd=shift if(scalar(@ARGV>0));
+	
+	if($cmd eq 'update')
+	{
+		print &updateTags();
+	}
+	elsif($cmd eq '')
+	{
+		&findTags();
+	}
+	else
+	{
+		die("Unknown command '$cmd'\n");
+	}
+
+###############################################################################
+# Subroutines
+###############################################################################
+sub setFromEnv {
+	my $name=shift;
+	my $default=shift;
+	
+	return $ENV{$name} if(exists($ENV{$name}));
+	
+	return $default;
+}
+
+sub findCtagsPGM {
+	return $CtagsPGM if($CtagsPGM ne '' && -x $CtagsPGM);
+	
+	return $CtagsPGMtmplugin if(-x($CtagsPGMtmplugin));
+	
+	die("Can't find exuberant ctags!\n");
+}
+
+sub findTagsDirStartingAt {
+	my $dir=shift;
+	
+	while($dir ne '')
+	{
+		#print "Checking dir $dir\n";
+		return $dir if(-f "$dir/$TagFileName");
+		
+		$dir=~s/\/[^\/]*//;
+	}
+	
+	return undef;
+}
+
+sub tagsDir {
+	#
+	# If there is a TM_TAGS_FILE environment variable use that
+	# to set both the directory and name of the tags file
+	#
+	if(exists($ENV{'TM_TAGS_FILE'}) && $ENV{'TM_TAGS_FILE'}=~/^(.+)\/(.+)$/)
+	{
+		$TagFileName=$2;
+		return $1;
+	}
+	
+	#
+	# If there is a TM_TAGS_FILE environment variable use that
+	# as the directory for the tags file
+	#
+	if(exists($ENV{'TM_PROJECT_DIRECTORY'}))
+	{
+		my $d=$ENV{'TM_PROJECT_DIRECTORY'};
+		return $d if($d ne '/' && $d ne '/');
+	}
+	
+	die("No TM_PROJECT_DIRECTORY or TM_DIRECTORY environment!") unless(exists($ENV{'TM_DIRECTORY'}));
+	
+	#
+	# From the files directory, search upwards to
+	# see if we have an existing tags file.
+	#
+	my $d=$ENV{'TM_DIRECTORY'};
+	
+	my $d2=&findTagsDirStartingAt($d);
+	
+	return $d2 if(defined($d2));
+	
+	#
+	# If we still did not find the tags file, use the current files dir.
+	#
+	return $d;
+}
+
+sub updateTags {
+	my $dir=&tagsDir();
+	
+	my $ctags=&findCtagsPGM();
+	
+	#
+	# The old way with system is problematic because occasionally
+	# ctags just hangs (various scanner bugs) and eats up CPU cycles
+	#
+	#system("cd '$dir';'$ctags' $CtagsFlags '$dir'");
+	
+	#
+	# New way: If ctags takes longer than $CtagsTimeout kill it
+	#
+	{
+		$::_ctagsPID=undef;
+		chdir($dir) or die("chdir to '$dir' failed: $!\n");
+		$::_ctagsPID=open(CTAGS,"'$ctags' -f $TagFileName $CtagsFlags '$dir' |");
+		local $SIG{ALRM}=sub{kill(9,$::_ctagsPID);die("ctags timed out!\n")};
+		alarm($CtagsTimeout);
+		while(<CTAGS>)
+		{
+			# Discard output
+		}
+		close(CTAGS);
+		alarm(0);
+	}
+	
+	return "Created/updated $TagFileName at $dir\n";
+}
+
+sub findTags {
+	my $word=$ENV{'TM_CURRENT_WORD'} or die("Missing 'TM_CURRENT_WORD' environment!\n");
+	
+	my $sound='';
+	
+	&pHeader($word);
+	
+	my $srch="$word\t";
+	my @lines=();
+	
+	my $dir=&tagsDir();
+	unless(-f "$dir/$TagFileName")
+	{
+		print &updateTags(),"<br />\n";
+	}
+	open(IN,"$dir/$TagFileName") or die("Can't open '$dir/$TagFileName' for read: $!\n");
+	while(<IN>)
+	{
+		next unless(index($_,$srch)==0);
+		push(@lines,$_);
+		while(<IN>)
+		{
+			last unless(index($_,$srch)==0);
+			push(@lines,$_);
+		}
+		last;
+	}
+	close(IN);
+	
+	#print STDERR "Found:<br>",join("<br>\n",@lines),"<br>\n";
+	
+	if(scalar(@lines)==0)
+	{
+		print "No tags found for '$word'.\n";
+		$sound=$ErrorSound;
+		#exit($ExitShowToolTip);
+	}
+	else
+	{
+		$sound=$OkMultiSound;
+		my $outLineNo=0;
+		foreach my $line (@lines)
+		{
+			#print "line: $line<br>\n";
+			
+			my $idx1=index($line,"\t/^");
+			my $idx2=rindex($line,"/;\"");
+			
+			next unless($idx1>0 && $idx2>$idx1+3);
+			
+			my $code=substr($line,$idx1+3,$idx2-$idx1-3);
+			$line=substr($line,0,$idx1).substr($line,$idx2+3);
+			$code=~s/\$$//;
+			
+			my($w,$file,$type,$lno)=split("\t",$line);
+			
+			# print "code: $code<br>\n";
+			# print "w: $w<br>\n";
+			# print "file: $file<br>\n";
+			# print "type: $type<br>\n";
+			# print "lno: $lno<br>\n";
+
+			if($lno=~/line\:(\d+)/)
+			{
+				$lno=$1;
+			}
+			else
+			{
+				$lno=1;
+			}
+			
+			$file=~/(.*)\/(.+)/;
+			my $path=$1;
+			my $filename=$2;
+			
+			$outLineNo++;
+			my $evenOdd=($outLineNo%2)?'odd':'even';
+			
+			print <<"HTML";
+<dt class="$evenOdd">
+<span class="filename"><a href="txmt://open?url=file://$file&line=$lno">$filename:$lno -- $path</a></span><br>
+<span class="code">$code</span>
+</dt>
+HTML
+			
+			if($AutoJump && scalar(@lines)==1)
+			{
+				print <<"HTML";
+				<script type="text/javascript">
+					TextMate.system("mate -l $lno '$file'",null);
+				</script>
+HTML
+				$sound=$OkSingleSound;
+			}
+		}		
+		
+		print <<"HTML";
+</dl>
+<h2>You were here:</h2>
+<dl class="top">
+<dt class="odd">
+<span class="filename"><a href="txmt://open?url=file://$ENV{'TM_FILEPATH'}&line=$ENV{'TM_LINE_NUMBER'}">$ENV{'TM_FILENAME'}:$ENV{'TM_LINE_NUMBER'} -- $ENV{'TM_DIRECTORY'}</a></span><br>
+<span class="code">$ENV{'TM_CURRENT_LINE'}</span>
+</dt>
+</dl>
+HTML
+	}
+	
+	&pFooter();
+	&playSoundNamed($sound);
+}
+
+sub pHeader
+{
+	my $word=shift;
+	
+	print <<"HTML";
+<html>
+<head>
+<title>Tags for $word</title>
+<style type="text/css">
+body {
+	font-family: 'Trebuchet MS', 'Arial','Helvetica','sans-serif';
+	font-size: 12;
+	background-color: #eeeeee;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.file {
+	background-color: #ffffff;
+	padding: 5px;
+}
+
+.filename {
+	font-family: 'Trebuchet MS', 'Arial','Helvetica','sans-serif';
+	font-weight: bold;
+	font-size: 10;
+}
+
+.code {
+	font-family: 'Monaco', 'courier','serif';
+}
+
+.even {
+	background-color: #eeeeee;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.odd {
+	background-color: #ffffff;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.summary {
+	border: thin solid #000000;
+	background-color: #ffffff;
+	margin-top: 10px;
+	padding: 4px;
+	font-family: 'Trebuchet MS', 'Arial','Helvetica','sans-serif';
+	font-size: 9;
+}
+
+</style>
+</head>
+<body>
+<h2>Tags for $word</h2>
+<dl class="top">
+HTML
+}
+
+sub pFooter
+{
+	print <<"HTML";
+</body>
+</html>
+HTML
+}
+
+sub playSoundNamed {
+	my $sf=shift;
+	
+	return unless(defined($sf) && $sf ne '');
+	
+	my $sp="$SoundDir/$sf";
+	
+	$sp.='.aiff' unless(-r $sp);
+	
+	my $ps="$ENV{'TM_SUPPORT_PATH'}/bin/play";
+	
+	if(-x $ps && -r $sp)
+	{
+		system("$ps $sp 2>/dev/null");
+	}
+}
+
+1;
+############################################################################EOF

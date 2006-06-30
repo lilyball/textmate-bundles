@@ -37,7 +37,7 @@ module GTD
           instructions << [:comment,$1,nil,nil]
         when /^(\s*)$/
           instructions << [:comment,$1,nil,nil]
-        else pp l; raise "Parse error: #{l}"
+        else raise "Parse error on line: #{l}\n. This is not a line I recognize."
       end
     end
     return instructions
@@ -264,10 +264,13 @@ end
         MyLogger.log "/#{a.due}/#{a.parent.name}/@#{a.context} #{a.name}"
         a.parent.remove_item(a)
       end
-      comp, self.projects = *self.projects.partition {|i| i.completed?}
-      comp.each do |p|
-        MyLogger.log "/#{Date.today}/#{p.name}"
-        a.parent.remove_item(p)
+      
+      completed_projects = self.projects.find_all {|i| i.completed?}
+      completed_projects.each do |project|
+        # pp project
+        MyLogger.log "/#{Date.today}/#{project.name}"
+        project.parent.remove_item(project)
+        project.root.update!
       end
     end
   end

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+$:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
+require "bin/GTD.rb"
+require "lib/dialog"
+include GTD
+GTD.process_directory
+projects = GTD.projects.find_all{|proj| !proj.completed?}
+pr = Printer.new
+b = &lt;&lt;HTML
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="tm-file://#{ENV['TM_SUPPORT_PATH']}/css/default.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+HTML
+e = &lt;&lt;HTML
+  &lt;/body&gt;
+&lt;/html&gt;
+HTML
+pr.raw b
+pr.table do
+  pr.title "List of all incomplete Projects"
+  pr.headers([ "Project", "Items", "Next Action"])
+  projects.each do |project|
+    pr.row([project.link,
+            project.flatten.reject{|i| i.completed? }.length-1,
+            project.next_action.link])
+  end
+end
+pr.raw e
+puts pr.to_html</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~@p</string>
+	<key>name</key>
+	<string>Project Statistics</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>BF7C70D8-A0D9-44A3-9CB4-8D99372E68B6</string>
+</dict>
+</plist>

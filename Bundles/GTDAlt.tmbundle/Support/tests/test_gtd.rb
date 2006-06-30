@@ -71,6 +71,10 @@ class TestGTD < Test::Unit::TestCase
     l = @object.update!
     assert_equal(11,l)
     assert_equal([0,1,2,3,4,5,6,8,10], @object.flatten.map {|i| i.line})
+    assert_not_nil(@object.file)
+    @object.flatten.each do |e|
+      assert_equal(@object.file,e.file)
+    end
   end
   def test_dump_object
     test_GTDFile_initialize

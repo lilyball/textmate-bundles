@@ -8,7 +8,6 @@
 	<string>#!/usr/bin/env ruby
 $:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
 require "bin/GTD.rb"
-requrie "lib/escape"
 require "lib/dialog"
 include GTD
 line = STDIN.read
@@ -16,9 +15,9 @@ GTD.process_directory
 contextList = GTD.get_contexts
 choice = Dialog.request_item(:title =&gt; 'Changing the context', :prompt =&gt;  'Choose the new context', :items =&gt; contextList)
 if choice then
-	print line
-else
   print line.sub(/@(\S+)/) {|text| "@"+choice}
+else
+  print line
 end
 </string>
 	<key>fallbackInput</key>

@@ -107,7 +107,7 @@ end
   # Module for updating container objects (Project, GTDFile)
   # that have underlying file structure.
   module Container
-    attr_accessor :subitems
+    attr_accessor :subitems, :name, :file, :line
     include Linkable
     def update!(update_info = nil)
       if update_info then
@@ -247,11 +247,12 @@ end
             act = Action.new(:name => name, :context => context,:parent =>  @current_project,:due => due, :completed => true)
             @current_project << act
           else
-            cmt = Comment.new(:name => name)
+            cmt = Comment.new(:name => name, :parent => @current_project)
             @current_project << cmt
         end
       end
       raise "'project' without 'end'." if @current_project != self
+      update!
     end
     # Removes completed projects and actions and returns an array of references to them.
     # It also deletes all actions that have been marked as completed. You can call the
@@ -279,7 +280,7 @@ end
       @parent = hash[:parent]
       @name = hash[:name]
       @completed = true if @completed == nil
-      update!(hash)
+      self.update!(hash)
     end
     def update!(update_info)
       @file = update_info[:file]
@@ -327,7 +328,7 @@ end
       return true
     end
     def next_action
-      return @subitems.find { |e| Action === e }
+      return @subitems.find { |e| Action === e && !e.completed? }
     end
     # Updates its subitems. Returns its end line plus 1.
   end

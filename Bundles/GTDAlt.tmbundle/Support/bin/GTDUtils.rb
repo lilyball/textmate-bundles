@@ -211,3 +211,8 @@ module GTD
     end
   end
 end
+class NilClass
+  def link
+    return ""
+  end
+end

@@ -18,7 +18,9 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>^\s*(project)\s+(.*)</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -31,13 +33,9 @@
 					<string>entity.project.title.gtdalt</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>^\s*(project)\s+(.*)</string>
-			<key>name</key>
-			<string>meta.project.begin.gtdalt</string>
-		</dict>
-		<dict>
-			<key>captures</key>
+			<key>end</key>
+			<string>^\s*(end)\s*</string>
+			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -45,10 +43,15 @@
 					<string>keyword.project.end.gtdalt</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>^\s*(end)\s*</string>
 			<key>name</key>
-			<string>meta.project.end.gtdalt</string>
+			<string>meta.project.begin.gtdalt</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>captures</key>

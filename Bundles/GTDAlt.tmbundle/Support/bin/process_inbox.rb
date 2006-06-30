@@ -36,7 +36,7 @@ for text in lines do
     newContext = contexts.find_all{|c| c.downcase.index(context.downcase) != nil}
     case newContext.length
     when 0
-      contexts = GTDFile.add_contexts(context)
+      contexts = GTD.add_contexts(context)
       $log << "Created new context: #{context}."
       newContext = context
     when 1

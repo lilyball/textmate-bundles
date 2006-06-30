@@ -210,7 +210,7 @@ end
       end
     end
     def name
-      self.file
+      self.file.split("/").last
     end
     def root
       self

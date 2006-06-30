@@ -9,72 +9,78 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require 'date'
-require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+$: &lt;&lt; ENV['TM_BUNDLE_SUPPORT']
+require "bin/GTD.rb"
 include GTD
 
 objects = GTD.process_directory
 gtdacts = objects.map{|o| o.actions}.flatten
 gtdprojects = objects.map{|o| o.projects}.flatten
-nacts = GTD.next_actions
 
 class LogProject
-def initialize(date,name)
-  @date = date
-  @name = name
-end
-def getprojects
-  return @name
-end
+  def initialize(date,name)
+    @date = date
+    @name = name
+  end
+  def getprojects
+    return @name
+  end
 end
 
 class LogAction
-def initialize(date,project,context,name)
-  @date = date
-  @project = project
-  @context = context
-  @name = name
-end
-def getcontexts
-  return @context
-end
-def getprojects
-  return @project
-end
+  def initialize(date,project,context,name)
+    @date = date
+    @project = project
+    @context = context
+    @name = name
+  end
+  def getcontexts
+    return @context
+  end
+  def getprojects
+    return @project
+  end
 end
 
 acts = Array.new
 projects = Array.new
 
-today = Date.today
+today = Date.today - 1
 review = today - 7
 
-log = File.open(File.join(ENV['TM_GTD_DIRECTORY'],"/GTD.gtdlog"),"r")
+logfile = File.join(GTD.get_gtd_directory,"GTD.gtdlog")
+if File.exists?(logfile) then
+  log = File.open(logfile)
+else
+  puts "Log file #{logfile} not found. Review requires this file. You should run the Clean Current File command to generate a log file."
+  exit
+end
 
 log.readlines.each { |line|
-if line =~ /^\/(.*)\/(.*)(\/@(\S+))?/ then
-  logdate = Date.strptime($1, '%Y-%m-%d')
-  project = $2
-  if line =~ /^\/(.*)\/(.*)\/@(\S+)\s(.*)$/
-    logact = LogAction.new($1.to_s,$2.to_s,$3.to_s,$4.to_s)
-    acts &lt;&lt; logact
-  else
-    logproj = LogProject.new(logdate.to_s,project)
-    projects &lt;&lt; LogProject.new(logdate.to_s,project)
+  if line =~ /^\/(.*)\/(.*)(\/@(\S+))?/ then
+    logdate = Date.strptime($1, '%Y-%m-%d')
+    project = $2
+    if line =~ /^\/(.*)\/(.*)\/@(\S+)\s(.*)$/
+      logact = LogAction.new($1.to_s,$2.to_s,$3.to_s,$4.to_s)
+      acts &lt;&lt; logact
+    else
+      logproj = LogProject.new(logdate.to_s,project)
+      projects &lt;&lt; LogProject.new(logdate.to_s,project)
+    end
   end
-end
 }
 
 pr = Printer.new
 b = &lt;&lt;HTML
 &lt;html&gt;
-&lt;head&gt;
-  &lt;link rel="stylesheet" href="tm-file://#{ENV['TM_SUPPORT_PATH']}/css/default.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;GTD Review (#{review} - #{Date.today})&lt;/h1&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="tm-file://#{ENV['TM_SUPPORT_PATH']}/css/default.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  &lt;h1&gt;GTD Review (#{review} - #{Date.today})&lt;/h1&gt;
 HTML
 e = &lt;&lt;HTML
-&lt;/body&gt;
+  &lt;/body&gt;
 &lt;/html&gt;
 HTML
 pr.raw b
@@ -83,12 +89,12 @@ pr.raw b
 pComplete = Array.new
 projects.each {|p| pComplete &lt;&lt; p.getprojects }
 if not pComplete.empty? then
-pComplete = pComplete.uniq.sort
-pr.raw "&lt;h2&gt;Projects completed&lt;/h2&gt;&lt;ul&gt;"
-pComplete.each {|p| 
-  pr.raw "&lt;li&gt;#{p}"
-}
-pr.raw "&lt;/ul&gt;"
+  pComplete = pComplete.uniq.sort
+  pr.raw "&lt;h2&gt;Projects completed&lt;/h2&gt;&lt;ul&gt;"
+  pComplete.each {|p| 
+    pr.raw "&lt;li&gt;#{p}"
+  }
+  pr.raw "&lt;/ul&gt;"
 end
 
 pUsed = Array.new
@@ -99,46 +105,43 @@ gtdprojects.each{|p| diffarray &lt;&lt; p.name }
 projectsDiff = diffarray - pUsed
 projectsDiff = projectsDiff.uniq.sort
 if not projectsDiff.empty? then
-pr.raw "&lt;h2&gt;Projects not acted on&lt;/h2&gt;"
-pr.table do
-  pr.headers([ "Project", "Next Action", "Context", "Due by"])
-  projectsDiff.each{|p| 
-  project = gtdprojects.find{|i| i.name == p}
-  nact = nacts.find{|i| i.project.to_s == p}
-  if nact != nil then
-    text = "&lt;a href=\"#{nact.txmt}\"&gt;#{nact.name}&lt;/a&gt;"
-    due = case nact.due
-      when "",nil
-        ""
-      when DateLate
-        "&lt;span style=\"color:red\"&gt;#{nact.due}&lt;/span&gt;"
-      else
-        nact.due
-    end
-    pr.row(["&lt;a href=\"txmt://open?url=file://#{project.file.to_s.gsub(/ /,"%20")}&amp;line=#{project.line}\"&gt;#{p}&lt;/a&gt;", text, nact.context, due])
-  end
-}
-end # pr.table
+  pr.raw "&lt;h2&gt;Projects not acted on&lt;/h2&gt;"
+  pr.table do
+    pr.headers([ "Project", "Next Action", "Context", "Due by"])
+    projectsDiff.each{|p| 
+    project = gtdprojects.find{|i| i.name == p}
+      text = project.next_action.link
+      due = case project.next_action.due
+        when "",nil
+          ""
+        when DateLate
+          "&lt;span style=\"color:red\"&gt;#{project.next_action.due}&lt;/span&gt;"
+        else
+          project.next_action.due
+      end
+      pr.row([project.link, text, project.next_action.context, due])
+  }
+  end # pr.table
 end
 
 pr.raw "&lt;h2&gt;Dated Actions&lt;/h2&gt;"
 pr.table do
-pr.headers([ "Context", "Action", "Project", "Due by"])
-gtdacts.each do |a|
-  proj = a.parent.link
-  if a.due != nil then
-    due = case a.due
-      when "",nil
-        ""
-      when DateLate
-        "&lt;span style=\"color:red\"&gt;#{a.due}&lt;/span&gt;"
-      else
-        a.due
+  pr.headers([ "Context", "Action", "Project", "Due by"])
+  gtdacts.each do |a|
+    proj = if a.project != nil then a.project.link else "none" end
+    if a.due != nil then
+      due = case a.due
+        when "",nil
+          ""
+        when DateLate
+          "&lt;span style=\"color:red\"&gt;#{a.due}&lt;/span&gt;"
+        else
+          a.due
+      end
+      text = "&lt;a href=\"#{a.txmt}\"&gt;#{a.name}&lt;/a&gt;"
+      pr.row([a.context, text, proj , due])
     end
-    text = "&lt;a href=\"#{a.txmt}\"&gt;#{a.name}&lt;/a&gt;"
-    pr.row([a.context, text, proj , due])
   end
-end
 end
 
 pr.raw e

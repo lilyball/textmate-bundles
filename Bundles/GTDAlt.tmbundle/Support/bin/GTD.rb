@@ -89,14 +89,14 @@ class << self
   end
   # Returns the actions for a particular context from among all objects.
   def actions_for_context(context)
-    return @@objects.map{|i| i.flatten.find_all{|action| Action == action && action.context == context}}
+    return @@objects.map{|i| i.flatten.find_all{|action| Action === action && action.context == context}}.flatten
   end
   # Returns all next actions from all projects
   def next_actions
-    return @@objects.flatten.map { |i| i.next_action}.compact
+    return @@objects.map { |i| i.next_action}.compact
   end
   def actions
-    return @@objects.map{|i| i.actions}.flatten
+    return @@objects.map{|i| i.flatten.find_all{|a| Action === a}}.flatten
   end
   def projects
     return @@objects.map { |i| i.projects }.flatten

@@ -1,4 +1,4 @@
-require "escape.rb"
+require File.join(File.dirname(__FILE__),'escape.rb')
 module Dialog
 class << self
   def request_string(options = Hash.new,&block)

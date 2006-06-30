@@ -6,9 +6,10 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+$: &lt;&lt; ENV['TM_BUNDLE_SUPPORT']
+require "bin/GTD.rb"
 include GTD
-objects = GTDFile.process_directory
+objects = GTD.process_directory
 acts = objects.map{|o| o.actions}.flatten
 acts.sort! do |a,b|
   da, db = *[a.due, b.due].map {|i| i || ""}  # convert nils to empty strings
@@ -36,7 +37,7 @@ pr.table do
   pr.title "List of all Actions"
   pr.headers([ "Context", "Action", "Project", "Due by"])
   acts.each do |a|
-    proj = if a.project != nil then a.project.link else "none" end
+    proj = a.project.link
     due = case a.due
       when "",nil
         ""

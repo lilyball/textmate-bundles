@@ -6,20 +6,16 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
+$:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
+require "bin/GTD.rb"
+requrie "lib/escape"
+require "lib/dialog"
 include GTD
 line = STDIN.read
-GTDFile.process_directory
-contextList = GTDFile.get_contexts.map{|i| "\""+i+"\""}
-newPath = ENV['TM_SUPPORT_PATH']+"/bin/CocoaDialog.app/Contents/MacOS"
-result=`"#{newPath}/CocoaDialog" dropdown \
-  --title 'Changing the context' \
-  --text 'Choose the new context' \
-  --button1 Ok --button2 Cancel \
-  --string-output --no-newline \
-  --items #{contextList.join(" ")}`
-answer, choice = *result.split("\n")
-if answer.downcase != "ok"
+GTD.process_directory
+contextList = e_sh GTD.get_contexts.join(" ")
+choice = Dialog.request_item(:title =&gt; 'Changing the context', :prompt =&gt;  'Choose the new context', :items =&gt; contextList)
+if choice then
 	print line
 else
   print line.sub(/@(\S+)/) {|text| "@"+choice}

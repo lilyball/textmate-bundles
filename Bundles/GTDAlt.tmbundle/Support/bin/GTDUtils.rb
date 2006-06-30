@@ -182,3 +182,32 @@ class Printer
     return s.join("\n")+"\n"
   end
 end
+
+module GTD
+  # Safe write of the pairs in +filepairs+, of the form <tt>[filename,format]</tt>.
+  def GTD.safe_write_with_backup(filepairs)
+    begin
+      for filename,string in filepairs do
+        newFile = filename + "~~"
+        raise "Could not create different name" if newFile == filename
+        File.open(newFile, 'w') do |f|
+          f.puts string
+        end
+      end
+    rescue Exception => e
+      $stderr.puts "There was a problem saving the files: #{e}.\nExiting... Some extra files may have been created."
+      raise e
+    end
+    begin
+      for filename,string in data do
+        FileUtils.mv(filename,filename+"~")
+      end
+      for file,string in data do
+        FileUtils.mv(filename+"~~",filename)
+      end
+    rescue Exception => e
+      $stderr.puts "There was a problem moving the files: #{e}.\nExiting... Files with extension \".gtd~~\" contain the newest data that could not be moved."
+      raise e
+    end
+  end
+end

@@ -6,16 +6,12 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTDUtils.rb"
-#include DateUtils
-require 'pp'
+$: &lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
+require 'lib/dialog'
+require "bin/GTDUtils.rb"
 line = STDIN.read
-newPath = ENV['TM_SUPPORT_PATH']+"/bin/CocoaDialog.app/Contents/MacOS"
-result=`"#{newPath}/CocoaDialog" standard-inputbox --title "Due date" --no-newline \
-      --informative-text "Set due date" \
-	--text "today"`
-answer, text = *result.split("\n")
-if answer != "1"
+text = Dialog.request_string(:title =&gt; "Due date", :prompt =&gt; "Set due date", :default =&gt; "today")  
+unless text then
 	print line
 else
   print line.gsub(/ due:\[\d{4}-\d{2}-\d{2}\]$/,"") + " due:[#{DateUtils::convert_date(text)}]"

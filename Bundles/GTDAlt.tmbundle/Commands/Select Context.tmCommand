@@ -11,7 +11,7 @@ $: &lt;&lt; ENV['TM_SUPPORT_PATH']
 require 'lib/escape'
 include GTD
 line = STDIN.read
-GTDFile.process_directory
+GTD.process_directory
 print e_sn(line).gsub(/(\S+)/,'@${1:\1}')
 </string>
 	<key>fallbackInput</key>

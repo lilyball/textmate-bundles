@@ -6,7 +6,10 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTDInfoRoutines.rb"
+$:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
+require "bin/GTDInfoRoutines.rb"
+requrie "lib/escape"
+require "lib/dialog"
 include GTD
 word = STDIN.read
 case word
@@ -15,24 +18,13 @@ when /^@?(\w+)$/
 when /\s+@(\w+)\s*.*/
   w = $1
 end
-GTDFile.process_directory
-contexts = GTDFile.get_contexts
+GTD.process_directory
+contexts = e_sh GTDFile.get_contexts.join(" ")
 if contexts.include?(word) then
 	context = word
 else
-  newPath = ENV['TM_SUPPORT_PATH']+"/bin/CocoaDialog.app/Contents/MacOS"
-  result=`"#{newPath}/CocoaDialog" dropdown \
-    --title 'Listing actions for context' \
-    --text 'Choose the new context' \
-    --button1 Ok --button2 Cancel \
-    --string-output --no-newline \
-    --items #{contexts.join(" ")}`
-  answer, choice = *result.split("\n")
-  if answer.downcase != "ok"
-  	exit
-  else
-  	context = choice
-  end
+  context = Dialog.request_item( :title =&gt; 'Listing actions for context', :prompt 'Choose the new context', :items =&gt; contexts )
+  exit unless context
 end
 #puts context
 puts html_actions_for_context(context)</string>

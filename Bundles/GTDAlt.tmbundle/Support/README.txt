@@ -97,7 +97,7 @@ There are a couple of class methods that allow work with an entire directory.
 + `self.get_contexts` returns an array of all contexts discovered so far.
 + `self.add_contexts(contexts)` adds the contexts passed to it to the context list.
 + `self.actions_for_context(context)` returns all actions with given context from all files.
-+ `self.get_files` returns all files from the same directory as in `process_instructions`.
++ `self.gtd_files_in_directory` returns all files from the same directory as in `process_instructions`.
 
 ## The Linkable mix-in
 

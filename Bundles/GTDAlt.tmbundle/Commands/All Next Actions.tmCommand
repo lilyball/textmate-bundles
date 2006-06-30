@@ -29,7 +29,7 @@ pr.table do
   pr.title("All Next Actions")
   pr.headers(["Context", "Action Name", "Project", "Due_by"])
   acts.sort{|a,b| a.context &lt;=&gt; b.context}.each do |a|
-    proj = a.project.link
+    proj = a.parent.link
     due = case a.due
       when "",nil
         ""

@@ -8,13 +8,12 @@
 	<string>#!/usr/bin/env ruby
 $:&lt;&lt; ENV['TM_SUPPORT_PATH'] &lt;&lt; ENV['TM_BUNDLE_SUPPORT']
 require "bin/GTD.rb"
-require "lib/escape"
 require "lib/dialog"
 include GTD
 files = GTD.process_directory
 projects = files.map{|i| i.projects}.flatten
-projectNames = e_sh projects.join(" ")
-choice = Dialog.request_item :title =&gt; "Listing projects", :prompt =&gt; "Choose the new project", :items =&gt; projectNames 
+projectNames = projects
+choice = Dialog.request_item(:title =&gt; "Listing projects", :prompt =&gt; "Choose the new project", :items =&gt; projectNames)
 if choice then
 	projectName = choice
   project = projects.find{|i| i.name == projectName}
@@ -29,7 +28,7 @@ end</string>
 	<key>name</key>
 	<string>Go to Project</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>openAsNewDocument</string>
 	<key>scope</key>
 	<string>text.gtdalt</string>
 	<key>uuid</key>

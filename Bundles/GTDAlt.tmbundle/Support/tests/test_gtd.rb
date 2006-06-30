@@ -10,7 +10,7 @@ class TestGTD < Test::Unit::TestCase
     assert_not_nil(@a)
     assert_equal("the name", @a.name)
     assert_equal("thecontext", @a.context)
-    assert_equal("project", @a.project)
+    assert_equal("project", @a.parent)
     @b = Action.new(:name => "another action",:context => "emailing",:file => "file2", :line => 15)
     assert_equal("another action", @b.name)
     assert_equal("emailing", @b.context)

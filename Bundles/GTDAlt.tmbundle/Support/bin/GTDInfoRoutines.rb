@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__),"GTD.rb")
 def html_actions_for_context(context)
-  actions = GTDFile.actions_for_context(context)
+  actions = GTD.actions_for_context(context)
   pr = Printer.new
   b = <<HTML
 <html>
@@ -18,7 +18,7 @@ HTML
     pr.title("Actions for context: #{context}")
     pr.headers(["Action name","Project","Due_by"])
     actions.each do |a|
-      proj = if a.project != nil then a.project.link else "none" end
+      proj = a.parent.link
       due = case a.due
         when "",nil
           ""

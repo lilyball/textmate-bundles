@@ -260,7 +260,7 @@ end
       c_actions = self.completed_actions
       until c_actions.empty? do
         a = c_actions.shift
-        MyLogger.log "/#{a.due}/#{a.project.name}/@#{a.context} #{a.name}"
+        MyLogger.log "/#{a.due}/#{a.parent.name}/@#{a.context} #{a.name}"
         a.parent.remove_item(a)
       end
       comp, self.projects = *self.projects.partition {|i| i.completed?}

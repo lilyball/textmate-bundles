@@ -13,7 +13,7 @@ require "lib/dialog"
 include GTD
 line = STDIN.read
 GTD.process_directory
-contextList = e_sh GTD.get_contexts.join(" ")
+contextList = GTD.get_contexts
 choice = Dialog.request_item(:title =&gt; 'Changing the context', :prompt =&gt;  'Choose the new context', :items =&gt; contextList)
 if choice then
 	print line

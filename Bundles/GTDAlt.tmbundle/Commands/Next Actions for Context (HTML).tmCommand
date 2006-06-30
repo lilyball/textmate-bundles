@@ -8,7 +8,6 @@
 	<string>#!/usr/bin/env ruby
 $:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
 require "bin/GTD.rb"
-require "lib/escape"
 require "lib/dialog"
 include GTD
 word = STDIN.read
@@ -19,11 +18,11 @@ when /\s+@(\w+)\s*.*/
   w = $1
 end
 GTDFile.process_directory
-contexts = e_sh GTDFile.get_contexts.join(" ")
+contexts = GTD.get_contexts
 if contexts.include?(word) then
 	context = word
 else
-  context = Dialog.request_item (:title =&gt; 'Listing actions for context', :prompt =&gt;  'Choose the new context', :items =&gt; contexts)
+  context = Dialog.request_item(:title =&gt; 'Listing actions for context', :prompt =&gt;  'Choose the new context', :items =&gt; contexts)
   exit unless context
 end
 acts = GTD.next_actions.find_all{|a| a.context == context}
@@ -45,7 +44,7 @@ pr.table do
   pr.title("Next Actions for context: #{context}")
   pr.headers(["Action name", "Project", "Due_by"])
   acts.each do |a|
-    proj = a.project.link
+    proj = a.parent.link
     due = case a.due
       when "",nil
         ""

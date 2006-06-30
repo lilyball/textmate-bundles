@@ -6,9 +6,9 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-$:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
+$: &lt;&lt; ENV['TM_BUNDLE_SUPPORT']
+$: &lt;&lt; ENV['TM_SUPPORT_PATH']
 require "bin/GTDInfoRoutines.rb"
-requrie "lib/escape"
 require "lib/dialog"
 include GTD
 word = STDIN.read
@@ -19,11 +19,11 @@ when /\s+@(\w+)\s*.*/
   w = $1
 end
 GTD.process_directory
-contexts = e_sh GTDFile.get_contexts.join(" ")
+contexts = GTD.get_contexts
 if contexts.include?(word) then
 	context = word
 else
-  context = Dialog.request_item( :title =&gt; 'Listing actions for context', :prompt 'Choose the new context', :items =&gt; contexts )
+  context = Dialog.request_item( :title =&gt; 'Listing actions for context', :prompt =&gt; 'Choose the new context', :items =&gt; contexts )
   exit unless context
 end
 #puts context

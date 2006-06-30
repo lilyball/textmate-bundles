@@ -116,7 +116,7 @@ end
 #      pr.title("Actions for context: #{context}")
 #      pr.headers(["Action name","Project","Due_by"])
 #      actions.each do |a|
-#        proj = if a.project != nil then a.project.link else "none" end
+#        proj = a.parent.link
 #        due = case a.due
 #          when "",nil
 #            ""

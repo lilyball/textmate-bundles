@@ -21,7 +21,7 @@ end
 if GTD.get_contexts.include?(word) then
 	context = word
 else
-  context = Dialog.request_item (:title =&gt; 'Listing actions for context', :prompt =&gt;  'Choose the new context', :items =&gt; e_sh GTD.contexts.join(" "))
+  context = Dialog.request_item(:title =&gt; 'Listing actions for context', :prompt =&gt;  'Choose the new context', :items =&gt; GTD.contexts)
   exit unless context
 end
 actions = GTD.actions_for_context(context).map{|r| [r[0],r[1].to_s,r[2]]}

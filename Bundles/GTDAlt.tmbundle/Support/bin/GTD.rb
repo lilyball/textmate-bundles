@@ -47,6 +47,16 @@ class << self
   @@contexts = ["email"]
   @@objects = Array.new
   @@files = Array.new
+  def objects
+    @@objects
+  end
+  def clear_objects
+    # pp "here"
+    @@objects = []
+  end
+  def add_object(object)
+    @@objects |= object
+  end
   # Add the array newContexts to the contexts.
   def add_contexts(*newContexts)
     # pp ENV['TM_GTD_CONTEXT']
@@ -60,6 +70,9 @@ class << self
   end
   def contexts
     @@contexts
+  end
+  def clear_contexts
+    @@contexts = []
   end
   GTD.add_contexts(*(ENV['TM_GTD_CONTEXT'] || "").chomp.split(" "))
   # Returns an array of all gtd files in given the directory, or in ENV['TM_GTD_DIRECTORY'] if
@@ -138,7 +151,7 @@ end
       self.subitems << object
     end
     def next_action
-      self.subitems.find{|i| Action == i}
+      self.subitems.find{|i| Action === i}
     end
     def projects
       self.flatten.find_all{|i| Project === i}
@@ -219,6 +232,14 @@ end
     def root
       self
     end
+    # Simply checks if the two objects correspond to the same file. This means the two objects
+    # *might* have different data. Use deep_compare to compare the data.
+    def ==(object)
+      self.file == object.file
+    end
+    # def deep_compare
+    #   self.subitems == self.subitems   # TODO:FIX
+    # end
     # Processes an array of instructions. Not to be called directly.
     def process_instructions(instructions)
       until instructions.empty?

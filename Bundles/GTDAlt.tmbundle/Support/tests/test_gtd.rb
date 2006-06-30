@@ -82,4 +82,12 @@ class TestGTD < Test::Unit::TestCase
       assert_equal(f.read.chomp, @object.dump_object)
     end
   end
+  def test_GTD_singleton_calls
+    contexts = GTD.get_contexts
+    GTD.process_directory
+    @na = GTD.next_actions
+    assert_equal(2, @na.length)
+    GTD.clear_contexts
+    GTD.add_contexts(*contexts)
+  end
 end

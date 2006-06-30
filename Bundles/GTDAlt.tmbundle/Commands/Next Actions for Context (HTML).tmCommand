@@ -17,7 +17,7 @@ when /^@?(\w+)$/
 when /\s+@(\w+)\s*.*/
   w = $1
 end
-GTDFile.process_directory
+GTD.process_directory
 contexts = GTD.get_contexts
 if contexts.include?(word) then
 	context = word

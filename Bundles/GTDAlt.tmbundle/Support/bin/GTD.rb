@@ -64,14 +64,18 @@ class << self
   GTD.add_contexts(*(ENV['TM_GTD_CONTEXT'] || "").chomp.split(" "))
   # Returns an array of all gtd files in given the directory, or in ENV['TM_GTD_DIRECTORY'] if
   # that is nil, or in the default directory otherwise.
+  def get_gtd_directory(directory = nil)
+    if directory then
+      directory
+    elsif (ENV['TM_GTD_DIRECTORY'] || "").to_s != ""
+      ENV['TM_GTD_DIRECTORY'].to_s
+    else
+      Pathname.new(`pwd`.chomp)
+    end
+  end
   def gtd_files_in_directory(directory = nil)
-    path = if directory then
-             directory
-           elsif (ENV['TM_GTD_DIRECTORY'] || "").to_s != ""
-             ENV['TM_GTD_DIRECTORY'].to_s
-           else
-             Pathname.new(`pwd`.chomp)
-           end
+    path = get_gtd_directory(directory)
+    
     return  Dir::glob(File.join(path,"*.gtd"))
   end
   # Reads all files in given directory and processes them. Returns an array of

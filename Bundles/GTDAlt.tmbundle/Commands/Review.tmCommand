@@ -45,7 +45,7 @@ end
 acts = Array.new
 projects = Array.new
 
-today = Date.today - 1
+today = Date.today
 review = today - 7
 
 logfile = File.join(GTD.get_gtd_directory,"GTD.gtdlog")
@@ -59,13 +59,15 @@ end
 log.readlines.each { |line|
   if line =~ /^\/(.*)\/(.*)(\/@(\S+))?/ then
     logdate = Date.strptime($1, '%Y-%m-%d')
-    project = $2
-    if line =~ /^\/(.*)\/(.*)\/@(\S+)\s(.*)$/
-      logact = LogAction.new($1.to_s,$2.to_s,$3.to_s,$4.to_s)
-      acts &lt;&lt; logact
-    else
-      logproj = LogProject.new(logdate.to_s,project)
-      projects &lt;&lt; LogProject.new(logdate.to_s,project)
+    if logdate &gt;= review then
+      project = $2
+      if line =~ /^\/(.*)\/(.*)\/@(\S+)\s(.*)$/
+        logact = LogAction.new($1.to_s,$2.to_s,$3.to_s,$4.to_s)
+        acts &lt;&lt; logact
+      else
+        # logproj = LogProject.new(logdate.to_s,project)
+        projects &lt;&lt; LogProject.new(logdate.to_s,project)
+      end
     end
   end
 }
@@ -97,33 +99,37 @@ if not pComplete.empty? then
   pr.raw "&lt;/ul&gt;"
 end
 
-pUsed = Array.new
-acts.each {|p| pUsed &lt;&lt; p.getprojects }
-pUsed = pUsed.uniq.sort
-diffarray = Array.new
-gtdprojects.each{|p| diffarray &lt;&lt; p.name }
-projectsDiff = diffarray - pUsed
-projectsDiff = projectsDiff.uniq.sort
-if not projectsDiff.empty? then
-  pr.raw "&lt;h2&gt;Projects not acted on&lt;/h2&gt;"
-  pr.table do
-    pr.headers([ "Project", "Next Action", "Context", "Due by"])
-    projectsDiff.each{|p| 
-    project = gtdprojects.find{|i| i.name == p}
-      text = project.next_action.link
-      due = case project.next_action.due
-        when "",nil
-          ""
-        when DateLate
-          "&lt;span style=\"color:red\"&gt;#{project.next_action.due}&lt;/span&gt;"
-        else
-          project.next_action.due
-      end
-      pr.row([project.link, text, project.next_action.context, due])
-  }
-  end # pr.table
+if not acts.empty? then
+  pUsed = Array.new
+  acts.each {|p| pUsed &lt;&lt; p.getprojects }
+  pUsed = pUsed.uniq.sort
+  diffarray = Array.new
+  gtdprojects.each{|p| diffarray &lt;&lt; p.name }
+  projectsDiff = diffarray - pUsed
+  projectsDiff = projectsDiff.uniq.sort
+  if not projectsDiff.empty? then
+    pr.raw "&lt;h2&gt;Projects not acted on&lt;/h2&gt;"
+    pr.table do
+      pr.headers([ "Project", "Next Action", "Context", "Due by"])
+      projectsDiff.each{|p| 
+      project = gtdprojects.find{|i| i.name == p}
+        text = project.next_action.link
+        due = case project.next_action.due
+          when "",nil
+            ""
+          when DateLate
+            "&lt;span style=\"color:red\"&gt;#{project.next_action.due}&lt;/span&gt;"
+          else
+            project.next_action.due
+        end
+        pr.row([project.link, text, project.next_action.context, due])
+    }
+    end # pr.table
+  end
+else  # if acts is empty
+  pr.raw "&lt;h2&gt;No logged activity to report&lt;/h2&gt;"
 end
-
+  
 pr.raw "&lt;h2&gt;Dated Actions&lt;/h2&gt;"
 pr.table do
   pr.headers([ "Context", "Action", "Project", "Due by"])

@@ -129,7 +129,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i:\b(select(\s+distinct)?|insert\s+into|update|delete|from|where|group\sby|and|union(\s+all)?|having|order\sby|limit)\b)</string>
+			<string>(?i:\b(select(\s+distinct)?|insert\s+into|update|delete|from|where|group\sby|and|union(\s+all)?|having|order\sby|limit|(inner|cross)\s+join|straight_join|(left|right)(\s+outer)?\s+join|natural(\s+(left|right)(\s+outer)?)?\s+join)\b)</string>
 			<key>name</key>
 			<string>keyword.other.DML.sql</string>
 		</dict>

@@ -216,7 +216,7 @@ end
       @current_project = self
       @line = 0
       @notes = Hash.new
-      if filename =~/^\/.*gtd$/ # Case where we were fed a filename
+      if filename =~/gtd\z/ # Case where we were fed a filename
         @current_file = filename
         @file = @current_file
         if File.exist?(filename) then

@@ -6,9 +6,8 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-$: &lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
-require "lib/dialog.rb"
-require "bin/GTDUtils.rb"
+require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTDUtils.rb')
+require File.join(ENV['TM_SUPPORT_PATH'],'lib','dialog.rb')
 line = STDIN.read
 text = Dialog.request_string(:title =&gt; "Due date", :prompt =&gt; "Set due date", :default =&gt; "today")  
 unless text then

@@ -13,7 +13,7 @@ col = ENV['TM_LINE_INDEX'].to_i
 currentLine = lines[row-1]
 found = currentLine.scan(/\[\d+\]/)[0]
 if found then
-  print text.insert(text.rindex(found),"$0")
+  print text.insert(text.rindex(found)+found.length + 1,"$0")
 else
   m = text.scan(/\[(\d+)\]/).map{|i| i[0].to_i}.max || 0
   before = []

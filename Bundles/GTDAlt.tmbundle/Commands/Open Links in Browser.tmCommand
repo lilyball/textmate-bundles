@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 links = STDIN.read.scan(/&lt;([^&gt;]*)&gt;/)
 links.each do |link|
-  `open #{link}`
+  `open "#{link}"`
 end</string>
 	<key>fallbackInput</key>
 	<string>line</string>

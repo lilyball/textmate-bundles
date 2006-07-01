@@ -6,11 +6,11 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTD.rb"
-include GTD
+require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTDUtils.rb"
+include GTDLight
 line = STDIN.read
-GTD.process_directory
-contextList = GTD.get_contexts
+#GTD.process_directory
+contextList = GTDLight.get_env_contexts
 print line.sub(/@(\S+)/) {|text| "@"+contextList.next(text[1..-1])}
 </string>
 	<key>fallbackInput</key>

@@ -6,9 +6,8 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-$: &lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
-require "bin/GTDInfoRoutines.rb"
-require "lib/dialog"
+require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTDInfoRoutines.rb')
+require File.join(ENV['TM_SUPPORT_PATH'],'lib','dialog.rb')
 include GTD
 word = STDIN.read
 case word
@@ -32,7 +31,7 @@ puts html_actions_for_context(context)</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>%</string>
+	<string>^~@9</string>
 	<key>name</key>
 	<string>All for Context</string>
 	<key>output</key>

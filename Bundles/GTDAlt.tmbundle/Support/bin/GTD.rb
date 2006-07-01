@@ -10,6 +10,7 @@ require 'pathname'
 # Module GTD. Used as a name-space for all other classes and methods.
 module GTD
 #--
+  include GTDLight
   PROJECT_BEGIN_REGEXP = /^\s*(project)\s*(.*)$/
   PROJECT_END_REGEXP   = /^\s*(end)\s*$/
   ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+due:\[(\d{4}-\d{2}-\d{2})\])?\s*$/
@@ -74,7 +75,7 @@ module GTD
     def clear_contexts
       @@contexts = []
     end
-    GTD.add_contexts(*(ENV['TM_GTD_CONTEXT'] || "").chomp.split(" "))
+    GTD.add_contexts(*GTDLight.get_env_contexts)
     # Returns an array of all gtd files in given the directory, or in ENV['TM_GTD_DIRECTORY'] if
     # that is nil, or in the default directory otherwise.
     def get_gtd_directory(directory = nil)

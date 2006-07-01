@@ -6,18 +6,17 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-$:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
-require "bin/GTD.rb"
-require "lib/dialog"
-include GTD
+require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTDUtils.rb')
+require File.join(ENV['TM_SUPPORT_PATH'],'lib','dialog.rb')
+include GTDLight
 line = STDIN.read
-GTD.process_directory
-contextList = GTD.get_contexts
+#GTD.process_directory
+contextList = GTDLight.get_env_contexts
 choice = Dialog.request_item(:title =&gt; 'Changing the context', :prompt =&gt;  'Choose the new context', :items =&gt; contextList)
 if choice then
-  print line.sub(/@(\S+)/) {|text| "@"+choice}
+  print line.sub(/@(\S+)($|\s+)/) {|text,space| "@" + e_sn(choice) + ((space.nil? or space == "") ? " " : space)+"$0"}
 else
-  print line
+  print e_sn(line)
 end
 </string>
 	<key>fallbackInput</key>
@@ -29,7 +28,7 @@ end
 	<key>name</key>
 	<string>Choose</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>insertAsSnippet</string>
 	<key>scope</key>
 	<string>text.gtdalt meta.action</string>
 	<key>uuid</key>

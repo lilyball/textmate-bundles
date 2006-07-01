@@ -1,4 +1,10 @@
 require 'date'
+# Useful methods that don't need to scan any files in order to work
+module GTDLight
+  def GTDLight.get_env_contexts
+    return (ENV['TM_GTD_CONTEXT'] || "").chomp.split(" ").sort
+  end
+end
 class Array
   def next(item)
     i = (self.index(item) || -1) + 1

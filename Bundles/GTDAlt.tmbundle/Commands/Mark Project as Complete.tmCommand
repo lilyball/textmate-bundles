@@ -6,8 +6,7 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-$: &lt;&lt;  ENV['TM_BUNDLE_SUPPORT']
-require "bin/GTD.rb"
+require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTD.rb')
 include GTD
 file = ENV['TM_FILEPATH']
 obj = GTDFile.new(file)

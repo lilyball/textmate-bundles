@@ -6,18 +6,24 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-word = STDIN.read
+require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTDUtils.rb')
+require File.join(ENV['TM_SUPPORT_PATH'],'lib','escape.rb')
+include GTDLight
+line = STDIN.read
+#GTD.process_directory
+contextList = GTDLight.get_env_contexts
+word = line.scan(/^\s+@(\S+)/)[0][0]
 len = word.length
-contextList = ENV['TM_GTD_CONTEXT'].split(" ")
-match = contextList.find {|i| i.slice(0..len-1) == word }
-if match then
-  print match + " "
+contextList = GTDLight.get_env_contexts
+choice = contextList.find {|i| i.slice(0..len-1) == word }
+if choice then
+  print line.sub(/@(\S+)($|\s+)/) {|text,space| "@" + e_sn(choice) + ((space.nil? or space == "") ? " " : space)+"$0"}
 else
-  print line + " "
+  print e_sn(line)
 end
 </string>
 	<key>fallbackInput</key>
-	<string>word</string>
+	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

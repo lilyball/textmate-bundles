@@ -216,3 +216,10 @@ class NilClass
     return ""
   end
 end
+# URL escape a string but preserve slashes (idea being we have a file system path that we want to use with file://)
+# Borrowed from TextMate's library.
+def e_url(str)
+  str.gsub(/([^a-zA-Z0-9\/_.-]+)/n) do
+    '%' + $1.unpack('H2' * $1.size).join('%').upcase
+  end
+end

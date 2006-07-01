@@ -110,7 +110,7 @@ class << self
   end
   # Returns all next actions from all projects
   def next_actions
-    return @@objects.map { |i| i.next_action}.compact
+    return @@objects.map { |i| i.next_actions}.flatten.compact
   end
   def actions
     return @@objects.map{|i| i.flatten.find_all{|a| Action === a}}.flatten
@@ -152,6 +152,9 @@ end
     end
     def next_action
       self.subitems.find{|i| Action === i}
+    end
+    def next_actions
+      self.flatten.map{|i| i.next_action}.compact
     end
     def projects
       self.flatten.find_all{|i| Project === i}

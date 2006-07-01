@@ -11,7 +11,6 @@ require "bin/GTD.rb"
 include GTD
 GTD.process_directory
 acts = GTD.next_actions
-
 pr = Printer.new
 b = &lt;&lt;HTML
 &lt;html&gt;
@@ -38,12 +37,12 @@ pr.table do
       else
         a.due
     end
+
     pr.row([a.context,a.link,proj,due])
   end
 end # pr.table
 pr.raw e
 puts pr.to_html
-
 </string>
 	<key>fallbackInput</key>
 	<string>word</string>

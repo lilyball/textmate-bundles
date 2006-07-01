@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require 'pp'
+$:&lt;&lt; ENV['TM_SUPPORT_PATH']
+$:&lt;&lt; ENV['TM_BUNDLE_SUPPORT']
+require "bin/GTD.rb"
+require "lib/dialog"
+include GTD
+
+files = GTD.process_directory
+projects = files.map{|i| i.projects}.flatten
+search_string = Dialog.request_string(:title =&gt; "Finding projects", :prompt =&gt; "Abbreviated words to seach for:")
+exit unless search_string &amp;&amp; !(search_string =~ /^\s*$/)
+search_terms = search_string.split(" ")
+for term in search_terms do
+  projects = projects.find_all { |proj| proj.name.index(term) != nil }
+end
+case projects.length
+when 0
+  project = nil
+when 1
+  project = projects[0]
+else
+  project = Dialog.request_item(:title =&gt; "Finding projects",:prompt =&gt; "Too many possible matches found! Please select one:",:items =&gt; projects.map{|i| i.name} )
+  project = projects.find{|proj| proj.name == project} if project
+end
+if project then
+#  project.root.update!
+ `open "#{project.txmt}"`
+end
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~p</string>
+	<key>name</key>
+	<string>Find Project</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>255E029C-7B95-49F2-B7AC-0FAB4F7FBA58</string>
+</dict>
+</plist>

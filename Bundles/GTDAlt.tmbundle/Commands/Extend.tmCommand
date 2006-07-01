@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+$:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
+require "bin/GTD.rb"
+include GTD
+word = STDIN.read
+len = word.length
+contextList = ENV['TM_GTD_CONTEXT'].split(" ")
+match = contextList.find {|i| i.slice(0..len-1) == word }
+if match then
+  print match + " "
+else
+  print line + " "
+end
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>	</string>
+	<key>name</key>
+	<string>Extend</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.gtdalt storage.action.context.gtdalt</string>
+	<key>uuid</key>
+	<string>52351CB8-C7BB-4119-AB3D-D7329A1B076A</string>
+</dict>
+</plist>

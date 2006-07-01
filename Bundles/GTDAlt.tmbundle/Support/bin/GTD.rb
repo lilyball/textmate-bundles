@@ -55,7 +55,7 @@ class << self
     @@objects = []
   end
   def add_object(object)
-    @@objects |= object
+    @@objects << object
   end
   # Add the array newContexts to the contexts.
   def add_contexts(*newContexts)
@@ -243,15 +243,6 @@ end
     def root
       self
     end
-    # Simply checks if the two objects correspond to the same file. This means the two objects
-    # *might* have different data. Use deep_compare to compare the data.
-    def ==(object)
-      self.file == object.file
-    end
-    # def deep_compare
-    #   self.subitems == self.subitems   # TODO:FIX
-    # end
-    # Processes an array of instructions. Not to be called directly.
     def process_instructions(instructions)
       until instructions.empty?
         code, name, context, due = instructions.shift

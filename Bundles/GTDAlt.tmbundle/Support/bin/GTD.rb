@@ -14,7 +14,7 @@ module GTD
   PROJECT_END_REGEXP   = /^\s*(end)\s*$/
   ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+due:\[(\d{4}-\d{2}-\d{2})\])?\s*$/
   NOTE_REGEXP          = /^\[(\d+)\]\s+(.*)$/
-  COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+([^\[]+)(?:\s*\[\d+\])?(?:\s+due:\[(?:\d{4}-\d{2}-\d{2})\])?\s*$/
+  COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+([^\[]+)(?:\s*\[\d+\])?(?:\s+(due:\[?:\d{4}-\d{2}-\d{2}\]))?\s*$/
   COMMENT_REGEXP       = /^\s*#(.*)$/
 #++
   def GTD::parse(data)
@@ -43,83 +43,83 @@ module GTD
     return instructions
   end
 
-class << self
-  @@contexts = ["email"]
-  @@objects = Array.new
-  @@files = Array.new
-  def objects
-    @@objects
-  end
-  def clear_objects
-    # pp "here"
-    @@objects = []
-  end
-  def add_object(object)
-    @@objects << object
-  end
-  # Add the array newContexts to the contexts.
-  def add_contexts(*newContexts)
-    # pp ENV['TM_GTD_CONTEXT']
-    @@contexts |= newContexts
-    @@contexts.uniq!
-    @@contexts.sort!
-  end
-  # Returns an array of all contexts, alphabetized.
-  def get_contexts
-    self.contexts
-  end
-  def contexts
-    @@contexts
-  end
-  def clear_contexts
-    @@contexts = []
-  end
-  GTD.add_contexts(*(ENV['TM_GTD_CONTEXT'] || "").chomp.split(" "))
-  # Returns an array of all gtd files in given the directory, or in ENV['TM_GTD_DIRECTORY'] if
-  # that is nil, or in the default directory otherwise.
-  def get_gtd_directory(directory = nil)
-    if directory then
-      directory
-    elsif (ENV['TM_GTD_DIRECTORY'] || "").to_s != ""
-      ENV['TM_GTD_DIRECTORY'].to_s
-    else
-      Pathname.new(`pwd`.chomp)
+  class << self
+    @@contexts = ["email"]
+    @@objects = Array.new
+    @@files = Array.new
+    def objects
+      @@objects
     end
-  end
-  def gtd_files_in_directory(directory = nil)
-    path = get_gtd_directory(directory)
+    def clear_objects
+      # pp "here"
+      @@objects = []
+    end
+    def add_object(object)
+      @@objects << object
+    end
+    # Add the array newContexts to the contexts.
+    def add_contexts(*newContexts)
+      # pp ENV['TM_GTD_CONTEXT']
+      @@contexts |= newContexts
+      @@contexts.uniq!
+      @@contexts.sort!
+    end
+    # Returns an array of all contexts, alphabetized.
+    def get_contexts
+      self.contexts
+    end
+    def contexts
+      @@contexts
+    end
+    def clear_contexts
+      @@contexts = []
+    end
+    GTD.add_contexts(*(ENV['TM_GTD_CONTEXT'] || "").chomp.split(" "))
+    # Returns an array of all gtd files in given the directory, or in ENV['TM_GTD_DIRECTORY'] if
+    # that is nil, or in the default directory otherwise.
+    def get_gtd_directory(directory = nil)
+      if directory then
+        directory
+      elsif (ENV['TM_GTD_DIRECTORY'] || "").to_s != ""
+        ENV['TM_GTD_DIRECTORY'].to_s
+      else
+        Pathname.new(`pwd`.chomp)
+      end
+    end
+    def gtd_files_in_directory(directory = nil)
+      path = get_gtd_directory(directory)
     
-    return  Dir::glob(File.join(path,"*.gtd"))
-  end
-  # Reads all files in given directory and processes them. Returns an array of
-  # GTDFile objects, one for each file.
-  def process_directory(directory = nil)
-    files = gtd_files_in_directory(directory)
-    for filename in files do
-      # puts "processing #{filename}."
-      @@objects << GTDFile.new(filename)
+      return  Dir::glob(File.join(path,"*.gtd"))
     end
-    @@objects
-  end
-  def all_lines
-    @actions + @projects + @other_lines + @completed_actions
-  end
-  # Returns the actions for a particular context from among all objects.
-  def actions_for_context(context)
-    return @@objects.map{|i| i.flatten.find_all{|action| Action === action && action.context == context}}.flatten
-  end
-  # Returns all next actions from all projects
-  def next_actions
-    return @@objects.map { |i| i.next_actions}.flatten.compact
-  end
-  def actions
-    return @@objects.map{|i| i.flatten.find_all{|a| Action === a}}.flatten
-  end
-  def projects
-    return @@objects.map { |i| i.projects }.flatten
-  end
+    # Reads all files in given directory and processes them. Returns an array of
+    # GTDFile objects, one for each file.
+    def process_directory(directory = nil)
+      files = gtd_files_in_directory(directory)
+      for filename in files do
+        # puts "processing #{filename}."
+        @@objects << GTDFile.new(filename)
+      end
+      @@objects
+    end
+    def all_lines
+      @actions + @projects + @other_lines + @completed_actions
+    end
+    # Returns the actions for a particular context from among all objects.
+    def actions_for_context(context)
+      return @@objects.map{|i| i.flatten.find_all{|action| Action === action && action.context == context}}.flatten
+    end
+    # Returns all next actions from all projects
+    def next_actions
+      return @@objects.map { |i| i.next_actions}.flatten.compact
+    end
+    def actions
+      return @@objects.map{|i| i.flatten.find_all{|a| Action === a}}.flatten
+    end
+    def projects
+      return @@objects.map { |i| i.projects }.flatten
+    end
   
-end
+  end
     
   # Module for updating container objects (Project, GTDFile)
   # that have underlying file structure.
@@ -257,6 +257,8 @@ end
           when :action
             name =~ /^\s*(\S.*?\S)\s*(?:\[(\d+)\])?$/
             thename, noteid = $1, $2
+            due =~ /^(due|at|from):\[(\d{4}\-\d{2}\-\d{2})\]/
+            due_type, date = $1, $2
             act = Action.new(:name => thename, 
                              :context => context,
                              :parent =>  @current_project,
@@ -367,11 +369,14 @@ end
     include Linkable
     # If the action is completed, then its completion date. Otherwise its due date or +nil+.
     attr_accessor :due
+    # The type of the date. Should be <tt>"due"</tt>, <tt>"at"</tt> or <tt>"from"</tt>.
+    attr_accessor :due_type
     # The text in the note, not the actual Note object. Empty if no note.
     attr_accessor :note
     attr_accessor :context, :completed
     def initialize(hash)
       @due = hash[:due]
+      @due_type = hash[:due_type]
       @context = hash[:context]
       @note = hash[:note]
       @completed = hash[:completed] || false

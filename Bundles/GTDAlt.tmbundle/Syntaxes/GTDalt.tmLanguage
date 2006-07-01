@@ -19,9 +19,14 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(project)\s+(.*)</string>
+			<string>^\s*(project)\s+(.*)(\n)</string>
 			<key>beginCaptures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>line.project.begin.gtdalt</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
@@ -32,11 +37,21 @@
 					<key>name</key>
 					<string>entity.project.title.gtdalt</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>meta.project.newline.gtdalt</string>
+				</dict>
 			</dict>
 			<key>end</key>
 			<string>^\s*(end)\s*</string>
 			<key>endCaptures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>line.project.end.gtdalt</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>

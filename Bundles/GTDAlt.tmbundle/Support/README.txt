@@ -35,7 +35,15 @@ First of all, let's describe the GTD format. Here is a typical file:
     [3] A third note
 
 As you can see it has a very simple minimalistic style. Projects start with a `project` line, and end with an `end` line, and they can be nested. Actions start with an at-sign, which is then followed by the context. Contexts can contain any non-space character. Then comes the name of the action, which is followed by two optional parts. The first one is a bracketed number, and signifies the presence of a note for the action. Notes are all at the end, and can contain links in brackets. The second optional part is a due date, in the format `due:[yyyy-mm-dd]`.
+---
+**Updates:** Some things have changed a bit:
 
+1. First, GTDAlt now allows `from:` and `at:` instead of `due:`, but for the time being doesn't yet do anything with them.
+2. Entering a new context has changed slightly. First, it is imperative that you set up the variable `TM_GTD_CONTEXT` to hold a space-separated list of all the context you want to be using. Then, when you try to create a new command the context is selected, with a current value. Type the first few characters of the desired context you want to switch to, and press tab, and the context will be automatically completed.
+3. When you want a new action with the same context as the previous action, press `shift-enter` instead of plain `enter`.
+4. A lot of shortcuts have changed. Look in the bundle for details.
+
+---
 Now let's describe the workflow for working with a gtd file:
 
 1. You create a new project via a snippet with shortcut the exclamation point `!` (`shift-1`).

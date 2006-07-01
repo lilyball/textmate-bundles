@@ -210,20 +210,28 @@ end
     include Container
     attr_reader :notes,  :other_lines, :subitems, :file, :line
     # Loads the data in filename and creates an object representing all projects/actions.
+    # It can be provided by the data string instead.
     def initialize(filename)
       @subitems = Array.new
       @current_project = self
-      @current_file = filename
-      @file = @current_file
       @line = 0
       @notes = Hash.new
-      if File.exist?(filename) then
-        f = File.open(filename, "r")
-        instructions = GTD::parse(f.read)
+      if filename =~/^\/.*gtd$/ # Case where we were fed a filename
+        @current_file = filename
+        @file = @current_file
+        if File.exist?(filename) then
+          f = File.open(filename, "r")
+          instructions = GTD::parse(f.read)
+          process_instructions(instructions)
+          f.close
+        else
+          File.open(filename, "a"){|f|}
+        end
+      else # Case where we were fed a string of data
+        @file = nil
+        @current_file = nil
+        instructions = GTD::parse(filename)
         process_instructions(instructions)
-        f.close
-      else
-        File.open(filename, "a"){|f|}
       end
     end
     def name

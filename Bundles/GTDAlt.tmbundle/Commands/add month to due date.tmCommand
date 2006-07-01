@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require ENV['TM_BUNDLE_SUPPORT']+"/bin/GTDUtils.rb"
-print STDIN.read.sub(/ due:\[(\d{4}-\d{2}-\d{2})\]$/) {|text| " due:[#{DateUtils::addMonth($1)}]"}
+print STDIN.read.sub(/\[(\d{4}-\d{2}-\d{2})\]$/) {|text| "[#{DateUtils::addMonth($1)}]"}
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

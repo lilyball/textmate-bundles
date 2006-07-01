@@ -14,7 +14,7 @@ text = Dialog.request_string(:title =&gt; "Due date", :prompt =&gt; "Set due dat
 unless text then
 	print line
 else
-  print line.gsub(/ due:\[\d{4}-\d{2}-\d{2}\]$/,"") + " due:[#{DateUtils::convert_date(text)}]"
+  print line.gsub(/ (at|due|from):\[\d{4}-\d{2}-\d{2}\]$/,"") + " ${0:due}:[#{DateUtils::convert_date(text)}]"
 end
 
 </string>

@@ -40,13 +40,7 @@
 			<key>match</key>
 			<string>(?i:^\s*(create)\s+(aggregate|conversion|database|domain|function|group|(unique\s+)?index|language|operator class|operator|rule|schema|sequence|table|tablespace|trigger|type|user|view)\s+)(['"`]?)(\w+)\4</string>
 			<key>name</key>
-			<string>declaration.create.sql</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?i:\b(on\s+|(not\s+)?null)\b)</string>
-			<key>name</key>
-			<string>keyword.other.DDL.create.II.sql</string>
+			<string>meta.create.sql</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -65,7 +59,7 @@
 			<key>match</key>
 			<string>(?i:^\s*(drop)\s+(aggregate|conversion|database|domain|function|group|index|language|operator class|operator|rule|schema|sequence|table|tablespace|trigger|type|user|view))</string>
 			<key>name</key>
-			<string>declaration.drop.sql</string>
+			<string>meta.drop.sql</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -94,7 +88,7 @@
 			<key>match</key>
 			<string>(?i:\s*(drop)\s+(table)\s+(\w+)(\s+cascade)?\b)</string>
 			<key>name</key>
-			<string>declaration.drop.sql</string>
+			<string>meta.drop.sql</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -113,31 +107,7 @@
 			<key>match</key>
 			<string>(?i:^\s*(alter)\s+(aggregate|conversion|database|domain|function|group|index|language|operator class|operator|rule|schema|sequence|table|tablespace|trigger|type|user|view)\s+)</string>
 			<key>name</key>
-			<string>declaration.alter.sql</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?i:\b(select(\s+distinct)?|insert\s+into|update|delete|from|where|group\sby|and|union(\s+all)?|having|order\sby|limit)\b)</string>
-			<key>name</key>
-			<string>keyword.other.DML.sql</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?i:\bvalues\b)</string>
-			<key>name</key>
-			<string>keyword.other.DML.II.sql</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?i:\b(begin(\s+work)?|start\s+transaction|commit(\s+work)?|rollback(\s+work)?)\b)</string>
-			<key>name</key>
-			<string>keyword.other.sql.LUW.sql</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?i:\b(grant(\swith\sgrant\soption)?|revoke)\b)</string>
-			<key>name</key>
-			<string>keyword.other.authorization.sql</string>
+			<string>meta.alter.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -153,29 +123,45 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>\d+</string>
+			<key>name</key>
+			<string>constant.numeric.sql</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?i:\b(select(\s+distinct)?|insert\s+into|update|delete|from|where|group\sby|and|union(\s+all)?|having|order\sby|limit)\b)</string>
+			<key>name</key>
+			<string>keyword.other.DML.sql</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?i:\b(on\s+|(not\s+)?null)\b)</string>
+			<key>name</key>
+			<string>keyword.other.DDL.create.II.sql</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?i:\bvalues\b)</string>
+			<key>name</key>
+			<string>keyword.other.DML.II.sql</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?i:\b(begin(\s+work)?|start\s+transaction|commit(\s+work)?|rollback(\s+work)?)\b)</string>
+			<key>name</key>
+			<string>keyword.other.LUW.sql</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?i:\b(grant(\swith\sgrant\soption)?|revoke)\b)</string>
+			<key>name</key>
+			<string>keyword.other.authorization.sql</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>(?i:\bin\b)</string>
 			<key>name</key>
 			<string>keyword.other.data-integrity.sql</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>'</string>
-			<key>end</key>
-			<string>'</string>
-			<key>name</key>
-			<string>string.quoted.single.sql</string>
-			<key>swallow</key>
-			<string>\\.</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>`</string>
-			<key>end</key>
-			<string>`</string>
-			<key>name</key>
-			<string>string.quoted.other.backtick.sql</string>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -184,106 +170,195 @@
 			<string>keyword.other.object-comments.sql</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>--.*$\n?</string>
-			<key>name</key>
-			<string>comment.line.double-dash.sql</string>
+			<key>include</key>
+			<string>#comments</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>#.*$\n?</string>
-			<key>name</key>
-			<string>comment.line.number-sign.sql</string>
+			<key>include</key>
+			<string>#strings</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>/\*</string>
-			<key>end</key>
-			<string>\*/</string>
-			<key>name</key>
-			<string>comment.block.c</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>"</string>
-			<key>end</key>
-			<string>"</string>
-			<key>name</key>
-			<string>string.quoted.double.sql</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>#\{([^\}]*)\}</string>
-					<key>name</key>
-					<string>string.interpolation.sql</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>%\{</string>
-			<key>end</key>
-			<string>\}</string>
-			<key>name</key>
-			<string>string.quoted.double.sql</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>#\{([^\}]*)\}</string>
-					<key>name</key>
-					<string>string.interpolation.sql</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>/(?=\S.*/)</string>
-			<key>end</key>
-			<string>/</string>
-			<key>name</key>
-			<string>string.regexp.sql</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>#\{([^\}]*)\}</string>
-					<key>name</key>
-					<string>string.interpolation.sql</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\\/</string>
-					<key>name</key>
-					<string>string.escaped-slash.sql</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>%r\{</string>
-			<key>end</key>
-			<string>\}</string>
-			<key>name</key>
-			<string>string.regexp.modr.sql</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>#\{([^\}]*)\}</string>
-					<key>name</key>
-					<string>string.interpolation.sql</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\\/</string>
-					<key>name</key>
-					<string>constant.character.escaped.slash.sql</string>
-				</dict>
-			</array>
+			<key>include</key>
+			<string>#regexps</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>--.*$\n?</string>
+					<key>name</key>
+					<string>comment.line.double-dash.sql</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>#.*$\n?</string>
+					<key>name</key>
+					<string>comment.line.number-sign.sql</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>/\*</string>
+					<key>end</key>
+					<string>\*/</string>
+					<key>name</key>
+					<string>comment.block.c</string>
+				</dict>
+			</array>
+		</dict>
+		<key>regexps</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>/(?=\S.*/)</string>
+					<key>end</key>
+					<string>/</string>
+					<key>name</key>
+					<string>string.regexp.sql</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#string_interpolation</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\\/</string>
+							<key>name</key>
+							<string>constant.character.escape.slash.sql</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>%r\{</string>
+					<key>comment</key>
+					<string>We should probably handle nested bracket pairs!?! -- Allan</string>
+					<key>end</key>
+					<string>\}</string>
+					<key>name</key>
+					<string>string.regexp.modr.sql</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#string_interpolation</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>string_escape</key>
+		<dict>
+			<key>match</key>
+			<string>\\.</string>
+			<key>name</key>
+			<string>constant.character.escape.sql</string>
+		</dict>
+		<key>string_interpolation</key>
+		<dict>
+			<key>match</key>
+			<string>#\{([^\}]*)\}</string>
+			<key>name</key>
+			<string>string.interpolation.sql</string>
+		</dict>
+		<key>strings</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>comment</key>
+					<string>this is faster than the next begin/end rule since sub-pattern will match till end-of-line and SQL files tend to have very long lines.</string>
+					<key>match</key>
+					<string>'[^'\\]*'</string>
+					<key>name</key>
+					<string>string.quoted.single.sql</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>string.quoted.single.sql</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#string_escape</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>this is faster than the next begin/end rule since sub-pattern will match till end-of-line and SQL files tend to have very long lines.</string>
+					<key>match</key>
+					<string>`[^`\\]*`</string>
+					<key>name</key>
+					<string>string.quoted.other.backtick.sql</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>`</string>
+					<key>end</key>
+					<string>`</string>
+					<key>name</key>
+					<string>string.quoted.other.backtick.sql</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#string_escape</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>this is faster than the next begin/end rule since sub-pattern will match till end-of-line and SQL files tend to have very long lines.</string>
+					<key>match</key>
+					<string>"[^"#]*"</string>
+					<key>name</key>
+					<string>string.quoted.double.sql</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.sql</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#string_interpolation</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>%\{</string>
+					<key>end</key>
+					<string>\}</string>
+					<key>name</key>
+					<string>string.quoted.brackets.sql</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#string_interpolation</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.sql</string>
 	<key>uuid</key>

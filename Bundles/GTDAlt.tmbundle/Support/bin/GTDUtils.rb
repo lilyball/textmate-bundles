@@ -79,7 +79,7 @@ end
 # that responds to +file+, +line+ and +name+.
 module Linkable
   def uri
-    "file://#{self.file.to_s.gsub(/ /,"%20")}"
+    "file://#{e_url self.file.to_s}"
   end
   def txmt
     "txmt://open?url=#{self.uri}&line=#{self.line}"

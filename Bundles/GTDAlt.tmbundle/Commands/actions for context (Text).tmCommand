@@ -8,7 +8,6 @@
 	<string>#!/usr/bin/env ruby
 $:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
 require "bin/GTD.rb"
-require "lib/escape"
 require "lib/dialog"
 include GTD
 word = STDIN.read

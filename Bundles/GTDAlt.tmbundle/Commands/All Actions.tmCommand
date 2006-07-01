@@ -14,10 +14,14 @@ acts = objects.map{|o| o.actions}.flatten
 acts.sort! do |a,b|
   da, db = *[a.due, b.due].map {|i| i || ""}  # convert nils to empty strings
 #  puts a,b, da, db
-  if da == db then
-    a.name &lt;=&gt; b.name
+  if a.context == b.context then
+    if da == db then
+      a.parent.name &lt;=&gt; b.parent.name
+    else
+      da &lt;=&gt; db
+    end
   else
-    da &lt;=&gt; db
+    a.context &lt;=&gt; b.context
   end
 end
 pr = Printer.new

@@ -86,7 +86,7 @@ class TestGTD < Test::Unit::TestCase
     contexts = GTD.get_contexts
     GTD.process_directory
     @na = GTD.next_actions
-    assert_equal(2, @na.length)
+    assert_equal(7, @na.length) # Careful. This relies on the contexts of test_example
     GTD.clear_contexts
     GTD.add_contexts(*contexts)
   end

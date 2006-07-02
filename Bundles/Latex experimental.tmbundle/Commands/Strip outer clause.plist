@@ -6,32 +6,28 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-leftDelims = { "$" =&gt; "\\[", "\\[" =&gt; "\\(", "$$" =&gt; "\\(", "\\(" =&gt; "\\["}
-rightDelims = { "$" =&gt; "\\]", "\\[" =&gt; "\\)", "$$" =&gt; "\\)", "\\(" =&gt; "\\]"}
-#regexp = /^\\\((.*)\\\)$|\\\[(.*)\\\]$|\$\$(.*)\$\$$|\$(.*)\$$/
-regexp = /^(\\\(|\\\[|\$\$|\$|\{|\(|\[)(.+?)(\\\)|\\\]|\$\$|\$|\}|\)|\])$/
+regexp = /\A\s*(\\\(|\\\[|\$\$|\$|\{|\(|\[|\\begin\{\w+\})(.*)(\\\)|\\\]|\$\$|\$|\}|\)|\]|\\end\{\w+\})\s*\z/m
 string = STDIN.read
 m = string.match(regexp)
 if (m != nil) then
-  string = m[2]
+    print $2
+else
+	print string
 end
-leftDelim = leftDelims[m[1]] || ""
-rightDelim = rightDelims[m[1]] || ""
-print leftDelim + string + rightDelim
 </string>
 	<key>fallbackInput</key>
-	<string>none</string>
+	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^[</string>
+	<string>^~s</string>
 	<key>name</key>
-	<string>Toggle math delimiters</string>
+	<string>Strip outer clause</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>text.latex</string>
 	<key>uuid</key>
-	<string>D037BCB2-A9C3-4CB6-A60F-9612902C2D37</string>
+	<string>1202ACEF-8D67-475C-97C6-C884E43A57E7</string>
 </dict>
 </plist>

@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -KA -rcgi
+	<string>#!/usr/bin/env ruby
+require 'cgi'
 print CGI.escape(STDIN.read)
 </string>
 	<key>fallbackInput</key>

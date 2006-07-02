@@ -5,6 +5,7 @@
 //  Copyright (c) 2005 MacroMates. All rights reserved.
 //
 
+#import <WebKit/WebKit.h>
 #import <Carbon/Carbon.h>
 #import <map>
 #import "Edit in TextMate.h"
@@ -103,13 +104,33 @@ struct PBX_SelectionRange
 
 + (void)externalEditString:(NSString*)aString startingAtLine:(int)aLine forView:(NSView*)aView
 {
-	NSString* appName = [[[[NSWorkspace sharedWorkspace] activeApplication] objectForKey:@"NSApplicationName"] lowercaseString];
+	NSString* urlString = nil;
+	for(NSView* view = aView; view && !urlString; view = [view superview])
+	{
+		if([view isKindOfClass:[WebFrameView class]])
+			urlString = [[[[[(WebFrameView*)view webFrame] dataSource] mainResource] URL] absoluteString];
+	}
+
+	NSString* extension = [[[[NSWorkspace sharedWorkspace] activeApplication] objectForKey:@"NSApplicationName"] lowercaseString];
+	if(urlString)
+	{
+		NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"url map" ofType:@"plist"];
+		NSDictionary* map = [NSDictionary dictionaryWithContentsOfFile:path];
+		unsigned longestMatch = 0;
+		NSEnumerator* enumerator = [map keyEnumerator];
+		while(NSString* key = [enumerator nextObject])
+		{
+			if([urlString rangeOfString:key].location != NSNotFound && [key length] > longestMatch)
+				extension = [map objectForKey:key];
+		}
+	}
+
 	NSString* windowTitle = [[aView window] title] ?: @"untitled";
 	windowTitle = [[windowTitle componentsSeparatedByString:@"/"] componentsJoinedByString:@"-"];
 
-	NSString* fileName = [NSString stringWithFormat:@"%@/%@.%@", NSTemporaryDirectory(), windowTitle, appName];
+	NSString* fileName = [NSString stringWithFormat:@"%@/%@.%@", NSTemporaryDirectory(), windowTitle, extension];
 	for(unsigned i = 2; [[NSFileManager defaultManager] fileExistsAtPath:fileName]; i++)
-		fileName = [NSString stringWithFormat:@"%@/%@ %u.%@", NSTemporaryDirectory(), windowTitle, i, appName];
+		fileName = [NSString stringWithFormat:@"%@/%@ %u.%@", NSTemporaryDirectory(), windowTitle, i, extension];
 
 	[[aString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileName atomically:NO];
 	fileName = [fileName stringByStandardizingPath];

@@ -26,7 +26,6 @@ done
 folders=( "Foundation" "ApplicationKit" "WebKit" )
 for (( i = 0; i &lt; ${#folders[@]}; i++ )); do
 	file="$doc_path/${folders[$i]}/Classes/${word}_Class/index.html"
-	echo "$file"
 	[[ -f "$file" ]] &amp;&amp; exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://${file// /%20}'&gt;"
 done
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>FILE="$HOME/Library/Preferences/com.macromates.edit_in_textmate.plist"
+[ -e "$FILE" ] || cat &lt;&lt;'PLIST' &gt;"$FILE"; mate "$FILE"
+{
+	URLAssociations = {
+		'mail.google.com/' = 'mail';
+		'macromates.com/blog/' = 'markdown';
+		'blacktree.cocoaforge.com/forums/' = 'bbcode';
+	};
+}
+/*
+	Custom associations used by the Edit in TextMate service when
+	invoked from a WebKit-based browser (e.g. Safari or OmniWeb)
+
+	Provide an URL subset and the extension to use for the temporary
+	file when this subset is found in the URL from the calling
+	applications current page.
+
+	This is to trigger proper syntax highlight.
+	
+	In case of multiple subsets matching the URL, the longest one
+	will win.
+
+*/
+PLIST</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Edit in TextMate URL Associations</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>4981F52A-F663-45FC-AE25-EE211E88BA05</string>
+</dict>
+</plist>

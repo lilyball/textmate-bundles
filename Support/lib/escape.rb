@@ -1,11 +1,16 @@
-# properly escapes argument for inclusion in a shell command
-def e_sh(argument)
-	argument.gsub(/[^a-zA-Z0-9_.]/, "\\\\\\0")
+# escape text to make it useable in a shell script as one “word” (string)
+def e_sh(str)
+	str.to_s.gsub(/[^a-zA-Z0-9_.]/, "\\\\\\0")
 end
 
-# properly escapes a string for insertion as a snippet
+# escape text for use in a TextMate snippet
 def e_sn(str)
-	str.to_s.gsub(/[\$\`\\]/, "\\\\\\0")
+	str.to_s.gsub(/[$`\\]/, "\\\\\\0")
+end
+
+# escape text for use in an AppleScript string
+def e_as(str)
+	str.to_s.gsub(/["\\]/, "\\\\\\0")
 end
 
 # URL escape a string but preserve slashes (idea being we have a file system path that we want to use with file://)

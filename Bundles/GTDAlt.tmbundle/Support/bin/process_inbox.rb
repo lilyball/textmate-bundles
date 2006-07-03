@@ -49,11 +49,21 @@ for text in lines do
       proj = projects.find_all{|pro| pro.name.downcase.index(project.downcase) != nil}
       case proj.length
         when 0
-          raise NormalException, "Did not find any project matching: #{project}."
+          choice = Dialog.request_item(:title => "No matching project", :prompt => "Did not find any project matching: #{project}. Please select a project from the list", :items => projects.map{|pro| pro.name} )
+          if choice then
+            proj = projects.find_all{|pro| pro.name == choice}
+          else
+            raise NormalException, "Did not find any project matching: #{project}."
+          end
         when 1
           targetProj = proj[0]
         else
-          raise NormalException, "Too many projects matching: #{project}."
+          choice = Dialog.request_item(:title => "Too many matching projects", :prompt => "Found too many projects matching: #{project}. Please select a project from the list", :items => proj.map{|pro| pro.name} )
+          if choice then
+            proj = projects.find_all{|pro| pro.name == choice}
+          else
+            raise NormalException, "Too many projects matching: #{project}."
+          end
       end
     end
     act = Action.new(:name => action,:context => newContext)

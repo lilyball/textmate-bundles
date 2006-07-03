@@ -17,6 +17,7 @@
 #define kAEClosedFile   'FCls'
 
 static NSMutableDictionary* OpenFiles;
+static NSMutableSet* FailedFiles;
 static NSString* TextMateBundleIdentifier = @"com.macromates.textmate";
 
 #pragma options align=mac68k
@@ -104,10 +105,12 @@ struct PBX_SelectionRange
 
 + (void)externalEditString:(NSString*)aString startingAtLine:(int)aLine forView:(NSView*)aView
 {
+	Class cl = NSClassFromString(@"WebFrameView");
+
 	NSString* urlString = nil;
-	for(NSView* view = aView; view && !urlString; view = [view superview])
+	for(NSView* view = aView; view && !urlString && cl; view = [view superview])
 	{
-		if([view isKindOfClass:[WebFrameView class]])
+		if([view isKindOfClass:cl])
 			urlString = [[[[[(WebFrameView*)view webFrame] dataSource] mainResource] URL] absoluteString];
 	}
 
@@ -121,7 +124,10 @@ struct PBX_SelectionRange
 		while(NSString* key = [enumerator nextObject])
 		{
 			if([urlString rangeOfString:key].location != NSNotFound && [key length] > longestMatch)
+			{
 				extension = [map objectForKey:key];
+				longestMatch = [key length];
+			}
 		}
 	}
 
@@ -158,9 +164,11 @@ struct PBX_SelectionRange
 	if([view window] && [view respondsToSelector:@selector(didModifyString:)])
 	{
 		[view performSelector:@selector(didModifyString:) withObject:[NSString stringWithContentsOfFile:fileName encoding:NSUTF8StringEncoding error:nil]];
+		[FailedFiles removeObject:fileName];
 	}
 	else
 	{
+		[FailedFiles addObject:fileName];
 		NSLog(@"%s view %p, %@, window %@", _cmd, view, view, [view window]);
 		NSLog(@"%s file name %@, options %@", _cmd, fileName, [[OpenFiles objectForKey:fileName] description]);
 		NSLog(@"%s all %@", _cmd, [OpenFiles description]);
@@ -173,8 +181,19 @@ struct PBX_SelectionRange
 	NSAppleEventDescriptor* fileURL = [[event paramDescriptorForKeyword:keyDirectObject] coerceToDescriptorType:typeFileURL];
 	NSString* urlString = [[[NSString alloc] initWithData:[fileURL data] encoding:NSUTF8StringEncoding] autorelease];
 	NSString* fileName = [[[NSURL URLWithString:urlString] path] stringByStandardizingPath];
-	[[NSFileManager defaultManager] removeFileAtPath:fileName handler:nil];
-	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+
+	if([FailedFiles containsObject:fileName])
+	{
+		if([[NSFileManager defaultManager] fileExistsAtPath:fileName])
+			[[NSWorkspace sharedWorkspace] selectFile:fileName inFileViewerRootedAtPath:[fileName stringByDeletingLastPathComponent]];
+		[FailedFiles removeObject:fileName];
+	}
+	else
+	{
+		[[NSFileManager defaultManager] removeFileAtPath:fileName handler:nil];
+		[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+	}
+
 	[OpenFiles removeObjectForKey:fileName];
 	if([OpenFiles count] == 0)
 		[self removeODBEventHandlers];
@@ -214,6 +233,7 @@ struct PBX_SelectionRange
 + (void)load
 {
 	OpenFiles = [NSMutableDictionary new];
+	FailedFiles = [NSMutableSet new];
 //	NSString* bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableEditInTextMateMenuItem"] == NO)
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installMenuItem:) name:NSApplicationDidFinishLaunchingNotification object:[NSApplication sharedApplication]];

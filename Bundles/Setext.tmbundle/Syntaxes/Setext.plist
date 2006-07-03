@@ -1,65 +1,240 @@
-{
-    name = "Setext";
-    fileTypes = ( etx, etx.txt );
-    firstLineMatch = "setext";
-    scopeName = "text.setext";
-    patterns = (
-        // Inline formatting
-        { include = "text.setext.inline"; },
-
-        // Block formatting
-        {   name = "markup.other.mail_header.setext";
-            match = "^((Subject|Date|From):) (.+)";
-            captures = {
-                1 = { name = "markup.other.mail_header.name.setext"; };
-                3 = { name = "markup.other.mail_header.value.setext"; };
-            };
-        },
-        {   name = "markup.other.heading.1.setext";
-            match = "^={3,}$";
-        },
-        {   name = "markup.other.heading.2.setext";
-            match = "^-{3,}$";
-        },
-        {   name = "markup.other.include.setext";
-            begin = "^>\\s";
-            end = "$";
-            patterns = (
-                { include = "text.setext.inline"; }
-            );
-        },
-        {   name = "markup.other.bullet.setext";
-            begin = "^[*]\\s";
-            end = "$";
-            patterns = (
-                { include = "text.setext.inline"; }
-            );
-        },
-        {   name = "markup.other.raw.setext";
-            begin = "`";
-            end = "`";
-        },
-        {   name = "markup.other.note_def.setext";
-            match = "^\\.{2} (_[\\w.]+) +(\\(.+)$";
-            captures = {
-                1 = { name = "markup.other.hotword.setext"; };
-                2 = { name = "markup.other.note.setext"; };
-            };
-        },
-        {   name = "markup.other.href_def.setext";
-            match = "^\\.{2} (_[\\w.]+) +(.{2,})$";
-            captures = {
-                1 = { name = "markup.other.hotword.setext"; };
-                2 = { name = "markup.underline.link.setext"; };
-            };
-        },
-        {   name = "comment.line.double-dot.setext";
-            match = "^\\.{2} (?![.]).+";
-        },
-        {   name = "comment.block.logical_end_of_text.setext";
-            begin = "^\\.{2}$";
-            end = "dummy text you should never find";
-        },
-    );
-    uuid = "FB227CE6-DC4C-4632-BCA3-965AE0D8E419";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>etx</string>
+		<string>etx.txt</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>setext</string>
+	<key>name</key>
+	<string>Setext</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>include</key>
+			<string>#inline</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.other.mail_header.name.setext</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>markup.other.mail_header.value.setext</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^((Subject|Date|From):) (.+)</string>
+			<key>name</key>
+			<string>markup.other.mail_header.setext</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^={3,}$</string>
+			<key>name</key>
+			<string>markup.heading.1.setext</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^-{3,}$</string>
+			<key>name</key>
+			<string>markup.heading.2.setext</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^&gt;\s</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>meta.other.include.setext</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^[*]\s</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>markup.other.bullet.setext</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>`</string>
+			<key>end</key>
+			<string>`</string>
+			<key>name</key>
+			<string>markup.raw.setext</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.other.hotword.setext</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>markup.other.note.setext</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\.{2} (_[\w.]+) +(\(.+)$</string>
+			<key>name</key>
+			<string>meta.other.note_def.setext</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.underline.hotword.setext</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>markup.underline.link.setext</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\.{2} (_[\w.]+) +(.{2,})$</string>
+			<key>name</key>
+			<string>meta.other.href_def.setext</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\.{2} (?![.]).+</string>
+			<key>name</key>
+			<string>comment.line.double-dot.setext</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\.{2}$</string>
+			<key>end</key>
+			<string>dummy text you should never find</string>
+			<key>name</key>
+			<string>comment.block.logical_end_of_text.setext</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>bold</key>
+		<dict>
+			<key>match</key>
+			<string>[*]{2}.+?[*]{2}</string>
+			<key>name</key>
+			<string>markup.bold.setext</string>
+		</dict>
+		<key>doc_separator</key>
+		<dict>
+			<key>match</key>
+			<string>\s*\$\$($\n|$)</string>
+			<key>name</key>
+			<string>meta.separator.document.setext</string>
+		</dict>
+		<key>hotword</key>
+		<dict>
+			<key>match</key>
+			<string>\b[\w.]*\w(?&lt;!_)_\b</string>
+			<key>name</key>
+			<string>markup.underline.hotword.setext</string>
+		</dict>
+		<key>inline</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#italic</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bold</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#underline</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#hotword</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#link</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#doc_separator</string>
+				</dict>
+			</array>
+		</dict>
+		<key>italic</key>
+		<dict>
+			<key>match</key>
+			<string>~\w+~</string>
+			<key>name</key>
+			<string>markup.italic.setext</string>
+		</dict>
+		<key>link</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.underline.setext</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>markup.underline.link.setext</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>markup.underline.setext</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Not actually part of setext, added for Tidbits.</string>
+			<key>match</key>
+			<string>(&lt;)((?i:mailto|https?|ftp|news)://.*?)(&gt;)</string>
+		</dict>
+		<key>underline</key>
+		<dict>
+			<key>match</key>
+			<string>\b_\w+(?&lt;!_)_\b|\b_.+(?&lt;!_)_\b</string>
+			<key>name</key>
+			<string>markup.underline.setext</string>
+		</dict>
+	</dict>
+	<key>scopeName</key>
+	<string>text.setext</string>
+	<key>uuid</key>
+	<string>FB227CE6-DC4C-4632-BCA3-965AE0D8E419</string>
+</dict>
+</plist>

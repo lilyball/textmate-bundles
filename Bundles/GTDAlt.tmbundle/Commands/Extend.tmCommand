@@ -10,7 +10,6 @@ require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTDUtils.rb')
 require File.join(ENV['TM_SUPPORT_PATH'],'lib','escape.rb')
 include GTDLight
 line = STDIN.read
-#GTD.process_directory
 contextList = GTDLight.get_env_contexts
 word = line.scan(/^\s*@(\S+)/)[0][0]
 len = word.length

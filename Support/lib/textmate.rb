@@ -13,7 +13,7 @@ module TextMate
       actual_version = IO.read(ENV['TM_SUPPORT_PATH'] + '/version').to_i
       if actual_version < version then
         require 'dialog'
-        Dialog.request_confirmation(:prompt => "Your version of the shared support folder is too old for this action to run.\n\nYou need version #{version} but only have #{actual_version}.", :button1 => "More Info") do
+        Dialog.request_confirmation(:title => "Support Folder is Outdated", :prompt => "Your version of the shared support folder is too old for this action to run.\n\nYou need version #{version} but only have #{actual_version}.", :button1 => "More Info") do
           %x{ open 'http://macromates.com/' }
         end
         raise SystemExit

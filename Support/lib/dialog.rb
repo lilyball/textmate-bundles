@@ -31,18 +31,16 @@ class << self
   def request_confirmation(options = Hash.new,&block)
     button1 = options[:button1] || "Continue"
     button2 = options[:button2] || "Cancel"
+    title   = options[:title]   || "Something Happened"
     prompt  = options[:prompt]  || "Should we continue or cancel?"
 
     res = %x{ iconv <<'APPLESCRIPT' -f utf-8 -t mac|osascript 2>/dev/null
       prop the_buttons : {"#{e_as button2}", "#{e_as button1}"}
       tell app "TextMate"
-        set the_button to button returned of ¬
-          (display dialog "#{e_as prompt}" ¬
-          buttons the_buttons ¬
-          with icon 1 default button 2)
-        if the_button is equal to item 2 of the_buttons then
-          return true
-        end if
+        display alert "#{e_as title}" message "#{e_as prompt}" as informational ¬
+        buttons the_buttons default button 2 cancel button 1
+        set the_button to button returned of result
+        if the_button is equal to item 2 of the_buttons then return true
       end tell
     }
 
@@ -64,10 +62,10 @@ class << self
 
   private
 
-  def textmate_path
-    require "textmate"
-    TextMate.app_path
-  end
+  # def textmate_path
+  #   require "textmate"
+  #   TextMate.app_path
+  # end
   def dialog(type, options)
     str = ""
     options.each_pair do |key, value|

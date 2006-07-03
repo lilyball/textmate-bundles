@@ -2,7 +2,7 @@ require 'date'
 # Useful methods that don't need to scan any files in order to work
 module GTDLight
   def GTDLight.get_env_contexts
-    return (ENV['TM_GTD_CONTEXT'] || "").chomp.split(" ").sort
+    return ((ENV['TM_GTD_CONTEXT'] || "") + " " + (ENV['TM_GTD_CONTEXTS'] || "")).chomp.split(" ").compact.sort
   end
 end
 class Array

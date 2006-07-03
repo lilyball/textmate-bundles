@@ -113,16 +113,20 @@ if not acts.empty? then
       pr.headers([ "Project", "Next Action", "Context", "Due by"])
       projectsDiff.each{|p| 
       project = gtdprojects.find{|i| i.name == p}
-        text = project.next_action.link
+        if project.next_action.note then
+          text = "#{project.next_action.link} / #{project.next_action.note}"
+        else
+          text = project.next_action.link
+        end
         due = case project.next_action.due
           when "",nil
             ""
           when DateLate
-            "&lt;span style=\"color:red\"&gt;#{project.next_action.due}&lt;/span&gt;"
+            "&lt;span style=\"color:red\"&gt;&lt;nobr&gt;#{project.next_action.due}&lt;/nobr&gt;&lt;/span&gt;"
           else
-            project.next_action.due
+            "&lt;nobr&gt;#{project.next_action.due}&lt;/nobr&gt;"
         end
-        pr.row([project.link, text, project.next_action.context, due])
+        pr.row([project.link, text, "&lt;nobr&gt;#{project.next_action.context}&lt;/nobr&gt;", due])
     }
     end # pr.table
   end
@@ -140,9 +144,9 @@ pr.table do
         when "",nil
           ""
         when DateLate
-          "&lt;span style=\"color:red\"&gt;#{a.due}&lt;/span&gt;"
+          "&lt;span style=\"color:red\"&gt;&lt;nobr&gt;#{a.due}&lt;/nobr&gt;&lt;/span&gt;"
         else
-          a.due
+          "&lt;nobr&gt;#{a.due}&lt;/nobr&gt;"
       end
       text = "&lt;a href=\"#{a.txmt}\"&gt;#{a.name}&lt;/a&gt;"
       pr.row([a.context, text, proj , due])
@@ -151,8 +155,7 @@ pr.table do
 end
 
 pr.raw e
-puts pr.to_html
-</string>
+puts pr.to_html</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

@@ -103,40 +103,48 @@ struct PBX_SelectionRange
 	[pool release];
 }
 
-+ (void)externalEditString:(NSString*)aString startingAtLine:(int)aLine forView:(NSView*)aView
++ (NSString*)extensionForURL:(NSURL*)anURL
 {
-	Class cl = NSClassFromString(@"WebFrameView");
-
-	NSString* urlString = nil;
-	for(NSView* view = aView; view && !urlString && cl; view = [view superview])
-	{
-		if([view isKindOfClass:cl])
-			urlString = [[[[[(WebFrameView*)view webFrame] dataSource] mainResource] URL] absoluteString];
-	}
-
-	NSString* extension = [[[[NSWorkspace sharedWorkspace] activeApplication] objectForKey:@"NSApplicationName"] lowercaseString];
-	if(urlString)
+	NSString* res = nil;
+	if(NSString* urlString = [anURL absoluteString])
 	{
 		NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"url map" ofType:@"plist"];
-		NSDictionary* map = [NSDictionary dictionaryWithContentsOfFile:path];
+		NSMutableDictionary* map = [NSMutableDictionary dictionaryWithContentsOfFile:path];
+
+		NSString* customBindingsPath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"Preferences/com.macromates.edit_in_textmate.plist"];
+		if(NSDictionary* associations = [[NSDictionary dictionaryWithContentsOfFile:customBindingsPath] objectForKey:@"URLAssociations"])
+			[map addEntriesFromDictionary:associations];
+
 		unsigned longestMatch = 0;
 		NSEnumerator* enumerator = [map keyEnumerator];
 		while(NSString* key = [enumerator nextObject])
 		{
 			if([urlString rangeOfString:key].location != NSNotFound && [key length] > longestMatch)
 			{
-				extension = [map objectForKey:key];
+				res = [map objectForKey:key];
 				longestMatch = [key length];
 			}
 		}
 	}
+	return res;
+}
 
-	NSString* windowTitle = [[aView window] title] ?: @"untitled";
-	windowTitle = [[windowTitle componentsSeparatedByString:@"/"] componentsJoinedByString:@"-"];
++ (void)externalEditString:(NSString*)aString startingAtLine:(int)aLine forView:(NSView*)aView
+{
+	Class cl = NSClassFromString(@"WebFrameView");
 
-	NSString* fileName = [NSString stringWithFormat:@"%@/%@.%@", NSTemporaryDirectory(), windowTitle, extension];
+	NSURL* url = nil;
+	for(NSView* view = aView; view && !url && cl; view = [view superview])
+	{
+		if([view isKindOfClass:cl])
+			url = [[[[(WebFrameView*)view webFrame] dataSource] mainResource] URL];
+	}
+
+	NSString* basename = [[[[aView window] title] componentsSeparatedByString:@"/"] componentsJoinedByString:@"-"] ?: @"untitled";
+	NSString* extension = [self extensionForURL:url] ?: [[[[NSWorkspace sharedWorkspace] activeApplication] objectForKey:@"NSApplicationName"] lowercaseString];
+	NSString* fileName = [NSString stringWithFormat:@"%@/%@.%@", NSTemporaryDirectory(), basename, extension];
 	for(unsigned i = 2; [[NSFileManager defaultManager] fileExistsAtPath:fileName]; i++)
-		fileName = [NSString stringWithFormat:@"%@/%@ %u.%@", NSTemporaryDirectory(), windowTitle, i, extension];
+		fileName = [NSString stringWithFormat:@"%@/%@ %u.%@", NSTemporaryDirectory(), basename, i, extension];
 
 	[[aString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileName atomically:NO];
 	fileName = [fileName stringByStandardizingPath];

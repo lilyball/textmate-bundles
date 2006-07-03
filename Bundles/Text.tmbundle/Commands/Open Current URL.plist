@@ -5,7 +5,12 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>open "$(cat)"
+	<string>#!/usr/bin/env ruby
+
+url = STDIN.read
+url.gsub!(/^&lt;|&gt;$/, '')
+
+`open #{url}`
 </string>
 	<key>fallbackInput</key>
 	<string>scope</string>

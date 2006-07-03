@@ -14,7 +14,15 @@ module TextMate
       if actual_version < version then
         require 'dialog'
         Dialog.request_confirmation(:title => "Support Folder is Outdated", :prompt => "Your version of the shared support folder is too old for this action to run.\n\nYou need version #{version} but only have #{actual_version}.", :button1 => "More Info") do
-          %x{ open 'http://macromates.com/' }
+          help_url = "file://#{e_url(self.app_path + '/Contents/Resources/English.lproj/TextMate Help Book/bundles.html')}#support_folder"
+          %x{ open #{e_sh help_url} }
+          # # unfortuantely the help viewer ignores the fragment specifier of the URL
+          # %x{ osascript <<'APPLESCRIPT'
+          # 	tell app "Help Viewer"
+          # 	  handle url "#{e_as help_url}"
+          # 	  activate
+          # 	end tell	
+          # }
         end
         raise SystemExit
       end

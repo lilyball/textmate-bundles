@@ -29,23 +29,38 @@ class << self
     end
   end
   def request_confirmation(options = Hash.new,&block)
-    _options = Hash.new
-    _options["string-output"] = ""
-    _options["title"] = options[:title] || "Yes or No?"
-    _options["text"] =  options[:prompt] || "Please answer Yes or No."
-    _options["informative-text"] = options[:information]
-    _options["no-cancel"] = options.has_key?(:cancel) ? nil : ""
-    dialog("yesno-msgbox", _options,&block)    
+    button1 = options[:button1] || "Continue"
+    button2 = options[:button2] || "Cancel"
+    prompt  = options[:prompt]  || "Should we continue or cancel?"
+
+    res = %x{ iconv <<'APPLESCRIPT' -f utf-8 -t mac|osascript 2>/dev/null
+      prop the_buttons : {"#{e_as button2}", "#{e_as button1}"}
+      tell app "TextMate"
+        set the_button to button returned of ¬
+          (display dialog "#{e_as prompt}" ¬
+          buttons the_buttons ¬
+          with icon 1 default button 2)
+        if the_button is equal to item 2 of the_buttons then
+          return true
+        end if
+      end tell
+    }
+
+    if res =~ /true/ then
+      block_given? ? yield : true
+    else
+      block_given? ? raise(SystemExit) : false
+    end
   end
-  def show_alert(options = Hash.new,&block)
-    _options = Hash.new
-    _options["string-output"] = ""
-    _options["title"] = options[:title] || "Alert"
-    _options["text"] = options[:prompt] || "Is this Ok?"
-    _options["informative-text"] = options[:information]
-    _options["icon-file"] = textmate_path + '/Contents/Resources/TextMate.icns'
-    dialog("ok-msgbox", _options,&block)
-  end
+  # def show_alert(options = Hash.new,&block)
+  #   _options = Hash.new
+  #   _options["string-output"] = ""
+  #   _options["title"] = options[:title] || "Alert"
+  #   _options["text"] = options[:prompt] || "Is this Ok?"
+  #   _options["informative-text"] = options[:information]
+  #   _options["icon-file"] = textmate_path + '/Contents/Resources/TextMate.icns'
+  #   dialog("ok-msgbox", _options,&block)
+  # end
 
   private
 

@@ -208,7 +208,7 @@ module GTD
       for filename,string in filepairs do
         FileUtils.mv(filename,filename+"~")
       end
-      for file,string in filepairs do
+      for filename,string in filepairs do
         FileUtils.mv(filename+"~~",filename)
       end
     rescue Exception => e

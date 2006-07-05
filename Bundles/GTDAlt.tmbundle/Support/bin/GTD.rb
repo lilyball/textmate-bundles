@@ -16,7 +16,7 @@ module GTD
   ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+(?:due|from|at):\[(\d{4}-\d{2}-\d{2})\])?\s*$/
   NOTE_REGEXP          = /^\[(\d+)\]\s+(.*)$/
   COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+(([^\[]+)(?:\s*\[\d+\])?)(?:\s+(?:(?:due|from|at):\[\d{4}-\d{2}-\d{2}\]))?\s*$/
-  COMMENT_REGEXP       = /^\s*#(.*)$/
+  COMMENT_REGEXP       = /^(\s*#.*)$/
 #++
   def GTD::parse(data)
     instructions = []
@@ -198,6 +198,8 @@ module GTD
           s << obj.dump_object(indent + indent_inc,indent_inc,notes)
         end
         s << indent + "end"
+      when Comment
+        s << self.name
       when GTDFile
         for obj in subitems do
           s << obj.dump_object(indent,indent_inc,notes)

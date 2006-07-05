@@ -587,10 +587,7 @@
 			<key>scope</key>
 			<string>keyword.control.ruby.start-block</string>
 			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#000000</string>
-			</dict>
+			<dict/>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -620,7 +617,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ Keyword.operator (math &amp; )</string>
+			<string>™ Keyword.operator</string>
 			<key>scope</key>
 			<string>keyword.operator, declaration.function.operator</string>
 			<key>settings</key>
@@ -628,6 +625,25 @@
 				<key>foreground</key>
 				<string>#6100CC</string>
 			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ keyword.operator.getter</string>
+			<key>scope</key>
+			<string>keyword.operator.getter</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#8083FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ keyword.operator.setter</string>
+			<key>scope</key>
+			<string>keyword.operator.setter</string>
+			<key>settings</key>
+			<dict/>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -1458,6 +1474,8 @@
 			<dict>
 				<key>background</key>
 				<string>#000000</string>
+				<key>fontStyle</key>
+				<string></string>
 			</dict>
 		</dict>
 		<dict>
@@ -1763,6 +1781,34 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>meta.brace.pipe</string>
+			<key>scope</key>
+			<string>meta.brace.pipe</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#33333333</string>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#4C4C4C</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>source.ruby.embedded.source.brace</string>
+			<key>scope</key>
+			<string>source.ruby.embedded.source.brace</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#4C4C4C</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>meta.brace.curly</string>
 			<key>scope</key>
 			<string>meta.brace.curly </string>
@@ -1774,6 +1820,21 @@
 				<string>bold</string>
 				<key>foreground</key>
 				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>meta.brace.square</string>
+			<key>scope</key>
+			<string>meta.brace.square</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#803D0033</string>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#FF7900</string>
 			</dict>
 		</dict>
 		<dict>

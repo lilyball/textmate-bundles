@@ -15,7 +15,7 @@ module GTD
   PROJECT_END_REGEXP   = /^\s*(end)\s*$/
   ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+due:\[(\d{4}-\d{2}-\d{2})\])?\s*$/
   NOTE_REGEXP          = /^\[(\d+)\]\s+(.*)$/
-  COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+([^\[]+)(?:\s*\[\d+\])?(?:\s+(due:\[?:\d{4}-\d{2}-\d{2}\]))?\s*$/
+  COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+(([^\[]+)(?:\s*\[\d+\])?)(?:\s+(due:\[?:\d{4}-\d{2}-\d{2}\]))?\s*$/
   COMMENT_REGEXP       = /^\s*#(.*)$/
 #++
   def GTD::parse(data)
@@ -263,7 +263,7 @@ module GTD
             act = Action.new(:name => thename, 
                              :context => context,
                              :parent =>  @current_project,
-                             :due => due)
+                             :due => due, :due_type => due_type)
             if noteid != "" then
               act.note = noteid
               @notes[noteid] = act
@@ -274,7 +274,13 @@ module GTD
             act = @notes[context]
             act.note = name unless act==nil
           when :completed
-            act = Action.new(:name => name, :context => context,:parent =>  @current_project,:due => due, :completed => true)
+            name =~ /^\s*(\S.*?\S)\s*(?:\[(\d+)\])?$/
+            thename, noteid = $1, $2
+            act = Action.new(:name => thename, :context => context,:parent =>  @current_project,:due => due, :completed => true)
+            if noteid != "" then
+              act.note = noteid
+              @notes[noteid] = act
+            end
             @current_project << act
           else
             cmt = Comment.new(:name => name, :parent => @current_project)
@@ -291,7 +297,8 @@ module GTD
       c_actions = self.completed_actions
       until c_actions.empty? do
         a = c_actions.shift
-        MyLogger.log "/#{a.due}/#{a.parent.name}/@#{a.context} #{a.name}"
+        note = (a.note.nil? || ENV['TM_ARCHIVE_NOTES'].nil?) ? "" : "\n  Note: #{a.note}"
+        MyLogger.log "/#{a.due}/#{a.parent.name}/@#{a.context} #{a.name}#{note}"
         a.parent.remove_item(a)
       end
       

@@ -227,6 +227,7 @@ TEXT
       @post.delete('mt_text_more')
     else
       @post['description'] += "\n\n"
+      @post['mt_text_more'] = "\n" + @post['mt_text_more']
     end
     @post['title'] = @headers['title'] if @headers['title']
     self.post_id = @headers['post'].to_i if @headers['post']

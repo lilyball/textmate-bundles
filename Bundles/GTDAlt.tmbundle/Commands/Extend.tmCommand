@@ -11,7 +11,8 @@ require File.join(ENV['TM_SUPPORT_PATH'],'lib','escape.rb')
 include GTDLight
 line = STDIN.read
 contextList = GTDLight.get_env_contexts
-word = line.scan(/^\s*@(\S+)/)[0][0]
+word = line.scan(/^\s*@(\S+)/)
+word = word.empty? ? line : word[0][0]
 len = word.length
 contextList = GTDLight.get_env_contexts
 choice = contextList.find {|i| i.slice(0..len-1) == word }

@@ -113,6 +113,7 @@ if not acts.empty? then
       pr.headers([ "Project", "Next Action", "Context", "Due by"])
       projectsDiff.each{|p| 
       project = gtdprojects.find{|i| i.name == p}
+	  if project.next_action then
         if project.next_action.note then
           text = "#{project.next_action.link} / #{project.next_action.note}"
         else
@@ -127,6 +128,7 @@ if not acts.empty? then
             "&lt;nobr&gt;#{project.next_action.due}&lt;/nobr&gt;"
         end
         pr.row([project.link, text, "&lt;nobr&gt;#{project.next_action.context}&lt;/nobr&gt;", due])
+    end
     }
     end # pr.table
   end

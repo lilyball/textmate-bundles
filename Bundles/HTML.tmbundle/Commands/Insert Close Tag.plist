@@ -7,9 +7,14 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-doc = STDIN.read
-line = ENV['TM_LINE_NUMBER'].to_i
+doc        = STDIN.read
+line       = ENV['TM_LINE_NUMBER'].to_i
 line_index = ENV['TM_LINE_INDEX'].to_i
+
+if ENV.has_key? 'TM_INPUT_START_LINE' then
+  line       = ENV['TM_INPUT_START_LINE'].to_i
+  line_index = ENV['TM_INPUT_START_LINE_INDEX'].to_i
+end
 
 before = /(.*\n){#{line-1}}.{#{line_index}}/.match(doc)[0]
 before.gsub!(/&lt;(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param)\b[^&gt;]*&gt;|&lt;[^&gt;]+\/\s*&gt;/, '') # remove all self-closing tags
@@ -38,7 +43,7 @@ end</string>
 	<key>name</key>
 	<string>Insert Close Tag</string>
 	<key>output</key>
-	<string>afterSelectedText</string>
+	<string>insertAsSnippet</string>
 	<key>uuid</key>
 	<string>0658019F-3635-462E-AAC2-74E4FE508A9B</string>
 </dict>

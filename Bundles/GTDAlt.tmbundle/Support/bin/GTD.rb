@@ -13,9 +13,9 @@ module GTD
   include GTDLight
   PROJECT_BEGIN_REGEXP = /^\s*(project)\s*(.*)$/
   PROJECT_END_REGEXP   = /^\s*(end)\s*$/
-  ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+due:\[(\d{4}-\d{2}-\d{2})\])?\s*$/
+  ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+(?:due|from|at):\[(\d{4}-\d{2}-\d{2})\])?\s*$/
   NOTE_REGEXP          = /^\[(\d+)\]\s+(.*)$/
-  COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+(([^\[]+)(?:\s*\[\d+\])?)(?:\s+(due:\[?:\d{4}-\d{2}-\d{2}\]))?\s*$/
+  COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+(([^\[]+)(?:\s*\[\d+\])?)(?:\s+(?:(?:due|from|at):\[\d{4}-\d{2}-\d{2}\]))?\s*$/
   COMMENT_REGEXP       = /^\s*#(.*)$/
 #++
   def GTD::parse(data)
@@ -97,7 +97,6 @@ module GTD
     def process_directory(directory = nil)
       files = gtd_files_in_directory(directory)
       for filename in files do
-        # puts "processing #{filename}."
         @@objects << GTDFile.new(filename)
       end
       @@objects

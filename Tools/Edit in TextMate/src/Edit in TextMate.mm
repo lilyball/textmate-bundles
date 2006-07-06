@@ -171,7 +171,7 @@ struct PBX_SelectionRange
 	NSView* view = [[OpenFiles objectForKey:fileName] objectForKey:@"view"];
 	if([view window] && [view respondsToSelector:@selector(didModifyString:)])
 	{
-		[view performSelector:@selector(didModifyString:) withObject:[NSString stringWithContentsOfFile:fileName encoding:NSUTF8StringEncoding error:nil]];
+		[view performSelector:@selector(didModifyString:) withObject:[[[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileName] encoding:NSUTF8StringEncoding] autorelease]];
 		[FailedFiles removeObject:fileName];
 	}
 	else

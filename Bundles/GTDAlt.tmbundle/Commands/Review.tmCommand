@@ -77,7 +77,7 @@ b = &lt;&lt;HTML
 &lt;html&gt;
   &lt;head&gt;
     &lt;link rel="stylesheet" href="tm-file://#{ENV['TM_SUPPORT_PATH']}/css/default.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
-  &lt;/head&gt;
+    &lt;style type="text/css"&gt;      .nobr {white-space: nowrap}    &lt;/style&gt;  &lt;/head&gt;
   &lt;body&gt;
   &lt;h1&gt;GTD Review (#{review} - #{Date.today})&lt;/h1&gt;
 HTML
@@ -123,11 +123,11 @@ if not acts.empty? then
           when "",nil
             ""
           when DateLate
-            "&lt;span style=\"color:red\"&gt;&lt;nobr&gt;#{project.next_action.due}&lt;/nobr&gt;&lt;/span&gt;"
+            "&lt;span style=\"color:red\"&gt;#{project.next_action.due}&lt;/span&gt;"
           else
-            "&lt;nobr&gt;#{project.next_action.due}&lt;/nobr&gt;"
+            project.next_action.due
         end
-        pr.row([project.link, text, "&lt;nobr&gt;#{project.next_action.context}&lt;/nobr&gt;", due])
+        pr.row([project.link, text, "&lt;span class=\"nobr\"&gt;#{project.next_action.context}&lt;/span&gt;", "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;"])
     end
     }
     end # pr.table
@@ -147,12 +147,12 @@ pr.table do
         when "",nil
           ""
         when DateLate
-          "&lt;span style=\"color:red\"&gt;&lt;nobr&gt;#{a.due}&lt;/nobr&gt;&lt;/span&gt;"
+          "&lt;span style=\"color:red\"&gt;#{a.due}&lt;/span&gt;"
         else
-          "&lt;nobr&gt;#{a.due}&lt;/nobr&gt;"
+          a.due
       end
       text = "&lt;a href=\"#{a.txmt}\"&gt;#{a.name}&lt;/a&gt;"
-      pr.row([a.context, text, proj , due])
+      pr.row([a.context, text, proj , "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;"])
     end
   end
 end

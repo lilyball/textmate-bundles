@@ -139,7 +139,8 @@ end
 pr.raw "&lt;h2&gt;Dated Actions&lt;/h2&gt;"
 pr.table do
   pr.headers([ "Context", "Action", "Project", "Due by"])
-  gtdacts.each do |a|
+  gtdacts.delete_if {|a| a.due == nil }
+  gtdacts.sort{|a,b| a.due &lt;=&gt; b.due}.each do |a|
     proj = if a.project != nil then a.project.link else "none" end
     if a.due != nil then
       due = case a.due

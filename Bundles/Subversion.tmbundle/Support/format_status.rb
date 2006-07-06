@@ -66,12 +66,16 @@ class << mup
 		$is_status ? 5 : 3
 	end
 	
-	def td_status!(status)
+	def status_map(status)
+		StatusMap[status]
+	end
+	
+	def td_status!(status,id)
 		status_column_count.times do |i|
 			
 			c = status[i].chr
 			status_class = StatusMap[c] || 'dunno'
-			td(c, "class" => status_class, "title" => StatusColumnNames[i] + " " + status_class.capitalize)
+			td(c, "class" => status_class, "title" => StatusColumnNames[i] + " " + status_class.capitalize, :id => "status#{id}")
 		end
 	end
 end
@@ -80,11 +84,37 @@ mup.html {
 	mup.head {
 			mup.title("Subversion #{command_name.capitalize}")
 			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
+			mup << (%{<script>
+					diff_to_mate = function(filename,id){
+						cmd = '"${TM_SVN:=svn}" diff "'+ filename +'">/tmp/diff_to_mate'+id+'.diff;open /tmp/diff_to_mate'+id+'.diff'
+						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+					};
+					svn_add = function(filename,id){
+						cmd = '"${TM_SVN:=svn}" add "'+ filename +'"'
+						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+						document.getElementById('status'+id).innerHTML = 'A';
+						document.getElementById('status'+id).className = '#{mup.status_map('A')}';
+					};
+					svn_remove_confirm = function(filename,id){
+						document.getElementById('STATUS').innerHTML = 'Are you sure you want to REMOVE the file \\n '+filename+'\\n<a href="#" onclick="svn_remove(\\''+filename+'\\', '+id+')">REMOVE!</a> <a href="#">Cancel</a>'
+					};
+					svn_remove = function(filename,id){
+						cmd = '"${TM_SVN:=svn}" remove "'+ filename +'"'
+						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString + '\\n' + cmd
+						document.getElementById('status'+id).innerHTML = 'D';
+						document.getElementById('status'+id).className = '#{mup.status_map('D')}';
+					};
+					finder_open = function(filename,id){
+						cmd = "open '"+ filename.replace(/^\s*/g,'').replace(/\s*$/g,'') +"'"
+						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+					};
+				</script>}
+			)
 	}
 
 	mup.body {
 		mup.h1 do 
-			mup.img( :src => "file://"+bundle+"/Stylesheets/subversion_logo.tiff",
+			mup.img(	:src => "file://"+bundle+"/Stylesheets/subversion_logo.tiff",
 						:height => 21,
 						:width => 32 )
 			mup.text " #{command_name.capitalize} for "
@@ -101,7 +131,9 @@ mup.html {
 			
 				match_columns		= '.' * mup.status_column_count
 				unknown_file_status	= '?' + (' ' * (mup.status_column_count - 1))
+				missing_file_status	= '!' + (' ' * (mup.status_column_count - 1))
 			
+				stdin_line_count = 1
 				STDIN.each_line do |line|
 				
 					# ignore lines consisting only of whitespace
@@ -112,7 +144,7 @@ mup.html {
 						if /^svn:/.match( line ).nil? then
 							match = /^(#{match_columns})(?:\s+)(.*)\n/.match( line )
 							if match.nil? then
-								mup.td(:colspan => (mup.status_column_count + 1).to_s ) do
+								mup.td(:colspan => (mup.status_column_count + 4).to_s ) do
 									mup.div(:class => 'info') { mup.text(line) }
 								end
 							else
@@ -120,19 +152,54 @@ mup.html {
 								file	= match[2]
 
 								if status == unknown_file_status and ignore_file_pattern =~ file
-								    # This is a file that we don't want to know about
-								    nil
+									# This is a file that we don't want to know about
+									nil
 								else
-	    							mup.td_status!(status)
-	    							mup.td { mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathanme" ) }
-	                            end
+									mup.td_status!(status, stdin_line_count)
+
+									# ADD Column 
+									mup.td {
+										if status == unknown_file_status
+											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add('#{file}',#{stdin_line_count}); return false" )
+										else
+											mup.text = ' '
+										end
+									}
+
+									# ADD Column 
+									mup.td {
+										if status == missing_file_status
+											mup.a( 'RM', "href" => '#', "class" => "remove button", "onclick" => "svn_remove_confirm('#{file}',#{stdin_line_count}); return false" )
+										else
+											mup.text = ' '
+										end
+									}
+
+									if file.match(/\.(gif|jpe?g|psd|tiff|zip|rar)$/i)
+										onclick        = "finder_open(' #{file}',#{stdin_line_count}); return false"
+										filename_title = 'Open in the Finder'
+										mup.td { mup << ' ' }
+									else
+										onclick        = ""
+										filename_title = 'Open in TextMate'
+										# Diff Column (only available for text)
+										mup.td { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{file}',#{stdin_line_count}); return false" ) }
+									end
+
+									mup.td {
+										mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathname", "onclick" => onclick, :title => filename_title )
+									}
+								end
 							end 
 						else
 							mup.td { mup.div( line, "class" => "error" ) }
 						end
 					}
+					stdin_line_count = stdin_line_count + 1
 				end
 			}
 		end
+		mup.br(:style => 'clear:both')
+		mup.div(:id => 'STATUS'){mup.text("Status")}
 	}
 }

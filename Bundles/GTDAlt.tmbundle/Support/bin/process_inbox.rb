@@ -51,7 +51,7 @@ for text in lines do
         when 0
           choice = Dialog.request_item(:title => "No matching project", :prompt => "Did not find any project matching: #{project}. Please select a project from the list", :items => projects.map{|pro| pro.name} )
           if choice then
-            proj = projects.find_all{|pro| pro.name == choice}
+            targetProj = projects.find{|pro| pro.name == choice}
           else
             raise NormalException, "Did not find any project matching: #{project}."
           end
@@ -60,7 +60,7 @@ for text in lines do
         else
           choice = Dialog.request_item(:title => "Too many matching projects", :prompt => "Found too many projects matching: #{project}. Please select a project from the list", :items => proj.map{|pro| pro.name} )
           if choice then
-            proj = projects.find_all{|pro| pro.name == choice}
+            targetProj = projects.find{|pro| pro.name == choice}
           else
             raise NormalException, "Too many projects matching: #{project}."
           end
@@ -73,8 +73,8 @@ for text in lines do
     $unsorted << text
     $log << e.to_s
     next
-  rescue
-    raise
+  rescue Exception => e
+    raise e
   end
 end
 # Create files we want

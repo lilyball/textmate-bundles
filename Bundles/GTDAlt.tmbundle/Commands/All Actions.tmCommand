@@ -39,7 +39,7 @@ HTML
 pr.raw b
 pr.table do
   pr.title "List of all Actions"
-  pr.headers([ "Context", "Action", "Project", "File" , "Due by","Mark completed"])
+  pr.headers([ "Context", "Action", "Project", "File" , "Due by","Completed"])
   acts.each do |a|
     proj = a.parent.link
     due = case a.due

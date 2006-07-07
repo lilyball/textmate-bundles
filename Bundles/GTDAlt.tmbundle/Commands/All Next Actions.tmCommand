@@ -26,7 +26,7 @@ HTML
 pr.raw b
 pr.table do
   pr.title("All Next Actions")
-  pr.headers(["Context", "Action Name", "Project", "Due_by"])
+  pr.headers(["Context", "Action Name", "Project", "Due_by","Completed"])
   acts.sort{|a,b| a.context &lt;=&gt; b.context}.each do |a|
     proj = a.parent.link
     due = case a.due
@@ -38,7 +38,7 @@ pr.table do
         a.due
     end
 
-    pr.row([a.context,a.link,proj,"&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;"])
+    pr.row([a.context,a.link,proj,"&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;", a.mark_completed_link])
   end
 end # pr.table
 pr.raw e

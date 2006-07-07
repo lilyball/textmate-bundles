@@ -99,14 +99,14 @@ module Linkable
     s << ">#{self.name}</a>"
   end
   def mark_completed_link(attributes={})
-    s = "<a href=\"\#\""
+    s = "<input type=\"checkbox\" href=\"\#\""
     attributes.each do |key,value|
       s << " #{key.to_s}=\"#{value.to_s}\""
     end
     pathToScript = File.join(ENV['TM_BUNDLE_SUPPORT'],"bin","mark_completed.rb")
     string_to_execute = (e_js_sh pathToScript) + " #{e_js_sh self.name} #{e_js_sh self.file.to_s} #{e_js_sh self.line}"
     s << " onClick='TextMate.system(\"2>/dev/console #{string_to_execute}\", null); return false;'"
-    s << ">mark!</a>"
+    s << ">Mark!</a>"
   end
 end
 

@@ -16,7 +16,7 @@ HTML
   pr.raw b
   pr.table do
     pr.title("Actions for context: #{context}")
-    pr.headers(["Action name","Project","Due_by"])
+    pr.headers(["Action name","Project","Due_by","Completed"])
     actions.each do |a|
       proj = a.parent.link
       due = case a.due
@@ -27,7 +27,7 @@ HTML
         else
           a.due
       end
-      pr.row([a.link,proj,due])
+      pr.row([a.link,proj,due, a.mark_completed_link])
     end
   pr.raw e
   return pr.to_html

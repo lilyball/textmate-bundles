@@ -105,6 +105,12 @@ mup.html {
 			mup.title("Subversion #{command_name.capitalize}")
 			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
 			mup << (%{<script>
+				
+					the_filename    = null;
+					the_id          = null;
+					the_displayname = null;
+					the_new_status  = null;
+					
 					// the filename passed in to the following functions is already properly shell escaped
 					diff_to_mate = function(filename,id){
 						TextMate.isBusy = true;
@@ -129,14 +135,37 @@ mup.html {
 						document.getElementById('status'+id).className = '#{mup.status_map('?')}';
 						TextMate.isBusy = false;
 					};
+					svn_revert_confirm = function(filename,id,displayname){
+						the_filename    = filename;
+						the_id          = id;
+						the_displayname = displayname;
+						the_new_status  = '?';
+						TextMate.isBusy = true;
+						cmd = '#{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/revert_file.rb -svn=#{e_sh_js svn} -path=' + filename + ' -displayname=' + displayname;
+						myCommand = TextMate.system(cmd, function (task) { });
+						myCommand.onreadoutput = svn_output;
+					};
 					svn_remove = function(filename,id,displayname){
+						the_filename    = filename;
+						the_id          = id;
+						the_displayname = displayname;
+						the_new_status  = 'D';
+						TextMate.isBusy = true;
 						cmd = '#{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/remove_file.rb -svn=#{e_sh_js svn} -path=' + filename + ' -displayname=' + displayname;
 						myCommand = TextMate.system(cmd, function (task) { });
-						myCommand.onreadoutput = svn_remove_output;
-					}
-					svn_remove_output = function(str){
+						myCommand.onreadoutput = svn_output;
+					};
+					svn_output = function(str){
 						document.getElementById('STATUS').innerHTML = str;
-					}
+						document.getElementById('status'+the_id).innerHTML = the_new_status;
+						if(the_new_status == '-'){document.getElementById('status'+the_id).className = '#{mup.status_map('-')}'};
+						if(the_new_status == 'D'){document.getElementById('status'+the_id).className = '#{mup.status_map('D')}'};
+						TextMate.isBusy = false;
+						the_filename    = null;
+						the_id          = null;
+						the_displayname = null;
+						the_new_status  = null;
+					};
 					finder_open = function(filename,id){
 						TextMate.isBusy = true;
 						cmd = "open 2>&1 " + filename
@@ -205,7 +234,7 @@ mup.html {
 									# REVERT Column 
 									mup.td(:class => 'revert_col') {
 										if status != unknown_file_status
-											mup.a( 'Revert', "href" => '#', "class" => "revert button", "onclick" => "svn_revert#{"_confirm" unless status == added_file_status}(#{esc_file},#{stdin_line_count}); return false" )
+											mup.a( 'Revert', "href" => '#', "class" => "revert button", "onclick" => "svn_revert#{"_confirm" unless status == added_file_status}(#{esc_file},#{stdin_line_count},'#{CGI.escapeHTML(shorten_path(file))}'); return false" )
 										else
 											mup << ' '
 										end

@@ -10,7 +10,12 @@ text = STDIN.read
 lines = text.split("\n")
 row = ENV['TM_LINE_NUMBER'].to_i
 m = lines[row-1].scan(/^\[\d+\]/)[0]
-print text.insert(text.index(m),"$0")
+txt = text.slice(0..text.index(m))
+lines = txt.split("\n")
+line = lines.length
+last_line = lines.last
+column = last_line.scan(/^\s*@[^\s]+\s+/)[0].length + 1
+`open "txmt://open?line=#{line}&amp;column=#{column}"`
 </string>
 	<key>fallbackInput</key>
 	<string>document</string>
@@ -21,7 +26,7 @@ print text.insert(text.index(m),"$0")
 	<key>name</key>
 	<string>Find Corresponding Action</string>
 	<key>output</key>
-	<string>insertAsSnippet</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>text.gtdalt meta.note</string>
 	<key>uuid</key>

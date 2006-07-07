@@ -6,6 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
 text = STDIN.read
 lines = text.split("\n")
 row = ENV['TM_LINE_NUMBER'].to_i
@@ -13,7 +14,15 @@ col = ENV['TM_LINE_INDEX'].to_i
 currentLine = lines[row-1]
 found = currentLine.scan(/\[\d+\]/)[0]
 if found then
-  print text.insert(text.rindex(found)+found.length + 1,"$0")
+# No need to change the file at all in this case. Just locate the proper 
+# line and use the txmt scheme to take us there.
+  txt = text.slice(0..text.rindex(found)+found.length)
+  lines = txt.split("\n")
+  line = lines.length
+  column = lines.last.length + 1
+  `open "txmt://open?line=#{line}&amp;column=#{column}"`
+  TextMate.exit_discard 
+  # print text.insert(text.rindex(found)+found.length + 1,"$0")
 else
   m = text.scan(/\[(\d+)\]/).map{|i| i[0].to_i}.max || 0
   before = []
@@ -36,7 +45,7 @@ end</string>
 	<key>name</key>
 	<string>For Action</string>
 	<key>output</key>
-	<string>insertAsSnippet</string>
+	<string>openAsNewDocument</string>
 	<key>scope</key>
 	<string>text.gtdalt - meta.note</string>
 	<key>uuid</key>

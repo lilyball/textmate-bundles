@@ -16,7 +16,11 @@ def e_sh_js(str)
   (e_sh str).gsub("\\", "\\\\\\\\")
 end
 
-strip_path_prefix	= work_path # Dir.pwd
+def shorten_path(path)
+	prefix = ENV['WorkPath'] || File.expand_path('~')
+	File.expand_path(path).gsub(/#{Regexp.escape prefix}/, '~')
+end
+
 svn = ENV['TM_SVN'] || 'svn'
 svn = `which svn`.chomp unless svn[0] == ?/
 
@@ -200,7 +204,7 @@ mup.html {
 									end
 
 									mup.td {
-										mup.a( file.sub( /^#{strip_path_prefix}\//, ""), "href" => 'txmt://open?url=file://' + file, "class" => "pathname", "onclick" => onclick, :title => filename_title )
+										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + file, "class" => "pathname", "onclick" => onclick, :title => filename_title )
 									}
 								end
 							end 

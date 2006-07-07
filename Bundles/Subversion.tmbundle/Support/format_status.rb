@@ -197,7 +197,7 @@ mup.html {
 										if status == unknown_file_status
 											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add('#{e_sh_js file}',#{stdin_line_count}); return false" )
 										else
-											mup.text = ' '
+											mup << ' '
 										end
 									}
 
@@ -206,7 +206,7 @@ mup.html {
 										if status != unknown_file_status
 											mup.a( 'Revert', "href" => '#', "class" => "revert button", "onclick" => "svn_revert#{"_confirm" unless status == added_file_status}('#{e_sh_js file}',#{stdin_line_count}); return false" )
 										else
-											mup.text = ' '
+											mup << ' '
 										end
 									}
 
@@ -215,7 +215,7 @@ mup.html {
 										if status == missing_file_status
 											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove_confirm('#{e_sh_js file}',#{stdin_line_count}); return false" )
 										else
-											mup.text = ' '
+											mup << ' '
 										end
 									}
 

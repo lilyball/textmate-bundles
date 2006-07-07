@@ -158,7 +158,7 @@ mup.html {
 									mup.td_status!(status, stdin_line_count)
 
 									# ADD Column 
-									mup.td {
+									mup.td(:class => 'add_col') {
 										if status == unknown_file_status
 											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add('#{file}',#{stdin_line_count}); return false" )
 										else
@@ -166,8 +166,8 @@ mup.html {
 										end
 									}
 
-									# ADD Column 
-									mup.td {
+									# REMOVE Column 
+									mup.td(:class => 'remove_col') {
 										if status == missing_file_status
 											mup.a( 'RM', "href" => '#', "class" => "remove button", "onclick" => "svn_remove_confirm('#{file}',#{stdin_line_count}); return false" )
 										else
@@ -183,7 +183,7 @@ mup.html {
 										onclick        = ""
 										filename_title = 'Open in TextMate'
 										# Diff Column (only available for text)
-										mup.td { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{file}',#{stdin_line_count}); return false" ) }
+										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{file}',#{stdin_line_count}); return false" ) }
 									end
 
 									mup.td {

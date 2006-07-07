@@ -204,16 +204,21 @@ mup.html {
 									if file.match(/\.(gif|jpe?g|psd|tiff|zip|rar)$/i)
 										onclick        = "finder_open('#{e_sh_js file}',#{stdin_line_count}); return false"
 										filename_title = 'Open in the Finder'
-										mup.td { mup << ' ' }
+										column_is_an_image = true
 									else
 										onclick        = ""
 										filename_title = 'Open in TextMate'
 										# Diff Column (only available for text)
+										column_is_an_image = false
+									end
+									if column_is_an_image or status == unknown_file_status
+										mup.td(:class => 'diff_col') { mup << ' ' }
+									else
 										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{e_sh_js file}',#{stdin_line_count}); return false" ) } unless status == unknown_file_status
 									end
 
-									mup.td {
-										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + file, "class" => "pathname", "onclick" => onclick, :title => filename_title )
+									mup.td(:class => 'file_col') {
+										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + file, "class" => "pathname", "onclick" => onclick, :title => "#{filename_title}\n\n#{file}" )
 									}
 								end
 							end 
@@ -226,6 +231,6 @@ mup.html {
 			}
 		end
 		mup.br(:style => 'clear:both')
-		mup.div(:id => 'STATUS'){mup.text("Status")}
+		mup.div(:id => 'STATUS'){mup << " "}
 	}
 }

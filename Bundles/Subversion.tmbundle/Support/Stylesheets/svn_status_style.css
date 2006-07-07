@@ -105,25 +105,40 @@ div.warning li,p {
    color: #000;
 }
 
-table {
+table.status {
 	background: #EBEBEB url(sG42_100_90-1024.gif) repeat-x top;
 	border: 1px solid transparent;
 	border-collapse:collapse;
 	width:100%;
 }
-table td {
-	border-bottom: 1px dotted #fff;
+table.status td {
+	border:none;
+	border-bottom: 1px solid #fff;
 }
-table tr:hover td {
+table.status tr:hover .file_col,
+table.status tr:hover .diff_col,
+table.status tr:hover .remove_col,
+table.status tr:hover .add_col {
 	background-image: url(sG42_100_90-16.gif);
 }
 
 .diff_col, .remove_col, .add_col,
 .diff_col *, .remove_col *, .add_col * {
+	display:block;
+/*	margin:0 2px;*/
+	padding:0 2px;
+	float:none;
 	text-align: center;
 	font-size: 9px;
 	color: #294666;
 	font-weight: bold;
+}
+.status_col {
+	background-image:none !important;
+}
+.file_col {
+	width: 100%;
+	text-align: left !important;
 }
 
 table.status {

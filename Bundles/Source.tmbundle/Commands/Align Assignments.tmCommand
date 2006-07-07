@@ -31,7 +31,7 @@ lines = STDIN.readlines()
 selected_text = ENV.member?("TM_SELECTED_TEXT")
 
 relevant_line_pattern = /^[^=]+=/
-column_search_pattern = / *=/
+column_search_pattern = /[\t ]*=/
 
 
 #
@@ -115,7 +115,7 @@ end
 
 block_top.upto(block_bottom) do |number|
    if lines[number-1] =~ relevant_line_pattern then
-      before, after = lines[number-1].split(/ *= */, 2)
+      before, after = lines[number-1].split(/[\t ]*=[\t ]*/, 2)
       lines[number-1] = before.ljust(best_column) + " = " + after
    end
 end

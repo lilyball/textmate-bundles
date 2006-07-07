@@ -218,7 +218,7 @@ mup.html {
 										end
 									}
 
-									if file.match(/\.(gif|jpe?g|psd|tiff|zip|rar)$/i)
+									if file.match(/\.(png|gif|jpe?g|psd|tiff|zip|rar)$/i)
 										onclick        = "finder_open('#{e_sh_js file}',#{stdin_line_count}); return false"
 										filename_title = 'Open in the Finder'
 										column_is_an_image = true

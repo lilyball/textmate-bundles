@@ -179,7 +179,7 @@ mup.html {
 						if /^svn:/.match( line ).nil? then
 							match = /^(#{match_columns})(?:\s+)(.*)\n/.match( line )
 							if match.nil? then
-								mup.td(:colspan => (mup.status_column_count + 4).to_s ) do
+								mup.td(:colspan => (mup.status_column_count + 5).to_s ) do
 									mup.div(:class => 'info') { mup.text(line) }
 								end
 							else

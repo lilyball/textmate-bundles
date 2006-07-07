@@ -7,13 +7,13 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-if [[ -z $TM_SELECTED_FILES ]]
+{ if [[ -z $TM_SELECTED_FILES ]]
 	then
 	export WorkPath="${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
-	"$TM_SVN" status "$WorkPath" 2&gt;&amp;1| "${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
+	"$TM_SVN" status "$WorkPath" 2&gt;&amp;1| "${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
 	else
-	eval "$TM_SVN" status "$TM_SELECTED_FILES" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
-fi
+	eval "$TM_SVN" status "$TM_SELECTED_FILES" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
+fi; }| tee /tmp/all.html
 </string>
 	<key>dontFollowNewOutput</key>
 	<true/>

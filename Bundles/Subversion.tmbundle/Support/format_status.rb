@@ -4,6 +4,7 @@ support = ENV['TM_SUPPORT_PATH']
 require (support + "/bin/Builder.rb")
 require (support + "/bin/shelltokenize.rb")
 require (support + "/lib/escape.rb")
+require "cgi"
 
 # Arguments
 bundle				= ENV['TM_BUNDLE_SUPPORT']
@@ -184,6 +185,7 @@ mup.html {
 							else
 								status	= match[1]
 								file	= match[2]
+								esc_file = '&quot;' + CGI.escapeHTML(e_sh_js(file).gsub(/(?=")/, '\\')) + '&quot;'
 
 								if status == unknown_file_status and ignore_file_pattern =~ file
 									# This is a file that we don't want to know about
@@ -194,7 +196,7 @@ mup.html {
 									# ADD Column 
 									mup.td(:class => 'add_col') {
 										if status == unknown_file_status
-											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add('#{e_sh_js file}',#{stdin_line_count}); return false" )
+											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add(#{esc_file},#{stdin_line_count}); return false" )
 										else
 											mup << ' '
 										end
@@ -203,7 +205,7 @@ mup.html {
 									# REVERT Column 
 									mup.td(:class => 'revert_col') {
 										if status != unknown_file_status
-											mup.a( 'Revert', "href" => '#', "class" => "revert button", "onclick" => "svn_revert#{"_confirm" unless status == added_file_status}('#{e_sh_js file}',#{stdin_line_count}); return false" )
+											mup.a( 'Revert', "href" => '#', "class" => "revert button", "onclick" => "svn_revert#{"_confirm" unless status == added_file_status}(#{esc_file},#{stdin_line_count}); return false" )
 										else
 											mup << ' '
 										end
@@ -212,14 +214,14 @@ mup.html {
 									# REMOVE Column 
 									mup.td(:class => 'remove_col') {
 										if status == missing_file_status
-											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove('#{e_sh_js file}',#{stdin_line_count},'#{shorten_path(file)}'); return false" )
+											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove(#{esc_file},#{stdin_line_count},'#{CGI.escapeHTML(shorten_path(file))}'); return false" )
 										else
 											mup << ' '
 										end
 									}
 
 									if file.match(/\.(png|gif|jpe?g|psd|tiff|zip|rar)$/i)
-										onclick        = "finder_open('#{e_sh_js file}',#{stdin_line_count}); return false"
+										onclick        = "finder_open(#{esc_file},#{stdin_line_count}); return false"
 										filename_title = 'Open in the Finder'
 										column_is_an_image = true
 									else
@@ -231,11 +233,11 @@ mup.html {
 									if column_is_an_image or status == unknown_file_status
 										mup.td(:class => 'diff_col') { mup << ' ' }
 									else
-										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{e_sh_js file}',#{stdin_line_count}); return false" ) } unless status == unknown_file_status
+										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate(#{esc_file},#{stdin_line_count}); return false" ) } unless status == unknown_file_status
 									end
 
 									mup.td(:class => 'file_col') {
-										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + file, "class" => "pathname", "onclick" => onclick, :title => "#{filename_title}\n\n#{file}" )
+										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + (e_url file), "class" => "pathname", "onclick" => onclick, :title => "#{CGI.escapeHTML(filename_title)}\n\n#{CGI.escapeHTML(file)}" )
 									}
 								end
 							end 

@@ -86,7 +86,7 @@ mup.html {
 			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
 			mup << (%{<script>
 					diff_to_mate = function(filename,id){
-						cmd = '"${TM_SVN:=svn}" diff "'+ filename +'">/tmp/diff_to_mate'+id+'.diff;open /tmp/diff_to_mate'+id+'.diff'
+						cmd = '"${TM_SVN:=svn}" diff "'+ filename +'">/tmp/diff_to_mate'+id+'.diff;open -a TextMate /tmp/diff_to_mate'+id+'.diff'
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
 					};
 					svn_add = function(filename,id){

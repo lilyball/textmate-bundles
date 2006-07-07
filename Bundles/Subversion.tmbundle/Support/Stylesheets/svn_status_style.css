@@ -118,8 +118,12 @@ table tr:hover td {
 	background-image: url(sG42_100_90-16.gif);
 }
 
-.diff_col, .remove_col, .add_col {
+.diff_col, .remove_col, .add_col,
+.diff_col *, .remove_col *, .add_col * {
 	text-align: center;
+	font-size: 9px;
+	color: #294666;
+	font-weight: bold;
 }
 
 table.status {
@@ -136,8 +140,8 @@ table.status a:link, table.status a:visited {
 	padding:             1px 3px;
 	border-bottom: 1px solid transparent;
 	text-decoration:     none;
-	border-bottom-color: #B7CDE5;
-	border-bottom-style: dotted;
+	border-bottom-color: #eee;
+	border-bottom-style: solid;
 	color:               #294666;
 /*	white-space: nowrap;*/
 }

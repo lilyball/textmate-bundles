@@ -86,27 +86,35 @@ mup.html {
 			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
 			mup << (%{<script>
 					diff_to_mate = function(filename,id){
+						TextMate.isBusy = true;
 						cmd = '"${TM_SVN:=svn}" diff "'+ filename +'">/tmp/diff_to_mate'+id+'.diff;open -a TextMate /tmp/diff_to_mate'+id+'.diff'
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+						TextMate.isBusy = false;
 					};
 					svn_add = function(filename,id){
+						TextMate.isBusy = true;
 						cmd = '"${TM_SVN:=svn}" add "'+ filename +'"'
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
 						document.getElementById('status'+id).innerHTML = 'A';
 						document.getElementById('status'+id).className = '#{mup.status_map('A')}';
+						TextMate.isBusy = false;
 					};
 					svn_remove_confirm = function(filename,id){
 						document.getElementById('STATUS').innerHTML = 'Are you sure you want to REMOVE the file \\n '+filename+'\\n<a href="#" onclick="svn_remove(\\''+filename+'\\', '+id+')">REMOVE!</a> <a href="#">Cancel</a>'
 					};
 					svn_remove = function(filename,id){
+						TextMate.isBusy = true;
 						cmd = '"${TM_SVN:=svn}" remove "'+ filename +'"'
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString + '\\n' + cmd
 						document.getElementById('status'+id).innerHTML = 'D';
 						document.getElementById('status'+id).className = '#{mup.status_map('D')}';
+						TextMate.isBusy = false;
 					};
 					finder_open = function(filename,id){
+						TextMate.isBusy = true;
 						cmd = "open '"+ filename.replace(/^\s*/g,'').replace(/\s*$/g,'') +"'"
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+						TextMate.isBusy = false;
 					};
 				</script>}
 			)
@@ -169,7 +177,7 @@ mup.html {
 									# REMOVE Column 
 									mup.td(:class => 'remove_col') {
 										if status == missing_file_status
-											mup.a( 'RM', "href" => '#', "class" => "remove button", "onclick" => "svn_remove_confirm('#{file}',#{stdin_line_count}); return false" )
+											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove_confirm('#{file}',#{stdin_line_count}); return false" )
 										else
 											mup.text = ' '
 										end
@@ -183,7 +191,7 @@ mup.html {
 										onclick        = ""
 										filename_title = 'Open in TextMate'
 										# Diff Column (only available for text)
-										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{file}',#{stdin_line_count}); return false" ) }
+										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{file}',#{stdin_line_count}); return false" ) } unless status == unknown_file_status
 									end
 
 									mup.td {

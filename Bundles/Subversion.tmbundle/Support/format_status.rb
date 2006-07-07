@@ -23,7 +23,9 @@ def shorten_path(path)
 		prefix = work_paths.first unless work_paths.nil? || work_paths.size != 1
 	end
 
-	if prefix
+	if prefix && prefix == path
+		File.basename(path)
+	elsif prefix
 		File.expand_path(path).gsub(/#{Regexp.escape prefix}\//, '')
 	else
 		File.expand_path(path).gsub(/#{Regexp.escape File.expand_path('~')}/, '~')

@@ -118,6 +118,14 @@ mup.html {
 						document.getElementById('status'+id).className = '#{mup.status_map('A')}';
 						TextMate.isBusy = false;
 					};
+					svn_revert = function(filename,id){
+						TextMate.isBusy = true;
+						cmd = '#{e_sh svn} 2>&1 revert ' + filename
+						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+						document.getElementById('status'+id).innerHTML = '?';
+						document.getElementById('status'+id).className = '#{mup.status_map('?')}';
+						TextMate.isBusy = false;
+					};
 					svn_remove_confirm = function(filename,id){
 						document.getElementById('STATUS').innerHTML = 'Are you sure you want to REMOVE the file \\n '+filename+'\\n<a href="#" onclick="svn_remove(\\''+filename+'\\', '+id+')">REMOVE!</a> <a href="#">Cancel</a>'
 					};
@@ -159,6 +167,7 @@ mup.html {
 				match_columns		= '.' * mup.status_column_count
 				unknown_file_status	= '?' + (' ' * (mup.status_column_count - 1))
 				missing_file_status	= '!' + (' ' * (mup.status_column_count - 1))
+				added_file_status	= 'A' + (' ' * (mup.status_column_count - 1))
 			
 				stdin_line_count = 1
 				STDIN.each_line do |line|
@@ -187,6 +196,15 @@ mup.html {
 									mup.td(:class => 'add_col') {
 										if status == unknown_file_status
 											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add('#{e_sh_js file}',#{stdin_line_count}); return false" )
+										else
+											mup.text = ' '
+										end
+									}
+
+									# REVERT Column 
+									mup.td(:class => 'revert_col') {
+										if status != unknown_file_status
+											mup.a( 'Revert', "href" => '#', "class" => "revert button", "onclick" => "svn_revert#{"_confirm" unless status == added_file_status}('#{e_sh_js file}',#{stdin_line_count}); return false" )
 										else
 											mup.text = ' '
 										end

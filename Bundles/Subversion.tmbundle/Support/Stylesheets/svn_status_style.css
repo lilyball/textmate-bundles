@@ -117,13 +117,14 @@ table.status td {
 }
 table.status tr:hover .file_col,
 table.status tr:hover .diff_col,
+table.status tr:hover .revert_col,
 table.status tr:hover .remove_col,
 table.status tr:hover .add_col {
 	background-image: url(sG42_100_90-16.gif);
 }
 
-.diff_col, .remove_col, .add_col,
-.diff_col *, .remove_col *, .add_col * {
+.diff_col, .remove_col, .add_col, .revert_col,
+.diff_col *, .remove_col *, .add_col *, .revert_col * {
 	display:block;
 /*	margin:0 2px;*/
 	padding:0 2px;

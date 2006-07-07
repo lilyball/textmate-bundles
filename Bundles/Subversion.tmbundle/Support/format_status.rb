@@ -12,12 +12,13 @@ work_paths			= TextMate.selected_paths_array
 ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 
 # First escape for use in the shell, then escape for use in a JS string
-def e_js_sh(str)
+def e_sh_js(str)
   (e_sh str).gsub("\\", "\\\\\\\\")
 end
 
 strip_path_prefix	= work_path # Dir.pwd
-svn			= ENV['TM_SVN'] || 'svn'
+svn = ENV['TM_SVN'] || 'svn'
+svn = `which svn`.chomp unless svn[0] == ?/
 
 work_path = work_paths[0] if work_path.nil? and (not work_paths.nil?) and (work_paths.size == 1)
 work_path ||= '(selected files)'
@@ -151,7 +152,6 @@ mup.html {
 				
 					# ignore lines consisting only of whitespace
 					next if line.squeeze.strip.empty?
-					
 					# build the row
 					mup.tr {
 						if /^svn:/.match( line ).nil? then
@@ -196,7 +196,7 @@ mup.html {
 										onclick        = ""
 										filename_title = 'Open in TextMate'
 										# Diff Column (only available for text)
-										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{(e_sh file).gsub("\\", "\\\\\\\\")}',#{stdin_line_count}); return false" ) } unless status == unknown_file_status
+										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{e_sh_js file}',#{stdin_line_count}); return false" ) } unless status == unknown_file_status
 									end
 
 									mup.td {

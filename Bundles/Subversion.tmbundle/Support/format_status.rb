@@ -3,6 +3,7 @@
 support = ENV['TM_SUPPORT_PATH']
 require (support + "/bin/Builder.rb")
 require (support + "/bin/shelltokenize.rb")
+require (support + "/lib/escape.rb")
 
 # Arguments
 bundle				= ENV['TM_BUNDLE_SUPPORT']
@@ -10,11 +11,13 @@ work_path			= ENV['WorkPath']
 work_paths			= TextMate.selected_paths_array
 ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 
-
+# First escape for use in the shell, then escape for use in a JS string
+def e_js_sh(str)
+  (e_sh str).gsub("\\", "\\\\\\\\")
+end
 
 strip_path_prefix	= work_path # Dir.pwd
-svn			= ENV['TM_SVN']
-svn = "svn" if svn.nil?
+svn			= ENV['TM_SVN'] || 'svn'
 
 work_path = work_paths[0] if work_path.nil? and (not work_paths.nil?) and (work_paths.size == 1)
 work_path ||= '(selected files)'
@@ -85,15 +88,17 @@ mup.html {
 			mup.title("Subversion #{command_name.capitalize}")
 			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
 			mup << (%{<script>
+					// the filename passed in to the following functions is already properly shell escaped
 					diff_to_mate = function(filename,id){
 						TextMate.isBusy = true;
-						cmd = '"${TM_SVN:=svn}" diff "'+ filename +'">/tmp/diff_to_mate'+id+'.diff;open -a TextMate /tmp/diff_to_mate'+id+'.diff'
+						tmp = '/tmp/diff_to_mate' + id + '.diff'
+						cmd = '#{e_sh svn} 2>&1 diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
 						TextMate.isBusy = false;
 					};
 					svn_add = function(filename,id){
 						TextMate.isBusy = true;
-						cmd = '"${TM_SVN:=svn}" add "'+ filename +'"'
+						cmd = '#{e_sh svn} 2>&1 add ' + filename
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
 						document.getElementById('status'+id).innerHTML = 'A';
 						document.getElementById('status'+id).className = '#{mup.status_map('A')}';
@@ -104,7 +109,7 @@ mup.html {
 					};
 					svn_remove = function(filename,id){
 						TextMate.isBusy = true;
-						cmd = '"${TM_SVN:=svn}" remove "'+ filename +'"'
+						cmd = '#{e_sh svn} 2>&1 remove ' + filename
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString + '\\n' + cmd
 						document.getElementById('status'+id).innerHTML = 'D';
 						document.getElementById('status'+id).className = '#{mup.status_map('D')}';
@@ -112,7 +117,7 @@ mup.html {
 					};
 					finder_open = function(filename,id){
 						TextMate.isBusy = true;
-						cmd = "open '"+ filename.replace(/^\s*/g,'').replace(/\s*$/g,'') +"'"
+						cmd = "open 2>&1 " + filename
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
 						TextMate.isBusy = false;
 					};
@@ -168,7 +173,7 @@ mup.html {
 									# ADD Column 
 									mup.td(:class => 'add_col') {
 										if status == unknown_file_status
-											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add('#{file}',#{stdin_line_count}); return false" )
+											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add('#{e_sh_js file}',#{stdin_line_count}); return false" )
 										else
 											mup.text = ' '
 										end
@@ -177,21 +182,21 @@ mup.html {
 									# REMOVE Column 
 									mup.td(:class => 'remove_col') {
 										if status == missing_file_status
-											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove_confirm('#{file}',#{stdin_line_count}); return false" )
+											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove_confirm('#{e_sh_js file}',#{stdin_line_count}); return false" )
 										else
 											mup.text = ' '
 										end
 									}
 
 									if file.match(/\.(gif|jpe?g|psd|tiff|zip|rar)$/i)
-										onclick        = "finder_open(' #{file}',#{stdin_line_count}); return false"
+										onclick        = "finder_open('#{e_sh_js file}',#{stdin_line_count}); return false"
 										filename_title = 'Open in the Finder'
 										mup.td { mup << ' ' }
 									else
 										onclick        = ""
 										filename_title = 'Open in TextMate'
 										# Diff Column (only available for text)
-										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{file}',#{stdin_line_count}); return false" ) } unless status == unknown_file_status
+										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate('#{(e_sh file).gsub("\\", "\\\\\\\\")}',#{stdin_line_count}); return false" ) } unless status == unknown_file_status
 									end
 
 									mup.td {

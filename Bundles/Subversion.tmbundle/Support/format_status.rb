@@ -126,17 +126,14 @@ mup.html {
 						document.getElementById('status'+id).className = '#{mup.status_map('?')}';
 						TextMate.isBusy = false;
 					};
-					svn_remove_confirm = function(filename,id){
-						document.getElementById('STATUS').innerHTML = 'Are you sure you want to REMOVE the file \\n '+filename+'\\n<a href="#" onclick="svn_remove(\\''+filename+'\\', '+id+')">REMOVE!</a> <a href="#">Cancel</a>'
-					};
-					svn_remove = function(filename,id){
-						TextMate.isBusy = true;
-						cmd = '#{e_sh svn} 2>&1 remove ' + filename
-						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString + '\\n' + cmd
-						document.getElementById('status'+id).innerHTML = 'D';
-						document.getElementById('status'+id).className = '#{mup.status_map('D')}';
-						TextMate.isBusy = false;
-					};
+					svn_remove = function(filename,id,displayname){
+						cmd = '#{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/remove_file.rb -svn=#{e_sh_js svn} -path=' + filename + ' -displayname=' + displayname;
+						myCommand = TextMate.system(cmd, function (task) { });
+						myCommand.onreadoutput = svn_remove_output;
+					}
+					svn_remove_output = function(str){
+						document.getElementById('STATUS').innerHTML = str;
+					}
 					finder_open = function(filename,id){
 						TextMate.isBusy = true;
 						cmd = "open 2>&1 " + filename
@@ -213,7 +210,7 @@ mup.html {
 									# REMOVE Column 
 									mup.td(:class => 'remove_col') {
 										if status == missing_file_status
-											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove_confirm('#{e_sh_js file}',#{stdin_line_count}); return false" )
+											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove('#{e_sh_js file}',#{stdin_line_count},'#{shorten_path(file)}'); return false" )
 										else
 											mup << ' '
 										end

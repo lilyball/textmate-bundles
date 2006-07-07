@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+scope   = STDIN.read
+
+# If we are working on a selection, exit
+if ENV['TM_SELECTED_TEXT'] then
+  if scope =~ /\A\d+\Z/ then
+    print scope
+    exit
+  end
+  print "\n"
+  exit
+end
+
+snippet = ""
+rules   = []
+before_caret = 0
+
+type = scope.match(/((beginC|endC|c)aptures)/)[0]
+# Compute position of the caret.
+caretpos = ENV['TM_LINE_NUMBER'].to_i() - ENV['TM_INPUT_START_LINE'].to_i() + 1
+
+# Figure out how many rules come before the caret
+scope.sub(/(
+              (.*\n){#{caretpos}}     |   # Match normally.
+              (.*\n)+                 |   # Match for if the caret is on the last line.
+              (.*)                        # Match for scope with no newline.
+           )/x) { |match|
+  match.gsub(/\d\s*=/) {|m| before_caret += 1 }
+}
+
+# Add each existing rule to the rules array and clean it up in the process.
+scope.gsub(/(\d+\s*=\s*\{\s*name\s*=.*?\};)/) { |match|
+  rules &lt;&lt; match.gsub(/(\d+)\s*=\s*\{\s*name\s*=\s*'((?:'(?=')|.)*?)'\s*\};/, "\1 = { name = '\2' };")
+}
+
+# Insert new rule, either in the middle or after other rules depending
+# on previously determined caret position.
+if rules.length &gt;= before_caret
+  rules.insert(before_caret, "${1:⁋} = { name = '$2'; };$0")
+else
+  rules &lt;&lt; "${1:⁋} = { name = '$2'; };$0"
+end
+
+# Add each rule to the output
+rules.each { |rule|
+  snippet &lt;&lt; "\t" + rule + "\n"
+}
+
+# Use the first number that hasn't been used yet as the default.
+1.upto(rules.length) { |capnum|
+  unless snippet =~ /\b#{capnum.to_s}\s*=/ then
+    snippet.gsub!(/⁋/) { |match| capnum.to_s }
+    break
+  end
+}
+
+# Add wrapper {}
+if scope =~ /aptures\s*=[^\n]*\{/ then
+  snippet = "#{type} = {\n#{snippet}};"
+else
+  snippet = "#{type} =\n{#{snippet}};"
+end
+
+print snippet</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>New Captures Rule</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>meta.captures.tm-language-def</string>
+	<key>uuid</key>
+	<string>02F6DE2C-3334-4DCE-9FBB-6F8906653E5C</string>
+</dict>
+</plist>

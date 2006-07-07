@@ -251,7 +251,7 @@ mup.html {
 
 									if file.match(/\.(png|gif|jpe?g|psd|tiff|zip|rar)$/i)
 										onclick        = "finder_open(#{esc_file},#{stdin_line_count}); return false"
-										filename_title = 'Open in the Finder'
+										filename_title = 'Open with the Finder'
 										column_is_an_image = true
 									else
 										onclick        = ""

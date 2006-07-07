@@ -17,8 +17,17 @@ def e_sh_js(str)
 end
 
 def shorten_path(path)
-	prefix = ENV['WorkPath'] || File.expand_path('~')
-	File.expand_path(path).gsub(/#{Regexp.escape prefix}/, '~')
+	prefix = ENV['WorkPath']
+	if prefix.nil?
+		work_paths = TextMate.selected_paths_array
+		prefix = work_paths.first unless work_paths.nil? || work_paths.size != 1
+	end
+
+	if prefix
+		File.expand_path(path).gsub(/#{Regexp.escape prefix}\//, '')
+	else
+		File.expand_path(path).gsub(/#{Regexp.escape File.expand_path('~')}/, '~')
+	end
 end
 
 svn = ENV['TM_SVN'] || 'svn'

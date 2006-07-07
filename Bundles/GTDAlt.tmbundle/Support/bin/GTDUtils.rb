@@ -97,6 +97,16 @@ module Linkable
     end
     s << ">#{self.name}</a>"
   end
+  def mark_completed_link(attributes={})
+    s = "<a href=\"\#\""
+    attributes.each do |key,value|
+      s << " #{key.to_s}=\"#{value.to_s}\""
+    end
+    pathToScript = File.join(ENV['TM_BUNDLE_SUPPORT'],"bin","mark_completed.rb")
+    string_to_execute = (e_sh pathToScript) + " #{e_sh self.name} #{e_sh self.file.to_s} #{e_sh self.line}"
+    s << " onClick='TextMate.system(\"#{string_to_execute}\", null); return false;'"
+    s << ">#{self.name}</a>"
+  end
 end
 
 # Very light logger class.

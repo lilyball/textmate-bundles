@@ -4,7 +4,7 @@ $:<<ENV['TM_BUNDLE_SUPPORT']
 require 'lib/dialog.rb'
 require 'lib/exit_codes.rb'
 require 'bin/GTD.rb'
-require 'FileUtils.rb'
+require 'fileutils.rb'
 include GTD
 include Dialog
 

@@ -39,7 +39,7 @@ HTML
 pr.raw b
 pr.table do
   pr.title "List of all Actions"
-  pr.headers([ "Context", "Action", "Project", "File" , "Due by"])
+  pr.headers([ "Context", "Action", "Project", "File" , "Due by","Mark completed"])
   acts.each do |a|
     proj = a.parent.link
     due = case a.due
@@ -52,7 +52,7 @@ pr.table do
     end
     note_part = (a.note != "") ? " title=\"#{a.note}\"" : ""
     text = "&lt;a href=\"#{a.txmt}\"#{note_part}&gt;#{a.name}&lt;/a&gt;"
-    pr.row([a.context, text, proj, a.root.link , "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;"])
+    pr.row([a.context, text, proj, a.root.link , "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;", a.mark_completed_link])
   end
 end
 pr.raw e

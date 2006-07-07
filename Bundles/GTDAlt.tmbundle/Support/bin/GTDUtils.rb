@@ -1,4 +1,5 @@
 require 'date'
+require 'fileutils.rb'
 # Useful methods that don't need to scan any files in order to work
 module GTDLight
   def GTDLight.get_env_contexts
@@ -103,9 +104,9 @@ module Linkable
       s << " #{key.to_s}=\"#{value.to_s}\""
     end
     pathToScript = File.join(ENV['TM_BUNDLE_SUPPORT'],"bin","mark_completed.rb")
-    string_to_execute = (e_sh pathToScript) + " #{e_sh self.name} #{e_sh self.file.to_s} #{e_sh self.line}"
-    s << " onClick='TextMate.system(\"#{string_to_execute}\", null); return false;'"
-    s << ">#{self.name}</a>"
+    string_to_execute = (e_js_sh pathToScript) + " #{e_js_sh self.name} #{e_js_sh self.file.to_s} #{e_js_sh self.line}"
+    s << " onClick='TextMate.system(\"2>/dev/console #{string_to_execute}\", null); return false;'"
+    s << ">mark!</a>"
   end
 end
 
@@ -202,8 +203,16 @@ end
 module GTD
   # Safe write of the pairs in +filepairs+, of the form <tt>[filename,format]</tt>.
   def GTD.safe_write_with_backup(filepairs)
+    # First read each filepair and compare with string to replace it.
+    # If the saem, ignore.
+    changed_filepairs = []
+    for filename,string in filepairs do
+      File.open(filename,'r') do |f|
+        changed_filepairs << [filename,string] unless f.read.to_s == string
+      end
+    end
     begin
-      for filename,string in filepairs do
+      for filename,string in changed_filepairs do
         newFile = filename + "~~"
         raise "Could not create different name" if newFile == filename
         File.open(newFile, 'w') do |f|
@@ -215,10 +224,10 @@ module GTD
       raise e
     end
     begin
-      for filename,string in filepairs do
+      for filename,string in changed_filepairs do
         FileUtils.mv(filename,filename+"~")
       end
-      for filename,string in filepairs do
+      for filename,string in changed_filepairs do
         FileUtils.mv(filename+"~~",filename)
       end
     rescue Exception => e
@@ -238,4 +247,14 @@ def e_url(str)
   str.gsub(/([^a-zA-Z0-9\/_.-]+)/n) do
     '%' + $1.unpack('H2' * $1.size).join('%').upcase
   end
+end
+# Also borrowed from TextMate's library.
+# escape text to make it useable in a shell script as one “word” (string)
+# Do not escape slashes.
+def e_sh(str)
+	str.to_s.gsub(/[^a-zA-Z0-9_.\/]/, "\\\\\\0")
+end
+# first escape for use in the shell, then escape for use in a JS string
+def e_js_sh(str)
+  (e_sh str).gsub("\\", "\\\\\\\\")
 end

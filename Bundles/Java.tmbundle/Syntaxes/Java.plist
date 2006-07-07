@@ -181,11 +181,11 @@
 			<key>begin</key>
 			<string>(?x)^\s*
 					((?:\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)\b\s*)*) # modifier
-					(\b(void|boolean|byte|char|short|int|float|long|double|(\w+\.)*[A-Z]\w+)\b(\[\s*\])?)\s* # type
+					(\b(void|boolean|byte|char|short|int|float|long|double|(\w+\.)*[A-Z]\w+)\b(&lt;((?:\w+\.)*[A-Z]\w+)&gt;|\[\s*\])?)\s* # type
 					(\w+)\s* # identifier
 					(?!.*;)  # abort if line has a ;
 					(?=\()</string>
-			<key>captures</key>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -197,7 +197,12 @@
 					<key>name</key>
 					<string>storage.type.java</string>
 				</dict>
-				<key>7</key>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.java</string>
+				</dict>
+				<key>8</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.function.java</string>

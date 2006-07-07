@@ -122,8 +122,8 @@ mup.html {
 					};
 					svn_revert = function(filename,id){
 						TextMate.isBusy = true;
-						cmd = '#{e_sh svn} 2>&1 revert ' + filename
-						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+						cmd = '#{e_sh svn} 2>&1 revert ' + filename;
+						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString;
 						document.getElementById('status'+id).innerHTML = '?';
 						document.getElementById('status'+id).className = '#{mup.status_map('?')}';
 						TextMate.isBusy = false;

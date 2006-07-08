@@ -155,7 +155,7 @@ begin
                   puts '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(&quot;' + $full_url_escaped + '&quot;, ' + rev + ', &quot;' + $filename_escaped + '&quot;); return false">'+htmlize(path[1])+"</a>"
                   
                   if path[0] == :modified
-                     puts '(<a href="#" onClick="javascript:diff_and_open_tm( \''+$full_url_escaped+'\', '+rev+', \'/tmp/'+$filename_escaped+'.diff\' ); return false">See Diff</a>)'
+                     puts '(<a href="#" onClick="javascript:diff_and_open_tm( \''+$full_url_escaped+'\', '+rev+', \'/tmp/'+$filename_escaped+'.diff\' ); return false">Diff With Previous</a>)'
                   end
                   
                   puts '  </li>'

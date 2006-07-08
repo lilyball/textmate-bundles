@@ -39,6 +39,10 @@ changed_files  = []     # just a array to sort the files
 #  skip_next      if doesnt show the next message because we already did
 state = :skipped_files
 
+# used to remember when to show the show / hide switches the next time
+# this is necesarry because this information has to be passed over one state.
+show_switch_next_time = true
+
 
 begin
    make_head( 'Subversion Log',
@@ -103,11 +107,7 @@ begin
                puts '<tr>  <th>Author:</th>    <td>'+ $2 +'</td> </tr>'
                puts '<tr>  <th>Date:</th>      <td>'+ htmlize( formated_date( $3 ), false ) +'</td></tr>'
                puts '<tr>  <th>Changed Files:</th><td>'
-               
-               puts '<a id="r'+$1+'_show" href="javascript:show_files(\'r'+$1+'\');">show</a>'
-               puts '<a id="r'+$1+'_hide" href="javascript:hide_files(\'r'+$1+'\');" class="hidden">hide</a>'
-               
-               puts '<ul id="r'+$1+'" class="hidden">'
+               show_switch_next_time = true
                
             else
                raise NoMatchException, line
@@ -141,6 +141,14 @@ begin
             end
             
          when :comment
+            if show_switch_next_time
+               puts '<a id="r'+rev+'_show" href="javascript:show_files(\'r'+rev+'\');">show ('+changed_files.size.to_s+')</a>'
+               puts '<a id="r'+rev+'_hide" href="javascript:hide_files(\'r'+rev+'\');" class="hidden">hide</a>'
+               puts '<ul id="r'+rev+'" class="hidden">'
+               
+               show_switch_next_time = false
+            end
+            
             unless changed_files.empty?
                changed_files.sort! do |a, b|
                   $sort_order.index( a[0] ) <=> $sort_order.index( b[0] )

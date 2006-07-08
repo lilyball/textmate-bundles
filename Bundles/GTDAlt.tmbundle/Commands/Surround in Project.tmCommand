@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 lines = STDIN.read.gsub(/\$/,"\\$").split("\n")
 currentTab = lines[0].scan(/^\s+/)[0]
-if ENV['TM_SOFT_TABS'] == "no" then
+if ENV['TM_SOFT_TABS'].downcase == "no" then
 	extraTab = "\t"
 else
 	extraTab = (" " * ENV['TM_TAB_SIZE'].to_i)

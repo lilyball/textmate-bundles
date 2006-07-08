@@ -189,7 +189,12 @@ module GTD
       self.subitems.shift
     end
     # Returns the string representing the object.
-    def dump_object(indent = "", indent_inc = "  ", notes = [])
+    def dump_object(indent = "", indent_inc = nil, notes = [])
+      unless ENV['TM_SOFT_TABS'] == "YES" then
+      	indent_inc = "\t"
+      else
+      	indent_inc = (" " * ENV['TM_TAB_SIZE'].to_i)
+      end unless indent_inc
       s = []
       case self
       when Project

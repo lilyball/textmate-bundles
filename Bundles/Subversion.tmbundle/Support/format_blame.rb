@@ -33,7 +33,6 @@ end
 require $bundle+'/svn_helper.rb'
 include SVNHelper
 
-
 # to show line numbers in output:
 linecount = 1
 
@@ -65,7 +64,7 @@ begin
             '<th class="codehead">code</th></tr>'
    
    prev_rev = 0
-   color = 'color_b'
+   color = ''
    
    $stdin.each_line do |line|
       raise SVNErrorException, line  if line =~ /^svn:/
@@ -73,23 +72,24 @@ begin
       # not a perfect pattern, but it works and is short:
       #              rev     user  date                                                       text
       if line =~ /\s*(\d+)\s+([-\w.]+) (\d+-\d+-\d+ \d+:\d+:\d+ [-+]\d+ \(\w{3}, \d+ \w{3} \d+\)) (.*)/
-         curr_add = ($current == linecount) ? ' current_line' : ''
+         curr_add = ($current == linecount) ? ' current_line ' : ' '
          line_id = ($current == linecount + 10) ? ' id="current_line"' : ''
          
          revision = $1.to_i
          
          if $1.to_i != prev_rev
-          if color == 'color_a'
-            color = 'color_b'
-          elsif color == 'color_b'
-            color = 'color_a'
-          end
+            if color == ''
+               color = 'alternate'
+            else
+               color = ''
+            end
          end
-         puts '<tr class ="' + color + '">'
+         
+         puts '<tr>'
          puts  '<td class="linecol"><span'+ line_id.to_s + '>'+ linecount.to_s + "</span></td>\n" +
                '<td class="revcol' +curr_add+'" title="'+ formated_date( $3 ) + (revision_comment[revision].nil? ? '' : "\n" + html_escape(revision_comment[revision])) + '">' + $1 + "</td>\n" +
                '<td class="namecol'+curr_add+'" title="'+ formated_date( $3 ) + (revision_comment[revision].nil? ? '' : "\n" + html_escape(revision_comment[revision])) + '">' + $2 + "</td>\n" +
-               '<td class="codecol'+curr_add+'" title="'+ formated_date( $3 ) + (revision_comment[revision].nil? ? '' : "\n" + html_escape(revision_comment[revision])) + '"><a href="' +
+               '<td class="codecol'+curr_add+color+'" title="'+ formated_date( $3 ) + (revision_comment[revision].nil? ? '' : "\n" + html_escape(revision_comment[revision])) + '"><a href="' +
                   make_tm_link( $full_file, linecount) +'"'+$close+'>'+ htmlize( $4 ) +
                "</a></td></tr>\n\n"
 
@@ -98,7 +98,9 @@ begin
       else
          raise NoMatchException, line
       end
+      
       prev_rev = $1.to_i
+      
    end #each_line
 
 rescue => e

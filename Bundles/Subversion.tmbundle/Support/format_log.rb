@@ -44,7 +44,7 @@ begin
               [ $bundle+'/Stylesheets/svn_style.css',
                 $bundle+'/Stylesheets/svn_log_style.css'],
               "<script type=\"text/javascript\">\n"+
-                 File.open($bundle+'/flip_files.js', 'r').readlines.join+'</script>' )
+                 File.open($bundle+'/svn_log_helper.js', 'r').readlines.join+'</script>' )
    
    STDOUT.flush
 
@@ -151,8 +151,15 @@ begin
                   $full_url = $base_url + $file
                   $filename = $file.gsub(%r(.*/(.*)$), '\1')
                   $filename_escaped = $filename.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')
-                  $full_url_escaped = $full_url.gsub(/[^a-zA-Z0-9_:.\/]/) { |m| sprintf("%%%02X", m[0] ) }
-                  puts '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(&quot;' + $full_url_escaped + '&quot;, ' + rev + ', &quot;' + $filename_escaped + '&quot;); return false">'+htmlize(path[1])+"</a></li>"
+                  $full_url_escaped = $full_url.gsub(/[^a-zA-Z0-9_:.\/@+]/) { |m| sprintf("%%%02X", m[0] ) }
+                  puts '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(&quot;' + $full_url_escaped + '&quot;, ' + rev + ', &quot;' + $filename_escaped + '&quot;); return false">'+htmlize(path[1])+"</a>"
+                  
+                  if path[0] == :modified
+                     puts '(<a href="#" onClick="javascript:diff_and_open_tm( \''+$full_url_escaped+'\', '+rev+', \'/tmp/tm_'+$filename_escaped+'.r'+rev+'.diff\' ); return false">See Diff</a>)'
+                  end
+                  
+                  puts '  </li>'
+                  
                end
                
                changed_files = []

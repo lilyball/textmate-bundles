@@ -15,7 +15,7 @@ function didFinishCommand ()
 function export_file ( url, rev, filename )
 {
    TextMate.isBusy = true;
-   TextMate.system("\"${TM_SVN:=svn}\" cat -r" + rev + " '" + url + "' &>/tmp/" + filename + " && open -a TextMate /tmp/" + filename, didFinishCommand);
+   TextMate.system("\"${TM_SVN:=svn}\" cat -r" + rev + " '" + url + "' &>/tmp/" + filename + "; open -a TextMate /tmp/" + filename, didFinishCommand);
 }
 
 /* show: files + hide-button,  hide: show-button.. */
@@ -38,7 +38,7 @@ function hide_files( base_id )
 function diff_and_open_tm( url, rev, filename )
 {
 	TextMate.isBusy = true;
-	TextMate.system('. "${TM_SUPPORT_PATH}/lib/bash_init.sh"; \"${TM_SVN:=svn}\" 2>&1 diff --old '+url+'@'+(rev-1)+' --new '+url+'@'+rev+' >'+filename+' && open -a TextMate '+filename, didFinishCommand );
+	TextMate.system('"${TM_SVN:=svn}" diff --old "'+url+'@'+(rev-1)+'" --new "'+url+'@'+rev+'" &> '+filename+'; open -a TextMate '+filename, didFinishCommand );
 	
 // debug / experimental stuff:
 //   TextMate.system('logger . "${TM_SUPPORT_PATH}/lib/bash_init.sh"', null );

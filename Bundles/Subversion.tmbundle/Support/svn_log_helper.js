@@ -1,5 +1,6 @@
-/* a _very_ basic implementation of flipping
-   the visibility of the changed files list.
+/* 
+   some js stuff like showing and hiding files, and opening
+   files / diffs with textmate, used by svn log.
    
    copyright 2005 torsten becker <torsten.becker@gmail.com>
    no warranty, that it doesn't crash your system.
@@ -12,10 +13,10 @@ function didFinishCommand ()
 }
 
 // filename is already shell-escaped, URL is %-escaped
-function export_file ( url, rev, filename )
+function export_file ( svn, url, rev, filename )
 {
    TextMate.isBusy = true;
-   TextMate.system("\"${TM_SVN:=svn}\" cat -r" + rev + " '" + url + "' &>/tmp/" + filename + "; open -a TextMate /tmp/" + filename, didFinishCommand);
+   TextMate.system("\""+svn+"\" cat -r" + rev + " '" + url + "' &>/tmp/" + filename + "; open -a TextMate /tmp/" + filename, didFinishCommand);
 }
 
 /* show: files + hide-button,  hide: show-button.. */
@@ -35,13 +36,8 @@ function hide_files( base_id )
 }
 
 
-function diff_and_open_tm( url, rev, filename )
+function diff_and_open_tm( svn, url, rev, filename )
 {
 	TextMate.isBusy = true;
-	TextMate.system('"${TM_SVN:=svn}" diff --old "'+url+'@'+(rev-1)+'" --new "'+url+'@'+rev+'" &> '+filename+'; open -a TextMate '+filename, didFinishCommand );
-	
-// debug / experimental stuff:
-//   TextMate.system('logger . "${TM_SUPPORT_PATH}/lib/bash_init.sh"', null );
-//   TextMate.system('logger <<< `env`', null );
-//	TextMate.system('. "${TM_SUPPORT_PATH}/lib/bash_init.sh"; \"${TM_SVN:=svn}\" 2>&1 diff --old '+url+'@'+(rev-1)+' --new '+url+'@'+rev+' >'+filename+' && open -a TextMate '+filename, didFinishCommand );
+	TextMate.system('"'+svn+'" diff --old "'+url+'@'+(rev-1)+'" --new "'+url+'@'+rev+'" &> '+filename+'; open -a TextMate '+filename, didFinishCommand );
 }

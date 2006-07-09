@@ -51,7 +51,7 @@ begin
               "<script type=\"text/javascript\">\n"+
                  File.open($bundle+'/svn_log_helper.js', 'r').readlines.join+'</script>' )
    
-   STDOUT.flush
+   $stdout.flush
 
    # assume PWD is under revision control
    $svn_url = `"${TM_SVN:=svn}" info #{ENV['PWD'].quote_filename_for_shell}|grep URL|cut -b6-`.chop
@@ -103,9 +103,9 @@ begin
                                               '<table class="log alternate">' )
                msg_count += 1
                
-               puts '<tr>  <th>Revision:</th>  <td>'+ $1 +'</td> </tr>'
-               puts '<tr>  <th>Author:</th>    <td>'+ $2 +'</td> </tr>'
-               puts '<tr>  <th>Date:</th>      <td>'+ htmlize( formated_date( $3 ), false ) +'</td></tr>'
+               puts '<tr>  <th>Revision:</th>  <td>'+ $1 + '</td> </tr>'
+               puts '<tr>  <th>Author:</th>    <td>'+ htmlize( $2 ) + '</td> </tr>'
+               puts '<tr>  <th>Date:</th>      <td>'+ htmlize( formated_date( $3 ), false ) + '</td></tr>'
                puts '<tr>  <th>Changed Files:</th><td>'
                show_switch_next_time = true
                
@@ -190,6 +190,8 @@ begin
                comment_count  = 0
                
                puts "</td></tr></table>\n\n"
+               
+               $stdout.flush
             end
             
          when :skip_next
@@ -201,6 +203,8 @@ begin
       end #case state
       
    end #each_line
+   
+   raise UnexpectedFinalStateException, state.to_s  if state != :info
    
 rescue LogLimitReachedException
 rescue => e

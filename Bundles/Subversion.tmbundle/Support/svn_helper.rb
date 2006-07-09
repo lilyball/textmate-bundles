@@ -18,6 +18,8 @@ module SVNHelper
    # (all) if we should go in error mode
    class SVNErrorException < StandardError; end
    
+   # thrown when a parser ended in a state that wasn't expected
+   class UnexpectedFinalStateException < StandardError; end
    
    # makes a txmt-link for the html output, the line arg is optional.
    def make_tm_link( filename, line=nil )
@@ -96,7 +98,7 @@ module SVNHelper
    def handle_default_exceptions( e, stdin=$stdin )
    	case e
    	when NoMatchException
-         make_error_head( 'NoMatch' )
+         make_error_head( 'No Match' )
          
          puts 'mhh, something with with the regex or svn must be wrong.  this should never happen.<br />'
          puts 'last line: <em>'+htmlize( $! )+'</em><br />please bug-report.'
@@ -104,9 +106,14 @@ module SVNHelper
          make_error_foot()
          
       when SVNErrorException
-         make_error_head( 'SVNError', htmlize( $! )+'<br />' )
+         make_error_head( 'SVN Error', htmlize( $! )+'<br />' )
          stdin.each_line { |line| puts htmlize( line )+'<br />' }
          make_error_foot()
+         
+      when UnexpectedFinalStateException
+         make_error_head('Unexpected Final State')
+         puts 'the parser ended in the final state <em>'+ $! +'</em>, this shouldnt happen. <br /> please bug-report.'
+         make_error_foot
          
       # handle unknown exceptions..
       else

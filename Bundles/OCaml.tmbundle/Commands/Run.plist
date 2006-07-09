@@ -8,18 +8,18 @@
 	<string>TOCAML=${TM_OCAML:=ocaml}
 require_cmd "$TOCAML"
 
-"$TOCAML" -w A -I /opt/local/lib/ocaml/sdl unix.cma str.cma bigarray.cma sdl.cma "$TM_FILEPATH"
+"$TOCAML" str.cma|pre
 </string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>
-	<string>none</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>@r</string>
 	<key>name</key>
 	<string>Run</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.ocaml</string>
 	<key>uuid</key>

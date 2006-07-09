@@ -12,7 +12,7 @@ $bundle        = ENV['TM_BUNDLE_SUPPORT']
 $limit         = ENV['TM_SVN_LOG_LIMIT'].nil?   ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i
 $date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
 $support       = ENV['TM_SUPPORT_PATH']
-$svn_cmd       = ENV['TM_SVN'].nil? ? 'svn' : ENV['TM_SVN']
+$svn_cmd       = ENV['TM_SVN'].nil? ? `which svn`.chomp : ENV['TM_SVN']
 $sort_order    = [ :added, :modified, :deleted, :replaced ]
 
 # require the helper, it does some formating, etc:

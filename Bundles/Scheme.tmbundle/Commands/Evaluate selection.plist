@@ -16,11 +16,9 @@ CMD=$(basename "$INTERPRET")
 # Run depending on the system are we on?
 if [ $CMD == "mzscheme" ] ; then
 	"$INTERPRET" -vm -e "$TM_SELECTED_TEXT"
-fi
-if [ $CMD == "csi" ] ; then
+elif [ $CMD == "csi" ] ; then
 	"$INTERPRET" -e "$TM_SELECTED_TEXT"
-fi
-</string>
+fi</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

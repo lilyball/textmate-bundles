@@ -10,23 +10,29 @@
 # The interpreter you use should be set in the environment
 # variable TM_SCHEME_INTERPRETER.
 #
+
+# Save file, use tmp-file if there's no filepath.
+[[ -z "$TM_FILEPATH" ]] &amp;&amp; TM_TMPFILE=$(mktemp -t pythonmate)
+: "${TM_FILEPATH:=$TM_TMPFILE}"; cat &gt;"$TM_FILEPATH"
+
+# set up variables
 INTERPRET=${TM_SCHEME_INTERPRETER:=csi}
 CMD=$(basename "$INTERPRET")
 SHOWOUTPUT="$TM_BUNDLE_SUPPORT/showoutput.rb"
-ERRORTEMP=$(mktemp -t scheme)
+TM_ERRORTEMP=$(mktemp -t scheme)
 
 # Run depending on the system are we on?
 if [ $CMD == "mzscheme" ] ; then
-	"$INTERPRET" -M errortrace -r "$TM_FILEPATH" 2&gt;"$ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$ERRORTEMP"
-fi
-if [ $CMD == "csi" ] ; then
-	"$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$ERRORTEMP"
+	"$INTERPRET" -M errortrace -r "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
+elif [ $CMD == "csi" ] ; then
+	"$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
+elif [ $CMD = "guile" ] ; then
+  "$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
 fi
 
 # Delete tempfiles
-rm -f "$ERRORTEMP"
-rm -f "$OUTTEMP"
-</string>
+rm -f "$TM_TMPFILE"
+rm -f "$TM_ERRORTEMP"</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

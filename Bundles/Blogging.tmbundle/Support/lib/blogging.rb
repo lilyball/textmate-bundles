@@ -674,7 +674,7 @@ HTML
       TextMate.exit_discard if result.nil?
 
       alt = result.sub(/\.[^.]+\z/, '').gsub(/[_-]/, ' ').gsub(/\w{4,}/) { |m| m.capitalize }
-      [ suggested_name, alt ]
+      [ result, alt ]
 
     else
 
@@ -691,7 +691,7 @@ HTML
       name.gsub!(/[^-_ \/\w]/, '') # remove strange stuff
       name.gsub!(/[-_ \/]+/, '_')  # collapse word separators into one underscore
       name.downcase!
-      [ prefix + name + ext, suggested_alt ]
+      [ prefix + name + ext, result ]
 
     end
   end

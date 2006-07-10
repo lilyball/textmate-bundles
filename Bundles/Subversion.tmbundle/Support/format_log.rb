@@ -161,10 +161,17 @@ begin
                   $filename = $file.gsub(%r(.*/(.*)$), '\1')
                   $filename_escaped = $filename.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')
                   $full_url_escaped = $full_url.gsub(/[^a-zA-Z0-9_:.\/@+]/) { |m| sprintf("%%%02X", m[0] ) }
-                  puts '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(&quot;' + $svn_cmd + '&quot;, &quot;' + $full_url_escaped + '&quot;, ' + rev + ', &quot;' + $filename_escaped + '&quot;); return false">'+htmlize(path[1])+"</a>"
                   
+                  print '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(&quot;' + $svn_cmd + '&quot;, &quot;' + $full_url_escaped + '&quot;, '
+                  
+                  # if a file was deleted, then show the previous (existing revision)
+                  print ( (path[0] == :deleted) ? (rev.to_i - 1).to_s : rev )
+                  
+                  puts ', &quot;' + $filename_escaped + '&quot;); return false">'+htmlize(path[1])+"</a>"
+                  
+                  # if the document was modified show a diff
                   if path[0] == :modified
-                     puts '&nbsp;(<a href="#" onClick="javascript:diff_and_open_tm( \''+$svn_cmd+'\', \''+$full_url_escaped+'\', '+rev+', \'/tmp/'+$filename_escaped+'.diff\' ); return false">Diff With Previous</a>)'
+                     puts '  &nbsp;(<a href="#" onClick="javascript:diff_and_open_tm( \''+$svn_cmd+'\', \''+$full_url_escaped+'\', '+rev+', \'/tmp/'+$filename_escaped+'.diff\' ); return false">Diff With Previous</a>)'
                   end
                   
                   puts '  </li>'

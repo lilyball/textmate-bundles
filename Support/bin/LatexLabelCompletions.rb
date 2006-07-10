@@ -71,13 +71,16 @@ filelist += recursiveFileSearch(filelist,"tex")
 # Get label prefix to expand
 if !(ENV.has_key?("TM_CURRENT_WORD")) then
   matchregex = /^(.*)\\label\{([^}]*)\}/
+  matchalt = /^(.*),label=([^,]*).*\]/
 else
   word = ENV["TM_CURRENT_WORD"].to_s
   if !(/\{/.match(word)) then
     word = word.gsub(/\}/,'')
     matchregex = Regexp.new("\\\\label\\{(#{word}[^}]*)\\}")
+    matchalt = Regexp.new("label=(#{word}[^,]*).*\\]")
   else
     matchregex = /\\label\{([^}]*)\}/
+    matchalt = /label=([^,]*).*\]/
   end
 end
 
@@ -86,7 +89,7 @@ completionslist= Array.new
 filelist.uniq.each {|filename|
   File.open("#{filename}") do |theFile|
     theFile.each { |line|
-      if line.match(matchregex)
+      if line.match(matchregex) || line.match(matchalt)
         m = $~
 # Escape \ if -e is set
         completionslist << if $e then "#{m[1]}".gsub('\\','\\\\\\\\') else "#{m[1]}" end

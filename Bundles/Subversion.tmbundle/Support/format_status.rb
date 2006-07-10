@@ -115,7 +115,7 @@ mup.html {
 					diff_to_mate = function(filename,id){
 						TextMate.isBusy = true;
 						tmp = '/tmp/diff_to_mate' + id + '.diff'
-						cmd = '#{e_sh svn} 2>&1 diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
+						cmd = '#{e_sh svn} 2>&1 diff --diff-cmd diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
 						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
 						TextMate.isBusy = false;
 					};

@@ -27,7 +27,7 @@ class TestGTD < Test::Unit::TestCase
     assert_equal(11, instructions.length)
     assert_equal([:project,:completed,:action,:action,:project,:action,:end,:action,:end,:action,:note],instructions.map{|i| i[0]}[0..10])
     assert_equal([:project,"World domination",nil,nil], instructions[0])
-    assert_equal([:action,"Create giant laser beam [1]","errand","2006-06-04"], instructions[2])
+    assert_equal([:action,"Create giant laser beam [1]","errand","due:[2006-06-04]"], instructions[2])
     assert_equal([:end,nil,nil,nil], instructions[6])
     assert_equal([:action,"Hello there","email",nil], instructions[9])
   end
@@ -65,6 +65,7 @@ class TestGTD < Test::Unit::TestCase
     assert_equal("Create giant laser beam", @a1.name)
     assert_equal("2006-06-04", @a1.due)
     assert_equal("A note here <http://www.google.com>", @a1.note)
+    assert_equal("due", @a1.due_type)
   end
   def test_update
     test_GTDFile_initialize

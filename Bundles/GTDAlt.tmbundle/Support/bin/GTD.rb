@@ -13,7 +13,7 @@ module GTD
   include GTDLight
   PROJECT_BEGIN_REGEXP = /^\s*(project)\s*(.*)$/
   PROJECT_END_REGEXP   = /^\s*(end)\s*$/
-  ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)(?:\s+(?:due|from|at):\[(\d{4}-\d{2}-\d{2})\])?\s*$/
+  ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)\s*((?:due|from|at):\[(\d{4}-\d{2}-\d{2})\])?\s*$/
   NOTE_REGEXP          = /^\[(\d+)\]\s+(.*)$/
   COMPLETED_REGEXP     = /^#completed:\[(\d{4}-\d{2}-\d{2})\]\s*@(\S+)\s+(([^\[]+)(?:\s*\[\d+\])?)(?:\s+(?:(?:due|from|at):\[\d{4}-\d{2}-\d{2}\]))?\s*$/
   COMMENT_REGEXP       = /^(\s*#.*)$/
@@ -264,12 +264,15 @@ module GTD
           when :action
             name =~ /^\s*(\S.*?\S)\s*(?:\[(\d+)\])?$/
             thename, noteid = $1, $2
-            due =~ /^(due|at|from):\[(\d{4}\-\d{2}\-\d{2})\]/
-            due_type, date = $1, $2
+            if due =~ /^(due|at|from):\[(\d{4}\-\d{2}\-\d{2})\]/ then
+              due_type, date = $1, $2
+            else
+              due_type, date = nil, nil
+            end
             act = Action.new(:name => thename, 
                              :context => context,
                              :parent =>  @current_project,
-                             :due => due, :due_type => due_type)
+                             :due => date, :due_type => due_type)
             if noteid != "" then
               act.note = noteid
               @notes[noteid] = act

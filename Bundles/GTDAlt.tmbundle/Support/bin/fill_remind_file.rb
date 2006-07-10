@@ -39,10 +39,11 @@ for action in actions do
     elsif !dateObj.nil? then
       case action.due_type
       when /at/,/from/
-        reminderLines << "REM #{dateObj.strftime('%B %d %Y')} MSG #{action.name.gsub(/%/,"")}.%"
-      when /due/
         reminderLines << "REM #{dateObj.strftime('%B %d %Y')}"+ 
         (ENV['YM_GTD_REMINDER'].nil? ? " +1" : " +#{ENV['YM_GTD_REMINDER']}") + " MSG #{action.name.gsub(/%/,"")} %b.%"
+      when /due/
+        reminderLines << "REM #{dateObj.strftime('%B %d %Y')}"+ 
+        (ENV['YM_GTD_REMINDER'].nil? ? " +1" : " +#{ENV['YM_GTD_REMINDER']}") + " MSG #{action.name.gsub(/%/,"")} DUE:%b.%"
       end
     end
   end

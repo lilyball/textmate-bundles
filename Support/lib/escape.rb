@@ -1,6 +1,6 @@
 # escape text to make it useable in a shell script as one “word” (string)
 def e_sh(str)
-	str.to_s.gsub(/[^a-zA-Z0-9_.]/, "\\\\\\0")
+	str.to_s.gsub(/[^a-zA-Z0-9_.\/]/, "\\\\\\0")
 end
 
 # escape text for use in a TextMate snippet

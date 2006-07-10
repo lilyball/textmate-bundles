@@ -117,7 +117,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i:\b(primary\s+key|references|on\sdelete(\s+cascade)?|check)\b)</string>
+<string>(?i:\b((?:primary|foreign)\s+key|references|on\sdelete(\s+cascade)?|check|constraint)\b)</string>
 			<key>name</key>
 			<string>storage.modifier.sql</string>
 		</dict>

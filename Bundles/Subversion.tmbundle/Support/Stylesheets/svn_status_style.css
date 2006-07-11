@@ -185,13 +185,13 @@ table.status a:active {
 }
 
 /* A */
-table.status td.added, td.updated, td.merged {
+table.status td.added {
    color: green;
    background: #bbffb3;	
 }
 
 /* M */
-table.status td.modified {
+table.status td.modified, td.updated, td.merged {
 	color: #eb6400;
 	background: #f7e1ad;
 }
@@ -214,7 +214,7 @@ table.status td.unknown, table.status td.ignored, table.status td.external {
 	background: #edaef5;
 }
 
-#STATUS {
+#commandOutput {
 	white-space: pre;
 	font: 10px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
 	color:#666;

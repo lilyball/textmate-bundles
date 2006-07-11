@@ -104,35 +104,74 @@ mup.html {
 	mup.head {
 			mup.title("Subversion #{command_name.capitalize}")
 			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
-			mup << (%{<script>
+			js_functions = <<ENDJS #javascript
+			<script>
 				
 					the_filename    = null;
 					the_id          = null;
 					the_displayname = null;
 					the_new_status  = null;
 					
+					function displayTail(id, className, string){
+						
+						if(string != null && string != '')
+						{
+//							tail_id = 'tail_' + id
+//							tail_div = document.getElementById(tail_id);
+//							if(tail_div == null)
+//							{
+//								status_div = document.getElementById('commandOutput');
+//								tail_div = document.createElement('div');
+//								tail_div.setAttribute('id', tail_id);
+//								tail_div.setAttribute('class', className);
+//								status_div.appendChild(tail_div);
+//							}
+//
+//							tail_div.innerHTML = string;
+
+							document.getElementById('commandOutput').innerHTML = string;
+						}
+					}
+					
+					function SVNCommand(cmd, id, statusString, className){
+						results = TextMate.system('LC_CTYPE=en_US.UTF-8 ' + cmd, null)
+						
+						outputString = results.outputString;
+//						errorString = results.errorString;
+						errorCode = results.status;
+						// TM doesn't receive the error stream unless output and error are the same descriptor?
+//						displayTail('error', 'error', errorString);
+						displayTail('info', 'info', outputString);
+						
+						if(errorCode == 0)
+						{
+							document.getElementById('status'+id).innerHTML = statusString;
+							document.getElementById('status'+id).className = className;
+						}
+					}
+					
 					// the filename passed in to the following functions is already properly shell escaped
 					diff_to_mate = function(filename,id){
 						TextMate.isBusy = true;
 						tmp = '/tmp/diff_to_mate' + id + '.diff'
 						cmd = '#{e_sh svn} 2>&1 diff --diff-cmd diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
-						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+						document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString
 						TextMate.isBusy = false;
 					};
 					svn_add = function(filename,id){
 						TextMate.isBusy = true;
-						cmd = '#{e_sh svn} 2>&1 add ' + filename
-						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
-						document.getElementById('status'+id).innerHTML = 'A';
-						document.getElementById('status'+id).className = '#{mup.status_map('A')}';
+						
+						cmd = '#{e_sh svn} add ' + filename + ' 2>&1'
+						SVNCommand(cmd, id, 'A', '#{mup.status_map('A')}')
+						
 						TextMate.isBusy = false;
 					};
 					svn_revert = function(filename,id){
 						TextMate.isBusy = true;
-						cmd = '#{e_sh svn} 2>&1 revert ' + filename;
-						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString;
-						document.getElementById('status'+id).innerHTML = '?';
-						document.getElementById('status'+id).className = '#{mup.status_map('?')}';
+						
+						cmd = '#{e_sh svn} 2>&1 revert ' + filename;						
+						SVNCommand(cmd, id, '?', '#{mup.status_map('?')}')						
+						
 						TextMate.isBusy = false;
 					};
 					svn_revert_confirm = function(filename,id,displayname){
@@ -156,7 +195,7 @@ mup.html {
 						myCommand.onreadoutput = svn_output;
 					};
 					svn_output = function(str){
-						document.getElementById('STATUS').innerHTML = str;
+						display_tail('info', 'info', str)						
 						document.getElementById('status'+the_id).innerHTML = the_new_status;
 						if(the_new_status == '-'){document.getElementById('status'+the_id).className = '#{mup.status_map('-')}'};
 						if(the_new_status == 'D'){document.getElementById('status'+the_id).className = '#{mup.status_map('D')}'};
@@ -169,11 +208,13 @@ mup.html {
 					finder_open = function(filename,id){
 						TextMate.isBusy = true;
 						cmd = "open 2>&1 " + filename
-						document.getElementById('STATUS').innerHTML = TextMate.system(cmd, null).outputString
+						output = TextMate.system(cmd, null).outputString
+						display_tail('info', 'info', output)
 						TextMate.isBusy = false;
 					};
 				</script>}
-			)
+ENDJS
+			mup << js_functions
 	}
 
 	mup.body {
@@ -279,6 +320,6 @@ mup.html {
 			}
 		end
 		mup.br(:style => 'clear:both')
-		mup.div(:id => 'STATUS'){mup << " "}
+		mup.div(:id => 'commandOutput'){mup << " "}
 	}
 }

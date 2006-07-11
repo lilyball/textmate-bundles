@@ -24,7 +24,7 @@
 		{ name = "keyword.operator.actionscript"; match = "\\b(instanceof)\\b"; },
 		{ name = "keyword.operator.symbolic.actionscript"; match = "[-\!\%\&\*\+\=\/\?\:]"; },
 		{ name = "other.preprocessor.actionscript"; match = "^[ \\t]*#[a-zA-Z]+"; },
-		{ name = "declaration.function.actionscript";
+		{ name = "meta.function.actionscript";
 		  begin = "\\b(function)\\s+([a-zA-Z_]\\w*)\\s*\\("; end = "\\)";
 		  captures = {
 		      1 = { name = "storage.type.function.asp"; };
@@ -34,7 +34,7 @@
 		      { name = "variable.parameter.asp"; match = "[^,)\\n]+"; }
 		  );
 		},
-		{ name = "declaration.class.actionscript";
+		{ name = "meta.class.actionscript";
 		  match = "\\b(class)\\s+([a-zA-Z_](?:\\w|\\.)*)(?:\\s+(extends)\\s+([a-zA-Z_](?:\\w|\\.)*))?";
 		  captures = {
 		      1 = { name = "storage.type.class.actionscript"; };

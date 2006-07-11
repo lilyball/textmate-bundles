@@ -7,9 +7,9 @@ require (support + "/lib/escape.rb")
 require "cgi"
 
 # Arguments
-bundle				= ENV['TM_BUNDLE_SUPPORT']
-work_path			= ENV['WorkPath']
-work_paths			= TextMate.selected_paths_array
+bundle     = ENV['TM_BUNDLE_SUPPORT']
+work_path  = ENV['WorkPath']
+work_paths = TextMate.selected_paths_array
 ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 
 # First escape for use in the shell, then escape for use in a JS string
@@ -95,7 +95,7 @@ class << mup
 			
 			c = status[i].chr
 			status_class = StatusMap[c] || 'dunno'
-			td(c, "class" => status_class, "title" => StatusColumnNames[i] + " " + status_class.capitalize, :id => "status#{id}")
+			td(c, "class" => "status_col #{status_class}", "title" => StatusColumnNames[i] + " " + status_class.capitalize, :id => "status#{id}")
 		end
 	end
 end
@@ -112,7 +112,7 @@ mup.html {
 					the_displayname = null;
 					the_new_status  = null;
 					
-					function displayTail(id, className, string){
+					function display_tail(id, className, string){
 						
 						if(string != null && string != '')
 						{
@@ -128,8 +128,8 @@ mup.html {
 //							}
 //
 //							tail_div.innerHTML = string;
-
-							document.getElementById('commandOutput').innerHTML = string;
+							string += " \\n";
+							document.getElementById('commandOutput').innerHTML += string;
 						}
 					}
 					
@@ -140,13 +140,13 @@ mup.html {
 //						errorString = results.errorString;
 						errorCode = results.status;
 						// TM doesn't receive the error stream unless output and error are the same descriptor?
-//						displayTail('error', 'error', errorString);
-						displayTail('info', 'info', outputString);
+//						display_tail('error', 'error', errorString);
+						display_tail('info', 'info', outputString);
 						
 						if(errorCode == 0)
 						{
 							document.getElementById('status'+id).innerHTML = statusString;
-							document.getElementById('status'+id).className = className;
+							document.getElementById('status'+id).className = 'status_col ' + className;
 						}
 					}
 					
@@ -155,7 +155,7 @@ mup.html {
 						TextMate.isBusy = true;
 						tmp = '/tmp/diff_to_mate' + id + '.diff'
 						cmd = '#{e_sh svn} 2>&1 diff --diff-cmd diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
-						document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString
+						document.getElementById('commandOutput').innerHTML += TextMate.system(cmd, null).outputString + ' \\n'
 						TextMate.isBusy = false;
 					};
 					svn_add = function(filename,id){
@@ -169,8 +169,8 @@ mup.html {
 					svn_revert = function(filename,id){
 						TextMate.isBusy = true;
 						
-						cmd = '#{e_sh svn} 2>&1 revert ' + filename;						
-						SVNCommand(cmd, id, '?', '#{mup.status_map('?')}')						
+						cmd = '#{e_sh svn} 2>&1 revert ' + filename;
+						SVNCommand(cmd, id, '?', '#{mup.status_map('?')}')
 						
 						TextMate.isBusy = false;
 					};
@@ -195,10 +195,10 @@ mup.html {
 						myCommand.onreadoutput = svn_output;
 					};
 					svn_output = function(str){
-						display_tail('info', 'info', str)						
+						display_tail('info', 'info', str);
 						document.getElementById('status'+the_id).innerHTML = the_new_status;
-						if(the_new_status == '-'){document.getElementById('status'+the_id).className = '#{mup.status_map('-')}'};
-						if(the_new_status == 'D'){document.getElementById('status'+the_id).className = '#{mup.status_map('D')}'};
+						if(the_new_status == '-'){document.getElementById('status'+the_id).className = 'status_col #{mup.status_map('-')}'};
+						if(the_new_status == 'D'){document.getElementById('status'+the_id).className = 'status_col #{mup.status_map('D')}'};
 						TextMate.isBusy = false;
 						the_filename    = null;
 						the_id          = null;
@@ -207,12 +207,12 @@ mup.html {
 					};
 					finder_open = function(filename,id){
 						TextMate.isBusy = true;
-						cmd = "open 2>&1 " + filename
-						output = TextMate.system(cmd, null).outputString
-						display_tail('info', 'info', output)
+						cmd = "open 2>&1 " + filename;
+						output = TextMate.system(cmd, null).outputString;
+						display_tail('info', 'info', output);
 						TextMate.isBusy = false;
 					};
-				</script>}
+				</script>
 ENDJS
 			mup << js_functions
 	}
@@ -222,9 +222,9 @@ ENDJS
 			mup.img(	:src => "file://"+bundle+"/Stylesheets/subversion_logo.tiff",
 						:height => 21,
 						:width => 32 )
-			mup.text " #{command_name.capitalize} for "
+			mup << " #{command_name.capitalize} for "
 			mup << "&ldquo;"
-			mup.text "#{File.basename(work_path)}"
+			mup << "#{File.basename(work_path)}"
 			mup << "&rdquo;"
 		end
 #		mup.hr
@@ -234,10 +234,10 @@ ENDJS
 		mup.div( "class" => "section" ) do
 			mup.table("class" => "status") {
 			
-				match_columns		= '.' * mup.status_column_count
-				unknown_file_status	= '?' + (' ' * (mup.status_column_count - 1))
-				missing_file_status	= '!' + (' ' * (mup.status_column_count - 1))
-				added_file_status	= 'A' + (' ' * (mup.status_column_count - 1))
+				match_columns       = '.' * mup.status_column_count
+				unknown_file_status = '?' + (' ' * (mup.status_column_count - 1))
+				missing_file_status = '!' + (' ' * (mup.status_column_count - 1))
+				added_file_status   = 'A' + (' ' * (mup.status_column_count - 1))
 			
 				stdin_line_count = 1
 				STDIN.each_line do |line|
@@ -250,11 +250,11 @@ ENDJS
 							match = /^(#{match_columns})(?:\s+)(.*)\n/.match( line )
 							if match.nil? then
 								mup.td(:colspan => (mup.status_column_count + 5).to_s ) do
-									mup.div(:class => 'info') { mup.text(line) }
+									mup.div(:class => 'info') { mup << (line) }
 								end
 							else
-								status	= match[1]
-								file	= match[2]
+								status   = match[1]
+								file     = match[2]
 								esc_file = '&quot;' + CGI.escapeHTML(e_sh_js(file).gsub(/(?=")/, '\\')) + '&quot;'
 
 								if status == unknown_file_status and ignore_file_pattern =~ file
@@ -292,11 +292,9 @@ ENDJS
 
 									if file.match(/\.(png|gif|jpe?g|psd|tiff|zip|rar)$/i)
 										onclick        = "finder_open(#{esc_file},#{stdin_line_count}); return false"
-										filename_title = 'Open with Finder'
 										column_is_an_image = true
 									else
 										onclick        = ""
-										filename_title = 'Open in TextMate'
 										# Diff Column (only available for text)
 										column_is_an_image = false
 									end
@@ -307,7 +305,7 @@ ENDJS
 									end
 
 									mup.td(:class => 'file_col') {
-										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + (e_url file), "class" => "pathname", "onclick" => onclick, :title => "#{CGI.escapeHTML(filename_title)}\n\n#{CGI.escapeHTML(file)}" )
+										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + (e_url file), "class" => "pathname", "onclick" => onclick )
 									}
 								end
 							end 
@@ -315,6 +313,7 @@ ENDJS
 							mup.td { mup.div( line, "class" => "error" ) }
 						end
 					}
+					mup << "\n"
 					stdin_line_count = stdin_line_count + 1
 				end
 			}

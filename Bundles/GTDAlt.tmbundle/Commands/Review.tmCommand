@@ -110,7 +110,7 @@ if not acts.empty? then
   if not projectsDiff.empty? then
     pr.raw "&lt;h2&gt;Projects not acted on&lt;/h2&gt;"
     pr.table do
-      pr.headers([ "Project", "Next Action", "Context", "Due by"])
+      pr.headers([ "Project", "Next Action", "Context", "Due by", "Completed"])
       projectsDiff.each{|p| 
       project = gtdprojects.find{|i| i.name == p}
 	  if project.next_action then
@@ -127,7 +127,7 @@ if not acts.empty? then
           else
             project.next_action.due
         end
-        pr.row([project.link, text, "&lt;span class=\"nobr\"&gt;#{project.next_action.context}&lt;/span&gt;", "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;"])
+        pr.row([project.link, text, "&lt;span class=\"nobr\"&gt;#{project.next_action.context}&lt;/span&gt;", "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;", project.next_action.mark_completed_link])
     end
     }
     end # pr.table
@@ -138,7 +138,7 @@ end
   
 pr.raw "&lt;h2&gt;Dated Actions&lt;/h2&gt;"
 pr.table do
-  pr.headers([ "Context", "Action", "Project", "Due by"])
+  pr.headers([ "Context", "Action", "Project", "Due by", "Completed"])
   gtdacts.delete_if {|a| a.due == nil }
   gtdacts.sort{|a,b| a.due &lt;=&gt; b.due}.each do |a|
     proj = if a.project != nil then a.project.link else "none" end
@@ -152,7 +152,7 @@ pr.table do
           a.due
       end
       text = "&lt;a href=\"#{a.txmt}\"&gt;#{a.name}&lt;/a&gt;"
-      pr.row([a.context, text, proj , "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;"])
+      pr.row([a.context, text, proj , "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;", a.mark_completed_link])
     end
   end
 end

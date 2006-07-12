@@ -7,9 +7,9 @@ require (support + "/lib/escape.rb")
 require "cgi"
 
 # Arguments
-bundle     = ENV['TM_BUNDLE_SUPPORT']
-work_path  = ENV['WorkPath']
-work_paths = TextMate.selected_paths_array
+bundle				= ENV['TM_BUNDLE_SUPPORT']
+work_path			= ENV['WorkPath']
+work_paths			= TextMate.selected_paths_array
 ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 
 # First escape for use in the shell, then escape for use in a JS string
@@ -86,6 +86,10 @@ class << mup
 		$is_status ? 5 : 3
 	end
 	
+	def status_colspan
+		$is_status ? (status_column_count + 5) : (status_column_count + 1)
+	end
+	
 	def status_map(status)
 		StatusMap[status]
 	end
@@ -97,6 +101,17 @@ class << mup
 			status_class = StatusMap[c] || 'dunno'
 			td(c, "class" => "status_col #{status_class}", "title" => StatusColumnNames[i] + " " + status_class.capitalize, :id => "status#{id}")
 		end
+	end
+	
+	def button_td!(show, name, onclick)
+		lowercase_name = name.downcase
+		col_class_name		= lowercase_name + '_col'
+		button_class_name	= lowercase_name + '_button'
+		td(:class => col_name) {
+			if show
+				a( name, "href" => '#', "class" => button_class_name, "onclick" => onclick )
+			end
+		}
 	end
 end
 
@@ -249,48 +264,40 @@ ENDJS
 						if /^svn:/.match( line ).nil? then
 							match = /^(#{match_columns})(?:\s+)(.*)\n/.match( line )
 							if match.nil? then
-								mup.td(:colspan => (mup.status_column_count + 5).to_s ) do
-									mup.div(:class => 'info') { mup << (line) }
+								# Informational text, not status
+								mup.td(:colspan => (mup.status_colspan).to_s ) do
+									mup.div(:class => 'info') { mup.text(line) }
 								end
 							else
 								status   = match[1]
 								file     = match[2]
 								esc_file = '&quot;' + CGI.escapeHTML(e_sh_js(file).gsub(/(?=")/, '\\')) + '&quot;'
 
-								if status == unknown_file_status and ignore_file_pattern =~ file
-									# This is a file that we don't want to know about
-									nil
-								else
-									mup.td_status!(status, stdin_line_count)
-
+								# Skip files that we don't want to know about
+								next if (status == unknown_file_status and ignore_file_pattern =~ file)
+								
+								# Status string
+								mup.td_status!(status, stdin_line_count)
+								
+								# Add, Revert, etc buttons
+								if $is_status
 									# ADD Column 
-									mup.td(:class => 'add_col') {
-										if status == unknown_file_status
-											mup.a( 'Add', "href" => '#', "class" => "add button", "onclick" => "svn_add(#{esc_file},#{stdin_line_count}); return false" )
-										else
-											mup << ' '
-										end
-									}
+									mup.button_td!((status == unknown_file_status),
+													'Add',
+													"svn_add(#{esc_file},#{stdin_line_count}); return false")
 
 									# REVERT Column 
-									mup.td(:class => 'revert_col') {
-										if status != unknown_file_status
-											mup.a( 'Revert', "href" => '#', "class" => "revert button", "onclick" => "svn_revert#{"_confirm" unless status == added_file_status}(#{esc_file},#{stdin_line_count},'#{CGI.escapeHTML(shorten_path(file))}'); return false" )
-										else
-											mup << ' '
-										end
-									}
+									mup.button_td!((status != unknown_file_status),
+													'Revert',
+													"svn_revert#{"_confirm" unless status == added_file_status}(#{esc_file},#{stdin_line_count},'#{CGI.escapeHTML(shorten_path(file))}'); return false")
 
 									# REMOVE Column 
-									mup.td(:class => 'remove_col') {
-										if status == missing_file_status
-											mup.a( 'Remove', "href" => '#', "class" => "remove button", "onclick" => "svn_remove(#{esc_file},#{stdin_line_count},'#{CGI.escapeHTML(shorten_path(file))}'); return false" )
-										else
-											mup << ' '
-										end
-									}
+									mup.button_td!((status == missing_file_status),
+													'Remove',
+													"svn_remove(#{esc_file},#{stdin_line_count},'#{CGI.escapeHTML(shorten_path(file))}'); return false")
 
-									if file.match(/\.(png|gif|jpe?g|psd|tiff|zip|rar)$/i)
+									# DIFF Column
+									if file.match(/\.(png|gif|jpe?g|psd|tif?f|zip|rar)$/i)
 										onclick        = "finder_open(#{esc_file},#{stdin_line_count}); return false"
 										column_is_an_image = true
 									else
@@ -298,23 +305,23 @@ ENDJS
 										# Diff Column (only available for text)
 										column_is_an_image = false
 									end
-									if column_is_an_image or status == unknown_file_status
-										mup.td(:class => 'diff_col') { mup << ' ' }
-									else
-										mup.td(:class => 'diff_col') { mup.a( 'Diff', "href" => '#', "class" => "diff button", "onclick" => "diff_to_mate(#{esc_file},#{stdin_line_count}); return false" ) } unless status == unknown_file_status
-									end
 
-									mup.td(:class => 'file_col') {
-										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + (e_url file), "class" => "pathname", "onclick" => onclick )
-									}
+									mup.button_td!( ((not column_is_an_image) and (status != unknown_file_status)),
+													'Diff',
+													"diff_to_mate(#{esc_file},#{stdin_line_count}); return false")
 								end
+
+								# FILE Column
+								mup.td(:class => 'file_col') {
+										mup.a( shorten_path(file), "href" => 'txmt://open?url=file://' + (e_url file), "class" => "pathname", "onclick" => onclick )
+								}
 							end 
 						else
 							mup.td { mup.div( line, "class" => "error" ) }
 						end
 					}
 					mup << "\n"
-					stdin_line_count = stdin_line_count + 1
+					stdin_line_count += 1
 				end
 			}
 		end

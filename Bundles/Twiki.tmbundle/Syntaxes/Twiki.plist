@@ -12,14 +12,14 @@
 			<key>end</key>
 			<string>"</string>
 			<key>name</key>
-			<string>string.quoted.double.untitled</string>
+			<string>string.quoted.double.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escaped.untitled</string>
+					<string>constant.character.escaped.twiki</string>
 				</dict>
 			</array>
 		</dict>
@@ -35,7 +35,7 @@
 			<key>match</key>
 			<string>^-{3}\+{1,6}(.*)$</string>
 			<key>name</key>
-			<string>markup.headings.twiki</string>
+			<string>markup.heading.twiki</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -43,14 +43,14 @@
 			<key>end</key>
 			<string>\&lt;/verbatim\&gt;|\&lt;/pre\&gt;</string>
 			<key>name</key>
-			<string>markup.verbatim.twiki</string>
+			<string>markup.raw.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escaped.untitled</string>
+					<string>constant.character.escaped.twiki</string>
 				</dict>
 			</array>
 		</dict>
@@ -58,7 +58,7 @@
 			<key>match</key>
 			<string>^-{3,}$\n</string>
 			<key>name</key>
-			<string>markup.hr.twiki</string>
+			<string>meta.separator.twiki</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -94,7 +94,7 @@
 			<key>end</key>
 			<string>^(?:\s*$|(?=\s*&gt;|[=-]{3,}$))</string>
 			<key>name</key>
-			<string>markup.table.twiki</string>
+			<string>markup.other.table.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -109,7 +109,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.list.1.twiki</string>
+			<string>markup.list.unnumbered.1.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -124,7 +124,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.list.2.twiki</string>
+			<string>markup.list.unnumbered.2.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -139,7 +139,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.list.3.twiki</string>
+			<string>markup.list.unnumbered.3.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -154,7 +154,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.list.4.twiki</string>
+			<string>markup.list.unnumbered.4.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -169,7 +169,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.list.5.twiki</string>
+			<string>markup.list.unnumbered.5.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -184,7 +184,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.list.6.twiki</string>
+			<string>markup.list.unnumbered.6.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -199,7 +199,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.numlist.1.twiki</string>
+			<string>markup.list.numbered.1.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -214,7 +214,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.numlist.2.twiki</string>
+			<string>markup.list.numbered.2.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -229,7 +229,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.numlist.3.twiki</string>
+			<string>markup.list.numbered.3.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -244,7 +244,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.numlist.4.twiki</string>
+			<string>markup.list.numbered.4.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -259,7 +259,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.numlist.5.twiki</string>
+			<string>markup.list.numbered.5.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -274,7 +274,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.numlist.6.twiki</string>
+			<string>markup.list.numbered.6.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -382,7 +382,7 @@
 					<key>end</key>
 					<string>^\s*$</string>
 					<key>name</key>
-					<string>markup.list.paragraph</string>
+					<string>markup.list.unnumbered.paragraph</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -407,7 +407,7 @@
 					<key>end</key>
 					<string>^\s*$</string>
 					<key>name</key>
-					<string>markup.numlist.paragraph</string>
+					<string>markup.list.numbered.paragraph</string>
 					<key>patterns</key>
 					<array>
 						<dict>

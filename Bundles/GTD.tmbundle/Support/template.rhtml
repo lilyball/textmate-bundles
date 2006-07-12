@@ -43,7 +43,7 @@
 					<li>
 						<a title="<%= html_escape(match[:content].strip) %>" href="<%= TextMate.file_link(match[:file], match[:line]) %>">
 							<%= "#{html_escape(File.basename(match[:file]))} (#{match[:line]})" %></a>:
-							<%= match[:match] %>
+							<%= match[:content] %>
 					</li>
 
 				<% end %>

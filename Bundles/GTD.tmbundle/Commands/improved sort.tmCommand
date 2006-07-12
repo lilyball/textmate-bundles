@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby  
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
+require "erb"
+require "pp"
+include ERB::Util
+
+$myPath = ENV['TM_DIRECTORY'] 
+$tags = [] #user defined contexts
+
+def readContexts(a)
+  # processes contexts.gtd into script  
+  context, tabCommand, tabString, regex, color = a.split(/\|/)
+  $tags.push({:label =&gt; context, :regexp =&gt; regex, :color =&gt; color, :matches =&gt; []})   
+end
+
+
+
+
+def TextMate.file_link (file, line = 0)
+  return "txmt://open/?url=file://" +
+    file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
+    "&amp;amp;line=" + line.to_s
+end  
+
+# the contexts.gtd file is read, and converted into $contexts
+file = File.open($myPath+"/contexts.gtd", "r")
+file.each do |line|
+  readContexts(line)
+end 
+
+# sorting happens
+$tags.each do |tag| 
+    context = tag[:label]    
+    myFiles = Dir.entries($myPath)
+    myFiles.each do |fileName|
+      if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd")
+        lineno = 0
+        mFile = File.open(fileName) 
+        mFile.each do |line|
+          lineno = lineno + 1
+          re = /\s/
+          ctask = re.match(line)
+          if ctask.pre_match == context
+            results = {
+              :file =&gt; fileName[0..-5],
+              :line =&gt; lineno,
+              :content =&gt; ctask.post_match
+            }
+            #results[:match] = html_escape($1)
+            tag[:matches] &lt;&lt; results
+          end        
+        end
+      end
+    end 
+end
+
+#pp $tags
+tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"
+puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^T</string>
+	<key>name</key>
+	<string>GTD List View</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.plain.gtd</string>
+	<key>uuid</key>
+	<string>15BFB421-9590-4F93-99DF-8AF9BDB9C572</string>
+</dict>
+</plist>

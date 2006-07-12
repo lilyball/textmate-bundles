@@ -17,27 +17,12 @@ $myPath = ENV['TM_DIRECTORY']
 tabCommand = ENV['TM_CURRENT_LINE']
 
 $contexts = [] #user defined contexts
-def readContexts(a,re)
-  # processes contexts.gtd into script
-  if a =~ re
-    context = "#{$`}"
-    a = "#{$'}"
-    if a =~ re
-      tabCommand = "#{$`}"
-      a = "#{$'}"
-      if a =~ re
-        tabString = "#{$`}"
-         a = "#{$'}"
-        if a =~ re
-          regex = "#{$`}"
-          color = "#{$'}"
-        end
-      end
-    end
-  end
-  tasks = []
-  $contexts.push({:context =&gt; context, :tabCommand =&gt; tabCommand, :tabString =&gt; tabString, :regex =&gt; regex, :color =&gt; color, :tasks =&gt; tasks})   
+def readContexts(a)
+  # processes contexts.gtd into script  
+  context, tabCommand, tabString, regex, color = a.split(/\|/)
+  $contexts.push({:context =&gt; tabCommand, :tabString =&gt; tabString})   
 end
+
 
 def reportContexts
   # a simple test
@@ -58,11 +43,14 @@ end
 def myParse tabCommand
   found = 0
   $contexts.each do |tag|
-    re = Regexp.new(tag[:tabCommand])
-    if (tabCommand =~ re) and (found == 0) 
+    re = tag[:context]
+    if (tabCommand == re) and (found == 0) 
       puts tag[:tabString]
       found = 1
     end
+  end
+  if found == 0 
+    puts "failed"
   end
 end
 
@@ -70,7 +58,7 @@ end
 # the contexts.gtd file is read, and converted into $contexts
 file = File.open($myPath+"/contexts.gtd", "r")
 file.each do |line|
-  readContexts(line.chomp,/\|/)
+  readContexts(line)
 end    
 
 #puts tabCommand

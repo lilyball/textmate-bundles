@@ -149,13 +149,13 @@ mup.html {
 					}
 					
 					function SVNCommand(cmd, id, statusString, className){
-						results = TextMate.system('LC_CTYPE=en_US.UTF-8 ' + cmd, null)
+						results        = TextMate.system('LC_CTYPE=en_US.UTF-8 ' + cmd, null)
 						
-						outputString = results.outputString;
-//						errorString = results.errorString;
-						errorCode = results.status;
+						outputString   = results.outputString;
+						// errorString = results.errorString;
+						errorCode      = results.status;
 						// TM doesn't receive the error stream unless output and error are the same descriptor?
-//						display_tail('error', 'error', errorString);
+						// display_tail('error', 'error', errorString);
 						display_tail('info', 'info', outputString);
 						
 						if(errorCode == 0)
@@ -165,6 +165,26 @@ mup.html {
 						}
 					}
 					
+					svn_commit = function(){
+						TextMate.isBusy = true;
+						
+						// cmd = 'require_cmd "#{e_sh svn}" "If you have installed svn, then you need to either update your <tt>PATH</tt> or set the <tt>TM_SVN</tt> shell variable (e.g. in Preferences / Advanced)"\\n\\nexport TM_SVN\\nexport CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"\\n\\ncd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"\\n"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/svn_commit.rb"'
+						cmd = ""
+						cmd += 'export LC_CTYPE=en_US.UTF-8 ;';
+						#{ %{cmd += "export            TM_SVN=#{ e_sh_js ENV['TM_SVN']            }; ";} if ENV['TM_SVN']            }
+						#{ %{cmd += "export TM_BUNDLE_SUPPORT=#{ e_sh_js ENV['TM_BUNDLE_SUPPORT'] }; ";} if ENV['TM_BUNDLE_SUPPORT'] }
+						#{ %{cmd += "export   TM_SUPPORT_PATH=#{ e_sh_js ENV['TM_SUPPORT_PATH']   }; ";} if ENV['TM_SUPPORT_PATH']   }
+						#{ %{cmd += "export      CommitWindow=#{ e_sh_js ENV['CommitWindow']      }; ";} if ENV['CommitWindow']      }
+						#{ %{cmd += "export   TM_SVN_DIFF_CMD=#{ e_sh_js ENV['TM_SVN_DIFF_CMD']   }; ";} if ENV['TM_SVN_DIFF_CMD']   }
+						#{ %{cmd += "export TM_SELECTED_FILES=#{ e_sh_js ENV['TM_SELECTED_FILES'] }; ";} if ENV['TM_SELECTED_FILES'] }
+						#{ %{cmd += "export TM_SELECTED_FILES=#{ e_sh_js("'"+(ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY'])+"'") }; ";\n} unless ENV['TM_SELECTED_FILES']}
+						
+						cmd += 'cd "#{ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']}";"#{ENV['TM_RUBY'] || "ruby"}" -- "#{ENV['TM_BUNDLE_SUPPORT']}/svn_commit.rb"'
+						document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'
+						// SVNCommand(cmd, '_commit', '-', 'done')
+						
+						TextMate.isBusy = false;
+					};
 					// the filename passed in to the following functions is already properly shell escaped
 					diff_to_mate = function(filename,id){
 						TextMate.isBusy = true;
@@ -325,7 +345,14 @@ ENDJS
 				end
 			}
 		end
-		mup.br(:style => 'clear:both')
-		mup.div(:id => 'commandOutput'){mup << " "}
+		mup.div(:id => 'actions'){
+			mup.a('Commit', :href => '#', :onclick => 'svn_commit(); return false')
+			mup.div(:style => 'clear:both'){}
+		}
+		mup.div(:id => 'commandOutput'){
+			mup << " "
+			#DEBUG# mup << work_path + "\n"
+			#DEBUG# ENV.sort.each { |key,value| puts key + ' = ' + value + "\n" }
+		}
 	}
 }

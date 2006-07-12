@@ -6,6 +6,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/rubypants.rb"
 class S5 < String
   DIVIDER = '✂------'
   HANDOUT = '__________'
+  NOTES = '##########'
 
   attr_reader :title, :subtitle, :location, :presenter, :organization,
     :date, :slides, :theme, :defaultView, :controlVis, :current_slide_number
@@ -100,15 +101,31 @@ class S5 < String
 
     content = nil
     handout = nil
+    notes = nil
     all_slides = ''
     self.slides.each do | slide |
       if slide =~ %r{^#{HANDOUT}$}m
         parts = slide.split(%r{^#{HANDOUT}$})
         content = parts[0]
         handout = parts[1]
+        if handout =~ %r{^#{NOTES}$}m
+          parts = handout.split(%r{^#{NOTES}$})
+          handout = parts[0]
+          notes = parts[1]
+        end
+        if content =~ %r{^#{NOTES}$}m
+          parts = content.split(%r{^#{NOTES}$})
+          content = parts[0]
+          notes = parts[1]
+        end
+      elsif slide =~ %r{^#{NOTES}$}m
+        parts = slide.split(%r{^#{NOTES}$})
+        content = parts[0]
+        notes = parts[1]
       else
         content = slide
         handout = nil
+        notes = nil
       end
       content = RubyPants.new(BlueCloth.new(content).to_html).to_html
       all_slides += eval '%Q{' + slide_tmpl + '}'

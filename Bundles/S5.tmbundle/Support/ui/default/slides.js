@@ -1,4 +1,4 @@
-// S5 v1.1 slides.js -- released into the Public Domain
+// S5 v1.2a1 slides.js -- released into the Public Domain
 //
 // Please see http://www.meyerweb.com/eric/tools/s5/credits.html for information 
 // about all the wonderful and talented contributors to this code!
@@ -12,6 +12,21 @@ var number = undef;
 var s5mode = true;
 var defaultView = 'slideshow';
 var controlVis = 'visible';
+
+var s5NotesWindow;
+var s5NotesWindowLoaded = false;
+var previousSlide = 0;
+var presentationStart = new Date();
+var slideStart = new Date();
+
+var countdown = {
+	timer: 0,
+	state: 'pause',
+	start: new Date(),
+	end: 0,
+	remaining: 0
+};
+
 
 var isIE = navigator.appName == 'Microsoft Internet Explorer' && navigator.userAgent.indexOf('Opera') < 1 ? 1 : 0;
 var isOp = navigator.userAgent.indexOf('Opera') > -1 ? 1 : 0;
@@ -28,7 +43,7 @@ function hasValue(object, value) {
 }
 
 function removeClass(object,className) {
-	if (!object) return;
+	if (!object || !hasClass(object,className)) return;
 	object.className = object.className.replace(new RegExp('(^|\\s)'+className+'(\\s|$)'), RegExp.$1+RegExp.$2);
 }
 
@@ -81,7 +96,8 @@ function slideLabel() {
 
 		var did = 'slide' + n.toString();
 		obj.setAttribute('id',did);
-		if (isOp) continue;
+
+//		if (isOp) continue;   // Opera fix (hallvord)
 
 		var otext = '';
 		var menu = obj.firstChild;
@@ -106,9 +122,12 @@ function currentSlide() {
 	} else {
 		cs = document.currentSlide;
 	}
-	cs.innerHTML = '<span id="csHere">' + snum + '<\/span> ' + 
+	cs.innerHTML = '<a id="plink" href="">' + 
+		'<span id="csHere">' + snum + '<\/span> ' + 
 		'<span id="csSep">\/<\/span> ' + 
-		'<span id="csTotal">' + (smax-1) + '<\/span>';
+		'<span id="csTotal">' + (smax-1) + '<\/span>' +
+		'<\/a>'
+		;
 	if (snum == 0) {
 		cs.style.visibility = 'hidden';
 	} else {
@@ -151,11 +170,17 @@ function go(step) {
 	}
 	if (incrementals[snum].length > 0 && incpos > 0)
 		addClass(incrementals[snum][incpos - 1], 'current');
-	ce.style.visibility = 'hidden';
-	ne.style.visibility = 'visible';
+	if (isOp) { //hallvord
+		location.hash = nid;
+	} else {
+		ce.style.visibility = 'hidden'; 
+		ne.style.visibility = 'visible';
+	} // /hallvord
 	jl.selectedIndex = snum;
 	currentSlide();
-	number = 0;
+	loadNote();
+	permaLink();
+	number = undef;
 }
 
 function goTo(target) {
@@ -175,6 +200,7 @@ function subgo(step) {
 		addClass(incrementals[snum][incpos], 'incremental');
 		addClass(incrementals[snum][incpos - 1],'current');
 	}
+	loadNote();
 }
 
 function toggle() {
@@ -270,6 +296,9 @@ function keys(key) {
 			case 67: // c
 				showHide('k');
 				break;
+			case 78: // n
+				createNotesWindow();
+				break;
 		}
 		if (key.which < 48 || key.which > 57) {
 			number = undef;
@@ -289,7 +318,7 @@ function clicker(e) {
 		target = window.event.srcElement;
 		e = window.event;
 	} else target = e.target;
-	if (target.getAttribute('href') != null || hasValue(target.rel, 'external') || isParentOrSelf(target, 'controls') || isParentOrSelf(target,'embed') || isParentOrSelf(target,'object')) return true;
+	if (target.href != null || hasValue(target.rel, 'external') || isParentOrSelf(target, 'controls') || isParentOrSelf(target,'embed') || isParentOrSelf(target,'object')) return true;
 	if (!e.which || e.which == 1) {
 		if (!incrementals[snum] || incpos >= incrementals[snum].length) {
 			go(1);
@@ -371,6 +400,10 @@ function externalLinks() {
 	}
 }
 
+function permaLink() {
+	document.getElementById('plink').href = window.location.pathname + '#slide' + snum;
+}
+
 function createControls() {
 	var controlsDiv = document.getElementById("controls");
 	if (!controlsDiv) return;
@@ -383,6 +416,7 @@ function createControls() {
 	}
 	controlsDiv.innerHTML = '<form action="#" id="controlForm"' + hideDiv + '>' +
 	'<div id="navLinks">' +
+	'<a accesskey="n" id="show-notes" href="javascript:createNotesWindow();" title="Show Notes">&equiv;<\/a>' +
 	'<a accesskey="t" id="toggle" href="javascript:toggle();">&#216;<\/a>' +
 	'<a accesskey="z" id="prev" href="javascript:go(-1);">&laquo;<\/a>' +
 	'<a accesskey="x" id="next" href="javascript:go(1);">&raquo;<\/a>' +
@@ -398,8 +432,8 @@ function createControls() {
 
 function fontScale() {  // causes layout problems in FireFox that get fixed if browser's Reload is used; same may be true of other Gecko-based browsers
 	if (!s5mode) return false;
-	var vScale = 22;  // both yield 32 (after rounding) at 1024x768
-	var hScale = 32;  // perhaps should auto-calculate based on theme's declared value?
+	var vScale = 48;  // both yield 16 (the usual browser default) at 1024x768
+	var hScale = 64;  // perhaps should auto-calculate based on theme's declared value?
 	if (window.innerHeight) {
 		var vSize = window.innerHeight;
 		var hSize = window.innerWidth;
@@ -424,7 +458,7 @@ function fontScale() {  // causes layout problems in FireFox that get fixed if b
 
 function fontSize(value) {
 	if (!(s5ss = document.getElementById('s5ss'))) {
-		if (!isIE) {
+		if (!document.createStyleSheet) {
 			document.getElementsByTagName('head')[0].appendChild(s5ss = document.createElement('style'));
 			s5ss.setAttribute('media','screen, projection');
 			s5ss.setAttribute('id','s5ss');
@@ -433,11 +467,11 @@ function fontSize(value) {
 			document.s5ss = document.styleSheets[document.styleSheets.length - 1];
 		}
 	}
-	if (!isIE) {
+	if (!(document.s5ss && document.s5ss.addRule)) {
 		while (s5ss.lastChild) s5ss.removeChild(s5ss.lastChild);
-		s5ss.appendChild(document.createTextNode('body {font-size: ' + value + ' !important;}'));
+		s5ss.appendChild(document.createTextNode('html {font-size: ' + value + ' !important;}'));
 	} else {
-		document.s5ss.addRule('body','font-size: ' + value + ' !important;');
+		document.s5ss.addRule('html','font-size: ' + value + ' !important;');
 	}
 }
 
@@ -528,26 +562,203 @@ function trap(e) {
 	return modifierKey || e.which == 0;
 }
 
-function startup() {
-	defaultCheck();
-	if (!isOp) 
-		createControls();
-	slideLabel();
-	fixLinks();
-	externalLinks();
-	fontScale();
-	if (!isOp) {
-		notOperaFix();
-		incrementals = createIncrementals();
-		slideJump();
-		if (defaultView == 'outline') {
-			toggle();
-		}
-		document.onkeyup = keys;
-		document.onkeypress = trap;
-		document.onclick = clicker;
+function noteLabel() { // Gives notes id's to match parent slides
+	var notes = GetElementsWithClassName('div','notes');
+	for (var i = 0; i < notes.length; i++) {
+		var note = notes[i];
+		var id = 'note' + note.parentNode.id.substring(5);
+		note.setAttribute('id',id);
+	}
+	resetElapsedSlide();
+	resetRemainingTime();
+	window.setInterval('updateElaspedTime()', 1000);
+}
+
+function createNotesWindow() { // creates a window for our notes
+	if (!s5NotesWindow || s5NotesWindow.closed) { // Create the window if it doesn't exist
+		s5NotesWindowLoaded = false;
+		// Note: Safari has a tendency to ignore window options preferring to default to the settings of the parent window, grr.
+		s5NotesWindow = window.open('ui/s5-notes.html', 's5NotesWindow', 'top=0,left=0');
+	}
+	if (s5NotesWindowLoaded) { // Load the current note if the Note HTML has loaded
+		loadNote();
+	} else { // Keep trying...
+		window.setTimeout('createNotesWindow()', 50);
 	}
 }
 
+function loadNote() {
+// Loads a note into the note window
+	var notes = nextNotes = '<em class="disclaimer">There are no notes for this slide.</em>';
+	if (document.getElementById('note' + snum)) {
+		notes = document.getElementById('note' + snum).innerHTML;
+	}
+	if (document.getElementById('note' + (snum + 1))) {
+		nextNotes = document.getElementById('note' + (snum + 1)).innerHTML;
+	}
+	
+	var jl = document.getElementById('jumplist');
+	var slideTitle = jl.options[jl.selectedIndex].text.replace(/^\d+\s+:\s+/, '') + ((jl.selectedIndex) ? ' (' + jl.selectedIndex + '/' + (smax - 1) + ')' : '');
+	if (incrementals[snum].length > 0) {
+//		alert('howdy');
+		slideTitle += ' <small>[' + incpos + '/' + incrementals[snum].length + ']</small>';
+	}
+	if (jl.selectedIndex < smax - 1) {
+		var nextTitle = jl.options[jl.selectedIndex + 1].text.replace(/^\d+\s+:\s+/, '') + ((jl.selectedIndex + 1) ? ' (' + (jl.selectedIndex + 1) + '/' + (smax - 1) + ')' : '');
+	} else {
+		var nextTitle = '[end of slide show]';
+	}
+	
+	if (s5NotesWindow && !s5NotesWindow.closed && s5NotesWindow.document) {
+		s5NotesWindow.document.getElementById('slide').innerHTML = slideTitle;
+		s5NotesWindow.document.getElementById('notes').innerHTML = notes;
+		s5NotesWindow.document.getElementById('next').innerHTML = nextTitle;
+		s5NotesWindow.document.getElementById('nextnotes').innerHTML = nextNotes;
+	}
+	resetElapsedSlide();
+}
+
+function minimizeTimer(id) {
+	var obj = s5NotesWindow.document.getElementById(id);
+	if (hasClass(obj,'collapsed')) {
+		removeClass(obj,'collapsed');
+	} else {
+		addClass(obj,'collapsed');
+	}
+}
+
+function resetElapsedTime() {
+	presentationStart = new Date();
+	slideStart = new Date();
+	updateElaspedTime();
+}
+
+function resetElapsedSlide() {
+	if (snum != previousSlide) {
+		slideStart = new Date();
+		previousSlide = snum;
+		updateElaspedTime();
+	}
+}
+
+function updateElaspedTime() {
+	if (!s5NotesWindowLoaded || !s5NotesWindow || s5NotesWindow.closed) return;
+	var now = new Date();
+	var ep = s5NotesWindow.document.getElementById('elapsed-presentation');
+	var es = s5NotesWindow.document.getElementById('elapsed-slide');
+	ep.innerHTML = formatTime(now.valueOf() - presentationStart.valueOf());
+	es.innerHTML = formatTime(now.valueOf() - slideStart.valueOf());
+}
+
+function resetRemainingTime() {
+	if (!s5NotesWindowLoaded || !s5NotesWindow || s5NotesWindow.closed) return;
+	var startField = s5NotesWindow.document.getElementById('startFrom');
+	startFrom = readTime(startField.value);
+	countdown.remaining = startFrom * 60000;  // convert to msecs
+	countdown.start = new Date().valueOf();
+	countdown.end = countdown.start + countdown.remaining;
+	var tl = s5NotesWindow.document.getElementById('timeLeft');
+	var timeLeft = formatTime(countdown.remaining);
+	tl.innerHTML = timeLeft;
+}
+
+function updateRemainingTime() {
+	if (!s5NotesWindowLoaded || !s5NotesWindow || s5NotesWindow.closed) return;
+	var tl = s5NotesWindow.document.getElementById('timeLeft');
+	var now = new Date();
+	if (countdown.state == 'run') {
+		countdown.remaining = countdown.end - now;
+	}
+	tl.style.color = '';
+	tl.style.backgroundColor = '';
+	if (countdown.remaining >= 0) {
+		var timeLeft = formatTime(countdown.remaining);
+		removeClass(tl,'overtime');
+		if (countdown.remaining < 300000) {
+			tl.style.color = 'rgb(' + (255-Math.round(countdown.remaining/2000)) + ',0,0)';
+			tl.style.backgroundColor = 'rgb(255,255,' + (Math.round(countdown.remaining/2000)) + ')';
+		}
+	} else {
+		var timeLeft = '-' + formatTime(-countdown.remaining);
+		addClass(tl,'overtime');
+	}
+	tl.innerHTML = timeLeft;
+}
+
+function toggleRemainingTime() {
+	if (countdown.state == 'pause') countdown.state = 'run'; else countdown.state = 'pause';
+	if (countdown.state == 'pause') {
+		window.clearInterval(countdown.timer);
+	}
+	if (countdown.state == 'run') {
+		countdown.start = new Date().valueOf();
+		countdown.end = countdown.start + countdown.remaining;
+		countdown.timer = window.setInterval('updateRemainingTime()', 1000);
+	}
+}
+
+function alterRemainingTime(amt) {
+	var change = amt * 60000;  // convert to msecs
+	countdown.end += change;
+	countdown.remaining += change;
+	updateRemainingTime();
+}
+
+function formatTime(msecs)  {
+	var time = new Date(msecs);
+	
+	var hrs = time.getUTCHours() + ((time.getUTCDate() -1) * 24); // I doubt anyone will spend more than 24 hours on a presentation or single slide but just in case...
+	hrs = (hrs < 10) ? '0'+hrs : hrs;
+	if (hrs == 'NaN' || isNaN(hrs)) hrs = '--';
+	
+	var min = time.getUTCMinutes();
+	min = (min < 10) ? '0'+min : min;
+	if (min == 'NaN' || isNaN(min)) min = '--';
+	
+	var sec = time.getUTCSeconds();
+	sec = (sec < 10) ? '0'+sec : sec;
+	if (sec == 'NaN' || isNaN(sec)) sec = '--';
+
+	return hrs + ':' + min + ':' + sec;
+}
+
+function readTime(val) {
+	var sregex = /:/;
+	var matches = sregex.exec(val);
+	if (matches == null) {
+		return val;
+	} else {
+		var times = val.split(':');
+		var hours = parseInt(times[0]);
+		var mins = parseInt(times[1]);
+		var total = (hours * 60) + mins;
+		return total;
+	}
+}
+
+function windowChange() {
+	fontScale();
+}
+
+function startup() {
+	defaultCheck();
+	createControls();  // hallvord
+	slideLabel();
+	incrementals = createIncrementals();
+	noteLabel(); // [SI:060104] must follow slideLabel()
+	loadNote();
+	fixLinks();
+	externalLinks();
+	fontScale();
+	if (!isOp) notOperaFix();
+	slideJump();
+	if (defaultView == 'outline') {
+		toggle();
+	}
+	document.onkeyup = keys;
+	document.onkeypress = trap;
+	document.onclick = clicker;
+}
+
 window.onload = startup;
-window.onresize = function(){setTimeout('fontScale()', 50);}
+window.onresize = function(){setTimeout('windowChange()',5);}

@@ -45,6 +45,25 @@ Header lines are written with the heading keyword followed with a colon (":") an
 
 Many of these headings are optional, but some are required in the sense that omitting them will adversely affect the appearance of the presentation.
 
+Content Layout
+--------------
+
+S5 supports placing "handout" and "note" sections within individual slides. You can notate these portions of a slide using the "note" and "hand" tab-triggered snippets. For example, a slide with text, handout and notes would look like this:
+
+    Slide Text
+
+    __________
+
+    Handout section
+
+    ##########
+
+    Presentation notes.
+
+The presentation notes are displayed in the popup-notes/control window that is new to S5 1.2.
+
+Handout notes are included when printing the presentation.
+
 Commands
 --------
 
@@ -59,12 +78,14 @@ The S5 bundle includes a copy of the S5 default theme. Executing the "Present" c
 
 &lt;pre&gt;MyPresentation.s5
 ui/
+ui/s5-notes.html
 ui/default/
 ui/default/blank.gif
 ui/default/bodybg.gif
 ui/default/framing.css
 ui/default/iepngfix.htc
 ui/default/opera.css
+ui/default/notes.css
 ui/default/outline.css
 ui/default/pretty.css
 ui/default/print.css

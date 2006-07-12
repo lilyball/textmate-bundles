@@ -1,20 +1,28 @@
 require 'English'
 
-svn				= ENV['TM_SVN']				|| `which svn`.chomp
-bundle			= ENV['TM_BUNDLE_SUPPORT']	|| File.dirname(__FILE__)
-support			= ENV['TM_SUPPORT_PATH']	|| File.dirname(File.dirname(File.dirname(File.dirname(__FILE__)))) + '/Support'
-commit_tool		= ENV['CommitWindow']		|| support + '/bin/CommitWindow.app/Contents/MacOS/CommitWindow'
-diff_cmd	    = ENV['TM_SVN_DIFF_CMD']	|| 'diff'
+svn         = ENV['TM_SVN']            || `which svn`.chomp
+bundle      = ENV['TM_BUNDLE_SUPPORT'] || File.dirname(__FILE__)
+support     = ENV['TM_SUPPORT_PATH']   || File.dirname(File.dirname(File.dirname(File.dirname(__FILE__)))) + '/Support'
+commit_tool = ENV['CommitWindow']      || support + '/bin/CommitWindow.app/Contents/MacOS/CommitWindow'
+diff_cmd    = ENV['TM_SVN_DIFF_CMD']   || 'diff'
 
-IgnoreFilePattern	= /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
-CurrentDir			= Dir.pwd + "/"
+# puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG
+# puts 'TM_FILEPATH        '+ ENV['TM_FILEPATH']       rescue nil #DEBUG
+# puts 'svn                '+ svn                                 #DEBUG
+# puts 'bundle             '+ bundle                              #DEBUG
+# puts 'support            '+ support                             #DEBUG
+# puts 'commit_tool        '+ commit_tool                         #DEBUG
+# puts 'diff_cmd           '+ diff_cmd                            #DEBUG
+
+IgnoreFilePattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
+CurrentDir        = Dir.pwd + "/"
 
 require (support + '/bin/shelltokenize.rb')
 require (support + "/bin/Builder.rb")
 
-mup				= nil			# markup builder
-paths_to_commit = Array.new		# array of paths to commit
-$dry_run		= false			# don't commit anything?
+mup             = nil       # markup builder
+paths_to_commit = Array.new # array of paths to commit
+$dry_run        = false     # don't commit anything?
 
 #
 # Run from Terminal or run from TextMate?
@@ -81,8 +89,10 @@ mup.html {
 		# Ignore files without changes
 #puts TextMate::selected_paths_for_shell
 		status_command = %Q{"#{svn}" status #{paths_to_commit.quote_for_shell_arguments}}
+		# puts status_command + "\n" #DEBUG
 #puts status_command
 		status_output = %x{#{status_command}}
+		# puts status_output + "\n" #DEBUG
 #puts status_output
 		paths = status_output.scan(/^(.....)(\s+)(.*)\n/)
 

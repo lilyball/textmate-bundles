@@ -8,12 +8,12 @@ div {
 	position: relative;
 }
 
-div.section {
+div.section, #actions {
 	padding:             2px;
 	margin:              3px;
 	border:              1px;
 	border-style:        solid;
-	border-top-color:    #eee;
+	border-top-color:    #ccc;
 	border-right-color:  #bbb;
 	border-bottom-color: #999;
 	border-left-color:   #ccc;
@@ -21,6 +21,17 @@ div.section {
 	background-color:    #fff;
 	font-size:           70%;
 	margin:              0;
+}
+#actions {
+	border-top-color:    #fff;
+	background:          #eee;
+	margin-top:          1px;
+}
+#actions a {
+	text-align:          center;
+	font-size:           1.3em !important;
+	float:               left;
+	margin:              0 !important;
 }
 
 div.section pre {
@@ -150,18 +161,20 @@ table.status .status_col {
 	text-align: center;
 }
 
-table.status a:link, table.status a:visited {
+table.status a:link, table.status a:visited,
+#actions a:link, #actions a:visited {
 	border-bottom:   1px solid transparent;
 	color:           #294666;
 	display:         block;
 	font-size:       inherit;
-	padding:         2px 4px;
+	padding:         0.3em 0.6em;
 	text-decoration: none;
 	margin-top:      -1px;
 	margin-bottom:   -1px;
 }
 
-table.status a:hover, table.status a:active {
+table.status a:hover, table.status a:active,
+#actions a:hover, #actions a:active {
 	font-size:       inherit;
 	text-decoration: none;
 	border-bottom:   1px solid #294666;
@@ -170,7 +183,8 @@ table.status a:hover, table.status a:active {
 	color:       white;
 	text-shadow: #000 0em 0.2em 2px;
 }
-table.status a:active {
+table.status a:active,
+#actions a:active {
 	color:       #142333;
 	background:  #a3c8ff url(sG42_blue-32.gif) top;
 	text-shadow: #fff 0em 0em 0.4em;

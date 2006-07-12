@@ -189,10 +189,15 @@ mup.html {
 			mup.pre {
 				mup.text("...\n")
 				STDOUT.flush
-
-				IO.popen("#{svn} commit --non-interactive --force-log #{commit_args}", "r+") do |pipe|
+				
+				# puts "#{svn} commit --non-interactive --force-log #{commit_args}" #DEBUG
+				# puts `pwd`                                                        #DEBUG
+				
+				require "open3"
+				Open3.popen3("#{svn} commit --non-interactive --force-log #{commit_args}") do |stdin, stdout, stderr|
 					# WebKit needs <br> instead of \n inside <pre>, otherwise the text won't flush
-					pipe.each_line {|line| mup.text! line.chomp; mup << "<br>"; STDOUT.flush}
+					stdout.each_line {|line| mup.text! line.chomp; mup << "<br>"; STDOUT.flush}
+					stderr.each_line {|line| mup.text! line.chomp; mup << "<br>"; STDOUT.flush}
 				end
 			}
 		end

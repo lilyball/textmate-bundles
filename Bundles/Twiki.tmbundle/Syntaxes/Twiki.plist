@@ -68,18 +68,18 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>markup.def.term.twiki</string>
+					<string>markup.other.def.term.twiki</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>markup.def.def.twiki</string>
+					<string>markup.other.def.def.twiki</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.def.twiki</string>
+			<string>markup.other.def.twiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -317,9 +317,20 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>__[\s\w :.\?']*__</string>
-					<key>name</key>
-					<string>markup.bolditalic.twiki</string>
+					<string>((__[\s\w :.\?']*__))</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.bold.twiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>markup.italic.twiki</string>
+						</dict>
+					</dict>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -329,15 +340,26 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\=\=[\s\w :.\?']*\=\=</string>
-					<key>name</key>
-					<string>markup.boldfixed.twiki</string>
+					<string>((\=\=[\s\w :.\?']*\=\=))</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.bold.twiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>markup.other.fixed.twiki</string>
+						</dict>
+					</dict>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\=[\s\w :.\?']*\=</string>
 					<key>name</key>
-					<string>markup.fixed.twiki</string>
+					<string>markup.other.fixed.twiki</string>
 				</dict>
 				<dict>
 					<key>match</key>

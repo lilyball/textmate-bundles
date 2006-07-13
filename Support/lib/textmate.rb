@@ -4,9 +4,14 @@ require 'plist'
 
 module TextMate
 
+  class AppPathNotFoundException < StandardError; end
+
   class << self
     def app_path
-      %x{ps -xww -o command|grep TextMate.app|grep -v grep}.sub(%r{/Contents/MacOS/TextMate.*\n}, '')
+      %x{ps -xwwco "pid command"}.grep(/^\s*(\d+)\s+(TextMate)$/) do |match|
+        return %x{ps -xwwp #{$1} -o "command"|tail -n1}.sub(%r{(.app)/Contents/MacOS/TextMate.*\n}, '\1')
+      end
+      raise AppPathNotFoundException
     end
 
     def min_support(version)

@@ -71,7 +71,7 @@ begin
       
       # not a perfect pattern, but it works and is short:
       # catched groups: revision, user, date, text/code
-      if line =~ /^\s*(\d+)\s+([-\w.]+) (\d+-\d+-\d+ \d+:\d+:\d+ [-+]\d+ \(\w+, \d+ \w+ \d+\)) (.*)$/
+      if line =~ /^\s*(\d+)\s+([-\w.]+) (\d+-\d+-\d+ \d+:\d+:\d+ [-+]\d+ \(\w+, \d+ \w+ \d+\)) (.*)$/u
          curr_add = ($current == linecount) ? ' current_line ' : ' '
          line_id = ($current == linecount + 10) ? ' id="current_line"' : ''
          

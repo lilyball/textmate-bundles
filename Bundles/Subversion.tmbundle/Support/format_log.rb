@@ -114,7 +114,10 @@ begin
             end
             
          when :changed_paths
-            if line =~ /^Changed paths:$/
+            # should match "Changed paths:" and all possible
+            # localisations (Geänderte Pfade, etc) as long as they consist
+            # of 2 words with 3+ chars.
+            if line =~ /^\w{3,} \w{3,}:$/
                state = :path_list
             elsif line =~ /^\s*$/
                state = :comment

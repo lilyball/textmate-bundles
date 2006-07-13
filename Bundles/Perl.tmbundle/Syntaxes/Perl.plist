@@ -134,6 +134,13 @@
 			<string>string.unquoted.heredoc.doublequote.perl</string>
 			<key>end</key>
 			<string>(^\2$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -166,10 +173,17 @@
 			<string>string.unquoted.heredoc.backtick.perl</string>
 			<key>end</key>
 			<string>(^\2$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;&lt; *((?![\d\$ ])[^;'"` )]*)).*\n?</string>
+			<string>(&lt;&lt; *((?![\d\$ ])[^;,'"` )]*)).*\n?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -182,6 +196,13 @@
 			<string>string.unquoted.heredoc.perl</string>
 			<key>end</key>
 			<string>(^\2$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -190,6 +211,13 @@
 			<string>\1</string>
 			<key>name</key>
 			<string>string.quoted.double.q.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -200,6 +228,13 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -220,6 +255,13 @@
 			<string>`</string>
 			<key>name</key>
 			<string>string.interpolated.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>

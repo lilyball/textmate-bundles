@@ -87,7 +87,7 @@
 			<key>name</key>
 			<string>~ String</string>
 			<key>scope</key>
-			<string>string -meta.tag -meta.doctype -string.regexp -string.literal - string.interpolated -string.quoted.literal, variable.parameter.misc.css, text string source string</string>
+			<string>string -meta.tag -meta.doctype -string.regexp -string.literal -string.interpolated -string.quoted.literal -string.unquoted, variable.parameter.misc.css, text string source string, string.unquoted string</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -113,7 +113,7 @@
 			<key>name</key>
 			<string>~ String Unquoted</string>
 			<key>scope</key>
-			<string>string.unquoted, string.quoted.double.multiline, meta.scope.heredoc</string>
+			<string>string.unquoted -string.unquoted.embedded, string.quoted.double.multiline, meta.scope.heredoc</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>

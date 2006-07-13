@@ -19,6 +19,46 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>begin</key>
+			<string>(?=\[% *(?:RAW)?PERL\b.*? *%\])</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.tt</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.perl</string>
+			<key>end</key>
+			<string>(\[% *(END) *%\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.tt</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.tt</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tmpl-container-tag</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.perl</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>#tmpl-container-tag</string>
 		</dict>
@@ -32,10 +72,7 @@
 	<key>repository</key>
 	<dict>
 		<key>embedded-code</key>
-		<dict>
-			<key>patterns</key>
-			<array/>
-		</dict>
+		<dict/>
 		<key>entities</key>
 		<dict>
 			<key>patterns</key>

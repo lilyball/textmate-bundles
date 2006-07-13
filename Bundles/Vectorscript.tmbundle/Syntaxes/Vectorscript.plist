@@ -37,13 +37,13 @@
 			<key>match</key>
 			<string>\b(?i:(abstract|all|and|and_then|array|as|asm|attribute|begin|bindable|case|class|const|constructor|destructor|div|do|end|do|else|end|export|exports|external|far|file|finalization|for|forward|goto|if|implementation|import|in|inherited|initialization|interface|interrupt|is|label|library|mod|module|name|near|nil|not|object|of|only|operator|or|or_else|otherwise|packed|pow|private|program|property|protected|public|published|qualified|record|repeat|resident|restricted|segment|set|shl|shr|then|to|type|unit|until|uses|value|var|view|virtual|while|with|xor|string|handle|real|point|longint|integer|boolean|vector|structure|allocate|dynarray))\b</string>
 			<key>name</key>
-			<string>keyword</string>
+			<string>keyword.control.vectorscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(?i:())\bk[A-Z]\w*\b</string>
 			<key>name</key>
-			<string>constant</string>
+			<string>constant.other.vectorscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -57,36 +57,36 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword</string>
+					<string>keyword.control.vectorscript</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>function-name</string>
+					<string>entity.name.function.vectorscript</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>\b(?i:(function|procedure))\b\s+(\w+)</string>
 			<key>name</key>
-			<string>declaration.function</string>
+			<string>meta.function.vectorscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\bp[A-Z_]+\b</string>
 			<key>name</key>
-			<string>constant.character.parameter</string>
+			<string>constant.character.parameter.vectorscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\bg[A-Z]\w*\b</string>
 			<key>name</key>
-			<string>variable.global</string>
+			<string>variable.global.vectorscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(?i:(true|false))\b</string>
 			<key>name</key>
-			<string>constant.language</string>
+			<string>constant.language.vectorscript</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -94,7 +94,7 @@
 			<key>end</key>
 			<string>\*\)</string>
 			<key>name</key>
-			<string>comment.block</string>
+			<string>comment.block.vectorscript</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -102,7 +102,7 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>comment</string>
+			<string>comment.block.vectorscript</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -110,7 +110,7 @@
 			<key>end</key>
 			<string>'</string>
 			<key>name</key>
-			<string>string.quoted.single</string>
+			<string>string.quoted.single.vectorscript</string>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>

@@ -121,6 +121,60 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>(&lt;&lt; *"HTML"\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.doublequote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.html.embedded.perl</string>
+			<key>end</key>
+			<string>(^HTML$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>text.html.basic</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt; *"SQL"\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.doublequote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.sql.embedded.perl</string>
+			<key>end</key>
+			<string>(^SQL$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.sql</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>(&lt;&lt; *"([^"]*)").*\n?</string>
 			<key>captures</key>
 			<dict>
@@ -139,6 +193,52 @@
 				<dict>
 					<key>include</key>
 					<string>#variable</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt; *'HTML'\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.quote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.html.embedded.perl</string>
+			<key>end</key>
+			<string>(^HTML$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>text.html.basic</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt; *'SQL'\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.quote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.sql.embedded.perl</string>
+			<key>end</key>
+			<string>(^SQL$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.sql</string>
 				</dict>
 			</array>
 		</dict>
@@ -178,6 +278,60 @@
 				<dict>
 					<key>include</key>
 					<string>#variable</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt; *HTML\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.html.embedded.perl</string>
+			<key>end</key>
+			<string>(^HTML$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>text.html.basic</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt; *SQL\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.sql.embedded.perl</string>
+			<key>end</key>
+			<string>(^SQL$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.sql</string>
 				</dict>
 			</array>
 		</dict>

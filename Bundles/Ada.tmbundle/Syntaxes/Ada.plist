@@ -1,23 +1,56 @@
-{
-	// Ada -- chris@cjack.com. Feel free to modify, distribute, be happy. Share and enjoy.
-	
-	name = "Ada";
-	scopeName = "source.ada";
-	fileTypes = ( adb, ads );
-	foldingStartMarker = "\\b(?i:(procedure|package|function|task|type|loop))\\b";
-	foldingStopMarker = "\\b(?i:(end))\\b";
-	increaseIndentPattern = "\\b(?i:(loop|declare|begin|exception|when|procedure|for|if|else|task|type|package))\\b";
-	patterns = (
-				
-		{ name = "keyword.control.ada";
-		  match = "\\b(?i:(abort|else|new|return|abs|elsif|not|reverse|abstract|end|null|accept|entry|select|access|exception|of|separate|aliased|exit|or|subtype|all|others|and|for|out|tagged|array|function|task|at|package|terminate|generic|pragma|then|begin|goto|private|type|body|procedure|if|protected|until|case|in|use|constant|is|raise|range|when|declare|limited|record|while|delay|loop|rem|with|delta|renames|digits|mod|requeue|xor|do))\\b";
-		},
-		
-		{ name = "constant.numeric.ada"; match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"; },
-		{ name = "string.quoted.double.ada"; begin = "\""; end = "\""; swallow = "\\\\.";},
-		
-		{ name = "comment.line.double-dash.ada"; match = "--(.*)$";},
-		
-	);
-	uuid = "0AB8A36E-6B1D-11D9-B034-000D93589AF6";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>Ada -- chris@cjack.com. Feel free to modify, distribute, be happy. Share and enjoy.</string>
+	<key>fileTypes</key>
+	<array>
+		<string>adb</string>
+		<string>ads</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>\b(?i:(procedure|package|function|task|type|loop))\b</string>
+	<key>foldingStopMarker</key>
+	<string>\b(?i:(end))\b</string>
+	<key>increaseIndentPattern</key>
+	<string>\b(?i:(loop|declare|begin|exception|when|procedure|for|if|else|task|type|package))\b</string>
+	<key>name</key>
+	<string>Ada</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:(abort|else|new|return|abs|elsif|not|reverse|abstract|end|null|accept|entry|select|access|exception|of|separate|aliased|exit|or|subtype|all|others|and|for|out|tagged|array|function|task|at|package|terminate|generic|pragma|then|begin|goto|private|type|body|procedure|if|protected|until|case|in|use|constant|is|raise|range|when|declare|limited|record|while|delay|loop|rem|with|delta|renames|digits|mod|requeue|xor|do))\b</string>
+			<key>name</key>
+			<string>keyword.control.ada</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.ada</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.ada</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>--(.*)$</string>
+			<key>name</key>
+			<string>comment.line.double-dash.ada</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.ada</string>
+	<key>uuid</key>
+	<string>0AB8A36E-6B1D-11D9-B034-000D93589AF6</string>
+</dict>
+</plist>

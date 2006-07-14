@@ -1,46 +1,107 @@
-{
-    name = "SWIG";
-    scopeName = "source.swig";
-
-    fileTypes = ( i, swg );
-
-    uuid = "C781B0D0-BED9-11D9-A141-000393A143CC";
-
-    foldingStartMarker = "(/\\*\\*|%?\\{\\s*$)";
-    foldingStopMarker = "(\\*\\*/|^\\s*%?\\})";
-
-    patterns = (
-        // SWIG files contain C code, so it's logical to derive from the C rules
-        { include = "source.c"; },
-        { name = "keyword.other.directive.inlinecode.swig";
-          match = "%(header|init|inline|native|runtime|wrapper)\\b"; },
-        { name = "keyword.other.function-parameter.swig";
-          match = "\\$([\\*&]*[1-9]+(_name|_type|_ltype|_basetype|_mangle|_descriptor){0,1}|action|input|result|symname)\\b"; },
-        { name = "entity.type.swig";
-          match = "\\b(in|out|typecheck|arginit|default|check|argout|freearg|newfree|memberin|varin|varout|throws|numinputs)\\b";
-        },
-        { name = "keyword.other.directive.swig";
-          match = "%(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|insert|makedefault|module|nocallback|nodefault|rename|typemap|varargs)\\b"; },
-        { name = "other.preprocessor.swig";
-          match = "\\(\\s*(allegrocl|chicken|csharp|guile|java|modula3|mzscheme|ocaml|perl|php|pike|python|ruby|sexp|tcl|xml)\\b";
-          captures = { 1 = { name = "entity.name.preprocessor.swig"; }; };
-        },
-        { name = "other.preprocessor.swig";
-          begin = "^\\s*%\\s*(include|import)\\b\\s+(\"?[A-Za-z0-9\\._]+\"?)";
-          end = "$";
-          captures = {
-        	    1 = { name = "entity.name.preprocessor.swig"; };
-        	    2 = { name = "string.quoted.double.swig"; };
-          };
-        },
-        { name = "other.preprocessor.macro.swig";
-          match = "%([A-Za-z]+[A-Za-z0-9_]*)\\b";
-        },
-        { name = "storage.type.swig";
-          match = "\\bSWIG_TYPECHECK_(POINTER|VOIDPTR|BOOL|UINT8|INT8|UINT16|INT16|UINT32|INT32|UINT64|INT64|UINT128|INT128|INTEGER|FLOAT|DOUBLE|COMPLEX|UNICHAR|UNISTRING|CHAR|STRING|BOOL_ARRAY|INT8_ARRAY|INT16_ARRAY|INT32_ARRAY|INT64_ARRAY|INT128_ARRAY|FLOAT_ARRAY|DOUBLE_ARRAY|CHAR_ARRAY|STRING_ARRAY)\\b";
-        },
-        { name = "source.swig.codeblock";
-          match = "(%\\{|%\\})";
-        },
-    );
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>i</string>
+		<string>swg</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(/\*\*|%?\{\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(\*\*/|^\s*%?\})</string>
+	<key>name</key>
+	<string>SWIG</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>comment</key>
+			<string>SWIG files contain C code, so it's logical to derive from the C rules</string>
+			<key>include</key>
+			<string>source.c</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>%(header|init|inline|native|runtime|wrapper)\b</string>
+			<key>name</key>
+			<string>keyword.other.directive.inlinecode.swig</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\$([\*&amp;]*[1-9]+(_name|_type|_ltype|_basetype|_mangle|_descriptor){0,1}|action|input|result|symname)\b</string>
+			<key>name</key>
+			<string>keyword.other.function-parameter.swig</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(in|out|typecheck|arginit|default|check|argout|freearg|newfree|memberin|varin|varout|throws|numinputs)\b</string>
+			<key>name</key>
+			<string>entity.type.swig</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>%(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|insert|makedefault|module|nocallback|nodefault|rename|typemap|varargs)\b</string>
+			<key>name</key>
+			<string>keyword.other.directive.swig</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.swig</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\(\s*(allegrocl|chicken|csharp|guile|java|modula3|mzscheme|ocaml|perl|php|pike|python|ruby|sexp|tcl|xml)\b</string>
+			<key>name</key>
+			<string>other.preprocessor.swig</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*%\s*(include|import)\b\s+("?[A-Za-z0-9\._]+"?)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.preprocessor.swig</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.swig</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>other.preprocessor.swig</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>%([A-Za-z]+[A-Za-z0-9_]*)\b</string>
+			<key>name</key>
+			<string>other.preprocessor.macro.swig</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bSWIG_TYPECHECK_(POINTER|VOIDPTR|BOOL|UINT8|INT8|UINT16|INT16|UINT32|INT32|UINT64|INT64|UINT128|INT128|INTEGER|FLOAT|DOUBLE|COMPLEX|UNICHAR|UNISTRING|CHAR|STRING|BOOL_ARRAY|INT8_ARRAY|INT16_ARRAY|INT32_ARRAY|INT64_ARRAY|INT128_ARRAY|FLOAT_ARRAY|DOUBLE_ARRAY|CHAR_ARRAY|STRING_ARRAY)\b</string>
+			<key>name</key>
+			<string>storage.type.swig</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(%\{|%\})</string>
+			<key>name</key>
+			<string>source.swig.codeblock</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.swig</string>
+	<key>uuid</key>
+	<string>C781B0D0-BED9-11D9-A141-000393A143CC</string>
+</dict>
+</plist>

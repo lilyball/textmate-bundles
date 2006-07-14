@@ -1,51 +1,102 @@
-{
-    name = "Modula-3";
-    scopeName = "source.modula-3";
-    uuid = "479D53FA-6ED6-11D9-8471-0011242E4184";
-    fileTypes = ( m3, cm3 );
-    
-    smartTypingPairs = (
-        ( "(", ")" ), ( "[", "]" )/*, ( "{", "}" )*/,
-        ( "\"", "\"" ), ( "'", "'" )/*, ( "|", "|" )*/
-    );
-    highlightPairs = (
-        ( "(", ")" ), ( "[", "]" )/*, ( "{", "}" )*/
-    );
-    
-    patterns = (
-        {   name = "keyword.other.modula-3";
-            match = "\\b(ANY|ARRAY|AS|BEGIN|BITS|BRANDED|BY|CASE|CONST|DIV|DO|ELSE|ELSIF|END|EVAL|EXCEPT|EXCEPTION|EXIT|EXPORTS|FINALLY|FOR|FROM|GENERIC|IF|IMPORT|INTERFACE|LOCK|LOOP|METHODS|MOD|MODULE|OBJECT|OF|OVERRIDES|PROCEDURE|RAISE|RAISES|READONLY|RECORD|REF|REPEAT|RETURN|REVEAL|ROOT|SET|THEN|TO|TRY|TYPE|TYPECASE|UNSAFE|UNTIL|UNTRACED|VALUE|VAR|WHILE|WITH|IN|NOT|AND|OR)\\b";
-        },
-        
-        {   name = "storage.type.modula-3";
-            match = "\\b(ABS|ADDRESS|ADR|ADRSIZE|BITSIZE|BOOLEAN|BYTESIZE|CARDINAL|CEILING|CHAR|DEC|DISPOSE|EXTENDED|FIRST|FLOAT|FLOOR|INC|INTEGER|ISTYPE|LAST|LONGREAL|LOOPHOLE|MAX|MIN|MUTEX|NARROW|NEW|NUMBER|ORD|REAL|REFANY|ROUND|SUBARRAY|TEXT|TRUNC|TYPECODE|VAL)\\b";
-        },
-
-        {   name = "constant.language.modula-3";
-            match = "\\b(FALSE|NIL|NULL|TRUE)\\b";
-        },
-        
-        {   name = "constant.numeric.modula-3";
-            match = "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b";
-        },
-        
-        {   name = "string.quoted.single.modula-3";
-            begin = "'";
-            end = "'";
-            swallow = "\\\\'";
-        },
-        
-        {   name = "string.quoted.double.modula-3";
-            begin = "\"";
-            end = "\"";
-            swallow = "\\\\.";
-        },
-        
-        {   name = "comment.block.modula-3";
-            begin = "\\(\\*";
-            end = "\\*\\)";
-        },
-        
-    );
-    
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>m3</string>
+		<string>cm3</string>
+	</array>
+	<key>highlightPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+	</array>
+	<key>name</key>
+	<string>Modula-3</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>\b(ANY|ARRAY|AS|BEGIN|BITS|BRANDED|BY|CASE|CONST|DIV|DO|ELSE|ELSIF|END|EVAL|EXCEPT|EXCEPTION|EXIT|EXPORTS|FINALLY|FOR|FROM|GENERIC|IF|IMPORT|INTERFACE|LOCK|LOOP|METHODS|MOD|MODULE|OBJECT|OF|OVERRIDES|PROCEDURE|RAISE|RAISES|READONLY|RECORD|REF|REPEAT|RETURN|REVEAL|ROOT|SET|THEN|TO|TRY|TYPE|TYPECASE|UNSAFE|UNTIL|UNTRACED|VALUE|VAR|WHILE|WITH|IN|NOT|AND|OR)\b</string>
+			<key>name</key>
+			<string>keyword.other.modula-3</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(ABS|ADDRESS|ADR|ADRSIZE|BITSIZE|BOOLEAN|BYTESIZE|CARDINAL|CEILING|CHAR|DEC|DISPOSE|EXTENDED|FIRST|FLOAT|FLOOR|INC|INTEGER|ISTYPE|LAST|LONGREAL|LOOPHOLE|MAX|MIN|MUTEX|NARROW|NEW|NUMBER|ORD|REAL|REFANY|ROUND|SUBARRAY|TEXT|TRUNC|TYPECODE|VAL)\b</string>
+			<key>name</key>
+			<string>storage.type.modula-3</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(FALSE|NIL|NULL|TRUE)\b</string>
+			<key>name</key>
+			<string>constant.language.modula-3</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.modula-3</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.modula-3</string>
+			<key>swallow</key>
+			<string>\\'</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.modula-3</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\(\*</string>
+			<key>end</key>
+			<string>\*\)</string>
+			<key>name</key>
+			<string>comment.block.modula-3</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.modula-3</string>
+	<key>smartTypingPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+		<array>
+			<string>'</string>
+			<string>'</string>
+		</array>
+	</array>
+	<key>uuid</key>
+	<string>479D53FA-6ED6-11D9-8471-0011242E4184</string>
+</dict>
+</plist>

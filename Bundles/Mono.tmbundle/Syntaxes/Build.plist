@@ -1,56 +1,146 @@
-{
-	name = "NAnt Build File";
-	scopeName = "source.nant-build";
-	uuid = "1BA72668-707C-11D9-A928-000D93589AF6";
-	
-	fileTypes = ( build );
-	foldingStartMarker = "<[^!?/>]+|<!--";
-	foldingStopMarker = "/>|</[^?>]+|-->";
-	increaseIndentPattern = "<[^/>]*>\\s*$";
-	foregroundColor = "#333333";
-	backgroundColor = "#ffffff";
-
-	smartTypingPairs = (
-	    ( "(", ")" ),
-		( "[", "]" ),
-		( "{", "}" ),
-		( "\"", "\"" ),
-	);
-
-	highlightPairs = (
-	    ( "(", ")" ),
-		( "[", "]" ),
-		( "{", "}" ),
-		( "\"", "\"" ),
-		( "<", ">" ),
-	);
-
-	patterns = (
-		/* comments */
-		{
-			name = "comment.block.nant";
-			begin = "<!--";
-			end = "-->";
-			foregroundColor = "red";
-		},
-		
-		/* nodes */
-		{
-			name = "meta.tag.nant";
-			begin = "</?([-_a-zA-Z0-9:]+)"; end = "/?>";
-			captures = {
-			    1 = { name = "entity.name.tag.nant"; };
-			};
-			
-			patterns = (
-	  			{ name = "entity.other.attribute-name.nant"; match = " ([a-zA-Z\-]+)"; },
-	  			{ name = "string.quoted.double.nant"; begin = "\""; end = "\"";  foregroundColor = "#CC3300";},
-				{ name = "string.quoted.single.nant"; begin = "'"; end = "'"; fontStyle = (  ); foregroundColor = "#CC3300";	},
-			);
-		},
-
-		/* entities */
-		{ name = "constant.character.entity.nant"; match = "&([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);"; foregroundColor = "#6600CC"; },
-		{ name = "invalid.illegal.bad-ampersand.nant"; match = "&"; backgroundColor = "#CC3300"; foregroundColor = "#ffffff"; },
-	);
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>backgroundColor</key>
+	<string>#ffffff</string>
+	<key>fileTypes</key>
+	<array>
+		<string>build</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>&lt;[^!?/&gt;]+|&lt;!--</string>
+	<key>foldingStopMarker</key>
+	<string>/&gt;|&lt;/[^?&gt;]+|--&gt;</string>
+	<key>foregroundColor</key>
+	<string>#333333</string>
+	<key>highlightPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+		<array>
+			<string>&lt;</string>
+			<string>&gt;</string>
+		</array>
+	</array>
+	<key>increaseIndentPattern</key>
+	<string>&lt;[^/&gt;]*&gt;\s*$</string>
+	<key>name</key>
+	<string>NAnt Build File</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>&lt;!--</string>
+			<key>end</key>
+			<string>--&gt;</string>
+			<key>foregroundColor</key>
+			<string>red</string>
+			<key>name</key>
+			<string>comment.block.nant</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;/?([-_a-zA-Z0-9:]+)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.nant</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>/?&gt;</string>
+			<key>name</key>
+			<string>meta.tag.nant</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string> ([a-zA-Z-]+)</string>
+					<key>name</key>
+					<string>entity.other.attribute-name.nant</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>foregroundColor</key>
+					<string>#CC3300</string>
+					<key>name</key>
+					<string>string.quoted.double.nant</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>fontStyle</key>
+					<array/>
+					<key>foregroundColor</key>
+					<string>#CC3300</string>
+					<key>name</key>
+					<string>string.quoted.single.nant</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>foregroundColor</key>
+			<string>#6600CC</string>
+			<key>match</key>
+			<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+			<key>name</key>
+			<string>constant.character.entity.nant</string>
+		</dict>
+		<dict>
+			<key>backgroundColor</key>
+			<string>#CC3300</string>
+			<key>foregroundColor</key>
+			<string>#ffffff</string>
+			<key>match</key>
+			<string>&amp;</string>
+			<key>name</key>
+			<string>invalid.illegal.bad-ampersand.nant</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.nant-build</string>
+	<key>smartTypingPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+	</array>
+	<key>uuid</key>
+	<string>1BA72668-707C-11D9-A928-000D93589AF6</string>
+</dict>
+</plist>

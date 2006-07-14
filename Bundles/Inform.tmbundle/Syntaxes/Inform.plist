@@ -1,26 +1,81 @@
-{
-	comment = "Should be current for Inform 6.2 or thereabouts -- chris@cjack.com";
-	
-	name = "Inform";
-	scopeName = "source.inform";
-	fileTypes = ( inf );
-
-  foldingStartMarker = "\\[";
-  foldingStopMarker = "\\]";
-
-	patterns = (
-		{ name = "comment.line.exclamation.inform"; match = "!(.*)";},
-		{   
-		    name = "meta.function.inform";
-		    match = "(?:\\s*)\\[(?:\\s*)(.*)(?:\\s*);";
-		    captures = { 1 = { name = "entity.name.function"; }; };
-		},
-		{ name = "constant.numeric.inform"; match = "\\b((\\$[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"; },
-		{ name = "string.quoted.single.inform"; begin = "'"; end = "'"; swallow = "\\\\."; },
-        { name = "string.quoted.double.inform"; begin = "\""; end = "\""; },
-		{ name = "keyword.control.inform"; match = "\\b(box|break|continue|do|else|font(\\s+)(on|off)|for|give|if|jump|new_line|objectloop|print|print_ret|remove|return|rfalse|rtrue|spaces|string|style(\\s+)(roman|bold|underline|reverse|fixed)|switch|until|while|has|hasnt|in|notin|ofclass|provides|or)\\b";},
-		{ name = "keyword.other.directives.inform"; match = "\\b(Abbreviate|Array|Attribute|Class|Constant|Default|End|Endif|Extend|Global|Ifdef|Ifndef|Ifnot|Iftrue|Iffalse|Import|Include|Link|Lowstring|Message|Object|Property|Release|Replace|Serial|Switches|Statusline(\\s+)(score|time)|System_file|Verb|Zcharacter)\\b"; },
-	);
-	uuid = "1510B8C7-6B1D-11D9-B82B-000D93589AF6";
-}
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>Should be current for Inform 6.2 or thereabouts – chris@cjack.com</string>
+	<key>fileTypes</key>
+	<array>
+		<string>inf</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>\[</string>
+	<key>foldingStopMarker</key>
+	<string>\]</string>
+	<key>name</key>
+	<string>Inform</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>!(.*)</string>
+			<key>name</key>
+			<string>comment.line.exclamation.inform</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?:\s*)\[(?:\s*)(.*)(?:\s*);</string>
+			<key>name</key>
+			<string>meta.function.inform</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((\$[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.inform</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.inform</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.inform</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(box|break|continue|do|else|font(\s+)(on|off)|for|give|if|jump|new_line|objectloop|print|print_ret|remove|return|rfalse|rtrue|spaces|string|style(\s+)(roman|bold|underline|reverse|fixed)|switch|until|while|has|hasnt|in|notin|ofclass|provides|or)\b</string>
+			<key>name</key>
+			<string>keyword.control.inform</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(Abbreviate|Array|Attribute|Class|Constant|Default|End|Endif|Extend|Global|Ifdef|Ifndef|Ifnot|Iftrue|Iffalse|Import|Include|Link|Lowstring|Message|Object|Property|Release|Replace|Serial|Switches|Statusline(\s+)(score|time)|System_file|Verb|Zcharacter)\b</string>
+			<key>name</key>
+			<string>keyword.other.directives.inform</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.inform</string>
+	<key>uuid</key>
+	<string>1510B8C7-6B1D-11D9-B82B-000D93589AF6</string>
+</dict>
+</plist>

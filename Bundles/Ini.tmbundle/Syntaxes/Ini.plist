@@ -1,35 +1,98 @@
-{
-    fileTypes = (ini, conf); 
-    foldingStartMarker = "\\["; 
-    foldingStopMarker = "\\["; 
-    highlightPairs = (("(", ")"), ("[", "]"), ("{", "}")); 
-    name = Ini; 
-    scopeName = "source.ini";
-    patterns = (
-        { 
-            match = "^[\\s]*(;|#).*"; 
-            name = "comment.line.ini"; 
-        }, 
-        {
-            match = "\\b([a-zA-Z_]+)\\b\\s*(=)"; 
-            name = "keyword.other.definition.ini"; 
-        }, 
-        {
-            match = "^\\[(.*)\\]"; 
-            name = "entity.name.group-title.ini"; 
-        }, 
-        {
-            begin = "'"; 
-            end = "'"; 
-            name = "string.quoted.single.ini"; 
-            swallow = "\\\\."; 
-        }, 
-        {
-            begin = "\""; 
-            end = "\""; 
-            name = "string.quoted.double.ini"; 
-        }
-    ); 
-    smartTypingPairs = (("(", ")"), ("[", "]"), ("{", "}"), ("\"", "\""), ("'", "'")); 
-    uuid = "77DC23B6-8A90-11D9-BAA4-000A9584EC8C"; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>ini</string>
+		<string>conf</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>\[</string>
+	<key>foldingStopMarker</key>
+	<string>\[</string>
+	<key>highlightPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+	</array>
+	<key>name</key>
+	<string>Ini</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>^[\s]*(;|#).*</string>
+			<key>name</key>
+			<string>comment.line.ini</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b([a-zA-Z_]+)\b\s*(=)</string>
+			<key>name</key>
+			<string>keyword.other.definition.ini</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\[(.*)\]</string>
+			<key>name</key>
+			<string>entity.name.group-title.ini</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.ini</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.ini</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.ini</string>
+	<key>smartTypingPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+		<array>
+			<string>'</string>
+			<string>'</string>
+		</array>
+	</array>
+	<key>uuid</key>
+	<string>77DC23B6-8A90-11D9-BAA4-000A9584EC8C</string>
+</dict>
+</plist>

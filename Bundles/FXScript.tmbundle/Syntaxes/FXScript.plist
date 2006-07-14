@@ -86,7 +86,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>variable.global.fxscript</string>
+							<string>variable.other.global.fxscript</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -122,13 +122,13 @@
 			<key>match</key>
 			<string>/b(?i:AlphaType|EffectID|FullFrame|Group|InformationFlag|InvalEntireItem|KeyType|ProducesAlpha|QTEffect|RenderEachFrameWhenStill|WipeCode)/b</string>
 			<key>name</key>
-			<string>keyword.definition-statements.fxscript</string>
+			<string>keyword.other.definition-statements.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>!|\$|%|&amp;|\*|\-\-|\-|\+\+|\+|~|==|=|!=|!==|&lt;=|&gt;=|&lt;|&gt;|!|&amp;&amp;|\|\||\?\:|\*=|/=|%=|\+=|\-=|&amp;=|\^=</string>
 			<key>name</key>
-			<string>keyword.operator.arithmetic</string>
+			<string>keyword.operator.arithmetic.fxscrpt</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -140,7 +140,7 @@
 			<key>match</key>
 			<string>(?i:kFormatRGB219|kFormatRGB255|kFormatYUV219)</string>
 			<key>name</key>
-			<string>constant.colorspace.fxscript</string>
+			<string>support.constant.colorspace.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -158,49 +158,49 @@
 			<key>match</key>
 			<string>(?i:kBlack|kBlue|kCyan|kGray|kGreen|kMagenta|kRed|kWhite|kYellow)</string>
 			<key>name</key>
-			<string>constant.color.fxscript</string>
+			<string>support.constant.color.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>(?i:k16mm|k24fps|k25fps|k30df|k30fps|k35mm|k60df|k60fps|kFloat2|kFloat4|kFloat6|kInteger|kSize)</string>
 			<key>name</key>
-			<string>constant.formatting.fxscript</string>
+			<string>support.constant.formatting.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>(?i:false|kAlpha|kNone|kUndefined|true)\b</string>
 			<key>name</key>
-			<string>constant.general.fxscript</string>
+			<string>support.constant.general.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>(?i:kKeyAdd|kKeyDarken|kKeyDifference|kKeyHardLight|kKeyLighten|kKeyMultiply|kKeyNormal|kKeyOverlay|kKeyScreen|kKeySoftLight|kKeySubtract)</string>
 			<key>name</key>
-			<string>constant.key.fxscript</string>
+			<string>support.constant.key.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>(?i:k16mm|k24fps|k25fps|k30df|k30fps|k35mm|k60df|k60fps|kFloat2|kFloat4|kFloat6|kInteger|kSize)</string>
 			<key>name</key>
-			<string>constant.formatting.fxscript</string>
+			<string>support.constant.formatting.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(?i:clip1|clip2|dest|duration|exposedBackground|fieldNumber|fieldprocessing|fps|frame|linearRamp|previewing|ratio|renderRes|RGBtoYUV|src1|src2|srcIsGap1|srcIsGap2|srcType1|srcType2|topfield|YUVtoRGB)\b</string>
 			<key>name</key>
-			<string>constant.predeclared-variables.fxscript</string>
+			<string>support.variable.predeclared.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>(?i:kbold|kbolditalic|kcenterjustify|kitalic|kleftjustify|kplain|krightjustify)</string>
 			<key>name</key>
-			<string>constant.text.fxscript</string>
+			<string>support.constant.text.fxscript</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>(?i:kDiamond|kRound|kSquare)</string>
 			<key>name</key>
-			<string>constant.shapes.fxscript</string>
+			<string>support.constant.shapes.fxscript</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -244,7 +244,7 @@
 			<key>end</key>
 			<string>"</string>
 			<key>name</key>
-			<string>string.quoted.fxscript</string>
+			<string>string.quoted.double.fxscript</string>
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
@@ -356,7 +356,7 @@
 			<key>match</key>
 			<string>\b((?i:absNoInt|ArrayFloatAbs|ArrayFloatAverage|ArrayFloatCount|ArrayFloatCountAll|ArrayFloatFlatten|ArrayFloatIndexExists|ArrayFloatInsertionSort|ArrayFloatMax|ArrayFloatMin|ArrayFloatNormalize|ArrayFloatPrint_r|ArrayFloatQuickSort|ArrayFloatSum|ArrayPointCount|ArrayPointReverse|ArrayPointWrap|BlurChannelInPlace|BoundsOfPoly|ceil|CenterOfPoly|ChannelCopyFit|ChannelMultiplyYUV|ChannelScreen|ChannelView|ColorRampImage|ColorReporter|DeInterlace|DeInterlaceFast|DeInterlaceInterpolate|DifferenceMask|DimensionsOfPoly|DrawGridFrames|ease|easeIn|easeMiddle|easeOut|easeS|ErrorReporter|factorial|factorialabsNoInt|FastRotate|FieldDouble|fitPoly|fitRange|fitRect|floor|gcd|getField|indexExistsPt|isFloatArray|isIndexFloat|isIndexFloatArray|makeLevelMapBez|makeThresholdMapBez|max|min|mirrorRect|NumReporter|PlaceFrame|PointInPoly|pt3dReporter|PtReporter|RandomNoiseScaled|RandomSeedFPS|RGBtoYUVcolor|round|scaleToFit|sumNaturals|T_borderFade|whattype|YUVtoRGBcolor))\b</string>
 			<key>name</key>
-			<string>support.function.joe</string>
+			<string>support.function.joe.fxscript</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

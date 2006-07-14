@@ -1,42 +1,65 @@
-{
-    name = "Quake Style .cfg";
-    scopeName = "source.quake-config";
-    
-    fileTypes = ( cfg );
-    
-    uuid = "AAB8717E-6E5C-11D9-9BE0-0011242E4184";
-    
-    smartTypingPairs = (
-        ( "\"", "\"" )
-    );
-    
-    patterns = (
-      // the 2nd part of the regex is just to capture
-      // binds to number-keys and prevent them from getting
-      // highlighted as values.
-      {  name = "keyword.other.quake3";
-         match = "\\b(set(a|u|s)?|bind|undbind|unbindall|vstr|exec|kill|say|say_team|quit|echo)(\\s+\\d)?\\b";
-      },
-      
-      {  name = "constant.numeric.quake3";
-         match = "\\b\\d+(\\.\\d+)?\\b";
-      },
-      
-      {  name = "string.quoted.double.quake3";
-         begin = "\"";
-         end = "\"";
-         swallow = "\\\\.";
-         patterns = (
-            {  name = "keyword.other.string-embedded.quake3";
-               match = "\\b(set(a|u|s)?|bind|unbindall|vstr|exec|kill|say|say_team|quit|echo)\\b";
-            }
-         );
-      },
-      
-      {  name = "comment.line.double-slash.quake3";
-         match = "//.*";
-      }
-        
-    );
-    
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>cfg</string>
+	</array>
+	<key>name</key>
+	<string>Quake Style .cfg</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>comment</key>
+			<string>the 2nd part of the regex is just to capture binds to number-keys and prevent them from getting highlighted as values.</string>
+			<key>match</key>
+			<string>\b(set(a|u|s)?|bind|undbind|unbindall|vstr|exec|kill|say|say_team|quit|echo)(\s+\d)?\b</string>
+			<key>name</key>
+			<string>keyword.other.quake3</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b\d+(\.\d+)?\b</string>
+			<key>name</key>
+			<string>constant.numeric.quake3</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.quake3</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(set(a|u|s)?|bind|unbindall|vstr|exec|kill|say|say_team|quit|echo)\b</string>
+					<key>name</key>
+					<string>keyword.other.string-embedded.quake3</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>//.*</string>
+			<key>name</key>
+			<string>comment.line.double-slash.quake3</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.quake-config</string>
+	<key>smartTypingPairs</key>
+	<array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+	</array>
+	<key>uuid</key>
+	<string>AAB8717E-6E5C-11D9-9BE0-0011242E4184</string>
+</dict>
+</plist>

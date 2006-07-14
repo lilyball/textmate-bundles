@@ -43,6 +43,10 @@ img#me05 {top: 43px;left: 36px;}
 <h1>#{location}</h1>
 <h2>#{title}</h2>
 </div>
+<div class="topleft"></div>
+<div class="topright"></div>
+<div class="bottomleft"></div>
+<div class="bottomright"></div>
 </div>
 
 <div class="presentation">
@@ -56,7 +60,8 @@ img#me05 {top: 43px;left: 36px;}
 
 ##SLIDE_START
 <div class="slide">
-#{content}#{handout != nil ? %Q{
+#{content}
+#{handout != nil ? %Q{
 <div class="handout">
 #{handout}
 </div>} : ''}#{notes != nil ? %Q{

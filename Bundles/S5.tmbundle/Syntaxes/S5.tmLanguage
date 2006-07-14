@@ -46,27 +46,91 @@
 			<string>^(?![A-Za-z0-9]+:)</string>
 			<key>end</key>
 			<string>^(?=not)possible$</string>
-			<key>name</key>
-			<string>text.html.markdown</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>^(✂-{6})+$\n</string>
-					<key>name</key>
-					<string>meta.separator.slide.s5</string>
+					<key>begin</key>
+					<string>(^_{10}$)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.separator.handout.s5</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>
+						name = 'meta.separator.handout.s5';
+						match = '(^_{10}$)';
+					</string>
+					<key>contentName</key>
+					<string>text.html.markdown.handout.s5</string>
+					<key>end</key>
+					<string>(?=^(?:(?:✂-{6})+|^#{10})$)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html.markdown</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>^_{10}$</string>
-					<key>name</key>
-					<string>meta.separator.handout.s5</string>
+					<key>begin</key>
+					<string>(^#{10}$)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.separator.notes.s5</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>
+						name = 'meta.separator.notes.s5';
+						match = '(^#{10}$)';
+					</string>
+					<key>contentName</key>
+					<string>text.html.markdown.notes.s5</string>
+					<key>end</key>
+					<string>(?=^(?:(?:✂-{6})+|_{10})$)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html.markdown</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>^#{10}$</string>
-					<key>name</key>
-					<string>meta.separator.notes.s5</string>
+					<key>begin</key>
+					<string>^((✂-{6})+$\n)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.separator.slide.s5</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>
+						name = 'meta.separator.slide.s5';
+						match = '^((✂-{6})+$\n)';
+					</string>
+					<key>contentName</key>
+					<string>text.html.markdown.slide.s5</string>
+					<key>end</key>
+					<string>(?=^(?:(?:✂-{6})+|_{10}|#{10})$)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html.markdown</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>include</key>

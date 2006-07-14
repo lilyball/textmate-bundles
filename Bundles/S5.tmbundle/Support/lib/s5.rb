@@ -55,12 +55,12 @@ class S5 < String
     @slides.push(slide) unless slide.strip.empty?
 
     # set values for template
-    @title = headers['Title']
+    @title = RubyPants.new(headers['Title']).to_html
     @date = headers['Date']
-    @subtitle = headers['Subtitle']
-    @location = headers['Location']
-    @presenter = headers['Presenter'] || headers['Author']
-    @organization = headers['Organization'] || headers['Company']
+    @subtitle = RubyPants.new(headers['Subtitle']).to_html
+    @location = RubyPants.new(headers['Location']).to_html
+    @presenter = RubyPants.new(headers['Presenter'] || headers['Author']).to_html
+    @organization = RubyPants.new(headers['Organization'] || headers['Company']).to_html
     @theme = headers['Theme'] || 'default'
     @defaultView = headers['View'] || 'slideshow'
     @controlVis = headers['Controls'] || 'visible'
@@ -128,6 +128,8 @@ class S5 < String
         notes = nil
       end
       content = RubyPants.new(BlueCloth.new(content).to_html).to_html
+      notes = RubyPants.new(BlueCloth.new(notes).to_html).to_html unless notes.nil?
+      handout = RubyPants.new(BlueCloth.new(handout).to_html).to_html unless handout.nil?
       all_slides += eval '%Q{' + slide_tmpl + '}'
     end
     s5tmpl.sub!(/##SLIDE_START.+##SLIDE_END/m, all_slides)

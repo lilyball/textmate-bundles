@@ -1,36 +1,148 @@
-{
-	// Rez. Legacy Mac OS source code frequently contains Rez files.
-	// chris@cjack.com
-	
-	name = "Rez";
-	scopeName = "source.rez";
-	fileTypes = ( r );
-	foldingStartMarker = "(/\\*\\*|\\{\\s*$)";
-	foldingStopMarker = "(\\*\\*/|^\\s*\\})";
-	increaseIndentPattern = "^.*(\\{[^}\"']*|\\([^)\"']*)$";
-	smartTypingPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" ),
-	   ( "\"", "\"" ), ( "'", "'" )
-	);
-	highlightPairs = (
-	   ( "(", ")" ), ( "[", "]" ), ( "{", "}" )
-	);
-
-	patterns = (
-		{ name = "comment.block.rez"; begin = "/\\*"; end = "\\*/"; },
-		{ name = "comment.line.double-slash.rez"; match = "//.*$\n?"; },
-		
-		// Note that Xcode gets case sensitivity wrong (last checked Xcode 2.0).
-		// I'm not sure built-in functions are case-insensitive, though, so we might too.
-		{ name = "keyword.control.rez"; match = "\\b(?i:(change|data|delete|include|read|resource|type))\\b"; },
-		{ name = "storage.type.rez"; match = "\\b(?i:(align|array|binary|bit|bitstring|boolean|byte|case|char|cstring|decimal|enum|fill|hex|integer|key|literal|long|longint|nibble|octal|point|pstring|rect|string|switch|unsigned|wide|word|wstring))\\b"; },
-		{ name = "keyword.other.attributes.rez"; match = "\\b(?i:(appheap|locked|nonpurgeable|purgeable|sysheap|unlocked))\\b"; },
-		{ name = "support.function.built-in.rez"; match = "\\$\\$(?i:(ArrayIndex|Attributes|BitField|Byte|CountOf|Date|Day|Format|Hour|ID|Long|Minute|Month|Name|PackedSize|Read|Resource|ResourceSize|Second|Shell|Time|Type|Version|Weekday|Word|Year))"; },
-		{ name = "constant.numeric.rez"; match = "\\b(((0(x|X|B)|\\\$)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b"; },
-		{ name = "string.quoted.double.rez"; begin = "\""; end = "\""; swallow = "\\\\."; },
-		{ name = "string.quoted.single.rez"; begin = "'"; end = "'"; swallow = "\\\\."; },
-		{ name = "string.quoted.hex.rez"; begin = "\\\$\""; end = "\""; swallow = "\\\\."; },
-		{ name = "other.preprocessor.rez"; match = "^\\s*#\\s*(define|defined|else|elif|endif|if|ifdef|ifndef|include|line|printf|undef)\\b";},
-	);
-	uuid = "F3EB29E9-8DB7-4052-9D48-5CDD2491D8D3";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>Rez. Legacy Mac OS source code frequently contains Rez files. – chris@cjack.com</string>
+	<key>fileTypes</key>
+	<array>
+		<string>r</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(/\*\*|\{\s*$)</string>
+	<key>foldingStopMarker</key>
+	<string>(\*\*/|^\s*\})</string>
+	<key>highlightPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+	</array>
+	<key>increaseIndentPattern</key>
+	<string>^.*(\{[^}"']*|\([^)"']*)$</string>
+	<key>name</key>
+	<string>Rez</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.rez</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>//.*$
+?</string>
+			<key>name</key>
+			<string>comment.line.double-slash.rez</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Note that Xcode gets case sensitivity wrong (last checked Xcode 2.0). I'm not sure built-in functions are case-insensitive, though, so we might too.</string>
+			<key>match</key>
+			<string>\b(?i:(change|data|delete|include|read|resource|type))\b</string>
+			<key>name</key>
+			<string>keyword.control.rez</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:(align|array|binary|bit|bitstring|boolean|byte|case|char|cstring|decimal|enum|fill|hex|integer|key|literal|long|longint|nibble|octal|point|pstring|rect|string|switch|unsigned|wide|word|wstring))\b</string>
+			<key>name</key>
+			<string>storage.type.rez</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:(appheap|locked|nonpurgeable|purgeable|sysheap|unlocked))\b</string>
+			<key>name</key>
+			<string>keyword.other.attributes.rez</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\$\$(?i:(ArrayIndex|Attributes|BitField|Byte|CountOf|Date|Day|Format|Hour|ID|Long|Minute|Month|Name|PackedSize|Read|Resource|ResourceSize|Second|Shell|Time|Type|Version|Weekday|Word|Year))</string>
+			<key>name</key>
+			<string>support.function.built-in.rez</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(((0(x|X|B)|\$)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)\b</string>
+			<key>name</key>
+			<string>constant.numeric.rez</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.rez</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.rez</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\$"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.hex.rez</string>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\s*#\s*(define|defined|else|elif|endif|if|ifdef|ifndef|include|line|printf|undef)\b</string>
+			<key>name</key>
+			<string>other.preprocessor.rez</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.rez</string>
+	<key>smartTypingPairs</key>
+	<array>
+		<array>
+			<string>(</string>
+			<string>)</string>
+		</array>
+		<array>
+			<string>[</string>
+			<string>]</string>
+		</array>
+		<array>
+			<string>{</string>
+			<string>}</string>
+		</array>
+		<array>
+			<string>"</string>
+			<string>"</string>
+		</array>
+		<array>
+			<string>'</string>
+			<string>'</string>
+		</array>
+	</array>
+	<key>uuid</key>
+	<string>F3EB29E9-8DB7-4052-9D48-5CDD2491D8D3</string>
+</dict>
+</plist>

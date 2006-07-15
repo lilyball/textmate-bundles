@@ -405,8 +405,6 @@
 			<string>storage -storage.modifier</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#803D0033</string>
 				<key>foreground</key>
 				<string>#FF7900</string>
 			</dict>
@@ -426,7 +424,7 @@
 			<key>name</key>
 			<string>~ constant.language.this.prototype.js</string>
 			<key>scope</key>
-			<string>constant.language.this.prototype.js</string>
+			<string>constant.language.this.js</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -1572,17 +1570,6 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>source meta.ending-space</string>
-			<key>scope</key>
-			<string>source meta.ending-space</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#000000BF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>—————————————————</string>
 			<key>settings</key>
 			<dict/>
@@ -1755,22 +1742,13 @@
 			<key>name</key>
 			<string>Bold String Quotes</string>
 			<key>scope</key>
-			<string>string.quoted.double.js, string.quoted.single.js</string>
+			<string>string.quoted.single.brace, string.quoted.double.brace</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
 				<string>bold</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Unbold contents</string>
-			<key>scope</key>
-			<string>string.quoted.double.js string.contents.quoted.double.js, string.quoted.single.js string.contents.quoted.single.js</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string></string>
+				<key>foreground</key>
+				<string>#803D00</string>
 			</dict>
 		</dict>
 		<dict>

@@ -54,13 +54,14 @@ class S5 < String
     end
     @slides.push(slide) unless slide.strip.empty?
 
+    require 'cgi'
     # set values for template
-    @title = RubyPants.new("#{headers['Title']}").to_html
+    @title = RubyPants.new(CGI::escapeHTML("#{headers['Title']}")).to_html
     @date = headers['Date']
-    @subtitle = RubyPants.new("#{headers['Subtitle']}").to_html
-    @location = RubyPants.new("#{headers['Location']}").to_html
-    @presenter = RubyPants.new("#{headers['Presenter'] || headers['Author']}").to_html
-    @organization = RubyPants.new("#{headers['Organization'] || headers['Company']}").to_html
+    @subtitle = RubyPants.new(CGI::escapeHTML("#{headers['Subtitle']}")).to_html
+    @location = RubyPants.new(CGI::escapeHTML("#{headers['Location']}")).to_html
+    @presenter = RubyPants.new(CGI::escapeHTML("#{headers['Presenter'] || headers['Author']}")).to_html
+    @organization = RubyPants.new(CGI::escapeHTML("#{headers['Organization'] || headers['Company']}")).to_html
     @theme = headers['Theme'] || 'default'
     @defaultView = headers['View'] || 'slideshow'
     @controlVis = headers['Controls'] || 'visible'

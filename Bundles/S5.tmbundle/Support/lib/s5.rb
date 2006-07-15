@@ -55,7 +55,7 @@ class S5 < String
     @slides.push(slide) unless slide.strip.empty?
 
     # set values for template
-    @title = RubyPants.new(headers['Title']).to_html
+    @title = RubyPants.new("#{headers['Title']}").to_html
     @date = headers['Date']
     @subtitle = RubyPants.new("#{headers['Subtitle']}").to_html
     @location = RubyPants.new("#{headers['Location']}").to_html

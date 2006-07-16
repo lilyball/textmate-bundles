@@ -415,7 +415,7 @@ module GTD
         notes << self.note if self.note
         return indent + "@#{self.context} #{self.name}" + 
                (self.note ? " [#{notes.length}]" : "") +
-               (self.due ? " due:[#{self.due}]" : "")
+               (self.due ? " #{due_type}:[#{self.due}]" : "")
       end
     end
   end

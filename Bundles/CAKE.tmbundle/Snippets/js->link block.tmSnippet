@@ -3,14 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;${4:p}&gt;${3:Label: }&lt;?php e(\$time-&gt;niceShort(\$data['${1:Model}']['${2:field}'])); ?&gt;&lt;/$4&gt;</string>
+	<string>&lt;?php
+if(isset(\$javascript)){
+	echo \$javascript-&gt;link('${1:prototype}');
+	echo \$javascript-&gt;link('${2:scriptaculous}');$0
+}
+?&gt;</string>
 	<key>name</key>
-	<string>niceShort</string>
+	<string>js-&gt;link block</string>
 	<key>scope</key>
 	<string>text.html, source.php.cake</string>
 	<key>tabTrigger</key>
-	<string>VniceShort</string>
+	<string>Vjs</string>
 	<key>uuid</key>
-	<string>A1C0B68C-31E6-4ABE-A93B-6DA90E3B62D0</string>
+	<string>9E6F79AE-72C4-40F8-BAE6-BADE983E0F64</string>
 </dict>
 </plist>

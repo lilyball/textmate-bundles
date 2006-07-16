@@ -40,10 +40,10 @@ for action in actions do
       case action.due_type
       when /at/,/from/
         reminderLines << "REM #{dateObj.strftime('%B %d %Y')}"+ 
-        (ENV['YM_GTD_REMINDER'].nil? ? " +1" : " +#{ENV['YM_GTD_REMINDER']}") + " MSG #{action.name.gsub(/%/,"")} %b.%"
+        (ENV['TM_GTD_REMINDER'].nil? ? " +1" : " +#{ENV['TM_GTD_REMINDER']}") + " MSG #{action.name.gsub(/%/,"")} %b.%"
       when /due/
         reminderLines << "REM #{dateObj.strftime('%B %d %Y')}"+ 
-        (ENV['YM_GTD_REMINDER'].nil? ? " +1" : " +#{ENV['YM_GTD_REMINDER']}") + " MSG #{action.name.gsub(/%/,"")} DUE:%b.%"
+        (ENV['TM_GTD_REMINDER'].nil? ? " +1" : " +#{ENV['TM_GTD_REMINDER']}") + " MSG #{action.name.gsub(/%/,"")} DUE:%b.%"
       end
     end
   end

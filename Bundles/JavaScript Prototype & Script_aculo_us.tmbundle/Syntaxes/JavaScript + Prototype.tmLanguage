@@ -15,7 +15,7 @@
 	<key>keyEquivalent</key>
 	<string>^~J</string>
 	<key>name</key>
-	<string>JavaScript + Prototype</string>
+	<string>Prototype &amp; Script.aculo.us (JavaScript)</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -43,7 +43,7 @@
 				</dict>
 			</dict>
 			<key>comment</key>
-			<string>Attempt to match foo: function</string>
+			<string>Attempt to match "foo": function</string>
 			<key>match</key>
 			<string>(('|")(.*?)(\2)):\s*\b(function)?\s*\((.*?)\)</string>
 			<key>name</key>
@@ -117,9 +117,9 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(Prototype|Class|Abstract|Try|PeriodicalExecuter|Enumerable|Hash|ObjectRange|Element|Ajax|Responders|Base|Request|Updater|PeriodicalUpdater|Toggle|Insertion|Before|Top|Bottom|After|ClassNames|Form|Serializers|TimedObserver|Observer|EventObserver|Event|Position|Effect|Effect2|Transitions|ScopedQueue|Queues|DefaultOptions|Parallel|Opacity|Move|MoveBy|Scale|Highlight|ScrollTo|Fade|Appear|Puff|BlindUp|BlindDown|SwitchOff|DropOut|Shake|SlideDown|SlideUp|Squish|Grow|Shrink|Pulsate|Fold)\b</string>
+			<string>\b(Prototype|Class|Abstract|Try|PeriodicalExecuter|Enumerable|Hash|ObjectRange|Element|Ajax|Responders|Base|Request|Updater|PeriodicalUpdater|Toggle|Insertion|Before|Top|Bottom|After|ClassNames|Form|Serializers|TimedObserver|Observer|EventObserver|Event|Position|Effect|Effect2|Transitions|ScopedQueue|Queues|DefaultOptions|Parallel|Opacity|Move|MoveBy|Scale|Highlight|ScrollTo|Fade|Appear|Puff|BlindUp|BlindDown|SwitchOff|DropOut|Shake|SlideDown|SlideUp|Squish|Grow|Shrink|Pulsate|Fold|console)\b</string>
 			<key>name</key>
-			<string>support.class.js.prototype</string>
+			<string>support.class.prototype.js</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -138,6 +138,18 @@
 			<string>\bthis\b</string>
 			<key>name</key>
 			<string>constant.language.this.js.prototype</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(console)\b</string>
+			<key>name</key>
+			<string>entity.name.object.js.firebug</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(warn|info|log|error|timeEnd|time|asswer)</string>
+			<key>name</key>
+			<string>support.function.js.firebug</string>
 		</dict>
 		<dict>
 			<key>include</key>

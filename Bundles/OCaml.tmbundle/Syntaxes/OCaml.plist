@@ -13,6 +13,8 @@
 	<string>\b(struct|sig|object)\b|\(\*\*</string>
 	<key>foldingStopMarker</key>
 	<string>\bend\b|\*\*\)</string>
+	<key>keyEquivalent</key>
+	<string>^~O</string>
 	<key>name</key>
 	<string>OCaml Source</string>
 	<key>patterns</key>
@@ -23,7 +25,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
+					<string>keyword.other.language.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -33,12 +35,12 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>variable.function.ocaml</string>
+					<string>variable.parameter.function.ocaml</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
+					<string>keyword.other.language.ocaml</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -52,7 +54,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
+					<string>keyword.other.language.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -71,7 +73,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
+					<string>keyword.other.language.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -90,7 +92,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
+					<string>keyword.other.language.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -109,7 +111,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
+					<string>keyword.other.language.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -130,7 +132,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
+					<string>keyword.other.language.ocaml</string>
 				</dict>
 				<key>3</key>
 				<dict>
@@ -150,7 +152,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.ocaml</string>
+					<string>keyword.other.language.ocaml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -163,17 +165,17 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.language.ocaml</string>
+							<string>keyword.other.language.ocaml</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.language.ocaml</string>
+							<string>keyword.other.language.ocaml</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.language.ocaml</string>
+							<string>keyword.other.language.ocaml</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -183,7 +185,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>variable.method.ocaml</string>
+							<string>variable.parameter.method.ocaml</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -219,7 +221,7 @@
 			<key>match</key>
 			<string>\bopen\s+([A-Z][a-zA-Z0-9_]*(\.[A-Z][a-zA-Z0-9_]*)*)</string>
 			<key>name</key>
-			<string>keyword.module.open.ocaml</string>
+			<string>keyword.other.module.open.ocaml</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -233,37 +235,43 @@
 			<key>match</key>
 			<string>\bexception\s+([A-Z][a-zA-Z0-9_]*)\b</string>
 			<key>name</key>
-			<string>keyword.exception.ocaml</string>
+			<string>keyword.other.exception.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(int|char|float|string|list|array|mutable|ref|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t|type)\b</string>
+			<string>\b(int|char|float|string|list|array|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t)\b</string>
 			<key>name</key>
-			<string>keyword.type.storage.ocaml</string>
+			<string>storage.type.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(mutable|ref)\b</string>
+			<key>name</key>
+			<string>storage.modifier.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\W`[A-Z][a-zA-Z0-9_]*\b</string>
 			<key>name</key>
-			<string>keyword.type.variant.polymorphic.ocaml</string>
+			<string>storage.other.variant.polymorphic.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b[A-Z][a-zA-Z0-9_]*\b</string>
 			<key>name</key>
-			<string>keyword.type.variant.ocaml</string>
+			<string>storage.other.variant.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>^[ \t]*#[a-zA-Z]+</string>
 			<key>name</key>
-			<string>keyword.directive.ocaml</string>
+			<string>keyword.other.directive.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>^[ \t]*#[0-9]*</string>
 			<key>name</key>
-			<string>keyword.directive.line-number.ocaml</string>
+			<string>keyword.other.directive.line-number.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -332,9 +340,21 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(and|as|assert|begin|class|constraint|do|done|downto|else|end|exception|external|false|for|fun|function|functor|if|in|include|inherit|initializer|land|lazy|let|lor|lsl|lsr|lxor|match|mod|module|mutable|new|object|of|open|or|private|rec|sig|struct|then|to|true|try|type|val|virtual|when|while|with)\b</string>
+			<string>\b(and|land|lor|lsl|lsr|lxor|mod|or)\b</string>
 			<key>name</key>
-			<string>keyword.language.ocaml</string>
+			<string>keyword.operator.language.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(begin|do|done|downto|else|end|for|if|match|then|to|try|when|while|with)\b</string>
+			<key>name</key>
+			<string>keyword.control.language.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(as|assert|class|constraint|exception|external|false|fun|function|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|of|open|private|rec|sig|struct|true|type|val|virtual|type)\b</string>
+			<key>name</key>
+			<string>keyword.other.language.ocaml</string>
 		</dict>
 	</array>
 	<key>repository</key>

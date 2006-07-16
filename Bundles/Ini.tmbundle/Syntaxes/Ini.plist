@@ -32,9 +32,15 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>^[\s]*(;|#).*</string>
+			<string>^\s*#.*</string>
 			<key>name</key>
-			<string>comment.line.ini</string>
+			<string>comment.line.number-sign.ini</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\s*;.*</string>
+			<key>name</key>
+			<string>comment.line.semicolon.ini</string>
 		</dict>
 		<dict>
 			<key>match</key>

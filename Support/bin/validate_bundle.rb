@@ -41,7 +41,7 @@ end
 
 __END__
 comment.block
-comment.block.documentation
+comment.documentation
 comment.line
 comment.line.double-dash
 comment.line.double-slash
@@ -64,7 +64,10 @@ keyword.control
 keyword.operator
 keyword.other
 markup.bold
+markup.changed
+markup.deleted
 markup.heading
+markup.inserted
 markup.italic
 markup.list
 markup.list.numbered
@@ -75,6 +78,8 @@ markup.raw
 markup.underline
 markup.underline.link
 meta
+meta.paragraph
+meta.separator
 source
 storage.modifier
 storage.type

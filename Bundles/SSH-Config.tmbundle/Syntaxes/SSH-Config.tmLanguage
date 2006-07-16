@@ -19,12 +19,21 @@
 			<string>keyword.other.ssh-config</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>(#|//)</string>
-			<key>end</key>
-			<string>$</string>
-			<key>name</key>
-			<string>comment.other.ssh-config</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>comment.line.number-sign.ssh-config</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>comment.line.double-slash.ssh-config</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(#.*$\n?)|(//.*$\n?)</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -52,7 +61,7 @@
 			<key>match</key>
 			<string>\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b</string>
 			<key>name</key>
-			<string>constant</string>
+			<string>constant.numeric.ssh-config</string>
 		</dict>
 		<dict>
 			<key>match</key>

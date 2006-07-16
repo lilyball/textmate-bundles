@@ -5,18 +5,19 @@ require "plist"
 
 $legal_scopes = DATA.read.scan(/.+/)
 
-def visit_value(value)
+def visit_value(value, bundle_name = nil)
   case value
   when Array
-    value.each { |v| visit_value v }
+    value.each { |v| visit_value v, bundle_name }
   when Hash
     value.each_pair do |name, v|
       if name == "name" || name == "contentName"
         unless $legal_scopes.any? { |scope| scope.size <= v.size && scope == v[0...(scope.size)] }
+          print "#{bundle_name}: " unless bundle_name.nil?
           puts v
         end
       else
-        visit_value v
+        visit_value v, bundle_name
       end
     end
   end
@@ -29,8 +30,9 @@ ARGV.each do |bundle|
   Dir["Syntaxes/*.{tmLanguage,plist}"].each do |grammar|
     open(grammar) do |io|
       plist = PropertyList.load(io)
-      visit_value plist['patterns']   if plist['patterns']
-      visit_value plist['repository'] if plist['repository']
+      bundle_name = ARGV.size == 1 ? nil : File.split(bundle).last
+      visit_value plist['patterns'], bundle_name   if plist['patterns']
+      visit_value plist['repository'], bundle_name if plist['repository']
     end
   end
   Dir.chdir(old_dir)

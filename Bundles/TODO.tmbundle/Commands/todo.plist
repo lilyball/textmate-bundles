@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveModifiedFiles</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
@@ -11,7 +11,7 @@ $tags = [
   { :label =&gt; "FIXME",   :color =&gt; "#A00000", :regexp =&gt; /FIX ?ME[\s,:]+(\w.*)$/i },
   { :label =&gt; "TODO",    :color =&gt; "#CF830D", :regexp =&gt; /TODO[\s,:]+(\w.*)$/i    },
   { :label =&gt; "CHANGED", :color =&gt; "#008000", :regexp =&gt; /CHANGED[\s,:]+(\w.*)$/  },
-  { :label =&gt; "RADAR",   :color =&gt; "#0090C8", :regexp =&gt; /(.*&lt;)ra?dar:\/(?:\/problem|)\/([&amp;0-9]+)(&gt;.*)$/  },
+  { :label =&gt; "RADAR",   :color =&gt; "#0090C8", :regexp =&gt; /(.*&lt;)ra?dar:\/(?:\/problem|)\/([&amp;0-9]+)(&gt;.*)$/, :trim_if_empty =&gt; true },
 ]
 
 if RUBY_VERSION =~ /^1\.6\./ then
@@ -56,6 +56,9 @@ TextMate.each_text_file do |file|
     end
   end
 end
+
+# trim tags that didn't match, if requested
+$tags.delete_if { |tag| tag[:trim_if_empty] and tag[:matches].empty? }
 
 tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"
 puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result

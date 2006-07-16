@@ -13,18 +13,68 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>/\*</string>
-			<key>end</key>
-			<string>\*/</string>
-			<key>name</key>
-			<string>comment.block.antlr</string>
+			<key>include</key>
+			<string>#strings</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>//.*$\n?</string>
+			<key>include</key>
+			<string>#comments</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\boptions\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.options.antlr</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?&lt;=\})</string>
 			<key>name</key>
-			<string>comment.line.double-slash.antlr</string>
+			<string>meta.options.antlr</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\{</string>
+					<key>end</key>
+					<string>\}</string>
+					<key>name</key>
+					<string>meta.options-block.antlr</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#strings</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\b\d+\b</string>
+							<key>name</key>
+							<string>constant.numeric.antlr</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\b(k|charVocabulary|filter|greedy|paraphrase|exportVocab|buildAST|defaultErrorHandler|language|namespace|namespaceStd|namespaceAntlr|genHashLines)\b</string>
+							<key>name</key>
+							<string>variable.other.option.antlr</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\b(true|false)\b</string>
+							<key>name</key>
+							<string>constant.language.boolean.antlr</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -44,46 +94,12 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>source.java.embedded.antlr</string>
+			<string>source.embedded.java-or-c.antlr</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
 					<string>#nested-curly</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>"</string>
-			<key>end</key>
-			<string>"</string>
-			<key>name</key>
-			<string>string.quoted.double.antlr</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\\(u\h{4}|.)</string>
-					<key>name</key>
-					<string>constant.character.escape.antlr</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>'</string>
-			<key>end</key>
-			<string>'</string>
-			<key>name</key>
-			<string>string.quoted.single.antlr</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\\(u\h{4}|.)</string>
-					<key>name</key>
-					<string>constant.character.escape.untitled</string>
 				</dict>
 			</array>
 		</dict>
@@ -99,9 +115,35 @@
 			<key>name</key>
 			<string>storage.modifier.extends.antlr</string>
 		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(Parser|Lexer|TreeWalker)\b</string>
+			<key>name</key>
+			<string>support.class.antlr</string>
+		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>/\*</string>
+					<key>end</key>
+					<string>\*/</string>
+					<key>name</key>
+					<string>comment.block.antlr</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>//.*$\n?</string>
+					<key>name</key>
+					<string>comment.line.double-slash.antlr</string>
+				</dict>
+			</array>
+		</dict>
 		<key>nested-curly</key>
 		<dict>
 			<key>patterns</key>
@@ -120,8 +162,84 @@
 					</array>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>source.java</string>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.java-or-c</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\.</string>
+							<key>name</key>
+							<string>constant.character.escape.antlr</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>string.quoted.single.java-or-c</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\.</string>
+							<key>name</key>
+							<string>constant.character.escape.antlr</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\bEOF_CHAR\b</string>
+					<key>name</key>
+					<string>support.constant.eof-char.antlr</string>
+				</dict>
+			</array>
+		</dict>
+		<key>strings</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.antlr</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\(u\h{4}|.)</string>
+							<key>name</key>
+							<string>constant.character.escape.antlr</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>string.quoted.single.antlr</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\(u\h{4}|.)</string>
+							<key>name</key>
+							<string>constant.character.escape.untitled</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

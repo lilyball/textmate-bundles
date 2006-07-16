@@ -486,18 +486,18 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.here-string.shell</string>
+					<string>keyword.operator.herestring.shell</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.here-string.shell</string>
+					<string>string.quoted.single.herestring.shell</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(&lt;&lt;&lt;)('[^']*'|"(\\("|\\)|[^"])*")</string>
+			<string>(&lt;&lt;&lt;)('[^']*')</string>
 			<key>name</key>
-			<string>meta.here-string.shell</string>
+			<string>meta.herestring.shell</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -505,18 +505,37 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.here-string.shell</string>
+					<string>keyword.operator.herestring.shell</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>string.unquoted.here-string.shell</string>
+					<string>string.quoted.double.herestring.shell</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(&lt;&lt;&lt;)("(\\("|\\)|[^"])*")</string>
+			<key>name</key>
+			<string>meta.herestring.shell</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.herestring.shell</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.herestring.shell</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>(&lt;&lt;&lt;)(([^\s\\]|\\.)+)</string>
 			<key>name</key>
-			<string>meta.here-string.shell</string>
+			<string>meta.herestring.shell</string>
 		</dict>
 		<dict>
 			<key>comment</key>

@@ -5,56 +5,64 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
-
-# TODO - not yet implemented
-
-
-$tags = [
-  { :label =&gt; "TODO",    :color =&gt; "#CF830D", :regexp =&gt; /TODO[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "CALL",    :color =&gt; "#CF830D", :regexp =&gt; /CALL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "EMAIL",    :color =&gt; "#CF830D", :regexp =&gt; /EMAIL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "CALL",    :color =&gt; "#CF830D", :regexp =&gt; /CALL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "WAIT",    :color =&gt; "#CF830D", :regexp =&gt; /WAIT[\s,:]+(\w.*)$/i    },
-{ :label =&gt; "DONE", :color =&gt; "#008000", :regexp     =&gt; /DONE[\s,:]+(\w.*)$/  },
-]
+	<string>#!/usr/bin/env ruby  
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
-require "erb"
-include ERB::Util
+
+$myPath = ENV['TM_DIRECTORY'] 
+$tags = [] #user defined contexts
+
+def readContexts(a)
+  # processes contexts.gtd into script  
+  context, tabCommand, tabString, regex, color = a.split(/\|/)
+  $tags.push({:label =&gt; context, :regexp =&gt; regex, :color =&gt; color, :matches =&gt; []})   
+end
 
 def TextMate.file_link (file, line = 0)
   return "txmt://open/?url=file://" +
     file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
     "&amp;amp;line=" + line.to_s
-end
+end  
 
-# setup empty array for per tag results
-$tags.each { |tag| tag[:matches] = [ ] }
+# the contexts.gtd file is read, and converted into $contexts
+file = File.open($myPath+"/contexts.gtd", "r")
+file.each do |line|
+  readContexts(line)
+end 
 
-TextMate.each_text_file do |file|
-  $tags.each do |tag|
-    File.open(file) do |io|
-      io.grep(tag[:regexp]) do |content|
-        results = {
-          :file =&gt; file,
-          :line =&gt; io.lineno,
-          :content =&gt; content
-        }
-        if tag[:label] == "RADAR" then
-          url = "rdar://" + $2
-          results[:match] = html_escape($1) + "&lt;a href=\"" + url + "\"&gt;" + html_escape(url) + "&lt;/a&gt;" + html_escape($3)
-        else
-          results[:match] = html_escape($1)
+# sorting happens     
+todoList = ""
+$tags.each do |tag|  
+  if tag[:label] != "DONE"
+    context = tag[:label]
+    todoList += context + "\n"  
+    matches = 0 
+    myFiles = Dir.entries($myPath)
+    myFiles.each do |fileName|
+      if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd")
+        lineno = 0
+        mFile = File.open(fileName) 
+        mFile.each do |line|
+          lineno = lineno + 1
+          re = /\s/
+          ctask = re.match(line)
+          if ctask.pre_match == context
+            results = (fileName[0..-5] + ":" + lineno.to_s + " - " + ctask.post_match)
+            todoList += results
+            matches += 1
+          end        
         end
-        tag[:matches] &lt;&lt; results
       end
     end
-  end
-end
-
-tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"
-puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result
+    if matches == 0
+      todoList += "none\n"
+    end
+    todoList += "\n"
+  end 
+end      
+File.open($myPath + "/todoList.txt", "w") {|f|
+  f &lt;&lt; todoList}
+puts "GeekTool Updated."
 </string>
 	<key>input</key>
 	<string>none</string>
@@ -63,7 +71,7 @@ puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result
 	<key>name</key>
 	<string>Export to GeekTool</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>text.plain.gtd</string>
 	<key>uuid</key>

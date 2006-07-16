@@ -12,12 +12,12 @@ proj_dir = None
 print """
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="file://%s/Commands/ant.css" />
+        <link rel="stylesheet" type="text/css" href="file://%s/ant.css" />
     </head>
 
     <body>
         <pre>
-""" % (os.environ['TM_BUNDLE_PATH'])
+""" % (os.environ['TM_BUNDLE_SUPPORT'])
 
 sys.stdout.flush()
 

@@ -289,9 +289,10 @@ ENDJS
 									mup.div(:class => 'info') { mup.text(line) }
 								end
 							else
-								status   = match[1]
-								file     = match[2]
-								esc_file = '&quot;' + CGI.escapeHTML(e_sh_js(file).gsub(/(?=")/, '\\')) + '&quot;'
+								status          = match[1]
+								file            = match[2]
+								esc_file        = '&quot;' + CGI.escapeHTML(e_sh_js(file).gsub(/(?=")/, '\\')) + '&quot;'
+								esc_displayname = '&quot;' + CGI.escapeHTML(e_sh_js(shorten_path(file)).gsub(/(?=")/, '\\')) + '&quot;'
 
 								# Skip files that we don't want to know about
 								next if (status == unknown_file_status and ignore_file_pattern =~ file)
@@ -309,12 +310,12 @@ ENDJS
 									# REVERT Column 
 									mup.button_td!((status != unknown_file_status),
 													'Revert',
-													"svn_revert#{"_confirm" unless status == added_file_status}(#{esc_file},#{stdin_line_count},'#{CGI.escapeHTML(shorten_path(file))}'); return false")
+													"svn_revert#{"_confirm" unless status == added_file_status}(#{esc_file},#{stdin_line_count},#{esc_displayname}); return false")
 
 									# REMOVE Column 
 									mup.button_td!((status == missing_file_status),
 													'Remove',
-													"svn_remove(#{esc_file},#{stdin_line_count},'#{CGI.escapeHTML(shorten_path(file))}'); return false")
+													"svn_remove(#{esc_file},#{stdin_line_count},#{esc_displayname}); return false")
 
 									# DIFF Column
 									if file.match(/\.(png|gif|jpe?g|psd|tif?f|zip|rar)$/i)

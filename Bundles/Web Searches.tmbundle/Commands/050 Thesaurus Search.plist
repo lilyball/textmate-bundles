@@ -5,13 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>open http://thesaurus.reference.com/search?q=$TM_CURRENT_WORD</string>
+	<string>#!/usr/bin/env ruby -w
+require 'cgi'
+phrase = ENV['TM_SELECTED_TEXT'] || ENV['TM_CURRENT_WORD']
+%x{ open 'http://thesaurus.reference.com/search?q=#{CGI.escape phrase}' }
+</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>Thesaurus Search</string>
+	<string>Thesaurus</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>

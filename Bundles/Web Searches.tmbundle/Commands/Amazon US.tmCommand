@@ -5,16 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>open http://search.yahoo.com/search?p=$TM_CURRENT_WORD</string>
+	<string>#!/usr/bin/env ruby -w
+require 'cgi'
+phrase = ENV['TM_SELECTED_TEXT'] || ENV['TM_CURRENT_WORD']
+%x{ open 'http://www.amazon.com/s/ref=br_ss_hs/102-8947449-0611313?platform=gurupa&amp;url=index=blended&amp;keywords=#{CGI.escape phrase}' }
+</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
 	<string></string>
 	<key>name</key>
-	<string>Yahoo Search</string>
+	<string>Amazon US</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>
-	<string>DA0A5383-5F16-11D9-B9C3-000D93589AF6</string>
+	<string>06FCE792-06D1-4B75-B3B5-001E8E85BB02</string>
 </dict>
 </plist>

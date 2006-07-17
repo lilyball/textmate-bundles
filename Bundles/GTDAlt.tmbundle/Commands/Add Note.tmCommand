@@ -28,8 +28,8 @@ else
   before = []
   (row-1).times do before &lt;&lt; lines.shift end
   # cl = lines.shift
-  if lines[0] =~ /due:/ then
-    before &lt;&lt; lines[0].slice!(/^.*(?=\sdue:)/)
+  if lines[0] =~ /(?:due|at|from):/ then
+    before &lt;&lt; lines[0].slice!(/^.*(?=\s(?:due|at|from):)/)
   else
     before &lt;&lt; lines.shift
     lines.unshift("")

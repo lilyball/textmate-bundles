@@ -1,7 +1,10 @@
 global the_contexts, the_calendars, the_todo_pairs, the_gtd_data
 set_the_contexts()
 set_the_calendars()
+-- display_calendar_names()
 set_the_gtd_data()
+-- return
+-- display_gtd_data()
 get_the_todo_pairs()
 process_existing_todos()
 -- return result
@@ -34,7 +37,7 @@ on create_new_entry from the_action_rec into the_context
 		set summary of the_todo to action of the_action_rec
 		set temp_date to "not found"
 		try
-			set temp_date to (due of the_action_rec)
+			set temp_date to (duedate of the_action_rec)
 		end try
 		if temp_date is not "not found" then
 			set due date of the_todo to (my get_date(temp_date))
@@ -52,7 +55,7 @@ on update_new_entry for todo_rec from the_action_rec
 		set the_todo to f_todo of todo_rec
 		set temp_date to "not found"
 		try
-			set temp_date to (due of the_action_rec)
+			set temp_date to (duedate of the_action_rec)
 		end try
 		if temp_date is not "not found" then
 			set due date of the_todo to (my get_date(temp_date))
@@ -117,6 +120,11 @@ on process_existing_todos()
 					-- end try
 				end if
 			end tell
+		else  -- No suspect found, this means the todo is redundant.
+			tell application "iCal"
+				-- display dialog "About to delete something!"
+				delete f_todo of todo_pair
+			end tell
 		end if
 	end repeat
 	return suspect_list
@@ -124,6 +132,11 @@ end process_existing_todos
 on set_the_gtd_data()
 	global the_gtd_data
 	set the_gtd_data to run script (do shell script "\"$TM_BUNDLE_SUPPORT/bin/get_lists.rb\"" without altering line endings)
+	-- set test_string to (do shell script "\"/Users/haris/Library/Application Support/TextMate/Bundles/GTDAlt.tmbundle/Support/bin/get_lists.rb\"" without altering line endings)
+	-- tell application "iCal"
+	-- 	display dialog test_string
+	-- end tell
+	set the_gtd_data to run script test_string
 end set_the_gtd_data
 on set_the_calendars() -- Reads calendars from iCal
 	global the_contexts
@@ -177,3 +190,28 @@ on get_date(a_date)
 	set year of d to (item 1 of elements)
 	return d
 end get_date
+
+-- DEBUGGING HANDLERS
+on display_calendar_names()
+	global the_calendars
+	tell application "iCal"
+		set the_list to ""
+		repeat with the_cal in the_calendars
+			set the_list to the_list & name of the_cal & " "
+		end repeat
+		display dialog the_list
+	end tell
+end
+on display_gtd_data()
+	global the_gtd_data
+	set the_string to ""
+	-- repeat with the_rec in the_gtd_data
+	-- 	set the_string to the_string & "\nContext:" & context of the_rec
+	-- 	repeat with the_act in (actions of the_rec)
+	-- 		set the_string to the_string & "\n" & action of the_act
+	-- 	end repeat
+	-- end repeat
+	tell app "iCal"
+		display dialog the_string
+	end tell
+end display_gtd_data

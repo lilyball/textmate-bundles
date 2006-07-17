@@ -2,7 +2,7 @@
 # ENV['TM_GTD_CONTEXT'] = "email home office online writing errand reading someday programming"
 # ENV['TM_GTD_DIRECTORY'] = "/Users/haris/Documents/MyGTD"
 # ENV['TM_BUNDLE_SUPPORT'] = '/Users/haris/Library/Application Support/TextMate/Bundles/GTDAlt.tmbundle/Support'
-require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTD.rb')
+require File.join(File.dirname(__FILE__),'GTD.rb')
 include GTD
 GTD.process_directory
 all_actions = GTD.actions
@@ -16,7 +16,7 @@ for context in contexts
   for act in actions
     it = "{action:\"#{act.name}\""
     unless act.due.nil? then
-      it << ",#{act.due_type || 'due'}:\"#{act.due}\""
+      it << ",#{act.due_type || 'due'}date:\"#{act.due}\""
     end
     unless act.note.nil? or act.note == "" then
       it << ",nte:\"#{act.note}\""

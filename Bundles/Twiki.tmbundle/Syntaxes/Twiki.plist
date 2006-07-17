@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>keyEquivalent</key>
+	<string>^~T</string>
 	<key>name</key>
 	<string>Twiki</string>
 	<key>patterns</key>
@@ -316,8 +318,6 @@
 					<string>markup.bold.twiki</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>((__[\s\w :.\?']*__))</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -331,6 +331,8 @@
 							<string>markup.italic.twiki</string>
 						</dict>
 					</dict>
+					<key>match</key>
+					<string>((__[\s\w :.\?']*__))</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -339,8 +341,6 @@
 					<string>markup.italic.twiki</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>((\=\=[\s\w :.\?']*\=\=))</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -354,6 +354,8 @@
 							<string>markup.raw.fixed.twiki</string>
 						</dict>
 					</dict>
+					<key>match</key>
+					<string>((\=\=[\s\w :.\?']*\=\=))</string>
 				</dict>
 				<dict>
 					<key>match</key>

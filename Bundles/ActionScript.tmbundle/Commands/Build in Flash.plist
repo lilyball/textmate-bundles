@@ -21,7 +21,7 @@
 
 require_cmd flashcommand
 
-SWF="$TM_DIRECTORY/temp.swf"
+SWF="/tmp/temp.swf"
 FLASHCOMMAND=flashcommand
 
 # if a .fla file is selected, build it
@@ -51,7 +51,12 @@ then
 	then
 		open "$FLASH_TEST_URL"
 	else
-		open "$SWF"
+		if [ $FLASH_SWF_SAVE_PATH ]
+		then
+			open "$FLASH_SWF_SAVE_PATH"
+		else
+			open "$SWF"
+		fi
 	fi
 fi</string>
 	<key>fileCaptureRegister</key>

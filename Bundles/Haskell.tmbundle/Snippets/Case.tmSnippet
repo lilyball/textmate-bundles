@@ -3,15 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>module ${1:Main} where
-	$2</string>
+	<string>case ${1:a} of
+	${2:True} -&gt; ${3:$1}
+	${4:otherwise} -&gt; ${0:$1}</string>
 	<key>name</key>
-	<string>Module</string>
+	<string>Case</string>
 	<key>scope</key>
 	<string>source.haskell</string>
 	<key>tabTrigger</key>
-	<string>mod</string>
+	<string>case</string>
 	<key>uuid</key>
-	<string>21646767-DD1B-4BA9-BF3B-15968F8672AB</string>
+	<string>18F43074-566D-4AD9-8DCE-9C26B8516B64</string>
 </dict>
 </plist>

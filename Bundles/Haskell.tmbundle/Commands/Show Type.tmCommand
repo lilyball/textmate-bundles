@@ -3,25 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>: ${TM_HASKELL:=runhaskell}
-require_cmd "$TM_HASKELL"
-
-"$TM_HASKELL" "$TM_FILEPATH" 2&gt;&amp;1 | haskellmate
-
-</string>
+	<string>haskelltype "${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@r</string>
+	<string>^h</string>
 	<key>name</key>
-	<string>Run</string>
+	<string>Show Type</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.haskell</string>
 	<key>uuid</key>
-	<string>3B083BE7-9812-4F06-A758-CCAD9514E797</string>
+	<string>6B723007-D4EE-476B-8282-76230C559D5A</string>
 </dict>
 </plist>

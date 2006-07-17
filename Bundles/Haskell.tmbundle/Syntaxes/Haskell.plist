@@ -13,22 +13,28 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>--</string>
-			<key>end</key>
-			<string>$</string>
+			<key>match</key>
+			<string>`.*`</string>
 			<key>name</key>
-			<string>comment.line.double-dash.haskell</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#block_comment</string>
+			<string>entity.name.function.infix.haskell</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(module|where|import|do|data|type|infixl|infixr|case|of|if|then|else|let|in|instance|deriving|class|newtype|default|hiding|as|qualified)\b</string>
+			<string>\b(otherwise|module|where|import|data|type|case|of|let|in|instance|deriving|class|newtype|default|hiding|as)\b</string>
 			<key>name</key>
-			<string>keyword.haskell</string>
+			<string>keyword.other.haskell</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(infixl|infixr)\b</string>
+			<key>name</key>
+			<string>keyword.operator.haskell</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(do|if|then|else)\b</string>
+			<key>name</key>
+			<string>keyword.control.haskell</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -49,7 +55,7 @@
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escape.haskell</string>
+					<string>constant.character.escaped.haskell</string>
 				</dict>
 			</array>
 		</dict>
@@ -66,71 +72,68 @@
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escape.haskell</string>
+					<string>constant.character.escaped.haskell</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>\b\d*\.?\d+\b</string>
-			<key>name</key>
-			<string>constant.numeric</string>
-		</dict>
-		<dict>
 			<key>begin</key>
-			<string>(?=\s*[\(a-z_][_a-zA-Z0-9'\)]*\s*::)</string>
+			<string>^(?=\s*[\(a-z][a-zA-Z0-9'\)]*\s*::)</string>
 			<key>end</key>
-			<string>(?=--)|$</string>
+			<string>$</string>
 			<key>name</key>
 			<string>meta.function.initial.haskell</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
-					<string>[\(a-z_][a-zA-Z0-9_'\)]*(?=\s*::)</string>
+					<string>[\(a-z][a-zA-Z0-9'\)]*(?=\s*::)</string>
 					<key>name</key>
 					<string>entity.name.function.haskell</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>[\[\]a-zA-Z0-9_,()]+</string>
+					<string>[\[\]a-zA-Z0-9,()]+</string>
 					<key>name</key>
-					<string>storage.type.haskell</string>
+					<string>variable.parameter.haskell</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(`[a-z_][a-zA-Z0-9_']*`|(\||==+|[^= ]=+|-|\+|\*|%|#|@|\!|~|&lt;|&gt;|:|\^|\$)+)</string>
+			<string>\b[A-Z]\w*\b</string>
 			<key>name</key>
-			<string>keyword.operator.haskell</string>
+			<string>constant.other.haskell</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b[_A-Z][a-zA-Z0-9_]*\b</string>
+			<string>--.*</string>
 			<key>name</key>
-			<string>entity.name.class</string>
+			<string>comment.line.double-dash.haskell</string>
 		</dict>
-	</array>
-	<key>repository</key>
-	<dict>
-		<key>block_comment</key>
 		<dict>
 			<key>begin</key>
-			<string>\{-</string>
+			<string>{-</string>
 			<key>end</key>
-			<string>-\}</string>
+			<string>-}</string>
 			<key>name</key>
 			<string>comment.block.haskell</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#block_comment</string>
-				</dict>
-			</array>
 		</dict>
-	</dict>
+		<dict>
+			<key>begin</key>
+			<string>::</string>
+			<key>end</key>
+			<string>$|(?=[;}])</string>
+			<key>name</key>
+			<string>storage.type.haskell</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(abs|acos|acosh|all|and|any|appendFile|applyM|asTypeOf|asin|asinh|atan|atan2|atanh|break|catch|ceiling|compare|concat|concatMap|const|cos|cosh|curry|cycle|decodeFloat|div|divMod|drop|dropWhile|elem|encodeFloat|enumFrom|enumFromThen|enumFromThenTo|enumFromTo|error|even|exp|exponent|fail|filter|flip|floatDigits|floatRadix|floatRange|floor|fmap|foldl|foldl1|foldr|foldr1|fromEnum|fromInteger|fromIntegral|fromRational|fst|gcd|getChar|getContents|getLine|head|id|init|interact|ioError|isDenormalized|isIEEE|isInfinite|isNaN|isNegativeZero|iterate|last|lcm|length|lex|lines|log|logBase|lookup|map|mapM|mapM_|max|maxBound|maximum|maybe|min|minBound|minimum|mod|negate|not|notElem|null|odd|or|otherwise|pi|pred|print|product|properFraction|putChar|putStr|putStrLn|quot|quotRem|read|readFile|readIO|readList|readLn|readParen|reads|readsPrec|realToFrac|recip|rem|repeat|replicate|return|reverse|round|scaleFloat|scanl|scanl1|scanr|scanr1|seq|sequence|sequence_|show|showChar|showList|showParen|showString|shows|showsPrec|significand|signum|sin|sinh|snd|span|splitAt|sqrt|subtract|succ|sum|tail|take|takeWhile|tan|tanh|toEnum|toInteger|toRational|truncate|uncurry|undefined|unlines|until|unwords|unzip|unzip3|userError|words|writeFile|zip|zip3|zipWith|zipWith3)\b</string>
+			<key>name</key>
+			<string>entity.name.function.builtin.prelude.haskell</string>
+		</dict>
+	</array>
 	<key>scopeName</key>
 	<string>source.haskell</string>
 	<key>uuid</key>

@@ -25,17 +25,17 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>line.project.begin.gtdalt</string>
+					<string>meta.line.project.begin.gtdalt</string>
 				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.project.begin.gtdalt</string>
+					<string>keyword.control.project.begin.gtdalt</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.project.title.gtdalt</string>
+					<string>entity.name.class.project.title.gtdalt</string>
 				</dict>
 				<key>3</key>
 				<dict>
@@ -50,12 +50,12 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>line.project.end.gtdalt</string>
+					<string>meta.line.project.end.gtdalt</string>
 				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.project.end.gtdalt</string>
+					<string>keyword.control.project.end.gtdalt</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -74,27 +74,27 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.action.context.gtdalt</string>
+					<string>storage.type.action.context.gtdalt</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>constant.action.title.gtdalt</string>
+					<string>constant.other.action.title.gtdalt</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>support.action.note.gtdalt</string>
+					<string>support.other.action.note.gtdalt</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>string.action.note.gtdalt</string>
+					<string>keyword.operator.action.due.gtdalt</string>
 				</dict>
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>variable.timestamp.action.due.gtdalt</string>
+					<string>string.quoted.other.timestamp.action.due.gtdalt</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -105,20 +105,15 @@
 		<dict>
 			<key>captures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>comment.action.completed.gtdalt</string>
+					<string>comment.line.number-sign.action.completed.gtdalt</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>variable.timestamp.action.completed.gtdalt</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>comment.action.completed.gtdalt</string>
+					<string>string.quoted.other.timestamp.action.completed.gtdalt</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -132,7 +127,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.note.gtdalt</string>
+					<string>support.other.note.gtdalt</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -152,22 +147,22 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.timestamp.action.archived.gtdalt</string>
+					<string>string.quoted.other.timestamp.action.archived.gtdalt</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>support.project.action.archived.gtdalt</string>
+					<string>support.other.project.action.archived.gtdalt</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>storage.context.action.archived.gtdalt</string>
+					<string>storage.type.context.action.archived.gtdalt</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>comment.action.archived.gtdalt</string>
+					<string>comment.line.slash.action.archived.gtdalt</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -181,12 +176,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.timestamp.project.archived.gtdalt</string>
+					<string>string.quoted.other.timestamp.project.archived.gtdalt</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>support.project.archived.gtdalt</string>
+					<string>support.other.project.archived.gtdalt</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -198,7 +193,7 @@
 			<key>match</key>
 			<string>^#\s+.*$</string>
 			<key>name</key>
-			<string>comment.gtdalt</string>
+			<string>comment.line.number-sign.generic.gtdalt</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

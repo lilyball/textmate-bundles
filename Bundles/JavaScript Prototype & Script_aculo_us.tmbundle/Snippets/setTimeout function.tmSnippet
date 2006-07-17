@@ -3,16 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:method_name}: function(${3:attribute}){
-	$0
-}${10:,}</string>
+	<string>setTimeout((function() {$0})${2:.bind(this)}, ${1:10});</string>
 	<key>name</key>
-	<string>Object Method</string>
+	<string>setTimeout function</string>
 	<key>scope</key>
-	<string>source.js</string>
+	<string>source.js.prototype</string>
 	<key>tabTrigger</key>
-	<string>:f</string>
+	<string>timeout</string>
 	<key>uuid</key>
-	<string>77065D69-742A-4FF0-9A41-AD211DFBE72F</string>
+	<string>D4BB5E49-42B4-40A7-B21C-4D4A48BF9E97</string>
 </dict>
 </plist>

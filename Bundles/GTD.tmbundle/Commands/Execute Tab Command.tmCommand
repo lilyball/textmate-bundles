@@ -45,7 +45,7 @@ def myParse tabCommand
   $contexts.each do |tag|
     re = tag[:context]
     if (tabCommand == re) and (found == 0) 
-      puts tag[:tabString]
+      print tag[:tabString]
       found = 1
     end
   end

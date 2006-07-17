@@ -224,6 +224,28 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>~ Meta Group Assertion Regexp </string>
+			<key>scope</key>
+			<string>meta.group.assertion.regexp </string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#0086FF33</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>~ Meta Assertion</string>
+			<key>scope</key>
+			<string>meta.assertion, meta.group.assertion keyword.control.group.regexp</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#0086FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>~ Number</string>
 			<key>scope</key>
 			<string>constant.numeric</string>
@@ -238,6 +260,17 @@
 			<string>~ Character constant</string>
 			<key>scope</key>
 			<string>constant.character</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#86FF00</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>meta.brace.erb.return-value</string>
+			<key>scope</key>
+			<string>meta.brace.erb.return-value</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -607,10 +640,8 @@
 			<string>support.function</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#3C008033</string>
 				<key>foreground</key>
-				<string>#7900FF</string>
+				<string>#C733FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -654,6 +685,17 @@
 				<string>#3C008033</string>
 				<key>foreground</key>
 				<string>#8083FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>source.regexp keyword</string>
+			<key>scope</key>
+			<string>source.regexp keyword.operator</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF0086</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1478,6 +1520,17 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>◊ meta.brace.erb</string>
+			<key>scope</key>
+			<string>meta.brace.erb</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>◊ Source String Source</string>
 			<key>scope</key>
 			<string>source string source</string>
@@ -1774,9 +1827,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>source.ruby.embedded.source.brace</string>
+			<string>Misc Braces</string>
 			<key>scope</key>
-			<string>source.ruby.embedded.source.brace</string>
+			<string>meta.brace.erb, source.ruby.embedded.source.brace, keyword.operator.dictionary.tm-language-def</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -1789,7 +1842,7 @@
 			<key>name</key>
 			<string>meta.brace.curly</string>
 			<key>scope</key>
-			<string>meta.brace.curly </string>
+			<string>meta.brace.curly</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -1802,13 +1855,26 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Object Delimiters</string>
+			<key>scope</key>
+			<string>meta.delimiter.object.colon, meta.group.braces.curly meta.delimiter.object -(meta.group.braces.curly meta.group meta.delimiter.object)</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#0C823B</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>meta.brace.square</string>
 			<key>scope</key>
-			<string>meta.brace.square</string>
+			<string>meta.brace.square, meta.group.braces.square meta.delimiter.object -(meta.group.braces.square meta.group.braces meta.delimiter)</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#803D0033</string>
+				<string>#803D001A</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
@@ -1834,15 +1900,30 @@
 			<key>name</key>
 			<string>meta.brace.round</string>
 			<key>scope</key>
-			<string>meta.brace.round</string>
+			<string>meta.brace.round, meta.group.braces.round meta.delimiter.object -(meta.group.braces.round meta.group.braces meta.delimiter)</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#80004333</string>
+				<string>#8000431A</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
 				<string>#800043</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>meta.brace.curly.function</string>
+			<key>scope</key>
+			<string>meta.brace.curly.function</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#3C008033</string>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#8083FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1885,11 +1966,11 @@
 			<key>name</key>
 			<string>º meta.group.braces 1</string>
 			<key>scope</key>
-			<string>meta.group.braces, meta.block.slate , text.xml.strict meta.tag, meta.group.braces</string>
+			<string>meta.group.braces, meta.block.slate, text.xml.strict meta.tag</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1900,7 +1981,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1911,7 +1992,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1922,7 +2003,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1933,7 +2014,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1944,7 +2025,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1955,7 +2036,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1966,7 +2047,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1977,7 +2058,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC05</string>
+				<string>#CCCCCC08</string>
 			</dict>
 		</dict>
 		<dict>

@@ -3,21 +3,33 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveActiveFile</string>
 	<key>command</key>
-	<string># This command deletes a task.</string>
+	<string>#!/usr/bin/env ruby
+
+myFile = ENV['TM_SELECTED_FILE']
+
+myText = File.open(myFile)
+re = /\s/
+myText.each do |line|
+  myTest = re.match(line)
+  if (myTest.pre_match != "DONE" and myTest.pre_match.length &gt; 0)
+    puts line
+  end
+end  
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~C</string>
 	<key>name</key>
 	<string>Remove</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>replaceDocument</string>
 	<key>scope</key>
 	<string>text.plain.gtd</string>
-	<key>tabTrigger</key>
-	<string>r</string>
 	<key>uuid</key>
 	<string>9D8893D0-2841-4CFC-816F-E9B658F96B04</string>
 </dict>

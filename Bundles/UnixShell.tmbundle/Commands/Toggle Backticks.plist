@@ -5,31 +5,27 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>NAME=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
-if [[ -z "$NAME" ]]; then
-	NAME='${1:function_name}'
-fi
+	<string>#!/usr/bin/env ruby
 
-cat &lt;&lt;SNIPPET
-function $NAME {
-	\${0:#statements}
-}
-SNIPPET</string>
+print case str = STDIN.read
+  when /\A`(.*)`\z/m     then '$(' + $1 + ')'
+  when /\A\$\((.*)\)\z/m then '`' + $1 + '`'
+  else str
+end
+</string>
 	<key>fallbackInput</key>
-	<string>word</string>
+	<string>scope</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>$</string>
+	<string>^"</string>
 	<key>name</key>
-	<string>New Function</string>
+	<string>Toggle Backticks</string>
 	<key>output</key>
-	<string>insertAsSnippet</string>
+	<string>replaceSelectedText</string>
 	<key>scope</key>
-	<string>source.shell</string>
-	<key>tabTrigger</key>
-	<string>fun</string>
+	<string>source.shell string.interpolated</string>
 	<key>uuid</key>
-	<string>74ED8466-F6E5-48F8-8063-E252C2A36353</string>
+	<string>3602A889-81F7-422B-BC0E-3FB0543CEA9C</string>
 </dict>
 </plist>

@@ -43,7 +43,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.tt</string>
+					<string>keyword.control.tt</string>
 				</dict>
 			</dict>
 			<key>patterns</key>
@@ -96,7 +96,7 @@
 			<key>match</key>
 			<string>\b([A-Za-z0-9_]+)</string>
 			<key>name</key>
-			<string>string</string>
+			<string>string.unquoted.tt</string>
 		</dict>
 		<key>string-double-quoted</key>
 		<dict>
@@ -199,10 +199,21 @@
 					<string>comment.line.number-sign.tt</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.double.filename.tt</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.other.filename.tt</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\b"?([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+"?\b</string>
-					<key>name</key>
-					<string>string.filename.tt</string>
+					<string>("([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+")|(\b([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+\b)</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -216,13 +227,13 @@
 					<key>match</key>
 					<string>\$?\b[a-z]([a-z0-9_]\.?)*\b</string>
 					<key>name</key>
-					<string>variable.tt</string>
+					<string>variable.other.tt</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(?:IF|END|BLOCK|INCLUDE|ELSE|ELSIF|SWITCH|CASE|UNLESS|WRAPPER|FOR|FOREACH|LAST|NEXT|USE|WHILE|FILTER|IN|GET|CALL|SET|INSERT|MACRO|PERL|TRY|CATCH|THROW|FINAL|STOP|META|DEBUG|RAWPERL)\b</string>
 					<key>name</key>
-					<string>keyword.tt</string>
+					<string>keyword.control.tt</string>
 				</dict>
 				<dict>
 					<key>match</key>

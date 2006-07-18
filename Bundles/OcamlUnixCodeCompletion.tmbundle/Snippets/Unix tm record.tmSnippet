@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>{ Unix.tm_sec  = ${1:secs}
+; Unix.tm_min  = ${2:mins}
+; Unix.tm_hour = ${3:hour}
+; Unix.tm_mday = ${4:day of month}
+; Unix.tm_mon  = ${5:month}
+; Unix.tm_year = ${6:year}
+; Unix.tm_wday = ${7:day of week}
+; Unix.tm_yday = ${8:day of year}
+; Unix.tm_isdt = ${9:true}
+}$0</string>
+	<key>name</key>
+	<string>Unix tm record</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
+	<key>tabTrigger</key>
+	<string>Unix.tm</string>
+	<key>uuid</key>
+	<string>9700FB51-970E-414D-A49C-5ED4485621F2</string>
+</dict>
+</plist>

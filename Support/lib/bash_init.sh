@@ -69,7 +69,7 @@ rescan_project () {
 # raw output to show as such in the HTML output
 pre () {
 	echo -n '<pre style="word-wrap: break-word;">'
-	perl -pe 's/&/&amp;/g; s/</&lt;/g; s/>/&gt;/g; s/$\\n/<br>/'
+	perl -pe '$| = 1; s/&/&amp;/g; s/</&lt;/g; s/>/&gt;/g; s/$\\n/<br>/'
 	echo '</pre>'
 }
 

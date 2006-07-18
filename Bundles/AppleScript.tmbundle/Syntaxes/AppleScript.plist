@@ -80,6 +80,112 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>begin</key>
+					<string>^\s*(script)\s+(\w+)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.script.applescript</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.script.applescript</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>^\s*(end script)</string>
+					<key>name</key>
+					<string>meta.script.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(on)\s+(\w+)\((?:(\w+(?:,(?:\w+))*))?\)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.on.applescript</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.handler.applescript</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.handler.applescript</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>^\s*(end) (\2)</string>
+					<key>name</key>
+					<string>meta.handler.with-parentheses.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(on)\s+(\w+)(?=\s+(above|against|apart from|around|aside from|at|below|beneath|beside|between|by|for|from|instead of|into|on|onto|out of|over|thru|under)\s+)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.on.applescript</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.handler.applescript</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>^\s*(end) (\2)</string>
+					<key>name</key>
+					<string>meta.handler.prepositional.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.control.preposition.applescript</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>variable.parameter.handler.applescript</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\b(above|against|apart from|around|aside from|at|below|beneath|beside|between|by|for|from|instead of|into|on|onto|out of|over|thru|under)\s+(\w+)\b</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
 					<key>match</key>
 					<string>--.*$\n?</string>
 					<key>name</key>
@@ -115,13 +221,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(on error|try|to|on|tell|script|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try|script)|end|my|where|whose|considering|ignoring|global|local|exit|continue|set|copy|put)\b</string>
+					<string>\b(on error|try|to|on|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|end|my|where|whose|considering|ignoring|global|local|exit|continue|set|copy|put)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(every|some|index|named|from|to|through|thru|before|(in )?front of|after|(in )?back of|beginning of|end of|in|of|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|\d+(st|nd|rd|th)|last|front|back|middle)\b</string>
+					<string>\b(every|some|index|named|from|to|through|thru|before|(in )?front of|after receiving|after|(in )?back of|beginning of|end of|in|of|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|\d+(st|nd|rd|th)|last|front|back|middle)\b</string>
 					<key>name</key>
 					<string>keyword.control.reference.applescript</string>
 				</dict>

@@ -1,3 +1,4 @@
+property parent : application "iCal"
 global the_contexts, the_calendars, the_todo_pairs, the_gtd_data
 set_the_contexts()
 set_the_calendars()

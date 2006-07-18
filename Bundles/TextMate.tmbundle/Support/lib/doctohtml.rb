@@ -22,7 +22,7 @@ def find_theme(uuid)
 
 	theme_dirs.each do |theme_dir|
 		if File.exists? theme_dir
-			themes = Dir.entries(theme_dir).find_all { |theme| theme =~ /.+\.tmTheme$/ }
+			themes = Dir.entries(theme_dir).find_all { |theme| theme =~ /.+\.(tmTheme|plist)$/ }
 			themes.each do |theme|
 				plist = PropertyList.load(File.open("#{theme_dir}/#{theme}"))
 				return plist if plist["uuid"] == uuid

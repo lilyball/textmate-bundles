@@ -8,6 +8,8 @@
 	<string>#!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH']+"/lib/progress.rb"
 TextMate.call_with_progress(:title=&gt; "Synchronizing with iCal" , :message =&gt;"This may take a while...") {
+#`osascript "$TM_BUNDLE_SUPPORT/bin/gtdalt_ical_synchronization.applescript"`
+
 `osascript "$TM_BUNDLE_SUPPORT/bin/gtdalt_ical_synchronization.scpt"`
 }</string>
 	<key>input</key>

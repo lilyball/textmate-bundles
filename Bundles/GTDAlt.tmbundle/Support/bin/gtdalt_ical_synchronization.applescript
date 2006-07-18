@@ -4,9 +4,9 @@ set_the_calendars()
 -- display_calendar_names()
 set_the_gtd_data()
 -- return
--- display_gtd_data()
 get_the_todo_pairs()
 process_existing_todos()
+-- display_gtd_data()
 -- return result
 set_the_gtd_data() -- Need to reread things to not have completed items show up again.
 get_the_todo_pairs() -- Need to reread things to not have completed items show up again.
@@ -99,7 +99,13 @@ on process_existing_todos()
 	global the_contexts, the_calendars, the_todo_pairs, the_gtd_data
 	local todo_pair, suspect
 	set suspect_list to {}
+	-- tell application "iCal"
+	-- 	display dialog "processing todos"
+	-- end tell
 	set the_command to do shell script "echo -n $TM_BUNDLE_SUPPORT"
+	-- tell application "iCal"
+	-- 	display dialog "path: " & the_command
+	-- end tell
 	repeat with todo_pair in the_todo_pairs
 		set suspect to find_todo_in_gtd(contents of f_todo of todo_pair)
 		if suspect is not "not found" then
@@ -113,7 +119,9 @@ on process_existing_todos()
 				if temp_test is true then
 					set todo_to_delete to f_todo of todo_pair
 					-- display dialog "Will delete" & summary of todo_to_delete
-					set end of suspect_list to do shell script "\"" & the_command & "/bin/mark_completed.rb\" \"" & (action of suspect) & "\" \"" & (file of suspect) & "\" " & (line of suspect)
+					set the_string to "\"" & the_command & "/bin/mark_completed.rb\" \"" & (action of suspect) & "\" \"" & (file of suspect) & "\" " & (line of suspect)
+					-- display dialog the_string
+					set end of suspect_list to do shell script the_string
 					-- return todo_to_delete
 					delete todo_to_delete
 					-- set end of suspect_list to todo_to_delete
@@ -131,12 +139,18 @@ on process_existing_todos()
 end process_existing_todos
 on set_the_gtd_data()
 	global the_gtd_data
-	set the_gtd_data to run script (do shell script "\"$TM_BUNDLE_SUPPORT/bin/get_lists.rb\"" without altering line endings)
+	-- tell application "iCal"
+	-- 	display dialog "reading data"
+	-- end tell
+	set test_string to (do shell script "\"$TM_BUNDLE_SUPPORT/bin/get_lists.rb\"" without altering line endings)
 	-- set test_string to (do shell script "\"/Users/haris/Library/Application Support/TextMate/Bundles/GTDAlt.tmbundle/Support/bin/get_lists.rb\"" without altering line endings)
 	-- tell application "iCal"
 	-- 	display dialog test_string
 	-- end tell
 	set the_gtd_data to run script test_string
+	-- tell application "iCal"
+	-- 	display dialog "just read data"
+	-- end tell
 end set_the_gtd_data
 on set_the_calendars() -- Reads calendars from iCal
 	global the_contexts
@@ -205,12 +219,12 @@ end
 on display_gtd_data()
 	global the_gtd_data
 	set the_string to ""
-	-- repeat with the_rec in the_gtd_data
-	-- 	set the_string to the_string & "\nContext:" & context of the_rec
-	-- 	repeat with the_act in (actions of the_rec)
-	-- 		set the_string to the_string & "\n" & action of the_act
-	-- 	end repeat
-	-- end repeat
+	repeat with the_rec in the_gtd_data
+		set the_string to the_string & "\nContext:" & context of the_rec
+		repeat with the_act in (actions of the_rec)
+			set the_string to the_string & "\n" & action of the_act
+		end repeat
+	end repeat
 	tell app "iCal"
 		display dialog the_string
 	end tell

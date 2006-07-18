@@ -1,7 +1,16 @@
-{
-    content = "Format.set_ellipsis_text ${1:txt}"; 
-    name = "Format.set_ellipsis_text"; 
-    tabTrigger = "Format."; 
-    uuid = "28E5FCE1-753B-11D9-81F4-000A95AFE286"; 
-    scope = "source.ocaml";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Format.set_ellipsis_text ${1:"${2:txt}"} $0</string>
+	<key>name</key>
+	<string>Format.set_ellipsis_text</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
+	<key>tabTrigger</key>
+	<string>Format.</string>
+	<key>uuid</key>
+	<string>28E5FCE1-753B-11D9-81F4-000A95AFE286</string>
+</dict>
+</plist>

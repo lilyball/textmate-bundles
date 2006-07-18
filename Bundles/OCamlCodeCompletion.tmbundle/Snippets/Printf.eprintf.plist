@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>Printf.eprintf "${1:format}" ${2:args}</string>
+	<string>Printf.eprintf ${1:"${2:format}"} ${3:args}$0</string>
 	<key>name</key>
 	<string>Printf.eprintf</string>
 	<key>scope</key>

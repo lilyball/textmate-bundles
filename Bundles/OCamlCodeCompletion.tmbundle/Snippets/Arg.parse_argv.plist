@@ -1,7 +1,16 @@
-{
-    content = "Arg.parse_argv ${1:~current args} ${2:speclist} ${3:anon_fun} ${5:usage_msg}"; 
-    name = "Arg.parse_argv"; 
-    tabTrigger = "Arg."; 
-    uuid = "21406DD8-7530-11D9-87B3-000A95AFE286"; 
-    scope = "source.ocaml";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Arg.parse_argv ${1:~current:${2:Arg.current}} ${3:args_array} ${4:speclist} ${5:anon_fun} ${6:usage_msg}$0</string>
+	<key>name</key>
+	<string>Arg.parse_argv</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
+	<key>tabTrigger</key>
+	<string>Arg.</string>
+	<key>uuid</key>
+	<string>21406DD8-7530-11D9-87B3-000A95AFE286</string>
+</dict>
+</plist>

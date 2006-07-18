@@ -8,7 +8,8 @@ require "textmate"
 FONT_MAP = {
 	/\bcourier\b/i => 'Courier, "MS Courier New"',
 	/\bbitstream.*mono\b/i => '"Bitstream Vera Sans Mono"',
-	/\bandale\b/i => '"Andale Mono"'
+	/\bandale\b/i => '"Andale Mono"',
+	/\bDejaVuSansMono\b/i => '"DejaVu Sans Mono"'
 }
 
 # Search heuristic is based on the Theme Builder bundle's
@@ -108,7 +109,7 @@ def generate_stylesheet_from_theme(theme_class = nil)
 		if (style = setting['settings']['fontStyle'])
 			theme_styles << "\tfont-style: italic;\n" if style =~ /\bitalic\b/i
 			theme_styles << "\ttext-decoration: underline;\n" if style =~ /\bunderline\b/i
-			theme_styles << "\tfont-weight: bold\n" if style =~ /\bbold\b/i
+			theme_styles << "\tfont-weight: bold;\n" if style =~ /\bbold\b/i
 		end
 		if (color = setting['settings']['background'])
 			color = to_rgba(color) if color =~ /#.{8}/
@@ -143,7 +144,7 @@ body {
 
 pre.textmate-source {
 	margin: 0;
-	padding: 0;
+	padding: 0 0 0 2px;
 	font-family: #{font_name}, monospace;
 	font-size: #{font_size}px;
 	line-height: 1.3em;

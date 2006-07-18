@@ -129,7 +129,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>^\s*(end) (\2)</string>
+					<string>^\s*(end)(?: (\2))?\s*$</string>
 					<key>name</key>
 					<string>meta.handler.with-parentheses.applescript</string>
 					<key>patterns</key>
@@ -157,7 +157,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>^\s*(end) (\2)</string>
+					<string>^\s*(end)(?: (\2))?\s*$</string>
 					<key>name</key>
 					<string>meta.handler.prepositional.applescript</string>
 					<key>patterns</key>

@@ -116,22 +116,32 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;((?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+))(?=(\s[^&gt;]*)?&gt;&lt;/\1&gt;)</string>
+			<string>&lt;((?:([-_a-zA-Z0-9]+)((:)))?([-_a-zA-Z0-9:]+))(?=(\s[^&gt;]*)?&gt;&lt;/\1&gt;)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.other.namespace.xml</string>
+					<string>entity.name.tag.namespace.xml</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.xml</string>
 				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.namespace-separator.xml</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.localname.xml</string>
+				</dict>
 			</dict>
 			<key>end</key>
-			<string>&gt;(&lt;)/(?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)</string>
+			<string>&gt;(&lt;)/(?:([-_a-zA-Z0-9]+)((:)))?([-_a-zA-Z0-9:]+)&gt;</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -142,12 +152,22 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.other.namespace.xml</string>
+					<string>entity.name.tag.namespace.xml</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.xml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.namespace-separator.xml</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.localname.xml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -162,18 +182,28 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;/?(?:([-_a-zA-Z0-9]+):)?([-_a-zA-Z0-9:]+)</string>
+			<string>&lt;/?(?:([-_a-zA-Z0-9]+)((:)))?([-_a-zA-Z0-9:]+)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.other.namespace.xml</string>
+					<string>entity.name.tag.namespace.xml</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.xml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.namespace-separator.xml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.localname.xml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -271,16 +301,26 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.other.namespace.xml</string>
+							<string>entity.other.attribute-name.namespace.xml</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>entity.other.attribute-name.xml</string>
 						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.namespace-separator.xml</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.localname.xml</string>
+						</dict>
 					</dict>
 					<key>match</key>
-					<string> (?:([-_a-zA-Z0-9]+):)?([_a-zA-Z-]+)</string>
+					<string> (?:([-_a-zA-Z0-9]+)((:)))?([_a-zA-Z-]+)=</string>
 				</dict>
 				<dict>
 					<key>include</key>

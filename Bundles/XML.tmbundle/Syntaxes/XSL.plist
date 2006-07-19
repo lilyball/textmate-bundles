@@ -40,16 +40,26 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.other.namespace.xml</string>
+							<string>entity.other.attribute-name.namespace.xml</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
+							<string>entity.other.attribute-name.localname.xml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
 							<string>entity.other.attribute-name.xml</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.namespace-separator.xml</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string> (?:([-_a-zA-Z0-9]+):)?([a-zA-Z-]+)</string>
+					<string> (?:([-_a-zA-Z0-9]+)((:)))?([a-zA-Z-]+)</string>
 				</dict>
 				<dict>
 					<key>include</key>

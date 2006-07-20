@@ -37,6 +37,82 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>keyword.control.perl</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.class</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>comment.line.number-sign.perl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(package)\s+(\S+)\s*(#.*)?$\n?</string>
+			<key>name</key>
+			<string>meta.class.perl</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sub.perl</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.perl</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.perl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(sub)\s+([-a-zA-Z0-9_]+)\s*(?:\((.*?)\))?</string>
+			<key>name</key>
+			<string>meta.function.perl</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^(?=(\t| {4}))</string>
+			<key>end</key>
+			<string>(?=[^\t\s])</string>
+			<key>name</key>
+			<string>meta.leading-tabs</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.odd-tab</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.even-tab</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\t| {4})(\t| {4})?</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
 					<string>support.function.perl</string>
 				</dict>
 			</dict>
@@ -76,30 +152,6 @@
 			<string>\b(my|our|local)\b</string>
 			<key>name</key>
 			<string>storage.modifier.perl</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.sub.perl</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.perl</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>variable.parameter.perl</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>^\s*(sub)\s+([-a-zA-Z0-9_]+)\s*(?:\((.*?)\))?</string>
-			<key>name</key>
-			<string>meta.function.perl</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -533,10 +585,21 @@
 	<dict>
 		<key>line_comment</key>
 		<dict>
-			<key>match</key>
-			<string>#.*$\n?</string>
-			<key>name</key>
-			<string>comment.line.number-sign.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>^#.*$\n?</string>
+					<key>name</key>
+					<string>comment.block.number-sign.perl</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>#.*$\n?</string>
+					<key>name</key>
+					<string>comment.line.number-sign.perl</string>
+				</dict>
+			</array>
 		</dict>
 		<key>nested_braces</key>
 		<dict>

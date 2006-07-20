@@ -67,9 +67,10 @@
 	} while (0)
 #endif
 
-VALUE mPlist;
-VALUE ePropertyListError;
-VALUE timeEpoch;
+static VALUE mPlist;
+static VALUE timeEpoch;
+static VALUE ePropertyListError;
+
 static VALUE id_gm;
 static VALUE id_plus;
 static VALUE id_minus;
@@ -564,6 +565,7 @@ void Init_plist() {
 	ePropertyListError = rb_define_class("PropertyListError", rb_eStandardError);
 	id_gm = rb_intern("gm");
 	timeEpoch = rb_funcall(rb_cTime, id_gm, 1, INT2FIX(2001));
+	rb_define_const(mPlist, "EPOCH", timeEpoch);
 	id_plus = rb_intern("+");
 	id_minus = rb_intern("-");
 	id_read = rb_intern("read");

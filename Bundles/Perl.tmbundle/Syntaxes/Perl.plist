@@ -200,6 +200,60 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>(&lt;&lt; *"CSS"\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.doublequote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.css.embedded.perl</string>
+			<key>end</key>
+			<string>(^CSS$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.css</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt; *"JavaScript"\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.doublequote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.js.embedded.perl</string>
+			<key>end</key>
+			<string>(^JavaScript$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.js</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>(&lt;&lt; *"SQL"\b).*\n?</string>
 			<key>captures</key>
 			<dict>
@@ -268,6 +322,52 @@
 				<dict>
 					<key>include</key>
 					<string>text.html.basic</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt; *'CSS'\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.quote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.css.embedded.perl</string>
+			<key>end</key>
+			<string>(^CSS$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.css</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt; *'JavaScript'\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.quote.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.js.embedded.perl</string>
+			<key>end</key>
+			<string>(^JavaScript$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.js</string>
 				</dict>
 			</array>
 		</dict>

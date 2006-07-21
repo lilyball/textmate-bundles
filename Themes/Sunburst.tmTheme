@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>comment</key>
+	<string>(π) Soryu, 2005</string>
 	<key>name</key>
 	<string>Sunburst</string>
 	<key>settings</key>
@@ -16,7 +18,7 @@
 				<key>foreground</key>
 				<string>#F8F8F8</string>
 				<key>invisibles</key>
-				<string>#FFFFFF40</string>
+				<string>#CAE2FB3D</string>
 				<key>lineHighlight</key>
 				<string>#FFFFFF0D</string>
 				<key>selection</key>
@@ -218,7 +220,7 @@
 			<key>name</key>
 			<string>♦ String.regexp.«special»</string>
 			<key>scope</key>
-			<string>string.regexp constant.character.escape, string.regexp source.ruby.embedded, string.regexp string.regexp.arbitrary-repitition</string>
+			<string>string.regexp constant.character.escaped, string.regexp source.ruby.embedded, string.regexp string.regexp.arbitrary-repitition</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -266,7 +268,7 @@
 			<key>name</key>
 			<string>c C/C++ Preprocessor Line</string>
 			<key>scope</key>
-			<string>meta.preprocessor.c</string>
+			<string>other.preprocessor.c</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -277,7 +279,7 @@
 			<key>name</key>
 			<string>c C/C++ Preprocessor Directive</string>
 			<key>scope</key>
-			<string>meta.preprocessor.c keyword</string>
+			<string>other.preprocessor.c entity</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -312,7 +314,7 @@
 			<key>name</key>
 			<string>✘ Doctype/XML Processing</string>
 			<key>scope</key>
-			<string>meta.sgml.html meta.doctype, meta.sgml.html meta.doctype entity, meta.sgml.html meta.doctype string, meta.xml-processing, meta.xml-processing entity, meta.xml-processing string</string>
+			<string>declaration.sgml.html declaration.doctype, declaration.sgml.html declaration.doctype entity, declaration.sgml.html declaration.doctype string, declaration.xml-processing, declaration.xml-processing entity, declaration.xml-processing string</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -345,7 +347,7 @@
 			<key>name</key>
 			<string>✘ Namespaces</string>
 			<key>scope</key>
-			<string>entity.name.tag.namespace, entity.other.attribute-name.namespace</string>
+			<string>entity.other.namespace</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -507,109 +509,162 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Notes: Reference</string>
-			<key>scope</key>
-			<string>reference.other.notes</string>
+			<string>--------------------------------</string>
 			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#6969FA</string>
-			</dict>
+			<dict/>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Notes: Sections</string>
+			<string>Markup: Italic</string>
 			<key>scope</key>
-			<string>sections.main.notes</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold italic</string>
-				<key>foreground</key>
-				<string>#F2913D</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Notes: Separators</string>
-			<key>scope</key>
-			<string>separators.other.notes</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#4D4D4D</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Notes: Headers</string>
-			<key>scope</key>
-			<string>headers.main.notes</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#5AD1814D</string>
-				<key>fontStyle</key>
-				<string>bold</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Notes: Events</string>
-			<key>scope</key>
-			<string>events.other.notes</string>
+			<string>markup.italic</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
 				<string>italic</string>
 				<key>foreground</key>
-				<string>#6F6F6F</string>
+				<string>#E9C062</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Notes: Green</string>
+			<string>Markup: Bold</string>
 			<key>scope</key>
-			<string>references.other.notes, comments.other.notes, added.version.other.notes</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#55D131</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Notes: Tool Tip</string>
-			<key>scope</key>
-			<string>tool-tip.other.notes</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#8DC988</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Notes: Important</string>
-			<key>scope</key>
-			<string>important.main.notes</string>
+			<string>markup.bold</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
-				<string>bold italic</string>
+				<string>bold</string>
 				<key>foreground</key>
-				<string>#CA4A46</string>
+				<string>#E9C062</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Notes: Removed</string>
+			<string>Markup: Underline</string>
 			<key>scope</key>
-			<string>removed.version.other.notes</string>
+			<string>markup.underline</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>underline</string>
+				<key>foreground</key>
+				<string>#E18964</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markup: Quote</string>
+			<key>scope</key>
+			<string>markup.quote</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FEE09C12</string>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#E1D4B9</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markup: Rule</string>
+			<key>scope</key>
+			<string>markup.hr</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#CA4A46</string>
+				<string>#8A9A95</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markup: Heading</string>
+			<key>scope</key>
+			<string>markup.heading, markup.heading entity</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#632D04</string>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#FEDCC5</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markup: List</string>
+			<key>scope</key>
+			<string>markup.list</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#E1D4B9</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markup: Raw</string>
+			<key>scope</key>
+			<string>markup.raw</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#B1B3BA08</string>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#578BB3</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markup: Comment</string>
+			<key>scope</key>
+			<string>markup comment</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#F67B37</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markup: Separator</string>
+			<key>scope</key>
+			<string>meta.separator</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#242424</string>
+				<key>foreground</key>
+				<string>#60A633</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Log Entry</string>
+			<key>scope</key>
+			<string>meta.line.entry.logfile, meta.line.exit.logfile</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#EEEEEE29</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Log Entry Error</string>
+			<key>scope</key>
+			<string>meta.line.error.logfile</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#751012</string>
 			</dict>
 		</dict>
 	</array>

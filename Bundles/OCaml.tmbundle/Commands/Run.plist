@@ -3,12 +3,28 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>TOCAML=${TM_OCAML:=ocaml}
-require_cmd "$TOCAML"
+	<string>TO_OCAML=${TM_OCAML:=ocamlc}
+TMPDIR=${TMPDIR:=/tmp}
 
-"$TOCAML" str.cma|pre
+require_cmd "$TO_OCAML"
+
+# get a tempfile and fill it with the contents of our file
+SRCFILE=`/usr/bin/mktemp $TMPDIR/ocamlXXXXXX` || exit 1
+mv "$SRCFILE" "$SRCFILE".ml
+
+DSTFILE=`/usr/bin/mktemp $TMPDIR/ocamlXXXXXX` || exit 1
+
+cat &gt; "$SRCFILE".ml
+
+# compile it to a new tempfile
+cd "$TMPDIR"
+`"$TO_OCAML" -o "$DSTFILE" "$SRCFILE".ml`
+$DSTFILE | pre
+rm -f "$SRCFILE".*
+rm -f "$DSTFILE"
+
 </string>
 	<key>fallbackInput</key>
 	<string>document</string>

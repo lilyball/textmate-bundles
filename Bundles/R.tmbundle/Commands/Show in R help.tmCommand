@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#! /usr/bin/ruby
+
+text = STDIN.read
+file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{text}.html -print`
+
+if file.empty?
+	matches = `grep -r --include CONTENTS ' #{text.gsub(".", "\\.")} ' /Library/Frameworks/R.framework/Versions/Current/Resources/library/*`
+	matches.split("\n").each do |line|
+		if line.include? "Alias"
+			alias_text = line.split(/\s+/).slice(1)
+			file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{alias_text}.html -print`
+		end
+	end
+end
+
+if file.empty?
+	print "&lt;html&gt;&lt;head&gt;&lt;title&gt;Not found&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;No function called \"#{text}\" was found in the help files.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"
+else
+	dir = File.dirname(file)
+	html = `cat #{file}`
+	html.gsub!(/href=['"]([^'"]+)['"]/) do |match|
+		href = $1
+		if href =~ /\w+:\/\//
+			match
+		else
+			"href=\"tm-file://#{dir}/#{href}\""
+		end
+	end
+	print html
+end</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~@?</string>
+	<key>name</key>
+	<string>Show in R help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.r</string>
+	<key>uuid</key>
+	<string>B8902A32-4E8C-4A20-ABB5-7563B908A30B</string>
+</dict>
+</plist>

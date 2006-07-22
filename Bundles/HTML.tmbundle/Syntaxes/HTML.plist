@@ -433,57 +433,35 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?:^\s*)&lt;\?(?i:php|=)?(?!.*\?&gt;)</string>
+					<string>(?:^\s*)(?=&lt;\?(?i:php|=)?(?!.*\?&gt;))</string>
 					<key>comment</key>
 					<string>match only multi-line PHP with leading whitespace</string>
 					<key>end</key>
-					<string>\?&gt;(?:\s*$\n)?</string>
+					<string>(?&lt;=\?&gt;)(?:\s*$\n)?</string>
 					<key>name</key>
 					<string>source.php.embedded.html</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#php-source</string>
+							<string>source.php</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>&lt;\?(?i:php|=)?</string>
+					<string>(?=&lt;\?(?i:php|=)?)</string>
 					<key>end</key>
-					<string>\?&gt;</string>
+					<string>(?&lt;=\?&gt;)</string>
 					<key>name</key>
 					<string>source.php.embedded.html</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#php-source</string>
+							<string>source.php</string>
 						</dict>
 					</array>
-				</dict>
-			</array>
-		</dict>
-		<key>php-source</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>#.*?(?=\?&gt;)</string>
-					<key>name</key>
-					<string>comment.line.number-sign.php</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>//.*?(?=\?&gt;)</string>
-					<key>name</key>
-					<string>comment.line.double-slash.php</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>source.php</string>
 				</dict>
 			</array>
 		</dict>

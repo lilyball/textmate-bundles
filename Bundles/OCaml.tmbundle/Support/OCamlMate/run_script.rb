@@ -32,6 +32,7 @@ class UserScript
     # compile it
     output = `\"#{@ocamlc}\" -o \"#{@dstfile}\" str.cma unix.cma \"#{@srcfile}\" 2>&1`
     
+    onlywarnings = true
     if output != ""
       output.each_line() do |line|
         if line =~ /^File "(?:.*?)", (line ([0-9]+), characters [0-9]+-[0-9]+):/
@@ -39,10 +40,15 @@ class UserScript
           print "<span>File \"#{@path}\", <a style=\"color: blue;\" href=\"txmt://open?url=file://#{e_url(@path)}&line=#{line}\">#{location}</a>:</span><br/>"
         else
           print esc(line)
+          if line !~ /^Warning/
+            onlywarnings = false
+          end
         end
       end
       
-      exit 1
+      if !onlywarnings
+        exit 1
+      end
     end
   end
 

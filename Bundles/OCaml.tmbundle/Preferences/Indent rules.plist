@@ -9,11 +9,11 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>^\s*(and|end|done|with|in)|^[^\("]*\)</string>
+		<string>^\s*(and|end|done|with|in|else)|^[^\("]*\)</string>
 		<key>increaseIndentPattern</key>
-		<string>^.*(\([^)"\n]*|begin)$|\blet [a-zA-Z0-9_-]+( [^ ]+)+ =\s*$|method[ \t]+.*=[ \t]*$|-&gt;[ \t]*$|(for|while)[ \t]+.*[ \t]+do[ \t]*$|\btry\s*$</string>
+		<string>^.*(\([^)"\n]*|begin)$|\blet [a-zA-Z0-9_-]+( [^ ]+)+ =\s*$|method[ \t]+.*=[ \t]*$|-&gt;[ \t]*$|\b(for|while)[ \t]+.*[ \t]+do[ \t]*$|\btry\s*$|\bif\s+.*\sthen\s*$|\belse\s*$</string>
 		<key>indentNextLinePattern</key>
-		<string>(?!\bif.*then.*(else.*|(;|[ \t]in)[ \t]*$))\bif|\bthen[ \t]*$|\belse[ \t]*$</string>
+		<string>(?!\bif.*then.*(else.*|(;|[ \t]in)[ \t]*$))\bif|\bthen[ \t]*$|\belse[ \t]*$$</string>
 	</dict>
 	<key>uuid</key>
 	<string>AD257FE4-8F09-4FE6-A0C3-CD5E15F75C5D</string>

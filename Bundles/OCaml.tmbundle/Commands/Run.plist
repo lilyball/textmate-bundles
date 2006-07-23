@@ -20,10 +20,10 @@ cat &gt; "$SRCFILE".ml
 
 # compile it to a new tempfile
 cd "$TMPDIR"
-`"$TO_OCAML" -o "$DSTFILE" bigarray.cma str.cma unix.cma "$SRCFILE".ml`
 
 # run it and clean up after ourselves
-$DSTFILE | pre
+"$TM_BUNDLE_SUPPORT/OCamlMate/run_script.rb" "$TO_OCAML" "$SRCFILE".ml "$DSTFILE"
+
 rm -f "$SRCFILE".*
 rm -f "$DSTFILE"
 
@@ -31,7 +31,7 @@ rm -f "$DSTFILE"
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>
-	<string>document</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>@r</string>
 	<key>name</key>

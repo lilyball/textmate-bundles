@@ -2,7 +2,6 @@
 
 $: << ENV['TM_SUPPORT_PATH'] + '/lib'
 require "textmate"
-require "CGI"
 
 # Provides CSS-friendly variations of common Mac fonts that you
 # may use in TextMate. Feel free to edit these to your liking...
@@ -179,7 +178,7 @@ end
 def detab(str, width)
 	lines = str.split(/\n/)
 	lines.each do | line |
-		line_sans_markup = CGI.unescapeHTML(line.gsub(/<[^>]*>/, ''))
+		line_sans_markup = line.gsub(/<[^>]*>/, '').gsub(/&[^;]+;/i, '')
 		while (index = line_sans_markup.index("\t"))
 			tab = line_sans_markup[0..index].jlength - 1
 			padding = " " * ((tab / width + 1) * width - tab)

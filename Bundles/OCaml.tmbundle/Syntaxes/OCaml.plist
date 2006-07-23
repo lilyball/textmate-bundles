@@ -16,11 +16,13 @@
 	<key>keyEquivalent</key>
 	<string>^~O</string>
 	<key>name</key>
-	<string>OCaml Source</string>
+	<string>OCaml</string>
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>^\s*(let(?:\s+rec)?|and)\s+([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?!\s*=)</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -32,21 +34,31 @@
 					<key>name</key>
 					<string>entity.name.function.ocaml</string>
 				</dict>
-				<key>3</key>
+			</dict>
+			<key>end</key>
+			<string>(=)\s*(fun(?:ction))?</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.parameter.function.ocaml</string>
+					<string>keyword.operator.ocaml</string>
 				</dict>
-				<key>4</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.language.ocaml</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>\b(let(?:\s+rec)?+|and)\s+([a-z_][a-zA-Z0-9'_]*)((?:\s*(?:\(\s*\)|\s+(?:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|~[a-z][a-zA-Z0-9'_]*:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|\?(?:(?:(?:[a-z][a-zA-Z0-9'_]*)|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*\)+))|(?:\(+\s*[a-z][a-zA-Z0-9'_]*(?:\s*:\s*[a-z][a-zA-Z0-9'_]*)?\s*=\s*\w+\s*\)+)))))+|.*=\s*(fun(ction)?))</string>
 			<key>name</key>
 			<string>meta.function.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variables</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -141,7 +153,9 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
+					<key>begin</key>
+					<string>\b(method)\s+(virtual\s+)?(private\s+)?([a-z_][a-zA-Z0-9'_]*)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
@@ -163,16 +177,26 @@
 							<key>name</key>
 							<string>entity.name.function.ocaml</string>
 						</dict>
-						<key>5</key>
+					</dict>
+					<key>end</key>
+					<string>(=)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>variable.parameter.method.ocaml</string>
+							<string></string>
 						</dict>
 					</dict>
-					<key>match</key>
-					<string>\b(method)\s+(virtual\s+)?(private\s+)?([a-z_][a-zA-Z0-9'_]*)((?:\s(?:[a-z_][a-zA-Z0-9'_]*))*)</string>
 					<key>name</key>
 					<string>meta.method.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#variables</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -396,6 +420,79 @@
 							<string>#comments</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>variables</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.named.parameter.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.name.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\s+(?:(~)([a-z]+)(:))?([a-z_][a-zA-Z0-9_]*)</string>
+					<key>name</key>
+					<string>variable.parameter.ocaml</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.named.parameter.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.name.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\s+(\?)\(([a-z_][a-zA-Z0-9_]*)\s*(=)\s*(.*)\)</string>
+					<key>name</key>
+					<string>variable.parameter.optional.ocaml</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\s(\{)(.*)(\})</string>
+					<key>name</key>
+					<string>variable.parameter.record.ocaml</string>
 				</dict>
 			</array>
 		</dict>

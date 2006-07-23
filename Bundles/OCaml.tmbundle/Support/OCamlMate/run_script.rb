@@ -30,7 +30,7 @@ class UserScript
 
   def compile
     # compile it
-    output = `\"#{@ocamlc}\" -o \"#{@dstfile}\" str.cma unix.cma \"#{@srcfile}\" 2>&1`
+    output = `#{e_sh @ocamlc} -o #{e_sh @dstfile} str.cma unix.cma #{e_sh @srcfile} 2>&1`
     
     onlywarnings = true
     if output != ""

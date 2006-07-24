@@ -53,7 +53,7 @@ class S5 < String
       slide += line + "\n"
     end
     @slides.push(slide) unless slide.strip.empty?
-    @current_slide_number = slide_num + 1 unless @current_slide_num
+    @current_slide_number = slide_num + 1 unless @current_slide_number
 
     require 'cgi'
     # set values for template

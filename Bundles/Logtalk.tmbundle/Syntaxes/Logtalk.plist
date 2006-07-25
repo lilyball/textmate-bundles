@@ -62,6 +62,12 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>:-\s+(dynamic|threaded)(?=[.])</string>
+			<key>name</key>
+			<string>storage.modifier.others.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>:-\s+(calls|e(ncoding|xport)|in(itialization|fo)|uses)(?=[(])</string>
 			<key>name</key>
 			<string>storage.modifier.others.logtalk</string>
@@ -251,6 +257,12 @@
 			<string>\b((bag|set)of|f(ind|or)all)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.all-solutions.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(threaded_(call|exit))(?=[(])</string>
+			<key>name</key>
+			<string>support.function.multi-threading.logtalk</string>
 		</dict>
 		<dict>
 			<key>match</key>

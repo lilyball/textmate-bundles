@@ -47,7 +47,7 @@ class Blogging
     else
       endpoint_list = [ <<-TEXT ]
 # Blogging Account List
-# Enter a blog name followed by the endpoint URL
+# Enter a blog name followed by the endpoint URL (see Help for proxy config)
 # Blog Name      URL
 # example        http://user@example.com/xmlrpc
 TEXT
@@ -339,7 +339,7 @@ TEXT
   def client
     current_endpoint = endpoint
     current_endpoint.sub!(/#\d+$/, '') if current_endpoint =~ /#\d+$/
-    @client ||= MetaWeblogClient.new2(current_endpoint)
+    @client ||= MetaWeblogClient.new2(current_endpoint, ENV['TM_HTTP_PROXY'])
     @client
   end
 

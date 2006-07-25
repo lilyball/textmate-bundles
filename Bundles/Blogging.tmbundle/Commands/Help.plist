@@ -5,7 +5,19 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl
+	<string>Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl|ruby -pe '$_.sub!(%r{&lt;h2&gt;(.+)&lt;/h2&gt;}) { |m| %{&lt;h2 id="#{$1.tr(" ", "_").downcase}"&gt;#{$1}&lt;/h2&gt;} }'
+
+# Table of Contents
+
+ 1. [Getting Started](#getting_started)
+ 2. [Headers](#headers)
+ 3. [Commands](#commands)
+ 4. [Image Uploads](#image_uploads)
+ 5. [Environment Variables](#environment_variables)
+ 6. [Troubleshooting](#troubleshooting)
+ 7. [Credits](#credits)
+
+- - - - - -
 
 Getting Started
 ---------------
@@ -71,7 +83,9 @@ Image Uploads
 
 It is possible to upload an image to your blog endpoint by dragging it into the document. After successful upload the URL of the image will be inserted.
 
-If you wish to upload the image under another name than what it has on your local system then hold down option (&amp;#x2325;) when dragging it into your document.
+By default you will be asked for the description of the image (used as argument for the `alt` attribute) and a “safe” file name will be derived from this description (i.e. lowercased using only alphanumeric characters and no spaces).
+
+If you instead wish to provide the actual file name under which the image should be uploaded then you can hold down option (&amp;#x2325;) when dragging it into your document.
 
 Environment Variables
 ---------------------
@@ -81,6 +95,8 @@ The following settings are available, but optional. They can either be specified
 * `TM_BLOG_ENDPOINT`: You may either specify a named blog endpoint (as configured with the "Setup Blogs" command) or an endpoint URL. This value can be overriden by a "Blog" header within a post. If this is unset **and** your document doesn't have a "Blog" header, you will be prompted for which blog to use.
 * `TM_BLOG_FORMAT`: Your preferred formatting choice (default will derive from current blog template selected).
 * `TM_BLOG_MODE`: 'mt' and 'wp' are valid settings for this. Influences the posting API to be as compatible as possible with Movable Type, TypePad, Blogger, Typo and WordPress variants of the metaWeblog API (default will derive from endpoint URL, or will default to 'mt').
+* `TM_HTTP_PROXY`: If you are behind a proxy set it to `host:port` of the proxy.
+
 
 Troubleshooting
 ---------------

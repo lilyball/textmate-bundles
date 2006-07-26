@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>comment</key>
+	<string>
+	TODO:	Include RegExp syntax
+</string>
 	<key>fileTypes</key>
 	<array>
 		<string>pl</string>
@@ -30,24 +34,54 @@
 			<integer>1</integer>
 			<key>begin</key>
 			<string>\b(?=qr)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.perl</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>([egimosx]*)(?=\s*\S)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.regexp-option.perl</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>meta.regexp.compile.block</string>
+			<string>meta.regexp.compile</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>qr\{</string>
+					<string>(qr)\{</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>name</key>
-					<string>meta.bracket.regexp</string>
+					<string>meta.regexp.nested_braces</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nested_braces</string>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_braces_interpolated</string>
 						</dict>
 					</array>
 					<key>swallow</key>
@@ -55,16 +89,30 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>qr\[</string>
+					<string>(qr)\[</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>\]</string>
 					<key>name</key>
-					<string>meta.square.regexp</string>
+					<string>meta.regexp.nested_brackets</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nested_brackets</string>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_brackets_interpolated</string>
 						</dict>
 					</array>
 					<key>swallow</key>
@@ -72,16 +120,30 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>qr&lt;</string>
+					<string>(qr)&lt;</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>&gt;</string>
 					<key>name</key>
-					<string>meta.angle.regexp</string>
+					<string>meta.regexp.nested_ltgt</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nested_ltgt</string>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_ltgt_interpolated</string>
 						</dict>
 					</array>
 					<key>swallow</key>
@@ -89,16 +151,30 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>qr\(</string>
+					<string>(qr)\(</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>\)</string>
 					<key>name</key>
-					<string>meta.round.regexp</string>
+					<string>meta.regexp.nested_parens</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nested_parens</string>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_parens_interpolated</string>
 						</dict>
 					</array>
 					<key>swallow</key>
@@ -106,11 +182,52 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>qr(.)</string>
+					<string>(qr)\'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
-					<string>\1</string>
+					<string>\'</string>
 					<key>name</key>
-					<string>meta.somechar.test.regexp</string>
+					<string>meta.regexp.single-quote</string>
+					<key>swallow</key>
+					<string>\\.</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(qr)(.)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
+					<key>end</key>
+					<string>\2</string>
+					<key>name</key>
+					<string>meta.regexp.simple-delimiter</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_parens_interpolated</string>
+						</dict>
+					</array>
 					<key>swallow</key>
 					<string>\\.</string>
 				</dict>
@@ -120,20 +237,38 @@
 			<key>applyEndPatternLast</key>
 			<integer>1</integer>
 			<key>begin</key>
-			<string>\b(?=s[\[({&lt;])</string>
+			<string>\b(?=(s)[\[({&lt;])</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.perl</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>([egimosx]*)(?=\S)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.regexp-option.perl</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>meta.regexp</string>
+			<string>meta.regexp.replace</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
 					<string>s\{</string>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>name</key>
-					<string>meta.bracket.regexp</string>
+					<string>meta.regexp.nested_braces</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -147,10 +282,12 @@
 				<dict>
 					<key>begin</key>
 					<string>s\[</string>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>\]</string>
 					<key>name</key>
-					<string>meta.square.regexp</string>
+					<string>meta.regexp.nested_brackets</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -164,10 +301,12 @@
 				<dict>
 					<key>begin</key>
 					<string>s&lt;</string>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>&gt;</string>
 					<key>name</key>
-					<string>meta.angle.regexp</string>
+					<string>meta.regexp.nested_ltgt</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -181,10 +320,12 @@
 				<dict>
 					<key>begin</key>
 					<string>s\(</string>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>\)</string>
 					<key>name</key>
-					<string>meta.round.regexp</string>
+					<string>meta.regexp.nested_parens</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -198,15 +339,21 @@
 				<dict>
 					<key>begin</key>
 					<string>\{</string>
+					<key>contentName</key>
+					<string>string.regexp-format.perl</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>name</key>
-					<string>meta.bracket.format</string>
+					<string>meta.regexp-format.nested_braces</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nested_braces</string>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_braces_interpolated</string>
 						</dict>
 					</array>
 					<key>swallow</key>
@@ -215,15 +362,21 @@
 				<dict>
 					<key>begin</key>
 					<string>\[</string>
+					<key>contentName</key>
+					<string>string.regexp-format.perl</string>
 					<key>end</key>
 					<string>\]</string>
 					<key>name</key>
-					<string>meta.square.format</string>
+					<string>meta.regexp-format.nested_brackets</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nested_brackets</string>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_brackets_interpolated</string>
 						</dict>
 					</array>
 					<key>swallow</key>
@@ -232,15 +385,21 @@
 				<dict>
 					<key>begin</key>
 					<string>&lt;</string>
+					<key>contentName</key>
+					<string>string.regexp-format.perl</string>
 					<key>end</key>
 					<string>&gt;</string>
 					<key>name</key>
-					<string>meta.angle.format</string>
+					<string>meta.regexp-format.nested_ltgt</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nested_ltgt</string>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_ltgt_interpolated</string>
 						</dict>
 					</array>
 					<key>swallow</key>
@@ -249,15 +408,21 @@
 				<dict>
 					<key>begin</key>
 					<string>\(</string>
+					<key>contentName</key>
+					<string>string.regexp-format.perl</string>
 					<key>end</key>
 					<string>\)</string>
 					<key>name</key>
-					<string>meta.round.format</string>
+					<string>meta.regexp-format.nested_parens</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nested_parens</string>
+							<string>#variable</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nested_parens_interpolated</string>
 						</dict>
 					</array>
 					<key>swallow</key>
@@ -265,11 +430,32 @@
 				</dict>
 				<dict>
 					<key>begin</key>
+					<string>'</string>
+					<key>contentName</key>
+					<string>string.regexp-format.perl</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>meta.regexp-format.single_quote</string>
+					<key>swallow</key>
+					<string>\\.</string>
+				</dict>
+				<dict>
+					<key>begin</key>
 					<string>([^\s\w\[({&lt;;])</string>
+					<key>contentName</key>
+					<string>string.regexp-format.perl</string>
 					<key>end</key>
 					<string>\1</string>
 					<key>name</key>
-					<string>meta.any.format.eval</string>
+					<string>meta.regexp-format.simple_delimiter</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#variable</string>
+						</dict>
+					</array>
 					<key>swallow</key>
 					<string>\\.</string>
 				</dict>
@@ -278,29 +464,68 @@
 		<dict>
 			<key>begin</key>
 			<string>\b(?=s([^\s\w\[({&lt;]).*\1([egimos]*)\s*[\}\)\;\,])</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.perl</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\2([egimos]*)(?=\s*[\}\)\;\,])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.regexp-option.perl</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>meta.regexp.delimited.oneline</string>
+			<string>meta.regexp.replace</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
 					<string>s(.)</string>
+					<key>contentName</key>
+					<string>string.regexp.perl</string>
 					<key>end</key>
 					<string>(?=\1)</string>
 					<key>name</key>
-					<string>meta.weirdo_1.regexp</string>
+					<string>meta.regexp.simple_delimiter</string>
+					<key>swallow</key>
+					<string>\\.</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>contentName</key>
+					<string>string.regexp-format.perl</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>meta.regexp-format.single_quote</string>
 					<key>swallow</key>
 					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>(.)</string>
+					<key>contentName</key>
+					<string>string.regexp-format.perl</string>
 					<key>end</key>
 					<string>\1</string>
 					<key>name</key>
-					<string>meta.weirdo_1.format</string>
+					<string>meta.regexp-format.simple_delimiter</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#variable</string>
+						</dict>
+					</array>
 					<key>swallow</key>
 					<string>\\.</string>
 				</dict>
@@ -309,31 +534,60 @@
 		<dict>
 			<key>begin</key>
 			<string>\b(?=s([^\s\w\[({&lt;]))</string>
-			<key>comment</key>
-			<string>Extended regex with single char delimiter.</string>
 			<key>end</key>
 			<string>\2([egimos]*x[egimos]*)\b</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.regexp-option.perl</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>meta.regexp.delimited.really.fucked.up.perl</string>
+			<string>meta.regexp.replace.extended</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
 					<string>s(.)</string>
+					<key>contentName</key>
+					<string>string.regexp.extended.perl</string>
 					<key>end</key>
 					<string>(?=\1)</string>
 					<key>name</key>
-					<string>meta.weirdo.regexp</string>
+					<string>meta.regexp.simple_delimiter</string>
+					<key>swallow</key>
+					<string>\\.</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>contentName</key>
+					<string>string.regexp-format.extended.perl</string>
+					<key>end</key>
+					<string>'(?=[egimos]*x[egimos]*)\b</string>
+					<key>name</key>
+					<string>meta.regexp-format.simple_delimiter</string>
 					<key>swallow</key>
 					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>(.)</string>
+					<key>contentName</key>
+					<string>string.regexp-format.extended.perl</string>
 					<key>end</key>
 					<string>\1(?=[egimos]*x[egimos]*)\b</string>
 					<key>name</key>
-					<string>meta.weirdo.format</string>
+					<string>meta.regexp-format.simple_delimiter</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#variable</string>
+						</dict>
+					</array>
 					<key>swallow</key>
 					<string>\\.</string>
 				</dict>
@@ -1031,6 +1285,26 @@
 			<key>swallow</key>
 			<string>\\.</string>
 		</dict>
+		<key>nested_braces_interpolated</key>
+		<dict>
+			<key>begin</key>
+			<string>\{</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#nested_braces_interpolated</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
 		<key>nested_brackets</key>
 		<dict>
 			<key>begin</key>
@@ -1042,6 +1316,26 @@
 				<dict>
 					<key>include</key>
 					<string>#nested_brackets</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<key>nested_brackets_interpolated</key>
+		<dict>
+			<key>begin</key>
+			<string>\[</string>
+			<key>end</key>
+			<string>\]</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#nested_brackets_interpolated</string>
 				</dict>
 			</array>
 			<key>swallow</key>
@@ -1061,6 +1355,24 @@
 				</dict>
 			</array>
 		</dict>
+		<key>nested_ltgt_interpolated</key>
+		<dict>
+			<key>begin</key>
+			<string>&lt;</string>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#nested_ltgt_interpolated</string>
+				</dict>
+			</array>
+		</dict>
 		<key>nested_parens</key>
 		<dict>
 			<key>begin</key>
@@ -1072,6 +1384,26 @@
 				<dict>
 					<key>include</key>
 					<string>#nested_parens</string>
+				</dict>
+			</array>
+			<key>swallow</key>
+			<string>\\.</string>
+		</dict>
+		<key>nested_parens_interpolated</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#nested_parens_interpolated</string>
 				</dict>
 			</array>
 			<key>swallow</key>

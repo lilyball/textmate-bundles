@@ -1,4 +1,4 @@
-require "plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
 module Browser
   class << self

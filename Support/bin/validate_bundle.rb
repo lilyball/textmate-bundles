@@ -26,7 +26,7 @@ end
 ARGV.each do |bundle|
 
   old_dir = Dir.getwd
-  Dir.chdir(File.join(old_dir, bundle))
+  Dir.chdir(bundle)
   Dir["Syntaxes/*.{tmLanguage,plist}"].each do |grammar|
     open(grammar) do |io|
       plist = PropertyList.load(io)

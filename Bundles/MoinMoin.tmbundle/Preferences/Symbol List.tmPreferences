@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List</string>
+	<key>scope</key>
+	<string>text.moinmoin markup.heading</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>
+		s/\s*=*[^=]*$//; # remove trailing space, =
+		s/^\s*//;  # remove leading space
+		s/\G=/ /g; # convert leading = to m-space
+		s/^ //;    # strip first m-space
+	</string>
+	</dict>
+	<key>uuid</key>
+	<string>62CBBA22-7680-4213-A3CC-707336A65F5A</string>
+</dict>
+</plist>

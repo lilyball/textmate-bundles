@@ -22,8 +22,7 @@ int main (int argc, char const* argv[])
 {
     if(argc != 1)
     {
-        int revision = 0;
-        fprintf(stderr, "proxy_config r%d: dump proxy config as an XML property list\nCurrently no arguments are supported.\n", current_version());
+        fprintf(stderr, "proxy_config r%s: dump proxy config as an XML property list.\nCurrently no arguments are supported.\n", current_version());
     }
     else
     {

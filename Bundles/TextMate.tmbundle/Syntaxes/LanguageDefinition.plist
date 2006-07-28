@@ -564,24 +564,44 @@
 					<string>#comment</string>
 				</dict>
 				<dict>
+					<key>applyEndPatternLast</key>
+					<integer>1</integer>
 					<key>begin</key>
-					<string>'</string>
+					<string>'(?=.*')</string>
 					<key>contentName</key>
 					<string>comment.block.string.tm-language-def</string>
 					<key>end</key>
 					<string>'</string>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>''</string>
+							<key>name</key>
+							<string>constant.character.escape.apostrophe.tm-language-def</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"</string>
+					<string>"(?=.*")</string>
 					<key>contentName</key>
 					<string>comment.block.string.tm-language-def</string>
 					<key>end</key>
 					<string>"</string>
 					<key>name</key>
 					<string>string.quoted.double.tm-language-def</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\[\\"]</string>
+							<key>name</key>
+							<string>constant.character.escape.tm-language-def</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>include</key>

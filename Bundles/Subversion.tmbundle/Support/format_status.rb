@@ -189,7 +189,7 @@ mup.html {
 					diff_to_mate = function(filename,id){
 						TextMate.isBusy = true;
 						tmp = '/tmp/diff_to_mate' + id + '.diff'
-						cmd = '#{e_sh svn} 2>&1 diff --diff-cmd diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
+						cmd = 'LC_CTYPE=en_US.UTF-8 #{e_sh svn} 2>&1 diff --diff-cmd diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
 						document.getElementById('commandOutput').innerHTML += TextMate.system(cmd, null).outputString + ' \\n'
 						TextMate.isBusy = false;
 					};
@@ -215,7 +215,7 @@ mup.html {
 						the_displayname = displayname;
 						the_new_status  = '?';
 						TextMate.isBusy = true;
-						cmd = '#{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/revert_file.rb -svn=#{e_sh_js svn} -path=' + filename + ' -displayname=' + displayname;
+						cmd = 'LC_CTYPE=en_US.UTF-8 #{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/revert_file.rb -svn=#{e_sh_js svn} -path=' + filename + ' -displayname=' + displayname;
 						myCommand = TextMate.system(cmd, function (task) { });
 						myCommand.onreadoutput = svn_output;
 					};
@@ -225,7 +225,7 @@ mup.html {
 						the_displayname = displayname;
 						the_new_status  = 'D';
 						TextMate.isBusy = true;
-						cmd = '#{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/remove_file.rb -svn=#{e_sh_js svn} -path=' + filename + ' -displayname=' + displayname;
+						cmd = 'LC_CTYPE=en_US.UTF-8 #{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/remove_file.rb -svn=#{e_sh_js svn} -path=' + filename + ' -displayname=' + displayname;
 						myCommand = TextMate.system(cmd, function (task) { });
 						myCommand.onreadoutput = svn_output;
 					};

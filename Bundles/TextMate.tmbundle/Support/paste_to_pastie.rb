@@ -51,8 +51,9 @@ TextMate.call_with_progress(:title => "Paste to Pastie", :message => "Contacting
   author = "#{`niutil -readprop / "/users/$USER" realname`.chomp} (#{ENV['USER']})"
   ext = find_language_ext
 
+  url = ENV['TM_PASTIE_URL'] || 'http://pastie.caboo.se/pastes/create'
   print %x{
-    curl http://pastie.caboo.se/pastes/create \
+    curl #{url} \
     	-s -L -o /dev/null -w "%{url_effective}" \
     	-H "Expect:" \
     	-F "paste[parser]=plaintext" \

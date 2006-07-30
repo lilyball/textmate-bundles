@@ -263,7 +263,12 @@ TEXT
       @post['mt_tags'] = @headers['tags'] if @headers['tags']
       @post['mt_basename'] = @headers['basename'] if @headers['basename']
     elsif self.mode == 'wp'
-      @post['dateCreated'] = @dateCreated if @dateCreated
+      if date_created then
+        # Convert to GMT and then to an XMLRPC:DateTime object to
+        # workaround xmlrpc/create.rb’s poor handling of DateTime.
+        d = date_created.new_offset(0)
+        @post['dateCreated'] = XMLRPC::DateTime.new(d.year, d.mon, d.day, d.hour, d.min, d.sec)
+      end
       @post['mt_allow_comments'] = @headers['comments'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['comments']
       @post['mt_allow_pings'] = @headers['pings'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['pings']
     end
@@ -395,13 +400,12 @@ TEXT
       cats.each { | cat | doc += "Category: #{cat}\n" }
     end
     doc += "Format: #{self.post['mt_convert_breaks']}\n" if self.post['mt_convert_breaks']
-    doc += sprintf "Date: %04d-%02d-%02d %02d:%02d:%02d\n",
-      self.post['dateCreated'].year,
-      self.post['dateCreated'].month,
-      self.post['dateCreated'].day,
-      self.post['dateCreated'].hour,
-      self.post['dateCreated'].min,
-      self.post['dateCreated'].sec
+
+    # Convert XMLRPC:DateTime to a regular DateTime object so
+    # that we can show the date using the users local time zone.
+    d = DateTime.civil(*self.post['dateCreated'].to_a)
+    doc += d.new_offset(DateTime.now.offset).strftime("Date: %F %T %z") + "\n"
+
     if self.post['mt_allow_pings'] && (self.post['mt_allow_pings'] == 1)
       doc += "Pings: On\n"
     else

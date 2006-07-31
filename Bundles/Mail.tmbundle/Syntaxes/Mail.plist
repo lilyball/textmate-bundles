@@ -6,6 +6,8 @@
 	<array>
 		<string>mail</string>
 	</array>
+	<key>firstLineMatch</key>
+	<string>^From: (?=\w+@[\w-]+\.\w+)</string>
 	<key>keyEquivalent</key>
 	<string>^~M</string>
 	<key>name</key>
@@ -13,115 +15,48 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>^(&gt; ?)(&gt; ?)(&gt;(?: )?)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>markup.quote.mail.single</string>
+					<string>keyword.other.mail</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>markup.quote.mail.double</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>markup.quote.mail.many</string>
+					<string>string.unquoted.mail</string>
 				</dict>
 			</dict>
-			<key>end</key>
-			<string>$\n?</string>
-			<key>name</key>
-			<string>markup.quote.mail</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#url</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^(&gt; ?)(&gt;(?: )?)</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>markup.quote.mail.single</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>markup.quote.mail.double</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>$\n?</string>
-			<key>name</key>
-			<string>markup.quote.mail</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#url</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^&gt;(?: )?</string>
-			<key>end</key>
-			<string>$\n?</string>
-			<key>name</key>
-			<string>markup.quote.mail.single</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#url</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
 			<key>match</key>
-			<string>^-- $\n</string>
+			<string>^([a-zA-Z-]+):\s*(.*)$\n?</string>
 			<key>name</key>
-			<string>meta.separator.signature.mail</string>
+			<string>meta.headers.mail</string>
 		</dict>
 		<dict>
-			<key>include</key>
-			<string>#url</string>
+			<key>begin</key>
+			<string>^(?![A-Za-z0-9]+:)</string>
+			<key>end</key>
+			<string>^(?=not)possible$</string>
+			<key>name</key>
+			<string>text.html.markdown</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>^-- $\n</string>
+					<key>name</key>
+					<string>meta.separator.signature.mail</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>text.html.markdown</string>
+				</dict>
+			</array>
 		</dict>
 	</array>
-	<key>repository</key>
-	<dict>
-		<key>url</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>((https?|ftp|file|txmt)://|mailto:)[-:@a-zA-Z0-9_./%?=&amp;#]+</string>
-					<key>name</key>
-					<string>markup.underline.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\b[a-zA-Z0-9_.]+@[-a-zA-Z0-9_.]+\b</string>
-					<key>name</key>
-					<string>markup.underline.link.email</string>
-				</dict>
-			</array>
-		</dict>
-	</dict>
 	<key>scopeName</key>
-	<string>text.plain.mail</string>
+	<string>text.mail.markdown</string>
 	<key>uuid</key>
 	<string>15615A0C-37B0-4B3F-9105-53ED536AFBB4</string>
 </dict>

@@ -33,17 +33,9 @@
 			<key>applyEndPatternLast</key>
 			<integer>1</integer>
 			<key>begin</key>
-			<string>\b(?=qr)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>support.function.perl</string>
-				</dict>
-			</dict>
+			<string>\b(?=qr[^\s\w])</string>
 			<key>end</key>
-			<string>([egimosx]*)(?=\s*\S)</string>
+			<string>([egimosx]*)(?=(\s+\S|\s*[;\,\#\{\}\)]|$))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -202,7 +194,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(qr)(.)</string>
+					<string>(qr)([^\s\w\'\{\[\(\&lt;])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -237,17 +229,9 @@
 			<key>applyEndPatternLast</key>
 			<integer>1</integer>
 			<key>begin</key>
-			<string>\b(?=(s)[\[({&lt;])</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>support.function.perl</string>
-				</dict>
-			</dict>
+			<string>\b(?=(s)(\s+\S|\s*[;\,\#\{\}\)]|$))</string>
 			<key>end</key>
-			<string>([egimosx]*)(?=\S)</string>
+			<string>([egimosx]*)(?=(\s+\S|\s*[;\,\#\{\}\)]|$))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -262,9 +246,17 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>s\{</string>
+					<string>(s)\{</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
-					<string>string.regexp.perl</string>
+					<string>string.regexp.perlxx</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>name</key>
@@ -281,7 +273,15 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>s\[</string>
+					<string>(s)\[</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>string.regexp.perl</string>
 					<key>end</key>
@@ -300,7 +300,15 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>s&lt;</string>
+					<string>(s)&lt;</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>string.regexp.perl</string>
 					<key>end</key>
@@ -319,7 +327,15 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>s\(</string>
+					<string>(s)\(</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>string.regexp.perl</string>
 					<key>end</key>
@@ -463,20 +479,12 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(?=s([^\s\w\[({&lt;]).*\1([egimos]*)\s*[\}\)\;\,])</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>support.function.perl</string>
-				</dict>
-			</dict>
+			<string>\b(?=s([^\s\w\[({&lt;]).*\1([egimos]*)(\s*[\}\)\;\,]|\s+))</string>
 			<key>end</key>
-			<string>\2([egimos]*)(?=\s*[\}\)\;\,])</string>
+			<string>\2([egimos]*)(?=(\s*[\}\)\;\,]|\s+))</string>
 			<key>endCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.control.regexp-option.perl</string>
@@ -488,11 +496,19 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>s(.)</string>
+					<string>(s)(.)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>string.regexp.perl</string>
 					<key>end</key>
-					<string>(?=\1)</string>
+					<string>(?=\2)</string>
 					<key>name</key>
 					<string>meta.regexp.simple_delimiter</string>
 					<key>swallow</key>

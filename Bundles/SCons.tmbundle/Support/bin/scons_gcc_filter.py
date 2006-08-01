@@ -77,6 +77,19 @@ class SConsGCCFilter(object):
         
         currdir = self._currdir
         content = self._content
+        
+        # b bdc we need to look through the content for a "dmd ". if we find one, use the D based search mechanism
+        Dlang = re.compile(r"dmd ")
+        if Dlang.search(content):
+            self._errExpr = re.compile(
+                r"^(?P<preamble>"
+                r"(?P<pathname>[/A-Za-z0-9_.+]*):"
+                r"(?P<line_num>\d+):\s*"
+                r")"
+                r"(?P<error_msg>.*(\n  .*)*)",
+                re.MULTILINE)
+        # e bdc
+        
         search = self._errExpr.search
         while True:
             match = search(content)
@@ -97,7 +110,14 @@ class SConsGCCFilter(object):
             else:
                 resultList.append(content[:match.start()])
                 pathname = match.group("pathname")
-                isError = (match.group("errwarn") == "error")
+                # bdc orig line: isError = (match.group("errwarn") == "error")
+                # b bdc check for D errors 
+                if pathname.endswith(".d"):
+                    isError = True
+                else:
+                    isError = (match.group("errwarn") == "error")
+                # e bdc check for D errors
+                
                 if self._worthHighlighting(pathname, isError):
                     msg = match.group("error_msg")
                     lineNum = match.group("line_num")

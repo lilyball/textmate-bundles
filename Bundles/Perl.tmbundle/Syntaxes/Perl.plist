@@ -479,24 +479,24 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(?=s([^\s\w\[({&lt;]).*\1([egimos]*)(\s*[\}\)\;\,]|\s+))</string>
+			<string>\b(?=s([^\s\w\[({&lt;]).*\1([egimos]*)([\}\)\;\,]|\s+))</string>
 			<key>end</key>
-			<string>\2([egimos]*)(?=(\s*[\}\)\;\,]|\s+))</string>
+			<string>([egimos]*)(?=([\}\)\;\,]|\s+|$))</string>
 			<key>endCaptures</key>
 			<dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.control.regexp-option.perl</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.regexp.replace</string>
+			<string>meta.regexp.replaceXXX</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(s)(.)</string>
+					<string>(s)([^\s\w\[({&lt;])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -528,7 +528,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(.)</string>
+					<string>([^\s\w\[({&lt;])</string>
 					<key>contentName</key>
 					<string>string.regexp-format.perl</string>
 					<key>end</key>

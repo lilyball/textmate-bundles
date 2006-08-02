@@ -34,25 +34,25 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>^\s*#.*</string>
+			<string>#.*$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.ini</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*;.*</string>
+			<string>;.*$</string>
 			<key>name</key>
 			<string>comment.line.semicolon.ini</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b([a-zA-Z_]+)\b\s*(=)</string>
+			<string>\b([a-zA-Z0-9_.-]+)\b(?=\s*(=))</string>
 			<key>name</key>
 			<string>keyword.other.definition.ini</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\[(.*)\]</string>
+			<string>^\[(.*?)\]</string>
 			<key>name</key>
 			<string>entity.name.section.group-title.ini</string>
 		</dict>

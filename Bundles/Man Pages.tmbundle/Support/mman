@@ -1,0 +1,32 @@
+#!/bin/sh
+if [ "$1" ]; then
+  manpage=`man -w $@`
+else
+  read line
+  section=`expr "$line" : '.*(\(.*\))'`
+  if [ "$section" ]; then
+  	manpage=`expr "$line" : '\(.*\)('`
+        manpage=`man -s $section -w "$manpage"`
+  else
+        manpage=`man -w "$line"`
+  fi
+fi
+[ "$manpage" ] || exit 0
+
+tmp=`basename $manpage .gz`.man
+
+(
+  echo $manpage | fmt -c -w 78;
+  man "$manpage" \
+  | col -bx \
+  | perl -pe '
+      print "_"x (length($_)-1),"\n" if /^[A-Z](?:(?:\S+\s\S+)+|\S+)$/;
+      END {print "__"}
+  '
+) > $tmp
+
+chmod 400 $tmp
+mate $tmp
+(sleep 2; rm -f $tmp) > /dev/null 2>&1 </dev/null &
+
+

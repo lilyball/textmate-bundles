@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>res=$(CocoaDialog inputbox --title "Manual Page" \
+    --informative-text "What manual page do you want?" \
+    --button1 "Okay" --button2 "Cancel")
+
+[[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit_discard
+
+res=$(tail -n1 &lt;&lt;&lt;"$res")
+$("$TM_BUNDLE_SUPPORT/mman"&lt;&lt;&lt;"$res")
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>View Man Page</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>71AB34F4-755D-4F16-A45F-93CD88246ED7</string>
+</dict>
+</plist>

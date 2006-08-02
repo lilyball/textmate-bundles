@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Place a symlink to "$TM_BUNDLE_SUPPORT/mman" somewhere in your path
+# and then you can bring up man pages in TextMate via the terminal
+# using "mman &lt;manpage&gt;"
+
+"$TM_BUNDLE_SUPPORT/mman"</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Visit Man Page</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>markup.underline.link.internal.man</string>
+	<key>uuid</key>
+	<string>876E1F2C-8FD2-4E93-803D-55F182BDA009</string>
+</dict>
+</plist>

@@ -19,7 +19,6 @@ module TextMate
       @@time = Time.now
       @@ctime = nil
       @@mtime = nil
-      @@docsize = nil
 
       def parse_arguments(arg_str, vars)
         arg_str.scan(@@argument_regexp) do | var, quote, val, val2 |
@@ -66,6 +65,8 @@ module TextMate
       end
 
       def process_include(file, args, vars)
+        @@doc_stack ||= Hash.new
+
         local_vars = vars.dup
         @@depth += 1
 
@@ -84,6 +85,14 @@ module TextMate
           print "Could not open file: #{file}"
           exit 206
         end
+
+        if @@doc_stack.has_key?(file)
+          print "Error: recursive include for #{file}"
+          exit 206
+        end
+
+        @@doc_stack[file] = true
+
         parse_arguments(args, local_vars) unless args.nil?
         if File.executable?(file) and file.match(/\.(pl|rb|py)$/)
           content = invoke_interpreter(file, local_vars)
@@ -94,6 +103,8 @@ module TextMate
         if content.scan(@@tminclude_regexp)
           content = process_document(content, local_vars)
         end
+
+        @@doc_stack.delete(file)
 
         @@depth -= 1
         content
@@ -121,12 +132,10 @@ module TextMate
         @@global_vars['compdate'] = @@time.strftime("%d-%b-%y")
         @@global_vars['monthnum'] = @@time.strftime("%m")
         @@global_vars['monthdaynum'] = @@time.strftime("%d")
-        @@global_vars['shortdate'] = @@time.strftime("%m/%d/%y")
-        @@global_vars['abbrev_date'] = @@time.strftime("%a, %b %e, %Y").sub(/  /, ' ')
+        @@global_vars['shortdate'] = @@time.strftime("%m/%d/%y").gsub(/0(\d\/)/, '\1')
+        @@global_vars['abbrevdate'] = @@time.strftime("%a, %b %e, %Y").sub(/  /, ' ')
         @@global_vars['yearnum'] = @@time.year
-        @@global_vars['yearnum'] = @@time.strftime("%X")
         @@global_vars['generator'] = "TextMate"
-        @@global_vars['docsize'] = @@docsize  # well... not really
 
         if filename = ENV['TM_FILENAME']
           @@global_vars['filename'] = filename
@@ -157,7 +166,7 @@ module TextMate
 
       # Dynamic variables
 
-      def var_creationtime(format = "%c")
+      def var_creationtime(format = "%l:%M %p")
         @@ctime ? @@ctime.strftime(format) : nil
       end
 
@@ -165,7 +174,7 @@ module TextMate
         @@ctime ? @@ctime.strftime(format) : nil
       end
 
-      def var_modifiedtime(format = "%c")
+      def var_modifiedtime(format = "%l:%M %p")
         @@mtime ? @@mtime.strftime(format) : nil
       end
 
@@ -210,15 +219,32 @@ module TextMate
 
       def process_persistent_includes
         vars = {}
-        init_global_vars()
         doc = STDIN.readlines.join
-        @@docsize = doc.length
         @@depth = 1
+        init_global_vars()
         if doc =~ /\#dont_update\#/
           print "This document cannot be updated because it is protected."
           exit 206
         end
-        print process_document(doc, vars)
+        doc = process_document(doc, vars)
+
+        # lastly, process '#docsize#'
+        # TBD: support for reporting document size in kb, mb, etc.
+        # TBD: support for image sizes as well.
+        matches = doc.scan(/#docsize#/i)
+        if matches.length
+          # baselen is document without any "#docsize#" elements
+          baselen = doc.length - '#docsize#'.length * matches.length
+          # newlen is document with added docsize values
+          newlen = baselen + baselen.to_s.length * matches.length
+          # sometimes this adjustment causes the length of the document
+          # to change again, so check for that.
+          while baselen + (newlen.to_s.length * matches.length) != newlen
+            newlen = baselen + (newlen.to_s.length * matches.length)
+          end
+          doc.gsub!(/#docsize#/i, newlen.to_s)
+        end
+        print doc
       end
 
       def include_command

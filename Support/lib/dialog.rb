@@ -8,6 +8,21 @@ class << self
     _options["text"] = options[:default] || ""
     dialog("inputbox", _options,&block)
   end
+  def request_file(options = Hash.new,&block)
+    _options = default_hash(options)
+    _options["title"] = options[:title] || "Select File"
+    _options["informative-text"] = options[:prompt] || ""
+    _options["text"] = options[:default] || ""
+    dialog("fileselect", _options,&block)
+  end
+  def request_files(options = Hash.new,&block)
+    _options = default_hash(options)
+    _options["title"] = options[:title] || "Select File(s)"
+    _options["informative-text"] = options[:prompt] || ""
+    _options["text"] = options[:default] || ""
+    _options["select-multiple"] = ""
+    dialog("fileselect", _options,&block)
+  end
   def request_secure_string(options = Hash.new,&block)
     _options = default_hash(options)
     _options["title"] = options[:title] || "Enter Password"
@@ -76,7 +91,14 @@ class << self
     end
     cd = ENV['TM_SUPPORT_PATH'] + '/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog'
     result = %x{#{e_sh cd} 2>/dev/console #{e_sh type} #{str} --float}
-    return_value, result = result.to_a.map{|line| line.chomp}
+    result = result.to_a.map{|line| line.chomp}
+    if (type == "fileselect")
+      if result.length == 0
+        return_value = options['button2'] # simulate cancel
+      end
+    else
+      return_value = result.shift
+    end
     if return_value == options["button2"] then
       block_given? ? raise(SystemExit) : nil
     else

@@ -101,7 +101,7 @@ module SVNHelper
          make_error_head( 'No Match' )
          
          puts 'mhh, something with with the regex or svn must be wrong.  this should never happen.<br />'
-         puts 'last line: <em>'+htmlize( $! )+'</em><br />please bug-report.'
+         puts "last line: #{$!}<br />please bug-report."
          
          make_error_foot()
          
@@ -128,5 +128,10 @@ module SVNHelper
       end #case
       
    end #def handle_default_exceptions
+   
+   
+   def merge_line_and_state( line, state )
+      "<em>#{htmlize(line)}</em> in state <em>:#{state}</em>"
+   end
    
 end #module SVNHelper

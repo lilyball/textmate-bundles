@@ -12,10 +12,10 @@ FORMAT_LOG="${TM_BUNDLE_SUPPORT}/format_log.rb"
 TM_SVN_LOG_RANGE="${TM_SVN_LOG_RANGE:=BASE:1}"
 
 if [[ -z $TM_SELECTED_FILES ]]; then
-   "$TM_SVN" log -vr"$TM_SVN_LOG_RANGE" "$TM_FILEPATH" 2&gt;&amp;1 \
+   "$TM_SVN" log --limit ${TM_SVN_LOG_LIMIT:=15} -vr"$TM_SVN_LOG_RANGE" "$TM_FILEPATH" 2&gt;&amp;1 \
    |"$TM_RUBY" -- "$FORMAT_LOG"
 else
-   eval "$TM_SVN" log -vr"$TM_SVN_LOG_RANGE" "$TM_SELECTED_FILES" 2&gt;&amp;1 \
+   eval "$TM_SVN" log --limit ${TM_SVN_LOG_LIMIT:=15} -vr"$TM_SVN_LOG_RANGE" "$TM_SELECTED_FILES" 2&gt;&amp;1 \
    |"$TM_RUBY" -- "$FORMAT_LOG"
 fi</string>
 	<key>dontFollowNewOutput</key>

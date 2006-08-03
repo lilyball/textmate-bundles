@@ -9,7 +9,7 @@
 # fetch some tm things or set useful defaults..
 $tab_size      = ENV['TM_TAB_SIZE'].to_i
 $bundle        = ENV['TM_BUNDLE_SUPPORT']
-$limit         = ENV['TM_SVN_LOG_LIMIT'].nil?   ? 9 : ENV['TM_SVN_LOG_LIMIT'].to_i
+$limit         = ENV['TM_SVN_LOG_LIMIT'].nil?   ? 15 : ENV['TM_SVN_LOG_LIMIT'].to_i
 $date_format   = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
 $support       = ENV['TM_SUPPORT_PATH']
 $svn_cmd       = ENV['TM_SVN'].nil? ? `which svn`.chomp : ENV['TM_SVN']
@@ -29,6 +29,10 @@ already_shown  = []     # to supress double messages (they could happen if you s
 skipped_files  = false  # to remember this
 changed_files  = []     # just a array to sort the files
 
+# used to remember when to show the show / hide switches the next time
+# this is necesarry because this information has to be passed over one state.
+show_switch_next_time = true
+
 # about the states of the 'parser':
 #  skipped_files  if we wait for some Skipped: messages at the beginning
 #  seperator      initial state, assuming a ---..
@@ -39,9 +43,6 @@ changed_files  = []     # just a array to sort the files
 #  skip_next      if doesnt show the next message because we already did
 state = :skipped_files
 
-# used to remember when to show the show / hide switches the next time
-# this is necesarry because this information has to be passed over one state.
-show_switch_next_time = true
 
 
 begin
@@ -73,7 +74,7 @@ begin
                puts '<a href="'+make_tm_link( $1 )+'">'+htmlize($1)+'</a><br />'
                
             else
-               raise NoMatchException, line
+               raise NoMatchException, merge_line_and_state( line, state )
             end
             
          when :seperator
@@ -82,7 +83,7 @@ begin
             if line =~ /^-{72}$/
                state = :info
             else
-               raise NoMatchException, line
+               raise NoMatchException, merge_line_and_state( line, state )
             end
             
          when :info
@@ -110,7 +111,7 @@ begin
                show_switch_next_time = true
                
             else
-               raise NoMatchException, line
+               raise NoMatchException, merge_line_and_state( line, state )
             end
             
          when :changed_paths
@@ -122,7 +123,7 @@ begin
             elsif line =~ /^\s*$/
                state = :comment
             else
-               raise NoMatchException, line
+               raise NoMatchException, merge_line_and_state( line, state )
             end
             
          when :path_list
@@ -132,7 +133,7 @@ begin
                        when 'M'; :modified
                        when 'D'; :deleted
                        when 'R'; :replaced
-                       else;     raise NoMatchException, line
+                       else;     raise NoMatchException, merge_line_and_state( line, state )
                     end
                
                changed_files << [ op, $2 ]
@@ -140,7 +141,7 @@ begin
             elsif line =~ /^\s*$/
                state = :comment
             else
-               raise NoMatchException, line
+               raise NoMatchException, merge_line_and_state( line, state )
             end
             
          when :comment
@@ -158,26 +159,28 @@ begin
                end
                
                changed_files.each do |path|
+                  # remove the stuff stating that this file comes from a older revision
                   $file = path[1].gsub(/(.*) \(from .*:\d+\)/, '\1')
+                  
                   $base_url = $svn_url.split($file.slice(%r(/[^/]*)))[0]
                   $full_url = $base_url + $file
                   $filename = $file.gsub(%r(.*/(.*)$), '\1')
                   $filename_escaped = $filename.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')
                   $full_url_escaped = $full_url.gsub(/[^a-zA-Z0-9_:.\/@+]/) { |m| sprintf("%%%02X", m[0] ) }
                   
-                  print '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(&quot;' + $svn_cmd + '&quot;, &quot;' + $full_url_escaped + '&quot;, '
+                  print '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(\''+$svn_cmd+'\', \''+$full_url_escaped+'\', '
                   
-                  # if a file was deleted, then show the previous (existing revision)
+                  # if a file was deleted, then show the previous (existing) revision
                   print ( (path[0] == :deleted) ? (rev.to_i - 1).to_s : rev )
                   
-                  puts ', &quot;' + $filename_escaped + '&quot;); return false">'+htmlize(path[1])+"</a>"
+                  print ', &quot;' + $filename_escaped + '&quot;); return false">'+htmlize(path[1])+"</a>"
                   
                   # if the document was modified show a diff
                   if path[0] == :modified
-                     puts '  &nbsp;(<a href="#" onClick="javascript:diff_and_open_tm( \''+$svn_cmd+'\', \''+$full_url_escaped+'\', '+rev+', \'/tmp/'+$filename_escaped+'.diff\' ); return false">Diff With Previous</a>)'
+                     print '  &nbsp;(<a href="#" onClick="javascript:diff_and_open_tm( \''+$svn_cmd+'\', \''+$full_url_escaped+'\', '+rev+', \'/tmp/'+$filename_escaped+'.diff\' ); return false">Diff With Previous</a>)'
                   end
                   
-                  puts '  </li>'
+                  puts '</li>'
                   
                end
                

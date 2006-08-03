@@ -10,6 +10,9 @@ module SVNHelper
    # (log) raised, if the maximum number of log messages is shown.
    class LogLimitReachedException < StandardError; end
    
+   # (log) thrown when a parser ended in a state that wasn't expected
+   class UnexpectedFinalStateException < StandardError; end
+   
    # (all) raised if the 'parser' gets a line
    # which doesnt match a certain scheme or wasnt expected
    # in a special state.
@@ -18,8 +21,6 @@ module SVNHelper
    # (all) if we should go in error mode
    class SVNErrorException < StandardError; end
    
-   # thrown when a parser ended in a state that wasn't expected
-   class UnexpectedFinalStateException < StandardError; end
    
    # makes a txmt-link for the html output, the line arg is optional.
    def make_tm_link( filename, line=nil )
@@ -101,7 +102,7 @@ module SVNHelper
          make_error_head( 'No Match' )
          
          puts 'mhh, something with with the regex or svn must be wrong.  this should never happen.<br />'
-         puts "last line: #{$!}<br />please bug-report."
+         puts "last line: <em>#{htmlize($!)}</em><br />please bug-report."
          
          make_error_foot()
          
@@ -130,8 +131,10 @@ module SVNHelper
    end #def handle_default_exceptions
    
    
+   # used when throwing a NoMatchException to also tell the state,
+   # because you can only pass 1 string to raise you have to cat them together.
    def merge_line_and_state( line, state )
-      "<em>#{htmlize(line)}</em> in state <em>:#{state}</em>"
+      "\"#{line}\" in state :#{state}"
    end
    
 end #module SVNHelper

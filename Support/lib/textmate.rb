@@ -108,6 +108,21 @@ module TextMate
       block.call(current_file)
     end
   end
+  
+  # returns a array if all currently selected files or nil
+  def TextMate.selected_files( tm_selected_files = ENV['TM_SELECTED_FILES'] )
+    return nil  if tm_selected_files.nil? or tm_selected_files.empty?
+    result = Array.new
+    
+    # iterate over every possible file
+    tm_selected_files.gsub( /(('.+?'|\\')+)/ ) do |file|
+      # make  'test'\''me'  become  test'me  and add it to the result
+      result << file.gsub(/\\(')|'([^']*)'/, '\\1\\2')
+      nil
+    end
+    
+    return result
+  end
 
 end
 

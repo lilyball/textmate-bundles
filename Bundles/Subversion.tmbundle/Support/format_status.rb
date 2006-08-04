@@ -176,10 +176,8 @@ mup.html {
 						#{ %{cmd += "export   TM_SUPPORT_PATH=#{ e_sh_js ENV['TM_SUPPORT_PATH']   }; ";} if ENV['TM_SUPPORT_PATH']   }
 						#{ %{cmd += "export      CommitWindow=#{ e_sh_js ENV['CommitWindow']      }; ";} if ENV['CommitWindow']      }
 						#{ %{cmd += "export   TM_SVN_DIFF_CMD=#{ e_sh_js ENV['TM_SVN_DIFF_CMD']   }; ";} if ENV['TM_SVN_DIFF_CMD']   }
-						#{ %{cmd += "export TM_SELECTED_FILES=#{ e_sh_js ENV['TM_SELECTED_FILES'] }; ";} if ENV['TM_SELECTED_FILES'] }
-						#{ %{cmd += "export TM_SELECTED_FILES=#{ e_sh_js("'"+(ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY'])+"'") }; ";\n} unless ENV['TM_SELECTED_FILES']}
 						
-						cmd += 'cd "#{ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']}";"#{ENV['TM_RUBY'] || "ruby"}" -- "#{ENV['TM_BUNDLE_SUPPORT']}/svn_commit.rb"'
+						cmd += '"#{ENV['TM_RUBY'] || "ruby"}" -- "#{ENV['TM_BUNDLE_SUPPORT']}/svn_commit.rb" "#{work_paths.join("\" \"")}"'
 						document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'
 						// SVNCommand(cmd, '_commit', '-', 'done')
 						

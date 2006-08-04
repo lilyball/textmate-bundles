@@ -6,6 +6,7 @@ support     = ENV['TM_SUPPORT_PATH']   || File.dirname(File.dirname(File.dirname
 commit_tool = ENV['CommitWindow']      || support + '/bin/CommitWindow.app/Contents/MacOS/CommitWindow'
 diff_cmd    = ENV['TM_SVN_DIFF_CMD']   || 'diff'
 
+# puts ARGV.inspect
 # puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG
 # puts 'TM_FILEPATH        '+ ENV['TM_FILEPATH']       rescue nil #DEBUG
 # puts 'svn                '+ svn                                 #DEBUG
@@ -65,6 +66,8 @@ else
 	# TextMate
 	$console_output = false
 	paths_to_commit = TextMate::selected_paths_array
+	paths_to_commit.concat( ARGV ) unless ARGV.empty?
+	
 	mup = Builder::XmlMarkup.new(:target => STDOUT)
 end
 

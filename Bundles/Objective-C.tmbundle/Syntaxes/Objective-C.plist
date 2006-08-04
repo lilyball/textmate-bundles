@@ -222,9 +222,29 @@
 			<key>name</key>
 			<string>support.constant.cocoa</string>
 		</dict>
+		<dict>
+			<key>include</key>
+			<string>#bracketed_content</string>
+		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>bracketed_content</key>
+		<dict>
+			<key>begin</key>
+			<string>\[</string>
+			<key>end</key>
+			<string>\]</string>
+			<key>name</key>
+			<string>meta.bracketed.objc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
 		<key>comment</key>
 		<dict>
 			<key>patterns</key>

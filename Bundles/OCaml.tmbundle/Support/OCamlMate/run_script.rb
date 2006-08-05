@@ -6,8 +6,6 @@ require 'open3'
 require 'cgi'
 require 'fcntl'
 
-$RUBYMATE_VERSION = "$Revision: 4106 $"
-
 def esc(str)
   CGI.escapeHTML(str).gsub(/\n/, '<br/>')
 end
@@ -30,7 +28,7 @@ class UserScript
 
   def compile
     # compile it
-    output = `#{e_sh @ocamlc} -o #{e_sh @dstfile} str.cma unix.cma #{e_sh @srcfile} 2>&1`
+    output = `#{e_sh @ocamlc} -o #{e_sh @dstfile} -I /opt/local/lib/ocaml/threads str.cma unix.cma threads.cma  #{e_sh @srcfile} 2>&1`
     
     onlywarnings = true
     if output != ""

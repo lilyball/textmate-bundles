@@ -71,7 +71,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.class.type.ocaml</string>
+					<string>storage.type.user-defined.ocaml</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -223,7 +223,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b((?:[A-Z][a-zA-Z0-9_]*)(?:\.[A-Z][a-zA-Z0-9_]+)*)(\.[a-z][a-z_][a-zA-Z0-9'_])</string>
+			<string>\b((?:[A-Z][a-zA-Z0-9_]*)(?:\.[A-Z][a-zA-Z0-9_]+)*)(\.[a-zA-Z0-9'_]+)</string>
 			<key>name</key>
 			<string>meta.module.ocaml</string>
 		</dict>
@@ -338,6 +338,12 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>(\b(true|false)\b|\(\)|\[\]|_)</string>
+			<key>name</key>
+			<string>constant.language.pseudo-variable.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>\b_|!=|[#|,})(\]]|\.{1,2}|:[:=&gt;]??|;{1,2}?|&gt;[\]}]|\[[&lt;&gt;|]?|\{&lt;?|\|]</string>
 			<key>name</key>
 			<string>keyword.operator.symbol.ocaml</string>
@@ -380,7 +386,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(as|assert|class|constraint|exception|external|false|fun|function|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|of|open|private|rec|sig|struct|true|type|val|virtual|type)\b</string>
+			<string>\b(as|assert|class|constraint|exception|external|fun|function|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|of|open|private|rec|sig|struct|type|val|virtual|type)\b</string>
 			<key>name</key>
 			<string>keyword.other.language.ocaml</string>
 		</dict>
@@ -482,23 +488,60 @@
 					<string>variable.parameter.optional.ocaml</string>
 				</dict>
 				<dict>
-					<key>captures</key>
+					<key>begin</key>
+					<string>\s(\{)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>keyword.operator.ocaml</string>
 						</dict>
-						<key>2</key>
+					</dict>
+					<key>end</key>
+					<string>(\})</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>keyword.operator.ocaml</string>
 						</dict>
 					</dict>
-					<key>match</key>
-					<string>\s(\{)(.*)(\})</string>
 					<key>name</key>
 					<string>variable.parameter.record.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.record.ocaml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.ocaml</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>variable.parameter.record.ocaml</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.ocaml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\s*([a-z][a-zA-Z0-9_]*)\s*(=)\s*([a-z][a-zA-Z0-9_]*)(;?)</string>
+							<key>name</key>
+							<string>meta.recordfield.ocaml</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

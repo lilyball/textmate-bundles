@@ -5,65 +5,73 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
-
-$tags = [
-  { :label =&gt; "TASK",    :color =&gt; "#ff0000", :regexp =&gt; /^TASK[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "WORK_TASK",    :color =&gt; "#ff0000", :regexp =&gt; /^WORK_TASK[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "HOME_TASK",    :color =&gt; "#ff0000", :regexp =&gt; /^HOME_TASK[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "CALL",    :color =&gt; "#009900", :regexp =&gt; /CALL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "WORK_CALL",    :color =&gt; "#009900", :regexp =&gt; /WORK_CALL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "HOME_CALL",    :color =&gt; "#009900", :regexp =&gt; /HOME_CALL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "EMAIL",    :color =&gt; "#0000ff", :regexp =&gt; /EMAIL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "WORK_EMAIL",    :color =&gt; "#0000ff", :regexp =&gt; /WORK_EMAIL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "HOME_EMAIL",    :color =&gt; "#0000ff", :regexp =&gt; /HOME_EMAIL[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "BUY",    :color =&gt; "#00ff33", :regexp =&gt; /BUY[\s,:]+(\w.*)$/i    },
-  { :label =&gt; "WAIT",    :color =&gt; "#99990d", :regexp =&gt; /WAIT[\s,:]+(\w.*)$/i    },
-]
+	<string>#!/usr/bin/env ruby  
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
+require "pp"
 include ERB::Util
+
+$myPath = ENV['TM_DIRECTORY'] 
+$tags = [] #user defined contexts
+
+def readContexts(a)
+  # processes contexts.gtd into script  
+  context, tabCommand, tabString, regex, color = a.split(/\|/)
+  if context != "DONE"
+    $tags.push({:label =&gt; context, :regexp =&gt; regex, :color =&gt; color, :matches =&gt; []})  
+  end 
+end
+
+
+
 
 def TextMate.file_link (file, line = 0)
   return "txmt://open/?url=file://" +
     file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
     "&amp;amp;line=" + line.to_s
-end
+end  
 
-# setup empty array for per tag results
-$tags.each { |tag| tag[:matches] = [ ] }
+# the contexts.gtd file is read, and converted into $contexts
+file = File.open($myPath+"/contexts.gtd", "r")
+file.each do |line|
+  readContexts(line)
+end 
 
-TextMate.each_text_file do |file|
-  $tags.each do |tag|
-    File.open(file) do |io|
-      io.grep(tag[:regexp]) do |content|
-        results = {
-          :file =&gt; file[1..-5],
-          :line =&gt; io.lineno,
-          :content =&gt; content
-        }
-        if tag[:label] == "RADAR" then
-          url = "rdar://" + $2
-          results[:match] = html_escape($1) + "&lt;a href=\"" + url + "\"&gt;" + html_escape(url) + "&lt;/a&gt;" + html_escape($3)
-        else
-          results[:match] = html_escape($1)
+# sorting happens
+$tags.each do |tag| 
+    context = tag[:label]    
+    myFiles = Dir.entries($myPath)
+    myFiles.each do |fileName|
+      if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd")
+        lineno = 0
+        mFile = File.open(fileName) 
+        mFile.each do |line|
+          lineno = lineno + 1
+          re = /\s/
+          ctask = re.match(line)
+          if ctask.pre_match == context
+            results = {
+              :file =&gt; fileName[0..-5],
+              :line =&gt; lineno,
+              :content =&gt; ctask.post_match
+            }
+            #results[:match] = html_escape($1)
+            tag[:matches] &lt;&lt; results
+          end        
         end
-        tag[:matches] &lt;&lt; results
       end
-    end
-  end
+    end 
 end
 
 tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"
-puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result
-</string>
+puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@T</string>
 	<key>name</key>
-	<string>Show Active GTD List</string>
+	<string>Active GTD List View</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>

@@ -62,7 +62,6 @@ $tags.each do |tag|
     end 
 end
 
-#pp $tags
 tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"
 puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result</string>
 	<key>input</key>

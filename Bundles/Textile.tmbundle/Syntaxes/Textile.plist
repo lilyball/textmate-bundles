@@ -255,16 +255,137 @@
 					<string>markup.list.numbered.textile</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.title</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.description.title</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.reference.link</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>"(\\"|[^"])*":\S+</string>
+					<string>(?x)
+								"								# Start name, etc
+									(?:							# Attributes
+										# I swear, this is how the language is defined,
+										# couldnt make it up if I tried.
+										(?:\([^)]+\))?(?:\{[^}]+\})?(?:\[[^\]]+\])?
+											# Class, Style, Lang
+									  | (?:\{[^}]+\})?(?:\[[^\]]+\])?(?:\([^)]+\))?
+											# Style, Lang, Class
+									  | (?:\[[^\]]+\])?(?:\{[^}]+\})?(?:\([^)]+\))?
+											# Lang, Style, Class
+									)?
+									([^"]+?)					# Link name
+									\s?							# Optional whitespace
+									(?:\(([^)]+?)\))?
+								":								# End name
+								(\w[-\w_]*)						# Linkref
+								(?=[^\w\/;]*?(&lt;|\s|$))			# Catch closing punctuation
+																#  and end of meta.link
+					</string>
 					<key>name</key>
-					<string>markup.underline.link.textile</string>
+					<string>meta.link.reference.textile</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.title</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.description.title</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>!\S+(\((\w| )+\))?!</string>
+					<string>(?x)
+								"								# Start name, etc
+									(?:							# Attributes
+										# I swear, this is how the language is defined,
+										# couldnt make it up if I tried.
+										(?:\([^)]+\))?(?:\{[^}]+\})?(?:\[[^\]]+\])?
+											# Class, Style, Lang
+									  | (?:\{[^}]+\})?(?:\[[^\]]+\])?(?:\([^)]+\))?
+											# Style, Lang, Class
+									  | (?:\[[^\]]+\])?(?:\{[^}]+\})?(?:\([^)]+\))?
+											# Lang, Style, Class
+									)?
+									([^"]+?)					# Link name
+									\s?							# Optional whitespace
+									(?:\(([^)]+?)\))?
+								":								# End Name
+								(\S*?(?:\w|\/|;))				# URL
+								(?=[^\w\/;]*?(&lt;|\s|$))			# Catch closing punctuation
+																#  and end of meta.link
+					</string>
 					<key>name</key>
-					<string>markup.underline.link.image.textile</string>
+					<string>meta.link.inline.textile</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link.image</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.description</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?x)
+								\!										# Open image
+								(\&lt;|\=|\&gt;)?								# Optional alignment
+								(?:										# Attributes
+									# I swear, this is how the language is defined,
+									# couldnt make it up if I tried.
+									(?:\([^)]+\))?(?:\{[^}]+\})?(?:\[[^\]]+\])?
+										# Class, Style, Lang
+								  | (?:\{[^}]+\})?(?:\[[^\]]+\])?(?:\([^)]+\))?
+										# Style, Lang, Class
+								  | (?:\[[^\]]+\])?(?:\{[^}]+\})?(?:\([^)]+\))?
+										# Lang, Style, Class
+								)?
+								(?:\.[ ])?            					# Optional
+								([^\s(!]+?)         					# Image URL
+								\s?                						# Optional space
+								(?:\(((?:[^\(\)]|\([^\)]+\))+?)\))?   	# Optional title
+								\!										# Close image
+								(?:
+									:
+									(\S*?(?:\w|\/|;))					# URL
+									(?=[^\w\/;]*?(&lt;|\s|$))				# Catch closing punctuation
+								)?
+					</string>
+					<key>name</key>
+					<string>meta.image.inline.textile</string>
 				</dict>
 				<dict>
 					<key>captures</key>

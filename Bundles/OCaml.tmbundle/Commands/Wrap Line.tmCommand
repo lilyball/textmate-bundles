@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+# This command attempts to reformat long lines with hard breaks in a reasonable
+# fashion for OCaml source code
+
+$: &lt;&lt; ENV['TM_SUPPORT_PATH']
+
+require 'lib/escape'
+
+
+# generates a fill string consisting of as many tab characters as
+# possible plus spaces to fill it out
+def generate_tabbing(length)
+	if length.kind_of?(String)
+		length = length.gsub(/\t/, " " * ENV['TM_TAB_SIZE'].to_i()).length()
+	end
+	if length &lt; 0 then length = 0 end
+	fillsize = ENV['TM_TAB_SIZE'].to_i()
+	fillchar = if ENV['TM_SOFT_TABS'] == 'YES' then " " * fillsize else "\t" end
+	return (fillchar * (length / fillsize)) + " " * (length % fillsize)
+end
+
+
+# pulls the next reasonable chunk from txt, attempting to break 
+# it in the best place possible.  The rules are:
+# break before an open paren if possible
+# then look for after a close paren, or on a space
+# avoid breaking in strings
+def nextchunk(txt, length)
+	nextchunk = txt[/^("(\\.|[^"])*"|.){1,#{length - 1}}(?=\()/]
+	if !nextchunk or nextchunk.length &lt; length / 2 then
+		nextchunk = txt[/^("(\\.|[^"])*"|.){1,#{length - 1}}($|\)| )/]
+	end
+	
+	nextchunk
+end
+
+
+def wrap_text_with_indent(txt, length)
+	lines = []
+	# while we have line left, get a piece
+	while txt.length &gt; 0
+		line = nextchunk(txt, length)
+		lines &lt;&lt; line[/\S.*$/]
+		txt = txt[line.length..-1]
+	end
+	
+	lines
+end
+
+
+tabsize = ENV['TM_TAB_SIZE'].to_i()
+line = $stdin.read()
+fulllinelength = ENV['TM_COLUMNS'].to_i()
+
+# the start column should be the furthest = after a let, or the first open paren
+# or a single indent if neither of those can be found.  But in no case should the
+# startcol be larger than half of the full line length
+startcol = line[/^.*=\s*(?=\S)/].to_s.length
+if startcol == 0 or startcol &gt; fulllinelength/2 then startcol = line[/^[^\(]*/].to_s.length end
+if startcol == 0 or startcol &gt; fulllinelength/2
+	startcol = tabsize
+end
+
+indent = generate_tabbing(line[0...startcol])
+linelength = fulllinelength - startcol
+
+firstline = nextchunk(line, fulllinelength - 1)
+line = line[firstline.length..-1]
+wraplines = wrap_text_with_indent(line, linelength)
+
+# output the new split line
+puts e_sn(firstline)
+print wraplines.map() { |l| e_sn("#{indent}#{l}") }.join("\n")
+</string>
+	<key>disableOutputAutoIndent</key>
+	<true/>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^q</string>
+	<key>name</key>
+	<string>Wrap Line</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
+	<key>uuid</key>
+	<string>41481AFE-8B7C-4B7F-AECA-6725DADC0B27</string>
+</dict>
+</plist>

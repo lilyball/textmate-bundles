@@ -7,20 +7,68 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-# This command attempts to reformat long lines with hard breaks in a reasonable
-# fashion for OCaml source code
-
 $: &lt;&lt; ENV['TM_SUPPORT_PATH']
 
 require 'lib/escape'
 
 
+def parse_line(str)
+	tokens = []
+	current = ""
+	instr = false
+	escaped = false
+	parenlevel = 0
+	
+	str.each_byte() do |b|
+		c = b.chr()
+		current &lt;&lt; c
+
+		# token break
+		if !instr and parenlevel == 0 and (c == ' ' or c == '\t')
+			tokens &lt;&lt; current
+			current = ""
+		elsif !instr and c == '"'
+			instr = true
+		elsif instr and c == '\\'
+			escaped = true
+		elsif instr and escaped
+		elsif instr and c == '"'
+			instr = false
+		elsif !instr and c == '('
+			parenlevel += 1
+		elsif !instr and c == ')'
+			parenlevel -= 1
+			if parenlevel == 0
+				tokens &lt;&lt; ["("] + parse_line(current[/^\((.*)\)$/, 1]) + [")"]
+				current = ""
+			end
+		end
+	end
+	tokens &lt;&lt; current
+	
+	tokens
+end
+
+
+def token_to_s(token)
+	if token.kind_of?(String)
+		token
+	else
+		token.flatten.join("")
+	end
+end
+
+
+ENV['TM_TAB_SIZE'] = '2'
+ENV['TM_SOFT_TABS'] = 'YES'
+
 # generates a fill string consisting of as many tab characters as
 # possible plus spaces to fill it out
-def generate_tabbing(length)
+def make_indent(length)
 	if length.kind_of?(String)
 		length = length.gsub(/\t/, " " * ENV['TM_TAB_SIZE'].to_i()).length()
 	end
+	
 	if length &lt; 0 then length = 0 end
 	fillsize = ENV['TM_TAB_SIZE'].to_i()
 	fillchar = if ENV['TM_SOFT_TABS'] == 'YES' then " " * fillsize else "\t" end
@@ -28,58 +76,75 @@ def generate_tabbing(length)
 end
 
 
-# pulls the next reasonable chunk from txt, attempting to break 
-# it in the best place possible.  The rules are:
-# break before an open paren if possible
-# then look for after a close paren, or on a space
-# avoid breaking in strings
-def nextchunk(txt, length)
-	nextchunk = txt[/^("(\\.|[^"])*"|.){1,#{length - 1}}(?=\()/]
-	if !nextchunk or nextchunk.length &lt; length / 2 then
-		nextchunk = txt[/^("(\\.|[^"])*"|.){1,#{length - 1}}($|\)| )/]
+def contains_unmatched_paren(str)
+	parenlevel = 0
+	instr = false
+	escaped = false
+	
+	str.each_byte() do |b|
+		c = b.chr()
+
+		# token break
+		if !instr and c == '"'
+			instr = true
+		elsif instr and c == '\\'
+			escaped = true
+		elsif instr and escaped
+			# do nothing
+		elsif instr and c == '"'
+			instr = false
+		elsif !instr and c == '('
+			parenlevel += 1
+		elsif !instr and c == ')'
+			parenlevel -= 1
+		end
 	end
 	
-	nextchunk
+	if parenlevel &gt; 0
+		true
+	else
+		false
+	end
 end
 
 
-def wrap_text_with_indent(txt, length)
-	lines = []
-	# while we have line left, get a piece
-	while txt.length &gt; 0
-		line = nextchunk(txt, length)
-		lines &lt;&lt; line[/\S.*$/]
-		txt = txt[line.length..-1]
+def make_multi_line(tokens, linelength = 78, currentindent = 0, line = "", lines = [])
+	while tokens.length &gt; 0
+		token = tokens[0]
+		tokens = tokens[1..-1]
+		tokenstr = token_to_s(token)
+		
+		if (line.length + tokenstr.length) &lt; (linelength - currentindent)
+			line += tokenstr
+		else
+			lines &lt;&lt; line
+			line = make_indent(currentindent)
+
+			if token.kind_of?(String)
+				line += tokenstr
+				return make_multi_line(tokens, linelength, currentindent, line, lines)
+			else
+				line += token[0]
+				newindent = currentindent
+				if contains_unmatched_paren(line)
+					newindent = newindent + ENV['TM_TAB_SIZE'].to_i()
+				end
+				lines = make_multi_line(token[1..-1], linelength, newindent, line, lines)
+				line = lines[-1]
+				lines = lines[0..-2]
+			end
+		end
 	end
-	
+	lines &lt;&lt; line
+
 	lines
 end
 
 
-tabsize = ENV['TM_TAB_SIZE'].to_i()
 line = $stdin.read()
+indent = make_indent(line[/^\s*/])
 fulllinelength = ENV['TM_COLUMNS'].to_i()
-
-# the start column should be the furthest = after a let, or the first open paren
-# or a single indent if neither of those can be found.  But in no case should the
-# startcol be larger than half of the full line length
-startcol = line[/^.*=\s*(?=\S)/].to_s.length
-if startcol == 0 or startcol &gt; fulllinelength/2 then startcol = line[/^[^\(]*/].to_s.length end
-if startcol == 0 or startcol &gt; fulllinelength/2
-	startcol = tabsize
-end
-
-indent = generate_tabbing(line[0...startcol])
-linelength = fulllinelength - startcol
-
-firstline = nextchunk(line, fulllinelength - 1)
-line = line[firstline.length..-1]
-wraplines = wrap_text_with_indent(line, linelength)
-
-# output the new split line
-puts e_sn(firstline)
-print wraplines.map() { |l| e_sn("#{indent}#{l}") }.join("\n")
-</string>
+print e_sn(make_multi_line(parse_line(line[/\S.*$/]), fulllinelength, indent.length + ENV['TM_TAB_SIZE'].to_i, indent).join("\n"))</string>
 	<key>disableOutputAutoIndent</key>
 	<true/>
 	<key>fallbackInput</key>

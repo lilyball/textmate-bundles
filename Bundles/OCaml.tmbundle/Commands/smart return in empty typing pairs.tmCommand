@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+$: &lt;&lt; ENV['TM_SUPPORT_PATH']
+
+require 'lib/escape'
+
+def generate_tabbing(length)
+	if length &lt; 0 then length = 0 end
+	fillsize = ENV['TM_TAB_SIZE'].to_i()
+	fillchar = if ENV['TM_SOFT_TABS'] == 'YES' then " " * fillsize else "\t" end
+	return (fillchar * (length / fillsize)) + " " * (length % fillsize)
+end
+
+
+line = $stdin.read()
+lineindex = ENV['TM_LINE_INDEX'].to_i
+left = if lineindex == 0 then "" else line[0..lineindex - 1] end
+right = line[lineindex..-1]
+indent1 = generate_tabbing(left.length)
+indent2 = generate_tabbing(left.length - 1)
+
+puts "#{e_sn left}\n#{indent1}$0\n#{indent2}#{e_sn right}"</string>
+	<key>disableOutputAutoIndent</key>
+	<true/>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>smart return in empty typing pairs</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>meta.empty-typing-pair.ocaml</string>
+	<key>uuid</key>
+	<string>95F5FE74-2FED-445A-B33B-7C7A04ABFAA3</string>
+</dict>
+</plist>

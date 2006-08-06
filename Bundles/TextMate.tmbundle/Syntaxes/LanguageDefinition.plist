@@ -678,9 +678,15 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(swallow|foregroundColor|backgroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|mode|highlightPairs|smartTypingPairs|increaseIndentPattern)\b(?=\s*=)</string>
+					<string>\b(swallow|mode)\b(?=\s*=)</string>
 					<key>name</key>
 					<string>invalid.deprecated.constant.tm-language-def</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(foregroundColor|backgroundColor|fontStyle|elementForegroundColor|elementBackgroundColor|elementFontStyle|highlightPairs|smartTypingPairs|increaseIndentPattern)\b(?=\s*=)</string>
+					<key>name</key>
+					<string>invalid.illegal.constant.outdated.tm-language-def</string>
 				</dict>
 				<dict>
 					<key>match</key>

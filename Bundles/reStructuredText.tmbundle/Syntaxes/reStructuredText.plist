@@ -69,12 +69,47 @@
 					</array>
 				</dict>
 				<dict>
+					<key>begin</key>
+					<string>^([ \t]*).*?(::)</string>
+					<key>captures</key>
+					<dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>markup.raw.rst</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>verbatim blocks</string>
+					<key>end</key>
+					<string>^(?=\1\w+)</string>
+					<key>name</key>
+					<string>meta.raw.block.restructuredtext</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>.+</string>
+							<key>name</key>
+							<string>markup.raw.rst</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
 					<key>comment</key>
 					<string>directives</string>
 					<key>match</key>
 					<string>\.\.\s[A-z][A-z0-9-_]+:: </string>
 					<key>name</key>
 					<string>meta.directive.restructuredtext</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>directives</string>
+					<key>match</key>
+					<string>::</string>
+					<key>name</key>
+					<string>meta.startraw.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -93,28 +128,70 @@
 					<string>markup.italic.restructuredtext</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.title</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link</string>
+						</dict>
+					</dict>
 					<key>comment</key>
 					<string>replacement</string>
 					<key>match</key>
-					<string>\.\.\s\|[^|]+\|</string>
+					<string>\.\.\s+(_[\w\s]+):\s+(.*)</string>
 					<key>name</key>
-					<string>markup.link.restructuredtext</string>
+					<string>meta.link.external.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>
 					<string>substitution</string>
 					<key>match</key>
-					<string>\|[^|]+\|</string>
+					<string>\|[^|]+\|_{0,2}</string>
 					<key>name</key>
-					<string>markup.link.restructuredtext</string>
+					<string>markup.underline.substitution.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>
 					<string>links `...`_ or `...`__</string>
 					<key>match</key>
-					<string>`[A-z0-9]+[^`]+`_{1,2}</string>
+					<string>\b\w+_\b</string>
 					<key>name</key>
-					<string>markup.link.restructuredtext</string>
+					<string>string.other.link.title</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>links `...`_ or `...`__</string>
+					<key>match</key>
+					<string>`[\w\s]+`_</string>
+					<key>name</key>
+					<string>string.other.link.title</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.title</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>links `...`_ </string>
+					<key>match</key>
+					<string>`([\w\s]+)\s+(&lt;.*?&gt;)`_</string>
+					<key>name</key>
+					<string>meta.link.inline.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -138,7 +215,7 @@
 					<key>match</key>
 					<string>\[\*\]_</string>
 					<key>name</key>
-					<string>markup.link.footnote.restructuredtext</string>
+					<string>markup.constant.footnote.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -146,7 +223,7 @@
 					<key>match</key>
 					<string>\[[A-z][A-z0-9_-]*\]_</string>
 					<key>name</key>
-					<string>markup.link.citation.restructuredtext</string>
+					<string>markup.constant.citation.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -162,9 +239,9 @@
 					<key>comment</key>
 					<string>intepreted text</string>
 					<key>match</key>
-					<string>`[^`]+`</string>
+					<string>`[^`]+`(?!_)</string>
 					<key>name</key>
-					<string>markup.raw.restructuredtext</string>
+					<string>markup.command.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>

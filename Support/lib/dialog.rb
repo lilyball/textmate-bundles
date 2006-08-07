@@ -97,7 +97,7 @@ class << self
         return_value = options['button2'] # simulate cancel
       end
     else
-      return_value = result.shift
+      return_value, result = *result
     end
     if return_value == options["button2"] then
       block_given? ? raise(SystemExit) : nil

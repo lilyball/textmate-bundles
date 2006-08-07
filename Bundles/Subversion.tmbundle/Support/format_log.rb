@@ -1,7 +1,7 @@
 # 'parses' the output of svn log and makes html out of
 # it, which it then shows you.
 # 
-# copyright 2005 torsten becker <torsten.becker@gmail.com>
+# by torsten becker <torsten.becker@gmail.com>, 2005/06
 # no warranty, that it doesn't crash your system.
 # you are of course free to modify this.
 
@@ -33,6 +33,9 @@ begin
    $svn_cmd     = ENV['TM_SVN'].nil? ? `which svn`.chomp : ENV['TM_SVN']
    $sort_order  = [ :added, :modified, :deleted, :replaced ]
    
+   # will not print the bad lines in orange
+   $ignore_bad_lines = ENV['TM_SVN_IGNORE_BAD_LINES'].nil? ? false : true
+   
    # internal changing vars
    msg_count      = 0      # used to count messages and to show tables in alternate colors
    comment_count  = 0      # used to count the lines of comments
@@ -63,9 +66,14 @@ begin
               "<script type=\"text/javascript\">\n"+
                  File.open($bundle+'/svn_log_helper.js', 'r').readlines.join+'</script>' )
    
-   # this should not happen
-   raise SVNErrorException, 'format_log.rb was not able to reconstruct the repository url'  if $repo_url.nil? or $repo_url.empty?
-   
+   # this should not happen but could :>
+   if $repo_url.nil? or $repo_url.empty?
+      make_error_head( 'Warning' )
+      puts "format_log.rb was not able to reconstruct the repository url so you won't<br />"+
+           "be able to click on the links. (if you get this everytime it could be a bug)"
+      make_error_foot()
+      $repo_url = ''
+   end
    
    $stdout.flush
    
@@ -86,7 +94,7 @@ begin
                puts '<a href="'+make_tm_link( $1 )+'">'+htmlize($1)+'</a><br />'
                
             else
-               raise NoMatchException, merge_line_and_state( line, state )
+               puts %{<div class="bad_line">#{line}&nbsp;</div>}  unless $ignore_bad_lines
             end
             
          when :seperator

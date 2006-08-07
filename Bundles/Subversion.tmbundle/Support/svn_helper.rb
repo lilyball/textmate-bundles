@@ -1,7 +1,7 @@
 # just some small methods and some exceptions to help
 # with converting some of the svn command outputs to html.
 # 
-# copyright 2005 torsten becker <torsten.becker@gmail.com>
+# by torsten becker <torsten.becker@gmail.com>, 2005/06
 # no warranty, that it doesn't crash your system.
 # you are of course free to modify this.
 

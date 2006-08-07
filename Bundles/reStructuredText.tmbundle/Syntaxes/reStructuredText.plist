@@ -38,14 +38,6 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>comment</key>
-					<string>headings</string>
-					<key>match</key>
-					<string>^(=|-|~|`|#|"|\^|\+|\*){3,}\s*$</string>
-					<key>name</key>
-					<string>markup.heading.restructuredtext</string>
-				</dict>
-				<dict>
 					<key>begin</key>
 					<string>^([ \t]*)(\.\.\sraw::) html</string>
 					<key>captures</key>
@@ -67,6 +59,14 @@
 							<string>text.html.basic</string>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>directives</string>
+					<key>match</key>
+					<string>\.\.\s[A-z][A-z0-9-_]+::\s*$</string>
+					<key>name</key>
+					<string>meta.other.directive.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -94,14 +94,6 @@
 							<string>markup.raw.rst</string>
 						</dict>
 					</array>
-				</dict>
-				<dict>
-					<key>comment</key>
-					<string>directives</string>
-					<key>match</key>
-					<string>\.\.\s[A-z][A-z0-9-_]+:: </string>
-					<key>name</key>
-					<string>meta.directive.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -144,9 +136,9 @@
 					<key>comment</key>
 					<string>replacement</string>
 					<key>match</key>
-					<string>\.\.\s+(_[\w\s]+):\s+(.*)</string>
+					<string>\.\.\s+_([\w\s]+):\s+(.*)</string>
 					<key>name</key>
-					<string>meta.link.external.restructuredtext</string>
+					<string>meta.link.reference.def.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -157,20 +149,36 @@
 					<string>markup.underline.substitution.restructuredtext</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.title</string>
+						</dict>
+					</dict>
 					<key>comment</key>
 					<string>links `...`_ or `...`__</string>
 					<key>match</key>
-					<string>\b\w+_\b</string>
+					<string>\b(\w+)_\b</string>
 					<key>name</key>
-					<string>string.other.link.title</string>
+					<string>meta.link.reference</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.title</string>
+						</dict>
+					</dict>
 					<key>comment</key>
 					<string>links `...`_ or `...`__</string>
 					<key>match</key>
-					<string>`[\w\s]+`_</string>
+					<string>`([\w\s]+)`_</string>
 					<key>name</key>
-					<string>string.other.link.title</string>
+					<string>meta.link.reference</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -189,41 +197,115 @@
 					<key>comment</key>
 					<string>links `...`_ </string>
 					<key>match</key>
-					<string>`([\w\s]+)\s+(&lt;.*?&gt;)`_</string>
+					<string>`([\w\s]+)\s+&lt;(.*?)&gt;`_</string>
 					<key>name</key>
 					<string>meta.link.inline.restructuredtext</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.footnote.link</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.footnote</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>replacement</string>
+					<key>match</key>
+					<string>^\.\.\s+(\[((#?[\w\s]*?)|\*)\])\s+(.*)</string>
+					<key>name</key>
+					<string>meta.link.footnote.def.restructuredtext</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.footnote.link</string>
+						</dict>
+					</dict>
 					<key>comment</key>
 					<string>footnote reference: [0]_</string>
 					<key>match</key>
-					<string>\[[0-9]+\]_</string>
+					<string>(\[[0-9]+\])_</string>
 					<key>name</key>
-					<string>markup.link.footnote.restructuredtext</string>
+					<string>meta.link.footnote.numericrestructuredtext</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.footnote.link</string>
+						</dict>
+					</dict>
 					<key>comment</key>
 					<string>footnote reference [#]_ or [#foo]_</string>
 					<key>match</key>
-					<string>\[#[A-z0-9_]*\]_</string>
+					<string>(\[#[A-z0-9_]*\])_</string>
 					<key>name</key>
-					<string>markup.link.footnote.restructuredtext</string>
+					<string>meta.link.footnote.auto.restructuredtext</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.footnote.link</string>
+						</dict>
+					</dict>
 					<key>comment</key>
 					<string>footnote reference [*]_</string>
 					<key>match</key>
-					<string>\[\*\]_</string>
+					<string>(\[\*\])_</string>
 					<key>name</key>
-					<string>markup.constant.footnote.restructuredtext</string>
+					<string>meta.link.footnote.symbol.auto.restructuredtext</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.citation.link</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.citation</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>replacement</string>
+					<key>match</key>
+					<string>^\.\.\s+(\[[A-z][A-z0-9]*\])_\s+(.*)</string>
+					<key>name</key>
+					<string>meta.link.citation.def.restructuredtext</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.citation.link</string>
+						</dict>
+					</dict>
 					<key>comment</key>
 					<string>citation reference</string>
 					<key>match</key>
-					<string>\[[A-z][A-z0-9_-]*\]_</string>
+					<string>(\[[A-z][A-z0-9_-]*\])_</string>
 					<key>name</key>
-					<string>markup.constant.citation.restructuredtext</string>
+					<string>meta.link.citation.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -241,7 +323,7 @@
 					<key>match</key>
 					<string>`[^`]+`(?!_)</string>
 					<key>name</key>
-					<string>markup.command.restructuredtext</string>
+					<string>markup.other.command.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -266,6 +348,14 @@
 					<string>\+=[+=]+</string>
 					<key>name</key>
 					<string>markup.other.table.restructuredtext</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>headings</string>
+					<key>match</key>
+					<string>(^(=|-|~|`|#|"|\^|\+|\*){3,}$){1,1}?</string>
+					<key>name</key>
+					<string>markup.heading.restructuredtext</string>
 				</dict>
 				<dict>
 					<key>begin</key>

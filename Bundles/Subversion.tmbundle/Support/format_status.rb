@@ -36,20 +36,25 @@ end
 svn = ENV['TM_SVN'] || 'svn'
 svn = `which svn`.chomp unless svn[0] == ?/
 
-work_path = work_paths[0] if work_path.nil? and (not work_paths.nil?) and (work_paths.size == 1)
-work_path ||= '(selected files)'
+display_title = work_paths[0] if work_path.nil? and (not work_paths.nil?) and (work_paths.size == 1)
+display_title ||= '(selected files)'
 
 #
 # Status or update?
 #
-$is_status = false
+$is_status		= false
+$is_checkout	= false
+command_name	= 'update'
 
-ARGV.each {|arg| $is_status = true if arg == "--status"}
-
-command_name = if $is_status then
-	"status"
-else
-	"update"
+ARGV.each do |arg|
+	case arg
+	when '--status'
+		$is_status = true
+		command_name = 'status'
+	when '--checkout'
+		$is_checkout = true
+		command_name = 'checkout'
+	end
 end
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)
@@ -257,11 +262,11 @@ ENDJS
 						:width => 32 )
 			mup << " #{command_name.capitalize} for "
 			mup << "&ldquo;"
-			mup << "#{File.basename(work_path)}"
+			mup << "#{File.basename(display_title)}"
 			mup << "&rdquo;"
 		end
 #		mup.hr
-#		mup.div("class" => "command"){ mup.strong("#{svn} #{command_name}"); mup.text!(" " + work_path) } #mup.text!("checking "); 
+#		mup.div("class" => "command"){ mup.strong("#{svn} #{command_name}"); mup.text!(" " + display_title) } #mup.text!("checking "); 
 		STDOUT.flush
 		
 		mup.div( "class" => "section" ) do
@@ -344,13 +349,17 @@ ENDJS
 				end
 			}
 		end
-		mup.div(:id => 'actions'){
-			mup.a('Commit', :href => '#', :onclick => 'svn_commit(); return false')
-			mup.div(:style => 'clear:both'){}
-		}
+		
+		if $is_status then
+			mup.div(:id => 'actions'){
+				mup.a('Commit', :href => '#', :onclick => 'svn_commit(); return false')
+				mup.div(:style => 'clear:both'){}
+			}
+		end
+		
 		mup.div(:id => 'commandOutput'){
 			mup << " "
-			#DEBUG# mup << work_path + "\n"
+			#DEBUG# mup << display_title + "\n"
 			#DEBUG# ENV.sort.each { |key,value| puts key + ' = ' + value + "\n" }
 		}
 	}

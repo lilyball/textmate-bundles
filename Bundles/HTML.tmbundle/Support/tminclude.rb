@@ -158,9 +158,30 @@ module TextMate
           end
         end
 
+        if ENV['TM_PROJECT_FILEPATH']
+          dir = ENV['TM_PROJECT_FILEPATH'].dup
+          fdir = ENV['TM_DIRECTORY'].dup
+          dir.sub!(/\/[^\/]+$/, '')
+          dir = Regexp.quote(dir)
+          fdir.sub!(Regexp.new("^" + dir), '')
+          fdir.sub!(/^\//, '')
+          fdir.sub!(/\/$/, '')
+          paths = fdir.split(/\//)
+          @@global_vars['relative'] = ("../" * paths.length) || ""
+        end
+
+        # Web Project settings
+        # Site Name (Local Web)
+        # Web Server Name (http://localhost/)
+        # Site Path on Server (/path/to/site)
+        # Default Page Name (index.html)
+        # Local Site Root (~/path/to/site)
+        # Template/Include path (~/path:~/path)
+        # Local Preview URL
+
         # Unsupported...
         # base, base_url, bodytext, charset, dirpath, doctitle, language,
-        # link, machine, meta, path, prefix, real_url, relative, root,
+        # link, machine, meta, path, prefix, real_url, root,
         # rootpath, server, title
       end
 

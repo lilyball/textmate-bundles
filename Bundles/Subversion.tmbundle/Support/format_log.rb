@@ -6,8 +6,9 @@
 # you are of course free to modify this.
 
 
-$bundle  = ENV['TM_BUNDLE_SUPPORT']
-$support = ENV['TM_SUPPORT_PATH']
+$bundle 		= ENV['TM_BUNDLE_SUPPORT']
+$support	 	= ENV['TM_SUPPORT_PATH']
+$window_title	= 'Log'
 
 # we depend in this things
 require $bundle+'/svn_helper.rb'
@@ -15,6 +16,14 @@ require $support+'/bin/shelltokenize.rb'
 require $support+'/lib/textmate.rb'
 include SVNHelper
 
+
+# check for alternative titles
+ARGV.each do |arg|
+	case arg
+	when /--title=(.*)/
+		$window_title = $1
+	end
+end
 
 begin
    # get the directory which probably is our working copy
@@ -51,7 +60,7 @@ begin
    
    # about the states of the 'parser':
    #  skipped_files  if we wait for some Skipped: messages at the beginning
-   #  seperator      initial state, assuming a ---..
+   #  separator      initial state, assuming a ---..
    #  info           parsing the info line with rev, name, etc
    #  changed_paths  awaiting a changed paths thing or blank line
    #  path_list      parsing changed files
@@ -60,7 +69,7 @@ begin
    state = :skipped_files
    
    
-   make_head( 'Subversion Log',
+   make_head( 'Subversion ' + $window_title,
               [ $bundle+'/Stylesheets/svn_style.css',
                 $bundle+'/Stylesheets/svn_log_style.css'],
               "<script type=\"text/javascript\">\n"+
@@ -97,11 +106,14 @@ begin
                puts %{<div class="bad_line">#{line}&nbsp;</div>}  unless $ignore_bad_lines
             end
             
-         when :seperator
+         when :separator
             raise LogLimitReachedException  if $limit != 0 and msg_count == $limit
             
-            if line =~ /^-{72}$/
+			case line
+            when /^-{72}$/
                state = :info
+			when /(\s|\n|\r)*/
+				# ignore an empty line
             else
                raise NoMatchException, merge_line_and_state( line, state )
             end
@@ -223,7 +235,7 @@ begin
             comment_count += 1
             
             if comment_count == max_lines
-               state          = :seperator
+               state          = :separator
                comment_count  = 0
                
                puts "</td></tr></table>\n\n"
@@ -241,7 +253,7 @@ begin
       
    end #each_line
    
-   raise UnexpectedFinalStateException, state.to_s  if state != :info
+   raise UnexpectedFinalStateException, state.to_s  unless ((state == :info) || (state == :separator))
    
 rescue LogLimitReachedException
 rescue => e

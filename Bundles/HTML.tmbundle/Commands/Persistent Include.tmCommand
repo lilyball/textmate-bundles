@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_BUNDLE_SUPPORT']}/tminclude.rb"
-TextMate::Includes.include_command
+TextMate::Includes.instance.include_command
 </string>
 	<key>input</key>
 	<string>none</string>

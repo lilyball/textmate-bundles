@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_BUNDLE_SUPPORT']}/tminclude.rb"
-TextMate::Includes.process_persistent_includes
+TextMate::Includes.instance.process_persistent_includes
 </string>
 	<key>input</key>
 	<string>document</string>

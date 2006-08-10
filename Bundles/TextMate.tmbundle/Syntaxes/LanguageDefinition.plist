@@ -571,7 +571,7 @@
 					<key>contentName</key>
 					<string>comment.block.string.tm-language-def</string>
 					<key>end</key>
-					<string>'</string>
+					<string>'(?!')</string>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
 					<key>patterns</key>
@@ -811,7 +811,7 @@
 					<key>contentName</key>
 					<string>source.regexp.oniguruma.embedded.tm-language-def</string>
 					<key>end</key>
-					<string>'</string>
+					<string>'(?!')</string>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
 					<key>patterns</key>
@@ -819,6 +819,12 @@
 						<dict>
 							<key>include</key>
 							<string>source.regexp.oniguruma</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>''</string>
+							<key>name</key>
+							<string>constant.character.escape.apostrophe.tm-language-def</string>
 						</dict>
 					</array>
 				</dict>
@@ -1246,7 +1252,7 @@
 					<key>contentName</key>
 					<string>constant.other.scope.tm-language-def</string>
 					<key>end</key>
-					<string>'</string>
+					<string>'(?!')</string>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
 					<key>patterns</key>
@@ -1302,7 +1308,7 @@
 					<key>begin</key>
 					<string>'</string>
 					<key>end</key>
-					<string>'</string>
+					<string>'(?!')</string>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
 					<key>patterns</key>

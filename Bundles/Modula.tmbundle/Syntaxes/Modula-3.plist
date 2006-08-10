@@ -44,8 +44,15 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.modula-3</string>
-			<key>swallow</key>
-			<string>\\'</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\'</string>
+					<key>name</key>
+					<string>constant.character.escape.apostrophe.modula-3</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -54,8 +61,15 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.modula-3</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.modula-3</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>

@@ -99,6 +99,12 @@
 					<string>meta.redirect.mediawiki</string>
 				</dict>
 				<dict>
+					<key>match</key>
+					<string>^=+\s*$</string>
+					<key>name</key>
+					<string>markup.heading.mediawiki</string>
+				</dict>
+				<dict>
 					<key>begin</key>
 					<string>^(=+)(?=.*\1\s*$)</string>
 					<key>comment</key>
@@ -230,11 +236,33 @@
 				  * definition lists: dl, dt, dd
 				  * headers: h1, h2, h3, h4, h5, h6
 				  * br
-				
-				
 			</string>
 			<key>patterns</key>
-			<array/>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(&lt;math&gt;)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.math.markdown</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>source.math.tex.embedded.mediawiki</string>
+					<key>end</key>
+					<string>(&lt;/math&gt;)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.math.tex</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
 		</dict>
 		<key>comments</key>
 		<dict>
@@ -311,6 +339,10 @@
 				<dict>
 					<key>include</key>
 					<string>#template</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#block_html</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -550,7 +582,7 @@
 					<key>contentName</key>
 					<string>markup.bold.html.mediawiki</string>
 					<key>end</key>
-					<string>(&lt;\2&gt;)</string>
+					<string>(&lt;/\2&gt;)</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -724,7 +756,7 @@
 					<key>contentName</key>
 					<string>markup.bold.html.mediawiki</string>
 					<key>end</key>
-					<string>(&lt;\2&gt;)</string>
+					<string>(&lt;/\2&gt;)</string>
 					<key>patterns</key>
 					<array>
 						<dict>

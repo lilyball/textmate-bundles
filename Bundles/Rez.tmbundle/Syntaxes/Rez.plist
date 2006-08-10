@@ -72,8 +72,13 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.rez</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -82,8 +87,13 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.rez</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -92,8 +102,13 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.other.hex.rez</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -110,6 +125,16 @@
 			<string>meta.preprocessor.rez</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>escaped_char</key>
+		<dict>
+			<key>match</key>
+			<string>\\.</string>
+			<key>name</key>
+			<string>constant.character.escape.untitled</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.rez</string>
 	<key>uuid</key>

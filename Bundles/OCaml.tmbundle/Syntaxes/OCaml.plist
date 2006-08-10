@@ -80,25 +80,6 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.user-defined.ocaml</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>^[ \t]*(type)\s+((?:(?:\(?\s*'[A-Za-z][a-zA-Z0-9_]*\s*\)?)|(?:\(\s*'[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*\s*\))\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
-			<key>name</key>
-			<string>meta.type.ocaml</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.language.ocaml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
 					<string>entity.name.class.class.type.ocaml</string>
 				</dict>
 			</dict>
@@ -328,6 +309,83 @@
 			<string>storage.modifier.ocaml</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.language.ocaml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.user-defined.ocaml</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^[ \t]*(type)\s+((?:(?:\(?\s*'[A-Za-z][a-zA-Z0-9_]*\s*\)?)|(?:\(\s*'[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*\s*\))\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
+			<key>name</key>
+			<string>meta.type.ocaml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\b(of)\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.language.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\|)|$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.symbol.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.type.usage.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(int|char|float|string|list|array|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t)\b</string>
+					<key>name</key>
+					<string>storage.type.ocaml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b[a-z_][a-zA-Z0-9_]*\b</string>
+					<key>name</key>
+					<string>storage.type.user-defined.ocaml</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.other.module.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.module.ocaml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b((?:[A-Z][a-zA-Z0-9_]*)(?:\.[A-Z][a-zA-Z0-9_]+)*)(\.[a-zA-Z0-9'_]+)</string>
+					<key>name</key>
+					<string>meta.module.type.ocaml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\W`[A-Z][a-zA-Z0-9_]*\b</string>
 			<key>name</key>
@@ -416,7 +474,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(as|assert|class|constraint|exception|external|fun|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|of|open|private|rec|sig|struct|type|val|virtual|type)\b</string>
+			<string>\b(as|assert|class|constraint|exception|external|fun|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
 			<key>name</key>
 			<string>keyword.other.language.ocaml</string>
 		</dict>

@@ -110,16 +110,6 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>"</string>
-			<key>end</key>
-			<string>"</string>
-			<key>name</key>
-			<string>string.quoted.double.io</string>
-			<key>swallow</key>
-			<string>\\.</string>
-		</dict>
-		<dict>
-			<key>begin</key>
 			<string>"""</string>
 			<key>end</key>
 			<string>"""</string>
@@ -127,6 +117,16 @@
 			<string>string.quoted.triple.io</string>
 			<key>swallow</key>
 			<string>\\.|"</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.io</string>
+			<key>swallow</key>
+			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>match</key>

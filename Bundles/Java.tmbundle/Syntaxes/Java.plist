@@ -452,8 +452,15 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.java</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.java</string>
+				</dict>
+			</array>
 		</dict>
 		<key>support-type-built-ins-java</key>
 		<dict>

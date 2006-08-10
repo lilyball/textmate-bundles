@@ -289,8 +289,15 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.logtalk</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.logtalk</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -299,8 +306,15 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.logtalk</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.logtalk</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>

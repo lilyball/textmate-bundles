@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>path=$(osascript&lt;&lt;END
+tell application "TextMate"
+	set theFile to choose file
+	set the result to POSIX path of theFile
+end tell
+END)
+
+diff -u "$path" -
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^@D</string>
+	<key>name</key>
+	<string>Document With Arbitrary File…</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>uuid</key>
+	<string>4050A252-C604-4D0C-8545-E50B22E2715B</string>
+</dict>
+</plist>

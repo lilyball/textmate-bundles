@@ -4705,8 +4705,15 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.css</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.css</string>
+				</dict>
+			</array>
 		</dict>
 		<key>string-single</key>
 		<dict>
@@ -4716,8 +4723,15 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.css</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.css</string>
+				</dict>
+			</array>
 		</dict>
 		<key>uri</key>
 		<dict>

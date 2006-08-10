@@ -98,8 +98,15 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.mips</string>
-			<key>swallow</key>
-			<string>\\[rnt\"]</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\[rnt\"]</string>
+					<key>name</key>
+					<string>constant.character.escape.mips</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>

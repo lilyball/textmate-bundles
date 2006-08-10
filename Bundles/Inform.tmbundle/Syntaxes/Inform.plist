@@ -51,8 +51,15 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.inform</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.inform</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>

@@ -37,13 +37,17 @@
 			<array>
 				<dict>
 					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.untitled</string>
+				</dict>
+				<dict>
+					<key>match</key>
 					<string>\b(set(a|u|s)?|bind|unbindall|vstr|exec|kill|say|say_team|quit|echo)\b</string>
 					<key>name</key>
 					<string>keyword.other.string-embedded.quake3</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>match</key>

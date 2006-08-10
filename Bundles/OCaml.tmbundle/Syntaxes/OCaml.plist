@@ -129,10 +129,15 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(-&gt;|\s(?=\|))</string>
+			<string>(?:(-&gt;)|\b(when)\b|\s(?=\|))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.language.ocaml</string>
+				</dict>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.language.ocaml</string>
@@ -561,6 +566,10 @@
 					<string>_</string>
 					<key>name</key>
 					<string>constant.language.match-pattern.ocaml</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#constants</string>
 				</dict>
 				<dict>
 					<key>match</key>

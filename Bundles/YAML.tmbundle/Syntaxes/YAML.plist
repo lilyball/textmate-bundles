@@ -192,11 +192,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#erb</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -209,11 +211,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#erb</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -226,11 +230,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#erb</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -323,6 +329,13 @@
 					<string>source.ruby.rails</string>
 				</dict>
 			</array>
+		</dict>
+		<key>escaped_char</key>
+		<dict>
+			<key>match</key>
+			<string>\\.</string>
+			<key>name</key>
+			<string>constant.character.escape.untitled</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>

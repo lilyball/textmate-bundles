@@ -49,8 +49,15 @@
 			<string>$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-slash.c++</string>
-			<key>swallow</key>
-			<string>\\\s*\n</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?&gt;\\\s*\n)</string>
+					<key>name</key>
+					<string>meta.line-continuation.c++</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -203,8 +210,15 @@
 			<string>$</string>
 			<key>name</key>
 			<string>meta.preprocessor.diagnostic.c</string>
-			<key>swallow</key>
-			<string>\\\s*\n</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?&gt;\\\s*\n)</string>
+					<key>name</key>
+					<string>meta.line-continuation.c</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -224,6 +238,12 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>match</key>
+					<string>(?&gt;\\\s*\n)</string>
+					<key>name</key>
+					<string>meta.line-continuation.c</string>
+				</dict>
+				<dict>
 					<key>begin</key>
 					<string>"</string>
 					<key>end</key>
@@ -240,8 +260,6 @@
 					<string>string.quoted.other.lt-gt.include.c</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\\s*\n</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -262,8 +280,15 @@
 			<string>(?=(?://|/\*))|$</string>
 			<key>name</key>
 			<string>meta.preprocessor.c</string>
-			<key>swallow</key>
-			<string>\\\s*\n</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?&gt;\\\s*\n)</string>
+					<key>name</key>
+					<string>meta.line-continuation.c</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>

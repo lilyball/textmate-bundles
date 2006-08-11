@@ -5,9 +5,9 @@
 	<key>comment</key>
 	<string>This is a wrapper for and adds nested bracket scopes to Prototype &amp; Script.aculo.us (JavaScript). It also allow for embedded ruby source. By Thomas Aylott</string>
 	<key>foldingStartMarker</key>
-	<string>(\{[^\}]*$|\([^\)]*$|^.*/\*(?!.*\*/).*$|&lt;%)</string>
+	<string>(\{[^\}]*$|\([^\)]*$|&lt;%)</string>
 	<key>foldingStopMarker</key>
-	<string>(^[^\{]*\}|^\s*\)|^(?!.*/\*).*\*/|%&gt;)</string>
+	<string>(^[^\{]*\}|^\s*\)|%&gt;)</string>
 	<key>keyEquivalent</key>
 	<string>^~J</string>
 	<key>name</key>
@@ -78,6 +78,10 @@
 			<key>include</key>
 			<string>source.js.prototype</string>
 		</dict>
+		<dict>
+			<key>include</key>
+			<string>#leading-space</string>
+		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
@@ -120,25 +124,161 @@
 				</dict>
 			</array>
 		</dict>
+		<key>leading-space</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group1.spaces</string>
+						</dict>
+						<key>10</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group10.spaces</string>
+						</dict>
+						<key>11</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group11.spaces</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group2.spaces</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group3.spaces</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group4.spaces</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group5.spaces</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group6.spaces</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group7.spaces</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group8.spaces</string>
+						</dict>
+						<key>9</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group9.spaces</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>^(  )?(  )?(  )?(  )?(  )?(  )?(  )?(  )?(  )?(  )?( +)?</string>
+					<key>name</key>
+					<string>meta.leading-space.spaces</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group1.tab</string>
+						</dict>
+						<key>10</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group10.tab</string>
+						</dict>
+						<key>11</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group11.tab</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group2.tab</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group3.tab</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group4.tab</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group5.tab</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group6.tab</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group7.tab</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group8.tab</string>
+						</dict>
+						<key>9</key>
+						<dict>
+							<key>name</key>
+							<string>meta.leading-space.group9.tab</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>^(	)?(	)?(	)?(	)?(	)?(	)?(	)?(	)?(	)?(	)?(	+)?</string>
+					<key>name</key>
+					<string>meta.leading-space.spaces</string>
+				</dict>
+			</array>
+		</dict>
 		<key>round-brackets</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;=\))\s*+\{</string>
+					<string>(?&lt;=\))\s*+(\{)</string>
 					<key>captures</key>
 					<dict>
-						<key>0</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.curly.function.js.prototype</string>
+							<string>meta.brace.curly.function</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>meta.group.braces.curly.function</string>
+					<string>meta.content</string>
 					<key>end</key>
-					<string>\}</string>
+					<string>(\})\s*\n?</string>
+					<key>name</key>
+					<string>meta.group.braces.curly.function.js.prototype</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -149,19 +289,21 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\{</string>
+					<string>(\{)</string>
 					<key>captures</key>
 					<dict>
-						<key>0</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.curly.js.prototype</string>
+							<string>meta.brace.curly</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>meta.group.braces.curly</string>
+					<string>meta.content</string>
 					<key>end</key>
-					<string>\}</string>
+					<string>(\})\s*\n?</string>
+					<key>name</key>
+					<string>meta.group.braces.curly</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -245,19 +387,21 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\(</string>
+					<string>(\()</string>
 					<key>captures</key>
 					<dict>
-						<key>0</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.round.prototype.js</string>
+							<string>meta.brace.round</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>meta.group.braces.round.js.prototype</string>
+					<string>meta.content</string>
 					<key>end</key>
-					<string>\)</string>
+					<string>(\))</string>
+					<key>name</key>
+					<string>meta.group.braces.round</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -268,19 +412,21 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\[</string>
+					<string>(\[)</string>
 					<key>captures</key>
 					<dict>
-						<key>0</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.square.prototype.js</string>
+							<string>meta.brace.square</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>meta.group.braces.square.js.prototype</string>
+					<string>meta.content</string>
 					<key>end</key>
-					<string>\]</string>
+					<string>(\])</string>
+					<key>name</key>
+					<string>meta.group.braces.square</string>
 					<key>patterns</key>
 					<array>
 						<dict>

@@ -14,7 +14,7 @@
 				<key>background</key>
 				<string>#050505FA</string>
 				<key>caret</key>
-				<string>#FFFF55</string>
+				<string>#00807C</string>
 				<key>foreground</key>
 				<string>#CDCDCD</string>
 				<key>invisibles</key>
@@ -87,7 +87,7 @@
 			<key>name</key>
 			<string>~ String</string>
 			<key>scope</key>
-			<string>string -meta.tag -meta.doctype -string.regexp -string.literal -string.interpolated -string.quoted.other.literal -string.unquoted, variable.parameter.misc.css, text string source string, string.unquoted string</string>
+			<string>string -meta.tag -meta.doctype -string.regexp -string.literal -string.interpolated -string.quoted.literal -string.unquoted, variable.parameter.misc.css, text string source string, string.unquoted string</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -100,7 +100,7 @@
 			<key>name</key>
 			<string>~ String Literal</string>
 			<key>scope</key>
-			<string>string.quoted.other.literal, string.quoted.double.ruby.mod</string>
+			<string>string.quoted.literal, string.quoted.double.ruby.mod</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -268,17 +268,6 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>meta.brace.erb.return-value</string>
-			<key>scope</key>
-			<string>meta.brace.erb.return-value</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#86FF00</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>~ Built-in constant</string>
 			<key>scope</key>
 			<string>constant.language, keyword.other.unit, constant.other.java, constant.other.unit</string>
@@ -316,7 +305,7 @@
 			<key>name</key>
 			<string>~ Library constant</string>
 			<key>scope</key>
-			<string>support.constant, constant.other.name</string>
+			<string>support.constant, constant.name</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -446,7 +435,7 @@
 			<key>name</key>
 			<string>¢ Entity Name Preprocessor</string>
 			<key>scope</key>
-			<string>meta.preprocessor, keyword.control.import</string>
+			<string>other.preprocessor, entity.name.preprocessor</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -538,7 +527,7 @@
 			<key>name</key>
 			<string>¢ Inherited class</string>
 			<key>scope</key>
-			<string>entity.other.inherited-class, entity.name.class.module</string>
+			<string>entity.other.inherited-class, entity.name.module</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -575,7 +564,7 @@
 			<key>name</key>
 			<string>¢ Function name</string>
 			<key>scope</key>
-			<string>entity.name.function, keyword.control.import</string>
+			<string>entity.name.function, entity.name.preprocessor</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -648,7 +637,7 @@
 			<key>name</key>
 			<string>™ Keyword.operator</string>
 			<key>scope</key>
-			<string>keyword.operator, meta.function.operator</string>
+			<string>keyword.operator, declaration.function.operator</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -755,7 +744,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#FFFFFF05</string>
+				<string>#4C4C4C33</string>
 			</dict>
 		</dict>
 		<dict>
@@ -916,7 +905,7 @@
 			<key>name</key>
 			<string>M HR</string>
 			<key>scope</key>
-			<string>meta.separator.markdown</string>
+			<string>markup.hr</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -1019,7 +1008,7 @@
 			<key>name</key>
 			<string>M underline link</string>
 			<key>scope</key>
-			<string>meta.reference.list markup.underline.link</string>
+			<string>meta.reference.list markup.underline.link, text.html.textile markup.underline.link</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -1507,6 +1496,43 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>meta.brace.erb.return-value</string>
+			<key>scope</key>
+			<string>meta.brace.erb.return-value</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#86FF001A</string>
+				<key>foreground</key>
+				<string>#86FF00</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>meta.brace.erb</string>
+			<key>scope</key>
+			<string>meta.brace.erb.html</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#00FFF81A</string>
+				<key>foreground</key>
+				<string>#00FFF8</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>source.ruby.rails.embedded.one-line</string>
+			<key>scope</key>
+			<string>source.ruby.rails.embedded.one-line</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#00FFF81A</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>◊ Source</string>
 			<key>scope</key>
 			<string>source</string>
@@ -1812,6 +1838,64 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>meta.headers.blog</string>
+			<key>scope</key>
+			<string>text.blog -(text.blog text)</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>meta.headers.blog</string>
+			<key>scope</key>
+			<string>meta.headers.blog</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FFFFFF</string>
+				<key>foreground</key>
+				<string>#666666</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>meta.headers.blog keyword.other.blog</string>
+			<key>scope</key>
+			<string>meta.headers.blog keyword.other.blog</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#00FFF81A</string>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#06403E</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>meta.headers.blog string.unquoted.blog</string>
+			<key>scope</key>
+			<string>meta.headers.blog string.unquoted.blog</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FFFF551A</string>
+				<key>foreground</key>
+				<string>#803D00</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>—————————————————</string>
+			<key>settings</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>meta.brace.pipe</string>
 			<key>scope</key>
 			<string>meta.brace.pipe</string>
@@ -1845,8 +1929,6 @@
 			<string>meta.brace.curly</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#FFFFFF0D</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
@@ -1878,7 +1960,7 @@
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#FF7900</string>
+				<string>#7F5E40</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1903,8 +1985,6 @@
 			<string>meta.brace.round, meta.group.braces.round meta.delimiter.object -(meta.group.braces.round meta.group.braces meta.delimiter)</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#8000431A</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
@@ -1966,99 +2046,99 @@
 			<key>name</key>
 			<string>º meta.group.braces 1</string>
 			<key>scope</key>
-			<string>meta.group.braces, meta.block.slate, text.xml.strict meta.tag</string>
+			<string>meta.leading-space.group1, meta.group.braces, meta.block.slate, text.xml.strict meta.tag</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#0A0A0A</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>º meta.group.braces 2</string>
 			<key>scope</key>
-			<string>meta.group.braces meta.group.braces, meta.block.slate meta.block.slate, text.xml.strict meta.tag meta.tag, meta.group.braces meta.group.braces</string>
+			<string>meta.leading-space.group2, meta.group.braces meta.group.braces, meta.block.slate meta.block.slate, text.xml.strict meta.tag meta.tag, meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#0E0E0E</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>º meta.group.braces 3</string>
 			<key>scope</key>
-			<string>meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.leading-space.group3, meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#111111</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>º meta.group.braces 4</string>
 			<key>scope</key>
-			<string>meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.leading-space.group4, meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#151515</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>º meta.group.braces 5</string>
 			<key>scope</key>
-			<string>meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.leading-space.group5, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#191919</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>º meta.group.braces 6</string>
 			<key>scope</key>
-			<string>meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.leading-space.group6, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#1C1C1C</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>º meta.group.braces 7</string>
 			<key>scope</key>
-			<string>meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.leading-space.group7, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#1F1F1F</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>º meta.group.braces 8</string>
 			<key>scope</key>
-			<string>meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.leading-space.group8, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#212121</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>º meta.group.braces 9</string>
 			<key>scope</key>
-			<string>meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.leading-space.group11, meta.leading-space.group10, meta.leading-space.group9, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CCCCCC08</string>
+				<string>#242424</string>
 			</dict>
 		</dict>
 		<dict>

@@ -33,8 +33,15 @@
 			<string>$</string>
 			<key>name</key>
 			<string>comment.line.double-slash.dylan</string>
-			<key>swallow</key>
-			<string>\\\s*\n</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?&gt;\\\s*\n)</string>
+					<key>name</key>
+					<string>meta.line-continuation.dylan</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>

@@ -264,8 +264,15 @@
 					<string>$\n?</string>
 					<key>name</key>
 					<string>comment.line.double-slash.c++</string>
-					<key>swallow</key>
-					<string>\\\s*\n</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>(?&gt;\\\s*\n)</string>
+							<key>name</key>
+							<string>meta.line-continuation.c++</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

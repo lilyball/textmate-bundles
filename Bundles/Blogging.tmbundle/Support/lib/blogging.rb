@@ -35,8 +35,8 @@ class Blogging
 
   def finally_save_internet_password
     protocol = self.endpoint =~ /^https:/ ? 'https' : 'http'
-    endpoint_path = self.path.clone
-    endpoint_path.sub!(/#\d+/, '') if endpoint_path =~ /#\d+/
+    endpoint_path = self.path.dup
+    endpoint_path.sub!(/#.+/, '') if endpoint_path =~ /#.+/
     KeyChain.add_internet_password(self.username, protocol, self.host,
       endpoint_path, self.password)
   end
@@ -61,8 +61,8 @@ TEXT
 
   def find_internet_password
     protocol = self.endpoint =~ /^https:/ ? 'https' : 'http'
-    endpoint_path = self.path.clone
-    endpoint_path.sub!(/#\d+/, '') if endpoint_path =~ /#\d+/
+    endpoint_path = self.path.dup
+    endpoint_path.sub!(/#.+/, '') if endpoint_path =~ /#.+/
     KeyChain.find_internet_password(self.username, protocol, self.host,
       endpoint_path)
   end
@@ -78,8 +78,8 @@ TEXT
     if @password == nil
       @password = find_internet_password()
       if @password == nil
-        current_endpoint = self.endpoint.clone
-        current_endpoint.sub!(/#\d+/, '') if current_endpoint =~ /#\d+/
+        current_endpoint = self.endpoint.dup
+        current_endpoint.sub!(/#.+/, '') if current_endpoint =~ /#.+/
         @password = TextMate.secure_standard_input_box("Blogging",
           "Enter the password to login at #{current_endpoint}")
         TextMate.exit_discard if @password == nil
@@ -163,10 +163,10 @@ TEXT
       TextMate.exit_show_tool_tip("Error: invalid endpoint specified: #{@endpoint}")
     end
 
-    if @endpoint =~ /#(\d+)/
-      @blog_id = $1.to_i
+    if @endpoint =~ /#(.+)/
+      @blog_id = $1
     else
-      @blog_id = 0
+      @blog_id = "0"
     end
   end
 
@@ -342,8 +342,8 @@ TEXT
   end
 
   def client
-    current_endpoint = endpoint
-    current_endpoint.sub!(/#\d+$/, '') if current_endpoint =~ /#\d+$/
+    current_endpoint = endpoint.dup
+    current_endpoint.sub!(/#.+/, '') if current_endpoint =~ /#.+/
     @client ||= MetaWeblogClient.new2(current_endpoint, ENV['TM_HTTP_PROXY'])
     @client
   end
@@ -613,7 +613,13 @@ TEXT
     format = ENV['TM_SCOPE']
     doc = "#{self.post['description']}"
     doc += "#{self.post['mt_text_more']}" if self.post['mt_text_more']
-    base = %Q{<base href="#{self.headers['link']}" />} if self.headers['link']
+    if self.headers['link']
+      base = %Q{<base href="#{self.headers['link']}" />}
+    elsif ENV['TM_FILEPATH']
+      filepath = ENV['TM_FILEPATH'].dup
+      filepath.gsub!(/ /, '%20')
+      base = %Q{<base href="file://#{filepath}" />}
+    end
     html = <<-HTML
 <html>
 <head>

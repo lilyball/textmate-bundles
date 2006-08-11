@@ -69,6 +69,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -76,8 +80,6 @@
 							<string>#nested_braces_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -100,6 +102,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -107,8 +113,6 @@
 							<string>#nested_brackets_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -131,6 +135,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -138,8 +146,6 @@
 							<string>#nested_ltgt_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -162,6 +168,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -169,8 +179,6 @@
 							<string>#nested_parens_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -189,8 +197,13 @@
 					<string>\'</string>
 					<key>name</key>
 					<string>meta.regexp.single-quote</string>
-					<key>swallow</key>
-					<string>\\.</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -213,6 +226,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -220,8 +237,6 @@
 							<string>#nested_parens_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 			</array>
 		</dict>
@@ -265,11 +280,13 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#nested_braces</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -292,11 +309,13 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#nested_brackets</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -319,11 +338,13 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#nested_ltgt</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -346,11 +367,13 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#nested_parens</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -365,6 +388,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -372,8 +399,6 @@
 							<string>#nested_braces_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -388,6 +413,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -395,8 +424,6 @@
 							<string>#nested_brackets_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -411,6 +438,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -418,8 +449,6 @@
 							<string>#nested_ltgt_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -434,6 +463,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 						<dict>
@@ -441,8 +474,6 @@
 							<string>#nested_parens_interpolated</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -453,8 +484,15 @@
 					<string>'</string>
 					<key>name</key>
 					<string>meta.regexp-format.single_quote</string>
-					<key>swallow</key>
-					<string>\\.</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\['\\]</string>
+							<key>name</key>
+							<string>constant.character.escape.perl</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -469,11 +507,13 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 			</array>
 		</dict>
@@ -511,8 +551,13 @@
 					<string>(?=\2)</string>
 					<key>name</key>
 					<string>meta.regexp.simple_delimiter</string>
-					<key>swallow</key>
-					<string>\\.</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -523,8 +568,15 @@
 					<string>'</string>
 					<key>name</key>
 					<string>meta.regexp-format.single_quote</string>
-					<key>swallow</key>
-					<string>\\.</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\['\\]</string>
+							<key>name</key>
+							<string>constant.character.escape.perl</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -539,11 +591,13 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 			</array>
 		</dict>
@@ -573,8 +627,13 @@
 					<string>(?=\1)</string>
 					<key>name</key>
 					<string>meta.regexp.simple_delimiter</string>
-					<key>swallow</key>
-					<string>\\.</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -585,8 +644,13 @@
 					<string>'(?=[egimos]*x[egimos]*)\b</string>
 					<key>name</key>
 					<string>meta.regexp-format.simple_delimiter</string>
-					<key>swallow</key>
-					<string>\\.</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -601,11 +665,13 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#escaped_char</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#variable</string>
 						</dict>
 					</array>
-					<key>swallow</key>
-					<string>\\.</string>
 				</dict>
 			</array>
 		</dict>
@@ -1105,11 +1171,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#variable</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1122,11 +1190,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#variable</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1135,8 +1205,15 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.perl</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\['\\]</string>
+					<key>name</key>
+					<string>constant.character.escape.perl</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1149,11 +1226,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#variable</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1166,11 +1245,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#nested_parens</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1183,11 +1264,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#nested_braces</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1200,11 +1283,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#nested_brackets</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1267,6 +1352,13 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>escaped_char</key>
+		<dict>
+			<key>match</key>
+			<string>\\.</string>
+			<key>name</key>
+			<string>constant.character.escape.perl</string>
+		</dict>
 		<key>line_comment</key>
 		<dict>
 			<key>patterns</key>
@@ -1295,11 +1387,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#nested_braces</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<key>nested_braces_interpolated</key>
 		<dict>
@@ -1311,6 +1405,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#variable</string>
 				</dict>
 				<dict>
@@ -1318,8 +1416,6 @@
 					<string>#nested_braces_interpolated</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<key>nested_brackets</key>
 		<dict>
@@ -1331,11 +1427,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#nested_brackets</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<key>nested_brackets_interpolated</key>
 		<dict>
@@ -1347,6 +1445,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#variable</string>
 				</dict>
 				<dict>
@@ -1354,8 +1456,6 @@
 					<string>#nested_brackets_interpolated</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<key>nested_ltgt</key>
 		<dict>
@@ -1399,11 +1499,13 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#nested_parens</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<key>nested_parens_interpolated</key>
 		<dict>
@@ -1415,6 +1517,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#variable</string>
 				</dict>
 				<dict>
@@ -1422,8 +1528,6 @@
 					<string>#nested_parens_interpolated</string>
 				</dict>
 			</array>
-			<key>swallow</key>
-			<string>\\.</string>
 		</dict>
 		<key>variable</key>
 		<dict>

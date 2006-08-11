@@ -177,8 +177,15 @@
 			<string>$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-slash.d</string>
-			<key>swallow</key>
-			<string>\\\s*\n</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?&gt;\\\s*\n)</string>
+					<key>name</key>
+					<string>meta.line-continuation.d</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>

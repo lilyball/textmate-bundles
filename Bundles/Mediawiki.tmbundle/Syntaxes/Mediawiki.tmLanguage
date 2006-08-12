@@ -13,7 +13,6 @@
 		TODO: lots of fixes still to do:
 		
 		 1. Add a bunch of HTML tags.  See the #block and #style sections.
-		 2. Add support for LaTeX math mode inside of &lt;math&gt;&lt;/math&gt; tags.
 		 3. Correctly scope all the parser functions and their contents.
 		    This on will be complicated, as there are several: expr, if, etc.
 		 4. This is probably the biggest one: get all the lists to scope
@@ -47,17 +46,23 @@
 		
 		TODO items not closely related to the grammar:
 		
-		 1. Add a command for new list item.  This one is trivial
 		 2. Add a drop command for links/images, add keyboard shortcuts for
 		    them too
 		 3. Make sure all the preference items are sorted out, for instance
 		    smart typing pairs, indent patterns, etc.
 		 4. Commands to do bold/italic, and maybe things like big/small 
 		 5. 
+		
+		FINISHED:
+		 2. Add support for LaTeX math mode inside of &lt;math&gt;&lt;/math&gt; tags.
+		 1. Add a command for new list item.  This one is trivial
+		 
 	</string>
 	<key>fileTypes</key>
 	<array>
 		<string>mediawiki</string>
+		<string>wikipedia</string>
+		<string>wiki</string>
 	</array>
 	<key>foldingStartMarker</key>
 	<string>^(=+)</string>
@@ -149,7 +154,7 @@
 					<string>
 						Code blocks start with one space.  Wiki text and
 						html are still interpreted in MediaWiki, unlike in
-						markdown.
+						mediawiki.
 					</string>
 					<key>end</key>
 					<string>^(?=[^ ])</string>
@@ -247,7 +252,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.math.markdown</string>
+							<string>meta.tag.inline.math.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -259,6 +264,29 @@
 						<dict>
 							<key>include</key>
 							<string>source.math.tex</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(&lt;ref&gt;)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.ref.mediawiki</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.reference.content.mediawiki</string>
+					<key>end</key>
+					<string>(&lt;/ref&gt;)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
 						</dict>
 					</array>
 				</dict>
@@ -315,18 +343,29 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.date-time.mediawiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.illegal.too-many-tildes.mediawiki</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(~~~~~)(~{0,2})(?!~)</string>
+				</dict>
+				<dict>
 					<key>comment</key>
 					<string>3 ~s for sig, 4 for sig + timestamp</string>
 					<key>match</key>
 					<string>~~~~?</string>
 					<key>name</key>
 					<string>constant.other.signature.mediawiki</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>~~~~~</string>
-					<key>name</key>
-					<string>constant.other.date-time.mediawiki</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -576,7 +615,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.bold.html.markdown</string>
+							<string>meta.tag.inline.bold.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -599,7 +638,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.italic.html.markdown</string>
+							<string>meta.tag.inline.italic.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -622,7 +661,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.strikethrough.html.markdown</string>
+							<string>meta.tag.inline.strikethrough.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -645,7 +684,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.underline.html.markdown</string>
+							<string>meta.tag.inline.underline.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -668,7 +707,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.raw.html.markdown</string>
+							<string>meta.tag.inline.raw.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -691,7 +730,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.any.html.markdown</string>
+							<string>meta.tag.inline.any.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -750,7 +789,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.bold.html.markdown</string>
+							<string>meta.tag.inline.bold.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -773,7 +812,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.italic.html.markdown</string>
+							<string>meta.tag.inline.italic.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -796,7 +835,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.strikethrough.html.markdown</string>
+							<string>meta.tag.inline.strikethrough.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -819,7 +858,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.underline.html.markdown</string>
+							<string>meta.tag.inline.underline.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -842,7 +881,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.raw.html.markdown</string>
+							<string>meta.tag.inline.raw.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -865,7 +904,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.inline.any.html.markdown</string>
+							<string>meta.tag.inline.any.html.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>

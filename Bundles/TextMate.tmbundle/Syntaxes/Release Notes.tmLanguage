@@ -20,7 +20,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\[(?:[\d-]+: )?(REVISION \d+)\]$
+			<string>^\[(?:[\d-]+: )?(REVISION (\d+|v[\d.b]+))\]$
 </string>
 			<key>name</key>
 			<string>meta.separator.release-notes</string>
@@ -67,7 +67,7 @@
 				</dict>
 				<dict>
 					<key>comment</key>
-					<string>I do not want spell checking for CamelCase words. Since this is generally when quoting various API’s, I have deliberetly used A-Z and a-z (ASCII) -- Allan</string>
+					<string>I do not want spell checking for CamelCase words. Since this is generally when quoting various API’s, I have deliberately used A-Z and a-z (ASCII) -- Allan</string>
 					<key>match</key>
 					<string>\b[A-Z]+[a-z]+[A-Z]\w*\b</string>
 					<key>name</key>

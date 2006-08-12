@@ -143,15 +143,27 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(F_DUPFD|O_EXCL|filesep|F_GETFD|O_NONBLOCK|i|F_GETFL|O_RDONLY|inf|F_SETFD|O_RDWR|j|F_SETFL|O_TRUNC|nan|I|O_WRONLY|pi|Inf|P_tmpdir|program_invocation_name|J|SEEK_CUR|program_name|NA|SEEK_END|realmax|NaN|SEEK_SET|realmin|OCTAVE_HOME|SIG|stderr|OCTAVE_VERSION|argv|stdin|O_APPEND|e|stdout|O_ASYNC|eps|true|O_CREAT|false)\b</string>
+			<string>\b(true|false)\b</string>
 			<key>name</key>
-			<string>constant.language.built-in.matlab</string>
+			<string>constant.language.boolean.matlab</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(NaN|nan|inf|pi|Inf|realmax|realmin|eps)\b</string>
+			<key>name</key>
+			<string>constant.language.matlab</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(F_DUPFD|O_EXCL|filesep|F_GETFD|O_NONBLOCK|i|F_GETFL|O_RDONLY|F_SETFD|O_RDWR|j|F_SETFL|O_TRUNC|I|O_WRONLY|P_tmpdir|program_invocation_name|J|SEEK_CUR|program_name|NA|SEEK_END|SEEK_SET|OCTAVE_HOME|SIG|stderr|OCTAVE_VERSION|argv|stdin|O_APPEND|e|stdout|O_ASYNC|O_CREAT)\b</string>
+			<key>name</key>
+			<string>support.constant.matlab</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(DEFAULT_EXEC_PATH|ignore_function_time_stamp|DEFAULT_LOADPATH|max_recursion_depth|EDITOR|output_max_field_width|EXEC_PATH|output_precision|IMAGEPATH|page_output_immediately|INFO_FILE|page_screen_output|INFO_PROGRAM|print_answer_id_name|LOADPATH|print_empty_dimensions|MAKEINFO_PROGRAM|print_rhs_assign_val|PAGER|save_header_format_string|PS1|save_precision|PS2|saving_history|PS4|sighup_dumps_octave_core|__kluge_procbuf_delay__|sigterm_dumps_octave_core|__nargin__|silent_functions|ans|split_long_rows|automatic_replot|string_fill_char|beep_on_error|struct_levels_to_print|completion_append_char|suppress_verbose_help_message|crash_dumps_octave_core|variables_can_hide_functions|current_script_file_name|warn_assign_as_truth_value|debug_on_error|warn_divide_by_zero|debug_on_interrupt|warn_empty_list_elements|debug_on_warning|warn_fortran_indexing|debug_symtab_lookups|warn_function_name_clash|default_save_format|warn_future_time_stamp|echo_executing_commands|warn_imag_to_real|fixed_point_format|warn_matlab_incompatible|gnuplot_binary|warn_missing_semicolon|gnuplot_command_axes|warn_neg_dim_as_zero|gnuplot_command_end|warn_num_to_str|gnuplot_command_plot|warn_precedence_change|gnuplot_command_replot|warn_reload_forces_clear|gnuplot_command_splot|warn_resize_on_range_error|gnuplot_command_title|warn_separator_insert|gnuplot_command_using|warn_single_quote_string|gnuplot_command_with|warn_str_to_num|gnuplot_has_frames|warn_undefined_return_values|history_file|warn_variable_switch_label|history_size)\b</string>
 			<key>name</key>
-			<string>variable.other.built-in.matlab</string>
+			<string>support.variable.matlab</string>
 		</dict>
 		<dict>
 			<key>match</key>

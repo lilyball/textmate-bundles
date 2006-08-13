@@ -23,15 +23,13 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function</string>
+					<string>entity.name.section.icalendar</string>
 				</dict>
 			</dict>
-			<key>comment</key>
-			<string>FIXME entity.name.function is not correct</string>
 			<key>match</key>
 			<string>^BEGIN:(.*)</string>
 			<key>name</key>
-			<string>keyword.other.iCalendar.component-begin</string>
+			<string>keyword.other.component-begin.icalendar</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -39,21 +37,19 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function</string>
+					<string>entity.name.section.icalendar</string>
 				</dict>
 			</dict>
-			<key>comment</key>
-			<string>FIXME entity.name.function is not correct</string>
 			<key>match</key>
 			<string>^END:(.*)</string>
 			<key>name</key>
-			<string>keyword.other.iCalendar.component-end</string>
+			<string>keyword.other.component-end.icalendar</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\b</string>
 			<key>name</key>
-			<string>constant.numeric.iCalendar</string>
+			<string>constant.numeric.icalendar</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -61,7 +57,7 @@
 			<key>end</key>
 			<string>"</string>
 			<key>name</key>
-			<string>string.quoted.double.iCalendar</string>
+			<string>string.quoted.double.icalendar</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

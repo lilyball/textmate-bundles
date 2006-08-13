@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-print " = " + $stdin.read.scan(/[$€]([0-9]+(?:\.[0-9]{1,2})?)\b/).inject(0.0) { |t,s| t + s[0].to_f() }.to_s.sub(/.0+\z/, '')</string>
+print " = " + $stdin.read.scan(/[$€]([0-9,]+(?:\.[0-9]{1,2})?)\b/).inject(0.0) { |t,s| t + s[0].gsub(/[^0-9.]/, '').to_f() }.to_s.sub(/.0+\z/, '')</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

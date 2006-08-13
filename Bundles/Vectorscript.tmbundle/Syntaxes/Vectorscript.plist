@@ -40,16 +40,21 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.vectorscript</string>
+					<string>storage.type.function.vectorscript</string>
 				</dict>
 				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.procedure.vectorscript</string>
+				</dict>
+				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.function.vectorscript</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(?i:(function|procedure))\b\s+(\w+)</string>
+			<string>\b(?i:(?:(function)|(procedure)))\b\s+(\w+)</string>
 			<key>name</key>
 			<string>meta.function.vectorscript</string>
 		</dict>

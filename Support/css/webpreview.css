@@ -1,0 +1,514 @@
+/*
+	Defines the style of HTML Output. To be used in conjunction with `../lib/webpreview.sh`.
+	
+	In Flux: http://macromates.com/wiki/Suggestions/StylingHTMLOutput
+	
+	I'm not sure whether all the styles should really go in here or if we leave the css in the bundles and include them dynamically. I've copied all things here to make it easier for me mostly while experimenting.
+	— Soryu
+*/
+
+
+body {
+	background: #FFFFFF;
+	color: #000000;
+	font: 12px "Lucida Grande", Verdana, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+#tm_webpreview_header {
+	background: url("file://TM_SUPPORT_PATH/images/header.png") repeat-x;
+	height: 68px;
+	color: #FFFFFF;
+	width: 100%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 100;
+}
+#tm_webpreview_header .headline {
+	margin: 0;
+	padding-left: 1em;
+	padding-top: 1.6ex;
+	font-size: 200%;
+	font-weight: bold;
+}
+#tm_webpreview_header .teaser {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+#tm_webpreview_header .type {
+	position: absolute;
+	top: 32px;
+	right: 30px;
+	font-weight: light;
+	font-size: 8pt;
+	color: rgba(255,255,255,0.5);
+}
+#theme_switcher {
+	opacity: 0.1;
+	position: absolute;
+	top: 20px;
+	right: 80px;
+}
+#theme_switcher:hover {
+	opacity: 1;
+}
+#tm_webpreview_footer {
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	height: 1.6em;
+	margin: 0;
+	padding: 0.3em 2em 0 2em;
+	border-top: 2px solid #000;
+	color: #777;
+	background: #292929;
+	text-shadow: #000 1px 3px 3px;
+}
+#tm_webpreview_footer p {
+	margin: 0;
+	padding: 0;
+}
+
+#tm_webpreview_content {
+	padding: 0.5em 2em 0.5em 2em;
+	margin-top: 60px;
+/*	margin-bottom: 2em;*/
+}
+
+.bright {
+	background: #FFF;
+	color: #000;
+}
+.dark {
+	background: #000;
+	color: #E6E2E8;
+}
+.bright a {
+	color: #0D2681;
+}
+
+.dark a {
+	color: #BBE;
+}
+
+h1 {
+	font-family: "LucidaGrande";
+}
+.bright h1 {
+	text-shadow:  #DDDDDD 3px 3px 5px;
+	color: #333;
+}
+.dark h1 {
+	color: #FFF;
+	text-shadow:  #808080 3px 3px 5px;
+}
+
+.bright h2 {
+	color: #222;
+	text-shadow:  #DDDDDD 3px 3px 5px;
+}
+.dark h2 {
+	text-shadow:  #808080 3px 3px 5px;
+}
+
+.bright h3 {
+	color: #333;
+	text-shadow:  #DDDDDD 3px 3px 5px;
+}
+.dark h3 {
+	text-shadow:  #808080 3px 3px 5px;
+}
+
+h4 {
+	font-style: italic;
+	margin-top: 1ex;
+	margin-bottom: 1ex;
+}
+
+.bright h4 {
+	color: #666;
+}
+
+blockquote {
+	font-family: "Palatino", "Book Antiqua", Verdana;
+	font-style: italic;
+	font-size: 106%;
+	margin: 1em 25px;
+	padding-left: 1em;
+}
+.bright blockquote {
+	border-left: 4px solid #E6E5DD;
+}
+.dark blockquote {
+	border-left: 4px solid #808080;
+	color: #FFF;
+}
+
+code, pre {
+	font-size: 95%;
+	font-family: "LuxiMono", "Bitstream Vera Sans Mono", "Monaco", "Courier New", monospace;
+	word-wrap: break-word;
+	white-space: pre;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -o-pre-wrap;
+}
+
+.bright code {
+	color: #1C360C;
+}
+
+.dark code {
+	color: #C1DE77;
+}
+
+pre {
+	padding: 10px 10px 10px 20px;
+}
+.bright pre {
+	background-color: #f0f0f0;
+	border: 1px solid #cccbba;
+}
+.dark pre {
+	color: #FFF;
+	background-color: #111;
+	border: 1px solid #555;
+}
+
+.graybox {
+	border-top: 1px solid #919699;
+	border-left: 1px solid #919699;
+}
+.graybox th {
+	background: #E2E2E2;
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+/*	font-size: 12px;*/
+	font-weight: bold;
+	padding: 4px 8px 4px 8px;
+	text-align: left;
+}
+.graybox td {
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+	padding: 8px;
+	vertical-align: top;
+}
+.graybox p {
+	margin: 0;
+}
+.graybox p + p {
+	margin-top: 1em;
+}
+
+li > p {
+	margin: 1ex 0 1ex 0;
+}
+
+.footnote {
+	vertical-align: top;
+	font-size: 75%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.bright .footnote {
+	color: #525151;
+}
+.footnote:before {
+	content: "[";
+	vertical-align: top;
+	font-weight: bold;
+}
+.bright .footnote:before {
+	color: #525151;
+}
+.dark .footnote:before {
+	color: #888;
+}
+.footnote:after {
+	content: "]";
+	vertical-align: top;
+	font-weight: bold;
+}
+.bright .footnote:after {
+	color: #525151;
+}
+.dark .footnote:after {
+	color: #888;
+}
+
+div.footnotes {
+   padding: 1em;
+   font-size: 90%;
+}
+.bright div.footnotes {
+   background: #F0F0F0;
+}
+.dark div.footnotes {
+   background: #111;
+}
+hr {
+	background: #606060;
+	color:  #606060;
+	border-style: solid;
+	border-color: #606060;
+	border-width: 1px 0 0 0;
+	margin-top: 0;
+}
+.dark td, .dark th {
+	color: #EEE;
+}
+
+.dark caption, .dark label {
+	color: #CCC;
+}
+
+
+/* =================== */
+/* = RubyMate Styles = */
+/* =================== */
+
+div.rubymate {
+}
+
+div.rubymate > div {
+	word-wrap: break-word;
+	border-bottom: 1px dotted #666;
+	padding: 1ex;
+}
+
+div.rubymate pre strong {
+	/* used for messages */
+	font-weight: normal;
+}
+
+div.rubymate pre em
+{
+	/* used for stderr */
+	font-style: normal;
+	color: #FF5600;
+}
+
+div.rubymate div#exception_report
+{
+/*	background-color: rgb(210, 220, 255);*/
+}
+
+div.rubymate p#exception strong
+{
+	color: #E4450B;
+}
+
+div.rubymate p#traceback
+{
+	font-size: 8pt;
+}
+
+div.rubymate blockquote {
+	font-style: normal;
+	border: none;
+}
+
+
+div.rubymate table {
+	margin: 0;
+	padding: 0;
+}
+
+div.rubymate td {
+	margin: 0;
+	padding: 2px 2px 2px 5px;
+	font-size: 10pt;
+}
+
+div.rubymate a {
+	color: #FF5600;
+}
+
+
+/* ===================== */
+/* = Subversion Styles = */
+/* ===================== */
+
+div.subversion {
+	padding: 10px 10px 10px 20px;
+}
+.bright div.subversion {
+	background-color: #f0f0f0;
+	border: 1px solid #cccbba;
+}
+.dark div.subversion {
+	color: #FFF;
+	background-color: #111;
+	border: 1px solid #555;
+}
+
+/* INFO */
+
+div.subversion dl.info dt {
+   font-weight: bold;
+   padding: 4px;
+   padding-bottom: 0;
+   margin: 0;
+   border-top: 1px dashed #ddd;
+}
+
+.bright div.subversion dl.info.alternate dt {
+   border-top: 1px dashed #ccc;
+}
+
+.dark div.subversion dl.info.alternate dt {
+   border-top: 1px dashed #444;
+}
+
+div.subversion dl.info dt:first-child {
+   border-top: 0;
+}
+
+div.subversion dl.info dt:after {
+   content: ":";
+}
+
+div.subversion dl.info dd {
+   margin: 0;
+   padding: 4px;
+   padding-top: 0;
+   padding-left: 24px;
+}
+
+/* BLAME */
+
+/* some adds for the links in the table (clickable lines)..*/
+table.blame a, table.blame a:visited, table.blame a:link {
+   text-decoration: none;
+   color: inherit;
+}
+
+.bright table.blame a:hover, table.blame a:active {
+   background-color: #a3c8ff;
+   color: inherit;
+   text-decoration: none;
+}
+
+.dark table.blame a:hover, table.blame a:active {
+   background-color: #2F3845;
+   color: inherit;
+   text-decoration: none;
+}
+
+
+/* formating the table.. */
+table.blame {
+   font-size: 12px;
+   padding: 1px;
+   border-collapse: collapse;
+   width: 100%;
+}
+
+.bright table.blame th {
+   text-align: left;
+   background-color: #eee;
+   border-bottom: 1px solid #999;
+   padding: 3px;
+   padding-bottom: 1px;
+   padding-top: 1px;
+   color: #666;
+}
+
+.dark table.blame th {
+   text-align: left;
+   background-color: #333;
+   border-bottom: 1px solid #555;
+   padding: 3px;
+   padding-bottom: 1px;
+   padding-top: 1px;
+   color: #AAA;
+}
+
+/* i have to format just this 2, because i just want
+   borders beween the headers and not at their sides.. */
+.bright th.revhead {
+   border-left: 1px solid #bbb;
+   border-right: 1px solid #bbb;
+}
+
+.bright th.codehead {
+   border-left: 1px solid #bbb;
+}
+
+.dark th.revhead {
+   border-left: 1px solid #444;
+   border-right: 1px solid #444;
+}
+
+.dark th.codehead {
+   border-left: 1px solid #444;
+}
+
+/* to make it look good if a line gets wrapped: */
+table.blame td {
+   vertical-align: top;
+}
+
+/* about the several column classes.. */
+.bright td.linecol {
+   background-color: #ddd;
+   border-right: 1px solid #999;
+   color: #888;
+   text-align: right;
+}
+
+.dark td.linecol {
+   background-color: #333;
+   border-right: 1px solid #666;
+   color: #888;
+   text-align: right;
+}
+
+.bright td.revcol, td.namecol {
+   text-align: right;
+   background-color: #f8f8f8;
+   color: #888;
+   border-right: 1px solid #ddd;
+   padding-right: 2px;
+   padding-left: 2px;
+}
+
+.dark td.revcol, td.namecol {
+   text-align: right;
+   background-color: #111;
+   color: #888;
+   border-right: 1px solid #333;
+   padding-right: 2px;
+   padding-left: 2px;
+}
+
+.bright td.namecol {
+   border-right: 1px solid #aaa;
+}
+
+.dark td.namecol {
+   border-right: 1px solid #444;
+}
+
+/* bitstream vera sans looks really _very_ good. But I like Luxi Mono better :p */
+td.codecol {
+/*   font-size: 12px;*/
+   font-family: "LuxiMono", "Bitstream Vera Sans Mono", monospace;
+   padding-left: 4px;
+   width: 100%;
+}
+
+/* maybe this should be implemented as id but its
+   an optimisation for less ruby code. :) */
+.bright td.current_line {
+   background-color: #ddd;
+}
+
+.dark td.current_line {
+   background-color: #333;
+}
+
+

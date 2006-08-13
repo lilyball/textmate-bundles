@@ -208,35 +208,41 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.class.color.red.fxscript</string>
+					<string>entity.name.function.color.alpha.fxscript</string>
 				</dict>
-			</dict>
-			<key>match</key>
-			<string>\b\w+\.((?i:r))\b</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.class.color.green.fxscript</string>
+					<string>entity.name.function.color.red.fxscript</string>
 				</dict>
-			</dict>
-			<key>match</key>
-			<string>\b\w+\.((?i:g))\b</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
+				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.class.color.blue.fxscript</string>
+					<string>entity.name.function.color.green.fxscript</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.color.blue.fxscript</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.color.luma.fxscript</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.color.chroma-u.fxscript</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.color.chroma-v.fxscript</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b\w+\.((?i:b))\b</string>
+			<string>\b\w+\.(?i:(a)|(r)|(g)|(b)|(y)|(u)|(v))\b</string>
 		</dict>
 		<dict>
 			<key>begin</key>

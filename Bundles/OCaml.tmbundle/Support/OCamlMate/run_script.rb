@@ -26,9 +26,37 @@ class UserScript
   end
 
 
+  # looks for the location of the threads library
+  def find_threads()
+    possibilities = [
+        '/opt/local/godi/lib/ocaml/std-lib/threads',
+        '/usr/local/godi/lib/ocaml/std-lib/threads',
+        '/godi/lib/ocaml/std-lib/threads',
+        '/opt/local/lib/ocaml/threads',
+        '/usr/local/lib/ocaml/threads',
+        '/usr/lib/ocaml/threads'
+      ]
+      
+    possibilities.each() do |p|
+      if File.exists?(p)
+        return p
+      end
+    end
+    
+    return ""
+  end
+
+
   def compile
+    threadsincludedir = find_threads()
+    
+    
     # compile it
-    output = `#{e_sh @ocamlc} -o #{e_sh @dstfile} -I /opt/local/lib/ocaml/threads str.cma unix.cma threads.cma  #{e_sh @srcfile} 2>&1`
+    if threadsincludedir != ""
+      output = `#{e_sh @ocamlc} -o #{e_sh @dstfile} -I #{e_sh(threadsincludedir)} str.cma unix.cma threads.cma #{e_sh @srcfile} 2>&1`
+    else
+      output = `#{e_sh @ocamlc} -o #{e_sh @dstfile} str.cma unix.cma #{e_sh @srcfile} 2>&1`
+    end
     
     onlywarnings = true
     if output != ""

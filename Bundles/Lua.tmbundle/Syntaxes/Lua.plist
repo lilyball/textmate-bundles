@@ -117,9 +117,15 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;![^.]\.|:)\b(false|nil|true|self|_G|_VERSION|math\.(pi|huge))\b|(?&lt;![.])\.{3}(?!\.)</string>
+			<string>(?&lt;![^.]\.|:)\b(false|nil|true|_G|_VERSION|math\.(pi|huge))\b|(?&lt;![.])\.{3}(?!\.)</string>
 			<key>name</key>
 			<string>constant.language.lua</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;![^.]\.|:)\b(self)\b</string>
+			<key>name</key>
+			<string>variable.language.self.lua</string>
 		</dict>
 		<dict>
 			<key>match</key>

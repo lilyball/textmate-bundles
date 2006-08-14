@@ -235,7 +235,7 @@
 					<key>match</key>
 					<string>\b(all (caps|lowercase)|bold|condensed|expanded|hidden|italic|outline|plain|shadow|small caps|strikethrough|(sub|super)script|underline)\b</string>
 					<key>name</key>
-					<string>constant.language.text-styles.applescript</string>
+					<string>constant.other.text-styles.applescript</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -247,9 +247,15 @@
 				</dict>
 				<dict>
 					<key>match</key>
+					<string>\b(null)\b</string>
+					<key>name</key>
+					<string>constant.language.null.applescript</string>
+				</dict>
+				<dict>
+					<key>match</key>
 					<string>\b(Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sep(tember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?|weekdays?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)\b</string>
 					<key>name</key>
-					<string>constant.language.date-time.applescript</string>
+					<string>constant.other.date-time.applescript</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -257,19 +263,19 @@
 					<key>match</key>
 					<string>\b(?&lt;=considering|ignoring) (application responses|current application|case|diacriticals|expansion|hyphens|punctuation|white space)\b</string>
 					<key>name</key>
-					<string>constant.language.considering-ignoring-attributes.applescript</string>
+					<string>constant.other.considering-ignoring-attributes.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(space|return|tab)\b</string>
 					<key>name</key>
-					<string>constant.language.characters.applescript</string>
+					<string>constant.other.characters.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(null|current application|it|me|version|result|pi|AppleScript)\b</string>
+					<string>\b(current application|it|me|version|result|pi|AppleScript)\b</string>
 					<key>name</key>
-					<string>constant.language.miscellaneous.applescript</string>
+					<string>constant.other.miscellaneous.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>

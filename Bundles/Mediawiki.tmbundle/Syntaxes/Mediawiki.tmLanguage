@@ -536,7 +536,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>markup.underline.link.external</string>
+							<string>markup.underline.link.external.mediawiki</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -552,6 +552,12 @@
 							<string>#style_in_link</string>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>((https?|ftp|file)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&amp;#]+(?&lt;![.?:])</string>
+					<key>name</key>
+					<string>markup.underline.link.external.mediawiki</string>
 				</dict>
 			</array>
 		</dict>
@@ -1040,7 +1046,7 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.parser-function.mediawiki</string>
+					<string>meta.template.parser-function.mediawiki</string>
 					<key>patterns</key>
 					<array>
 						<dict>

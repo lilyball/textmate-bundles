@@ -272,11 +272,16 @@
 							<key>name</key>
 							<string>meta.brace.curly.function</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.delimiter.object.comma.js.prototype</string>
+						</dict>
 					</dict>
 					<key>contentName</key>
 					<string>meta.content</string>
 					<key>end</key>
-					<string>(\})\s*\n?</string>
+					<string>(\})(,)?\s*\n?</string>
 					<key>name</key>
 					<string>meta.group.braces.curly.function.js.prototype</string>
 					<key>patterns</key>
@@ -297,11 +302,16 @@
 							<key>name</key>
 							<string>meta.brace.curly</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.delimiter.object.comma.js.prototype</string>
+						</dict>
 					</dict>
 					<key>contentName</key>
 					<string>meta.content</string>
 					<key>end</key>
-					<string>(\})\s*\n?</string>
+					<string>(\})(,)?\s*\n?</string>
 					<key>name</key>
 					<string>meta.group.braces.curly</string>
 					<key>patterns</key>

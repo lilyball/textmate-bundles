@@ -126,9 +126,15 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(false|null|true|focused|frameCount|framerate|height|height|key|keyCode|keyPressed|mouseButton|mousePressed|mouseX|mouseY|online|pixels|pmouseX|pmouseY|screen|width)\b</string>
+			<string>\b(false|null|true)\b</string>
 			<key>name</key>
 			<string>constant.language.processing</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(focused|frameCount|framerate|height|height|key|keyCode|keyPressed|mouseButton|mousePressed|mouseX|mouseY|online|pixels|pmouseX|pmouseY|screen|width)\b</string>
+			<key>name</key>
+			<string>constant.other.processing</string>
 		</dict>
 		<dict>
 			<key>match</key>

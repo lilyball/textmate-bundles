@@ -52,7 +52,7 @@ constant.character.escape
 constant.language
 constant.numeric
 constant.other
-entity.name.class
+entity.name.type
 entity.name.function
 entity.name.section
 entity.name.tag

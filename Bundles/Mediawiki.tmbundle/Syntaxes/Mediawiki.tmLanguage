@@ -90,18 +90,27 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
+					<key>begin</key>
+					<string>^\s*(?i)(#redirect)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string></string>
+							<string>keyword.control.redirect.mediawiki</string>
 						</dict>
 					</dict>
-					<key>match</key>
-					<string>(?i:#redirect)\[\[([^\]\|]*)\]\]</string>
+					<key>end</key>
+					<string>\n</string>
 					<key>name</key>
 					<string>meta.redirect.mediawiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#link</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>match</key>

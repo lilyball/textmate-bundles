@@ -82,7 +82,7 @@
 					<key>comment</key>
 					<string>verbatim blocks</string>
 					<key>end</key>
-					<string>^(?=\1\w+)</string>
+					<string>^(?=\1[^\s]+)</string>
 					<key>name</key>
 					<string>meta.raw.block.restructuredtext</string>
 					<key>patterns</key>
@@ -115,7 +115,7 @@
 					<key>comment</key>
 					<string>emphasis</string>
 					<key>match</key>
-					<string>\*[^*]+\*</string>
+					<string>\*\w[^*]\w+\*</string>
 					<key>name</key>
 					<string>markup.italic.restructuredtext</string>
 				</dict>
@@ -350,8 +350,6 @@
 					<string>markup.other.table.restructuredtext</string>
 				</dict>
 				<dict>
-					<key>comment</key>
-					<string>headings</string>
 					<key>match</key>
 					<string>(^(=|-|~|`|#|"|\^|\+|\*){3,}$){1,1}?</string>
 					<key>name</key>

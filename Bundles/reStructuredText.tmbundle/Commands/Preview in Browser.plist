@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>TRST=${TM_RST2HTML:=rst2html.py}
 
@@ -38,7 +38,7 @@ fi
 out=`mktemp -t /tmp`
 echo "Running: $TRST $flags \"$TM_FILEPATH\" \"$out.html\""
 $TRST $flags "$TM_FILEPATH" "$out.html"
-open -a Safari "$out.html"
+open "$out.html"
 
 #rm "$out.html"
 if [[ -n $css ]]
@@ -50,7 +50,7 @@ fi
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
-	<string>^M</string>
+	<string>^@p</string>
 	<key>name</key>
 	<string>Preview in Browser</string>
 	<key>output</key>

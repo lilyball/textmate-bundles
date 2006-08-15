@@ -14,10 +14,8 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>match</key>
-			<string>;.*$\n?</string>
-			<key>name</key>
-			<string>comment.line.semicolon.scheme</string>
+			<key>include</key>
+			<string>#comment</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -26,29 +24,12 @@
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>parameters</key>
+		<key>comment</key>
 		<dict>
-			<key>begin</key>
-			<string>\(</string>
-			<key>end</key>
-			<string>\)</string>
+			<key>match</key>
+			<string>;.*$\n?</string>
 			<key>name</key>
-			<string>meta.declaration.procedure.parameters.scheme</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>[[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*</string>
-					<key>name</key>
-					<string>variable.parameter.scheme</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>[._]</string>
-					<key>name</key>
-					<string>variable.parameter.scheme</string>
-				</dict>
-			</array>
+			<string>comment.line.semicolon.scheme</string>
 		</dict>
 		<key>sexp</key>
 		<dict>
@@ -61,10 +42,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>;.*$\n?</string>
-					<key>name</key>
-					<string>comment.line.semicolon.scheme</string>
+					<key>include</key>
+					<string>#comment</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -95,6 +74,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#comment</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#sexp</string>
 						</dict>
 					</array>
@@ -123,6 +106,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#comment</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#sexp</string>
 						</dict>
 					</array>
@@ -149,6 +136,10 @@
 					<string>meta.declaration.variable.scheme</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#comment</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#sexp</string>

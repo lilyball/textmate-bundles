@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+htmlHeader "S5 Slide Show Help" "S5 Slide Show"
+Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl
 
 S5: A Simple Standards-Based Slide Show System
 ==============================================
@@ -105,7 +107,8 @@ This bundle is maintained by [Brad Choate][1]. The S5 CSS and HTML framework was
 [2]: http://www.meyerweb.com/eric/
 [3]: http://www.meyerweb.com/eric/tools/s5/
 
-EOF</string>
+EOF
+htmlFooter</string>
 	<key>fallbackInput</key>
 	<string>scope</string>
 	<key>input</key>

@@ -5,10 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>Markdown.pl &lt;&lt;'EOF'
-About Persistent Includes
-=========================
-
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+htmlHeader "About Persistent Includes" "HTML"
+Markdown.pl &lt;&lt;'EOF'
 The "Add Persistent Include" command allows you to embed an external file inside your HTML document. This inclusion is handled by TextMate itself. Once you've added the include statement, use the "Update Document" command to refresh any included files.
 
 Including Files
@@ -130,7 +129,8 @@ That would end up producing this:
 	&lt;h1 class='huge'&gt;Header for /path/to/example.html&lt;/h1&gt;
 	&lt;!-- end tminclude --&gt;
 
-EOF</string>
+EOF
+htmlFooter</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

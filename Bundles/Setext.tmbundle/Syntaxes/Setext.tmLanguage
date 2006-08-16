@@ -40,13 +40,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^={3,}$</string>
+			<string>^={3,}$\n?</string>
 			<key>name</key>
 			<string>markup.heading.1.setext</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^-{3,}$</string>
+			<string>^-{3,}$\n?</string>
 			<key>name</key>
 			<string>markup.heading.2.setext</string>
 		</dict>
@@ -56,7 +56,7 @@
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
-			<string>meta.other.include.setext</string>
+			<string>markup.quote.setext</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -94,18 +94,18 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>markup.other.hotword.setext</string>
+					<string>constant.other.reference.note.setext</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>markup.other.note.setext</string>
+					<string>string.quoted.other.note.setext</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\.{2} (_[\w.]+) +(\(.+)$</string>
+			<string>^\.{2} (_[-\w.]+) +(\(.+)$</string>
 			<key>name</key>
-			<string>meta.other.note_def.setext</string>
+			<string>meta.note.def.setext</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -113,7 +113,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>markup.underline.hotword.setext</string>
+					<string>constant.other.reference.link.setext</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -122,9 +122,9 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\.{2} (_[\w.]+) +(.{2,})$</string>
+			<string>^\.{2} (_[-\w.]+) +(.{2,})$</string>
 			<key>name</key>
-			<string>meta.other.href_def.setext</string>
+			<string>meta.link.reference.def.setext</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -153,16 +153,24 @@
 		<key>doc_separator</key>
 		<dict>
 			<key>match</key>
-			<string>\s*\$\$($\n|$)</string>
+			<string>\s*\$\$$\n?</string>
 			<key>name</key>
 			<string>meta.separator.document.setext</string>
 		</dict>
 		<key>hotword</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>constant.other.reference.link.setext</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\b[\w.]*\w(?&lt;!_)_\b</string>
+			<string>\b[-\w.]*\w(?&lt;!_)_\b</string>
 			<key>name</key>
-			<string>markup.underline.hotword.setext</string>
+			<string>meta.link.reference.setext</string>
 		</dict>
 		<key>inline</key>
 		<dict>
@@ -208,7 +216,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>markup.underline.setext</string>
+					<string>punctuation.FIXME</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -218,7 +226,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>markup.underline.setext</string>
+					<string>punctuation.FIXME</string>
 				</dict>
 			</dict>
 			<key>comment</key>

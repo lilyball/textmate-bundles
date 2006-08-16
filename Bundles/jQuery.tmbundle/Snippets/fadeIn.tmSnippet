@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>.fadeIn(${1:'slow'})$0</string>
+	<string>.fadeIn(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0</string>
 	<key>name</key>
 	<string>fadeIn</string>
 	<key>scope</key>

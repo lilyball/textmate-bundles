@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>.show(${1:'slow'})$0</string>
+	<string>.show(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0</string>
 	<key>name</key>
 	<string>show</string>
 	<key>scope</key>

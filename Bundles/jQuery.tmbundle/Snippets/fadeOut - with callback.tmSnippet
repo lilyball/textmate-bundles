@@ -3,14 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>.html(${1/(.+)/(?1:':)/}${1:Some text &lt;b&gt;and bold!&lt;/b&gt;}${1/(.+)/(?1:':)/})$0</string>
+	<string>.fadeOut(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/},function() {
+	${2://Stuff to do *after* the animation takes place};
+});
+$0</string>
 	<key>name</key>
-	<string>html</string>
+	<string>fadeOut (with callback)</string>
 	<key>scope</key>
 	<string>source.js.jquery</string>
 	<key>tabTrigger</key>
-	<string>.html</string>
+	<string>.fadeOut</string>
 	<key>uuid</key>
-	<string>3A459E99-A508-4561-93C4-8C801987BF65</string>
+	<string>9D75244D-9AD6-41EA-81D5-BE0AC1854D8A</string>
 </dict>
 </plist>

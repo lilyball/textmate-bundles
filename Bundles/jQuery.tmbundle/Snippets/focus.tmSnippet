@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>.html(${1/(.+)/(?1:':)/}${1:Some text &lt;b&gt;and bold!&lt;/b&gt;}${1/(.+)/(?1:':)/})$0</string>
+	<string>.focus( function() {
+	${1:// Act on the event}
+});$0</string>
 	<key>name</key>
-	<string>html</string>
+	<string>focus</string>
 	<key>scope</key>
 	<string>source.js.jquery</string>
 	<key>tabTrigger</key>
-	<string>.html</string>
+	<string>.focus</string>
 	<key>uuid</key>
-	<string>3A459E99-A508-4561-93C4-8C801987BF65</string>
+	<string>EECF47F6-EA86-4954-AC05-8875798A6B64</string>
 </dict>
 </plist>

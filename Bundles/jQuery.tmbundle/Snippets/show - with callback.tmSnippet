@@ -3,14 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>.html(${1/(.+)/(?1:':)/}${1:Some text &lt;b&gt;and bold!&lt;/b&gt;}${1/(.+)/(?1:':)/})$0</string>
+	<string>.show(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/},function() {
+	${2://Stuff to do *after* the animation takes place};
+});
+$0</string>
 	<key>name</key>
-	<string>html</string>
+	<string>show (with callback)</string>
 	<key>scope</key>
 	<string>source.js.jquery</string>
 	<key>tabTrigger</key>
-	<string>.html</string>
+	<string>.show</string>
 	<key>uuid</key>
-	<string>3A459E99-A508-4561-93C4-8C801987BF65</string>
+	<string>48ED79F8-E373-4A10-8652-88704526AD5A</string>
 </dict>
 </plist>

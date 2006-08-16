@@ -15,19 +15,21 @@ file = File.open ENV['TM_BUNDLE_SUPPORT'] + '/jquery-docs-xml.xml'
 doc = Document.new(file)
 root = doc.root
 name = ENV['TM_CURRENT_WORD']
-method = root.elements["method[@name='#{name}']"]
+methods = ''
+root.elements.each("method[@name='#{name}']") { |e| methods += e.to_s }
 
 stylefile = ENV['TM_BUNDLE_SUPPORT'] + '/docs.xsl'
 
 tf = Tempfile.new('docs')
 tf.puts('&lt;?xml version="1.0" encoding="UTF-8"?&gt;' + "\n")
-tf.puts method
+tf.puts('&lt;docs&gt;' + "\n")
+tf.puts methods
+tf.puts('&lt;/docs&gt;' + "\n")
 tf.close
 xmlfile = tf.path
 
 puts `xsltproc "#{stylefile}" "#{xmlfile}"`
-
-# testy</string>
+</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>

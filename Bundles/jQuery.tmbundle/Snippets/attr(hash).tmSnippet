@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>.html(${1/(.+)/(?1:':)/}${1:Some text &lt;b&gt;and bold!&lt;/b&gt;}${1/(.+)/(?1:':)/})$0</string>
+	<string>.attr({${1:attribute1}: '${2:value1}', ${3:attribute2}: '${4:value2}'})$0</string>
 	<key>name</key>
-	<string>html</string>
+	<string>attr (hash)</string>
 	<key>scope</key>
 	<string>source.js.jquery</string>
 	<key>tabTrigger</key>
-	<string>.html</string>
+	<string>.attr</string>
 	<key>uuid</key>
-	<string>3A459E99-A508-4561-93C4-8C801987BF65</string>
+	<string>DEF5F0F2-4A20-492B-920C-8DB154EBB343</string>
 </dict>
 </plist>

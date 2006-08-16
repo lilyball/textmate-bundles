@@ -683,20 +683,20 @@ HTML
       result = TextMate.input_box('Upload Image', 'Name to use for uploaded file:', suggested_name, 'Upload')
       TextMate.exit_discard if result.nil?
 
-      alt = result.sub(/\.[^.]+\z/, '').gsub(/[_-]/, ' ').gsub(/\w{4,}/) { |m| m.capitalize }
+      alt = result.sub(/\.[^.]+\z/, '').gsub(/[_-]/, ' ').capitalize.gsub(/\w{4,}/) { |m| m.capitalize }
       [ result, alt ]
 
     else
 
       base          = file.sub(/\.[^.]+\z/, '')
       ext           = file[(base.length)..-1]
-      suggested_alt = base.gsub(/[_-]/, ' ').gsub(/[a-z](?=[A-Z0-9])/, '\0 ').gsub(/\w{4,}/) { |m| m.capitalize }
+      suggested_alt = base.gsub(/[_-]/, ' ').gsub(/[a-z](?=[A-Z0-9])/, '\0 ').capitalize.gsub(/\w{4,}/) { |m| m.capitalize }
 
       result = TextMate.input_box('Upload Image', 'Image description (a filename will be derived from it):', suggested_alt, 'Upload')
       TextMate.exit_discard if result.nil?
 
       require "iconv"
-      name = Iconv.new('ASCII//TRANSLIT', 'UTF-8').iconv(result)
+      name = Iconv.new('ASCII//TRANSLIT', 'UTF-8').iconv(result.dup)
 
       name.gsub!(/[^-_ \/\w]/, '') # remove strange stuff
       name.gsub!(/[-_ \/]+/, '_')  # collapse word separators into one underscore

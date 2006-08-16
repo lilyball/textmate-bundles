@@ -25,6 +25,8 @@
 					<string>support.class.js.jquery</string>
 				</dict>
 			</dict>
+			<key>contentName</key>
+			<string>meta.selector.jquery</string>
 			<key>end</key>
 			<string>\)</string>
 			<key>patterns</key>
@@ -59,11 +61,68 @@
 						</dict>
 					</array>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.js</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\b(add|ancestors|appendTo|children|filter|find|insertAfter|insertBefore|next|not|parent|parents|prependTo|prev|remove|siblings)\s*\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.js.jquery</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>meta.selector.jquery</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#nested-parens</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#css-selector</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#css-selector</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.js</string>
+				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(jquery|top|left|position|get|float|overflow|color|background|val|each|html|id|title|name|href|attr|src|rel|parent|ancestors|parents|next|prev|siblings|children|show|hide|toggle|addClass|removeClass|toggleClass|remove|empty|bind|unbind|css|trigger|hover|ready|blur|oneblur|unblur|focus|onefocus|unfocus|load|oneload|unload|resize|oneresize|unresize|scroll|onescroll|unscroll|text|oneunload|ununload|click|oneclick|unclick|wrap|dblclick|onedblclick|undblclick|length|mousedown|onemousedown|unmousedown|append|mouseup|onemouseup|unmouseup|mousemove|onemousemove|unmousemove|prepend|mouseover|onemouseover|unmouseover|mouseout|onemouseout|unmouseout|before|change|onechange|unchange|reset|onereset|unreset|after|select|oneselect|unselect|submit|onesubmit|unsubmit|end|keydown|onekeydown|unkeydown|keypress|onekeypress|unkeypress|find|keyup|onekeyup|unkeyup|error|oneerror|unerror|filter|slideDown|slideUp|fadeIn|fadeOut|fadeTo|not|size|add|domManip|pushStack|extend|init|each|find|trim|parents|sibling|merge|grep|map|appendTo|prependTo|insertBefore|insertAfter|width|height)\b</string>
+			<string>\.(addClass|after|append|attr|background|before|bind|blur|change|click|color|css|dblclick|domManip|each|empty|end|error|extend|fadeIn|fadeOut|fadeTo|float|focus|get|height|hide|hover|href|html|id|init|keydown|keypress|keyup|left|length|load|mousedown|mousemove|mouseout|mouseover|mouseup|name|oneblur|onechange|oneclick|onedblclick|oneerror|onefocus|onekeydown|onekeypress|onekeyup|oneload|onemousedown|onemousemove|onemouseout|onemouseover|onemouseup|onereset|oneresize|onescroll|oneselect|onesubmit|oneunload|overflow|position|prepend|pushStack|ready|rel|removeClass|reset|resize|scroll|select|show|size|slideDown|slideUp|src|submit|text|title|toggle|toggleClass|top|trigger|unbind|unblur|unchange|unclick|undblclick|unerror|unfocus|unkeydown|unkeypress|unkeyup|unload|unmousedown|unmousemove|unmouseout|unmouseover|unmouseup|unreset|unresize|unscroll|unselect|unsubmit|ununload|val|width|wrap)\b</string>
 			<key>name</key>
 			<string>support.function.js.jquery</string>
 		</dict>
@@ -122,6 +181,17 @@
 			<string>\(</string>
 			<key>end</key>
 			<string>\)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#nested-parens</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.js</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

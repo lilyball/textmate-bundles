@@ -10,5 +10,5 @@ methods = []
 root.each_element('//method') { |e|
   methods.push(e.elements['@name'].to_s)
 }
-methods.uniq!
+methods.uniq!.sort!
 print methods.join('|')

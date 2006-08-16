@@ -6,6 +6,8 @@
 	<array>
 		<string>moinmoin</string>
 	</array>
+	<key>keyEquivalent</key>
+	<string>^~M</string>
 	<key>name</key>
 	<string>MoinMoin</string>
 	<key>patterns</key>
@@ -57,6 +59,29 @@
 			<string>^##.*</string>
 			<key>name</key>
 			<string>comment.line.double-number-sign.moimoin</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s+(.*?::)(?=\s+\S)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.list.definition.term.moinmoin</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>markup.list.definition.moinmoin</string>
+			<key>end</key>
+			<string>\n</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>

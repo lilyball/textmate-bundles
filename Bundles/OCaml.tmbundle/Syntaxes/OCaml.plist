@@ -35,7 +35,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(let(?:\s+rec)?|and)\s+([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?=\s)(?!\s*=)</string>
+			<string>^\s*(let(?:\s+rec)?|and)\s+([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?=\s)((?=\s+=\s*(fun(?:ction)))|(?!\s+=))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

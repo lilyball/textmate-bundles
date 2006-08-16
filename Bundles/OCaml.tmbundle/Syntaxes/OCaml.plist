@@ -473,6 +473,40 @@
 					<string>variable.parameter.unit.ocaml</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.ocaml</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\()\s*([a-z_][a-zA-Z0-9_]*)\s*(:)([^\)]+)(\))</string>
+					<key>name</key>
+					<string>variable.parameter.type-constraint.ocaml</string>
+				</dict>
+				<dict>
 					<key>begin</key>
 					<string>(\()</string>
 					<key>beginCaptures</key>

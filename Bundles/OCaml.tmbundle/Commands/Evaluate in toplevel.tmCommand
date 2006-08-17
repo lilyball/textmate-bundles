@@ -5,7 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>ocaml | pre</string>
+	<string>/usr/bin/osascript &lt;&lt;EOF
+
+ignoring application responses
+   tell application "Terminal"
+      activate
+      do script with command "ocaml;"
+   end tell
+end ignoring</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
@@ -13,7 +20,9 @@
 	<key>name</key>
 	<string>Evaluate in toplevel</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
 	<key>uuid</key>
 	<string>1B2552E5-39D7-40AF-B4ED-72CEDA681A04</string>
 </dict>

@@ -299,6 +299,89 @@
 						</dict>
 					</array>
 				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(&lt;gallery&gt;)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.ref.mediawiki</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.gallery.mediawiki</string>
+					<key>end</key>
+					<string>(&lt;/gallery&gt;)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(?x)
+								^(?!\s*\n)				# not an empty line
+								( [ ]*(((i|I)mage)(:))  # spaces, image, colon
+								  ([^\[\]|]+)           # anything
+								  (?&lt;!\s)[ ]*           # spaces
+								)?
+							</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.namespace.image.mediawiki</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.fix_this_later.colon.mediawiki</string>
+								</dict>
+								<key>6</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.wiki-link.image.mediawiki</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>\n</string>
+							<key>name</key>
+							<string>meta.item.gallery.mediawiki</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>begin</key>
+									<string>^(?!\|)|(\|)</string>
+									<key>beginCaptures</key>
+									<dict>
+										<key>1</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.fix_this_later.pipe.mediawiki</string>
+										</dict>
+									</dict>
+									<key>contentName</key>
+									<string>string.other.title.gallery.mediawiki</string>
+									<key>end</key>
+									<string>\n|(?=\|)</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#inline</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>\|</string>
+									<key>name</key>
+									<string>punctuation.fix_this_later.pipe.mediawiki</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
 			</array>
 		</dict>
 		<key>comments</key>
@@ -411,7 +494,7 @@
 						  ( [ ]*(((i|I)mage)(:))       # spaces, image, colon
 						    ([^\[\]|]+)                # anything
 						    (?&lt;!\s)[ ]*                # spaces
-						  )               
+						  )
 					)</string>
 					<key>beginCaptures</key>
 					<dict>
@@ -433,7 +516,7 @@
 						<key>7</key>
 						<dict>
 							<key>name</key>
-							<string>constant.other.wiki-link.mediawiki</string>
+							<string>constant.other.wiki-link.image.mediawiki</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -451,7 +534,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.other.link.title.wiki-link.mediawiki</string>
+							<string>string.other.title.link.wiki-link.mediawiki</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -459,10 +542,43 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.fix_this_later.pipe.mediawiki</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.control.image.formatting.mediawiki</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.control.image.alignment.mediawiki</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>constant.numeric.image.width.mediawiki</string>
+								</dict>
+							</dict>
 							<key>match</key>
-							<string></string>
+							<string>(?x)
+								(\|)[ ]*
+								( (thumb|thumbnail|frame)
+								 |(right|left|center|none)
+								 |([0-9]+px)
+								)[ ]*
+							</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\|</string>
 							<key>name</key>
-							<string></string>
+							<string>punctuation.fix_this_later.pipe.mediawiki</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -524,7 +640,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.other.link.title.wiki-link.mediawiki</string>
+							<string>string.other.title.link.wiki-link.mediawiki</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -549,7 +665,7 @@
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>string.other.link.title.external.mediawiki</string>
+					<string>string.other.title.link.external.mediawiki</string>
 					<key>end</key>
 					<string>\]</string>
 					<key>name</key>

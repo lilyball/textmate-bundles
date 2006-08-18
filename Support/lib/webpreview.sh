@@ -57,7 +57,7 @@ HTML
 
 # Generate HTML footer.
 # USAGE: html_footer
-htmlFooter() {
+html_footer() {
 	cat << HTML
 	</div>
 	<!-- <div id="tm_webpreview_footer">

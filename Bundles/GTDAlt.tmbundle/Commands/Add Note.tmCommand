@@ -7,6 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
 text = STDIN.read
 lines = text.split("\n")
 row = ENV['TM_LINE_NUMBER'].to_i
@@ -34,7 +35,7 @@ else
     before &lt;&lt; lines.shift
     lines.unshift("")
   end
-  print before.join("\n") + " [#{m+1}]" + lines.join("\n") + "\n[#{m+1}] $0"
+  print e_sn(before.join("\n") + " [#{m+1}]" + lines.join("\n")) + "\n[#{m+1}] $0"
 end</string>
 	<key>fallbackInput</key>
 	<string>document</string>

@@ -4,27 +4,11 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>3D365E53-12D1-42AC-913F-2C4F49A984B4</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
-
-htmlHeader "GTD Bundle Help file" '&lt;style type="text/css"&gt;
-	body {
-		background-color: #eee;
-	}
-	.contents {
-		background: white;
-		font-family: Georgia, serif;
-		font-size: 13px;
-		border: 1px #888 solid;
-		padding: 0 1em;
-	}
-	code {
-		font-size: 90%;
-	}
-	&lt;/style&gt;'
-
-beginTag div 'contents'
-
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+htmlHeader "GTD Bundle Help file" "Getting Things Done"
 Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
 # GTD Bundle Help
 This bundle is shamelessly taken from the TODO bundle and reconfigured for GTD.  For more info on GTD see &lt;http://www.davidco.com&gt;
@@ -44,8 +28,6 @@ Preconfigured tags are:
 - DONE
 
 EOF
-
-endTag
 htmlFooter
 </string>
 	<key>input</key>

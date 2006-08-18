@@ -8,9 +8,9 @@
 	<string>79741B2E-271D-4CBC-A61A-380C83D36863</string>
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-htmlHeader "Blogging Bundle Help" "Blogging"
+html_header "Blogging Bundle Help" "Blogging"
 Markdown.pl "$TM_BUNDLE_SUPPORT/help.markdown" |SmartyPants.pl|ruby -pe '$_.sub!(%r{&lt;h2&gt;(.+)&lt;/h2&gt;}) { |m| %{&lt;h2 id="#{$1.tr(" ", "_").downcase}"&gt;#{$1}&lt;/h2&gt;} }'
-htmlFooter</string>
+html_footer</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

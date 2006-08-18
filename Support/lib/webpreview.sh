@@ -9,8 +9,8 @@
 
 
 # Generate HTML header up to and including the body tag. Also includes the default stylesheet and javascript.
-# USAGE: htmlHeader [page title] [page info, like Bundle Name, shown at the top right]
-htmlHeader() {
+# USAGE: html_header [page title] [page info, like Bundle Name, shown at the top right]
+html_header() {
 	TM_HTML_TITLE=${1}
 	TM_HTML_THEME="bright" # TODO: Store theme information dynamically. Either per Bundle or globally.
 	if [[ -n $2 ]]; then
@@ -56,7 +56,7 @@ HTML
 }
 
 # Generate HTML footer.
-# USAGE: htmlFooter
+# USAGE: html_footer
 htmlFooter() {
 	cat << HTML
 	</div>

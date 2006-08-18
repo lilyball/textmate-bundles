@@ -4,9 +4,15 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>4679B572-6227-11D9-BFB1-000D93589AF6</string>
 	<key>command</key>
-	<string>cat "$TM_BUNDLE_SUPPORT/Help.txt"|pre
-</string>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Perl Runner" "Perl"
+
+cat "$TM_BUNDLE_SUPPORT/Help.txt"|pre
+
+html_footer</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

@@ -4,8 +4,12 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>005ECD5C-8762-4E90-8D8F-C778C91FFB66</string>
 	<key>command</key>
-	<string>Markdown.pl &lt;&lt;'EOF'
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Movable Type Help" "Movable Type"
+Markdown.pl &lt;&lt;'EOF'
 Help for Movable Type Bundle
 ============================
 
@@ -22,22 +26,22 @@ Customizing your MT syntax highlighting
 
 You can customize the colors used to highlight MT container and variable tags. To do this, you can use these custom scopes for new color settings:
 
-* meta.tag.mt.variable.html: Scope that covers the entire variable tag block (from '&lt;$' to '$&gt;').
-* meta.tag.mt.container.html: Scope that covers the entire container tag block (from '&lt;' to '&gt;').
+* meta.tag.mt.variable.html: Scope that covers the entire variable tag block (from `&lt;$` to `$&gt;`).
+* meta.tag.mt.container.html: Scope that covers the entire container tag block (from `&lt;` to `&gt;`).
 * entity.name.tag.mt: Scope for the inner portion of a MT container tag.
 * variable.other.mt: Scope for the inner portion of a MT variable tag.
 
-A note about the syntax highlighting of variable tags. Variable tags are written as &lt;$MTEntryTitle$&gt; to be recognized properly. Movable Type allows you to omit the '$' characters, but this language bundle requires them so they are distinguishable from the container tags.
+A note about the syntax highlighting of variable tags. Variable tags are written as `&lt;$MTEntryTitle$&gt;` to be recognized properly. Movable Type allows you to omit the `$` characters, but this language bundle requires them so they are distinguishable from the container tags.
 
 Help
 ----
 
-A context-sensitive help command (^H) is available when the cursor is on a standard MT tag. It will display the online help for that tag from the Six Apart web site.
+A context-sensitive help command (`⌃H`) is available when the cursor is on a standard MT tag. It will display the online help for that tag from the Six Apart web site.
 
 And More!
 ---------
 
-Several templates and snippets are also included with this bundle. The tab-triggered snippets are grouped by keyword ("entry", "blog", "category", "archive", etc.).
+Several templates and snippets are also included with this bundle. The tab-triggered snippets are grouped by keyword (“entry”, “blog”, “category”, “archive”, etc.).
 
 Author
 ------
@@ -49,7 +53,8 @@ This bundle is maintained by [Brad Choate][1]. Brad works at [Six Apart][2], the
 [3]: http://www.sixapart.com/movabletype/
 [4]: mailto:brad@bradchoate.com?subject=Movable%20Type%20TextMate%20Bundle
 
-EOF</string>
+EOF
+html_footer</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

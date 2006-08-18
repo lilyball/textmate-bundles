@@ -4,8 +4,13 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>30FA6EB3-2180-46F8-B2DD-EDA6B443CBB6</string>
 	<key>command</key>
-	<string>Markdown.pl "$TM_BUNDLE_SUPPORT/README.txt"</string>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+htmlHeader "GTDalt Help" "Getting Things Done (alternative)"
+Markdown.pl "$TM_BUNDLE_SUPPORT/README.txt"
+htmlFooter</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>

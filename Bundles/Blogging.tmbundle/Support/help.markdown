@@ -1,12 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>beforeRunningCommand</key>
-	<string>nop</string>
-	<key>command</key>
-	<string>Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl|ruby -pe '$_.sub!(%r{&lt;h2&gt;(.+)&lt;/h2&gt;}) { |m| %{&lt;h2 id="#{$1.tr(" ", "_").downcase}"&gt;#{$1}&lt;/h2&gt;} }'
-
 # Table of Contents
 
  1. [Getting Started](#getting_started)
@@ -85,7 +76,7 @@ It is possible to upload an image to your blog endpoint by dragging it into the 
 
 By default you will be asked for the description of the image (used as argument for the `alt` attribute) and a “safe” file name will be derived from this description (i.e. lowercased using only alphanumeric characters and no spaces).
 
-If you instead wish to provide the actual file name under which the image should be uploaded then you can hold down option (&amp;#x2325;) when dragging it into your document.
+If you instead wish to provide the actual file name under which the image should be uploaded then you can hold down option (&#x2325;) when dragging it into your document.
 
 Environment Variables
 ---------------------
@@ -109,19 +100,3 @@ Credits
 This bundle is maintained by [Brad Choate][1].
 
 [1]: http://bradchoate.com/
-
-EOF</string>
-	<key>input</key>
-	<string>selection</string>
-	<key>keyEquivalent</key>
-	<string></string>
-	<key>name</key>
-	<string>Help</string>
-	<key>output</key>
-	<string>showAsHTML</string>
-	<key>scope</key>
-	<string>text.blog</string>
-	<key>uuid</key>
-	<string>17B2F39B-5CCB-4B0E-B305-8C27BED56887</string>
-</dict>
-</plist>

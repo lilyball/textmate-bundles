@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>79741B2E-271D-4CBC-A61A-380C83D36863</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+htmlHeader "Blogging Bundle Help" "Blogging"
+Markdown.pl "$TM_BUNDLE_SUPPORT/help.markdown" |SmartyPants.pl|ruby -pe '$_.sub!(%r{&lt;h2&gt;(.+)&lt;/h2&gt;}) { |m| %{&lt;h2 id="#{$1.tr(" ", "_").downcase}"&gt;#{$1}&lt;/h2&gt;} }'
+htmlFooter</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.blog</string>
+	<key>uuid</key>
+	<string>17B2F39B-5CCB-4B0E-B305-8C27BED56887</string>
+</dict>
+</plist>

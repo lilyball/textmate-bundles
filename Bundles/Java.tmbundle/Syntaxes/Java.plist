@@ -50,6 +50,23 @@
 					<string>\*\s*(@(param|throws))\s*([a-zA-Z]\w+)\s*</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.documentation.return.java</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.documentation.value.java</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\*\s*(@(return))\s*([a-zA-Z]\w+)\s*</string>
+				</dict>
+				<dict>
 					<key>match</key>
 					<string>{@link\s+\S*\s+(\S*)}</string>
 					<key>name</key>

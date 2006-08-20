@@ -6,8 +6,6 @@
 	<string>(&lt;(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\b.*?&gt;|\{\{?(if|foreach|capture|literal|foreach|php|section|strip)|\{\s*$)</string>
 	<key>foldingStopMarker</key>
 	<string>(&lt;/(?i:(head|table|tr|div|style|script|ul|ol|form|dl))&gt;|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)|(^|\s)\})</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>XHTML</string>
 	<key>patterns</key>
@@ -24,10 +22,18 @@
 				<dict>
 					<key>begin</key>
 					<string>^#\s*(include|config|echo|exec|fsize|flastmod|printenv|set)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.server-side-include.html</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>(?=\s*--|&gt;)</string>
 					<key>name</key>
-					<string>comment.other.server-side-include.html.strict</string>
+					<string>meta.tag.preprocessor.server-side-includes.html.strict</string>
 				</dict>
 			</array>
 		</dict>

@@ -420,10 +420,18 @@
 			<string>keyword.operator.symbol.infix.ocaml</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.ocaml</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>[!?~][!$%&amp;*+./:&lt;=&gt;?@^|~-]*</string>
+			<string>~[a-z][a-z0-9]*(:)</string>
 			<key>name</key>
-			<string>keyword.operator.symbol.prefix.ocaml</string>
+			<string>entity.name.tag.label</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -854,7 +862,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>variable.parameter.name.ocaml</string>
+							<string>entity.name.tag.parameter.ocaml</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -863,7 +871,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(?:(~)([a-z]+)(:))?([a-z_][a-zA-Z0-9_]*)</string>
+					<string>\b(?:(~|\?)([a-z]+)(:))?([a-z_][a-zA-Z0-9_]*)</string>
 					<key>name</key>
 					<string>variable.parameter.ocaml</string>
 				</dict>

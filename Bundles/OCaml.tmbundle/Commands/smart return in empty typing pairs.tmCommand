@@ -29,7 +29,7 @@ right = line[lineindex..-1]
 indent1 = generate_tabbing(left + (" " * (ENV['TM_TAB_SIZE'].to_i - 1)))
 indent2 = generate_tabbing(left[0..-2])
 
-puts "#{e_sn left}\n#{indent1}$0\n#{indent2}#{e_sn right}"</string>
+print "#{e_sn left}\n#{indent1}$0\n#{indent2}#{e_sn right}"</string>
 	<key>disableOutputAutoIndent</key>
 	<true/>
 	<key>fallbackInput</key>

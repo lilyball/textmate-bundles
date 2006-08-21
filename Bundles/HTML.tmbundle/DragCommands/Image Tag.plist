@@ -12,7 +12,7 @@ sips -g pixelWidth -g pixelHeight "$img" \
 
 base=${img##*/}
 alt=$(tr &lt;&lt;&lt;${base%.*} '[_-]' ' '|perl -pe 's/(\w+)/\u$1/g')
-echo -n "alt=\"\${1:$alt}\" /&gt;"
+echo -n "alt=\"$alt\" /&gt;"
 </string>
 	<key>draggedFileExtensions</key>
 	<array>

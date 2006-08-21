@@ -27,7 +27,7 @@
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escaped.dokuwiki</string>
+					<string>constant.character.escape.dokuwiki</string>
 				</dict>
 			</array>
 		</dict>
@@ -41,7 +41,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*={2,}(.*)={2,}\s*$</string>
+			<string>^\s*={2,}(.*)={2,}\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.dokuwiki</string>
 		</dict>
@@ -49,13 +49,13 @@
 			<key>match</key>
 			<string>~~NOTOC~~</string>
 			<key>name</key>
-			<string>markup.other.notoc.dokuwiki</string>
+			<string>keyword.other.notoc.dokuwiki</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>~~NOCACHE~~</string>
 			<key>name</key>
-			<string>markup.other.nocache.dokuwiki</string>
+			<string>keyword.other.nocache.dokuwiki</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -173,12 +173,26 @@
 			<string>markup.raw.dokuwiki</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.underline.link.dokuwiki</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\{\{(.+?)\}\}</string>
+			<key>name</key>
+			<string>meta.image.inline.dokuwiki</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>\[\[</string>
 			<key>end</key>
 			<string>\]\]</string>
 			<key>name</key>
-			<string>markup.underline.link.dokuwiki</string>
+			<string>meta.link.dokuwiki</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -186,6 +200,12 @@
 					<string>[^\[\]]+\&gt;[^|\]]+</string>
 					<key>name</key>
 					<string>markup.underline.link.interwiki.dokuwiki</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>.*(?=\]\])</string>
+					<key>name</key>
+					<string>markup.underline.link.dokuwiki</string>
 				</dict>
 			</array>
 		</dict>
@@ -196,16 +216,18 @@
 			<string>markup.underline.link.dokuwiki</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.underline.link.dokuwiki</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\{\{.+?\}\}</string>
+			<string>&lt;([\w0-9\-_.]+?@[\w\-]+\.[\w\-\.]+\.*[\w]+)\&gt;</string>
 			<key>name</key>
-			<string>markup.underline.link.img.dokuwiki</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>&lt;[\w0-9\-_.]+?@[\w\-]+\.[\w\-\.]+\.*[\w]+\&gt;</string>
-			<key>name</key>
-			<string>markup.other.email.dokuwiki</string>
+			<string>meta.link.email.dokuwiki</string>
 		</dict>
 	</array>
 	<key>repository</key>

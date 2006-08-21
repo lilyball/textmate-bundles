@@ -33,11 +33,12 @@ module Browser
     def org_mozilla_camino_did_load?(url)
       %x{osascript <<'APPLESCRIPT'
       	tell app "Camino"
-      		if windows is not { }
-      			set the_url to URL of first window
+      		set theWindows to windows where visible is true
+      		if theWindows is not { }
+      			set the_url to URL of (first item of theWindows)
       			if the_url is "#{url}" then
       				activate
-      				do javascript "window.location.reload();"
+      				tell app "System Events" to keystroke "r" using {command down}
       				return true
       			end if
       		end if

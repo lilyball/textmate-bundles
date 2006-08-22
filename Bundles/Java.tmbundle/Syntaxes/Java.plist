@@ -33,56 +33,16 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.documentation.params.java</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.documentation.value.java</string>
-						</dict>
-					</dict>
 					<key>match</key>
-					<string>\*\s*(@(param|throws))\s*([a-zA-Z]\w+)\s*</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.documentation.return.java</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.documentation.value.java</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>\*\s*(@(return))\s*([a-zA-Z]\w+)\s*</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>{@link\s+\S*\s+(\S*)}</string>
+					<string>@(param|return|throws|exception|author|version|see|since|serial|serialField|serialData|deprecated)\b</string>
 					<key>name</key>
-					<string>keyword.other.documentation.link.java</string>
+					<string>keyword.other.documentation.javadoc.java</string>
 				</dict>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.documentation.java</string>
-						</dict>
-					</dict>
 					<key>match</key>
-					<string>\*\s*(@[a-zA-Z0-9_-]+)\s*</string>
+					<string>\{@link\s+[^\}]*\}</string>
+					<key>name</key>
+					<string>keyword.other.documentation.javadoc.link.java</string>
 				</dict>
 			</array>
 		</dict>

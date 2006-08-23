@@ -44,7 +44,7 @@ textmate_init () {
 	[[ -f "$1/.textmate_init" ]] && . "$1/.textmate_init"
 	[[ "$1" == / && -f ~/.textmate_init ]] && . ~/.textmate_init
 }
-textmate_init "${TM_DIRECTORY:-~}"
+textmate_init "${TM_DIRECTORY:-$HOME}"
 
 # an abstract way to change the output option of the running command
 exit_discard ()					{ echo -n "$1"; exit 200; }

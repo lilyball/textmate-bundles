@@ -102,7 +102,9 @@
 			</array>
 		</dict>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>^[ \t]*(class)(?:\s+(?!(?:virtual)\s+))((?:\[\s*'[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -115,10 +117,25 @@
 					<string>entity.name.type.class.type.ocaml</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>^[ \t]*(class)(?:\s+(?!(?:virtual)\s+))((?:\[\s*'[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
+			<key>end</key>
+			<string>(=)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.language.ocaml</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.class.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variables</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>captures</key>

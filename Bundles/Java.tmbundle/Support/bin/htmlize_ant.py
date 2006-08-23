@@ -22,6 +22,7 @@ print """
 sys.stdout.flush()
 
 ## read all data from stdin
+lastLine = None
 line = sys.stdin.readline()
 while line:
     line = line.rstrip()
@@ -43,15 +44,27 @@ while line:
         else:
             short_name = fn
 
+        colInd = 0
+        ## if lastLine:
+        ##     if lastLine[-1] == "^":
+        ##         # print lastLine
+        ##         brktInd = lastLine.find("]")
+        ## 
+        ##         if lastLine != -1:
+        ##             colInd = len(lastLine[(brktInd + 2):])
+        ##             # print lastLine[(brktInd + 2):], colInd
+        
+        
         print line[:match.start()].rstrip(),
-        print '<a href="txmt://open?url=file://%s&line=%s">%s:%s: %s</a>' % (
-            fn, match.group(2), short_name, match.group(2), match.group(3)
-        )
+        print '<a href="txmt://open?url=file://%s&line=%s&column=%d">%s:%s: %s</a>' % (
+            fn, match.group(2), colInd, short_name, match.group(2), match.group(3)
+        ),
         print line[match.end():]
 
     sys.stdout.flush()
     
     ## read next line
+    lastLine = line
     line = sys.stdin.readline()
 
 print """

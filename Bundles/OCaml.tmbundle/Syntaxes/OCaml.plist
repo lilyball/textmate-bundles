@@ -365,7 +365,7 @@
 			<key>match</key>
 			<string>\b(mutable|ref)\b</string>
 			<key>name</key>
-			<string>storage.modifier.ocaml</string>
+			<string>keyword.other.storage.modifier.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -583,6 +583,12 @@
 					<string>keyword.other.language.ocaml</string>
 				</dict>
 				<dict>
+					<key>match</key>
+					<string>\|(?=\s*\S)</string>
+					<key>name</key>
+					<string>keyword.other.language.ocaml</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#variables</string>
 				</dict>
@@ -610,15 +616,20 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b([a-z_][a-zA-Z0-9_]*)\s*(:)</string>
+					<string>(\bmutable\s+)?\b([a-z_][a-zA-Z0-9_]*)\s*(:)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>source.ocaml</string>
+							<string>keyword.other.storage.modifier.ocaml</string>
 						</dict>
 						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>source.ocaml</string>
+						</dict>
+						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>keyword.operator.ocaml</string>

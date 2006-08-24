@@ -23,8 +23,8 @@ APPLESCRIPT)
   chmod a+x "$TM_FILEPATH"
 fi
 
-{ "$TM_FILEPATH"; echo -e "\nProcess terminated with status $?"; }|pre
-
+"$TM_FILEPATH"|pre
+echo "Program exited with status $?."
 html_footer
 </string>
 	<key>input</key>

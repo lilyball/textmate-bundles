@@ -66,9 +66,7 @@ module TextMate
 
     def _standard_input_box(type, title, prompt, text = "", button1 = "Okay", button2 = "Cancel")
       require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
-      _result = _dialog(type, %Q{--title #{e_sh title} \
-        --informative-text #{e_sh prompt} --text #{e_sh text} \
-        --button1 #{e_sh button1} --button2 #{e_sh button2}})
+      _result = _dialog(type, %Q{--title #{e_sh title} --informative-text #{e_sh prompt}#{text.length > 0 ? " --text" + e_sh(text) : ""} --button1 #{e_sh button1} --button2 #{e_sh button2}})
       _result = _result.split(/\n/)
       _result[0] == '1' ? _result[1] : nil
     end

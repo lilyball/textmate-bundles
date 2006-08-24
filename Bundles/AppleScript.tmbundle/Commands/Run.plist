@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "AppleScript Runner" "${TM_FILENAME:-untitled.applescript}"
+html_header "AppleScript Runner" "${TM_FILENAME:-}"
 iconv -cs -f utf-8 -t macroman//TRANSLIT|osascript -ss|pre
 echo "Program exited with status $?."
 html_footer</string>

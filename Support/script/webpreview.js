@@ -4,12 +4,7 @@
 	In Flux: http://macromates.com/wiki/Suggestions/StylingHTMLOutput
 */
 function selectTheme(value) {
-	var date = new Date();
-	// TODO: Save the selected theme permanently
-	// Cookies don't work
-	// date.setTime(date.getTime() + (365*24*60*60*1000));
-	// var expires = "; expires=" + date.toGMTString();
-	// document.cookie = "tm_webpreview_content=" + escape(value) + "; expires=" + date.toGMTString();
+  TextMate.system("defaults write com.macromates.textmate.webpreview SelectedTheme '" + value + "'", null);
 	content = document.getElementById('tm_webpreview_content');
 	content.className = value;
 	body = document.getElementById('tm_webpreview_body'); // fix to have the body all the way styled (e.g. for black background)

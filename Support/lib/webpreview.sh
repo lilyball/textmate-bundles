@@ -7,12 +7,25 @@
 # Further Notes:
 # This is in flux right (see http://macromates.com/wiki/Suggestions/StylingHTMLOutput) now as I'm updating the Web Preview (HTML output). `html.sh` is the old version. To make for a smooth transition I threw out all the old (now partly incompatible and as I see it hardly used) functions and kind of started from scratch.
 
+selected_theme() {
+	RES=$(defaults 2>/dev/null read com.macromates.textmate.webpreview SelectedTheme)
+	if [[ $? == 0 ]]
+		then echo "$RES"
+		else echo "bright"
+	fi
+}
 
 # Generate HTML header up to and including the body tag. Also includes the default stylesheet and javascript.
 # USAGE: html_header [page title] [page info, like Bundle Name, shown at the top right]
 html_header() {
 	TM_HTML_TITLE=${1}
-	TM_HTML_THEME="bright" # TODO: Store theme information dynamically. Either per Bundle or globally.
+	TM_HTML_THEME=$(selected_theme)
+	case "$TM_HTML_THEME" in
+		bright)  SEL_BRIGHT=selected;;
+		dark)    SEL_DARK=selected;;
+		default) SEL_DEFAULT=selected;;
+	esac
+
 	if [[ -n $2 ]]; then
 		TM_HTML_LANG=$2
 	fi
@@ -44,9 +57,9 @@ html_header() {
 			<form action="#" onsubmit="return false;">
 				Theme: 
 				<select onchange="selectTheme(this.value);" id="theme_selector">
-					<option>bright</option>
-					<option>dark</option>
-					<option value="default">no colors</option>
+					<option ${SEL_BRIGHT}>bright</option>
+					<option ${SEL_DARK}  >dark</option>
+					<option ${SEL_DEFAULT} value="default">no colors</option>
 				</select>
 			</form>
 		</div>

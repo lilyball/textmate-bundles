@@ -112,6 +112,12 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>match</key>
+					<string>:|,</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation.erlang</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#internal-type-specifiers</string>
 				</dict>
@@ -233,6 +239,12 @@
 						<dict>
 							<key>include</key>
 							<string>#internal-parameter-sequence</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\|\||\||:|;|,|\.|-&gt;</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -420,6 +432,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#parens</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#character</string>
 				</dict>
 				<dict>
@@ -436,15 +452,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#variable</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#punctuation</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#symbolic-operator</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -484,6 +496,12 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>match</key>
+							<string>-&gt;|,|;</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation</string>
+						</dict>
+						<dict>
 							<key>include</key>
 							<string>#everything-else</string>
 						</dict>
@@ -515,6 +533,12 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>match</key>
+							<string>-&gt;|,|;</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation</string>
+						</dict>
+						<dict>
 							<key>include</key>
 							<string>#everything-else</string>
 						</dict>
@@ -545,6 +569,12 @@
 					<string>meta.expression.receive.erlang</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>match</key>
+							<string>-&gt;|,|;</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#everything-else</string>
@@ -608,6 +638,12 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>match</key>
+							<string>-&gt;|,|;</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation</string>
+						</dict>
+						<dict>
 							<key>include</key>
 							<string>#everything-else</string>
 						</dict>
@@ -638,6 +674,12 @@
 					<string>meta.expression.begin.erlang</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>match</key>
+							<string>-&gt;|,|;</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#everything-else</string>
@@ -750,6 +792,12 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation</string>
+						</dict>
+						<dict>
 							<key>include</key>
 							<string>#everything-else</string>
 						</dict>
@@ -795,6 +843,12 @@
 					<string>meta.function-call.erlang</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#everything-else</string>
@@ -958,6 +1012,12 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#everything-else</string>
 				</dict>
@@ -968,7 +1028,7 @@
 			<key>begin</key>
 			<string>(?=\()</string>
 			<key>end</key>
-			<string>(?=-&gt;|;|\bend\b)</string>
+			<string>(?=-&gt;)</string>
 			<key>name</key>
 			<string>meta.fun.clause.head.erlang</string>
 			<key>patterns</key>
@@ -980,6 +1040,10 @@
 				<dict>
 					<key>include</key>
 					<string>#internal-guard-sequence</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#everything-else</string>
 				</dict>
 			</array>
 		</dict>
@@ -1018,6 +1082,10 @@
 						</dict>
 					</array>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#everything-else</string>
+				</dict>
 			</array>
 		</dict>
 		<key>internal-function-clause-body</key>
@@ -1039,6 +1107,12 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#everything-else</string>
 				</dict>
@@ -1057,7 +1131,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=-&gt;|[;\.])</string>
+			<string>(?=-&gt;)</string>
 			<key>name</key>
 			<string>meta.function.clause.head.erlang</string>
 			<key>patterns</key>
@@ -1069,6 +1143,10 @@
 				<dict>
 					<key>include</key>
 					<string>#internal-guard-sequence</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#everything-else</string>
 				</dict>
 			</array>
 		</dict>
@@ -1145,9 +1223,15 @@
 			<key>contentName</key>
 			<string>meta.guard-sequence.erlang</string>
 			<key>end</key>
-			<string>(?=-&gt;|\.)</string>
+			<string>(?=-&gt;)</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>match</key>
+					<string>,|;</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#everything-else</string>
@@ -1193,6 +1277,12 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#everything-else</string>
 				</dict>
@@ -1211,7 +1301,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=-&gt;|[;\.])</string>
+			<string>(?=-&gt;)</string>
 			<key>name</key>
 			<string>meta.function.clause.head.initial.erlang</string>
 			<key>patterns</key>
@@ -1223,6 +1313,10 @@
 				<dict>
 					<key>include</key>
 					<string>#internal-guard-sequence</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#everything-else</string>
 				</dict>
 			</array>
 		</dict>
@@ -1244,6 +1338,12 @@
 			<string>meta.parameter-sequence.erlang</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#everything-else</string>
@@ -1403,6 +1503,12 @@
 			<string>meta.structure.list.erlang</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>match</key>
+					<string>\||\|\||,</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation.erlang</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#everything-else</string>
@@ -2119,12 +2225,29 @@
 				</dict>
 			</array>
 		</dict>
-		<key>punctuation</key>
+		<key>parens</key>
 		<dict>
-			<key>match</key>
-			<string>\(|\)|\|\||\||:|;|,|-&gt;</string>
+			<key>begin</key>
+			<string>(\()</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.punctuation.erlang</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\))</string>
 			<key>name</key>
-			<string>keyword.operator.punctuation.erlang</string>
+			<string>meta.structure.parens.erlang</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#everything-else</string>
+				</dict>
+			</array>
 		</dict>
 		<key>record-directive</key>
 		<dict>
@@ -2150,7 +2273,7 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.type.record.definition.erlang</string>
+					<string>entity.name.type.class.record.definition.erlang</string>
 				</dict>
 				<key>5</key>
 				<dict>
@@ -2210,7 +2333,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.type.record.erlang</string>
+							<string>entity.name.type.class.record.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -2249,7 +2372,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.type.record.erlang</string>
+							<string>entity.name.type.class.record.erlang</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -2351,6 +2474,12 @@
 			<string>meta.structure.tuple.erlang</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation.erlang</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#everything-else</string>

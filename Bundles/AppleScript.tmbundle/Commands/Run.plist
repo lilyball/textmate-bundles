@@ -5,9 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>iconv -cs -f utf-8 -t macroman//TRANSLIT|osascript -ss|pre
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "AppleScript Runner" "${TM_FILENAME:-untitled.applescript}"
+iconv -cs -f utf-8 -t macroman//TRANSLIT|osascript -ss|pre
 echo "Program exited with status $?."
-</string>
+html_footer</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

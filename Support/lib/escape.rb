@@ -19,3 +19,11 @@ def e_url(str)
     '%' + $1.unpack('H2' * $1.size).join('%').upcase
   end
 end
+
+# URL escape a string but preserve slashes (idea being we have a file system path that we want to use with file://)
+def e_pre(str)
+  str.gsub("&", "&amp;").
+      gsub("<", "&lt;").
+      gsub(">", "&gt;").
+      gsub("\n", "<br />")
+end

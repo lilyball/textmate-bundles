@@ -2,10 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>autoScrollOutput</key>
+	<integer>1</integer>
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>if [ ! -x "$TM_FILEPATH" ]; then
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Run ‘${TM_FILENAME}’"
+
+if [ ! -x "$TM_FILEPATH" ]; then
 
   res=$(iconv &lt;&lt;APPLESCRIPT -f utf-8 -t mac|osascript 2&gt;/dev/null
   tell app "TextMate" to return button returned of ¬
@@ -19,6 +24,8 @@ APPLESCRIPT)
 fi
 
 { "$TM_FILEPATH"; echo -e "\nProcess terminated with status $?"; }|pre
+
+html_footer
 </string>
 	<key>input</key>
 	<string>none</string>

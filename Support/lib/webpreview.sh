@@ -75,8 +75,9 @@ html_footer() {
 	</div>
 	<!-- <div id="tm_webpreview_footer">
 		<p>TextMate Web Preview Window</p>
-	</div> -->
+	</div>
 	<script type="text/javascript">window.location.hash = "scroll_to_here";</script>
+	 -->
 </body>
 </html>
 HTML

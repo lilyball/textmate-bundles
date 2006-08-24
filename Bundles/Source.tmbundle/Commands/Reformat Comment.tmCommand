@@ -12,14 +12,14 @@ require "escape"
 require "exit_codes"
 
 ctext = STDIN.read
-if ctext =~ /^\s*([^\s\w]+\s*)/
+if ctext =~ /^\s*([^\s\w\\]+\s*)/
   cstring = $1
 else
   TextMate.exit_show_tool_tip("Unable to determine comment character.")
 end
 
-flags = %Q{ -p "#{cstring}"}
-flags += " --retabify" if ENV["TM_SOFT_TABS"] == "NO"
+flags = %Q{-p "#{cstring}"}
+flags += " --retabify" unless ENV["TM_SOFT_TABS"] == "YES"
 
 command = "ruby #{e_sh(ENV["TM_SUPPORT_PATH"])}/bin/rubywrap.rb #{flags}"
 text    = open("| #{command}", "r+") do |wrapper|

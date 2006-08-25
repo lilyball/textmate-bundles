@@ -5,25 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>/usr/bin/osascript &lt;&lt;EOF
+	<string>#!/bin/bash
 
-ignoring application responses
-   tell application "Terminal"
-      activate
-      do script with command "ocaml;"
-   end tell
-end ignoring</string>
+annot -type $TM_LINE_NUMBER $TM_LINE_INDEX ${TM_FILEPATH/%\.ml/\.annot}</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>^~@r</string>
+	<string>^t</string>
 	<key>name</key>
-	<string>Evaluate in toplevel</string>
+	<string>show type</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.ocaml</string>
 	<key>uuid</key>
-	<string>1B2552E5-39D7-40AF-B4ED-72CEDA681A04</string>
+	<string>50C87892-73B6-4B09-B286-78A50136BC71</string>
 </dict>
 </plist>

@@ -5,13 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_RUBY:=ruby}" -e "
-print '&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=\"Refresh\" content=\"0; URL='
+	<string>#!/usr/bin/env ruby
+
+print '&lt;html&gt;&lt;head&gt;&lt;meta http-equiv="Refresh" content="0; URL='
 print 'http://jigsaw.w3.org/css-validator/validator?warning=1&amp;profile=none&amp;usermedium=all&amp;text='
 
-((ENV['TM_SELECTED_TEXT'] != nil &amp;&amp; ENV['TM_SELECTED_TEXT'].size &gt; 0) ?
-  ENV['TM_SELECTED_TEXT'] : \$&lt; ).each_byte do |b|
-  
+scope = STDIN.read
+
+scope.gsub!(/&lt;\/?style.*?&gt;/, '')
+
+((scope != nil &amp;&amp; scope.size &gt; 0) ? scope : $&lt; ).each_byte do |b|
+
   if b == 32
     print '+'
   elsif b.chr =~ /\w/
@@ -21,15 +25,15 @@ print 'http://jigsaw.w3.org/css-validator/validator?warning=1&amp;profile=none&a
   end
 end
 
-puts '#errors\"&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;' "</string>
+puts '#errors"&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;'</string>
 	<key>fallbackInput</key>
-	<string>none</string>
+	<string>scope</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^V</string>
 	<key>name</key>
-	<string>Validate Selected CSS</string>
+	<string>Validate CSS</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>

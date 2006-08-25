@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 
 module TextMate
 
@@ -39,7 +40,9 @@ module TextMate
       @folder_pattern = load_pattern('OakFolderReferenceFolderPattern', '!.*/(\.[^/]*|CVS|_darcs|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$')
 
       @text_types = prefs_for_key('OakProjectTextFiles')     || [ ]
-      @binary_types = prefs_for_key('OakProjectBinaryFiles') || [ ".nib" ]
+      @text_types.collect! { |ext| '.' + ext }
+      @binary_types = prefs_for_key('OakProjectBinaryFiles') || [ "nib" ]
+      @binary_types.collect! { |ext| '.' + ext }
     end
 
     def prefs_for_key (key)
@@ -62,18 +65,22 @@ module TextMate
     def binary? (file)
       ext = File.extname(file)
       if @text_types.member?(ext) then
-        return false
+        false
       elsif @binary_types.member?(ext) then
-        return true
-      end
-
-      type = %x{file '#{file.gsub(/'/, "'\\''")}'}
-      if /\btext\b/.match(type) then
-        @text_types.push(ext) unless(ext == "")
-        return false
+        true
       else
-        @binary_types.push(ext) unless(ext == "")
-        return true
+        # ask the file shell command about the type
+        case `file #{e_sh file}`
+        when /\bempty\b/ then
+          # treat empty files as binary, but do not record the extension
+          true
+        when /\btext\b/ then
+          @text_types << ext unless ext.empty?
+          false
+        else
+          @binary_types << ext unless ext.empty?
+          true
+        end
       end
     end
 

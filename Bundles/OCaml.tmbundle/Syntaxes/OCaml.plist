@@ -356,6 +356,42 @@
 			<string>meta.exception.declaration.ocaml</string>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>\((?=.*?:(?!=))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(:)([^:)]+)\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.ocaml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.type-constraint.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\b(int|char|float|string|list|array|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t)\b</string>
 			<key>name</key>
@@ -392,21 +428,8 @@
 			<string>keyword.other.directive.line-number.ocaml</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>(?=[^\\])(")</string>
-			<key>end</key>
-			<string>"</string>
-			<key>name</key>
-			<string>string.quoted.double.ocaml</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\\.</string>
-					<key>name</key>
-					<string>constant.character.escape.ocaml</string>
-				</dict>
-			</array>
+			<key>include</key>
+			<string>#strings</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -505,6 +528,23 @@
 						</dict>
 					</array>
 				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=[^\\])(")</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>comment.block.string.quoted.double.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\.</string>
+							<key>name</key>
+							<string>comment.block.string.constant.character.escape.ocaml</string>
+						</dict>
+					</array>
+				</dict>
 			</array>
 		</dict>
 		<key>constants</key>
@@ -595,6 +635,29 @@
 				<dict>
 					<key>include</key>
 					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<key>strings</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?=[^\\])(")</string>
+					<key>end</key>
+					<string>"</string>
+					<key>name</key>
+					<string>string.quoted.double.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\.</string>
+							<key>name</key>
+							<string>constant.character.escape.ocaml</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
@@ -697,7 +760,19 @@
 					<string>#constants</string>
 				</dict>
 				<dict>
-					<key>captures</key>
+					<key>begin</key>
+					<string>(\()(?=.*?:(?!=)&gt;?)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(:&gt;?)(.*?)(\))</string>
+					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
@@ -707,28 +782,27 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>variable.parameter.ocaml</string>
+							<string>storage.type.ocaml</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>keyword.operator.ocaml</string>
 						</dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
-							<string>storage.type.ocaml</string>
-						</dict>
-						<key>5</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.ocaml</string>
-						</dict>
 					</dict>
-					<key>match</key>
-					<string>(\()\s*([a-z][a-zA-Z0-9_]*)\s*(:&gt;?)([^)]+)(\))</string>
 					<key>name</key>
 					<string>variable.parameter.type-constrained.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#matchpatterns</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#variables</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>

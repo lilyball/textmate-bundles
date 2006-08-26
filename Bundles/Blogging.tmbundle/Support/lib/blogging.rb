@@ -155,8 +155,9 @@ TEXT
       @host = $1
       @path = $2
       if @host =~ /^(.+)(?:[:](.+))?@(.+)/
-        @username = $1
-        @password = $2
+        require 'CGI'
+        @username = CGI.unescape($1)
+        @password = CGI.unescape($2) if $2
         @host = $3
       end
     else

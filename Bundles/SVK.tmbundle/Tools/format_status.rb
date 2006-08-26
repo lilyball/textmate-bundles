@@ -5,7 +5,7 @@ strip_path_prefix	= work_path # Dir.pwd
 svk			= ENV['TM_SVK']
 svk = "svk" if svk.nil?
 
-require (support + "/bin/Builder.rb")
+require (support + "/lib/Builder.rb")
 
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)

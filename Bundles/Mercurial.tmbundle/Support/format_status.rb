@@ -18,7 +18,7 @@ ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 strip_path_prefix	= work_path # Dir.pwd
 hg			         = ENV['TM_HG'].nil? ? "hg" : ENV['TM_HG']
 
-require (support + "/bin/Builder.rb")
+require (support + "/lib/Builder.rb")
 
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)

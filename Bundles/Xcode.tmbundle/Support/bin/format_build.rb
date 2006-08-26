@@ -1,7 +1,7 @@
 $bundle				= ENV['TM_BUNDLE_SUPPORT']
 $support			= ENV['TM_SUPPORT_PATH']
 
-require ($support + "/bin/Builder.rb")
+require ($support + "/lib/Builder.rb")
 require ($bundle + "/bin/xcode_version.rb")
 
 # N.B. This code is not a model of Ruby clarity.

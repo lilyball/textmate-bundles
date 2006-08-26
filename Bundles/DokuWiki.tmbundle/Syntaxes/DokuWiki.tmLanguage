@@ -15,6 +15,14 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>include</key>
+			<string>#php</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#inline</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>"</string>
 			<key>end</key>
@@ -71,43 +79,18 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\*\*</string>
-			<key>end</key>
-			<string>\*\*</string>
-			<key>name</key>
-			<string>markup.bold.dokuwiki</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>//</string>
-			<key>end</key>
-			<string>//</string>
-			<key>name</key>
-			<string>markup.italic.dokuwiki</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>__</string>
-			<key>end</key>
-			<string>__</string>
-			<key>name</key>
-			<string>markup.underline.dokuwiki</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\&lt;(sub|sup|del)\&gt;</string>
-			<key>end</key>
-			<string>\&lt;/\1\&gt;</string>
-			<key>name</key>
-			<string>markup.other.dokuwiki</string>
-		</dict>
-		<dict>
-			<key>begin</key>
 			<string>^((\t+)|( {2,}))\*</string>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.unnumbered.dokuwiki</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -116,6 +99,13 @@
 			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.numbered.dokuwiki</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -124,6 +114,13 @@
 			<string>$</string>
 			<key>name</key>
 			<string>markup.other.table.dokuwiki</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -140,10 +137,6 @@
 			<string>\1</string>
 			<key>name</key>
 			<string>markup.raw.dokuwiki</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#php</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -172,86 +165,138 @@
 			<key>name</key>
 			<string>markup.raw.dokuwiki</string>
 		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>markup.underline.link.dokuwiki</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>\{\{(.+?)\}\}</string>
-			<key>name</key>
-			<string>meta.image.inline.dokuwiki</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\[\[</string>
-			<key>end</key>
-			<string>\]\]</string>
-			<key>name</key>
-			<string>meta.link.dokuwiki</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>[^\[\]]+\&gt;[^|\]]+</string>
-					<key>name</key>
-					<string>markup.underline.link.interwiki.dokuwiki</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>.*(?=\]\])</string>
-					<key>name</key>
-					<string>markup.underline.link.dokuwiki</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>https?://[^\s]+</string>
-			<key>name</key>
-			<string>markup.underline.link.dokuwiki</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>markup.underline.link.dokuwiki</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>&lt;([\w0-9\-_.]+?@[\w\-]+\.[\w\-\.]+\.*[\w]+)\&gt;</string>
-			<key>name</key>
-			<string>meta.link.email.dokuwiki</string>
-		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>php</key>
+		<key>inline</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>applyEndPatternLast</key>
-					<integer>1</integer>
 					<key>begin</key>
-					<string>(?=&lt;php&gt;)</string>
+					<string>\*\*</string>
 					<key>end</key>
-					<string>(?&lt;=&lt;/php&gt;)</string>
+					<string>\*\*</string>
 					<key>name</key>
-					<string>source.php.embedded.dokuwiki</string>
+					<string>markup.bold.dokuwiki</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>source.php</string>
+							<string>#inline</string>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>//</string>
+					<key>end</key>
+					<string>//</string>
+					<key>name</key>
+					<string>markup.italic.dokuwiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>__</string>
+					<key>end</key>
+					<string>__</string>
+					<key>name</key>
+					<string>markup.underline.dokuwiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\&lt;(sub|sup|del)\&gt;</string>
+					<key>end</key>
+					<string>\&lt;/\1\&gt;</string>
+					<key>name</key>
+					<string>markup.other.dokuwiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link.dokuwiki</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\{\{(.+?)\}\}</string>
+					<key>name</key>
+					<string>meta.image.inline.dokuwiki</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link.dokuwiki</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\[\[(.*?)\]\]</string>
+					<key>name</key>
+					<string>meta.link.dokuwiki</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link.interwiki.dokuwiki</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\[\[([^\[\]]+\&gt;[^|\]]+)\]\]</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link.dokuwiki</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>((https?|telnet|gopher|wais|ftp|ed2k|irc)://[\w/\#~:.?+=&amp;%@!\-;,]+?(?=[.:?\-;,]*[^\w/\#~:.?+=&amp;%@!\-;,]))</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link.dokuwiki</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>&lt;([\w0-9\-_.]+?@[\w\-]+\.[\w\-\.]+\.*[\w]+)\&gt;</string>
+					<key>name</key>
+					<string>meta.link.email.dokuwiki</string>
 				</dict>
 			</array>
 		</dict>

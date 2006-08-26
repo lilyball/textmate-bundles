@@ -21,9 +21,6 @@ def readContexts(a)
   $tags.push({:label =&gt; context, :regexp =&gt; regex, :color =&gt; color, :matches =&gt; []})   
 end
 
-
-
-
 def TextMate.file_link (file, line = 0)
   return "txmt://open/?url=file://" +
     file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
@@ -38,10 +35,10 @@ end
 
 # sorting happens
 $tags.each do |tag| 
-    context = tag[:label]    
-    myFiles = Dir.entries($myPath)
-    myFiles.each do |fileName|
-      if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd")
+  context = tag[:label]    
+  myFiles = Dir.entries($myPath)
+  myFiles.each do |fileName|
+    if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd") and (fileName != "excluded.gtd")
         lineno = 0
         mFile = File.open(fileName) 
         mFile.each do |line|
@@ -56,10 +53,10 @@ $tags.each do |tag|
             }
             #results[:match] = html_escape($1)
             tag[:matches] &lt;&lt; results
-          end        
-        end
-      end
-    end 
+          end  
+        end      
+    end
+  end
 end
 
 tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"

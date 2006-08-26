@@ -18,8 +18,8 @@ diff_cmd    = ENV['TM_SVN_DIFF_CMD']   || 'diff'
 IgnoreFilePattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 CurrentDir        = Dir.pwd + "/"
 
-require (support + '/bin/shelltokenize.rb')
-require (support + "/bin/Builder.rb")
+require (support + '/lib/shelltokenize.rb')
+require (support + "/lib/Builder.rb")
 
 mup             = nil       # markup builder
 paths_to_commit = Array.new # array of paths to commit

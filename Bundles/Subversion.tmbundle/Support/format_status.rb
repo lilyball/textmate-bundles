@@ -2,7 +2,7 @@
 # Includes
 support = ENV['TM_SUPPORT_PATH']
 require (support + "/bin/Builder.rb")
-require (support + "/bin/shelltokenize.rb")
+require (support + "/lib/shelltokenize.rb")
 require (support + "/lib/escape.rb")
 require "cgi"
 

@@ -8,7 +8,7 @@ support			= ENV['TM_SUPPORT_PATH']
 
 CURRENT_DIR		= Dir.pwd + "/"
 
-require (support + '/bin/shelltokenize.rb')
+require (support + '/lib/shelltokenize.rb')
 require (support + "/bin/Builder.rb")
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)

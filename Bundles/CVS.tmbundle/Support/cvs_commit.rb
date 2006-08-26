@@ -11,7 +11,7 @@ CURRENT_DIR		= Dir.pwd + "/"
 
 require (bundle + '/versioned_file.rb')
 require (bundle + '/working_copy.rb')
-require (support + '/bin/shelltokenize.rb')
+require (support + '/lib/shelltokenize.rb')
 require (support + "/bin/Builder.rb")
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)

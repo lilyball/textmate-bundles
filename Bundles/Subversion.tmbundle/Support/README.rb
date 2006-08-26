@@ -1,6 +1,6 @@
 
 support = ENV['TM_SUPPORT_PATH']
-require (support + "/bin/Builder.rb")
+require (support + "/lib/Builder.rb")
 
 CSSStyle = <<ENDSTYLE #CSS
  /* general stuff.. */

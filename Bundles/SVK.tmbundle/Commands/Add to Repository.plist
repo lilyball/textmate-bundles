@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_RUBY:=ruby}" -r "$TM_SUPPORT_PATH/bin/shelltokenize.rb" &lt;&lt;END
+	<string>"${TM_RUBY:=ruby}" -r "$TM_SUPPORT_PATH/lib/shelltokenize.rb" &lt;&lt;END
 	svk = ENV['TM_SVK'] || "svk"
 	puts %x{#{svk} add #{TextMate.selected_paths_for_shell}}
 END</string>

@@ -12,7 +12,7 @@ $window_title	= 'Log'
 
 # we depend in this things
 require $bundle+'/svn_helper.rb'
-require $support+'/bin/shelltokenize.rb'
+require $support+'/lib/shelltokenize.rb'
 require $support+'/lib/textmate.rb'
 include SVNHelper
 

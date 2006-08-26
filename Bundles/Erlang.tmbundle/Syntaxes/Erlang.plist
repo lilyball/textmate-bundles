@@ -458,12 +458,6 @@
 					<key>include</key>
 					<string>#variable</string>
 				</dict>
-				<dict>
-					<key>match</key>
-					<string>\S</string>
-					<key>name</key>
-					<string>invalid.illegal.erlang</string>
-				</dict>
 			</array>
 		</dict>
 		<key>expression</key>
@@ -749,6 +743,20 @@
 		</dict>
 		<key>function-call</key>
 		<dict>
+			<key>begin</key>
+			<string>(?=([a-z][a-zA-Z\d@_]*\s*:\s*)?[a-z][a-zA-Z\d@_]*\s*\()</string>
+			<key>end</key>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.punctuation.erlang</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function-call.erlang</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -778,17 +786,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(\))</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.function-call.guard.erlang</string>
+					<string>(?=\))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -830,17 +828,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(\))</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.function-call.erlang</string>
+					<string>(?=\))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1700,6 +1688,10 @@
 		</dict>
 		<key>number</key>
 		<dict>
+			<key>begin</key>
+			<string>(?=\d)</string>
+			<key>end</key>
+			<string>(?!\d)</string>
 			<key>patterns</key>
 			<array>
 				<dict>

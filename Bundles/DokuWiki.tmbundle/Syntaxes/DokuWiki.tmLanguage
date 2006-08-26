@@ -300,6 +300,48 @@
 				</dict>
 			</array>
 		</dict>
+		<key>php</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>applyEndPatternLast</key>
+					<integer>1</integer>
+					<key>begin</key>
+					<string>(?:^\s*)(?=&lt;\?(?i:php|=)?(?!.*\?&gt;))</string>
+					<key>comment</key>
+					<string>match only multi-line PHP with leading whitespace</string>
+					<key>end</key>
+					<string>(?&lt;=\?&gt;)(?:\s*$\n)?</string>
+					<key>name</key>
+					<string>source.php.embedded.dokuwiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.php</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>applyEndPatternLast</key>
+					<integer>1</integer>
+					<key>begin</key>
+					<string>(?=&lt;\?(?i:php|=)?)</string>
+					<key>end</key>
+					<string>(?&lt;=\?&gt;)</string>
+					<key>name</key>
+					<string>source.php.embedded.dokuwiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.php</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 	</dict>
 	<key>scopeName</key>
 	<string>text.html.dokuwiki</string>

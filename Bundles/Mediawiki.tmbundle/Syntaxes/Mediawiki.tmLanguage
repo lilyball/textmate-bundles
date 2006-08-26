@@ -21,7 +21,8 @@
 		    Eventually we want to do numbered and unnumbered separately, etc.
 		 5. Get some kind of folding by heading.  Maybe it should just fold
 		    to the next header, no matter which level it is.  Then we can
-		    make a contents just by folding everything
+		    make a contents just by folding everything.  Not completely sure
+			this is possible with current TM folding.
 		 6. Get the symbol list working on headings.  Trivial.
 		 7. Make sure that illegal things are correctly scoped illegal.
 		    This is non-trivial, and has several parts
@@ -34,8 +35,6 @@
 		        be so flexible.
 		      - 
 		
-		 8. &lt;gallery&gt;&lt;/gallery&gt; tag.  This one adds some complication, but
-		    is worth supporting.
 		 9. &lt;timeline&gt;&lt;/timeline&gt; tag.  I am really not sure this one is
 		    worth trying to do
 		10. Figure out a better scope for meta.function-call.  Infininight
@@ -56,6 +55,8 @@
 		FINISHED:
 		 2. Add support for LaTeX math mode inside of &lt;math&gt;&lt;/math&gt; tags.
 		 1. Add a command for new list item.  This one is trivial
+		 8. &lt;gallery&gt;&lt;/gallery&gt; tag.  This one adds some complication, but
+		    is worth supporting.
 		 
 	</string>
 	<key>fileTypes</key>
@@ -218,14 +219,14 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^(?=\S)</string>
+					<string>^(?![\t ;*#:=]|----|$)</string>
 					<key>comment</key>
 					<string>
 						Anything that is not a code block, list, header, etc.
 						is a paragraph.
 					</string>
 					<key>end</key>
-					<string>^(?:\s*$|(?=[;*#:=]|---))</string>
+					<string>^(?:\s*$|(?=[;*#:=]|----))</string>
 					<key>name</key>
 					<string>meta.paragraph.mediawiki</string>
 					<key>patterns</key>
@@ -564,13 +565,18 @@
 									<key>name</key>
 									<string>constant.numeric.image.width.mediawiki</string>
 								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.unit.mediawiki</string>
+								</dict>
 							</dict>
 							<key>match</key>
 							<string>(?x)
 								(\|)[ ]*
 								( (thumb|thumbnail|frame)
 								 |(right|left|center|none)
-								 |([0-9]+px)
+								 |([0-9]+)(px)
 								)[ ]*
 							</string>
 						</dict>

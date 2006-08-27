@@ -7,8 +7,8 @@
 #Instead, let's just do a simple find of all the $1, $2, ... $9, and record their start/end positions. Then we'll insert special fixed-length codes everything. Then we'll go through and insert <div class="m1"> and </div> all around. We'll then make the class CSS cascades so you can see overlap, e.g. ((t{2})(s{3})).
 
 
-my $bundle = $ENV{'TM_BUNDLE_PATH'};
-my $css= $bundle . "/Tools";
+my $bundle = $ENV{'TM_BUNDLE_SUPPORT'};
+my $css= $bundle . "/css";
 
 my $regexp = `pbpaste`;
 chomp($regexp);

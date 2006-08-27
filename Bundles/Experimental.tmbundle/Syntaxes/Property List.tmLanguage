@@ -7,7 +7,7 @@
 	<key>foldingStartMarker</key>
 	<string>(?x)
 							(
-								(?&lt;=|=[ ]|\s\s|\t|\n|\A)		# Openstep foldings
+								(^|=|=[ ]|\s\s|\t|\n)			# Openstep foldings
 								(\{|\()(?!.*(\)|\}))			# spaces before them to 
 																# limit false positives
 							  | (
@@ -24,8 +24,7 @@
 	<string>(?x)
 							(
 								(\}|\))(,|;)?					# Openstep foldings
-								(?==[ ]|\s\s|\t|\n|\z)			# spaces after them to
-																# limit false positives
+								(.*?$\n?)						# limit false positives
 							  | (^\s*(&lt;/[^&gt;]+&gt;|/&gt;|--&gt;)\s*$)		# XML						
 							)
 						</string>

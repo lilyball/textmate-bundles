@@ -21,9 +21,9 @@ html_header() {
 	TM_HTML_TITLE=${1}
 	TM_HTML_THEME=$(selected_theme)
 	case "$TM_HTML_THEME" in
-		bright)  SEL_BRIGHT=selected;;
-		dark)    SEL_DARK=selected;;
-		default) SEL_DEFAULT=selected;;
+		bright)  SEL_BRIGHT='selected="selected"';;
+		dark)    SEL_DARK='selected="selected"';;
+		default) SEL_DEFAULT='selected="selected"';;
 	esac
 
 	if [[ -n $2 ]]; then

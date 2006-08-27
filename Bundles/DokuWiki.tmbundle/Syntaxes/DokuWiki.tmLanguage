@@ -7,9 +7,9 @@
 	<key>firstLineMatch</key>
 	<string>^\s*={2,}(.*)={2,}\s*$</string>
 	<key>foldingStartMarker</key>
-	<string>(&lt;(php|html)&gt;|&lt;code(\s*.*)?&gt;)|/\*\*|\{\s*$</string>
+	<string>(&lt;(php|html|file|nowiki)&gt;|&lt;code(\s*.*)?&gt;)|/\*\*|\{\s*$</string>
 	<key>foldingStopMarker</key>
-	<string>(&lt;/(code|php|html)&gt;)|\*\*/|^\s*\}</string>
+	<string>(&lt;/(code|php|html|file|nowiki)&gt;)|\*\*/|^\s*\}</string>
 	<key>name</key>
 	<string>DokuWiki</string>
 	<key>patterns</key>
@@ -330,6 +330,23 @@
 					<string>(?=&lt;\?(?i:php|=)?)</string>
 					<key>end</key>
 					<string>(?&lt;=\?&gt;)</string>
+					<key>name</key>
+					<string>source.php.embedded.dokuwiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.php</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>applyEndPatternLast</key>
+					<integer>1</integer>
+					<key>begin</key>
+					<string>&lt;php&gt;</string>
+					<key>end</key>
+					<string>&lt;/php&gt;</string>
 					<key>name</key>
 					<string>source.php.embedded.dokuwiki</string>
 					<key>patterns</key>

@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/env ruby
 
 # REGEXP HELPER
 # David Lee (c) 2005. 
@@ -25,7 +25,7 @@ To set the sucker up as a TextMate command:
 
 - save this somewhere and chmod +x it so it can run
 - change the shebang to point to your local install of ruby 
-  (type 'which ruby' to find it)
+  (type 'which ruby' to find it)  # NO NEED FOR THAT USING env  --cskiadas
 - create a new Command in Textmate (alt-ctrl-cmd-c)
 - add the action /path_to_script/rx_helper.rb
 - it should operate on the selection and display output text in a tooltip

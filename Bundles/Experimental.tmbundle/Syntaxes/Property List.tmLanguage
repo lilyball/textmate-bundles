@@ -8,7 +8,7 @@
 	<string>(?x)
 							(
 								(?&lt;=|=[ ]|\s\s|\t|\n|\A)		# Openstep foldings
-								(\{|\()							# spaces before them to 
+								(\{|\()(?!.*(\)|\}))			# spaces before them to 
 																# limit false positives
 							  | (
 									^\s*
@@ -35,9 +35,9 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>xml</string>
+			<string>xml|plist</string>
 			<key>comment</key>
-			<string>This gives us the proper scope for the xml declaration snippet.</string>
+			<string>This gives us the proper scope for the xml or plist snippet.</string>
 			<key>end</key>
 			<string>\Z(?!\n)</string>
 			<key>name</key>

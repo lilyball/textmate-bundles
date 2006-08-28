@@ -86,7 +86,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=\btype\b)|^$</string>
+			<string>(?=\btype\b)|^\s*$</string>
 			<key>name</key>
 			<string>meta.type.ocaml</string>
 			<key>patterns</key>
@@ -742,6 +742,10 @@
 					<string>\b((?:[A-Z][a-zA-Z0-9_]*)(?:\.[A-Z][a-zA-Z0-9_]+)*)(\.[a-zA-Z0-9'_]+)</string>
 					<key>name</key>
 					<string>meta.module.type.ocaml</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
 				</dict>
 			</array>
 		</dict>

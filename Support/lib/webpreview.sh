@@ -29,9 +29,9 @@ html_header() {
 	if [[ -n $2 ]]; then
 		TM_HTML_LANG=$2
 	fi
-	if [[ -f "$TM_FILEPATH" ]]; then
-	  TM_EXTRA_HEAD="<base href='tm-file://${TM_FILEPATH// /%20}'/>"
-	fi
+	# if [[ -f "$TM_FILEPATH" ]]; then
+	#   TM_EXTRA_HEAD="<base href='tm-file://${TM_FILEPATH// /%20}'/>"
+	# fi
 	TM_CSS=`cat "${TM_SUPPORT_PATH}/css/webpreview.css" | sed "s|TM_SUPPORT_PATH|${TM_SUPPORT_PATH}|"`
 	cat <<HTML
 <?xml version="1.0" encoding="utf-8"?>

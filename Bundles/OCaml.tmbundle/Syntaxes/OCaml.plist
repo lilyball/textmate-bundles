@@ -935,13 +935,46 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\s(\?)\(([a-z_][a-zA-Z0-9_]*)\s*(=)</string>
+					<string>(~)([a-z][a-zA-Z0-9_]*)\s*(:)\s*</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>keyword.operator.named.parameter.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.name.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\s</string>
+					<key>name</key>
+					<string>variable.parameter.named.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#variables</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\s(\?)\(([a-z_][a-zA-Z0-9_]*)\s*(=)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.optional.parameter.ocaml</string>
 						</dict>
 						<key>2</key>
 						<dict>

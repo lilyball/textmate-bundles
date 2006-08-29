@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>D99E8C0C-792F-11D9-A212-000D93B3A10E</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Mediawiki Cheat Sheet"
+Markdown.pl &lt;&lt;MARKDOWN
+## Paragraphs ##
+
+    Two line breaks
+    will signify
+    a paragraph.
+    
+    New paragraph starts
+    here.
+    
+    For a linebreak, just
+    use &lt;br/&gt; the html tag
+
+## Phrase Emphasis ##
+
+	''italics''
+	'''bold'''
+
+## Links ##
+
+External:
+
+	An [http://url.com/ example].
+
+Wiki-links:
+
+	An [[example]] wikilink, possibly even
+	from another namespace: [[talk:example]].
+	Renaming [[hyperlink|links]] is easy.
+
+Categories:  add the page to a category as follows:
+
+    [[category:example]]
+
+## Images ##
+
+Not floated:
+
+	[[Image:example.png]]
+
+Thumbnail, with a caption, floated left, 200 pixels wide:
+
+    [[Image:example.png|left|200px|Floating!]]
+
+Link to the image, but don't show it on the page:
+
+    [[:Image:example.png|example.png]]
+
+## Headers ##
+
+
+	== Header 2 ==
+
+	=== Header 3 ===
+
+	====== Header 6 ======
+
+
+## Lists ##
+
+Ordered:
+
+	#  Foo
+	#  Bar
+
+Unordered:
+
+	* A list item. &lt;br&gt; With a line break.
+	* Bar
+
+Definition:
+
+    ; a term
+    : some defining
+    : and more defining
+    ; and another term : definition
+
+They can be nested:
+
+	* Abacus
+    ** answer
+	* Bubbles
+	*# bunk
+    *# bupkis
+    *#; BELITTLER : one who belittles
+	*# burper
+	* Cunning
+
+Definitions, without the word they are defining, are used
+to indent talk pages:
+
+    Delete this article! [[user:spam]]
+    : No, it's great! [[user:eggs]]
+
+## Signatures ##
+
+Comments should be signed:
+
+    ~~~ is my signature
+    ~~~~ is my signature with datestamp
+    ~~~~~ is just the datestamp
+
+## Use HTML for other formatting ##
+
+For a monospaced font:
+
+    use the &lt;tt&gt;tt&lt;/tt&gt; tag.
+
+To center text:
+
+    &lt;center&gt;put me in the middle&lt;/center&gt;
+
+For a blockquote:
+
+    &lt;blockquote&gt;To be or not to be…&lt;/blockquote&gt;
+
+
+## Prevent wiki formatting ##
+
+    Use the &lt;nowiki&gt;'''tag'' to write
+    '''about''&lt;/nowiki&gt; mediawiki code
+    itself, or suppress rendering for
+    some other reason.
+
+## Templates ##
+
+One page can be transcluded in another page
+by using a template:
+
+    {{templates}} go in curly braces
+
+## Horizontal Rules ##
+
+Four or more dashes:
+
+	----
+
+MARKDOWN
+html_footer</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Syntax Cheat Sheet</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.html.mediawiki</string>
+	<key>uuid</key>
+	<string>873BDE02-80C9-44F4-910B-234EF7702D01</string>
+</dict>
+</plist>

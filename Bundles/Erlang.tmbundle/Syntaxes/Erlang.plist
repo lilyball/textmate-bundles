@@ -237,10 +237,6 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>include</key>
-							<string>#internal-parameter-sequence</string>
-						</dict>
-						<dict>
 							<key>match</key>
 							<string>\|\||\||:|;|,|\.|-&gt;</string>
 							<key>name</key>
@@ -493,7 +489,7 @@
 							<key>match</key>
 							<string>-&gt;|,|;</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation</string>
+							<string>keyword.operator.punctuation.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -530,7 +526,7 @@
 							<key>match</key>
 							<string>-&gt;|,|;</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation</string>
+							<string>keyword.operator.punctuation.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -567,7 +563,7 @@
 							<key>match</key>
 							<string>-&gt;|,|;</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation</string>
+							<string>keyword.operator.punctuation.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -635,7 +631,7 @@
 							<key>match</key>
 							<string>-&gt;|,|;</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation</string>
+							<string>keyword.operator.punctuation.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -672,7 +668,7 @@
 							<key>match</key>
 							<string>-&gt;|,|;</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation</string>
+							<string>keyword.operator.punctuation.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -716,7 +712,15 @@
 		<key>function</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*+(?=[a-z][a-zA-Z\d@_]*+\s*+\()</string>
+			<string>^\s*+([a-z][a-zA-Z\d@_]*+)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.definition.erlang</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>(\.)</string>
 			<key>endCaptures</key>
@@ -732,12 +736,14 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#internal-initial-function-clause</string>
+					<key>match</key>
+					<string>,|;|-&gt;</string>
+					<key>name</key>
+					<string>keyword.operator.punctuation.erlang</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#internal-function-clause</string>
+					<string>#everything-else</string>
 				</dict>
 			</array>
 		</dict>
@@ -793,7 +799,7 @@
 							<key>match</key>
 							<string>,</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation</string>
+							<string>keyword.operator.punctuation.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -835,7 +841,7 @@
 							<key>match</key>
 							<string>,</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation</string>
+							<string>keyword.operator.punctuation.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -953,191 +959,6 @@
 				</dict>
 			</array>
 		</dict>
-		<key>internal-fun-clause</key>
-		<dict>
-			<key>begin</key>
-			<string>(?=\()</string>
-			<key>end</key>
-			<string>(;)|(?=\bend\b)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.fun.clause.erlang</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#internal-fun-clause-head</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#internal-fun-clause-body</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-fun-clause-body</key>
-		<dict>
-			<key>begin</key>
-			<string>(-&gt;)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
-				</dict>
-			</dict>
-			<key>contentName</key>
-			<string>meta.fun.clause.body.erlang</string>
-			<key>end</key>
-			<string>(?=;|\bend\b)</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>,</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-fun-clause-head</key>
-		<dict>
-			<key>begin</key>
-			<string>(?=\()</string>
-			<key>end</key>
-			<string>(?=-&gt;)</string>
-			<key>name</key>
-			<string>meta.fun.clause.head.erlang</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#internal-parameter-sequence</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#internal-guard-sequence</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-function-clause</key>
-		<dict>
-			<key>begin</key>
-			<string>(;)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?=[;\.])</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>begin</key>
-					<string>(?=[a-z][a-zA-Z\d@_]*+\s*+\()</string>
-					<key>end</key>
-					<string>(?=[;\.])</string>
-					<key>name</key>
-					<string>meta.function.clause.erlang</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#internal-function-clause-head</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#internal-function-clause-body</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-function-clause-body</key>
-		<dict>
-			<key>begin</key>
-			<string>(-&gt;)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
-				</dict>
-			</dict>
-			<key>contentName</key>
-			<string>meta.function.clause.body.erlang</string>
-			<key>end</key>
-			<string>(?=[;\.])</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>,</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-function-clause-head</key>
-		<dict>
-			<key>begin</key>
-			<string>([a-z][a-zA-Z\d@_]*+)\s*+(?=\()</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.erlang</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?=-&gt;)</string>
-			<key>name</key>
-			<string>meta.function.clause.head.erlang</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#internal-parameter-sequence</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#internal-guard-sequence</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
 		<key>internal-function-list</key>
 		<dict>
 			<key>begin</key>
@@ -1189,148 +1010,6 @@
 							<string>#everything-else</string>
 						</dict>
 					</array>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-guard-sequence</key>
-		<dict>
-			<key>begin</key>
-			<string>\b(when)\b</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.when.erlang</string>
-				</dict>
-			</dict>
-			<key>contentName</key>
-			<string>meta.guard-sequence.erlang</string>
-			<key>end</key>
-			<string>(?=-&gt;)</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>,|;</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-initial-function-clause</key>
-		<dict>
-			<key>begin</key>
-			<string>(?=[a-z][a-zA-Z\d@_]*+\s*+\()</string>
-			<key>end</key>
-			<string>(?=[;\.])</string>
-			<key>name</key>
-			<string>meta.function.clause.initial.erlang</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#internal-initial-function-clause-head</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#internal-initial-function-clause-body</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-initial-function-clause-body</key>
-		<dict>
-			<key>begin</key>
-			<string>(-&gt;)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
-				</dict>
-			</dict>
-			<key>contentName</key>
-			<string>meta.function.clause.body.initial.erlang</string>
-			<key>end</key>
-			<string>(?=[;\.])</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>,</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-initial-function-clause-head</key>
-		<dict>
-			<key>begin</key>
-			<string>([a-z][a-zA-Z\d@_]*+)\s*+(?=\()</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.definition.erlang</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?=-&gt;)</string>
-			<key>name</key>
-			<string>meta.function.clause.head.initial.erlang</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#internal-parameter-sequence</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#internal-guard-sequence</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#everything-else</string>
-				</dict>
-			</array>
-		</dict>
-		<key>internal-parameter-sequence</key>
-		<dict>
-			<key>begin</key>
-			<string>(\()</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(\))</string>
-			<key>name</key>
-			<string>meta.parameter-sequence.erlang</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>,</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation</string>
 				</dict>
 				<dict>
 					<key>include</key>

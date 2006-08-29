@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>VW_MANPATH="/Applications/VectorWorks 12.0.0/VWHelp/VectorScript Reference/Pages"
+	<string>VW_MANPATH=$TM_VSCRIPT_MANUAL
 
 pushd "${VW_MANPATH}" &gt; /dev/null
 FILE=`grep -o "&lt;A name = \"${TM_CURRENT_WORD}" *.html | cut -f 1 -d :`

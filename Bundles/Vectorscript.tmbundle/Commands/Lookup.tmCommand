@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>VW_MANPATH="/Applications/VectorWorks 12.0.0/VWHelp/VectorScript Reference/Pages"
+
+pushd "${VW_MANPATH}" &gt; /dev/null
+FILE=`grep -o "&lt;A name = \"${TM_CURRENT_WORD}" *.html | cut -f 1 -d :`
+popd &gt; /dev/null
+FILEPATH="${VW_MANPATH}/${FILE}"
+LINES=`cat "${FILEPATH}" | tr '\r' '\n' | wc -l`
+STARTLINE=`cat "${FILEPATH}" | tr '\r' '\n' | grep -n "&lt;\!-- ${TM_CURRENT_WORD}" | cut -f 1 -d :`
+TAILLINES=$((LINES-STARTLINE))
+HEADLINES=`cat "${FILEPATH}" | tr '\r' '\n' | tail -n $TAILLINES | grep -n "^&lt;\!--" | cut -f 1 -d : | head -n 1`
+cat "${FILEPATH}" | tr '\r' '\n' | tail -n $TAILLINES 2&gt; /dev/null | head -n $((HEADLINES-1))</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Lookup</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.pascal.vectorscript</string>
+	<key>uuid</key>
+	<string>A5E76858-928F-47F9-9A18-DE9E281364AC</string>
+</dict>
+</plist>

@@ -451,7 +451,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.unquoted.heredoc.no-indent.applescript.shell</string>
+			<string>string.unquoted.heredoc.no-indent.html.shell</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -495,6 +495,82 @@
 				<dict>
 					<key>include</key>
 					<string>text.html.basic</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt;)-("|'|)(MARKDOWN)\2</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.heredoc.shell</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.html.markdown.embedded.shell</string>
+			<key>end</key>
+			<string>^\t*(MARKDOWN)$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.unquoted.heredoc.no-indent.markdown.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>text.html.markdown</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;&lt;)("|'|)(MARKDOWN)\2</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.heredoc.shell</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.html.markdown.embedded.shell</string>
+			<key>end</key>
+			<string>^(MARKDOWN)$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.unquoted.heredoc.markdown.shell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>text.html.markdown</string>
 				</dict>
 			</array>
 		</dict>

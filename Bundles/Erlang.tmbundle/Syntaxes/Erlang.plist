@@ -629,8 +629,14 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>match</key>
+							<string>-&gt;|,|;</string>
+							<key>name</key>
+							<string>keyword.operator.punctuation.erlang</string>
+						</dict>
+						<dict>
 							<key>include</key>
-							<string>#internal-fun-clause</string>
+							<string>#everything-else</string>
 						</dict>
 					</array>
 				</dict>

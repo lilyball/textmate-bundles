@@ -1,0 +1,51 @@
+<% include SVNLogHelpers %>
+<html>
+<head>
+   <title>Subversion <%= $window_title %></title>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <style type="text/css">
+      @import 'file://<%= $bundle %>/Stylesheets/svn_style.css';
+      @import 'file://<%= $bundle %>/Stylesheets/svn_log_style.css';
+   </style>
+   
+   <script type="text/javascript">
+      <%= File.read( $bundle+'/svn_log_helper.js' )%>
+   </script>
+</head>
+
+<body class="log">
+
+<h1>Subversion <%= $window_title %></h1>
+<hr>
+
+<% unless no_xml.empty?
+   no_xml.each_line do |line| %>
+      <div class="bad_line"><%= line %>&nbsp;</div>
+<% end
+   end %>
+
+<% log.each_entry do |e| %>
+<table class="log <%= odd_or_even %>">
+   <% r = e.rev %>
+   <tr><th>Revision:</th><td><%= r %></td></tr>
+   <tr><th>Author:</th>  <td><%= e.author %></td></tr>
+   <tr><th>Date:</th>    <td><%= e.date %></td></tr>
+   <tr><th>Changed Files:</th>
+   <td>
+      <a id="r<%= r %>_show" href="javascript:show_files('r<%= r %>');">show (<%= e.num_paths %>)</a>
+      <a id="r<%= r %>_hide" href="javascript:hide_files('r<%= r %>');" class="hidden">hide</a>
+      <ul id="r<%= r %>" class="hidden">
+         <% e.each_path do |path| %>
+         <li class="<%= path.action %>">
+            <%= link_for path, r.to_i %>
+         </li>
+         <% end %>
+      </ul>
+   </td></tr>
+   <tr><th>Message:</th><td class="msg_field">
+      <%= e.message %>
+   </td></tr>
+</table>
+<% end %>
+
+</body></html>

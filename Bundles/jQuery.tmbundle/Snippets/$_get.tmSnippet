@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>\$.get('${1:/test/ajax-test.xml}'${2/(.+)/(?1:,function\(xml\){
+	<string>\$.get('${1:/test/ajax-test.xml}'${2/(.+)/(?1:, function\(xml\){
  :)/}${2:alert( $("title",xml).text() )//optional stuff to do after get}${2/(.+)/(?1:;
 }:)/});
 $0</string>

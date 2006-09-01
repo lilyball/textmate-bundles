@@ -80,6 +80,10 @@ markup.underline.link
 meta
 meta.paragraph
 meta.separator
+punctuation.definition
+punctuation.section
+punctuation.separator
+punctuation.terminator
 source
 storage.modifier
 storage.type

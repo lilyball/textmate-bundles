@@ -22,15 +22,23 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.apache-config</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>#.*$
+			<string>(#).*$
 ?</string>
 			<key>name</key>
 			<string>comment.line.number-sign.apache-config</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^[ ]*(&lt;(VirtualHost)(?:[ ]+([^&gt;]+))?&gt;)</string>
+			<string>^[ ]*((&lt;)(VirtualHost)(?:[ ]+([^&gt;]+))?(&gt;))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -41,16 +49,26 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.apache-config</string>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
+					<string>entity.name.tag.apache-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
 					<string>meta.toc-list.virtual-host.apache-config</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^[ ]*(&lt;/(VirtualHost)[^&gt;]*&gt;)</string>
+			<string>^[ ]*((&lt;/)(VirtualHost)[^&gt;]*(&gt;))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -61,7 +79,17 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>entity.name.tag.apache-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -76,7 +104,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^[ ]*(&lt;(Directory(?:Match)?)(?:[ ]+([^&gt;]+))?&gt;)</string>
+			<string>^[ ]*((&lt;)(Directory(?:Match)?)(?:[ ]+([^&gt;]+))?(&gt;))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -87,16 +115,26 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.apache-config</string>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>meta.toc-list.directory.apache-config</string>
+					<string>entity.name.tag.apache-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.virtual-host.apache-config</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^[ ]*(&lt;/(Directory(?:Match)?)[^&gt;]*&gt;)</string>
+			<string>^[ ]*((&lt;/)(Directory(?:Match)?)[^&gt;]*(&gt;))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -107,7 +145,17 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>entity.name.tag.apache-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -122,7 +170,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^[ ]*(&lt;(Location(?:Match)?)(?:[ ]+([^&gt;]+))?&gt;)</string>
+			<string>^[ ]*((&lt;)(Location(?:Match)?)(?:[ ]+([^&gt;]+))?(&gt;))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -133,16 +181,26 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.apache-config</string>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>meta.toc-list.location.apache-config</string>
+					<string>entity.name.tag.apache-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.virtual-host.apache-config</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^[ ]*(&lt;/(Location(?:Match)?)[^&gt;]*&gt;)</string>
+			<string>^[ ]*((&lt;/)(Location(?:Match)?)[^&gt;]*(&gt;))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -153,7 +211,17 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>entity.name.tag.apache-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -311,8 +379,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.apache-config</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"(?!")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.apache-config</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.apache-config</string>
 			<key>patterns</key>
@@ -327,17 +411,22 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;/?([a-zA-Z]+)</string>
+			<string>(&lt;/?)([a-zA-Z]+)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
+				</dict>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.apache-config</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>/?&gt;</string>
+			<string>(/?&gt;)</string>
 			<key>name</key>
 			<string>meta.tag.apache-config</string>
 		</dict>
@@ -349,8 +438,21 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.apache-config</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.apache-config</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>%\{(?:HTTP_(?:USER_AGENT|REFERER|COOKIE|FORWARDED|HOST|PROXY_CONNECTION|ACCEPT)|REMOTE_(?:ADDR|HOST|USER|IDENT)|REQUEST_(?:METHOD|URI|FILENAME)|SCRIPT_FILENAME|PATH_INFO|QUERY_STRING|AUTH_TYPE|DOCUMENT_ROOT|SERVER_(?:ADMIN|NAME|ADDR|PORT|PROTOCOL|SOFTWARE)|TIME_(?:YEAR|MON|DAY|HOUR|MIN|SEC|WDAY)|TIME|API_VERSION|THE_REQUEST|IS_SUBREQ|(?:ENV|LA-U|LA-F|HTTP|SSL):[^\}]+)\}</string>
+					<string>(%\{)(?:HTTP_(?:USER_AGENT|REFERER|COOKIE|FORWARDED|HOST|PROXY_CONNECTION|ACCEPT)|REMOTE_(?:ADDR|HOST|USER|IDENT)|REQUEST_(?:METHOD|URI|FILENAME)|SCRIPT_FILENAME|PATH_INFO|QUERY_STRING|AUTH_TYPE|DOCUMENT_ROOT|SERVER_(?:ADMIN|NAME|ADDR|PORT|PROTOCOL|SOFTWARE)|TIME_(?:YEAR|MON|DAY|HOUR|MIN|SEC|WDAY)|TIME|API_VERSION|THE_REQUEST|IS_SUBREQ|(?:ENV|LA-U|LA-F|HTTP|SSL):[^\}]+)(\})</string>
 					<key>name</key>
 					<string>support.variable.apache-config</string>
 				</dict>

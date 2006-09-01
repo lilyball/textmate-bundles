@@ -34,8 +34,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.ada</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.ada</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.ada</string>
 			<key>patterns</key>
@@ -49,8 +65,16 @@
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.ada</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>--(.*)$</string>
+			<string>(--)(.*)$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-dash.ada</string>
 		</dict>

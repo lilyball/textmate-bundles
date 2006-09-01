@@ -19,26 +19,58 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>`.*</string>
+			<string>(`).*</string>
 			<key>name</key>
 			<string>comment.line.backtick.active4d</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>//.*</string>
+			<string>(//).*</string>
 			<key>name</key>
 			<string>comment.line.double-slash.active4d</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\\\\.*$</string>
+			<string>(\\\\).*$</string>
 			<key>name</key>
 			<string>comment.line.double-backslash.continuation.active4d</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.active4d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*/</string>
 			<key>name</key>
@@ -54,8 +86,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"(?!"")</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.active4d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.active4d</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.active4d</string>
 			<key>patterns</key>
@@ -69,8 +117,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"""</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.active4d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"""</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.active4d</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.triple.heredoc.active4d</string>
 			<key>patterns</key>
@@ -84,8 +148,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'(?!'')</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.active4d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.active4d</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.interpolated.quoted.single.active4d</string>
 			<key>patterns</key>
@@ -99,8 +179,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'''</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.active4d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'''</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.active4d</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.interpolated.quoted.triple.heredoc.active4d</string>
 			<key>patterns</key>
@@ -124,32 +220,87 @@
 			<string>constant.language.boolean.active4d</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\$[\w_]+</string>
+			<string>(\$)[\w_]+</string>
 			<key>name</key>
 			<string>variable.other.local.active4d</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\&lt;\&gt;[\w_]+</string>
+			<string>(\&lt;\&gt;)[\w_]+</string>
 			<key>name</key>
 			<string>variable.other.interprocess.active4d</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.active4d</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\[[^\[].*?\]([\w_ ]+)?</string>
+			<string>(\[)[^\[].*?(\])([\w_ ]+)?</string>
 			<key>name</key>
 			<string>variable.other.table-field.active4d</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.active4d</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>!\d{1,2}/\d{1,2}/\d{2,4}!</string>
+			<string>(!)\d{1,2}/\d{1,2}/\d{2,4}(!)</string>
 			<key>name</key>
 			<string>constant.other.date.active4d</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.active4d</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\?\d{1,2}:\d{1,2}:\d{1,2}\?</string>
+			<string>(\?)\d{1,2}:\d{1,2}:\d{1,2}(\?)</string>
 			<key>name</key>
 			<string>constant.other.time.active4d</string>
 		</dict>
@@ -176,7 +327,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(method)\s*("[^"]+")\s*\(</string>
+			<string>^\s*(method)\s*((")[^"]+("))\s*(\()</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -189,11 +340,34 @@
 					<key>name</key>
 					<string>entity.name.function.active4d</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.active4d</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.active4d</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.active4d</string>
+				</dict>
 			</dict>
 			<key>comment</key>
 			<string>method definition with parameters</string>
 			<key>end</key>
-			<string>\)\s*(?:(?:\\\\|//|`).*)?$</string>
+			<string>(\))\s*(?:(?:\\\\|//|`).*)?$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.active4d</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.function.active4d</string>
 			<key>patterns</key>
@@ -209,27 +383,40 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.active4d</string>
+							<string>punctuation.definition.variable.active4d</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.parameters.active4d</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(&amp;)?\$[\w_]+(;)?</string>
+					<string>(&amp;)?(\$)[\w_]+(;)?</string>
 					<key>name</key>
 					<string>variable.parameter.function.active4d</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>(=)</string>
-					<key>captures</key>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.other.active4d</string>
+							<string>punctuation.separator.valuepair.active4d</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(;)|(?=\))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.parameters.active4d</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -381,8 +568,24 @@
 		<dict>
 			<key>begin</key>
 			<string>`</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.active4d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>`</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.active4d</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>source.interpolated.active4d</string>
 			<key>patterns</key>
@@ -435,8 +638,16 @@
 		</dict>
 		<key>interpolated_variable</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.active4d</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\$[\w_]+({(".+?"|\d+|\$[\w_]+)})*(\[\[\d+\]\])*</string>
+			<string>(\$)[\w_]+({(".+?"|\d+|\$[\w_]+)})*(\[\[\d+\]\])*</string>
 			<key>name</key>
 			<string>variable.other.interpolated.local.active4d</string>
 		</dict>

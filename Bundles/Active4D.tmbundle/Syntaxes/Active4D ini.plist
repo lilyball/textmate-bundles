@@ -13,26 +13,58 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.active4d-ini</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>//.*</string>
+			<string>(//).*</string>
 			<key>name</key>
 			<string>comment.line.double-slash.active4d-ini</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.active4d-ini</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>`.*</string>
+			<string>(`).*</string>
 			<key>name</key>
 			<string>comment.line.backtick.active4d-ini</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.active4d-ini</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\\\\.*$</string>
+			<string>(\\\\).*$</string>
 			<key>name</key>
 			<string>comment.line.double-backslash.continuation.active4d-ini</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.active4d-ini</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*/</string>
 			<key>name</key>
@@ -41,8 +73,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"(?!"")</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.active4d-ini</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.active4d-ini</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.active4d-ini</string>
 			<key>patterns</key>

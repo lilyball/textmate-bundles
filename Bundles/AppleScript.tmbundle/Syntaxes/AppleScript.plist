@@ -61,6 +61,12 @@
 			</array>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>¬</string>
+			<key>name</key>
+			<string>punctuation.continuation.line.applescript</string>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>#tell-blocks</string>
 		</dict>
@@ -303,9 +309,17 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;=application )"|(?&lt;=app )"</string>
+					<string>((?&lt;=application )"|(?&lt;=app )")</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.applescript</string>
+						</dict>
+					</dict>
 					<key>end</key>
-					<string>"</string>
+					<string>(")</string>
 					<key>name</key>
 					<string>string.quoted.double.application-name.applescript</string>
 					<key>patterns</key>
@@ -320,9 +334,17 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.applescript</string>
+						</dict>
+					</dict>
 					<key>end</key>
-					<string>"</string>
+					<string>(")</string>
 					<key>name</key>
 					<string>string.quoted.double.applescript</string>
 					<key>patterns</key>
@@ -341,31 +363,41 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>support.class.built-in.applescript</string>
+							<string>punctuation.definition.data.applescript</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>storage.type.utxt.applescript</string>
+							<string>support.class.built-in.applescript</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.data.applescript</string>
+							<string>storage.type.utxt.applescript</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.applescript</string>
+							<string>string.unquoted.data.applescript</string>
 						</dict>
 						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.data.applescript</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.applescript</string>
+						</dict>
+						<key>7</key>
 						<dict>
 							<key>name</key>
 							<string>support.class.built-in.applescript</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>«(data) (utxt)([0-9A-Fa-f]*)»(?: (as) (Unicode text))?</string>
+					<string>(«)(data) (utxt)([0-9A-Fa-f]*)(»)(?: (as) (Unicode text))?</string>
 					<key>name</key>
 					<string>meta.data.applescript</string>
 				</dict>
@@ -833,6 +865,8 @@
 					<string>generic tell block</string>
 					<key>end</key>
 					<string>^\s*(end tell)</string>
+					<key>name</key>
+					<string>meta.tell-block.generic.applescript</string>
 					<key>patterns</key>
 					<array>
 						<dict>

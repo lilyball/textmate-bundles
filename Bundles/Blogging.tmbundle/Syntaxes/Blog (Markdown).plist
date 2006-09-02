@@ -40,11 +40,16 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.separator.valuepair.blog</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>string.unquoted.blog</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^([Tt]itle|[Dd]ate|[Bb]asename|[Kk]eywords|[Bb]log|[Tt]ype|[Ll]ink|[Pp]ost|[Tt]ags|[Cc]omments|[Pp]ings?|[Cc]ategory|[Ss]tatus|[Ff]ormat):\s*(.*)$\n?</string>
+			<string>^([Tt]itle|[Dd]ate|[Bb]asename|[Kk]eywords|[Bb]log|[Tt]ype|[Ll]ink|[Pp]ost|[Tt]ags|[Cc]omments|[Pp]ings?|[Cc]ategory|[Ss]tatus|[Ff]ormat)(:)\s*(.*)$\n?</string>
 			<key>name</key>
 			<string>meta.header.blog</string>
 		</dict>

@@ -13,6 +13,14 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.haskell</string>
+				</dict>
+			</dict>
 			<key>match</key>
 			<string>`.*`</string>
 			<key>name</key>
@@ -37,16 +45,40 @@
 			<string>keyword.control.haskell</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.preprocessor.haskell</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*#\s*\w+</string>
+			<string>^\s*(#)\s*\w+</string>
 			<key>name</key>
 			<string>meta.preprocessor.haskell</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.haskell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.haskell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.haskell</string>
 			<key>patterns</key>
@@ -62,8 +94,24 @@
 		<dict>
 			<key>begin</key>
 			<string>[^\w']'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.haskell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.haskell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.haskell</string>
 			<key>patterns</key>
@@ -106,14 +154,30 @@
 			<string>constant.other.haskell</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.haskell</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>--.*</string>
+			<string>(--).*</string>
 			<key>name</key>
 			<string>comment.line.double-dash.haskell</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>{-</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.haskell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>-}</string>
 			<key>name</key>
@@ -122,6 +186,14 @@
 		<dict>
 			<key>begin</key>
 			<string>::</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.storage.type.haskell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$|(?=[;}])</string>
 			<key>name</key>

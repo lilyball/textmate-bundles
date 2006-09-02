@@ -22,17 +22,35 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.function.gri</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>entity.name.function.gri</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.gri</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\`(.*)'</string>
+			<string>(\`)(.*)(')</string>
 			<key>name</key>
 			<string>meta.function.gri</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>#</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.gri</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -50,6 +68,14 @@
 		<dict>
 			<key>begin</key>
 			<string>//</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.gri</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -96,35 +122,98 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;&lt; *"([^"]*)(")</string>
+			<string>(&lt;&lt; *")([^"]*)(")</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heredoc.gri</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heredoc.gri</string>
+				</dict>
+			</dict>
 			<key>end</key>
-			<string>^\1$</string>
+			<string>^\2$</string>
 			<key>name</key>
 			<string>string.unquoted.heredoc.doublequote.gri</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.gri</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\\[\.a-zA-Z0-9_][\.a-zA-Z0-9_]*\b</string>
+			<string>(\\)[\.a-zA-Z0-9_][\.a-zA-Z0-9_]*\b</string>
 			<key>name</key>
 			<string>variable.other.synonym.gri</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.gri</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.gri</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\.[a-zA-Z0-9_][a-zA-Z0-9_]*\.</string>
+			<string>(\.)[a-zA-Z0-9_][a-zA-Z0-9_]*(\.)</string>
 			<key>name</key>
 			<string>variable.other.variable.gri</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.gri</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.gri</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\.\.[a-zA-Z0-9_][a-zA-Z0-9_]*\.\.</string>
+			<string>(\.\.)[a-zA-Z0-9_][a-zA-Z0-9_]*(\.\.)</string>
 			<key>name</key>
 			<string>variable.other.variabledot.gri</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.gri</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.gri</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.gri</string>
 		</dict>

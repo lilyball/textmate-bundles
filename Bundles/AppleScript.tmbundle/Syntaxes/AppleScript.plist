@@ -115,7 +115,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^\s*(on)\s+(\w+)\((?:(\w+(?:,(?:\w+))*))?\)</string>
+					<string>^\s*(on)\s+(\w+)(\()(?:(\w+(?:,(?:\w+))*))?(\))</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -131,7 +131,17 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
+							<string>punctuation.section.parameters.applescript</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
 							<string>variable.parameter.handler.applescript</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.parameters.applescript</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -192,14 +202,30 @@
 					</array>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.applescript</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>--.*$\n?</string>
+					<string>(--).*$\n?</string>
 					<key>name</key>
 					<string>comment.line.double-dash.applescript</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>\(\*</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.applescript</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\*\)</string>
 					<key>name</key>

@@ -23,8 +23,16 @@
 			<string>meta.dummy.symbol.ignore.fscript</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.symbol.fscript</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>:\w+\b</string>
+			<string>(:)\w+\b</string>
 			<key>name</key>
 			<string>constant.other.symbol.fscript</string>
 		</dict>
@@ -46,20 +54,35 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.section.block.fscript</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>variable.parameter.block.fscript</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.block.fscript</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\[(?:\s*((?::\w+\s+)*:\w+)\s*\|)?\s*\]</string>
+			<string>(\[)(?:\s*((?::\w+\s+)*:\w+)\s*\|)?\s*(\])</string>
 			<key>name</key>
 			<string>meta.block.empty.fscript</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?:\s*((?::\w+\s+)*:\w+)\s*\|)?</string>
-			<key>captures</key>
+			<string>(\[)(?:\s*((?::\w+\s+)*:\w+)\s*\|)?</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.block.fscript</string>
+				</dict>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>variable.parameter.block.fscript</string>
@@ -67,6 +90,14 @@
 			</dict>
 			<key>end</key>
 			<string>\]</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.block.fscript</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.block.fscript</string>
 			<key>patterns</key>
@@ -125,16 +156,48 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.begin.fscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.end.fscript</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>comment.block.quotes.fscript</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.fscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.fscript</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.fscript</string>
 			<key>patterns</key>

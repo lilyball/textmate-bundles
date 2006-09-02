@@ -16,6 +16,14 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.separator.diff</string>
+				</dict>
+			</dict>
 			<key>match</key>
 			<string>^((\*{15})|(={67})|(-{3}))$\n?</string>
 			<key>name</key>
@@ -33,47 +41,150 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.range.diff</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>meta.toc-list.line-number.diff</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.range.diff</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^@@\s*(.+?)\s*@@$\n?</string>
+			<string>^(@@)\s*(.+?)\s*(@@)$\n?</string>
 			<key>name</key>
 			<string>meta.diff.range.unified</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.range.diff</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.range.diff</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.range.diff</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.range.diff</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^((\-{3} .+ \-{4})|(\*{3} .+ \*{4}))$\n?</string>
+			<string>^(((\-{3}) .+ (\-{4}))|((\*{3}) .+ (\*{4})))$\n?</string>
 			<key>name</key>
 			<string>meta.diff.range.context</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.from-file.diff</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.from-file.diff</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.from-file.diff</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(^((-{3} .+)|(\*{3} .+))$\n?|^={4} .+(?= - ))</string>
+			<string>(^(((-{3}) .+)|((\*{3}) .+))$\n?|^(={4}) .+(?= - ))</string>
 			<key>name</key>
 			<string>meta.diff.header.from-file</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.to-file.diff</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.to-file.diff</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.to-file.diff</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(^\+{3} .+$\n?| - .* ={4}$\n?)</string>
+			<string>(^(\+{3}) .+$\n?| (-) .* (={4})$\n?)</string>
 			<key>name</key>
 			<string>meta.diff.header.to-file</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.inserted.diff</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.inserted.diff</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^((&gt;( .*)?)|(\+.*))$\n?</string>
+			<string>^(((&gt;)( .*)?)|((\+).*))$\n?</string>
 			<key>name</key>
 			<string>markup.inserted.diff</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.inserted.diff</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^!.*$\n?</string>
+			<string>^(!).*$\n?</string>
 			<key>name</key>
 			<string>markup.changed.diff</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.inserted.diff</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.inserted.diff</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^((&lt;( .*)?)|(-.*))$\n?</string>
+			<string>^(((&lt;)( .*)?)|((-).*))$\n?</string>
 			<key>name</key>
 			<string>markup.deleted.diff</string>
 		</dict>
@@ -83,11 +194,16 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.separator.valuepair.diff</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>meta.toc-list.file-name.diff</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^Index: (.+)$\n?</string>
+			<string>^Index(:) (.+)$\n?</string>
 			<key>name</key>
 			<string>meta.diff.index</string>
 		</dict>

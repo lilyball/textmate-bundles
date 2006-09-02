@@ -2,20 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>bundlePath</key>
-	<string>/Users/kumar/Library/Application Support/TextMate/Bundles/PHPDoc.tmbundle</string>
 	<key>content</key>
 	<string>/** \brief  ${3:undocumented class}
 	
 	${4:undocumented class}
 	
-&amp;copy; Copyright `date +%Y` `echo $TM_ORGANIZATION_NAME` - `echo $TM_AUTHOR`. All Rights Reserved.
+© Copyright `date +%Y` $TM_ORGANIZATION_NAME - ${TM_AUTHOR:`niutil -readprop / "/users/$USER" realname`}. All Rights Reserved.
 
-	\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
-	\\author \$LastChangedBy\$
-	\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
-	\\date \$LastChangedDate\$
-	\\version \$Rev\$
+	\author ${TM_AUTHOR:`niutil -readprop / "/users/$USER" realname`} $TM_ORGANIZATION_NAME
+	\author \$LastChangedBy\$
+	\date `date +%Y-%m-%d`
+	\date \$LastChangedDate\$
+	\version \$Rev\$
 	\sa
 **/
 $1class $2 {
@@ -24,8 +22,8 @@ $1class $2 {
 	/** 
 	\brief class $2 constructor
 	
-	\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
-	\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
+	\author ${TM_AUTHOR:`niutil -readprop / "/users/$USER" realname`} $TM_ORGANIZATION_NAME
+	\date `date +%Y-%m-%d`
 	\param $8 ${9:description of parameter}
 	
 	\return
@@ -39,7 +37,7 @@ $1class $2 {
 
 </string>
 	<key>name</key>
-	<string>Class PHP</string>
+	<string>Class</string>
 	<key>scope</key>
 	<string>source.php</string>
 	<key>tabTrigger</key>

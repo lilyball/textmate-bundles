@@ -30,17 +30,35 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.section.perameters.asp</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
 					<string>variable.parameter.function.asp</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.perameters.asp</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*((?i:function|sub))\s*([a-zA-Z_]\w*)\s*\(([^)]*)\).*\n?</string>
+			<string>^\s*((?i:function|sub))\s*([a-zA-Z_]\w*)\s*(\()([^)]*)(\)).*\n?</string>
 			<key>name</key>
 			<string>meta.function.asp</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.asp</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>'.*$\n?</string>
+			<string>(').*$\n?</string>
 			<key>name</key>
 			<string>comment.line.apostrophe.asp</string>
 		</dict>
@@ -77,8 +95,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.asp</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"(?!")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.asp</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.asp</string>
 			<key>patterns</key>
@@ -92,8 +126,16 @@
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.asp</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\$[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\b</string>
+			<string>(\$)[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\b</string>
 			<key>name</key>
 			<string>variable.other.asp</string>
 		</dict>

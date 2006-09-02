@@ -130,9 +130,17 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>asm[\n]*\s*{</string>
+			<string>asm[\n]*\s*({)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.mips</string>
+				</dict>
+			</dict>
 			<key>end</key>
-			<string>}</string>
+			<string>(})</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -144,6 +152,14 @@
 		<dict>
 			<key>begin</key>
 			<string>/\+</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\+/</string>
 			<key>name</key>
@@ -159,6 +175,14 @@
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*/</string>
 			<key>name</key>
@@ -166,7 +190,15 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>//</string>
+			<string>(//)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -190,8 +222,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.d</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.c</string>
 			<key>patterns</key>
@@ -209,8 +257,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.d</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.c</string>
 			<key>patterns</key>
@@ -246,6 +310,14 @@
 		<dict>
 			<key>begin</key>
 			<string>/\+</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.d</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\+/</string>
 			<key>patterns</key>

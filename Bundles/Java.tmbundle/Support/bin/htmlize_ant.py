@@ -16,7 +16,6 @@ print """
     </head>
 
     <body>
-        <pre>
 """ % (os.environ['TM_BUNDLE_SUPPORT'])
 
 sys.stdout.flush()
@@ -61,6 +60,7 @@ while line:
         ),
         print line[match.end():]
 
+    print "<br />"
     sys.stdout.flush()
     
     ## read next line
@@ -68,7 +68,6 @@ while line:
     line = sys.stdin.readline()
 
 print """
-        </pre>
     </body>
 </html>
 """

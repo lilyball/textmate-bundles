@@ -19,6 +19,14 @@
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.dylan</string>
+				</dict>
+			</dict>
 			<key>comment</key>
 			<string>TODO -- Dylan allows nested comments.</string>
 			<key>end</key>
@@ -29,6 +37,14 @@
 		<dict>
 			<key>begin</key>
 			<string>//</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.dylan</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -101,8 +117,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.dylan</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.dylan</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.dylan</string>
 			<key>patterns</key>

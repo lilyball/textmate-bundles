@@ -26,7 +26,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:list)\]</string>
+			<string>(\[)(?i:list)(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
@@ -34,20 +34,35 @@
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
 				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
 			</dict>
 			<key>end</key>
-			<string>\[/(?i:list)\]</string>
+			<string>(\[/)(?i:list)(\])</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\[\*\]</string>
+					<string>(\[\*\])</string>
 					<key>captures</key>
 					<dict>
 						<key>0</key>
 						<dict>
 							<key>name</key>
 							<string>meta.tag.bbcode</string>
+						</dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.bbcode</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -66,8 +81,8 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:list)=(1|a)\]</string>
-			<key>captures</key>
+			<string>(\[)(?i:list)=(1|a)(\])</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
@@ -77,22 +92,55 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>constant.other.list-type.bbcode</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\[/(?i:list)\]</string>
+			<string>(\[/)(?i:list)(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+			</dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\[\*\]</string>
+					<string>(\[\*\])</string>
 					<key>captures</key>
 					<dict>
 						<key>0</key>
 						<dict>
 							<key>name</key>
 							<string>meta.tag.bbcode</string>
+						</dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.bbcode</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -111,19 +159,29 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:quote)(=[^\]]+)?\]</string>
+			<string>(\[)(?i:quote)(?:=[^\]]+)?(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.quote.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:quote)\]</string>
+			<string>(\[/)(?i:quote)(\])</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -134,35 +192,55 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:code)\]</string>
+			<string>(\[)(?i:code)(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.raw.block.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:code)\]</string>
+			<string>(\[/)(?i:code)(\])</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:i)\]</string>
+			<string>(\[)(?i:i)(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.italic.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:i)\]</string>
+			<string>(\[/)(?i:i)(\])</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -173,19 +251,29 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:b)\]</string>
+			<string>(\[)(?i:b)(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.bold.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:b)\]</string>
+			<string>(\[/)(?i:b)(\])</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -196,19 +284,29 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:u)\]</string>
+			<string>(\[)(?i:u)(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.underline.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:u)\]</string>
+			<string>(\[/)(?i:u)(\])</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -219,19 +317,29 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:strike)\]</string>
+			<string>(\[)(?i:strike)(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.other.strikethrough.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:strike)\]</string>
+			<string>(\[/)(?i:strike)(\])</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -242,14 +350,14 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?x)\[(?i:color)=(
+			<string>(?x)(\[)(?i:color)=(
 		            (?i:(red|green|blue|yellow
 		                |white|black|pink
 		                |purple|brown|grey))
                     |(\#([0-9a-fA-F]{6}))
                     |([^\]]+))
-                \]</string>
-			<key>captures</key>
+                (\])</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
@@ -259,23 +367,51 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constant.other.named-color.bbcode</string>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>constant.other.named-color.bbcode</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>constant.other.rgb-value.bbcode</string>
 				</dict>
-				<key>5</key>
+				<key>6</key>
 				<dict>
 					<key>name</key>
 					<string>invalid.illegal.expected-a-color.bbcode</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.other.colored.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:color)\]</string>
+			<string>(\[/)(?i:color)(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+			</dict>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -286,11 +422,11 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?x)\[(?i:size)=
+			<string>(?x)(\[)(?i:size)=
                  (?i:([0-9]{1,3})\b
                      |([^\]]+))
-                 \]</string>
-			<key>captures</key>
+                 (\])</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
@@ -300,18 +436,46 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constant.numeric.size.bbcode</string>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>constant.numeric.size.bbcode</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>invalid.illegal.expected-a-size.bbcode</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.other.resized.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:size)\]</string>
+			<string>(\[/)(?i:size)(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+			</dict>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -322,7 +486,65 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:url)=([^\]]+)\]</string>
+			<string>(\[)(?i:url)=([^\]]+)(\])</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>markup.underline.link.bbcode</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>string.other.link.title.bbcode</string>
+			<key>end</key>
+			<string>(\[/)(?i:url)(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.link.inline.bbcode</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\[)(?i:url)(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
@@ -333,38 +555,18 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>markup.underline.link.bbcode</string>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
-			</dict>
-			<key>contentName</key>
-			<string>string.other.link.title.bbcode</string>
-			<key>end</key>
-			<string>\[/(?i:url)\]</string>
-			<key>name</key>
-			<string>meta.link.inline.bbcode</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\[(?i:url)\]</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>meta.tag.bbcode</string>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.underline.link.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:url)\]</string>
+			<string>(\[/)(?i:url)(\])</string>
 			<key>name</key>
 			<string>meta.link.inline.bbcode</string>
 			<key>patterns</key>
@@ -377,19 +579,29 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:email)\]</string>
+			<string>(\[)(?i:email)(\])</string>
 			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.underline.link.email.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:email)\]</string>
+			<string>(\[/)(?i:email)(\])</string>
 			<key>name</key>
 			<string>meta.link.inline.bbcode</string>
 			<key>patterns</key>
@@ -402,29 +614,57 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?i:img)(:((?i:right|left|top))|([^\]]+))?\]</string>
-			<key>captures</key>
+			<string>(\[)(?i:img)(:((?i:right|left|top))|([^\]]+))?(\])</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.tag.bbcode</string>
 				</dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constant.other.alignment.bbcode</string>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
+					<string>constant.other.alignment.bbcode</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
 					<string>invalid.illegal.expected-an-alignment.bbcode</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>markup.underline.link.image.bbcode</string>
 			<key>end</key>
-			<string>\[/(?i:img)\]</string>
+			<string>(\[/)(?i:img)(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.bbcode</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.bbcode</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.link.image.bbcode</string>
 			<key>patterns</key>
@@ -436,11 +676,30 @@
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.bbcode</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.bbcode</string>
+				</dict>
+			</dict>
 			<key>match</key>
 			<string>(?x)
-				:\)|:mad:|;\)|:rolleyes:|:D|:cool:|
-				:\(|:p|:eek:|:o|:confused:|:devious:|
-				:judge:|:scared:|:eyebrow:|:bigdumbgrin:</string>
+				(
+					(
+						(:)
+						(mad|rolleyes|cool|eek|confused|devious|
+						judge|scared|eyebrow|bigdumbgrin)
+						(:)
+					)
+				  | (?::\)|;\)|:D|:\(|:p|:o)
+				)</string>
 			<key>name</key>
 			<string>constant.other.smiley.bbcode</string>
 		</dict>

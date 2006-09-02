@@ -37,6 +37,14 @@
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.c</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*/</string>
 			<key>name</key>
@@ -45,6 +53,14 @@
 		<dict>
 			<key>begin</key>
 			<string>//</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.c</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -118,8 +134,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.c</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.c</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.c</string>
 			<key>patterns</key>
@@ -137,8 +169,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.c</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.c</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.c</string>
 			<key>patterns</key>
@@ -154,10 +202,10 @@
 			<string>(?x)
 				^\s*\#\s*(define)\s+             # define
 				((?&lt;id&gt;[a-zA-Z_][a-zA-Z0-9_]*))  # macro name
-				\((
+				(\()(
 					\s* \g&lt;id&gt; \s*              # first argument
 					(, \s* \g&lt;id&gt; \s*)*         # additional arguments
-				)\)
+				)(\))
 			</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -174,7 +222,17 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.section.parameters.c</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
 					<string>variable.parameter.preprocessor.c</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.parameters.c</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -246,16 +304,48 @@
 				<dict>
 					<key>begin</key>
 					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.c</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.c</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.include.c</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>&lt;</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.c</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>&gt;</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.c</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.other.lt-gt.include.c</string>
 				</dict>
@@ -329,9 +419,9 @@
 				     )
 				)
 				([A-Za-z_][A-Za-z0-9_:]*)              # actual name
-				 \s*\( (?=                             # match "("
+				 \s*(\() (?=                           # match "("
 				           (?&lt;fun&gt; [^()]++ | \( \g&lt;fun&gt;*+ \) )*+   # function arguments
-				    \)                                 # match ")"
+				    \) 		                           # match ")"
 				 (\s+const)?\s*                        # optional const modifier
 				 (\{|\n|//|/\*))                       # start bracket or end-of-line
 			</string>
@@ -342,9 +432,22 @@
 					<key>name</key>
 					<string>entity.name.function.c</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
 			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.function.c</string>
 			<key>patterns</key>
@@ -364,7 +467,7 @@
 				     )
 				)
 				([A-Za-z_][A-Za-z0-9_:]*)              # actual name
-				 \s+\( (?=                             # match "("
+				 \s+(\() (?=                           # match "("
 				           (?&lt;fun&gt; [^()]++ | \( \g&lt;fun&gt;*+ \) )*+   # function arguments
 				    \)                                 # match ")"
 				 (\s+const)?\s*                        # optional const modifier
@@ -377,9 +480,22 @@
 					<key>name</key>
 					<string>entity.name.function.c</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
 			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.function.prototype.c</string>
 			<key>patterns</key>

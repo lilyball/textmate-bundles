@@ -105,7 +105,7 @@
 				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
 				)
 				((?:[A-Za-z_][A-Za-z0-9_]*::)*+~[A-Za-z_][A-Za-z0-9_]*) # actual name
-				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				 \s*(\() (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s*=\s*0)?\s*                        # optional pure modifier
 				 (\{|\n))                              # start bracket or end-of-line
 			</string>
@@ -116,9 +116,22 @@
 					<key>name</key>
 					<string>entity.name.function.c</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
 			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.function.destructor.c++</string>
 			<key>patterns</key>
@@ -136,7 +149,7 @@
 				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
 				)
 				((?:[A-Za-z_][A-Za-z0-9_]*::)*+~[A-Za-z_][A-Za-z0-9_]*) # actual name
-				 \s*\( (?=[^)]*\)                      # match "(" and use look-ahead for ")"
+				 \s*(\() (?=[^)]*\)                      # match "(" and use look-ahead for ")"
 				 (\s*=\s*0)?\s*                        # optional pure modifier
 				 ;)                                    # terminating semi-colon
 			</string>
@@ -147,9 +160,22 @@
 					<key>name</key>
 					<string>entity.name.function.c</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
 			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.function.destructor.prototype.c++</string>
 			<key>patterns</key>
@@ -165,7 +191,7 @@
 			<string>(?x)
 				(?:  ^\s*)                             # begin-of-line
 				((?!while|for|do|if|else|switch|catch|enumerate|iterate)[A-Za-z_][A-Za-z0-9_:]*) # actual name
-				 \s*\( (?=                             # match "("
+				 \s*(\() (?=                             # match "("
 				           (?&lt;arg&gt; [^()]++ | \( \g&lt;arg&gt;*+ \) )*+   # function arguments
 				    \)                                 # match ")"
 				 (\s* : (?&lt;base&gt; \s* [A-Za-z_][A-Za-z0-9_]* \( \g&lt;arg&gt;*+ \) ) (, \g&lt;base&gt;)* (, (?=\s*\n))? )? \s*  # optional base constructors
@@ -178,9 +204,22 @@
 					<key>name</key>
 					<string>entity.name.function.c</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
 			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.c</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.function.constructor.c++</string>
 			<key>patterns</key>

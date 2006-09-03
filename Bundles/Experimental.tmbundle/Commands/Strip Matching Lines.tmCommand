@@ -10,7 +10,7 @@
 # we seem to have to provide the full path
 # here... which is a pain. Some shell guru
 # can no doubt explain why.
-output = `'#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog' inputbox --title Input --informative-text 'Regular Expression' --button1 'Strip' --button2 'Abort'`
+output = `'#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog' inputbox --title "Strip Matching Lines" --informative-text 'Regular Expression' --button1 'Strip' --button2 'Cancel'`
 output = output.split("\n")
 
 # check the button pressed, exit if it wasn't Record
@@ -28,8 +28,6 @@ end
 	<string>document</string>
 	<key>input</key>
 	<string>selection</string>
-	<key>keyEquivalent</key>
-	<string>^~@s</string>
 	<key>name</key>
 	<string>Strip Matching Lines</string>
 	<key>output</key>

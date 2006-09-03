@@ -200,7 +200,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(&lt;\/)(\1)(&gt;)</string>
+			<string>(&lt;\/)(\2)(\&gt;)</string>
 			<key>name</key>
 			<string>markup.raw.dokuwiki</string>
 		</dict>
@@ -251,6 +251,34 @@
 			<string>^((\s\s)|(\t))[^\*\-].*$</string>
 			<key>name</key>
 			<string>markup.raw.dokuwiki</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\&lt;)(sub|sup|del)(\&gt;)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.dokuwiki</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.dokuwiki</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\&lt;/)(\2)(\&gt;)</string>
+			<key>name</key>
+			<string>markup.other.dokuwiki</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -341,34 +369,6 @@
 					<string>__</string>
 					<key>name</key>
 					<string>markup.underline.dokuwiki</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#inline</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(\&lt;)(sub|sup|del)(\&gt;)</string>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.tag.dokuwiki</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.tag.dokuwiki</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(\&lt;/)(\1)(\&gt;)</string>
-					<key>name</key>
-					<string>markup.other.dokuwiki</string>
 					<key>patterns</key>
 					<array>
 						<dict>

@@ -112,7 +112,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.FIXME</string>
+					<string>punctuation.section.array.plist</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -138,7 +138,7 @@
 		<key>openstep_array-item</key>
 		<dict>
 			<key>begin</key>
-			<string>(?={|\(|"|'|[-a-zA-Z0-9_.])</string>
+			<string>(?={|\(|"|'|[-a-zA-Z0-9_.]|&lt;)</string>
 			<key>end</key>
 			<string>(,)|(?=\))</string>
 			<key>endCaptures</key>
@@ -146,7 +146,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.FIXME</string>
+					<string>punctuation.separator.array-items.plist</string>
 				</dict>
 			</dict>
 			<key>patterns</key>
@@ -195,14 +195,30 @@
 				<dict>
 					<key>begin</key>
 					<string>/\*</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.plist</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\*/</string>
 					<key>name</key>
 					<string>comment.block.plist</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.plist</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>//.*$\n?</string>
+					<string>(//).*$\n?</string>
 					<key>name</key>
 					<string>comment.line.double-slash.plist</string>
 				</dict>
@@ -212,18 +228,31 @@
 		<dict>
 			<key>begin</key>
 			<string>(&lt;)</string>
-			<key>captures</key>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.FIXME</string>
+					<string>punctuation.definition.data.plist</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>=?\s*?(&gt;)</string>
+			<string>(=?)\s*?(&gt;)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.data.plist</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.data.plist</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>meta.group.array.plist</string>
+			<string>meta.binary-data.plist</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -249,7 +278,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.FIXME</string>
+					<string>punctuation.section.dictionary.plist</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -281,6 +310,14 @@
 					<string>(?=([-a-zA-Z0-9_.]+)|("|'))</string>
 					<key>end</key>
 					<string>;</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.rule.plist</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>meta.rule.named.plist</string>
 					<key>patterns</key>
@@ -310,8 +347,24 @@
 						<dict>
 							<key>begin</key>
 							<string>("|')</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.plist</string>
+								</dict>
+							</dict>
 							<key>end</key>
 							<string>(\1)</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.plist</string>
+								</dict>
+							</dict>
 							<key>name</key>
 							<string>constant.other.key.plist</string>
 							<key>patterns</key>
@@ -330,7 +383,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.FIXME</string>
+									<string>punctuation.separator.key-value.plist</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -366,9 +419,17 @@
 		<key>openstep_plist</key>
 		<dict>
 			<key>begin</key>
-			<string>(\{)</string>
+			<string>\{</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.plist.plist</string>
+				</dict>
+			</dict>
 			<key>end</key>
-			<string>(\})</string>
+			<string>\}</string>
 			<key>name</key>
 			<string>meta.rule.plist.plist</string>
 			<key>patterns</key>
@@ -414,19 +475,58 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>("|')</string>
-					<key>captures</key>
+					<string>'</string>
+					<key>beginCaptures</key>
 					<dict>
-						<key>1</key>
+						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.string.begin.other</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(\1)</string>
+					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.other</string>
+						</dict>
+					</dict>
 					<key>name</key>
-					<string>string</string>
+					<string>string.quoted.single.plist</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#openstep_string-contents</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.other</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.other</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>string.quoted.double.plist</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -470,6 +570,11 @@
 							<key>name</key>
 							<string>meta.tag.plist.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -483,7 +588,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -492,7 +597,7 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>(?&lt;=&lt;plist)(?!&gt;)\s*(?:(version)(=)(?:(".*?")|('.*?')))?</string>
+							<string>(?&lt;=&lt;plist)(?!&gt;)\s*(?:(version)(=)(?:((").*?("))|((').*?('))))?</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
@@ -503,12 +608,37 @@
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.FIXME</string>
+									<string>punctuation.separator.key-value.xml.plist</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
+									<string>string.quoted.double.xml.plist</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.xml.plist</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.xml.plist</string>
+								</dict>
+								<key>6</key>
+								<dict>
+									<key>name</key>
 									<string>string.quoted.single.xml.plist</string>
+								</dict>
+								<key>7</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.xml.plist</string>
+								</dict>
+								<key>8</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.xml.plist</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -529,7 +659,7 @@
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.FIXME</string>
+									<string>punctuation.definition.tag.xml.plist</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -571,7 +701,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.FIXME</string>
+					<string>punctuation.definition.comment.xml.plist</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -615,15 +745,20 @@
 					<key>name</key>
 					<string>meta.tag.boolean.xml.plist</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.xml.plist</string>
+				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>invalid.illegal.tag-not-recognized.xml.plist</string>
 				</dict>
-				<key>5</key>
+				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.FIXME</string>
+					<string>punctuation.definition.tag.xml.plist</string>
 				</dict>
 			</dict>
 			<key>comment</key>
@@ -650,41 +785,61 @@
 							<key>name</key>
 							<string>meta.tag.key.xml.plist</string>
 						</dict>
+						<key>10</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.localname.xml.plist</string>
+						</dict>
+						<key>11</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.tag.xml.plist</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.tag.localname.xml.plist</string>
+							<string>entity.name.tag.xml.plist</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.other.name.xml.plist</string>
+							<string>entity.name.tag.localname.xml.plist</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.key.xml.plist</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.tag.xml.plist</string>
+							<string>constant.other.name.xml.plist</string>
 						</dict>
 						<key>7</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.tag.localname.xml.plist</string>
+							<string>meta.tag.key.xml.plist</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>9</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>
 					<string>the extra captures are required to duplicate the effect of the namespace parsing in the XML syntax</string>
 					<key>match</key>
-					<string>(&lt;((key))&gt;)(.*)(&lt;/((key))&gt;)</string>
+					<string>((&lt;)((key))(&gt;))(.*)((&lt;/)((key))(&gt;))</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -696,6 +851,11 @@
 							<key>name</key>
 							<string>meta.tag.dict.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -709,7 +869,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -734,6 +894,11 @@
 							<key>name</key>
 							<string>meta.tag.array.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -747,7 +912,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -772,6 +937,11 @@
 							<key>name</key>
 							<string>meta.tag.string.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -785,7 +955,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -812,6 +982,11 @@
 							<key>name</key>
 							<string>meta.tag.real.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -825,7 +1000,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -858,6 +1033,11 @@
 							<key>name</key>
 							<string>meta.tag.integer.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -871,7 +1051,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -902,6 +1082,11 @@
 							<key>name</key>
 							<string>meta.tag.boolean.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -915,7 +1100,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -933,6 +1118,11 @@
 							<key>name</key>
 							<string>meta.tag.data.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -946,7 +1136,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -985,6 +1175,11 @@
 							<key>name</key>
 							<string>meta.tag.date.xml.plist</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
@@ -998,7 +1193,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.FIXME</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 					</dict>
 					<key>comment</key>

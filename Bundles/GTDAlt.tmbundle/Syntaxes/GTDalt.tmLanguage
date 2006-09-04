@@ -69,8 +69,27 @@
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.context.action.gtdalt</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.context.action.gtdalt</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*((@)\S++\n)</string>
+			<key>name</key>
+			<string>meta.action.only-context.gtdalt</string>
+		</dict>
+		<dict>
 			<key>begin</key>
-			<string>^\s*((@)\S++)</string>
+			<string>^\s*((@)\S++\s)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>comment</key>
-	<string>The recognition of function definitions and compiler directives (such as module, record and macro definitions) requires that each of the aforementioned constructs must be the first string inside a line (except for whitespace).  Also, the function/module/record/macro names must be given unquoted.  -- desp</string>
+	<string>The recognition of function definitions and compiler directives (such as module, record and macro definitions) requires that each of the aforementioned constructs must be the first string inside a line (except for whitespace).  Also, the function/module/record/macro names must be given unquoted.
+To do:  maybe scope some more punctuation in placeholders.
+-- desp</string>
 	<key>fileTypes</key>
 	<array>
 		<string>erl</string>
@@ -57,23 +59,44 @@
 				<dict>
 					<key>begin</key>
 					<string>(')</string>
-					<key>captures</key>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.definition.symbol.begin.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(')</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.symbol.end.erlang</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>constant.other.symbol.quoted.single.erlang</string>
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.escape.erlang</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.escape.erlang</string>
+								</dict>
+							</dict>
 							<key>match</key>
-							<string>\\([bdefnrstv\\'"]|\^[@-_]|[0-7]{1,3})</string>
+							<string>(\\)([bdefnrstv\\'"]|(\^)[@-_]|[0-7]{1,3})</string>
 							<key>name</key>
 							<string>constant.other.symbol.escape.erlang</string>
 						</dict>
@@ -97,25 +120,44 @@
 		<dict>
 			<key>begin</key>
 			<string>(&lt;&lt;)</string>
-			<key>captures</key>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.definition.binary.begin.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>(&gt;&gt;)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.binary.end.erlang</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.structure.binary.erlang</string>
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.binary.erlang</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.value-size.erlang</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>:|,</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>(,)|(:)</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -137,16 +179,26 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.definition.character.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>constant.character.escape.erlang</string>
 						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.escape.erlang</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.escape.erlang</string>
+						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\$)(\\([bdefnrstv\\'"]|\^[@-_]|[0-7]{1,3}))</string>
+					<string>(\$)((\\)([bdefnrstv\\'"]|(\^)[@-_]|[0-7]{1,3}))</string>
 					<key>name</key>
 					<string>constant.character.erlang</string>
 				</dict>
@@ -162,7 +214,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.definition.character.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -193,70 +245,13 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>^\s*+(-)\s*+(define)\s*+(\()\s*+([a-zA-Z\d@_]++)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.control.directive.define.erlang</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
-						</dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
-							<string>entity.name.function.macro.definition.erlang</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(\))\s*+(\.)</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.directive.define.erlang</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>match</key>
-							<string>\|\||\||:|;|,|\.|-&gt;</string>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#everything-else</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
 					<string>^\s*+(-)\s*+(define)\s*+(\()\s*+([a-zA-Z\d@_]++)\s*+(,)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.begin.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -266,7 +261,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -276,7 +271,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.parameters.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -286,18 +281,112 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.end.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.end.erlang</string>
 						</dict>
 					</dict>
 					<key>name</key>
 					<string>meta.directive.define.erlang</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#everything-else</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=^\s*+-\s*+define\s*+\(\s*+[a-zA-Z\d@_]++\s*+\()</string>
+					<key>end</key>
+					<string>(\))\s*+(\.)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.parameters.end.erlang</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.directive.end.erlang</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.directive.define.erlang</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>^\s*+(-)\s*+(define)\s*+(\()\s*+([a-zA-Z\d@_]++)\s*+(\()</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.directive.begin.erlang</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.control.directive.define.erlang</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.parameters.begin.erlang</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.function.macro.definition.erlang</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.parameters.begin.erlang</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(\))\s*(,)</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.parameters.end.erlang</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.parameters.erlang</string>
+								</dict>
+							</dict>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>match</key>
+									<string>,</string>
+									<key>name</key>
+									<string>punctuation.separator.parameters.erlang</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#everything-else</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\|\||\||:|;|,|\.|-&gt;</string>
+							<key>name</key>
+							<string>punctuation.other.define.erlang</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#everything-else</string>
@@ -318,7 +407,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.begin.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -328,7 +417,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -338,12 +427,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.end.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.end.erlang</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -362,7 +451,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.begin.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -372,7 +461,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.end.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -428,7 +517,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#parens</string>
+					<string>#parenthesized-expression</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -486,10 +575,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
-							<string>-&gt;|,|;</string>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<key>include</key>
+							<string>#internal-expression-punctuation</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -523,10 +610,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
-							<string>-&gt;|,|;</string>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<key>include</key>
+							<string>#internal-expression-punctuation</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -560,10 +645,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
-							<string>-&gt;|,|;</string>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<key>include</key>
+							<string>#internal-expression-punctuation</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -587,7 +670,7 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.module-function.erlang</string>
 						</dict>
 						<key>5</key>
 						<dict>
@@ -597,7 +680,7 @@
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.function-arity.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -629,10 +712,25 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
-							<string>-&gt;|,|;</string>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<key>begin</key>
+							<string>(?=\()</string>
+							<key>end</key>
+							<string>(;)|(?=\bend\b)</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.clauses.erlang</string>
+								</dict>
+							</dict>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#internal-function-parts</string>
+								</dict>
+							</array>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -666,10 +764,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
-							<string>-&gt;|,|;</string>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<key>include</key>
+							<string>#internal-expression-punctuation</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -703,10 +799,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
-							<string>-&gt;|,|;</string>
-							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<key>include</key>
+							<string>#internal-expression-punctuation</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -750,7 +844,7 @@
 		<key>function</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*+([a-z][a-zA-Z\d@_]*+)</string>
+			<string>^\s*+([a-z][a-zA-Z\d@_]*+)\s*+(?=\()</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -766,7 +860,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.terminator.function.erlang</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -774,10 +868,37 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>begin</key>
+					<string>(?=\()</string>
+					<key>end</key>
+					<string>(;)|(?=\.)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.clauses.erlang</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#internal-function-parts</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.erlang</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>,|;|-&gt;</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>^\s*+([a-z][a-zA-Z\d@_]*+)\s*+(?=\()</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -796,7 +917,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.parameters.end.erlang</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -816,7 +937,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.module-function.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -826,7 +947,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -837,7 +958,7 @@
 							<key>match</key>
 							<string>,</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.parameters.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -858,7 +979,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.module-function.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -868,7 +989,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -879,7 +1000,7 @@
 							<key>match</key>
 							<string>,</string>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.parameters.erlang</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -901,7 +1022,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.begin.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -911,7 +1032,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -921,7 +1042,7 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.parameters.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -931,12 +1052,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.end.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.end.erlang</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -957,7 +1078,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.begin.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -967,7 +1088,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -977,12 +1098,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.end.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.end.erlang</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -997,20 +1118,51 @@
 				</dict>
 			</array>
 		</dict>
-		<key>internal-function-list</key>
+		<key>internal-expression-punctuation</key>
 		<dict>
-			<key>begin</key>
-			<string>(\[)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.separator.clause-head-body.erlang</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.clauses.erlang</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.expressions.erlang</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(-&gt;)|(;)|(,)</string>
+		</dict>
+		<key>internal-function-list</key>
+		<dict>
+			<key>begin</key>
+			<string>(\[)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list.begin.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list.end.erlang</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.structure.list.function.erlang</string>
 			<key>patterns</key>
@@ -1028,7 +1180,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.function-arity.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1038,7 +1190,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.list.erlang</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -1055,6 +1207,84 @@
 				</dict>
 			</array>
 		</dict>
+		<key>internal-function-parts</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?=\()</string>
+					<key>end</key>
+					<string>(-&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.clause-head-body.erlang</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(\()</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.parameters.begin.erlang</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(\))</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.parameters.end.erlang</string>
+								</dict>
+							</dict>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>match</key>
+									<string>,</string>
+									<key>name</key>
+									<string>punctuation.separator.parameters.erlang</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#everything-else</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>,|;</string>
+							<key>name</key>
+							<string>punctuation.separator.guards.erlang</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#everything-else</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>punctuation.separator.expressions.erlang</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#everything-else</string>
+				</dict>
+			</array>
+		</dict>
 		<key>internal-record-body</key>
 		<dict>
 			<key>begin</key>
@@ -1064,7 +1294,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.definition.class.record.begin.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1091,7 +1321,7 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>keyword.operator.assignment.erlang</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1101,7 +1331,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.class.record.erlang</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -1123,7 +1353,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.class.record.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1144,7 +1374,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.separator.value-type.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1152,34 +1382,36 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.erlang</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.signedness.erlang</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.endianness.erlang</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.unit.erlang</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.type-specifiers.erlang</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>integer|float|binary</string>
-					<key>name</key>
-					<string>storage.type.erlang</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>signed|unsigned</string>
-					<key>name</key>
-					<string>storage.modifier.signedness.erlang</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>big|little|native</string>
-					<key>name</key>
-					<string>storage.modifier.endianness.erlang</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>unit</string>
-					<key>name</key>
-					<string>storage.modifier.unit.erlang</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>-</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>(integer|float|binary)|(signed|unsigned)|(big|little|native)|(unit)|(-)</string>
 				</dict>
 			</array>
 		</dict>
@@ -1194,16 +1426,24 @@
 		<dict>
 			<key>begin</key>
 			<string>(\[)</string>
-			<key>captures</key>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.definition.list.begin.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list.end.erlang</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.structure.list.erlang</string>
 			<key>patterns</key>
@@ -1212,7 +1452,7 @@
 					<key>match</key>
 					<string>\||\|\||,</string>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.separator.list.erlang</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1230,7 +1470,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.begin.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1240,7 +1480,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -1250,12 +1490,12 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.end.erlang</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.end.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1269,7 +1509,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.begin.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1279,7 +1519,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -1289,12 +1529,12 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.end.erlang</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.end.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1308,7 +1548,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.begin.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1318,7 +1558,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.begin.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -1328,12 +1568,12 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.parameters.end.erlang</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.section.directive.end.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1350,7 +1590,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>keyword.operator.macro.erlang</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -1370,7 +1610,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.directive.begin.erlang</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -1380,7 +1620,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.parameters.begin.erlang</string>
 				</dict>
 				<key>4</key>
 				<dict>
@@ -1390,12 +1630,12 @@
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.parameters.end.erlang</string>
 				</dict>
 				<key>6</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.directive.end.erlang</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -1417,12 +1657,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.integer-float.erlang</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.float-exponent.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1436,7 +1676,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1450,7 +1690,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1464,7 +1704,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1478,7 +1718,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1492,7 +1732,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1506,7 +1746,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1520,7 +1760,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1534,7 +1774,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1548,7 +1788,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1562,7 +1802,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1576,7 +1816,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1590,7 +1830,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1604,7 +1844,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1618,7 +1858,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1632,7 +1872,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1646,7 +1886,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1660,7 +1900,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1674,7 +1914,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1688,7 +1928,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1702,7 +1942,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1716,7 +1956,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1730,7 +1970,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1744,7 +1984,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1758,7 +1998,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1772,7 +2012,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1786,7 +2026,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1800,7 +2040,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1814,7 +2054,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1828,7 +2068,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1842,7 +2082,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1856,7 +2096,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1870,7 +2110,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1884,7 +2124,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1898,7 +2138,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1912,7 +2152,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.base-integer.erlang</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1934,30 +2174,32 @@
 				</dict>
 			</array>
 		</dict>
-		<key>parens</key>
+		<key>parenthesized-expression</key>
 		<dict>
 			<key>begin</key>
 			<string>(\()</string>
-			<key>captures</key>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.expression.begin.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.expression.end.erlang</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>meta.structure.parens.erlang</string>
+			<string>meta.expression.parenthesized</string>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>match</key>
-					<string>,</string>
-					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
-				</dict>
 				<dict>
 					<key>include</key>
 					<string>#everything-else</string>
@@ -1973,7 +2215,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.directive.begin.erlang</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -1983,7 +2225,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.parameters.begin.erlang</string>
 				</dict>
 				<key>4</key>
 				<dict>
@@ -1993,7 +2235,7 @@
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.separator.parameters.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -2008,17 +2250,17 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.definition.class.record.end.erlang</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.parameters.end.erlang</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.section.directive.end.erlang</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -2041,7 +2283,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>keyword.operator.record.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -2051,7 +2293,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.separator.record-field.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -2072,7 +2314,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>keyword.operator.record.erlang</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -2092,7 +2334,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.punctuation.erlang</string>
+							<string>punctuation.definition.class.record.end.erlang</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2111,23 +2353,44 @@
 		<dict>
 			<key>begin</key>
 			<string>(")</string>
-			<key>captures</key>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.definition.string.begin.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>(")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.erlang</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.erlang</string>
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.escape.erlang</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.escape.erlang</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\\([bdefnrstv\\'"]|\^[@-_]|[0-7]{1,3})</string>
+					<string>(\\)([bdefnrstv\\'"]|(\^)[@-_]|[0-7]{1,3})</string>
 					<key>name</key>
 					<string>constant.character.escape.erlang</string>
 				</dict>
@@ -2138,14 +2401,30 @@
 					<string>invalid.illegal.string.erlang</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.placeholder.erlang</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>~((\-?\d++|\*))?(\.(\d++|\*))?(\..)?[~cfegswpWPBX#bx\+ni]</string>
+					<string>(~)((\-?\d++|\*))?(\.(\d++|\*))?(\..)?[~cfegswpWPBX#bx\+ni]</string>
 					<key>name</key>
 					<string>constant.other.placeholder.erlang</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.placeholder.erlang</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>~\*?(\d++)?[~du\-#fsacl]</string>
+					<string>(~)\*?(\d++)?[~du\-#fsacl]</string>
 					<key>name</key>
 					<string>constant.other.placeholder.erlang</string>
 				</dict>
@@ -2175,16 +2454,24 @@
 		<dict>
 			<key>begin</key>
 			<string>(\{)</string>
-			<key>captures</key>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.definition.tuple.begin.erlang</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>(\})</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tuple.end.erlang</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.structure.tuple.erlang</string>
 			<key>patterns</key>
@@ -2193,7 +2480,7 @@
 					<key>match</key>
 					<string>,</string>
 					<key>name</key>
-					<string>keyword.operator.punctuation.erlang</string>
+					<string>punctuation.separator.tuple.erlang</string>
 				</dict>
 				<dict>
 					<key>include</key>

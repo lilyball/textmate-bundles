@@ -111,7 +111,7 @@ sub findTagsDirStartingAt {
 		#print "Checking dir $dir\n";
 		return $dir if(-f "$dir/$TagFileName");
 		
-		$dir=~s/\/[^\/]*//;
+		$dir=~s/\/[^\/]*$//;
 	}
 	
 	return undef;

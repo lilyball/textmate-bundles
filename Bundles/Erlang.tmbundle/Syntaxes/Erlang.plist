@@ -3,9 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>comment</key>
-	<string>The recognition of function definitions and compiler directives (such as module, record and macro definitions) requires that each of the aforementioned constructs must be the first string inside a line (except for whitespace).  Also, the function/module/record/macro names must be given unquoted.
-To do:  maybe scope some more punctuation in placeholders.
--- desp</string>
+	<string>The recognition of function definitions and compiler directives (such as module, record and macro definitions) requires that each of the aforementioned constructs must be the first string inside a line (except for whitespace).  Also, the function/module/record/macro names must be given unquoted.  -- desp</string>
 	<key>fileTypes</key>
 	<array>
 		<string>erl</string>
@@ -2408,9 +2406,39 @@ To do:  maybe scope some more punctuation in placeholders.
 							<key>name</key>
 							<string>punctuation.definition.placeholder.erlang</string>
 						</dict>
+						<key>10</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.placeholder-parts.erlang</string>
+						</dict>
+						<key>12</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.placeholder-parts.erlang</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.placeholder-parts.erlang</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.placeholder-parts.erlang</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.placeholder-parts.erlang</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.placeholder-parts.erlang</string>
+						</dict>
 					</dict>
 					<key>match</key>
-					<string>(~)((\-?\d++|\*))?(\.(\d++|\*))?(\..)?[~cfegswpWPBX#bx\+ni]</string>
+					<string>(~)((\-)?\d++|(\*))?((\.)(\d++|(\*)))?((\.)((\*)|.))?[~cfegswpWPBX#bx\+ni]</string>
 					<key>name</key>
 					<string>constant.other.placeholder.erlang</string>
 				</dict>
@@ -2422,9 +2450,14 @@ To do:  maybe scope some more punctuation in placeholders.
 							<key>name</key>
 							<string>punctuation.definition.placeholder.erlang</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.placeholder-parts.erlang</string>
+						</dict>
 					</dict>
 					<key>match</key>
-					<string>(~)\*?(\d++)?[~du\-#fsacl]</string>
+					<string>(~)(\*)?(\d++)?[~du\-#fsacl]</string>
 					<key>name</key>
 					<string>constant.other.placeholder.erlang</string>
 				</dict>

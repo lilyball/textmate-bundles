@@ -17,7 +17,7 @@ CMD=$(basename "$INTERPRET")
 if [ $CMD == "mzscheme" ] ; then
 	"$INTERPRET" -vm -e "$TM_SELECTED_TEXT"
 elif [ $CMD == "csi" ] ; then
-	"$INTERPRET" -e "$TM_SELECTED_TEXT"
+	"$INTERPRET" -q &lt; /dev/stdin
 fi</string>
 	<key>fallbackInput</key>
 	<string>line</string>

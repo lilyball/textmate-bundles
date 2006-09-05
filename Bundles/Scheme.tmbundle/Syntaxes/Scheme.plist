@@ -2,11 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>comment</key>
+	<string>the foldings do not currently work the way I want them to. this may be a limitation of the way they are applied rather than the regexps in use. Nonetheless the foldings will end on the last identically indented blank line following an s-expression. Not ideal perhaps but it works. Also, the #illegal pattern never matches an unpaired ( as being illegal. Why?! -- Rob Rix</string>
 	<key>fileTypes</key>
 	<array>
 		<string>scm</string>
 		<string>sch</string>
 	</array>
+	<key>foldingStartMarker</key>
+	<string>^\s*\(([^)]+|(\s+\([^)]+\))+)$</string>
+	<key>foldingStopMarker</key>
+	<string>^\s*(\([^)]*\)\s+|[^)]+\s+)*\)?$</string>
 	<key>keyEquivalent</key>
 	<string>^~S</string>
 	<key>name</key>
@@ -21,22 +27,62 @@
 			<key>include</key>
 			<string>#sexp</string>
 		</dict>
+		<dict>
+			<key>include</key>
+			<string>#illegal</string>
+		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
 		<key>comment</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.semicolon.scheme</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>;.*$\n?</string>
+			<string>(;).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.semicolon.scheme</string>
+		</dict>
+		<key>illegal</key>
+		<dict>
+			<key>match</key>
+			<string>[()]</string>
+			<key>name</key>
+			<string>invalid.illegal.parenthesis.scheme</string>
 		</dict>
 		<key>sexp</key>
 		<dict>
 			<key>begin</key>
-			<string>\(</string>
+			<string>(\()</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.expression.begin.scheme</string>
+				</dict>
+			</dict>
 			<key>end</key>
-			<string>\)</string>
+			<string>(\))(\n)?</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.expression.end.scheme</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.after-expression.scheme</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.expression.scheme</string>
 			<key>patterns</key>
@@ -80,6 +126,10 @@
 							<key>include</key>
 							<string>#sexp</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#illegal</string>
+						</dict>
 					</array>
 				</dict>
 				<dict>
@@ -111,6 +161,10 @@
 						<dict>
 							<key>include</key>
 							<string>#sexp</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#illegal</string>
 						</dict>
 					</array>
 				</dict>
@@ -144,6 +198,10 @@
 							<key>include</key>
 							<string>#sexp</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#illegal</string>
+						</dict>
 					</array>
 				</dict>
 				<dict>
@@ -160,9 +218,25 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.scheme</string>
+						</dict>
+					</dict>
 					<key>end</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.scheme</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.scheme</string>
 					<key>patterns</key>
@@ -176,14 +250,50 @@
 					</array>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.boolean.scheme</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.boolean.scheme</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.symbol.scheme</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.expression.begin.scheme</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.expression.end.scheme</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>(#t|#f|'\(\))</string>
+					<string>((#)t|(#)f|(')(\()(\)))</string>
 					<key>name</key>
 					<string>constant.language.scheme</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.symbol.scheme</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>'[[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*</string>
+					<string>(')[[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*</string>
 					<key>name</key>
 					<string>constant.other.symbol.scheme</string>
 				</dict>
@@ -220,6 +330,10 @@
 				<dict>
 					<key>include</key>
 					<string>#sexp</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#illegal</string>
 				</dict>
 			</array>
 		</dict>

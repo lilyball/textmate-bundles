@@ -309,10 +309,20 @@
 					<key>begin</key>
 					<string>(?=([-a-zA-Z0-9_.]+)|("|'))</string>
 					<key>end</key>
-					<string>;</string>
+					<string>((?&lt;=\));)|((?&lt;=\});)|(;)</string>
 					<key>endCaptures</key>
 					<dict>
-						<key>0</key>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.array.plist</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.dictionary.plist</string>
+						</dict>
+						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.terminator.rule.plist</string>

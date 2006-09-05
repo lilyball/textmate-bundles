@@ -620,7 +620,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(?=s([^\s\w\[({&lt;]))</string>
+			<string>\b(?=(?&lt;!\\)s([^\s\w\[({&lt;]))</string>
 			<key>end</key>
 			<string>\2([egimos]*x[egimos]*)\b</string>
 			<key>endCaptures</key>
@@ -700,7 +700,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;!\\)(\/)</string>
+			<string>(?&lt;!\\)(\~\s*\/)</string>
 			<key>end</key>
 			<string>\/(?=[cgimos]*x[cgimos]*)\b</string>
 			<key>name</key>

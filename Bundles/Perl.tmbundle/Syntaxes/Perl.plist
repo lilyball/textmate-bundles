@@ -694,7 +694,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;!\\)(\/)(.*?)(?&lt;!\\)(\\{2})*(\/)</string>
+			<string>(?&lt;!\\)((~\s*)?\/)(.*?)(?&lt;!\\)(\\{2})*(\/)</string>
 			<key>name</key>
 			<string>string.regexp.perl.find</string>
 		</dict>
@@ -702,7 +702,15 @@
 			<key>begin</key>
 			<string>(?&lt;!\\)(\~\s*\/)</string>
 			<key>end</key>
-			<string>\/(?=[cgimos]*x[cgimos]*)\b</string>
+			<string>\/([cgimos]*x[cgimos]*)\b</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.regexp-option.perl</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.regexp.find.extended.perl</string>
 			<key>patterns</key>

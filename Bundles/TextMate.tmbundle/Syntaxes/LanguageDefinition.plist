@@ -26,7 +26,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.section.dictionary.tm-language-def</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -50,7 +50,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.section.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -62,7 +62,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.section.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -96,7 +96,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -108,7 +108,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -121,7 +121,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.array.tm-language-def</string>
+									<string>punctuation.section.array.tm-language-def</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -142,7 +142,7 @@
 										<key>1</key>
 										<dict>
 											<key>name</key>
-											<string>keyword.operator.array-separator.tm-language-def</string>
+											<string>punctuation.separator.array.tm-language-def</string>
 										</dict>
 									</dict>
 									<key>patterns</key>
@@ -190,7 +190,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -202,7 +202,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -238,7 +238,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -250,7 +250,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -265,7 +265,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.dictionary.tm-language-def</string>
+									<string>punctuation.section.dictionary.tm-language-def</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -289,7 +289,7 @@
 										<key>3</key>
 										<dict>
 											<key>name</key>
-											<string>keyword.operator.dictionary.tm-language-def</string>
+											<string>punctuation.separator.key-value.tm-language-def</string>
 										</dict>
 									</dict>
 									<key>end</key>
@@ -299,7 +299,7 @@
 										<key>1</key>
 										<dict>
 											<key>name</key>
-											<string>keyword.operator.dictionary.tm-language-def</string>
+											<string>punctuation.terminator.dictionary.tm-language-def</string>
 										</dict>
 									</dict>
 									<key>name</key>
@@ -327,16 +327,24 @@
 								<dict>
 									<key>begin</key>
 									<string>(=)</string>
-									<key>captures</key>
+									<key>beginCaptures</key>
 									<dict>
 										<key>1</key>
 										<dict>
 											<key>name</key>
-											<string>keyword.operator.dictionary.tm-language-def</string>
+											<string>punctuation.separator.key-value.tm-language-def</string>
 										</dict>
 									</dict>
 									<key>end</key>
 									<string>(;)</string>
+									<key>endCaptures</key>
+									<dict>
+										<key>1</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.terminator.dictionary.tm-language-def</string>
+										</dict>
+									</dict>
 									<key>patterns</key>
 									<array>
 										<dict>
@@ -349,7 +357,7 @@
 									<key>match</key>
 									<string>;</string>
 									<key>name</key>
-									<string>keyword.operator.dictionary.tm-language-def</string>
+									<string>punctuation.terminator.dictionary.tm-language-def</string>
 								</dict>
 								<dict>
 									<key>include</key>
@@ -374,16 +382,24 @@
 				<dict>
 					<key>begin</key>
 					<string>(=)</string>
-					<key>captures</key>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -396,7 +412,7 @@
 					<key>match</key>
 					<string>;</string>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.terminator.dictionary.tm-language-def</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -442,7 +458,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.array.tm-language-def</string>
+					<string>punctuation.section.array.tm-language-def</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -463,7 +479,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.array-separator.tm-language-def</string>
+							<string>punctuation.separator.array.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -546,7 +562,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.separator.key-value.tm-language-def</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -556,7 +572,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.terminator.dictionary.tm-language-def</string>
 				</dict>
 			</dict>
 			<key>patterns</key>
@@ -620,7 +636,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.section.dictionary.tm-language-def</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -638,16 +654,24 @@
 				<dict>
 					<key>begin</key>
 					<string>(=)</string>
-					<key>captures</key>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -660,7 +684,7 @@
 					<key>match</key>
 					<string>;</string>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.terminator.dictionary.tm-language-def</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -712,7 +736,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.separator.key-value.tm-language-def</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -722,7 +746,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.terminator.dictionary.tm-language-def</string>
 				</dict>
 			</dict>
 			<key>patterns</key>
@@ -739,7 +763,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.array.tm-language-def</string>
+							<string>punctuation.section.array.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -760,7 +784,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.array-separator.tm-language-def</string>
+									<string>punctuation.separator.array.tm-language-def</string>
 								</dict>
 							</dict>
 							<key>patterns</key>
@@ -858,7 +882,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.section.dictionary.tm-language-def</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -882,7 +906,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -894,7 +918,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -928,7 +952,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -940,7 +964,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -972,7 +996,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -984,7 +1008,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -1016,7 +1040,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -1028,7 +1052,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1043,7 +1067,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.dictionary.tm-language-def</string>
+									<string>punctuation.section.dictionary.tm-language-def</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -1061,16 +1085,24 @@
 								<dict>
 									<key>begin</key>
 									<string>(=)</string>
-									<key>captures</key>
+									<key>beginCaptures</key>
 									<dict>
 										<key>1</key>
 										<dict>
 											<key>name</key>
-											<string>keyword.operator.dictionary.tm-language-def</string>
+											<string>punctuation.separator.key-value.tm-language-def</string>
 										</dict>
 									</dict>
 									<key>end</key>
 									<string>(;)</string>
+									<key>endCaptures</key>
+									<dict>
+										<key>1</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.terminator.dictionary.tm-language-def</string>
+										</dict>
+									</dict>
 									<key>patterns</key>
 									<array>
 										<dict>
@@ -1085,7 +1117,7 @@
 												<key>1</key>
 												<dict>
 													<key>name</key>
-													<string>keyword.operator.dictionary.tm-language-def</string>
+													<string>punctuation.section.dictionary.tm-language-def</string>
 												</dict>
 											</dict>
 											<key>end</key>
@@ -1109,7 +1141,7 @@
 														<key>2</key>
 														<dict>
 															<key>name</key>
-															<string>keyword.operator.dictionary.tm-language-def</string>
+															<string>punctuation.separator.key-value.tm-language-def</string>
 														</dict>
 													</dict>
 													<key>comment</key>
@@ -1121,7 +1153,7 @@
 														<key>1</key>
 														<dict>
 															<key>name</key>
-															<string>keyword.operator.dictionary.tm-language-def</string>
+															<string>punctuation.terminator.dictionary.tm-language-def</string>
 														</dict>
 													</dict>
 													<key>name</key>
@@ -1154,7 +1186,7 @@
 									<key>match</key>
 									<string>;</string>
 									<key>name</key>
-									<string>keyword.operator.dictionary.tm-language-def</string>
+									<string>punctuation.terminator.dictionary.tm-language-def</string>
 								</dict>
 								<dict>
 									<key>include</key>
@@ -1175,7 +1207,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -1185,7 +1217,7 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -1212,16 +1244,24 @@
 				<dict>
 					<key>begin</key>
 					<string>(=)</string>
-					<key>captures</key>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.dictionary.tm-language-def</string>
+							<string>punctuation.separator.key-value.tm-language-def</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.dictionary.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1234,7 +1274,7 @@
 					<key>match</key>
 					<string>;</string>
 					<key>name</key>
-					<string>keyword.operator.dictionary.tm-language-def</string>
+					<string>punctuation.terminator.dictionary.tm-language-def</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1308,9 +1348,25 @@
 					<key>applyEndPatternLast</key>
 					<integer>1</integer>
 					<key>begin</key>
-					<string>'</string>
+					<string>(')</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>end</key>
-					<string>'(?!')</string>
+					<string>('(?!'))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
 					<key>patterns</key>
@@ -1325,9 +1381,25 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>end</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.tm-language-def</string>
 					<key>patterns</key>

@@ -585,11 +585,27 @@
 					<key>applyEndPatternLast</key>
 					<integer>1</integer>
 					<key>begin</key>
-					<string>'</string>
+					<string>(')</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>comment.block.string.tm-language-def</string>
 					<key>end</key>
-					<string>'(?!')</string>
+					<string>(')(?!')</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
 					<key>patterns</key>
@@ -604,11 +620,27 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>comment.block.string.tm-language-def</string>
 					<key>end</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.tm-language-def</string>
 					<key>patterns</key>
@@ -833,11 +865,27 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>'</string>
+					<string>(')</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>source.regexp.oniguruma.embedded.tm-language-def</string>
 					<key>end</key>
-					<string>'(?!')</string>
+					<string>(')(?!')</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
 					<key>patterns</key>
@@ -856,11 +904,27 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>source.regexp.oniguruma.embedded.tm-language-def</string>
 					<key>end</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.tm-language-def</string>
 					<key>patterns</key>
@@ -1290,11 +1354,27 @@
 					<key>applyEndPatternLast</key>
 					<integer>1</integer>
 					<key>begin</key>
-					<string>'(?=.*')</string>
+					<string>(')(?=.*')</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>constant.other.scope.tm-language-def</string>
 					<key>end</key>
-					<string>'(?!')</string>
+					<string>(')(?!')</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.single.tm-language-def</string>
 					<key>patterns</key>
@@ -1309,11 +1389,27 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"(?=.*")</string>
+					<string>(")(?=.*")</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>constant.other.scope.tm-language-def</string>
 					<key>end</key>
-					<string>"</string>
+					<string>(")</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-language-def</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.tm-language-def</string>
 					<key>patterns</key>

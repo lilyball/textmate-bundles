@@ -10,7 +10,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#F8F8FF</string>
+				<string>#F1F1F1</string>
 				<key>caret</key>
 				<string>#000000</string>
 				<key>foreground</key>
@@ -18,7 +18,7 @@
 				<key>invisibles</key>
 				<string>#BFBFBF</string>
 				<key>lineHighlight</key>
-				<string>#00000012</string>
+				<string>#00000026</string>
 				<key>selection</key>
 				<string>#B0B0FF</string>
 			</dict>
@@ -156,7 +156,7 @@
 			<key>name</key>
 			<string>Module Keyword</string>
 			<key>scope</key>
-			<string>keyword.other.module, support.other.module</string>
+			<string>entity.name.module,  support.other.module</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -178,9 +178,20 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Storage</string>
+			<key>scope</key>
+			<string>storage</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#008080</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Variant types</string>
 			<key>scope</key>
-			<string>storage.other.variant</string>
+			<string>entity.name.class.variant</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -211,17 +222,6 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Type name</string>
-			<key>scope</key>
-			<string>entity.name.type</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#008040</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>Inherited class</string>
 			<key>scope</key>
 			<string>entity.other.inherited-class</string>
@@ -245,7 +245,7 @@
 			<key>name</key>
 			<string>Type name</string>
 			<key>scope</key>
-			<string>support.type</string>
+			<string>storage.type.user-defined</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>

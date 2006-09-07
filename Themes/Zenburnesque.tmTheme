@@ -18,7 +18,7 @@
 				<key>invisibles</key>
 				<string>#A8A8A8</string>
 				<key>lineHighlight</key>
-				<string>#FFCC6626</string>
+				<string>#A0804026</string>
 				<key>selection</key>
 				<string>#A0A0C0</string>
 			</dict>
@@ -51,11 +51,22 @@
 			<key>name</key>
 			<string>Line-number directives</string>
 			<key>scope</key>
-			<string>source.ocaml keyword.other.directive.line-number</string>
+			<string>keyword.other.directive.line-number</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
 				<string>underline</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Characters</string>
+			<key>scope</key>
+			<string>constant.character</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF8080</string>
 			</dict>
 		</dict>
 		<dict>
@@ -93,17 +104,6 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Characters</string>
-			<key>scope</key>
-			<string>constant.character</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#FF8080</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>Built-in constant</string>
 			<key>scope</key>
 			<string>constant.language</string>
@@ -122,7 +122,7 @@
 			<key>name</key>
 			<string>Variable</string>
 			<key>scope</key>
-			<string>variable.language, variable.other</string>
+			<string>variable.parameter, variable.other</string>
 			<key>settings</key>
 			<dict/>
 		</dict>
@@ -141,7 +141,7 @@
 			<key>name</key>
 			<string>Module Keyword</string>
 			<key>scope</key>
-			<string>keyword.control.module, keyword.other.module</string>
+			<string>entity.name.module,  support.other.module</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -187,7 +187,7 @@
 			<key>name</key>
 			<string>Storage Types</string>
 			<key>scope</key>
-			<string>keyword.type</string>
+			<string>storage.type</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -198,7 +198,7 @@
 			<key>name</key>
 			<string>Variant Types</string>
 			<key>scope</key>
-			<string>keyword.type.variant</string>
+			<string>entity.name.class.variant</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -249,7 +249,7 @@
 			<key>name</key>
 			<string>Type name</string>
 			<key>scope</key>
-			<string>entity.name.type.type</string>
+			<string>storage.type.user-defined</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>

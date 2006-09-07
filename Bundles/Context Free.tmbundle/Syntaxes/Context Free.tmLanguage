@@ -42,7 +42,7 @@
 		<key>background-directive</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*+(background)</string>
+			<string>\b(background)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -198,7 +198,7 @@
 		<key>geometry-adjustment</key>
 		<dict>
 			<key>match</key>
-			<string>\b(x|y|z|s(ize)?|r(ot)?|f(lip)?|skew)\b</string>
+			<string>\b(x|y|z|s(ize)?|r(ot(ate)?)?|f(lip)?|skew)\b</string>
 			<key>name</key>
 			<string>constant.language.geometry-adjustment.cfdg</string>
 		</dict>
@@ -218,7 +218,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*+(include)\s++(\S++)</string>
+			<string>\b(include)\s++(\S++)</string>
 		</dict>
 		<key>loop</key>
 		<dict>
@@ -317,7 +317,7 @@
 		<key>rule-directive</key>
 		<dict>
 			<key>begin</key>
-			<string>^\s*+(rule)\s++([a-zA-Z_][a-zA-Z_\d]*+)(\s++(((\d++)?(\.))?\d++))?</string>
+			<string>\b(rule)\s++([a-zA-Z_][a-zA-Z_\.\d]*+)(\s++(((\d++)?(\.))?\d++))?</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -438,7 +438,7 @@
 		<key>shape-replacement</key>
 		<dict>
 			<key>begin</key>
-			<string>([a-zA-Z_][a-zA-Z_\d]*+)</string>
+			<string>([a-zA-Z_][a-zA-Z_\.\d]*+)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -490,7 +490,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*+(startshape)\s++([a-zA-Z_][a-zA-Z_\d]*+)</string>
+			<string>\b(startshape)\s++([a-zA-Z_][a-zA-Z_\.\d]*+)</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>

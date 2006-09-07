@@ -231,7 +231,15 @@
 		<key>comment</key>
 		<dict>
 			<key>begin</key>
-			<string>%</string>
+			<string>(%)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.erlang</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n</string>
 			<key>name</key>

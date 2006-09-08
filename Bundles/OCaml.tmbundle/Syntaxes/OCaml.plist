@@ -81,6 +81,37 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>\((fun)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(-&gt;)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function.anonymous.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variables</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>\b(type|and)\s+(.*?)(?==)</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -497,7 +528,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(as|assert|class|constraint|exception|external|fun|functor|in|include|inherit|initializer|lazy|let|match|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual|with)\b</string>
+			<string>\b(as|assert|class|constraint|exception|external|functor|in|include|inherit|initializer|lazy|let|match|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual|with)\b</string>
 			<key>name</key>
 			<string>keyword.other.language.ocaml</string>
 		</dict>

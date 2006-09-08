@@ -177,24 +177,44 @@ pre {
 	border: 1px solid #555;
 }
 
+
 .graybox {
+   font-size: 12px;
+}
+.bright .graybox {
 	border-top: 1px solid #919699;
 	border-left: 1px solid #919699;
 }
+.dark .graybox {
+	border-top: 1px solid #616465;
+	border-left: 1px solid #616465;
+}
 .graybox th {
-	background: #E2E2E2;
-	border-bottom: 1px solid #919699;
-	border-right: 1px solid #919699;
-/*	font-size: 12px;*/
 	font-weight: bold;
 	padding: 4px 8px 4px 8px;
 	text-align: left;
 }
-.graybox td {
+.bright .graybox th {
+	background: #E2E2E2;
 	border-bottom: 1px solid #919699;
 	border-right: 1px solid #919699;
+}
+.dark .graybox th {
+	background: #1C1C1C;
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
+}
+.graybox td {
 	padding: 8px;
 	vertical-align: top;
+}
+.bright .graybox td {
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+}
+.dark .graybox td {
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
 }
 .graybox p {
 	margin: 0;
@@ -202,6 +222,80 @@ pre {
 .graybox p + p {
 	margin-top: 1em;
 }
+
+.sql_table {
+	font-size: 9px;
+	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
+}
+.bright .sql_table {
+	border-top: 1px solid #919699;
+	border-left: 1px solid #919699;
+}
+.dark .sql_table {
+	border-top: 1px solid #616465;
+	border-left: 1px solid #616465;
+}
+.sql_table th {
+	font-weight: normal;
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+.bright .sql_table th {
+	background: #E2E2E2;
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+}
+.dark .sql_table th {
+	background: #1C1C1C;
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
+}
+.sql_table td {
+	padding: 3px;
+	vertical-align: top;
+}
+.bright .sql_table td {
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+}
+.dark .sql_table td {
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
+}
+.sql_table p {
+	margin: 0;
+}
+.sql_table p + p {
+	margin-top: 1em;
+}
+
+/*
+.sql_table {
+   font-size: 9px;
+	border-top: 1px solid #919699;
+	border-left: 1px solid #919699;
+}
+.sql_table th {
+	background: #E2E2E2;
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+	font-weight: bold;
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+.sql_table td {
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+	padding: 3px;
+	vertical-align: top;
+}
+.sql_table p {
+	margin: 0;
+}
+.sql_table p + p {
+	margin-top: 1em;
+}
+*/
 
 li > p {
 	margin: 1ex 0 1ex 0;
@@ -495,9 +589,9 @@ table.blame td {
 /* bitstream vera sans looks really _very_ good. But I like Luxi Mono better :p */
 td.codecol {
 /*   font-size: 12px;*/
-   font-family: "LuxiMono", "Bitstream Vera Sans Mono", monospace;
-   padding-left: 4px;
-   width: 100%;
+	font-family: "LuxiMono", "Bitstream Vera Sans Mono", monospace;
+	padding-left: 4px;
+	width: 100%;
 }
 
 /* maybe this should be implemented as id but its

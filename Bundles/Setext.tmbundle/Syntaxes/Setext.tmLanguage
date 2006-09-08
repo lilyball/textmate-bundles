@@ -27,6 +27,11 @@
 					<key>name</key>
 					<string>keyword.other.setext</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.key-value.setext</string>
+				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
@@ -34,25 +39,33 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^((Subject|Date|From):) (.+)</string>
+			<string>^(Subject|Date|From)(:) (.+)</string>
 			<key>name</key>
 			<string>meta.header.setext</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^={3,}$\n?</string>
+			<string>^={3,}\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.1.setext</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^-{3,}$\n?</string>
+			<string>^-{3,}\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.2.setext</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^&gt;\s</string>
+			<string>^(&gt;)\s</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.quote.setext</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -67,7 +80,15 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^[*]\s</string>
+			<string>^([*])\s</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bullet.setext</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -83,8 +104,24 @@
 		<dict>
 			<key>begin</key>
 			<string>`</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.raw.begin.other</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>`</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.raw.end.other</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>markup.raw.setext</string>
 		</dict>
@@ -94,16 +131,36 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constant.other.reference.note.setext</string>
+					<string>punctuation.definition.note.setext</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>constant.other.reference.note.setext</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.reference.setext</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
 					<string>string.quoted.other.note.setext</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.setext</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.setext</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\.{2} (_[-\w.]+) +(\(.+)$</string>
+			<string>^(\.{2}) ((_)[-\w.]+) +((\()(.+(\))|.+))$</string>
 			<key>name</key>
 			<string>meta.note.def.setext</string>
 		</dict>
@@ -113,30 +170,56 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constant.other.reference.link.setext</string>
+					<string>punctuation.definition.reference.setext</string>
 				</dict>
 				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.other.reference.link.setext</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.reference.setext</string>
+				</dict>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>markup.underline.link.setext</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\.{2} (_[-\w.]+) +(.{2,})$</string>
+			<string>^(\.{2}) ((_)[-\w.]+) +(.{2,})$</string>
 			<key>name</key>
 			<string>meta.link.reference.def.setext</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.setext</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\.{2} (?![.]).+</string>
+			<string>^(\.{2}) (?![.]).+</string>
 			<key>name</key>
 			<string>comment.line.double-dot.setext</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\.{2}$</string>
+			<string>^(\.{2})$</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.setext</string>
+				</dict>
+			</dict>
 			<key>end</key>
-			<string>dummy text you should never find</string>
+			<string>not(?&lt;=possible)</string>
 			<key>name</key>
 			<string>comment.block.logical_end_of_text.setext</string>
 		</dict>
@@ -145,15 +228,36 @@
 	<dict>
 		<key>bold</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bold.setext</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bold.setext</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>[*]{2}.+?[*]{2}</string>
+			<string>([*]{2}).+?([*]{2})</string>
 			<key>name</key>
 			<string>markup.bold.setext</string>
 		</dict>
 		<key>doc_separator</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.separator.setext</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\s*\$\$$\n?</string>
+			<string>\s*(\$\$)$\n?</string>
 			<key>name</key>
 			<string>meta.separator.document.setext</string>
 		</dict>
@@ -166,9 +270,14 @@
 					<key>name</key>
 					<string>constant.other.reference.link.setext</string>
 				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.reference.setext</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b[-\w.]*\w(?&lt;!_)_\b</string>
+			<string>\b[-\w.]*\w(?&lt;!_)(_)\b</string>
 			<key>name</key>
 			<string>meta.link.reference.setext</string>
 		</dict>
@@ -204,8 +313,21 @@
 		</dict>
 		<key>italic</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.italic.setext</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.italic.setext</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>~\w+~</string>
+			<string>(~)\w+(~)</string>
 			<key>name</key>
 			<string>markup.italic.setext</string>
 		</dict>
@@ -216,7 +338,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.FIXME</string>
+					<string>punctuation.definition.link.setext</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -226,7 +348,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.FIXME</string>
+					<string>punctuation.definition.link.setext</string>
 				</dict>
 			</dict>
 			<key>comment</key>
@@ -236,8 +358,31 @@
 		</dict>
 		<key>underline</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.underline.setext</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.underline.setext</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.underline.setext</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.underline.setext</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\b_\w+(?&lt;!_)_\b|\b_.+(?&lt;!_)_\b</string>
+			<string>\b(_)\w+(?&lt;!_)(_)\b|\b(_).+(?&lt;!_)(_)\b</string>
 			<key>name</key>
 			<string>markup.underline.setext</string>
 		</dict>

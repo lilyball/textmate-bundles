@@ -66,20 +66,51 @@ module SVNHelper
    
    # produces a generic header..
    def make_head( title='', styles=Array.new, head_adds=''  )
-      puts '<html><head><title>'+title+'</title>'
-      puts '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
-      puts '<style type="text/css">'
-      
-      styles.each do |style|
-         puts "   @import 'file://"+style+"';"
+   tm_EXTRA_HEAD   = head_adds
+   tm_CSS          = `cat "${TM_SUPPORT_PATH}/css/webpreview.css" | sed "s|TM_SUPPORT_PATH|${TM_SUPPORT_PATH}|"`
+   html =<<-HTML
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+   <title>Subversion — #{title}</title>
+	<style type="text/css" media="screen">
+		#{tm_CSS}
+	</style>
+	<script src="file://#{ENV['TM_SUPPORT_PATH']}/script/default.js" type="text/javascript" language="javascript" charset="utf-8"></script>
+	<script src="file://#{ENV['TM_SUPPORT_PATH']}/script/webpreview.js" type="text/javascript" language="javascript" charset="utf-8"></script>
+	#{tm_EXTRA_HEAD}
+</head>
+<body id="tm_webpreview_body">
+	<div id="tm_webpreview_header">
+		<p class="headline">#{title}</p>
+		<p class="type">Subversion</p>
+		<img class="teaser" src="file://#{ENV['TM_SUPPORT_PATH']}/images/gear2.png" alt="teaser" />
+		<div id="theme_switcher">
+			<form action="#" onsubmit="return false;">
+				Theme: 
+				<select onchange="selectTheme(this.value);" id="theme_selector">
+					<option>bright</option>
+					<option>dark</option>
+					<option value="default">no colors</option>
+				</select>
+			</form>
+		</div>
+	</div>
+	<div id="tm_webpreview_content" class="bright">
+	<div class="subversion">
+HTML
+      puts html
+		styles.each do |style|
+         puts "<!--   @import 'file://"+style+"'; -->"
       end
-      
-      puts '</style>'+head_adds+'</head><body><h1>'+title+'</h1><hr />'
    end
    
    # .. and this a simple, matching footer ..
    def make_foot( foot_adds='' )
-      puts foot_adds+'</body></html>'
+      puts foot_adds+'</div></div></body></html>'
    end
    
    

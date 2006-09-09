@@ -7,7 +7,9 @@
 	— Soryu
 */
 
-
+/* =================== */
+/* = General Styling = */
+/* =================== */
 body {
 	background: #FFFFFF;
 	color: #000000;
@@ -76,6 +78,10 @@ body {
 	margin-top: 60px;
 /*	margin-bottom: 2em;*/
 }
+
+/* ================================= */
+/* = Common Stuff for all Commands = */
+/* ================================= */
 
 .bright {
 	background: #FFF;
@@ -223,80 +229,6 @@ pre {
 	margin-top: 1em;
 }
 
-.sql_table {
-	font-size: 9px;
-	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
-}
-.bright .sql_table {
-	border-top: 1px solid #919699;
-	border-left: 1px solid #919699;
-}
-.dark .sql_table {
-	border-top: 1px solid #616465;
-	border-left: 1px solid #616465;
-}
-.sql_table th {
-	font-weight: normal;
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-}
-.bright .sql_table th {
-	background: #E2E2E2;
-	border-bottom: 1px solid #919699;
-	border-right: 1px solid #919699;
-}
-.dark .sql_table th {
-	background: #1C1C1C;
-	border-bottom: 1px solid #616465;
-	border-right: 1px solid #616465;
-}
-.sql_table td {
-	padding: 3px;
-	vertical-align: top;
-}
-.bright .sql_table td {
-	border-bottom: 1px solid #919699;
-	border-right: 1px solid #919699;
-}
-.dark .sql_table td {
-	border-bottom: 1px solid #616465;
-	border-right: 1px solid #616465;
-}
-.sql_table p {
-	margin: 0;
-}
-.sql_table p + p {
-	margin-top: 1em;
-}
-
-/*
-.sql_table {
-   font-size: 9px;
-	border-top: 1px solid #919699;
-	border-left: 1px solid #919699;
-}
-.sql_table th {
-	background: #E2E2E2;
-	border-bottom: 1px solid #919699;
-	border-right: 1px solid #919699;
-	font-weight: bold;
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-}
-.sql_table td {
-	border-bottom: 1px solid #919699;
-	border-right: 1px solid #919699;
-	padding: 3px;
-	vertical-align: top;
-}
-.sql_table p {
-	margin: 0;
-}
-.sql_table p + p {
-	margin-top: 1em;
-}
-*/
-
 li > p {
 	margin: 1ex 0 1ex 0;
 }
@@ -359,6 +291,55 @@ hr {
 	color: #CCC;
 }
 
+/* ================================================ */
+/* = SQL Table (Overridden Graybox, just smaller) = */
+/* ================================================ */
+
+.sql_table {
+	font-size: 9px;
+	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
+}
+.bright .sql_table {
+	border-top: 1px solid #919699;
+	border-left: 1px solid #919699;
+}
+.dark .sql_table {
+	border-top: 1px solid #616465;
+	border-left: 1px solid #616465;
+}
+.sql_table th {
+	font-weight: normal;
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+.bright .sql_table th {
+	background: #E2E2E2;
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+}
+.dark .sql_table th {
+	background: #1C1C1C;
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
+}
+.sql_table td {
+	padding: 3px;
+	vertical-align: top;
+}
+.bright .sql_table td {
+	border-bottom: 1px solid #919699;
+	border-right: 1px solid #919699;
+}
+.dark .sql_table td {
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
+}
+.sql_table p {
+	margin: 0;
+}
+.sql_table p + p {
+	margin-top: 1em;
+}
 
 /* =================== */
 /* = RubyMate Styles = */
@@ -427,6 +408,7 @@ div.rubymate a {
 
 div.subversion {
 /*	padding: 10px 10px 10px 20px;*/
+	margin-top: 10px;
 }
 .bright div.subversion {
 	background-color: #f0f0f0;
@@ -474,18 +456,18 @@ div.subversion dl.info dd {
 /* BLAME */
 
 /* some adds for the links in the table (clickable lines)..*/
-table.blame a, table.blame a:visited, table.blame a:link {
+div.subversion table.blame a, div.subversion table.blame a:visited, div.subversion table.blame a:link {
    text-decoration: none;
    color: inherit;
 }
 
-.bright table.blame a:hover, table.blame a:active {
+.bright div.subversion table.blame a:hover, div.subversion table.blame a:active {
    background-color: #a3c8ff;
    color: inherit;
    text-decoration: none;
 }
 
-.dark table.blame a:hover, table.blame a:active {
+.dark div.subversion table.blame a:hover, div.subversion table.blame a:active {
    background-color: #2F3845;
    color: inherit;
    text-decoration: none;
@@ -493,14 +475,14 @@ table.blame a, table.blame a:visited, table.blame a:link {
 
 
 /* formating the table.. */
-table.blame {
+div.subversion table.blame {
    font-size: 12px;
    padding: 1px;
    border-collapse: collapse;
    width: 100%;
 }
 
-.bright table.blame th {
+.bright div.subversion table.blame th {
    text-align: left;
    background-color: #eee;
    border-bottom: 1px solid #999;
@@ -510,7 +492,7 @@ table.blame {
    color: #666;
 }
 
-.dark table.blame th {
+.dark div.subversion table.blame th {
    text-align: left;
    background-color: #333;
    border-bottom: 1px solid #555;
@@ -522,45 +504,45 @@ table.blame {
 
 /* i have to format just this 2, because i just want
    borders beween the headers and not at their sides.. */
-.bright th.revhead {
+.bright div.subversion  table.blameth.revhead {
    border-left: 1px solid #bbb;
    border-right: 1px solid #bbb;
 }
 
-.bright th.codehead {
+.bright div.subversion table.blame th.codehead {
    border-left: 1px solid #bbb;
 }
 
-.dark th.revhead {
+.dark div.subversion table.blame th.revhead {
    border-left: 1px solid #444;
    border-right: 1px solid #444;
 }
 
-.dark th.codehead {
+.dark div.subversion table.blame th.codehead {
    border-left: 1px solid #444;
 }
 
 /* to make it look good if a line gets wrapped: */
-table.blame td {
+div.subversion table.blame td {
    vertical-align: top;
 }
 
 /* about the several column classes.. */
-.bright td.linecol {
+.bright div.subversion table.blame td.linecol {
    background-color: #ddd;
    border-right: 1px solid #999;
    color: #888;
    text-align: right;
 }
 
-.dark td.linecol {
+.dark div.subversion table.blame td.linecol {
    background-color: #333;
    border-right: 1px solid #666;
    color: #888;
    text-align: right;
 }
 
-.bright td.revcol, .bright td.namecol {
+.bright div.subversion table.blame td.revcol, .bright div.subversion table.blame td.namecol {
    text-align: right;
    background-color: #f8f8f8;
    color: #888;
@@ -569,7 +551,7 @@ table.blame td {
    padding-left: 2px;
 }
 
-.dark td.revcol, .dark td.namecol {
+.dark div.subversion table.blame td.revcol, .dark div.subversion table.blame td.namecol {
    text-align: right;
    background-color: #111;
    color: #888;
@@ -578,36 +560,36 @@ table.blame td {
    padding-left: 2px;
 }
 
-.bright td.namecol {
+.bright div.subversion table.blame td.namecol {
    border-right: 1px solid #aaa;
 }
 
-.dark td.namecol {
+.dark div.subversion table.blame td.namecol {
    border-right: 1px solid #444;
 }
 
 /* bitstream vera sans looks really _very_ good. But I like Luxi Mono better :p */
-td.codecol {
+div.subversion table.blame td.codecol {
 /*   font-size: 12px;*/
 	font-family: "LuxiMono", "Bitstream Vera Sans Mono", monospace;
 	padding-left: 4px;
 	width: 100%;
 }
-.bright td.alternate {
+.bright div.subversion table.blame td.alternate {
 	background-color: #E4E4E4;
 }
 
-.dark td.alternate {
+.dark div.subversion table.blame td.alternate {
 	background-color: #1D1D1D;
 }
 
 /* maybe this should be implemented as id but its
    an optimisation for less ruby code. :) */
-.bright td.current_line {
+.bright div.subversion table.blame td.current_line {
    background-color: #ddd;
 }
 
-.dark td.current_line {
+.dark div.subversion table.blame td.current_line {
    background-color: #333;
 }
 

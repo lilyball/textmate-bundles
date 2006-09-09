@@ -426,7 +426,7 @@ div.rubymate a {
 /* ===================== */
 
 div.subversion {
-	padding: 10px 10px 10px 20px;
+/*	padding: 10px 10px 10px 20px;*/
 }
 .bright div.subversion {
 	background-color: #f0f0f0;
@@ -560,7 +560,7 @@ table.blame td {
    text-align: right;
 }
 
-.bright td.revcol, td.namecol {
+.bright td.revcol, .bright td.namecol {
    text-align: right;
    background-color: #f8f8f8;
    color: #888;
@@ -569,7 +569,7 @@ table.blame td {
    padding-left: 2px;
 }
 
-.dark td.revcol, td.namecol {
+.dark td.revcol, .dark td.namecol {
    text-align: right;
    background-color: #111;
    color: #888;
@@ -592,6 +592,13 @@ td.codecol {
 	font-family: "LuxiMono", "Bitstream Vera Sans Mono", monospace;
 	padding-left: 4px;
 	width: 100%;
+}
+.bright td.alternate {
+	background-color: #E4E4E4;
+}
+
+.dark td.alternate {
+	background-color: #1D1D1D;
 }
 
 /* maybe this should be implemented as id but its

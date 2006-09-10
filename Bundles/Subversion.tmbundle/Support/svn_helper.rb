@@ -65,10 +65,21 @@ module SVNHelper
    
    
    # produces a generic header..
-   def make_head( title='', styles=Array.new, head_adds=''  )
-   tm_EXTRA_HEAD   = head_adds
-   tm_CSS          = `cat "${TM_SUPPORT_PATH}/css/webpreview.css" | sed "s|TM_SUPPORT_PATH|${TM_SUPPORT_PATH}|"`
-   html =<<-HTML
+def make_head( title='', styles=Array.new, head_adds=''  )
+	tm_EXTRA_HEAD   = head_adds
+	tm_CSS          = `cat "${TM_SUPPORT_PATH}/css/webpreview.css" | sed "s|TM_SUPPORT_PATH|${TM_SUPPORT_PATH}|"`
+	tm_THEME        = `defaults 2>/dev/null read com.macromates.textmate.webpreview SelectedTheme`.rstrip
+	
+	tm_THEME = tm_THEME == '' ? 'bright' : tm_THEME;
+	
+	tm_THEMES = ''
+	themes = ['bright', 'dark'];
+	themes.each { |theme|
+		x = theme == tm_THEME ? ' selected="selected" ' : '';
+		tm_THEMES += '<option ' + x + ' >' + theme + '</option>\n'
+	}
+	
+	html =<<-HTML
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -83,7 +94,7 @@ module SVNHelper
 	<script src="file://#{ENV['TM_SUPPORT_PATH']}/script/webpreview.js" type="text/javascript" language="javascript" charset="utf-8"></script>
 	#{tm_EXTRA_HEAD}
 </head>
-<body id="tm_webpreview_body">
+<body id="tm_webpreview_body" class="#{tm_THEME}">
 	<div id="tm_webpreview_header">
 		<p class="headline">#{title}</p>
 		<p class="type">Subversion</p>
@@ -92,14 +103,12 @@ module SVNHelper
 			<form action="#" onsubmit="return false;">
 				Theme: 
 				<select onchange="selectTheme(this.value);" id="theme_selector">
-					<option>bright</option>
-					<option>dark</option>
-					<option value="default">no colors</option>
+					#{tm_THEMES}
 				</select>
 			</form>
 		</div>
 	</div>
-	<div id="tm_webpreview_content" class="bright">
+	<div id="tm_webpreview_content" class="#{tm_THEME}">
 	<div class="subversion">
 HTML
       puts html

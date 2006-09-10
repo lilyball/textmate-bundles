@@ -1,3 +1,4 @@
+require 'cgi'
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/textmate.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/keychain.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/metaweblog.rb"
@@ -155,7 +156,6 @@ TEXT
       @host = $1
       @path = $2
       if @host =~ /^(.+)(?:[:](.+))?@(.+)/
-        require 'CGI'
         @username = CGI.unescape($1)
         @password = CGI.unescape($2) if $2
         @host = $3
@@ -735,7 +735,6 @@ HTML
             when /\.textile/
               print "!#{url} (${1:#{alt}})!"
             else
-              require 'cgi'
               height_width = ""
               if sips_hw = %x{sips -g pixelWidth -g pixelHeight #{e_sh full_path}}
                 height = $1 if sips_hw.match(/pixelHeight:[ ]*(\d+)/)

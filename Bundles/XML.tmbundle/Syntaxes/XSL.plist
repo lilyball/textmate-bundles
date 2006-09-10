@@ -19,13 +19,28 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>&lt;(xsl:template)</string>
+			<string>&lt;(xsl)((:))(template)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>entity.name.tag.namespace.xml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>entity.name.tag.xml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.namespace-separator.xml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.localname.xml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -45,17 +60,17 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.other.attribute-name.localname.xml</string>
+							<string>entity.other.attribute-name.xml</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>entity.other.attribute-name.xml</string>
+							<string>keyword.operator.namespace-separator.xml</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.namespace-separator.xml</string>
+							<string>entity.other.attribute-name.localname.xml</string>
 						</dict>
 					</dict>
 					<key>match</key>

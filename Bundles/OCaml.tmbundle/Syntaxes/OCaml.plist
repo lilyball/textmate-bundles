@@ -373,24 +373,24 @@
 					<string>meta.object.type-constraint.ocaml</string>
 				</dict>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.separator.method-call.ocaml</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(?&lt;=\w|\))(#)[a-z_][a-zA-Z0-9'_]*</string>
-					<key>name</key>
-					<string>meta.method-call.ocaml</string>
-				</dict>
-				<dict>
 					<key>include</key>
 					<string>$self</string>
 				</dict>
 			</array>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.method-call.ocaml</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?&lt;=\w|\))(#)[a-z_][a-zA-Z0-9'_]*</string>
+			<key>name</key>
+			<string>meta.method-call.ocaml</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -627,7 +627,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\()(?=[^\(]+[^:]:(?!=|:)&gt;?)</string>
+			<string>(\()(?=[^\(]+(?!=~[a-z][a-z0-9_]|:):(?!=|:)&gt;?)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

@@ -1,7 +1,7 @@
 require "erb"
 
 def html_header(tm_html_title, tm_html_lang = "", tm_extra_head = "")
-	tm_html_theme = ENV["TM_HTML_THEME"] || "bright"
+	tm_html_theme = %x{bash -c #{e_sh ". #{e_sh ENV['TM_SUPPORT_PATH']}/lib/webpreview.sh && selected_theme"}}.strip
 	if File.exist? ENV["TM_FILEPATH"].to_s
 	  tm_extra_head += "<base href='tm-file://#{ERB::Util.url_encode(ENV["TM_FILEPATH"])}'/>"
 	end

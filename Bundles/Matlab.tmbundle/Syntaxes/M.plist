@@ -3,15 +3,33 @@
 <plist version="1.0">
 <dict>
 	<key>foldingStartMarker</key>
-	<string>^\s*(function|if|switch|while|for|try)\s(?!.*\bend\b).*$</string>
+	<string>^\s*(function|if|switch|while|for|try)\b(?!.*\bend\b).*$</string>
 	<key>foldingStopMarker</key>
-	<string>^\s*(end|return).*$</string>
+	<string>^\s*(end|return)\b.*$</string>
 	<key>keyEquivalent</key>
 	<string>^~M</string>
 	<key>name</key>
 	<string>MATLAB</string>
 	<key>patterns</key>
 	<array>
+		<dict>
+			<key>match</key>
+			<string>\b(varargin|varargout)\b</string>
+			<key>name</key>
+			<string>storage.modifier.matlab</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(case|otherwise)\b</string>
+			<key>name</key>
+			<string>keyword.control.matlab</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(inputname|get|findobj|allchild|dbstack|stop|waitbar)\b</string>
+			<key>name</key>
+			<string>keyword.other.matlab</string>
+		</dict>
 		<dict>
 			<key>begin</key>
 			<string>(\({2})</string>

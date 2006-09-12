@@ -19,8 +19,8 @@ if [[ -n "$TM_PROJECT_SITEURL" ]]
 fi
 
 # 2. Now check if any browser is running, if so, point it to the URL
-## Safari
-[[ $(ps -xc|grep Safari) ]] &amp;&amp; osascript -e 'tell app "Safari"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell'
+## Safari or Webkit
+[[ $(ps -xc|grep Safari) ]] &amp;&amp; osascript -e 'tell app "System Events" to set proclist to name of every application process' -e 'if proclist contains "Webkit" then' -e 'tell app "Webkit"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell' -e 'end if' -e 'if proclist contains "Safari" then' -e 'tell app "Safari"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell' -e 'end if'
 
 ## Shiira
 [[ $(ps -xc|grep Shiira) ]] &amp;&amp; osascript -e 'tell app "Shiira"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell'

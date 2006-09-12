@@ -14,11 +14,36 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^\\begin{code}</string>
-			<key>end</key>
-			<string>^\\end{code}</string>
-			<key>name</key>
+			<string>^((\\)begin)({)code(})(\s*\n)?</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.be.latex</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.latex</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.arguments.begin.latex</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.arguments.end.latex</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
 			<string>source.haskell.embedded.latex</string>
+			<key>end</key>
+			<string>^((\\)end)({)code(})</string>
+			<key>name</key>
+			<string>meta.function.embedded.haskell.latex</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -29,11 +54,11 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>text.latex</string>
+			<string>text.tex.latex</string>
 		</dict>
 	</array>
 	<key>scopeName</key>
-	<string>text.latex.haskell</string>
+	<string>text.tex.latex.haskell</string>
 	<key>uuid</key>
 	<string>439807F5-7129-487D-B5DC-95D5272B43DD</string>
 </dict>

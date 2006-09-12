@@ -36,9 +36,15 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(if|in|else|for|while|break|continue|case|default|do|switch|return|switch|case|global|proc|source|catch|alias)\b</string>
+			<string>\b(if|in|else|for|while|break|continue|case|default|do|switch|return|switch|case|source|catch|alias)\b</string>
 			<key>name</key>
 			<string>keyword.control.mel</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(global)\b</string>
+			<key>name</key>
+			<string>keyword.other.mel</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -73,7 +79,7 @@
 			<key>match</key>
 			<string>\$[a-zA-Z_\x{7f}-\x{ff}][a-zA-Z0-9_\x{7f}-\x{ff}]*?\b</string>
 			<key>name</key>
-			<string>variable.other.php</string>
+			<string>variable.other.mel</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -132,18 +138,23 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(proc)\s+([a-zA-Z_]\w*)\s*\(</string>
+			<string>((?:global\s*)?proc)\s*(\w+\s*\[?\]?\s+|\s+)([A-Za-z_][A-Za-z0-9_]*)\s*\(</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.function.asp</string>
+					<string>keyword.other.mel</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.asp</string>
+					<string>storage.type.mel</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.mel</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -153,10 +164,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>[^,)\n]+</string>
-					<key>name</key>
-					<string>variable.parameter.function.asp</string>
+					<key>include</key>
+					<string>$self</string>
 				</dict>
 			</array>
 		</dict>

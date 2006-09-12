@@ -627,7 +627,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\()(?=[^\(]+(?!=~[a-z][a-z0-9_]|:):(?!=|:)&gt;?)</string>
+			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|::|:=|[^\(~])+(:&gt;|:))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -637,7 +637,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(:&gt;?)(.*?)(\))</string>
+			<string>(:&gt;|:)(.*?)(\))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -990,7 +990,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.ocaml</string>
+							<string>punctuation.definition.string.begin.ocaml</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1000,7 +1000,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.ocaml</string>
+							<string>punctuation.definition.string.end.ocaml</string>
 						</dict>
 					</dict>
 					<key>name</key>

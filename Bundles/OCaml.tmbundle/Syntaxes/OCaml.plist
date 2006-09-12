@@ -477,7 +477,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>$self</string>
+					<string>#module-signature</string>
 				</dict>
 			</array>
 		</dict>
@@ -993,6 +993,73 @@
 				<dict>
 					<key>include</key>
 					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<key>module-signature</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(type)\s+([a-z_][a-zA-Z0-9_']*)\s*=?</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\s*(type|val|class|module|end))|^\s*$</string>
+					<key>name</key>
+					<string>meta.module.signature.type.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#typedefs</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(val)\s+([a-z_][a-zA-Z0-9_']*)\s*(:)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.value-signature.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.type-constraint.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\s*(type|val|class|module|end))|^\s*$</string>
+					<key>name</key>
+					<string>meta.module.signature.val.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#typedefs</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

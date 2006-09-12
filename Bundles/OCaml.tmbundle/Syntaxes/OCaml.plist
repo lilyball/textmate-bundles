@@ -10,9 +10,9 @@
 		<string>mly</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(\b(module|class)\s.*?=\s*$|\bbegin\s*$|\bwhile\s.*?\bdo\s*$|^let(?:\s+rec)?\s+[a-z_][a-zA-Z0-9_]*\s+(?!=)\S)</string>
+	<string>(\b(module|class|)\s.*?=\s*$|\bbegin|sig|struct|object\s*$|\bwhile\s.*?\bdo\s*$|^let(?:\s+rec)?\s+[a-z_][a-zA-Z0-9_]*\s+(?!=)\S)</string>
 	<key>foldingStopMarker</key>
-	<string>(\bend;?|\bdone;?|^;;|^in)\s*$</string>
+	<string>(\bend[ \t]*(;{1,2}|=)?|\bdone;?|^;;|^in)[ \t]*$</string>
 	<key>keyEquivalent</key>
 	<string>^~O</string>
 	<key>name</key>
@@ -668,6 +668,18 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>^[ \t]*#[a-zA-Z]+</string>
+			<key>name</key>
+			<string>keyword.other.directive.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^[ \t]*#[0-9]*</string>
+			<key>name</key>
+			<string>keyword.other.directive.line-number.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>\b(int|char|float|string|list|array|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t)\b</string>
 			<key>name</key>
 			<string>storage.type.ocaml</string>
@@ -695,18 +707,6 @@
 			<string>\b[A-Z][a-zA-Z0-9_]*\b</string>
 			<key>name</key>
 			<string>entity.name.type.variant.ocaml</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>^[ \t]*#[a-zA-Z]+</string>
-			<key>name</key>
-			<string>keyword.other.directive.ocaml</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>^[ \t]*#[0-9]*</string>
-			<key>name</key>
-			<string>keyword.other.directive.line-number.ocaml</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -790,13 +790,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(begin|do|done|downto|else|end|for|if|then|to|try|when|while)\b</string>
+			<string>\b(begin|do|done|downto|else|end|for|if|match|then|to|try|when|while|with)\b</string>
 			<key>name</key>
 			<string>keyword.control.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(as|assert|class|constraint|exception|external|fun|functor|in|include|inherit|initializer|lazy|let|match|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual|with)\b</string>
+			<string>\b(as|assert|class|constraint|exception|external|fun|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
 			<key>name</key>
 			<string>keyword.other.ocaml</string>
 		</dict>
@@ -896,6 +896,24 @@
 					<string>\b-?[0-9][0-9_]*((\.([0-9][0-9_]*([eE][+-]??[0-9][0-9_]*)?)?)|([eE][+-]??[0-9][0-9_]*))</string>
 					<key>name</key>
 					<string>constant.numeric.floating-point.ocaml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(-?((0(x|X)[0-9a-fA-F][0-9a-fA-F_]*)|(0(o|O)[0-7][0-7_]*)|(0(b|B)[01][01_]*)|([0-9][0-9_]*)))n</string>
+					<key>name</key>
+					<string>constant.numeric.integer.nativeint.ocaml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(-?((0(x|X)[0-9a-fA-F][0-9a-fA-F_]*)|(0(o|O)[0-7][0-7_]*)|(0(b|B)[01][01_]*)|([0-9][0-9_]*)))L</string>
+					<key>name</key>
+					<string>constant.numeric.integer.int64.ocaml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(-?((0(x|X)[0-9a-fA-F][0-9a-fA-F_]*)|(0(o|O)[0-7][0-7_]*)|(0(b|B)[01][01_]*)|([0-9][0-9_]*)))l</string>
+					<key>name</key>
+					<string>constant.numeric.integer.int32.ocaml</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -1101,7 +1119,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(\[)</string>
+					<string>(\[(&gt;|&lt;)?)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>

@@ -627,7 +627,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|::|:=|[^\(\)~])+(:&gt;|:(?![=:])))</string>
+			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+(:&gt;|:(?![=:])))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

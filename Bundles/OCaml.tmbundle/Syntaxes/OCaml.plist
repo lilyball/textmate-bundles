@@ -96,6 +96,68 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>(\()(?=fun\s)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.anonymous.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.anonymous.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function.anonymous.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=\()(fun)\s</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.function-definition.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(-&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.function-definition.ocaml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.function.anonymous.definition.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#variables</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>\b(type|and)\s+(.*?)(?==)</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -626,6 +688,18 @@
 			<string>meta.exception.ocaml</string>
 		</dict>
 		<dict>
+			<key>include</key>
+			<string>#strings</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#constants</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#comments</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+(:&gt;|:(?![=:])))</string>
 			<key>beginCaptures</key>
@@ -709,18 +783,6 @@
 			<string>entity.name.type.variant.ocaml</string>
 		</dict>
 		<dict>
-			<key>include</key>
-			<string>#strings</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#constants</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#comments</string>
-		</dict>
-		<dict>
 			<key>match</key>
 			<string>!=|:=|&gt;|&lt;</string>
 			<key>name</key>
@@ -796,9 +858,24 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(as|assert|class|constraint|exception|external|fun|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
+			<string>\b(as|assert|class|constraint|exception|external|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
 			<key>name</key>
 			<string>keyword.other.ocaml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>meta.paren-group.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>

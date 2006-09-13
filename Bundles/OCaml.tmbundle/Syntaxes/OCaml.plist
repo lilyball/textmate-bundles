@@ -35,7 +35,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(let|and)\s+((rec\s+)([a-z_][a-zA-Z0-9_]*)\b|([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
+			<string>^[ \t]*(let|and)\s+(?!\(\*)((rec\s+)([a-z_][a-zA-Z0-9_]*)\b|([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -158,7 +158,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(type|and)\s+(.*?)(?==)</string>
+			<string>(?:\b(type)|(and)\s*(\(\*\s*type\s*\*\)))\s+(.*?)(?==)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -167,6 +167,16 @@
 					<string>keyword.other.type-definition.ocaml</string>
 				</dict>
 				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.type-definition.ocaml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>comment.block.ocaml</string>
+				</dict>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>storage.type.user-defined.ocaml</string>
@@ -255,7 +265,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\bwith(?=\s*$)\b)|(\bfunction\b)|((?&lt;!\|)(\|)(?!\|)(?=.*-&gt;))</string>
+			<string>\b(with|function)\b|((?&lt;!\|)(\|)(?!\|)(?=.*-&gt;))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -701,7 +711,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+(:&gt;|:(?![=:])))</string>
+			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+([^:]:[^:=]))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -711,13 +721,13 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(:&gt;|:(?![=:]))(.*?)(\))</string>
+			<string>([^:]:[^:=])(.*?)(\))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.separator.type-constraint.ocaml</string>
+					<string>constraint.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -826,9 +836,21 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>-&gt;</string>
+			<key>name</key>
+			<string>punctuation.separator.function-return.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>[=&lt;&gt;@^&amp;+\-*/$%][!$%&amp;*+./:&lt;=&gt;?@^~-]*</string>
 			<key>name</key>
 			<string>keyword.operator.infix.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>!|[!\?~][!$%&amp;*+./:&lt;=&gt;?@^~-]+</string>
+			<key>name</key>
+			<string>keyword.operator.prefix.ocaml</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -931,7 +953,7 @@
 					<array>
 						<dict>
 							<key>match</key>
-							<string>\\.</string>
+							<string>\\(x[a-fA-F0-9][a-fA-F0-9]|[0-2]\d\d|.|[bnrt'"\\])</string>
 							<key>name</key>
 							<string>comment.block.string.constant.character.escape.ocaml</string>
 						</dict>
@@ -1000,7 +1022,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>'(\\x[a-fA-F0-9][a-fA-F0-9]|\\\d\d\d|.|\\[bnrt'"]|\\\\)'</string>
+					<string>'\\(x[a-fA-F0-9][a-fA-F0-9]|[0-2]\d\d|.|[bnrt'"\\])'</string>
 					<key>name</key>
 					<string>constant.character.ocaml</string>
 				</dict>
@@ -1171,9 +1193,27 @@
 					<array>
 						<dict>
 							<key>match</key>
-							<string>\\.</string>
+							<string>\\$[ \t]*</string>
+							<key>name</key>
+							<string>punctuation.string.ignore-eol.ocaml</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\\(x[a-fA-F0-9][a-fA-F0-9]|[0-2]\d\d|[bnrt'"\\])</string>
 							<key>name</key>
 							<string>constant.character.string.escape.ocaml</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\\[\|\(\)1-9$^.*+?\[\]]</string>
+							<key>name</key>
+							<string>constant.character.regexp.escape.ocaml</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\\(?!(x[a-fA-F0-9][a-fA-F0-9]|[0-2]\d\d|[bnrt'"\\]|[\|\(\)1-9$^.*+?\[\]]|$[ \t]*))(?:.)</string>
+							<key>name</key>
+							<string>invalid.illegal.character.string.escape</string>
 						</dict>
 					</array>
 				</dict>
@@ -1413,7 +1453,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(\()(?=.*?[^:]:(?!=|:)&gt;?)</string>
+					<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+([^:]:[^:=]))</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -1423,7 +1463,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(:&gt;?)(.*?)(\))</string>
+					<string>([^:]:[^:=])(.*?)(\))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>

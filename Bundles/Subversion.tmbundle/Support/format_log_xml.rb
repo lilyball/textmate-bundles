@@ -145,14 +145,14 @@ begin
   # collect all lines before the xml header
   no_xml = ''
   $stdin.each_line do |line|
-    if line =~ /^(.*)<\?xml version="1\.0" encoding="utf-8"\?>$/
+    if line =~ /^(.*)<\?xml version="1\.0"\?>$/
       no_xml << $1
       break
     else
       no_xml << line
     end
   end
-  no_xml = '' if $ignore_bad_lines
+  no_xml = '' if ($ignore_bad_lines and (not $stdin.eof?))
   
   # read everything into a (maybe very huge) buffer
   # buffer = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + $stdin.readlines.join
@@ -160,8 +160,8 @@ begin
   # puts buffer.size
   # 
   # exit
-  
-  log = REXML::Document.new $stdin
+
+  log = REXML::Document.new $stdin unless $stdin.eof?
   ERB.new( File.read( $bundle+'/log.rhtml' ) ).run binding
   
 rescue => e

@@ -218,11 +218,25 @@
 	}
 }
 
+// To make redo work, we need to add a new undo each time
+- (void) restoreTextForUndo:(NSString *)newSummary
+{
+	NSUndoManager *	undoManager = [[fCommitMessage window] undoManager];
+    NSString *		oldSummary = [fCommitMessage string];
+    
+    [undoManager registerUndoWithTarget:self
+                                            selector:@selector(restoreTextForUndo:)
+                                            object:[[oldSummary copy] autorelease]];
+
+	[fCommitMessage setString:newSummary];
+
+}
+
 - (void) restoreSummary:(id)sender
 {
-	NSString *	summary = [sender representedObject];
-
-	[fCommitMessage setString:summary];
+	NSString *		newSummary = [sender representedObject];
+	
+	[self restoreTextForUndo:newSummary];
 }
 
 // Save, in a MRU list, the most recent commit summary

@@ -16,6 +16,24 @@
 	<array>
 		<dict>
 			<key>begin</key>
+			<string>(?i:subject):\s*</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.mail</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>entity.name.section.mail</string>
+			<key>end</key>
+			<string>^(?![ \t\v])</string>
+			<key>name</key>
+			<string>meta.header.mail</string>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>([\x{21}-\x{39}\x{3B}-\x{7E}]+):\s*</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -32,40 +50,20 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>;.*$\n?</string>
-					<key>name</key>
-					<string>comment.line.semi-colon.mail</string>
+					<key>include</key>
+					<string>#string</string>
 				</dict>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>constant.other.charset.mail</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>constant.other.encoding.mail</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.mail</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>=\?(.*?)(?:\*[^?]+)?\?([QB])\?(.*?)\?=</string>
-					<key>name</key>
-					<string>meta.encoded-data.mail</string>
+					<key>include</key>
+					<string>#comment</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>.+?(?==\?.*?\?[QB]\?.*?\?=|;|$)</string>
-					<key>name</key>
-					<string>string.unquoted.mail</string>
+					<key>include</key>
+					<string>#reference</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#atom</string>
 				</dict>
 			</array>
 		</dict>
@@ -91,6 +89,211 @@
 			</array>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>any</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#group</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#reference</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#domain_literal</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#atom</string>
+				</dict>
+			</array>
+		</dict>
+		<key>atom</key>
+		<dict>
+			<key>match</key>
+			<string>[^ \t\v\n()&lt;&gt;@,;:\\".\[\]]+</string>
+			<key>name</key>
+			<string>string.unquoted.atom.mail</string>
+		</dict>
+		<key>comment</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>comment.line.parentheses.mail</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#quote_pair</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+			</array>
+		</dict>
+		<key>domain_literal</key>
+		<dict>
+			<key>begin</key>
+			<string>\[</string>
+			<key>end</key>
+			<string>\]</string>
+			<key>name</key>
+			<string>meta.domain-literal.mail</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#quote_pair</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#group</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#reference</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#atom</string>
+				</dict>
+			</array>
+		</dict>
+		<key>encoded_text</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.other.charset.mail</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.other.encoding.mail</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>=\?(.*?)(?:\*[^?]+)?\?([QB])\?(.*?)\?=</string>
+			<key>name</key>
+			<string>meta.encoded-text.mail</string>
+		</dict>
+		<key>group</key>
+		<dict>
+			<key>begin</key>
+			<string>:(?=.*;)</string>
+			<key>comment</key>
+			<string>this is to group addresses, RFC822 says that these “must occur in  matched pairs,” but e.g. the date header uses : as a time separator.</string>
+			<key>end</key>
+			<string>;</string>
+			<key>name</key>
+			<string>meta.group.mail</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#reference</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#domain_literal</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#atom</string>
+				</dict>
+			</array>
+		</dict>
+		<key>quote_pair</key>
+		<dict>
+			<key>match</key>
+			<string>\\.</string>
+			<key>name</key>
+			<string>constant.other.escape.mail</string>
+		</dict>
+		<key>reference</key>
+		<dict>
+			<key>begin</key>
+			<string>&lt;</string>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>name</key>
+			<string>constant.other.reference.mail</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#domain_literal</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#atom</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string</key>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.mail</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#quote_pair</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#encoded_text</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>text.mail.markdown</string>
 	<key>uuid</key>

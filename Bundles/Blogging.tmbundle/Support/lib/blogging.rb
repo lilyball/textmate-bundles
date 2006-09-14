@@ -621,31 +621,7 @@ TEXT
       filepath.gsub!(/ /, '%20')
       base = %Q{<base href="file://#{filepath}" />}
     end
-    html = <<-HTML
-<html>
-<head>
-  <title>#{self.post['title']}</title>
-  #{base}
-  <style type="text/css">
-    body {  
-      background-color: #eee;
-    }
-    body > h1 {
-      font-size: large;
-    }
-    .contents { 
-      background: white;
-      font-family: Georgia, serif;
-      font-size: 13px;
-      border: 1px #888 solid;
-      padding: 0 1em;
-    }
-  </style>
-</head>
-<body>
-<h1>#{post['title']}</h1>
-<div class="contents">
-HTML
+    html = `. "${TM_SUPPORT_PATH}/lib/webpreview.sh"; html_header Preview Blogging`
     case format
       when /\.textile/
         require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth.rb"
@@ -659,7 +635,7 @@ HTML
       when /\.text/
         html += %Q{<div style="white-space: pre">#{doc}</div>}
     end
-    html += "</div></body></html>"
+    html += `. "${TM_SUPPORT_PATH}/lib/webpreview.sh"; html_footer`
     html
   end
 

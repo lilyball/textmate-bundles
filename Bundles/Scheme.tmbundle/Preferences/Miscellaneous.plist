@@ -8,6 +8,19 @@
 	<string>source.scheme</string>
 	<key>settings</key>
 	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>(?x)^ [ \t]*+
+	  (?&lt;par&gt;
+	    ( [^()\n]++ | \( \g&lt;par&gt; \) )*+
+	  )
+	  ( \) [ \t]*+ ) ++
+	$</string>
+		<key>increaseIndentPattern</key>
+		<string>(?x)^ [ \t]*+ \(
+	  (?&lt;par&gt;
+	    ( [^()\n]++ | \( \g&lt;par&gt; \)? )*+
+	  )
+	$</string>
 		<key>shellVariables</key>
 		<array>
 			<dict>

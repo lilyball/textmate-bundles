@@ -1461,7 +1461,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+([^:]:[^:=]))</string>
+					<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+(?&lt;!:)(:&gt;|:(?![:=])))</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -1471,7 +1471,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>([^:]:[^:=])(.*?)(\))</string>
+					<string>(?&lt;!:)(:&gt;|:(?![:=]))(.*?)(\))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>

@@ -15,23 +15,59 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>([\x{21}-\x{39}\x{3B}-\x{7E}]+):\s*</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.mail</string>
 				</dict>
-				<key>2</key>
+			</dict>
+			<key>end</key>
+			<string>^(?![ \t\v])</string>
+			<key>name</key>
+			<string>meta.header.mail</string>
+			<key>patterns</key>
+			<array>
 				<dict>
+					<key>match</key>
+					<string>;.*$\n?</string>
+					<key>name</key>
+					<string>comment.line.semi-colon.mail</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.charset.mail</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.encoding.mail</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.mail</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>=\?(.*?)(?:\*[^?]+)?\?([QB])\?(.*?)\?=</string>
+					<key>name</key>
+					<string>meta.encoded-data.mail</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>.+?(?==\?.*?\?[QB]\?.*?\?=|;|$)</string>
 					<key>name</key>
 					<string>string.unquoted.mail</string>
 				</dict>
-			</dict>
-			<key>match</key>
-			<string>^([a-zA-Z-]+):\s*(.*)$\n?</string>
-			<key>name</key>
-			<string>meta.header.mail</string>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>

@@ -711,7 +711,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+([^:]:[^:=]))</string>
+			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+(?&lt;!:)(:&gt;|:(?![:=])))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -721,13 +721,13 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>([^:]:[^:=])(.*?)(\))</string>
+			<string>(?&lt;!:)(:&gt;|:(?![:=]))(.*?)(\))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constraint.ocaml</string>
+					<string>punctuation.separator.type-constraint.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -811,8 +811,16 @@
 			<string>keyword.operator.prefix.floating-point.ocaml</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.list.ocaml</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(\[|\]|::)</string>
+			<string>(\[|\]|(::))</string>
 			<key>name</key>
 			<string>punctuation.definition.list.ocaml</string>
 		</dict>

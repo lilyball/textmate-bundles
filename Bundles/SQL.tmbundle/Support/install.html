@@ -1,0 +1,42 @@
+<h2>Database Module Not Installed</h2>
+<p>To use the table browser you must install the appropriate Python database module.  See the instructions below for installing the right driver for your DMBS.</p>
+
+
+<h3 id="mysql">MySQL</h3>
+<p>Download the source from <a href="http://sourceforge.net/projects/mysql-python">http://sourceforge.net/projects/mysql-python</a>After you download the file unpack the tar file. You can consult the instructions in the README file.  The short version is as follows:
+    <ol>
+        <li>Make sure the command mysql_config is in your PATH.  It should be in the same directory as the mysql command.</li>
+        <li>cd into the directory you unpacked from the tar file</li>
+        <li>python setup.py build</li>
+        <li>sudo python setup.py install</li>
+    </ol>
+<p>When submitting the query to MySQL, the command assumes the following environment variables are properly set:</p>
+
+<ul>
+<li><code>$MYSQL_USER</code> — defaults to the value of <code>$USER</code></li>
+<li><code>$MYSQL_PWD</code> — no default</li>
+<li><code>$MYSQL_HOST</code> — defaults to localhost if not set</li>
+<li><code>$MYSQL_PORT</code> — defaults to 3306 if not set</li>
+<li><code>$MYSQL_DB</code> — no default</li>
+</ul>
+
+<p>These variables may be set in the parent shell of TextMate, global variables in TextMate preferences, or as project local variables.</p>
+
+<h3 id="postgresql">PostgreSQL</h3>
+download pgdb from  <a href="ftp://ftp.pygresql.org/pub/distrib/PyGreSQL.tgz">ftp://ftp.pygresql.org/pub/distrib/PyGreSQL.tgz</a>
+
+After you have downloaded PyGreSQL and unpacked the tar file,  follow the installation instructions  <a href="http://www.pygresql.org/">Here.</a>  The simplified version is as follows:
+
+<ol>
+    <li>Make sure pg_config is in your PATH.</li>
+    <li>sudo python setup.py install</li>
+</ol>
+
+<p>If you are a Postgres user and have the <code>psql8</code> command installed (as from <a href="http://darwinports.opendarwin.org/">DarwinPorts</a> for example) the following variables will be used:</p>
+
+<ul>
+<li><code>$PGUSER</code> — defaults to the value of <code>$USER</code></li>
+<li><code>$PGHOST</code> — defaults to localhost if not set</li>
+<li><code>$PGPORT</code> — defaults to 3306 if not set</li>
+<li><code>$PGDATABASE</code> — defaults to user</li>
+</ul>

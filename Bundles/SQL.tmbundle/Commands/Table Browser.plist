@@ -15,7 +15,16 @@ cat &lt;&lt;CSS
 CSS
 
 htmlHeader "Table Browser"
-tableBrowser.py --server=$(database_choice)</string>
+dbServe=$(database_choice)
+
+checkInstall.py --server=$dbServe
+RC=$?
+if (($RC == 0)); then 
+        tableBrowser.py --server=$dbServe
+else
+        cat "$TM_BUNDLE_SUPPORT"/install.html
+fi
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

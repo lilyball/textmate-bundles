@@ -20,10 +20,9 @@ def e_url(str)
   end
 end
 
-# URL escape a string but preserve slashes (idea being we have a file system path that we want to use with file://)
-def e_pre(str)
-  str.gsub("&", "&amp;").
-      gsub("<", "&lt;").
-      gsub(">", "&gt;").
-      gsub("\n", "<br />")
+# Make string suitable for display as HTML, preserve spaces
+def htmlize(str)
+  str = str.gsub("&", "&amp;").gsub("<", "&lt;").gsub("\n", "<br>")
+  str = str.gsub(/\t+/, '<span style="white-space:pre;">\0</span>')
+  str.reverse.gsub(/ (?= |$)/, ';psbn&').reverse
 end

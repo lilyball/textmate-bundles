@@ -20,20 +20,6 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.record.ocaml</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(?&lt;=\{)\s*(\})</string>
-			<key>name</key>
-			<string>meta.empty-typing-pair.ocaml</string>
-		</dict>
-		<dict>
 			<key>begin</key>
 			<string>^[ \t]*(let|and)\s+(?!\(\*)((rec\s+)([a-z_][a-zA-Z0-9_]*)\b|([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
 			<key>beginCaptures</key>
@@ -811,6 +797,12 @@
 			<string>keyword.operator.prefix.floating-point.ocaml</string>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>(\[\||\|\])</string>
+			<key>name</key>
+			<string>punctuation.definition.array.ocaml</string>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>2</key>
@@ -823,12 +815,6 @@
 			<string>(\[|\]|(::))</string>
 			<key>name</key>
 			<string>punctuation.definition.list.ocaml</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(\[\||\|\])</string>
-			<key>name</key>
-			<string>punctuation.definition.array.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -974,19 +960,6 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>meta.empty-typing-pair.ocaml</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>meta.empty-typing-pair.ocaml</string>
-						</dict>
-					</dict>
 					<key>match</key>
 					<string>(?:\[\s*(\])|\(\s*(\)))</string>
 					<key>name</key>

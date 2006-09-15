@@ -3,16 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for ${1:range}
+	<string>if ${1:condition}
 	${2:body}
+elseif ${3:condition}
+	${4:body}
+else
+	${5:body}
 end</string>
 	<key>name</key>
-	<string>for</string>
+	<string>if elseif</string>
 	<key>scope</key>
 	<string>source.matlab</string>
 	<key>tabTrigger</key>
-	<string>for</string>
+	<string>ifeif</string>
 	<key>uuid</key>
-	<string>08CB1F21-B7EB-4AD7-B066-BB365966E390</string>
+	<string>93234216-9807-416E-8416-A130A05C2C1F</string>
 </dict>
 </plist>

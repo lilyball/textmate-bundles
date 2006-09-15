@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+# Replace != with ~= for the novice user
+line = ENV['TM_LINE_NUMBER'].to_i
+columns = ENV['TM_LINE_INDEX'].to_i-1
+textArray = STDIN.readlines
+print textArray.last. to_s.sub(/\!/,'~=')
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>=</string>
+	<key>name</key>
+	<string>= after !</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>variable.other.exclamation.matlab</string>
+	<key>uuid</key>
+	<string>563CDF89-C286-4CDB-94AB-30819104470F</string>
+</dict>
+</plist>

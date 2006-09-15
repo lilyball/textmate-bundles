@@ -3,11 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>function ${1:name}
+	<string>function [${1:Output variables}] = ${2:functionName}(${3:Input variables})
 
-% ${1}
+% ${2/.*/\U$0/}   ${4:Short description}
 %
-% This function provides
+%	${5:Long description}
+%	
+%	SYNTAX
+%		[${1/.*/\U$0/}] = ${2/.*/\U$0/}(${6:${3/.*/\U$0/}})
+%	
+
+%
+%	Created by `niutil -readprop / /users/$USER realname` on `date +%Y-%m-%d`.
+%	Copyright (c) ${TM_YEAR} ${TM_ORGANIZATION_NAME}. All rights reserved.
 %
 
 </string>

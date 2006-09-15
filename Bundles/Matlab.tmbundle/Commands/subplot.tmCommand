@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+#
+# Looks through code, finds the last subplot function
+# and pre-populates the new subplot call with values
+# from last function. If the input values are numeric,
+# we increment the last argument.
+#
+linesbefore = ENV['TM_LINE_NUMBER'].to_i-1
+columns = ENV['TM_LINE_INDEX'].to_i
+textArray = STDIN.readlines
+myStr = textArray[0...linesbefore].join
+myStr &lt;&lt; textArray[linesbefore].to_s.slice(0...columns)
+
+if myStr =~ /.*(subplot\()(\w+[*]?)(\,)(\w+[*]?)(\,)(\w+[*]?)(\))/m
+  subrows, subcols, subthis = $2, $4, $6
+
+  # We have a pure number
+  subthis = subthis.to_i + 1 if subthis =~ /\A\d+\z/
+else
+  subrows = "rows"
+  subcols = "cols"
+  subthis = "current"
+end
+
+print "subplot(${1:", subrows, "},"
+print "${2:", subcols, "},"
+print "${3:", subthis, "})${4:, }$0"</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>subplot</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.matlab</string>
+	<key>tabTrigger</key>
+	<string>sub</string>
+	<key>uuid</key>
+	<string>F674E1B2-5BA5-4397-9D54-D48623E9F2FD</string>
+</dict>
+</plist>

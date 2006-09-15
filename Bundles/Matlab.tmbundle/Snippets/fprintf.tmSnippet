@@ -3,16 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for ${1:range}
-	${2:body}
-end</string>
+	<string>fprintf(${1:fid}, '${2:%s}\\n'${2/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$3${2/([^%]|%%)*(%.)?.*/(?2:\);)/}</string>
 	<key>name</key>
-	<string>for</string>
+	<string>fprintf</string>
 	<key>scope</key>
 	<string>source.matlab</string>
 	<key>tabTrigger</key>
-	<string>for</string>
+	<string>fpr</string>
 	<key>uuid</key>
-	<string>08CB1F21-B7EB-4AD7-B066-BB365966E390</string>
+	<string>163D3790-C8E8-4888-81D7-50907D825EA0</string>
 </dict>
 </plist>

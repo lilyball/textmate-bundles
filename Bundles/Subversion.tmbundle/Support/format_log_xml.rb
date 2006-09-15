@@ -145,7 +145,7 @@ begin
   # collect all lines before the xml header
   no_xml = ''
   $stdin.each_line do |line|
-    if line =~ /^(.*)<\?xml version="1\.0"\?>$/
+    if line =~ /^(.*)<\?xml version="1\.0"( encoding="utf-8")?\?>$/
       no_xml << $1
       break
     else

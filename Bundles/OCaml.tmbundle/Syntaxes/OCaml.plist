@@ -12,13 +12,27 @@
 	<key>foldingStartMarker</key>
 	<string>(\b(module|class|)\s.*?=\s*$|\bbegin|sig|struct|object\s*$|\bwhile\s.*?\bdo\s*$|^let(?:\s+rec)?\s+[a-z_][a-zA-Z0-9_]*\s+(?!=)\S)</string>
 	<key>foldingStopMarker</key>
-	<string>(\bend[ \t]*(;{1,2}|=)?|\bdone;?|^\s*;;|^\s*in)[ \t]*$</string>
+	<string>(\bend[ \t]*(;{1,2}|=)?|\bdone;?|^;;|^in)[ \t]*$</string>
 	<key>keyEquivalent</key>
 	<string>^~O</string>
 	<key>name</key>
 	<string>OCaml</string>
 	<key>patterns</key>
 	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.record.ocaml</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?&lt;=\{)\s*(\})</string>
+			<key>name</key>
+			<string>meta.empty-typing-pair.ocaml</string>
+		</dict>
 		<dict>
 			<key>begin</key>
 			<string>^[ \t]*(let|and)\s+(?!\(\*)((rec\s+)([a-z_][a-zA-Z0-9_]*)\b|([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
@@ -684,6 +698,29 @@
 			<string>meta.exception.ocaml</string>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>(?=(\[&lt;)(?![^\[]+?[^&gt;]]))</string>
+			<key>end</key>
+			<string>(&gt;])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.camlp4-stream.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>source.camlp4.embedded.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.camlp4.ocaml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>#strings</string>
 		</dict>
@@ -694,6 +731,14 @@
 		<dict>
 			<key>include</key>
 			<string>#comments</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#lists</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#arrays</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -798,23 +843,9 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(\[\||\|\])</string>
+			<string>::</string>
 			<key>name</key>
-			<string>punctuation.definition.array.ocaml</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.list.ocaml</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(\[|\]|(::))</string>
-			<key>name</key>
-			<string>punctuation.definition.list.ocaml</string>
+			<string>punctuation.list.constructor.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -902,6 +933,47 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>arrays</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(\[\|)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.array.begin.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\|])</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.array.end.ocaml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.arroy.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#arrays</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>comments</key>
 		<dict>
 			<key>patterns</key>
@@ -947,7 +1019,7 @@
 					<array>
 						<dict>
 							<key>match</key>
-							<string>\\(x[a-fA-F0-9][a-fA-F0-9]|[0-2]\d\d|.|[bnrt'"\\])</string>
+							<string>\\(x[a-fA-F0-9][a-fA-F0-9]|[0-2]\d\d|[bnrt'"\\])</string>
 							<key>name</key>
 							<string>comment.block.string.constant.character.escape.ocaml</string>
 						</dict>
@@ -960,6 +1032,19 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.empty-typing-pair.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.empty-typing-pair.ocaml</string>
+						</dict>
+					</dict>
 					<key>match</key>
 					<string>(?:\[\s*(\])|\(\s*(\)))</string>
 					<key>name</key>
@@ -1003,9 +1088,50 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>'\\(x[a-fA-F0-9][a-fA-F0-9]|[0-2]\d\d|.|[bnrt'"\\])'</string>
+					<string>'(.|\\(x[a-fA-F0-9][a-fA-F0-9]|[0-2]\d\d|[bnrt'"\\]))'</string>
 					<key>name</key>
 					<string>constant.character.ocaml</string>
+				</dict>
+			</array>
+		</dict>
+		<key>lists</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(\[)(?!\||&lt;|&gt;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.list.begin.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?&lt;!\||&gt;)(])</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.list.end.ocaml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.list.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#lists</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

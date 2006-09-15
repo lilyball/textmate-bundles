@@ -36,19 +36,11 @@ module SVNHelper
       'txmt://open?url=' + encoded_file_url + ((line.nil?) ? '' : '&amp;line='+line.to_s)
    end
    
-   
    # subsitutes some special chars for showing html..
    def htmlize( string, blow_up_spaces = true, tab_size = $tab_size )
-      return string.to_s.gsub( /<|>|&| |\t/ ) do |match|
-         case match
-            when '<';  '&lt;'
-            when '>';  '&gt;'
-            when '&';  '&amp;'
-            when ' ';  (blow_up_spaces) ? '&zwj;&#32;&zwj;' : ' '
-            when "\t"; ((blow_up_spaces) ? '&zwj;&#32;&zwj;' : ' ')*tab_size
-            else; raise 'this should never happen!'
-         end
-      end   
+      string = string.gsub(/&/n, '&amp;').gsub(/\"/n, '&quot;').gsub(/</n, '&lt;')
+      string = string.gsub(/\t+/, '<span style="white-space:pre;">\0</span>')
+      string.reverse.gsub(/ (?= |$)/, ';psbn&').reverse
    end
    
    

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/bin/bash
+
+: ${TM_LILYPOND:="$(find_app Lilypond.app)/Contents/Resources/bin/lilypond"}
+[[ ! -f "$TM_LILYPOND" ]] &amp;&amp; TM_LILYPOND=lilypond
+
+if ! type &gt;/dev/null -p "$TM_LILYPOND"; then
+   echo "Couldn’t find lilypond."
+   exit
+fi
+
+# Switch to the right directory.
+cd "$TM_DIRECTORY"
+
+"$TM_LILYPOND" "$TM_FILENAME" | pre
+
+if [[ -f "${TM_FILEPATH%.*}.pdf" ]];
+   then echo "Opening PDF…"; open "${TM_FILEPATH%.*}.pdf"
+   else echo "Error generating PDF file."
+fi</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Engrave and View</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.lilypond</string>
+	<key>uuid</key>
+	<string>E8B6A543-90A6-46A4-A307-B21B67EF7F2F</string>
+</dict>
+</plist>

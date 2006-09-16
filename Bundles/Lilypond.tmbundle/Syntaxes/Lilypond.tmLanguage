@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>
+		This bundle is, as can easily be seen, but it should still
+		be as useful as the Lilypond.app pyobjc application, which
+		has no syntax coloring, no way to do snippets, and pretty
+		much no interesting functionality at all, other than a "Run"
+		menu option. :)
+	</string>
+	<key>fileTypes</key>
+	<array>
+		<string>ly</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>\{\s*$</string>
+	<key>foldingStopMarker</key>
+	<string>^.*\}</string>
+	<key>keyEquivalent</key>
+	<string>^~L</string>
+	<key>name</key>
+	<string>Lilypond</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>(%{)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.comment.lilypond</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(%})</string>
+			<key>name</key>
+			<string>comment.block.lilypond</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(%)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.lilypond</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>$\n?</string>
+			<key>name</key>
+			<string>comment.line.lilypond</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.lilypond</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\\)[a-zA-Z]+\b</string>
+			<key>name</key>
+			<string>support.function.general.lilypond</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(")</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.lilypond</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(")</string>
+			<key>name</key>
+			<string>string.quoted.double.lilypond</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.untitled</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.lilypond</string>
+	<key>uuid</key>
+	<string>F25B30BE-0526-4D92-806C-F0D678DDF669</string>
+</dict>
+</plist>

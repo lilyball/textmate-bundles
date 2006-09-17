@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>FILE=`"$TM_BUNDLE_SUPPORT/bin/linkify.rb" "$TM_BUNDLE_SUPPORT/pages/intro.mdown"`
+	<string>FILE=`"$TM_BUNDLE_SUPPORT/bin/linkify.rb" 2&gt;/dev/console "$TM_BUNDLE_SUPPORT/pages/intro.mdown"`
 echo "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://$FILE'&gt;"
 
 </string>

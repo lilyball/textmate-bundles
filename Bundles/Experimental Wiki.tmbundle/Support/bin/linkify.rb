@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/env ruby -wKU
 
 require "pathname"
 require "fileutils"
@@ -16,8 +16,13 @@ def e_sh(str)
 end
 
 def e_sh_js(str)
-  (e_sh str).gsub("\\", "\\\\\\\\")
+  (e_sh str).gsub("\\", "\\\\\\\\").gsub(/(?=['"])/, "\\\\").gsub("'", "&#x27;").gsub('"', "&#x22;")
 end
+
+def e_html (text)
+  text.gsub(/[^\x00-\x7F]/) { |ch| sprintf("&#x%02X;", ch.unpack("U")[0]) }
+end
+
 
 script = Pathname.new($0).realpath.to_s
 
@@ -27,15 +32,28 @@ dir = path.parent.to_s
 
 tmp = '/tmp/tm_wiki'
 FileUtils.mkdir tmp unless File.exists? tmp
-dst_name = tmp + '/' + path.basename.to_s.sub(/\..+\z/, '') + '.html'
+page_name = path.basename.to_s.sub(/\..+\z/, '')
+dst_name = tmp + '/' + page_name + '.html'
 
 open("|#{e_sh markdown} > #{e_sh dst_name}", "w") do |io|
-  io << DATA.read
-
   io << <<-HTML
-<a href='#' onClick='visit(\"#{e_sh_js script}\", \"#{e_sh_js path.to_s}\"); return false;'>Refresh</a>
-<a href='txmt://open?url=file://#{e_url path.to_s}'>Edit</a>
-<hr />
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript">
+      function visit (script, page) {
+        var link = TextMate.system(script + " " + page, null).outputString;
+        window.location="file://" + link;
+      }
+    </script>
+    <title>#{e_html page_name} &mdash; TextMate Wiki</title>
+  </head>
+  <body>
+    <a href='#' onClick='visit(\"#{e_sh_js script}\", \"#{e_sh_js path.to_s}\"); return false;'>Refresh</a>
+    <a href='txmt://open?url=file://#{e_url path.to_s}'>Edit</a>
+    <a href='#' onClick='visit(\"#{e_sh_js script}\", \"#{e_sh_js dir}/intro.mdown\"); return false;'>Intro</a>
+    All Pages
+    <hr />
 HTML
 
   line_no = 1
@@ -56,18 +74,11 @@ HTML
 
       line_no = line_no + 1
 
-      io << line
+      io << e_html(line)
     end
   end
 end
 
-print dst_name
-
-__END__
-<script type="text/javascript">
-  function visit (script, page) {
-    var link = TextMate.system(script + " " + page, null).outputString;
-    window.location="tm-file://" + link;
-  }
-</script>
-
+res = e_url(dst_name)
+open("/dev/console", "w") { |io| io << res + "\n" }
+print res

@@ -32,11 +32,17 @@ dst_name = tmp + '/' + path.basename.to_s.sub(/\..+\z/, '') + '.html'
 open("|#{e_sh markdown} > #{e_sh dst_name}", "w") do |io|
   io << DATA.read
 
+  io << <<-HTML
+<a href='#' onClick='visit(\"#{e_sh_js script}\", \"#{e_sh_js path.to_s}\"); return false;'>Refresh</a>
+<a href='txmt://open?url=file://#{e_url path.to_s}'>Edit</a>
+<hr />
+HTML
+
   line_no = 1
   open(file) do |src|
     src.each_line do |line|
       if line =~ /^#+.*/
-        line = line + " <small>(<a href='txmt://open?line=#{line_no + 1}&url=file://#{e_url path.to_s}'>edit</a>)</small>"
+        line = line.chomp + " <small>(<a href='txmt://open?line=#{line_no + 1}&url=file://#{e_url path.to_s}'>edit</a>)</small>\n"
       end
 
       line = line.gsub(/\[([^\]]+)\]\[\]/) do |m|

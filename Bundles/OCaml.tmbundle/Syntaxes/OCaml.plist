@@ -20,20 +20,6 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.record.ocaml</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(?&lt;=\{)\s*(\})</string>
-			<key>name</key>
-			<string>meta.empty-typing-pair.ocaml</string>
-		</dict>
-		<dict>
 			<key>begin</key>
 			<string>^[ \t]*(let|and)\s+(?!\(\*)((rec\s+)([a-z_][a-zA-Z0-9_]*)\b|([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
 			<key>beginCaptures</key>
@@ -264,6 +250,43 @@
 			<string>^[ \t]*(class\s+type\s+)((\[\s*('[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*)\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
 			<key>name</key>
 			<string>meta.class.type-definition.ocaml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\{)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.record.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\})</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.record.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.record.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\bwith\b</string>
+					<key>name</key>
+					<string>keyword.other.language.ocaml</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -898,22 +921,35 @@
 			<string>entity.name.tag.label</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>\b(and|land|lor|lsl|lsr|lxor|mod|or)\b</string>
+			<key>begin</key>
+			<string>\b(begin)\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.begin-end.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\b(end)\b</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.begin-end.ocaml</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>keyword.operator.ocaml</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(begin|do|done|downto|else|end|for|if|match|then|to|try|when|while|with)\b</string>
-			<key>name</key>
-			<string>keyword.control.ocaml</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(as|assert|class|constraint|exception|external|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
-			<key>name</key>
-			<string>keyword.other.ocaml</string>
+			<string>meta.begin-end-group.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -929,6 +965,24 @@
 					<string>$self</string>
 				</dict>
 			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(and|land|lor|lsl|lsr|lxor|mod|or)\b</string>
+			<key>name</key>
+			<string>keyword.operator.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(do|done|downto|else|for|if|match|then|to|try|when|while|with)\b</string>
+			<key>name</key>
+			<string>keyword.control.ocaml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(as|assert|class|constraint|exception|external|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
+			<key>name</key>
+			<string>keyword.other.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>

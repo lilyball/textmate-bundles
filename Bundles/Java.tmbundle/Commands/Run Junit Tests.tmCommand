@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/bin/bash
+
+# Source some support functions we need.
+. "${TM_SUPPORT_PATH}/lib/html.sh"
+. "${TM_SUPPORT_PATH}/lib/webpreview.sh"
+
+
+cd "$TM_DIRECTORY"
+
+html_header "Running Unit Tests for $TM_FILENAME"
+
+echo '&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; junit.jar must be in your CLASSPATH'
+echo 'See junit.org for downloads and installation&lt;/p&gt;'
+echo '&lt;p&gt;This command uses the junit 4 test runner&lt;/p&gt;'
+
+javac -encoding UTF8 "$TM_FILENAME" &amp;&gt; &gt;("${TM_RUBY:-ruby}" -rtm_parser -eTextMate.parse_errors)
+if (($? &gt;= 1)); then exit; fi
+
+echo '&lt;pre&gt;'
+testClass=`basename -s .java $TM_FILENAME`
+/usr/bin/java org.junit.runner.JUnitCore $testClass
+echo '&lt;/pre&gt;'</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Run Junit Tests</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.java</string>
+	<key>uuid</key>
+	<string>A3AF777B-C1D8-4989-9251-7A0D594A407F</string>
+</dict>
+</plist>

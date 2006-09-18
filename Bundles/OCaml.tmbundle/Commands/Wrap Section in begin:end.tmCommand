@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+$: &lt;&lt; ENV['TM_SUPPORT_PATH']
+require 'lib/escape'
+
+def make_tab()
+	size = ENV['TM_TAB_SIZE'].to_i
+	if ENV['TM_SOFT_TABS'] == 'YES'
+		return ' ' * size
+	else
+		return "\t"
+	end
+end
+
+
+text = ENV['TM_SELECTED_TEXT']
+indent = text[/^\s*/]
+tab = make_tab()
+text = text.to_a.map() { |l| tab + l }
+
+puts indent + "begin"
+print e_sn(text.join().chomp() + "\n")
+puts indent + "end"</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@W</string>
+	<key>name</key>
+	<string>Wrap Section in begin/end</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>uuid</key>
+	<string>34B55C0A-C51E-4137-9811-B805640042C8</string>
+</dict>
+</plist>

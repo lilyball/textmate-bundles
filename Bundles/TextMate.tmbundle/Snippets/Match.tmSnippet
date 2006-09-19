@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>match = '$1';</string>
+	<string>{	name = '${1:name}';
+	match = '${2:pattern}';
+},</string>
 	<key>name</key>
-	<string>Match</string>
+	<string>Rule — Match</string>
 	<key>scope</key>
 	<string>source.plist.language-definition</string>
 	<key>tabTrigger</key>

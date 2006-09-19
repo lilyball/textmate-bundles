@@ -23,7 +23,6 @@
 		    to the next header, no matter which level it is.  Then we can
 		    make a contents just by folding everything.  Not completely sure
 			this is possible with current TM folding.
-		 6. Get the symbol list working on headings.  Trivial.
 		 7. Make sure that illegal things are correctly scoped illegal.
 		    This is non-trivial, and has several parts
 		    
@@ -55,6 +54,7 @@
 		FINISHED:
 		 2. Add support for LaTeX math mode inside of &lt;math&gt;&lt;/math&gt; tags.
 		 1. Add a command for new list item.  This one is trivial
+		 6. Get the symbol list working on headings.  Trivial.
 		 8. &lt;gallery&gt;&lt;/gallery&gt; tag.  This one adds some complication, but
 		    is worth supporting.
 		 
@@ -266,7 +266,7 @@
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>text.tex.math.embedded.mediawiki</string>
+					<string>source.math.tex.embedded.mediawiki</string>
 					<key>end</key>
 					<string>(&lt;/math&gt;)</string>
 					<key>patterns</key>

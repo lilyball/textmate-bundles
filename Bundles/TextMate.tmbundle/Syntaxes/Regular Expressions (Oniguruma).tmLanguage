@@ -88,7 +88,7 @@
 			<key>comment</key>
 			<string>We are restrictive in what we allow to go after the comment character to avoid false positives, since the availability of comments depend on regexp flags.</string>
 			<key>match</key>
-			<string>(?&lt;=^|\s)#\s[[a-zA-Z0-9,. \t?!-][^\x{00}-\x{7F}]]*$</string>
+			<string>(?&lt;=^|\s)#\s[[a-zA-Z0-9,. \t?!-:][^\x{00}-\x{7F}]]*$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.regexp</string>
 		</dict>

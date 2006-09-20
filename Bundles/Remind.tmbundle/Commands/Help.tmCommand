@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># show this month's calendar
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Remind bundle Help" "Remind"
+
+Markdown.pl &lt;&lt;'MARKDOWN'
+
+## Intro
+
+[Remind][] is a calendar/reminder shell command which takes as input your calendar file (which is written in a simple plain text format) and outputs upcoming events.
+
+On Mac OS X Remind is useful with something like [GeekTool][] (get the [unofficial branch][GTBranch]) which allows you to setup a shell command to run periodically and have its output shown nicely on your desktop.
+
+[Remind]: http://www.roaringpenguin.com/penguin/open_source_remind.php
+[GeekTool]: http://projects.tynsoe.org/en/geektool/
+[GTBranch]: http://www.jaw.it/pages/en/x_misc.html
+
+## Installing `remind`
+
+You can download Remind from [MacPorts](http://macports.org/) by using:
+    
+    sudo port install remind
+
+## This Bundle
+
+This bundle offers a language grammar for your `~/.reminders` file, a few useful snippets, and commands to show upcoming events or a calender for this week/month.
+
+MARKDOWN
+
+html_footer
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.remind</string>
+	<key>uuid</key>
+	<string>A72C1A66-38B4-4DB5-8C82-0F4E522E31A7</string>
+</dict>
+</plist>

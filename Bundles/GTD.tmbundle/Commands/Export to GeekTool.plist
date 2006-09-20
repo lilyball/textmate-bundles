@@ -39,7 +39,7 @@ $tags.each do |tag|
     matches = 0 
     myFiles = Dir.entries($myPath)
     myFiles.each do |fileName|
-      if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd")
+      if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd") and (fileName != "excluded.gtd")
         lineno = 0
         mFile = File.open(fileName) 
         mFile.each do |line|

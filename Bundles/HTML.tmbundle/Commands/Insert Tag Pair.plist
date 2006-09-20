@@ -20,12 +20,21 @@
 single_no_arg = /^(?:br|hr)$/i
 single        = /^(?:img|meta|link|input|base|area|col|frame|param)$/i
 
-print case tag = STDIN.read
+# handle the case where caret is in the middle of a word, assume only the left part is the tag
+index = ENV['TM_LINE_INDEX'].to_i - ENV['TM_INPUT_START_LINE_INDEX'].to_i
+tag, suffix = STDIN.read, ''
+if index &lt; tag.length
+  tag, suffix = tag[0...index], tag[index..-1]
+end
+
+print case tag
   when single_no_arg then "&lt;#{tag} /&gt;"
   when single then        "&lt;#{tag} $1/&gt;"
   when '' then            "&lt;${1:p}&gt;$2&lt;/${1/\\s.*//}&gt;"
   else                    "&lt;#{tag}&gt;$1&lt;/#{tag.strip[/^\S+/]}&gt;"
 end
+
+print suffix
 </string>
 	<key>fallbackInput</key>
 	<string>word</string>

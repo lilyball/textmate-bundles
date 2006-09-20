@@ -30,58 +30,17 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>(?&lt;=¬)$</string>
-			<key>end</key>
-			<string>(?&lt;!¬)$(\n?)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>meta.end-of-line-continuation.applescript</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.line-continuation.applescript</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#tell-blocks</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#standardadditions</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#built-in</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>¬</string>
-			<key>name</key>
-			<string>punctuation.continuation.line.applescript</string>
+			<key>include</key>
+			<string>#blocks</string>
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#tell-blocks</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#standardadditions</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#built-in</string>
+			<string>#inline</string>
 		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>built-in</key>
+		<key>blocks</key>
 		<dict>
 			<key>patterns</key>
 			<array>
@@ -202,34 +161,20 @@
 					</array>
 				</dict>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.applescript</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(--).*$\n?</string>
-					<key>name</key>
-					<string>comment.line.double-dash.applescript</string>
+					<key>include</key>
+					<string>#tell-blocks</string>
 				</dict>
+			</array>
+		</dict>
+		<key>built-in</key>
+		<dict>
+			<key>patterns</key>
+			<array>
 				<dict>
-					<key>begin</key>
-					<string>\(\*</string>
-					<key>captures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.applescript</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>\*\)</string>
+					<key>match</key>
+					<string>¬</string>
 					<key>name</key>
-					<string>comment.block.applescript</string>
+					<string>punctuation.continuation.line.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -250,6 +195,22 @@
 					<string>make sure that "return", "property", and other keywords are not preceded by something else, to disambiguate</string>
 					<key>match</key>
 					<string>(?&lt;=^|then|to)\s*\b(return|prop(erty)?)\b</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>the : in property assignments</string>
+					<key>match</key>
+					<string>:</string>
+					<key>name</key>
+					<string>punctuation.separator.key-value.property.applescript</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>the parentheses in groups</string>
+					<key>match</key>
+					<string>(|)</string>
+					<key>name</key>
+					<string>punctuation.section.group.applescript</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -333,6 +294,120 @@
 					<key>name</key>
 					<string>constant.numeric.applescript</string>
 				</dict>
+			</array>
+		</dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.applescript</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(--).*$\n?</string>
+					<key>name</key>
+					<string>comment.line.double-dash.applescript</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\(\*</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.applescript</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\*\)</string>
+					<key>name</key>
+					<string>comment.block.applescript</string>
+				</dict>
+			</array>
+		</dict>
+		<key>data-structures</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(\{)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.array.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>
+						we cannot necessarily distinguish "records" from
+						"arrays", and so this could be either
+					</string>
+					<key>end</key>
+					<string>(\})</string>
+					<key>name</key>
+					<string>meta.data.array.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.key.applescript</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>meta.identifier.applescript</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.identifier.applescript</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.identifier.applescript</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.key-value.applescript</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>([A-Za-z]+|((\|)[^|\n]*(\|)))\s*(:)</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>:</string>
+							<key>name</key>
+							<string>punctuation.separator.key-value.applescript</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>punctuation.separator.array.applescript</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
 				<dict>
 					<key>begin</key>
 					<string>((?&lt;=application )"|(?&lt;=app )")</string>
@@ -382,6 +457,25 @@
 							<string>constant.character.escape.applescript</string>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.identifier.applescript</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.identifier.applescript</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\|)[^|\n]*(\|)</string>
+					<key>name</key>
+					<string>meta.identifier.applescript</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -468,6 +562,28 @@
 					<string>\b(visible)\b</string>
 					<key>name</key>
 					<string>support.variable.finder.applescript</string>
+				</dict>
+			</array>
+		</dict>
+		<key>inline</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#data-structures</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#built-in</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#standardadditions</string>
 				</dict>
 			</array>
 		</dict>

@@ -1,0 +1,562 @@
+#!/usr/bin/perl
+
+# rem2html
+#
+# A script to convert from the output of "remind -p" to Hyper-Text Markup
+# Language (HTML), the text format used in WWW documents.  By default, it
+# outputs a stand-alone file which can be fed directly into a web browser.
+# The output uses nested <TABLE> blocks, so it will only work in a browser
+# which supports tables (Netscape, MSIE, etc, NOT Lynx).
+#
+# This script works well on my computer (Linux 2.0.27) under Perl 5.003 and
+# 5.004.  It should work fine on other unices but I have no idea whether
+# it will run under VMS, OS/2, Windows, etc.
+#
+# [Note from David:  The REMIND license prohibits you from using REMIND
+#  under Windows.]
+#
+# Rem2html puts "normal" CAL or MSG-type reminders in a <P></P> pair,
+# and escapes any special HTML characters.
+#
+# If you want to put actual HTML code in the calendar (hyper-links, for
+# example), use the "SPECIAL HTML" type.  For example:
+#
+# REM Wed SPECIAL HTML <P> Meeting at \
+# <A HREF="http://www.linuxhq.com">Linux HQ</A> </P>
+#
+# This file is Copyright (C) 1997-8 by Don Schwarz <darkowl@mcs.net>
+# and David F. Skoll
+#
+# v1.2-beta, Hal Burgiss <hal@foobox.net> 03/03/05
+#
+# Changelog:
+#
+# - Fixed some mark-up mishaps for calendars with multiple months.
+# - Added provision for a default CSS stylesheet (remind.css), and various 
+#   related mark-up additions.
+# - Added a 'nomini' option for eliminating the 'small calendar' thumbnails.
+# - Added a 'title' option for HTML page title.
+# - Added a 'print' option for nicer print look.
+# - Added a 'months' option to control the size of the calendar.
+# - Added a 'dtd' option to allow control of the document DTD.
+# - Added some minor mark-up changes/improvements, eg xhtml compliant.
+# - Added capability to grok remind data from within rem2html, looking for 
+#   cgi type output, with -x option.
+#
+#   A work in progress at this point.
+#
+#
+########################################################################
+
+use Getopt::Long;
+
+@months = (January,February,March,April,May,June,July,August,September,October,November,December);
+$def_width = '14%';
+
+$DefaultImageDir = "%IMAGEBASE%";
+$DefaultImageDir = "/images";
+if ($DefaultImageDir =~ m@/$@) {
+    chop $DefaultImageDir;
+}
+
+$rem2html_version = "1.2-beta";
+
+&parse_options();
+
+# Backgound color -- unfortunately, most Web browsers (as of 14 October 1999)
+# do not correctly handle transparency in PNG images, so I had to make the
+# moon image background white.
+$Options{'bgcolor'} ||= "bgcolor=\"#FFFFFF\"";
+
+# if (-t STDIN) {
+#     print STDERR "(Rem2HTML: Input should not come from a terminal.)\n";
+#     $Options{'help'} = 1;
+# }
+
+if ($Options{'help'}) {
+  &show_usage();
+} elsif ($Options{'version'}) {
+  print "Rem2HTML Version $rem2html_version.\n";
+} else {
+  $successes = 0;
+  $today = &today();
+  $num = ($Options{'months'}) ? $Options{'months'} : 3;
+  # get the data from remind here.
+  $Options{'x'} && open STDIN, "$Options{'x'}  |" || die "<b>Unable to open todo file</b><br>";
+ if (-t STDIN) {
+     print STDERR "(Rem2HTML: Input should not come from a terminal.)\n";
+     &show_usage();
+ } else {
+    while(1) {  
+     last if (!parse_input());
+     $successes++;
+     &output_header();
+     &output_data();
+     &output_footer();
+    }
+  print STDERR "Rem2HTML: Couldn't find any calendar data.\n" if (!$successes);
+  unless ($Options{'tableonly'}) {
+    print <<EndOfHTML;
+ </body>
+</html>
+EndOfHTML
+  }
+}
+exit(0);
+
+sub show_usage {
+  print STDERR <<EndOfUsage;
+Rem2HTML: Produce a HTML calendar from the output of Remind.
+
+Usage: rem2html [options]
+
+Options:
+
+--help, -h          Print this information
+--version           Version information
+--dtd,-d file       Use this file as the DTD specification.
+-p file             Prepend the specified HTML file to the beginning of the
+                    HTML output
+-a file             Append the specified HTML file to the end of the output
+-f[shted] font      Set font for small cal, hdr, title, cal entries,day numbers
+-s[hted] size       Set size for header, title, calendar entries and/or day
+                    numbers
+--backurl url       Make the title on the previous month's small calendar entry
+                    a hyperlink to <url>
+--forwurl url       Same as --backurl, but with the next month's small calendar
+--tableonly         Output the results as a <TABLE> block only, no <HTML>, etc.
+--title name        Set HTML <title>
+--nomini            Omit the small calendar thumbnails for previous/next months.
+--months, -m num    Number of months for calendar to display.
+--print             Minor changes to facilitate a more printable page.
+--border,-b size    Set the border thickness of the table
+--cellspace,-t size Set the line thickness of the table
+--bgcolor,-g color  Set the background color for the day entries
+-x cmd              Run the specified remind command from within rem2html.
+
+EndOfUsage
+
+}
+
+sub escape_html {
+    my($in) = @_;
+    $in =~ s/\&/\&amp;/g;
+    $in =~ s/\</\&lt;/g;
+    $in =~ s/\>/\&gt;/g;
+    return $in;
+}
+
+sub parse_options {
+  %Options = ();
+  
+  GetOptions (\%Options, "help|h",
+                         "version",
+                         "border|b=i",
+                         "cellspace|t=i",
+                         "dtd|d=s",
+                         "backurl|bu:s", "forwurl|fu:s",
+                         "tableonly|to",
+                         "title|ti:s",
+                         "nomini|nm",
+                         "months|m:i",
+                         "prologue|p=s",
+                         "print",
+                        "append|a=s",
+                          "bgcolor|g=s",
+                          "x:s",
+                         "fs=s", "fh=s", "ft=s", "fe=s", "fd=s",
+                                 "sh=i", "st=i", "se=i", "sd=i",
+             );
+
+   $Options{'border'} = "border=" . ($Options{'border'} || 1);
+   $Options{'cellspace'} &&= "cellspacing=$Options{'cellspace'}";
+   $Options{'bgcolor'} &&= "bgcolor=$Options{'bgcolor'}";
+   $Options{'title'} = ($Options{'title'}) ? $Options{'title'} : "Calendar";
+}
+
+sub parse_input {
+  local $where = 0;
+  local $msg;
+  local $type;
+  local $day;
+  my $title;
+  @days = ();
+  @shades = ();
+  @moons = ();
+  while (<>) {
+    chomp($_);
+    if (/rem2(html|ps) begin/) {
+    } elsif (!$where) {
+      next;
+    } elsif ($where == 1) {
+#      local ($month, $year); # need this later.
+      ($month, $year, $month_length, $firstday, $mfirst) = split(" ");
+      $caption = "$month, $year";
+      for $i ( 1 .. $month_length) { push(@days, ""); }
+    } elsif ($where == 2) {
+      @DayNames = split(" ");
+    } elsif ($where == 3) {
+      @prevsc = split(" ");
+    } elsif ($where == 4) {
+      @nextsc = split(" ");
+    } else {
+      return 1 if /rem2(html|ps) end/;
+      next unless m/^(\d*).(\d*).(\d*)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*(.*)$/;
+      $type = $4;
+      $msg = $8;
+      $day = $3;
+      if ($type eq "HTML") {
+	  $days[$day] .= "$msg ";
+      } elsif ($type eq "MOON") {
+	  my($phase, $text);
+	  if ($msg =~ /^\s*(\d+)\s+\S+\s+\S+\s+(.*)$/) {
+	      $phase = $1;
+	      $text = $2;
+	  } elsif ($msg =~ /^\s*(\d+)/) {
+	      $phase = $1;
+	      $text = "";
+	  } else {
+	      next;
+	  }
+	  next if ($phase > 3);
+	  if ($phase == 0) {
+	      $text = "<image src=\"$DefaultImageDir/newmoon.png\" alt=\"New Moon\"" .
+		  "width=16 height=16> <font size=\"-2\">" . escape_html($text);
+	  } elsif ($phase == 1) {
+	      $text = "<image src=\"$DefaultImageDir/firstquarter.png\" alt=\"First Quarter\"" .
+		  "width=16 height=16> <font size=\"-2\">" . escape_html($text);
+	  } elsif ($phase == 2) {
+	      $text = "<span class=\"moon\" >Full </span><image src=\"$DefaultImageDir/fullmoon.png\" alt=\"Full Moon\"" .
+		  "width=16 height=16> <font size=\"-2\">\&nbsp;" . escape_html($text);
+	  } else {
+	      $text = "<image src=\"$DefaultImageDir/lastquarter.png\" alt=\"Last Quarter\"" .
+		  "width=16 height=16> <font size=\"-2\">" . escape_html($text);
+	  }
+	  $moons[$day] = $text . "</font> ";
+      } elsif ($type eq "SHADE") {
+	  my($red, $green, $blue);
+	  if ($msg =~ /^\s*(\d+)\s+(\d+)\s+(\d+)\s*$/) {
+	      $red = $1;
+	      $green = $2;
+	      $blue = $3;
+	  } elsif ($msg =~ /^\s*(\d+)\s*$/) {
+	      $red = $1;
+	      $green = $1;
+	      $blue = $1;
+	  } else {
+	      next;
+	  }
+	  next if ($red > 255 || $green > 255 || $blue > 255);
+       # shading done here
+	  $shades[$day] = sprintf(" class=\"shaded\" bgcolor=\"#%02X%02X%02X\"",
+				  $red, $green, $blue);
+      } elsif ($type eq "*") {
+       # this is the MSG from remind
+       $title = $msg if ( $msg =~ /DETAIL:/ );
+       $title =~ s/.*DETAIL: //;
+       $msg =~ s/DETAIL: .*//;
+       $title = "title=\"$title\"" if (length($title) > 0);
+	  $msg = &escape_html($msg);
+#	  $days[$day] .= "<p class=\"msg\"><a href='#' $title>$msg</a></p>";
+#	  $days[$day] .= "<p class=\"msg\"><span $title>$msg</span></p>";
+	  $days[$day] .= "<span class=\"msg\" $title>$msg</span><br/>";
+      }
+    }
+    $where++;
+  }
+  if ($where) {
+    return 1;
+  }
+  return 0;      
+}
+
+sub output_header {
+  local ($title, $dayheader);
+  my $width="100%";
+  my $class = ($Options{'print'}) ? 'class="printable"' : "";
+if ($successes eq 1) {
+   if (!$Options{'tableonly'}) {
+       if ($Options{'dtd'}) {
+           open(DTD, "< $Options{'dtd'}");
+           print while ( <DTD> );
+           close(DTD);
+       }
+     print <<EndOfHTML;
+<html>
+ <head><title>$Options{'title'}</title>
+ <meta http-equiv="refresh" content="1200">
+ <link rel="stylesheet" id="mainStyle" href="remind.css" type="text/css" />
+  <script language="javascript">
+  <!-- 
+   function hotbox_on(name) {
+    if (name == "nada") { 
+      return false;
+    }
+    oldcolor=document.getElementById(name).style.borderColor;
+    document.getElementById(name).style.borderColor="pink" ;
+    document.getElementById(name).style.borderWidth="3px" ;
+    return true;
+   }
+   function hotbox_off(name) {
+    if (name == "nada") { 
+      return false;
+    }
+    oldcolor="black";
+    document.getElementById(name).style.borderWidth="1px" ;
+    document.getElementById(name).style.borderColor=oldcolor ;
+    return true;
+   }
+   // END -->
+  </script>
+ </head><body $class $Options{'bgcolor'} >
+
+EndOfHTML
+  }
+
+  print <<EndOfHTML;
+<!-- 
+This output was produced by Rem2HTML $rem2html_version (written by
+Don Schwarz <darkowl\@mcs.net>, updated and modified by Hal Burgiss 
+<hal\@foobox.net>), and Remind (written by David F. Skoll).  
+-->
+
+EndOfHTML
+}
+
+if ($Options{'prologue'}) {
+    open(PROLOGUE, "< $Options{'prologue'}");
+    print while ( <PROLOGUE> );
+    close(PROLOGUE);
+  }
+
+  $caption = &format_font($caption, $Options{'ft'}, $Options{'st'} || "+1");
+
+  print <<EndOfHTML;
+<div class="calendar" id="$month$year">
+ <table class="caltable" $Options{'border'} $Options{'cellspace'} $Options{'bgcolor'} width=100%>
+ <caption><strong>$caption</strong></caption>
+ <tr>
+EndOfHTML
+
+  $mfirst || &print_day_header($DayNames[0]);
+  
+  for($i=1; $i<7; $i++) {
+    &print_day_header($DayNames[$i]);
+  }
+
+  $mfirst && &print_day_header($DayNames[0]);
+  print "</tr>\n";
+}
+
+sub output_footer {
+  print "</table></div><p></p>\n\n";
+
+  if ($Options{'append'}) {
+    open(EPILOGUE, "< $Options{'append'}");
+    print while ( <EPILOGUE> );
+    close(EPILOGUE);
+  }
+
+  }
+}
+
+sub output_data {
+  local ($endday, $prevday, $nextday, $week, $weekday);
+  local ($element, $day, $msg, $fday, $id, $cell);
+  $firstday -= $mfirst;
+  if ($firstday < 0) { $firstday += 7; }
+  $endday = $firstday + $month_length;
+  $endweek = $endday + (6 - ($endday % 7));
+  $endday %= 7;
+
+  if ( $firstday > 1 ) {
+    $prevday = 0;
+    $nextday = 1;
+  } elsif ($endday ? ($endday < 5) : !$firstday) {
+    $prevday = $endweek - 1;
+    $nextday = $endweek;
+  } else {
+    $prevday = 0;
+    $nextday = $endweek;
+  }
+
+  for $week ( 0..5 ) {
+    print " <tr>\n";
+    for $weekday ( 0..6 ) {
+      $element = ($week * 7) + ($weekday * 1);
+      $day = $element - $firstday + 1;
+      $cell = ($Options{'print'}) ? "print" :"cell";
+      $msg = $days[$day];
+      $id = $Options{'print'} ? "nada" : &fdate($day,$month,$year) ;
+      $id = "today" if ("$today" eq "$id");
+      $id = "nada" if ( "$id" ne "today" && (length($msg) eq 0) );
+      $msg = $msg ? &format_font($msg, $Options{'fe'}, $Options{'se'})
+                  : " <br> <br> <br> <br>";
+      $fday = &format_font($day, $Options{'fd'}, $Options{'sd'} || -1);
+      if ($day > 0 && $day <= $month_length) {
+        # day numeral is here.
+        print <<EndOfHTML;
+  <td class="$cell" id="$id" onmousedown='hotbox_on("$id");' onmouseup='hotbox_off("$id");' height="120"  valign=top width=$def_width $shades[$day]>
+  <div class="innercell">
+   <div class="numeral">$moons[$day]$fday</div>
+  </div><p></p>
+  <div class="bottomcell">
+   $msg
+  </div></td>
+EndOfHTML
+
+      } elsif ($element == $prevday) {
+        &small_calendar(@prevsc, 1, $Options{'backurl'});
+      } elsif ($element == $nextday) {
+        &small_calendar(@nextsc, 2, $Options{'forwurl'});
+      } else {
+        print "  <td width=$def_width><BR></TD>";
+      }
+    }
+    print " </tr>\n";
+    last if $day >= $month_length && $element >= $nextday;
+  }
+}
+
+sub small_calendar {
+  local ($scname, $scn, $which, $url) = @_;
+  local ($scstart, $l, $week, $weekday, $tday);
+  $scname = "<a href=\"$url\">$scname</a>", if $url;
+  $scname = &format_font($scname, $Options{'fs'}, -2);
+  
+  if ($which == 1) {
+    $scstart = $firstday - ($scn % 7);
+    if ($scstart < 0) { $scstart += 7; }
+  } else {
+    $scstart = $firstday + ($month_length % 7);
+    if ($scstart > 6) { $scstart -= 7; }
+  }
+
+
+if ($Options{'nomini'})  {
+# Skip the 'small cal' stuff HB
+  print "<td width=$def_width valign=TOP>
+<table width=100%>
+ <tr><td></td></tr>
+</table>
+  </td>";
+ return 1;
+}
+
+  print <<EndOfHTML;
+  <td width=$def_width valign=top>
+<table width=100%>
+ <caption><strong>$scname</strong></caption>
+ <tr>
+EndOfHTML
+
+  $mfirst || &print_day_header(substr($DayNames[0], 0, 1), 1);
+  
+  for ($i=1; $i<7; $i++) {
+    &print_day_header(substr($DayNames[$i], 0, 1), 1);
+  }
+
+  $mfirst && &print_day_header(substr($DayNames[0], 0, 1), 1);
+
+  print "</tr>\n";
+
+  for $week ( 0..5 ) {
+    print " <tr>\n";
+    for $weekday ( 0..6 ) {
+      $tday = ($week * 7) + ($weekday * 1) - $scstart + 1;
+      $tday = "", if $tday <= 0 || $tday > $scn;
+      print "  <td width=$def_width><font size=-2>$tday</font></td>\n";
+    }
+    print " </tr>\n";
+    last if $tday >= $scn;
+  }
+
+  print <<EndOfHTML;
+</table>
+  </td>
+EndOfHTML
+
+}
+
+sub format_font {
+  local ($text, $font, $size) = @_;
+
+  if (!$text) {
+    return "";
+  } elsif ($font && $size) {
+    return "<font face=$font size=$size>$text</font>";
+  } elsif ($font) {
+    return "<font face=$font>$text</font>";
+  } elsif ($size) {
+    return "<font size=$size>$text</font>";
+  } else {
+    return $text;
+  }
+}
+
+sub print_day_header {
+  local ($dheader, $small) = @_;
+
+  if ($small) {
+    $dheader = &format_font($dheader, $Options{'fs'}, -2);
+  } else {
+    $dheader = &format_font($dheader, $Options{'fh'}, $Options{'sh'});
+  }
+
+  print "  <th width=$def_width>$dheader</th>\n";
+}
+
+sub fdate($day,$month,$year) {
+my $fday=$day;
+my $fmon;
+
+if ($day < 10 ) {
+ $fday = "0$fday";
+}
+
+if ($month eq "January") {
+ $fmon="01";
+ } elsif ( $month eq "February" ) {
+ $fmon="02";
+ } elsif ( $month eq "March" ) {
+ $fmon="03";
+ } elsif ( $month eq "April" ) {
+ $fmon="04";
+ } elsif ( $month eq "May" ) {
+ $fmon="05";
+ } elsif ( $month eq "June" ) {
+ $fmon="06";
+ } elsif ( $month eq "July" ) {
+ $fmon="07";
+ } elsif ( $month eq "August" ) {
+ $fmon="08";
+ } elsif ( $month eq "September" ) {
+ $fmon="09";
+ } elsif ( $month eq "October" ) {
+ $fmon="10";
+ } elsif ( $month eq "November" ) {
+ $fmon="11";
+ } elsif ( $month eq "December" ) {
+ $fmon="12";
+}
+
+ return ("$fday$fmon$year");
+
+}
+
+sub today() {
+my($s,$t,$a,$mday,$mon,$year) = localtime(time);
+$year+=1900;
+$mon++;
+
+if ( $mday < 10 ) { 
+ $mday = "0$mday";
+}
+
+if ( $mon < 10 ) { 
+ $mon = "0$mon";
+}
+
+return "$mday$mon$year";
+
+}

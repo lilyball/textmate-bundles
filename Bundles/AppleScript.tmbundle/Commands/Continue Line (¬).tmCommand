@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/bin/bash
+
+if head -n$((TM_LINE_NUMBER-1)) | tail -n1 | grep -sq '¬$'
+  then echo -en '¬\n'
+  else echo -en '¬\n\t'
+fi
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Continue Line (¬)</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.applescript</string>
+	<key>uuid</key>
+	<string>9755F5E9-3919-4E82-AAAD-9ECB64FD718A</string>
+</dict>
+</plist>

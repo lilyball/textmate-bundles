@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>content () {
+	perl -pe 's/["\\]/\\$&amp;/g'
+}
+
+osascript &lt;&lt;-APPLESCRIPT
+	tell application "Context Free" to activate
+	menu_click({"Context Free", "File", "New"})
+	tell app "System Events"
+		set value of ((process "Context Free")'s (window 1)'s (splitter group 1)'s (group 1)'s (scroll area 1)'s (text area 1)) to "$(content)"
+	end tell
+	menu_click({"Context Free", "Render", "Render"})
+
+
+	-- Helper functions
+	on menu_click(mList)
+		local appName, topMenu, r
+		if mList's length &lt; 3 then error "Menu list is not long enough"
+		set {appName, topMenu} to (items 1 through 2 of mList)
+		set r to (items 3 through (mList's length) of mList)
+		tell app "System Events" to my menu_click_recurse(r, ((process appName)'s (menu bar 1)'s (menu bar item topMenu)'s (menu topMenu)))
+	end menu_click
+	on menu_click_recurse(mList, parentObject)
+		local f, r
+		set f to item 1 of mList
+		if mList's length &gt; 1 then set r to (items 2 through (mList's length) of mList)
+		tell app "System Events"
+			if mList's length is 1 then
+				click parentObject's menu item f
+			else
+				my menu_click_recurse(r, (parentObject's (menu item f)'s (menu f)))
+			end if
+		end tell
+	end menu_click_recurse
+
+APPLESCRIPT</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Render in Context Free</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.context-free</string>
+	<key>uuid</key>
+	<string>4A4BCD2A-C90D-4F5B-90A5-3C1B4208FBD6</string>
+</dict>
+</plist>

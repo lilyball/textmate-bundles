@@ -74,7 +74,13 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^\s*(on)\s+(\w+)(\()(?:(\w+(?:,(?:\w+))*))?(\))</string>
+					<string>^(?x)
+						\s*(to|on)\s+ 					# "on" or "to"
+						(\w+)							# function name
+						(\()							# opening paren
+							(?:(\w+(?:\s*,\s*\w+)*))?	# parameters
+						(\))							# closing paren
+					</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -103,10 +109,15 @@
 							<string>punctuation.definition.parameters.applescript</string>
 						</dict>
 					</dict>
+					<key>comment</key>
+					<string>
+						This is not a very well-designed rule.  For now,
+						we can leave it like this though, as it sorta works.
+					</string>
 					<key>end</key>
 					<string>^\s*(end)(?: (\2))?\s*$</string>
 					<key>name</key>
-					<string>meta.handler.with-parentheses.applescript</string>
+					<string>meta.function.with-parentheses.applescript</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -134,7 +145,7 @@
 					<key>end</key>
 					<string>^\s*(end)(?: (\2))?\s*$</string>
 					<key>name</key>
-					<string>meta.handler.prepositional.applescript</string>
+					<string>meta.function.prepositional.applescript</string>
 					<key>patterns</key>
 					<array>
 						<dict>

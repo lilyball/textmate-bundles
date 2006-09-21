@@ -25,7 +25,7 @@ end menu_click
 
 on menu_click_recurse(mList, parentObject)
 	
-	-- `f` = first item, `r` = rest of items
+	-- \`f\` = first item, \`r\` = rest of items
 	set f to item 1 of mList
 	if mList's length &gt; 1 then set r to (items 2 through (mList's length) of mList)
 	

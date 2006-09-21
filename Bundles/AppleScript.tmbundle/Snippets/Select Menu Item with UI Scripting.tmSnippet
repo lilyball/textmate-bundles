@@ -5,17 +5,18 @@
 	<key>content</key>
 	<string>-- \`menu_click\`, by Jacob Rus, September 2006
 -- 
--- Accepts a list of form: `{"Finder", "View", "Arrange By", "Date"}`
+-- Accepts a list of form: \`{"Finder", "View", "Arrange By", "Date"}\`
 -- Execute the specified menu item.  In this case, assuming the Finder 
 -- is the active application, arranging the frontmost folder by date.
 
 on menu_click(mList)
+	local appName, topMenu, r
+	
 	-- Validate our input
 	if mList's length &lt; 3 then error "Menu list is not long enough"
 	
 	-- Set these variables for clarity and brevity later on
-	set appName to item 1 of mList
-	set topMenu to item 2 of mList
+	set {appName, topMenu} to (items 1 through 2 of mList)
 	set r to (items 3 through (mList's length) of mList)
 	
 	-- This overly-long line calls the menu_recurse function with
@@ -24,6 +25,7 @@ on menu_click(mList)
 end menu_click
 
 on menu_click_recurse(mList, parentObject)
+	local f, r
 	
 	-- \`f\` = first item, \`r\` = rest of items
 	set f to item 1 of mList

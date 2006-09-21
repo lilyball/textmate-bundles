@@ -76,7 +76,7 @@
 					<key>begin</key>
 					<string>^(?x)
 						\s*(to|on)\s+ 					# "on" or "to"
-						(\w+)							# function name
+						([A-Za-z][A-Za-z0-9_]*)			# function name
 						(\()							# opening paren
 							(?:(\w+(?:\s*,\s*\w+)*))?	# parameters
 						(\))							# closing paren
@@ -225,7 +225,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(on error|try|to|on|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|end|my|where|whose|considering|ignoring|global|local|exit|continue|set|copy|put)\b</string>
+					<string>\b(on error|try|to|on|tell|if|then|else if|else|repeat( (while|until|with))?|using terms from|from|through|thru|with timeout|times|end (tell|repeat|if|timeout|using terms from|error|try)|end|my|where|whose|considering|ignoring|global|local|exit|continue|returning|set|copy|put)\b</string>
 					<key>name</key>
 					<string>keyword.control.applescript</string>
 				</dict>

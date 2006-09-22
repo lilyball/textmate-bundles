@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoScrollOutput</key>
+	<true/>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Compile “${TM_FILENAME}”" "Context Free"
+
+SIZE=400
+RES="/tmp/tm_cfdg_${TM_FILENAME%.*}.png"
+
+cfdg -s $SIZE "$TM_FILEPATH" "$RES"|pre
+
+if [[ -e "$RES" ]]; then
+  echo "&lt;img src='tm-file://${RES// /%20}' width='$SIZE' height='$SIZE'&gt;"
+  { sleep 20; rm -f "$RES"; } &amp;&gt;/dev/null &amp;
+fi
+
+html_footer
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Render</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.context-free</string>
+	<key>uuid</key>
+	<string>919889A9-590B-45CD-AEA2-CFC3452B16C7</string>
+</dict>
+</plist>

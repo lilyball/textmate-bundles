@@ -7,7 +7,7 @@
    # if the clipboard contains a single line, let’s use that
    export __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100
    if [[ $(pbpaste|wc -l) -eq 0 ]]
-      then pbpaste|sed 's/&amp;/&amp;amp;/g'
+      then pbpaste|perl -pe 's/&amp;(?!([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);)/&amp;amp;/g'
       else echo http://site.com/
    fi
 `}"&gt;${TM_SELECTED_TEXT:Link text...}&lt;/a&gt;</string>

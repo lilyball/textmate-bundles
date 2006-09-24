@@ -13,8 +13,8 @@ if [[ -z $TM_SELECTED_TEXT ]]
 fi
 # Searches for bibliography items in bib files and also things linked to from all included files.
 if [[ -z $phrase ]]
-	then res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb $TM_LATEX_BIB $TM_LATEX_MASTER $TM_FILENAME`
-	else res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb -p=$phrase $TM_LATEX_BIB $TM_LATEX_MASTER $TM_FILENAME`
+	then res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb "$TM_LATEX_BIB" "$TM_LATEX_MASTER" "$TM_FILENAME"`
+	else res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb -p=$phrase "$TM_LATEX_BIB" "$TM_LATEX_MASTER" "$TM_FILENAME"`
 fi
 if [[ $? != 0 ]]
  then exit

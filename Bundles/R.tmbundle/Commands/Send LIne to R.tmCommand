@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>echo
 test=`tail -c+2`
-osascript &lt;&lt;-APPLESCRIPT | tail -n +2
+osascript &lt;&lt;-APPLESCRIPT | tail -n +2 | perl -pe 'BEGIN {$/=undef} s/\n\z//'
 tell application "System Events"
     -- Get a reference to the text field
     set text_area to (process "R")'s (window "R Console")'s (scroll area 1)'s text area 1
@@ -18,7 +18,7 @@ tell application "System Events"
     set newtext to text_area's value
 
     -- Find the difference between old and new
-    text from (oldtext's length + 1) to -2 of newtext
+    text from (oldtext's length + 1) to -1 of newtext
 end tell
 APPLESCRIPT</string>
 	<key>fallbackInput</key>

@@ -1,5 +1,7 @@
 #!/bin/sh
-. "$TM_SUPPORT_PATH/lib/bash_init.sh"
+# It doesn't seem that sourcing bash_init was necessary, so I commented it out.
+# . "$TM_SUPPORT_PATH/lib/bash_init.sh"
+cd "${TM_DIRECTORY:-$HOME}"
 if [[ -z $TM_SELECTED_TEXT ]]
    then 
 # If the cursor is inside empty braces {}, then offer
@@ -7,14 +9,14 @@ if [[ -z $TM_SELECTED_TEXT ]]
 # the variable $phrase is not being set.
 	prev_ch=${TM_CURRENT_LINE:$TM_LINE_INDEX-1:1}
 	if [[ $prev_ch != '{' ]]
-		then phrase=$TM_CURRENT_WORD
+		then phrase="$TM_CURRENT_WORD"
 	fi
-   else phrase=$TM_SELECTED_TEXT
+   else phrase="$TM_SELECTED_TEXT"
 fi
 # Searches for bibliography items in bib files and also things linked to from all included files.
 if [[ -z $phrase ]]
-	then res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb "$TM_LATEX_BIB" "$TM_LATEX_MASTER" "$TM_FILENAME"`
-	else res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb -p=$phrase "$TM_LATEX_BIB" "$TM_LATEX_MASTER" "$TM_FILENAME"`
+	then res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb "$TM_LATEX_BIB" "$TM_LATEX_MASTER" "$TM_FILEPATH"`
+	else res=`"$TM_SUPPORT_PATH/bin"/LatexCitekeys.rb -p=$phrase "$TM_LATEX_BIB" "$TM_LATEX_MASTER" "$TM_FILEPATH"`
 fi
 if [[ $? != 0 ]]
  then exit

@@ -14,7 +14,7 @@ tell application "System Events"
     
     -- Get text before and after our command
     set oldtext to text_area's value
-    tell application "R" to cmd "${test//\"/\\\"}" 
+    tell application "R" to cmd "${test//\"/\"}" 
     set newtext to text_area's value
 
     -- Find the difference between old and new

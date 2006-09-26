@@ -35,7 +35,6 @@
 	args = [args subarrayWithRange:NSMakeRange(1, argc)];
 
 	// Populate our NSArrayController with the command line arguments
-	[fFilesController objectDidBeginEditing:nil];
 	for( i = 0; i < argc; i += 1 )
 	{
 		NSString *				argument	= [args objectAtIndex:i];

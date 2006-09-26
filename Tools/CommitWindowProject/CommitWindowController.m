@@ -83,9 +83,6 @@
 		[fStatusColumn setWidth:maxCharsToDisplay * kStatusColumnWidthForSingleChar];
 	}
 	
-	[fFilesController objectDidEndEditing:nil];
-
-	
 	//
 	// Populate previous summary menu
 	//

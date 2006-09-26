@@ -5,10 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#! /usr/bin/ruby
+	<string>#!/usr/bin/ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/dialog.rb"
+require 'pp'
 text = STDIN.read
 file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{text}.tex -print`.chomp
 if file.empty?
@@ -20,7 +21,8 @@ if file.empty?
   resources.each do |filename|
     data = File.read(filename)
 	  data.split("\n\n").each do |part|
-	    if part =~ /#{text.gsub(".","\\.")}/ then
+	    if part =~ /Aliases:(?: [\w.]+)* #{text.gsub(".","\\.")}/ then
+        pp part
         matchfile = part.sub(/.*Entry: ([\w.]+).*/m,'\1')
         files &lt;&lt; `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{matchfile}.tex -print`.chomp
       end
@@ -66,7 +68,7 @@ print result
 	<key>name</key>
 	<string>Insert Command Template</string>
 	<key>output</key>
-	<string>insertAsSnippet</string>
+	<string>afterSelectedText</string>
 	<key>scope</key>
 	<string>source.r</string>
 	<key>uuid</key>

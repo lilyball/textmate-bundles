@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/ruby
+require ENV['TM_BUNDLE_SUPPORT'] + "/lib/historyList.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/dialog.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
+doc = STDIN.read
+list = HistoryList.list(doc)
+choice = Dialog.request_item :title =&gt; "History List", :prompt =&gt; "Select line to insert", :items =&gt; list
+exit_discard if choice.nil?
+print doc.sub(/&gt; .*\z/,"&gt; "+choice)</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~h</string>
+	<key>name</key>
+	<string>Show History List</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>source.r-console</string>
+	<key>uuid</key>
+	<string>613CDD87-1F8B-484E-B741-74B95F3C878B</string>
+</dict>
+</plist>

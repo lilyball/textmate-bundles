@@ -9,11 +9,11 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>^(.*\*/)?\s*\}([^}{"']*\{)?[;\s]*$</string>
+		<string>^(.*\*/)?\s*\}([^}{"']*\{)?[;\s]*$|^\s*(public|private|protected):\s*$</string>
 		<key>increaseIndentPattern</key>
-		<string>^.*\{[^}"']*$</string>
+		<string>^.*\{[^}"']*$|^\s*(public|private|protected):\s*$</string>
 		<key>indentNextLinePattern</key>
-		<string>^(?!.*;\s*(//|/\*.*\*/\s*$)).*[^\s;{}]\s*$</string>
+		<string>^(?!.*[;:]\s*(//|/\*.*\*/\s*$)).*[^\s;:{}]\s*$</string>
 		<key>unIndentedLinePattern</key>
 		<string>^\s*((/\*|\*/|//|#|template\b.*?&gt;(?!\(.*\))|@protocol|@interface|@implementation|@end).*)?$</string>
 	</dict>

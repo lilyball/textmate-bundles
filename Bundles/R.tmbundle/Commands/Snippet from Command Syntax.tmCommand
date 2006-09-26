@@ -22,7 +22,6 @@ if file.empty?
     data = File.read(filename)
 	  data.split("\n\n").each do |part|
 	    if part =~ /Aliases:(?: [\w.]+)* #{text.gsub(".","\\.")}/ then
-        pp part
         matchfile = part.sub(/.*Entry: ([\w.]+).*/m,'\1')
         files &lt;&lt; `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{matchfile}.tex -print`.chomp
       end
@@ -35,9 +34,11 @@ end
 results = []
 files.each do |file|
   tex = File.read(file)
-  results &lt;&lt; tex.scan(/\\begin\{verbatim\}\n(.*)\\end\{verbatim\}/m)[0][0].split("\n\n").map{|line| line.gsub(/\n|(  )/,"")}
+  terms = tex.scan(/\\begin\{verbatim\}\n(.*)\\end\{verbatim\}/m)[0][0].split(/\n+(?=[\w.]+\()/)
+  results &lt;&lt; terms.map{|line| line.gsub(/\n|(  )/,"")}
 end
-results.flatten!
+results.flatten!.uniq!
+results = results.delete_if {|i| (i =~ /^#{text.gsub(".","\\.")}/).nil?}
 if results.length==1 then
   line=results[0]
 else

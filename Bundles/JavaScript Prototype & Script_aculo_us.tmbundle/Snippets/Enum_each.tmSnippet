@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>each(function(${3:this_one}${4:,i}){$0}${5:.bind(this)});</string>
+	<string>each(function(${1:value}) {
+	$0
+});</string>
 	<key>name</key>
 	<string>Enum.each</string>
 	<key>scope</key>

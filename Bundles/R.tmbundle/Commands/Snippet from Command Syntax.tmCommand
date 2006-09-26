@@ -10,22 +10,32 @@ require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/dialog.rb"
 text = STDIN.read
-# text="read.csv"
-file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{text}.tex -print`
+file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{text}.tex -print`.chomp
 if file.empty?
-  matches = `grep -r --include CONTENTS ' #{text.gsub(".", "\\.")} ' /Library/Frameworks/R.framework/Versions/Current/Resources/library/*`
-  matches.split("\n").each do |line|
-		if line.include? "Alias"
-			alias_text = line.split(/\s+/).slice(1)
-			file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{alias_text}.tex -print`
+  resources = `grep -r --include CONTENTS #{text.gsub(".","\\.")} /Library/Frameworks/R.framework/Versions/Current/Resources/library/*`
+  resources=resources.split("\n").grep(/Aliases/).map do |match|
+    match.gsub(/CONTENTS.*/,"CONTENTS")
+  end.uniq
+  files = []
+  resources.each do |filename|
+    data = File.read(filename)
+	  data.split("\n\n").each do |part|
+	    if part =~ /#{text.gsub(".","\\.")}/ then
+        matchfile = part.sub(/.*Entry: ([\w.]+).*/m,'\1')
+        files &lt;&lt; `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{matchfile}.tex -print`.chomp
+      end
 		end
 	end
+	TextMate.exit_discard if files.empty?
+else
+  files = [file]
 end
-file=file.chomp
-TextMate.exit_discard if file.empty?
-dir = File.dirname(file)
-tex = File.read(file)
-results = tex.scan(/\\begin\{verbatim\}\n(.*)\\end\{verbatim\}/m)[0][0].split("\n\n").map{|line| line.gsub(/\n|(  )/,"")}
+results = []
+files.each do |file|
+  tex = File.read(file)
+  results &lt;&lt; tex.scan(/\\begin\{verbatim\}\n(.*)\\end\{verbatim\}/m)[0][0].split("\n\n").map{|line| line.gsub(/\n|(  )/,"")}
+end
+results.flatten!
 if results.length==1 then
   line=results[0]
 else

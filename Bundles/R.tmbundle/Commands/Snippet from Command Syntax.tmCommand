@@ -27,7 +27,7 @@ dir = File.dirname(file)
 tex = File.read(file)
 results = tex.scan(/\\begin\{verbatim\}\n(.*)\\end\{verbatim\}/m)[0][0].split("\n\n").map{|line| line.gsub(/\n|(  )/,"")}
 if results.length==1 then
-  line=results
+  line=results[0]
 else
   line = Dialog.request_item :title =&gt; "Snippet for Command", :prompt =&gt; "There were more than one matching commands found", :items =&gt; results
   TextMate.exit_discard if line.nil?

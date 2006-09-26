@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>var ${1:ClassName}=Class.create();
-${1:ClassName}.prototype={
-  initialize:function(){
+	<string>var ${1:ClassName} = Class.create();
+${1:ClassName}.prototype = {
+  initialize : function(){
     $0${10:${TM_SELECTED_TEXT:/*initialize*/}}
   }${2:, /*Other methods?*/}
 };

@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>setTimeout((function() {$0})${2:.bind(this)}, ${1:10});</string>
+	<string>(function(${1:value}) {
+	${2:$1}$0
+});</string>
+	<key>keyEquivalent</key>
+	<string>^@(</string>
 	<key>name</key>
-	<string>setTimeout function</string>
+	<string>(function()...})</string>
 	<key>scope</key>
 	<string>source.js.prototype</string>
-	<key>tabTrigger</key>
-	<string>timeout</string>
 	<key>uuid</key>
-	<string>D4BB5E49-42B4-40A7-B21C-4D4A48BF9E97</string>
+	<string>5F877B41-21B1-4466-9BE4-77D946C01897</string>
 </dict>
 </plist>

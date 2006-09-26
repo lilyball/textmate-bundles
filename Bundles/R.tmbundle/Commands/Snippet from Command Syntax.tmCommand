@@ -8,6 +8,7 @@
 	<string>#! /usr/bin/ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/dialog.rb"
 text = STDIN.read
 # text="read.csv"
 file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{text}.tex -print`
@@ -24,31 +25,27 @@ file=file.chomp
 TextMate.exit_discard if file.empty?
 dir = File.dirname(file)
 tex = File.read(file)
-results = tex.scan(/\\begin\{verbatim\}\n(.*)\\end\{verbatim\}/m)[0][0].split("\n\n")
-require 'pp'
-results.grep(/^#{text.gsub(".","\.")}\((.*)\)/m) do |line|
-  line=line.gsub(/\n|(  )/,"")
-  result = ""
-  m=line.scan(/(#{text.gsub(".","\.")}\()|(\s*[\w.]+\s*(?=,))|((\s*[\w.]+\s*=\s*)((?:\"((?:[^"]|(?:\\\\\\\"))*)\"(?=,))|[^,"]*(?=,)))|(\)\s*)$/)
- # pp m
-  index = 0
-  while !m.empty? do
-    item = m.shift
-    case
-    when !item[0].nil?  # Case of the starting part
-      result &lt;&lt; e_sn(item[0])
-    when !item[1].nil?  # Case of a parameter of the form "name" ( or ...)
-      result &lt;&lt; "${#{index+=1}:${#{index+=1}:#{e_sn(item[1])}}#{m.length&gt;1?",":""}}"
-    when item[2].nil?   # Case of the last parenthesis
-      result &lt;&lt; item[6]
-    when item[5].nil?   # Case of "name = item"
-      result &lt;&lt; "${#{index+=1}:#{e_sn(item[3])}${#{index+=1}:#{e_sn(item[4])}}#{m.length&gt;1?",":""}}"
-    else  # Case of "name = \"item\""
-      result &lt;&lt; "${#{index+=1}:#{e_sn(item[3])}\"${#{index+=1}:#{e_sn(item[5])}}\"#{m.length&gt;1?",":""}}"
-    end
-  end
-  print result
+results = tex.scan(/\\begin\{verbatim\}\n(.*)\\end\{verbatim\}/m)[0][0].split("\n\n").map{|line| line.gsub(/\n|(  )/,"")}
+if results.length==1 then
+  line=results
+else
+  line = Dialog.request_item :title =&gt; "Snippet for Command", :prompt =&gt; "There were more than one matching commands found", :items =&gt; results
+  TextMate.exit_discard if line.nil?
 end
+line = line.sub(/.*?(?=[\w.]+\()/, "")
+snippet_counter = 0
+result = line.gsub(/[(,]\s*[\w.]+\s*(?:=\s*(?:"((?:\\\\|\\[^\\]|[^"\\]+)*)"|([^\s,]+))\s*)?/) do |match|
+  snippet = match[0] == ?( ? "(${#{snippet_counter += 1}:#{e_sn(match[1..-1])}}" :
+                             "${#{snippet_counter += 1}:#{e_sn(match)}}"
+  value = $1 || $2
+  if value &amp;&amp; ( snippet =~ /^([^"]+").+("\s*\})$/ ||
+                snippet =~ /^([^=]+=\s*).+?(\s*\})$/ )
+    $1 + "${#{snippet_counter += 1}#{':' if value != ''}#{e_sn(value)}}" + $2
+  else
+    snippet
+  end
+end
+print result
 </string>
 	<key>fallbackInput</key>
 	<string>word</string>

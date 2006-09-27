@@ -55,7 +55,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.variable.setline.remind</string>
+					<string>variable.other.setline.remind</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -134,7 +134,7 @@
 					<key>match</key>
 					<string>\b\w+\b</string>
 					<key>name</key>
-					<string>entity.name.variable.unsetline.remind</string>
+					<string>variable.other.unsetline.remind</string>
 				</dict>
 			</array>
 		</dict>
@@ -393,13 +393,13 @@
 					<key>match</key>
 					<string>'\d{4}([\-/])\d{1,2}\1\d{1,2}'</string>
 					<key>name</key>
-					<string>string.quoted.date.remind</string>
+					<string>constant.other.date.remind</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\d{1,2}[:.]\d{2}</string>
 					<key>name</key>
-					<string>entity.other.time.remind</string>
+					<string>constant.other.time.remind</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -438,13 +438,13 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b\w+\(</string>
+					<string>\b(\w+)\(</string>
 					<key>captures</key>
 					<dict>
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>entity.function.user.remind</string>
+							<string>entity.name.function.remind</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -505,7 +505,7 @@
 					<key>match</key>
 					<string>%[a-zA-Z0-9_!@#]</string>
 					<key>name</key>
-					<string>constant.escape.substitution.language.remind</string>
+					<string>constant.other.placeholder.remind</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -531,12 +531,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.attime.trigger.remind</string>
+							<string>keyword.other.attime.trigger.remind</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.time.trigger.remind</string>
+							<string>constant.other.time.trigger.remind</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -546,7 +546,7 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>variable.comp.trigger.remind</string>
+							<string>variable.other.comp.trigger.remind</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -560,12 +560,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.duration.trigger.remind</string>
+							<string>keyword.other.duration.trigger.remind</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.time.trigger.remind</string>
+							<string>constant.other.time.trigger.remind</string>
 						</dict>
 					</dict>
 					<key>match</key>

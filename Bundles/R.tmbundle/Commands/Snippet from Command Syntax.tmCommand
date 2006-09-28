@@ -47,7 +47,7 @@ else
 end
 line = line.sub(/.*?(?=[\w.]+\()/, "")
 snippet_counter = 0
-result = line.gsub(/[(,]\s*[\w.]+\s*(?:=\s*(?:"((?:\\\\|\\[^\\]|[^"\\]+)*)"|([^\s,)]+))\s*)?/) do |match|
+result = line[0..-2].gsub(/[(,]\s*[\w.]+\s*(?:=\s*(?:"((?:\\\\|\\[^\\]|[^"\\]+)*)"|([^\s,]+))\s*)?/) do |match|
   snippet = match[0] == ?( ? "(${#{snippet_counter += 1}:#{e_sn(match[1..-1])}}" :
                              "${#{snippet_counter += 1}:#{e_sn(match)}}"
   value = $1 || $2
@@ -57,19 +57,7 @@ result = line.gsub(/[(,]\s*[\w.]+\s*(?:=\s*(?:"((?:\\\\|\\[^\\]|[^"\\]+)*)"|([^\
   else
     snippet
   end
-end
-# snippet_counter = 0
-# result = line.gsub(/[(,]\s*[\w.]+\s*(?:=\s*(?:"((?:\\\\|\\[^\\]|[^"\\]+)*)"|([^\s,]+))\s*)?/) do |match|
-#   snippet = match[0] == ?( ? "(${#{snippet_counter += 1}:#{e_sn(match[1..-1])}}" :
-#                              "${#{snippet_counter += 1}:#{e_sn(match)}}"
-#   value = $1 || $2
-#   if value &amp;&amp; ( snippet =~ /^([^"]+").+("\s*\})$/ ||
-#                 snippet =~ /^([^=]+=\s*).+?(\s*\})$/ )
-#     $1 + "${#{snippet_counter += 1}#{':' if value != ''}#{e_sn(value)}}" + $2
-#   else
-#     snippet
-#   end
-# end
+end + ")"
 print result
 </string>
 	<key>fallbackInput</key>

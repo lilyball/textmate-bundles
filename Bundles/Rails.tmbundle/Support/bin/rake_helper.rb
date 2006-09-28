@@ -1,5 +1,25 @@
+#!/usr/bin/env ruby
+
+# Copyright:
+#   (c) 2006 InquiryLabs, Inc.
+#   Visit us at http://inquirylabs.com/
+# Author: Duane Johnson (duane.johnson@gmail.com)
+# Description:
+#   Runs 'rake' and executes a particular task
+
+require 'rails_bundle_tools'
+
 Dir.chdir ENV['TM_PROJECT_DIRECTORY']
-command = "rake #{ARGV.shift}"
+task = ARGV.shift
+optional_question = ARGV.shift
+optional_prefix = ARGV.shift
+
+if optional_question
+  optional_answer = TextMate.input(optional_question, "", :title => "Rake")
+end
+
+command = "rake #{task}"
+command += " #{optional_prefix}=#{optional_answer}" if optional_answer
 output = `#{command}`
 
 styles = ["table {padding-left: 2em;}", "td {padding-right: 1.5em;}", ".time {color: #f99; font-weight: bold}"]
@@ -27,6 +47,8 @@ output.each_line do |line|
     when /^\s+->(.+)$/
       # Show execution time inside table cell
       line = "<td class=\"time\">#{$1}</td></tr>\n"
+    else
+      line += "<br/>"
   end
   report << line
 end

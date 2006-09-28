@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>pro</string>
+	</array>
+	<key>keyEquivalent</key>
+	<string>^~Q</string>
+	<key>name</key>
+	<string>qmake Project</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>\b(CONFIG|DEF(INES|_FILE)|DEPENDPATH|DESTDIR(_TARGET)?|DISTFILES|DLLDESTDIR|DSP_TEMPLATE|FORMS3?|HEADERS|INCLUDEPATH|INSTALLS|(LEX|YACC)(IMPLS|OBJECTS|SOURCES)|LIBS|LITERAL_HASH|MAKEFILE(_GENERATOR)?|MOC_DIR|OBJECTS(_DIR)?|OBJMOC|POST_TARGETDEPS|PRECOMPILED_HEADER|PRE_TARGETDEPS|QT|QMAKE(SPEC|_(APP_(FLAG|OR_DLL)|AR_CMD|BUNDLE_DATA|(CFLAGS|CXXFLAGS)_(DEBUG|MT(_DBG|_DLL(DBG)?)?|RELEASE|SHLIB|THREAD|WARN_(OFF|ON))|CLEAN|EXTENSION_SHLIB|EXT_(CPP|H|LEX|MOC|OBJ|PRL|UI|YACC)|FAILED_REQUIREMENTS|FILETAGS|FRAMEWORK_VERSION|INCDIR(_OPENGL|_QT|_THREAD|_X11)?|LFLAGS_(CONSOLE(_DLL)?|DEBUG|PLUGIN|QT_DLL|RELEASE|SHAPP|SHLIB|SONAME|THREAD|WINDOWS(_DLL)?)|LIBDIR(_(FLAGS|OPENGL|QT|X11))?|LIBS(_(CONSOLE|OPENGL(_QT)?|QT(_DLL|_OPENGL|_THREAD)?|RT(MT)?|THREAD|WINDOWS|X11(SM)?))?|LIB_FLAG|LINK_SHLIB_CMD|LN_SHLIB|MAKEFILE|MOC_SRC|(POST|PRE)_LINK|QMAKE|QT_DLL|RUN_((CC|CXX)(_IMP)?)|TARGET|UIC))?|QTPLUGIN|RCC_DIR|REQUIRES|(RES|RC)_FILE|SOURCES|SRCMOC|SUBDIRS|TARGET(_(EXT|x(\.y\.z)?))?|TEMPLATE|TRANSLATIONS|UI(CIMPLS|COBJECTS|_(DIR|HEADERS_DIR|SOURCES_DIR))|VERSION|VER_(MAJ|MIN|PAT)|VPATH)\b</string>
+			<key>name</key>
+			<string>variable.language.qmake</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>#.*$\n?</string>
+			<key>name</key>
+			<string>comment.line.number-sign.qmake</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.qmake</string>
+	<key>uuid</key>
+	<string>7A6E6815-628D-402C-BE81-1B7FB00B4685</string>
+</dict>
+</plist>

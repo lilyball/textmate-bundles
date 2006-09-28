@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>cpp</string>
+		<string>h</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>-\*- C\+\+ -\*-</string>
+	<key>foldingStartMarker</key>
+	<string>(?x)
+		 /\*\*(?!\*)
+		|^(?![^{]*?//|[^{]*?/\*(?!.*?\*/.*?\{)).*?\{\s*($|//|/\*(?!.*?\*/.*\S))
+	</string>
+	<key>foldingStopMarker</key>
+	<string>(?&lt;!\*)\*\*/|^\s*\}</string>
+	<key>keyEquivalent</key>
+	<string>^~Q</string>
+	<key>name</key>
+	<string>Qt C++</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>\bQ_(CLASSINFO|ENUMS|FLAGS|INTERFACES|OBJECT|PROPERTY)\b</string>
+			<key>name</key>
+			<string>support.other.macro.qt</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((dis)?connect|emit|fore(ach|ver)|tr(Utf8)?|qobject_cast)\b</string>
+			<key>name</key>
+			<string>support.function.qt</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bQ(Abstract(Button|EventDispatcher|Extension(Factory|Manager)|File(Engine(Handler)?)?|FormBuilder|Item(Delegate|Model|View)|ListModel|PrintDialog|ProxyModel|ScrollArea|Slider|Socket|SpinBox|TableModel|TextDocumentLayout)|Accessible(Bridge(Plugin)?|Event|Interface|Object|Plugin|Widget)?|Action(Event|Group)?|(Core)?Application|AssistantClient|Ax(Aggregated|Base|Bindable|Factory|Object|Script|ScriptEngine|ScriptManager|Widget)|BasicTimer|Bit(Array|map)|BoxLayout|Brush|Buffer|ButtonGroup|Byte(Array(Matcher)?)?|CDEStyle|Cache|Ch(ar|eckBox)|ChildEvent|Clipboard|CloseEvent|Color(Dialog|map)?|ComboBox|CommonStyle|ConicalGradient|ContextMenuEvent|CopChannel|Cursor|Dat(aStream|e|eEdit|eTime(Edit)?)|Decoration(Factory|Plugin)?|Designer(Form((Window(Cursor|Manager)?|Editor)Interface)|(ActionEditor|ObjectInspector|PropertyEditor|WidgetBox|(CustomWidget(Collection)?))Interface|(Container|MemberSheet|PropertySheet|TaskMenu)Extension)|DesktopWidget|Dial(og)?|Dir(Model|ectPainter)?|DockWidget|Dom(Attr||CDATASection|CharacterData|Comment|Document(Fragment|Type)?||Element|Entity(Reference)?||Implementation|NamedNodeMap|Node(List)?|Notation|ProcessingInstruction|Text)|Double(SpinBox|Validator)|Drag(EnterEvent|LeaveEvent|MoveEvent)?|DropEvent|ErrorMessage|Event(Loop)?|Extension(Factory|Manager)|FSFileEngine|File(Dialog|IconProvider|Info|OpenEvent)?|Flags?|Focus(Event|Frame)|Font(Database|Dialog|Info|MetricsF?)?|FormBuilder|Frame|Ftp|GL(Colormap|Context|Format|PixelBuffer|Widget)|Generic(Return)?Argument|Gradient|GridLayout|GroupBox|HBoxLayout|Hash(Iterator)?|HeaderView|HelpEvent|HideEvent|Host(Address|Info)|HoverEvent|Http((Request|Response)?Header)?|IODevice|Icon(DragEvent|Engine(Plugin)?)?|Image(IO(Handler|Plugin)|Reader|Writer)?|Input(Context(Factory|Plugin)?|Dialog|(Method)?Event)|IntValidator|Item(Delegate|Editor(CreatorBase|Factory)|Selection(Model|Range)?)|KbdDriver(Factory|Plugin)|Key(Event|Sequence)|LCDNumber|Label|Latin1(Char|String)|Layout(Item)?|Library(Info)?|Line(Edit|F)?|LinearGradient|LinkedList(Iterator)?|LinuxFbScreen|List(Iterator|View|Widget(Item)?)?|Locale|Mac(Mime|Style)|MainWindow|Map(Iterator)?|Matrix|Menu(Bar)?|MessageBox|Meta(ClassInfo|Enum|Method|Object|Property|Type)|Mime(Data|Source)|ModelIndex|MotifStyle|MouseDriver(Factory|Plugin)|(Move|Mouse)Event|Movie|Multi(Hash|Map)|Mutable(Map|Hash|(Linked)?List|Vector)Iterator|Mutex(Locker)?|NetworkProxy|Object(CleanupHandler)?|PageSetupDialog|Paint(Device|Engine(State)?|Event|er(Path(Stroker)?)?)|Pair|Palette|Pen|PersistentModelIndex|Picture(FormatPlugin|IO)?|Pixmap(Cache)?|PlastiqueStyle|PluginLoader|Point(F|er)?|PolygonF?|Print(Dialog|Engine|er)|Process|Progress(Bar|Dialog)|ProxyModel|(Push|Radio)Button|Queue|RadialGradient|Read(Locker|WriteLock)|RectF?|RegExp(Validator)?|Region|ResizeEvent|RubberBand|Screen(Cursor|Driver(Factory|Plugin))?|Scroll(Area|Bar)|Semaphore|SessionManager|Set(Iterator|tings)?|SharedData(Pointer)?|Shortcut(Event)?|ShowEvent|Signal(Mapper|Spy)|Size(Grip|Policy|F)?|Slider|SocketNotifier|SortFilterProxyModel|Sound|SpacerItem|SpinBox|SplashScreen|Splitter(Handle)?|Sql(Database|Driver(Creator(Base)?|Plugin)?|Error|Field|Index|Query(Model)?|Record|Relation(alDelegate)?|(Relational)?TableModel|Result)|Stack(ed(Layout|Widget))?|StandardItemModel|Status(Bar|TipEvent)|String(List(Model)?|Matcher)?|Style(Factory|HintReturn(Mask)?|Option(Button||ComboBox|Complex|DockWidget|FocusRect|Frame(V2)?|GroupBox|Header|MenuItem|ProgressBar(V2)?|Q3(DockWindow|ListView(Item)?)|RubberBand|Slider|SpinBox|Tab(BarBase|V2|WidgetFrame)?|TitleBar|Tool(Bar|Box|Button)|ViewItem)?|Painter|Plugin)?|Svg(Renderer|Widget)|SyntaxHighlighter|SysInfo|Tab(Bar|Widget|le(View|Widget(Item|SelectionRange)?|tEvent))|Tcp(Server|Socket)|TemporaryFile|TestEventList|Text(Block(Format|Group|UserData)?|Browser|CharFormat|Codec(Plugin)?|Cursor|Decoder|Document(Fragment)?|Edit|Encoder|Format|Fragment|Frame(Format)?|ImageFormat|(Inline)?Object|Layout|Length|Line|List(Format)?|Option|Stream|Table(Cell|Format)?)|Thread(Storage)?|Time(Edit|r(Event)?)?|Tool(Bar|Box|Button|Tip)|Trans(formedScreen|lator)|Tree(View|Widget(Item(Iterator)?)?)|UdpSocket|UiLoader|Url(Info)?|Uuid|VBoxLayout|(VNC|VFb)Screen|Validator|Var(iant|LengthArray)|Vector(Iterator)?|WS(((Calibrated|Tslib)?Mouse|Keyboard)Handler|Client|Event|InputMethod|PointerCalibrationData|ScreenSaver|Server|Window)|WaitCondition|WhatsThis(ClickedEvent)?|WheelEvent|Widget(Item)?|Window(StateChangeEvent|sMime|sStyle|sXPStyle)|Workspace|WriteLocker|X11(Embed(Container|Widget)|Info)|Xml(Attributes|(Content|DTD|Decl|Default|Error|Lexical)Handler|EntityResolver|InputSource|Locator|NamespaceSupport|ParseException|(Simple)?Reader))\b</string>
+			<key>name</key>
+			<string>support.class.qt</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(q(int8|int16|int32|int64|longlong|real|uint8|uint16|uint32|uint64|ulonglong)|u(char|int|long|short))\b</string>
+			<key>name</key>
+			<string>storage.type.qt</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(slots|signals)\b</string>
+			<key>name</key>
+			<string>storage.modifier.qt</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.c++</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.c++.qt</string>
+	<key>uuid</key>
+	<string>C0D24A46-0534-11DB-8949-0011242E4184</string>
+</dict>
+</plist>

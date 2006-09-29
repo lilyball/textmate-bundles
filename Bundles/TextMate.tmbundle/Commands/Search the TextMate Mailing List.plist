@@ -8,7 +8,7 @@
 	<string># this command allows you to search
 # the TextMate mailing list archive
 
-res=$(CocoaDialog inputbox \
+res=$(CocoaDialog inputbox --float \
 	--title "Search the TextMate Mailing List" \
 	--informative-text "What would you like to search for?" \
 	--button1 "Search Archive" --button2 "Cancel")
@@ -20,8 +20,6 @@ search_term=$(tail -n1 &lt;&lt;&lt;"$res")
 redirect "http://www.google.com/search?num=20&amp;hl=en&amp;c2coff=1&amp;as_sitesearch=lists.macromates.com&amp;as_q=${search_term// /+}"</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Search the TextMate Mailing List</string>
 	<key>output</key>

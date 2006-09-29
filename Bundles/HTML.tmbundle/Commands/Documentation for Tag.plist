@@ -100,7 +100,7 @@ $tags = {
 
 def request_tag_name (default_tag = "body")
   res, tag = %x{ "$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" \
-    inputbox --title 'Documentation for Tag' \
+    inputbox --float --title 'Documentation for Tag' \
     --informative-text 'What tag would you like to lookup?' \
     --text '#{default_tag}' --button1 'Lookup' --button2 'Cancel' \
     --button3 'Show All Tags'

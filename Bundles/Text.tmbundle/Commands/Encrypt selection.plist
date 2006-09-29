@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>get_pw () {
-  res=$(CocoaDialog secure-inputbox --no-newline \
+  res=$(CocoaDialog secure-inputbox --float --no-newline \
     --title 'Encrypt Text With AES 128' \
     --informative-text "$1" \
     --button1 "$2" --button2 Cancel)

@@ -15,7 +15,7 @@ fi
 
 # ask user about header
 if [[ -z "$header" ]]; then
-   res=$(CocoaDialog inputbox --title "Open Header Quickly" --no-newline --informative-text "Header name?"  --text "foobar"  --button1 "Open" --button2 "Cancel")
+   res=$(CocoaDialog inputbox --float --title "Open Header Quickly" --no-newline --informative-text "Header name?"  --text "foobar"  --button1 "Open" --button2 "Cancel")
    [[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit
    header=$(tail -n1 &lt;&lt;&lt;"$res")
 fi

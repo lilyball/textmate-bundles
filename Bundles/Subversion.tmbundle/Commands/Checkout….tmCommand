@@ -8,7 +8,7 @@
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
   # Setup Dialog asking for host
-url=$(CocoaDialog inputbox \
+url=$(CocoaDialog inputbox --float \
     --title "Subversion Checkout" \
     --informative-text "URL:" \
     --text "svn+ssh://" \
@@ -26,7 +26,7 @@ checkoutname=`basename $url`
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
 # Setup Dialog asking where to save
-location=$(CocoaDialog filesave \
+location=$(CocoaDialog filesave --float \
     --text "Checking out $url" \
 	--with-file "$checkoutname" )
 

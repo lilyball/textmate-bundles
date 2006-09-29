@@ -8,7 +8,7 @@
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
 revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
-	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
+	2&gt; &gt;(CocoaDialog progressbar --float --indeterminate \
 		--title "Diff Revisions…" \
 		--text "Retrieving List of Revisions…" \
 	))

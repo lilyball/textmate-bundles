@@ -15,7 +15,7 @@ def html_esc (text)
 	text.gsub(/&lt;/, '&amp;lt;').gsub(/&amp;/, '&amp;amp;')
 end
 #/Applications/TextMate.app/Contents/SharedSupport/Support/
-output = `"$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" inputbox --title Input --informative-text 'Search For...' --button1 'Search' --button2 'Abort'`
+output = `"$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" inputbox --float --title Input --informative-text 'Search For...' --button1 'Search' --button2 'Abort'`
 output = output.split("\n")
 
 # check the button pressed, exit if it wasn't Record

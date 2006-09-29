@@ -23,7 +23,7 @@ file_list () {
    fi
 }
 
-rv=$(CocoaDialog textbox --title "Remove from Repository" \
+rv=$(CocoaDialog textbox --float --title "Remove from Repository" \
    --string-output --no-newline --informative-text \
    "These files will be scheduled for deletion during the next commit." \
    --text "$(file_list|sort -f)" --button1 "Delete" --button2 "Cancel")

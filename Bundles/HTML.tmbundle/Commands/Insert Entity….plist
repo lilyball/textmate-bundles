@@ -14,7 +14,7 @@ entity_list () {
 }
 
 IFS=$'\n'
-res=$(CocoaDialog dropdown --title "Insert Entity" \
+res=$(CocoaDialog dropdown --float --title "Insert Entity" \
   --text "Select the character to insert" \
   --button1 Insert --button2 Cancel \
   --exit-onchange --pulldown \

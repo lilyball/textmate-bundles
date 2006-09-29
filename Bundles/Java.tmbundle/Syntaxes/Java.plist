@@ -154,6 +154,10 @@
 					<key>include</key>
 					<string>#statement-remainder</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
 			</array>
 		</dict>
 		<dict>
@@ -197,6 +201,10 @@
 					<key>include</key>
 					<string>#statement-remainder</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
 			</array>
 		</dict>
 		<dict>
@@ -206,18 +214,8 @@
 			<string>constant.other.java</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>/\*</string>
-			<key>end</key>
-			<string>\*/</string>
-			<key>name</key>
-			<string>comment.block.java</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>//.*$\n?</string>
-			<key>name</key>
-			<string>comment.line.double-slash.java</string>
+			<key>include</key>
+			<string>#comments</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -367,6 +365,26 @@
 				<dict>
 					<key>include</key>
 					<string>#storage-type-java</string>
+				</dict>
+			</array>
+		</dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>/\*</string>
+					<key>end</key>
+					<string>\*/</string>
+					<key>name</key>
+					<string>comment.block.java</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>//.*$\n?</string>
+					<key>name</key>
+					<string>comment.line.double-slash.java</string>
 				</dict>
 			</array>
 		</dict>

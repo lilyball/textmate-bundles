@@ -184,48 +184,48 @@ pre {
 }
 
 
-.graybox {
+.pro_table {
    font-size: 12px;
 }
-.bright .graybox {
+.bright .pro_table {
 	border-top: 1px solid #919699;
 	border-left: 1px solid #919699;
 }
-.dark .graybox {
+.dark .pro_table {
 	border-top: 1px solid #616465;
 	border-left: 1px solid #616465;
 }
-.graybox th {
+.pro_table th {
 	font-weight: bold;
 	padding: 4px 8px 4px 8px;
 	text-align: left;
 }
-.bright .graybox th {
+.bright .pro_table th {
 	background: #E2E2E2;
 	border-bottom: 1px solid #919699;
 	border-right: 1px solid #919699;
 }
-.dark .graybox th {
+.dark .pro_table th {
 	background: #1C1C1C;
 	border-bottom: 1px solid #616465;
 	border-right: 1px solid #616465;
 }
-.graybox td {
+.pro_table td {
 	padding: 8px;
 	vertical-align: top;
 }
-.bright .graybox td {
+.bright .pro_table td {
 	border-bottom: 1px solid #919699;
 	border-right: 1px solid #919699;
 }
-.dark .graybox td {
+.dark .pro_table td {
 	border-bottom: 1px solid #616465;
 	border-right: 1px solid #616465;
 }
-.graybox p {
+.pro_table p {
 	margin: 0;
 }
-.graybox p + p {
+.pro_table p + p {
 	margin-top: 1em;
 }
 
@@ -291,54 +291,38 @@ hr {
 	color: #CCC;
 }
 
-/* ================================================ */
-/* = SQL Table (Overridden Graybox, just smaller) = */
-/* ================================================ */
+/* ================ */
+/* = Remind Table = */
+/* ================ */
+
+.remind_table {
+	font-size: 10px;
+	font-family: "LuxiMono", "Bitstream Vera Sans Mono", "Monaco", monospace;
+}
+
+/* ============ */
+/* = SQL Table  */
+/* ============ */
 
 .sql_table {
 	font-size: 9px;
 	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
 }
-.bright .sql_table {
-	border-top: 1px solid #919699;
-	border-left: 1px solid #919699;
-}
-.dark .sql_table {
-	border-top: 1px solid #616465;
-	border-left: 1px solid #616465;
-}
-.sql_table > tr > th {
+.sql_table th {
 	font-weight: normal;
 	padding: 2px 4px 2px 4px;
-	text-align: left;
 }
-.bright .sql_table > tr > th {
-	background: #E2E2E2;
+.bright .sql_table th {
 	border-bottom: 1px solid #919699;
 	border-right: 1px solid #919699;
 }
-.dark .sql_table > tr > th {
-	background: #1C1C1C;
+.dark .sql_table th {
 	border-bottom: 1px solid #616465;
 	border-right: 1px solid #616465;
 }
-.sql_table > tr > td {
+.sql_table td {
 	padding: 3px;
 	vertical-align: top;
-}
-.bright .sql_table > tr > td {
-	border-bottom: 1px solid #919699;
-	border-right: 1px solid #919699;
-}
-.dark .sql_table > tr > td {
-	border-bottom: 1px solid #616465;
-	border-right: 1px solid #616465;
-}
-.sql_table p {
-	margin: 0;
-}
-.sql_table p + p {
-	margin-top: 1em;
 }
 
 /* =================== */

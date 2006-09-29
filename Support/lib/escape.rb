@@ -22,7 +22,8 @@ end
 
 # Make string suitable for display as HTML, preserve spaces
 def htmlize(str)
-  str = str.gsub("&", "&amp;").gsub("<", "&lt;").gsub("\n", "<br>")
+  str = str.gsub("&", "&amp;").gsub("<", "&lt;")
   str = str.gsub(/\t+/, '<span style="white-space:pre;">\0</span>')
-  str.reverse.gsub(/ (?= |$)/, ';psbn&').reverse
+  str = str.reverse.gsub(/ (?= |$)/, ';psbn&').reverse
+  str.gsub("\n", "<br>")
 end

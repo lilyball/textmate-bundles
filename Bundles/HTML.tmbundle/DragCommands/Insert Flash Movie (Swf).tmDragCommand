@@ -116,11 +116,11 @@ HTML
 else
 print &lt;&lt;HTML
 &lt;object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=#{swf.version},0,0,0" width="#{swf.width}" height="#{swf.height}" id="#{name}" align="middle"&gt;
-&lt;param name="allowScriptAccess" value="sameDomain" /&gt;
-&lt;param name="movie" value="#{file}" /&gt;
-&lt;param name="quality" value="high" /&gt;
-&lt;param name="bgcolor" value="#{swf.bgcolor}" /&gt;
-&lt;embed src="#{file}" quality="high" bgcolor="#{swf.bgcolor}" width="#{swf.width}" height="#{swf.height}" name="#{name}" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /&gt;
+&lt;param name="allowScriptAccess" value="sameDomain"&gt;
+&lt;param name="movie" value="#{file}"&gt;
+&lt;param name="quality" value="high"&gt;
+&lt;param name="bgcolor" value="#{swf.bgcolor}"&gt;
+&lt;embed src="#{file}" quality="high" bgcolor="#{swf.bgcolor}" width="#{swf.width}" height="#{swf.height}" name="#{name}" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"&gt;
 &lt;/object&gt;
 HTML
 end</string>

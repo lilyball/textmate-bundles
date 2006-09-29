@@ -18,15 +18,15 @@ APPLESCRIPT
 
 cat &lt;&lt;SNIPPET
 &lt;object $DIM classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab"&gt;
-	&lt;param name="src" value="$TM_DROPPED_FILE" /&gt;
-	&lt;param name="controller" value="\$1" /&gt;
-	&lt;param name="autoplay" value="\$2" /&gt;
+	&lt;param name="src" value="$TM_DROPPED_FILE"&gt;
+	&lt;param name="controller" value="\$1"&gt;
+	&lt;param name="autoplay" value="\$2"&gt;
 	&lt;embed src="$TM_DROPPED_FILE"
 		$DIM
 		controller="\${1:true}" autoplay="\${2:true}"
 		scale="tofit" cache="true"
 		pluginspage="http://www.apple.com/quicktime/download/"
-	/&gt;
+	&gt;
 &lt;/object&gt;
 SNIPPET
 </string>

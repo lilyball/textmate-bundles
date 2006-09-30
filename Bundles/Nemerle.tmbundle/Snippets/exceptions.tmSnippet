@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>try{
+	$1
+} catch {
+| ${2:name} is ${3:type} =&gt; $4
+} finally {
+	$5
+}
+</string>
+	<key>name</key>
+	<string>try ... catch ...  finally</string>
+	<key>scope</key>
+	<string>source.nemerle</string>
+	<key>tabTrigger</key>
+	<string>try</string>
+	<key>uuid</key>
+	<string>4FC377A6-4EF7-11DB-96B0-00112474B8F0</string>
+</dict>
+</plist>

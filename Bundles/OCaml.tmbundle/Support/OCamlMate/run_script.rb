@@ -56,7 +56,7 @@ class UserScript
     
     # compile it
     if threadsincludedir != ""
-      output = `#{e_sh @findlib} #{e_sh @ocamlc} -o #{e_sh @dstfile} -I #{e_sh(threadsincludedir)} #{@findlibpackages.join(' ')} str.cma unix.cma threads.cma pcre.cma #{e_sh @srcfile} 2>&1`
+      output = `#{e_sh @findlib} #{e_sh @ocamlc} -o #{e_sh @dstfile} -I #{e_sh(threadsincludedir)} #{@findlibpackages.join(' ')} str.cma unix.cma threads.cma #{e_sh @srcfile} 2>&1`
     else
       output = `#{e_sh @findlib} #{e_sh @ocamlc} -o #{e_sh @dstfile} #{@findlibpackages.join(' ')} str.cma unix.cma #{e_sh @srcfile} 2>&1`
     end

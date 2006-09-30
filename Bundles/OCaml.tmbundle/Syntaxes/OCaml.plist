@@ -12,7 +12,7 @@
 	<key>foldingStartMarker</key>
 	<string>(\b(module|class|)\s.*?=\s*$|\bbegin|sig|struct|object\s*$|\bwhile\s.*?\bdo\s*$|^let(?:\s+rec)?\s+[a-z_][a-zA-Z0-9_]*\s+(?!=)\S)</string>
 	<key>foldingStopMarker</key>
-	<string>(\bend[ \t]*(;{1,2}|=)?|\bdone;?|^\s*;;|^\s*in)[ \t]*$</string>
+	<string>(\bend(\s+in)?[ \t]*(;{1,2}|=)?|\bdone;?|^\s*;;|^\s*in)[ \t]*$</string>
 	<key>keyEquivalent</key>
 	<string>^~O</string>
 	<key>name</key>
@@ -874,7 +874,7 @@
 			<key>match</key>
 			<string>::</string>
 			<key>name</key>
-			<string>punctuation.list.constructor.ocaml</string>
+			<string>punctuation.definition.list.constructor.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -1307,7 +1307,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.value-signature.ocaml</string>
+							<string>entity.name.type.value-signature.ocaml</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -1362,7 +1362,7 @@
 							<key>match</key>
 							<string>\\$[ \t]*</string>
 							<key>name</key>
-							<string>punctuation.string.ignore-eol.ocaml</string>
+							<string>punctuation.separator.string.ignore-eol.ocaml</string>
 						</dict>
 						<dict>
 							<key>match</key>

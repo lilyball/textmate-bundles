@@ -11,34 +11,8 @@ require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/dialog.rb"
 require 'pp'
 text = STDIN.read
-file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{text}.tex -print`.chomp
-if file.empty?
-  resources = `grep -r --include CONTENTS #{text.gsub(".","\\.")} /Library/Frameworks/R.framework/Versions/Current/Resources/library/*`
-  resources=resources.split("\n").grep(/Aliases/).map do |match|
-    match.gsub(/CONTENTS.*/,"CONTENTS")
-  end.uniq
-  files = []
-  resources.each do |filename|
-    data = File.read(filename)
-	  data.split("\n\n").each do |part|
-	    if part =~ /Aliases:(?: [\w.]+)* #{text.gsub(".","\\.")}/ then
-        matchfile = part.sub(/.*Entry: ([\w.]+).*/m,'\1')
-        files &lt;&lt; `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{matchfile}.tex -print`.chomp
-      end
-		end
-	end
-	TextMate.exit_discard if files.empty?
-else
-  files = [file]
-end
-results = []
-files.each do |file|
-  tex = File.read(file)
-  terms = tex.scan(/\\begin\{verbatim\}\n(.*)\\end\{verbatim\}/m)[0][0].split(/\n+(?=[\w.]+\()/)
-  results &lt;&lt; terms.map{|line| line.gsub(/\n|(  )/,"")}
-end
-results.flatten!.uniq!
-results = results.delete_if {|i| (i =~ /^#{text.gsub(".","\\.")}/).nil?}
+data = File.read(ENV['TM_BUNDLE_SUPPORT']+"/commands.txt").split("\n")
+results=data.grep(/^#{text.gsub(".","\\.")}/)
 if results.length==1 then
   line=results[0]
 else

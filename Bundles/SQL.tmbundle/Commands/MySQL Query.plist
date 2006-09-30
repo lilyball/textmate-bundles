@@ -21,7 +21,7 @@ mysql)
 	mysql -e "$query" \
 		-u"${MYSQL_USER:-$USER}" --password="$MYSQL_PWD" \
 		-h"${MYSQL_HOST:-localhost}" -P"${MYSQL_PORT:-3306}" \
-		--html "$MYSQL_DB"|perl -pe 's/(?&lt;=&lt;TABLE )BORDER=1/class="sql_table" cellspacing="0" cellpadding="5"/'
+		--html "$MYSQL_DB"|perl -pe 's/(?&lt;=&lt;TABLE )BORDER=1/class="pro_table sql_table" cellspacing="0" cellpadding="5"/'
 ;;
 postgresql)
 	echo '&lt;p&gt;To use a password with Postgres and TextMate you should store your password in &lt;tt&gt;~/.pgpass&lt;/tt&gt;.  See the Postgres documentation for the file format.&lt;/p&gt;'
@@ -30,11 +30,11 @@ postgresql)
 	psql8 -c "$query" \
 		--user="${PGUSER:-$USER}"  --html  \
 		--host="${PGHOST:-localhost}" --port="${PGPORT:-5432}" \
-	     "${PGDATABASE:-$USER}" |perl -pe 's/(?&lt;=&lt;table )border="1"/class="graybox" cellspacing="0" cellpadding="5"/'
+	     "${PGDATABASE:-$USER}" |perl -pe 's/(?&lt;=&lt;table )border="1"/class="pro_table sql_table" cellspacing="0" cellpadding="5"/'
 ;;
 sqlite3)
 	require_cmd sqlite3
-	echo '&lt;table class="graybox" cellspacing="0" cellpadding="5"&gt;'
+	echo '&lt;table class="pro_table sql_table" cellspacing="0" cellpadding="5"&gt;'
 	sqlite3 -html "$SQLITE3_DB" "$query"
 	echo '&lt;/table&gt;'
 ;;

@@ -10,7 +10,7 @@
 html_header "Calendar for this Month" "Remind"
 require_cmd rem
 
-rem -plm|rem2html --tableonly --nomini|perl -pe 's/&lt;table class="caltable" border=1  bgcolor="#FFFFFF" width=100%&gt;/&lt;table class="pro_table remind_table" cellspacing="0" cellpadding="5" width="100%"&gt;/'
+rem ${REMIND_FLAGS:--mb1} -pl|rem2html --tableonly --nomini|perl -pe 's/&lt;table class="caltable" border=1  bgcolor="#FFFFFF" width=100%&gt;/&lt;table class="pro_table remind_table" cellspacing="0" cellpadding="5" width="100%"&gt;/'
 
 html_footer
 </string>

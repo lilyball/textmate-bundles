@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cs2n -n "$TM_DROPPED_FILE" -o tmpCs2N
+	<string>require_cmd cs2n
+
+cs2n -n "$TM_DROPPED_FILE" -o tmpCs2N
 cat tmpCs2N
 rm -f tmpCs2N</string>
 	<key>draggedFileExtensions</key>

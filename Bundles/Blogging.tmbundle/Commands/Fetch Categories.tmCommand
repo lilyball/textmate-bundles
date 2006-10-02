@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>79741B2E-271D-4CBC-A61A-380C83D36863</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -rjcode -Ku
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/blogging"
+require 'xmlrpc/client'
+
+# fetches available categories (only tested with Wordpress)
+
+def select_from_cats(cats)
+  names = cats.map { |p| p['categoryName'] }
+  names.sort! { |a, b| a &lt;=&gt; b }
+  names.map! { |p| '"' + e_as(p) + '"' }
+  res = %x{ iconv &lt;&lt;'APPLESCRIPT' -f utf-8 -t mac|osascript 2&gt;/dev/null
+    tell app "TextMate" to ¬
+      return choose from list { #{names.join ','} } ¬
+        with title "Categories" ¬
+        with prompt "Choose categories to insert:" ¬
+        OK button name "Insert" ¬
+        with multiple selections allowed
+  }.chomp
+  TextMate.exit_discard if res == 'false'
+  TextMate.exit_insert_text res.gsub(/([^,]+),?\s*/, "Category: \\1\n")
+end # select_cats
+
+cred = Blogging.new
+current_endpoint = cred.endpoint.sub(/#.+/, '')
+current_username = cred.username
+current_password = cred.password
+TextMate.call_with_progress(:title =&gt; "Fetch Categories", :message =&gt; "Contacting Server “#{cred.host}”…") do
+    server = XMLRPC::Client.new(cred.host, cred.path)
+    @result = server.call("metaWeblog.getCategories", "#{current_endpoint}", "#{current_username}", "#{current_password}")
+end
+
+if @result.nil? || @result.empty?
+  TextMate.exit_show_tool_tip("No categories are available!")
+end
+select_from_cats(@result)</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Category</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>scope</key>
+	<string>text.blog, text.blog text.html.markdown, text.blog text.plain, text.blog text.html.textile, text.blog text.html</string>
+	<key>tabTrigger</key>
+	<string>cat</string>
+	<key>uuid</key>
+	<string>40318F5D-111F-4451-BBB0-F282DEAC881F</string>
+</dict>
+</plist>

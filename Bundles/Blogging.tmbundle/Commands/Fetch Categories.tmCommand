@@ -17,9 +17,24 @@ require 'xmlrpc/client'
 # fetches available categories (only tested with Wordpress)
 
 def select_from_cats(cats)
-  names = cats.map { |p| p['categoryName'] }
+  # the metaWeblog API says the result is a per-category struct containing a
+  # description, but nothing about a categoryName (which e.g. WP will *also*
+  # give us). So we prefer a categoryName, then falls back on description,
+  # though Typo just returns strings instead of structs, so we handle that as
+  # well
+  names = cats.map do |p|
+    if Hash === p &amp;&amp; p.has_key?('categoryName')
+      p['categoryName']
+    elsif Hash === p &amp;&amp; p.has_key?('description')
+      p['description']
+    else
+      p.to_s
+    end
+  end
+
   names.sort! { |a, b| a &lt;=&gt; b }
   names.map! { |p| '"' + e_as(p) + '"' }
+
   res = %x{ iconv &lt;&lt;'APPLESCRIPT' -f utf-8 -t mac|osascript 2&gt;/dev/null
     tell app "TextMate" to ¬
       return choose from list { #{names.join ','} } ¬
@@ -28,23 +43,22 @@ def select_from_cats(cats)
         OK button name "Insert" ¬
         with multiple selections allowed
   }.chomp
+
   TextMate.exit_discard if res == 'false'
-  TextMate.exit_insert_text res.gsub(/([^,]+),?\s*/, "Category: \\1\n")
+  puts res.gsub(/([^,]+),?\s*/, "Category: \\1\n")
 end # select_cats
 
 cred = Blogging.new
-current_endpoint = cred.endpoint.sub(/#.+/, '')
-current_username = cred.username
-current_password = cred.password
-TextMate.call_with_progress(:title =&gt; "Fetch Categories", :message =&gt; "Contacting Server “#{cred.host}”…") do
+endpoint = cred.endpoint.sub(/#.+/, '')
+password = cred.password
+res = TextMate.call_with_progress(:title =&gt; "Fetch Categories", :message =&gt; "Contacting Server “#{cred.host}”…") do
     server = XMLRPC::Client.new(cred.host, cred.path)
-    @result = server.call("metaWeblog.getCategories", "#{current_endpoint}", "#{current_username}", "#{current_password}")
+    server.call("metaWeblog.getCategories", endpoint, cred.username, password)
 end
 
-if @result.nil? || @result.empty?
-  TextMate.exit_show_tool_tip("No categories are available!")
-end
-select_from_cats(@result) rescue print "Category: "</string>
+TextMate.exit_show_tool_tip "No categories are available!" if res.nil? || res.empty?
+select_from_cats(res) rescue print "Category: "
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

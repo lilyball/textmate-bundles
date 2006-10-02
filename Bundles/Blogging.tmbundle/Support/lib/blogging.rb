@@ -257,6 +257,13 @@ TEXT
     end
 
     date_created = DateTime.parse(@headers['date']) if @headers['date']
+    if date_created && self.mode != 'mt' && (self.mode != 'wp' || ENV['TM_SEND_DATE_TO_WP']) then
+      # Convert to GMT and then to an XMLRPC:DateTime object to
+      # workaround xmlrpc/create.rb’s poor handling of DateTime.
+      d = date_created.new_offset(0)
+      @post['dateCreated'] = XMLRPC::DateTime.new(d.year, d.mon, d.day, d.hour, d.min, d.sec)
+    end
+
     if self.mode == 'mt'
       @post['dateCreated'] = date_created.strftime('%FT%T') if date_created
       @post['mt_allow_comments'] = @headers['comments'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['comments']
@@ -264,12 +271,6 @@ TEXT
       @post['mt_tags'] = @headers['tags'] if @headers['tags']
       @post['mt_basename'] = @headers['basename'] if @headers['basename']
     elsif self.mode == 'wp'
-      if date_created then
-        # Convert to GMT and then to an XMLRPC:DateTime object to
-        # workaround xmlrpc/create.rb’s poor handling of DateTime.
-        d = date_created.new_offset(0)
-        @post['dateCreated'] = XMLRPC::DateTime.new(d.year, d.mon, d.day, d.hour, d.min, d.sec)
-      end
       @post['mt_allow_comments'] = @headers['comments'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['comments']
       @post['mt_allow_pings'] = @headers['pings'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['pings']
     end

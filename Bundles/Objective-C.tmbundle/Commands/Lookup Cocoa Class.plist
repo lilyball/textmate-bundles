@@ -29,17 +29,20 @@ for (( i = 0; i &lt; ${#folders[@]}; i++ )); do
 	[[ -f "$file" ]] &amp;&amp; exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://${file// /%20}'&gt;"
 done
 
-
 # finally try man (PolyglotMan)
-RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
-export MANSECT=${MANSECT:-2:3:4:5:6:7:8:9} # exclude shell commands
-if [[ -x "$RMAN" ]] &amp;&amp; man -w "$word" &amp;&gt;/dev/null; then
-	page=$("$TM_SUPPORT_PATH/bin/html_man.sh" -a "$word")
-	echo "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://$page'&gt;"
-	exit_show_html
-fi
+try_man () {
+	RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+	if [[ -x "$RMAN" ]] &amp;&amp; man -w "$word" &amp;&gt;/dev/null; then
+		page=$("$TM_SUPPORT_PATH/bin/html_man.sh" -a "$word")
+		echo "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://$page'&gt;"
+		exit_show_html
+	fi
+}
 
-#echo "Couldn’t find documentation for “${word}”"
+MANSECT=${MANSECT:-2:3:4:5:6:7:8:9} try_man
+try_man
+
+echo "Couldn’t find documentation for “${word}”"
 </string>
 	<key>fallbackInput</key>
 	<string>word</string>

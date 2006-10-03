@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-  # Setup Dialog asking for host
+# Setup Dialog asking for host
 url=$(CocoaDialog inputbox --float \
     --title "Subversion Checkout" \
     --informative-text "URL:" \
@@ -16,39 +16,26 @@ url=$(CocoaDialog inputbox --float \
     --button2 "Cancel")
 
 # If user canceled exit.
-[[ $( (tail -r &lt;&lt;&lt;"$url") | tail -n1)  == "2" ]] &amp;&amp; \
-         exit_discard
+[[ "${url:0:1}" == "2" ]] &amp;&amp; exit_discard
 
-# url contains the url entered
-url=$(tail -n1 &lt;&lt;&lt;"$url")
-checkoutname=`basename $url`
+# skip the return code so we are left with just the url
+url="${url:2}"
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
 # Setup Dialog asking where to save
 location=$(CocoaDialog filesave --float \
     --text "Checking out $url" \
-	--with-file "$checkoutname" )
+    --with-file "$(basename "$url")" )
 
 # If user canceled exit.
-if [[ -z $location ]]; then
-	exit_discard
-fi
-
-# location contains the location selected
-location=$(tail -n1 &lt;&lt;&lt;"$location")
-
-cd `dirname $location`
-
-WorkPath=$location
-export WorkPath
+[[ -z "$location" ]] &amp;&amp; exit_discard
 
 # format the checkout output
-eval "$TM_SVN" checkout "$url" "`basename $location`" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" --checkout
+export WorkPath="$location" # format_status will show paths as relative to this value
+"$TM_SVN" checkout "$url" "$location" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" --checkout
 
-project=`basename $url`
-
-open -b com.macromates.TextMate "$location/$project"
+open -b com.macromates.textmate "$location"
 </string>
 	<key>input</key>
 	<string>none</string>

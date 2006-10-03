@@ -1,8 +1,7 @@
 \header{
 	filename = "${TM_NEW_FILE_BASENAME}.ly"
-	composer          = "composer"
+	composer          = "${TM_USERNAME}"
 	title             = "${TM_NEW_FILE_BASENAME}"
-	opus              = "BWV 772"
 
 	copyright         = "Creative Commons Attribution-ShareAlike 2.5"
 	maintainer        = "${TM_USERNAME}"

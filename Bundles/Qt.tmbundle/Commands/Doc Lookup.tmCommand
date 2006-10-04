@@ -8,10 +8,10 @@
 	<string>#!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH']+'/lib/exit_codes'
 
-word = (ENV['TM_SELECTED_TEXT'] or ENV['TM_CURRENT_WORD'])
-dir  = (ENV['TM_QT_DOC_DIR'] or '/usr/local/Trolltech/Qt-4.1.4/doc/html')
+word = (ENV['TM_SELECTED_TEXT'] or ENV['TM_CURRENT_WORD'] or '')
+dir  = (ENV['TM_QT_DOC_DIR'] or '/usr/local/Trolltech/Qt-4.2.0/doc/html')
 
-word.strip!
+word.strip! unless word.frozen?
 
 if word.nil?
   puts "Nothing given to search for."
@@ -26,7 +26,7 @@ else
     files   = spotted.grep %r{^#{Regexp::escape dir}/.+\.html$}
     
     unless files.any?
-      puts "No Documentation found for #{word}."
+      puts "No Documentation found for '#{word}'."
     else
       puts %{
       &lt;html&gt;

@@ -35,7 +35,9 @@ def find_language_ext
   ext.empty? ? 'txt' : ext
 end
 
-TextMate.call_with_progress(:title => "Paste to Pastie", :message => "Contacting Server “pastie.caboo.se”…") do
+url = ENV['TM_PASTIE_URL'] || 'http://pastie.textmate.org/pastes/create'
+server = $1 if url =~ %r{.*?://(.*?)(/.*)?$}
+TextMate.call_with_progress(:title => "Paste to Pastie", :message => "Contacting Server “#{server}”…") do
   text_file, html_file = `/usr/bin/mktemp -t tm_paste && /usr/bin/mktemp -t tm_paste`.split("\n")
 
   xml = STDIN.read
@@ -51,7 +53,6 @@ TextMate.call_with_progress(:title => "Paste to Pastie", :message => "Contacting
   author = "#{`niutil -readprop / "/users/$USER" realname`.chomp} (#{ENV['USER']})"
   ext = find_language_ext
 
-  url = ENV['TM_PASTIE_URL'] || 'http://pastie.caboo.se/pastes/create'
   print %x{
     curl #{url} \
     	-s -L -o /dev/null -w "%{url_effective}" \

@@ -17,7 +17,12 @@ if ENV.has_key? 'TM_INPUT_START_LINE' then
 end
 
 before = /(.*\n){#{line-1}}.{#{line_index}}/.match(doc)[0]
-before.gsub!(/&lt;(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param)\b[^&gt;]*&gt;|&lt;[^&gt;]+\/\s*&gt;/, '') # remove all self-closing tags
+
+# remove all self-closing tags
+before.gsub!(/&lt;(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param)\b[^&gt;]*&gt;|&lt;[^&gt;]+\/\s*&gt;/, '') 
+
+# remove all comments
+before.gsub!(/&lt;!--.*?--&gt;/m, '')
 
 stack = [ ]
 before.scan(/&lt;\s*(\/)?\s*(\w[\w:-]*)[^&gt;]*&gt;/) do |m|

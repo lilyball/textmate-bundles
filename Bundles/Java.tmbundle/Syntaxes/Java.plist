@@ -321,7 +321,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#string-quoted-double</string>
+			<string>#strings</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -439,21 +439,43 @@
 			<key>name</key>
 			<string>storage.type.java</string>
 		</dict>
-		<key>string-quoted-double</key>
+		<key>strings</key>
 		<dict>
-			<key>begin</key>
-			<string>"</string>
-			<key>end</key>
-			<string>"</string>
-			<key>name</key>
-			<string>string.quoted.double.java</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\\.</string>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
 					<key>name</key>
-					<string>constant.character.escape.java</string>
+					<string>string.quoted.double.java</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\.</string>
+							<key>name</key>
+							<string>constant.character.escape.java</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>end</key>
+					<string>'</string>
+					<key>name</key>
+					<string>string.quoted.single.java</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\.</string>
+							<key>name</key>
+							<string>constant.character.escape.java</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

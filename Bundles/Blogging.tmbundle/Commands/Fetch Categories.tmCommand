@@ -49,11 +49,10 @@ def select_from_cats(cats)
 end # select_cats
 
 cred = Blogging.new
-endpoint = cred.endpoint.sub(/#.+/, '')
+endpoint = cred.endpoint
 password = cred.password
 res = TextMate.call_with_progress(:title =&gt; "Fetch Categories", :message =&gt; "Contacting Server “#{cred.host}”…") do
-    server = XMLRPC::Client.new(cred.host, cred.path)
-    server.call("metaWeblog.getCategories", endpoint, cred.username, password)
+    cred.client.call("metaWeblog.getCategories", endpoint, cred.username, password)
 end
 
 TextMate.exit_show_tool_tip "No categories are available!" if res.nil? || res.empty?

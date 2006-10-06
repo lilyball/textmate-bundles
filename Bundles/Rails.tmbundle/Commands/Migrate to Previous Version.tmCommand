@@ -6,19 +6,24 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
-"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/rake_helper.rb" db:migrate
+
+# Find the previous version number from the schema.rb file
+export PREVIOUS=`grep 'Schema\.define' "$TM_PROJECT_DIRECTORY/db/schema.rb" | ruby -e 'print $stdin.read.scan(/\d+/).first.to_i - 1'`
+
+# Migrate database to the previous version
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/rake_helper.rb" db:migrate -v VERSION -a $PREVIOUS
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^|</string>
 	<key>name</key>
-	<string>Migrate to Current</string>
+	<string>Migrate to Previous Version</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.ruby.rails</string>
 	<key>uuid</key>
-	<string>985F56D4-82ED-4C45-8250-2ECCFC71957E</string>
+	<string>9A1AE6BA-8350-4AB7-B5BD-969A7E64CF29</string>
 </dict>
 </plist>

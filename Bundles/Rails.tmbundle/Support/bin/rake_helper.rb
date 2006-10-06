@@ -7,20 +7,53 @@
 # Description:
 #   Runs 'rake' and executes a particular task
 
+require 'optparse'
 require 'rails_bundle_tools'
 
-Dir.chdir ENV['TM_PROJECT_DIRECTORY']
-task = ARGV.shift
-optional_question = ARGV.shift
-optional_prefix = ARGV.shift
+Dir.chdir TextMate.project_directory
 
-if optional_question
-  optional_answer = TextMate.input(optional_question, "", :title => "Rake")
+options = {}
+
+task = ARGV.shift
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: rake_helper.rb [options]"
+
+  opts.separator ""
+  opts.separator "Rake helper options:"
+
+  opts.on("-q", "--question [QUESTION TEXT]", "Ask a question before running rake.") do |question|
+    options[:question] = question
+  end
+
+  opts.on("-a", "--answer [ANSWER TEXT]", "Default answer for the question.") do |answer|
+    options[:answer] = answer
+  end
+  
+  opts.on("-v", "--variable [VARIABLE]", "Variable to assign the ANSWER to.") do |variable|
+    options[:variable] = variable
+  end
+
+  opts.on("-t", "--title [TITLE TEXT]", "Title of pop-up window.") do |title|
+    options[:title] = title
+  end
+end.parse!
+
+if options[:question]
+  unless options[:answer] = TextMate.input(optional_question, options[:answer] || "", :title => options[:title] || "Rake")
+    TextMate.exit_discard
+  end
 end
 
 command = "rake #{task}"
-command += " #{optional_prefix}=#{optional_answer}" if optional_answer
+if options[:variable] && options[:answer]
+  command += " #{options[:variable]}=#{options[:answer]}"
+end
 output = `#{command}`
+
+# puts "<span style='color:blue; font-size: 1.2em'>#{options.inspect}</span><br>"
+
+puts "<span style='color:red; font-size: 1.2em'>#{command}</span><br>"
 
 styles = ["table {padding-left: 2em;}", "td {padding-right: 1.5em;}", ".time {color: #f99; font-weight: bold}"]
 

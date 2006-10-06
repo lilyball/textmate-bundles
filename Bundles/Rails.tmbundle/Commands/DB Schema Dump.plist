@@ -6,18 +6,18 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
-"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/rake_helper.rb" db_schema_dump
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/rake_helper.rb" db:schema:dump
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^|</string>
 	<key>name</key>
-	<string>DB Schema Dump</string>
+	<string>Dump DB to schema.rb</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>source.ruby.rails</string>
+	<string>source.ruby.rails, source.yaml</string>
 	<key>uuid</key>
 	<string>310C901C-EF32-4E88-938A-804ABBF8C428</string>
 </dict>

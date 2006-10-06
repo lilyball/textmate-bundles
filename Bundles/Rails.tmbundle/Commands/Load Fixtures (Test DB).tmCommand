@@ -6,18 +6,19 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
-"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/install_plugin.rb"</string>
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/rake_helper.rb" db:fixtures:load -v RAILS_ENV -a test
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^|</string>
 	<key>name</key>
-	<string>Install Bundled Plugin</string>
+	<string>Load Fixtures (Test DB)</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.ruby.rails, source.yaml</string>
 	<key>uuid</key>
-	<string>46ECE243-0448-4A64-A223-27CC21E7704D</string>
+	<string>F758BFD1-00CA-4742-BE71-032580080F5C</string>
 </dict>
 </plist>

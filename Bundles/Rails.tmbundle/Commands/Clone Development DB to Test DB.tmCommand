@@ -6,18 +6,19 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
-"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/install_plugin.rb"</string>
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/rake_helper.rb" db:test:clone
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^|</string>
 	<key>name</key>
-	<string>Install Bundled Plugin</string>
+	<string>Clone Development DB to Test DB</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.ruby.rails, source.yaml</string>
 	<key>uuid</key>
-	<string>46ECE243-0448-4A64-A223-27CC21E7704D</string>
+	<string>6F2AB859-46E3-4FF5-A9A7-E9A813AB5DE1</string>
 </dict>
 </plist>

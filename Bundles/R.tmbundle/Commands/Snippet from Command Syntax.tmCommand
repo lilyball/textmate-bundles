@@ -7,9 +7,8 @@
 	<key>command</key>
 	<string>#!/usr/bin/ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
-require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/dialog.rb"
-require 'pp'
+require ENV['TM_BUNDLE_SUPPORT'] + "/lib/parsing.rb"
 text = STDIN.read
 data = File.read(ENV['TM_BUNDLE_SUPPORT']+"/commands.txt").split("\n")
 results=data.grep(/^#{text.gsub(".","\\.")}/)
@@ -19,20 +18,7 @@ else
   line = Dialog.request_item :title =&gt; "Snippet for Command", :prompt =&gt; "There were more than one matching commands found", :items =&gt; results
   TextMate.exit_discard if line.nil?
 end
-line = line.sub(/.*?(?=[\w.]+\()/, "")
-snippet_counter = 0
-result = line[0..-2].gsub(/[(,]\s*[\w.]+\s*(?:=\s*(?:"((?:\\\\|\\[^\\]|[^"\\]+)*)"|([^\s,]+))\s*)?/) do |match|
-  snippet = match[0] == ?( ? "(${#{snippet_counter += 1}:#{e_sn(match[1..-1])}}" :
-                             "${#{snippet_counter += 1}:#{e_sn(match)}}"
-  value = $1 || $2
-  if value &amp;&amp; ( snippet =~ /^([^"]+").+("\s*\})$/ ||
-                snippet =~ /^([^=]+=\s*).+?(\s*\})$/ )
-    $1 + "${#{snippet_counter += 1}#{':' if value != ''}#{e_sn(value)}}" + $2
-  else
-    snippet
-  end
-end + ")"
-print result
+print CommandParser.snippet(line.chomp)
 </string>
 	<key>fallbackInput</key>
 	<string>word</string>

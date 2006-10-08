@@ -30,6 +30,36 @@ file.each do |line|
   readContexts(line)
 end 
 
+class ExList
+  def initialize
+    @values = []
+  end
+  def contains(test)
+    #puts @values.class
+    found = true
+    @values.each do |item|
+      if test == item.chomp
+        found = false
+      end
+    end
+    return found
+  end
+  def add(item)
+    @values.push item
+  end
+  def print
+    puts @values
+  end
+end
+
+xFile = File.open($myPath+"/excluded.gtd", "r")
+
+myList = ExList.new
+
+xFile.each do |line|
+  myList.add(line)
+end
+
 # sorting happens     
 todoList = ""
 $tags.each do |tag|  
@@ -39,7 +69,7 @@ $tags.each do |tag|
     matches = 0 
     myFiles = Dir.entries($myPath)
     myFiles.each do |fileName|
-      if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd") and (fileName != "excluded.gtd")
+      if (fileName[-3,3] == "gtd") and (fileName != "contexts.gtd") and (fileName != "excluded.gtd") and (myList.contains(fileName))
         lineno = 0
         mFile = File.open(fileName) 
         mFile.each do |line|

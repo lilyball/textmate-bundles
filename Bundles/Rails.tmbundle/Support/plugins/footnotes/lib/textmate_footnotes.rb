@@ -27,7 +27,7 @@ class FootnoteFilter
   end
   
   def self.insert_text_before(pattern, indentation, body, new_text)
-    index = body.index(pattern) || body.size
+    index = pattern.is_a?(Regexp) ? body.index(pattern) || body.size : pattern
     body.insert index, indent(indentation, new_text)
   end
   
@@ -77,8 +77,7 @@ class FootnoteFilter
           else
             textmate_links = ""
           end
-          
-          insert_text_before %r{</body>}i, 4, controller.response.body, <<-HTML
+          textmate_footnotes = <<-HTML
           <!-- TextMate Footnotes -->
           <div style="clear:both"></div>
           <div id="textmate_footnotes_debug">
@@ -105,6 +104,11 @@ class FootnoteFilter
           </div>
           <!-- End TextMate Footnotes -->
           HTML
+          if m = controller.response.body.match(%r{<div[^>]+id=['"]textmate_footnotes['"][^>]*>})
+            insert_text_before m.offset(0)[1], 4, controller.response.body, textmate_footnotes
+          else
+            insert_text_before %r{</body>}i, 4, controller.response.body, textmate_footnotes
+          end
         end
       end
     rescue Exception => e

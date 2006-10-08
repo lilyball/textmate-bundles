@@ -114,6 +114,8 @@ when "db:migrate", "migrate"
 else
   report += lines.join("<br>")
 end
+
+report += "<div class='done'>Done</div>"
 puts report
 
 puts <<-HTML
@@ -138,6 +140,7 @@ __END__
     table {padding-left: 2em;}
     td {padding-right: 1.5em;}
     .time {color: #f99; font-weight: bold}
+    .done {color: #b55; font-weight: bold; font-size: 1.1em;}
   </style>
   <script src="file://${TM_SUPPORT_PATH}/script/default.js" type="text/javascript" language="javascript" charset="utf-8"></script>
   <script src="file://${TM_SUPPORT_PATH}/script/webpreview.js" type="text/javascript" language="javascript" charset="utf-8"></script>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/ruby -w
+
+# To use this function, type the desired key followed by "Enter"
+#
+# Note - the search for the tab command will stop at the first match,
+# so put longer commands before shorter, e.g., tw before t.
+
+# This is where the GTD files are kept
+$myPath = ENV['TM_DIRECTORY'] 
+tabCommand = ENV['TM_CURRENT_LINE']
+
+$contexts = [] #user defined contexts
+def readContexts(a)
+  # processes contexts.gtd into script  
+  context, tabCommand, tabString, regex, color = a.split(/\|/)
+  $contexts.push({:context =&gt; tabCommand, :tabString =&gt; tabString})   
+end
+
+
+def reportContexts
+  # a simple test
+  $contexts.each do |tag|
+    puts("Context: " + tag[:context])
+    puts("tabCommand: " + tag[:tabCommand])
+    puts("tabString: " + tag[:tabString])
+    puts("Search String: " + tag[:regex])
+    puts("Color: " + tag[:color])
+    i = 0
+    while i &lt; tag[:tasks].length
+      puts "Task: " + tag[:tasks][i]
+      i = i + 1
+    end
+  end
+end
+
+def myParse tabCommand
+  found = 0
+  $contexts.each do |tag|
+    re = tag[:context]
+    if (tabCommand == re) and (found == 0) 
+      print tag[:tabString]
+      found = 1
+    end
+  end
+  if found == 0 
+    puts "failed"
+  end
+end
+
+
+# the contexts.gtd file is read, and converted into $contexts
+file = File.open($myPath+"/contexts.gtd", "r")
+file.each do |line|
+  readContexts(line)
+end    
+
+myParse tabCommand</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Execute Tab Command</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.plain.gtd2</string>
+	<key>uuid</key>
+	<string>157FD2C3-5EE2-4062-AB10-4DC99569479A</string>
+</dict>
+</plist>

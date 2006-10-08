@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+myFile = ENV['TM_SELECTED_FILE']
+
+myText = File.open(myFile)
+re = /\s/
+myText.each do |line|
+  myTest = re.match(line)
+  if (myTest.pre_match != "+" and myTest.pre_match.length &gt; 0)
+    puts line
+  end
+end  
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~C</string>
+	<key>name</key>
+	<string>Remove Completed Tasks</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>text.plain.gtd2</string>
+	<key>uuid</key>
+	<string>E5F06D38-834F-47DA-8155-1442E93F916D</string>
+</dict>
+</plist>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+import sys, os
+
+oldtask = os.environ['TM_CURRENT_LINE']
+if (oldtask[0] != "+") and (oldtask[0] != "^"):
+	sys.stdout.write("-&gt; " + oldtask[3:])
+else:
+    sys.stdout.write(oldtask)</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Delegate</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.plain.gtd2</string>
+	<key>tabTrigger</key>
+	<string>f</string>
+	<key>uuid</key>
+	<string>3C05B507-FDF8-4BD1-9D9E-E1246C4AE7E4</string>
+</dict>
+</plist>

@@ -25,36 +25,8 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>(%{)</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.comment.lilypond</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(%})</string>
-			<key>name</key>
-			<string>comment.block.lilypond</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(%)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.lilypond</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>$\n?</string>
-			<key>name</key>
-			<string>comment.line.lilypond</string>
+			<key>include</key>
+			<string>#comment</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -91,11 +63,95 @@
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escape.untitled</string>
+					<string>constant.character.escape.lilypond</string>
 				</dict>
 			</array>
 		</dict>
+		<dict>
+			<key>include</key>
+			<string>#scheme</string>
+		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>comment</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(%{)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.comment.lilypond</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(%})</string>
+					<key>name</key>
+					<string>comment.block.lilypond</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(%)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.lilypond</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>$\n?</string>
+					<key>name</key>
+					<string>comment.line.lilypond</string>
+				</dict>
+			</array>
+		</dict>
+		<key>scheme</key>
+		<dict>
+			<key>comment</key>
+			<string>
+				Lilypond source can embed scheme code to do things more
+				flexibly than allowed by the basic language.
+			</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>#</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.embedded-scheme.lilypond</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>
+						We need to make sure to match after a \n, as included
+						by some s-expressions in the scheme grammar.
+					</string>
+					<key>contentName</key>
+					<string>source.scheme.embedded.lilypond</string>
+					<key>end</key>
+					<string>(?=[\s%])|(?&lt;=\n)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.scheme</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.lilypond</string>
 	<key>uuid</key>

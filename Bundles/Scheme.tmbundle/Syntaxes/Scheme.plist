@@ -355,7 +355,7 @@
 					<key>contentName</key>
 					<string>string.other.quoted-object.scheme</string>
 					<key>end</key>
-					<string>(?&lt;=\s)</string>
+					<string>(?=\s|\))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -446,18 +446,13 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(\))(\n)?</string>
+					<string>(\))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.section.expression.end.scheme</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>meta.after-expression.scheme</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -629,7 +624,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>variable.language.scheme</string>
+							<string>variable.other.scheme</string>
 						</dict>
 					</dict>
 					<key>end</key>

@@ -3,7 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>comment</key>
-	<string>the foldings do not currently work the way I want them to. this may be a limitation of the way they are applied rather than the regexps in use. Nonetheless the foldings will end on the last identically indented blank line following an s-expression. Not ideal perhaps but it works. Also, the #illegal pattern never matches an unpaired ( as being illegal. Why?! -- Rob Rix</string>
+	<string>
+		The foldings do not currently work the way I want them to. This
+		may be a limitation of the way they are applied rather than the
+		regexps in use. Nonetheless, the foldings will end on the last
+		identically indented blank line following an s-expression. Not
+		ideal perhaps, but it works. Also, the #illegal pattern never
+		matches an unpaired ( as being illegal. Why?! -- Rob Rix
+		
+		Ok, hopefully this grammar works better on quoted stuff now.  It
+		may break for fancy macros, but should generally work pretty
+		smoothly.  -- Jacob Rus
+	</string>
 	<key>fileTypes</key>
 	<array>
 		<string>scm</string>
@@ -38,6 +49,18 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#string</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#language-functions</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#quote</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#illegal</string>
 		</dict>
 	</array>
@@ -58,239 +81,15 @@
 			<key>name</key>
 			<string>comment.line.semicolon.scheme</string>
 		</dict>
-		<key>illegal</key>
+		<key>constants</key>
 		<dict>
-			<key>match</key>
-			<string>[()]</string>
-			<key>name</key>
-			<string>invalid.illegal.parenthesis.scheme</string>
-		</dict>
-		<key>sexp</key>
-		<dict>
-			<key>begin</key>
-			<string>(\()</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.expression.begin.scheme</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(\))(\n)?</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.expression.end.scheme</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>meta.after-expression.scheme</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.expression.scheme</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#comment</string>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(?&lt;=\()(define)\s+\(([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*)((\s+([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._]))*)\s*\)</string>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.scheme</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>entity.name.function.scheme</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.function.scheme</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(?=\))</string>
-					<key>name</key>
-					<string>meta.declaration.procedure.scheme</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#comment</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#sexp</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#illegal</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(?&lt;=\()(lambda)\s+\(((([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._])\s*)*)\)</string>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.scheme</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.scheme</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(?=\))</string>
-					<key>name</key>
-					<string>meta.declaration.procedure.scheme</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#comment</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#sexp</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#illegal</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(?&lt;=\()(define)\s([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*)\s*.*?</string>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.scheme</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>variable.language.scheme</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(?=\))</string>
-					<key>name</key>
-					<string>meta.declaration.variable.scheme</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#comment</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#sexp</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#illegal</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
 					<key>match</key>
-					<string>(?&lt;=(\s|\())(do|or|and|else|quasiquote|begin|if|quote|case|set!|cond|let|unquote|define|let\*|unquote-splicing|delay|letrec)(?=(\s|\())</string>
+					<string>#[t|f]</string>
 					<key>name</key>
-					<string>keyword.other.scheme</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=(\s|\())(=|&gt;|-|\+|\*|/|&lt;|&gt;=|&lt;=|abs|acos|angle|append|apply|approximate|asin|assoc|assq|assv|atan|atom\?|boolean\?|bound-identifier=\?|caar|cadr|cdar|cddr|caaar|caadr|cadar|caddr|cdaar|cdadr|cddar|cdddr|caaaar|caaadr|caadar|caaddr|cadaar|cadadr|caddar|cadddr|cdaaar|cdaadr|cdadr|cdaddr|cddaar|cddadr|cdddar|cddddr|call-with-current-continuation|call-with-input-file|call-with-output-file|call/cc|car|catch|cdddar|cddddr|cdr|ceiling|char-&gt;integer|char-alphabetic\?|char-ci&lt;=\?|char-ci&lt;\?|char-ci=\?|char-ci&gt;=\?|char-ci&gt;\?|char-downcase|char-lower-case\?|char-numeric\?|char-ready|char-ready\?|char-upcase|char-upper-case\?|char-whitespace\?|char&lt;=\?|char&lt;\?|char=\?|char&gt;=\?|char&gt;\?|char\?|close-input-port|close-output-port|complex\?|cons|construct-identifier|cos|current-input-port|current-output-port|define-syntax|denominator|display|eof-object\?|eq\?|equal?|eqv\?|even\?|exact-&gt;inexact|exact\?|exp|expt|floor|foo|for-each|force|free-identifier=\?|cd|gen-counter|gen-loser|generate-identifier|identifier-&gt;symbol|identifier\?|imag-part|inexact-&gt;exact|inexact\?|input-port\?|integer-&gt;char|integer\?|last-pair|lcm|length|let-syntax|letrec-syntax|list|list-&gt;string|list-&gt;vector|list-ref|list-tail|list\?|load|log|macro|magnitude|make-polar|make-promise|make-rectangular|make-string|make-vector|map|map-streams|max|member|memq|memv|min|modulo|negative\?|newline|nil|not|null\?|number-&gt;string|number\?|numerator|odd\?|open-input-file|open-output-file|output-port\?|pair\?|peek-char|positive\?|procedure\?|quotient|rational\?|rationalize|read|read-char|real-part|real\?|remainder|return|reverse|round|sequence|set-car!|set-cdr!|sin|sqrt|string|string-&gt;list|string-&gt;number|string-&gt;symbol|string-append|string-ci&lt;=\?|string-ci&lt;\?|string-ci=\?|string-ci&gt;=\?|string-ci&gt;\?|string-copy|string-fill!|string-length|string-ref|string-set!|string&lt;=\?|string&lt;\?|string=\?|string&gt;=\?|string&gt;\?|string\?|substring|symbol-&gt;string|symbol\?|syntax|syntax-rules|tan|transcript-off|transcript-on|truncate|unwrap-syntax|values-list|vector|vector-&gt;list|vector-fill!|vector-length|vector-ref|vector-set!|vector\?|with-input-from-file|with-output-to-file|write|write-char|zero\?)(?=(\s|\())</string>
-					<key>name</key>
-					<string>support.function.scheme</string>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(")</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.begin.scheme</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(")</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.end.scheme</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>string.quoted.double.scheme</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>match</key>
-							<string>\\.</string>
-							<key>name</key>
-							<string>constant.character.escape.scheme</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.boolean.scheme</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.boolean.scheme</string>
-						</dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.symbol.scheme</string>
-						</dict>
-						<key>5</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.section.expression.begin.scheme</string>
-						</dict>
-						<key>6</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.section.expression.end.scheme</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>((#)t|(#)f|(')(\()(\)))</string>
-					<key>name</key>
-					<string>constant.language.scheme</string>
+					<string>constant.language.boolean.scheme</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -330,6 +129,549 @@
 					<key>name</key>
 					<string>constant.numeric.scheme</string>
 				</dict>
+			</array>
+		</dict>
+		<key>illegal</key>
+		<dict>
+			<key>match</key>
+			<string>[()]</string>
+			<key>name</key>
+			<string>invalid.illegal.parenthesis.scheme</string>
+		</dict>
+		<key>language-functions</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?x)
+						(?&lt;=(\s|\()) # preceded by space or ( 
+						( do|or|and|else|quasiquote|begin|if|case|set!|
+						  cond|let|unquote|define|let\*|unquote-splicing|delay|
+						  letrec)
+						(?=(\s|\())</string>
+					<key>name</key>
+					<string>keyword.control.scheme</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>
+						These functions run a test, and return a boolean
+						answer.
+					</string>
+					<key>match</key>
+					<string>(?x)
+						(?&lt;=(\s|\()) # preceded by space or (
+						( char-alphabetic|char-lower-case|char-numeric|
+						  char-ready|char-upper-case|char-whitespace|
+						  (?:char|string)(?:-ci)?(?:=|&lt;=?|&gt;=?)|
+						  atom|boolean|bound-identifier=|char|complex|
+						  identifier|integer|symbol|free-identifier=|inexact|
+						  eof-object|exact|list|(?:input|output)-port|pair|
+						  real|rational|zero|vector|negative|odd|null|string|
+						  eq|equal|eqv|even|number|positive|procedure
+						)
+						(\?)		# name ends with ? sign
+						(?=(\s|\()) # followed by space or (
+					</string>
+					<key>name</key>
+					<string>support.function.boolean-test.scheme</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>
+						These functions change one type into another.
+					</string>
+					<key>match</key>
+					<string>(?x)
+						(?&lt;=(\s|\()) # preceded by space or (
+						( char-&gt;integer|exact-&gt;inexact|inexact-&gt;exact|
+						  integer-&gt;char|symbol-&gt;string|list-&gt;vector|
+						  list-&gt;string|identifier-&gt;symbol|vector-&gt;list|
+						  string-&gt;list|string-&gt;number|string-&gt;symbol|
+						  number-&gt;string
+						)
+						(?=(\s|\()) # followed by space or (					
+					</string>
+					<key>name</key>
+					<string>support.function.convert-type.scheme</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>
+						These functions are potentially dangerous because
+						they have side-effects which could affect other
+						parts of the program.
+					</string>
+					<key>match</key>
+					<string>(?x)
+						(?&lt;=(\s|\()) # preceded by space or (
+						( set-(?:car|cdr)|				 # set car/cdr
+						  (?:vector|string)-(?:fill|set) # fill/set string/vector
+						)
+						(!)			# name ends with ! sign
+						(?=(\s|\()) # followed by space or (
+					</string>
+					<key>name</key>
+					<string>support.function.with-side-effects.scheme</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>
+						+, -, *, /, =, &gt;, etc. 
+					</string>
+					<key>match</key>
+					<string>(?x)
+						(?&lt;=(\s|\()) # preceded by space or (
+						( &gt;=?|&lt;=?|=|[*/+-])
+						(?=(\s|\()) # followed by space or (
+						</string>
+					<key>name</key>
+					<string>support.function.arithmetic-operators.scheme</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?x)
+						(?&lt;=(\s|\()) # preceded by space or (
+						( append|apply|approximate|
+						  call-with-current-continuation|call/cc|catch|
+						  construct-identifier|define-syntax|display|foo|
+						  for-each|force|cd|gen-counter|gen-loser|
+						  generate-identifier|last-pair|length|let-syntax|
+						  letrec-syntax|list|list-ref|list-tail|load|log|
+						  macro|magnitude|map|map-streams|max|member|memq|
+						  memv|min|newline|nil|not|peek-char|rationalize|
+						  read|read-char|return|reverse|sequence|substring|
+						  syntax|syntax-rules|transcript-off|transcript-on|
+						  truncate|unwrap-syntax|values-list|write|write-char|
+						  
+						  # cons, car, cdr, etc
+						  cons|c(a|d){1,4}r| 
+                          
+						  # unary math operators
+						  abs|acos|angle|asin|assoc|assq|assv|atan|ceiling|
+						  cos|floor|round|sin|sqrt|tan|
+						  (?:real|imag)-part|numerator|denominator
+                          
+						  # other math operators
+						  modulo|exp|expt|remainder|quotient|lcm|
+                          
+						  # ports / files
+						  call-with-(?:input|output)-file|
+						  (?:close|current)-(?:input|output)-port|
+						  with-(?:input|output)-from-file|
+						  open-(?:input|output)-file|
+						  
+						  # char-«foo»
+						  char-(?:downcase|upcase|ready)|
+						  
+						  # make-«foo»
+						  make-(?:polar|promise|rectangular|string|vector)
+						  
+						  # string-«foo», vector-«foo»
+						  string(?:-(?:append|copy|length|ref))?|
+						  vector(?:-length|-ref)
+						)
+						(?=(\s|\()) # followed by space or (
+					</string>
+					<key>name</key>
+					<string>support.function.general.scheme</string>
+				</dict>
+			</array>
+		</dict>
+		<key>quote</key>
+		<dict>
+			<key>comment</key>
+			<string>
+				We need to be able to quote any kind of item, which creates
+				a tiny bit of complexity in our grammar.  It is hopefully
+				not overwhelming complexity
+			</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(')\s*(?=")</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.quoted-code.scheme</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>quoted double-quoted string</string>
+					<key>contentName</key>
+					<string>string.other.quoted-object.scheme</string>
+					<key>end</key>
+					<string>(?&lt;=")</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#quoted</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(')\s*(?=\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.quoted-code.scheme</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>quoted s-expression</string>
+					<key>contentName</key>
+					<string>string.other.quoted-object.scheme</string>
+					<key>end</key>
+					<string>(?&lt;=\))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#quoted</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(')\s*(?=[^\s])</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.quoted-code.scheme</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>quoted anything else</string>
+					<key>contentName</key>
+					<string>string.other.quoted-object.scheme</string>
+					<key>end</key>
+					<string>(?&lt;=\s)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#quoted</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>quote-sexp</key>
+		<dict>
+			<key>begin</key>
+			<string>(?&lt;=\()\s*(quote)\b\s*</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.quote.scheme</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=\)|[ ])</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?=\()</string>
+					<key>comment</key>
+					<string>quoted s-expression</string>
+					<key>end</key>
+					<string>(?&lt;=\))</string>
+					<key>name</key>
+					<string>string.other.quoted-code.scheme</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#quoted</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=")</string>
+					<key>comment</key>
+					<string>quoted string</string>
+					<key>end</key>
+					<string>(?&lt;=")</string>
+					<key>name</key>
+					<string>string.other.quoted-code.scheme</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#quoted</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>quoted anything else</string>
+					<key>match</key>
+					<string>[^\s()"]+</string>
+					<key>name</key>
+					<string>string.other.quoted-code.scheme</string>
+				</dict>
+			</array>
+		</dict>
+		<key>quoted</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.expression.begin.scheme</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\))(\n)?</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.expression.end.scheme</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.after-expression.scheme</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.expression.scheme</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#quoted</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#quote</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#illegal</string>
+				</dict>
+			</array>
+		</dict>
+		<key>sexp</key>
+		<dict>
+			<key>begin</key>
+			<string>(\()</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.expression.begin.scheme</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\))(\n)?</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.expression.end.scheme</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.after-expression.scheme</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.expression.scheme</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x)
+						(?&lt;=\()       # preceded by (
+						(define)\s+   # define
+						\(            # list of parameters
+						  ([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*)
+						  ((\s+
+						    ([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._])
+						   )*
+						  )\s*
+						\)
+					</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.scheme</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.scheme</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.function.scheme</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\))</string>
+					<key>name</key>
+					<string>meta.declaration.procedure.scheme</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#comment</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#sexp</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#illegal</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x)
+						(?&lt;=\() # preceded by (
+						(lambda)\s+
+						(\() # opening paren
+						((?:
+						  ([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._])
+						  \s*
+						)*)
+						(\)) # closing paren
+					</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.scheme</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.scheme</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>
+						Not sure this one is quite correct.  That \s* is
+						particularly troubling
+					</string>
+					<key>end</key>
+					<string>(?=\))</string>
+					<key>name</key>
+					<string>meta.declaration.procedure.scheme</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#comment</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#sexp</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#illegal</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=\()(define)\s([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*)\s*.*?</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.scheme</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.language.scheme</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\))</string>
+					<key>name</key>
+					<string>meta.declaration.variable.scheme</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#comment</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#sexp</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#illegal</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#quote-sexp</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#quote</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#language-functions</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#constants</string>
+				</dict>
 				<dict>
 					<key>match</key>
 					<string>(?&lt;=[\(\s])(#\\).</string>
@@ -343,6 +685,40 @@
 				<dict>
 					<key>include</key>
 					<string>#illegal</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string</key>
+		<dict>
+			<key>begin</key>
+			<string>(")</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.scheme</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.scheme</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.double.scheme</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.scheme</string>
 				</dict>
 			</array>
 		</dict>

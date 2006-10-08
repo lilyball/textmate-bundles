@@ -285,10 +285,63 @@
 			<string>
 				We need to be able to quote any kind of item, which creates
 				a tiny bit of complexity in our grammar.  It is hopefully
-				not overwhelming complexity
+				not overwhelming complexity.
+				
+				Note: the first two matches are special cases.  quoted
+				symbols, and quoted empty lists are considered constant.other
+				
 			</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.quoted.symbol.scheme</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?x)
+						(')\s*
+						([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*)
+					</string>
+					<key>name</key>
+					<string>constant.other.symbol.scheme</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.quoted.empty-list.scheme</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.expression.scheme</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.expression.begin.scheme</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.expression.end.scheme</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?x)
+						(')\s*
+						((\()\s*(\)))
+					</string>
+					<key>name</key>
+					<string>constant.other.empty-list.schem</string>
+				</dict>
 				<dict>
 					<key>begin</key>
 					<string>(')\s*(?=")</string>
@@ -297,15 +350,15 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.section.quoted-code.scheme</string>
+							<string>punctuation.section.quoted.scheme</string>
 						</dict>
 					</dict>
 					<key>comment</key>
 					<string>quoted double-quoted string</string>
-					<key>contentName</key>
-					<string>string.other.quoted-object.scheme</string>
 					<key>end</key>
 					<string>(?&lt;=")</string>
+					<key>name</key>
+					<string>string.other.quoted-object.scheme</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -322,15 +375,15 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.section.quoted-code.scheme</string>
+							<string>punctuation.section.quoted.scheme</string>
 						</dict>
 					</dict>
 					<key>comment</key>
 					<string>quoted s-expression</string>
-					<key>contentName</key>
-					<string>string.other.quoted-object.scheme</string>
 					<key>end</key>
 					<string>(?&lt;=\))</string>
+					<key>name</key>
+					<string>string.other.quoted-object.scheme</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -347,15 +400,15 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.section.quoted-code.scheme</string>
+							<string>punctuation.section.quoted.scheme</string>
 						</dict>
 					</dict>
 					<key>comment</key>
 					<string>quoted anything else</string>
-					<key>contentName</key>
-					<string>string.other.quoted-object.scheme</string>
 					<key>end</key>
 					<string>(?=\s|\))</string>
+					<key>name</key>
+					<string>string.other.quoted-object.scheme</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -672,6 +725,17 @@
 					<string>(?&lt;=[\(\s])(#\\).</string>
 					<key>name</key>
 					<string>constant.character.escape.scheme</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>
+						the . in (a . b) which conses together two elements
+						a and b. (a b c) == (a . (b . (c . nil)))
+					</string>
+					<key>match</key>
+					<string>(?&lt;=[ ()])\.(?=[ ()])</string>
+					<key>name</key>
+					<string>punctuation.separator.cons.scheme</string>
 				</dict>
 				<dict>
 					<key>include</key>

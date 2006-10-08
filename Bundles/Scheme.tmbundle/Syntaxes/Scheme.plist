@@ -344,7 +344,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(')\s*(?=")</string>
+					<string>(')\s*</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -354,59 +354,9 @@
 						</dict>
 					</dict>
 					<key>comment</key>
-					<string>quoted double-quoted string</string>
+					<string>quoted double-quoted string or s-expression</string>
 					<key>end</key>
-					<string>(?&lt;=")</string>
-					<key>name</key>
-					<string>string.other.quoted-object.scheme</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#quoted</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(')\s*(?=\()</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.section.quoted.scheme</string>
-						</dict>
-					</dict>
-					<key>comment</key>
-					<string>quoted s-expression</string>
-					<key>end</key>
-					<string>(?&lt;=\))</string>
-					<key>name</key>
-					<string>string.other.quoted-object.scheme</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#quoted</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(')\s*(?=[^\s])</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.section.quoted.scheme</string>
-						</dict>
-					</dict>
-					<key>comment</key>
-					<string>quoted anything else</string>
-					<key>end</key>
-					<string>(?=\s|\))</string>
+					<string>(?=[\s()])|(?&lt;=\n)</string>
 					<key>name</key>
 					<string>string.other.quoted-object.scheme</string>
 					<key>patterns</key>
@@ -431,51 +381,20 @@
 					<string>keyword.control.quote.scheme</string>
 				</dict>
 			</dict>
+			<key>comment</key>
+			<string>
+				Something quoted with (quote «thing»).  In this case «thing»
+				will not be evaluated, so we are considering it a string.
+			</string>
+			<key>contentName</key>
+			<string>string.other.quote.scheme</string>
 			<key>end</key>
-			<string>(?=\)|[ ])</string>
+			<string>(?=[\s()])|(?&lt;=\n)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>begin</key>
-					<string>(?=\()</string>
-					<key>comment</key>
-					<string>quoted s-expression</string>
-					<key>end</key>
-					<string>(?&lt;=\))</string>
-					<key>name</key>
-					<string>string.other.quoted-code.scheme</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#quoted</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(?=")</string>
-					<key>comment</key>
-					<string>quoted string</string>
-					<key>end</key>
-					<string>(?&lt;=")</string>
-					<key>name</key>
-					<string>string.other.quoted-code.scheme</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#quoted</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>comment</key>
-					<string>quoted anything else</string>
-					<key>match</key>
-					<string>[^\s()"]+</string>
-					<key>name</key>
-					<string>string.other.quoted-code.scheme</string>
+					<key>include</key>
+					<string>#quoted</string>
 				</dict>
 			</array>
 		</dict>

@@ -56,7 +56,7 @@ res = TextMate.call_with_progress(:title =&gt; "Fetch Categories", :message =&gt
 end
 
 TextMate.exit_show_tool_tip "No categories are available!" if res.nil? || res.empty?
-select_from_cats(res) rescue print "Category: "
+select_from_cats(res)
 </string>
 	<key>input</key>
 	<string>none</string>

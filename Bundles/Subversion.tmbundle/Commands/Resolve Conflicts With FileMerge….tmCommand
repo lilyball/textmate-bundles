@@ -37,7 +37,7 @@ function lookup {
 }
 
 filedir=`dirname "$conflictfile"`
-info=`svn info "$conflictfile"`
+info=`"$TM_SVN" info "$conflictfile"`
 lookup "$info" "Conflict Current Base File" &amp;&amp; leftfile=$RETVAL
 lookup "$info" "Conflict Previous Working File" &amp;&amp; rightfile=$RETVAL
 lookup "$info" "Conflict Previous Base File" &amp;&amp; ancestorfile=$RETVAL

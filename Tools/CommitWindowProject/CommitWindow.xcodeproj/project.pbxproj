@@ -11,6 +11,9 @@
 		831670450A4DB70A00199564 /* CommitWindowCommandLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 831670440A4DB70A00199564 /* CommitWindowCommandLine.m */; };
 		831C222407B6F2EC00397A7E /* CommitWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 831C222307B6F2EC00397A7E /* CommitWindowController.m */; };
 		83BDF3B207DD4165005AC50F /* CWTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BDF3B107DD4165005AC50F /* CWTextView.m */; };
+		83C8C89B0ADA89330070245F /* Action.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83C8C8990ADA89320070245F /* Action.tiff */; };
+		83C8C89C0ADA89330070245F /* ActionPressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83C8C89A0ADA89320070245F /* ActionPressed.tiff */; };
+		83C8C8A20ADA90140070245F /* CXMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C8C8A10ADA90140070245F /* CXMenuButton.m */; };
 		83F6091D07B8A60400C21FE8 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F6091C07B8A60400C21FE8 /* ApplicationServices.framework */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -34,6 +37,10 @@
 		831C222307B6F2EC00397A7E /* CommitWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitWindowController.m; sourceTree = "<group>"; };
 		83BDF3B007DD4165005AC50F /* CWTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWTextView.h; sourceTree = "<group>"; };
 		83BDF3B107DD4165005AC50F /* CWTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWTextView.m; sourceTree = "<group>"; };
+		83C8C8990ADA89320070245F /* Action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Action.tiff; path = ../../../../../Applications/TextMate.app/Contents/Resources/Action.tiff; sourceTree = SOURCE_ROOT; };
+		83C8C89A0ADA89320070245F /* ActionPressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ActionPressed.tiff; path = ../../../../../Applications/TextMate.app/Contents/Resources/ActionPressed.tiff; sourceTree = SOURCE_ROOT; };
+		83C8C8A00ADA900B0070245F /* CXMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXMenuButton.h; sourceTree = SOURCE_ROOT; };
+		83C8C8A10ADA90140070245F /* CXMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXMenuButton.m; sourceTree = SOURCE_ROOT; };
 		83F6091C07B8A60400C21FE8 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CommitWindow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommitWindow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +70,8 @@
 				8316703A0A4DB58500199564 /* NSString+StatusString.m */,
 				83BDF3B007DD4165005AC50F /* CWTextView.h */,
 				83BDF3B107DD4165005AC50F /* CWTextView.m */,
+				83C8C8A00ADA900B0070245F /* CXMenuButton.h */,
+				83C8C8A10ADA90140070245F /* CXMenuButton.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -117,6 +126,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				83C8C8990ADA89320070245F /* Action.tiff */,
+				83C8C89A0ADA89320070245F /* ActionPressed.tiff */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -161,9 +172,12 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 83189C550877A068007473C7 /* Build configuration list for PBXProject "CommitWindow" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* AskForString */;
 			projectDirPath = "";
+			projectRoot = "";
+			shouldCheckCompatibility = 1;
 			targets = (
 				8D1107260486CEB800E47090 /* CommitWindow */,
 			);
@@ -177,6 +191,8 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				83C8C89B0ADA89330070245F /* Action.tiff in Resources */,
+				83C8C89C0ADA89330070245F /* ActionPressed.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +226,7 @@
 				83BDF3B207DD4165005AC50F /* CWTextView.m in Sources */,
 				8316703B0A4DB58500199564 /* NSString+StatusString.m in Sources */,
 				831670450A4DB70A00199564 /* CommitWindowCommandLine.m in Sources */,
+				83C8C8A20ADA90140070245F /* CXMenuButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

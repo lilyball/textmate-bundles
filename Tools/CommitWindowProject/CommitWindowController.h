@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class CWTextView;
+@class CXMenuButton;
 
 @interface CommitWindowController : NSWindowController
 {
@@ -17,8 +19,9 @@
 	IBOutlet NSWindow *				fWindow;
 
 	IBOutlet NSTextField *			fRequestText;
-	IBOutlet NSTextView *			fCommitMessage;
+	IBOutlet CWTextView *			fCommitMessage;
 	IBOutlet NSPopUpButton *		fPreviousSummaryPopUp;
+	IBOutlet CXMenuButton *			fFileListActionPopUp;
 
 	IBOutlet NSButton *				fCancelButton;
 	IBOutlet NSButton *				fOKButton;
@@ -28,6 +31,10 @@
 	IBOutlet NSTableColumn *		fStatusColumn;
 	IBOutlet NSTableColumn *		fPathColumn;
 
+	IBOutlet NSScrollView *			fSummaryScrollView;
+	NSRect							fPreviousSummaryFrame;
+	IBOutlet NSView *				fLowerControlsView;
+
 	NSString *						fDiffCommand;
 	
 	NSArray *						fFileStatusStrings;
@@ -35,5 +42,9 @@
 
 - (void) setupUserInterface;
 - (void) saveSummary;
+
+- (IBAction) chooseAllFiles:(id)sender;
+- (IBAction) chooseNoFiles:(id)sender;
+- (IBAction) revertToStandardChosenState:(id)sender;
 
 @end

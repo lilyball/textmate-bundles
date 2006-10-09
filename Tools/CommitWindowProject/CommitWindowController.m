@@ -7,12 +7,17 @@
 //
 
 #import "CommitWindowController.h"
+#import "CXMenuButton.h"
+#import "CWTextView.h"
+
 #import "NSString+StatusString.h"
 
 #define kStatusColumnWidthForSingleChar	18
 
 @interface CommitWindowController (Private)
 - (void) populatePreviousSummaryMenu;
+- (void) windowDidResize:(NSNotification *)notification;
+- (void) summaryScrollViewDidResize:(NSNotification *)notification;
 @end
 
 // Forward string comparisons to NSString
@@ -39,8 +44,24 @@
 		[cell setLineBreakMode:NSLineBreakByTruncatingHead];
 
 	//
-	// Done processing arguments, now add status to each item
-	// 								and choose default commit state
+	// Set up summary text view resizing
+	//
+	[self windowDidResize:nil];
+	
+	fPreviousSummaryFrame = [fSummaryScrollView frame];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+		selector:@selector(summaryScrollViewDidResize:)
+		name:NSViewFrameDidChangeNotification
+		object:fSummaryScrollView];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+		selector:@selector(windowDidResize:)
+		name:NSWindowDidResizeNotification
+		object:fWindow];
+		
+	//
+	// Add status to each item and choose default commit state
 	//
 	if( fFileStatusStrings != nil )
 	{
@@ -282,5 +303,86 @@
 		[defaults synchronize];
 	}
 }
+
+#if 0
+#pragma mark -
+#pragma mark File action menu
+#endif
+
+
+
+- (void) chooseAllItems:(BOOL)chosen
+{
+	NSArray *	files = [fFilesController arrangedObjects];
+	int			count = [files count];
+	int			i;
+	
+	for( i = 0; i < count; i += 1 )
+	{
+		NSMutableDictionary *	dictionary	= [files objectAtIndex:i];
+
+		[dictionary setObject:[NSNumber numberWithBool:chosen] forKey:@"commit"]; 
+	}
+}
+
+- (void) choose:(BOOL)chosen itemsWithStatus:(NSString *)status
+{
+	NSArray *	files = [fFilesController arrangedObjects];
+	int			count = [files count];
+	int			i;
+	
+	for( i = 0; i < count; i += 1 )
+	{
+		NSMutableDictionary *	dictionary	= [files objectAtIndex:i];
+		
+		if( [[dictionary objectForKey:@"status"] hasPrefix:status] )
+		{
+			[dictionary setObject:[NSNumber numberWithBool:chosen] forKey:@"commit"]; 
+		}
+	}
+}
+
+- (IBAction) chooseAllFiles:(id)sender
+{
+	[self chooseAllItems:YES];
+}
+
+- (IBAction) chooseNoFiles:(id)sender
+{
+	[self chooseAllItems:NO];
+}
+
+- (IBAction) revertToStandardChosenState:(id)sender
+{
+	[self chooseAllItems:YES];
+	[self choose:NO itemsWithStatus:@"X"];
+}
+
+#if 0
+#pragma mark -
+#pragma mark Summary view resize
+#endif
+
+- (void) summaryScrollViewDidResize:(NSNotification *)notification
+{
+	// Adjust the size of the lower controls
+	NSRect	currentSummaryFrame			= [fSummaryScrollView frame];
+	NSRect	currentLowerControlsFrame	= [fLowerControlsView frame];
+	
+	float	deltaV = currentSummaryFrame.size.height - fPreviousSummaryFrame.size.height;
+
+	currentLowerControlsFrame.size.height	-= deltaV;
+	
+	[fLowerControlsView setFrame:currentLowerControlsFrame];
+	
+	fPreviousSummaryFrame = currentSummaryFrame;
+}
+
+- (void) windowDidResize:(NSNotification *)notification
+{
+	// Adjust max allowed summary size to 60% of window size
+	[fCommitMessage setMaxHeight:[fWindow frame].size.height * 0.60];
+}
+
 
 @end

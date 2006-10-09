@@ -2,19 +2,34 @@
     IBClasses = (
         {CLASS = CWTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {
-            ACTIONS = {cancel = id; commit = id; doubleClickFileTable = id; }; 
+            CLASS = CXMenuButton; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {menu = NSMenu; }; 
+            SUPERCLASS = NSButton; 
+        }, 
+        {
+            ACTIONS = {
+                cancel = id; 
+                chooseAllFiles = id; 
+                chooseNoFiles = id; 
+                commit = id; 
+                revertToStandardChosenState = id; 
+            }; 
             CLASS = CommitWindowController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 fCancelButton = NSButton; 
                 fCheckBoxColumn = NSTableColumn; 
                 fCommitMessage = NSTextView; 
+                fFileListActionPopUp = CXMenuButton; 
                 fFilesController = NSArrayController; 
+                fLowerControlsView = NSView; 
                 fOKButton = NSButton; 
                 fPathColumn = NSTableColumn; 
                 fPreviousSummaryPopUp = NSPopUpButton; 
                 fRequestText = NSTextField; 
                 fStatusColumn = NSTableColumn; 
+                fSummaryScrollView = NSScrollView; 
                 fTableView = NSTableView; 
                 fWindow = NSWindow; 
             }; 

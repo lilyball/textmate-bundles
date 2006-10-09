@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Similiar to entering query in the Qt Assistant's
+# "Look For:" field, then collecting topics for
+# each displayed method, and then displaying an
+# option to pick one of them using text box.
+
+${TM_RUBY:-ruby} "$TM_BUNDLE_SUPPORT/bin/search.rb" fuzzy</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~h</string>
+	<key>name</key>
+	<string>Fuzzy Documentation for Word / Selection</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.c++.qt</string>
+	<key>uuid</key>
+	<string>C6BD2114-7620-4C35-A9B5-F44CA3291004</string>
+</dict>
+</plist>

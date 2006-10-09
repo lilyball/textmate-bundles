@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Inserts a call to the same metod of superclass.
+# Since figuring a superclass is a bit tricky, it 
+# only works when class declaration exists in the 
+# same file, and prior to the current line. If 
+# it's unable to find superclass, QWidget is used.
+
+${TM_RUBY:-ruby} "$TM_BUNDLE_SUPPORT/bin/insert_super.rb"</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>Insert Call to Super</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.c++.qt</string>
+	<key>tabTrigger</key>
+	<string>super</string>
+	<key>uuid</key>
+	<string>02131A74-BB30-4A92-B8D0-BDD96FF9CD88</string>
+</dict>
+</plist>

@@ -79,7 +79,7 @@ if list == ""
 end
 #puts list
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
-url = %x{ zgrep ^#{e_sh list + "[[:space:]]"} #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa_ref.txt.gz|cut -f2 }.chomp.split[0]
+url = %x{ zgrep ^#{e_sh list + "[[:space:]]"} #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa_ref.txt.gz }.split[1]
 doc_path="/Developer/ADC Reference Library/documentation/Cocoa/Reference/"
 #puts url
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"

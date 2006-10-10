@@ -22,7 +22,7 @@ results.gsub!(/^(?:if|for|while|function)\(.*\n/,"") # Removes definitions of if
 results.gsub!(/\n(?![\w.]+\()/," ") # Brings together arguments on different lines
 results.gsub!(/[\t ]+/," ")
 results.gsub!(/\s+$/,"")
-puts "Suspicious lines:" 
-pp results.scan(/^(.*[^ \w\(].\)) +(\w.*)/) #,"\\1\n\\2" # Try to fix some lines that got together
+# puts "Suspicious lines:"   # UNCOMMENT FOR DEBUGGIN
+# pp results.scan(/^(.*[^ \w\(].\)) +(\w.*)/) #,"\\1\n\\2" # Try to fix some lines that got together
 puts "=" * 40
 puts results.split("\n").sort.uniq.join("\n")

@@ -19,7 +19,7 @@ choice = contextList.find {|i| i.slice(0..len-1) == word }
 if choice then
   print line.sub(/@(\S+)($|\s+)/) {|text,space| "@" + e_sn(choice) + ((space.nil? or space == "") ? " " : space)+"$0"}
 else
-  print e_sn(line)
+  print e_sn(line) + " "
 end
 </string>
 	<key>fallbackInput</key>

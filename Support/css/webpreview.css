@@ -75,8 +75,12 @@ body {
 
 #tm_webpreview_content {
 	padding: 0.5em 2em 0.5em 2em;
-	margin-top: 60px;
+	margin-top: 75px;
 /*	margin-bottom: 2em;*/
+}
+
+#tm_webpreview_content :first-child {
+	margin-top: 0;
 }
 
 /* ================================= */
@@ -616,14 +620,14 @@ div.subversion table.blame td.codecol {
    background-color: #F1D8F0;
 	border-width: 1px 0 1px 0;
 	border-style: solid;
-	border-color: #333;
+	border-color: #555;
 }
 
 .dark div.subversion table.blame td.current_line {
    background-color: #210020;
 	border-width: 1px 0 1px 0;
 	border-style: solid;
-	border-color: #DDD;
+	border-color: #AAA;
 }
 
 

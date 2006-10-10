@@ -336,7 +336,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(^|\s+)(object)\s*(?:(\()([a-z]+)(\)))?\s*$</string>
+			<string>(^\s*)?\b(object)\s*(?:(\()([a-z]+)(\)))?\s*$</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>2</key>
@@ -361,7 +361,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^\1(end)(\s*;;)?\s*$</string>
+			<string>^\1(end)\b</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -823,16 +823,8 @@
 			<string>keyword.other.directive.line-number.ocaml</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>\b(int|char|float|string|list|array|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t)\b</string>
-			<key>name</key>
-			<string>storage.type.ocaml</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>#[a-z_][a-zA-Z0-9_]*</string>
-			<key>name</key>
-			<string>storage.type.variant.polymorphic.ocaml</string>
+			<key>include</key>
+			<string>#storagetypes</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -1019,7 +1011,7 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.arroy.ocaml</string>
+					<string>meta.array.ocaml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1329,6 +1321,24 @@
 				</dict>
 			</array>
 		</dict>
+		<key>storagetypes</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(int|char|float|string|list|array|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t)\b</string>
+					<key>name</key>
+					<string>storage.type.ocaml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>#[a-z_][a-zA-Z0-9_]*</string>
+					<key>name</key>
+					<string>storage.type.variant.polymorphic.ocaml</string>
+				</dict>
+			</array>
+		</dict>
 		<key>strings</key>
 		<dict>
 			<key>patterns</key>
@@ -1392,15 +1402,38 @@
 			<array>
 				<dict>
 					<key>match</key>
+					<string>\|</string>
+					<key>name</key>
+					<string>punctuation.separator.variant-definition.ocaml</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\(</string>
+					<key>end</key>
+					<string>\)</string>
+					<key>name</key>
+					<string>meta.paren-group.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#typedefs</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
 					<string>\bof\b</string>
 					<key>name</key>
 					<string>keyword.other.ocaml</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\b(int|char|float|string|list|array|bool|unit|exn|option|int32|int64|nativeint|format4|lazy_t)\b</string>
-					<key>name</key>
-					<string>storage.type.ocaml</string>
+					<key>include</key>
+					<string>#storagetypes</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -1445,7 +1478,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b[a-z_][a-zA-Z0-9_]*\b</string>
+					<string>(?&lt;=\s|\()['a-z_][a-zA-Z0-9_]*\b</string>
 					<key>name</key>
 					<string>storage.type.ocaml</string>
 				</dict>
@@ -1630,20 +1663,10 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?&lt;!:)(:&gt;|:(?![:=]))(.*?)(\))</string>
+					<string>(\))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.separator.type-constraint.ocaml</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>storage.type.ocaml</string>
-						</dict>
-						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.section.type-constraint.ocaml</string>
@@ -1654,9 +1677,30 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>include</key>
-							<string>#matchpatterns</string>
+							<key>match</key>
+							<string>(?&lt;!:)(:&gt;|:(?![:=]))</string>
+							<key>name</key>
+							<string>punctuation.separator.type-constraint.ocaml</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#variables</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\(</string>
+					<key>end</key>
+					<string>\)</string>
+					<key>name</key>
+					<string>meta.paren-group.ocaml</string>
+					<key>patterns</key>
+					<array>
 						<dict>
 							<key>include</key>
 							<string>#variables</string>
@@ -1766,6 +1810,10 @@
 							</array>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#storagetypes</string>
 				</dict>
 				<dict>
 					<key>match</key>

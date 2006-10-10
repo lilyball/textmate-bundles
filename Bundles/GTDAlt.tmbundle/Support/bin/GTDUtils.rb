@@ -3,7 +3,9 @@ require 'fileutils.rb'
 # Useful methods that don't need to scan any files in order to work
 module GTDLight
   def GTDLight.get_env_contexts
-    return ((ENV['TM_GTD_CONTEXT'] || "") + " " + (ENV['TM_GTD_CONTEXTS'] || "")).chomp.split(" ").compact.sort
+    contexts = ((ENV['TM_GTD_CONTEXT'] || "") + " " + (ENV['TM_GTD_CONTEXTS'] || "")).chomp.split(" ").compact.sort
+    contexts = ["email", "office", "online", "home", "call", "waiting"] if contexts.empty?
+    return contexts
   end
 end
 class Array

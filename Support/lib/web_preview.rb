@@ -1,10 +1,9 @@
-require "erb"
-include ERB::Util
+require "cgi"
 
 def html_header(tm_html_title, tm_html_lang = "", tm_extra_head = "")
 	tm_html_theme = %x{bash -c #{e_sh ". #{e_sh ENV['TM_SUPPORT_PATH']}/lib/webpreview.sh && selected_theme"}}.strip
 	if File.exist? ENV["TM_FILEPATH"].to_s
-	  tm_extra_head += "<base href='tm-file://#{url_encode(ENV["TM_FILEPATH"])}'/>"
+	  tm_extra_head += "<base href='tm-file://#{CGI.escape(ENV["TM_FILEPATH"])}'/>"
 	end
 	tm_css = File.read("#{ENV['TM_SUPPORT_PATH']}/css/webpreview.css").
 	              gsub("TM_SUPPORT_PATH", ENV['TM_SUPPORT_PATH'])

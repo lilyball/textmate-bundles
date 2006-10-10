@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>4679484F-6227-11D9-BFB1-000D93589AF6</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+line = STDIN.read
+
+caret_placement = 0
+tmp = ENV['TM_LINE_NUMBER'].to_i - ENV['TM_INPUT_START_LINE'].to_i
+if tmp &gt; 0
+  caret_placement += line.index("\n", tmp) + ENV['TM_LINE_INDEX'].to_i
+else
+  caret_placement =ENV['TM_LINE_INDEX'].to_i-ENV['TM_INPUT_START_LINE_INDEX'].to_i - 1
+end
+
+def match_iter(rgxp,str)
+  offset = 0
+  while m = str.match(rgxp)
+    yield [m[0], m.begin(0) + offset, m[0].length]
+    str = m.post_match
+    offset += m.end(0)
+  end
+end
+
+pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
+
+up = 0
+start = [0]
+#Count [
+match_iter(pat , line[0..caret_placement]) do |tok, beg, len|
+  t = tok[0].chr
+  if t == "["
+    start &lt;&lt; beg
+  elsif t == "]"
+    start.pop
+  end
+end
+
+
+up = 0
+last = line.length
+match_iter(pat , line[caret_placement+1..line.length]) do |tok, beg, len|
+  t = tok[0].chr
+  if t == "["
+    up +=1
+  elsif t == "]"
+    if up == 0
+      last = beg
+      break
+    end
+    up -=1
+  end
+end
+
+up =-1
+list = ""
+
+match_iter(pat , line[start[-1]..last+caret_placement]) do |tok, beg, len|
+  t = tok[0].chr
+  if t == "["
+    up +=1
+  elsif t == "]"
+    up -=1
+  elsif t !='"' and t !='@' and up == 0
+    list &lt;&lt; tok
+  end
+end
+
+if list == ""
+	m = line[start[-1]..last+caret_placement].match(/([a-zA-Z][a-zA-Z0-9]*:?)\s*$/)
+  if m
+    list = m[1]
+ end
+end
+#puts list
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+url = %x{ zgrep ^#{e_sh list + "[[:space:]]"} #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa_ref.txt.gz|cut -f2 }.chomp.split[0]
+doc_path="/Developer/ADC Reference Library/documentation/Cocoa/Reference/"
+#puts url
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
+TextMate.exit_show_tool_tip "No documentation found for:\n#{list}" if url.nil?
+TextMate.exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://#{doc_path+url}'&gt;"
+
+
+# the variable "list" contains the message
+# http://home.mac.se/joachimm/cocoa_ref.txt.gz</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation for Selector</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>meta.bracketed.objc</string>
+	<key>uuid</key>
+	<string>8AF46225-833C-473E-8EEC-F21C581636F6</string>
+</dict>
+</plist>

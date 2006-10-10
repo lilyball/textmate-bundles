@@ -159,6 +159,7 @@
 			newFrame.origin.y += scrollFrame.size.height - newFrame.size.height;
 		}
 		
+		[scrollView setNeedsDisplayInRect:[scrollView bounds]];
 		[scrollView setFrame:newFrame];
 		[[NSCursor arrowCursor] set];
 	}

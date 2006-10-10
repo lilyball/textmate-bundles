@@ -368,9 +368,11 @@
 	// Adjust the size of the lower controls
 	NSRect	currentSummaryFrame			= [fSummaryScrollView frame];
 	NSRect	currentLowerControlsFrame	= [fLowerControlsView frame];
-	
-	float	deltaV = currentSummaryFrame.size.height - fPreviousSummaryFrame.size.height;
 
+	float	deltaV = currentSummaryFrame.size.height - fPreviousSummaryFrame.size.height;
+	
+	[fLowerControlsView setNeedsDisplayInRect:[fLowerControlsView bounds]];
+	
 	currentLowerControlsFrame.size.height	-= deltaV;
 	
 	[fLowerControlsView setFrame:currentLowerControlsFrame];

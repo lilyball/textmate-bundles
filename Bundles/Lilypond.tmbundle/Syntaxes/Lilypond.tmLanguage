@@ -30,11 +30,15 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#strings</string>
+			<string>#g_header</string>
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#functions</string>
+			<string>#groupings</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#strings</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -42,7 +46,11 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#notes</string>
+			<string>#f_keywords</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#f_generic</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -102,22 +110,32 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>constant.language.clef-name.lilypond</string>
+					<string>punctuation.definition.string.lilypond</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>constant.other.modifier.clef.lilypond</string>
+					<string>constant.language.clef-name.lilypond</string>
 				</dict>
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>meta.fixme.unknown-clef-name.lilypond</string>
+					<string>constant.other.modifier.clef.lilypond</string>
 				</dict>
 				<key>6</key>
 				<dict>
 					<key>name</key>
+					<string>meta.fixme.unknown-clef-name.lilypond</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
 					<string>constant.other.modifier.clef.lilypond</string>
+				</dict>
+				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.lilypond</string>
 				</dict>
 			</dict>
 			<key>comment</key>
@@ -129,7 +147,8 @@
 			<string>(?x)
 				((\\) clef) \s+  # backslash + "clef" + spaces (groups 1-2)
 				(?:
-				  ( (?: # group 3
+				  (")?	# beginning quotes (group 3)
+				  ( (?: # group 4
 					  treble | violin | G | french |                    # G clefs
 				      alto | C | tenor | (?:mezzo)?soprano | baritone | # C clefs
 				      (?:sub)?bass | F | varbaritone |                  # F clefs
@@ -140,16 +159,35 @@
 				      (?: vaticana | medicaea | hufnagel ) - (?: do[1-3] | fa[12] ) |
 				      hufnagel-do-fa
 				    )
-				    ([_^](?:8|15)?)? # optionally shift 1-2 octaves ↑/↓ (group 4)
+				    ([_^](?:8|15)?)? # optionally shift 1-2 octaves ↑/↓ (group 5)
 				  ) |
-				  ( (?:\w+) ([_^](?:8|15))? ) # unknown clef name (groups 5-6)
+				  ( (?:\w+) ([_^](?:8|15))? ) # unknown clef name (groups 6-7)
+				  (\3) # closing quotes (group 8)
 				)?
 			</string>
 			<key>name</key>
-			<string>meta.clef.lilypond</string>
+			<string>meta.element.clef.lilypond</string>
+		</dict>
+		<key>f_generic</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.lilypond</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\\)[a-zA-Z]+\b</string>
+			<key>name</key>
+			<string>support.function.general.lilypond</string>
 		</dict>
 		<key>f_key-signature</key>
-		<dict/>
+		<dict>
+			<key>comment</key>
+			<string>FIXME</string>
+		</dict>
 		<key>f_keywords</key>
 		<dict>
 			<key>captures</key>
@@ -159,20 +197,15 @@
 					<key>name</key>
 					<string>punctuation.definition.function.lilypond</string>
 				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.lilypond</string>
-				</dict>
 			</dict>
 			<key>match</key>
 			<string>(?x)
 				(?: (\\)
-				    (set|new)
+				    (?: set | new )
 				)
 			</string>
 			<key>name</key>
-			<string>support.function.keyword.lilypond</string>
+			<string>keyword.control.lilypond</string>
 		</dict>
 		<key>f_time-signature</key>
 		<dict>
@@ -200,7 +233,7 @@
 				([1-9][0-9]*/[1-9][0-9]*)?
 			</string>
 			<key>name</key>
-			<string>meta.time-signature.lilypond</string>
+			<string>meta.element.time-signature.lilypond</string>
 		</dict>
 		<key>functions</key>
 		<dict>
@@ -223,58 +256,63 @@
 					<string>#f_keywords</string>
 				</dict>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.function.lilypond</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(\\)[a-zA-Z]+\b</string>
-					<key>name</key>
-					<string>support.function.general.lilypond</string>
+					<key>include</key>
+					<string>#f_generic</string>
 				</dict>
 			</array>
 		</dict>
-		<key>n_articulations</key>
+		<key>g_header</key>
 		<dict>
-			<key>match</key>
-			<string>(?x)
-				(?: (\\)
-					()
-				)
-			</string>
+			<key>begin</key>
+			<string>((\\)header)\s*({)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.section.header.lilypond</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.lilypond</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.group.begin.lilypond</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.group.end.lilypond</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string></string>
-		</dict>
-		<key>notes</key>
-		<dict>
-			<key>comment</key>
-			<string>
-				These elements here are things that come up in the parts of
-				the file where notes are allowed, so this includes things
-				which modify individual notes or chords.
-			</string>
+			<string>meta.header.lilypond</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\b[a-g]\b</string>
-					<key>name</key>
-					<string>constant.language.note-name.lilypond</string>
+					<key>include</key>
+					<string>#strings</string>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#n_articulations</string>
+					<key>match</key>
+					<string>=</string>
+					<key>name</key>
+					<string>punctuation.separator.key-value.lilypond</string>
 				</dict>
 			</array>
 		</dict>
-		<key>relative</key>
+		<key>g_relative</key>
 		<dict>
 			<key>begin</key>
-			<string>((\\)relative)\s*(?:([a-g])([',]*)\s*)?({)</string>
+			<string>((\\)relative)\s*(?:([a-g])([',]*)\s*)?(?={)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -297,7 +335,88 @@
 					<key>name</key>
 					<string>constant.other.modifier.note.octave.lilypond</string>
 				</dict>
-				<key>5</key>
+			</dict>
+			<key>end</key>
+			<string>(?&lt;=})</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#group</string>
+				</dict>
+			</array>
+		</dict>
+		<key>g_system</key>
+		<dict>
+			<key>begin</key>
+			<string>&lt;&lt;</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.system.begin.lilypond</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&gt;&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.system.end.lilypond</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.system.lilypond</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<key>g_times</key>
+		<dict>
+			<key>begin</key>
+			<string>((\\)times)\s*(?:([1-9][0-9]*/[1-9][0-9])\s*)(?={)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.section.lilypond</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.lilypond</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.fraction.lilypond</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?&lt;=})</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#group</string>
+				</dict>
+			</array>
+		</dict>
+		<key>group</key>
+		<dict>
+			<key>begin</key>
+			<string>{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.section.group.begin.lilypond</string>
@@ -310,9 +429,347 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.section.group.end.lilypond</string>
+					<string>punctuation.section.group.begin.lilypond</string>
 				</dict>
 			</dict>
+			<key>name</key>
+			<string>meta.music-expression.lilypond</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#music-expr</string>
+				</dict>
+			</array>
+		</dict>
+		<key>groupings</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#g_relative</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#g_times</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#g_system</string>
+				</dict>
+			</array>
+		</dict>
+		<key>music-expr</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#groupings</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#strings</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#functions</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#scheme</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#notes</string>
+				</dict>
+			</array>
+		</dict>
+		<key>n_articulations</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?x)
+						([_^-])
+						(?:[.&gt;^+_-])
+					</string>
+					<key>name</key>
+					<string>storage.modifier.articulation.accent</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.lilypond</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?x)
+						(\\)
+						(?: accent | markato | staccatissimo |		 # basic accents
+							espressivo | staccato | tenuto | portato | 
+							(?:up|down)bow | flageolet | thumb |
+							[lr](?:heel|toe) | open | stopped |
+							(?:reverse)?turn | trill |
+							prall(?: prall | mordent | down | up)? | # pralls
+							(?: up | down | line ) prall |           # and
+							(?: up | down )? mordent |               # mordents
+							signumcongruentiae |
+							(?: (?:very)? long | short)?fermata |    # fermatas
+							segno | (?:var)?coda 
+						)
+					</string>
+					<key>name</key>
+					<string>storage.modifier.articulation.named</string>
+				</dict>
+			</array>
+		</dict>
+		<key>notes</key>
+		<dict>
+			<key>comment</key>
+			<string>
+				This section includes the rules for notes, rests, and chords
+			</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?x)\b
+					    (						  # (group 1)
+						  ( [a-g]                 # Pitch (group 2)
+						    ( (?:i[sh]){1,2} |    #   - sharp (group 3)
+						      (?:e[sh]|s){1,2}    #   - flat
+						    )?
+					        ([!?])?               # Cautionary accidental (group 4)
+					        ('+|,+)?             # Octave (group 5)
+						  )
+						  ( ( ((\\)breve)|        # Duration (groups 6-9)
+						      1|2|4|8|16|32|64
+						    )
+						    (\.)?                  # Augmentation dot (group 10)
+						  )?
+						)
+					</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.pitch.lilypond</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>meta.note-modifier.cautionary-accidental.lilypond</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>meta.note-modifier.octave.lilypond</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.duration.lilypond</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.lilypond</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>
+						This rule handles notes, including the pitch, the
+						duration, and any articulations drawn along with
+						the note.
+						
+						This rule gets a whole lot uglier if we want to
+						support multilingual note names.  If so, the rule
+						goes something like:
+						
+						(?x)
+							\b( # Basic Pitches
+							  [a-g]  # Dutch/English/etc.                         
+							  (?: (iss?|s|sharp|x)(iss?|s|sharp|x|ih) | # sharp / flat
+								  (ess?|s|flat|f)(ess?|s|flat|f|eh)
+							  )? |
+							  (?: do|re|mi|fa|sol|la|si) # Italian/Spanish
+							  (?: ss?|dd?bb?) # sharp/flat
+							)
+						...
+					</string>
+					<key>end</key>
+					<string>(?x)
+						(?= [ }~] ) # End when we encounter a space or }
+					</string>
+					<key>name</key>
+					<string>meta.element.note.lilypond</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#n_articulations</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\br</string>
+					<key>end</key>
+					<string>(?=[ }~])</string>
+					<key>name</key>
+					<string>meta.element.pause.rest.lilypond</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\bs</string>
+					<key>end</key>
+					<string>(?=[ }~])</string>
+					<key>name</key>
+					<string>meta.element.pause.skip.lilypond</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>fix-me</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.lilypond</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.duration.lilypond</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>((\\) skip)\s+(1|2|4|8|16|32|64)</string>
+					<key>name</key>
+					<string>meta.element.pause.skip.lilypond</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>&lt;</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.chord.lilypond</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>
+						Lilypond chords look like:    &lt; a b c &gt;
+					</string>
+					<key>end</key>
+					<string>(?x)
+						(&gt;)
+						( ( ((\\)breve)|        # Duration (groups 2-4)
+						    1|2|4|8|16|32|64
+						  )
+						  (\.)?                  # Augmentation dot (group 5)
+						)?
+					</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.chord.lilypond</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.duration.lilypond</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.lilypond</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.element.chord.lilypond</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>storage.type.pitch.lilypond</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>meta.note-modifier.cautionary-accidental.lilypond</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>meta.note-modifier.octave.lilypond</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(?x)\b
+								  ( [a-g]                 # Pitch (group 1)
+								    ( (?:i[sh]){1,2} |    #   - sharp (group 2)
+								      (?:e[sh]|s){1,2}    #   - flat
+								    )?
+							        ([!?])?               # Cautionary accidental (group 3)
+							        ('+|,+)?             # Octave (group 4)
+								  )
+							</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=&gt;)(?&lt;!-&gt;)(?!\s)</string>
+					<key>comment</key>
+					<string>
+						This rule attaches stuff to the end of a chord
+						
+						Therefore it begins after the &gt; which ends a chord,
+						and does not end after a &gt; which ends a chord.
+						(to avoid infinite loops)
+					</string>
+					<key>end</key>
+					<string>(?=[ }~])(?&lt;![^-]&gt;)</string>
+					<key>name</key>
+					<string>meta.element.chord.lilypond</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#n_articulations</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>~</string>
+					<key>name</key>
+					<string>storage.type.tie.lilypond</string>
+				</dict>
+			</array>
 		</dict>
 		<key>scheme</key>
 		<dict>

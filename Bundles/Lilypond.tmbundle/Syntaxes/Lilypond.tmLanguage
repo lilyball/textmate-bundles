@@ -46,11 +46,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#f_keywords</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#f_generic</string>
+			<string>#functions</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -187,6 +183,8 @@
 		<dict>
 			<key>comment</key>
 			<string>FIXME</string>
+			<key>name</key>
+			<string>meta.element.key-signature.lilypond</string>
 		</dict>
 		<key>f_keywords</key>
 		<dict>
@@ -201,7 +199,7 @@
 			<key>match</key>
 			<string>(?x)
 				(?: (\\)
-				    (?: set | new )
+				    (?: set | new | override | revert)
 				)
 			</string>
 			<key>name</key>
@@ -302,17 +300,42 @@
 					<string>#strings</string>
 				</dict>
 				<dict>
+					<key>include</key>
+					<string>#scheme</string>
+				</dict>
+				<dict>
 					<key>match</key>
 					<string>=</string>
 					<key>name</key>
 					<string>punctuation.separator.key-value.lilypond</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?x)
+						dedication | title | subtitle | subsubtitle | poet |
+						composer | meter | opus | arranger | instrument |
+						piece | breakbefore | copyright | tagline
+					</string>
+					<key>name</key>
+					<string>support.constant.header.lilypond</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?x)
+						mutopiatitle | mutopiacomposer | mutopiapoet |
+						mutopiaopus | mutopiainstrument | date | source |
+						style | maintainer | maintainerEmail |
+						maintainerWeb | lastupdated
+					</string>
+					<key>name</key>
+					<string>support.constant.header.mutopia.lilypond</string>
 				</dict>
 			</array>
 		</dict>
 		<key>g_relative</key>
 		<dict>
 			<key>begin</key>
-			<string>((\\)relative)\s*(?:([a-g])([',]*)\s*)?(?={)</string>
+			<string>((\\)relative)\s*(?:([a-g][',]*)\s*)?(?={)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -328,12 +351,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>constant.language.note-name.lilypond</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>constant.other.modifier.note.octave.lilypond</string>
+					<string>storage.type.pitch.lilypond</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -448,6 +466,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#g_system</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#g_relative</string>
 				</dict>
 				<dict>
@@ -456,7 +478,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#g_system</string>
+					<string>#group</string>
 				</dict>
 			</array>
 		</dict>
@@ -501,7 +523,7 @@
 						(?:[.&gt;^+_-])
 					</string>
 					<key>name</key>
-					<string>storage.modifier.articulation.accent</string>
+					<string>storage.modifier.articulation.accent.lilypond</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -529,7 +551,30 @@
 						)
 					</string>
 					<key>name</key>
-					<string>storage.modifier.articulation.named</string>
+					<string>storage.modifier.articulation.named.lilypond</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?x)
+						(\\) # backslash
+						p{1,5} | m[pf] | f{1,4} | fp | # forte, piano, etc.
+						sff? | spp? | [sr]fz | 
+						&lt; | &gt; | ! | espressivo         # (de)crescendo
+					</string>
+					<key>name</key>
+					<string>storage.modifier.articulation.dynamics.lilypond</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\[|\]</string>
+					<key>name</key>
+					<string>storage.modifier.beam.lilypond</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\(|\)</string>
+					<key>name</key>
+					<string>storage.modifier.slur.lilypond</string>
 				</dict>
 			</array>
 		</dict>
@@ -553,14 +598,25 @@
 					        ('+|,+)?             # Octave (group 5)
 						  )
 						  ( ( ((\\)breve)|        # Duration (groups 6-9)
-						      1|2|4|8|16|32|64
+						      64|32|16|8|4|2|1
 						    )
-						    (\.)?                  # Augmentation dot (group 10)
+						    (\.)?                 # Augmentation dot (group 10)
+							((\*)(\d+(?:/\d+)?))? # Scaling duration (groups 11-13)
 						  )?
-						)
+						)(?![a-z])	# do not follow a note with a letter
 					</string>
 					<key>beginCaptures</key>
 					<dict>
+						<key>12</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.duration-scale.lilypond</string>
+						</dict>
+						<key>13</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.fraction.lilypond</string>
+						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
@@ -581,7 +637,7 @@
 							<key>name</key>
 							<string>storage.type.duration.lilypond</string>
 						</dict>
-						<key>8</key>
+						<key>9</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.function.lilypond</string>
@@ -610,7 +666,7 @@
 					</string>
 					<key>end</key>
 					<string>(?x)
-						(?= [ }~] ) # End when we encounter a space or }
+						(?= [ }~a-z] ) # End when we encounter a space or }
 					</string>
 					<key>name</key>
 					<string>meta.element.note.lilypond</string>
@@ -624,19 +680,109 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\br</string>
+					<string>(?x)\b
+						(r) # (group 1)
+						( ( (\\)breve|       # Duration (groups 2-4)
+						    64|32|16|8|4|2|1
+						  )
+						  (\.)?                 # Augmentation dot (group 5)
+						  ((\*)(\d+(?:/\d+)?))? # Scaling duration (groups 6-8)
+						
+						)?
+						(?![a-z])	# do not follow a note with a letter
+					</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.pause.rest.lilypond</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.duration.lilypond</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.lilypond</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.duration-scale.lilypond</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.fraction.lilypond</string>
+						</dict>
+					</dict>
 					<key>end</key>
-					<string>(?=[ }~])</string>
+					<string>(?=[ }~a-z])</string>
 					<key>name</key>
 					<string>meta.element.pause.rest.lilypond</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#n_articulations</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\bs</string>
+					<string>(?x)\b
+						(s) # (group 1)
+						( ( (\\)breve|       # Duration (groups 2-4)
+						    64|32|16|8|4|2|1
+						  )
+						  (\.)?                 # Augmentation dot (group 5)
+						  ((\*)(\d+(?:/\d+)?))? # Scaling duration (groups 6-8)
+						
+						)?
+						(?![a-z])	# do not follow a note with a letter
+					</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.pause.skip.lilypond</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.duration.lilypond</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.lilypond</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.duration-scale.lilypond</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.fraction.lilypond</string>
+						</dict>
+					</dict>
 					<key>end</key>
-					<string>(?=[ }~])</string>
+					<string>(?=[ }~a-z])</string>
 					<key>name</key>
 					<string>meta.element.pause.skip.lilypond</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#n_articulations</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -644,7 +790,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>fix-me</string>
+							<string>storage.type.pause.skip.lilypond</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -658,7 +804,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>((\\) skip)\s+(1|2|4|8|16|32|64)</string>
+					<string>((\\)skip)\s+(64|32|16|8|4|2|1)</string>
 					<key>name</key>
 					<string>meta.element.pause.skip.lilypond</string>
 				</dict>
@@ -681,7 +827,7 @@
 					<string>(?x)
 						(&gt;)
 						( ( ((\\)breve)|        # Duration (groups 2-4)
-						    1|2|4|8|16|32|64
+						    64|32|16|8|4|2|1
 						  )
 						  (\.)?                  # Augmentation dot (group 5)
 						)?
@@ -752,7 +898,7 @@
 						(to avoid infinite loops)
 					</string>
 					<key>end</key>
-					<string>(?=[ }~])(?&lt;![^-]&gt;)</string>
+					<string>(?=[ }~a-z])(?&lt;![^-]&gt;)</string>
 					<key>name</key>
 					<string>meta.element.chord.lilypond</string>
 					<key>patterns</key>
@@ -768,6 +914,20 @@
 					<string>~</string>
 					<key>name</key>
 					<string>storage.type.tie.lilypond</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.lilypond</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\\)breathe</string>
+					<key>name</key>
+					<string>storage.type.breath-mark.lilypond</string>
 				</dict>
 			</array>
 		</dict>

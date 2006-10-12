@@ -14,135 +14,225 @@ class String
 end
 
 class FootnoteFilter
-  cattr_accessor :no_style
+  cattr_accessor :no_style, :abs_root, :textmate_prefix
   self.no_style = false
+  self.textmate_prefix = "txmt://open?url=file://"
   
-  def self.indent(indentation, text)
-    initial_indentation = text.scan(/^(\s+)/).flatten.first
-    text.to_a.map do |line|
-      if line.index(initial_indentation) == 0
-        " " * indentation + line[initial_indentation.size..-1]
-      end
-    end.join
-  end
-  
-  def self.insert_text_before(pattern, indentation, body, new_text)
-    index = pattern.is_a?(Regexp) ? body.index(pattern) || body.size : pattern
-    body.insert index, indent(indentation, new_text)
-  end
+  attr_accessor :body, :abs_root
   
   def self.filter(controller)
     return if controller.render_without_footnotes
-    begin
-      abs_root = File.expand_path(RAILS_ROOT)
-    
-      # Some controller classes come with the Controller:: module and some don't (anyone know why? -- Duane)
-      controller_filename = "#{abs_root}/app/controllers/#{controller.class.to_s.underscore}.rb".sub('/controllers/controllers/', '/controllers/')
-      controller_text = IO.read(controller_filename)
-      index_of_method = (controller_text =~ /def\s+#{controller.action_name}[\s\(]/)
-      controller_line_number = controller_text.line_from_index(index_of_method) if index_of_method
-    
-      performed_render = controller.instance_variable_get("@performed_render")
-      template = controller.instance_variable_get("@template")
-      if performed_render and template.respond_to?(:first_render) and template.first_render
-        template_path = template.first_render.sub(/\.(rhtml|rxhtml|rxml|rjs)$/, "")
-        template_extension = $1 || template.pick_template_extension(template_path).to_s
-        template_file_name = File.expand_path(template.send(:full_template_path, template_path, template_extension))
-        layout_file_name = File.expand_path(template.send(:full_template_path, controller.active_layout, "rhtml"))
-        if ["rhtml", "rxhtml"].include? template_extension
-          textmate_prefix = "txmt://open?url=file://"
-          controller_url = controller_filename
-          controller_url += "&line=#{controller_line_number + 1}" if index_of_method
-          
-          # If the user would like to be responsible for the styles, let them opt out of the styling here
-          unless FootnoteFilter.no_style
-            insert_text_before %r{</head>}i, 4, controller.response.body, <<-HTML
-            <!-- TextMate Footnotes Style -->
-            <style>
-              #textmate_footnotes_debug {margin-top: 0.5em; text-align: center; color: #999;}
-              #textmate_footnotes_debug a {text-decoration: none; color: #bbb;}
-              fieldset.textmate_footnotes_debug_info {text-align: left; border: 1px dashed #aaa; padding: 1em; margin: 1em 2em 1em 2em; color: #777;}
-            </style>
-            <!-- End TextMate Footnotes Style -->
-            HTML
-          end
-          
-          if ::MAC_OS_X
-            textmate_links = <<-HTML
-            <b>TextMate Footnotes</b>:
-            <a href="#{textmate_prefix}#{controller_url}">Edit Controller File</a> |
-            <a href="#{textmate_prefix}#{template_file_name}">Edit View File</a> |
-            <a href="#{textmate_prefix}#{layout_file_name}">Edit Layout File</a><br/>
-            HTML
-          else
-            textmate_links = ""
-          end
-          textmate_footnotes = <<-HTML
-          <!-- TextMate Footnotes -->
-          <div style="clear:both"></div>
-          <div id="textmate_footnotes_debug">
-            #{textmate_links}
-            <a href="#" onclick="Element.toggle('session_debug_info');return false">Show Session &#10162;</a> |
-            <a href="#" onclick="Element.toggle('cookies_debug_info');return false">Show Cookies &#10162;</a> |
-            <a href="#" onclick="Element.toggle('params_debug_info');return false">Show Params &#10162;</a> |
-            <a href="#" onclick="Element.toggle('general_debug_info');return false">General Debug &#10162;</a>
-            <fieldset id="session_debug_info" class="textmate_footnotes_debug_info" style="display: none">
-              <legend>Session</legend>
-              #{controller.session.instance_variable_get("@data").inspect}
-            </fieldset>
-            <fieldset id="cookies_debug_info" class="textmate_footnotes_debug_info" style="display: none">
-              <legend>Cookies</legend>
-              <code>#{controller.send(:cookies).inspect}</code>
-            </fieldset>
-            <fieldset id="params_debug_info" class="textmate_footnotes_debug_info" style="display: none">
-              <legend>Params</legend>
-              <code>#{controller.params.inspect}</code>
-            </fieldset>
-            <fieldset id="general_debug_info" class="textmate_footnotes_debug_info" style="display: none">
-              <legend>General</legend>
-            </fieldset>
-          </div>
-          <!-- End TextMate Footnotes -->
-          HTML
-          if m = controller.response.body.match(%r{<div[^>]+id=['"]textmate_footnotes['"][^>]*>})
-            insert_text_before m.offset(0)[1], 4, controller.response.body, textmate_footnotes
-          else
-            insert_text_before %r{</body>}i, 4, controller.response.body, textmate_footnotes
-          end
-        end
+    filter = FootnoteFilter.new(controller)
+    filter.add_footnotes!
+  end
+  
+  def initialize(controller)
+    @controller = controller
+    @template = controller.instance_variable_get("@template")
+    @body = controller.response.body
+    @extra_html = ""
+    self.abs_root = File.expand_path(RAILS_ROOT)
+  end
+  
+  def add_footnotes!
+    if performed_render? and first_render?
+      if ["rhtml", "rxhtml"].include?(template_extension)
+        # If the user would like to be responsible for the styles, let them opt out of the styling here
+        insert_styles unless FootnoteFilter.no_style
+        insert_footnotes
       end
-    rescue Exception => e
-      # Discard footnotes if there are any problems
-      RAILS_DEFAULT_LOGGER.error "Textmate Footnotes Exception: #{e}\n#{e.backtrace.join("\n")}"
+    end
+  rescue Exception => e
+    # Discard footnotes if there are any problems
+    RAILS_DEFAULT_LOGGER.error "Textmate Footnotes Exception: #{e}\n#{e.backtrace.join("\n")}"
+  end
+  
+  # Some controller classes come with the Controller:: module and some don't
+  # (anyone know why? -- Duane)
+  def controller_filename
+    File.join(abs_root, "app", "controllers", "#{@controller.class.to_s.underscore}.rb").
+    sub('/controllers/controllers/', '/controllers/')
+  end
+  
+  def controller_text
+    @controller_text ||= IO.read(controller_filename)
+  end
+  
+  def index_of_method
+    (controller_text =~ /def\s+#{@controller.action_name}[\s\(]/)
+  end
+  
+  def controller_line_number
+    controller_text.line_from_index(index_of_method)
+  end
+  
+  def performed_render?
+    @controller.instance_variable_get("@performed_render")
+  end
+  
+  def first_render?
+    @template.respond_to?(:first_render) and @template.first_render
+  end
+  
+  def template_path
+    @template.first_render.sub(/\.(rhtml|rxhtml|rxml|rjs)$/, "")
+  end
+  
+  def template_extension
+    @template.first_render.scan(/\.(rhtml|rxhtml|rxml|rjs)$/).flatten.first ||
+    @template.pick_template_extension(template_path).to_s
+  end
+  
+  def template_file_name
+    File.expand_path(@template.send(:full_template_path, template_path, template_extension))
+  end
+  
+  def layout_file_name
+    File.expand_path(@template.send(:full_template_path, @controller.active_layout, "rhtml"))
+  end
+  
+  def stylesheet_files
+    @stylesheet_files ||= @body.scan(/<link[^>]+href\s*=\s*['"]([^>?'"]+)/im).flatten
+  end
+  
+  def javascript_files
+    @javascript_files ||= @body.scan(/<script[^>]+src\s*=\s*['"]([^>?'"]+)/im).flatten
+  end
+  
+  def controller_url
+    textmate_prefix +
+    controller_filename +
+    (index_of_method ? "&line=#{controller_line_number + 1}&column=3" : "")
+  end
+  
+  def view_url
+    textmate_prefix + template_file_name
+  end
+  
+  def layout_url
+    textmate_prefix + layout_file_name
+  end
+  
+  def insert_styles
+    insert_text :before, /<\/head>/i, <<-HTML
+    <!-- TextMate Footnotes Style -->
+    <style>
+      #textmate_footnotes_debug {margin-top: 0.5em; text-align: center; color: #999;}
+      #textmate_footnotes_debug a {text-decoration: none; color: #bbb;}
+      fieldset.textmate_footnotes_debug_info {text-align: left; border: 1px dashed #aaa; padding: 1em; margin: 1em 2em 1em 2em; color: #777;}
+    </style>
+    <!-- End TextMate Footnotes Style -->
+    HTML
+  end
+  
+  def insert_footnotes
+    footnotes_html = <<-HTML
+    <!-- TextMate Footnotes -->
+    <div style="clear:both"></div>
+    <div id="textmate_footnotes_debug">
+      #{textmate_links}
+      <a href="#" onclick="Element.toggle('session_debug_info');return false">Show Session &#10162;</a> |
+      <a href="#" onclick="Element.toggle('cookies_debug_info');return false">Show Cookies &#10162;</a> |
+      <a href="#" onclick="Element.toggle('params_debug_info');return false">Show Params &#10162;</a> |
+      <a href="#" onclick="Element.toggle('general_debug_info');return false">General Debug &#10162;</a>
+      #{@extra_html}
+      <fieldset id="session_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+        <legend>Session</legend>
+        #{@controller.session.instance_variable_get("@data").inspect}
+      </fieldset>
+      <fieldset id="cookies_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+        <legend>Cookies</legend>
+        <code>#{@controller.send(:cookies).inspect}</code>
+      </fieldset>
+      <fieldset id="params_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+        <legend>Params</legend>
+        <code>#{@controller.params.inspect}</code>
+      </fieldset>
+      <fieldset id="general_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+        <legend>General</legend>
+        <div id="tm_debug"></div>
+      </fieldset>
+    </div>
+    <!-- End TextMate Footnotes -->
+    HTML
+    if @body =~ %r{<div[^>]+id=['"]textmate_footnotes['"][^>]*>}
+      # Insert inside the "textmate_footnotes" div if it exists
+      insert_text :after, %r{<div[^>]+id=['"]textmate_footnotes['"][^>]*>}, footnotes_html
+    else
+      # Otherwise, try to insert as the last part of the html body
+      insert_text :before, /<\/body>/i, footnotes_html
     end
   end
   
-  def self.debug(object)
-    begin
-      Marshal::dump(object)
-      "<pre class='debug_dump'>#{escape(object.to_yaml).gsub("  ", "&nbsp; ")}</pre>"
-    rescue Object => e
-      # Object couldn't be dumped, perhaps because of singleton methods -- this is the fallback
-      "<code class='debug_dump'>#{escape(object.inspect)}</code>"
+  def textmate_links
+    html = ""
+    if ::MAC_OS_X
+      html = <<-HTML
+        <b>TextMate Footnotes</b>: Edit
+        <a href="#{controller_url}">Controller File</a> |
+        <a href="#{view_url}">View File</a> |
+        <a href="#{layout_url}">Layout File</a>
+      HTML
+      html += asset_file_links("CSS Files", stylesheet_files)
+      html += asset_file_links("JS Files", javascript_files)
+      html += "<br/>"
     end
+    html
   end
   
-  def self.escape(text)
-    text.gsub("<", "&lt;").gsub(">", "&gt;")
+  def asset_file_links(link_text, files)
+    return if files.size == 0
+    links = files.map do |filename|
+      if filename =~ %r{^/}
+        full_filename = File.join(abs_root, "public", filename)
+        %{<a href="#{textmate_prefix}#{full_filename}">#{filename}</a>}
+      else
+        %{<a href="#{filename}">#{filename}</a>}
+      end
+    end
+    @extra_html << <<-HTML
+      <fieldset id="textmate_footnotes_#{link_text.underscore}" class="textmate_footnotes_debug_info" style="display: none">
+        <legend>#{link_text}</legend>
+        <ul><li>#{links.join("</li><li>")}</li></ul>
+      </fieldset>
+    HTML
+    # Return the link that will open the 'extra html' div
+    %{ | <a href="#" onclick="Element.toggle('textmate_footnotes_#{link_text.underscore}');return false">#{link_text}</a>}
   end
-end
+  
+  def indent(indentation, text)
+    lines = text.to_a
+    initial_indentation = lines.first.scan(/^(\s+)/).flatten.first
+    lines.map do |line|
+      if initial_indentation.nil?
+        " " * indentation + line
+      elsif line.index(initial_indentation) == 0
+        " " * indentation + line[initial_indentation.size..-1]
+      else
+        " " * indentation + line
+      end
+    end.join
+  end
 
-class ActionController::Base
-  attr_accessor :render_without_footnotes
+  # Inserts text in to the body of the document
+  # +pattern+ is a Regular expression which, when matched, will cause +new_text+
+  # to be inserted before or after the match.  If no match is found, +new_text+ is appended
+  # to the body instead. +position+ may be either :before or :after
+  def insert_text(position, pattern, new_text, indentation = 4)
+    index = case pattern
+      when Regexp
+        if match = @body.match(pattern)
+          match.offset(0)[position == :before ? 0 : 1]
+        else
+          @body.size
+        end
+      else
+        pattern
+      end
+    @body.insert index, indent(indentation, new_text)
+  end
   
-  after_filter FootnoteFilter
-  
-protected
-  alias footnotes_original_render render
-  def render(options = nil, deprecated_status = nil, &block) #:doc:
-    if options.is_a? Hash
-      @render_without_footnotes = (options.delete(:footnotes) == false)
-    end
-    footnotes_original_render(options, deprecated_status, &block)
+  def escape(text)
+    text.gsub("<", "&lt;").gsub(">", "&gt;")
   end
 end

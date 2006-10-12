@@ -1,10 +1,17 @@
 *  PROJECT|p|*  ${1:new project}|*|990099
--  @TASK|t|-  @TASK ${1:new task}|TASK|006600
--  @COMPUTER|m|-  @COMPUTER ${1:computer task}|COMPUTER|660000
--  @EMAIL|e|-  @EMAIL ${1:person} re: ${0:subject}|EMAIL|996600
--  @CALL|c|-  @CALL ${1:person} re: ${2:subject} ${0:#}|CALL|FF6600
--  @BUY|b|-  @BUY ${1:new purchase}|BUY|6699CC
-^  @INFO|i|^  @INFO ${1:new info}|^|336633 
--> @DELEGATE|d|-> @DELEGATE|->|336633 
-<- @WAIT|w|<- @wait|<-|336633 
-+  DONE|d|done|+|666666
+-  TASK|t|-  TASK ${1:new task}|TASK|006600
+-  COMPUTER|m|-  COMPUTER ${1:computer task}|COMPUTER|660000
+-  EMAIL|e|-  EMAIL ${1:person} re: ${0:subject}|EMAIL|996600
+-  CALL|c|-  CALL ${1:person} re: ${2:subject} ${0:#}|CALL|FF6600
+-  WEB|we|-  WEB ${1:new webwork}|WEB|00000f
+-  READ|r|-  READ ${1:book or article}|READ|f00000
+-  ERRANDS|er|-  ERRANDS ${1:new task}|ERRANDS|011fff
+-  SOMEDAY|sd|-  SOMEDAY ${1:new task}|SOMEDAY|02222f
+-  SCHOOL|s|-  SCHOOL ${1:new task}|SCHOOL|0000ff
+-  CHORES|ch|-  CHORES ${1:task}|CHORES|0222ff
+-  OTHER|oo|-  other|OTHER|00ffff
+-  BUY|b|-  BUY ${1:new purchase}|BUY|6699CC
+^  INFO|i|^  INFO ${1:new info}|^|336633
+-> DELEGATE|d|-> DELEGATE|->|336633
+<- WAIT|w|<- WAIT|<-|336633
++  DONE|d|DONE|+|666666

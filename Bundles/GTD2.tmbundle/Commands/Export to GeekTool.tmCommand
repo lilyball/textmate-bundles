@@ -81,7 +81,7 @@ $tags.each do |tag|
       mFile = File.open(fileName) 
       mFile.each do |line|
         lineno = lineno + 1
-        tLine = line[4..-1]
+        tLine = line[3..-1]
         if tLine != nil
           re = /\s/
           if line[0..1] == "- "

@@ -72,13 +72,14 @@ end
 $tags.each do |tag| 
   context = tag[:regexp]
   myFiles = Dir.entries($myPath)
+  #puts myFiles.to_s
   myFiles.each do |fileName|
     if ((fileName[-3,3] == "gtd") and myList.contains(fileName))
       lineno = 0
       mFile = File.open(fileName) 
       mFile.each do |line|
         lineno = lineno + 1
-        tLine = line[4..-1]
+        tLine = line[3..-1]
         if tLine != nil
           re = /\s/
           if line[0..1] == "- "

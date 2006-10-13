@@ -29,11 +29,21 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>punctutation.definition.comment.ssh-config</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>comment.line.double-slash.ssh-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctutation.definition.comment.ssh-config</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(#.*$\n?)|(//.*$\n?)</string>
+			<string>((#).*$\n?)|((//).*$\n?)</string>
 		</dict>
 		<dict>
 			<key>captures</key>

@@ -23,10 +23,10 @@ end
 
 
 def TextMate.file_link (file, line = 0)
-  return "txmt://open/?url=file://" +
+  return "txmt://open/?url=file://" + $myPath + "/" +
     file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
-    "&amp;amp;line=" + line.to_s
-end  
+    ".gtd&amp;amp;line=" + line.to_s
+end 
 
 # the contexts.gtd file is read, and converted into $contexts
 file = File.open($myPath+"/contexts.gtd", "r")

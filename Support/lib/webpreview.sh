@@ -41,10 +41,9 @@ html_header() {
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>${TM_HTML_TITLE}</title>
-	<style type="text/css" media="screen">
+	<style type="text/css" media="all">
 		${TM_CSS}
 	</style>
-	<link rel="stylesheet" href="file://${TM_SUPPORT_PATH}/css/print.css" type="text/css" media="print" title="print" charset="utf-8" />
 	<script src="file://${TM_SUPPORT_PATH}/script/default.js" type="text/javascript" language="javascript" charset="utf-8"></script>
 	<script src="file://${TM_SUPPORT_PATH}/script/webpreview.js" type="text/javascript" language="javascript" charset="utf-8"></script>
 	${TM_EXTRA_HEAD}

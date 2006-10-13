@@ -83,6 +83,22 @@ body {
 	margin-top: 0;
 }
 
+/* Print overrides */
+@media print {
+	body {
+		font-family: "Palatino", "Book Antiqua", serif;
+		font-size: 10pt;
+	}
+	#tm_webpreview_header {
+		display: none;
+	}
+
+	#tm_webpreview_footer {
+		display: none;
+	}
+}
+
+
 /* ================================= */
 /* = Common Stuff for all Commands = */
 /* ================================= */
@@ -142,9 +158,13 @@ h4 {
 }
 
 blockquote {
+	/*
+	*sigh* Here goes my nice italic serif font
+	
 	font-family: "Palatino", "Book Antiqua", Verdana;
 	font-style: italic;
 	font-size: 106%;
+	*/
 	margin: 1em 25px;
 	padding-left: 1em;
 }

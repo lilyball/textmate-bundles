@@ -85,6 +85,14 @@
 		<dict>
 			<key>begin</key>
 			<string>\(\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.vectorscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*\)</string>
 			<key>name</key>
@@ -93,6 +101,14 @@
 		<dict>
 			<key>begin</key>
 			<string>\{</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.vectorscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
@@ -101,8 +117,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.vectorscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.vectorscript</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.vectorscript</string>
 			<key>patterns</key>

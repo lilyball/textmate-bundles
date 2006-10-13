@@ -17,6 +17,14 @@
 		<dict>
 			<key>begin</key>
 			<string>&lt;!--</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.nant</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>--&gt;</string>
 			<key>name</key>
@@ -24,17 +32,22 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;/?([-_a-zA-Z0-9:]+)</string>
+			<string>(&lt;/?)([-_a-zA-Z0-9:]+)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.nant</string>
+				</dict>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.nant</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>/?&gt;</string>
+			<string>(/?&gt;)</string>
 			<key>name</key>
 			<string>meta.tag.nant</string>
 			<key>patterns</key>
@@ -48,24 +61,69 @@
 				<dict>
 					<key>begin</key>
 					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.nant</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.nant</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.nant</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.nant</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.nant</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.single.nant</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.nant</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.nant</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>&amp;([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+			<string>(&amp;)([a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+)(;)</string>
 			<key>name</key>
 			<string>constant.character.entity.nant</string>
 		</dict>

@@ -22,14 +22,30 @@
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.c#</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*/</string>
 			<key>name</key>
 			<string>comment.block.c#</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.c#</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>//.*$\n?</string>
+			<string>(//).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-slash.c#</string>
 		</dict>
@@ -54,8 +70,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.c#</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.c#</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.c#</string>
 			<key>patterns</key>
@@ -71,8 +103,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.c#</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.c#</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.c#</string>
 			<key>patterns</key>
@@ -88,14 +136,14 @@
 		<dict>
 			<key>captures</key>
 			<dict>
-				<key>1</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.control.import.c#</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^#\s*(if|else|elif|endif|define|undef|warning|error|line|region|endregion)\b</string>
+			<string>^(#)\s*(if|else|elif|endif|define|undef|warning|error|line|region|endregion)\b</string>
 			<key>name</key>
 			<string>meta.preprocessor.c#</string>
 		</dict>

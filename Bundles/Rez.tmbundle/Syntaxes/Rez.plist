@@ -21,15 +21,30 @@
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.rez</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*/</string>
 			<key>name</key>
 			<string>comment.block.rez</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.rez</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>//.*$
-?</string>
+			<string>(//).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-slash.rez</string>
 		</dict>
@@ -54,8 +69,16 @@
 			<string>keyword.other.attributes.rez</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.rez</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\$\$(?i:(ArrayIndex|Attributes|BitField|Byte|CountOf|Date|Day|Format|Hour|ID|Long|Minute|Month|Name|PackedSize|Read|Resource|ResourceSize|Second|Shell|Time|Type|Version|Weekday|Word|Year))</string>
+			<string>(\$\$)(?i:(ArrayIndex|Attributes|BitField|Byte|CountOf|Date|Day|Format|Hour|ID|Long|Minute|Month|Name|PackedSize|Read|Resource|ResourceSize|Second|Shell|Time|Type|Version|Weekday|Word|Year))</string>
 			<key>name</key>
 			<string>support.function.built-in.rez</string>
 		</dict>
@@ -68,8 +91,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.rez</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.rez</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.rez</string>
 			<key>patterns</key>
@@ -83,8 +122,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.rez</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.rez</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.rez</string>
 			<key>patterns</key>
@@ -98,8 +153,24 @@
 		<dict>
 			<key>begin</key>
 			<string>\$"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.rez</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.rez</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.other.hex.rez</string>
 			<key>patterns</key>
@@ -116,11 +187,16 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.preprocessor.rez</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>keyword.control.import.rez</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*#\s*(define|defined|else|elif|endif|if|ifdef|ifndef|include|line|printf|undef)\b</string>
+			<string>^\s*(#)\s*(define|defined|else|elif|endif|if|ifdef|ifndef|include|line|printf|undef)\b</string>
 			<key>name</key>
 			<string>meta.preprocessor.rez</string>
 		</dict>

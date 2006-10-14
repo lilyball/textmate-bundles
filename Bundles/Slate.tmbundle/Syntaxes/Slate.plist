@@ -43,8 +43,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.slate</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.slate</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.slate</string>
 			<key>patterns</key>
@@ -60,8 +76,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.slate</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.slate</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.slate</string>
 			<key>patterns</key>
@@ -77,8 +109,24 @@
 		<dict>
 			<key>begin</key>
 			<string>\#\{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.array.begin.slate</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.array.end.slate</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.array.slate</string>
 			<key>patterns</key>
@@ -96,10 +144,26 @@
 		<dict>
 			<key>begin</key>
 			<string>\#\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.array.begin.slate</string>
+				</dict>
+			</dict>
 			<key>comment</key>
 			<string>Should restrict contents to literals.</string>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.array.end.slate</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.array.literal.slate</string>
 			<key>patterns</key>
@@ -118,17 +182,22 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\[(?:\s*\|\s*((?::\w+\s+)*:\w+)\s*\|)?</string>
-			<key>beginCaptures</key>
+			<string>(\[)(?:\s*\|\s*((?::\w+\s+)*:\w+)\s*\|)?</string>
+			<key>captures</key>
 			<dict>
 				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.block.slate</string>
+				</dict>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>variable.parameter.block.slate</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\]</string>
+			<string>(\])</string>
 			<key>name</key>
 			<string>meta.block.slate</string>
 			<key>patterns</key>
@@ -205,14 +274,30 @@
 			<string>constant.numeric.slate</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.slate</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\$(\S|\\[\\ntsbre0avf])</string>
+			<string>(\$)(\S|\\[\\ntsbre0avf])</string>
 			<key>name</key>
 			<string>constant.character.slate</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.slate</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>#\S+</string>
+			<string>(#)\S+</string>
 			<key>name</key>
 			<string>constant.other.slate</string>
 		</dict>

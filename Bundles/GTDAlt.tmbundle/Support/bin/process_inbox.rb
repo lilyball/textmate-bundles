@@ -11,12 +11,15 @@ include Dialog
 class NormalException < Exception
 end
 
-dir = ENV['TM_GTD_DIRECTORY']
-inboxfile = ENV['TM_GTD_INBOX']
-unless dir && inboxfile && File.exist?(dir) && File.exist?(inboxfile) then
+dir = ENV['TM_GTD_DIRECTORY'] || ""
+inboxfile = ENV['TM_GTD_INBOX'] || ""
+unless dir != "" && inboxfile != "" && File.exist?(File.expand_path(dir)) && File.exist?(File.expand_path(inboxfile)) then
   TextMate.exit_show_html("<h1>Some files need to be created first!</h1>" + `#{e_sh File.join(ENV['TM_SUPPORT_PATH'],'bin',"MarkDown.pl")} #{e_sh File.join(ENV['TM_BUNDLE_SUPPORT'],"/INBOX.txt")} `)
 end
+dir = File.expand_path(dir)
+inboxfile = File.expand_path(inboxfile)
 tempInboxFilename = File.join(dir, "temp.gtd")
+`touch "#{tempInboxFilename}"` unless File.exist?(tempInboxFilename)
 objects = GTD.process_directory(dir)
 inbox_object = objects.find{|o| o.file == tempInboxFilename}
 objects << (inbox_object = GTDFile.new(tempInboxFilename)) unless inbox_object

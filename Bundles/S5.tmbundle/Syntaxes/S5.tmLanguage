@@ -35,11 +35,16 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.separator.key-value.s5</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>string.unquoted.s5</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^([A-Za-z0-9]+):\s*(.*)$\n?</string>
+			<string>^([A-Za-z0-9]+)(:)\s*(.*)$\n?</string>
 			<key>name</key>
 			<string>meta.header.s5</string>
 		</dict>

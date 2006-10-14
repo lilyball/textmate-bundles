@@ -53,20 +53,44 @@
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.io</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*/</string>
 			<key>name</key>
 			<string>comment.block.io</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.io</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>//.*$\n?</string>
+			<string>(//).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-slash.io</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.io</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>#.*$\n?</string>
+			<string>(#).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.number-sign.io</string>
 		</dict>
@@ -111,8 +135,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"""</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.io</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"""</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.io</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.triple.io</string>
 			<key>patterns</key>
@@ -128,8 +168,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.io</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.io</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.io</string>
 			<key>patterns</key>

@@ -19,8 +19,16 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.inform</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>!(.*)</string>
+			<string>(!)(.*)$\n?</string>
 			<key>name</key>
 			<string>comment.line.exclamation.inform</string>
 		</dict>
@@ -47,8 +55,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.inform</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.inform</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.inform</string>
 			<key>patterns</key>
@@ -64,8 +88,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.inform</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.inform</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.inform</string>
 		</dict>

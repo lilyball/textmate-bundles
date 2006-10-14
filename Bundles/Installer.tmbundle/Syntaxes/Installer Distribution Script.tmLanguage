@@ -18,7 +18,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;(script)&gt;)</string>
+			<string>((&lt;)(script)(&gt;))</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -29,11 +29,21 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.tag.xml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>entity.name.tag.xml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.xml</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(&lt;/(script)&gt;)</string>
+			<string>((&lt;/)(script)(&gt;))</string>
 			<key>name</key>
 			<string>source.js.embedded.apple-dist</string>
 			<key>patterns</key>

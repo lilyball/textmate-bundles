@@ -13,20 +13,44 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.item.text</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*•.*$\n?</string>
+			<string>^\s*(•).*$\n?</string>
 			<key>name</key>
 			<string>meta.bullet-point.strong</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.item.text</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*·.*$\n?</string>
+			<string>^\s*(·).*$\n?</string>
 			<key>name</key>
 			<string>meta.bullet-point.light</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.item.text</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*\*.*$\n?</string>
+			<string>^\s*(\*).*$\n?</string>
 			<key>name</key>
 			<string>meta.bullet-point.star</string>
 		</dict>

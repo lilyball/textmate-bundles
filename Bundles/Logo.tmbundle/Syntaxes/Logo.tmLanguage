@@ -35,8 +35,16 @@
 			<string>keyword.other.logo</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.logo</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\:\w+</string>
+			<string>(\:)\w+</string>
 			<key>name</key>
 			<string>variable.parameter.logo</string>
 		</dict>
@@ -47,8 +55,16 @@
 			<string>string.other.word.logo</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.logo</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>;.+$</string>
+			<string>(;).+$</string>
 			<key>name</key>
 			<string>comment.line.semicolon.logo</string>
 		</dict>

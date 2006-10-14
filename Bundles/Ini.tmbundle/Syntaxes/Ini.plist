@@ -18,34 +18,87 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.ini</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>#.*$</string>
+			<string>(#).*$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.ini</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.ini</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>;.*$</string>
+			<string>(;).*$</string>
 			<key>name</key>
 			<string>comment.line.semicolon.ini</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.key-value.ini</string>
+				</dict>
+			</dict>
 			<key>match</key>
 			<string>\b([a-zA-Z0-9_.-]+)\b(?=\s*(=))</string>
 			<key>name</key>
 			<string>keyword.other.definition.ini</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.ini</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.ini</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\[(.*?)\]</string>
+			<string>^(\[)(.*?)(\])</string>
 			<key>name</key>
 			<string>entity.name.section.group-title.ini</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.ini</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.ini</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.ini</string>
 			<key>patterns</key>
@@ -61,8 +114,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.ini</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.ini</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.ini</string>
 		</dict>

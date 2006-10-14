@@ -19,32 +19,37 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>&lt;(xsl)((:))(template)</string>
+			<string>(&lt;)(xsl)((:))(template)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.namespace.xml</string>
+					<string>punctuation.definition.tag.xml</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.xml</string>
+					<string>entity.name.tag.namespace.xml</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.separator.namespace.xml</string>
+					<string>entity.name.tag.xml</string>
 				</dict>
 				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.namespace.xml</string>
+				</dict>
+				<key>5</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.localname.xml</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>&gt;</string>
+			<string>(&gt;)</string>
 			<key>name</key>
 			<string>meta.tag.xml.template</string>
 			<key>patterns</key>
@@ -97,8 +102,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.xml</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.xml</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.xml</string>
 		</dict>
@@ -106,8 +127,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.xml</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.xml</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.xml</string>
 		</dict>

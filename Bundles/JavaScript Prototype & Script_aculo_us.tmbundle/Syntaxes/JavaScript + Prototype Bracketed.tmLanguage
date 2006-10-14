@@ -17,8 +17,24 @@
 		<dict>
 			<key>begin</key>
 			<string>&lt;%=</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.begin.js</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>%&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.end.js</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.source.embedded.return-value</string>
 			<key>patterns</key>
@@ -43,8 +59,24 @@
 		<dict>
 			<key>begin</key>
 			<string>&lt;%(?![=#])</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.begin.js</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>%&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.end.js</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.source.embedded</string>
 			<key>patterns</key>
@@ -88,6 +120,14 @@
 				<dict>
 					<key>begin</key>
 					<string>/\*(?=@)</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.js</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>(?&lt;=@)\*/</string>
 					<key>name</key>
@@ -101,20 +141,44 @@
 					</array>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.keyword.js</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>@(if|elif|else|end)</string>
+					<string>(@)(if|elif|else|end)</string>
 					<key>name</key>
 					<string>keyword.control.conditional.js</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.keyword.js</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>@(cc_on|set)</string>
+					<string>(@)(cc_on|set)</string>
 					<key>name</key>
 					<string>keyword.operator.conditional.js</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.js</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>@(_win32|_win16|_mac|_alpha|_x86|_mc680x0|_PowerPC|_jscript_build|_jscript_version|_jscript|_debug|_fast|[a-zA-Z]\w+)</string>
+					<string>(@)(_win32|_win16|_mac|_alpha|_x86|_mc680x0|_PowerPC|_jscript_build|_jscript_version|_jscript|_debug|_fast|[a-zA-Z]\w+)</string>
 					<key>name</key>
 					<string>variable.conditional.js</string>
 				</dict>
@@ -132,12 +196,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.curly.function</string>
+							<string>punctuation.section.function.js.prototype</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.delimiter.object.comma.js.prototype</string>
+							<string>punctuation.separator.objects.js.prototype</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -160,12 +224,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.curly</string>
+							<string>punctuation.section.scope.js</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.delimiter.object.comma.js.prototype</string>
+							<string>punctuation.separator.objects.js.prototype</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -197,16 +261,26 @@
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>constant.other.object.key.js.prototype</string>
+									<string>punctuation.definition.string.js.prototype</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>meta.delimiter.object.colon</string>
+									<string>constant.other.object.key.js.prototype</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.js.prototype</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.objects.js.prototype</string>
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>("([^"]*)")(:)\s*+(?!function)</string>
+							<string>((")([^"]*)("))(:)\s*+(?!function)</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -219,16 +293,26 @@
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>constant.other.object.key.js.prototype</string>
+									<string>punctuation.definition.string.js.prototype</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>meta.delimiter.object.colon.js.prototype</string>
+									<string>constant.other.object.key.js.prototype</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.js.prototype</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.objects.js.prototype</string>
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>('([^']*)')(:)\s*+(?!function)</string>
+							<string>((')([^']*)('))(:)\s*+(?!function)</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -241,7 +325,7 @@
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>meta.delimiter.object.colon.js.prototype</string>
+									<string>punctuation.separator.objects.js.prototype</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -261,7 +345,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.round</string>
+							<string>punctuation.section.scope.js</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -284,7 +368,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.square</string>
+							<string>punctuation.section.scope.js</string>
 						</dict>
 					</dict>
 					<key>end</key>

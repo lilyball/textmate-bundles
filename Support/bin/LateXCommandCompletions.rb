@@ -51,12 +51,9 @@ end
 # Work with the current file; if TM_LATEX_MASTER is set, work with both
 # Thanks to Alan Schussman
 #
-filelist = if (ENV.has_key?("TM_LATEX_MASTER")) then
-          [ENV["TM_FILEPATH"], ENV["TM_LATEX_MASTER"]]
-        else
-          [ENV["TM_FILEPATH"]]
-        end
-
+filelist = []
+filelist << ENV["TM_FILEPATH"] if ENV.has_key?("TM_FILEPATH")
+filelist << ENV["TM_LATEX_MASTER"] if ENV.has_key?("TM_LATEX_MASTER")
 # Recursively find all relevant files. Don't forget to include current files
 filelist += recursiveFileSearch(filelist)
 # Get word prefix to expand

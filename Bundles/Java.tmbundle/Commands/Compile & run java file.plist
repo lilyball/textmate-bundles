@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>echo "&lt;h2&gt;Compiling $TM_FILENAME&lt;/h2&gt;"
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Compiling “${TM_FILENAME}”…"
+
 cd "$TM_DIRECTORY"
 javac -encoding UTF8 "$TM_FILENAME" &amp;&gt; &gt;("${TM_RUBY:-ruby}" -rtm_parser -eTextMate.parse_errors)
 if (($? &gt;= 1)); then exit; fi
@@ -20,6 +22,8 @@ if (($? &gt;= 1)); then exit; fi
 #       do script "cd '$TM_DIRECTORY'; java '${TM_FILENAME%.java}'"
 #    end tell
 # EOF
+
+html_footer
 </string>
 	<key>input</key>
 	<string>none</string>

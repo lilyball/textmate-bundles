@@ -17,7 +17,7 @@ snippets = {
   
   'add_remove_column' =>
     { :up   => 'add_column :${1:table_name}, :${2:column_name}, :${3:string}$0',
-      :down => 'remove_column "$1", "$2"' },
+      :down => 'remove_column :$1, :$2' },
   
   'add_remove_column_continue' =>
     { :up   => 'add_column :${1:table_name}, :${2:column_name}, :${3:string}

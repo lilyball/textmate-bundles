@@ -8,38 +8,38 @@
 
 snippets = {
   'rename_column' =>
-    { :up   => 'rename_column "${1:table}", "${2:column}", "${3:new_name}"$0',
-      :down => 'rename_column "$1", "$3", "$2"' },
+    { :up   => 'rename_column :${1:table_name}, :${2:column_name}, :${3:new_column_name}$0',
+      :down => 'rename_column :$1, :$3, :$2' },
 
   'rename_table' =>
-    { :up   => 'rename_table "${1:old_table}", "${2:new_table}"$0',
-      :down => 'rename_table "$2", "$1"' },
+    { :up   => 'rename_table :${1:old_table_name}, :${2:new_table_name}$0',
+      :down => 'rename_table :$2, :$1' },
   
   'add_remove_column' =>
-    { :up   => 'add_column "${1:table}", "${2:column}", :${3:string}$0',
+    { :up   => 'add_column :${1:table_name}, :${2:column_name}, :${3:string}$0',
       :down => 'remove_column "$1", "$2"' },
   
   'add_remove_column_continue' =>
-    { :up   => 'add_column "${1:table}", "${2:column}", :${3:string}
+    { :up   => 'add_column :${1:table_name}, :${2:column_name}, :${3:string}
 marcc$0',
-      :down => 'remove_column "$1", "$2"' },
+      :down => 'remove_column :$1, :$2' },
 
   'create_drop_table' =>
-    { :up   => 'create_table "${1:table}" do |t|
+    { :up   => 'create_table :${1:table_name} do |t|
   mccc$0
 end',
-      :down => 'drop_table "$1"' },
+      :down => 'drop_table :$1' },
 
   'add_remove_index' =>
-    { :up   => 'add_index :${1:table}, :${2:column}$0',
+    { :up   => 'add_index :${1:table_name}, :${2:column_name}$0',
       :down => 'remove_index :$1, :$2' },
 
   'add_remove_unique_index' =>
-    { :up   => 'add_index :${1:table}, [:${2:column}${3:, :${4:column}}], :unique => true$0',
+    { :up   => 'add_index :${1:table_name}, [:${2:column_name}${3:, :${4:column_name}}], :unique => true$0',
       :down => 'remove_index :$1, :column => :$2' },
 
   'add_remove_named_index' =>
-    { :up   => 'add_index :${1:table}, [:${2:column}${3:, :${4:column}}], :name => "${5:index_name}"${6:, :unique => true}$0',
+    { :up   => 'add_index :${1:table_name}, [:${2:column_name}${3:, :${4:column_name}}], :name => "${5:index_name}"${6:, :unique => true}$0',
       :down => 'remove_index :$1, :name => :$5' }
 }
 

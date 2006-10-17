@@ -22,8 +22,24 @@
 		<dict>
 			<key>begin</key>
 			<string>\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.postscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.postscript</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.other.postscript</string>
 			<key>patterns</key>
@@ -54,14 +70,30 @@
 			<string>meta.Document-Structuring-Comment.postscript</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.postscript</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>%.*$\n?</string>
+			<string>(%).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.percentage.postscript</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>\&lt;\&lt;</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.dictionary.postscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\&gt;\&gt;</string>
 			<key>name</key>
@@ -77,6 +109,14 @@
 		<dict>
 			<key>begin</key>
 			<string>\[</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.array.postscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\]</string>
 			<key>name</key>
@@ -92,6 +132,14 @@
 		<dict>
 			<key>begin</key>
 			<string>{</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.procedure.postscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>}</string>
 			<key>name</key>
@@ -107,8 +155,24 @@
 		<dict>
 			<key>begin</key>
 			<string>\&lt;\~</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.postscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\~\&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.postscript</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.other.base85.postscript</string>
 			<key>patterns</key>
@@ -128,8 +192,24 @@
 		<dict>
 			<key>begin</key>
 			<string>\&lt;</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.postscript</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.postscript</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.other.hexadecimal.postscript</string>
 			<key>patterns</key>

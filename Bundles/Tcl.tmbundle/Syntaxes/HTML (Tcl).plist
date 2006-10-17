@@ -21,8 +21,24 @@
 		<dict>
 			<key>begin</key>
 			<string>&lt;%</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.begin.tcl</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>%&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.end.tcl</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>source.tcl.embedded.html</string>
 			<key>patterns</key>

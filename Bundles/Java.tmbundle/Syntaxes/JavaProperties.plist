@@ -13,8 +13,16 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.java-props</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>[#!](.+)?$</string>
+			<string>([#!])(.+)?$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.java-props</string>
 		</dict>
@@ -26,11 +34,16 @@
 					<key>name</key>
 					<string>keyword.other.java-props</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.key-value.java-props</string>
+				</dict>
 			</dict>
 			<key>comment</key>
 			<string>Not compliant with the properties file spec, but this works for me, and I'm the one who counts around here.</string>
 			<key>match</key>
-			<string>^([^:=]+)[:=](.*)$</string>
+			<string>^([^:=]+)([:=])(.*)$</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

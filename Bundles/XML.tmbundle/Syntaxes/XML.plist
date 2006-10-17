@@ -12,8 +12,6 @@
 		<string>dtml</string>
 		<string>rss</string>
 	</array>
-	<key>firstLineMatch_disabled</key>
-	<string>^\s*&lt;\?xml</string>
 	<key>foldingStartMarker</key>
 	<string>^\s*(&lt;[^!?%/](?!.+?(/&gt;|&lt;/.+?&gt;))|&lt;[!%]--(?!.+?--%?&gt;)|&lt;%[!]?(?!.+?%&gt;))</string>
 	<key>foldingStopMarker</key>
@@ -139,7 +137,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;)((?:([-_a-zA-Z0-9]+)((:)))?([-_a-zA-Z0-9:]+))(?=(\s[^&gt;]*)?&gt;&lt;/\1&gt;)</string>
+			<string>(&lt;)((?:([-_a-zA-Z0-9]+)((:)))?([-_a-zA-Z0-9:]+))(?=(\s[^&gt;]*)?&gt;&lt;/\2&gt;)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

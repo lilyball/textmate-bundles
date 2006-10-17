@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Installed Bundles" "GetBundle"
+require_cmd svnversion
+
+cat &lt;&lt;'HTML'
+  &lt;table class="pro_table" cellspacing="0" cellpadding="5"&gt;
+  &lt;tr&gt;&lt;th&gt;Bundle Name&lt;/th&gt;&lt;th&gt;Revision&lt;/th&gt;&lt;/tr&gt;
+HTML
+
+cd ~/Library/Application\ Support/TextMate/Pristine\ Copy/Bundles
+for f in *.tmbundle; do
+  echo "&lt;tr&gt;&lt;td&gt;${f%.tmbundle}&lt;/td&gt;&lt;td&gt;"
+  svnversion "$f"
+  echo "&lt;/td&gt;&lt;/tr&gt;"
+done
+
+cat &lt;&lt;'HTML'
+  &lt;/table&gt;
+HTML
+html_footer
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>List Installed Bundles</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>FBA5B6EB-2516-4940-9C8B-70645917F8BB</string>
+</dict>
+</plist>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
+PTRN=$(ruby -rtextmate -e 'print Dir.entries(TextMate.app_path + "/Contents/SharedSupport/Bundles").grep(/.tmbundle$/).join("|")')
+INST=$(ruby -rtextmate -e 'print Dir.entries( File.expand_path("~/Library/Application Support/TextMate/Pristine Copy/Bundles")).grep(/.tmbundle$/).join("|")')
+
+cd ~/Library/Application\ Support/TextMate/Support
+if [[ $? == 0 ]];
+then
+ svn up . --no-auth-cache --non-interactive
+else
+ mkdir ~/Library/Application\ Support/TextMate/Support
+ svn co http://macromates.com/svn/Bundles/trunk/Support/ ~/Library/Application\ Support/TextMate/Support --no-auth-cache --non-interactive
+fi
+
+bundlelist (){ 
+  "${TM_BUNDLE_SUPPORT}/bin/svn" --username anon --password anon list http://macromates.com/svn/Bundles/trunk/Bundles/ --no-auth-cache --non-interactive | egrep -v "^($PTRN|$INST)/\$" |  sed -ne 's/.tmbundle\/$//p' | sort -f \
+  3&gt; &gt;(CocoaDialog progressbar --indeterminate --title 'Getting Bundle List' --text 'This could take a while...')
+}
+IFS=$'\n' 
+bundle=$(CocoaDialog dropdown \
+    --title 'Choose a Bundle' \
+    --text 'Select from list:' \
+    --button1 Install --button2 Cancel \
+    --string-output --no-newline \
+    --items $(bundlelist))
+
+if [[ "${bundle:0:7}" == "Install" ]];
+then 
+ bu=${bundle:8}
+else 
+ exit_discard
+fi
+
+mkdir -p ~/Library/Application\ Support/TextMate/Pristine\ Copy/Bundles
+cd ~/Library/Application\ Support/TextMate/Pristine\ Copy/Bundles
+
+"${TM_BUNDLE_SUPPORT}/bin/svn" --username anon --password anon co http://macromates.com/svn/Bundles/trunk/Bundles/${bu}.tmbundle --no-auth-cache --non-interactive \
+2&gt; &gt;(CocoaDialog progressbar --indeterminate --title "Installing Bundle: ${bu}" --text 'This could take a while...')
+if [[ $? == 0 ]];
+then
+ osascript -e 'tell app "TextMate" to reload bundles'
+
+ CocoaDialog bubble --title "Installed Bundle: ${bu}" --text 'You now can use the new Bundle' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Install Bundle</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>19B3B518-4B71-4AD6-BC0B-7B5477ABD2D9</string>
+</dict>
+</plist>

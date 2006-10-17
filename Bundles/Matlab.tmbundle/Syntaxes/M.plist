@@ -32,17 +32,17 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\({2})</string>
+			<string>\({2}</string>
 			<key>captures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.expression.matlab</string>
+					<string>punctuation.section.scope.matlab</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(\){2})</string>
+			<string>\){2}</string>
 			<key>name</key>
 			<string>meta.scope.expression.matlab</string>
 			<key>patterns</key>
@@ -55,17 +55,17 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\[{2})</string>
+			<string>\[{2}</string>
 			<key>captures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.logical-expression.matlab</string>
+					<string>punctuation.section.scope.matlab</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(\]{2})</string>
+			<string>\]{2}</string>
 			<key>name</key>
 			<string>meta.scope.logical-expression.matlab</string>
 			<key>patterns</key>
@@ -86,17 +86,17 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\()</string>
+			<string>\(</string>
 			<key>captures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.parens.matlab</string>
+					<string>punctuation.section.scope.matlab</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(\))</string>
+			<string>\)</string>
 			<key>name</key>
 			<string>meta.scope.parens.matlab</string>
 			<key>patterns</key>
@@ -108,8 +108,16 @@
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.matlab</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>%.*$\n?</string>
+			<string>(%).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.percentage.matlab</string>
 		</dict>
@@ -122,8 +130,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.matlab</string>
+				</dict>
+			</dict>
 			<key>end</key>
-			<string>['\n]</string>
+			<string>(')|\n</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.matlab</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.matlab</string>
 			<key>patterns</key>
@@ -139,8 +163,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.matlab</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.matlab</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.matlab</string>
 			<key>patterns</key>

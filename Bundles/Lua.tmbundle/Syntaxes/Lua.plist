@@ -39,11 +39,21 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.parameters.begin.lua</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
 					<string>variable.parameter.function.lua</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.end.lua</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(function)\s+([a-zA-Z_.:]+[.:])?([a-zA-Z_]\w*)\s*\(([^)]*)\)</string>
+			<string>\b(function)\s+([a-zA-Z_.:]+[.:])?([a-zA-Z_]\w*)\s*(\()([^)]*)(\))</string>
 			<key>name</key>
 			<string>meta.function.lua</string>
 		</dict>
@@ -56,8 +66,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.lua</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.lua</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.lua</string>
 			<key>patterns</key>
@@ -73,8 +99,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.lua</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.lua</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.lua</string>
 			<key>patterns</key>
@@ -90,22 +132,54 @@
 		<dict>
 			<key>begin</key>
 			<string>(?&lt;!--)\[(=*)\[</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.lua</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\]\1\]</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.lua</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.other.multiline.lua</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>--\[(=*)\[</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.lua</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\]\1\]</string>
 			<key>name</key>
 			<string>comment.block.lua</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.lua</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>--(?!\[\[).*</string>
+			<string>(--)(?!\[\[).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-dash.lua</string>
 		</dict>

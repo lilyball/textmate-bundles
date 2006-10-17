@@ -23,8 +23,16 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.lisp</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>;.*$\n?</string>
+			<string>(;).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.semicolon.lisp</string>
 		</dict>
@@ -48,14 +56,35 @@
 			<string>meta.function.lisp</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.constant.lisp</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>#(\w|[\\+-=&lt;&gt;'"&amp;#])+</string>
+			<string>(#)(\w|[\\+-=&lt;&gt;'"&amp;#])+</string>
 			<key>name</key>
 			<string>constant.character.lisp</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.lisp</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.lisp</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\*(\S*)\*</string>
+			<string>(\*)(\S*)(\*)</string>
 			<key>name</key>
 			<string>variable.other.global.lisp</string>
 		</dict>
@@ -92,8 +121,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.lisp</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.lisp</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.lisp</string>
 			<key>patterns</key>

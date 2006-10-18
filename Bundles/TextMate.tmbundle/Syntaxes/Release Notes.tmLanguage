@@ -16,12 +16,21 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.separator.release-notes</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>meta.toc-list.release-notes</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.separator.release-notes</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\[(?:[\d-]+: )?(REVISION (\d+|v[\d.b]+))\]$
-</string>
+			<string>^(\[)(?:[\d-]+: )?(REVISION (\d+|v[\d.b]+))(\])$\n</string>
 			<key>name</key>
 			<string>meta.separator.release-notes</string>
 		</dict>
@@ -41,8 +50,16 @@
 					<string>markup.underline.link</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.keyword.release-notes</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\[(NEW|FIXED|CHANGED|REMOVED|INFO)\]</string>
+					<string>(\[)(NEW|FIXED|CHANGED|REMOVED|INFO)(\])</string>
 					<key>name</key>
 					<string>keyword.other.release-notes</string>
 				</dict>

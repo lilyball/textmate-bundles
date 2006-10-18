@@ -23,7 +23,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(@(interface|protocol))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
+			<string>((@)(interface|protocol))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -31,12 +31,17 @@
 					<key>name</key>
 					<string>storage.type.objc</string>
 				</dict>
-				<key>3</key>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.storage.type.objc</string>
+				</dict>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.type.objc</string>
 				</dict>
-				<key>4</key>
+				<key>5</key>
 				<dict>
 					<key>name</key>
 					<string>entity.other.inherited-class</string>
@@ -45,7 +50,7 @@
 			<key>contentName</key>
 			<string>meta.scope.interface.objc</string>
 			<key>end</key>
-			<string>(@end)\b</string>
+			<string>((@)end)\b</string>
 			<key>name</key>
 			<string>meta.interface-or-protocol.objc</string>
 			<key>patterns</key>
@@ -62,13 +67,18 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(@(implementation))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
+			<string>((@)(implementation))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>storage.type.objc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.storage.type.objc</string>
 				</dict>
 				<key>3</key>
 				<dict>
@@ -84,7 +94,7 @@
 			<key>contentName</key>
 			<string>meta.scope.implementation.objc</string>
 			<key>end</key>
-			<string>(@end)\b</string>
+			<string>((@)end)\b</string>
 			<key>name</key>
 			<string>meta.implementation.objc</string>
 			<key>patterns</key>
@@ -108,8 +118,24 @@
 		<dict>
 			<key>begin</key>
 			<string>@"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.objc</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.objc</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.objc</string>
 			<key>patterns</key>
@@ -135,20 +161,44 @@
 			<string>keyword.control.macro.objc</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.objc</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>@(try|catch|finally|throw)\b</string>
+			<string>(@)(try|catch|finally|throw)\b</string>
 			<key>name</key>
 			<string>keyword.control.exception.objc</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.objc</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>@(synchronized)\b</string>
+			<string>(@)(synchronized)\b</string>
 			<key>name</key>
 			<string>keyword.control.synchronize.objc</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.objc</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>@(defs|encode)\b</string>
+			<string>(@)(defs|encode)\b</string>
 			<key>name</key>
 			<string>keyword.other.objc</string>
 		</dict>
@@ -159,14 +209,30 @@
 			<string>storage.type.objc</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.storage.type.objc</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>@(class|selector)\b</string>
+			<string>(@)(class|selector)\b</string>
 			<key>name</key>
 			<string>storage.type.objc</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.storage.modifier.objc</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>@(synchronized|public|private|protected)\b</string>
+			<string>(@)(synchronized|public|private|protected)\b</string>
 			<key>name</key>
 			<string>storage.modifier.objc</string>
 		</dict>
@@ -233,6 +299,14 @@
 		<dict>
 			<key>begin</key>
 			<string>\[</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.scope.objc</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\]</string>
 			<key>name</key>
@@ -252,6 +326,14 @@
 				<dict>
 					<key>begin</key>
 					<string>/\*</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.objc</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\*/</string>
 					<key>name</key>
@@ -260,6 +342,14 @@
 				<dict>
 					<key>begin</key>
 					<string>//</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.objc</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>$\n?</string>
 					<key>name</key>
@@ -288,17 +378,22 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\(</string>
-					<key>end</key>
-					<string>\)\s*(\w+\b)</string>
-					<key>endCaptures</key>
+					<string>(\()</string>
+					<key>captures</key>
 					<dict>
 						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.type.objc</string>
+						</dict>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.function.objc</string>
 						</dict>
 					</dict>
+					<key>end</key>
+					<string>(\))\s*(\w+\b)</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -319,12 +414,30 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>:\s*\(</string>
+					<string>(:)\s*(\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.arguments.objc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.type.objc</string>
+						</dict>
+					</dict>
 					<key>end</key>
-					<string>\)\s*(\w+\b)?</string>
+					<string>(\))\s*(\w+\b)?</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.type.objc</string>
+						</dict>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>variable.parameter.function.objc</string>

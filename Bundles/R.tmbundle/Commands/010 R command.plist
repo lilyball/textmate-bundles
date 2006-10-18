@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>osascript -e 'tell application "R" to activate' -e "tell application \"R\" to cmd \"${TM_SELECTED_TEXT//\"/\\\"}\""</string>
+	<string>escText=${TM_SELECTED_TEXT//\\\\/\\\\}
+osascript -e 'tell application "R" to activate' -e "tell application \"R\" to cmd \"${escText//\"/\\\"}\""</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

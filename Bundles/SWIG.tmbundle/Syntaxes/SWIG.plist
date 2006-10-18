@@ -24,14 +24,30 @@
 			<string>source.c</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.swig</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>%(header|init|inline|native|runtime|wrapper)\b</string>
+			<string>(%)(header|init|inline|native|runtime|wrapper)\b</string>
 			<key>name</key>
 			<string>keyword.other.directive.inlinecode.swig</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.swig</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\$([\*&amp;]*[1-9]+(_name|_type|_ltype|_basetype|_mangle|_descriptor){0,1}|action|input|result|symname)\b</string>
+			<string>(\$)([\*&amp;]*[1-9]+(_name|_type|_ltype|_basetype|_mangle|_descriptor){0,1}|action|input|result|symname)\b</string>
 			<key>name</key>
 			<string>keyword.other.function-parameter.swig</string>
 		</dict>
@@ -42,8 +58,16 @@
 			<string>support.function.type.swig</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.swig</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>%(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|insert|makedefault|module|nocallback|nodefault|rename|typemap|varargs)\b</string>
+			<string>(%)(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|insert|makedefault|module|nocallback|nodefault|rename|typemap|varargs)\b</string>
 			<key>name</key>
 			<string>keyword.other.directive.swig</string>
 		</dict>
@@ -63,15 +87,20 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*%\s*(include|import)\b\s+("?[A-Za-z0-9\._]+"?)</string>
+			<string>^\s*(%)\s*(include|import)\b\s+("?[A-Za-z0-9\._]+"?)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.import.swig</string>
+					<string>punctuation.definition.preprocessor.swig</string>
 				</dict>
 				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.import.swig</string>
+				</dict>
+				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>string.quoted.double.swig</string>
@@ -83,8 +112,16 @@
 			<string>meta.preprocessor.swig</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.preprocessor.swig</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>%([A-Za-z]+[A-Za-z0-9_]*)\b</string>
+			<string>(%)([A-Za-z]+[A-Za-z0-9_]*)\b</string>
 			<key>name</key>
 			<string>meta.preprocessor.macro.swig</string>
 		</dict>
@@ -95,6 +132,14 @@
 			<string>storage.type.swig</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.swig</string>
+				</dict>
+			</dict>
 			<key>match</key>
 			<string>(%\{|%\})</string>
 			<key>name</key>

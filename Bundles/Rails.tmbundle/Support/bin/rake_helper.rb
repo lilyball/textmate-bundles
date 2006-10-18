@@ -43,7 +43,7 @@ OptionParser.new do |opts|
 end.parse!
 
 if options[:question]
-  unless options[:answer] = TextMate.input(optional_question, options[:answer] || "", :title => options[:title] || "Rake")
+  unless options[:answer] = TextMate.input(options[:question], options[:answer] || "", :title => options[:title] || "Rake")
     TextMate.exit_discard
   end
 end
@@ -89,7 +89,7 @@ when "db:migrate", "migrate"
     case line
       when /^==\s+/
         # Replace == headings with <h2></h2>
-        line.gsub!(/^==\s+([^=]+)[=\s]*$/, "<h2>\\1</h2>")
+        line.gsub!(/^==\s+([^=]+)[=\s]*$/, "<span class=\"heading\">\\1</span>")
         # Replace parenthetical times with time class
         line.gsub!(/(\([\d\.]+s\))/, "<span class=\"time\">\\1</span>")
         # Show details inside table
@@ -139,7 +139,8 @@ __END__
     div#rake_command {font-size: 0.9em; font-weight: bold; margin-bottom: 0.5em;}
     table {padding-left: 2em;}
     td {padding-right: 1.5em;}
-    .time {color: #f99; font-weight: bold}
+    .time {color: #8c2386; font-weight: bold;}
+    .heading {font-weight: bold;}
     .done {color: #b55; font-weight: bold; font-size: 1.1em;}
   </style>
   <script src="file://${TM_SUPPORT_PATH}/script/default.js" type="text/javascript" language="javascript" charset="utf-8"></script>

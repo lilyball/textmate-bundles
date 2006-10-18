@@ -6,7 +6,11 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
-"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/rake_helper.rb" db:migrate -q "Migrate to which version?" -v VERSION
+
+# Find the current version number from the schema.rb file
+export CURRENT=`grep 'Schema\.define' "$TM_PROJECT_DIRECTORY/db/schema.rb" | ruby -e 'print $stdin.read.scan(/\d+/).first'`
+
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/rake_helper.rb" db:migrate -q "Migrate to which version? (Current version: $CURRENT)" -v VERSION
 </string>
 	<key>input</key>
 	<string>none</string>

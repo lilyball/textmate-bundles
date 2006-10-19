@@ -1,18 +1,18 @@
 //
 //  CXTextWithButtonStripCell.m
-//  NSCell supporting iTunes-store-ish action buttons
+//  NSCell supporting row action buttons aligned to one side of a text table column.
 //
 //  Created by Chris Thomas on 2006-10-11.
 //  Copyright 2006 Chris Thomas. All rights reserved.
 //
 
 #import "CXTextWithButtonStripCell.h"
-#import "CXShading.h"
 
-#define kVerticalMargin					1.0
-#define kHorizontalMargin				2.0
-#define kMarginBetweenTextAndButtons	8.0
-#define kIconButtonWidth				18.0
+#define kVerticalMargin							1.0
+#define kHorizontalMargin						2.0
+#define kMarginBetweenTextAndButtons			8.0
+#define kIconButtonWidth						16.0
+#define kButtonInteriorVerticalEdgeMargin		8.0
 
 @interface NSBezierPath (CXBezierPathAdditions)
 + (NSBezierPath*)bezierPathWithCapsuleRect:(NSRect)rect;
@@ -35,33 +35,84 @@
 
 @end
 
-
 @implementation CXTextWithButtonStripCell
+
+// NSTableView frequently wants to make copies of the cell. Retain anything that later will be released.
+- (id)copyWithZone:(NSZone *)zone
+{
+	CXTextWithButtonStripCell *	copiedCell = [super copyWithZone:zone];
+	
+	[copiedCell->fButtons retain];
+	return copiedCell;
+}
+
+- (void) dealloc
+{
+	[fButtons release];
+	[super dealloc];
+}
 
 #if 0
 #pragma mark -
 #pragma mark Geometry
 #endif
 
-// Maintaining a cache of the rects simplifies the rest of the code
+- (NSDictionary *) titleTextAttributes
+{
+	NSMutableDictionary * attributes = [NSMutableDictionary dictionary];
+	
+	[attributes setObject:[NSFont systemFontOfSize:9.0] forKey:NSFontAttributeName];
+	[attributes setObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
+	
+	return attributes;
+}
+
+// Maintaining a cache of the button boundrects simplifies the rest of the code
 - (void)calcButtonRects
 {
 	NSRect			buttonRect		= NSMakeRect(0,0,16,16);
 	unsigned int	buttonsCount	= [fButtons count];
 	float			currentX		= 0.0;
 	float 			currentButtonWidth;
+	NSString *		downwardTriangle = [NSString stringWithFormat:@" %C", 0x25BE];
 
 	for(unsigned int index = 0; index < buttonsCount; index += 1)
 	{
 		NSMutableDictionary *	buttonDefinition = [fButtons objectAtIndex:index];
+//		NSImage *				icon = [buttonDefinition objectForKey:@"icon"];
+		NSString *				text = [buttonDefinition objectForKey:@"title"];
+		NSMenu *				menu = [buttonDefinition objectForKey:@"menu"];
+		
+		if( text != nil )
+		{
+			// Text size
+			// Add popup triangle for menu buttons
+			if( menu != nil && ![text hasSuffix:downwardTriangle] )
+			{
+				text = [text stringByAppendingString:downwardTriangle];
+				[buttonDefinition setObject:text forKey:@"title"];
+			}
+			
+			currentButtonWidth = [text sizeWithAttributes:[self titleTextAttributes]].width;
+		}
+		else
+		{
+			// Default to icon width
+			currentButtonWidth = kIconButtonWidth;
+			if( menu != nil )
+			{
+				currentButtonWidth += [downwardTriangle sizeWithAttributes:[self titleTextAttributes]].width;
+			}
+		}
 
-		currentButtonWidth = kIconButtonWidth; 	// TODO support text string too
-		// [self sizeOfButton:buttonDefinition];
+		// Add margin to both sides
+		currentButtonWidth += (kButtonInteriorVerticalEdgeMargin * 2);
 
 		buttonRect.origin.x		= currentX;
 		buttonRect.size.width 	= currentButtonWidth;
 
-		NSValue *	rectValue = [NSValue valueWithRect:buttonRect];			
+		// Cache the calculated rect
+		NSValue *	rectValue = [NSValue valueWithRect:buttonRect];
 		[buttonDefinition setObject:rectValue forKey:@"_cachedRect"];
 
 		currentX += (currentButtonWidth + kHorizontalMargin);
@@ -72,7 +123,7 @@
 
 - (NSRect)rectForButtonAtIndex:(UInt32)rectIndex inCellFrame:(NSRect)cellFrame
 {	
-	NSRect buttonRect = [[[fButtons objectAtIndex:rectIndex] objectForKey:@"_cachedRect"] rectValue];
+ 	NSRect buttonRect = [[[fButtons objectAtIndex:rectIndex] objectForKey:@"_cachedRect"] rectValue];
 	if( !fRightToLeft )
 	{
 		// Left to right: need to offset the buttonRects to the right edge of the cellFrame
@@ -127,7 +178,8 @@
 
     for (;;)
 	{
-		UInt32 hitButton = [self buttonIndexAtPoint:[controlView convertPoint:[theEvent locationInWindow] fromView:nil]
+		NSMenu *	menu;
+		UInt32		hitButton = [self buttonIndexAtPoint:[controlView convertPoint:[theEvent locationInWindow] fromView:nil]
 							inRect:cellFrame
 							ofView:controlView];
 		
@@ -156,6 +208,17 @@
 			fButtonPressedIndex = hitButton;
 		}
 		
+		// Pop up the menu, if we have a menu button. popUpContextMenu will track the mouse from this point forward.
+		if(fButtonPressedIndex != NSNotFound)
+		{
+			menu = [[fButtons objectAtIndex:fButtonPressedIndex] objectForKey:@"menu"];
+			if( menu != nil )
+			{
+				[NSMenu popUpContextMenu:menu withEvent:theEvent forView:controlView withFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+				break;
+			}
+		}
+		
 		// Next event
         theEvent = [[controlView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
         curPoint = [controlView convertPoint:[theEvent locationInWindow] fromView:nil];
@@ -178,54 +241,45 @@
 #endif
 
 
-- (void)drawButtonInRect:(NSRect)rect selected:(BOOL)selected
+- (void)drawButtonContent:(id)content inRect:(NSRect)rect selected:(BOOL)selected menu:(NSMenu *)menu
 {
-	NSColor * 	borderColor		= [NSColor lightGrayColor];
-	NSColor *	lightColor		= [NSColor colorWithDeviceWhite:1.0 alpha:1.0];
-	NSColor *	darkColor		= [NSColor colorWithDeviceWhite:0.85 alpha:1.0];
-
-	// On?
-	if( [self isHighlighted] )
-	// [self state] == NSOnState
-		//&& ([self showsStateBy] != NSNoCellMask) )
-	{
-		NSColor *	litColor				= [NSColor colorForControlTint:[NSColor currentControlTint]];
-
-		darkColor		= [[darkColor shadowWithLevel:0.1] blendedColorWithFraction:0.7 ofColor:litColor];
-	}
-
-	// Highlighted?
+	// Draw background
+	NSBezierPath * path = [NSBezierPath bezierPathWithCapsuleRect:NSInsetRect(rect, 0.5f, 0.5f)];
+	
 	if( selected )
 	{
-		// swap
-		NSColor *	newDarkColor = lightColor;
-
-		lightColor = darkColor;
-		darkColor = newDarkColor;
+		[[NSColor darkGrayColor] set];
 	}
-
-	//
-	// Outline
-	// offset by 0.5 so we sit on pixel boundaries for nice, crisp lines
-	NSBezierPath * path = [NSBezierPath bezierPathWithCapsuleRect:NSInsetRect(rect, 0.5f, 0.5f)];
-//	NSBezierPath * path = [NSBezierPath bezierPathWithRect:NSInsetRect(rect, 1.0f, 1.0f)];
-//	NSBezierPath * path = [NSBezierPath bezierPathWithRect:rect];
-
-	[path setLineWidth:0.0f];
-
-	// Interior
-	[NSGraphicsContext saveGraphicsState];
-
-		[path addClip];
-		[CXShading fillRect:rect withVerticalLinearShadingFromColor:lightColor
-																 toColor:darkColor];
-	[NSGraphicsContext restoreGraphicsState];
-
-	// Button outline goes on top of the fill, so that we don't lose the inner antialising.
-	[borderColor set];
-	[path stroke];
-
-	// TODO: draw icon or text
+	else
+	{
+		[[NSColor lightGrayColor] set];
+	}
+	[path fill];
+	
+	// Draw content (send the polymorphism lecture to the AppKit team, thanks)
+	if( [content isKindOfClass:[NSString class]] )
+	{
+		NSRect			textRect = NSInsetRect(rect, kButtonInteriorVerticalEdgeMargin, 0.5f);
+		
+		[content drawInRect:textRect withAttributes:[self titleTextAttributes]];
+	}
+	else if( [content isKindOfClass:[NSImage class]] )
+	{
+		NSRect			iconRect = NSInsetRect(rect, kButtonInteriorVerticalEdgeMargin, 1.5f);
+		
+		NSFrameRect(iconRect);
+		[content compositeToPoint:iconRect.origin operation:NSCompositeSourceOver];
+				
+		// Add popup triangle for menu button
+		if( menu != nil )
+		{
+			NSRect			textRect = iconRect;
+			NSString *		downwardTriangle = [NSString stringWithFormat:@" %C", 0x25BE];
+			
+			textRect.origin.x += kIconButtonWidth;
+			[downwardTriangle drawInRect:textRect withAttributes:[self titleTextAttributes]];
+		}
+	}
 }
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
@@ -234,11 +288,20 @@
 	
 	for( unsigned int i = 0; i < buttonsCount; i += 1 )
 	{
-		NSRect buttonRect = [self rectForButtonAtIndex:i inCellFrame:cellFrame];
+		NSMutableDictionary *	buttonDefinition = [fButtons objectAtIndex:i];
+		NSRect					buttonRect = [self rectForButtonAtIndex:i inCellFrame:cellFrame];
+		BOOL					selected = (fButtonPressedIndex == i);
+		id 						content = [buttonDefinition objectForKey:@"icon"];
 		
-		[self drawButtonInRect:buttonRect selected:(fButtonPressedIndex == i)];
+		if( content == NULL )
+		{
+			content = [buttonDefinition objectForKey:@"title"];
+		}
+		
+		[self drawButtonContent:content inRect:buttonRect selected:selected menu:[buttonDefinition objectForKey:@"menu"]];
 	}
 	
+	// Adjust the text bounds to avoid overlapping the buttons
 	if( fRightToLeft )
 	{
 		cellFrame.origin.x += (fButtonStripWidth + kMarginBetweenTextAndButtons);
@@ -258,8 +321,8 @@
 
 - (void)setButtonDefinitions:(NSArray *)newDefs
 {
-	NSArray *		oldButtonDefinitions = fButtons;
 	unsigned int	buttonsCount = [newDefs count];
+	NSArray *		oldButtonDefinitions = fButtons;
 	
 	// Get mutable copies of the button definitions; we want to store additional data in them
 	fButtons = [[NSMutableArray alloc] init];
@@ -274,6 +337,8 @@
 	[oldButtonDefinitions release];
 	
 	[self calcButtonRects];
+	
+	// Reset pressed index
 	fButtonPressedIndex = NSNotFound;
 }
 

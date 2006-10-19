@@ -414,11 +414,15 @@
 			<key>begin</key>
 			<string>(?x)
 				(?:  ^                                 # begin-of-line
-				  |  (?: (?&lt;!else|new) (?&lt;=\w)\s+      #  or word + space before name
-				       | (?&lt;!&amp;&amp;)       (?&lt;=[*&amp;&gt;])\s*   #  or type modifier before name
+				  |  
+				     (?: (?= \s )           (?&lt;!else|new) (?&lt;=\w)\s+      #  or word + space before name
+				       | (?= \s*[A-Za-z_] ) (?&lt;!&amp;&amp;)       (?&lt;=[*&amp;&gt;])\s*   #  or type modifier before name
 				     )
 				)
-				([A-Za-z_][A-Za-z0-9_:]*)              # actual name
+				(
+					[A-Za-z_][A-Za-z0-9_:]*               # actual name
+					(?: (?&lt;=operator) (?: [-*&amp;&lt;&gt;=+!]+ | \(\) | \[\] ) )?  # if it is a C++ operator
+				)
 				 \s*(\() (?=                           # match "("
 				           (?&lt;fun&gt; [^()]++ | \( \g&lt;fun&gt;*+ \) )*+   # function arguments
 				    \) 		                           # match ")"
@@ -462,11 +466,14 @@
 			<key>begin</key>
 			<string>(?x)
 				(?:  ^                                        # begin-of-line
-				  |  (?: (?&lt;!else|new|return) (?&lt;=\w)\s+      #  or word + space before name
-				       | (?&lt;!&amp;&amp;)              (?&lt;=[*&amp;])\s*    #  or type modifier before name
+				  |  (?: (?= \s )           (?&lt;!else|new|return) (?&lt;=\w)\s+      #  or word + space before name
+				       | (?= \s*[A-Za-z_] ) (?&lt;!&amp;&amp;)              (?&lt;=[*&amp;])\s*    #  or type modifier before name
 				     )
 				)
-				([A-Za-z_][A-Za-z0-9_:]*)              # actual name
+				(
+					[A-Za-z_][A-Za-z0-9_:]*               # actual name
+					(?: (?&lt;=operator) (?: [-*&amp;&lt;&gt;=+!]+ | \(\) | \[\] ) )?  # if it is a C++ operator
+				)
 				 \s+(\() (?=                           # match "("
 				           (?&lt;fun&gt; [^()]++ | \( \g&lt;fun&gt;*+ \) )*+   # function arguments
 				    \)                                 # match ")"

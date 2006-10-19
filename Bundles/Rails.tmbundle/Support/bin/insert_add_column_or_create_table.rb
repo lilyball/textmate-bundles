@@ -13,9 +13,9 @@ buffer = Buffer.new(STDIN.read, 0, 0)
 
 table_name = column_name = nil
 case buffer.lines[0]
-when /remove_column\s+['"](\w+?)['"],\s*['"](\w+?)['"]/
+when /remove_column\s+:(\w+),\s*:(\w+)/
   table_name, column_name = $1, $2
-when /drop_table\s+['"](\w+)['"]/
+when /drop_table\s+:(\w+)/
   table_name = $1
 else
   puts "No table or column name specified. (\"#{buffer.lines[0]}\")"

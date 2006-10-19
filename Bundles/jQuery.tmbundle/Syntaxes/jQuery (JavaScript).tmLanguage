@@ -16,7 +16,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(\$)\(</string>
+			<string>(\$)(\()</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -24,11 +24,24 @@
 					<key>name</key>
 					<string>support.class.js.jquery</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.class.js</string>
+				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>meta.selector.jquery</string>
 			<key>end</key>
-			<string>\)</string>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.class.js</string>
+				</dict>
+			</dict>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -38,8 +51,24 @@
 				<dict>
 					<key>begin</key>
 					<string>'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.begin.js</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.end.js</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -51,8 +80,24 @@
 				<dict>
 					<key>begin</key>
 					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.begin.js</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.end.js</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -69,7 +114,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(add|ancestors|appendTo|children|filter|find|insertAfter|insertBefore|next|not|parent|parents|prependTo|prev|remove|siblings)\s*\(</string>
+			<string>\b(add|ancestors|appendTo|children|filter|find|insertAfter|insertBefore|next|not|parent|parents|prependTo|prev|remove|siblings)\s*(\()</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -77,11 +122,24 @@
 					<key>name</key>
 					<string>support.function.js.jquery</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.function.js</string>
+				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>meta.selector.jquery</string>
 			<key>end</key>
-			<string>\)</string>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.function.js</string>
+				</dict>
+			</dict>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -91,8 +149,24 @@
 				<dict>
 					<key>begin</key>
 					<string>'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.begin.js</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.end.js</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -104,8 +178,24 @@
 				<dict>
 					<key>begin</key>
 					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.begin.js</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.end.js</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -150,14 +240,30 @@
 					<string>entity.name.tag.css</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.attribute-name.css</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\.[a-zA-Z0-9_-]+</string>
+					<string>(\.)[a-zA-Z0-9_-]+</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.class.css</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.attribute-name.css</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>#[a-zA-Z0-9_-]+</string>
+					<string>(#)[a-zA-Z0-9_-]+</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.id.css</string>
 				</dict>
@@ -168,8 +274,16 @@
 					<string>entity.name.tag.wildcard.css</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.attribute-name.css</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>:\b(active|after|before|first-letter|first-line|hover|link|visited)\b</string>
+					<string>(:)\b(active|after|before|first-letter|first-line|hover|link|visited)\b</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.pseudo-class.css</string>
 				</dict>
@@ -179,6 +293,14 @@
 		<dict>
 			<key>begin</key>
 			<string>\(</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.scope.js</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\)</string>
 			<key>patterns</key>

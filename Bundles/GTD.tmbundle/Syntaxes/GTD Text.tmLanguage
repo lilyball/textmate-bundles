@@ -13,20 +13,44 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bullet-point.gtd</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*•.*$\n?</string>
+			<string>^\s*(•).*$\n?</string>
 			<key>name</key>
 			<string>meta.bullet-point.strong</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bullet-point.gtd</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*·.*$\n?</string>
+			<string>^\s*(·).*$\n?</string>
 			<key>name</key>
 			<string>meta.bullet-point.light</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bullet-point.gtd</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*\*.*$\n?</string>
+			<string>^\s*(\*).*$\n?</string>
 			<key>name</key>
 			<string>meta.bullet-point.star</string>
 		</dict>
@@ -36,14 +60,23 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>meta.toc-list.release-notes</string>
+					<string>punctuation.definition.separator.release-notes</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.gtd</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.separator.release-notes</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\[(?:[\d-]+: )?(REVISION \d+)\]$
-</string>
+			<string>^(\[)(?:[\d-]+: )?(REVISION \d+)(\])$\n?</string>
 			<key>name</key>
-			<string>meta.diff.separator.release-notes</string>
+			<string>meta.separator.gtd</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -67,10 +100,23 @@
 					<string>constant.numeric.version-string</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.keyword.gtd</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.keyword.gtd</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\[(NEW|FIXED|CHANGED|REMOVED|INFO)\]</string>
+					<string>(\[)(NEW|FIXED|CHANGED|REMOVED|INFO)(\])</string>
 					<key>name</key>
-					<string>keyword.other.release-notes</string>
+					<string>keyword.other.gtd</string>
 				</dict>
 			</array>
 		</dict>

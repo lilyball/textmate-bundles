@@ -42,7 +42,7 @@ if self_down = buffer.find { /^(\s*)def self\.down\b/ }
         if insert_text = schema.buffer.find { %r{^\s*\w+\.column\s+['"]#{column_name}['"](.+)$} }
           column_params = insert_text[0]
           
-          insert_text = "add_column \"#{table_name}\", \"#{column_name}\"#{column_params}\n"
+          insert_text = "add_column :#{table_name}, :#{column_name}#{column_params}\n"
           buffer.lines.insert self_down_end[1], prepend(insert_text, indentation + "  ")
         else
           puts "The db/schema.rb does not have a column matching \"#{column_name}\" within create_table \"#{table_name}\"."

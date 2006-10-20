@@ -178,7 +178,8 @@ module TextMate
       content = nil
 
       # File resolution; expand ~/... paths;
-      # look for relative files, relative to current file, current project
+      # look for relative files, relative to current file, current project, replace variables
+      file = replace_variables(file, local_vars)
       file = File.expand_path(file)
       if File.exist?(filepath = file)
       elsif file.match(/^\//) # non-relative path...

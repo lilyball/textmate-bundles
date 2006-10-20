@@ -10,9 +10,19 @@ snippets = {
   'rename_column' =>
     { :up   => 'rename_column :${1:table_name}, :${2:column_name}, :${3:new_column_name}$0',
       :down => 'rename_column :$1, :$3, :$2' },
-
+  
+  'rename_column_continue' =>
+    { :up   => 'rename_column :${1:table_name}, :${2:column_name}, :${3:new_column_name}
+mncc$0',
+      :down => 'rename_column :$1, :$3, :$2' },
+  
   'rename_table' =>
     { :up   => 'rename_table :${1:old_table_name}, :${2:new_table_name}$0',
+      :down => 'rename_table :$2, :$1' },
+  
+  'rename_table_continue' =>
+    { :up   => 'rename_table :${1:old_table_name}, :${2:new_table_name}
+mntc$0',
       :down => 'rename_table :$2, :$1' },
   
   'add_remove_column' =>

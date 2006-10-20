@@ -152,6 +152,6 @@ end
 # This part looks for \bibitem references in the current file only. 
 # So that completion works for people that don't use bib files.
 # TODO: This whole file needs refactoring.
-completionsList += File.read(ENV["TM_FILEPATH"]).scan(/\\bibitem(?:\[[^\]]*\])?\{([^\}]+)\}/).map{|i| i[0]}.find_all { |i| !($p.nil? && i.downcase.index($p.downcase).nil?) }
+completionsList += File.read(ENV["TM_FILEPATH"]).scan(/\\bibitem(?:\[[^\]]*\])?\{([^\}]+)\}/).map{|i| i[0]}.find_all { |i| ($p.nil? || !i.downcase.index($p.downcase).nil?) }
 
 print completionsList.uniq.sort.join(", ")

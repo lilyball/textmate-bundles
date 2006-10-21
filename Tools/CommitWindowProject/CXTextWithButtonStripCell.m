@@ -179,6 +179,21 @@
 							inRect:cellFrame
 							ofView:controlView];
 		
+		// Mouse up --> invoke the appropriate invocation, if any
+        if ([theEvent type] == NSLeftMouseUp)
+		{
+			if( hitButton != NSNotFound )
+			{
+				NSInvocation * invocation = [[fButtons objectAtIndex:fButtonPressedIndex] objectForKey:@"invocation"];
+				
+				[invocation invoke];
+			}
+
+			fButtonPressedIndex = NSNotFound;
+            break;
+        }
+		
+		
 		// Exit early if the first hit wasn't a button
 		if( firstIteration && hitButton == NSNotFound )
 		{
@@ -218,12 +233,6 @@
 		// Next event
         theEvent = [[controlView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
         curPoint = [controlView convertPoint:[theEvent locationInWindow] fromView:nil];
-
-        if ([theEvent type] == NSLeftMouseUp)
-		{
-			fButtonPressedIndex = NSNotFound;
-            break;
-        }
 
 		firstIteration = NO;
     }

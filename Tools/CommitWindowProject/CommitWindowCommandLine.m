@@ -8,6 +8,8 @@
 
 #import "CommitWindowCommandLine.h"
 
+#import "NSTask+CXAdditions.h"
+
 @implementation CommitWindowController(CommandLine)
 
 - (void) awakeFromNib
@@ -173,31 +175,39 @@
 
 - (IBAction) doubleClickRowInTable:(id)sender
 {
-	if(fDiffCommand != nil)
+	if( fDiffCommand != nil )
 	{
-		NSArray *			unquotedArguments	= [fDiffCommand componentsSeparatedByString:@","];
-		NSString *			quoteArgument		= @"\"%@\"";
-		NSString *			diffCommand			= @"";
-		NSString *			mateCommand			= [NSString stringWithFormat:@"\"%s/bin/mate\" &> /dev/null &", getenv("TM_SUPPORT_PATH")];
-		NSString *			filePath			= [[[fFilesController arrangedObjects] objectAtIndex:[sender selectedRow]] objectForKey:@"path"];
-		unsigned int	argumentCount = [unquotedArguments count];
-		unsigned int	index;
-		
-		for(index = 0; index < argumentCount; index += 1)
-		{
-			NSString *	argument = [unquotedArguments objectAtIndex:index];
-			NSString *	quotedArgument = [NSString stringWithFormat:quoteArgument, argument];
-			
-			diffCommand = [diffCommand stringByAppendingString:quotedArgument];
-			diffCommand = [diffCommand stringByAppendingString:@" "];
-		}
+		NSMutableArray *	arguments	= [[fDiffCommand componentsSeparatedByString:@","] mutableCopy];
+		NSString *			filePath	= [[[fFilesController arrangedObjects] objectAtIndex:[sender selectedRow]] objectForKey:@"path"];
+		NSData *			diffData;
+		NSString *			errorText;
+		int					exitStatus;
 
-		diffCommand = [diffCommand stringByAppendingString:[NSString stringWithFormat:quoteArgument, filePath]];
-		diffCommand = [diffCommand stringByAppendingString:[NSString stringWithFormat:@" | %@", mateCommand]];
+		[arguments addObject:filePath];
+		exitStatus = [NSTask executeTaskWithArguments:arguments
+			    					input:nil
+			                        outputData:&diffData
+			                        errorString:&errorText];
 		
-		system([diffCommand UTF8String]);
+		if( exitStatus != 0 )
+		{
+			NSRunAlertPanel(errorText, @"Exit status (%d) -- Might be a bug!", @"OK", nil, nil, exitStatus);
+		}
+		else
+		{
+			arguments = [NSArray arrayWithObjects:[NSString stringWithFormat:@"%s/bin/mate", getenv("TM_SUPPORT_PATH")], @"-a", nil];
+			
+			// Success, send the diff to TextMate
+			exitStatus = [NSTask executeTaskWithArguments:arguments
+				    					input:diffData
+				                        outputData:nil
+				                        errorString:&errorText];
+			if( exitStatus != 0 )
+			{
+				NSRunAlertPanel(errorText, @"Exit status (%d) -- Might be a bug!", @"OK", nil, nil, exitStatus);
+			}
+		}
 	}
-	
 }
 
 

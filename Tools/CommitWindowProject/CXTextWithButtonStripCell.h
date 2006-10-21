@@ -14,7 +14,7 @@
 	//	• either @"title" NSString -- localized name of button
 	//	  OR @"icon" 	-- NSImage -- icon
 	//	• @"menu"		-- NSMenu -- if present, indicates that this button is a menu button
-	//	TODO: • @"invocation"	-- NSInvocation -- required if this is a push button, useless for menu buttons
+	//	• @"invocation"	-- NSInvocation -- required if this is a push button, useless for menu buttons
 	//
 	NSMutableArray *	fButtons;
 	UInt32				fButtonPressedIndex;

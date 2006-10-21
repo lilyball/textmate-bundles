@@ -10,6 +10,7 @@
 #import "CXMenuButton.h"
 #import "CWTextView.h"
 
+#import "CXTextWithButtonStripCell.h"
 #import "NSString+StatusString.h"
 
 #define kStatusColumnWidthForSingleChar	18
@@ -39,9 +40,44 @@
 // fFilesController and fFilesStatusStrings should be set up before calling setupUserInterface.
 - (void) setupUserInterface
 {
-	NSCell * cell = [fPathColumn dataCell];
+	CXTextWithButtonStripCell *		cell = (CXTextWithButtonStripCell *)[fPathColumn dataCell];
+	
 	if([cell respondsToSelector:@selector(setLineBreakMode:)])
-		[cell setLineBreakMode:NSLineBreakByTruncatingHead];
+	{
+		[cell setLineBreakMode:NSLineBreakByTruncatingHead];		
+	}
+
+	// Set up button strip
+	if( fDiffCommand != nil )
+	{
+		NSMutableDictionary *	diffButtonDefinition;
+		NSMethodSignature *		diffMethodSignature = [self methodSignatureForSelector:@selector(doubleClickRowInTable:)];
+		NSInvocation *			diffInvocation = [NSInvocation invocationWithMethodSignature:diffMethodSignature];
+		
+		// Arguments 0 and 1
+		[diffInvocation setTarget:self];
+		[diffInvocation setSelector:@selector(doubleClickRowInTable:)];
+		
+		// Pretend the table view is the sender
+		[diffInvocation setArgument:&fTableView atIndex:2];
+
+		diffButtonDefinition = [NSMutableDictionary dictionary];
+		[diffButtonDefinition setObject:@"Diff" forKey:@"title"];
+		[diffButtonDefinition setObject:diffInvocation forKey:@"invocation"];
+
+		[cell setButtonDefinitions:[NSArray arrayWithObjects:diffButtonDefinition, nil]];
+
+//  NSMenu *						itemActionMenu;
+//	NSMutableDictionary *	actionMenuButtonDefinition;
+//	itemActionMenu = [[NSMenu alloc] initWithTitle:@"Test"];
+//	[itemActionMenu insertItemWithTitle:@"Add" action:@selector(test:) keyEquivalent:@"" atIndex:0];
+//	[itemActionMenu insertItemWithTitle:@"Remove" action:@selector(test:) keyEquivalent:@"" atIndex:0];
+//	actionMenuButtonDefinition = [NSMutableDictionary dictionaryWithObject:itemActionMenu forKey:@"menu"];
+//	
+//	[actionMenuButtonDefinition setObject:@"Action" forKey:@"title"];
+//
+//		[itemActionMenu release];
+	}
 
 	//
 	// Set up summary text view resizing

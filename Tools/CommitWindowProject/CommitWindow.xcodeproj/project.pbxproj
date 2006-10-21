@@ -10,11 +10,13 @@
 		8316703B0A4DB58500199564 /* NSString+StatusString.m in Sources */ = {isa = PBXBuildFile; fileRef = 8316703A0A4DB58500199564 /* NSString+StatusString.m */; };
 		831670450A4DB70A00199564 /* CommitWindowCommandLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 831670440A4DB70A00199564 /* CommitWindowCommandLine.m */; };
 		831C222407B6F2EC00397A7E /* CommitWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 831C222307B6F2EC00397A7E /* CommitWindowController.m */; };
+		831FF4B50ADDC1BA00BD90C2 /* CXTextWithButtonStripCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 831FF4B40ADDC1BA00BD90C2 /* CXTextWithButtonStripCell.m */; };
 		83BDF3B207DD4165005AC50F /* CWTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BDF3B107DD4165005AC50F /* CWTextView.m */; };
-		83C8C89B0ADA89330070245F /* Action.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83C8C8990ADA89320070245F /* Action.tiff */; };
-		83C8C89C0ADA89330070245F /* ActionPressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83C8C89A0ADA89320070245F /* ActionPressed.tiff */; };
 		83C8C8A20ADA90140070245F /* CXMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C8C8A10ADA90140070245F /* CXMenuButton.m */; };
 		83F6091D07B8A60400C21FE8 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F6091C07B8A60400C21FE8 /* ApplicationServices.framework */; };
+		83FF98860AE7CD7E00D83081 /* Action.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83FF98830AE7CD7E00D83081 /* Action.tiff */; };
+		83FF98870AE7CD7E00D83081 /* ActionPressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83FF98840AE7CD7E00D83081 /* ActionPressed.tiff */; };
+		83FF98CF0AE9AD5400D83081 /* NSTask+CXAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF98CE0AE9AD5400D83081 /* NSTask+CXAdditions.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -35,13 +37,17 @@
 		831670440A4DB70A00199564 /* CommitWindowCommandLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitWindowCommandLine.m; sourceTree = "<group>"; };
 		831C222207B6F2EC00397A7E /* CommitWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitWindowController.h; sourceTree = "<group>"; };
 		831C222307B6F2EC00397A7E /* CommitWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitWindowController.m; sourceTree = "<group>"; };
+		831FF4B30ADDC1BA00BD90C2 /* CXTextWithButtonStripCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXTextWithButtonStripCell.h; sourceTree = "<group>"; };
+		831FF4B40ADDC1BA00BD90C2 /* CXTextWithButtonStripCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXTextWithButtonStripCell.m; sourceTree = "<group>"; };
 		83BDF3B007DD4165005AC50F /* CWTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWTextView.h; sourceTree = "<group>"; };
 		83BDF3B107DD4165005AC50F /* CWTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWTextView.m; sourceTree = "<group>"; };
-		83C8C8990ADA89320070245F /* Action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Action.tiff; path = ../../../../../Applications/TextMate.app/Contents/Resources/Action.tiff; sourceTree = SOURCE_ROOT; };
-		83C8C89A0ADA89320070245F /* ActionPressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ActionPressed.tiff; path = ../../../../../Applications/TextMate.app/Contents/Resources/ActionPressed.tiff; sourceTree = SOURCE_ROOT; };
 		83C8C8A00ADA900B0070245F /* CXMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXMenuButton.h; sourceTree = SOURCE_ROOT; };
 		83C8C8A10ADA90140070245F /* CXMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXMenuButton.m; sourceTree = SOURCE_ROOT; };
 		83F6091C07B8A60400C21FE8 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
+		83FF98830AE7CD7E00D83081 /* Action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Action.tiff; sourceTree = "<group>"; };
+		83FF98840AE7CD7E00D83081 /* ActionPressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ActionPressed.tiff; sourceTree = "<group>"; };
+		83FF98CE0AE9AD5400D83081 /* NSTask+CXAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTask+CXAdditions.m"; sourceTree = "<group>"; };
+		83FF98D00AE9AD5B00D83081 /* NSTask+CXAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTask+CXAdditions.h"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CommitWindow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommitWindow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -70,6 +76,10 @@
 				8316703A0A4DB58500199564 /* NSString+StatusString.m */,
 				83BDF3B007DD4165005AC50F /* CWTextView.h */,
 				83BDF3B107DD4165005AC50F /* CWTextView.m */,
+				83FF98D00AE9AD5B00D83081 /* NSTask+CXAdditions.h */,
+				83FF98CE0AE9AD5400D83081 /* NSTask+CXAdditions.m */,
+				831FF4B30ADDC1BA00BD90C2 /* CXTextWithButtonStripCell.h */,
+				831FF4B40ADDC1BA00BD90C2 /* CXTextWithButtonStripCell.m */,
 				83C8C8A00ADA900B0070245F /* CXMenuButton.h */,
 				83C8C8A10ADA90140070245F /* CXMenuButton.m */,
 			);
@@ -126,8 +136,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				83C8C8990ADA89320070245F /* Action.tiff */,
-				83C8C89A0ADA89320070245F /* ActionPressed.tiff */,
+				83FF98820AE7CD7E00D83081 /* Icons */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -142,6 +151,15 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		83FF98820AE7CD7E00D83081 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				83FF98830AE7CD7E00D83081 /* Action.tiff */,
+				83FF98840AE7CD7E00D83081 /* ActionPressed.tiff */,
+			);
+			path = Icons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,8 +209,8 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				83C8C89B0ADA89330070245F /* Action.tiff in Resources */,
-				83C8C89C0ADA89330070245F /* ActionPressed.tiff in Resources */,
+				83FF98860AE7CD7E00D83081 /* Action.tiff in Resources */,
+				83FF98870AE7CD7E00D83081 /* ActionPressed.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +245,8 @@
 				8316703B0A4DB58500199564 /* NSString+StatusString.m in Sources */,
 				831670450A4DB70A00199564 /* CommitWindowCommandLine.m in Sources */,
 				83C8C8A20ADA90140070245F /* CXMenuButton.m in Sources */,
+				831FF4B50ADDC1BA00BD90C2 /* CXTextWithButtonStripCell.m in Sources */,
+				83FF98CF0AE9AD5400D83081 /* NSTask+CXAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +326,7 @@
 					ppc,
 					i386,
 				);
+				GCC_C_LANGUAGE_STANDARD = c99;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -318,6 +339,7 @@
 					ppc,
 					i386,
 				);
+				GCC_C_LANGUAGE_STANDARD = c99;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};

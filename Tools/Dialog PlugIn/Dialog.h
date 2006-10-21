@@ -6,7 +6,7 @@
 
 @protocol TextMateDialogServerProtocol
 - (int)textMateDialogServerProtocolVersion;
-- (void)showNib:(NSString*)aNib withArguments:(id)someArguments;
+- (id)showNib:(NSString*)aNib withArguments:(id)someArguments;
 @end
 
 @interface Dialog : NSObject

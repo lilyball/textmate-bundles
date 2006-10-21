@@ -27,21 +27,21 @@
 	return 1;
 }
 
-- (void)showNib:(NSString*)aNibPath withArguments:(id)someArguments
+- (id)showNib:(NSString*)aNibPath withArguments:(id)someArguments
 {
-	NSFileManager* fm = [NSFileManager defaultManager];
+	NSLog(@"%s %@, %@", _cmd, aNibPath, [someArguments description]);
 
-	if(![fm fileExistsAtPath:aNibPath])
+	if(![[NSFileManager defaultManager] fileExistsAtPath:aNibPath])
 	{
 		NSLog(@"%s nib file not found: %@", _cmd, aNibPath);
-		return;
+		return nil;
 	}
 
 	NSNib* nib = [[NSNib alloc] initWithContentsOfURL:[NSURL fileURLWithPath:aNibPath]];
 	if(!nib)
 	{
 		NSLog(@"%s failed loading nib: %@", _cmd, aNibPath);
-		return;
+		return nil;
 	}
 
 	NSMutableArray* topLevelObjects = nil;
@@ -57,6 +57,8 @@
 		if([object isKindOfClass:[NSWindow class]])
 			[object makeKeyAndOrderFront:self];
 	}
+
+	return nil;
 }
 @end
 
@@ -66,7 +68,7 @@
 	NSApp = [NSApplication sharedApplication];
 	if(self = [super init])
 	{
-		NSConnection* connection = [NSConnection defaultConnection];
+		NSConnection* connection = [NSConnection new];
 		[connection setRootObject:[[DialogServer new] autorelease]];
 		if([connection registerName:@"TextMate dialog server"] == NO)
 			NSLog(@"couldn't setup TextMate dialog server."), NSBeep();

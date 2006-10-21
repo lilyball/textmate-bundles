@@ -29,12 +29,12 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.definition.entry.yaml</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.definition.entry.yaml</string>
 				</dict>
 				<key>4</key>
 				<dict>
@@ -44,7 +44,7 @@
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.separator.key-value.yaml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -65,7 +65,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.definition.entry.yaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -75,12 +75,12 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.separator.key-value.yaml</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.definition.entry.yaml</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -94,7 +94,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.definition.entry.yaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -104,12 +104,12 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.separator.key-value.yaml</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.definition.entry.yaml</string>
 				</dict>
 				<key>5</key>
 				<dict>
@@ -128,7 +128,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.definition.entry.yaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -138,12 +138,12 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.separator.key-value.yaml</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.definition.entry.yaml</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -162,20 +162,33 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.symbol</string>
+					<string>punctuation.separator.key-value.yaml</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.omap.yaml</string>
 				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.yaml</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>(\w.*?)(:)\s*(\!\!omap)?</string>
+			<string>(\w.*?)(:)\s*((\!\!)omap)?</string>
 			<key>name</key>
 			<string>meta.tag.yaml</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.yaml</string>
+				</dict>
+			</dict>
 			<key>match</key>
 			<string>(\&amp;|\*)\w.*?$</string>
 			<key>name</key>
@@ -184,8 +197,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.yaml</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.yaml</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.yaml</string>
 			<key>patterns</key>
@@ -203,8 +232,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.yaml</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.yaml</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.yaml</string>
 			<key>patterns</key>
@@ -222,8 +267,24 @@
 		<dict>
 			<key>begin</key>
 			<string>`</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.yaml</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>`</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.yaml</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.interpolated.yaml</string>
 			<key>patterns</key>
@@ -251,9 +312,14 @@
 					<key>name</key>
 					<string>keyword.operator.merge-key.yaml</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.yaml</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>(\&lt;\&lt;): (\*.*)$</string>
+			<string>(\&lt;\&lt;): ((\*).*)$</string>
 			<key>name</key>
 			<string>keyword.operator.merge-key.yaml</string>
 		</dict>
@@ -266,8 +332,16 @@
 			<string>invalid.deprecated.trailing-whitespace.yaml</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.yaml</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(?&lt;!\$)#(?!\{).*$</string>
+			<string>(?&lt;!\$)(#)(?!\{).*$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.yaml</string>
 		</dict>
@@ -312,6 +386,14 @@
 		<dict>
 			<key>begin</key>
 			<string>&lt;%+(?!&gt;)=?</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.ruby</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>%&gt;</string>
 			<key>name</key>
@@ -319,8 +401,16 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.ruby</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>#.*?(?=%&gt;)</string>
+					<string>(#).*?(?=%&gt;)</string>
 					<key>name</key>
 					<string>comment.line.number-sign.ruby</string>
 				</dict>

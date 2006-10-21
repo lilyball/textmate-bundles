@@ -13,32 +13,97 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*=\s.*\s=\n</string>
+			<string>^\s*(=)\s.*\s(=)\n</string>
 			<key>name</key>
 			<string>markup.heading.1.moinmoin</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*==\s.*\s==\n</string>
+			<string>^\s*(==)\s.*\s(==)\n</string>
 			<key>name</key>
 			<string>markup.heading.2.moinmoin</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*===\s.*\s===\n</string>
+			<string>^\s*(===)\s.*\s(===)\n</string>
 			<key>name</key>
 			<string>markup.heading.3.moinmoin</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*====\s.*\s====\n</string>
+			<string>^\s*(====)\s.*\s(====)\n</string>
 			<key>name</key>
 			<string>markup.heading.4.moinmoin</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heading.moimoin</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^\s*=====\s.*\s=====\n</string>
+			<string>^\s*(=====)\s.*\s(=====)\n</string>
 			<key>name</key>
 			<string>markup.heading.5.moinmoin</string>
 		</dict>
@@ -55,20 +120,33 @@
 			<string>meta.pragma.moimoin</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.moimoin</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^##.*</string>
+			<string>^(##).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-number-sign.moimoin</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s+(.*?::)(?=\s+\S)</string>
+			<string>^\s+(.*?(::))(?=\s+\S)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>markup.list.definition.term.moinmoin</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.definition.moinmoin</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
@@ -91,7 +169,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.list-item-marker</string>
+					<string>punctuation.definition.list_item.moinmoin</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -119,7 +197,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.list-item-marker</string>
+					<string>punctuation.definition.list_item.moinmoin</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -147,12 +225,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>meta.table.column.moinmoin</string>
+					<string>punctuation.definition.table.column.moinmoin</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>meta.table.column.moinmoin</string>
+					<string>punctuation.definition.table.column.moinmoin</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
@@ -192,20 +270,59 @@
 				<dict>
 					<key>begin</key>
 					<string>\{{3}(?!.*\}{3})</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.moinmoin</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\}{3}</string>
 					<key>name</key>
 					<string>markup.raw.block.moinmoin</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.moinmoin</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.moinmoin</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.moinmoin</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.moinmoin</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>`[^`]*`|{{{.*?}}}</string>
+					<string>(`)[^`]*(`)|({{{).*?(}}})</string>
 					<key>name</key>
 					<string>markup.raw.inline.moinmoin</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>'{2}(?='{3}[^']*'{3})</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.italic.moinmoin</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>markup.italic.moinmoin</string>
 					<key>end</key>
@@ -221,6 +338,14 @@
 				<dict>
 					<key>begin</key>
 					<string>'{3}</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.bold.moinmoin</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>markup.bold.moinmoin</string>
 					<key>end</key>
@@ -236,6 +361,14 @@
 				<dict>
 					<key>begin</key>
 					<string>'{2}</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.italic.moinmoin</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>markup.italic.moinmoin</string>
 					<key>end</key>
@@ -251,6 +384,14 @@
 				<dict>
 					<key>begin</key>
 					<string>__</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.underline.moinmoin</string>
+						</dict>
+					</dict>
 					<key>contentName</key>
 					<string>markup.underline.moinmoin</string>
 					<key>end</key>
@@ -270,14 +411,40 @@
 					<string>markup.underline.link.moinmoin</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.moinmoin</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.moinmoin</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\[".*?"\]</string>
+					<string>(\[").*?("\])</string>
 					<key>name</key>
 					<string>markup.underline.link.moinmoin</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.moinmoin</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.moinmoin</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\[:.*?:.*?\]</string>
+					<string>(\[):.*?:.*?(\])</string>
 					<key>name</key>
 					<string>markup.underline.link.moinmoin</string>
 				</dict>
@@ -288,26 +455,63 @@
 					<string>markup.underline.link.moinmoin</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.moinmoin</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.moinmoin</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\[https?://.*?\]</string>
+					<string>(\[)https?://.*?(\])</string>
 					<key>name</key>
 					<string>markup.underline.link.moinmoin</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.key-value.moinmoin</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>attachment:\S+</string>
+					<string>attachment(:)\S+</string>
 					<key>name</key>
 					<string>markup.underline.link.moinmoin</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.table.column.moinmoin</string>
+						</dict>
+					</dict>
 					<key>match</key>
 					<string>\|\|</string>
 					<key>name</key>
 					<string>meta.table.column.moinmoin</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.macro.moinmoin</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\[\[.*?\]\]</string>
+					<string>(\[\[).*?(\]\])</string>
 					<key>name</key>
 					<string>meta.macro.moinmoin</string>
 				</dict>

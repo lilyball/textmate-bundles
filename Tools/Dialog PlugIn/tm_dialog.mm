@@ -1,5 +1,5 @@
 /*
-    g++ -Wmost -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -DDATE=\"`date +%Y-%m-%d`\" -Os "$TM_FILEPATH" -o ~/Library/Application\ Support/TextMate/Support/bin/tm_dialog -framework Cocoa && strip ~/Library/Application\ Support/TextMate/Support/bin/tm_dialog
+    g++ -Wmost -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -DDATE=\"`date +%Y-%m-%d`\" -Os "$TM_FILEPATH" -o "$TM_SUPPORT_PATH/bin/tm_dialog" -framework Cocoa && strip "$TM_SUPPORT_PATH/bin/tm_dialog"
 */
 #import <Cocoa/Cocoa.h>
 #import <getopt.h>

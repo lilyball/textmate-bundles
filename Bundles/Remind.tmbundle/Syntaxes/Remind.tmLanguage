@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>bundleUUID</key>
-	<string>183654CC-E0EF-4130-9201-28141392D57A</string>
 	<key>fileTypes</key>
 	<array>
 		<string>defs.rem</string>
@@ -17,14 +15,30 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.remind</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>[ ]*#.*\n?</string>
+			<string>[ ]*(#).*\n?</string>
 			<key>name</key>
 			<string>comment.line.number-sign.remind</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.remind</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>[ ]*;.*\n?</string>
+			<string>[ ]*(;).*\n?</string>
 			<key>name</key>
 			<string>comment.line.semi-colon.remind</string>
 		</dict>
@@ -72,7 +86,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(?i:(FSET))\s+(\w+\()(\w+)?(?:,(\w+))*(\))</string>
+			<string>\b(?i:(FSET))\s+(\w+(\())(\w+)?(?:,(\w+))*(\))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -88,7 +102,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>variable.parameter.fsetline.remind</string>
+					<string>punctuation.definition.arguments.remind</string>
 				</dict>
 				<key>4</key>
 				<dict>
@@ -98,7 +112,12 @@
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.fsetline.remind</string>
+					<string>variable.parameter.fsetline.remind</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.arguments.remind</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -298,7 +317,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.brackets.remind</string>
+					<string>punctuation.section.scope.remind</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -353,7 +372,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.parenthesis.remind</string>
+							<string>punctuation.section.scope.remind</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -375,8 +394,24 @@
 				<dict>
 					<key>begin</key>
 					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.remind</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.remind</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.remind</string>
 					<key>patterns</key>
@@ -438,17 +473,30 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(\w+)\(</string>
-					<key>captures</key>
+					<string>\b(\w+)(\()</string>
+					<key>beginCaptures</key>
 					<dict>
-						<key>0</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.function.remind</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.remind</string>
+						</dict>
 					</dict>
 					<key>end</key>
-					<string>\)</string>
+					<string>(\))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.remind</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>meta.function.user.remind</string>
 					<key>patterns</key>
@@ -502,16 +550,40 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.constant.remind</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>%[a-zA-Z0-9_!@#]</string>
+					<string>(%)[a-zA-Z0-9_!@#]</string>
 					<key>name</key>
 					<string>constant.other.placeholder.remind</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>%"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.remind</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>%"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.remind</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.remind</string>
 				</dict>
@@ -586,20 +658,44 @@
 					<string>keyword.control.move-reminder.trigger.remind</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.remind</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\+{1,2}\d+</string>
+					<string>(\+{1,2})\d+</string>
 					<key>name</key>
 					<string>variable.other.component.delta.trigger.remind</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.remind</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\-{1,2}\d+</string>
+					<string>(\-{1,2})\d+</string>
 					<key>name</key>
 					<string>variable.other.component.back.trigger.remind</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.remind</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\*\d+</string>
+					<string>(\*)\d+</string>
 					<key>name</key>
 					<string>variable.other.component.repeat.trigger.remind</string>
 				</dict>

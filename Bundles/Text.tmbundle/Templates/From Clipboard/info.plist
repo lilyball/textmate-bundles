@@ -5,7 +5,7 @@
 	<key>command</key>
 	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
    __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 \
-   pbpaste &gt; "$TM_NEW_FILE"
+   pbpaste &gt; "$TM_NEW_FILE" | tr '\r' '\n'
 fi</string>
 	<key>extension</key>
 	<string>txt</string>

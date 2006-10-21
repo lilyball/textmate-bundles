@@ -11,8 +11,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.twiki</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.twiki</string>
 			<key>patterns</key>
@@ -31,19 +47,47 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function</string>
+					<string>punctuation.definition.heading.twiki</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.twiki</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^-{3}\+{1,6}(.*)$</string>
+			<string>^(-{3}\+{1,6})(.*)$</string>
 			<key>name</key>
 			<string>markup.heading.twiki</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\&lt;verbatim\&gt;|\&lt;pre\&gt;</string>
+			<string>(&lt;)verbatim(&gt;)|(&lt;)pre(&gt;)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.twiki</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.twiki</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.twiki</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
-			<string>\&lt;/verbatim\&gt;|\&lt;/pre\&gt;</string>
+			<string>(&lt;/)verbatim(&gt;)|(&lt;/)pre(&gt;)</string>
 			<key>name</key>
 			<string>markup.raw.twiki</string>
 			<key>patterns</key>
@@ -93,6 +137,14 @@
 		<dict>
 			<key>begin</key>
 			<string>^(\|)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.table.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>^(?:\s*$|(?=\s*&gt;|[=-]{3,}$))</string>
 			<key>name</key>
@@ -107,7 +159,15 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ {3}\*</string>
+			<string>^ {3}(\*)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list-item.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -122,7 +182,15 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ {6}\*</string>
+			<string>^ {6}(\*)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list-item.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -137,7 +205,15 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ {9}\*</string>
+			<string>^ {9}(\*)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list-item.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -152,7 +228,15 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ {12}\*</string>
+			<string>^ {12}(\*)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list-item.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -167,7 +251,15 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ {15}\*</string>
+			<string>^ {15}(\*)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list-item.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -182,7 +274,15 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ {18}\*</string>
+			<string>^ {18}(\*)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list-item.twiki</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -312,8 +412,21 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.bold.twiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.bold.twiki</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>[\*][\s\w :.\?']*[\*]</string>
+					<string>([\*])[\s\w :.\?']*([\*])</string>
 					<key>name</key>
 					<string>markup.bold.twiki</string>
 				</dict>
@@ -330,13 +443,46 @@
 							<key>name</key>
 							<string>markup.italic.twiki</string>
 						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.bold.twiki</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.italic.twiki</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.bold.twiki</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.italic.twiki</string>
+						</dict>
 					</dict>
 					<key>match</key>
-					<string>((__[\s\w :.\?']*__))</string>
+					<string>((((__))[\s\w :.\?']*((__))))</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.italic.twiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.italic.twiki</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>_[\s\w :.\?']*_</string>
+					<string>(_)[\s\w :.\?']*(_)</string>
 					<key>name</key>
 					<string>markup.italic.twiki</string>
 				</dict>
@@ -353,25 +499,84 @@
 							<key>name</key>
 							<string>markup.raw.fixed.twiki</string>
 						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.bold.twiki</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.fixed.twiki</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.bold.twiki</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.fixed.twiki</string>
+						</dict>
 					</dict>
 					<key>match</key>
-					<string>((\=\=[\s\w :.\?']*\=\=))</string>
+					<string>((((\=\=))[\s\w :.\?']*((\=\=))))</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.fixed.twiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.fixed.twiki</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\=[\s\w :.\?']*\=</string>
+					<string>(\=)[\s\w :.\?']*(\=)</string>
 					<key>name</key>
 					<string>markup.raw.fixed.twiki</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.twiki</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.twiki</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>%([A-Z0-9]+)%</string>
+					<string>(%)([A-Z0-9]+)(%)</string>
 					<key>name</key>
 					<string>variable.other.twiki</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.constant.twiki</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.constant.twiki</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>&amp;([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+					<string>(&amp;)([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+)(;)</string>
 					<key>name</key>
 					<string>constant.character.entity.html</string>
 				</dict>
@@ -381,16 +586,36 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>markup.underline.link.twiki</string>
+							<string>punctuation.definition.link.twiki</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
+							<string>markup.underline.link.twiki</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.twiki</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.twiki</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
 							<string>string.other.link.title.twiki</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.twiki</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\[([^]]*)\] *\[(.*?)\]</string>
+					<string>(\[)([^]]*)(\]) *(\[)(.*?)(\])</string>
 					<key>name</key>
 					<string>meta.link.inline</string>
 				</dict>

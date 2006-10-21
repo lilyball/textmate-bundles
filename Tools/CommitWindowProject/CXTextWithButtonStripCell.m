@@ -14,6 +14,8 @@
 #define kIconButtonWidth						16.0
 #define kButtonInteriorVerticalEdgeMargin		8.0
 
+
+
 @interface NSBezierPath (CXBezierPathAdditions)
 + (NSBezierPath*)bezierPathWithCapsuleRect:(NSRect)rect;
 @end
@@ -33,6 +35,10 @@
 	return path;
 }
 
+@end
+
+@interface CXTextWithButtonStripCell (Private)
+- (NSDictionary *) titleTextAttributes;
 @end
 
 @implementation CXTextWithButtonStripCell
@@ -56,16 +62,6 @@
 #pragma mark -
 #pragma mark Geometry
 #endif
-
-- (NSDictionary *) titleTextAttributes
-{
-	NSMutableDictionary * attributes = [NSMutableDictionary dictionary];
-	
-	[attributes setObject:[NSFont systemFontOfSize:9.0] forKey:NSFontAttributeName];
-	[attributes setObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
-	
-	return attributes;
-}
 
 // Maintaining a cache of the button boundrects simplifies the rest of the code
 - (void)calcButtonRects
@@ -240,23 +236,76 @@
 #pragma mark Drawing
 #endif
 
-
-- (void)drawButtonContent:(id)content inRect:(NSRect)rect selected:(BOOL)selected menu:(NSMenu *)menu
+- (BOOL)drawAsHighlighted
 {
-	// Draw background
-	NSBezierPath * path = [NSBezierPath bezierPathWithCapsuleRect:NSInsetRect(rect, 0.5f, 0.5f)];
+	NSView *	selfView	= [self controlView];
+	NSWindow *	selfWindow	= [selfView window];
 	
-	if( selected )
+	return (([selfWindow firstResponder] == selfView)
+				&& [selfWindow isKeyWindow]);
+}
+
+- (NSDictionary *) titleTextAttributes
+{
+	NSMutableDictionary *	attributes = [NSMutableDictionary dictionary];
+	NSColor *				foreColor;
+
+	if( [self isHighlighted] && [self drawAsHighlighted] )
 	{
-		[[NSColor darkGrayColor] set];
+		foreColor = [NSColor alternateSelectedControlColor];
 	}
 	else
 	{
-		[[NSColor lightGrayColor] set];
+		foreColor = [NSColor whiteColor];
 	}
+	
+	[attributes setObject:[NSFont systemFontOfSize:9.0] forKey:NSFontAttributeName];
+	[attributes setObject:foreColor forKey:NSForegroundColorAttributeName];
+	
+	return attributes;
+}
+
+- (void)drawButtonContent:(id)content inRect:(NSRect)rect selected:(BOOL)selected menu:(NSMenu *)menu
+{
+	//
+	// Draw background
+	//
+	NSBezierPath * 	path = [NSBezierPath bezierPathWithCapsuleRect:NSInsetRect(rect, 0.5f, 0.5f)];
+	NSColor *		backgroundColor = nil;
+//	NSColor *		foregroundColor = nil;
+	
+	// Table row is selected?
+	if( [self isHighlighted] && [self drawAsHighlighted] )
+	{
+		if( selected )
+		{
+			backgroundColor = [NSColor whiteColor];
+		}
+		else
+		{
+			backgroundColor		= [NSColor colorForControlTint:[NSColor currentControlTint]];
+			backgroundColor		= [[backgroundColor shadowWithLevel:0.1] blendedColorWithFraction:0.85 ofColor:[NSColor whiteColor]];
+		}
+	}
+	else
+	{
+		if( selected )
+		{
+			backgroundColor = [NSColor colorWithDeviceWhite:0.2 alpha:1.0];
+		}
+		else
+		{
+			backgroundColor = [NSColor lightGrayColor];
+		}
+	}
+	
+	[backgroundColor set];
 	[path fill];
 	
-	// Draw content (send the polymorphism lecture to the AppKit team, thanks)
+	//
+	// Draw content
+	// (send the polymorphism lecture to the AppKit team, thanks)
+	//
 	if( [content isKindOfClass:[NSString class]] )
 	{
 		NSRect			textRect = NSInsetRect(rect, kButtonInteriorVerticalEdgeMargin, 0.5f);

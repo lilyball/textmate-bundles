@@ -31,12 +31,6 @@
 {
 	NSFileManager* fm = [NSFileManager defaultManager];
 
-	if(![aNibPath hasPrefix:@"/"]) // relative URL
-		aNibPath = [[fm currentDirectoryPath] stringByAppendingPathComponent:aNibPath];
-
-	if(![aNibPath hasSuffix:@".nib"])
-		aNibPath = [aNibPath stringByAppendingPathExtension:@"nib"];
-
 	if(![fm fileExistsAtPath:aNibPath])
 	{
 		NSLog(@"%s nib file not found: %@", _cmd, aNibPath);

@@ -1,5 +1,5 @@
 /*
-    g++ -Wmost -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -DDATE=\"`date +%Y-%m-%d`\" -Os "$TM_FILEPATH" -o ~/Library/tm/Support/bin/tm_dialog -framework Cocoa && strip ~/Library/tm/Support/bin/tm_dialog
+    g++ -Wmost -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -DDATE=\"`date +%Y-%m-%d`\" -Os "$TM_FILEPATH" -o ~/Library/Application\ Support/TextMate/Support/bin/tm_dialog -framework Cocoa && strip ~/Library/Application\ Support/TextMate/Support/bin/tm_dialog
 */
 #import <Cocoa/Cocoa.h>
 #import <getopt.h>
@@ -35,7 +35,15 @@ void contact_server (char const* nibName)
 	}
 	else if([proxy textMateDialogServerProtocolVersion] >= 1)
 	{
-		[proxy showNib:[NSString stringWithUTF8String:nibName] withArguments:nil];
+		NSString* aNibPath = [NSString stringWithUTF8String:nibName];
+
+		if(![aNibPath hasPrefix:@"/"]) // relative URL
+			aNibPath = [[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingPathComponent:aNibPath];
+
+		if(![aNibPath hasSuffix:@".nib"])
+			aNibPath = [aNibPath stringByAppendingPathExtension:@"nib"];
+
+		[proxy showNib:aNibPath withArguments:nil];
 	}
 	else
 	{

@@ -23,6 +23,14 @@
 		<dict>
 			<key>begin</key>
 			<string>%%{</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.ragel</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>}%%</string>
 			<key>name</key>
@@ -38,6 +46,14 @@
 		<dict>
 			<key>begin</key>
 			<string>%%$</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.ragel</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -53,6 +69,14 @@
 		<dict>
 			<key>begin</key>
 			<string>%%</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.ragel</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -77,6 +101,14 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.ragel</string>
+						</dict>
+					</dict>
 					<key>match</key>
 					<string>([@$&gt;%])\s*([\w\d]+)</string>
 					<key>name</key>
@@ -91,6 +123,14 @@
 				<dict>
 					<key>begin</key>
 					<string>#</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.ragel</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>$</string>
 					<key>name</key>
@@ -105,6 +145,14 @@
 				<dict>
 					<key>begin</key>
 					<string>\{</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.embedded.c</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\}</string>
 					<key>name</key>
@@ -150,16 +198,48 @@
 				<dict>
 					<key>begin</key>
 					<string>\[</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.ragel</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\]\s*[*?]?</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.ragel</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.regexp.character-class.ragel</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>\/</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.ragel</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\/\s*[*?]?</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.ragel</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.regexp.classic.ragel</string>
 				</dict>
@@ -191,8 +271,8 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(action)\s+([\w\d]+)\s+{</string>
-					<key>captures</key>
+					<string>(action)\s+([\w\d]+)\s+({)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
@@ -204,9 +284,22 @@
 							<key>name</key>
 							<string>entity.name.action.ragel</string>
 						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.function.ragel</string>
+						</dict>
 					</dict>
 					<key>end</key>
-					<string>}</string>
+					<string>(})</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.function.ragel</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>function.ragel.action</string>
 					<key>patterns</key>
@@ -219,17 +312,30 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>([\w\d]+)\s*=</string>
-					<key>captures</key>
+					<string>([\w\d]+)\s*(=)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.machine-definition.ragel</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.key-value.ragel</string>
+						</dict>
 					</dict>
 					<key>end</key>
-					<string>;</string>
+					<string>(;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.machine-definition.ragel</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>meta.machine-definition.ragel</string>
 					<key>patterns</key>
@@ -262,17 +368,30 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>([\w\d]+)\s*:=</string>
-					<key>captures</key>
+					<string>([\w\d]+)\s*(:=)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.machine-instantiation.ragel</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.key-value.ragel</string>
+						</dict>
 					</dict>
 					<key>end</key>
 					<string>;</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.machine-instantiation.ragel</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>meta.machine-instantiation.ragel</string>
 					<key>patterns</key>
@@ -327,8 +446,24 @@
 				<dict>
 					<key>begin</key>
 					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.ragel</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.ragel</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.double.ragel</string>
 					<key>patterns</key>
@@ -346,8 +481,24 @@
 				<dict>
 					<key>begin</key>
 					<string>'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.ragel</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.ragel</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>string.quoted.single.ragel</string>
 					<key>patterns</key>

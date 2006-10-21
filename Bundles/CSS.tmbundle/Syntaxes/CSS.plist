@@ -38,14 +38,30 @@
 					<string>entity.name.tag.css</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.css</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\.[a-zA-Z0-9_-]+</string>
+					<string>(\.)[a-zA-Z0-9_-]+</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.class.css</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.css</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>#[a-zA-Z0-9_-]+</string>
+					<string>(#)[a-zA-Z0-9_-]+</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.id.css</string>
 				</dict>
@@ -56,8 +72,16 @@
 					<string>entity.name.tag.wildcard.css</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.css</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>:\b(active|after|before|first-letter|first-line|hover|link|visited)\b</string>
+					<string>(:)\b(active|after|before|first-letter|first-line|hover|link|visited)\b</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.pseudo-class.css</string>
 				</dict>
@@ -69,13 +93,18 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(@import\b)</string>
+			<string>^\s*((@)import\b)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.control.at-rule.import.css</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.css</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -90,17 +119,30 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(url)\s*\(\s*</string>
-					<key>captures</key>
+					<string>(url)\s*(\()\s*</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>support.function.url.css</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.function.css</string>
+						</dict>
 					</dict>
 					<key>end</key>
-					<string>\s*\)\s*</string>
+					<string>\s*(\))\s*</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.function.css</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -123,7 +165,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(@media)\s+(((all|aural|braille|embossed|handheld|print|projection|screen|tty|tv)\s*,?\s*)+)\s*{</string>
+			<string>^\s*((@)media)\s+(((all|aural|braille|embossed|handheld|print|projection|screen|tty|tv)\s*,?\s*)+)\s*{</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -132,6 +174,11 @@
 					<string>keyword.control.at-rule.media.css</string>
 				</dict>
 				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.css</string>
+				</dict>
+				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>support.constant.media.css</string>
@@ -152,6 +199,14 @@
 		<dict>
 			<key>begin</key>
 			<string>\{</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.property-list.css</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
@@ -181,9 +236,25 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>:\s*</string>
+					<string>(:)\s*</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.key-value.css</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\s*(;|(?=\}))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.rule.css</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>meta.property-value.css</string>
 					<key>patterns</key>
@@ -213,6 +284,14 @@
 							<string>keyword.other.unit.css</string>
 						</dict>
 						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.constant.css</string>
+								</dict>
+							</dict>
 							<key>match</key>
 							<string>(#)([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b</string>
 							<key>name</key>
@@ -228,17 +307,30 @@
 						</dict>
 						<dict>
 							<key>begin</key>
-							<string>(rgb|url|attr|counter|counters)\s*\(</string>
-							<key>captures</key>
+							<string>(rgb|url|attr|counter|counters)\s*(\()</string>
+							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
 								<dict>
 									<key>name</key>
 									<string>support.function.misc.css</string>
 								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.function.css</string>
+								</dict>
 							</dict>
 							<key>end</key>
-							<string>\)</string>
+							<string>(\))</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.function.css</string>
+								</dict>
+							</dict>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -280,6 +372,14 @@
 		<dict>
 			<key>begin</key>
 			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.css</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\*/</string>
 			<key>name</key>
@@ -289,8 +389,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.css</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.css</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.css</string>
 			<key>patterns</key>
@@ -307,8 +423,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.css</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.css</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.css</string>
 			<key>patterns</key>

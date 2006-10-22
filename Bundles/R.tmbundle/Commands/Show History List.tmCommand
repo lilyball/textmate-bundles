@@ -9,21 +9,22 @@
 require ENV['TM_BUNDLE_SUPPORT'] + "/lib/historyList.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/dialog.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
 doc = STDIN.read
-list = HistoryList.list(doc)
-choice = Dialog.request_item :title =&gt; "History List", :prompt =&gt; "Select line to insert", :items =&gt; list
-exit_discard if choice.nil?
-print doc.sub(/&gt; .*\z/,"&gt; "+choice)</string>
+list = HistoryList.new(doc)
+choice = Dialog.request_item :title =&gt; "History List", :prompt =&gt; "Select line to insert", :items =&gt; list.list
+TextMate.exit_discard if choice.nil?
+print e_sn(list.add_line(choice))</string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>
-	<string>document</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^~h</string>
 	<key>name</key>
 	<string>Show History List</string>
 	<key>output</key>
-	<string>replaceDocument</string>
+	<string>insertAsSnippet</string>
 	<key>scope</key>
 	<string>source.r-console</string>
 	<key>uuid</key>

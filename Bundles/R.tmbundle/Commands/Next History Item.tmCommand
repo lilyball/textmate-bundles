@@ -8,23 +8,21 @@
 	<string>#!/usr/bin/ruby
 require ENV['TM_BUNDLE_SUPPORT'] + "/lib/historyList.rb"
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
 doc = STDIN.read
-choice = HistoryList.new(doc).next(doc.slice(/&gt; .*\z/)[2..-1])
-if choice.nil? then
-	print doc.sub(/&gt; .*\z/,"&gt; ")
-else
-	print doc.sub(/&gt; .*\z/,"&gt; "+choice)
-end</string>
+new_doc = HistoryList.move_down(doc)
+TextMate.exit_discard if new_doc == doc
+print e_sn(new_doc)</string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>
-	<string>document</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>~</string>
 	<key>name</key>
 	<string>Next History Item</string>
 	<key>output</key>
-	<string>replaceDocument</string>
+	<string>insertAsSnippet</string>
 	<key>scope</key>
 	<string>source.r-console</string>
 	<key>uuid</key>

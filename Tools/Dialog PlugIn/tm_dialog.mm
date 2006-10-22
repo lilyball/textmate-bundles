@@ -145,7 +145,7 @@ int main (int argc, char* argv[])
 			}
 		}
 
-		id plist = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
+		id plist = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:nil errorDescription:NULL] : [NSMutableDictionary dictionary];
 		res = contact_server(find_nib(argv[0]), plist, center, modal);
 		[pool release];
 	}

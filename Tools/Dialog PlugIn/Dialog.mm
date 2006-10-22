@@ -114,7 +114,17 @@ NSLock* Lock = [NSLock new];
 	}
 
 	if(center)
-		[window center];
+	{
+		if(NSWindow* keyWindow = [NSApp keyWindow])
+		{
+			NSRect frame = [window frame], parentFrame = [keyWindow frame];
+			[window setFrame:NSMakeRect(NSMidX(parentFrame) - 0.5 * NSWidth(frame), NSMidY(parentFrame) - 0.5 * NSHeight(frame), NSWidth(frame), NSHeight(frame)) display:NO];
+		}
+		else
+		{
+			[window center];
+		}
+	}
 
 	[window makeKeyAndOrderFront:self];
 

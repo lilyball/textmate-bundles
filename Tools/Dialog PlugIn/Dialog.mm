@@ -83,8 +83,10 @@ NSLock* Lock = [NSLock new];
 
 - (void)performButtonClick:(id)sender
 {
-	[parameters setObject:[sender title] forKey:@"returnButton"];
-	[parameters setObject:[NSNumber numberWithInt:[sender tag]] forKey:@"returnCode"];
+	if([sender respondsToSelector:@selector(title)])
+		[parameters setObject:[sender title] forKey:@"returnButton"];
+	if([sender respondsToSelector:@selector(tag)])
+		[parameters setObject:[NSNumber numberWithInt:[sender tag]] forKey:@"returnCode"];
 
 	[window orderOut:self];
 	[self cleanupAndRelease];

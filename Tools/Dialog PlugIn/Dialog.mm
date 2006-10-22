@@ -174,6 +174,13 @@ NSLock* Lock = [NSLock new];
 	NSAutoreleasePool* pool = [NSAutoreleasePool new];
 	
 	NSConnection* connection = [NSConnection defaultConnection];
+	if(!connection)
+	{
+		NSLog(@"%s no defualt connection for thread", _cmd);
+		connection = [NSConnection new];
+		NSLog(@"%s created connection: %@", _cmd, connection);
+	}
+
 	[connection setRootObject:self];
 	if([connection registerName:@"TextMate dialog server"] == NO)
 		NSLog(@"couldn't setup TextMate dialog server."), NSBeep();

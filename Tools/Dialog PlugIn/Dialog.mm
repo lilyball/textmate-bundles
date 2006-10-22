@@ -97,6 +97,7 @@ NSLock* Lock = [NSLock new];
 	CatchAllNibLoader* nibOwner = [[CatchAllNibLoader alloc] initWithParameters:someArguments];
 	[nibOwner performSelectorOnMainThread:@selector(instantiateNib:) withObject:nib waitUntilDone:YES];
 	[Lock lock];
+	[Lock unlock];
 
 	return someArguments;
 }
@@ -115,7 +116,6 @@ NSLock* Lock = [NSLock new];
 	[pool release];
 }
 @end
-
 
 @implementation Dialog
 - (id)initWithPlugInController:(id <TMPlugInController>)aController

@@ -19,17 +19,19 @@ NSLock* Lock = [NSLock new];
 	NSMutableArray* topLevelObjects;
 	NSWindow* window;
 	BOOL isModal;
+	BOOL center;
 }
 - (NSDictionary*)instantiateNib:(NSNib*)aNib;
 @end
 
 @implementation NibLoader
-- (id)initWithParameters:(NSMutableDictionary*)someParameters modal:(BOOL)flag
+- (id)initWithParameters:(NSMutableDictionary*)someParameters modal:(BOOL)flag center:(BOOL)shouldCenter
 {
 	if(self = [super init])
 	{
 		parameters = [someParameters retain];
 		isModal = flag;
+		center = shouldCenter;
 		[Lock lock];
 	}
 	return self;
@@ -37,6 +39,8 @@ NSLock* Lock = [NSLock new];
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
 	enumerate(topLevelObjects, id object)
 		[object release];
 	[topLevelObjects release];
@@ -57,7 +61,7 @@ NSLock* Lock = [NSLock new];
 	}
 }
 
-- (void)detachFromNib
+- (void)cleanupAndRelease
 {
 	enumerate(topLevelObjects, id object)
 	{
@@ -65,14 +69,16 @@ NSLock* Lock = [NSLock new];
 			[object unbind:@"contentObject"];
 	}
 	[self setWindow:nil];
+
+	if(isModal)
+		[NSApp stopModal];
+
+	[self autorelease];
 }
 
 - (void)windowWillClose:(NSNotification*)aNotification
 {
-	[self detachFromNib];
-	if(isModal)
-		[NSApp stopModal];
-	[self autorelease];
+	[self cleanupAndRelease];
 }
 
 - (void)performButtonClick:(id)sender
@@ -81,11 +87,19 @@ NSLock* Lock = [NSLock new];
 	[parameters setObject:[NSNumber numberWithInt:[sender tag]] forKey:@"returnCode"];
 
 	[window orderOut:self];
-	[self windowWillClose:nil];
+	[self cleanupAndRelease];
+}
+
+- (void)connectionDidDie:(NSNotification*)aNotification
+{
+	[window orderOut:self];
+	[self cleanupAndRelease];
 }
 
 - (NSDictionary*)instantiateNib:(NSNib*)aNib
 {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionDidDie:) name:NSPortDidBecomeInvalidNotification object:nil];
+
 	BOOL didInstantiate = [aNib instantiateNibWithOwner:self topLevelObjects:&topLevelObjects];
 	if(!didInstantiate)
 	{
@@ -98,6 +112,10 @@ NSLock* Lock = [NSLock new];
 		if([object isKindOfClass:[NSWindow class]])
 			[self setWindow:object];
 	}
+
+	if(center)
+		[window center];
+
 	[window makeKeyAndOrderFront:self];
 
 	if(isModal && window)
@@ -115,10 +133,10 @@ NSLock* Lock = [NSLock new];
 @implementation ObjectVendor
 - (int)textMateDialogServerProtocolVersion
 {
-	return 2;
+	return TextMateDialogServerProtocolVersion;
 }
 
-- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters modal:(BOOL)flag
+- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters modal:(BOOL)flag center:(BOOL)shouldCenter
 {
 	if(![[NSFileManager defaultManager] fileExistsAtPath:aNibPath])
 	{
@@ -133,7 +151,7 @@ NSLock* Lock = [NSLock new];
 		return nil;
 	}
 
-	NibLoader* nibOwner = [[NibLoader alloc] initWithParameters:someParameters modal:flag];
+	NibLoader* nibOwner = [[NibLoader alloc] initWithParameters:someParameters modal:flag center:shouldCenter];
 	[nibOwner performSelectorOnMainThread:@selector(instantiateNib:) withObject:nib waitUntilDone:YES];
 	[Lock lock];
 	[Lock unlock];

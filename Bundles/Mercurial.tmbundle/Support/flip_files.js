@@ -33,3 +33,21 @@ function hide_files( base_id )
    document.getElementById( base_id+'_show' ).style.display = 'inline';   
    document.getElementById( base_id+'_hide' ).style.display = 'none';
 }
+
+/* show: desc + hide-button,  hide: show-button.. */
+function show_desc( base_id )
+{
+  document.getElementById( base_id+'_short' ).style.display = 'none';
+  document.getElementById( base_id+'_long' ).style.display = 'block';
+   document.getElementById( base_id+'_show' ).style.display = 'none';   
+   document.getElementById( base_id+'_hide' ).style.display = 'inline';
+}
+
+/* hide: desc + hide-button,  show: show-button.. */
+function hide_desc( base_id )
+{
+   document.getElementById( base_id+'_long' ).style.display = 'none';
+   document.getElementById( base_id+'_short' ).style.display = 'block';
+   document.getElementById( base_id+'_show' ).style.display = 'inline';   
+   document.getElementById( base_id+'_hide' ).style.display = 'none';
+}

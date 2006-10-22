@@ -18,7 +18,9 @@ ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 strip_path_prefix	= work_path # Dir.pwd
 hg			         = ENV['TM_HG'].nil? ? "hg" : ENV['TM_HG']
 
-require (support + "/lib/Builder.rb")
+require support + "/lib/Builder.rb"
+require bundle + "/hg_helper.rb"
+include HGHelper
 
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)
@@ -42,18 +44,13 @@ class << mup
 	end
 end
 
-mup.html {
-	mup.head {
-			mup.title("Mercurial #{command_name}")
-			mup.style( "@import 'file://"+bundle+"/Stylesheets/hg_style.css';
-						@import 'file://"+bundle+"/Stylesheets/hg_status_style.css';", "type" => "text/css")
-	}
+begin
+make_head( "Hg Status", work_path,
+           [ bundle+"/Stylesheets/hg_style.css",
+             bundle+"/Stylesheets/hg_status_style.css"] )
 
-	mup.body { 
-		mup.h1("Mercurial #{command_name} for '#{File.basename(work_path)}'")
-		mup.div("class" => "command"){ mup.strong("#{hg} #{command_name}"); mup.text!(" " + work_path) } #mup.text!("checking "); 
 		STDOUT.flush
-		mup.hr
+
 
 		mup.table("class" => "status") {
 			STDIN.each_line do |line|
@@ -92,5 +89,11 @@ mup.html {
 				}
 			end
 		}
-	}
-}
+# 	}
+# }
+
+rescue => e
+   handle_default_exceptions( e )
+ensure
+   make_foot()
+end

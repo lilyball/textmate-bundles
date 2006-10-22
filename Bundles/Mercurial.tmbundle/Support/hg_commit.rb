@@ -5,24 +5,23 @@ commit_tool		= ENV['CommitWindow']
 bundle			= ENV['TM_BUNDLE_SUPPORT']
 support			= ENV['TM_SUPPORT_PATH']
 ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
+# work_path = ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']
 
 CURRENT_DIR		= Dir.pwd + "/"
 
-require (support + '/lib/shelltokenize.rb')
-require (support + "/lib/Builder.rb")
+require support + "/lib/shelltokenize.rb"
+require support + "/lib/Builder.rb"
+require bundle + "/hg_helper.rb"
+include HGHelper
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)
 
-mup.html {
-	mup.head {
-			mup.title("Mercurial commit")
-			mup.style( "@import 'file://"+bundle+"/Stylesheets/hg_style.css';", "type" => "text/css")
-	}
+begin
+make_head( "Hg Commit", CURRENT_DIR,
+           [ bundle+"/Stylesheets/hg_style.css", bundle+"/Stylesheets/hg_commit_style.css"] )
 
-	mup.body { 
-		mup.h1("Mercurial Commit")
 		STDOUT.flush
-		mup.hr
+
 
 		# Ignore files without changes
 #puts TextMate::selected_paths_for_shell
@@ -42,8 +41,6 @@ mup.html {
 			matches.collect {|m| m[0]}
 		end
 		
-		#TODO: Removed files 'R' is not styled in the commit window as hg uses 'R' instead of the svn 'D'
-
 		# Ignore files with '?', but report them to the user
 		unknown_paths = paths.select { |m| m[0] == '?' }
         unknown_to_report_paths = paths.select{ |m| m[0] == '?' and not ignore_file_pattern =~ m[2]}
@@ -65,7 +62,7 @@ mup.html {
 				mup.ul{ matches_to_paths(conflict_paths).each{ |path| mup.li(path) } }
 				mup.text! "Canceled."
 			}	
-			exit -1
+			exit(-1)
 		end
 
 		# Remove the unknown paths from the commit
@@ -93,7 +90,7 @@ mup.html {
 			mup.div( "class" => "error" ) {
 				mup.text! "Canceled (#{status >> 8})."
 			}	
-			exit -1
+			exit(-1)
 		end
 
 		mup.div("class" => "command"){ mup.strong(%Q{#{hg} commit}); mup.text!(commit_args) }
@@ -105,6 +102,8 @@ mup.html {
 				pipe.each {|line| mup.text! line }
 			end
 		}
-	}
-}
-
+rescue => e
+   handle_default_exceptions( e )
+ensure
+   make_foot()
+end

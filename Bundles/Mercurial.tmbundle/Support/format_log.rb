@@ -6,18 +6,20 @@ msg_count      = 0      # used to count messages and to show tables in alternate
 
 require 'erb'
 require $bundle+'/hg_helper.rb'
+require "#{ENV['TM_BUNDLE_SUPPORT']}/getfontpref.rb"
 include HGHelper
 include ERB::Util 
 
 begin
-   make_head( 'Mercurial Log',
+  font = %Q|\n<style type="text/css">\npre { font: 11px #{getfontname}; }\n</style>|
+  make_head( 'Hg Log', $work_path,
               [ $bundle+'/Stylesheets/hg_style.css',
                 $bundle+'/Stylesheets/hg_log_style.css'],
-              "<script type=\"text/javascript\">\n"+
+              font + "<script type=\"text/javascript\">\n"+
                  File.open($bundle+'/flip_files.js', 'r').readlines.join+'</script>' )
-   
+ 
    STDOUT.flush
-   
+ 
    # hg ouput is formatted with map-cmdline.changelog, then parsed by ERB. Weird but works.
    ERB.new( STDIN.read ).result( binding ).each_line do |l|
       puts l

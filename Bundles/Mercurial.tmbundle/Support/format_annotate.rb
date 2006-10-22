@@ -32,6 +32,7 @@ end
 # require the helper, it does some formating, etc:
 require $bundle+'/hg_helper.rb'
 include HGHelper
+require "#{ENV['TM_BUNDLE_SUPPORT']}/getfontpref.rb"
 
 
 # to show line numbers in output:
@@ -51,9 +52,12 @@ begin
         end
       end
    end
-   make_head( "Mercurial Annotate for '"+$full_file.sub( /^.*\//, '')+"'",
+   
+   font = %Q|\n<style type="text/css">\ntd.codecol { font: #{getfontsize}px #{getfontname}; }\n</style>|
+
+   make_head( "Hg Annotate '"+ File.basename($full_file)+"'", $full_file,
               [ $bundle+"/Stylesheets/hg_style.css",
-                $bundle+"/Stylesheets/hg_annotate_style.css"] )
+                $bundle+"/Stylesheets/hg_annotate_style.css"], font  )
 
    STDOUT.flush
 

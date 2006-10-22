@@ -1,0 +1,92 @@
+/* general stuff.. */
+body {
+	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+	font-size: 11px;
+}
+
+h1 {
+	font-size: 165%;
+	border-bottom: 3px solid #ccc;
+	padding-bottom: 4px;
+	margin-bottom: 2px;
+	color: #222;
+}
+
+.dark h1 {
+  color: #888;
+}
+
+h2,h3,h4,h5,h6 {
+	font-size: 135%;
+	border-bottom: 2px solid #ddd;
+	padding-bottom: 4px;
+	margin-top: 26px;
+	color: #333;
+}
+
+.dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: #999;
+}
+
+/* formating the definition lists.. */
+dt {
+	font-weight: bold;
+	margin-top: 8px;
+	margin-bottom: 2px;
+	font-size: 115%;
+	border-top: 1px dashed #ccc;
+	padding-top: 10px;
+	color: #333;
+}
+.dark dt {
+  color: #999;
+}
+
+
+/* no top-border for the first thing, so it looks
+	like there is a hr between all. */
+dl > dt:first-child {
+	border-top: 0;
+	padding-top: 0;
+}
+
+
+/* info fields: */
+div.target:before {
+	font-weight: bold;
+	content: "Target: ";
+}
+.dark div.target:before {
+	font-weight: bold;
+	color: #fff;
+	content: "Target: ";
+}
+
+div.description {
+	margin-top: 4px;
+}
+
+div.connect:before {
+	font-weight: bold;
+	content: "Needs network: ";
+}
+.dark div.connect:before {
+  color: #fff;
+	font-weight: bold;
+	content: "Needs network: ";
+}
+
+div.default:before {
+	font-weight: bold;
+	content: "Default: ";
+}
+.dark div.default:before {
+  color: #fff;
+	font-weight: bold;
+	content: "Default: ";
+}
+#tm_webpreview_content {
+  padding: 0 0.5em;
+	margin-top: 70px;
+}
+

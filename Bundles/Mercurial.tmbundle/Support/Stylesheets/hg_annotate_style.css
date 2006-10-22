@@ -10,6 +10,12 @@ table.blame a:hover, table.blame a:active {
    text-decoration: none;
 }
 
+.dark table.blame a:hover, .dark table.blame a:active {
+   background-color: #101b73;
+   color: inherit;
+   text-decoration: none;
+}
+
 
 /* formating the table.. */
 table.blame {
@@ -68,14 +74,16 @@ td.namecol {
 
 /* bitstream vera sans looks really _very_ good. */
 td.codecol {
-/*   font-size: 12px;*/
-   font-family: "Bitstream Vera Sans Mono", monospace;
+   font: 12px "Bitstream Vera Sans Mono", monospace;
    padding-left: 4px;
    width: 100%;
 }
 
 /* maybe this should be implemented as id but its
    an optimisation for less ruby code. :) */
-td.current_line {
-   background-color: #e7e7e7;
+.bright td.codecol.current_line {
+   background-color: #f0d2fc;
+}
+.dark td.codecol.current_line {
+   background-color: #411452;
 }

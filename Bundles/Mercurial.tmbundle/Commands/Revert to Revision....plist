@@ -9,7 +9,7 @@
 
 revs=$("$TM_HG" log -q "$TM_FILEPATH" \
 	2&gt; &gt;(CocoaDialog progressbar --indeterminate \
-		--title "Diff Revisions…" \
+		--title "Revert to Revision…" \
 		--text "Retrieving List of Revisions…" \
 	))
 
@@ -22,7 +22,7 @@ revs=`osascript&lt;&lt;END
 			display dialog "No older revisions of file '$(basename "$TM_FILEPATH")' found" buttons ("OK")
 			set the result to false
 		else
-			choose from list ourList with prompt "Diff '$(basename "$TM_FILEPATH")' with older revision:"
+			choose from list ourList with prompt "Revert '$(basename "$TM_FILEPATH")' to revision:"
 		end if
 	end tell
 END`

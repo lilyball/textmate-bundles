@@ -14,6 +14,17 @@ table.status a:hover, table.status a:active {
 	color: inherit;
 	text-decoration: none;
 }
+.dark table.status a:hover, .dark table.status a:active {
+	font-size: inherit;
+	background-color: #101b73;
+	color: inherit;
+	text-decoration: none;
+}
+
+#tm_webpreview_content {
+	padding: 1em;
+	margin-top: 60px;
+}
 
 /* A */
 table.status td.added, td.updated, td.merged {
@@ -45,3 +56,7 @@ table.status td.unknown, table.status td.ignore, table.status td.external {
 	background-color: #edaef5;
 }
 
+.dark a:link, .dark a:visited {
+  color: #63a7de;
+
+}

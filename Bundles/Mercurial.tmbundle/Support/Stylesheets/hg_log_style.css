@@ -17,6 +17,11 @@ table.log th {
    padding-left: 5px;
    vertical-align: top;
    white-space: nowrap;
+/*   color:#fff;*/
+}
+
+.dark table.log th {
+   color:#fff;
 }
 
 table.log td {
@@ -41,6 +46,16 @@ table.log td ul li {
    margin-bottom: 2px;
    padding: 1px;
 }
+
+.dark li a:link, .dark li a:visited {
+  color: #223871;
+}
+
+.dark li a:hover, .dark li a:active {
+  color: #fff;
+}
+
+.dark li.deleted {color: #000;}
 
 
 li.added:before, li.modified:before, li.deleted:before {
@@ -70,4 +85,9 @@ li.modified:before {
 }
 li.modified {
    background-color: #f7e1ad;
+}
+
+#tm_webpreview_content {
+  padding-right: 1em;
+	margin-top: 70px;
 }

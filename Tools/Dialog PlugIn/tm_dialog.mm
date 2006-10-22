@@ -40,7 +40,7 @@ void contact_server (char const* nibName)
 		if(![aNibPath hasPrefix:@"/"]) // relative URL
 			aNibPath = [[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingPathComponent:aNibPath];
 
-		if(![aNibPath hasSuffix:@".nib"])
+		if(![aNibPath hasSuffix:@".nib"] && ![aNibPath hasSuffix:@".nib/"])
 			aNibPath = [aNibPath stringByAppendingPathExtension:@"nib"];
 
 		NSMutableData* data = [NSMutableData data];
@@ -52,7 +52,8 @@ void contact_server (char const* nibName)
 		}
 
 		id args = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
-		[proxy showNib:aNibPath withArguments:args];
+		id res = [proxy showNib:aNibPath withArguments:args];
+		printf("%s\n", [[res description] UTF8String]);
 	}
 	else
 	{

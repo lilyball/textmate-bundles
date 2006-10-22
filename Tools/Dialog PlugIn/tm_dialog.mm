@@ -23,7 +23,7 @@ char const* current_version ()
 	return sscanf("$Revision$", "$%*[^:]: %s $", res) == 1 ? res : "???";
 }
 
-int contact_server (std::string nibName, bool center, bool modal)
+int contact_server (std::string nibName, NSMutableDictionary* someParameters, bool center, bool modal)
 {
 	int res = -1;
 
@@ -38,16 +38,7 @@ int contact_server (std::string nibName, bool center, bool modal)
 	{
 		NSString* aNibPath = [NSString stringWithUTF8String:nibName.c_str()];
 
-		NSMutableData* data = [NSMutableData data];
-		if(isatty(STDIN_FILENO) == 0)
-		{
-			char buf[1024];
-			while(size_t len = read(STDIN_FILENO, buf, sizeof(buf)))
-				[data appendBytes:buf length:len];
-		}
-
-		id args = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
-		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:args modal:modal center:center];
+		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:someParameters modal:modal center:center];
 		printf("%s\n", [[parameters description] UTF8String]);
 		res = [[parameters objectForKey:@"returnCode"] intValue];
 	}
@@ -107,21 +98,26 @@ std::string find_nib (std::string nibName)
 int main (int argc, char* argv[])
 {
 	extern int optind;
+	extern char* optarg;
 
 	static struct option const longopts[] = {
 		{ "center",				no_argument,			0,		'c'	},
 		{ "modal",				no_argument,			0,		'm'	},
+		{ "plist",				required_argument,	0,		'l'	},
 		{ 0,						0,							0,		0		}
 	};
 
 	bool center = false, modal = false;
+	char const* parameters = NULL;
 	char ch;
-	while((ch = getopt_long(argc, argv, "cm", longopts, NULL)) != -1)
+	while((ch = getopt_long(argc, argv, "cmp:", longopts, NULL)) != -1)
 	{
 		switch(ch)
 		{
 			case 'c':	center = true;				break;
 			case 'm':	modal = true;				break;
+			case 'e':	modal = true;				break;
+			case 'p':	parameters = optarg;		break;
 			default:		usage();						break;
 		}
 	}
@@ -133,7 +129,24 @@ int main (int argc, char* argv[])
 	if(argc == 1)
 	{
 		NSAutoreleasePool* pool = [NSAutoreleasePool new];
-		res = contact_server(find_nib(argv[0]), center, modal);
+
+		NSMutableData* data = [NSMutableData data];
+		if(parameters)
+		{
+			[data appendBytes:parameters length:strlen(parameters)];
+		}
+		else
+		{
+			if(isatty(STDIN_FILENO) == 0)
+			{
+				char buf[1024];
+				while(size_t len = read(STDIN_FILENO, buf, sizeof(buf)))
+					[data appendBytes:buf length:len];
+			}
+		}
+
+		id plist = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
+		res = contact_server(find_nib(argv[0]), plist, center, modal);
 		[pool release];
 	}
 	else

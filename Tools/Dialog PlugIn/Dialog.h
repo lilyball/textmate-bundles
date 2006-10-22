@@ -6,12 +6,5 @@
 
 @protocol TextMateDialogServerProtocol
 - (int)textMateDialogServerProtocolVersion;
-- (id)showNib:(NSString*)aNib withArguments:(id)someArguments;
-@end
-
-@interface Dialog : NSObject
-{
-}
-- (id)initWithPlugInController:(id <TMPlugInController>)aController;
-- (void)dealloc;
+- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters modal:(BOOL)flag;
 @end

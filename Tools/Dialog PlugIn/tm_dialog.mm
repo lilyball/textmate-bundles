@@ -11,6 +11,8 @@
 #import <errno.h>
 #import <vector>
 
+#import "Dialog.h"
+
 char const* AppName = "tm_dialog";
 
 char const* current_version ()
@@ -19,13 +21,10 @@ char const* current_version ()
 	return sscanf("$Revision: 1 $", "$%*[^:]: %s $", res) == 1 ? res : "???";
 }
 
-@protocol TextMateDialogServerProtocol
-- (int)textMateDialogServerProtocolVersion;
-- (id)showNib:(NSString*)aNib withArguments:(id)someArguments;
-@end
-
-void contact_server (char const* nibName)
+int contact_server (char const* nibName, bool modal)
 {
+	int res = -1;
+
 	id proxy = [NSConnection rootProxyForConnectionWithRegisteredName:@"TextMate dialog server" host:nil];
 	[proxy setProtocolForProxy:@protocol(TextMateDialogServerProtocol)];
 
@@ -33,7 +32,7 @@ void contact_server (char const* nibName)
 	{
 		fprintf(stderr, "%s: failed to establish connection with TextMate.\n", AppName);
 	}
-	else if([proxy textMateDialogServerProtocolVersion] >= 1)
+	else if([proxy textMateDialogServerProtocolVersion] >= 2)
 	{
 		NSString* aNibPath = [NSString stringWithUTF8String:nibName];
 
@@ -52,26 +51,55 @@ void contact_server (char const* nibName)
 		}
 
 		id args = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
-		id res = [proxy showNib:aNibPath withArguments:args];
-		printf("%s\n", [[res description] UTF8String]);
+		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:args modal:modal];
+		printf("%s\n", [[parameters description] UTF8String]);
+		res = [[parameters objectForKey:@"returnCode"] intValue];
 	}
 	else
 	{
 		fprintf(stderr, "%s: you need to update this helper tool (server at version %d).\n", AppName, [proxy textMateDialogServerProtocolVersion]);
 	}
+	return res;
+}
+
+void usage ()
+{
+	fprintf(stderr, "%s: -m/--modal «nib file»\n", AppName);
 }
 
 int main (int argc, char* argv[])
 {
-	if(argc == 2)
+	extern int optind;
+
+	static struct option const longopts[] = {
+		{ "modal",				no_argument,			0,		'm'	},
+		{ 0,						0,							0,		0		}
+	};
+
+	bool modal = false;
+	char ch;
+	while((ch = getopt_long(argc, argv, "m", longopts, NULL)) != -1)
+	{
+		switch(ch)
+		{
+			case 'm':	modal = true;				break;
+			default:		usage();						break;
+		}
+	}
+
+	argc -= optind;
+	argv += optind;
+
+	int res = -1;
+	if(argc == 1)
 	{
 		NSAutoreleasePool* pool = [NSAutoreleasePool new];
-		contact_server(argv[1]);
+		res = contact_server(argv[0], modal);
 		[pool release];
 	}
 	else
 	{
-		fprintf(stderr, "%s: «Nib File»\n", AppName);
+		usage();
 	}
-	return 0;
+	return res;
 }

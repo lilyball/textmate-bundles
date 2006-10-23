@@ -96,6 +96,8 @@ NSLock* Lock = [NSLock new];
 {
 	[window orderOut:self];
 	[self cleanupAndRelease];
+
+	[NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint modifierFlags:0 timestamp:0.0f windowNumber:0 context:nil subtype:0 data1:0 data2:0] atStart:NO];
 }
 
 - (NSDictionary*)instantiateNib:(NSNib*)aNib

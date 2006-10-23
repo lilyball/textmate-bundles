@@ -50,7 +50,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.logical-expression.shell</string>
+					<string>punctuation.definition.logical-expression.shell</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -81,7 +81,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.expression.shell</string>
+					<string>punctuation.definition.expression.shell</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -104,7 +104,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.subshell.shell</string>
+					<string>punctuation.definition.subshell.shell</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -127,7 +127,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.group.shell</string>
+					<string>punctuation.definition.group.shell</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -151,16 +151,48 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.shell</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>\$?"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.shell</string>
 			<key>patterns</key>
@@ -180,8 +212,24 @@
 		<dict>
 			<key>begin</key>
 			<string>\$'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.dollar.shell</string>
 			<key>patterns</key>
@@ -225,8 +273,24 @@
 		<dict>
 			<key>begin</key>
 			<string>`</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>`</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.interpolated.backtick.shell</string>
 			<key>patterns</key>
@@ -242,16 +306,48 @@
 		<dict>
 			<key>begin</key>
 			<string>\$\({2}</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\){2}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.other.math.shell</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>\$\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.interpolated.dollar.shell</string>
 			<key>patterns</key>
@@ -265,8 +361,24 @@
 		<dict>
 			<key>begin</key>
 			<string>[&gt;&lt;]\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.interpolated.process-substitution.shell</string>
 		</dict>
@@ -284,6 +396,14 @@
 				<dict>
 					<key>name</key>
 					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
@@ -324,6 +444,14 @@
 					<string>keyword.control.heredoc-token.shell</string>
 				</dict>
 			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
+				</dict>
+			</dict>
 			<key>contentName</key>
 			<string>source.ruby.embedded.shell</string>
 			<key>end</key>
@@ -360,6 +488,14 @@
 				<dict>
 					<key>name</key>
 					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
@@ -400,6 +536,14 @@
 					<string>keyword.control.heredoc-token.shell</string>
 				</dict>
 			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
+				</dict>
+			</dict>
 			<key>contentName</key>
 			<string>source.applescript.embedded.shell</string>
 			<key>end</key>
@@ -436,6 +580,14 @@
 				<dict>
 					<key>name</key>
 					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
@@ -476,6 +628,14 @@
 					<string>keyword.control.heredoc-token.shell</string>
 				</dict>
 			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
+				</dict>
+			</dict>
 			<key>contentName</key>
 			<string>text.html.embedded.shell</string>
 			<key>end</key>
@@ -512,6 +672,14 @@
 				<dict>
 					<key>name</key>
 					<string>keyword.control.heredoc-token.shell</string>
+				</dict>
+			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
@@ -552,6 +720,14 @@
 					<string>keyword.control.heredoc-token.shell</string>
 				</dict>
 			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
+				</dict>
+			</dict>
 			<key>contentName</key>
 			<string>text.html.markdown.embedded.shell</string>
 			<key>end</key>
@@ -590,6 +766,14 @@
 					<string>keyword.control.heredoc-token.shell</string>
 				</dict>
 			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>^\t*(\3)$</string>
 			<key>endCaptures</key>
@@ -619,6 +803,14 @@
 					<string>keyword.control.heredoc-token.shell</string>
 				</dict>
 			</dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.shell</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>^(\3)$</string>
 			<key>endCaptures</key>
@@ -645,9 +837,19 @@
 					<key>name</key>
 					<string>string.quoted.single.herestring.shell</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>(&lt;&lt;&lt;)('[^']*')</string>
+			<string>(&lt;&lt;&lt;)((')[^']*('))</string>
 			<key>name</key>
 			<string>meta.herestring.shell</string>
 		</dict>
@@ -664,9 +866,19 @@
 					<key>name</key>
 					<string>string.quoted.double.herestring.shell</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.shell</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.shell</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>(&lt;&lt;&lt;)("(\\("|\\)|[^"])*")</string>
+			<string>(&lt;&lt;&lt;)((")(\\("|\\)|[^"])*("))</string>
 			<key>name</key>
 			<string>meta.herestring.shell</string>
 		</dict>
@@ -698,8 +910,16 @@
 			<string>keyword.operator.redirect.shell</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.shell</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(?&lt;!\$)#(?!\{).*$\n?</string>
+			<string>(?&lt;!\$)(#)(?!\{).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.number-sign.shell</string>
 		</dict>
@@ -711,9 +931,14 @@
 					<key>name</key>
 					<string>entity.name.function.shell</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.arguments.shell</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b([^ \t\n]*)\s*\(\)</string>
+			<string>\b([^ \t\n]*)\s*(\(\))</string>
 			<key>name</key>
 			<string>meta.function.shell</string>
 		</dict>
@@ -737,26 +962,58 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.shell</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\$[-*@#?$!0_]</string>
+					<string>(\$)[-*@#?$!0_]</string>
 					<key>name</key>
 					<string>variable.other.special.shell</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.shell</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\$[1-9]</string>
+					<string>(\$)[1-9]</string>
 					<key>name</key>
 					<string>variable.other.positional.shell</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.shell</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\$[a-zA-Z_][a-zA-Z0-9_]*</string>
+					<string>(\$)[a-zA-Z_][a-zA-Z0-9_]*</string>
 					<key>name</key>
 					<string>variable.other.normal.shell</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>\$\{</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.shell</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>\}</string>
 					<key>name</key>

@@ -50,7 +50,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\bdelete\b(\s*\[\])?|\bnew\b</string>
+			<string>\bdelete\b(\s*\[\])?|\bnew\b(?!])</string>
 			<key>name</key>
 			<string>keyword.control.c++</string>
 		</dict>
@@ -190,7 +190,7 @@
 			<key>begin</key>
 			<string>(?x)
 				(?:  ^\s*)                             # begin-of-line
-				((?!while|for|do|if|else|switch|catch|enumerate|iterate)[A-Za-z_][A-Za-z0-9_:]*) # actual name
+				((?!while|for|do|if|else|switch|catch|enumerate|r?iterate)[A-Za-z_][A-Za-z0-9_:]*) # actual name
 				 \s*(\() (?=                             # match "("
 				           (?&lt;arg&gt; [^()]++ | \( \g&lt;arg&gt;*+ \) )*+   # function arguments
 				    \)                                 # match ")"

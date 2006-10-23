@@ -1,9 +1,5 @@
 #import "Dialog.h"
 
-#ifndef enumerate
-#define enumerate(container,var) for(NSEnumerator* _enumerator = [container objectEnumerator]; var = [_enumerator nextObject]; )
-#endif
-
 NSLock* Lock = [NSLock new];
 
 @interface Dialog : NSObject

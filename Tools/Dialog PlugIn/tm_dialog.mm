@@ -23,7 +23,42 @@ char const* current_version ()
 	return sscanf("$Revision$", "$%*[^:]: %s $", res) == 1 ? res : "???";
 }
 
-int contact_server (std::string nibName, NSMutableDictionary* someParameters, bool center, bool modal)
+id convert_object (id object)
+{
+	if([object isKindOfClass:[NSDictionary class]])
+	{
+		NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+		enumerate([object allKeys], id key)
+			[dict setObject:convert_object([object objectForKey:key]) forKey:key];
+		object = dict;
+	}
+	else if([object isKindOfClass:[NSArray class]])
+	{
+		NSMutableArray* array = [NSMutableArray array];
+		enumerate(object, id member)
+			[array addObject:convert_object(member)];
+		object = array;
+	}
+	else if([object isKindOfClass:[NSIndexPath class]])
+	{
+		NSMutableArray* array = [NSMutableArray array];
+		for(size_t i = 0; i < [object length]; ++i)
+			[array addObject:[NSNumber numberWithUnsignedInt:[object indexAtPosition:i]]];
+		object = array;
+	}
+	else if([object isKindOfClass:[NSIndexSet class]])
+	{
+		NSMutableArray* array = [NSMutableArray array];
+		unsigned int buf[[object count]];
+		[(NSIndexSet*)object getIndexes:buf maxCount:[object count] inIndexRange:nil];
+		for(unsigned int i = 0; i != [object count]; i++)
+			[array addObject:[NSNumber numberWithUnsignedInt:buf[i]]];
+		object = array;
+	}
+	return object;
+}
+
+int contact_server (std::string nibName, NSMutableDictionary* someParameters, bool center, bool modal, bool quiet)
 {
 	int res = -1;
 
@@ -39,7 +74,8 @@ int contact_server (std::string nibName, NSMutableDictionary* someParameters, bo
 		NSString* aNibPath = [NSString stringWithUTF8String:nibName.c_str()];
 
 		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:someParameters modal:modal center:center];
-		printf("%s\n", [[parameters description] UTF8String]);
+		if(!quiet)
+			printf("%s\n", [[convert_object(parameters) description] UTF8String]);
 		res = [[parameters objectForKey:@"returnCode"] intValue];
 	}
 	else
@@ -53,10 +89,12 @@ void usage ()
 {
 	fprintf(stderr, 
 		"%1$s r%2$s (" DATE ")\n"
-		"Usage: %1$s [-cm] nib_file\n"
+		"Usage: %1$s [-cmqp] nib_file\n"
 		"Options:\n"
-		" -c, --center           Center the window on screen.\n"
-		" -m, --modal            Show window as modal.\n"
+		" -c, --center               Center the window on screen.\n"
+		" -m, --modal                Show window as modal.\n"
+		" -q, --quiet                Do not write result to stdout.\n"
+		" -p, --parameters <plist>   Provide parameters as a plist.\n"
 		"", AppName, current_version());
 }
 
@@ -103,21 +141,22 @@ int main (int argc, char* argv[])
 	static struct option const longopts[] = {
 		{ "center",				no_argument,			0,		'c'	},
 		{ "modal",				no_argument,			0,		'm'	},
-		{ "plist",				required_argument,	0,		'l'	},
+		{ "parameters",		required_argument,	0,		'p'	},
+		{ "quiet",				no_argument,			0,		'q'	},
 		{ 0,						0,							0,		0		}
 	};
 
-	bool center = false, modal = false;
+	bool center = false, modal = false, quiet = false;
 	char const* parameters = NULL;
 	char ch;
-	while((ch = getopt_long(argc, argv, "cmp:", longopts, NULL)) != -1)
+	while((ch = getopt_long(argc, argv, "cmp:q", longopts, NULL)) != -1)
 	{
 		switch(ch)
 		{
 			case 'c':	center = true;				break;
 			case 'm':	modal = true;				break;
-			case 'e':	modal = true;				break;
 			case 'p':	parameters = optarg;		break;
+			case 'q':	quiet = true;				break;
 			default:		usage();						break;
 		}
 	}
@@ -146,7 +185,7 @@ int main (int argc, char* argv[])
 		}
 
 		id plist = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:nil errorDescription:NULL] : [NSMutableDictionary dictionary];
-		res = contact_server(find_nib(argv[0]), plist, center, modal);
+		res = contact_server(find_nib(argv[0]), plist, center, modal, quiet);
 		[pool release];
 	}
 	else

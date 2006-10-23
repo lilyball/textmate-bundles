@@ -7,6 +7,7 @@
 //
 
 #import "CXTextWithButtonStripCell.h"
+#import "CXShading.h"
 
 #define kVerticalMargin							1.0
 #define kHorizontalMargin						2.0
@@ -269,12 +270,42 @@
 	}
 	
 	[attributes setObject:[NSFont systemFontOfSize:9.0] forKey:NSFontAttributeName];
-	[attributes setObject:foreColor forKey:NSForegroundColorAttributeName];
+//	[attributes setObject:foreColor forKey:NSForegroundColorAttributeName]; TODO: should use foreColor for flat style only
 	
 	return attributes;
 }
 
 - (void)drawButtonContent:(id)content inRect:(NSRect)rect selected:(BOOL)selected menu:(NSMenu *)menu
+{
+	//
+	// Draw content
+	//
+	if( [content isKindOfClass:[NSString class]] )
+	{
+		NSRect			textRect = NSInsetRect(rect, kButtonInteriorVerticalEdgeMargin, 0.5f);
+		
+		[content drawInRect:textRect withAttributes:[self titleTextAttributes]];
+	}
+	else if( [content isKindOfClass:[NSImage class]] )
+	{
+		NSRect			iconRect = NSInsetRect(rect, kButtonInteriorVerticalEdgeMargin, 1.5f);
+		
+		NSFrameRect(iconRect);
+		[content compositeToPoint:iconRect.origin operation:NSCompositeSourceOver];
+				
+		// Add popup triangle for menu button
+		if( menu != nil )
+		{
+			NSRect			textRect = iconRect;
+			NSString *		downwardTriangle = [NSString stringWithFormat:@" %C", 0x25BE];
+			
+			textRect.origin.x += kIconButtonWidth;
+			[downwardTriangle drawInRect:textRect withAttributes:[self titleTextAttributes]];
+		}
+	}
+}
+
+- (void)drawFlatButton:(id)content inRect:(NSRect)rect selected:(BOOL)selected menu:(NSMenu *)menu
 {
 	//
 	// Draw background
@@ -311,33 +342,46 @@
 	[backgroundColor set];
 	[path fill];
 	
+	[self drawButtonContent:content inRect:rect selected:selected menu:menu];
+	
+}
+
+- (void)drawClickableButton:(id)content inRect:(NSRect)rect selected:(BOOL)selected menu:(NSMenu *)menu
+{
 	//
-	// Draw content
-	// (send the polymorphism lecture to the AppKit team, thanks)
+	// Draw background
 	//
-	if( [content isKindOfClass:[NSString class]] )
+	NSBezierPath * 	path			= [NSBezierPath bezierPathWithCapsuleRect:NSInsetRect(rect, 0.5f, 0.5f)];
+	NSColor * 		borderColor		= [NSColor lightGrayColor];
+	NSColor *		lightColor		= [NSColor colorWithDeviceWhite:1.0 alpha:1.0];
+	NSColor *		darkColor		= [NSColor colorWithDeviceWhite:0.8 alpha:1.0];
+	CXShading *		shading;
+
+	[path setLineWidth:0.0f];
+	
+	if( selected )
 	{
-		NSRect			textRect = NSInsetRect(rect, kButtonInteriorVerticalEdgeMargin, 0.5f);
-		
-		[content drawInRect:textRect withAttributes:[self titleTextAttributes]];
+		lightColor = [NSColor colorWithDeviceWhite:0.65 alpha:1.0];
+		darkColor = [NSColor colorWithDeviceWhite:0.85 alpha:1.0];
 	}
-	else if( [content isKindOfClass:[NSImage class]] )
-	{
-		NSRect			iconRect = NSInsetRect(rect, kButtonInteriorVerticalEdgeMargin, 1.5f);
+	
+	shading = [[CXShading alloc] initWithStartingColor:lightColor endingColor:darkColor];
+	
+	[shading autorelease];
+	
+	// Interior
+	[NSGraphicsContext saveGraphicsState];
+
+		[path addClip];
+		[shading drawFromPoint:rect.origin toPoint:NSMakePoint(rect.origin.x, NSMaxY(rect))];
 		
-		NSFrameRect(iconRect);
-		[content compositeToPoint:iconRect.origin operation:NSCompositeSourceOver];
-				
-		// Add popup triangle for menu button
-		if( menu != nil )
-		{
-			NSRect			textRect = iconRect;
-			NSString *		downwardTriangle = [NSString stringWithFormat:@" %C", 0x25BE];
-			
-			textRect.origin.x += kIconButtonWidth;
-			[downwardTriangle drawInRect:textRect withAttributes:[self titleTextAttributes]];
-		}
-	}
+	[NSGraphicsContext restoreGraphicsState];
+
+	// Button outline goes on top of the fill, so that we don't lose the inner antialising.
+	[borderColor set];
+	[path stroke];
+	
+	[self drawButtonContent:content inRect:rect selected:selected menu:menu];
 }
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
@@ -350,13 +394,22 @@
 		NSRect					buttonRect = [self rectForButtonAtIndex:i inCellFrame:cellFrame];
 		BOOL					selected = (fButtonPressedIndex == i);
 		id 						content = [buttonDefinition objectForKey:@"icon"];
+		NSMenu *				menu = [buttonDefinition objectForKey:@"menu"];
 		
 		if( content == NULL )
 		{
 			content = [buttonDefinition objectForKey:@"title"];
 		}
 		
-		[self drawButtonContent:content inRect:buttonRect selected:selected menu:[buttonDefinition objectForKey:@"menu"]];
+		if( [buttonDefinition objectForKey:@"invocation"] == nil
+		 	&& menu == nil)
+		{
+			[self drawFlatButton:content inRect:buttonRect selected:selected menu:menu];
+		}
+		else
+		{
+			[self drawClickableButton:content inRect:buttonRect selected:selected menu:menu];
+		}
 	}
 	
 	// Adjust the text bounds to avoid overlapping the buttons

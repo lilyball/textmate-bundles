@@ -283,6 +283,47 @@
 					<string>keyword.other.language.ocaml</string>
 				</dict>
 				<dict>
+					<key>begin</key>
+					<string>(\bmutable\s+)?\b([a-z_][a-zA-Z0-9_]*)\s*(:)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.storage.modifier.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>source.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.record.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(;|})</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.ocaml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.record.definition.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#typedefs</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>$self</string>
 				</dict>
@@ -290,7 +331,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(with|function)\b|((?&lt;!\|)(\|)(?!\|)(?=.*-&gt;))</string>
+			<string>\b(with|function)(?=(\s*$|.*-&gt;))\b|((?&lt;!\|)(\|)(?!\|)(?=.*-&gt;))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -1434,47 +1475,6 @@
 				<dict>
 					<key>include</key>
 					<string>#storagetypes</string>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(\bmutable\s+)?\b([a-z_][a-zA-Z0-9_]*)\s*(:)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.storage.modifier.ocaml</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>source.ocaml</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.record.ocaml</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(;|})</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.ocaml</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.record.definition.ocaml</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#typedefs</string>
-						</dict>
-					</array>
 				</dict>
 				<dict>
 					<key>match</key>

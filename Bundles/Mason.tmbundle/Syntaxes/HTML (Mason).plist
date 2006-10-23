@@ -4,7 +4,6 @@
 <dict>
 	<key>fileTypes</key>
 	<array>
-		<string>html</string>
 		<string>mhtml</string>
 		<string>autohandler</string>
 		<string>dhandler</string>
@@ -25,16 +24,16 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control</string>
+					<string>punctuation.section.embedded.perl.mason</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>variable.other</string>
+					<string>keyword.control</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(&lt;/%(\2)&gt;)</string>
+			<string>(&lt;/%(\2)&gt;)(\s*$\n)?</string>
 			<key>name</key>
 			<string>source.perl.mason.block</string>
 			<key>patterns</key>
@@ -117,11 +116,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control</string>
+					<string>punctuation.section.embedded.perl.mason</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>$</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>source.perl.mason.line</string>
 			<key>patterns</key>

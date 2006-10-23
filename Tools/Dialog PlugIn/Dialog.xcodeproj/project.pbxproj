@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		177E4DA309132A0F0064163D /* Dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 177E4DA209132A0F0064163D /* Dialog.mm */; };
+		178E031A0AED82FE0005685F /* ValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 178E03190AED82FE0005685F /* ValueTransformers.mm */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -19,6 +20,8 @@
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		177E4DA109132A0F0064163D /* Dialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dialog.h; sourceTree = "<group>"; };
 		177E4DA209132A0F0064163D /* Dialog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Dialog.mm; sourceTree = "<group>"; };
+		178E03180AED82FE0005685F /* ValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTransformers.h; sourceTree = "<group>"; };
+		178E03190AED82FE0005685F /* ValueTransformers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ValueTransformers.mm; sourceTree = "<group>"; };
 		32DBCF630370AF2F00C91783 /* Dialog_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dialog_Prefix.pch; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Dialog.tmplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Dialog.tmplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -72,6 +75,8 @@
 			children = (
 				177E4DA209132A0F0064163D /* Dialog.mm */,
 				177E4DA109132A0F0064163D /* Dialog.h */,
+				178E03190AED82FE0005685F /* ValueTransformers.mm */,
+				178E03180AED82FE0005685F /* ValueTransformers.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				177E4DA309132A0F0064163D /* Dialog.mm in Sources */,
+				178E031A0AED82FE0005685F /* ValueTransformers.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

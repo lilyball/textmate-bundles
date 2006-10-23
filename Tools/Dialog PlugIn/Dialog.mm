@@ -2,7 +2,7 @@
 
 NSLock* Lock = [NSLock new];
 
-@interface Dialog : NSObject
+@interface Dialog : NSObject <TextMateDialogServerProtocol>
 {
 }
 - (id)initWithPlugInController:(id <TMPlugInController>)aController;
@@ -135,12 +135,20 @@ NSLock* Lock = [NSLock new];
 }
 @end
 
-@interface ObjectVendor : NSObject <TextMateDialogServerProtocol>
+@implementation Dialog
+- (id)initWithPlugInController:(id <TMPlugInController>)aController
 {
+	NSApp = [NSApplication sharedApplication];
+	if(self = [super init])
+		[NSThread detachNewThreadSelector:@selector(vendObject:) toTarget:self withObject:nil];
+	return self;
 }
-@end
 
-@implementation ObjectVendor
+- (void)dealloc
+{
+	[super dealloc];
+}
+
 - (int)textMateDialogServerProtocolVersion
 {
 	return TextMateDialogServerProtocolVersion;
@@ -169,18 +177,11 @@ NSLock* Lock = [NSLock new];
 	return someParameters;
 }
 
-- (void)vendObject:(Dialog*)dialogServer
+- (void)vendObject:(id)arguments
 {
 	NSAutoreleasePool* pool = [NSAutoreleasePool new];
 	
 	NSConnection* connection = [NSConnection defaultConnection];
-	if(!connection)
-	{
-		NSLog(@"%s no defualt connection for thread", _cmd);
-		connection = [NSConnection new];
-		NSLog(@"%s created connection: %@", _cmd, connection);
-	}
-
 	[connection setRootObject:self];
 	if([connection registerName:@"TextMate dialog server"] == NO)
 		NSLog(@"couldn't setup TextMate dialog server."), NSBeep();
@@ -188,20 +189,5 @@ NSLock* Lock = [NSLock new];
 	[[NSRunLoop currentRunLoop] run];
 
 	[pool release];
-}
-@end
-
-@implementation Dialog
-- (id)initWithPlugInController:(id <TMPlugInController>)aController
-{
-	NSApp = [NSApplication sharedApplication];
-	if(self = [super init])
-		[NSThread detachNewThreadSelector:@selector(vendObject:) toTarget:[[ObjectVendor new] autorelease] withObject:self];
-	return self;
-}
-
-- (void)dealloc
-{
-	[super dealloc];
 }
 @end

@@ -23,41 +23,6 @@ char const* current_version ()
 	return sscanf("$Revision$", "$%*[^:]: %s $", res) == 1 ? res : "???";
 }
 
-id convert_object (id object)
-{
-	if([object isKindOfClass:[NSDictionary class]])
-	{
-		NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-		enumerate([object allKeys], id key)
-			[dict setObject:convert_object([object objectForKey:key]) forKey:key];
-		object = dict;
-	}
-	else if([object isKindOfClass:[NSArray class]])
-	{
-		NSMutableArray* array = [NSMutableArray array];
-		enumerate(object, id member)
-			[array addObject:convert_object(member)];
-		object = array;
-	}
-	else if([object isKindOfClass:[NSIndexPath class]])
-	{
-		NSMutableArray* array = [NSMutableArray array];
-		for(size_t i = 0; i < [object length]; ++i)
-			[array addObject:[NSNumber numberWithUnsignedInt:[object indexAtPosition:i]]];
-		object = array;
-	}
-	else if([object isKindOfClass:[NSIndexSet class]])
-	{
-		NSMutableArray* array = [NSMutableArray array];
-		unsigned int buf[[object count]];
-		[(NSIndexSet*)object getIndexes:buf maxCount:[object count] inIndexRange:nil];
-		for(unsigned int i = 0; i != [object count]; i++)
-			[array addObject:[NSNumber numberWithUnsignedInt:buf[i]]];
-		object = array;
-	}
-	return object;
-}
-
 int contact_server (std::string nibName, NSMutableDictionary* someParameters, bool center, bool modal, bool quiet)
 {
 	int res = -1;
@@ -75,7 +40,7 @@ int contact_server (std::string nibName, NSMutableDictionary* someParameters, bo
 
 		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:someParameters modal:modal center:center];
 		if(!quiet)
-			printf("%s\n", [[convert_object(parameters) description] UTF8String]);
+			printf("%s\n", [[parameters description] UTF8String]);
 		res = [[parameters objectForKey:@"returnCode"] intValue];
 	}
 	else

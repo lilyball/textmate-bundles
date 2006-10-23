@@ -173,40 +173,59 @@
 	exit(-128);
 }
 
+
+- (void) checkExitStatus:(int)exitStatus forCommand:(NSArray *)arguments errorText:(NSString *)errorText
+{
+	if( exitStatus != 0 )
+	{
+		// This error dialog text sucks for an isolated end user, but allows us to diagnose the problem accurately.
+		NSRunAlertPanel(errorText, @"Exit status (%d) while executing %@", @"OK", nil, nil, exitStatus, arguments);
+		[NSException raise:@"ProcessFailed" format:@"Subprocess %@ unsuccessful.", arguments];
+	}	
+}
+
 - (IBAction) doubleClickRowInTable:(id)sender
 {
 	if( fDiffCommand != nil )
 	{
+		static NSString *	sCommandAbsolutePath = nil;
+
 		NSMutableArray *	arguments	= [[fDiffCommand componentsSeparatedByString:@","] mutableCopy];
 		NSString *			filePath	= [[[fFilesController arrangedObjects] objectAtIndex:[sender selectedRow]] objectForKey:@"path"];
 		NSData *			diffData;
 		NSString *			errorText;
 		int					exitStatus;
+		
+		// Resolve the command to an absolute path (only do this once per launch)
+		if(sCommandAbsolutePath == nil)
+		{
+			exitStatus = [NSTask executeTaskWithArguments:[NSArray arrayWithObjects:@"/usr/bin/which", [arguments objectAtIndex:0], nil]
+				    					input:nil
+				                        outputString:&sCommandAbsolutePath
+				                        errorString:&errorText];
 
+			// Trim whitespace
+			sCommandAbsolutePath = [[sCommandAbsolutePath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] retain];
+			[self checkExitStatus:exitStatus forCommand:arguments errorText:errorText];
+		}
+		[arguments replaceObjectAtIndex:0 withObject:sCommandAbsolutePath];
+
+		// Run the diff
 		[arguments addObject:filePath];
 		exitStatus = [NSTask executeTaskWithArguments:arguments
 			    					input:nil
 			                        outputData:&diffData
 			                        errorString:&errorText];
+		[self checkExitStatus:exitStatus forCommand:arguments errorText:errorText];
+
+		// Success, send the diff to TextMate
+		arguments = [NSArray arrayWithObjects:[NSString stringWithFormat:@"%s/bin/mate", getenv("TM_SUPPORT_PATH")], @"-a", nil];
 		
-		if( exitStatus != 0 )
-		{
-			NSRunAlertPanel(errorText, @"Exit status (%d) -- Might be a bug!", @"OK", nil, nil, exitStatus);
-		}
-		else
-		{
-			arguments = [NSArray arrayWithObjects:[NSString stringWithFormat:@"%s/bin/mate", getenv("TM_SUPPORT_PATH")], @"-a", nil];
-			
-			// Success, send the diff to TextMate
-			exitStatus = [NSTask executeTaskWithArguments:arguments
-				    					input:diffData
-				                        outputData:nil
-				                        errorString:&errorText];
-			if( exitStatus != 0 )
-			{
-				NSRunAlertPanel(errorText, @"Exit status (%d) -- Might be a bug!", @"OK", nil, nil, exitStatus);
-			}
-		}
+		exitStatus = [NSTask executeTaskWithArguments:arguments
+			    					input:diffData
+			                        outputData:nil
+			                        errorString:&errorText];
+		[self checkExitStatus:exitStatus forCommand:arguments errorText:errorText];
 	}
 }
 

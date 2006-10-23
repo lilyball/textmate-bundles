@@ -21,29 +21,31 @@
 		<dict>
 			<key>begin</key>
 			<string>(?=\[% *(?:RAW)?PERL\b.*? *%\])</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.tt</string>
-				</dict>
-			</dict>
 			<key>contentName</key>
 			<string>source.perl</string>
 			<key>end</key>
-			<string>(\[% *(END) *%\])</string>
+			<string>(\[%) *(END) *(%\])</string>
 			<key>endCaptures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.template.tt</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.tt</string>
+					<string>punctuation.definition.tag.tt</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.tt</string>
+					<string>entity.name.tag.tt</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.tt</string>
 				</dict>
 			</dict>
 			<key>patterns</key>
@@ -63,8 +65,6 @@
 			<string>#tmpl-container-tag</string>
 		</dict>
 		<dict>
-			<key>comment</key>
-			<string>This is set to use XHTML standards, but you can change that by changing .strict to .basic for HTML standards</string>
 			<key>include</key>
 			<string>text.html.basic</string>
 		</dict>
@@ -78,8 +78,21 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.constant.html</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.constant.html</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>&amp;([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);</string>
+					<string>(&amp;)([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+)(;)</string>
 					<key>name</key>
 					<string>constant.character.entity.html</string>
 				</dict>
@@ -102,10 +115,26 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.tt</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.tt</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>string.quoted.double.html</string>
+			<string>string.quoted.double.tt</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -122,10 +151,26 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.tt</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.tt</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>string.quoted.single.html</string>
+			<string>string.quoted.single.tt</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -140,10 +185,18 @@
 		</dict>
 		<key>tag-generic-attribute</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.key-value.tt</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\b([a-zA-Z-_:]+)\s*=</string>
+			<string>\b([a-zA-Z-_:]+)\s*(=)</string>
 			<key>name</key>
-			<string>entity.other.attribute-name.html</string>
+			<string>entity.other.attribute-name.tt</string>
 		</dict>
 		<key>tag-stuff</key>
 		<dict>
@@ -174,10 +227,18 @@
 				<dict>
 					<key>begin</key>
 					<string>\[%</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.tt</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>%\]</string>
 					<key>name</key>
-					<string>entity.name.tag.tt</string>
+					<string>meta.tag.template.tt</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -193,8 +254,16 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.tt</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>#.*?(?=%\])</string>
+					<string>(#).*?(?=%\])</string>
 					<key>name</key>
 					<string>comment.line.number-sign.tt</string>
 				</dict>
@@ -206,14 +275,24 @@
 							<key>name</key>
 							<string>string.quoted.double.filename.tt</string>
 						</dict>
-						<key>3</key>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tt</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tt</string>
+						</dict>
+						<key>5</key>
 						<dict>
 							<key>name</key>
 							<string>string.unquoted.other.filename.tt</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>("([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+")|(\b([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+\b)</string>
+					<string>((")([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+("))|(\b([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+\b)</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -224,8 +303,16 @@
 					<string>#string-single-quoted</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.tt</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>\$?\b[a-z]([a-z0-9_]\.?)*\b</string>
+					<string>(\$?)\b[a-z]([a-z0-9_]\.?)*\b</string>
 					<key>name</key>
 					<string>variable.other.tt</string>
 				</dict>

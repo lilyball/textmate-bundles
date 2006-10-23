@@ -173,7 +173,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=\b(type|and)\b)|^\s*$</string>
+					<string>(?=\b(type|and)\b)|(?=^\s*$)</string>
 					<key>name</key>
 					<string>meta.type-definition.ocaml</string>
 					<key>patterns</key>
@@ -304,7 +304,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(;|})</string>
+					<string>(;|(?=}))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>

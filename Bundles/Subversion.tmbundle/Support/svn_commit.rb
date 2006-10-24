@@ -1,10 +1,12 @@
 require 'English'
 
-svn         = ENV['TM_SVN']            || `which svn`.chomp
-bundle      = ENV['TM_BUNDLE_SUPPORT'] || File.dirname(__FILE__)
-support     = ENV['TM_SUPPORT_PATH']   || File.dirname(File.dirname(File.dirname(File.dirname(__FILE__)))) + '/Support'
-commit_tool = ENV['CommitWindow']      || support + '/bin/CommitWindow.app/Contents/MacOS/CommitWindow'
-diff_cmd    = ENV['TM_SVN_DIFF_CMD']   || 'diff'
+svn         	= ENV['TM_SVN']            || `which svn`.chomp
+bundle      	= ENV['TM_BUNDLE_SUPPORT'] || File.dirname(__FILE__)
+support     	= ENV['TM_SUPPORT_PATH']   || File.dirname(File.dirname(File.dirname(File.dirname(__FILE__)))) + '/Support'
+commit_tool 	= ENV['CommitWindow']      || support + '/bin/CommitWindow.app/Contents/MacOS/CommitWindow'
+status_helper	= bundle + "/commit_status_helper.rb"
+diff_cmd		= ENV['TM_SVN_DIFF_CMD']   || 'diff'
+
 
 # puts ARGV.inspect
 # puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG
@@ -117,44 +119,46 @@ mup.html {
 		end
 
 		# Ignore files with '?', but report them to the user String.index
-		unknown_paths = select_files_with_status_prefix(paths, '?')
-        unknown_to_report_paths = unknown_paths.reject{ |m| IgnoreFilePattern =~ m[2] }
-		if unknown_to_report_paths and unknown_to_report_paths.size > 0 then
-			mup.div( :class => "warning" ) {
-				mup.p "These files are not under version control, and so will not be committed:"
-				mup.ul{ matches_to_paths(unknown_to_report_paths).each{ |path| mup.li(path) } }
-			}
-		end
+		# unknown_paths = select_files_with_status_prefix(paths, '?')
+		#         unknown_to_report_paths = unknown_paths.reject{ |m| IgnoreFilePattern =~ m[2] }
+		# if unknown_to_report_paths and unknown_to_report_paths.size > 0 then
+		# 	mup.div( :class => "warning" ) {
+		# 		mup.p "These files are not under version control, and so will not be committed:"
+		# 		mup.ul{ matches_to_paths(unknown_to_report_paths).each{ |path| mup.li(path) } }
+		# 	}
+		# end
 
 		# Ignore files with '!', but report them to the user
-		missing_paths = select_files_with_status_prefix(paths, '!')
-        missing_to_report_paths = missing_paths.reject{ |m| IgnoreFilePattern =~ m[2] }
-		if missing_to_report_paths and missing_to_report_paths.size > 0 then
-    
-			mup.div( :class => "warning" ) {
-				mup.p "These files are missing from the working copy:"
-				mup.ul{ matches_to_paths(missing_to_report_paths).each{ |path| mup.li(path) } }
-			}
-		end
+		# missing_paths = select_files_with_status_prefix(paths, '!')
+		#         missing_to_report_paths = missing_paths.reject{ |m| IgnoreFilePattern =~ m[2] }
+		# if missing_to_report_paths and missing_to_report_paths.size > 0 then
+		#     
+		# 	mup.div( :class => "warning" ) {
+		# 		mup.p "These files are missing from the working copy:"
+		# 		mup.ul{ matches_to_paths(missing_to_report_paths).each{ |path| mup.li(path) } }
+		# 	}
+		# end
 
 		# Fail if we have conflicts -- svn commit will fail, so let's
 		# error out before the user gets too involved in the commit
-		conflict_paths = select_files_with_status_prefix(paths, 'C')
-
-		if conflict_paths and conflict_paths.size > 0 then
-			mup.div( :class => "error" ) {
-				mup.p "Cannot continue; there are merge conflicts in files:"		
-				mup.ul{ matches_to_paths(conflict_paths).each{ |path| mup.li(path) } }
-				mup.text! "Canceled."
-			}	
-			exit -1
-		end
+		# conflict_paths = select_files_with_status_prefix(paths, 'C')
+		# 
+		# if conflict_paths and conflict_paths.size > 0 then
+		# 	mup.div( :class => "error" ) {
+		# 		mup.p "Cannot continue; there are merge conflicts in files:"		
+		# 		mup.ul{ matches_to_paths(conflict_paths).each{ |path| mup.li(path) } }
+		# 		mup.text! "Canceled."
+		# 	}	
+		# 	exit -1
+		# end
 
 		# Remove the unknown paths from the commit
-		commit_matches = paths - unknown_paths
+		# commit_matches = paths - unknown_paths
+		# 
+		# # Remove the missing paths from the commit
+		# commit_matches = commit_matches - missing_paths
 
-		# Remove the missing paths from the commit
-		commit_matches = commit_matches - missing_paths
+		commit_matches = paths
 
 		if commit_matches.nil? or commit_matches.size == 0
 			mup.div( :class => "info" ) {
@@ -173,7 +177,14 @@ mup.html {
 
 		# need to reexport the support directory for CommitWindow's benefit, or double-click diff doesn't work.
 		ENV['TM_SUPPORT_PATH'] = support if $console_output
-		commit_args = %x{"#{commit_tool}" --diff-cmd "#{svn},diff,--diff-cmd,#{diff_cmd}" --status #{commit_status} #{commit_path_text}}
+		commit_args = %x{"#{commit_tool}" --diff-cmd "#{svn},diff,--diff-cmd,#{diff_cmd}" \
+		 					--status #{commit_status} \
+							--action-cmd "?:Add,#{svn},add" \
+							--action-cmd "A:Mark Executable,#{status_helper},propset,svn:executable,true" \
+							--action-cmd "A,M,D,C:Revert,#{status_helper},revert" \
+							--action-cmd "C:Resolved,#{status_helper},resolved" \
+							#{commit_path_text}
+		}
 
 		status = $CHILD_STATUS
 		if status != 0

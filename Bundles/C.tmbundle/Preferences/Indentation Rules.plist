@@ -9,7 +9,10 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>^(.*\*/)?\s*\}([^}{"']*\{)?[;\s]*(//.*|/\*.*\*/\s*)?$|^\s*(public|private|protected):\s*$</string>
+		<string>(?x)
+	    ^ (.*\*/)? \s* \} ( [^}{"']* \{ | \s* while \s* \( .* )? [;\s]* (//.*|/\*.*\*/\s*)? $
+	|   ^ \s* (public|private|protected): \s* $
+	</string>
 		<key>increaseIndentPattern</key>
 		<string>^.*\{[^}"']*$|^\s*(public|private|protected):\s*$</string>
 		<key>indentNextLinePattern</key>

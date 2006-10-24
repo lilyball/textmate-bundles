@@ -50,7 +50,7 @@ match_iter(pat , line[caret_placement+1..line.length]) do |tok, beg, len|
     up +=1
   elsif t == "]"
     if up == 0
-      last = beg
+      last = beg + caret_placement
       break
     end
     up -=1
@@ -60,7 +60,7 @@ end
 up =-1
 list = ""
 
-match_iter(pat , line[start[-1]..last+caret_placement]) do |tok, beg, len|
+match_iter(pat , line[start[-1]..last]) do |tok, beg, len|
   t = tok[0].chr
   if t == "["
     up +=1
@@ -72,18 +72,33 @@ match_iter(pat , line[start[-1]..last+caret_placement]) do |tok, beg, len|
 end
 
 if list == ""
-	m = line[start[-1]..last+caret_placement].match(/([a-zA-Z][a-zA-Z0-9]*:?)\s*$/)
+	m = line[start[-1]..last].match(/([a-zA-Z][a-zA-Z0-9]*:?)\s*$/)
   if m
     list = m[1]
+    last = m.begin(0)
  end
 end
 #puts list
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
-url = %x{ zgrep ^#{e_sh list + "[[:space:]]"} #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa_ref.txt.gz }.split[1]
+zGrepped = %x{ zgrep ^#{e_sh list + "[[:space:]]"} #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa_r.txt.gz }
+candidates = zGrepped.split("\n") #.map{|e| e.split[1]}
 doc_path="/Developer/ADC Reference Library/documentation/Cocoa/Reference/"
-#puts url
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
-TextMate.exit_show_tool_tip "No documentation found for:\n#{list}" if url.nil?
+TextMate.exit_show_tool_tip "No documentation found for:\n#{list}" if candidates.empty?
+if candidates.size &gt; 1 # if more than 1 candidate disambiguate
+  m = line[start[-1]..last].match(/^(\[\s*)+([A-Z][a-zA-Z0-9]*)/)
+  old = candidates
+  if m
+    candidates = candidates.select{|e| e.split("\t")[2] == m[2] }
+
+end
+  candidates = old if candidates.empty?
+end
+#file:///Developer/ADC%20Reference%20Library/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/Reference/Reference.html#//apple_ref/occ/clm/NSObject/alloc
+#
+middle = "_Class/Reference/Reference.html#//apple_ref/occ/"
+p = candidates[0].split("\t")
+url = p[1] +"/Classes/"+p[2] +middle+ p[3] +"/"+ p[2] + "/"+p[0]   
 TextMate.exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://#{doc_path+url}'&gt;"
 
 

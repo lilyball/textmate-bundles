@@ -15,129 +15,189 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(TEMPLATE)\s*=</string>
+			<string>(TEMPLATE)\s*(=)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.language.qt-project</string>
+					<string>variable.language.qmake</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.key-value.qmake</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>$</string>
+			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.other.template.qt-project</string>
+			<string>markup.other.template.qmake</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>\b(app|lib|subdirs|vcapp|vclib)\b</string>
 					<key>name</key>
-					<string>keyword.other.qt-project</string>
+					<string>keyword.other.qmake</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(CONFIG)\s*(\+|\-)?=</string>
+			<string>(CONFIG)\s*(\+|\-)?(=)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.language.qt-project</string>
+					<string>variable.language.qmake</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.key-value.qmake</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>$</string>
+			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.other.config.qt-project</string>
+			<string>markup.other.config.qmake</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>\b(release|debug|warn_(on|off)|qt|opengl|thread|x11|windows|console|dll|staticlib|plugin|designer|uic3|no_lflags_merge|exceptions|rtti|stl|flat|app_bundle|no_batch|qtestlib|ppc|x86)\b</string>
 					<key>name</key>
-					<string>keyword.other.qt-project</string>
+					<string>keyword.other.qmake</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(QT)\s*(\+|\-)?=</string>
+			<string>(QT)\s*(\+|\-)?(=)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.language.qt-project</string>
+					<string>variable.language.qmake</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.key-value.qmake</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>$</string>
+			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.other.qt.qt-project</string>
+			<string>markup.other.qt.qmake</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>\b(core|gui|network|opengl|sql|svg|xml|qt3support)\b</string>
 					<key>name</key>
-					<string>keyword.other.qt-project</string>
+					<string>keyword.other.qmake</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(CONFIG|DEFINES|DEF_FILE|DESTDIR|DLLDESTDIR|DISTFILES|HEADERS|INCLUDEPATH|FORMS|LEXSOURCES|LIBS|MOC_DIR|OBJECTS_DIR|UI_DIR|UI_HEADERS_DIR|UI_SOURCES_DIR|RCC_DIR|REQUIRES|SOURCES|SUBDIRS|TARGET|VERSION|YACCSOURCES|DESTDIR_TARGET|DSP_TEMPLATE|LEXIMPLS|LEXOBJECTS|MAKEFILE|MAKEFILE_GENERATOR|OBJECTS|OBJMOC|PRECOMPILED_HEADER|QMAKE|QMAKESPEC|QMAKE_APP_FLAG|QMAKE_APP_OR_DLL|QMAKE_AR_CMD|QMAKE_CFLAGS_DEBUG|QMAKE_CFLAGS_MT|QMAKE_CFLAGS_MT_DBG|QMAKE_CFLAGS_MT_DLL|QMAKE_CFLAGS_MT_DLLDBG|QMAKE_CFLAGS_RELEASE|QMAKE_CFLAGS_SHLIB|QMAKE_CFLAGS_THREAD|QMAKE_CFLAGS_WARN_OFF|QMAKE_CFLAGS_WARN_ON|QMAKE_CLEAN|QMAKE_CXXFLAGS_DEBUG|QMAKE_CXXFLAGS_MT|QMAKE_CXXFLAGS_MT_DBG|QMAKE_CXXFLAGS_MT_DLL|QMAKE_CXXFLAGS_MT_DLLDBG|QMAKE_CXXFLAGS_RELEASE|QMAKE_CXXFLAGS_SHLIB|QMAKE_CXXFLAGS_THREAD|QMAKE_CXXFLAGS_WARN_OFF|QMAKE_CXXFLAGS_WARN_ON|QMAKE_EXTENSION_SHLIB|QMAKE_FAILED_REQUIREMENTS|QMAKE_FILETAGS|QMAKE_INCDIR|POST_TARGETDEPS|PRE_TARGETDEPS|QMAKE_INCDIR_OPENGL|QMAKE_INCDIR_QT|QMAKE_INCDIR_THREAD|QMAKE_INCDIR_X|QMAKE_LFLAGS|QMAKE_INFO_PLIST|QMAKE_LFLAGS_CONSOLE|QMAKE_LFLAGS_CONSOLE_DLL|QMAKE_LFLAGS_DEBUG|QMAKE_LFLAGS_PLUGIN|QMAKE_LFLAGS_QT_DLL|QMAKE_LFLAGS_RELEASE|QMAKE_LFLAGS_SHAPP|QMAKE_LFLAGS_SHLIB|QMAKE_LFLAGS_SONAME|QMAKE_LFLAGS_THREAD|QMAKE_LFLAGS_WINDOWS|QMAKE_LFLAGS_WINDOWS_DLL|QMAKE_LIBDIR|QMAKE_LIBDIR_FLAGS|VPATH|DEPENDPATH|QMAKE_LIBDIR_OPENGL|QMAKE_LIBDIR_QT|QMAKE_LIBDIR_X|QMAKE_LIBS|QMAKE_LIBS_CONSOLE|QMAKE_LIBS_OPENGL|QMAKE_LIBS_OPENGL_QT|QMAKE_LIBS_QT|QMAKE_LIBS_QT_DLL|QMAKE_LIBS_QT_OPENGL|QMAKE_LIBS|QT_THREAD|QMAKE_LIBS_RT|QMAKE_LIBS_RTMT|QMAKE_LIBS_THREAD|QMAKE_LIBS_WINDOWS|QMAKE_LIBS_X|QMAKE_LIBS_X|QMAKE_LIB_FLAG|QMAKE_LINK_SHLIB_CMD|QMAKE_POST_LINK|QMAKE_PRE_LINK|QMAKE_LN_SHLIB|MAKE_MAKEFILE|QMAKE_MOC_SRC|QMAKE_QMAKE|QMAKE_QT_DLL|QMAKE_RUN_CC|QMAKE_RUN_CC_IMP|QMAKE_RUN_CXX|QMAKE_RUN_CXX_IMP|QMAKE_TARGET|QMAKE_UIC|RC_FILE|RES_FILE|SRCMOC|TARGET_EXT|TARGET_\d+|TARGET_\d+\.\d+\.\d+|UICIMPLS|UICOBJECTS|VER_MAJ|VER_MIN|VER_PAT|QMAKE_EXT_MOC|QMAKE_EXT_UI|QMAKE_EXT_PRL|QMAKE_EXT_LEX|QMAKE_EXT_YACC|QMAKE_EXT_OBJ|QMAKE_EXT_CPP|QMAKE_EXT_H|TRANSLATIONS|YACCIMPLS|YACCOBJECTS)\b</string>
+			<string>\b(R(C(C_DIR|_FILE)|E(S_FILE|QUIRES))|M(OC_DIR|AKE(_MAKEFILE|FILE(_GENERATOR)?))|S(RCMOC|OURCES|UBDIRS)|HEADERS|YACC(SOURCES|IMPLS|OBJECTS)|CONFIG|T(RANSLATIONS|ARGET(_(EXT|\d+(\.\d+\.\d+)?))?)|INCLUDEPATH|OBJ(MOC|ECTS(_DIR)?)|D(SP_TEMPLATE|ISTFILES|E(STDIR(_TARGET)?|PENDPATH|F(_FILE|INES))|LLDESTDIR)|UI(C(IMPLS|OBJECTS)|_(SOURCES_DIR|HEADERS_DIR|DIR))|P(RE(COMPILED_HEADER|_TARGETDEPS)|OST_TARGETDEPS)|V(PATH|ER(SION|_(M(IN|AJ)|PAT)))|Q(MAKE(SPEC|_(RUN_C(XX(_IMP)?|C(_IMP)?)|MOC_SRC|C(XXFLAGS_(RELEASE|MT(_D(BG|LL(DBG)?))?|SHLIB|THREAD|DEBUG|WARN_O(N|FF))|FLAGS_(RELEASE|MT(_D(BG|LL(DBG)?))?|SHLIB|THREAD|DEBUG|WARN_O(N|FF))|LEAN)|TARGET|IN(CDIR(_(X|THREAD|OPENGL|QT))?|FO_PLIST)|UIC|P(RE_LINK|OST_LINK)|EXT(_(MOC|H|CPP|YACC|OBJ|UI|PRL|LEX)|ENSION_SHLIB)|Q(MAKE|T_DLL)|F(ILETAGS|AILED_REQUIREMENTS)|L(N_SHLIB|I(B(S(_(RT(MT)?|X|CONSOLE|THREAD|OPENGL(_QT)?|QT(_(OPENGL|DLL))?|WINDOWS))?|_FLAG|DIR(_(X|OPENGL|QT|FLAGS))?)|NK_SHLIB_CMD)|FLAGS(_(RELEASE|S(H(LIB|APP)|ONAME)|CONSOLE(_DLL)?|THREAD|DEBUG|PLUGIN|QT_DLL|WINDOWS(_DLL)?))?)|A(R_CMD|PP_(OR_DLL|FLAG))))?|T_THREAD)|FORMS|L(IBS|EX(SOURCES|IMPLS|OBJECTS)))\b</string>
 			<key>name</key>
-			<string>variable.language.qt-project</string>
+			<string>variable.language.qmake</string>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\b([\w\d_]+\.[\w\d_]+|[A-Z_]+))?\s*(\+|\-)?=</string>
+			<string>(\b([\w\d_]+\.[\w\d_]+|[A-Z_]+))?\s*(\+|\-)?(=)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.other.qt-project</string>
+					<string>variable.other.qmake</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.key-value.qmake</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>$</string>
+			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.other.assignment.qt-project</string>
+			<string>markup.other.assignment.qmake</string>
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.qmake</string>
+						</dict>
+					</dict>
 					<key>match</key>
 					<string>(\$\$)([A-Z_]+|[\w\d_]+\.[\w\d_]+)|\$\([\w\d_]+\)</string>
 					<key>name</key>
-					<string>variable.other.qt-project</string>
+					<string>variable.other.qmake</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>[\w\d\/_\-\.\:]+</string>
 					<key>name</key>
-					<string>constant.other.filename.qt-project</string>
+					<string>constant.other.filename.qmake</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.qmake</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.qmake</string>
+						</dict>
+					</dict>
 					<key>name</key>
-					<string>string.quoted.double.qt-project</string>
+					<string>string.quoted.double.qmake</string>
 				</dict>
 				<dict>
 					<key>begin</key>
 					<string>`</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.qmake</string>
+						</dict>
+					</dict>
 					<key>end</key>
 					<string>`</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.qmake</string>
+						</dict>
+					</dict>
 					<key>name</key>
-					<string>string.interpolated.qt-project</string>
+					<string>string.interpolated.qmake</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -147,63 +207,101 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.regexp.qt-project</string>
+							<string>string.regexp.qmake</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>^[^#]</string>
 					<key>name</key>
-					<string>markup.other.assignment.continuation.qt-project</string>
+					<string>markup.other.assignment.continuation.qmake</string>
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.comment.qmake</string>
+								</dict>
+							</dict>
 							<key>match</key>
-							<string>#.*$</string>
+							<string>(#).*$\n?</string>
 							<key>name</key>
-							<string>comment.line.number-sign.qt-project</string>
+							<string>comment.line.number-sign.qmake</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.qmake</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>#.*$</string>
+					<string>(#).*$\n?</string>
 					<key>name</key>
-					<string>comment.line.number-sign.qt-project</string>
+					<string>comment.line.number-sign.qmake</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(basename|CONFIG|contains|count|dirname|error|exists|find|for|include|infile|isEmpty|join|member|message|prompt|quote|sprintf|system|unique|warning)\s*\(</string>
+			<string>\b(basename|CONFIG|contains|count|dirname|error|exists|find|for|include|infile|isEmpty|join|member|message|prompt|quote|sprintf|system|unique|warning)\s*(\()</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.qmake</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.qmake</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>entity.name.function.qmake</string>
 			<key>contentName</key>
 			<string>variable.parameter</string>
 			<key>end</key>
-			<string>\)</string>
-			<key>name</key>
-			<string>entity.name.function.qt-project</string>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.qmake</string>
+				</dict>
+			</dict>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(unix|win32|mac|debug|release)\b</string>
 			<key>name</key>
-			<string>keyword.other.scope.qt-project</string>
+			<string>keyword.other.scope.qmake</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.qmake</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>#.*$</string>
+			<string>(#).*$\n?</string>
 			<key>name</key>
-			<string>comment.line.number-sign.qt-project</string>
+			<string>comment.line.number-sign.qmake</string>
 		</dict>
 	</array>
 	<key>scopeName</key>
 	<string>source.qmake</string>
-	<key>smartTypingPairs</key>
-	<array>
-		<array>
-			<string>"</string>
-			<string>"</string>
-		</array>
-	</array>
 	<key>uuid</key>
 	<string>3D54A8F9-17CA-422A-A1D6-DE5F98B9DEF4</string>
 </dict>

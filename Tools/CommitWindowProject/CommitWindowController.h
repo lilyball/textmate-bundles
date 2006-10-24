@@ -36,15 +36,22 @@
 	IBOutlet NSView *				fLowerControlsView;
 
 	NSString *						fDiffCommand;
+	NSMutableDictionary *			fActionCommands;
 	
 	NSArray *						fFileStatusStrings;
 }
 
+- (void) addAction:(NSString *)name command:(NSArray *)arguments forStatus:(NSString *)statusString;
 - (void) setupUserInterface;
+- (void) resetStatusColumnSize;
+
 - (void) saveSummary;
 
 - (IBAction) chooseAllFiles:(id)sender;
 - (IBAction) chooseNoFiles:(id)sender;
 - (IBAction) revertToStandardChosenState:(id)sender;
+
+- (NSString *) absolutePathForPath:(NSString *)path;
+- (void) checkExitStatus:(int)exitStatus forCommand:(NSArray *)arguments errorText:(NSString *)errorText;
 
 @end

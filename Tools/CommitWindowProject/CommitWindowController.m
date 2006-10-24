@@ -12,6 +12,7 @@
 
 #import "CXTextWithButtonStripCell.h"
 #import "NSString+StatusString.h"
+#import "NSTask+CXAdditions.h"
 
 #define kStatusColumnWidthForSingleChar	18
 
@@ -36,6 +37,41 @@
 
 @implementation CommitWindowController
 
+// Not necessary while CommitWindow is a separate process, but it might be more integrated in the future.
+- (void) dealloc
+{
+	// TODO: make sure the nib objects are being released properly
+	
+	[fDiffCommand release];
+	[fActionCommands release];
+	[fFileStatusStrings release];
+	
+	[super dealloc];
+}
+
+// Add a command to the array of commands available for the given status substring
+- (void) addAction:(NSString *)name command:(NSArray *)arguments forStatus:(NSString *)statusString
+{
+	NSArray *			commandArguments = [NSArray arrayWithObjects:name, arguments, nil];
+	NSMutableArray *	commandsForAction = nil;
+	
+	if(fActionCommands == nil)
+	{
+		fActionCommands = [[NSMutableDictionary alloc] init];
+	}
+	else
+	{
+		commandsForAction = [fActionCommands objectForKey:statusString];
+	}
+	
+	if(commandsForAction == nil)
+	{
+		commandsForAction = [NSMutableArray array];
+		[fActionCommands setObject:commandsForAction forKey:statusString];
+	}
+	
+	[commandsForAction addObject:commandArguments];
+}
 
 // fFilesController and fFilesStatusStrings should be set up before calling setupUserInterface.
 - (void) setupUserInterface
@@ -47,12 +83,17 @@
 		[cell setLineBreakMode:NSLineBreakByTruncatingHead];		
 	}
 
+	//
 	// Set up button strip
+	//
+	NSMutableArray *		buttonDefinitions = [NSMutableArray array];
+	
+	//	Diff command
 	if( fDiffCommand != nil )
 	{
 		NSMutableDictionary *	diffButtonDefinition;
-		NSMethodSignature *		diffMethodSignature = [self methodSignatureForSelector:@selector(doubleClickRowInTable:)];
-		NSInvocation *			diffInvocation = [NSInvocation invocationWithMethodSignature:diffMethodSignature];
+		NSMethodSignature *		diffMethodSignature	= [self methodSignatureForSelector:@selector(doubleClickRowInTable:)];
+		NSInvocation *			diffInvocation		= [NSInvocation invocationWithMethodSignature:diffMethodSignature];
 		
 		// Arguments 0 and 1
 		[diffInvocation setTarget:self];
@@ -65,20 +106,31 @@
 		[diffButtonDefinition setObject:@"Diff" forKey:@"title"];
 		[diffButtonDefinition setObject:diffInvocation forKey:@"invocation"];
 
-		[cell setButtonDefinitions:[NSArray arrayWithObjects:diffButtonDefinition, nil]];
-
-//  NSMenu *						itemActionMenu;
-//	NSMutableDictionary *	actionMenuButtonDefinition;
-//	itemActionMenu = [[NSMenu alloc] initWithTitle:@"Test"];
-//	[itemActionMenu insertItemWithTitle:@"Add" action:@selector(test:) keyEquivalent:@"" atIndex:0];
-//	[itemActionMenu insertItemWithTitle:@"Remove" action:@selector(test:) keyEquivalent:@"" atIndex:0];
-//	actionMenuButtonDefinition = [NSMutableDictionary dictionaryWithObject:itemActionMenu forKey:@"menu"];
-//	
-//	[actionMenuButtonDefinition setObject:@"Action" forKey:@"title"];
-//
-//		[itemActionMenu release];
+		[buttonDefinitions addObject:diffButtonDefinition];
 	}
 
+	// Action menu
+	if(fActionCommands != nil)
+	{
+	 	NSMenu *						itemActionMenu;
+		NSMutableDictionary *			actionMenuButtonDefinition;
+
+		itemActionMenu = [[NSMenu alloc] initWithTitle:@"Test"];
+		[itemActionMenu setDelegate:self];
+		
+		actionMenuButtonDefinition = [NSMutableDictionary dictionaryWithObject:itemActionMenu forKey:@"menu"];
+		[actionMenuButtonDefinition setObject:@"Modify" forKey:@"title"];
+
+		[buttonDefinitions addObject:actionMenuButtonDefinition];
+		
+		[itemActionMenu release];
+	}
+	
+	if( [buttonDefinitions count] > 0 )
+	{
+		[cell setButtonDefinitions:buttonDefinitions];
+	}
+	
 	//
 	// Set up summary text view resizing
 	//
@@ -125,7 +177,11 @@
 			[dictionary setObject:[status attributedStatusString] forKey:@"attributedStatus"];
 
 			// Deselect external commits by default
-			if([status hasPrefix:@"X"])
+			// and files not added.
+			// We intentionally do not deselect file conflicts by default
+			// -- those are most likely to be a problem.
+			if([status hasPrefix:@"X"]
+			|| [status hasPrefix:@"?"])
 			{
 				itemSelectedForCommit = NO;
 			}
@@ -212,6 +268,35 @@
 	[fWindow center];
 	[fWindow makeKeyAndOrderFront:self];
 	
+}
+
+- (void) resetStatusColumnSize
+{
+	//
+	// Add status to each item and choose default commit state
+	//
+	NSArray *	files = [fFilesController arrangedObjects];
+	int			count = [files count];
+	int			i;
+	
+	UInt32		maxCharsToDisplay = 0;
+	
+	for( i = 0; i < count; i += 1 )
+	{
+		NSMutableDictionary *	dictionary	= [files objectAtIndex:i];
+		NSString *				status		= [dictionary objectForKey:@"status"];
+		UInt32					statusLength;
+		
+		// Set high-water mark
+		statusLength = [status length];
+		if( statusLength > maxCharsToDisplay )
+		{
+			maxCharsToDisplay = statusLength;
+		}
+	}
+
+	// Set status column size
+	[fStatusColumn setWidth:maxCharsToDisplay * kStatusColumnWidthForSingleChar];
 }
 
 #if 0
@@ -422,5 +507,132 @@
 	[fCommitMessage setMaxHeight:[fWindow frame].size.height * 0.60];
 }
 
+#if 0
+#pragma mark -
+#pragma mark Command utilities
+#endif
+
+- (NSString *) absolutePathForPath:(NSString *)path
+{
+	NSString *			absolutePath = nil;
+	NSString *			errorText;
+	int					exitStatus;
+	NSArray *			arguments = [NSArray arrayWithObjects:@"/usr/bin/which", path, nil];
+
+	exitStatus = [NSTask executeTaskWithArguments:arguments
+		    					input:nil
+		                        outputString:&absolutePath
+		                        errorString:&errorText];
+	
+	[self checkExitStatus:exitStatus forCommand:arguments errorText:errorText];
+
+	// Trim whitespace
+	absolutePath = [absolutePath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	return absolutePath;
+}
+
+- (void) checkExitStatus:(int)exitStatus forCommand:(NSArray *)arguments errorText:(NSString *)errorText
+{
+	if( exitStatus != 0 )
+	{
+		// This error dialog text sucks for an isolated end user, but allows us to diagnose the problem accurately.
+		NSRunAlertPanel(errorText, @"Exit status (%d) while executing %@", @"OK", nil, nil, exitStatus, arguments);
+		[NSException raise:@"ProcessFailed" format:@"Subprocess %@ unsuccessful.", arguments];
+	}	
+}
+
+
+#if 0
+#pragma mark -
+#pragma mark ButtonStrip action menu delegate
+#endif
+
+- (void)chooseActionCommand:(id)sender
+{
+	NSMutableArray *		arguments		= [[sender representedObject] mutableCopy];
+	NSString *				pathToCommand;
+	NSMutableDictionary *	fileDictionary	= [[fFilesController arrangedObjects] objectAtIndex:[fTableView selectedRow]];
+	NSString *				filePath		= [fileDictionary objectForKey:@"path"];
+	NSString *				errorText;
+	NSString *				outputStatus;
+	int						exitStatus;
+	
+	// make sure we have an absolute path
+	pathToCommand = [self absolutePathForPath:[arguments objectAtIndex:0]];
+	[arguments replaceObjectAtIndex:0 withObject:pathToCommand];
+	
+	[arguments addObject:filePath];
+	
+	exitStatus = [NSTask executeTaskWithArguments:arguments
+		    					input:nil
+		                        outputString:&outputStatus
+		                        errorString:&errorText];
+	[self checkExitStatus:exitStatus forCommand:arguments errorText:errorText];
+	
+	//
+	// Set the file status to the new status
+	//
+	NSRange		rangeOfStatus;
+	NSString *	newStatus;
+	
+	rangeOfStatus = [outputStatus rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	if( rangeOfStatus.location == NSNotFound)
+	{
+		NSRunAlertPanel(@"Cannot understand output from command", @"Command %@ returned '%@'", @"OK", nil, nil, arguments, outputStatus);
+		[NSException raise:@"CannotUnderstandReturnValue" format:@"Don't understand %@", outputStatus];
+	}
+	
+	newStatus = [outputStatus substringToIndex:rangeOfStatus.location];
+
+	[fileDictionary setObject:newStatus forKey:@"status"];
+	[fileDictionary setObject:[newStatus attributedStatusString] forKey:@"attributedStatus"];
+	
+	[self resetStatusColumnSize];
+}
+
+- (void)menuNeedsUpdate:(NSMenu*)menu
+{
+	//
+	// Remove old items
+	//
+	UInt32 itemCount = [menu numberOfItems];
+	for( UInt32 i = 0; i < itemCount; i += 1 )
+	{
+		[menu removeItemAtIndex:0];
+	}
+	
+	//
+	// Find action items usable for the selected row
+	//
+	NSArray *		keys = [fActionCommands allKeys];
+	NSString *		fileStatus	= [[[fFilesController arrangedObjects] objectAtIndex:[fTableView selectedRow]] objectForKey:@"status"];
+
+	unsigned int	possibleStatusCount = [keys count];
+
+	for(unsigned int index = 0; index < possibleStatusCount; index += 1)
+	{
+		NSString *	possibleStatus = [keys objectAtIndex:index];
+
+		if( [fileStatus rangeOfString:possibleStatus].location != NSNotFound )
+		{	
+			// Add all the commands we find for this status
+			NSArray *		commands		= [fActionCommands objectForKey:possibleStatus];
+			unsigned int	commandCount	= [commands count];
+
+			for(unsigned int arrayOfCommandsIndex = 0; arrayOfCommandsIndex < commandCount; arrayOfCommandsIndex += 1)
+			{
+				NSArray *	commandArguments = [commands objectAtIndex:arrayOfCommandsIndex];
+
+				NSMenuItem *	item = [menu addItemWithTitle:[commandArguments objectAtIndex:0]
+												action:@selector(chooseActionCommand:)
+												keyEquivalent:@""];
+				
+				[item setRepresentedObject:[commandArguments objectAtIndex:1]];
+				[item setTarget:self];
+			}
+		}
+	}
+}
 
 @end

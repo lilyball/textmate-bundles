@@ -68,6 +68,12 @@ static inline void ColorsFromStatus( NSString * status, NSColor ** foreColor, NS
 		*foreColor = ForeColorForFileDeleted();
 		*backColor = BackColorForFileDeleted();
 	}
+	else if([status isEqualToString:@"C"]
+		|| [status isEqualToString:@"?"])
+	{
+		*foreColor = ForeColorForFileConflict();
+		*backColor = BackColorForFileConflict();
+	}
 	else
 	{
 		*foreColor = [NSColor controlTextColor];

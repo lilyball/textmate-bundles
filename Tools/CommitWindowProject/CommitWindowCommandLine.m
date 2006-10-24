@@ -31,8 +31,10 @@
 	//
 	// Parse the command line.
 	//
+	// fDiffCommand and fActionCommands are set up according to the arguments given.
+	//
 	
-	// Program name is the first argument -- get rid of it. (COW semantics should make this cheaper than it looks.)
+	// Program name is the first argument -- get rid of it.
 	argc -= 1;
 	args = [args subarrayWithRange:NSMakeRange(1, argc)];
 
@@ -79,6 +81,77 @@
 			i += 1;
 			argument	= [args objectAtIndex:i];
 			fDiffCommand = [argument retain];
+		}
+		else if( [argument isEqualToString:@"--action-cmd"] )
+		{
+			//
+			// --action-cmd provides an action that may be performed on a file.
+			// Provide multiple action commands by passing --action-cmd multiple times, each with a different command argument.
+			//
+			// The argument to --action-cmd is two comma-seperated lists separated by a colon, of the form "A,M,D:Revert,/usr/local/bin/svn,revert"
+			//	
+			//	On the left side of the colon is a list of status character or character sequences; a file must have one of these
+			//	for this command to be enabled.
+			//
+			//	On the right side  is a list:
+			//		Item 1 is the human-readable name of the command.
+			//		Item 2 is the path (either absolute or accessible via $PATH) to the executable.
+			//		Items 3 through n are the arguments to the executable.
+			//		CommitWindow will append the file path as the last argument before executing the command.
+			//		Multiple paths may be appended in the future.
+			//
+			//	The executable should return a single line of the form "<new status character(s)><whitespace><file path>" for each path.
+			//
+			//  For Subversion, commands might be:
+			//		"?:Add,/usr/local/bin/svn,add"
+			//		"A:Mark Executable,/usr/local/bin/svn,propset,svn:executable,true"
+			//		"A,M,D,C:Revert,/usr/local/bin/svn,revert"
+			//		"C:Resolved,/usr/local/bin/svn,resolved"
+			//
+			//	Only the first colon is significant, so that, for example, 'svn:executable' in the example above works as expected.
+			//	This does scheme assume that neither comma nor colon will be used in status sequences. The file paths themselves may contain
+			//	commas, since those are handled out of bounds. We could introduce comma or colon quoting if needed. But I hope not.
+			//	
+			if( i >= (argc - 1) )
+			{
+				fprintf(stderr, "commit window: missing text: --action-cmd \"M,Revert,/usr/bin/svn,revert\"\n");
+				[self cancel:nil];
+			}
+			
+			i += 1;
+			argument	= [args objectAtIndex:i];
+			
+			// Get status strings
+			NSString *	statusSubstringString;
+			NSString *	commandArgumentString;
+			NSArray *	statusSubstrings;
+			NSArray *	commandArguments;
+			NSRange		range;
+			
+			range = [argument rangeOfString:@":"];
+			if(range.location == NSNotFound)
+			{
+				fprintf(stderr, "commit window: missing ':' in --action-cmd\n");
+				[self cancel:nil];
+			}
+			
+			statusSubstringString	= [argument substringToIndex:range.location];
+			commandArgumentString	= [argument substringFromIndex:NSMaxRange(range)];
+			
+			statusSubstrings	= [statusSubstringString componentsSeparatedByString:@","];
+			commandArguments	= [commandArgumentString componentsSeparatedByString:@","];
+			
+			unsigned int	statusSubstringCount = [statusSubstrings count];
+			
+			// Add the command to each substring
+			for(unsigned int index = 0; index < statusSubstringCount; index += 1)
+			{
+				NSString *	statusSubstring = [statusSubstrings objectAtIndex:index];
+
+				[self addAction:[commandArguments objectAtIndex:0]
+						command:[commandArguments subarrayWithRange:NSMakeRange(1, [commandArguments count] - 1)]
+						forStatus:statusSubstring];
+			}
 		}
 		else
 		{
@@ -174,16 +247,6 @@
 }
 
 
-- (void) checkExitStatus:(int)exitStatus forCommand:(NSArray *)arguments errorText:(NSString *)errorText
-{
-	if( exitStatus != 0 )
-	{
-		// This error dialog text sucks for an isolated end user, but allows us to diagnose the problem accurately.
-		NSRunAlertPanel(errorText, @"Exit status (%d) while executing %@", @"OK", nil, nil, exitStatus, arguments);
-		[NSException raise:@"ProcessFailed" format:@"Subprocess %@ unsuccessful.", arguments];
-	}	
-}
-
 - (IBAction) doubleClickRowInTable:(id)sender
 {
 	if( fDiffCommand != nil )
@@ -199,14 +262,7 @@
 		// Resolve the command to an absolute path (only do this once per launch)
 		if(sCommandAbsolutePath == nil)
 		{
-			exitStatus = [NSTask executeTaskWithArguments:[NSArray arrayWithObjects:@"/usr/bin/which", [arguments objectAtIndex:0], nil]
-				    					input:nil
-				                        outputString:&sCommandAbsolutePath
-				                        errorString:&errorText];
-
-			// Trim whitespace
-			sCommandAbsolutePath = [[sCommandAbsolutePath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] retain];
-			[self checkExitStatus:exitStatus forCommand:arguments errorText:errorText];
+			sCommandAbsolutePath = [[self absolutePathForPath:[arguments objectAtIndex:0]] retain];
 		}
 		[arguments replaceObjectAtIndex:0 withObject:sCommandAbsolutePath];
 

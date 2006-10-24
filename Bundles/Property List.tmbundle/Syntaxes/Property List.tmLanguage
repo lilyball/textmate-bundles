@@ -618,7 +618,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>((&lt;/)((plist))(&gt;))</string>
+					<string>((/)((plist))(&gt;))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -673,6 +673,30 @@
 							<string>meta.tag.plist.xml.plist</string>
 						</dict>
 						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.plist.xml.plist</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.plist</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>meta.scope.between-tag-pair.xml.plist</string>
+								</dict>
+							</dict>
+							<key>comment</key>
+							<string>Tag with no content</string>
+							<key>match</key>
+							<string>((&gt;(&lt;)))(?=/plist)</string>
+						</dict>
+						<dict>
 							<key>begin</key>
 							<string>((&gt;))(?!&lt;/plist)</string>
 							<key>beginCaptures</key>
@@ -689,7 +713,20 @@
 								</dict>
 							</dict>
 							<key>end</key>
-							<string>(?=&lt;/plist)</string>
+							<string>(&lt;)(?=/plist)</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.plist.xml.plist</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.plist</string>
+								</dict>
+							</dict>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -809,7 +846,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.key.xml.plist</string>
+							<string>meta.tag.dict.xml.plist</string>
 						</dict>
 						<key>10</key>
 						<dict>
@@ -844,17 +881,17 @@
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>constant.other.name.xml.plist</string>
+							<string>meta.tag.dict.xml.plist</string>
 						</dict>
 						<key>7</key>
 						<dict>
 							<key>name</key>
-							<string>meta.tag.key.xml.plist</string>
+							<string>punctuation.definition.tag.xml.plist</string>
 						</dict>
 						<key>8</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.tag.xml.plist</string>
+							<string>meta.scope.between-tag-pair.xml.plist</string>
 						</dict>
 						<key>9</key>
 						<dict>
@@ -863,9 +900,192 @@
 						</dict>
 					</dict>
 					<key>comment</key>
-					<string>the extra captures are required to duplicate the effect of the namespace parsing in the XML syntax</string>
+					<string>Empty tag: Dictionary</string>
 					<key>match</key>
-					<string>((&lt;)((key))(&gt;))(.*)((&lt;/)((key))(&gt;))</string>
+					<string>((&lt;)((dict))(&gt;))(((&lt;)/)((dict))(&gt;))</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.array.xml.plist</string>
+						</dict>
+						<key>10</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.localname.xml.plist</string>
+						</dict>
+						<key>11</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.plist</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.localname.xml.plist</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.array.xml.plist</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>meta.scope.between-tag-pair.xml.plist</string>
+						</dict>
+						<key>9</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.plist</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Empty tag: Array</string>
+					<key>match</key>
+					<string>((&lt;)((array))(&gt;))(((&lt;)/)((array))(&gt;))</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.string.xml.plist</string>
+						</dict>
+						<key>10</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.localname.xml.plist</string>
+						</dict>
+						<key>11</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.plist</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.localname.xml.plist</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.string.xml.plist</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>meta.scope.between-tag-pair.xml.plist</string>
+						</dict>
+						<key>9</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.plist</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Empty tag: String</string>
+					<key>match</key>
+					<string>((&lt;)((string))(&gt;))(((&lt;)/)((string))(&gt;))</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>((&lt;)((key))(&gt;))</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.key.xml.plist</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.plist</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.localname.xml.plist</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.plist</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>the extra captures are required to duplicate the effect of the namespace parsing in the XML syntax</string>
+					<key>contentName</key>
+					<string>constant.other.name.xml.plist</string>
+					<key>end</key>
+					<string>((&lt;/)((key))(&gt;))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>&lt;!\[CDATA\[</string>
+							<key>captures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.constant.xml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>]]&gt;</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -1132,6 +1352,22 @@
 							<key>include</key>
 							<string>#xml_innertag</string>
 						</dict>
+						<dict>
+							<key>begin</key>
+							<string>&lt;!\[CDATA\[</string>
+							<key>captures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.xml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>]]&gt;</string>
+							<key>name</key>
+							<string>string.unquoted.cdata.xml</string>
+						</dict>
 					</array>
 				</dict>
 				<dict>
@@ -1171,6 +1407,40 @@
 					<string>((&lt;/)((real))(&gt;))</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>begin</key>
+							<string>(&lt;!\[CDATA\[)</string>
+							<key>captures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.constant.xml</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>constant.numeric.real.xml.plist</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(]]&gt;)</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>match</key>
+									<string>[-+]?\d+(\.\d*)?(E[-+]\d+)?</string>
+									<key>name</key>
+									<string>constant.numeric.real.xml.plist</string>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>.</string>
+									<key>name</key>
+									<string>invalid.illegal.not-a-number.xml.plist</string>
+								</dict>
+							</array>
+						</dict>
 						<dict>
 							<key>match</key>
 							<string>[-+]?\d+(\.\d*)?(E[-+]\d+)?</string>

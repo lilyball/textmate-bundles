@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -rjcode -KU
+
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/doctohtml.rb"
+require "textmate"
+require 'progress'
+require 'cgi'
+require 'fileutils'
+require 'zlib'
+
+BUNDLE_SUPPORT = ENV['TM_BUNDLE_SUPPORT']
+
+def temp_script(script)
+  dest = %x{ /usr/bin/mktemp -t tm_paste }.chomp
+  at_exit { File.delete dest }
+  FileUtils.cp(script, dest)
+  dest
+end
+
+def get_destinations
+  destinations = []
+  node = nil
+
+  actions = %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/get_destinations.scpt")} }
+  actions.split("\n").each do |action|
+    if action =~ /^\t(.+)/ then
+      (node['children'] ||= [ ]) &lt;&lt; { "name" =&gt; $1 }
+    else
+      node = { "name" =&gt; action }
+      destinations &lt;&lt; node
+    end
+  end
+
+  default_wrap = (ENV['TM_SCOPE'] =~ /^text\./) ? 1 : 0
+  parameters = {
+    "destinations" =&gt; destinations,
+    "selectedDestinations" =&gt; [ [0] ],
+    "private" =&gt; 0,
+    "lineWrap" =&gt; default_wrap,
+  }.to_plist
+
+  res = %x{ "$TM_SUPPORT_PATH/bin/tm_dialog" -cmp #{e_sh parameters} pastebin }
+  exit if $? != 0
+
+  res = PropertyList.load(res)
+
+  actions = []
+  res["selectedDestinations"].to_a.each do |index_array|
+    path = []
+    node = destinations
+    index_array.each do |index|
+      path &lt;&lt; node[index.to_i]["name"]
+      node = node[index.to_i]["children"]
+    end
+    actions &lt;&lt; path.join(" ")
+  end
+
+  [ actions.join("\n"), res["private"], res["lineWrap"] ]
+end
+
+def find_language_ext
+	bundle_dirs = [
+		File.expand_path('~/Library/Application Support/TextMate/Bundles'),
+		'/Library/Application Support/TextMate/Bundles',
+		TextMate.app_path + '/Contents/SharedSupport/Bundles'
+	]
+
+  if scope = ENV['TM_SCOPE'] then
+    scope = scope.split(' ').first
+    bundle_dirs.each do |dir|
+      Dir.glob(dir + '/*.tmbundle/Syntaxes/*.{plist,tmLanguage}') do |filename|
+        File.open(filename) do |io|
+          plist = PropertyList.load(io)
+          if scope == plist['scopeName'].to_s then
+            return Array(plist['fileTypes']).first || 'txt'
+          end
+        end
+      end
+    end
+  end
+
+  ext = File.extname(ENV['TM_FILENAME'].to_s).sub(/\A\./, '')
+  ext.empty? ? 'txt' : ext
+end
+
+def paste_stdin(priv, wrap)
+  url = ENV['TM_PASTIE_URL'] || 'http://pastie.textmate.org/pastes/create'
+  server = $1 if url =~ %r{.*?://(.*?)(/.*)?$}
+  TextMate.call_with_progress(:title =&gt; "Paste to Pastie", :message =&gt; "Contacting Server “#{server}”…") do
+    text_file, html_file = `/usr/bin/mktemp -t tm_paste &amp;&amp; /usr/bin/mktemp -t tm_paste`.split("\n")
+    at_exit { File.delete(text_file); File.delete(html_file) }
+
+    xml = STDIN.read
+
+    open(text_file, 'w') do |io|
+      io &lt;&lt; CGI::unescapeHTML(xml.gsub(/&lt;[^&gt;]*&gt;/, ''))
+    end
+
+    Zlib::GzipWriter.open(html_file) do |gz|
+      gz.write document_to_html(xml)
+    end
+
+    author = "#{`niutil -readprop / "/users/$USER" realname`.chomp} (#{ENV['USER']})"
+    ext = find_language_ext
+
+    %x{
+      curl #{url} \
+      -s -L -o /dev/null -w "%{url_effective}" \
+      -H "Expect:" \
+      -F "paste[parser]=plaintext" \
+      -F "paste[restricted]=#{priv}" \
+      -F "paste[wrap]=#{wrap}" \
+      -F "paste[display_name]=#{author}" \
+      -F "paste[file_extension]=#{ext}" \
+      -F "paste[body]=&lt;#{text_file}" \
+      -F "paste[textmate_html_gz]=&lt;#{html_file}"
+    }
+  end
+end
+
+dests, priv, wrap = get_destinations
+unless dests.empty?
+  url = paste_stdin(priv, wrap)
+  %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/paste_to_destinations.scpt")} #{e_sh url} #{e_sh dests} }
+  puts "Pasted #{url}"
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>xml</string>
+	<key>keyEquivalent</key>
+	<string>^~V</string>
+	<key>name</key>
+	<string>Paste Line / Selection Online…</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>6E779E48-F146-49BF-B60C-EFDFD1380772</string>
+</dict>
+</plist>

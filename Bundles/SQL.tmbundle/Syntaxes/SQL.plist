@@ -110,10 +110,106 @@
 			<string>meta.alter.sql</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+				<key>10</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.sql</string>
+				</dict>
+				<key>11</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+				<key>12</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+				<key>13</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+				<key>14</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.sql</string>
+				</dict>
+				<key>15</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.sql</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.sql</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.sql</string>
+				</dict>
+				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.sql</string>
+				</dict>
+				<key>9</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.sql</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(?i:\b(bigint|bigserial|bit|bit\svarying\(\d+\)|boolean|box|bytea|character\s(varying)?\(\d+\)|char\(\d+\)|var\schar\(\d+\)|char(\(\d+\))?|cidr|circle|date|double\sprecision|float\(\d+\)|inet|int|integer|interval\(\d+\)|line|lseg|macaddr|money|number(\(\d+\))?|numeric(\(\d+,\d+\))?|oid|path|point|polygon|real|smallint|serial|sysdate|text|times(\(\d+\))(\swithoutstimeszone)?|timestamp(s(\(\d+\))(\swithoutstimeszone)?)?|tinyint\(\d+\)|varchar\d?(\(\d+\))?)\s*)\b</string>
-			<key>name</key>
-			<string>storage.type.sql</string>
+			<string>(?xi)
+
+				# normal stuff, capture 1
+				 \b(bigint|bigserial|bit|boolean|box|bytea|cidr|circle|date|double\sprecision|inet|int|integer|line|lseg|macaddr|money|oid|path|point|polygon|real|serial|smallint|sysdate|text)\b
+
+				# numeric suffix, capture 2 + 3i
+				|\b(bit\svarying|character\s(?:varying)?|tinyint|var\schar|float|interval)\((\d+)\)
+
+				# optional numeric suffix, capture 4 + 5i
+				|\b(char|number|varchar\d?)\b(?:\((\d+)\))?
+
+				# special case, capture 6 + 7i + 8i
+				|\b(numeric)\b(?:\((\d+),(\d+)\))?
+
+				# special case, captures 9, 10i, 11
+				|\b(times)(?:\((\d+)\))(\swithoutstimeszone\b)?
+
+				# special case, captures 12, 13, 14i, 15
+				|\b(timestamp)(?:(s)\((\d+)\)(\swithoutstimeszone\b)?)?
+
+			</string>
 		</dict>
 		<dict>
 			<key>match</key>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>4679484F-6227-11D9-BFB1-000D93589AF6</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
+
+
+line = STDIN.read
+caret_placement = 0
+tmp = ENV['TM_LINE_NUMBER'].to_i - ENV['TM_INPUT_START_LINE'].to_i
+if tmp &gt; 0
+  caret_placement += line.index("\n", tmp) + ENV['TM_LINE_INDEX'].to_i
+else
+  caret_placement =ENV['TM_LINE_INDEX'].to_i-ENV['TM_INPUT_START_LINE_INDEX'].to_i - 1
+end
+
+def snippet_generator(cand, start)
+  stuff = cand[start..-1].split("\t")
+  if stuff[0].count(":") &gt; 0
+    name_array = stuff[0].split(":")
+
+    out = ""
+    stuff[-(name_array.size)..-1].each_with_index do |arg,i|
+      out &lt;&lt; name_array[i] + ":${"+(i+1).to_s + ":"+ arg+"} "
+    end
+  else
+    out = stuff[0]
+  end
+  return out.chomp.strip
+end
+
+def candidates_or_exit(methodSearch="")
+  require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+  zGrepped = %x{ zgrep ^#{e_sh methodSearch} #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa_r.txt.gz }
+  candidates = zGrepped.split("\n")
+  TextMate.exit_show_tool_tip "No completion available" if candidates.empty?
+  return candidates
+end
+
+def match_iter(rgxp,str)
+  offset = 0
+  while m = str.match(rgxp)
+    yield [m[0], m.begin(0) + offset, m[0].length]
+    str = m.post_match
+    offset += m.end(0)
+  end
+end
+
+def methodNames(line )
+  up =-1
+  list = ""
+  pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
+  match_iter(pat , line) do |tok, beg, len|
+    t = tok[0].chr
+    if t == "["
+      up +=1
+    elsif t == "]"
+      up -=1
+    elsif t !='"' and t !='@' and up == 0
+      list &lt;&lt; tok
+    end
+  end
+  return list
+end
+
+backContext = line[1+caret_placement..-1].match /^[a-zA-Z0-9]/
+
+pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
+
+if backContext
+  print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
+  TextMate.exit_discard
+end
+
+if caret_placement == -1
+  print "$0"+ line[caret_placement+1..-1]
+  TextMate.exit_discard
+end
+
+up = 0
+start = [0]
+#Count [
+match_iter(pat , line[0..caret_placement]) do |tok, beg, len|
+  t = tok[0].chr
+  if t == "["
+    start &lt;&lt; beg
+  elsif t == "]"
+    start.pop
+  end
+end
+
+colon_and_space = /([a-zA-Z][a-zA-Z0-9]*:)\s*$/
+alpha_and_space = /[a-zA-Z0-9"\)\]]\s+$/
+alpha_and_caret = /[a-zA-Z][a-zA-Z0-9]*$/
+
+
+if line[start[-1]..caret_placement].match colon_and_space
+  mn = methodNames(line[start[-1]..caret_placement])
+  candidates = candidates_or_exit mn
+  print line[0..caret_placement] +"${1:" + candidates[0].split("\t")[3+mn.count(":")] + "}" + line[caret_placement+1..-1]
+
+elsif temp =line[start[-1]..caret_placement].match( alpha_and_space)
+  mn = methodNames(line[start[-1]..caret_placement])
+  if mn.empty?
+    mn = "NoMethod"
+  end
+  candidates = candidates_or_exit( mn + "[[:alpha:]]" ) # the alpha is to prevent satisfaction with just one part
+  print line[0..caret_placement] + snippet_generator( candidates[0], mn.size ) + "$0"+ line[caret_placement+1..-1]
+elsif k = line[start[-1]..caret_placement].match( alpha_and_caret)
+  if line[start[-1]..k.begin(0)-1+start[-1]].match alpha_and_space
+    mn = methodNames(line[start[-1]..caret_placement]) + k[0]
+    candidates = candidates_or_exit mn
+    print line[0..caret_placement] + snippet_generator( candidates[0], mn.size ) + "$0"+ line[caret_placement+1..-1]
+  else
+    print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
+  end
+else
+  print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
+end</string>
+	<key>disableOutputAutoIndent</key>
+	<true/>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^m</string>
+	<key>name</key>
+	<string>Cocoa Context</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>meta.bracketed.objc</string>
+	<key>uuid</key>
+	<string>478FBA1D-C11C-4D53-BE95-8B8ABB5F15DC</string>
+</dict>
+</plist>

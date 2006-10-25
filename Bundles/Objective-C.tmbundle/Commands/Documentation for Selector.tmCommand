@@ -82,7 +82,6 @@ end
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 zGrepped = %x{ zgrep ^#{e_sh list + "[[:space:]]"} #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa_r.txt.gz }
 candidates = zGrepped.split("\n") #.map{|e| e.split[1]}
-doc_path="/Developer/ADC Reference Library/documentation/Cocoa/Reference/"
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
 TextMate.exit_show_tool_tip "No documentation found for:\n#{list}" if candidates.empty?
 if candidates.size &gt; 1 # if more than 1 candidate disambiguate
@@ -96,14 +95,18 @@ end
 end
 #file:///Developer/ADC%20Reference%20Library/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/Reference/Reference.html#//apple_ref/occ/clm/NSObject/alloc
 #
-middle = "_Class/Reference/Reference.html#//apple_ref/occ/"
+doc_path="/Developer/ADC Reference Library/documentation/Cocoa/Reference/"
+middle = "_Class/Reference/"
 p = candidates[0].split("\t")
-url = p[1] +"/Classes/"+p[2] +middle+ p[3] +"/"+ p[2] + "/"+p[0]   
-TextMate.exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://#{doc_path+url}'&gt;"
-
-
-# the variable "list" contains the message
-# http://home.mac.se/joachimm/cocoa_ref.txt.gz</string>
+r = "#//apple_ref/occ/" + p[3] +"/"+ p[2] + "/"+p[0]
+url = doc_path + p[1] +"/Classes/"+p[2] +middle
+if FileTest.exists?(url + "Reference.html")
+  url += "Reference.html" + r
+else
+url += p[2]+".html" + r
+end
+TextMate.exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://#{url}'&gt;"
+</string>
 	<key>fallbackInput</key>
 	<string>scope</string>
 	<key>input</key>
@@ -113,7 +116,7 @@ TextMate.exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://
 	<key>name</key>
 	<string>Documentation for Selector</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>afterSelectedText</string>
 	<key>scope</key>
 	<string>meta.bracketed.objc</string>
 	<key>uuid</key>

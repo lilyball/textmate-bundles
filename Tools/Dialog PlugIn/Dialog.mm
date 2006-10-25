@@ -122,7 +122,7 @@ NSLock* Lock = [NSLock new];
 	 	didInstantiate = [aNib instantiateNibWithOwner:self topLevelObjects:&topLevelObjects];
 	}
 	@catch(NSException* e) {
-		// note that our retain count is actually too high if we reach this branch -- so no RAII idioms for Cocoa, which is why we have the didLock variable, etc.
+		// our retain count is too high if we reach this branch (<rdar://4803521>) so no RAII idioms for Cocoa, which is why we have the didLock variable, etc.
 		NSLog(@"%s failed to instantiate nib (%@)", _cmd, [e reason]);
 	}
 

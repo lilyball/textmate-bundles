@@ -89,8 +89,7 @@ module GTD
     end
     def gtd_files_in_directory(directory = nil)
       path = get_gtd_directory(directory)
-    
-      return  Dir::glob(File.join(path,"*.gtd"))
+      return Dir::glob(File.join(File.expand_path(path),"*.gtd"))
     end
     # Reads all files in given directory and processes them. Returns an array of
     # GTDFile objects, one for each file.

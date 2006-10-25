@@ -414,15 +414,20 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(:)\s*(\()</string>
+					<string>((:))\s*(\()</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.separator.arguments.objc</string>
+							<string>entity.name.function.name-of-parameter.objc</string>
 						</dict>
 						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.arguments.objc</string>
+						</dict>
+						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.type.objc</string>

@@ -314,6 +314,48 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>begin</key>
+					<string>(?=\w)(?&lt;=[\w\])] )(\w+(?:(:)|(?=\])))</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.any-method.objc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.arguments.objc</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\])</string>
+					<key>name</key>
+					<string>meta.function-call.objc</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.arguments.objc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\b\w+(:)</string>
+							<key>name</key>
+							<string>support.function.any-method.name-of-parameter.objc</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>$base</string>
 				</dict>

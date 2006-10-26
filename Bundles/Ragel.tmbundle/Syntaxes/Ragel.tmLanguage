@@ -80,7 +80,7 @@
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
-			<string>support.ragel.command</string>
+			<string>support.function.ragel</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -112,7 +112,7 @@
 					<key>match</key>
 					<string>([@$&gt;%])\s*([\w\d]+)</string>
 					<key>name</key>
-					<string>entity.name.action-reference.ragel</string>
+					<string>entity.name.type.action-reference.ragel</string>
 				</dict>
 			</array>
 		</dict>
@@ -132,9 +132,9 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>$\n?</string>
 					<key>name</key>
-					<string>comment.ragel</string>
+					<string>comment.line.ragel</string>
 				</dict>
 			</array>
 		</dict>
@@ -175,7 +175,7 @@
 					<key>match</key>
 					<string>\b(machine|action|context|include|variable|access|write|contained)\b</string>
 					<key>name</key>
-					<string>keyword.ragel</string>
+					<string>keyword.other.ragel</string>
 				</dict>
 			</array>
 		</dict>
@@ -277,12 +277,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.ragel.action</string>
+							<string>keyword.other.action.ragel</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.action.ragel</string>
+							<string>entity.name.type.action.ragel</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -301,7 +301,7 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>function.ragel.action</string>
+					<string>meta.function.action.ragel</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -318,7 +318,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.machine-definition.ragel</string>
+							<string>entity.name.type.machine-definition.ragel</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -374,7 +374,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.machine-instantiation.ragel</string>
+							<string>entity.name.type.machine-instantiation.ragel</string>
 						</dict>
 						<key>2</key>
 						<dict>

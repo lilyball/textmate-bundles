@@ -176,6 +176,7 @@ mup.html {
 						// cmd = 'require_cmd "#{e_sh svn}" "If you have installed svn, then you need to either update your <tt>PATH</tt> or set the <tt>TM_SVN</tt> shell variable (e.g. in Preferences / Advanced)"\\n\\nexport TM_SVN\\nexport CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"\\n\\ncd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"\\n"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/svn_commit.rb"'
 						cmd = ""
 						cmd += 'export LC_CTYPE=en_US.UTF-8 ;';
+						#{ %{cmd += "export              PATH=#{ e_sh_js ENV['PATH']              }; ";}                             }
 						#{ %{cmd += "export            TM_SVN=#{ e_sh_js ENV['TM_SVN']            }; ";} if ENV['TM_SVN']            }
 						#{ %{cmd += "export TM_BUNDLE_SUPPORT=#{ e_sh_js ENV['TM_BUNDLE_SUPPORT'] }; ";} if ENV['TM_BUNDLE_SUPPORT'] }
 						#{ %{cmd += "export   TM_SUPPORT_PATH=#{ e_sh_js ENV['TM_SUPPORT_PATH']   }; ";} if ENV['TM_SUPPORT_PATH']   }

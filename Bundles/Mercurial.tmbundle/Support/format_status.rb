@@ -74,7 +74,7 @@ make_head( "Hg Status", work_path,
 							if status == '?    ' and ignore_file_pattern =~ file
 							    # This is a file that we don't want to know about
 							    nil
-						   elsif status == '!' or status == 'R'
+						  elsif status == '!' or status == 'R'
 						      # No need to link to Deleted or missing files.
 						      mup.td_status!(status)
     							mup.td( file.sub( /^#{strip_path_prefix}\//, "") )
@@ -89,8 +89,7 @@ make_head( "Hg Status", work_path,
 				}
 			end
 		}
-# 	}
-# }
+
 
 rescue => e
    handle_default_exceptions( e )

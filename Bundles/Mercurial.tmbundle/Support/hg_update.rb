@@ -4,15 +4,10 @@ work_path		= ENV['WorkPath']
 require $bundle+'/hg_helper.rb'
 include HGHelper
 
-
-
-
-
-
 begin
    update = %x{hg update -v 2>&1}
    
-   make_head( 'Mercurial Update',
+   make_head( 'Hg Update', 'work_path',
               [ $bundle+'/Stylesheets/hg_style.css',
                 $bundle+'/Stylesheets/hg_log_style.css'] )
                 
@@ -23,8 +18,6 @@ begin
      puts "<li>" + files + "</li>"
   end
   puts "<ul>"
-     
-  
 
 ensure
    make_foot()

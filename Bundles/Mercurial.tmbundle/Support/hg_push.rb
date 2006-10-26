@@ -12,6 +12,6 @@ TextMate::call_with_progress(:title => "Push to default repos.",
                            :output_filepath => nil) do
 
    `cd "#{work_path}";#{hg} push`
-
+#TODO: Check what push and pull output to notify success
 end
 

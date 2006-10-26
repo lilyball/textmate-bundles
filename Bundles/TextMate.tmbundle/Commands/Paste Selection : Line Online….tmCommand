@@ -53,7 +53,7 @@ end
 
 def save_prefs(params)
   selected = params['selectedDestinations'].dup
-  selected.collect! { |indices| names_for_indices(indices, params['destinations']) }
+  selected.collect! { |indices| names_for_indices(indices.dup, params['destinations']) }
   File.open(PREFS_FILE, "w") { |file| YAML.dump({ 'selectedDestinations' =&gt; selected }, file) }
 end
 

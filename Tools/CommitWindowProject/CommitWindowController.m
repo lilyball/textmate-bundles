@@ -553,7 +553,7 @@
 	NSMutableArray *		arguments		= [[sender representedObject] mutableCopy];
 	NSString *				pathToCommand;
 	NSMutableDictionary *	fileDictionary	= [[fFilesController arrangedObjects] objectAtIndex:[fTableView selectedRow]];
-	NSString *				filePath		= [fileDictionary objectForKey:@"path"];
+	NSString *				filePath		= [[fileDictionary objectForKey:@"path"] stringByStandardizingPath];
 	NSString *				errorText;
 	NSString *				outputStatus;
 	int						exitStatus;

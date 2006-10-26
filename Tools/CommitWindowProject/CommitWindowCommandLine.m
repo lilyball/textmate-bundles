@@ -254,7 +254,7 @@
 		static NSString *	sCommandAbsolutePath = nil;
 
 		NSMutableArray *	arguments	= [[fDiffCommand componentsSeparatedByString:@","] mutableCopy];
-		NSString *			filePath	= [[[fFilesController arrangedObjects] objectAtIndex:[sender selectedRow]] objectForKey:@"path"];
+		NSString *			filePath	= [[[[fFilesController arrangedObjects] objectAtIndex:[sender selectedRow]] objectForKey:@"path"] stringByStandardizingPath];
 		NSData *			diffData;
 		NSString *			errorText;
 		int					exitStatus;

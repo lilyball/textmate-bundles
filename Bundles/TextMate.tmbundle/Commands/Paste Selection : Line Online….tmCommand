@@ -7,20 +7,54 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -rjcode -KU
 
-require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/doctohtml.rb"
-require "textmate"
+BUNDLE_SUPPORT = ENV['TM_BUNDLE_SUPPORT']
+
+require "#{BUNDLE_SUPPORT}/lib/doctohtml.rb"
+require 'textmate'
 require 'progress'
 require 'cgi'
 require 'fileutils'
 require 'zlib'
-
-BUNDLE_SUPPORT = ENV['TM_BUNDLE_SUPPORT']
+require "yaml"
 
 def temp_script(script)
   dest = %x{ /usr/bin/mktemp -t tm_paste }.chomp
   at_exit { File.delete dest }
   FileUtils.cp(script, dest)
   dest
+end
+
+# example: ["Colloquy", "#textmate"] -&gt; [ 2, 1 ]
+def indices_for_names(names, tree)
+  name = names.shift
+  node = tree.find { |n| n["name"] == name }
+  return [ 0 ] if node.nil?
+  res  = [ tree.index(node) ]
+  res += indices_for_names(names, node["children"]) unless names.empty? || node["children"].nil?
+  return res
+end
+
+# example: [ 2, 1 ] -&gt; ["Colloquy", "#textmate"]
+def names_for_indices(indices, tree)
+  node = tree[indices.shift.to_i]
+  res  = [ node["name"] ]
+  res += names_for_indices(indices, node["children"]) unless indices.empty?
+  return res
+end
+
+PREFS_FILE = "#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.paste_online.yaml"
+
+def load_prefs(destinations)
+  prefs = File.open(PREFS_FILE) { |file| YAML.load(file) } rescue { }
+  selected = prefs['selectedDestinations'] || [ [ "Paste to Colloquy:", "#textmate" ] ]
+  selected.collect! { |names| indices_for_names(names, destinations) }
+  return { 'selectedDestinations' =&gt; selected }
+end
+
+def save_prefs(params)
+  selected = params['selectedDestinations'].dup
+  selected.collect! { |indices| names_for_indices(indices, params['destinations']) }
+  File.open(PREFS_FILE, "w") { |file| YAML.dump({ 'selectedDestinations' =&gt; selected }, file) }
 end
 
 def get_destinations
@@ -30,38 +64,48 @@ def get_destinations
   actions = %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/get_destinations.scpt")} }
   actions.split("\n").each do |action|
     if action =~ /^\t(.+)/ then
-      (node['children'] ||= [ ]) &lt;&lt; { "name" =&gt; $1 }
+      (node['children'] ||= [ ]) &lt;&lt; { 'name' =&gt; $1 }
     else
-      node = { "name" =&gt; action }
+      node = { 'name' =&gt; action }
       destinations &lt;&lt; node
     end
   end
 
+  destinations.sort! { |a, b| a['name'] &lt;=&gt; b['name'] }
+  destinations.each { |e| e['children'].sort! { |a, b| a['name'] &lt;=&gt; b['name'] } if e.has_key? 'children' }
+
+  prefs = load_prefs(destinations)
+
+  window_title = if ENV.has_key? 'TM_SELECTED_TEXT'; 'Paste Selection Online'; else 'Paste Line Online'; end
   default_wrap = (ENV['TM_SCOPE'] =~ /^text\./) ? 1 : 0
   parameters = {
-    "destinations" =&gt; destinations,
-    "selectedDestinations" =&gt; [ [0] ],
-    "private" =&gt; 0,
-    "lineWrap" =&gt; default_wrap,
+    'windowTitle'           =&gt; window_title,
+    'destinations'          =&gt; destinations,
+    'selectedDestinations'  =&gt; prefs['selectedDestinations'],
+    'private'               =&gt; 0,
+    'lineWrap'              =&gt; default_wrap,
   }.to_plist
 
   res = %x{ "$TM_SUPPORT_PATH/bin/tm_dialog" -cmp #{e_sh parameters} pastebin }
   exit if $? != 0
 
   res = PropertyList.load(res)
+  exit unless res.has_key? 'returnCode'
+
+  save_prefs(res)
 
   actions = []
-  res["selectedDestinations"].to_a.each do |index_array|
+  res['selectedDestinations'].to_a.each do |index_array|
     path = []
     node = destinations
     index_array.each do |index|
-      path &lt;&lt; node[index.to_i]["name"]
-      node = node[index.to_i]["children"]
+      path &lt;&lt; node[index.to_i]['name']
+      node = node[index.to_i]['children']
     end
-    actions &lt;&lt; path.join(" ")
+    actions &lt;&lt; path.join(' ')
   end
 
-  [ actions.join("\n"), res["private"], res["lineWrap"] ]
+  [ actions.join("\n"), res['private'], res['lineWrap'] ]
 end
 
 def find_language_ext
@@ -92,7 +136,7 @@ end
 def paste_stdin(priv, wrap)
   url = ENV['TM_PASTIE_URL'] || 'http://pastie.textmate.org/pastes/create'
   server = $1 if url =~ %r{.*?://(.*?)(/.*)?$}
-  TextMate.call_with_progress(:title =&gt; "Paste to Pastie", :message =&gt; "Contacting Server “#{server}”…") do
+  TextMate.call_with_progress(:title =&gt; 'Paste to Pastie', :message =&gt; "Contacting Server “#{server}”…") do
     text_file, html_file = `/usr/bin/mktemp -t tm_paste &amp;&amp; /usr/bin/mktemp -t tm_paste`.split("\n")
     at_exit { File.delete(text_file); File.delete(html_file) }
 

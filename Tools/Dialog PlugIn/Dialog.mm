@@ -70,6 +70,8 @@ NSLock* Lock = [NSLock new];
 
 - (void)cleanupAndRelease
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
 	enumerate(topLevelObjects, id object)
 	{
 		// if we do not manually unbind, the object in the nib will keep us retained, and thus we will never reach dealloc
@@ -105,9 +107,6 @@ NSLock* Lock = [NSLock new];
 {
 	[window orderOut:self];
 	[self cleanupAndRelease];
-
-	// remove ourself as observer, since there is a slight chance this object will never be released (when nib instantiation throws an exception)
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
 	// post dummy event, since the system has a tendency to stall the next event, after replying to a DO message where the receiver has disappeared, posting this dummy event seems to solve it
 	[NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint modifierFlags:0 timestamp:0.0f windowNumber:0 context:nil subtype:0 data1:0 data2:0] atStart:NO];

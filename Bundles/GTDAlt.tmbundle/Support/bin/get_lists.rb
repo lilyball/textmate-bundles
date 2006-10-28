@@ -8,18 +8,21 @@ GTD.process_directory
 all_actions = GTD.actions
 contexts = GTD.get_contexts
 contxts = []
+def esc(str)
+  str.gsub('"','\\"')
+end
 for context in contexts
   # puts context
   ar = "{context:\"#{context}\",actions:{"
   actions = all_actions.find_all{ |a| a.context == context}
   acts = []
   for act in actions
-    it = "{action:\"#{act.name}\""
+    it = "{action:\"#{esc(act.name)}\""
     unless act.due.nil? then
       it << ",#{act.due_type || 'due'}date:\"#{act.due}\""
     end
     unless act.note.nil? or act.note == "" then
-      it << ",nte:\"#{act.note}\""
+      it << ",nte:\"#{esc(act.note)}\""
     end
     it << ",completed:\"#{act.completed? ? 'yes' : 'no'}\""
     it << ",link:\"#{act.txmt}\",file:\"#{act.file}\",line:\"#{act.line}\""

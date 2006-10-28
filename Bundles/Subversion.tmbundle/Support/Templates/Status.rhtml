@@ -1,27 +1,34 @@
 <% require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview.rb' %>
 
-<% raise 'No JavaScript' if not File.exist?("#{bundle}/format_status.js") %>
+
+
+<% # raise 'No JavaScript' if not File.exist?("#{bundle}/Template/Status.js") %>
 
 
 <%=
 
 prefix_js =<<END_JS # javascript
 // Set up globals
-PATH				= #{e_sh_js ENV['PATH']}
-TM_SVN				= #{e_sh_js ENV['TM_SVN']}
-TM_SUPPORT_PATH		= #{e_sh_js ENV['TM_SUPPORT_PATH']}
-TM_BUNDLE_SUPPORT	= #{e_sh_js ENV['TM_BUNDLE_SUPPORT']}
-CommitWindow		= #{e_sh_js ENV['CommitWindow']}
-TM_RUBY				= #{e_sh_js ENV['TM_RUBY']}
-	
+var ENV = new Object
+
+ENV['PATH']					= "#{e_sh_js ENV['PATH']}"
+ENV['TM_SVN']				= "#{e_sh_js ENV['TM_SVN']}"
+ENV['TM_SUPPORT_PATH']		= "#{e_sh_js ENV['TM_SUPPORT_PATH']}"
+ENV['TM_BUNDLE_SUPPORT']	= "#{e_sh_js ENV['TM_BUNDLE_SUPPORT']}"
+ENV['CommitWindow']			= "#{e_sh_js ENV['CommitWindow']}"
+ENV['TM_RUBY']				= "#{e_sh_js ENV['TM_RUBY']}"
+
+// Status class map
+var StatusMap = new Object
+#{StatusMap.keys.inject("") {|string, key| string + "StatusMap['#{key}'] = '#{StatusMap[key]}'\n" }}
 END_JS
 
-status_js = IO.read(bundle + "/format_status.js")
+status_js = IO.read("#{bundle}/Templates/Status.js")
 status_js.gsub!(/\#\{(.*)\}/) {|s| instance_eval "$1"}
 
 html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title)}&rdquo;",
 			"Subversion",
-			%Q{<style type="text/css" media="screen"> @import 'file://#{bundle}/Stylesheets/svn_status_style.css'; </style>\n	<script  type="text/javascript" language="javascript" charset="utf-8">#{status_js}</script>})
+			%Q{<style type="text/css" media="screen"> @import 'file://#{bundle}/Stylesheets/svn_status_style.css'; </style>\n	<script  type="text/javascript" language="javascript" charset="utf-8">#{prefix_js}\n\n#{status_js}</script>})
 %>
 
 
@@ -33,7 +40,6 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 						{:status => /A/,	:name =>	'Revert',	:onclick => 'svnRevertFile'},
 						{:status => /\?/,	:name =>	'Remove',	:onclick => 'svnRemoveFile'},
 						{:status => /.*/,	:name =>	'Diff',		:onclick => 'sendDiffToTextMate', :or_finder => 1}]		# openWithFinder for image files
-
 %>
 
 
@@ -67,13 +73,13 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 					<%
 					status          = match[1]
 					file            = match[2]
-					esc_file        = '&quot;' + CGI.escapeHTML(e_sh_js(file).gsub(/(?=")/, '\\')) + '&quot;'
-					esc_displayname = '&quot;' + CGI.escapeHTML(e_sh_js(shorten_path(file)).gsub(/(?=")/, '\\')) + '&quot;'
+					esc_file        = '&quot;' + CGI.escapeHTML(file.gsub(/(?=")/, '\\')) + '&quot;'
+					esc_displayname = '&quot;' + CGI.escapeHTML(shorten_path(file).gsub(/(?=")/, '\\')) + '&quot;'
 
 					# Skip files that we don't want to know about
 					next if (status == unknown_file_status and ignore_file_pattern =~ file)
 					%>
-					<%# Status string %>
+					<%# Status columns %>
 					<% status_column_count.times do |i| %>
 
 						<% c = status[i].chr %>
@@ -83,18 +89,17 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 						</td>
 					<% end %>
 					
+					<%# Action buttons %>
 					<% button_strip.each do |button| %>
-						<% match_status = button[:status] %>
-						<% button_name = button[:name] %>
+						<% match_status = button[:status]
+						 button_name = button[:name] %>
 						<td class="<%= button_name.downcase + '_col' %>">
 							<% if not status.scan(match_status).empty? %>
-								<a href="javascript:<%= "#{button[:onclick]}('#{esc_file}', #{stdin_line_count})" %>" class="<%= button_name.downcase + '_button' %>"><%= button_name %></a>
+								<a href="#" onclick="<%= "#{button[:onclick]}('#{esc_file}', #{stdin_line_count})" %>; return false" class="<%= button_name.downcase + '_button' %>"><%= button_name %></a>
 							<% end %>
 						</td>
 					<% end %>
 					
-					<%# File path  onclick="<%= onclick
-					%>
 					<td class="file_col"> <a href="<%= 'txmt://open?url=file://' + (e_url file) %>" class="pathname"><%= shorten_path(file) %></a> </td>
 					
 				<% end %>							
@@ -103,6 +108,17 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 		<% stdin_line_count += 1 %>
 	<% end %>
 </table>
- <!-- onclick="" -->
+
+<% if $is_status then %>
+	<div id="actions">
+		<a href='#' onclick="svnCommit(); return false">Commit</a>
+		<div style="clear:both"></div>
+	</div>
+<% end %>
+
+<div id="commandOutput"></div>
+<%#DEBUG# mup << display_title + "\n" %>
+<%#DEBUG# ENV.sort.each { |key,value| puts key + ' = ' + value + "\n" } %>
+
 <!-- why would this close the document _above_ the table tag? -->
 <%#= html_footer %>

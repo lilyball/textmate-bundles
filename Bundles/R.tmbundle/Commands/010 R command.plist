@@ -5,16 +5,21 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>escText=${TM_SELECTED_TEXT//\\\\/\\\\}
-osascript -e 'tell application "R" to activate' -e "tell application \"R\" to cmd \"${escText//\"/\\\"}\""</string>
+	<string># input is selection or document
+rawText="`cat`"
+escText="${rawText//\\\\/\\\\}"
+
+osascript -e 'tell application "R" to activate' \
+		  -e 'tell application "R" to cmd "'"${escText//\"/\\\"}"'"'
+</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>@R</string>
 	<key>name</key>
-	<string>Send Selection to R</string>
+	<string>Send Selection / Document to R</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>source.r</string>
 	<key>uuid</key>

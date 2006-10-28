@@ -42,11 +42,28 @@ class << STDOUT
 end
 STDOUT.flush
 STDOUT.sync = true
-rsession = IO.popen("R --vanilla --no-readline -q","r+")
-rsession.write(STDIN.read.chomp + "\n")
-rsession.write "q()\n"
-print rsession.read
-rsession.close
+
+def recursive_delete(path)
+  if (File.directory?(path)) then
+    Dir.foreach(path) { |file| recursive_delete(File.join(path,file)) unless [".",".."].include?(file) }
+    Dir.unlink(path)
+  else
+    File.unlink(path)
+  end
+end
+
+IO.popen("R --vanilla --no-readline --slave --encoding=UTF-8", "r+") do |rsession|
+  tmpDir = File.join(ENV['TMP'] || "/tmp", "TM_R")
+  recursive_delete(tmpDir) if File.exists?(tmpDir) # remove the temp dir if it's already there
+  Dir::mkdir(tmpDir)
+  rsession.puts(%Q{pdf("#{tmpDir}/Rplot%03d.pdf", onefile=F, width=8, height=8)})
+  rsession.puts("options(echo=T)")
+  rsession.write(STDIN.read.chomp)
+  rsession.close_write
+  print rsession.read
+  system("open -a Preview '#{tmpDir}'")
+end
+
 STDOUT.sync = false
 class << STDOUT
   alias unreal_write write

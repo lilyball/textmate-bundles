@@ -1,8 +1,8 @@
 require 'test/unit'
-require '../../../rails/activesupport/lib/active_support/core_ext/class/attribute_accessors'
+require File.dirname(__FILE__) + '/../../../../config/environment'
 
-require 'mock_controller'
-require '../lib/textmate_footnotes'
+require File.dirname(__FILE__) + '/../lib/textmate_footnotes'
+require File.dirname(__FILE__) + '/mock_controller'
 
 $html = DATA.read
 
@@ -15,6 +15,23 @@ class TextmateFootnotesTest < Test::Unit::TestCase
   def test_mock_controller
     index = @controller.response.body.index(/This is the HTML page/)
     assert_equal 334, index
+  end
+  
+  def test_footnote_not_included_when_content_type_is_javascript
+    @controller.response.headers['Content-Type'] = 'text/javascript'
+    @footnote.add_footnotes!
+    assert_equal $html, @controller.response.body
+  end
+  
+  def test_footnote_included_when_content_type_is_html
+    @controller.response.headers['Content-Type'] = 'text/html'
+    @footnote.add_footnotes!
+    assert_not_equal $html, @controller.response.body
+  end
+  
+  def test_footnote_included_when_content_type_is_nil
+    @footnote.add_footnotes!
+    assert_not_equal $html, @controller.response.body
   end
   
   def test_indent

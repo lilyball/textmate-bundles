@@ -36,7 +36,7 @@ class FootnoteFilter
   
   def add_footnotes!
     if performed_render? and first_render?
-      if ["rhtml", "rxhtml"].include?(template_extension)
+      if ["rhtml", "rxhtml"].include?(template_extension) && (content_type =~ /html/ || content_type.nil?)
         # If the user would like to be responsible for the styles, let them opt out of the styling here
         insert_styles unless FootnoteFilter.no_style
         insert_footnotes
@@ -89,6 +89,10 @@ class FootnoteFilter
   
   def layout_file_name
     File.expand_path(@template.send(:full_template_path, @controller.active_layout, "rhtml"))
+  end
+  
+  def content_type
+    @controller.response.headers['Content-Type']
   end
   
   def stylesheet_files
@@ -181,7 +185,7 @@ class FootnoteFilter
   end
   
   def asset_file_links(link_text, files)
-    return if files.size == 0
+    return '' if files.size == 0
     links = files.map do |filename|
       if filename =~ %r{^/}
         full_filename = File.join(abs_root, "public", filename)

@@ -16,11 +16,14 @@ ENV['TM_SVN']				= "#{e_sh_js ENV['TM_SVN']}"
 ENV['TM_SUPPORT_PATH']		= "#{e_sh_js ENV['TM_SUPPORT_PATH']}"
 ENV['TM_BUNDLE_SUPPORT']	= "#{e_sh_js ENV['TM_BUNDLE_SUPPORT']}"
 ENV['CommitWindow']			= "#{e_sh_js ENV['CommitWindow']}"
-ENV['TM_RUBY']				= "#{e_sh_js ENV['TM_RUBY']}"
+ENV['TM_RUBY']				= "#{e_sh_js ENV['TM_RUBY'] || '/usr/bin/ruby' }"
 
 // Status class map
 var StatusMap = new Object
 #{StatusMap.keys.inject("") {|string, key| string + "StatusMap['#{key}'] = '#{StatusMap[key]}'\n" }}
+
+WorkPaths = ["#{work_paths.join('","')}"]
+
 END_JS
 
 status_js = IO.read("#{bundle}/Templates/Status.js")

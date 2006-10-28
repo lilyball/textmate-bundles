@@ -30,7 +30,7 @@ function svnCommand(cmd, id, statusString, className){
 	displayCommandOutput('error', 'error', errorString);
 	displayCommandOutput('info', 'info', outputString);
 	
-	if(errorCode == 0)
+	if(errorCode == 0 && id != null)
 	{
 		document.getElementById('status'+id).innerHTML = statusString;
 		document.getElementById('status'+id).className = 'status_col ' + className;
@@ -61,6 +61,7 @@ function displayCommandOutput(id, className, string){
 }
 
 function svnCommit(){
+		
 	cmd = ""
 	cmd += 'export LC_CTYPE=en_US.UTF-8 ;'
 	cmd += "export            PATH="			+ ENV['PATH']				+ "; "
@@ -68,13 +69,16 @@ function svnCommit(){
 	cmd += "export            TM_SUPPORT_PATH="	+ ENV['TM_SUPPORT_PATH']	+ "; "
 	cmd += "export            CommitWindow="	+ ENV['CommitWindow'] 		+ "; "
 	cmd += "export            TM_SVN_DIFF_CMD="	+ ENV['TM_SVN_DIFF_CMD']	+ "; "
+
+	cmd += ENV['TM_RUBY'] + ' -- ' + ENV['TM_BUNDLE_SUPPORT'] + '/svn_commit.rb "' + WorkPaths.join('" "') + '"'
+
+//	displayCommandOutput('info', 'info', cmd);
+//	document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'
 	
 	TextMate.isBusy = true
-	
-	cmd += ENV['TM_RUBY'] + ' -- ' + ENV['TM_BUNDLE_SUPPORT'] + '/svn_commit.rb "' + StatusPaths.join('" "') + '"'
-	document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'
-	
-	TextMate.isBusy = false
+	myCommand = TextMate.system(cmd, function (task) { });
+	myCommand.onreadoutput = svnReadOutput;
+	myCommand.onreaderror = svnReadError;
 };
 
 function svnAddFile(filename,id){
@@ -96,8 +100,9 @@ function svnRevertFileConfirm(filename,id,displayname){
 	the_id          = id;
 	the_displayname = displayname;
 	the_new_status  = '?';
-	TextMate.isBusy = true;
 	cmd = 'LC_CTYPE=en_US.UTF-8 ' + ENV['TM_BUNDLE_SUPPORT'] + '/revert_file.rb -svn=' + ENV['TM_SVN'] + ' -path=' + filename + ' -displayname=' + displayname;
+
+	TextMate.isBusy = true;
 	myCommand = TextMate.system(cmd, function (task) { });
 	myCommand.onreadoutput = svnReadOutput;
 	myCommand.onreaderror = svnReadError;

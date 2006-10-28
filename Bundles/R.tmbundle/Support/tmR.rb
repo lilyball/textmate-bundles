@@ -56,12 +56,13 @@ IO.popen("R --vanilla --no-readline --slave --encoding=UTF-8", "r+") do |rsessio
   tmpDir = File.join(ENV['TMP'] || "/tmp", "TM_R")
   recursive_delete(tmpDir) if File.exists?(tmpDir) # remove the temp dir if it's already there
   Dir::mkdir(tmpDir)
-  rsession.puts(%Q{pdf("#{tmpDir}/Rplot%03d.pdf", onefile=F, width=8, height=8)})
+  rsession.puts(%{options(device="pdf")})
+  rsession.puts(%{formals(pdf)[c("file","onefile","width","height")] <- list("#{tmpDir}/Rplot%03d.pdf", F, 8, 8)})
   rsession.puts("options(echo=T)")
   rsession.write(STDIN.read.chomp)
   rsession.close_write
   print rsession.read
-  system("open -a Preview '#{tmpDir}'")
+  system("open -a Preview '#{tmpDir}'") unless Dir::glob("#{tmpDir}/*.pdf").empty?
 end
 
 STDOUT.sync = false

@@ -28,7 +28,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(`).*</string>
+			<string>(`).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.backtick.active4d</string>
 		</dict>
@@ -42,7 +42,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(//).*</string>
+			<string>(//).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-slash.active4d</string>
 		</dict>
@@ -56,7 +56,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(\\\\).*$</string>
+			<string>(\\\\).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-backslash.continuation.active4d</string>
 		</dict>

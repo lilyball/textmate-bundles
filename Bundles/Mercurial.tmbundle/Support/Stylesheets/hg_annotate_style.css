@@ -1,3 +1,8 @@
+#tm_webpreview_content {
+	padding: 0;
+	margin-top: 59px;
+}
+
 /* some adds for the links in the table (clickable lines)..*/
 table.blame a, table.blame a:visited, table.blame a:link {
    text-decoration: none;
@@ -10,7 +15,12 @@ table.blame a:hover, table.blame a:active {
    text-decoration: none;
 }
 
-.dark table.blame a:hover, .dark table.blame a:active {
+.dark table.blame a:hover,
+.dark table.blame a:active,
+.shiny table.blame a:hover,
+.shiny table.blame a:active,
+.halloween table.blame a:hover,
+.halloween table.blame a:active {
    background-color: #101b73;
    color: inherit;
    text-decoration: none;
@@ -84,6 +94,8 @@ td.codecol {
 .bright td.codecol.current_line {
    background-color: #f0d2fc;
 }
-.dark td.codecol.current_line {
+.dark td.codecol.current_line,
+.shiny td.codecol.current_line,
+.halloween td.codecol.current_line {
    background-color: #411452;
 }

@@ -4,8 +4,10 @@ table.status
 	font-size: 93%;
 }
 
+
 table.status a:link, table.status a:visited {
 	font-size: inherit;
+	margin-left:3px;
 }
 
 table.status a:hover, table.status a:active {
@@ -14,11 +16,15 @@ table.status a:hover, table.status a:active {
 	color: inherit;
 	text-decoration: none;
 }
-.dark table.status a:hover, .dark table.status a:active {
-	font-size: inherit;
-	background-color: #101b73;
-	color: inherit;
-	text-decoration: none;
+.dark table.status a:hover, 
+.dark table.status a:active,
+.shiny table.status a:hover, 
+.shiny table.status a:active {
+  background-color: #686885;
+}
+.halloween table.status a:hover, 
+.halloween table.status a:active {
+	background-color: #a46b00;
 }
 
 #tm_webpreview_content {
@@ -54,9 +60,4 @@ table.status td.conflict, table.status td.missing, table.status td.typeconflict 
 table.status td.unknown, table.status td.ignore, table.status td.external {
 	color: purple;
 	background-color: #edaef5;
-}
-
-.dark a:link, .dark a:visited {
-  color: #63a7de;
-
 }

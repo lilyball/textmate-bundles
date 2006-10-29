@@ -55,7 +55,7 @@ begin
    
    font = %Q|\n<style type="text/css">\ntd.codecol { font: #{getfontsize}px #{getfontname}; }\n</style>|
 
-   make_head( "Hg Annotate '"+ File.basename($full_file)+"'", $full_file,
+   make_head( "Hg Annotate", $full_file,
               [ $bundle+"/Stylesheets/hg_style.css",
                 $bundle+"/Stylesheets/hg_annotate_style.css"], font  )
 

@@ -6,14 +6,12 @@ include HGHelper
 make_head( 'Hg Bundle Help', "Mercurial",
             [ $bundle+'/Stylesheets/hg_style.css',
               $bundle+'/Stylesheets/hg_help_style.css'] )
-              
-              
-              
+
 body = <<HTML_HELP
 
 <p>This document describes the commands of the TextMate <a href="http://www.selenic.com/mercurial/">Mercurial</a> bundle and how you can <a href="#conf">fine-tune</a> their behavior. For general Mercurial help and tutorial, you should read the Mercurial man pages (hg(1), hgrc(5), hgmerge(1)), or check the <a href="http://www.selenic.com/mercurial/">wiki</a>.</p>
 
-<p><strong>NB: <a href="http://www.selenic.com/mercurial/release/">Mercurial 0.9 or greater</a> is required.</strong></p>
+<p><strong>NB: <a href="http://www.selenic.com/mercurial/release/">Mercurial 0.9.1 or greater</a> is required.</strong></p>
 
 <h2><a name="commands">Commands</a></h2>
  
@@ -246,7 +244,7 @@ body = <<HTML_HELP
 <h2><a name="authors">Authors</a></h2>
  
  <ul>
-	<li>Chris Thomas & Torsten Becker for the svn bundle wich has been the inspiration for the hg bundle</li>
+	<li>Chris Thomas & Torsten Becker for the svn bundle which is the inspiration for the hg bundle</li>
 	<li>Ollivier Robert did the first version of this bundle</li>
 	<li>Frédéric "FredB" Ballériaux rewrited it to its current state</li>
  </ul>

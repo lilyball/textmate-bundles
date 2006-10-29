@@ -7,8 +7,8 @@
 
 # Needed to easily convert date
 require 'parsedate' 
-# require "#{ENV['TM_BUNDLE_SUPPORT']}/web_preview.rb"
-require "/Library/Application Support/TextMate/Bundles/Mercurial.tmbundle/Support/web_preview.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/web_preview.rb"
+# require "/Library/Application Support/TextMate/Bundles/Mercurial.tmbundle/Support/web_preview.rb"
 
 
 module HGHelper   
@@ -69,12 +69,13 @@ module HGHelper
    # produces a TM header..
    
    def make_head( title='', filename="#{ENV['TM_FILEPATH']}", styles=Array.new, head_adds='' )
-      tm_extra_head = "<style type=\"text/css\">\n"
+      tm_extra_head = ""
       styles.each do |style|
-         tm_extra_head << "   @import 'file://"+style+"';\n"
+         tm_extra_head << "<link rel=\"stylesheet\" href=\"file://"+style+"\" type=\"text/css\" charset=\"utf-8\" media=\"screen\">\n"
       end
-      tm_extra_head += '</style>'+ head_adds
-      html_header(title, filename, tm_extra_head)
+      tm_extra_head += head_adds
+#       html_header(title, filename, tm_extra_head)
+      puts html_head(:title => title, :sub_title =>filename, :html_head => tm_extra_head)
    end
    
    # .. and this a simple, matching footer ..
@@ -82,10 +83,6 @@ module HGHelper
   	puts <<HTML
   	#{foot_adds}
   	</div>
-  	<!-- <div id="tm_webpreview_footer">
-  		<p>TextMate Web Preview Window</p>
-  	</div> -->
-  	<script type="text/javascript">window.location.hash = "scroll_to_here";</script>
   </body>
   </html>
 HTML

@@ -1,7 +1,9 @@
+
 /* general stuff.. */
-body {
-	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
-	font-size: 11px;
+
+
+#tm_webpreview_content {
+  font-size: 11px;
 }
 
 h1 {
@@ -12,20 +14,18 @@ h1 {
 	color: #222;
 }
 
-.dark h1 {
-  color: #888;
-}
-
-h2,h3,h4,h5,h6 {
-	font-size: 135%;
+h2 {
+	font-size: 25px;
 	border-bottom: 2px solid #ddd;
 	padding-bottom: 4px;
-	margin-top: 26px;
+	margin-top: 16px;
 	color: #333;
+	text-shadow: #000 1px 1px 1px;
 }
 
-.dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-  color: #999;
+.dark h2 a, .shiny h2 a {
+  color: #acacac;
+  text-shadow: none;
 }
 
 /* formating the definition lists.. */
@@ -38,8 +38,8 @@ dt {
 	padding-top: 10px;
 	color: #333;
 }
-.dark dt {
-  color: #999;
+.dark dt a, .shiny dt a {
+  color: #999999;
 }
 
 
@@ -56,9 +56,16 @@ div.target:before {
 	font-weight: bold;
 	content: "Target: ";
 }
-.dark div.target:before {
+.dark div.target:before,
+.shiny div.target:before {
 	font-weight: bold;
 	color: #fff;
+	content: "Target: ";
+}
+
+.halloween div.target:before {
+  color: #ff9a3f;
+	font-weight: bold;
 	content: "Target: ";
 }
 
@@ -70,23 +77,36 @@ div.connect:before {
 	font-weight: bold;
 	content: "Needs network: ";
 }
-.dark div.connect:before {
+.dark div.connect:before,
+.shiny div.connect:before {
   color: #fff;
 	font-weight: bold;
 	content: "Needs network: ";
+}
+
+.halloween div.connect:before {
+  color: #ff9a3f;
+	font-weight: bold;
+	content: "Needs network: ";  
 }
 
 div.default:before {
 	font-weight: bold;
 	content: "Default: ";
 }
-.dark div.default:before {
+.dark div.default:before,
+.shiny div.default:before {
   color: #fff;
 	font-weight: bold;
 	content: "Default: ";
 }
-#tm_webpreview_content {
-  padding: 0 0.5em;
-	margin-top: 70px;
+
+.halloween div.default:before {
+  color: #ff9a3f;
+	font-weight: bold;
+	content: "Default: "  
 }
 
+.dark code, .shiny code {
+  color:#fff;
+}

@@ -1,81 +1,39 @@
 body {
-	background: #fff;
-	color: #000;
-	font: 13px "Lucida Grande", sans-serif;
-	margin: 0;
-	padding: 0;
+	font: 13px "Lucida Grande", Verdana, sans-serif;
 }
 
-/*body.dark {*/
-/*  background: #000;*/
-/*  color: #fff;*/
-/*}*/
-#tm_webpreview_header {
-	background: url("file:///Library/Application Support/TextMate/Support/images/header.png") repeat-x;
-	height: 68px;
-	color: #FFFFFF;
-	width: 100%;
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	z-index: 100;
-}
-#tm_webpreview_header .headline {
-	margin: 0;
-	padding-left: 1em;
-	padding-top: 1.3ex;
-	font-size: 200%;
-/*	font-weight: bold;*/
-}
-#tm_webpreview_header .teaser {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-}
+/*  Header   */
+
 #tm_webpreview_header .type {
 	position: absolute;
-	top: 30px;
-	right: 30px;
-	font-weight: light;
-	font-size: 8pt;
+	top: 2.8em;
+	right: 3em;
+	z-index: 2;
+
 	color: rgba(255,255,255,0.5);
+	font-size: 8pt;
+	font-weight: light;
 }
-#theme_switcher {
-	opacity: 0.1;
+.halloween #tm_webpreview_header .type {
 	position: absolute;
-	top: 19px;
-	right: 80px;
-}
-#theme_switcher:hover {
-	opacity: 1;
-}
-#tm_webpreview_footer {
-	position: fixed;
-	bottom: 0px;
-	width: 100%;
-	height: 1.6em;
-	margin: 0;
-	padding: 0.3em 2em 0 2em;
-	border-top: 2px solid #000;
-	color: #777;
-	background: #292929;
-	text-shadow: #000 1px 3px 3px;
-}
-#tm_webpreview_footer p {
-	margin: 0;
-	padding: 0;
+	top: 2.8em;
+	right: 6em;
+	z-index: 2;
+	font-size: 8pt;
+	font-weight: light;
 }
 
-#tm_webpreview_content {
-	padding: 0;
-	margin-top: 60px;
-}
-
-#tm_webpreview_content :first-child {
-	margin-top: 0;
+#tm_webpreview_header .headline {
+	position: relative;
+	z-index: 3;
+	margin: 0;
+	padding-left: 0.8em;
+	padding-top: .5ex;
 }
 
 /* general stuff.. */
+
+
 
 /* make horizontal rules slightly less heavy */
 hr {
@@ -117,7 +75,6 @@ div.error a:hover, div.error a:active {
    color: #fee;
 }
 
-
 /* for showing the path or other information about the current operation */
 div.command {
    color: #03f;
@@ -135,36 +92,6 @@ div.command h2 {
    margin-top: 0;
 }
 
-
-/* about links.. */
-.bright a:link, .bright a:visited {
-   background-color: transparent;
-   color: #35a;
-   text-decoration: underline;
-   padding-left: 1px;
-   padding-right: 1px;
-}
-
-.bright a:hover, .bright a:active {
-   background-color: #136;
-   color: #fff;
-   text-decoration: none;
-}
-
-.dark a:link, .dark a:visited {
-  background-color: transparent;
-  color: #529fde;
-  text-decoration: underline;
-  padding-left: 1px;
-  padding-right: 1px;
-}
-
-.dark a:hover, .dark a:active {
-  background-color: #101b73;
-  color: #fff;
-  text-decoration: none;
-}
-
 /* for everything alternating: */
 body.bright .alternate {
    background-color: #f2f2f2;
@@ -174,15 +101,15 @@ body.dark .alternate {
    background-color: #242424;
 }
 
-/* ================================= */
-/* = Common Stuff for all Commands = */
-/* ================================= */
+.bright code {
+	color: #1C360C;
+}
 
-.bright {
-	background: #FFF;
-	color: #000;
+.bright pre, .dark pre, .shiny pre, .halloween pre {
+	background-color: inherit;
+	border: 0;
+	padding: 2px 0;
 }
-.dark {
-	background: #000;
-	color: #E6E2E8;
-}
+
+
+

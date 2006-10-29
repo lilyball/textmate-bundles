@@ -28,10 +28,9 @@ HTML_TEMPLATE = <<-HTML
       <form action="#" onsubmit="return false;">
         Theme: 
         <select onchange="selectTheme(this.value);" id="theme_selector">
-          <option value="bright"   >bright    </option>
-          <option value="dark"     >dark      </option>
-          <option value="shiny"    >shiny     </option>
-          <option value="halloween">halloween </option>
+          <% common_styles.each { |style| %>
+            <option value="<%= style %>"><%= style %></option>
+          <% } %>
         </select>
         <script type="text/javascript" charset="utf-8">
           document.getElementById('theme_selector').value = '<%= html_theme %>';

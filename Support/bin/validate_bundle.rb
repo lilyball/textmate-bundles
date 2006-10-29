@@ -41,7 +41,6 @@ end
 
 __END__
 comment.block
-comment.documentation
 comment.line
 comment.line.double-dash
 comment.line.double-slash

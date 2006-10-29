@@ -1,4 +1,5 @@
 require 'erb'
+require 'cgi'
 
 HTML_TEMPLATE = <<-HTML
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -7,11 +8,12 @@ HTML_TEMPLATE = <<-HTML
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <title><%= window_title %></title>
-  <link rel="stylesheet" href="file://<%= support_path %>/themes/default/style.css"   type="text/css" charset="utf-8" media="screen">
-  <link rel="stylesheet" href="file://<%= support_path %>/themes/bright/style.css"    type="text/css" charset="utf-8" media="screen">
-  <link rel="stylesheet" href="file://<%= support_path %>/themes/dark/style.css"      type="text/css" charset="utf-8" media="screen">
-  <link rel="stylesheet" href="file://<%= support_path %>/themes/shiny/style.css"     type="text/css" charset="utf-8" media="screen">
-  <link rel="stylesheet" href="file://<%= support_path %>/themes/halloween/style.css" type="text/css" charset="utf-8" media="screen">
+  <% common_styles.each { |style| %>
+    <link rel="stylesheet" href="file://<%= support_path %>/themes/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
+  <% } %>
+  <% bundle_styles.each { |style| %>
+    <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
+    <% } %>
   <script src="file://<%= support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
   <script src="file://<%= support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
   <%= html_head %>
@@ -50,15 +52,34 @@ def html_head(options = { })
   page_title   = options[:page_title]   || options[:title]    || 'Page Title'
   sub_title    = options[:sub_title]    || ENV['TM_FILENAME'] || 'untitled'
 
-  html_theme   = selected_theme
-  support_path = ENV['TM_SUPPORT_PATH']
+  html_theme     = selected_theme
+  support_path   = ENV['TM_SUPPORT_PATH']
+  bundle_support = ENV['TM_BUNDLE_SUPPORT']
+  
+  common_styles  = ['default'];
+  # common_styles  = ['default', 'bright', 'dark', 'shiny', 'halloween']; # TODO: determine dynamically
+  bundle_styles  = ['default'];
 
+  Dir.foreach(support_path + '/themes/') { |file|
+    next if file == 'default'
+    common_styles << file if File.exists?(support_path + "/themes/" + file + '/style.css')
+  }
+  
+  common_styles.each { |style|
+    next if style == 'default'
+    bundle_styles << style if File.directory?(bundle_support + '/css/' + style)
+  }
+  
+  
   html_head    = options[:html_head]    || ''
 
   if options[:fix_href] && File.exist?(ENV['TM_FILEPATH'].to_s)
     require "cgi"
     html_head << "<base href='tm-file://#{CGI.escape(ENV['TM_FILEPATH'])}'>"
 	end
+
+  support_path   = support_path.sub(/ /, '%20')
+  bundle_support = bundle_support.sub(/ /, '%20')
 
   ERB.new(HTML_TEMPLATE).result binding
 end

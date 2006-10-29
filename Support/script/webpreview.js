@@ -14,9 +14,7 @@ function selectTheme(value) {
 	
 	for(var r in replacements) {
 		document.getElementById(r).src = document.getElementById(r).src.replace(/(.*themes).*/, "$1/" + value + "/images/" + replacements[r] + ".png");
-		
 	}
-	// document.getElementById('teaser').src = document.getElementById('teaser').src.replace(/(.*themes).*/, "$1/" + value + "/images/teaser.png");
 }
 
 function hide_header() {

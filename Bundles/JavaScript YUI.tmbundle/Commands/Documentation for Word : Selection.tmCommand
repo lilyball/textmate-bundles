@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+
+$func = preg_replace('/[\(\) ;]/', '',  $_ENV['TM_CURRENT_WORD']);
+$scope = trim(preg_replace('/source\.js\.yui support\.function\.(.*?)\.js\.yui/', '$1', $_ENV['TM_SCOPE']));
+
+if(preg_match('|support\.class\.js\.yui|', $scope)) {
+	$scope = $func;
+}
+
+switch($scope) {
+	case 'YAHOO':	
+		$lib = 'yahoo'; break;
+	case 'CustomEvent':
+	case 'Event':
+	case 'Subscriber':
+		$lib = 'event'; break;
+	case 'Dom':
+	case 'Region':
+		$lib = 'dom'; break;
+	case 'Connect':
+		$lib = 'connection'; break;
+	case 'DD':
+	case 'DDProxy':
+	case 'DDTarget':
+	case 'DragDrop':
+	case 'DragDropMgr':
+		$lib = 'dragdrop'; break;
+	case 'Anim':
+	case 'AnimMgr':
+	case 'Bezier':
+	case 'ColorAnim':
+	case 'Easing':
+	case 'Motion':
+	case 'Scroll':
+		$lib = 'animation'; break;
+	default:
+		echo '&lt;h2&gt;Error&lt;/h2&gt;Function ' . $func . '() could not be matched to a specific library. It may still be found in the &lt;a href="http://developer.yahoo.com/yui/"&gt;YUI documentation&lt;/a&gt;.';
+		exit;
+}
+
+switch($scope) {
+	case 'YAHOO':
+		$page = 'YAHOO.html'; break;
+	case 'support.class.js.yui':
+		$page = ''; break;
+	default:
+		$page = 'YAHOO.util.' . $scope . '.html'; 
+}
+
+$url = 'http://developer.yahoo.com/yui/docs/' . $lib . '/' . $page . '#' . $func;
+echo '&lt;meta http-equiv="Refresh" content="0;URL' . $url . '"&gt;';
+
+?&gt;</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation for Word / Selection</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.js.yui</string>
+	<key>uuid</key>
+	<string>E43BD9CC-90BB-49A0-9644-15300E2A097F</string>
+</dict>
+</plist>

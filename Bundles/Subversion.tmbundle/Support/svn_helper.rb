@@ -59,7 +59,6 @@ module SVNHelper
    # produces a generic header..
 def make_head( title='', styles=Array.new, head_adds=''  )
 	tm_EXTRA_HEAD   = head_adds
-	tm_CSS          = `cat "${TM_SUPPORT_PATH}/css/webpreview.css" | sed "s|TM_SUPPORT_PATH|${TM_SUPPORT_PATH}|"`
 	tm_THEME        = `defaults 2>/dev/null read com.macromates.textmate.webpreview SelectedTheme`.rstrip
 	
 	tm_THEME = tm_THEME == '' ? 'bright' : tm_THEME;

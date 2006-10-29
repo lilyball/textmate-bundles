@@ -9,6 +9,14 @@ function selectTheme(value) {
 	content.className = value;
 	body = document.getElementById('tm_webpreview_body'); // fix to have the body all the way styled (e.g. for black background)
 	body.className = value;
+	
+	var replacements = {teaser: "teaser", gradient: "header"};
+	
+	for(var r in replacements) {
+		document.getElementById(r).src = document.getElementById(r).src.replace(/(.*themes).*/, "$1/" + value + "/images/" + replacements[r] + ".png");
+		
+	}
+	// document.getElementById('teaser').src = document.getElementById('teaser').src.replace(/(.*themes).*/, "$1/" + value + "/images/teaser.png");
 }
 
 function hide_header() {

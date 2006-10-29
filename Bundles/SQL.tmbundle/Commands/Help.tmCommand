@@ -10,16 +10,14 @@
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "SQL Bundle Help" "SQL"
 
-Markdown.pl &lt;&lt;'EOF'
-# Help for the SQL Bundle
-
-## Execute Line / Selection as SQL Query
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
+# Execute Line / Selection as SQL Query
 
 The _Execute Line / Selection as SQL Query_ command takes the selected text or current line and submits it as a query to either MySQL or PostgreSQL.
 
 You can set `TM_DB_SERVER` to either `mysql` or `postgresql` to select the database software to use. If this variable is unset, the command will check to see if there is either a `mysql` or `psql8` shell command in your path, if only there is one of these, this one will be used, otherwise a dialog will ask you about which database software should be used for the query.
 
-### MySQL
+## MySQL
 
 When submitting the query to MySQL, the command assumes the following environment variables are properly set:
 
@@ -31,7 +29,7 @@ When submitting the query to MySQL, the command assumes the following environmen
 
 These variables may be set in the parent shell of TextMate, global variables in TextMate preferences, or as project local variables.
 
-### PostgreSQL
+## PostgreSQL
 
 If you are a Postgres user and have the `psql8` command installed (as from [DarwinPorts](http://darwinports.opendarwin.org/) for example) the following variables will be used:
 
@@ -44,7 +42,7 @@ PostgreSQL users should also note that there is not a command line argument to p
 
 	hostname:port:database:username:password
 
-## Table Browser
+# Table Browser
 
 The table browser command displays a list of tables in whatever database you are currently working in using either PostgreSQL or MySQL.  Which one is determined like with the _Execute Line / Selection as SQL Query_ command.
 
@@ -52,7 +50,8 @@ The current database is specified by either `PGDATABASE`, or `MYSQL_DB`.  If nei
 
 EOF
 
-html_footer</string>
+html_footer
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

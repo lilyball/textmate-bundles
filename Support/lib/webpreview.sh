@@ -23,7 +23,8 @@ html_header() {
 	case "$TM_HTML_THEME" in
 		bright)  SEL_BRIGHT='selected="selected"';;
 		dark)    SEL_DARK='selected="selected"';;
-		default) SEL_DEFAULT='selected="selected"';;
+		shiny)    SEL_SHINY='selected="selected"';;
+		halloween) SEL_HALLOWEEN='selected="halloween"';;
 	esac
 
 	if [[ -n $2 ]]; then
@@ -32,7 +33,7 @@ html_header() {
 	# if [[ -f "$TM_FILEPATH" ]]; then
 	#   TM_EXTRA_HEAD="<base href='tm-file://${TM_FILEPATH// /%20}'/>"
 	# fi
-	TM_CSS=`cat "${TM_SUPPORT_PATH}/css/webpreview.css" | sed "s|TM_SUPPORT_PATH|${TM_SUPPORT_PATH}|"`
+	# TM_CSS=`cat "${TM_SUPPORT_PATH}/themes/${TM_HTML_THEME}/style.css" | sed "s|TM_SUPPORT_PATH|${TM_SUPPORT_PATH}|"`
 	cat <<HTML
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -41,25 +42,31 @@ html_header() {
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>${TM_HTML_TITLE}</title>
-	<style type="text/css" media="all">
-		${TM_CSS}
-	</style>
+	<link rel="stylesheet" href="file://${TM_SUPPORT_PATH}/themes/default/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<link rel="stylesheet" href="file://${TM_SUPPORT_PATH}/themes/bright/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<link rel="stylesheet" href="file://${TM_SUPPORT_PATH}/themes/dark/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<link rel="stylesheet" href="file://${TM_SUPPORT_PATH}/themes/shiny/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<link rel="stylesheet" href="file://${TM_SUPPORT_PATH}/themes/halloween/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<!-- <link rel="stylesheet" href="file://${TM_SUPPORT_PATH}/themes/${TM_HTML_THEME}/style.css" type="text/css" media="screen" charset="utf-8"/> -->
 	<script src="file://${TM_SUPPORT_PATH}/script/default.js" type="text/javascript" language="javascript" charset="utf-8"></script>
 	<script src="file://${TM_SUPPORT_PATH}/script/webpreview.js" type="text/javascript" language="javascript" charset="utf-8"></script>
 	${TM_EXTRA_HEAD}
 </head>
 <body id="tm_webpreview_body" class="${TM_HTML_THEME}">
 	<div id="tm_webpreview_header">
+		<img id="gradient" src="file://${TM_SUPPORT_PATH}/themes/${TM_HTML_THEME}/images/header.png" />
 		<p class="headline">${TM_HTML_TITLE}</p>
 		<p class="type">${TM_HTML_LANG}</p>
-		<img class="teaser" src="file://${TM_SUPPORT_PATH}/images/gear2.png" alt="teaser" />
+		<img id="teaser" src="file://${TM_SUPPORT_PATH}/themes/${TM_HTML_THEME}/images/teaser.png" />
+		<!-- <div id="actions"><a href="#" onclick="hide_header(); return false;">x</a></div> -->
 		<div id="theme_switcher">
 			<form action="#" onsubmit="return false;">
 				Theme: 
 				<select onchange="selectTheme(this.value);" id="theme_selector">
 					<option ${SEL_BRIGHT}>bright</option>
 					<option ${SEL_DARK}  >dark</option>
-					<option ${SEL_DEFAULT} value="default">no colors</option>
+					<option ${SEL_SHINY} >shiny</option>
+					<option ${SEL_HALLOWEEN} >halloween</option>
 				</select>
 			</form>
 		</div>

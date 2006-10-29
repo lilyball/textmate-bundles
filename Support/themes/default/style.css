@@ -1,0 +1,474 @@
+/*
+	Defines the style of HTML Output. To be used in conjunction with `../lib/webpreview.sh`.
+	
+	In Flux: http://macromates.com/wiki/Suggestions/StylingHTMLOutput
+	
+	I'm not sure whether all the styles should really go in here or if we leave the css in the bundles and include them dynamically. I've copied all things here to make it easier for me mostly while experimenting.
+	— Soryu
+*/
+
+/* =================== */
+/* = General Styling = */
+/* =================== */
+body {
+	margin: 0;
+	padding: 0;
+
+	color: #000000;
+	background: #FFFFFF;
+	font: 13px "Trebuchet MS", Helvetica, sans-serif;
+}
+#tm_webpreview_header {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+
+	color: #FFFFFF;
+	font-size: 200%;
+}
+#tm_webpreview_header #gradient {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 1;
+
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 2.6em;
+}
+#tm_webpreview_header .headline {
+	position: relative;
+	z-index: 3;
+	margin: 0;
+
+	padding-left: 1em;
+	padding-top: 1.5ex;
+}
+#tm_webpreview_header #teaser {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	z-index: 2;
+
+	margin: 0;
+	padding: 0;
+	height: 2.4em;
+	width: 2.4em;
+}
+#tm_webpreview_header #actions {
+	position: absolute;
+	top: 2.3em;
+	right: 0.5ex;
+	
+	z-index: 3;
+	
+	font-size: 8pt;
+}
+#tm_webpreview_header .type {
+	position: absolute;
+	top: 3em;
+	right: 6em;
+	z-index: 2;
+
+	color: rgba(255,255,255,0.5);
+	font-size: 8pt;
+	font-weight: light;
+}
+#theme_switcher {
+	position: absolute;
+	top: 1em;
+	right: 6em;
+	z-index: 4;
+
+	font-size: 50%;
+	opacity: 0.1;
+}
+#theme_switcher:hover {
+	opacity: 1;
+}
+#tm_webpreview_footer {
+	position: fixed;
+	bottom: 0px;
+
+	width: 100%;
+	height: 1.6em;
+
+	margin: 0;
+	padding: 0.3em 2em 0 2em;
+
+	color: #777;
+	background: #292929;
+	text-shadow: #000 1px 3px 3px;
+
+	border-top: 2px solid #000;
+}
+#tm_webpreview_footer p {
+	margin: 0;
+	padding: 0;
+}
+
+#tm_webpreview_content {
+	padding: 0.5em 2em 0.5em 2em;
+	margin-top: 6em;
+}
+
+#tm_webpreview_content :first-child {
+	margin-top: 0;
+}
+
+/* Print overrides */
+@media print {
+	body {
+		font-family: "Palatino", "Book Antiqua", serif;
+		font-size: 10pt;
+	}
+	#tm_webpreview_header {
+		display: none;
+	}
+
+	#tm_webpreview_footer {
+		display: none;
+	}
+}
+
+h1 {
+/*	font-family: "LucidaGrande";*/
+	font-weight: bolder;
+}
+
+h4 {
+	font-style: italic;
+	margin-top: 1ex;
+	margin-bottom: 1ex;
+}
+
+blockquote {
+/*	font-family: "Palatino", "Book Antiqua", Verdana;*/
+	font-style: italic;
+/*	font-size: 106%;*/
+
+	margin: 1em 25px;
+	padding-left: 1em;
+}
+
+code, pre {
+	font-size: 95%;
+	font-family: "LuxiMono", "Bitstream Vera Sans Mono", "Monaco", "Courier New", monospace;
+	word-wrap: break-word;
+	white-space: pre;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -o-pre-wrap;
+}
+
+pre {
+	padding: 10px 10px 10px 20px;
+}
+
+@media print {
+	
+	a {
+		color: #0D2681;
+	}
+	h1 {
+		color: #333;
+	}
+	h2 {
+		color: #222;
+	}
+
+	h3 {
+		color: #333;
+	}
+
+	h4 {
+		font-style: italic;
+		color: #666;
+	}
+
+	blockquote {
+		margin: 1em 25px;
+		padding-left: 1em;
+	}
+
+	code, pre {
+		color: #1C360C;
+	}
+
+
+	pre {
+		padding: 10px 10px 10px 20px;
+		background-color: #f0f0f0;
+		border: 1px solid #cccbba;
+	}
+}
+
+
+.pro_table {
+	font-size: 12px;
+}
+.pro_table th {
+	font-weight: bold;
+	padding: 4px 8px 4px 8px;
+	text-align: left;
+}
+.pro_table td {
+	padding: 8px;
+	vertical-align: top;
+}
+.pro_table p {
+	margin: 0;
+}
+.pro_table p + p {
+	margin-top: 1em;
+}
+
+@media print {
+	
+	.pro_table {
+		border-top: 1px solid #919699;
+		border-left: 1px solid #919699;
+	}
+	.pro_table th {
+		background: #E2E2E2;
+		border-bottom: 1px solid #919699;
+		border-right: 1px solid #919699;
+		font-weight: bold;
+		padding: 4px 8px 4px 8px;
+		text-align: left;
+	}
+	.pro_table td {
+		border-bottom: 1px solid #919699;
+		border-right: 1px solid #919699;
+		padding: 8px;
+		vertical-align: top;
+	}
+}
+
+
+li > p {
+	margin: 1ex 0 1ex 0;
+}
+
+.footnote {
+	vertical-align: top;
+	font-size: 75%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.footnote:before {
+	content: "[";
+	vertical-align: top;
+	font-weight: bold;
+}
+.footnote:after {
+	content: "]";
+	vertical-align: top;
+	font-weight: bold;
+}
+
+div.footnotes {
+   padding: 1em;
+   font-size: 90%;
+}
+
+@media print {
+	.footnote {
+		color: #525151;
+	}
+	.footnote:before {
+		color: #525151;
+	}
+	.footnote:after {
+		color: #525151;
+	}
+	div.footnotes {
+	   padding: 1em;
+	   font-size: 90%;
+	   background: #F0F0F0;
+	}
+}
+
+
+hr {
+	background: #606060;
+	color:  #606060;
+	border-style: solid;
+	border-color: #606060;
+	border-width: 1px 0 0 0;
+	margin-top: 0;
+}
+
+/* ================ */
+/* = Remind Table = */
+/* ================ */
+
+.remind_table {
+	font-size: 10px;
+	font-family: "LuxiMono", "Bitstream Vera Sans Mono", "Monaco", monospace;
+}
+
+.remind_table .numeral {
+	text-align: right;
+	margin-bottom: 0.5em;
+}
+
+.pro_table.remind_table table td {
+	border: none;
+}
+
+/* ============ */
+/* = SQL Table  */
+/* ============ */
+
+.sql_table {
+	font-size: 9px;
+	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
+}
+.sql_table th {
+	font-weight: normal;
+	padding: 2px 4px 2px 4px;
+}
+.sql_table td {
+	padding: 3px;
+	vertical-align: top;
+}
+
+/* =================== */
+/* = RubyMate Styles = */
+/* =================== */
+
+div.rubymate {
+}
+
+div.rubymate > div {
+	border-bottom: 1px dotted #666;
+	padding: 1ex;
+}
+
+div.rubymate pre strong {
+	/* used for messages */
+	font-weight: normal;
+}
+
+div.rubymate pre em
+{
+	/* used for stderr */
+	font-style: normal;
+	color: #FF5600;
+}
+
+div.rubymate div#exception_report
+{
+/*	background-color: rgb(210, 220, 255);*/
+}
+
+div.rubymate p#exception strong
+{
+	color: #E4450B;
+}
+
+div.rubymate p#traceback
+{
+	font-size: 8pt;
+}
+
+div.rubymate blockquote {
+	font-style: normal;
+	border: none;
+}
+
+
+div.rubymate table {
+	margin: 0;
+	padding: 0;
+}
+
+div.rubymate td {
+	margin: 0;
+	padding: 2px 2px 2px 5px;
+	font-size: 10pt;
+}
+
+div.rubymate a {
+	color: #FF5600;
+}
+
+
+/* ===================== */
+/* = Subversion Styles = */
+/* ===================== */
+
+div.subversion {
+/*	padding: 10px 10px 10px 20px;*/
+	margin-top: 10px;
+}
+
+/* INFO */
+
+div.subversion dl.info dt {
+   font-weight: bold;
+   padding: 4px;
+   padding-bottom: 0;
+   margin: 0;
+   border-top: 1px dashed #ddd;
+}
+
+div.subversion dl.info dt:first-child {
+   border-top: 0;
+}
+
+div.subversion dl.info dt:after {
+   content: ":";
+}
+
+div.subversion dl.info dd {
+   margin: 0;
+   padding: 4px;
+   padding-top: 0;
+   padding-left: 24px;
+}
+
+/* BLAME */
+
+div.subversion {
+/*	padding: 10px 10px 10px 20px;*/
+	margin-top: 10px;
+}
+
+/* some adds for the links in the table (clickable lines)..*/
+div.subversion table.blame a, div.subversion table.blame a:visited, div.subversion table.blame a:link {
+   text-decoration: none;
+   color: inherit;
+}
+
+
+/* formating the table.. */
+div.subversion table.blame {
+   font-size: 12px;
+   padding: 1px;
+   border-collapse: collapse;
+   width: 100%;
+}
+
+
+/* to make it look good if a line gets wrapped: */
+div.subversion table.blame td {
+   vertical-align: top;
+}
+
+/* bitstream vera sans looks really _very_ good. But I like Luxi Mono better :p */
+div.subversion table.blame td.codecol {
+/*   font-size: 12px;*/
+	font-family: "LuxiMono", "Bitstream Vera Sans Mono", monospace;
+	padding-left: 4px;
+	width: 100%;
+}
+
+/* Status */
+
+.subversion table.status {
+	border-collapse: collapse;
+}

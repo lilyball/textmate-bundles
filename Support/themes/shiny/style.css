@@ -1,0 +1,209 @@
+/* =================== */
+/* = General Styling = */
+/* =================== */
+.shiny {
+	background: #000;
+	color: #E6E2E8;
+}
+.shiny a {
+	color: #BBE;
+}
+
+.shiny h1 {
+	color: #FFF;
+	text-shadow:  #808080 3px 3px 5px;
+}
+
+.shiny h2 {
+	text-shadow:  #808080 3px 3px 5px;
+}
+
+.shiny h3 {
+	text-shadow:  #808080 3px 3px 5px;
+}
+
+.shiny blockquote {
+	border-left: 4px solid #808080;
+	color: #FFF;
+}
+
+.shiny code {
+	color: #C1DE77;
+}
+
+.shiny pre {
+	color: #FFF;
+	background-color: #111;
+	border: 1px solid #555;
+}
+
+
+.shiny .pro_table {
+	border-top: 1px solid #616465;
+	border-left: 1px solid #616465;
+}
+.shiny .pro_table th {
+	background: #1C1C1C;
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
+}
+.shiny .pro_table td {
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
+}
+.shiny .footnote:before {
+	color: #888;
+}
+.shiny .footnote:after {
+	color: #888;
+}
+
+.shiny div.footnotes {
+   background: #111;
+}
+
+
+.shiny td, .dark th {
+	color: #EEE;
+}
+
+.shiny caption, .dark label {
+	color: #CCC;
+}
+
+/* ================ */
+/* = Remind Table = */
+/* ================ */
+
+.shiny .remind_table td {
+	background-color: #303030;
+}
+
+.shiny .remind_table .cell {
+	background-color: #000000;
+}
+
+.shiny .remind_table #nada {
+	background-color: #080808;
+}
+
+.shiny .remind_table #today {
+	background-color: #250722;
+	border: 2px solid #98268B;
+}
+
+/* ============ */
+/* = SQL Table  */
+/* ============ */
+
+.shiny .sql_table th {
+	border-bottom: 1px solid #616465;
+	border-right: 1px solid #616465;
+}
+/* =================== */
+/* = RubyMate Styles = */
+/* =================== */
+
+div.rubymate div#exception_report
+div.rubymate p#exception strong
+div.rubymate p#traceback
+/* ===================== */
+/* = Subversion Styles = */
+/* ===================== */
+
+.shiny div.subversion {
+	color: #FFF;
+/*	background-color: #111;*/
+/*	border: 1px solid #555;*/
+}
+
+/* INFO */
+
+.shiny div.subversion dl.info.alternate dt {
+   border-top: 1px dashed #444;
+}
+
+/* BLAME */
+
+.shiny div.subversion {
+	color: #FFF;
+/*	background-color: #111;*/
+/*	border: 1px solid #555;*/
+}
+
+
+
+/* some adds for the links in the table (clickable lines)..*/
+.shiny div.subversion table.blame a:hover, div.subversion table.blame a:active {
+/*   background-color: #2F3845;*/
+   color: inherit;
+   text-decoration: none;
+}
+
+
+/* formating the table.. */
+.shiny div.subversion table.blame {
+	background-color: #111;
+	border: 1px solid #555;
+}
+
+.shiny div.subversion table.blame th {
+   text-align: left;
+   background-color: #333;
+   border-bottom: 1px solid #555;
+   padding: 3px;
+   padding-bottom: 1px;
+   padding-top: 1px;
+   color: #AAA;
+}
+
+/* i have to format just these 2, because i just want
+   borders beween the headers and not at their sides.. */
+.shiny div.subversion table.blame th.revhead {
+   border-left: 1px solid #444;
+   border-right: 1px solid #444;
+}
+
+.shiny div.subversion table.blame th.codehead {
+   border-left: 1px solid #444;
+}
+
+/* to make it look good if a line gets wrapped: */
+/* about the several column classes.. */
+.shiny div.subversion table.blame td.linecol {
+   background-color: #333;
+   border-right: 1px solid #666;
+   color: #888;
+   text-align: right;
+}
+
+.shiny div.subversion table.blame td.revcol, .dark div.subversion table.blame td.namecol {
+   text-align: right;
+   background-color: #111;
+   color: #888;
+   border-right: 1px solid #333;
+   padding-right: 2px;
+   padding-left: 2px;
+}
+
+.shiny div.subversion table.blame td.namecol {
+   border-right: 1px solid #444;
+}
+
+/* bitstream vera sans looks really _very_ good. But I like Luxi Mono better :p */
+.shiny div.subversion table.blame td.alternate {
+	background-color: #1D1D1D;
+}
+
+/* maybe this should be implemented as id but its
+   an optimisation for less ruby code. :) */
+.shiny div.subversion table.blame td.current_line {
+   background-color: #210020;
+	border-width: 1px 0 1px 0;
+	border-style: solid;
+	border-color: #AAA;
+}
+
+
+/* Status */
+

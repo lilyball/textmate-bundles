@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby  
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
+
+$myPath = ENV['TM_DIRECTORY']
+
+myFiles = Dir.entries($myPath)
+myProjects = []
+myFiles.each do |fileName|
+  if fileName[-3,3]  == "gtd"
+    myProjects.push fileName
+  end
+end
+
+puts myProjects</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^P</string>
+	<key>name</key>
+	<string>Create Project List</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>text.plain.gtd2</string>
+	<key>uuid</key>
+	<string>98B494A9-BF8A-4645-A221-9FC47FE5E299</string>
+</dict>
+</plist>

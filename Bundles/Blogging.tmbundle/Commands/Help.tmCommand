@@ -9,8 +9,9 @@
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "Blogging Bundle Help" "Blogging"
-Markdown.pl "$TM_BUNDLE_SUPPORT/help.markdown" |SmartyPants.pl|ruby -pe '$_.sub!(%r{&lt;h2&gt;(.+)&lt;/h2&gt;}) { |m| %{&lt;h2 id="#{$1.tr(" ", "_").downcase}"&gt;#{$1}&lt;/h2&gt;} }'
-html_footer</string>
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" "$TM_BUNDLE_SUPPORT/help.markdown"
+html_footer
+</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

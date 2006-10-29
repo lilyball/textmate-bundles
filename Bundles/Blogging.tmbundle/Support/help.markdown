@@ -1,17 +1,5 @@
-# Table of Contents
-
- 1. [Getting Started](#getting_started)
- 2. [Headers](#headers)
- 3. [Commands](#commands)
- 4. [Image Uploads](#image_uploads)
- 5. [Environment Variables](#environment_variables)
- 6. [Troubleshooting](#troubleshooting)
- 7. [Credits](#credits)
-
-- - - - - -
-
 Getting Started
----------------
+===============
 
 You should first use the "Setup Blogs" command to identify any blogs you wish to post to. This command will load a file for editing. Within this file, you simply specify a blog name and the XMLRPC URL for it. For example:
 
@@ -33,7 +21,7 @@ Each of these will give you a basic heading section followed with the text of th
 Feel free to customize these templates to suit your preferences.
 
 Headers
--------
+=======
 
 To specify all the relevant metadata along with your post, add one of the following items to the top of the document:
 
@@ -62,7 +50,7 @@ The "Date" header must be specified with this format: YYYY-MM-DD HH:MM:SS. You m
 Your blog software may not support some of these headers. I recommend that you issue a Fetch command to retrieve an existing post and take note of the headers returned with the post. That will give you an indication of which headers are supported for new posts.
 
 Commands
---------
+========
 
 * **Post to Blog**: Takes a new or edited post and publishes it to your configured blog.
 * **Fetch Post**: Selects the last available posts (up to 20) and lets you choose one for editing. This will create a new document locally that you can edit and then republish using the Post to Blog command.
@@ -70,7 +58,7 @@ Commands
 * **Setup Blogs**: Loads the blog accounts file for editing the list of blogs that you want to publish to.
 
 Image Uploads
--------------
+=============
 
 It is possible to upload an image to your blog endpoint by dragging it into the document. After successful upload the URL of the image will be inserted.
 
@@ -79,7 +67,7 @@ By default you will be asked for the description of the image (used as argument 
 If you instead wish to provide the actual file name under which the image should be uploaded then you can hold down option (&#x2325;) when dragging it into your document.
 
 Environment Variables
----------------------
+=====================
 
 The following settings are available, but optional. They can either be specified in TextMate's global Shell Variables or within a specific project.
 
@@ -90,12 +78,12 @@ The following settings are available, but optional. They can either be specified
 
 
 Troubleshooting
----------------
+===============
 
 * If you change your blog password, you will need to also change your local password. The password is stored in your KeyChain, so you'll have to search for it and update it or delete the Keychain record to be prompted to reauthenticate.
 
 Credits
--------
+=======
 
 This bundle is maintained by [Brad Choate][1].
 

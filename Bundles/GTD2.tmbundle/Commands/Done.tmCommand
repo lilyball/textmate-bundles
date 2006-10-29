@@ -9,10 +9,8 @@
 import sys, os
 
 oldtask = os.environ['TM_CURRENT_LINE']
-if oldtask[0] != "^":
-	sys.stdout.write("+  " + oldtask[3:])
-else:
-    sys.stdout.write(oldtask)</string>
+sys.stdout.write("+  " + oldtask[3:])
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

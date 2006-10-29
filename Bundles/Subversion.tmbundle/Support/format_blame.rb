@@ -51,13 +51,11 @@ begin
       end
    }
    
-   make_head( "Blame for “"+$full_file.sub( /^.*\//, '')+"”",
-              [ $bundle+"/Stylesheets/svn_style.css",
-                $bundle+"/Stylesheets/svn_blame_style.css"] )
-
+   puts html_head(:window_title => "Blame for “"+$full_file.sub( /^.*\//, '')+"”", :page_title => $full_file.sub( /^.*\//, ''), :sub_title => 'Subversion')
+   
    STDOUT.flush
 
-   puts '<table class="blame"> <tr>' +
+   puts '<div class="subversion"><table class="blame"> <tr>' +
             '<th>line</th>' +
             '<th class="revhead">rev</th>' +
             '<th>user</th>' +
@@ -106,6 +104,6 @@ begin
 rescue => e
    handle_default_exceptions( e )
 ensure
-   puts '<script>window.location.hash = "current_line";</script>'
-   make_foot( '</table>' )
+   puts '<script>window.location.hash = "current_line";</script></table></div>'
+   html_footer()
 end

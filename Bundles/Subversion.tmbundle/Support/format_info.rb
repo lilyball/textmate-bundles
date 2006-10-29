@@ -39,9 +39,9 @@ count_dl = 0
 got_newline = true
 
 begin
-   make_head( 'Subversion Info',
-              [ $bundle+"/Stylesheets/svn_style.css",
-                $bundle+"/Stylesheets/svn_info_style.css"] )
+
+   puts html_head(:window_title => "Info", :page_title => "SVN Info", :sub_title => 'Subversion')
+   puts '<div class="subversion">'
    
    STDOUT.flush
    
@@ -62,7 +62,7 @@ begin
          
          if $2 == '(Not a versioned resource)'
             make_error_head( 'Not a versioned resource:' )
-            make_error_foot( '<a href="'+make_tm_link( $1 )+'">'+htmlize($1, false)+'</a>' )
+            make_error_foot( '<a href="'+make_tm_link( $1 )+'">'+htmlize($1)+'</a>' )
             count_dl -= 1
             
          else
@@ -73,20 +73,20 @@ begin
             
             if $1 == 'Path'
                dt = 'Path'
-               dd = '<a href="'+make_tm_link( $2 )+'"'+$close+'>'+htmlize($2, false)+'</a>'
+               dd = '<a href="'+make_tm_link( $2 )+'"'+$close+'>'+htmlize($2)+'</a>'
                
             elsif $1 == 'URL'
                dt = 'URL'
-               dd = '<a href="'+htmlize($2, false)+'">'+htmlize($2, false)+'</a>'
+               dd = '<a href="'+htmlize($2)+'">'+htmlize($2)+'</a>'
                
             # this 2 keys should be the only ones with dates:
             elsif $1 == 'Last Changed Date' or $1 == 'Text Last Updated'
-               dt = htmlize( $1, false )
-               dd = htmlize( formated_date( $2 ), false )
+               dt = htmlize( $1 )
+               dd = htmlize( formated_date( $2 ) )
                
             else
-               dt = htmlize( $1, false )
-               dd = htmlize( $2, false )
+               dt = htmlize( $1 )
+               dd = htmlize( $2 )
                
             end
             
@@ -104,5 +104,6 @@ begin
 rescue => e
    handle_default_exceptions( e )
 ensure
-   make_foot( '</dl>' )
+   puts '</dl></div>'
+   html_footer()
 end

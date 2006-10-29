@@ -65,7 +65,7 @@ def make_head( title='', styles=Array.new, head_adds=''  )
 	tm_THEME = tm_THEME == '' ? 'bright' : tm_THEME;
 	
 	tm_THEMES = ''
-	themes = ['bright', 'dark'];
+	themes = ['bright', 'dark', 'shiny', 'halloween'];
 	themes.each { |theme|
 		x = theme == tm_THEME ? ' selected="selected" ' : '';
 		tm_THEMES += '<option ' + x + ' >' + theme + '</option>\n'
@@ -78,19 +78,22 @@ def make_head( title='', styles=Array.new, head_adds=''  )
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-   <title>Subversion — #{title}</title>
-	<style type="text/css" media="screen">
-		#{tm_CSS}
-	</style>
+  <title>Subversion — #{title}</title>
+	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/default/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/bright/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/dark/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/shiny/style.css" type="text/css" media="screen" charset="utf-8"/>
+	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/halloween/style.css" type="text/css" media="screen" charset="utf-8"/>
 	<script src="file://#{ENV['TM_SUPPORT_PATH']}/script/default.js" type="text/javascript" language="javascript" charset="utf-8"></script>
 	<script src="file://#{ENV['TM_SUPPORT_PATH']}/script/webpreview.js" type="text/javascript" language="javascript" charset="utf-8"></script>
 	#{tm_EXTRA_HEAD}
 </head>
 <body id="tm_webpreview_body" class="#{tm_THEME}">
 	<div id="tm_webpreview_header">
+	<img id="gradient" src="file://#{ENV['TM_SUPPORT_PATH']}/themes/#{tm_THEME}/images/header.png" />
 		<p class="headline">#{title}</p>
 		<p class="type">Subversion</p>
-		<img class="teaser" src="file://#{ENV['TM_SUPPORT_PATH']}/images/gear2.png" alt="teaser" />
+		<img id="teaser" src="file://#{ENV['TM_SUPPORT_PATH']}/themes/#{tm_THEME}/images/teaser.png" alt="teaser" />
 		<div id="theme_switcher">
 			<form action="#" onsubmit="return false;">
 				Theme: 

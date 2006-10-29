@@ -50,67 +50,6 @@ module SVNHelper
    end
    
    
-#    # produces a generic header..
-# def make_head( title='', styles=Array.new, head_adds=''  )
-# 	tm_EXTRA_HEAD   = head_adds
-# 	tm_THEME        = `defaults 2>/dev/null read com.macromates.textmate.webpreview SelectedTheme`.rstrip
-# 	
-# 	tm_THEME = tm_THEME == '' ? 'bright' : tm_THEME;
-# 	
-# 	tm_THEMES = ''
-# 	themes = ['bright', 'dark', 'shiny', 'halloween'];
-# 	themes.each { |theme|
-# 		x = theme == tm_THEME ? ' selected="selected" ' : '';
-# 		tm_THEMES += '<option ' + x + ' >' + theme + '</option>\n'
-# 	}
-# 	
-# 	html =<<-HTML
-# <?xml version="1.0" encoding="utf-8"?>
-# <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-# 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-# <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-# <head>
-# 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-#   <title>Subversion — #{title}</title>
-# 	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/default/style.css" type="text/css" media="screen" charset="utf-8"/>
-# 	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/bright/style.css" type="text/css" media="screen" charset="utf-8"/>
-# 	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/dark/style.css" type="text/css" media="screen" charset="utf-8"/>
-# 	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/shiny/style.css" type="text/css" media="screen" charset="utf-8"/>
-# 	<link rel="stylesheet" href="file://#{ENV['TM_SUPPORT_PATH']}/themes/halloween/style.css" type="text/css" media="screen" charset="utf-8"/>
-# 	<script src="file://#{ENV['TM_SUPPORT_PATH']}/script/default.js" type="text/javascript" language="javascript" charset="utf-8"></script>
-# 	<script src="file://#{ENV['TM_SUPPORT_PATH']}/script/webpreview.js" type="text/javascript" language="javascript" charset="utf-8"></script>
-# 	#{tm_EXTRA_HEAD}
-# </head>
-# <body id="tm_webpreview_body" class="#{tm_THEME}">
-# 	<div id="tm_webpreview_header">
-# 	<img id="gradient" src="file://#{ENV['TM_SUPPORT_PATH']}/themes/#{tm_THEME}/images/header.png" />
-# 		<p class="headline">#{title}</p>
-# 		<p class="type">Subversion</p>
-# 		<img id="teaser" src="file://#{ENV['TM_SUPPORT_PATH']}/themes/#{tm_THEME}/images/teaser.png" alt="teaser" />
-# 		<div id="theme_switcher">
-# 			<form action="#" onsubmit="return false;">
-# 				Theme: 
-# 				<select onchange="selectTheme(this.value);" id="theme_selector">
-# 					#{tm_THEMES}
-# 				</select>
-# 			</form>
-# 		</div>
-# 	</div>
-# 	<div id="tm_webpreview_content" class="#{tm_THEME}">
-# 	<div class="subversion">
-# HTML
-#       puts html
-# 		styles.each do |style|
-#          puts "<!--   @import 'file://"+style+"'; -->"
-#       end
-#    end
-   # 
-   # # .. and this a simple, matching footer ..
-   # def make_foot( foot_adds='' )
-   #    puts foot_adds+'</div></div></body></html>'
-   # end
-   
-   
    # the same as the above 2 methods, just for errors.
    def make_error_head( title='', head_adds='' )
       puts '<div class="error"><h2>'+title+'</h2>'+head_adds

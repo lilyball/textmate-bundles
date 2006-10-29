@@ -18,7 +18,7 @@ $tags = [] #user defined contexts
 def readContexts(a)
   # processes contexts.gtd into script  
   context, tabCommand, tabString, regex, color = a.split(/\|/)
-  if context != "+ DONE"
+  if (context != "+ DONE") and (context[0..1] != "&lt;-")
     $tags.push({:label =&gt; context[3..-1], :regexp =&gt; regex, :color =&gt; color, :matches =&gt; []})  
   end 
 end

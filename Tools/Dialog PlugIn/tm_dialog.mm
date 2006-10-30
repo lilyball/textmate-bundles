@@ -30,11 +30,7 @@ int contact_server (std::string nibName, NSMutableDictionary* someParameters, bo
 	id proxy = [NSConnection rootProxyForConnectionWithRegisteredName:@"TextMate dialog server" host:nil];
 	[proxy setProtocolForProxy:@protocol(TextMateDialogServerProtocol)];
 
-	if(!proxy)
-	{
-		fprintf(stderr, "%s: failed to establish connection with TextMate.\n", AppName);
-	}
-	else if([proxy textMateDialogServerProtocolVersion] == TextMateDialogServerProtocolVersion)
+	if([proxy textMateDialogServerProtocolVersion] == TextMateDialogServerProtocolVersion)
 	{
 		NSString* aNibPath = [NSString stringWithUTF8String:nibName.c_str()];
 
@@ -45,7 +41,9 @@ int contact_server (std::string nibName, NSMutableDictionary* someParameters, bo
 	}
 	else
 	{
-		fprintf(stderr, "%s: server version at v%d, this tool at v%d (they need to match)\n", AppName, [proxy textMateDialogServerProtocolVersion], TextMateDialogServerProtocolVersion);
+		if(proxy)
+				fprintf(stderr, "%s: server version at v%d, this tool at v%d (they need to match)\n", AppName, [proxy textMateDialogServerProtocolVersion], TextMateDialogServerProtocolVersion);
+		else	fprintf(stderr, "%s: failed to establish connection with TextMate.\n", AppName);
 	}
 	return res;
 }
@@ -55,11 +53,13 @@ void usage ()
 	fprintf(stderr, 
 		"%1$s r%2$s (" DATE ")\n"
 		"Usage: %1$s [-cmqp] nib_file\n"
+		"Usage: %1$s [-p] -u\n"
 		"Options:\n"
 		" -c, --center               Center the window on screen.\n"
 		" -m, --modal                Show window as modal.\n"
 		" -q, --quiet                Do not write result to stdout.\n"
 		" -p, --parameters <plist>   Provide parameters as a plist.\n"
+		" -u, --menu           		  Treat paramters as a menu structure.\n"
 		"", AppName, current_version());
 }
 
@@ -100,6 +100,8 @@ std::string find_nib (std::string nibName)
 
 int main (int argc, char* argv[])
 {
+	NSAutoreleasePool* pool = [NSAutoreleasePool new];
+
 	extern int optind;
 	extern char* optarg;
 
@@ -108,13 +110,14 @@ int main (int argc, char* argv[])
 		{ "modal",				no_argument,			0,		'm'	},
 		{ "parameters",		required_argument,	0,		'p'	},
 		{ "quiet",				no_argument,			0,		'q'	},
+		{ "menu",				no_argument,			0,		'u'	},
 		{ 0,						0,							0,		0		}
 	};
 
-	bool center = false, modal = false, quiet = false;
+	bool center = false, modal = false, quiet = false, menu = false;
 	char const* parameters = NULL;
 	char ch;
-	while((ch = getopt_long(argc, argv, "cmp:q", longopts, NULL)) != -1)
+	while((ch = getopt_long(argc, argv, "cmp:qu", longopts, NULL)) != -1)
 	{
 		switch(ch)
 		{
@@ -122,6 +125,7 @@ int main (int argc, char* argv[])
 			case 'm':	modal = true;				break;
 			case 'p':	parameters = optarg;		break;
 			case 'q':	quiet = true;				break;
+			case 'u':	menu = true;				break;
 			default:		usage();						break;
 		}
 	}
@@ -129,33 +133,54 @@ int main (int argc, char* argv[])
 	argc -= optind;
 	argv += optind;
 
+	// ===================
+	// = read parameters =
+	// ===================
+	
+	NSMutableData* data = [NSMutableData data];
+	if(parameters)
+	{
+		[data appendBytes:parameters length:strlen(parameters)];
+	}
+	else
+	{
+		if(isatty(STDIN_FILENO) == 0)
+		{
+			char buf[1024];
+			while(size_t len = read(STDIN_FILENO, buf, sizeof(buf)))
+				[data appendBytes:buf length:len];
+		}
+	}
+
+	id plist = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:nil errorDescription:NULL] : [NSMutableDictionary dictionary];
+
 	int res = -1;
 	if(argc == 1)
 	{
-		NSAutoreleasePool* pool = [NSAutoreleasePool new];
+		res = contact_server(find_nib(argv[0]), plist, center, modal, quiet);
+	}
+	else if(menu)
+	{
+		id proxy = [NSConnection rootProxyForConnectionWithRegisteredName:@"TextMate dialog server" host:nil];
+		[proxy setProtocolForProxy:@protocol(TextMateDialogServerProtocol)];
 
-		NSMutableData* data = [NSMutableData data];
-		if(parameters)
+		if([proxy textMateDialogServerProtocolVersion] == TextMateDialogServerProtocolVersion)
 		{
-			[data appendBytes:parameters length:strlen(parameters)];
+			id res = [proxy showMenuWithOptions:plist];
+			printf("%s\n", [[res description] UTF8String]);
 		}
 		else
 		{
-			if(isatty(STDIN_FILENO) == 0)
-			{
-				char buf[1024];
-				while(size_t len = read(STDIN_FILENO, buf, sizeof(buf)))
-					[data appendBytes:buf length:len];
-			}
+			if(proxy)
+					fprintf(stderr, "%s: server version at v%d, this tool at v%d (they need to match)\n", AppName, [proxy textMateDialogServerProtocolVersion], TextMateDialogServerProtocolVersion);
+			else	fprintf(stderr, "%s: failed to establish connection with TextMate.\n", AppName);
 		}
-
-		id plist = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:nil errorDescription:NULL] : [NSMutableDictionary dictionary];
-		res = contact_server(find_nib(argv[0]), plist, center, modal, quiet);
-		[pool release];
 	}
 	else
 	{
 		usage();
 	}
+
+	[pool release];
 	return res;
 }

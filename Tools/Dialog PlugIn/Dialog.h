@@ -8,9 +8,10 @@
 - (float)version;
 @end
 
-#define TextMateDialogServerProtocolVersion 3
+#define TextMateDialogServerProtocolVersion 4
 
 @protocol TextMateDialogServerProtocol
 - (int)textMateDialogServerProtocolVersion;
 - (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters modal:(BOOL)flag center:(BOOL)shouldCenter;
+- (id)showMenuWithOptions:(NSDictionary*)someOptions;
 @end

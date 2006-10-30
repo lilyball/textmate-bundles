@@ -15,7 +15,7 @@ fi
       
 : ${TM_RUBY:=ruby}
 FORMAT_LOG="${TM_BUNDLE_SUPPORT}/format_log.rb"
-HG_STYLE="${TM_BUNDLE_SUPPORT}/map-cmdline.changelog"
+HG_STYLE="${TM_BUNDLE_SUPPORT}/map-log.changelog"
 
 if [[ $TM_HG_LOG_LIMIT != 0 ]]
 	then HG_LIMIT="-l ${TM_HG_LOG_LIMIT:=10}"

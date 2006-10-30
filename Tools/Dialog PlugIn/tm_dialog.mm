@@ -23,6 +23,25 @@ char const* current_version ()
 	return sscanf("$Revision$", "$%*[^:]: %s $", res) == 1 ? res : "???";
 }
 
+bool output_property_list (id plist)
+{
+	bool res = false;
+	NSString* error = nil;
+	if(NSData* data = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:&error])
+	{
+		if(NSFileHandle* fh = [NSFileHandle fileHandleWithStandardOutput])
+		{
+			[fh writeData:data];
+			res = true;
+		}
+	}
+	else
+	{
+		fprintf(stderr, "%s: %s\n", AppName, [error UTF8String] ?: "unknown error serializing returned property list");
+	}
+	return res;
+}
+
 int contact_server (std::string nibName, NSMutableDictionary* someParameters, bool center, bool modal, bool quiet)
 {
 	int res = -1;
@@ -36,7 +55,7 @@ int contact_server (std::string nibName, NSMutableDictionary* someParameters, bo
 
 		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:someParameters modal:modal center:center];
 		if(!quiet)
-			printf("%s\n", [[parameters description] UTF8String]);
+			output_property_list(parameters);
 		res = [[parameters objectForKey:@"returnCode"] intValue];
 	}
 	else
@@ -166,8 +185,7 @@ int main (int argc, char* argv[])
 
 		if([proxy textMateDialogServerProtocolVersion] == TextMateDialogServerProtocolVersion)
 		{
-			id res = [proxy showMenuWithOptions:plist];
-			printf("%s\n", [[res description] UTF8String]);
+			output_property_list([proxy showMenuWithOptions:plist]);
 		}
 		else
 		{

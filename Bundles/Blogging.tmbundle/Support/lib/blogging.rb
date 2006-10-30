@@ -573,6 +573,11 @@ TEXT
   # 'blog' Command (snippet)
 
   def choose_blog_endpoint
+    if self.endpoints.length == 0
+      TextMate.exit_show_tool_tip(%Q{No blogs have been configured.\n} +
+        %q{Use the "Setup Blogs" command."})
+    end
+
     if self.endpoints.length == 2
       current_endpoint = nil
       self.endpoints.each_key do | name |
@@ -600,8 +605,6 @@ TEXT
     if opt != nil
       TextMate.exit_insert_snippet("Blog: " + titles[opt] + '$0')
     end
-    TextMate.exit_show_tool_tip(%Q{No blogs have been configured.\n} +
-      %q{Use the "Setup Blogs" command."})
   end
 
   def to_html

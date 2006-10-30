@@ -67,7 +67,7 @@ def html_head(options = { })
   common_styles.each { |style|
     next if style == 'default'
     bundle_styles << style if File.directory?(bundle_support + '/css/' + style)
-  }
+  } unless bundle_support.nil?
   
   
   html_head    = options[:html_head]    || ''
@@ -78,7 +78,7 @@ def html_head(options = { })
 	end
 
   support_path   = support_path.sub(/ /, '%20')
-  bundle_support = bundle_support.sub(/ /, '%20')
+  bundle_support = bundle_support.sub(/ /, '%20') unless bundle_support.nil?
 
   ERB.new(HTML_TEMPLATE).result binding
 end

@@ -55,11 +55,11 @@ void usage ()
 		"Usage: %1$s [-cmqp] nib_file\n"
 		"Usage: %1$s [-p] -u\n"
 		"Options:\n"
-		" -c, --center               Center the window on screen.\n"
-		" -m, --modal                Show window as modal.\n"
-		" -q, --quiet                Do not write result to stdout.\n"
-		" -p, --parameters <plist>   Provide parameters as a plist.\n"
-		" -u, --menu           		  Treat paramters as a menu structure.\n"
+      " -c, --center               Center the window on screen.\n"
+      " -m, --modal                Show window as modal.\n"
+      " -q, --quiet                Do not write result to stdout.\n"
+      " -p, --parameters <plist>   Provide parameters as a plist.\n"
+      " -u, --menu                 Treat parameters as a menu structure.\n"
 		"", AppName, current_version());
 }
 

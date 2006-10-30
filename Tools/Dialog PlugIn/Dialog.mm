@@ -75,9 +75,13 @@ NSLock* Lock = [NSLock new];
 
 	enumerate(topLevelObjects, id object)
 	{
-		// if we do not manually unbind, the object in the nib will keep us retained, and thus we will never reach dealloc
 		if([object isKindOfClass:[NSObjectController class]])
+		{
+			[object commitEditing];
+
+			// if we do not manually unbind, the object in the nib will keep us retained, and thus we will never reach dealloc
 			[object unbind:@"contentObject"];
+		}
 	}
 	[self setWindow:nil];
 

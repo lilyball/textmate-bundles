@@ -12,6 +12,7 @@ BUNDLE_SUPPORT = ENV['TM_BUNDLE_SUPPORT']
 require "#{BUNDLE_SUPPORT}/lib/doctohtml.rb"
 require 'textmate'
 require 'progress'
+require 'escape'
 require 'cgi'
 require 'fileutils'
 require 'zlib'
@@ -168,12 +169,17 @@ def paste_stdin(priv, wrap)
   end
 end
 
-dests, priv, wrap = get_destinations
-unless dests.empty?
-  url = paste_stdin(priv, wrap)
-  %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/paste_to_destinations.scpt")} #{e_sh url} #{e_sh dests} }
-  puts "Pasted #{url}"
+pid = fork do
+  dests, priv, wrap = get_destinations
+  unless dests.empty?
+    url = paste_stdin(priv, wrap)
+    %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/paste_to_destinations.scpt")} #{e_sh url} #{e_sh dests} }
+    puts "Pasted #{url}"
+  end
 end
+
+Process.detach(pid)
+
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

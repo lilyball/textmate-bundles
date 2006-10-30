@@ -5,9 +5,12 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>Markdown.pl &lt;&lt;'EOF'
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header PHPDoc
 
-# Help for the PHPDoc Bundle
+Markdown.pl &lt;&lt;'EOF'
+
+# Snippets
 
 This bundle contains snippets for use with [PHPDoc](http://phpdoc.org/).
 
@@ -25,7 +28,7 @@ This bundle contains snippets for use with [PHPDoc](http://phpdoc.org/).
 
 _Commands marked as “post documentation” are designed for undocumented code — in other words, a comment block is added at the caret position._
 
-## Shell Variables
+# Shell Variables
 
 The snippets make use of two environment variables (_set these under Preferences &amp;#x2192; Advanced &amp;#x2192; Shell Variables_).
 

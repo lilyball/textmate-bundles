@@ -30,8 +30,6 @@
 		<dict>
 			<key>begin</key>
 			<string>#</string>
-			<key>end</key>
-			<string>$</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -40,6 +38,8 @@
 					<string>punctuation.definition.comment.makefile</string>
 				</dict>
 			</dict>
+			<key>end</key>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>comment.line.number-sign.makefile</string>
 			<key>patterns</key>
@@ -48,7 +48,7 @@
 					<key>match</key>
 					<string>(?&lt;!\\)\\$\n</string>
 					<key>name</key>
-					<string>constant.character.escape.makefile</string>
+					<string>punctuation.separator.continuation.makefile</string>
 				</dict>
 			</array>
 		</dict>

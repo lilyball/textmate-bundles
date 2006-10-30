@@ -93,12 +93,17 @@ div.command h2 {
 }
 
 /* for everything alternating: */
-body.bright .alternate {
-   background-color: #f2f2f2;
+.bright .alternate {
+   background-color: #ececec;
 }
 
-body.dark .alternate {
+.dark .alternate,
+.shiny .alternate {
    background-color: #242424;
+}
+
+.halloween .alternate {
+  background-color: #251400;
 }
 
 .bright code {

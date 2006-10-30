@@ -90,9 +90,9 @@ begin
          end
          puts '<tr class ="' + color + '">'
          puts  '<td class="linecol"><span'+ line_id.to_s + '>'+ linecount.to_s + "</span></td>\n" +
-               '<td class="revcol' +curr_add+'" title="'+ $3 + (revision_comment[revision].nil? ? '' : "\n" + html_escape(revision_comment[revision])) + '">' + $2 + "</td>\n" +
-               '<td class="namecol'+curr_add+'" title="'+ $3 + (revision_comment[revision].nil? ? '' : "\n" + html_escape(revision_comment[revision])) + '">' + $1 + "</td>\n" +
-               '<td class="codecol'+curr_add+'" title="'+ $3 + (revision_comment[revision].nil? ? '' : "\n" + html_escape(revision_comment[revision])) + '"><a href="' +
+               '<td class="revcol' +curr_add+'" title="' + (revision_comment[revision].nil? ? '' : html_escape(revision_comment[revision]).chomp) + '">' + $2 + "</td>\n" +
+               '<td class="namecol'+curr_add+'" title="' + (revision_comment[revision].nil? ? '' :  html_escape(revision_comment[revision]).chomp) + '">' + $1 + "</td>\n" +
+               '<td class="codecol'+curr_add+'" title="' + (revision_comment[revision].nil? ? '' :  html_escape(revision_comment[revision]).chomp) + '"><a href="' +
                   make_tm_link( $full_file, linecount) +'"'+$close+'>'+ htmlize( $4 ) +
                "</a></td></tr>\n\n"
 

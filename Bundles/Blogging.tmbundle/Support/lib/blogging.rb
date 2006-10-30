@@ -586,23 +586,19 @@ TEXT
       TextMate.exit_insert_snippet("Blog: #{current_endpoint}")
     end
 
+    # TBD: preserve order from endpoint file
     titles = []
     self.endpoints.each_key do | name |
       next if name =~ /^https?:/
-      titles.push( '"' + name.gsub(/"/, '\"') + '"' )
+      titles.push(name)
     end
     titles.sort!
 
-    result = TextMate.dropdown(%Q{--title 'Select Blog' \
-      --text 'Choose a Blog' \
-      --button1 Ok --button2 Cancel \
-      --items #{titles.join(' ')}})
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog.rb"
+    opt = Dialog.menu(titles)
 
-    result = result.split(/\n/)
-
-    if result[0] == "1"
-      TextMate.exit_insert_snippet("Blog: " +
-        titles[result[1].to_i].gsub(/^"|"$/, '') + '$0')
+    if opt != nil
+      TextMate.exit_insert_snippet("Blog: " + titles[opt] + '$0')
     end
     TextMate.exit_show_tool_tip(%Q{No blogs have been configured.\n} +
       %q{Use the "Setup Blogs" command."})

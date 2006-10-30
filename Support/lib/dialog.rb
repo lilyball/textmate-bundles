@@ -1,6 +1,27 @@
 require File.join(File.dirname(__FILE__),'escape.rb')
 module Dialog
 class << self
+  def menu(options)
+    return nil if options.empty?
+
+    support = ENV['TM_SUPPORT_PATH']
+    dialog = support + '/bin/tm_dialog'
+    require support + '/lib/plist'
+
+    return_hash = true
+    if options[0].kind_of?(String)
+      return_hash = false
+      options = options.collect { |e| e == nil ? { 'separator' => 1 } : { 'title' => e } }
+    end
+
+    plist = { 'menuItems' => options }.to_plist
+
+    res = PropertyList::load(`#{e_sh dialog} -up #{e_sh plist}`)
+    return nil unless res.has_key? 'selectedIndex'
+    index = res['selectedIndex'].to_i
+
+    return return_hash ? options[index] : index
+  end
   def request_string(options = Hash.new,&block)
     _options = default_hash(options)
     _options["title"] = options[:title] || "Enter String"

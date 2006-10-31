@@ -177,8 +177,8 @@ class FootnoteFilter
         <a href="#{view_url}">View File</a> |
         <a href="#{layout_url}">Layout File</a>
       HTML
-      html += asset_file_links("CSS Files", stylesheet_files)
-      html += asset_file_links("JS Files", javascript_files)
+      html += asset_file_links("CSS Files", stylesheet_files) unless stylesheet_files.blank?
+      html += asset_file_links("JS Files", javascript_files) unless javascript_files.blank?
       html += "<br/>"
     end
     html

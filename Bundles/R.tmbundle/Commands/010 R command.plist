@@ -8,10 +8,17 @@
 	<string># input is selection or document
 rawText="`cat`"
 
+curDir=''
+if [[ ${#TM_SELECTED_TEXT} -eq 0 &amp;&amp; ${#TM_DIRECTORY} -gt 0 ]]; then
+	curDir="$TM_DIRECTORY"
+fi
+
 osascript -e 'on run(theCode)' \
-          -e 'tell application "R" to activate' \
-          -e 'tell application "R" to cmd (item 1 of theCode)' \
-          -e 'end run' -- "$rawText"</string>
+		  -e 'tell application "R" to activate' \
+		  -e 'if (item 2 of theCode) is not "" then tell application "R" to cmd "setwd('\''" &amp; (item 2 of theCode) &amp; "'\'')"' \
+		  -e 'tell application "R" to cmd (item 1 of theCode)' \
+		  -e 'end run' -- "$rawText" "$curDir"
+</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

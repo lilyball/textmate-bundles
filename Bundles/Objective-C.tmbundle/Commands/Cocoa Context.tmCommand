@@ -71,16 +71,18 @@ end
 def pop_up(candidates, searchTerm, caret_placement, line)
   start = searchTerm.size
   prettyCandidates = candidates.map { |candidate| [prettify(candidate), candidate] }.sort
-  
-  require "enumerator"
-  pruneList = []  
+  if prettyCandidates.size &gt; 1
+    require "enumerator"
+    pruneList = []  
 
-  prettyCandidates.each_cons(2) do |a|
-    pruneList &lt;&lt; (a[0][0] != a[1][0]) 
-  end
-  ind = -1
-  prettyCandidates = prettyCandidates.select do |a|
-    pruneList[ind+=1]
+    prettyCandidates.each_cons(2) do |a| 
+      pruneList &lt;&lt; (a[0][0] != a[1][0]) # check if prettified versions are the same
+    end
+    pruneList &lt;&lt; true
+    ind = -1
+    prettyCandidates = prettyCandidates.select do |a| #remove duplicates
+      pruneList[ind+=1]  
+    end
   end
 
   if prettyCandidates.size &gt; 1

@@ -169,9 +169,9 @@ struct PBX_SelectionRange
 	NSString* fileName = [[[NSURL URLWithString:urlString] path] stringByStandardizingPath];
 
 	NSView* view = [[OpenFiles objectForKey:fileName] objectForKey:@"view"];
-	if([view window] && [view respondsToSelector:@selector(didModifyString:)])
+	if([view window] && [view respondsToSelector:@selector(textMateDidModifyString:)])
 	{
-		[view performSelector:@selector(didModifyString:) withObject:[[[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileName] encoding:NSUTF8StringEncoding] autorelease]];
+		[view performSelector:@selector(textMateDidModifyString:) withObject:[[[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileName] encoding:NSUTF8StringEncoding] autorelease]];
 		[FailedFiles removeObject:fileName];
 	}
 	else

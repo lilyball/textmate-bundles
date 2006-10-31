@@ -13,13 +13,13 @@
 @end
 
 @interface NSString (EditInTextMate)
-- (NSString*)stringByTrimmingWhitespace;
-- (NSString*)stringByReplacingString:(NSString*)aSearchString withString:(NSString*)aReplaceString;
-- (NSString*)stringByNbspEscapingSpaces;
+- (NSString*)TM_stringByTrimmingWhitespace;
+- (NSString*)TM_stringByReplacingString:(NSString*)aSearchString withString:(NSString*)aReplaceString;
+- (NSString*)TM_stringByNbspEscapingSpaces;
 @end
 
 @implementation NSString (EditInTextMate)
-- (NSString*)stringByTrimmingWhitespace
+- (NSString*)TM_stringByTrimmingWhitespace
 {
 	NSString* str = self;
 	while([str hasPrefix:@" "])
@@ -30,12 +30,12 @@
 	return str;
 }
 
-- (NSString*)stringByReplacingString:(NSString*)aSearchString withString:(NSString*)aReplaceString
+- (NSString*)TM_stringByReplacingString:(NSString*)aSearchString withString:(NSString*)aReplaceString
 {
 	return [[self componentsSeparatedByString:aSearchString] componentsJoinedByString:aReplaceString];
 }
 
-- (NSString*)stringByNbspEscapingSpaces
+- (NSString*)TM_stringByNbspEscapingSpaces
 {
 	unsigned len = [self length];
 	unichar* buf = new unichar[len];
@@ -70,11 +70,11 @@ private:
 
 	void output_text (NSString* str)
 	{
-		str = [str stringByTrimmingWhitespace];
+		str = [str TM_stringByTrimmingWhitespace];
 		if([str isEqualToString:@""])
 			return;
 
-		str = [str stringByReplacingString:[NSString stringWithUTF8String:" "] withString:@" "];
+		str = [str TM_stringByReplacingString:[NSString stringWithUTF8String:" "] withString:@" "];
 
 		if(pendingFlush)
 		{
@@ -178,7 +178,7 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 	[EditInTextMate externalEditString:str startingAtLine:lineNumber forView:self];
 }
 
-- (void)didModifyString:(NSString*)newString
+- (void)textMateDidModifyString:(NSString*)newString
 {
 	NSArray* lines = [newString componentsSeparatedByString:@"\n"];
 	NSMutableString* res = [NSMutableString string];
@@ -218,10 +218,10 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 		}
 		else
 		{
-			line = [line stringByNbspEscapingSpaces];
-			line = [line stringByReplacingString:@"&" withString:@"&amp;"];
-			line = [line stringByReplacingString:@"<" withString:@"&lt;"];
-			line = [line stringByReplacingString:@">" withString:@"&gt;"];
+			line = [line TM_stringByNbspEscapingSpaces];
+			line = [line TM_stringByReplacingString:@"&" withString:@"&amp;"];
+			line = [line TM_stringByReplacingString:@"<" withString:@"&lt;"];
+			line = [line TM_stringByReplacingString:@">" withString:@"&gt;"];
 			[res appendFormat:@"<DIV>%@</DIV>", line];
 		}
 	}

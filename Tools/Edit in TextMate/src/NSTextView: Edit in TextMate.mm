@@ -36,7 +36,7 @@
 	[EditInTextMate externalEditString:[str substringWithRange:selectedRange] startingAtLine:lineNumber forView:self];
 }
 
-- (void)didModifyString:(NSString*)newString
+- (void)textMateDidModifyString:(NSString*)newString
 {
 	NSRange selectedRange = [self selectedRange];
 	BOOL hadSelection = selectedRange.length != 0;

@@ -211,7 +211,7 @@ mup.html {
 				Open3.popen3("#{svn} commit --non-interactive --force-log #{commit_args}") do |stdin, stdout, stderr|
 					# WebKit needs <br> instead of \n inside <pre>, otherwise the text won't flush
 					stdout.each_line {|line| mup.text! line.chomp; mup << "<br>"; STDOUT.flush}
-					stderr.each_line {|line| mup.text! line.chomp; mup << "<br>"; STDOUT.flush}
+					stderr.each_line {|line| mup.text! line.chomp; mup << "<br>"; STDERR.flush}
 				end
 			}
 		end

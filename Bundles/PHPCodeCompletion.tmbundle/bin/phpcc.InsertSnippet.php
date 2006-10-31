@@ -46,7 +46,7 @@
 			#	check for an exact match of the function 
 			if ( array_key_exists( strtolower( $function ), $_LOOKUP ) )
 			{
-				$snippet = $_LOOKUP[$function]['snippet'];
+				$snippet = $function.$_LOOKUP[$function]['snippet'];
 				#	now check which coding style version we want to have
 				if ( $phpcc_snippets_use_pear )
 				{
@@ -63,7 +63,7 @@
 			else
 			{
 				#	No, not an exact match, so return nothing
-				echo "";
+				echo $function;
 			
 				/* 
 				

@@ -15,15 +15,15 @@
 				<false/>
 				<key>findString</key>
 				<string>(?x)
-&lt;(\w+)[^&gt;]*&gt;[^&lt;]*&lt;/\1&gt;                         # HTML tags that don&apos;t contain text
+&lt;(\w+)[^&gt;]*&gt;[^&lt;]*&lt;/\1&gt;                         # HTML tags that don't contain text
 |(&lt;%@\s|&lt;%\#\s|&lt;%=\s)[^%]*%&gt;                   # The contents of various other forms of Embedded source
 |(?&lt;=(&lt;%@\s|&lt;%\#\s|&lt;%=\s))[^%]*(?=\s%&gt;)        # The contents of various other forms of Embedded source
 |(?&lt;=&lt;%\s)[^%]*(?=\s%&gt;)                        # The contents of Embedded source
 |(?&lt;=&lt;!--\s)[^-&gt;]*(?=\s--&gt;)                    # HTML Comments
 |\b[\w-]+\b(?=\s*=)                            # HTML Attribute name
-|\s\b[\w-]+\b=\&quot;[^\&quot;]*\&quot;                       # HTML Attribute name value pair
-|(?&lt;=\&quot;)[^\&quot;\n&lt;&gt;]*(?=\&quot;)                       # HTML Compatible String Double
-|(?&lt;=\&apos;)[^\&apos;\n]*(?=\&apos;)                         # &apos;String Single&apos;
+|\s\b[\w-]+\b=\"[^\"]*\"                       # HTML Attribute name value pair
+|(?&lt;=\")[^\"\n&lt;&gt;]*(?=\")                       # HTML Compatible String Double
+|(?&lt;=\')[^\'\n]*(?=\')                         # 'String Single'
 |(?&lt;=\[)[^\[\]]*(?=\])                         # [Square Brackets]
 |(?&lt;={)[^{}]*(?=})                             # {Curly Brackets}
 |(?&lt;=[^/]&gt;)[^&gt;&lt;]*(?=&lt;/)                        # &gt;Text Inside HTML Tag&lt;/
@@ -33,10 +33,10 @@
 |[@$!]\w+\b                                    # @variables $variables !etc
 |(?&lt;=/\*).*(?=\*/)                             # /* Contents of Comment Blocks */
 |/\*.*\*/                                      # /* Comment Blocks */
-|(?&lt;=[\(,:])[^\(\),\n]*(?=[\),;])              # Comma Delimitated
-|(?&lt;=\&quot;)(?=(&gt;|/&gt;| /&gt;))                         # Placer for adding HTML Attribute Values
+|(?&lt;=[\(,])[^\(\),\n]*(?=[\),])              # Comma Delimitated
+|(?&lt;=\")(?=(&gt;|/&gt;| /&gt;))                         # Placer for adding HTML Attribute Values
 |&lt;[^&gt;\n]*/?&gt;                                   # HTML Tags
-|(?&lt;=\&quot;)[^\&quot;\n]*(?=\&quot;)                         # String Double
+|(?&lt;=\")[^\"\n]*(?=\")                         # String Double
 # Thomas Aylott &lt;oblivious@subtleGradient.com&gt; #
 # Balance Jr. Regular Expression version 2.7   #
 </string>
@@ -55,6 +55,8 @@
 			<string>findWithOptions:</string>
 		</dict>
 	</array>
+	<key>keyEquivalent</key>
+	<string></string>
 	<key>name</key>
 	<string>Balance Jr Foreward</string>
 	<key>scopeType</key>

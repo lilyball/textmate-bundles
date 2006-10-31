@@ -4,7 +4,7 @@ It comes in the form of two macros.
 **Balance Jr Back** &  
 **Balance Jr Forward**
 
-I would advise you set them to set their key equivilents to the home and end keys.
+I would advise you set them to set their key equivilents to the home and end keys. I also have it mapped to the tiltwheel on my mouse.
 
 	(?x)
 	<(\w+)[^>]*>[^<]*</\1>                         # HTML tags that don't contain text

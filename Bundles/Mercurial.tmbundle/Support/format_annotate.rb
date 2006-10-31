@@ -107,6 +107,6 @@ begin
 rescue => e
    handle_default_exceptions( e )
 ensure
-   puts '<script>window.location.hash = "current_line";</script>'
+   puts '<script type="text/javascript">window.location.hash = "current_line";</script>'
    make_foot( '</table>' )
 end

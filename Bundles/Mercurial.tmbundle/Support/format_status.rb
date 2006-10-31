@@ -112,7 +112,7 @@ class << mup
 		lowercase_name = name.downcase
 		col_class_name		= lowercase_name + '_col'
 		button_class_name	= lowercase_name + '_button'
-		td(:class => col_name) {
+		td(:class => col_class_name) {
 			if show
 				a( name, "href" => '#', "class" => button_class_name, "onclick" => onclick )
 			end
@@ -124,7 +124,7 @@ end
 js_functions = <<ENDJS #javascript
 
 			\n<script type="text/javascript">
-			
+//<![CDATA[		
 				
 					the_filename    = null;
 					the_id          = null;
@@ -243,7 +243,7 @@ js_functions = <<ENDJS #javascript
 						display_tail('info', 'info', output);
 						TextMate.isBusy = false;
 					};
-					
+//]]>					
 				</script>
 
 ENDJS

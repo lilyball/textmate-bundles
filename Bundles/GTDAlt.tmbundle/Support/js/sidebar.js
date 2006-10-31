@@ -28,14 +28,29 @@ function get_toggles() {
   }
   return to_return;
 }
+function select_all_items(e) {
+  var answer = this.firstChild.nodeValue == "all" ? true : false;
+  var items = this.parentNode.parentNode.getElementsByTagName('li');
+  for (var i=0; i < items.length; i++) {
+    if (items[i].firstChild.checked != answer)
+      items[i].firstChild.click();
+  };
+  return true;
+}
 function create_nav_list() {
   var main_level = get_toggles();
   for (var i=0;i<main_level.length;i++) {
     main_level[i].onclick = toggle_sublist;
     var title = full_text(main_level[i]).substring(0,3).toLowerCase();
+    main_level[i].innerHTML += '<span>(select <a href="#" class="select_all" title="Select All">all</a><a href="#" class="select_all" title="Select None">none</a>)</span>';
     main_level[i].innerHTML += create_list_part(title,
                             main_level[i].getAttribute('tablecolumn'));
   }
+  var links = document.getElementsByTagName('a');
+  for (var i=0; i < links.length; i++) {
+    if (links[i].className == "select_all")
+      links[i].onclick = select_all_items;
+  };
   var els = document.getElementById('toggles').getElementsByTagName('input');
   for (i=0;i<els.length;i++) {
     els[i].onclick = toggle_this;

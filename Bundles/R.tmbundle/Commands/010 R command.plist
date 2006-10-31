@@ -7,11 +7,11 @@
 	<key>command</key>
 	<string># input is selection or document
 rawText="`cat`"
-escText="${rawText//\\\\/\\\\}"
 
-osascript -e 'tell application "R" to activate' \
-		  -e 'tell application "R" to cmd "'"${escText//\"/\\\"}"'"'
-</string>
+osascript -e 'on run(theCode)' \
+          -e 'tell application "R" to activate' \
+          -e 'tell application "R" to cmd (item 1 of theCode)' \
+          -e 'end run' -- "$rawText"</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

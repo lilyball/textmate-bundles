@@ -28,9 +28,19 @@ b = &lt;&lt;HTML
 &lt;html&gt;
   &lt;head&gt;
     &lt;link rel="stylesheet" href="tm-file://#{ENV['TM_SUPPORT_PATH']}/css/default.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
-    &lt;style type="text/css"&gt;      .nobr {white-space: nowrap}    &lt;/style&gt;
+    &lt;link rel="stylesheet" href="tm-file://#{ENV['TM_BUNDLE_SUPPORT']}/css/sidebar.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
+    &lt;script src="tm-file://#{ENV['TM_BUNDLE_SUPPORT']}/js/sidebar.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+    &lt;style type="text/css"&gt;
+      .nobr {white-space: nowrap}
+    &lt;/style&gt;
   &lt;/head&gt;
   &lt;body&gt;
+    &lt;body class=""&gt;
+  &lt;ul id="toggles"&gt;
+    &lt;li class="collapse" tablecolumn="0"&gt;Contexts&lt;/li&gt;
+    &lt;li class="collapse" tablecolumn="2"&gt;Projects&lt;/li&gt;
+    &lt;li class="collapse" tablecolumn="3"&gt;Files&lt;/li&gt;
+  &lt;/ul&gt;
 HTML
 e = &lt;&lt;HTML
   &lt;/body&gt;

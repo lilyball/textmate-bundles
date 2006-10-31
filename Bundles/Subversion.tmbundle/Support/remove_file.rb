@@ -19,4 +19,5 @@ if res =~ /Remove/ then
   puts `#{svn} remove "$TM_SVN_REMOVE"`
 else
 	puts "Cancel"
+	exit 1
 end

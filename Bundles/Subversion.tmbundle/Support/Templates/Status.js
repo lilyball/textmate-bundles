@@ -95,6 +95,23 @@ function svnRevertFile(filename,id){
 	svnCommand(cmd, id, '?', StatusMap['?'])
 };
 
+function completedTask(task){
+	
+	if (task.status == 0)
+	{
+		if(the_new_status == '-'){document.getElementById('status'+the_id).className = 'status_col ' + StatusMap['-']};
+		if(the_new_status == 'D'){document.getElementById('status'+the_id).className = 'status_col ' + StatusMap['D']};
+		document.getElementById('status'+the_id).innerHTML = the_new_status;
+	}
+
+	the_filename    = null;
+	the_id          = null;
+	the_displayname = null;
+	the_new_status  = null;	
+
+	TextMate.isBusy = false;
+}
+
 function svnRevertFileConfirm(filename,id,displayname){
 	the_filename    = filename;
 	the_id          = id;
@@ -103,7 +120,7 @@ function svnRevertFileConfirm(filename,id,displayname){
 	cmd = 'LC_CTYPE=en_US.UTF-8 ' + ENV['TM_BUNDLE_SUPPORT'] + '/revert_file.rb -svn=' + ENV['TM_SVN'] + ' -path=' + filename + ' -displayname=' + displayname;
 
 	TextMate.isBusy = true;
-	myCommand = TextMate.system(cmd, function (task) { });
+	myCommand = TextMate.system(cmd, completedTask);
 	myCommand.onreadoutput = svnReadOutput;
 	myCommand.onreaderror = svnReadError;
 };
@@ -116,30 +133,17 @@ function svnRemoveFile(filename,id,displayname){
 	TextMate.isBusy = true;
 	cmd = 'LC_CTYPE=en_US.UTF-8 ' + ENV['TM_BUNDLE_SUPPORT'] + '/remove_file.rb -svn=' + ENV['TM_SVN'] + ' -path=' + filename + ' -displayname=' + displayname;
 	
-	myCommand = TextMate.system(cmd, function (task) { });
+	myCommand = TextMate.system(cmd, completedTask);
 	myCommand.onreadoutput = svnReadOutput;
 	myCommand.onreaderror = svnReadError;
 };
 
-function readTail(){
-	TextMate.isBusy = false;
-	the_filename    = null;
-	the_id          = null;
-	the_displayname = null;
-	the_new_status  = null;	
-}
-
 function svnReadOutput(str){
 	displayCommandOutput('info', 'info', str);
-	if(the_new_status == '-'){document.getElementById('status'+the_id).className = 'status_col ' + StatusMap['-']};
-	if(the_new_status == 'D'){document.getElementById('status'+the_id).className = 'status_col ' + StatusMap['D']};
-	document.getElementById('status'+the_id).innerHTML = the_new_status;
-	readTail()
 };
 
 function svnReadError(str){
 	displayCommandOutput('error', 'error', str);
-	readTail()
 };
 
 function openWithFinder(filename,id){
@@ -154,7 +158,6 @@ function sendDiffToTextMate(filename,id){
 	TextMate.isBusy = true;
 	tmp = '/tmp/diff_to_mate' + id + '.diff'
 	cmd = 'LC_CTYPE=en_US.UTF-8 ' + ENV['TM_SVN'] + ' 2>&1 diff --diff-cmd diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
-	document.getElementById('commandOutput').innerHTML += TextMate.system(cmd, null).outputString + ' \\n'
+	document.getElementById('commandOutput').innerHTML += TextMate.system(cmd, null).outputString + ' \n'
 	TextMate.isBusy = false;
 };
-

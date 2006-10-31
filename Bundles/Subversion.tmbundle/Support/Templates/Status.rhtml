@@ -1,12 +1,12 @@
 <% require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview.rb' %>
 
-
-
 <% # raise 'No JavaScript' if not File.exist?("#{bundle}/Template/Status.js") %>
 
+<!--
+	TODO: openWithFinder for image files instead of Diff
+	TODO: fix diff with the CommitWindow -->
 
 <%=
-
 prefix_js =<<END_JS # javascript
 // Set up globals
 var ENV = new Object
@@ -27,39 +27,30 @@ WorkPaths = ["#{work_paths.join('","')}"]
 END_JS
 
 status_js = IO.read("#{bundle}/Templates/Status.js")
-status_js.gsub!(/\#\{(.*)\}/) {|s| instance_eval "$1"}
 
 html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title)}&rdquo;",
 			"Subversion",
-			%Q{<style type="text/css" media="screen"> @import 'file://#{bundle}/Stylesheets/svn_status_style.css'; </style>\n	<script  type="text/javascript" language="javascript" charset="utf-8">#{prefix_js}\n\n#{status_js}</script>})
+			%Q{	<script  type="text/javascript" language="javascript" charset="utf-8">#{prefix_js}\n\n#{status_js}</script>})
+
+#<style type="text/css" media="screen"> @import 'file://#{bundle}/Stylesheets/svn_status_style.css'; </style>\n
 %>
 
-
-
+<% STDOUT.flush %>
 
 <%
-	button_strip = [	{:status => /\?/,	:name =>	'Add',		:onclick => 'svnAddFile'},
-						{:status => /[^?A]/,:name =>	'Revert',	:onclick => 'svnRevertFileConfirm'},
-						{:status => /A/,	:name =>	'Revert',	:onclick => 'svnRevertFile'},
-						{:status => /\?/,	:name =>	'Remove',	:onclick => 'svnRemoveFile'},
-						{:status => /.*/,	:name =>	'Diff',		:onclick => 'sendDiffToTextMate', :or_finder => 1}]		# openWithFinder for image files
+	button_strip = [	{:status => /\?/,			:name =>	'Add',		:onclick => 'svnAddFile'},
+						{:status => /(A|D|M|C)/,	:name =>	'Revert',	:onclick => 'svnRevertFileConfirm'},
+						{:status => /!/,		:name =>	'Remove',	:onclick => 'svnRemoveFile'},
+						{:status => /(A|M|C)/,		:name =>	'Diff',		:onclick => 'sendDiffToTextMate'}]		# should be openWithFinder for image files
 %>
-
-
 
 <!-- <div class="section"> -->
 <table class="status" border="0">
 
-	<%
-	match_columns       = '.' * status_column_count
-	unknown_file_status = '?' + (' ' * (status_column_count - 1))
-	missing_file_status = '!' + (' ' * (status_column_count - 1))
-	added_file_status   = 'A' + (' ' * (status_column_count - 1))
+	<% match_columns       = '.' * status_column_count %>
 
-	stdin_line_count = 1
-	%>
-
-	<% STDIN.each_line do |line| %>
+	<% stdin_line_count = 1
+	 STDIN.each_line do |line| %>
 		<tr>
 			<%# Check for error first %>
 			<% if not /^svn:/.match( line ).nil? then %>
@@ -70,7 +61,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 				<% match = /^(#{match_columns})(?:\s+)(.*)\n/.match( line ) %>
 				<% if match.nil? then %>
 				
-					<%# Informational text, not status %>
+					<%# Informational text, not status. colspan=0 doesn't seem to work. Wrong DOCTYPE, maybe? %>
 					<td colspan=<%= status_colspan %>><div class="info"><%= line %></div></td>
 				<% else %>
 					<%
@@ -80,7 +71,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 					esc_displayname = '&quot;' + CGI.escapeHTML(shorten_path(file).gsub(/(?=")/, '\\')) + '&quot;'
 
 					# Skip files that we don't want to know about
-					next if (status == unknown_file_status and ignore_file_pattern =~ file)
+					next if (status.strip == '?' and ignore_file_pattern =~ file)
 					%>
 					<%# Status columns %>
 					<% status_column_count.times do |i| %>
@@ -91,17 +82,27 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 							<%= c %>
 						</td>
 					<% end %>
+					<%# End status columns %>
 					
-					<%# Action buttons %>
-					<% button_strip.each do |button| %>
-						<% match_status = button[:status]
-						 button_name = button[:name] %>
-						<td class="<%= button_name.downcase + '_col' %>">
-							<% if not status.scan(match_status).empty? %>
-								<a href="#" onclick="<%= "#{button[:onclick]}('#{esc_file}', #{stdin_line_count})" %>; return false" class="<%= button_name.downcase + '_button' %>"><%= button_name %></a>
-							<% end %>
-						</td>
+					<%# Action buttons for status %>
+					<% if $is_status %>
+						<% button_strip.each do |button| %>
+							<% match_status = button[:status]
+							button_name = button[:name]
+							show_button = (not status.scan(match_status).empty?)
+							
+							# Make sure we ask for confirmation if we're going to lose changes using Revert
+							if show_button and button_name == 'Revert' then
+								button[:onclick] = 'svnRevertFile' + (status.scan(/A|D/).empty? ? 'Confirm' : '')
+							end %>
+								<td class="<%= button_name.downcase + '_col' %>">
+									<% if show_button then %>
+										<a href="#" onclick="<%= "#{button[:onclick]}('#{esc_file}', #{stdin_line_count}, '#{esc_displayname}')" %>; return false" class="<%= button_name.downcase + '_button' %>"><%= button_name %></a>
+									<% end %>
+								</td>
+						<% end %>
 					<% end %>
+					<%# End action buttons %>
 					
 					<td class="file_col"> <a href="<%= 'txmt://open?url=file://' + (e_url file) %>" class="pathname"><%= shorten_path(file) %></a> </td>
 					
@@ -109,6 +110,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 			<% end %>
 		</tr>
 		<% stdin_line_count += 1 %>
+		<% STDOUT.flush %>
 	<% end %>
 </table>
 

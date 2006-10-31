@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+$LOAD_PATH &lt;&lt; "#{ENV['TM_BUNDLE_SUPPORT']}/lib"
+require "terminal_mate"
+
+file_ext = ENV["TERMINAL_MATE_FILE_EXTENSION"].to_s
+tm_filepath = ENV["TM_FILEPATH"]
+if tm_filepath.nil?
+  tmpfile = `mktemp -t TerminalMate`.chomp # Couldn't get Tempfile to work…
+  tmpfile += file_ext
+  File.open(tmpfile, "w") do |f| f.write(STDIN.read) end
+  file = tmpfile
+  File.chmod(0755, file) if file_ext == ".sh"
+else
+  file = tm_filepath
+end
+TerminalMate::Client.new.send("load_file", ENV["TM_SCOPE"], ENV["TERMINAL_MATE_LOAD"] % file)
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^I</string>
+	<key>name</key>
+	<string>Load File</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>scope</key>
+	<string>source</string>
+	<key>uuid</key>
+	<string>964A0E53-3896-4EC6-AC15-038DC8FCEEE2</string>
+</dict>
+</plist>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+$LOAD_PATH &lt;&lt; "#{ENV['TM_BUNDLE_SUPPORT']}/lib"
+require "terminal_mate"
+TerminalMate::Client.new.send("paste", ENV["TM_SCOPE"], STDIN.read)
+</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^I</string>
+	<key>name</key>
+	<string>Paste Selection</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source</string>
+	<key>uuid</key>
+	<string>3B47B103-857B-4A75-938B-4D57D4803BC2</string>
+</dict>
+</plist>

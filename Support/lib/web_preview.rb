@@ -6,7 +6,7 @@ HTML_TEMPLATE = <<-HTML
   "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title><%= window_title %></title>
   <% common_styles.each { |style| %>
     <link rel="stylesheet" href="file://<%= support_path %>/themes/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
@@ -14,24 +14,27 @@ HTML_TEMPLATE = <<-HTML
   <% bundle_styles.each { |style| %>
     <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
     <% } %>
+    <link rel="stylesheet" href="file://<%= support_path %>/themes/default/print.css"   type="text/css" charset="utf-8" media="print">    
   <script src="file://<%= support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
   <script src="file://<%= support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
   <%= html_head %>
 </head>
 <body id="tm_webpreview_body" class="<%= html_theme %>">
   <div id="tm_webpreview_header">
-    <img id="gradient" src="file://<%= support_path %>/themes/<%= html_theme %>/images/header.png">
+    <img id="gradient" src="file://<%= support_path %>/themes/<%= html_theme %>/images/header.png" alt="header">
     <p class="headline"><%= page_title %></p>
     <p class="type"><%= sub_title %></p>
     <img id="teaser" src="file://<%= support_path %>/themes/<%= html_theme %>/images/teaser.png" alt="teaser">
     <div id="theme_switcher">
       <form action="#" onsubmit="return false;">
-        Theme: 
-        <select onchange="selectTheme(this.value);" id="theme_selector">
+        <div>
+          Theme:        
+          <select onchange="selectTheme(this.value);" id="theme_selector">
           <% common_styles.each { |style| %>
             <option value="<%= style %>"><%= style %></option>
           <% } %>
-        </select>
+          </select>
+        </div>
         <script type="text/javascript" charset="utf-8">
           document.getElementById('theme_selector').value = '<%= html_theme %>';
         </script>

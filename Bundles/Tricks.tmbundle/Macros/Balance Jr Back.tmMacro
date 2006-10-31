@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>action</key>
+				<string>findPrevious</string>
+				<key>findInProjectIgnoreCase</key>
+				<true/>
+				<key>findInProjectRegularExpression</key>
+				<false/>
+				<key>findString</key>
+				<string>(?x)
+&lt;(\w+)[^&gt;]*&gt;[^&lt;]*&lt;/\1&gt;                         # HTML tags that don&apos;t contain text
+|(&lt;%@\s|&lt;%\#\s|&lt;%=\s)[^%]*%&gt;                   # The contents of various other forms of Embedded source
+|(?&lt;=(&lt;%@\s|&lt;%\#\s|&lt;%=\s))[^%]*(?=\s%&gt;)        # The contents of various other forms of Embedded source
+|(?&lt;=&lt;%\s)[^%]*(?=\s%&gt;)                        # The contents of Embedded source
+|(?&lt;=&lt;!--\s)[^-&gt;]*(?=\s--&gt;)                    # HTML Comments
+|\b[\w-]+\b(?=\s*=)                            # HTML Attribute name
+|\s\b[\w-]+\b=\&quot;[^\&quot;]*\&quot;                       # HTML Attribute name value pair
+|(?&lt;=\&quot;)[^\&quot;\n&lt;&gt;]*(?=\&quot;)                       # HTML Compatible String Double
+|(?&lt;=\&apos;)[^\&apos;\n]*(?=\&apos;)                         # &apos;String Single&apos;
+|(?&lt;=\[)[^\[\]]*(?=\])                         # [Square Brackets]
+|(?&lt;={)[^{}]*(?=})                             # {Curly Brackets}
+|(?&lt;=[^/]&gt;)[^&gt;&lt;]*(?=&lt;/)                        # &gt;Text Inside HTML Tag&lt;/
+|\#[0-9a-fA-F]{6}                              # Hex Colors #AABBCC
+|\#[0-9a-fA-F]{3}                              # Hex Colors #ABC
+|(?&lt;![\d])-?\d+(?:\.\d+)?(?!=\d)               # Number 123 123.123 -123
+|[@$!]\w+\b                                    # @variables $variables !etc
+|(?&lt;=/\*).*(?=\*/)                             # /* Contents of Comment Blocks */
+|/\*.*\*/                                      # /* Comment Blocks */
+|(?&lt;=[\(,:])[^\(\),\n]*(?=[\),;])              # Comma Delimitated
+|(?&lt;=\&quot;)(?=(&gt;|/&gt;| /&gt;))                         # Placer for adding HTML Attribute Values
+|&lt;[^&gt;\n]*/?&gt;                                   # HTML Tags
+|(?&lt;=\&quot;)[^\&quot;\n]*(?=\&quot;)                         # String Double
+# Thomas Aylott &lt;oblivious@subtleGradient.com&gt; #
+# Balance Jr. Regular Expression version 2.7   #
+</string>
+				<key>ignoreCase</key>
+				<true/>
+				<key>regularExpression</key>
+				<true/>
+				<key>replaceAllScope</key>
+				<string>selection</string>
+				<key>replaceString</key>
+				<string>subtleGradient</string>
+				<key>wrapAround</key>
+				<true/>
+			</dict>
+			<key>command</key>
+			<string>findWithOptions:</string>
+		</dict>
+	</array>
+	<key>name</key>
+	<string>Balance Jr Back</string>
+	<key>scopeType</key>
+	<string>local</string>
+	<key>useGlobalClipboard</key>
+	<true/>
+	<key>uuid</key>
+	<string>37FBE527-CE10-42F5-8974-12463404AD23</string>
+</dict>
+</plist>

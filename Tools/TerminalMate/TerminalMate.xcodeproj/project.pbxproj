@@ -1,0 +1,344 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
+		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
+		9B8B40060A90FA810006F753 /* GCTerminalMate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8B40040A90FA810006F753 /* GCTerminalMate.m */; };
+		9B8B40470A90FF780006F753 /* iTermApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8B40460A90FF780006F753 /* iTermApplicationDelegate.m */; };
+		9BB0156D0AF7E79E008FD47F /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BB0156B0AF7E79E008FD47F /* Growl.framework */; };
+		9BB0156E0AF7E79E008FD47F /* iTerm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BB0156C0AF7E79E008FD47F /* iTerm.framework */; };
+		9BB015720AF7E7A8008FD47F /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 9BB0156B0AF7E79E008FD47F /* Growl.framework */; };
+		9BB015730AF7E7A8008FD47F /* iTerm.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 9BB0156C0AF7E79E008FD47F /* iTerm.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9B8B40480A90FF800006F753 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9BB015720AF7E7A8008FD47F /* Growl.framework in Copy Frameworks */,
+				9BB015730AF7E7A8008FD47F /* iTerm.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		089C167EFE841241C02AAC07 /* English.lproj */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = folder; name = English.lproj; path = Resources/English.lproj; sourceTree = "<group>"; };
+		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		8D5B49B6048680CD000E48DA /* TerminalMate.tmplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TerminalMate.tmplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
+		9B8B40030A90FA810006F753 /* GCTerminalMate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTerminalMate.h; sourceTree = "<group>"; };
+		9B8B40040A90FA810006F753 /* GCTerminalMate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTerminalMate.m; sourceTree = "<group>"; };
+		9B8B40050A90FA810006F753 /* TerminalMate_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerminalMate_Prefix.pch; sourceTree = "<group>"; };
+		9B8B40450A90FF780006F753 /* iTermApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTermApplicationDelegate.h; sourceTree = "<group>"; };
+		9B8B40460A90FF780006F753 /* iTermApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iTermApplicationDelegate.m; sourceTree = "<group>"; };
+		9BB0156B0AF7E79E008FD47F /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = Vendor/Growl.framework; sourceTree = "<group>"; };
+		9BB0156C0AF7E79E008FD47F /* iTerm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iTerm.framework; path = Vendor/iTerm.framework; sourceTree = "<group>"; };
+		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D5B49B3048680CD000E48DA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
+				9BB0156D0AF7E79E008FD47F /* Growl.framework in Frameworks */,
+				9BB0156E0AF7E79E008FD47F /* iTerm.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* TerminalMate */ = {
+			isa = PBXGroup;
+			children = (
+				9B8B40020A90FA810006F753 /* Sources */,
+				089C167CFE841241C02AAC07 /* Resources */,
+				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
+				19C28FB8FE9D52D311CA2CBB /* Products */,
+			);
+			name = TerminalMate;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 /* Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */,
+				1058C7AEFEA557BF11CA2CBB /* Other Frameworks */,
+			);
+			name = "Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C167CFE841241C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D5B49B7048680CD000E48DA /* Info.plist */,
+				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9BB0156B0AF7E79E008FD47F /* Growl.framework */,
+				9BB0156C0AF7E79E008FD47F /* iTerm.framework */,
+				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7AEFEA557BF11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				089C167FFE841241C02AAC07 /* AppKit.framework */,
+				D2F7E65807B2D6F200F64583 /* CoreData.framework */,
+				089C1672FE841209C02AAC07 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FB8FE9D52D311CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D5B49B6048680CD000E48DA /* TerminalMate.tmplugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9B8B40020A90FA810006F753 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				9B8B40450A90FF780006F753 /* iTermApplicationDelegate.h */,
+				9B8B40460A90FF780006F753 /* iTermApplicationDelegate.m */,
+				9B8B40030A90FA810006F753 /* GCTerminalMate.h */,
+				9B8B40040A90FA810006F753 /* GCTerminalMate.m */,
+				9B8B40050A90FA810006F753 /* TerminalMate_Prefix.pch */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D5B49AC048680CD000E48DA /* TerminalMate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "TerminalMate" */;
+			buildPhases = (
+				8D5B49AF048680CD000E48DA /* Resources */,
+				9B8B40480A90FF800006F753 /* Copy Frameworks */,
+				8D5B49B1048680CD000E48DA /* Sources */,
+				8D5B49B3048680CD000E48DA /* Frameworks */,
+				9B8B40670A90FFB60006F753 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TerminalMate;
+			productInstallPath = "$(HOME)/Library/Bundles";
+			productName = TerminalMate;
+			productReference = 8D5B49B6048680CD000E48DA /* TerminalMate.tmplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "TerminalMate" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 089C166AFE841209C02AAC07 /* TerminalMate */;
+			projectDirPath = "";
+			targets = (
+				8D5B49AC048680CD000E48DA /* TerminalMate */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D5B49AF048680CD000E48DA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9B8B40670A90FFB60006F753 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -change \\\n\t@executable_path/../Frameworks/iTerm.framework/Versions/A/iTerm \\\n\t@loader_path/../Frameworks/iTerm.framework/Versions/A/iTerm \\\n\t\"${CONFIGURATION_BUILD_DIR}/${PRODUCT_NAME}${WRAPPER_SUFFIX}/Contents/MacOS/${PRODUCT_NAME}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D5B49B1048680CD000E48DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B8B40060A90FA810006F753 /* GCTerminalMate.m in Sources */,
+				9B8B40470A90FF780006F753 /* iTermApplicationDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C167DFE841241C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C167EFE841241C02AAC07 /* English.lproj */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB913B08733D840010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_5)",
+					/Users/lee/Projects/Work/TerminalMate/Vendor,
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/vendor\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Vendor\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Vendor\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Vendor/iTerm.framework/Versions/A/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_5 = "\"$(SRCROOT)/Vendor\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Sources/TerminalMate_Prefix.pch;
+				HEADER_SEARCH_PATHS = "/usr/lib/ruby/1.8/universal-darwin8.0/";
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "/Library/Application Support/TextMate/PlugIns";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lruby",
+					"-lpthread",
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = TerminalMate;
+				WRAPPER_EXTENSION = tmplugin;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB913C08733D840010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = /;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_5)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/vendor\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Vendor\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Vendor\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Vendor/iTerm.framework/Versions/A/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_5 = "\"$(LOCAL_LIBRARY_DIR)/Application Support/TextMate/Tools/TerminalMate/Vendor\"";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Sources/TerminalMate_Prefix.pch;
+				HEADER_SEARCH_PATHS = "/usr/lib/ruby/1.8/universal-darwin8.0/";
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Application Support/TextMate/PlugIns";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lruby",
+					"-lpthread",
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = TerminalMate;
+				WRAPPER_EXTENSION = tmplugin;
+			};
+			name = Release;
+		};
+		1DEB913F08733D840010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		1DEB914008733D840010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "TerminalMate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB913B08733D840010E9CD /* Debug */,
+				1DEB913C08733D840010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "TerminalMate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB913F08733D840010E9CD /* Debug */,
+				1DEB914008733D840010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}

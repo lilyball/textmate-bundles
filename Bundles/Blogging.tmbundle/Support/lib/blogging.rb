@@ -719,7 +719,7 @@ TEXT
                   height_width = %Q{ height="#{height}" width="#{width}"}
                 end
               end
-              print %Q{<img src="#{url}" alt="${1:#{CGI::escapeHTML alt}}"#{height_width} />}
+              print %Q{<img src="#{url}" alt="${1:#{CGI::escapeHTML alt}}"#{height_width}#{ENV['TM_XHTML']}>}
           end
         else
           TextMate.exit_show_tool_tip("Error uploading image.")

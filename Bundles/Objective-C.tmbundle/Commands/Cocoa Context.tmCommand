@@ -52,8 +52,9 @@ end
 def snippet_generator(cand, start)
   stuff = cand[start..-1].split("\t")
   if stuff[0].count(":") &gt; 0
-    name_array = stuff[0].split(":")
 
+    name_array = stuff[0].split(":")
+    name_array = [""] if name_array.empty? 
     out = ""
 begin
     stuff[-(name_array.size)..-1].each_with_index do |arg,i|
@@ -187,13 +188,13 @@ elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
   if mn.empty?
     mn = "NoMethod"
   end
-  candidates = candidates_or_exit( mn + "[[:alpha:]]" ) # the alpha is to prevent satisfaction with just one part
+  candidates = candidates_or_exit( mn + "[[:alpha:]:]" ) # the alpha is to prevent satisfaction with just one part
   res = pop_up(candidates, mn, caret_placement, line)
   print line[0..caret_placement] + res + "$0"+ line[caret_placement+1..-1]
 elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
   if mline[start[-1]..k.begin(0)-1+start[-1]].match alpha_and_space
     mn = methodNames(line[start[-1]..caret_placement]) + k[0]
-    candidates = candidates_or_exit( mn + "[[:alpha:]]")
+    candidates = candidates_or_exit( mn + "[[:alpha:]:]")
     res =pop_up(candidates, mn, caret_placement, line)
     print line[0..caret_placement] + res + "$0"+ line[caret_placement+1..-1]
     #print line[0..caret_placement] + snippet_generator( candidates[0], mn.size )+"$0"+ line[caret_placement+1..-1]

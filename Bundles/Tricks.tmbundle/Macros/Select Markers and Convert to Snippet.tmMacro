@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<string>moveToBeginningOfDocument:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>action</key>
+				<string>findNext</string>
+				<key>findInProjectIgnoreCase</key>
+				<true/>
+				<key>findInProjectRegularExpression</key>
+				<false/>
+				<key>findString</key>
+				<string>(?m:‹.*›)</string>
+				<key>ignoreCase</key>
+				<true/>
+				<key>regularExpression</key>
+				<true/>
+				<key>replaceAllScope</key>
+				<string>selection</string>
+				<key>wrapAround</key>
+				<false/>
+			</dict>
+			<key>command</key>
+			<string>findWithOptions:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>beforeRunningCommand</key>
+				<string>nop</string>
+				<key>command</key>
+				<string>"$TM_BUNDLE_SUPPORT/bin/convert_to_snippet.rb"</string>
+				<key>disableOutputAutoIndent</key>
+				<true/>
+				<key>fallbackInput</key>
+				<string>none</string>
+				<key>input</key>
+				<string>selection</string>
+				<key>keyEquivalent</key>
+				<string></string>
+				<key>name</key>
+				<string>Convert to Snippet</string>
+				<key>output</key>
+				<string>insertAsSnippet</string>
+				<key>uuid</key>
+				<string>99D9DBC0-E03E-46B9-9E73-13F58DCDB55B</string>
+			</dict>
+			<key>command</key>
+			<string>executeCommandWithOptions:</string>
+		</dict>
+	</array>
+	<key>name</key>
+	<string>Select Markers and Convert to Snippet</string>
+	<key>scopeType</key>
+	<string>local</string>
+	<key>uuid</key>
+	<string>C5EF3C38-DED6-4308-90C1-BE75B4430332</string>
+</dict>
+</plist>

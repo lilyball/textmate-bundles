@@ -129,10 +129,17 @@ function full_text(node) {
     return str;
   }
 }
+function mark_table() {
+  var tab = document.getElementsByTagName('table')[0];
+  tab.className += " sortable";
+  tab.id = "table_unique";
+}
 var CH_titles = new Array;
 window.onload = function () {
   create_nav_list();
   mark_trs();
   set_tr_classes();
+  mark_table();
+  sortables_init();
   return true;
 };

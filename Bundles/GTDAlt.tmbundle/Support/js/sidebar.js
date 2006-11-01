@@ -29,10 +29,12 @@ function get_toggles() {
   return to_return;
 }
 function select_all_items(e) {
+  var trg = e.target;
   var answer = this.firstChild.nodeValue == "all" ? true : false;
   var items = this.parentNode.parentNode.getElementsByTagName('li');
   for (var i=0; i < items.length; i++) {
-    if (items[i].firstChild.checked != answer)
+    if ( (items[i].firstChild.checked != answer && items[i].childNodes[1] != trg) ||
+    (items[i].firstChild.checked == answer && items[i].childNodes[1] == trg) )
       items[i].firstChild.click();
   };
   return true;
@@ -46,10 +48,9 @@ function create_nav_list() {
     main_level[i].innerHTML += create_list_part(title,
                             main_level[i].getAttribute('tablecolumn'));
   }
-  var links = document.getElementsByTagName('a');
+  var links = document.getElementById('toggles').getElementsByTagName('a');
   for (var i=0; i < links.length; i++) {
-    if (links[i].className == "select_all")
-      links[i].onclick = select_all_items;
+    links[i].onclick = select_all_items;
   };
   var els = document.getElementById('toggles').getElementsByTagName('input');
   for (i=0;i<els.length;i++) {
@@ -60,7 +61,7 @@ function create_list_part(type_name,index) {
   var titles = find_values(index);
   var str = '<ul id="'+ type_name + '">';
   for (var i=0;i<titles.length;i++) {
-    var link_str = '<li><input type="checkbox" name="TEMPLATE-' + i + '-hide" id="TEMPLATE-' + i + '-button" checked = "true" >'+ titles[i] + '</li>'
+    var link_str = '<li><input type="checkbox" name="TEMPLATE-' + i + '-hide" id="TEMPLATE-' + i + '-button" checked = "true" ><a href="#">'+ titles[i] + '</a></li>'
     str += string_substitute(link_str,"TEMPLATE",type_name);
   }
   str += "</ul>";
@@ -79,23 +80,16 @@ function find_values(index){
       var txt = full_text(el);
       var found = false;
       for (j=0;j<contexts.length;j++) {
-        if (contexts[j] == txt)
-          found = true;
+        if (contexts[j] == txt) found = true;
       }
-      if (!found)
-        contexts.push(txt);
+      if (!found) contexts.push(txt);
     }
   }
   return contexts;
 }
 function set_tr_classes() {
   var trs = document.getElementsByTagName('tr');
-/*  set_class(trs[1]);
-  set_class(trs[2]);
-*/
-  for (var i=1;i<trs.length;i++) {
-    set_class(trs[i]);
-  }
+  for (var i=1;i<trs.length;i++) set_class(trs[i]);
 }
 function set_class(tr) {
   var main_level = document.getElementById('toggles');
@@ -148,6 +142,16 @@ function mark_table() {
   var tab = document.getElementsByTagName('table')[0];
   tab.className += " sortable";
   tab.id = "table_unique";
+}
+function toggle_done (el) {
+  if (el.value == "Mark!") {
+    el.value = "Done!";
+    el.className = "done";
+  } else {
+    el.value = "Mark!";
+    el.className = "";
+  }
+  return false;
 }
 var CH_titles = new Array;
 window.onload = function () {

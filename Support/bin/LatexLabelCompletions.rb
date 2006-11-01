@@ -8,7 +8,12 @@
 # Helper function
 #####################
 def recursiveFileSearch(initialList,fileExt)
-  extraPathList = ([`kpsewhich -show-path=#{fileExt}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')})
+  if `which kpsewhich`.match(/^no kpsewhich/) then
+    kpsewhich = `locate kpsewhich`.split("\n").grep(/kpsewhich$/)[0]
+  else
+    kpsewhich = "kpsewhich"
+  end
+  extraPathList = ([`"#{kpsewhich}" -show-path=#{fileExt}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')})
   extraPathList.unshift("")
   case fileExt 
     when "bib" then regexp = /\\bibliography\{([^}]*)\}/
@@ -60,11 +65,9 @@ end
 # Work with the current file; if TM_LATEX_MASTER is set, work with both
 # Thanks to Alan Schussman
 #
-filelist = if (ENV.has_key?("TM_LATEX_MASTER")) then
-          [ENV["TM_FILEPATH"], ENV["TM_LATEX_MASTER"]]
-        else
-          [ENV["TM_FILEPATH"]]
-        end
+filelist = []
+filelist << ENV["TM_FILEPATH"] if ENV.has_key?("TM_FILEPATH")
+filelist << ENV["TM_LATEX_MASTER"] if ENV.has_key?("TM_LATEX_MASTER")
 
 # Recursively find all relevant files. Don't forget to include current files
 filelist += recursiveFileSearch(filelist,"tex")

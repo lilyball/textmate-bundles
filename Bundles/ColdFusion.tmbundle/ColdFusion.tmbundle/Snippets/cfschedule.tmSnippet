@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;cfschedule
+	action = "$1"
+	task = "$2"${3:
+	operation = "${4:[required if action equals update]}"
+	file = "${5:[required if publish equals yes]}"
+	path = "${6:[required if publish equals yes]}"
+	startDate = "${7:[required if action equals update]}"
+	startTime = "${8:[required if action equals update]}"
+	url = "${9:[required if action equals update]}"
+	port = "${10:[ ]}"
+	publish = "${11:[ ]}"
+	endDate = "${12:[ ]}"
+	endTime = "${13:[ ]}"
+	interval = "${14:[required if action equals update]}"
+	requestTimeOut = "${15:[ ]}"
+	username = "${16:[ ]}"
+	password = "${17:[ ]}"
+	proxyServer = "${18:[ ]}"
+	proxyPort = "${19:[ ]}"
+	proxyUser = "${20:[ ]}"
+	proxyPassword = "${21:[ ]}"
+	resolveURL = "${22:[ ]}"}&gt;$0</string>
+	<key>name</key>
+	<string>cfschedule</string>
+	<key>scope</key>
+	<string>text.html.cfm</string>
+	<key>tabTrigger</key>
+	<string>cfschedule</string>
+	<key>uuid</key>
+	<string>AD74D8BA-A774-4748-BF7E-22A6E94194ED</string>
+</dict>
+</plist>

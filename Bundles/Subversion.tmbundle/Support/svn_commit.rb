@@ -67,8 +67,11 @@ if ARGV.include? '--console-output'
 else 
 	# TextMate
 	$console_output = false
-	paths_to_commit = TextMate::selected_paths_array
-	paths_to_commit.concat( ARGV ) unless ARGV.empty?
+	if ARGV.empty?
+	  paths_to_commit = TextMate::selected_paths_array
+  else
+	  paths_to_commit.concat( ARGV ) 
+  end
 	
 	mup = Builder::XmlMarkup.new(:target => STDOUT)
 end

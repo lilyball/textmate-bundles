@@ -142,7 +142,12 @@ function svnRemoveFile(filename,id,displayname){
 };
 
 function svnReadOutput(str){
+	// FIXME: Committing will output a while new page!
+	// str = str.replace(/</g, '&lt;')
+	// str = str.replace(/>/g, '&gt;')
+	// str = str.replace(/"/g, '&quot;')
 	displayCommandOutput('info', 'info', str);
+	TextMate.isBusy = false;
 };
 
 function svnReadError(str){

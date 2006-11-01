@@ -46,12 +46,14 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 
 <!-- <div class="section"> -->
 <table class="status" border="0">
-
+	<tr>
+		<th colspan="4">Status</th><th colspan="5">Actions</th><th>File</th>
+	</tr>
 	<% match_columns       = '.' * status_column_count %>
 
 	<% stdin_line_count = 1
 	 STDIN.each_line do |line| %>
-		<tr>
+		<tr class="<%= stdin_line_count % 2 == 0 ? 'even' : 'odd' %>">
 			<%# Check for error first %>
 			<% if not /^svn:/.match( line ).nil? then %>
 				<td><div class="error"><%= line %></div></td>
@@ -106,7 +108,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 					
 					<td class="file_col"> <a href="<%= 'txmt://open?url=file://' + (e_url file) %>" class="pathname"><%= shorten_path(file) %></a> </td>
 					
-				<% end %>							
+				<% end %>
 			<% end %>
 		</tr>
 		<% stdin_line_count += 1 %>
@@ -116,14 +118,15 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 
 <% if $is_status then %>
 	<div id="actions">
-		<a href='#' onclick="svnCommit(); return false">Commit</a>
-		<div style="clear:both"></div>
+		<input type="button" value="Commit" onclick="svnCommit(); return false" />
 	</div>
 <% end %>
 
+<h3 class="console">Console</h3>
 <div id="commandOutput"></div>
-<%#DEBUG# mup << display_title + "\n" %>
-<%#DEBUG# ENV.sort.each { |key,value| puts key + ' = ' + value + "\n" } %>
 
-<!-- why would this close the document _above_ the table tag? -->
+<!-- FIXME: why would this close the document _above_ the table tag? -->
 <%#= html_footer %>
+</div>
+</body>
+</html>

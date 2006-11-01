@@ -64,26 +64,54 @@ div.subversion table.blame td.codecol {
 
 /* Status */
 table.status {
-/*	border-collapse: collapse;*/
+	font-size: 90%;
+	border-collapse: collapse;
+	border: 1px solid #808080;
+	empty-cells: show;
+}
+table.status th {
+	padding: 0.5ex 1ex 0.5ex 1ex;
+	border: 1px solid #808080;
+	text-align: left;
 }
 
 table.status td {
-	font-size: 90%;
+	padding: 0.3ex 0.6ex 0.3ex 0.6ex;
+/*	border-bottom: 1px solid #808080;*/
+}
+
+h3.console {
+	margin-bottom: 0;
 }
 
 #commandOutput {
-	white-space: pre;
-	font: 10px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-	width: 100%;
+	width: 95%;
+	min-height: 2em;
+	
 	overflow: auto;
-	padding-bottom: 10px;
+	margin: 0 1em 1em 0;
+	padding-left: 1em;
+	
+	border: 1px solid #808080;
+
+	font-family: monospace;
+	font-size: 85%;
+	white-space: pre;
 }
 
 /* center the status characters */
-table.status .status_col {
+table.status td.status_col {
 	text-align: center;
+}
+
+table.status td.file_col {
+	padding: 0 1ex 0 2ex;
 }
 
 .diff_col, .remove_col, .add_col, .revert_col {
 	text-align: center;
+}
+
+div#actions {
+	margin-top: 1em;
 }

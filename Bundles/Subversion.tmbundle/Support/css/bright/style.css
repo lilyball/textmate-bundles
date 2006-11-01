@@ -46,14 +46,14 @@
 
 /* to make it look good if a line gets wrapped: */
 /* about the several column classes.. */
-.bright div.subversion table.blame td.linecol {
+.bright div.subversion table.blame tr.linecol {
    background-color: #ddd;
    border-right: 1px solid #999;
    color: #888;
    text-align: right;
 }
 
-.bright div.subversion table.blame td.revcol, .bright div.subversion table.blame td.namecol {
+.bright div.subversion table.blame tr.revcol, .bright div.subversion table.blame tr.namecol {
    text-align: right;
    background-color: #f8f8f8;
    color: #888;
@@ -62,17 +62,17 @@
    padding-left: 2px;
 }
 
-.bright div.subversion table.blame td.namecol {
+.bright div.subversion table.blame tr.namecol {
    border-right: 1px solid #aaa;
 }
 
-.bright div.subversion table.blame td.alternate {
+.bright div.subversion table.blame tr.alternate {
 	background-color: #E4E4E4;
 }
 
 /* maybe this should be implemented as id but its
    an optimisation for less ruby code. :) */
-.bright div.subversion table.blame td.current_line {
+.bright div.subversion table.blame tr.current_line {
    background-color: #F1D8F0;
 	border-width: 1px 0 1px 0;
 	border-style: solid;
@@ -81,29 +81,27 @@
 
 
 /* STATUS */
+.bright table.status {
+/*	border-color: #000;*/
+}
 
-/* A */
-.bright table.status td.added {
-	color:      green;
-	background: #bbffb3;
+.bright table.status th {
+	background-color: #E2E2E2;
+	border: 1px solid #AAA;
+/*	color: #FFF;*/
+	font-weight: normal;
 }
-/* M */
-.bright table.status td.modified, td.updated, td.merged {
-	color:      #eb6400;
-	background: #f7e1ad;
+
+.bright table.status td {
 }
-/* D */
-.bright table.status td.deleted, td.replaced {
-	color:      red;
-	background: #f59696;
+
+table.status td.status_col {
+	color: #505050;
 }
-/* C, !, " */
-.bright table.status td.conflict, table.status td.missing, table.status td.typeconflict {
-	color:      teal;
-	background: #A3CED0;
+.bright table.status tr.even {
+	background-color: #F0F0F0;
 }
-/* ?, I, X */
-.bright table.status td.unknown, table.status td.ignored, table.status td.external {
-	color:      purple;
-	background: #edaef5;
+#commandOutput {
+	border: 1px solid #AAA;
+	background-color: #DDD;
 }

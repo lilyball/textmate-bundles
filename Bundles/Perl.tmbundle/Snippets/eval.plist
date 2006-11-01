@@ -6,7 +6,7 @@
 	<string>eval {
 	${1:# do something risky...}
 };
-if ($@) {
+if (\$@) {
 	${2:# handle failure...}
 }
 </string>

@@ -227,7 +227,7 @@ void *initTerminalMateThread(void *data)
 - (void)loadGrowl
 {
     NSString *path1 = @"/Library/Application Support/TextMate/PlugIns/TerminalMate.tmplugin/Contents/Frameworks/Growl.framework";
-    NSString *path2 = @"~/Library/Application Support/TextMate/PlugIns/TerminalMate.tmplugin/Contents/Frameworks/Growl.framework";
+    NSString *path2 = [@"~/Library/Application Support/TextMate/PlugIns/TerminalMate.tmplugin/Contents/Frameworks/Growl.framework" stringByExpandingTildeInPath];
     NSString *path;
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:path1])
@@ -239,7 +239,7 @@ void *initTerminalMateThread(void *data)
     
     GCLog(@"Using Growl path='%@'", path);
     
-    NSBundle * bundle = [NSBundle bundleWithPath:[path stringByExpandingTildeInPath]];
+    NSBundle * bundle = [NSBundle bundleWithPath:path];
     if ([bundle load])
         GCLog(@"Growl loaded");
     else

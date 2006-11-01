@@ -35,7 +35,10 @@ def shorten_path(path)
 end
 
 svn = ENV['TM_SVN'] || 'svn'
-svn = `which svn`.chomp unless svn[0] == ?/
+unless svn[0] == ?/
+  svn = `which svn`.chomp
+  ENV['TM_SVN'] = svn
+end
 
 display_title = work_paths[0] if work_path.nil? and (not work_paths.nil?) and (work_paths.size == 1)
 display_title ||= '(selected files)'

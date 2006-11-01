@@ -68,7 +68,10 @@ function svnCommit(){
 	cmd += "export            TM_SVN="			+ ENV['TM_SVN']				+ "; "
 	cmd += "export            TM_SUPPORT_PATH="	+ ENV['TM_SUPPORT_PATH']	+ "; "
 	cmd += "export            CommitWindow="	+ ENV['CommitWindow'] 		+ "; "
-	cmd += "export            TM_SVN_DIFF_CMD="	+ ENV['TM_SVN_DIFF_CMD']	+ "; "
+
+	if(ENV['TM_SVN_DIFF_CMD']) {
+		cmd += "export        TM_SVN_DIFF_CMD="	+ ENV['TM_SVN_DIFF_CMD']	+ "; "
+	}
 
 	cmd += ENV['TM_RUBY'] + ' -- ' + ENV['TM_BUNDLE_SUPPORT'] + '/svn_commit.rb "' + WorkPaths.join('" "') + '"'
 

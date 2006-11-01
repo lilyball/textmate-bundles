@@ -4,9 +4,62 @@
 
 #define GCLog(s, args...) NSLog([NSString stringWithFormat:@"TerminalMate: %@", s], ##args)
 
+#ifndef enumerate
+#   define enumerate(container,var) for(NSEnumerator* _enumerator = [container objectEnumerator]; var = [_enumerator nextObject];)
+#endif
+
 static iTermApplicationDelegate *iTerm;
 static VALUE terminalMateServer;
-static NSMutableDictionary *terminals;
+static NSMutableDictionary *terminalContainers;
+
+@interface GCTerminalContainer : NSObject
+{
+    id terminal;
+    NSString *scope;
+}
+@end
+
+@implementation GCTerminalContainer
+- (id)initWithScope:(NSString *)aScope
+{
+    self = [super init];
+    if(self)
+    {
+        scope = aScope;
+        terminal = [self makeTerminal];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(windowWillClose:)
+                                                     name:NSWindowWillCloseNotification
+                                                   object:[terminal window]];
+    }
+    return self;
+}
+
+- (id)makeTerminal
+{
+    [iTerm newWindow:nil];
+    NSArray *iTerm_terminals = [iTerm terminals];
+    id terminal = [iTerm_terminals objectAtIndex:[iTerm_terminals count] - 1];
+    [terminal setAntiAlias:NO];
+    return terminal;
+}
+
+- (void)windowWillClose:(NSNotification *)aNotification
+{
+    [terminalContainers removeObjectForKey:scope];
+}
+
+- (id)terminal
+{
+    return terminal;
+}
+
+- (id)session
+{
+    return [[terminal sessions] objectAtIndex:0];
+}
+@end
+
 
 void initRuby(void)
 {
@@ -64,10 +117,18 @@ NSString *readConvert(VALUE io)
     return [NSString stringWithCString:StringValuePtr(s)];
 }
 
+id sessionForScope(NSString *scope)
+{
+    if ([[terminalContainers allKeys] containsObject:scope]) {
+        id container = [terminalContainers objectForKey: scope];
+        return [container session];
+    }
+    return nil;
+}
+
 VALUE terminalMateHandleRequest(VALUE s, VALUE io)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSArray *iTerm_terminals = [iTerm terminals];
     
     VALUE command = getsChomp(io);
     
@@ -87,11 +148,10 @@ VALUE terminalMateHandleRequest(VALUE s, VALUE io)
         VALUE tm_project_directory = getsChomp(io);
         NSString *argument = readConvert(io);
         
-        [iTerm newWindow:nil];
-        id terminal = [iTerm_terminals objectAtIndex:[iTerm_terminals count] - 1];
-        [terminal setAntiAlias:NO];
-        id session = [[terminal sessions] objectAtIndex:0];
-        
+        GCTerminalContainer *container = [[GCTerminalContainer alloc] initWithScope:scope];
+        id session = [container session];
+        [terminalContainers setObject:container forKey:scope];
+            
         if (rb_funcall(tm_project_directory, rb_intern("empty?"), 0) == Qfalse)
         {
             NSString *directory = [NSString stringWithCString:StringValuePtr(tm_project_directory)];
@@ -99,25 +159,25 @@ VALUE terminalMateHandleRequest(VALUE s, VALUE io)
             [session insertText:[NSString stringWithFormat:@"cd '%@'\n", directory]];
         }
         
-        [session insertText:argument];
-        [terminals setObject:session forKey:scope];
+        if (![argument isEqualToString:@"\n"])
+            [session insertText:argument];
     }
     else if (rb_funcall(command, equals, 1, rb_str_new2("paste"))) {
         GCLog(@"paste command");
         NSString *argument = readConvert(io);
-        // TODO: this is broken
-        if ([[terminals allKeys] containsObject:scope]) {
-            id terminal = [terminals objectForKey: scope];
-            [terminal insertText:argument];
+        id session = sessionForScope(scope);
+        if (session)
+        {
+            [session insertText:argument];
         }
     }
     else if (rb_funcall(command, equals, 1, rb_str_new2("load_file"))) {
         GCLog(@"load_file command");
         NSString *argument = readConvert(io);
-        // TODO: this is broken
-        if ([[terminals allKeys] containsObject:scope]) {
-            id terminal = [terminals objectForKey: scope];
-            [terminal insertText:argument];
+        id session = sessionForScope(scope);
+        if (session)
+        {
+            [session insertText:argument];
         }
     }
     else {
@@ -152,7 +212,7 @@ void *initTerminalMateThread(void *data)
     [self loadGrowl];
     
     iTerm = [[iTermApplicationDelegate alloc] init];
-    terminals = [[NSMutableDictionary alloc] initWithCapacity:10];
+    terminalContainers = [[NSMutableDictionary alloc] initWithCapacity:10];
     
     pthread_t thread;
     int thread_status;
@@ -208,7 +268,7 @@ void *initTerminalMateThread(void *data)
 - (void)dealloc
 {
     [iTerm dealloc];
-    [terminals dealloc];
+    [terminalContainers dealloc];
     rb_funcall(terminalMateServer, rb_intern("shutdown"), 0);
     cleanupRuby();
     [super dealloc];

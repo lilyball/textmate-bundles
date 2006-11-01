@@ -20,14 +20,16 @@ TerminalMate is a terminal for TextMate. It is inspired by emacs's inferior-mode
 
 ## Known Issues
 
-1. Sending input after you close a terminal will crash TextMate.
-2. The iTerm Preferences window is in the “Window” menu, and not in the TextMate menu.
+1. The iTerm Preferences window is in the “Window” menu, and not in the TextMate menu.
 
 ## Download
 
 * [TerminalMate 0.1.2](TerminalMate-0.1.2.zip)
 
 ## News
+
+### 0.2
+* Sending input after you close a terminal will now not crash TextMate.
 
 ### 0.1.2
 * TerminalMate will now change directories to `TM_PROJECT_DIRECTORY` if it is set

@@ -120,7 +120,7 @@ class FootnoteFilter
   def insert_styles
     insert_text :before, /<\/head>/i, <<-HTML
     <!-- TextMate Footnotes Style -->
-    <style>
+    <style type="text/css">
       #textmate_footnotes_debug {margin-top: 0.5em; text-align: center; color: #999;}
       #textmate_footnotes_debug a {text-decoration: none; color: #bbb;}
       fieldset.textmate_footnotes_debug_info {text-align: left; border: 1px dashed #aaa; padding: 1em; margin: 1em 2em 1em 2em; color: #777;}

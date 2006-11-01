@@ -160,13 +160,15 @@ mup.html {
 
 		commit_matches = paths
 
-		if commit_matches.nil? or commit_matches.size == 0
-			mup.div( :class => "info" ) {
-				mup.text! "File(s) not modified; nothing to commit."
-				mup.ul{ matches_to_paths(unknown_paths).each{ |path| mup.li(path) } }
-			}
-			exit 0
-		end
+		# FIXME this uses unknown_paths which is never initialized, so I commented it (allan, 2006-11-01)
+		#
+		# if commit_matches.nil? or commit_matches.size == 0
+		# 	mup.div( :class => "info" ) {
+		# 		mup.text! "File(s) not modified; nothing to commit."
+		# 		mup.ul{ matches_to_paths(unknown_paths).each{ |path| mup.li(path) } }
+		# 	}
+		# 	exit 0
+		# end
 
 		STDOUT.flush
 

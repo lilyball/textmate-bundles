@@ -32,6 +32,22 @@
 
 @implementation NSTask (CXAdditions)
 
+// helper method called in its own thread and writes data to a file descriptor
++ (void)writeDataToFileHandleAndClose:(id)someArguments
+{
+	NSAutoreleasePool*	pool	= [NSAutoreleasePool new];
+	NSFileHandle *		fh		= [someArguments objectForKey:@"fileHandle"];
+	NSData *			data	= [someArguments objectForKey:@"data"];
+
+	if( fh != nil && data != nil )
+	{
+		[fh writeData:data];
+		[fh closeFile];
+	}
+	
+	[pool release];
+}
+
 // Return a task (not yet launched) and optionally allocate stdout/stdin/stderr streams for communication with it
 + (NSTask *) taskWithArguments:(NSArray *)args
 						input:(NSFileHandle **)outWriteHandle
@@ -98,8 +114,11 @@
 			inputDataOrString = [inputDataOrString dataUsingEncoding:NSUTF8StringEncoding];
 		}
 	
-		[inputFile writeData:inputDataOrString];
-		[inputFile closeFile];
+		NSDictionary* arguments = [NSDictionary dictionaryWithObjectsAndKeys:
+			inputFile,			@"fileHandle",
+			inputDataOrString,	@"data",
+			nil];
+		[NSThread detachNewThreadSelector:@selector(writeDataToFileHandleAndClose:) toTarget:self withObject:arguments];
 	}
 	[task launch];
 

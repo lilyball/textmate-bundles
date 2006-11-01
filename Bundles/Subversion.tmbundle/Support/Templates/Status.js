@@ -79,7 +79,7 @@ function svnCommit(){
 //	document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'
 	
 	TextMate.isBusy = true
-	myCommand = TextMate.system(cmd, function (task) { });
+	myCommand = TextMate.system(cmd, function (task) { TextMate.isBusy = false; });
 	myCommand.onreadoutput = svnReadOutput;
 	myCommand.onreaderror = svnReadError;
 };
@@ -147,7 +147,6 @@ function svnReadOutput(str){
 	// str = str.replace(/>/g, '&gt;')
 	// str = str.replace(/"/g, '&quot;')
 	displayCommandOutput('info', 'info', str);
-	TextMate.isBusy = false;
 };
 
 function svnReadError(str){

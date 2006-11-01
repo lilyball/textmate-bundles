@@ -104,17 +104,19 @@ class FootnoteFilter
   end
   
   def controller_url
-    textmate_prefix +
-    controller_filename +
-    (index_of_method ? "&line=#{controller_line_number + 1}&column=3" : "")
+    escape(
+      textmate_prefix +
+      controller_filename +
+      (index_of_method ? "&line=#{controller_line_number + 1}&column=3" : "")
+    )
   end
   
   def view_url
-    textmate_prefix + template_file_name
+    escape(textmate_prefix + template_file_name)
   end
   
   def layout_url
-    textmate_prefix + layout_file_name
+    escape(textmate_prefix + layout_file_name)
   end
   
   def insert_styles
@@ -142,15 +144,15 @@ class FootnoteFilter
       #{@extra_html}
       <fieldset id="session_debug_info" class="textmate_footnotes_debug_info" style="display: none">
         <legend>Session</legend>
-        #{@controller.session.instance_variable_get("@data").inspect}
+        #{escape(@controller.session.instance_variable_get("@data").inspect)}
       </fieldset>
       <fieldset id="cookies_debug_info" class="textmate_footnotes_debug_info" style="display: none">
         <legend>Cookies</legend>
-        <code>#{@controller.send(:cookies).inspect}</code>
+        <code>#{escape(@controller.send(:cookies).inspect)}</code>
       </fieldset>
       <fieldset id="params_debug_info" class="textmate_footnotes_debug_info" style="display: none">
         <legend>Params</legend>
-        <code>#{@controller.params.inspect}</code>
+        <code>#{escape(@controller.params.inspect)}</code>
       </fieldset>
       <fieldset id="general_debug_info" class="textmate_footnotes_debug_info" style="display: none">
         <legend>General</legend>
@@ -195,13 +197,13 @@ class FootnoteFilter
       end
     end
     @extra_html << <<-HTML
-      <fieldset id="textmate_footnotes_#{link_text.underscore}" class="textmate_footnotes_debug_info" style="display: none">
+      <fieldset id="textmate_footnotes_#{link_text.underscore.gsub(' ', '_')}" class="textmate_footnotes_debug_info" style="display: none">
         <legend>#{link_text}</legend>
         <ul><li>#{links.join("</li><li>")}</li></ul>
       </fieldset>
     HTML
     # Return the link that will open the 'extra html' div
-    %{ | <a href="#" onclick="Element.toggle('textmate_footnotes_#{link_text.underscore}');return false">#{link_text}</a>}
+    %{ | <a href="#" onclick="Element.toggle('textmate_footnotes_#{link_text.underscore.gsub(' ', '_')}');return false">#{link_text}</a>}
   end
   
   def indent(indentation, text)
@@ -237,6 +239,6 @@ class FootnoteFilter
   end
   
   def escape(text)
-    text.gsub("<", "&lt;").gsub(">", "&gt;")
+    text.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
   end
 end

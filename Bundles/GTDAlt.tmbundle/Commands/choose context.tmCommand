@@ -12,9 +12,9 @@ include GTDLight
 line = STDIN.read
 #GTD.process_directory
 contextList = GTDLight.get_env_contexts
-choice = Dialog.request_item(:title =&gt; 'Changing the context', :prompt =&gt;  'Choose the new context', :items =&gt; contextList)
+choice = Dialog.menu(contextList)
 if choice then
-  print line.sub(/@(\S+)($|\s+)/) {|text,space| "@" + e_sn(choice) + ((space.nil? or space == "") ? " " : space)+"$0"}
+  print line.sub(/@(\S+)($|\s+)/) {|text,space| "@" + e_sn(contextList[choice]) + ((space.nil? or space == "") ? " " : space)+"$0"}
 else
   print e_sn(line)
 end

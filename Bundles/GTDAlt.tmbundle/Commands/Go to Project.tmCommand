@@ -12,9 +12,9 @@ include GTD
 files = GTD.process_directory
 projects = files.map{|i| i.projects}.flatten
 projectNames = projects.map{|i| i.name+" : "+i.root.name}
-choice = Dialog.request_item(:title =&gt; "Listing projects", :prompt =&gt; "Choose the new project", :items =&gt; projectNames)
+choice = Dialog.menu(projectNames)
 if choice then
-	projectName = choice
+	projectName = projectNames[choice]
   project = projects.find{|i| i.name+" : "+i.root.name == projectName}
   `open #{project.txmt}`
 end</string>

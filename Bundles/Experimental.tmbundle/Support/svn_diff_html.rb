@@ -65,7 +65,7 @@ class DiffLine
     %{<a class="#{status}" href="txmt://open?url=file:///#{filepath}&amp;line=#{line_number}"><span>#{line_number}</span> #{hcode}</a>}
   end
   def hcode
-    CGI::escapeHTML(self.code)
+    CGI::escapeHTML(self.code).gsub(' ','&nbsp;')
   end
 end
 

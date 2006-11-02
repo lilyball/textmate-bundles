@@ -115,8 +115,25 @@ table.status td.file_col {
 	width: 100%;
 }
 
+/* Status ction buttons */
 .diff_col, .remove_col, .add_col, .revert_col {
+	vertical-align: bottom;
+}
+
+.diff_col a:link, .remove_col a:link, .add_col a:link, .revert_col a:link {
+	padding: 1px;
+	border: 1px solid;
+	text-decoration: none;
+	font-size: 80%;
 	text-align: center;
+}
+
+.diff_col a:hover, .remove_col a:hover, .add_col a:hover, .revert_col a:hover {
+  background: #BBB;
+}
+
+.diff_col a:active, .remove_col a:active, .add_col a:active, .revert_col a:active {
+  background: #555;
 }
 
 div#actions {

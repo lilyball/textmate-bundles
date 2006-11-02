@@ -45,7 +45,11 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 <!-- <div class="section"> -->
 <table class="status" border="0">
 	<tr>
-		<th colspan="4">Status</th><th colspan="5">Actions</th><th>File</th>
+		<th colspan="<%= status_column_count %>">Status</th>
+		<% if $is_status %>
+		<th colspan="<%= button_strip.size %>">Actions</th>
+		<% end %>
+		<th>File</th>
 	</tr>
 	<% match_columns       = '.' * status_column_count %>
 
@@ -62,7 +66,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 				<% if match.nil? then %>
 				
 					<%# Informational text, not status. colspan=0 doesn't seem to work. Wrong DOCTYPE, maybe? %>
-					<td colspan=<%= status_colspan %>><div class="info"><%= line %></div></td>
+					<td colspan="<%= status_colspan %>"><div class="info"><%= line %></div></td>
 				<% else %>
 					<%
 					status          = match[1]

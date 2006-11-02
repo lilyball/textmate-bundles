@@ -32,8 +32,9 @@ function svnCommand(cmd, id, statusString, className){
 	
 	if(errorCode == 0 && id != null)
 	{
-		document.getElementById('status'+id).innerHTML = statusString;
-		document.getElementById('status'+id).className = 'status_col ' + className;
+		status_element = document.getElementById('status'+id)
+		status_element.innerHTML = statusString;
+		status_element.className = 'status_col ' + className;
 	}
 
 	TextMate.isBusy = false;
@@ -55,6 +56,10 @@ function displayCommandOutput(id, className, string){
 //		}
 //
 //		tail_div.innerHTML = string;
+		
+		console_div = document.getElementById('console')
+		console_div.style.display = 'inline';
+		
 		string += " \n";
 		document.getElementById('commandOutput').innerHTML += string;
 	}

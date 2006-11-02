@@ -2,9 +2,7 @@
 
 <% # raise 'No JavaScript' if not File.exist?("#{bundle}/Template/Status.js") %>
 
-<!--
-	TODO: openWithFinder for image files instead of Diff
-	TODO: fix diff with the CommitWindow -->
+<%# TODO: openWithFinder for image files instead of Diff %>
 
 <%=
 prefix_js =<<END_JS # javascript
@@ -122,8 +120,11 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 	</div>
 <% end %>
 
-<h3 class="console">Console</h3>
-<div id="commandOutput"></div>
+<div id="console">
+	<hr>
+	<h3 class="console">Console</h3>
+	<div id="commandOutput"></div>
+</div>
 
 <!-- FIXME: why would this close the document _above_ the table tag? -->
 <%#= html_footer %>

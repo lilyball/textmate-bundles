@@ -99,12 +99,12 @@ static inline void ColorsFromStatus( NSString * status, NSColor ** foreColor, NS
 	
 	for( i = 0; i < length; i += 1 )
 	{
-		unichar 				character = [self characterAtIndex:i];
-		NSString *				charString;
-		NSAttributedString *	attributedCharString;
-		NSColor *				foreColor;
-		NSColor *				backColor;
-		NSDictionary *			attributes;
+		unichar 					character = [self characterAtIndex:i];
+		NSString *					charString;
+		NSMutableAttributedString *	attributedCharString;
+		NSColor *					foreColor;
+		NSColor *					backColor;
+		NSDictionary *				attributes;
 		
 		// We pass in underscores for empty multicolumn attributes
 		if(character == '_')
@@ -119,8 +119,22 @@ static inline void ColorsFromStatus( NSString * status, NSColor ** foreColor, NS
 																backColor,	NSBackgroundColorAttributeName,
 																nil];
 
-		attributedCharString = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%C%@%C", hairSpace, charString, hairSpace] attributes:attributes] autorelease];
+		attributedCharString = [[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%C%@%C", hairSpace, charString, hairSpace] attributes:attributes] autorelease];
 		
+		float width = [attributedCharString size].width;
+		float desiredWidth = 13.0f;
+		if(width < desiredWidth)
+		{
+			float hairSpaceWidth = [[[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%C", hairSpace] attributes:attributes] autorelease] size].width;
+			float extraWidth = 0.5f * (desiredWidth - width) + hairSpaceWidth;
+			float scale = logf(extraWidth - (hairSpaceWidth - 1.0f));
+
+			NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+			[dict setObject:[NSNumber numberWithFloat:scale] forKey:NSExpansionAttributeName];
+			[attributedCharString addAttributes:dict range:NSMakeRange(0, 1)];
+			[attributedCharString addAttributes:dict range:NSMakeRange(2, 1)];
+		}
+
 		[attributedStatusString appendAttributedString:attributedCharString];
 		[attributedStatusString appendAttributedString:spaceString];
 	}

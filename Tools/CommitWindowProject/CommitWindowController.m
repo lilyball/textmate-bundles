@@ -14,7 +14,8 @@
 #import "NSString+StatusString.h"
 #import "NSTask+CXAdditions.h"
 
-#define kStatusColumnWidthForSingleChar	18
+#define kStatusColumnWidthForSingleChar	13
+#define kStatusColumnWidthForPadding	13
 
 @interface CommitWindowController (Private)
 - (void) populatePreviousSummaryMenu;
@@ -193,7 +194,7 @@
 		}
 
 		// Set status column size
-		[fStatusColumn setWidth:maxCharsToDisplay * kStatusColumnWidthForSingleChar];
+		[fStatusColumn setWidth:12 + maxCharsToDisplay * kStatusColumnWidthForSingleChar + (maxCharsToDisplay-1) * kStatusColumnWidthForPadding];
 	}
 	
 	//
@@ -296,7 +297,7 @@
 	}
 
 	// Set status column size
-	[fStatusColumn setWidth:maxCharsToDisplay * kStatusColumnWidthForSingleChar];
+	[fStatusColumn setWidth:12 + maxCharsToDisplay * kStatusColumnWidthForSingleChar + (maxCharsToDisplay-1) * kStatusColumnWidthForPadding];
 }
 
 #if 0

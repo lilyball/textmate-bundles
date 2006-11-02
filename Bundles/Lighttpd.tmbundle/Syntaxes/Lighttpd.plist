@@ -13,8 +13,16 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.lighttpd-config</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>#.*$</string>
+			<string>(#).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.number-sign.lighttpd-config</string>
 		</dict>
@@ -24,11 +32,26 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.separator.key-value.lighttpd-config</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>string.regexp.lighttpd-config</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.lighttpd-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.lighttpd-config</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>=~\s*("[^"]*")</string>
+			<string>(=~|!~)\s*((").*("))</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -36,17 +59,44 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.separator.key-value.lighttpd-config</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>constant.numeric.lighttpd-config</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>=&gt;?\s*([0-9]+)</string>
+			<string>(=&gt;?)\s*([0-9]+)</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>=|\+=|==|!=|=~|!~|=&gt;</string>
+			<key>name</key>
+			<string>punctuation.separator.key-value.lighttpd-config</string>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.lighttpd-config</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.lighttpd-config</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.lighttpd-config</string>
 			<key>patterns</key>
@@ -55,13 +105,21 @@
 					<key>match</key>
 					<string>""</string>
 					<key>name</key>
-					<string>constant.character.escape.quote.lighttpd-constant</string>
+					<string>constant.character.escape.quote.lighttpd-config</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.variable.comment.lighttpd-config</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\$[a-zA-Z][0-9a-zA-Z]*</string>
+			<string>(\$)[a-zA-Z][0-9a-zA-Z]*</string>
 			<key>name</key>
 			<string>variable.language.lighttpd-config</string>
 		</dict>
@@ -77,7 +135,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>invalid.illegal.lighttpd-config.semicolon-at-end-of-line</string>
+					<string>invalid.illegal.semicolon-at-end-of-line.lighttpd-config</string>
 				</dict>
 			</dict>
 			<key>match</key>

@@ -17,6 +17,12 @@ class TextmateFootnotesTest < Test::Unit::TestCase
     assert_equal 334, index
   end
   
+  def test_footnote_not_included_when_request_is_xhr
+    @controller.instance_variable_set("@xhr", true)
+    @footnote.add_footnotes!
+    assert_equal $html, @controller.response.body
+  end
+  
   def test_footnote_not_included_when_content_type_is_javascript
     @controller.response.headers['Content-Type'] = 'text/javascript'
     @footnote.add_footnotes!

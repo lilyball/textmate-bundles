@@ -27,6 +27,10 @@ class MockController
     @body
   end
   
+  def xhr?
+    @xhr
+  end
+  
   def action_name
     @params[:action]
   end

@@ -36,7 +36,7 @@ class FootnoteFilter
   
   def add_footnotes!
     if performed_render? and first_render?
-      if ["rhtml", "rxhtml"].include?(template_extension) && (content_type =~ /html/ || content_type.nil?)
+      if ["rhtml", "rxhtml"].include?(template_extension) && (content_type =~ /html/ || content_type.nil?) && !xhr?
         # If the user would like to be responsible for the styles, let them opt out of the styling here
         insert_styles unless FootnoteFilter.no_style
         insert_footnotes
@@ -72,6 +72,10 @@ class FootnoteFilter
   
   def first_render?
     @template.respond_to?(:first_render) and @template.first_render
+  end
+  
+  def xhr?
+    @controller.xhr?
   end
   
   def template_path

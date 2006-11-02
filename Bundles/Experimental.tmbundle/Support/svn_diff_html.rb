@@ -100,7 +100,7 @@ end
 
 filepath = ''
 difflines.each_with_index do |d,i|
-  puts '</pre>' if i > 1 and d.filepath != filepath
+  puts '</pre>' if i > 0 and d.filepath != filepath
   puts "<h3>#{d.filepath.gsub(/\b\//,'&#8203;/')}</h3><pre>" if d.filepath != filepath
   filepath = d.filepath
   puts d.link

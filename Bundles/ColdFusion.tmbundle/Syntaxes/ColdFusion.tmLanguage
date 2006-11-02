@@ -10,8 +10,6 @@
 		<string>cfml</string>
 		<string>cfc</string>
 	</array>
-	<key>firstLineMatch</key>
-	<string>&lt;!DOCTYPE|&lt;(?i:html)</string>
 	<key>foldingStartMarker</key>
 	<string>(?x)
 		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|cfloop|cfif|cfswitch|cfcomponent)\b.*?&gt;
@@ -426,24 +424,7 @@
 		<key>embedded-code</key>
 		<dict>
 			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#php</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#ruby</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#smarty</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#python</string>
-				</dict>
-			</array>
+			<array/>
 		</dict>
 		<key>entities</key>
 		<dict>

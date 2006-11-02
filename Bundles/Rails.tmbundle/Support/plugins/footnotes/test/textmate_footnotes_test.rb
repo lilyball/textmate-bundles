@@ -18,7 +18,7 @@ class TextmateFootnotesTest < Test::Unit::TestCase
   end
   
   def test_footnote_not_included_when_request_is_xhr
-    @controller.instance_variable_set("@xhr", true)
+    @controller.request.xhr = true
     @footnote.add_footnotes!
     assert_equal $html, @controller.response.body
   end

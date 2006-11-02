@@ -27,8 +27,8 @@ class MockController
     @body
   end
   
-  def xhr?
-    @xhr
+  def request
+    @request ||= MockRequest.new(false)
   end
   
   def action_name
@@ -44,6 +44,10 @@ class MockTemplate
   def first_render
     "example.rhtml"
   end
+end
+
+class MockRequest < OpenStruct.new(:xhr)
+  alias_method :xhr?, :xhr
 end
 
 class FootnoteFilter

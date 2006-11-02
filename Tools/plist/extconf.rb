@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 require 'mkmf'
-$CFLAGS += " -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk"
-$LDFLAGS += ' -framework CoreFoundation'
+newFlags = " -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk"
+$CFLAGS += newFlags
+$LDFLAGS += ' -framework CoreFoundation' + newFlags + ' -undefined suppress -flat_namespace'
+$LIBRUBYARG_SHARED=""
 create_makefile("plist")

@@ -75,7 +75,7 @@ class FootnoteFilter
   end
   
   def xhr?
-    @controller.xhr?
+    @controller.request.xhr?
   end
   
   def template_path

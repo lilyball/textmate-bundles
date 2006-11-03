@@ -93,7 +93,6 @@ h3.console {
 	width: 95%;
 	min-height: 2em;
 	
-	overflow: auto;
 	margin: 0 1em 1em 0;
 	padding-left: 1em;
 	
@@ -101,7 +100,18 @@ h3.console {
 
 	font-family: monospace;
 	font-size: 85%;
-	white-space: pre;
+}
+
+table.status {
+	border: 0px;
+}
+
+table.status th {
+	border: 0px;
+}
+
+table.status td {
+	padding: 3px;
 }
 
 /* center the status characters */
@@ -116,11 +126,11 @@ table.status td.file_col {
 }
 
 /* Status ction buttons */
-.diff_col, .remove_col, .add_col, .revert_col {
-	vertical-align: bottom;
+table.status td.action_button {
+/*	vertical-align: bottom;*/
 }
 
-.diff_col a:link, .remove_col a:link, .add_col a:link, .revert_col a:link {
+table.status td.action_button a:link {
 	padding: 1px;
 	border: 1px solid;
 	text-decoration: none;
@@ -128,11 +138,11 @@ table.status td.file_col {
 	text-align: center;
 }
 
-.diff_col a:hover, .remove_col a:hover, .add_col a:hover, .revert_col a:hover {
+table.status td.action_button a:hover {
   background: #BBB;
 }
 
-.diff_col a:active, .remove_col a:active, .add_col a:active, .revert_col a:active {
+table.status td.action_button a:active{
   background: #555;
 }
 

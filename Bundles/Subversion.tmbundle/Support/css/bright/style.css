@@ -82,14 +82,11 @@
 
 /* STATUS */
 .bright table.status {
-	border: 0px solid #AAA;
-/*	border-color: #000;*/
+	border: 0px;
 }
 
 .bright table.status th {
 	background-color: #E2E2E2;
-	border: 0px solid #AAA;
-/*	color: #FFF;*/
 	font-weight: normal;
 }
 
@@ -105,4 +102,37 @@ table.status td.status_col {
 #commandOutput {
 	border: 1px solid #AAA;
 	background-color: #DDD;
+}
+
+/* A */
+.bright table.status td.added {
+	color:      green;
+	background: #bbffb3;
+}
+/* M */
+.bright table.status td.modified,
+.bright table.status td.updated,
+.bright table.status td.merged {
+	color:      #eb6400;
+	background: #f7e1ad;
+}
+/* D */
+.bright table.status td.deleted,
+.bright table.status td.replaced {
+	color:      red;
+	background: #f59696;
+}
+/* C, !, " */
+.bright table.status td.conflict,
+.bright table.status td.missing,
+.bright table.status td.typeconflict {
+	color:      teal;
+	background: #A3CED0;
+}
+/* ?, I, X */
+.bright table.status td.unknown,
+.bright table.status td.ignored,
+.bright table.status td.external {
+	color:      purple;
+	background: #edaef5;
 }

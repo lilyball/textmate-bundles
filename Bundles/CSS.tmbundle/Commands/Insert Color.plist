@@ -15,7 +15,7 @@ col = `osascript 2&gt;/dev/null -e 'tell app "TextMate" to choose color#{def_col
 exit 200 if col == ""
 col=col.scan(/\d+/).map { |i| "%02X" % (i.to_i / 257) }.join("")
 print prefix
-if col.match(/(.)\1(.)\2(.)\3/) then
+if /(.)\1(.)\2(.)\3/.match(col) then
   print $1 + $2 + $3
 else
   print col

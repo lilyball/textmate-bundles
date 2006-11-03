@@ -81,6 +81,8 @@ StatusMap = {	'A' => 'added',
 				'X' => 'external',
 				' ' => 'none'}
 
+# this may be more dynamic in the future
+# it also possibly should not be stashed in mup
 def status_column_count
 	# update has three columns vs. up to eight for status as of 1.3.x
 	# But, for status, if we assume eight, we might have compatibility

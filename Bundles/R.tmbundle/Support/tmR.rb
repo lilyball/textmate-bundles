@@ -4,17 +4,42 @@
 # Copied, by Charilaos Skiadas, from RubyMate by Sune Foldager.
 #
 # v0.1  (2005-08-12): Initial version.
+# v0.9  Heavily modified by Kevin Ballard
 #
 # We need this for HTML escaping.
 require 'cgi'
+require 'fcntl'
+
 # HTML escaping function.
 def esc(str)
   CGI.escapeHTML(str)
 end
-# Helper to dump files to stdout.
-def dump_file(name)
-  File.open(name) {|f| f.each_line {|l| print l} }
+
+# Open a sub-process and return 3 IO objects: stdin, stdout, stderr
+# Unlike Open3::popen3, it produces a child, not a grandchild
+def popen3(*args)
+  stdin, stdout, stderr = [IO.pipe, IO.pipe, IO.pipe]
+  fork do
+    stdin[1].close
+    STDIN.reopen(stdin[0])
+    stdin[0].close
+    
+    stdout[0].close
+    STDOUT.reopen(stdout[1])
+    stdout[1].close
+    
+    stderr[0].close
+    STDERR.reopen(stderr[1])
+    stderr[1].close
+    
+    exec(*args)
+  end
+  stdin[0].close
+  stdout[1].close
+  stderr[1].close
+  [stdin[1], stdout[0], stderr[0]]
 end
+
 # Headers...
 print <<-EOS
 <html>
@@ -25,7 +50,7 @@ EOS
 # Prepare some values for later.
 myFile = __FILE__
 myDir = File.dirname(myFile) + '/'
-dump_file(myDir + 'pastel.css')
+File.open(File.join(myDir, 'pastel.css')) {|f| f.each_line {|l| print l} }
 print <<-HTML
 </style>
 </head>
@@ -34,14 +59,6 @@ print <<-HTML
 <pre><strong>RMate. Executing document in R. This may take a while...</strong>
 <div id="actual_output" style="-khtml-line-break: after-white-space;">
 HTML
-class << STDOUT
-  alias real_write write
-  def write(thing)
-    real_write(esc(thing.to_s).gsub("\n", '<br />'))
-  end
-end
-STDOUT.flush
-STDOUT.sync = true
 
 def recursive_delete(path)
   if (File.directory?(path)) then
@@ -52,24 +69,45 @@ def recursive_delete(path)
   end
 end
 
-IO.popen("R --vanilla --no-readline --slave --encoding=UTF-8", "r+") do |rsession|
-  tmpDir = File.join(ENV['TMP'] || "/tmp", "TM_R")
-  recursive_delete(tmpDir) if File.exists?(tmpDir) # remove the temp dir if it's already there
-  Dir::mkdir(tmpDir)
-  rsession.puts(%{options(device="pdf")})
-  rsession.puts(%{formals(pdf)[c("file","onefile","width","height")] <- list("#{tmpDir}/Rplot%03d.pdf", F, 8, 8)})
-  rsession.puts("options(echo=T)")
-  rsession.write(STDIN.read.chomp)
-  rsession.close_write
-  print rsession.read
-  system("open -a Preview '#{tmpDir}'") unless Dir::glob("#{tmpDir}/*.pdf").empty?
+tmpDir = File.join(ENV['TMP'] || "/tmp", "TM_R")
+recursive_delete(tmpDir) if File.exists?(tmpDir) # remove the temp dir if it's already there
+Dir::mkdir(tmpDir)
+# Mechanism for dynamic reading inspired by RubyMate
+stdin, stdout, stderr = popen3("R", "--vanilla", "--no-readline", "--slave", "--encoding=UTF-8")
+
+stdin.puts(%{options(device="pdf")})
+stdin.puts(%{formals(pdf)[c("file","onefile","width","height")] <- list("#{tmpDir}/Rplot%03d.pdf", F, 8, 8)})
+stdin.puts(%{options(pager="/bin/cat")})
+stdin.puts("options(echo=T)")
+stdin.write(STDIN.read.chomp)
+stdin.close
+
+STDOUT.sync = true
+
+descriptors = [stdout, stderr]
+descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
+until descriptors.empty?
+  select(descriptors).shift.each do |io|
+    str = io.read
+    if str.empty?
+      descriptors.delete io
+      io.close
+    elsif io == stdout
+      print( str.map do |line|
+        if line =~ /^(?:>|\+) / then
+          %{<span style="color: darkcyan">#{esc line.chomp}</span>\n}
+        else
+          esc line
+        end
+      end.join )
+    elsif io == stderr
+      print %{<span style="color: red">#{esc str}</span>}
+    end
+  end
 end
+system("open -a Preview '#{tmpDir}'") unless Dir::glob("#{tmpDir}/*.pdf").empty?
 
 STDOUT.sync = false
-class << STDOUT
-  alias unreal_write write
-  alias write real_write
-end
 puts '</div></pre></div>'
 # Footer.
 print <<-HTML

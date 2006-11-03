@@ -8,38 +8,52 @@
 	<string>### Preview in All Active Browsers
 ### v1.0. 2005-03-29
 ### v1.1. 2005-12-04
+### v2.2. 2006-11-03
 ###
 ###	CONFIG OPTION:: Set TM_PROJECT_SITEURL in your TM Project Window Info Button in the following form: [ http://your.site.ext/ ]
 ###
 
 # 1. Check if we have a SITE_URL
 if [[ -n "$TM_PROJECT_SITEURL" ]]
-	then activeURL=$TM_PROJECT_SITEURL${TM_FILEPATH##$TM_PROJECT_DIRECTORY}
-	else activeURL=file://$TM_FILEPATH
+    then activeURL="$TM_PROJECT_SITEURL${TM_FILEPATH##$TM_PROJECT_DIRECTORY}"
+    else activeURL="file://$TM_FILEPATH"
 fi
 
-# 2. Now check if any browser is running, if so, point it to the URL
-## Safari or Webkit
-[[ $(ps -xc|grep Safari) ]] &amp;&amp; osascript -e 'tell app "System Events" to set proclist to name of every application process' -e 'if proclist contains "Webkit" then' -e 'tell app "Webkit"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell' -e 'end if' -e 'if proclist contains "Safari" then' -e 'tell app "Safari"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell' -e 'end if'
-
-## Shiira
-[[ $(ps -xc|grep Shiira) ]] &amp;&amp; osascript -e 'tell app "Shiira"' -e activate -e "make new document" -e "set the URL of document 1 to \"$activeURL\"" -e 'end tell'
-
-## FireFox
-[[ $(ps -xc|grep -i firefox) ]] &amp;&amp; osascript -e 'tell app "Firefox"' -e activate -e "Get URL \"$activeURL\" inside window 1" -e "end tell"
-
-## Internet Explorer
-[[ $(ps -xc|grep "Internet Explorer") ]] &amp;&amp; osascript -e 'tell app "Internet Explorer"' -e "activate OpenURL \"$activeURL\" toWindow 0 Flags 1" -e 'end tell'
-
-## OmniWeb
-[[ $(ps -xc|grep -i OmniWeb) ]] &amp;&amp; osascript -e 'tell app "OmniWeb"' -e activate -e "GetURL \"$activeURL\"" -e 'end tell'
-
-## Camino
-[[ $(ps -xc|grep -i Camino) ]] &amp;&amp; osascript -e 'tell app "Camino"' -e activate -e "Get URL \"$activeURL\"" -e 'end tell'
-
-## Xyle scope
-[[ $(ps -xc|grep "Xyle scope") ]] &amp;&amp; osascript -e 'tell app "Xyle scope"' -e activate -e "Get URL \"$activeURL\"" -e 'end tell'
-</string>
+osascript &lt;&lt;"APPLESCRIPT" - "$activeURL"
+on run(argv)
+    set activeURL to item 1 of argv
+    tell app "System Events" to set proclist to name of every application process
+    if proclist contains "Webkit" then
+        run script "on run(argv)" &amp; return &amp; "tell app \"Webkit\" to make new document with properties {URL: item 1 of argv}" &amp; return &amp; "end run" with parameters {activeURL}
+    end if
+    if proclist contains "Safari" then
+        run script "on run(argv)" &amp; return &amp; "tell app \"Safari\" to make new document with properties {URL: item 1 of argv}" &amp; return &amp; "end run" with parameters {activeURL}
+    end if
+    
+    if proclist contains "$1" then
+    run script "on run(argv)" &amp; return &amp; "tell app \"$1\" to `pbpaste`" &amp; return &amp; "end run" with parameters {activeURL}
+end if
+    
+    if proclist contains "Shiira" then
+        run script "on run(argv)" &amp; return &amp; "tell app \"Shiira\" to make new document with properties {URL: item 1 of argv}" &amp; return &amp; "end run" with parameters {activeURL}
+    end if
+    if proclist contains "Firefox" then
+        run script "on run(argv)" &amp; return &amp; "tell app \"Firefox\" to Get URL (item 1 of argv) inside window 1" &amp; return &amp; "end run" with parameters {activeURL}
+    end if
+    if proclist contains "Internet Explorer" then
+        run script "on run(argv)" &amp; return &amp; "tell app \"Internet Explorer\" to activate OpenURL (item 1 of argv) toWindow 0 Flags 1" &amp; return &amp; "end run" with parameters {activeURL}
+    end if
+    if proclist contains "OmniWeb" then
+        run script "on run(argv)" &amp; return &amp; "tell app \"OmniWeb\" to GetURL (item 1 of argv)" &amp; return &amp; "end run" with parameters {activeURL}
+    end if
+    if proclist contains "Camino" then
+        run script "on run(argv)" &amp; return &amp; "tell app \"Camino\" to Get URL (item 1 of argv)" &amp; return &amp; "end run" with parameters {activeURL}
+    end if
+    if proclist contains "Xyle scope" then
+        run script "on run(argv)" &amp; return &amp; "tell app \"Xyle scope\" to Get URL (item 1 of argv)" &amp; return &amp; "end run" with parameters {activeURL}
+    end if
+end run
+APPLESCRIPT</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

@@ -19,6 +19,14 @@ the_id          = null;
 the_displayname = null;
 the_new_status  = null;
 
+function escapeHTML(string) {
+	return(string.replace(/&/g,'&amp;')
+				.replace(/>/g,'&gt;')
+				.replace(/</g,'&lt;')
+				.replace(/"/g,'&quot;'));                                                                      
+};
+
+
 function svnCommand(cmd, id, statusString, className){
 	TextMate.isBusy = true;
 
@@ -60,8 +68,9 @@ function displayCommandOutput(id, className, string){
 		console_div = document.getElementById('console')
 		console_div.style.display = 'inline';
 		
-		string += " \n";
-		document.getElementById('commandOutput').innerHTML += string;
+		escapeHTML(string)
+		string.replace(/\\n/g, "<br>")
+		document.getElementById('commandOutput').innerHTML += (string + '<br>');
 	}
 }
 

@@ -99,7 +99,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 							if show_button and button_name == 'Revert' then
 								button[:onclick] = 'svnRevertFile' + (status.scan(/A|D/).empty? ? 'Confirm' : '')
 							end %>
-								<td class="<%= button_name.downcase + '_col' %>">
+								<td class="action_button <%= button_name.downcase + '_col' %>">
 									<% if show_button then %>
 										<a href="#" onclick="<%= "#{button[:onclick]}('#{esc_file}', #{stdin_line_count}, '#{esc_displayname}')" %>; return false" class="<%= button_name.downcase + '_button' %>"><%= button_name %></a>
 									<% end %>

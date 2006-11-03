@@ -87,10 +87,14 @@ class << builder
 		end
 	end
 	
-	def command_group(name, &block)
+	def group(name, description=nil, &block)
+		self.p description unless description.nil?
 		self.div(:class => 'group') do
 			self.h2 { self.a(:name => name) { self << name } }
-			block.call
+			
+			self.dl do
+				self.instance_eval(&block)
+			end
 		end
 	end
 	
@@ -112,103 +116,91 @@ builder.html do
 			builder << "This document describes the commands of the TextMate Subversion bundle and how you can <a href=\"#conf\">fine-tune</a> their behavior. For general Subversion help and tutorial, you should read the <a title=\"Version Control with Subversion\" href=\"http://svnbook.red-bean.com/\">Subversion book</a>."
 		end
 		
-		builder.command_group( 'Basic Commands' ) do
+		builder.group( 'Basic Commands' ) do
 #			builder.p "Diff commands operate on selected project files/folders or the active file if it doesn\'t belong to a project."
-			builder.dl do
-				 builder.command(:name => "Add to Repository",
-				:description => "Schedules the targets for addition to the repository.")
+			command(:name => "Add to Repository",
+			:description => "Schedules the targets for addition to the repository.")
 
-				 builder.command(:name => "Remove from Repository",
-				:description => "Schedules the targets for removal from the repository.")
+			command(:name => "Remove from Repository",
+			:description => "Schedules the targets for removal from the repository.")
 
-			 	builder.command(:name => "Revert",
-				:target => "active file",
-				:description => "Reverts the file to the base revision. Any modifications to the file will be lost.")
+		 	command(:name => "Revert",
+			:target => "active file",
+			:description => "Reverts the file to the base revision. Any modifications to the file will be lost.")
 
-				builder.command(:name => "Update to Newest",
-				:connect => "Yes",
-				:description => "Updates the targets with the newest changes from the repository.")
+			command(:name => "Update to Newest",
+			:connect => "Yes",
+			:description => "Updates the targets with the newest changes from the repository.")
 
-				builder.command(:name => "Commit",
-				:connect => "Yes",
-				:description => " Commits your changed files to the repository. A dialog asks you for the description of
-						your changes; you may also choose to exclude files from the commit by unchecking them.
-						If no files are selected or active, this command does nothing. If the target files
-						have no local changes, nothing happens.
-				   ")
-			end
+			command(:name => "Commit",
+			:connect => "Yes",
+			:description => " Commits your changed files to the repository. A dialog asks you for the description of
+					your changes; you may also choose to exclude files from the commit by unchecking them.
+					If no files are selected or active, this command does nothing. If the target files
+					have no local changes, nothing happens.
+			   ")
 		end
 		
+		builder.group(	'Diff Commands',
+						"Diff commands operate on selected project files/folders or the active file if it doesn\'t belong to a project." ) do
+			command(:name => "Diff Revisions&hellip;",
+			:connect => "Yes",
+			:description => "Displays the differences between two specific revisions of the active file. You will be presented with a list of revisions; please select two.")
+
+			command(:name => "Diff With Newest (HEAD)",
+			:connect => "Yes",
+			:description => "
+				Displays the differences between the active file and the newest available revision of the file on the server.
+				Equivalent to <code>svn diff -rHEAD</code>.
+			   ")
 		
-		builder.command_group( 'Difference Commands' ) do
-			builder.p "Diff commands operate on selected project files/folders or the active file if it doesn\'t belong to a project."
+			command(:name => "Diff With Working Copy (BASE)",
+			:description => "
+				  Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
+				  Equivalent to <code>svn diff -rBASE</code>.
+			   ")
+		
+			command(:name => "Diff With Previous Revision (PREV)",
+			:connect => "Yes",
+			:description => "
+				  Displays the differences between the active file and the previous revision of the file.
+				  Equivalent to <code>svn diff -rPREV</code>.
+			   ")
 
-			builder.dl do
-				builder.command(:name => "Diff Revisions&hellip;",
-				:connect => "Yes",
-				:description => "Displays the differences between two specific revisions of the active file. You will be presented with a list of revisions; please select two.")
+			command(:name => "Diff With Revision&hellip;",
+			:connect => "Yes",
+			:description => "Displays the differences between the active file and a different revision of the same file. This command presents you with a list of revisions to choose from.")
+		end
 
-				builder.command(:name => "Diff With Newest (HEAD)",
-				:connect => "Yes",
-				:description => "
-					Displays the differences between the active file and the newest available revision of the file on the server.
-					Equivalent to <code>svn diff -rHEAD</code>.
-				   ")
+		builder.group( 'History and Info Commands' ) do
+			 command(:name => "Blame",
+			:target => "active file",
+			:connect => "Yes",
+			:description => "Displays a line-by-line history of the active file, showing you who wrote which line in what revision.	 Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href=\"#tm_svn_date_format\">adjustable</a>.")
+
+			command(:name => "Info",
+			:target => "active file••• check me",
+			:description => "Displays detailed information about the selected files, including the type of file, who last changed the file, the date file was last changed, the repository URL to the file, and other information. Some parameters are configurable via shell variables; see the <a href=\"#tm_svn_info\">Configuration Options</a> section below.")			
+
+			command(:name => "Log",
+			:connect => "Yes",
+			:description => "Displays the commit message history for the selected files. Some parameters are configurable via shell variables; see the <a href=\"#tm_svn_log\">Configuration Options</a> section below. ")
 			
-				builder.command(:name => "Diff With Working Copy (BASE)",
-				:description => "
-					  Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
-					  Equivalent to <code>svn diff -rBASE</code>.
-				   ")
-			
-				builder.command(:name => "Diff With Previous Revision (PREV)",
-				:connect => "Yes",
-				:description => "
-					  Displays the differences between the active file and the previous revision of the file.
-					  Equivalent to <code>svn diff -rPREV</code>.
-				   ")
+			command(:name => "Status",
+			:target => "files/folders selected in the drawer",
+			:description => "Displays a list of files with changes in your working copy, along with the type of change for each file.")
 
-				builder.command(:name => "Diff With Revision&hellip;",
-				:connect => "Yes",
-				:description => "Displays the differences between the active file and a different revision of the same file. This command presents you with a list of revisions to choose from.")
-			end
-		end
-
-		builder.command_group( 'History and Info Commands' ) do
-			builder.dl do
-				 builder.command(:name => "Blame",
-				:target => "active file",
-				:connect => "Yes",
-				:description => "Displays a line-by-line history of the file, showing you who wrote which line in what revision.	 Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href=\"#tm_svn_date_format\">adjustable</a>.")
-
-				builder.command(:name => "Info",
-				:description => "
-					  Displays detailed information about the selected files, including the type of file, who last changed the file, the date file was last changed, the repository URL to the file, and other information.
-					  Some parameters are configurable via shell variables; see the <a href=\"#tm_svn_info\">Configuration Options</a> section below.")			
-
-				builder.command(:name => "Log",
-				:connect => "Yes",
-				:description => "Displays the commit message history for the selected files. Some parameters are configurable via shell variables; see the <a href=\"#tm_svn_log\">Configuration Options</a> section below. ")
-				
-				builder.command(:name => "Status",
-				:target => "directory of active file",
-				:description => "Displays a list of files with changes in your working copy, along with the type of change for each file.")
-
-				builder.command(:name => "View Revision&hellip;",
-				:target => "active file",
-				:connect => "Yes",
-				:description => "Displays a different revision of the active file. This command presents you with a list of revisions to choose from.")
-			end
-
+			command(:name => "View Revision&hellip;",
+			:target => "active file",
+			:connect => "Yes",
+			:description => "Displays a different revision of the active file. This command presents you with a list of revisions to choose from.")
 		end
 		
-		builder.command_group( 'Merge Commands' ) do
+		builder.group( 'Merge Commands' ) do
 #			builder.p "Diff commands operate on selected project files/folders or the active file if it doesn\'t belong to a project."
-			builder.dl do
-				builder.command(:name => "Resolved",
-				:target => "active file",
-				:description => "Removing the conflict-related artifact files, allowing the file to be committed. Does not remove conflict markers or resolve textual conflicts.")
-			end
+			command(:name => "Resolved",
+			:target => "active file",
+			:description => "Removing the conflict-related artifact files, allowing the file to be committed. Does not remove conflict markers or resolve textual conflicts.")
 		end
 						
 	end

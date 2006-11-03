@@ -106,3 +106,37 @@
 	border: 1px solid #555;
 	background-color: #222;
 }
+
+
+/* A */
+.dark table.status td.added {
+	color:      #bbffb3;
+	background: green;
+}
+/* M */
+.dark table.status td.modified,
+.dark table.status td.updated,
+.dark table.status td.merged {
+	color:      #f7e1ad;
+	background: #eb6400;
+}
+/* D */
+.dark table.status td.deleted,
+.dark table.status td.replaced {
+	color:      #f59696;
+	background: red;
+}
+/* C, !, " */
+.dark table.status td.conflict,
+.dark table.status td.missing,
+.dark table.status td.typeconflict {
+	color:      #A3CED0;
+	background: teal;
+}
+/* ?, I, X */
+.dark table.status td.unknown,
+.dark table.status td.ignored,
+.dark table.status td.external {
+	color:      #edaef5;
+	background: purple;
+}

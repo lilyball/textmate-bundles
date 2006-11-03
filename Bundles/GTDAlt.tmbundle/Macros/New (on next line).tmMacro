@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<string>moveToEndOfLine:</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<string>insertNewline:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>beforeRunningCommand</key>
+				<string>nop</string>
+				<key>command</key>
+				<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT'] + '/bin/GTDUtils.rb'
+require ENV['TM_SUPPORT_PATH'] + '/lib/dialog.rb'
+contextList = GTDLight.get_env_contexts
+choice = Dialog.menu(contextList)
+if choice then
+  print "@#{contextList[choice]} "
+else
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes.rb'
+  TextMate.exit_discard
+end
+</string>
+				<key>input</key>
+				<string>none</string>
+				<key>keyEquivalent</key>
+				<string>@</string>
+				<key>name</key>
+				<string>New</string>
+				<key>output</key>
+				<string>afterSelectedText</string>
+				<key>scope</key>
+				<string>text.gtdalt - meta.action - meta.line.project - meta.note</string>
+				<key>uuid</key>
+				<string>BBA04431-8960-4017-A684-7FBACB0F7FFF</string>
+			</dict>
+			<key>command</key>
+			<string>executeCommandWithOptions:</string>
+		</dict>
+	</array>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>New (on next line)</string>
+	<key>scope</key>
+	<string>text.gtdalt</string>
+	<key>uuid</key>
+	<string>4EF0270A-A1D7-4E98-8123-6E6F1305B7E2</string>
+</dict>
+</plist>

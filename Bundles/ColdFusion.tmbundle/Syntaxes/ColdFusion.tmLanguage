@@ -212,13 +212,13 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.cfquery.html</string>
+					<string>entity.name.tag.cfquery.cfm</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>&lt;/((?i:cfquery))&gt;(?:\s*\n)?</string>
 			<key>name</key>
-			<string>source.sql.embedded.html</string>
+			<string>meta.tag.cfquery.cfm</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -227,15 +227,13 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>&gt;</string>
+					<string>(?&lt;=&gt;)</string>
 					<key>end</key>
 					<string>(?=&lt;/(?i:cfquery))</string>
+					<key>name</key>
+					<string>source.sql.embedded</string>
 					<key>patterns</key>
 					<array>
-						<dict>
-							<key>include</key>
-							<string>#embedded-code</string>
-						</dict>
 						<dict>
 							<key>include</key>
 							<string>source.sql</string>

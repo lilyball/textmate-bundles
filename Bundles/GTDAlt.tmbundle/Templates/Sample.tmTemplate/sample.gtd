@@ -1,22 +1,40 @@
-project Buy New Desk
-  @home Measure dimensions
-  @online Check on IKEA [1]
-  @errand Go to Big Lots [2]
-end
-project !Class Preparation
-  @office Prepare homework assignments for Stats due:[2006-10-12]
-  @office Prepare homework assignments for Calc due:[2006-10-11]
-  project Calc Labs
-    @office Grade Labs due:[2006-10-10]
-    @office Enter Grades [3]
+project This is the project title
+  @home Here is an action. Each action has a context. This one's context is home.
+  @email You can change an action's context by pressing ctrl-option-C.
+  @reading Do this now to change this action's context to: programming.
+  @email You can set your own, space-separated, list of contexts in the variable TM_GTD_CONTEXTS.
+  @online The next action has a note attached to it.
+  @errand Press ctrl-{ to be taken to the corresponding note. [1]
+  @call You can also see a note as a tooltip. For that, press ctrl-?.
+  project This is a subproject
+    @call You can create a new action by going to a new line and pressing @.
+    @call Try it on the next line.
+    
+    @home You can also use Enter for starting a note in a new line. This works with the caret anywhere on this line.
+    @home You can start a note with the same context as the current line via shift-Enter.
   end
+  @email The following is a completed action:
+#completed:[2006-11-04]  @call This action is marked as completed. You can toggle the completion status via cmd-/.
+  @home You can clean all completed actions from the current file via opt-cmd-/.
+  @home Any projects with no actions left in them will also be removed as completed.
+  @home A gtdalt.log file keeps track of completed items.
 end
-project GTDAlt Screencast
-#completed:[2006-10-10]  @planning Draft list of ideas
-  @email Allan to get suggestions [4]
-  @waiting Allan's suggestions
+project !This is a permanent project because of the exclamation point.
+  @office This project will not be removed when all the actions are completed.
+  @office You can set due dates for items. due:[2006-10-11]
+  @office To do that, press #.
+  @writing You can also set 'from' and 'at' dates: from:[2006-11-05]
+  @online Notes can contain links to websites [2]
+  @online Emails [3]
+  @reading Or any file in your hard drive. [4]
+  @reading You can create links to files by dragging them. First go to the note. [5]
+  @reading At this point, you have to copy a url first before creating a link. [6]
 end
-[1] IKEA website <http://www.ikea.com/webapp/wcs/stores/servlet/CategoryDisplay?storeId=12&langId=-1&catalogId=10103&catalogIdentifier=irwtree003&cattype=top&identifier=00027_irwtree003>
-[2] Directions <http://maps.google.com/maps?f=d&hl=en&saddr=Hanover,+IN&daddr=1345+Clifty+Dr,+Madison,+IN&ie=UTF8&z=13&om=1>
-[3] <file:///Users/haris/Desktop/grades.txt>
-[4] <mailto://someallan@somewhere.com>
+@call Actions can also appear outside of projects.
+@call To create a new project, press Return to go to a new line, then press !. Type the project's name, then press tab.
+[1] This is the note numbered 1. Notes must be on a single line. Use external files for longer notes. Press ctrl-{ to go back to the corresponding action.
+[2] Press ctrl-L to go to: <http://www.google.com>
+[3] Press ctrl-L to start an email: <mailto://someallan@somewhere.com?subject=Cool>
+[4] You can link to other files as well: <file:///Users/yourname/filepath>
+[5] Now, drag a file and drop it on this line.
+[6] Press ctrl-N to create a new link here. In fact, create two links. Then you can open them together via ctrl-L.<http://www.google.com/> <http://www.imdb.com>

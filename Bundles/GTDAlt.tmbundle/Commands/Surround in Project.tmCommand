@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 lines = STDIN.read.gsub(/\$/,"\\$").split("\n")
-currentTab = lines[0].scan(/^\s+/)[0]
+currentTab = lines[0].scan(/^\s*/)[0]
 unless ENV['TM_SOFT_TABS'] == "YES" then
 	extraTab = "\t"
 else

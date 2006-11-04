@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_BUNDLE_SUPPORT'] + '/bin/GTDUtils.rb'
+dialog = ENV['TM_SUPPORT_PATH'] + '/bin/tm_dialog'
+require ENV['TM_SUPPORT_PATH'] + '/lib/plist'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
+require 'date'
+line = STDIN.read
+if line =~ / (at|due|from):\[(\d{4})-(\d{2})-(\d{2})\]$/
+  absoluteYear, absoluteMonth, absoluteDay = $2, $3, $4
+  weekdayDay = 0
+else
+  date = Date.today
+  absoluteYear, absoluteMonth, absoluteDay = date.year, date.month, date.day
+  weekdayDay = date.wday
+end
+plist = { 'radioButton' =&gt; 0, 
+  'relativeNumber' =&gt; 1, 'relativePeriod' =&gt; 0,
+  'absoluteDay' =&gt; absoluteDay, 'absoluteMonth' =&gt; absoluteMonth-1, 'absoluteYear' =&gt;absoluteYear,
+  'weekdayInterval' =&gt; 0, 'weekdayDay' =&gt; weekdayDay
+}.to_plist
+res=PropertyList::load(`#{e_sh dialog} dateInterval -mp #{e_sh plist}`)
+if res['returnCode'] == 0
+  TextMate.exit_discard
+else
+  case res['radioButton']
+  when 0
+    num = res['relativeNumber'].to_i
+    case res['relativePeriod']
+    when 0
+      date = date + num
+    when 1
+      date = date + 7 * num
+    when 2
+      num &gt;= 0 ? date &gt;&gt; num : date &lt;&lt; num
+    end
+  when 1
+    date = [res['absoluteYear'].to_i, res['absoluteMonth']+1, res['absoluteDay'].to_i].join("-")
+  when 2
+    date = date.succ while date.wday != (res['weekdayDay']+6 ) % 7
+    date = date + 7 * res['weekdayInterval']
+  end
+  print e_sn(line).gsub(/ (at|due|from):\[\d{4}-\d{2}-\d{2}\]$/,"") + " #{if $1 &amp;&amp; $1 != "" then $1 else "\$0due" end}:[#{date}]"
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>#</string>
+	<key>name</key>
+	<string>Set Date</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.gtdalt meta.action</string>
+	<key>uuid</key>
+	<string>E168EC0F-F134-4DAE-B062-671082E8A092</string>
+</dict>
+</plist>

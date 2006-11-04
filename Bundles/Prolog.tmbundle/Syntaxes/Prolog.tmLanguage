@@ -17,8 +17,24 @@
 		<dict>
 			<key>begin</key>
 			<string>'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.prolog</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.prolog</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.single.prolog</string>
 			<key>patterns</key>
@@ -38,16 +54,24 @@
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.prolog</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>%.*$\n?</string>
+			<string>(%).*$\n?</string>
 			<key>name</key>
-			<string>comment.line.percent.pl</string>
+			<string>comment.line.percent.prolog</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>:-</string>
 			<key>name</key>
-			<string>keyword.operator.definition.pl</string>
+			<string>keyword.operator.definition.prolog</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -57,11 +81,15 @@
 		</dict>
 		<dict>
 			<key>comment</key>
-			<string>I changed this from entity to storage.type, but have no idea what it is -- Allan</string>
+			<string>
+			I changed this from entity to storage.type, but have no idea what it is -- Allan
+			And I changed this to constant.other.symbol after glancing over the docs,
+			    might still be wrong.  -- Infininight
+			</string>
 			<key>match</key>
 			<string>\b[a-z][a-zA-Z0-9_]*\b</string>
 			<key>name</key>
-			<string>storage.type.atom.prolog</string>
+			<string>constant.other.symbol.prolog</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

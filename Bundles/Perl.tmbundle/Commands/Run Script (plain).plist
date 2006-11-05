@@ -3,14 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>TPERL=${TM_PERL:-perl}
+	<string>export RUBYLIB="$TM_BUNDLE_SUPPORT/RubyMate${RUBYLIB:+:$RUBYLIB}"
+export TM_RUBY=$(which "${TM_RUBY:-ruby}")
 
-cd "${TM_DIRECTORY}"
-"$TPERL" "$TM_FILEPATH" | pre</string>
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Running ‘${TM_FILENAME:-untitled}’" "Perl"
+echo '&lt;pre&gt;'
+
+"${TM_RUBY}" -- "$TM_BUNDLE_SUPPORT/run_script.rb"
+
+echo '&lt;/pre&gt;'
+html_footer
+</string>
 	<key>input</key>
-	<string>none</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>@r</string>
 	<key>name</key>

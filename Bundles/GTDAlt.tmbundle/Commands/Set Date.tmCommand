@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + '/lib/dialog'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
+require 'date'
+
+def relative_date(date,is_today)
+  interval_menu = ["day(s)","week(s)","month(s)"];
+  number_menu = [[1,2,3,4,5,10, 20, 30],    # days
+          [1,2,3,4,5, 6,  7,  8],    # weeks
+          [1,2,3,4,5, 6,  7,  8],    # months
+  ]
+  interval = Dialog.menu(interval_menu.map{|i| i + "…"})
+  TextMate.exit_discard if interval.nil?
+  number_menu = number_menu[interval]
+  number = Dialog.menu(number_menu.map{|i| [i,interval_menu[interval], "after #{if is_today then "today" else date end}"].join(" ")} + [nil,"Other…"] )
+  if number &amp;&amp; number &gt; number_menu.length then
+    number = Dialog.request_string(:title =&gt; "Set relative date", :prompt =&gt; "Number of #{interval_menu[interval]}:")
+  else
+    number = number_menu[number]
+  end
+  TextMate.exit_discard if number.nil?
+  if interval &lt; 2 then
+    return date + number.to_i * (interval * 6 + 1)
+  else
+    return (date &gt;&gt; number.to_i)
+  end
+end
+line = STDIN.read
+tod = Date.today
+first_menu = ["Absolute Date"]
+if line.match(/ (at|due|from):\[(\d{4})-(\d{2})-(\d{2})\]$/)
+  date = Date.new($2.to_i, $3.to_i, $4.to_i)
+  first_menu &lt;&lt; "Relative to current (#{date})…"
+else
+  date = tod
+  first_menu &lt;&lt; "Relative to today…"
+end
+first_menu += [nil, "This upcoming…", "A week from this…", "Two weeks from this…", "Three weeks from this…", nil, "No date"]
+res = Dialog.menu(first_menu)
+case res
+when nil
+  TextMate.exit_discard
+when 0
+  if reply = Dialog.request_string(:title =&gt; "Set absolute date", :prompt =&gt; "Enter new date (yymmdd):")
+    final_date = Date.parse(reply,true)
+  else
+    TextMate.exit_discard
+  end
+when 1
+  final_date = relative_date(date, date == tod)
+when 8
+  final_date = nil
+else
+  extra_days = (res - 3) * 7
+  weekdays = Date::DAYNAMES
+  if day = Dialog.menu(weekdays)
+    date = date.succ while date.wday != day
+    final_date = date + extra_days
+  else
+    TextMate.exit_discard
+  end
+end
+if final_date.nil?
+  print e_sn(line).gsub(/ (at|due|from):\[\d{4}-\d{2}-\d{2}\]$/,"")
+else
+  print e_sn(line).gsub(/ (at|due|from):\[\d{4}-\d{2}-\d{2}\]$/,"") + " #{if $1 &amp;&amp; $1 != "" then $1 else "\$0due" end}:[#{final_date}]"
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>#</string>
+	<key>name</key>
+	<string>Set Date</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.gtdalt meta.action</string>
+	<key>uuid</key>
+	<string>7FBD47E6-F919-45C0-956C-3996106E0C49</string>
+</dict>
+</plist>

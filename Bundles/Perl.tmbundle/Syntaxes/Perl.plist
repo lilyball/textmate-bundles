@@ -943,16 +943,35 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
+					<string>storage.type.method.perl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(sub)\s+([-a-zA-Z0-9_]+)\s*(\([\$\@\*;]*\))?</string>
+			<key>name</key>
+			<string>meta.function.perl</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.perl</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>punctuation.definition.parameters.perl</string>
 				</dict>
-				<key>4</key>
+				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>variable.parameter.function.perl</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(sub)\s+([-a-zA-Z0-9_]+)\s*(?:(\()(.*?)(\)))?</string>
+			<string>^\s*(BEGIN|END|DESTROY)\b</string>
 			<key>name</key>
 			<string>meta.function.perl</string>
 		</dict>

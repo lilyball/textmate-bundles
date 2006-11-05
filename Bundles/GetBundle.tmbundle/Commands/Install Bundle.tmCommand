@@ -7,6 +7,7 @@
 PTRN=$(ruby -rtextmate -e 'print Dir.entries(TextMate.app_path + "/Contents/SharedSupport/Bundles").grep(/.tmbundle$/).join("|")')
 INST=$(ruby -rtextmate -e 'print Dir.entries( File.expand_path("~/Library/Application Support/TextMate/Pristine Copy/Bundles")).grep(/.tmbundle$/).join("|")')
 
+
 cd ~/Library/Application\ Support/TextMate/Support
 if [[ $? == 0 ]];
 then
@@ -17,7 +18,7 @@ else
 fi
 
 bundlelist (){ 
-  "${TM_BUNDLE_SUPPORT}/bin/svn" --username anon --password anon list http://macromates.com/svn/Bundles/trunk/Bundles/ --no-auth-cache --non-interactive | egrep -v "^($PTRN|$INST)/\$" |  sed -ne 's/.tmbundle\/$//p' | sort -f \
+  "${TM_BUNDLE_SUPPORT}/bin/svn" --username anon --password anon list http://macromates.com/svn/Bundles/trunk/Bundles/ --no-auth-cache --non-interactive | egrep -v "^($PTRN|$INST)/\$" | egrep -v "^GetBundle\.tmbundle" | sed -ne 's/.tmbundle\/$//p' | sort -f \
   3&gt; &gt;(CocoaDialog progressbar --indeterminate --title 'Getting Bundle List' --text 'This could take a while...')
 }
 IFS=$'\n' 

@@ -19,9 +19,9 @@
 	<array>
 		<dict>
 			<key>comment</key>
-			<string>SWIG files contain C code, so it's logical to derive from the C rules</string>
+			<string>SWIG files contain C or C++ code, so it's logical to derive from the C++ rules</string>
 			<key>include</key>
-			<string>source.c</string>
+			<string>source.c++</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -67,7 +67,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(%)(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|insert|makedefault|module|nocallback|nodefault|rename|typemap|varargs)\b</string>
+			<string>(%)(apply|callback|clear|constant|contract|define|enddef|extend|feature|ignore|insert|makedefault|module|nocallback|nodefault|rename|typemap|varargs|template)\b</string>
 			<key>name</key>
 			<string>keyword.other.directive.swig</string>
 		</dict>

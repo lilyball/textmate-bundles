@@ -27,7 +27,7 @@ plist = { 'radioButton' =&gt; 0,
   'weekdayInterval' =&gt; 0, 'weekdayDay' =&gt; weekdayDay
 }.to_plist
 res=PropertyList::load(`#{e_sh dialog} dateInterval -mp #{e_sh plist}`)
-if res['returnCode'] == 0
+if res['returnButton'] == 'Cancel'
   TextMate.exit_discard
 else
   case res['radioButton']

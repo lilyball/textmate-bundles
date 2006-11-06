@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
+   perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
+      &lt; index.html &gt; "$TM_NEW_FILE"
+fi</string>
+	<key>extension</key>
+	<string>html</string>
+	<key>name</key>
+	<string>HTML — 4.01 Transitional</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>6647393E-C0F6-4FF7-8B5A-A3C0C8B59B6D</string>
+</dict>
+</plist>

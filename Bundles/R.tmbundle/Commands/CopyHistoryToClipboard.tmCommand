@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>ruby -e "require ENV['TM_BUNDLE_SUPPORT'] + '/lib/historyList.rb';print HistoryList.new(STDIN.read + \"\n&gt; \").list.join(\"\n\")"|pbcopy
+	<string>ruby -e 'require ENV["TM_BUNDLE_SUPPORT""] + "/lib/historyList.rb";print HistoryList.new(STDIN.read + "\n&gt; ").list.join("\n")'|pbcopy
 echo "Commands from selection/document placed into pasteboard"</string>
 	<key>fallbackInput</key>
 	<string>document</string>

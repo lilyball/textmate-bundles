@@ -133,70 +133,31 @@ transaction.commit_window_tool	= commit_tool
 transaction.diff_tool			= diff_cmd
 transaction.status_helper_tool	= status_helper
 
-
+# Perform the commit
 case $options.output_format
+when :plaintext
+	exit_early = false
+	if not transaction.preflight then
+		exit_early = true
+		puts "No files modified; nothing to commit."
+		transaction.paths_to_commit.each do | path |
+			puts " • " + path
+		end
+	else
+		status = transaction.ask_user_for_arguments
+		if status != 0
+			puts "Canceled (#{status >> 8})."
+			exit_early = true
+		end
+	end
+
+	STDOUT.flush
+	if (not exit_early) and (not $options.dry_run)
+		# WebKit needs <br> instead of \n inside <pre>, otherwise the text won't flush
+		transaction.commit {|stream, line| STDOUT.print(line + "<br>"); STDOUT.flush}
+	end
+	
 when :HTML
 	ERB.run_to_stream(IO.read(bundle + '/Templates/Commit.rhtml'), STDOUT)
 end
 
-
-=begin
-
-
-mup.html {
-	mup.head do
-			mup.title("Subversion Commit")
-			mup.style( "@import 'file://"+bundle+"/Stylesheets/svn_status_style.css';", "type" => "text/css")
-	end
-
-	mup.body { 
-		unless $opts.console_output
-			mup.h1 do 
-				mup.img( :src => "file://"+bundle+"/Stylesheets/subversion_logo.tiff",
-							:height => 21,
-							:width => 32 )
-				mup.text " Commit"
-			end
-		end
-		
-		STDOUT.flush
-
-		
-		if not transaction.preflight then 
-			mup.div( :class => "info" ) {
-				mup.text! "File(s) not modified; nothing to commit."
-				mup.ul{ transaction.paths_to_commit.each{ |path| mup.li(path) } }
-			}
-			exit 0
-		else
-			STDOUT.flush
-			status = transaction.ask_user_for_arguments
-
-			if status != 0
-				mup.div( :class => "error" ) { mup.text! "Canceled (#{status >> 8})." }	
-				exit -1
-			end
-		end
-		
-		if $opts.console_output
-			mup.div(:class => "command"){ mup.strong(%Q{#{svn} commit}); mup.text!(commit_args) }
-		end
-
-		exit 0 if $opts.dry_run
-		
-		mup.div( :class => 'section' ) do
-			mup.pre {
-				mup.text("...\n")
-				STDOUT.flush
-				
-				# puts "#{svn} commit --non-interactive --force-log #{commit_args}" #DEBUG
-				# puts `pwd`                                                        #DEBUG
-				
-				# WebKit needs <br> instead of \n inside <pre>, otherwise the text won't flush
-				transaction.commit {|stream, line| mup.text! line; mup << "<br>"; STDOUT.flush}
-			}
-		end
-
-	}
-}
-=end

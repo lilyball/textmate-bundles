@@ -87,7 +87,7 @@ function svnCommit(){
 		cmd += "export        TM_SVN_DIFF_CMD="	+ ENV['TM_SVN_DIFF_CMD']	+ "; "
 	}
 
-	cmd += ENV['TM_RUBY'] + ' -- ' + ENV['TM_BUNDLE_SUPPORT'] + '/svn_commit.rb "' + WorkPaths.join('" "') + '"'
+	cmd += ENV['TM_RUBY'] + ' -- ' + ENV['TM_BUNDLE_SUPPORT'] + '/svn_commit.rb --output=plaintext "' + WorkPaths.join('" "') + '"'
 
 //	displayCommandOutput('info', 'info', cmd);
 //	document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'

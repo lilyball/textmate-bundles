@@ -5,9 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>osascript -e "tell application \"Transmit\"
-(upload item \"$TM_FILEPATH\") in current session of first document
-end tell"</string>
+	<string>if [[ ${#TM_FILEPATH} -gt 0 ]]; then
+	osascript &lt;&lt;-"APPLESCRIPT" - "$TM_FILEPATH"
+	on run(argv)
+		tell application "Transmit"
+			(upload item (item 1 of argv)) in current session of first document
+		end tell
+	end run
+	APPLESCRIPT
+else
+	echo "You need to save the file first"
+fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

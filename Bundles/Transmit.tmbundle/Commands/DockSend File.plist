@@ -5,7 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>osascript -e "tell application \"Transmit\" to open POSIX file \"$TM_FILEPATH\""</string>
+	<string>if [[ ${#TM_FILEPATH} -gt 0 ]]; then
+	open -a Transmit "$TM_FILEPATH"
+else
+	echo "You need to save the file first"
+fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

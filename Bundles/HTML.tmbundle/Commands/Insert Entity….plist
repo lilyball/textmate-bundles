@@ -5,25 +5,32 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>entity_file="$TM_BUNDLE_SUPPORT/entities.txt"
-entity_list () {
-  "${TM_RUBY:-ruby}" &lt;"$entity_file" -pe '
-    gsub(/^(\d+)\t(.+)$/) do |_|
-      puts "#{[$1.to_i].pack("U")} — #{$2}"
-    end'
-}
+	<string>#!/usr/bin/env ruby -w
+SUPPORT = ENV['TM_SUPPORT_PATH']
+DIALOG = SUPPORT + '/bin/tm_dialog'
 
-IFS=$'\n'
-res=$(CocoaDialog dropdown --float --title "Insert Entity" \
-  --text "Select the character to insert" \
-  --button1 Insert --button2 Cancel \
-  --exit-onchange --pulldown \
-  --items "Character…" $(entity_list)
-)
+require "#{SUPPORT}/lib/plist"
+require "#{SUPPORT}/lib/escape"
 
-if [[ ${res:0:1} != 2 &amp;&amp; ${res:2} != 0 ]]; then
-  echo -n "&amp;$(head -n${res:2} "$entity_file"|tail -n1|cut -f2);"
-fi
+entities = [ ]
+File.read("#{ENV['TM_BUNDLE_SUPPORT']}/entities.txt").scan(/^(\d+)\t(.+)$/) do |key, value|
+  char = [key.to_i].pack('U')
+  entities &lt;&lt; { 'display' =&gt; "#{value} (#{char})", 'char' =&gt; char, 'entity' =&gt; value }
+end
+
+plist = { 'entities' =&gt; entities, 'insertAsEntity' =&gt; true }.to_plist
+open("|#{e_sh DIALOG} -cm 'Insert Entity'", 'w+') do |io|
+  io &lt;&lt; plist; io.close_write
+
+  res = PropertyList.load(io.read)['result']
+  abort if res.nil?
+
+  if res['asEntity'].to_i == 1
+    print '&amp;' + res['returnArgument'].first['entity'] + ';'
+  else
+    print res['returnArgument'].first['char']
+  end
+end
 </string>
 	<key>input</key>
 	<string>none</string>

@@ -13,8 +13,9 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 require 'date'
 line = STDIN.read
 if line =~ / (at|due|from):\[(\d{4})-(\d{2})-(\d{2})\]$/
-  absoluteYear, absoluteMonth, absoluteDay = $2, $3, $4
-  weekdayDay = 0
+absoluteYear, absoluteMonth, absoluteDay = $2.to_i, $3.to_i, $4.to_i
+weekdayDay = 0
+date = Date.new(absoluteYear,absoluteMonth,absoluteDay)
 else
   date = Date.today
   absoluteYear, absoluteMonth, absoluteDay = date.year, date.month, date.day

@@ -21,7 +21,8 @@ def relative_date(date,is_today)
   TextMate.exit_discard if interval.nil?
   number_menu = number_menu[interval]
   number = Dialog.menu(number_menu.map{|i| [i,interval_menu[interval], "after #{if is_today then "today" else date end}"].join(" ")} + [nil,"Other…"] )
-  if number &amp;&amp; number &gt; number_menu.length then
+  TextMate.exit_discard if number.nil?
+  if number &gt; number_menu.length then
     number = Dialog.request_string(:title =&gt; "Set relative date", :prompt =&gt; "Number of #{interval_menu[interval]}:")
   else
     number = number_menu[number]

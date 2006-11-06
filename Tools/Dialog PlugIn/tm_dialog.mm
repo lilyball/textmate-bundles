@@ -38,6 +38,7 @@ bool output_property_list (id plist)
 	else
 	{
 		fprintf(stderr, "%s: %s\n", AppName, [error UTF8String] ?: "unknown error serializing returned property list");
+		fprintf(stderr, "%s\n", [[plist description] UTF8String]);
 	}
 	return res;
 }

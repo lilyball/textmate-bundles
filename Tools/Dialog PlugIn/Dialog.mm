@@ -1,7 +1,13 @@
 #import <Carbon/Carbon.h>
+#import <string>
 #import "Dialog.h"
 
 NSLock* Lock = [NSLock new];
+
+// Apple ought to document this <rdar://4821265>
+@interface NSMethodSignature (Undocumented)
++(NSMethodSignature*)signatureWithObjCTypes:(const char*)types;
+@end
 
 @interface Dialog : NSObject <TextMateDialogServerProtocol>
 {
@@ -27,6 +33,7 @@ NSLock* Lock = [NSLock new];
 	if(self = [super init])
 	{
 		parameters = [someParameters retain];
+		[parameters setObject:self forKey:@"controller"];
 		isModal = flag;
 		center = shouldCenter;
 	}
@@ -72,6 +79,7 @@ NSLock* Lock = [NSLock new];
 - (void)cleanupAndRelease
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[parameters removeObjectForKey:@"controller"];
 
 	enumerate(topLevelObjects, id object)
 	{
@@ -106,6 +114,50 @@ NSLock* Lock = [NSLock new];
 
 	[window orderOut:self];
 	[self cleanupAndRelease];
+}
+
+- (NSMethodSignature*)methodSignatureForSelector:(SEL)aSelector
+{
+	NSString* str = NSStringFromSelector(aSelector);
+	if([str hasPrefix:@"returnArgument:"])
+	{
+		std::string types;
+		types += @encode(void);
+		types += @encode(id);
+		types += @encode(SEL);
+	
+		unsigned numberOfArgs = [[str componentsSeparatedByString:@":"] count];
+		while(numberOfArgs-- > 1)
+			types += @encode(id);
+	
+		return [NSMethodSignature signatureWithObjCTypes:types.c_str()];
+	}
+	return [super methodSignatureForSelector:aSelector];
+}
+
+- (void)forwardInvocation:(NSInvocation*)invocation
+{
+	NSString* str = NSStringFromSelector([invocation selector]);
+	if([str hasPrefix:@"returnArgument:"])
+	{
+		NSArray* argNames = [str componentsSeparatedByString:@":"];
+
+		NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+		for(size_t i = 2; i < [[invocation methodSignature] numberOfArguments]; ++i)
+		{
+			id arg = nil;
+			[invocation getArgument:&arg atIndex:i];
+			[dict setObject:arg forKey:[argNames objectAtIndex:i - 2]];
+		}
+		[parameters setObject:dict forKey:@"result"];
+
+		[window orderOut:self];
+		[self cleanupAndRelease];
+	}
+	else
+	{
+		[super forwardInvocation:invocation];
+	}
 }
 
 - (void)connectionDidDie:(NSNotification*)aNotification

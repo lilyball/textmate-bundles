@@ -1,4 +1,6 @@
 require 'English'
+require 'ostruct'
+
 
 svn         	= ENV['TM_SVN']            || `which svn`.chomp
 bundle      	= ENV['TM_BUNDLE_SUPPORT'] || File.dirname(__FILE__)
@@ -7,6 +9,8 @@ commit_tool 	= ENV['CommitWindow']      || support + '/bin/CommitWindow.app/Cont
 status_helper	= bundle + "/commit_status_helper.rb"
 diff_cmd		= ENV['TM_SVN_DIFF_CMD']   || 'diff'
 
+require (support + '/lib/shelltokenize.rb')
+require (support + "/lib/erb_streaming.rb")
 
 # puts ARGV.inspect
 # puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG
@@ -20,62 +24,43 @@ diff_cmd		= ENV['TM_SVN_DIFF_CMD']   || 'diff'
 IgnoreFilePattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 CurrentDir        = Dir.pwd + "/"
 
-require (support + '/lib/shelltokenize.rb')
-require (support + "/lib/Builder.rb")
+paths_to_commit = Array.new			# array of paths to commit
+$options			= OpenStruct.new	# options
 
-mup             = nil       # markup builder
-paths_to_commit = Array.new # array of paths to commit
-$dry_run        = false     # don't commit anything?
+$options.output_format	= :HTML
+$options.dry_run			= false
 
-#
-# Run from Terminal or run from TextMate?
-# 
-if ARGV.include? '--console-output'
-	# Terminal
-	ARGV.delete '--console-output'
-	
-	$console_output	= true
-	
-	require (bundle + '/terminal_markup')
-	require 'optparse'
-	
-	opts = OptionParser.new do |opts|
-	        opts.banner = "Usage: #{File.basename(__FILE__)} --console-output [options] [files]"
-	        opts.separator ""
-	        opts.separator "Specific options:"
+require 'optparse'
 
-			opts.on_tail("--help", "Display help.") do
-				puts opts
-				exit
-			end
-	
-			opts.on_tail("--dry-run", "Go through the motions, but don't actually commit anything.") do
-				$dry_run = true
-			end
+opts = OptionParser.new do |opts|
+	opts.banner = "Usage: #{File.basename(__FILE__)} [options] [files]"
+	opts.separator ""
+	opts.separator "Specific options:"
+
+	opts.on("--output=TYPE", [:HTML, :plaintext, :terminal], "Select format of output (HTML, plaintext, terminal).") 	 do |format|
+		$options.output_format = format
 	end
-	
-	opts.parse!
 
-	# any file arguments?
-	if ARGV.size > 0
-		paths_to_commit = ARGV
-	else
-		paths_to_commit = [Dir.pwd]
+	opts.on_tail("--help", "Display help.") do
+		puts opts
+		exit
 	end
-	
-	mup = TerminalMarkup.new
-else 
-	# TextMate
-	$console_output = false
-	if ARGV.empty?
-	  paths_to_commit = TextMate::selected_paths_array
-  else
-	  paths_to_commit.concat( ARGV ) 
-  end
-	
-	mup = Builder::XmlMarkup.new(:target => STDOUT)
+
+	opts.on_tail("--dry-run", "Go through the motions, but don't actually commit anything.") do
+		$options.dry_run = true
+	end
 end
 
+opts.parse!
+
+# any file arguments?
+if ARGV.empty? then
+	paths_to_commit = TextMate::selected_paths_array
+#		paths_to_commit = [Dir.pwd] FIXME when using command line
+else
+	paths_to_commit.concat( ARGV ) 
+end
+	
 
 class SVNCommitTransaction
 	attr_accessor :paths_to_commit
@@ -122,7 +107,7 @@ public
 
 		commit_path_text = commit_paths_array.collect{|path| path.quote_filename_for_shell }.join(" ")
 		
-		ENV['TM_SUPPORT_PATH'] = support if $console_output
+		ENV['TM_SUPPORT_PATH'] = support if $options.console_output
 		@commit_args = %x{"#{@commit_window_tool}" --diff-cmd "#{@svn_tool},diff,--diff-cmd,#{@diff_tool}" \
 		 					--status #{commit_status} \
 							--action-cmd "?:Add,#{@svn_tool},add" \
@@ -142,6 +127,21 @@ public
 	end
 end
 
+transaction = SVNCommitTransaction.new(paths_to_commit)
+transaction.svn_tool			= svn
+transaction.commit_window_tool	= commit_tool
+transaction.diff_tool			= diff_cmd
+transaction.status_helper_tool	= status_helper
+
+
+case $options.output_format
+when :HTML
+	ERB.run_to_stream(IO.read(bundle + '/Templates/Commit.rhtml'), STDOUT)
+end
+
+
+=begin
+
 
 mup.html {
 	mup.head do
@@ -150,7 +150,7 @@ mup.html {
 	end
 
 	mup.body { 
-		unless $console_output
+		unless $opts.console_output
 			mup.h1 do 
 				mup.img( :src => "file://"+bundle+"/Stylesheets/subversion_logo.tiff",
 							:height => 21,
@@ -161,11 +161,6 @@ mup.html {
 		
 		STDOUT.flush
 
-		transaction = SVNCommitTransaction.new(paths_to_commit)
-		transaction.svn_tool			= svn
-		transaction.commit_window_tool	= commit_tool
-		transaction.diff_tool			= diff_cmd
-		transaction.status_helper_tool	= status_helper
 		
 		if not transaction.preflight then 
 			mup.div( :class => "info" ) {
@@ -183,11 +178,11 @@ mup.html {
 			end
 		end
 		
-		if $console_output
+		if $opts.console_output
 			mup.div(:class => "command"){ mup.strong(%Q{#{svn} commit}); mup.text!(commit_args) }
 		end
 
-		exit 0 if $dry_run
+		exit 0 if $opts.dry_run
 		
 		mup.div( :class => 'section' ) do
 			mup.pre {
@@ -204,4 +199,4 @@ mup.html {
 
 	}
 }
-
+=end

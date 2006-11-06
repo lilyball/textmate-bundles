@@ -4,6 +4,7 @@ support = ENV['TM_SUPPORT_PATH']
 require (support + "/lib/Builder.rb")
 require (support + "/lib/shelltokenize.rb")
 require (support + "/lib/escape.rb")
+require (support + "/lib/erb_streaming.rb")
 require "cgi"
 require "erb"
 
@@ -100,18 +101,4 @@ def status_map(status)
 	StatusMap[status]
 end
 
-
-# Setup the compiler to print to stdout so we can do incremental output streaming
-# rather than downloading everthing first and rendering afterwards
-compiler = ERB::Compiler.new(nil)
-rhtml = ERB.new(IO.read(bundle + '/Templates/Status.rhtml'))
-
-# actually, we're just setting the compiler, not eoutvar
-rhtml.set_eoutvar(compiler)
-compiler.pre_cmd	= []
-compiler.post_cmd	= []
-compiler.put_cmd	= 'print'
-compiler.insert_cmd	= compiler.put_cmd if defined?(compiler.insert_cmd) # insert_cmd appears to be new
-
-rhtml.run
-
+ERB.run_to_stream(IO.read(bundle + '/Templates/Status.rhtml'), STDOUT)

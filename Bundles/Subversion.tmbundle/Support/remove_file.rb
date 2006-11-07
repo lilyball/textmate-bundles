@@ -18,6 +18,5 @@ if res =~ /Remove/ then
   ENV['TM_SVN_REMOVE'] = path # by using an env. variable we avoid shell escaping
   puts `#{svn} remove "$TM_SVN_REMOVE"`
 else
-	puts "Cancel"
-	exit 1
+	exit -128
 end

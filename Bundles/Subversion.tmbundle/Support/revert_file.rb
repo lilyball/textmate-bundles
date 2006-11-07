@@ -17,5 +17,5 @@ if res =~ /Revert/i then
   ENV['TM_SVN_REVERT'] = path # by using an env. variable we avoid shell escaping
   puts `#{svn} revert "$TM_SVN_REVERT"`
 else
-	puts "Cancel"
+	exit -128
 end

@@ -18,8 +18,7 @@ stdin, stdout, stderr = popen3("R", "--vanilla", "--no-readline", "--slave", "--
 
 stdin.write(&lt;&lt;'R')
 getSig &lt;- function (names) {
-	sapply(names, function(name) {
-		snipIdx &lt;- 0
+	sapply(names, function(name, snipIdx=0)
 		paste(c(name, "(", sapply(lapply(names(f &lt;- formals(name)), function (name) if ((fdep &lt;- paste(deparse(f[[name]], width=500), collapse="\n")) == "") name else list(name, fdep)), function(arg)
 				if (is.list(arg))
 					paste("${", (snipIdx &lt;&lt;- snipIdx + 1), ":", if (snipIdx &gt; 1) ", " else "", arg[[1]], "=${",
@@ -33,7 +32,7 @@ getSig &lt;- function (names) {
 					paste(if (snipIdx &gt; 0) ", " else "", "${", (snipIdx &lt;&lt;- snipIdx + 1), ":", arg, "}", sep="")
 			), ")")
 		, collapse="")
-	})
+	)
 }
 R
 

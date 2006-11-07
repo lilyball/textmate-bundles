@@ -76,18 +76,8 @@ function displayCommandOutput(id, className, string){
 
 function svnCommit(){
 		
-	cmd = ""
-	cmd += 'export LC_CTYPE=en_US.UTF-8 ;'
-	cmd += "export            PATH="			+ ENV['PATH']				+ "; "
-	cmd += "export            TM_SVN="			+ ENV['TM_SVN']				+ "; "
-	cmd += "export            TM_SUPPORT_PATH="	+ ENV['TM_SUPPORT_PATH']	+ "; "
-	cmd += "export            CommitWindow="	+ ENV['CommitWindow'] 		+ "; "
-
-	if(ENV['TM_SVN_DIFF_CMD']) {
-		cmd += "export        TM_SVN_DIFF_CMD="	+ ENV['TM_SVN_DIFF_CMD']	+ "; "
-	}
-
-	cmd += ENV['TM_RUBY'] + ' -- ' + ENV['TM_BUNDLE_SUPPORT'] + '/svn_commit.rb --output=plaintext "' + WorkPaths.join('" "') + '"'
+	cmd  = 'cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"; '
+	cmd += '"${TM_RUBY:-ruby}" -- "$TM_BUNDLE_SUPPORT/svn_commit.rb" --output=plaintext "' + WorkPaths.join('" "') + '"'
 
 //	displayCommandOutput('info', 'info', cmd);
 //	document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'

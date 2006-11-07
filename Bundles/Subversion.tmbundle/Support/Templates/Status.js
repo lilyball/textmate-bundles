@@ -177,8 +177,7 @@ function openWithFinder(filename,id){
 
 function sendDiffToTextMate(filename,id){
 	TextMate.isBusy = true;
-	tmp = '/tmp/diff_to_mate' + id + '.diff'
-	cmd = 'LC_CTYPE=en_US.UTF-8 ' + ENV['TM_SVN'] + ' 2>&1 diff --diff-cmd diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
+	cmd = ENV['TM_SVN'] + ' diff --non-recursive --diff-cmd diff ' + filename + '|"$TM_SUPPORT_PATH/bin/mate" &>/dev/console &';
 	document.getElementById('commandOutput').innerHTML += TextMate.system(cmd, null).outputString + ' \n'
 	TextMate.isBusy = false;
 };

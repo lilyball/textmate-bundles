@@ -110,6 +110,7 @@ public
 		ENV['TM_SUPPORT_PATH'] = support if $options.console_output
 		@commit_args = %x{"#{@commit_window_tool}" 2>/dev/console --diff-cmd "#{@svn_tool},diff,--diff-cmd,#{@diff_tool}" \
 		 					--status #{commit_status} \
+							--action-cmd "!:Remove,#{@svn_tool},rm" \
 							--action-cmd "?:Add,#{@svn_tool},add" \
 							--action-cmd "A:Mark Executable,#{@status_helper_tool},propset,svn:executable,true" \
 							--action-cmd "A,M,D,C:Revert,#{@status_helper_tool},revert" \

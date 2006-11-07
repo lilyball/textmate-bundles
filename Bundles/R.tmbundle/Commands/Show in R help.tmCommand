@@ -12,6 +12,7 @@
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/exit_codes"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
+require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word")
 
 require 'base64'
 
@@ -25,12 +26,7 @@ def e_js(str)
   str.gsub("'", "\\'")
 end
 
-term = ENV['TM_SELECTED_TEXT']
-if term.nil? or term.empty?
-  line = ENV['TM_CURRENT_LINE']
-  column = ENV['TM_COLUMN_NUMBER'].to_i - 1 # columns are 1-based, ruby is 0-based
-  term = line[0...column].match(/[\w.]*$/).to_s + line[column..-1].match(/^[\w.]*/).to_s
-end
+term = Word.current_word(/\w./)
 TextMate.exit_show_tool_tip("Please select a term to look up.") if term.empty?
 
 linked_rhelp = "#{ENV["TM_BUNDLE_SUPPORT"]}/bin/linked_rhelp.rb"

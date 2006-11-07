@@ -515,6 +515,9 @@
 
 - (NSString *) absolutePathForPath:(NSString *)path
 {
+	if([path hasPrefix:@"/"])
+		return path;
+
 	NSString *			absolutePath = nil;
 	NSString *			errorText;
 	int					exitStatus;

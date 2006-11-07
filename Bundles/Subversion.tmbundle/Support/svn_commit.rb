@@ -108,7 +108,7 @@ public
 		commit_path_text = commit_paths_array.collect{|path| path.quote_filename_for_shell }.join(" ")
 		
 		ENV['TM_SUPPORT_PATH'] = support if $options.console_output
-		@commit_args = %x{"#{@commit_window_tool}" --diff-cmd "#{@svn_tool},diff,--diff-cmd,#{@diff_tool}" \
+		@commit_args = %x{"#{@commit_window_tool}" 2>/dev/console --diff-cmd "#{@svn_tool},diff,--diff-cmd,#{@diff_tool}" \
 		 					--status #{commit_status} \
 							--action-cmd "?:Add,#{@svn_tool},add" \
 							--action-cmd "A:Mark Executable,#{@status_helper_tool},propset,svn:executable,true" \

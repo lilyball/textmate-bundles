@@ -237,7 +237,7 @@
 		NSRect			usableRect	= [screen visibleFrame];
 		NSRect			windowRect	= [fWindow frame];
 		NSTableView *	tableView	= [fPathColumn tableView];
-		float			rowHeight	= [tableView rowHeight];
+		float			rowHeight	= [tableView rowHeight] + [tableView intercellSpacing].height;
 		int				rowCount	= [[fFilesController arrangedObjects] count];
 		float			idealVisibleHeight;
 		float			currentVisibleHeight;
@@ -257,7 +257,7 @@
 
 			// reasonable margin
 			usableRect = NSInsetRect( usableRect, 20, 20 );
-			windowRect = NSIntersectionRect(usableRect, NSInsetRect(windowRect, 0, -deltaVisibleHeight));
+			windowRect = NSIntersectionRect(usableRect, NSInsetRect(windowRect, 0, ceilf(0.5f * -deltaVisibleHeight)));
 			
 //			NSLog( @"new windowRect: %@", NSStringFromRect(windowRect) );
 			

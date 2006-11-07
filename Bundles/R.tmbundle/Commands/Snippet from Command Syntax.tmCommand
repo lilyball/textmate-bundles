@@ -6,22 +6,69 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/ruby
-require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
-require ENV['TM_SUPPORT_PATH'] + "/lib/dialog.rb"
-require ENV['TM_BUNDLE_SUPPORT'] + "/lib/parsing.rb"
-text = STDIN.read
-data = File.read(ENV['TM_BUNDLE_SUPPORT']+"/commands.txt").split("\n")
-results=data.grep(/^#{text.gsub(".","\\.")}/)
-if results.length==1 then
-  line=results[0]
+require File.join(ENV['TM_SUPPORT_PATH'], "lib/exit_codes.rb")
+require File.join(ENV['TM_SUPPORT_PATH'], "lib/dialog.rb")
+require File.join(ENV['TM_SUPPORT_PATH'], 'lib/current_word.rb')
+
+require File.join(ENV['TM_BUNDLE_SUPPORT'], 'lib/popen3.rb')
+
+word = Word.current_word(/\w./)
+
+stdin, stdout, stderr = popen3("R", "--vanilla", "--no-readline", "--slave", "--encoding=UTF-8")
+
+stdin.write(&lt;&lt;'R')
+getSig &lt;- function (names) {
+	sapply(names, function(name) {
+		snipIdx &lt;- 0
+		paste(c(name, "(", sapply(lapply(names(f &lt;- formals(name)), function (name) if ((fdep &lt;- paste(deparse(f[[name]], width=500), collapse="\n")) == "") name else list(name, fdep)), function(arg)
+				if (is.list(arg))
+					paste("${", (snipIdx &lt;&lt;- snipIdx + 1), ":", if (snipIdx &gt; 1) ", " else "", arg[[1]], "=${",
+							snipIdx &lt;&lt;- snipIdx + 1, ":",
+							if ((pos &lt;- regexpr("(?&lt;=^['\"]).*(?=['\"]$)", arg[[2]], perl=T)) != -1)
+								paste(substr(arg[[2]], 1, pos-1), "${", snipIdx &lt;&lt;- snipIdx + 1, ":", substr(arg[[2]], pos, pos + attr(pos,"match.length") - 1), "}", substr(arg[[2]], pos + attr(pos, "match.length"), nchar(arg[[2]])), sep="")
+							else
+								arg[[2]]
+							, "}}", sep="")
+				else
+					paste(if (snipIdx &gt; 0) ", " else "", "${", (snipIdx &lt;&lt;- snipIdx + 1), ":", arg, "}", sep="")
+			), ")")
+		, collapse="")
+	})
+}
+R
+
+
+wordEsc = word.gsub("\\|'", "\\\\\\0")
+wordReg = Regexp.escape(word).gsub("\\|'", "\\\\\\0")
+stdin.puts("cat(paste(getSig(if ('#{wordEsc}' %in% (ary &lt;- sort(apropos('^#{wordReg}')))) '#{wordEsc}' else ary), collapse='\\n'))")
+stdin.close
+
+text = stdout.read()
+
+TextMate.exit_show_tool_tip("No function signature known for `#{word}'") if text.empty?
+
+functions = text.split("\n")
+if functions.size == 1
+  function = functions.first
 else
-  line = Dialog.request_item :title =&gt; "Snippet for Command", :prompt =&gt; "There were more than one matching commands found", :items =&gt; results
-  TextMate.exit_discard if line.nil?
+  term = Dialog.request_item :title =&gt; "Snippet for Command", :prompt =&gt; "There were more than one matching commands found", :items =&gt; functions.collect { |f| f[0...f.index("(")] }
+  TextMate.exit_discard if term.nil?
+  function = functions.find("") { |f| f[0..term.length] == term + "(" }
 end
-print CommandParser.snippet(line.chomp)
+
+TextMate.exit_discard if function.empty?
+
+if ENV['TM_SELECTED_TEXT'].nil? or ENV['TM_SELECTED_TEXT'].empty?
+  # we didn't use selected text but instead pulled the word from the line
+  # so lets only insert everything after the term
+  print function[word.length..-1]
+NameError
+else
+  print function
+end
 </string>
 	<key>fallbackInput</key>
-	<string>word</string>
+	<string>none</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

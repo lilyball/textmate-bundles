@@ -14,15 +14,15 @@
 				<key>background</key>
 				<string>#050505FA</string>
 				<key>caret</key>
-				<string>#00807C</string>
+				<string>#3333FF</string>
 				<key>foreground</key>
 				<string>#CDCDCD</string>
 				<key>invisibles</key>
-				<string>#66666633</string>
+				<string>#CDCDCD1A</string>
 				<key>lineHighlight</key>
-				<string>#0065801A</string>
+				<string>#0000801A</string>
 				<key>selection</key>
-				<string>#00807C4D</string>
+				<string>#1717E64D</string>
 			</dict>
 		</dict>
 		<dict>
@@ -90,6 +90,17 @@
 			<dict>
 				<key>foreground</key>
 				<string>#803D00</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>~ String Punctuation II</string>
+			<key>scope</key>
+			<string>string.regexp punctuation.definition.string, string.quoted.literal punctuation.definition.string, string.quoted.double.ruby.mod punctuation.definition.string</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FFF80033</string>
 			</dict>
 		</dict>
 		<dict>
@@ -414,7 +425,7 @@
 			<key>name</key>
 			<string>√ Variable Punctuation</string>
 			<key>scope</key>
-			<string>punctuation.definition.variable</string>
+			<string>punctuation.definition</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -1531,7 +1542,7 @@
 			<key>name</key>
 			<string>meta.brace.erb</string>
 			<key>scope</key>
-			<string>punctuation.section.embedded , meta.brace.erb.html</string>
+			<string>punctuation.section.embedded -(source string source punctuation.section.embedded), meta.brace.erb.html</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -1549,6 +1560,17 @@
 			<dict>
 				<key>background</key>
 				<string>#00FFF81A</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>String Embedded Source</string>
+			<key>scope</key>
+			<string>source string source punctuation.section.embedded</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#406180</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1703,7 +1725,7 @@
 			<key>name</key>
 			<string>Comment</string>
 			<key>scope</key>
-			<string>comment</string>
+			<string>0comment</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -1724,7 +1746,31 @@
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#2C2881</string>
+				<string>#0000FF1A</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>comment</string>
+			<key>scope</key>
+			<string>comment</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#050505</string>
+				<key>foreground</key>
+				<string>#333333</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Comment Punctuation</string>
+			<key>scope</key>
+			<string>comment punctuation</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#333333</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1946,9 +1992,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Misc Braces</string>
+			<string>Misc Punctuation</string>
 			<key>scope</key>
-			<string>meta.brace.erb, source.ruby.embedded.source.brace, punctuation.section.dictionary, punctuation.terminator.dictionary</string>
+			<string>meta.brace.erb, source.ruby.embedded.source.brace, punctuation.section.dictionary, punctuation.terminator.dictionary, punctuation.delimiter.object</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -1959,7 +2005,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>meta.brace.curly</string>
+			<string>Curly Punctuation</string>
 			<key>scope</key>
 			<string>meta.group.braces.curly punctuation.section.scope, meta.brace.curly</string>
 			<key>settings</key>
@@ -1974,7 +2020,7 @@
 			<key>name</key>
 			<string>Object Punctuation</string>
 			<key>scope</key>
-			<string>punctuation.separator.objects, meta.group.braces.curly meta.delimiter.object.comma, punctuation.separator.key-value</string>
+			<string>punctuation.separator.objects, meta.group.braces.curly meta.delimiter.object.comma, punctuation.separator.key-value -meta.tag</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>

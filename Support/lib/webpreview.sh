@@ -10,9 +10,19 @@
 # Generate HTML header up to and including the body tag. Also includes the default stylesheet and javascript.
 # USAGE: html_header [page title] [page info, like Bundle Name, shown at the top right]
 html_header() {
-	export HTML_TITLE=$1
-	export HTML_SUB_TITLE=$2
-	"${TM_RUBY:-ruby}" -r"$TM_SUPPORT_PATH/lib/web_preview.rb" -e 'html_header(ENV["HTML_TITLE"], ENV["HTML_SUB_TITLE"])'
+	case ${#@} in
+		1)	export WINDOW_TITLE="$1"; export PAGE_TITLE="$1";                      ;;
+		2)	export WINDOW_TITLE="$1"; export PAGE_TITLE="$1"; export SUB_TITLE="$2";;
+		3)	export WINDOW_TITLE="$1"; export PAGE_TITLE="$2"; export SUB_TITLE="$3";;
+	esac
+
+	"${TM_RUBY:-ruby}" -r"$TM_SUPPORT_PATH/lib/web_preview.rb" <<-'RUBY'
+		puts html_head(
+			:window_title	=> ENV['WINDOW_TITLE'],
+			:page_title		=> ENV['PAGE_TITLE'],
+			:sub_title		=> ENV['SUB_TITLE']
+		)
+	RUBY
 }
 
 # Generate HTML footer.

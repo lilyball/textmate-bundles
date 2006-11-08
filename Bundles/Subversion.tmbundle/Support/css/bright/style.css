@@ -19,7 +19,7 @@
 
 /* formating the table.. */
 .bright div.subversion table.blame {
-	background-color: #f0f0f0;
+	background-color: #F8F8F8;
 	border: 1px solid #cccbba;
 }
 
@@ -46,14 +46,14 @@
 
 /* to make it look good if a line gets wrapped: */
 /* about the several column classes.. */
-.bright div.subversion table.blame tr.linecol {
+.bright div.subversion table.blame td.linecol {
    background-color: #ddd;
    border-right: 1px solid #999;
    color: #888;
    text-align: right;
 }
 
-.bright div.subversion table.blame tr.revcol, .bright div.subversion table.blame tr.namecol {
+.bright div.subversion table.blame td.revcol, .bright div.subversion table.blame td.namecol {
    text-align: right;
    background-color: #f8f8f8;
    color: #888;
@@ -62,17 +62,13 @@
    padding-left: 2px;
 }
 
-.bright div.subversion table.blame tr.namecol {
+.bright div.subversion table.blame td.namecol {
    border-right: 1px solid #aaa;
-}
-
-.bright div.subversion table.blame tr.alternate {
-	background-color: #E4E4E4;
 }
 
 /* maybe this should be implemented as id but its
    an optimisation for less ruby code. :) */
-.bright div.subversion table.blame tr.current_line {
+.bright div.subversion table.blame td.current_line {
    background-color: #F1D8F0;
 	border-width: 1px 0 1px 0;
 	border-style: solid;
@@ -95,9 +91,6 @@
 
 table.status td.status_col {
 	color: #505050;
-}
-.bright table.status tr.even {
-	background-color: #F0F0F0;
 }
 #commandOutput {
 	border: 1px solid #AAA;

@@ -43,7 +43,7 @@ bool output_property_list (id plist)
 	return res;
 }
 
-int contact_server (std::string nibName, NSMutableDictionary* someParameters, bool center, bool modal, bool quiet)
+int contact_server (std::string nibName, NSMutableDictionary* someParameters, NSDictionary* initialValues, bool center, bool modal, bool quiet)
 {
 	int res = -1;
 
@@ -54,7 +54,7 @@ int contact_server (std::string nibName, NSMutableDictionary* someParameters, bo
 	{
 		NSString* aNibPath = [NSString stringWithUTF8String:nibName.c_str()];
 
-		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:someParameters modal:modal center:center];
+		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:someParameters andInitialValues:initialValues modal:modal center:center];
 		if(!quiet)
 			output_property_list(parameters);
 		res = [[parameters objectForKey:@"returnCode"] intValue];
@@ -76,6 +76,7 @@ void usage ()
 		"Usage: %1$s [-p] -u\n"
 		"Options:\n"
       " -c, --center               Center the window on screen.\n"
+      " -d, --defaults <plist>     Register initial values for user defaults.\n"
       " -m, --modal                Show window as modal.\n"
       " -q, --quiet                Do not write result to stdout.\n"
       " -p, --parameters <plist>   Provide parameters as a plist.\n"
@@ -127,6 +128,7 @@ int main (int argc, char* argv[])
 
 	static struct option const longopts[] = {
 		{ "center",				no_argument,			0,		'c'	},
+		{ "defaults",			required_argument,	0,		'd'	},
 		{ "modal",				no_argument,			0,		'm'	},
 		{ "parameters",		required_argument,	0,		'p'	},
 		{ "quiet",				no_argument,			0,		'q'	},
@@ -136,12 +138,14 @@ int main (int argc, char* argv[])
 
 	bool center = false, modal = false, quiet = false, menu = false;
 	char const* parameters = NULL;
+	char const* defaults = NULL;
 	char ch;
-	while((ch = getopt_long(argc, argv, "cmp:qu", longopts, NULL)) != -1)
+	while((ch = getopt_long(argc, argv, "cd:mp:qu", longopts, NULL)) != -1)
 	{
 		switch(ch)
 		{
 			case 'c':	center = true;				break;
+			case 'd':	defaults = optarg;		break;
 			case 'm':	modal = true;				break;
 			case 'p':	parameters = optarg;		break;
 			case 'q':	quiet = true;				break;
@@ -177,7 +181,8 @@ int main (int argc, char* argv[])
 	int res = -1;
 	if(argc == 1)
 	{
-		res = contact_server(find_nib(argv[0]), plist, center, modal, quiet);
+		id initialValues = defaults ? [NSPropertyListSerialization propertyListFromData:[NSData dataWithBytes:defaults length:strlen(defaults)] mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
+		res = contact_server(find_nib(argv[0]), plist, initialValues, center, modal, quiet);
 	}
 	else if(menu)
 	{

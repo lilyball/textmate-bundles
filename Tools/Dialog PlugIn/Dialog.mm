@@ -248,13 +248,16 @@ NSLock* Lock = [NSLock new];
 	return TextMateDialogServerProtocolVersion;
 }
 
-- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters modal:(BOOL)flag center:(BOOL)shouldCenter
+- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues modal:(BOOL)flag center:(BOOL)shouldCenter
 {
 	if(![[NSFileManager defaultManager] fileExistsAtPath:aNibPath])
 	{
 		NSLog(@"%s nib file not found: %@", _cmd, aNibPath);
 		return nil;
 	}
+
+	if(initialValues && [initialValues count])
+		[[NSUserDefaults standardUserDefaults] registerDefaults:initialValues];
 
 	NSNib* nib = [[[NSNib alloc] initWithContentsOfURL:[NSURL fileURLWithPath:aNibPath]] autorelease];
 	if(!nib)

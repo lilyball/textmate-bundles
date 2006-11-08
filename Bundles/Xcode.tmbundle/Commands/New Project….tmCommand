@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -w
+
+TEMPLATES = '/Library/Application Support/Apple/Developer Tools/Project Templates'
+SUPPORT   = ENV['TM_SUPPORT_PATH']
+DIALOG    = "#{SUPPORT}/bin/tm_dialog"
+MATE      = "#{SUPPORT}/bin/mate"
+
+require "#{SUPPORT}/lib/plist"
+require "#{SUPPORT}/lib/escape"
+require "fileutils"
+
+def scan_dir(dir)
+  entries = [ ]
+  Dir.foreach(dir) do |entry|
+    next if entry =~ /^\./
+    entries &lt;&lt; { 'name' =&gt; entry, 'path' =&gt; File.join(dir, entry) }
+  end
+  entries 
+end
+
+templates = [ ]
+
+Dir.foreach(TEMPLATES) do |dir|
+  next if dir =~ /^\./
+  templates &lt;&lt; { 'name' =&gt; dir, 'children' =&gt; scan_dir(File.join(TEMPLATES, dir)) }
+end
+
+plist = { 'templates' =&gt; templates, 'projectName' =&gt; 'untitled' }.to_plist
+
+if res = PropertyList.load(%x{ #{e_sh DIALOG} -cmp #{e_sh plist} 'New Project' })['result']
+
+  src = res['returnArgument']
+
+  dir = File.expand_path(res['location'])
+  dst = File.join(dir, res['name'])
+  
+  abort "Location does not exist."    unless File.exists?(dir)
+  abort "Destination already exists." if File.exists?(dst)
+
+  FileUtils.cp_r(src, dst)
+  %x{ #{e_sh MATE} #{e_sh dst} &amp;&gt;/dev/null &amp; }
+
+end
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>New Project…</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>73E356A1-87CF-4B8E-A4B5-B14F29683F12</string>
+</dict>
+</plist>

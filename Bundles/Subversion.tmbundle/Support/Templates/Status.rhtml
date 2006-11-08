@@ -55,7 +55,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 
 	<% stdin_line_count = 1
 	 STDIN.each_line do |line| %>
-		<tr class="<%= stdin_line_count % 2 == 0 ? 'even' : 'odd' %>">
+		<tr class="<%= stdin_line_count % 2 == 0 ? 'alternate' : '' %>">
 			<%# Check for error first %>
 			<% if not /^svn:/.match( line ).nil? then %>
 				<td><div class="error"><%= line %></div></td>

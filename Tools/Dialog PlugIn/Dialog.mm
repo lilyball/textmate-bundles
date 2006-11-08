@@ -23,6 +23,7 @@ NSLock* Lock = [NSLock new];
 	BOOL isModal;
 	BOOL center;
 	BOOL didLock;
+	BOOL didCleanup;
 }
 - (NSDictionary*)instantiateNib:(NSNib*)aNib;
 @end
@@ -76,8 +77,12 @@ NSLock* Lock = [NSLock new];
 	}
 }
 
-- (void)cleanupAndRelease
+- (void)cleanupAndRelease:(id)sender
 {
+	if(didCleanup)
+		return;
+	didCleanup = YES;
+
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[parameters removeObjectForKey:@"controller"];
 
@@ -102,7 +107,7 @@ NSLock* Lock = [NSLock new];
 
 - (void)windowWillClose:(NSNotification*)aNotification
 {
-	[self cleanupAndRelease];
+	[self cleanupAndRelease:self];
 }
 
 - (void)performButtonClick:(id)sender
@@ -113,7 +118,7 @@ NSLock* Lock = [NSLock new];
 		[parameters setObject:[NSNumber numberWithInt:[sender tag]] forKey:@"returnCode"];
 
 	[window orderOut:self];
-	[self cleanupAndRelease];
+	[self cleanupAndRelease:self];
 }
 
 - (NSMethodSignature*)methodSignatureForSelector:(SEL)aSelector
@@ -152,7 +157,7 @@ NSLock* Lock = [NSLock new];
 		[parameters setObject:dict forKey:@"result"];
 
 		[window orderOut:self];
-		[self cleanupAndRelease];
+		[self performSelector:@selector(cleanupAndRelease:) withObject:self afterDelay:0];
 	}
 	else
 	{
@@ -163,7 +168,7 @@ NSLock* Lock = [NSLock new];
 - (void)connectionDidDie:(NSNotification*)aNotification
 {
 	[window orderOut:self];
-	[self cleanupAndRelease];
+	[self cleanupAndRelease:self];
 
 	// post dummy event, since the system has a tendency to stall the next event, after replying to a DO message where the receiver has disappeared, posting this dummy event seems to solve it
 	[NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint modifierFlags:0 timestamp:0.0f windowNumber:0 context:nil subtype:0 data1:0 data2:0] atStart:NO];
@@ -213,7 +218,7 @@ NSLock* Lock = [NSLock new];
 	else
 	{
 		NSLog(@"%s didn't find a window in nib", _cmd);
-		[self cleanupAndRelease];
+		[self cleanupAndRelease:self];
 	}
 
 	return parameters;

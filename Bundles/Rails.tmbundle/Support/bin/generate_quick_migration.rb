@@ -11,7 +11,9 @@
 require 'rails_bundle_tools'
 require 'fileutils'
 
-selection = STDIN.read
+selection = TextMate.input(
+  "Name the new migration:", "CreateUserTable",
+  :title => "Quick Migration Generator")
 
 if selection.size < 3 or selection.size > 255
   print "Please highlight the name of the migration you want to create"
@@ -47,8 +49,7 @@ class #{camelized} < ActiveRecord::Migration
 end
 RUBY
 
-# TextMate.refresh_project_drawer
 new_migration_filename = File.join(migration_dir, number + "_" + underscored + ".rb")
 File.open(new_migration_filename, "w") { |f| f.write generated_code }
+TextMate.refresh_project_drawer
 TextMate.open(new_migration_filename)
-print "" # Replace selected text with nothing

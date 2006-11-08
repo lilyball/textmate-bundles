@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 require 'pp'
-Dir.chdir("/Library/Frameworks/R.framework/Versions/Current/Resources/library")
+Dir.chdir(File.join((ENV["R_HOME"] || "/Library/Frameworks/R.framework/Resources"), "library"))
 resources = Dir.glob("*/latex/*.tex")
 # puts resources
 results = ""

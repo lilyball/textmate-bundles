@@ -30,7 +30,7 @@ term = Word.current_word(/\w./)
 TextMate.exit_show_tool_tip("Please select a term to look up.") if term.empty?
 
 linked_rhelp = "#{ENV["TM_BUNDLE_SUPPORT"]}/bin/linked_rhelp.rb"
-libDir = '/Library/Frameworks/R.framework/Versions/Current/Resources/library'
+libDir = File.join((ENV["R_HOME"] || '/Library/Frameworks/R.framework/Resources'), '/library')
 files = `awk -- '/^Entry:/ { entry = $2 } /[[:space:]]'#{e_sh Regexp.escape(term)}'([[:space:]]|$)/,/^URL:/ { if(match($0,/^URL:/)) { sub(/^URL: /, ""); sub(/^(\\.\\.\\/)*library\\//, ""); print entry, $0; } }' #{e_sh libDir}/*/CONTENTS`.split("\n")
 
 TextMate.exit_show_tool_tip("Nothing known about `#{term}'") if files.empty?

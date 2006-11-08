@@ -7,11 +7,11 @@
 	<key>command</key>
 	<string>#! /usr/bin/ruby
 text = STDIN.read
-file = `find /Library/Frameworks/R.framework/Versions/Current/Resources/library -name #{text}.tex -print`
+file = `find "${R_HOME:-/Library/Frameworks/R.framework/Resources}"/library -name #{text}.tex -print`
 unless file.empty?
        dir = File.dirname(file)
        tex = `cat #{file}`
-       tex.scan(/\\begin\{Usage\}\n\\begin\{verbatim\}\n(.*)/) {|a| print a}
+       texscan(/\\begin\{Usage\}\n\\begin\{verbatim\}\n(.*)/) {|a| print a}
 end</string>
 	<key>fallbackInput</key>
 	<string>word</string>

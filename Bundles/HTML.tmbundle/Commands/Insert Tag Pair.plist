@@ -23,7 +23,7 @@ single        = /^(?:img|meta|link|input|base|area|col|frame|param)$/i
 # handle the case where caret is in the middle of a word, assume only the left part is the tag
 index = ENV['TM_LINE_INDEX'].to_i - ENV['TM_INPUT_START_LINE_INDEX'].to_i
 tag, suffix = STDIN.read, ''
-if index &lt; tag.length
+if index &lt; tag.length &amp;&amp; !ENV['TM_SELECTED_TEXT']
   tag, suffix = tag[0...index], tag[index..-1]
 end
 

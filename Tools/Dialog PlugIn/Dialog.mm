@@ -102,6 +102,11 @@ NSLock* Lock = [NSLock new];
 		[NSApp stopModal];
 
 	[self unlock];
+	[self performSelector:@selector(delayedRelease:) withObject:self afterDelay:0];
+}
+
+- (void)delayedRelease:(id)anArgument
+{
 	[self autorelease];
 }
 
@@ -157,7 +162,7 @@ NSLock* Lock = [NSLock new];
 		[parameters setObject:dict forKey:@"result"];
 
 		[window orderOut:self];
-		[self performSelector:@selector(cleanupAndRelease:) withObject:self afterDelay:0];
+		[self cleanupAndRelease:self];
 	}
 	else
 	{

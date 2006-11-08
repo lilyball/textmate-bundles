@@ -1,23 +1,15 @@
+<%= require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview.rb' 
+		html_header("Log", "Subversion", <<-HTML)
+		<style type="text/css">
+			@import 'file://#{$bundle}/Stylesheets/svn_style.css';
+			@import 'file://#{$bundle}/Stylesheets/svn_log_style.css';
+		</style>
+		<script src='file://#{$bundle}/svn_log_helper.js' type='text/javascript' charset='utf-8'></script>
+HTML
+
+%>
+
 <% include SVNLogHelpers %>
-<html>
-<head>
-   <title>Subversion <%= $window_title %></title>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-   <style type="text/css">
-      @import 'file://<%= $bundle %>/Stylesheets/svn_style.css';
-      @import 'file://<%= $bundle %>/Stylesheets/svn_log_style.css';
-   </style>
-   
-   <script type="text/javascript">
-      <%= File.read( $bundle+'/svn_log_helper.js' )%>
-   </script>
-</head>
-
-<body class="log">
-
-<h1>Subversion <%= $window_title %></h1>
-<hr>
-
 <% unless no_xml.empty?
    no_xml.each_line do |line| %>
       <div class="bad_line"><%= line %>&nbsp;</div>

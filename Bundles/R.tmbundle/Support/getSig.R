@@ -1,17 +1,45 @@
-getSig <- function (names) {
-	sapply(names, function(name, snipIdx=0)
-		paste(c(name, "(", sapply(lapply(names(f <- formals(name)), function (name) if ((fdep <- paste(deparse(f[[name]], width=500), collapse="\n")) == "") name else list(name, fdep)), function(arg)
-				if (is.list(arg))
-					paste("${", (snipIdx <<- snipIdx + 1), ":", if (snipIdx > 1) ", " else "", arg[[1]], "=${",
-							snipIdx <<- snipIdx + 1, ":",
-							if ((pos <- regexpr("(?<=^['\"]).*(?=['\"]$)", arg[[2]], perl=T)) != -1)
-								paste(substr(arg[[2]], 1, pos-1), "${", snipIdx <<- snipIdx + 1, ":", substr(arg[[2]], pos, pos + attr(pos,"match.length") - 1), "}", substr(arg[[2]], pos + attr(pos, "match.length"), nchar(arg[[2]])), sep="")
-							else
-								arg[[2]]
-							, "}}", sep="")
-				else
-					paste(if (snipIdx > 0) ", " else "", "${", (snipIdx <<- snipIdx + 1), ":", arg, "}", sep="")
-			), ")")
-		, collapse="")
+getSig <- function (..., snippet=T)
+	sapply(unlist(list(...)), function(name, snipIdx=0, argIdx=0)
+		paste(c(name, "(",
+			if (snippet && is.null(formals(name)))
+				"$1"
+			else
+				lapply(
+					lapply(names(f <- formals(name)),
+						function (arg)
+							if (is.symbol(f[[arg]]) && f[[arg]] == "") arg else list(arg, f[[arg]])
+					),
+					function (arg, escape=function(x) ifelse(snippet, gsub("([\\$`}])", "\\\\\\1", x), x))
+						if (is.list(arg))
+							paste(if (snippet) paste("${", snipIdx <<- snipIdx + 1, ":", sep=""),
+								ifelse((argIdx <<- argIdx + 1) > 1, ", ", ""),
+								escape(deparse(as.name(arg[[1]]), backtick=T)),
+								"=",
+								if (snippet) paste("${", snipIdx <<- snipIdx + 1, ":", sep=""),
+								if (is.character(arg[[2]]))
+									paste('"',
+										if (snippet) paste('${', snipIdx <<- snipIdx + 1, ":", sep=""),
+										escape(substr(deparse(arg[[2]]), 2, nchar(deparse(arg[[2]]),type="c")-1)),
+										ifelse(snippet, '}', ""),
+										'"',
+										sep=""
+									)
+								else
+									escape(paste(deparse(arg[[2]], backtick=T, control="useSource"), collapse="\n"))
+								,
+								ifelse(snippet, "}}", ""),
+								sep="")
+						else
+							paste(ifelse((argIdx <<- argIdx + 1) > 1,
+									ifelse(snippet, paste("${", snipIdx <<- snipIdx + 1, ":, ", sep=""), ", "),
+									""),
+								if (snippet) paste("${", snipIdx <<- snipIdx + 1, ":", sep=""),
+								escape(arg),
+								ifelse(snippet, ifelse(argIdx > 1, "}}", "}"), ""),
+								sep="")
+				)
+			,
+			")")
+			, collapse=""
+		)
 	)
-}

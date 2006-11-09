@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -Ku
+	<string>#!/usr/bin/env ruby
 
 # AppleScript strings cannot handle Unicode text, so
 # any Unicode characters entered in a string will
@@ -20,9 +20,14 @@ case txt = STDIN.read
     decoded = $1.gsub(/([0-9A-F]{4})/i) { |m| [$1.hex].pack("U") }
     print '"' + decoded + '"'
 
+  when /\A«data utf8([0-9A-F]+)»(?: as Unicode text)?\z/i then
+    decoded = $1.gsub(/../) { |i| i.hex.chr }
+    print '"' + decoded + '"'
+
   when /\A"(.*)"\z/ then
-    encoded = $1.gsub(/./) { |ch| sprintf("%04X", ch.unpack("U")[0]) }
-    print '«data utxt' + encoded + '» as Unicode text'
+    encoded = ""
+    $1.each_byte { |b| encoded &lt;&lt; format("%02X", b) }
+    print '«data utf8' + encoded + '» as Unicode text'
 
   else
     print txt
@@ -35,7 +40,7 @@ end
 	<key>keyEquivalent</key>
 	<string>^"</string>
 	<key>name</key>
-	<string>Toggle String / «data utxt»</string>
+	<string>Toggle String / «data utf8»</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>

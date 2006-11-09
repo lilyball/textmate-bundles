@@ -141,10 +141,12 @@ class FootnoteFilter
     <div style="clear:both"></div>
     <div id="textmate_footnotes_debug">
       #{textmate_links}
-      <a href="#" onclick="Element.toggle('session_debug_info');return false">Show Session &#10162;</a> |
-      <a href="#" onclick="Element.toggle('cookies_debug_info');return false">Show Cookies &#10162;</a> |
-      <a href="#" onclick="Element.toggle('params_debug_info');return false">Show Params &#10162;</a> |
-      <a href="#" onclick="Element.toggle('general_debug_info');return false">General Debug &#10162;</a>
+      Show:
+      <a href="#" onclick="Element.toggle('session_debug_info');return false">Session</a> |
+      <a href="#" onclick="Element.toggle('cookies_debug_info');return false">Cookies</a> |
+      <a href="#" onclick="Element.toggle('params_debug_info');return false">Params</a> |
+      <a href="#" onclick="Element.toggle('general_debug_info');return false">General Debug</a>
+      <br/>(<a href="http://blog.inquirylabs.com/2006/09/28/textmate-footnotes-v16-released/"><b>TextMate Footnotes</b></a>)
       #{@extra_html}
       <fieldset id="session_debug_info" class="textmate_footnotes_debug_info" style="display: none">
         <legend>Session</legend>
@@ -159,7 +161,7 @@ class FootnoteFilter
         <code>#{escape(@controller.params.inspect)}</code>
       </fieldset>
       <fieldset id="general_debug_info" class="textmate_footnotes_debug_info" style="display: none">
-        <legend>General</legend>
+        <legend>General (id="tm_debug")</legend>
         <div id="tm_debug"></div>
       </fieldset>
     </div>
@@ -178,7 +180,7 @@ class FootnoteFilter
     html = ""
     if ::MAC_OS_X
       html = <<-HTML
-        (<b>TextMate Footnotes</b>) Edit:
+        Edit:
         <a href="#{controller_url}">Controller</a> |
         <a href="#{view_url}">View</a> |
         <a href="#{layout_url}">Layout</a>

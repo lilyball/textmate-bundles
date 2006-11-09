@@ -129,6 +129,7 @@ class FootnoteFilter
     <style type="text/css">
       #textmate_footnotes_debug {margin-top: 0.5em; text-align: center; color: #999;}
       #textmate_footnotes_debug a {text-decoration: none; color: #bbb;}
+      #textmate_footnotes_debug pre {overflow: scroll;}
       fieldset.textmate_footnotes_debug_info {text-align: left; border: 1px dashed #aaa; padding: 1em; margin: 1em 2em 1em 2em; color: #777;}
     </style>
     <!-- End TextMate Footnotes Style -->
@@ -145,6 +146,7 @@ class FootnoteFilter
       <a href="#" onclick="Element.toggle('session_debug_info');return false">Session</a> |
       <a href="#" onclick="Element.toggle('cookies_debug_info');return false">Cookies</a> |
       <a href="#" onclick="Element.toggle('params_debug_info');return false">Params</a> |
+      <a href="#" onclick="Element.toggle('log_debug_info');return false">Log</a> |
       <a href="#" onclick="Element.toggle('general_debug_info');return false">General Debug</a>
       <br/>(<a href="http://blog.inquirylabs.com/2006/09/28/textmate-footnotes-v16-released/"><b>TextMate Footnotes</b></a>)
       #{@extra_html}
@@ -159,6 +161,10 @@ class FootnoteFilter
       <fieldset id="params_debug_info" class="textmate_footnotes_debug_info" style="display: none">
         <legend>Params</legend>
         <code>#{escape(@controller.params.inspect)}</code>
+      </fieldset>
+      <fieldset id="log_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+        <legend>Log</legend>
+        <code><pre>#{escape(log_tail)}</pre></code>
       </fieldset>
       <fieldset id="general_debug_info" class="textmate_footnotes_debug_info" style="display: none">
         <legend>General (id="tm_debug")</legend>
@@ -190,6 +196,11 @@ class FootnoteFilter
       html += "<br/>"
     end
     html
+  end
+  
+  def log_tail
+    ansi = `tail -n 200 #{RAILS_DEFAULT_LOGGER.instance_variable_get("@logdev").filename}`
+    html = ansi.gsub(/\e\[.+?m/, '')
   end
   
   def asset_file_links(link_text, files)

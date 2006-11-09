@@ -178,13 +178,13 @@ class FootnoteFilter
     html = ""
     if ::MAC_OS_X
       html = <<-HTML
-        <b>TextMate Footnotes</b>: Edit
-        <a href="#{controller_url}">Controller File</a> |
-        <a href="#{view_url}">View File</a> |
-        <a href="#{layout_url}">Layout File</a>
+        (<b>TextMate Footnotes</b>) Edit:
+        <a href="#{controller_url}">Controller</a> |
+        <a href="#{view_url}">View</a> |
+        <a href="#{layout_url}">Layout</a>
       HTML
-      html += asset_file_links("CSS Files", stylesheet_files) unless stylesheet_files.blank?
-      html += asset_file_links("JS Files", javascript_files) unless javascript_files.blank?
+      html += asset_file_links("Stylesheets", stylesheet_files) unless stylesheet_files.blank?
+      html += asset_file_links("Javascripts", javascript_files) unless javascript_files.blank?
       html += "<br/>"
     end
     html

@@ -21,7 +21,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^[ \t]*(let|and)\s+(?!\(\*)((rec\s+)([a-z_][a-zA-Z0-9_]*)\b|([a-z_][a-zA-Z0-9_]*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
+			<string>^[ \t]*(let|and)\s+(?!\(\*)((rec\s+)([a-z_][a-zA-Z0-9_']*)\b|([a-z_][a-zA-Z0-9_']*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -188,7 +188,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^[ \t]*(class)(?:\s+(?!(?:virtual)\s+))((\[\s*('[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*)\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
+			<string>^[ \t]*(class)(?:\s+(?!(?:virtual)\s+))((\[\s*('[A-Za-z][a-zA-Z0-9_']*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_']*)*)\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -247,7 +247,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^[ \t]*(class\s+type\s+)((\[\s*('[A-Za-z][a-zA-Z0-9_]*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_]*)*)\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
+			<string>^[ \t]*(class\s+type\s+)((\[\s*('[A-Za-z][a-zA-Z0-9_']*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_']*)*)\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
 			<key>name</key>
 			<string>meta.class.type-definition.ocaml</string>
 		</dict>
@@ -284,7 +284,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(\bmutable\s+)?\b([a-z_][a-zA-Z0-9_]*)\s*(:)</string>
+					<string>(\bmutable\s+)?\b([a-z_][a-zA-Z0-9_']*)\s*(:)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -661,7 +661,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b([A-Z][a-zA-Z0-9_]*)(?=(?:\.[A-Z][a-zA-Z0-9_]*)*(?:\.[a-zA-Z0-9'_]+))</string>
+			<string>\b([A-Z][a-zA-Z0-9'_]*)(?=(?:\.[A-Z][a-zA-Z0-9'_]*)*(?:\.[a-zA-Z0-9'_]+))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -704,7 +704,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\.)([A-Z][a-zA-Z0-9_]*)</string>
+					<string>(\.)([A-Z][a-zA-Z0-9'_]*)</string>
 					<key>name</key>
 					<string>support.other.module.ocaml</string>
 				</dict>
@@ -712,7 +712,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(open)\s+([A-Z][a-zA-Z0-9_]*)(?=(\.[A-Z][a-zA-Z0-9_]*)*)</string>
+			<string>\b(open)\s+([A-Z][a-zA-Z0-9'_]*)(?=(\.[A-Z][a-zA-Z0-9_]*)*)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -742,7 +742,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\.)([A-Z][a-zA-Z0-9_]*)</string>
+					<string>(\.)([A-Z][a-zA-Z0-9'_]*)</string>
 					<key>name</key>
 					<string>support.other.module.ocaml</string>
 				</dict>
@@ -763,7 +763,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(exception)\s+([A-Z][a-zA-Z0-9_]*)\b</string>
+			<string>\b(exception)\s+([A-Z][a-zA-Z0-9'_]*)\b</string>
 			<key>name</key>
 			<string>meta.exception.ocaml</string>
 		</dict>
@@ -875,13 +875,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>`[A-Z][a-zA-Z0-9_]*\b</string>
+			<string>`[A-Z][a-zA-Z0-9'_]*\b</string>
 			<key>name</key>
 			<string>entity.name.type.variant.polymorphic.ocaml</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b[A-Z][a-zA-Z0-9_]*\b</string>
+			<string>\b[A-Z][a-zA-Z0-9'_]*\b</string>
 			<key>name</key>
 			<string>entity.name.type.variant.ocaml</string>
 		</dict>
@@ -949,7 +949,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>~[a-z][a-z0-9_]*(:)</string>
+			<string>~[a-z][a-z0-9'_]*(:)</string>
 			<key>name</key>
 			<string>entity.name.tag.label</string>
 		</dict>
@@ -1497,7 +1497,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b((?:[A-Z][a-zA-Z0-9_]*)(?:\.[A-Z][a-zA-Z0-9_]+)*)(\.[a-zA-Z0-9'_]+)</string>
+					<string>\b((?:[A-Z][a-zA-Z0-9'_]*)(?:\.[A-Z][a-zA-Z0-9'_]+)*)(\.[a-zA-Z0-9'_]+)</string>
 					<key>name</key>
 					<string>meta.module.type.ocaml</string>
 				</dict>
@@ -1560,7 +1560,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(~)([a-z][a-zA-Z0-9_]*)\s*(:)\s*</string>
+					<string>(~)([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -1607,7 +1607,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(\?)(\()([a-z_][a-zA-Z0-9_]*)\s*(=)</string>
+					<string>(\?)(\()([a-z_][a-zA-Z0-9'_]*)\s*(=)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -1775,7 +1775,7 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>\s*([a-z][a-zA-Z0-9_]*)\s*(=)</string>
+							<string>\s*([a-z][a-zA-Z0-9'_]*)\s*(=)</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
@@ -1817,7 +1817,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b[a-z_][a-zA-Z0-9_]*</string>
+					<string>\b[a-z_][a-zA-Z0-9'_]*</string>
 					<key>name</key>
 					<string>variable.parameter.ocaml</string>
 				</dict>

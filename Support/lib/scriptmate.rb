@@ -45,7 +45,7 @@ class UserScript
     rd, wr = IO.pipe
     rd.fcntl(Fcntl::F_SETFD, 1)
     ENV['TM_ERROR_FD'] = wr.to_i.to_s
-    args = [e_sh(executable), @@execargs, Array(@args), @path, ARGV.to_a ].flatten
+    args = [e_sh(executable), @@execargs, Array(@args), e_sh(@path), ARGV.to_a ].flatten
     args = filter_args(args)
     stdin, stdout, stderr = Open3.popen3(args.join(" "))
     Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'

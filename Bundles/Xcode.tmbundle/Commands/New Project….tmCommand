@@ -29,6 +29,23 @@ module ProcessTemplate
     end
   end
 
+  def expand_file(file, variables)
+    data = IO.read(file)
+
+    open(file, "w") do |io|
+      if data[0..1] == "\xFE\xFF"
+        new_data = expand(Iconv.conv('utf-8', 'utf-16', data), variables)
+        io &lt;&lt; Iconv.conv('utf-16', 'utf-8', new_data)
+      elsif mac_roman?(data)
+        io &lt;&lt; expand(Iconv.conv('utf-8', 'mac', data), variables)
+      elsif utf8?(data)
+        io &lt;&lt; expand(data, variables)
+      else
+        io &lt;&lt; data # we probably should not have opened the file for writing
+      end
+    end
+  end
+
   def mac_roman?(data)
     data =~ /\xC7(DATE|FULLUSERNAME|ORGANIZATIONNAME|PRODUCTNAME|PROJECTNAMEASIDENTIFIER|PROJECTNAMEASXML|PROJECTNAME|TARGETNAMEASIDENTIFIER|USERNAME|UUID|YEAR)\xC8/
   end
@@ -70,26 +87,17 @@ module ProcessTemplate
 
     plist['FilesToMacroExpand'].each do |file|
       variables['FILENAME'] = file
-      src = File.join(dir, expand(file, variables))
-
-      data = IO.read(src)
-      open(src, "w") do |io|
-        if data[0..1] == "\xFE\xFF"
-          new_data = expand(Iconv.conv('utf-8', 'utf-16', data), variables)
-          io &lt;&lt; Iconv.conv('utf-16', 'utf-8', new_data)
-        elsif mac_roman?(data)
-          io &lt;&lt; expand(Iconv.conv('utf-8', 'mac', data), variables)
-        elsif utf8?(data)
-          io &lt;&lt; expand(data, variables)
-        else
-          io &lt;&lt; data # we probably should not have opened the file for writing
-        end
-      end
+      expand_file(File.join(dir, expand(file, variables)), variables)
     end
 
-    File.delete(template_info)
     src_dir = File.split(template_info).first
+    Dir.glob("#{src_dir}/*.*").each do |file|
+      puts "Expand: #{file}"
+      expand_file(file, variables)
+    end
+
     dst_dir = src_dir.sub(/(.*\/)[^\/]*(\.[^.])/, "\\1#{name}\\2")
+    File.delete(template_info)
     FileUtils.mv(src_dir, dst_dir) if File.exist?(src_dir) &amp;&amp; !File.exist?(dst_dir)
   end
 end

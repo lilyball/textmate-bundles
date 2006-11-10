@@ -21,6 +21,7 @@ typedef enum
 				id 						fDelegate;
 
 	IBOutlet	NSOutlineView *			fOutlineView;
+	IBOutlet	NSView *				fURLHeaderView;
 	IBOutlet	NSProgressIndicator *	fSpinner;
 	IBOutlet	NSTextField *			fURLField;
 	IBOutlet	NSButton *				fGoButton;
@@ -33,7 +34,6 @@ typedef enum
 	IBOutlet	NSTextField *			fCommitURLSource;
 	
 	CXTransientStatusWindow *			fStatusWindow;
-	
 }
 
 + (CXSVNRepoBrowser *) browser;

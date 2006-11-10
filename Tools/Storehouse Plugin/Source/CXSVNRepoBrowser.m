@@ -1,9 +1,28 @@
 #include "CXSVNRepoBrowser.h"
 #include "CXSVNRepoNode.h"
 #include "CXSVNTask.h"
-#include "CXTransientStatusWindow.h"
+//#include "CXTransientStatusWindow.h"
 #include <Foundation/NSDebug.h>
 #include "ImageAndTextCell.h"
+
+@interface CXToolbarItemView : NSView
+{
+}
+@end
+
+@implementation CXToolbarItemView
+- (id)initWithCoder:(NSCoder *)coder
+{
+     return [super initWithCoder: coder];
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+     [super encodeWithCoder: coder];
+}
+@end
+
+
 
 @implementation CXSVNRepoBrowser
 
@@ -21,7 +40,7 @@
 	
 	if(sBrowserNib == nil)
 	{
-		sBrowserNib = [[NSNib alloc] initWithNibNamed:@"SVNRepoBrowser" bundle:[NSBundle bundleForClass:[self class]]];
+		sBrowserNib = [[NSNib alloc] initWithNibNamed:@"Browser" bundle:[NSBundle bundleForClass:[self class]]];
 	}
 	
 	[sBrowserNib instantiateNibWithOwner:self topLevelObjects:&array];
@@ -47,7 +66,7 @@
 	
 		[[outBrowser->fOutlineView window] makeKeyAndOrderFront:self];
 	
-		outBrowser->fStatusWindow = [[CXTransientStatusWindow alloc] init];
+//		outBrowser->fStatusWindow = [[CXTransientStatusWindow alloc] init];
 	
 		// Load the requested URL
 		if(URL != nil)
@@ -80,6 +99,57 @@
 	return [fURLField stringValue];
 }
 
+#if 0
+#pragma mark -
+#pragma mark Toolbar Setup
+#endif
+
+- (void)setupToolbar
+{
+	NSToolbar *	toolbar = [[NSToolbar alloc] initWithIdentifier:@"URLToolbar"];
+	[toolbar setDelegate:self];
+	[toolbar setAllowsUserCustomization:NO];
+	[toolbar setAutosavesConfiguration:NO];
+	[toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
+	[toolbar setSizeMode:NSToolbarSizeModeSmall];
+	
+	[[fOutlineView window] setToolbar:toolbar];
+	[toolbar release];	
+	
+}
+
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar
+{
+    return [NSArray arrayWithObjects:@"CXURLHeader", nil];
+}
+
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
+{
+    return [NSArray arrayWithObjects:@"CXURLHeader", nil];
+}
+
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdent
+  willBeInsertedIntoToolbar:(BOOL)willBeInserted
+{
+   NSToolbarItem *toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+
+	if ([itemIdent isEqual:@"CXURLHeader"])
+	{
+		NSRect	viewFrame = [fURLHeaderView frame];
+
+		[toolbarItem setView:fURLHeaderView];
+
+		[toolbarItem setMinSize:NSMakeSize(200, viewFrame.size.height)];
+		[toolbarItem setMaxSize:NSMakeSize(viewFrame.size.width + 1000, viewFrame.size.height)];
+
+		[toolbarItem setLabel: @"URL"];
+		[toolbarItem setPaletteLabel: @"URL"];
+		
+	}
+	
+	return toolbarItem;
+}
+
 - (void) awakeFromNib
 {
 //	NSBrowserCell *	cell = [[[NSBrowserCell alloc] init] autorelease];
@@ -97,6 +167,16 @@
 
 	[fOutlineView setDraggingSourceOperationMask:NSDragOperationCopy|NSDragOperationMove forLocal:NO];
 	[fOutlineView setDraggingSourceOperationMask:NSDragOperationCopy|NSDragOperationMove forLocal:YES];
+	
+	[self setupToolbar];
+	
+	
+	
+	// populate content
+	if( ! [[fURLField stringValue] isEqualToString:@""] )
+	{
+		[self getRootURLFromField:nil];
+	}	
 }
 
 - (IBAction) getRootURLFromField:(id)sender
@@ -126,7 +206,7 @@
 	URL = [URL stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
 	[fURLField setStringValue:URL];
-	
+			
 	if( fRepoLocation == nil || ![fRepoLocation isEqualToString:URL] )
 	{
 		fRepoLocation = [URL copy];
@@ -136,6 +216,8 @@
 
 		[fRootNode setDelegate:self];
 		[fOutlineView reloadData];
+
+		[[fURLField window] setTitle:[NSString stringWithFormat:@"svn repo: %@", [URL lastPathComponent]]];
 	}
 }
 
@@ -188,7 +270,7 @@
 #pragma mark Context menu
 #endif
 
-// FIXME: item validation
+// TODO: item validation
 
 - (IBAction) contextRefresh:(id)sender
 {
@@ -500,7 +582,8 @@
 	status = [status stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 //	NSLog(@"%s %@", _cmd, status);
 
-	[fStatusWindow showStatus:status onParent:[fOutlineView window]];
+// TODO: report status
+//	[fStatusWindow showStatus:status onParent:[fOutlineView window]];
 	
 /*	[[[fOutlineView tableColumnWithIdentifier:@"1"] headerCell] setStringValue:status];
 	[[fOutlineView headerView] setNeedsDisplay:YES];

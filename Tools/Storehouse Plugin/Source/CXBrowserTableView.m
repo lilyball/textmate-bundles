@@ -58,7 +58,7 @@ static float heightOffset = 3.0;
 	
 	drawRect = NSIntegralRect(drawRect);
 	
-	[[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]set];
+	[[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.1]set];
 	[NSBezierPath fillRoundRectInRect:drawRect radius:4.0];
 
 	[[NSColor alternateSelectedControlColor] set];

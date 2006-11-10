@@ -20,12 +20,7 @@ static NSMutableArray *			sBrowsers = nil;
 {
 	NSApp = [NSApplication sharedApplication];
 	
-	if(self = [super init])
-	{
-		[self vend];
-	}
-	
-	return self;
+	return [super init];
 }
 
 - (void)dealloc

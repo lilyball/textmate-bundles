@@ -12,11 +12,13 @@ include GTD
 files = GTD.process_directory
 projects = files.map{|i| i.projects}.flatten
 projectNames = projects.map{|i| i.name+" : "+i.root.name}
+require 'pp'
 choice = Dialog.menu(projectNames)
 if choice then
 	projectName = projectNames[choice]
   project = projects.find{|i| i.name+" : "+i.root.name == projectName}
-  `open #{project.txmt}`
+puts project.txmt
+  `open "#{project.txmt}"`
 end</string>
 	<key>fallbackInput</key>
 	<string>word</string>

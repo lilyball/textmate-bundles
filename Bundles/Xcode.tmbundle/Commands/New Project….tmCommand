@@ -14,7 +14,79 @@ MATE      = "#{SUPPORT}/bin/mate"
 
 require "#{SUPPORT}/lib/plist"
 require "#{SUPPORT}/lib/escape"
+
+require "cgi"
 require "fileutils"
+require "iconv"
+require "plist"
+
+module ProcessTemplate
+  module_function
+  
+  def expand(str, variables)
+    str.gsub(/«(DATE|FULLUSERNAME|ORGANIZATIONNAME|PRODUCTNAME|PROJECTNAMEASIDENTIFIER|PROJECTNAMEASXML|PROJECTNAME|TARGETNAMEASIDENTIFIER|USERNAME|UUID|YEAR)»/) do |match|
+      variables[match.delete('«»')]
+    end
+  end
+
+  def mac_roman?(data)
+    data =~ /\xC7(DATE|FULLUSERNAME|ORGANIZATIONNAME|PRODUCTNAME|PROJECTNAMEASIDENTIFIER|PROJECTNAMEASXML|PROJECTNAME|TARGETNAMEASIDENTIFIER|USERNAME|UUID|YEAR)\xC8/
+  end
+
+  def process(dir, name)
+    variables = {
+      'DATE'                      =&gt; Time.now.strftime('%F'),
+      'FULLUSERNAME'              =&gt; `niutil -readprop / "/users/$USER" realname`.chomp,
+      'ORGANIZATIONNAME'          =&gt; ENV['TM_ORGANIZATION_NAME'],
+      'PRODUCTNAME'               =&gt; name,
+      'PROJECTNAMEASIDENTIFIER'   =&gt; name.gsub(/[^a-z]+/, '_').upcase,
+      'PROJECTNAMEASXML'          =&gt; CGI.escapeHTML(name),
+      'PROJECTNAME'               =&gt; name,
+      'TARGETNAMEASIDENTIFIER'    =&gt; name.gsub(/[^a-z]+/, '_').upcase,
+      'USERNAME'                  =&gt; ENV['LOGNAME'],
+      'UUID'                      =&gt; `uuidgen`.chomp,
+      'YEAR'                      =&gt; Time.now.year,
+    }
+
+    template_info = Dir.glob("#{dir}/*/TemplateInfo.plist")
+    exit if template_info.nil? || template_info.empty?
+
+    template_info = template_info.shift
+
+    data = File.read(template_info)
+    data = Iconv.conv('utf-8', 'mac', data)
+
+    plist = PropertyList.load(data)
+
+    plist['FilesToRename'].each_pair do |key, value|
+      from = File.join(dir, expand(key, variables))
+      to = File.join(dir, expand(value, variables))
+      FileUtils.mv(from, to) if File.exist?(from) &amp;&amp; !File.exist?(to)
+    end
+
+    plist['FilesToMacroExpand'].each do |file|
+      variables['FILENAME'] = file
+      src = File.join(dir, expand(file, variables))
+
+      data = IO.read(src)
+      open(src, "w") do |io|
+        if data[0..1] == "\xFE\xFF"
+          new_data = expand(Iconv.conv('utf-8', 'utf-16', data), variables)
+          io &lt;&lt; Iconv.conv('utf-16', 'utf-8', new_data)
+        elsif mac_roman?(data)
+          io &lt;&lt; expand(Iconv.conv('utf-8', 'mac', data), variables)
+        else # assume utf-8
+          io &lt;&lt; expand(data, variables)
+        end
+      end
+    end
+
+    File.delete(template_info)
+    src_dir = File.split(template_info).first
+    dst_dir = src_dir.sub(/(.*\/)[^\/]*(\.[^.])/, "\\1#{name}\\2")
+    FileUtils.mv(src_dir, dst_dir) if File.exist?(src_dir) &amp;&amp; !File.exist?(dst_dir)
+  end
+end
 
 def scan_dir(dir)
   entries = [ ]
@@ -47,6 +119,7 @@ if res = PropertyList.load(%x{ #{e_sh DIALOG} -cmp #{e_sh plist} -d #{e_sh defau
   abort "Destination already exists." if File.exists?(dst)
 
   FileUtils.cp_r(src, dst)
+  ProcessTemplate.process(dst, res['name'])
   %x{ #{e_sh MATE} #{e_sh dst} &amp;&gt;/dev/null &amp; }
 
 end

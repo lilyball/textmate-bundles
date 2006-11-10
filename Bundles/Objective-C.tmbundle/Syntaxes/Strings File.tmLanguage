@@ -50,7 +50,40 @@
 			<key>name</key>
 			<string>string.quoted.double.strings</string>
 			<key>patterns</key>
-			<array/>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\(\\|[abefnrtv'"?]|[0-3]\d{,2}|[4-7]\d?|x[a-zA-Z0-9]+)</string>
+					<key>name</key>
+					<string>constant.character.escape.strings</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>invalid.illegal.unknown-escape.strings</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?x)%
+						(\d+\$)?                             # field (argument #)
+						[#0\- +']*                           # flags
+						[,;:_]?                              # separator character (AltiVec)
+						((-?\d+)|\*(-?\d+\$)?)?              # minimum field width
+						(\.((-?\d+)|\*(-?\d+\$)?)?)?         # precision
+						(hh|h|ll|l|j|t|z|q|L|vh|vl|v|hv|hl)? # length modifier
+						[@diouxXDOUeEfFgGaACcSspn%]          # conversion type
+					</string>
+					<key>name</key>
+					<string>constant.other.placeholder.strings</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>%</string>
+					<key>name</key>
+					<string>invalid.illegal.placeholder.c</string>
+				</dict>
+			</array>
 		</dict>
 	</array>
 	<key>scopeName</key>

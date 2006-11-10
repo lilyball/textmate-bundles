@@ -33,6 +33,10 @@ module ProcessTemplate
     data =~ /\xC7(DATE|FULLUSERNAME|ORGANIZATIONNAME|PRODUCTNAME|PROJECTNAMEASIDENTIFIER|PROJECTNAMEASXML|PROJECTNAME|TARGETNAMEASIDENTIFIER|USERNAME|UUID|YEAR)\xC8/
   end
 
+  def utf8?(data)
+    data =~ /«(DATE|FULLUSERNAME|ORGANIZATIONNAME|PRODUCTNAME|PROJECTNAMEASIDENTIFIER|PROJECTNAMEASXML|PROJECTNAME|TARGETNAMEASIDENTIFIER|USERNAME|UUID|YEAR)»/
+  end
+
   def process(dir, name)
     variables = {
       'DATE'                      =&gt; Time.now.strftime('%F'),
@@ -75,8 +79,10 @@ module ProcessTemplate
           io &lt;&lt; Iconv.conv('utf-16', 'utf-8', new_data)
         elsif mac_roman?(data)
           io &lt;&lt; expand(Iconv.conv('utf-8', 'mac', data), variables)
-        else # assume utf-8
+        elsif utf8?(data)
           io &lt;&lt; expand(data, variables)
+        else
+          io &lt;&lt; data # we probably should not have opened the file for writing
         end
       end
     end

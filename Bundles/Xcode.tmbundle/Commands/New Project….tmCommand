@@ -18,7 +18,6 @@ require "#{SUPPORT}/lib/escape"
 require "cgi"
 require "fileutils"
 require "iconv"
-require "plist"
 
 module ProcessTemplate
   module_function
@@ -92,7 +91,6 @@ module ProcessTemplate
 
     src_dir = File.split(template_info).first
     Dir.glob("#{src_dir}/*.*").each do |file|
-      puts "Expand: #{file}"
       expand_file(file, variables)
     end
 

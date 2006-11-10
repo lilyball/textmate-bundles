@@ -29,7 +29,7 @@ class UserScript
       @display_name = 'untitled'
     end
   end
-  def filter_args(args)
+  def filter_args(*args)
     # args are filtered through this function before the script is run.
     args
   end

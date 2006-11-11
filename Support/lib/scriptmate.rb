@@ -18,8 +18,8 @@ class UserScript
   @@write_content_to_stdin = true
   def initialize
     @content = STDIN.read
-    @arg0 = $1       if @content =~ /\A#!([^ \n]*(?:env)?\s+#{@@execmatch})/
-    @args = $1.split if @content =~ /\A#![^ \n]*(?:env)?\s+#{@@execmatch}[ \t]+(.*)$/
+    @arg0 = $1       if @content =~ /\A#!([^ \n]*(?:env\s+)?#{@@execmatch})/
+    @args = $1.split if @content =~ /\A#![^ \n]*(?:env\s+)?#{@@execmatch}[ \t]+(.*)$/
     if ENV.has_key? 'TM_FILEPATH' then
       @path = ENV['TM_FILEPATH']
       @display_name = File.basename(@path)
@@ -46,7 +46,7 @@ class UserScript
     rd, wr = IO.pipe
     rd.fcntl(Fcntl::F_SETFD, 1)
     ENV['TM_ERROR_FD'] = wr.to_i.to_s
-    args = [e_sh(executable), @@execargs, Array(@args), e_sh(@path), ARGV.to_a ].flatten
+    args = [executable, @@execargs, Array(@args), e_sh(@path), ARGV.to_a ].flatten
     args = filter_args(args)
     stdin, stdout, stderr = Open3.popen3(args.join(" "))
     if @@write_content_to_stdin

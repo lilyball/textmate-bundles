@@ -1,9 +1,10 @@
-#include "CXSVNRepoBrowser.h"
-#include "CXSVNRepoNode.h"
-#include "CXSVNTask.h"
+#import "CXSVNRepoBrowser.h"
+#import "CXSVNRepoNode.h"
+#import "CXTask.h"
 //#include "CXTransientStatusWindow.h"
-#include <Foundation/NSDebug.h>
-#include "ImageAndTextCell.h"
+#import <Foundation/NSDebug.h>
+#import "ImageAndTextCell.h"
+#import "CXSVNClient.h"
 
 @interface CXToolbarItemView : NSView
 {
@@ -23,8 +24,56 @@
 @end
 
 
+#if !TMPLUGIN
+
+@interface CXTestShimHackForNibLoading : NSObject
+{
+	NSMutableDictionary * 					_parameters;
+}
+@end
+
+@implementation CXTestShimHackForNibLoading
+
+- (id) init
+{
+	_parameters = [[NSMutableDictionary alloc] init];
+	return [super init];
+}
+
+- (void)dealloc
+{
+	[_parameters release];
+	[super dealloc];
+}
+@end
+
+#endif
+
 
 @implementation CXSVNRepoBrowser
+
+- (CXSVNClient *) svnClient
+{
+	if(fSVNClient == nil)
+	{
+		fSVNClient = [[CXSVNClient alloc] init];
+	}
+	
+	return fSVNClient;
+}
+
+- (void) loadCommitPromptIfNeeded
+{
+	NSMutableArray *	array;
+	static NSNib *		sCommitWindowNib = nil;
+
+	if(sCommitWindowNib == nil)
+	{
+		sCommitWindowNib = [[NSNib alloc] initWithNibNamed:@"CommitPrompt" bundle:[NSBundle bundleForClass:[self class]]];
+	}
+	
+	[sCommitWindowNib instantiateNibWithOwner:self topLevelObjects:&array];
+}
 
 + (CXSVNRepoBrowser *) browser
 {
@@ -43,7 +92,14 @@
 		sBrowserNib = [[NSNib alloc] initWithNibNamed:@"Browser" bundle:[NSBundle bundleForClass:[self class]]];
 	}
 	
+#if !TMPLUGIN
+// Hack in a "parameters" binding so we can use the test app (without tm_dialog).
+	CXTestShimHackForNibLoading *	hack = [[CXTestShimHackForNibLoading alloc] init];
+	[sBrowserNib instantiateNibWithOwner:hack topLevelObjects:&array];
+#else
 	[sBrowserNib instantiateNibWithOwner:self topLevelObjects:&array];
+#endif
+		
 	
 	if(array == nil)
 	{
@@ -64,7 +120,10 @@
 			}
 		}
 	
-		[[outBrowser->fOutlineView window] makeKeyAndOrderFront:self];
+		if(outBrowser != nil)
+		{
+			[[outBrowser->fOutlineView window] makeKeyAndOrderFront:self];
+		}
 	
 //		outBrowser->fStatusWindow = [[CXTransientStatusWindow alloc] init];
 	
@@ -644,6 +703,8 @@
 	NSValue *				value		= [NSValue value:&selector withObjCType:@encode(SEL)];
 	unsigned int			URLCount	= [URLs count];
 	
+	[self loadCommitPromptIfNeeded];
+	
 	[context setObject:value forKey:@"action"];
 	[context setObject:URLs forKey:@"URLs"];
 	[context setObject:[NSNumber numberWithUnsignedLong:(unsigned long)options] forKey:@"options"];
@@ -698,7 +759,7 @@
 
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	NSDictionary *		contextDict = (NSDictionary *)contextInfo;
+	NSMutableDictionary *		contextDict = (NSMutableDictionary *)contextInfo;
 	
 	if (returnCode == NSOKButton)
 	{
@@ -707,33 +768,39 @@
 		CXSVNCommitOptions	options		= [[contextDict objectForKey:@"options"] unsignedLongValue];
 		SEL					selector;
 		NSString *			description;
+		NSMutableArray *	nodes		= [NSMutableArray array];
 		unsigned int		countURLs;
+		CXSVNClient *		svnClient	= [self svnClient];
 
 		description = [fCommitAnswerField stringValue];
 		
 		[action getValue:&selector];
+		
+		// Setup for refresh (nodes will be added below)
+		[contextDict setObject:nodes forKey:@"refreshNodes"];
+		[svnClient setUserInfo:contextInfo];
 		
 		countURLs = [URLs count];
 		if( countURLs == 1 )
 		{
 			NSString *			firstURL = [URLs objectAtIndex:0];	// refresh the original URL
 			CXSVNRepoNode *		firstNode;
+
+			firstNode = [self visibleNodeForURL:firstURL];
+			[nodes addObject:firstNode];
 			
 			if( (options & kCXAppendName) == kCXAppendName )
 			{
-				[self performSelector:selector	withObject:[firstURL stringByAppendingString:[fCommitURLDestination stringValue]]
-												withObject:description];
+				[svnClient performSelector:selector
+								withObject:[firstURL stringByAppendingString:[fCommitURLDestination stringValue]]
+								withObject:description];
 			}
 			else
 			{
-				[self performSelector:selector	withObject:[fCommitURLDestination stringValue]
-												withObject:description];
+				[svnClient performSelector:selector	withObject:[fCommitURLDestination stringValue]
+														withObject:description];
 			}
 
-			firstNode = [self visibleNodeForURL:firstURL];
-			
-			[firstNode invalidateChildren];
-			[firstNode loadChildrenWithQueueKey:fRootNode];
 		}
 		else if( countURLs == 2 )
 		{
@@ -741,26 +808,28 @@
 			NSString *			secondURL	= [fCommitURLDestination stringValue];
 			CXSVNRepoNode *		firstNode;
 			CXSVNRepoNode *		secondNode;
-			
-			[self performSelector:selector	withObject:firstURL
-											withObject:secondURL
-											withObject:description];
-			
+
 			// svn cp A B  -- copy A to B -- update B
 			// svn mv A B  -- move A to B -- update [A parent] and B
 			// svn rename A B -- rename A to B -- update [A parent] and [B parent], which should be the same object
 			firstNode = [[self visibleNodeForURL:firstURL] parentNode];
 			secondNode = [self visibleNodeForURL:secondURL];
+
+			[nodes addObject:firstNode];
+			[nodes addObject:secondNode];
 			
-			[firstNode invalidateChildren];
-			[firstNode loadChildrenWithQueueKey:fRootNode];
-			[secondNode invalidateChildren];
-			[secondNode loadChildrenWithQueueKey:fRootNode];
+			objc_msgSend(svnClient, selector, firstURL, secondURL, description);
+/*			[svnClient performSelector:selector
+							withObject:firstURL
+							withObject:secondURL
+							withObject:description];
+*/			
 		}
 		else if( countURLs > 2 )
 		{
 			[self performSelector:selector	withObject:URLs
 											withObject:description];
+			// TODO: which nodes to refresh?
 		}
 	}
 	else
@@ -801,62 +870,40 @@
 				options:kCXAppendName];
 }
 
-- (void) copyURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc
+- (void) exitedSVNWithStatus:(int)terminationStatus userInfo:(id)userInfo
 {
-	// FIXME: copy more than one
-	// FIXME: add description entry dialog
-	NSArray *	arguments = [NSArray arrayWithObjects:@"copy", @"-m", desc, sourceURL, destURL, nil];
+	if( terminationStatus == 0 )
+	{
+		NSArray *	refreshNodes = [userInfo valueForKey:@"refreshNodes"];
 
-	[self willStartSVNNode:fRootNode];
-	
-	[CXSVNTask	launchWithArguments:arguments
-				notifying:self
-				outputAction:@selector(copyURLOutput:)
-				queueKey:fRootNode];
+		unsigned int	nodeCount = [refreshNodes count];
+
+		for(unsigned int index = 0; index < nodeCount; index += 1)
+		{
+			CXSVNRepoNode *	node = [refreshNodes objectAtIndex:index];
+
+			[node invalidateChildren];
+			[node loadChildrenWithQueueKey:fRootNode];
+		}
+	}
+	[self didStopSVNNode:fRootNode];
 }
 
-- (void) makeDirAtURL:(NSString *)destURL withDescription:(NSString *)desc
+- (void) readSVNOutput:(NSString *)output
 {
-	NSArray *	arguments = [NSArray arrayWithObjects:@"mkdir", @"-m", desc, destURL, nil];
-
-	[self willStartSVNNode:fRootNode];
-	
-	[CXSVNTask	launchWithArguments:arguments
-				notifying:self
-				outputAction:@selector(copyURLOutput:)
-				queueKey:fRootNode];
+	[self statusLine:output forSVNNode:fRootNode];
 }
 
-- (void) moveURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc
-{
-	NSArray *	arguments = [NSArray arrayWithObjects:@"move", @"-m", desc, sourceURL, destURL, nil];
-
-	[self willStartSVNNode:fRootNode];
-	
-	[CXSVNTask	launchWithArguments:arguments
-				notifying:self
-				outputAction:@selector(copyURLOutput:)
-				queueKey:fRootNode];
-}
-
-- (void) error:(NSString *)string fromTask:(CXSVNTask *)task
+- (void) readSVNError:(NSString *)string
 {
 	[self error:string usingSVNNode:nil];
 }
 
-- (void)copyURLOutput:(NSString *)output
-{	
-	if( output != nil )
-	{
-		NSLog( @"%@", output );
-		
-		[self statusLine:output forSVNNode:fRootNode];
-	}
-	else
-	{
-		[self didStopSVNNode:fRootNode];
-	}
-}
+#if 0
+#pragma mark -
+#pragma mark Delegate accessor
+#endif
+
 - (void) setDelegate:(id)delegate
 {
 	fDelegate = delegate;
@@ -896,6 +943,7 @@
 	[fStatusWindow release];
 	[fRootNode release];
 	[fRepoLocation release];
+	[fSVNClient release];
 	
 	[super dealloc];
 }

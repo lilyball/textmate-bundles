@@ -20,7 +20,6 @@
 		8391B2F10934AE440016DB7E /* CXSVNRepoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8379C2E0092535E300481DBE /* CXSVNRepoBrowser.m */; };
 		8391B2F20934AE440016DB7E /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E0197A09293E2B004D9294 /* ImageAndTextCell.m */; };
 		8391B2F30934AE440016DB7E /* CXSVNRepoDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F143D2092BAD540010D233 /* CXSVNRepoDelegate.m */; };
-		8391B2F40934AE440016DB7E /* CXSVNTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F143E1092BB5930010D233 /* CXSVNTask.m */; };
 		8391B2F50934AE440016DB7E /* CXRoundRects.m in Sources */ = {isa = PBXBuildFile; fileRef = 8391B126092ED83D0016DB7E /* CXRoundRects.m */; };
 		8391B2F70934AE440016DB7E /* CXBrowserTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8391B1EF093212210016DB7E /* CXBrowserTableView.m */; };
 		8391B2F90934AE440016DB7E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -29,9 +28,16 @@
 		83E0197B09293E2B004D9294 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E0197A09293E2B004D9294 /* ImageAndTextCell.m */; };
 		83F143C9092BA4EA0010D233 /* SVNRepoBrowser.nib in Resources */ = {isa = PBXBuildFile; fileRef = 83F143C7092BA4EA0010D233 /* SVNRepoBrowser.nib */; };
 		83F143D3092BAD540010D233 /* CXSVNRepoDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F143D2092BAD540010D233 /* CXSVNRepoDelegate.m */; };
-		83F143E2092BB5930010D233 /* CXSVNTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F143E1092BB5930010D233 /* CXSVNTask.m */; };
 		83FF70450B03B19600924B12 /* Browser.nib in Resources */ = {isa = PBXBuildFile; fileRef = 83FF70430B03B19600924B12 /* Browser.nib */; };
 		83FF70460B03B19600924B12 /* Browser.nib in Resources */ = {isa = PBXBuildFile; fileRef = 83FF70430B03B19600924B12 /* Browser.nib */; };
+		83FF70AE0B04E88100924B12 /* CXTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF70AB0B04E88100924B12 /* CXTask.m */; };
+		83FF70AF0B04E88100924B12 /* CXLineBufferedOutputTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83FF70AD0B04E88100924B12 /* CXLineBufferedOutputTask.mm */; };
+		83FF70B00B04E88100924B12 /* CXTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF70AB0B04E88100924B12 /* CXTask.m */; };
+		83FF70B10B04E88100924B12 /* CXLineBufferedOutputTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83FF70AD0B04E88100924B12 /* CXLineBufferedOutputTask.mm */; };
+		83FF70BB0B05583E00924B12 /* CommitPrompt.nib in Resources */ = {isa = PBXBuildFile; fileRef = 83FF70B90B05583E00924B12 /* CommitPrompt.nib */; };
+		83FF70BC0B05583E00924B12 /* CommitPrompt.nib in Resources */ = {isa = PBXBuildFile; fileRef = 83FF70B90B05583E00924B12 /* CommitPrompt.nib */; };
+		83FF70BF0B057C4800924B12 /* CXSVNClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF70BD0B057C4800924B12 /* CXSVNClient.m */; };
+		83FF70C00B057C4800924B12 /* CXSVNClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF70BD0B057C4800924B12 /* CXSVNClient.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -61,9 +67,14 @@
 		83F143C8092BA4EA0010D233 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SVNRepoBrowser.nib; sourceTree = "<group>"; };
 		83F143CE092BAD4C0010D233 /* CXSVNRepoDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXSVNRepoDelegate.h; path = Source/CXSVNRepoDelegate.h; sourceTree = "<group>"; };
 		83F143D2092BAD540010D233 /* CXSVNRepoDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXSVNRepoDelegate.m; path = Source/CXSVNRepoDelegate.m; sourceTree = "<group>"; };
-		83F143E0092BB58A0010D233 /* CXSVNTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXSVNTask.h; path = Source/CXSVNTask.h; sourceTree = "<group>"; };
-		83F143E1092BB5930010D233 /* CXSVNTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXSVNTask.m; path = Source/CXSVNTask.m; sourceTree = "<group>"; };
 		83FF70440B03B19600924B12 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Browser.nib; sourceTree = "<group>"; };
+		83FF70AA0B04E88100924B12 /* CXTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXTask.h; path = Source/CXTask.h; sourceTree = "<group>"; };
+		83FF70AB0B04E88100924B12 /* CXTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXTask.m; path = Source/CXTask.m; sourceTree = "<group>"; };
+		83FF70AC0B04E88100924B12 /* CXLineBufferedOutputTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXLineBufferedOutputTask.h; path = Source/CXLineBufferedOutputTask.h; sourceTree = "<group>"; };
+		83FF70AD0B04E88100924B12 /* CXLineBufferedOutputTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CXLineBufferedOutputTask.mm; path = Source/CXLineBufferedOutputTask.mm; sourceTree = "<group>"; };
+		83FF70BA0B05583E00924B12 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CommitPrompt.nib; sourceTree = "<group>"; };
+		83FF70BD0B057C4800924B12 /* CXSVNClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXSVNClient.m; path = Source/CXSVNClient.m; sourceTree = "<group>"; };
+		83FF70BE0B057C4800924B12 /* CXSVNClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXSVNClient.h; path = Source/CXSVNClient.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Storehouse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Storehouse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -93,16 +104,20 @@
 			children = (
 				83F143D2092BAD540010D233 /* CXSVNRepoDelegate.m */,
 				83F143CE092BAD4C0010D233 /* CXSVNRepoDelegate.h */,
+				83FF70AA0B04E88100924B12 /* CXTask.h */,
+				83FF70AB0B04E88100924B12 /* CXTask.m */,
+				83FF70AC0B04E88100924B12 /* CXLineBufferedOutputTask.h */,
+				83FF70AD0B04E88100924B12 /* CXLineBufferedOutputTask.mm */,
 				8379C2E0092535E300481DBE /* CXSVNRepoBrowser.m */,
 				8379C2DB09252B0400481DBE /* CXSVNRepoBrowser.h */,
+				8379C2D709252ADB00481DBE /* CXSVNRepoNode.m */,
+				8379C2D909252ADF00481DBE /* CXSVNRepoNode.h */,
+				83FF70BD0B057C4800924B12 /* CXSVNClient.m */,
+				83FF70BE0B057C4800924B12 /* CXSVNClient.h */,
 				83E0197A09293E2B004D9294 /* ImageAndTextCell.m */,
 				83E0197909293E2B004D9294 /* ImageAndTextCell.h */,
 				8391B1EE093212210016DB7E /* CXBrowserTableView.h */,
 				8391B1EF093212210016DB7E /* CXBrowserTableView.m */,
-				83F143E1092BB5930010D233 /* CXSVNTask.m */,
-				83F143E0092BB58A0010D233 /* CXSVNTask.h */,
-				8379C2D709252ADB00481DBE /* CXSVNRepoNode.m */,
-				8379C2D909252ADF00481DBE /* CXSVNRepoNode.h */,
 				8391B125092ED83D0016DB7E /* CXRoundRects.h */,
 				8391B126092ED83D0016DB7E /* CXRoundRects.m */,
 			);
@@ -166,6 +181,7 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				83FF70430B03B19600924B12 /* Browser.nib */,
+				83FF70B90B05583E00924B12 /* CommitPrompt.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -246,6 +262,7 @@
 				8391B2EC0934AE440016DB7E /* SVNRepoBrowser.nib in Resources */,
 				8391B3450934B2D50016DB7E /* Info.plist in Resources */,
 				83FF70460B03B19600924B12 /* Browser.nib in Resources */,
+				83FF70BC0B05583E00924B12 /* CommitPrompt.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +276,7 @@
 				8391B3440934B2D30016DB7E /* Info.plist in Resources */,
 				835744B20937EDD00030AB66 /* MainMenu.nib in Resources */,
 				83FF70450B03B19600924B12 /* Browser.nib in Resources */,
+				83FF70BB0B05583E00924B12 /* CommitPrompt.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,9 +292,11 @@
 				8391B2F10934AE440016DB7E /* CXSVNRepoBrowser.m in Sources */,
 				8391B2F20934AE440016DB7E /* ImageAndTextCell.m in Sources */,
 				8391B2F30934AE440016DB7E /* CXSVNRepoDelegate.m in Sources */,
-				8391B2F40934AE440016DB7E /* CXSVNTask.m in Sources */,
 				8391B2F50934AE440016DB7E /* CXRoundRects.m in Sources */,
 				8391B2F70934AE440016DB7E /* CXBrowserTableView.m in Sources */,
+				83FF70AE0B04E88100924B12 /* CXTask.m in Sources */,
+				83FF70AF0B04E88100924B12 /* CXLineBufferedOutputTask.mm in Sources */,
+				83FF70BF0B057C4800924B12 /* CXSVNClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,9 +309,11 @@
 				8379C2E1092535E300481DBE /* CXSVNRepoBrowser.m in Sources */,
 				83E0197B09293E2B004D9294 /* ImageAndTextCell.m in Sources */,
 				83F143D3092BAD540010D233 /* CXSVNRepoDelegate.m in Sources */,
-				83F143E2092BB5930010D233 /* CXSVNTask.m in Sources */,
 				8391B129092ED83D0016DB7E /* CXRoundRects.m in Sources */,
 				8391B1F0093212210016DB7E /* CXBrowserTableView.m in Sources */,
+				83FF70B00B04E88100924B12 /* CXTask.m in Sources */,
+				83FF70B10B04E88100924B12 /* CXLineBufferedOutputTask.mm in Sources */,
+				83FF70C00B057C4800924B12 /* CXSVNClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +358,14 @@
 				83FF70440B03B19600924B12 /* English */,
 			);
 			name = Browser.nib;
+			sourceTree = "<group>";
+		};
+		83FF70B90B05583E00924B12 /* CommitPrompt.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				83FF70BA0B05583E00924B12 /* English */,
+			);
+			name = CommitPrompt.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -1,6 +1,6 @@
 
 #include "CXSVNRepoNode.h"
-#include "CXSVNTask.h"
+#include "CXTask.h"
 
 
 @interface CXSVNRepoNode(Private)
@@ -164,10 +164,13 @@
 		
 		[self startActivity];
 		
-		[CXSVNTask	launchWithArguments:arguments
-				notifying:self
-				outputAction:@selector(listOutput:)
-				queueKey:key];
+		[CXTask launchCommand:@"/usr/bin/svn"	// FIXME hardcoding
+						withArguments:arguments
+						notifying:self
+						outputAction:@selector(listOutput:)
+						errorAction:@selector(error:fromTask:)
+						queueKey:key
+						userInfo:nil];
 	}
 }
 
@@ -300,55 +303,7 @@
 	}
 }
 
-/*- (void) copyURLs:(NSArray *)URLs withDescription:(NSString *)desc
-{
-	// FIXME: copy more than one
-	// FIXME: add description entry dialog
-	NSArray *	arguments = [NSArray arrayWithObjects:@"copy", @"-m", desc, [URLs objectAtIndex:0], [self URL], nil];
 
-//	NSLog(@"arguments:%@", arguments);
-
-	[self startActivity];
-	
-	[CXSVNTask	launchWithArguments:arguments
-				notifying:self
-				outputAction:@selector(copyOutput:)
-				queueKey:self];
-}
-
-// FIXME: this simply uses the node as a convenience; the URL could be anywhere
-- (void) copyURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc
-{
-	// FIXME: copy more than one
-	// FIXME: add description entry dialog
-	NSArray *	arguments = [NSArray arrayWithObjects:@"copy", @"-m", desc, sourceURL, destURL, nil];
-
-//	NSLog(@"arguments:%@", arguments);
-
-	[self startActivity];
-	
-	[CXSVNTask	launchWithArguments:arguments
-				notifying:self
-				outputAction:@selector(copyOutput:)
-				queueKey:self];
-}
-
-- (void)copyOutput:(NSString *)output
-{	
-	if( output != nil )
-	{
-		NSLog( @"%@", output );
-		
-		[fDelegate statusLine:output forSVNNode:self];
-	}
-	else
-	{
-		[self invalidateChildren];
-		[self loadChildren];
-		[self stopActivity];
-	}
-}
-*/
 - (void) error:(NSString *)string fromTask:(CXSVNTask *)task
 {
 	[fDelegate error:string usingSVNNode:self];

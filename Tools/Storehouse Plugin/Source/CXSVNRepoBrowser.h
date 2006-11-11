@@ -3,6 +3,7 @@
 
 @class CXSVNRepoNode;
 @class CXTransientStatusWindow;
+@class CXSVNClient;
 
 // TODO: wrap in NSWindowController
 
@@ -18,6 +19,7 @@ typedef enum
 {
 				NSString *				fRepoLocation;
 				CXSVNRepoNode *			fRootNode;
+				CXSVNClient *			fSVNClient;
 				id 						fDelegate;
 
 	IBOutlet	NSOutlineView *			fOutlineView;
@@ -25,6 +27,7 @@ typedef enum
 	IBOutlet	NSProgressIndicator *	fSpinner;
 	IBOutlet	NSTextField *			fURLField;
 	IBOutlet	NSButton *				fGoButton;
+//				NSTableHeaderCell *		fTableHeaderCell;
 		
 	IBOutlet	NSTextField *			fCommitVerbField;
 	IBOutlet	NSTextField *			fCommitPromptField;
@@ -65,7 +68,6 @@ typedef enum
 - (IBAction) contextMakeDir:(id)sender;
 
 - (void) makeDirAtNode:(CXSVNRepoNode *)node;
-- (void) makeDirAtURL:(NSString *)destURL withDescription:(NSString *)desc;
 
 - (void) syncNextBrowserWindowFrame:(CXSVNRepoBrowser *)browser;
 

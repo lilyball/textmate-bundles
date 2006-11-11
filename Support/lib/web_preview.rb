@@ -13,26 +13,36 @@ HTML_TEMPLATE = <<-HTML
   <% } %>
   <% bundle_styles.each { |style| %>
     <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
-    <% } %>
-    <link rel="stylesheet" href="file://<%= support_path %>/themes/default/print.css"   type="text/css" charset="utf-8" media="print">    
+  <% } %>
+  <% user_styles.each { |style| %>
+    <link rel="stylesheet" href="file://<%= user_path %>/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
+  <% } %>
+  <link rel="stylesheet" href="file://<%= support_path %>/themes/default/print.css"   type="text/css" charset="utf-8" media="print">    
   <script src="file://<%= support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
   <script src="file://<%= support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
   <%= html_head %>
 </head>
 <body id="tm_webpreview_body" class="<%= html_theme %>">
   <div id="tm_webpreview_header">
-    <img id="gradient" src="file://<%= support_path %>/themes/<%= html_theme %>/images/header.png" alt="header">
+    <img id="gradient" src="file://<%= theme_path %>/images/header.png" alt="header">
     <p class="headline"><%= page_title %></p>
     <p class="type"><%= sub_title %></p>
-    <img id="teaser" src="file://<%= support_path %>/themes/<%= html_theme %>/images/teaser.png" alt="teaser">
+    <img id="teaser" src="file://<%= theme_path %>/images/teaser.png" alt="teaser">
     <div id="theme_switcher">
       <form action="#" onsubmit="return false;">
         <div>
           Theme:        
-          <select onchange="selectTheme(this.value);" id="theme_selector">
-          <% common_styles.each { |style| %>
-            <option value="<%= style %>"><%= style %></option>
-          <% } %>
+          <select onchange="selectTheme(event);" id="theme_selector">
+            <optgroup label="TextMate">
+            <% common_styles.each { |style| %>
+              <option value="<%= style %>" title="<%= support_path %>/themes/"><%= style %></option>
+            <% } %>
+            </optgroup>
+            <optgroup label="User">
+            <% user_styles.each { |style| %>
+              <option value="<%= style %>" title="<%= user_path %>"><%= style %></option>
+            <% } %>
+            </optgroup>
           </select>
         </div>
         <script type="text/javascript" charset="utf-8">
@@ -54,14 +64,18 @@ def html_head(options = { })
   page_title   = options[:page_title]   || options[:title]    || 'Page Title'
   sub_title    = options[:sub_title]    || ENV['TM_FILENAME'] || 'untitled'
 
-  html_theme     = selected_theme
   support_path   = ENV['TM_SUPPORT_PATH']
   bundle_support = ENV['TM_BUNDLE_SUPPORT']
+  user_path      = ENV['HOME'] + '/Library/Application Support/TextMate/Themes/Webpreview/'
   
   common_styles  = ['default'];
-  # common_styles  = ['default', 'bright', 'dark', 'shiny', 'halloween']; # TODO: determine dynamically
+  user_styles    = [];
   bundle_styles  = ['default'];
 
+  Dir.foreach(user_path) { |file|
+    user_styles << file if File.exist?(user_path + file + '/style.css')
+  } if File.exist? user_path
+  
   Dir.foreach(support_path + '/themes/') { |file|
     next if file == 'default'
     common_styles << file if File.exists?(support_path + "/themes/" + file + '/style.css')
@@ -71,8 +85,7 @@ def html_head(options = { })
     next if style == 'default'
     bundle_styles << style if File.directory?(bundle_support + '/css/' + style)
   } unless bundle_support.nil?
-  
-  
+
   html_head    = options[:html_head]    || ''
 
   if options[:fix_href] && File.exist?(ENV['TM_FILEPATH'].to_s)
@@ -82,6 +95,18 @@ def html_head(options = { })
 
   support_path   = support_path.sub(/ /, '%20')
   bundle_support = bundle_support.sub(/ /, '%20') unless bundle_support.nil?
+  user_path      = user_path.sub(/ /, '%20')
+
+  html_theme     = selected_theme
+  
+  theme_path     = support_path + '/themes/'
+  if(user_styles.include?(html_theme))
+    theme_path = user_path + html_theme
+  elsif(common_styles.include?(html_theme))
+    theme_path += html_theme
+  else
+    theme_path += "default"
+  end
 
   ERB.new(HTML_TEMPLATE).result binding
 end

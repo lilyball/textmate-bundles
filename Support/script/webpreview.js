@@ -3,17 +3,19 @@
 	
 	In Flux: http://macromates.com/wiki/Suggestions/StylingHTMLOutput
 */
-function selectTheme(value) {
-  TextMate.system("defaults write com.macromates.textmate.webpreview SelectedTheme '" + value + "'", null);
-	content = document.getElementById('tm_webpreview_content');
-	content.className = value;
-	body = document.getElementById('tm_webpreview_body'); // fix to have the body all the way styled (e.g. for black background)
-	body.className = value;
+function selectTheme(event) {
+	var theme = event.target.value;
+	var title = event.target.options[event.target.options.selectedIndex].title;
+
+	TextMate.system("defaults write com.macromates.textmate.webpreview SelectedTheme '" + theme + "'", null);
+
+	document.getElementById('tm_webpreview_body').className = theme;
+	document.getElementById('tm_webpreview_content').className = theme;
 	
 	var replacements = {teaser: "teaser", gradient: "header"};
-	
 	for(var r in replacements) {
-		document.getElementById(r).src = document.getElementById(r).src.replace(/(.*themes).*/, "$1/" + value + "/images/" + replacements[r] + ".png");
+		var element = document.getElementById(r);
+		element.src = 'file://' + title + theme + '/images/' + replacements[r] + ".png";
 	}
 }
 

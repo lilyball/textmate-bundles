@@ -87,7 +87,7 @@
 	if(node != nil)
 	{
 //		NSLog(@"%s %@", _cmd, node );
-		node->fDisplayName			= [URL copy];
+		node->fDisplayName			= [URL stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 		node->fIsBranch				= YES;
 	}
 	

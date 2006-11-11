@@ -627,7 +627,7 @@
 	[self performSelector:@selector(reloadNode:) withObject:node afterDelay:0.0];
 //	[self reloadNode:node];
 //	[self stopSpinner];
-	NSRunAlertPanel(@"Problem accessing Subversion repository", errorText, @"OK", nil, nil);
+	NSRunAlertPanel(@"Problem accessing Subversion repository", @"%@", @"OK", nil, nil, errorText);
 }
 
 - (void) willStartSVNNode:(CXSVNRepoNode *)node

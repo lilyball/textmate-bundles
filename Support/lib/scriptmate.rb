@@ -15,10 +15,11 @@ class UserScript
   @@execmatch = ""
   # @@execargs is an array of arguments you want to pass to the executable.
   @@execargs = []
+  @@write_content_to_stdin = true
   def initialize
     @content = STDIN.read
-    @arg0 = $1       if @content =~ /\A#!([^ \n]*(?:env\s+)?#{@@execmatch})/
-    @args = $1.split if @content =~ /\A#![^ \n]*(?:env\s+)?#{@@execmatch}[ \t]+(.*)$/
+    @arg0 = $1       if @content =~ /\A#!([^ \n]*(?:env)?\s+#{@@execmatch})/
+    @args = $1.split if @content =~ /\A#![^ \n]*(?:env)?\s+#{@@execmatch}[ \t]+(.*)$/
     if ENV.has_key? 'TM_FILEPATH' then
       @path = ENV['TM_FILEPATH']
       @display_name = File.basename(@path)
@@ -48,7 +49,9 @@ class UserScript
     args = [e_sh(executable), @@execargs, Array(@args), e_sh(@path), ARGV.to_a ].flatten
     args = filter_args(args)
     stdin, stdout, stderr = Open3.popen3(args.join(" "))
-    Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'
+    if @@write_content_to_stdin
+      Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'
+    end
     wr.close
     [ stdout, stderr, rd ]
   end

@@ -6,73 +6,57 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require ENV['TM_SUPPORT_PATH'] + '/lib/dialog'
+dialog = ENV['TM_SUPPORT_PATH'] + '/bin/tm_dialog'
+require ENV['TM_SUPPORT_PATH'] + '/lib/plist'
 require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 require 'date'
-
-def relative_date(date,is_today)
-  interval_menu = ["day(s)","week(s)","month(s)"];
-  number_menu = [[1,2,3,4,5,10, 20, 30],    # days
-          [1,2,3,4,5, 6,  7,  8],    # weeks
-          [1,2,3,4,5, 6,  7,  8],    # months
-  ]
-  interval = Dialog.menu(interval_menu.map{|i| i + "…"})
-  TextMate.exit_discard if interval.nil?
-  number_menu = number_menu[interval]
-  number = Dialog.menu(number_menu.map{|i| [i,interval_menu[interval], "after #{if is_today then "today" else date end}"].join(" ")} + [nil,"Other…"] )
-  TextMate.exit_discard if number.nil?
-  if number &gt; number_menu.length then
-    number = Dialog.request_string(:title =&gt; "Set relative date", :prompt =&gt; "Number of #{interval_menu[interval]}:")
-  else
-    number = number_menu[number]
-  end
-  TextMate.exit_discard if number.nil?
-  if interval &lt; 2 then
-    return date + number.to_i * (interval * 6 + 1)
-  else
-    return (date &gt;&gt; number.to_i)
-  end
-end
 line = STDIN.read
-tod = Date.today
-first_menu = ["Absolute Date"]
-if line.match(/ (at|due|from):\[(\d{4})-(\d{2})-(\d{2})\]$/)
-  date = Date.new($2.to_i, $3.to_i, $4.to_i)
-  first_menu &lt;&lt; "Relative to current (#{date})…"
+if line =~ / (at|due|from):\[(\d{4})-(\d{2})-(\d{2})\]$/
+absoluteYear, absoluteMonth, absoluteDay = $2.to_i, $3.to_i, $4.to_i
+weekdayDay = 0
+date = Date.new(absoluteYear,absoluteMonth,absoluteDay)
 else
-  date = tod
-  first_menu &lt;&lt; "Relative to today…"
+  date = Date.today
+  absoluteYear, absoluteMonth, absoluteDay = date.year, date.month, date.day
+  weekdayDay = date.wday
 end
-first_menu += [nil, "This upcoming…", "A week from this…", "Two weeks from this…", "Three weeks from this…", nil, "No date"]
-res = Dialog.menu(first_menu)
-case res
-when nil
+  tod = Date.today
+def to_cocoa_date(date)
+  ((date - Date.new(2001, 1, 1)+1)* 3600 * 24).to_i
+end
+def from_cocoa_date(number)
+  Date.new(2001,1,1)+number.to_i/(3600 * 24) - 1
+end
+def format(date)
+  date.strftime("%A, %m/%d/%Y")
+end
+plist = { 
+  'currentDeadline' =&gt; "Current value: " + format(date),
+  'daysFromToday' =&gt; "Current value: " + (date - tod).to_s,
+  'newDeadlineDate' =&gt; to_cocoa_date(date),
+  'newDaysFromToday' =&gt; (date - tod).to_i,
+  'today' =&gt; "Today is " + format(tod)
+}.to_plist
+str = `#{e_sh dialog} ~/Desktop/testing.nib -mp #{e_sh plist}`
+res=PropertyList::load(str)
+if res['returnButton'].to_s != "OK" then
+  newDate = nil
+else
+  newDate = res['newDeadlineDate'].to_s
+  if newDate =~ /^[\d\+\-*]+$/
+    newDate = (tod + eval(res['newDaysFromToday']).to_i)
+  else
+    newDate =~ /^\w{3} (\w{3}) (\d{2}) \d{2}:\d{2}:\d{2} \w{3} (\d{4})/
+    newDate = Date.new($3.to_i,Date::ABBR_MONTHNAMES.index($1),$2.to_i)-1
+  end
+end
+#puts res['newDeadlineDate']/(3600*24)
+#pp from_cocoa_date(res['newDeadlineDate']).to_s
+if newDate.nil?
   TextMate.exit_discard
-when 0
-  if reply = Dialog.request_string(:title =&gt; "Set absolute date", :prompt =&gt; "Enter new date (yymmdd):")
-    final_date = Date.parse(reply,true)
-  else
-    TextMate.exit_discard
-  end
-when 1
-  final_date = relative_date(date, date == tod)
-when 8
-  final_date = nil
 else
-  extra_days = (res - 3) * 7
-  weekdays = Date::DAYNAMES
-  if day = Dialog.menu(weekdays)
-    date = date.succ while date.wday != day
-    final_date = date + extra_days
-  else
-    TextMate.exit_discard
-  end
-end
-if final_date.nil?
-  print e_sn(line).gsub(/ (at|due|from):\[\d{4}-\d{2}-\d{2}\]$/,"")
-else
-  print e_sn(line).gsub(/ (at|due|from):\[\d{4}-\d{2}-\d{2}\]$/,"") + " #{if $1 &amp;&amp; $1 != "" then $1 else "\$0due" end}:[#{final_date}]"
+  print e_sn(line).gsub(/ (at|due|from):\[\d{4}-\d{2}-\d{2}\]$/,"") + " #{if $1 &amp;&amp; $1 != "" then $1 else "\$0due" end}:[#{newDate}]"
 end
 </string>
 	<key>fallbackInput</key>

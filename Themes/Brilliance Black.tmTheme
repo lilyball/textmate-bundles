@@ -5,7 +5,7 @@
 	<key>comment</key>
 	<string>Thomas Aylott ㊷ subtleGradient.com</string>
 	<key>name</key>
-	<string>Brilliance Black ㊷</string>
+	<string>Brilliance Black</string>
 	<key>settings</key>
 	<array>
 		<dict>
@@ -16,13 +16,13 @@
 				<key>caret</key>
 				<string>#3333FF</string>
 				<key>foreground</key>
-				<string>#CDCDCD</string>
+				<string>#CCCCCC</string>
 				<key>invisibles</key>
 				<string>#CDCDCD1A</string>
 				<key>lineHighlight</key>
 				<string>#0000801A</string>
 				<key>selection</key>
-				<string>#1717E64D</string>
+				<string>#2E2EE64D</string>
 			</dict>
 		</dict>
 		<dict>
@@ -244,7 +244,7 @@
 			<key>name</key>
 			<string>~ Meta Assertion</string>
 			<key>scope</key>
-			<string>meta.assertion, meta.group.assertion keyword.control.group.regexp</string>
+			<string>meta.assertion, meta.group.assertion keyword.control.group.regexp, meta.group.assertion punctuation.definition.group</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -383,7 +383,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#0086FF</string>
+				<string>#31A6FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -567,26 +567,117 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>¢ Function</string>
+			<string>¢ Function Declaration</string>
 			<key>scope</key>
 			<string>meta.function, meta.property.function, declaration.function</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#80004333</string>
 				<key>foreground</key>
-				<string>#800043</string>
+				<string>#FF0086</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>¢ Function name</string>
+			<string>¢ Function Declaration Name</string>
 			<key>scope</key>
 			<string>entity.name.function, entity.name.preprocessor</string>
 			<key>settings</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>¢ Function Declaration Parameters</string>
+			<key>scope</key>
+			<string>variable.parameter.function</string>
+			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#FF0086</string>
+				<string>#9799FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>¢ Function Declaration Parameters</string>
+			<key>scope</key>
+			<string>variable.parameter -variable.parameter.misc.css, meta.definition.method  meta.definition.param-list, meta.function.method.with-arguments variable.parameter.function</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#9799FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>¢ Function Declaration Parameters Punctuation</string>
+			<key>scope</key>
+			<string>punctuation.definition.parameters, variable.parameter.function punctuation.delimiter.object</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#800004</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ Function Call</string>
+			<key>scope</key>
+			<string>keyword.other.special-method, meta.function-call entity.name.function, support.function - variable</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#782EC1</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ Library Function Call</string>
+			<key>scope</key>
+			<string>meta.function-call support.function - variable</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#9D3EFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ Library Function Name</string>
+			<key>scope</key>
+			<string>support.function</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#5F3F8033</string>
+				<key>foreground</key>
+				<string>#603F80</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ Function Call Arguments Punctuation</string>
+			<key>scope</key>
+			<string>punctuation.section.function, meta.brace.curly.function, meta.function-call punctuation.section.scope.ruby, meta.function-call punctuation.delimiter.object</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#BC7FFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ Function Punctuation</string>
+			<key>scope</key>
+			<string>meta.group.braces.round punctuation.section.scope, meta.group.braces.round meta.delimiter.object.comma, meta.brace.round</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#BC7FFF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -597,85 +688,45 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ Keyword</string>
-			<key>scope</key>
-			<string>keyword</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#F800FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>™ Keyword.control</string>
+			<string>™ Keyword Control</string>
 			<key>scope</key>
 			<string>keyword.control</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#3C008033</string>
 				<key>foreground</key>
 				<string>#F800FF</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ HACK keyword.control.ruby.start-block</string>
+			<string>™ Keyword</string>
 			<key>scope</key>
-			<string>keyword.control.ruby.start-block</string>
+			<string>keyword</string>
 			<key>settings</key>
 			<dict/>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ Special Function</string>
+			<string>™ Regex Keyword</string>
 			<key>scope</key>
-			<string>keyword.other.special-method, meta.function-call entity.name.function</string>
+			<string>source.regexp keyword.operator</string>
 			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#3C008033</string>
-				<key>foreground</key>
-				<string>#7900FF</string>
-			</dict>
+			<dict/>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ Keyword.operator</string>
+			<string>™ Keyword Operator</string>
 			<key>scope</key>
 			<string>keyword.operator, declaration.function.operator, meta.preprocessor.c.include</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#6100CC</string>
+				<string>#2A34C1</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ Library function</string>
-			<key>scope</key>
-			<string>support.function - variable</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#8C60BF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>™ keyword.operator.getter</string>
-			<key>scope</key>
-			<string>keyword.operator.getter</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#8083FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>™ keyword.operator.setter</string>
+			<string>™ Keyword Operator Setter</string>
 			<key>scope</key>
 			<string>keyword.operator.setter</string>
 			<key>settings</key>
@@ -683,26 +734,13 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ Function argument</string>
+			<string>™ Keyword Operator Getter</string>
 			<key>scope</key>
-			<string>variable.parameter -variable.parameter.misc.css, meta.definition.method  meta.definition.param-list, meta.function.method.with-arguments variable.parameter.function</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#3C008033</string>
-				<key>foreground</key>
-				<string>#8083FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>source.regexp keyword</string>
-			<key>scope</key>
-			<string>source.regexp keyword.operator</string>
+			<string>keyword.operator.getter</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#FF0086</string>
+				<string>#7C88FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -749,7 +787,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#333333</string>
+				<string>#333333BF</string>
 				<key>foreground</key>
 				<string>#666666</string>
 			</dict>
@@ -878,7 +916,7 @@
 			<key>name</key>
 			<string>✘ Tag attribute</string>
 			<key>scope</key>
-			<string>entity.other.attribute-name</string>
+			<string>entity.other.attribute-name, meta.tag punctuation.definition.string</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -1522,9 +1560,9 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#45815D33</string>
+				<string>#00805533</string>
 				<key>foreground</key>
-				<string>#45815D</string>
+				<string>#00FFAA</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1535,7 +1573,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#66666633</string>
+				<string>#80808033</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1723,17 +1761,15 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Comment</string>
+			<string>comment</string>
 			<key>scope</key>
-			<string>0comment</string>
+			<string>comment</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#0000FF1A</string>
-				<key>fontStyle</key>
-				<string>italic</string>
+				<string>#33333333</string>
 				<key>foreground</key>
-				<string>#5555FF</string>
+				<string>#333333CC</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1742,36 +1778,7 @@
 			<key>scope</key>
 			<string>comment punctuation</string>
 			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-				<key>foreground</key>
-				<string>#0000FF1A</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>comment</string>
-			<key>scope</key>
-			<string>comment</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#050505</string>
-				<key>foreground</key>
-				<string>#333333</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Comment Punctuation</string>
-			<key>scope</key>
-			<string>comment punctuation</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#333333</string>
-			</dict>
+			<dict/>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -1994,13 +2001,13 @@
 			<key>name</key>
 			<string>Misc Punctuation</string>
 			<key>scope</key>
-			<string>meta.brace.erb, source.ruby.embedded.source.brace, punctuation.section.dictionary, punctuation.terminator.dictionary, punctuation.delimiter.object</string>
+			<string>meta.brace.erb, source.ruby.embedded.source.brace, punctuation.section.dictionary, punctuation.terminator.dictionary, punctuation.delimiter.object, punctuation.delimiter.statement</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#4C4C4C</string>
+				<string>#666666</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2057,34 +2064,6 @@
 				<string></string>
 				<key>foreground</key>
 				<string>#CDCDCD</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>Function Punctuation</string>
-			<key>scope</key>
-			<string>meta.group.braces.round punctuation.section.scope, meta.group.braces.round meta.delimiter.object.comma, meta.brace.round</string>
-			<key>settings</key>
-			<dict>
-				<key>fontStyle</key>
-				<string>bold</string>
-				<key>foreground</key>
-				<string>#800043</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>meta.brace.curly.function</string>
-			<key>scope</key>
-			<string>punctuation.section.function, meta.brace.curly.function</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#3C008033</string>
-				<key>fontStyle</key>
-				<string></string>
-				<key>foreground</key>
-				<string>#8083FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2237,6 +2216,6 @@
 		</dict>
 	</array>
 	<key>uuid</key>
-	<string>ABD6C2FA-DE47-4E0B-B4DE-E1E9891B7DB9</string>
+	<string>24847CB3-23BC-4BF9-861B-E39661A6DA71</string>
 </dict>
 </plist>

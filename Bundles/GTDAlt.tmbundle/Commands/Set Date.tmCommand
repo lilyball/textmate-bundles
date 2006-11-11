@@ -38,7 +38,7 @@ plist = {
   'newDaysFromToday' =&gt; (date - tod).to_i,
   'today' =&gt; "Today is " + format(tod)
 }.to_plist
-str = `#{e_sh dialog} ~/Desktop/testing.nib -mp #{e_sh plist}`
+str = `#{e_sh dialog} datePicker -mp #{e_sh plist}`
 res=PropertyList::load(str)
 if res['returnButton'].to_s != "OK" then
   newDate = nil

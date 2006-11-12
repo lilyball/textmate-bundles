@@ -4,6 +4,7 @@ $LOAD_PATH << ENV['TM_SUPPORT_PATH'] + "/lib"
 $LOAD_PATH << ENV['TM_SUPPORT_PATH'] + "/bin"
 require 'progress'
 require 'exit_codes'
+require 'escape'
 require 'shelltokenize' # for TextMate::selected_paths_array
 
 module Subversion
@@ -19,7 +20,7 @@ module Subversion
     TextMate::call_with_progress(:title => command, :message => "Accessing Subversion Repository…") do
       TextMate::selected_paths_array.each do |target_path|
         svn_header  = /\AIndex: #{Regexp.escape(target_path)}\n=+\n\z/
-        res = %x{"#{svn}" 2>&1 diff "-r#{revision}" #{diff_arg} "#{target_path}"}
+        res = %x{#{e_sh svn} 2>&1 diff "-r#{revision}" #{diff_arg} #{e_sh target_path}}
 
         if $? != 0
           # The command failed; show its output as a tooltip

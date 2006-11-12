@@ -44,6 +44,64 @@
 	<array>
 		<dict>
 			<key>begin</key>
+			<string>(?&lt;=\.|::)(?=[a-zA-Z0-9_!?])</string>
+			<key>end</key>
+			<string>(?&lt;=[a-zA-Z0-9_!?])(?=[^a-zA-Z0-9_!?])</string>
+			<key>name</key>
+			<string>meta.function-call.method.without-arguments.ruby</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#known_function_names</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>([a-zA-Z0-9_!?]+)(?=[^a-zA-Z0-9_!?])</string>
+					<key>name</key>
+					<string>entity.name.function</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?=(\.|::)[a-zA-Z0-9_!?]+\()(\.|::)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.delimiter.method.ruby</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?&lt;=\))</string>
+			<key>name</key>
+			<string>meta.function-call.method.with-arguments.ruby</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#nest_function_parens</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#known_function_names</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>([a-zA-Z0-9_!?]+)(?=\()</string>
+					<key>name</key>
+					<string>entity.name.function</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>(?=[a-zA-Z0-9_!?]+\()</string>
 			<key>end</key>
 			<string>(?&lt;=\))</string>
@@ -53,11 +111,11 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#nest_parens</string>
+					<string>#nest_function_parens</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#known_functions</string>
+					<string>#known_function_names</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -76,10 +134,8 @@
 			<string>source.ruby</string>
 		</dict>
 		<dict>
-			<key>include</key>
-			<string>#known_functions</string>
-		</dict>
-		<dict>
+			<key>begin</key>
+			<string>(?&lt;=\{|do|\{\s|do\s)(\|)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -87,19 +143,24 @@
 					<key>name</key>
 					<string>punctuation.delimiter.variable.ruby</string>
 				</dict>
-				<key>2</key>
+			</dict>
+			<key>end</key>
+			<string>(\|)</string>
+			<key>patterns</key>
+			<array>
 				<dict>
+					<key>match</key>
+					<string>[_a-zA-Z][_a-zA-Z0-9]*</string>
 					<key>name</key>
 					<string>variable.other.block.ruby</string>
 				</dict>
-				<key>3</key>
 				<dict>
+					<key>match</key>
+					<string>,</string>
 					<key>name</key>
 					<string>punctuation.delimiter.variable.ruby</string>
 				</dict>
-			</dict>
-			<key>match</key>
-			<string>(?&lt;=\{\t|do\t|\{ |do |\{|do)(\|)([a-zA-Z0-9_\s,]+)(\|)</string>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -109,15 +170,51 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>===|==|=~|!~|!=|&lt;=&gt;|&lt;=|&gt;=|&gt;(?!&gt;)|&lt;(?!&lt;)|&gt;=|~|\|\|(?!=)|\|(?!\[=|\|])</string>
+			<string>\+@|-@</string>
 			<key>name</key>
-			<string>keyword.operator.getter</string>
+			<string>keyword.operator.unary.ruby</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>%|&amp;|\*\*|\*|\+|-|/|&lt;&lt;|=|&gt;&gt;|\^|\|\|=|!</string>
+			<string>&lt;&lt;=|%=|&amp;=|\*=|\*\*=|\+=|\-=|\^=|\|{1,2}=|/=|&lt;&lt;</string>
 			<key>name</key>
-			<string>keyword.operator.setter</string>
+			<string>keyword.operator.assignment.augmented.ruby</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>&lt;=&gt;|&lt;(?!&lt;|=)|&gt;(?!&lt;|=|&gt;)|&lt;=|&gt;=|===|==|=~|!=|!~|\?</string>
+			<key>name</key>
+			<string>keyword.operator.comparison.ruby</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>!|\bnot\b|&amp;&amp;|\band\b|\|\||\bor\b|\^</string>
+			<key>name</key>
+			<string>keyword.operator.logical.ruby</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(%|&amp;|\*\*|\*|\+|\-|/)</string>
+			<key>name</key>
+			<string>keyword.operator.arithmetic.ruby</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>=</string>
+			<key>name</key>
+			<string>keyword.operator.assignment.ruby</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\||~|&gt;&gt;</string>
+			<key>name</key>
+			<string>keyword.operator.other.ruby</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>:</string>
+			<key>name</key>
+			<string>punctuation.delimiter.other.ruby</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -158,7 +255,7 @@
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>known_functions</key>
+		<key>known_function_names</key>
 		<dict>
 			<key>comment</key>
 			<string>
@@ -171,7 +268,7 @@
 			<key>name</key>
 			<string>support.function.core.ruby</string>
 		</dict>
-		<key>nest_parens</key>
+		<key>nest_function_parens</key>
 		<dict>
 			<key>begin</key>
 			<string>\(</string>
@@ -191,7 +288,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#nest_parens</string>
+					<string>#nest_function_parens</string>
 				</dict>
 				<dict>
 					<key>include</key>

@@ -9,7 +9,7 @@
 	<key>firstLineMatch</key>
 	<string>^\{\s*scopeName = .*$</string>
 	<key>foldingStartMarker</key>
-	<string>^\s*([a-z_-]+ = )?[{(](?!.*[)}][;,]?\s*$)</string>
+	<string>^\s*([a-zA-Z_-]+ = )?[{(](?!.*[)}][;,]?\s*$)</string>
 	<key>foldingStopMarker</key>
 	<string>^\s*(\}|\))</string>
 	<key>keyEquivalent</key>
@@ -875,7 +875,7 @@
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>source.regexp.oniguruma.embedded.tm-language-def</string>
+					<string>string.regexp.oniguruma.tm-language-def</string>
 					<key>end</key>
 					<string>(')(?!')</string>
 					<key>endCaptures</key>
@@ -914,7 +914,7 @@
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>source.regexp.oniguruma.embedded.tm-language-def</string>
+					<string>string.regexp.oniguruma.tm-language-def</string>
 					<key>end</key>
 					<string>(")</string>
 					<key>endCaptures</key>
@@ -1005,7 +1005,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(begin|end|match)\s*(=)</string>
+					<string>\b(begin|end|while|match)\s*(=)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -1020,7 +1020,7 @@
 						</dict>
 					</dict>
 					<key>comment</key>
-					<string>begin, end, match</string>
+					<string>begin, end, while, match</string>
 					<key>end</key>
 					<string>(;)</string>
 					<key>endCaptures</key>
@@ -1093,7 +1093,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b((beginC|endC|c)aptures)\s*(=)</string>
+					<string>\b((beginC|endC|whileC|c)aptures)\s*(=)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>

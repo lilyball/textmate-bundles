@@ -66,6 +66,7 @@ static NSMutableDictionary	* sTaskQueues = nil;
 {
 	NSMutableArray *	taskQueue = [sTaskQueues objectForKey:fQueueKey];
 	
+	[fTask waitUntilExit];
 	[fTarget taskExited:self withStatus:[fTask terminationStatus]];
 		
 	if(taskQueue != nil)

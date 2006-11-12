@@ -1,14 +1,13 @@
+/*
+   CXSVNRepoNode.m
+   Storehouse Plugin
+   
+   Created by Chris Thomas on 2006-11-11.
+   Copyright 2006 Chris Thomas. All rights reserved.
+*/
 
-#include "CXSVNRepoNode.h"
-#include "CXTask.h"
-
-
-@interface CXSVNRepoNode(Private)
-
-- (void) startActivity;
-- (void) stopActivity;
-
-@end
+#import "CXSVNRepoNode.h"
+#import "CXSVNClient.h"
 
 @implementation CXSVNRepoNode
 
@@ -46,7 +45,7 @@
 	NSRange 		range;
 	CXSVNRepoNode *	outNode	= nil;
 	
-	NSLog(@"node:%@ match:%@", [self nameForURL], URL);
+//	NSLog(@"node:%@ match:%@", [self nameForURL], URL);
 	
 	if ( [URL isEqualToString:[self nameForURL]] )
 	{
@@ -61,9 +60,9 @@
 
 			// now find the rest of the string in child
 
-			for( unsigned int index = 0; index < [fChildren count]; index += 1 )
+			for( unsigned int index = 0; index < [fSubnodes count]; index += 1 )
 			{
-				CXSVNRepoNode *	child = [fChildren objectAtIndex:index];
+				CXSVNRepoNode *	child = [fSubnodes objectAtIndex:index];
 				CXSVNRepoNode *	node;
 
 				node = [child visibleNodeForURL:subURL];
@@ -80,7 +79,7 @@
 }
 
 
-+ (CXSVNRepoNode *) rootNodeWithURL:(NSString *)URL
++ (CXSVNRepoNode *) rootNodeWithURL:(NSString *)URL SVNClient:(CXSVNClient *)client
 {
 	CXSVNRepoNode * node = [[CXSVNRepoNode alloc] init];
 	
@@ -89,6 +88,7 @@
 //		NSLog(@"%s %@", _cmd, node );
 		node->fDisplayName			= [URL stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 		node->fIsBranch				= YES;
+		node->fSVNClient			= client;
 	}
 	
 	return [node autorelease];
@@ -104,7 +104,7 @@
 //		NSLog(@"%s %@", _cmd, node );
 		node->fDisplayName	= [name copy];
 		node->fParent		= parent;
-		node->fDelegate		= parent->fDelegate;
+		node->fSVNClient	= parent->fSVNClient;
 	}
 	
 	return [node autorelease];
@@ -112,7 +112,7 @@
 
 - (void) dealloc
 {
-	[fChildren release];
+	[fSubnodes release];
 	
 	[super dealloc];
 }
@@ -137,48 +137,27 @@
 	return fIsBranch;
 }
 
-- (BOOL) isBusy
+- (void) invalidateSubnodes
 {
-	return (fBusyRefCount > 0);
+	[fSubnodes release];
+	fSubnodes = nil;
 }
 
-- (void) invalidateChildren
-{
-	[fChildren release];
-	fChildren = nil;
-}
-
-- (void) loadChildren
+- (void) loadSubnodes
 {	
-	[self loadChildrenWithQueueKey:self];
-}
-
-- (void) loadChildrenWithQueueKey:(id)key
-{
-	if( fChildren == nil )
+	if( fSubnodes == nil )
 	{
-		NSArray *	arguments = [NSArray arrayWithObjects:@"ls", [self URL], nil];
-
-		// prevent redundant requests!
-		fChildren = [[NSMutableArray alloc] init];
+		fSubnodes = [[NSMutableArray alloc] init];
 		
-		[self startActivity];
-		
-		[CXTask launchCommand:@"/usr/bin/svn"	// FIXME hardcoding
-						withArguments:arguments
-						notifying:self
-						outputAction:@selector(listOutput:)
-						errorAction:@selector(error:fromTask:)
-						queueKey:key
-						userInfo:nil];
+		[fSVNClient listContentsOfURL:[self URL] toSelector:@selector(receivePartialListOfSubnodeNames:) ofObject:self];
 	}
 }
 
-- (NSArray *)children
+- (NSArray *)subnodes
 {
 	NSArray *	outArray;
 	
-	outArray = fChildren;
+	outArray = fSubnodes;
 	
 	if(outArray == nil)
 	{
@@ -188,9 +167,30 @@
 	return outArray;
 }
 
-- (NSArray *) nodesFromSimpleFileListing:(NSString *)data
+
+#if 0
+#pragma mark Command processing
+#endif
+
+- (void) appendSubnodes:(NSArray *)arrayOfSubnodes
 {
-	NSArray *			arrayOfNames	= [data componentsSeparatedByString:@"\n"];
+	NSArray *	oldChildren = fSubnodes;
+	NSArray *	newChildren = arrayOfSubnodes;
+
+	if(fSubnodes == nil)
+	{
+		fSubnodes = [newChildren retain];
+	}
+	else
+	{
+		fSubnodes = [fSubnodes arrayByAddingObjectsFromArray:newChildren];
+		[fSubnodes retain];
+		[oldChildren release];
+	}
+}
+
+- (NSArray *) subnodesFromArrayOfNames:(NSArray *)arrayOfNames
+{
 	NSMutableArray *	arrayOfNodes	= [NSMutableArray array];
 	UInt32				nameCount		= [arrayOfNames count];
 
@@ -200,123 +200,37 @@
 		CXSVNRepoNode *	node;
 		BOOL			isBranch;
 		
-		// First item? is there a previous partial line waiting?
-		if( index == 0 )
+		// chomp any "/", but remember it's a directory
+		if([string hasSuffix:@"/"])
 		{
-			if(fPartialChild != nil)
-			{
-//				NSLog(@"complete partial data read:%@", string);
-				string = [fPartialChild stringByAppendingString:string];
-				[fPartialChild release];
-				fPartialChild = nil;
-			}
-		}
-		
-		// Last item? Do we need to save it for next time?
-		if( index == (nameCount - 1)
-		 	&& ![data hasSuffix:@"\n"])	// partial line read
-		{
-//			NSLog(@"partial data read:%@", string);
-			[fPartialChild release];
-			fPartialChild = [string copy];
+			isBranch = YES;
+			string = [string substringToIndex:[string length] - 1];
 		}
 		else
 		{
-			// chomp any "/", but remember it's a directory
-			if([string hasSuffix:@"/"])
-			{
-				isBranch = YES;
-				string = [string substringToIndex:[string length] - 1];
-			}
-			else
-			{
-				isBranch = NO;
-			}
-		
-			if( ![string length] == 0 )
-			{
-				node = [[self class] nodeWithName:string parent:self];
-				[node setIsBranch:isBranch];
-
-				[arrayOfNodes addObject:node];
-			}
+			isBranch = NO;
 		}
+	
+		if( ![string length] == 0 )
+		{
+			node = [[self class] nodeWithName:string parent:self];
+			[node setIsBranch:isBranch];
+
+			[arrayOfNodes addObject:node];
+		}
+		
 	}
 	
 	return arrayOfNodes;
 }
 
-#if 0
-#pragma mark Activity Monitoring
-#endif
-
-- (void) startActivity
+- (void) receivePartialListOfSubnodeNames:(NSArray *)arrayOfNames
 {
-	fBusyRefCount += 1;
-	if(fBusyRefCount == 1)
-	{
-		[fDelegate willStartSVNNode:self];
-	}
-}
+	NSArray *	arrayOfNodes = [self subnodesFromArrayOfNames:arrayOfNames];
 
-- (void) stopActivity
-{
-	fBusyRefCount -= 1;
-	if(fBusyRefCount == 0)
-	{
-		[fDelegate didStopSVNNode:self];
-	}
-}
-
-
-#if 0
-#pragma mark Commands
-#endif
-- (void)listOutput:(NSString *)output
-{
-	if( output == nil )
-	{	
-		[fPartialChild release];
-		fPartialChild = nil;
-		[self stopActivity];
-	}
-	else
-	{
-		NSArray *	oldChildren = fChildren;
-		NSArray *	newChildren;
-		newChildren = [self nodesFromSimpleFileListing:output];
-
-		if(fChildren == nil)
-		{
-			fChildren = [newChildren retain];
-			
-			[fDelegate didUpdateChildrenAtSVNNode:self];
-		}
-		else
-		{
-			fChildren = [fChildren arrayByAddingObjectsFromArray:newChildren];
-			[fChildren retain];
-			[oldChildren release];
-			
-			[fDelegate didUpdateChildrenAtSVNNode:self];
-		}
-	}
-}
-
-
-- (void) error:(NSString *)string fromTask:(CXSVNTask *)task
-{
-	[fDelegate error:string usingSVNNode:self];
-}
-
-- (void) setDelegate:(id)delegate
-{
-	fDelegate = delegate;
-}
-
-- (id) delegate
-{
-	return fDelegate;
+	[self appendSubnodes:arrayOfNodes];
+	
+	[fSVNClient contentsOfSVNURLDidChange:[self URL]];
 }
 
 @end

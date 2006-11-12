@@ -2,26 +2,19 @@
 #ifndef _CXSVNRepoNode_H_
 #define _CXSVNRepoNode_H_
 
-@class CXSVNTask;
+@class CXSVNClient;
 
 @interface CXSVNRepoNode : NSObject
 {
 	NSString *			fDisplayName;	// should be the first part of the URL if the root node
-	NSArray *			fChildren;
-	NSString *			fPartialChild;
-	
-	id 					fDelegate;
+	NSArray *			fSubnodes;
 	
 	CXSVNRepoNode *		fParent;		// nil if root node
 	BOOL				fIsBranch;
-	
-	UInt32				fBusyRefCount;
+	CXSVNClient *		fSVNClient;
 }
 
-- (void) setDelegate:(id)delegate;
-- (id) delegate;
-
-+ (CXSVNRepoNode *) rootNodeWithURL:(NSString *)URL;
++ (CXSVNRepoNode *) rootNodeWithURL:(NSString *)URL SVNClient:(CXSVNClient *)client;
 + (CXSVNRepoNode *) nodeWithName:(NSString *)name parent:(CXSVNRepoNode *)parent;
 
 - (NSString *) URL;
@@ -30,41 +23,16 @@
 - (void) setIsBranch:(BOOL)branch;
 - (BOOL) isBranch;
 
-- (BOOL) isBusy;
-
 // data access
 - (CXSVNRepoNode *) parentNode;
 - (NSString *) displayName;
 - (NSString *) nameForURL;
 
 // svn ls
-- (void) loadChildren;
-- (void) loadChildrenWithQueueKey:(id)key;
-- (void) invalidateChildren;
-- (NSArray *)children;
+- (void) loadSubnodes;
+- (void) invalidateSubnodes;
+- (NSArray *)subnodes;
 
-
-// svn cp
-// Copy URLs from the array to this node.
-//- (void) copyURLs:(NSArray *)URLs withDescription:(NSString *)desc;
-//- (void) copyURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc;
-
-- (void) error:(NSString *)string fromTask:(CXSVNTask *)task;
-
-@end
-
-@interface NSObject(CXSVNNodeDelegate)
-
-- (void) willStartSVNNode:(CXSVNRepoNode *)node;
-- (void) didStopSVNNode:(CXSVNRepoNode *)node;
-
-//- (void) statusLine:(NSString *)status forSVNNode:(CXSVNRepoNode *)node;
-- (void) error:(NSString *)errorText usingSVNNode:(CXSVNRepoNode *)node;
-
-- (void) didUpdateChildrenAtSVNNode:(CXSVNRepoNode *)node;
 @end
 
 #endif /* _CXSVNRepoNode_H_ */
-
-
-

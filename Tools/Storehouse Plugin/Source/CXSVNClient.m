@@ -82,6 +82,12 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 }
 
 // forward all of these
+
+- (void) taskWillStart
+{
+	[fObserver startingTask];
+}
+
 - (void) taskExited:(CXTask *)task withStatus:(int)terminationStatus
 {
 	[fObserver exitedSVNWithStatus:terminationStatus userInfo:[task userInfo]];
@@ -97,6 +103,11 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 	[fObserver readSVNError:error];
 }
 
+- (void) contentsOfSVNURLDidChange:(NSString *)url
+{
+	[fObserver contentsOfSVNURLDidChange:url];
+}
+
 
 #if 0
 #pragma mark -
@@ -105,6 +116,7 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 
 - (void) launchWithArguments:(NSArray *)arguments
 {
+	[self taskWillStart];
 	CXTask *	task = [CXLineBufferedOutputTask launchCommand:[self pathToSVN]
 													withArguments:arguments
 													notifying:self
@@ -147,6 +159,44 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 	NSArray *	arguments = [NSArray arrayWithObjects:@"move", @"-m", desc, sourceURL, destURL, nil];
 
 	[self launchWithArguments:arguments];
+}
+
+#if 0
+#pragma mark -
+#pragma mark List
+#endif
+
+- (void) lsOutput:(NSString *)output fromTask:(CXTask *)task
+{
+	if(output != nil)
+	{
+		NSArray *			arrayOfNames	= [NSArray arrayWithObject:output];//[output componentsSeparatedByString:@"\n"];
+		id 					target			= [task valueForKey:@"ls-target"];
+		SEL					selector		= [[task valueForKey:@"ls-selector"] pointerValue];
+
+		[target performSelector:selector withObject:arrayOfNames];
+	}
+}
+
+
+// sel takes an array of names; additional items will be sent as they arrive, so expect multiple invocations of sel
+- (void) listContentsOfURL:(NSString *)sourceURL toSelector:(SEL)sel ofObject:(id)target
+{
+	NSArray *				arguments = [NSArray arrayWithObjects:@"ls", sourceURL, nil];
+	NSMutableDictionary *	userInfo = [NSMutableDictionary dictionary];
+	
+	[userInfo setObject:target forKey:@"ls-target"];
+	[userInfo setObject:[NSValue valueWithPointer:sel] forKey:@"ls-selector"];
+		
+	[self taskWillStart];
+	
+	CXTask *	task = [CXLineBufferedOutputTask launchCommand:[self pathToSVN]
+													withArguments:arguments
+													notifying:self
+													outputAction:@selector(lsOutput:fromTask:)
+													errorAction:@selector(readError:fromTask:)
+													queueKey:fObserver
+													userInfo:userInfo];
 }
 
 @end

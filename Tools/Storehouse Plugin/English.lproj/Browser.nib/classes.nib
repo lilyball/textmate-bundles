@@ -2,6 +2,12 @@
     IBClasses = (
         {CLASS = CXBrowserTableView; LANGUAGE = ObjC; SUPERCLASS = NSOutlineView; }, 
         {
+            CLASS = CXMenuButton; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {menu = NSMenu; }; 
+            SUPERCLASS = NSButton; 
+        }, 
+        {
             ACTIONS = {
                 contextMakeDir = id; 
                 contextRefresh = id; 

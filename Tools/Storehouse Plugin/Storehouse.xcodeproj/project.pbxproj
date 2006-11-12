@@ -38,6 +38,12 @@
 		83FF70BC0B05583E00924B12 /* CommitPrompt.nib in Resources */ = {isa = PBXBuildFile; fileRef = 83FF70B90B05583E00924B12 /* CommitPrompt.nib */; };
 		83FF70BF0B057C4800924B12 /* CXSVNClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF70BD0B057C4800924B12 /* CXSVNClient.m */; };
 		83FF70C00B057C4800924B12 /* CXSVNClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF70BD0B057C4800924B12 /* CXSVNClient.m */; };
+		83FF713A0B058EB700924B12 /* Action.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83FF71380B058EB700924B12 /* Action.tiff */; };
+		83FF713B0B058EB700924B12 /* ActionPressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83FF71390B058EB700924B12 /* ActionPressed.tiff */; };
+		83FF713C0B058EB700924B12 /* Action.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83FF71380B058EB700924B12 /* Action.tiff */; };
+		83FF713D0B058EB700924B12 /* ActionPressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 83FF71390B058EB700924B12 /* ActionPressed.tiff */; };
+		83FF71400B058EF200924B12 /* CXMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF713F0B058EF200924B12 /* CXMenuButton.m */; };
+		83FF71410B058EF200924B12 /* CXMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF713F0B058EF200924B12 /* CXMenuButton.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -75,6 +81,10 @@
 		83FF70BA0B05583E00924B12 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CommitPrompt.nib; sourceTree = "<group>"; };
 		83FF70BD0B057C4800924B12 /* CXSVNClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXSVNClient.m; path = Source/CXSVNClient.m; sourceTree = "<group>"; };
 		83FF70BE0B057C4800924B12 /* CXSVNClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXSVNClient.h; path = Source/CXSVNClient.h; sourceTree = "<group>"; };
+		83FF71380B058EB700924B12 /* Action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Action.tiff; path = Icons/Action.tiff; sourceTree = "<group>"; };
+		83FF71390B058EB700924B12 /* ActionPressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ActionPressed.tiff; path = Icons/ActionPressed.tiff; sourceTree = "<group>"; };
+		83FF713E0B058EF200924B12 /* CXMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMenuButton.h; path = Source/CXMenuButton.h; sourceTree = "<group>"; };
+		83FF713F0B058EF200924B12 /* CXMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMenuButton.m; path = Source/CXMenuButton.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Storehouse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Storehouse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -120,6 +130,8 @@
 				8391B1EF093212210016DB7E /* CXBrowserTableView.m */,
 				8391B125092ED83D0016DB7E /* CXRoundRects.h */,
 				8391B126092ED83D0016DB7E /* CXRoundRects.m */,
+				83FF713E0B058EF200924B12 /* CXMenuButton.h */,
+				83FF713F0B058EF200924B12 /* CXMenuButton.m */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -175,6 +187,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				83FF71380B058EB700924B12 /* Action.tiff */,
+				83FF71390B058EB700924B12 /* ActionPressed.tiff */,
 				8391B115092E50BB0016DB7E /* SVNLogo.icns */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				83F143C7092BA4EA0010D233 /* SVNRepoBrowser.nib */,
@@ -263,6 +277,8 @@
 				8391B3450934B2D50016DB7E /* Info.plist in Resources */,
 				83FF70460B03B19600924B12 /* Browser.nib in Resources */,
 				83FF70BC0B05583E00924B12 /* CommitPrompt.nib in Resources */,
+				83FF713A0B058EB700924B12 /* Action.tiff in Resources */,
+				83FF713B0B058EB700924B12 /* ActionPressed.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +293,8 @@
 				835744B20937EDD00030AB66 /* MainMenu.nib in Resources */,
 				83FF70450B03B19600924B12 /* Browser.nib in Resources */,
 				83FF70BB0B05583E00924B12 /* CommitPrompt.nib in Resources */,
+				83FF713C0B058EB700924B12 /* Action.tiff in Resources */,
+				83FF713D0B058EB700924B12 /* ActionPressed.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +315,7 @@
 				83FF70AE0B04E88100924B12 /* CXTask.m in Sources */,
 				83FF70AF0B04E88100924B12 /* CXLineBufferedOutputTask.mm in Sources */,
 				83FF70BF0B057C4800924B12 /* CXSVNClient.m in Sources */,
+				83FF71400B058EF200924B12 /* CXMenuButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +333,7 @@
 				83FF70B00B04E88100924B12 /* CXTask.m in Sources */,
 				83FF70B10B04E88100924B12 /* CXLineBufferedOutputTask.mm in Sources */,
 				83FF70C00B057C4800924B12 /* CXSVNClient.m in Sources */,
+				83FF71410B058EF200924B12 /* CXMenuButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

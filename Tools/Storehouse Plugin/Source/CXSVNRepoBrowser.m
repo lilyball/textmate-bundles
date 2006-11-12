@@ -57,6 +57,7 @@
 	if(fSVNClient == nil)
 	{
 		fSVNClient = [[CXSVNClient alloc] init];
+		[fSVNClient setObserver:self];
 	}
 	
 	return fSVNClient;
@@ -209,6 +210,12 @@
 	return toolbarItem;
 }
 
+#if 0
+#pragma mark -
+#pragma mark UI
+#endif
+
+
 - (void) awakeFromNib
 {
 //	NSBrowserCell *	cell = [[[NSBrowserCell alloc] init] autorelease];
@@ -228,8 +235,6 @@
 	[fOutlineView setDraggingSourceOperationMask:NSDragOperationCopy|NSDragOperationMove forLocal:YES];
 	
 	[self setupToolbar];
-	
-	
 	
 	// populate content
 	if( ! [[fURLField stringValue] isEqualToString:@""] )
@@ -271,9 +276,9 @@
 		fRepoLocation = [URL copy];
 
 		[fRootNode release];
-		fRootNode = [[CXSVNRepoNode rootNodeWithURL:fRepoLocation] retain];
+		fRootNode = [[CXSVNRepoNode rootNodeWithURL:fRepoLocation SVNClient:[self svnClient]] retain];
 
-		[fRootNode setDelegate:self];
+//		[fRootNode setDelegate:self];
 		[fOutlineView reloadData];
 
 		[[fURLField window] setTitle:[NSString stringWithFormat:@"svn repo: %@", [URL lastPathComponent]]];
@@ -309,7 +314,7 @@
 	
 	while(true)
 	{
-		currentNode = [self nextNodeFromPath:mutablePath inChildren:[currentNode children]];
+		currentNode = [self nextNodeFromPath:mutablePath inChildren:[currentNode subnodes]];
 		
 		if(currentNode == nil)
 		{
@@ -336,8 +341,8 @@
 	CXSVNRepoNode *	node;
 	node = [fOutlineView itemAtRow:[fOutlineView selectedRow]];
 	
-	[node invalidateChildren];
-	[node loadChildren];
+	[node invalidateSubnodes];
+	[node loadSubnodes];
 }
 
 - (IBAction) contextMakeDir:(id)sender
@@ -347,7 +352,14 @@
 	
 	if(node != nil)
 	{
-		[self makeDirAtNode:node];
+		if( [node isBranch] )
+		{
+			[self makeDirAtNode:node];
+		}
+		else
+		{
+			[self makeDirAtNode:[node parentNode]];
+		}
 	}
 }
 
@@ -424,8 +436,8 @@
 		item = fRootNode;
 	}
 	
-	[item loadChildren];
-	return [[item children] objectAtIndex:index];
+	[item loadSubnodes];
+	return [[item subnodes] objectAtIndex:index];
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item
@@ -447,8 +459,8 @@
 		item = fRootNode;
 	}
 	
-	[item loadChildren];
-	return [[item children] count];
+	[item loadSubnodes];
+	return [[item subnodes] count];
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
@@ -593,7 +605,7 @@
 #pragma mark SVN delegate
 #endif
 
--(void) startSpinner
+- (void) startSpinner
 {
 	[fGoButton setHidden:YES];
 	[fSpinner setUsesThreadedAnimation:YES];
@@ -630,11 +642,6 @@
 	NSRunAlertPanel(@"Problem accessing Subversion repository", @"%@", @"OK", nil, nil, errorText);
 }
 
-- (void) willStartSVNNode:(CXSVNRepoNode *)node
-{
-	[self startSpinner];
-}
-
 - (void) statusLine:(NSString *)status forSVNNode:(CXSVNRepoNode *)node
 {	
 	// chomp(" \n\r")
@@ -647,17 +654,6 @@
 /*	[[[fOutlineView tableColumnWithIdentifier:@"1"] headerCell] setStringValue:status];
 	[[fOutlineView headerView] setNeedsDisplay:YES];
 */}
-
-
-- (void) didUpdateChildrenAtSVNNode:(CXSVNRepoNode *)node
-{
-	[self reloadNode:node];
-}
-
-- (void) didStopSVNNode:(CXSVNRepoNode *)node
-{
-	[self stopSpinner];
-}
 
 
 #if 0
@@ -870,23 +866,32 @@
 				options:kCXAppendName];
 }
 
-- (void) exitedSVNWithStatus:(int)terminationStatus userInfo:(id)userInfo
+- (void) startingTask
 {
+	[self startSpinner];
+}
+
+- (void) exitedSVNWithStatus:(int)terminationStatus userInfo:(id)userInfo
+{	
+	[self stopSpinner];
+	
 	if( terminationStatus == 0 )
 	{
 		NSArray *	refreshNodes = [userInfo valueForKey:@"refreshNodes"];
 
-		unsigned int	nodeCount = [refreshNodes count];
-
-		for(unsigned int index = 0; index < nodeCount; index += 1)
+		if(refreshNodes != nil)
 		{
-			CXSVNRepoNode *	node = [refreshNodes objectAtIndex:index];
+			unsigned int	nodeCount = [refreshNodes count];
 
-			[node invalidateChildren];
-			[node loadChildrenWithQueueKey:fRootNode];
+			for(unsigned int index = 0; index < nodeCount; index += 1)
+			{
+				CXSVNRepoNode *	node = [refreshNodes objectAtIndex:index];
+
+				[node invalidateSubnodes];
+				[node loadSubnodes];
+			}
 		}
 	}
-	[self didStopSVNNode:fRootNode];
 }
 
 - (void) readSVNOutput:(NSString *)output
@@ -897,6 +902,15 @@
 - (void) readSVNError:(NSString *)string
 {
 	[self error:string usingSVNNode:nil];
+}
+
+- (void) contentsOfSVNURLDidChange:(NSString *)url
+{
+	CXSVNRepoNode *	node = [self visibleNodeForURL:url];
+	if(node != nil)
+	{
+		[self reloadNode:node];
+	}
 }
 
 #if 0

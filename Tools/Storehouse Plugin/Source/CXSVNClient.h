@@ -25,10 +25,16 @@
 - (void) exportURL:(NSString *)sourceURL toLocalPath:(NSString *)path;
 - (void) importLocalPath:(NSString *)sourcePath toURL:(NSString *)destURL withDescription:(NSString *)desc;
 
+- (void) listContentsOfURL:(NSString *)sourceURL toSelector:(SEL)sel ofObject:(id)target;
+
+- (void) contentsOfSVNURLDidChange:(NSString *)url;
+
 @end
 
 @interface NSObject(CXSVNTaskObserver)
+- (void) startingTask;
 - (void) exitedSVNWithStatus:(int)terminationStatus userInfo:(id)userInfo;
 - (void) readSVNOutput:(NSString *)output;
 - (void) readSVNError:(NSString *)error;
+- (void) contentsOfSVNURLDidChange:(NSString *)url;
 @end

@@ -36,7 +36,7 @@
 		
 		string = UTF8FromData(fDataBuffer);
 		
-		// Feed every line ending in newline to the output data. NSString
+		// Feed every line ending in newline to the output data.
 		while( true )
 		{
 			UInt32	previousLineEnd = NSMaxRange(currentLineRange);

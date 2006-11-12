@@ -12,7 +12,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#050505FA</string>
+				<string>#000000FA</string>
 				<key>caret</key>
 				<string>#3333FF</string>
 				<key>foreground</key>
@@ -22,7 +22,7 @@
 				<key>lineHighlight</key>
 				<string>#0000801A</string>
 				<key>selection</key>
-				<string>#2E2EE64D</string>
+				<string>#000C8180</string>
 			</dict>
 		</dict>
 		<dict>
@@ -379,7 +379,7 @@
 			<key>name</key>
 			<string>√ Variable</string>
 			<key>scope</key>
-			<string>variable.language, variable.other, variable.js</string>
+			<string>variable.language, variable.other, variable.js, punctuation.delimiter.variable</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -425,7 +425,7 @@
 			<key>name</key>
 			<string>√ Variable Punctuation</string>
 			<key>scope</key>
-			<string>punctuation.definition</string>
+			<string>punctuation.definition, punctuation.delimiter.variable</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -721,22 +721,51 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#2A34C1</string>
+				<string>#2136CE</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ Keyword Operator Setter</string>
+			<string>™ Keyword Operator Assignment</string>
 			<key>scope</key>
-			<string>keyword.operator.setter</string>
+			<string>keyword.operator.assignment</string>
 			<key>settings</key>
-			<dict/>
+			<dict>
+				<key>background</key>
+				<string>#00009A33</string>
+				<key>foreground</key>
+				<string>#0000CE</string>
+			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>™ Keyword Operator Getter</string>
+			<string>™ Keyword Operator Arithmetic</string>
 			<key>scope</key>
-			<string>keyword.operator.getter</string>
+			<string>keyword.operator.arithmetic</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#2136CE</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ Keyword Operator Logical</string>
+			<key>scope</key>
+			<string>keyword.operator.logical</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#00009A33</string>
+				<key>foreground</key>
+				<string>#3759FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>™ Keyword Operator Comparison</string>
+			<key>scope</key>
+			<string>keyword.operator.comparison</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>

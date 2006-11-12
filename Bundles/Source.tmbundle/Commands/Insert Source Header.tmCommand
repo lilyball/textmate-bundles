@@ -19,8 +19,8 @@ file_placeholder = '${1:«file»}'
 project_placeholder = '${2:«project»}'
 
 tm_filename		= ENV['TM_FILENAME']			|| file_placeholder
-tm_project_dir	= ENV['TM_PROJECT_DIRECTORY']
-comment_start 	= ENV['TM_COMMENT_START']
+tm_project_dir	= ENV['TM_PROJECT_DIRECTORY']	|| ''
+comment_start 	= ENV['TM_COMMENT_START']		|| ''
 comment_end		= ENV['TM_COMMENT_END'] 		|| ''
 copyright_holder	= ENV['TM_ORGANIZATION_NAME']
 
@@ -43,7 +43,7 @@ if comment_end.empty?
 end
 
 # Leopard doesn't have niutil
-username	= `dscl . read /Users/#{ENV['USER']} realname | ruby -e 'puts STDIN.read.sub(/.*realname:\s*(.*)$/, "\\\\1")'`.strip
+username	= `dscl . read /Users/#{ENV['LOGNAME']} realname | ruby -e 'puts STDIN.read.sub(/.*realname:\s*(.*)$/, "\\\\1")'`.strip
 date		= `date +%Y-%m-%d`.chomp
 
 # Default to username if no organization name

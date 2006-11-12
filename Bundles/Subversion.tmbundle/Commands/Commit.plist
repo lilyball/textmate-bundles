@@ -14,7 +14,7 @@ export TM_SVN
 export CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"
 
 cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
-"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/svn_commit.rb"</string>
+"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/svn_commit.rb" &amp;&gt;/dev/console &amp;</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -22,7 +22,7 @@ cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
 	<key>name</key>
 	<string>Commit…</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>discard</string>
 	<key>uuid</key>
 	<string>5F2BCB27-7A5B-11D9-A61B-000A95A89C98</string>
 </dict>

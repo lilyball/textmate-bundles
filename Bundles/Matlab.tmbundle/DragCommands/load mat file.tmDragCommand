@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if [[ -z "$TM_DIRECTORY" ]]
+	then filename=$TM_DROPPED_FILE
+	else filename=${TM_DROPPED_FILE#${TM_DIRECTORY}}
+fi
+echo "\${1:variable} = load('${filename}');"</string>
+	<key>draggedFileExtensions</key>
+	<array>
+		<string>mat</string>
+	</array>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Load .mat File</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.matlab</string>
+	<key>uuid</key>
+	<string>41EA6496-FA26-4F74-90B1-F316A4C451AE</string>
+</dict>
+</plist>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if [[ -z "$TM_DIRECTORY" ]]
+	then filename=$TM_DROPPED_FILE
+	else filename=${TM_DROPPED_FILE#${TM_DIRECTORY}}
+fi
+echo "\${1:image} = imread('${filename}');"</string>
+	<key>draggedFileExtensions</key>
+	<array>
+		<string>bmp</string>
+		<string>cur</string>
+		<string>gif</string>
+		<string>hdf</string>
+		<string>ico</string>
+		<string>jpg</string>
+		<string>jpeg</string>
+		<string>pbm</string>
+		<string>pcx</string>
+		<string>pgm</string>
+		<string>png</string>
+		<string>pnm</string>
+		<string>ppm</string>
+		<string>ras</string>
+		<string>tif</string>
+		<string>tiff</string>
+		<string>xwd</string>
+	</array>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Read Image</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.matlab</string>
+	<key>uuid</key>
+	<string>9FF80E01-2981-4D11-8E87-872FCCD0304E</string>
+</dict>
+</plist>

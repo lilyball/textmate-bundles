@@ -70,12 +70,13 @@ module GTD
       self.contexts
     end
     def contexts
+      GTD.add_contexts(*GTDLight.get_env_contexts) if @@contexts.empty?
       @@contexts
     end
     def clear_contexts
       @@contexts = []
     end
-    GTD.add_contexts(*GTDLight.get_env_contexts)
+    
     # Returns an array of all gtd files in given the directory, or in ENV['TM_GTD_DIRECTORY'] if
     # that is nil, or in the default directory otherwise.
     def get_gtd_directory(directory = nil)
@@ -406,6 +407,11 @@ module GTD
     end
     def completed?
       completed
+    end
+    # Whether the action is the next action or not. It should either have no parent,
+    # or it should be its parent's first action subitem.
+    def is_next_action?
+      self == self.project.next_action
     end
     def dump_object(indent = "",inc_indent = "  ", notes = [])
       if self.completed? then

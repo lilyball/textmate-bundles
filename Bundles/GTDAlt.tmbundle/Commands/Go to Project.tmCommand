@@ -6,8 +6,8 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTD.rb')
-require File.join(ENV['TM_SUPPORT_PATH'],'lib','dialog.rb')
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/GTD.rb'
+require ENV['TM_SUPPORT_PATH'] + '/lib/dialog.rb'
 include GTD
 files = GTD.process_directory
 projects = files.map{|i| i.projects}.flatten

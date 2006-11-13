@@ -6,7 +6,7 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTD.rb')
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/GTD.rb'
 include GTD
 objects = GTD.process_directory
 acts = objects.map{|o| o.actions}.flatten
@@ -38,6 +38,7 @@ b = &lt;&lt;HTML
   &lt;body&gt;
     &lt;body class=""&gt;
   &lt;ul id="toggles"&gt;
+    &lt;p&gt;Next Actions Only &lt;input type="checkbox" name="next-show" value="" id="next-show-button"&gt;&lt;/p&gt;
     &lt;li class="collapse" tablecolumn="0"&gt;Contexts&lt;/li&gt;
     &lt;li class="collapse" tablecolumn="2"&gt;Projects&lt;/li&gt;
     &lt;li class="collapse" tablecolumn="3"&gt;Files&lt;/li&gt;
@@ -63,7 +64,11 @@ pr.table do
     end
     note_part = (a.note != "") ? " title=\"#{a.note}\"" : ""
     text = "&lt;a href=\"#{a.txmt}\"#{note_part}&gt;#{a.name}&lt;/a&gt;"
-    pr.row([a.context, text, proj, a.root.link , "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;", a.mark_completed_link])
+    if a.is_next_action?
+      pr.row_next([a.context, text, proj, a.root.link , "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;", a.mark_completed_link])
+    else
+      pr.row([a.context, text, proj, a.root.link , "&lt;span class=\"nobr\"&gt;#{due}&lt;/span&gt;", a.mark_completed_link])
+    end
   end
 end
 pr.raw e
@@ -75,7 +80,7 @@ puts pr.to_html</string>
 	<key>keyEquivalent</key>
 	<string>^~@0</string>
 	<key>name</key>
-	<string>All</string>
+	<string>Current Actions</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>

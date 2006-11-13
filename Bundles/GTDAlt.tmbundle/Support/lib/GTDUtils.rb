@@ -171,6 +171,9 @@ class Printer
   def row(*row_items)
     @items << [:row,*row_items]
   end
+  def row_next(*row_items)
+    @items << [:row_next,*row_items]
+  end
   # Adds raw HTML code.
   def raw(code)
     @items << [:raw, code]
@@ -187,7 +190,11 @@ class Printer
         when :table_end
           s << "</table>"
         when :row
-          s << "<tr>"
+          s << "<tr class='not-next'>"
+          s << item.map{|i| "<td>#{i}</td>"}.join("\n")
+          s << "</tr>"
+        when :row_next
+          s << "<tr class='next'>"
           s << item.map{|i| "<td>#{i}</td>"}.join("\n")
           s << "</tr>"
         when :headers

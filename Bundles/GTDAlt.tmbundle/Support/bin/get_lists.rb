@@ -2,7 +2,7 @@
 # ENV['TM_GTD_CONTEXT'] = "email home office online writing errand reading someday programming"
 # ENV['TM_GTD_DIRECTORY'] = "/Users/haris/Documents/MyGTD"
 # ENV['TM_BUNDLE_SUPPORT'] = '/Users/haris/Library/Application Support/TextMate/Bundles/GTDAlt.tmbundle/Support'
-require File.join(File.dirname(__FILE__),'GTD.rb')
+require '../lib/GTD.rb'
 include GTD
 GTD.process_directory
 all_actions = GTD.actions

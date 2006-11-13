@@ -6,8 +6,8 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require File.join(ENV['TM_BUNDLE_SUPPORT'],'bin','GTDUtils.rb')
-require File.join(ENV['TM_SUPPORT_PATH'],'lib','dialog.rb')
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/GTDUtils.rb'
+require ENV['TM_SUPPORT_PATH'] + '/lib/dialog.rb'
 include GTDLight
 line = STDIN.read
 #GTD.process_directory

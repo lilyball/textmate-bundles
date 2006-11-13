@@ -7,6 +7,15 @@ function toggle_sublist(e) {
   }
   return true;
 }
+function toggle_next_actions() {
+  var table = document.getElementsByTagName('tbody')[0];
+  if (this.checked) {
+    table.className = "next-show";
+  } else {
+    table.className = "";
+  }
+  return true;
+}
 function toggle_this() {
   var body_tag = document.getElementsByTagName('body')[0];
   var the_name = this.name;
@@ -153,8 +162,13 @@ function toggle_done (el) {
   }
   return false;
 }
+function set_next_actions_toggle() {
+  var box = document.getElementById('next-show-button');
+  box.onClick = toggle_next_actions;
+}
 var CH_titles = new Array;
 window.onload = function () {
+  set_next_actions_toggle();
   create_nav_list();
   mark_trs();
   set_tr_classes();

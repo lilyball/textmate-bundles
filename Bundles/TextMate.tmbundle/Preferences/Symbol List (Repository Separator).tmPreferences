@@ -3,19 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Symbol List (Repository Item Scopes)</string>
+	<string>Symbol List (Repository Separator)</string>
 	<key>scope</key>
-	<string>source.plist.tm-grammar meta.value-pair.repository-item constant.other.scope - meta.dictionary.captures</string>
+	<string>support.constant.repository.tm-grammar</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolTransformation</key>
 		<string>
-		s/^(punctuation.*$)?/    /;
+		s/^repository$/-/;				# repository = separator
 	</string>
 	</dict>
 	<key>uuid</key>
-	<string>46D63D96-FBDA-4E36-B088-018D6B672FFB</string>
+	<string>1515233D-64A7-48B3-A032-895A2A2E9789</string>
 </dict>
 </plist>

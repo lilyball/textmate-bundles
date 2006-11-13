@@ -5,14 +5,14 @@
 	<key>name</key>
 	<string>Symbol List</string>
 	<key>scope</key>
-	<string>constant.other.scope.tm-language-def - meta.rule.repository.tm-language-def, support.constant.repository.tm-language-def</string>
+	<string>source.plist.tm-grammar constant.other.scope - (meta.dictionary.repository|meta.value-pair.scopename)</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolTransformation</key>
 		<string>
-		s/^repository$/-/;				# repository = separator
+		s/^punctuation.*$//;
 	</string>
 	</dict>
 	<key>uuid</key>

@@ -1268,6 +1268,21 @@
 							<key>name</key>
 							<string>support.constant.tm-grammar</string>
 						</dict>
+						<key>10</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.tm-grammar</string>
+						</dict>
+						<key>11</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-grammar</string>
+						</dict>
+						<key>12</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.dictionary.tm-grammar</string>
+						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
@@ -1281,13 +1296,38 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.terminator.dictionary.tm-grammar</string>
+							<string>string.quoted.double.tm-grammar</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-grammar</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.tm-grammar</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-grammar</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.single.tm-grammar</string>
+						</dict>
+						<key>9</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-grammar</string>
 						</dict>
 					</dict>
 					<key>comment</key>
 					<string>disabled, applyEndPatternLast</string>
 					<key>match</key>
-					<string>\b(disabled|applyEndPatternLast)\s*(=)\s*(0|1)\s*(;)</string>
+					<string>\b(disabled|applyEndPatternLast)\s*(=)\s*(?:(0|1)|((")(0|1)("))|((')(0|1)(')))\s*(;)</string>
 				</dict>
 				<dict>
 					<key>include</key>

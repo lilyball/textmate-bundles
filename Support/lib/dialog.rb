@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__),'escape.rb')
 module Dialog
 class << self
   def request_color(string)
-    string = '#999' #unless string
+    string = '#999' unless string
     color  = ''
     prefix, string = string.match(/(#?)(.*)/)[1,2]
     string = $1 * 2 + $2 * 2 + $3 * 2 if string =~ /^(.)(.)(.)$/

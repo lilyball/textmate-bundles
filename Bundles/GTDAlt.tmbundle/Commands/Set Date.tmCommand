@@ -45,7 +45,7 @@ if res['returnButton'].to_s != "OK" then
 else
   newDate = res['newDeadlineDate'].to_s
   if newDate =~ /^[\d\+\-*]+$/
-    newDate = (tod + eval(res['newDaysFromToday']).to_i)
+    newDate = (tod + eval(res['newDaysFromToday'].to_s).to_i)
   else
     newDate =~ /^\w{3} (\w{3}) (\d{2}) \d{2}:\d{2}:\d{2} \w{3} (\d{4})/
     newDate = Date.new($3.to_i,Date::ABBR_MONTHNAMES.index($1),$2.to_i)-1

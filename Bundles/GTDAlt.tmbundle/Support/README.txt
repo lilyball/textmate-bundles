@@ -73,7 +73,7 @@ Finally, the commands in the bundle work by default with the current directory. 
 First of all, notice that you can browse the RDoc documentation for the bundle under `Support/bin/doc/index.html`. Each command should start with the three lines:
 
     #!/usr/bin/env ruby
-    require ENV['TM_BUNDLE_PATH']+"/bin/GTD.rb"
+    require ENV['TM_BUNDLE_PATH']+"/lib/GTD.rb"
     include GTD
 
 This sets up the ground-work for working with the GTD module. There are a number of classes in the GTD module, let's look at them one at a time:
@@ -163,7 +163,7 @@ Note the class `DateLate`. It simply responds to: `DateLate === date`, where dat
 Let's create a command that generates an html file with all actions, sorted by their due date breaking ties alphabetically, along with links to the corresponding files, and tooltips showing the notes for those actions that have notes. First, we need to process the directory:
 
     #!/usr/bin/env ruby
-    require ENV['TM_BUNDLE_PATH']+"/bin/GTD.rb"
+    require ENV['TM_BUNDLE_PATH']+"/lib/GTD.rb"
     include GTD
     objects = GTDFile.process_directory
 

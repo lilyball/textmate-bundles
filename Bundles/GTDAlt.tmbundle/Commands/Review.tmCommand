@@ -10,7 +10,7 @@
 	<string>#!/usr/bin/env ruby
 require 'date'
 $: &lt;&lt; ENV['TM_BUNDLE_SUPPORT']
-require "bin/GTD.rb"
+require "lib/GTD.rb"
 include GTD
 
 objects = GTD.process_directory
@@ -77,7 +77,10 @@ b = &lt;&lt;HTML
 &lt;html&gt;
   &lt;head&gt;
     &lt;link rel="stylesheet" href="tm-file://#{ENV['TM_SUPPORT_PATH']}/css/default.css" type="text/css" media="screen" title="no title" charset="utf-8" /&gt;
-    &lt;style type="text/css"&gt;      .nobr {white-space: nowrap}    &lt;/style&gt;  &lt;/head&gt;
+    &lt;style type="text/css"&gt;
+      .nobr {white-space: nowrap}
+    &lt;/style&gt;
+  &lt;/head&gt;
   &lt;body&gt;
   &lt;h1&gt;GTD Review (#{review} - #{Date.today})&lt;/h1&gt;
 HTML

@@ -5,15 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_RUBY:-ruby}" "$TM_BUNDLE_SUPPORT/invert_colors.rb"
+	<string>"${TM_RUBY:-ruby}" "$TM_BUNDLE_SUPPORT/replace_colors.rb"
 </string>
+	<key>fallbackInput</key>
+	<string>word</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>name</key>
-	<string>Invert HEX Colors</string>
+	<string>Replace Selected HEX Color (Every Occurrence)</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
-	<string>D15DAF9D-80EF-4636-885A-74F64808060A</string>
+	<string>381FFB1B-0CAE-40AC-A228-B575C6E1C1C4</string>
 </dict>
 </plist>

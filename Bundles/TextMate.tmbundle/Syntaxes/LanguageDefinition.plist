@@ -1456,6 +1456,7 @@
 									\.(?:definition|section|separator|terminator)
 									(?:\.[^']*)?
 								)?
+							  | source(?:\.[^']*)?
 							  | storage(?:
 									\.(?:type|modifier)
 									(?:\.[^']*)?
@@ -1474,11 +1475,12 @@
 									\.(?:function|class|type|constant|variable|other)
 									(?:\.[^']*)?
 								)?
+							  | text(?:\.[^']*)?
 							  | variable(?:
 									\.(?:parameter|language|other)
 									(?:\.[^']*)?
 								)?
-							)?
+							)?\b
 							([^']*)?
 						(')								# Close String
 					</string>
@@ -1551,6 +1553,7 @@
 									\.(?:definition|section|separator|terminator)
 									(?:\.[^"]*)?
 								)?
+							  | source(?:\.[^"]*)?
 							  | storage(?:
 									\.(?:type|modifier)
 									(?:\.[^"]*)?
@@ -1569,11 +1572,12 @@
 									\.(?:function|class|type|constant|variable|other)
 									(?:\.[^"]*)?
 								)?
+							  | text(?:\.[^"]*)?
 							  | variable(?:
 									\.(?:parameter|language|other)
 									(?:\.[^"]*)?
 								)?
-							)?
+							)?\b
 							([^"]*)?
 						(")								# Close String
 					</string>

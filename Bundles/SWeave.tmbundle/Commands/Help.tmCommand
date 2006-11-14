@@ -3,20 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>${TM_R:-R} CMD Sweave "$TM_FILEPATH"</string>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+	html_header "Sweave Bundle Help" "Sweave"
+	Markdown.pl "$TM_BUNDLE_SUPPORT/help.markdown"|Smartypants.pl
+	html_footer
+</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string>^@r</string>
 	<key>name</key>
-	<string>Run</string>
+	<string>Help</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
-	<key>scope</key>
-	<string>text.rweave</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>D385CD74-3FB6-44A0-911E-004ABD64768F</string>
+	<string>F05EE36B-139D-41A4-8957-637BE0AAD847</string>
 </dict>
 </plist>

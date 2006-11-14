@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>#echo $TM_DIRECTORY/${{TM_FILENAME%.*}.tex}
+M=${TM_LATEX_MASTER:=$TM_DIRECTORY/${TM_FILENAME%.*}.tex}
+M=${M%.*}.pdf
+#M=$TM_DIRECTORY/$M
+
+echo "&lt;meta http-equiv=\"refresh\" content=\"0; tm-file://${M}\"&gt;&lt;title&gt;${M}&lt;/title&gt;"
+
+echo "loading &lt;b&gt;$M&lt;/b&gt;"
+
+# open $M</string>
+	<key>dontFollowNewOutput</key>
+	<integer>0</integer>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@V</string>
+	<key>name</key>
+	<string>View (PDF)</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.sweave</string>
+	<key>uuid</key>
+	<string>43E6A4DB-1524-4FDD-8BD9-76852A2FA790</string>
+</dict>
+</plist>

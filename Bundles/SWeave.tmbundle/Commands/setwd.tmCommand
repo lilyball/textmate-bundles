@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>M=${TM_SWEAVE_WD:=${TM_DIRECTORY}}
+osascript -e 'tell application "R" to activate' -e "tell application \"R\" to cmd \"setwd('$M')\n\""</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>setwd</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.r, text.sweave</string>
+	<key>uuid</key>
+	<string>6B05627E-6513-4C10-A489-1A09001F8D0D</string>
+</dict>
+</plist>

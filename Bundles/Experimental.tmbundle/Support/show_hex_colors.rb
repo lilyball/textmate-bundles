@@ -80,7 +80,7 @@ class HexColor
         hsl[:h] += 360
       end
     else
-      hsl[:h] = 0
+      hsl[:h] = -1
     end
     
     # hsl[:h] /= 255 * 3
@@ -90,14 +90,15 @@ class HexColor
     hsl
   end
   def to_hsl
+    return "L #{(l*100).round}%" if h == -1
     "HSL #{h.round}&deg;,#{(s*100).round}%,#{(l*100).round}%"
   end
   
   def sort_h; h.round.to_s.rjust(4).gsub(' ','0')                  ;end
   def sort_s; ((s*10000).round * 1000).to_s.rjust(7).gsub(' ','0') ;end
   def sort_l; ((l*10000).round * 1000).to_s.rjust(7).gsub(' ','0') ;end
-  def sort_hsl; return sort_h + sort_s + sort_l ;end
-  def sort_hls; return sort_h + sort_l + sort_s ;end
+  def sort_hsl; return self.l.to_s if s == -1; return sort_h + sort_s + sort_l ;end
+  def sort_hls; return self.l.to_s if s == -1; return sort_h + sort_l + sort_s ;end
   
   class << self
     def get_color_value()

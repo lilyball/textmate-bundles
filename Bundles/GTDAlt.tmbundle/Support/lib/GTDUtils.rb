@@ -1,13 +1,33 @@
 require 'date'
 require 'fileutils.rb'
 # Useful methods that don't need to scan any files in order to work
-module GTDLight
-  def GTDLight.get_env_contexts
-    contexts = ((ENV['TM_GTD_CONTEXT'] || "") + " " + (ENV['TM_GTD_CONTEXTS'] || "")).chomp.split(" ").compact.sort
-    contexts = ["email", "office", "online", "home", "call", "waiting"] if contexts.empty?
-    return contexts
+class GTDContexts
+  class << self
+    def contexts
+      @@contexts ||= self.get_env_contexts
+    end
+    def contexts=(newContexts)
+      @@contexts = newContexts
+      unless @@contexts.nil?
+        @@contexts.uniq!
+        @@contexts.sort!
+      end
+    end
+    def get_env_contexts
+      contexts = ("#{ENV['TM_GTD_CONTEXT']} #{ENV['TM_GTD_CONTEXTS']}").chomp.split(" ").compact.sort
+      contexts = ["email", "office", "online", "home", "call", "waiting"] if contexts.empty?
+      return contexts.uniq.sort
+    end
   end
 end
+# COMMENT TO BE REMOVED ONCE THINGS ARE CHECKED TO WORK
+# module GTDLight
+#   def GTDLight.get_env_contexts
+#     contexts = ((ENV['TM_GTD_CONTEXT'] || "") + " " + (ENV['TM_GTD_CONTEXTS'] || "")).chomp.split(" ").compact.sort
+#     contexts = ["email", "office", "online", "home", "call", "waiting"] if contexts.empty?
+#     return contexts.uniq.sort
+#   end
+# end
 class Array
   def next(item)
     i = (self.index(item) || -1) + 1
@@ -16,65 +36,6 @@ class Array
   def previous(item)
     i = (self.index(item) || length) -1
     return self[i % length]
-  end
-end
-# Utilities for converting a date in various ways.
-module DateUtils
-  require 'date'
-  # Attempts to convert the given string to a date. It can understand expressions like:
-  #  * <em>today</em>
-  #  * <em>next Tuesday</em>
-  #  * <em>3 months</em>
-  def DateUtils::convert_date(string)
-    case string.downcase
-    when /^today$/
-      return Date.today
-    when /^tomorrow$/
-      return Date.today + 1
-    when /^(?:next )?(week|month|year)$/
-      tod = Date.today
-      case $1
-      when "week"
-        return tod + 7
-      when "month"
-        return tod + 30
-      when "year"
-        return tod + 365
-      end
-    when /^(?:next )?(\w+)$/
-      day = Date::ABBR_DAYS[$1] || Date::DAYS[$1]
-      raise unless day
-      tod = Date.today
-      tod=tod.succ while tod.wday != day
-      return tod
-    when /^(?:in\s*)?((?:[+-])?\d+)\s*(day|week|month|year)(s?)$/
-      tod = Date.today
-      no = $1.to_i
-      case $2
-      when "day"
-        return tod + no
-      when "week"
-        return tod + no * 7
-      when "month"
-        return tod >> no
-      when "year"
-        return tod + no * 365
-      end
-    else
-      return Date.parse(string.downcase)
-    end
-  end
-  # Adds +days+ to the date described by +dateString+. +days+ can be negative.
-  def DateUtils::addToDate(dateString,days)
-    return Date.parse(dateString) + days
-  end
-  # Adds a month to the date described by +dateString+.
-  def DateUtils::addMonth(dateString)
-    return Date.parse(dateString) >> 1
-  end
-  # Subtracts a month from the date described by +dateString+.
-  def DateUtils::subtractMonth(dateString)
-    return Date.parse(dateString) << 1
   end
 end
 # The test <tt>date === DateLate</tt> returns true if +date+ is earlier than Date.today

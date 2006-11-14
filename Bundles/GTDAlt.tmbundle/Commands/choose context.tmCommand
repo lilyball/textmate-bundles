@@ -8,10 +8,8 @@
 	<string>#!/usr/bin/env ruby
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/GTDUtils.rb'
 require ENV['TM_SUPPORT_PATH'] + '/lib/dialog.rb'
-include GTDLight
 line = STDIN.read
-#GTD.process_directory
-contextList = GTDLight.get_env_contexts
+contextList = GTDContexts.contexts
 choice = Dialog.menu(contextList)
 if choice then
   print line.sub(/@(\S+)($|\s+)/) {|text,space| "@" + e_sn(contextList[choice]) + ((space.nil? or space == "") ? " " : space)+"$0"}

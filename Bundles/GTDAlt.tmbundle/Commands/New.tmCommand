@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/GTDUtils.rb'
 require ENV['TM_SUPPORT_PATH'] + '/lib/dialog.rb'
-contextList = GTDLight.get_env_contexts
+contextList = GTDContexts.contexts
 choice = Dialog.menu(contextList)
 if choice then
   print "@#{contextList[choice]} "

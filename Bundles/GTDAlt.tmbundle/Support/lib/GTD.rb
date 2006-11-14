@@ -10,7 +10,7 @@ require 'pathname'
 # Module GTD. Used as a name-space for all other classes and methods.
 module GTD
 #--
-  include GTDLight
+  # include GTDLight
   PROJECT_BEGIN_REGEXP = /^\s*(project)\s*(.*)$/
   PROJECT_END_REGEXP   = /^\s*(end)\s*$/
   ACTION_REGEXP        = /^\s*@(\S+)\s+((?:[^\[]+)(?:\s*\[\d+\])?)\s*((?:due|from|at):\[(\d{4}-\d{2}-\d{2})\])?\s*$/
@@ -45,7 +45,6 @@ module GTD
   end
 
   class << self
-    @@contexts = ["email"]
     @@objects = Array.new
     @@files = Array.new
     def objects
@@ -58,25 +57,6 @@ module GTD
     def add_object(object)
       @@objects << object
     end
-    # Add the array newContexts to the contexts.
-    def add_contexts(*newContexts)
-      # pp ENV['TM_GTD_CONTEXT']
-      @@contexts |= newContexts
-      @@contexts.uniq!
-      @@contexts.sort!
-    end
-    # Returns an array of all contexts, alphabetized.
-    def get_contexts
-      self.contexts
-    end
-    def contexts
-      GTD.add_contexts(*GTDLight.get_env_contexts) if @@contexts.empty?
-      @@contexts
-    end
-    def clear_contexts
-      @@contexts = []
-    end
-    
     # Returns an array of all gtd files in given the directory, or in ENV['TM_GTD_DIRECTORY'] if
     # that is nil, or in the default directory otherwise.
     def get_gtd_directory(directory = nil)
@@ -277,7 +257,7 @@ module GTD
               act.note = noteid
               @notes[noteid] = act
             end
-            GTD.add_contexts(context)
+            GTDContexts.contexts << context
             @current_project << act
           when :note
             act = @notes[context]

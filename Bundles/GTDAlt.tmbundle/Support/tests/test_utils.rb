@@ -1,11 +1,12 @@
 require "test/unit"
-$:.unshift File.join(File.dirname(__FILE__), "..", "bin")
+$:.unshift "../lib"
+ENV['TM_GTD_CONTEXT'] = ""
+ENV['TM_GTD_CONTEXTS'] = "hello there"
 require "GTDUtils.rb"
 
 class TestUtils < Test::Unit::TestCase
   def setup
     @a = [6,2,5,3,4]
-    @today = Date.today
   end
   def test_array_next
     assert_equal(6, @a.next(4))
@@ -16,19 +17,20 @@ class TestUtils < Test::Unit::TestCase
     assert_equal(6, @a.previous(2))
     assert_equal(4, @a.previous(6))
   end
-  def test_date_convert
-    assert_equal(DateUtils.convert_date("today"), @today)
-    assert_equal(DateUtils.convert_date("1 week"), @today + 7)
-    assert_equal(DateUtils.convert_date("1 weeks"), @today + 7)
-    assert_equal(DateUtils.convert_date("4 weeks"), @today + 28)
-    assert_equal(DateUtils.convert_date("-1 week"), @today - 7)
-    assert_equal(DateUtils.convert_date("2 month"), @today >> 2)
-    assert_equal(DateUtils.convert_date("In 5 days"), @today + 5)
-    nextWednesday = @today + ( 7 + 3 - @today.cwday ) % 7
-    assert_equal(DateUtils.convert_date("next wednesday"), nextWednesday)
-    assert_equal(DateUtils.convert_date("next wed"), nextWednesday)
-    assert_equal(DateUtils.addToDate("2005-06-07",5), Date.parse("2005-06-12"))
-    assert_equal(DateUtils.addMonth("2005-06-07"), Date.parse("2005-07-07"))
-    assert_equal(DateUtils.subtractMonth("2005-06-07"), Date.parse("2005-05-07"))
+  def test_contexts
+    puts GTDContexts.get_env_contexts
+    assert_equal(2, GTDContexts.get_env_contexts.length)
+    assert_equal(2, GTDContexts.contexts.length)
+    GTDContexts.contexts=["hi","you", "there"]
+    assert_equal(3, GTDContexts.contexts.length)
+    GTDContexts.contexts += ["you", "there", "foo"]
+    assert_equal(4, GTDContexts.contexts.length)
+    GTDContexts.contexts << "bar"
+    assert_equal(5, GTDContexts.contexts.length)
+    GTDContexts.contexts = nil
+    assert_equal(2, GTDContexts.contexts.length)
+    ENV['TM_GTD_CONTEXTS'] = nil
+    GTDContexts.contexts = nil
+    assert_equal(6, GTDContexts.contexts.length)
   end
 end

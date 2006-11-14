@@ -23,19 +23,26 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 	
 	if( sPath == nil )
 	{
-		NSFileManager * fileManager = [NSFileManager defaultManager];
-
-		// TODO: should probably check version number for the highest version of all installed versions
+		// TM_SVN environment variable overrides path search.
+		const char * tmSVN = getenv("TM_SVN");
 		
-		for( unsigned int i = 0; i < kExecutablePathsCount; i += 1 )
+		if( tmSVN != NULL )
 		{
-			NSString * possiblePath = [kExecutablePathNames[i] stringByAppendingString:@"/svn"];
-		
-//			NSLog(possiblePath);
-			if([fileManager fileExistsAtPath:possiblePath])
+			sPath = [[NSString stringWithUTF8String:tmSVN] retain];
+		}
+		else
+		{
+			NSFileManager * fileManager = [NSFileManager defaultManager];
+
+			for( unsigned int i = 0; i < kExecutablePathsCount; i += 1 )
 			{
-				sPath = [possiblePath retain];
-				break;
+				NSString * possiblePath = [kExecutablePathNames[i] stringByAppendingString:@"/svn"];
+
+				if([fileManager fileExistsAtPath:possiblePath])
+				{
+					sPath = [possiblePath retain];
+					break;
+				}
 			}
 		}
 		NSLog(@"Subversion command:%@", sPath);
@@ -133,6 +140,19 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 	[self launchWithArguments:arguments];
 }
 
+
+- (void) removeURL:(NSString *)destURL withDescription:(NSString *)desc;
+{
+	[self removeURLs:[NSArray arrayWithObject:destURL] withDescription:desc];
+}
+
+- (void) removeURLs:(NSArray *)removeURLs withDescription:(NSString *)desc;
+{
+	NSArray *	arguments = [NSArray arrayWithObjects:@"remove", @"-m", desc, nil];
+
+	[self launchWithArguments:[arguments arrayByAddingObjectsFromArray:removeURLs]];
+}
+
 - (void) importLocalPath:(NSString *)sourcePath toURL:(NSString *)destURL withDescription:(NSString *)desc
 {
 	NSArray *	arguments = [NSArray arrayWithObjects:@"import", @"-m", desc, sourcePath, destURL, nil];
@@ -149,9 +169,14 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 
 - (void) makeDirAtURL:(NSString *)destURL withDescription:(NSString *)desc
 {
-	NSArray *	arguments = [NSArray arrayWithObjects:@"mkdir", @"-m", desc, destURL, nil];
+	[self makeDirsAtURLs:[NSArray arrayWithObject:destURL] withDescription:desc];
+}
 
-	[self launchWithArguments:arguments];
+- (void) makeDirsAtURLs:(NSArray *)addDirURLs withDescription:(NSString *)desc
+{
+	NSArray *	arguments = [NSArray arrayWithObjects:@"mkdir", @"-m", desc, nil];
+
+	[self launchWithArguments:[arguments arrayByAddingObjectsFromArray:addDirURLs]];
 }
 
 - (void) moveURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc

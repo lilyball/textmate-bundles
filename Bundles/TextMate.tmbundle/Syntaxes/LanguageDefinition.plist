@@ -75,7 +75,7 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#scope-name</string>
+							<string>#scope-name-root</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1351,76 +1351,258 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>applyEndPatternLast</key>
-					<integer>1</integer>
-					<key>begin</key>
-					<string>(')(?=.*')</string>
-					<key>beginCaptures</key>
+					<key>captures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.begin.tm-grammar</string>
 						</dict>
-					</dict>
-					<key>contentName</key>
-					<string>constant.other.scope.tm-grammar</string>
-					<key>end</key>
-					<string>(')(?!')</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.scope.tm-grammar</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+						</dict>
+						<key>4</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.end.tm-grammar</string>
 						</dict>
 					</dict>
+					<key>match</key>
+					<string>(?x)
+						(')								# Open String
+							(							# Optionally match the valid
+														# scopes, and the following
+														# part of the scope, meaning
+														# anything else is invalid
+								comment(?:
+									\.(?:line|block)
+									(?:\.[^']*)?
+								)?
+							  | constant(?:
+									\.(?:numeric|character|language|other)
+									(?:\.[^']*)?
+								)?
+							  | entity(?:
+									\.name(?:
+										\.(?:function|type|tag|section)
+										(?:\.[^']*)?
+									)?
+								  | \.other(?:
+										\.(?:inherited-class|attribute-name)
+										(?:\.[^']*)?
+									)?
+								)?
+							  | invalid(?:
+									\.(?:illegal|deprecated)
+									(?:\.[^']*)?
+								)?
+							  | keyword(?:
+									\.(?:control|operator|other)
+									(?:\.[^']*)?
+								)?
+							  | markup(?:
+									\.(?:underline|bold|heading|italic|list|quote|raw|other)
+									(?:\.[^']*)?
+								)?
+							  | meta(?:\.[^']*)?
+							  | punctuation(?:
+									\.(?:definition|section|separator|terminator)
+									(?:\.[^']*)?
+								)?
+							  | storage(?:
+									\.(?:type|modifier)
+									(?:\.[^']*)?
+								)?
+							  | string(?:
+									\.(?:
+										quoted(?:
+											\.(?:single|double|triple|other)
+											(?:\.[^']*)?
+										)?
+									  | (?:unquoted|interpolated|regexp|other)
+										(?:\.[^']*)?
+									)
+								)?
+							  | support(?:
+									\.(?:function|class|type|constant|variable|other)
+									(?:\.[^']*)?
+								)?
+							  | variable(?:
+									\.(?:parameter|language|other)
+									(?:\.[^']*)?
+								)?
+							)?
+							([^']*)?
+						(')								# Close String
+					</string>
 					<key>name</key>
 					<string>string.quoted.single.tm-grammar</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>match</key>
-							<string>''</string>
-							<key>name</key>
-							<string>constant.character.escape.apostrophe.tm-grammar</string>
-						</dict>
-					</array>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>(")(?=.*")</string>
-					<key>beginCaptures</key>
+					<key>captures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.begin.tm-grammar</string>
 						</dict>
-					</dict>
-					<key>contentName</key>
-					<string>constant.other.scope.tm-grammar</string>
-					<key>end</key>
-					<string>(")</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.scope.tm-grammar</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+						</dict>
+						<key>4</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.end.tm-grammar</string>
 						</dict>
 					</dict>
+					<key>match</key>
+					<string>(?x)
+						(")								# Open String
+							(							# Optionally match the valid
+														# scopes, and the following
+														# part of the scope, meaning
+														# anything else is invalid
+								comment(?:
+									\.(?:line|block)
+									(?:\.[^"]*)?
+								)?
+							  | constant(?:
+									\.(?:numeric|character|language|other)
+									(?:\.[^"]*)?
+								)?
+							  | entity(?:
+									\.name(?:
+										\.(?:function|type|tag|section)
+										(?:\.[^"]*)?
+									)?
+								  | \.other(?:
+										\.(?:inherited-class|attribute-name)
+										(?:\.[^"]*)?
+									)?
+								)?
+							  | invalid(?:
+									\.(?:illegal|deprecated)
+									(?:\.[^"]*)?
+								)?
+							  | keyword(?:
+									\.(?:control|operator|other)
+									(?:\.[^"]*)?
+								)?
+							  | markup(?:
+									\.(?:underline|bold|heading|italic|list|quote|raw|other)
+									(?:\.[^"]*)?
+								)?
+							  | meta(?:\.[^"]*)?
+							  | punctuation(?:
+									\.(?:definition|section|separator|terminator)
+									(?:\.[^"]*)?
+								)?
+							  | storage(?:
+									\.(?:type|modifier)
+									(?:\.[^"]*)?
+								)?
+							  | string(?:
+									\.(?:
+										quoted(?:
+											\.(?:single|double|triple|other)
+											(?:\.[^"]*)?
+										)?
+									  | (?:unquoted|interpolated|regexp|other)
+										(?:\.[^"]*)?
+									)
+								)?
+							  | support(?:
+									\.(?:function|class|type|constant|variable|other)
+									(?:\.[^"]*)?
+								)?
+							  | variable(?:
+									\.(?:parameter|language|other)
+									(?:\.[^"]*)?
+								)?
+							)?
+							([^"]*)?
+						(")								# Close String
+					</string>
 					<key>name</key>
 					<string>string.quoted.double.tm-grammar</string>
-					<key>patterns</key>
-					<array>
+				</dict>
+			</array>
+		</dict>
+		<key>scope-name-root</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
 						<dict>
-							<key>match</key>
-							<string>\\[\\"]</string>
 							<key>name</key>
-							<string>constant.character.escape.tm-grammar</string>
+							<string>punctuation.definition.string.begin.tm-grammar</string>
 						</dict>
-					</array>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.scope.tm-grammar</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-grammar</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(')(?:((?:source|text)(?='|\.)[^']*)|([^']*))(')</string>
+					<key>name</key>
+					<string>string.quoted.single.tm-grammar</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tm-grammar</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.scope.tm-grammar</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tm-grammar</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(")(?:((?:source|text)(?="|\.)[^"]*)|([^"]*))(")</string>
+					<key>name</key>
+					<string>string.quoted.double.tm-grammar</string>
 				</dict>
 			</array>
 		</dict>

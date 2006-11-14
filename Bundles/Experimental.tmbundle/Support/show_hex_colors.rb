@@ -95,20 +95,20 @@ class HexColor
   end
   
   def sort_h; h.round.to_s.rjust(4).gsub(' ','0')                  ;end
+  def sort_H; (h/25).round.to_s.rjust(4).gsub(' ','0')             ;end
   def sort_s; ((s*10000).round * 1000).to_s.rjust(7).gsub(' ','0') ;end
   def sort_l; ((l*10000).round * 1000).to_s.rjust(7).gsub(' ','0') ;end
   def sort_hsl; return self.l.to_s if s == -1; return sort_h + sort_s + sort_l ;end
+  def sort_Hsl; return self.l.to_s if s == -1; return sort_H + sort_l + sort_s ;end
   def sort_hls; return self.l.to_s if s == -1; return sort_h + sort_l + sort_s ;end
+  def sort_Hls; return self.l.to_s if s == -1; return sort_H + sort_s + sort_l ;end
   
   class << self
-    def get_color_value()
-      
-    end
     def show_hex_colors(doc)
       colors, hex_colors = [], []
       doc.scan(/#[0-9a-f]{3,6}/i) { |c| colors.push(c) unless colors.include?(c) }
       colors.each { |c| hex_colors.push(HexColor.new(c)) }
-      '<div id="colors">' + hex_colors.sort_by{|c| c.sort_hls }.to_s + '</div>'
+      '<div id="colors">' + hex_colors.sort_by{|c| c.sort_Hsl }.to_s + '</div>'
     end
   end
 end

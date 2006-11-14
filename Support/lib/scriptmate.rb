@@ -77,14 +77,13 @@ class ScriptMate
   def emit_html
     puts html_head(:window_title => "#{@script.display_name} — #{@@matename}", :page_title => "#{@@matename}", :sub_title => "#{@@langname}")
     puts <<-HTML
-    	<div class="#{@@matename.downcase}">
-		
-    		<div><!-- first box containing version info and script output -->
-    			<pre><strong>#{@@matename} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@script.version_string}</strong>
-    <strong>>>> #{@script.display_name}</strong>
+<div class="#{@@matename.downcase}">		
+<div><!-- first box containing version info and script output -->
+<pre><strong>#{@@matename} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@script.version_string}</strong>
+<strong>>>> #{@script.display_name}</strong>
 
-    <div style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
-    HTML
+<div style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
+HTML
 
     stdout, stderr, stack_dump = @script.run
     descriptors = [ stdout, stderr, stack_dump ]

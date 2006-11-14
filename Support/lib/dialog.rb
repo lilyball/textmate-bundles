@@ -1,6 +1,24 @@
 require File.join(File.dirname(__FILE__),'escape.rb')
 module Dialog
 class << self
+  def request_color(string)
+    string = '#999' #unless string
+    color  = ''
+    prefix, string = string.match(/(#?)(.*)/)[1,2]
+    string = $1 * 2 + $2 * 2 + $3 * 2 if string =~ /^(.)(.)(.)$/
+    def_col = ' default color {' + string.scan(/../).map { |i| i.hex * 257 }.join(",") + '}'
+    col = `osascript 2>/dev/null -e 'tell app "TextMate" to choose color#{def_col}'`
+    return false if col == ""
+    col = col.scan(/\d+/).map { |i| "%02X" % (i.to_i / 257) }.join("")
+    
+    color = prefix
+    if /(.)\1(.)\2(.)\3/.match(col) then
+      color << $1 + $2 + $3
+    else
+      color << col
+    end
+    color
+  end
   def menu(options)
     return nil if options.empty?
 
@@ -15,7 +33,7 @@ class << self
     end
 
     plist = { 'menuItems' => options }.to_plist
-
+    
     res = PropertyList::load(`#{e_sh dialog} -up #{e_sh plist}`)
     return nil unless res.has_key? 'selectedIndex'
     index = res['selectedIndex'].to_i

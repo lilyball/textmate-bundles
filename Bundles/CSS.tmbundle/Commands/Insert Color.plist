@@ -6,20 +6,10 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-string = STDIN.read
-string = "#999" if string.empty?
-prefix, string = string.match(/(#?)(.*)/)[1,2]
-string = $1 * 2 + $2 * 2 + $3 * 2 if string =~ /^(.)(.)(.)$/
-def_col = ' default color {' + string.scan(/../).map { |i| i.hex * 257 }.join(",") + '}'
-col = `osascript 2&gt;/dev/null -e 'tell app "TextMate" to choose color#{def_col}'`
-exit 200 if col == ""
-col=col.scan(/\d+/).map { |i| "%02X" % (i.to_i / 257) }.join("")
-print prefix
-if /(.)\1(.)\2(.)\3/.match(col) then
-  print $1 + $2 + $3
-else
-  print col
-end</string>
+
+require ENV['TM_SUPPORT_PATH'] + "/lib/dialog"
+print Dialog.request_color(STDIN.read)
+</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>

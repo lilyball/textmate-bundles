@@ -46,7 +46,7 @@ class HexColor
   def l; hsl[:l]; end
   
   def to_s
-    %{<div style="background: #{c = self.color.ljust(7)}; color: #{(l < 0.15) ? 'white' : 'black'};">#{c}<span class="hsl">#{to_hsl}</span></div>\n}
+    %{<div style="background: #{c = self.color.ljust(7)}; color: #{(l < 0.15) ? 'white' : 'black'};"><tt>#{c}</tt><span class="hsl">#{to_hsl}</span></div>\n}
   end
   def hsl
     hsl = {:h => nil,

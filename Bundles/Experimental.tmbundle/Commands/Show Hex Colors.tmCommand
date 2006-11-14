@@ -5,17 +5,21 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"${TM_RUBY:-ruby}" "$TM_BUNDLE_SUPPORT/invert_colors.rb"
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Hex Colors in Document"
+"${TM_RUBY:-ruby}" "$TM_BUNDLE_SUPPORT/show_hex_colors.rb"
+html_footer
+
 </string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>~@C</string>
 	<key>name</key>
-	<string>Invert HEX Colors</string>
+	<string>Show Hex Colors</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>D15DAF9D-80EF-4636-885A-74F64808060A</string>
+	<string>7CC7E11B-02BE-4F8D-9E8F-396D2CB74A98</string>
 </dict>
 </plist>

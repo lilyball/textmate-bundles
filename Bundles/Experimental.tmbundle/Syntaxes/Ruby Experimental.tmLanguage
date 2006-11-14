@@ -44,7 +44,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;=\.|::)(?=[a-zA-Z0-9_!?])</string>
+			<string>(?&lt;=\.|::)(?=[a-zA-Z])</string>
 			<key>end</key>
 			<string>(?&lt;=[a-zA-Z0-9_!?])(?=[^a-zA-Z0-9_!?])</string>
 			<key>name</key>
@@ -57,7 +57,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>([a-zA-Z0-9_!?]+)(?=[^a-zA-Z0-9_!?])</string>
+					<string>([a-zA-Z][a-zA-Z0-9_!?]*)(?=[^a-zA-Z0-9_!?])</string>
 					<key>name</key>
 					<string>entity.name.function</string>
 				</dict>
@@ -65,7 +65,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?=(\.|::)[a-zA-Z0-9_!?]+\()(\.|::)</string>
+			<string>(?=(\.|::)[a-zA-Z][a-zA-Z0-9_!?]*\()(\.|::)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -90,7 +90,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>([a-zA-Z0-9_!?]+)(?=\()</string>
+					<string>([a-zA-Z][a-zA-Z0-9_!?]*)(?=\()</string>
 					<key>name</key>
 					<string>entity.name.function</string>
 				</dict>

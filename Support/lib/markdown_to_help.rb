@@ -14,7 +14,7 @@ class TreeNode
   end
   def to_s
     child = @child ? "\n<ul style='list-style: none'>\n#{@child}</ul>\n" : ''
-    entry = @heading ? "<li>#{index.join '.'} <a href='#sect_#{index.join '.'}'>#{@heading}</a>#{child}</li>\n" : child
+    entry = @heading ? "<li>#{index.join '.'} <a href='javascript:goTo(&quot;sect_#{index.join '.'}&quot;)'>#{@heading}</a>#{child}</li>\n" : child
     @next ? entry.to_s + @next.to_s : entry.to_s
   end
   def new_child
@@ -25,7 +25,7 @@ class TreeNode
     @next = TreeNode.new(@parent, @count + 1)
   end
   def new_heading
-    "<h#{@level}><a name='sect_#{index.join '.'}'>#{index.join '.'}</a> #{@heading}</h#{@level}>"
+    "<h#{@level}><a id='sect_#{index.join '.'}'>#{index.join '.'}</a> #{@heading}</h#{@level}>"
   end
 end
 
@@ -48,6 +48,14 @@ IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
     end
     contents << line
   end
+
+  puts <<-HTML
+<script type="text/javascript" charset="utf-8">
+function goTo (id) {
+  document.body.scrollTop = document.getElementById(id).offsetTop + 3;
+}
+</script>
+HTML
 
   puts "<h2>Table of Contents</h2>"
   puts root

@@ -62,8 +62,24 @@ int contact_server (std::string nibName, NSMutableDictionary* someParameters, NS
 	else
 	{
 		if(proxy)
-				fprintf(stderr, "%s: server version at v%d, this tool at v%d (they need to match)\n", AppName, [proxy textMateDialogServerProtocolVersion], TextMateDialogServerProtocolVersion);
-		else	fprintf(stderr, "%s: failed to establish connection with TextMate.\n", AppName);
+		{
+			int pluginVersion = [proxy textMateDialogServerProtocolVersion];
+			int toolVersion = TextMateDialogServerProtocolVersion;
+			if(pluginVersion < toolVersion)
+			{
+				fprintf(stderr, "%s: you have updated the tm_dialog tool to v%d but the Dialog plug-in running is still at v%d.\n", AppName, toolVersion, pluginVersion);
+				fprintf(stderr, "%s: either checkout the PlugIns folder from the repository or remove your checkout of the Support folder.\n", AppName);
+				fprintf(stderr, "%s: if you did checkout the PlugIns folder, you need to relaunch TextMate to load the new plug-in.\n", AppName);
+			}
+			else
+			{
+				fprintf(stderr, "%s: you have updated the Dialog plug-in to v%d but the tm_dialog tool is still at v%d\n", AppName, pluginVersion, toolVersion);
+			}
+		}
+		else
+		{
+			fprintf(stderr, "%s: failed to establish connection with TextMate.\n", AppName);
+		}
 	}
 	return res;
 }

@@ -5,13 +5,12 @@ class GTDContexts
   class << self
     def contexts
       @@contexts ||= self.get_env_contexts
+      @@contexts.uniq!
+      @@contexts.sort!
+      @@contexts
     end
     def contexts=(newContexts)
       @@contexts = newContexts
-      unless @@contexts.nil?
-        @@contexts.uniq!
-        @@contexts.sort!
-      end
     end
     def get_env_contexts
       contexts = ("#{ENV['TM_GTD_CONTEXT']} #{ENV['TM_GTD_CONTEXTS']}").chomp.split(" ").compact.sort

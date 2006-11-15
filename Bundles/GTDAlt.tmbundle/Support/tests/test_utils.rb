@@ -22,9 +22,9 @@ class TestUtils < Test::Unit::TestCase
     assert_equal(2, GTDContexts.get_env_contexts.length)
     assert_equal(2, GTDContexts.contexts.length)
     GTDContexts.contexts=["hi","you", "there"]
-    assert_equal(3, GTDContexts.contexts.length)
+    assert_equal(["hi","there", "you"], GTDContexts.contexts)
     GTDContexts.contexts += ["you", "there", "foo"]
-    assert_equal(4, GTDContexts.contexts.length)
+    assert_equal(["foo", "hi","there", "you"], GTDContexts.contexts)
     GTDContexts.contexts << "bar"
     assert_equal(5, GTDContexts.contexts.length)
     GTDContexts.contexts = nil

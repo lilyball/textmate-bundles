@@ -6,7 +6,7 @@ require '../lib/GTD.rb'
 include GTD
 GTD.process_directory
 all_actions = GTD.actions
-contexts = GTD.get_contexts
+contexts = GTDContexts.contexts
 contxts = []
 def esc(str)
   str.gsub('"','\\"')

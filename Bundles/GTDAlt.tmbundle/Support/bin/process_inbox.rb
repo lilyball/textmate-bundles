@@ -24,7 +24,7 @@ objects = GTD.process_directory(dir)
 inbox_object = objects.find{|o| o.file == tempInboxFilename}
 objects << (inbox_object = GTDFile.new(tempInboxFilename)) unless inbox_object
 projects = GTD.projects
-contexts = GTD.get_contexts
+contexts = GTDContexts.contexts
 f = File.open(inboxfile, "r")
 lines = f.readlines.map{|i| i.chomp}
 f.close

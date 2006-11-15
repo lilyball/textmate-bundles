@@ -1,11 +1,15 @@
 require "test/unit"
-$:.unshift File.join(File.dirname(__FILE__), "..", "bin")
+$:.unshift "../lib"
 ENV['TM_GTD_CONTEXT'] = "hello there"
+ENV['TM_GTD_CONTEXTS'] = "hello there"
 require "GTD.rb"
 include GTD
 class TestGTD < Test::Unit::TestCase
+  def setup
+    GTDContexts.contexts = nil
+  end
   def test_action
-    ENV['TM_GTD_CONTEXTS'] = "hello there"
+    assert_equal(["hello","there"], GTDContexts.contexts)
     @a = Action.new(:name => "the name", :context => "thecontext", :parent => "project", :file => "2005-03-05")
     assert_not_nil(@a)
     assert_equal("the name", @a.name)
@@ -17,8 +21,10 @@ class TestGTD < Test::Unit::TestCase
     assert_equal(nil, @b.project)
     assert_equal(["file2",15], [@b.file,@b.line])
     assert_equal(nil,@b.due)
+    assert_equal(["hello", "there"],GTDContexts.contexts)
   end
   def test_GTD_parse
+    assert_equal(["hello","there"],GTDContexts.contexts)
     File.open("test_example.gtd") do |f|
       @data = f.read
     end
@@ -38,8 +44,8 @@ class TestGTD < Test::Unit::TestCase
     assert_equal(["World domination","A subproject"], @object.projects.map{|i| i.name})
     assert_equal(5, @object.actions.length)
     assert_equal(["Create giant laser beam","Threaten to destroy Barbados","An action","Take over world","Hello there"], @object.actions.map{|i| i.name})
-    assert_equal(["email","email-task","errand","hello","testing","there","work"], GTD.contexts)
-    assert_equal(7, GTD.contexts.length)
+    assert_equal(["email","email-task","errand","hello","testing","there","work"], GTDContexts.contexts)
+    assert_equal(7, GTDContexts.contexts.length)
   end
   def test_projects
     test_GTDFile_initialize
@@ -84,11 +90,8 @@ class TestGTD < Test::Unit::TestCase
     end
   end
   def test_GTD_singleton_calls
-    contexts = GTD.get_contexts
+    contexts = GTDContexts.contexts
     GTD.process_directory
     @na = GTD.next_actions
-    assert_equal(7, @na.length) # Careful. This relies on the contexts of test_example
-    GTD.clear_contexts
-    GTD.add_contexts(*contexts)
   end
 end

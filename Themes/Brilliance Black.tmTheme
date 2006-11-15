@@ -18,11 +18,11 @@
 				<key>foreground</key>
 				<string>#CCCCCC</string>
 				<key>invisibles</key>
-				<string>#CDCDCD1A</string>
+				<string>#CCCCCC1A</string>
 				<key>lineHighlight</key>
 				<string>#0000801A</string>
 				<key>selection</key>
-				<string>#000C8180</string>
+				<string>#0010B499</string>
 			</dict>
 		</dict>
 		<dict>
@@ -394,7 +394,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#0007FF33</string>
+				<string>#0008FF33</string>
 				<key>foreground</key>
 				<string>#0086FF</string>
 			</dict>
@@ -649,7 +649,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#5F3F8033</string>
+				<string>#603F8033</string>
 				<key>foreground</key>
 				<string>#603F80</string>
 			</dict>
@@ -664,7 +664,7 @@
 				<key>fontStyle</key>
 				<string></string>
 				<key>foreground</key>
-				<string>#BC7FFF</string>
+				<string>#BC80FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -677,7 +677,7 @@
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#BC7FFF</string>
+				<string>#BC80FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -805,7 +805,7 @@
 				<key>background</key>
 				<string>#333333</string>
 				<key>foreground</key>
-				<string>#CDCDCD</string>
+				<string>#CCCCCC</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1174,9 +1174,9 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#00048033</string>
+				<string>#00008033</string>
 				<key>foreground</key>
-				<string>#0007FF</string>
+				<string>#0008FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1407,7 +1407,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#00048033</string>
+				<string>#00008033</string>
 				<key>foreground</key>
 				<string>#0008FF4D</string>
 			</dict>
@@ -1581,7 +1581,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#CDCDCD</string>
+				<string>#CCCCCC</string>
 				<key>foreground</key>
 				<string>#000000</string>
 			</dict>
@@ -1796,7 +1796,7 @@
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#330000</string>
+				<string>#330004</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1858,7 +1858,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#400021</string>
+				<string>#400022</string>
 				<key>foreground</key>
 				<string>#FF40A3</string>
 			</dict>
@@ -1966,33 +1966,35 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>meta.headers.blog</string>
+			<string>ß Blog Post / Email Message</string>
 			<key>scope</key>
-			<string>text.blog -(text.blog text)</string>
+			<string>text.blog, text.mail</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#FFFFFF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>meta.headers.blog</string>
-			<key>scope</key>
-			<string>meta.headers.blog</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#FFFFFF</string>
+				<string>#DCDCDC</string>
 				<key>foreground</key>
-				<string>#666666</string>
+				<string>#333333</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>meta.headers.blog keyword.other.blog</string>
+			<string>ß Post Content</string>
 			<key>scope</key>
-			<string>meta.headers.blog keyword.other.blog</string>
+			<string>text.blog text, text.mail text</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#000000</string>
+				<key>foreground</key>
+				<string>#CCCCCC</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>ß Post Header Keys</string>
+			<key>scope</key>
+			<string>meta.header.blog keyword.other, meta.header.mail keyword.other</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2005,9 +2007,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>meta.headers.blog string.unquoted.blog</string>
+			<string>ß Post Header Values</string>
 			<key>scope</key>
-			<string>meta.headers.blog string.unquoted.blog</string>
+			<string>meta.header.blog string.unquoted.blog, meta.header.mail string.unquoted</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2041,7 +2043,7 @@
 			<key>name</key>
 			<string>Misc Punctuation</string>
 			<key>scope</key>
-			<string>meta.brace.erb, source.ruby.embedded.source.brace, punctuation.section.dictionary, punctuation.terminator.dictionary, punctuation.separator.object, punctuation.separator.statement</string>
+			<string>meta.brace.erb, source.ruby.embedded.source.brace, punctuation.section.dictionary, punctuation.terminator.dictionary, punctuation.separator.object, punctuation.separator.statement, punctuation.separator.key-value.css</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -2103,7 +2105,7 @@
 				<key>fontStyle</key>
 				<string></string>
 				<key>foreground</key>
-				<string>#CDCDCD</string>
+				<string>#CCCCCC</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2245,7 +2247,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#CDCDCD</string>
+				<string>#CCCCCC</string>
 			</dict>
 		</dict>
 		<dict>

@@ -112,6 +112,7 @@
 
 - (void) dealloc
 {
+	NSLog(@"%s %@", _cmd, self);
 	[fSubnodes release];
 	
 	[super dealloc];
@@ -174,17 +175,17 @@
 
 - (void) appendSubnodes:(NSArray *)arrayOfSubnodes
 {
-	NSArray *	oldChildren = fSubnodes;
-	NSArray *	newChildren = arrayOfSubnodes;
-
 	if(fSubnodes == nil)
 	{
-		fSubnodes = [newChildren retain];
+		fSubnodes = [arrayOfSubnodes copy];
 	}
 	else
 	{
-		fSubnodes = [fSubnodes arrayByAddingObjectsFromArray:newChildren];
+		NSArray *	oldChildren = fSubnodes;
+		
+		fSubnodes = [fSubnodes arrayByAddingObjectsFromArray:arrayOfSubnodes];
 		[fSubnodes retain];
+		
 		[oldChildren release];
 	}
 }

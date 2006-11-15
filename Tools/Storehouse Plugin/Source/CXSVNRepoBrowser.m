@@ -1,3 +1,16 @@
+/*
+   CXSVNRepoBrowser.m
+   Storehouse
+   
+	TODO: automagically process multiple items
+	TODO: show the new item in the browser before committing,
+			so the user knows exactly what's going to happen.
+
+   Created by Chris Thomas on 2006-11-13.
+   Copyright 2006 Chris Thomas. All rights reserved.
+*/
+
+
 #import "CXSVNRepoBrowser.h"
 #import "CXSVNRepoNode.h"
 #import "CXTask.h"
@@ -73,7 +86,8 @@
 		sCommitWindowNib = [[NSNib alloc] initWithNibNamed:@"CommitPrompt" bundle:[NSBundle bundleForClass:[self class]]];
 	}
 	
-	[sCommitWindowNib instantiateNibWithOwner:self topLevelObjects:&array];
+	[sCommitWindowNib instantiateNibWithOwner:self topLevelObjects:&fCommitWindowTopLevelObjects];
+	[fCommitWindowTopLevelObjects retain];
 }
 
 + (CXSVNRepoBrowser *) browser
@@ -100,8 +114,7 @@
 #else
 	[sBrowserNib instantiateNibWithOwner:self topLevelObjects:&array];
 #endif
-		
-	
+			
 	if(array == nil)
 	{
 		NSLog(@"Storehouse: can't find the browser nib!");
@@ -110,7 +123,7 @@
 	{
 		//
 		// Find the new repo object
-		//
+		//		
 		for( unsigned int index = 0; index < [array count]; index += 1 )
 		{
 			id	object = [array objectAtIndex:index];
@@ -123,23 +136,19 @@
 	
 		if(outBrowser != nil)
 		{
+			outBrowser->fBrowserWindowTopLevelObjects = [array retain];
 			[[outBrowser->fOutlineView window] makeKeyAndOrderFront:self];
 		}
-	
-//		outBrowser->fStatusWindow = [[CXTransientStatusWindow alloc] init];
 	
 		// Load the requested URL
 		if(URL != nil)
 		{
 			[outBrowser loadURL:URL];
 		}
-	
-//		[outBrowser->fStatusWindow showStatus:@"testing" onParent:[outBrowser->fOutlineView window]];
-
 	}
 	
 	
-	return [outBrowser autorelease];
+	return outBrowser;//[outBrowser autorelease];
 }
 
 - (CXSVNRepoNode *) visibleNodeForURL:(NSString *)URL
@@ -229,7 +238,7 @@
 	[[fOutlineView tableColumnWithIdentifier:@"1"] setDataCell:cell];
 	
 	// TODO: accept filenanes and URLs
-	[fOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:NSStringPboardType, nil]];
+	[fOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, NSStringPboardType, nil]];
 
 	[fOutlineView setDraggingSourceOperationMask:NSDragOperationCopy|NSDragOperationMove forLocal:NO];
 	[fOutlineView setDraggingSourceOperationMask:NSDragOperationCopy|NSDragOperationMove forLocal:YES];
@@ -280,8 +289,12 @@
 
 //		[fRootNode setDelegate:self];
 		[fOutlineView reloadData];
-
-		[[fURLField window] setTitle:[NSString stringWithFormat:@"svn repo: %@", [URL lastPathComponent]]];
+		
+		NSArray *	pathComponents	= [URL pathComponents];
+		NSString *	windowTitle1	= [pathComponents objectAtIndex:1];
+		NSString *	windowTitle2	= [pathComponents lastObject];
+		
+		[[fURLField window] setTitle:[NSString stringWithFormat:@"svn %@ %@", windowTitle1, windowTitle2]];
 	}
 }
 
@@ -335,6 +348,25 @@
 #endif
 
 // TODO: item validation
+
+- (IBAction) contextExportFiles:(id)sender
+{
+	CXSVNRepoNode *	node;
+	node = [fOutlineView itemAtRow:[fOutlineView selectedRow]];
+	
+//	[self exportNode:node];
+}
+
+- (IBAction) contextRemoveFile:(id)sender
+{
+	CXSVNRepoNode *	node;
+	node = [fOutlineView itemAtRow:[fOutlineView selectedRow]];
+	
+	[self askForCommitWithVerb:@"Remove"
+				prompt:@"Reason for deleting these files?"
+				URLs:[NSArray arrayWithObject:[node URL]]
+				action:@selector(removeURL:withDescription:)];
+}
 
 - (IBAction) contextRefresh:(id)sender
 {
@@ -528,36 +560,55 @@
 	return NSDragOperationCopy;
 }
 
+// Move or copy in the repository
+- (BOOL) receiveURLDragFromPasteboard:(NSPasteboard *)pboard atNode:(CXSVNRepoNode *)atNode dragOperation:(NSDragOperation)dragOperationMask
+{
+	NSString *		string = [pboard stringForType: NSStringPboardType];
+	NSArray *		URLsToCopy;
+	SEL				action = @selector(copyURLAction:);
+
+	URLsToCopy = [string componentsSeparatedByString:@"\n"];
+
+	if((dragOperationMask & NSDragOperationMove) == NSDragOperationMove)
+	{
+		action = @selector(moveURLAction:);
+	}
+
+
+	// get us out of the drag and drop loop
+	[self performSelector:action
+				withObject:[NSArray arrayWithObjects:[URLsToCopy objectAtIndex:0], [atNode URL], nil]
+				afterDelay:0.0];
+	return YES;
+}
+
+// Import into the repository
+- (BOOL) receiveFilenameDragFromPasteboard:(NSPasteboard *)pboard atNode:(CXSVNRepoNode *)atNode dragOperation:(NSDragOperation)dragOperationMask
+{
+	NSArray *		filePaths = [pboard propertyListForType:NSFilenamesPboardType];
+	SEL				action = @selector(importFilesAction:);
+
+	// get us out of the drag and drop loop
+	[self performSelector:action
+				withObject:[NSArray arrayWithObjects:[atNode URL], filePaths, nil]
+				afterDelay:0.0];
+	return YES;
+}
+
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index
 {
 	NSPasteboard * pboard = [info draggingPasteboard];
 	BOOL			accepted = NO;
 	
-	if ([pboard availableTypeFromArray:[NSArray arrayWithObject: NSStringPboardType]])
+	if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]])
 	{
-		NSString *	string = [pboard stringForType: NSStringPboardType];
-		NSArray *	URLsToCopy;
-		SEL			action = @selector(copyURLAction:);
-
-		URLsToCopy = [string componentsSeparatedByString:@"\n"];
-
-		// get us out of the drag and drop loop
-		
-		if (([info draggingSourceOperationMask] & NSDragOperationMove) == NSDragOperationMove)
-		{
-			action = @selector(moveURLAction:);
-		}
-
-		[self performSelector:action
-					withObject:[NSArray arrayWithObjects:[URLsToCopy objectAtIndex:0], [item URL], nil]
-					afterDelay:0.0];
-		accepted = YES;
+		accepted = [self receiveURLDragFromPasteboard:pboard atNode:item dragOperation:[info draggingSourceOperationMask]];
+	}
+	else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
+	{
+		accepted = [self receiveFilenameDragFromPasteboard:pboard atNode:item dragOperation:[info draggingSourceOperationMask]];
 	}
 
-
-//	[outlineView reloadData];
-//	[outlineView selectItems:item byExtendingSelection:NO];
-	
 	return accepted;
 }
 
@@ -575,6 +626,18 @@
 				action:@selector(moveURL:toURL:withDescription:)];
 	
 }
+
+- (void) importFilesAction:(NSArray *)args
+{
+	NSString *				destPath			= [args objectAtIndex:0];
+	NSArray *				filesToImport		= [args objectAtIndex:1];
+
+	[self askForCommitWithVerb:@"Import:"
+				prompt:@"Summary?"
+				URLs:[NSArray arrayWithObjects:[filesToImport objectAtIndex:0], destPath, nil]
+				action:@selector(importLocalPath:toURL:withDescription:)];
+}
+
 
 - (void) moveURLAction:(NSArray *)args
 {
@@ -649,11 +712,10 @@
 //	NSLog(@"%s %@", _cmd, status);
 
 // TODO: report status
-//	[fStatusWindow showStatus:status onParent:[fOutlineView window]];
 	
-/*	[[[fOutlineView tableColumnWithIdentifier:@"1"] headerCell] setStringValue:status];
+	[[[fOutlineView tableColumnWithIdentifier:@"1"] headerCell] setStringValue:status];
 	[[fOutlineView headerView] setNeedsDisplay:YES];
-*/}
+}
 
 
 #if 0
@@ -852,10 +914,9 @@
 
 
 #if 0
+#pragma mark -
 #pragma mark Task core
 #endif
-
-// TODO: checkout, delete, export, add/import?
 
 - (void) makeDirAtNode:(CXSVNRepoNode *)node
 {
@@ -868,13 +929,21 @@
 
 - (void) startingTask
 {
-	[self startSpinner];
+	fRunningTaskCount += 1;
+	if( fRunningTaskCount == 1 )
+	{
+		[self startSpinner];
+	}
 }
 
 - (void) exitedSVNWithStatus:(int)terminationStatus userInfo:(id)userInfo
-{	
-	[self stopSpinner];
-	
+{
+	fRunningTaskCount -= 1;
+	if( fRunningTaskCount == 0 )
+	{
+		[self stopSpinner];
+	}
+
 	if( terminationStatus == 0 )
 	{
 		NSArray *	refreshNodes = [userInfo valueForKey:@"refreshNodes"];
@@ -940,6 +1009,7 @@
 
 - (void) closeBrowser
 {
+	NSWindow *	window = [fOutlineView window];
 	//
 	// SVNRepoBrowserWillClose notification may release us, so keep us alive
 	// long enough to safely order out the window.
@@ -947,14 +1017,24 @@
 	[self retain];
 
 	[fDelegate SVNRepoBrowserWillClose:self];
-	[[fOutlineView window] orderOut:nil];
+
+	[window orderOut:nil];
+
+#if !TMPLUGIN
+	// Release top-level objects
+	[fCommitWindowTopLevelObjects makeObjectsPerformSelector:@selector(release)];
+	[fCommitWindowTopLevelObjects release];
+	[fBrowserWindowTopLevelObjects makeObjectsPerformSelector:@selector(release)];
+	[fBrowserWindowTopLevelObjects release];
+#endif
+
+	[fSVNClient setObserver:nil];
 
 	[self autorelease];
 }
 
 - (void) dealloc
 {
-	[fStatusWindow release];
 	[fRootNode release];
 	[fRepoLocation release];
 	[fSVNClient release];

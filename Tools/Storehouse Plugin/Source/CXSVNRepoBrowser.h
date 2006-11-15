@@ -2,7 +2,6 @@
 #define _CXSVNRepoBrowser_H_
 
 @class CXSVNRepoNode;
-@class CXTransientStatusWindow;
 @class CXSVNClient;
 
 // TODO: wrap in NSWindowController
@@ -17,10 +16,13 @@ typedef enum
 
 @interface CXSVNRepoBrowser : NSObject
 {
+				NSArray *				fCommitWindowTopLevelObjects;
+				NSArray *				fBrowserWindowTopLevelObjects;
 				NSString *				fRepoLocation;
 				CXSVNRepoNode *			fRootNode;
 				CXSVNClient *			fSVNClient;
 				id 						fDelegate;
+				int						fRunningTaskCount;
 
 	IBOutlet	NSOutlineView *			fOutlineView;
 	IBOutlet	NSView *				fURLHeaderView;
@@ -28,15 +30,12 @@ typedef enum
 	IBOutlet	NSTextField *			fURLField;
 	IBOutlet	NSButton *				fGoButton;
 //				NSTableHeaderCell *		fTableHeaderCell;
-		
 	IBOutlet	NSTextField *			fCommitVerbField;
 	IBOutlet	NSTextField *			fCommitPromptField;
 	IBOutlet	NSTextField *			fCommitAnswerField;
 	IBOutlet	NSPanel *				fCommitPromptWindow;
 	IBOutlet	NSTextField *			fCommitURLDestination;
 	IBOutlet	NSTextField *			fCommitURLSource;
-	
-	CXTransientStatusWindow *			fStatusWindow;
 }
 
 + (CXSVNRepoBrowser *) browser;
@@ -63,7 +62,8 @@ typedef enum
 - (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector;
 - (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector options:(CXSVNCommitOptions)options;
 
-
+- (IBAction) contextRemoveFile:(id)sender;
+- (IBAction) contextExportFiles:(id)sender;
 - (IBAction) contextRefresh:(id)sender;
 - (IBAction) contextMakeDir:(id)sender;
 

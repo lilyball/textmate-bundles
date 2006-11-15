@@ -220,7 +220,7 @@ static NSMutableDictionary	* sTaskQueues = nil;
 			// Launch it if nothing else is executing right now
 			if( [queueArray count] == 1 )
 			{
-				NSLog(@"launching %@", self);
+//				NSLog(@"launching %@", self);
 				[self execute];
 			}
 		}

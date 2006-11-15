@@ -21,9 +21,13 @@
 
 - (void) moveURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc;
 - (void) makeDirAtURL:(NSString *)destURL withDescription:(NSString *)desc;
+- (void) makeDirsAtURLs:(NSArray *)addDirURLs withDescription:(NSString *)desc;
+- (void) removeURLs:(NSArray *)removeURLs withDescription:(NSString *)desc;
+- (void) removeURL:(NSString *)destURL withDescription:(NSString *)desc;
 - (void) copyURL:(NSString *)sourceURL toURL:(NSString *)destURL withDescription:(NSString *)desc;
-- (void) exportURL:(NSString *)sourceURL toLocalPath:(NSString *)path;
 - (void) importLocalPath:(NSString *)sourcePath toURL:(NSString *)destURL withDescription:(NSString *)desc;
+
+- (void) exportURL:(NSString *)sourceURL toLocalPath:(NSString *)path;
 
 - (void) listContentsOfURL:(NSString *)sourceURL toSelector:(SEL)sel ofObject:(id)target;
 

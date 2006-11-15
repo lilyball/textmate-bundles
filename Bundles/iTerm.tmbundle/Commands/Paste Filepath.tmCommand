@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>export SHELL_NAME=${SHELL_NAME:="TextMate Shell"}
 "$TM_BUNDLE_SUPPORT/new.sh"
-PASTE=$(echo "$TM_SELECTED_TEXT" | sed s/\"/\\\\\"/g)
+PASTE=$(echo "$TM_FILEPATH" | sed s/\"/\\\\\"/g)
 osascript &lt;&lt; END
 tell application "iTerm"
 	tell first terminal
@@ -23,10 +23,10 @@ END
 	<key>keyEquivalent</key>
 	<string>^I</string>
 	<key>name</key>
-	<string>Paste Selection</string>
+	<string>Paste Filepath</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>uuid</key>
-	<string>02E5581D-BCC8-4479-A9A9-A5E7CEE8293E</string>
+	<string>BED3AE43-7F29-4F92-B2F1-3361B4ACC71A</string>
 </dict>
 </plist>

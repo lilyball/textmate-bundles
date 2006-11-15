@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"$TM_BUNDLE_SUPPORT/new.sh"
+	<string># Start a new shell if needed, otherwise show the one with the right name.
+export SHELL_NAME=${SHELL_NAME:="TextMate Shell"}
+"$TM_BUNDLE_SUPPORT/new.sh"
 </string>
 	<key>input</key>
 	<string>none</string>
@@ -15,8 +17,6 @@
 	<string>Interactive Shell</string>
 	<key>output</key>
 	<string>discard</string>
-	<key>scope</key>
-	<string>source</string>
 	<key>uuid</key>
 	<string>E7E68111-54E4-4C01-8DBA-9D9FFD38FF2C</string>
 </dict>

@@ -17,7 +17,10 @@
 XCODE_PROJECT_FILE=$(ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb")
 export XCODE_PROJECT_FILE
 
-"${TM_BUNDLE_SUPPORT}/bin/run_xcodebuild.sh" &amp;&amp; "${TM_BUNDLE_SUPPORT}/bin/run_xcode_target.rb" -project_dir="$XCODE_PROJECT_FILE"
+export XCODE_RUN_BUILD=1
+"${TM_BUNDLE_SUPPORT}/bin/run_xcodebuild.sh"
+
+#&amp;&amp; "${TM_BUNDLE_SUPPORT}/bin/run_xcode_target.rb" -project_dir="$XCODE_PROJECT_FILE"
 </string>
 	<key>input</key>
 	<string>none</string>

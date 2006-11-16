@@ -126,7 +126,7 @@ div.error h2, div.warning h2, div.info h2 {
 }
 
 div.error div.inner :link, div.warning div.inner :link, div.info div.inner :link {
-	font-family: "Bitstream Vera Sans Mono", monospace;
+	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
 }
 
 div.error, div.warning, div.info {
@@ -469,6 +469,12 @@ class Formatter
 		  %x{cd "#{$support}"; bin/play Sounds/#{sound} &>/dev/null &}
 		end
 	end
+
+  def run_executable( name )
+    @mup.new_div!("target") do
+			@mup.h2(name)
+    end
+  end
 	
 	def target_name(verb, name, style = nil)
 		@mup.end_div!("target")
@@ -506,8 +512,7 @@ class Formatter
 
 		play_sound 'Harp.wav'
 
-	end
-	
+	end	
 	def failure
 		@mup.new_div!("error", "", :show) do
  			@mup.h2 do

@@ -7,6 +7,7 @@
 # OpenBSD license. 
 #
 #
+require File.dirname(__FILE__) + '/run_xcode_target'
 
 #
 # String helpers for build command tokenization.
@@ -190,6 +191,16 @@ formatter.message_prefix(last_line)
 
 unless success.nil? then
 	formatter.success( success[1] )
+	
+	if ENV['XCODE_RUN_BUILD']
+  	formatter.run_executable('Test Run')
+	  runner = Xcode::HTMLProjectRunner.new(ENV['PROJECT_FILE'])
+	  output = runner.run(false) # false -> don't detach STDOUT
+	  if not output.nil?
+	    output.each_line {|line| formatter.build_noise(line)}
+    end
+  end
+	
 else
 	formatter.failure
 end

@@ -22,15 +22,15 @@ I would advise you set them to set their key equivilents to the home and end key
 	|(?<=/\*).*?(?=\*/)                            # /* Contents of Comment Blocks */
 	|/\*.*?\*/                                     # /* Comment Blocks */
 	
-	|(?<=\')[\'\n]*?(?=\')                         # 'String Single'
-	|(?<=\[)[\[\]\n]*?(?=\])                       # [Square Brackets]
-	|(?<=\{)[\{\}\n]*?(?=\})                       # {Curly Brackets}
+	|(?<=\')[^\'\n]*?(?=\')                         # 'String Single'
+	|(?<=\")[^\"\n]*(?=\")                         # String Double
+	|(?<=\[)[^\[\]\n]*?(?=\])                       # [Square Brackets]
+	|(?<=\{)[^\{\}\n]*?(?=\})                       # {Curly Brackets}
 	
 	|\#[0-9a-fA-F]{3,6}                            # Hex Colors
 	|(?<![\d])-?\d+(?:\.\d+)?(?!=\d)               # Number 123 123.123 -123
 	|[@$!]\w+\b                                    # @variables $variables !etc
 	
 	|(?<=[\(,:])[^\(\),\n]*(?=[\),;])              # Comma Delimitated
-	|(?<=\")[^\"\n]*(?=\")                         # String Double
 	# Thomas Aylott <oblivious@subtleGradient.com> #
 	# Balance Jr. Regular Expression version 2.8   #

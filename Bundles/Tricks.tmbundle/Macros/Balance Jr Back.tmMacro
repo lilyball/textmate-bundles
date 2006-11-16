@@ -30,16 +30,16 @@
 |(?&lt;=/\*).*?(?=\*/)                            # /* Contents of Comment Blocks */
 |/\*.*?\*/                                     # /* Comment Blocks */
 
-|(?&lt;=\')[\'\n]*?(?=\')                         # 'String Single'
-|(?&lt;=\[)[\[\]\n]*?(?=\])                       # [Square Brackets]
-|(?&lt;=\{)[\{\}\n]*?(?=\})                       # {Curly Brackets}
+|(?&lt;=\')[^\'\n]*?(?=\')                         # 'String Single'
+|(?&lt;=\")[^\"\n]*(?=\")                         # String Double
+|(?&lt;=\[)[^\[\]\n]*?(?=\])                       # [Square Brackets]
+|(?&lt;=\{)[^\{\}\n]*?(?=\})                       # {Curly Brackets}
 
 |\#[0-9a-fA-F]{3,6}                            # Hex Colors
 |(?&lt;![\d])-?\d+(?:\.\d+)?(?!=\d)               # Number 123 123.123 -123
 |[@$!]\w+\b                                    # @variables $variables !etc
 
 |(?&lt;=[\(,:])[^\(\),\n]*(?=[\),;])              # Comma Delimitated
-|(?&lt;=\")[^\"\n]*(?=\")                         # String Double
 # Thomas Aylott &lt;oblivious@subtleGradient.com&gt; #
 # Balance Jr. Regular Expression version 2.8   #</string>
 				<key>ignoreCase</key>

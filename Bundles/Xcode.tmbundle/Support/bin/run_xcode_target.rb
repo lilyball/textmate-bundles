@@ -20,6 +20,17 @@ class Xcode
       @objects      = @project_data['objects']
       @root_object  = @objects[@project_data['rootObject']]
     end
+
+    def user_settings_data
+      user_file     = @project_path + "/#{ENV['USER']}.pbxuser"
+      user          = PropertyList::load(File.new(user_file)) if File.exists?(user_file)
+    end
+      
+    def active_configuration_name
+      user            = user_settings_data
+      active_config   = user && user[@project_data['rootObject']]['activeBuildConfigurationName']      
+      active_config || 'Release'
+    end
     
     def results_path
       # default to global build results
@@ -28,16 +39,43 @@ class Xcode
       
       # || user pref for SYMROOT + the active configuration
       if Xcode.supports_configurations? then
-        userFile      = @project_path + "/#{ENV['USER']}.pbxuser"
-        user          = PropertyList::load(File.new(userFile)) if File.exists?(userFile)
+        user          = user_settings_data
         userBuild     = user && user[@project_data['rootObject']]['userBuildSettings']
-        activeConfig  = user && user[@project_data['rootObject']]['activeBuildConfigurationName']
         if userBuild && userBuild['SYMROOT']
           dir = userBuild['SYMROOT']
         end
-        dir += "/#{activeConfig || "Release"}"
+        dir += "/#{active_configuration_name}"
       end
       dir
+    end
+    
+    def targets
+      @root_object['targets'].map { |t| Target.new(self, dereference(t)) }
+    end
+    
+    def dereference(key)
+      @objects[key]
+    end
+    
+    # build configuration
+    class BuildConfiguration
+      def initialize(project, target, config_data)
+        @project      = project
+        @target       = target
+        @config_data  = config_data
+      end
+      
+      def name
+        @config_data['name']
+      end
+      
+      def setting(name)
+        @config_data['buildSettings'][name]
+      end
+      
+      def product_name
+        setting('PRODUCT_NAME')
+      end
     end
     
     # targets
@@ -52,14 +90,24 @@ class Xcode
         @target_data['name']
       end
       
+      def configurations
+        config_list = @project.dereference(@target_data['buildConfigurationList'])
+        config_list = config_list['buildConfigurations']
+        config_list.map {|config| BuildConfiguration.new(@project, self, @project.dereference(config)) }
+      end
+      
+      def configuration_named(name)
+        configurations.find { |c| c.name == name }
+      end
+      
       def product_path
-        productKey = @target_data['productReference']
-        product = @project.objects[productKey]
+        product_key = @target_data['productReference']
+        product = @project.dereference(product_key)
         product['path']
       end
       
       def inspect
-        "Target name:#{@target_data['name']} productName:#{@target_data['productName']} path:#{product_path}"
+        "Target name:#{@target_data['name']}\nproductName:#{@target_data['productName']}\npath:#{product_path}\n---\n"
       end
       
       def product_type
@@ -79,7 +127,7 @@ class Xcode
         product_type == :tool
       end
       
-      def run(detach = true)
+      def run(&block)
         dir_path  = @project.results_path
         file_path = product_path
         escaped_dir = shell_escape(File.expand_path(dir_path))
@@ -87,12 +135,16 @@ class Xcode
         
         if is_application?
           # TODO: we need to parse the build configurations to retrieve the PRODUCT_NAME key to be able to find the executable so that we can directly run it and thus remain attached to the the output stream. 'productName' seems to be obsolete and ignored.
-          # if detach then
-            cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} open ./#{escaped_file}"
-          # else
-          #   cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} ./#{escaped_file}/Contents/MacOS/#{@target_data['productName']}"
-          # end
-          %x{#{cmd}}
+          setup_cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir}"
+          if block_given? and Xcode.supports_configurations? then
+            cmd = "#{setup_cmd} ./#{escaped_file}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}"
+            block.call(:start, file_path )
+            IO.popen(cmd) {|f| block.call(:output, f.gets )}
+          else
+            cmd = "#{setup_cmd} open ./#{escaped_file}"
+            %x{#{cmd}}
+          end
+          
         else
           cmd  = "clear; cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} ./#{escaped_file}; echo -ne \\\\n\\\\nPress RETURN to Continue...; read foo;"
           cmd += 'osascript &>/dev/null'
@@ -111,15 +163,6 @@ class Xcode
         
       end
     end
-    
-    def targets
-      @root_object['targets'].map { |t| Target.new(self, dereference(t)) }
-    end
-
-  private
-      def dereference(key)
-        @objects[key]
-      end
   end
   
   class ProjectRunner
@@ -127,11 +170,11 @@ class Xcode
       @project = Xcode::Project.new(projdir)
     end
     
-    def run(detach = true)
+    def run(&block)
       targets = @project.targets.select { |t| [:application, :tool].include?(t.product_type) }
       case
       when targets.size == 1
-        targets.first.run(detach)
+        targets.first.run(&block)
       when targets.size == 0
         failed(targets, "The project has no immediately executable target to run.")
       when ENV['XC_TARGET_NAME'].nil?
@@ -140,7 +183,7 @@ class Xcode
         info "Will try to run target #{ENV['XC_TARGET_NAME']}"
         found_target = targets.find { |t| t.name == ENV['XC_TARGET_NAME'] }
         if found_target
-          found_target.run(detach)
+          found_target.run(&block)
         else
           failed(targets, "No such target: #{ENV['XC_TARGET_NAME']}")
         end

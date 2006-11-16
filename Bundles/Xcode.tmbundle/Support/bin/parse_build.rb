@@ -192,12 +192,17 @@ formatter.message_prefix(last_line)
 unless success.nil? then
 	formatter.success( success[1] )
 	
+	# should we run the build results?
 	if ENV['XCODE_RUN_BUILD']
-  	formatter.run_executable('Test Run')
 	  runner = Xcode::HTMLProjectRunner.new(ENV['PROJECT_FILE'])
-	  output = runner.run(false) # false -> don't detach STDOUT
-	  if not output.nil?
-	    output.each_line {|line| formatter.build_noise(line)}
+
+	  output = runner.run do |type, line|
+      case type
+      when :start 
+        formatter.run_executable(line)
+      else
+        formatter.build_noise(line)
+  	  end
     end
   end
 	

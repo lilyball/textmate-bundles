@@ -1480,7 +1480,7 @@
 									\.(?:parameter|language|other)
 									(?:\.[^']*)?
 								)?
-							)?\b
+							)?(?:\b|(?&lt;='))
 							([^']*)?
 						(')								# Close String
 					</string>
@@ -1577,7 +1577,7 @@
 									\.(?:parameter|language|other)
 									(?:\.[^"]*)?
 								)?
-							)?\b
+							)?(?:\b|(?&lt;="))
 							([^"]*)?
 						(")								# Close String
 					</string>

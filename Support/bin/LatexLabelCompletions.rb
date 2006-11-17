@@ -8,12 +8,7 @@
 # Helper function
 #####################
 def recursiveFileSearch(initialList,fileExt)
-  if `which kpsewhich`.match(/^no kpsewhich/) then
-    kpsewhich = `locate kpsewhich`.split("\n").grep(/kpsewhich$/)[0]
-  else
-    kpsewhich = "kpsewhich"
-  end
-  extraPathList = ([`"#{kpsewhich}" -show-path=#{fileExt}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')})
+  extraPathList = ([`kpsewhich -show-path=#{fileExt}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')})
   extraPathList.unshift("")
   case fileExt 
     when "bib" then regexp = /\\bibliography\{([^}]*)\}/

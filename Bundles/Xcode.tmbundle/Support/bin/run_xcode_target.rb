@@ -2,7 +2,7 @@
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
-#require 'pp'
+require 'open3'
 
 def shell_escape (str)
   str.gsub(/[{}()`'"\\; $<>&]/, '\\\\\&')
@@ -134,15 +134,28 @@ class Xcode
         escaped_file = shell_escape(file_path)
         
         if is_application?
-          # TODO: we need to parse the build configurations to retrieve the PRODUCT_NAME key to be able to find the executable so that we can directly run it and thus remain attached to the the output stream. 'productName' seems to be obsolete and ignored.
           setup_cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir}"
+
+          # If we have a block, feed it stdout and stderr data
           if block_given? and Xcode.supports_configurations? then
-            cmd = %Q{#{setup_cmd} "./#{escaped_file}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}" 2>&1}
+            cmd = %Q{#{setup_cmd} "./#{escaped_file}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}"}
             block.call(:start, file_path )
             
-            IO.popen(cmd) do |f|
-              f.each_line { |line| block.call(:output, line ) }
+            stdin, stdout, stderr = Open3.popen3(cmd)
+            selections = [stdout, stderr]
+            while not selections.empty?
+              data = select(selections)
+              unless data.nil?
+                data[0].each do |d|
+                  block.call(d == stdout ? :output : :error , d.gets )
+                end
+              end
+              # remove closed descriptors
+              selections.reject! {|s| s.eof?}
             end
+            # IO.popen(cmd) do |f|
+            #   f.each_line { |line| block.call(:output, line ) }
+            # end
           else
             cmd = "#{setup_cmd} open ./#{escaped_file}"
             %x{#{cmd}}

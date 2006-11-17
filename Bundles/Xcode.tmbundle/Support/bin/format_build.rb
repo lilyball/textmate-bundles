@@ -163,6 +163,17 @@ img.icon {
 	margin-left: 2px;
 }
 
+div.console {
+	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
+  color: black;
+}
+
+div.console_error  {
+	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
+  color: red;
+}
+
+
 ENDSTYLE
 
 
@@ -481,6 +492,18 @@ class Formatter
   			@mup.span(name, 'class' => 'name')
   		end
   end
+	
+	def executable_output( line )
+	  @mup.div(:class => 'console') do
+		  @mup.text!( line )
+	  end
+	end
+
+	def executable_error( line )
+	  @mup.div(:class => 'console_error') do
+		  @mup.text!( line )
+	  end
+	end	
 	
 	def target_name(verb, name, style = nil)
 		@mup.end_div!("target")

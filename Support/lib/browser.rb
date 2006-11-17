@@ -12,7 +12,7 @@ module Browser
 
       fav = favorite.to_s.downcase
       browsers.each do |browser|
-        if fav == browser[:id] && %x{ps -xc|grep -sq #{browser[:name]}} then
+        if fav == browser[:id] && (%x{ps -xc|grep -qs #{browser[:name]}}; $?.exitstatus == 0) then
           return if self.send(browser[:id].tr('.', '_') + '_did_load?', url)
         end
       end

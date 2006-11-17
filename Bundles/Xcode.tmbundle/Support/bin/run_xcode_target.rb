@@ -196,7 +196,7 @@ class Xcode
             -e 'activate' \
             -e 'do script "#{cmd.gsub(/[\\"]/, '\\\\\\0')}"' \
             -e 'set position of first window to { 100, 100 }' \
-            -e 'set custom title of first window to "#{file}"' \
+            -e 'set custom title of first window to "#{file_path}"' \
             -e 'end tell'
           }
         end

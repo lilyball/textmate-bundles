@@ -44,7 +44,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;=\.|::)(?=[a-zA-Z])</string>
+			<string>(?&lt;=[^\.]\.|::)(?=[a-zA-Z])</string>
 			<key>end</key>
 			<string>(?&lt;=[a-zA-Z0-9_!?])(?=[^a-zA-Z0-9_!?])</string>
 			<key>name</key>
@@ -65,7 +65,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?=(\.|::)[a-zA-Z][a-zA-Z0-9_!?]*\()(\.|::)</string>
+			<string>(?=([^\.]\.|::)[a-zA-Z][a-zA-Z0-9_!?]*\()(\.|::)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -182,13 +182,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>&lt;=&gt;|&lt;(?!&lt;|=)|&gt;(?!&lt;|=|&gt;)|&lt;=|&gt;=|===|==|=~|!=|!~|\?</string>
+			<string>&lt;=&gt;|&lt;(?!&lt;|=)|&gt;(?!&lt;|=|&gt;)|&lt;=|&gt;=|===|==|=~|!=|!~|(?&lt;=[ \t])\?</string>
 			<key>name</key>
 			<string>keyword.operator.comparison.ruby</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>!|\bnot\b|&amp;&amp;|\band\b|\|\||\bor\b|\^</string>
+			<string>(?&lt;=[ \t])!|\bnot\b|&amp;&amp;|\band\b|\|\||\bor\b|\^</string>
 			<key>name</key>
 			<string>keyword.operator.logical.ruby</string>
 		</dict>

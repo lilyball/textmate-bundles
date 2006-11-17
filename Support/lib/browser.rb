@@ -1,8 +1,12 @@
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
+require 'uri'
+
 module Browser
   class << self
     def load_url(url)
+      url = URI.parse(url.to_s)
+      return if url.scheme.nil?
       browsers = [
         { :name => "Camino",  :id => "org.mozilla.camino" },
         { :name => "OmniWeb", :id => "com.omnigroup.omniweb5" },

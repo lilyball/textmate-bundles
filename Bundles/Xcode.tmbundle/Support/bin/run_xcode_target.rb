@@ -147,15 +147,16 @@ class Xcode
               data = select(selections)
               unless data.nil?
                 data[0].each do |d|
-                  block.call(d == stdout ? :output : :error , d.gets )
+                  line = d.gets
+                  block.call(d == stdout ? :output : :error , line ) unless line.nil?
                 end
               end
+              
               # remove closed descriptors
               selections.reject! {|s| s.eof?}
             end
-            # IO.popen(cmd) do |f|
-            #   f.each_line { |line| block.call(:output, line ) }
-            # end
+
+            block.call(:end, 'Process completed.' )
           else
             cmd = "#{setup_cmd} open ./#{escaped_file}"
             %x{#{cmd}}

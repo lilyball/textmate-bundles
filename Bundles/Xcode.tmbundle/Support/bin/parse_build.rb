@@ -200,8 +200,8 @@ unless success.nil? then
     
     formatter.start_new_section
 	  output = runner.run do |type, line|
-#	    line = htmlize(line)
       case type
+      when :end
       when :start
         formatter.run_executable(line)
       when :output

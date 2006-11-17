@@ -3,6 +3,7 @@
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
 require 'open3'
+require 'pty'
 
 def shell_escape (str)
   str.gsub(/[{}()`'"\\; $<>&]/, '\\\\\&')
@@ -134,27 +135,49 @@ class Xcode
         escaped_file = shell_escape(file_path)
         
         if is_application?
-          setup_cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir}"
+          setup_cmd = %Q{cd "#{escaped_dir}"; env DYLD_FRAMEWORK_PATH="#{escaped_dir}" DYLD_LIBRARY_PATH="#{escaped_dir}"}
 
           # If we have a block, feed it stdout and stderr data
           if block_given? and Xcode.supports_configurations? then
-            cmd = %Q{#{setup_cmd} "./#{escaped_file}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}"}
-            block.call(:start, file_path )
+            executable = "./#{escaped_file}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}"
             
-            stdin, stdout, stderr = Open3.popen3(cmd)
-            selections = [stdout, stderr]
-            while not selections.empty?
-              data = select(selections)
-              unless data.nil?
-                data[0].each do |d|
-                  line = d.gets
-                  block.call(d == stdout ? :output : :error , line ) unless line.nil?
+            cmd = %Q{#{setup_cmd} "#{executable}"}
+            block.call(:start, file_path )
+#            block.call(:output, cmd )  #debugging
+
+            # If the executable doesn't exist, PTY.spawn might not return immediately
+            if not File.exist?(escaped_dir + '/' + executable)
+              block.call(:error, "Executable doesn't exist: #{executable}")
+              return nil
+            end
+            
+            # NSLog needs a tty. PTY.spawn throws a bogus exception when the process exits.
+            begin
+              PTY.spawn(cmd) do |reader, writer, pid|
+                line = reader.gets
+                until line.nil?
+                  block.call(:output, line )
+                  line = reader.gets
                 end
               end
-              
-              # remove closed descriptors
-              selections.reject! {|s| s.eof?}
+            rescue
             end
+            
+            # stdin, stdout, stderr = Open3.popen3(cmd)
+            # descriptors = [stdout, stderr]
+            # descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
+            # 
+            # until descriptors.empty?
+            #   fd_list = select(descriptors)
+            #   unless data.nil?
+            #     fd_list[0].each do |fd|
+            #       line = fd.gets
+            #       block.call(fd == stdout ? :output : :error , line ) unless line.nil?
+            #     end
+            #   end
+            #   # remove closed descriptors
+            #   descriptors.reject! {|s| s.eof?}
+            # end
 
             block.call(:end, 'Process completed.' )
           else

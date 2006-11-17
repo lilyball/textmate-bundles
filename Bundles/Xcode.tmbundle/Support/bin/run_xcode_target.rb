@@ -178,7 +178,7 @@ class Xcode
       when targets.size == 0
         failed(targets, "The project has no immediately executable target to run.")
       when ENV['XC_TARGET_NAME'].nil?
-        failed(targets, "The project has multiple targets. Didn't know which to pick.\nTry setting project's XC_TARGET_NAME variable.")
+        failed(targets, "The project has multiple executable products. Didn't know which to pick.\nTry setting project's XC_TARGET_NAME variable.")
       else
         info "Will try to run target #{ENV['XC_TARGET_NAME']}"
         found_target = targets.find { |t| t.name == ENV['XC_TARGET_NAME'] }

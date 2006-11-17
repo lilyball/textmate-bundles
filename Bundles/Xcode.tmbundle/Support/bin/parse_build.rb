@@ -8,6 +8,8 @@
 #
 #
 require File.dirname(__FILE__) + '/run_xcode_target'
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"  # for htmlize
+
 
 #
 # String helpers for build command tokenization.
@@ -195,14 +197,17 @@ unless success.nil? then
 	# should we run the build results?
 	if ENV['XCODE_RUN_BUILD']
 	  runner = Xcode::HTMLProjectRunner.new(ENV['PROJECT_FILE'])
-
+    
+    formatter.start_new_section
 	  output = runner.run do |type, line|
+	    line = htmlize(line)
       case type
       when :start 
         formatter.run_executable(line)
       else
         formatter.build_noise(line)
   	  end
+  	  STDOUT.flush
     end
   end
 	

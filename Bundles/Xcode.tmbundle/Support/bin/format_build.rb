@@ -470,15 +470,16 @@ class Formatter
 		end
 	end
 
-  def run_executable( name )
+  def start_new_section
 		@mup.end_div!("target")
+    @mup.new_div!("target") {}
+  end
 
-    @mup.new_div!("target") do
+  def run_executable( name )
       @mup.h2 do
   			@mup.text!('Running ')
   			@mup.span(name, 'class' => 'name')
   		end
-    end
   end
 	
 	def target_name(verb, name, style = nil)

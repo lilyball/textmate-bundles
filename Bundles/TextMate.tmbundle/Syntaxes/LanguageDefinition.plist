@@ -75,7 +75,7 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#scope-name-root</string>
+							<string>#scope-root</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -995,7 +995,7 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#scope-name</string>
+							<string>#scope</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1230,7 +1230,7 @@
 														</dict>
 														<dict>
 															<key>include</key>
-															<string>#scope-name</string>
+															<string>#scope</string>
 														</dict>
 														<dict>
 															<key>include</key>
@@ -1386,7 +1386,7 @@
 				</dict>
 			</array>
 		</dict>
-		<key>scope-name</key>
+		<key>scope</key>
 		<dict>
 			<key>patterns</key>
 			<array>
@@ -1485,7 +1485,7 @@
 						(')								# Close String
 					</string>
 					<key>name</key>
-					<string>string.quoted.single.tm-grammar</string>
+					<string>string.quoted.single.scope.tm-grammar</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -1582,11 +1582,11 @@
 						(")								# Close String
 					</string>
 					<key>name</key>
-					<string>string.quoted.double.tm-grammar</string>
+					<string>string.quoted.double.scope.tm-grammar</string>
 				</dict>
 			</array>
 		</dict>
-		<key>scope-name-root</key>
+		<key>scope-root</key>
 		<dict>
 			<key>patterns</key>
 			<array>
@@ -1617,7 +1617,7 @@
 					<key>match</key>
 					<string>(')(?:((?:source|text)(?='|\.)[^']*)|([^']*))(')</string>
 					<key>name</key>
-					<string>string.quoted.single.tm-grammar</string>
+					<string>string.quoted.single.scope.root.tm-grammar</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -1646,7 +1646,7 @@
 					<key>match</key>
 					<string>(")(?:((?:source|text)(?="|\.)[^"]*)|([^"]*))(")</string>
 					<key>name</key>
-					<string>string.quoted.double.tm-grammar</string>
+					<string>string.quoted.double.scope.root.tm-grammar</string>
 				</dict>
 			</array>
 		</dict>

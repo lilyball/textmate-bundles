@@ -137,9 +137,12 @@ class Xcode
           # TODO: we need to parse the build configurations to retrieve the PRODUCT_NAME key to be able to find the executable so that we can directly run it and thus remain attached to the the output stream. 'productName' seems to be obsolete and ignored.
           setup_cmd = "cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir}"
           if block_given? and Xcode.supports_configurations? then
-            cmd = "#{setup_cmd} ./#{escaped_file}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}"
+            cmd = %Q{#{setup_cmd} "./#{escaped_file}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}" 2>&1}
             block.call(:start, file_path )
-            IO.popen(cmd) {|f| block.call(:output, f.gets )}
+            
+            IO.popen(cmd) do |f|
+              f.each_line { |line| block.call(:output, line ) }
+            end
           else
             cmd = "#{setup_cmd} open ./#{escaped_file}"
             %x{#{cmd}}

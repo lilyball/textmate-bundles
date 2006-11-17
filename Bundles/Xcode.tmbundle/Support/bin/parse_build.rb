@@ -8,7 +8,7 @@
 #
 #
 require File.dirname(__FILE__) + '/run_xcode_target'
-require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"  # for htmlize
+#require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"  # for htmlize
 
 
 #
@@ -200,9 +200,8 @@ unless success.nil? then
     
     formatter.start_new_section
 	  output = runner.run do |type, line|
-	    line = htmlize(line)
       case type
-      when :start 
+      when :start
         formatter.run_executable(line)
       else
         formatter.build_noise(line)

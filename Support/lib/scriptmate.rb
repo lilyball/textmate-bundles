@@ -8,18 +8,13 @@ require 'fcntl'
 $SCRIPTMATE_VERSION = "$Revision: 6031 $"
 
 class UserScript
-  # execmatch will be substituted into the #! match.  so write a regular
-  # expression that can recognize the language you want to run.
-  # in python, we:
-  #  @@execmatch = "python(\d.\d)?"
-  @@execmatch = ""
-  # @@execargs is an array of arguments you want to pass to the executable.
-  @@execargs = []
   @@write_content_to_stdin = true
+  @@args = []
+  # @@args is an array of arguments you want to pass to the executable.
   def initialize
     @content = STDIN.read
-    @arg0 = $1       if @content =~ /\A#!([^ \n]*(?:env\s+)?#{@@execmatch})/
-    @args = $1.split if @content =~ /\A#![^ \n]*(?:env\s+)?#{@@execmatch}[ \t]+(.*)$/
+    #match the entire she-bang.
+    @hashbang = $1 if @content =~ /\A#!(.*)$/
     if ENV.has_key? 'TM_FILEPATH' then
       @path = ENV['TM_FILEPATH']
       @display_name = File.basename(@path)
@@ -30,9 +25,9 @@ class UserScript
       @display_name = 'untitled'
     end
   end
-  def filter_args(*args)
-    # args are filtered through this function before the script is run.
-    args
+  def filter_cmd(cmd)
+    # cmd is filtered through this function before the script is run.
+    cmd
   end
   def executable
     # return the path to the executable that will run @content.
@@ -46,9 +41,9 @@ class UserScript
     rd, wr = IO.pipe
     rd.fcntl(Fcntl::F_SETFD, 1)
     ENV['TM_ERROR_FD'] = wr.to_i.to_s
-    args = [executable, @@execargs, Array(@args), e_sh(@path), ARGV.to_a ].flatten
-    args = filter_args(args)
-    stdin, stdout, stderr = Open3.popen3(args.join(" "))
+    cmd = [executable, @@args, Array(@args), e_sh(@path), ARGV.to_a ].flatten
+    cmd = filter_cmd(cmd)
+    stdin, stdout, stderr = Open3.popen3(cmd.join(" "))
     if @@write_content_to_stdin
       Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'
     end
@@ -59,12 +54,12 @@ class UserScript
 end
 
 class ScriptMate
-  @@matename = "ScriptMate" # eg. RubyMate, PyMate, PerlMate...
-  @@langname = "LanguageName" # eg. Python, Ruby, Perl...
+  @@lang = "LanguageName" # eg. Python, Ruby, Perl...
   def initialize(script)
     @error = ""
     STDOUT.sync = true
     @script = script
+    @mate = self.class.name
   end
   def filter_stdout(str)
     # strings from stdout are passed through this method before being printed
@@ -75,11 +70,11 @@ class ScriptMate
     "<span style='color: red'>#{htmlize str}</span>"
   end
   def emit_html
-    puts html_head(:window_title => "#{@script.display_name} — #{@@matename}", :page_title => "#{@@matename}", :sub_title => "#{@@langname}")
+    puts html_head(:window_title => "#{@script.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@@lang}")
     puts <<-HTML
-<div class="#{@@matename.downcase}">		
+<div class="#{@mate.downcase}">		
 <div><!-- first box containing version info and script output -->
-<pre><strong>#{@@matename} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@script.version_string}</strong>
+<pre><strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@script.version_string}</strong>
 <strong>>>> #{@script.display_name}</strong>
 
 <div style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->

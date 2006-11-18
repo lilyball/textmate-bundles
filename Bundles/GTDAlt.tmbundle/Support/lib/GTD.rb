@@ -38,7 +38,7 @@ module GTD
           instructions << [:comment,$1,nil,nil]
         when /^(\s*)$/
           instructions << [:comment,$1,nil,nil]
-        else raise "Parse error on line: #{l}\n. This is not a line I recognize."
+        # else raise "Parse error on line: #{l}.\n This is not a line I recognize."
       end
     end
     return instructions

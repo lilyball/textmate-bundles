@@ -181,7 +181,7 @@ when :HTML
 			transaction.commit {|stream, line| verbose_output += (line + "<br>")}
 		end
 
-		revision_string = verbose_output.match(/Committed revision \d*./)[0]
+		revision_string = $& if verbose_output =~ /Committed revision \d*./
 
 		erb = ERB.new(IO.read(bundle + '/Templates/Commit.rhtml'))
 

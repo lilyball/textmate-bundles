@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/current_word"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
+
+partial_scope = Word.current_word('a-zA-Z._#+-', :left)
+matches = []
+
+# if ENV['TM_SCOPE'] =~ /string\.quoted\.single\.scope\.root\.tm-grammar/
+if ENV['TM_SCOPE'] =~ /string\.quoted\.(single|double)\.scope\.root/
+  $scopes = "source.\ntext.html.\ntext.plain.\ntext.xml."
+else
+  $scopes = DATA.read
+end
+
+$scopes.each_line do |line|
+  matches &lt;&lt; $1 if line =~ /(^#{Regexp.escape partial_scope}[-a-zA-Z._#+]*?\.)/
+end
+
+matches.sort!.uniq!
+
+options = Array.new(matches)
+
+matches.collect! { |m| m.sub(/#{Regexp.escape partial_scope}(.*)/, '\1') }
+options.collect! { |m| m.sub(/^(.*)\.$/, '\1') }
+
+if matches.empty?
+  print ""
+elsif matches.length == 1
+  print matches.first
+elsif index = Dialog.menu(options)
+  print matches[index]
+end
+
+__END__
+
+comment.block.documentation.
+comment.block.empty.
+comment.block.preprocessor.
+comment.line.apostrophe.
+comment.line.asterisk.
+comment.line.at-sign.
+comment.line.backtick.
+comment.line.double-backslash.
+comment.line.double-dash.
+comment.line.double-dash.
+comment.line.double-dot.
+comment.line.double-number-sign.
+comment.line.double-slash.
+comment.line.exclamation.
+comment.line.number-sign.
+comment.line.parentheses.
+comment.line.percent.
+comment.line.percentage.
+comment.line.semicolon.
+comment.line.slash.
+constant.character.entity.
+constant.character.escape.
+constant.language.boolean.
+constant.language.null.
+constant.numeric.base64.
+constant.numeric.float.
+constant.numeric.integer.binary.
+constant.numeric.integer.decimal.
+constant.numeric.integer.hexadecimal.
+constant.numeric.integer.long.
+constant.numeric.integer.octal.
+constant.other.placeholder.
+constant.other.reference.
+constant.other.symbol.
+entity.name.function.
+entity.name.section.
+entity.name.tag.block.
+entity.name.tag.form.
+entity.name.tag.inline.
+entity.name.tag.localname.
+entity.name.tag.meta.
+entity.name.tag.object.
+entity.name.type.class.
+entity.name.type.module.
+entity.other.attribute-name.
+entity.other.inherited-class.
+invalid.deprecated.obsolete.
+invalid.deprecated.trailing-whitespace.
+invalid.illegal.whitespace
+keyword.control.def.
+keyword.control.directive.
+keyword.control.exception.
+keyword.control.import.
+keyword.operator.arithmetic.
+keyword.operator.assignment.
+keyword.operator.comparison.
+keyword.operator.logical.
+keyword.other.directive.
+keyword.other.documentation.
+markup.bold.
+markup.deleted.
+markup.heading.
+markup.italic.
+markup.list.numbered.
+markup.list.unnumbered.
+markup.other.
+markup.quote.
+markup.raw.block.
+markup.raw.inline.
+markup.underline.link.
+meta.array.
+meta.block.
+meta.class.
+meta.definition.
+meta.directive.
+meta.element.
+meta.expression.
+meta.function.
+meta.group.
+meta.header.
+meta.link
+meta.module.
+meta.paragraph.
+meta.preprocessor.
+meta.property.
+meta.scope.
+meta.section
+meta.separator.
+meta.structure.
+meta.tag.block.
+meta.tag.form.
+meta.tag.inline.
+meta.tag.meta.
+meta.tag.object.
+meta.tag.preprocessor.
+meta.toc-list.
+punctuation.definition.arguments.begin.
+punctuation.definition.arguments.end.
+punctuation.definition.array.begin.
+punctuation.definition.array.end.
+punctuation.definition.comment.
+punctuation.definition.constant.
+punctuation.definition.entity.
+punctuation.definition.function.
+punctuation.definition.heading.
+punctuation.definition.keyword.
+punctuation.definition.parameters.begin.
+punctuation.definition.parameters.end.
+punctuation.definition.preprocessor.
+punctuation.definition.string.begin.
+punctuation.definition.string.end.
+punctuation.definition.tag.
+punctuation.definition.variable.
+punctuation.section.array.
+punctuation.section.class.
+punctuation.section.embedded.begin.
+punctuation.section.embedded.end.
+punctuation.section.function.
+punctuation.section.group.
+punctuation.section.scope.
+punctuation.separator.arguments.
+punctuation.separator.array.
+punctuation.separator.continuation.
+punctuation.separator.key-value.
+punctuation.separator.parameters.
+punctuation.terminator.expression.
+punctuation.terminator.function.
+punctuation.terminator.rule.
+punctuation.terminator.statement.
+source.
+storage.modifier.extends.
+storage.modifier.global.
+storage.modifier.implements.
+storage.type.class.
+storage.type.function.
+storage.type.method.
+storage.type.module.
+string.interpolated.
+string.other.
+string.quoted.double.
+string.quoted.other.
+string.quoted.single
+string.quoted.triple.
+string.regexp.
+string.unquoted.heredoc.
+support.class.
+support.constant.
+support.function.
+support.other.
+support.type.
+support.variable.
+text.html.
+text.plain.
+text.xml.
+variable.language.
+variable.other.predefined.
+variable.other.readwrite.global.
+variable.other.register.
+variable.parameter.
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Scope Completion</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>scope</key>
+	<string>string.quoted.single.scope.tm-grammar -punctuation.definition.string.begin, string.quoted.single.scope.root.tm-grammar -punctuation.definition.string.begin, string.quoted.double.scope.tm-grammar -punctuation.definition.string.begin, string.quoted.double.scope.root.tm-grammar -punctuation.definition.string.begin</string>
+	<key>uuid</key>
+	<string>DF2093BA-EA37-4546-9ADA-C17A13CEBDA9</string>
+</dict>
+</plist>

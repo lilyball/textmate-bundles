@@ -85,7 +85,7 @@ HTML
     descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
     until descriptors.empty?
       select(descriptors).shift.each do |io|
-        str = io.gets
+        str = io.read
         if str.to_s.empty? then
           descriptors.delete io
           io.close

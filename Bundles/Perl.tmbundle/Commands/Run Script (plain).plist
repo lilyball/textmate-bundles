@@ -5,17 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>export RUBYLIB="$TM_BUNDLE_SUPPORT/RubyMate${RUBYLIB:+:$RUBYLIB}"
-export TM_RUBY=$(which "${TM_RUBY:-ruby}")
-
-. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "Running ‘${TM_FILENAME:-untitled}’" "Perl"
-echo '&lt;pre&gt;'
-
-"${TM_RUBY}" -- "$TM_BUNDLE_SUPPORT/run_script.rb"
-
-echo '&lt;/pre&gt;'
-html_footer
+	<string>export TM_RUBY=$(which "${TM_RUBY:-ruby}")
+"${TM_RUBY}" -- "$TM_BUNDLE_SUPPORT/PerlMate/perlmate.rb"
 </string>
 	<key>input</key>
 	<string>document</string>

@@ -10,8 +10,9 @@
 require 'optparse'
 require 'rails_bundle_tools'
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
 
-$RAKEMATE_VERSION = "$Revision: 15 $"
+$RAKEMATE_VERSION = "$Revision$"
 
 Dir.chdir TextMate.project_directory
 
@@ -58,21 +59,16 @@ reports = {
   "db:migrate" => "Migration Report"
 }
 
-map = {
-  'TASK'              => task,
-  'COMMAND'           => command,
-  'REPORT_TITLE'      => reports[task] || "Rake Report",
-  'RAKEMATE_VERSION'  => $RAKEMATE_VERSION[/\d+/],
-  'BUNDLE_SUPPORT'    => "tm-file://#{ENV['TM_BUNDLE_SUPPORT'].gsub(/ /, '%20')}",
-  'TM_SUPPORT_PATH'   => ENV['TM_SUPPORT_PATH'],
-  'TM_HTML_LANG'      => ENV['TM_MODE'],
-  'TM_HTML_TITLE'     => 'RakeMate',
-  'TM_HTML_THEME'     => %x{bash -c #{e_sh ". #{e_sh ENV['TM_SUPPORT_PATH']}/lib/webpreview.sh && selected_theme"}}.chomp,
-  'TM_EXTRA_HEAD'     => '',
-  'TM_CSS'            => `cat "${TM_SUPPORT_PATH}/css/webpreview.css" | sed "s|TM_SUPPORT_PATH|${TM_SUPPORT_PATH}|"`,
-}
+puts html_head(:window_title => "#{task} — RakeMate", :page_title => 'RakeMate', :sub_title => 'Rake')
+puts <<-HTML
+    <div id="report_title">#{reports[task] || "Rake Report"}</div>
+    <div id="rake_command">#{command}</div>
+    <div><!-- Script output -->
+			<pre><strong>RakeMate r#{$RAKEMATE_VERSION[/\d+/]}</strong>
 
-puts DATA.read.gsub(/\$\{([^}]+)\}/) { |m| map[$1] }
+<div style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
+HTML
+
 $stdout.flush
 
 output = `#{command}`
@@ -124,46 +120,3 @@ puts <<-HTML
   </body>
 </html>
 HTML
-
-__END__
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <title>RakeMate — ${TASK}</title>
-  <style type="text/css" media="screen">
-    ${TM_CSS}
-    div#report_title {font-size: 1.2em; font-weight: bold; margin-top: 0.5em; margin-bottom: 1em;}
-    div#rake_command {font-size: 0.9em; font-weight: bold; margin-bottom: 0.5em;}
-    table {padding-left: 2em;}
-    td {padding-right: 1.5em;}
-    .time {color: #8c2386; font-weight: bold;}
-    .heading {font-weight: bold;}
-    .done {color: #b55; font-weight: bold; font-size: 1.1em;}
-  </style>
-  <script src="file://${TM_SUPPORT_PATH}/script/default.js" type="text/javascript" language="javascript" charset="utf-8"></script>
-  <script src="file://${TM_SUPPORT_PATH}/script/webpreview.js" type="text/javascript" language="javascript" charset="utf-8"></script>
-  ${TM_EXTRA_HEAD}
-</head>
-<body id="tm_webpreview_body" class="${TM_HTML_THEME}">
-  <div id="tm_webpreview_header">
-    <p class="headline">${TM_HTML_TITLE}</p>
-    <p class="type">${TM_HTML_LANG}</p>
-    <img class="teaser" src="file://${TM_SUPPORT_PATH}/images/gear2.png" alt="teaser" />
-    <div id="theme_switcher">
-      <form action="#" onsubmit="return false;">
-        Theme: 
-        <select onchange="selectTheme(this.value);" id="theme_selector">
-          <option>bright</option>
-          <option>dark</option>
-          <option value="default">no colors</option>
-        </select>
-      </form>
-    </div>
-  </div>
-  <div id="tm_webpreview_content" class="${TM_HTML_THEME}">
-    <div id="report_title">${REPORT_TITLE}</div>
-    <div id="rake_command">${COMMAND}</div>
-    <div><!-- Script output -->

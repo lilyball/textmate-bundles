@@ -8,11 +8,9 @@ require 'fcntl'
 $SCRIPTMATE_VERSION = "$Revision: 6031 $"
 
 class UserScript
-  @@write_content_to_stdin = true
-  @@args = []
-  # @@args is an array of arguments you want to pass to the executable.
-  def initialize
-    @content = STDIN.read
+  def initialize(content, write_content_to_stdin=true)
+    @write_content_to_stdin = write_content_to_stdin
+    @content = content
     #match the entire she-bang.
     @hashbang = $1 if @content =~ /\A#!(.*)$/
     if ENV.has_key? 'TM_FILEPATH' then
@@ -25,26 +23,28 @@ class UserScript
       @display_name = 'untitled'
     end
   end
-  def filter_cmd(cmd)
-    # cmd is filtered through this function before the script is run.
-    cmd
-  end
   def executable
     # return the path to the executable that will run @content.
   end
-
+  def args
+    # return any arguments to be fed to the executable
+    []
+  end
+  def filter_cmd(cmd)
+    # this method is called with this list:
+    #     [executable, args, e_sh(@path), ARGV.to_a ].flatten
+    cmd
+  end
   def version_string
     # return the version string of the executable.
   end
-
   def run
     rd, wr = IO.pipe
     rd.fcntl(Fcntl::F_SETFD, 1)
     ENV['TM_ERROR_FD'] = wr.to_i.to_s
-    cmd = [executable, @@args, Array(@args), e_sh(@path), ARGV.to_a ].flatten
-    cmd = filter_cmd(cmd)
+    cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten)
     stdin, stdout, stderr = Open3.popen3(cmd.join(" "))
-    if @@write_content_to_stdin
+    if @write_content_to_stdin
       Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'
     end
     wr.close
@@ -54,7 +54,6 @@ class UserScript
 end
 
 class ScriptMate
-  @@lang = "LanguageName" # eg. Python, Ruby, Perl...
   def initialize(script)
     @error = ""
     STDOUT.sync = true
@@ -70,7 +69,7 @@ class ScriptMate
     "<span style='color: red'>#{htmlize str}</span>"
   end
   def emit_html
-    puts html_head(:window_title => "#{@script.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@@lang}")
+    puts html_head(:window_title => "#{@script.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@script.lang}")
     puts <<-HTML
 <div class="#{@mate.downcase}">		
 <div><!-- first box containing version info and script output -->
@@ -86,7 +85,7 @@ HTML
     descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
     until descriptors.empty?
       select(descriptors).shift.each do |io|
-        str = io.read
+        str = io.gets
         if str.to_s.empty? then
           descriptors.delete io
           io.close
@@ -99,7 +98,6 @@ HTML
         end
       end
     end
-
     puts '</div></pre></div>'
     puts @error
     puts '<div id="exception_report" class="framed">Program exited.</div>'

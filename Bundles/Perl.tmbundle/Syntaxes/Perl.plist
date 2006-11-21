@@ -1761,7 +1761,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\bq[wx]([^'\(\{\[\w\s])</string>
+			<string>\bqx([^'\(\{\[\w\s])</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -1781,7 +1781,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.other.q.perl</string>
+			<string>string.interpolated.qx.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1791,6 +1791,37 @@
 				<dict>
 					<key>include</key>
 					<string>#variable</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\bqx'</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.perl</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>'</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.perl</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.interpolated.qx.single-quote.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
 				</dict>
 			</array>
 		</dict>
@@ -1831,7 +1862,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\bq([^\(\{\[\w\s])</string>
+			<string>\bqw?([^\(\{\[\w\s])</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -1930,7 +1961,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\bq[qwx]\(</string>
+			<string>\bqq\(</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -1950,7 +1981,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.other.q-paren.perl</string>
+			<string>string.quoted.other.qq-paren.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1969,7 +2000,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\bq[qwx]\{</string>
+			<string>\bqq\{</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -1989,7 +2020,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.other.q-brace.perl</string>
+			<string>string.quoted.other.qq-brace.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -2008,7 +2039,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\bq[qwx]\[</string>
+			<string>\bqq\[</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -2028,7 +2059,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.other.q-bracket.perl</string>
+			<string>string.quoted.other.qq-bracket.perl</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -2047,7 +2078,124 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\bq\(</string>
+			<string>\bqx\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.perl</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.perl</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.interpolated.qx-paren.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#nested_parens_interpolated</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\bqx\{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.perl</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.perl</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.interpolated.qx-brace.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#nested_braces_interpolated</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\bqx\[</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.perl</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\]</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.perl</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.interpolated.qx-bracket.perl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#nested_brackets_interpolated</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\bqw?\(</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -2082,7 +2230,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\bq\{</string>
+			<string>\bqw?\{</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -2117,7 +2265,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\bq\[</string>
+			<string>\bqw?\[</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>

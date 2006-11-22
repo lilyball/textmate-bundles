@@ -2,13 +2,13 @@ require File.join(File.dirname(__FILE__),'escape.rb')
 module Dialog
 class << self
   def request_color(string)
-    string = '#999' unless string
-    color  = ''
-    prefix, string = string.match(/(#?)(.*)/)[1,2]
+    string = '#999' unless string.match(/#?[0-9A-F]{3,6}/i)
+    color  = string
+    prefix, string = string.match(/(#?)([0-9A-F]{3,6})/)[1,2]
     string = $1 * 2 + $2 * 2 + $3 * 2 if string =~ /^(.)(.)(.)$/
     def_col = ' default color {' + string.scan(/../).map { |i| i.hex * 257 }.join(",") + '}'
     col = `osascript 2>/dev/null -e 'tell app "TextMate" to choose color#{def_col}'`
-    return false if col == ""
+    return color if col == ""
     col = col.scan(/\d+/).map { |i| "%02X" % (i.to_i / 257) }.join("")
     
     color = prefix
@@ -17,7 +17,7 @@ class << self
     else
       color << col
     end
-    color
+    return color
   end
   def menu(options)
     return nil if options.empty?

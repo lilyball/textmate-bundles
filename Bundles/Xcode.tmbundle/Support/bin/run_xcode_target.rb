@@ -1,13 +1,10 @@
 #!/usr/bin/env ruby -s
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
 require 'open3'
 require 'pty'
-
-def shell_escape (str)
-  str.gsub(/[{}()`'"\\; $<>&]/, '\\\\\&')
-end
 
 class Xcode
   
@@ -131,17 +128,17 @@ class Xcode
       def run(&block)
         dir_path  = @project.results_path
         file_path = product_path
-        escaped_dir = shell_escape(File.expand_path(dir_path))
-        escaped_file = shell_escape(file_path)
+        escaped_dir = e_sh(File.expand_path(dir_path))
+        escaped_file = e_sh(file_path)
         
         if is_application?
-          setup_cmd = %Q{cd "#{escaped_dir}"; env DYLD_FRAMEWORK_PATH="#{escaped_dir}" DYLD_LIBRARY_PATH="#{escaped_dir}"}
+          setup_cmd = %Q{cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir}}
 
           # If we have a block, feed it stdout and stderr data
           if block_given? and Xcode.supports_configurations? then
-            executable = "./#{escaped_file}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}"
+            executable = "./#{file_path}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}"
             
-            cmd = %Q{#{setup_cmd} "#{executable}"}
+            cmd = %Q{#{setup_cmd} #{e_sh executable}}
             block.call(:start, file_path )
 #            block.call(:output, cmd )  #debugging
 

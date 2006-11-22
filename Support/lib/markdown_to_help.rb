@@ -52,7 +52,7 @@ IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
   puts <<-HTML
 <script type="text/javascript" charset="utf-8">
 function goTo (id) {
-  document.body.scrollTop = document.getElementById(id).offsetTop + 3;
+  document.body.scrollTop = document.getElementById(id).offsetTop + 8;
 }
 </script>
 HTML

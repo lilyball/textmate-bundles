@@ -143,7 +143,7 @@ class Xcode
 #            block.call(:output, cmd )  #debugging
 
             # If the executable doesn't exist, PTY.spawn might not return immediately
-            if not File.exist?(escaped_dir + '/' + executable)
+            if not File.exist?(File.expand_path(dir_path) + '/' + executable)
               block.call(:error, "Executable doesn't exist: #{executable}")
               return nil
             end

@@ -165,11 +165,13 @@ img.icon {
 
 div.console {
 	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
+	white-space: pre;
   color: black;
 }
 
 div.console_error  {
 	font-family: "Monaco", "Bitstream Vera Sans Mono", monospace;
+	white-space: pre;
   color: red;
 }
 

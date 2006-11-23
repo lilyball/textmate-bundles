@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+html_header "Widget Creator Bundle Help" "Widget Creator"
+
+Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
+
+## Widget Creator Bundle Help
+
+The Widget Creator Bundle provides an interface to scripts normally accessed through Terminal.app through the Dashboard layer of OS X.
+
+The bundle includes a Dashboard widget, which will be installed automatically when the command "*Create Widget With Contents of Document*" or "*Create Widget Calling Current Document*" are called within Textmate.
+
+### "Create Widget With Contents of Document"
+
+When editing a script which would usually be executed in a shell terminal such as Terminal.app, calling the "*Create Widget With Contents of Document*" command will copy the contents of the current document to a new file created in ~/Application Settings/Textmate/Widget Scripts/ and a new instance of a widget will appear on the Dashboard layer of OS X.
+
+When this widget is clicked on the copied script will run, and any output to STDOUT or STDERR will be accessable by clicking on the green or red icons which should appear on the widget respectively.
+
+Addtionally, if any files or a URL is dragged on to the widget then arguments are passed to the script with either the full path and filename of each file, or the URL itself.
+
+### "Create Widget Calling Current Document"
+
+If the "*Create Widget Calling Current Document*" command is invoked in Textmate whilst editing a saved script, then a new widget is created which will call the already existing script, passing any arguments in the process (i.e. any files/URL dropped).
+
+This is useful feature if you plan on calling the script used by the widget in a shell terminal as well as through Dashboard, so any changes you make to the original script are also reflected when called by both methods.
+
+### "Insert Loop to Handle Multiple Arguments"
+
+The only snippet in this bundle will allow a bash script to deal with multiple arguments, this is useful when applying the same action to multiple files when they are dragged on to the widget.
+
+When the snippet is inserted a loop will appear in the edit window, and any commands nested within the loop with be performed as many times as there are arguments (i.e. files) passed to the script. Each time the loop iterates a new argument will be assigned to $ARG, so for example 'rm "$arg"' within the loop will delete every file dragged on to the widget.
+
+### Hints
+
+This document can be printed using *Print…* (⌘P) from the *File* menu.
+EOF
+
+html_footer
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>A0F5745D-6DC1-4D2B-B638-8A38AB18EE68</string>
+</dict>
+</plist>

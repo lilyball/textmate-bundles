@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>for arg in "\$@"
+do
+	#Treat each file dropped on to the widget as "\$arg" in this loop
+	${0:$TM_SELECTED_TEXT}
+done
+</string>
+	<key>name</key>
+	<string>Insert Loop to Handle Multiple Arguments</string>
+	<key>scope</key>
+	<string>source.shell</string>
+	<key>uuid</key>
+	<string>6D0D2911-4755-46E0-BEAA-05926F4B1CE5</string>
+</dict>
+</plist>

@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<style>
+			@import "textmate.css";
+		</style>
+		<script type = "text/javascript" src = "textmate.js" charset = "utf-8" />
+		<script type = "text/javascript" src = "/System/Library/WidgetResources/button/genericButton.js" charset = "utf-8" />
+		<script type = "text/javascript" src = "/System/Library/WidgetResources/AppleClasses/AppleInfoButton.js" charset = "utf-8" />
+		<script type = "text/javascript" src = "/System/Library/WidgetResources/AppleClasses/AppleAnimator.js" charset = "utf-8" />
+		<script type = "text/javascript" src = "/System/Library/WidgetResources/AppleClasses/AppleButton.js" charset = "utf-8" />
+	</head>
+	<body onload = "init();">
+		<div id = "debug"></div>
+		<div id = "front">
+			<table id= "ShadowTable" class="centerTable">
+				<tr><td>
+					<center>
+						<table border="0" cellpadding = "0" cellspacing = "0">
+							<tr>
+								<td><img src="images/Bar/Shadow/left.png"></td>
+								<td background="images/Bar/Shadow/middle.png"><div id = "scriptNameShadow" class = "label"></div></td>
+								<td><img src="images/Bar/Shadow/right.png"></td>
+							</tr>
+						</table>
+					</center>
+				</td></tr>
+			</table>
+			<table id= "NameTable_Red" class="NameTable">
+				<tr><td>
+					<center><table border="0" cellpadding = "0" cellspacing = "0"><tr><td><img id = "bar_left" src="images/Bar/Red/left.png"></td><td id="bar_middle" background="images/Bar/Red/middle.png"><img height="24px" /><div id = "scriptNameLabel_Red" class = "label"></div></td><td><img id = "bar_right" src="images/Bar/Red/right.png"></td></tr></table></center>
+				</td></tr>
+			</table>
+			<table id= "NameTable_Orange" class="NameTable">
+				<tr><td>
+					<center><table border="0" cellpadding = "0" cellspacing = "0"><tr><td><img id = "bar_left" src="images/Bar/Orange/left.png"></td><td id="bar_middle" background="images/Bar/Orange/middle.png"><img height="24px" /><div id = "scriptNameLabel_Orange" class = "label"></div></td><td><img id = "bar_right" src="images/Bar/Orange/right.png"></td></tr></table></center>
+				</td></tr>
+			</table>
+			<table id= "NameTable_Yellow" class="NameTable">
+				<tr><td>
+					<center><table border="0" cellpadding = "0" cellspacing = "0"><tr><td><img id = "bar_left" src="images/Bar/Yellow/left.png"></td><td id="bar_middle" background="images/Bar/Yellow/middle.png"><img height="24px" /><div id = "scriptNameLabel_Yellow" class = "label"></div></td><td><img id = "bar_right" src="images/Bar/Yellow/right.png"></td></tr></table></center>
+				</td></tr>
+			</table>
+			<table id= "NameTable_Green" class="NameTable">
+				<tr><td>
+					<center><table border="0" cellpadding = "0" cellspacing = "0"><tr><td><img id = "bar_left" src="images/Bar/Green/left.png"></td><td id="bar_middle" background="images/Bar/Green/middle.png"><img height="24px" /><div id = "scriptNameLabel_Green" class = "label"></div></td><td><img id = "bar_right" src="images/Bar/Green/right.png"></td></tr></table></center>
+				</td></tr>
+			</table>
+			<table id= "NameTable_Blue" class="NameTable">
+				<tr><td>
+					<center><table border="0" cellpadding = "0" cellspacing = "0"><tr><td><img id = "bar_left" src="images/Bar/Blue/left.png"></td><td id="bar_middle" background="images/Bar/Blue/middle.png"><img height="24px" /><div id = "scriptNameLabel_Blue" class = "label"></div></td><td><img id = "bar_right" src="images/Bar/Blue/right.png"></td></tr></table></center>
+				</td></tr>
+			</table>
+			<table id= "NameTable_Purple" class="NameTable">
+				<tr><td>
+					<center><table border="0" cellpadding = "0" cellspacing = "0"><tr><td><img id = "bar_left" src="images/Bar/Purple/left.png"></td><td id="bar_middle" background="images/Bar/Purple/middle.png"><img height="24px" /><div id = "scriptNameLabel_Purple" class = "label"></div></td><td><img id = "bar_right" src="images/Bar/Purple/right.png"></td></tr></table></center>
+				</td></tr>
+			</table>
+			<table id= "NameTable_Gray" class="NameTable">
+				<tr><td>
+					<center><table border="0" cellpadding = "0" cellspacing = "0"><tr><td><img id = "bar_left" src="images/Bar/Gray/left.png"></td><td id="bar_middle" background="images/Bar/Gray/middle.png"><img height="24px" /><div id = "scriptNameLabel_Gray" class = "label"></div></td><td><img id = "bar_right" src="images/Bar/Gray/right.png"></td></tr></table></center>
+				</td></tr>
+			</table>
+			<table id= "iconTable" class="centerTable">
+				<tr><td>
+					<center>
+						<img valign="top" src="images/Icon/textmate_icon.png" id = "imgTextmate" />
+					<center>
+				</td></tr>
+			</table>
+			<table id= "StarTable" class="NameTable">
+				<tr><td>
+					<center>
+						<table border="0" cellpadding = "0" cellspacing = "0">
+							<tr>
+								<td valign="top" width="32px" height="52px"><img id = "greenStar" class = "star" src="images/Stars/green_star.png" onclick = "parent.greenStar()" /></td>
+								<td ><img height="47px" /><div id = "iconNameLabel" class = "label"></div></td>
+								<td valign="top" width="32px"><img id = "redStar" class = "star" src="images/Stars/red_star.png" onclick = "parent.redStar()" /></td>
+							</tr>
+						</table>
+					</center>
+				</td></tr>
+			</table>
+			<table id= "StopIcon" class="centerTable">
+				<tr><td>
+					<center>
+						<img src="images/Icon/textmate_stop.png" onmouseover = "this.src='images/Icon/textmate_stop.png'" onclick = "parent.stopClick()" />
+					</center>
+				</td></tr>
+			</table>
+			<div id = "CatchArea" onclick = "click()" ondragover = "dragover(event);" ondrop = "dragdrop(event)" ondragenter = "dragenter(event)" ondragleave = "dragleave(event)"></div>
+			<div id = "infoButton"</div>
+		</div>
+		<div id = "back">
+			<img id = "backside" src="images/backside.png">
+			<input type = "textinput" maxlength = "32" id = "scriptName" class = "textInput">
+			<div id = "TMButton" class = "button"></div>
+			<div id = "doneButton" class = "button"></div>
+			<div id = "Swatches">
+				<img class="swatch_row_1" id="Red" src="images/Swatches/Red.png" onclick = "parent.clickSwatch(this.id)"/>
+				<img class="swatch_row_1" id="Orange" src="images/Swatches/Orange.png" onclick = "parent.clickSwatch(this.id)"/>
+				<img class="swatch_row_1" id="Yellow" src="images/Swatches/Yellow.png" onclick = "parent.clickSwatch(this.id)"/>
+				<img class="swatch_row_1" id="Green" src="images/Swatches/Green.png" onclick = "parent.clickSwatch(this.id)"/>
+				<img class="swatch_row_2" id="Blue" src="images/Swatches/Blue.png" onclick = "parent.clickSwatch(this.id)"/>
+				<img class="swatch_row_2" id="Purple" src="images/Swatches/Purple.png" onclick = "parent.clickSwatch(this.id)"/>
+				<img class="swatch_row_2" id="Gray" src="images/Swatches/Gray.png" onclick = "parent.clickSwatch(this.id)"/>
+				<img class="swatch_row_1" id="Red_tick" src="images/Swatches/Tick.png"/>
+				<img class="swatch_row_1" id="Orange_tick" src="images/Swatches/Tick.png"/>
+				<img class="swatch_row_1" id="Yellow_tick" src="images/Swatches/Tick.png"/>
+				<img class="swatch_row_1" id="Green_tick" src="images/Swatches/Tick.png"/>
+				<img class="swatch_row_2" id="Blue_tick" src="images/Swatches/Tick.png"/>
+				<img class="swatch_row_2" id="Purple_tick" src="images/Swatches/Tick.png"/>
+				<img class="swatch_row_2" id="Gray_tick" src="images/Swatches/Tick.png"/>
+			</div>
+		</div>
+	</body>
+</html>

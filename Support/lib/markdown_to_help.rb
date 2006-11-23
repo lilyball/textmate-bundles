@@ -25,7 +25,7 @@ class TreeNode
     @next = TreeNode.new(@parent, @count + 1)
   end
   def new_heading
-    "<h#{@level}><a id='sect_#{index.join '.'}'>#{index.join '.'}</a> #{@heading}</h#{@level}>"
+    "<h#{@level}><a id='sect_#{index.join '.'}' href='javascript:goTo(&quot;sect_0&quot;)' style='text-decoration:none'>#{index.join '.'}</a> #{@heading}</h#{@level}>"
   end
 end
 
@@ -57,7 +57,7 @@ function goTo (id) {
 </script>
 HTML
 
-  puts "<h2>Table of Contents</h2>"
+  puts "<h2 id='sect_0'>Table of Contents</h2>"
   puts root
   puts contents
 end

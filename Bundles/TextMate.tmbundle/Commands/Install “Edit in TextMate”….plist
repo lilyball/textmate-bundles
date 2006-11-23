@@ -14,7 +14,7 @@ SRC="$(ruby -r"$TM_SUPPORT_PATH/lib/textmate.rb" -e 'print TextMate.app_path')/C
 [[ ! -d "$SRC" ]] &amp;&amp; { echo "&lt;h2&gt;Error&lt;/h2&gt;&lt;p&gt;The input manager (&lt;tt&gt;$SRC&lt;/tt&gt;) was not found in the TextMate application bundle.&lt;p&gt;You may need a newer version of TextMate."; exit; }
 
 # javascript which creates the link (by calling out to the shell)
-cat &lt;&lt;EOF
+cat &lt;&lt;HTML
 &lt;script&gt;
 function installInputManager () {
   var cmd = TextMate.system(
@@ -25,17 +25,18 @@ function installInputManager () {
   res.innerHTML = "&lt;p&gt;" + cmd.outputString + "&lt;/p&gt;";
 }
 &lt;/script&gt;
-EOF
+HTML
 
 # documentation which links to the script above
-Markdown.pl &lt;&lt;"EOF"
-## Intro
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;"MARKDOWN"
+# Intro
 
 Included with TextMate is an input manager which can add an “Edit in TextMate” menu item to the Edit menu of other applications.
 
 This allow you to call upon TextMate to edit the text in the current web form (Safari) or current letter that you are writing (Mail) by pressing &amp;#x2303;&amp;#x2318;E and when done editing the text in TextMate, press &amp;#x2318;S + &amp;#x2318;W to save, close, and have focus (plus edited text) return to the application from which you invoked the Edit in TextMate action.
 
-## Installation
+
+# Installation
 
 The Input Manager is preferably installed by creating a symbolic link in `~/Library/InputManagers` which point to the location of the input manager (inside the TextMate application bundle).
 
@@ -45,7 +46,8 @@ You can create this link by using the button below.
 
 _After creating the link you need to relaunch the applications in which you want to test the functionality (e.g. Mail, Safari, …)_
 
-## Excluding Applications
+
+# Excluding Applications
 
 If you do not want the menu item to appear in a certain application, you can set the `DisableEditInTextMateMenuItem` defaults key to `1` for that application.
 
@@ -57,7 +59,33 @@ We can also disable it for all applications using:
 
 	defaults write NSGlobalDomain DisableEditInTextMateMenuItem 1   
 
-## Custom Key Bindings
+
+# File Type Mapping
+
+When you initiate editing from an application, the temporary file used will have the application name as extension. For example if you call it from Mail then the extension will be `mail`. Based on this, TextMate will pick the proper language grammar, and if not, you can correct it, which will then stick to that extension.
+
+When you call it from a browser, the URL of the page is often indicative of the type you will be editing, for example if the URL is &lt;http://macromates.com/blog/&gt; then you are most likely editing a comment on the blog, which is in Markdown, thus TextMate should pick that syntax.
+
+For this reason, the service reads a configuration file which maps URL fragments to a file extension that will be used for the temporary file. This only works for WebKit based browsers (e.g. OmniWeb and Safari).
+
+The file is read as:
+
+	~/Library/Preferences/com.macromates.edit_in_textmate.plist
+
+Here is an example file:
+
+    {  URLAssociations = {
+          'mail.google.com/'                  = mail;
+          'macromates.com/blog/'              = markdown;
+          'macromates.com/wiki/'              = markdown;
+          'blacktree.cocoaforge.com/forums/'  = bbcode;
+       };
+    }
+
+If multiple URL fragments match the current URL, the longest match wins.
+
+
+# Custom Key Bindings
 
 You can use System Preferences &amp;#x2192; Keyboard &amp; Mouse to change the default key equivalent. This however only works as long as the key binding includes the command modifier (&amp;#x2318;). If you want to give it a key that does not include this modifier, you can add an entry to your `~/Library/KeyBindings/DefaultKeyBinding.dict` with the action method set to `editInTextMate:`. With this key binding, you do not need to have the menu item (so you can disable that in the global domain).
 
@@ -67,7 +95,8 @@ For example I have the following line in my `DefaultKeyBinding.dict`:
 
 This puts the action on &amp;#x2303;&amp;#x21E7;E.
 
-## Compatibility
+
+# Compatibility
 
 The input manager works by adding a category to `NSTextView` and `WebView` (which is used by Mail to edit text). So it will only work for Cocoa applications (and those which use these controls).
 
@@ -76,7 +105,13 @@ Previously the functionality was provided by a Service, but the synchronous natu
 Generally the input manager approach works better, but it is a hack, so e.g. if you call upon the Edit in TextMate action and close the window which held the text, or was calling the service from the field editors text view and advance focus, before the text has been returned, do not be surprised if the text does not show up in the proper text view.
 
 That said, it should be rather robust, and you can even call “Edit in TextMate” from within TextMate (in its Cocoa text views used e.g. in the Bundle Editor).
-EOF
+
+
+# Source Code
+
+The source code for the input manager is available here: &lt;http://macromates.com/svn/Bundles/trunk/Tools/Edit%20in%20TextMate/&gt;
+
+MARKDOWN
 
 html_footer</string>
 	<key>input</key>

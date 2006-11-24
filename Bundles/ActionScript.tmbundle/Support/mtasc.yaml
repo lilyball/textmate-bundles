@@ -1,15 +1,19 @@
-swf:        Application.swf
-app:        Class.as
-preview:    http://127.0.0.1/your/path/
+# Name of your output file:
+swf:        myApplication.swf
+# Name of your main class:
+app:        myClass.as
+# Folder/URL to open when compilation succeeds:
+preview:    .
+# SWF Header:
 player:     8
 width:      800
 height:     600
 fps:        31
 
-# Optional, use it if you have a custom version of MTASC (i.e: HAMTASC)
+# Optional, use it if you have a custom version of MTASC (i.e: HAMTASC):
 # mtasc_path: /Users/your_name/bin/mtasc
 
-# Optional, include as many classpaths as you need
+# Optional, include as many classpaths as you need:
 # classpaths:
     # - /Users/your_name/Documents/mtasc-1.12-osx/std8/
     # - /Users/your_name/Documents/mtasc-1.12-osx/std/

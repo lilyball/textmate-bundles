@@ -2,14 +2,19 @@
    CXSVNRepoBrowser.m
    Storehouse
    
+	TODO: retrieve and display all data (revision numbers, etc) from the svn list operation
 	TODO: automagically process multiple items
 	TODO: show the new item in the browser before committing,
 			so the user knows exactly what's going to happen.
+			Especially for mkdir.
+	TODO: localization -- use strings file
+	
+	FIXME: mkdir doesn't work.
+	TODO: export by dragging out.
 
    Created by Chris Thomas on 2006-11-13.
    Copyright 2006 Chris Thomas. All rights reserved.
 */
-
 
 #import "CXSVNRepoBrowser.h"
 #import "CXSVNRepoNode.h"
@@ -18,6 +23,9 @@
 #import <Foundation/NSDebug.h>
 #import "ImageAndTextCell.h"
 #import "CXSVNClient.h"
+
+const UInt16 kLeftQuoteUnicode	= 0x201C;
+const UInt16 kRightQuoteUnicode	= 0x201D;
 
 @interface CXToolbarItemView : NSView
 {
@@ -78,7 +86,6 @@
 
 - (void) loadCommitPromptIfNeeded
 {
-	NSMutableArray *	array;
 	static NSNib *		sCommitWindowNib = nil;
 
 	if(sCommitWindowNib == nil)
@@ -615,16 +622,27 @@
 // Support renames
 - (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
+	NSString *	newURL;
+	NSString *	oldURL;
 	if( item == nil )
 	{
 		[NSException raise:@"Root item renamed" format:@"Shouldn't be able to set the value of the root item"];
 	}
 	
-	[self askForCommitWithVerb:@"Rename:"
-				prompt:@"Reason for the rename?"
-				URLs:[NSArray arrayWithObjects:[item URL], [item URL], nil]
-				action:@selector(moveURL:toURL:withDescription:)];
+	oldURL = [(CXSVNRepoNode *)item URL];
+	newURL = [oldURL stringByDeletingLastPathComponent];
+	newURL = [newURL stringByAppendingPathComponent:object];
 	
+	[self askForCommitWithVerb:@"Rename"
+				prompt:[NSString stringWithFormat:@"Rename %C%@%C to %C%@%C",
+														kLeftQuoteUnicode,
+														[item displayName],
+														kRightQuoteUnicode,
+														kLeftQuoteUnicode,
+														object,
+														kRightQuoteUnicode]
+				URLs:[NSArray arrayWithObjects:oldURL, newURL, nil]
+				action:@selector(moveURL:toURL:withDescription:)];
 }
 
 - (void) importFilesAction:(NSArray *)args
@@ -632,8 +650,14 @@
 	NSString *				destPath			= [args objectAtIndex:0];
 	NSArray *				filesToImport		= [args objectAtIndex:1];
 
-	[self askForCommitWithVerb:@"Import:"
-				prompt:@"Summary?"
+	[self askForCommitWithVerb:@"Import"
+			prompt:[NSString stringWithFormat:@"Import %C%@%C to %C%@%C",
+											kLeftQuoteUnicode,
+											[[filesToImport objectAtIndex:0] lastPathComponent],
+											kRightQuoteUnicode,
+											kLeftQuoteUnicode,
+											[destPath lastPathComponent],
+											kRightQuoteUnicode]
 				URLs:[NSArray arrayWithObjects:[filesToImport objectAtIndex:0], destPath, nil]
 				action:@selector(importLocalPath:toURL:withDescription:)];
 }
@@ -644,8 +668,14 @@
 	NSString *				pathFrom		= [args objectAtIndex:0];
 	NSString *				pathTo			= [args objectAtIndex:1];
 
-	[self askForCommitWithVerb:@"Move:"
-				prompt:@"Reason for the move?"
+	[self askForCommitWithVerb:@"Move"
+				prompt:[NSString stringWithFormat:@"Move %C%@%C to %C%@%C",
+																	kLeftQuoteUnicode,
+																	[pathFrom lastPathComponent],
+				 													kRightQuoteUnicode,
+																	kLeftQuoteUnicode,
+																	[pathTo lastPathComponent],
+				 													kRightQuoteUnicode]
 				URLs:[NSArray arrayWithObjects:pathFrom, pathTo, nil]
 				action:@selector(moveURL:toURL:withDescription:)];
 }
@@ -655,8 +685,14 @@
 	NSString *				pathFrom		= [args objectAtIndex:0];
 	NSString *				pathTo			= [args objectAtIndex:1];
 
-	[self askForCommitWithVerb:@"Copy:"
-				prompt:@"Reason for the copy?"
+	[self askForCommitWithVerb:@"Copy"
+				prompt:[NSString stringWithFormat:@"Copy %C%@%C to %C%@%C",
+														kLeftQuoteUnicode,
+														[pathFrom lastPathComponent],
+														kRightQuoteUnicode,
+														kLeftQuoteUnicode,
+														[pathTo lastPathComponent],
+														kRightQuoteUnicode]
 				URLs:[NSArray arrayWithObjects:pathFrom, pathTo, nil]
 				action:@selector(copyURL:toURL:withDescription:)];
 }
@@ -712,9 +748,11 @@
 //	NSLog(@"%s %@", _cmd, status);
 
 // TODO: report status
-	
-	[[[fOutlineView tableColumnWithIdentifier:@"1"] headerCell] setStringValue:status];
-	[[fOutlineView headerView] setNeedsDisplay:YES];
+	if(status != nil)
+	{
+		[[[fOutlineView tableColumnWithIdentifier:@"1"] headerCell] setStringValue:status];
+		[[fOutlineView headerView] setNeedsDisplay:YES];
+	}
 }
 
 
@@ -767,35 +805,20 @@
 	[context setObject:URLs forKey:@"URLs"];
 	[context setObject:[NSNumber numberWithUnsignedLong:(unsigned long)options] forKey:@"options"];
 	
-	[fCommitVerbField setStringValue:verb];
+//	[fCommitVerbField setStringValue:verb];
 	[fCommitPromptField setStringValue:prompt];
 
-	[fCommitURLSource setStringValue:[URLs objectAtIndex:0]];
+//	[fCommitURLSource setStringValue:[URLs objectAtIndex:0]];
 
 	if( URLCount == 1 )
 	{
-		NSString *	suggestion = @"";
-		
-		if( (options & kCXAppendName) != 0 )
-		{
-			suggestion = @"Untitled Folder";
-		}
-		else if( (options & kCXReplaceName) != 0 )
-		{
-			// TODO get last component of URL
-		}
-		else
-		{
-			suggestion = [URLs objectAtIndex:0];
-		}
-		
-		[fCommitURLDestination setStringValue:suggestion];
-		[self configureCommitSheetForOneURL];
+//		[fCommitURLDestination setStringValue:suggestion];
+//		[self configureCommitSheetForOneURL];
 	}
 	else if( URLCount == 2 )
 	{	
-		[fCommitURLDestination setStringValue:[URLs objectAtIndex:1]];
-		[self configureCommitSheetForTwoURLs];
+//		[fCommitURLDestination setStringValue:[URLs objectAtIndex:1]];
+//		[self configureCommitSheetForTwoURLs];
 	}
 	else
 	{
@@ -823,7 +846,7 @@
 	{
 		NSValue *			action		= [contextDict objectForKey:@"action"];
 		NSArray *			URLs		= [contextDict objectForKey:@"URLs"];
-		CXSVNCommitOptions	options		= [[contextDict objectForKey:@"options"] unsignedLongValue];
+//		CXSVNCommitOptions	options		= [[contextDict objectForKey:@"options"] unsignedLongValue];
 		SEL					selector;
 		NSString *			description;
 		NSMutableArray *	nodes		= [NSMutableArray array];
@@ -846,24 +869,14 @@
 
 			firstNode = [self visibleNodeForURL:firstURL];
 			[nodes addObject:firstNode];
-			
-			if( (options & kCXAppendName) == kCXAppendName )
-			{
-				[svnClient performSelector:selector
-								withObject:[firstURL stringByAppendingString:[fCommitURLDestination stringValue]]
-								withObject:description];
-			}
-			else
-			{
-				[svnClient performSelector:selector	withObject:[fCommitURLDestination stringValue]
-														withObject:description];
-			}
+			[svnClient performSelector:selector	withObject:[fCommitURLDestination stringValue]
+													withObject:description];
 
 		}
 		else if( countURLs == 2 )
 		{
 			NSString *			firstURL	= [URLs objectAtIndex:0];
-			NSString *			secondURL	= [fCommitURLDestination stringValue];
+			NSString *			secondURL	= [URLs objectAtIndex:1];
 			CXSVNRepoNode *		firstNode;
 			CXSVNRepoNode *		secondNode;
 
@@ -873,8 +886,14 @@
 			firstNode = [[self visibleNodeForURL:firstURL] parentNode];
 			secondNode = [self visibleNodeForURL:secondURL];
 
-			[nodes addObject:firstNode];
-			[nodes addObject:secondNode];
+			if(firstNode != nil)
+			{
+				[nodes addObject:firstNode];
+			}
+			if(secondNode != nil)
+			{
+				[nodes addObject:secondNode];
+			}
 			
 			objc_msgSend(svnClient, selector, firstURL, secondURL, description);
 /*			[svnClient performSelector:selector
@@ -921,7 +940,7 @@
 - (void) makeDirAtNode:(CXSVNRepoNode *)node
 {
 	[self askForCommitWithVerb:@"New Folder"
-				prompt:@"Purpose of the new folder?"
+				prompt:[NSString stringWithFormat:@"Create new folder %C%@%C", kLeftQuoteUnicode, [node displayName], kLeftQuoteUnicode]
 				URLs:[NSArray arrayWithObject:[node URL]]
 				action:@selector(makeDirAtURL:withDescription:)
 				options:kCXAppendName];

@@ -124,7 +124,7 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 - (void) launchWithArguments:(NSArray *)arguments
 {
 	[self taskWillStart];
-	CXTask *	task = [CXLineBufferedOutputTask launchCommand:[self pathToSVN]
+	/*CXTask *	task =*/ [CXLineBufferedOutputTask launchCommand:[self pathToSVN]
 													withArguments:arguments
 													notifying:self
 													outputAction:@selector(readOutput:fromTask:)
@@ -155,8 +155,9 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 
 - (void) importLocalPath:(NSString *)sourcePath toURL:(NSString *)destURL withDescription:(NSString *)desc
 {
-	NSArray *	arguments = [NSArray arrayWithObjects:@"import", @"-m", desc, sourcePath, destURL, nil];
+	NSArray *	arguments = [NSArray arrayWithObjects:@"import", @"-m", desc, sourcePath, [destURL stringByAppendingString:[sourcePath lastPathComponent]], nil];
 
+NSLog(@"%s %@", _cmd, arguments);
 	[self launchWithArguments:arguments];
 }
 
@@ -215,7 +216,7 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 		
 	[self taskWillStart];
 	
-	CXTask *	task = [CXLineBufferedOutputTask launchCommand:[self pathToSVN]
+	/*CXTask *	task =*/ [CXLineBufferedOutputTask launchCommand:[self pathToSVN]
 													withArguments:arguments
 													notifying:self
 													outputAction:@selector(lsOutput:fromTask:)

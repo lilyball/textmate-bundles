@@ -74,7 +74,14 @@
 			
 			if( ![lineText isEqualToString:@""] )
 			{
-				[fTarget performSelector:fOutputAction withObject:lineText withObject:self];
+				@try
+				{
+					[fTarget performSelector:fOutputAction withObject:lineText withObject:self];
+				}
+				@catch(NSException * exception)
+				{
+					NSLog(@"%s %@", _cmd, exception);
+				}
 			}
 			
 			// Next up
@@ -90,13 +97,27 @@
 		// Feed any remaining buffered data. Should only be a partial line, if any.
 		if([fDataBuffer length] > 0)
 		{
-			[fTarget performSelector:fOutputAction withObject:UTF8FromData(fDataBuffer) withObject:self];
+			@try
+			{
+				[fTarget performSelector:fOutputAction withObject:UTF8FromData(fDataBuffer) withObject:self];
+			}
+			@catch(NSException * exception)
+			{
+				NSLog(@"%s %@", _cmd, exception);
+			}
 			[fDataBuffer release];
 			fDataBuffer = nil;
 		}
 		
 		// nil to signal end of data
-		[fTarget performSelector:fOutputAction withObject:nil withObject:self];
+		@try
+		{
+			[fTarget performSelector:fOutputAction withObject:nil withObject:self];
+		}
+		@catch(NSException * exception)
+		{
+			NSLog(@"%s %@", _cmd, exception);
+		}
 		
 		// delete this! balances self-retain in executeWithArgs
 		fStreamCount -= 1;

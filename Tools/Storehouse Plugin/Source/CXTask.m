@@ -67,7 +67,15 @@ static NSMutableDictionary	* sTaskQueues = nil;
 	NSMutableArray *	taskQueue = [sTaskQueues objectForKey:fQueueKey];
 	
 	[fTask waitUntilExit];
-	[fTarget taskExited:self withStatus:[fTask terminationStatus]];
+	
+	@try
+	{
+		[fTarget taskExited:self withStatus:[fTask terminationStatus]];
+	}
+	@catch(NSException * exception)
+	{
+		NSLog(@"%s %@", _cmd, exception);
+	}
 		
 	if(taskQueue != nil)
 	{
@@ -89,7 +97,14 @@ static NSMutableDictionary	* sTaskQueues = nil;
 	if( data != nil && [data length] > 0 )
 	{
 		// Notify Target and stop refresh
-		[fTarget performSelector:fErrorAction  withObject:UTF8FromData(data) withObject:self];
+		@try
+		{
+			[fTarget performSelector:fErrorAction  withObject:UTF8FromData(data) withObject:self];
+		}
+		@catch(NSException * exception)
+		{
+			NSLog(@"%s %@", _cmd, exception);
+		}
 		[fErrorHandle readInBackgroundAndNotify];
 	}
 	else
@@ -117,13 +132,28 @@ static NSMutableDictionary	* sTaskQueues = nil;
 	// Continue with incremental reading until there's no more data
 	if( data && [data length] > 0 )
 	{
-		[fTarget performSelector:fOutputAction withObject:UTF8FromData(data) withObject:self];
+		@try
+		{
+			[fTarget performSelector:fOutputAction withObject:UTF8FromData(data) withObject:self];
+		}
+		@catch(NSException * exception)
+		{
+			NSLog(@"%s %@", _cmd, exception);
+		}
+		
 		[fOutHandle readInBackgroundAndNotify];
 	}
 	else
 	{
-		[fTarget performSelector:fOutputAction withObject:nil withObject:self];
-		
+		@try
+		{
+			[fTarget performSelector:fOutputAction withObject:nil withObject:self];
+		}
+		@catch(NSException * exception)
+		{
+			NSLog(@"%s %@", _cmd, exception);
+		}
+				
 		// delete this! balances self-retain in executeWithArgs
 		fStreamCount -= 1;
 		if(fStreamCount == 0)
@@ -297,7 +327,15 @@ static NSMutableDictionary	* sTaskQueues = nil;
 			data = [errorHandle availableData];
 			if( [data length] > 0 )
 			{
-				[fTarget performSelector:fErrorAction withObject:UTF8FromData(data) withObject:self];
+				@try
+				{
+					[fTarget performSelector:fErrorAction withObject:UTF8FromData(data) withObject:self];
+				}
+				@catch(NSException * exception)
+				{
+					NSLog(@"%s %@", _cmd, exception);
+				}
+
 			}
 		} while ([data length] > 0);
 	}

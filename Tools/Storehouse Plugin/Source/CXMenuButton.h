@@ -8,11 +8,16 @@
 
 @interface CXMenuButton : NSButton
 {
-	IBOutlet NSMenu *		menu;
+	IBOutlet	NSMenu *				menu;
+//				NSMutableArray *		array;
+				id 						observedObjectForArray;
+				NSString *				observedKeyPathForArray;
 }
 
 - (NSMenu *)menu;
 - (void)setMenu:(NSMenu *)aValue;
 
+- (NSMutableArray *)array;
+- (void)setArray:(NSMutableArray *)newArray;
 
 @end

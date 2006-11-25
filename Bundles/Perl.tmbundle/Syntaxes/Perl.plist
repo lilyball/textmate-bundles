@@ -845,6 +845,18 @@
 			</array>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>\b\w+\s*(?==&gt;)</string>
+			<key>name</key>
+			<string>constant.other.key.perl</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;={)\s*\w+\s*(?=})</string>
+			<key>name</key>
+			<string>constant.other.bareword.perl</string>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>

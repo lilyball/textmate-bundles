@@ -43,7 +43,7 @@ if comment_end.empty?
 end
 
 # Leopard doesn't have niutil
-username	= `dscl . read /Users/#{ENV['LOGNAME']} realname | ruby -e 'puts STDIN.read.sub(/.*realname:\s*(.*)$/, "\\\\1")'`.strip
+username	= `dscl -raw . read /Users/#{ENV['USER']} realname | ruby -e 'puts STDIN.read.sub(/.*realname:\s*(.*)$/, "\\\\1")'`.strip
 date		= `date +%Y-%m-%d`.chomp
 
 # Default to username if no organization name

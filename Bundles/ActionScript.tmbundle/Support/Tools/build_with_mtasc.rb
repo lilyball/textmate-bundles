@@ -15,6 +15,14 @@ require "yaml"
 
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
 require ENV['TM_SUPPORT_PATH'] + "/lib/progress"
+require ENV["TM_SUPPORT_PATH"] + "/lib/web_preview"
+
+if !ENV['TM_PROJECT_DIRECTORY']
+	html_header("Error!","Build With MTASC")
+	puts "<h1>Do NOT run this if you don't have a project open...</h1>"
+	html_footer
+	TextMate.exit_show_html
+end
 
 def mtasc_compile
 	Dir.chdir(ENV['TM_PROJECT_DIRECTORY'])
@@ -40,9 +48,6 @@ def mtasc_compile
 	cmd += " -main "
 	cmd += " -swf #{yml['swf']} "
 
-	puts "<h1>#{yml['app']} → #{yml['swf']} </h1>"
-	puts "Command: <code style=\"color: #666;\">#{cmd}</code>"
-
 	stdin, stdout, stderr = Open3.popen3(cmd)
 	warnings = []
 	errors = []
@@ -53,22 +58,25 @@ def mtasc_compile
 		else
 			m = /(.+):([0-9]+): characters ([0-9]+)/.match(err)
 			if m != nil
-				a = "txmt://open?url=file://#{m[1]}&line=#{m[2]}&column=#{m[3].to_i + 1}"
+				a = "txmt://open?url=file://#{ENV['TM_PROJECT_DIRECTORY']}/#{m[1]}&line=#{m[2]}&column=#{m[3].to_i + 1}"
 				err = "<a href=\"#{a}\">#{err}</a>"
 			end
 			errors.push(err.chomp)
 		end
 	end
 	if !errors.empty?
+		html_header("Error!","Build With MTASC")
 		puts '<h1>Errors:</h1>'
 		puts "<p>#{errors.uniq.join('</p><p>')}</p>"
+		html_footer
 	end
 	if !warnings.empty?
+		html_header("Warning!","Build With MTASC")
 		puts '<h1>Warnings:</h1>'
 		puts "<p>#{warnings.uniq.join('</p><p>')}</p>"
+		html_footer
 	end
 	if errors.empty? && warnings.empty?
-		puts '<script type="text/javascript">self.close()</script>'
 		`open #{yml['preview']}` if yml["preview"]
 	else
 		TextMate.exit_show_html

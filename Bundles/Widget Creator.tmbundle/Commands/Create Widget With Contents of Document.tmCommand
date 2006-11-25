@@ -9,8 +9,9 @@
 SCRIPT_PATH="Library/Application Support/Textmate/Widget Scripts"
 mkdir -p ~/"$SCRIPT_PATH"
 cat &gt; ~/"$SCRIPT_PATH/default.sh"
+"$TM_BUNDLE_SUPPORT/deploy_widget.sh"
 echo "Widget created."
-"$TM_BUNDLE_SUPPORT/deploy_widget.sh"</string>
+</string>
 	<key>input</key>
 	<string>document</string>
 	<key>name</key>

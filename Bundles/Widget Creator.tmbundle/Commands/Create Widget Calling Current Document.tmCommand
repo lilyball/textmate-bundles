@@ -12,8 +12,8 @@ mkdir -p ~/"$SCRIPT_PATH"
 echo \#\!\/usr/bin/env bash &gt; ~/"$SCRIPT_PATH/default.sh"
 echo -n "\"$ESCAPED_FILEPATH\" \"\$@\"" &gt;&gt; ~/"$SCRIPT_PATH/default.sh"
 echo -n "\"$TM_FILENAME\"" &gt; ~/"$SCRIPT_PATH/filename.txt"
-echo "Widget created."
 "$TM_BUNDLE_SUPPORT/deploy_widget.sh"
+echo "Widget created."
 </string>
 	<key>input</key>
 	<string>none</string>

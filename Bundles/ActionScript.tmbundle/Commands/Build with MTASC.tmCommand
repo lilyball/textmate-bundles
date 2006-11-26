@@ -5,90 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
-#
-# Build - compile ActionScript using MTASC
-#
-# Based on a command by Chris Sessions, Released on 2006-06-02.
-# Copyright (c) 2006. MIT License.
-# Modified by Ale Muñoz &lt;ale@bomberstudios.com&gt; on 2006-11-24.
-# 
-# TODO: Documentation
-# TODO: Use -main only when it's in the config
-
-require "open3"
-require "yaml"
-
-def mtasc_compile
-
-Dir.chdir(ENV['TM_PROJECT_DIRECTORY'])
-yml = YAML.load(File.open('mtasc.yaml'))
-
-if !yml['mtasc_path']
-	cmd = "\"#{ENV['TM_BUNDLE_SUPPORT']}/bin/mtasc\" "
-else
-	cmd = "\"#{yml['mtasc_path']}\" "
-end
-cmd += " \"#{ENV['TM_PROJECT_DIRECTORY']}/#{yml['app']}\" "
-cmd += " -version #{yml['player']} "
-cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/std/\" "
-cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/std8/\" "
-if yml['classpaths']
-	cmd += " -cp \"#{yml['classpaths'].join('" -cp "')}\" "
-end
-if !File.exists? yml['swf']
-	cmd += " -header #{yml['width']}:#{yml['height']}:#{yml['fps']} "
-else
-	cmd += " -keep "
-end
-cmd += " -main "
-cmd += " -swf #{yml['swf']} "
-
-puts "&lt;h1&gt;#{yml['app']} → #{yml['swf']} &lt;/h1&gt;"
-puts "Command: &lt;code style=\"color: #666;\"&gt;#{cmd}&lt;/code&gt;"
-
-stdin, stdout, stderr = Open3.popen3(cmd)
-warnings = []
-errors = []
-
-while err = stderr.gets
-	if err[0, 10] == 'Warning : '
-		warnings.push(err.chomp)
-	else
-		m = /(.+):([0-9]+): characters ([0-9]+)/.match(err)
-		if m != nil
-			a = "txmt://open?url=file://#{m[1]}&amp;line=#{m[2]}&amp;column=#{m[3].to_i + 1}"
-			err = "&lt;a href=\"#{a}\"&gt;#{err}&lt;/a&gt;"
-		end
-		errors.push(err.chomp)
-	end
-end
-
-if !errors.empty?
-	puts '&lt;h1&gt;Errors:&lt;/h1&gt;'
-	puts "&lt;p&gt;#{errors.uniq.join('&lt;/p&gt;&lt;p&gt;')}&lt;/p&gt;"
-end
-
-if !warnings.empty?
-	puts '&lt;h1&gt;Warnings:&lt;/h1&gt;'
-	puts "&lt;p&gt;#{warnings.uniq.join('&lt;/p&gt;&lt;p&gt;')}&lt;/p&gt;"
-end
-
-if errors.empty? &amp;&amp; warnings.empty?
-	puts '&lt;script type="text/javascript"&gt;self.close()&lt;/script&gt;'
-	`open #{yml['preview']}`
-end
-
-end
-
-if File.exist?("#{ENV['TM_PROJECT_DIRECTORY']}/mtasc.yaml")
-# compile with MTASC
-mtasc_compile
-else
-# compile with Flash IDE
-`echo "flash.getDocumentDOM().testMovie()" &gt; /tmp/test.jsfl; open /tmp/test.jsfl;`
-puts '&lt;script type="text/javascript"&gt;self.close()&lt;/script&gt;'
-end</string>
+	<string>ruby "$TM_BUNDLE_SUPPORT/Tools/build_with_mtasc.rb"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -96,7 +13,7 @@ end</string>
 	<key>name</key>
 	<string>Build With MTASC</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>source.actionscript</string>
 	<key>uuid</key>

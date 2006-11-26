@@ -3,21 +3,21 @@
 //
 //  Created by Chris Thomas on 2006-10-09.
 //  Copyright 2006 Chris Thomas. All rights reserved.
-//  MIT license.
+//
+//	Available bindings:
+//		contentValues (read only)
 //
 
 @interface CXMenuButton : NSButton
 {
 	IBOutlet	NSMenu *				menu;
-//				NSMutableArray *		array;
+
+	// Binding support
 				id 						observedObjectForArray;
 				NSString *				observedKeyPathForArray;
 }
 
 - (NSMenu *)menu;
 - (void)setMenu:(NSMenu *)aValue;
-
-- (NSMutableArray *)array;
-- (void)setArray:(NSMutableArray *)newArray;
 
 @end

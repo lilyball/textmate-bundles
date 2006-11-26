@@ -6,5 +6,7 @@
 //
 
 class ${TM_NEW_FILE_BASENAME} {
-
-};
+	function ${TM_NEW_FILE_BASENAME}(){
+		
+	}
+}

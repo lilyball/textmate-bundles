@@ -8,9 +8,9 @@
 			so the user knows exactly what's going to happen.
 			Especially for mkdir.
 	TODO: localization -- use strings file
-	
-	FIXME: mkdir doesn't work.
 	TODO: export by dragging out.
+
+	FIXME: stop using pathComponent methods for URL processing -- they sometimes munge the slashes at the front.
 
    Created by Chris Thomas on 2006-11-13.
    Copyright 2006 Chris Thomas. All rights reserved.
@@ -239,6 +239,7 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 	ImageAndTextCell *	cell = [[[ImageAndTextCell alloc] init] autorelease];
 //	NSZombieEnabled = 1;
 
+	[cell setEditable:YES];
 	//
 	// Programmatic bindings for custom classes
 	//
@@ -411,7 +412,13 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 	node = [fOutlineView itemAtRow:[fOutlineView selectedRow]];
 	
 	[self askForCommitWithVerb:@"Remove"
-				prompt:@"Reason for deleting these files?"
+			prompt:[NSString stringWithFormat:@"Remove %C%@%C from %C%@%C",
+													kLeftQuoteUnicode,
+													[node displayName],
+													kRightQuoteUnicode,
+													kLeftQuoteUnicode,
+													[[node parentNode] displayName],
+													kRightQuoteUnicode]
 				URLs:[NSArray arrayWithObject:[node URL]]
 				action:@selector(removeURL:withDescription:)];
 }
@@ -668,27 +675,43 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 // Support renames
 - (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
-	NSString *	newURL;
-	NSString *	oldURL;
+	NSLog(@"%s", _cmd);
 	if( item == nil )
 	{
 		[NSException raise:@"Root item renamed" format:@"Shouldn't be able to set the value of the root item"];
 	}
 	
-	oldURL = [(CXSVNRepoNode *)item URL];
-	newURL = [oldURL stringByDeletingLastPathComponent];
-	newURL = [newURL stringByAppendingPathComponent:object];
-	
-	[self askForCommitWithVerb:@"Rename"
-				prompt:[NSString stringWithFormat:@"Rename %C%@%C to %C%@%C",
-														kLeftQuoteUnicode,
-														[item displayName],
-														kRightQuoteUnicode,
-														kLeftQuoteUnicode,
-														object,
-														kRightQuoteUnicode]
-				URLs:[NSArray arrayWithObjects:oldURL, newURL, nil]
-				action:@selector(moveURL:toURL:withDescription:)];
+	// Process makedir
+	if( [item isKindOfClass:[CXSVNRepoPreviewNode class]] )
+	{
+		CXSVNRepoNode *	parentNode = [item parentNode];
+//		NSLog(@"%s %@ full:%@", _cmd, [parentNode URL],  [[parentNode URL] stringByAppendingPathComponent:object]);
+//		[parentNode removePreviewNode:item]; -- if we remove the item being set, does NSOutlineView fail?
+		[self askForCommitWithVerb:@"New Folder"
+					prompt:[NSString stringWithFormat:@"Create new folder %C%@%C", kLeftQuoteUnicode, object, kLeftQuoteUnicode]
+					URLs:[NSArray arrayWithObject:[[parentNode URL] stringByAppendingFormat:@"/%@", object]]
+					action:@selector(makeDirAtURL:withDescription:)];
+	}
+	else
+	{
+		NSString *	newURL;
+		NSString *	oldURL;
+
+		oldURL = [(CXSVNRepoNode *)item URL];
+		newURL = [oldURL stringByDeletingLastPathComponent];
+		newURL = [newURL stringByAppendingPathComponent:object];
+
+		[self askForCommitWithVerb:@"Rename"
+					prompt:[NSString stringWithFormat:@"Rename %C%@%C to %C%@%C",
+															kLeftQuoteUnicode,
+															[item displayName],
+															kRightQuoteUnicode,
+															kLeftQuoteUnicode,
+															object,
+															kRightQuoteUnicode]
+					URLs:[NSArray arrayWithObjects:oldURL, newURL, nil]
+					action:@selector(moveURL:toURL:withDescription:)];
+	}
 }
 
 - (void) importFilesAction:(NSArray *)args
@@ -807,39 +830,12 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 #pragma mark Sheet Sheet
 #endif
 
-- (void) configureCommitSheetForOneURL
-{
-	// Verb may stretch out if there's no source URL
-
-	NSSize					verbFieldSize = [fCommitVerbField frame].size;
-
-	[fCommitURLSource setHidden:YES];
-	
-	[fCommitVerbField setFrameSize:NSMakeSize(verbFieldSize.width + [fCommitURLSource frame].size.width, verbFieldSize.height)];
-	[fCommitVerbField setAlignment:NSLeftTextAlignment];
-	
-}
-
-- (void) configureCommitSheetForTwoURLs
-{
-	[fCommitVerbField setFrameSize:NSMakeSize(71, [fCommitVerbField frame].size.height)];
-	[fCommitVerbField setAlignment:NSRightTextAlignment];
-	
-	[fCommitURLSource setHidden:NO];
-}
-
 - (void) configureCommitSheetForMultipleURLs
 {
 	[NSException raise:@"NotImplemented" format:@"multiple URLs aren't supported yet"];
 }
 
-- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector 
-{
-	[self askForCommitWithVerb:verb prompt:prompt URLs:URLs action:selector options:kCXNone];
-}
-
-
-- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector options:(CXSVNCommitOptions)options
+- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector
 {
 	NSMutableDictionary *	context  	= [[NSMutableDictionary alloc] init];
 	NSValue *				value		= [NSValue value:&selector withObjCType:@encode(SEL)];
@@ -849,12 +845,8 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 	
 	[context setObject:value forKey:@"action"];
 	[context setObject:URLs forKey:@"URLs"];
-	[context setObject:[NSNumber numberWithUnsignedLong:(unsigned long)options] forKey:@"options"];
 	
-//	[fCommitVerbField setStringValue:verb];
 	[fCommitPromptField setStringValue:prompt];
-
-//	[fCommitURLSource setStringValue:[URLs objectAtIndex:0]];
 
 	if( URLCount == 1 )
 	{
@@ -871,7 +863,6 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 		[self configureCommitSheetForMultipleURLs];
 	}
 
-	
 	[NSApp	beginSheet:fCommitPromptWindow
 			modalForWindow:[fOutlineView window]
 			modalDelegate:self
@@ -892,7 +883,6 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 	{
 		NSValue *			action		= [contextDict objectForKey:@"action"];
 		NSArray *			URLs		= [contextDict objectForKey:@"URLs"];
-//		CXSVNCommitOptions	options		= [[contextDict objectForKey:@"options"] unsignedLongValue];
 		SEL					selector;
 		NSString *			description;
 		NSMutableArray *	nodes		= [NSMutableArray array];
@@ -914,8 +904,11 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 			CXSVNRepoNode *		firstNode;
 
 			firstNode = [self visibleNodeForURL:firstURL];
-			[nodes addObject:firstNode];
-			[svnClient performSelector:selector	withObject:[fCommitURLDestination stringValue]
+			if(firstNode != nil)
+			{
+				[nodes addObject:firstNode];
+			}
+			[svnClient performSelector:selector	withObject:firstURL
 													withObject:description];
 
 		}
@@ -942,11 +935,6 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 			}
 			
 			objc_msgSend(svnClient, selector, firstURL, secondURL, description);
-/*			[svnClient performSelector:selector
-							withObject:firstURL
-							withObject:secondURL
-							withObject:description];
-*/			
 		}
 		else if( countURLs > 2 )
 		{
@@ -985,11 +973,16 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 
 - (void) makeDirAtNode:(CXSVNRepoNode *)node
 {
-	[self askForCommitWithVerb:@"New Folder"
-				prompt:[NSString stringWithFormat:@"Create new folder %C%@%C", kLeftQuoteUnicode, [node displayName], kLeftQuoteUnicode]
-				URLs:[NSArray arrayWithObject:[node URL]]
-				action:@selector(makeDirAtURL:withDescription:)
-				options:kCXAppendName];
+	// Visualize the new node and let the user edit the name
+	CXSVNRepoPreviewNode *	newDirNode = (CXSVNRepoPreviewNode *)[CXSVNRepoPreviewNode nodeWithName:@"untitled folder" parent:node];
+	int						itemRow;
+	
+	[node addPreviewSubnode:newDirNode];
+	[self reloadNode:node];
+	
+	itemRow = [fOutlineView rowForItem:newDirNode];
+	[fOutlineView selectRow:itemRow byExtendingSelection:NO];
+	[fOutlineView editColumn:0 row:itemRow withEvent:nil select:NO];
 }
 
 - (void) startingTask

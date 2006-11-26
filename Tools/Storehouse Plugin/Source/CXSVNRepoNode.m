@@ -79,9 +79,9 @@
 }
 
 
-+ (CXSVNRepoNode *) rootNodeWithURL:(NSString *)URL SVNClient:(CXSVNClient *)client
++ (id) rootNodeWithURL:(NSString *)URL SVNClient:(CXSVNClient *)client
 {
-	CXSVNRepoNode * node = [[CXSVNRepoNode alloc] init];
+	CXSVNRepoNode * node = [[self alloc] init];
 	
 	if(node != nil)
 	{
@@ -95,9 +95,9 @@
 }
 
 
-+ (CXSVNRepoNode *) nodeWithName:(NSString *)name parent:(CXSVNRepoNode *)parent
++ (id) nodeWithName:(NSString *)name parent:(CXSVNRepoNode *)parent
 {
-	CXSVNRepoNode * node = [[CXSVNRepoNode alloc] init];
+	CXSVNRepoNode * node = [[self alloc] init];
 	
 	if(node != nil)
 	{
@@ -168,6 +168,22 @@
 	return outArray;
 }
 
+- (void) addPreviewSubnode:(CXSVNRepoPreviewNode *)subnode
+{
+	[self appendSubnodes:[NSArray arrayWithObject:subnode]];
+}
+
+- (void) removePreviewSubnode:(CXSVNRepoPreviewNode *)subnode
+{
+	NSArray *			oldSubnodes = fSubnodes;
+	NSMutableArray *	mutableSubnodes = [fSubnodes mutableCopy];
+
+	[mutableSubnodes removeObject:subnode];
+	fSubnodes = mutableSubnodes;
+	[fSubnodes retain];
+	
+	[oldSubnodes release];
+}
 
 #if 0
 #pragma mark Command processing
@@ -234,4 +250,12 @@
 	[fSVNClient contentsOfSVNURLDidChange:[self URL]];
 }
 
+@end
+
+
+@implementation CXSVNRepoPreviewNode
+- (void) loadSubnodes
+{
+	// Stub out.
+}
 @end

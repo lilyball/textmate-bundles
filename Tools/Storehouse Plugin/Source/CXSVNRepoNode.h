@@ -3,6 +3,7 @@
 #define _CXSVNRepoNode_H_
 
 @class CXSVNClient;
+@class CXSVNRepoPreviewNode;
 
 @interface CXSVNRepoNode : NSObject
 {
@@ -14,8 +15,8 @@
 	CXSVNClient *		fSVNClient;
 }
 
-+ (CXSVNRepoNode *) rootNodeWithURL:(NSString *)URL SVNClient:(CXSVNClient *)client;
-+ (CXSVNRepoNode *) nodeWithName:(NSString *)name parent:(CXSVNRepoNode *)parent;
++ (id) rootNodeWithURL:(NSString *)URL SVNClient:(CXSVNClient *)client;
++ (id) nodeWithName:(NSString *)name parent:(CXSVNRepoNode *)parent;
 
 - (NSString *) URL;
 - (CXSVNRepoNode *) visibleNodeForURL:(NSString *)URL;
@@ -33,6 +34,13 @@
 - (void) invalidateSubnodes;
 - (NSArray *)subnodes;
 
+// 'preview' subnodes for visualizing changes before they are committed
+- (void) removePreviewSubnode:(CXSVNRepoPreviewNode *)subnode;
+- (void) addPreviewSubnode:(CXSVNRepoPreviewNode *)subnode;
+
+@end
+
+@interface CXSVNRepoPreviewNode : CXSVNRepoNode
 @end
 
 #endif /* _CXSVNRepoNode_H_ */

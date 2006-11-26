@@ -33,12 +33,9 @@ typedef enum
 	IBOutlet 	CXMenuButton *			fHistoryMenuButton;
 	
 //				NSTableHeaderCell *		fTableHeaderCell;
-	IBOutlet	NSTextField *			fCommitVerbField;
 	IBOutlet	NSTextField *			fCommitPromptField;
 	IBOutlet	NSTextField *			fCommitAnswerField;
 	IBOutlet	NSPanel *				fCommitPromptWindow;
-	IBOutlet	NSTextField *			fCommitURLDestination;
-	IBOutlet	NSTextField *			fCommitURLSource;
 
 	IBOutlet	NSUserDefaultsController *	fUserDefaultsController;
 	
@@ -68,7 +65,6 @@ typedef enum
 - (IBAction)sheetOK:(id)sender;
 
 - (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector;
-- (void) askForCommitWithVerb:(NSString *)verb prompt:(NSString *)prompt URLs:(NSArray *)URLs action:(SEL)selector options:(CXSVNCommitOptions)options;
 
 - (IBAction) contextRemoveFile:(id)sender;
 - (IBAction) contextExportFiles:(id)sender;

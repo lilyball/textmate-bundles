@@ -3,6 +3,7 @@
 
 @class CXSVNRepoNode;
 @class CXSVNClient;
+@class CXMenuButton;
 
 // TODO: wrap in NSWindowController
 
@@ -29,6 +30,8 @@ typedef enum
 	IBOutlet	NSProgressIndicator *	fSpinner;
 	IBOutlet	NSTextField *			fURLField;
 	IBOutlet	NSButton *				fGoButton;
+	IBOutlet 	CXMenuButton *			fHistoryMenuButton;
+	
 //				NSTableHeaderCell *		fTableHeaderCell;
 	IBOutlet	NSTextField *			fCommitVerbField;
 	IBOutlet	NSTextField *			fCommitPromptField;
@@ -36,6 +39,11 @@ typedef enum
 	IBOutlet	NSPanel *				fCommitPromptWindow;
 	IBOutlet	NSTextField *			fCommitURLDestination;
 	IBOutlet	NSTextField *			fCommitURLSource;
+
+	IBOutlet	NSUserDefaultsController *	fUserDefaultsController;
+	
+	// bindings
+				NSArray *				history;
 }
 
 + (CXSVNRepoBrowser *) browser;

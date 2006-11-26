@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		832894C50B192ABC00D52500 /* NSArray+CXMRU.m in Sources */ = {isa = PBXBuildFile; fileRef = 832894C40B192ABC00D52500 /* NSArray+CXMRU.m */; };
+		832894C60B192ABC00D52500 /* NSArray+CXMRU.m in Sources */ = {isa = PBXBuildFile; fileRef = 832894C40B192ABC00D52500 /* NSArray+CXMRU.m */; };
 		835744B20937EDD00030AB66 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8379C2D809252ADB00481DBE /* CXSVNRepoNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8379C2D709252ADB00481DBE /* CXSVNRepoNode.m */; };
 		8379C2E1092535E300481DBE /* CXSVNRepoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8379C2E0092535E300481DBE /* CXSVNRepoBrowser.m */; };
@@ -58,6 +60,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* CXBrowser_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXBrowser_Prefix.pch; sourceTree = "<group>"; };
+		832894C30B192ABC00D52500 /* NSArray+CXMRU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+CXMRU.h"; path = "Source/NSArray+CXMRU.h"; sourceTree = "<group>"; };
+		832894C40B192ABC00D52500 /* NSArray+CXMRU.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+CXMRU.m"; path = "Source/NSArray+CXMRU.m"; sourceTree = "<group>"; };
 		8379C2D709252ADB00481DBE /* CXSVNRepoNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXSVNRepoNode.m; path = Source/CXSVNRepoNode.m; sourceTree = "<group>"; };
 		8379C2D909252ADF00481DBE /* CXSVNRepoNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXSVNRepoNode.h; path = Source/CXSVNRepoNode.h; sourceTree = "<group>"; };
 		8379C2DB09252B0400481DBE /* CXSVNRepoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXSVNRepoBrowser.h; path = Source/CXSVNRepoBrowser.h; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 				83FF70AB0B04E88100924B12 /* CXTask.m */,
 				83FF70AC0B04E88100924B12 /* CXLineBufferedOutputTask.h */,
 				83FF70AD0B04E88100924B12 /* CXLineBufferedOutputTask.mm */,
+				832894C30B192ABC00D52500 /* NSArray+CXMRU.h */,
+				832894C40B192ABC00D52500 /* NSArray+CXMRU.m */,
 			);
 			name = "Generic Code";
 			sourceTree = "<group>";
@@ -324,6 +330,7 @@
 				83FF70AF0B04E88100924B12 /* CXLineBufferedOutputTask.mm in Sources */,
 				83FF70BF0B057C4800924B12 /* CXSVNClient.m in Sources */,
 				83FF71400B058EF200924B12 /* CXMenuButton.m in Sources */,
+				832894C50B192ABC00D52500 /* NSArray+CXMRU.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,6 +349,7 @@
 				83FF70B10B04E88100924B12 /* CXLineBufferedOutputTask.mm in Sources */,
 				83FF70C00B057C4800924B12 /* CXSVNClient.m in Sources */,
 				83FF71410B058EF200924B12 /* CXMenuButton.m in Sources */,
+				832894C60B192ABC00D52500 /* NSArray+CXMRU.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

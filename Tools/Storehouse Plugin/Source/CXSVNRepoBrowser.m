@@ -23,6 +23,9 @@
 #import <Foundation/NSDebug.h>
 #import "ImageAndTextCell.h"
 #import "CXSVNClient.h"
+#import "NSArray+CXMRU.h"
+
+#define kHistorySize 3
 
 const UInt16 kLeftQuoteUnicode	= 0x201C;
 const UInt16 kRightQuoteUnicode	= 0x201D;
@@ -231,20 +234,25 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 #pragma mark UI
 #endif
 
-
 - (void) awakeFromNib
 {
-//	NSBrowserCell *	cell = [[[NSBrowserCell alloc] init] autorelease];
 	ImageAndTextCell *	cell = [[[ImageAndTextCell alloc] init] autorelease];
 //	NSZombieEnabled = 1;
 
+	//
+	// Programmatic bindings for custom classes
+	//
+	
+	// Bind the history menu to the "history" saved preference
+	[fHistoryMenuButton bind:@"contentValues" toObject:fUserDefaultsController withKeyPath:@"values.history" options:nil];
+	
+	// Set font
 	[cell setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
-	
-	[[fOutlineView window] setHidesOnDeactivate:NO];
-
 	[[fOutlineView tableColumnWithIdentifier:@"1"] setDataCell:cell];
+
+	[[fOutlineView window] setHidesOnDeactivate:NO];
 	
-	// TODO: accept filenanes and URLs
+	// TODO: accept URLs
 	[fOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, NSStringPboardType, nil]];
 
 	[fOutlineView setDraggingSourceOperationMask:NSDragOperationCopy|NSDragOperationMove forLocal:NO];
@@ -252,11 +260,11 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 	
 	[self setupToolbar];
 	
-	// populate content
+	// Populate content
 	if( ! [[fURLField stringValue] isEqualToString:@""] )
 	{
 		[self getRootURLFromField:nil];
-	}	
+	}
 }
 
 - (IBAction) getRootURLFromField:(id)sender
@@ -266,7 +274,20 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 
 - (IBAction) takeRootURLFrom:(id)sender
 {
-	[self loadURL:[sender stringValue]];
+	NSString *	URL;
+	
+	if ([sender respondsToSelector:@selector(representedObject)])
+	{
+		// Menu item
+	    URL = [sender representedObject];
+	}
+	else
+	{
+		// Anything not a menu item
+		URL = [sender stringValue];
+	}
+	
+	[self loadURL:URL];
 }
 
 // Position the given browser right next to this one
@@ -302,6 +323,26 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 		NSString *	windowTitle2	= [pathComponents lastObject];
 		
 		[[fURLField window] setTitle:[NSString stringWithFormat:@"svn %@ %@", windowTitle1, windowTitle2]];
+		
+		// Append the URL to the global history
+		{
+			NSUserDefaults *  	defaults		= [fUserDefaultsController defaults];
+			NSArray *			oldHistory		= [defaults arrayForKey:@"history"];
+			NSArray *			newHistory;
+			if( oldHistory )
+			{
+				newHistory = [oldHistory arrayByAddingMostRecentlyUsedObject:URL andLimitingCapacityTo:kHistorySize];
+			}
+			else
+			{
+				newHistory = [NSArray arrayWithObject:URL];
+			}
+
+			// Write the history
+			[defaults setObject:newHistory forKey:@"history"];
+			[defaults synchronize];
+
+		}
 	}
 }
 

@@ -21,7 +21,7 @@
 {
 	NSButtonCell *	cell = [self cell];
 	
-	[self setEnabled:NO];
+	[self setEnabled:( menu != nil && [menu numberOfItems] > 0 )];
 	
 	// Use alternateImage for pressed state (if there is an alternateImage)
 	if( [cell alternateImage] != nil )

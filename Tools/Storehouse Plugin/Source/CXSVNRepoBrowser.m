@@ -25,7 +25,7 @@
 #import "CXSVNClient.h"
 #import "NSArray+CXMRU.h"
 
-#define kHistorySize 3
+#define kHistorySize 15
 
 const UInt16 kLeftQuoteUnicode	= 0x201C;
 const UInt16 kRightQuoteUnicode	= 0x201D;
@@ -647,6 +647,11 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 {
 	NSPasteboard * pboard = [info draggingPasteboard];
 	BOOL			accepted = NO;
+	
+	if(item == nil)
+	{
+		item = fRootNode;
+	}
 	
 	if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]])
 	{

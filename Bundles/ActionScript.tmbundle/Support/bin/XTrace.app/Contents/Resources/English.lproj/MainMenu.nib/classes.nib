@@ -1,0 +1,21 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                clearLog = id; 
+                showLogWindow = id; 
+                startServer = id; 
+                stopServer = id; 
+                toggleAutoHide = id; 
+                visitHomePage = id; 
+            }; 
+            CLASS = AppController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {oLogWindow = TraceWindow; oTraceField = NSTextView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = TraceWindow; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }
+    ); 
+    IBVersion = 1; 
+}

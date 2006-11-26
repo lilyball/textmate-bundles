@@ -4,10 +4,9 @@
 #
 # Based on a command by Chris Sessions, Released on 2006-06-02.
 # Copyright (c) 2006. MIT License.
-# Modified by Ale Muñoz <ale@bomberstudios.com> on 2006-11-24.
-# Improved by juanzo on 2006-11-25
+# Modified by Ale Muñoz <http://bomberstudios.com> on 2006-11-24.
+# Improvements suggested by Juan Carlos Añorga <http://www.juanzo.com/> on 2006-11-25
 # 
-# TODO: Documentation
 # TODO: Use -main only when it's in the config
 
 require "open3"
@@ -24,6 +23,14 @@ if !ENV['TM_PROJECT_DIRECTORY']
 	TextMate.exit_show_html
 end
 
+if !File.exist?("#{ENV['TM_PROJECT_DIRECTORY']}/mtasc.yaml")
+	html_header("Error!","Build With MTASC")
+	puts "<h1>mtasc.yaml file missing</h1>"
+	puts "<p>For the “Build With MTASC” command to work, you need to have a 'mtasc.yaml' file in your project's root folder. Use the “Install MTASC Support Files” command to create a default 'mtasc.yaml' file."
+	html_footer
+	TextMate.exit_show_html
+end
+
 def mtasc_compile
 	Dir.chdir(ENV['TM_PROJECT_DIRECTORY'])
 	yml = YAML.load(File.open('mtasc.yaml'))
@@ -35,10 +42,21 @@ def mtasc_compile
 	end
 	cmd += " \"#{yml['app']}\" "
 	cmd += " -version #{yml['player']} "
+	# Standard Adobe Classes
 	cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/std/\" "
 	cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/std8/\" "
+	# XTrace Classes
+	cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/\" "
+	# User-provided Classpath
 	if yml['classpaths']
 		cmd += " -cp \"#{yml['classpaths'].join('" -cp "')}\" "
+	end
+	# Use XTrace for debugging
+	if !yml['trace']
+		# Open XTrace...
+		`open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
+		cmd += " -pack com/mab/util "
+		cmd += " -trace com.mab.util.debug.trace "
 	end
 	if !File.exists? yml['swf']
 		cmd += " -header #{yml['width']}:#{yml['height']}:#{yml['fps']} "
@@ -83,13 +101,7 @@ def mtasc_compile
 	end
 end
 
-if File.exist?("#{ENV['TM_PROJECT_DIRECTORY']}/mtasc.yaml")
-	# compile with MTASC
-	TextMate.call_with_progress({:title => "MTASC", :message => "Compiling Classes"}) do
-		mtasc_compile
-	end
-else
-	# compile with Flash IDE
-	`echo "flash.getDocumentDOM().testMovie()" > /tmp/test.jsfl; open /tmp/test.jsfl;`
-	puts '<script type="text/javascript">self.close()</script>'
+# compile with MTASC
+TextMate.call_with_progress({:title => "MTASC", :message => "Compiling Classes"}) do
+	mtasc_compile
 end

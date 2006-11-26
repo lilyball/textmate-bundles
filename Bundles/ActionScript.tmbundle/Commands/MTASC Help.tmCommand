@@ -5,11 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat &lt;&lt;HELP
-Help for this command will be available Really Soon Now™
-HELP</string>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "MTASC Help" "ActionScript"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" "$TM_BUNDLE_SUPPORT/help.markdown"
+html_footer</string>
 	<key>input</key>
 	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
 	<key>name</key>
 	<string>MTASC Help</string>
 	<key>output</key>

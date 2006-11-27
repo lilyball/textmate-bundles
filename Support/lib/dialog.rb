@@ -19,6 +19,24 @@ class << self
     end
     return color
   end
+  
+  # options should contain :title, :summary, and :log
+  def simple_notification(options)
+    raise if options.empty?
+
+    support = ENV['TM_SUPPORT_PATH']
+    dialog  = support + '/bin/tm_dialog'
+    nib     = support + '/nibs/SimpleNotificationWindow.nib'
+    require support + '/lib/plist'
+    
+    plist = Hash.new
+    plist['title']    = options[:title]   || ''
+    plist['summary']  = options[:summary] || ''
+    plist['log']      = options[:log]     || ''
+
+    `#{e_sh dialog} -cp #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
+  end
+  
   def menu(options)
     return nil if options.empty?
 

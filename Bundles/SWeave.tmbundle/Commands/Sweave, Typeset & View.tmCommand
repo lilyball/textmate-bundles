@@ -57,7 +57,7 @@ run_tex "$FILE" 2&gt;&amp;1| latexErrWarnHtml.py -v
 RC=$?
 
 # If there is output and it's newer than the current document, then we go directly to preview or link to it.
-if [ -s "${PDF}" -a "$PDF" -nt "$FILE" ]; then
+if [ -s "${PDF}" -a ! "$PDF" -ot "$FILE" ]; then
 	if [[ "$V" == html ]]; then
 		WEB_LOC="tm-file://${DIR}/${PDF}"
 		WEB_LOC="${WEB_LOC//\\#/%23}"
@@ -92,7 +92,7 @@ html_footer
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>text.tex.latex.sweave</string>
+	<string>text.tex.latex.sweave, text.tex.latex.sweave source.r</string>
 	<key>uuid</key>
 	<string>F599ACE4-6B59-4235-A2BF-7BABA5C911B7</string>
 </dict>

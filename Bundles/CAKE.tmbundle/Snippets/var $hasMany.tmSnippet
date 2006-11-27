@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>var \$hasMany = array(
+		'${1:ModelNameCamelCase}' =&gt;
+			 array('className' =&gt; '${2:$1}}',
+					'conditions' =&gt; '${3:$1.active=1}',
+					'order' =&gt; '${4:$1.ordering  DESC}',
+					'foreignKey' =&gt; ''${5:,
+					'dependent'  =&gt; true}${6:,
+                        'exclusive'  =&gt; false},
+					'counterCache' =&gt; '')
+          );</string>
+	<key>name</key>
+	<string>var $hasMany</string>
+	<key>scope</key>
+	<string>source.php.cake</string>
+	<key>tabTrigger</key>
+	<string>MhasMany</string>
+	<key>uuid</key>
+	<string>60D98FB5-7FAC-4ED8-86EB-31F379F8EA20</string>
+</dict>
+</plist>

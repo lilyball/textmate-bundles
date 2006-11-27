@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>var \$hasAndBelongsToMany = array(
+		'${1:ModelNameCamelCase}' =&gt;
+			 array('className' =&gt; '${2:$1}}',
+					'joinTable'    =&gt; '',
+					'conditions' =&gt; '${3:$1.active=1}',
+					'order' =&gt; '${4:$1.ordering  DESC}',
+					'foreignKey' =&gt; '$5',
+					'associationForeignKey'=&gt; '$6',${7:,
+					'uniq'         =&gt; true,},
+					'conditions'   =&gt; '$8',
+					'finderQuery'  =&gt; '$9',
+					'deleteQuery'  =&gt; '$10')
+          );
+$0</string>
+	<key>name</key>
+	<string>var $hasAndBelongsToMany</string>
+	<key>scope</key>
+	<string>source.php.cake</string>
+	<key>tabTrigger</key>
+	<string>MhasAndBelongsToMany</string>
+	<key>uuid</key>
+	<string>B9EB6976-0C0B-4BFB-A749-1F9C8BC53621</string>
+</dict>
+</plist>

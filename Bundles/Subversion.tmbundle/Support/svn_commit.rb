@@ -1,7 +1,6 @@
 require 'English'
 require 'ostruct'
 
-
 svn         	= ENV['TM_SVN']            || `which svn`.chomp
 bundle      	= ENV['TM_BUNDLE_SUPPORT'] || File.dirname(__FILE__)
 support     	= ENV['TM_SUPPORT_PATH']   || File.dirname(File.dirname(File.dirname(File.dirname(__FILE__)))) + '/Support'
@@ -9,10 +8,13 @@ commit_tool 	= ENV['CommitWindow']      || support + '/bin/CommitWindow.app/Cont
 status_helper	= bundle + "/commit_status_helper.rb"
 diff_cmd		= ENV['TM_SVN_DIFF_CMD']   || 'diff'
 
-require (support + '/lib/shelltokenize.rb')
-require (support + "/lib/erb_streaming.rb")
-require (support + "/lib/exit_codes.rb")
-require (support + "/lib/progress.rb")
+$LOAD_PATH << (support + '/lib')
+
+require 'shelltokenize'
+require 'erb_streaming'
+require 'exit_codes'
+require 'progress'
+require 'dialog'
 
 # puts ARGV.inspect
 # puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG
@@ -166,11 +168,17 @@ when :HTML
 		transaction.paths_to_commit.each do | path |
 			string += " • " + path + "\n"
 		end
-		TextMate.exit_show_tool_tip(string)
+		
+		Dialog.simple_notification(:title => 'Commit Result', :summary => "No files modified; nothing to commit.", :log => string)
+    exit 1
+#		TextMate.exit_show_tool_tip(string)
 	else
 		status = transaction.ask_user_for_arguments
 		if status != 0
-			TextMate.exit_show_tool_tip "Canceled (#{status >> 8})."
+#		  Dialog.simple_notification(:title => 'Commit Result', :summary => 'Canceled commit.')
+#			TextMate.exit_show_tool_tip "Canceled (#{status >> 8})."
+      exit status
+      
 		end
 	end
 
@@ -178,18 +186,19 @@ when :HTML
 		verbose_output	= ''
 		revision_string	= 'unknown revision committed'
 		TextMate.call_with_progress( :title => 'Subversion Commit', :message => 'Transmitting file data' ) do
-			transaction.commit {|stream, line| verbose_output += (line + "<br>")}
+			transaction.commit {|stream, line| verbose_output += line + "\n"}
 		end
 
 		revision_string = $& if verbose_output =~ /Committed revision \d*./
 
-		erb = ERB.new(IO.read(bundle + '/Templates/Commit.rhtml'))
-
-		if( ENV['TM_SVN_BRIEF_COMMIT_OUTPUT'].nil? or revision_string.nil? ) then
-			TextMate.exit_show_html(erb.result)
-		else
-			TextMate.exit_show_tool_tip(revision_string)
-		end
+    Dialog.simple_notification(:title => 'Commit Result',
+                              :summary => (revision_string || 'Error occurred'),
+                              :log => verbose_output)
+		# if( ENV['TM_SVN_BRIEF_COMMIT_OUTPUT'].nil? or revision_string.nil? ) then
+		# 	TextMate.exit_show_html(erb.result)
+		# else
+		# 	TextMate.exit_show_tool_tip(revision_string)
+		# end
 	end
 end
 

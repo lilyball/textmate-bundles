@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>\repeat "${1:volta}" ${2:2} {
+	$3
+}
+${1/(volta)|(.*)/(?1:\\alternative {\n\t{  }\n\t{  }\n})(?2:)/}</string>
+	<key>name</key>
+	<string>repeat</string>
+	<key>scope</key>
+	<string>source.lilypond</string>
+	<key>tabTrigger</key>
+	<string>rep</string>
+	<key>uuid</key>
+	<string>73B33ED5-1704-47C6-B397-034B27A38433</string>
+</dict>
+</plist>

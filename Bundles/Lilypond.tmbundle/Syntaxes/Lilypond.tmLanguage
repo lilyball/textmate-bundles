@@ -4,20 +4,21 @@
 <dict>
 	<key>comment</key>
 	<string>
-		This bundle is, as can easily be seen, but it should still
-		be as useful as the Lilypond.app pyobjc application, which
-		has no syntax coloring, no way to do snippets, and pretty
-		much no interesting functionality at all, other than a "Run"
-		menu option. :)
+		This bundle is, as can easily be seen, far from complete,
+		but it should still be as useful as the Lilypond.app pyobjc
+		application, which has no syntax coloring, no way to do
+		snippets, and pretty much no interesting functionality at
+		all, other than a "Run" menu option. :)
 	</string>
 	<key>fileTypes</key>
 	<array>
 		<string>ly</string>
+		<string>ily</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>\{\s*$</string>
+	<string>(\{|&lt;&lt;)\s*$</string>
 	<key>foldingStopMarker</key>
-	<string>^.*\}</string>
+	<string>(\}|&gt;&gt;)</string>
 	<key>keyEquivalent</key>
 	<string>^~L</string>
 	<key>name</key>
@@ -143,7 +144,7 @@
 			<string>(?x)
 				((\\) clef) \s+  # backslash + "clef" + spaces (groups 1-2)
 				(?:
-				  (")?	# beginning quotes (group 3)
+				  ("?)	# beginning quotes (group 3)
 				  ( (?: # group 4
 					  treble | violin | G | french |                    # G clefs
 				      alto | C | tenor | (?:mezzo)?soprano | baritone | # C clefs
@@ -175,7 +176,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(\\)[a-zA-Z]+\b</string>
+			<string>(\\)[a-zA-Z-]+\b</string>
 			<key>name</key>
 			<string>support.function.general.lilypond</string>
 		</dict>
@@ -297,11 +298,19 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#strings</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#scheme</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#g_markup</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -314,7 +323,7 @@
 					<string>(?x)
 						dedication | title | subtitle | subsubtitle | poet |
 						composer | meter | opus | arranger | instrument |
-						piece | breakbefore | copyright | tagline
+						piece | breakbefore | copyright | tagline | enteredby
 					</string>
 					<key>name</key>
 					<string>support.constant.header.lilypond</string>
@@ -332,10 +341,90 @@
 				</dict>
 			</array>
 		</dict>
+		<key>g_m_group</key>
+		<dict>
+			<key>begin</key>
+			<string>{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.group.begin.lilypond</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.group.end.lilypond</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.group.lilypond</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#f_generic</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#strings</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#scheme</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#g_m_group</string>
+				</dict>
+			</array>
+		</dict>
+		<key>g_markup</key>
+		<dict>
+			<key>begin</key>
+			<string>(?x)
+				((\\) markup) \s+ # backslash + "markup" + spaces
+				(?={)
+			</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.element.markup.lilypond</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.markup</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?&lt;=})</string>
+			<key>name</key>
+			<string>meta.element.markup.lilypond</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#g_m_group</string>
+				</dict>
+			</array>
+		</dict>
 		<key>g_relative</key>
 		<dict>
 			<key>begin</key>
-			<string>((\\)relative)\s*(?:([a-g][',]*)\s*)?(?={)</string>
+			<string>((\\)relative)\s*(?:([a-h][',]*)\s*)?(?={)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -447,7 +536,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.section.group.begin.lilypond</string>
+					<string>punctuation.section.group.end.lilypond</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -537,16 +626,16 @@
 					<key>match</key>
 					<string>(?x)
 						(\\)
-						(?: accent | markato | staccatissimo |		 # basic accents
+						(?: accent | markato | staccatissimo |		       # basic accents
 							espressivo | staccato | tenuto | portato | 
 							(?:up|down)bow | flageolet | thumb |
 							[lr](?:heel|toe) | open | stopped |
 							(?:reverse)?turn | trill |
-							prall(?: prall | mordent | down | up)? | # pralls
-							(?: up | down | line ) prall |           # and
-							(?: up | down )? mordent |               # mordents
+							prall(?: prall | mordent | down | up)? |       # pralls
+							(?: up | down | line ) prall |                 # and
+							(?: up | down )? mordent |                     # mordents
 							signumcongruentiae |
-							(?: (?:very)? long | short)?fermata |    # fermatas
+							(?: (?:very)? long | short)?fermata(Markup)? | # fermatas
 							segno | (?:var)?coda 
 						)
 					</string>
@@ -590,7 +679,7 @@
 					<key>begin</key>
 					<string>(?x)\b
 					    (						  # (group 1)
-						  ( [a-g]                 # Pitch (group 2)
+						  ( [a-h]                 # Pitch (group 2)
 						    ( (?:i[sh]){1,2} |    #   - sharp (group 3)
 						      (?:e[sh]|s){1,2}    #   - flat
 						    )?
@@ -655,7 +744,7 @@
 						
 						(?x)
 							\b( # Basic Pitches
-							  [a-g]  # Dutch/English/etc.                         
+							  [a-h]  # Dutch/English/etc.                         
 							  (?: (iss?|s|sharp|x)(iss?|s|sharp|x|ih) | # sharp / flat
 								  (ess?|s|flat|f)(ess?|s|flat|f|eh)
 							  )? |
@@ -875,7 +964,7 @@
 							</dict>
 							<key>match</key>
 							<string>(?x)\b
-								  ( [a-g]                 # Pitch (group 1)
+								  ( [a-h]                 # Pitch (group 1)
 								    ( (?:i[sh]){1,2} |    #   - sharp (group 2)
 								      (?:e[sh]|s){1,2}    #   - flat
 								    )?

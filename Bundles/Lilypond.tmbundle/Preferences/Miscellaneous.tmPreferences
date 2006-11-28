@@ -4,8 +4,12 @@
 <dict>
 	<key>name</key>
 	<string>Miscellaneous</string>
+	<key>scope</key>
+	<string>source.lilypond</string>
 	<key>settings</key>
 	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>[^{]*\}.*|&gt;&gt;</string>
 		<key>highlightPairs</key>
 		<array>
 			<array>
@@ -29,14 +33,12 @@
 				<string>”</string>
 			</array>
 			<array>
-				<string>`</string>
-				<string>'</string>
-			</array>
-			<array>
 				<string>&lt;</string>
 				<string>&gt;</string>
 			</array>
 		</array>
+		<key>increaseIndentPattern</key>
+		<string>.*\{[^}]*$|&lt;&lt;</string>
 		<key>shellVariables</key>
 		<array>
 			<dict>
@@ -69,10 +71,6 @@
 			<array>
 				<string>"</string>
 				<string>"</string>
-			</array>
-			<array>
-				<string>(</string>
-				<string>)</string>
 			</array>
 			<array>
 				<string>{</string>

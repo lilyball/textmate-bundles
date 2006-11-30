@@ -7,6 +7,15 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
+
+def out(*args)
+  print( *args.map do |arg|
+    escaped = e_sn(arg)
+    $selected ? escaped.gsub("}", "\\}") : escaped
+  end )
+end
+
 # by James Edward Gray II &lt;james (at) grayproductions.net&gt;
 
 # find all available comment variables
@@ -21,6 +30,15 @@ end
 
 text    = STDIN.read
 default = nil  # the comment we will insert, if none are removed
+
+# maintain selection
+if text == ENV["TM_SELECTED_TEXT"]
+  $selected = true
+  print "${0:"
+  at_exit { print "}" }
+else
+  $selected = false
+end
 
 # try a removal for each comment...
 var_suffixes.each do |suffix|
@@ -43,14 +61,14 @@ var_suffixes.each do |suffix|
   when "line"  # line by line comment
     if text != "" &amp;&amp; text.map { |l| !!(l =~ /\A\s*(#{com[:esc_start]}|$)/) }.
                           uniq == [true]
-      print text.gsub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
-                       '\1\2\3' )
+      out text.gsub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
+                     '\1\2\3' )
       exit
     end
   when "block" # block comment
     regex = /\A(\s*)#{com[:esc_start]}(.*?)#{com[:esc_end]}(\s*)\z/m
     if text =~ regex
-      print text.sub(regex, '\1\2\3')
+      out text.sub(regex, '\1\2\3')
       exit
     end
   end
@@ -60,28 +78,32 @@ end
 case default[:mode]
 when "line"  # apply comment line by line
   if default[:no_indent] || text.empty?
-    print text.gsub(/^.*$/, "#{default[:start]}\\&amp;#{default[:end]}")
+    out text.gsub(/^.*$/, "#{default[:start]}\\&amp;#{default[:end]}")
   else
     indent = text.scan(/^[\t ]*(?=\S)/).min { |lhs, rhs| lhs.length &lt;=&gt; rhs.length } || ""
     text.map do |line|
       if line =~ /^(#{indent})(.*)$(\n?)/ then
-        print $1 + default[:start] + $2 + default[:end] + $3
+        out $1 + default[:start] + $2 + default[:end] + $3
       elsif line =~ /^(.*)$(\n?)/ then
-        print indent + default[:start] + $1 + default[:end] + $2
+        out indent + default[:start] + $1 + default[:end] + $2
       end
     end
   end
 when "block" # apply comment around selection
-  if default[:no_indent]
-    print default[:start], text, default[:end]
+  if text =~ /\A[ \t]*\z/
+    out default[:start], text
+    print "${0}"
+    out default[:end]
+  elsif default[:no_indent]
+    out default[:start], text, default[:end]
   else
     lines = text.to_a
     if lines.empty?
-      print default[:start], default[:end]
+      out default[:start], default[:end]
     else
       lines[-1].sub!(/^(.*)$/, "\\1#{default[:end]}")
-      print lines.shift.sub(/^(\s*)(.*)$/, "\\1#{default[:start]}\\2")
-      print *lines unless lines.empty?
+      out lines.shift.sub(/^(\s*)(.*)$/, "\\1#{default[:start]}\\2")
+      out *lines unless lines.empty?
     end
   end
 end
@@ -95,7 +117,7 @@ end
 	<key>name</key>
 	<string>Comment Line / Selection</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>insertAsSnippet</string>
 	<key>uuid</key>
 	<string>73EAE95D-A09C-4FC2-B4E3-42505678B57E</string>
 </dict>

@@ -10,29 +10,24 @@
 
 $func = preg_replace('/[\(\) ;]/', '',  $_ENV['TM_CURRENT_WORD']);
 $scope = trim(preg_replace('/source\.js\.yui support\.function\.(.*?)\.js\.yui/', '$1', $_ENV['TM_SCOPE']));
+$anchor = '#' . $func;
 
 if(preg_match('|support\.class\.js\.yui|', $scope)) {
 	$scope = $func;
+	$anchor = '';
 }
 
 switch($scope) {
-	case 'YAHOO':	
-		$lib = 'yahoo'; break;
-	case 'CustomEvent':
-	case 'Event':
-	case 'Subscriber':
-		$lib = 'event'; break;
+	case 'YAHOO':
+		$page = 'YAHOO.html'; break;
 	case 'Dom':
+	case 'Point':
 	case 'Region':
-		$lib = 'dom'; break;
+	case 'Event':
+	case 'CustomEvent':
+	case 'EventProvider':
+	case 'Subscriber':
 	case 'Connect':
-		$lib = 'connection'; break;
-	case 'DD':
-	case 'DDProxy':
-	case 'DDTarget':
-	case 'DragDrop':
-	case 'DragDropMgr':
-		$lib = 'dragdrop'; break;
 	case 'Anim':
 	case 'AnimMgr':
 	case 'Bezier':
@@ -40,22 +35,17 @@ switch($scope) {
 	case 'Easing':
 	case 'Motion':
 	case 'Scroll':
-		$lib = 'animation'; break;
+	case 'DD':
+	case 'DDProxy':
+	case 'DDTarget':
+	case 'DragDrop':
+	case 'DragDropMgr':
+		$page = 'YAHOO.util.' . $scope . '.html'; break;
 	default:
-		echo '&lt;h2&gt;Error&lt;/h2&gt;Function ' . $func . '() could not be matched to a specific library. It may still be found in the &lt;a href="http://developer.yahoo.com/yui/"&gt;YUI documentation&lt;/a&gt;.';
-		exit;
+		$page = ''; $anchor = '';
 }
 
-switch($scope) {
-	case 'YAHOO':
-		$page = 'YAHOO.html'; break;
-	case 'support.class.js.yui':
-		$page = ''; break;
-	default:
-		$page = 'YAHOO.util.' . $scope . '.html'; 
-}
-
-$url = 'http://developer.yahoo.com/yui/docs/' . $lib . '/' . $page . '#' . $func;
+$url = 'http://developer.yahoo.com/yui/docs/' . $page . $anchor;
 echo '&lt;meta http-equiv="Refresh" content="0;URL' . $url . '"&gt;';
 
 ?&gt;</string>

@@ -30,11 +30,11 @@ sub quote {
 }
 
 sub die {
+    my $message = join('', @_);
     if ($^S) {
-        CORE::die($@);
+        Carp::croak $message;
     }
     else {
-        my $message = join('', @_);
         my $error_fd = $ENV{"TM_ERROR_FD"};
     	chomp($message);
     	my ($file, $line) = id(1);
@@ -55,6 +55,6 @@ sub die {
     	print TM_ERROR_FD '<tr><td>in <a href="txmt://open?' . $url . 'line=$line"> ' . $display_name . "</a> at line $line<td></tr>\n" ;
     	print TM_ERROR_FD "</table></blockquote></div>";
     	print TM_ERROR_FD "</div>";
-    	exit(1);
+    	exit($!);
     }
 }

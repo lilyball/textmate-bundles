@@ -7,7 +7,8 @@
 # Modified by Ale Muñoz <http://bomberstudios.com> on 2006-11-24.
 # Improvements suggested by Juan Carlos Añorga <http://www.juanzo.com/> on 2006-11-25
 # 
-# TODO: Use -main only when it's in the config
+# CHANGELOG
+# 2006-12-02 - Make it work without a 'mtasc.yaml' file (assuming some sane defaults...)
 
 require "open3"
 require "yaml"
@@ -16,55 +17,90 @@ require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
 require ENV['TM_SUPPORT_PATH'] + "/lib/progress"
 require ENV["TM_SUPPORT_PATH"] + "/lib/web_preview"
 
-if !ENV['TM_PROJECT_DIRECTORY']
-	html_header("Error!","Build With MTASC")
-	puts "<h1>Do NOT run this if you don't have a project open...</h1>"
-	html_footer
-	TextMate.exit_show_html
-end
+# Some routes
+@file_path = ENV['TM_FILEPATH']
+@file_name = ENV['TM_FILENAME']
+@project_path = ENV['TM_PROJECT_DIRECTORY']
 
-if !File.exist?("#{ENV['TM_PROJECT_DIRECTORY']}/mtasc.yaml")
+# Utils
+@q = "\""
+
+def warning(text, title)
 	html_header("Error!","Build With MTASC")
-	puts "<h1>mtasc.yaml file missing</h1>"
-	puts "<p>For the “Build With MTASC” command to work, you need to have a 'mtasc.yaml' file in your project's root folder. Use the “Install MTASC Support Files” command to create a default 'mtasc.yaml' file."
+	puts "<h1>#{title}</h1>"
+	puts "<p>#{text}</p>"
 	html_footer
 	TextMate.exit_show_html
 end
 
 def mtasc_compile
-	Dir.chdir(ENV['TM_PROJECT_DIRECTORY'])
-	yml = YAML.load(File.open('mtasc.yaml'))
-
-	if !yml['mtasc_path']
-		cmd = "\"#{ENV['TM_BUNDLE_SUPPORT']}/bin/mtasc\" "
-	else
-		cmd = "\"#{yml['mtasc_path']}\" "
+	if !@project_path || !File.exist?("#{@project_path}/mtasc.yaml")
+		@project_path = File.dirname @file_path
 	end
-	cmd += " \"#{yml['app']}\" "
-	cmd += " -version #{yml['player']} "
+	Dir.chdir(@project_path)
+	if File.exists?(@project_path + "/mtasc.yaml")
+		yml = YAML.load(File.open('mtasc.yaml'))
+		if yml['mtasc_path']
+			@mtasc_path = yml['mtasc_path']
+		else
+			@mtasc_path = ENV['TM_BUNDLE_SUPPORT'] + "/bin/mtasc"
+		end
+		@app = yml['app']
+		@swf = yml['swf']
+		@player = yml['player']
+		@width = yml['width']
+		@height = yml['height']
+		@fps = yml['fps']
+		@classpaths = yml['classpaths']
+		@trace = yml['trace']
+		@preview = yml['preview']
+	else
+		@mtasc_path = ENV['TM_BUNDLE_SUPPORT'] + "/bin/mtasc"
+		@app = @file_name
+		@swf = File.basename(@file_name,".as") + ".swf"
+		@player = 8
+		@width = 800
+		@height = 600
+		@fps = 31
+	end
+
+	# MTASC binary
+	cmd = @q + @mtasc_path + @q
+
+	# App name
+	cmd += " " + @app
+
+	# Player version
+	cmd += " -version " + @player.to_s
+
 	# Standard Adobe Classes
 	cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/std/\" "
 	cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/std8/\" "
+
 	# XTrace Classes
 	cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/\" "
+
 	# User-provided Classpath
-	if yml['classpaths']
-		cmd += " -cp \"#{yml['classpaths'].join('" -cp "')}\" "
+	if @classpaths
+		cmd += " -cp \"#{@classpaths.join('" -cp "')}\" "
 	end
+
 	# Use XTrace for debugging
-	if !yml['trace']
+	if !@trace
 		# Open XTrace...
 		`open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
 		cmd += " -pack com/mab/util "
 		cmd += " -trace com.mab.util.debug.trace "
 	end
-	if !File.exists? yml['swf']
-		cmd += " -header #{yml['width']}:#{yml['height']}:#{yml['fps']} "
+
+	if !@swf
+		cmd += " -header #{@width}:#{@height}:#{@fps}"
 	else
 		cmd += " -keep "
 	end
+
 	cmd += " -main "
-	cmd += " -swf #{yml['swf']} "
+	cmd += " -swf #{@swf}"
 
 	stdin, stdout, stderr = Open3.popen3(cmd)
 	warnings = []
@@ -76,26 +112,24 @@ def mtasc_compile
 		else
 			m = /(.+):([0-9]+): characters ([0-9]+)/.match(err)
 			if m != nil
-				a = "txmt://open?url=file://#{ENV['TM_PROJECT_DIRECTORY']}/#{m[1]}&line=#{m[2]}&column=#{m[3].to_i + 1}"
+				a = "txmt://open?url=file://#{@project_path}/#{m[1]}&line=#{m[2]}&column=#{m[3].to_i + 1}"
 				err = "<a href=\"#{a}\">#{err}</a>"
 			end
 			errors.push(err.chomp)
 		end
 	end
 	if !errors.empty?
-		html_header("Error!","Build With MTASC")
-		puts '<h1>Errors:</h1>'
-		puts "<p>#{errors.uniq.join('</p><p>')}</p>"
-		html_footer
+		warning "#{errors.uniq.join('</p><p>')} <br/> <pre>#{cmd}</pre>", "Errors:"
 	end
 	if !warnings.empty?
-		html_header("Warning!","Build With MTASC")
-		puts '<h1>Warnings:</h1>'
-		puts "<p>#{warnings.uniq.join('</p><p>')}</p>"
-		html_footer
+		warning "#{warnings.uniq.join('</p><p>')} <br/> <pre>#{cmd}</pre>", "Warnings:"
 	end
 	if errors.empty? && warnings.empty?
-		`open #{yml['preview']}` if yml["preview"]
+		if @preview
+			`open "#{@preview}"`
+		else
+			`open -a SAFlashPlayer "#{@swf}"`
+		end
 	else
 		TextMate.exit_show_html
 	end

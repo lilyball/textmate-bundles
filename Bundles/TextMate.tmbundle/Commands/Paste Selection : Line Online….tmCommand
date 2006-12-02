@@ -151,7 +151,7 @@ def paste_stdin(priv, wrap)
       gz.write document_to_html(xml)
     end
 
-    author = "#{`niutil -readprop / "/users/$USER" realname`.chomp} (#{ENV['USER']})"
+    author = ENV['TM_AUTHOR'] || "#{`niutil -readprop / "/users/$USER" realname`.chomp} (#{ENV['USER']})"
     ext = find_language_ext
 
     %x{

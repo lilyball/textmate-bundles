@@ -93,7 +93,7 @@ def mtasc_compile
 		cmd += " -trace com.mab.util.debug.trace "
 	end
 
-	if !@swf
+	if !File.exists? @swf
 		cmd += " -header #{@width}:#{@height}:#{@fps}"
 	else
 		cmd += " -keep "

@@ -48,25 +48,26 @@ stack = []
 line = 1
 while (!num or line<num) and s = $stdin.gets
   dumped = false
-	if s =~ open_match
-		stack.push $~.to_a
-	elsif s =~ close_match
+  if s =~ open_match
+    stack.push $~.to_a
+  elsif s =~ close_match
     e = $~.to_a
     if e[1..-1] == stack[-1][1..-1]
-		  stack.pop
+      stack.pop
     elsif error_text
       print error_text.gsub(/\$(\d)/) {e[$1.to_i]}
       dumped = true
     end
   end
-	line += 1
+  line += 1
   print s if pass and not dumped
 end
 
 # Insert correct closers.
 while levels > 0 and e = stack.pop
-	puts close_text.gsub(/\$(\d)/) {e[$1.to_i]}
+  print close_text.gsub(/\$(\d)/) {e[$1.to_i]}
   levels -= 1
+  print "\n" if levels > 0 and not stack.empty?
 end
 
 # Dump rest of file, if requested.

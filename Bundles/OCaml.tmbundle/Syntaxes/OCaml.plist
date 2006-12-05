@@ -1105,6 +1105,12 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>match</key>
+					<string>\(\*\*\)</string>
+					<key>name</key>
+					<string>comment.block.empty.ocaml</string>
+				</dict>
+				<dict>
 					<key>begin</key>
 					<string>\(\*</string>
 					<key>end</key>
@@ -1168,11 +1174,16 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
+							<string>meta.empty-typing-pair.parens.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
 							<string>meta.empty-typing-pair.ocaml</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?:\[\s*(\])|\(\s*(\)))</string>
+					<string>(?:\[\s*(\])|\((\))|\(\s*(\)))</string>
 					<key>name</key>
 					<string>constant.language.pseudo-variable.ocaml</string>
 				</dict>

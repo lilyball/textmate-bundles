@@ -93,18 +93,8 @@
 			<string>constant.character.escape.tcl</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.variable.tcl</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(\$)(\w+)(\([^\)]+\))?</string>
-			<key>name</key>
-			<string>variable.other.tcl</string>
+			<key>include</key>
+			<string>#variable</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -140,18 +130,8 @@
 					<string>constant.character.escape.tcl</string>
 				</dict>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.variable.tcl</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(\$)([a-zA-Z0-9_:]+(\([^\)]+\))?|\{[^\}]*\})</string>
-					<key>name</key>
-					<string>variable.other.tcl</string>
+					<key>include</key>
+					<string>#variable</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -187,6 +167,24 @@
 			</array>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>variable</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.tcl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\$)([a-zA-Z0-9_:]+(\([^\)]+\))?|\{[^\}]*\})</string>
+			<key>name</key>
+			<string>variable.other.tcl</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.tcl</string>
 	<key>uuid</key>

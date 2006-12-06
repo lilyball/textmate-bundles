@@ -85,6 +85,7 @@ sub ret_backtrace {
   # foreach $key (keys %i) {
   #     print STDERR "$key  :  $i{$key}\n";
   # }
+  $arg =~ s/\n/\<br\>/g;
   $mess .= "<div id='exception_report' class='framed'>\n";
   $mess .= "<p id='exception'><strong>$arg</strong></p>\n";
   $mess .= "<blockquote><table border='0' cellspacing='0' cellpadding='0'>\n";

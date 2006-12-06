@@ -1,60 +1,125 @@
 package exception_handler;
-
-use Exporter;
+use sigtrap qw(die normal-signals);
+use IO::Handle;
+use Carp;
 use File::Spec;
 use File::Basename;
-use CGI::Util qw/escape unescape/;
-use base qw(Exporter);
-use vars qw($VERSION @EXPORT);
-no warnings;
-use strict;
+use Data::Dumper;
 
-our $VERSION = '0.01';
-our @EXPORT  = qw(die warn);
+use sigtrap 'handler', \&tm_die;
+
+$Carp::CarpLevel = 1;     # How many extra package levels to skip on carp.
 
 BEGIN {
- 	*CORE::GLOBAL::die = \&__PACKAGE__::die;
+    *CORE::GLOBAL::die = \&tm_die;
+    $main::SIG{__DIE__} = \&tm_die;
+    my $error_fd = $ENV{"TM_ERROR_FD"};
+	open (TM_ERROR_FD, ">&=$error_fd");
+	TM_ERROR_FD->autoflush(1);
 }
 
-sub id {
-	my $level = shift;
-	my ($pack, $file, $line) = caller($level);
-	my ($dev, $dirs, $id) = File::Spec->splitpath($file);
-	return ($file, $line);
+sub realwarn { CORE::warn(@_); }
+sub realdie { CORE::die(@_); }
+
+sub longmess {
+    my ($arg, @rest) = shift;
+    {
+        local $@;
+        # XXX fix require to not clear $@?
+        # don't use require unless we need to (for Safe compartments)
+        require Carp::Heavy unless $INC{"Carp/Heavy.pm"};
+    }
+    # Icky backwards compatibility wrapper. :-(
+    my $call_pack = caller();
+    if ($Internal{$call_pack} or $Carp::CarpInternal{$call_pack}) {
+      return longmess_heavy($arg, @rest);
+    }
+    else {
+      local $Carp::CarpLevel = $Carp::CarpLevel + 1;
+      return longmess_heavy($arg, @rest);
+    }
+}
+
+sub longmess_heavy {
+  return @_ if ref($_[0]); # don't break references as exceptions
+  my $i = Carp::long_error_loc();
+  my ($arg, @rest) = @_;
+  return ret_backtrace($i, $arg, @rest);
 }
 
 sub quote {
-    my $str = shift;
-    $str =~ s/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg;
-    return $str;
+	my $str = shift;
+	$str =~ s/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg;
+	return $str;
 }
 
-sub die {
-    my $message = join('', @_);
-    if ($^S) {
-        Carp::croak $message;
-    }
-    else {
-        my $error_fd = $ENV{"TM_ERROR_FD"};
-    	chomp($message);
-    	my ($file, $line) = id(1);
-        my $url = "";
-        my $display_name = "";
-        if ($file ne "-") {
-            $display_name = basename($file);
-            $url = 'url=file://' . quote($file) . '&amp;';
-        }
-        else {
-            $url = "";
-            $display_name = 'untitled';
-        }
-        open (TM_ERROR_FD, ">&=$error_fd");
-        print TM_ERROR_FD "<div id='exception_report' class='framed'>\n";
-        print TM_ERROR_FD "<p id='exception'>$message</p>\n";
-        print TM_ERROR_FD "<blockquote><table border='0' cellspacing='0' cellpadding='0'>\n";
-    	print TM_ERROR_FD '<tr><td>in <a href="txmt://open?' . $url . 'line=$line"> ' . $display_name . "</a> at line $line<td></tr>\n" ;
-    	print TM_ERROR_FD "</table></blockquote></div>";
-    	print TM_ERROR_FD "</div>";
-    	exit($!);
-    }
+sub url_and_display_name {
+	my $file = shift;
+	my $url = "";
+	my $display_name = "";
+	if ($file ne "-") {
+		$display_name = basename($file);
+		$url = 'url=file://' . quote($file);
+	} else {
+		$url = "";
+		$display_name = 'untitled';
+	}
+	return ($url, $display_name);
 }
+
+# Returns a full stack backtrace starting from where it is
+# told.
+sub ret_backtrace { 
+  my ($i, $arg, @rest) = @_;
+  my $mess;
+  #my $err = join '', @error;
+  $i++;
+
+  my $tid_msg = '';
+  if (defined &Thread::tid) {
+    my $tid = Thread->self->tid;
+    $tid_msg = " thread $tid" if $tid;
+  }
+
+  my %i = Carp::caller_info($i);
+  # foreach $key (keys %i) {
+  #     print STDERR "$key  :  $i{$key}\n";
+  # }
+  $mess .= "<div id='exception_report' class='framed'>\n";
+  $mess .= "<p id='exception'><strong>$arg</strong></p>\n";
+  $mess .= "<blockquote><table border='0' cellspacing='0' cellpadding='0'>\n";
+  my ($url, $display_name) = url_and_display_name($i{file});
+  $mess .= "<tr><td><a href='txmt://open?" . $url . "&amp;line=$i{line}'>$i{sub}</a></td><td>&nbsp; in $display_name line $i{line}$tid_msg</td></tr>\n";
+  while (my %i = Carp::caller_info(++$i)) {
+      ($url, $display_name) = url_and_display_name($i{file});
+      $mess .= "<tr><td><a href='txmt://open?" . $url . "&amp;line=$i{line}'>$i{sub}</a></td><td>&nbsp; in $display_name line $i{line}$tid_msg</td></tr>\n";
+  }
+  $mess .= "</table></blockquote></div>";
+  return $mess;
+}
+
+sub ineval {
+  (exists $ENV{MOD_PERL} ? 0 : $^S) || Carp::longmess() =~ /eval [\{\']/m
+}
+
+sub htmlize {
+	my $l = shift;
+	$l =~ s/&/&amp;/g;
+	$l =~ s/</&lt;/g;
+	$l =~ s/>/&gt;/g;
+	return $l;
+}
+
+sub tm_die {
+  my ($arg,@rest) = @_;
+  if (ineval()) {
+      realdie ($arg,@rest) if ineval();
+  }
+  if (!ref($arg)) {
+    print TM_ERROR_FD longmess($arg,@rest);
+  }
+  
+  exit($!);
+}
+
+1;

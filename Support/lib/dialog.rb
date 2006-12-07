@@ -1,4 +1,77 @@
-require File.join(File.dirname(__FILE__),'escape.rb')
+require 'English'
+$LOAD_PATH << File.dirname(__FILE__)
+require 'escape'
+require 'plist'
+
+module TextMate
+  # Wrapper for tm_dialog. See the unit test in progress.rb
+  class WindowNotFound < Exception
+  end
+
+  class Dialog
+    TM_SUPPORT    = ENV['TM_SUPPORT_PATH']
+    TM_DIALOG     = TM_SUPPORT + '/bin/tm_dialog'
+    
+    # safest way to use this object
+    def self.dialog(nib_path, parameters, defaults= nil)
+      dialog = Dialog.new(nib_path, parameters, defaults)
+      begin
+        yield dialog
+      rescue StandardError => error
+        puts 'Received exception:' + error
+      ensure
+        dialog.close
+      end
+    end
+    
+    # instantiate an asynchronous nib
+    def initialize(nib_path, start_parameters, defaults = nil)
+      defaults_args = ''
+      defaults_args = %Q{-d #{e_sh defaults.to_plist}} unless defaults.nil?
+      
+      command = %Q{#{e_sh TM_DIALOG} -a -p #{e_sh start_parameters.to_plist} #{defaults_args} #{e_sh nib_path}}
+      @dialog_token = %x{#{command}}.chomp
+      raise WindowNotFound, "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
+#      raise "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
+    end
+
+    # wait for the user to press a button (with performButtonClick: or returnArguments: action)
+    # or the close box. Returns a dictionary containing the return argument values.
+    # If a block is given, wait_for_input will pass the return arguments to the block
+    # in a continuous loop. The block must return true to continue the loop, false to break out of it.
+    def wait_for_input
+      wait_for_input_core = lambda do
+        text = %x{#{e_sh TM_DIALOG} -w #{@dialog_token} }
+        raise WindowNotFound if $CHILD_STATUS == 54528  # -43
+        raise "Error (#{text})" if $CHILD_STATUS != 0
+
+        PropertyList::load(text)
+      end
+
+      if block_given? then
+        loop do
+          should_continue = yield(wait_for_input_core.call)
+          break unless should_continue
+        end
+      else
+        wait_for_input_core.call
+      end
+    end
+    
+    # update bindings with new value(s)
+    def parameters=(parameters)
+      text = %x{#{e_sh TM_DIALOG} -t #{@dialog_token} -p #{e_sh parameters.to_plist}}
+      raise "Could not update (#{text})" if $CHILD_STATUS != 0
+    end
+    
+    # close the window
+    def close
+      %x{#{e_sh TM_DIALOG} -x #{@dialog_token}}
+    end
+    
+  end
+end
+
 module Dialog
 class << self
   def request_color(string)

@@ -10,6 +10,7 @@
 		174DE8E30AF5A1A60060BD80 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 174DE8E20AF5A1A60060BD80 /* Carbon.framework */; };
 		177E4DA309132A0F0064163D /* Dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 177E4DA209132A0F0064163D /* Dialog.mm */; };
 		178E031A0AED82FE0005685F /* ValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 178E03190AED82FE0005685F /* ValueTransformers.mm */; };
+		831625970B2752AF002857D1 /* TMDSemaphore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 831625950B2752AF002857D1 /* TMDSemaphore.mm */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -25,6 +26,8 @@
 		178E03180AED82FE0005685F /* ValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTransformers.h; sourceTree = "<group>"; };
 		178E03190AED82FE0005685F /* ValueTransformers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ValueTransformers.mm; sourceTree = "<group>"; };
 		32DBCF630370AF2F00C91783 /* Dialog_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dialog_Prefix.pch; sourceTree = "<group>"; };
+		831625950B2752AF002857D1 /* TMDSemaphore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TMDSemaphore.mm; sourceTree = "<group>"; };
+		831625960B2752AF002857D1 /* TMDSemaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMDSemaphore.h; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Dialog.tmplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Dialog.tmplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -76,6 +79,8 @@
 		08FB77AFFE84173DC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				831625950B2752AF002857D1 /* TMDSemaphore.mm */,
+				831625960B2752AF002857D1 /* TMDSemaphore.h */,
 				177E4DA209132A0F0064163D /* Dialog.mm */,
 				177E4DA109132A0F0064163D /* Dialog.h */,
 				178E03190AED82FE0005685F /* ValueTransformers.mm */,
@@ -147,9 +152,12 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "Dialog" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* Dialog */;
 			projectDirPath = "";
+			projectRoot = "";
+			shouldCheckCompatibility = 1;
 			targets = (
 				8D5B49AC048680CD000E48DA /* Dialog */,
 			);
@@ -190,6 +198,7 @@
 			files = (
 				177E4DA309132A0F0064163D /* Dialog.mm in Sources */,
 				178E031A0AED82FE0005685F /* ValueTransformers.mm in Sources */,
+				831625970B2752AF002857D1 /* TMDSemaphore.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

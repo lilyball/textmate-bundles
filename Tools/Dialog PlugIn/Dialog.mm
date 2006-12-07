@@ -1,8 +1,8 @@
 #import <Carbon/Carbon.h>
 #import <string>
+#import <sys/stat.h>
 #import "Dialog.h"
-
-NSLock* Lock = [NSLock new];
+#import "TMDSemaphore.h"
 
 // Apple ought to document this <rdar://4821265>
 @interface NSMethodSignature (Undocumented)
@@ -22,48 +22,147 @@ NSLock* Lock = [NSLock new];
 	NSWindow* window;
 	BOOL isModal;
 	BOOL center;
-	BOOL didLock;
+	BOOL async;
+//	BOOL didLock;
 	BOOL didCleanup;
+	int	token;
 }
+
 - (NSDictionary*)instantiateNib:(NSNib*)aNib;
+- (void)updateParameters:(NSMutableDictionary *)params;
+
+// return unique ID for this NibLoader instance
+- (int)token;
+- (NSString*)windowTitle;
++ (NibLoader*)nibLoaderForToken:(int)token;
++ (NSArray*)nibDescriptions;
+- (BOOL)isAsync;
+- (NSMutableDictionary*)returnResult;
+
 @end
 
 @implementation NibLoader
-- (id)initWithParameters:(NSMutableDictionary*)someParameters modal:(BOOL)flag center:(BOOL)shouldCenter
+
+static NSMutableArray *	sNibLoaders	= nil;
+static int sNextNibLoaderToken = 1;
+
+- (id)initWithParameters:(NSMutableDictionary*)someParameters modal:(BOOL)flag center:(BOOL)shouldCenter aysnc:(BOOL)inAsync
 {
 	if(self = [super init])
 	{
+		if(sNibLoaders == nil)
+			sNibLoaders = [[NSMutableArray alloc] init];
+		
 		parameters = [someParameters retain];
 		[parameters setObject:self forKey:@"controller"];
 		isModal = flag;
 		center = shouldCenter;
+		async = inAsync;
+		
+		token = sNextNibLoaderToken;
+		sNextNibLoaderToken += 1;
+		
+		[sNibLoaders addObject:self];
 	}
 	return self;
+}
+
+// Return the result; if there is no result, return the parameters
+- (NSMutableDictionary *)returnResult
+{
+	id result = [parameters objectForKey:@"result"];
+	if(result == nil)
+	{
+		result = [[parameters mutableCopy] autorelease];
+		[result removeObjectForKey:@"controller"];
+	}
+	return result;
+}
+
+// Async param updates
+- (void)updateParameters:(NSMutableDictionary *)updatedParams
+{
+	NSArray *	keys = [updatedParams allKeys];
+
+	enumerate(keys, id key)
+	{
+		[parameters setValue:[updatedParams valueForKey:key] forKey:key];
+	}
 }
 
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-
+	
 	enumerate(topLevelObjects, id object)
 		[object release];
 	[topLevelObjects release];
 	[parameters release];
-
 	[super dealloc];
 }
 
-- (void)lock
+- (BOOL)isAsync
 {
-	[Lock lock];
-	didLock = YES;
+	return async;
 }
 
-- (void)unlock
+- (int)token
 {
-	if(didLock)
-		[Lock unlock];
-	didLock = NO;
+	return token;
+}
+
+- (NSString*)windowTitle
+{
+	return [window title];
+}
+
++ (NSArray*)nibDescriptions
+{
+	NSMutableArray*	outNibArray = [NSMutableArray array];
+	
+	enumerate(sNibLoaders, NibLoader* nibLoader)
+	{
+//		if( [nibLoader isAsync] )
+		{
+			NSMutableDictionary*	nibDict = [NSMutableDictionary dictionary];
+			NSString*				nibTitle = [nibLoader windowTitle];
+			
+			[nibDict setObject:[NSNumber numberWithInt:[nibLoader token]] forKey:@"token"];
+			if(nibTitle != nil)
+			{
+				[nibDict setObject:nibTitle forKey:@"windowTitle"];
+			}
+			[outNibArray addObject:nibDict];
+		}
+	}
+	
+	return outNibArray;
+}
+
++ (NibLoader*)nibLoaderForToken:(int)token
+{
+	NibLoader *	outLoader = nil;
+	
+	enumerate(sNibLoaders, NibLoader* loader)
+	{
+		if([loader token] == token)
+		{
+			outLoader = loader;
+			break;
+		}
+	}
+
+	return outLoader;
+}
+
+
+- (void)wakeClient
+{
+	if(isModal)
+		[NSApp stopModal];
+	
+	TMDSemaphore *	semaphore = [TMDSemaphore semaphoreForTokenInt:token];
+	[semaphore stopWaiting];
 }
 
 - (void)setWindow:(NSWindow*)aWindow
@@ -79,6 +178,8 @@ NSLock* Lock = [NSLock new];
 
 - (void)cleanupAndRelease:(id)sender
 {
+	[sNibLoaders removeObject:self];
+	
 	if(didCleanup)
 		return;
 	didCleanup = YES;
@@ -101,7 +202,7 @@ NSLock* Lock = [NSLock new];
 	if(isModal)
 		[NSApp stopModal];
 
-	[self unlock];
+	[self wakeClient];
 	[self performSelector:@selector(delayedRelease:) withObject:self afterDelay:0];
 }
 
@@ -121,11 +222,11 @@ NSLock* Lock = [NSLock new];
 		[parameters setObject:[sender title] forKey:@"returnButton"];
 	if([sender respondsToSelector:@selector(tag)])
 		[parameters setObject:[NSNumber numberWithInt:[sender tag]] forKey:@"returnCode"];
-
-	[window orderOut:self];
-	[self cleanupAndRelease:self];
+	
+	[self wakeClient];
 }
 
+// returnArgument: implementation. See <http://lists.macromates.com/pipermail/textmate/2006-November/015321.html>
 - (NSMethodSignature*)methodSignatureForSelector:(SEL)aSelector
 {
 	NSString* str = NSStringFromSelector(aSelector);
@@ -145,6 +246,7 @@ NSLock* Lock = [NSLock new];
 	return [super methodSignatureForSelector:aSelector];
 }
 
+// returnArgument: implementation. See <http://lists.macromates.com/pipermail/textmate/2006-November/015321.html>
 - (void)forwardInvocation:(NSInvocation*)invocation
 {
 	NSString* str = NSStringFromSelector([invocation selector]);
@@ -160,9 +262,9 @@ NSLock* Lock = [NSLock new];
 			[dict setObject:arg forKey:[argNames objectAtIndex:i - 2]];
 		}
 		[parameters setObject:dict forKey:@"result"];
-
-		[window orderOut:self];
-		[self cleanupAndRelease:self];
+		
+		// unblock the connection thread
+		[self wakeClient];
 	}
 	else
 	{
@@ -181,7 +283,10 @@ NSLock* Lock = [NSLock new];
 
 - (NSDictionary*)instantiateNib:(NSNib*)aNib
 {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionDidDie:) name:NSPortDidBecomeInvalidNotification object:nil];
+	if(not async)
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionDidDie:) name:NSPortDidBecomeInvalidNotification object:nil];
+	}
 
 	BOOL didInstantiate = NO;
 	@try {
@@ -201,8 +306,6 @@ NSLock* Lock = [NSLock new];
 	
 	if(window)
 	{
-		[self lock];
-
 		if(center)
 		{
 			if(NSWindow* keyWindow = [NSApp keyWindow])
@@ -216,9 +319,19 @@ NSLock* Lock = [NSLock new];
 			}
 		}
 
-		[window makeKeyAndOrderFront:self];
-		if(isModal && window)
-			[NSApp runModalForWindow:window];
+		if(window != nil)
+		{
+			// Show the window
+			[window makeKeyAndOrderFront:self];
+
+			// TODO: When TextMate is capable of running script I/O in it's own thread(s), modal blocking
+			// can go away altogether.
+			if(isModal && window)
+			{
+				[NSApp runModalForWindow:window];
+				[self cleanupAndRelease:self];
+			}
+		}
 	}
 	else
 	{
@@ -248,8 +361,10 @@ NSLock* Lock = [NSLock new];
 	return TextMateDialogServerProtocolVersion;
 }
 
-- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues modal:(BOOL)flag center:(BOOL)shouldCenter
+- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues modal:(BOOL)flag center:(BOOL)shouldCenter async:(BOOL)async
 {
+	id output;
+	
 	if(![[NSFileManager defaultManager] fileExistsAtPath:aNibPath])
 	{
 		NSLog(@"%s nib file not found: %@", _cmd, aNibPath);
@@ -266,15 +381,87 @@ NSLock* Lock = [NSLock new];
 		return nil;
 	}
 
-	NibLoader* nibOwner = [[NibLoader alloc] initWithParameters:someParameters modal:flag center:shouldCenter];
+	NibLoader* nibOwner = [[NibLoader alloc] initWithParameters:someParameters modal:flag center:shouldCenter aysnc:async];
 	if(!nibOwner)
 		NSLog(@"%s couldn't create nib loader", _cmd);
 	[nibOwner performSelectorOnMainThread:@selector(instantiateNib:) withObject:nib waitUntilDone:YES];
-	[Lock lock];
-	[Lock unlock];
-
-	return someParameters;
+	
+	if(async)
+	{
+		output = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+										[NSNumber numberWithUnsignedInt:[nibOwner token]], @"token",
+										[NSNumber numberWithUnsignedInt:0], @"returnCode",
+										nil];
+	}
+	else
+	{
+		output = someParameters;
+	}
+	return output;
 }
+
+// Async updates of parameters
+- (id)updateNib:(id)token withParameters:(id)someParameters
+{
+	NibLoader*	nibLoader	= [NibLoader nibLoaderForToken:[token intValue]];
+	int			resultCode	= -43;
+	
+	if((nibLoader != nil) && [nibLoader isAsync])
+	{
+		[nibLoader updateParameters:someParameters];
+		resultCode = 0;
+	}
+	
+	return [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:resultCode] forKey:@"returnCode"];
+}
+
+// Async close
+- (id)closeNib:(id)token
+{
+	NibLoader*	nibLoader	= [NibLoader nibLoaderForToken:[token intValue]];
+	int			resultCode	= -43;
+	
+	if((nibLoader != nil) /*&& [nibLoader isAsync]*/)
+	{
+		[nibLoader connectionDidDie:nil];
+		resultCode = 0;
+	}
+	
+	return [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:resultCode] forKey:@"returnCode"];
+}
+
+// Async get results
+- (id)retrieveNibResults:(id)token
+{
+	NibLoader*	nibLoader	= [NibLoader nibLoaderForToken:[token intValue]];
+	int			resultCode	= -43;
+	id			results;
+	
+	if((nibLoader != nil) /*&& [nibLoader isAsync]*/)
+	{
+		results = [nibLoader returnResult];
+		resultCode = 0;
+	}
+	else
+	{
+		results = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:resultCode] forKey:@"returnCode"];
+	}
+	
+	return results;
+}
+
+// Async list
+- (id)listNibTokens
+{
+	NSMutableDictionary*	dict		= [NSMutableDictionary dictionary];
+	NSArray*				outNibArray	= [NibLoader nibDescriptions];
+	int						resultCode	= 0;
+		
+	[dict setObject:outNibArray forKey:@"nibs"];
+	[dict setObject:[NSNumber numberWithUnsignedInt:resultCode] forKey:@"returnCode"];
+	return dict;
+}
+
 
 - (id)showMenuWithOptions:(NSDictionary*)someOptions
 {

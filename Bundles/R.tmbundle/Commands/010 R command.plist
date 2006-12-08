@@ -9,7 +9,7 @@
 rawText="`cat`"
 
 curDir=''
-if [[ ${#TM_SELECTED_TEXT} -eq 0 &amp;&amp; ${#TM_DIRECTORY} -gt 0 ]]; then
+if [[ ${#TM_DIRECTORY} -gt 0 ]]; then
 	curDir="$TM_DIRECTORY"
 fi
 

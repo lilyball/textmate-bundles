@@ -1,0 +1,68 @@
+from types import NoneType
+import sys
+import os
+import re
+
+sys.path.insert(0, os.path.join(os.environ["TM_SUPPORT_PATH"], "lib"))
+
+import plistlib
+to_plist = plistlib.writePlistToString
+from_plist = plistlib.readPlistFromString
+
+def sh(cmd): 
+    result = ""
+    pipe = None
+    try:
+        pipe = os.popen(cmd)
+        result = pipe.read()
+    finally:
+        if pipe: pipe.close()
+    return result
+
+def e_sh(s):
+    return re.sub(r"(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])", r'\\', s).replace("\n", "'\n'")
+
+support = os.environ["TM_SUPPORT_PATH"]
+dialog = os.path.join(support, 'bin/tm_dialog')
+
+if not sys.version.startswith("2.5"):
+    def all(it):
+        return not bool(len([truth for truth in it if truth is False]))
+
+def item(val):
+    if isinstance(val, str):
+        return {"title": val}
+    if isinstance(val, tuple):
+        return {"title": val[0]}
+    elif val is None:
+        return {"separator": 1}
+
+def all_are_instance(it, typ):
+    return all([(isinstance(i, typ)) for i in it])
+
+def menu(options):
+    """ Accepts a list and causes TextMate to show an inline menu.
+    
+    If options is a list of strings, will return the selected index.
+    
+    If options is a list of (key, value) tuples, will return value of the
+    selected key. Note that we don't use dicts, so that key-value options
+    can be ordered. If you want to use a dict, try dict.items().
+    """
+    hashed_options = False
+    if not options:
+        return None
+    if all_are_instance(options, (str, NoneType)):
+        menu = dict(menuItems=[item(val) for val in options])    
+    elif all_are_instance(options, (tuple, NoneType)):
+        hashed_options = True
+        menu = dict(menuItems=[item(pair) for pair in options])
+    plist = to_plist(menu)
+    cmd = 'bash -c "%s -up %s"' % (e_sh(dialog), e_sh(plist))
+    result = from_plist(sh(cmd))
+    if not 'selectedIndex' in result:
+        return None
+    index = int(result['selectedIndex'])
+    if hashed_options:
+        return options[index][1]
+    return options[index]

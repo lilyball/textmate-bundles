@@ -106,7 +106,7 @@ class << self
     plist['summary']  = options[:summary] || ''
     plist['log']      = options[:log]     || ''
 
-    `#{e_sh dialog} -cp #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
+    `#{e_sh dialog} -cap #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
   end
   
   def menu(options)

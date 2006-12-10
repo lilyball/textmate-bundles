@@ -26,7 +26,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(CustomEvent|Subscriber|Event|Dom|Point|Region|Connect|DD|DDProxy|DDTarget|DragDrop|DragDropMgr|DDM|Anim|AnimMgr|Bezier|ColorAnim|Easing|Motion)\b</string>
+			<string>\.(CustomEvent|Subscriber|Event|EventProvider|Dom|Point|Region|Connect|DD|DDProxy|DDTarget|DragDrop|DragDropMgr|DDM|Anim|AnimMgr|Bezier|ColorAnim|Easing|Motion|Scroll|AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Config|KeyListener|Attribute|AttributeProvider|Element)\b</string>
+			<key>name</key>
+			<string>support.class.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Calendar|Calendar2up|Calendar_Core|CalendarGroup|DateMath|Module|Overlay|OverlayManager|Tooltip|Panel|Dialog|SimpleDialog|ContainerEffect|Logger|LogMsg|LogReader|LogWriter|Menu|MenuItem|Menubar|MenuBarItem|MenuManager|MenuModule|MenuModuleItem|ContextMenu|ContextMenuItem|Slider|SliderThumb|Tab|TabView|TreeView|Node|HTMLNode|MenuNode|TextNode|RootNode|TVAnim|TVFadeIn|TVFadeOut)\b</string>
 			<key>name</key>
 			<string>support.class.js.yui</string>
 		</dict>
@@ -38,7 +44,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.()\b(?=\()</string>
+			<string>\.(getScope)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Subscriber.js.yui</string>
 		</dict>
@@ -50,13 +56,19 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(on|addListener|generateId|getCharCode|getEvent|getListeners|getPageX|getPageY|getRelatedTarget|getTarget|getTime|getXY|onAvailable|onContentReady|preventDefault|purgeElement|removeListener|resolveTextNode|stopEvent|stopPropagation)\b(?=\()</string>
+			<string>\.(addListener|clearCache|fireLegacyEvent|generateId|getCharCode|getEl|getEvent|getLegacyIndex|getListeners|getPageX|getPageY|getRelatedTarget|getTarget|getTime|getXY|on|onAvailable|onContentReady|preventDefault|purgeElement|removeListener|resolveTextNode|startInterval|stopEvent|stopPropagation|useLegacyEvent)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Event.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(addClass|batch|generateId|get|getViewportHeight|getViewportWidth|getElementsBy|getElementsByClassName|getRegion|getStyle|getX|getXY|getY|hasClass|inDocument|isAncestor|removeClass|replaceClass|setStyle|setX|setXY|setY)\b(?=\()</string>
+			<string>\.(createEvent|fireEvent|hasEvent|subscribe|unsubscribe)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.EventProvider.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addClass|batch|generateId|get|getClientHeight|getClientWidth|getDocumentHeight|getDocumentWidth|getElementsBy|getElementsByClassName|getRegion|getStyle|getViewportHeight|getViewportWidth|getX|getXY|getY|hasClass|inDocument|isAncestor|removeClass|replaceClass|setStyle|setX|setXY|setY)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Dom.js.yui</string>
 		</dict>
@@ -68,43 +80,19 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(abort|asyncRequest|createExceptionObject|createResponseObject|createXhrObject|getConnectionObject|handleReadyState|handleTransactionResponse|initHeader|isCallInProgress|releaseObject|setDefaultPostHeader|setForm|setHeader|setPollingInterval|setProgId)\b(?=\()</string>
+			<string>\.(abort|appendPostData|asyncRequest|createExceptionObject|createFrame|createResponseObject|createXhrObject|getConnectionObject|handleReadyState|handleTransactionResponse|initHeader|isCallInProgress|releaseObject|resetFormState|setDefaultPostHeader|setForm|setHeader|setPollingInterval|setProgId|uploadFile)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Connect.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(alignElWithMouse|applyConfig|autoOffset|b4Drag|b4MouseDown|cachePosition|setDelta|setDragElPos)\b(?=\()</string>
-			<key>name</key>
-			<string>support.function.DD.js.yui</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\.(applyConfig|b4EndDrag|b4MouseDown|b4StartDrag|createFrame|endDrag|initFrame)\b(?=\()</string>
-			<key>name</key>
-			<string>support.function.DDProxy.js.yui</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\.(addInvalidHandleClass|addInvalidHandleId|addInvalidHandleType|addToGroup|applyConfig|clearConstraints|clearTicks|endDrag|getDragEl|getEl|initTarget|isLocked|isValidHandleChild|lock|onAvailable|onDrag|onDragDrop|onDragEnter|onDragOut|onDragOver|onMouseDown|onMouseUp|removeFromGroup|removeInvalidHandleClass|removeInvalidHandleId|removeInvalidHandleType|resetContraints|setDragElId|setHandleElId|setInitPosition|setOuterHandleElId|setPadding|setXConstraint|setYConstraint|startDrag|unlock|unreg)\b(?=\()</string>
-			<key>name</key>
-			<string>support.function.DragDrop.js.yui</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\.(getBestMatch|getClientHeight|getClientWidth|getCss|getDDById|getElement|getLocation|getPosX|getPosY|getRelated|getScrollLeft|getScrollTop|getStyle|handleWasClicked|isDragDrop|isHandle|isLegalTarget|isLocked|isTypeOfDD|lock|moveToEl|numericSort|refreshCache|regDragDrop|regHandle|startDrag|stopEvent|swapNode|unlock|verifyEl)\b(?=\()</string>
-			<key>name</key>
-			<string>support.function.DragDropMgr.js.yui</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\.(animate|doMethod|getAttribute|getDefaultUnit|getEl|getStartTime|isAnimated|setAttribute|stop)\b(?=\()</string>
+			<string>\.(animate|doMethod|getAttribute|getDefaultUnit|getEl|getStartTime|init|isAnimated|onTween|setAttribute|setRuntimeAttribute|stop)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Anim.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(registerElement|run|start|stop|unregister)\b(?=\()</string>
+			<string>\.(correctFrame|registerElement|run|start|stop|unRegister)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.AnimMgr.js.yui</string>
 		</dict>
@@ -128,9 +116,327 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(doMethod|getAttribute|setAttribute)\b(?=\()</string>
+			<string>\.()\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Motion.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Scroll.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addInvalidHandleClass|addInvalidHandleId|addInvalidHandleType|addToGroup|applyConfig|b4Drag|b4DragDrop|b4DragOut|b4DragOver|b4EndDrag|b4MouseDown|b4StartDrag|clearConstraints|clearTicks|endDrag|getDragEl|getEl|getTick|handleMouseDown|handleOnAvailable|init|initTarget|isLocked|isValidHandleChild|lock|onAvailable|onDrag|onDragDrop|onDragEnter|onDragOut|onDragOver|onInvalidDrop|onMouseDown|onMouseUp|padding|removeFromGroup|removeInvalidHandleClass|removeInvalidHandleId|removeInvalidHandleType|resetContraints|setDragElId|setHandleElId|setInitPosition|setOuterHandleElId|setPadding|setStartPosition|setXConstraint|setXTicks|setYConstraint|setYTicks|startDrag|unlock|unreg)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DragDrop.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(fireEvents|getBestMatch|getClientHeight|getClientWidth|getCss|getDDById|getElement|getElWrapper|getLocation|getPosX|getPosY|getRelated|getScrollLeft|getScrollTop|getStyle|handleMouseDown|handleMouseMove|handleMouseUp|handleWasClicked|init|isDragDrop|isHandle|isLegalTarget|isLocked|isOverTarget|isTypeOfDD|lock|moveToEl|numericSort|refreshCache|regDragDrop|regHandle|removeDDFromGroup|startDrag|stopDrag|stopEvent|swapNode|unlock|unregAll|verifyEl)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DragDropMgr.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(alignElWithMouse|applyConfig|autoOffset|autoScroll|cachePosition|getTargetCoord|setDelta|setDragElPos)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DD.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(createFrame|initFrame|showFrame)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DDProxy.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DDTarget.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(doBeforeExpandContainer|formatResult|getListItemData|getListItems|isContainerOpen|sendQuery|setBody|setFooter|setHeader)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.AutoComplete.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(doQuery|flushCache|getResults)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DataSource.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DS_JSArray.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DS_JSFunction.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(parseResponse)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DS_XHR.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addMonthRenderer|addMonths|addRenderer|addWeekdayRenderer|addYears|applyListeners|buildDayLabel|buildMonthLabel|buildWeekdays|clear|clearAllBodyCellStyles|clearElement|configClose|configIframe|configLocale|configLocaleValues|configMaxDate|configMinDate|configOptions|configPageDate|configSelected|configTitle|deselect|deselectAll|deselectCell|doCellMouseOut|doCellMouseOver|doSelectCell|getDateByCellId|getDateFieldsByCellId|getSelectedDates|hide|init|initEvents|initStyles|isDateOOM|nextMonth|nextYear|onBeforeDeselect|onBeforeSelect|onChangePage|onClear|onDeselect|onRender|onReset|onSelect|previousMonth|previousYear|refreshLocale|render|renderBody|renderBodyCellRestricted|renderCellDefault|renderCellNotThisMonth|renderCellStyleHighlight1|renderCellStyleHighlight2|renderCellStyleHighlight3|renderCellStyleHighlight4|renderCellStyleSelected|renderCellStyleToday|renderFooter|renderHeader|renderOutOfBoundsDate|renderRowFooter|renderRowHeader|reset|resetRenderers|select|selectCell|setMonth|setYear|show|styleCellDefault|subtractMonths|substractYears|validate)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Calendar.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addMonthRenderer|addMonths|addRenderer|addWeekdayRenderer|addYears|callChildFunction|clear|configPageDate|configPages|constructChild|delegateConfig|deselect|deselectAll|deselectCell|getSelectedDates|init|initEvents|nextMonth|nextYear|previousMonth|previousYear|render|renderFooter|renderHeader|reset|select|selectCell|setChildFunction|setMonth|setYear|sub|subtractMonths|subtractYears|unsub)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.CalendarGroup.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(add|after|before|between|clearTime|findMonthEnd|findMonthStart|getDayOffset|getJan1|getWeekNumber|isMonthOverlapWeek|isYearOverlapWeek|subtract)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DateMath.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addProperty|alreadySubscribed|applyConfig|checkBoolean|checkNumber|fireEvent|fireQueue|getConfig|getProperty|init|outputEventQueue|queueProperty|refireEvent|refresh|resetProperty|setProperty|subscribeToConfigEvent|unsubscribeFromConfigEvent)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Config.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(disable|enable|handleKeyPress)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.KeyListener.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(appendToBody|appendToFooter|appendToHeader|configMonitorResize|configVisible|destroy|hide|init|initDefaultConfig|initEvents|initResizeMonitor|onDomResize|render|setBody|setFooter|setHeader|show)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Module.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(align|center|configConstrainToViewport|configContext|configFixedCenter|configHeight|configIframe|configVisible|configWidth|configX|configXY|configY|configZIndex|destroy|doCenterOnDOMEvent|enforceContraints|hideIframe|hideMacGeckoScrollbars|init|initDefaultConfig|initEvenrts|moveTo|onDomResize|showIframe|showMacGeckoScrollbars|syncPosition|windowResizeHandle|windowScrollHandler)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Overlay.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(blurAll|compareZIndexDesc|find|focus|getActive|hideAll|init|initDefaultConfig|register|remove|showAll)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.OverlayManager.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(configContainer|configContext|configText|doHide|doShow|init|initDefaultConfig|onContextMouseMove|onContextMouseOut|onContextMouseOver|preventOverlay)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Tooltip.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(buildMask|buildWrapper|configClose|configDraggable|configHeight|configKeyListeners|configModal|configUnderlay|configWidth|configzIndex|hideMask|init|initDefaultConfig|initEvents|onDomResize|registerDragDrop|removeMask|render|showMask|sizeMask|sizeUnderlay)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Panel.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(blurButtons|cancel|configButtons|doSubmit|focusDefaultButton|focusFirst|focusFirstButton|focusLast|focusLastButton|getData|init|initDefaultConfig|initEvents|registerForm|submit|validate)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Dialog.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(configIcon|configText|init|initDefaultConfig|registerForm)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.SimpleDialog.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(animateIn|animateOut|FADE|handleCompleteAnimateIn|handleCompleteAnimateOut|handleStartAnimateIn|handleStartAnimateOut|handleTweenAnimateIn|handleTweenAnimateOut|init|SLIDE)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.ContainerEffect.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(disableBrowserConsole|enableBrowserConsole|getStack|getStartTime|log|reset)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Logger.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.LogMsg.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(formatMsg|getLastTime|hide|html2Text|pause|resume|setTitle|show)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.LogReader.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(getSource|log|setSource)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.LogWriter.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addItem|addItems|clearActiveItem|configContainer|configHideDelay|configIframe|configPosition|configVisible|destroy|disableAutoSubmenuDisplay|enforceConstraints|getItem|getItemGroups|getRoot|init|initDefaultConfig|initEvents|insertItem|onDomResize|removeItem|setInitialFocus|setInitialSelection|setItemGroupTitle)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Menu.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(blur|configChecked|configDisabled|configEmphasis|configHelpText|configSelected|configStrongEmphasis|configSubmenu|configTarget|configText|configUrl|destroy|focus|getFirstItemIndex|getNextArrayItem|getNextEnabledSibling|getPreviousArrayItem|getPreviousEnabledSibling|init|initDefaultConfig|initHelpText|removeHelpText)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.MenuItem.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(init|initDefaultConfig)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Menubar.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(init)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.MenuBarItem.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addItem|addMenu|getMenu|getMenuRootElement|getMenus|hideVisible|onDOMEvent|onItemAdded|onItemDestroy|onItemRemoved|onMenuDestroy|onMenuVisibleConfigChange|removeItem|removeMenu)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.MenuManager.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.MenuModule.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.MenuModuleItem.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(configTrigger|destroy|init|initDefaultConfig)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.ContextMenu.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(init)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.ContextMenuItem.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(b4MouseDown|endMove|fireEvents|focus|getThumb|getValue|getXValue|getYValue|handleThumbChange|lock|moveOneTick|moveThumb|onChange|onDrag|onMouseDown|onSliderEnd|onSlideStart|setRegionValue|setSliderStartState|setThumbCenterPoint|setValue|thumbMouseUp|unlock|verifyOffset|getHorizSlider|getSliderRegion|getVertSlider)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Slider.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(clearTicks|getOffsetFromParent|getValue|getXValue|getYValue|initSlider|onChange)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.SliderThumb.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(configureAttribute|fireBeforeChangeEvent|fireChangeEvent|get|getAttributeConfig|getAttributeKeys|refresh|register|resetAttributeConfig|resetValue|set|setAttributes)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.AttributeProvider.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(configure|getValue|refresh|resetConfig|resetValue|setValue|getValue|refresh|resetConfig|resetValue|setValue)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Attribute.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addClass|addListener|appendChild|appendTo|fireQueue|getElementsByClassName|getElementsByTagName|getStyle|hasChildNodes|hasClass|initAttributes|insertBefore|on|removeChild|removeClass|removeListener|replaceChild|replaceClass|setStyle)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Element.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addTab|contentTransition|createTabs|DOMEventHandler|getTab|getTabIndex|initAttributes|removeTab)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.TabView.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(initAttributes)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Tab.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(animateCollapse|animateExpand|collapseAll|collapseComplete|draw|expandAll|expandComplete|generateId|getEl|getNodeByIndex|getNodeByProperty|getNodesByProperty|getRoot|init|onCollapse|onExpand|popNode|regNode|removeChildren|removeNode|setCollapseAnim|setDynamicLoad|setExpandAnim|setUpLabel|addHandler|getNode|getTree|preload|removeHandler)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.TreeView.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(appendChild|appendTo|applyParent|collapseToggleStyle|collapseAll|completeRender|expand|expandAll|getAncestor|getChildrenEl|getChildrenElId|getChildrenHtml|getDepthStyle|getEl|getElId|getHoverStyle|getHtml|getIconMode|getNodeHtml|getSiblings|getStyle|getToggleEl|getToggleElId|getToggleLink|hasChildren|hideChildren|init|insertAfter|insertBefore|isChildOf|isDynamic|isRoot|loadComplete|refresh|renderChildren|setDynamicLoad|showChildren|toggle)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Node.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(getContentEl)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.HTMLNode.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.MenuNode.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(getLabelEl|onLabelClick)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.TextNode.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.RootNode.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(getAnim|isValid)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.TVAnim.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(animate|onComplete)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.TVFadeIn.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(animate|onComplete)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.TVFadeOut.js.yui</string>
 		</dict>
 		<dict>
 			<key>include</key>

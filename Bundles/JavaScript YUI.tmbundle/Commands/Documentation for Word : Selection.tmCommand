@@ -41,6 +41,51 @@ switch($scope) {
 	case 'DragDrop':
 	case 'DragDropMgr':
 		$page = 'YAHOO.util.' . $scope . '.html'; break;
+	case 'AutoComplete':
+	case 'DataSource':
+	case 'DS_JSArray':
+	case 'DS_JSFunction':
+	case 'DS_XHR':
+	case 'Calendar':
+	case 'Calendar2up':
+	case 'Calendar_Core':
+	case 'CalendarGroup':
+	case 'DateMath':
+	case 'Module':
+	case 'Overlay':
+	case 'OverlayManager':
+	case 'Tooltip':
+	case 'Panel':
+	case 'Dialog':
+	case 'SimpleDialog':
+	case 'ContainerEffect':
+	case 'Logger':
+	case 'LogMsg':
+	case 'LogReader':
+	case 'LogWriter':
+	case 'Menu':
+	case 'MenuItem':
+	case 'Menubar':
+	case 'MenuBarItem':
+	case 'MenuManager':
+	case 'MenuModule':
+	case 'MenuModuleItem':
+	case 'ContextMenu':
+	case 'ContextMenuItem':
+	case 'Slider':
+	case 'SliderThumb':
+	case 'Tab':
+	case 'TabView':
+	case 'TreeView':
+	case 'Node':
+	case 'HTMLNode':
+	case 'MenuNode':
+	case 'TextNode':
+	case 'RootNode':
+	case 'TVAnim':
+	case 'TVFadeIn':
+	case 'TVFadeOut':
+		$page = 'YAHOO.widget.' . $scope . '.html'; break;
 	default:
 		$page = ''; $anchor = '';
 }

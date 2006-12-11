@@ -5,22 +5,7 @@ import re
 
 sys.path.insert(0, os.path.join(os.environ["TM_SUPPORT_PATH"], "lib"))
 
-import plistlib
-to_plist = plistlib.writePlistToString
-from_plist = plistlib.readPlistFromString
-
-def sh(cmd): 
-    result = ""
-    pipe = None
-    try:
-        pipe = os.popen(cmd)
-        result = pipe.read()
-    finally:
-        if pipe: pipe.close()
-    return result
-
-def e_sh(s):
-    return re.sub(r"(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])", r'\\', s).replace("\n", "'\n'")
+from tm_helpers import sh, sh_escape, to_plist, from_plist
 
 support = os.environ["TM_SUPPORT_PATH"]
 dialog = os.path.join(support, 'bin/tm_dialog')
@@ -58,7 +43,7 @@ def menu(options):
         hashed_options = True
         menu = dict(menuItems=[item(pair) for pair in options])
     plist = to_plist(menu)
-    cmd = 'bash -c "%s -up %s"' % (e_sh(dialog), e_sh(plist))
+    cmd = 'bash -c "%s -up %s"' % (sh_escape(dialog), sh_escape(plist))
     result = from_plist(sh(cmd))
     if not 'selectedIndex' in result:
         return None

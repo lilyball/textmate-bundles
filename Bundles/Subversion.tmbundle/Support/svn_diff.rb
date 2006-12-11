@@ -1,11 +1,9 @@
 #!/usr/bin/env ruby -w
 
-$LOAD_PATH << ENV['TM_SUPPORT_PATH'] + "/lib"
-$LOAD_PATH << ENV['TM_SUPPORT_PATH'] + "/bin"
-require 'progress'
-require 'exit_codes'
-require 'escape'
-require 'shelltokenize' # for TextMate::selected_paths_array
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/shelltokenize" # for TextMate::selected_paths_array
 
 module Subversion
   def Subversion.diff_active_file( revision, command )

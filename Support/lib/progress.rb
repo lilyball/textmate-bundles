@@ -1,6 +1,5 @@
 require 'English'
-$LOAD_PATH << File.dirname(__FILE__)
-require 'dialog'
+require File.dirname(__FILE__) + '/dialog'
 
 module TextMate
 

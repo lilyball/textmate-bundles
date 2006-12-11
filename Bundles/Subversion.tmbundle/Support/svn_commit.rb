@@ -3,18 +3,16 @@ require 'ostruct'
 
 svn         	= ENV['TM_SVN']            || `which svn`.chomp
 bundle      	= ENV['TM_BUNDLE_SUPPORT'] || File.dirname(__FILE__)
-support     	= ENV['TM_SUPPORT_PATH']   || File.dirname(File.dirname(File.dirname(File.dirname(__FILE__)))) + '/Support'
+support     	= ENV['TM_SUPPORT_PATH']   || File.dirname(__FILE__) + '/Support'
 commit_tool 	= ENV['CommitWindow']      || support + '/bin/CommitWindow.app/Contents/MacOS/CommitWindow'
 status_helper	= bundle + "/commit_status_helper.rb"
 diff_cmd		= ENV['TM_SVN_DIFF_CMD']   || 'diff'
 
-$LOAD_PATH << (support + '/lib')
-
-require 'shelltokenize'
-require 'erb_streaming'
-require 'exit_codes'
-require 'progress'
-require 'dialog'
+require "#{ENV['TM_SUPPORT_PATH']}/lib/shelltokenize"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/erb_streaming"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
 
 # puts ARGV.inspect
 # puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG

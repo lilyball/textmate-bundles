@@ -140,7 +140,7 @@ int contact_server_async_update (const char* token, NSMutableDictionary* somePar
 }
 
 // contact_server_async_close: close the window
-int contact_server_async_close (const char* token)
+int contact_server_async_close (const char* token, bool ignoreFailure)
 {
 	id	proxy;
 	int	returnCode = -1;
@@ -150,9 +150,16 @@ int contact_server_async_close (const char* token)
 		id result = [proxy closeNib:[NSString stringWithUTF8String:token]];
 		returnCode = [[result objectForKey:@"returnCode"] intValue];
 		
-		if(returnCode == -43)
+		if(ignoreFailure)
 		{
-			fprintf(stderr, "%s (async_close): Window '%s' doesn't exist\n", AppName, token);
+			returnCode = 0;
+		}
+		else
+		{
+			if(returnCode == -43)
+			{
+				fprintf(stderr, "%s (async_close): Window '%s' doesn't exist\n", AppName, token);
+			}
 		}
 	}
 
@@ -170,21 +177,26 @@ int contact_server_async_wait (const char* token)
 	{
 		id result;
 		TMDSemaphore *	semaphore = [TMDSemaphore semaphoreForTokenString:token];
-		
-//		fprintf(stderr, "%s blocking for window '%s' \n", AppName, token);
-//		fflush(stdout);
-		[semaphore wait];
-//		fprintf(stderr, "%s awake for window '%s' \n", AppName, token);
-//		fflush(stdout);
+
+		// Validate the window (throw away this result other than the returnCode)
 		result = [proxy retrieveNibResults:[NSString stringWithUTF8String:token]];
 		returnCode = [[result objectForKey:@"returnCode"] intValue];
+		
+		if(returnCode == 0)
+		{
+			[semaphore wait];
 
-		if(returnCode == -43)
+			result = [proxy retrieveNibResults:[NSString stringWithUTF8String:token]];
+			output_property_list(result);
+		}
+		else if(returnCode == -43)
 		{
 			fprintf(stderr, "%s (async_wait): Window '%s' doesn't exist\n", AppName, token);
 		}
-
-		output_property_list(result);
+		else
+		{
+			fprintf(stderr, "%s (async_wait): Window '%s' error %d\n", AppName, token, returnCode);
+		}
 	}
 
 	return returnCode;
@@ -244,32 +256,46 @@ int contact_server_show_nib (std::string nibName, NSMutableDictionary* someParam
 		res = [[parameters objectForKey:@"returnCode"] intValue];
 		
 		// Async mode: print just the token for the new window
-		if(async)
+		if(res != 0)
 		{
-			if(res == 0)
-			{
-				fprintf(stdout, "%d\n", [[parameters objectForKey:@"token"] intValue]);
-			}
-			else
-			{
-				fprintf(stderr, "Error %d creating window\n", res);
-			}
-		}
-		else if(modal)
-		{
-			if(not quiet)
-			{
-				output_property_list(parameters);
-			}
+			fprintf(stderr, "Error %d creating window\n", res);
 		}
 		else
 		{
-			// Not async, not modal. The task had better be detached from TM, or TM will hang
-			// until the task is killed. Wait until something happens.
-			res = contact_server_async_wait(token);
-			contact_server_async_close(token);
+			if(async)
+			{
+				fprintf(stdout, "%d\n", [[parameters objectForKey:@"token"] intValue]);
+			}
+			else if(modal)
+			{
+				// Modal: the window has already been ordered out; retrieve the results and close it.
+				if(validate_proxy(proxy) && not quiet)
+				{
+					id result;
+					int returnCode;
+
+					result = [proxy retrieveNibResults:[NSString stringWithUTF8String:token]];
+					returnCode = [[result objectForKey:@"returnCode"] intValue];
+
+	//				if(returnCode == 0)
+					{
+						output_property_list(result);
+					}
+				}
+				contact_server_async_close(token, false);	// false -> log errors
+			}
+			else
+			{
+				// Not async, not modal. The task had better be detached from TM, or TM will hang
+				// until the task is killed. Wait until something happens.
+				res = contact_server_async_wait(token);
+				if(not quiet)
+				{
+					output_property_list(parameters);
+				}
+				contact_server_async_close(token, false);	// false -> log errors
+			}
 		}
-		
 	}
 	return res;
 }
@@ -356,6 +382,11 @@ id read_property_list_argument(const char* parameters)
 		{
 			plist = read_property_list_from_file(STDIN_FILENO);
 		}
+	}
+	
+	if(plist == nil)
+	{
+		plist = [NSMutableDictionary dictionary];
 	}
 	
 	return plist;
@@ -458,7 +489,7 @@ int main (int argc, char* argv[])
 				res = contact_server_async_update(token, plist);
 			} break;
 			case kAsyncClose:
-				res = contact_server_async_close(token);
+				res = contact_server_async_close(token, false); 	// false -> generate errors
 				break;
 			case kAsyncWait:
 				res = contact_server_async_wait(token);

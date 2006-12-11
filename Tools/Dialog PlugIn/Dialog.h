@@ -8,7 +8,7 @@
 - (float)version;
 @end
 
-#define TextMateDialogServerProtocolVersion 6
+#define TextMateDialogServerProtocolVersion 7
 
 @protocol TextMateDialogServerProtocol
 - (int)textMateDialogServerProtocolVersion;

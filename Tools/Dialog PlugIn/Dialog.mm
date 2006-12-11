@@ -70,12 +70,26 @@ static int sNextNibLoaderToken = 1;
 // Return the result; if there is no result, return the parameters
 - (NSMutableDictionary *)returnResult
 {
-	id result = [parameters objectForKey:@"result"];
-	if(result == nil)
+	id result = nil;
+	
+	if(async)
 	{
-		result = [[parameters mutableCopy] autorelease];
-		[result removeObjectForKey:@"controller"];
+		// Async dialogs return just the results
+		result = [parameters objectForKey:@"result"];
+
+		if(result == nil )
+		{
+			result = [[parameters mutableCopy] autorelease];
+		}
 	}
+	else
+	{
+		// Other dialogs return everything
+		result = [[parameters mutableCopy] autorelease];
+	}
+
+	[result removeObjectForKey:@"controller"];
+	
 	return result;
 }
 
@@ -92,6 +106,8 @@ static int sNextNibLoaderToken = 1;
 
 - (void)dealloc
 {
+//	NSLog(@"%s %@ %d", _cmd, self, token);
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	enumerate(topLevelObjects, id object)
@@ -160,6 +176,9 @@ static int sNextNibLoaderToken = 1;
 {
 	if(isModal)
 		[NSApp stopModal];
+
+	// Post dummy event; the event system sometimes stalls unless we do this after stopModal. See also connectionDidDie: in this file.
+	[NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint modifierFlags:0 timestamp:0.0f windowNumber:0 context:nil subtype:0 data1:0 data2:0] atStart:NO];
 	
 	TMDSemaphore *	semaphore = [TMDSemaphore semaphoreForTokenInt:token];
 	[semaphore stopWaiting];
@@ -178,11 +197,11 @@ static int sNextNibLoaderToken = 1;
 
 - (void)cleanupAndRelease:(id)sender
 {
-	[sNibLoaders removeObject:self];
-	
 	if(didCleanup)
 		return;
 	didCleanup = YES;
+
+	[sNibLoaders removeObject:self];
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[parameters removeObjectForKey:@"controller"];
@@ -199,9 +218,6 @@ static int sNextNibLoaderToken = 1;
 	}
 	[self setWindow:nil];
 
-	if(isModal)
-		[NSApp stopModal];
-
 	[self wakeClient];
 	[self performSelector:@selector(delayedRelease:) withObject:self afterDelay:0];
 }
@@ -213,7 +229,8 @@ static int sNextNibLoaderToken = 1;
 
 - (void)windowWillClose:(NSNotification*)aNotification
 {
-	[self cleanupAndRelease:self];
+	[self wakeClient];
+//	[self cleanupAndRelease:self];
 }
 
 - (void)performButtonClick:(id)sender
@@ -329,7 +346,7 @@ static int sNextNibLoaderToken = 1;
 			if(isModal && window)
 			{
 				[NSApp runModalForWindow:window];
-				[self cleanupAndRelease:self];
+//				[self cleanupAndRelease:self];
 			}
 		}
 	}
@@ -361,7 +378,7 @@ static int sNextNibLoaderToken = 1;
 	return TextMateDialogServerProtocolVersion;
 }
 
-- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues modal:(BOOL)flag center:(BOOL)shouldCenter async:(BOOL)async
+- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues modal:(BOOL)modal center:(BOOL)shouldCenter async:(BOOL)async
 {
 	id output;
 	
@@ -381,22 +398,22 @@ static int sNextNibLoaderToken = 1;
 		return nil;
 	}
 
-	NibLoader* nibOwner = [[NibLoader alloc] initWithParameters:someParameters modal:flag center:shouldCenter aysnc:async];
+	NibLoader* nibOwner = [[NibLoader alloc] initWithParameters:someParameters modal:modal center:shouldCenter aysnc:async];
 	if(!nibOwner)
 		NSLog(@"%s couldn't create nib loader", _cmd);
 	[nibOwner performSelectorOnMainThread:@selector(instantiateNib:) withObject:nib waitUntilDone:YES];
 	
-	if(async)
+//	if(async || (not modal))
 	{
 		output = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										[NSNumber numberWithUnsignedInt:[nibOwner token]], @"token",
 										[NSNumber numberWithUnsignedInt:0], @"returnCode",
 										nil];
 	}
-	else
-	{
-		output = someParameters;
-	}
+	// else
+	// {
+	// 	output = someParameters;
+	// }
 	return output;
 }
 

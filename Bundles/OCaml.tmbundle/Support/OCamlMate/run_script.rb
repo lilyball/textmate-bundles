@@ -24,8 +24,8 @@ class UserScript
       @display_name = 'untitled'
     end
     
-    @findlibpackages = '"' + ENV['TM_OCAML_FINDLIB_PACKAGES'].strip() + '"'
-    @findlib = if @findlibpackages.length > 0 then "ocamlfind" else "" end
+    @findlibpackages = (ENV['TM_OCAML_FINDLIB_PACKAGES'] || '').strip()
+    @findlib = "ocamlfind"
   end
 
 
@@ -56,9 +56,9 @@ class UserScript
     
     # compile it
     if threadsincludedir != ""
-      command = "#{e_sh @findlib} #{e_sh @ocamlc} -o #{e_sh @dstfile} -I #{e_sh(threadsincludedir)} -package #{@findlibpackages} -linkpkg str.cma unix.cma threads.cma #{e_sh @srcfile} 2>&1"
+      command = "#{e_sh @findlib} #{e_sh @ocamlc} -o #{e_sh @dstfile} -I #{e_sh(threadsincludedir)} -package #{e_sh @findlibpackages} -linkpkg str.cma unix.cma threads.cma #{e_sh @srcfile} 2>&1"
     else
-      command = "#{e_sh @findlib} #{e_sh @ocamlc} -o #{e_sh @dstfile} -package #{@findlibpackages} -linkpkg str.cma unix.cma #{e_sh @srcfile} 2>&1"
+      command = "#{e_sh @findlib} #{e_sh @ocamlc} -o #{e_sh @dstfile} -package #{e_sh @findlibpackages} -linkpkg str.cma unix.cma #{e_sh @srcfile} 2>&1"
     end
     puts command
     output = `#{command}`

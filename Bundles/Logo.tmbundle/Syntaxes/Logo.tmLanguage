@@ -18,7 +18,7 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>^to [\w\.]+</string>
+			<string>^to [\w.]+</string>
 			<key>name</key>
 			<string>entity.name.function.logo</string>
 		</dict>
@@ -44,13 +44,13 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(\:)\w+</string>
+			<string>(\:)(?:\|[^|]*\||[-\w.]*)+</string>
 			<key>name</key>
 			<string>variable.parameter.logo</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>"\w+</string>
+			<string>"(?:\|[^|]*\||[-\w.]*)+</string>
 			<key>name</key>
 			<string>string.other.word.logo</string>
 		</dict>
@@ -64,7 +64,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(;).+$\n?</string>
+			<string>(;).*$\n?</string>
 			<key>name</key>
 			<string>comment.line.semicolon.logo</string>
 		</dict>

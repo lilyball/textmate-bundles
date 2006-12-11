@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
+   TM_EMAIL=${TM_MACPORTS_EMAIL:-EMAIL}
+   perl -pe 's/\$\{(TM_[^}]*)\}/$ENV{$1}/g' \
+      &lt; Portfile &gt; "$TM_NEW_FILE"
+fi
+</string>
+	<key>name</key>
+	<string>Portfile</string>
+	<key>uuid</key>
+	<string>B7BA9BCD-52BC-4A00-AAC3-47059577B75E</string>
+</dict>
+</plist>

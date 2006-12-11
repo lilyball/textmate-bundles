@@ -1,0 +1,23 @@
+# $Id$
+
+PortSystem 1.0
+
+name                NAME
+version             VERSION
+categories          CATEGORIES
+maintainers         ${TM_EMAIL}
+description         DESCRIPTION
+long_description    $description
+homepage            HOMEPAGE
+platforms           darwin
+master_sites        MASTER_SITES
+
+checksums           md5 MD5SUM \
+                    sha1 SHA1SUM
+distname            ${name}-${version}
+extract.suffix      .tar.gz
+worksrcdir          ${distname}
+
+patchfiles          PATCHFILES
+
+depends_lib         DEPENDENCIES

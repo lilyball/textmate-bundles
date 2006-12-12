@@ -18,6 +18,8 @@ Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
 The "Show TODO List" command will scan your current document (on disk) or documents in your project for lines containing certain tags (see below).
 It will show an ordered list of these tags and their context which can be clicked to jump to that line in that file.
 
+It will also ignore files whose name matches the enviromental variable `TM_TODO_IGNORE`.
+
 ### Tags
 
 Preconfigured tags are:

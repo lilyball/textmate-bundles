@@ -28,6 +28,8 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
 include ERB::Util
 
+ignores = ENV['TM_TODO_IGNORE']
+
 def TextMate.file_link (file, line = 0)
   return "txmt://open/?url=file://" +
     file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
@@ -38,6 +40,9 @@ end
 $tags.each { |tag| tag[:matches] = [ ] }
 
 TextMate.each_text_file do |file|
+  if ignores != nil and file =~ /#{ignores}/ then
+    next
+  end
   $tags.each do |tag|
     File.open(file) do |io|
       io.grep(tag[:regexp]) do |content|

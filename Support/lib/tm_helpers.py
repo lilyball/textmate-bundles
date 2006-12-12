@@ -11,9 +11,9 @@ from re import sub, compile as compile_
 from os import popen, path, environ as env
 
 # fix up path
-tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
-if not tm_support_path in env:
-    sys.path.insert(0, tm_support_path)
+# tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
+# if not tm_support_path in env:
+#     sys.path.insert(0, tm_support_path)
 
 from plistlib import writePlistToString, readPlistFromString
 
@@ -45,6 +45,32 @@ def current_word(pat, direction="both"):
         if m and direction in ("right", "both"):
             word += m.group(0)
     return word
+
+def env_python():
+    """ Return (python, version) from env.
+    
+        Checks for the environment variable TM_FIRST_LINE and parses
+        it for a #!.  Failing that, checks for the environment variable
+        TM_PYTHON.  Failing that, uses "/usr/bin/env python".
+    """
+    python = ""
+    if "TM_FIRST_LINE" in env:
+        first_line = env["TM_FIRST_LINE"]
+        hash_bang = compile_(r"^#!(.*)$")
+        m = hash_bang.match(first_line)
+        if m:
+            python = m.group(1)
+            version_string = sh(python + " -S -V 2>&1")
+            if version_string.startswith("-bash:"):
+                python = ""
+    if not python and "TM_PYTHON" in env:
+        python = env["TM_PYTHON"]
+    elif not python:
+        python = "/usr/bin/env python"
+    version_string = sh(python + " -S -V 2>&1")
+    version = version_string.strip().split()[1]
+    version = int(version[0] + version[2])
+    return python, version
 
 def sh(cmd):
     """ Execute `cmd` and capture stdout, and return it as a string. """

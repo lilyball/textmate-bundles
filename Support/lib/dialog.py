@@ -3,7 +3,10 @@ import sys
 import os
 import re
 
-sys.path.insert(0, os.path.join(os.environ["TM_SUPPORT_PATH"], "lib"))
+# fix up path
+tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
+if not tm_support_path in env:
+    sys.path.insert(0, tm_support_path)
 
 from tm_helpers import sh, sh_escape, to_plist, from_plist
 

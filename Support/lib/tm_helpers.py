@@ -6,10 +6,14 @@ tm_helpers.py
 A collection of useful helper functions and classes for writing
 commands in Python for TextMate.
 """
-
+import sys
 from re import sub, compile as compile_
-from os import environ as env
-from os import popen
+from os import popen, path, environ as env
+
+# fix up path
+tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
+if not tm_support_path in env:
+    sys.path.insert(0, tm_support_path)
 
 from plistlib import writePlistToString, readPlistFromString
 

@@ -36,6 +36,9 @@ def menu(options):
     If options is a list of (key, value) tuples, will return value of the
     selected key. Note that we don't use dicts, so that key-value options
     can be ordered. If you want to use a dict, try dict.items().
+    
+    In either input case, a list item with value `None` causes tm_dialog to
+    separator for that index.
     """
     hashed_options = False
     if not options:

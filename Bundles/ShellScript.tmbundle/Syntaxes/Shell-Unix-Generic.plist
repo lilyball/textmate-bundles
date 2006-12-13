@@ -209,7 +209,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#backtick</string>
+					<string>#interpolation</string>
 				</dict>
 			</array>
 		</dict>
@@ -276,7 +276,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#backtick</string>
+			<string>#interpolation</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -301,37 +301,6 @@
 			</dict>
 			<key>name</key>
 			<string>string.other.math.shell</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\$\(</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.shell</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.shell</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.interpolated.dollar.shell</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -932,7 +901,7 @@
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>backtick</key>
+		<key>interpolation</key>
 		<dict>
 			<key>patterns</key>
 			<array>
@@ -966,6 +935,37 @@
 							<string>\\[`\\$]</string>
 							<key>name</key>
 							<string>constant.character.escape.shell</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\$\(</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.shell</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.shell</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>string.interpolated.dollar.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
 						</dict>
 					</array>
 				</dict>

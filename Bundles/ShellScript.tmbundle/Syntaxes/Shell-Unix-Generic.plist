@@ -207,6 +207,10 @@
 					<key>include</key>
 					<string>#variable</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#backtick</string>
+				</dict>
 			</array>
 		</dict>
 		<dict>
@@ -271,37 +275,8 @@
 			<string>#variable</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>`</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.shell</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>`</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.shell</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.interpolated.backtick.shell</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\\[`\\$]</string>
-					<key>name</key>
-					<string>constant.character.escape.shell</string>
-				</dict>
-			</array>
+			<key>include</key>
+			<string>#backtick</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -957,6 +932,45 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>backtick</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>`</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.shell</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>`</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.shell</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>string.interpolated.backtick.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\\[`\\$]</string>
+							<key>name</key>
+							<string>constant.character.escape.shell</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>variable</key>
 		<dict>
 			<key>patterns</key>

@@ -7,7 +7,69 @@ require 'fcntl'
 
 $SCRIPTMATE_VERSION = "$Revision: 6031 $"
 
+class UserCommand
+  attr_reader :display_name, :path
+  def initialize(cmd)
+    @cmd = cmd
+  end
+  def run
+    stdin, stdout, stderr = Open3.popen3(@cmd)
+    return stdout, stderr, open("/dev/null")
+  end
+  def to_s
+    @cmd.to_s
+  end
+end
+
+class CommandMate
+  def initialize (command)
+    # the object `command` needs to implement a method `run`.  `run` should
+    # return an array of three file descriptors [stdout, stderr, stack_dump].
+    @error = ""
+    @command = command
+    STDOUT.sync = true
+    @mate = self.class.name
+  end
+  def filter_stdout(str)
+    # strings from stdout are passed through this method before being printed
+    htmlize(str)
+  end
+  def filter_stderr(str)
+    # strings from stderr are passwed through this method before printing
+    "<span style='color: red'>#{htmlize str}</span>"
+  end
+  def emit_header
+    puts html_head(:window_title => "#{@command} — #{@mate}", :page_title => "#{@mate}")
+  end
+  def emit_footer
+    puts html_footer
+  end
+  def emit_html
+    emit_header()
+    stdout, stderr, stack_dump = @command.run
+    descriptors = [ stdout, stderr, stack_dump ]
+    descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
+    until descriptors.empty?
+      select(descriptors).shift.each do |io|
+        str = io.read
+        if str.to_s.empty? then
+          descriptors.delete io
+          io.close
+        elsif io == stdout then
+          print filter_stdout(str)
+        elsif io == stderr then
+          print filter_stderr(str)
+        elsif io == stack_dump then
+          @error << str
+        end
+      end
+    end
+    emit_footer()
+  end
+end
+
 class UserScript
+  attr_reader :display_name, :path
   def initialize(content, write_content_to_stdin=true)
     @write_content_to_stdin = write_content_to_stdin
     @content = content
@@ -50,54 +112,30 @@ class UserScript
     wr.close
     [ stdout, stderr, rd ]
   end
-  attr_reader :display_name, :path
 end
 
-class ScriptMate
-  def initialize(script)
+class ScriptMate < CommandMate
+  def initialize(command)
+    # ScriptMate expects an instance of the (sub)class UserScript.
     @error = ""
     STDOUT.sync = true
-    @script = script
+    @command = command
     @mate = self.class.name
   end
-  def filter_stdout(str)
-    # strings from stdout are passed through this method before being printed
-    htmlize(str)
-  end
-  def filter_stderr(str)
-    # strings from stderr are passwed through this method before printing
-    "<span style='color: red'>#{htmlize str}</span>"
-  end
-  def emit_html
-    puts html_head(:window_title => "#{@script.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@script.lang}")
+
+  def emit_header
+    puts html_head(:window_title => "#{@command.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@command.lang}")
     puts <<-HTML
 <div class="#{@mate.downcase}">		
 <div><!-- first box containing version info and script output -->
-<pre><strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@script.version_string}</strong>
-<strong>>>> #{@script.display_name}</strong>
+<pre><strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@command.version_string}</strong>
+<strong>>>> #{@command.display_name}</strong>
 
 <div style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
 HTML
+  end
 
-    stdout, stderr, stack_dump = @script.run
-    descriptors = [ stdout, stderr, stack_dump ]
-
-    descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
-    until descriptors.empty?
-      select(descriptors).shift.each do |io|
-        str = io.read
-        if str.to_s.empty? then
-          descriptors.delete io
-          io.close
-        elsif io == stdout then
-          print filter_stdout(str)
-        elsif io == stderr then
-          print filter_stderr(str)
-        elsif io == stack_dump then
-          @error << str
-        end
-      end
-    end
+  def emit_footer
     puts '</div></pre></div>'
     puts @error
     puts '<div id="exception_report" class="framed">Program exited.</div>'

@@ -100,10 +100,8 @@ def pop_up(candidates, searchTerm, caret_placement, line)
     require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
     dialog_path = "#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog"
     pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
-    io = open("|#{e_sh dialog_path} -u", "r+")
-    io &lt;&lt; pl.to_plist
-    io.close_write
-    res = PropertyList::load(io.read)
+    plist = pl.to_plist
+    res = PropertyList::load(%x{ #{e_sh dialog_path} -up #{e_sh plist} })
     if res.has_key? 'selectedMenuItem'
       snippet_generator( res['selectedMenuItem']['cand'], start )
     else
@@ -213,7 +211,7 @@ end</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^m</string>
+	<string>~</string>
 	<key>name</key>
 	<string>Cocoa Context</string>
 	<key>output</key>

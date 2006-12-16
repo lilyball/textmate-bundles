@@ -5,7 +5,7 @@ require 'open3'
 require 'cgi'
 require 'fcntl'
 
-$SCRIPTMATE_VERSION = "$Revision: 6031 $"
+$SCRIPTMATE_VERSION = "$Revision$"
 
 class UserCommand
   attr_reader :display_name, :path

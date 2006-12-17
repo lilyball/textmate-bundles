@@ -9,6 +9,7 @@
 # 
 # CHANGELOG
 # 2006-12-02 - Make it work without a 'mtasc.yaml' file (assuming some sane defaults...)
+# 2006-12-17 - Enclosed input .as file in quote to fix an error when the path contains spaces
 
 require "open3"
 require "yaml"
@@ -68,7 +69,7 @@ def mtasc_compile
 	cmd = @q + @mtasc_path + @q
 
 	# App name
-	cmd += " " + @app
+	cmd += " " + @q + @app + @q
 
 	# Player version
 	cmd += " -version " + @player.to_s

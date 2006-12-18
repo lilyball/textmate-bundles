@@ -38,7 +38,7 @@ else
 	# ...find matching lines...
 	search_results = []
 	toc_lines.each do |line|
-		search_results << line.strip if line[/name=\"WORD/]
+		search_results << line.strip if line[/name=\"#{WORD}/]
 	end
 
 	puts html_head( :title => "Documentation for ‘#{WORD}’", :sub_title => "ActionScript Dictionary" )

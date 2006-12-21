@@ -57,13 +57,13 @@ module LaTeX
         c["bibtype"] = s.scan(/[^\s\{]+/)
         s.scan(/\s*\{/)
         c["citekey"] = s.scan(/[\w:\-_]+(?=\s*,)/)
-        # puts "Found citekey: #{c["citekey"]}"
+        puts "Found citekey: #{c["citekey"]}"
         s.scan(/\s*,/)
         until s.eos? or s.scan(/\s*\,?\s*\}/) do
           s.scan(/\s+/)
           key = s.scan(/[\w\-]+/)
           raise "Choked on: #{s.matched}" unless s.scan(/\s*=\s*/)
-          # puts "Found key: #{key}"
+          puts "Found key: #{key}"
           s.scan(/\{/)
           contents = ""
           nest_level = 1
@@ -78,7 +78,7 @@ module LaTeX
             end
           end
           c[key] = contents
-          # puts "Found contents: #{contents}"
+          puts "Found contents: #{contents}"
           raise unless s.scan(/\s*(\,|\})\s*/)
         end
         c
@@ -90,12 +90,12 @@ module LaTeX
   # +root+ is the file to start the scanning from.
   # +includes+ is a hash with keys regular expressions and values blocks of
   #   code called when that expression matches. The block is passed the
-  #   matched object as argument, and must return the full path to the file
-  #   to be recursively scanned.
+  #   matched groups in the kind of array returned by String#scan as argument,
+  #   and must return the full path to the file to be recursively scanned.
   # +extractors+ is a similar hash, dealing with the bits of text to be
   #   matched. The block is passed as arguments the current filename, the
-  #   current line number counting from 0, the matched object and finally the
-  #   entire file contents.
+  #   current line number counting from 0, the matched groups in the kind
+  #   of array returned by String#scan and finally the entire file contents.
   class FileScanner
     attr_accessor :root, :includes, :extractors
     # Creates a new scanner object. If the argument +old_scanner+ is a String,
@@ -119,7 +119,7 @@ module LaTeX
     def set_defaults
       @includes = Hash.new
       @includes[/(?:\\include|\\input)\{([^\}]*)\}/] = Proc.new {|m| 
-        LaTeX.find_file( m[1], "tex", File.dirname(root) )
+        LaTeX.find_file( m[0], "tex", File.dirname(root) )
       }
       @extractors = Hash.new
     end
@@ -129,15 +129,16 @@ module LaTeX
        text = File.read(@root)
        text.each_with_index do |line, index|
          includes.each_pair do |regexp, block|
- # Consider using scan instead of match For the case of multiple includes in one line.
-            if m = line.match(regexp) then 
+           line.scan(regexp).each do |m|
              newfile = block.call(m)
              scanner = FileScanner.new(self)
              scanner.root = newfile.to_s
              scanner.recursive_scan
            end
            extractors.each_pair { |regexp,block| 
-             block.call(root,index,m,text) if m = line.match(regexp)
+             line.scan(regexp).each do |m|
+               block.call(root,index,m,text)
+             end
             }
          end
        end
@@ -148,8 +149,8 @@ module LaTeX
       # LaTeX.set_paths
       labelsList = Array.new
       scanner = FileScanner.new(root)
-      scanner.extractors[/\\label\{([^\}]*)\}/] = Proc.new do |filename, line, matched, text| 
-        labelsList << Label.new(:file => filename, :line => line, :label => matched[1], :contents => text)
+      scanner.extractors[/\\label\{([^\}]*)\}/] = Proc.new do |filename, line, groups, text| 
+        labelsList << Label.new(:file => filename, :line => line, :label => groups[0], :contents => text)
       end
       scanner.recursive_scan
       labelsList
@@ -161,11 +162,11 @@ module LaTeX
       scanner = FileScanner.new(root)
       bibitem_regexp = /\\bibitem(?:\[[^\]]*\])?\{([^\}]*)\}(.*)/
       biblio_regexp = /\\bibliography\{([^\}]*)\}/
-      scanner.extractors[bibitem_regexp] = Proc.new do |filename, line, matched, text|
-      citationsList << Citation.new( "citekey" => matched[1], "cite_data" => matched[2])
+      scanner.extractors[bibitem_regexp] = Proc.new do |filename, line, groups, text|
+      citationsList << Citation.new( "citekey" => groups[0], "cite_data" => groups[1])
       end
-      scanner.extractors[biblio_regexp] = Proc.new do |filename, line, matched, text|
-        file = LaTeX.find_file( matched[1], "bib", File.dirname(root) )
+      scanner.extractors[biblio_regexp] = Proc.new do |filename, line, groups, text|
+        file = LaTeX.find_file( groups[0], "bib", File.dirname(root) )
         citationsList += LaTeX.parse_bibfile(file)
         citationsList += LaTeX.parse_bibfile(ENV["TM_LATEX_BIB"]) unless ENV["TM_LATEX_BIB"].nil?
       end

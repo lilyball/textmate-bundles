@@ -35,13 +35,15 @@ module LaTeX
         s = StringScanner.new(text)
         s.scan(/\s+@/)
         c["bibtype"] = s.scan(/[^\s\{]+/)
-        s.scan(/\{/)
-        c["citekey"] = s.scan(/[\w:]+(?=\s*,)/)
+        s.scan(/\s*\{/)
+        c["citekey"] = s.scan(/[\w:\-_]+(?=\s*,)/)
+        # puts "Found citekey: #{c["citekey"]}"
         s.scan(/\s*,/)
-        until s.eos? do
+        until s.eos? or s.scan(/\s*\,?\s*\}/) do
           s.scan(/\s+/)
           key = s.scan(/[\w\-]+/)
           raise "Choked on: #{s.matched}" unless s.scan(/\s*=\s*/)
+          # puts "Found key: #{key}"
           s.scan(/\{/)
           contents = ""
           nest_level = 1
@@ -56,6 +58,7 @@ module LaTeX
             end
           end
           c[key] = contents
+          # puts "Found contents: #{contents}"
           raise unless s.scan(/\s*(\,|\})\s*/)
         end
         c

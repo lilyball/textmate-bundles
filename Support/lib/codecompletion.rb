@@ -110,7 +110,7 @@ class TextmateCodeCompletion
       choices = TextmateCompletionsPlist.new(
         "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}.tmPreferences"
       ).to_ary
-      print TextmateCodeCompletion.new(choices,STDIN.read).to_s
+      print TextmateCodeCompletion.new(choices,STDIN.read).to_snippet
     end
   end
   
@@ -128,10 +128,18 @@ class TextmateCodeCompletion
     @choice = false
     
     filter_choices!()
+    choose() unless @choice
   end
   
-  def to_s
-    choose() unless @choice
+  def choice
+    @choice
+  end
+  
+  def index
+    @choice_i
+  end
+  
+  def to_snippet
     completion()
   end
   
@@ -185,6 +193,7 @@ class TextmateCodeCompletion
     
     val = Dialog.menu(@choices)
     cancel() and return unless val
+    @choice_i = val
     @choice = @choices[val]
   end
   

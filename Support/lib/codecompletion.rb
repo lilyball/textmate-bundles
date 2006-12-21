@@ -211,13 +211,21 @@ class TextmateCodeCompletion
     # TODO: make snippet safe
     #       to keep any random characters from interfering with the function of the snippet
     text.gsub!(/^#{Regexp.escape @choice_partial}/,'') if @has_selection # Trimoff the choice_partial if we have a selection
-    text.gsub!(/\(\)$/,'($1)')
     
     snippet = ''
     snippet << '${101:'
-    snippet << snip(text)
+    snippet << snippetize_methods(snip(text))
     snippet << '}$100$0'
     snippet
+  end
+  
+  def snippetize_methods(text)
+    text = text.to_s
+    place = 0
+    text.gsub!(/([\(,])([^\),]*)/) do |g|
+      "#{$1}${#{place += 1}:#{$2}}"
+    end
+    text
   end
   
   def snip(text) #make snippet proof

@@ -42,6 +42,16 @@ class TestTextmateCodeCompletion < Test::Unit::TestCase
     assert_equal "${101:test_basic_selection}$100$0", TextmateCodeCompletion.new(['test_basic_selection'], %{basic_selection}).to_s, $debug_codecompletion.inspect
   end
   
+  def test_snippetize
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "String", "TM_COLUMN_NUMBER" => "7", "TM_BUNDLE_PATH" => "/Users/taylott/Library/Application Support/TextMate/Bundles/Ruby.tmbundle", "TM_INPUT_START_COLUMN" => "1", "TM_SUPPORT_PATH" => "/Library/Application Support/TextMate/Support"})
+    assert_equal "${101:String.method(${1:})}$100$0", TextmateCodeCompletion.new(['String.method()'], %{String}).to_s, $debug_codecompletion.inspect
+  end
+  
+  def test_snippetize_methods
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "String", "TM_COLUMN_NUMBER" => "7", "TM_BUNDLE_PATH" => "/Users/taylott/Library/Application Support/TextMate/Bundles/Ruby.tmbundle", "TM_INPUT_START_COLUMN" => "1", "TM_SUPPORT_PATH" => "/Library/Application Support/TextMate/Support"})
+    assert_equal "${101:String.method(${1:one},${2:two})(${3:})}$100$0", TextmateCodeCompletion.new(['String.method(one,two)()'], %{String}).to_s, $debug_codecompletion.inspect
+  end
+  
   private
   def set_tm_vars(env)
     ENV['TM_BUNDLE_PATH']        = env['TM_BUNDLE_PATH']

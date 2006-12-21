@@ -35,9 +35,15 @@ module LaTeX
     # paths to look at when searching for the file. This will typically be the
     # path to the root document.
     def find_file(filename,extension,relative)
+      filename.gsub!(/\.#{extension}$/,"")
+      if filename.match(/^\//) # If it is an absolute path, return it
+        filename = filename + ".bib"
+        return filename if File.exist?(filename)
+        return nil
+      end
       LaTeX.check_tex_path
       @@paths ||= Hash.new
-      @@paths[extension] ||= ([`kpsewhich -show-path=#{extension}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')}).unshift(relative)
+      @@paths[extension] ||= ([`kpsewhich -show-path=#{extension}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')}).unshift(relative).unshift("")
       return "#{filename}.#{extension}" if File.exist?("#{filename}.#{extension}")
       @@paths[extension].each do |path|
         testpath = File.expand_path(File.join(path,filename + "." + extension))
@@ -48,6 +54,7 @@ module LaTeX
     # Processes the .bib file with title +file+, and returns an array of the
     # Citation objects.
     def parse_bibfile(file)
+      raise "Could not locate file #{file.to_s}" if (file.nil? or !File.exist?(file))
       text = File.read(file)
       entries = text.scan(/^\s*@[^{]*\{.*?(?=\n[ \t]*@|\z)/m)
       citations = entries.map do |text|
@@ -57,13 +64,13 @@ module LaTeX
         c["bibtype"] = s.scan(/[^\s\{]+/)
         s.scan(/\s*\{/)
         c["citekey"] = s.scan(/[\w:\-_]+(?=\s*,)/)
-        puts "Found citekey: #{c["citekey"]}"
+        # puts "Found citekey: #{c["citekey"]}"
         s.scan(/\s*,/)
         until s.eos? or s.scan(/\s*\,?\s*\}/) do
           s.scan(/\s+/)
           key = s.scan(/[\w\-]+/)
           raise "Choked on: #{s.matched}" unless s.scan(/\s*=\s*/)
-          puts "Found key: #{key}"
+          # puts "Found key: #{key}"
           s.scan(/\{/)
           contents = ""
           nest_level = 1
@@ -78,7 +85,7 @@ module LaTeX
             end
           end
           c[key] = contents
-          puts "Found contents: #{contents}"
+          # puts "Found contents: #{contents}"
           raise unless s.scan(/\s*(\,|\})\s*/)
         end
         c
@@ -126,6 +133,7 @@ module LaTeX
     # Performs the recursive scanning.
     def recursive_scan
        raise "No root specified!" if @root.nil?
+       raise "Could not find file #{@root}" unless File.exist?(@root)
        text = File.read(@root)
        text.each_with_index do |line, index|
          includes.each_pair do |regexp, block|
@@ -222,7 +230,8 @@ end
 # Example of use:
 #
 # include LaTeX
-# ar = FileScanner.cite_scan("/Users/haris/svnlocalrepos/repos/master.tex")
+# # ar = FileScanner.cite_scan("/Users/haris/svnlocalrepos/repos/master.tex")
+# ar = FileScanner.cite_scan("/Users/haris/Desktop/testing/Morten/test2.tex")
 # puts ar.length
 # ar.each do |citation|
 #   puts citation.description

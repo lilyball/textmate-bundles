@@ -193,8 +193,12 @@ module LaTeX
       label
     end
     # Returns the text around the label.
-    def context(chars = 40)
-      return contents.gsub(/\s/,"").match(/.{#{chars/2}}\\label\{#{label}\}.{#{chars/2}}/)
+    def context(chars = 40, countlines=false)
+      if countlines then
+        return contents.match(/(.*\n){#{chars/2}}.*\\label\{#{label}\}.*\n(.*\n){#{chars/2}}/)
+      else
+        return contents.gsub(/\s/,"").match(/.{#{chars/2}}\\label\{#{label}\}.{#{chars/2}}/)
+      end
     end
     def file_line_label
       "#{file}:#{line}:#{label}"

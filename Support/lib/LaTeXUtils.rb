@@ -26,9 +26,16 @@ module LaTeX
     def get_citekeys
       self.get_citations.map{|i| i["citekey"]}.uniq
     end
-    # Checks whether the path is set properly so that TeX binaries can be located.
-    def check_tex_path
-      raise "The tex binaries cannot be located!" if `which kpsewhich`.match(/^no kpsewhich/)
+    # Returns the path to the TeX binaries, or raises an exception if it can't find them.
+    def tex_path
+      loc = `which kpsewhich`
+      return "" if !loc.match(/^no kpsewhich/)
+      locs = ["/usr/texbin/",
+              "/usr/local/teTeX/bin/powerpc-apple-darwin-current/"]
+      locs.each do |loc|
+        return loc if File.exist?(loc+"kpsewhich")
+      end
+      raise "The tex binaries cannot be located!"
     end
     # Uses kpsewhich to locate the file with name +filename+ and +extension+.
     # +relative+ determines an explicit path that should be included in the
@@ -41,9 +48,9 @@ module LaTeX
         return filename if File.exist?(filename)
         return nil
       end
-      LaTeX.check_tex_path
+      texpath = LaTeX.tex_path
       @@paths ||= Hash.new
-      @@paths[extension] ||= ([`kpsewhich -show-path=#{extension}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')}).unshift(relative).unshift("")
+      @@paths[extension] ||= ([`#{texpath}kpsewhich -show-path=#{extension}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')}).unshift(relative).unshift("")
       return "#{filename}.#{extension}" if File.exist?("#{filename}.#{extension}")
       @@paths[extension].each do |path|
         testpath = File.expand_path(File.join(path,filename + "." + extension))

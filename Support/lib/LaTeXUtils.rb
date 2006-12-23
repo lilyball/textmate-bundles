@@ -28,13 +28,17 @@ module LaTeX
     end
     # Returns the path to the TeX binaries, or raises an exception if it can't find them.
     def tex_path
-      loc = `which kpsewhich`
-      return "" if !loc.match(/^no kpsewhich/)
+      # First try directly
+      return "" unless `which kpsewhich`.match(/^no kpsewhich/)
+      # Then try some specific paths
       locs = ["/usr/texbin/",
               "/usr/local/teTeX/bin/powerpc-apple-darwin-current/"]
       locs.each do |loc|
         return loc if File.exist?(loc+"kpsewhich")
       end
+#     If all else fails, rely on /etc/profile. For most people, we should never make it here.
+      loc = `. /etc/profile; which kpsewhich`
+      return loc.gsub(/kpsewhich$/,"") unless loc.match(/^no kpsewhich/)
       raise "The tex binaries cannot be located!"
     end
     # Uses kpsewhich to locate the file with name +filename+ and +extension+.

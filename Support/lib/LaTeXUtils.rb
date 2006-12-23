@@ -69,7 +69,11 @@ module LaTeX
         until s.eos? or s.scan(/\s*\,?\s*\}/) do
           s.scan(/\s+/)
           key = s.scan(/[\w\-]+/)
-          raise "Choked on: #{s.matched}" unless s.scan(/\s*=\s*/)
+          unless s.scan(/\s*=\s*/) then
+            s.scan(/[^@]*/m)
+            c=nil
+            next
+          end
           # puts "Found key: #{key}"
           s.scan(/\{/)
           contents = ""
@@ -90,7 +94,7 @@ module LaTeX
         end
         c
       end
-      return citations
+      return citations.compact
     end
   end
   # A class implementing a recursive scanner.

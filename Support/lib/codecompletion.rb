@@ -1,6 +1,6 @@
 # 
 # Textmate Code Completion
-# Version: 1 (version numbers are integers, no beta bologna!)
+# Version: 2 (version numbers are integers, no beta bologna!)
 # 
 #  By: Thomas Aylott / subtleGradient, oblivious@
 # And: nobody else yet
@@ -31,7 +31,7 @@ Or you can use any random plist file like this:
 
 #!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-choices = TextmateCompletionsPlist.new('path_to_my_plist_file_of_doom').to_ary
+choices = TextmateCompletionsPlist.new('path_to_my_plist_file_of_doom')
 print TextmateCodeCompletion.new(choices,STDIN.read).to_s
 
 
@@ -39,7 +39,7 @@ Or you can just pass in an array manually like so:
 
 #!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-print TextmateCodeCompletion.new([ 'fibbity', 'flabbity', 'floo' ],STDIN.read).to_s
+print TextmateCodeCompletion.new([ 'fibbity', 'flabbity', 'floo' ],STDIN.read).to_snippet
 
 
 =end
@@ -60,6 +60,11 @@ print TextmateCodeCompletion.new([ 'fibbity', 'flabbity', 'floo' ],STDIN.read).t
 #   TextmateCodeCompletion.simple method to allow for really quick and simple default behavior in tmCommands
 # 
 # Release 2:
+#   Support for pure text based completion lists (by file or string).
+#   Support for the simple form of plist completions (the same format in TextMate's bundle editor)
+#   
+# 
+# Release 3:
 #   I dunno, fanciness of some sort perhaps
 # 
 # Eventual goals: 
@@ -80,38 +85,21 @@ print TextmateCodeCompletion.new([ 'fibbity', 'flabbity', 'floo' ],STDIN.read).t
 # 
 # 
 
-class TextmateCompletionsPlist
-  require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
-  
-  attr :plist, true
-  attr :scope, true
-  attr :choices, true
-  
-  def initialize(filepath=nil)
-    path = filepath || "#{ENV['TM_BUNDLE_PATH']}/Preferences/CodeCompletion.tmPreferences"
-    return false unless File.exist?(path)
-    self.plist = File.new(path)
-    
-    pl = PropertyList.load(self.plist, true)
-    self.scope   = pl[0]['scope'].split(/, ?/)
-    self.choices = pl[0]['settings']['completions']
-  end
-  
-  def to_ary
-    self.choices
-  end
-end
-
 class TextmateCodeCompletion
   require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
   
   class << self
-    def simple(preference='CodeCompletions')
-      choices = TextmateCompletionsPlist.new(
-        "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}.tmPreferences"
-      ).to_ary
+    def plist(preference='Completions')
+      choices = TextmateCompletionsPlist.new( "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}.tmPreferences" )
       print TextmateCodeCompletion.new(choices,STDIN.read).to_snippet
     end
+    
+    def txt(file='Completions.txt')
+      choices = TextmateCompletionsText.new( "#{ENV['TM_BUNDLE_PATH']}/Support/#{file}" )
+      print TextmateCodeCompletion.new(choices,STDIN.read).to_snippet
+    end
+    
+    alias :simple :plist
   end
   
   def initialize(choices=nil,context=nil)
@@ -122,9 +110,9 @@ class TextmateCodeCompletion
     @context = context
     set_context!()
     
-    cancel() and return unless choices and !choices.empty?
+    cancel() and return unless choices and !choices.to_ary.empty?
     
-    @choices = choices
+    @choices = choices.to_ary
     @choice = false
     
     filter_choices!()
@@ -217,8 +205,6 @@ class TextmateCodeCompletion
   end
   
   def snippetize(text)
-    # TODO: make snippet safe
-    #       to keep any random characters from interfering with the function of the snippet
     text.gsub!(/^#{Regexp.escape @choice_partial}/,'') if @has_selection # Trimoff the choice_partial if we have a selection
     
     snippet = ''
@@ -241,3 +227,60 @@ class TextmateCodeCompletion
     text.to_s.gsub(/(\$|\`)/,'\\\\\\1') if text
   end
 end
+
+class TextmateCompletionsPlist
+  require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+  
+  attr :raw, true
+  attr :scope, true
+  attr :choices, true
+  
+  def initialize(filepath=nil,options={})
+    path = filepath || "#{ENV['TM_BUNDLE_PATH']}/Preferences/CodeCompletion.tmPreferences"
+    
+    if path.match(/\{/)
+      self.raw = path.to_s
+      @fullsize = false
+    else
+      return false unless File.exist?(path)
+      self.raw = File.new(path).read
+      @fullsize = true
+    end
+        
+    pl = PropertyList.load(self.raw, true)[0]
+    
+    self.scope   = pl['scope'].split(/, ?/) if @fullsize and pl['scope']
+    self.choices = (@fullsize ? pl['settings'] : pl)['completions']
+  end
+  
+  def to_ary
+    self.choices
+  end
+end
+
+class TextmateCompletionsText
+  attr :raw, true
+  attr :scope, true
+  attr :choices, true
+  
+  def initialize(path,options={})
+    options[:split] = "\n" unless options[:split]
+    
+    if path.match(options[:split])
+      self.raw = path.to_s
+    else
+      return false unless File.exist?(path)
+      self.raw = File.new(path).read
+    end
+    
+    self.scope   = nil
+    self.choices = self.raw.split(options[:split])
+    
+    self.choices = self.choices - self.choices.grep(options[:filter]) if options[:filter]
+  end
+  
+  def to_ary
+    self.choices
+  end
+end
+

@@ -5,6 +5,8 @@
 require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
 require 'test/unit'
 
+puts "\nJust keep hittin' 1\n\n"
+
 class TestTextmateCodeCompletion < Test::Unit::TestCase
   def test_blank
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
@@ -64,5 +66,57 @@ class TestTextmateCodeCompletion < Test::Unit::TestCase
     ENV['TM_CURRENT_LINE']       = env['TM_CURRENT_LINE']
     ENV['TM_INPUT_START_COLUMN'] = env['TM_INPUT_START_COLUMN']
     ENV['TM_SELECTED_TEXT']      = env['TM_SELECTED_TEXT']
+  end
+end
+
+class TestTextmateCompletionsPlist < Test::Unit::TestCase
+  def test_basic_plist
+    completions = TextmateCompletionsPlist.new(
+      "#{ENV['TM_SUPPORT_PATH']}/../Bundles/Objective-C.tmbundle/Preferences/Cocoa completions.plist"
+    )
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length > 0
+  end
+  def test_basic_plist_string
+    completions = TextmateCompletionsPlist.new("{	completions = ( 'fibbity', 'flabbity', 'floo' ); }")
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3, completions.choices
+  end
+end
+
+class TestTextmateCompletionsText < Test::Unit::TestCase
+  def test_basic_txt
+    completions = TextmateCompletionsText.new("README.txt")
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length > 0
+  end
+  def test_basic_txt_completions
+    completion = TextmateCodeCompletion.new(TextmateCompletionsText.new("README.txt"),'').to_snippet
+    assert_not_nil completion
+  end
+  def test_basic_strings
+    them = %{one\ntwo\nthree}
+    
+    completions = TextmateCompletionsText.new(them)
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3
+    
+    them = %{one,two,three}
+    
+    completions = TextmateCompletionsText.new(them, :split => ',')
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3
+    
+    them = %{one,two,three}
+    
+    completions = TextmateCompletionsText.new(them, :split => ',', :filter => /three/)
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 2
   end
 end

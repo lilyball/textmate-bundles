@@ -140,7 +140,7 @@ module LaTeX
     # Default values for the +includes+ hash.
     def set_defaults
       @includes = Hash.new
-      @includes[/(?:\\include|\\input)\{([^\}]*)\}/] = Proc.new {|m| 
+      @includes[/^[^%]*(?:\\include|\\input)\{([^\}]*)\}/] = Proc.new {|m| 
         LaTeX.find_file( m[0], "tex", File.dirname(root) )
       }
       @extractors = Hash.new
@@ -172,7 +172,7 @@ module LaTeX
       # LaTeX.set_paths
       labelsList = Array.new
       scanner = FileScanner.new(root)
-      scanner.extractors[/\\label\{([^\}]*)\}/] = Proc.new do |filename, line, groups, text| 
+      scanner.extractors[/^[^%]*\\label\{([^\}]*)\}/] = Proc.new do |filename, line, groups, text| 
         labelsList << Label.new(:file => filename, :line => line, :label => groups[0], :contents => text)
       end
       scanner.recursive_scan
@@ -183,8 +183,8 @@ module LaTeX
     def self.cite_scan(root)
       citationsList = Array.new
       scanner = FileScanner.new(root)
-      bibitem_regexp = /\\bibitem(?:\[[^\]]*\])?\{([^\}]*)\}(.*)/
-      biblio_regexp = /\\bibliography\{([^\}]*)\}/
+      bibitem_regexp = /^[^%]*\\bibitem(?:\[[^\]]*\])?\{([^\}]*)\}(.*)/
+      biblio_regexp = /^[^%]*\\bibliography\{([^\}]*)\}/
       scanner.extractors[bibitem_regexp] = Proc.new do |filename, line, groups, text|
       citationsList << Citation.new( "citekey" => groups[0], "cite_data" => groups[1])
       end

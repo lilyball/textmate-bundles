@@ -1,6 +1,6 @@
 # 
 # Textmate Code Completion
-# Version: 2 (version numbers are integers, no beta bologna!)
+# Version: 3 (version numbers are integers, no beta bologna!)
 # 
 #  By: Thomas Aylott / subtleGradient, oblivious@
 # And: nobody else yet
@@ -41,7 +41,7 @@ Or you can just pass in an array manually like so:
 require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
 print TextmateCodeCompletion.new([ 'fibbity', 'flabbity', 'floo' ],STDIN.read).to_snippet
 
-
+There's other stuff too, but I got bored with the documentation, haha! take THAT!
 =end
 
 # TESTS are in the file codecompletion_test.rb
@@ -62,9 +62,13 @@ print TextmateCodeCompletion.new([ 'fibbity', 'flabbity', 'floo' ],STDIN.read).t
 # Release 2:
 #   Support for pure text based completion lists (by file or string).
 #   Support for the simple form of plist completions (the same format in TextMate's bundle editor)
-#   
 # 
 # Release 3:
+#   New TextmateCompletionsParser class to parse out a text file and return an array of whatever
+#   You can pass in a Regexp or an array or Regexps for either the :select or :filter
+#   The select thing will use the first Regexp group thing as the replacement pattern
+# 
+# Release 4:
 #   I dunno, fanciness of some sort perhaps
 # 
 # Eventual goals: 
@@ -85,8 +89,9 @@ print TextmateCodeCompletion.new([ 'fibbity', 'flabbity', 'floo' ],STDIN.read).t
 # 
 # 
 
+require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
+
 class TextmateCodeCompletion
-  require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
   
   class << self
     def plist(preference='Completions')
@@ -173,7 +178,7 @@ class TextmateCodeCompletion
   end
   
   def filter_choices!
-    @choices = @choices.grep(/^#{Regexp.escape @choice_partial}/) if @choice_partial
+    @choices = @choices.grep(/^#{Regexp.escape @choice_partial}/).uniq if @choice_partial
   end
   
   def choose
@@ -284,3 +289,63 @@ class TextmateCompletionsText
   end
 end
 
+class TextmateCompletionsParser
+  PARSERS = {}
+  
+  def initialize(filepath=nil, options={})
+    path = filepath || ENV['TM_FILEPATH']
+    return false unless File.exist?(path)
+    return false if File.directory?(path)
+    
+    @raw = IO.readlines(path)
+    
+    options = PARSERS[options[:scope]].merge(options) if options[:scope]
+    
+    @filter  = arrayify options[:filter]
+    @selects = arrayify options[:select]
+    collect_selects!
+    
+    render!()
+  end
+  
+  def to_ary
+    @rendered
+  end
+  
+  private
+  def render!
+    @filter.each do |filter|
+      @raw -= @raw.grep(filter)
+    end
+    
+    @rendered = @raw
+    @rendered = @raw.grep(@select)
+    
+    @rendered.each do |r|
+      @selects.each do |select|
+        r.gsub!(select,'\1')
+      end
+    end
+  end
+  
+  def collect_selects!
+    @select = Regexp.new(@selects.collect do |select|
+      select.to_s << '|'
+    end.to_s.gsub(/\|$/,''))
+  end
+end
+
+def arrayify(anything)
+  anything.is_a?(Array) ? anything : [anything]
+end
+
+TextmateCompletionsParser::PARSERS[:ruby] = {
+  :select => [/^[ \t]*(?:class)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/,
+              /^[ \t]*(?:def)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/,
+              /^[ \t]*(?:attr_.*?)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/], 
+  :filter => [/test_/,'< Test::Unit::TestCase']
+}
+# TextmateCompletionsParser::PARSERS[:rails] = {
+#   :select => TextmateCompletionsParser::PARSERS[:ruby][:select],
+#   :filter => TextmateCompletionsParser::PARSERS[:ruby][:filter]
+# }

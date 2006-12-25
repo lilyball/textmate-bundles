@@ -7,7 +7,7 @@ require 'test/unit'
 
 puts "\nJust keep hittin' 1\n\n"
 
-class TestTextmateCodeCompletion < Test::Unit::TestCase
+class TextmateCodeCompletionTest < Test::Unit::TestCase
   def test_blank
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal "${101:test}$100$0", TextmateCodeCompletion.new(['test']).to_snippet
@@ -45,7 +45,7 @@ class TestTextmateCodeCompletion < Test::Unit::TestCase
   
   def test_selection_no_context
     set_tm_vars({"TM_SELECTED_TEXT" => "basic_selection", "TM_CURRENT_LINE" => "basic_selection", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
-    assert_equal "${101:test_basic_selection}$100$0", TextmateCodeCompletion.new(['test_basic_selection'], %{basic_selection}).to_snippet, $debug_codecompletion.inspect
+    assert_equal "${101:test_selection}$100$0", TextmateCodeCompletion.new(['test_selection'], %{basic_selection}).to_snippet, $debug_codecompletion.inspect
   end
   
   def test_snippetize
@@ -57,20 +57,10 @@ class TestTextmateCodeCompletion < Test::Unit::TestCase
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "String", "TM_COLUMN_NUMBER" => "7", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal "${101:String.method(${1:one},${2:two})(${3:})}$100$0", TextmateCodeCompletion.new(['String.method(one,two)()'], %{String}).to_snippet, $debug_codecompletion.inspect
   end
-  
-  private
-  def set_tm_vars(env)
-    # ENV['TM_BUNDLE_PATH']        = env['TM_BUNDLE_PATH']
-    # ENV['TM_SUPPORT_PATH']       = env['TM_SUPPORT_PATH']
-    ENV['TM_COLUMN_NUMBER']      = env['TM_COLUMN_NUMBER']
-    ENV['TM_CURRENT_LINE']       = env['TM_CURRENT_LINE']
-    ENV['TM_INPUT_START_COLUMN'] = env['TM_INPUT_START_COLUMN']
-    ENV['TM_SELECTED_TEXT']      = env['TM_SELECTED_TEXT']
-  end
 end
 
-class TestTextmateCompletionsPlist < Test::Unit::TestCase
-  def test_basic_plist
+class TextmateCompletionsPlistTest < Test::Unit::TestCase
+  def test_plist
     completions = TextmateCompletionsPlist.new(
       "#{ENV['TM_SUPPORT_PATH']}/../Bundles/Objective-C.tmbundle/Preferences/Cocoa completions.plist"
     )
@@ -78,7 +68,7 @@ class TestTextmateCompletionsPlist < Test::Unit::TestCase
     assert_kind_of Array, completions.to_ary
     assert completions.to_ary.length > 0
   end
-  def test_basic_plist_string
+  def test_plist_string
     completions = TextmateCompletionsPlist.new("{	completions = ( 'fibbity', 'flabbity', 'floo' ); }")
     assert_not_nil completions
     assert_kind_of Array, completions.to_ary
@@ -86,18 +76,18 @@ class TestTextmateCompletionsPlist < Test::Unit::TestCase
   end
 end
 
-class TestTextmateCompletionsText < Test::Unit::TestCase
-  def test_basic_txt
+class TextmateCompletionsTextTest < Test::Unit::TestCase
+  def test_txt
     completions = TextmateCompletionsText.new("README.txt")
     assert_not_nil completions
     assert_kind_of Array, completions.to_ary
     assert completions.to_ary.length > 0
   end
-  def test_basic_txt_completions
+  def test_txt_completions
     completion = TextmateCodeCompletion.new(TextmateCompletionsText.new("README.txt"),'').to_snippet
     assert_not_nil completion
   end
-  def test_basic_strings
+  def test_strings
     them = %{one\ntwo\nthree}
     
     completions = TextmateCompletionsText.new(them)
@@ -119,4 +109,41 @@ class TestTextmateCompletionsText < Test::Unit::TestCase
     assert_kind_of Array, completions.to_ary
     assert completions.to_ary.length == 2
   end
+end
+
+class TextmateCompletionsParserTest < Test::Unit::TestCase
+  def test_parser_dir
+    fred = TextmateCompletionsParser.new(File.dirname(__FILE__), :select => /^[ \t]*(?:class|def)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/).to_ary
+    assert_nil fred
+  end
+  def test_parser_symbol
+    fred = TextmateCompletionsParser.new(nil, :scope => :ruby).to_ary
+    assert_kind_of Array, fred.to_ary
+    assert fred.to_ary.length > 0, fred.inspect
+    
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "a", "TM_COLUMN_NUMBER" => "2", "TM_INPUT_START_COLUMN" => "1"})
+    assert_not_nil TextmateCodeCompletion.new(fred).to_snippet
+  end
+  def test_parser_array
+    fred = TextmateCompletionsParser.new(nil, 
+      :select => [/^[ \t]*(?:class)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/,
+                  /^[ \t]*(?:def)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/,
+                  /^[ \t]*(?:attr_.*?)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/], 
+      
+      :filter => /_string/).to_ary
+    assert_kind_of Array, fred.to_ary
+    assert fred.to_ary.length > 0, fred.inspect
+    
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "a", "TM_COLUMN_NUMBER" => "2", "TM_INPUT_START_COLUMN" => "1"})
+    assert_not_nil TextmateCodeCompletion.new(fred).to_snippet
+  end
+end
+
+def set_tm_vars(env)
+  # ENV['TM_BUNDLE_PATH']        = env['TM_BUNDLE_PATH']
+  # ENV['TM_SUPPORT_PATH']       = env['TM_SUPPORT_PATH']
+  ENV['TM_COLUMN_NUMBER']      = env['TM_COLUMN_NUMBER']
+  ENV['TM_CURRENT_LINE']       = env['TM_CURRENT_LINE']
+  ENV['TM_INPUT_START_COLUMN'] = env['TM_INPUT_START_COLUMN']
+  ENV['TM_SELECTED_TEXT']      = env['TM_SELECTED_TEXT']
 end

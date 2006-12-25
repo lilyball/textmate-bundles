@@ -86,22 +86,22 @@ module LaTeX
             next
           end
           # puts "Found key: #{key}"
-          s.scan(/\{/)
           contents = ""
-          nest_level = 1
-          until nest_level == 0 do
-            contents << (s.scan(/[^\{\}]+/) || "")
+          nest_level = 0
+          until nest_level <= 0 and s.check(/[\},]/) do
+            contents << (s.scan(/[^\{\}#{if nest_level == 0 then "," else "" end}]+/) || "")
             if s.scan(/\{/) then
+              contents << "\{" unless nest_level == 0
               nest_level += 1
-              contents << "\{"
-            elsif s.scan(/\}/) then
+            elsif s.check(/\}/) then
               nest_level -= 1
-              contents << "\}" unless nest_level == 0
+              contents << "\}" unless nest_level <= 0
+              s.scan(/\}/) unless nest_level == -1
             end
           end
           c[key] = contents
           # puts "Found contents: #{contents}"
-          raise unless s.scan(/\s*(\,|\})\s*/)
+          raise "Unexpected end of bib entry" unless s.scan(/\s*(\,|\})\s*/)
         end
         c
       end

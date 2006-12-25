@@ -294,7 +294,7 @@ class TextmateCompletionsParser
   
   def initialize(filepath=nil, options={})
     path = filepath || ENV['TM_FILEPATH']
-    return false unless File.exist?(path)
+    return false unless path and File.exist?(path)
     return false if File.directory?(path)
     
     @raw = IO.readlines(path)

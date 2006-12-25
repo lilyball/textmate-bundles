@@ -9,7 +9,18 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-TextmateCodeCompletion.simple('CodeCompletions Ruby')
+preference = 'CodeCompletions Ruby'
+choices = []
+
+parsed_choices = TextmateCompletionsParser.new(nil, :scope =&gt; :ruby).to_ary
+choices += parsed_choices if parsed_choices
+
+choices += ['--']
+
+plist_choices = TextmateCompletionsPlist.new( "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}.tmPreferences" ).to_ary
+choices += plist_choices if plist_choices
+
+print TextmateCodeCompletion.new(choices,STDIN.read).to_snippet
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

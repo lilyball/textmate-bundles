@@ -326,6 +326,8 @@ class TextmateCompletionsParser
         r.gsub!(select,'\1')
       end
     end
+    
+    @rendered -= @rendered.grep(/^\s*$/)
   end
   
   def collect_selects!

@@ -57,6 +57,10 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "String", "TM_COLUMN_NUMBER" => "7", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal "${101:String.method(${1:one},${2:two})(${3:})}$100$0", TextmateCodeCompletion.new(['String.method(one,two)()'], %{String}).to_snippet, $debug_codecompletion.inspect
   end
+  def test_snippetize_methods_with_stuff
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "change_column", "TM_COLUMN_NUMBER" => "14", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{change_column(table_name, column_name, type, options = {})}, TextmateCodeCompletion.new([%{change_column(table_name, column_name, type, options = {})}],'').to_snippet, $debug_codecompletion.inspect
+  end
 end
 
 class TextmateCompletionsPlistTest < Test::Unit::TestCase
@@ -137,6 +141,11 @@ class TextmateCompletionsParserTest < Test::Unit::TestCase
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "a", "TM_COLUMN_NUMBER" => "2", "TM_INPUT_START_COLUMN" => "1"})
     assert_not_nil TextmateCodeCompletion.new(fred).to_snippet
   end
+  
+  def test_parser_array_with_empty_rows
+    fred = TextmateCompletionsParser.new('codecompletion.rb', :scope => :ruby).to_ary
+    assert fred.to_ary.grep(/^$/).length == 0, fred.to_ary.grep(/^$/).inspect
+  end
 end
 
 def set_tm_vars(env)
@@ -147,3 +156,5 @@ def set_tm_vars(env)
   ENV['TM_INPUT_START_COLUMN'] = env['TM_INPUT_START_COLUMN']
   ENV['TM_SELECTED_TEXT']      = env['TM_SELECTED_TEXT']
 end
+
+# ${101:change_column(${1:table_name},${2: column_name},${3: type},${4: options = {}})}$100$0

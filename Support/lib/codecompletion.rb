@@ -92,6 +92,7 @@ There's other stuff too, but I got bored with the documentation, haha! take THAT
 require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
 
 class TextmateCodeCompletion
+  EMPTY_ROW = /(^\s*$)/
   
   class << self
     def plist(preference='Completions')
@@ -115,13 +116,16 @@ class TextmateCodeCompletion
     @context = context
     set_context!()
     
-    cancel() and return unless choices and !choices.to_ary.empty?
+    cancel() and return if choices.is_a? String
+    cancel() and return unless choices and choices.to_ary and !choices.to_ary.empty?
     
     @choices = choices.to_ary
     @choice = false
     
     filter_choices!()
     choose() unless @choice
+  # rescue
+    # cancel()
   end
   
   def choice
@@ -178,7 +182,19 @@ class TextmateCodeCompletion
   end
   
   def filter_choices!
-    @choices = @choices.grep(/^#{Regexp.escape @choice_partial}/).uniq if @choice_partial
+    cancel() and return if @choices.length == @choices.grep(EMPTY_ROW).length
+    
+    # Convert the empties to seperators
+    # Unless they're the first or last choice
+    while @choices.first =~ EMPTY_ROW
+      @choices.delete_at(0)
+    end
+    while @choices.last =~ EMPTY_ROW
+      @choices.delete_at(@choices.length-1)
+    end
+    @choices.each_with_index { |e, i| @choices[i] = '--' if e =~ EMPTY_ROW }
+    
+    @choices = @choices.grep(/^#{Regexp.escape @choice_partial}/).uniq if @choice_partial #and @choice_partial != ''
   end
   
   def choose
@@ -192,6 +208,8 @@ class TextmateCodeCompletion
   
   def completion
     $debug_codecompletion["choice"] = snip @choice
+    $debug_codecompletion["cancel"] = @cancel
+    $debug_codecompletion["choices"] = @choices
     
     completion = ''
     completion << snip(@context_before) unless @has_selection
@@ -200,12 +218,12 @@ class TextmateCodeCompletion
       completion << "${0:#{snip(@selection)}}"
     else
       if @choice
-        completion << snippetize(@choice)
+        completion << snippetize(@choice) unless @cancel
       else
         completion << snip(@selection) if @selection
       end
     end
-    completion << snip(@context_after) unless @has_selection
+    completion << snip(@context_after) unless @has_selection if @context_after
     completion
   end
   
@@ -229,7 +247,7 @@ class TextmateCodeCompletion
   end
   
   def snip(text) #make snippet proof
-    text.to_s.gsub(/(\$|\`)/,'\\\\\\1') if text
+    text.to_s.gsub(/(\$|\`|\})/,'\\\\\\1') if text
   end
 end
 

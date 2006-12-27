@@ -96,7 +96,7 @@ class TextmateCodeCompletion
   
   class << self
     def plist(preference='Completions')
-      choices = TextmateCompletionsPlist.new( "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}.tmPreferences" )
+      choices = TextmateCompletionsPlist.new( "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}#{'.tmPreferences' if preference !~ /\./}" )
       print TextmateCodeCompletion.new(choices,STDIN.read).to_snippet
     end
     
@@ -165,11 +165,11 @@ class TextmateCodeCompletion
     
     if @debug
       $debug_codecompletion = {}
-      $debug_codecompletion["caret_placement"] = snip caret_placement+2
-      $debug_codecompletion["context_before" ] = snip @context_before
-      $debug_codecompletion["choice_partial" ] = snip @choice_partial
-      $debug_codecompletion["selection"      ] = snip @selection
-      $debug_codecompletion["context_after"  ] = snip @context_after
+      $debug_codecompletion["caret_placement"] = caret_placement+2
+      $debug_codecompletion["context_before" ] = @context_before
+      $debug_codecompletion["choice_partial" ] = @choice_partial
+      $debug_codecompletion["selection"      ] = @selection
+      $debug_codecompletion["context_after"  ] = @context_after
     end
   end
   
@@ -207,7 +207,7 @@ class TextmateCodeCompletion
   end
   
   def completion
-    $debug_codecompletion["choice"] = snip @choice
+    $debug_codecompletion["choice"] = @choice
     $debug_codecompletion["cancel"] = @cancel
     $debug_codecompletion["choices"] = @choices
     
@@ -232,7 +232,7 @@ class TextmateCodeCompletion
     
     snippet = ''
     snippet << '${101:'
-    snippet << snippetize_methods(snip(text))
+    snippet << snippetize_methods(text)
     snippet << '}$100$0'
     snippet
   end
@@ -241,13 +241,16 @@ class TextmateCodeCompletion
     text = text.to_s
     place = 0
     text.gsub!(/([\(,])([^\),]*)/) do |g|
-      "#{$1}${#{place += 1}:#{$2}}"
+      thing = $2
+      "#{$1}${#{place += 1}:#{snip(thing,true)}}"
     end
     text
   end
   
-  def snip(text) #make snippet proof
-    text.to_s.gsub(/(\$|\`|\})/,'\\\\\\1') if text
+  def snip(text,escape_bracket=false) #make snippet proof
+    chars = /(\$|\`)/
+    chars = /(\$|\`|\})/ if escape_bracket
+    text.to_s.gsub(chars,'\\\\\\1') if text
   end
 end
 

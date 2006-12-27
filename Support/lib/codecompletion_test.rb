@@ -40,11 +40,11 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
   
   def test_in_snippet
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => %{${1:snippet}}, "TM_COLUMN_NUMBER" => "12", "TM_INPUT_START_COLUMN" => "1"})
-    assert_equal '\${1:snippet${0:}\}', TextmateCodeCompletion.new(['nomatch'], %{${1:snippet}}).to_snippet
+    assert_equal '\${1:snippet${0:}}', TextmateCodeCompletion.new(['nomatch'], %{${1:snippet}}).to_snippet
   end
   def test_in_snippet_match
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => %{${1:snippet}}, "TM_COLUMN_NUMBER" => "12", "TM_INPUT_START_COLUMN" => "1"})
-    assert_equal '\${1:${101:snippet}$100$0\}', TextmateCodeCompletion.new(['snippet'], %{${1:snippet}}).to_snippet
+    assert_equal '\${1:${101:snippet}$100$0}', TextmateCodeCompletion.new(['snippet'], %{${1:snippet}}).to_snippet
   end
   
   def test_choice_partial_selection
@@ -74,6 +74,12 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "change_column", "TM_COLUMN_NUMBER" => "14", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal '${101:change_column(${1:table_name},${2: column_name},${3: type},${4: options = {\}})}$100$0', TextmateCodeCompletion.new([%{change_column(table_name, column_name, type, options = {})}],'').to_snippet, $debug_codecompletion.inspect
   end
+  
+  def test_snippetize_bracket_escaping
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "{before} {inside} {after}", "TM_COLUMN_NUMBER" => "14","TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{{before} {ins${0:}ide} {after}}, TextmateCodeCompletion.new(['test'], %{{before} {inside} {after}}).to_snippet, $debug_codecompletion.inspect
+  end
+  
 end
 
 class TextmateCompletionsPlistTest < Test::Unit::TestCase

@@ -74,10 +74,28 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "change_column", "TM_COLUMN_NUMBER" => "14", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal 'change_column(${1:table_name},${2: column_name},${3: type},${4: options = {\}})$0', TextmateCodeCompletion.new([%{change_column(table_name, column_name, type, options = {})}],'').to_snippet, $debug_codecompletion.inspect
   end
-  
   def test_snippetize_bracket_escaping
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "{before} {inside} {after}", "TM_COLUMN_NUMBER" => "14","TM_INPUT_START_COLUMN" => "1"})
     assert_equal %{{before} {ins${0:}ide} {after}}, TextmateCodeCompletion.new(['test'], %{{before} {inside} {after}}).to_snippet, $debug_codecompletion.inspect
+  end
+  
+  def test_spaces
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "  padding-top: 1px;", "TM_COLUMN_NUMBER" => "10", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal "  padding_is_awesome$0-top: 1px;", TextmateCodeCompletion.new(['padding_is_awesome'], %{  padding-top: 1px;}).to_snippet, $debug_codecompletion.inspect
+  end
+  def test_tabs
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "\t\t\t\tpadding-top: 1px;", "TM_COLUMN_NUMBER" => "16", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal "\t\t\t\tpadding_is_awesome$0-top: 1px;", TextmateCodeCompletion.new(['padding_is_awesome'], "\t\t\t\tpadding-top: 1px;").to_snippet, $debug_codecompletion.inspect
+    
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "\tpadding-top: 1px;", "TM_COLUMN_NUMBER" => "10", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal "\tpadding_is_awesome$0-top: 1px;", TextmateCodeCompletion.new(['padding_is_awesome'], %{	padding-top: 1px;}).to_snippet, $debug_codecompletion.inspect
+    
+    # Make sure it's not also recalculating the tabs after the cursor position
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "\t\t\t\tpadding\t\t\t\t-top: 1px;", "TM_COLUMN_NUMBER" => "16", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal "\t\t\t\tpadding_is_awesome$0\t\t\t\t-top: 1px;", TextmateCodeCompletion.new(['padding_is_awesome'], "\t\t\t\tpadding\t\t\t\t-top: 1px;").to_snippet, $debug_codecompletion.inspect
+    
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "\tpadding\t\t\t\t-top: 1px;", "TM_COLUMN_NUMBER" => "10", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal "\tpadding_is_awesome$0\t\t\t\t-top: 1px;", TextmateCodeCompletion.new(['padding_is_awesome'], "\tpadding\t\t\t\t-top: 1px;").to_snippet, $debug_codecompletion.inspect
   end
   
 end

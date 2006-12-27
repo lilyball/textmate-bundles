@@ -92,6 +92,8 @@ There's other stuff too, but I got bored with the documentation, haha! take THAT
 require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
 
 class TextmateCodeCompletion
+  $debug_codecompletion = {}
+  
   EMPTY_ROW = /(^\s*$)/
   
   class << self
@@ -147,30 +149,50 @@ class TextmateCodeCompletion
   end
   
   def set_context!
-    line = ENV['TM_CURRENT_LINE']
+    @line = ENV['TM_CURRENT_LINE']
     
-    caret_placement = 0
-    caret_placement = ENV['TM_COLUMN_NUMBER'].to_i - 2
-    caret_placement = ENV['TM_INPUT_START_COLUMN'].to_i - 2 if @has_selection
-    @context_before = line[0..caret_placement]
+    
+    caret_placement
+    
+    @context_before = @line[0..caret_placement]
     @context_before = '' if caret_placement == -1
     @choice_partial = get_choice_partial()
     @selection      = @context if @has_selection
-    @context_after  = line[caret_placement+1..line.length+1]
+    @context_after  = @line[caret_placement+1..@line.length+1]
     
     @context_before.gsub!(/#{Regexp.escape @choice_partial}$/,'')
     @context_after.gsub!(/^#{Regexp.escape @selection}/,'') if @selection
     
-    
-    
     if @debug
-      $debug_codecompletion = {}
       $debug_codecompletion["caret_placement"] = caret_placement+2
       $debug_codecompletion["context_before" ] = @context_before
       $debug_codecompletion["choice_partial" ] = @choice_partial
       $debug_codecompletion["selection"      ] = @selection
       $debug_codecompletion["context_after"  ] = @context_after
     end
+  end
+  
+  def caret_placement
+    return @caret_placement if @caret_placement
+    
+    caret_placement = 0
+    caret_placement = ENV['TM_COLUMN_NUMBER'].to_i - 2
+    caret_placement = ENV['TM_INPUT_START_COLUMN'].to_i - 2 if @has_selection
+    
+    # Fix those dang tabs being longer than 1 character
+    if @line =~ /\t/    
+      tabes_to_spaces = ''; ENV['TM_TAB_SIZE'].to_i.times {tabes_to_spaces<<' '}
+      
+      number_of_tabs_before_cursor = @line.gsub(' ','X').gsub("\t",tabes_to_spaces)[0..caret_placement].gsub(/[^ ]/,'').length / ENV['TM_TAB_SIZE'].to_i
+      
+      add_to_caret_placement  = 0
+      add_to_caret_placement -= number_of_tabs_before_cursor * ENV['TM_TAB_SIZE'].to_i
+      add_to_caret_placement += number_of_tabs_before_cursor
+      
+      caret_placement += add_to_caret_placement
+    end
+    
+    @caret_placement = caret_placement
   end
   
   def get_choice_partial
@@ -199,8 +221,11 @@ class TextmateCodeCompletion
   
   def choose
     cancel() and return unless @choices
-    
-    val = Dialog.menu(@choices)
+    if @choices.length == 1
+      val = 0
+    else
+      val = Dialog.menu(@choices)
+    end
     cancel() and return unless val
     @choice_i = val
     @choice = @choices[val]

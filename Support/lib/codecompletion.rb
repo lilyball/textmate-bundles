@@ -231,9 +231,10 @@ class TextmateCodeCompletion
     text.gsub!(/^#{Regexp.escape @choice_partial}/,'') if @has_selection # Trimoff the choice_partial if we have a selection
     
     snippet = ''
-    snippet << '${101:'
+    # snippet << '${101:'
     snippet << snippetize_methods(text)
-    snippet << '}$100$0'
+    # snippet << '}$100'
+    snippet << '$0'
     snippet
   end
   

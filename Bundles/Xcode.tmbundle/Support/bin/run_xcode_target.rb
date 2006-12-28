@@ -8,6 +8,10 @@ require 'pty'
 
 class Xcode
   
+  # N.B. lots of cheap performance wins here to be made by aggressive (or any) caching.
+  # Not clear it's worthwhile. Could also be stale if these objects live a long time and
+  # the user makes changes to the project in Xcode.
+  
   # project file
   class Project
     attr_reader :objects
@@ -20,15 +24,22 @@ class Xcode
     end
 
     def user_settings_data
-      user_file     = @project_path + "/#{ENV['USER']}.pbxuser"
+      user_file     = @project_path + "/#{`whoami`.chomp}.pbxuser"
       user          = PropertyList::load(File.new(user_file)) if File.exists?(user_file)
     end
-      
+        
     def active_configuration_name
+      raise unless Xcode.supports_configurations?
+      
       user            = user_settings_data
-      active_config   = user && user[@project_data['rootObject']]['activeBuildConfigurationName']      
-      active_config || 'Release'
+      active_config   = user && user[@project_data['rootObject']]['activeBuildConfigurationName']
+
+      active_config || configurations.first.name
     end
+
+		def configurations
+			targets.first.configurations
+		end
     
     def results_path
       # default to global build results
@@ -143,8 +154,9 @@ class Xcode
 #            block.call(:output, cmd )  #debugging
 
             # If the executable doesn't exist, PTY.spawn might not return immediately
-            if not File.exist?(File.expand_path(dir_path) + '/' + executable)
-              block.call(:error, "Executable doesn't exist: #{executable}")
+						executable_path = File.expand_path(dir_path) + '/' + executable
+            if not File.exist?(executable_path)
+              block.call(:error, "Executable doesn't exist: #{executable_path}")
               return nil
             end
             
@@ -183,6 +195,8 @@ class Xcode
           end
           
         else
+          block.call(:start, escaped_dir )
+
           cmd  = "clear; cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} ./#{escaped_file}; echo -ne \\\\n\\\\nPress RETURN to Continue...; read foo;"
           cmd += 'osascript &>/dev/null'
           cmd += ' -e "tell app \"TextMate\" to activate"'

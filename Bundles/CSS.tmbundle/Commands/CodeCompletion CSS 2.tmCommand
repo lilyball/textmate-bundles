@@ -9,7 +9,18 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-TextmateCodeCompletion.plist('Property Completions')
+preference = 'Completions'
+choices = []
+
+parsed_choices = TextmateCompletionsParser.new(nil, :scope =&gt; :css).to_ary
+choices += parsed_choices if parsed_choices
+
+choices += ['--']
+
+plist_choices = TextmateCompletionsPlist.new( "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}.tmPreferences" ).to_ary
+choices += plist_choices if plist_choices
+
+print TextmateCodeCompletion.new(choices,STDIN.read, :scope =&gt; :css).to_snippet
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>
@@ -18,12 +29,12 @@ TextmateCodeCompletion.plist('Property Completions')
 	<key>keyEquivalent</key>
 	<string>~</string>
 	<key>name</key>
-	<string>CodeCompletion CSS Properties</string>
+	<string>CodeCompletion CSS</string>
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>
-	<string>source.css meta.property-list -meta.property-value</string>
+	<string>source.css -meta.property-list</string>
 	<key>uuid</key>
-	<string>42E26C97-72AB-4953-807F-645AF7EDF59F</string>
+	<string>E6FB4209-818E-40F5-9AFF-96E204F52A11</string>
 </dict>
 </plist>

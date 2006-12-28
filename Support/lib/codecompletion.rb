@@ -1,6 +1,6 @@
 # 
 # Textmate Code Completion
-# Version: 3 (version numbers are integers, no beta bologna!)
+# Version: 7 (version numbers are integers, no beta bologna!)
 # 
 #  By: Thomas Aylott / subtleGradient, oblivious@
 # And: nobody else yet
@@ -110,7 +110,13 @@ class TextmateCodeCompletion
     alias :simple :plist
   end
   
-  def initialize(choices=nil,context=nil)
+  def initialize(choices=nil,context=nil,options={})
+    @options = {}
+    @options[:characters] = /\w+$/
+    
+    @options.merge!(options)
+    @options.merge!(TextmateCompletionsParser::PARSERS[options[:scope]]) if options[:scope]
+    
     @debug = true
     
     @has_selection = ENV['TM_SELECTED_TEXT'] == context
@@ -199,7 +205,7 @@ class TextmateCodeCompletion
     return nil unless @context_before
     
     choice_partial  = ''
-    choice_partial  = @context_before.scan(/\w+$/)
+    choice_partial  = @context_before.scan(@options[:characters])
     choice_partial.to_s
   end
   
@@ -344,15 +350,20 @@ class TextmateCompletionsParser
     return false unless path and File.exist?(path)
     return false if File.directory?(path)
     
-    @raw = IO.readlines(path)
+    @options = {}
+    @options[:split] = "\n"
     
-    options = PARSERS[options[:scope]].merge(options) if options[:scope]
+    @options.merge!(options)
+    @options.merge!(PARSERS[options[:scope]]) if options[:scope]
     
-    @filter  = arrayify options[:filter]
-    @selects = arrayify options[:select]
+    @raw = IO.read(path).split(@options[:split])
+    
+    @filter  = arrayify @options[:filter]
+    @selects = arrayify @options[:select]
     collect_selects!
     
     render!()
+    @rendered.sort! if @options[:sort]
   end
   
   def to_ary
@@ -387,6 +398,24 @@ end
 def arrayify(anything)
   anything.is_a?(Array) ? anything : [anything]
 end
+
+TextmateCompletionsParser::PARSERS[:css] = {
+  :select => [/^([#\.][a-z][-_\w\d]*)\b.*/i, #Ids and Classes
+              /.*id="(.*?)"|id='(.*?)'.*/ #IDs in HTML
+              ], 
+  :filter => [/^#([0-9a-f]{6}|[0-9a-f]{3})/, /^..*#.*$/],
+  :sort => true,
+  :characters => /[-_:#\.\w]/,
+  :split => /[,;\n\s{}]|(\/\*|\*\/)/
+}
+
+TextmateCompletionsParser::PARSERS[:css_values] = {
+  :sort => true,
+  :select => [/.*(#([0-9a-f]{6}|[0-9a-f]{3})).*/i, #HEX colors
+              /(url\([^\)]*\))/#URLs
+              ],
+  :characters => /[#0-9a-z]/
+}
 
 TextmateCompletionsParser::PARSERS[:ruby] = {
   :select => [/^[ \t]*(?:class)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/,

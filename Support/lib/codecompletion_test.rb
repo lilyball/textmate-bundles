@@ -98,6 +98,13 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     assert_equal "\tpadding_is_awesome$0\t\t\t\t-top: 1px;", TextmateCodeCompletion.new(['padding_is_awesome'], "\tpadding\t\t\t\t-top: 1px;").to_snippet, $debug_codecompletion.inspect
   end
   
+  def test_extra_word_characters
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => ".", "TM_COLUMN_NUMBER" => "2", "TM_INPUT_START_COLUMN" => "1"})
+    tcc = TextmateCodeCompletion.new(['.aaa'], %{.}, {:characters => /[-_:#\.\w]/})
+    assert_equal ".aaa$0", tcc.to_snippet  , $debug_codecompletion.inspect
+    assert_equal 0, tcc.index             , $debug_codecompletion.inspect
+    assert_equal '.aaa', tcc.choice        , $debug_codecompletion.inspect
+  end
 end
 
 class TextmateCompletionsPlistTest < Test::Unit::TestCase
@@ -167,13 +174,13 @@ class TextmateCompletionsParserTest < Test::Unit::TestCase
   end
   def test_parser_array
     fred = TextmateCompletionsParser.new(nil, 
+      :split => "\n",
       :select => [/^[ \t]*(?:class)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/,
                   /^[ \t]*(?:def)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/,
                   /^[ \t]*(?:attr_.*?)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/], 
-      
       :filter => /_string/).to_ary
-    assert_kind_of Array, fred.to_ary
-    assert fred.to_ary.length > 0, fred.inspect
+    assert_kind_of Array, fred.to_ary, $debug_codecompletion.inspect
+    assert fred.to_ary.length > 0, $debug_codecompletion.inspect
     
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "a", "TM_COLUMN_NUMBER" => "2", "TM_INPUT_START_COLUMN" => "1"})
     assert_not_nil TextmateCodeCompletion.new(fred).to_snippet

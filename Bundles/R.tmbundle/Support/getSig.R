@@ -9,7 +9,7 @@ getSig <- function (..., snippet=T)
 						function (arg)
 							if (is.symbol(f[[arg]]) && f[[arg]] == "") arg else list(arg, f[[arg]])
 					),
-					function (arg, escape=function(x) ifelse(snippet, gsub("([\\$`}])", "\\\\\\1", x), x))
+					function (arg, escape=function(x) ifelse(snippet, gsub(" *\n +", " ", gsub("([\\$`}])", "\\\\\\1", x)), x))
 						if (is.list(arg))
 							paste(if (snippet) paste("${", snipIdx <<- snipIdx + 1, ":", sep=""),
 								ifelse((argIdx <<- argIdx + 1) > 1, ", ", ""),

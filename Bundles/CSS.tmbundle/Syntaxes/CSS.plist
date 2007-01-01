@@ -219,9 +219,9 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\s*(?=[a-z])</string>
+					<string>\b(?=[a-z])</string>
 					<key>end</key>
-					<string>\s*(?=:)</string>
+					<string>[ \t]|^|(?=[:;}&lt;&gt;])</string>
 					<key>name</key>
 					<string>meta.property-name.css</string>
 					<key>patterns</key>

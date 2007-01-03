@@ -7,16 +7,22 @@
 	<key>command</key>
 	<string>#! /usr/bin/ruby
 text = STDIN.read
-file = `find "${R_HOME:-/Library/Frameworks/R.framework/Resources}"/library -name #{text}.tex -print`
+file = `find "${R_HOME:-/Library/Frameworks/R.framework/Resources}"/library -name #{text}.tex -print 2&gt;/dev/null`
 unless file.empty?
-       dir = File.dirname(file)
        tex = `cat #{file}`
-       texscan(/\\begin\{Usage\}\n\\begin\{verbatim\}\n(.*)/) {|a| print a}
+       tex.scan(/\\begin\{Usage\}\n((?:.|\n)*)\\end\{Usage\}/) do |usage|
+         usage[0].scan(/\\begin\{verbatim\}\n((?:.|\n)*)\\end\{verbatim\}/) do |terms|
+           puts terms
+           puts
+         end
+       end
 end</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>
 	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~h</string>
 	<key>name</key>
 	<string>Command Usage</string>
 	<key>output</key>

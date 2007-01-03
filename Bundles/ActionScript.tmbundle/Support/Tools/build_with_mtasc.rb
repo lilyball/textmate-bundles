@@ -92,6 +92,8 @@ def mtasc_compile
 		`open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
 		cmd += " -pack com/mab/util "
 		cmd += " -trace com.mab.util.debug.trace "
+	else
+	  cmd += " -trace #{@trace} "
 	end
 
 	if !File.exists? @swf

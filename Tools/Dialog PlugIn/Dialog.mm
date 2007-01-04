@@ -15,10 +15,8 @@
 - (id)initWithPlugInController:(id <TMPlugInController>)aController;
 @end
 
-@interface NibLoader : NSObject
+@interface TMDWindowController : NSObject
 {
-	NSMutableDictionary* parameters;
-	NSMutableArray* topLevelObjects;
 	NSWindow* window;
 	BOOL isModal;
 	BOOL center;
@@ -28,41 +26,43 @@
 	int	token;
 }
 
-- (NSDictionary*)instantiateNib:(NSNib*)aNib;
-- (void)updateParameters:(NSMutableDictionary *)params;
+// Fetch an existing controller
++ (TMDWindowController*)windowControllerForToken:(int)token;
++ (NSArray*)nibDescriptions;
+- (void)cleanupAndRelease:(id)sender;
 
-// return unique ID for this NibLoader instance
+// return unique ID for this TMDWindowController instance
 - (int)token;
 - (NSString*)windowTitle;
-+ (NibLoader*)nibLoaderForToken:(int)token;
-+ (NSArray*)nibDescriptions;
+- (void)setWindow:(NSWindow*)aWindow;
 - (BOOL)isAsync;
+- (void)wakeClient;
 - (NSMutableDictionary*)returnResult;
 
 @end
 
-@implementation NibLoader
+@interface TMDNibWindowController : TMDWindowController
+{
+	NSMutableDictionary* parameters;
+	NSMutableArray* topLevelObjects;
+}
 
-static NSMutableArray *	sNibLoaders	= nil;
-static int sNextNibLoaderToken = 1;
+- (id)initWithParameters:(NSMutableDictionary*)someParameters modal:(BOOL)flag center:(BOOL)shouldCenter aysnc:(BOOL)inAsync;
+- (NSDictionary*)instantiateNib:(NSNib*)aNib;
+- (void)updateParameters:(NSMutableDictionary *)params;
 
+@end
+
+@implementation TMDNibWindowController
 - (id)initWithParameters:(NSMutableDictionary*)someParameters modal:(BOOL)flag center:(BOOL)shouldCenter aysnc:(BOOL)inAsync
 {
 	if(self = [super init])
 	{
-		if(sNibLoaders == nil)
-			sNibLoaders = [[NSMutableArray alloc] init];
-		
 		parameters = [someParameters retain];
 		[parameters setObject:self forKey:@"controller"];
 		isModal = flag;
 		center = shouldCenter;
 		async = inAsync;
-		
-		token = sNextNibLoaderToken;
-		sNextNibLoaderToken += 1;
-		
-		[sNibLoaders addObject:self];
 	}
 	return self;
 }
@@ -93,117 +93,12 @@ static int sNextNibLoaderToken = 1;
 	return result;
 }
 
-// Async param updates
-- (void)updateParameters:(NSMutableDictionary *)updatedParams
-{
-	NSArray *	keys = [updatedParams allKeys];
-
-	enumerate(keys, id key)
-	{
-		[parameters setValue:[updatedParams valueForKey:key] forKey:key];
-	}
-}
-
-- (void)dealloc
-{
-//	NSLog(@"%s %@ %d", _cmd, self, token);
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
-	enumerate(topLevelObjects, id object)
-		[object release];
-	[topLevelObjects release];
-	[parameters release];
-	[super dealloc];
-}
-
-- (BOOL)isAsync
-{
-	return async;
-}
-
-- (int)token
-{
-	return token;
-}
-
-- (NSString*)windowTitle
-{
-	return [window title];
-}
-
-+ (NSArray*)nibDescriptions
-{
-	NSMutableArray*	outNibArray = [NSMutableArray array];
-	
-	enumerate(sNibLoaders, NibLoader* nibLoader)
-	{
-//		if( [nibLoader isAsync] )
-		{
-			NSMutableDictionary*	nibDict = [NSMutableDictionary dictionary];
-			NSString*				nibTitle = [nibLoader windowTitle];
-			
-			[nibDict setObject:[NSNumber numberWithInt:[nibLoader token]] forKey:@"token"];
-			if(nibTitle != nil)
-			{
-				[nibDict setObject:nibTitle forKey:@"windowTitle"];
-			}
-			[outNibArray addObject:nibDict];
-		}
-	}
-	
-	return outNibArray;
-}
-
-+ (NibLoader*)nibLoaderForToken:(int)token
-{
-	NibLoader *	outLoader = nil;
-	
-	enumerate(sNibLoaders, NibLoader* loader)
-	{
-		if([loader token] == token)
-		{
-			outLoader = loader;
-			break;
-		}
-	}
-
-	return outLoader;
-}
-
-
-- (void)wakeClient
-{
-	if(isModal)
-		[NSApp stopModal];
-
-	// Post dummy event; the event system sometimes stalls unless we do this after stopModal. See also connectionDidDie: in this file.
-	[NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint modifierFlags:0 timestamp:0.0f windowNumber:0 context:nil subtype:0 data1:0 data2:0] atStart:NO];
-	
-	TMDSemaphore *	semaphore = [TMDSemaphore semaphoreForTokenInt:token];
-	[semaphore stopWaiting];
-}
-
-- (void)setWindow:(NSWindow*)aWindow
-{
-	if(window != aWindow)
-	{
-		[window setDelegate:nil];
-		[window release];
-		window = [aWindow retain];
-		[window setDelegate:self];
-	}
-}
-
 - (void)cleanupAndRelease:(id)sender
 {
 	if(didCleanup)
 		return;
 	didCleanup = YES;
 
-	[sNibLoaders removeObject:self];
-
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[parameters removeObjectForKey:@"controller"];
 
 	enumerate(topLevelObjects, id object)
@@ -216,21 +111,8 @@ static int sNextNibLoaderToken = 1;
 			[object unbind:@"contentObject"];
 		}
 	}
-	[self setWindow:nil];
-
-	[self wakeClient];
-	[self performSelector:@selector(delayedRelease:) withObject:self afterDelay:0];
-}
-
-- (void)delayedRelease:(id)anArgument
-{
-	[self autorelease];
-}
-
-- (void)windowWillClose:(NSNotification*)aNotification
-{
-	[self wakeClient];
-//	[self cleanupAndRelease:self];
+	
+	[super cleanupAndRelease:sender];
 }
 
 - (void)performButtonClick:(id)sender
@@ -287,15 +169,6 @@ static int sNextNibLoaderToken = 1;
 	{
 		[super forwardInvocation:invocation];
 	}
-}
-
-- (void)connectionDidDie:(NSNotification*)aNotification
-{
-	[window orderOut:self];
-	[self cleanupAndRelease:self];
-
-	// post dummy event, since the system has a tendency to stall the next event, after replying to a DO message where the receiver has disappeared, posting this dummy event seems to solve it
-	[NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint modifierFlags:0 timestamp:0.0f windowNumber:0 context:nil subtype:0 data1:0 data2:0] atStart:NO];
 }
 
 - (NSDictionary*)instantiateNib:(NSNib*)aNib
@@ -358,6 +231,189 @@ static int sNextNibLoaderToken = 1;
 
 	return parameters;
 }
+
+// Async param updates
+- (void)updateParameters:(NSMutableDictionary *)updatedParams
+{
+	NSArray *	keys = [updatedParams allKeys];
+
+	enumerate(keys, id key)
+	{
+		[parameters setValue:[updatedParams valueForKey:key] forKey:key];
+	}
+}
+
+- (void)dealloc
+{
+//	NSLog(@"%s %@ %d", _cmd, self, token);
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
+	enumerate(topLevelObjects, id object)
+		[object release];
+	[topLevelObjects release];
+	[parameters release];
+	[super dealloc];
+}
+
+@end
+
+
+
+@implementation TMDWindowController
+
+static NSMutableArray *	sWindowControllers	= nil;
+static int sNextWindowControllerToken = 1;
+
++ (NSArray*)nibDescriptions
+{
+	NSMutableArray*	outNibArray = [NSMutableArray array];
+	
+	enumerate(sWindowControllers, TMDWindowController* windowController)
+	{
+//		if( [windowController isAsync] )
+		{
+			NSMutableDictionary*	nibDict = [NSMutableDictionary dictionary];
+			NSString*				nibTitle = [windowController windowTitle];
+			
+			[nibDict setObject:[NSNumber numberWithInt:[windowController token]] forKey:@"token"];
+			if(nibTitle != nil)
+			{
+				[nibDict setObject:nibTitle forKey:@"windowTitle"];
+			}
+			[outNibArray addObject:nibDict];
+		}
+	}
+	
+	return outNibArray;
+}
+
++ (TMDWindowController*)windowControllerForToken:(int)token
+{
+	TMDWindowController*	outLoader = nil;
+	
+	enumerate(sWindowControllers, TMDWindowController* loader)
+	{
+		if([loader token] == token)
+		{
+			outLoader = loader;
+			break;
+		}
+	}
+
+	return outLoader;
+}
+
+- (id)init
+{
+	if(self = [super init])
+	{
+		if(sWindowControllers == nil)
+			sWindowControllers = [[NSMutableArray alloc] init];
+
+		token = sNextWindowControllerToken;
+		sNextWindowControllerToken += 1;
+		
+		[sWindowControllers addObject:self];
+	}
+	return self;
+}
+
+// Return the result; if there is no result, return the parameters
+- (NSMutableDictionary *)returnResult
+{
+	// override me
+	return nil;
+}
+
+- (void)dealloc
+{
+//	NSLog(@"%s %@ %d", _cmd, self, token);
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
+	[super dealloc];
+}
+
+- (BOOL)isAsync
+{
+	return async;
+}
+
+- (int)token
+{
+	return token;
+}
+
+- (NSString*)windowTitle
+{
+	return [window title];
+}
+
+- (void)wakeClient
+{
+	if(isModal)
+		[NSApp stopModal];
+
+	// Post dummy event; the event system sometimes stalls unless we do this after stopModal. See also connectionDidDie: in this file.
+	[NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint modifierFlags:0 timestamp:0.0f windowNumber:0 context:nil subtype:0 data1:0 data2:0] atStart:NO];
+	
+	TMDSemaphore *	semaphore = [TMDSemaphore semaphoreForTokenInt:token];
+	[semaphore stopWaiting];
+}
+
+- (void)setWindow:(NSWindow*)aWindow
+{
+	if(window != aWindow)
+	{
+		[window setDelegate:nil];
+		[window release];
+		window = [aWindow retain];
+		[window setDelegate:self];
+		
+		// We own the window, and we will release it. This prevents a potential crash later on.
+		if([window isReleasedWhenClosed])
+		{
+			NSLog(@"warning: Window should not have released-when-closed bit set. I will clear it for you, but this it crash earlier versions of TextMate.");
+			[window setReleasedWhenClosed:NO];
+		}
+	}
+}
+
+- (void)cleanupAndRelease:(id)sender
+{
+	if(didCleanup)
+		return;
+	didCleanup = YES;
+
+	[sWindowControllers removeObject:self];
+
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[self setWindow:nil];
+
+	[self wakeClient];
+	[self performSelector:@selector(delayedRelease:) withObject:self afterDelay:0];
+}
+
+- (void)delayedRelease:(id)anArgument
+{
+	[self autorelease];
+}
+
+- (void)windowWillClose:(NSNotification*)aNotification
+{
+	[self wakeClient];
+//	[self cleanupAndRelease:self];
+}
+
+
+- (void)connectionDidDie:(NSNotification*)aNotification
+{
+	[window orderOut:self];
+	[self cleanupAndRelease:self];
+
+	// post dummy event, since the system has a tendency to stall the next event, after replying to a DO message where the receiver has disappeared, posting this dummy event seems to solve it
+	[NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint modifierFlags:0 timestamp:0.0f windowNumber:0 context:nil subtype:0 data1:0 data2:0] atStart:NO];
+}
 @end
 
 @interface NSObject (OakTextView)
@@ -376,6 +432,109 @@ static int sNextNibLoaderToken = 1;
 - (int)textMateDialogServerProtocolVersion
 {
 	return TextMateDialogServerProtocolVersion;
+}
+
+// filePath: find the window with this path, and create a sheet on it. If we can't find one, may go app-modal.
+- (id)showAlertForPath:(NSString*)filePath withParameters:(NSDictionary *)parameters modal:(BOOL)modal
+{
+	NSAlertStyle		alertStyle = NSInformationalAlertStyle;
+	NSAlert*			alert;
+	NSDictionary*		resultDict = nil;
+	NSArray*			buttonTitles = [parameters objectForKey:@"buttonTitles"];
+	NSString*			alertStyleString = [parameters objectForKey:@"alertStyle"];
+		
+	alert = [[[NSAlert alloc] init] autorelease];
+	
+	if([alertStyleString isEqualToString:@"warning"])
+	{
+		alertStyle = NSWarningAlertStyle;
+	}
+	else if([alertStyleString isEqualToString:@"critical"])
+	{
+		alertStyle = NSCriticalAlertStyle;
+	}
+	else if([alertStyleString isEqualToString:@"informational"])
+	{
+		alertStyle = NSInformationalAlertStyle;
+	}
+	
+	[alert setAlertStyle:alertStyle];
+	[alert setMessageText:[parameters objectForKey:@"messageTitle"]];
+	[alert setInformativeText:[parameters objectForKey:@"informativeText"]];
+	
+	// Setup buttons
+	if(buttonTitles != nil && [buttonTitles count] > 0)
+	{
+		unsigned int	buttonCount = [buttonTitles count];
+
+		// NSAlert always preallocates the OK button.
+		// No -- docs are not entirely correct.
+//		[[[alert buttons] objectAtIndex:0] setTitle:[buttonTitles objectAtIndex:0]];
+
+		for(unsigned int index = 0; index < buttonCount; index += 1)
+		{
+			NSString *	buttonTitle = [buttonTitles objectAtIndex:index];
+
+			[alert addButtonWithTitle:buttonTitle];
+		}
+	}
+	
+	// Show the alert
+	if(not modal)
+	{
+#if 1
+		// Not supported yet; needs same infrastructure as will be required for nib-based sheets.
+		[NSException raise:@"NotSupportedYet" format:@"Sheet alerts not yet supported."];
+#else
+		// Window-modal (sheet).NSWindowController
+		// Find the window corresponding to the given path
+
+		NSArray* windows = [NSApp windows];
+		NSWindow* chosenWindow = nil;
+		
+		enumerate(windows, NSWindow * window)
+		{
+			OakDocumentController*	documentController = [window controller];
+			if([documentController isKindOfClass:[OakDocumentController class]])
+			{
+				if(filePath == nil)
+				{
+					// Take first visible document window
+					if( [window isVisible] )
+					{
+						chosenWindow = window;
+						break;
+					}
+				}
+				else
+				{
+					// Find given document window
+					// TODO: documentWithContentsOfFile may be a better way to do this
+					// FIXME: standardize paths
+					if([[documentController->textDocument filename] isEqualToString:filePath])
+					{
+						chosenWindow = window;
+						break;
+					}
+				}
+			}
+		}
+		
+		// Fall back to modal
+		if(chosenWindow == nil)
+		{
+			modal = YES;
+		}
+#endif
+	}
+	
+	if(modal)
+	{
+		int alertResult = ([alert runModal] - NSAlertFirstButtonReturn);
+		
+		resultDict = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:alertResult] forKey:@"buttonClicked"];
+	}
+	return resultDict;
 }
 
 - (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues modal:(BOOL)modal center:(BOOL)shouldCenter async:(BOOL)async
@@ -398,7 +557,7 @@ static int sNextNibLoaderToken = 1;
 		return nil;
 	}
 
-	NibLoader* nibOwner = [[NibLoader alloc] initWithParameters:someParameters modal:modal center:shouldCenter aysnc:async];
+	TMDNibWindowController* nibOwner = [[TMDNibWindowController alloc] initWithParameters:someParameters modal:modal center:shouldCenter aysnc:async];
 	if(!nibOwner)
 		NSLog(@"%s couldn't create nib loader", _cmd);
 	[nibOwner performSelectorOnMainThread:@selector(instantiateNib:) withObject:nib waitUntilDone:YES];
@@ -420,12 +579,14 @@ static int sNextNibLoaderToken = 1;
 // Async updates of parameters
 - (id)updateNib:(id)token withParameters:(id)someParameters
 {
-	NibLoader*	nibLoader	= [NibLoader nibLoaderForToken:[token intValue]];
+	TMDWindowController*	windowController	= [TMDWindowController windowControllerForToken:[token intValue]];
 	int			resultCode	= -43;
 	
-	if((nibLoader != nil) && [nibLoader isAsync])
+	if((windowController != nil)
+	&& [windowController isAsync]
+	&& [windowController isKindOfClass:[TMDNibWindowController class]])
 	{
-		[nibLoader updateParameters:someParameters];
+		[((TMDNibWindowController*)windowController) updateParameters:someParameters];
 		resultCode = 0;
 	}
 	
@@ -435,12 +596,12 @@ static int sNextNibLoaderToken = 1;
 // Async close
 - (id)closeNib:(id)token
 {
-	NibLoader*	nibLoader	= [NibLoader nibLoaderForToken:[token intValue]];
+	TMDWindowController*	windowController	= [TMDWindowController windowControllerForToken:[token intValue]];
 	int			resultCode	= -43;
 	
-	if((nibLoader != nil) /*&& [nibLoader isAsync]*/)
+	if((windowController != nil) /*&& [windowController isAsync]*/)
 	{
-		[nibLoader connectionDidDie:nil];
+		[windowController connectionDidDie:nil];
 		resultCode = 0;
 	}
 	
@@ -450,13 +611,13 @@ static int sNextNibLoaderToken = 1;
 // Async get results
 - (id)retrieveNibResults:(id)token
 {
-	NibLoader*	nibLoader	= [NibLoader nibLoaderForToken:[token intValue]];
+	TMDWindowController*	windowController	= [TMDWindowController windowControllerForToken:[token intValue]];
 	int			resultCode	= -43;
 	id			results;
 	
-	if((nibLoader != nil) /*&& [nibLoader isAsync]*/)
+	if((windowController != nil) /*&& [windowController isAsync]*/)
 	{
-		results = [nibLoader returnResult];
+		results = [windowController returnResult];
 		resultCode = 0;
 	}
 	else
@@ -471,7 +632,7 @@ static int sNextNibLoaderToken = 1;
 - (id)listNibTokens
 {
 	NSMutableDictionary*	dict		= [NSMutableDictionary dictionary];
-	NSArray*				outNibArray	= [NibLoader nibDescriptions];
+	NSArray*				outNibArray	= [TMDWindowController nibDescriptions];
 	int						resultCode	= 0;
 		
 	[dict setObject:outNibArray forKey:@"nibs"];

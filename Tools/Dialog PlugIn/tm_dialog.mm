@@ -304,32 +304,41 @@ void usage ()
 {
 	fprintf(stderr, 
 		"%1$s r%2$s (" DATE ")\n"
-		"Usage: %1$s [-cmqpaxt] nib_file\n"
-		"Usage: %1$s [-p] -u\n"
+		"Usage (dialog): %1$s [-cmqp] nib_file\n"
+		"Usage (window): %1$s [-cpaxts] nib_file\n"
+		"Usage (alert): %1$s [-p] -e [-i|-c|-w]\n"
+//		"Usage (sheet): %1$s [-p] -e\n"
+		"Usage (menu): %1$s [-p] -u\n"
 		"\n"
-		"Options:\n"
+		"Dialog Options:\n"
       " -c, --center                 Center the window on screen.\n"
       " -d, --defaults <plist>       Register initial values for user defaults.\n"
       " -m, --modal                  Show window as modal (other windows will be inaccessible).\n"
-      " -q, --quiet                  Do not write result to stdout.\n"
       " -p, --parameters <plist>     Provide parameters as a plist.\n"
+      " -q, --quiet                  Do not write result to stdout.\n"
+//      " -s, --target-path <path>     Attempt to display the window as a sheet on the window containing\n"
+//	  "                              the given path. Applies to alerts and async windows only.\n"
+      "\nAlert Options:\n"
+      " -e, --alert                  Show alert. Parameters: 'title', 'message', 'buttons'\n"
+	  "                              'alertStyle' -- can be 'warning,' 'informational',\n"
+	  "                              'critical'.  Returns the button index.\n"
+      "Menu Options:\n"
       " -u, --menu                   Treat parameters as a menu structure.\n"
-      "\n Async Window Subcommands\n"
+      "\nAsync Window Options:\n"
       " -a, --async-window           Displays the window and returns a reference token for it\n"
       "                              in the output property list.\n"
-      " -x, --close-window <token>   Close and release an async window.\n"
+      " -l, --list-windows           List async window tokens.\n"
       " -t, --update-window <token>  Update an async window with new parameter values.\n"
 	  "                              Use the --parameters argument (or stdin) to specify the\n"
 	  "                              updated parameters.\n"
-      " -l, --list-windows           List async window tokens.\n"
+      " -x, --close-window <token>   Close and release an async window.\n"
       " -w, --wait-for-input <token> Wait for user input from the given async window.\n"
-	  "\nImportant Note\n"
+	  "\nNote:\n"
 	  "If you DO NOT use the -m/--modal option,\n"
 	  "OR you create an async window and then use the wait-for-input subcommand,\n"
 	  "you must run tm_dialog in a detached/backgrounded process (`mycommand 2&>1 &` in bash).\n"
 	  "Otherwise, TextMate's UI thread will hang, waiting for your command to complete.\n"
-	  "You can recover from the hang by killing the tm_dialog process in Terminal.\n"
-	  "Better not to cause it in the first place, though. :)\n"
+	  "You can recover from such a hang by killing the tm_dialog process in Terminal.\n"
 		"\n"
 		"", AppName, current_version());
 }
@@ -399,17 +408,20 @@ int main (int argc, char* argv[])
 	extern int optind;
 	extern char* optarg;
 
-	enum AsyncWindowAction
+	enum DialogAction
 	{
-		kSyncCreate,
+		kShowDialog,
+		kShowMenu,
+		kShowAlert,
 		kAsyncCreate,
 		kAsyncClose,
 		kAsyncUpdate,
 		kAsyncList,
-		kAsyncWait
+		kAsyncWait,
 	};
 
 	static struct option const longopts[] = {
+		{ "alert",				no_argument,			0,		'e'	},
 		{ "center",				no_argument,			0,		'c'	},
 		{ "defaults",			required_argument,	0,		'd'	},
 		{ "modal",				no_argument,			0,		'm'	},
@@ -424,29 +436,30 @@ int main (int argc, char* argv[])
 		{ 0,						0,							0,		0		}
 	};
 
-	bool center = false, modal = false, quiet = false, menu = false;
+	bool center = false, modal = false, quiet = false;
 	char const* parameters = NULL;
 	char const* defaults = NULL;
 	char const* token = NULL;
 	char ch;
-	AsyncWindowAction asyncWindowAction = kSyncCreate;
+	DialogAction dialogAction = kShowDialog;
 	
-	while((ch = getopt_long(argc, argv, "cd:mp:quax:t:w:l", longopts, NULL)) != -1)
+	while((ch = getopt_long(argc, argv, "eacd:mp:quax:t:w:l", longopts, NULL)) != -1)
 	{
 		switch(ch)
 		{
+			case 'e':	dialogAction = kShowAlert;				break;
 			case 'c':	center = true;				break;
 			case 'd':	defaults = optarg;		break;
 			case 'm':	modal = true;				break;
 			case 'p':	parameters = optarg;		break;
 			case 'q':	quiet = true;				break;
-			case 'u':	menu = true;				break;
+			case 'u':	dialogAction = kShowMenu;				break;
 			
-			case 'a':	asyncWindowAction = kAsyncCreate;				break;
-			case 'x':	asyncWindowAction = kAsyncClose; token = optarg;			break;
-			case 't':	asyncWindowAction = kAsyncUpdate; token = optarg;			break;
-			case 'w':	asyncWindowAction = kAsyncWait; token = optarg;			break;
-			case 'l':	asyncWindowAction = kAsyncList;			break;
+			case 'a':	dialogAction = kAsyncCreate;				break;
+			case 'x':	dialogAction = kAsyncClose; token = optarg;			break;
+			case 't':	dialogAction = kAsyncUpdate; token = optarg;			break;
+			case 'w':	dialogAction = kAsyncWait; token = optarg;			break;
+			case 'l':	dialogAction = kAsyncList;			break;
 
 			default:		usage();						break;
 		}
@@ -456,64 +469,81 @@ int main (int argc, char* argv[])
 	argv += optind;
 
 	int res = -1;
-	if(not menu)
+
+	if(dialogAction != kShowDialog)
 	{
-		id initialValues = defaults ? [NSPropertyListSerialization propertyListFromData:[NSData dataWithBytes:defaults length:strlen(defaults)] mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
+		if(modal)
+			fprintf(stderr, "%s: warning: Ignoring 'modal' option\n", AppName);
+		
+		if(quiet)
+			fprintf(stderr, "%s: warning: Ignoring 'quiet' option.\n", AppName);
+	}
 
-		if(asyncWindowAction != kSyncCreate)
-		{
-			if(modal)
-				fprintf(stderr, "%s: warning: Ignoring 'modal' option; async windows cannot be modal\n", AppName);
-			
-			if(quiet)
-				fprintf(stderr, "%s: warning: Ignoring 'quiet' option for async window; use a normal window instead.\n", AppName);
-		}
-
-		switch(asyncWindowAction)
-		{
-			case kSyncCreate:
-			case kAsyncCreate:
-				if(argc == 1)
+	switch(dialogAction)
+	{
+		case kShowMenu:
+			if(argc == 0)
+			{
+				id proxy;
+				if(validate_proxy(proxy))
 				{
 					id plist = read_property_list_argument(parameters);
-					res = contact_server_show_nib(find_nib(argv[0]), plist, initialValues, center, modal, quiet, (asyncWindowAction == kAsyncCreate));
+					output_property_list([proxy showMenuWithOptions:plist]);
 				}
-				else
+			}
+			else
+			{
+				usage();
+			}
+			break;
+		case kShowAlert:
+			if(argc == 0)
+			{
+				id proxy;
+				if(validate_proxy(proxy))
 				{
-					usage();
+					id plist = read_property_list_argument(parameters);
+					NSDictionary* output = [proxy showAlertForPath:nil withParameters:plist modal:YES];
+					printf("%d\n", [[output objectForKey:@"buttonClicked"] intValue]);
 				}
-				break;
-			case kAsyncUpdate:	
+			}
+			else
+			{
+				usage();
+			}
+			break;
+		case kShowDialog:
+		case kAsyncCreate:
+		{
+			id initialValues = defaults ? [NSPropertyListSerialization propertyListFromData:[NSData dataWithBytes:defaults length:strlen(defaults)] mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
+
+			if(argc == 1)
 			{
 				id plist = read_property_list_argument(parameters);
-				res = contact_server_async_update(token, plist);
-			} break;
-			case kAsyncClose:
-				res = contact_server_async_close(token, false); 	// false -> generate errors
-				break;
-			case kAsyncWait:
-				res = contact_server_async_wait(token);
-				break;
-			case kAsyncList:
-				res = contact_server_async_list();
-				break;
-			default:
+				res = contact_server_show_nib(find_nib(argv[0]), plist, initialValues, center, modal, quiet, (dialogAction == kAsyncCreate));
+			}
+			else
+			{
 				usage();
-				break;
-		}
-	}
-	else if(argc == 0)
-	{
-		id proxy;
-		if(validate_proxy(proxy))
+			}
+		} break;
+		case kAsyncUpdate:	
 		{
 			id plist = read_property_list_argument(parameters);
-			output_property_list([proxy showMenuWithOptions:plist]);
-		}
-	}
-	else
-	{
-		usage();
+			res = contact_server_async_update(token, plist);
+		} break;
+		case kAsyncClose:
+			res = contact_server_async_close(token, false); 	// false -> generate errors
+			break;
+		case kAsyncWait:
+			res = contact_server_async_wait(token);
+			break;
+		case kAsyncList:
+			res = contact_server_async_list();
+			break;
+		default:
+			usage();
+			break;
 	}
 
 	[pool release];

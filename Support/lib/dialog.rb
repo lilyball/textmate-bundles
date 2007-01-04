@@ -8,9 +8,18 @@ module TextMate
   end
 
   class Dialog
-    TM_SUPPORT    = ENV['TM_SUPPORT_PATH']
+    TM_SUPPORT    = File.expand_path(File.dirname(__FILE__) + '/..')
     TM_DIALOG     = TM_SUPPORT + '/bin/tm_dialog'
-    
+
+		def self.alert(style, title, message, *buttons)
+			styles = [:warning, :informational, :critical]
+			raise "style must be one of #{types.inspect}" unless styles.include?(style)
+			
+			params = {'alertStyle' => style.to_s, 'messageTitle' => title, 'informativeText' => message, 'buttonTitles' => buttons}
+	    button_index = %x{#{e_sh TM_DIALOG} -ep #{e_sh params.to_plist}}.chomp.to_i
+			buttons[button_index]
+		end
+
     # safest way to use this object
     def self.dialog(nib_path, parameters, defaults= nil)
       dialog = Dialog.new(nib_path, parameters, defaults)
@@ -99,7 +108,6 @@ class << self
     support = ENV['TM_SUPPORT_PATH']
     dialog  = support + '/bin/tm_dialog'
     nib     = support + '/nibs/SimpleNotificationWindow.nib'
-    require support + '/lib/plist'
     
     plist = Hash.new
     plist['title']    = options[:title]   || ''
@@ -114,7 +122,6 @@ class << self
 
     support = ENV['TM_SUPPORT_PATH']
     dialog = support + '/bin/tm_dialog'
-    require support + '/lib/plist'
 
     return_hash = true
     if options[0].kind_of?(String)
@@ -243,3 +250,11 @@ class << self
   end
 end
 end
+
+# interactive unit tests
+if $0 == __FILE__
+	result = TextMate::Dialog.alert(:warning, 'The wallaby has escaped.', 'The hard disk may be full, or maybe you should try using a larger cage.', 'Dagnabit', 'I Am Relieved', 'Heavens')
+	
+	puts "Button pressed: #{result}"
+end
+

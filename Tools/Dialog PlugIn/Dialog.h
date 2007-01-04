@@ -8,7 +8,7 @@
 - (float)version;
 @end
 
-#define TextMateDialogServerProtocolVersion 7
+#define TextMateDialogServerProtocolVersion 8
 
 @protocol TextMateDialogServerProtocol
 - (int)textMateDialogServerProtocolVersion;
@@ -20,6 +20,9 @@
 - (id)updateNib:(id)token withParameters:(id)someParameters;
 - (id)closeNib:(id)token;
 - (id)retrieveNibResults:(id)token;
+
+// Alert
+- (id)showAlertForPath:(NSString*)filePath withParameters:(NSDictionary *)parameters modal:(BOOL)modal;
 
 // Menu
 - (id)showMenuWithOptions:(NSDictionary*)someOptions;

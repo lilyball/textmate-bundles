@@ -531,7 +531,8 @@ begin
   Dir.chdir($pwd)
 
   if not File.exists? "Makefile"
-    parse_errors("Running qmake...", "$QTDIR/bin/qmake") # TODO: this doesn't seem to work
+    # Make sure qmake is in PATH
+    parse_errors("Running qmake...", "qmake")
   end
   
   if File.exists? "Makefile"

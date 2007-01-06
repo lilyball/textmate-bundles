@@ -6,8 +6,8 @@ def closest_tag(tags, line_number)
   tag = nil
   tags.each_value do |functions|
     functions.each do |t|
+      next if !t.path.nil?
       next if (line_number - t.line) < 0
-      next if !ENV['TM_FILEPATH'].nil? && t.path != ENV['TM_FILEPATH']
       tag = t if tag.nil? || (line_number - t.line) < (line_number - tag.line)
     end
   end
@@ -37,9 +37,5 @@ def insert_super(tags)
 end
 
 if __FILE__ == $0
-  begin
-    print insert_super(CTags.run)
-  rescue Exception => e
-    p e.backtrace
-  end
+  print insert_super(CTags.run)
 end

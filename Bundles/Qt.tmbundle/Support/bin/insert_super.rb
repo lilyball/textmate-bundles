@@ -1,34 +1,31 @@
 #! /usr/bin/env ruby
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/rails_bundle_tools'
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/ctags'
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/common'
 
-def closest_tag(tags, line_number)
-  tag = nil
-  tags.each_value do |functions|
-    functions.each do |t|
+def closest_function_tag(tags, line_number)
+  functions = []
+  tags.functions.each_value do |f|
+    f.each do |t|
       next if !t.path.nil?
-      next if (line_number - t.line) < 0
-      tag = t if tag.nil? || (line_number - t.line) < (line_number - tag.line)
+      functions << t
     end
   end
-  return tag
+  return closest_tag(functions, line_number)
 end
 
 def parse_signature(signature)
-  if signature =~ /\((.+)\)/
-    index = 2 # first argument will get index 3
-    signature = $1
-    signature.split(",").map do |a|
-      index += 1
-      "\${#{index}:#{$1}}" if a =~ /([\w\d_]+)$/
-    end.join(", ")
-  else
-    ""
-  end
+  args = signature_to_arguments(signature)
+
+  index = 2 # first argument will get index 3
+  args.split(",").map do |a|
+    index += 1
+    "\${#{index}:#{a.strip}}"
+  end.join(", ")
 end
 
 def insert_super(tags)
-  tag = closest_tag(tags.functions, TextMate.line_number)
+  tag = closest_function_tag(tags, TextMate.line_number)
   klass = tags.class_parent(tag ? tag.klass : nil) || "Class"
   method = tag ? tag.name : nil || "method"
   signature = tag ? tag.signature : nil || "()"

@@ -108,11 +108,12 @@ class CTags
   end
 
   def self.run
+    eof = $stdin.eof?
     tags = parse_data($stdin.readlines)
     file = ENV['TM_FILEPATH']
     if !file.nil?
       files = [ "h", "cpp" ].map { |e| replace_extension(file, e) }.compact
-      files -= [file]
+      files -= [file] if !eof
       raise "No corresponding .h and .cpp files found for #{ENV['TM_FILEPATH']}" if files.empty?
       tags += CTags.parse(files)
     end

@@ -1,5 +1,7 @@
 #! /usr/bin/env ruby
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/rails_bundle_tools'
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/ctags'
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/common'
 
 input = $stdin.readlines
 
@@ -13,9 +15,15 @@ end
 $cpp_mode = TextMate.scope =~ /source\.(c|objc)\+\+/
 $doxygen  = ARGV.find { |a| a == "doxygen" }
 
+input = input.map do |line|
+  line.gsub!(/^\s+/, "")
+  line.gsub!(";", "{}")
+  # line.gsub!(/$/, "{}")
+end.join("\n")
+
 $doxygen_index = 10
-def insert_method(type, name, arguments, is_const)
-  r = Array.new
+def print_function(tags, tag)
+  r = []
   if $doxygen
     r << "#$indent/*" + TextMate.doxygen_style
     r << "#$indent * \${#{$doxygen_index}:TODO}"
@@ -23,51 +31,53 @@ def insert_method(type, name, arguments, is_const)
     $doxygen_index += 1
   end
   
-  if !type.nil?
-    type.gsub!(/\s+/, " ")
-    type.gsub!(/\s+$/, "")
-    
-    # this would result in implementations like this:
-    # QTextDocument *document() const
-    type += " " if type =~ /[^*&]$/
+  if !tag.result_type.nil?
+    t = closest_tag(tags.tags, TextMate.line_number)
+    klass = t ? t.klass : nil
+    class_name = "Class"
+    class_name = underscore_to_classname(TextMate.filename) if TextMate.env(:filename)
+    class_name = !klass.nil? ? klass : class_name
+    class_name = "\${1:#{class_name}}::"
+    class_name = "" if !$cpp_mode
 
-    className = "ClassName"
-    className = underscore_to_classname(TextMate.filename) if TextMate.env(:filename)
-    className = "\${1:#{className}}::"
-    className = "" if !$cpp_mode
-    
-    r << "#$indent#{type}#{className}#{name}(#{arguments})" + (!is_const.nil? ? " const" : "")
-  elsif name[0] != ?~
+    r << "#$indent#{tag.result_type}#{class_name}#{tag.name}(#{signature_to_implementation_signature(tag.signature)})"
+  elsif tag.name[0] != ?~
     # Constructor
-    r << "#$indent\${1:#{name}}::\${1}(#{arguments})"
-    r << "#$indent\t: \${2:ParentClass()}"
+    parent = tags.class_parent(tag.name) || "Parent"
+    r << "#$indent\${1:#{tag.name}}::\${1}(#{signature_to_implementation_signature(tag.signature)})"
+    r << "#$indent\t: \${2:#{parent}(#{signature_to_arguments(tag.signature)})}"
   else
     # Destructor
-    r << "#$indent\${1:#{name[1..-1]}}::~\${1}()"
+    r << "#$indent\${1:#{tag.name[1..-1]}}::~\${1}()"
   end
   r << "#$indent{"
   r << "#$indent\t\$0"
   r << "#$indent}"
   r << ""
+  return r
 end
 
-# Due to the way TextMate passes strings, if it passed
-# only one string without newline, but thought that it
-# selected the entire line (Input: Selected Text or Line),
-# then it will append additonal newline to the end
-extra_newline = ""
-
-output = Array.new
-input.each do |line|
-  extra_newline = "\n" if line.chomp != line
-  case line
-  when /^\s*(?:virtual)?\s*([\w\d_:,<>*\s]+\s+([*&])?)?\s*([~\w\d_]+)\s*\((.*)\)\s*(const)?/
-    type = $1
-    # type += " " + $2 if !$2.nil?
-    method = $3
-    arguments = $4
-    output += insert_method(type, method, arguments, $5)
+def declaration_to_implementation(tags)
+  global_tags = CTags.run
+  r = []
+  functions = []
+  tags.functions.each_value do |f|
+    f.each { |t| functions << t }
   end
+  functions.sort! { |a, b| a.line <=> b.line }
+  functions.each do |e|
+    r += print_function(global_tags, e)
+  end
+  return r
 end
 
-print output.join("\n").chomp + extra_newline
+if __FILE__ == $0
+  # Due to the way TextMate passes strings, if it passed
+  # only one string without newline, but thought that it
+  # selected the entire line (Input: Selected Text or Line),
+  # then it will append additonal newline to the end
+  extra_newline = ""
+  input.each { |line| extra_newline = "\n" if line.chomp != line }
+  
+  print declaration_to_implementation(CTags.parse_data(input)).join("\n").chomp + extra_newline
+end

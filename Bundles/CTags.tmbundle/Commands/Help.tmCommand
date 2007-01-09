@@ -27,6 +27,17 @@ If you modify the source code, the definition list will become out of sync with 
 
 **Note:** The definitions are stored in a file named *tmtags* in your project root directory. It is safe to delete this file when no longer needed. The bundle will recreate it on the fly whenever needed.
 
+To exclude certain files or directories (eg source control files), add the appropiate options to the `.ctags` file in your home directory. An example:
+
+	--exclude=*~
+	--exclude=\._*
+	--exclude=*\.bak
+	--exclude=\.svn
+	--exclude=_darcs
+
+Please see the ctags man page or the [Exuberant CTags][1] documentation for more info.
+
+
 Configuration
 -------------
 
@@ -43,6 +54,10 @@ The file name used to store tags in. Default is *tmtags*.
 * TM\_TAGS\_FILE
 
 For backward-compatibility with the *Lookup Definition (ctags)* command from the Source bundle. Only makes sense inside a project. If set must contain the full path and filename for the tags file ctags will use. The path also is the root from which ctags does its work.
+
+* TmCtagsTimeout
+
+The timeout in seconds after which ctags is considered hanging (there are some bugs in ctags) and it is killed. Default is 30 seconds. For really large projects that may need to be increased.
 
 * TmCtagsSoundDir
 

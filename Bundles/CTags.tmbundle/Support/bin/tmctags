@@ -43,8 +43,8 @@
 	our $CtagsFlags="--fields=Kn --excmd=pattern -R";
 	our $CtagsPGM="$ENV{'TM_BUNDLE_SUPPORT'}/bin/ctags";
 	our $CtagsPGMtmplugin="$ENV{'HOME'}/Library/Application Support/TextMate/PlugIns/TmCodeBrowser.tmplugin/Contents/Resources/ctags";
-	our $CtagsTimeout=15;	# timeout if ctags does not finish within x seconds
-	
+	our $CtagsTimeout=&setFromEnv('TmCtagsTimeout',30);		# timeout if ctags does not finish within x seconds
+
 	our $AutoJump=&setFromEnv('TmCtagsAutoJump',1);
 	
 	#our $OkSingleSound=&setFromEnv('TmCtagsOkSingleSound','Ping');

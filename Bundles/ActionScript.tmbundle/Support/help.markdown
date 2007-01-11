@@ -23,6 +23,10 @@ If you already have an existing SWF file, the code will be injected into it and 
 
 If you don't have a SWF file, MTASC will create a new one for you.
 
+## Troubleshooting
+
+If you want to debug using XTrace, you need to adjust your security settings to allow local scripts to make HTTP connections (check [Adobe TechNote 4c093f20](http://www.adobe.com/go/4c093f20) for more information on why and how to do this).
+
 # Where to go for help
 
 The maintainer of the ActionScript bundle (Ale Muñoz) follows the [TextMate List](http://lists.macromates.com/mailman/listinfo/textmate), and will be happy to help you out with anything ActionScript-related.

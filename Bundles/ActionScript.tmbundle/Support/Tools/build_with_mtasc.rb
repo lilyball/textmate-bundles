@@ -54,7 +54,7 @@ def mtasc_compile
 		@fps = yml['fps']
 		@classpaths = yml['classpaths']
 		@trace = yml['trace']
-		@preview = yml['preview']
+		@preview = yml['preview'] || "textmate"
 	else
 		@mtasc_path = ENV['TM_BUNDLE_SUPPORT'] + "/bin/mtasc"
 		@app = @file_name
@@ -63,6 +63,7 @@ def mtasc_compile
 		@width = 800
 		@height = 600
 		@fps = 31
+		@preview = "textmate"
 	end
 
 	# MTASC binary
@@ -128,10 +129,24 @@ def mtasc_compile
 		warning "#{warnings.uniq.join('</p><p>')} <br/> <pre>#{cmd}</pre>", "Warnings:"
 	end
 	if errors.empty? && warnings.empty?
-		if @preview
-			`open "#{@preview}"`
+		if @preview == "textmate"
+			# Preview in TextMate
+			html_header("Preview","Build With MTASC")
+			output_file = "#{@project_path}/#{@swf}"
+			# puts "<h2>#{@app} - #{Time.now}</h2>"
+			puts <<SWF_HTML
+			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=#{@version},0,0,0" width="#{@width}" height="#{@height}" id="myApplication" align="middle">
+				<param name="allowScriptAccess" value="always">
+				<param name="movie" value="#{output_file}">
+				<param name="quality" value="high">
+				<param name="bgcolor" value="#FFFFFF">
+				<embed src="#{output_file}" quality="high" bgcolor="#FFFFFF" width="#{@width}" height="#{@height}" name="myApplication" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+			</object>
+SWF_HTML
+			TextMate.exit_show_html
 		else
-			`open -a SAFlashPlayer "#{@swf}"`
+			# Open user-defined preview
+			`open #{@preview}`
 		end
 	else
 		TextMate.exit_show_html

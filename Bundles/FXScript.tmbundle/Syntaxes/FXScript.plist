@@ -35,7 +35,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\((?=(?i:clip|color|float|image|point|string|value))</string>
+					<string>\((?=(?i:clip|color|float|image|point|string|value|point3d))</string>
 					<key>end</key>
 					<string>\)</string>
 					<key>patterns</key>
@@ -55,7 +55,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>((?i:clip|color|float|image|point|string|value))[ \t]+([^,)]+)</string>
+							<string>((?i:clip|color|float|image|point|string|value|point3d))[ \t]+([^,)]+)</string>
 						</dict>
 					</array>
 				</dict>
@@ -329,7 +329,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i:Abs|Integer|Sign|Sqrt)\b</string>
+			<string>\b(?i:Abs|Integer|Sign|Sqrt|Power)\b</string>
 			<key>name</key>
 			<string>support.function.math.fxscript</string>
 		</dict>

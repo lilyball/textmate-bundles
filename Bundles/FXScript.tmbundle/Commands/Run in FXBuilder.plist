@@ -139,6 +139,8 @@ on FXBuilderRunScript(sourceText)
 	end tell
 end FXBuilderRunScript
 
+tell application "System Events" to set UI elements enabled to true -- just do this gracelessly rather than gunking up the script with dialogs etc
+
 set theSource to do shell script "cat /tmp/$TEMPFILE"
 FXBuilderRunScript(theSource)
 

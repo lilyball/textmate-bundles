@@ -17,7 +17,9 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>(?&lt;=^|;)\s*((#))</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -30,8 +32,17 @@
 					<string>punctuation.definition.comment.tcl</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>(?&lt;=^|;)\s*((#).*)$\n?</string>
+			<key>contentName</key>
+			<string>comment.line.number-sign.tcl</string>
+			<key>end</key>
+			<string>\n</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\\\\|\\\n)</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>captures</key>

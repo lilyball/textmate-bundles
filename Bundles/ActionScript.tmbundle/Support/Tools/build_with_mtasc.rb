@@ -5,11 +5,7 @@
 # Based on a command by Chris Sessions, Released on 2006-06-02.
 # Copyright (c) 2006. MIT License.
 # Modified by Ale Muñoz <http://bomberstudios.com> on 2006-11-24.
-# Improvements suggested by Juan Carlos Añorga <http://www.juanzo.com/> on 2006-11-25
-# 
-# CHANGELOG
-# 2006-12-02 - Make it work without a 'mtasc.yaml' file (assuming some sane defaults...)
-# 2006-12-17 - Enclosed input .as file in quote to fix an error when the path contains spaces
+# Improvements suggested by Juan Carlos Añorga <http://www.juanzo.com/>, Helmut Granda <http://helmutgranda.com>
 
 require "open3"
 require "yaml"
@@ -51,10 +47,17 @@ def mtasc_compile
 		@player = yml['player']
 		@width = yml['width']
 		@height = yml['height']
+		# If width or height is a percentage. MTASC chokes because it needs a number. Fix it.
+		if @width =~ /%/ || @height =~ /%/
+			@size_is_percentage = true
+			@width.gsub!(/%/,'')
+			@height.gsub!(/%/,'')
+		end
 		@fps = yml['fps']
 		@classpaths = yml['classpaths']
 		@trace = yml['trace']
 		@preview = yml['preview'] || "textmate"
+		@bgcolor = yml['bgcolor'] || "FFFFFF"
 	else
 		@mtasc_path = ENV['TM_BUNDLE_SUPPORT'] + "/bin/mtasc"
 		@app = @file_name
@@ -64,6 +67,7 @@ def mtasc_compile
 		@height = 600
 		@fps = 31
 		@preview = "textmate"
+		@bgcolor = "FFFFFF"
 	end
 
 	# MTASC binary
@@ -87,9 +91,8 @@ def mtasc_compile
 		cmd += " -cp \"#{@classpaths.join('" -cp "')}\" "
 	end
 
-	# Use XTrace for debugging
 	if !@trace
-		# Open XTrace...
+		# Use XTrace for debugging
 		`open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
 		cmd += " -pack com/mab/util "
 		cmd += " -trace com.mab.util.debug.trace "
@@ -131,17 +134,24 @@ def mtasc_compile
 	if errors.empty? && warnings.empty?
 		if @preview == "textmate"
 			# Preview in TextMate
-			html_header("Preview","Build With MTASC")
 			output_file = "#{@project_path}/#{@swf}"
-			# puts "<h2>#{@app} - #{Time.now}</h2>"
+			if @size_is_percentage
+				@width += "%"
+				@height += "%"
+			end
+			puts "<html>"
+			puts "<head><title>#{@swf}</title></head>"
 			puts <<SWF_HTML
+			<body style="margin: 0; padding: 0;">
 			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=#{@version},0,0,0" width="#{@width}" height="#{@height}" id="myApplication" align="middle">
 				<param name="allowScriptAccess" value="always">
 				<param name="movie" value="#{output_file}">
 				<param name="quality" value="high">
-				<param name="bgcolor" value="#FFFFFF">
-				<embed src="#{output_file}" quality="high" bgcolor="#FFFFFF" width="#{@width}" height="#{@height}" name="myApplication" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+				<param name="bgcolor" value="##{@bgcolor}">
+				<embed src="#{output_file}" quality="high" bgcolor="##{@bgcolor}" width="#{@width}" height="#{@height}" name="myApplication" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
 			</object>
+			</body>
+			</html>
 SWF_HTML
 			TextMate.exit_show_html
 		else

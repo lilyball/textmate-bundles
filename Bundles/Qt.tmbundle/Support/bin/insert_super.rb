@@ -30,7 +30,7 @@ def insert_super(tags)
   method = tag ? tag.name : nil || "method"
   signature = tag ? tag.signature : nil || "()"
   signature = parse_signature(signature)
-  return "\${1:#{klass}}::\${2:#{method}}(#{signature})"
+  return "\${1:#{klass}::}\${2:#{method}}(#{signature})"
 end
 
 if __FILE__ == $0

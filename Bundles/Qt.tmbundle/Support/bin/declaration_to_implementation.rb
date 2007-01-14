@@ -17,7 +17,8 @@ $doxygen  = ARGV.find { |a| a == "doxygen" }
 
 input = input.map do |line|
   line.gsub!(/^\s+/, "")
-  line.gsub!(";", "{}")
+  line.gsub!(/\bvirtual\b/, "")
+  line.gsub!(/(=\s*0)?;/, "{}")
   # line.gsub!(/$/, "{}")
 end.join("\n")
 
@@ -30,25 +31,27 @@ def print_function(tags, tag)
     r << "#$indent */"
     $doxygen_index += 1
   end
-  
+
+  class_regexp = "/([\\w\\d_]+::)*([\\w\\d_]+)::/$2/"
+
   if !tag.result_type.nil?
     t = closest_tag(tags.tags, TextMate.line_number)
     klass = t ? t.klass : nil
     class_name = "Class"
     class_name = underscore_to_classname(TextMate.filename) if TextMate.env(:filename)
     class_name = !klass.nil? ? klass : class_name
-    class_name = "\${1:#{class_name}}::"
+    class_name = "\${1:#{class_name}::}"
     class_name = "" if !$cpp_mode
 
-    r << "#$indent#{tag.result_type}#{class_name}#{tag.name}(#{signature_to_implementation_signature(tag.signature)})"
+    r << "#$indent#{tag.result_type}#{class_name}#{tag.name}#{signature_to_implementation_signature(tag.signature)}"
   elsif tag.name[0] != ?~
     # Constructor
     parent = tags.class_parent(tag.name) || "Parent"
-    r << "#$indent\${1:#{tag.name}}::\${1}(#{signature_to_implementation_signature(tag.signature)})"
+    r << "#$indent\${1:#{tag.name}::}\${1#{class_regexp}}#{signature_to_implementation_signature(tag.signature)}"
     r << "#$indent\t: \${2:#{parent}(#{signature_to_arguments(tag.signature)})}"
   else
     # Destructor
-    r << "#$indent\${1:#{tag.name[1..-1]}}::~\${1}()"
+    r << "#$indent\${1:#{tag.name[1..-1]}::}~\${1#{class_regexp}}()"
   end
   r << "#$indent{"
   r << "#$indent\t\$0"

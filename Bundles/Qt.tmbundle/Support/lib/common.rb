@@ -1,16 +1,22 @@
 def signature_to_arguments(signature)
   sig = signature_to_implementation_signature(signature)
-  sig.split(",").map do |e|
-    e.split(" ")[-1]
-  end.join(", ")
+  if sig =~ /\((.+)\)/
+    $1.split(",").map do |e|
+      e.split(" ")[-1]
+    end.join(", ")
+  else
+    ""
+  end
 end
 
 def signature_to_implementation_signature(signature)
-  if signature =~ /\((.+)\)/
-    signature = $1
-    signature.split(",").map do |a|
+  if signature =~ /\((.*)\)(.*)$/
+    suffix = $2.strip
+    signature = $1.split(",").map do |a|
       a.gsub(/\s+/, " ").gsub(/=.+/, "").strip
     end.join(", ")
+
+    "(#{signature}) #{suffix}".strip
   else
     ""
   end
@@ -23,4 +29,10 @@ def closest_tag(tags, line_number)
     tag = t if tag.nil? || (line_number - t.line) < (line_number - tag.line)
   end
   return tag
+end
+
+def temp_file(name)
+  temp = `mktemp -t #{name}`.chomp
+  File.delete(temp)
+  return temp
 end

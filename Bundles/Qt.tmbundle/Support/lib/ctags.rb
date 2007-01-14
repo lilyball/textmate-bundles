@@ -8,9 +8,11 @@ end
 class CTags
   class Tag < Struct.new(:name, :path, :pattern, :kind, :line, :klass, :inherits, :signature, :result_type)
     def initialize(*args)
-      super
-      self.kind = kind.nil? ? nil : kind.to_sym
-      self.line = line.nil? ? nil : line.split(":")[1].to_i
+      self.name = args[0]
+      self.path = args[1]
+      self.pattern = args[2]
+      self.kind = f(args, "kind") { |k| k.to_sym }
+      self.line = f(args, "line") { |l| l.to_i }
       case kind
       when :class
         self.klass = name
@@ -28,7 +30,7 @@ class CTags
     def f(args, name)
       f = args.find { |e| e =~ /^#{name}:/ }
       return nil if f.nil?
-      val = f.split(":")[1]
+      val = f.split(":")[1..-1].join(":")
       if block_given?
         yield val
       else
@@ -65,7 +67,7 @@ class CTags
 
     lines.reject! { |e| e =~ /^!_/ }
     tags = lines.map do |line|
-      Tag.new(*line.split("\t"))
+      Tag.new(*line.split("\t").find_all { |e| !e.empty? })
     end
     
     return CTags.new(tags)
@@ -84,8 +86,8 @@ class CTags
 
   def self.parse(files)
     ctags = ENV['TM_BUNDLE_SUPPORT'] + '/../../CTags.tmbundle/Support/bin/ctags'
-    flags = "--language-force=C++ --fields=KnisSafm --excmd=pattern"
-    temp = `mktemp -t ctags`.chomp
+    flags = "--language-force=C++ --fields=KnisSafmz --excmd=pattern"
+    temp = temp_file("ctags")
     begin
       system("\"#{ctags}\" -f \"#{temp}\" #{flags} #{files.map{|f| "\"#{f}\""}.join(' ')}")
       tags = CTags.create(File.readlines(temp))
@@ -96,7 +98,7 @@ class CTags
   end
 
   def self.parse_data(lines)
-    temp = `mktemp -t ctags`.chomp
+    temp = temp_file("ctags")
     begin
       File.open(temp, "w+") { |f| f << lines }
       tags = CTags.parse(temp)
@@ -114,8 +116,7 @@ class CTags
     if !file.nil?
       files = [ "h", "cpp" ].map { |e| replace_extension(file, e) }.compact
       files -= [file] if !eof
-      raise "No corresponding .h and .cpp files found for #{ENV['TM_FILEPATH']}" if files.empty?
-      tags += CTags.parse(files)
+      tags += CTags.parse(files) if !files.empty?
     end
     return tags
   end

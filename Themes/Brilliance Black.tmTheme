@@ -72,7 +72,7 @@
 			<key>name</key>
 			<string>~ String</string>
 			<key>scope</key>
-			<string>string -meta.tag -meta.doctype -string.regexp -string.literal -string.interpolated -string.quoted.literal -string.unquoted, variable.parameter.misc.css, text string source string, string.unquoted string, string.regexp string</string>
+			<string>string -meta.tag -meta.doctype -string.regexp -string.literal -string.interpolated -string.quoted.literal -string.unquoted, variable.parameter.misc.css, text string source string, string.unquoted string, string.regexp string, string.interpolated string</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -446,7 +446,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#FF7900</string>
+				<string>#7E0080</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1613,7 +1613,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#80808033</string>
+				<string>#8080801A</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1649,6 +1649,17 @@
 			<dict>
 				<key>foreground</key>
 				<string>#406180</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>source.js.embedded</string>
+			<key>scope</key>
+			<string>source.js.embedded</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#0D0D0D</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1775,17 +1786,6 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Syntax</string>
-			<key>scope</key>
-			<string>meta.syntax</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#333333</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>Invalid</string>
 			<key>scope</key>
 			<string>invalid</string>
@@ -1801,15 +1801,39 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Syntax</string>
+			<key>scope</key>
+			<string>meta.syntax</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#333333</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>comment</string>
 			<key>scope</key>
-			<string>comment</string>
+			<string>comment -comment.line</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
 				<string>#33333333</string>
 				<key>foreground</key>
-				<string>#333333CC</string>
+				<string>#4C4C4C</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>comment.line</string>
+			<key>scope</key>
+			<string>comment.line</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+				<key>foreground</key>
+				<string>#4C4C4C</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2221,11 +2245,45 @@
 			<key>name</key>
 			<string>º meta.group.braces 9</string>
 			<key>scope</key>
-			<string>meta.odd-tab.group11, meta.odd-tab.group10, meta.odd-tab.group9, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.odd-tab.group9, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
 				<string>#242424</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>º meta.group.braces 10</string>
+			<key>scope</key>
+			<string>meta.even-tab.group10</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#1F1F1F</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>º meta.group.braces 11</string>
+			<key>scope</key>
+			<string>meta.odd-tab.group11</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#151515</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>º Even</string>
+			<key>scope</key>
+			<string>source.ruby meta.even-tab, source.ruby meta.even-tab.group2, source.ruby meta.even-tab.group4, source.ruby meta.even-tab.group6, source.ruby meta.even-tab.group8, source.ruby meta.even-tab.group10, source.ruby meta.even-tab.group12
+</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#00000080</string>
 			</dict>
 		</dict>
 		<dict>

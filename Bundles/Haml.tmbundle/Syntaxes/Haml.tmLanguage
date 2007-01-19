@@ -95,9 +95,9 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\{</string>
+					<string>\{(?=.*\}|.*\|\s*$)</string>
 					<key>end</key>
-					<string>\}</string>
+					<string>\}|$|^(?!.*\|\s*$)</string>
 					<key>name</key>
 					<string>meta.section.attributes.haml</string>
 					<key>patterns</key>
@@ -105,6 +105,10 @@
 						<dict>
 							<key>include</key>
 							<string>source.ruby.rails</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#continuation</string>
 						</dict>
 					</array>
 				</dict>
@@ -119,12 +123,6 @@
 					<string>punctuation.terminator.tag.haml</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\|$</string>
-			<key>name</key>
-			<string>punctuation.terminator.line.continuation.haml</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -145,6 +143,19 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>continuation</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.continuation.haml</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\|)\s*\n</string>
+		</dict>
 		<key>rubyline</key>
 		<dict>
 			<key>begin</key>
@@ -152,7 +163,7 @@
 			<key>contentName</key>
 			<string>source.ruby.embedded.haml</string>
 			<key>end</key>
-			<string>((do|\{)( \|[^|]+\|)?)$|$</string>
+			<string>((do|\{)( \|[^|]+\|)?)$|$|^(?!.*\|\s*$)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -173,6 +184,10 @@
 				<dict>
 					<key>include</key>
 					<string>source.ruby.rails</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#continuation</string>
 				</dict>
 			</array>
 		</dict>

@@ -55,10 +55,17 @@
 			<string>^(?!\1  )</string>
 			<key>name</key>
 			<string>comment.block.haml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>text.haml</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(?:((%)(\w+))|(?=\.|#))</string>
+			<string>^\s*(?:((%)([\w:]+))|(?=\.|#))</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -156,8 +163,17 @@
 			<string>^\s*(\\.)</string>
 		</dict>
 		<dict>
-			<key>include</key>
-			<string>#rubyline</string>
+			<key>begin</key>
+			<string>^\s*(?==)</string>
+			<key>end</key>
+			<string>$</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#rubyline</string>
+				</dict>
+			</array>
 		</dict>
 	</array>
 	<key>repository</key>

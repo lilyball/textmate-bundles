@@ -217,6 +217,14 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>comment</key>
+					<string>Hack to let ruby comments work in this context properly</string>
+					<key>match</key>
+					<string>#.*$</string>
+					<key>name</key>
+					<string>comment.line.number-sign.ruby</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>source.ruby.rails</string>
 				</dict>

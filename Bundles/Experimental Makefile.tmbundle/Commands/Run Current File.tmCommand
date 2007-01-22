@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string># This command runs gcc/g++ on the current file, with default flags -Wall -Os (or $TM_GCC_FLAGS, if it's not nil), generating an executable with an .x extension.  Errors are parsed and formatted nicely.  It then runs the executable, redirecting the output into the results window.
+# This should probably go into the Makefile bundle, once Allan approves.
+# -- desp
+
+"${TM_RUBY:-ruby}" -- "$TM_BUNDLE_SUPPORT/run_current_file.rb"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run Current File</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.c, source.c++</string>
+	<key>uuid</key>
+	<string>990E5B1C-FA2D-479E-9A40-E7FE82BEBA20</string>
+</dict>
+</plist>

@@ -887,18 +887,18 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>string.regexp.oniguruma.tm-grammar</string>
+					<string>string.regexp.oniguruma.single.tm-grammar</string>
 					<key>patterns</key>
 					<array>
-						<dict>
-							<key>include</key>
-							<string>source.regexp.oniguruma</string>
-						</dict>
 						<dict>
 							<key>match</key>
 							<string>''</string>
 							<key>name</key>
 							<string>constant.character.escape.apostrophe.tm-grammar</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>source.regexp.oniguruma</string>
 						</dict>
 					</array>
 				</dict>
@@ -924,9 +924,15 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>string.regexp.oniguruma.tm-grammar</string>
+					<string>string.regexp.oniguruma.double.tm-grammar</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>match</key>
+							<string>\\\\|\\"</string>
+							<key>name</key>
+							<string>constant.character.escape.tm-grammar</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>source.regexp.oniguruma</string>

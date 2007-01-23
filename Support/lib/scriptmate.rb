@@ -7,6 +7,15 @@ require 'fcntl'
 
 $SCRIPTMATE_VERSION = "$Revision$"
 
+def cmd_mate(cmd)
+  # cmd can be either a string or a list of strings to be passed to Popen3
+  # this command will write the output of the `cmd` on STDOUT, formatted in
+  # HTML.
+  c = UserCommand.new(cmd)
+  m = CommandMate.new(c)
+  m.emit_html
+end
+
 class UserCommand
   attr_reader :display_name, :path
   def initialize(cmd)
@@ -39,9 +48,11 @@ class CommandMate
     "<span style='color: red'>#{htmlize str}</span>"
   end
   def emit_header
-    puts html_head(:window_title => "#{@command} — #{@mate}", :page_title => "#{@mate}")
+    puts html_head(:window_title => "#{@command}", :page_title => "#{@command}", :sub_title => "")
+    puts "<pre>"
   end
   def emit_footer
+    puts "</pre>"
     puts html_footer
   end
   def emit_html

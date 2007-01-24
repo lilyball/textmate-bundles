@@ -2,12 +2,12 @@
 #  svn_log_parser.rb
 #  Subversion.tmbundle
 #  
-#  Usage:
-#
+#  Low-level:
 # 	LogParser.parse_path(path) {|hash_for one_log_entry| ... }
 # 	LogParser.parse(string_or_IO) {|hash_for one_log_entry| ... }
 #
-#  TODO: error reporting
+#  High-level:
+#  	Subversion.view_revision(path)
 #
 #  Created by Chris Thomas on 2006-12-30.
 #  Copyright 2006 Chris Thomas. All rights reserved.
@@ -40,16 +40,15 @@ module Subversion
 		
 		"#{filename}-r#{rev}#{extname}"
 	end
-	
+
 	def self.view_revision(path)
-		
 		# Get the desired revision number
 		revision = choose_revision(path, "Choose a revision to view" )
 		return if revision.nil?
 
 		# Get the file at the desired revision
 		log_data = ''
-		TextMate.call_with_progress(:title => "R",
+		TextMate.call_with_progress(:title => "View Revision",
 	          :summary => "Retrieving revision #{revision}…",
 						:details => "#{File.basename(path)}") do
 			
@@ -66,33 +65,37 @@ module Subversion
 	# on failure: returns nil
 	def self.choose_revision(path, prompt)
 		escaped_path = e_sh(path)
-		
+
 		# Get the server name
-	  info = YAML::load(svn_cmd("info #{escaped_path}"))
+		info = YAML::load(svn_cmd("info #{escaped_path}"))
 		repository = info['Repository Root']
 		uri = URI::parse(repository)
 
 		# Display progress dialog
 		log_data = ''
 		TextMate.call_with_progress(:title => "Retrieving List of Revisions",
-	          :summary => "Reading the log from “#{uri.host}”…",
+		         :summary => "Reading the log from “#{uri.host}”…",
 						:details => "#{File.basename(path)}") do
 				log_data = svn_cmd("log --xml #{escaped_path}")
-	  end
+		end
 		
 		# Parse the log
-		plist = []
-		Subversion::LogParser.parse(log_data) do |hash|
-			plist << hash
+		begin
+			plist = []
+			Subversion::LogParser.parse(log_data) do |hash|
+				plist << hash
+			end
+		rescue REXML::ParseException => exception
+			TextMate::Dialog.alert(:warning, "Could not parse log data for “#{path}”", "This may be a bug. Error: #{error}.")
 		end
 		
 		if plist.size == 0
-			TextMate::Dialog.alert("No older revisions of file “#{path}” found", "There's only one revision of this file, and you already have it.")
+			TextMate::Dialog.alert(:warning, "No revisions of file “#{path}” found", "Either there’s only one revision of this file, and you already have it, or this file was never added to the repository in the first place, or I can’t read the contents of the log for reasons unknown.")
 		end
 		
 		# Show the log and ask for the revision number
 		revision = 0
-		TextMate::Dialog.dialog(ListNib, {'entries' => plist}) do |dialog|
+		TextMate::Dialog.dialog(ListNib, {'title' => "Revisions of #{File.basename(path)}",'entries' => plist}) do |dialog|
 			dialog.wait_for_input do |params|
 				revision = params['returnArgument']
 				false
@@ -166,18 +169,32 @@ end # module Subversion
 
 if __FILE__ == $0
 	
-#	test_path = "~/Library/Application Support/TextMate/Bundles/Ada.tmbundle"
-	test_path = "~/TestRepo/TestFiles"
-	Subversion::LogParser.parse_path(test_path) do |hash|
+#	test_path = "~/TestRepo/TestFiles"
+# REXML thinks this is perfectly acceptable XML input.
+#I'm pretty sure it's not, but I haven't read the spec in the last four years.
+	Subversion::LogParser.parse(%Q{Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat
+		. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		}) do |hash|
+		puts hash.inspect
+	end
+
+# It catches this and other angle-bracket problems, though.
+	Subversion::LogParser.parse(%Q{<Lo> <lo> <lo> <.&&>>>><<<<<DFDFSFD<S<DF<D<F>DFWE242$>@$>@>$&&&&!!!>> dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat
+		. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		}) do |hash|
 		puts hash.inspect
 	end
 	
-	# plist
-	plist = []
-	Subversion::LogParser.parse_path(test_path) do |hash|
-		plist << hash
-	end
-	puts plist.to_plist
+	# # plist
+	# plist = []
+	# Subversion::LogParser.parse_path(test_path) do |hash|
+	# 	plist << hash
+	# end
+	# puts plist.to_plist
 	
 end
 

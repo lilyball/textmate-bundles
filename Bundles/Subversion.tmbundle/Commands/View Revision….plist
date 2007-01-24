@@ -7,36 +7,15 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-revs=$("$TM_SVN" log -q "$TM_FILEPATH"|grep -v '^-*$' \
-	2&gt; &gt;(CocoaDialog progressbar --float --indeterminate \
-		--title "View Revision…" \
-		--text "Retrieving List of Revisions…" \
-	))
+ruby &gt;&amp; /tmp/tm_svn_debug &lt;&lt;END &amp;
+begin
+	require "$TM_BUNDLE_SUPPORT/svn_log_parser"
 
-revs=`iconv -f utf-8 -t mac &lt;&lt;END|osascript
-	set AppleScript's text item delimiters to {"\n","\r"}
-	tell app "TextMate"
-		set ourList to (every text item of "$revs")
-		if the count of items in ourList is 0 or "$revs" is "" then
-			display dialog "No older revisions of file “${TM_FILENAME}” found" buttons ("Continue") with icon 1 default button 1
-			set the result to false
-		else
-			choose from list ourList with prompt "View “${TM_FILENAME}” revision:"
-		end if
-	end tell
-END`
-
-# exit if user canceled
-[[ $revs = "false" ]] &amp;&amp; exit_discard
-
-revs=( $(tr &lt;&lt;&lt;"$revs" \\r \\n|cut -d\| -f1) )
-rev1=${revs[0]#r}
-
-"$TM_SVN" cat -r "$rev1" "$TM_FILEPATH" \
-	2&gt; &gt;(CocoaDialog progressbar --float --indeterminate \
-		--title "View Revision…" \
-		--text "Retrieving Revision ${rev1} of “${TM_FILENAME}”…" \
-	)
+	Subversion::view_revision("$TM_FILEPATH")
+rescue Exception =&gt; error
+	TextMate::Dialog.alert(:warning, "You’ve discovered a bug", "Please report the following text: #{error}\n\n#{error.backtrace.join(%Q{\n})}")
+end
+END
 </string>
 	<key>input</key>
 	<string>none</string>
@@ -45,7 +24,7 @@ rev1=${revs[0]#r}
 	<key>name</key>
 	<string>View Revision…</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>discard</string>
 	<key>uuid</key>
 	<string>05DF9B5B-AB88-4597-ACD3-DD1DCEDC0BE8</string>
 </dict>

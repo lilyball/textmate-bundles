@@ -97,7 +97,6 @@
 {
 	if(didCleanup)
 		return;
-	didCleanup = YES;
 
 	[parameters removeObjectForKey:@"controller"];
 
@@ -111,7 +110,7 @@
 			[object unbind:@"contentObject"];
 		}
 	}
-	
+
 	[super cleanupAndRelease:sender];
 }
 

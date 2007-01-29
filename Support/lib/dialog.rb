@@ -21,8 +21,9 @@ module TextMate
 		end
 
     # safest way to use this object
-    def self.dialog(nib_path, parameters, defaults= nil)
-      dialog = Dialog.new(nib_path, parameters, defaults)
+		# see initialize for calling info
+    def self.dialog(*args)
+      dialog = Dialog.new(*args)
       begin
         yield dialog
       rescue StandardError => error
@@ -33,11 +34,21 @@ module TextMate
     end
     
     # instantiate an asynchronous nib
-    def initialize(nib_path, start_parameters, defaults = nil)
-      defaults_args = ''
-      defaults_args = %Q{-d #{e_sh defaults.to_plist}} unless defaults.nil?
+		# two ways to call:
+		# Dialog.new(nib_path, parameters, defaults=nil)
+		# Dialog.new(:nib => path, :parameters => params, [:defaults => defaults], [:center => true/false])
+    def initialize(*args)
+			nib_path, start_parameters, defaults, center = if args.size > 1
+				args
+			else
+				args = args[0]
+				[args[:nib], args[:parameters], args[:defaults], args[:center]]
+			end
+	
+      center_arg = center.nil? ? '' : '-c'
+      defaults_args = defaults.nil? ? '' : %Q{-d #{e_sh defaults.to_plist}}
       
-      command = %Q{#{e_sh TM_DIALOG} -a -p #{e_sh start_parameters.to_plist} #{defaults_args} #{e_sh nib_path}}
+      command = %Q{#{e_sh TM_DIALOG} -a #{center_arg} -p #{e_sh start_parameters.to_plist} #{defaults_args} #{e_sh nib_path}}
       @dialog_token = %x{#{command}}.chomp
       raise WindowNotFound, "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
 #      raise "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0

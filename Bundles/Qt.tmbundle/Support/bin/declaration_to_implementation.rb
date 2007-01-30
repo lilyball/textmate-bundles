@@ -17,7 +17,7 @@ $doxygen  = ARGV.find { |a| a == "doxygen" }
 
 input = input.map do |line|
   line.gsub!(/^\s+/, "")
-  line.gsub!(/\bvirtual\b/, "")
+  line.gsub!(/\b(virtual|static)\b/, "")
   line.gsub!(/(=\s*0)?;/, "{}")
   # line.gsub!(/$/, "{}")
 end.join("\n")

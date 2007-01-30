@@ -8,7 +8,10 @@ end
 class CTags
   class Tag < Struct.new(:name, :path, :pattern, :kind, :line, :klass, :inherits, :signature, :result_type)
     def initialize(*args)
-      self.name = args[0]
+      # when pattern = 'virtual bool operator<(const ContactListItem& other) const',
+      # the name is 'operator <', which is not the same
+      # probably we should correct this here
+      self.name = args[0].gsub(/\s+/, '')
       self.path = args[1]
       self.pattern = args[2]
       self.kind = f(args, "kind") { |k| k.to_sym }
@@ -22,7 +25,7 @@ class CTags
         self.klass = f(args, "class") || ""
         self.inherits = nil
         self.signature = f(args, "signature") { |s| s.chomp } || ""
-        self.result_type = $1 if pattern =~ /^\/\^\s*(.+)#{name}/
+        self.result_type = $1 if pattern =~ /^\/\^\s*(.+)#{Regexp.escape(name)}/
       end
     end
   

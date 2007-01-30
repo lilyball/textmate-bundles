@@ -2,7 +2,7 @@ def signature_to_arguments(signature)
   sig = signature_to_implementation_signature(signature)
   if sig =~ /\((.+)\)/
     $1.split(",").map do |e|
-      e.split(" ")[-1]
+      e.split(" ")[-1].gsub(/[*&]/, '')
     end.join(", ")
   else
     ""

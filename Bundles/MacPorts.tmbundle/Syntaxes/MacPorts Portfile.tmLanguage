@@ -13,31 +13,10 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
+			<key>match</key>
 			<string>^\s*(PortSystem|PortGroup|use_configure|(?:(?:pre|post)-)?(?:activate|build|checksum|clean|configure|destroot|distcheck|extract|fetch|install|livecheck|main|mirror|patch|submit|test)|(?:build\.(?:target|(?:pre_|post_|)args|cmd|type)|checksums|checksum.skip|depends_build|depends_run|depends_lib|destroot\.(?:target|destdir|clean|keepdirs|mask)|startupitem\.(?:create|requires|init|name|start|stop|restart|type|executable|pidfile|logfile|logevents)|distcheck\.check|exctract\.(?:only|suffix)|master_sites|patch_sites|extract\.suffix|distfiles|patchfiles|use_zip|use_bzip2|dist_subdir|fetch\.(?:type|user|password|use_epsv)|master_sites\.mirror_subdir|patch_sites\.mirror_subdir|portname|cvs\.(?:module|root|password|date|tag)|svn\.(?:url|tag)|livecheck\.(?:url|check|md5|regex|name|version)|prefix|name|version|revision|epoch|categories|maintainers|long_description|description|homepage|workdir|worksrcdir|filesdir|distname|portdbpath|libpath|distpath|sources_conf|os\.(?:platform|version|arch|endian)|platforms|default_variants|install\.(?:user|group)|test\.(?:run|target)|gnustep\.domain|xcode\.(?:project|target|configuration|build\.settings|destroot\.(?:type|path|settings))|zope\.need_subdir)(?:-(?:append|delete))?)(?=\s)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.tcl.macports</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\n</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>(?m)\\.</string>
-					<key>name</key>
-					<string>constant.character.escape.tcl.macports</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#variable</string>
-				</dict>
-			</array>
+			<key>name</key>
+			<string>keyword.other.tcl.macports</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -64,7 +43,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=\s)(\S+)</string>
+					<string>(?&lt;=\s)([\w-]+)</string>
 					<key>name</key>
 					<string>entity.name.function.variant.tcl.macports</string>
 				</dict>
@@ -151,26 +130,6 @@
 			<string>source.tcl</string>
 		</dict>
 	</array>
-	<key>repository</key>
-	<dict>
-		<key>variable</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.variable.tcl</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>copied from source.tcl because I don't know of any way to reference it directly</string>
-			<key>match</key>
-			<string>(\$)([a-zA-Z0-9_:]+(\([^\)]+\))?|\{[^\}]*\})</string>
-			<key>name</key>
-			<string>variable.other.tcl</string>
-		</dict>
-	</dict>
 	<key>scopeName</key>
 	<string>source.tcl.macports</string>
 	<key>uuid</key>

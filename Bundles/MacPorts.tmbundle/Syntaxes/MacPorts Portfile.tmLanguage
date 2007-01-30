@@ -13,10 +13,60 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tcl.macports</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Base commands</string>
 			<key>match</key>
-			<string>^\s*(PortSystem|PortGroup|use_configure|(?:(?:pre|post)-)?(?:activate|build|checksum|clean|configure|destroot|distcheck|extract|fetch|install|livecheck|main|mirror|patch|submit|test)|(?:build\.(?:target|(?:pre_|post_|)args|cmd|type)|checksums|checksum.skip|depends_build|depends_run|depends_lib|destroot\.(?:target|destdir|clean|keepdirs|mask)|startupitem\.(?:create|requires|init|name|start|stop|restart|type|executable|pidfile|logfile|logevents)|distcheck\.check|exctract\.(?:only|suffix)|master_sites|patch_sites|extract\.suffix|distfiles|patchfiles|use_zip|use_bzip2|dist_subdir|fetch\.(?:type|user|password|use_epsv)|master_sites\.mirror_subdir|patch_sites\.mirror_subdir|portname|cvs\.(?:module|root|password|date|tag)|svn\.(?:url|tag)|livecheck\.(?:url|check|md5|regex|name|version)|prefix|name|version|revision|epoch|categories|maintainers|long_description|description|homepage|workdir|worksrcdir|filesdir|distname|portdbpath|libpath|distpath|sources_conf|os\.(?:platform|version|arch|endian)|platforms|default_variants|install\.(?:user|group)|test\.(?:run|target)|gnustep\.domain|xcode\.(?:project|target|configuration|build\.settings|destroot\.(?:type|path|settings))|zope\.need_subdir)(?:-(?:append|delete))?)(?=\s)</string>
-			<key>name</key>
-			<string>keyword.other.tcl.macports</string>
+			<string>^\s*(PortSystem|PortGroup)(?!\S)</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tcl.macports</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Procs defined with the `commands` keyword (ignore use_option-{delete,append} as it is useless)</string>
+			<key>match</key>
+			<string>^\s*(use_(?:configure|build|automake|autoconf|xmkmf|libtool|destroot|extract|cvs|svn|patch|test)|(?:configure|build|automake|autoconf|xmkmf|libtool|destroot|extract|cvs|svn|patch|test)\.(?:dir|(?:pre_|post_)?args|env|type|cmd)(?:-(?:delete|append))?)(?!\S)</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tcl.macports</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Procs defined with the `target_provides` keyword</string>
+			<key>match</key>
+			<string>^\s*((?:(?:pre|post)-)?(?:activate|build|checksum|clean|configure|destroot|distcheck|extract|fetch|install|livecheck|main|mirror|patch|submit|test))(?!\S)</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tcl.macports</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Procs defined with the `options` keyword</string>
+			<key>match</key>
+			<string>^\s*((?:build\.target|categories|checksum\.skip|checksums|cvs\.(?:date|module|password|root|tag)|default_variants|depends_(?:build|lib|run)|description|destroot\.(?:clean|destdir|keepdirs|target|umask)|dist_subdir|distcheck\.check|distfiles|distname|distpath|epoch|extract\.(?:only|suffix)|fetch\.(?:password|type|use_epsv|user)|filesdir|gnustep\.domain|homepage|install\.(?:group|user)|libpath|livecheck\.(?:check|md5|name|regex|url|version)|long_description|maintainers|(?:master|patch)_sites(?:\.mirror_subdir)?|name|os\.(?:arch|endian|platform|version)|patchfiles|platforms|portdbpath|portname|prefix|revision|sources_conf|startupitem\.(?:create|executable|init|logevents|logfile|name|pidfile|requires|restart|start|stop|type)|svn\.(?:tag|url)|test\.(?:run|target)|use_bzip2|use_zip|version|workdir|worksrcdir|xcode\.(?:build\.settings|configuration|destroot\.(?:path|settings|type)|project|target)|zope\.need_subdir)(?:-(?:delete|append))?)(?!\S)</string>
 		</dict>
 		<dict>
 			<key>begin</key>

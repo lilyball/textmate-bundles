@@ -76,7 +76,9 @@
 	{
 		// Async dialogs return just the results
 		result = [parameters objectForKey:@"result"];
-
+		[[result retain] autorelease];
+		[parameters removeObjectForKey:@"result"];
+		
 		if(result == nil )
 		{
 			result = [[parameters mutableCopy] autorelease];

@@ -47,32 +47,41 @@ module Subversion
 		filename = File.basename(filename)
 		# TODO: Make sure the filename can fit in 255 characters, the limit on HFS+ volumes.
 		
-		"#{filename}-r#{rev}#{extname}"
+		"#{filename.sub(extname, '')}-r#{rev}#{extname}"
 	end
 
 	def self.view_revision(path)
 		# Get the desired revision number
-		revision = choose_revision(path, "Choose a revision to view" )
-		return if revision.nil?
+		revisions = choose_revision(path, "Choose a revision to view", :multiple)
+		return if revisions.nil?
 
-		# Get the file at the desired revision
-		log_data = ''
+		files						= []
+
 		TextMate.call_with_progress(:title => "View Revision",
-	          :summary => "Retrieving revision #{revision}…",
-						:details => "#{File.basename(path)}") do
-			
-			temp_name = '/tmp/' + human_readable_mktemp(path, revision)
-			svn_cmd("cat -r#{revision} #{e_sh(path)} > #{temp_name}")
-			
-			# Open the file in TextMate and then delete it when it's closed.
-			%x{"#{ENV['TM_SUPPORT_PATH']}/bin/mate" -w #{e_sh(temp_name)}}
-			File.delete(temp_name)
-	  end
+										          :summary => "Retrieving revision data…",
+															:details => "#{File.basename(path)}") do |dialog|
+			revisions.each do |revision|
+				# Get the file at the desired revision
+				dialog.parameters = {'summary' => "Retrieving revision #{revision}…"}
+				
+				temp_name = '/tmp/' + human_readable_mktemp(path, revision)
+				svn_cmd("cat -r#{revision} #{e_sh(path)} > #{temp_name}")
+				files << temp_name
+		  end
+		end
 		
+		# Open the files in TextMate and delete them on close
+		### mate -w doesn't work on multiple files, so we'll do one file at a time...
+		files.each do |file|
+			fork do 
+				%x{"#{ENV['TM_SUPPORT_PATH']}/bin/mate" -w #{e_sh(file)}}
+				File.delete(file)
+			end
+		end
 	end
 	
 	# on failure: returns nil
-	def self.choose_revision(path, prompt)
+	def self.choose_revision(path, prompt, number_of_revisions = 1)
 		escaped_path = e_sh(path)
 
 		# Get the server name
@@ -85,7 +94,9 @@ module Subversion
 		
 		# Show the log
 		revision = 0
-		TextMate::Dialog.dialog(ListNib, {'title' => "View revision of #{File.basename(path)}",'entries' => [], 'hideProgressIndicator' => false}) do |dialog|
+		TextMate::Dialog.dialog(:nib => ListNib,
+														:center => true,
+														:parameters => {'title' => "View revision of #{File.basename(path)}",'entries' => [], 'hideProgressIndicator' => false}) do |dialog|
 
 			# Parse the log
 			begin
@@ -110,9 +121,23 @@ module Subversion
 			
 			dialog.wait_for_input do |params|
 				revision = params['returnArgument']
-				false
+				STDERR.puts params['returnButton']
+#				STDERR.puts "Want:#{number_of_revisions} got:#{revision.length}"
+				button_clicked = params['returnButton']
+
+				if (button_clicked != nil) and (button_clicked == 'Cancel')
+					false # exit
+				else
+					unless (number_of_revisions == :multiple) or (revision.length == number_of_revisions) then
+						TextMate::Dialog.alert(:warning, "Please select #{number_of_revisions} revision#{number_of_revisions == 1 ? '' : 's'}.", "So far, you have selected #{revision.length} revision#{revision.length == 1 ? '' : 's'}.")
+						true # continue
+					else
+						false # exit
+					end
+				end
 			end
-			dialog.close
+
+#			dialog.close
 		end
 		
 		# Return the revision number or nil

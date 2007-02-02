@@ -153,7 +153,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\b(type|and)\s+([^=]*)(=)</string>
+					<string>\b(type|and)\s+([^=]*)(=)?</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -442,38 +442,38 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(^\s*)?\b(object)\s*(?:(\()(_?[a-z]+)(\)))?\s*$</string>
+			<string>\b(object)\s*(?:(\()(_?[a-z]+)(\)))?\s*$</string>
 			<key>beginCaptures</key>
 			<dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.object-definition.ocaml</string>
 				</dict>
-				<key>3</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.self-binding.ocaml</string>
 				</dict>
-				<key>4</key>
+				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.type.self-binding.ocaml</string>
 				</dict>
-				<key>5</key>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.self-binding.ocaml</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^\1(end)\b</string>
+			<string>\b(end)\b</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.ocaml</string>
+					<string>keyword.control.object.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -645,23 +645,23 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(^|\s+)(sig)\s*$</string>
+			<string>\b(sig)\b</string>
 			<key>beginCaptures</key>
 			<dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.module-type-signature-definition.ocaml</string>
+					<string>keyword.other.module.signature.ocaml</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^\1(end)\s*(?:(;;)|(=))?\s*$</string>
+			<string>\b(end)\b</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.ocaml</string>
+					<string>keyword.other.module.signature.ocaml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -690,28 +690,23 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(^|\s+)(struct)\s*$</string>
+			<string>\b(struct)\b</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.structure-definition.ocaml</string>
+					<string>keyword.other.module.structure.ocaml</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^\1(end)\s*(;;)?\s*$</string>
+			<string>\b(end)\b</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.ocaml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.terminator.expression.ocaml</string>
+					<string>keyword.other.module.structure.ocaml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -1356,34 +1351,6 @@
 		<dict>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>begin</key>
-					<string>(type)\s+([a-z_][a-zA-Z0-9_']*)\s*=?</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.ocaml</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>storage.type.ocaml</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(?=\s*(type|val|class|module|end))|^\s*$</string>
-					<key>name</key>
-					<string>meta.module.signature.type.ocaml</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#typedefs</string>
-						</dict>
-					</array>
-				</dict>
 				<dict>
 					<key>begin</key>
 					<string>(val)\s+([a-z_][a-zA-Z0-9_']*)\s*(:)</string>

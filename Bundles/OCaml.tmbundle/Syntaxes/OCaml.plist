@@ -1115,9 +1115,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(as|assert|class|constraint|exception|external|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
+			<string>\b(as|assert|class|constraint|exception|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
 			<key>name</key>
 			<string>keyword.other.ocaml</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#module-signature</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -1447,9 +1451,99 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=\b(type|val|class|module|end)\b)|^\s*$</string>
+					<string>(?=\b(type|val|external|class|module|end)\b)|^\s*$</string>
 					<key>name</key>
 					<string>meta.module.signature.val.ocaml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.optional-parameter.ocaml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.label.optional.ocaml</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.optional-parameter.ocaml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(\?)([a-z][a-zA-Z0-9_]*)\s*(:)</string>
+							<key>name</key>
+							<string>variable.parameter.optional.ocaml</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(~)([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.labeled-parameter.ocaml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.label.ocaml</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.label.ocaml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>\s</string>
+							<key>name</key>
+							<string>variable.parameter.labeled.ocaml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#variables</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#typedefs</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(external)\s+([a-z_][a-zA-Z0-9_']*)\s*(:)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.type.external-signature.ocaml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.type-constraint.ocaml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\b(type|val|external|class|module|end)\b)|^\s*$</string>
+					<key>name</key>
+					<string>meta.module.signature.external.ocaml</string>
 					<key>patterns</key>
 					<array>
 						<dict>

@@ -146,7 +146,7 @@
 			<key>begin</key>
 			<string>^\s*(?=type\s)</string>
 			<key>end</key>
-			<string>\b(?=let)|^\s*$</string>
+			<string>\b(?=let|end)|^\s*$</string>
 			<key>name</key>
 			<string>meta.type-definition-group.ocaml</string>
 			<key>patterns</key>
@@ -173,7 +173,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=\b(type|and)\b)|(?=^\s*$)</string>
+					<string>(?=\b(type|and|let|end)\b)|(?=^\s*$)</string>
 					<key>name</key>
 					<string>meta.type-definition.ocaml</string>
 					<key>patterns</key>
@@ -183,6 +183,52 @@
 							<string>#typedefs</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\b(with|function)(?=(\s*$|.*-&gt;))\b|((?&lt;!\|)(\|)(?!\|)(?=.*-&gt;))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.match-definition.ocaml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.function-definition.ocaml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.match-definition.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?:(-&gt;)|\b(when)\b|\s(?=\|))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.match-definition.ocaml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.match-condition.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.pattern-match.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#matchpatterns</string>
 				</dict>
 			</array>
 		</dict>
@@ -391,52 +437,6 @@
 				<dict>
 					<key>include</key>
 					<string>$self</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\b(with|function)(?=(\s*$|.*-&gt;))\b|((?&lt;!\|)(\|)(?!\|)(?=.*-&gt;))</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.match-definition.ocaml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.function-definition.ocaml</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.match-definition.ocaml</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?:(-&gt;)|\b(when)\b|\s(?=\|))</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.match-definition.ocaml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.match-condition.ocaml</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.pattern-match.ocaml</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#matchpatterns</string>
 				</dict>
 			</array>
 		</dict>
@@ -693,7 +693,7 @@
 			<string>\b(struct)\b</string>
 			<key>beginCaptures</key>
 			<dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.module.structure.ocaml</string>
@@ -963,7 +963,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>!|[!\?~][!$%&amp;*+./:&lt;=&gt;?@^~-]+</string>
+			<string>not|!|[!\?~][!$%&amp;*+./:&lt;=&gt;?@^~-]+</string>
 			<key>name</key>
 			<string>keyword.operator.prefix.ocaml</string>
 		</dict>
@@ -1014,6 +1014,80 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>\b(for)\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.for-loop.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\b(done)\b</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.for-loop.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.for-loop.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\bdo\b</string>
+					<key>name</key>
+					<string>keyword.control.loop.ocaml</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\b(while)\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.while-loop.ocaml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\b(done)\b</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.while-loop.ocaml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.while-loop.ocaml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\bdo\b</string>
+					<key>name</key>
+					<string>keyword.control.loop.ocaml</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>\(</string>
 			<key>end</key>
 			<string>\)</string>
@@ -1035,7 +1109,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(do|done|downto|else|for|if|match|then|to|try|when|while|with)\b</string>
+			<string>\b(downto|if|else|match|then|to|when|try)\b</string>
 			<key>name</key>
 			<string>keyword.control.ocaml</string>
 		</dict>
@@ -1373,11 +1447,68 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=\s*(type|val|class|module|end))|^\s*$</string>
+					<string>(?=\b(type|val|class|module|end)\b)|^\s*$</string>
 					<key>name</key>
 					<string>meta.module.signature.val.ocaml</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.optional-parameter.ocaml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.label.optional.ocaml</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.optional-parameter.ocaml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(\?)([a-z][a-zA-Z0-9_]*)\s*(:)</string>
+							<key>name</key>
+							<string>variable.parameter.optional.ocaml</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(~)([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.labeled-parameter.ocaml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.label.ocaml</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.label.ocaml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>\s</string>
+							<key>name</key>
+							<string>variable.parameter.labeled.ocaml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#variables</string>
+								</dict>
+							</array>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#typedefs</string>
@@ -1590,7 +1721,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.labeled-parameter.ocaml</string>
+							<string>punctuation.definition.labeled-parameter.ocaml</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1621,6 +1752,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
+							<string>punctuation.definition.optional-parameter.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
 							<string>entity.name.tag.label.optional.ocaml</string>
 						</dict>
 					</dict>
@@ -1637,7 +1773,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.optional-parameter.ocaml</string>
+							<string>punctuation.definition.optional-parameter.ocaml</string>
 						</dict>
 						<key>2</key>
 						<dict>

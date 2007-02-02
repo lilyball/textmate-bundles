@@ -9,7 +9,7 @@
 
 ruby &gt;&amp; /tmp/tm_svn_debug &lt;&lt;END &amp;
 begin
-	require "$TM_BUNDLE_SUPPORT/svn_log_parser"
+	require "$TM_BUNDLE_SUPPORT/svn_revision_chooser"
 
 	Subversion::view_revision("$TM_FILEPATH")
 rescue Exception =&gt; error

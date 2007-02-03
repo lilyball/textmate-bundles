@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+
+searchstring = $stdin.read.strip
+
+plist = "{ignoreCase = 0; regularExpression = 0; searchString = \"#{searchstring}\"; }"
+options = `'#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog' -p '#{plist}' -m '#{ENV['TM_BUNDLE_SUPPORT']}/nibs/SearchWindow.nib' | pl`
+
+options = PropertyList.load(options)
+
+if $? == 0
+  answers = `'#{ENV['TM_SUPPORT_PATH']}/bin/cmigrep -a #{options['searchString']}'`
+  puts answers
+end</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^F</string>
+	<key>name</key>
+	<string>Search .cmi</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
+	<key>uuid</key>
+	<string>437E330A-5F7B-42D2-A69E-1112F1DAAE32</string>
+</dict>
+</plist>

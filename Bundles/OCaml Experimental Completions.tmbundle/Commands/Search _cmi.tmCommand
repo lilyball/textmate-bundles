@@ -12,14 +12,23 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
 
 searchstring = $stdin.read.strip
 
-plist = "{ignoreCase = 0; regularExpression = 0; searchString = \"#{searchstring}\"; }"
+plist = "{ignoreCase = 0; regularExpression = 0; searchString = \"#{searchstring}\"; restrictTo = \"all\";}"
 options = `'#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog' -p '#{plist}' -m '#{ENV['TM_BUNDLE_SUPPORT']}/nibs/SearchWindow.nib' | pl`
 
 
 options = PropertyList.load(options)
 if options['returnButton'] == 'Search'
-  answers = OCamlCompletion::cmigrep(options['searchString'])
-  puts answers
+  searchtype = options['restrictTo'].to_sym
+  searchstring = options['searchString']
+  if options['regularExpression'] != 1
+    searchstring = Regexp.escape(searchstring)
+  end
+  answers = OCamlCompletion::cmigrep(searchstring, searchtype)
+  if answers != ''
+    puts answers
+  else
+    puts 'No matches found'
+  end
 end</string>
 	<key>fallbackInput</key>
 	<string>word</string>

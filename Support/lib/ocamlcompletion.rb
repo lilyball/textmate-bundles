@@ -3,7 +3,7 @@
 require 'fileutils'
 require 'pathname'
 require 'optparse'
-
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 
 
 
@@ -65,11 +65,31 @@ module OCamlCompletion
   end
   
   
-  def OCamlCompletion::cmigrep(regexstr, packages=[], modules=[])
+  def OCamlCompletion::searchtype_to_arg searchtype
+    case searchtype
+      when :all then '-a'
+      when :records then '-r'
+      when :types then '-t'
+      when :constructors then '-c'
+      when :modules then '-m'
+      when :values then '-v'
+      when :exceptions then '-e'
+      when :classes then '-o'
+      else '-a'
+    end
+  end
+  
+  
+  def OCamlCompletion::cmigrep(regexstr, searchtype=:all, packages=nil, modules=nil)
+    if packages.nil?
+      packages = all_packages.join(',')
+    end
+    if modules.nil?
+      modules = open_modules
+    end
     completions = modules.map { |modname|
-      `#{find_command 'cmigrep'} -package '#{packages}' -r '#{regexstr}' #{modname}`.split(/\n/) 
-    }.flatten.select { |s| s =~ /\(\*/ }.map { |s| s[/^(?:mutable )?([^:]+)/,1] }.sort.uniq
-    completions.join("\n")
+      `#{find_command 'cmigrep'} -package #{e_sh(packages)} #{searchtype_to_arg(searchtype)} #{e_sh(regexstr)} #{e_sh(modname)}`
+    }.join("\n")
   end
   
 end

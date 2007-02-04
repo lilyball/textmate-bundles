@@ -22,6 +22,7 @@ module OCamlCompletion
     locations.each do |l|
       if (l + command).exist? then return l + command end
     end
+    raise "Unable to find #{command}"
   end
   
   

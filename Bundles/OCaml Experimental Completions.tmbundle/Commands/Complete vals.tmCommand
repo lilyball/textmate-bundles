@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ocamlcompletion"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+
+$line = $stdin.read
+$linepos = ENV['TM_LINE_INDEX'].to_i
+
+
+class Array
+  def map_i(&amp;block)
+    accum = []
+    self.each_index do |i|
+      accum &lt;&lt; yield(i, self[i])
+    end
+    accum
+  end
+end
+
+
+def extract_module_from_line
+  accum = []
+  start = [($linepos - 1), 0].max
+  start.downto(0) do |i|
+    if $line[i].chr !~ /[A-Za-z_.]/
+      break
+    end
+    accum &lt;&lt; $line[i].chr
+  end
+  
+  accum.reverse.join.chomp('.')
+end
+
+
+def convert_to_snippet str
+  matches = /^val (\S+)\s+:\s+(.*)$/.match(str)
+  funname = matches[1]
+  args = []
+  depth = 0
+  last = 'a'
+  token = []
+  matches[2].each_byte do |b|
+    c = b.chr
+    case c
+    when '('
+      token &lt;&lt; c
+      depth += 1
+    when ')'
+      token &lt;&lt; c
+      depth -= 1
+    when '&gt;'
+      if last == '-' and depth == 0
+        args &lt;&lt; token.join.chomp('-').strip
+        token = []
+      end
+    else
+      token &lt;&lt; c
+    end
+    last = c
+  end
+  args &lt;&lt; token.join.chomp('-').strip
+  args = args.map_i { |i, a| "\$\{#{i+1}:#{e_sn(a.strip)}\}" }
+  snippet = "#{funname} #{args.join(' ')}"
+  
+  e_sn($line[0...$linepos]) + snippet + e_sn($line[$linepos..-1])
+end
+
+
+modulename = extract_module_from_line
+possible_completions = OCamlCompletion::cmigrep('.', :values, [modulename]).split(/\n/)
+possible_completions = possible_completions.map do |c|
+  chash = Hash.new
+  chash['completion'] = c
+  
+  chash
+end
+
+plist = Hash.new
+plist['possibleCompletions'] = possible_completions
+
+cio = IO.popen("'#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog' -m '#{ENV['TM_BUNDLE_SUPPORT']}/nibs/CompletionsWindow.nib' | pl", 'r+')
+cio.puts(plist.to_plist)
+cio.close_write
+choice = PropertyList.load(cio.read)
+if !choice['returnButton'] || choice['returnButton'] != 'Cancel'
+  selection = choice['result']['returnArgument'].to_i
+  snippettxt = plist['possibleCompletions'][selection]['completion']
+  puts convert_to_snippet(snippettxt)
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~	</string>
+	<key>name</key>
+	<string>Complete vals</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
+	<key>uuid</key>
+	<string>55235037-C23A-4B8D-8ECD-9ED5737DD0D5</string>
+</dict>
+</plist>

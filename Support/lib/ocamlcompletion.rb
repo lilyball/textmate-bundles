@@ -80,7 +80,7 @@ module OCamlCompletion
   end
   
   
-  def OCamlCompletion::cmigrep(regexstr, searchtype=:all, packages=nil, modules=nil)
+  def OCamlCompletion::cmigrep(regexstr, searchtype=:all, modules=nil, packages=nil)
     if packages.nil?
       packages = all_packages.join(',')
     end

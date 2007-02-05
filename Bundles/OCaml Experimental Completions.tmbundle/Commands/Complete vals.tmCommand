@@ -60,14 +60,29 @@ def convert_to_snippet str
       if last == '-' and depth == 0
         args &lt;&lt; token.join.chomp('-').strip
         token = []
+      else
+        token &lt;&lt; c
       end
     else
       token &lt;&lt; c
     end
     last = c
   end
-  args &lt;&lt; token.join.chomp('-').strip
-  args = args.map_i { |i, a| "\$\{#{i+1}:#{e_sn(a.strip)}\}" }
+  i = 1
+  args = args.map do |a| 
+    a.strip!    
+    i += 1
+    if a =~ /^\S+:/
+      if a =~ /^\?/
+        i += 1 
+        "\$\{#{i - 1}:~#{a[/^\S+:/]}\$\{#{i}:#{e_sn(a[/:(.*)$/, 1])}\}}"
+      else
+        "~#{a[/^\S+:/]}\$\{#{i}:#{e_sn(a[/:(.*)$/, 1])}\}" 
+      end
+    else
+      "\$\{#{i}:#{e_sn(a)}\}" 
+    end
+  end
   snippet = "#{funname} #{args.join(' ')}"
   
   e_sn($line[0...$linepos]) + snippet + e_sn($line[$linepos..-1])
@@ -75,7 +90,7 @@ end
 
 
 modulename = extract_module_from_line
-possible_completions = OCamlCompletion::cmigrep('.', :values, [modulename]).split(/\n/)
+possible_completions = OCamlCompletion::cmigrep('.', :values, [modulename]).split(/\n/).select { |l| l !~ /^(from file|external)/ }.sort.uniq
 possible_completions = possible_completions.map do |c|
   chash = Hash.new
   chash['completion'] = c
@@ -93,7 +108,9 @@ choice = PropertyList.load(cio.read)
 if !choice['returnButton'] || choice['returnButton'] != 'Cancel'
   selection = choice['result']['returnArgument'].to_i
   snippettxt = plist['possibleCompletions'][selection]['completion']
-  puts convert_to_snippet(snippettxt)
+  print convert_to_snippet(snippettxt)
+else
+  print e_sn($line)
 end
 </string>
 	<key>fallbackInput</key>

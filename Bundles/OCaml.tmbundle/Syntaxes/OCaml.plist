@@ -1476,42 +1476,28 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(\?)([a-z][a-zA-Z0-9_]*)\s*(:)</string>
+							<string>(\?)([a-z][a-zA-Z0-9_]*)\s*(:)\s*</string>
 							<key>name</key>
-							<string>variable.parameter.optional.ocaml</string>
+							<string>meta.parameter.optional.ocaml</string>
 						</dict>
 						<dict>
-							<key>begin</key>
-							<string>(~)([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
-							<key>beginCaptures</key>
+							<key>captures</key>
 							<dict>
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.labeled-parameter.ocaml</string>
-								</dict>
-								<key>2</key>
-								<dict>
-									<key>name</key>
 									<string>entity.name.tag.label.ocaml</string>
 								</dict>
-								<key>3</key>
+								<key>2</key>
 								<dict>
 									<key>name</key>
 									<string>punctuation.separator.label.ocaml</string>
 								</dict>
 							</dict>
-							<key>end</key>
-							<string>\s</string>
+							<key>match</key>
+							<string>\b([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
 							<key>name</key>
-							<string>variable.parameter.labeled.ocaml</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>include</key>
-									<string>#variables</string>
-								</dict>
-							</array>
+							<string>meta.parameter.labeled.ocaml</string>
 						</dict>
 						<dict>
 							<key>include</key>

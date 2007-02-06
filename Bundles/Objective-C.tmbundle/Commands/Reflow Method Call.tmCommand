@@ -9,8 +9,22 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 line = STDIN.read
-
 offset = ENV['TM_INPUT_START_COLUMN'].to_i - 1
+caret_placement = 0
+tmp = ENV['TM_LINE_NUMBER'].to_i - ENV['TM_INPUT_START_LINE'].to_i
+if tmp &gt; 0
+class String
+  def index_of_nth_occurrence_of(n, ch)
+    self.unpack("U*").each_with_index do |e, i|
+      return i if e == ch &amp;&amp; (n -= 1) == 0
+    end
+    return -1
+  end
+end
+  caret_placement += line.index_of_nth_occurrence_of(tmp,?\n) + ENV['TM_LINE_INDEX'].to_i
+else
+  caret_placement =ENV['TM_LINE_INDEX'].to_i-ENV['TM_INPUT_START_LINE_INDEX'].to_i - 1
+end
 
 def match_iter(rgxp,str)
   offset = 0
@@ -25,33 +39,69 @@ pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
 up = 0
 list = []
 
-match_iter(pat , line[1..line.length]) do |tok, beg, len|
+up = 0
+pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
+start = [0]
+match_iter(pat , line[0..caret_placement]) do |tok, beg, len|
+  t = tok[0].chr
+  if t == "["
+    start &lt;&lt; beg
+  elsif t == "]"
+    start.pop
+  end
+end
+
+
+up = 0
+last = line.length
+match_iter(pat , line[caret_placement+1..line.length]) do |tok, beg, len|
+  t = tok[0].chr
+  if t == "["
+    up +=1
+  elsif t == "]"
+    if up == 0
+      last = beg + caret_placement + 1
+      break
+    end
+    up -=1
+  end
+end
+
+list = []
+prefix = ""
+prefix = line[0..start[-1]-1] unless start[-1] == 0
+suffix = line[last+1..-1]
+l = line[start[-1]..last]
+up = -1
+
+match_iter(pat , l) do |tok, beg, len|
   t = tok[0].chr
   if t == "["
     up +=1
   elsif t == "]"
     up -=1
   elsif t !='"' and t !='@' and up == 0
-    list &lt;&lt; [beg +1,len]
+    list &lt;&lt; [beg,len]
   end
 end
 
-list &lt;&lt; [line.length,0]
-
+list &lt;&lt; [l.length,0]
+offset += start[-1]
 if list.length &gt; 2
-  print line[0...list[1][0]].strip
+  print prefix+ l[0...list[1][0]].strip
   #check to if the first "selector:" is not in the first line
-  if k = line[0...list[0][0]].rindex("\n")
+  if k = line[0...start[-1]+list[0][0]].rindex("\n")
     firstIndex = list[0][0]+list[0][1]- k -1
-    offset = 0
+    offset = start[-1]
   else
-    firstIndex = list[0][0] + list [0][1]
+    firstIndex = list[0][0] + list[0][1] 
   end
   (1..(list.length() -2)).each do |ind|
     list[ind][1]+list[ind][0]
     b = (b = firstIndex-list[ind][1]+offset) &gt; 0 ? b : 0
-    print "\n" + " "*b + line[(list[ind][0])...(list[ind+1][0])].strip
+    print "\n" + " "*b + l[(list[ind][0])...(list[ind+1][0])].strip
   end
+  print suffix unless suffix.nil?
 else
   print line
 end

@@ -23,8 +23,9 @@ $tm_dialog = "#{ENV["TM_SUPPORT_PATH"]}/bin/tm_dialog"
 module Subversion
 	
 	def self.svn_cmd(args)
-		result_text = %x{"#{ENV['TM_SVN']||'svn'}" #{args}}
-		raise if $CHILD_STATUS != 0		
+		command = %Q{"#{ENV['TM_SVN']||'svn'}" #{args}}
+		result_text = %x{#{command}}
+		raise "\n#{command}\n#{result_text}" if $CHILD_STATUS != 0
 		result_text
 	end
 
@@ -47,7 +48,7 @@ module Subversion
 
 	def self.view_revision(path)
 		# Get the desired revision number
-		revisions = choose_revision(path, "Choose a revision to view", :multiple)
+		revisions = choose_revision(path, "View revision of #{File.basename(path)}", :multiple)
 		return if revisions.nil?
 
 		files						= []
@@ -101,24 +102,26 @@ module Subversion
 		revision = 0
 		TextMate::Dialog.dialog(:nib => ListNib,
 														:center => true,
-														:parameters => {'title' => "View revision of #{File.basename(path)}",'entries' => [], 'hideProgressIndicator' => false}) do |dialog|
+														:parameters => {'title' => prompt,'entries' => [], 'hideProgressIndicator' => false}) do |dialog|
 
 			# Parse the log
 			begin
 				plist = []
 				log_data = svn_cmd_popen("log --xml #{escaped_path}")
 
-				Subversion::LogParser.parse(log_data) do |hash|
-					plist << hash
-					# update every ten entries (? may do better with a timeout)
-					if (plist.size % 10) == 0 then
-						dialog.parameters = {'entries' => plist}
-					end 
-				end
-				dialog.parameters = {'entries' => plist, 'hideProgressIndicator' => true}
+				fork do
+					Subversion::LogParser.parse(log_data) do |hash|
+						plist << hash
+						# update every ten entries (? may do better with a timeout)
+						if (plist.size % 10) == 0 then
+							dialog.parameters = {'entries' => plist}
+						end 
+					end
+					dialog.parameters = {'entries' => plist, 'hideProgressIndicator' => true}
 
-				if plist.size == 0
-					TextMate::Dialog.alert(:warning, "No revisions of file “#{path}” found", "Either there’s only one revision of this file, and you already have it, or this file was never added to the repository in the first place, or I can’t read the contents of the log for reasons unknown.")
+					if plist.size == 0
+						TextMate::Dialog.alert(:warning, "No revisions of file “#{path}” found", "Either there’s only one revision of this file, and you already have it, or this file was never added to the repository in the first place, or I can’t read the contents of the log for reasons unknown.")
+					end
 				end
 			rescue REXML::ParseException => exception
 				TextMate::Dialog.alert(:warning, "Could not parse log data for “#{path}”", "This may be a bug. Error: #{error}.")

@@ -10,8 +10,7 @@
 "${TM_RUBY:-ruby}" &lt;&lt;'END'
 #!/usr/bin/env ruby -w
 
-$LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_SUPPORT']
-require 'svn_diff'
+require "#{ENV['TM_BUNDLE_SUPPORT']}/svn_diff"
 
 Subversion::diff_active_file('PREV', "Diff With Previous")
 END</string>

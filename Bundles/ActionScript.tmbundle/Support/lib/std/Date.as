@@ -45,6 +45,12 @@ intrinsic class Date
 	function valueOf():Number;
 	function setYear(value:Number):Void;
 
+
+	// Flash Lite 2.x
+	function getLocaleLongDate():String;
+	function getLocaleShortDate():String;
+	function getLocaleTime():String;
+
 	static function UTC(year:Number,month:Number,date:Number,
                         hour:Number,min:Number,sec:Number,ms:Number):Number;
 }

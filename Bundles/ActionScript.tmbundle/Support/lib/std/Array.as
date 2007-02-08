@@ -19,7 +19,7 @@ intrinsic dynamic class Array
 	function toString():String;
 	function sort(compare : Object, options: Number):Array;
 	function reverse():Void;
-	function sortOn(key:Object, options: Number):Array;
+	function sortOn(key:Object, options: Object):Array;
 }
 
 

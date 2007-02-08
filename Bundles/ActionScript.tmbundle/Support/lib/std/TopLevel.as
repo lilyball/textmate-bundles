@@ -24,6 +24,7 @@ intrinsic class TopLevel {
 
 	// private members are not stored into _global, they need special compilation opcodes
 
+	private static function FSCommand2(p1:Object,p2:Object);
 	private static function getVersion():String;
 	private static function trace(value):Void;
 	private static function eval( e : String );

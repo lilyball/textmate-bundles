@@ -18,6 +18,10 @@ intrinsic class SharedObject
 	function clear() : Void;
 
 	var data:Object;
+
+	// Flash Lite 2.x
+	static function GetMaxSize():Number;
+
 }
 
 

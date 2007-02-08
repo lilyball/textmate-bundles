@@ -38,3 +38,4 @@ Another good place to ask is the [MTASC Mailing List](http://lists.motion-twin.c
 * [MTASC](http://www.mtasc.org/) is released under the GPL License.
 * [XTrace](http://developer.mabwebdesign.com/xtrace.html) is released under the GPL License.
 * The "Build With MTASC" command is based on work by [Chris Sessions](http://lists.motion-twin.com/pipermail/mtasc/2006-June/029791.html), [Ben Jackson](http://www.unfitforprint.com/) and [Juan Carlos Añorga](http://www.juanzo.com/), and is maintained (along with the ActionScript bundle) by [Ale Muñoz](http://bomberstudios.com). Some code & inspiration lifted from [Monokai](http://www.monokai.nl/blog/2006/07/14/using-textmate-mtasc-and-xtrace-to-build-flash-projects-in-mac-osx/)
+* Improvements suggested by [Juan Carlos Añorga](http://www.juanzo.com/), [Helmut Granda](http://helmutgranda.com)

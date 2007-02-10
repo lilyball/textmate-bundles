@@ -271,16 +271,10 @@ int contact_server_show_nib (std::string nibName, NSMutableDictionary* someParam
 				// Modal: the window has already been ordered out; retrieve the results and close it.
 				if(validate_proxy(proxy) && not quiet)
 				{
-					id result;
-					int returnCode;
+					id result = [proxy retrieveNibResults:[NSString stringWithUTF8String:token]];
+					output_property_list(result);
 
-					result = [proxy retrieveNibResults:[NSString stringWithUTF8String:token]];
-					returnCode = [[result objectForKey:@"returnCode"] intValue];
-
-	//				if(returnCode == 0)
-					{
-						output_property_list(result);
-					}
+					res = [[result objectForKey:@"returnCode"] intValue];
 				}
 				contact_server_async_close(token, false);	// false -> log errors
 			}

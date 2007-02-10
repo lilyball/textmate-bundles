@@ -50,16 +50,17 @@ end # select_cats
 
 cred = Blogging.new
 endpoint = cred.endpoint
+username = cred.username
 password = cred.password
 res = TextMate.call_with_progress(:title =&gt; "Fetch Categories", :message =&gt; "Contacting Server “#{cred.host}”…") do
-    cred.client.call("metaWeblog.getCategories", endpoint, cred.username, password)
+    cred.client.call("metaWeblog.getCategories", endpoint, username, password)
 end
 
 TextMate.exit_show_tool_tip "No categories are available!" if res.nil? || res.empty?
 select_from_cats(res)
 </string>
 	<key>input</key>
-	<string>none</string>
+	<string>document</string>
 	<key>name</key>
 	<string>Category</string>
 	<key>output</key>

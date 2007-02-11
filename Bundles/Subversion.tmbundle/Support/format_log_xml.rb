@@ -19,7 +19,7 @@ module SVNLogHelpers
   end
   
   def author
-    self.elements['author'].text
+    self.elements['author'] ? self.elements['author'].text : "(anonymous)"
   end
   
   def date

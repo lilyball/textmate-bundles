@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+ar = ["&lt;&lt;echo=false,results=hide&gt;&gt;=",
+  "&lt;&lt;echo=false,results=tex&gt;&gt;=",
+  "&lt;&lt;echo=false,results=verbatim&gt;&gt;=",
+  "&lt;&lt;echo=true&gt;&gt;="]
+text = STDIN.readlines
+if (i = ar.index(text[0].strip))
+  text[0] = ar[(i+1)% 4] + "\n"
+end
+print text.join
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^&lt;</string>
+	<key>name</key>
+	<string>Change Block Parameters</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.tex.latex.sweave meta.block</string>
+	<key>uuid</key>
+	<string>486047C3-9313-4276-97A7-EEDCF2E2ABB8</string>
+</dict>
+</plist>

@@ -36,12 +36,18 @@ def extract_module_from_line
     accum &lt;&lt; $line[i].chr
   end
   
-  accum.reverse.join.chomp('.')
+  full = accum.reverse.join
+  if full[-1] == '.'
+    [full.chomp('.'), /^/]
+  else
+    matches = /^(.*?)\.([^.]*)$/.match(full)
+    [matches[1].to_s, /^#{Regexp.escape(matches[2].to_s)}/]
+  end
 end
 
 
-def convert_to_snippet str
-  matches = /^val (\S+)\s+:\s+(.*)$/.match(str)
+def convert_to_snippet(str, stripregex)
+  matches = /^(\S+)\s+:\s+(.*)$/.match(str)
   funname = matches[1]
   args = []
   depth = 0
@@ -83,36 +89,38 @@ def convert_to_snippet str
       "\$\{#{i}:#{e_sn(a)}\}" 
     end
   end
-  snippet = "#{funname} #{args.join(' ')}"
+  snippet = "#{funname} #{args.join(' ')}".sub(stripregex, '')
   
   e_sn($line[0...$linepos]) + snippet + e_sn($line[$linepos..-1])
 end
 
-
-modulename = extract_module_from_line
-possible_completions = OCamlCompletion::cmigrep('.', :values, [modulename]).split(/\n/).select { |l| l !~ /^(from file|external)/ }.sort.uniq
-possible_completions = possible_completions.map do |c|
-  chash = Hash.new
-  chash['completion'] = c
+begin
+  modulename, regex = extract_module_from_line
+  possible_completions = OCamlCompletion::cmigrep(regex, :values, [modulename]).split(/\n/).select { |l| l =~ /^val\s+/ }.sort.uniq
+  possible_completions = possible_completions.map do |c|
+    chash = Hash.new
+    chash['completion'] = c[/^val\s+(.*)/, 1]
   
-  chash
-end
+    chash
+  end
 
-plist = Hash.new
-plist['possibleCompletions'] = possible_completions
+  plist = Hash.new
+  plist['possibleCompletions'] = possible_completions
 
-cio = IO.popen("'#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog' -m '#{ENV['TM_BUNDLE_SUPPORT']}/nibs/CompletionsWindow.nib' | pl", 'r+')
-cio.puts(plist.to_plist)
-cio.close_write
-choice = PropertyList.load(cio.read)
-if !choice['returnButton'] || choice['returnButton'] != 'Cancel'
-  selection = choice['result']['returnArgument'].to_i
-  snippettxt = plist['possibleCompletions'][selection]['completion']
-  print convert_to_snippet(snippettxt)
-else
+  cio = IO.popen("'#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog' -m '#{ENV['TM_BUNDLE_SUPPORT']}/nibs/CompletionsWindow.nib' | pl", 'r+')
+  cio.puts(plist.to_plist)
+  cio.close_write
+  choice = PropertyList.load(cio.read)
+  if !choice['returnButton'] || choice['returnButton'] != 'Cancel'
+    selection = choice['result']['returnArgument'].to_i
+    snippettxt = plist['possibleCompletions'][selection]['completion']
+    print convert_to_snippet(snippettxt, regex)
+  else
+    print e_sn($line)
+  end
+rescue
   print e_sn($line)
-end
-</string>
+end</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

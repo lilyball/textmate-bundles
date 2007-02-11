@@ -3,22 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:name}
-{
-public:
-	${1/(\w+).*/$1/} (${2:arguments});
-	virtual ~${1/(\w+).*/$1/} ();
-
-private:
-	${0:/* data */}
-};</string>
+	<string>typedef ${1:MyCustomType} ${2:int};</string>
 	<key>name</key>
-	<string>Class</string>
+	<string>Typedef</string>
 	<key>scope</key>
-	<string>source.c++, source.objc++</string>
+	<string>source.c, source.objc, source.c++, source.objc++</string>
 	<key>tabTrigger</key>
-	<string>cl</string>
+	<string>td</string>
 	<key>uuid</key>
-	<string>523B30D4-C28A-11D9-8CEF-000D93589AF6</string>
+	<string>08E16CAE-DBD8-4570-B778-9E0E0EFFF80C</string>
 </dict>
 </plist>

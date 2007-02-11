@@ -87,7 +87,9 @@ module OCamlCompletion
     if modules.nil?
       modules = open_modules
     end
-    FileUtils.cd(File.dirname(ENV['TM_FILEPATH']))
+    if ENV['TM_FILEPATH']
+      FileUtils.cd(File.dirname(ENV['TM_FILEPATH']))
+    end
     modules.map { |modname|
       `#{find_command 'cmigrep'} -package #{e_sh(packages)} #{searchtype_to_arg(searchtype)} #{e_sh(regexstr)} #{e_sh(modname)}`
     }.join("\n")

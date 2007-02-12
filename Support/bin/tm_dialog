@@ -2,5 +2,5 @@
 
 if [[ -e "$DIALOG" ]]
 	then "$DIALOG" "$@"
-	else "$(dirname "$1")/tm_dialog_v5" "$@"
+	else "$TM_SUPPORT_PATH/bin/tm_dialog_v5" "$@"
 fi

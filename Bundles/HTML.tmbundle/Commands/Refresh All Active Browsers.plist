@@ -31,6 +31,9 @@ APPLESCRIPT
 
 # Check if Safari is running, if so refresh
 ps -xc|grep -sq Safari &amp;&amp; osascript -e 'tell app "Safari"' -e 'activate' -e 'do JavaScript "window.location.reload();" in first document' -e 'end tell'
+
+# Check if Camino is running, if so refresh 
+ps -xc|grep -sq Camino &amp;&amp; osascript -e 'tell app "Camino"' -e 'activate' -e 'tell app "System Events" to keystroke "r" using {command down}' -e 'end tell'
 </string>
 	<key>input</key>
 	<string>none</string>

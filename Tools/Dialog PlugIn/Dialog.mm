@@ -426,7 +426,11 @@ static int sNextWindowControllerToken = 1;
 {
 	NSApp = [NSApplication sharedApplication];
 	if(self = [super init])
+	{
 		[NSThread detachNewThreadSelector:@selector(vendObject:) toTarget:self withObject:nil];
+		if(NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tm_dialog" ofType:nil])
+			setenv("DIALOG", [path UTF8String], 1);
+	}
 	return self;
 }
 

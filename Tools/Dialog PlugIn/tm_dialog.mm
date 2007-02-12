@@ -4,7 +4,7 @@
 	In theory -Wl,-s would avoid a separate invocation of the strip tool, but it ends up stripping bits we actually need.
 	-dead_strip tells the linker to remove unused functions and data.
 	
-    g++ -Wmost -arch ppc -arch i386 -mdynamic-no-pic -dead_strip -isysroot /Developer/SDKs/MacOSX10.4u.sdk -DDATE=\"`date +%Y-%m-%d`\" -Os "$TM_FILEPATH" -o "$TM_SUPPORT_PATH/bin/tm_dialog" -framework Foundation && strip "$TM_SUPPORT_PATH/bin/tm_dialog"
+    g++ -Wmost -arch ppc -arch i386 -mdynamic-no-pic -dead_strip -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Os "$TM_FILEPATH" -o "$TM_SUPPORT_PATH/bin/tm_dialog" -framework Foundation && strip "$TM_SUPPORT_PATH/bin/tm_dialog"
 
 */
 #import <Cocoa/Cocoa.h>
@@ -297,7 +297,7 @@ int contact_server_show_nib (std::string nibName, NSMutableDictionary* someParam
 void usage ()
 {
 	fprintf(stderr, 
-		"%1$s r%2$s (" DATE ")\n"
+		"%1$s r%2$s (" __DATE__ ")\n"
 		"Usage (dialog): %1$s [-cmqp] nib_file\n"
 		"Usage (window): %1$s [-cpaxts] nib_file\n"
 		"Usage (alert): %1$s [-p] -e [-i|-c|-w]\n"

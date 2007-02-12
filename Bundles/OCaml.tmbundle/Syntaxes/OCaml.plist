@@ -963,7 +963,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>not|!|[!\?~][!$%&amp;*+./:&lt;=&gt;?@^~-]+</string>
+			<string>\bnot\b|!|[!\?~][!$%&amp;*+./:&lt;=&gt;?@^~-]+</string>
 			<key>name</key>
 			<string>keyword.operator.prefix.ocaml</string>
 		</dict>
@@ -977,9 +977,9 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>~[a-z][a-z0-9'_]*(:)</string>
+			<string>~[a-z][a-z0-9'_]*(:)?</string>
 			<key>name</key>
-			<string>entity.name.tag.label</string>
+			<string>entity.name.tag.label.ocaml</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1810,7 +1810,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(~)([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
+					<string>(~)([a-z][a-zA-Z0-9'_]*)\s*(:\s*)?</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>

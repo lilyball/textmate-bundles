@@ -591,7 +591,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?&lt;=\w|\))(#)[a-z_][a-zA-Z0-9'_]*</string>
+			<string>(?&lt;=\w|\)|')(#)[a-z_][a-zA-Z0-9'_]*</string>
 			<key>name</key>
 			<string>meta.method-call.ocaml</string>
 		</dict>
@@ -1109,7 +1109,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(downto|if|else|match|then|to|when|try)\b</string>
+			<string>\b(downto|if|else|match|then|to|when|with|try)\b</string>
 			<key>name</key>
 			<string>keyword.control.ocaml</string>
 		</dict>
@@ -1118,21 +1118,6 @@
 			<string>\b(as|assert|class|constraint|exception|functor|in|include|inherit|initializer|lazy|let|mod|module|mutable|new|object|open|private|rec|sig|struct|type|val|virtual)\b</string>
 			<key>name</key>
 			<string>keyword.other.ocaml</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\(</string>
-			<key>end</key>
-			<string>\)</string>
-			<key>name</key>
-			<string>meta.paren-group.ocaml</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-			</array>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -1491,28 +1476,42 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(\?)([a-z][a-zA-Z0-9_]*)\s*(:)\s*</string>
+							<string>(\?)([a-z][a-zA-Z0-9_]*)\s*(:)</string>
 							<key>name</key>
-							<string>meta.parameter.optional.ocaml</string>
+							<string>variable.parameter.optional.ocaml</string>
 						</dict>
 						<dict>
-							<key>captures</key>
+							<key>begin</key>
+							<string>(~)([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
+							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>entity.name.tag.label.ocaml</string>
+									<string>punctuation.definition.labeled-parameter.ocaml</string>
 								</dict>
 								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.label.ocaml</string>
+								</dict>
+								<key>3</key>
 								<dict>
 									<key>name</key>
 									<string>punctuation.separator.label.ocaml</string>
 								</dict>
 							</dict>
-							<key>match</key>
-							<string>\b([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
+							<key>end</key>
+							<string>\s</string>
 							<key>name</key>
-							<string>meta.parameter.labeled.ocaml</string>
+							<string>variable.parameter.labeled.ocaml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#variables</string>
+								</dict>
+							</array>
 						</dict>
 						<dict>
 							<key>include</key>

@@ -23,7 +23,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>((@)(interface|protocol))(?!.+;)\s+([A-Za-z]+\s*(?::\s*([A-Za-z]+))?\s*(\(([A-Za-z]+)\))?)</string>
+			<string>((@)(interface|protocol))(?!.+;)\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -45,11 +45,6 @@
 				<dict>
 					<key>name</key>
 					<string>entity.other.inherited-class.objc</string>
-				</dict>
-				<key>7</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.category-name.objc</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
@@ -72,7 +67,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>((@)(implementation))\s+([A-Za-z]+\s*(?::\s*([A-Za-z]+))?\s*(\(([A-Za-z]+)\))?)</string>
+			<string>((@)(implementation))\s+([A-Za-z]+)\s*(?::\s*([A-Za-z]+))?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -94,11 +89,6 @@
 				<dict>
 					<key>name</key>
 					<string>entity.other.inherited-class.objc</string>
-				</dict>
-				<key>7</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.category-name.objc</string>
 				</dict>
 			</dict>
 			<key>contentName</key>

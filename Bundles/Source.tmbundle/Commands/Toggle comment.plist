@@ -7,16 +7,16 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
+# by James Edward Gray II &lt;james (at) grayproductions.net&gt;
+
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
 
 def out(*args)
   print( *args.map do |arg|
     escaped = e_sn(arg)
-    $selected ? escaped.gsub("}", "\\}") : escaped
+    $selected ? escaped.gsub("}", "\\}") : escaped.sub("\0", "${0}")
   end )
 end
-
-# by James Edward Gray II &lt;james (at) grayproductions.net&gt;
 
 # find all available comment variables
 var_suffixes = [""]
@@ -61,20 +61,38 @@ var_suffixes.each do |suffix|
   when "line"  # line by line comment
     if text != "" &amp;&amp; text.map { |l| !!(l =~ /\A\s*(#{com[:esc_start]}|$)/) }.
                           uniq == [true]
-      out text.gsub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
-                     '\1\2\3' )
-      exit
+      if $selected
+        out text.gsub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
+                       '\1\2\3' )
+        exit
+      else
+        i = [0, ENV["TM_LINE_INDEX"].to_i - com[:start].length].max
+        r = text.sub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
+                      '\1\2\3' )
+        r[i, 0] = "\0"
+        out r
+        exit
+      end
     end
   when "block" # block comment
     regex = /\A(\s*)#{com[:esc_start]}(.*?)#{com[:esc_end]}(\s*)\z/m
     if text =~ regex
-      out text.sub(regex, '\1\2\3')
-      exit
+      if $selected
+        out text.sub(regex, '\1\2\3')
+        exit
+      else
+        i = [0, ENV["TM_LINE_INDEX"].to_i - com[:start].length].max
+        r = text.sub(regex, '\1\2\3')
+        r[i, 0] = "\0"
+        out r
+        exit
+      end
     end
   end
 end
 
 # none of our removals worked, so preform an insert (minding indent setting)
+text[ENV["TM_LINE_INDEX"].to_i, 0] = "\0" unless $selected or text !~ /\S/
 case default[:mode]
 when "line"  # apply comment line by line
   if default[:no_indent] || text.empty?

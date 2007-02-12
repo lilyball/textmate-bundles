@@ -58,7 +58,15 @@ def snippet_generator(cand, start)
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
+        if (name_array.size == (i+1))
+          if arg == "SEL"
+            out &lt;&lt; name_array[i] + ":${0:SEL} "
+          else
+            out &lt;&lt; name_array[i] + ":${"+(i+1).to_s + ":"+ arg+"}$0"
+          end
+        else
         out &lt;&lt; name_array[i] + ":${"+(i+1).to_s + ":"+ arg+"} "
+        end
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -246,13 +254,13 @@ elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
   mn = methodNames(line[start[-1]..caret_placement])
   candidates = candidates_or_exit( mn + "[[:alpha:]:]", list ) # the alpha is to prevent satisfaction with just one part
   res = pop_up(candidates, mn, caret_placement, line)
-  print line[0..caret_placement] + res + "$0"+ line[caret_placement+1..-1]
+  print line[0..caret_placement] + res + line[caret_placement+1..-1]
 elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
   if mline[start[-1]..k.begin(0)-1+start[-1]].match alpha_and_space
     mn = methodNames(line[start[-1]..caret_placement]) + k[0]
     candidates = candidates_or_exit( mn + "[[:alpha:]:]", list)
     res =pop_up(candidates, mn, caret_placement, line)
-    print line[0..caret_placement] + res + "$0"+ line[caret_placement+1..-1]
+    print line[0..caret_placement] + res + line[caret_placement+1..-1]
   else
     print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
   end

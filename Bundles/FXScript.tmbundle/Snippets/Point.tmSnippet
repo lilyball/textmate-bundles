@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>input ${1:varname}, "${2:text label}", Point, ${3:X}, ${4:Y};
+	<string>input ${1:varname}, "${2:${1/varname/text label/}}", Point, ${3:X}, ${4:Y};
 </string>
 	<key>name</key>
 	<string>Point</string>

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>input ${1:varname}, "${2:text label}", Checkbox, ${3:0};
+	<string>input ${1:varname}, "${2:${1/varname/text label/}}", Checkbox, ${3:0};
 </string>
 	<key>name</key>
 	<string>Checkbox</string>

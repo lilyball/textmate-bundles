@@ -14,7 +14,7 @@
 				<key>caret</key>
 				<string>#7070FF</string>
 				<key>foreground</key>
-				<string>#E6E6E6</string>
+				<string>#E0E0E0</string>
 				<key>invisibles</key>
 				<string>#BFBFBF</string>
 				<key>lineHighlight</key>
@@ -190,6 +190,17 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Keyword decorator</string>
+			<key>scope</key>
+			<string>keyword.other.decorator</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#D0D0FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Floating-point infix operator</string>
 			<key>scope</key>
 			<string>keyword.operator.infix.floating-point.ocaml</string>
@@ -295,6 +306,19 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Module type definitions</string>
+			<key>scope</key>
+			<string>entity.name.type.module-type.ocaml</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>underline</string>
+				<key>foreground</key>
+				<string>#C40000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Support modules</string>
 			<key>scope</key>
 			<string>support.other</string>
@@ -343,6 +367,54 @@
 			<dict>
 				<key>foreground</key>
 				<string>#80B0B0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Token definition (ocamlyacc)</string>
+			<key>scope</key>
+			<string>entity.name.token</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#3080A0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Token reference (ocamlyacc)</string>
+			<key>scope</key>
+			<string>entity.name.token.reference</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#3CB0D0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Non-terminal definition (ocamlyacc)</string>
+			<key>scope</key>
+			<string>entity.name.non-terminal</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#90E0E0</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Non-terminal reference (ocamlyacc)</string>
+			<key>scope</key>
+			<string>entity.name.non-terminal.reference</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#C0F0F0</string>
 			</dict>
 		</dict>
 		<dict>

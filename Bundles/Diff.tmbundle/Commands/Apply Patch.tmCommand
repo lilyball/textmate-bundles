@@ -19,7 +19,7 @@ END)
 if [[ -z $path ]]; then
 	exit_discard
 else
-	patch -d "$path" &lt; "$TM_FILEPATH"
+	patch -d "$path" -p0 &lt; "$TM_FILEPATH"
 fi
 </string>
 	<key>input</key>

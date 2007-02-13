@@ -8,7 +8,7 @@
 		<string>mli</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(\b(module|class|)\s.*?=\s*$|\bbegin|sig|struct|object\s*$|\bwhile\s.*?\bdo\s*$|^let(?:\s+rec)?\s+[a-z_][a-zA-Z0-9_]*\s+(?!=)\S)</string>
+	<string>(\b(module|class|)\s.*?=\s*$|\bbegin|sig|struct|(object(\s*\(_?[a-z]+\))?)\s*$|\bwhile\s.*?\bdo\s*$|^let(?:\s+rec)?\s+[a-z_][a-zA-Z0-9_]*\s+(?!=)\S)</string>
 	<key>foldingStopMarker</key>
 	<string>(\bend(\s+in)?[ \t]*(;{1,2}|=)?|\bdone;?|^\s*;;|^\s*in)[ \t]*$</string>
 	<key>keyEquivalent</key>
@@ -231,6 +231,30 @@
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.class-type-definition.ocaml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.type.class-type.ocaml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.user-defined.ocaml</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^[ \t]*(class\s+type\s+)((\[\s*('[A-Za-z][a-zA-Z0-9_']*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_']*)*)\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
+			<key>name</key>
+			<string>meta.class.type-definition.ocaml</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>^[ \t]*(class)(?:\s+(?!(?:virtual)\s+))((\[\s*('[A-Za-z][a-zA-Z0-9_']*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_']*)*)\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
 			<key>beginCaptures</key>
@@ -270,30 +294,6 @@
 					<string>#variables</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.class-type-definition.ocaml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.type.class-type.ocaml</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.user-defined.ocaml</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>^[ \t]*(class\s+type\s+)((\[\s*('[A-Za-z][a-zA-Z0-9_']*(?:\s*,\s*'[A-Za-z][a-zA-Z0-9_']*)*)\s*\]\s+)?[a-z_][a-zA-Z0-9'_]*)</string>
-			<key>name</key>
-			<string>meta.class.type-definition.ocaml</string>
 		</dict>
 		<dict>
 			<key>begin</key>

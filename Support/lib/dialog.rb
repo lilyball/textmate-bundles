@@ -96,7 +96,7 @@ class << self
   def request_color(string)
     string = '#999' unless string.match(/#?[0-9A-F]{3,6}/i)
     color  = string
-    prefix, string = string.match(/(#?)([0-9A-F]{3,6})/)[1,2]
+    prefix, string = string.match(/(#?)([0-9A-F]{3,6})/i)[1,2]
     string = $1 * 2 + $2 * 2 + $3 * 2 if string =~ /^(.)(.)(.)$/
     def_col = ' default color {' + string.scan(/../).map { |i| i.hex * 257 }.join(",") + '}'
     col = `osascript 2>/dev/null -e 'tell app "TextMate" to choose color#{def_col}'`

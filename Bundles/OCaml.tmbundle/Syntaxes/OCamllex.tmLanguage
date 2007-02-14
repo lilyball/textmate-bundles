@@ -60,7 +60,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.type.pattern.stupid-fucking-hack.ocamllex</string>
+					<string>entity.name.type.pattern.stupid-goddamn-hack.ocamllex</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -77,15 +77,30 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(parse)(?=\s*$)|((?&lt;!\|)(\|)(?!\|))</string>
+			<string>(rule|and)\s+([a-z][a-zA-Z0-9_]*)\s+(=)\s+(parse)(?=\s*$)|((?&lt;!\|)(\|)(?!\|))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.entry-definition.ocamllex</string>
+					<string>keyword.other.ocamllex</string>
 				</dict>
 				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.entrypoint.ocamllex</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.ocamllex</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.ocamllex</string>
+				</dict>
+				<key>5</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.separator.match-pattern.ocamllex</string>
@@ -143,18 +158,6 @@
 					<string>$self</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(let|rule)\b</string>
-			<key>name</key>
-			<string>keyword.other.ocamllex</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(and|parse)\b</string>
-			<key>name</key>
-			<string>keyword.other.entry-definition.ocamllex</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -323,7 +326,7 @@
 					<key>match</key>
 					<string>[a-z][a-zA-Z0-9'_]</string>
 					<key>name</key>
-					<string>entity.name.type.pattern.reference.stupid-fucking-hack.ocamllex</string>
+					<string>entity.name.type.pattern.reference.stupid-goddamn-hack.ocamllex</string>
 				</dict>
 				<dict>
 					<key>match</key>

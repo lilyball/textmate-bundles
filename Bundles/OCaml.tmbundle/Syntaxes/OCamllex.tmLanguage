@@ -24,7 +24,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.embedded.ocaml.ocamllex</string>
+					<string>punctuation.section.embedded.ocaml.begin.ocamllex</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -34,7 +34,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.embedded.ocaml.ocamllex</string>
+					<string>punctuation.section.embedded.ocaml.end.ocamllex</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -60,7 +60,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.pattern.ocamllex</string>
+					<string>entity.name.type.pattern.stupid-fucking-hack.ocamllex</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -177,7 +177,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.action.ocamllex</string>
+							<string>punctuation.definition.action.begin.ocamllex</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -187,7 +187,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.action.ocamllex</string>
+							<string>punctuation.definition.action.end.ocamllex</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -267,21 +267,6 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>/\*</string>
-					<key>end</key>
-					<string>\*/</string>
-					<key>name</key>
-					<string>comment.block.ocamlyacc</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
 					<string>(?=[^\\])(")</string>
 					<key>end</key>
 					<string>"</string>
@@ -311,7 +296,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.sub-pattern.begin.ocamllex</string>
+							<string>punctuation.definition.sub-pattern.begin.ocamllex</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -321,7 +306,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.sub-pattern.end.ocamllex</string>
+							<string>punctuation.definition.sub-pattern.end.ocamllex</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -338,7 +323,7 @@
 					<key>match</key>
 					<string>[a-z][a-zA-Z0-9'_]</string>
 					<key>name</key>
-					<string>entity.name.pattern.reference.ocamllex</string>
+					<string>entity.name.type.pattern.reference.stupid-fucking-hack.ocamllex</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -366,12 +351,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.character-class.begin.ocamllex</string>
+							<string>punctuation.definition.character-class.begin.ocamllex</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.character-class.negation.ocamllex</string>
+							<string>punctuation.definition.character-class.negation.ocamllex</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -381,7 +366,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.character-class.end.ocamllex</string>
+							<string>punctuation.definition.character-class.end.ocamllex</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -392,7 +377,7 @@
 							<key>match</key>
 							<string>-</string>
 							<key>name</key>
-							<string>punctuation.character-class.range.ocamllex</string>
+							<string>punctuation.separator.character-class.range.ocamllex</string>
 						</dict>
 						<dict>
 							<key>include</key>

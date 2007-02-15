@@ -6,10 +6,10 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-ar = ["&lt;&lt;echo=false,results=hide&gt;&gt;=",
+ar = ["&lt;&lt;&gt;&gt;=",
+  "&lt;&lt;echo=true&gt;&gt;=","&lt;&lt;echo=false,results=hide&gt;&gt;=",
   "&lt;&lt;echo=false,results=tex&gt;&gt;=",
-  "&lt;&lt;echo=false,results=verbatim&gt;&gt;=",
-  "&lt;&lt;echo=true&gt;&gt;="]
+  "&lt;&lt;echo=false,results=verbatim&gt;&gt;="]
 text = STDIN.readlines
 if (i = ar.index(text[0].strip))
   text[0] = ar[(i+1)% 4] + "\n"

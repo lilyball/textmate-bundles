@@ -6,18 +6,19 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "Colors"
-"${TM_RUBY:-ruby}" "$TM_BUNDLE_SUPPORT/show_hex_colors.rb"
+html_header "Replace Colors"
+echo '&lt;p&gt;WARNING: Changes you make here are instantly saved to disk. The only way to undo is if you keep the document open in textmate, undo and resave.&lt;/p&gt;'
+"${TM_RUBY:-ruby}" "$TM_BUNDLE_SUPPORT/show_hex_colors_and_replace.rb"
 html_footer
 
 </string>
 	<key>input</key>
 	<string>selection</string>
 	<key>name</key>
-	<string>Show Hex Colors</string>
+	<string>Replace Hex Colors</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>7CC7E11B-02BE-4F8D-9E8F-396D2CB74A98</string>
+	<string>BD115447-20FA-43E3-8694-E8B4280C296B</string>
 </dict>
 </plist>

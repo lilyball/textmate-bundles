@@ -47,7 +47,7 @@ class HexColor
   def l; hsl[:l]; end
   
   def to_s
-    %{<div style="background: #{c = self.color.ljust(7)}; color: #{(l < 0.15) ? 'white' : 'black'};"><tt>#{c}</tt><span class="hsl">#{to_hsl}</span></div>\n}
+    %{<div style="background: #{c = self.color.ljust(7)}; color: #{(l < 0.15) ? 'white' : 'black'};"><input type="button" value="c" onclick="replace_color(this.parentNode,'#{self.color}')"/>&nbsp;<tt>#{c}&nbsp;</tt><span class="hsl">#{to_hsl}</span></div>\n}
   end
   def hsl
     hsl = {:h => nil,
@@ -121,13 +121,52 @@ class HexColor
   end
 end
 
-
+ruby_cmd = ENV['TM_RUBY'] || 'ruby'
 
 print HexColor::show_hex_colors(doc)
 puts <<-HTML
+<script type="text/javascript" charset="utf-8">
+var myCommand = null;
+var myElement = null;
+
+function done(){
+  document.getElementById("result").innerHTML += '\\n.';
+	TextMate.isBusy = false;
+}
+
+function end(){
+  myCommand.cancel();
+	TextMate.isBusy = false;
+}
+
+function replace_color(element,color){
+	TextMate.isBusy = true;
+	
+  myElement = element;
+  myElement.innerHTML = '[ '+myElement.innerHTML+' ]';
+  
+  if(myCommand){ end() };
+  
+  cmd = 'echo "' +color+ '"|"#{ruby_cmd}" "#{ENV['TM_BUNDLE_SUPPORT']}/replace_colors.rb"'
+  myCommand              = TextMate.system(cmd, done);
+  myCommand.onreadoutput = outputHandler;
+  myCommand.onreaderror  = outputHandler;
+  
+	window.location.hash = "working";
+}
+
+function outputHandler(currentStringOnStdout){
+  document.getElementById("result").innerHTML = currentStringOnStdout;
+  if(currentStringOnStdout != 'No changes made')
+    myElement.innerHTML += '√';
+}
+
+</script>
 <style type="text/css" media="screen">
 #colors { border: 2px solid #111; outline: 1px solid #eee; }
 span.hsl {float: right; width: 10em; white-space: nowrap; text-align: right;}
-#colors div {font-size: 0.8em; padding: 0.5em;}
+#colors div {font-size: 70%; padding: 0.5em;}
+input {font-size: 9px;}
 </style>
+<p id='result'></p>
 HTML

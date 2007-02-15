@@ -12,7 +12,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#000000FA</string>
+				<string>#0D0D0DFA</string>
 				<key>caret</key>
 				<string>#3333FF</string>
 				<key>foreground</key>
@@ -490,7 +490,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#FF0007</string>
+				<string>#FF0000</string>
 			</dict>
 		</dict>
 		<dict>
@@ -501,9 +501,9 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#FF000733</string>
+				<string>#FF000033</string>
 				<key>foreground</key>
-				<string>#800004</string>
+				<string>#870000</string>
 			</dict>
 		</dict>
 		<dict>
@@ -514,20 +514,20 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#80000433</string>
+				<string>#87000033</string>
 				<key>foreground</key>
-				<string>#FF0007</string>
+				<string>#FF0000</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>¢ Instance</string>
 			<key>scope</key>
-			<string>entity.name.instance</string>
+			<string>entity.name.instance, entity.name.type.instance</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#FF0007</string>
+				<string>#FF3D44</string>
 			</dict>
 		</dict>
 		<dict>
@@ -538,7 +538,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#80004333</string>
+				<string>#831E5133</string>
 			</dict>
 		</dict>
 		<dict>
@@ -558,7 +558,7 @@
 			<key>name</key>
 			<string>¢ Class Method</string>
 			<key>scope</key>
-			<string>object.property.function, meta.definition.method</string>
+			<string>meta.definition.method</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -572,8 +572,10 @@
 			<string>meta.function, meta.property.function, declaration.function</string>
 			<key>settings</key>
 			<dict>
+				<key>background</key>
+				<string>#340C2133</string>
 				<key>foreground</key>
-				<string>#FF0086</string>
+				<string>#999999</string>
 			</dict>
 		</dict>
 		<dict>
@@ -582,7 +584,10 @@
 			<key>scope</key>
 			<string>entity.name.function, entity.name.preprocessor</string>
 			<key>settings</key>
-			<dict/>
+			<dict>
+				<key>foreground</key>
+				<string>#FF0086</string>
+			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -718,6 +723,17 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>™ Keyword other</string>
+			<key>scope</key>
+			<string>keyword.other</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#7900FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>™ Regex Keyword</string>
 			<key>scope</key>
 			<string>source.regexp keyword.operator</string>
@@ -732,7 +748,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#2136CE</string>
+				<string>#0000CE</string>
 			</dict>
 		</dict>
 		<dict>
@@ -781,6 +797,17 @@
 			<dict>
 				<key>foreground</key>
 				<string>#7C88FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>meta.class.instance.constructor keyword.operator.new</string>
+			<key>scope</key>
+			<string>meta.class.instance.constructor keyword.operator.new</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#800043</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1490,6 +1517,17 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>L markup</string>
+			<key>scope</key>
+			<string>meta.function markup</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#CDCDCD</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>L meta.group.braces</string>
 			<key>scope</key>
 			<string>text.latex meta.group.braces</string>
@@ -2050,6 +2088,64 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>OCAML</string>
+			<key>settings</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>entity.name.type.module</string>
+			<key>scope</key>
+			<string>source.ocaml entity.name.type.module</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF0000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>support.other.module</string>
+			<key>scope</key>
+			<string>source.ocaml support.other.module</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#83000033</string>
+				<key>foreground</key>
+				<string>#FF0000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>entity.name.type.variant</string>
+			<key>scope</key>
+			<string>entity.name.type.variant</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00FFF8</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>entity.name.tag, meta.record.definition</string>
+			<key>scope</key>
+			<string>source.ocaml entity.name.tag, source.ocaml meta.record.definition</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00FF79</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>—————————————————</string>
+			<key>settings</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>meta.brace.pipe</string>
 			<key>scope</key>
 			<string>meta.brace.pipe</string>
@@ -2093,13 +2189,24 @@
 			<key>name</key>
 			<string>Object Punctuation</string>
 			<key>scope</key>
-			<string>punctuation.separator.objects, meta.group.braces.curly meta.delimiter.object.comma, punctuation.separator.key-value -meta.tag</string>
+			<string>punctuation.separator.objects, meta.group.braces.curly meta.delimiter.object.comma, punctuation.separator.key-value -meta.tag, source.ocaml punctuation.separator.match-definition</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
 				<string>#0C823B</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Function Punctuation</string>
+			<key>scope</key>
+			<string>punctuation.definition.function, punctuation.separator.function-return, punctuation.separator.function-definition</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#800043</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2155,9 +2262,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 1</string>
+			<string>Group1</string>
 			<key>scope</key>
-			<string>meta.odd-tab.group1, meta.group.braces, meta.block.slate, text.xml.strict meta.tag</string>
+			<string>meta.odd-tab.group1, meta.group.braces, meta.block.slate, text.xml.strict meta.tag, meta.paren-group, meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2166,9 +2273,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 2</string>
+			<string>Group2</string>
 			<key>scope</key>
-			<string>meta.even-tab.group2, meta.group.braces meta.group.braces, meta.block.slate meta.block.slate, text.xml.strict meta.tag meta.tag, meta.group.braces meta.group.braces</string>
+			<string>meta.even-tab.group2, meta.group.braces meta.group.braces, meta.block.slate meta.block.slate, text.xml.strict meta.tag meta.tag, meta.group.braces meta.group.braces, meta.paren-group meta.paren-group, meta.section meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2177,9 +2284,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 3</string>
+			<string>Group3</string>
 			<key>scope</key>
-			<string>meta.odd-tab.group3, meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.odd-tab.group3, meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces, meta.paren-group meta.paren-group meta.paren-group, meta.section meta.section meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2188,9 +2295,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 4</string>
+			<string>Group4</string>
 			<key>scope</key>
-			<string>meta.even-tab.group4, meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.even-tab.group4, meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces, meta.paren-group meta.paren-group meta.paren-group meta.paren-group, meta.section meta.section meta.section meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2199,9 +2306,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 5</string>
+			<string>Group5</string>
 			<key>scope</key>
-			<string>meta.odd-tab.group5, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.odd-tab.group5, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces, meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group, meta.section meta.section meta.section meta.section meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2210,9 +2317,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 6</string>
+			<string>Group6</string>
 			<key>scope</key>
-			<string>meta.even-tab.group6, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.even-tab.group6, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces, meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group, meta.section meta.section meta.section meta.section meta.section meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2221,9 +2328,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 7</string>
+			<string>Group7</string>
 			<key>scope</key>
-			<string>meta.odd-tab.group7, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.odd-tab.group7, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces, meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group, meta.section meta.section meta.section meta.section meta.section meta.section meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2232,9 +2339,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 8</string>
+			<string>Group8</string>
 			<key>scope</key>
-			<string>meta.even-tab.group8, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.even-tab.group8, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces, meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group, meta.section meta.section meta.section meta.section meta.section meta.section meta.section meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2243,9 +2350,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 9</string>
+			<string>Group9</string>
 			<key>scope</key>
-			<string>meta.odd-tab.group9, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces</string>
+			<string>meta.odd-tab.group9, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces , meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate meta.block.slate , text.xml.strict meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag meta.tag, meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces meta.group.braces, meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group meta.paren-group, meta.section meta.section meta.section meta.section meta.section meta.section meta.section meta.section meta.section</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2254,7 +2361,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 10</string>
+			<string>Group10</string>
 			<key>scope</key>
 			<string>meta.even-tab.group10</string>
 			<key>settings</key>
@@ -2265,7 +2372,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º meta.group.braces 11</string>
+			<string>Group11</string>
 			<key>scope</key>
 			<string>meta.odd-tab.group11</string>
 			<key>settings</key>

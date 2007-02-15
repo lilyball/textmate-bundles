@@ -65,7 +65,7 @@ def snippet_generator(cand, start)
             out &lt;&lt; name_array[i] + ":${"+(i+1).to_s + ":"+ arg+"}$0"
           end
         else
-        out &lt;&lt; name_array[i] + ":${"+(i+1).to_s + ":"+ arg+"} "
+          out &lt;&lt; name_array[i] + ":${"+(i+1).to_s + ":"+ arg+"} "
         end
       end
     rescue NoMethodError
@@ -137,9 +137,9 @@ def candidates_or_exit(methodSearch, list)
     end
     n = (n.empty? ? candidates : n)
 
-      return n
-    end
+    return n
   end
+end
 
 def match_iter(rgxp,str)
   offset = 0
@@ -197,7 +197,8 @@ def try_find_class(line)
       candidates = zGrepped.split("\n")
       unless candidates.empty?
         if (type = candidates[0].split("\t")[5].match(/[A-Za-z]+/)) &amp;&amp; (obj = OSX::NSClassFromString(type[0]))
-          list = obj.objc_methods
+          b = "OSX::#{obj.to_s}".split("::").inject(Object) { |par, const| par.const_get(const) }          
+          list = b.objc_instance_methods
         end      
       end
     elsif obj = OSX::NSClassFromString(m[2])

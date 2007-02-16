@@ -8,11 +8,12 @@
 	<string>#!/usr/bin/env ruby -rjcode -KU
 
 BUNDLE_SUPPORT = ENV['TM_BUNDLE_SUPPORT']
+SUPPORT_PATH = ENV['TM_SUPPORT_PATH']
 
 require "#{BUNDLE_SUPPORT}/lib/doctohtml.rb"
-require 'textmate'
-require 'progress'
-require 'escape'
+require "#{SUPPORT_PATH}/lib/textmate"
+require "#{SUPPORT_PATH}/lib/progress"
+require "#{SUPPORT_PATH}/lib/escape"
 require 'cgi'
 require 'fileutils'
 require 'zlib'

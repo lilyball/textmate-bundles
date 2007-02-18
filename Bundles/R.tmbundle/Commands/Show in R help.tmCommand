@@ -12,10 +12,13 @@
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/exit_codes"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/dialog"
 require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word")
 
 require 'base64'
 
+LINKED_RHELP = "#{ENV["TM_BUNDLE_SUPPORT"]}/bin/LINKED_RHELP.rb"
+LIBDIR = File.join((ENV["R_HOME"] || '/Library/Frameworks/R.framework/Resources'), '/library')
 # first escape for use in the shell, then escape for use in a JS string
 def e_js_sh(str)
   (e_sh str).gsub("\\", "\\\\\\\\")
@@ -26,14 +29,26 @@ def e_js(str)
   str.gsub("'", "\\'")
 end
 
+# Prompts the user for words, for the cases where matches are not found
+def get_word_from_user(prompt = "Please select word to look for")
+  Dialog.request_string(:title =&gt; "Look up in R Documentation", :prompt =&gt; prompt)
+end
+def look_up_term(term)
+  `awk -- '/^Entry:/ { entry = $2 } /[[:space:]]'#{e_sh Regexp.escape(term)}'([[:space:]]|$)/,/^URL:/ { if(match($0,/^URL:/)) { sub(/^URL: /, ""); sub(/^(\\.\\.\\/)*library\\//, ""); print entry, $0; } }' #{e_sh LIBDIR}/*/CONTENTS`.split("\n")
+end
+
 term = Word.current_word(/\w./)
-TextMate.exit_show_tool_tip("Please select a term to look up.") if term.empty?
+if term.empty? then
+  TextMate.exit_discard unless term = get_word_from_user
+end
+# TextMate.exit_show_tool_tip("Please select a term to look up.") if 
 
-linked_rhelp = "#{ENV["TM_BUNDLE_SUPPORT"]}/bin/linked_rhelp.rb"
-libDir = File.join((ENV["R_HOME"] || '/Library/Frameworks/R.framework/Resources'), '/library')
-files = `awk -- '/^Entry:/ { entry = $2 } /[[:space:]]'#{e_sh Regexp.escape(term)}'([[:space:]]|$)/,/^URL:/ { if(match($0,/^URL:/)) { sub(/^URL: /, ""); sub(/^(\\.\\.\\/)*library\\//, ""); print entry, $0; } }' #{e_sh libDir}/*/CONTENTS`.split("\n")
-
-TextMate.exit_show_tool_tip("Nothing known about `#{term}'") if files.empty?
+files = look_up_term(term)
+while files.empty? do
+  TextMate.exit_discard unless term = get_word_from_user("Current word not found! Please select word to look for")
+  files = look_up_term(term)
+end
+# TextMate.exit_show_tool_tip("Nothing found for #{term}.") if files.empty?
 
 if files.size &gt; 1
   documentation = "&lt;h1&gt;Multiple Matches:&lt;/h1&gt;&lt;ul&gt;"
@@ -44,7 +59,7 @@ if files.size &gt; 1
   documentation &lt;&lt; "&lt;/ul&gt;"
 else
   name,path = files.first.split(" ", 2)
-  documentation = `#{e_sh linked_rhelp} 2&gt;&amp;1 '#{path}' '#{libDir}'`
+  documentation = `#{e_sh LINKED_RHELP} 2&gt;&amp;1 '#{path}' '#{LIBDIR}'`
 end
 
 html_header("Documentation for ‘#{term}’", "R help", &lt;&lt;-HTML)
@@ -71,7 +86,7 @@ html_header("Documentation for ‘#{term}’", "R help", &lt;&lt;-HTML)
       workingName = path.replace(/.*\\/|\\.html$/, "");
         // Apparently synchronous TextMate.system() has a habit of returning not quite
         //  all of the data so we're trying asynchronous now
-      var sysObj = TextMate.system("#{e_js_sh linked_rhelp} 2&gt;&amp;1 '"+path.replace(/'/,"'\\\\''")+"' #{e_js_sh libDir} base64", rhelpDone);
+      var sysObj = TextMate.system("#{e_js_sh LINKED_RHELP} 2&gt;&amp;1 '"+path.replace(/'/,"'\\\\''")+"' #{e_js_sh LIBDIR} base64", rhelpDone);
     }
     function rhelpDone(sysObj) {
       TextMate.isBusy = false;
@@ -143,7 +158,7 @@ TextMate.exit_show_html
 	<key>keyEquivalent</key>
 	<string>^h</string>
 	<key>name</key>
-	<string>Show in R Help</string>
+	<string>Documentation for Word / Selection</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

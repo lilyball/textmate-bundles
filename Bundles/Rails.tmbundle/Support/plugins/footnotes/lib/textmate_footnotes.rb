@@ -143,11 +143,11 @@ class FootnoteFilter
     <div id="textmate_footnotes_debug">
       #{textmate_links}
       Show:
-      <a href="#" onclick="Element.toggle('session_debug_info');return false">Session</a> |
-      <a href="#" onclick="Element.toggle('cookies_debug_info');return false">Cookies</a> |
-      <a href="#" onclick="Element.toggle('params_debug_info');return false">Params</a> |
-      <a href="#" onclick="Element.toggle('log_debug_info');return false">Log</a> |
-      <a href="#" onclick="Element.toggle('general_debug_info');return false">General Debug</a>
+      <a href="#" onclick="document.getElementById('session_debug_info').style.display='';return false">Session</a> |
+      <a href="#" onclick="document.getElementById('cookies_debug_info').style.display='';return false">Cookies</a> |
+      <a href="#" onclick="document.getElementById('params_debug_info').style.display='';return false">Params</a> |
+      <a href="#" onclick="document.getElementById('log_debug_info').style.display='';return false">Log</a> |
+      <a href="#" onclick="document.getElementById('general_debug_info').style.display='';return false">General Debug</a>
       <br/>(<a href="http://blog.inquirylabs.com/2006/09/28/textmate-footnotes-v16-released/"><b>TextMate Footnotes</b></a>)
       #{@extra_html}
       <fieldset id="session_debug_info" class="textmate_footnotes_debug_info" style="display: none">
@@ -220,7 +220,7 @@ class FootnoteFilter
       </fieldset>
     HTML
     # Return the link that will open the 'extra html' div
-    %{ | <a href="#" onclick="Element.toggle('textmate_footnotes_#{link_text.underscore.gsub(' ', '_')}');return false">#{link_text}</a>}
+    %{ | <a href="#" onclick="document.getElementById('textmate_footnotes_#{link_text.underscore.gsub(' ', '_')}').style.display='';return false">#{link_text}</a>}
   end
   
   def indent(indentation, text)

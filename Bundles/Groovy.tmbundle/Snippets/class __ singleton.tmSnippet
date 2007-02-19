@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>class ${1:ClassName} {
+	private ${1:ClassName}${2/(^.*?\S.*)|.*/(?1:\()/}${2:args}${2/(^.*?\S.*)|.*/(?1:\))/}
+		$0
+	}
+
+    private static ${1:ClassName} instance
+    static ${1:ClassName} getInstance(${2:args}) { 
+		if(!instance) instance = new ${1:ClassName}(${2:args})
+          return instance
+    }
+}</string>
+	<key>name</key>
+	<string>class .. singleton</string>
+	<key>scope</key>
+	<string>source.groovy</string>
+	<key>tabTrigger</key>
+	<string>cla</string>
+	<key>uuid</key>
+	<string>B46D35B8-5DEB-4C10-A110-BA1965A2EB9C</string>
+</dict>
+</plist>

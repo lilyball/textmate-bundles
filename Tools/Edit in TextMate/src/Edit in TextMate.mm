@@ -156,7 +156,7 @@ struct PBX_SelectionRange
 		[NSNumber numberWithInt:aLine],  @"line",
 		nil];
 
-	[OpenFiles setObject:options forKey:fileName];
+	[OpenFiles setObject:options forKey:[fileName precomposedStringWithCanonicalMapping]];
 	if([OpenFiles count] == 1)
 		[self setODBEventHandlers];
 	[NSThread detachNewThreadSelector:@selector(asyncEditStringWithOptions:) toTarget:self withObject:options];
@@ -168,7 +168,7 @@ struct PBX_SelectionRange
 	NSString* urlString = [[[NSString alloc] initWithData:[fileURL data] encoding:NSUTF8StringEncoding] autorelease];
 	NSString* fileName = [[[NSURL URLWithString:urlString] path] stringByStandardizingPath];
 
-	NSView* view = [[OpenFiles objectForKey:fileName] objectForKey:@"view"];
+	NSView* view = [[OpenFiles objectForKey:[fileName precomposedStringWithCanonicalMapping]] objectForKey:@"view"];
 	if([view window] && [view respondsToSelector:@selector(textMateDidModifyString:)])
 	{
 		[view performSelector:@selector(textMateDidModifyString:) withObject:[[[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileName] encoding:NSUTF8StringEncoding] autorelease]];
@@ -178,7 +178,7 @@ struct PBX_SelectionRange
 	{
 		[FailedFiles addObject:fileName];
 		NSLog(@"%s view %p, %@, window %@", _cmd, view, view, [view window]);
-		NSLog(@"%s file name %@, options %@", _cmd, fileName, [[OpenFiles objectForKey:fileName] description]);
+		NSLog(@"%s file name %@, options %@", _cmd, fileName, [[OpenFiles objectForKey:[fileName precomposedStringWithCanonicalMapping]] description]);
 		NSLog(@"%s all %@", _cmd, [OpenFiles description]);
 		NSBeep();
 	}
@@ -202,7 +202,7 @@ struct PBX_SelectionRange
 		[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 	}
 
-	[OpenFiles removeObjectForKey:fileName];
+	[OpenFiles removeObjectForKey:[fileName precomposedStringWithCanonicalMapping]];
 	if([OpenFiles count] == 0)
 		[self removeODBEventHandlers];
 }

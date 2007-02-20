@@ -98,7 +98,7 @@ when "line"  # apply comment line by line
   if default[:no_indent] || text.empty?
     out text.gsub(/^.*$/, "#{default[:start]}\\&amp;#{default[:end]}")
   else
-    indent = text.scan(/^[\t ]*(?=\S)/).min { |lhs, rhs| lhs.length &lt;=&gt; rhs.length } || ""
+    indent = text.scan(/^[\t \0]*(?=\S)/).min { |lhs, rhs| lhs.length &lt;=&gt; rhs.length } || ""
     text.map do |line|
       if line =~ /^(#{indent})(.*)$(\n?)/ then
         out $1 + default[:start] + $2 + default[:end] + $3
@@ -108,7 +108,7 @@ when "line"  # apply comment line by line
     end
   end
 when "block" # apply comment around selection
-  if text =~ /\A[ \t]*\z/
+  if text =~ /\A[\t \0]*\z/
     out default[:start], text
     print "${0}"
     out default[:end]
@@ -120,7 +120,7 @@ when "block" # apply comment around selection
       out default[:start], default[:end]
     else
       lines[-1].sub!(/^(.*)$/, "\\1#{default[:end]}")
-      out lines.shift.sub(/^(\s*)(.*)$/, "\\1#{default[:start]}\\2")
+      out lines.shift.sub(/^([\s\0]*)(.*)$/, "\\1#{default[:start]}\\2")
       out *lines unless lines.empty?
     end
   end

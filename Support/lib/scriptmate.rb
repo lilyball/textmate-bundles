@@ -57,7 +57,19 @@ class CommandMate
   end
   def emit_html
     emit_header()
-    stdout, stderr, stack_dump = @command.run
+    stdout, stderr, stack_dump, pid = @command.run
+
+    puts <<-HTML
+<script type="text/javascript" charset="utf-8">
+function press(evt) {
+   if (evt.keyCode == 67 && evt.ctrlKey == true) {
+      TextMate.system("kill -s INT #{pid}", null);
+   }
+}
+document.body.addEventListener('keydown', press, false);
+</script>
+HTML
+
     descriptors = [ stdout, stderr, stack_dump ]
     descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
     until descriptors.empty?
@@ -76,6 +88,8 @@ class CommandMate
       end
     end
     emit_footer()
+
+    Process.waitpid(pid)
   end
 end
 
@@ -111,17 +125,46 @@ class UserScript
   def version_string
     # return the version string of the executable.
   end
+  def my_popen3(*cmd) # returns [stdin, stdout, strerr, pid]
+    pw = IO::pipe   # pipe[0] for read, pipe[1] for write
+    pr = IO::pipe
+    pe = IO::pipe
+
+    pid = fork{
+      pw[1].close
+      STDIN.reopen(pw[0])
+      pw[0].close
+
+      pr[0].close
+      STDOUT.reopen(pr[1])
+      pr[1].close
+
+      pe[0].close
+      STDERR.reopen(pe[1])
+      pe[1].close
+
+      exec(*cmd)
+    }
+
+    pw[0].close
+    pr[1].close
+    pe[1].close
+
+    pw[1].sync = true
+
+    [pw[1], pr[0], pe[0], pid]
+  end
   def run
     rd, wr = IO.pipe
     rd.fcntl(Fcntl::F_SETFD, 1)
     ENV['TM_ERROR_FD'] = wr.to_i.to_s
     cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten)
-    stdin, stdout, stderr = Open3.popen3(cmd.join(" "))
+    stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
     if @write_content_to_stdin
       Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'
     end
     wr.close
-    [ stdout, stderr, rd ]
+    [ stdout, stderr, rd, pid ]
   end
 end
 

@@ -141,7 +141,9 @@ module LaTeX
     def set_defaults
       @includes = Hash.new
       @includes[/^[^%]*(?:\\include|\\input)\{([^\}]*)\}/] = Proc.new {|m| 
-        LaTeX.find_file( m[0], "tex", File.dirname(root) )
+        m[0].split(",") do |it|
+          LaTeX.find_file( it.strip, "tex", File.dirname(root) )
+        end
       }
       @extractors = Hash.new
     end
@@ -189,9 +191,11 @@ module LaTeX
       citationsList << Citation.new( "citekey" => groups[0], "cite_data" => groups[1])
       end
       scanner.extractors[biblio_regexp] = Proc.new do |filename, line, groups, text|
-        file = LaTeX.find_file( groups[0], "bib", File.dirname(root) )
-        citationsList += LaTeX.parse_bibfile(file)
-        citationsList += LaTeX.parse_bibfile(ENV["TM_LATEX_BIB"]) unless ENV["TM_LATEX_BIB"].nil?
+        groups[0].split(",").each do |it|
+          file = LaTeX.find_file( it.strip, "bib", File.dirname(root) )
+          citationsList += LaTeX.parse_bibfile(file)
+          citationsList += LaTeX.parse_bibfile(ENV["TM_LATEX_BIB"]) unless ENV["TM_LATEX_BIB"].nil?
+        end
       end
       scanner.recursive_scan
       citationsList

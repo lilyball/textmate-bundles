@@ -90,10 +90,14 @@ module Subversion
 			return nil
 		end
 
-		# Get the server name		
-		info = YAML::load(svn_cmd("info #{escaped_path}"))
-		repository = info['Repository Root']
-		uri = URI::parse(repository)
+    # # Get the server name   
+    # info = YAML::load(svn_cmd("info #{escaped_path}"))
+    # repository = info['Repository Root']
+    # uri = URI::parse(repository)
+    
+    # the above will fail for users that run a localized system
+    # instead we should do ‘svn info --xml’, though since the
+    # code is not used, I just commented it. --Allan 2007-02-20
 
 		# Display progress dialog
 		log_data = ''

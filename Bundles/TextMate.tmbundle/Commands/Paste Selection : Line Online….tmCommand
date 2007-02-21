@@ -10,6 +10,8 @@
 BUNDLE_SUPPORT = ENV['TM_BUNDLE_SUPPORT']
 SUPPORT_PATH = ENV['TM_SUPPORT_PATH']
 
+PASTE_URL = ENV['TM_PASTIE_URL'] || 'http://pastie.textmate.org/pastes/create'
+
 require "#{BUNDLE_SUPPORT}/lib/doctohtml.rb"
 require "#{SUPPORT_PATH}/lib/textmate"
 require "#{SUPPORT_PATH}/lib/progress"
@@ -136,8 +138,7 @@ def find_language_ext
 end
 
 def paste_stdin(priv, wrap)
-  url = ENV['TM_PASTIE_URL'] || 'http://pastie.textmate.org/pastes/create'
-  server = $1 if url =~ %r{.*?://(.*?)(/.*)?$}
+  server = $1 if PASTE_URL =~ %r{.*?://(.*?)(/.*)?$}
   TextMate.call_with_progress(:title =&gt; 'Paste to Pastie', :message =&gt; "Contacting Server “#{server}”…") do
     text_file, html_file = `/usr/bin/mktemp -t tm_paste &amp;&amp; /usr/bin/mktemp -t tm_paste`.split("\n")
     at_exit { File.delete(text_file); File.delete(html_file) }
@@ -156,7 +157,7 @@ def paste_stdin(priv, wrap)
     ext = find_language_ext
 
     %x{
-      curl #{url} \
+      curl #{PASTE_URL} \
       -s -L -o /dev/null -w "%{url_effective}" \
       -H "Expect:" \
       -F "paste[parser]=plaintext" \
@@ -174,8 +175,13 @@ pid = fork do
   dests, priv, wrap = get_destinations
   unless dests.empty?
     url = paste_stdin(priv, wrap)
-    %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/paste_to_destinations.scpt")} #{e_sh url} #{e_sh dests} }
-    puts "Pasted #{url}"
+    if url == PASTE_URL  # pastie error--something went wrong
+      puts "Server Error:  Your paste could not be made at this time.  " +
+           "Please wait a moment and try again."
+    else
+      %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/paste_to_destinations.scpt")} #{e_sh url} #{e_sh dests} }
+      puts "Pasted #{url}"
+    end
   end
 end
 

@@ -116,7 +116,7 @@ end
 block_top.upto(block_bottom) do |number|
    if lines[number-1] =~ relevant_line_pattern then
       before, after = lines[number-1].split(/[\t ]*=[\t ]*/, 2)
-      lines[number-1] = before.ljust(best_column) + " = " + after
+      lines[number-1] = [before.ljust(best_column), after].join(after[0,1] == '&gt;' ? " =" : " = ")
    end
 end
 

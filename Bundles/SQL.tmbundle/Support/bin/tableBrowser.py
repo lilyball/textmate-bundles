@@ -193,8 +193,7 @@ def printScriptTag():
        }
 
        function tb(db,tbl,hname,stype,pw,dbuser,dbport) {
-          var cmd = "%s --database=" + db + " --table=" + tbl + " --host=" + hname + " --server=" + stype + " --passwd=" + pw + " --user=" + dbuser + " --port=" + dbport;
-          cmd = cmd.replace(" ","\\\\ ")
+          var cmd = "'%s' --database='" + db + "' --table='" + tbl + "' --host='" + hname + "' --server='" + stype + "' --passwd='" + pw + "' --user='" + dbuser + "' --port='" + dbport + "'";
           var res = shell_run(cmd);
           if(tbl == '__none__') {
              document.getElementById("tablist").innerHTML = res;

@@ -66,9 +66,10 @@ var_suffixes.each do |suffix|
                        '\1\2\3' )
         exit
       else
-        i = [0, ENV["TM_LINE_INDEX"].to_i - com[:start].length].max
         r = text.sub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
                       '\1\2\3' )
+        i = [ [0, ENV["TM_LINE_INDEX"].to_i - com[:start].length].max,
+              r.length ].min
         r[i, 0] = "\0"
         out r
         exit
@@ -81,8 +82,9 @@ var_suffixes.each do |suffix|
         out text.sub(regex, '\1\2\3')
         exit
       else
-        i = [0, ENV["TM_LINE_INDEX"].to_i - com[:start].length].max
         r = text.sub(regex, '\1\2\3')
+        i = [ [0, ENV["TM_LINE_INDEX"].to_i - com[:start].length].max,
+              r.length ].min
         r[i, 0] = "\0"
         out r
         exit

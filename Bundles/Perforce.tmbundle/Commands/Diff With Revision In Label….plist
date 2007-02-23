@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>labels=`"$TM_P4" labels "$TM_FILEPATH" | cut -d " " -f 2`
+	<string>labels=`"${TM_P4:=p4}" labels "$TM_FILEPATH" | cut -d " " -f 2`
 
 revs=`osascript&lt;&lt;END
 	set AppleScript's text item delimiters to {"\n","\r"}

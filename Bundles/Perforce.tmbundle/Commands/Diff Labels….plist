@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>labels=`"$TM_P4" labels | cut -d " " -f 2`
+	<string>labels=`"${TM_P4:=p4}" labels | cut -d " " -f 2`
 #echo $labels
 
 difflabels=`osascript&lt;&lt;END

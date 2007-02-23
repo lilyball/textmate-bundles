@@ -16,35 +16,37 @@ module TextMate
   def TextMate.call_with_progress( args, &block )
     title           = args[:title] || 'Progress'
     message         = args[:message] || args[:summary] || 'Frobbing the widget...'
+    details         = args[:details] || ''
     cancel_proc     = args[:cancel]
     indeterminate   = args[:indeterminate]
     indeterminate   = true if indeterminate.nil?
+		return_val			= nil
         
     params = {'title' => title,
               'summary' => message,
-              'details' => '',
+              'details' => details,
               'isIndeterminate' => indeterminate}
 
     params['cancelButtonHidden'] = false unless cancel_proc.nil?
     
-    run_block = Proc.new do |dialog|
+    run_block = Proc.new do |d|
       if block.arity == 0
         block.call
       else
-        block.call(dialog)
+        block.call(d)
       end
     end
-    
+
     Dialog.dialog('ProgressDialog.nib', params) do |dialog|
       if cancel_proc.nil?
         # if there is no cancel proc, we get no input from the dialog and need not block.
-        run_block.call(dialog)
+        return_val = run_block.call(dialog)
       else # not cancel_proc.nil?
         
         # invoke processing block in one process
         run_block_process = fork do
             trap('SIGINT'){cancel_proc.call}
-            run_block.call(dialog)
+            return_val = run_block.call(dialog)
         end
 
         # invoke ui waiting in a second process
@@ -64,12 +66,20 @@ module TextMate
         Process.wait
       end
     end
+	  return_val
   end
-  
+
 end
 
 # test
 if __FILE__ == $0
+
+  value = TextMate.call_with_progress(:title =>'Evil',
+          :summary => 'Is Love...') do
+
+    "this text should appear"
+  end
+	puts value
 
   # indeterminate
   TextMate.call_with_progress(:title =>'Now Testing',

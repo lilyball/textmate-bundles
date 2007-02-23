@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby -w
 
-$LOAD_PATH << ENV['TM_SUPPORT_PATH'] + "/lib"
-require 'progress'
+require ENV['TM_SUPPORT_PATH'] + "/lib/progress"
 
 module Perforce
 
@@ -14,7 +13,7 @@ module Perforce
 		TextMate::call_with_progress(:title => command,
 									:message => "Retrieving differences",
 									:output_filepath => output_path) do
-			%x{"#{p4}" diff -f -du "#{target_path}#{revision}"}
+	     puts %x{"#{p4}" diff -f -du "#{target_path}#{revision}"}
 		end
 	end
 
@@ -25,7 +24,7 @@ module Perforce
 		TextMate::call_with_progress(:title => command,
 									:message => "Retrieving differences",
 									:output_filepath => output_path) do
-			%x{"#{p4}" diff -f -du "#{rev1}" "#{rev2}"}
+			puts %x{"#{p4}" diff -f -du "#{rev1}" "#{rev2}"}
 		end
 	end
 	
@@ -37,7 +36,7 @@ module Perforce
 									:message => "Retrieving differences",
 									:output_filepath => output_path) do
 		
-			%x{"#{p4}" files "#{rev1}" > "#{rev1}.txt" && "#{p4}" files "#{rev2}" > "#{rev2}.txt" && diff -u "#{rev1}.txt" "#{rev2}.txt"}
+			puts %x{"#{p4}" files "#{rev1}" > "#{rev1}.txt" && "#{p4}" files "#{rev2}" > "#{rev2}.txt" && diff -u "#{rev1}.txt" "#{rev2}.txt"}
 		end
 		
 	end

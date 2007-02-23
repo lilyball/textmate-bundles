@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -w
 
-$LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_PATH'] + "/lib"
+$LOAD_PATH &lt;&lt; ENV['TM_BUNDLE_SUPPORT'] + "/lib"
 require 'p4_diff'
 
 Perforce::diff_active_file("", "Perforce—Diff With Base")

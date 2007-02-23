@@ -11,7 +11,7 @@ if [ -z $TM_OPML_APPLICATION ] ; then
 	TM_OPML_APPLICATION="OmniOutliner"
 fi
 
-perl "$TM_BUNDLE_PATH/Tools/t2o.pl" &gt; /tmp/tm2oo.opml
+perl "$TM_BUNDLE_SUPPORT/t2o.pl" &gt; /tmp/tm2oo.opml
 
 open -a "$TM_OPML_APPLICATION" /tmp/tm2oo.opml ||	echo "$TM_OPML_APPLICATION can't be found. Edit the command and replace TM_OPML_APPLICATION with an existing application."
 </string>

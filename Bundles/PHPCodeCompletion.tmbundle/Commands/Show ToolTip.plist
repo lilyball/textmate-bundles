@@ -18,9 +18,9 @@
 #	check if we have MY_FUNC_TO_CHECK
 [[ "$MY_FUNC_TO_CHECK" == "" ]] &amp;&amp; MY_FUNC_TO_CHECK="$TM_CURRENT_WORD"
 
-${TM_PHP:=php} "$TM_BUNDLE_PATH"/bin/phpcc.ShowTooltip.php "$MY_FUNC_TO_CHECK"
+${TM_PHP:=php} "$TM_BUNDLE_SUPPORT"/bin/phpcc.ShowTooltip.php "$MY_FUNC_TO_CHECK"
 
-# ${TM_PHP:=php} "$TM_BUNDLE_PATH"/bin/phpcc.ShowTooltip.php "$TM_CURRENT_WORD"</string>
+# ${TM_PHP:=php} "$TM_BUNDLE_SUPPORT"/bin/phpcc.ShowTooltip.php "$TM_CURRENT_WORD"</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

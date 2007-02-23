@@ -18,7 +18,7 @@
 #	check if we have MY_FUNC_TO_CHECK
 [[ "$MY_FUNC_TO_CHECK" == "" ]] &amp;&amp; MY_FUNC_TO_CHECK="$TM_CURRENT_WORD"
 
-${TM_PHP:=php} "$TM_BUNDLE_PATH"/bin/phpcc.ShowDocumentation.php "$MY_FUNC_TO_CHECK"
+${TM_PHP:=php} "$TM_BUNDLE_SUPPORT"/bin/phpcc.ShowDocumentation.php "$MY_FUNC_TO_CHECK"
 </string>
 	<key>dontFollowNewOutput</key>
 	<true/>

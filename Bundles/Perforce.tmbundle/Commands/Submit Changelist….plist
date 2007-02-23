@@ -13,7 +13,7 @@ $LOAD_PATH &lt;&lt; ENV['TM_SUPPORT_PATH'] + "/bin"
 require 'p4_forms'
 require 'shelltokenize'
 
-p4				= ENV['TM_P4'] || '~/bin/p4'
+p4				= ENV['TM_P4'] || 'p4'
 #commit_paths	= ENV['CommitPaths']
 bundle			= ENV['TM_BUNDLE_PATH']
 support			= ENV['TM_SUPPORT_PATH']

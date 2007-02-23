@@ -4,21 +4,21 @@
 # TM bundle license.
 #
 
+def p4_cmd
+	ENV['TM_P4'] || 'p4'
+end
 
 # N.B. "p4 where" uses spaces as delimiters in its output. Don't ask us, go ask your dad.
 class Array
+	
 	def join_p4_to_local_paths
-		p4 = ENV['TM_P4'] || '~/bin/p4'
-		
-		matches = %x{#{p4} where "#{self.join('" "')}"}.scan(/.*?\s.*?\s(.*?)\n/)
+		matches = %x{#{p4_cmd} where "#{self.join('" "')}"}.scan(/.*?\s.*?\s(.*?)\n/)
 		puts matches.inspect
 		"'" + matches.flatten.join("' '") + "'"
 	end
 
 	def local_to_p4_paths
-		p4 = ENV['TM_P4'] || '~/bin/p4'
-
-		matches = %x{#{p4} where "#{self.join('" "')}"}.scan(/(.*?)\s.*?\s.*?\n/)
+		matches = %x{#{p4_cmd} where "#{self.join('" "')}"}.scan(/(.*?)\s.*?\s.*?\n/)
 		puts matches.inspect
 		matches.flatten
 	end
@@ -28,13 +28,11 @@ end
 class String
 	
 	def p4_to_local_path
-		p4 = ENV['TM_P4'] || '~/bin/p4'
-		/(.*)\s(.*)\s(.*)/.match(%x{#{p4} where "#{self}"})[2]
+		/(.*)\s(.*)\s(.*)/.match(%x{#{p4_cmd} where "#{self}"})[2]
 	end
 	
 	def local_to_p4_path
-		p4 = ENV['TM_P4'] || '~/bin/p4'
-		/(.*)\s(.*)\s(.*)/.match(%x{#{p4} where "#{self}"})[1]
+		/(.*)\s(.*)\s(.*)/.match(%x{#{p4_cmd} where "#{self}"})[1]
 	end
 	
 end

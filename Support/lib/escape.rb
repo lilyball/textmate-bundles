@@ -8,6 +8,11 @@ def e_sn(str)
 	str.to_s.gsub(/(?=[$`\\])/, '\\')
 end
 
+# escape text for use in a TextMate snippet placeholder
+def e_snp(str)
+	str.to_s.gsub(/(?=[$`\\}])/, '\\')
+end
+
 # escape text for use in an AppleScript string
 def e_as(str)
 	str.to_s.gsub(/(?=["\\])/, '\\')

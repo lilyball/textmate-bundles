@@ -14,6 +14,16 @@ module TextMate
       raise AppPathNotFoundException
     end
 
+    def go_to(options = {})
+      default_line = options.has_key?(:file) ? 1 : ENV['TM_LINE_NUMBER']
+      options = {:file => ENV['TM_FILEPATH'], :line => default_line, :column => 1}.merge(options)
+      if options[:file]
+        `open "txmt://open?url=file://#{e_url options[:file]}&line=#{options[:line]}&column=#{options[:column]}"`
+      else
+        `open "txmt://open?line=#{options[:line]}&column=#{options[:column]}"`
+      end
+    end
+
     def min_support(version)
       actual_version = IO.read(ENV['TM_SUPPORT_PATH'] + '/version').to_i
       if actual_version < version then

@@ -59,7 +59,7 @@ def pop_up(candidates, searchTerm)
     #  searchTerm &lt;&lt; candidates[0][index].chr
     #  index +=1
     #end
-    require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
     dialog_path = "#{ENV['DIALOG']}"
     pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
     plist = pl.to_plist

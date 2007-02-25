@@ -1,4 +1,4 @@
-require 'plist'
+require './plist'
 require 'stringio'
 require 'test/unit'
 

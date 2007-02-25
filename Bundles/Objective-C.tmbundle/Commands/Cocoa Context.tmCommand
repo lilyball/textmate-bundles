@@ -105,7 +105,7 @@ def pop_up(candidates, searchTerm, caret_placement, line)
     #  searchTerm &lt;&lt; candidates[0][index].chr
     #  index +=1
     #end
-    require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
     dialog_path = "#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog"
     pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
     io = open("|#{e_sh dialog_path} -u", "r+")

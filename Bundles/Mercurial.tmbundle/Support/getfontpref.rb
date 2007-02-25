@@ -1,4 +1,4 @@
-require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 
 # Load TM preferences to discover the current font settings
 # Taken from doc2html by Brad Choate -- http://bradchoate.com/

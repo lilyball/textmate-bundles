@@ -10,7 +10,7 @@
 location = File.dirname(__FILE__)
 puts location
 
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/plist"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/osx/plist"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/dialog"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/progress"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"

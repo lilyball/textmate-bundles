@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -w
 
 $: << File.join(File.split(__FILE__).first, '../lib')
-require "plist"
+require "osx/plist"
 
 $legal_scopes = DATA.read.scan(/.+/)
 

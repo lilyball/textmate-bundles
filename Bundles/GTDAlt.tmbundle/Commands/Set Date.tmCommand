@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 dialog = ENV['TM_SUPPORT_PATH'] + '/bin/tm_dialog'
-require ENV['TM_SUPPORT_PATH'] + '/lib/plist'
+require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 require 'date'

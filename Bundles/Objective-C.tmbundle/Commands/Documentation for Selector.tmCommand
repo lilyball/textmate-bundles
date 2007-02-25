@@ -101,7 +101,7 @@ if candidates.size &gt; 1 # if more than 1 candidate disambiguate
 end
 
 if candidates.size &gt; 1
-  require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+  require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
   dialog_path = "#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog"
 #pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}  
 plist = { 'menuItems' =&gt; candidates.map do |cand|

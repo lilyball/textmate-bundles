@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 
 module TextMate

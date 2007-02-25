@@ -12,7 +12,7 @@ SUPPORT   = ENV['TM_SUPPORT_PATH']
 DIALOG    = "#{SUPPORT}/bin/tm_dialog"
 MATE      = "#{SUPPORT}/bin/mate"
 
-require "#{SUPPORT}/lib/plist"
+require "#{SUPPORT}/lib/osx/plist"
 require "#{SUPPORT}/lib/escape"
 
 require "cgi"

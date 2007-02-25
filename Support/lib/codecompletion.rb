@@ -287,7 +287,7 @@ class TextmateCodeCompletion
 end
 
 class TextmateCompletionsPlist
-  require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+  require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
   
   attr :raw, true
   attr :scope, true

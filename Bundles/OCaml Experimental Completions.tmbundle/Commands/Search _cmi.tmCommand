@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/ocamlcompletion"
-require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 
 searchstring = $stdin.read.strip
 

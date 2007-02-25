@@ -44,7 +44,7 @@ end
 
 def generate_stylesheet_from_theme(theme_class = nil)
 	theme_class = '' if theme_class == nil
-	require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+	require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 
 	# Load TM preferences to discover the current theme and font settings
 	textmate_pref_file = '~/Library/Preferences/com.macromates.textmate.plist'

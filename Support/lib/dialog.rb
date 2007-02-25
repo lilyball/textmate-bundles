@@ -1,6 +1,6 @@
 require 'English'
 require File.dirname(__FILE__) + '/escape'
-require File.dirname(__FILE__) + '/plist'
+require File.dirname(__FILE__) + '/osx/plist'
 
 module TextMate
   # Wrapper for tm_dialog. See the unit test in progress.rb

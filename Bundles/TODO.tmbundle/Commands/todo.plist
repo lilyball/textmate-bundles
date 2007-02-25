@@ -23,7 +23,7 @@ HTML
   abort
 end
 
-require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
 include ERB::Util

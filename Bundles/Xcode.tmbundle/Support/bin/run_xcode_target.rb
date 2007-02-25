@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -s
 
-require "#{ENV['TM_SUPPORT_PATH']}/lib/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
 require 'open3'

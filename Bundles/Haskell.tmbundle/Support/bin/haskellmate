@@ -2,7 +2,7 @@
 
 
 
-require 'CGI'
+require 'cgi'
 puts "<pre>"
 def proper_escape fname
   fname.split('/').each{|s| CGI.escape s}.join('/')

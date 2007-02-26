@@ -9,8 +9,7 @@
 
 # [hH]otFlamingCats -&gt; hot_flaming_cats
 def camelcase_to_underscore(word)
-	word[0] = word[0].chr.downcase
-	word.gsub(/([A-Z])/, "_\\1").downcase
+	word.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').gsub(/([a-z\d])([A-Z])/,'\1_\2').downcase
 end
 
 # hot_flaming_cats -&gt; hotFlamingCats
@@ -34,7 +33,7 @@ end
 	<key>keyEquivalent</key>
 	<string>^_</string>
 	<key>name</key>
-	<string>Toggle CamelCase / underscore_delimited</string>
+	<string>Toggle camelCase / underscore_delimited</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>

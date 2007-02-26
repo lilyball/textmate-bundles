@@ -115,7 +115,7 @@ def pop_up(candidates, searchTerm, caret_placement, line)
     if res.has_key? 'selectedMenuItem'
       snippet_generator( res['selectedMenuItem']['cand'], start )
     else
-      ""
+      "$0"
     end
   else
     snippet_generator( candidates[0], start )

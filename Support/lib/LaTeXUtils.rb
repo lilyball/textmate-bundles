@@ -45,10 +45,10 @@ module LaTeX
     # +relative+ determines an explicit path that should be included in the
     # paths to look at when searching for the file. This will typically be the
     # path to the root document.
-    def find_file(filename,extension,relative)
+    def find_file(filename, extension, relative)
       filename.gsub!(/\.#{extension}$/,"")
       if filename.match(/^\//) # If it is an absolute path, return it
-        filename = filename + ".bib"
+        filename = filename + ".#{extension}"
         return filename if File.exist?(filename)
         return nil
       end
@@ -140,9 +140,9 @@ module LaTeX
     # Default values for the +includes+ hash.
     def set_defaults
       @includes = Hash.new
-      @includes[/^[^%]*(?:\\include|\\input)\{([^\}]*)\}/] = Proc.new {|m| 
-        m[0].split(",") do |it|
-          LaTeX.find_file( it.strip, "tex", File.dirname(root) )
+      @includes[/^[^%]*(?:\\include|\\input)\{([^\}]*)\}/] = Proc.new {|m|
+        m[0].split(",").map do |it|
+          LaTeX.find_file( it.strip, "tex", File.dirname(@root) )
         end
       }
       @extractors = Hash.new
@@ -155,10 +155,12 @@ module LaTeX
        text.each_with_index do |line, index|
          includes.each_pair do |regexp, block|
            line.scan(regexp).each do |m|
-             newfile = block.call(m)
-             scanner = FileScanner.new(self)
-             scanner.root = newfile.to_s
-             scanner.recursive_scan
+             newfiles = block.call(m)
+             newfiles.each do |newfile|
+               scanner = FileScanner.new(self)
+               scanner.root = newfile.to_s
+               scanner.recursive_scan
+             end
            end
            extractors.each_pair { |regexp,block| 
              line.scan(regexp).each do |m|

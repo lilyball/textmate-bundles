@@ -11,7 +11,8 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/ocamlcompletion"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 
-$line = $stdin.read
+$contents = $stdin.read
+$line = ENV['TM_CURRENT_LINE']
 $linepos = ENV['TM_LINE_INDEX'].to_i
 
 
@@ -41,7 +42,11 @@ def extract_module_from_line
     [full.chomp('.'), /^/]
   else
     matches = /^(.*?)\.([^.]*)$/.match(full)
-    [matches[1].to_s, /^#{Regexp.escape(matches[2].to_s)}/]
+    if matches
+      [matches[1].to_s, /^#{Regexp.escape(matches[2].to_s)}/]
+    else
+      ["", /^#{Regexp.escape(full)}/]
+    end
   end
 end
 
@@ -64,7 +69,7 @@ def convert_to_snippet(str, stripregex)
       depth -= 1
     when '&gt;'
       if last == '-' and depth == 0
-        args &lt;&lt; token.join.chomp('-').strip
+        args &lt;&lt; (token.join.chomp('-').strip + ' -&gt;')
         token = []
       else
         token &lt;&lt; c
@@ -74,6 +79,7 @@ def convert_to_snippet(str, stripregex)
     end
     last = c
   end
+  args[-1] = args[-1][/^(.*) -&gt;$/, 1]
   i = 2
   args = args.map do |a| 
     a.strip!    
@@ -91,12 +97,15 @@ def convert_to_snippet(str, stripregex)
   end
   snippet = "#{funname} ${1:#{args.join(' ')}}".sub(stripregex, '')
   
-  e_sn($line[0...$linepos]) + snippet + e_sn($line[$linepos..-1])
+  snippet
 end
 
+
 begin
+  openmodules = OCamlCompletion.open_modules($contents)
   modulename, regex = extract_module_from_line
-  possible_completions = OCamlCompletion::cmigrep(regex, :values, [modulename]).split(/\n/).select { |l| l =~ /^val\s+/ }.sort.uniq
+  modules = if modulename == '' then nil else [modulename] end
+  possible_completions = OCamlCompletion::cmigrep(regex.source, :values, modules, openmodules).split(/\n/).select { |l| l =~ /^val\s+/ }.sort.uniq
   possible_completions = possible_completions.map do |c|
     chash = Hash.new
     chash['completion'] = c[/^val\s+(.*)/, 1]
@@ -116,15 +125,15 @@ begin
     snippettxt = plist['possibleCompletions'][selection]['completion']
     print convert_to_snippet(snippettxt, regex)
   else
-    print e_sn($line)
+    print ""
   end
 rescue
-  print e_sn($line)
+  print ""
 end</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>~	</string>
 	<key>name</key>

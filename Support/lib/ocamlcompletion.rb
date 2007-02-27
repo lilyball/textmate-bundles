@@ -80,19 +80,21 @@ module OCamlCompletion
   end
   
   
-  def OCamlCompletion::cmigrep(regexstr, searchtype=:all, modules=nil, packages=nil)
+  def OCamlCompletion::cmigrep(regexstr, searchtype=:all, modules=nil, openmodules=nil, packages=nil)
     if packages.nil?
       packages = all_packages.join(',')
     end
+    openmodules = if openmodules then "-open #{openmodules.join(',')}" else "" end
     if modules.nil?
       modules = open_modules
     end
+    modules = modules.map { |m| e_sh(m) }
     if ENV['TM_FILEPATH']
       FileUtils.cd(File.dirname(ENV['TM_FILEPATH']))
     end
-    modules.map { |modname|
-      `#{find_command 'cmigrep'} -package #{e_sh(packages)} #{searchtype_to_arg(searchtype)} #{e_sh(regexstr)} #{e_sh(modname)}`
-    }.join("\n")
+
+    command = "#{find_command 'cmigrep'} #{openmodules} -package #{e_sh(packages)} #{searchtype_to_arg(searchtype)} #{e_sh(regexstr)} #{modules.join(' ')}"
+    `#{command}`
   end
   
 end

@@ -185,7 +185,7 @@ class ObjcParser
   end
 
   def eat_star(prev, curr)
-    openings = [:operator,:selector,:open,:return]
+    openings = [:operator,:selector,:open,:return,:star]
     if @list.empty? || openings.include?(@list[-1].tt)
       return curr, true
     else

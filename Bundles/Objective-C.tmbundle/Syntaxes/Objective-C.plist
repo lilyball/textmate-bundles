@@ -106,6 +106,12 @@
 					<string>variable.other.selector.objc</string>
 				</dict>
 				<dict>
+					<key>match</key>
+					<string>\b(self|super)\b</string>
+					<key>name</key>
+					<string>variable.language.objc</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#method</string>
 				</dict>
@@ -241,12 +247,6 @@
 			<string>\b(YES|NO|Nil|nil)\b</string>
 			<key>name</key>
 			<string>constant.language.objc</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(self|super)\b</string>
-			<key>name</key>
-			<string>variable.language.objc</string>
 		</dict>
 		<dict>
 			<key>match</key>

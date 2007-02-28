@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -wKU
 
 require "find"
-require File.join(File.dirname(__FILE__), *%w[.. lib plist])
+require File.join(File.dirname(__FILE__), *%w[.. lib osx plist])
 
 ROOT_DIR = ARGV.shift || File.join(File.dirname(__FILE__), *%w[.. .. Bundles])
 

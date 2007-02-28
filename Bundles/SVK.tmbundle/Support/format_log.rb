@@ -12,13 +12,13 @@
 
 # fetch some tm things or set useful defaults..
 $tab_size      = ENV['TM_TAB_SIZE'].to_i
-$bundle        = ENV['TM_BUNDLE_PATH']
+$bundle        = ENV['TM_BUNDLE_SUPPORT']
 $limit         = ENV['TM_SVK_LOG_LIMIT'].nil?   ? 9 : ENV['TM_SVK_LOG_LIMIT'].to_i
 $date_format   = ENV['TM_SVK_DATE_FORMAT'].nil? ? nil : ENV['TM_SVK_DATE_FORMAT']
 $sort_order    = [ :added, :modified, :deleted, :none ]
 
 # require the helper, it does some formating, etc:
-require $bundle+'/Tools/svk_helper.rb'
+require $bundle+'/svk_helper.rb'
 include SVKHelper
 
 
@@ -43,10 +43,10 @@ state = :skipped_files
 
 begin
    make_head( 'SVK Log',
-              [ $bundle+'/Stylesheets/svk_style.css',
-                $bundle+'/Stylesheets/svk_log_style.css'],
+              [ $bundle+'/css/svk_style.css',
+                $bundle+'/css/svk_log_style.css'],
               "<script type=\"text/javascript\">\n"+
-                 File.open($bundle+'/Tools/flip_files.js', 'r').readlines.join+'</script>' )
+                 File.open($bundle+'/script/flip_files.js', 'r').readlines.join+'</script>' )
    
    
    $stdin.each_line do |line|

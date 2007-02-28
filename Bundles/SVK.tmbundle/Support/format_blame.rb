@@ -13,7 +13,7 @@
 $full_file     = ENV['TM_FILEPATH']
 $current       = ENV['TM_LINE_NUMBER'].to_i
 $tab_size      = ENV['TM_TAB_SIZE'].to_i
-$bundle        = ENV['TM_BUNDLE_PATH']
+$bundle        = ENV['TM_BUNDLE_SUPPORT']
 $date_format   = ENV['TM_SVK_DATE_FORMAT'].nil? ? nil : ENV['TM_SVK_DATE_FORMAT']
 
 # find out if the window should get closed on a click
@@ -29,7 +29,7 @@ end
 
 
 # require the helper, it does some formating, etc:
-require $bundle+'/Tools/svk_helper.rb'
+require $bundle+'/svk_helper.rb'
 include SVKHelper
 
 
@@ -39,8 +39,8 @@ linecount = 1
 
 begin
    make_head( "SVK Blame for '"+$full_file.sub( /^.*\//, '')+"'",
-              [ $bundle+"/Stylesheets/svk_style.css",
-                $bundle+"/Stylesheets/svk_blame_style.css"] )
+              [ $bundle+"/css/svk_style.css",
+                $bundle+"/css/svk_blame_style.css"] )
    
    puts '<table class="blame"> <tr>' +
             '<th>line</th>' +

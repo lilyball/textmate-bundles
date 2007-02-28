@@ -9,7 +9,7 @@
 
 
 # fetch some tm things..
-$bundle        = ENV['TM_BUNDLE_PATH']
+$bundle        = ENV['TM_BUNDLE_SUPPORT']
 $show          = ENV['TM_SVK_INFO_SHOW'].nil? ? [] :
                    ENV['TM_SVK_INFO_SHOW'].split(/\s*,\s*/).each { |s| s.downcase! }
 $hide          = ENV['TM_SVK_INFO_HIDE'].nil? ? [] :
@@ -30,7 +30,7 @@ end
 
 
 # require the helper, it does some formating, etc:
-require $bundle+'/Tools/svk_helper.rb'
+require $bundle+'/svk_helper.rb'
 include SVKHelper
 
 
@@ -42,8 +42,8 @@ got_newline = true
 
 begin
    make_head( 'SVK Info',
-              [ $bundle+"/Stylesheets/svk_style.css",
-                $bundle+"/Stylesheets/svk_info_style.css"] )
+              [ $bundle+"/css/svk_style.css",
+                $bundle+"/css/svk_info_style.css"] )
    
    
    $stdin.each_line do |line|

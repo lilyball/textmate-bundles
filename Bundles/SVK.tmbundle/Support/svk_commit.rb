@@ -3,7 +3,7 @@ require 'English' # you are angry, english!
 svk				= ENV['TM_SVK']
 #commit_paths	= ENV['CommitPaths']
 commit_tool		= ENV['CommitWindow']
-bundle			= ENV['TM_BUNDLE_PATH']
+bundle			= ENV['TM_BUNDLE_SUPPORT']
 support			= ENV['TM_SUPPORT_PATH']
 
 CURRENT_DIR		= Dir.pwd + "/"
@@ -16,7 +16,7 @@ mup = Builder::XmlMarkup.new(:target => STDOUT)
 mup.html {
 	mup.head {
 			mup.title("SVK status")
-			mup.style( "@import 'file://"+bundle+"/Stylesheets/svk_style.css';", "type" => "text/css")
+			mup.style( "@import 'file://"+bundle+"/css/svk_style.css';", "type" => "text/css")
 	}
 
 	mup.body { 

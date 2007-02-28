@@ -1,4 +1,4 @@
-bundle				= ENV['TM_BUNDLE_PATH']
+bundle				= ENV['TM_BUNDLE_SUPPORT']
 support				= ENV['TM_SUPPORT_PATH']
 work_path			= ENV['WorkPath']
 strip_path_prefix	= work_path # Dir.pwd
@@ -31,8 +31,8 @@ end
 mup.html {
 	mup.head {
 			mup.title("SVK status")
-			mup.style( "@import 'file://"+bundle+"/Stylesheets/svk_style.css';
-						@import 'file://"+bundle+"/Stylesheets/svk_status_style.css';", "type" => "text/css")
+			mup.style( "@import 'file://"+bundle+"/css/svk_style.css';
+						@import 'file://"+bundle+"/css/svk_status_style.css';", "type" => "text/css")
 	}
 
 	mup.body { 

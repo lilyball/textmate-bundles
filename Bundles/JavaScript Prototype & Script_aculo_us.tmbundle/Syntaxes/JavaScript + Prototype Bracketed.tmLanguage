@@ -280,7 +280,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>((")([^"]*)("))(:)\s*+(?!function)</string>
+							<string>((")([^"]*)(")\s*)(:)\s*+(?!function)</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -312,7 +312,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>((')([^']*)('))(:)\s*+(?!function)</string>
+							<string>((')([^']*)(')\s*)(:)\s*+(?!function)</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -329,7 +329,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>\b(\w+)\b(:)\s*+(?!function)</string>
+							<string>\b(\w+\b\s*)(:)\s*+(?!function)</string>
 						</dict>
 						<dict>
 							<key>include</key>

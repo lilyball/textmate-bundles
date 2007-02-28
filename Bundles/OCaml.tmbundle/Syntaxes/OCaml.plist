@@ -18,8 +18,37 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.module-binding.ocaml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.module-definition.ocaml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>support.other.module.ocaml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.module-binding.ocmal</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(let)\s+(module)\s+([A-Z][a-zA-Z0-9'_]*)\s*(=)</string>
+			<key>name</key>
+			<string>meta.module.binding</string>
+		</dict>
+		<dict>
 			<key>begin</key>
-			<string>^[ \t]*(let|and)\s+(?!\(\*)((rec\s+)([a-z_][a-zA-Z0-9_']*)\b|([a-z_][a-zA-Z0-9_']*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
+			<string>\b(let|and)\s+(?!\(\*)((rec\s+)([a-z_][a-zA-Z0-9_']*)\b|([a-z_][a-zA-Z0-9_']*|\([^)]+\))(?=\s)((?=\s*=\s*(?=fun(?:ction)\b))|(?!\s*=)))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -718,23 +747,8 @@
 			</array>
 		</dict>
 		<dict>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>support.other.module.ocaml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.module-reference.ocaml</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>\b([A-Z][a-zA-Z0-9'_]*)(\.)</string>
-			<key>name</key>
-			<string>meta.module-reference.ocaml</string>
+			<key>include</key>
+			<string>#moduleref</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1411,6 +1425,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#moduleref</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#constants</string>
 				</dict>
 				<dict>
@@ -1613,6 +1631,31 @@
 				</dict>
 			</array>
 		</dict>
+		<key>moduleref</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.other.module.ocaml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.module-reference.ocaml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b([A-Z][a-zA-Z0-9'_]*)(\.)</string>
+					<key>name</key>
+					<string>meta.module-reference.ocaml</string>
+				</dict>
+			</array>
+		</dict>
 		<key>storagetypes</key>
 		<dict>
 			<key>patterns</key>
@@ -1808,6 +1851,10 @@
 				<dict>
 					<key>include</key>
 					<string>#constants</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#moduleref</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -2051,8 +2098,12 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>include</key>
+							<string>#moduleref</string>
+						</dict>
+						<dict>
 							<key>begin</key>
-							<string>\s*([a-z][a-zA-Z0-9'_]*)\s*(=)</string>
+							<string>\b([a-z][a-zA-Z0-9'_]*)\s*(=)</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>

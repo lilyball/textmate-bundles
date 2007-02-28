@@ -3,13 +3,25 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;a href="${1:`
-   # if the clipboard contains a single line, let’s use that
-   export __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100
-   if [[ $(pbpaste|wc -l) -eq 0 ]]
-      then pbpaste|perl -pe 's/^\s*(.+?)\s*$/\1/;$_="mailto:$_"if/@/&amp;&amp;!/mailto/;s/&amp;(?!([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);)/&amp;amp;/g'
-      else echo http://site.com/
-   fi
+	<string>&lt;a href="${1:`#!/usr/bin/env ruby
+
+def entity_escape(text)
+  text.gsub(/&amp;(?!([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);)/, '&amp;amp;')
+end
+
+def make_link(text)
+  case text
+  when %r{\A(mailto:)?(.*?@.*\..*)\z}:        "mailto:#{$2}"
+  when %r{\A[a-zA-Z][a-zA-Z0-9.+-]*://.*\z}:  entity_escape(text)
+  when %r{\A.*\.(com|uk|net|org|info)\z}:     "http://#{entity_escape text}"
+  when %r{\A\S+\z}:                           entity_escape(text)
+  else                                        "http://some-site.com/"
+  end
+end
+
+text = %x{__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbpaste}.strip
+print make_link(text)
+
 `}"&gt;${TM_SELECTED_TEXT:Link text...}&lt;/a&gt;</string>
 	<key>keyEquivalent</key>
 	<string>^L</string>

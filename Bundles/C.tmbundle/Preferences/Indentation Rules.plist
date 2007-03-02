@@ -12,11 +12,23 @@
 		<string>(?x)
 	    ^ (.*\*/)? \s* \} ( [^}{"']* \{ | \s* while \s* \( .* )? [;\s]* (//.*|/\*.*\*/\s*)? $
 	|   ^ \s* (public|private|protected): \s* $
+	|   ^ \s* @(public|private|protected) \s* $
 	</string>
 		<key>increaseIndentPattern</key>
-		<string>^.*\{[^}"']*$|^\s*(public|private|protected):\s*$</string>
+		<string>(?x)
+	    ^ .* \{ [^}"']* $
+	|   ^ \s* (public|private|protected): \s* $
+	|   ^ \s* @(public|private|protected) \s* $
+	</string>
 		<key>indentNextLinePattern</key>
-		<string>^(?!.*[};:]\s*(//|/\*.*\*/\s*$)).*[^\s;:{}]\s*$</string>
+		<string>(?x)^
+	    (?! .* [};:]                    # do not indent when line ends with }, ;, or :
+	        \s* (//|/[*] .* [*]/ \s* $) #  …account for potential trailing comment
+	    |   @(public|private|protected) # do not indent after obj-c data access keywords
+	    )
+	    .* [^\s;:{}] \s* $              # indent next if this one isn’t
+	                                    #  terminated with ;, :, {, or }
+	</string>
 		<key>unIndentedLinePattern</key>
 		<string>^\s*((/\*|\*/|//|#|template\b.*?&gt;(?!\(.*\))|@protocol|@interface|@implementation|@end).*)?$</string>
 	</dict>

@@ -6,14 +6,14 @@
 	<string>nop</string>
 	<key>command</key>
 	<string># set defaultCStringEncoding to UTF-8
-diff -u - &lt;(__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbpaste)
+diff --label "${TM_FILENAME:-untitled}" --label "(clipboard)" -u - &lt;(__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbpaste)
 </string>
 	<key>input</key>
-	<string>document</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^@D</string>
 	<key>name</key>
-	<string>Document With Clipboard</string>
+	<string>Document / Selection With Clipboard</string>
 	<key>output</key>
 	<string>openAsNewDocument</string>
 	<key>uuid</key>

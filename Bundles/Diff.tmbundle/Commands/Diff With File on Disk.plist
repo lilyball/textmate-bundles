@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>if [[ -e "$TM_FILEPATH" ]]
-   then diff -u &lt;(cat "$TM_FILEPATH" | tr -d '\r') -
+   then diff --label "$TM_FILENAME (saved version)" --label "(current document)" -u &lt;(cat "$TM_FILEPATH" | tr -d '\r') -
    else exit_show_tool_tip "There's no file on disk"
 fi</string>
 	<key>input</key>

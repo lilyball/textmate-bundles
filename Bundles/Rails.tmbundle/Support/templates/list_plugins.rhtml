@@ -168,7 +168,7 @@
 
 			install: function(url) {
 				var output = document.getElementById('output');
-				var command = "cd <%= root %>; ruby script/plugin install " + url;
+				var command = "cd <%= e_sh root %>; ruby script/plugin install " + url;
 				Plugin.clearStatus();
 				Plugin.printStatus(command + "<br>Installing...", "loading");
 

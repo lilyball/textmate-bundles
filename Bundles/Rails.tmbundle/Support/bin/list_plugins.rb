@@ -16,6 +16,7 @@ if RUBY_VERSION =~ /^1\.6\./ then
   abort
 end
 
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape' # we use e_sh in the rhtml template
 require 'rails_bundle_tools'
 require "erb"
 include ERB::Util

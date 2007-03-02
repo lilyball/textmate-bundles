@@ -37,7 +37,7 @@ module TextMate
       end
     end
 
-    Dialog.dialog('ProgressDialog.nib', params) do |dialog|
+    Dialog.dialog('ProgressDialog.nib', params, nil, true) do |dialog|
       if cancel_proc.nil?
         # if there is no cancel proc, we get no input from the dialog and need not block.
         return_val = run_block.call(dialog)

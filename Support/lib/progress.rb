@@ -65,6 +65,9 @@ module TextMate
         # hang out until the dialog is done
         Process.wait
       end
+
+      # if we do not set the animate state back to NO the progress indicator in the nib will leak and will even consume CPU-time
+      dialog.parameters = { "progressAnimate" => false }
     end
 	  return_val
   end

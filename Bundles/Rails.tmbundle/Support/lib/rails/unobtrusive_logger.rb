@@ -20,4 +20,4 @@ class UnobtrusiveLogger
   end
 end
 
-$logger = UnobtrusiveLogger.new("#{ENV["HOME"]}/textmate_bundle.log")
+$logger = UnobtrusiveLogger.new("/tmp/textmate_rails_bundle.log")

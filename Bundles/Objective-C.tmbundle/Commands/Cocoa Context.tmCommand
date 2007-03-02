@@ -72,7 +72,7 @@ def snippet_generator(cand, start)
       out &lt;&lt; stuff[0]
     end
   else
-    out = stuff[0]
+    out = stuff[0] + "$0"
   end
   return out.chomp.strip
 end
@@ -122,8 +122,8 @@ def pop_up(candidates, searchTerm, caret_placement, line)
   end
 end
 
-def candidates_or_exit(methodSearch, list)
-  zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz }
+def candidates_or_exit(methodSearch, list, fileName = "cocoa.txt.gz")
+  zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/#{fileName} }
   candidates = zGrepped.split("\n")
   # strip notifications
   candidates = candidates.select {|cand| !cand.match(/\tno\t/) } 
@@ -261,6 +261,10 @@ elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
     mn = methodNames(line[start[-1]..caret_placement]) + k[0]
     candidates = candidates_or_exit( mn + "[[:alpha:]:]", list)
     res =pop_up(candidates, mn, caret_placement, line)
+    print line[0..caret_placement] + res + line[caret_placement+1..-1]
+  elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[\s*$/)
+    candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "CocoaClasses.txt.gz")
+   res =pop_up(candidates, k[0], caret_placement, line)
     print line[0..caret_placement] + res + line[caret_placement+1..-1]
   else
     print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]

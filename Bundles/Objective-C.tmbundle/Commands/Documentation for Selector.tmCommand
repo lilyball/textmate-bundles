@@ -139,6 +139,7 @@ end
 t = {"AK" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/",
   "F"  =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation/", 
   "CI" =&gt; "/Developer/ADC Reference Library/documentation/GraphicsImaging/Reference/QuartzCoreFramework/",
+"WK" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/WebKit/",
   "CD" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/CoreDataFramework/",
   "im" =&gt; "#//apple_ref/occ/instm/#{className}/", 
   "cm" =&gt; "#//apple_ref/occ/clm/#{className}/",
@@ -149,16 +150,21 @@ t = {"AK" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/
 }
 url=t[framework] + t[behaviors]
 if behaviors == "Pr"
-  suffix = "#//apple_ref/occ/intfm/#{className}/"+ methodName
+  suffix = "#//apple_ref/occ/intfm/#{className}/"
+  if framework == "WK"
+    className = "NSObject" if nsClass.include?("Delegate")
+    suffix = "#//apple_ref/occ/instm/#{className}/" if methodType == "im"
+    suffix = "#//apple_ref/occ/intfcm/#{className}/" if methodType == "cm"
+  end
 else
-  suffix =  t[methodType]+ methodName
+  suffix =  t[methodType]
 end
+suffix += methodName
 if FileTest.exists?(url + "Reference.html")
   url += "Reference.html" + suffix
 else
   url += className +".html" + suffix
 end
-
 TextMate.exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://#{url}'&gt;"
 </string>
 	<key>fallbackInput</key>
@@ -170,7 +176,7 @@ TextMate.exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://
 	<key>name</key>
 	<string>Documentation for Selector</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>afterSelectedText</string>
 	<key>scope</key>
 	<string>meta.bracketed.objc</string>
 	<key>uuid</key>

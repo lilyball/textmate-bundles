@@ -75,6 +75,10 @@ module LaTeX
         c["bibtype"] = s.scan(/[^\s\{]+/)
         s.scan(/\s*\{/)
         c["citekey"] = s.scan(/[^\s,]+(?=\s*,)/)
+        if c["citekey"].nil?
+          c = nil
+          next
+        end
         # puts "Found citekey: #{c["citekey"]}"
         s.scan(/\s*,/)
         until s.eos? or s.scan(/\s*\,?\s*\}/) do

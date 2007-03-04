@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -wKU
 
 class TreeNode
-  attr_accessor :heading, :parent, :level, :count
+  attr_accessor :heading, :attributes, :parent, :level, :count
   def initialize(parent = nil, count = 1)
     @parent = parent
     @level = parent ? parent.level + 1 : 0
@@ -14,7 +14,7 @@ class TreeNode
   end
   def to_s
     child = @child ? "\n<ul style='list-style: none'>\n#{@child}</ul>\n" : ''
-    entry = @heading ? "<li>#{index.join '.'} <a href='javascript:goTo(&quot;sect_#{index.join '.'}&quot;)'>#{@heading}</a>#{child}</li>\n" : child
+    entry = @heading ? "<li>#{index.join '.'} <a href='javascript:goTo(&quot;sect_#{index.join '.'}&quot;)'>#{unanchored_heading}</a>#{child}</li>\n" : child
     @next ? entry.to_s + @next.to_s : entry.to_s
   end
   def new_child
@@ -25,7 +25,10 @@ class TreeNode
     @next = TreeNode.new(@parent, @count + 1)
   end
   def new_heading
-    "<h#{@level}><a id='sect_#{index.join '.'}' href='javascript:goTo(&quot;sect_0&quot;)' style='text-decoration:none'>#{index.join '.'}</a> #{@heading}</h#{@level}>"
+    "<h#{@level}#{@attributes}><a id='sect_#{index.join '.'}' href='javascript:goTo(&quot;sect_0&quot;)' style='text-decoration:none'>#{index.join '.'}</a> #{@heading}</h#{@level}>"
+  end
+  def unanchored_heading
+    heading.gsub(/<(.*?)>/) {|innards| innards.gsub(/ id=("|').*?\1/, '') }
   end
 end
 
@@ -36,16 +39,18 @@ IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
   root = tree_node = TreeNode.new
   contents = ''
   io.each_line do |line|
-    if line =~ %r{^<h(.)>(.*)</h.>$} then
+    if line =~ %r{^<h(\d)( .*?)?>(.*)</h\1>$} then
       level = $1.to_i
       tree_node = tree_node.parent while tree_node.level > level
       tree_node = tree_node.new_child while tree_node.level < level
       tree_node = tree_node.new_sibling if tree_node.heading
-      tree_node.heading = $2
+      tree_node.heading = $3
+      tree_node.attributes = $2
 
       contents << "\n<hr />\n" if level == 1
       line = tree_node.new_heading
     end
+    line.gsub!(/<a href="#(.*?)"/) { %Q{<a href='javascript:goTo(&quot;#{$1}&quot;)'} }
     contents << line
   end
 

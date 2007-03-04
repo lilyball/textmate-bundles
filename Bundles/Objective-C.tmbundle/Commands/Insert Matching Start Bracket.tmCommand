@@ -9,9 +9,8 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
-
-
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
+
 class Lexer
   include Enumerable
   def initialize
@@ -99,7 +98,8 @@ class ObjcParser
   end
   
   def get_position
-    a = @list.pop unless @list.empty?
+    return nil if @list.empty?
+    a = @list.pop
     endings = [:close,:post_op,:at_string,:at_selector,:identifier]
     if a.tt == :identifier &amp;&amp; !@list.empty? &amp;&amp; endings.include?(@list[-1].tt)
       insert_point = find_object_start
@@ -145,13 +145,15 @@ class ObjcParser
         return obj
       when :close
         return nil if match_bracket(obj.text,l).nil?
+      when :open
+        return nil
       end
     end
     return nil
   end
   
   def match_bracket(type,l)
-    partner = {"]"=&gt;"[",")"=&gt;"("}[type]
+    partner = {"]"=&gt;"[",")"=&gt;"(","}"=&gt;"{"}[type]
     up = 1
     until l.empty?
       obj = l.pop
@@ -166,12 +168,13 @@ class ObjcParser
   end
   
   def find_object_start
-    openings = [:operator,:selector,:open,:return]
+    openings = [:operator,:selector,:open,:return,:control]
     until @list.empty? || openings.include?(@list[-1].tt)
       obj = @list.pop
       case obj.tt
       when :close
-        b = match_bracket(obj.text, @list)
+        tmp = match_bracket(obj.text, @list)
+        b = tmp unless tmp.nil?
       when :star
         b, ate = eat_star(b,obj.beg)
         return b unless ate
@@ -185,7 +188,7 @@ class ObjcParser
   end
 
   def eat_star(prev, curr)
-    openings = [:operator,:selector,:open,:return,:star]
+    openings = [:operator,:selector,:open,:return,:control,:star]
     if @list.empty? || openings.include?(@list[-1].tt)
       return curr, true
     else
@@ -221,6 +224,7 @@ if __FILE__ == $PROGRAM_NAME
   lexer = Lexer.new do |l|
     l.add_token(:return,  /\breturn\b/)
     l.add_token(:nil, /\bnil\b/)
+    l.add_token(:control, /\b(?:if|while|for|do)(?:\s*)\(/)# /\bif|while|for|do(?:\s*)\(/)
     l.add_token(:at_string, /"(?:\\.|[^"\\])*"/)
     l.add_token(:selector, /\b[A-Za-z_0-9]+:/)
     l.add_token(:identifier, /\b[A-Za-z_0-9]+\b/)
@@ -228,9 +232,9 @@ if __FILE__ == $PROGRAM_NAME
     l.add_token(:post_op, /\+\+|\-\-/)
     l.add_token(:at, /@/)
     l.add_token(:star, /\*/)
-    l.add_token(:close, /\)|\]/)
-    l.add_token(:open, /\(|\[/)
-    l.add_token(:operator,   /[-+\/=%:\,\?]/)
+    l.add_token(:close, /\)|\]|\}/)
+    l.add_token(:open, /\(|\[|\{/)
+    l.add_token(:operator,   /[-+\/=%:\,\?;]/)
 
     l.add_token(:terminator, /;\n*|\n+/)
     l.add_token(:whitespace, /\s+/)
@@ -248,12 +252,18 @@ if __FILE__ == $PROGRAM_NAME
     tokenList &lt;&lt; A.new(*(token&lt;&lt;offset)) unless [:whitespace,:terminator].include? token[0]
     offset +=token[1].length
   end
+  if tokenList.empty?
+    print line[0..caret_placement]+"]$0"+line[caret_placement+1..-1]
+    TextMate.exit_insert_snippet
+  end
+  
   par = ObjcParser.new(tokenList)
   b = par.get_position
+
+
   if b.nil?
     print line[0..caret_placement]+"]$0"+line[caret_placement+1..-1]
-  elsif b &lt; caret_placement
-    
+  elsif b &lt; caret_placement    
     print line[0..b-1] unless b == 0
     print "[" +line[b..caret_placement] +"]$0"+line[caret_placement+1..-1] 
   else

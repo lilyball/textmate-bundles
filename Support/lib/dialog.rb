@@ -2,21 +2,20 @@ require 'English'
 require File.dirname(__FILE__) + '/escape'
 require File.dirname(__FILE__) + '/osx/plist'
 
+TM_DIALOG = e_sh ENV['DIALOG']
+
 module TextMate
   # Wrapper for tm_dialog. See the unit test in progress.rb
   class WindowNotFound < Exception
   end
 
   class Dialog
-    TM_SUPPORT    = File.expand_path(File.dirname(__FILE__) + '/..')
-    TM_DIALOG     = TM_SUPPORT + '/bin/tm_dialog'
-
 		def self.alert(style, title, message, *buttons)
 			styles = [:warning, :informational, :critical]
 			raise "style must be one of #{types.inspect}" unless styles.include?(style)
 			
 			params = {'alertStyle' => style.to_s, 'messageTitle' => title, 'informativeText' => message, 'buttonTitles' => buttons}
-	    button_index = %x{#{e_sh TM_DIALOG} -ep #{e_sh params.to_plist}}.chomp.to_i
+	    button_index = %x{#{TM_DIALOG} -ep #{e_sh params.to_plist}}.chomp.to_i
 			buttons[button_index]
 		end
 
@@ -48,7 +47,7 @@ module TextMate
       center_arg = center.nil? ? '' : '-c'
       defaults_args = defaults.nil? ? '' : %Q{-d #{e_sh defaults.to_plist}}
       
-      command = %Q{#{e_sh TM_DIALOG} -a #{center_arg} -p #{e_sh start_parameters.to_plist} #{defaults_args} #{e_sh nib_path}}
+      command = %Q{#{TM_DIALOG} -a #{center_arg} -p #{e_sh start_parameters.to_plist} #{defaults_args} #{e_sh nib_path}}
       @dialog_token = %x{#{command}}.chomp
       raise WindowNotFound, "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
 #      raise "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
@@ -60,7 +59,7 @@ module TextMate
     # in a continuous loop. The block must return true to continue the loop, false to break out of it.
     def wait_for_input
       wait_for_input_core = lambda do
-        text = %x{#{e_sh TM_DIALOG} -w #{@dialog_token} }
+        text = %x{#{TM_DIALOG} -w #{@dialog_token} }
         raise WindowNotFound if $CHILD_STATUS == 54528  # -43
         raise "Error (#{text})" if $CHILD_STATUS != 0
 
@@ -79,13 +78,13 @@ module TextMate
     
     # update bindings with new value(s)
     def parameters=(parameters)
-      text = %x{#{e_sh TM_DIALOG} -t #{@dialog_token} -p #{e_sh parameters.to_plist}}
+      text = %x{#{TM_DIALOG} -t #{@dialog_token} -p #{e_sh parameters.to_plist}}
       raise "Could not update (#{text})" if $CHILD_STATUS != 0
     end
     
     # close the window
     def close
-      %x{#{e_sh TM_DIALOG} -x #{@dialog_token}}
+      %x{#{TM_DIALOG} -x #{@dialog_token}}
     end
     
   end
@@ -117,7 +116,6 @@ class << self
     raise if options.empty?
 
     support = ENV['TM_SUPPORT_PATH']
-    dialog  = support + '/bin/tm_dialog'
     nib     = support + '/nibs/SimpleNotificationWindow.nib'
     
     plist = Hash.new
@@ -125,14 +123,11 @@ class << self
     plist['summary']  = options[:summary] || ''
     plist['log']      = options[:log]     || ''
 
-    `#{e_sh dialog} -cap #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
+    `#{TM_DIALOG} -cap #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
   end
   
   def menu(options)
     return nil if options.empty?
-
-    support = ENV['TM_SUPPORT_PATH']
-    dialog = support + '/bin/tm_dialog'
 
     return_hash = true
     if options[0].kind_of?(String)
@@ -140,9 +135,14 @@ class << self
       options = options.collect { |e| e == nil ? { 'separator' => 1 } : { 'title' => e } }
     end
 
-    plist = { 'menuItems' => options }.to_plist
-    
-    res = PropertyList::load(`#{e_sh dialog} -up #{e_sh plist}`)
+    res = IO.popen("#{TM_DIALOG} -u", "r+") do |io|
+      Thread.new do
+        plist = { 'menuItems' => options }.to_plist
+        io.write plist; io.close_write
+      end
+      PropertyList::load(io)
+    end
+
     return nil unless res.has_key? 'selectedIndex'
     index = res['selectedIndex'].to_i
 

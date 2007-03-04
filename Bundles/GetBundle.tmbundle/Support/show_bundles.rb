@@ -62,7 +62,8 @@ x = Thread.new do
 
 end
 
-puts %x{#{DIALOG} -w#{token}}
+res = %x{#{DIALOG} -w#{token}}
+open("/dev/console", "w") { |io| io.write res }
 %x{#{DIALOG} -x#{token}}
 
 x.kill; x.join

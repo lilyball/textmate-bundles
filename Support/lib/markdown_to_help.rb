@@ -25,7 +25,7 @@ class TreeNode
     @next = TreeNode.new(@parent, @count + 1)
   end
   def new_heading
-    "<h#{@level}#{@attributes}><a id='sect_#{index.join '.'}' href='javascript:goTo(&quot;sect_0&quot;)' style='text-decoration:none'>#{index.join '.'}</a> #{@heading}</h#{@level}>"
+    "<h#{@level}#{@attributes}><a id='sect_#{index.join '.'}' href='javascript:goTo(&quot;sect_0&quot;)' style='text-decoration:none' class='uplink'>#{index.join '.'} #{@heading}</a></h#{@level}>"
   end
   def unanchored_heading
     heading.gsub(/<(.*?)>/) {|innards| innards.gsub(/ id=("|').*?\1/, '') }
@@ -55,6 +55,11 @@ IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
   end
 
   puts <<-HTML
+<style type="text/css">
+.uplink:hover:after {
+  content: " ⇞";
+}
+</style>
 <script type="text/javascript" charset="utf-8">
 function goTo (id) {
   document.body.scrollTop = document.getElementById(id).offsetTop + 8;

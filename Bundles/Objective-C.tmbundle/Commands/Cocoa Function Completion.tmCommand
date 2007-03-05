@@ -13,7 +13,7 @@ line = ENV['TM_CURRENT_LINE']
 
 def candidates_or_exit(methodSearch="")
   candidates = []
-  ["CLib.txt.gz","C++Lib.txt.gz","CocoaClasses.txt.gz","CocoaFunctions.txt.gz"].each do |name|
+  ["CLib.txt.gz","CocoaClasses.txt.gz","CocoaFunctions.txt.gz"].each do |name|
   zGrepped = %x{zgrep ^#{e_sh methodSearch } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/#{name}}
   candidates += zGrepped.split("\n")
   end

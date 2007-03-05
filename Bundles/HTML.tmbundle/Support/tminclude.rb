@@ -310,7 +310,7 @@ module TextMate
       cstart = (@escape_open).rstrip + ' '
       cend = (' ' + @escape_close).rstrip
       begin
-        Dialog.request_file do | file |
+        ::Dialog.request_file do | file |
           print <<-"EOT"
 #{cstart}#tminclude "#{file}"#{cend}
 #{cstart}end tminclude#{cend}

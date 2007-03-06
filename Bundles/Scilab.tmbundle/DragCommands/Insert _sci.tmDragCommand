@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>DROPPED_FILE=`echo "$TM_DROPPED_FILE" |  sed -e "s/'/''/g" -e "s/\"/\"\"/g"`
+echo "getf(\"$DROPPED_FILE\");"</string>
+	<key>draggedFileExtensions</key>
+	<array>
+		<string>sci</string>
+	</array>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Insert .sci</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.scilab</string>
+	<key>uuid</key>
+	<string>B4242F8A-C36A-4275-BC65-1DD4BE1AD758</string>
+</dict>
+</plist>

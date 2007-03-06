@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Scilab Bundle Help" "Scilab"
+
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
+
+# Help for Scilab Bundle (v0.11)
+
+This Scilab bundle was created to help make editing Scilab scripts in TextMate a little easier. The two main benefits are:
+
+1. **Syntax Highlighting**
+
+  Most conventional Scilab scripts should be interpreted correctly using the language grammar provided with this bundle. You'll get all the benefits of syntax highlighting, function pop-ups, and code folding.
+
+2. **Run Script Command**
+
+  If you have `Scilab-4.1.app` installed, you'll be able to run the current script in a new instance of Scilab by simply pressing &amp;#x2318;R. You can also load all functions defined in the working directory first (using getd) by pressing &amp;#x21E7;&amp;#x2318;R.
+
+  You can obtain `Scilab-4.1.app` at &lt;a href="javascript:TextMate.system('open http://www.lmac.utc.fr/~mottelet/Darwin/', null);"&gt;http://www.lmac.utc.fr/~mottelet/Darwin/&lt;/a&gt;.
+
+If you have any suggestions or bug reports, feel free to send them to &lt;a href="mailto:jc483@cornell.edu?subject=Scilab Bundle"&gt;jc483@cornell.edu&lt;/a&gt; with the subject "Scilab Bundle".
+
+# Version History
+
+- v0.11 (March 5th, 2007)
+	- Thanks to Allan Odgaard for reviewing this bundle
+		- Help now uses `markdown_to_help.rb` instead of `Markdown.pl`
+		- `Scilab-4.1.app` is now located using `find_app`
+- v0.1 (March 3rd, 2007)
+	- Initial release
+
+# About This Bundle
+
+## Disclaimer
+
+I'm just an amateur programmer, so it's very likely that there are better ways to automate some of the things that this bundle attempts to do. Feel free to correct any errors you may find, and if you want, you can publish your changes for everyone's benefit.
+
+## Credits
+
+Created by Jiun Wei Chia. Various code stolen from the default TextMate bundles.
+
+EOF
+
+html_footer</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.scilab</string>
+	<key>uuid</key>
+	<string>B2908B89-B064-447E-B3A7-C03D4BEE6D1C</string>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>get_absolute_file_path("${0:`echo "$TM_FILEPATH" | sed -e "s/'/''/g" -e "s/\"/\"\"/g"`}");</string>
+	<key>name</key>
+	<string>get_absolute_file_path(..)</string>
+	<key>scope</key>
+	<string>source.scilab</string>
+	<key>tabTrigger</key>
+	<string>path</string>
+	<key>uuid</key>
+	<string>1A24ECE9-7AF7-4CAB-9C8F-5C1B7B5E2231</string>
+</dict>
+</plist>

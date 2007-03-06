@@ -14,33 +14,39 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>\b(YAHOO)\b</string>
+			<string>\b(YAHOO|YAHOO_config)\b</string>
 			<key>name</key>
 			<string>support.class.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(util|widget|example)\b</string>
+			<string>\.(util|lang|env|widget|example)\b</string>
 			<key>name</key>
 			<string>support.class.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(CustomEvent|Subscriber|Event|EventProvider|Dom|Point|Region|Connect|DD|DDProxy|DDTarget|DragDrop|DragDropMgr|DDM|Anim|AnimMgr|Bezier|ColorAnim|Easing|Motion|Scroll|AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Config|KeyListener|Attribute|AttributeProvider|Element)\b</string>
+			<string>\.(CustomEvent|Subscriber|Event|EventProvider|Dom|Point|Region|Connect|DD|DDProxy|DDTarget|DragDrop|DragDropMgr|DDM|Anim|AnimMgr|Bezier|ColorAnim|Easing|Motion|Scroll|AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Config|KeyListener|Attribute|AttributeProvider|Element|History)\b</string>
 			<key>name</key>
 			<string>support.class.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Calendar|Calendar2up|Calendar_Core|CalendarGroup|DateMath|Module|Overlay|OverlayManager|Tooltip|Panel|Dialog|SimpleDialog|ContainerEffect|Logger|LogMsg|LogReader|LogWriter|Menu|MenuItem|Menubar|MenuBarItem|MenuManager|MenuModule|MenuModuleItem|ContextMenu|ContextMenuItem|Slider|SliderThumb|Tab|TabView|TreeView|Node|HTMLNode|MenuNode|TextNode|RootNode|TVAnim|TVFadeIn|TVFadeOut)\b</string>
+			<string>\.(AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Calendar|Calendar2up|Calendar_Core|CalendarGroup|DateMath|Module|Overlay|OverlayManager|Tooltip|Panel|Dialog|SimpleDialog|ContainerEffect|Logger|LogMsg|LogReader|LogWriter|Menu|MenuItem|Menubar|MenuBarItem|MenuManager|MenuModule|MenuModuleItem|ContextMenu|ContextMenuItem|Slider|SliderThumb|Tab|TabView|TreeView|Node|HTMLNode|MenuNode|TextNode|RootNode|TVAnim|TVFadeIn|TVFadeOut|Column|ColumnEditor|ColumnSet|DataTable|Record|RecordSet|Sort|WidthResizer)\b</string>
 			<key>name</key>
 			<string>support.class.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(augment|extend|log|namespace)\b(?=\()</string>
+			<string>\.(log|namespace|register)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.YAHOO.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(augment|extend|hasOwnProperty|isArray|isBoolean|isFunction|isNull|isNumber|isObject|isString|isUndefined)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.lang.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -158,15 +164,21 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(doBeforeExpandContainer|formatResult|getListItemData|getListItems|isContainerOpen|sendQuery|setBody|setFooter|setHeader)\b(?=\()</string>
+			<string>\.(getBookmarkedState|getCurrentState|initialize|navigate|register)\b(?=\()</string>
 			<key>name</key>
-			<string>support.function.AutoComplete.js.yui</string>
+			<string>support.function.History.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(doQuery|flushCache|getResults)\b(?=\()</string>
+			<string>\.(addToCache|flushCache|getCachedResponse|handleResponse|isCacheHit|makeConnection|parseArrayData|parseJSONData|parseTextData|parseXMLData|sendRequest)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.DataSource.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(doBeforeExpandContainer|formatResult|getListItemData|getListItems|isContainerOpen|sendQuery|setBody|setFooter|setHeader)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.AutoComplete.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -437,6 +449,54 @@
 			<string>\.(animate|onComplete)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.TVFadeOut.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(format|formatCheckbox|formatCurrency|formatDate|formatEmail|formatLink|formatNumber|formatSelect|getColSpan|getId|getRowSpan|parse|parseCheckbox|parseCurrency|parseDate|parseNumber|parseSelect|showEditor)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Column.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(createTextareaEditor|createTextboxEditor|getTextareaEditorValue|getTextboxEditorValue|getValue|hide|show|showTextareaEditor|showTextboxEditor)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.ColumnEditor.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.ColumnSet.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addRow|appendRow|deleteRow|deleteSelectedRows|doBeforeLoadData|editCell|focusTable|formatCell|getBody|getCell|getColumnSet|getHead|getRecordSet|getRow|getSelectedCells|getSelectedRecordIds|getSelectedRows|getTable|hideTableMessages|highlight|insertRows|isSelected|onDataReturnAppendRows|onDataReturnInsertRows|onDataReturnPaginateRows|onDataReturnReplaceRows|onEventEditCell|onEventFormatCell|onEventHighlightCell|onEventSelectCell|onEventSelectRow|onEventSortColumn|onEventUnhighlightCell|paginateRows|replaceRows|select|showEmptyMessage|showLoadingMessage|showPage|sortColumn|unhighlight|unselect|unselectedAllCells|unselectAllRows|updateRow)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DataTable.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.()\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Record.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addRecord|addRecords|append|deleteRecord|getLength|getRecord|getRecordBy|getRecordIndex|getRecords|insert|replace|reset|sort|updateRecord)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.RecordSet.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(compareAsc|compareDesc)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Sort.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(onDrag|onMouseDown|onMouseUp)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.WidthResizer.js.yui</string>
 		</dict>
 		<dict>
 			<key>include</key>

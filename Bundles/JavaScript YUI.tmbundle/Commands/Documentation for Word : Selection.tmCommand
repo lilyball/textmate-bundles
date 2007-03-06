@@ -20,6 +20,20 @@ if(preg_match('|support\.class\.js\.yui|', $scope)) {
 switch($scope) {
 	case 'YAHOO':
 		$page = 'YAHOO.html'; break;
+	case 'YAHOO_config':
+		$page = 'YAHOO_config.html'; break;
+	case 'lang':
+		$page = 'YAHOO.lang.html'; break;
+	case 'DataSource':
+	case 'Column':
+	case 'ColumnEditor':
+	case 'ColumnSet':
+	case 'DataTable':
+	case 'Record':
+	case 'RecordSet':
+	case 'Sort':
+	case 'WidthResizer':
+		$page = $scope . '.html'; break;
 	case 'Dom':
 	case 'Point':
 	case 'Region':
@@ -40,9 +54,9 @@ switch($scope) {
 	case 'DDTarget':
 	case 'DragDrop':
 	case 'DragDropMgr':
+	case 'History':
 		$page = 'YAHOO.util.' . $scope . '.html'; break;
 	case 'AutoComplete':
-	case 'DataSource':
 	case 'DS_JSArray':
 	case 'DS_JSFunction':
 	case 'DS_XHR':

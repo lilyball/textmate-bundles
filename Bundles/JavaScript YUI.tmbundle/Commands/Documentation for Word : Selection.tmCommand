@@ -90,6 +90,7 @@ switch($scope) {
 	case 'SliderThumb':
 	case 'Tab':
 	case 'TabView':
+	case 'Element':
 	case 'TreeView':
 	case 'Node':
 	case 'HTMLNode':
@@ -99,6 +100,8 @@ switch($scope) {
 	case 'TVAnim':
 	case 'TVFadeIn':
 	case 'TVFadeOut':
+	case 'Button':
+	case 'ButtonGroup':
 		$page = 'YAHOO.widget.' . $scope . '.html'; break;
 	default:
 		$page = ''; $anchor = '';

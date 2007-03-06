@@ -319,7 +319,7 @@ alpha_and_caret = /[a-zA-Z][a-zA-Z0-9]*$/
 mline = line.gsub(/\n/, " ")
 # find Nested method
 list = nil
-list = try_find_class(mline[start[-1]..caret_placement])
+#list = try_find_class(mline[start[-1]..caret_placement])
 
 if mline[start[-1]..caret_placement].match colon_and_space
 	# [obj mess:^]

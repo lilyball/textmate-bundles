@@ -32,7 +32,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Calendar|Calendar2up|Calendar_Core|CalendarGroup|DateMath|Module|Overlay|OverlayManager|Tooltip|Panel|Dialog|SimpleDialog|ContainerEffect|Logger|LogMsg|LogReader|LogWriter|Menu|MenuItem|Menubar|MenuBarItem|MenuManager|MenuModule|MenuModuleItem|ContextMenu|ContextMenuItem|Slider|SliderThumb|Tab|TabView|TreeView|Node|HTMLNode|MenuNode|TextNode|RootNode|TVAnim|TVFadeIn|TVFadeOut|Column|ColumnEditor|ColumnSet|DataTable|Record|RecordSet|Sort|WidthResizer)\b</string>
+			<string>\.(AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Calendar|Calendar2up|Calendar_Core|CalendarGroup|DateMath|Module|Overlay|OverlayManager|Tooltip|Panel|Dialog|SimpleDialog|ContainerEffect|Logger|LogMsg|LogReader|LogWriter|Menu|MenuItem|Menubar|MenuBarItem|MenuManager|MenuModule|MenuModuleItem|ContextMenu|ContextMenuItem|Slider|SliderThumb|Tab|TabView|TreeView|Node|HTMLNode|MenuNode|TextNode|RootNode|TVAnim|TVFadeIn|TVFadeOut|Column|ColumnEditor|ColumnSet|DataTable|Record|RecordSet|Sort|WidthResizer|Button|ButtonGroup)\b</string>
 			<key>name</key>
 			<string>support.class.js.yui</string>
 		</dict>
@@ -497,6 +497,18 @@
 			<string>\.(onDrag|onMouseDown|onMouseUp)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.WidthResizer.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addHiddenFieldsToForm|blur|createHiddenField|createInputElement|destroy|focus|getFirstElement|getForm|getMenu|hasFocus|init|initAttributes|initConfig|isActive|setAttributeFromDOMAttribute|setAttributesFromSrcElement|setFormElementProperties)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Button.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addButton|addButtons|check|destroy|focus|getButton|getButtons|getCount|init|initAttributes|removeButton)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.ButtonGroup.js.yui</string>
 		</dict>
 		<dict>
 			<key>include</key>

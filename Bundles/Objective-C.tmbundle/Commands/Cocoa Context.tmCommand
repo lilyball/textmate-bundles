@@ -245,8 +245,6 @@ end
 
 def try_find_class(line)
   if  m = line.match(/^\[\s*(\[|([A-Z][a-zA-Z][a-zA-Z0-9]*)\s)/)
-    require "osx/cocoa"
-
     if m[1] == "["
       pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
       up = -2
@@ -272,14 +270,12 @@ def try_find_class(line)
       zGrepped = %x{ zgrep ^#{e_sh mn + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz }
       candidates = zGrepped.split("\n")
       unless candidates.empty?
-        if (type = candidates[0].split("\t")[5].match(/[A-Za-z]+/)) &amp;&amp; (obj = OSX::NSClassFromString(type[0]))
-          b = "OSX::#{obj.to_s}".split("::").inject(Object) { |par, const| par.const_get(const) }          
-          list = b.objc_instance_methods
+        if (type = candidates[0].split("\t")[5].match(/[A-Za-z]+/))
+					list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -i -n #{e_sh type[0]}}.split("\n")
         end      
       end
-    elsif obj = OSX::NSClassFromString(m[2])
-      b = "OSX::#{obj.to_s}".split("::").inject(Object) { |par, const| par.const_get(const) }
-      list = b.objc_class_methods
+    else
+			list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]}}.split("\n")
     end
   end
   return list
@@ -318,8 +314,7 @@ alpha_and_caret = /[a-zA-Z][a-zA-Z0-9]*$/
 
 mline = line.gsub(/\n/, " ")
 # find Nested method
-list = nil
-#list = try_find_class(mline[start[-1]..caret_placement])
+list = try_find_class(mline[start[-1]..caret_placement])
 
 if mline[start[-1]..caret_placement].match colon_and_space
 	# [obj mess:^]

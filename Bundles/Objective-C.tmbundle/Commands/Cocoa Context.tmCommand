@@ -267,15 +267,19 @@ def try_find_class(line)
         mn = m[1] unless m.nil?
       end
 
-      zGrepped = %x{ zgrep ^#{e_sh mn + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz }
-      candidates = zGrepped.split("\n")
+      candidates = %x{ zgrep ^#{e_sh mn + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz }.split("\n")
+      
       unless candidates.empty?
         if (type = candidates[0].split("\t")[5].match(/[A-Za-z]+/))
-					list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -i -n #{e_sh type[0]}}.split("\n")
+					framework = %x{ zgrep ^#{e_sh type[0] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctionsWithFramework.txt.gz }.split("\n")
+					unless framework.empty?
+						list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -i -n #{e_sh type[0]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+					end
         end      
       end
     else
-			list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]}}.split("\n")
+			framework = %x{ zgrep ^#{e_sh m[2] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctionsWithFramework.txt.gz }.split("\n")
+			list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
     end
   end
   return list

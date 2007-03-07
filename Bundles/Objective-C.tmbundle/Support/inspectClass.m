@@ -58,6 +58,7 @@ void usage ()
 		"-c, --classmethods 		list class methods\n"
 		"-i, --instancemethods		list instance methods\n"
 		"-i, --classname			name of class to inspect\n"
+		"-f, --framework			name of framework to inspect\n"
 		"\n"
 		"");
 }
@@ -77,24 +78,36 @@ int main (int argc, char* argv[])
 		{ "classmethods",		no_argument,		0,		'c'	},
 		{ "instancemethods",	no_argument,		0,		'i'	},
 		{ "classname",			required_argument,	0,		'n'	},
+		{ "framework", 			required_argument,	0,		'f'	},
 		{ 0,						0,				0,		0	}
 	};
 	
 	char const* token = NULL;
+	char const* framework = NULL;
 	char ch;
 	
 	int res = -1;
 	
-	while((ch = getopt_long(argc, argv, "cin:", longopts, NULL)) != -1)
+	while((ch = getopt_long(argc, argv, "cin:f:", longopts, NULL)) != -1)
 	{
 		switch(ch)
 		{
 			case 'c':	methodType = kClassMethods;		break;
 			case 'i':	methodType = kInstanceMethods;	break;
 			case 'n':	token = optarg;	res = 0;		break;
+			case 'f':	framework = optarg; 			break;
 			default:	usage();						break;
 		}
 	}
+	if (framework){
+		NSString *aString = [@"/System/Library/Frameworks/" 
+							stringByAppendingString:
+							[[NSString stringWithUTF8String:framework] stringByAppendingPathExtension:@"framework"]];
+		//NSLog(@"%@", aString );
+		NSBundle * b1 = [NSBundle bundleWithPath:aString];
+		[b1 load];
+	}
+	// /System/Library/Frameworks/
     if (res == 0){
 		Class aClass = NSClassFromString([NSString stringWithUTF8String:token]);
 		if(aClass != nil){

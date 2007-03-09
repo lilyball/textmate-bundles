@@ -72,7 +72,7 @@ function e_sh(string) {
 
 function insert_after(new_node, node) {
   var parent = node.parentNode;
-  return node.nextSibling ? parent.insertBefore(new_node, node.nextSibling) : parent.appendChild(newNode);
+  return node.nextSibling ? parent.insertBefore(new_node, node.nextSibling) : parent.appendChild(new_node);
 }
 
 function click_external_link(evt) {

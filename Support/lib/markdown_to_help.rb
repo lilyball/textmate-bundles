@@ -59,10 +59,6 @@ IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
 .uplink:hover:after {
   content: " ⇞";
 }
-a[href^='http://']:after,
-a[href^='https://']:after {
-  content:" ➲";
-}
 </style>
 <script type="text/javascript" charset="utf-8">
 function goTo (id) {
@@ -74,23 +70,28 @@ function e_sh(string) {
   return string.replace(/(?=[^a-zA-Z0-9_.\\/\\-\\x7F-\\xFF\\n])/g, '\\\\').replace(/\\n/g, "'\\n'").replace(/^$/g, "''");
 }
 
+function insert_after(new_node, node) {
+  var parent = node.parentNode;
+  return node.nextSibling ? parent.insertBefore(new_node, node.nextSibling) : parent.appendChild(newNode);
+}
+
 function click_external_link(evt) {
   if (!evt.metaKey) return;
   evt.preventDefault();
   TextMate.system("open " + e_sh(evt.srcElement.href), null);
 }
 
-function titles_for_external_links() {
+function setup_external_links() {
   var link, links = document.links;
   for (i = 0; i < links.length; i++) {
     link = links[i];
     if (link.href.match(/^https?:/)) {
       link.title = '⌘-click to open “' + link.href + '” in the default browser.';
       link.addEventListener('click', click_external_link, false);
+      insert_after(document.createTextNode("  ➲"), link);
     }
   }
 }
-
 </script>
 <base href="file://#{ENV['TM_BUNDLE_SUPPORT']}/" />
 HTML
@@ -101,7 +102,7 @@ HTML
 
   puts <<-HTML
 <script type="text/javascript" charset="utf-8">
-titles_for_external_links();
+setup_external_links();
 </script>
 HTML
 

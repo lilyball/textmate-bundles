@@ -37,7 +37,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 
 <%
 	button_strip = [	{:status => /\?/,			:name =>	'Add',		:onclick => 'svnAddFile'},
-						{:status => /(A|D|M|C)/,	:name =>	'Revert',	:onclick => 'svnRevertFileConfirm'},
+						{:status => /(A|D|M|C)/,	:name =>	'Revert',	:onclick => 'svnRevertFile'},
 						{:status => /!/,		:name =>	'Remove',	:onclick => 'svnRemoveFile'},
 						{:status => /(A|M|C)/,		:name =>	'Diff',		:onclick => 'sendDiffToTextMate'}]		# should be openWithFinder for image files
 %>
@@ -96,13 +96,15 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 							show_button = (not status.scan(match_status).empty?)
 							
 							# Make sure we ask for confirmation if we're going to lose changes using Revert
-							if show_button and button_name == 'Revert' then
-								button[:onclick] = 'svnRevertFile' + (status.scan(/A|D/).empty? ? 'Confirm' : '')
-							end %>
+#							if show_button and button_name == 'Revert' then
+#								button[:onclick] = 'svnRevertFile' + (status.scan(/A|D/).empty? ? 'Confirm' : '')
+#							end %>
 								<td class="action_button <%= button_name.downcase + '_col' %>">
-									<% if show_button then %>
-										<a href="#" onclick="<%= "#{button[:onclick]}('#{esc_file}', #{stdin_line_count}, '#{esc_displayname}')" %>; return false" class="<%= button_name.downcase + '_button' %>"><%= button_name %></a>
-									<% end %>
+									<a id="button_<%= button_name.downcase + stdin_line_count.to_s %>"
+										class="<%= button_name.downcase + '_button' %>"
+										style="display: <%= show_button ? 'inline' : 'none' %>;"
+										href="#"
+										onclick="<%= "#{button[:onclick]}('#{esc_file}', #{stdin_line_count}, '#{esc_displayname}')" %>; return false"><%= button_name %></a>
 								</td>
 						<% end %>
 					<% end %>
@@ -114,7 +116,7 @@ html_header("#{command_name.capitalize} for &ldquo;#{File.basename(display_title
 			<% end %>
 		</tr>
 		<% stdin_line_count += 1 %>
-		<% STDOUT.flush %>
+		<%= STDOUT.flush; "\n" %>
 	<% end %>
 </table>
 

@@ -26,14 +26,46 @@ function escapeHTML(string) {
 				.replace(/"/g,'&quot;'));                                                                      
 };
 
+function adjustActionButtonsForStatusChange( firstLetterOfNewStatus, id )
+{
+	// FIXME: This does not seem to work
+	add_button		= document.getElementById( 'button_add' + id)
+	remove_button	= document.getElementById( 'button_remove' + id)
+	revert_button	= document.getElementById( 'button_revert' + id)
+	diff_button		= document.getElementById( 'button_diff' + id)
+	
+	switch(firstLetterOfNewStatus)
+	{
+		case 'A':
+		case 'D':
+			add_button.style.display	= 'none'
+			remove_button.style.display	= 'none'
+			revert_button.style.display	= 'inline'
+			diff_button.style.display	= 'none'
+			break
+		case '?':
+		case '!':
+			add_button.style.display	= 'inline'
+			remove_button.style.display	= 'inline'
+			revert_button.style.display	= 'none'
+			diff_button.style.display	= 'none'
+			break
+		default:
+			add_button.style.display	= 'none'
+			remove_button.style.display	= 'none'
+			revert_button.style.display	= 'inline'
+			diff_button.style.display	= 'inline'
+			break
+	}
+}
 
 function svnCommand(cmd, id, statusString, className){
 	TextMate.isBusy = true;
 
-	results        = TextMate.system('LC_CTYPE=en_US.UTF-8 ' + cmd, null)
-	outputString   = results.outputString;
-	errorString = results.errorString;
-	errorCode      = results.status;
+	results			= TextMate.system('LC_CTYPE=en_US.UTF-8 ' + cmd, null)
+	outputString	= results.outputString;
+	errorString		= results.errorString;
+	errorCode		= results.status;
 
 	displayCommandOutput('error', 'error', errorString);
 	displayCommandOutput('info', 'info', outputString);
@@ -43,6 +75,8 @@ function svnCommand(cmd, id, statusString, className){
 		status_element = document.getElementById('status'+id)
 		status_element.innerHTML = statusString;
 		status_element.className = 'status_col ' + className;
+		
+		adjustActionButtonsForStatusChange(statusString.charAt(0), id)
 	}
 
 	TextMate.isBusy = false;
@@ -97,9 +131,12 @@ function svnAddFile(filename,id){
 	svnCommand(cmd, id, 'A', StatusMap['A'])
 };
 
-function svnRevertFile(filename,id){
-	cmd = ENV['TM_SVN'] + ' 2>&1 revert ' + filename;
-	svnCommand(cmd, id, '?', StatusMap['?'])
+function svnRevertFile(filename, id, displayname){
+	
+	statusElement = document.getElementById('status'+id)
+	statusText = statusElement.firstChild.nodeValue
+	
+	svnRevertFileConfirm(filename,id, displayname)
 };
 
 function completedTask(task){
@@ -109,6 +146,8 @@ function completedTask(task){
 		if(the_new_status == '-'){document.getElementById('status'+the_id).className = 'status_col ' + StatusMap['-']};
 		if(the_new_status == 'D'){document.getElementById('status'+the_id).className = 'status_col ' + StatusMap['D']};
 		document.getElementById('status'+the_id).innerHTML = the_new_status;
+
+		adjustActionButtonsForStatusChange(the_new_status.charAt(0), id)
 	}
 
 	the_filename    = null;

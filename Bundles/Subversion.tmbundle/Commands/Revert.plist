@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,10 +7,11 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-"$TM_SVN" revert "$TM_FILEPATH"
-
-# will cause current file to be re-loaded
-rescan_project
+if [[ -z $TM_SELECTED_FILES ]]
+	then
+	TM_SELECTED_FILES="'$TM_FILEPATH'"
+fi
+"$TM_BUNDLE_SUPPORT/revert_file.rb" $TM_SELECTED_FILES
 </string>
 	<key>input</key>
 	<string>none</string>

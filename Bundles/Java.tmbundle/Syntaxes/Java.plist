@@ -144,7 +144,7 @@
 			<key>begin</key>
 			<string>(?x)^\s*
 					((?:\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)\b\s*)*) # modifier
-					((?!(if|while|catch|this|print|return|synchronized|switch))\w+)\s* # identifier
+					((?!(if|while|for|catch|this|print|return|synchronized|switch))\w+)\s* # identifier
 					(?!.*;)  # abort if line has a ;
 					(?=\()</string>
 			<key>captures</key>

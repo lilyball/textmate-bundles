@@ -75,7 +75,7 @@ def snippet_generator(cand, start)
   return out.chomp.strip
 end
 
-def pop_up(candidates, searchTerm, caret_placement, line)
+def pop_up(candidates, searchTerm)
   start = searchTerm.size
   prettyCandidates = candidates.map { |candidate| [prettify(candidate), candidate] }.sort
   if prettyCandidates.size &gt; 1
@@ -115,7 +115,7 @@ end
 def cfunc_snippet_generator(c,s)
 	c = c.split"\t"
 i = 0
-  ((c[1].nil? || !c[4].nil?) ? c[0][s..-1]+"$0" : c[0][s..-1]+"("+c[1][1..-2].split(",").collect do |arg| "${"+(i+=1).to_s+":"+ arg.strip + "}" end.join(", ")+")$0")
+  ((c.size &lt; 2) ? c[0][s..-1]+"$0" : c[0][s..-1]+"("+c[1][1..-2].split(",").collect do |arg| "${"+(i+=1).to_s+":"+ arg.strip + "}" end.join(", ")+")$0")
 end
 
 def c_snip_gen(c,si,arg_type=nil)
@@ -319,45 +319,41 @@ alpha_and_caret = /[a-zA-Z][a-zA-Z0-9]*$/
 mline = line.gsub(/\n/, " ")
 # find Nested method
 list = try_find_class(mline[start[-1]..caret_placement])
+mn = methodNames(line[start[-1]..caret_placement])
+
 
 if mline[start[-1]..caret_placement].match colon_and_space
 	# [obj mess:^]
-  mn = methodNames(line[start[-1]..caret_placement])
   res = return_type_based_c_constructs_suggestions(mn, "", true)
-
-  print line[0..caret_placement] +res + line[caret_placement+1..-1]
 
 elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
 	# [obj mess ^]
-  mn = methodNames(line[start[-1]..caret_placement])
   candidates = candidates_or_exit( mn + "[[:alpha:]:]", list, "cocoa.txt.gz" ) # the alpha is to prevent satisfaction with just one part
   TextMate.exit_show_tool_tip "No completion available" if candidates.nil?
-  res = pop_up(candidates, mn, caret_placement, line)
-  print line[0..caret_placement] + res + line[caret_placement+1..-1]
+  res = pop_up(candidates, mn)
 elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
 	# [obj mess^]
   if mline[start[-1]..k.begin(0)-1+start[-1]].match alpha_and_space
-    mn = methodNames(line[start[-1]..caret_placement]) + k[0]
+    mn += k[0]
     candidates = candidates_or_exit( mn + "[[:alpha:]:]", list, "cocoa.txt.gz")
-    res =pop_up(candidates, mn, caret_placement, line)
-    print line[0..caret_placement] + res + line[caret_placement+1..-1]
+    res =pop_up(candidates, mn)
   # [NSOb^]
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[\s*$/)
-    candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "CocoaClasses.txt.gz")
-   res =pop_up(candidates, k[0], caret_placement, line)
-    print line[0..caret_placement] + res + line[caret_placement+1..-1]
+    candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "CocoaClassesWithFramework.txt.gz")
+   res =pop_up(candidates, k[0])
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(colon_and_space)
 	#  [obj mess: arg^]
-	  mn = methodNames(line[start[-1]..caret_placement])
 	  res = return_type_based_c_constructs_suggestions(mn, k[0], false)
 
-	  print line[0..caret_placement] + res + line[caret_placement+1..-1]
   else
-    print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
+		TextMate.exit_discard
   end
 else
-  print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
-end</string>
+	TextMate.exit_discard
+end
+
+print line[0..caret_placement] + res + line[caret_placement+1..-1]
+</string>
 	<key>disableOutputAutoIndent</key>
 	<true/>
 	<key>fallbackInput</key>

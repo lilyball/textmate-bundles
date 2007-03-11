@@ -115,7 +115,7 @@ end
 def cfunc_snippet_generator(c,s)
 	c = c.split"\t"
 i = 0
-  ((c.size &lt; 2) ? c[0][s..-1]+"$0" : c[0][s..-1]+"("+c[1][1..-2].split(",").collect do |arg| "${"+(i+=1).to_s+":"+ arg.strip + "}" end.join(", ")+")$0")
+  ((c.size &lt; 2 || c.size &gt; 4) ? c[0][s..-1]+"$0" : c[0][s..-1]+"("+c[1][1..-2].split(",").collect do |arg| "${"+(i+=1).to_s+":"+ arg.strip + "}" end.join(", ")+")$0")
 end
 
 def c_snip_gen(c,si,arg_type=nil)

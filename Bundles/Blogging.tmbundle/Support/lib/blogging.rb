@@ -1,4 +1,5 @@
 require 'cgi'
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/textmate.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/keychain.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/metaweblog.rb"
@@ -459,8 +460,7 @@ TEXT
   end
 
   def select_post(posts)
-    titles = []
-    posts.each { |p| titles.push( '"' + p['title'].gsub(/"/, '\"') + '"' ) }
+    titles = posts.map { |p| e_sh p['title'] }
 
     result = TextMate.dropdown(%Q{--title 'Fetch Post' \
       --text 'Select a recent post to edit' \
@@ -486,8 +486,7 @@ TEXT
 
     titles = []
     self.endpoints.each_key do | name |
-      next if name =~ /^https?:/
-      titles.push( '"' + name.gsub(/"/, '\"') + '"' )
+      titles << e_sh(name) unless name =~ /^https?:/
     end
 
     if titles.length == 0
@@ -502,7 +501,7 @@ TEXT
 
     result = result.split(/\n/)
     if result[0] == "1"
-      name = titles[result[1].to_i].gsub(/^"|"$/, '')
+      name = titles[result[1].to_i].gsub(/\\(.)/, '\\1') # FIXME rather than cleanup after e_sh, we should keep the unescaped name, as we don’t really know what e_sh does
       return self.endpoints[name]
     end
     nil

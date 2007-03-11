@@ -7,6 +7,36 @@ require 'fcntl'
 
 $SCRIPTMATE_VERSION = "$Revision$"
 
+def my_popen3(*cmd) # returns [stdin, stdout, strerr, pid]
+  pw = IO::pipe   # pipe[0] for read, pipe[1] for write
+  pr = IO::pipe
+  pe = IO::pipe
+
+  pid = fork{
+    pw[1].close
+    STDIN.reopen(pw[0])
+    pw[0].close
+
+    pr[0].close
+    STDOUT.reopen(pr[1])
+    pr[1].close
+
+    pe[0].close
+    STDERR.reopen(pe[1])
+    pe[1].close
+
+    exec(*cmd)
+  }
+
+  pw[0].close
+  pr[1].close
+  pe[1].close
+
+  pw[1].sync = true
+
+  [pw[1], pr[0], pe[0], pid]
+end
+
 def cmd_mate(cmd)
   # cmd can be either a string or a list of strings to be passed to Popen3
   # this command will write the output of the `cmd` on STDOUT, formatted in
@@ -22,8 +52,8 @@ class UserCommand
     @cmd = cmd
   end
   def run
-    stdin, stdout, stderr = Open3.popen3(@cmd)
-    return stdout, stderr, open("/dev/null")
+    stdin, stdout, stderr, pid = my_popen3(@cmd)
+    return stdout, stderr, IO::pipe, pid
   end
   def to_s
     @cmd.to_s
@@ -31,35 +61,37 @@ class UserCommand
 end
 
 class CommandMate
-  def initialize (command)
-    # the object `command` needs to implement a method `run`.  `run` should
-    # return an array of three file descriptors [stdout, stderr, stack_dump].
-    @error = ""
-    @command = command
-    STDOUT.sync = true
-    @mate = self.class.name
-  end
-  def filter_stdout(str)
-    # strings from stdout are passed through this method before being printed
-    htmlize(str)
-  end
-  def filter_stderr(str)
-    # strings from stderr are passwed through this method before printing
-    "<span style='color: red'>#{htmlize str}</span>"
-  end
-  def emit_header
-    puts html_head(:window_title => "#{@command}", :page_title => "#{@command}", :sub_title => "")
-    puts "<pre>"
-  end
-  def emit_footer
-    puts "</pre>"
-    puts html_footer
-  end
-  def emit_html
-    emit_header()
-    stdout, stderr, stack_dump, pid = @command.run
+    def initialize (command)
+      # the object `command` needs to implement a method `run`.  `run` should
+      # return an array of three file descriptors [stdout, stderr, stack_dump].
+      @error = ""
+      @command = command
+      STDOUT.sync = true
+      @mate = self.class.name
+    end
+  protected
+    def filter_stdout(str)
+      # strings from stdout are passed through this method before being printed
+      htmlize(str)
+    end
+    def filter_stderr(str)
+      # strings from stderr are passwed through this method before printing
+      "<span style='color: red'>#{htmlize str}</span>"
+    end
+    def emit_header
+      puts html_head(:window_title => "#{@command}", :page_title => "#{@command}", :sub_title => "")
+      puts "<pre>"
+    end
+    def emit_footer
+      puts "</pre>"
+      puts html_footer
+    end
+  public
+    def emit_html
+      emit_header()
+      stdout, stderr, stack_dump, pid = @command.run
 
-    puts <<-HTML
+      puts <<-HTML
 <script type="text/javascript" charset="utf-8">
 function press(evt) {
    if (evt.keyCode == 67 && evt.ctrlKey == true) {
@@ -70,27 +102,26 @@ document.body.addEventListener('keydown', press, false);
 </script>
 HTML
 
-    descriptors = [ stdout, stderr, stack_dump ]
-    descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
-    until descriptors.empty?
-      select(descriptors).shift.each do |io|
-        str = io.read
-        if str.to_s.empty? then
-          descriptors.delete io
-          io.close
-        elsif io == stdout then
-          print filter_stdout(str)
-        elsif io == stderr then
-          print filter_stderr(str)
-        elsif io == stack_dump then
-          @error << str
+      descriptors = [ stdout, stderr, stack_dump ]
+      descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
+      until descriptors.empty?
+        select(descriptors).shift.each do |io|
+          str = io.read
+          if str.to_s.empty? then
+            descriptors.delete io
+            io.close
+          elsif io == stdout then
+            print filter_stdout(str)
+          elsif io == stderr then
+            print filter_stderr(str)
+          elsif io == stack_dump then
+            @error << str
+          end
         end
       end
+      emit_footer()
+      Process.waitpid(pid)
     end
-    emit_footer()
-
-    Process.waitpid(pid)
-  end
 end
 
 class UserScript
@@ -110,62 +141,34 @@ class UserScript
       @display_name = 'untitled'
     end
   end
-  def executable
-    # return the path to the executable that will run @content.
-  end
-  def args
-    # return any arguments to be fed to the executable
-    []
-  end
-  def filter_cmd(cmd)
-    # this method is called with this list:
-    #     [executable, args, e_sh(@path), ARGV.to_a ].flatten
-    cmd
-  end
-  def version_string
-    # return the version string of the executable.
-  end
-  def my_popen3(*cmd) # returns [stdin, stdout, strerr, pid]
-    pw = IO::pipe   # pipe[0] for read, pipe[1] for write
-    pr = IO::pipe
-    pe = IO::pipe
-
-    pid = fork{
-      pw[1].close
-      STDIN.reopen(pw[0])
-      pw[0].close
-
-      pr[0].close
-      STDOUT.reopen(pr[1])
-      pr[1].close
-
-      pe[0].close
-      STDERR.reopen(pe[1])
-      pe[1].close
-
-      exec(*cmd)
-    }
-
-    pw[0].close
-    pr[1].close
-    pe[1].close
-
-    pw[1].sync = true
-
-    [pw[1], pr[0], pe[0], pid]
-  end
-  def run
-    rd, wr = IO.pipe
-    rd.fcntl(Fcntl::F_SETFD, 1)
-    ENV['TM_ERROR_FD'] = wr.to_i.to_s
-    cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten)
-    stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
-    if @write_content_to_stdin
-      Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'
+  public
+    def executable
+      # return the path to the executable that will run @content.
     end
-    wr.close
-    [ stdout, stderr, rd, pid ]
-  end
+    def args
+      # return any arguments to be fed to the executable
+      []
+    end
+    def filter_cmd(cmd)
+      # this method is called with this list:
+      #     [executable, args, e_sh(@path), ARGV.to_a ].flatten
+      cmd
+    end
+    def version_string
+      # return the version string of the executable.
+    end
+    def run
+      rd, wr = IO.pipe
+      rd.fcntl(Fcntl::F_SETFD, 1)
+      ENV['TM_ERROR_FD'] = wr.to_i.to_s
+      cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten)
+      stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
+      if @write_content_to_stdin
+        Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'
+      end
+      wr.close
+      [ stdout, stderr, rd, pid ]
+    end
 end
 
 class ScriptMate < CommandMate
@@ -177,23 +180,24 @@ class ScriptMate < CommandMate
     @mate = self.class.name
   end
 
-  def emit_header
-    puts html_head(:window_title => "#{@command.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@command.lang}")
-    puts <<-HTML
-<div class="#{@mate.downcase}">		
-<div><!-- first box containing version info and script output -->
-<pre><strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@command.version_string}</strong>
-<strong>>>> #{@command.display_name}</strong>
+  protected
+    def emit_header
+      puts html_head(:window_title => "#{@command.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@command.lang}")
+      puts <<-HTML
+  <div class="#{@mate.downcase}">		
+  <div><!-- first box containing version info and script output -->
+  <pre><strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@command.version_string}</strong>
+  <strong>>>> #{@command.display_name}</strong>
 
-<div style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
-HTML
-  end
+  <div style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
+  HTML
+    end
 
-  def emit_footer
-    puts '</div></pre></div>'
-    puts @error
-    puts '<div id="exception_report" class="framed">Program exited.</div>'
-    puts '</div>'
-    puts '</body></html>'
-  end
+    def emit_footer
+      puts '</div></pre></div>'
+      puts @error
+      puts '<div id="exception_report" class="framed">Program exited.</div>'
+      puts '</div>'
+      puts '</body></html>'
+    end
 end

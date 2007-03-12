@@ -12,7 +12,7 @@ end
 def make_link(text)
   case text
   when %r{\A(mailto:)?(.*?@.*\..*)\z}:        "mailto:#{$2}"
-  when %r{(http://www.amazon.co(?:m|.uk))/.+?/([A-Z0-9]{10})/[-a-zA-Z0-9_./%?=&amp;]+}: "#{$1}/o/asin/#{$2}"
+  when %r{http://www.(amazon.(?:com|co.uk|co.jp|ca|fr|de))/.+?/([A-Z0-9]{10})/[-a-zA-Z0-9_./%?=&amp;]+}: "http://#{$1}/dp/#{$2}"
   when %r{\A[a-zA-Z][a-zA-Z0-9.+-]*://.*\z}:  entity_escape(text)
   when %r{\A.*\.(com|uk|net|org|info)\z}:     "http://#{entity_escape text}"
   when %r{\A\S+\z}:                           entity_escape(text)

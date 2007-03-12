@@ -40,7 +40,7 @@ res = if warn_for_paths.size > 0 then
   plural = (warn_for_paths.size == 1) ? '' : 's'
   title_files = (warn_for_paths.size == 1) ? "“#{paths_to_display}”" : 'files'
 
-  TextMate::Dialog.alert(:warning, "Revert #{title_files}?", "Do you really want to revert the file#{plural} “#{paths_to_display}” and lose all local changes?", 'Cancel', 'Revert')
+  TextMate::Dialog.alert(:warning, "Revert #{title_files}?", "Do you really want to revert the file#{plural} “#{paths_to_display}” and lose all local changes?", 'Revert', 'Cancel')
 else
   # Nothing dangerous; be happy
   'Revert'

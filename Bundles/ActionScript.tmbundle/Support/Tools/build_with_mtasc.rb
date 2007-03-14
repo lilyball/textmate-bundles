@@ -102,6 +102,8 @@ def mtasc_compile
       `open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
       cmd += " -pack com/mab/util "
       cmd += " -trace com.mab.util.debug.trace "
+    elsif @trace == "console"
+      # do nothing
     else
       cmd += " -trace #{@trace} "
     end
@@ -137,12 +139,15 @@ def mtasc_compile
 		warning "#{warnings.uniq.join('</p><p>')} <br/> <pre>#{cmd}</pre>", "Warnings:"
 	end
 	if errors.empty? && warnings.empty?
-		if @preview == "textmate"
-			# Preview in TextMate
-			output_file = "#{@project_path}/#{@swf}"
-			if @size_is_percentage
-				@width += "%"
-				@height += "%"
+    if @trace == "console"
+      `open -a Console.app "#{ENV['HOME']}/Library/Preferences/Macromedia/Flash Player/Logs/flashlog.txt"`
+    end
+    if @preview == "textmate"
+      # Preview in TextMate
+      output_file = "#{@project_path}/#{@swf}"
+      if @size_is_percentage
+        @width += "%"
+        @height += "%"
 			end
 			puts "<html>"
 			puts "<head><title>#{@swf}</title></head>"

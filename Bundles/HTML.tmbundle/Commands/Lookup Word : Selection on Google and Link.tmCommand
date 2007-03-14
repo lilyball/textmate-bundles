@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
 require 'net/http' 
-TextMate.call_with_progress("Asking Google for the link") do
+TextMate.call_with_progress(:message => "Asking Google for the link") do
   phrase = STDIN.read
   response = Net::HTTP.get_response(URI.parse(URI.escape("http://www.google.com/search?q=#{phrase}&amp;btnI=I'm+Feeling+Lucky")))
   url = response.to_hash['location']

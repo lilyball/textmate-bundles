@@ -55,9 +55,10 @@ def mtasc_compile
 		end
 		@fps = yml['fps']
 		@classpaths = yml['classpaths']
-		@trace = yml['trace']
+		@trace = yml['trace'] if !yml['trace'].nil?
 		@preview = yml['preview'] || "textmate"
 		@bgcolor = yml['bgcolor'] || "FFFFFF"
+		@params = yml['params'] if !yml['params'].nil?
 	else
 		@mtasc_path = ENV['TM_BUNDLE_SUPPORT'] + "/bin/mtasc"
 		@app = @file_name
@@ -91,20 +92,24 @@ def mtasc_compile
 		cmd += " -cp \"#{@classpaths.join('" -cp "')}\" "
 	end
 
-	if !@trace
-		# Use XTrace for debugging
-		`open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
-		cmd += " -pack com/mab/util "
-		cmd += " -trace com.mab.util.debug.trace "
-	else
-	  cmd += " -trace #{@trace} "
-	end
+  # Additional parameters from mtasc.yaml
+  if @params
+    cmd += " #{@params} "
+  end
+  if @trace
+    if @trace == "xtrace"
+      # Use XTrace for debugging
+      `open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
+      cmd += " -pack com/mab/util "
+      cmd += " -trace com.mab.util.debug.trace "
+    else
+      cmd += " -trace #{@trace} "
+    end
+  end
 
-	if !File.exists? @swf
-		cmd += " -header #{@width}:#{@height}:#{@fps}"
-	else
-		cmd += " -keep "
-	end
+  if !File.exists? @swf
+    cmd += " -header #{@width}:#{@height}:#{@fps}"
+  end
 
 	cmd += " -main "
 	cmd += " -swf #{@swf}"

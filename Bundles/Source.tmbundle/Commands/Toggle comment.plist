@@ -112,10 +112,10 @@ when "line"  # apply comment line by line
     end
   end
 when "block" # apply comment around selection
-  if text =~ /\A[\t \0]*\z/
-    out default[:start], text
+  if text =~ /\A([\t ]*)\0([\t ]*)\z/
+    out $1, default[:start]
     print "${0}"
-    out default[:end]
+    out $2, default[:end]
   elsif default[:no_indent]
     out default[:start], text, default[:end]
   else

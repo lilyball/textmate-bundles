@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+# an evolution of the code from skiadas.dcostanet.net/afterthought
+# retrieves link from Google automatically and creates XHTML link
+# improved call to progress bar, added ability to retrieve title
+# of page and create title attribute in link using idea
+# borrowed from iamrice.org.  Improved regex to handle title tags 
+# newlines, spaces and capitalization differences
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+require 'net/http' 
+require 'open-uri'
+require 'erb'
+
+def getLinkWithTitle(phrase)
+  TextMate.call_with_progress(:title =&gt; "Contacting Google", :message =&gt; "Retrieving Link for #{phrase}") do
+    response = Net::HTTP.get_response(URI.parse(URI.escape("http://www.google.com/search?q=#{phrase}&amp;btnI=I'm+Feeling+Lucky")))
+    url = response.to_hash['location'].first
+    fp = open(url)
+    title = fp.read.match(/&lt;title&gt;([^&lt;&gt;]*)&lt;\/title&gt;/i).to_a[1]
+    title = title.strip
+    return url, title, phrase
+  end
+end
+
+url, title, input = getLinkWithTitle(STDIN.read)
+print ERB.new(ENV['TM_LINK_FORMAT']).result</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^@L</string>
+	<key>name</key>
+	<string>Lookup Word / Selection on Google and Link</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html, text.html.markdown, text.html.textile, text.bbcode</string>
+	<key>uuid</key>
+	<string>D2F3BE59-1349-4762-9B17-A6F79A7F81B9</string>
+</dict>
+</plist>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -rjcode -Ku
+SUPPORT = ENV['TM_SUPPORT_PATH']
+DIALOG = ENV['DIALOG']
+require SUPPORT + '/lib/escape'
+require SUPPORT + '/lib/osx/plist'
+require SUPPORT + '/lib/exit_codes'
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/yahoo"
+require 'erb'
+
+input = STDIN.read
+query = e_url(input)
+yahoo = WebSearch.new('TM_YAHOO', query, 'all', 10, 1, nil, 1)
+ysuggest = []
+    yahoo.parse_results.each {|result| 
+        ysuggest &lt;&lt; { 
+          'title' =&gt; result['Title'].gsub('"','&amp;raquo;'),
+          'url' =&gt; result['Url']}
+    }
+    plist = { 'menuItems' =&gt; ysuggest }.to_plist
+
+    res = PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+    TextMate.exit_show_tool_tip "No matches found" unless res.has_key? 'selectedMenuItem'
+    url = res['selectedMenuItem']['url']
+    title = res['selectedMenuItem']['title']
+
+    print ERB.new(ENV['TM_LINK_FORMAT']).result</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^Y</string>
+	<key>name</key>
+	<string>Yahoo Web Search</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html, text.html.markdown, text.html.textile, text.bbcode</string>
+	<key>uuid</key>
+	<string>2E03E8C8-DC99-4D15-AE46-0E8DCE6BBE6F</string>
+</dict>
+</plist>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>1BF76350-AB8F-4FC8-9512-1129CEEE0A3E</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog.rb"
+require 'cgi'
+require 'open-uri'
+require 'erb'
+
+def cap_all_words(string)
+	return string.split(" ").map{|w| w.capitalize}.join(" ")
+end
+
+def follow_redirect(page)
+  pagename = page.match(/var\swgPageName\s\=\s\"(.*?)\";/).to_a[1]
+  url = %{http://en.wikipedia.org/wiki/#{pagename}}
+  content = open(url).read
+  return url, content, pagename
+end #follow_redirect
+
+def select_link(links)
+    linklist = links.map { |p| p[0] }
+    item = Dialog.request_item :title =&gt; "Multiple Definitions", :prompt =&gt; "Please select a definition", :items =&gt; linklist
+    TextMate.exit_discard if item.nil?
+    return links[linklist.index(item)]
+end # select_link
+
+def check_for_search(page)
+  TextMate.exit_show_tool_tip "No definition found" if page.match(/&lt;title&gt;([^&lt;&gt;]*)&lt;\/title&gt;/i).to_a[1].include? "Search"
+  return page
+end # check_for_search
+
+def check_for_multiple_results(page,phrase,pagename)
+  if page.match(/(&lt;\/b&gt;\scan\sbe:&lt;\/p&gt;)|(&lt;\/b&gt;\smay\srefer\sto:&lt;\/p&gt;)/i) then
+    open("http://en.wikipedia.org/wiki/Special:Export/#{pagename}") {|body|
+	      links = []
+	      body.read.scan(/\[\[([^|\]]*)[|]?[^\]]*\]\]/) { |link| 
+        links.push(link) }
+       choice = select_link(links)
+       TextMate.exit_discard if choice.nil?
+       TextMate.exit_replace_text(%{&lt;a href="http://en.wikipedia.org/wiki/#{CGI.escape(choice[0]).gsub('+','_')}" title="Wikipedia Entry: #{choice[0]}"&gt;#{phrase}&lt;/a&gt;})        
+        }
+  end
+end #check_for_multiple_results
+
+def check_for_disambiguation(page,phrase,pagename)
+#  if page.match(/#{phrase}[\s]?\(disambiguation\)/i) then
+  if page.include? "(disambiguation)"
+	    # findlink = page.match(/\"(\/wiki\/#{pagename}_%28disambiguation%29)\"/i) 
+	    # open("http://en.wikipedia.org#{findlink[1]}") {|body|
+		open("http://en.wikipedia.org/wiki/Special:Export/#{pagename}_%28disambiguation%29") {|body|
+	      content = body.read
+	      links = []
+	      content.scan(/\[\[([^|\]]*)[|]?[^\]]*\]\]/) { |link| 
+           links.push(link) }
+       choice = select_link(links)
+       TextMate.exit_discard if choice.nil?
+       TextMate.exit_replace_text(%{&lt;a href="http://en.wikipedia.org/wiki/#{CGI.escape(choice[0]).gsub('+','_')}" title="Wikipedia Entry: #{choice[0]}"&gt;#{phrase}&lt;/a&gt;})        
+        }
+	end
+end #check_for_disambiguation
+
+def getWikiDef(phrase)
+  TextMate.call_with_progress(:title =&gt; "Contacting Wikipedia", :message =&gt; "Looking for definition of #{phrase}") do
+    @response = open("http://en.wikipedia.org/wiki/Special:Search?search=#{CGI.escape(phrase)}",
+        "User-Agent" =&gt; "TextMate 1.5.3")
+    content = @response.read
+    if content.scan(/Redirected\sfrom/)
+      url, content, pagename = follow_redirect(content)
+  #    confirmed = Dialog.request_confirmation :button1 =&gt; "Accept", :button2 =&gt; "Cancel", :title =&gt; "Redirected to \"#{pagename}\"", :prompt =&gt; "Accept Redirection?"
+  #    TextMate.exit_discard unless confirmed
+    else
+      url = @response.base_uri
+      pagename = phrase
+    end
+    check_for_search(content)
+    check_for_multiple_results(content,phrase,pagename)
+    check_for_disambiguation(content,phrase,pagename)
+    title = "Wikipedia Entry: " + pagename
+    return url, title, phrase
+  end
+end
+
+url, title, input = getWikiDef(STDIN.read)
+print ERB.new(ENV['TM_LINK_FORMAT']).result
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^@w</string>
+	<key>name</key>
+	<string>Lookup Word / Selection on Wikipedia and link</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html, text.html.markdown, text.html.textile, text.bbcode</string>
+	<key>uuid</key>
+	<string>B94A2DF9-FC40-4281-80FB-35FB2917CDE7</string>
+</dict>
+</plist>

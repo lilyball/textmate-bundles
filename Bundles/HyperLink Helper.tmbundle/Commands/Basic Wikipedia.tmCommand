@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes.rb"
+require 'open-uri'
+require 'erb'
+
+
+def getWikiDef(input)
+  TextMate.call_with_progress(:title =&gt; "Contacting Wikipedia", :message =&gt; "Looking for definition of #{input}") do
+  	response = open("http://en.wikipedia.org/wiki/Special:Search?search=#{input}",
+  	    "User-Agent" =&gt; "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.1) Gecko/20060111 Firefox/1.5.0.1",
+  	    "Referer" =&gt; "http://www.ruby-lang.org/") {|f| $response = f }
+  	url = response.base_uri
+  	# borrowed from iamrice.org
+  	fp = open(url)
+  	title = "Wikipedia Entry: " + fp.read.match(/&lt;title&gt;([^&lt;&gt;]*)&lt;\/title&gt;/i).to_a[1]
+  	if title.include? "Search"
+  	   TextMate.exit_show_tool_tip "No definition found"
+  	else
+        return title, url
+  	end
+  end
+end
+input = STDIN.read
+title, url = getWikiDef(input)
+print ERB.new(ENV['TM_LINK_FORMAT']).result</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Basic Wikipedia</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html, text.html.markdown, text.html.textile, text.bbcode</string>
+	<key>uuid</key>
+	<string>71C47F5F-41FA-40E8-A13A-238BC30984D1</string>
+</dict>
+</plist>

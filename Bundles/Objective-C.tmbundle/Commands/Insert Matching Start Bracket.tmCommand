@@ -284,7 +284,8 @@ if __FILE__ == $PROGRAM_NAME
     print line[0..caret_placement]+"]$0"+line[caret_placement+1..-1]
   elsif !has_message &amp;&amp; (b &lt; caret_placement )
     print line[0..b-1] unless b == 0
-    print "[" +line[b..caret_placement].rstrip + " $0]"+line[caret_placement+1..-1] 
+    ins = (/\s/ =~ line[caret_placement].chr ? "$0]" : " $0]")
+    print "[" +line[b..caret_placement] + ins +line[caret_placement+1..-1] 
   elsif b &lt; caret_placement    
     print line[0..b-1] unless b == 0
     print "[" +line[b..caret_placement] +"]$0"+line[caret_placement+1..-1] 

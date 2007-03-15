@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -11,9 +11,6 @@
 html_header "XCode Help" "XCode"
 
 Markdown.pl &lt;&lt;'EOF'
-
-# Help for Xcode Bundle
-
 This bundle contains a set of useful commands for Xcode users.
 
 Several of the commands will use your Xcode project file and will try to find this by first checking the root folder of your project (`TM_PROJECT_DIRECTORY`) searching for a project with the extensions `xcodeproj`, `xcode`, or `pbproj`. If nothing is found, the folder of the currently open file (`TM_DIRECTORY`) will be checked, and then the parent and ancestor folders of this (until the project file is found).
@@ -22,7 +19,17 @@ Normally it should work out-of-the-box when dragging the folder containing your 
 
 ## Commands
 
-*   __Run__ (&amp;#x2318;R)
+*   __Build &amp; Run__ (&amp;#x2318;R)
+
+    First do a normal build. If that succeeds, run the target and display console output.
+
+*   __Build__ (&amp;#x2318;B)
+
+    Build the project using [`xcodebuild`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html) with the active build configuration and show the result pretty-printed and with potential source references shown as clickable links.
+
+    A sample will be played based on the success/failure of the build. See Settings below for how to disable this.
+
+*   __Run__ (&amp;#x21E7;&amp;#x2318;R)
 
     Scan the project file for a target of type _application_ or _tool_ and run it.
     
@@ -34,19 +41,21 @@ Normally it should work out-of-the-box when dragging the folder containing your 
 
     If the project has multiple _tool_ and _application_ targets, the command will currently show an error (rather than pick the active).
 
-*   __Build__ (&amp;#x2318;B)
+*   __Run Tests__
 
-    Build the project using [`xcodebuild`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html) with the active build configuration and show the result pretty-printed and with potential source references shown as clickable links.
-
-    A sample will be played based on the success/failure of the build. See Settings below for how to disable this.
-
-*   __Build &amp; Run__ (&amp;#x21E7;&amp;#x2318;R)
-
-    First do a normal build, if that succeeds, run the target.
+	Scan the project file for a unit test target and run it.
 
 *   __Clean__
 
     This will clear the target (done by running `xcodebuild clean` with the project and active build configuration as arguments).
+
+*   __New Project Using Xcode Template…__
+
+	Creates a new Xcode project from one of Xcode's templates.
+
+*   __Open Project in Xcode…__
+
+	If&amp;mdash;using the same heuristics as the Run command&amp;mdash;an Xcode project can be found, open it in Xcode.
 
 *   __Import Project…__
 

@@ -279,7 +279,9 @@ def try_find_class(line)
       end
     else
 			framework = %x{ zgrep ^#{e_sh m[2] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
-			list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+			unless framework.empty?
+				list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+			end
     end
   end
   return list

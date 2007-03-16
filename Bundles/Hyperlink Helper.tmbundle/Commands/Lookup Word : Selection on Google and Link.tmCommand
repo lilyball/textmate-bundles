@@ -21,7 +21,7 @@ require 'erb'
 def getLinkWithTitle(phrase)
   TextMate.call_with_progress(:title =&gt; "Contacting Google", :message =&gt; "Retrieving Link for “#{phrase}”…") do
     response = Net::HTTP.get_response(URI.parse(URI.escape("http://www.google.com/search?q=#{phrase}&amp;btnI=I'm+Feeling+Lucky")))
-    url = response.to_hash['location'].first
+    url = response.to_hash['location'].to_a.first
     fp = open(url)
     title = fp.read.match(/&lt;title&gt;([^&lt;&gt;]*)&lt;\/title&gt;/i).to_a[1]
     title = title.strip

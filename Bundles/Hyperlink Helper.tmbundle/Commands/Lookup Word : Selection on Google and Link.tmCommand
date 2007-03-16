@@ -5,20 +5,21 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
+	<string>#!/usr/bin/env ruby -wKU
 # an evolution of the code from skiadas.dcostanet.net/afterthought
 # retrieves link from Google automatically and creates XHTML link
 # improved call to progress bar, added ability to retrieve title
 # of page and create title attribute in link using idea
 # borrowed from iamrice.org.  Improved regex to handle title tags 
 # newlines, spaces and capitalization differences
-require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+require ENV['TM_SUPPORT_PATH'] + '/lib/progress.rb'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape.rb'
 require 'net/http' 
 require 'open-uri'
 require 'erb'
 
 def getLinkWithTitle(phrase)
-  TextMate.call_with_progress(:title =&gt; "Contacting Google", :message =&gt; "Retrieving Link for #{phrase}") do
+  TextMate.call_with_progress(:title =&gt; "Contacting Google", :message =&gt; "Retrieving Link for “#{phrase}”…") do
     response = Net::HTTP.get_response(URI.parse(URI.escape("http://www.google.com/search?q=#{phrase}&amp;btnI=I'm+Feeling+Lucky")))
     url = response.to_hash['location'].first
     fp = open(url)

@@ -36,6 +36,8 @@ url = make_link %x{__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbpaste}.str
 input = STDIN.read
 print ERB.new(ENV['TM_LINK_FORMAT']).result
 </string>
+	<key>fallbackInput</key>
+	<string>word</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

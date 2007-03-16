@@ -31,6 +31,8 @@ end
 input = STDIN.read
 title, url = getWikiDef(input)
 print ERB.new(ENV['TM_LINK_FORMAT']).result</string>
+	<key>fallbackInput</key>
+	<string>word</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>name</key>

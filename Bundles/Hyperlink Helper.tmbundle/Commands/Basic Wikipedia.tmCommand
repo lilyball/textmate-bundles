@@ -24,7 +24,7 @@ def getWikiDef(input)
   	if title.include? "Search"
   	   TextMate.exit_show_tool_tip "No definition found"
   	else
-        return title, url
+  	   return title.sub(/ - Wikipedia, the free encyclopedia/, ''), url
   	end
   end
 end

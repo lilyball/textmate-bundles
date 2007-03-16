@@ -65,7 +65,10 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&amp;#]+(?&lt;![.?:])</string>
+					<string>(?x)
+						( (https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)
+						[-:@a-zA-Z0-9_.,~%+/?=&amp;#]+(?&lt;![.,?:])
+					</string>
 					<key>name</key>
 					<string>markup.underline.link</string>
 				</dict>

@@ -53,7 +53,7 @@ class UserCommand
   end
   def run
     stdin, stdout, stderr, pid = my_popen3(@cmd)
-    return stdout, stderr, IO::pipe, pid
+    return stdout, stderr, nil, pid
   end
   def to_s
     @cmd.to_s
@@ -84,7 +84,7 @@ class CommandMate
     end
     def emit_footer
       puts "</pre>"
-      puts html_footer
+      html_footer
     end
   public
     def emit_html
@@ -101,9 +101,10 @@ function press(evt) {
 document.body.addEventListener('keydown', press, false);
 </script>
 HTML
-
-      descriptors = [ stdout, stderr, stack_dump ]
-      descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
+      descriptors = [ stdout, stderr, stack_dump ].compact
+      descriptors.each do
+         |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
+      end
       until descriptors.empty?
         select(descriptors).shift.each do |io|
           str = io.read
@@ -113,7 +114,7 @@ HTML
           elsif io == stdout then
             print filter_stdout(str)
           elsif io == stderr then
-            print filter_stderr(str)
+            puts filter_stderr(str)
           elsif io == stack_dump then
             @error << str
           end
@@ -195,9 +196,8 @@ class ScriptMate < CommandMate
 
     def emit_footer
       puts '</div></pre></div>'
-      puts @error
+      puts @error unless @error == ""
       puts '<div id="exception_report" class="framed">Program exited.</div>'
-      puts '</div>'
-      puts '</body></html>'
+      html_footer
     end
 end

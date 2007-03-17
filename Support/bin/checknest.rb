@@ -10,6 +10,8 @@
 #           Defaults to 1. Set to -1 to consider all.
 # -e<text>: If a spurious close-tag is encoutered, substitute line with this.
 # -p:       Pass file thru, don't just output the close text.
+# -d:       Debugging: print out the line number and current stack,
+#           whenever an opening or closing tag is found.
 #
 # <close text> and -e<text> can use $n to substitute tag captures.
 #
@@ -23,6 +25,7 @@ end
 begin
   open_match = Regexp.new ARGV[0]
   close_match = Regexp.new ARGV[1]
+  open_or_close_match = Regexp.new("%s|%s" % ARGV)
   close_text = ARGV[2]
 rescue
   puts 'ERROR: Ill-formed regex in open or close tag.'
@@ -34,12 +37,14 @@ num = nil
 levels = 1
 error_text = nil
 pass = false
+debug = false
 ARGV[3..-1].each {|e|
   case e
   when /^-n(\d+)$/: num = $1.to_i
   when /^-l(\d+)$/: levels = $1.to_i
   when /^-e(.+)$/: error_text = $1
   when /^-p$/: pass = true
+  when /^-d$/: debug = true
   end
 }
 
@@ -48,15 +53,20 @@ stack = []
 line = 1
 while (!num or line<num) and s = $stdin.gets
   dumped = false
-  if s =~ open_match
-    stack.push $~.to_a
-  elsif s =~ close_match
-    e = $~.to_a
-    if e[1..-1] == stack[-1][1..-1]
-      stack.pop
-    elsif error_text
-      print error_text.gsub(/\$(\d)/) {e[$1.to_i]}
-      dumped = true
+  s.scan(open_or_close_match) do  m = $&
+    if m =~ open_match
+      stack.push $~.to_a
+    elsif m =~ close_match
+      e = $~.to_a
+      if e[1..-1] == stack[-1][1..-1]
+        stack.pop
+      elsif error_text
+        print error_text.gsub(/\$(\d)/) {e[$1.to_i]}
+        dumped = true
+      end
+    end
+    if debug
+    	puts "%d: "%line + (stack.map{|a,b| b})*", "
     end
   end
   line += 1

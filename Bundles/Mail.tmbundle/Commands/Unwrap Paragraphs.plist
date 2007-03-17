@@ -36,7 +36,8 @@ lines.each_with_index do |line, i|
   cur_qlevel = quote_level(line)
 end
 
-par_bounds.uniq!.each_with_index do |i, idx|
+par_bounds.uniq!
+par_bounds.each_with_index do |i, idx|
   j = idx+1 &lt; par_bounds.size ? par_bounds[idx+1] : lines.size
   puts reformat_lines(lines[i...j])
 end

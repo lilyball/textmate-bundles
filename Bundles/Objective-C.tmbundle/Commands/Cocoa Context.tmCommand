@@ -293,12 +293,10 @@ backContext = line[1+caret_placement..-1].match /^[a-zA-Z0-9]/
 pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
 
 if backContext
-  print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
   TextMate.exit_discard
 end
 
 if caret_placement == -1
-  print "$0"+ line[caret_placement+1..-1]
   TextMate.exit_discard
 end
 
@@ -354,7 +352,7 @@ else
 	TextMate.exit_discard
 end
 
-print line[0..caret_placement] + res + line[caret_placement+1..-1]
+print e_sn(line[0..caret_placement]) + res + e_sn(line[caret_placement+1..-1])
 </string>
 	<key>disableOutputAutoIndent</key>
 	<true/>

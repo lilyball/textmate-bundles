@@ -224,12 +224,12 @@ if __FILE__ == $PROGRAM_NAME
        end
      end
   if caret_placement ==-1
-    print "]$0"+line[caret_placement+1..-1]
+    print "]$0" + e_sn(line[caret_placement+1..-1])
     TextMate.exit_insert_snippet
   end
 
   if  up != 0 
-    print line[0..caret_placement]+"]$0"+line[caret_placement+1..-1]
+    print e_sn(line[0..caret_placement])+"]$0"+e_sn(line[caret_placement+1..-1])
     TextMate.exit_insert_snippet
   end
   
@@ -266,7 +266,7 @@ if __FILE__ == $PROGRAM_NAME
     offset +=token[1].length
   end
   if tokenList.empty?
-    print line[0..caret_placement]+"]$0"+line[caret_placement+1..-1]
+    print e_sn(line[0..caret_placement])+"]$0"+e_sn(line[caret_placement+1..-1])
     TextMate.exit_insert_snippet
   end
   
@@ -275,22 +275,22 @@ if __FILE__ == $PROGRAM_NAME
 
   if !line[caret_placement+1].nil? &amp;&amp; line[caret_placement+1].chr == "]"
     if b.nil? || par.list.empty? || par.list[-1].text == "["
-			print line[0..caret_placement]+"]$0"+line[caret_placement+2..-1]
+			print e_sn(line[0..caret_placement])+"]$0"+e_sn(line[caret_placement+2..-1])
     	TextMate.exit_insert_snippet
 		end
   end
 
   if b.nil?
-    print line[0..caret_placement]+"]$0"+line[caret_placement+1..-1]
+    print e_sn(line[0..caret_placement])+"]$0"+e_sn(line[caret_placement+1..-1])
   elsif !has_message &amp;&amp; (b &lt; caret_placement )
-    print line[0..b-1] unless b == 0
+    print e_sn(line[0..b-1]) unless b == 0
     ins = (/\s/ =~ line[caret_placement].chr ? "$0]" : " $0]")
-    print "[" +line[b..caret_placement] + ins +line[caret_placement+1..-1] 
+    print "[" +e_sn(line[b..caret_placement]) + ins +e_sn(line[caret_placement+1..-1])
   elsif b &lt; caret_placement    
-    print line[0..b-1] unless b == 0
-    print "[" +line[b..caret_placement] +"]$0"+line[caret_placement+1..-1] 
+    print e_sn(line[0..b-1]) unless b == 0
+    print "[" +e_sn(line[b..caret_placement]) +"]$0"+e_sn(line[caret_placement+1..-1]) 
   else
-    print line[0..caret_placement]+"]$0"+line[caret_placement+1..-1]
+    print e_sn(line[0..caret_placement])+"]$0"+e_sn(line[caret_placement+1..-1])
   end
 end
 </string>

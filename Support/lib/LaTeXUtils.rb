@@ -32,7 +32,8 @@ module LaTeX
       return "" unless `which kpsewhich`.match(/^no kpsewhich/)
       # Then try some specific paths
       locs = ["/usr/texbin/",
-              "/usr/local/teTeX/bin/powerpc-apple-darwin-current/"]
+              "/usr/local/teTeX/bin/powerpc-apple-darwin-current/",
+              "/opt/local/bin/"]
       locs.each do |loc|
         return loc if File.exist?(loc+"kpsewhich")
       end

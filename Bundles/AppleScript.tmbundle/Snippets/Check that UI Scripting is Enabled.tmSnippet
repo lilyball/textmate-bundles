@@ -5,20 +5,16 @@
 	<key>content</key>
 	<string>on UIscript_check()
 	-- check to see if assistive devices is enabled
-	tell application "System Events"
-		set UI_enabled to UI elements enabled
-	end tell
-	if UI_enabled is false then
-		tell application "System Preferences"
+	tell application "System Events" to set UI_enabled to UI elements enabled
+	if not UI_enabled then
+		tell application "AppleScript Utility"
 			activate
-			set current pane to pane "com.apple.preference.universalaccess"
-			display dialog "This script utilizes the built-in Graphic User Interface Scripting architecture of Mac OS X which is currently disabled." &amp; return &amp; return &amp; "You can activate GUI Scripting by selecting the checkbox \"Enable access for assistive devices\" in the Universal Access preference pane." with icon 1 buttons {"Cancel"} default button 1
+			display dialog "This script utilizes the built-in Graphical User Interface Scripting architecture of Mac OS X which is currently disabled." &amp; return &amp; return &amp; "You can activate GUI Scripting by selecting the checkbox “Enable GUI Scripting” in AppleScript Utility." with icon 1 buttons {"Okay"} default button 1
 		end tell
 	end if
 end UIscript_check
 
-UIscript_check()
-</string>
+UIscript_check()</string>
 	<key>name</key>
 	<string>Check that UI Scripting is Enabled</string>
 	<key>scope</key>

@@ -1,6 +1,10 @@
 require 'xmlrpc/client'
 
 class MetaWeblogClient < XMLRPC::Client
+  def initialize(*args)
+    super(*args)
+    @http.verify_mode = OpenSSL::SSL::VERIFY_NONE # squelch Net::HTTP warning
+  end
   def get_post(post_id, username, password)
     call("metaWeblog.getPost", "#{post_id}", "#{username}", "#{password}")
   end

@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby -wKU
 
+require 'escape.rb'
+
 class TreeNode
   attr_accessor :heading, :attributes, :parent, :level, :count
   def initialize(parent = nil, count = 1)
@@ -34,7 +36,9 @@ end
 
 IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
 
-  Thread.new { ARGF.each_line { |line| io << line }; io.close_write }
+  Thread.new { ARGF.each_line { |line| 
+    io << line.gsub(/\[.+?\]\[\?(.+?)\]/){ $& + "\n[?" + $1 + "]: help:search='&quot;" + e_url($1) + "&quot;'%20bookID='TextMate%20Help'\n" }
+  }; io.close_write }
 
   root = tree_node = TreeNode.new
   contents = ''
@@ -89,6 +93,9 @@ function setup_external_links() {
       link.title = '⌘-click to open “' + link.href + '” in the default browser.';
       link.addEventListener('click', click_external_link, false);
       insert_after(document.createTextNode("  ➲"), link);
+    } else if (link.href.match(/^help:/)) {
+      link.title = 'Open TexMate help in Help Viewer.';
+      insert_after(document.createTextNode(" ⓘ"), link);
     }
   }
 }

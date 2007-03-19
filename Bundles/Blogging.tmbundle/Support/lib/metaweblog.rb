@@ -1,4 +1,5 @@
 require 'xmlrpc/client'
+require "net/https" # OpenSSL::SSL::VERIFY_NONE
 
 class MetaWeblogClient < XMLRPC::Client
   def initialize(*args)

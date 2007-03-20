@@ -37,7 +37,7 @@ end
 IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
 
   Thread.new { ARGF.each_line { |line| 
-    io << line.gsub(/\[.+?\]\[\?(.+?)\]/){ $& + "\n[?" + $1 + "]: help:search='&quot;" + e_url($1) + "&quot;'%20bookID='TextMate%20Help'\n" }
+    io << line.gsub(/\[(.+?)\]\(\?(.+?)\)/){ '[' + $1 + '][?' + $2 + ']' + "\n[?" + $2 + "]: help:anchor='" + e_url($2) + "'%20bookID='TextMate%20Help'\n" }
   }; io.close_write }
 
   root = tree_node = TreeNode.new

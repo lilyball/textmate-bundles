@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Slightly modified version of the command for the JavaScript bundle by Thomas Aylott(?)
+
+# index created using: curl -s 'http://devguru.com/technologies/javascript/index.asp'|grep -o '&lt;a href="[0-9]*.asp"&gt;[a-z][a-zA-Z]*&lt;/a&gt;'|perl -pe 's/&lt;a href="([^"]*)"&gt;([^&lt;]*)&lt;\/a&gt;/$2\t$1/'|sort|uniq|gzip &gt;data/dev_guru_index.gz
+
+# First try GM docs
+
+ref=$(ruby -e '
+	GM_ENTRIES = %w{GM_addStyle GM_getValue GM_setValue GM_log GM_openInTab GM_registerMenuCommand GM_xmlhttpRequest unsafeWindow}
+	look_up = ENV["TM_SELECTED_TEXT"] || ENV["TM_CURRENT_WORD"]
+	puts look_up if GM_ENTRIES.include?(look_up)
+')
+
+[[ -n "$ref" ]] &amp;&amp; exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=http://wiki.greasespot.net/$ref'&gt;"
+
+# Then try JS docs
+
+ref=$(zgrep -w "^${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}" "$TM_BUNDLE_SUPPORT/data/dev_guru_index.gz"|cut -f2)
+
+[[ -n "$ref" ]] &amp;&amp; exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=http://devguru.com/technologies/javascript/$ref'&gt;"
+
+echo "No documentation found for \"${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}\"."</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation for Word / Selection</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.js.greasemonkey</string>
+	<key>uuid</key>
+	<string>276FCB93-FB0E-49A9-A5E8-3714D4A0D0C6</string>
+</dict>
+</plist>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>user.js</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>// ==UserScript==</string>
+	<key>foldingStartMarker</key>
+	<string>/\*\*|\{\s*$|\s*//\s*==UserScript==</string>
+	<key>foldingStopMarker</key>
+	<string>\*\*/|^\s*\}|\s*//\s*==/UserScript==</string>
+	<key>keyEquivalent</key>
+	<string>^~G</string>
+	<key>name</key>
+	<string>Greasemonkey</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>\bunsafeWindow\b</string>
+			<key>name</key>
+			<string>support.class.greasemonkey</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bGM_(registerMenuCommand|xmlhttpRequest|setValue|getValue|log|openInTab|addStyle)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.greasemonkey</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\s*//\s*==UserScript==</string>
+			<key>end</key>
+			<string>\s*//\s*==/UserScript==</string>
+			<key>name</key>
+			<string>meta.header.greasemonkey</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.greasemonkey</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.greasemonkey</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(@(name|namespace|description|include|exclude))\b\s*(.+\s+)?</string>
+					<key>name</key>
+					<string>meta.directive.greasemonkey</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.js</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.js.greasemonkey</string>
+	<key>uuid</key>
+	<string>B57ED36B-65DD-492A-82D7-E6C80253BAAB</string>
+</dict>
+</plist>

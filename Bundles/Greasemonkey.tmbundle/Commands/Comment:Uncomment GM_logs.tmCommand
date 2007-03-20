@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require "#{ENV['TM_BUNDLE_SUPPORT']}/greasemonkey.rb"
+Greasemonkey.new.toggle_log_comments</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Comment/Uncomment GM_logs</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.js.greasemonkey</string>
+	<key>uuid</key>
+	<string>0674F266-C30F-4089-95A4-DDB68E89439E</string>
+</dict>
+</plist>

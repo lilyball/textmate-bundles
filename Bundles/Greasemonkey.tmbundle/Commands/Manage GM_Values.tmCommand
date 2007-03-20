@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require "#{ENV['TM_BUNDLE_SUPPORT']}/greasemonkey.rb"
+Greasemonkey.new.manage_gm_values</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>Manage GM_Values</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.js.greasemonkey</string>
+	<key>uuid</key>
+	<string>5A9C9F8A-99E8-451D-BC0C-B5C2A8A9A45E</string>
+</dict>
+</plist>

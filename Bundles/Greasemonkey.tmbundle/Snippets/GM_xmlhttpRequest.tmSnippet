@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>GM_xmlhttpRequest({
+	method: "GET",
+	url: ${1:"${2:http://www.example.com}"},
+	onload: ${3:function(result) {
+		${0:var response = result.responseText;}
+	\} }
+});</string>
+	<key>name</key>
+	<string>GM_xmlhttpRequest</string>
+	<key>scope</key>
+	<string>source.js.greasemonkey</string>
+	<key>tabTrigger</key>
+	<string>xhr</string>
+	<key>uuid</key>
+	<string>ED343BF2-B3DE-4A57-92BB-B7F361C74BE3</string>
+</dict>
+</plist>

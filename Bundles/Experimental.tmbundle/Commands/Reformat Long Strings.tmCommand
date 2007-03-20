@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+def doit!(str='')
+  return str unless ['"',"'","`"].include?(str[0].chr) and str[0] == str[-1]
+  
+  column = (ENV['TM_INPUT_START_COLUMN'].to_i||1) - 1
+  
+  @quote_char = str[0].chr
+  str.gsub!(/\A#{Regexp.escape(@quote_char)}|#{Regexp.escape(@quote_char)}\Z/,'')
+  strs = []
+  while str.length != 0
+    strs &lt;&lt; str.slice!(0..(70-column))
+    column = 0
+  end
+  str = @quote_char + (strs.compact.join %{#@quote_char + \n#@quote_char}) + @quote_char
+  
+  str
+end
+
+# print doit!(%{%{Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. asdjfhakldsfhkladjsfhkalsdjfh}}) #for testing
+
+print doit!(STDIN.read())
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^q</string>
+	<key>name</key>
+	<string>Reformat Long Strings</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>string.quoted.double, string.quoted.single</string>
+	<key>uuid</key>
+	<string>93523AF2-7A9D-4190-A1C9-D510AAB690FB</string>
+</dict>
+</plist>

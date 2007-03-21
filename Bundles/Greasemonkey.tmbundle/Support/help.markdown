@@ -177,9 +177,9 @@ Opens a web window with documentation for the currently focused or selected word
 This is an extended version of the command from the JavaScript bundle, but with support for Greasemonkey constructs.  
 
 
-## Resources (&#x2303;&#x2325;&#x2318;H)
+## Resources (&#x2303;&#x21E7;H)
 
-Invoking &#x2303;&#x2325;&#x2318;H opens a menu where you can choose a help resource by clicking or pressing the listed number.
+Invoking &#x2303;&#x21E7;H opens a menu where you can choose a help resource by clicking or pressing the listed number.
 
 The resources are 
 

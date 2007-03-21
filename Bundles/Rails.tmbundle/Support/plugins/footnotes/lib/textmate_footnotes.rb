@@ -1,5 +1,3 @@
-require "pp"
-
 class String
   def line_from_index(index)
     lines = self.to_a
@@ -127,55 +125,60 @@ class FootnoteFilter
     insert_text :before, /<\/head>/i, <<-HTML
     <!-- TextMate Footnotes Style -->
     <style type="text/css">
-      #textmate_footnotes_debug {margin-top: 0.5em; text-align: center; color: #999;}
-      #textmate_footnotes_debug a {text-decoration: none; color: #bbb;}
-      #textmate_footnotes_debug pre {overflow: scroll;}
-      fieldset.textmate_footnotes_debug_info {text-align: left; border: 1px dashed #aaa; padding: 1em; margin: 1em 2em 1em 2em; color: #777;}
+      #tm_footnotes_debug {margin-top: 0.5em; text-align: center; color: #999;}
+      #tm_footnotes_debug a {text-decoration: none; color: #bbb;}
+      #tm_footnotes_debug pre {overflow: scroll;}
+      fieldset.tm_footnotes_debug_info {text-align: left; border: 1px dashed #aaa; padding: 1em; margin: 1em 2em 1em 2em; color: #777;}
     </style>
     <!-- End TextMate Footnotes Style -->
     HTML
   end
   
   def insert_footnotes
+    
+    def tm_footnotes_toggle(id)
+      "s = document.getElementById('#{id}').style; if(s.display == 'none') { s.display = '' } else { s.display = 'none' }"
+    end
+    
     footnotes_html = <<-HTML
     <!-- TextMate Footnotes -->
     <div style="clear:both"></div>
-    <div id="textmate_footnotes_debug">
+    <div id="tm_footnotes_debug">
       #{textmate_links}
       Show:
-      <a href="#" onclick="document.getElementById('session_debug_info').style.display='';return false">Session</a> |
-      <a href="#" onclick="document.getElementById('cookies_debug_info').style.display='';return false">Cookies</a> |
-      <a href="#" onclick="document.getElementById('params_debug_info').style.display='';return false">Params</a> |
-      <a href="#" onclick="document.getElementById('log_debug_info').style.display='';return false">Log</a> |
-      <a href="#" onclick="document.getElementById('general_debug_info').style.display='';return false">General Debug</a>
+      <a href="#" onclick="#{tm_footnotes_toggle('session_debug_info')};return false">Session</a> |
+      <a href="#" onclick="#{tm_footnotes_toggle('cookies_debug_info')};return false">Cookies</a> |
+      <a href="#" onclick="#{tm_footnotes_toggle('params_debug_info')};return false">Params</a> |
+      <a href="#" onclick="#{tm_footnotes_toggle('log_debug_info')};return false">Log</a> |
+      <a href="#" onclick="#{tm_footnotes_toggle('general_debug_info')};return false">General Debug</a>
       <br/>(<a href="http://blog.inquirylabs.com/2006/09/28/textmate-footnotes-v16-released/"><b>TextMate Footnotes</b></a>)
       #{@extra_html}
-      <fieldset id="session_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+      <fieldset id="session_debug_info" class="tm_footnotes_debug_info" style="display: none">
         <legend>Session</legend>
         #{escape(@controller.session.instance_variable_get("@data").inspect)}
       </fieldset>
-      <fieldset id="cookies_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+      <fieldset id="cookies_debug_info" class="tm_footnotes_debug_info" style="display: none">
         <legend>Cookies</legend>
         <code>#{escape(@controller.send(:cookies).inspect)}</code>
       </fieldset>
-      <fieldset id="params_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+      <fieldset id="params_debug_info" class="tm_footnotes_debug_info" style="display: none">
         <legend>Params</legend>
         <code>#{escape(@controller.params.inspect)}</code>
       </fieldset>
-      <fieldset id="log_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+      <fieldset id="log_debug_info" class="tm_footnotes_debug_info" style="display: none">
         <legend>Log</legend>
         <code><pre>#{escape(log_tail)}</pre></code>
       </fieldset>
-      <fieldset id="general_debug_info" class="textmate_footnotes_debug_info" style="display: none">
+      <fieldset id="general_debug_info" class="tm_footnotes_debug_info" style="display: none">
         <legend>General (id="tm_debug")</legend>
         <div id="tm_debug"></div>
       </fieldset>
     </div>
     <!-- End TextMate Footnotes -->
     HTML
-    if @body =~ %r{<div[^>]+id=['"]textmate_footnotes['"][^>]*>}
-      # Insert inside the "textmate_footnotes" div if it exists
-      insert_text :after, %r{<div[^>]+id=['"]textmate_footnotes['"][^>]*>}, footnotes_html
+    if @body =~ %r{<div[^>]+id=['"]tm_footnotes['"][^>]*>}
+      # Insert inside the "tm_footnotes" div if it exists
+      insert_text :after, %r{<div[^>]+id=['"]tm_footnotes['"][^>]*>}, footnotes_html
     else
       # Otherwise, try to insert as the last part of the html body
       insert_text :before, /<\/body>/i, footnotes_html
@@ -214,13 +217,13 @@ class FootnoteFilter
       end
     end
     @extra_html << <<-HTML
-      <fieldset id="textmate_footnotes_#{link_text.underscore.gsub(' ', '_')}" class="textmate_footnotes_debug_info" style="display: none">
+      <fieldset id="tm_footnotes_#{link_text.underscore.gsub(' ', '_')}" class="tm_footnotes_debug_info" style="display: none">
         <legend>#{link_text}</legend>
         <ul><li>#{links.join("</li><li>")}</li></ul>
       </fieldset>
     HTML
     # Return the link that will open the 'extra html' div
-    %{ | <a href="#" onclick="document.getElementById('textmate_footnotes_#{link_text.underscore.gsub(' ', '_')}').style.display='';return false">#{link_text}</a>}
+    %{ | <a href="#" onclick="tm_footnotes_toggle('tm_footnotes_#{link_text.underscore.gsub(' ', '_')}');return false">#{link_text}</a>}
   end
   
   def indent(indentation, text)

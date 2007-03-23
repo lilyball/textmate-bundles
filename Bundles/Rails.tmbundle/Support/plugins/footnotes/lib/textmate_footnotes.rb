@@ -223,7 +223,7 @@ class FootnoteFilter
       </fieldset>
     HTML
     # Return the link that will open the 'extra html' div
-    %{ | <a href="#" onclick="tm_footnotes_toggle('tm_footnotes_#{link_text.underscore.gsub(' ', '_')}');return false">#{link_text}</a>}
+    %{ | <a href="#" onclick="#{tm_footnotes_toggle('tm_footnotes_' + link_text.underscore.gsub(' ', '_') )}; return false">#{link_text}</a>}
   end
   
   def indent(indentation, text)

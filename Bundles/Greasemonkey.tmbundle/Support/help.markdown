@@ -1,4 +1,4 @@
-# Template (&#x2303;&#x2325;&#x21E7;&#x2318;G)
+# Template
 
 Select `File > New From Template > Greasemonkey > Userscript` to create a new script from template. The template outputs this:
 
@@ -19,7 +19,7 @@ You should change the `template.user.js` template to include whatever functions 
 
 Optionally, if you create a file `~/Library/Preferences/com.macromates.textmate.gmbundle.staples.user.js`, the `/* Your favorite functions go here. */` comment will be substituted with its contents whenever a new script is created. This might be useful if you want to version control your staple code.
 
-You may wish to remove (in the Bundle Editor) the `source.js.greasemonkey` scope for this template so that it works no matter what you're editing.
+If you often create new userscripts, you may wish to add (in the Bundle Editor) a key equivalent such as &#x2303;&#x2325;&#x21E7;&#x2318;G for this template.
 
 
 

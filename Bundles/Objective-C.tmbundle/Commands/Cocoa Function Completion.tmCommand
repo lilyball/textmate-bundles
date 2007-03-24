@@ -11,9 +11,9 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 
 line = ENV['TM_CURRENT_LINE']
 
-def candidates_or_exit(methodSearch="")
+def candidates_or_exit(methodSearch,files)
   candidates = []
-  ["CLib.txt.gz","CocoaClasses.txt.gz","CocoaFunctions.txt.gz"].each do |name|
+  files.each do |name|
   zGrepped = %x{zgrep ^#{e_sh methodSearch } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/#{name}}
   candidates += zGrepped.split("\n")
   end
@@ -30,6 +30,15 @@ def prettify(candidate)
   end
 end
 
+def construct_arg_name(arg)
+	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUY])?[A-Za-z_0-9]+)/)
+	unless a.nil?
+		(a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
+	else
+		""
+	end
+end
+
 def snippet_generator(cand, s)
   	c = cand.split"\t"
   i = 0
@@ -39,7 +48,7 @@ def snippet_generator(cand, s)
 	end.join(", ")
   c[0][s..-1]+"("+middle+")$0"
   else
-    c[0][s..-1]
+    c[0][s..-1] + ((ENV['TM_SCOPE'].include? "meta.inherited-class.objc" ) ? "" : "${1: *${2:" + construct_arg_name(c[0]) + "}}$0")
   end
 end
 
@@ -95,13 +104,18 @@ end
 backContext = line[1+caret_placement..-1].match /^[a-zA-Z0-9_]/
 
 if backContext
-  #TextMate.exit_discard
+  TextMate.exit_discard
 end
 
+files = ["CocoaClasses.txt.gz"]
+if ENV['TM_SCOPE'].include? "meta.implementation.objc"
+  files += ["CLib.txt.gz","CocoaFunctions.txt.gz"]
+  files += ["C++Lib.txt.gz"] if ENV['TM_SCOPE'].include? "source.objc++"
+end
 
 alpha_and_caret = /[a-zA-Z_][_a-zA-Z0-9]*\(?$/
 if k = line[0..caret_placement].match(alpha_and_caret)
-  candidates = candidates_or_exit(k[0])
+  candidates = candidates_or_exit(k[0], files)
   res = pop_up(candidates, k[0])
 else
   res = ""
@@ -117,7 +131,7 @@ print res
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>
-	<string>source.objc</string>
+	<string>source.objc, source.objc++</string>
 	<key>uuid</key>
 	<string>88754B0F-D8DB-4796-9D02-058B756C606D</string>
 </dict>

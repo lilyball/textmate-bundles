@@ -23,7 +23,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>((@)(interface|protocol))(?!.+;)\s+([A-Za-z][A-Za-z0-9]+)\s*(?::\s*([A-Za-z][A-Za-z0-9]+))?</string>
+			<string>((@)(interface|protocol))(?!.+;)\s+([A-Za-z][A-Za-z0-9]+)\s*(?::\s*([A-Za-z][A-Za-z0-9]+|[A-Za-z])(\n)?)?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -45,6 +45,11 @@
 				<dict>
 					<key>name</key>
 					<string>entity.other.inherited-class.objc</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>meta.inherited-class.objc</string>
 				</dict>
 			</dict>
 			<key>contentName</key>

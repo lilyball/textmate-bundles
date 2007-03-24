@@ -29,14 +29,23 @@ else
   caret_placement =ENV['TM_LINE_INDEX'].to_i-ENV['TM_INPUT_START_LINE_INDEX'].to_i - 1
 end
 
-def prettify(cand)
+def construct_arg_name(arg)
+	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUY])?[A-Za-z_0-9]+)/)
+	unless a.nil?
+		(a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
+	else
+		""
+	end
+end
+
+def prettify(cand, call)
   stuff = cand.split("\t")
   if stuff[0].count(":") &gt; 0
     name_array = stuff[0].split(":")
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        out &lt;&lt; name_array[i] +  ":("+ arg+") "
+        out &lt;&lt; name_array[i] +  ":("+ arg+")"+ (call ? " " : construct_arg_name(arg) )
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -44,10 +53,13 @@ def prettify(cand)
   else
     out = stuff[0]
   end
+  out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
+
   return out.chomp.strip
 end
 
-def snippet_generator(cand, start)
+def snippet_generator(cand, start, call)
+start = 0 unless call
   stuff = cand[start..-1].split("\t")
   if stuff[0].count(":") &gt; 0
 
@@ -58,12 +70,12 @@ def snippet_generator(cand, start)
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
         if (name_array.size == (i+1))
           if arg == "SEL"
-            out &lt;&lt; name_array[i] + ":${0:SEL} "
+            out &lt;&lt; name_array[i] + (call ? ":${0:SEL} " : "(SEL)aSelector$0")
           else
-            out &lt;&lt; name_array[i] + ":${"+(i+1).to_s + ":"+ arg+"}$0"
+            out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"}$0": ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0")
           end
         else
-          out &lt;&lt; name_array[i] + ":${"+(i+1).to_s + ":"+ arg+"} "
+          out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"} " : ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}} ")
         end
       end
     rescue NoMethodError
@@ -72,13 +84,14 @@ def snippet_generator(cand, start)
   else
     out = stuff[0] + "$0"
   end
+out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
   return out.chomp.strip
 end
 
-def pop_up(candidates, searchTerm)
+def pop_up(candidates, searchTerm, call = true)
   start = searchTerm.size
-  prettyCandidates = candidates.map { |candidate| [prettify(candidate), candidate] }.sort
-  if prettyCandidates.size &gt; 1
+  prettyCandidates = candidates.map { |candidate| [prettify(candidate,call), candidate] }.sort
+if prettyCandidates.size &gt; 1
     require "enumerator"
     pruneList = []  
 
@@ -105,25 +118,24 @@ def pop_up(candidates, searchTerm)
     #end
     
     show_dialog(prettyCandidates,start) do |c,s|
-			snippet_generator(c,s)
+			snippet_generator(c,s, call)
 		end
   else
-    snippet_generator( candidates[0], start )
+    snippet_generator( candidates[0], start, call )
   end
 end
 
 def cfunc_snippet_generator(c,s)
 	c = c.split"\t"
 i = 0
-  ((c.size &lt; 2 || c.size &gt; 4) ? c[0][s..-1]+"$0" : c[0][s..-1]+"("+c[1][1..-2].split(",").collect do |arg| "${"+(i+=1).to_s+":"+ arg.strip + "}" end.join(", ")+")$0")
+  ((c.size &lt; 2 || c.size &gt; 4 || c[1]=="") ? c[0][s..-1]+"$0" : c[0][s..-1]+"("+c[1][1..-2].split(",").collect do |arg| "${"+(i+=1).to_s+":"+ arg.strip + "}" end.join(", ")+")$0")
 end
 
 def c_snip_gen(c,si,arg_type=nil)
    s = si.size
-if c.size &gt; 1
 		prettyCandidates = c.map do |candidate|
 			ca = candidate.split("\t")
-			[((ca[1].nil? || !ca[4].nil?) ? ca[0] : ca[0]+ca[1]), candidate] 
+			[((ca[1].nil? || !ca[4].nil? || c[1]=="") ? ca[0] : ca[0]+ca[1]), candidate] 
 		end
 		unless arg_type.nil?
 			tmp = prettyCandidates.reject do |a,b|
@@ -132,6 +144,7 @@ if c.size &gt; 1
 			end
 			prettyCandidates = tmp unless tmp.empty?
 		end
+		if prettyCandidates.size &gt; 1
 		show_dialog(prettyCandidates,s) do |cand,size|
 			cfunc_snippet_generator(cand,size)
 		end
@@ -159,7 +172,7 @@ end
 
 def candidates_or_exit(methodSearch, list, fileNames, notif = false)
 	x = candidate_list(methodSearch, list, fileNames, notif)
-  TextMate.exit_show_tool_tip "No completion available" if x.nil?
+  TextMate.exit_show_tool_tip "No completion available" if x.empty?
   return x
 end
 
@@ -175,7 +188,7 @@ def candidate_list(methodSearch, list, fileNames, notif = false)
 	else
     candidates = candidates.reject {|cand| cand.match(/\tno\t/) }
   end
-  return nil if candidates.empty?
+  return [] if candidates.empty?
   if list.nil?
     return candidates
   else
@@ -236,8 +249,9 @@ def return_type_based_c_constructs_suggestions(mn, search, show_arg)
     else
 	    candidates = []
 	  end
-  	candidates += candidates_or_exit(search, nil, "CocoaFunctions.txt.gz")
-
+    candidates +=  candidate_list(search, nil, "CocoaFunctions.txt.gz")
+    candidates += candidate_list(search, nil, "CocoaConstants.txt.gz")
+	TextMate.exit_show_tool_tip "No completion available" if candidates.empty?
 	res = c_snip_gen(candidates, search, arg_type)
 	end
 end
@@ -279,9 +293,7 @@ def try_find_class(line)
       end
     else
 			framework = %x{ zgrep ^#{e_sh m[2] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
-			unless framework.empty?
-				list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
-			end
+			list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
     end
   end
   return list
@@ -293,10 +305,12 @@ backContext = line[1+caret_placement..-1].match /^[a-zA-Z0-9]/
 pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
 
 if backContext
+  print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
   TextMate.exit_discard
 end
 
 if caret_placement == -1
+  print "$0"+ line[caret_placement+1..-1]
   TextMate.exit_discard
 end
 
@@ -329,7 +343,6 @@ if mline[start[-1]..caret_placement].match colon_and_space
 elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
 	# [obj mess ^]
   candidates = candidates_or_exit( mn + "[[:alpha:]:]", list, "cocoa.txt.gz" ) # the alpha is to prevent satisfaction with just one part
-  TextMate.exit_show_tool_tip "No completion available" if candidates.nil?
   res = pop_up(candidates, mn)
 elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
 	# [obj mess^]
@@ -341,6 +354,11 @@ elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[\s*$/)
     candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "CocoaClassesWithFramework.txt.gz")
    res =pop_up(candidates, k[0])
+elsif n = mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[(-\s*)$/)
+    candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "cocoa.txt.gz")
+   res =pop_up(candidates, k[0],false)
+print n[1] + res
+TextMate.exit_insert_snippet
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(colon_and_space)
 	#  [obj mess: arg^]
 	  res = return_type_based_c_constructs_suggestions(mn, k[0], false)
@@ -352,7 +370,7 @@ else
 	TextMate.exit_discard
 end
 
-print e_sn(line[0..caret_placement]) + res + e_sn(line[caret_placement+1..-1])
+print line[0..caret_placement] + res + line[caret_placement+1..-1]
 </string>
 	<key>disableOutputAutoIndent</key>
 	<true/>

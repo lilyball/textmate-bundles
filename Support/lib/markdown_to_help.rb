@@ -94,7 +94,7 @@ function setup_external_links() {
       link.addEventListener('click', click_external_link, false);
       insert_after(document.createTextNode("  ➲"), link);
     } else if (link.href.match(/^help:/)) {
-      link.title = 'Open TexMate help in Help Viewer.';
+      link.title = 'Open TextMate help in Help Viewer.';
       insert_after(document.createTextNode(" ⓘ"), link);
     }
   }

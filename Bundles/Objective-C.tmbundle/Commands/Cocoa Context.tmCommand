@@ -45,7 +45,7 @@ def prettify(cand, call)
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        out &lt;&lt; name_array[i] +  ":("+ arg+") "+ (call ? "" : construct_arg_name(arg) )
+        out &lt;&lt; name_array[i] +  ":("+ arg+") "+ (call ? "" : "#{construct_arg_name(arg)} " )
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -306,13 +306,7 @@ backContext = line[1+caret_placement..-1].match /^[a-zA-Z0-9]/
 
 pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
 
-if backContext
-  print line[0..caret_placement]+ "$0"+ line[caret_placement+1..-1]
-  TextMate.exit_discard
-end
-
-if caret_placement == -1
-  print "$0"+ line[caret_placement+1..-1]
+if backContext || (caret_placement == -1)
   TextMate.exit_discard
 end
 
@@ -356,16 +350,6 @@ elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[\s*$/)
     candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "CocoaClassesWithFramework.txt.gz")
    res =pop_up(candidates, k[0])
-elsif n = mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[(-\s*)$/)
-    candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "cocoa.txt.gz")
-   res =pop_up(candidates, k[0],false)
-  unless res == "$0"
-    print n[1] + res 
-    TextMate.exit_insert_snippet
-  else
-    TextMate.exit_discard
-  end
-
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(colon_and_space)
 	#  [obj mess: arg^]
 	  res = return_type_based_c_constructs_suggestions(mn, k[0], false)
@@ -377,7 +361,7 @@ else
 	TextMate.exit_discard
 end
 
-print line[0..caret_placement] + res + line[caret_placement+1..-1]
+print e_sn(line[0..caret_placement]) + res + e_sn(line[caret_placement+1..-1])
 </string>
 	<key>disableOutputAutoIndent</key>
 	<true/>

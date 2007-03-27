@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+
+line = ENV['TM_CURRENT_LINE']
+
+def construct_arg_name(arg)
+	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUY])?[A-Za-z_0-9]+)/)
+	unless a.nil?
+		(a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
+	else
+		""
+	end
+end
+
+def prettify(cand, call)
+  stuff = cand.split("\t")
+  if stuff[0].count(":") &gt; 0
+    name_array = stuff[0].split(":")
+    out = ""
+    begin
+      stuff[-(name_array.size)..-1].each_with_index do |arg,i|
+        out &lt;&lt; name_array[i] +  ":("+ arg+")"+ (call ? "" : "#{construct_arg_name(arg)} " )
+      end
+    rescue NoMethodError
+      out &lt;&lt; stuff[0]
+    end
+  else
+    out = stuff[0]
+  end
+  out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
+
+  return out.chomp.strip
+end
+
+def snippet_generator(cand, start, call)
+start = 0 unless call
+  stuff = cand[start..-1].split("\t")
+  if stuff[0].count(":") &gt; 0
+
+    name_array = stuff[0].split(":")
+    name_array = [""] if name_array.empty? 
+    out = ""
+    begin
+      stuff[-(name_array.size)..-1].each_with_index do |arg,i|
+        if (name_array.size == (i+1))
+          if arg == "SEL"
+            out &lt;&lt; name_array[i] + (call ? ":${0:SEL} " : "(SEL)aSelector$0")
+          else
+            out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"}$0": ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0")
+          end
+        else
+          out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"} " : ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}} ")
+        end
+      end
+    rescue NoMethodError
+      out &lt;&lt; stuff[0]
+    end
+  else
+    out = stuff[0] + "$0"
+  end
+out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
+  return out.chomp.strip
+end
+
+def pop_up(candidates, searchTerm, call = true)
+  start = searchTerm.size
+  prettyCandidates = candidates.map { |candidate| [prettify(candidate,call), candidate] }.sort
+if prettyCandidates.size &gt; 1
+    require "enumerator"
+    pruneList = []  
+
+    prettyCandidates.each_cons(2) do |a| 
+      pruneList &lt;&lt; (a[0][0] != a[1][0]) # check if prettified versions are the same
+    end
+    pruneList &lt;&lt; true
+    ind = -1
+    prettyCandidates = prettyCandidates.select do |a| #remove duplicates
+      pruneList[ind+=1]  
+    end
+  end
+
+  if prettyCandidates.size &gt; 1
+    #index = start
+    #test = false
+    #while !test
+    #  candidates.each_cons(2) do |a,b|
+    #    break if test = (a[index].chr != b[index].chr || a[index].chr == "\t")
+    #  end
+    #  break if test
+    #  searchTerm &lt;&lt; candidates[0][index].chr
+    #  index +=1
+    #end
+    
+    show_dialog(prettyCandidates,start) do |c,s|
+			snippet_generator(c,s, call)
+		end
+  else
+    snippet_generator( candidates[0], start, call )
+  end
+end
+
+def show_dialog(prettyCandidates,start,&amp;snip_gen)
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+    dialog_path = "#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog"
+    pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
+    io = open("|#{e_sh dialog_path} -u", "r+")
+    io &lt;&lt;  pl.to_plist
+    io.close_write
+    res = PropertyList::load(io.read)
+    if res.has_key? 'selectedMenuItem'
+      snip_gen.call( res['selectedMenuItem']['cand'], start )
+    else
+      "$0"
+    end
+end
+
+def candidates_or_exit(methodSearch, list, fileNames, notif = false)
+	x = candidate_list(methodSearch, list, fileNames, notif)
+  TextMate.exit_show_tool_tip "No completion available" if x.empty?
+  return x
+end
+
+def candidate_list(methodSearch, list, fileNames, notif = false)
+  candidates = []
+  fileNames.each do |fileName|
+    zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/#{fileName} }
+    candidates += zGrepped.split("\n")
+  end
+  # strip notifications
+  if notif
+	  candidates = candidates.select {|cand| cand.match(/\tno\t/) }
+	else
+    candidates = candidates.reject {|cand| cand.match(/\tno\t/) }
+  end
+  return [] if candidates.empty?
+  if list.nil?
+    return candidates
+  else
+    n = []
+    candidates.each do |cand|
+      n &lt;&lt; cand if list.include?(cand.split("\t")[0])
+    end
+    n = (n.empty? ? candidates : n)
+
+    return n
+  end
+end
+
+methodDeclaration = /^((?:\+|-)\s*)([a-zA-Z][a-zA-Z0-9:]*)$/
+
+if k = line.match(methodDeclaration)
+  candidates = candidates_or_exit( k[2], nil, "cocoa.txt.gz")
+  res =pop_up(candidates, k[2], false)
+  print k[1] + res
+else
+  TextMate.exit_discard
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>Cocoa Method Signature Completion</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>meta.function.objc</string>
+	<key>uuid</key>
+	<string>30E93FBA-5A81-4D94-8A03-9CD46FCA3CFA</string>
+</dict>
+</plist>

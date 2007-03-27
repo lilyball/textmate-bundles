@@ -48,7 +48,9 @@ def snippet_generator(cand, s)
 	end.join(", ")
   c[0][s..-1]+"("+middle+")$0"
   else
-    c[0][s..-1] + ((ENV['TM_SCOPE'].include? "meta.inherited-class.objc" ) ? "" : "${1: *${2:" + construct_arg_name(c[0]) + "}}$0")
+    subc = ENV['TM_SCOPE'].include?("meta.inherited-class.objc") 
+    func =ENV['TM_SCOPE'].include?("meta.function.objc")
+    c[0][s..-1] + (subc || func ?( subc ? "" : " *" ) : "${1: *${2:" + construct_arg_name(c[0]) + "}}$0")
   end
 end
 
@@ -108,11 +110,12 @@ if backContext
 end
 
 files = ["CocoaClasses.txt.gz"]
-if ENV['TM_SCOPE'].include? "meta.implementation.objc"
-  files += ["CLib.txt.gz","CocoaFunctions.txt.gz"]
-  files += ["C++Lib.txt.gz"] if ENV['TM_SCOPE'].include? "source.objc++"
+unless ENV['TM_SCOPE'].include? "meta.function.objc"
+  if ENV['TM_SCOPE'].include? "meta.implementation.objc"
+    files += ["CLib.txt.gz","CocoaFunctions.txt.gz"]
+    files += ["C++Lib.txt.gz"] if ENV['TM_SCOPE'].include? "source.objc++"
+  end
 end
-
 alpha_and_caret = /[a-zA-Z_][_a-zA-Z0-9]*\(?$/
 if k = line[0..caret_placement].match(alpha_and_caret)
   candidates = candidates_or_exit(k[0], files)

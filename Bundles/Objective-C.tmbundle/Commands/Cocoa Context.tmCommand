@@ -45,7 +45,7 @@ def prettify(cand, call)
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        out &lt;&lt; name_array[i] +  ":("+ arg+")"+ (call ? " " : construct_arg_name(arg) )
+        out &lt;&lt; name_array[i] +  ":("+ arg+") "+ (call ? "" : construct_arg_name(arg) )
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -359,8 +359,13 @@ elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
 elsif n = mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[(-\s*)$/)
     candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "cocoa.txt.gz")
    res =pop_up(candidates, k[0],false)
-print n[1] + res
-TextMate.exit_insert_snippet
+  unless res == "$0"
+    print n[1] + res 
+    TextMate.exit_insert_snippet
+  else
+    TextMate.exit_discard
+  end
+
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(colon_and_space)
 	#  [obj mess: arg^]
 	  res = return_type_based_c_constructs_suggestions(mn, k[0], false)

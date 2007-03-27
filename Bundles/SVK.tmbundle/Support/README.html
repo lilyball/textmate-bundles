@@ -79,11 +79,49 @@
       <h2><a name="commands">Commands</a></h2>
          
          <dl>
-            <dt><a name="status">Status</a></dt>
+            <dt><a name="add">Add to Repository</a></dt>
             <dd>
-               <div class="target">directory of active file</div>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
                <div class="description">
-                  Displays a list of files with changes in your working copy, along with the type of change for each file.
+                  Adds the targets to the repository.
+               </div>
+            </dd>
+            
+            <dt><a name="blame">Blame</a></dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="description">
+                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href="#tm_svk_date_format">adjustable</a>.  
+                     "wc" means the last change was in your working copy.
+               </div>
+            </dd>
+ 
+            <dt><a name="commit">Commit</a></dt>
+            <dd>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+               <div class="description">
+                    Commits your changed files to the repository. A dialog asks you for the description of
+                    your changes; you may also choose to exclude files from the commit by un-checking them.
+                    If no files are selected or active, this command does nothing. If the target files
+                    have no local changes, nothing happens.
+               </div>
+            </dd>
+            
+            <dt><a name="diff_base">Diff With Working Copy (BASE)</a></dt>
+            <dd>
+               <div class="target">active file</div>
+               <div class="description">
+                  Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
+                  Equivalent to <code>svk diff -rBASE</code>.
+               </div>
+            </dd>
+            
+            <dt><a name="info">Info</a></dt>
+            <dd>
+               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+               <div class="description">
+                  Displays detailed information about the selected files.
+                  Some parameters are configurable via shell variables; see the <a href="#tm_svk_info">Configuration Options</a> section below.
                </div>
             </dd>
             
@@ -97,53 +135,22 @@
                </div>
             </dd>
             
-            <dt><a name="blame">Blame</a></dt>
+            <dt><a name="revert">Revert</a></dt>
             <dd>
                <div class="target">active file</div>
                <div class="description">
-                   Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is <a href="#tm_svk_date_format">adjustable</a>.  
-                     "wc" means the last change was in your working copy.
+                  Revert changes made in checkout copies.
                </div>
             </dd>
-            
-            <dt><a name="info">Info</a></dt>
+             
+            <dt><a name="status">Status</a></dt>
             <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+               <div class="target">directory of active file</div>
                <div class="description">
-                  Displays detailed information about the selected files.
-                  Some parameters are configurable via shell variables; see the <a href="#tm_svk_info">Configuration Options</a> section below.
+                  Displays a list of files with changes in your working copy, along with the type of change for each file.
                </div>
             </dd>
-                        
-            <dt><a name="diff_base">Diff With Working Copy (BASE)</a></dt>
-            <dd>
-               <div class="target">active file</div>
-               <div class="description">
-                  Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
-                  Equivalent to <code>svk diff -rBASE</code>.
-               </div>
-            </dd>
-            
-            <dt><a name="add">Add to Repository</a></dt>
-            <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="description">
-                  Adds the targets to the repository.
-               </div>
-            </dd>
-            
-            <dt><a name="commit">Commit</a></dt>
-            <dd>
-               <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
-               <div class="description">
-                    Commits your changed files to the repository. A dialog asks you for the description of
-                    your changes; you may also choose to exclude files from the commit by un-checking them.
-                    If no files are selected or active, this command does nothing. If the target files
-                    have no local changes, nothing happens.
-               </div>
-            </dd>
-
-            
+             
             <dt><a name="update">Update to Newest</a></dt>
             <dd>
                <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
@@ -151,8 +158,6 @@
                   Updates the targets with the newest changes from the repository.
                </div>
             </dd>
-            
-
          </dl>
 
       <h2><a name="conf">Configuration Options</a></h2>

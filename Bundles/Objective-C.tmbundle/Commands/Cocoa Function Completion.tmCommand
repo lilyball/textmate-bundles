@@ -31,7 +31,7 @@ def prettify(candidate)
 end
 
 def construct_arg_name(arg)
-	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUY])?[A-Za-z_0-9]+)/)
+	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUYi])?[A-Za-z_0-9]+)/)
 	unless a.nil?
 		(a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
 	else
@@ -48,7 +48,7 @@ def snippet_generator(cand, s)
 	end.join(", ")
   c[0][s..-1]+"("+middle+")$0"
   else
-    subc = ENV['TM_SCOPE'].include?("meta.inherited-class.objc") 
+    subc = ENV['TM_SCOPE'].include?("meta.interface-or-protocol.objc") &amp;&amp;  !ENV['TM_SCOPE'].include?("meta.scope.interface.objc")
     func =ENV['TM_SCOPE'].include?("meta.function.objc")
     c[0][s..-1] + (subc || func ?( subc ? "" : " *" ) : "${1: *${2:" + construct_arg_name(c[0]) + "}}$0")
   end

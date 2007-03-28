@@ -112,7 +112,11 @@ when "line"  # apply comment line by line
     end
   end
 when "block" # apply comment around selection
-  if text =~ /\A([\t ]*)\0([\t ]*)\z/
+  if text.empty?
+    out default[:start]
+    print "${0}"
+    out default[:end]
+  elsif text =~ /\A([\t ]*)\0([\t ]*)\z/
     out $1, default[:start]
     print "${0}"
     out $2, default[:end]

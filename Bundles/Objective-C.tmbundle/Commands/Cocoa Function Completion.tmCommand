@@ -97,6 +97,7 @@ def pop_up(candidates, searchTerm)
   end
 end
 
+
 if ENV['TM_INPUT_START_LINE_INDEX']
   caret_placement =ENV['TM_INPUT_START_LINE_INDEX'].to_i - 1
 else
@@ -109,12 +110,16 @@ if backContext
   TextMate.exit_discard
 end
 
+unless ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
 files = ["CocoaClasses.txt.gz"]
 unless ENV['TM_SCOPE'].include? "meta.function.objc"
   if ENV['TM_SCOPE'].include? "meta.implementation.objc"
     files += ["CLib.txt.gz","CocoaFunctions.txt.gz"]
     files += ["C++Lib.txt.gz"] if ENV['TM_SCOPE'].include? "source.objc++"
   end
+end
+else
+  files = ["CocoaProtocols.txt.gz"]
 end
 alpha_and_caret = /[a-zA-Z_][_a-zA-Z0-9]*\(?$/
 if k = line[0..caret_placement].match(alpha_and_caret)

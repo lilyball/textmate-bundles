@@ -39,22 +39,24 @@ def construct_arg_name(arg)
 	end
 end
 
-def snippet_generator(cand, s)
-  	c = cand.split"\t"
-  i = 0
+def snippet_generator(cand,s,star,arg_name)
+  c = cand.split"\t"
   if c[1]
-  middle = c[1][1..-2].split(",").collect do |arg|
-	 "${"+(i+=1).to_s+":"+ arg.strip + "}" 
-	end.join(", ")
-  c[0][s..-1]+"("+middle+")$0"
+    i = 0
+    middle = c[1][1..-2].split(",").collect do |arg|
+      "${"+(i+=1).to_s+":"+ arg.strip + "}" 
+    end.join(", ")
+    c[0][s..-1]+"("+middle+")$0"
   else
-    subc = ENV['TM_SCOPE'].include?("meta.interface-or-protocol.objc") &amp;&amp;  !ENV['TM_SCOPE'].include?("meta.scope.interface.objc")
-    func =ENV['TM_SCOPE'].include?("meta.function.objc")
-    c[0][s..-1] + (subc || func ?( subc ? "" : " *" ) : "${1: *${2:" + construct_arg_name(c[0]) + "}}$0")
+    name = ""
+    name = "${2:#{construct_arg_name(c[0])}}" if arg_name
+    name = "${1: *#{name}}" if star
+    c[0][s..-1] + name +"$0"
   end
 end
 
-def pop_up(candidates, searchTerm)
+
+def pop_up(candidates, searchTerm,star,arg_name)
   start = searchTerm.size
   prettyCandidates = candidates.map { |candidate| [prettify(candidate), candidate] }.sort
   if prettyCandidates.size &gt; 1
@@ -88,12 +90,12 @@ def pop_up(candidates, searchTerm)
     plist = pl.to_plist
     res = PropertyList::load(%x{ #{e_sh dialog_path} -up #{e_sh plist} })
     if res.has_key? 'selectedMenuItem'
-      snippet_generator( res['selectedMenuItem']['cand'], start )
+      snippet_generator( res['selectedMenuItem']['cand'], start,star,arg_name )
     else
       ""
     end
   else
-    snippet_generator( candidates[0], start )
+    snippet_generator( candidates[0], start, star, arg_name )
   end
 end
 
@@ -110,26 +112,30 @@ if backContext
   TextMate.exit_discard
 end
 
-unless ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
-files = ["CocoaClasses.txt.gz"]
-unless ENV['TM_SCOPE'].include? "meta.function.objc"
-  if ENV['TM_SCOPE'].include? "meta.implementation.objc"
+star = arg_name = false
+if ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
+	files = ["CocoaProtocols.txt.gz"]
+else
+  files = ["CocoaClasses.txt.gz"]
+  if ENV['TM_SCOPE'].include?("meta.function.objc")
+    star = true		 
+  elsif ENV['TM_SCOPE'].include? "meta.scope.implementation.objc"
+    star = arg_name = true
     files += ["CLib.txt.gz","CocoaFunctions.txt.gz"]
     files += ["C++Lib.txt.gz"] if ENV['TM_SCOPE'].include? "source.objc++"
+  elsif ENV['TM_SCOPE'].include? "meta.scope.interface.objc"
+    star = arg_name = true
   end
 end
-else
-  files = ["CocoaProtocols.txt.gz"]
-end
+
 alpha_and_caret = /[a-zA-Z_][_a-zA-Z0-9]*\(?$/
 if k = line[0..caret_placement].match(alpha_and_caret)
   candidates = candidates_or_exit(k[0], files)
-  res = pop_up(candidates, k[0])
+  res = pop_up(candidates, k[0],star,arg_name)
 else
   res = ""
 end
-print res
-</string>
+print res</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

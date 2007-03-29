@@ -487,6 +487,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#protocol_list</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#protocol_type_qualifier</string>
 						</dict>
 						<dict>
@@ -543,6 +547,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#protocol_list</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#protocol_type_qualifier</string>
 						</dict>
 						<dict>
@@ -556,6 +564,41 @@
 					<string>#comment</string>
 				</dict>
 			</array>
+		</dict>
+		<key>protocol_list</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.scope.begin.objc</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.inherited-protocol.objc</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.arguments.objc</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.inherited-protocol.objc</string>
+				</dict>
+				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.scope.end.objc</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(&lt;)((?:\s*)(([A-Za-z][A-Za-z0-9]*)((?:\s*)(,)(?:\s*)([A-Za-z][A-Za-z0-9]*)?)*)?(?:\s*))?(&gt;)?</string>
+			<key>name</key>
+			<string>meta.protocol-list.objc</string>
 		</dict>
 		<key>protocol_type_qualifier</key>
 		<dict>

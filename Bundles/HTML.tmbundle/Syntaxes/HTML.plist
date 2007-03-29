@@ -566,6 +566,20 @@
 		<dict>
 			<key>patterns</key>
 			<array>
+  			<dict>
+  				<key>captures</key>
+  				<dict>
+  					<key>1</key>
+  					<dict>
+  						<key>name</key>
+  						<string>source.php.embedded.line.empty.whitespace.html</string>
+  					</dict>
+  				</dict>
+  				<key>match</key>
+  				<string>&lt;\?(?i:php|=)?(\s*\?)&gt;</string>
+  				<key>name</key>
+  				<string>source.php.embedded.line.empty.html</string>
+  			</dict>
 				<dict>
 					<key>applyEndPatternLast</key>
 					<integer>1</integer>

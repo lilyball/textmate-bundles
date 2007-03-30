@@ -9,9 +9,9 @@
 	<key>firstLineMatch</key>
 	<string>// ==UserScript==</string>
 	<key>foldingStartMarker</key>
-	<string>/\*\*|\{\s*$|\s*//\s*==UserScript==</string>
+	<string>// ==UserScript==</string>
 	<key>foldingStopMarker</key>
-	<string>\*\*/|^\s*\}|\s*//\s*==/UserScript==</string>
+	<string>// ==/UserScript==</string>
 	<key>keyEquivalent</key>
 	<string>^~G</string>
 	<key>name</key>
@@ -32,9 +32,9 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\s*//\s*==UserScript==</string>
+			<string>// ==UserScript==</string>
 			<key>end</key>
-			<string>\s*//\s*==/UserScript==</string>
+			<string>// ==/UserScript==</string>
 			<key>name</key>
 			<string>meta.header.greasemonkey</string>
 			<key>patterns</key>
@@ -54,9 +54,28 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(@(name|namespace|description|include|exclude))\b\s*(.+\s+)?</string>
+					<string>// (@(name|namespace|description|include|exclude))\b\s*(.+\s+)?</string>
 					<key>name</key>
-					<string>meta.directive.greasemonkey</string>
+					<string>meta.directive.standard.greasemonkey</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.greasemonkey</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.greasemonkey</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>// (@(\S+))\b\s*(.+\s+)?</string>
+					<key>name</key>
+					<string>meta.directive.nonstandard.greasemonkey</string>
 				</dict>
 			</array>
 		</dict>

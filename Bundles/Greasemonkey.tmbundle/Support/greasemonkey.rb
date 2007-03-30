@@ -216,28 +216,27 @@ END
 		
 	end
 
-	
-# In selection or entire document, comment out all GM_logs if any were uncommented; otherwise uncomment all GM_logs.
-def toggle_log_comments
-	any_uncommented_logs = @script.file_lines.any? {|line| line.reverse =~ %r{\).*\(gol_MG(?!\s*//)}i }  # Fake lookbehind
-#		any_commented_logs = @script.file_lines.any? {|line| line =~ %r{//\s*GM_log\([^)]*\)} }
-	@script.file_lines.each do |line|
-		line.sub!(%r{(//)?(\s*GM_log\(.*\))}i, '//\2') if any_uncommented_logs  # Comment all
-		line.sub!(%r{//(\s*GM_log\(.*\))}i, '\1') unless any_uncommented_logs  # Uncomment all
-		print line
-	end
-end
+	RE_LOG = %r{(^|[\s;])(//)?(\s*(GM_|(unsafeWindow\.)?console\.)log\(.*\);?\s*)}
 
-
-# In selection or entire document, remove all GM_logs.
-def remove_logs
-	@script.file_lines.each do |line|
-		if line.sub!(%r{\s*(//)?\s*GM_log\(.*\);?[\t ]*}i, '')
-			print line unless line.strip.empty?
-		else
+	# In selection or entire document, comment out all log statements if any were uncommented; otherwise uncomment all.
+	def toggle_log_comments
+		any_uncommented_logs = @script.file_lines.any? { |line| line =~ RE_LOG and $2.nil? }
+		@script.file_lines.each do |line|
+			line.sub!(RE_LOG) { "#$1#{ "//" if any_uncommented_logs }#$3" }
 			print line
 		end
 	end
-end
+
+
+	# In selection or entire document, remove all log statements.
+	def remove_logs
+		@script.file_lines.each do |line|
+			if line.sub!(RE_LOG, '\1')
+				print line unless line.strip.empty?
+			else
+				print line
+			end
+		end
+	end
 
 end

@@ -160,14 +160,14 @@ Does not handle all weird characters properly.
 Works by outputting keystrokes into the about:config filter bar. If you change the focus from the filter bar, the keystrokes will go there instead.
 
 
-## Comment/Uncomment GM_logs
+## Toggle Logs in Document / Selection
 
-In the selection or else the entire document, all `GM_log()` function calls are commented out if any were uncommented; otherwise all `GM_log()` function calls are uncommented.
+In the selection or else the entire document, all `GM_log`, `console.log` and `unsafeWindow.console.log` function calls are commented out if any weren't; otherwise all such function calls are uncommented.
 
 
-## Remove GM_logs
+## Remove Logs in Document / Selection
 
-Removes all `GM_log()` function calls in the selection or else the entire document.
+Removes all `GM_log`, `console.log` and `unsafeWindow.console.log` function calls in the selection or else the entire document.
 
 
 ## Documentation for Word / Selection (&#x2303;H) <span id="documentation_for_word_selection"></span>

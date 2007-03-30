@@ -200,6 +200,15 @@ This document in a web window.
 
 
 
+# Grammar/Highlighting Tips
+
+These are some ways you can [modify your theme](http://macromates.com/textmate/manual/themes) to get nicer syntax highlighting of userscripts.
+
+* Add a style for `meta.header.greasemonkey`, perhaps a background color, to change the appearance of metadata headers.
+* Add a style for `meta.directive.nonstandard.greasemonkey keyword` to have non-standard metadata keywords (e.g. `@version`) highlighted differently from standard keywords (e.g. `@name`).
+
+
+
 # Credits
 
 [Originally](http://adamv.com/dev/textmate/greasemonkey) by Adam Vandenberg, who wrote most of the grammar and a few snippets.

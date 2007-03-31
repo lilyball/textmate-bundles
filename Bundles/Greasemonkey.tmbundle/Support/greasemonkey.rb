@@ -69,9 +69,11 @@ class Greasemonkey
 			"listDate" => scripts.reverse,
 			# Get these sorted in the same order as Cocoa popup buttons do typeahead find (FIXME: not quite there yet)
 			"listAlpha" => scripts.sort_by {|x| x["name"].downcase.split(//).zip(x["name"].swapcase.split(//)) },
-			# Show everyone's scripts by default
-			"onlyMine" => false
+			# Load from preferences
+			"onlyMine" => Greasemonkey::Preferences[:onlyMine] || 0,
+			"byDate" => Greasemonkey::Preferences[:byDate] || 0
 		}
+		
 		in_my_namespace = Proc.new { |s|
 			if "#{ENV['TM_NAMESPACE']}".empty? then false else s["namespace"].include?(ENV['TM_NAMESPACE']) end
 		}
@@ -82,6 +84,9 @@ class Greasemonkey
 		pl = PropertyList::load(dialog)
 		
 		exit unless pl["returnButton"] == "Load"  # Bail if the user cancelled
+		
+		# Save to preferences
+		Greasemonkey::Preferences.merge!(pl, :keep => %w{onlyMine byDate})
 
 		source_base = "#{ "My" if pl["onlyMine"]==1 }#{ pl["byDate"]==1 ? "Date" : "Alpha" }"
 		source = pl["list#{source_base}"]

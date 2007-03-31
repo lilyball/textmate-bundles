@@ -27,8 +27,6 @@ class Struct
 end
 
 class UserscriptsOrg
-	PREFERENCES = "#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.gmbundle.plist"
-	STORED_KEYS = ["login", "password"]
 	COOKIE_JAR = "/tmp/gmbundle_#{ENV["USER"]}.cookiejar"
 
 	LOGIN_NIB = "#{ENV['TM_BUNDLE_SUPPORT']}/nib/UsoLogin.nib"
@@ -65,25 +63,12 @@ class UserscriptsOrg
 	
 	def self.authenticate
 		properties = {}
-		begin
-			# First try to get e-mail from address book…
-			begin
-				ab = PropertyList::load(`defaults read AddressBookMe`)
-				properties["login"] = ab["ExistingEmailAddress"]
-			rescue;end
-
-			# Overwrite from preferences, if they hold a record…
-			if File.exist? PREFERENCES and prefs = PropertyList::load(File.new(PREFERENCES))
-				properties["login"] = prefs["login"] unless prefs["login"].empty?
-				properties["password"] =  prefs["password"]
-			end
-		rescue;end
+		# Get e-mail from preferences or else from the address book "me" card
+		properties["login"] = Greasemonkey::Preferences[:login] || PropertyList::load(`defaults read AddressBookMe`)["ExistingEmailAddress"] rescue ""
+		properties["password"] = Greasemonkey::Preferences[:password] || ""
 		
 		response_code = nil
-		TextMate.call_with_progress(
-			:title => PROGRESS_DIALOG_TITLE,
-			:message => "Authenticating…"
-		) do
+		TextMate.call_with_progress(:title => PROGRESS_DIALOG_TITLE, :message => "Authenticating…") do
 			response_code = `curl -d "#{properties.to_query_string}" --cookie-jar "#{COOKIE_JAR}" "#{LOGIN_URL}" -o /dev/null --write-out "%{http_code}" 2> /dev/null`.to_i
 		end
 		
@@ -106,12 +91,8 @@ class UserscriptsOrg
 
 		return false unless properties["returnButton"]=="Connect"
 
-		properties.delete_if {|k, v| !STORED_KEYS.include?(k)}  # Only keep some keys
-		properties.each_pair {|k, v| properties[k] ||= ""}  # No nils
+		Greasemonkey::Preferences.merge!(properties, :keep => %w{login password})
 
-		File.open(PREFERENCES, "w") do |file|
-		    file.print(properties.to_plist)
-		end
 		self.authenticate
 	end
 	

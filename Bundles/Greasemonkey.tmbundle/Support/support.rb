@@ -108,6 +108,35 @@ class Greasemonkey
 			data.write File.open(@file_name, 'w')
 		end
 	end
+	
+	class Preferences
+		FILE = "#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.gmbundle.plist"
+		def self.[](key)
+			prefs = self.load
+			value = prefs[key.to_s]
+			if value=="" then nil else value end
+		end
+		def self.[]=(key, value)
+			merge!({key => value})
+			value
+		end
+		def self.merge!(hash, options={})
+			prefs, new_prefs = self.load, {}
+			
+			# Remove anything we can't keep. reject, don't delete_if, or we'll modify by reference.
+			hash = hash.reject { |k,v| not Array(options[:keep]).map { |e| e.to_sym }.include?(k.to_sym) } if options[:keep]
+			# Ensure to_plist gets string keys and non-nil values.
+			hash.each_pair { |k,v| new_prefs[k.to_s] = v || "" }
+			
+			prefs.merge!(new_prefs)
+			File.open(FILE, "w") { |f| f.print(prefs.to_plist) }
+			prefs
+		end
+		private
+		def self.load
+			PropertyList::load(File.new(FILE)) rescue {}
+		end
+	end
 
 
 	def initialize

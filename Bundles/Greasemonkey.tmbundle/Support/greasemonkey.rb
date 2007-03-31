@@ -55,32 +55,40 @@ class Greasemonkey
 
 	# Open any script from a list of installed userscripts.	
 	def open_installed_script
-
 		xml = @config.xml		
 		scripts = []
 		xml.root.elements.to_a('Script').each do |script|
-			scripts << {"name" => script.attributes["name"], "filename" => script.attributes["filename"]}
+			h = {}
+			%w{name filename namespace}.each { |a| h[a] = script.attributes[a] }
+			scripts << h
 		end
 		abort "You do not have any installed scripts to open!" if scripts.empty?
 
 		parameters = {
 			# Ascending order of installation
-			"installOrderScripts" => scripts.reverse,
+			"listDate" => scripts.reverse,
 			# Get these sorted in the same order as Cocoa popup buttons do typeahead find (FIXME: not quite there yet)
-			"alphabeticalScripts" => scripts.sort_by {|x| x["name"].downcase.split(//).zip(x["name"].swapcase.split(//)) }
+			"listAlpha" => scripts.sort_by {|x| x["name"].downcase.split(//).zip(x["name"].swapcase.split(//)) },
+			# Show everyone's scripts by default
+			"onlyMine" => false
 		}
+		in_my_namespace = Proc.new { |s|
+			if "#{ENV['TM_NAMESPACE']}".empty? then false else s["namespace"].include?(ENV['TM_NAMESPACE']) end
+		}
+		%w{Date Alpha}.each { |o| parameters["listMy#{o}"] = parameters["list#{o}"].select &in_my_namespace }
 		
 		# Flags: modal, centered, parameters
 		dialog = `$DIALOG -mcp #{e_sh parameters.to_plist} #{e_sh "#{ENV['TM_BUNDLE_SUPPORT']}/nib/OpenInstalledScript.nib"}`
 		pl = PropertyList::load(dialog)
 		
 		exit unless pl["returnButton"] == "Load"  # Bail if the user cancelled
-		
-		by_install_date = pl["byInstallDate"]==1
-		source = if by_install_date then pl["installOrderScripts"] else pl["alphabeticalScripts"] end
-		index = if by_install_date then pl["selectedDate"] else pl["selectedAlpha"] end || 0
-		script = source[index]
-		
+
+		source_base = "#{ "My" if pl["onlyMine"]==1 }#{ pl["byDate"]==1 ? "Date" : "Alpha" }"
+		source = pl["list#{source_base}"]
+		index = pl["selected#{source_base}"] || 0			
+
+		exit if source.empty?
+		script = source[index]		
 		path = "#{@config.directory}/#{script["filename"]}"
 		TextMate.go_to(:file => path)
 	end

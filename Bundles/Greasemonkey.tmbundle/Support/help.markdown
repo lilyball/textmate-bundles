@@ -81,8 +81,9 @@ Inserts that function call, with tab stops selecting in turn the entire URL stri
 
 Displays a dialog listing every installed userscript, with the choice of alphabetical or chronological (most recently installed first) ordering. Select a script and confirm to open it.
 
-You may wish to remove (in the Bundle Editor) the `source.js.greasemonkey` scope for this command so that it works no matter what you're editing.
+There is also a checkbox to only list scripts in your namespace. Your namespace is the value of the `TM_NAMESPACE` shell variable in the TextMate preferences (`Preferences > Advanced > Shell Variables`). The checkbox will limit the listed scripts to those where the `@namespace` value *contains* your namespace. This means it will list scripts with a namespace like `http://yournamespace.tld+http://othernamespace.tld` (for collaborations or derivations) as well. No scripts will be listed if your namespace is empty or unset.
 
+You may wish to remove (in the Bundle Editor) the `source.js.greasemonkey` scope for this command so that it's globally available in TextMate.
 
 
 ## Install and Edit (&#x2318;B)

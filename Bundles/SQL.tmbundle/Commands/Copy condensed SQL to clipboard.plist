@@ -8,7 +8,7 @@
 	<string># set defaultCStringEncoding to UTF-8
 export __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100
 
-grep -E -v '^[ \t\s]*\-\-' | sed 's/\(.*\)[ \t]*--.*/\1/' | tr -s ' \n\t' ' ' | pbcopy
+perl -pe 's/\s*\-\-.*$//' | tr -s ' \n\t' ' ' | pbcopy
 echo "Copied SQL to Clipboard"</string>
 	<key>input</key>
 	<string>selection</string>

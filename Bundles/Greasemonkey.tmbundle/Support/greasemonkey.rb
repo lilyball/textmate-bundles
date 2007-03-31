@@ -1,5 +1,5 @@
 # Greasemonkey bundle commands for TextMate
-# By Henrik Nyh <http://henrik.nyh.se> 2007-03-08.
+# By Henrik Nyh <http://henrik.nyh.se>.
 # Free to modify and redistribute non-commercially with due credit.
 
 

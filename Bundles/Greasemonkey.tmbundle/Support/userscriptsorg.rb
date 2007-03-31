@@ -1,5 +1,5 @@
 # Greasemonkey Userscript.org integration for TextMate
-# By Henrik Nyh <http://henrik.nyh.se> 2007-02-27.
+# By Henrik Nyh <http://henrik.nyh.se>.
 # Free to modify and redistribute non-commercially with due credit.
 
 require "webrick"
@@ -9,14 +9,8 @@ require "#{ENV['TM_BUNDLE_SUPPORT']}/levenshtein"
 	
 class Hash
 	def to_query_string
-	  vals = [] 
-	  self.each do |k,v|
-	    next if k.nil?
-	    vals <<
-	    [WEBrick::HTTPUtils.escape_form(k.to_s), 
-	     WEBrick::HTTPUtils.escape_form(v.to_s)].join("=")
-	  end
-	  vals.join("&")
+    	esc = WEBrick::HTTPUtils.method(:escape_form)
+    	map { |k, v| esc.call(k.to_s) + "=" + esc.call(v.to_s) }.join("&")
 	end
 end
 

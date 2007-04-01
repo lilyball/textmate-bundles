@@ -165,11 +165,7 @@ COLOURS = {
 if colour.length &gt; 0 and colour[0] != ?#
   colour.downcase!
   # Convert named colours to their hex values
-  if COLOURS.has_key? colour
-    colour = '#' + COLOURS[colour]
-  else
-    TextMate::exit_show_tool_tip %{Colour “#{colour}” not recognised}
-  end
+  colour = '#' + COLOURS[colour] if COLOURS.has_key? colour
 end
 
 print Dialog.request_color(colour)

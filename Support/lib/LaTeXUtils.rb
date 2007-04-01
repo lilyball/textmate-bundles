@@ -33,6 +33,7 @@ module LaTeX
       # Then try some specific paths
       locs = ["/usr/texbin/",
               "/usr/local/teTeX/bin/powerpc-apple-darwin-current/",
+              "/usr/local/teTeX/bin/i386-darwin",
               "/opt/local/bin/"]
       locs.each do |loc|
         return loc if File.exist?(loc+"kpsewhich")
@@ -46,18 +47,19 @@ module LaTeX
     # +relative+ determines an explicit path that should be included in the
     # paths to look at when searching for the file. This will typically be the
     # path to the root document.
+    
+    # TODO: The following method should probably be simplified dramatically
     def find_file(filename, extension, relative)
       filename.gsub!(/\.#{extension}$/,"")
-      if filename.match(/^\//) # If it is an absolute path, return it
-        filename = filename + ".#{extension}"
-        return filename if File.exist?(filename)
-        return nil
-      end
+      return filename if File.exist?(filename) # First try the filename as is, without the extension
+      return "#{filename}.#{extension}" if File.exist?("#{filename}.#{extension}") # Then try with the added extension
+      return nil if filename.match(/^\//) # If it is an absolute path, and the above two tests didn't find it, return nil
       texpath = LaTeX.tex_path
       @@paths ||= Hash.new
       @@paths[extension] ||= ([`#{texpath}kpsewhich -show-path=#{extension}`.chomp.split(/:!!|:/)].flatten.map{|i| i.sub(/\/*$/,'/')}).unshift(relative).unshift("")
-      return "#{filename}.#{extension}" if File.exist?("#{filename}.#{extension}")
       @@paths[extension].each do |path|
+        testpath = File.expand_path(File.join(path,filename))
+        return testpath if File.exist?(testpath)
         testpath = File.expand_path(File.join(path,filename + "." + extension))
         return testpath if File.exist?(testpath)
       end

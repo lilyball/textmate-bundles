@@ -381,10 +381,9 @@ id read_property_list_argument(const char* parameters)
 	}
 	else
 	{
-//		if(isatty(STDIN_FILENO) == 0)
-		{
-			plist = read_property_list_from_file(STDIN_FILENO);
-		}
+		if(isatty(STDIN_FILENO) != 0)
+			fprintf(stderr, "%s: Reading parameters from stdin... (press CTRL-D to proceed)\n", AppName);
+		plist = read_property_list_from_file(STDIN_FILENO);
 	}
 	
 	if(plist == nil)

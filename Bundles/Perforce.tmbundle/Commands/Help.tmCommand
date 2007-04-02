@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+html_header "Perforce Bundle Help" "Perforce"
+
+Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
+
+## Perforce Bundle Help
+
+The Perforce bundle contains commands to allow one to work with the [Perforce Software Configuration Management System](http://perforce.com/) from within TextMate.
+
+This document assumes that the reader has already installed and is familiar with Perforce.  For help with Perforce, see [http://perforce.com/perforce/technical.html](http://perforce.com/perforce/technical.html).
+
+### Setup
+
+You probably already have the following environment variables defined (in a file such as .bash_profile or .p4config) in order to use the `p4` shell command:
+
+ *  P4PORT
+ *  P4USER
+ *  P4CLIENT
+
+The Perforce bundle commands that don't use the shell (such as "Diff With Base") don't have access to environment variables (such as those defined in .bash_profile), so they need to be defined in TextMate.
+
+ 1.  Select the TextMate-&gt;Preferences... menu item
+ 2.  Click on Advanced (the gear icon)
+ 3.  Click on Shell Variables
+ 4.  Click on '+', and change "MY_VARIABLE" to "P4PORT" and change "some value" to the appropriate P4PORT value for your Perforce server
+ 5.  Repeat step 4 for P4USER and P4CLIENT 
+
+EOF
+
+html_footer
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>80BD96D6-C41C-45F3-8CAE-E6D88B9D7339</string>
+</dict>
+</plist>

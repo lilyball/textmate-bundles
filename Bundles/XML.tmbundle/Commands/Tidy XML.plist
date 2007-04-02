@@ -5,13 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ $TM_SOFT_TABS == "YES" ]];
-   then export XMLLINT_INDENT=$(printf "%${TM_TAB_SIZE}s")
-   else export XMLLINT_INDENT="	" # one tab
-fi
-
-xmllint --format -
-</string>
+	<string>result=`xmllint --format - 2&gt;&amp;1`
+  if [[ $? &gt; 0 ]];
+  then
+    exit_show_tool_tip "Errors: $result"
+  else
+    echo "$result"
+  fi</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

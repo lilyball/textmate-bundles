@@ -1,12 +1,3 @@
-/*
-	Weird options added by chris:
-	-mdynamic-no-pic removes useless symbol indirection code, reducing executable size. It does _not_ work for code that may need relocation at runtime, i.e. bundles and frameworks.
-	In theory -Wl,-s would avoid a separate invocation of the strip tool, but it ends up stripping bits we actually need.
-	-dead_strip tells the linker to remove unused functions and data.
-	
-    g++ -Wmost -arch ppc -arch i386 -mdynamic-no-pic -dead_strip -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Os "$TM_FILEPATH" -o "$TM_SUPPORT_PATH/bin/tm_dialog" -framework Foundation && strip "$TM_SUPPORT_PATH/bin/tm_dialog"
-
-*/
 #import <Cocoa/Cocoa.h>
 #import <getopt.h>
 #import <fcntl.h>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Named Code Blocks in Symbol List</string>
+	<key>scope</key>
+	<string>meta.block.parameters.sweave</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>
+		s/^&lt;&lt;.*?(?:label=)\s*([^\s,&gt;]*)\s*(?:,.*)?&gt;&gt;$/R: $1/; # explicit label
+		s/^&lt;&lt;\s*([^\s,&gt;=]+)\s*(?:,.*&gt;&gt;|&gt;&gt;)$/R: $1/; # First entry is a label
+	s/^&lt;&lt;.*&gt;&gt;//; # Everything else just wont show up
+	</string>
+	</dict>
+	<key>uuid</key>
+	<string>6677D67A-999F-4F29-8151-3308967D51D7</string>
+</dict>
+</plist>

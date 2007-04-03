@@ -99,6 +99,14 @@ function press(evt) {
    }
 }
 document.body.addEventListener('keydown', press, false);
+
+function copyOutput(link) {
+  output = document.getElementById('_scriptmate_output').innerText;
+  cmd = TextMate.system('pbcopy', function(){});
+  cmd.write(output);
+  cmd.close();
+  link.innerText = 'output copied to clipboard';
+}
 </script>
 HTML
       descriptors = [ stdout, stderr, stack_dump ].compact
@@ -185,12 +193,14 @@ class ScriptMate < CommandMate
     def emit_header
       puts html_head(:window_title => "#{@command.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@command.lang}")
       puts <<-HTML
-  <div class="#{@mate.downcase}">		
+  <div class="#{@mate.downcase}">
   <div><!-- first box containing version info and script output -->
-  <pre><strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@command.version_string}</strong>
+  <pre>
+    <a style="text-decoration: none; float: right" href="#" onclick="copyOutput(this)">copy output</a>
+    <strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@command.version_string}</strong>
   <strong>>>> #{@command.display_name}</strong>
 
-  <div style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
+  <div id="_scriptmate_output" style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
   HTML
     end
 

@@ -102,7 +102,7 @@ document.body.addEventListener('keydown', press, false);
 
 function copyOutput(link) {
   output = document.getElementById('_scriptmate_output').innerText;
-  cmd = TextMate.system('pbcopy', function(){});
+  cmd = TextMate.system('__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbcopy', function(){});
   cmd.write(output);
   cmd.close();
   link.innerText = 'output copied to clipboard';

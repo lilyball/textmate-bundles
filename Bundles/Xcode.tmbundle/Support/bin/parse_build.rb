@@ -35,6 +35,7 @@ class String
 					found_quote = true
 				when /\s/
 					break if not found_quote
+					out_token += char
 				else
 					out_token += char
 			end

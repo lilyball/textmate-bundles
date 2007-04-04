@@ -4,6 +4,8 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>4679484F-6227-11D9-BFB1-000D93589AF6</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
@@ -115,7 +117,7 @@ end
 star = arg_name = false
 if ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
 	files = ["CocoaProtocols.txt.gz"]
-else
+elsif ENV['TM_SCOPE'].include?("meta.scope.implementation.objc") ||  ENV['TM_SCOPE'].include?("meta.interface-or-protocol.objc")
   files = ["CocoaClasses.txt.gz"]
   if ENV['TM_SCOPE'].include?("meta.function.objc")
     star = true		 
@@ -126,6 +128,10 @@ else
   elsif ENV['TM_SCOPE'].include? "meta.scope.interface.objc"
     star = arg_name = true
   end
+else
+  star = arg_name = true
+  files = ["CocoaClasses.txt.gz", "CLib.txt.gz","CocoaFunctions.txt.gz"]
+  files += ["C++Lib.txt.gz"] if ENV['TM_SCOPE'].include? "source.objc++"
 end
 
 alpha_and_caret = /[a-zA-Z_][_a-zA-Z0-9]*\(?$/

@@ -88,27 +88,8 @@ class CommandMate
     end
   public
     def emit_html
+      stdout, stderr, stack_dump, @pid = @command.run
       emit_header()
-      stdout, stderr, stack_dump, pid = @command.run
-
-      puts <<-HTML
-<script type="text/javascript" charset="utf-8">
-function press(evt) {
-   if (evt.keyCode == 67 && evt.ctrlKey == true) {
-      TextMate.system("kill -s INT #{pid}", null);
-   }
-}
-document.body.addEventListener('keydown', press, false);
-
-function copyOutput(link) {
-  output = document.getElementById('_scriptmate_output').innerText;
-  cmd = TextMate.system('__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbcopy', function(){});
-  cmd.write(output);
-  cmd.close();
-  link.innerText = 'output copied to clipboard';
-}
-</script>
-HTML
       descriptors = [ stdout, stderr, stack_dump ].compact
       descriptors.each do
          |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
@@ -129,7 +110,7 @@ HTML
         end
       end
       emit_footer()
-      Process.waitpid(pid)
+      Process.waitpid(@pid)
     end
 end
 
@@ -193,14 +174,92 @@ class ScriptMate < CommandMate
     def emit_header
       puts html_head(:window_title => "#{@command.display_name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@command.lang}")
       puts <<-HTML
-  <div class="#{@mate.downcase}">
-  <div><!-- first box containing version info and script output -->
-  <pre>
-    <a style="text-decoration: none; float: right" href="#" onclick="copyOutput(this)">copy output</a>
-    <strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@command.version_string}</strong>
-  <strong>>>> #{@command.display_name}</strong>
+<!-- scriptmate javascripts -->
+<script type="text/javascript" charset="utf-8">
+function press(evt) {
+   if (evt.keyCode == 67 && evt.ctrlKey == true) {
+      TextMate.system("kill -s INT #{@pid}", null);
+   }
+}
+document.body.addEventListener('keydown', press, false);
 
-  <div id="_scriptmate_output" style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
+function copyOutput(link) {
+  output = document.getElementById('_scriptmate_output').innerText;
+  cmd = TextMate.system('__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbcopy', function(){});
+  cmd.write(output);
+  cmd.close();
+  link.innerText = 'output copied to clipboard';
+}
+</script>
+<!-- end javascript -->
+HTML
+      puts <<-HTML
+  <style type="text/css">
+    /* =================== */
+    /* = ScriptMate Styles = */
+    /* =================== */
+
+    div.scriptmate {
+    }
+
+    div.scriptmate > div {
+    	/*border-bottom: 1px dotted #666;*/
+    	/*padding: 1ex;*/
+    }
+
+    div.scriptmate pre em
+    {
+    	/* used for stderr */
+    	font-style: normal;
+    	color: #FF5600;
+    }
+
+    div.scriptmate div#exception_report
+    {
+    /*	background-color: rgb(210, 220, 255);*/
+    }
+
+    div.scriptmate p#exception strong
+    {
+    	color: #E4450B;
+    }
+
+    div.scriptmate p#traceback
+    {
+    	font-size: 8pt;
+    }
+
+    div.scriptmate blockquote {
+    	font-style: normal;
+    	border: none;
+    }
+
+
+    div.scriptmate table {
+    	margin: 0;
+    	padding: 0;
+    }
+
+    div.scriptmate td {
+    	margin: 0;
+    	padding: 2px 2px 2px 5px;
+    	font-size: 10pt;
+    }
+
+    div.scriptmate a {
+    	color: #FF5600;
+    }
+  </style>
+  <div class="scriptmate #{@mate.downcase}">
+  <div class="controls" style="text-align:right;">
+    <a style="text-decoration: none;" href="#" onclick="copyOutput(document.getElementById('_script_output'))">copy output</a>
+  </div>
+  <!-- first box containing version info and script output -->
+  <pre>
+<strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@command.version_string}</strong>
+<strong>>>> #{@command.display_name}</strong>
+
+<div id="_scriptmate_output" style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
   HTML
     end
 

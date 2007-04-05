@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+test -z $TM_FILENAME &amp;&amp; title="Txt2tags" || title="${TM_FILENAME%.*}"
+
+html_header "$title - Document Outline"
+
+cd "$TM_DIRECTORY" # needed to expand possible includes
+txt2tags -t txt --toc-level 5 --toc-only -i- -o- | pre
+
+html_footer</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>Show Document Outline</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.txt2tags</string>
+	<key>uuid</key>
+	<string>423F0F96-A0B8-4643-B8E1-A55157FC53E4</string>
+</dict>
+</plist>

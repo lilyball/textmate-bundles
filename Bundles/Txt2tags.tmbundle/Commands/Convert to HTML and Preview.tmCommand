@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+html_header "Txt2tags Preview"
+txt2tags -t html -i- -o-
+html_footer
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~@p</string>
+	<key>name</key>
+	<string>Preview</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.txt2tags</string>
+	<key>uuid</key>
+	<string>4B8C62A1-82C3-40C6-9595-4546EE8B2CA0</string>
+</dict>
+</plist>

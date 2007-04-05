@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if test -z "$TM_SELECTED_TEXT"; then
+	echo	
+	echo "|| Heading1 | Heading 2 | Heading 3 |"
+	echo "| left      |   center  |     right |"
+	echo
+else
+	tab=$(echo -ne \\t)
+	echo "$TM_SELECTED_TEXT" |
+		sed "s/$tab/ | /g;s/.*/| &amp; |/"
+fi</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^|</string>
+	<key>name</key>
+	<string>Table</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.txt2tags</string>
+	<key>tabTrigger</key>
+	<string>|</string>
+	<key>uuid</key>
+	<string>3B5D493F-111A-4639-BA28-B2119770504B</string>
+</dict>
+</plist>

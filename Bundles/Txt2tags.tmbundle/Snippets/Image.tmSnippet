@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>[${1:${TM_SELECTED_TEXT:`#!/usr/bin/env ruby
+
+def make_link(text)
+  case text
+  when %r{\A(?i)(.*\.(png|jpe?g|gif|eps|bmp))\z}:     "#{$1}"
+  else "Picture.jpg"
+  end
+end
+
+text = %x{__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbpaste}.strip
+print make_link(text)
+`}}]</string>
+	<key>keyEquivalent</key>
+	<string>^I</string>
+	<key>name</key>
+	<string>Image</string>
+	<key>scope</key>
+	<string>text.txt2tags</string>
+	<key>tabTrigger</key>
+	<string>[</string>
+	<key>uuid</key>
+	<string>86555501-E5E7-46B7-9DDE-4ABD3C8DF7BB</string>
+</dict>
+</plist>

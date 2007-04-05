@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
+   cat template_in.txt &gt; "$TM_NEW_FILE"
+fi</string>
+	<key>extension</key>
+	<string>t2t</string>
+	<key>name</key>
+	<string>Manual Page (man)</string>
+	<key>scope</key>
+	<string>text.txt2tags</string>
+	<key>uuid</key>
+	<string>F23D10B7-B5C5-4AB7-AE32-CBF0E0B3D160</string>
+</dict>
+</plist>

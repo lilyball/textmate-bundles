@@ -1,0 +1,77 @@
+TXT2TAGS
+
+Dec, 2006
+
+% UNIX Manual Page Template for txt2tags
+% --------------------------------------
+%
+% Change the current text with your program options and information.
+% Add new sections as you wish: BUGS, EXAMPLES, SEE ALSO... 
+
+%!target: man
+
+% Handy filter to change the Man Page section from 1 (the default) to 5.
+% All sections: 
+%  1  Commands available to users
+%  2  Unix and C system calls
+%  3  C library routines for C programs
+%  4  Special file names
+%  5  File formats and conventions for files used by Unix
+%  6  Games
+%  7  Word processing packages
+%  8  System administration commands and procedures
+%
+%!postproc(man): "^(\.TH.*) 1 "  "\1 5 "
+
+
+= NAME =
+
+txt2tags - text formatting and conversion tool
+
+
+= SYNOPSIS =
+
+**txt2tags** [//OPTION//]... [//FILE//]...
+
+
+= DESCRIPTION =
+
+**txt2tags** is a GPL format conversion tool written in Python that
+generates //HTML//, //XHTML//, //SGML//, //LaTeX//, //Lout//,
+//Man Page//, //MoinMoin//, //MagicPoint// and //PageMaker//
+documents from a single text file with minimal markup.
+
+= OPTIONS =
+
+:  **-h**, **--help**
+print help information and exit
+
+:  **-i**, **--infile**=//FILE//
+set FILE as the input file name ('-' for STDIN)
+
+:      **--toc**
+add TOC (Table of Contents) to target document
+
+:  **-v**, **--verbose**
+print informative messages during conversion
+
+:  **-V**, **--version**
+print program version and exit
+:
+
+If input file is '-', reads from STDIN.
+If output file is '-', dumps output to STDOUT.
+
+
+= AUTHOR =
+
+Written and maintained by Aurelio Marinho Jargas <verde@aurelio.net>
+
+
+= COPYRIGHT =
+
+Copyright (C) 2007 Aurelio Marinho Jargas
+
+This is free software; see the source for copying conditions. There is
+NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.

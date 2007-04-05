@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if test -z "$TM_SELECTED_TEXT"; then
+	echo
+	echo "+ Item 1"
+	echo "+ Item 2"
+	echo "+"
+else
+	echo "$TM_SELECTED_TEXT" | sed 's/^/+ /'
+fi</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Numbered List</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.txt2tags</string>
+	<key>tabTrigger</key>
+	<string>+</string>
+	<key>uuid</key>
+	<string>70E9A4C5-9F6F-4139-BE41-3685017D6169</string>
+</dict>
+</plist>

@@ -10,6 +10,8 @@
 	<string>. "${TM_BUNDLE_SUPPORT}/lib/misc.sh"
 . "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
+export TM_PSQL=${TM_PSQL:-psql8}
+
 html_header "SQL Query Results" "SQL"
 
 query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
@@ -24,13 +26,26 @@ mysql)
 		--html "$MYSQL_DB"|perl -pe 's/(?&lt;=&lt;TABLE )BORDER=1/class="pro_table sql_table" cellspacing="0" cellpadding="5"/'
 ;;
 postgresql)
-	echo '&lt;p&gt;To use a password with Postgres and TextMate you should store your password in &lt;tt&gt;~/.pgpass&lt;/tt&gt;.  See the Postgres documentation for the file format.&lt;/p&gt;'
-
-	require_cmd psql8
-	psql8 -c "$query" \
-		--user="${PGUSER:-$USER}"  --html  \
-		--host="${PGHOST:-localhost}" --port="${PGPORT:-5432}" \
-	     "${PGDATABASE:-$USER}" |perl -pe 's/(?&lt;=&lt;table )border="1"/class="pro_table sql_table" cellspacing="0" cellpadding="5"/'
+	if [ ! -f ~/.pgpass ]; then
+		echo '&lt;hr /&gt;'
+		echo '&lt;p&gt;To use a password with Postgres and TextMate you should store your password in &lt;tt&gt;~/.pgpass&lt;/tt&gt;.&lt;/p&gt;'
+		echo '&lt;p&gt;From: &lt;a href="http://www.postgresql.org/docs/current/interactive/libpq-pgpass.html"&gt;libpq-pgpass documentation&lt;/a&gt;&lt;/p&gt;'
+		echo '&lt;h2&gt;29.13. The Password File&lt;/h2&gt;'
+		echo '&lt;p&gt;The file .pgpass in a user`s home directory or the file referenced by PGPASSFILE can contain passwords to be used if the connection requires a password (and no password has been specified otherwise). On Microsoft Windows the file is named %APPDATA%\postgresql\pgpass.conf (where %APPDATA% refers to the Application Data subdirectory in the user`s profile).&lt;/p&gt;'
+		echo '&lt;p&gt;This file should contain lines of the following format:&lt;/p&gt;'
+		echo 'hostname:port:database:username:password' |pre
+		echo '&lt;p&gt;Each of the first four fields may be a literal value, or *, which matches anything. The password field from the first line that matches the current connection parameters will be used. (Therefore, put more-specific entries first when you are using wildcards.) If an entry needs to contain : or \, escape this character with \. A host name of localhost matches both TCP (hostname localhost) and Unix domain socket (pghost empty or the default socket directory) connections coming from the local machine.&lt;/p&gt;'
+		echo '&lt;p&gt;The permissions on .pgpass must disallow any access to world or group; achieve this by the command &lt;tt&gt;chmod 0600 ~/.pgpass&lt;/tt&gt;. If the permissions are less strict than this, the file will be ignored. (The file permissions are not currently checked on Microsoft Windows, however.)&lt;/p&gt;'
+		echo '&lt;p&gt;Even if you don`t require a password, you should set this file as described with wildcards.&lt;/p&gt;'
+		echo '&lt;hr /&gt;'
+		exit 0
+	else
+		require_cmd ${TM_PSQL}
+		"${TM_PSQL}" -c "$query" \
+			--user="${PGUSER:-$USER}"  --html  \
+			--host="${PGHOST:-localhost}" --port="${PGPORT:-5432}" \
+			"${PGDATABASE:-$USER}" |perl -pe 's/(?&lt;=&lt;table )border="1"/class="pro_table sql_table" cellspacing="0" cellpadding="5"/'
+	fi
 ;;
 sqlite3)
 	require_cmd sqlite3

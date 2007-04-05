@@ -1,10 +1,12 @@
 database_choice () {
 
+	export TM_PSQL=${TM_PSQL:-psql8}
+
 	if [[ -n "$TM_DB_SERVER" ]]; then
 		echo -n "$TM_DB_SERVER"
-	elif ! type -p mysql >/dev/null && type -p psql8 >/dev/null; then
+	elif ! type -p mysql >/dev/null && type -p "${TM_PSQL}" >/dev/null; then
 		echo -n "postgresql"
-	elif type -p mysql >/dev/null && ! type -p psql8 >/dev/null; then
+	elif type -p mysql >/dev/null && ! type -p "${TM_PSQL}" >/dev/null; then
 		echo -n "mysql"
 	else
 		res=$(CocoaDialog dropdown --title "Select Database" \

@@ -72,11 +72,11 @@ class CommandMate
   protected
     def filter_stdout(str)
       # strings from stdout are passed through this method before being printed
-      htmlize(str) + "\n"
+      htmlize(str).gsub(/\<br\>/, "<br>\n")
     end
     def filter_stderr(str)
       # strings from stderr are passwed through this method before printing
-      "<span style='color: red'>#{htmlize str}</span>\n"
+      "<span style='color: red'>#{htmlize str}</span>".gsub(/\<br\>/, "<br>\n")
     end
     def emit_header
       puts html_head(:window_title => "#{@command}", :page_title => "#{@command}", :sub_title => "")

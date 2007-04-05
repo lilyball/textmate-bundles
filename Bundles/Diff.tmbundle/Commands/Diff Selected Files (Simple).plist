@@ -5,13 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>eval arr=($TM_SELECTED_FILES)
+	<string>eval arr=("$TM_SELECTED_FILES")
 if [[ ${#arr[@]} != 2 ]]; then
    echo -e "You need to select exactly two\nfiles in the project drawer."
    exit_show_tool_tip
 fi
 
-eval diff -u $TM_SELECTED_FILES</string>
+eval diff -u "$TM_SELECTED_FILES"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

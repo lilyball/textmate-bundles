@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 $:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
 require "lib/GTD.rb"
-require "lib/dialog"
+require "lib/ui"
 include GTD
 GTD.process_directory
 projects = GTD.projects.find_all{|proj| !proj.completed?}

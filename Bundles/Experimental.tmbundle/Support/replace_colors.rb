@@ -2,7 +2,7 @@
 # Replace all of the occurances of the selected color with the chosen color in the current document.
 # Thomas Aylott -- subtleGradient.com
 
-require ENV['TM_SUPPORT_PATH'] + "/lib/dialog"
+require ENV['TM_SUPPORT_PATH'] + "/lib/ui"
 
 FILENAME = ENV['TM_FILEPATH']
 VALID_COLOR = /^#?[0-9a-f]{3,6}$/i
@@ -27,13 +27,13 @@ unless @original_color and @original_color.match(VALID_COLOR)
   abort
 end
 
-@replaced_color = Dialog.request_color(@original_color)
+@replaced_color = TextMate::UI.request_color(@original_color)
 
 norm = normalize_color(@replaced_color)
 error! unless norm
 @replaced_color = norm
 
-@replaced_color = Dialog.request_string(
+@replaced_color = TextMate::UI.request_string(
   :title => "#{ENV['TM_FILENAME']}: Replace Color", 
   :default => @replaced_color,
   :prompt => "Replace #@original_color with: this",

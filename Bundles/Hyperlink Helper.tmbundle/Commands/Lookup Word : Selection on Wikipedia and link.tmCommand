@@ -10,7 +10,7 @@
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes.rb"
-require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui.rb"
 require 'cgi'
 require 'open-uri'
 require 'erb'
@@ -28,7 +28,7 @@ end #follow_redirect
 
 def select_link(links)
     linklist = links.map { |p| p[0] }
-    item = Dialog.request_item :title =&gt; "Multiple Definitions", :prompt =&gt; "Please select a definition", :items =&gt; linklist
+    item = TextMate::UI.request_item :title =&gt; "Multiple Definitions", :prompt =&gt; "Please select a definition", :items =&gt; linklist
     TextMate.exit_discard if item.nil?
     return links[linklist.index(item)]
 end # select_link
@@ -75,7 +75,7 @@ def getWikiDef(phrase)
     content = @response.read
     if content.scan(/Redirected\sfrom/)
       url, content, pagename = follow_redirect(content)
-  #    confirmed = Dialog.request_confirmation :button1 =&gt; "Accept", :button2 =&gt; "Cancel", :title =&gt; "Redirected to \"#{pagename}\"", :prompt =&gt; "Accept Redirection?"
+  #    confirmed = TextMate::UI.request_confirmation :button1 =&gt; "Accept", :button2 =&gt; "Cancel", :title =&gt; "Redirected to \"#{pagename}\"", :prompt =&gt; "Accept Redirection?"
   #    TextMate.exit_discard unless confirmed
     else
       url = @response.base_uri

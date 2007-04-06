@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -w
 
-require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/shelltokenize" # for TextMate::selected_paths_array
@@ -27,7 +27,7 @@ module Subversion
 		filepaths				= args[:paths]
 		revision				= args[:revision]
 		command					= args[:command_name]
-		error_handler		=	args[:on_error]			|| lambda {|error| Dialog.alert(:warning, "Could not complete diff operation", error)}
+		error_handler		=	args[:on_error]			|| lambda {|error| TextMate::UI.alert(:warning, "Could not complete diff operation", error)}
 	
     svn         = ENV['TM_SVN'] || 'svn'
     diff_cmd    = ENV['TM_SVN_DIFF_CMD']

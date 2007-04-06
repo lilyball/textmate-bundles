@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 $:&lt;&lt; ENV['TM_BUNDLE_SUPPORT'] &lt;&lt; ENV['TM_SUPPORT_PATH']
 require "lib/GTD.rb"
-require "lib/dialog"
+require "lib/ui"
 include GTD
 word = STDIN.read
 case word
@@ -20,7 +20,7 @@ end
 if GTD.get_contexts.include?(word) then
 	context = word
 else
-  context = Dialog.request_item(:title =&gt; 'Listing actions for context', :prompt =&gt;  'Choose the new context', :items =&gt; GTD.contexts)
+  context = TextMate::UI.request_item(:title =&gt; 'Listing actions for context', :prompt =&gt;  'Choose the new context', :items =&gt; GTD.contexts)
   exit unless context
 end
 actions = GTD.actions_for_context(context).map{|r| [r[0],r[1].to_s,r[2]]}

@@ -1,5 +1,5 @@
 require 'English'
-require File.dirname(__FILE__) + '/dialog'
+require File.dirname(__FILE__) + '/ui'
 
 module TextMate
 
@@ -37,17 +37,17 @@ module TextMate
       end
     end
 
-    Dialog.dialog('ProgressDialog.nib', params, nil, true) do |dialog|
+    UI.dialog('ProgressDialog.nib', params, nil, true) do |dialog|
       if cancel_proc.nil?
         # if there is no cancel proc, we get no input from the dialog and need not block.
         return_val = run_block.call(dialog)
       else # not cancel_proc.nil?
         
         # invoke processing block in one process
-        run_block_process = fork do
+        run_block_process = Process.pid
+#        run_block_process = fork do
             trap('SIGINT'){cancel_proc.call}
-            return_val = run_block.call(dialog)
-        end
+ #       end
 
         # invoke ui waiting in a second process
         ui_process = fork do
@@ -61,9 +61,10 @@ module TextMate
               # ignore; the window was probably canceled
           end
         end
+        return_val = run_block.call(dialog)
         
         # hang out until the dialog is done
-        Process.wait
+#        Process.wait
       end
 
       # if we do not set the animate state back to NO the progress indicator in the nib will leak and will even consume CPU-time

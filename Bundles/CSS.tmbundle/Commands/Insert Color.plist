@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-require ENV['TM_SUPPORT_PATH'] + "/lib/dialog"
+require ENV['TM_SUPPORT_PATH'] + "/lib/ui"
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
 colour = STDIN.read
 
@@ -168,7 +168,7 @@ if colour.length &gt; 0 and colour[0] != ?#
   colour = '#' + COLOURS[colour] if COLOURS.has_key? colour
 end
 
-print Dialog.request_color(colour)
+print TextMate::UI.request_color(colour)
 </string>
 	<key>fallbackInput</key>
 	<string>word</string>
@@ -181,7 +181,7 @@ print Dialog.request_color(colour)
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>
-	<string>source.css - meta.property-name.css - meta.selector.css</string>
+	<string>source.css</string>
 	<key>uuid</key>
 	<string>CC30D708-6E49-11D9-B411-000D93589AF6</string>
 </dict>

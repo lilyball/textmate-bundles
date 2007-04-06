@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 # print "Got:" + STDIN.read
 
-require ENV['TM_SUPPORT_PATH'] +'/lib/dialog.rb'
+require ENV['TM_SUPPORT_PATH'] +'/lib/ui.rb'
 opts = { "Formula" =&gt; "plot(${1:y~x}${2:, data=${3:frame})",
          "Bar Graph" =&gt; "barplot(${1:table(${2:x})})",
 		"Pie Chart" =&gt; "pie(${1:x}${2:, col=c(${3:colors})})",
@@ -16,7 +16,7 @@ opts = { "Formula" =&gt; "plot(${1:y~x}${2:, data=${3:frame})",
 		"Box Plot" =&gt;  "boxplot(${1:x}${2:, horizontal = TRUE})",
 		"Scatterplot" =&gt; "plot(${1:x})"}
 keys = opts.keys.sort
-ans = Dialog.menu(keys)
+ans = TextMate::UI.menu(keys)
 TextMate.exit_discard unless ans
 print opts[keys[ans]]</string>
 	<key>fallbackInput</key>

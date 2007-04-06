@@ -306,11 +306,11 @@ module TextMate
       #initialize
       init_comment_delimiters()
 
-      require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog.rb"
+      require "#{ENV['TM_SUPPORT_PATH']}/lib/ui.rb"
       cstart = (@escape_open).rstrip + ' '
       cend = (' ' + @escape_close).rstrip
       begin
-        ::Dialog.request_file do | file |
+        TextMate::UI.request_file do | file |
           print <<-"EOT"
 #{cstart}#tminclude "#{file}"#{cend}
 #{cstart}end tminclude#{cend}

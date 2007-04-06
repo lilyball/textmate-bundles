@@ -6,12 +6,11 @@
 #  Copyright 2006 Chris Thomas. All rights reserved.
 # 
 
-#require "#{ENV["TM_SUPPORT_PATH"]}/lib/dialog"
 location = File.dirname(__FILE__)
 puts location
 
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/osx/plist"
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/dialog"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/progress"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
 
@@ -83,10 +82,10 @@ module Subversion
 		# Validate file
 		case svn_cmd("status #{escaped_path}")
 		when /^\?.*/
-			TextMate::Dialog.alert(:warning, "File “#{File.basename(path)}” is not in the repository.", "Please add the file to the repository before using this command.")
+			TextMate::UI.alert(:warning, "File “#{File.basename(path)}” is not in the repository.", "Please add the file to the repository before using this command.")
 			return nil
 		when /^A.*/
-			TextMate::Dialog.alert(:warning, "File “#{File.basename(path)}” is not in the repository.", "Please commit the file to the repository before using this command.")
+			TextMate::UI.alert(:warning, "File “#{File.basename(path)}” is not in the repository.", "Please commit the file to the repository before using this command.")
 			return nil
 		end
 
@@ -104,7 +103,7 @@ module Subversion
 
 		# Show the log
 		revision = 0
-		TextMate::Dialog.dialog(:nib => ListNib,
+		TextMate::UI.dialog(:nib => ListNib,
 														:center => true,
 														:parameters => {'title' => prompt,'entries' => [], 'hideProgressIndicator' => false}) do |dialog|
 
@@ -124,11 +123,11 @@ module Subversion
 					dialog.parameters = {'entries' => plist, 'hideProgressIndicator' => true}
 
 					if plist.size == 0
-						TextMate::Dialog.alert(:warning, "No revisions of file “#{path}” found", "Either there’s only one revision of this file, and you already have it, or this file was never added to the repository in the first place, or I can’t read the contents of the log for reasons unknown.")
+						TextMate::UI.alert(:warning, "No revisions of file “#{path}” found", "Either there’s only one revision of this file, and you already have it, or this file was never added to the repository in the first place, or I can’t read the contents of the log for reasons unknown.")
 					end
 				end
 			rescue REXML::ParseException => exception
-				TextMate::Dialog.alert(:warning, "Could not parse log data for “#{path}”", "This may be a bug. Error: #{error}.")
+				TextMate::UI.alert(:warning, "Could not parse log data for “#{path}”", "This may be a bug. Error: #{error}.")
 			end
 
 			dialog.wait_for_input do |params|
@@ -141,7 +140,7 @@ module Subversion
 					false # exit
 				else
 					unless (number_of_revisions == :multiple) or (revision.length == number_of_revisions) then
-						TextMate::Dialog.alert(:warning, "Please select #{number_of_revisions} revision#{number_of_revisions == 1 ? '' : 's'}.", "So far, you have selected #{revision.length} revision#{revision.length == 1 ? '' : 's'}.")
+						TextMate::UI.alert(:warning, "Please select #{number_of_revisions} revision#{number_of_revisions == 1 ? '' : 's'}.", "So far, you have selected #{revision.length} revision#{revision.length == 1 ? '' : 's'}.")
 						true # continue
 					else
 						false # exit

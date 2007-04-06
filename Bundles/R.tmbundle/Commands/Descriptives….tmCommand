@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby
 # print "Got:" + STDIN.read
 
-require ENV['TM_SUPPORT_PATH'] +'/lib/dialog.rb'
+require ENV['TM_SUPPORT_PATH'] +'/lib/ui.rb'
 opts = { "Mean" =&gt; "mean(${1:x})", 
          "Variance" =&gt; "var(${1:x})",
          "Std. Dev." =&gt; "sd(${1:x})",
@@ -21,7 +21,7 @@ opts = { "Mean" =&gt; "mean(${1:x})",
 		"Range" =&gt; "range(${1:x}${2:, na.rm=TRUE})"
 }
 keys = opts.keys.sort
-ans = Dialog.menu(keys)
+ans = TextMate::UI.menu(keys)
 TextMate.exit_discard unless ans
 print opts[keys[ans]]</string>
 	<key>fallbackInput</key>

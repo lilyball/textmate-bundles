@@ -127,7 +127,7 @@ END`
 		xml = @config.xml
 		xml.root.elements.delete("Script[@filename='#{@script.file_name}']")
 
-		button = TextMate::Dialog.alert(:warning, %Q{Uninstall "#{@script.name}"?}, "The file will be moved to the Trash folder.", "Uninstall", "Cancel")
+		button = TextMate::UI.alert(:warning, %Q{Uninstall "#{@script.name}"?}, "The file will be moved to the Trash folder.", "Uninstall", "Cancel")
 		exit if button == "Cancel"
 		
 		@config.xml = xml  # Save XML if we're still around

@@ -24,10 +24,10 @@ words_tmp.each do |w|
 end
 
 begin
-  require ENV['TM_SUPPORT_PATH'] + "/lib/dialog"
+  require ENV['TM_SUPPORT_PATH'] + "/lib/ui"
   abort if words.empty?
 
-  val = Dialog.menu(words)
+  val = TextMate::UI.menu(words)
   val = words[val] if val
   
   val = nil if val == context

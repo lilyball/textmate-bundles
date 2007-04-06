@@ -7,9 +7,9 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/GTDUtils.rb'
-require ENV['TM_SUPPORT_PATH'] + '/lib/dialog.rb'
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui.rb'
 contextList = GTDContexts.contexts
-choice = Dialog.menu(contextList)
+choice = TextMate::UI.menu(contextList)
 if choice then
   print "@#{contextList[choice]} "
 else

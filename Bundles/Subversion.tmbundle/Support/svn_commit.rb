@@ -12,7 +12,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/shelltokenize"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/erb_streaming"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
-require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 
 # puts ARGV.inspect
 # puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG
@@ -123,7 +123,8 @@ public
 	
 	def commit(&output_block)
 		require "open3"
-		Open3.popen3("#{@svn_tool} commit --non-interactive --force-log #{@commit_args}") do |stdin, stdout, stderr|
+		#--non-interactive
+		Open3.popen3("#{@svn_tool} commit  --force-log #{@commit_args}") do |stdin, stdout, stderr|
 			stdout.each_line {|line| output_block.call(:output, line.chomp)}
 			stderr.each_line {|line| output_block.call(:error, line.chomp)}
 		end
@@ -167,13 +168,13 @@ when :HTML
 			string += " • " + path + "\n"
 		end
 		
-		Dialog.simple_notification(:title => 'Commit Result', :summary => "No files modified; nothing to commit.", :log => string)
+		TextMate::UI.simple_notification(:title => 'Commit Result', :summary => "No files modified; nothing to commit.", :log => string)
     exit 1
 #		TextMate.exit_show_tool_tip(string)
 	else
 		status = transaction.ask_user_for_arguments
 		if status != 0
-#		  Dialog.simple_notification(:title => 'Commit Result', :summary => 'Canceled commit.')
+#		  TextMate::UI.simple_notification(:title => 'Commit Result', :summary => 'Canceled commit.')
 #			TextMate.exit_show_tool_tip "Canceled (#{status >> 8})."
       exit status
       
@@ -189,7 +190,7 @@ when :HTML
 
 		revision_string = $& if verbose_output =~ /Committed revision \d*./
 
-    Dialog.simple_notification(:title => 'Commit Result',
+    TextMate::UI.simple_notification(:title => 'Commit Result',
                               :summary => (revision_string || 'Error occurred'),
                               :log => verbose_output)
 		# if( ENV['TM_SVN_BRIEF_COMMIT_OUTPUT'].nil? or revision_string.nil? ) then

@@ -13,7 +13,7 @@ begin
 
 	Subversion::view_revision("$TM_FILEPATH")
 rescue Exception =&gt; error
-	TextMate::Dialog.alert(:warning, "You’ve discovered a bug", "Please report the following text: #{error}\n\n#{error.backtrace.join(%Q{\n})}")
+	TextMate::UI.alert(:warning, "You’ve discovered a bug", "Please report the following text: #{error}\n\n#{error.backtrace.join(%Q{\n})}")
 end
 END
 </string>

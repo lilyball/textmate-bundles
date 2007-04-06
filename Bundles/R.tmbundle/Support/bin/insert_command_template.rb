@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 require File.join(ENV['TM_SUPPORT_PATH'], "lib/exit_codes.rb")
-require File.join(ENV['TM_SUPPORT_PATH'], "lib/dialog.rb")
+require File.join(ENV['TM_SUPPORT_PATH'], "lib/ui.rb")
 require File.join(ENV['TM_SUPPORT_PATH'], 'lib/current_word.rb')
 
 require File.join(ENV['TM_BUNDLE_SUPPORT'], 'lib/popen3.rb')
@@ -24,8 +24,8 @@ functions = text.split("\n")
 if functions.size == 1
   function = functions.first
 else
-  # term = Dialog.request_item :title => "Snippet for Command", :prompt => "There were more than one matching commands found", :items => functions.collect { |f| f[0...f.index("(")] }
-  idx = Dialog.menu functions.collect { |f| f[0...f.index("(")] }
+  # term = TextMate::UI.request_item :title => "Snippet for Command", :prompt => "There were more than one matching commands found", :items => functions.collect { |f| f[0...f.index("(")] }
+  idx = TextMate::UI.menu functions.collect { |f| f[0...f.index("(")] }
   TextMate.exit_discard if idx.nil?
   function = functions[idx]
   # function = functions.find("") { |f| f[0..term.length] == term + "(" }

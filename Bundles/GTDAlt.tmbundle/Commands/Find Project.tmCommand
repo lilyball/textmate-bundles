@@ -7,11 +7,11 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/GTD.rb'
-require ENV['TM_SUPPORT_PATH'] + '/lib/dialog.rb'
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui.rb'
 include GTD
 files = GTD.process_directory
 projects = files.map{|i| i.projects}.flatten
-search_string = Dialog.request_string(:title =&gt; "Finding projects", :prompt =&gt; "Abbreviated words to seach for:")
+search_string = TextMate::UI.request_string(:title =&gt; "Finding projects", :prompt =&gt; "Abbreviated words to seach for:")
 exit unless search_string &amp;&amp; !(search_string =~ /^\s*$/)
 search_terms = search_string.downcase.split(" ")
 for term in search_terms do
@@ -23,7 +23,7 @@ when 0
 when 1
   project = projects[0]
 else
-  project = Dialog.request_item(:title =&gt; "Finding projects",:prompt =&gt; "Too many possible matches found! Please select one:",:items =&gt; projects.map{|i| i.name+" : "+i.root.name} )
+  project = TextMate::UI.request_item(:title =&gt; "Finding projects",:prompt =&gt; "Too many possible matches found! Please select one:",:items =&gt; projects.map{|i| i.name+" : "+i.root.name} )
   project = projects.find{|proj| proj.name+" : "+proj.root.name == project} if project
 end
 if project then

@@ -12,7 +12,7 @@
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/exit_codes"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/dialog"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
 require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word")
 
 require 'base64'
@@ -31,7 +31,7 @@ end
 
 # Prompts the user for words, for the cases where matches are not found
 def get_word_from_user(prompt = "Please select word to look for")
-  Dialog.request_string(:title =&gt; "Look up in R Documentation", :prompt =&gt; prompt)
+  TextMate::UI.request_string(:title =&gt; "Look up in R Documentation", :prompt =&gt; prompt)
 end
 def look_up_term(term)
   `awk -- '/^Entry:/ { entry = $2 } /[[:space:]]'#{e_sh Regexp.escape(term)}'([[:space:]]|$)/,/^URL:/ { if(match($0,/^URL:/)) { sub(/^URL: /, ""); sub(/^(\\.\\.\\/)*library\\//, ""); print entry, $0; } }' #{e_sh LIBDIR}/*/CONTENTS`.split("\n")

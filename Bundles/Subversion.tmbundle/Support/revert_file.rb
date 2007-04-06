@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -s
 
-require ENV['TM_SUPPORT_PATH'] + "/lib/dialog"
+require ENV['TM_SUPPORT_PATH'] + "/lib/ui"
 
 abort "Wrong arguments: use -path=«file to revert»" if $path.nil? and ARGV.size == 0
 
@@ -33,14 +33,14 @@ status_for_paths.each do|status_entry|
   warn_for_paths << path unless (status =~ /^(A|D|\?)/)
 end
 
-# TextMate::Dialog.alert(:warning, "¿Que pasa?", "It's not dangerous to revert the file “#{paths_for_shell.inspect}”.")
+# TextMate::UI.alert(:warning, "¿Que pasa?", "It's not dangerous to revert the file “#{paths_for_shell.inspect}”.")
 
 res = if warn_for_paths.size > 0 then
   paths_to_display = warn_for_paths.map {|x| File.basename(x)}.join("”, “")
   plural = (warn_for_paths.size == 1) ? '' : 's'
   title_files = (warn_for_paths.size == 1) ? "“#{paths_to_display}”" : 'files'
 
-  TextMate::Dialog.alert(:warning, "Revert #{title_files}?", "Do you really want to revert the file#{plural} “#{paths_to_display}” and lose all local changes?", 'Revert', 'Cancel')
+  TextMate::UI.alert(:warning, "Revert #{title_files}?", "Do you really want to revert the file#{plural} “#{paths_to_display}” and lose all local changes?", 'Revert', 'Cancel')
 else
   # Nothing dangerous; be happy
   'Revert'

@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 $:<<ENV['TM_SUPPORT_PATH']
 $:<<ENV['TM_BUNDLE_SUPPORT']
-require 'lib/dialog.rb'
+require 'lib/ui.rb'
 require 'lib/exit_codes.rb'
 require 'lib/GTD.rb'
 require 'fileutils.rb'
 include GTD
-include Dialog
 
 class NormalException < Exception
 end
@@ -52,7 +51,7 @@ for text in lines do
       proj = projects.find_all{|pro| pro.name.downcase.index(project.downcase) != nil}
       case proj.length
         when 0
-          choice = Dialog.request_item(:title => "No matching project", :prompt => "Did not find any project matching: #{project}. Please select a project from the list", :items => projects.map{|pro| pro.name} )
+          choice = TextMate::UI.request_item(:title => "No matching project", :prompt => "Did not find any project matching: #{project}. Please select a project from the list", :items => projects.map{|pro| pro.name} )
           if choice then
             targetProj = projects.find{|pro| pro.name == choice}
           else
@@ -61,7 +60,7 @@ for text in lines do
         when 1
           targetProj = proj[0]
         else
-          choice = Dialog.request_item(:title => "Too many matching projects", :prompt => "Found too many projects matching: #{project}. Please select a project from the list", :items => proj.map{|pro| pro.name} )
+          choice = TextMate::UI.request_item(:title => "Too many matching projects", :prompt => "Found too many projects matching: #{project}. Please select a project from the list", :items => proj.map{|pro| pro.name} )
           if choice then
             targetProj = projects.find{|pro| pro.name == choice}
           else

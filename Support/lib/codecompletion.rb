@@ -89,7 +89,7 @@ There's other stuff too, but I got bored with the documentation, haha! take THAT
 # 
 # 
 
-require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 
 class TextmateCodeCompletion
   $debug_codecompletion = {}
@@ -230,7 +230,7 @@ class TextmateCodeCompletion
     if @choices.length == 1
       val = 0
     else
-      val = Dialog.menu(@choices)
+      val = TextMate::UI.menu(@choices)
     end
     cancel() and return unless val
     @choice_i = val

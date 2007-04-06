@@ -8,11 +8,11 @@
 	<string>#!/usr/bin/env ruby
 # print "Got:" + STDIN.read
 
-require ENV['TM_SUPPORT_PATH'] +'/lib/dialog.rb'
+require ENV['TM_SUPPORT_PATH'] +'/lib/ui.rb'
 opts = { "Summary" =&gt; "summary(${1:x})", 
          "Table" =&gt; "table(${1:x})"}
 keys = opts.keys.sort
-ans = Dialog.menu(keys)
+ans = TextMate::UI.menu(keys)
 TextMate.exit_discard unless ans
 print opts[keys[ans]]</string>
 	<key>fallbackInput</key>

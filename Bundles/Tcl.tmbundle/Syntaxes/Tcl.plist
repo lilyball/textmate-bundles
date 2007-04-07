@@ -321,7 +321,7 @@
 		<key>regexp</key>
 		<dict>
 			<key>begin</key>
-			<string>(?=\S)</string>
+			<string>(?=\S)(?![\n;\]])</string>
 			<key>comment</key>
 			<string>matches a single word, named as a regexp, then swallows the rest of the command</string>
 			<key>end</key>

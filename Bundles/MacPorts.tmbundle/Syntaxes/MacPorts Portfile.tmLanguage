@@ -66,7 +66,48 @@
 			<key>comment</key>
 			<string>Procs defined with the `options` keyword</string>
 			<key>match</key>
-			<string>^\s*((?:build\.target|categories|checksum\.skip|checksums|cvs\.(?:date|module|password|root|tag)|default_variants|depends_(?:build|lib|run)|description|destroot\.(?:clean|destdir|keepdirs|target|umask)|dist_subdir|distcheck\.check|distfiles|distname|distpath|epoch|extract\.(?:only|suffix)|fetch\.(?:password|type|use_epsv|user)|filesdir|gnustep\.domain|homepage|install\.(?:group|user)|libpath|livecheck\.(?:check|md5|name|regex|url|version)|long_description|maintainers|(?:master|patch)_sites(?:\.mirror_subdir)?|name|os\.(?:arch|endian|platform|version)|patchfiles|platforms|portdbpath|portname|prefix|revision|sources_conf|startupitem\.(?:create|executable|init|logevents|logfile|name|pidfile|requires|restart|start|stop|type)|svn\.(?:tag|url)|test\.(?:run|target)|use_bzip2|use_zip|version|workdir|worksrcdir|xcode\.(?:build\.settings|configuration|destroot\.(?:path|settings|type)|project|target)|zope\.need_subdir)(?:-(?:delete|append))?)(?!\S)</string>
+			<string>^\s*((?:build\.target|categories|checksum\.skip|checksums|cvs\.(?:date|module|password|root|tag)|default_variants|depends_(?:build|lib|run)|destroot\.(?:clean|destdir|keepdirs|target|umask)|dist_subdir|distcheck\.check|distfiles|distname|distpath|epoch|extract\.(?:only|suffix)|fetch\.(?:password|type|use_epsv|user)|filesdir|gnustep\.domain|homepage|install\.(?:group|user)|libpath|livecheck\.(?:check|md5|name|regex|url|version)|maintainers|(?:master|patch)_sites(?:\.mirror_subdir)?|name|os\.(?:arch|endian|platform|version)|patchfiles|platforms|portdbpath|portname|prefix|revision|sources_conf|startupitem\.(?:create|executable|init|logevents|logfile|name|pidfile|requires|restart|start|stop|type)|svn\.(?:tag|url)|test\.(?:run|target)|use_bzip2|use_zip|version|workdir|worksrcdir|xcode\.(?:build\.settings|configuration|destroot\.(?:path|settings|type)|project|target)|zope\.need_subdir)(?:-(?:delete|append))?)(?!\S)</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*((?:long_)?description)(?!\S)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tcl.macports</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>special-case description and long_description to handle backslash-newline escapes</string>
+			<key>contentName</key>
+			<string>string.unquoted.tcl.macports</string>
+			<key>end</key>
+			<string>[\n;]</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escape</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#braces</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#embedded</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -180,6 +221,169 @@
 			<string>source.tcl</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>bare-string</key>
+		<dict>
+			<key>begin</key>
+			<string>(?:^|(?&lt;=\s))"</string>
+			<key>comment</key>
+			<string>imported from Tcl grammar</string>
+			<key>end</key>
+			<string>"(\S*)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>invalid.illegal.tcl</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escape</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
+		</dict>
+		<key>braces</key>
+		<dict>
+			<key>begin</key>
+			<string>(?:^|(?&lt;=\s))\{</string>
+			<key>comment</key>
+			<string>imported from Tcl grammar</string>
+			<key>end</key>
+			<string>\}(\S*)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>invalid.illegal.tcl</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\[{}\n]</string>
+					<key>name</key>
+					<string>constant.character.escape.tcl</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#inner-braces</string>
+				</dict>
+			</array>
+		</dict>
+		<key>embedded</key>
+		<dict>
+			<key>begin</key>
+			<string>\[</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.begin.tcl</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>imported from Tcl grammar</string>
+			<key>end</key>
+			<string>\]</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.end.tcl</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>source.tcl.embedded</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.tcl.macports</string>
+				</dict>
+			</array>
+		</dict>
+		<key>escape</key>
+		<dict>
+			<key>comment</key>
+			<string>imported from Tcl grammar</string>
+			<key>match</key>
+			<string>\\(\d{1,3}|x[a-fA-F0-9]+|u[a-fA-F0-9]{1,4}|.|\n)</string>
+			<key>name</key>
+			<string>constant.character.escape.tcl</string>
+		</dict>
+		<key>inner-braces</key>
+		<dict>
+			<key>begin</key>
+			<string>\{</string>
+			<key>comment</key>
+			<string>imported from Tcl grammar</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\[{}\n]</string>
+					<key>name</key>
+					<string>constant.character.escape.tcl</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#inner-braces</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string</key>
+		<dict>
+			<key>applyEndPatternLast</key>
+			<integer>1</integer>
+			<key>begin</key>
+			<string>(?:^|(?&lt;=\s))(?=")</string>
+			<key>comment</key>
+			<string>imported from Tcl grammar</string>
+			<key>end</key>
+			<string></string>
+			<key>name</key>
+			<string>string.quoted.double.tcl</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#bare-string</string>
+				</dict>
+			</array>
+		</dict>
+		<key>variable</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.tcl</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>imported from Tcl grammar</string>
+			<key>match</key>
+			<string>(\$)([a-zA-Z0-9_:]+(\([^\)]+\))?|\{[^\}]*\})</string>
+			<key>name</key>
+			<string>variable.other.tcl</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.tcl.macports</string>
 	<key>uuid</key>

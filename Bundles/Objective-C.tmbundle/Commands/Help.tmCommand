@@ -13,12 +13,14 @@ html_header "Objective-C Bundle Help" "Objective-C"
 
 # Introduction
 
-I thought I should showcase some of the features in the Objective-C TextMate Bundle. Here is [direct link][1] (3:30 / 8 MB) to a screencast I (Joachim) made, showing some of the newest features:
+This document describes the commands of the TextMate Objective-C bundle. Here is a [direct link][1] (3:30 / 8 MB) to a screencast Joachim Mårtensson made, showing some of the newest features:
 
 *   The Code Completion command ( activated with the ⌥⎋ - option escape - key-combo ).
 *   The Bracket Matching command ( \] )
 *   Reformatting of method calls ( ⌃Q )
 *   Documentation Look-up ( ⌃H )
+
+Other screencasts can be found on [Macromates' homepage][2]
     
 # The Code Completion Commands
 
@@ -144,14 +146,14 @@ Pressing ⌃Q when the caret is inside a multi-part method call will align the m
 Will be reformatted as
 
     [NSEvent enterExitEventWithType:anEventType
-                       location:aPoint
-                  modifierFlags:flags
-                      timestamp:aTimeInterval
-                   windowNumber:number
-                        context:aGraphicsContext
-                    eventNumber:x
-                 trackingNumber:tracker
-                       userData:data]
+                           location:aPoint
+                      modifierFlags:flags
+                          timestamp:aTimeInterval
+                       windowNumber:number
+                            context:aGraphicsContext
+                        eventNumber:x
+                     trackingNumber:tracker
+                           userData:data]
     
 By default the inner brackets will be reformatted if the brackets are nested, move the caret to a non nested area to get the outer methods reformatted.
 
@@ -162,6 +164,7 @@ Documentation look-up exist for most everything defined in the Cocoa framework, 
 
 [0]: http://home.mac.se/joachimm/Post.html
 [1]: http://home.mac.se/joachimm/TextMateObjCScreenCast.mov
+[2]: http://macromates.com/screencasts
 
 MARKDOWN
 html_footer</string>

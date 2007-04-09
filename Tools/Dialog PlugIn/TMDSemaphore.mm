@@ -6,17 +6,18 @@
 // 
 
 #import "TMDSemaphore.h"
+#import <unistd.h>
 
 @implementation TMDSemaphore
 
 + (NSString *)nameForToken:(int)token
 {
-	return [NSString stringWithFormat:@"/tm_dialog async/%@/%d", NSUserName(), token];
+	return [NSString stringWithFormat:@"/tm_dialog async/%d/%d", getuid(), token];
 }
 
 + (NSString *)nameForTokenString:(const char *)token
 {
-	return [NSString stringWithFormat:@"/tm_dialog async/%@/%s", NSUserName(), token];
+	return [NSString stringWithFormat:@"/tm_dialog async/%d/%s", getuid(), token];
 }
 
 + (TMDSemaphore*)semaphoreForTokenString:(const char *)token

@@ -135,7 +135,7 @@ module TextMate
         title   = options[:title]   || "Something Happened"
         prompt  = options[:prompt]  || "Should we continue or cancel?"
 
-      	res = alert(:informational, title, prompt, 'Dagnabit', button1, button2)
+      	res = alert(:informational, title, prompt, button1, button2)
 
         if res == button1 then
           block_given? ? yield : true

@@ -206,7 +206,7 @@
 				    (\()                         # an open parenthesis
 				        (
 				            \s* \g&lt;id&gt; \s*       # first argument
-				            (, \s* \g&lt;id&gt; \s*)*  # additional arguments
+				            ((,) \s* \g&lt;id&gt; \s*)*  # additional arguments
 				            (?:\.\.\.)?          # varargs ellipsis?
 				        )
 				    (\))                         # a close parenthesis
@@ -234,7 +234,12 @@
 					<key>name</key>
 					<string>variable.parameter.preprocessor.c</string>
 				</dict>
-				<key>6</key>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.parameters.c</string>
+				</dict>
+				<key>8</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.parameters.c</string>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>PATH="$TM_BUNDLE_SUPPORT/bin:$PATH"
+export PATH
+if [[ ! -f "$TM_NEW_FILE" ]]; then
+	cat "$(moinedit -e)" &gt; "$TM_NEW_FILE"
+fi</string>
+	<key>extension</key>
+	<string>moinmoin</string>
+	<key>name</key>
+	<string>From Safari</string>
+	<key>uuid</key>
+	<string>39774AD5-E800-4AD5-8246-E5B51134171A</string>
+</dict>
+</plist>

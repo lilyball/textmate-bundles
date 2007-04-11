@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+PATH="$TM_BUNDLE_SUPPORT/bin:$PATH"
+export PATH
+
+html_header "MoinMoin Bundle Help" "MoinMoin"
+moinedit | pre
+html_footer
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Help [moinedit]</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.moinmoin</string>
+	<key>uuid</key>
+	<string>75C7A294-C2B3-4AF9-86A0-50D4351CF35C</string>
+</dict>
+</plist>

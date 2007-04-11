@@ -1,0 +1,177 @@
+#!/bin/sh
+#
+#  Created by Jay Soffian on 2007-03-21.
+#
+# $Id: moinedit 2965 2007-03-21 19:01:49Z jay $
+
+usage() {
+cat <<__EOF__
+Usage: moinedit -e, --edit [URL]
+       moinedit -r, --re-edit [PATH]
+       moinedit -p, --preview [PATH]
+       moinedit -s, --save [PATH]
+       moinedit -c, --cancel [PATH]
+
+  -e, --edit [URL]
+      Retrieves MoinMoin document stored at URL and emits the path of the
+      retreived document to stdout. If URL is not supplied, uses the URL of
+      the frontmost Safari window. Equivalent to clicking the "Page Edit" link
+      while viewing a MoinMoin page.
+
+  -r, --re-edit [PATH]
+      Identical to edit, but determines document URL from previously retrieved
+      document. Supply the path to the document or provide the document text
+      via stdin.
+
+  -p, --preview [PATH]
+      Preview saves a previously retrieved document and emits the preview HTML
+      to stdout. Supply the path to the document or provide the document text
+      via stdin.
+
+  -s, --save [PATH]
+      Saves a previously retrieved document and emits the new HTML to stdout.
+      Supply the path to the document or provide the document text via stdin.
+
+  -c, --cancel [PATH]
+      Cancels editing a previously retrieved document and emits the old HTML
+      to stdout. Supply the path to the document or provide the document text
+      via stdin.
+
+  In order to edit a document, you must supply your MoinMoin cookie. This may
+  be gotten by logging in to MoinMoin via a web-browser, then viewing your
+  browser's cookies and locating the MOIN_ID cookie. If you log in w/Safari,
+  Camino, or Firefox, the cookie is automatically retreived for you. Otherwise
+  you must supply MOIN_ID as an environment variable.
+__EOF__
+  exit 1
+}
+
+on_exit() {
+  [[ -n "$TEMP" ]] && rm -f "$TEMP"
+}
+
+set_MOIN_ID() {
+  [[ '' = "$MOIN_ID" ]] && MOIN_ID=$(cookie "$BASE" MOIN_ID)
+  [[ '' = "$MOIN_ID" ]] && {
+    echo "Cannot get MOIN_ID for $BASE" >&2
+    exit 1
+  }
+}
+
+set_vars() {
+  # read header from $1 and setup global variables
+  # FILE
+  if [[ '' = "$1"  || '-' = "$1" ]]; then
+    TEMP=$(mktemp -t moinedit)
+    cat - > "$TEMP"
+    FILE="$TEMP"
+  else
+    FILE="$1"
+  fi  
+  # HEADER VARIABLES
+  local _header=$(sed -ne '1,/^## END OF HEADER/p' "$FILE")
+  local _pattern="^## Base: "
+  BASE=$(echo "$_header" | grep "$_pattern" | sed -E "s|$_pattern||")
+  _pattern="^## Page: "
+  PAGE=$(echo "$_header" | grep "$_pattern" | sed -E "s|$_pattern||")
+  _pattern="^## Secs: "
+  SECS=$(echo "$_header" | grep "$_pattern" | sed -E "s|$_pattern||")
+  URL="${BASE}${PAGE}"
+  set_MOIN_ID
+}
+
+do_curl() {
+  # echo curl "$@"
+  curl "$@"
+}
+
+do_edit() {
+  URL=$(echo "$URL" | sed -E 's|^([^\?#]*)(.*)?|\1|') # trim suffix
+  BASE=$(echo "$URL" | sed -E 's|^(https?://[^/]*/[^/]*/).*|\1|')
+  PAGE=$(echo "$URL" | sed -E 's|^https?://[^/]*/[^/]*/(.*)|\1|; s|/|_2f|g')
+  NAME=$(echo "$PAGE" | sed -E 's|^.*_2f(.*)|\1|; s|([a-z])([A-Z])|\1 \2|g')
+  FILE="/tmp/$(id -u)/${NAME}.moinmoin"
+  TEMP=$(mktemp -t moinedit)
+  set_MOIN_ID
+  do_curl -o "$TEMP" -s -b "MOIN_ID=$MOIN_ID" "$URL?action=edit"
+  SECS=$(sed -En '
+    /<input type="hidden" name="datestamp"/{
+      s/.*value="([^"]*)".*/\1/p;q
+    }' "$TEMP")
+  cat >"$FILE" <<__EOF__
+## Do not edit this header. It is not part of the wiki code and will not be
+## posted back to the wiki when you save.
+## Base: $BASE
+## Page: $PAGE
+## Secs: $SECS
+## END OF HEADER
+$(sed -En '/<textarea [^>]*>/,/<\/textarea>/ {
+      s/.*<textarea [^>]*>//
+      s/<\/textarea>.*//
+      s/&lt;/</g
+      s/&gt;/>/g
+      s/&amp;/\&/g
+      p
+    }
+  ' "$TEMP")
+__EOF__
+}
+
+do_submit() {
+  set_vars "$1"
+  local _submit_button="$2"
+  sed -n '1,/^## END OF HEADER/d; p' "$FILE" \
+  | do_curl -s \
+    -b "MOIN_ID=$MOIN_ID" \
+    -F savetext="<-" \
+    -F datestamp="$SECS" \
+    -F action=savepage \
+    -F "$_submit_button" \
+    "$URL" \
+  | sed -E "s|^(<head>)|\\1<base href=\"$URL\">|"
+}
+
+edit() {
+  URL="$1"
+  if [[ '' = "$URL" ]]; then
+    URL=$(osascript -e 'tell app "Safari" to get URL of document 0')
+  fi
+  do_edit
+  echo "$FILE"
+}
+
+re_edit() {
+  set_vars "$1"
+  do_edit
+  echo "$FILE"
+}
+
+preview() {
+  do_submit "$1" "button_preview=Preview"
+}
+
+save() {
+  do_submit "$1" "button_save=Save Changes"
+}
+
+cancel() {
+  do_submit "$1" "button_cancel=Cancel"
+}
+
+#-----------------------------------------------------------------------------
+# main
+
+self=`basename $0`
+verb="$1"
+shift
+
+trap on_exit EXIT
+
+case $verb in
+  -e|--edit) edit "$1" ;;
+  -r|--re-edit) re_edit "$1" ;;
+  -p|--preview) preview "$1" ;;
+  -s|--save) save "$1" ;;
+  -c|--cancel) cancel "$1" ;;
+  *) usage ;;
+esac

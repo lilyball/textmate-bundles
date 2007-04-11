@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>PATH="$TM_BUNDLE_SUPPORT/bin:$PATH"
+export PATH
+cat "$(moinedit -r)"</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Reload Document</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>text.moinmoin</string>
+	<key>uuid</key>
+	<string>05D7D0D5-C981-40CA-85D6-0539B2E9B7EA</string>
+</dict>
+</plist>

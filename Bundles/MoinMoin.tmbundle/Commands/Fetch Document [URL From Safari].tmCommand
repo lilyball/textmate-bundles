@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>PATH="$TM_BUNDLE_SUPPORT/bin:$PATH"
+export PATH
+mate "$(moinedit -e)"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Fetch Document [URL From Safari]</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>880EE1CB-04F8-4944-946B-281BCD0B71B0</string>
+</dict>
+</plist>

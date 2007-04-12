@@ -206,7 +206,7 @@
 			<key>comment</key>
 			<string>matches a single quote-enclosed word without scoping</string>
 			<key>end</key>
-			<string>"(\S*)</string>
+			<string>"([^\s\]]*)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -234,7 +234,7 @@
 			<key>comment</key>
 			<string>matches a single brace-enclosed word</string>
 			<key>end</key>
-			<string>\}(\S*)</string>
+			<string>\}([^\s\]]*)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>

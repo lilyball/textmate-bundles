@@ -1,0 +1,155 @@
+#!/usr/bin/python
+# encoding: utf-8
+"""
+cookie
+
+Created by Jay Soffian on 2007-03-21.
+"""
+
+import sys
+import os
+import re
+
+def usage():
+    print "Usage: cookie URL COOKIE_NAME"
+    sys.exit(0)
+
+def debug(*args):
+    # sys.stderr.write(' '.join(['%s' % arg for arg in args]) + '\n')
+    pass
+
+class Cookie(dict):
+    def __init__(self, name, domain, path):
+        dict.__init__(self)
+        self.name = name
+        self.domain = domain
+        self.path = path
+    
+    def update_maybe(self, d):
+        if self.name != d.get('Name'):
+            debug("name", d)
+            return
+        
+        domain = d.get('Domain', '')
+        if domain.startswith('.'):
+            if not self.domain.endswith(domain):
+                debug("domain endswith", d)
+                return
+        elif self.domain != domain:
+            debug("domain", d)
+            return
+        if len(domain) < len(self.get('Domain', '')):
+            debug("domain len", d)
+            return
+        
+        path = d.get('Path', '')
+        if not self.path.startswith(path):
+            debug("path startswith", d)
+            return
+        if len(path) < len(self.get('Path', '')):
+            debug("path len", d)
+            return
+        
+        self.clear()
+        self.update(d)
+        try:
+            del self['Junk']
+        except KeyError:
+            pass
+
+def safari_cookie(fname, name, domain, path):
+    # N.B. plistlib is unable to parse the cookies file, easy enough to
+    # parse what we need w/regexes
+    re_open  = re.compile(r'^<dict>$')
+    re_elem  = re.compile(r'^<([^>]*)>(.*)</\1>$')
+    re_close = re.compile(r'^</dict>$')
+    cookie = Cookie(name, domain, path)
+    cur_dict = None
+    cur_key = None
+    f = file(fname, 'r')
+    try:
+        for line in f:
+            line = line.strip()
+            m = cur_dict is not None and re_elem.search(line)
+            if m:
+                tag, val = m.groups()
+                if tag == 'key':
+                    cur_key = val
+                elif cur_key:
+                    cur_dict[cur_key] = val
+                    cur_key = None
+            elif re_open.search(line):
+                cur_dict = {}
+            elif re_close.search(line):
+                cookie.update_maybe(cur_dict)
+                cur_dict = None
+    finally:
+        f.close()
+    return cookie.get('Value')
+
+def mozilla_cookie(fname, name, domain, path):
+    cookie = Cookie(name, domain, path)
+    fields = ('Domain', 'Junk', 'Path', 'Junk', 'Expires', 'Name', 'Value')
+    f = file(fname, 'r')
+    try:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            vals = line.split('\t')
+            if len(vals) == len(fields):
+                cookie.update_maybe(dict(zip(fields, vals)))
+    finally:
+        f.close()
+    return cookie.get('Value')
+
+def get_dispatch(name, domain, path):
+    dispatch = []
+    home = os.environ['HOME']
+    join = os.path.join
+    webkit_dir  = join(home, 'Library/Cookies')
+    camino_dir  = join(home, 'Library/Application Support/Camino')
+    firefox_dir = join(home, 'Library/Application Support/Firefox/Profiles')
+    mozilla_dirs = []
+    
+    if os.path.isdir(camino_dir):
+        mozilla_dirs.append(camino_dir)
+    
+    if os.path.isdir(firefox_dir):
+        mozilla_dirs.extend(
+            [join(firefox_dir, d) for d in os.listdir(firefox_dir)])
+    
+    # WebKit
+    fname = join(webkit_dir, 'Cookies.plist')
+    if os.path.isfile(fname):
+        dispatch.append(
+            lambda fname=fname: safari_cookie(fname, name, domain, path)
+        )
+    
+    # Camino, Firefox
+    for d in mozilla_dirs:
+        fname = join(d, 'cookies.txt')
+        if os.path.isfile(fname):
+            dispatch.append(
+                lambda fname=fname: mozilla_cookie(fname, name, domain, path)
+            )
+    return dispatch
+
+def main(args):
+    if len(args) != 2:
+        usage()
+    m = re.search(r"^https?://([^/]*)(/.*)", args[0])
+    if not m:
+        usage()
+    domain, path = m.groups()
+    name = args[1]
+    dispatch = get_dispatch(name, domain, path)
+    for get_cookie in dispatch:
+        cookie_val = get_cookie()
+        if cookie_val:
+            print cookie_val
+            return
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
+

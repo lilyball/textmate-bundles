@@ -427,7 +427,11 @@ static int sNextWindowControllerToken = 1;
 	NSApp = [NSApplication sharedApplication];
 	if(self = [super init])
 	{
-		[NSThread detachNewThreadSelector:@selector(vendObject:) toTarget:self withObject:nil];
+		NSConnection* connection = [NSConnection new];
+		[connection setRootObject:self];
+		if([connection registerName:@"TextMate dialog server"] == NO)
+			NSLog(@"couldn't setup TextMate dialog server."), NSBeep();
+
 		if(NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tm_dialog" ofType:nil])
 			setenv("DIALOG", [path UTF8String], 1);
 	}
@@ -565,7 +569,7 @@ static int sNextWindowControllerToken = 1;
 	TMDNibWindowController* nibOwner = [[TMDNibWindowController alloc] initWithParameters:someParameters modal:modal center:shouldCenter aysnc:async];
 	if(!nibOwner)
 		NSLog(@"%s couldn't create nib loader", _cmd);
-	[nibOwner performSelectorOnMainThread:@selector(instantiateNib:) withObject:nib waitUntilDone:YES];
+	[nibOwner instantiateNib:nib];
 	
 //	if(async || (not modal))
 	{
@@ -648,13 +652,6 @@ static int sNextWindowControllerToken = 1;
 
 - (id)showMenuWithOptions:(NSDictionary*)someOptions
 {
-	NSMutableDictionary* res = [[someOptions mutableCopy] autorelease];
-	[self performSelectorOnMainThread:@selector(showMenuWithOptionsHelper:) withObject:res waitUntilDone:YES];
-	return res;
-}
-
-- (void)showMenuWithOptionsHelper:(NSMutableDictionary*)someOptions
-{
 	MenuRef menu_ref;
 	CreateNewMenu(0 /* menu id */, kMenuAttrDoNotCacheImage, &menu_ref);
 	SetMenuFont(menu_ref, 0, [[NSUserDefaults standardUserDefaults] integerForKey:@"OakBundleManagerDisambiguateMenuFontSize"] ?: 12);
@@ -696,29 +693,16 @@ static int sNextWindowControllerToken = 1;
 	short left = lroundf(pos.x - NSMinX(mainScreen));
 	long res = PopUpMenuSelect(menu_ref, top, left, 0 /* pop-up item */);
 
-	[someOptions removeAllObjects];
+	NSMutableDictionary* selectedItem = [NSMutableDictionary dictionary];
 	if(res != 0)
 	{
 		MenuCommand cmd = 0;
 		GetMenuItemCommandID(menu_ref, res, &cmd);
-		[someOptions setObject:[NSNumber numberWithUnsignedInt:(unsigned)cmd] forKey:@"selectedIndex"];
-		[someOptions setObject:[menuItems objectAtIndex:(unsigned)cmd] forKey:@"selectedMenuItem"];
+		[selectedItem setObject:[NSNumber numberWithUnsignedInt:(unsigned)cmd] forKey:@"selectedIndex"];
+		[selectedItem setObject:[menuItems objectAtIndex:(unsigned)cmd] forKey:@"selectedMenuItem"];
 	}
 
 	DisposeMenu(menu_ref);
-}
-
-- (void)vendObject:(id)arguments
-{
-	NSAutoreleasePool* pool = [NSAutoreleasePool new];
-	
-	NSConnection* connection = [NSConnection defaultConnection];
-	[connection setRootObject:self];
-	if([connection registerName:@"TextMate dialog server"] == NO)
-		NSLog(@"couldn't setup TextMate dialog server."), NSBeep();
-
-	[[NSRunLoop currentRunLoop] run];
-
-	[pool release];
+	return selectedItem;
 }
 @end

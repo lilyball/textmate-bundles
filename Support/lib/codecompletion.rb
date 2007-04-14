@@ -157,7 +157,6 @@ class TextmateCodeCompletion
   def set_context!
     @line = ENV['TM_CURRENT_LINE']
     
-    
     caret_placement
     
     @context_before = @line[0..caret_placement]
@@ -322,7 +321,7 @@ class TextmateCompletionsText
   attr :choices, true
   
   def initialize(path,options={})
-    options[:split] = "\n" unless options[:split]
+    options[:split] ||= "\n"
     
     if path.match(options[:split])
       self.raw = path.to_s
@@ -401,7 +400,7 @@ end
 
 TextmateCompletionsParser::PARSERS[:css] = {
   :select => [/^([#\.][a-z][-_\w\d]*)\b.*/i, #Ids and Classes
-              /.*id="(.*?)"|id='(.*?)'.*/ #IDs in HTML
+              /.*(?:id="(.*?)"|id='(.*?)').*/ #IDs in HTML
               ], 
   :filter => [/^#([0-9a-f]{6}|[0-9a-f]{3})/, /^..*#.*$/],
   :sort => true,
@@ -423,6 +422,7 @@ TextmateCompletionsParser::PARSERS[:ruby] = {
               /^[ \t]*(?:attr_.*?)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/], 
   :filter => [/test_/,'< Test::Unit::TestCase']
 }
+
 # TextmateCompletionsParser::PARSERS[:rails] = {
 #   :select => TextmateCompletionsParser::PARSERS[:ruby][:select],
 #   :filter => TextmateCompletionsParser::PARSERS[:ruby][:filter]

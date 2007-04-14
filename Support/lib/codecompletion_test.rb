@@ -105,6 +105,7 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     assert_equal 0, tcc.index             , $debug_codecompletion.inspect
     assert_equal '.aaa', tcc.choice        , $debug_codecompletion.inspect
   end
+  
 end
 
 class TextmateCompletionsPlistTest < Test::Unit::TestCase
@@ -133,6 +134,11 @@ class TextmateCompletionsTextTest < Test::Unit::TestCase
   end
   def test_txt_completions
     completion = TextmateCodeCompletion.new(TextmateCompletionsText.new("README.txt"),'').to_snippet
+    assert_not_nil completion
+  end
+  def test_txt_completions_dict
+    completions = TextmateCompletionsText.new(`cat /usr/share/dict/web2|grep ^fr`).to_ary
+    completion = TextmateCodeCompletion.new(completions,'fra').to_snippet
     assert_not_nil completion
   end
   def test_strings
@@ -175,9 +181,9 @@ class TextmateCompletionsParserTest < Test::Unit::TestCase
   def test_parser_array
     fred = TextmateCompletionsParser.new(nil, 
       :split => "\n",
-      :select => [/^[ \t]*(?:class)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/,
-                  /^[ \t]*(?:def)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/,
-                  /^[ \t]*(?:attr_.*?)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/], 
+      :select => [%r/^[ \t]*(?:class)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/,
+                  %r/^[ \t]*(?:def)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/,
+                  %r/^[ \t]*(?:attr_.*?)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/], 
       :filter => /_string/).to_ary
     assert_kind_of Array, fred.to_ary, $debug_codecompletion.inspect
     assert fred.to_ary.length > 0, $debug_codecompletion.inspect

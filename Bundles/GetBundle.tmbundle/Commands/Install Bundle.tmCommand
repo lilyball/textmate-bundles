@@ -7,18 +7,19 @@
 PTRN=$(ruby -rtextmate -e 'print Dir.entries(TextMate.app_path + "/Contents/SharedSupport/Bundles").grep(/.tmbundle$/).join("|")')
 INST=$(ruby -rtextmate -e 'print Dir.entries( File.expand_path("~/Library/Application Support/TextMate/Pristine Copy/Bundles")).grep(/.tmbundle$/).join("|")')
 
+SVN="${TM_BUNDLE_SUPPORT}/bin/svn"
 
-cd ~/Library/Application\ Support/TextMate/Support
-if [[ $? == 0 ]];
-then
- svn up . --no-auth-cache --non-interactive
-else
- mkdir ~/Library/Application\ Support/TextMate/Support
- svn co http://macromates.com/svn/Bundles/trunk/Support/ ~/Library/Application\ Support/TextMate/Support --no-auth-cache --non-interactive
-fi
+REV=$(&lt; "$TM_SUPPORT_PATH/version")
+SVN_OPTS="-r$REV --no-auth-cache --non-interactive"
+
+BASE_URL=http://macromates.com/svn/Bundles/trunk/
 
 bundlelist (){ 
-  "${TM_BUNDLE_SUPPORT}/bin/svn" --username anon --password anon list http://macromates.com/svn/Bundles/trunk/Bundles/ --no-auth-cache --non-interactive | egrep -v "^($PTRN|$INST)/\$" | egrep -v "^GetBundle\.tmbundle" | sed -ne 's/.tmbundle\/$//p' | sort -f \
+  eval '"$SVN"' list "$SVN_OPTS" '"${BASE_URL}/Bundles/"' \
+    | egrep -v "^($PTRN|$INST)/\$" \
+    | egrep -v "^GetBundle\.tmbundle" \
+    | sed -ne 's/.tmbundle\/$//p' \
+    | sort -f \
   3&gt; &gt;(CocoaDialog progressbar --indeterminate --title 'Getting Bundle List' --text 'This could take a while...')
 }
 IFS=$'\n' 
@@ -30,22 +31,19 @@ bundle=$(CocoaDialog dropdown \
     --items $(bundlelist))
 
 if [[ "${bundle:0:7}" == "Install" ]];
-then 
- bu=${bundle:8}
-else 
- exit_discard
+  then bu=${bundle:8}
+  else exit_discard
 fi
 
 mkdir -p ~/Library/Application\ Support/TextMate/Pristine\ Copy/Bundles
 cd ~/Library/Application\ Support/TextMate/Pristine\ Copy/Bundles
 
-"${TM_BUNDLE_SUPPORT}/bin/svn" --username anon --password anon co http://macromates.com/svn/Bundles/trunk/Bundles/${bu}.tmbundle --no-auth-cache --non-interactive \
-2&gt; &gt;(CocoaDialog progressbar --indeterminate --title "Installing Bundle: ${bu}" --text 'This could take a while...')
-if [[ $? == 0 ]];
-then
- osascript -e 'tell app "TextMate" to reload bundles'
+eval '"$SVN"' co "$SVN_OPTS" '"${BASE_URL}/Bundles/${bu}.tmbundle"' \
+   2&gt; &gt;(CocoaDialog progressbar --indeterminate --title "Installing Bundle: ${bu}" --text 'This could take a while...')
 
- CocoaDialog bubble --title "Installed Bundle: ${bu}" --text 'You now can use the new Bundle' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
+if [[ $? == 0 ]]; then
+  osascript -e 'tell app "TextMate" to reload bundles'
+  CocoaDialog bubble --title "Installed Bundle: ${bu}" --text 'You now can use the new Bundle' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
 fi
 </string>
 	<key>input</key>

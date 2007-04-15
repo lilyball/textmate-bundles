@@ -5,26 +5,22 @@
 	<key>command</key>
 	<string>APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
 
-cd ~/Library/Application\ Support/TextMate/Support
-if [[ $? == 0 ]];
-then
- svn up . --no-auth-cache --non-interactive
-else
- mkdir ~/Library/Application\ Support/TextMate/Support
- svn co http://macromates.com/svn/Bundles/trunk/Support/ ~/Library/Application\ Support/TextMate/Support --no-auth-cache --non-interactive
-fi
+SVN="${TM_BUNDLE_SUPPORT}/bin/svn"
+
+REV=$(&lt; "$TM_SUPPORT_PATH/version")
+SVN_OPTS="-r$REV --no-auth-cache --non-interactive"
 
 cd ~/Library/Application\ Support/TextMate/Pristine\ Copy/Bundles
-if [[ $? == 0 ]]; 
-then 
- "${TM_BUNDLE_SUPPORT}/bin/svn" up *.tmbundle --no-auth-cache --non-interactive \
- 2&gt; &gt;(CocoaDialog progressbar --indeterminate --title 'Updating all your Bundles' --text 'This could take a while...')
+if [[ $? == 0 ]]; then 
+  for f in *.tmbundle; do "$SVN" up $SVN_OPTS "$f"; done \
+   2&gt; &gt;(CocoaDialog progressbar --indeterminate --title 'Updating all your Bundles' --text 'This could take a while...')
 
-   osascript -e 'tell app "TextMate" to reload bundles'
-   CocoaDialog bubble --title 'All Bundles Updated' --text 'You can use them now' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
+  osascript -e 'tell app "TextMate" to reload bundles'
+  CocoaDialog bubble --title 'All Bundles Updated' --text 'You can use them now' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
 else
- CocoaDialog bubble --title 'No Bundles to update' --text 'Use \"Install Bundles\".' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
-fi</string>
+  CocoaDialog bubble --title 'No Bundles to update' --text 'Use \"Install Bundles\".' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
+fi
+</string>
 	<key>name</key>
 	<string>Update Installed Bundles</string>
 	<key>output</key>

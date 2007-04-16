@@ -20,6 +20,12 @@
 single_no_arg = /^(?:br|hr)$/i
 single        = /^(?:img|meta|link|input|base|area|col|frame|param)$/i
 
+# we are not in HTML mode, so let’s scrap the above hardcoded tag lists
+unless ENV.has_key? 'TM_HTML_EMPTY_TAGS' then
+  single_no_arg = /\z\A/ # this can’t match anything
+  single        = /\z\A/
+end
+
 # handle the case where caret is in the middle of a word, assume only the left part is the tag
 index = ENV['TM_LINE_INDEX'].to_i - ENV['TM_INPUT_START_LINE_INDEX'].to_i
 tag, suffix = STDIN.read, ''

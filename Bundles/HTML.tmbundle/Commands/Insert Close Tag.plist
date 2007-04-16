@@ -19,7 +19,10 @@ end
 before = /(.*\n){#{line-1}}.{#{line_index}}/.match(doc)[0]
 
 # remove all self-closing tags
-before.gsub!(/&lt;(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param)\b[^&gt;]*&gt;|&lt;[^&gt;]+\/\s*&gt;/, '') 
+if ENV.has_key? 'TM_HTML_EMPTY_TAGS' then
+  empty_tags = ENV['TM_HTML_EMPTY_TAGS']
+  before.gsub!(/&lt;(#{empty_tags})\b[^&gt;]*&gt;|&lt;[^&gt;]+\/\s*&gt;/i, '') 
+end
 
 # remove all comments
 before.gsub!(/&lt;!--.*?--&gt;/m, '')

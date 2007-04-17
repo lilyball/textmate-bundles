@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
+
+@THEMES = []
+def add_themes!(dir)
+  themes = `ls "#{dir}"`.split("\n")
+  themes.each do |theme|
+    @THEMES &lt;&lt; {
+      'title' =&gt; theme.gsub('.tmTheme',''),
+      'path'  =&gt; '' + dir + theme
+    }
+  end
+  
+end
+
+add_themes! "#{ENV['TM_SUPPORT_PATH']}/../Themes/"
+add_themes! "$HOME/Library/Application Support/TextMate/Themes/"
+
+selection = TextMate::UI.menu(@THEMES)
+
+`open "#{selection['path']}"`
+print "Switched to  " + selection['title']</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~T</string>
+	<key>name</key>
+	<string>Select TextMate Theme</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>B98B3ADE-3EAE-4C7B-BBF4-46258CAD9E76</string>
+</dict>
+</plist>

@@ -89,6 +89,17 @@ class CommandMate
   public
     def emit_html
       stdout, stderr, stack_dump, @pid = @command.run
+      %w[INT TERM].each do |signal|
+        trap(signal) do
+          begin
+            Process.kill("KILL", @pid)
+            sleep 0.5
+            Process.kill("TERM", @pid)
+          rescue
+            # process doesn't exist anymore
+          end
+        end
+      end
       emit_header()
       descriptors = [ stdout, stderr, stack_dump ].compact
       descriptors.each do
@@ -178,7 +189,7 @@ class ScriptMate < CommandMate
 <script type="text/javascript" charset="utf-8">
 function press(evt) {
    if (evt.keyCode == 67 && evt.ctrlKey == true) {
-      TextMate.system("kill -s INT #{@pid}", null);
+      TextMate.system("kill -s INT #{@pid}; sleep 0.5; kill -s TERM #{@pid}", null);
    }
 }
 document.body.addEventListener('keydown', press, false);

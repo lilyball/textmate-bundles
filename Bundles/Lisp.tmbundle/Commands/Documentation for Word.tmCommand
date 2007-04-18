@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Documentation for Word" "Common Lisp HyperSpec"
+read KEYWORD
+echo "&lt;ul&gt;"
+curl -s "http://www.lisp.org/HyperSpec/FrontMatter/Symbol-Index-Alphabetical.html" | grep -E "&lt;LI&gt;&lt;A.* HREF=\".+\"&gt;&lt;B&gt;.*$KEYWORD.*&lt;/B&gt;&lt;/A&gt;" | sed -E "s/&lt;LI&gt;&lt;A.* HREF=\"\.\.(.+)\"&gt;&lt;B&gt;(.+)&lt;\/B&gt;&lt;\/A&gt;/&lt;li&gt;&lt;a href=\"http:\/\/www.lisp.org\/HyperSpec\1\"&gt;\2&lt;\/a&gt;&lt;\/li&gt;/"
+echo "&lt;/ul&gt;"
+html_footer
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation for Word</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.lisp</string>
+	<key>uuid</key>
+	<string>DCCF29B4-80E9-4DF8-A9EC-28F91611665F</string>
+</dict>
+</plist>

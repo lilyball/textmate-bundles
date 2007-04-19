@@ -22,6 +22,7 @@ module TextMate
         end
       end
 
+      # present an alert
     	def alert(style, title, message, *buttons)
     		styles = [:warning, :informational, :critical]
     		raise "style must be one of #{types.inspect}" unless styles.include?(style)
@@ -31,6 +32,8 @@ module TextMate
     		buttons[button_index]
     	end
 
+      # show the system color picker and return a hex-format color (#RRGGBB).
+      # If the input string is a recognizable hex string, the default color will be set to it.
       def request_color(string)
         string = '#999' unless string.match(/#?[0-9A-F]{3,6}/i)
         color  = string
@@ -65,6 +68,7 @@ module TextMate
         `#{TM_DIALOG} -cap #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
       end
   
+      # pop up a menu on screen
       def menu(options)
         return nil if options.empty?
 
@@ -87,6 +91,8 @@ module TextMate
 
         return return_hash ? options[index] : index
       end
+      
+      # request a single, simple string
       def request_string(options = Hash.new,&block)
         _options = default_hash(options)
         _options["title"] = options[:title] || "Enter String"
@@ -94,6 +100,8 @@ module TextMate
         _options["text"] = options[:default] || ""
         cocoa_dialog("inputbox", _options,&block)
       end
+      
+      # show a standard open file dialog
       def request_file(options = Hash.new,&block)
         _options = default_hash(options)
         _options["title"] = options[:title] || "Select File"
@@ -101,6 +109,8 @@ module TextMate
         _options["text"] = options[:default] || ""
         cocoa_dialog("fileselect", _options,&block)
       end
+      
+      # show a standard open file dialog, allowing multiple selections 
       def request_files(options = Hash.new,&block)
         _options = default_hash(options)
         _options["title"] = options[:title] || "Select File(s)"
@@ -109,6 +119,8 @@ module TextMate
         _options["select-multiple"] = ""
         cocoa_dialog("fileselect", _options,&block)
       end
+      
+      # request a password or other text that should be disguised with bullet points instead of the actual characters
       def request_secure_string(options = Hash.new,&block)
         _options = default_hash(options)
         _options["title"] = options[:title] || "Enter Password"
@@ -116,6 +128,8 @@ module TextMate
         _options["text"] = options[:default] || ""
         cocoa_dialog("secure-inputbox", _options,&block)
       end
+      
+      # Request an item from a pop-up menu of items located in a window (very ugly UI -- may we recommend the +menu+ method instead?)
       def request_item(options = Hash.new,&block)
         items = options[:items] || []
         case items.size
@@ -129,6 +143,8 @@ module TextMate
           cocoa_dialog("dropdown", _options,&block)
         end
       end
+      
+      # Post a confirmation alert
       def request_confirmation(options = Hash.new,&block)
         button1 = options[:button1] || "Continue"
         button2 = options[:button2] || "Cancel"

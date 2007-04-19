@@ -121,12 +121,44 @@ public
 		$CHILD_STATUS
 	end
 	
+	def handle_authentication(line, complete_text, stdin, output_block)
+	  case line
+    when /^Authentication realm:\s*(.*)/
+      @auth_realm = $1
+    when /^Password for/
+      stdin.puts(TextMate::UI.request_secure_string(:title => 'Subversion Password', :prompt => "#{defined?(@auth_realm) ? (@auth_realm + ':') : ''}#{line}"))
+    when /^Username/
+      stdin.puts(TextMate::UI.request_string(:title => 'Subversion Username', :prompt => "#{defined?(@auth_realm) ? (@auth_realm + ':') : ''}#{line}"))
+    when /^Transmitting file data/
+      output_block.call(:transmitting, line.chomp)
+    end
+  end
+	
 	def commit(&output_block)
 		require "open3"
-		#--non-interactive
+
 		Open3.popen3("#{@svn_tool} commit  --force-log #{@commit_args}") do |stdin, stdout, stderr|
-			stdout.each_line {|line| output_block.call(:output, line.chomp)}
-			stderr.each_line {|line| output_block.call(:error, line.chomp)}
+		  all_output = ''
+			
+			while (not stdout.closed?) and (not stderr.closed?)
+			  out_io = select([stdout, stderr])
+			  puts "after select: #{out_io.inspect}"
+			  
+			  out_io[0].each do |i|
+			    puts "process: #{i}"
+			    
+			    data = i.readpartial(4096)
+			    data.each_line do |line|
+  			    handle_authentication(line, all_output, stdin, output_block)
+  			    all_output << line
+  			    output_block.call(:output, line.chomp)
+			    
+  			    puts line
+  		    end
+		    end
+		  end
+      # stdout.each_line {|line| handle_authentication(line, all_output, stdin); all_output << line; output_block.call(:output, line.chomp)}
+      # stderr.each_line {|line| handle_authentication(line, all_output, stdin); all_output << line; output_block.call(:error, line.chomp)}
 		end
 	end
 end
@@ -185,7 +217,9 @@ when :HTML
 		verbose_output	= ''
 		revision_string	= 'unknown revision committed'
 		TextMate.call_with_progress( :title => 'Subversion Commit', :message => 'Transmitting file data' ) do
-			transaction.commit {|stream, line| verbose_output += line + "\n"}
+			transaction.commit do|stream, line|
+			  verbose_output += line + "\n"
+			end
 		end
 
 		revision_string = $& if verbose_output =~ /Committed revision \d*./

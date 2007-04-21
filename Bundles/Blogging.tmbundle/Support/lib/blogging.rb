@@ -511,8 +511,7 @@ TEXT
 
   def post_or_update
     if !post['title']
-      filename = ENV['TM_FILENAME'] || ''
-      filename.sub!(/\.[a-z]+$/, '') if filename
+      filename = ENV['TM_FILENAME'].to_s.sub(/(\.[a-z]+)+$/, '')
       self.post['title'] = request_title(filename)
     end
 

@@ -91,19 +91,20 @@ module TextMate
 
         return return_hash ? options[index] : index
       end
-      
+
       # request a single, simple string
       def request_string(options = Hash.new,&block)
-        _options = default_hash(options)
-        _options["title"] = options[:title] || "Enter String"
-        _options["informative-text"] = options[:prompt] || ""
-        _options["text"] = options[:default] || ""
-        cocoa_dialog("inputbox", _options,&block)
+        request_string_core('Enter string:', 'RequestString', options, &block)
+      end
+      
+      # request a password or other text which should be obscured from view
+      def request_secure_string(options = Hash.new,&block)
+        request_string_core('Enter password:', 'RequestSecureString', options, &block)
       end
       
       # show a standard open file dialog
       def request_file(options = Hash.new,&block)
-        _options = default_hash(options)
+        _options = default_options_for_cocoa_dialog(options)
         _options["title"] = options[:title] || "Select File"
         _options["informative-text"] = options[:prompt] || ""
         _options["text"] = options[:default] || ""
@@ -112,35 +113,40 @@ module TextMate
       
       # show a standard open file dialog, allowing multiple selections 
       def request_files(options = Hash.new,&block)
-        _options = default_hash(options)
+        _options = default_options_for_cocoa_dialog(options)
         _options["title"] = options[:title] || "Select File(s)"
         _options["informative-text"] = options[:prompt] || ""
         _options["text"] = options[:default] || ""
         _options["select-multiple"] = ""
         cocoa_dialog("fileselect", _options,&block)
       end
-      
-      # request a password or other text that should be disguised with bullet points instead of the actual characters
-      def request_secure_string(options = Hash.new,&block)
-        _options = default_hash(options)
-        _options["title"] = options[:title] || "Enter Password"
-        _options["informative-text"] = options[:prompt] || ""
-        _options["text"] = options[:default] || ""
-        cocoa_dialog("secure-inputbox", _options,&block)
-      end
-      
-      # Request an item from a pop-up menu of items located in a window (very ugly UI -- may we recommend the +menu+ method instead?)
+            
+      # Request an item from a list of items
       def request_item(options = Hash.new,&block)
         items = options[:items] || []
         case items.size
         when 0 then block_given? ? raise(SystemExit) : nil
         when 1 then block_given? ? yield(items[0]) : items[0]
         else
-          _options = default_hash(options)
-          _options["title"] = options[:title] || "Select Item"
-          _options["text"] = options[:prompt] || ""
-          _options["items"] = items
-          cocoa_dialog("dropdown", _options,&block)
+          params = default_buttons(options)
+          params["title"] = options[:title] || "Select item:"
+          params["prompt"] = options[:prompt] || ""
+          params["string"] = options[:default] || ""
+          params["items"] = items
+
+          return_plist = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + "/nibs/RequestItem")}}
+          return_hash = PropertyList::load(return_plist)
+
+          # return string is in hash->result->returnArgument.
+          # If cancel button was clicked, hash->result is nil.
+          return_value = return_hash['result']
+          return_value = return_value['returnArgument'] if not return_value.nil?
+
+          if return_value == nil then
+            block_given? ? raise(SystemExit) : nil
+          else
+            block_given? ? yield(return_value) : return_value
+          end
         end
       end
       
@@ -223,6 +229,28 @@ module TextMate
         end
 
       private
+      
+      # common to request_string, request_secure_string
+      def request_string_core(default_prompt, nib_name, options, &block)
+        params = default_buttons(options)
+        params["title"] = options[:title] || default_prompt
+        params["prompt"] = options[:prompt] || ""
+        params["string"] = options[:default] || ""
+        
+        return_plist = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + "/nibs/#{nib_name}")}}
+        return_hash = PropertyList::load(return_plist)
+        
+        # return string is in hash->result->returnArgument.
+        # If cancel button was clicked, hash->result is nil.
+        return_value = return_hash['result']
+        return_value = return_value['returnArgument'] if not return_value.nil?
+        
+        if return_value == nil then
+          block_given? ? raise(SystemExit) : nil
+        else
+          block_given? ? yield(return_value) : return_value
+        end
+      end
 
       def cocoa_dialog(type, options)
         str = ""
@@ -248,11 +276,17 @@ module TextMate
           block_given? ? yield(result) : result
         end
       end
-      def default_hash(user_options = Hash.new)
+      
+      def default_buttons(user_options = Hash.new)
         options = Hash.new
+        options['button1'] = user_options[:button1] || "OK"
+        options['button2'] = user_options[:button2] || "Cancel"
+        options
+      end
+      
+      def default_options_for_cocoa_dialog(user_options = Hash.new)
+        options = default_buttons(user_options)
         options["string-output"] = ""
-        options["button1"] = user_options[:button1] || "Okay"
-        options["button2"] = user_options[:button2] || "Cancel"
         options
       end
     end
@@ -261,8 +295,19 @@ end
 
 # interactive unit tests
 if $0 == __FILE__
-	result = TextMate::UI.alert(:warning, 'The wallaby has escaped.', 'The hard disk may be full, or maybe you should try using a larger cage.', 'Dagnabit', 'I Am Relieved', 'Heavens')
+#  puts TextMate::UI.request_secure_string(:title => "Hotness", :prompt => 'Please enter some hotness', :default => 'teh hotness')
+
+  puts TextMate::UI.request_item(:title => "Hotness", :prompt => 'Please enter some hotness', :items => ['hotness', 'coolness', 'iceness'])
+
+  # params = {'title' => "Hotness", 'prompt' => 'Please enter some hotness', 'string' => 'teh hotness'}
+  # return_value = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + '/nibs/RequestString')}}
+  # return_hash = PropertyList::load(return_value)
+  # puts return_hash['result'].inspect
+  
+#  puts TextMate::UI.dialog(:nib => , :parameters => , :center => true)
+  
+#	result = TextMate::UI.alert(:warning, 'The wallaby has escaped.', 'The hard disk may be full, or maybe you should try using a larger cage.', 'Dagnabit', 'I Am Relieved', 'Heavens')
 	
-	puts "Button pressed: #{result}"
+#	puts "Button pressed: #{result}"
 end
 

@@ -147,7 +147,7 @@ public
 			  out_io[0].each do |i|
 			    puts "process: #{i}"
 			    
-			    data = i.readpartial(4096)
+			    data = i.sysread(4096)
 			    data.each_line do |line|
   			    handle_authentication(line, all_output, stdin, output_block)
   			    all_output << line

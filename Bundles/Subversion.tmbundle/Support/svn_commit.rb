@@ -145,7 +145,8 @@ public
 			  puts "after select: #{out_io.inspect}"
 			  
 			  out_io[0].each do |i|
-			    puts "process: #{i}"
+			    puts "process: #{i}, is eof? #{i.eof?}"
+			    next if i.eof?
 			    
 			    data = i.sysread(4096)
 			    data.each_line do |line|

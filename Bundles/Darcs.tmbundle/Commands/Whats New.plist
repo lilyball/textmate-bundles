@@ -39,6 +39,8 @@ for line in  res:
     print '&lt;td class="'+statClass+'\"&gt;', 
     print line[0], '&lt;/td&gt;&lt;td&gt;&lt;a href="',
     fname = removeNums(line[1:-1])
+    # FIXME we should treat fname as relative to the first
+    # parent holding the _darcs directory rather than os.getcwd()
     print make_link(os.getcwd()+fname[2:]),'"&gt;',fname, '&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;'
 
 

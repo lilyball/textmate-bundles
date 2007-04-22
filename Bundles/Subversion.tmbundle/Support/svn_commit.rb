@@ -158,8 +158,6 @@ public
   			    handle_authentication(line, all_output, stdin, output_block)
   			    all_output << line
             output_block.call(:output, line.chomp)
-
-  			    puts line
   		    end
         end
       end

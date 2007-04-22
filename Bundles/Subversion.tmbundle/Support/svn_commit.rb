@@ -147,7 +147,7 @@ public
 			  out_io[0].each do |i|
 			    puts "process: #{i}"
 			    
-			    data = i.sysread(4096) rescue "" # despite the previous select, there might not be data to read
+			    data = i.sysread(4096)
 			    data.each_line do |line|
   			    handle_authentication(line, all_output, stdin, output_block)
   			    all_output << line

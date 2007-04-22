@@ -86,25 +86,10 @@ function displayCommandOutput(id, className, string){
 	
 	if(string != null && string != '')
 	{
-//		tail_id = 'tail_' + id
-//		tail_div = document.getElementById(tail_id);
-//		if(tail_div == null)
-//		{
-//			status_div = document.getElementById('commandOutput');
-//			tail_div = document.createElement('div');
-//			tail_div.setAttribute('id', tail_id);
-//			tail_div.setAttribute('class', className);
-//			status_div.appendChild(tail_div);
-//		}
-//
-//		tail_div.innerHTML = string;
-		
 		console_div = document.getElementById('console')
 		console_div.style.display = 'inline';
 		
-		escapeHTML(string)
-		string.replace(/\\n/g, "<br>")
-		document.getElementById('commandOutput').innerHTML += (string + '<br>');
+		document.getElementById('commandOutput').innerHTML += escapeHTML(string).replace(/\n/, '<br>');
 	}
 }
 
@@ -124,7 +109,7 @@ function svnCommit(){
 
 function svnAddFile(filename,id){
 	
-	displayCommandOutput('info', 'info', 'Adding ' + filename)
+	displayCommandOutput('info', 'info', 'Adding ' + filename + "\n")
 	
 	cmd = ENV['TM_SVN'] + ' add ' + filename + ' 2>&1'
 
@@ -185,10 +170,6 @@ function svnRemoveFile(filename,id,displayname){
 };
 
 function svnReadOutput(str){
-	// FIXME: Committing will output a while new page!
-	// str = str.replace(/</g, '&lt;')
-	// str = str.replace(/>/g, '&gt;')
-	// str = str.replace(/"/g, '&quot;')
 	displayCommandOutput('info', 'info', str);
 };
 

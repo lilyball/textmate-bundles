@@ -196,8 +196,7 @@ when :plaintext
 
 	STDOUT.flush
 	if (not exit_early) and (not $options.dry_run)
-		# WebKit needs <br> instead of \n inside <pre>, otherwise the text won't flush
-		transaction.commit {|stream, line| STDOUT.print(line + "<br>"); STDOUT.flush}
+		transaction.commit {|stream, line| puts line; STDOUT.flush}
 	end
 	
 when :HTML

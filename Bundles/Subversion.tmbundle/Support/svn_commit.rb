@@ -146,7 +146,7 @@ public
       until fds.empty? do
         fd = select(fds)[0][0]
         debug << "svn commit: data on #{fd == stdout ? "stdout" : "stderr"}\n"
-        data = fd.read
+        data = fd.sysread(4096) rescue ""
         debug << "svn commit: read #{data.to_s.length} bytes (‘#{data}’)\n"
         if data.to_s.empty? then
           debug << "svn commit: closing #{fd == stdout ? "stdout" : "stderr"}\n"

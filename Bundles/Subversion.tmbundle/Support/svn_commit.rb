@@ -129,37 +129,45 @@ public
       stdin.puts(TextMate::UI.request_secure_string(:title => 'Subversion Password', :prompt => "#{defined?(@auth_realm) ? (@auth_realm + ':') : ''}#{line}"))
     when /^Username/
       stdin.puts(TextMate::UI.request_string(:title => 'Subversion Username', :prompt => "#{defined?(@auth_realm) ? (@auth_realm + ':') : ''}#{line}"))
-    when /^Transmitting file data/
-      output_block.call(:transmitting, line.chomp)
+    # when /^Transmitting file data/
+    #   output_block.call(:transmitting, line.chomp)
     end
   end
 	
 	def commit(&output_block)
 		require "open3"
 
+		debug = open("/dev/console", "w")
+
 		Open3.popen3("#{@svn_tool} commit  --force-log #{@commit_args}") do |stdin, stdout, stderr|
 		  all_output = ''
 			
-			while (not stdout.closed?) and (not stderr.closed?)
-			  out_io = select([stdout, stderr])
-			  puts "after select: #{out_io.inspect}"
-			  
-			  out_io[0].each do |i|
-			    puts "process: #{i}, is eof? #{i.eof?}"
-			    next if i.eof?
-			    
-			    data = i.sysread(4096)
+      fds = [stdout, stderr]
+      until fds.empty? do
+        fd = select(fds)[0][0]
+        debug << "svn commit: data on #{fd == stdout ? "stdout" : "stderr"}\n"
+        data = fd.read
+        debug << "svn commit: read #{data.to_s.length} bytes (‘#{data}’)\n"
+        if data.to_s.empty? then
+          debug << "svn commit: closing #{fd == stdout ? "stdout" : "stderr"}\n"
+          fds.delete fd
+          fd.close
+        else
 			    data.each_line do |line|
+			      debug << "svn commit: process line ‘#{line}’\n"
   			    handle_authentication(line, all_output, stdin, output_block)
   			    all_output << line
-  			    output_block.call(:output, line.chomp)
-			    
+            output_block.call(:output, line.chomp)
+
   			    puts line
   		    end
-		    end
-		  end
+        end
+      end
       # stdout.each_line {|line| handle_authentication(line, all_output, stdin); all_output << line; output_block.call(:output, line.chomp)}
       # stderr.each_line {|line| handle_authentication(line, all_output, stdin); all_output << line; output_block.call(:error, line.chomp)}
+
+      debug << "svn commit: done processing svn output\n"
+      debug << "svn commit: all output\n«««\n#{all_output}\n»»»\n"
 		end
 	end
 end

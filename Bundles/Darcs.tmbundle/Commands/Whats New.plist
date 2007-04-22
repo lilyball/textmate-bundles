@@ -22,7 +22,7 @@ def make_link(file):
 	return 'txmt://open?url=file:%2F%2F' + percent_escape(file)
 
 def removeNums(s):
-    l = re.compile('(.*?)(\s+[-]*\d*\s+[+]*\d*)')
+    l = re.compile('^(.*?)(\s+[-]\d+)?(\s+[+]\d+\s*)?$')
     x = l.match(s)
     if x:
        return x.group(1)

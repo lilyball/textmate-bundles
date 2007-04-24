@@ -14,7 +14,7 @@
 				<key>name</key>
 				<string>TM_LINK_FORMAT</string>
 				<key>value</key>
-				<string>&lt;a href="&lt;%= e_sn url %&gt;"&lt;%= " title='\${1:#{e_sn title}}'" if defined? title %&gt;&gt;&lt;%= e_sn input %&gt;&lt;/a&gt;</string>
+				<string>&lt;a href="&lt;%= e_sn url %&gt;"&lt;%= " title=\"\${1:#{e_sn title}}\"" if defined? title %&gt;&gt;&lt;%= e_sn input %&gt;&lt;/a&gt;</string>
 			</dict>
 		</array>
 	</dict>

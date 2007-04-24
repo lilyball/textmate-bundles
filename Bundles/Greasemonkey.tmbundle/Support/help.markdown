@@ -46,6 +46,10 @@ Strictly speaking a command, but it fits with the snippets.
 
 `log` inserts `GM_log("info")` with `"info"` pre-selected. The next tab stop selects just `ìnfo`. Start typing directly to log a variable, or tab once and then type, to input a string.
 
+## unsafeWindow.console.log (clog&#x21E5;)
+
+Inserts [Firebug](http://www.getfirebug.com/)'s `unsafeWindow.console.log("Debug: %o", object)` with the string contents pre-selected. The next tab stop selects the object.
+
 
 ## GM&#95;setValue and GM&#95;getValue (set&#x21E5; and get&#x21E5;)
 

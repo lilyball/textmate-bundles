@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+$LOAD_PATH &lt;&lt; "#{ENV['TM_SUPPORT_PATH']}/lib"
+require "textmate"
+require "exit_codes"
+
+#The class to look for which contains the Build information.
+BUILD_FILE = "BuildNumber.as";
+
+#Finds a file in the Project with the specifed name.
+def findBuildFile
+    TextMate.each_text_file do |file|
+    	if File.basename(file).chomp.to_s == BUILD_FILE then
+    	    return file
+        end
+    end    
+end
+
+def rescan_project
+	pause = `osascript &amp;&gt;/dev/null -e 'tell app "SystemUIServer" to activate' -e 'tell app "TextMate" to activate' &amp;`
+	puts pause
+end
+
+#Array to contain the lines of the document searched.
+MATCH="BUILD"
+docArray = []
+incrementedBuildNumber = "?"
+bf_uri = findBuildFile;
+
+#Open the Build Number file and fill the document array, translating the line/s which need it. 
+bf = File.open( bf_uri, "r" )
+bf.each do |line|
+    if line =~ /\b#{MATCH}\b/ 
+	   res = /\d+";/.match(line)
+	   incrementedBuildNumber = res[0].to_i + 1
+       result = line.gsub(/\d+/, incrementedBuildNumber.to_s )
+       docArray.push(result)
+	puts "REPLACED: "+result
+    else
+        docArray.push(line)
+    end
+end
+bf.close()
+
+#Re-open the BuildFile and write the updated document to it.
+bf = File.open( bf_uri, "w" )
+bf.print docArray.to_s
+bf.close()
+
+if incrementedBuildNumber == "?"
+    exitMsg = "Unable to locate a Build Number"
+else
+    exitMsg = "Build " + incrementedBuildNumber.to_s
+end
+
+TextMate.exit_show_tool_tip( exitMsg )
+
+#This may be a consideration.
+#rescan_project()
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>$</string>
+	<key>name</key>
+	<string>Build Number++</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>9C587D96-289D-4082-A9B5-F36B8EB54E66</string>
+</dict>
+</plist>

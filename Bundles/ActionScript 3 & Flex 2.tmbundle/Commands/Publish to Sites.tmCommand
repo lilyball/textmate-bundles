@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>captureFormatString</key>
+	<string>$1: Line $2: $3</string>
+	<key>capturePattern</key>
+	<string>^.*(\w+\.as):\sLine\s(\d+):\s(.*)$</string>
+	<key>command</key>
+	<string>. "$TM_BUNDLE_SUPPORT/lib/flex_utils.sh"
+
+# Define $TM_PROJECT_DIR or warn the user if they're not working with a TM Project. 
+cd_to_tmproj_root;
+
+if [[ (-f "$TM_PROJECT_DIR/build/publish_to_sites.sh") ]]; then
+	"$TM_PROJECT_DIR/build/publish_to_sites.sh";
+else
+	exit_show_tool_tip "I can't find a custom publish_to_sites.sh file..."
+fi</string>
+	<key>fileCaptureRegister</key>
+	<string>1</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>$</string>
+	<key>lineCaptureRegister</key>
+	<string>2</string>
+	<key>name</key>
+	<string>Publish to Sites</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.actionscript3, source.shell, text.xml, text.html, source.mxml</string>
+	<key>uuid</key>
+	<string>A62A7EA3-7C75-44A1-AE3C-3664694A5558</string>
+</dict>
+</plist>

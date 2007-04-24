@@ -8,7 +8,10 @@
 	<string>4679484F-6227-11D9-BFB1-000D93589AF6</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+
 line = STDIN.read
+offset = ENV['TM_INPUT_START_COLUMN'].to_i - 1
 caret_placement = 0
 tmp = ENV['TM_LINE_NUMBER'].to_i - ENV['TM_INPUT_START_LINE'].to_i
 if tmp &gt; 0
@@ -35,10 +38,12 @@ def match_iter(rgxp,str)
 end
 
 pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
+up = 0
+list = []
 
 up = 0
+pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
 start = [0]
-#Count [
 match_iter(pat , line[0..caret_placement]) do |tok, beg, len|
   t = tok[0].chr
   if t == "["
@@ -48,6 +53,7 @@ match_iter(pat , line[0..caret_placement]) do |tok, beg, len|
   end
 end
 
+
 up = 0
 last = line.length
 match_iter(pat , line[caret_placement+1..line.length]) do |tok, beg, len|
@@ -56,130 +62,65 @@ match_iter(pat , line[caret_placement+1..line.length]) do |tok, beg, len|
     up +=1
   elsif t == "]"
     if up == 0
-      last = beg + caret_placement
+      last = beg + caret_placement + 1
       break
     end
     up -=1
   end
 end
 
-up =-1
-list = ""
+list = []
+prefix = ""
+prefix = line[0..start[-1]-1] unless start[-1] == 0
+suffix = line[last+1..-1]
+l = line[start[-1]..last]
+up = -1
 
-match_iter(pat , line[start[-1]..last]) do |tok, beg, len|
+match_iter(pat , l) do |tok, beg, len|
   t = tok[0].chr
   if t == "["
     up +=1
   elsif t == "]"
     up -=1
   elsif t !='"' and t !='@' and up == 0
-    list &lt;&lt; tok
+    list &lt;&lt; [beg,len]
   end
 end
 
-if list == ""
-  m = line[start[-1]..last].match(/([a-zA-Z][a-zA-Z0-9]*:?)\s*$/)
-  if m
-    list = m[1]
-    last = m.begin(0)
-  end
-end
-
-require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
-zGrepped = %x{ zgrep ^#{e_sh list + "[[:space:]]"} #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz }
-candidates = zGrepped.split("\n") #.map{|e| e.split[1]}
-require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
-TextMate.exit_show_tool_tip "No documentation found for:\n#{list}" if candidates.empty?
-if candidates.size &gt; 1 # if more than 1 candidate disambiguate
-  m = line[start[-1]..last].match(/^(\[\s*)+([A-Z][a-zA-Z0-9]*)/)
-  old = candidates
-  if m
-    candidates = candidates.select{|e| e.split("\t")[2] == m[2] }
-
-  end
-  candidates = old if candidates.empty?
-end
-
-if candidates.size &gt; 1
-  require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-  dialog_path = "#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog"
-#pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}  
-plist = { 'menuItems' =&gt; candidates.map do |cand|
-                        {'title' =&gt; "[#{cand.split("\t")[3]} #{cand.split("\t")[0]}]", 'full' =&gt; cand} 
-                      end
-          }.to_plist
-lk = candidates.map do |cand|
-                        {'title' =&gt; "[#{cand.split("\t")[3]} #{cand.split("\t")[0]}]", 'full' =&gt; cand} 
-                      end
-
-
-  res = PropertyList::load(%x{#{e_sh dialog_path} -up #{e_sh plist} })
-  if res.has_key? 'selectedMenuItem'
-	result = res['selectedMenuItem']['full']
+list &lt;&lt; [l.length,0]
+offset += start[-1]
+if list.length &gt; 2
+  print e_sn(prefix+ l[0...list[1][0]].strip)
+  #check to if the first "selector:" is not in the first line
+  if k = line[0...start[-1]+list[0][0]].rindex("\n")
+    firstIndex = list[0][0]+list[0][1]- k -1
+    offset = start[-1]
   else
-   TextMate.exit_discard  
+    firstIndex = list[0][0] + list[0][1] 
   end
-else
-  result = candidates[0]
-end
-
-#file:///Developer/ADC%20Reference%20Library/documentation/Cocoa/Reference/ApplicationKit/Classes/NSApplication_Class/Reference/Reference.html#//apple_ref/c/data/NSApplicationDidFinishLaunchingNotification
-#file:///Developer/ADC%20Reference%20Library/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/Reference/Reference.html#//apple_ref/occ/clm/NSObject/alloc
-#file:///Developer/ADC%20Reference%20Library/documentation/GraphicsImaging/Reference/QuartzCoreFramework/Classes/CIColor_Class/Reference/Reference.html#//apple_ref/occ/clm/CIColor/colorWithRed:green:blue:alpha:
-#file:///Developer/ADC%20Reference%20Library/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/Reference.html#//apple_ref/occ/intfm/NSObject/autorelease
-
-methodName, framework,behaviors,nsClass, methodType = result.split("\t")
-semi = nsClass.index(";")
-if semi.nil?
-  className = nsClass
-else
-  className = nsClass[0..semi-1]
-end
-
-t = {"AK" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/",
-  "F"  =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation/", 
-  "CI" =&gt; "/Developer/ADC Reference Library/documentation/GraphicsImaging/Reference/QuartzCoreFramework/",
-"WK" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/WebKit/",
-  "CD" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/CoreDataFramework/",
-  "im" =&gt; "#//apple_ref/occ/instm/#{className}/", 
-  "cm" =&gt; "#//apple_ref/occ/clm/#{className}/",
-  "no" =&gt; "#//apple_ref/c/data/",
-  "Cl" =&gt; "Classes/#{className}_Class/Reference/",
-  "Pr" =&gt; "Protocols/#{className}_Protocol/Reference/", 
-  "dm" =&gt; "#//apple_ref/occ/instm/NSObject/"
-}
-url=t[framework] + t[behaviors]
-if behaviors == "Pr"
-  suffix = "#//apple_ref/occ/intfm/#{className}/"
-  if framework == "WK"
-    className = "NSObject" if nsClass.include?("Delegate")
-    suffix = "#//apple_ref/occ/instm/#{className}/" if methodType == "im"
-    suffix = "#//apple_ref/occ/intfcm/#{className}/" if methodType == "cm"
+  (1..(list.length() -2)).each do |ind|
+    list[ind][1]+list[ind][0]
+    b = (b = firstIndex-list[ind][1]+offset) &gt; 0 ? b : 0
+    print e_sn("\n" + " "*b + l[(list[ind][0])...(list[ind+1][0])].strip)
   end
+  print e_sn(suffix) unless suffix.nil?
 else
-  suffix =  t[methodType]
+  print e_sn(line)
 end
-suffix += methodName
-if FileTest.exists?(url + "Reference.html")
-  url += "Reference.html" + suffix
-else
-  url += className +".html" + suffix
-end
-TextMate.exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=tm-file://#{url}'&gt;"
 </string>
 	<key>fallbackInput</key>
 	<string>scope</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^h</string>
+	<string>^q</string>
 	<key>name</key>
-	<string>Documentation for Selector</string>
+	<string>Method Call</string>
 	<key>output</key>
-	<string>afterSelectedText</string>
+	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>meta.bracketed.objc</string>
 	<key>uuid</key>
-	<string>8AF46225-833C-473E-8EEC-F21C581636F6</string>
+	<string>8957C99F-88F5-42CC-B355-AAC6BF3FDF8D</string>
 </dict>
 </plist>

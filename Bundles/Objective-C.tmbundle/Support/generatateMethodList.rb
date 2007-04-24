@@ -2,23 +2,25 @@
 # run with find /System/Library/Frameworks/*.framework -name \*.h | ruby generator.rb > ut.txt
 translate = {"AppKit" => "AK", "Foundation" => "F", "CoreData" => "CD", "QuartzCore" => "CI","WebKit" => "WK"}
 
-
 def method_parse(k)
-  l = k.scan /(\-|\+|:)\s*\((([^\(\)]|\([^\)]*\))*)\)/
-  types = l.collect {|item| item[1].strip}
-  methodList = k.scan(/[a-zA-Z][a-zA-Z0-9]*:/)
+  l = k.scan /(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*[a-zA-Z][a-zA-Z0-9]*|(([a-zA-Z][a-zA-Z0-9]*)?:)/
+  types = l.select {|item| item[1] || item[3] }.collect{|item| item[1] || item[3] }
+
+  methodList = l.reject {|item| item[5].nil? }.collect{|item| item[5] }
   if methodList.size > 0
     methodName = methodList.join
   elsif mn = k.match(/\)\s*([a-zA-Z][a-zA-Z0-9]*)/)
     methodName = mn[1]
   else
     methodName = k.match(/([a-zA-Z][a-zA-Z0-9]*)/)[1]
-  end
+  end  
   [methodName, types]
   
 end
+headers = %x{find /System/Library/Frameworks/*.framework -name \*.h}.split("\n")
+#puts headers
 #headers = %x{find /System/Library/Frameworks/*.framework -name \*.h}
-headers = STDIN.read.split("\n")
+#headers = STDIN.read.split("\n")
 #headers = ["test.h"]
 rgxp = /^((@interface)|(@end)|((\-|\+)\s*\()|((\-|\+)[^;]*\;)|(@protocol[^\n;]*\n))/
 list = []

@@ -184,7 +184,7 @@ def candidate_list(methodSearch, list, types)
     fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz"
   elsif types == :methods
     fileNames = ["#{ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz"]
-    userMethods = "#{ENV['TM_PROJECT_DIRECTORY']}/._methods.TM_Completions.txt.gz"
+    userMethods = "#{ENV['TM_PROJECT_DIRECTORY']}/.methods.TM_Completions.txt.gz"
 
     fileNames += [userMethods] if File.exists? userMethods
   elsif types == :constants

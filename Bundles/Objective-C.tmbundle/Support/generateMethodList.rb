@@ -45,7 +45,7 @@ headers.each do |name|
         inClass = false
         str = m.post_match
       elsif m[4]
-        k = str.match /[^;]+?;/
+        k = str.match /[^;{]+?(;|\{)/
         if inClass
           methodName, types = method_parse(k[0])
           na = className

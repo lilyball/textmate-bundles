@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-# run with find /System/Library/Frameworks/*.framework -name \*.h | ruby generator.rb > ut.txt
-translate = {"AppKit" => "AK", "Foundation" => "F", "CoreData" => "CD", "QuartzCore" => "CI","WebKit" => "WK"}
+# run with find /System/Library/Frameworks/*.framework -name \*.h | ruby generateMethodList.rb
+translate = {"AppKit" => "AK", "Foundation" => "F", "CoreData" => "CD", "QuartzCore" => "CI","WebKit" => "WK", "Priv" => "Priv"}
 
 def method_parse(k)
   l = k.scan /(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*[a-zA-Z][a-zA-Z0-9]*|(([a-zA-Z][a-zA-Z0-9]*)?:)/
@@ -17,15 +17,17 @@ def method_parse(k)
   [methodName, types]
   
 end
-headers = %x{find /System/Library/Frameworks/*.framework -name \*.h}.split("\n")
-#puts headers
-#headers = %x{find /System/Library/Frameworks/*.framework -name \*.h}
-#headers = STDIN.read.split("\n")
+#headers = %x{find /System/Library/Frameworks/*.framework -name \*.h}.split("\n")
+headers = STDIN.read.split("\n")
 #headers = ["test.h"]
 rgxp = /^((@interface)|(@end)|((\-|\+)\s*\()|((\-|\+)[^;]*\;)|(@protocol[^\n;]*\n))/
 list = []
 headers.each do |name|
-  framework = name.match(/(\w*)\.framework/)[1]
+  if mat = name.match(/(\w*)\.framework/)
+    framework = mat[1]
+  else
+    framework = "Priv"
+  end
   filename = name.match(/(\w*)\.h/)[1]
   unless framework == "JavaVM"
   open(name) do |file|
@@ -88,9 +90,8 @@ headers.each do |name|
   end
 end
 end
-f = open("methodList.txt", "w")
-f.write(list.join("\n"))
-f.close
+print list.join("\n")
+
 #netService:didNotPublish:	F	Cl	NSNetService;NSNetServices	dm	void	NSNetService *	NSDictionary *
 #begin = '((:))\s*(\()';
 #					end = '(\))\s*(\w+\b)?';

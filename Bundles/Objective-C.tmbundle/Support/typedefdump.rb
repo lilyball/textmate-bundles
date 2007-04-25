@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-#find /System/Library/Frameworks/{AppKit,Foundation}.framework -name \*.h -exec awk '/\}/ { if(tp) print $0; pr = 0; tp=0; } { if(pr) print $0; } /^(typedef )enum .*\{[^}]*$/ { print $0 ;pr = 1; tp = 1;}' '{}' \;|expand
+# find /System/Library/Frameworks/{AppKit,Foundation}.framework -name \*.h -exec awk '/\}/ { if(pr) print $0; pr = 0; } { if(pr) print $0; } /^(typedef )enum .*\{[^}]*$/ { print $0 ;pr = 1}' '{}' \;|expand
 
 # NSStringEncodings are not defined as typedefed enum, add by hand
 

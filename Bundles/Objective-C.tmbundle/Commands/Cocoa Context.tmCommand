@@ -170,16 +170,33 @@ def show_dialog(prettyCandidates,start,&amp;snip_gen)
     end
 end
 
-def candidates_or_exit(methodSearch, list, fileNames, notif = false)
-	x = candidate_list(methodSearch, list, fileNames, notif)
+def candidates_or_exit(methodSearch, list, fileNames)
+	x = candidate_list(methodSearch, list, fileNames)
   TextMate.exit_show_tool_tip "No completion available" if x.empty?
   return x
 end
 
-def candidate_list(methodSearch, list, fileNames, notif = false)
+def candidate_list(methodSearch, list, types)
+  notif = false
+  if types == :classes
+    fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz"
+  elsif types == :functions
+    fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz"
+  elsif types == :methods
+    fileNames = ["#{ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz"]
+    userMethods = "#{ENV['TM_PROJECT_DIRECTORY']}/._methods.TM_Completions.txt.gz"
+
+    fileNames += [userMethods] if File.exists? userMethods
+  elsif types == :constants
+    fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz"
+  elsif :notifications
+    fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz"
+    notif = true
+  end
+  
   candidates = []
   fileNames.each do |fileName|
-    zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/#{fileName} }
+    zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh fileName }}
     candidates += zGrepped.split("\n")
   end
   # strip notifications
@@ -238,10 +255,10 @@ def return_type_based_c_constructs_suggestions(mn, search, show_arg)
 		   candidates = []
 		end
 
-		candidates += candidates_or_exit(search, nil, "cocoa.txt.gz",true)
+		candidates += candidates_or_exit(search, nil, :notifications)
 		res = c_snip_gen(candidates, search, nil)
 	else
-  	candidates = candidate_list(mn, nil, "cocoa.txt.gz")
+  	candidates = candidate_list(mn, nil, :methods)
     arg_type = candidates[0].split("\t")[5+mn.count(":")] unless candidates.nil?
 
     if show_arg &amp;&amp; !arg_type.nil?
@@ -249,8 +266,8 @@ def return_type_based_c_constructs_suggestions(mn, search, show_arg)
     else
 	    candidates = []
 	  end
-    candidates +=  candidate_list(search, nil, "CocoaFunctions.txt.gz")
-    candidates += candidate_list(search, nil, "CocoaConstants.txt.gz")
+    candidates +=  candidate_list(search, nil, :functions)
+    candidates += candidate_list(search, nil, :constants)
 	TextMate.exit_show_tool_tip "No completion available" if candidates.empty?
 	res = c_snip_gen(candidates, search, arg_type)
 	end
@@ -338,17 +355,17 @@ if mline[start[-1]..caret_placement].match colon_and_space
 
 elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
 	# [obj mess ^]
-  candidates = candidates_or_exit( mn + "[[:alpha:]:]", list, "cocoa.txt.gz" ) # the alpha is to prevent satisfaction with just one part
+  candidates = candidates_or_exit( mn + "[[:alpha:]:]", list, :methods ) # the alpha is to prevent satisfaction with just one part
   res = pop_up(candidates, mn)
 elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
 	# [obj mess^]
   if mline[start[-1]..k.begin(0)-1+start[-1]].match alpha_and_space
     mn += k[0]
-    candidates = candidates_or_exit( mn + "[[:alpha:]:]", list, "cocoa.txt.gz")
+    candidates = candidates_or_exit( mn + "[[:alpha:]:]", list, :methods)
     res =pop_up(candidates, mn)
   # [NSOb^]
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[\s*$/)
-    candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, "CocoaClassesWithFramework.txt.gz")
+    candidates = candidates_or_exit( k[0] + "[[:alpha:]]", nil, :classes)
    res =pop_up(candidates, k[0])
   elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(colon_and_space)
 	#  [obj mess: arg^]

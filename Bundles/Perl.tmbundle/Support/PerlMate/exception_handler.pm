@@ -116,11 +116,10 @@ sub tm_die {
   if (ineval()) {
       realdie ($arg,@rest) if ineval();
   }
-  if (!ref($arg)) {
+  if (!ref($arg) and $^S) {
     print TM_ERROR_FD longmess($arg,@rest);
+    exit($^S);
   }
-  
-  exit($!);
 }
 
 1;

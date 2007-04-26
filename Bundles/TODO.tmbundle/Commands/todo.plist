@@ -40,9 +40,7 @@ end
 $tags.each { |tag| tag[:matches] = [ ] }
 
 TextMate.each_text_file do |file|
-  if ignores != nil and file =~ /#{ignores}/ then
-    next
-  end
+  next if (ignores != nil and file =~ /#{ignores}/) or File.symlink?(file)
   $tags.each do |tag|
     File.open(file) do |io|
       io.grep(tag[:regexp]) do |content|

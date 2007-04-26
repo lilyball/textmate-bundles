@@ -190,8 +190,7 @@ def candidate_list(methodSearch, list, types)
   elsif types == :constants
     fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz"
   elsif :notifications
-    fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz"
-    notif = true
+    fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaNotifications.txt.gz"
   end
   
   candidates = []
@@ -199,12 +198,7 @@ def candidate_list(methodSearch, list, types)
     zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh fileName }}
     candidates += zGrepped.split("\n")
   end
-  # strip notifications
-  if notif
-	  candidates = candidates.select {|cand| cand.match(/\tno\t/) }
-	else
-    candidates = candidates.reject {|cand| cand.match(/\tno\t/) }
-  end
+
   return [] if candidates.empty?
   if list.nil?
     return candidates

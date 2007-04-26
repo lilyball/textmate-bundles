@@ -5,10 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+	<string>require_cmd moinedit
 
-PATH="$TM_BUNDLE_SUPPORT/bin:$PATH"
-export PATH
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
 html_header "MoinMoin Bundle Help" "MoinMoin"
 moinedit | pre

@@ -83,7 +83,7 @@ class Xcode
       end
       
       def product_name
-        setting('PRODUCT_NAME')
+        setting('PRODUCT_NAME') || @target.name
       end
     end
     
@@ -148,10 +148,12 @@ class Xcode
           # If we have a block, feed it stdout and stderr data
           if block_given? and Xcode.supports_configurations? then
             executable = "./#{file_path}/Contents/MacOS/#{configuration_named(@project.active_configuration_name).product_name}"
-            
+
             cmd = %Q{#{setup_cmd} #{e_sh executable}}
             block.call(:start, file_path )
-#            block.call(:output, cmd )  #debugging
+#            block.call(:output, @project.active_configuration_name )  #debugging
+#   	     block.call(:output, cmd )  #debugging
+#            block.call(:output, configuration_named(@project.active_configuration_name).inspect )  #debugging
 
             # If the executable doesn't exist, PTY.spawn might not return immediately
 						executable_path = File.expand_path(dir_path) + '/' + executable

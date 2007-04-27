@@ -71,7 +71,7 @@ end #check_for_disambiguation
 def getWikiDef(phrase)
   TextMate.call_with_progress(:title =&gt; "Contacting Wikipedia", :message =&gt; "Looking for definition of #{phrase}") do
     @response = open("http://en.wikipedia.org/wiki/Special:Search?search=#{CGI.escape(phrase)}",
-        "User-Agent" =&gt; "TextMate 1.5.3")
+        "User-Agent" =&gt; "TextMate 1.5.5")
     content = @response.read
     if content.scan(/Redirected\sfrom/)
       url, content, pagename = follow_redirect(content)
@@ -84,7 +84,7 @@ def getWikiDef(phrase)
     check_for_search(content)
     check_for_multiple_results(content,phrase,pagename)
     check_for_disambiguation(content,phrase,pagename)
-    title = "Wikipedia Entry: " + pagename
+    title = "Wikipedia Entry: " + pagename.gsub(/_/, ' ')
     return url, title, phrase
   end
 end

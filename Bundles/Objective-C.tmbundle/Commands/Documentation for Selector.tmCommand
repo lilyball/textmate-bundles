@@ -159,10 +159,9 @@ unless t[framework].nil?
   elsif File.exist?(url + "#{className}.html")
     url += "#{className}.html"
     loadHTMLPage(url,className,methodName)
-  else
-     TextMate.exit_discard
   end
 end
+TextMate.exit_discard
 </string>
 	<key>fallbackInput</key>
 	<string>scope</string>

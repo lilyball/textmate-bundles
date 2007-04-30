@@ -115,7 +115,17 @@ The candidates suggested for the 6 different scopes are:
  4. Same as 3, but completion of known (C, C++, and Cocoa) functions is also suggested.
  5. Here completion candidates are known Cocoa methods, but inserted as when implementing the method. For example in the above, one of the suggestions is `windowWillClose`, which when selected, will have the line changed to: `- (void)windowWillClose:(NSNotification *)aNotification`.
  6. Same as 1, but an asterisk (`*`) is inserted.
-    
+
+## Completing User Methods
+
+By default compleiton candidates comes from the various Apple frameworks (mostly under the Cocoa umbrella).
+
+If you wish to have your own methods shown as completion candidates, you can invoke the *Index Headers for Completion* command.
+
+This scans all headers in the current project folder and saves the result as `.methods.TM_Completions.txt.gz` in your project folder.
+
+You can later re-run the command to update the index.
+
 # Bracket Matching
 
 ## Wrapping Selectors
@@ -173,7 +183,7 @@ Pressing ⌃Q when the caret is inside a multi-part method call will align the m
 		windowNumber:number context:aGraphicsContext
 		eventNumber:x trackingNumber:tracker userData:data]
 
-Will be reformatted as
+Will be reformatted as:
 
 	[NSEvent enterExitEventWithType:anEventType
 	                       location:aPoint

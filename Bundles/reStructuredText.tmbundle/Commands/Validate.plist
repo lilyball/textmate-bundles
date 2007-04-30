@@ -9,10 +9,10 @@
 	<key>capturePattern</key>
 	<string>^(.+):(\d+): (.+)</string>
 	<key>command</key>
-	<string>TRST=${TM_PYTHON:=rst2html.py}
+	<string>TRST=${TM_RST2HTML:=rst2html.py}
 # TRST = "/System/Library/Frameworks/Python.framework/Versions/2.3/bin/rst2html.py"
 # Send the current file through rst2html.py
-$TRST "$TM_FILEPATH" 1&gt;/dev/null|pre</string>
+"$TRST" "$TM_FILEPATH" 1&gt;/dev/null|pre</string>
 	<key>fileCaptureRegister</key>
 	<string>1</string>
 	<key>input</key>

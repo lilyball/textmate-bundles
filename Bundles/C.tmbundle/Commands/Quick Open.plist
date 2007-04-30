@@ -5,55 +5,83 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>line=$TM_CURRENT_LINE
-header=$TM_SELECTED_TEXT
+	<string>#!/usr/bin/env ruby -wKU
 
-# extract header from current line
-if [[ -z "$header" ]] &amp;&amp; $(egrep -q &lt;&lt;&lt;"$line" '#(import|include)'); then
-   header=$(sed -n &lt;&lt;&lt;"$line" 's/[^&lt;"]*[&lt;"]\([^"&gt;]*\).*/\1/p')
-fi
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate.rb'
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui.rb'
 
-# ask user about header
-if [[ -z "$header" ]]; then
-   res=$(CocoaDialog inputbox --float --title "Open Header Quickly" --no-newline --informative-text "Header name?"  --text "foobar"  --button1 "Open" --button2 "Cancel")
-   [[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit
-   header=$(tail -n1 &lt;&lt;&lt;"$res")
-fi
+USR_HEAD  = Regexp.escape "#include \"...\" search starts here:\n"
+SYS_HEAD  = Regexp.escape "#include &lt;...&gt; search starts here:\n"
+FOOT      = Regexp.escape 'End of search list.'
 
-# If Spotlight is available, avail ourselves of it.
-# otherwise, use the old 'find'-based method.
-#
-# The Spotlight method has the advantage of being
-# both reasonably fast and catching all the corner
-# cases, many of which are missed by the old method.
-#
-if [[ `which mdfind` != *"not found" ]]; then
-	# we have Spotlight
-	files=`${TM_RUBY:-ruby} "$TM_BUNDLE_SUPPORT/SpotlightSearch.rb" "$header"`
+COMPILER  = {
+  'source.c'      =&gt; 'gcc 2&gt;&amp;1 &gt;/dev/null -E -v -x c /dev/null',
+  'source.c++'    =&gt; 'g++ 2&gt;&amp;1 &gt;/dev/null -E -v -x c++ /dev/null',
+  'source.objc'   =&gt; 'gcc 2&gt;&amp;1 &gt;/dev/null -E -v -x objective-c /dev/null',
+  'source.objc++' =&gt; 'g++ 2&gt;&amp;1 &gt;/dev/null -E -v -x objective-c++ /dev/null',
+}
+
+def compiler_search_path(domain = :system)
+  scope        = 'source.c'
+  scope        = $&amp; if ENV['TM_SCOPE'] =~ /source.(obj)?c(\+\+)?/
+
+  res = IO.popen(COMPILER[scope]) { |io| io.read }
+  if res =~ /#{USR_HEAD}(.*)#{SYS_HEAD}(.*)#{FOOT}/m
+    case domain
+      when :system  then $2
+      when :user    then $1 + " .\n"
+      when :all     then $1 + " .\n" + $2
+    end.scan(/ (.*)/).flatten
+  else
+    abort "Failed to parse compiler output.\nCommand: " + COMPILER[scope]
+  end
+end
+
+def user_search_path(domain = :system)
+  usr = ENV['TM_USR_HEADER_PATH'].to_s
+  sys = ENV['TM_SYS_HEADER_PATH'].to_s
+
+  res = case domain
+    when :system  then sys
+    when :user    then usr
+    when :all     then "#{usr}:#{sys}"
+  end.split(':')
+  res.delete('')
+
+  res.empty? ? nil : res
+end
+
+def header
+  if ENV.has_key? 'TM_SELECTED_TEXT'
+    [:all, ENV['TM_SELECTED_TEXT']]
+  elsif ENV['TM_CURRENT_LINE'] =~ /#\s*(?:include|import)\s*([&lt;"])(.*?)["&gt;]/;
+    [$1 == '&lt;' ? :system : :user, $2]
+  else
+    header = TextMate::UI.request_string :title =&gt; "Quick Open", :prompt =&gt; "Which header file do you wish to open?"
+    [:all, header]
+  end
+end
+
+def find(file, dirs)
+  framework = file.sub(/(.*)\/(.*\.h)/, '\1.framework/Headers/\2')
+  base = ENV['TM_DIRECTORY'] || Dir.getwd
+  dirs.each do |dir|
+    dir = "#{base}/#{dir}" unless dir[0..0] == "/"
+    return "#{dir}/#{file}"       if File.exists? "#{dir}/#{file}"
+    return "#{dir}/#{framework}"  if File.exists? "#{dir}/#{framework}"
+  end
+  nil
+end
+
+domain, file = header()
+abort if file.nil?
+
+dirs = user_search_path(domain) || compiler_search_path(domain)
+if path = find(file, dirs)
+  TextMate.go_to :file =&gt; path
 else
-	# old method
-	arr=("/usr/include"
-	"/System/Library/Frameworks/AppKit.framework/Headers/"
-	"/System/Library/Frameworks/Foundation.framework/Headers/"
-	"/System/Library/Frameworks/IOKit.framework/Headers/"
-	"/System/Library/Frameworks/CoreAudio.framework/Headers/"
-	"/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework/Headers/"
-	"/System/Library/Frameworks/QuickTime.framework/Headers/"
-	"/System/Library/Frameworks/QTKit.framework/Headers/"
-	"/System/Library/Frameworks/Carbon.framework"
-#	"/System/Library/Frameworks/Kernel.framework"
-	"/System/Library/Frameworks/ApplicationServices.framework"
-	"${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
-	)
-
-	files=$(for dir in "${arr[@]}";
-		do find "$dir" -path "*/$header"; done|sort|uniq)
-fi
-
-if [[ -n "$files" ]];
-   then IFS=$'\n'; mate $files &amp;&gt;/dev/null &amp;
-   else echo "No headers found."
-fi
+  abort "Unable to find ‘#{file}’\nLocations searched:\n" + dirs.map { |dir| "   #{dir}" }.join("\n")
+end
 </string>
 	<key>input</key>
 	<string>none</string>

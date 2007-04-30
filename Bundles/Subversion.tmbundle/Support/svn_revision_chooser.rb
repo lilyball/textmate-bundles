@@ -60,7 +60,7 @@ module Subversion
 				dialog.parameters = {'summary' => "Retrieving revision #{revision}…"}
 
 				temp_name = '/tmp/' + human_readable_mktemp(path, revision)
-				svn_cmd("cat -r#{revision} #{e_sh(path)} > #{temp_name}")
+				svn_cmd("cat -r#{revision} #{e_sh path} > #{e_sh temp_name}")
 				files << temp_name
 		  end
 		end

@@ -12,7 +12,7 @@ static ${TM_NEW_FILE_BASENAME}* SharedInstance;
 @implementation ${TM_NEW_FILE_BASENAME}
 + (${TM_NEW_FILE_BASENAME}*)sharedInstance
 {
-	return SharedInstance ?: [[${TM_NEW_FILE_BASENAME} new] autorelease];
+	return SharedInstance ?: [[self new] autorelease];
 }
 
 - (id)init

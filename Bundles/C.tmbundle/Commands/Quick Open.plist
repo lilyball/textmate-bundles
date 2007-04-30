@@ -62,7 +62,7 @@ def header
   end
 end
 
-def find(file, dirs)
+def find_in_dirs(file, dirs)
   framework = file.sub(/(.*)\/(.*\.h)/, '\1.framework/Headers/\2')
   base = ENV['TM_DIRECTORY'] || Dir.getwd
   dirs.each do |dir|
@@ -73,11 +73,33 @@ def find(file, dirs)
   nil
 end
 
+def find_recursively(header)
+  hdr_match = /\b#{Regexp.escape(header.sub(/(\.h)?$/, '.h'))}$/i
+  matches   = Dir["/System/Library/Frameworks/*.framework/{Headers,Frameworks/*.framework/Headers}/*.h"].find_all { |e| e =~ hdr_match }
+
+  if matches.size &gt; 1
+    menu = matches.map do |e|
+      header_name = $&amp; if e =~ /[^\/]+$/
+      framework_suffix = e.scan(/\/([^\/]+?).framework/).flatten.join(' → ')
+      { 'path' =&gt; e, 'title' =&gt; "#{header_name} — #{framework_suffix}" }
+    end
+    if res = TextMate::UI.menu(menu)
+      res['path']
+    else
+      nil
+    end
+  else
+    matches.first
+  end
+end
+
 domain, file = header()
 abort if file.nil?
 
 dirs = user_search_path(domain) || compiler_search_path(domain)
-if path = find(file, dirs)
+if path = find_in_dirs(file, dirs)
+  TextMate.go_to :file =&gt; path
+elsif domain == :all &amp;&amp; path = find_recursively(file)
   TextMate.go_to :file =&gt; path
 else
   abort "Unable to find ‘#{file}’\nLocations searched:\n" + dirs.map { |dir| "   #{dir}" }.join("\n")

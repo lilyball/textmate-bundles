@@ -9,7 +9,7 @@
 
 TEMPLATES = '/Library/Application Support/Apple/Developer Tools/Project Templates'
 SUPPORT   = ENV['TM_SUPPORT_PATH']
-DIALOG    = "#{SUPPORT}/bin/tm_dialog"
+DIALOG    = ENV['DIALOG']
 MATE      = "#{SUPPORT}/bin/mate"
 
 require "#{SUPPORT}/lib/osx/plist"
@@ -24,7 +24,7 @@ module ProcessTemplate
   
   def expand(str, variables)
     str.gsub(/«(DATE|FULLUSERNAME|ORGANIZATIONNAME|PRODUCTNAME|PROJECTNAMEASIDENTIFIER|PROJECTNAMEASXML|PROJECTNAME|TARGETNAMEASIDENTIFIER|USERNAME|UUID|YEAR)»/) do |match|
-      variables[match.delete('«»')]
+      variables[$1]
     end
   end
 
@@ -118,7 +118,7 @@ end
 
 plist = { 'templates' =&gt; templates, 'projectName' =&gt; 'untitled' }.to_plist
 defaults = { 'Xcode New Project Location'          =&gt; '~/',
-             'Xcode New Project Selected Template' =&gt; [ [ 1, 6 ]] }.to_plist
+             'Xcode New Project Selected Template' =&gt; [ [ 1, 6 ] ] }.to_plist
 
 if res = PropertyList.load(%x{ #{e_sh DIALOG} -cmp #{e_sh plist} -d #{e_sh defaults} 'New Project' })['result']
 

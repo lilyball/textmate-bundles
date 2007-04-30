@@ -85,7 +85,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?=\s*({|//|/\*))</string>
+			<string>(?=\s*({|\(|//|/\*))</string>
 			<key>end</key>
 			<string>\Z(?!\n)</string>
 			<key>name</key>
@@ -111,7 +111,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#openstep_plist</string>
+					<string>#openstep_dictionary</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#openstep_array</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -439,38 +443,6 @@
 							</array>
 						</dict>
 					</array>
-				</dict>
-			</array>
-		</dict>
-		<key>openstep_plist</key>
-		<dict>
-			<key>begin</key>
-			<string>\{</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.plist.plist</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\}</string>
-			<key>name</key>
-			<string>meta.rule.plist.plist</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#openstep_comment</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#openstep_name</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#openstep_stray-char</string>
 				</dict>
 			</array>
 		</dict>

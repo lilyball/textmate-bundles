@@ -46,7 +46,11 @@ module SVNLogHelpers
   
   # TODO: überarbeiten
   def message
-    htmlize( self.elements['msg'].text ).split("\n").join('<br>')
+    if node = self.elements['msg']
+      htmlize( node.text ).split("\n").join('<br>')
+    else
+      '(no message for this commit)'
+    end
   end
   
   def num_paths

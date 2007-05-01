@@ -42,7 +42,7 @@
 		<key>increaseIndentPattern</key>
 		<string>(?x)
 		(&lt;(?!area|base|br|col|frame|hr|html|img|input|link|meta|param|[^&gt;]*/&gt;)
-		  ([A-Za-z0-9]+)\b[^&gt;]*&gt;(?!.*&lt;/\2&gt;)
+		  ([A-Za-z0-9]+)(?=\s|&gt;)\b[^&gt;]*&gt;(?!.*&lt;/\2&gt;)
 		|&lt;!--(?!.*--&gt;)
 		|\{[^}"']*$
 		)</string>

@@ -9,22 +9,23 @@
 require 'cgi'
 require 'net/http'
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
-require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+require ENV['TM_SUPPORT_PATH'] + '/lib/progress.rb'
 
 query = CGI::escape(STDIN.read)
 abort if query.empty?
 
 TextMate.call_with_progress(:message =&gt; 'Querying Google…') do
   response = Net::HTTP.get('www.google.com', '/search?q=' + query)
-  matches = Regexp.new('&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=/images/calc_img\.gif&gt;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td nowrap&gt;&lt;font size=\+1&gt;&lt;b&gt;(.+)&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;').match(response)
-  TextMate.exit_show_tool_tip "Invalid calculation" unless matches
-  answer = matches[1]
-  answer = answer[answer.index(' = ') + 3..-1] # Remove the calculation
-  answer.gsub!(/&lt;sup&gt;(.+?)&lt;\/sup&gt;/) { |number| "^" + $1 } # Prefix exponents
-  answer.gsub!(/&lt;.+?&gt;/, '')
-  answer.gsub!('&amp;#215;', '×')
-  1 while answer.gsub!(/(\d+)\s+(\d+)/, '\1,\2') # Add comma separators
-  print answer
+  if response =~ /&lt;b&gt;.*? = (.*?)&lt;\/b&gt;/
+    answer = $1
+    answer.gsub!(/&lt;sup&gt;(.+?)&lt;\/sup&gt;/, '^\1') # Prefix exponents
+    answer.gsub!(/&lt;.+?&gt;/, '')
+    answer.gsub!('&amp;#215;', '×')
+    answer.gsub!(/(\d+)\s+(\d+)/, '\1, \2') # Add comma separators
+    print answer
+  else
+    TextMate.exit_show_tool_tip 'Invalid calculation'
+  end
 end</string>
 	<key>fallbackInput</key>
 	<string>line</string>

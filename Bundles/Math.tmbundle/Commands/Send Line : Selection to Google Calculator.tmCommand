@@ -21,7 +21,7 @@ TextMate.call_with_progress(:message =&gt; 'Querying Google…') do
     answer.gsub!(/&lt;sup&gt;(.+?)&lt;\/sup&gt;/, '^\1') # Prefix exponents
     answer.gsub!(/&lt;.+?&gt;/, '')
     answer.gsub!('&amp;#215;', '×')
-    answer.gsub!(/(\d+)\s+(\d+)/, '\1, \2') # Add comma separators
+    answer.gsub!(/(\d+) (?=\d{3})/, '\1,') # Turn 10 000 into 10,000
     print answer
   else
     TextMate.exit_show_tool_tip 'Invalid calculation'

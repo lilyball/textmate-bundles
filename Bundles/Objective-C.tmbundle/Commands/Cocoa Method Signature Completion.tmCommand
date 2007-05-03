@@ -12,9 +12,13 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 line = ENV['TM_CURRENT_LINE']
 
 def construct_arg_name(arg)
-	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUYi])?[A-Za-z_0-9]+)/)
+	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUYi])?((void)|[A-Za-z_0-9]+))/)
 	unless a.nil?
-		(a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
+	  if a[6].nil?
+		  (a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
+	  else
+	    "udata"
+	  end
 	else
 		""
 	end

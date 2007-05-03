@@ -143,8 +143,16 @@ return false
   end
   
   def file_contains_selector?(methodName)
-    zGrepped = %x{ zgrep ^#{e_sh methodName }[[:space:]] #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz }
-    candidates = zGrepped.split("\n")
+    fileNames = ["#{ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz"]
+    userMethods = "#{ENV['TM_PROJECT_DIRECTORY']}/.methods.TM_Completions.txt.gz"
+
+    fileNames += [userMethods] if File.exists? userMethods
+    candidates = []
+    fileNames.each do |fileName|
+      zGrepped = %x{zgrep ^#{e_sh methodName }[[:space:]] #{e_sh fileName }}
+      candidates += zGrepped.split("\n")
+    end
+
     return !candidates.empty?
   end
   

@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby -s
 
-ENV['TM_SUPPORT_PATH'] = "/Users/chris/Library/Application Support/TextMate/Support"
-ENV['TM_BUNDLE_SUPPORT'] = "/Users/chris/Library/Application Support/TextMate/Bundles/Xcode.tmbundle/Support"
-
 require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"

@@ -5,6 +5,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
 require 'open3'
 require 'pty'
+require "cgi" # so we have CGI.escapeHTML
 
 class Xcode
   
@@ -132,12 +133,37 @@ class Xcode
       fs_path
     end
     
+    @@project_cache = { }     # to avoid loading/parsing sub-projects multiple times
+    @@did_scan_project = [ ]  # to avoid scanning the same project multiple times (i.e. when it is included by sevearl sub-projects)
+    @@in_sub_project = 0
+
     def path_for_basename(basename)
+      @@did_scan_project = [ ] if @@in_sub_project == 0
       path = nil
       @objects.each_pair do |key, obj|
+
+        if obj['isa'] == 'PBXContainerItemProxy'
+          sub_project_file = dereference(obj['containerPortal'])['path']
+          sub_project_path = File.join(File.split(@project_path).first, sub_project_file)
+          sub_project_path = File.expand_path(sub_project_path)
+
+          next if @@did_scan_project.include? sub_project_path
+
+          unless @@project_cache.has_key? sub_project_path
+            @@project_cache[sub_project_path] = Xcode::Project.new sub_project_path
+          end
+
+          sub_project = @@project_cache[sub_project_path]
+          @@did_scan_project << sub_project_path
+          @@in_sub_project += 1
+          path = sub_project.path_for_basename(basename)
+          @@in_sub_project -= 1
+          break if path
+        end
+
         next unless obj['isa'] == 'PBXFileReference'
-        next unless obj['path'] == basename
-        path = path_for_fileref(key) + '/' + basename
+        next unless obj['path'].include? basename
+        path = path_for_fileref(key) + '/' + obj['path']
         break
       end
       path
@@ -321,7 +347,7 @@ class Xcode
           begin
             type = :HTML
             line = htmlize(line.chomp)
-            line = line.gsub(/((\w|\.|\/)+):(\d+):((\d+):)?(?!\d+\.\d+)/) do |string|
+            line = line.gsub(/^(([\w.\/ ])+):(\d+):((\d+):)?(?!\d+\.\d+)/) do |string|
               # the negative lookahead suffix prevents matching the NSLog time prefix
             
               path        = @project.path_for_basename($1)
@@ -335,7 +361,9 @@ class Xcode
               end
             end
           rescue Exception => exception
-            line = "==> <b>Exception during output formatting:</b>\n #{htmlize(exception.backtrace)}\n\n"
+            line = "==> <b>Exception during output formatting:</b> #{exception.class.name}: #{CGI.escapeHTML exception.message.sub(/`(\w+)'/, '‘\1’').sub(/ -- /, ' — ')}\n"
+            line << " " + htmlize(exception.backtrace.join("\n "))
+            line << "\n\n"
           end
         end
         original_block.call(type, line)

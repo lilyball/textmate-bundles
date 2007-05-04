@@ -5,20 +5,59 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -d $TM_SELECTED_FILE ]]; then
-   TM_PATH="$TM_SELECTED_FILE"
-elif [[ -f $TM_SELECTED_FILE ]]; then
-   TM_PATH="`dirname "$TM_SELECTED_FILE"`"
-else
-   TM_PATH="`dirname "$TM_FILEPATH"`"
-fi
+	<string>#!/usr/bin/env ruby -wKU
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape.rb'
 
-osascript &lt;&lt;EOF
-   tell application "Terminal"
+def find_directory
+  files = [ ENV['TM_SELECTED_FILE'], ENV['TM_FILEPATH'], ENV['TM_DIRECTORY'] ]
+  res = files.find { |file| file &amp;&amp; File.exists?(file) }
+  res &amp;&amp; File.file?(res) ? File.split(res).first : res
+end
+
+def is_running(process)
+  all = `ps -U "$USER" -o ucomm`
+  all.to_a[1..-1].find { |cmd| process == cmd.strip }
+end
+
+def terminal_script(dir)
+  return &lt;&lt;-APPLESCRIPT
+    tell application "Terminal"
       activate
-      do script "cd '$TM_PATH'; clear; pwd"
-   end tell
-EOF</string>
+      do script "cd #{e_as(e_sh(dir))}; clear; pwd"
+    end tell
+APPLESCRIPT
+end
+
+def iterm_script(dir)
+  return &lt;&lt;-APPLESCRIPT
+    tell application "iTerm"
+      activate
+      if exists the first terminal then
+        set myterm to the first terminal
+      else
+        set myterm to (make new terminal)
+      end if
+      tell myterm
+        activate current session
+        launch session "Default Session"
+        tell the last session
+          write text "cd #{e_as(e_sh(dir))}; clear; pwd"
+        end tell
+      end tell
+    end tell
+APPLESCRIPT
+end
+
+if dir = find_directory
+  script = nil
+  if ENV['TM_TERMINAL'] =~ /^iterm$/i || is_running('iTerm')
+    script = iterm_script(dir)
+  else
+    script = terminal_script(dir)
+  end
+  open("|osascript", "w") { |io| io &lt;&lt; script }
+end
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

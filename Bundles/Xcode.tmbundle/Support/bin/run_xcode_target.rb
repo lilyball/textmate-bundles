@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby -s
 
+ENV['TM_SUPPORT_PATH'] = "/Users/chris/Library/Application Support/TextMate/Support"
+ENV['TM_BUNDLE_SUPPORT'] = "/Users/chris/Library/Application Support/TextMate/Bundles/Xcode.tmbundle/Support"
+
 require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
@@ -8,13 +11,14 @@ require 'pty'
 
 class Xcode
   
-  # N.B. lots of cheap performance wins here to be made by aggressive (or any) caching.
+  # N.B. lots of cheap performance wins to be made by aggressive (or any) caching.
   # Not clear it's worthwhile. Could also be stale if these objects live a long time and
   # the user makes changes to the project in Xcode.
   
   # project file
   class Project
     attr_reader :objects
+    attr_reader :root_object
     
     def initialize(path_to_xcodeproj)
       @project_path = path_to_xcodeproj
@@ -64,6 +68,82 @@ class Xcode
     
     def dereference(key)
       @objects[key]
+    end
+
+    def source_root
+      root = @root_object['projectRoot']
+      if root.nil? or root.empty?
+        root = File.expand_path(File.dirname(@project_path))
+      end
+      root
+    end
+
+    def source_tree_for_group(group)
+      type      = false
+      path      = group['path']
+      case group['sourceTree']
+      when '<group>'
+        type = :group
+      when '<absolute>'
+        type = :absolute
+      when 'SOURCE_ROOT'
+        path = source_root + "/" + path
+        type = :source_root
+      else
+        puts "unknown sourceTree:#{group['sourceTree']}"
+      end # case
+      [type, path]
+    end
+    
+    def nodepath_for_ref(ref, group, parents)      
+      # maybe we're the parent
+      return nil unless group['isa'] == 'PBXGroup'
+
+      parents = parents.dup
+      parents << group      
+
+      children = group['children']
+    
+      # is the path in this group?
+      if children.include?(ref) then
+        return parents
+      else
+        out_parents = nil
+        children.find do |child|
+          out_parents = nodepath_for_ref(ref, dereference(child), parents)
+          out_parents
+        end
+        out_parents
+      end
+    end
+  
+    
+    def path_for_fileref(ref)
+      # find the node path
+      value = nodepath_for_ref(ref, dereference(@root_object['mainGroup']), Array.new) 
+      return nil if value.nil?
+      
+      # create a filesystem path
+      fs_path = source_root
+      
+      value.each do |group|
+        type, segment = source_tree_for_group(group)
+        unless type == :group
+          fs_path = segment
+        end
+      end
+      fs_path
+    end
+    
+    def path_for_basename(basename)
+      path = nil
+      @objects.each_pair do |key, obj|
+        next unless obj['isa'] == 'PBXFileReference'
+        next unless obj['path'] == basename
+        path = path_for_fileref(key) + '/' + basename
+        break
+      end
+      path
     end
     
     # build configuration
@@ -151,9 +231,6 @@ class Xcode
 
             cmd = %Q{#{setup_cmd} #{e_sh executable}}
             block.call(:start, file_path )
-#            block.call(:output, @project.active_configuration_name )  #debugging
-#   	     block.call(:output, cmd )  #debugging
-#            block.call(:output, configuration_named(@project.active_configuration_name).inspect )  #debugging
 
             # If the executable doesn't exist, PTY.spawn might not return immediately
 						executable_path = File.expand_path(dir_path) + '/' + executable
@@ -174,22 +251,6 @@ class Xcode
             rescue
             end
             
-            # stdin, stdout, stderr = Open3.popen3(cmd)
-            # descriptors = [stdout, stderr]
-            # descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
-            # 
-            # until descriptors.empty?
-            #   fd_list = select(descriptors)
-            #   unless data.nil?
-            #     fd_list[0].each do |fd|
-            #       line = fd.gets
-            #       block.call(fd == stdout ? :output : :error , line ) unless line.nil?
-            #     end
-            #   end
-            #   # remove closed descriptors
-            #   descriptors.reject! {|s| s.eof?}
-            # end
-
             block.call(:end, 'Process completed.' )
           else
             cmd = "#{setup_cmd} open ./#{escaped_file}"
@@ -254,8 +315,38 @@ class Xcode
   end
   
   class HTMLProjectRunner < ProjectRunner
+    
+    # intercept formatter output to highlight files in the standard file:line:(column:)? format.
+    def run(&original_block)
+      super do |type, line|
+        case type
+        when :output
+          begin
+            type = :HTML
+            line = htmlize(line.chomp)
+            line = line.gsub(/((\w|\.|\/)+):(\d+):((\d+):)?(?!\d+\.\d+)/) do |string|
+              # the negative lookahead suffix prevents matching the NSLog time prefix
+            
+              path        = @project.path_for_basename($1)
+              line_number = $3
+              column      = $4.nil? ? '' : "&column=#{$5}"
+              
+              if path != nil and File.exist?(path) then
+                %Q{<a href="txmt://open?url=file://#{e_url(path)}&line=#{line_number}#{column}">#{string}</a>}
+              else
+                string
+              end
+            end
+          rescue Exception => exception
+            line = "==> <b>Exception during output formatting:</b>\n #{htmlize(exception.backtrace)}\n\n"
+          end
+        end
+        original_block.call(type, line)
+      end
+    end
+    
     def info(message)
-      puts message.gsub(/\n/, '<br>\n')
+      puts output.gsub(/\n/, '<br>\n')
     end
     
     def failed(targets, message)

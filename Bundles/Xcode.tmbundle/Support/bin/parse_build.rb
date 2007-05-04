@@ -203,10 +203,14 @@ unless success.nil? then
 	  output = runner.run do |type, line|
       case type
       when :end
+	    formatter.start_new_section
+		formatter.executable_output(line)
       when :start
         formatter.run_executable(line)
-      when :output
-        formatter.executable_output(line)
+	  when :HTML
+		formatter.executable_HTML(line)
+	  when :output
+	    formatter.executable_output(line)
       when :error
         formatter.executable_error(line)
       else

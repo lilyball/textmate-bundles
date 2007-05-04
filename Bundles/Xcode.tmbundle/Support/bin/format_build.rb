@@ -504,6 +504,12 @@ class Formatter
 		  @mup.text!( line )
 	  end
 	end
+	
+	def executable_HTML( line )
+	  @mup.div(:class => 'console') do
+		  @mup << line
+	  end
+	end
 
 	def executable_error( line )
 	  @mup.div(:class => 'console_error') do

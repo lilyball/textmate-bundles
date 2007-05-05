@@ -5,8 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>echo "&lt;mx:Model \${1:id="\${2:modelId}" } source="$TM_DROPPED_FILE"/&gt;\$0"
-</string>
+	<string>if [[ "$TM_MODIFIER_FLAGS" == "" ]]; then
+	echo "&lt;mx:XML \${1:id="\${2:modelId}" }\${3:format="\${4:e4x}\${5:|xml}}" source="$TM_DROPPED_FILE" xmlns="\${6:namspace}"/&gt;\$0"
+elif [[ "$TM_MODIFIER_FLAGS" == "SHIFT" ]]; then
+	echo "&lt;mx:XML \${1:id="\${2:modelId}" }\${3:format="\${4:e4x}\${5:|xml}}" xmlns="\${6:namspace}" /&gt;"
+	cat "$TM_DROPPED_FILEPATH"
+     echo "&lt;/mx:XML&gt;"
+fi</string>
 	<key>draggedFileExtensions</key>
 	<array>
 		<string>xml</string>
@@ -14,12 +19,12 @@
 	<key>input</key>
 	<string>selection</string>
 	<key>name</key>
-	<string>mx:Model</string>
+	<string>XML</string>
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>
 	<string>text.xml.mxml</string>
 	<key>uuid</key>
-	<string>EFFA73A6-3501-4C8C-AAF7-51FAB7614ED9</string>
+	<string>D027C941-20D1-49B9-B0F8-C85B5820A3E0</string>
 </dict>
 </plist>

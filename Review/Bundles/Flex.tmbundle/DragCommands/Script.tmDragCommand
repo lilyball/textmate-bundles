@@ -3,7 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>command</key>
-	<string>echo "&lt;mx:Style source=\"$TM_DROPPED_FILE\"/&gt;"</string>
+	<string>if [[ "$TM_MODIFIER_FLAGS" == "" ]]; then
+	echo "&lt;mx:Script source=\"$TM_DROPPED_FILE\"/&gt;\$0"
+elif [[ "$TM_MODIFIER_FLAGS" == "SHIFT" ]]; then
+	echo "&lt;mx:Script&gt;&lt;![CDATA["
+	cat "$TM_DROPPED_FILEPATH"
+	echo "]]&gt;&lt;/mx:Script&gt;\$0"
+fi
+</string>
 	<key>documentExtensions</key>
 	<array>
 		<string>html</string>
@@ -23,15 +30,15 @@
 	</array>
 	<key>draggedFileExtensions</key>
 	<array>
-		<string>css</string>
+		<string>as</string>
 	</array>
 	<key>name</key>
-	<string>mx:Style</string>
+	<string>Script</string>
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>
 	<string>text.xml.mxml</string>
 	<key>uuid</key>
-	<string>04726559-E50D-4F28-B927-F1B704C6EA81</string>
+	<string>6DA5B70A-AF1C-46CD-98B3-52CDA3528945</string>
 </dict>
 </plist>

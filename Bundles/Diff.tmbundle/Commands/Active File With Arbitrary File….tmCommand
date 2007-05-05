@@ -12,7 +12,7 @@ tell application "TextMate"
 end tell
 END)
 
-diff --label "$path" --label "${TM_FILENAME:-untitled}" -u "$path" -
+diff --strip-trailing-cr --label "$path" --label "${TM_FILENAME:-untitled}" -u "$path" -
 </string>
 	<key>input</key>
 	<string>document</string>

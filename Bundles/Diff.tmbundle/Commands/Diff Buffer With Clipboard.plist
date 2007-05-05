@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string># set defaultCStringEncoding to UTF-8
-diff --label "${TM_FILENAME:-untitled}" --label "(clipboard)" -u - &lt;(__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbpaste)
+diff --strip-trailing-cr --label "${TM_FILENAME:-untitled}" --label "(clipboard)" -u - &lt;(__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbpaste)
 </string>
 	<key>input</key>
 	<string>selection</string>

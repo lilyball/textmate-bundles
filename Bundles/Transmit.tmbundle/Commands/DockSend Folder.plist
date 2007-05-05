@@ -3,15 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>open -a Transmit "$TM_DIRECTORY"</string>
+	<string>#!/bin/sh
+osascript "${TM_BUNDLE_SUPPORT}/send_to_transmit.applescript" "$TM_DIRECTORY" &amp;&gt;/dev/console &amp;
+echo "Sent folder ‘`basename ${TM_DIRECTORY}`’ to Transmit"
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^F</string>
 	<key>name</key>
-	<string>DockSend Folder</string>
+	<string>Send Folder (DockSend)</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>

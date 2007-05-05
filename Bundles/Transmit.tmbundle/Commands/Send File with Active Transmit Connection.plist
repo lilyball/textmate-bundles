@@ -3,25 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>if [[ ${#TM_FILEPATH} -gt 0 ]]; then
-	osascript &lt;&lt;-"APPLESCRIPT" - "$TM_FILEPATH"
-	on run(argv)
-		tell application "Transmit"
-			(upload item (item 1 of argv)) in current session of first document
-		end tell
-	end run
-	APPLESCRIPT
-else
-	echo "You need to save the file first"
-fi</string>
+	<string>osascript &lt;&lt;-"APPLESCRIPT" - "$TM_FILEPATH"
+on run(argv)
+	tell application "Transmit"
+		(upload item (item 1 of argv)) in current session of first document
+	end tell
+end run
+APPLESCRIPT
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^F</string>
 	<key>name</key>
-	<string>Send File with Active Transmit Connection</string>
+	<string>Send Document With Active Connection</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>

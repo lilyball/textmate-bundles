@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Transmit Bundle Help" "Transmit"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'MARKDOWN'
+
+# Synopsis
+
+The Transmit bundle offers you a way to have the current document or its containing folder uploaded via the [Transmit][] file transfer program.
+
+[Transmit]: http://www.panic.com/transmit/
+
+# DockSend Setup
+
+The two commands with a “(DockSend)” suffix assumes that you have configured Transmit to have DockSend enabled for the containing folder of the current document.
+
+This is done by starting Transmit, connect to your server as usual and then from the Favorites menu select Add to Favorites…
+
+In the sheet which appears, you need to click the downward pointing arrow with a “More Options” label.
+
+This expands the sheet so it looks like in the following picture:
+
+![Add to Favorites](add_to_favorites.png)
+
+There are 3 settings of importance here:
+
+ 1. **Remote Path** — This is where, on the server, you want your files uploaded.
+
+ 2. **Local Path** — This is where the files are located on your own machine.
+
+ 3. **Use DockSend** — Check this box to enable the feature.
+
+In the picture we have set the remote path to `/usr/home/raven/public_html` and the local path to `~/scavenger`.
+
+What this means is that if we edit `~/scavenger/index.html` and select Trasmit → Send Document (DockSend) then it will be uploaded to the server as `/usr/home/raven/public_html/index.html`
+
+MARKDOWN
+html_footer
+</string>
+	<key>dontFollowNewOutput</key>
+	<true/>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>BF39FA53-3EFD-4CA8-9789-BA606C7883B9</string>
+</dict>
+</plist>

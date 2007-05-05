@@ -3,19 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>if [[ ${#TM_FILEPATH} -gt 0 ]]; then
-	open -a Transmit "$TM_FILEPATH"
-else
-	echo "You need to save the file first"
-fi</string>
+	<string>#!/bin/sh
+osascript "${TM_BUNDLE_SUPPORT}/send_to_transmit.applescript" "$TM_FILEPATH" &amp;&gt;/dev/console &amp;
+echo "Sent ‘${TM_FILENAME}’ to Transmit"
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^F</string>
 	<key>name</key>
-	<string>DockSend File</string>
+	<string>Send Document (DockSend)</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>uuid</key>

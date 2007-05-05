@@ -15,12 +15,13 @@
 		<key>increaseIndentPattern</key>
 		<string>(?x)
 		^\s*
-		(tell \s+ (?! .* \b to \b) .*
-		|if\b .* \bthen \b .*
-		|repeat.*
+		(tell \s+ (?! .* \bto\b) .*
+		|if\b .* \bthen\b .*
+		|repeat\b .*
 		|( on | to ) \b .*
 		|try
-		|with \s+ timeout .*
+		|with \s+ timeout\b .*
+		|ignoring\b .*
 		)\s*$
 	</string>
 		<key>indentNextLinePattern</key>

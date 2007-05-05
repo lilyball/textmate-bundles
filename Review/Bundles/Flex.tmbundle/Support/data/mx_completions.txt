@@ -5,6 +5,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml">$0</mx:Application>
 <mx:ApplicationControlBar ${1:dropShadowEnabled="${2:true}"}>$0</mx:ApplicationControlBar>
 <mx:Array>$0</mx:Array>
+<mx:ArrayCollection source="${1:null}"/>
 
 # B
 <mx:Box id="${1:bBox}" direction="${2:${3:vertical}${4:|horizontal}}">$0</mx:Box>
@@ -42,6 +43,7 @@
 # L
 <mx:Label id="${1:lLabel}" text="${2:label text}"/>$0
 <mx:List ${1:width="${2:100%}" }${3:height="$4" }${5:dataProvider="$6" }${7:change="$8"}>$0</mx:List>
+<mx:ListCollectionView ${1:filterFunction="null"} ${2:list="null"} ${3:sort="null"} ${4:collectionChange="method(event)"} />
 <mx:LinkBar ${1:id="$2" }${3:width="${4:100%}" }${5:itemClick="$6"}>$0</mx:LinkBar>
 <mx:LinkButton ${1:id="$2" }${3:label="$4" }${5:click="$6" }/>
 
@@ -49,6 +51,7 @@
 <mx:MenuBar dataDescriptor="$1" dataProvider="$2" showRoot="${3:true|false}" itemClick="$4" />
 <mx:Metadata >${1:[Event("enableChange")]}</mx:Metadata>
 <mx:Model id="${1:modelId}"><${2:modelnode}/></mx:Model>
+<mx:Module  width="${1:100%}" height="${2:100%}" ${3:xmlns:mx="http://www.adobe.com/2006/mxml"} />
 <mx:NumericStepper maxChars="${1:10}" maximum="${2:10}" minimum="${3:0}" stepSize="${4:1}" value="${5:0}" change="$6" />
 <mx:Panel id="${1:pnPanel}" title="${2:My Panel}">$0</mx:Panel>
 <mx:PopUpButton openAlways="${1:false|true}" popUp="${2:IUIComponent}" close="$3" open="$4" />
@@ -73,8 +76,9 @@
 <mx:Slider direction="${1:horizontal|vertical}" liveDragging="${2:false|true}" minimum="$3" maximum="$4" showDataTip="${5:true|false}" value="$6" change="$7" />
 <mx:State name="$1">$0</mx:State>
 <mx:states>$0</mx:states>
-<mx:Style ${1:source="${2:filname.css}"/}>
+<mx:Style ${1:source="${2:filename.css}"/}>
 <mx:Style>$0</mx:Style>
+<mx:Sort ${1:compareFunction="${2:method}" }${3:fields="${4:null}" }${5:unique="${6:false|}true"} />
 
 # T
 <mx:TabNavigator ${1:id="$2" }${3:width="$4" }${5:height="$6"}>$0</mx:TabNavigator>
@@ -89,9 +93,10 @@
 <mx:VBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:VBox>
 <mx:VDividedBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:VDividedBox>
 <mx:VSlider liveDragging="${1:false|true}" minimum="$2" maximum="$3" showDataTip="${4:true|false}" value="$5" change="$6" />
+<mx:ViewStack historyManagementEnabled="${1:false|true}" resizeToContent="${2:false|true}"  selectedIndex="${3:0}" change="${4:method(event)}" >$0</mx:ViewStack>
 
 # X
 <mx:XML id="${1:modelId}" format="${2:e4x|xml}" source="${3:filename}" xmlns="${4:namespace}">$0</mx:XML>
-
+<mx:XMLListCollection source="${1:null}" />
 
 

@@ -36,7 +36,7 @@ end
 
 url = make_link %x{__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbpaste}.strip
 
-if url =~ /^http:\/\// and url != 'http://some-site.com'
+if url =~ /^http:\/\// and url != 'http://some-site.com/'
   eval 'title = fp.read.match(/&lt;title&gt;([^&lt;&gt;]*)&lt;\/title&gt;/i).to_a[1].strip rescue nil' if fp = open(url) rescue nil
 end
 

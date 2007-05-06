@@ -9,6 +9,12 @@
 
 # by James Edward Gray II &lt;james (at) grayproductions.net&gt;
 
+# to override the operation of this commond for your language add a Preferences bundle
+# item that defines the following valiables as appropriate for your language:
+# TM_COMMENT_START - the character string that starts comments, e.g. /*
+# TM_COMMENT_END - the character string that ends comments (if appropriate), e.g. */
+# TM_COMMENT_MODE - the type of comment to use - either 'line' or 'block'
+
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
 
 def out(*args)

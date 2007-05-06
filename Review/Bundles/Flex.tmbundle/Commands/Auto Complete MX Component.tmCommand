@@ -15,10 +15,12 @@ require SUPPORT + '/lib/exit_codes'
 require SUPPORT + '/lib/osx/plist'
 
 #Search for
-WORD = STDIN.read.strip
-TextMate.exit_show_tool_tip("Please select a term to complete.") if WORD.empty?
+word = STDIN.read.strip
+TextMate.exit_show_tool_tip("Please select a term to complete.") if word.empty?
 
-words = `grep "#{WORD}" "$TM_BUNDLE_PATH/support/data/mx_completions.txt"`.split("\n")
+word = "mx:"+word if word !~ /mx/
+
+words = `grep "#{word}" "$TM_BUNDLE_PATH/support/data/mx_completions.txt"`.split("\n")
 TextMate.exit_show_tool_tip "No completion available" if words.empty?
 
 if words.size &gt; 1

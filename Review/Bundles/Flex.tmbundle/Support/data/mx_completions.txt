@@ -26,10 +26,17 @@
 <mx:dataProvider>$0</mx:dataProvider>
 <mx:DateChooser id="dateChooser" yearNavigationEnabled="true" change="clickMethod"/>$0
 
+# E
+<mx:entries>$0</mx:entries>
+
 # F
 <mx:Form width="${1:100%}" height="${2:100%}">$0</mx:Form>
 <mx:FormHeading label="${1:Form heading}"/>
 <mx:FormItem label="${1:label}" direction="${2:horizontal|vertical}">$0</mx:FormItem>
+<mx:fill>$0</mx:fill>
+   
+# G
+<mx:GradientEntry color="${1:0xFF0000}" ratio="${2:0}" alpha="${3:.5}"/>
 
 # H
 <mx:HBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:HBox>
@@ -44,6 +51,7 @@
 <mx:Label id="${1:lLabel}" text="${2:label text}"/>$0
 <mx:List ${1:width="${2:100%}" }${3:height="$4" }${5:dataProvider="$6" }${7:change="$8"}>$0</mx:List>
 <mx:ListCollectionView ${1:filterFunction="null"} ${2:list="null"} ${3:sort="null"} ${4:collectionChange="method(event)"} />
+<mx:LinearGradient>$0</mx:LinearGradient>
 <mx:LinkBar ${1:id="$2" }${3:width="${4:100%}" }${5:itemClick="$6"}>$0</mx:LinkBar>
 <mx:LinkButton ${1:id="$2" }${3:label="$4" }${5:click="$6" }/>
 
@@ -65,6 +73,7 @@
 <mx:RadioButtonGroup ${1:id="$2" }${3:itemClick="$4" }/>
 <mx:RemoveChild target="{${1:sprite}}" />
 <mx:RegExpValidator expression="${1:regex}" ${2:flags="${3:regexFlags}"} ${4:noExpressionError="${5:error message}"} ${6:noMatchError="${5:no match message}"} />
+<mx:RadialGradient angle="${1:0}" foculPointRatio="${2:0}" />
 
 # S
 <mx:Script><![CDATA[ $0 ]]></mx:Script>
@@ -72,13 +81,14 @@
 <mx:SetEventHandler name="${1:null}" handlerFunction="${2:null}" target="${3:null}" handler="$4" />
 <mx:SetProperty target="$1" name="$2" value="$3" />
 <mx:SetStyle name="$1" target="$2" value="$3" />
+<mx:Sort ${1:compareFunction="${2:method}" }${3:fields="${4:null}" }${5:unique="${6:false|}true"} />
 <mx:Spacer width="${1:100%}" />
 <mx:Slider direction="${1:horizontal|vertical}" liveDragging="${2:false|true}" minimum="$3" maximum="$4" showDataTip="${5:true|false}" value="$6" change="$7" />
 <mx:State name="$1">$0</mx:State>
 <mx:states>$0</mx:states>
+<mx:Stroke id="${1:strokeId}" color="${2:0x0000FF}" weight="${3:1}"/>
 <mx:Style ${1:source="${2:filename.css}"/}>
 <mx:Style>$0</mx:Style>
-<mx:Sort ${1:compareFunction="${2:method}" }${3:fields="${4:null}" }${5:unique="${6:false|}true"} />
 
 # T
 <mx:TabNavigator ${1:id="$2" }${3:width="$4" }${5:height="$6"}>$0</mx:TabNavigator>
@@ -90,6 +100,7 @@
 <mx:Transition id="$1" fromState="$2" toState="$3">$0</mx:Transition>
 
 # V
+<mx:Validator enabled="${1:true|false}" listener="null" property="null" required="true|false" requiredFieldError="This field is required." source="No default" trigger="Value of the source property" triggerEvent="valueCommit" />
 <mx:VBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:VBox>
 <mx:VDividedBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:VDividedBox>
 <mx:VSlider liveDragging="${1:false|true}" minimum="$2" maximum="$3" showDataTip="${4:true|false}" value="$5" change="$6" />

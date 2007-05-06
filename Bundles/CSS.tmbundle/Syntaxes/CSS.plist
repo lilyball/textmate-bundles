@@ -20,7 +20,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^(?=\s*[.*#a-zA-Z])</string>
+			<string>^(?=\s*[:.*#a-zA-Z])</string>
 			<key>end</key>
 			<string>(?=\{)</string>
 			<key>name</key>
@@ -61,7 +61,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(#)[a-zA-Z][a-zA-Z0-9_.:-]*</string>
+					<string>(#)[a-zA-Z][a-zA-Z0-9_-]*</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.id.css</string>
 				</dict>
@@ -81,7 +81,21 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(:)\b(active|after|before|first-child|first-letter|first-line|hover|link|visited)\b</string>
+					<string>(:+)\b(after|before|first-child|first-letter|first-line|selection)\b</string>
+					<key>name</key>
+					<string>entity.other.attribute-name.pseudo-element.css</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.css</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(:)\b(active|hover|link|visited|focus)\b</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.pseudo-class.css</string>
 				</dict>

@@ -462,8 +462,15 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.groovy</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.groovy</string>
+				</dict>
+			</array>
 		</dict>
 		<key>string-quoted-single</key>
 		<dict>
@@ -473,8 +480,15 @@
 			<string>'</string>
 			<key>name</key>
 			<string>string.quoted.single.groovy</string>
-			<key>swallow</key>
-			<string>\\.</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.groovy</string>
+				</dict>
+			</array>
 		</dict>
 		<key>support-type-built-ins-groovy</key>
 		<dict>

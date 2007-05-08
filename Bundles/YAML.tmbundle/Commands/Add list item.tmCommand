@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/local/bin/ruby
+	<string>#!/usr/bin/env ruby
 
 line = STDIN.read
 TAB = line.match(/^(\s+)/).to_s

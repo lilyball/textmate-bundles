@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "${TM_SUPPORT_PATH}/lib/html.sh"
+. "${TM_BUNDLE_SUPPORT}/lib/misc.sh"
+
+cat &lt;&lt;CSS
+   &lt;link href='file://$TM_BUNDLE_SUPPORT/lib/tableBrowser.css' type='text/css'&gt;
+   &lt;style&gt;table { font-size: 9pt; } td { text-align: right; }&lt;/style&gt;
+   &lt;script src='file://$TM_SUPPORT_PATH/script/shell.js' type='text/javascript'&gt; &lt;/script&gt;
+CSS
+
+htmlHeader "Database Browser"
+dbServe=$(database_choice)
+
+db_browser.rb --server=$dbServe</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Database Browser</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>80C0161C-5C4E-4FF8-AAD3-0A795A1033E5</string>
+</dict>
+</plist>

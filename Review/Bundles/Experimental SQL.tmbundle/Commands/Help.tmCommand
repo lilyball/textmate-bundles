@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>AAB4CBF7-73F9-11D9-B89A-000D93589AF6</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "SQL Bundle Help" "SQL"
+
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
+# Execute Line / Selection as SQL Query
+
+The _Execute Line / Selection as SQL Query_ command takes the selected text or current line and submits it as a query to either MySQL or PostgreSQL.
+
+You can set `TM_DB_SERVER` to either `mysql` or `postgresql` to select the database software to use. If this variable is unset, the command will check to see if there is either a `mysql` or `psql8` shell command in your path, if only there is one of these, this one will be used, otherwise a dialog will ask you about which database software should be used for the query.
+
+## MySQL
+
+When submitting the query to MySQL, the command assumes the following environment variables are properly set:
+
+* `$MYSQL_USER` — defaults to the value of `$USER`
+* `$MYSQL_PWD ` — no default
+* `$MYSQL_HOST` — defaults to localhost if not set
+* `$MYSQL_PORT` — defaults to 3306 if not set
+* `$MYSQL_DB  ` — no default
+
+These variables may be set in the parent shell of TextMate, global variables in TextMate preferences, or as project local variables.
+
+## PostgreSQL
+
+If you are a Postgres user and have the `psql8` command installed (as from [DarwinPorts](http://darwinports.opendarwin.org/) for example) the following variables will be used:
+
+* `$PGUSER` — defaults to the value of `$USER`
+* `$PGHOST` — defaults to localhost if not set
+* `$PGPORT` — defaults to 3306 if not set
+* `$PGDATABASE` — defaults to user
+
+PostgreSQL users should also note that there is not a command line argument to provide your password.  To use PostgreSQL on a database with a password from TextMate you should set up a `~/.pgpass` file.  This file should contain lines of the following format:
+
+	hostname:port:database:username:password
+
+# Table Browser
+
+The table browser command displays a list of tables in whatever database you are currently working in using either PostgreSQL or MySQL.  Which one is determined like with the _Execute Line / Selection as SQL Query_ command.
+
+The current database is specified by either `PGDATABASE`, or `MYSQL_DB`.  If neither is set the table browser will default to using your username.  For MySQL to work you must have the `MYSQL_PWD` environment variable set.  For PostgreSQL you must have an entry in your `.pgpass` file.
+
+EOF
+
+html_footer
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.sql</string>
+	<key>uuid</key>
+	<string>E9501041-21AA-4F55-BD5F-B7BDDF2C334D</string>
+</dict>
+</plist>

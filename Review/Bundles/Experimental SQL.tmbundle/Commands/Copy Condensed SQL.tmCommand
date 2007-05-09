@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># set defaultCStringEncoding to UTF-8
+export __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100
+
+perl -pe 's/\s*\-\-.*$//' | tr -s ' \n\t' ' ' | pbcopy
+echo "Copied SQL to Clipboard"</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~@C</string>
+	<key>name</key>
+	<string>Copy Condensed SQL</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.sql</string>
+	<key>uuid</key>
+	<string>9806C029-496B-4F8C-AB9B-527A7C11BB22</string>
+</dict>
+</plist>

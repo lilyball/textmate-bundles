@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "${TM_BUNDLE_SUPPORT}/lib/misc.sh"
+. "$TM_SUPPORT_PATH/lib/html.sh"
+
+dbServe=$(database_choice)
+
+if [[ "$dbServe" == 'mysql' ]]; then
+	# VERSION=`db_browser.rb --server=mysql --version | cut -d. -f1-2`
+	URL="http://dev.mysql.com/${TM_CURRENT_WORD}"
+elif [[ "$dbServe" == 'postgresql' ]]; then
+	URL="http://www.postgresql.org/docs/current/static/sql-${TM_CURRENT_WORD}.html"
+	if ! curl --silent -I "$URL" | grep '200 OK' &gt; /dev/null; then
+		URL="http://search.postgresql.org/search?q=${TM_CURRENT_WORD}"
+	fi
+fi
+
+redirect "$URL"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation for Current Word</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.sql</string>
+	<key>uuid</key>
+	<string>AF7AB970-DFA1-4136-B8F2-B9750D730FAA</string>
+</dict>
+</plist>

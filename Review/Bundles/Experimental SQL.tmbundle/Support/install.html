@@ -1,0 +1,23 @@
+<h3>Database Browser</h3>
+
+<p>To use the database browser, you need to configure your database access settings using the environment variables below.</p>
+<p>These variables may be set in the parent shell of TextMate, global variables in TextMate preferences, or as project local variables.</p>
+
+<h3 id="mysql">MySQL</h3>
+<ul>
+    <li><code>$MYSQL_USER</code> — defaults to the value of <code>$USER</code></li>
+    <li><code>$MYSQL_PWD</code> — no default</li>
+    <li><code>$MYSQL_HOST</code> — defaults to localhost if not set</li>
+    <li><code>$MYSQL_PORT</code> — defaults to 3306 if not set</li>
+    <li><code>$MYSQL_DB</code> — no default (optional, selects as initial database)</li>
+</ul>
+
+<h3 id="postgresql">PostgreSQL</h3>
+<ul>
+    <li><code>$PGUSER</code> — defaults to the value of <code>$USER</code></li>
+    <li><code>$PGHOST</code> — defaults to localhost if not set</li>
+    <li><code>$PGPORT</code> — defaults to 5432 if not set</li>
+    <li><code>$PGDATABASE</code> — defaults to user</li>
+</ul>
+
+<p>You can also set <code>$TM_DB_TABLE</code>, which will skip this page and jump straight to that table.</p>

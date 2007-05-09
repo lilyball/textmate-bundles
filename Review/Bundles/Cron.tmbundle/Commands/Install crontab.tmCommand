@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>RESULT=`crontab 2&gt;&amp;1`
+if [[ -z "$RESULT" ]]; then
+  echo "Crontab installed succesfully" 
+else
+  echo $RESULT | perl -e 'exec "open txmt://open?line=" . (1+$1) if &lt;&gt; =~ /"-":(\d+)/'
+  echo "$RESULT"
+fi</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>Install crontab</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>text.crontab</string>
+	<key>uuid</key>
+	<string>F1DF41F5-0482-4F9B-8C36-BA0BCFBCE177</string>
+</dict>
+</plist>

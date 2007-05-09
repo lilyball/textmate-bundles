@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+
+tokens = STDIN.read.split(/(&lt;[^&gt;]*&gt;|\n)/)
+max = 0
+
+scope = nil
+lines = []
+line = []
+tokens.each do |token|
+  case token
+  when /^&lt;/
+    scope = $1 if token =~ /^&lt;([^&gt;]+)&gt;$/
+  when "\n"
+    lines &lt;&lt; line
+    line = []
+  else
+    if scope == 'string.unquoted.command.crontab'
+      line[1] ||= ''
+      line[1] &lt;&lt; token
+      max = line[0].strip.size if line[0].strip.size &gt; max
+    else
+      line[0] ||= ''
+      line[0] &lt;&lt; token.gsub("\t", ' ' * ENV['TM_TAB_SIZE'].to_i)
+    end
+  end
+end
+
+lines.each do |line|
+  if line.size == 2
+    puts line[0].to_s.strip.ljust(max) + " " + line[1].strip
+  else
+    puts line[0].to_s.strip
+  end
+end
+</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>xml</string>
+	<key>keyEquivalent</key>
+	<string>~@[</string>
+	<key>name</key>
+	<string>Align events</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.crontab</string>
+	<key>uuid</key>
+	<string>6CA3D7BB-B42A-45A8-90ED-D44D73CF0505</string>
+</dict>
+</plist>

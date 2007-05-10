@@ -16,13 +16,13 @@
 			<key>begin</key>
 			<string>^%%%\s*$</string>
 			<key>end</key>
-			<string>^%%%\s*$</string>
+			<string>^%%%\s*$\n?</string>
 			<key>name</key>
 			<string>comment.block.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*[_=-]{20,}\s*$</string>
+			<string>^\s*[_=-]{20,}\s*$\n?</string>
 			<key>name</key>
 			<string>string.unquoted.txt2tags</string>
 		</dict>
@@ -40,61 +40,61 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*={1}[^=](|.*[^=])={1}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*={1}[^=](|.*[^=])={1}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.1.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*={2}[^=](|.*[^=])={2}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*={2}[^=](|.*[^=])={2}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.2.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*={3}[^=](|.*[^=])={3}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*={3}[^=](|.*[^=])={3}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.3.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*={4}[^=](|.*[^=])={4}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*={4}[^=](|.*[^=])={4}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.4.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*={5}[^=](|.*[^=])={5}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*={5}[^=](|.*[^=])={5}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.5.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*\+{1}[^+](|.*[^+])\+{1}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*\+{1}[^+](|.*[^+])\+{1}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.1.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*\+{2}[^+](|.*[^+])\+{2}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*\+{2}[^+](|.*[^+])\+{2}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.2.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*\+{3}[^+](|.*[^+])\+{3}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*\+{3}[^+](|.*[^+])\+{3}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.3.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*\+{4}[^+](|.*[^+])\+{4}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*\+{4}[^+](|.*[^+])\+{4}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.4.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*\+{5}[^+](|.*[^+])\+{5}(\[[\w-]*\])?\s*$</string>
+			<string>^\s*\+{5}[^+](|.*[^+])\+{5}(\[[\w-]*\])?\s*$\n?</string>
 			<key>name</key>
 			<string>markup.heading.5.txt2tags</string>
 		</dict>
@@ -112,7 +112,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^""" (?=.).*</string>
+			<string>^""" (?=.).*$\n?</string>
 			<key>name</key>
 			<string>string.quoted.other.raw.line.txt2tags</string>
 		</dict>
@@ -120,7 +120,7 @@
 			<key>begin</key>
 			<string>^"""\s*$</string>
 			<key>end</key>
-			<string>^"""\s*$</string>
+			<string>^"""\s*$\n?</string>
 			<key>name</key>
 			<string>string.quoted.other.raw.block.txt2tags</string>
 		</dict>
@@ -152,13 +152,13 @@
 			<key>begin</key>
 			<string>^```\s*$</string>
 			<key>end</key>
-			<string>^```\s*$</string>
+			<string>^```\s*$\n?</string>
 			<key>name</key>
 			<string>markup.raw.verb.block.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^``` (?=.).*</string>
+			<string>^``` (?=.).*$\n?</string>
 			<key>name</key>
 			<string>markup.raw.verb.line.txt2tags</string>
 		</dict>
@@ -212,13 +212,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\t.*</string>
+			<string>^\t.*$\n?</string>
 			<key>name</key>
 			<string>markup.quote.txt2tags</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^%.*</string>
+			<string>^%.*$\n?</string>
 			<key>name</key>
 			<string>comment.line.txt2tags</string>
 		</dict>

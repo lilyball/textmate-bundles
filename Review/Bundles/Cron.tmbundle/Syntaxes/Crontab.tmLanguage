@@ -14,7 +14,7 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>^\s*#.+$</string>
+			<string>^\s*#.+$\n?</string>
 			<key>name</key>
 			<string>comment.line.number-sign.crontab</string>
 		</dict>
@@ -93,14 +93,14 @@
 						((?:\*|(?:\d+|\*)(?:[-,\/]\d+)*|((?i:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))))\s+   # Month
 						((?:\*|[0-7*](?:[-,\/][0-7])*|((?i:Mon|Tue|Wed|Thu|Fri|Sat|Sun))))\s+                       # Day of the week
 						|
-						(\@(?:reboot|midnight|(?:year|annual|month|week|dai|hour)ly))   # Special keywords
+						(\@(?:reboot|midnight|(?:year|annual|month|week|dai|hour)ly)\b)   # Special keywords
 					)
 					(
 						(?:(@AppleNotOnBattery)\s+)?
 						.+?   # The command
 					)
 					((?&lt;!\\)(%).*?)*	# Optional standard input for the command
-					\s*$</string>
+					\s*$\n?</string>
 			<key>name</key>
 			<string>meta.schedule.crontab</string>
 		</dict>
@@ -110,22 +110,22 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.other.</string>
+					<string>variable.other.environment.crontab</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.begin.crontab</string>
+					<string>punctuation.definition.variable.begin.crontab</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>variable.other.environment.crontab</string>
+					<string>variable.language.mailto.crontab</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.end.crontab</string>
+					<string>punctuation.definition.variable.end.crontab</string>
 				</dict>
 				<key>5</key>
 				<dict>
@@ -135,7 +135,7 @@
 				<key>6</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted</string>
+					<string>string.quoted.other.value.crontab</string>
 				</dict>
 				<key>7</key>
 				<dict>
@@ -152,7 +152,7 @@
 			<string>(?x)^\s*
 					(
 						(['"]|)
-						(.+?)
+						(?i:(MAILTO)|.+?)
 						(\2)
 					)
 					\s*(=)\s*
@@ -161,7 +161,7 @@
 						.+?
 						(\7)
 					)
-					\s*$</string>
+					\s*$\n?</string>
 			<key>name</key>
 			<string>meta.environment-assign.crontab</string>
 		</dict>

@@ -7,14 +7,14 @@
 		<string>haml</string>
 		<string>sass</string>
 	</array>
+	<key>foldingStartMarker</key>
+	<string>^\s*([-%#\:\.\w\=].*)\s$</string>
+	<key>foldingStopMarker</key>
+	<string>^\s*$</string>
 	<key>keyEquivalent</key>
 	<string>^~H</string>
 	<key>name</key>
 	<string>Haml</string>
-  <key>foldingStartMarker</key>
-                  <string>^\s*([-%#\:\.\w\=].*)\s$</string>
-                  <key>foldingStopMarker</key>
-                  <string>^\s*$</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -41,9 +41,9 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^ *(/)\s*\S.*</string>
+			<string>^ *(/)\s*\S.*$\n?</string>
 			<key>name</key>
-			<string>comment.line.haml</string>
+			<string>comment.line.slash.haml</string>
 		</dict>
 		<dict>
 			<key>begin</key>

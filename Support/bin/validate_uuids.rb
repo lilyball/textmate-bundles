@@ -4,7 +4,7 @@ require "find"
 require File.join(File.dirname(__FILE__), *%w[.. lib osx plist])
 
 ROOT_DIRS = if ARGV.empty?
-  %w[Bundles Disabled\ Bundles].map do |rel|
+  %w[Bundles Review Disabled\ Bundles].map do |rel|
     File.join(File.dirname(__FILE__), *%W[.. .. #{rel}])
   end
 else

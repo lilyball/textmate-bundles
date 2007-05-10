@@ -11,7 +11,7 @@
 	<key>command</key>
 	<string>require_cmd perltidy 'Perltidy is available &lt;a href="javascript:TextMate.system(&amp;quot;open http://perltidy.sourceforge.net/&amp;quot;, null)"&gt;from here&lt;/a&gt;.'
 
-perltidy -st -dac -mangle "$TM_FILEPATH" | perl -e '        local $/;$_=&lt;&gt;;s/^#(.*?)\n//;s/\n//g;print;'
+__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 perltidy -st -dac -mangle "$TM_FILEPATH" | perl -e '        local $/;$_=&lt;&gt;;s/^#(.*?)\n//;s/\n//g;print;'
 </string>
 	<key>input</key>
 	<string>selection</string>

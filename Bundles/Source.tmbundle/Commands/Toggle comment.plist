@@ -139,7 +139,7 @@ when "block" # apply comment around selection
     else
       lines[-1].sub!(/^(.*)$/, "\\1#{default[:end]}")
       out lines.shift.sub(/^([\s\0]*)(.*)$/, "\\1#{default[:start]}\\2")
-      out *lines unless lines.empty?
+      out(*lines) unless lines.empty?
     end
   end
 end

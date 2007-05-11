@@ -1,8 +1,8 @@
 $bundle				= ENV['TM_BUNDLE_SUPPORT']
 $support			= ENV['TM_SUPPORT_PATH']
 
-require ($support + "/lib/Builder.rb")
-require ($bundle + "/bin/xcode_version.rb")
+require($support + "/lib/Builder.rb")
+require($bundle + "/bin/xcode_version.rb")
 
 # N.B. This code is not a model of Ruby clarity.
 # I'm still experimenting with Builder.rb.
@@ -568,4 +568,4 @@ end
 
 
 # On with the show
-load ($bundle + "/bin/parse_build.rb")
+load($bundle + "/bin/parse_build.rb")

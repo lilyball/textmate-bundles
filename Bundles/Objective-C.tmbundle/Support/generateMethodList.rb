@@ -3,7 +3,7 @@
 translate = {"AppKit" => "AK", "Foundation" => "F", "CoreData" => "CD", "QuartzCore" => "CI","WebKit" => "WK", "Priv" => "Priv"}
 
 def method_parse(k)
-  l = k.scan /(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*[a-zA-Z][a-zA-Z0-9]*|(([a-zA-Z][a-zA-Z0-9]*)?:)/
+  l = k.scan( /(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*[a-zA-Z][a-zA-Z0-9]*|(([a-zA-Z][a-zA-Z0-9]*)?:)/ )
   types = l.select {|item| item[1] || item[3] }.collect{|item| item[1] || item[3] }
 
   methodList = l.reject {|item| item[5].nil? }.collect{|item| item[5] }
@@ -35,8 +35,8 @@ headers.each do |name|
     while m = str.match(rgxp)
       str = m[0] + m.post_match
       if m[2]
-        k = str.match /@interface\s+(\w+)[^\n]*/
-        methodType = "dm" if k[0].match /\(\s*\w*[Dd]elegate\w*\s*\)/
+        k = str.match( /@interface\s+(\w+)[^\n]*/ )
+        methodType = "dm" if k[0].match( /\(\s*\w*[Dd]elegate\w*\s*\)/ )
         className = k[1]
         classType = "Cl"
         inClass = true
@@ -45,7 +45,7 @@ headers.each do |name|
         inClass = false
         str = m.post_match
       elsif m[4]
-        k = str.match /[^;{]+?(;|\{)/
+        k = str.match( /[^;{]+?(;|\{)/ )
         if inClass
           methodName, types = method_parse(k[0])
           na = className
@@ -78,7 +78,7 @@ headers.each do |name|
         end
         str = m.post_match
       elsif m[8]
-        k = str.match /@protocol\s+(\w+)[^\n]*/
+        k = str.match( /@protocol\s+(\w+)[^\n]*/ )
         className = k[1]
         classType = "Pr"
         inClass = true

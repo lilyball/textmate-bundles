@@ -1,10 +1,10 @@
 
 # Includes
 support = ENV['TM_SUPPORT_PATH']
-require (support + "/lib/Builder.rb")
-require (support + "/lib/shelltokenize.rb")
-require (support + "/lib/escape.rb")
-require (support + "/lib/erb_streaming.rb")
+require(support + "/lib/Builder.rb")
+require(support + "/lib/shelltokenize.rb")
+require(support + "/lib/escape.rb")
+require(support + "/lib/erb_streaming.rb")
 require "cgi"
 require "erb"
 

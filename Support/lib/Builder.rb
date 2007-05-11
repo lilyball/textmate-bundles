@@ -111,6 +111,7 @@ module Builder
     def initialize(indent=0, initial=0)
       @indent = indent
       @level  = initial
+      @self = nil
     end
     
     # Create a tag named +sym+.  Other than the first argument which

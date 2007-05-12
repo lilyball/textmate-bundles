@@ -267,7 +267,7 @@ class Xcode
             leftover = { }
             TextMate::IO.exhaust(:output => stdout, :error => stderr) do |str, type|
               # we only want to call ‘block’ with full lines so we cut any trailing bytes that are not newline terminated and save for next time we call block
-              if str =~ /\A(.*\n)([^\n]*)\z/m
+              if str =~ /\A(.*\n|)([^\n]*)\z/m
                 lines = leftover[type].to_s + $1
                 leftover[type] = $2
                 lines.each { |line| block.call(type, line) }

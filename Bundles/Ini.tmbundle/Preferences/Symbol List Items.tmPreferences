@@ -5,13 +5,13 @@
 	<key>name</key>
 	<string>Symbol List Items</string>
 	<key>scope</key>
-	<string>source.ini entity.name.section.group-title.ini, source.ini keyword.other.definition.ini</string>
+	<string>source.ini entity.name.section.group-title.ini</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolTransformation</key>
-		<string>s/^([^\[\]]+)$/  $1/;</string>
+		<string>s/^\[(\w+)\]$/  $1/;</string>
 	</dict>
 	<key>uuid</key>
 	<string>44CAEF12-223E-11DB-BE7D-0011242E4184</string>

@@ -2,6 +2,7 @@
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/io"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
 require 'open3'
 require 'pty'
@@ -261,19 +262,12 @@ class Xcode
               block.call(:error, "Executable doesn't exist: #{executable_path}")
               return nil
             end
-            
-            # NSLog needs a tty. PTY.spawn throws a bogus exception when the process exits.
-            begin
-              PTY.spawn(cmd) do |reader, writer, pid|
-                line = reader.gets
-                until line.nil?
-                  block.call(:output, line )
-                  line = reader.gets
-                end
-              end
-            rescue
+
+            stdin, stdout, stderr = Open3.popen3(cmd)
+            TextMate::IO.exhaust(:output => stdout, :error => stderr) do |str, type|
+              block.call(type, str)
             end
-            
+
             block.call(:end, 'Process completed.' )
           else
             cmd = "#{setup_cmd} open ./#{escaped_file}"

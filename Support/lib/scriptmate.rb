@@ -1,7 +1,8 @@
-require "escape"
-require "web_preview"
+SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
+require SUPPORT_LIB + 'escape'
+require SUPPORT_LIB + 'web_preview'
+require SUPPORT_LIB + 'io'
 
-require 'open3'
 require 'cgi'
 require 'fcntl'
 
@@ -101,23 +102,11 @@ class CommandMate
         end
       end
       emit_header()
-      descriptors = [ stdout, stderr, stack_dump ].compact
-      descriptors.each do
-         |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
-      end
-      until descriptors.empty?
-        select(descriptors).shift.each do |io|
-          str = io.read
-          if str.to_s.empty? then
-            descriptors.delete io
-            io.close
-          elsif io == stdout then
-            print filter_stdout(str)
-          elsif io == stderr then
-            puts filter_stderr(str)
-          elsif io == stack_dump then
-            @error << str
-          end
+      TextMate::IO.exhaust(:out => stdout, :err => stderr, :stack => stack_dump) do |str, type|
+        case type
+          when :out   then print filter_stdout(str)
+          when :err   then puts filter_stderr(str)
+          when :stack then @error << str
         end
       end
       emit_footer()

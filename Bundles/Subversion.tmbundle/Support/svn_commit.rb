@@ -13,6 +13,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/erb_streaming"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/io"
 
 # puts ARGV.inspect
 # puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG
@@ -137,35 +138,16 @@ public
 	def commit(&output_block)
 		require "open3"
 
-		debug = open("/dev/console", "w")
-
 		Open3.popen3("#{@svn_tool} commit  --force-log #{@commit_args}") do |stdin, stdout, stderr|
 		  all_output = ''
 			
-      fds = [stdout, stderr]
-      until fds.empty? do
-        fd = select(fds)[0][0]
-        debug << "svn commit: data on #{fd == stdout ? "stdout" : "stderr"}\n"
-        data = fd.sysread(4096) rescue ""
-        debug << "svn commit: read #{data.to_s.length} bytes (‘#{data}’)\n"
-        if data.to_s.empty? then
-          debug << "svn commit: closing #{fd == stdout ? "stdout" : "stderr"}\n"
-          fds.delete fd
-          fd.close
-        else
-			    data.each_line do |line|
-			      debug << "svn commit: process line ‘#{line}’\n"
-  			    handle_authentication(line, all_output, stdin, output_block)
-  			    all_output << line
-            output_block.call(:output, line.chomp)
-  		    end
-        end
+      TextMate::IO.exhaust(:out => stdout, :err => stderr) do |data|
+		    data.each_line do |line|
+			    handle_authentication(line, all_output, stdin, output_block)
+			    all_output << line
+          output_block.call(:output, line.chomp)
+		    end
       end
-      # stdout.each_line {|line| handle_authentication(line, all_output, stdin); all_output << line; output_block.call(:output, line.chomp)}
-      # stderr.each_line {|line| handle_authentication(line, all_output, stdin); all_output << line; output_block.call(:error, line.chomp)}
-
-      debug << "svn commit: done processing svn output\n"
-      debug << "svn commit: all output\n«««\n#{all_output}\n»»»\n"
 		end
 	end
 end

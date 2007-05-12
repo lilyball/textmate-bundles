@@ -264,9 +264,18 @@ class Xcode
             end
 
             stdin, stdout, stderr = Open3.popen3(cmd)
+            leftover = { }
             TextMate::IO.exhaust(:output => stdout, :error => stderr) do |str, type|
-              block.call(type, str)
+              # we only want to call ‘block’ with full lines so we cut any trailing bytes that are not newline terminated and save for next time we call block
+              if str =~ /\A(.*\n)([^\n]*)\z/m
+                lines = leftover[type].to_s + $1
+                leftover[type] = $2
+                lines.each { |line| block.call(type, line) }
+              else
+                raise "Allan’s regexp did not match ‘#{str}’"
+              end
             end
+            leftover.each_pair { |type, str| block.call(type, str) }
 
             block.call(:end, 'Process completed.' )
           else
@@ -337,7 +346,7 @@ class Xcode
     def run(&original_block)
       super do |type, line|
         case type
-        when :output
+        when :output, :error
           begin
             type = :HTML
             line = htmlize(line.chomp)

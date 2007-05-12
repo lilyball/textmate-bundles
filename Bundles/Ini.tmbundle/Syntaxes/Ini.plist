@@ -48,6 +48,11 @@
 		<dict>
 			<key>captures</key>
 			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.definition.ini</string>
+				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
@@ -55,9 +60,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b([a-zA-Z0-9_.-]+)\b(?=\s*(=))</string>
-			<key>name</key>
-			<string>keyword.other.definition.ini</string>
+			<string>\b([a-zA-Z0-9_.-]+)\b\s*(=)</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -67,7 +70,7 @@
 					<key>name</key>
 					<string>punctuation.definition.entity.ini</string>
 				</dict>
-				<key>2</key>
+				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.entity.ini</string>

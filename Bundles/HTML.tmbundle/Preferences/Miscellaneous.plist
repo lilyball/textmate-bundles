@@ -14,6 +14,7 @@
 		(&lt;/(?!html)
 		  [A-Za-z0-9]+\b[^&gt;]*&gt;
 		|--&gt;
+		|&lt;\?(php)?\s+(else(if)?|end(if|for(each)?|while))
 		|\}
 		)</string>
 		<key>highlightPairs</key>
@@ -41,11 +42,12 @@
 		</array>
 		<key>increaseIndentPattern</key>
 		<string>(?x)
-		(&lt;(?!area|base|br|col|frame|hr|html|img|input|link|meta|param|[^&gt;]*/&gt;)
-		  ([A-Za-z0-9]+)(?=\s|&gt;)\b[^&gt;]*&gt;(?!.*&lt;/\2&gt;)
+		&lt;(?!\?|area|base|br|col|frame|hr|html|img|input|link|meta|param|[^&gt;]*/&gt;)
+		  ([A-Za-z0-9]+)(?=\s|&gt;)\b[^&gt;]*&gt;(?!.*&lt;/\1&gt;)
 		|&lt;!--(?!.*--&gt;)
+		|&lt;\?php.+?\b(if|else(?:if)?|for(?:each)?|while)\b.*:(?!.*end\1)
 		|\{[^}"']*$
-		)</string>
+		</string>
 		<key>indentNextLinePattern</key>
 		<string>&lt;!DOCTYPE(?!.*&gt;)</string>
 		<key>shellVariables</key>

@@ -42,6 +42,35 @@
 			</array>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>^\s*(PortGroup)\s+perl5(?!\S)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tcl.macports</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>special case for the perl5 PortGroup</string>
+			<key>end</key>
+			<string>$.^</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>^\s*perl5\.setup(?!\S)</string>
+					<key>name</key>
+					<string>keyword.other.tcl.macports</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>

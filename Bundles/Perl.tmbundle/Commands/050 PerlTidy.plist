@@ -7,16 +7,16 @@
 	<key>command</key>
 	<string>require_cmd perltidy 'Perltidy is available &lt;a href="javascript:TextMate.system(&amp;quot;open http://perltidy.sourceforge.net/&amp;quot;, null)"&gt;from here&lt;/a&gt;.'
 
-__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 perltidy -st -q "$TM_FILEPATH"
+perltidy -st -q
 </string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^H</string>
 	<key>name</key>
 	<string>Tidy</string>
 	<key>output</key>
-	<string>replaceDocument</string>
+	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>source.perl</string>
 	<key>uuid</key>

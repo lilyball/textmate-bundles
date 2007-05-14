@@ -5,11 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># set defaultCStringEncoding to UTF-8
-export __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100
+	<string>#!/usr/bin/env perl
+$/=\0;$_=&lt;&gt;; # Read all input
 
-perl -pe 's/\s*\-\-.*$//' | tr -s ' \n\t' ' ' | pbcopy
-echo "Copied SQL to Clipboard"</string>
+s/\s*\-\-.*$//g; # Strip comments
+
+1while s@^(([^'"]*["'][^'"]*["'])*[^"']*)(\n+|\s{2,})@$1 @; # Compact whitespace
+
+# set defaultCStringEncoding to UTF-8 and open pbcopy
+open(PBCOPY, '|__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 pbcopy');
+print PBCOPY; # Print the SQL to pbcopy
+close PBCOPY;
+print "Copied SQL to Clipboard";</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

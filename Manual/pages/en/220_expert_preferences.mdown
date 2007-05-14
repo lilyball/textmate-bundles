@@ -1,0 +1,102 @@
+# Expert Preferences
+
+TextMate has a few settings which are not exposed in the GUI.
+
+You can change these with the [`defaults`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/defaults.1.html) shell command but you need to do this while TextMate is not running.
+
+You set a key to a given value with the following syntax:
+
+    defaults write com.macromates.textmate «key» «value»
+
+You can always reset a key to its default value using:
+
+    defaults delete com.macromates.textmate «key»
+
+Or you can read the value of a key using:
+
+    defaults read com.macromates.textmate «key»
+
+
+## `NSDragAndDropTextDelay`
+
+When you press mouse down on the selection and move the mouse, TextMate will start a new selection, unless you wait 150 milliseconds, then it will instead drag the selection. This delay can be changed by adjusting this preferences value.
+
+Setting it to a value less than zero (e.g. `-1`) will disable the ability to drag a selection, meaning clicking the mouse inside a selection immediately deselects it and starts a new selection from that point (if the mouse is moved while the button is down).
+
+Setting it to zero will immediately start a drag.
+
+Example:
+
+    defaults write com.macromates.textmate NSDragAndDropTextDelay 0
+
+
+## `NSRecentDocumentsLimit`
+
+This sets the number of documents kept in the "Open Recent" menu. The default value is 25.
+
+Example:
+
+    defaults write com.macromates.textmate NSRecentDocumentsLimit 50
+
+## `OakBundleItemsPopUpMenuKeyEquivalent`
+
+The key equivalent which should open the gear menu in the status bar. This is a key equivalent description as used in the [system key bindings file](http://macromates.com/blog/archives/2005/07/05/key-bindings-for-switchers/). The default value is "^\033" (control escape).
+
+For more information about key codes see [this letter](http://lists.macromates.com/pipermail/textmate/2006-April/009955.html).
+
+## `OakBundleManagerDisambiguateMenuFontSize`
+
+If you find the font used in the menu to disambiguate tab triggers, key equivalents and similar, too small, then you can run:
+
+    defaults write com.macromates.textmate OakBundleManagerDisambiguateMenuFontSize 14
+
+## `OakDefaultBundleForNewBundleItems`
+
+When you create a new item in the bundle editor without having selected a bundle first, then the bundle with the UUID held by this defaults key is used as the target.
+
+This automatically gets set to the first bundle you create. For an example of how to change it see [this letter](http://lists.macromates.com/pipermail/textmate/2006-May/010651.html).
+
+## `OakDefaultLanguage`
+
+Sets the default language used for new (untitled) documents. The value should be the UUID of the language to be used.
+
+For more information see [this message from the mailing list](http://lists.macromates.com/pipermail/textmate/2006-February/008276.html).
+
+
+## `OakDisableSessionRestore`
+
+When you launch TextMate it will open the project / document which was open when you last exited. You can however disable this feature by running:
+
+    defaults write com.macromates.textmate OakDisableSessionRestore 1
+
+
+## `OakDocumentCustomFSMetaData`
+
+An array of file systems for which TextMate should use its own functions for storing meta data ([`setxattr`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/setxattr.2.html) replacement). The meta data is stored in AppleDouble format. The default value is `( afpfs, nfs, msdos )` since `setxattr` can cause a kernel panic for these file systems ([rdar://4162474](rdar://problem/4162474)).
+
+Example:
+
+    defaults write com.macromates.textmate \
+       OakDocumentCustomFSMetaData '( afpfs, nfs, msdos, hfs )'
+
+
+## `OakDocumentDisableFSMetaData`
+
+See [extended attributes][ExtendedAttributes] for more info.
+
+## `OakFindPanelDisableHistory`
+
+This disables the history controls in the find panel. The reason for this setting is only because some users have experienced crashes when using the tab key in the find dialog and this is caused by the history controls used. Currently the only workaround is to disable the use of these controls:
+
+    defaults write com.macromates.textmate OakFindPanelDisableHistory 1
+
+## `OakToolTipMouseMoveIgnorePeriod` and `OakToolTipMouseDistanceThreshold`
+
+When a command brings up a tool tip, mouse movements performed within the first second do not close the tool tip and after that second has elapsed, the mouse needs to be moved at least 5 pixels for the tool tip to close. These values can be adjusted using the `OakToolTipMouseMoveIgnorePeriod` and `OakToolTipMouseDistanceThreshold` defaults keys.
+
+## `OakWordsExcludedFromCapitalization`
+
+The Text &#x2192; Convert &#x2192; to Titlecase action (&#x2303;&#x2325;U) excludes words found in this array.
+
+The default value is `( a, an, and, at, but, by, else, for, from, if, in, nor, of, off, on, or, out, over, the, then, to, up, when )`.
+

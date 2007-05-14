@@ -1,0 +1,128 @@
+# Key Bindings
+
+There are basically three types of actions in TextMate and each has its own system when it comes to key bindings (yes, this is not ideal).
+
+## Bundle Items
+
+Bundle items are commands, snippets, macros, language grammars, templates etc. and can all be found in the bundle editor (Window &#x2192; Show Bundle Editor). Each of these actions has a [key equivalent][KeyEquivalents] and an associated [scope selector][ScopeSelectors] which can be edited from the bundle editor.
+
+## Menu Items
+
+Menu items can be edited via System Preferences &#x2192; Keyboard & Mouse. From here it is possible to change key bindings for either all applications or particular applications based on the menu items title.
+
+This is done by pressing the plus button on the left side below the list on the Keyboard Shortcuts page, which displays the sheet shown below.
+
+![Change Menu Key Binding](change_menu_key_binding.png)
+
+Some caveats:
+
+ 1. Only key bindings which include the command modifier (&#x2318;) will work.
+
+ 2. Dynamic menu items i.e. those which change title depending on the programs state (like Fold Current Block / Selection) should be specified with their initial title. The initial title can be found by opening the MainMenu.nib file in Interface Builder (use Show Package Contents on TextMate and navigate to Contents &#x2192; Resources &#x2192; English.lproj).
+
+ 3. You need to restart an application before key binding changes take effect.
+
+An alternative to the system preferences is [Menu Master](http://www.unsanity.com/haxies/menumaster) from [Unsanity](http://www.unsanity.com/). This allows you to change the key binding inside the application simply by hovering your mouse on the item and pressing the new key (and does not require a restart).
+
+
+## Text Move / Edit Actions
+
+The last is probably the most essential, it is the keys which “just work” in the actual text editing area.
+
+Here TextMate uses the Cocoa key bindings system where the master set of keys are defined in `/System/‍Library/‍Frameworks/‍AppKit.framework/‍Resources/‍StandardKeyBinding.dict` and used by all Cocoa text fields and to some degree other controls also.
+
+The master set of keys can be augmented by `~/Library/‍KeyBindings/‍DefaultKeyBinding.dict`. The most common request with respect to key bindings is to have page up/down move the caret and have home/end go to the beginning and end of the line. [This article](http://macromates.com/blog/archives/2005/07/05/key-bindings-for-switchers/) shows how this can be done.
+
+In addition TextMate has a `/path/‍to/‍TextMate.app/‍Contents/‍Resources/‍KeyBindings.dict` file with some extra key bindings which are specific to TextMate (and thus not appropriate to put in the per user global key bindings file). You can copy this file to `~/Library/‍Application Support/‍TextMate` and edit it, this will then take precedence over the bundled file.
+
+The format is explained in the blog post linked to above.
+
+### List of Standard Key Bindings
+
+For a list of which keys are available by default (in OS X) please see [this list of key bindings](http://hcs.harvard.edu/~jrus/Site/System Bindings.html) created by Jacob Rus.
+
+Apple also has a page about [standard key bindings](http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGKeyboardShortcuts/chapter_20_section_1.html) as part of their human Interface Guidelines. TextMate conforms to these and implement majority of the keys shown on that page.
+
+In addition TextMate has the following key bindings, which are not visible in the menus and cannot be found in the standard key binding files:
+
+<table class="graybox" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+        <th>Key</th>
+        <th>Action</th>
+    </tr>
+    <tr>
+        <td align="center"><p>&#x2325;F2</p></td>
+        <td><p>Show context menu — This is equivalent to clicking the mouse at the current caret location while holding down control (&#x2303;). If the current word is misspelled the context menu will contain spelling suggestions.</p></td>
+    </tr>
+    <tr>
+        <td align="center"><p>&#x2303;&#x238B;</p></td>
+        <td><p>Show bundle items menu — this opens the gear menu which is located in the status bar.</p></td>
+    </tr>
+    <tr>
+        <td align="center"><p>&#x2303;S</p></td>
+        <td><p>Forward incremental search.</p></td>
+    </tr>
+    <tr>
+        <td align="center"><p>&#x2303;&#x21E7;S</p></td>
+        <td><p>Backward incremental search.</p></td>
+    </tr>
+    <tr>
+        <td align="center"><p>&#x2318;`<br>&#x2318;~</p></td>
+        <td><p>Switch to the next/previous window. This keyboard shortcut is based on the physical location of the key so on many European keymaps it is instead &#x2318;&lt; and &#x2318;&gt; (it is the key to the left of the Z).</p></td>
+    </tr>
+    <tr>
+        <td align="center"><p>&#x2325;&#x2318;`<br>&#x2325;&#x2318;~</p></td>
+        <td><p>Switch between main window and drawer. Like the previous key this one is also based on physical location. The function is not available on Panther.</p></td>
+    </tr>
+    <tr>
+        <td align="center"><p>&#x2303;&#x21E5;</p></td>
+        <td><p>Go backwards through the chain of keyboard accessible controls. Normally this would be the same as &#x21E4; (&#x21E7;&#x21E5;) but that one doesn’t work when the text editing control has focus. The previous keyboard accessible control in that situation is the project outline in the drawer, so this key could be considered a “bring focus to the project drawer” key.</p></td>
+    </tr>
+</table>
+
+
+## Conventions
+
+<table class="graybox" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+        <th>Modifiers</th>
+        <th>Purpose</th>
+    </tr>
+    <tr>
+        <td align="center">&#x2318;</td> <!-- command -->
+        <td>This is for primary actions mostly defined by Apple or already a de-facto standard e.g. New, Open, Save, Print, Hide, Quit, Cut, Copy, Paste, etc.</td>
+    </tr>
+    <tr>
+        <td align="center">&#x21E7;&#x2318;</td> <!-- shift command -->
+        <td>Adding the shift modifier often indicates a twist on the plain key equivalent. For example<ul>
+            <li>&#x2318;W is Close Tab — &#x21E7;&#x2318;W is Close Project (in a project)</li>
+            <li>&#x2318;T is Go to File… — &#x21E7;&#x2318;T is Go to Symbol…</li>
+            <li>&#x2318;V is Paste — &#x21E7;&#x2318;V is Paste Previous</li>
+            <li>&#x2318;Z is Undo — &#x21E7;&#x2318;Z is Redo</li>
+        </ul>etc.</td>
+    </tr>
+    <tr>
+        <td align="center">&#x2325;&#x2318;</td> <!-- option command -->
+        <td>Often (but definitely not always) this modifier sequence is used to toggle an option, e.g. Soft Wrap (&#x2325;&#x2318;W), Show Invisibles (&#x2325;&#x2318;I), Bookmarks (&#x2325;&#x2318;B), Line Numbers (&#x2325;&#x2318;L), Foldings at a given level (&#x2325;&#x2318;0-9) etc.</td>
+    </tr>
+    <tr>
+        <td align="center">&#x2303;&#x2325;&#x2318;</td> <!-- control option command -->
+        <td>This modifier sequence is generally used for actions which open a window. For example Show Bundle Editor (&#x2303;&#x2325;&#x2318;B), Show Clipboard History (&#x2303;&#x2325;&#x2318;V), Show/Hide Project Drawer (&#x2303;&#x2325;&#x2318;D), Show Web Preview (&#x2303;&#x2325;&#x2318;P) etc.</td>
+    </tr>
+    <tr>
+        <td align="center">&#x2303;&#x21E7;</td> <!-- control shift -->
+        <td>Less important bundle actions (commands and sometimes snippets) should generally use this modifier sequence.</td>
+    </tr>
+    <tr>
+        <td align="center">&#x2303;&#x21E7;&#x2318;</td> <!-- control shift command -->
+        <td>This is the secondary modifier sequence for use with less important bundle actions (i.e. when the primary one is taken).</td>
+    </tr>
+    <tr>
+        <td align="center">&#x2303;&#x2325;&#x21E7;</td> <!-- control option shift -->
+        <td>This is used to switch language grammar, the key is (generally) the first letter of the language grammar name.</td>
+    </tr>
+    <tr>
+        <td align="center">&#x2303;&#x2318;</td> <!-- control command -->
+        <td>Actions related to projects are in this space, e.g. New Project, Save Project, Reveal in Project, etc.</td>
+    </tr>
+</table>

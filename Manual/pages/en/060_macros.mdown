@@ -1,0 +1,9 @@
+# Macros
+
+TextMate supports recordable macros. A macro is recorded by selecting Macros &#x2192; Start Recording from the Bundles menu.
+
+While recording, a red dot will pulsate in the right part of status bar and all text editing actions are recorded together with things like Find, running commands, inserting snippets etc. When done, you select Stop Recording and can either replay the recorded macro or save it for later use.
+
+When saving a macro, it will appear in the bundle editor as (currently) a read-only macro which can get an [activation sequence][ActivatingBundleItems] and [scope selector][ScopeSelectors], just like any other bundle item.
+
+It is possible to set whether or not the macro should use a local clipboard while being executed. The local clipboard is generally advantageous (thus the default) but sometimes you may want the macro to effect the “real” clipboard and can disable this option.

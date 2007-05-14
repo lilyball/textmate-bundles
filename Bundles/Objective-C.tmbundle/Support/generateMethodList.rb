@@ -1,10 +1,39 @@
 #!/usr/bin/env ruby
 # run with find /System/Library/Frameworks/*.framework -name \*.h | ruby generateMethodList.rb
-translate = {"AppKit" => "AK", "Foundation" => "F", "CoreData" => "CD", "QuartzCore" => "CI","WebKit" => "WK", "Priv" => "Priv"}
+translate = {"Message" => "Me",
+"AddressBook" => "AB",
+"SecurityFoundation" => "SF",
+"QTKit" => "QT",
+"IOBluetooth" => "Blue",
+"WebKit" => "WK",
+"SenTestingKit" => "Test",
+"InstallerPlugins" => "Ins",
+"CoreData" => "CD",
+"Carbon" => "Ca",
+"Automator" => "Au",
+"SyncServices" => "Sync",
+"AppKit" => "AK",
+"InterfaceBuilder" => "IB",
+"InstantMessage" => "IM",
+"DiscRecording" => "DR",
+"AppleScriptKit" => "ASK",
+"SecurityInterface" => "SI",
+"OSAKit" => "OSA",
+"QuartzCore" => "CI",
+"Foundation" => "F",
+"AudioUnit" => "AU",
+"ScreenSaver" => "Sav",
+"Quartz" => "Q",
+"PreferencePanes" => "Pref",
+"ExceptionHandling" => "Exc",
+"DiscRecordingUI" => "DRui",
+"CoreAudioKit" => "CAK",
+"XgridFoundation" => "Grid",
+"IOBluetoothUI" => "BUI"}
 
 def method_parse(k)
-  l = k.scan( /(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*[a-zA-Z][a-zA-Z0-9]*|(([a-zA-Z][a-zA-Z0-9]*)?:)/ )
-  types = l.select {|item| item[1] || item[3] }.collect{|item| item[1] || item[3] }
+  l = k.scan /(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*[a-zA-Z][a-zA-Z0-9]*|(([a-zA-Z][a-zA-Z0-9]*)?:)/
+  types = l.select {|item| item[1] || item[3] }.collect{|item| (item[1] || item[3]).gsub(/(\w)\*/,'\1 *') }
 
   methodList = l.reject {|item| item[5].nil? }.collect{|item| item[5] }
   if methodList.size > 0
@@ -35,17 +64,21 @@ headers.each do |name|
     while m = str.match(rgxp)
       str = m[0] + m.post_match
       if m[2]
-        k = str.match( /@interface\s+(\w+)[^\n]*/ )
-        methodType = "dm" if k[0].match( /\(\s*\w*[Dd]elegate\w*\s*\)/ )
-        className = k[1]
-        classType = "Cl"
-        inClass = true
-        str = k.post_match
+        k = str.match /@interface(?:\s|\n)+(\w+)[^\n]*/
+        if k
+        methodType = "dm" if k[0].match /\(\s*\w*[Dd]elegate\w*\s*\)/
+        
+          className = k[1]
+          classType = "Cl"
+          inClass = true
+          
+          str = k.post_match
+        end
       elsif m[3]
         inClass = false
         str = m.post_match
       elsif m[4]
-        k = str.match( /[^;{]+?(;|\{)/ )
+        k = str.match /[^;{]+?(;|\{)/
         if inClass
           methodName, types = method_parse(k[0])
           na = className
@@ -78,11 +111,13 @@ headers.each do |name|
         end
         str = m.post_match
       elsif m[8]
-        k = str.match( /@protocol\s+(\w+)[^\n]*/ )
-        className = k[1]
-        classType = "Pr"
-        inClass = true
-        str = k.post_match
+        k = str.match /@protocol\s+(\w+)[^\n]*/
+        if k
+          className = k[1]
+          classType = "Pr"
+          inClass = true
+          str = k.post_match
+        end
       else
         str = m.post_match
       end

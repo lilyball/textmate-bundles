@@ -17,7 +17,11 @@ class Connector
       mycon = self.get_mysql(database)
       res = mycon.query(query)
     end
-    Result.new(res)
+    if res
+      Result.new(res)
+    else
+      mycon.affected_rows
+    end
   end
   
   def server_version

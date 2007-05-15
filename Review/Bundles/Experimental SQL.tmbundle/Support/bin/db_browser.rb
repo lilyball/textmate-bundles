@@ -180,36 +180,42 @@ def print_data(query = nil)
     offset = 0
   end
   run_query = query.dup
-  if not limited = query.include?('LIMIT')
-    run_query << ' LIMIT %d OFFSET %d' % [page_size, offset] if run_query =~ /\s*SELECT/i
+  if not query.include?('LIMIT') and run_query =~ /\s*SELECT/i
+    limited = true
+    run_query << ' LIMIT %d OFFSET %d' % [page_size, offset]
   end
   begin
     res = @connection.do_query(run_query)
-    if res.num_rows == 0
-      Tag.h2 'There are no records to show'
-      Tag.p run_query, :class => 'query'
-    else
-      Tag.h2 'Records %d to %d' % [offset, offset + res.num_rows]
-      Tag.p run_query, :class => 'query'
-      if not limited
-        puts get_data_link('&lt;&nbsp;Prev', :query => query, :offset => [@options.offset - page_size, 0].max) if @options.offset > 0
-        puts get_data_link('Next&nbsp;&gt;', :query => query, :offset => @options.offset + page_size)
-      end
-      Tag.table(:class => 'graybox', :cellspacing => '0', :cellpadding => '5') do
-        Tag.tr do
-          res.fields.each do |field|
-            Tag.th field
-          end
+    if res.is_a? Result
+      if res.num_rows == 0
+        Tag.h2 'There are no records to show'
+        Tag.p run_query, :class => 'query'
+      else
+        Tag.h2 'Records %d to %d' % [offset, offset + res.num_rows]
+        Tag.p run_query, :class => 'query'
+        if not limited
+          puts get_data_link('&lt;&nbsp;Prev', :query => query, :offset => [@options.offset - page_size, 0].max) if @options.offset > 0
+          puts get_data_link('Next&nbsp;&gt;', :query => query, :offset => @options.offset + page_size)
         end
-        res.rows.each do |row|
+        Tag.table(:class => 'graybox', :cellspacing => '0', :cellpadding => '5') do
           Tag.tr do
-            row.each do |col|
-              Tag.td col.to_s[0..30].gsub('<', '&lt;')
+            res.fields.each do |field|
+              Tag.th field
+            end
+          end
+          res.rows.each do |row|
+            Tag.tr do
+              row.each do |col|
+                Tag.td col.to_s[0..30].gsub('<', '&lt;')
+              end
             end
           end
         end
+        Tag.br
       end
-      Tag.br
+    else
+      Tag.h2 'Query complete, ' + res.to_s + ' rows affected'
+      Tag.p run_query, :class => 'query'
     end
   rescue
     Tag.h2 "Invalid query: "

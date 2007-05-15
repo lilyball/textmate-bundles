@@ -69,7 +69,7 @@ class DiffLine
   end
 end
 
-files = ENV['TM_SELECTED_FILES'] || ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']
+files = ENV['TM_SELECTED_FILES'] || "'"<<( ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY'] )<<"'"
 puts <<-HTML
 <!--
   Selected files 

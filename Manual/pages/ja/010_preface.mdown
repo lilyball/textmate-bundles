@@ -1,0 +1,199 @@
+# 前書き
+
+## このドキュメンテーションについて
+
+ドキュメンテーションの使用目的はTextMateの主な特徴を説明し、はじめて使うユーザにとってはっきりとわからないかもしれない特徴を明らかにすることです。このドキュメンテーションは包括的ではありません。
+
+あなたはテキストエディタが何であるかについてをよく理解してあるべきです。特にあなたはTextEdit, MailやXcodeなどで使われているCocoaのテキストエディットコントロールの経験があるべきです。TextMateはそのコントロールを使用しませんが、大部分のふるまいに似せています。
+
+もしあなたが、このドキュメンテーションを印刷したいなら、[こちらに印刷可能なバージョンがあります](all_pages.html)。
+
+
+## TextMateの理念
+
+Unixから私たちは、タスクとトレンドは変化する(Tasks and Trends Change.)ということを理解します。具体的な言葉でいうとこれは、手元にある問題を解決するために（Unixで）コマンドを書くのに代わり、私たちは内在するパターンを見つけ、そのタイプの問題を解決するためのコマンドを書き、そしてスクリプトの中でコマンドを使用します。
+
+これによって私たちは同じタイプの複数の問題にたいして、将来再利用できるコマンドをえることができます。さまざまなコマンドのスクリプトをまとめる方が個別のコマンドをかくよりもっと簡単で（そしてもっと柔軟性）があるので、生産性の向上はとても大きくなりうります。このことは、私まずはじめに私たちが実際にコマンドを書かずに、同じ種類の問題についてすでに書かれたコマンドを使うのであてはまります。
+
+TextMateがこの理念をりようする方法は二つあります。まず、優れたシェルの統合をもつこと、なので、あなたがUnixシェルを使う技術があれば、あなたは、TextMateを好きになるはずです。
+
+しかし、さらに曖昧にいえば、TextMateは退屈なことを自動化する背後にある内在されたパタンを見つけ出し、何をすべきかについて賢明で、それであなたがあなたの個々のニーズのために組み合わせられるような機能を提供します。
+
+もちろん、TextMateは広範囲をカバーしようとする最初のテキストエディタではありません。しかしAppleからわれわれは貴重な_Keep It Simple_ということを学びます。だからスクリプティングや正規表現の経験がほとんどあるいはまったくないユーザでさえ、ほかのエディタではできないような方法でTextMateをカスタマイズできます。
+
+
+<!-- TODO: This paragraph has terms which are difficult to translate. Some rules will be made to keep things consistent -->
+
+そういうわけで、TextMateの理念は_Educate the User._ということにもあります。そのためTextMateが提供するものをあなたがフルに活用するためにはあなたは、[正規表現]について学ぶべきです。あなたはTextMateの[スコープ][スコープセレクタ]、[スニペット]システム、（また、[language grammars][LanguageGrammars]をある程度理解すべきです）、そして（特に[環境変数],パイプ、stdin/stdout）で提供される）[shell infrastructures][ShellCommands]が何かついて知っているべきです。
+
+## 用語
+
+だいたいの部分に、TextMateとこのドキュメンテーションは[Appleの用語]に従います。以下は誤解の原因になるかもしれない用語の表です。
+
+<table class="graybox" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+        <th>用語</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td><p>キャレット</p></td>
+        <td><p>テキスト挿入ポイント。</p></td>
+    </tr>
+
+    <tr>
+        <td><p>カーソル</p></td>
+        <td><p>マウスポインタ。</p></td>
+    </tr>
+
+    <tr>
+        <td><p>ドキュメント</p></td>
+        <td><p>これは、（編集される目的で）TextMateへロードされたファイルを指します。昔からのユーザはよくこれを<em>バッファ</em>と呼びます。</p></td>
+    </tr>
+
+    <tr>
+        <td><p>ディレクトリ</p></td>
+        <td><p>これはフォルダのかわりによく使われます。フォルダは主にGUIについて話すときにつかわれます、そして、ディレクトリはシェルに関連したことを話す際に使われます。</p></td>
+    </tr>
+</table>
+
+概してTextMateとこのドキュメンテーションはキーのグリフ表示を使います。以下はほとんどのグリフと（よくこのドキュメンテーションで使われるような）キーの名前と短い説明の表です。
+
+![Keyboard Viewer](keyboard_viewer.png)
+
+もしあなたがキーの場所に着いて不確かであるなら、あなたは、キーボードビューワを出すことができます。（それはシステム環境設定の国際ペーンのなかのインプットメニューに加えることが可能です。）
+<!-- TODO: Check the official trans for "International Pane" and "System Preferences" -->
+
+
+<!--　I will do the translation of the table very soon -->
+
+<table class="graybox" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+        <th>Glyph</th>
+        <th>Key Name</th>
+        <th>Explanation</th>
+    </tr>
+
+    <tr>
+        <td><p>&#x2303;</p></td>
+        <td><p>Control</p></td>
+        <td><p>This key is generally in the lower left corner of the keyboard (and symmetrically placed on the right side). In addition to key equivalents, this key is also used with a mouse click to bring up context sensitive menus.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x2325;</p></td>
+        <td><p>Option</p></td>
+        <td><p>This is next to the control key and often bears the label Alt. You can hold down the option key while dragging with the mouse to select text rectangularly. It is also possible to place the caret beyond the end of a line by single-clicking the mouse while holding the down option key (&#x2325;). Together with Shift, the option key does a (rectangular) selection to where you click.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x2318;</p></td>
+        <td><p>Command</p></td>
+        <td><p>The command key is also referred to as the Apple key since it has an apple symbol on it (&#63743;).</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x21E7;</p></td>
+        <td><p>Shift</p></td>
+        <td><p>The Shift key should be well-known. When used together with a mouse click, it extends the selection.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x238B;</p></td>
+        <td><p>Escape</p></td>
+        <td><p>The escape key is generally in the upper left corner of the keyboard. This key can be used to dismiss (cancel) panels, which means dialogs and some (but not all) windows. In TextMate it is also used to cycle through completion candidates.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x2305;</p></td>
+        <td><p>Enter</p></td>
+        <td><p>The enter key is on the numeric keypad (and is not the same as return). On laptops it is fn-return.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x21A9;</p></td>
+        <td><p>Return</p></td>
+        <td><p>The return key should be well known.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x2326;</p></td>
+        <td><p>Forward&nbsp;Delete</p></td>
+        <td><p>This is often just called delete and on the keyboard has a label of Del or Delete.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x232B;</p></td>
+        <td><p>Backward&nbsp;Delete</p></td>
+        <td><p>Often called backspace. On most keyboards this has a left pointing arrow on the key (&#x2190;).</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#xFE56;&#x20DD;</p></td>
+        <td><p>Help</p></td>
+        <td><p>The Help key is located above Forward Delete, but not all keyboards have it. Generally it has the word Help on the key, but it is also known as the Ins key.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x2196;</p></td>
+        <td><p>Home</p></td>
+        <td><p>The Home key scrolls to the beginning of the document, but does not move the caret.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x2198;</p></td>
+        <td><p>End</p></td>
+        <td><p>The End key scrolls to the end of the document, but does not move the caret.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x21DE;</p></td>
+        <td><p>Page&nbsp;Up</p></td>
+        <td><p>Scrolls up a page without moving the caret. Using the option key will cause the caret to be moved. When used with Shift it will create a selection.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x21DF;</p></td>
+        <td><p>Page&nbsp;Down</p></td>
+        <td><p>Scrolls down a page without moving the caret. Using the option key will cause the caret to be moved. When used with Shift it will create a selection.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x21E5;</p></td>
+        <td><p>Tab</p></td>
+        <td><p>The Tab key is used to insert a tab character (or equivalent amount of spaces if soft tabs are enabled). In normal controls it advances the focus to the next control.</p></td>
+    </tr>
+
+    <tr>
+        <td><p>&#x21E4;</p></td>
+        <td><p>Back-tab</p></td>
+        <td><p>The Back-tab key can be used by holding down Shift while pressing the normal Tab key.</p></td>
+    </tr>
+</table>
+
+
+## 制限
+
+TextMateは未完成です。（西洋系以外のユーザにとって）現在の重要な制限は(CJKのような）国際的なインプットモード、プロポーショナルフォント、右から左へのテキストレンダリングと他の(ユニコードの)機能のサポートです。作者として、私はユーザがTextMateにこれらのサポートを望んでいることを理解しています。しかし、今のところ適切なサポートは長期間のto-doアイテムです。
+
+そして、制限のトピックについて、私はまた(s)ftpの統合、コード・ヒント、スプリットビュー、よりよい印刷、インデントされたソフトラップ、コーヒーメイキングそして文字通り何百もの他のユーザリクエストを知っています。あなたは[メーリングリストを検索]することによってアーカイブからほとんどの機能リクエストについての私のコメントを見つけることができるでしょう。しかし、私が何かが現れるバージョン番号以外に、私は見通しや期間を示しません。
+
+
+<!-- feature == 機能？　特徴？　フィーチャー？　I will dig into to find out a good word for this -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -w
+	<string>#!/usr/bin/env ruby -wKU
 
 TEMPLATES = '/Library/Application Support/Apple/Developer Tools/Project Templates'
 SUPPORT   = ENV['TM_SUPPORT_PATH']
@@ -56,13 +56,13 @@ module ProcessTemplate
   def process(dir, name)
     variables = {
       'DATE'                      =&gt; Time.now.strftime('%F'),
-      'FULLUSERNAME'              =&gt; `niutil -readprop / "/users/$USER" realname`.chomp,
+      'FULLUSERNAME'              =&gt; `dscl . read "/Users/$USER" realname|cut -f2 -d:`.strip,
       'ORGANIZATIONNAME'          =&gt; ENV['TM_ORGANIZATION_NAME'],
       'PRODUCTNAME'               =&gt; name,
-      'PROJECTNAMEASIDENTIFIER'   =&gt; name.gsub(/[^a-z]+/, '_').upcase,
+      'PROJECTNAMEASIDENTIFIER'   =&gt; name.gsub(/[^a-zA-Z0-9]/, '_'),
       'PROJECTNAMEASXML'          =&gt; CGI.escapeHTML(name),
       'PROJECTNAME'               =&gt; name,
-      'TARGETNAMEASIDENTIFIER'    =&gt; name.gsub(/[^a-z]+/, '_').upcase,
+      'TARGETNAMEASIDENTIFIER'    =&gt; name.gsub(/[^a-zA-Z0-9]/, '_'),
       'USERNAME'                  =&gt; ENV['LOGNAME'],
       'UUID'                      =&gt; `uuidgen`.chomp,
       'YEAR'                      =&gt; Time.now.year,
@@ -74,7 +74,7 @@ module ProcessTemplate
     template_info = template_info.shift
 
     data = File.read(template_info)
-    data = Iconv.conv('utf-8', 'mac', data)
+    data = Iconv.conv('utf-8', 'mac', data) if mac_roman? data
 
     plist = PropertyList.load(data)
 
@@ -82,11 +82,6 @@ module ProcessTemplate
       from = File.join(dir, expand(key, variables))
       to = File.join(dir, expand(value, variables))
       FileUtils.mv(from, to) if File.exist?(from) &amp;&amp; !File.exist?(to)
-    end
-
-    plist['FilesToMacroExpand'].each do |file|
-      variables['FILENAME'] = file
-      expand_file(File.join(dir, expand(file, variables)), variables)
     end
 
     src_dir = File.split(template_info).first
@@ -97,6 +92,11 @@ module ProcessTemplate
     dst_dir = src_dir.sub(/(.*\/)[^\/]*(\.[^.])/, "\\1#{name}\\2")
     File.delete(template_info)
     FileUtils.mv(src_dir, dst_dir) if File.exist?(src_dir) &amp;&amp; !File.exist?(dst_dir)
+
+    plist['FilesToMacroExpand'].each do |file|
+      variables['FILENAME'] = file
+      expand_file(File.join(dir, expand(file, variables)), variables)
+    end
   end
 end
 

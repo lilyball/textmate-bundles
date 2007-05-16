@@ -12,10 +12,13 @@ if [[ -d "$TM_PROJECT_DIRECTORY" ]]
    else export WorkPath="$TM_DIRECTORY"; cd "$TM_PROJECT_DIRECTORY"
 fi
 
+(
 "${TM_RUBY:=ruby}" -I "$TM_BUNDLE_SUPPORT/" &lt;&lt;END
 	require 'hg_diff'
 	Mercurial::diff_active_file("", "Diff With Working Copy")
-END</string>
+END
+)| iconv -t UTF-8 -c
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

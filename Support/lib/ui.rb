@@ -141,6 +141,7 @@ module TextMate
           # If cancel button was clicked, hash->result is nil.
           return_value = return_hash['result']
           return_value = return_value['returnArgument'] if not return_value.nil?
+          return_value = return_value.first if return_value.is_a? Array
 
           if return_value == nil then
             block_given? ? raise(SystemExit) : nil

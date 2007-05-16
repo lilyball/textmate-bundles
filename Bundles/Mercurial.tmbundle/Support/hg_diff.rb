@@ -6,7 +6,7 @@ require 'progress'
 module Mercurial
    def Mercurial.diff_active_file( revision, command )
       hg             = ENV['TM_HG'] || 'hg'
-      target_path    = ENV['TM_FILEPATH']
+      target_path    = ENV['TM_SELECTED_FILE'] || ENV['TM_FILEPATH']
       work_path      = ENV['WorkPath']
       path           = target_path.sub(/^#{work_path}\//, '')     
       output_path    = File.basename(target_path) + ".diff"

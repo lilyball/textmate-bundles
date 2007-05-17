@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSBezierPath *${1:path} = [NSBezierPath bezierPath];
+	<string>NSBezierPath${TM_C_POINTER: *}${1:path} = [NSBezierPath bezierPath];
 $0</string>
 	<key>name</key>
 	<string>NSBezierPath</string>

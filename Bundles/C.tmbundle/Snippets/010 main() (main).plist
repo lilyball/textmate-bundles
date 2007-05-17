@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>int main (int argc, char const* argv[])
+	<string>int main (int argc, char const${TM_C_POINTER: *}argv[])
 {
-	$0
+	${0:/* code */}
 	return 0;
 }</string>
 	<key>name</key>

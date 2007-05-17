@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for( ${1:unsigned int} ${2:i} = ${3:0}; ${2:i} &lt; ${4:count}; ${2:i} += ${5:1} )
+	<string>for(size_t ${2:i} = 0; $2 &lt; ${1:count}; ${3:++$2})
 {
-	$0
+	${0:/* code */}
 }</string>
 	<key>name</key>
 	<string>For Loop</string>

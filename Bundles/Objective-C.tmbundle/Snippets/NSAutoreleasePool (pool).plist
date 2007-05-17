@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	<string>NSAutoreleasePool${TM_C_POINTER: *}pool = [NSAutoreleasePool new];
 $0
 [pool release];</string>
 	<key>name</key>

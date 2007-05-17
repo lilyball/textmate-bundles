@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSMutableArray *${1:array} = [NSMutableArray array];</string>
+	<string>NSMutableArray${TM_C_POINTER: *}${1:array} = [NSMutableArray array];</string>
 	<key>name</key>
 	<string>NSArray</string>
 	<key>scope</key>

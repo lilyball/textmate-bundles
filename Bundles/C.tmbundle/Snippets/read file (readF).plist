@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>std::vector&lt;uint8_t&gt; v;
-if(FILE* fp = fopen(${1:"filename"}, "r"))
+	<string>std::vector&lt;char&gt; v;
+if(FILE${TM_C_POINTER: *}fp = fopen(${1:"filename"}, "r"))
 {
-	uint8_t buf[1024];
+	char buf[1024];
 	while(size_t len = fread(buf, 1, sizeof(buf), fp))
 		v.insert(v.end(), buf, buf + len);
 	fclose(fp);

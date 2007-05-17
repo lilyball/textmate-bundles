@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSMutableDictionary *${1:dict} = [NSMutableDictionary dictionary];</string>
+	<string>NSMutableDictionary${TM_C_POINTER: *}${1:dict} = [NSMutableDictionary dictionary];</string>
 	<key>name</key>
 	<string>NSDictionary</string>
 	<key>scope</key>

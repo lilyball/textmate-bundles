@@ -4,10 +4,13 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>4679484F-6227-11D9-BFB1-000D93589AF6</string>
 	<key>command</key>
 	<string>if [[ -d "$TM_PROJECT_DIRECTORY" ]]; then
-  find "$TM_PROJECT_DIRECTORY" -name \*.h | ruby "$TM_BUNDLE_SUPPORT/generateMethodList.rb" &gt; "$TM_PROJECT_DIRECTORY/.methods.TM_Completions.txt";
+  find "$TM_PROJECT_DIRECTORY" -name \*.h | ruby "$TM_BUNDLE_SUPPORT/generateMethodList.rb" -c "$TM_PROJECT_DIRECTORY/.classes.TM_Completions.txt" -m "$TM_PROJECT_DIRECTORY/.methods.TM_Completions.txt";
   gzip -f "$TM_PROJECT_DIRECTORY/.methods.TM_Completions.txt";
+  gzip -f "$TM_PROJECT_DIRECTORY/.classes.TM_Completions.txt";
     echo "indexing complete";
   else
     echo "no Project Path found";

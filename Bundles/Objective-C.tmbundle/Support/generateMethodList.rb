@@ -30,6 +30,19 @@ translate = {"Message" => "Me",
 "CoreAudioKit" => "CAK",
 "XgridFoundation" => "Grid",
 "IOBluetoothUI" => "BUI"}
+require 'optparse'
+
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = "Usage: example.rb [options]"
+
+    opts.on("-c", "--classOutput FILENAME", "Run verbosely") do |v|
+      options[:class] = v
+    end
+    opts.on("-m", "--methodOutput FILENAME", "Run verbosely") do |v|
+      options[:method] = v
+    end
+  end.parse!
 
 def method_parse(k)
   l = k.scan /(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*[a-zA-Z][a-zA-Z0-9]*|(([a-zA-Z][a-zA-Z0-9]*)?:)/
@@ -51,6 +64,7 @@ headers = STDIN.read.split("\n")
 #headers = ["test.h"]
 rgxp = /^((@interface)|(@end)|((\-|\+)\s*\()|((\-|\+)[^;]*\;)|(@protocol[^\n;]*\n))/
 list = []
+classList = []
 headers.each do |name|
   if mat = name.match(/(\w*)\.framework/)
     framework = mat[1]
@@ -69,6 +83,12 @@ headers.each do |name|
         methodType = "dm" if k[0].match /\(\s*\w*[Dd]elegate\w*\s*\)/
         
           className = k[1]
+          if translate[framework]
+             frameworkName = translate[framework]
+           else
+             frameworkName = "NA"
+           end
+          classList << "#{className}"
           classType = "Cl"
           inClass = true
           
@@ -125,8 +145,13 @@ headers.each do |name|
   end
 end
 end
-print list.join("\n")
-
+if options.empty?
+  print list.join("\n")
+else
+  File.open(options[:class],"w")do |f| f.write(classList.uniq.join("\n")) end unless options[:class].nil?
+  File.open(options[:method],"w")do |f| f.write(list.join("\n")) end unless options[:method].nil?
+end
+p options
 #netService:didNotPublish:	F	Cl	NSNetService;NSNetServices	dm	void	NSNetService *	NSDictionary *
 #begin = '((:))\s*(\()';
 #					end = '(\))\s*(\w+\b)?';

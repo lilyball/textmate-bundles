@@ -55,7 +55,7 @@ def prettify(cand, call)
   end
   out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size &lt; 4)
 
-  return out.chomp.strip
+  return [out.chomp.strip, stuff[0], cand]
 end
 
 def snippet_generator(cand, start, call)
@@ -90,7 +90,7 @@ end
 
 def pop_up(candidates, searchTerm, call = true)
   start = searchTerm.size
-  prettyCandidates = candidates.map { |candidate| [prettify(candidate,call), candidate] }.sort
+  prettyCandidates = candidates.map { |candidate| prettify(candidate,call) }.sort
 if prettyCandidates.size &gt; 1
     require "enumerator"
     pruneList = []  
@@ -116,7 +116,7 @@ if prettyCandidates.size &gt; 1
     #  searchTerm &lt;&lt; candidates[0][index].chr
     #  index +=1
     #end
-    
+    prettyCandidates = prettyCandidates.sort {|x,y| x[1].downcase &lt;=&gt; y[1].downcase }
     show_dialog(prettyCandidates,start) do |c,s|
 			snippet_generator(c,s, call)
 		end
@@ -158,7 +158,7 @@ end
 def show_dialog(prettyCandidates,start,&amp;snip_gen)
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
     dialog_path = "#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog"
-    pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
+    pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, junk, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
     io = open("|#{e_sh dialog_path} -u", "r+")
     io &lt;&lt;  pl.to_plist
     io.close_write
@@ -179,7 +179,9 @@ end
 def candidate_list(methodSearch, list, types)
   notif = false
   if types == :classes
-    fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz"
+    userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz"
+    fileNames = ["#{ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz"]
+    fileNames += [userClasses] if File.exists? userClasses
   elsif types == :functions
     fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz"
   elsif types == :methods
@@ -198,7 +200,7 @@ def candidate_list(methodSearch, list, types)
     zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh fileName }}
     candidates += zGrepped.split("\n")
   end
-
+ 
   return [] if candidates.empty?
   if list.nil?
     return candidates

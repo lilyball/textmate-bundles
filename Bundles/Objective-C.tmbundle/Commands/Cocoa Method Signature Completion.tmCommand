@@ -14,13 +14,9 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 line = ENV['TM_CURRENT_LINE']
 
 def construct_arg_name(arg)
-	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUYi])?((void|d\b)|[A-Za-z_0-9]+))/)
+	a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUYi])?[A-Za-z_0-9]+)/)
 	unless a.nil?
-	  if a[6].nil?
-		  (a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
-	  else
-	    {"void"=&gt;"udata","id" =&gt; "anArgument"}[a[3]]
-	  end
+		(a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
 	else
 		""
 	end
@@ -33,7 +29,7 @@ def prettify(cand, call)
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        out &lt;&lt; name_array[i] +  ":("+ arg.gsub(/\s\*/,(ENV['TM_C_POINTER'] || " *").rstrip)+")" + "#{construct_arg_name(arg)} " 
+        out &lt;&lt; name_array[i] +  ":("+ arg+")"+ (call ? "" : "#{construct_arg_name(arg)} " )
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -41,13 +37,13 @@ def prettify(cand, call)
   else
     out = stuff[0]
   end
-  out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size &lt; 4)
+  out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
 
-  return out.chomp.strip
+  return [out.chomp.strip, stuff[0], cand]
 end
 
 def snippet_generator(cand, start, call)
-start = 0 
+start = 0 unless call
   stuff = cand[start..-1].split("\t")
   if stuff[0].count(":") &gt; 0
 
@@ -58,12 +54,12 @@ start = 0
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
         if (name_array.size == (i+1))
           if arg == "SEL"
-            out &lt;&lt; name_array[i] + "(SEL)aSelector$0"
+            out &lt;&lt; name_array[i] + (call ? ":${0:SEL} " : "(SEL)aSelector$0")
           else
-            out &lt;&lt; name_array[i] + ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0"
+            out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"}$0": ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0")
           end
         else
-          out &lt;&lt; name_array[i] + ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}} "
+          out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"} " : ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}} ")
         end
       end
     rescue NoMethodError
@@ -72,13 +68,14 @@ start = 0
   else
     out = stuff[0] + "$0"
   end
-out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size &lt; 4)
+out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
   return out.chomp.strip
 end
 
 def pop_up(candidates, searchTerm, call = true)
   start = searchTerm.size
-  prettyCandidates = candidates.map { |candidate| [prettify(candidate,call), candidate] }.sort
+  prettyCandidates = candidates.map { |candidate| prettify(candidate,call) }.sort
+
 if prettyCandidates.size &gt; 1
     require "enumerator"
     pruneList = []  
@@ -92,7 +89,7 @@ if prettyCandidates.size &gt; 1
       pruneList[ind+=1]  
     end
   end
-
+  prettyCandidates = prettyCandidates.sort {|x,y| x[1].downcase &lt;=&gt; y[1].downcase }
   if prettyCandidates.size &gt; 1
     #index = start
     #test = false
@@ -116,7 +113,7 @@ end
 def show_dialog(prettyCandidates,start,&amp;snip_gen)
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
     dialog_path = "#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog"
-    pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
+    pl = {'menuItems' =&gt; prettyCandidates.map { |pretty,junk, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
     io = open("|#{e_sh dialog_path} -u", "r+")
     io &lt;&lt;  pl.to_plist
     io.close_write

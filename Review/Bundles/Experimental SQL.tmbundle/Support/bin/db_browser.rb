@@ -103,6 +103,7 @@ def print_script_tag
   puts <<-HTML
   <script src="file://#{ENV['TM_BUNDLE_SUPPORT']}/lib/shell.js"></script>
   <script>
+  var image_path = "file:///#{ENV['TM_SUPPORT_PATH']}/images/";
   var server = '#{e_js @options.server}';
   var host = '#{e_js @options.database.host}';
   var port = '#{e_js @options.database.port}';
@@ -129,6 +130,7 @@ def print_script_tag
     TextMate.log('done');
   }
   </script>
+  <script src="file://#{ENV['TM_SUPPORT_PATH']}/script/sortable.js" type="text/javascript" charset="utf-8"></script>
   HTML
 end
 
@@ -197,7 +199,7 @@ def print_data(query = nil)
           puts get_data_link('&lt;&nbsp;Prev', :query => query, :offset => [@options.offset - page_size, 0].max) if @options.offset > 0
           puts get_data_link('Next&nbsp;&gt;', :query => query, :offset => @options.offset + page_size)
         end
-        Tag.table(:class => 'graybox', :cellspacing => '0', :cellpadding => '5') do
+        Tag.table(:class => 'sortable graybox', :id => 'results', :cellspacing => '0', :cellpadding => '5') do
           Tag.tr do
             res.fields.each do |field|
               Tag.th field

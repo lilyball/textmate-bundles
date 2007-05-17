@@ -24,11 +24,11 @@ TextMateがこの理念をりようする方法は二つあります。まず、
 
 <!-- TODO: This paragraph has terms which are difficult to translate. Some rules will be made to keep things consistent -->
 
-そういうわけで、TextMateの理念は_Educate the User._ということにもあります。そのためTextMateが提供するものをあなたがフルに活用するためにはあなたは、[正規表現]について学ぶべきです。あなたはTextMateの[スコープ][スコープセレクタ]、[スニペット]システム、（また、[language grammars][LanguageGrammars]をある程度理解すべきです）、そして（特に[環境変数],パイプ、stdin/stdout）で提供される）[shell infrastructures][ShellCommands]が何かついて知っているべきです。
+そういうわけで、TextMateの理念は_Educate the User._ということにもあります。そのためTextMateが提供するものをあなたがフルに活用するためにはあなたは、[正規表現][RegularExpressions]について学ぶべきです。あなたはTextMateの[スコープ][ScopeSelectors]、[スニペット][Snippets]システム、（また、[language grammars][LanguageGrammars]をある程度理解すべきです）、そして（特に[環境変数][EnvVariables],パイプ、stdin/stdout）で提供される）[シェルのインフラストラクチャ][ShellCommands]が何かついて知っているべきです。
 
 ## 用語
 
-だいたいの部分に、TextMateとこのドキュメンテーションは[Appleの用語]に従います。以下は誤解の原因になるかもしれない用語の表です。
+だいたいの部分に、TextMateとこのドキュメンテーションは[Appleの用語](http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/XHIGText/chapter_13_section_3.html#//apple_ref/doc/uid/TP30000365-TPXREF101)に従います。以下は誤解の原因になるかもしれない用語の表です。
 
 <table class="graybox" border="0" cellspacing="0" cellpadding="5">
     <tr>
@@ -67,107 +67,110 @@ TextMateがこの理念をりようする方法は二つあります。まず、
 
 <!--　I will do the translation of the table very soon -->
 
+<!-- The original tag by Allan <table class="graybox" border="0" cellspacing="0" cellpadding="5"> -->
+
 <table class="graybox" border="0" cellspacing="0" cellpadding="5">
     <tr>
-        <th>Glyph</th>
-        <th>Key Name</th>
-        <th>Explanation</th>
+        <th>グリフ</th>
+        <th>キーの名前</th>
+        <th>説明</th>
     </tr>
 
     <tr>
         <td><p>&#x2303;</p></td>
-        <td><p>Control</p></td>
-        <td><p>This key is generally in the lower left corner of the keyboard (and symmetrically placed on the right side). In addition to key equivalents, this key is also used with a mouse click to bring up context sensitive menus.</p></td>
+        <td><p>コントロール</p></td>
+        <td><p>このキーは一般的に左の下側にあります。（そして対照的に右側にもあります。）対応するキーだけでなく、このキーはコンテクストに依存したメニューを出すために、マウスクリックとともに使われることもあります。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x2325;</p></td>
-        <td><p>Option</p></td>
-        <td><p>This is next to the control key and often bears the label Alt. You can hold down the option key while dragging with the mouse to select text rectangularly. It is also possible to place the caret beyond the end of a line by single-clicking the mouse while holding the down option key (&#x2325;). Together with Shift, the option key does a (rectangular) selection to where you click.</p></td>
+        <td><p>オプション</p></td>
+        <td><p>これはコントロールキーの隣にあり、よくAltというラベルがついています。あなたは長方形にテキストを選択するためにマウスを使いながらオプションキーを押さえたままにできます。また、オプションキー(&#x2325;)を押さえながら、一度マウスをクリックすることによって、行の最後より右の場所にキャレットをおくこともできます。シフトといっしょに、オプションキーであなたがクリックする場所へ（長方形の）選択部分を作ることができます。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x2318;</p></td>
-        <td><p>Command</p></td>
-        <td><p>The command key is also referred to as the Apple key since it has an apple symbol on it (&#63743;).</p></td>
+        <td><p>コマンド</p></td>
+        <td><p>コマンドキーはアップルキーとして呼ばれることもあります。なぜならアップルのシンボル(&#63743;)がついているからです。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x21E7;</p></td>
-        <td><p>Shift</p></td>
-        <td><p>The Shift key should be well-known. When used together with a mouse click, it extends the selection.</p></td>
+        <td><p>シフト</p></td>
+        <td><p>シフトキーはよく知られているはずです。マウスクリックといっしょに使うと、選択範囲を広げることができます。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x238B;</p></td>
-        <td><p>Escape</p></td>
-        <td><p>The escape key is generally in the upper left corner of the keyboard. This key can be used to dismiss (cancel) panels, which means dialogs and some (but not all) windows. In TextMate it is also used to cycle through completion candidates.</p></td>
+        <td><p>エスケープ</p></td>
+        <td><p>エスケープキーは一般的にキーボードの左上の角にあります。 このキーはpanelsを退ける（キャンセルする）。panelsとはダイアログや（全てではないが）いくつかのウインドウという意味です。TextMateでは、補完候補を循環するために使われることもあります。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x2305;</p></td>
-        <td><p>Enter</p></td>
-        <td><p>The enter key is on the numeric keypad (and is not the same as return). On laptops it is fn-return.</p></td>
+        <td><p>エンター</p></td>
+        <td><p>エンターキーは数字キーパッドにあります（、そしてそれはリターンキーと同じではありません。）ラップトップではファンクション- リターンにあたります。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x21A9;</p></td>
-        <td><p>Return</p></td>
-        <td><p>The return key should be well known.</p></td>
+        <td><p>リターン</p></td>
+        <td><p>リターンキーはよく知られているでしょう。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x2326;</p></td>
-        <td><p>Forward&nbsp;Delete</p></td>
-        <td><p>This is often just called delete and on the keyboard has a label of Del or Delete.</p></td>
+        <td><p>フォワード・デリート</p></td>
+        <td><p>これはよくデリートと呼ばれ、キーボードにDelやDeleteと書かれています。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x232B;</p></td>
-        <td><p>Backward&nbsp;Delete</p></td>
-        <td><p>Often called backspace. On most keyboards this has a left pointing arrow on the key (&#x2190;).</p></td>
+        <td><p>バック・デリート</p></td>
+        <td><p>よくバックスペースと呼ばれます。たいていのキーボードでは
+        左向きの矢印がキー(&#x2190;)にあります。</p></td>
     </tr>
 
     <tr>
         <td><p>&#xFE56;&#x20DD;</p></td>
-        <td><p>Help</p></td>
-        <td><p>The Help key is located above Forward Delete, but not all keyboards have it. Generally it has the word Help on the key, but it is also known as the Ins key.</p></td>
+        <td><p>ヘルプ</p></td>
+        <td><p>ヘルプキーはフォワード・デリートの上に位置します、しかし全てのキーボードにあるわけではありません。一般的にHelpとキーに書かれています。しかし、Insキーとしても知られています。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x2196;</p></td>
-        <td><p>Home</p></td>
-        <td><p>The Home key scrolls to the beginning of the document, but does not move the caret.</p></td>
+        <td><p>ホーム</p></td>
+        <td><p>ホームキーはドキュメントの最初にスクロールさせます、しかしキャレットは動きません。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x2198;</p></td>
-        <td><p>End</p></td>
-        <td><p>The End key scrolls to the end of the document, but does not move the caret.</p></td>
+        <td><p>エンド</p></td>
+        <td><p>エンドキーはドキュメントの最後にスクロールさせます、しかしっキャレットは動きません。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x21DE;</p></td>
-        <td><p>Page&nbsp;Up</p></td>
-        <td><p>Scrolls up a page without moving the caret. Using the option key will cause the caret to be moved. When used with Shift it will create a selection.</p></td>
+        <td><p>ページアップ</p></td>
+        <td><p>キャレットを動かさずに一ページ分上にスクロールします。オプションキーを使ってキャレットを動かすことができます。シフトキーと使うと、選択部分を作ります。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x21DF;</p></td>
-        <td><p>Page&nbsp;Down</p></td>
-        <td><p>Scrolls down a page without moving the caret. Using the option key will cause the caret to be moved. When used with Shift it will create a selection.</p></td>
+        <td><p>ページダウン</p></td>
+        <td><p>キャレットを動かさずに一ページ分下にスクロールします。オプションキーを使ってキャレットを動かすことができます。シフトキーと使うと、選択部分を作ります</p></td>
     </tr>
 
     <tr>
         <td><p>&#x21E5;</p></td>
-        <td><p>Tab</p></td>
-        <td><p>The Tab key is used to insert a tab character (or equivalent amount of spaces if soft tabs are enabled). In normal controls it advances the focus to the next control.</p></td>
+        <td><p>タブ</p></td>
+        <td><p>タブはタブ文字（もしくは、もしソフトタブを有効にしていれば、同等のスペースの数を挿入するのに使われます。通常のコントロールでは、フォーカスを次のコントロールへ進めます。</p></td>
     </tr>
 
     <tr>
         <td><p>&#x21E4;</p></td>
-        <td><p>Back-tab</p></td>
-        <td><p>The Back-tab key can be used by holding down Shift while pressing the normal Tab key.</p></td>
+        <td><p>バックタブ</p></td>
+        <td><p>バックタブキーはシフトを押さえながら、通常のタブキーを押すことによって使われます。</p></td>
     </tr>
 </table>
 

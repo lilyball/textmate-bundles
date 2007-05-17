@@ -52,7 +52,7 @@ def snippet_generator(cand,s,star,arg_name)
   else
     name = ""
     name = "${2:#{construct_arg_name(c[0])}}" if arg_name
-    name = "${1: *#{name}}" if star
+    name = "${1:${TM_C_POINTER: *}#{name}}" if star
     c[0][s..-1] + name +"$0"
   end
 end

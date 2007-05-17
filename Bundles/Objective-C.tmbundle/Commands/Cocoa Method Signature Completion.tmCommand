@@ -4,6 +4,8 @@
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>4679484F-6227-11D9-BFB1-000D93589AF6</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
@@ -17,7 +19,7 @@ def construct_arg_name(arg)
 	  if a[6].nil?
 		  (a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&amp;.upcase }
 	  else
-	    {"void"=>"udata","id" => "anArgument"}[a[3]]
+	    {"void"=&gt;"udata","id" =&gt; "anArgument"}[a[3]]
 	  end
 	else
 		""
@@ -31,7 +33,7 @@ def prettify(cand, call)
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        out &lt;&lt; name_array[i] +  ":("+ arg+")"+ (call ? "" : "#{construct_arg_name(arg)} " )
+        out &lt;&lt; name_array[i] +  ":("+ arg.gsub(/\s\*/,(ENV['TM_C_POINTER'] || " *").rstrip)+")" + "#{construct_arg_name(arg)} " 
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -39,13 +41,13 @@ def prettify(cand, call)
   else
     out = stuff[0]
   end
-  out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
+  out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size &lt; 4)
 
   return out.chomp.strip
 end
 
 def snippet_generator(cand, start, call)
-start = 0 unless call
+start = 0 
   stuff = cand[start..-1].split("\t")
   if stuff[0].count(":") &gt; 0
 
@@ -56,12 +58,12 @@ start = 0 unless call
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
         if (name_array.size == (i+1))
           if arg == "SEL"
-            out &lt;&lt; name_array[i] + (call ? ":${0:SEL} " : "(SEL)aSelector$0")
+            out &lt;&lt; name_array[i] + "(SEL)aSelector$0"
           else
-            out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"}$0": ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0")
+            out &lt;&lt; name_array[i] + ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0"
           end
         else
-          out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"} " : ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}} ")
+          out &lt;&lt; name_array[i] + ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}} "
         end
       end
     rescue NoMethodError
@@ -70,7 +72,7 @@ start = 0 unless call
   else
     out = stuff[0] + "$0"
   end
-out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
+out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size &lt; 4)
   return out.chomp.strip
 end
 

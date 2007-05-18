@@ -103,6 +103,7 @@ module TextMate
   end
 
   def TextMate.scan_dir (dir, block, filter)
+    return unless File.executable?(dir)
     Dir.entries(dir).each do |filename|
       fullpath = File.join(dir, filename)
       if(filter.skip?(fullpath)) then

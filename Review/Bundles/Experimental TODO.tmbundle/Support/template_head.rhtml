@@ -1,7 +1,15 @@
-<table id="todo" class="sortable">
-	<tr>
-		<th>Type</th>
-		<th>File</th>
-		<th>Line</th>
-		<th>Comment</th>
-	</tr>
+<div id="todo_list">
+
+	<ul class="counters">
+		<% $tags.each do |tag| %>
+			<li class="bg_<%= tag[:label] %>"><%= tag[:label] %>: <span id="count_<%= tag[:label] %>">0</span></li>
+		<% end %>
+		<li id="total_count">counting…</li>
+	</ul>
+
+	<table class="sortable" id="todo_list_table">
+		<tr>
+			<th>Type</th>
+			<th>File</th>
+			<th>Comment</th>
+		</tr>

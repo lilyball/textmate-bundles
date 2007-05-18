@@ -37,6 +37,7 @@ $tags.each { |tag| tag[:matches] = [ ] }
 
 options_a = []
 $tags.each do |tag|
+  options_a << ".bg_#{tag[:label]} {background-color: #{tag[:color]}; color: #FFF;}"
   options_a << "\##{tag[:label]} {color: #{tag[:color]}}"
   options_a << "tr.#{tag[:label]} {color: #{tag[:color]}}"
 end
@@ -49,6 +50,7 @@ puts ERB.new(File.open(tmpl_file), 0, '<>').result
 # puts '<table class="todo">'
 STDOUT.flush
 
+$total = 0
 TextMate.each_text_file do |file|
   next if (ignores != nil and file =~ /#{ignores}/) or File.symlink?(file)
   $tags.each do |tag|
@@ -66,7 +68,9 @@ TextMate.each_text_file do |file|
         else
           $match[:match] = html_escape($1)
         end
-        # tag[:matches] << $match
+        tag[:matches] << $match
+        $count = tag[:matches].length
+        $total += 1
         tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_item.rhtml"
         puts ERB.new(File.open(tmpl_file), 0, '<>').result        
       end
@@ -76,8 +80,9 @@ end
 
 # trim tags that didn't match, if requested
 # $tags.delete_if { |tag| tag[:trim_if_empty] and tag[:matches].empty? }
-puts '</table>'
+
+tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_tail.rhtml"
+puts ERB.new(File.open(tmpl_file), 0, '<>').result
+
 html_footer()
 
-# tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_tail.rhtml"
-# puts ERB.new(File.open(tmpl_file), 0, '<>').result

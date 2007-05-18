@@ -118,7 +118,7 @@ star = arg_name = false
 if ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
 	files = ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaProtocols.txt.gz"]
 elsif ENV['TM_SCOPE'].include?("meta.scope.implementation.objc") ||  ENV['TM_SCOPE'].include?("meta.interface-or-protocol.objc")
-  files = ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz"]
+  files = ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClasses.txt.gz"]
   userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz"
     files += [userClasses] if File.exists? userClasses
   if ENV['TM_SCOPE'].include?("meta.function.objc")

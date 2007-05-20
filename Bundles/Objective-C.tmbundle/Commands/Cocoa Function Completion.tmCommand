@@ -87,10 +87,12 @@ def pop_up(candidates, searchTerm,star,arg_name)
     #  index +=1
     #end
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-    dialog_path = "#{ENV['DIALOG']}"
     pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
-    plist = pl.to_plist
-    res = PropertyList::load(%x{ #{e_sh dialog_path} -up #{e_sh plist} })
+    open("/dev/console", "w") { |io| io &lt;&lt; pl.to_plist }
+    io = open('|"$DIALOG" -u', "r+")
+    io &lt;&lt; pl.to_plist
+    io.close_write
+    res = PropertyList::load(io.read)
     if res.has_key? 'selectedMenuItem'
       snippet_generator( res['selectedMenuItem']['cand'], start,star,arg_name )
     else

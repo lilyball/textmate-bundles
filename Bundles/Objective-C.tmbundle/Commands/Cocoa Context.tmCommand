@@ -157,9 +157,8 @@ end
 
 def show_dialog(prettyCandidates,start,&amp;snip_gen)
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-    dialog_path = "#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog"
     pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, junk, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
-    io = open("|#{e_sh dialog_path} -u", "r+")
+    io = open('|"$DIALOG" -u', "r+")
     io &lt;&lt;  pl.to_plist
     io.close_write
     res = PropertyList::load(io.read)

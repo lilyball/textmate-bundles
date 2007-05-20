@@ -18,21 +18,9 @@ require "rexml/document"
 WORD    = ENV['TM_CURRENT_WORD']
 HELPTOC = '/help_toc.xml'
 
-def nice_name section_name
-  section_names = {
-    "ActionScriptLangRefV2" => "ActionScript 2.0",
-    "ActionScriptLangRefV3" => "ActionScript 3.0",
-    "FlashLiteAPIReference1" => "Flash Lite 1.0",
-    "FlashLiteAPIReference2" => "Flash Lite 2.0",
-    "ComponentsRef" => "Components Reference",
-    "ExtendingFlash" => "Extending Flash",
-    "FlashLite2DevGuide" => "Flash Lite 2.0 Dev Guide"
-  }
-  if section_names[section_name].nil?
-    return section_name
-  else
-    return section_names[section_name].to_s
-  end
+def nice_name toc_file
+  toc_lines = IO.readlines(toc_file)
+  return toc_lines[1].match(/[A-Z][A-Za-z0-9\s.,_]*/).to_s
 end
 
 def get_help_dirs
@@ -87,14 +75,17 @@ def get_search_dirs
 end
 
 def find_matching_lines
-  search_results = []
+  search_results = {}
   get_search_dirs.each do |path|
     current_toc_file = path + HELPTOC
     IO.readlines("#{current_toc_file}").each do |line|
       if line.match(/name=\"#{WORD}/)
-        section = nice_name(File.dirname(current_toc_file).split("/").last)
+        section = nice_name(current_toc_file)
+        if search_results[section].nil?
+          search_results[section] = []
+        end
         xml_line = REXML::Document.new(line.strip)
-        search_results << "<li>#{section}: <a href=\"tm-file://#{path}/#{xml_line.root.attributes['href']}\">#{xml_line.root.attributes['name']}</a></li>"
+        search_results[section] << "<li><a href=\"tm-file://#{path}/#{xml_line.root.attributes['href']}\">#{xml_line.root.attributes['name']}</a></li>"
       end
     end
   end
@@ -105,11 +96,15 @@ puts html_head( :title => "Documentation for ‘#{WORD}’", :sub_title => "Acti
 
 matches = find_matching_lines
 if matches.length > 0
-  puts "<ul>"
-  find_matching_lines.each do |line|
-    puts line
+  find_matching_lines.each do |section|
+    puts "<h3>" + section[0] + "</h3>"
+    puts "<ul>"
+    section.shift
+    section.each do |match|
+      puts match
+    end
+    puts "</ul>"
   end
-  puts "</ul>"
 else
   puts "No results :("
 end

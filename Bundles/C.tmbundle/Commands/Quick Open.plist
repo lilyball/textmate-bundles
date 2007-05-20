@@ -12,7 +12,7 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/ui.rb'
 
 USR_HEAD  = Regexp.escape "#include \"...\" search starts here:\n"
 SYS_HEAD  = Regexp.escape "#include &lt;...&gt; search starts here:\n"
-FOOT      = Regexp.escape 'End of search list.'
+FOOTER    = Regexp.escape 'End of search list.'
 
 COMPILER  = {
   'source.c'      =&gt; 'gcc 2&gt;&amp;1 &gt;/dev/null -E -v -x c /dev/null',
@@ -26,7 +26,7 @@ def compiler_search_path(domain = :system)
   scope        = $&amp; if ENV['TM_SCOPE'] =~ /source.(obj)?c(\+\+)?/
 
   res = IO.popen(COMPILER[scope]) { |io| io.read }
-  if res =~ /#{USR_HEAD}(.*)#{SYS_HEAD}(.*)#{FOOT}/m
+  if res =~ /#{USR_HEAD}(.*)#{SYS_HEAD}(.*)#{FOOTER}/m
     case domain
       when :system  then $2
       when :user    then $1 + " .\n"
@@ -75,7 +75,7 @@ end
 
 def find_recursively(header)
   hdr_match = /\b#{Regexp.escape(header.sub(/(\.h)?$/, '.h'))}$/i
-  matches   = Dir["/System/Library/Frameworks/*.framework/{Headers,Frameworks/*.framework/Headers}/*.h"].find_all { |e| e =~ hdr_match }
+  matches   = Dir["/System/Library/Frameworks/*.framework/{Frameworks/*.framework/,}Headers/*.h"].find_all { |e| e =~ hdr_match }
 
   if matches.size &gt; 1
     menu = matches.map do |e|

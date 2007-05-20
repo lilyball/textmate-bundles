@@ -29,7 +29,11 @@ def prettify(cand, call)
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        out &lt;&lt; name_array[i] +  ":("+ arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)+")"+ (call ? "" : "#{construct_arg_name(arg)} " )
+        if arg == "SEL"
+          out &lt;&lt; name_array[i] +  ":(SEL)"+ "aSelector "
+        else
+          out &lt;&lt; name_array[i] +  ":("+ arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)+")"+ "#{construct_arg_name(arg)} "
+        end
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -43,7 +47,7 @@ def prettify(cand, call)
 end
 
 def snippet_generator(cand, start, call)
-start = 0 unless call
+start = 0
   stuff = cand[start..-1].split("\t")
   if stuff[0].count(":") &gt; 0
 
@@ -52,15 +56,11 @@ start = 0 unless call
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        if (name_array.size == (i+1))
           if arg == "SEL"
-            out &lt;&lt; name_array[i] + (call ? ":${0:SEL} " : "(SEL)aSelector$0")
+            out &lt;&lt; name_array[i] + ":(#{arg})${#{(i+1).to_s}:aSelector} " 
           else
-            out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"}$0": ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0")
+            out &lt;&lt; name_array[i] + ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}} "
           end
-        else
-          out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"} " : ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}} ")
-        end
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -68,8 +68,15 @@ start = 0 unless call
   else
     out = stuff[0] + "$0"
   end
-out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size &lt; 4)
-  return out.chomp.strip
+out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless (stuff.size &lt; 4)
+  if ENV['TM_SCOPE'].include? "meta.scope.implementation.objc"
+    rv = "\treturn nil;\n" unless stuff[5].match(/^void$/) || stuff[5].match(/IBAction/)
+    
+    out = out.chomp.strip + "\n\{$0\n#{rv}\}$0"
+  else
+    out = out.chomp.strip + ";"
+  end
+  return out
 end
 
 def pop_up(candidates, searchTerm, call = true)
@@ -160,7 +167,7 @@ methodDeclaration = /^((?:\+|-)\s*)([a-zA-Z][a-zA-Z0-9:]*)$/
 
 if k = line.match(methodDeclaration)
   candidates = candidates_or_exit( k[2], nil, "cocoa.txt.gz")
-  res =pop_up(candidates, k[2], false)
+  res =pop_up(candidates, k[2])
   TextMate.exit_discard if res == "$0"
   print k[1] + res
 else

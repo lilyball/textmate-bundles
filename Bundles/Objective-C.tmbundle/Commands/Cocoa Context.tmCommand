@@ -135,7 +135,7 @@ def c_snip_gen(c,si,arg_type=nil)
    s = si.size
 		prettyCandidates = c.map do |candidate|
 			ca = candidate.split("\t")
-			[((ca[1].nil? || !ca[4].nil? || c[1]=="") ? ca[0] : ca[0]+ca[1]), candidate] 
+			[((ca[1].nil? || !ca[4].nil? || c[1]=="") ? ca[0] : ca[0]+ca[1]),ca[0], candidate] 
 		end
 		unless arg_type.nil?
 			tmp = prettyCandidates.reject do |a,b|

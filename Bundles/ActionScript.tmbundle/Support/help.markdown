@@ -23,13 +23,30 @@ If you already have an existing SWF file, the code will be injected into it and 
 
 If you don't have a SWF file, MTASC will create a new one for you.
 
-## Troubleshooting
+## Debugging
 
-If you want to debug using XTrace, you need to adjust your security settings to allow local scripts to make HTTP connections (check [Adobe TechNote 4c093f20](http://www.adobe.com/go/4c093f20) for more information on why and how to do this).
+Currently, the ActionScript bundle supports two debugging systems (three, if you count "No Debug" as a debugging system :)
+
+* **Debugging using XTrace.**
+  XTrace is a graphical tool that accepts HTTP connections from any application. The bundle includes an ActionScript library you can use to send debugging information to XTrace.
+
+  To enable XTrace, add the line `trace: xtrace` to mtasc.yaml
+
+  This will tell MTASC to include the required libraries and use the `com.mab.util.debug.trace()` function for debugging.
+
+  You don't need to change your code for XTrace to work. Just use a simple `trace()` and the output will show up in XTrace.
+
+  Everytime you compile the movie, TextMate will open XTrace if it's not open. The first time you open XTrace, though, it may not register log messages if the movie starts sending debug information before XTrace is fully loaded. I'm working on fixing this :)
+
+  If you want to debug using XTrace, you need to adjust your security settings to allow local scripts to make HTTP connections (check [Adobe TechNote 4c093f20](http://www.adobe.com/go/4c093f20) for more information on why and how to do this).
+* **Debugging using Console.app**
+  See http://bomberstudios.com/ for information.
 
 # Where to go for help
 
 The maintainer of the ActionScript bundle (Ale Muñoz) follows the [TextMate List](http://lists.macromates.com/mailman/listinfo/textmate), and will be happy to help you out with anything ActionScript-related.
+
+Feel free to send your suggestions and code patches to ale AT bomberstudios DOT com
 
 Another good place to ask is the [MTASC Mailing List](http://lists.motion-twin.com/mailman/listinfo/mtasc), where the maintainer of MTASC is pretty active.
 
@@ -38,4 +55,7 @@ Another good place to ask is the [MTASC Mailing List](http://lists.motion-twin.c
 * [MTASC](http://www.mtasc.org/) is released under the GPL License.
 * [XTrace](http://developer.mabwebdesign.com/xtrace.html) is released under the GPL License.
 * The "Build With MTASC" command is based on work by [Chris Sessions](http://lists.motion-twin.com/pipermail/mtasc/2006-June/029791.html), [Ben Jackson](http://www.unfitforprint.com/) and [Juan Carlos Añorga](http://www.juanzo.com/), and is maintained (along with the ActionScript bundle) by [Ale Muñoz](http://bomberstudios.com). Some code & inspiration lifted from [Monokai](http://www.monokai.nl/blog/2006/07/14/using-textmate-mtasc-and-xtrace-to-build-flash-projects-in-mac-osx/)
-* Improvements suggested by [Juan Carlos Añorga](http://www.juanzo.com/), [Helmut Granda](http://helmutgranda.com)
+* Improvements suggested by
+  * [Juan Carlos Añorga](http://www.juanzo.com/)
+  * [Helmut Granda](http://helmutgranda.com)
+  * [Gaby Vanhegan](http://vanhegan.net)

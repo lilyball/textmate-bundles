@@ -29,7 +29,7 @@ def prettify(cand, call)
     out = ""
     begin
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        out &lt;&lt; name_array[i] +  ":("+ arg+")"+ (call ? "" : "#{construct_arg_name(arg)} " )
+        out &lt;&lt; name_array[i] +  ":("+ arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)+")"+ (call ? "" : "#{construct_arg_name(arg)} " )
       end
     rescue NoMethodError
       out &lt;&lt; stuff[0]
@@ -37,7 +37,7 @@ def prettify(cand, call)
   else
     out = stuff[0]
   end
-  out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
+  out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size &lt; 4)
 
   return [out.chomp.strip, stuff[0], cand]
 end
@@ -56,10 +56,10 @@ start = 0 unless call
           if arg == "SEL"
             out &lt;&lt; name_array[i] + (call ? ":${0:SEL} " : "(SEL)aSelector$0")
           else
-            out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"}$0": ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0")
+            out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"}$0": ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}}$0")
           end
         else
-          out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"} " : ":(#{arg})${#{(i+1).to_s}:#{construct_arg_name(arg)}} ")
+          out &lt;&lt; name_array[i] + (call ? ":${"+(i+1).to_s + ":"+ arg+"} " : ":(#{arg.gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})${#{(i+1).to_s}:#{construct_arg_name(arg)}} ")
         end
       end
     rescue NoMethodError
@@ -68,7 +68,7 @@ start = 0 unless call
   else
     out = stuff[0] + "$0"
   end
-out = "(#{stuff[5]})#{out}" unless call || (stuff.size &lt; 4)
+out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size &lt; 4)
   return out.chomp.strip
 end
 

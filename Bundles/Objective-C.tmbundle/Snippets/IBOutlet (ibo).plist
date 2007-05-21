@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>IBOutlet ${2:${1:NSSomeClass}${TM_C_POINTER: *}}${3:someClass};</string>
+	<string>IBOutlet ${1:NSSomeClass}${TM_C_POINTER: *}${2:${1/^[A-Z](?:[A-Z]+|[a-z]+)([A-Z]\w*)/\l$1/}};</string>
 	<key>name</key>
 	<string>IBOutlet</string>
 	<key>scope</key>

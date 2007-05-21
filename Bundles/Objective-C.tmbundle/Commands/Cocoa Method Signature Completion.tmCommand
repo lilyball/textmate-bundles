@@ -66,15 +66,15 @@ start = 0
       out &lt;&lt; stuff[0]
     end
   else
-    out = stuff[0] + "$0"
+    out = stuff[0]
   end
 out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless (stuff.size &lt; 4)
   if ENV['TM_SCOPE'].include? "meta.scope.implementation.objc"
     rv = "\treturn nil;\n" unless stuff[5].match(/^void$/) || stuff[5].match(/IBAction/)
     
-    out = out.chomp.strip + "\n\{$0\n#{rv}\}$0"
+    out = out.chomp.strip + "\n\{$0\n#{rv}\}"
   else
-    out = out.chomp.strip + ";"
+    out = out.chomp.strip + "$0;"
   end
   return out
 end

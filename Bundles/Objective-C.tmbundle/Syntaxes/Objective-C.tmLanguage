@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>bundleUUID</key>
+	<string>4679484F-6227-11D9-BFB1-000D93589AF6</string>
 	<key>fileTypes</key>
 	<array>
 		<string>m</string>
@@ -23,43 +25,13 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>((@)(interface|protocol))(?!.+;)\s+([A-Za-z][A-Za-z0-9]*)\s*((:)(?:\s*)([A-Za-z][A-Za-z0-9]*)(\s|\n)?)?((?:\s*)(&lt;)((?:\s*)(([A-Za-z][A-Za-z0-9]*)((?:\s*)(,)(?:\s*)([A-Za-z][A-Za-z0-9]*)?)*)?(?:\s*))?(&gt;)?)?(\s|\n)?</string>
+			<string>((@)(interface|protocol))(?!.+;)\s+([A-Za-z][A-Za-z0-9]*)\s*((:)(?:\s*)([A-Za-z][A-Za-z0-9]*))</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>storage.type.objc</string>
-				</dict>
-				<key>10</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.scope.begin.objc</string>
-				</dict>
-				<key>13</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.inherited-protocol.objc</string>
-				</dict>
-				<key>15</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.arguments.objc</string>
-				</dict>
-				<key>16</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.inherited-protocol.objc</string>
-				</dict>
-				<key>17</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.scope.end.objc</string>
-				</dict>
-				<key>18</key>
-				<dict>
-					<key>name</key>
-					<string>meta.inherited-protocol.end.objc</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -86,11 +58,6 @@
 					<key>name</key>
 					<string>meta.inherited-class.objc</string>
 				</dict>
-				<key>9</key>
-				<dict>
-					<key>name</key>
-					<string>meta.protocol-list.objc</string>
-				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>meta.scope.interface.objc</string>
@@ -100,6 +67,10 @@
 			<string>meta.interface-or-protocol.objc</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#protocol_list</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#method</string>
@@ -145,16 +116,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\b_cmd\b</string>
-					<key>name</key>
-					<string>variable.other.selector.objc</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\b(self|super)\b</string>
-					<key>name</key>
-					<string>variable.language.objc</string>
+					<key>include</key>
+					<string>#special_variables</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -202,6 +165,29 @@
 					<string>\\.</string>
 					<key>name</key>
 					<string>invalid.illegal.unknown-escape.objc</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(id)\s?(?=&lt;)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.objc</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?&lt;=&gt;)</string>
+			<key>name</key>
+			<string>meta.id-with-protocol.objc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#protocol_list</string>
 				</dict>
 			</array>
 		</dict>
@@ -254,8 +240,16 @@
 			<string>keyword.other.objc</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.id-type.objc</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\b(IBOutlet|IBAction|BOOL|SEL|id|unichar|IMP|Class)\b</string>
+			<string>\b(IBOutlet|IBAction|BOOL|SEL|id(?!\s?&lt;)|unichar|IMP|Class)\b</string>
 			<key>name</key>
 			<string>storage.type.objc</string>
 		</dict>
@@ -402,9 +396,17 @@
 						</dict>
 						<dict>
 							<key>include</key>
+							<string>#special_variables</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>$base</string>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#special_variables</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -573,38 +575,37 @@
 		</dict>
 		<key>protocol_list</key>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>(&lt;)</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.section.scope.begin.objc</string>
 				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.inherited-protocol.objc</string>
-				</dict>
-				<key>6</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.arguments.objc</string>
-				</dict>
-				<key>7</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.inherited-protocol.objc</string>
-				</dict>
-				<key>8</key>
+			</dict>
+			<key>end</key>
+			<string>(&gt;)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.section.scope.end.objc</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>(&lt;)((?:\s*)(([A-Za-z][A-Za-z0-9]*)((?:\s*)(,)(?:\s*)([A-Za-z][A-Za-z0-9]*)?)*)?(?:\s*))?(&gt;)?</string>
 			<key>name</key>
 			<string>meta.protocol-list.objc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>NS(GlyphStorage|M(utableCopying|enuItem)|C(hangeSpelling|o(ding|pying|lorPicking(Custom|Default)))|T(oolbarItemValidations|ext(Input|AttachmentCell))|I(nputServ(iceProvider|erMouseTracker)|gnoreMisspelledWords)|Obj(CTypeSerializationCallBack|ect)|D(ecimalNumberBehaviors|raggingInfo)|U(serInterfaceValidations|RL(HandleClient|DownloadDelegate|ProtocolClient|AuthenticationChallengeSender))|Validated(ToobarItem|UserInterfaceItem)|Locking)</string>
+					<key>name</key>
+					<string>support.other.protocol.objc</string>
+				</dict>
+			</array>
 		</dict>
 		<key>protocol_type_qualifier</key>
 		<dict>
@@ -612,6 +613,24 @@
 			<string>\b(in|out|inout|oneway|bycopy|byref)\b</string>
 			<key>name</key>
 			<string>storage.modifier.protocol.objc</string>
+		</dict>
+		<key>special_variables</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b_cmd\b</string>
+					<key>name</key>
+					<string>variable.other.selector.objc</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(self|super)\b</string>
+					<key>name</key>
+					<string>variable.language.objc</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

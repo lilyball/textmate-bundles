@@ -9,8 +9,9 @@
 			<%= tag[:rendered] %>
 		</table>
 	<% end %>
+	<script type="text/javascript" charset="utf-8">
+		var box = document.getElementById("total_count")
+		box.innerHTML = "Total: <%= $total %>";
+	</script>
+	<a href="#todo_list" id="toplink">↑ top</a>
 </div>
-<script type="text/javascript" charset="utf-8">
-	var box = document.getElementById("total_count")
-	box.innerHTML = "Total: <%= $total %>";
-</script>

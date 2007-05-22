@@ -1,14 +1,31 @@
+#todo_list table {
+	clear: both;
+	border-collapse: collapse;
+}
+
 #todo_list_list td, #todo_list th {
 	font-family: monospace;
 }
+
+#todo_list th {
+	white-space: no-wrap;
+	border-bottom: 1px solid #000;
+	text-align: left;
+}
+
+#todo_list th a {
+	text-decoration: none;
+}
+
 #todo_list td {
 	font-size: 9pt;
+	padding: 1ex 1ex 0 0;
 }
 
 #todo_list td.file {
-	max-width: 16em;
+/*	max-width: 16em;
 	text-wrap: unrestricted;
-	word-wrap: break-word;
+	word-wrap: break-word;*/
 }
 
 #todo_list td.comment {
@@ -32,11 +49,6 @@
 
 #todo_list .counters li a {
 	color: #FFF;
-/*	text-decoration: none;*/
-}
-
-#todo_list table {
-	clear: both;
 }
 
 #todo_list #total_count {
@@ -47,3 +59,7 @@
 #todo_list td.type {
 	padding: 2px;
 }
+
+/*#todo_list h3 a {
+	color: #000;
+}*/

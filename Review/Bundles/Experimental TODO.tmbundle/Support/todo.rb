@@ -30,13 +30,11 @@ def TextMate.file_link (file, line = 0)
     "&amp;line=" + line.to_s
 end
 
-# setup empty array for per tag results
-$tags.each { |tag| tag[:matches] = [ ] }
-
 # output header
-
 options_a = []
 $tags.each do |tag|
+  tag[:matches] = []
+  tag[:rendered] = ''
   options_a << ".bg_#{tag[:label]} {background-color: #{tag[:color]}; color: #FFF;}"
   options_a << "\##{tag[:label]} {color: #{tag[:color]}}"
   options_a << "tr.#{tag[:label]} {color: #{tag[:color]}}"
@@ -72,9 +70,12 @@ TextMate.each_text_file do |file|
         $count = tag[:matches].length
         $total += 1
         tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_item.rhtml"
-        puts ERB.new(File.open(tmpl_file), 0, '<>').result        
+        row = ERB.new(File.open(tmpl_file), 0, '<>').result
+        puts row
+        tag[:rendered] += row
+        STDOUT.flush
       end
-    end
+    end if File.readable?(file)
   end
 end
 

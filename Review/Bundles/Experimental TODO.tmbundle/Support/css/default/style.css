@@ -1,0 +1,49 @@
+#todo_list_list td, #todo_list th {
+	font-family: monospace;
+}
+#todo_list td {
+	font-size: 9pt;
+}
+
+#todo_list td.file {
+	max-width: 16em;
+	text-wrap: unrestricted;
+	word-wrap: break-word;
+}
+
+#todo_list td.comment {
+	min-width: 20em;
+}
+
+#todo_list .counters {
+	padding: 0;
+	padding-bottom: 3em;
+}
+
+#todo_list .counters li {
+	display: block;
+	float: left;
+	padding: 1ex;
+	border: 1px solid #444;
+	border-collapse: collapse;
+	min-width: 6em;
+	text-align: center;
+}
+
+#todo_list .counters li a {
+	color: #FFF;
+/*	text-decoration: none;*/
+}
+
+#todo_list table {
+	clear: both;
+}
+
+#todo_list #total_count {
+	color: #FFF;
+	background-color: #000;
+}
+
+#todo_list td.type {
+	padding: 2px;
+}

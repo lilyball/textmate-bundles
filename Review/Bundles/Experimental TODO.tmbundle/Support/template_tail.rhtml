@@ -1,4 +1,19 @@
 	</table>
+
+	<h2>Items by Type</h2>
+
+	<% $tags.each do |tag| %>
+	<% next if tag[:matches].length == 0 %>
+		<h3><a id="jump_to_<%= tag[:label] %>"><%= tag[:label] %></a></h3>
+		<table class="sortable" id="table_<%= tag[:label] %>">
+			<tr>
+				<th>Type</th>
+				<th>File</th>
+				<th>Comment</th>
+			</tr>
+			<%= tag[:rendered] %>
+		</table>
+	<% end %>
 </div>
 <script type="text/javascript" charset="utf-8">
 	var box = document.getElementById("total_count")

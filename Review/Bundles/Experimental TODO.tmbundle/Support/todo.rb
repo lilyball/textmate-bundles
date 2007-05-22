@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+# TODO: Fix relative Links wrt offset header
+# TODO: Hide categories with no items (like radar)
+
 $tags = [
   { :label => "FIXME",   :color => "#A00000", :regexp => /FIX ?ME[\s,:]+(\S.*)$/i },
   { :label => "TODO",    :color => "#CF830D", :regexp => /TODO[\s,:]+(\S.*)$/i    },

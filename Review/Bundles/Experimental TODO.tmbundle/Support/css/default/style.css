@@ -3,12 +3,16 @@
 	border-collapse: collapse;
 }
 
+#todo_list h3 {
+	clear: both;
+}
+
 #todo_list_list td, #todo_list th {
 	font-family: monospace;
 }
 
 #todo_list th {
-	white-space: no-wrap;
+	white-space: nowrap;
 	border-bottom: 1px solid #000;
 	text-align: left;
 }
@@ -20,13 +24,14 @@
 #todo_list td {
 	font-size: 9pt;
 	padding: 1ex 1ex 0 0;
+	vertical-align: top;
 }
 
 #todo_list td.file {
 /*	max-width: 16em;
 	text-wrap: unrestricted;
 	word-wrap: break-word;*/
-	vertical-align: top;
+	white-space: nowrap;
 }
 
 #todo_list td.comment {

@@ -19,6 +19,10 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>include</key>
+			<string>#comments</string>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -219,7 +223,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\d+</string>
+			<string>\b\d+\b</string>
 			<key>name</key>
 			<string>constant.numeric.sql</string>
 		</dict>
@@ -279,15 +283,21 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>\*</string>
+			<key>name</key>
+			<string>keyword.operator.star.sql</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>[!&lt;&gt;]?=|&lt;&gt;|&lt;|&gt;</string>
 			<key>name</key>
 			<string>keyword.operator.comparison.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\*</string>
+			<string>-|\+|/</string>
 			<key>name</key>
-			<string>keyword.operator.star.sql</string>
+			<string>keyword.operator.math.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -299,7 +309,7 @@
 			<key>comment</key>
 			<string>List of SQL99 built-in functions from http://www.oreilly.com/catalog/sqlnut/chapter/ch04.html</string>
 			<key>match</key>
-			<string>(?i)CURRENT_(DATE|TIME(STAMP)?|USER)|(SESSION|SYSTEM)_USER</string>
+			<string>(?i)\b(CURRENT_(DATE|TIME(STAMP)?|USER)|(SESSION|SYSTEM)_USER)\b</string>
 			<key>name</key>
 			<string>support.function.scalar.sql</string>
 		</dict>
@@ -307,13 +317,13 @@
 			<key>comment</key>
 			<string>List of SQL99 built-in functions from http://www.oreilly.com/catalog/sqlnut/chapter/ch04.html</string>
 			<key>match</key>
-			<string>(?i)AVG|COUNT|MIN|MAX|SUM</string>
+			<string>(?i)\b(AVG|COUNT|MIN|MAX|SUM)\b</string>
 			<key>name</key>
 			<string>support.function.aggregate.sql</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i)CONCATENATE|CONVERT|LOWER|SUBSTRING|TRANSLATE|TRIM|UPPER</string>
+			<string>(?i)\b(CONCATENATE|CONVERT|LOWER|SUBSTRING|TRANSLATE|TRIM|UPPER)\b</string>
 			<key>name</key>
 			<string>support.function.string.sql</string>
 		</dict>
@@ -333,10 +343,6 @@
 			</dict>
 			<key>match</key>
 			<string>(\w+?)\.(\w+)</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#comments</string>
 		</dict>
 		<dict>
 			<key>include</key>

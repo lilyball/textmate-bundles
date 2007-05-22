@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # TODO: Fix relative Links wrt offset header
-# TODO: Hide categories with no items (like radar)
+# TODO: Print stylesheet
 
 $tags = [
   { :label => "FIXME",   :color => "#A00000", :regexp => /FIX ?ME[\s,:]+(\S.*)$/i },
@@ -45,7 +45,7 @@ end
 
 options = '<style type="text/css">' + options_a.join("\n") + '</style>'
 
-puts html_head(:window_title => "TODO", :page_title => "TODO List", :sub_title => 'TODO', :html_head => options)
+puts html_head(:window_title => "TODO", :page_title => "TODO List", :sub_title => ENV['TM_PROJECT_DIRECTORY'], :html_head => options)
 tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_head.rhtml"
 puts ERB.new(File.open(tmpl_file), 0, '<>').result
 # puts '<table class="todo">'

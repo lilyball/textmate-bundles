@@ -1,0 +1,102 @@
+# エキスパートのための設定
+
+TextMateにはGUIでは見えない設定がいくつかあります。
+
+これらの設定の変更は [`defaults`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/defaults.1.html) シェルコマンドで可能です。しかし、TextMateが起動していないときにこれをしなければいけません。
+
+次のシンタックスのように、与えられた値(value)に対してキー(key)を設定します:
+
+    defaults write com.macromates.textmate «key» «value»
+
+いつもデフォルトの値を使ってキーをリセットできます。:
+
+    defaults delete com.macromates.textmate «key»
+
+もしくは以下のように使い、値を読むことができます。:
+
+    defaults read com.macromates.textmate «key»
+
+
+## `NSDragAndDropTextDelay`
+
+あなたが、選択部分の上でマウスをクリックしてマウスをうごかすと、もしあなたが15ミリセカンド待ち、それから選択範囲をドラッグしない限り、TextMateは新しい選択範囲を作ります。この遅延時間はこの設定の値によって変えることができます。
+
+値をゼロ以下（例えば、`-1`）にセットすると選択範囲をドラッグすることができなくなります。それは、選択範囲の中でマウスをクリックをするとすぐにそれをすぐに感知し、（ボタンが押されている間にマウスを動かせば、）そのポイントから新しい選択範囲を作るという言う意味です。
+
+ゼロにセットすればすぐにドラッグを始めます。
+
+例:
+
+    defaults write com.macromates.textmate NSDragAndDropTextDelay 0
+
+
+## `NSRecentDocumentsLimit`
+
+これは"Open Recent"メニューに保存されているドキュメントの数を設定します。デフォルト値は25です。
+
+例:
+
+    defaults write com.macromates.textmate NSRecentDocumentsLimit 50
+
+## `OakBundleItemsPopUpMenuKeyEquivalent`
+
+The key equivalent which should open the gear menu in the status bar. This is a key equivalent description as used in the [system key bindings file](http://macromates.com/blog/archives/2005/07/05/key-bindings-for-switchers/). The default value is "^\033" (control escape).
+
+For more information about key codes see [this letter](http://lists.macromates.com/pipermail/textmate/2006-April/009955.html).
+
+## `OakBundleManagerDisambiguateMenuFontSize`
+
+If you find the font used in the menu to disambiguate tab triggers, key equivalents and similar, too small, then you can run:
+
+    defaults write com.macromates.textmate OakBundleManagerDisambiguateMenuFontSize 14
+
+## `OakDefaultBundleForNewBundleItems`
+
+When you create a new item in the bundle editor without having selected a bundle first, then the bundle with the UUID held by this defaults key is used as the target.
+
+This automatically gets set to the first bundle you create. For an example of how to change it see [this letter](http://lists.macromates.com/pipermail/textmate/2006-May/010651.html).
+
+## `OakDefaultLanguage`
+
+Sets the default language used for new (untitled) documents. The value should be the UUID of the language to be used.
+
+For more information see [this message from the mailing list](http://lists.macromates.com/pipermail/textmate/2006-February/008276.html).
+
+
+## `OakDisableSessionRestore`
+
+When you launch TextMate it will open the project / document which was open when you last exited. You can however disable this feature by running:
+
+    defaults write com.macromates.textmate OakDisableSessionRestore 1
+
+
+## `OakDocumentCustomFSMetaData`
+
+An array of file systems for which TextMate should use its own functions for storing meta data ([`setxattr`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/setxattr.2.html) replacement). The meta data is stored in AppleDouble format. The default value is `( afpfs, nfs, msdos )` since `setxattr` can cause a kernel panic for these file systems ([rdar://4162474](rdar://problem/4162474)).
+
+例:
+
+    defaults write com.macromates.textmate \
+       OakDocumentCustomFSMetaData '( afpfs, nfs, msdos, hfs )'
+
+
+## `OakDocumentDisableFSMetaData`
+
+それ以上の情報は[extended attributes][ExtendedAttributes]をみてください。
+
+## `OakFindPanelDisableHistory`
+
+This disables the history controls in the find panel. The reason for this setting is only because some users have experienced crashes when using the tab key in the find dialog and this is caused by the history controls used. Currently the only workaround is to disable the use of these controls:
+
+    defaults write com.macromates.textmate OakFindPanelDisableHistory 1
+
+## `OakToolTipMouseMoveIgnorePeriod` and `OakToolTipMouseDistanceThreshold`
+
+When a command brings up a tool tip, mouse movements performed within the first second do not close the tool tip and after that second has elapsed, the mouse needs to be moved at least 5 pixels for the tool tip to close. These values can be adjusted using the `OakToolTipMouseMoveIgnorePeriod` and `OakToolTipMouseDistanceThreshold` defaults keys.
+
+## `OakWordsExcludedFromCapitalization`
+
+The Text &#x2192; Convert &#x2192; to Titlecase action (&#x2303;&#x2325;U) は以下の配列の単語を例外として扱います。
+
+The default value is `( a, an, and, at, but, by, else, for, from, if, in, nor, of, off, on, or, out, over, the, then, to, up, when )`.
+

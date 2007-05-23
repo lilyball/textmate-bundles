@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-# TODO: Fix relative Links wrt offset header
 # TODO: Print stylesheet
 
 if RUBY_VERSION =~ /^1\.6\./ then
@@ -12,7 +11,6 @@ HTML
   abort
 end
 
-# require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/web_preview"
 require "erb"
@@ -63,7 +61,6 @@ options = '<style type="text/css">' + options_a.join("\n") + '</style>'
 puts html_head(:window_title => "TODO", :page_title => "TODO List", :sub_title => ENV['TM_PROJECT_DIRECTORY'], :html_head => options)
 tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_head.rhtml"
 puts ERB.new(File.open(tmpl_file), 0, '<>').result
-# puts '<table class="todo">'
 STDOUT.flush
 
 $total = 0
@@ -94,9 +91,6 @@ TextMate.each_text_file do |file|
     end if File.readable?(file)
   end
 end
-
-# trim tags that didn't match, if requested
-# $tags.delete_if { |tag| tag[:trim_if_empty] and tag[:matches].empty? }
 
 tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_tail.rhtml"
 puts ERB.new(File.open(tmpl_file), 0, '<>').result

@@ -25,7 +25,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>((@)(interface|protocol))(?!.+;)\s+([A-Za-z][A-Za-z0-9]*)\s*((:)(?:\s*)([A-Za-z][A-Za-z0-9]*))</string>
+			<string>((@)(interface|protocol))(?!.+;)\s+([A-Za-z][A-Za-z0-9]*)\s*((:)(?:\s*)([A-Za-z][A-Za-z0-9]*))?(\s|\n)?</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -54,6 +54,11 @@
 					<string>entity.other.inherited-class.objc</string>
 				</dict>
 				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>meta.divider.objc</string>
+				</dict>
+				<key>9</key>
 				<dict>
 					<key>name</key>
 					<string>meta.inherited-class.objc</string>
@@ -601,7 +606,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>NS(GlyphStorage|M(utableCopying|enuItem)|C(hangeSpelling|o(ding|pying|lorPicking(Custom|Default)))|T(oolbarItemValidations|ext(Input|AttachmentCell))|I(nputServ(iceProvider|erMouseTracker)|gnoreMisspelledWords)|Obj(CTypeSerializationCallBack|ect)|D(ecimalNumberBehaviors|raggingInfo)|U(serInterfaceValidations|RL(HandleClient|DownloadDelegate|ProtocolClient|AuthenticationChallengeSender))|Validated(ToobarItem|UserInterfaceItem)|Locking)</string>
+					<string>\bNS(GlyphStorage|M(utableCopying|enuItem)|C(hangeSpelling|o(ding|pying|lorPicking(Custom|Default)))|T(oolbarItemValidations|ext(Input|AttachmentCell))|I(nputServ(iceProvider|erMouseTracker)|gnoreMisspelledWords)|Obj(CTypeSerializationCallBack|ect)|D(ecimalNumberBehaviors|raggingInfo)|U(serInterfaceValidations|RL(HandleClient|DownloadDelegate|ProtocolClient|AuthenticationChallengeSender))|Validated(ToobarItem|UserInterfaceItem)|Locking)\b</string>
 					<key>name</key>
 					<string>support.other.protocol.objc</string>
 				</dict>

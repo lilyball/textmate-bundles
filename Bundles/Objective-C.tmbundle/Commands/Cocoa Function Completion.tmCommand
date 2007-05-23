@@ -10,14 +10,15 @@
 	<string>#!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
-
 line = ENV['TM_CURRENT_LINE']
 
 def candidates_or_exit(methodSearch,files)
   candidates = []
-  files.each do |name|
-  zGrepped = %x{zgrep ^#{e_sh methodSearch } #{name}}
-  candidates += zGrepped.split("\n")
+  files.each do |name, pure,noArg|
+    zGrepped = %x{zgrep ^#{e_sh methodSearch } #{name}}
+    candidates += zGrepped.split("\n").map do |elem|
+       [elem, pure, noArg]
+      end
   end
   TextMate.exit_show_tool_tip "No completion available" if candidates.empty?
   return candidates
@@ -25,7 +26,7 @@ end
 
 def prettify(candidate)
   ca = candidate.split("\t")
-  if ca[1]
+  if ca[1]  &amp;&amp; ca.size != 2
     ca[0]+ca[1]
   else
    ca[0]
@@ -43,7 +44,7 @@ end
 
 def snippet_generator(cand,s,star,arg_name)
   c = cand.split"\t"
-  if c[1]
+  if c[1] &amp;&amp; c.size != 2 &amp;&amp; c[1] != ""
     i = 0
     middle = c[1][1..-2].split(",").collect do |arg|
       "${"+(i+=1).to_s+":"+ arg.strip + "}" 
@@ -51,17 +52,30 @@ def snippet_generator(cand,s,star,arg_name)
     c[0][s..-1]+"("+middle+")$0"
   else
     name = ""
-    name = "${2:#{construct_arg_name(c[0])}}" if arg_name
-    name = "${1:${TM_C_POINTER: *}#{name}}" if star
-    c[0][s..-1] + name +"$0"
+    if arg_name
+      name = "${2:#{construct_arg_name(c[0])}}"
+      if star
+        name = ("${1:${TM_C_POINTER: *}#{name}}") if star
+      else
+        name = " " + name
+      end
+    
+    else
+      name = (ENV['TM_C_POINTER'] || " *").rstrip if star
+    end
+  #  name = name[0..-2].rstrip unless arg_name
+    e_sn(c[0][s..-1]) + name + "$0"
   end
 end
 
 
 def pop_up(candidates, searchTerm,star,arg_name)
   start = searchTerm.size
-  prettyCandidates = candidates.map { |candidate| [prettify(candidate), candidate] }.sort
+  prettyCandidates = candidates.map do |cand|
+    [prettify(cand[0]), cand[0],cand[1],cand[2]]
+  end.sort
   if prettyCandidates.size &gt; 1
+    
     require "enumerator"
     pruneList = []  
 
@@ -74,7 +88,7 @@ def pop_up(candidates, searchTerm,star,arg_name)
       pruneList[ind+=1]  
     end
   end
-
+  
   if prettyCandidates.size &gt; 1
     #index = start
     #test = false
@@ -87,19 +101,20 @@ def pop_up(candidates, searchTerm,star,arg_name)
     #  index +=1
     #end
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-    pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full | { 'title' =&gt; pretty, 'cand' =&gt; full} }}
+    pl = {'menuItems' =&gt; prettyCandidates.map { |pretty, full, pure, noArg | { 'title' =&gt; pretty, 'cand' =&gt; full, 'pure'=&gt; pure, 'noArg'=&gt; noArg} }}
     open("/dev/console", "w") { |io| io &lt;&lt; pl.to_plist }
     io = open('|"$DIALOG" -u', "r+")
     io &lt;&lt; pl.to_plist
     io.close_write
     res = PropertyList::load(io.read)
     if res.has_key? 'selectedMenuItem'
-      snippet_generator( res['selectedMenuItem']['cand'], start,star,arg_name )
+      b = {0 => false , 1 => true}
+      snippet_generator( res['selectedMenuItem']['cand'], start, star&amp;&amp; !b[res['selectedMenuItem']['pure']],arg_name &amp;&amp; !b[res['selectedMenuItem']['noArg']] )
     else
       ""
     end
   else
-    snippet_generator( candidates[0], start, star, arg_name )
+    snippet_generator( candidates[0][0], start, star &amp;&amp; !candidates[0][1], arg_name &amp;&amp; !candidates[0][2] )
   end
 end
 
@@ -118,28 +133,33 @@ end
 
 star = arg_name = false
 if ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
-	files = ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaProtocols.txt.gz"]
+  files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaProtocols.txt.gz",false,false]]
 elsif ENV['TM_SCOPE'].include?("meta.scope.implementation.objc") ||  ENV['TM_SCOPE'].include?("meta.interface-or-protocol.objc")
-  files = ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClasses.txt.gz"]
-  userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz"
-    files += [userClasses] if File.exists? userClasses
+  files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false]]
+  files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz", true, false]] if ENV['TM_SCOPE'].include?("meta.scope.interface.objc")
+  userClasses = ["#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz", false,false]
+  files += [userClasses] if File.exists? userClasses[0]
   if ENV['TM_SCOPE'].include?("meta.function.objc")
-    star = true		 
+    star = true
+    files += [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false]]
   elsif ENV['TM_SCOPE'].include? "meta.scope.implementation.objc"
     star = arg_name = true
-    files += ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz","#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz"]
-    files += ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz"] if ENV['TM_SCOPE'].include? "source.objc++"
+    files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false],
+     [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false],
+             ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false]]
+    files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false]] if ENV['TM_SCOPE'].include? "source.objc++"
   elsif ENV['TM_SCOPE'].include? "meta.scope.interface.objc"
     star = arg_name = true
   end
 else
   star = arg_name = true
-  files = ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClasses.txt.gz",
-           "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",
-           "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz"]
-  files += ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz"] if ENV['TM_SCOPE'].include? "source.objc++"
+  files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false],
+          [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true],
+          [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false],
+          [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false],
+          [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false]]
+  files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false]] if ENV['TM_SCOPE'].include? "source.objc++"
 end
-
 alpha_and_caret = /[a-zA-Z_][_a-zA-Z0-9]*\(?$/
 if k = line[0..caret_placement].match(alpha_and_caret)
   candidates = candidates_or_exit(k[0], files)

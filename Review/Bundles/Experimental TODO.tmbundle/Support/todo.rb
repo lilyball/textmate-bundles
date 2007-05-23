@@ -3,13 +3,6 @@
 # TODO: Fix relative Links wrt offset header
 # TODO: Print stylesheet
 
-$tags = [
-  { :label => "FIXME",   :color => "#A00000", :regexp => /FIX ?ME[\s,:]+(\S.*)$/i },
-  { :label => "TODO",    :color => "#CF830D", :regexp => /TODO[\s,:]+(\S.*)$/i    },
-  { :label => "CHANGED", :color => "#008000", :regexp => /CHANGED[\s,:]+(\S.*)$/  },
-  { :label => "RADAR",   :color => "#0090C8", :regexp => /(.*<)ra?dar:\/(?:\/problem|)\/([&0-9]+)(>.*)$/, :trim_if_empty => true },
-]
-
 if RUBY_VERSION =~ /^1\.6\./ then
   puts <<-HTML
 <p>Sorry, but this function requires Ruby 1.8.</p>
@@ -19,11 +12,33 @@ HTML
   abort
 end
 
-require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+# require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/web_preview"
 require "erb"
+require "yaml"
 include ERB::Util
+
+loaded_tags = YAML.load_file("#{ENV['TM_BUNDLE_SUPPORT']}/tags.yaml")
+
+# TODO: ok, this is kind of ugly and certainly could be done inline.
+# my attempts using inject on the hashes did not work however.
+$tags = []
+loaded_tags.each { |tag|
+  new_tag = {}
+  tag.each do |key, value|
+    if value == 'true'
+      new_tag[key.to_sym] = true
+    elsif value == 'false'
+      new_tag[key.to_sym] = false
+    elsif value =~ /^\/.*\/i?$/
+      new_tag[key.to_sym] = Regexp.new(value.sub(/^\/(.*)\/i?$/, '\1'), (value =~ /i$/) ? 129 : 128)
+    else
+      new_tag[key.to_sym] = value
+    end
+  end
+  $tags << new_tag
+}
 
 ignores = ENV['TM_TODO_IGNORE']
 

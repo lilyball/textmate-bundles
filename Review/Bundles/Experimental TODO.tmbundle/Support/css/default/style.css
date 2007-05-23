@@ -3,6 +3,29 @@
 	border-collapse: collapse;
 }
 
+#todo_list h6.big {
+	opacity: 0.1;
+	font-family: serif;
+	font-size: 36pt;
+	font-weight: bold;
+	position: fixed;
+	right: 1ex;
+	top: 0;
+}
+
+/*
+#todo_list h6.big {
+	opacity: 0.2;
+	font-family: monospace;
+	font-size: 12pt;
+	font-weight: bold;
+	position: fixed;
+	left: 0.5ex;
+	top: 6em;
+}
+*/
+
+
 #todo_list h3 {
 	clear: both;
 }
@@ -23,8 +46,12 @@
 
 #todo_list td {
 	font-size: 9pt;
-	padding: 1ex 1ex 0 0;
+	padding: 0.5ex 1ex 0.5ex 0;
 	vertical-align: top;
+}
+
+#todo_list tr.alternate {
+	background-color: rgba(127,127,127,0.15);
 }
 
 #todo_list td.file {

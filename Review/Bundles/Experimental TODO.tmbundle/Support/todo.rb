@@ -40,7 +40,7 @@ $tags.each do |tag|
   tag[:rendered] = ''
   options_a << ".bg_#{tag[:label]} {background-color: #{tag[:color]}; color: #FFF; padding: 0.5ex;}"
   options_a << "\#jump_to_#{tag[:label]} {color: #{tag[:color]};}"
-  options_a << "tr.#{tag[:label]} {color: #{tag[:color]}}"
+  options_a << ".color_#{tag[:label]} {color: #{tag[:color]}}"
 end
 
 options = '<style type="text/css">' + options_a.join("\n") + '</style>'

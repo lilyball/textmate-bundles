@@ -18,7 +18,7 @@ Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
 The "Show TODO List" command will scan your current document (on disk) or documents in your project for lines containing certain tags (see below).
 You will be presented with a row of “Tabs” that are counting matches while the search is going on. Once the search finishes a list for each of the tags and their context is shown. Each entry can be clicked to jump to that line in that file. The lists can be ordered by clicking on their column titles. Clicking on the Tabs or typing `⌃` + first letter of the tag (like `⌃T` for “TODO”) will jump to the corresponding list.
 
-TextMate will ignore files whose name matches the enviromental variable `TM_TODO_IGNORE`.
+TextMate will ignore files whose full path matches the enviromental variable `TM_TODO_IGNORE`.
 
 ### Tags
 

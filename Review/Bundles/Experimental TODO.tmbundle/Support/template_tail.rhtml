@@ -1,5 +1,6 @@
 	<% $tags.each do |tag| %>
 	<% next if tag[:matches].length == 0 %>
+		<h6 id="big_<%= tag[:label] %>" class="big color_<%= tag[:label] %>" style="display: none;"><%= tag[:label] %></h6>
 		<h3><a id="jump_to_<%= tag[:label] %>"><%= tag[:label] %></a></h3>
 		<table class="sortable" id="table_<%= tag[:label] %>">
 			<tr>
@@ -8,9 +9,19 @@
 			</tr>
 			<%= tag[:rendered] %>
 		</table>
+		<script type="text/javascript" charset="utf-8">
+			document.getElementById("table_<%= tag[:label] %>").onmouseover = function(event) {
+				var big = document.getElementById("big_<%= tag[:label] %>");
+				big.style.display = "block";
+			};
+			document.getElementById("table_<%= tag[:label] %>").onmouseout = function(event) {
+				var big = document.getElementById("big_<%= tag[:label] %>");
+				big.style.display = "none";
+			};
+		</script>
 	<% end %>
 	<script type="text/javascript" charset="utf-8">
-		var box = document.getElementById("total_count")
+		var box = document.getElementById("total_count");
 		box.innerHTML = "Total: <%= $total %>";
 	</script>
 	<a href="#todo_list" id="toplink">↑ top</a>

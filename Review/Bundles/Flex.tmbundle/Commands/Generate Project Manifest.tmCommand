@@ -16,9 +16,16 @@ require SUPPORT + '/lib/exit_codes'
 require SUPPORT + '/lib/textmate'
 
 def generateComponentXML( the_file, extension )
+    
     c_id = File.basename( the_file, extension )
-    c_class = the_file.sub(PROJECT+"/src/","").sub(extension,"").gsub( "/", ".")    
-    return "\t&lt;component id=\"#{c_id}\" class=\"#{c_class}\" /&gt;"
+    c_class = the_file.sub(PROJECT+"/src/","").sub(extension,"").gsub( "/", ".")
+    
+    if the_file[/\/src\//] then            
+        return "\t&lt;component id=\"#{c_id}\" class=\"#{c_class}\" /&gt;"
+    else
+        return "\t&lt;!-- &lt;component id=\"#{c_id}\" class=\"#{c_class}\" /&gt; --&gt;"
+    end
+    
 end
 
 xml_components = []
@@ -49,9 +56,7 @@ puts "\n&lt;/componentPackage&gt;"
 	<key>name</key>
 	<string>Generate Manifest</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
-	<key>scope</key>
-	<string>text.xml.mxml</string>
+	<string>replaceDocument</string>
 	<key>uuid</key>
 	<string>A61DF47A-7BD1-4FE1-8793-CF8C97DF4E6D</string>
 </dict>

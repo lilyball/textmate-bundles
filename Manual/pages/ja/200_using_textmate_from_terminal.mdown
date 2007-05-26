@@ -1,0 +1,79 @@
+# Calling TextMate from Other Applications
+
+## Shell / Terminal
+
+Mac OS X comes with an [`open`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/open.1.html) shell command which can be used to simulate a double click from within Terminal. It can also perform an _Open With…_ operation by use of the `-a` argument, e.g.: `open -a TextMate .` will open the current folder in TextMate (as a scratch project).
+
+This standard command has a few shortcomings: it can only open one file at a time, it cannot open a document at a specific line and it cannot “stall” the shell until the file has been closed, which is useful e.g. when using an editor to write something like a subversion commit message.
+
+For this reason TextMate comes with its own `mate` shell command, which supersedes the `open` command. For usage instructions you can run `mate -h` (from Terminal).
+
+The `mate` command is located inside the TextMate application bundle and it is recommended that you create a symbolic link which points to the command (rather than “install” it), so that if the command is updated in the future, you will not need to reinstall the updated command.
+
+Creating a symbolic link can either be done by selecting Help &#x2192; Terminal Usage… from the menu, or from the shell by running something like the following:
+    
+    ln -s /Applications/TextMate.app/Contents/Resources/mate ~/bin/mate
+
+This assumes that you have `~/bin` created and in your path and that TextMate is installed in `/Applications`.
+
+After having created this link, you may want to setup a few shell variables to make other applications use TextMate as an external editor.
+
+### The General EDITOR Variable
+
+The `EDITOR` variable is used by many shell commands, like `svn` (subversion) and `CVS`. To use TextMate as the editor for the `EDITOR` variable, set it like this (for bash and zsh users e.g. in `~/.bash_profile` or `~/.zshrc`):
+    
+    export EDITOR='mate -w'
+
+We add the `-w` argument to make the command wait for TextMate to close the file, before continuing.
+
+There is one command which does not support giving arguments in the `EDITOR` variable, it is `crontab` (which is sort of obsoleted by [launchd](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man8/launchd.8.html)). If you need to use it, you can create a symbolic link to `mate` with a `_wait` suffix which implies `-w`. For example:
+    
+    ln -s mate ~/bin/mate_wait   # run this once to create the link
+    export EDITOR='mate_wait'    # use in your ~/.bash_profile
+
+### TeX Editor
+
+When TeX gives an error message relating to a file, you can enter `e` to edit the file (and correct the error).
+
+To setup TextMate to be used in this case, setup the `TEXEDIT` variable like this:
+    
+    export TEXEDIT='mate -w -l %d "%s"'
+
+### Edit from `less`
+
+The `less` pager supports editing the file being viewed by pressing `v`. To setup TextMate to be used with less, you need to setup the `LESSEDIT` variable:
+    
+    export LESSEDIT='mate -l %lm %f'
+
+
+## URL Scheme (HTML)
+
+The `txmt` URL scheme allows you to open files in TextMate via hyperlinks found for example in HTML documents (anchors). These can refer to local files which can be useful when:
+
+ 1. Using [commands][Commands] with [HTML output][HTMLOutput] that indicate errors/warnings with the current document, or refer to other documents in your project.
+
+ 2. If you are generating a set of web-pages from simpler (text) files you can have these link to the original text files, so that when you are inspecting the generated result (in a browser) you can quickly edit the source of each page by following the `txmt:`-link.
+
+The URL scheme is `txmt:` and currently has one command named `open`. This command takes up to three arguments:
+
+ * `url` — the (file) URL to open (e.g. `url=file://~/.bash_profile`), if this is left out, the current document is targeted.
+ * `line` — the line on which the caret should be placed after opening the file (e.g. `line=11`).
+ * `column` — the column on which the caret should be placed after opening the file (e.g. `column=3`).
+
+So a full example of a `txmt:` URL could be ([click here to test](txmt://open/?url=file://~/.bash_profile&line=11&column=2)):
+
+    txmt://open/?url=file://~/.bash_profile&line=11&column=2
+
+## ODB Editor Suite
+
+TextMate implements the server side of the ODB Editor Suite. This allows it to be used as external editor for programs which implement the client side of the protocol.
+
+Many programs do however use a hardcoded list of which text editors implement the protocol, so if you cannot find TextMate in the list of external editors for an application which does support the ODB Editor Suite, you may need to write to the author of that application and request that TextMate gets added to its list of supported editors.
+
+There is a wiki page which tracks the [status of applications that can be configured to use an external text editor](http://macromates.com/wiki/Main/TextMateAwarePrograms).
+
+## Cocoa Text Fields
+
+Included with TextMate is an “Edit in TextMate” input manager which you can install to get the ability to call upon TextMate from the standard Cocoa text editor control (including the one used in Mail). This is useful for programs which do not implement the ODB Editor Suite (e.g. Safari's form elements).
+
+For more info select the _Install “Edit in TextMate”…_ action located in the TextMate bundle (using the gear menu in the status bar). This provides you with full documentation about the input manager before actually installing it.

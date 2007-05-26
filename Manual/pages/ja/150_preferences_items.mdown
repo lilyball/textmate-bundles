@@ -1,0 +1,53 @@
+# Preferences Items
+
+For settings where differing values are useful to have based on a file type or the context of the caret position in a document, the bundle editor allows you to set and specify a scope selector which selects which scope the particular settings should apply.
+
+Currently the preferences are specified in the [old-style property list][PropertyListFormat] format.
+
+![Preferences Editor](preferences_editor.png)
+
+## Completions
+
+ * `completions` — an array of additional candidates when cycling through completion candidates from the current document.
+ * `completionCommand` — a shell command (string) which should return a list of candidates to complete the current word (obtained via the `TM_CURRENT_WORD` variable).
+ * `disableDefaultCompletion` — set to `1` if you want to exclude matches from the current document when asking for completion candidates (useful when you provide your own completion command).
+
+For more info see section on [completions][Completions].
+
+## Indentation
+
+ * `decreaseIndentPattern` — regular expression.
+ * `increaseIndentPattern` — regular expression.
+ * `indentNextLinePattern` — regular expression.
+ * `unIndentedLinePattern` — regular expression.
+
+For more information see [indentation rules][IndentRules].
+
+## Symbol List
+
+ * `showInSymbolList` — set to `1` to include in the symbol list.
+ * `symbolTransformation` — a “program” consisting of one or more `s/«regexp»/«format»/«options»;` transformations which will be applied to the extracted “symbol”.
+
+For more information see [customizing the symbol list][CustomizeSymbolList].
+
+## Paired Characters
+
+ * `highlightPairs` — an array of arrays, each containing a pair of characters where, when the caret moves over the second, the first one will be highlighted for a short moment, if found.
+ * `smartTypingPairs` — an array of arrays, each containing a pair of characters where when the first is typed, the second will be inserted. An example is shown below. For more information see [auto-paired characters][AutoPairs].
+
+    	smartTypingPairs = (
+    		( '"', '"' ),
+    		( '(', ')' ),
+    		( '{', '}' ),
+    		( '[', ']' ),
+    		( '“', '”' ),
+    		( "'", "'" ),
+    		( '`', '`' ),
+    	);
+
+
+## Other
+
+ * `shellVariables` — an array of key/value pairs. See [context dependent variables][ScopedEnvVariables].
+ * `spellChecking` — set to `0`/`1` to disable/enable spell checking.
+

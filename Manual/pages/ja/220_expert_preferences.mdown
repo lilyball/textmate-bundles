@@ -46,26 +46,30 @@ For more information about key codes see [this letter](http://lists.macromates.c
 
 ## `OakBundleManagerDisambiguateMenuFontSize`
 
-If you find the font used in the menu to disambiguate tab triggers, key equivalents and similar, too small, then you can run:
+もしあなたがメニューで使われているタブトリガーと対応するキーと似たものを明確にするためのフォントが小さすぎると思うなら、次のように実行してください。
 
     defaults write com.macromates.textmate OakBundleManagerDisambiguateMenuFontSize 14
 
 ## `OakDefaultBundleForNewBundleItems`
 
-When you create a new item in the bundle editor without having selected a bundle first, then the bundle with the UUID held by this defaults key is used as the target.
 
-This automatically gets set to the first bundle you create. For an example of how to change it see [this letter](http://lists.macromates.com/pipermail/textmate/2006-May/010651.html).
+あなたがはじめにバンドルを選択せずに、バンドルエディタで新しいアイテムを作ると、このデフォルトキーによって使われるUUIDのバンドルがターゲットとして使われます。
+
+<!-- TODO: Review the paragraph above. When you create a new item in the bundle editor without having selected a bundle first, then the bundle with the UUID held by this defaults key is used as the target. -->
+
+これは自動的にあなたが作る最初のバンドルに設定されます。これをどう変更するかの例は [このメール](http://lists.macromates.com/pipermail/textmate/2006-May/010651.html)を見てください。
 
 ## `OakDefaultLanguage`
 
-Sets the default language used for new (untitled) documents. The value should be the UUID of the language to be used.
+新規の（無題の）ドキュメントのデフォルトの言語を設定します。値は使われる言語のUUIDを使います。
 
-For more information see [this message from the mailing list](http://lists.macromates.com/pipermail/textmate/2006-February/008276.html).
+
+さらなる情報は[メーリングリストのこのメッセージ](http://lists.macromates.com/pipermail/textmate/2006-February/008276.html)をみてください。
 
 
 ## `OakDisableSessionRestore`
 
-When you launch TextMate it will open the project / document which was open when you last exited. You can however disable this feature by running:
+あなたがTextMateを起動するとき、最後に使ったプロジェクト／ドキュメントが開きます。しかし、次のコマンドを実行することによってこの機能を無効にできます。
 
     defaults write com.macromates.textmate OakDisableSessionRestore 1
 
@@ -98,5 +102,5 @@ When a command brings up a tool tip, mouse movements performed within the first 
 
 The Text &#x2192; Convert &#x2192; to Titlecase action (&#x2303;&#x2325;U) は以下の配列の単語を例外として扱います。
 
-The default value is `( a, an, and, at, but, by, else, for, from, if, in, nor, of, off, on, or, out, over, the, then, to, up, when )`.
+デフォルト値は以下の通り。 `( a, an, and, at, but, by, else, for, from, if, in, nor, of, off, on, or, out, over, the, then, to, up, when )`
 

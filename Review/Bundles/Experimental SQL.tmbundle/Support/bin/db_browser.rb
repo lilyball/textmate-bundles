@@ -182,9 +182,10 @@ def print_data(query = nil)
     offset = 0
   end
   run_query = query.dup
+  limited = true
   if not query.include?('LIMIT') and run_query =~ /\s*SELECT/i
-    limited = true
     run_query << ' LIMIT %d OFFSET %d' % [page_size, offset]
+    limited = false
   end
   begin
     res = @connection.do_query(run_query)

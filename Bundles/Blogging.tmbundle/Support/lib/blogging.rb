@@ -258,7 +258,7 @@ TEXT
     end
 
     date_created = DateTime.parse(@headers['date']) if @headers['date']
-    if date_created && self.mode != 'mt' && (self.mode != 'wp' || ENV['TM_SEND_DATE_TO_WP']) then
+    if date_created && self.mode != 'mt' then
       # Convert to GMT and then to an XMLRPC:DateTime object to
       # workaround xmlrpc/create.rb’s poor handling of DateTime.
       d = date_created.new_offset(0)

@@ -74,6 +74,7 @@
 <mx:RemoveChild target="{${1:sprite}}" />
 <mx:RegExpValidator expression="${1:regex}" ${2:flags="${3:regexFlags}"} ${4:noExpressionError="${5:error message}"} ${6:noMatchError="${5:no match message}"} />
 <mx:RadialGradient angle="${1:0}" foculPointRatio="${2:0}" />
+<mx:Repeater id="${1:repId}" dataProvider="{ ${2:data} }" ${3:recycleChildren="${4:false|true}"}>$0</mx:Repeater>
 
 # S
 <mx:Script><![CDATA[ $0 ]]></mx:Script>

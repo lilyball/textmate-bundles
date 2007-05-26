@@ -5,11 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>cd "`dirname "$TM_FILEPATH"`"
-#antlr "$TM_FILENAME"
+	<string>export TM_JAVA=$(which "${TM_JAVA:-java}")
+export TM_ANTLR="org.antlr.Tool"
 
-# for this you need to set CLASSPATH to your antlr.jar
-java antlr/Tool "$TM_FILENAME"
+cd "`dirname "$TM_FILEPATH"`"
+
+# for this to work you need to set CLASSPATH to
+# include antlr v3, v2, and StringTemplate jars
+# or set TM_ANTLR to include a proper -classpath
+"$TM_JAVA" $TM_ANTLR "$TM_FILENAME"
 </string>
 	<key>input</key>
 	<string>none</string>

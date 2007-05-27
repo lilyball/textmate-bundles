@@ -455,7 +455,7 @@ TEXT
       end
       @mw_success = true
     rescue XMLRPC::FaultException => e
-      # ignore for now?
+      TextMate.exit_show_tool_tip("Error: #{e.faultString} (#{e.faultCode})")
     end
   end
 
@@ -515,46 +515,46 @@ TEXT
       self.post['title'] = request_title(filename)
     end
 
-    begin
-      current_password = self.password
-      require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
-      TextMate.call_with_progress(:title => "Posting to Blog", :message => "Contacting Server “#{@host}”…") do
+    current_password = self.password
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+    TextMate.call_with_progress(:title => "Posting to Blog", :message => "Contacting Server “#{@host}”…") do
+      begin
         if post_id
           result = client.editPost(self.post_id, self.username, current_password, self.post, self.publish)
         else
           self.post_id = client.newPost(self.blog_id, self.username, current_password, self.post, self.publish)
         end
-        show_post_page()
+      rescue XMLRPC::FaultException => e
+        TextMate.exit_show_tool_tip("Error: #{e.faultString} (#{e.faultCode})")
       end
-      @mw_success = true
-      TextMate.exit_replace_document(post_to_document())
-    rescue XMLRPC::FaultException => e
-      TextMate.exit_show_tool_tip("Error: #{e.faultString} (#{e.faultCode})")
+      show_post_page()
     end
+    @mw_success = true
+    TextMate.exit_replace_document(post_to_document())
   end
 
   # Command: Fetch
 
   def fetch
-    begin
-      # Makes sure endpoint is determined and elements are parsed
-      current_password = self.password
-      require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
-      result = nil
-      TextMate.call_with_progress(:title => "Fetch Post", :message => "Contacting Server “#{@host}”…") do
+    # Makes sure endpoint is determined and elements are parsed
+    current_password = self.password
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+    result = nil
+    TextMate.call_with_progress(:title => "Fetch Post", :message => "Contacting Server “#{@host}”…") do
+      begin
         result = self.client.getRecentPosts(self.blog_id, self.username, current_password, 20)
+      rescue XMLRPC::FaultException => e
+        TextMate.exit_show_tool_tip("Error: #{e.faultString} (#{e.faultCode})")
       end
-      if !result || !result.length
-        TextMate.exit_show_tool_tip("No posts are available!")
-      end
-      @mw_success = true
-      if self.post = select_post(result)
-        TextMate.exit_create_new_document(post_to_document())
-      else
-        TextMate.exit_discard
-      end
-    rescue XMLRPC::FaultException => e
-      TextMate.exit_show_tool_tip("Error retrieving posts. Check your configuration and try again.")
+    end
+    if !result || !result.length
+      TextMate.exit_show_tool_tip("No posts are available!")
+    end
+    @mw_success = true
+    if self.post = select_post(result)
+      TextMate.exit_create_new_document(post_to_document())
+    else
+      TextMate.exit_discard
     end
   end
 
@@ -723,7 +723,7 @@ TEXT
           TextMate.exit_show_tool_tip("Error uploading image.")
         end
       rescue XMLRPC::FaultException => e
-        TextMate.exit_show_tool_tip("Error uploading image. Check your configuration and try again.")
+        TextMate.exit_show_tool_tip("Error uploading image: #{e.faultString} (#{e.faultCode})")
       end
     end
   end

@@ -3,8 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (NSString *)${1:thing};
-- (void)set${1/./\u$0/}:(NSString *)${2:a${1/.*/\u$0/}};</string>
+	<string>- (NSString${TM_C_POINTER/(^(.+?)\s*$)?/(?1:$2: *)/})${1:thing};
+- (void)set${1/./\u$0/}:(NSString${TM_C_POINTER/(^(.+?)\s*$)?/(?1:$2: *)/})${2:a${1/.*/\u$0/}};</string>
 	<key>name</key>
 	<string>Interface: Accessors for String</string>
 	<key>scope</key>

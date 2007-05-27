@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (NSString *)${1:thing}
+	<string>- (NSString${TM_C_POINTER/(^(.+?)\s*$)?/(?1:$2: *)/})${1:thing}
 {
 	return ${2:$1};
 }
 
-- (void)set${1/.*/\u$0/}:(NSString *)${3:a${1/.*/\u$0/}}
+- (void)set${1/.*/\u$0/}:(NSString${TM_C_POINTER/(^(.+?)\s*$)?/(?1:$2: *)/})${3:a${1/.*/\u$0/}}
 {
 	$3 = [$3 copy];
 	[$2 release];

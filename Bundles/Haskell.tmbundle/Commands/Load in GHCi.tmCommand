@@ -19,15 +19,13 @@ RUBY
 }
 
 osascript &lt;&lt;- APPLESCRIPT
-tell application "Term"
+tell app "Terminal"
 	launch
 	activate
 	do script "clear; cd $(esc "${TM_DIRECTORY}"); ${THASKELL} ${TM_FILEPATH}"
 	set position of first window to {100, 100}
 end tell
 APPLESCRIPT
-
-
 </string>
 	<key>input</key>
 	<string>none</string>
@@ -36,7 +34,7 @@ APPLESCRIPT
 	<key>name</key>
 	<string>Load in GHCi</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.haskell</string>
 	<key>uuid</key>

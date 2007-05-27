@@ -1,12 +1,16 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -w
 
 class XMLInput
   def initialize(xml)
-    @xml = xml[/^<(.*?)>(.*?)<\/\1>$/m, 2]
+    @xml        = xml[/^<(.*?)>(.*?)<\/\1>$/m, 2]
     @root_scope = $1
   end
   attr_reader :xml
   
+  # 
+  # I don't like this method because it's basically a constructor that can
+  # return two incompatible object types. – JEG2
+  # 
   def self.parse(text)
     xml = XMLInput.new(text)
     xml.xml ? xml : text
@@ -30,7 +34,7 @@ class XMLInput
     false
   end
 
-  def iterate(*scope_patterns)
+  def each(*scope_patterns)
     yield_scope = nil
     @xml.gsub(/(?:(<(.*?)>(.*?)<\/\2>)|([^<]*))/m) do
       next if $&.empty?
@@ -40,40 +44,35 @@ class XMLInput
         content = $4
         scope = @root_scope
       end
-      yield [content, yield_scope] if scope_patterns.empty? or scope_patterns.find { |pat| yield_scope = XMLInput.match_scope(pat, scope) }
+      if scope_patterns.empty? or scope_patterns.find { |pat| yield_scope = self.class.match_scope(pat, scope) }
+        yield content, yield_scope
+      end
     end
   end
+  include Enumerable
 
-  # Iterate over STDIN
-  def self.iterate(*scope_patterns, &block)
-    new(STDIN.read).send(:iterate, *scope_patterns, &block)
+  # Iterate over the IO provided as the first argument or STDIN.
+  def self.each(*args, &block)
+    io = args.first.respond_to?(:read) ? args.shift : STDIN
+    new(io.read).each(*args, &block)
   end
   
   # Returns just the text
   def to_s
     return xml unless xml[0] == ?<
-    s = ''
-    iterate do |xml, scope|
+    inject("") do |s, (xml, scope)|
       s << xml.to_s
     end
-    s
   end
 end
 
 if $0 == __FILE__
-  class TestSTDIN < IO
-    def read
-      DATA.read
-    end
-  end
-  STDIN.reopen(TestSTDIN.new(STDIN.fileno))
-  
   # =============
   # = doctohtml =
   # =============
   def xml_to_html(xml)
     code_html = ''
-    xml.iterate(/.*/) do |xml, scope|
+    xml.each(/.*/) do |xml, scope|
       classes = scope.split(/\./)
       list = []
       begin 
@@ -96,7 +95,7 @@ if $0 == __FILE__
   # = Copy condensed SQL =
   # ======================
   res = ''
-  XMLInput.iterate('comment', 'string', '*') do |xml, scope|
+  XMLInput.each(DATA, 'comment', 'string', '*') do |xml, scope|
   # or XMLInput.new(xml).iterate(/^comment/, /^string/, /.*/) do |xml, scope|
   # or XMLInput.new(xml).iterate(/^.*?(?=\..*)?/) do |scope, xml|
     case scope

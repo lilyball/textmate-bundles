@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSDictionary *${1:dict} = [NSDictionary dictionaryWithObjectsAndKeys:
+	<string>NSDictionary${TM_C_POINTER: *}${1:dict} = [NSDictionary dictionaryWithObjectsAndKeys:
 	${2:object}, ${3:key},$0
 	nil];
 </string>
 	<key>name</key>
-	<string>New NSDictionary</string>
+	<string>NSDictionary With Objects and Keys</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>

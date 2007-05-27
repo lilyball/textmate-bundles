@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSArray *${1:array} = [NSArray arrayWithObjects:
+	<string>NSArray${TM_C_POINTER: *}${1:array} = [NSArray arrayWithObjects:
 						${2:object},$0
 						nil];</string>
 	<key>name</key>
-	<string>New NSArray</string>
+	<string>NSArray With Objects</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>

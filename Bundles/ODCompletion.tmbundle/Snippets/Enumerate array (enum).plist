@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSEnumerator *${2:${1:string}Enum} = [${3:$1Array} objectEnumerator];
+	<string>NSEnumerator${TM_C_POINTER: *}${2:${1:string}Enum} = [${3:$1Array} objectEnumerator];
 ${5:id} ${4:curr${1/(.)(.*)/\U$1\E$2/}};
 
 while (($4 = [$2 nextObject])) {

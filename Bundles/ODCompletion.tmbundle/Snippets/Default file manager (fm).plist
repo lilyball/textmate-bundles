@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>NSFileManager *${1:fm} = [NSFileManager defaultManager];</string>
+	<string>NSFileManager${TM_C_POINTER: *}${1:fm} = [NSFileManager defaultManager];</string>
 	<key>name</key>
-	<string>Default File Manager</string>
+	<string>NSFileManager</string>
 	<key>scope</key>
 	<string>source.objc, source.objc++</string>
 	<key>tabTrigger</key>

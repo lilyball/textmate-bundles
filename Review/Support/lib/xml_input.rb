@@ -6,7 +6,7 @@ class XMLInput
     @root_scope = $1
   end
   attr_reader :xml
-  
+
   # 
   # I don't like this method because it's basically a constructor that can
   # return two incompatible object types. – JEG2
@@ -30,7 +30,7 @@ class XMLInput
     return pattern if pattern == '*'
 
     return pattern if scope[0, pattern.length] == pattern
-    
+
     false
   end
 
@@ -44,7 +44,9 @@ class XMLInput
         content = $4
         scope = @root_scope
       end
-      if scope_patterns.empty? or scope_patterns.find { |pat| yield_scope = self.class.match_scope(pat, scope) }
+      if scope_patterns.empty?
+        yield content, scope
+      elsif scope_patterns.find { |pat| yield_scope = self.class.match_scope(pat, scope) }
         yield content, yield_scope
       end
     end
@@ -89,6 +91,7 @@ if $0 == __FILE__
     code_html
   end
   # puts xml_to_html(XMLInput.new(DATA.read))
+  # 
   # exit
 
   # ======================
@@ -97,7 +100,7 @@ if $0 == __FILE__
   res = ''
   XMLInput.each(DATA, 'comment', 'string', '*') do |xml, scope|
   # or XMLInput.new(xml).iterate(/^comment/, /^string/, /.*/) do |xml, scope|
-  # or XMLInput.new(xml).iterate(/^.*?(?=\..*)?/) do |scope, xml|
+  # or XMLInput.new(xml).iterate(/^.*?(?=\..*)?/) do |xml, scope|
     case scope
       when 'comment': # strip this
       when 'string':  res << xml.to_s

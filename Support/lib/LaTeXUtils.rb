@@ -50,6 +50,7 @@ module LaTeX
     
     # TODO: The following method should probably be simplified dramatically
     def find_file(filename, extension, relative)
+      filename.gsub!(/"/,"")
       filename.gsub!(/\.#{extension}$/,"")
       return filename if File.exist?(filename) # First try the filename as is, without the extension
       return "#{filename}.#{extension}" if File.exist?("#{filename}.#{extension}") # Then try with the added extension

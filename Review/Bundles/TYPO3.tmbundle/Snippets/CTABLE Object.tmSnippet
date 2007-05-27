@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${1:temp.something} = CTABLE
+$1 {
+  offset = 5, 0
+  tableParams = border=0 width=400
+  cWidth=400
+  c.1 = CONTENT
+  c.1.table = tt_content
+  c.1.select {
+    pidInList = this
+    orderBy = sorting
+  }
+  tm.10 &lt; temp.sidemenu
+  tm.TDParams = valign=top
+}
+</string>
+	<key>name</key>
+	<string>CTABLE Object</string>
+	<key>scope</key>
+	<string>source.typoscript</string>
+	<key>tabTrigger</key>
+	<string>ctable</string>
+	<key>uuid</key>
+	<string>5D3AD531-184C-4C4B-A638-3A7733D2DD20</string>
+</dict>
+</plist>

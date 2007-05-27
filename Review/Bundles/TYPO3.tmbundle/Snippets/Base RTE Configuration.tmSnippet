@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>RTE &gt;
+RTE.default.contentCSS = ${1:fileadmin/templates/master.css}
+RTE.default.classesCharacter = ${2:classes,from,stylesheet,to,appear,in,RTE,editor}
+RTE.config.tt_content.bodytext.showButtons = textstylelabel, textstyle, formatblock,left, center, justifyfull,outdent, indent, textindicator, line, link, image, findreplace, spellcheck, chMode, removeformat, copy, cut, paste, undo, redo, showhelp, about
+RTE.config.tt_news.bodytext.showButtons = textstylelabel, textstyle, formatblock,left, center, justifyfull,outdent, indent, textindicator, line, link, image, findreplace, spellcheck, chMode, removeformat, copy, cut, paste, undo, redo, showhelp, about
+RTE.default.hideButtons = underline, strikethrough, subscript, superscript
+RTE.default.proc { 
+  allowTags = b,i,strong,em,table, tbody, tr, th, td, h1, h2, h3, h4, h5, h6, div, p, br, span, ul, ol, li, pre, blockquote, strong, em, a, img, hr, tt, q, cite, abbr, acronym, address
+  overruleMode = ts_css
+  dontConvBRtoParagraph = 1
+  internalizeFontTags = 1
+  allowTagsOutside = img,hr,address
+  denyTags = sup,sub,strike,center,u
+  allowedClasses = fancy,neato,ugly
+  entryHTMLparser_db = 1
+  entryHTMLparser_db {
+    allowTags &lt; RTE.default.proc.allowTags
+    xhtml_cleaning = 1
+    htmlSpecialChars = 0
+    noAttrib = b, i, u, strike, sub, sup, strong, em, quote, blockquote, cite, tt, br, center
+    tags.hr.allowedAttribs = class
+    tags.span.allowedAttribs = class
+    tags.b.remap = strong
+    tags.i.remap = em
+    removeTags = sdfield
+    keepNonMatchedTags = protect 
+  }
+}</string>
+	<key>name</key>
+	<string>Base RTE Configuration</string>
+	<key>scope</key>
+	<string>source.typoscript</string>
+	<key>tabTrigger</key>
+	<string>rte</string>
+	<key>uuid</key>
+	<string>642DC30D-7161-4824-8037-4300C5C6A5C5</string>
+</dict>
+</plist>

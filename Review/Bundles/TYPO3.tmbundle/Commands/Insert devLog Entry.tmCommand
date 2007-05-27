@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+input = $stdin.read
+
+matchdata =/var \$extKey\t*\s*=\t*\s*'(.*)';/.match(input)
+
+if matchdata.nil?
+  extKey = "extn_key"  
+else
+  extKey = matchdata[1]
+end
+
+print "if (TYPO3_DLOG) t3lib_div::devLog('${1:Message Here}', '${2:"+extKey+"}'${3:,${4:Severity:0=Info,1=Notice,2=Warning,3=Fatal Error,-1=OK}${5:,\\$${6:additional_data_to_pass}}});
+$0"
+
+</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^m</string>
+	<key>name</key>
+	<string>Insert devLog Entry</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.php</string>
+	<key>tabTrigger</key>
+	<string>debug</string>
+	<key>uuid</key>
+	<string>E6FAF2E5-4858-49BB-AAC0-65943D91A139</string>
+</dict>
+</plist>

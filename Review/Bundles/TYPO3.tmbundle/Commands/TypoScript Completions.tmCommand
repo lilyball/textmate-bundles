@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+# A complete ripoff of the Textmate scope completions
+
+# Created by Sudara Williams
+# On the train to Steiermark, Austria
+# April 6, 2007
+
+# When you see this: [help!] in the comments, it is the user hitting the key equivalent
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/current_word"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
+
+# grabs everything to the left of the cursor
+partial = Word.current_word('a-zA-Z.', :left)
+
+# where we are keeping our lucky bachelors this evening
+candidates = []
+
+
+# let's walk through this intelligently
+
+# before any of this works, we need to scope as much as possible
+# For instance 
+# config.[help!]
+# would be scoped as meta.config.typoscript
+
+# So, we want to see where we are
+# if ENV['TM_SCOPE'] =~ /string\.quoted\.single\.scope\.root\.tm-grammar/
+if ENV['TM_SCOPE'] =~ /string\.quoted\.(single|double)\.scope\.root/
+  scopes = "source.\ntext.html.\ntext.plain.\ntext.xml."
+end
+if ENV['TM_SCOPE'] =~ /meta\.stdWrap\.typoscript/
+  scopes = ["csConv", "parseFunc", "HTMLparser", "split", "prioriCalc", "char", "intval", "date", "strftime", "age", "case", "bbytes", "subtring", "removeBadHTML", "stripHtml", "crop", "rawUrlEncode", "htmlSpecialCharacters", "doubleBrTag", "br", "brTag", "encapsLines", "keywords", "innerWrap", "innerWrap2", "fontTag", "addParams", "textStyle", "tableStyle", "filelink", "postCObject", "preCObject", "wrapAlign", "typolink", "TCAselectItem", "spaceBefore", "spaceAfter", "space", "wrap", "noTrimWrap", "wrap2", "wrap3", "dataWrap", "prepend", "append", "outerWrap", "insertData", "offsetWrap", "postUserFunc", "postUserFuncInt", "prefixComment", "editIcons", "editPanel", "debug", "debugFunc", "debugData"]
+else 
+  scopes = ["boo", "bap"]
+end
+
+
+
+# PARTIAL COMPLETIONS
+# this is for "I don't want to type so much" or "I don't remember the full property name"
+#
+
+# PATH COMPLETIONS
+# the basic, most useful completion would come like this:
+# config.[help!]
+# stdWrap.[help!]
+# lib.someObject.[help!]
+
+
+# we could be somewhere like 
+# config.someParameter.[help] 
+# wanting a value
+
+# DRYing TYPOSCRIPT completions
+# we could want to have help typing that big ass chain of typoscript properties again
+# lib.myObject.myProperty = HTML
+# [help!]
+
+# "WHERE THE HELL AM I" completions
+# we could be somewhere like
+# lib.myObject.myProperty = HTML
+# lib.myObject.myProperty{
+# [help!]
+# wanting a list of avaliable options
+
+# maybe we are scoped in as HTML cobject
+# 10.[help!]
+
+
+# TYPOSCRIPT OBJECT TYPES
+# Typoscript has repeating themes such as 'stdWrap' which can occur in many places. 
+# We want to see if we are in one of those places and offer up the options available there.
+# A heirarchy of options should be presented
+
+# matches stdWrap
+# setCurrent|filelist|override|ifEmpty|ifBlank|stdWrap|innerWrap|innerWrap2|wrapAlign|spaceBefore|spaceAfter|outerWrap
+
+# respond with
+# csConv|parseFunc|HTMLparser|split|prioriCalc|char|intval|date|strftime|age|case|bbytes|subtring|removeBadHTML|stripHtml|crop|rawUrlEncode|htmlSpecialCharacters|doubleBrTag|br|brTag|encapsLines|keywords|innerWrap|innerWrap2|fontTag|addParams|textStyle|tableStyle|filelink|postCObject|preCObject|wrapAlign|typolink|TCAselectItem|spaceBefore|spaceAfter|space|wrap|noTrimWrap|wrap2|wrap3|dataWrap|prepend|append|outerWrap|insertData|offsetWrap|postUserFunc|postUserFuncInt|prefixComment|editIcons|editPanel|debug|debugFunc|debugData
+
+# walk through the read data
+scopes.each do |scope|
+ # matches a partial against a full line
+ # matches &lt;&lt; $1 if line =~ /(^#{Regexp.escape partial}[-a-zA-Z._#+]*?\.)/
+ candidates &lt;&lt; scope
+end
+
+
+
+candidates.sort!.uniq!
+
+options = Array.new(candidates)
+
+# no idea what this does
+candidates.collect! { |m| m.sub(/#{Regexp.escape partial}(.*)/, '\1') }
+options.collect! { |m| m.sub(/^(.*)\.$/, '\1') }
+
+if candidates.empty?
+  print ""
+elsif candidates.length == 1
+  print candidates.first
+elsif index = Dialog.menu(options)
+  print candidates[index]
+end</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>TypoScript Completions</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>scope</key>
+	<string>source.typoscript</string>
+	<key>uuid</key>
+	<string>1D60B32C-FD59-4976-BD62-4A48AA980119</string>
+</dict>
+</plist>

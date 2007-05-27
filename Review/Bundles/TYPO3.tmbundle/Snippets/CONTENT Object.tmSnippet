@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${1:temp.something} = CONTENT
+$1 {
+	table = ${2:tt_content}
+	select = {
+		pidInList = ${3:this}
+		orderBy = ${4:sorting}
+	}
+}
+</string>
+	<key>name</key>
+	<string>CONTENT Object</string>
+	<key>scope</key>
+	<string>source.typoscript</string>
+	<key>tabTrigger</key>
+	<string>content</string>
+	<key>uuid</key>
+	<string>F9AE408C-E297-44E2-8666-1EC299924E7B</string>
+</dict>
+</plist>

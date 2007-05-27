@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${1:temp.Template} = TEMPLATE
+$1 {
+	relPathPrefix = ${2:pathToTemplateRoot}
+	
+	template = FILE
+	template.file = ${3:file/path/to/template}
+
+	workOnSubpart = DOCUMENT_${5:BODY|HEADER}
+
+	subparts.${4:subpartid} &lt; {$6:temp.object}
+
+}
+</string>
+	<key>name</key>
+	<string>TEMPLATE Object</string>
+	<key>scope</key>
+	<string>source.typoscript</string>
+	<key>tabTrigger</key>
+	<string>template</string>
+	<key>uuid</key>
+	<string>548E57D5-F803-4F56-94B1-DBBB164A980E</string>
+</dict>
+</plist>

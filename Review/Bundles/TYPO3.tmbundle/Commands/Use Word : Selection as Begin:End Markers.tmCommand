@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+if ENV['TM_SELECTED_TEXT'].nil?
+  selection = ENV['TM_CURRENT_WORD']
+else
+  selection = ENV['TM_SELECTED_TEXT']
+end
+
+marker = "###"+selection.gsub(/\s*/, "").upcase+"###"
+
+print "&lt;!--  "+marker.center(30)+" begin --&gt;
+  $0
+&lt;!--  "+marker.center(30)+" end   --&gt;"
+
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^M</string>
+	<key>name</key>
+	<string>Use Word / Selection as Begin/End Markers</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html.basic</string>
+	<key>uuid</key>
+	<string>A413EB27-2E7B-4F4E-8C44-BB3575C82B03</string>
+</dict>
+</plist>

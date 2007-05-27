@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${1:temp.something} = RECORDS
+$1 {
+	source.field = ${2:records}
+	tables = ${3:tt_address}
+	conf.$3 &lt; $3.default
+}
+</string>
+	<key>name</key>
+	<string>RECORDS Object</string>
+	<key>scope</key>
+	<string>source.typoscript</string>
+	<key>tabTrigger</key>
+	<string>records</string>
+	<key>uuid</key>
+	<string>9B5E3EE4-344C-41E9-9CB6-084107037D3A</string>
+</dict>
+</plist>

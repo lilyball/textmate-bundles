@@ -53,17 +53,17 @@ end
 
 # Load connectors and set missing defaults
 if @options.server == 'mysql'
-  @options.database.name     ||= ENV['MYSQL_DB'] || ENV['USER']
+  @options.database.name     ||= ENV['MYSQL_DB']    || ENV['USER']
   @options.database.host     ||= (ENV['MYSQL_HOST'] || 'localhost')
   @options.database.user     ||= (ENV['MYSQL_USER'] || ENV['USER'])
   @options.database.password ||= ENV['MYSQL_PWD']
   @options.database.port     ||= (ENV['MYSQL_PORT'] || 3306).to_i
 elsif @options.server == 'postgresql'
   @options.database.name     ||= (ENV['PGDATABASE'] || ENV['USER'])
-  @options.database.host     ||= (ENV['PGHOST'] || 'localhost')
-  @options.database.user     ||= (ENV['PGUSER'] || ENV['USER'])
+  @options.database.host     ||= (ENV['PGHOST']     || 'localhost')
+  @options.database.user     ||= (ENV['PGUSER']     || ENV['USER'])
   @options.database.password ||= ENV['PGPASS']
-  @options.database.port     ||= (ENV['PGPORT'] || 5432).to_i
+  @options.database.port     ||= (ENV['PGPORT']     || 5432).to_i
 else
   puts "Unsupported server type: #{@options.server}"
   exit
@@ -156,7 +156,7 @@ end
 
 def render(template_file)
   template = File.read(ENV['TM_BUNDLE_SUPPORT'] + '/templates/' + template_file + '.rhtml')
-  ERB.new(template).result
+  ERB.new(template).result(binding)
 end
 
 # ===============
@@ -173,7 +173,6 @@ elsif @options.mode == 'home'
     @content = File.read(ENV['TM_BUNDLE_SUPPORT'] + '/install.html')
   end
   @databases = @connection.database_list
-  @database_list = render('databases')
   print render('main')
 elsif @options.query.to_s.size > 0
   print print_data(@options.query)

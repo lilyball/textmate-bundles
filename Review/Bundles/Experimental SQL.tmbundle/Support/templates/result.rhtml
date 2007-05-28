@@ -7,8 +7,8 @@
 
 <% if @result and @result.num_rows > 0 %>
     <% if not @limited %>
-      <%= get_data_link('&lt;&nbsp;Prev', :query => @query, :offset => [@options.offset - @page_size, 0].max) if @options.offset > 0 %>
-      <%= get_data_link('Next&nbsp;&gt;', :query => @query, :offset => @options.offset + @page_size) %>
+      <%= get_data_link('&laquo;&nbsp;Prev', :query => @query, :offset => [@options.offset - @page_size, 0].max) if @options.offset > 0 %>
+      <%= get_data_link('Next&nbsp;&raquo;', :query => @query, :offset => @options.offset + @page_size) %>
     <% end %>
     <table class="sortable graybox" id="results" cellspacing="0" cellpadding="5">
         <tr>

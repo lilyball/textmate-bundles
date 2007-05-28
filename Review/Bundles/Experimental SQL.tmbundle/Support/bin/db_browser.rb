@@ -172,10 +172,9 @@ elsif @options.mode == 'home'
   elsif ENV['TM_BUNDLE_SUPPORT']
     @content = File.read(ENV['TM_BUNDLE_SUPPORT'] + '/install.html')
   end
-  print render('main')
-
   @databases = @connection.database_list
-  print render('databases')
+  @database_list = render('databases')
+  print render('main')
 elsif @options.query.to_s.size > 0
   print print_data(@options.query)
 elsif @options.database.table

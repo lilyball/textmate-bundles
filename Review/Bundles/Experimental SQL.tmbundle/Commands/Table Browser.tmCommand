@@ -6,7 +6,6 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>. "${TM_SUPPORT_PATH}/lib/html.sh"
-. "${TM_BUNDLE_SUPPORT}/lib/misc.sh"
 
 cat &lt;&lt;CSS
    &lt;link href='file://$TM_BUNDLE_SUPPORT/lib/tableBrowser.css' type='text/css'&gt;
@@ -15,7 +14,7 @@ cat &lt;&lt;CSS
 CSS
 
 htmlHeader "Database Browser"
-dbServe=$(database_choice)
+dbServe=$("${TM_BUNDLE_SUPPORT}/lib/choose_database.sh")
 
 db_browser.rb --server=$dbServe</string>
 	<key>input</key>

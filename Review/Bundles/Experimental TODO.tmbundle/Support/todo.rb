@@ -11,6 +11,15 @@ HTML
   abort
 end
 
+if ENV['TM_PROJECT_DIRECTORY'] == '/'
+  puts <<-HTML
+<p>Warning: Your project directory is the root directory!</p>
+<p>This is problably because you have symbolic links or file references inside your project so that the most common directory of all the files in the project resolves to `/` (root).</p>
+<p>Aborting.</p>
+HTML
+  abort
+end
+
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/web_preview"
 require "erb"
@@ -84,6 +93,7 @@ TextMate.each_text_file do |file|
         tag[:matches] << $match
         $count = tag[:matches].length
         $total += 1
+        $file_name = file
         puts ERB.new(File.open("#{ENV['TM_BUNDLE_SUPPORT']}/template_update.rhtml"), 0, '<>').result
         tag[:rendered] += ERB.new(File.open("#{ENV['TM_BUNDLE_SUPPORT']}/template_item.rhtml"), 0, '<>').result
         STDOUT.flush

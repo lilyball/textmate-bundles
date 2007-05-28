@@ -5,16 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>. "${TM_SUPPORT_PATH}/lib/html.sh"
-
-cat &lt;&lt;CSS
-   &lt;link href='file://$TM_BUNDLE_SUPPORT/lib/tableBrowser.css' type='text/css'&gt;
-   &lt;style&gt;table { font-size: 9pt; } td { text-align: right; }&lt;/style&gt;
-   &lt;script src='file://$TM_SUPPORT_PATH/script/shell.js' type='text/javascript'&gt; &lt;/script&gt;
-CSS
-
-htmlHeader "Database Browser"
-dbServe=$("${TM_BUNDLE_SUPPORT}/lib/choose_database.sh")
+	<string>dbServe=$("${TM_BUNDLE_SUPPORT}/lib/choose_database.sh")
 query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
 
 db_browser.rb --server=$dbServe --query="$query"</string>

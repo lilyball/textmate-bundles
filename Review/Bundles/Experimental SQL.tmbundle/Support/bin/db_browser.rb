@@ -5,6 +5,7 @@ $: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
 
 require 'optparse'
 require 'ostruct'
+require 'erb'
 require File.dirname(__FILE__) + '/db_browser_lib'
 require 'cgi'
 
@@ -85,6 +86,63 @@ if @options.mode == 'version'
   exit
 end
 
+def print_data(query = nil)
+  @page_size = @options.page_size
+  offset     = @options.offset
+  if not query or query.to_s.size == 0
+    query     = "SELECT * FROM %s" % @options.database.table
+    @page_size = 5
+    offset    = 0
+  end
+  run_query = query.dup
+  @limited  = true
+  if not query.include?('LIMIT') and run_query =~ /\s*SELECT/i
+    run_query << ' LIMIT %d OFFSET %d' % [@page_size, offset]
+    @limited = false
+  end
+
+  @query = query
+  begin
+    @result = @connection.do_query(run_query)
+    if @result.is_a? Result
+      @title = 'Query complete'
+      if @result.num_rows == 0
+        @message = 'There are no records to show'
+      else
+        @message = 'Records %d to %d' % [offset, offset + @result.num_rows]
+      end
+    else
+      @message = res.to_s + ' rows affected'
+    end
+  rescue Exception => e
+    @title = "Invalid query"
+    if e.is_a? Mysql::Error
+      @message = escape(smarty(e.message))
+    else
+      @message = "<b>#{e.class.name}: #{escape(smarty(e))}</b>"
+      @message += '<pre>' + "\t" + escape(e.backtrace.join("\n\t")) + '</pre>'
+    end
+  end
+  render('result')
+end
+
+# ====================
+# = Template helpers =
+# ====================
+def smarty(text)
+  text.
+    sub(" -- ", ' — ').
+    sub(/ -- /, ' — ')
+end
+
+def escape(text)
+  CGI.escapeHTML(text)
+end
+
+def e_js(str)
+  str.to_s.gsub(/(?=['\\])/, '\\')
+end
+
 def get_data_link(link, new_params = {})
   params = []
   params << (new_params[:database] || @options.database.name)
@@ -96,162 +154,35 @@ def get_data_link(link, new_params = {})
   "<a href='javascript:getData(" + params.join(', ') + ")'>" + link + "</a>"
 end
 
-def e_js(str)
-  str.to_s.gsub(/(?=['\\])/, '\\')
+def render(template_file)
+  template = File.read(ENV['TM_BUNDLE_SUPPORT'] + '/templates/' + template_file + '.rhtml')
+  ERB.new(template).result
 end
 
-def print_script_tag
-  puts <<-HTML
-  <script src="file://#{ENV['TM_BUNDLE_SUPPORT']}/lib/shell.js"></script>
-  <script>
-  var image_path = "file:///#{ENV['TM_SUPPORT_PATH']}/images/";
-  var server = '#{e_js @options.server}';
-  var host = '#{e_js @options.database.host}';
-  var port = '#{e_js @options.database.port}';
-  var user = '#{e_js @options.database.user}';
-  var pass = '#{e_js @options.database.password}';
-
-  function getData(db, tbl, query, page_size, offset) {
-    var res = shell_run("#{__FILE__}", '--mode=frame', shell_join_long_args({database: db, table: tbl, host: host, server: server, password: pass, user: user, port: port, query: query, rows: page_size, offset: offset}));
-    document.getElementById("result").innerHTML = res;
-  }
-  function toggleDatabases(database, tbl, hname, stype, pw, dbuser, dbport, query, page_size, offset) {
-    database_name = database.innerText;
-    list = document.getElementById('db_' + database_name);
-    if (list.childNodes.length == 0) {
-      var res = shell_run("#{__FILE__}", '--mode=tables', shell_join_long_args({database: database_name, host: host, server: server, password: pass, user: user, port: port}));
-      TextMate.log(res);
-      list.innerHTML = res;
-      list.style.display = 'block';
-    } else if (list.style.display != 'block') {
-      list.style.display = 'block';
-    } else {
-      list.style.display = 'none';
-    }
-    TextMate.log('done');
-  }
-  </script>
-  <script src="file://#{ENV['TM_SUPPORT_PATH']}/script/sortable.js" type="text/javascript" charset="utf-8"></script>
-  HTML
-end
-
-def list_databases
-  databases = @connection.database_list
-  # Output
-  Tag.h2 'Databases', :align => 'center'
-  Tag.ul(:id => 'database_list') do
-    databases.each do |database|
-      Tag.li do 
-        Tag.a database, :onclick => "javascript: toggleDatabases(this);", :href => '#'
-        Tag.ul(:id => "db_#{database}", :class => "table_list", :style => ('display: block' if @options.database.name == database) ) do
-          # @connection.table_list(database).each do |table|
-          #   Tag.li get_data_link(table, :database => database, :table => table)
-          # end
-        end
-      end
-    end
-  end
-end
-
-def list_columns
-  Tag.h2 'Columns in table: ' + @options.database.table
-  Tag.table(:width => '75%', :class => 'graybox', :cellspacing => '0', :cellpadding => '5') do
-    Tag.tr do
-      Tag.th 'Name', :align => 'left'
-      Tag.th 'Type', :align => 'left'
-      Tag.th 'Nullable', :align => 'left'
-      Tag.th 'Default', :align => 'left'
-    end
-    @connection.get_fields.each do |field|
-      Tag.tr do
-        Tag.td field[:name]
-        Tag.td field[:type]
-        Tag.td field[:nullable]
-        Tag.td field[:default].nil? ? 'NULL' : field[:default]
-      end
-    end
-  end
-end
-
-def print_data(query = nil)
-  page_size = @options.page_size
-  offset = @options.offset
-
-  if not query or query.to_s.size == 0
-    query = "SELECT * FROM %s" % @options.database.table
-    page_size = 5
-    offset = 0
-  end
-  run_query = query.dup
-  limited = true
-  if not query.include?('LIMIT') and run_query =~ /\s*SELECT/i
-    run_query << ' LIMIT %d OFFSET %d' % [page_size, offset]
-    limited = false
-  end
-  begin
-    res = @connection.do_query(run_query)
-    if res.is_a? Result
-      if res.num_rows == 0
-        Tag.h2 'There are no records to show'
-        Tag.p run_query, :class => 'query'
-      else
-        Tag.h2 'Records %d to %d' % [offset, offset + res.num_rows]
-        Tag.p run_query, :class => 'query'
-        if not limited
-          puts get_data_link('&lt;&nbsp;Prev', :query => query, :offset => [@options.offset - page_size, 0].max) if @options.offset > 0
-          puts get_data_link('Next&nbsp;&gt;', :query => query, :offset => @options.offset + page_size)
-        end
-        Tag.table(:class => 'sortable graybox', :id => 'results', :cellspacing => '0', :cellpadding => '5') do
-          Tag.tr do
-            res.fields.each do |field|
-              Tag.th field
-            end
-          end
-          res.rows.each do |row|
-            Tag.tr do
-              row.each do |col|
-                Tag.td col.to_s[0..30].gsub('<', '&lt;')
-              end
-            end
-          end
-        end
-        Tag.br
-      end
-    else
-      Tag.h2 'Query complete, ' + res.to_s + ' rows affected'
-      Tag.p run_query, :class => 'query'
-    end
-  rescue Exception => e
-    Tag.h2 "Invalid query: "
-    Tag.p run_query, :class => 'query'
-    Tag.b "#{e.class.name}: #{CGI.escapeHTML e.message.sub(/`(\w+)'/, '‘\1’').sub(/ -- /, ' — ')}"
-    Tag.pre "\t" + CGI.escapeHTML(e.backtrace.join("\n\t"))
-  end
-end
-
+# ===============
+# = Entry point =
+# ===============
 if @options.mode == 'tables'
-  @connection.table_list(@options.database.name).each do |table|
-    Tag.li get_data_link(table, :database => @options.database.name, :table => table)
-  end
+  @tables = @connection.table_list(@options.database.name)
+  print render('tables')
 elsif @options.mode == 'home'
-  print_script_tag
-  Tag.div :id => 'main' do
-    Tag.div :id => 'result' do
-      if @options.query.to_s.size > 0
-        print_data @options.query
-      else
-        puts File.read(ENV['TM_BUNDLE_SUPPORT'] + '/install.html') if ENV['TM_BUNDLE_SUPPORT']
-      end
-    end
+  @content = ''
+  if @options.query.to_s.size > 0
+    @content = print_data(@options.query)
+  elsif ENV['TM_BUNDLE_SUPPORT']
+    @content = File.read(ENV['TM_BUNDLE_SUPPORT'] + '/install.html')
   end
-  Tag.div :id => 'dbbar' do
-    list_databases
-  end
+  print render('main')
+
+  @databases = @connection.database_list
+  print render('databases')
 elsif @options.query.to_s.size > 0
-  print_data @options.query
+  print print_data(@options.query)
 elsif @options.database.table
   if @options.database.table != NO_TABLE
-    list_columns
-    print_data
+    @table  = @options.database.table
+    @fields = @connection.get_fields
+    print render('columns')
+    print print_data
   end
 end

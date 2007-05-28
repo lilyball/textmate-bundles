@@ -108,25 +108,3 @@ class Result
     @res.num_rows
   end
 end
-
-class Tag
-  def self.method_missing(tag, *args)
-    attributes = {}
-    contents = ''
-    args.each do |arg|
-      attributes.merge!(arg) if arg.is_a? Hash
-      contents << arg if arg.is_a? String
-    end
-    attrib_list = ''
-    attributes.each_pair do |attrib, value|
-      attrib_list << " #{attrib}=\"#{value}\""
-    end
-    print "<#{tag}#{attrib_list}>"
-    if block_given?
-      yield
-    else
-      print contents
-    end
-    puts "</#{tag}>"
-  end
-end

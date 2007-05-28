@@ -1,0 +1,11 @@
+<div id="dbbar">
+    <h2 align="center">Databases</h2>
+    <ul id="database_list">
+        <% @databases.each do |database| %>
+        <li>
+            <a href="#" onclick="toggleDatabases(this)"><%= database %></a>
+            <ul id="db_<%= database %>" class="table_list" <%= style='display: block' if @options.database.name == database %>></ul>
+        </li>
+        <% end %>
+    </ul>
+</div>

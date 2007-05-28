@@ -1,0 +1,28 @@
+<h2>Query complete</h2>
+<div class="query"><%= escape @query %></div>
+
+<% if @message %>
+    <div class="message"><%= @message %></div>
+<% end %>
+
+<% if @result and @result.num_rows > 0 %>
+    <% if not @limited %>
+      <%= get_data_link('&lt;&nbsp;Prev', :query => @query, :offset => [@options.offset - @page_size, 0].max) if @options.offset > 0 %>
+      <%= get_data_link('Next&nbsp;&gt;', :query => @query, :offset => @options.offset + @page_size) %>
+    <% end %>
+    <table class="sortable graybox" id="results" cellspacing="0" cellpadding="5">
+        <tr>
+            <% @result.fields.each do |field| %>
+                <th><%= field %></th>
+            <% end %>
+        </tr>
+        <% @result.rows.each do |row| %>
+            <tr>
+                <% row.each do |col| %>
+                    <td><%= escape col.to_s[0..30] %></td>
+                <% end %>
+            </tr>
+        <% end %>
+    </table>
+<% end %>
+<br />

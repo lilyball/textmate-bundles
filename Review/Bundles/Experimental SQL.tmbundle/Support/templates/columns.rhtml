@@ -1,0 +1,17 @@
+<h2>Columns in table: <%= @table %></h2>
+<table width="75%" class="graybox" cellspacing="0" cellpadding="5">
+  <tr>
+    <th align="left">Name</th>
+    <th align="left">Type</th>
+    <th align="left">Nullable</th>
+    <th align="left">Default</th>
+  </tr>
+  <% @fields.each do |field| %>
+    <tr>
+      <td><%= field[:name] %></td>
+      <td><%= field[:type] %></td>
+      <td><%= field[:nullable] %></td>
+      <td><%= field[:default].nil? ? 'NULL' : field[:default] %></td>
+    </tr>
+  <% end %>
+</table>

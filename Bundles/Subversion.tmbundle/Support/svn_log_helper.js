@@ -16,7 +16,7 @@ function didFinishCommand ()
 function export_file ( svn, url, rev, filename )
 {
    TextMate.isBusy = true;
-   TextMate.system("\""+svn+"\" cat '" + url + "'@"+rev+" &>/tmp/" + filename + "; open -a TextMate /tmp/" + filename, didFinishCommand);
+   TextMate.system("\""+svn+"\" cat '" + url + "'@"+rev+" &>/tmp/" + filename + "; \"$TM_SUPPORT_PATH/bin/mate\" /tmp/" + filename, didFinishCommand);
 }
 
 /* show: files + hide-button,  hide: show-button.. */

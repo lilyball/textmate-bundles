@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<string>toggleFolding:</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<string>moveToBeginningOfLine:</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<string>moveDownAndModifySelection:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>action</key>
+				<string>replaceAll</string>
+				<key>findInProjectIgnoreCase</key>
+				<false/>
+				<key>findInProjectRegularExpression</key>
+				<false/>
+				<key>findString</key>
+				<string>^</string>
+				<key>ignoreCase</key>
+				<false/>
+				<key>regularExpression</key>
+				<true/>
+				<key>replaceAllScope</key>
+				<string>selection</string>
+				<key>wrapAround</key>
+				<true/>
+			</dict>
+			<key>command</key>
+			<string>findWithOptions:</string>
+		</dict>
+	</array>
+	<key>keyEquivalent</key>
+	<string>@</string>
+	<key>name</key>
+	<string>Select Folding Group</string>
+	<key>uuid</key>
+	<string>5854EC0D-70A8-4A45-ABD6-5654B036F831</string>
+</dict>
+</plist>

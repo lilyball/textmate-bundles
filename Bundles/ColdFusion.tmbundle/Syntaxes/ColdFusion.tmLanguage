@@ -32,13 +32,13 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.cfoutput.cfml</string>
+					<string>entity.name.tag.cfoutput.cfm</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>&lt;/((?i:cfoutput))&gt;(?:\s*\n)?</string>
 			<key>name</key>
-			<string>meta.tag.cfoutput.cfml</string>
+			<string>meta.tag.cfoutput.cfm</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -49,7 +49,7 @@
 					<key>begin</key>
 					<string>&gt;</string>
 					<key>contentName</key>
-					<string>meta.scope.output.cfml</string>
+					<string>meta.scope.output.cfm</string>
 					<key>end</key>
 					<string>(?=&lt;/(?i:cfoutput))</string>
 					<key>patterns</key>
@@ -70,13 +70,13 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.cfquery.cfml</string>
+					<string>entity.name.tag.cfquery.cfm</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>&lt;/((?i:cfquery))&gt;(?:\s*\n)?</string>
 			<key>name</key>
-			<string>meta.tag.cfquery.cfml</string>
+			<string>meta.tag.cfquery.cfm</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -108,13 +108,13 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.cfml</string>
+					<string>entity.name.tag.cfm</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>&gt;</string>
 			<key>name</key>
-			<string>meta.tag.any.cfml</string>
+			<string>meta.tag.any.cfm</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -141,7 +141,7 @@
 			<key>end</key>
 			<string>---&gt;</string>
 			<key>name</key>
-			<string>comment.block.cfml</string>
+			<string>comment.block.cfm</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -180,7 +180,7 @@
 			<key>end</key>
 			<string>"</string>
 			<key>name</key>
-			<string>string.quoted.double.cfml</string>
+			<string>string.quoted.double.cfm</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -200,7 +200,7 @@
 			<key>end</key>
 			<string>'</string>
 			<key>name</key>
-			<string>string.quoted.single.cfml</string>
+			<string>string.quoted.single.cfm</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -218,7 +218,7 @@
 			<key>match</key>
 			<string>\b([a-zA-Z\-:]+)</string>
 			<key>name</key>
-			<string>entity.other.attribute-name.cfml</string>
+			<string>entity.other.attribute-name.cfm</string>
 		</dict>
 		<key>tag-id-attribute</key>
 		<dict>
@@ -235,18 +235,18 @@
 			<key>end</key>
 			<string>(?&lt;='|")</string>
 			<key>name</key>
-			<string>meta.attribute-with-value.id.cfml</string>
+			<string>meta.attribute-with-value.id.cfm</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
 					<string>"</string>
 					<key>contentName</key>
-					<string>meta.toc-list.id.cfml</string>
+					<string>meta.toc-list.id.cfm</string>
 					<key>end</key>
 					<string>"</string>
 					<key>name</key>
-					<string>string.quoted.double.cfml</string>
+					<string>string.quoted.double.cfm</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -263,11 +263,11 @@
 					<key>begin</key>
 					<string>'</string>
 					<key>contentName</key>
-					<string>meta.toc-list.id.cfml</string>
+					<string>meta.toc-list.id.cfm</string>
 					<key>end</key>
 					<string>'</string>
 					<key>name</key>
-					<string>string.quoted.single.cfml</string>
+					<string>string.quoted.single.cfm</string>
 					<key>patterns</key>
 					<array>
 						<dict>

@@ -63,7 +63,7 @@ class Connector
       end
     elsif @server == 'mysql'
       db_list = `mysql -e 'show databases' --host="#{@settings.host}" --port="#{@settings.port}" --user="#{@settings.user}" --password="#{@settings.password}" --xml`
-      db_list.each_line { |line| databases << $1 if line.match(/<Database>(.+)<\/Database>/) }
+      db_list.each_line { |line| databases << $1 if line.match(/<(?:Database|field name="Database")>(.+)<\/(Database|field)>/) }
     end
     databases
   end

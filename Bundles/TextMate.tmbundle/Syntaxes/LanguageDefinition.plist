@@ -1412,9 +1412,14 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+							<string>constant.other.scope.tm-grammar</string>
 						</dict>
 						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+						</dict>
+						<key>5</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.end.tm-grammar</string>
@@ -1429,64 +1434,52 @@
 														# anything else is invalid
 								comment(?:
 									\.(?:line|block)
-									(?:\.[^']*)?
 								)?
 							  | constant(?:
 									\.(?:numeric|character|language|other)
-									(?:\.[^']*)?
 								)?
 							  | entity(?:
 									\.name(?:
 										\.(?:function|type|tag|section)
-										(?:\.[^']*)?
 									)?
 								  | \.other(?:
 										\.(?:inherited-class|attribute-name)
-										(?:\.[^']*)?
 									)?
 								)?
 							  | invalid(?:
 									\.(?:illegal|deprecated)
-									(?:\.[^']*)?
 								)?
 							  | keyword(?:
 									\.(?:control|operator|other)
-									(?:\.[^']*)?
 								)?
 							  | markup(?:
 									\.(?:underline|bold|heading|italic|list|quote|raw|other)
-									(?:\.[^']*)?
 								)?
-							  | meta(?:\.[^']*)?
+							  | meta
 							  | punctuation(?:
 									\.(?:definition|section|separator|terminator|whitespace)
-									(?:\.[^']*)?
 								)?
-							  | source(?:\.[^']*)?
+							  | source
 							  | storage(?:
 									\.(?:type|modifier)
-									(?:\.[^']*)?
 								)?
 							  | string(?:
 									\.(?:
 										quoted(?:
 											\.(?:single|double|triple|other)
-											(?:\.[^']*)?
 										)?
 									  | (?:unquoted|interpolated|regexp|other)
-										(?:\.[^']*)?
 									)
 								)?
 							  | support(?:
 									\.(?:function|class|type|constant|variable|other)
-									(?:\.[^']*)?
 								)?
-							  | text(?:\.[^']*)?
+							  | text
 							  | variable(?:
 									\.(?:parameter|language|other)
-									(?:\.[^']*)?
 								)?
-							)?(?:\b|(?&lt;='))
+							)?
+							((?&lt;!')[^\s,()&amp;|\[\]:"'{}&lt;&gt;*?=^;]*(?&lt;!\.))?
 							([^']*)?
 						(')								# Close String
 					</string>
@@ -1509,9 +1502,14 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+							<string>constant.other.scope.tm-grammar</string>
 						</dict>
 						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+						</dict>
+						<key>5</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.end.tm-grammar</string>
@@ -1526,64 +1524,52 @@
 														# anything else is invalid
 								comment(?:
 									\.(?:line|block)
-									(?:\.[^"]*)?
 								)?
 							  | constant(?:
 									\.(?:numeric|character|language|other)
-									(?:\.[^"]*)?
 								)?
 							  | entity(?:
 									\.name(?:
 										\.(?:function|type|tag|section)
-										(?:\.[^"]*)?
 									)?
 								  | \.other(?:
 										\.(?:inherited-class|attribute-name)
-										(?:\.[^"]*)?
 									)?
 								)?
 							  | invalid(?:
 									\.(?:illegal|deprecated)
-									(?:\.[^"]*)?
 								)?
 							  | keyword(?:
 									\.(?:control|operator|other)
-									(?:\.[^"]*)?
 								)?
 							  | markup(?:
 									\.(?:underline|bold|heading|italic|list|quote|raw|other)
-									(?:\.[^"]*)?
 								)?
-							  | meta(?:\.[^"]*)?
+							  | meta
 							  | punctuation(?:
-									\.(?:definition|section|separator|terminator)
-									(?:\.[^"]*)?
+									\.(?:definition|section|separator|terminator|whitespace)
 								)?
-							  | source(?:\.[^"]*)?
+							  | source
 							  | storage(?:
 									\.(?:type|modifier)
-									(?:\.[^"]*)?
 								)?
 							  | string(?:
 									\.(?:
 										quoted(?:
 											\.(?:single|double|triple|other)
-											(?:\.[^"]*)?
 										)?
 									  | (?:unquoted|interpolated|regexp|other)
-										(?:\.[^"]*)?
 									)
 								)?
 							  | support(?:
 									\.(?:function|class|type|constant|variable|other)
-									(?:\.[^"]*)?
 								)?
-							  | text(?:\.[^"]*)?
+							  | text
 							  | variable(?:
 									\.(?:parameter|language|other)
-									(?:\.[^"]*)?
 								)?
-							)?(?:\b|(?&lt;="))
+							)?
+							((?&lt;!")[^\s,()&amp;|\[\]:"'{}&lt;&gt;*?=^;]*(?&lt;!\.))?
 							([^"]*)?
 						(")								# Close String
 					</string>

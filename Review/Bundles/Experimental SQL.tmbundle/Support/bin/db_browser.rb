@@ -6,6 +6,7 @@ $: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
 require 'optparse'
 require 'ostruct'
 require File.dirname(__FILE__) + '/db_browser_lib'
+require 'cgi'
 
 NO_TABLE = '__none__'
 
@@ -220,9 +221,11 @@ def print_data(query = nil)
       Tag.h2 'Query complete, ' + res.to_s + ' rows affected'
       Tag.p run_query, :class => 'query'
     end
-  rescue
+  rescue Exception => e
     Tag.h2 "Invalid query: "
     Tag.p run_query, :class => 'query'
+    Tag.b "#{e.class.name}: #{CGI.escapeHTML e.message.sub(/`(\w+)'/, '‘\1’').sub(/ -- /, ' — ')}"
+    Tag.pre "\t" + CGI.escapeHTML(e.backtrace.join("\n\t"))
   end
 end
 

@@ -16,7 +16,6 @@ function shell_join_long_args(args) {
 
 // Run a shell command and return the result. The command will not be escaped
 function shell_run_raw(cmd) {
-    TextMate.log(cmd);
     TextMate.isBusy = true;
     var res = TextMate.system(cmd, null).outputString;
     TextMate.isBusy = false;
@@ -31,13 +30,10 @@ function shell_run() {
         if (typeof shell_run.arguments[arg] == 'object') {
             for (child_arg in shell_run.arguments[arg]) {
                 commands.push(shell_escape(shell_run.arguments[arg][child_arg]));
-                TextMate.log(shell_escape(shell_run.arguments[arg][child_arg]));
             }
         } else {
             commands.push(shell_escape(shell_run.arguments[arg]));
-            TextMate.log(shell_escape(shell_run.arguments[arg]));
         }
     }
-    TextMate.log(commands);
     return shell_run_raw(commands.join(' '));
 }

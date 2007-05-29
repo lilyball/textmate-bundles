@@ -5,7 +5,7 @@
     <div class="message"><%= @message %></div>
 <% end %>
 
-<% if @result and @result.num_rows > 0 %>
+<% if @result and @result.is_a? Result and @result.num_rows > 0 %>
     <% if not @limited %>
       <%= get_data_link('&laquo;&nbsp;Prev', :query => @query, :offset => [@options.offset - @page_size, 0].max) if @options.offset > 0 %>
       <%= get_data_link('Next&nbsp;&raquo;', :query => @query, :offset => @options.offset + @page_size) %>

@@ -112,10 +112,11 @@ def print_data(query = nil)
         @message = 'Records %d to %d' % [offset, offset + @result.num_rows]
       end
     else
-      @message = res.to_s + ' rows affected'
+      @message = @result.to_s + ' rows affected'
     end
   rescue Exception => e
     @title = "Invalid query"
+
     if e.is_a? Mysql::Error
       @message = escape(smarty(e.message))
     else

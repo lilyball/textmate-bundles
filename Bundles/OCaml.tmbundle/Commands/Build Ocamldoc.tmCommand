@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>ocamldoc -html -d /tmp "$TM_FILENAME"
+open /tmp/index.html</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~@d</string>
+	<key>name</key>
+	<string>Build Ocamldoc</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
+	<key>uuid</key>
+	<string>7E096535-0E9E-4866-956A-CCE8694F85A8</string>
+</dict>
+</plist>

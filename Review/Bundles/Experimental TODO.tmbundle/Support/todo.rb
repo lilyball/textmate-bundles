@@ -72,6 +72,7 @@ tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_head.rhtml"
 puts ERB.new(File.open(tmpl_file), 0, '<>').result
 STDOUT.flush
 
+home_dir = Regexp.compile("^#{ENV['HOME']}")
 $total = 0
 TextMate.each_text_file do |file|
   next if (ignores != nil and file =~ /#{ignores}/) or File.symlink?(file)
@@ -93,7 +94,7 @@ TextMate.each_text_file do |file|
         tag[:matches] << $match
         $count = tag[:matches].length
         $total += 1
-        $file_name = file
+        $file_name = file.sub(home_dir, '~')
         puts ERB.new(File.open("#{ENV['TM_BUNDLE_SUPPORT']}/template_update.rhtml"), 0, '<>').result
         tag[:rendered] += ERB.new(File.open("#{ENV['TM_BUNDLE_SUPPORT']}/template_item.rhtml"), 0, '<>').result
         STDOUT.flush

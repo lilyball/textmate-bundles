@@ -69,7 +69,7 @@ end
 # sorting happens
 $tags.each do |tag| 
   context = tag[:regexp]
-  puts context
+  #puts context
   myFiles = Dir.entries($myPath)
   myFiles.each do |fileName|
     if ((fileName[-3,3] == "gtd") and myList.contains(fileName))

@@ -1088,8 +1088,86 @@
 							<string>#comment</string>
 						</dict>
 						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.tm-grammar</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.reference.repository-item.tm-grammar</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.constant.tm-grammar</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.reference.grammar.tm-grammar</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.constant.tm-grammar</string>
+								</dict>
+								<key>6</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.tm-grammar</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(')(?:((#)[-a-zA-Z0-9._]+)|((\$)(?:base|self)))?(')</string>
+							<key>name</key>
+							<string>string.quoted.single.include.tm-grammar</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.tm-grammar</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.reference.repository-item.tm-grammar</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition..tm-grammar</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.reference.grammar.tm-grammar</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition..tm-grammar</string>
+								</dict>
+								<key>6</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.tm-grammar</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(')(?:((#)[-a-zA-Z0-9._]+)|((\$)(?:base|self)))?(')</string>
+							<key>name</key>
+							<string>string.quoted.double.include.tm-grammar</string>
+						</dict>
+						<dict>
 							<key>include</key>
-							<string>#string</string>
+							<string>#scope-root</string>
 						</dict>
 						<dict>
 							<key>include</key>

@@ -14,7 +14,20 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
 partial_scope = Word.current_word('a-zA-Z._#+-', :left)
 matches = []
 
-# if ENV['TM_SCOPE'] =~ /string\.quoted\.single\.scope\.root\.tm-grammar/
+# Only if we are in an empty include rule, otherwise use the main scope completion.
+if ENV['TM_SCOPE'] =~ /string\.quoted\.(single|double)\.include/ &amp;&amp; partial_scope == ""
+  options = []
+  options &lt;&lt; { 'title' =&gt; "Selected Grammar ($base)", 'string' =&gt; "\\$base" }
+  options &lt;&lt; { 'title' =&gt; "This Grammar ($self)", 'string' =&gt; "\\$self" }
+  options &lt;&lt; { 'title' =&gt; "Repository Item", 'string' =&gt; "\#${0:repository_item}" }
+  options &lt;&lt; { 'separator' =&gt; 1 }
+  options &lt;&lt; { 'title' =&gt; "source", 'string' =&gt; "source." }
+  options &lt;&lt; { 'title' =&gt; "text", 'string' =&gt; "text." }
+  res = TextMate::UI.menu(options)
+  print res['string'] if res
+  exit 204
+end
+
 if ENV['TM_SCOPE'] =~ /string\.quoted\.(single|double)\.scope\.root/
   $scopes = "source.\ntext.html.\ntext.plain.\ntext.xml."
 else
@@ -25,7 +38,7 @@ $scopes.each_line do |line|
   matches &lt;&lt; $1 if line =~ /(^#{Regexp.escape partial_scope}[-a-zA-Z._#+]*?\.)/
 end
 
-matches.sort!.uniq!
+matches.uniq!
 
 options = Array.new(matches)
 
@@ -220,7 +233,7 @@ variable.parameter.
 	<key>output</key>
 	<string>afterSelectedText</string>
 	<key>scope</key>
-	<string>string.quoted.single.scope.tm-grammar -punctuation.definition.string.begin, string.quoted.single.scope.root.tm-grammar -punctuation.definition.string.begin, string.quoted.double.scope.tm-grammar -punctuation.definition.string.begin, string.quoted.double.scope.root.tm-grammar -punctuation.definition.string.begin</string>
+	<string>string.quoted.single.scope.tm-grammar -punctuation.definition.string.begin, string.quoted.single.scope.root.tm-grammar -punctuation.definition.string.begin,  string.quoted.single.include.tm-grammar -punctuation.definition.string.begin, string.quoted.double.scope.tm-grammar -punctuation.definition.string.begin, string.quoted.double.scope.root.tm-grammar -punctuation.definition.string.begin,  string.quoted.double.include.tm-grammar -punctuation.definition.string.begin</string>
 	<key>uuid</key>
 	<string>DF2093BA-EA37-4546-9ADA-C17A13CEBDA9</string>
 </dict>

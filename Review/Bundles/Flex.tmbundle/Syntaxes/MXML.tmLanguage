@@ -31,6 +31,19 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>(?&lt;=&lt;mx:Metadata&gt;)</string>
+			<key>end</key>
+			<string>(?=&lt;/mx:Metadata&gt;)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#script-stuff</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>(?&lt;=&lt;mx:Style&gt;)</string>
 			<key>contentName</key>
 			<string>source.css.embedded.mxml</string>

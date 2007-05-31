@@ -3,7 +3,7 @@
 require "pathname"
 require "fileutils"
 
-markdown = "#{ENV['HOME']}/Library/Application Support/TextMate/Support/bin/Markdown.pl"
+markdown = "#{ENV['TM_SUPPORT_PATH']}/bin/Markdown.pl"
 
 def e_url(str)
   str.gsub(/([^a-zA-Z0-9\/_.-]+)/n) do

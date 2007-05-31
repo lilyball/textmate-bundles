@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+def fileSearch fileExt
+
+	file = ENV['TM_CURRENT_WORD'].to_s + fileExt
+	dir = $:.find { |d| File.exist?(File.join(d, file)) }
+
+	if dir &amp;&amp; file then
+	  	ENV['FILE'] = File.join(dir, file)
+		%x{ "$TM_SUPPORT_PATH/bin/mate" "$FILE" }
+  		exit
+	end
+
+end
+
+fileSearch( ".as" )
+fileSearch( ".mxml" )
+
+puts "File not found."
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@D</string>
+	<key>name</key>
+	<string>Open Component</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>entity.name.tag.localname.xml.mxml</string>
+	<key>uuid</key>
+	<string>87F59F86-CCDD-41C0-B425-458AB7ECB769</string>
+</dict>
+</plist>

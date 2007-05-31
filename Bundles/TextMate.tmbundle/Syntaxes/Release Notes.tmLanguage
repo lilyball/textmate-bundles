@@ -55,13 +55,26 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
+							<string>keyword.other.release-notes</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
 							<string>punctuation.definition.keyword.release-notes</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.keyword.release-notes</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.bundle-name.release-notes</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\[)(NEW|FIXED|CHANGED|REMOVED|INFO)(\])</string>
-					<key>name</key>
-					<string>keyword.other.release-notes</string>
+					<string>((\[)(?:NEW|FIXED|CHANGED|REMOVED|INFO)(\])) (?:(.+? bundle):)?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -89,6 +102,18 @@
 					<string>\b[A-Z]*[a-z]+[A-Z]\w*\b</string>
 					<key>name</key>
 					<string>meta.word.camel-case</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.committer-name.release-notes</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\((G(erd Knops|a(vin Kistner|rrett J. Woodworth)|ra(nt Hollingworth|eme Rocher))|R(yan McCuaig|ich Barton|o(ss Harmes|ger Braunstein|b(ert Rainthorpe| (Rix|Bevan))))|M(i(cha(il Pishchagin|el Sheets)|tch Chapman|etek Bąk|k(e Mellor|ael Säker))|a(t(s Persson|t(hew Gilbert|eo Spinelli| Pelletier))|r(tin Ström|k Grimes)|x Williams))|B(ill Duenskie|ob Fleck|en(oit Gagnon|jamin Jackson| Perry)|arrett Clark|r(ian (Donovan|Lalor)|ett Terpstra|ad (Miller|Choate)))|H(enrik Nyh|adley Wickham)|S(t(ephen Skubik-Peplaski|éphane Payrard|anley Rost)|imon (Gregory|Strandgaard)|u(ne Foldager|dara Williams)|ebastian Gräßl|am DeVore)|Nathan Youngman|C(h(a(ndler McWilliams|rilaos Skiadas)|ris(topher Forsythe| (Thomas|Jenkins)))|iarán Walsh)|T(homas Aylott|o(rsten Becker|m Lazar|bias Luetke)|akaaki Kato|roy Mcilvena)|Ian (Joyner|White)|Ollivier Robert|D(om(inique Peretti|enico Carbotta)|uane Johnson|a(n(iel Harple| Kelley)|vid (Glasser|Bonnet|Hansson|Powers|Wikler))|rew Colthorp)|J(iun Wei Chia|o(shua Emmons|nathan (Ragan-Kelley|Chaffer)|e Maller|achim Mårtensson)|ustin French|eroen van der Ham|a(cob Rus|y Soffian|kub Nešetřil|m(is Buck|es (Edward Gray II|A. Baker))))|Paul(o Jorge Lopes de Moura| Bissex)|Eric Hsu|K(umar McMillan|evin Ballard)|F(ergus Bremner|abien POTENCIER|lorent Pillet|r(édéric Ballériaux|ank Brault))|Wil(son Miner|liam (D. Neumann|Prater))|A(n(thony Underwood|d(y Herbert|ers Thid|rew Henson))|dam Sanderson|urelio Marinho Jargas|parajita Fishman|l(e( Muñoz|xand(er John Ross|re Girard))|an Schussman|lan Odgaard)|mro Nasr))\)$</string>
 				</dict>
 			</array>
 		</dict>

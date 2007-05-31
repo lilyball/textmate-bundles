@@ -124,9 +124,13 @@ def find_language_ext
     bundle_dirs.each do |dir|
       Dir.glob(dir + '/*.tmbundle/Syntaxes/*.{plist,tmLanguage}') do |filename|
         File.open(filename) do |io|
-          plist = PropertyList.load(io)
-          if scope == plist['scopeName'].to_s then
-            return Array(plist['fileTypes']).first || 'txt'
+          begin
+            plist = PropertyList.load(io)
+            if scope == plist['scopeName'].to_s then
+              return Array(plist['fileTypes']).first || 'txt'
+            end
+          rescue Exception =&gt; e
+            abort "Error while parsing “#{filename}”\n\n#{e}"
           end
         end
       end
@@ -186,7 +190,6 @@ pid = fork do
 end
 
 Process.detach(pid)
-
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

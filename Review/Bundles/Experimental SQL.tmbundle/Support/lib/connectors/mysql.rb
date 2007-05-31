@@ -565,7 +565,8 @@ class Mysql
     buf = [0x14]
     s1 = Digest::SHA1.new.update(password).digest
     s2 = Digest::SHA1.new.update(s1).digest
-    x = Digest::SHA1.new.update(message + s2).digest    (0..s1.length - 1).each {|i| buf.push(s1[i] ^ x[i])}
+    x = Digest::SHA1.new.update(message + s2).digest
+    (0..s1.length - 1).each {|i| buf.push(s1[i] ^ x[i])}
     buf.pack("C*")
   end
 

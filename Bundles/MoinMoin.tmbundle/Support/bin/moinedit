@@ -47,7 +47,7 @@ __EOF__
 }
 
 on_exit() {
-  [[ -n "$TEMP" ]] && rm -f "$TEMP"
+  [[ "$TEMP" ]] && rm -f "$TEMP"
 }
 
 set_MOIN_ID() {
@@ -58,11 +58,22 @@ set_MOIN_ID() {
   }
 }
 
+make_temp() {
+  # create temporary directory and file
+  TMPDIR="/tmp/moinedit.$(id -u)"
+  export TMPDIR
+  [[ -d "$TMPDIR" ]] || mktemp -d "$TMPDIR" > /dev/null || {
+    echo "Cannot create $TMPDIR"
+    exit 1
+  }
+  [[ "$TEMP" ]] || TEMP=$(mktemp -t moinedit)
+}
+
 set_vars() {
   # read header from $1 and setup global variables
   # FILE
   if [[ '' = "$1"  || '-' = "$1" ]]; then
-    TEMP=$(mktemp -t moinedit)
+    make_temp
     cat - > "$TEMP"
     FILE="$TEMP"
   else
@@ -90,14 +101,14 @@ do_edit() {
   BASE=$(echo "$URL" | sed -E 's|^(https?://[^/]*/[^/]*/).*|\1|')
   PAGE=$(echo "$URL" | sed -E 's|^https?://[^/]*/[^/]*/(.*)|\1|; s|/|_2f|g')
   NAME=$(echo "$PAGE" | sed -E 's|^.*_2f(.*)|\1|; s|([a-z])([A-Z])|\1 \2|g')
-  FILE="/tmp/$(id -u)/${NAME}.moinmoin"
-  TEMP=$(mktemp -t moinedit)
+  make_temp
   set_MOIN_ID
   do_curl -o "$TEMP" -s -b "MOIN_ID=$MOIN_ID" "$URL?action=edit"
   SECS=$(sed -En '
     /<input type="hidden" name="datestamp"/{
       s/.*value="([^"]*)".*/\1/p;q
     }' "$TEMP")
+  FILE="$TMPDIR/${NAME}.moinmoin"
   cat >"$FILE" <<__EOF__
 ## Do not edit this header. It is not part of the wiki code and will not be
 ## posted back to the wiki when you save.

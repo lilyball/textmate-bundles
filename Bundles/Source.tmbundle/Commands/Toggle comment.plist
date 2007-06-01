@@ -9,11 +9,16 @@
 
 # by James Edward Gray II &lt;james (at) grayproductions.net&gt;
 
-# to override the operation of this commond for your language add a Preferences bundle
-# item that defines the following valiables as appropriate for your language:
-# TM_COMMENT_START - the character string that starts comments, e.g. /*
-# TM_COMMENT_END - the character string that ends comments (if appropriate), e.g. */
-# TM_COMMENT_MODE - the type of comment to use - either 'line' or 'block'
+# 
+# To override the operation of this commond for your language add a Preferences
+# bundle item that defines the following valiables as appropriate for your
+# language:
+# 
+#   TM_COMMENT_START - the character string that starts comments, e.g. /*
+#   TM_COMMENT_END   - the character string that ends comments (if appropriate),
+#                      e.g. */
+#   TM_COMMENT_MODE  - the type of comment to use - either 'line' or 'block'
+# 
 
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
 
@@ -51,7 +56,8 @@ var_suffixes.each do |suffix|
   # build comment
   com = { :start     =&gt; ENV["TM_COMMENT_START#{suffix}"] || "# ",
           :end       =&gt; ENV["TM_COMMENT_END#{suffix}"]   || "",
-          :mode      =&gt; ENV["TM_COMMENT_MODE#{suffix}"]  || (ENV["TM_COMMENT_END#{suffix}"] ? "block" : "line"),
+          :mode      =&gt; ENV["TM_COMMENT_MODE#{suffix}"]  ||
+                        (ENV["TM_COMMENT_END#{suffix}"] ? "block" : "line"),
           :no_indent =&gt; ENV["TM_COMMENT_DISABLE_INDENT#{suffix}"] }
   
   com[:esc_start], com[:esc_end] = [com[:start], com[:end]].map do |str|
@@ -68,11 +74,11 @@ var_suffixes.each do |suffix|
     if text !~ /\A[\t ]+\z/ &amp;&amp;
        text.map { |l| !!(l =~ /\A\s*(#{com[:esc_start]}|$)/) }.uniq == [true]
       if $selected
-        out text.gsub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
+        out text.gsub( /^(\s*)#{com[:esc_start]}(.*?)#{com[:esc_end]}(\s*)$/,
                        '\1\2\3' )
         exit
       else
-        r = text.sub( /^(\s*)#{com[:esc_start]}(.*)#{com[:esc_end]}(\s*)$/,
+        r = text.sub( /^(\s*)#{com[:esc_start]}(.*?)#{com[:esc_end]}(\s*)$/,
                       '\1\2\3' )
         i = ENV["TM_LINE_INDEX"].to_i
         i = i &gt; text.index(/#{com[:esc_start]}/)            ?
@@ -107,12 +113,15 @@ end
 text[ENV["TM_LINE_INDEX"].to_i, 0] = "\0" unless $selected or text.empty?
 case default[:mode]
 when "line"  # apply comment line by line
-  if default[:no_indent] || text.empty?
+  if text.empty?
+    out "#{default[:start]}\0#{default[:end]}"
+  elsif default[:no_indent]
     out text.gsub(/^.*$/, "#{default[:start]}\\&amp;#{default[:end]}")
   elsif text =~ /\A([\t ]*)\0([\t ]*)\z/
     out text.gsub(/^.*$/, "#{$1}#{default[:start]}#{$2}#{default[:end]}")
   else
-    indent = text.scan(/^[\t \0]*(?=\S)/).min { |lhs, rhs| lhs.length &lt;=&gt; rhs.length } || ""
+    indent = text.scan(/^[\t \0]*(?=\S)/).
+                  min { |a, b| a.length &lt;=&gt; b.length } || ""
     text.map do |line|
       if line =~ /^(#{indent})(.*)$(\n?)/ then
         out $1 + default[:start] + $2 + default[:end] + $3

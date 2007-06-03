@@ -426,7 +426,7 @@ TEXT
       end
     end
     doc += "\n"
-    doc += self.post['description'].strip + "\n"
+    doc += self.post['description'].to_s.strip + "\n"
     unless self.post['mt_text_more'].nil?
       if (more = self.post['mt_text_more'].strip) && more != ''
         doc += "\n#{DIVIDER * 10}\n\n"

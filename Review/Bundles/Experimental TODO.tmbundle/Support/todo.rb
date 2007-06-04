@@ -72,7 +72,7 @@ tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template_head.rhtml"
 puts ERB.new(File.open(tmpl_file), 0, '<>').result
 STDOUT.flush
 
-home_dir = Regexp.compile("^#{ENV['HOME']}")
+home_dir = /^#{Regexp.escape ENV['HOME']}/
 $total = 0
 TextMate.each_text_file do |file|
   next if (ignores != nil and file =~ /#{ignores}/) or File.symlink?(file)

@@ -7,16 +7,12 @@ abort "Wrong arguments: use -path=«file to revert»" if $path.nil? and ARGV.siz
 svn     = ENV['TM_SVN'] ||  $svn || 'svn'
 
 # get paths from --path or from naked arguments
-paths = if ARGV.size > 0
-  ARGV
-else
-  [e_sh($path)]
-end
+paths = ARGV.empty? ? [$path] : ARGV
 
 warn_for_paths = []
 
 # Escape paths for shell
-paths_for_shell = paths.sort.uniq #.map {|path| e_sh(path)}
+paths_for_shell = paths.sort.uniq.map {|path| e_sh(path)}
 
 # Ask for status
 status = %x{#{svn} status #{paths_for_shell.join(" ")}}

@@ -9,21 +9,23 @@
 import sys, os
 
 oldtask = os.environ['TM_CURRENT_LINE']
-sys.stdout.write("+  " + oldtask[3:])
-</string>
+if (oldtask[0] != "+") and (oldtask[0] != "^"):
+	sys.stdout.write("-  " + oldtask[3:])
+else:
+    sys.stdout.write(oldtask)</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>name</key>
-	<string>Done</string>
+	<string>Undo State Change</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>text.plain.gtd</string>
 	<key>tabTrigger</key>
-	<string>d</string>
+	<string>u</string>
 	<key>uuid</key>
-	<string>3EA8AD43-5ED3-4FB3-9296-D37A409AABF8</string>
+	<string>900C7391-7C63-4D1C-AF83-9F3E497F6A7F</string>
 </dict>
 </plist>

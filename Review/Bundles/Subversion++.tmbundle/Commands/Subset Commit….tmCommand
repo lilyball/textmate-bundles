@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape.rb'
+
+require 'fileutils'
+require 'time'
+
+dir, file = File.split(ENV['TM_FILEPATH'])
+Dir.chdir(dir)
+
+old = Dir.entries(".").find_all { |e| e =~ /^#{Regexp.escape file}_\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/}
+abort "Previous run of this command seems to have been unsuccesful, you need to manually cleanup the mess (sorry)." unless old.empty?
+
+patch_text = %x{svn diff #{e_sh file}}
+patches    = patch_text.scan(/(^@@.*?@@)\n(.*?)(?=^@@|\z)/m)
+items      = patches.map { |e| { 'head' =&gt; e[0], 'body' =&gt; e[1] } }
+parameters = { 'items' =&gt; items }
+
+token = open('|"$DIALOG" -a Patch', 'r+') { |io| io &lt;&lt; parameters.to_plist; io.close_write; io.read.chomp }
+res   = open('|"$DIALOG" -w' + token)               { |io| PropertyList.load(io) }
+        open('|"$DIALOG" -x' + token)               { |io| }
+
+rc    = res['returnCode'].to_i
+msg   = res['commitMessage'].to_s
+items = res['items'].reject { |e| e['disabled'] == 1 }
+
+abort "User aborted." if rc != 1
+abort "No changes accepted." if items.empty?
+abort "All changes accepted, use regular commit instead." if items.size == res['items'].size
+abort "No commit message." if msg.empty?
+
+backup = file + '_' + Time.now.strftime('%Y-%m-%dT%H:%M:%S')
+FileUtils.mv(file, backup, :verbose =&gt; true)
+
+f = e_sh file
+open(%{|svn &gt;#{f} cat #{f} &amp;&amp; \\
+        patch #{f} &amp;&amp; \\
+        svn ci #{f} -m #{e_sh msg}}, "w") do |io|
+  io &lt;&lt; [ 'Index: ' + file, '=' * 67, '--- ' + file, '+++ ' + file, '' ].join("\n")
+  items.each { |e| io &lt;&lt; e['head'] &lt;&lt; "\n" &lt;&lt; e['body'] }
+end
+
+FileUtils.mv(backup, file, :verbose =&gt; true)
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Subset Commit…</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>AE925ECF-0579-4AF4-82F8-00929862E651</string>
+</dict>
+</plist>

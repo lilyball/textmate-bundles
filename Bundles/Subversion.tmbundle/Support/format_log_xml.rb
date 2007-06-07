@@ -72,8 +72,7 @@ module SVNLogHelpers
     
     file = path.text.gsub(/(.*) \(from .*:\d+\)/, '\1')
     
-    full_url = $repo_url + file
-    full_url_escaped = full_url.gsub(/[^a-zA-Z0-9_:.\/@+]/) { |m| sprintf("%%%02X", m[0] ) }
+    full_url_escaped = $repo_url + file.gsub(/[^a-zA-Z0-9_:.\/@+]/) { |m| sprintf("%%%02X", m[0] ) }
     
     filename = file.gsub(%r(.*/(.*?)$), '\1')
     filename_escaped = filename.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')

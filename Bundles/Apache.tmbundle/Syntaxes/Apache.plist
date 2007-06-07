@@ -36,6 +36,45 @@
 			<string>comment.line.number-sign.apache-config</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.apache-config</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>meta.scope.between-tag-pair.apache-config</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.apache-config</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.apache-config</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^[ ]*(&lt;)([a-zA-Z0-9:]+)[^&gt;]*(&gt;(&lt;)/)(\2)(&gt;)</string>
+			<key>name</key>
+			<string>meta.tag.any.html</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>^[ ]*((&lt;)(VirtualHost)(?:[ ]+([^&gt;]+))?(&gt;))</string>
 			<key>beginCaptures</key>

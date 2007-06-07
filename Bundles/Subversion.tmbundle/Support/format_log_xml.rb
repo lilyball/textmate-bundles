@@ -127,7 +127,7 @@ begin
   
   # external (not changing) vars
   $tab_size    = ENV['TM_TAB_SIZE'].to_i
-  $date_format = ENV['TM_SVN_DATE_FORMAT'].nil? ? nil : ENV['TM_SVN_DATE_FORMAT']
+  $date_format = ENV['TM_SVN_DATE_FORMAT'] || '%F %T %z'
   $svn_cmd     = ENV['TM_SVN'].nil? ? `which svn`.chomp : ENV['TM_SVN']
   $sort_order  = [ :added, :modified, :deleted, :replaced ]
   

@@ -28,7 +28,7 @@ module SVNLogHelpers
     
     if not format.nil? and input =~ /^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)\.\d+Z$/
       #            year     month    day      hour     minutes  seconds
-      Time.mktime( $1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i ).strftime( format )
+      Time.gm( $1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i ).getlocal.strftime( format )
     else
       input
     end

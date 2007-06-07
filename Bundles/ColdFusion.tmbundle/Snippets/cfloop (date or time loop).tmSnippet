@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;cfloop from = "${1:#createdate($2)#}" to = "${3:#createdate($4)#}" index = "${5:i}"${6: step = "${7:[ ]}"}&gt;
+	$8
+&lt;/cfloop&gt;$0</string>
+	<key>name</key>
+	<string>cfloop (date or time loop)</string>
+	<key>scope</key>
+	<string>text.html.cfm</string>
+	<key>tabTrigger</key>
+	<string>cfloop</string>
+	<key>uuid</key>
+	<string>7F70512F-517F-4361-89ED-13E8C3BD98F0</string>
+</dict>
+</plist>

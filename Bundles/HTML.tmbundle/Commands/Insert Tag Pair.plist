@@ -38,7 +38,7 @@ xhtml = ENV['TM_XHTML'].to_s
 print case tag
   when single_no_arg then "&lt;#{tag}#{xhtml}&gt;"
   when single then        "&lt;#{tag} $1#{xhtml}&gt;"
-  when '' then            "&lt;${1:p}&gt;$2&lt;/${1/\\s.*//}&gt;"
+  when '' then            "&lt;${1:#{ENV['TM_DEFAULT_TAG'] || 'p'}}&gt;$2&lt;/${1/\\s.*//}&gt;"
   else                    "&lt;#{tag}&gt;$1&lt;/#{tag.strip[/^\S+/]}&gt;"
 end
 

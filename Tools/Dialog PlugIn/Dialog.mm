@@ -51,6 +51,8 @@
 - (NSDictionary*)instantiateNib:(NSNib*)aNib;
 - (void)updateParameters:(NSMutableDictionary *)params;
 
+- (void)wakeClient;
+- (void)makeControllersCommitEditing;
 @end
 
 @implementation TMDNibWindowController
@@ -95,22 +97,28 @@
 	return result;
 }
 
+- (void)makeControllersCommitEditing
+{
+	enumerate(topLevelObjects, id object)
+	{
+		if([object respondsToSelector:@selector(commitEditing)])
+			[object commitEditing];
+	}
+}
+
 - (void)cleanupAndRelease:(id)sender
 {
 	if(didCleanup)
 		return;
 
 	[parameters removeObjectForKey:@"controller"];
+	[self makeControllersCommitEditing];
 
+	// if we do not manually unbind, the object in the nib will keep us retained, and thus we will never reach dealloc
 	enumerate(topLevelObjects, id object)
 	{
 		if([object isKindOfClass:[NSObjectController class]])
-		{
-			[object commitEditing];
-
-			// if we do not manually unbind, the object in the nib will keep us retained, and thus we will never reach dealloc
 			[object unbind:@"contentObject"];
-		}
 	}
 
 	[super cleanupAndRelease:sender];
@@ -257,6 +265,12 @@
 	[super dealloc];
 }
 
+- (void)wakeClient
+{
+	// makeControllersCommitEditing can only be in this (sub) class, since it needs access to topLevelObjects, but wakeClient is the logical place for committing the UI values, yet that is defined in our super class
+	[self makeControllersCommitEditing];
+	[super wakeClient];
+}
 @end
 
 

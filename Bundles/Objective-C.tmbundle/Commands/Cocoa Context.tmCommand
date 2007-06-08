@@ -207,15 +207,14 @@ class ObjCMethodCompletion
     end
 
     candidates = []
+    if obType &amp;&amp; obType == :initObject
+      methodSearch = "init[[:space:][:upper:]]" unless methodSearch.match(/^init(\b|[A-Z])/)
+    end
     fileNames.each do |fileName|
       zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh fileName }}
       candidates += zGrepped.split("\n")
     end
-    if obType &amp;&amp; obType == :initObject
-      candidates = candidates.select do |e|
-        e.match(/^(init(\b|[A-Z]))/)
-      end
-    end
+    
     
     return [] if candidates.empty?
     if list.nil?

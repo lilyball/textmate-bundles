@@ -49,14 +49,14 @@ def myParse tabCommand
   found = 0
   $contexts.each do |tag|
     re = tag[:context]
-    if (tabCommand == re) and (found == 0) 
+    if (tabCommand == re) # and (found == 0) 
       print tag[:tabString]
       found = 1
     end
   end
-  if found == 0 
-    puts "failed"
-  end
+  #if found == 0 
+  #  puts "failed"
+  #end
 end
 
 

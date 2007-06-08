@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>beforeRunningCommand</key>
-	<string>nop</string>
-	<key>bundleUUID</key>
-	<string>4679484F-6227-11D9-BFB1-000D93589AF6</string>
-	<key>command</key>
-	<string>#!/usr/bin/env ruby
+	<key>changed</key>
+	<dict>
+		<key>command</key>
+		<string>#!/usr/bin/env ruby
 
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
@@ -185,6 +183,11 @@ class ObjCMethodCompletion
   end
 
   def candidate_list(methodSearch, list, types)
+    unless list.nil?
+      obType = list[1]
+      list = list[0]
+    end
+    
     notif = false
     if types == :classes
       userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz"
@@ -208,7 +211,12 @@ class ObjCMethodCompletion
       zGrepped = %x{ zgrep ^#{e_sh methodSearch } #{e_sh fileName }}
       candidates += zGrepped.split("\n")
     end
-
+    if obType &amp;&amp; obType == :initObject
+      candidates = candidates.select do |e|
+        e.match(/^(init(\b|[A-Z]))/)
+      end
+    end
+    
     return [] if candidates.empty?
     if list.nil?
       return candidates
@@ -301,25 +309,39 @@ class ObjCMethodCompletion
           m = line[m.begin(1)..last].match(/([a-zA-Z][a-zA-Z0-9]*)\s*\]$/)
           mn = m[1] unless m.nil?
         end
-
-        candidates = %x{ zgrep ^#{e_sh mn + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz }.split("\n")
-
-        unless candidates.empty?
-          if (type = candidates[0].split("\t")[5].match(/[A-Za-z]+/))
-            framework = %x{ zgrep ^#{e_sh type[0] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
+        if mn &amp;&amp; (mn == "alloc" || mn == "allocWithZone:")
+          obType = :initObject
+          if  m = line.match(/^\[\s*\[\s*([A-Z][a-zA-Z][a-zA-Z0-9]*)\s/)
+            framework = %x{ zgrep ^#{e_sh m[1] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
             unless framework.empty?
-              list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -i -n #{e_sh type[0]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+              list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -i -n #{e_sh m[1]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+              list = list.select do |e|
+                e.match(/^(init(\b|[A-Z]))/)
+              end
             end
-          end      
+          end
+        else
+          candidates = %x{ zgrep ^#{e_sh mn + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/cocoa.txt.gz }.split("\n")
+      
+
+          unless candidates.empty?
+            if (type = candidates[0].split("\t")[5].match(/[A-Za-z]+/))
+              framework = %x{ zgrep ^#{e_sh type[0] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
+              unless framework.empty?
+                list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -i -n #{e_sh type[0]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+              end
+            end      
+          end
         end
       else
+        obType = :classMethod
         framework = %x{ zgrep ^#{e_sh m[2] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
         unless framework.empty?
           list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
         end
       end
     end
-    return list
+    return list, obType
   end
 
 
@@ -359,7 +381,6 @@ class ObjCMethodCompletion
     # find Nested method
     list = try_find_class(mline[start[-1]..caret_placement])
     mn = methodNames(line[start[-1]..caret_placement])
-
 
     if mline[start[-1]..caret_placement].match colon_and_space
       # [obj mess:^]
@@ -476,20 +497,11 @@ else
 end
 end
 </string>
-	<key>disableOutputAutoIndent</key>
+	</dict>
+	<key>deleted</key>
+	<array/>
+	<key>isDelta</key>
 	<true/>
-	<key>fallbackInput</key>
-	<string>scope</string>
-	<key>input</key>
-	<string>selection</string>
-	<key>keyEquivalent</key>
-	<string>~</string>
-	<key>name</key>
-	<string>Completion: Inside Brackets</string>
-	<key>output</key>
-	<string>insertAsSnippet</string>
-	<key>scope</key>
-	<string>meta.bracketed.objc</string>
 	<key>uuid</key>
 	<string>478FBA1D-C11C-4D53-BE95-8B8ABB5F15DC</string>
 </dict>

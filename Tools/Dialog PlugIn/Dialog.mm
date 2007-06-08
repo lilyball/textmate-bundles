@@ -374,7 +374,7 @@ static int sNextWindowControllerToken = 1;
 		// We own the window, and we will release it. This prevents a potential crash later on.
 		if([window isReleasedWhenClosed])
 		{
-			NSLog(@"warning: Window should not have released-when-closed bit set. I will clear it for you, but this it crash earlier versions of TextMate.");
+			NSLog(@"warning: Window (%@) should not have released-when-closed bit set. I will clear it for you, but this it crash earlier versions of TextMate.", [window title]);
 			[window setReleasedWhenClosed:NO];
 		}
 	}

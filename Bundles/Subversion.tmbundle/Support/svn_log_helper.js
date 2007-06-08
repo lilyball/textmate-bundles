@@ -39,5 +39,5 @@ function hide_files( base_id )
 function diff_and_open_tm( svn, url, rev, filename )
 {
 	TextMate.isBusy = true;
-	TextMate.system('"'+svn+'" diff --diff-cmd diff --old "'+url+'@'+(rev-1)+'" --new "'+url+'@'+rev+'" &> '+filename+'; open -a TextMate '+filename, didFinishCommand );
+	TextMate.system('"'+svn+'" diff --diff-cmd diff -c'+rev+' "'+url+'" &>'+filename+'; open -a TextMate '+filename, didFinishCommand );
 }

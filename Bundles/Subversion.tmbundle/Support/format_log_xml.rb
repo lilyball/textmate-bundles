@@ -87,7 +87,7 @@ module SVNLogHelpers
     # if the document was modified show a diff
     if path.action == :modified
       result << '  &nbsp;(<a href="#" onClick="javascript:diff_and_open_tm(' +
-        "'#{$svn_cmd}', '#{full_url_escaped}', #{rev}, '/tmp/#{filename_escaped}.diff' ); return false;\">Diff With Previous</a>)"
+        "'#{$svn_cmd}', '#{full_url_escaped}', #{rev}, '/tmp/#{filename_escaped}.diff' ); return false;\">Show Changes</a>)"
     end
     
     result

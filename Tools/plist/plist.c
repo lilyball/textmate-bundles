@@ -8,7 +8,7 @@
  * Copyright © 2005, Kevin Ballard
  *
  * Usage:
- * This extension provides a module named PropertyList
+ * This extension provides a module named OSX::PropertyList
  * This module has two methods:
  *
  * PropertyList::load(obj, format = false)
@@ -67,7 +67,9 @@
 	} while (0)
 #endif
 
+static VALUE mOSX;
 static VALUE mPlist;
+static VALUE mPlistDeprecated;
 static VALUE timeEpoch;
 static VALUE ePropertyListError;
 
@@ -109,6 +111,23 @@ void raiseError(CFStringRef error) {
 		}
 		rb_raise(ePropertyListError, (char *)errBuffer);
 		if (freeBuffer) free(errBuffer);
+}
+
+/* call-seq:
+ *    PropertyList.method_missing(symbol, [args]) -> result
+ *
+ * Forwards all method calls to the OSX::PropertyList class after
+ * outputting a warning.
+ */
+VALUE plist_deprecated_method_missing(int argc, VALUE *argv, VALUE self) {
+	static bool shownWarning = false;
+	if (!shownWarning) {
+		fprintf(stderr, "Warning: PropertyList is deprecated. Use OSX::PropertyList instead.\n");
+		shownWarning = true;
+	}
+	VALUE symbol = *argv++; argc--;
+	Check_Type(symbol, T_SYMBOL);
+	return rb_funcall3(mPlist, SYM2ID(symbol), argc, argv);
 }
 
 /* call-seq:
@@ -556,13 +575,16 @@ VALUE str_setBlob(VALUE self, VALUE b) {
  * Only works when CoreFoundation is available.
  */
 void Init_plist() {
-	mPlist = rb_define_module("PropertyList");
+	mPlistDeprecated = rb_define_module("PropertyList");
+	rb_define_module_function(mPlistDeprecated,"method_missing", plist_deprecated_method_missing, -1);
+	mOSX = rb_define_module("OSX");
+	mPlist = rb_define_module_under(mOSX, "PropertyList");
 	rb_define_module_function(mPlist, "load", plist_load, -1);
 	rb_define_module_function(mPlist, "dump", plist_dump, -1);
 	rb_define_method(rb_cObject, "to_plist", obj_to_plist, -1);
 	rb_define_method(rb_cString, "blob?", str_blob, 0);
 	rb_define_method(rb_cString, "blob=", str_setBlob, 1);
-	ePropertyListError = rb_define_class("PropertyListError", rb_eStandardError);
+	ePropertyListError = rb_define_class_under(mOSX, "PropertyListError", rb_eStandardError);
 	id_gm = rb_intern("gm");
 	timeEpoch = rb_funcall(rb_cTime, id_gm, 1, INT2FIX(2001));
 	rb_define_const(mPlist, "EPOCH", timeEpoch);

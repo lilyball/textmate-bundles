@@ -83,7 +83,7 @@ module TextMate
             plist = { 'menuItems' => options }.to_plist
             io.write plist; io.close_write
           end
-          PropertyList::load(io)
+          OSX::PropertyList::load(io)
         end
 
         return nil unless res.has_key? 'selectedIndex'
@@ -135,7 +135,7 @@ module TextMate
           params["items"] = items
 
           return_plist = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + "/nibs/RequestItem")}}
-          return_hash = PropertyList::load(return_plist)
+          return_hash = OSX::PropertyList::load(return_plist)
 
           # return string is in hash->result->returnArgument.
           # If cancel button was clicked, hash->result is nil.
@@ -203,7 +203,7 @@ module TextMate
               raise WindowNotFound if $CHILD_STATUS == 54528  # -43
               raise "Error (#{text})" if $CHILD_STATUS != 0
 
-              PropertyList::load(text)
+              OSX::PropertyList::load(text)
             end
 
             if block_given? then
@@ -239,7 +239,7 @@ module TextMate
         params["string"] = options[:default] || ""
         
         return_plist = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + "/nibs/#{nib_name}")}}
-        return_hash = PropertyList::load(return_plist)
+        return_hash = OSX::PropertyList::load(return_plist)
         
         # return string is in hash->result->returnArgument.
         # If cancel button was clicked, hash->result is nil.
@@ -302,7 +302,7 @@ if $0 == __FILE__
 
   # params = {'title' => "Hotness", 'prompt' => 'Please enter some hotness', 'string' => 'teh hotness'}
   # return_value = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + '/nibs/RequestString')}}
-  # return_hash = PropertyList::load(return_value)
+  # return_hash = OSX::PropertyList::load(return_value)
   # puts return_hash['result'].inspect
   
 #  puts TextMate::UI.dialog(:nib => , :parameters => , :center => true)

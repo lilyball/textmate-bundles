@@ -63,7 +63,7 @@ module TextMate
         raise WindowNotFound if $CHILD_STATUS == 54528  # -43
         raise "Error (#{text})" if $CHILD_STATUS != 0
 
-        PropertyList::load(text)
+        OSX::PropertyList::load(text)
       end
 
       if block_given? then
@@ -140,7 +140,7 @@ class << self
         plist = { 'menuItems' => options }.to_plist
         io.write plist; io.close_write
       end
-      PropertyList::load(io)
+      OSX::PropertyList::load(io)
     end
 
     return nil unless res.has_key? 'selectedIndex'

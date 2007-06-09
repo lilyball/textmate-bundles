@@ -210,7 +210,7 @@ class ObjCMethodCompletion
 
     candidates = []
     if obType &amp;&amp; obType == :initObject
-      if methodSearch.match /^(i(n(i(t([A-Z]\w*)?)?)?)?)?$/
+      if methodSearch.match /^(i(n(i(t([A-Z]\w*)?)?)?)?)?(\[\[:alpha:\]:\])?$/
         methodSearch = "init[[:space:][:upper:]]" unless methodSearch.match(/^init(\b|[A-Z])/)
       end
     end

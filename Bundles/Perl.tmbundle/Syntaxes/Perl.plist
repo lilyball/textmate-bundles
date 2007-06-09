@@ -1467,6 +1467,47 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>((&lt;&lt;) *"POSTSCRIPT").*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.perl</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.doublequote.perl</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heredoc.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>text.postscript.embedded.perl</string>
+			<key>end</key>
+			<string>(^POSTSCRIPT$)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.postscript</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>((&lt;&lt;) *"([^"]*)").*\n?</string>
 			<key>captures</key>
 			<dict>
@@ -1669,6 +1710,39 @@
 		</dict>
 		<dict>
 			<key>begin</key>
+			<string>((&lt;&lt;) *'POSTSCRIPT').*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.perl</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.quote.perl</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heredoc.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.postscript.embedded.perl</string>
+			<key>end</key>
+			<string>(^POSTSCRIPT)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.postscript</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>((&lt;&lt;) *'([^']*)').*\n?</string>
 			<key>captures</key>
 			<dict>
@@ -1850,6 +1924,47 @@
 				<dict>
 					<key>include</key>
 					<string>source.sql</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>((&lt;&lt;) *POSTSCRIPT\b).*\n?</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.perl</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.heredoc.perl</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.heredoc.perl</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.postscript.embedded.perl</string>
+			<key>end</key>
+			<string>(^POSTSCRIPT)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.postscript</string>
 				</dict>
 			</array>
 		</dict>

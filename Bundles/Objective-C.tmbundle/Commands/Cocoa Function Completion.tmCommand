@@ -106,7 +106,7 @@ def pop_up(candidates, searchTerm,star,arg_name)
     io = open('|"$DIALOG" -u', "r+")
     io &lt;&lt; pl.to_plist
     io.close_write
-    res = PropertyList::load(io.read)
+    res = OSX::PropertyList::load(io.read)
     if res.has_key? 'selectedMenuItem'
       b = {0 => false , 1 => true}
       snippet_generator( res['selectedMenuItem']['cand'], start, star&amp;&amp; !b[res['selectedMenuItem']['pure']],arg_name &amp;&amp; !b[res['selectedMenuItem']['noArg']] )

@@ -123,7 +123,7 @@ def show_dialog(prettyCandidates,start,&amp;snip_gen)
     io = open('|"$DIALOG" -u', "r+")
     io &lt;&lt;  pl.to_plist
     io.close_write
-    res = PropertyList::load(io.read)
+    res = OSX::PropertyList::load(io.read)
     if res.has_key? 'selectedMenuItem'
       snip_gen.call( res['selectedMenuItem']['cand'], start )
     else

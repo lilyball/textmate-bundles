@@ -119,7 +119,7 @@ lk = candidates.map do |cand|
                       end
 
 
-  res = PropertyList::load(%x{#{e_sh dialog_path} -up #{e_sh plist} })
+  res = OSX::PropertyList::load(%x{#{e_sh dialog_path} -up #{e_sh plist} })
   if res.has_key? 'selectedMenuItem'
 	result = res['selectedMenuItem']['full']
   else

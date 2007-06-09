@@ -98,7 +98,7 @@ module TextMate
       a_directory = File.directory?(file)
       ptrn = a_directory ? @folder_pattern : @file_pattern
       skip_it = ptrn[:regexp].match(file) ? ptrn[:negate] : !ptrn[:negate]
-      return (skip_it or a_directory) ? skip_it : binary?(file)
+      return (skip_it or a_directory) ? skip_it || File.symlink?(file) : binary?(file)
     end
   end
 

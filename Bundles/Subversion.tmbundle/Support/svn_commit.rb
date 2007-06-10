@@ -1,5 +1,6 @@
 require 'English'
 require 'ostruct'
+require 'pathname'
 
 svn         	= ENV['TM_SVN']            || `which svn`.chomp
 bundle      	= ENV['TM_BUNDLE_SUPPORT'] || File.dirname(__FILE__)
@@ -74,8 +75,8 @@ class SVNCommitTransaction
 
 private	
 	def matches_to_paths(matches)
-		paths = matches.collect {|m| m[2] }
-		paths.collect{|path| path.sub(/^#{CurrentDir}/, "") }
+		paths = matches.collect {|m| Pathname.new(m[2]).realpath.to_s }
+		paths.collect{|path| path.sub(/^#{Regexp.escape CurrentDir}/, "") }
 	end
 
 	def matches_to_status(matches)

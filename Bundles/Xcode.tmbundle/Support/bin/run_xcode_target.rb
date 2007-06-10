@@ -21,14 +21,14 @@ class Xcode
     
     def initialize(path_to_xcodeproj)
       @project_path = path_to_xcodeproj
-      @project_data = PropertyList::load(File.new(path_to_xcodeproj + "/project.pbxproj"))
+      @project_data = OSX::PropertyList.load(File.new(path_to_xcodeproj + "/project.pbxproj"))
       @objects      = @project_data['objects']
       @root_object  = @objects[@project_data['rootObject']]
     end
 
     def user_settings_data
       user_file     = @project_path + "/#{`whoami`.chomp}.pbxuser"
-      user          = PropertyList::load(File.new(user_file)) if File.exists?(user_file)
+      user          = OSX::PropertyList.load(File.new(user_file)) if File.exists?(user_file)
     end
         
     def active_configuration_name
@@ -46,7 +46,7 @@ class Xcode
     
     def results_path
       # default to global build results
-      prefs = PropertyList::load(File.new("#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"))
+      prefs = OSX::PropertyList.load(File.new("#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"))
       dir = prefs['PBXProductDirectory'] || File.dirname(@project_path) + "/build"
       
       # || user pref for SYMROOT + the active configuration

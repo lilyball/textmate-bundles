@@ -8,6 +8,7 @@ require 'ostruct'
 require 'erb'
 require File.dirname(__FILE__) + '/db_browser_lib'
 require 'cgi'
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
 
 NO_TABLE = '__none__'
 
@@ -94,7 +95,7 @@ def print_data(query = nil)
     @page_size = 5
     offset    = 0
   end
-  run_query = query.dup
+  run_query = query.sub(/;\s*$/, '')
   @limited  = true
   if not query.include?('LIMIT') and run_query =~ /\s*SELECT/i
     run_query << ' LIMIT %d OFFSET %d' % [@page_size, offset]
@@ -109,7 +110,7 @@ def print_data(query = nil)
       if @result.num_rows == 0
         @message = 'There are no records to show'
       else
-        @message = 'Records %d to %d' % [offset, offset + @result.num_rows]
+        @pager = 'Records %d to %d' % [offset + 1, offset + @result.num_rows]
       end
     else
       @message = @result.to_s + ' rows affected'
@@ -163,10 +164,13 @@ end
 # ===============
 # = Entry point =
 # ===============
+
 if @options.mode == 'tables'
   @tables = @connection.table_list(@options.database.name)
   print render('tables')
 elsif @options.mode == 'home'
+  puts html_head(:window_title => "SQL", :page_title => "Database Browser", :sub_title => @options.database.name, :html_head => render('head'))
+  STDOUT.flush
   @content = ''
   if @options.query.to_s.size > 0
     @content = print_data(@options.query)
@@ -175,6 +179,7 @@ elsif @options.mode == 'home'
   end
   @databases = @connection.database_list
   print render('main')
+  html_footer
 elsif @options.query.to_s.size > 0
   print print_data(@options.query)
 elsif @options.database.table

@@ -1,13 +1,14 @@
 <h2>Columns in table: <%= @table %></h2>
-<table width="75%" class="graybox" cellspacing="0" cellpadding="5">
+<table class="graybox table_schema">
   <tr>
     <th align="left">Name</th>
     <th align="left">Type</th>
     <th align="left">Nullable</th>
     <th align="left">Default</th>
   </tr>
+  <% $row_counter = 0 %>
   <% @fields.each do |field| %>
-    <tr>
+    <tr class="<% $row_counter += 1; if $row_counter % 2 == 0 then %>alternate<% end %>">
       <td><%= field[:name] %></td>
       <td><%= field[:type] %></td>
       <td><%= field[:nullable] %></td>

@@ -13,15 +13,15 @@
     <% end %>
     <table class="sortable graybox" id="results" cellspacing="0" cellpadding="5">
         <tr>
-            <% @result.fields.each do |field| %>
-                <th><%= field %></th>
+            <% (@fields = @result.fields).each do |field| %>
+                <th><%= field[:name] %></th>
             <% end %>
         </tr>
         <% $row_counter = 0 %>
         <% @result.rows.each do |row| %>
             <tr class="<% $row_counter += 1; if $row_counter % 2 == 0 then %>alternate<% end %>">
-                <% row.each do |col| %>
-                    <td><%= escape col.to_s[0..30] %></td>
+                <% row.each_with_index do |col, index| %>
+                    <td <%= 'style="text-align: right"' if @fields[index][:type] == :number %>><%= escape col.to_s[0..30] %></td>
                 <% end %>
             </tr>
         <% end %>

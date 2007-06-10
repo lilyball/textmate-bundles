@@ -97,11 +97,14 @@ class Result
   
   def fields
     if @res.is_a? Mysql::Result
-      fields = @res.fetch_fields
+      @res.fetch_fields.map do |field|
+        {:name => field.name,
+         :type => [Mysql::Field::TYPE_DECIMAL, Mysql::Field::TYPE_TINY, Mysql::Field::TYPE_SHORT,
+                   Mysql::Field::TYPE_LONG, Mysql::Field::TYPE_FLOAT, Mysql::Field::TYPE_DOUBLE].include?(field.type) ? :number : :string }
+      end
     elsif @res == PostgresPR::Connection::Result
-      fields = @res.fields
+      @res.fields.map{|field| {:name => field.name, :type => :string } }
     end
-    fields.map{|field| field.name}
   end
   
   def num_rows

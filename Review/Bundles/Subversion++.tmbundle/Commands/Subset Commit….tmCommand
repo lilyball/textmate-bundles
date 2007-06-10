@@ -25,25 +25,25 @@ items      = patches.map { |e| { 'head' =&gt; e[0], 'body' =&gt; e[1] } }
 parameters = { 'items' =&gt; items }
 
 token = open('|"$DIALOG" -a Patch', 'r+') { |io| io &lt;&lt; parameters.to_plist; io.close_write; io.read.chomp }
-res   = open('|"$DIALOG" -w' + token)               { |io| PropertyList.load(io) }
-        open('|"$DIALOG" -x' + token)               { |io| }
+res   = open('|"$DIALOG" -w' + token)     { |io| OSX::PropertyList.load(io) }
+        open('|"$DIALOG" -x' + token)     { |io| }
 
 rc    = res['returnCode'].to_i
 msg   = res['commitMessage'].to_s
 items = res['items'].reject { |e| e['disabled'] == 1 }
 
-abort "User aborted." if rc != 1
-abort "No changes accepted." if items.empty?
+abort "User aborted."                                     if rc != 1
+abort "No changes accepted."                              if items.empty?
 abort "All changes accepted, use regular commit instead." if items.size == res['items'].size
-abort "No commit message." if msg.empty?
+abort "No commit message."                                if msg.empty?
 
 backup = file + '_' + Time.now.strftime('%Y-%m-%dT%H:%M:%S')
 FileUtils.mv(file, backup, :verbose =&gt; true)
 
 f = e_sh file
-open(%{|svn &gt;#{f} cat #{f} &amp;&amp; \\
+open(%{|"${TM_SVN:-svn}" &gt;#{f} cat #{f} &amp;&amp; \\
         patch #{f} &amp;&amp; \\
-        svn ci #{f} -m #{e_sh msg}}, "w") do |io|
+        "${TM_SVN:-svn}" ci #{f} -m #{e_sh msg}}, "w") do |io|
   io &lt;&lt; [ 'Index: ' + file, '=' * 67, '--- ' + file, '+++ ' + file, '' ].join("\n")
   items.each { |e| io &lt;&lt; e['head'] &lt;&lt; "\n" &lt;&lt; e['body'] }
 end

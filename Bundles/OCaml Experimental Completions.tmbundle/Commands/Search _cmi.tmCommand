@@ -16,7 +16,7 @@ plist = "{ignoreCase = 0; regularExpression = 0; searchString = \"#{searchstring
 options = `'#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog' -p '#{plist}' -m '#{ENV['TM_BUNDLE_SUPPORT']}/nibs/SearchWindow.nib' | pl`
 
 
-options = PropertyList.load(options)
+options = OSX::PropertyList.load(options)
 if options['returnButton'] == 'Search'
   searchtype = options['restrictTo'].to_sym
   searchstring = options['searchString']

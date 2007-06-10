@@ -76,7 +76,7 @@ module ProcessTemplate
     data = File.read(template_info)
     data = Iconv.conv('utf-8', 'mac', data) if mac_roman? data
 
-    plist = PropertyList.load(data)
+    plist = OSX::PropertyList.load(data)
 
     plist['FilesToRename'].each_pair do |key, value|
       from = File.join(dir, expand(key, variables))
@@ -120,7 +120,7 @@ plist = { 'templates' =&gt; templates, 'projectName' =&gt; 'untitled' }.to_plist
 defaults = { 'Xcode New Project Location'          =&gt; '~/',
              'Xcode New Project Selected Template' =&gt; [ [ 1, 6 ] ] }.to_plist
 
-if res = PropertyList.load(%x{ #{e_sh DIALOG} -cmp #{e_sh plist} -d #{e_sh defaults} 'New Project' })['result']
+if res = OSX::PropertyList.load(%x{ #{e_sh DIALOG} -cmp #{e_sh plist} -d #{e_sh defaults} 'New Project' })['result']
 
   src = res['returnArgument']
 

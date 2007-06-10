@@ -48,7 +48,7 @@ x = Thread.new do
 
     bundles.each do |bundle|
       puts "Load #{bundle['path']}…"
-      plist = open("|svn cat http://macromates.com/svn/Bundles/trunk/Bundles/#{url_encode bundle['path']}/info.plist") { |io| PropertyList.load(io) }
+      plist = open("|svn cat http://macromates.com/svn/Bundles/trunk/Bundles/#{url_encode bundle['path']}/info.plist") { |io| OSX::PropertyList.load(io) }
       # puts "Got #{plist}"
       bundle['uuid'] = plist['uuid'] unless plist['uuid'].nil?
       bundle['name'] = plist['name'] unless plist['name'].nil?

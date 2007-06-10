@@ -119,7 +119,7 @@ begin
   cio = IO.popen("'#{ENV['TM_SUPPORT_PATH']}/bin/tm_dialog' -m '#{ENV['TM_BUNDLE_SUPPORT']}/nibs/CompletionsWindow.nib' | pl", 'r+')
   cio.puts(plist.to_plist)
   cio.close_write
-  choice = PropertyList.load(cio.read)
+  choice = OSX::PropertyList.load(cio.read)
   if !choice['returnButton'] || choice['returnButton'] != 'Cancel'
     selection = choice['result']['returnArgument'].to_i
     snippettxt = plist['possibleCompletions'][selection]['completion']

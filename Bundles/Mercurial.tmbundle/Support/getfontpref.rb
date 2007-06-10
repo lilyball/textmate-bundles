@@ -3,7 +3,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 # Load TM preferences to discover the current font settings
 # Taken from doc2html by Brad Choate -- http://bradchoate.com/
 textmate_pref_file = '~/Library/Preferences/com.macromates.textmate.plist'
-$prefs = PropertyList.load(File.open(File.expand_path(textmate_pref_file)))
+$prefs = OSX::PropertyList.load(File.open(File.expand_path(textmate_pref_file)))
  
 def getfontname
   font_name = $prefs['OakTextViewNormalFontName']

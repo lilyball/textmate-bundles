@@ -22,7 +22,7 @@ plist = { 'entities' =&gt; entities, 'insertAsEntity' =&gt; true }.to_plist
 open("|#{e_sh DIALOG} -cm 'Insert Entity'", 'w+') do |io|
   io &lt;&lt; plist; io.close_write
 
-  res = PropertyList.load(io.read)['result']
+  res = OSX::PropertyList.load(io.read)['result']
   abort if res.nil?
 
   if res['asEntity'].to_i == 1

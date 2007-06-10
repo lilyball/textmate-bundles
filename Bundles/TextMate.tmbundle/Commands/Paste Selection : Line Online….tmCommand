@@ -93,7 +93,7 @@ def get_destinations
   res = %x{ "$TM_SUPPORT_PATH/bin/tm_dialog" -cmp #{e_sh parameters} pastebin }
   exit if $? != 0
 
-  res = PropertyList.load(res)
+  res = OSX::PropertyList.load(res)
   exit unless res.has_key? 'returnCode'
 
   save_prefs(res)
@@ -125,7 +125,7 @@ def find_language_ext
       Dir.glob(dir + '/*.tmbundle/Syntaxes/*.{plist,tmLanguage}') do |filename|
         File.open(filename) do |io|
           begin
-            plist = PropertyList.load(io)
+            plist = OSX::PropertyList.load(io)
             if scope == plist['scopeName'].to_s then
               return Array(plist['fileTypes']).first || 'txt'
             end

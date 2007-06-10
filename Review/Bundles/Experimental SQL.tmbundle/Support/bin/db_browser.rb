@@ -104,6 +104,7 @@ def print_data(query = nil)
 
   @query = query
   begin
+    throw Errno::ECONNREFUSED.new
     @result = @connection.do_query(run_query)
     if @result.is_a? Result
       @title = 'Query complete'
@@ -121,7 +122,7 @@ def print_data(query = nil)
     if e.is_a? Mysql::Error
       @message = escape(smarty(e.message))
     else
-      @message = "<b>#{e.class.name}: #{escape(smarty(e))}</b>"
+      @message = "<b>#{e.class.name}: #{escape(smarty(e.message))}</b>"
       @message += '<pre>' + "\t" + escape(e.backtrace.join("\n\t")) + '</pre>'
     end
   end
@@ -132,13 +133,13 @@ end
 # = Template helpers =
 # ====================
 def smarty(text)
-  text.
+  text.to_s
     sub(" -- ", ' — ').
     sub(/ -- /, ' — ')
 end
 
 def escape(text)
-  CGI.escapeHTML(text)
+  CGI.escapeHTML(text.to_s)
 end
 
 def e_js(str)

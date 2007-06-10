@@ -81,7 +81,7 @@ class Greasemonkey
 		
 		# Flags: modal, centered, parameters
 		dialog = `$DIALOG -mcp #{e_sh parameters.to_plist} #{e_sh "#{ENV['TM_BUNDLE_SUPPORT']}/nib/OpenInstalledScript.nib"}`
-		pl = PropertyList::load(dialog)
+		pl = OSX::PropertyList.load(dialog)
 		
 		exit unless pl["returnButton"] == "Load"  # Bail if the user cancelled
 		

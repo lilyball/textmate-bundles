@@ -39,7 +39,7 @@ plist = {
   'today' =&gt; "Today is " + format(tod)
 }.to_plist
 str = `#{e_sh dialog} datePicker -mp #{e_sh plist}`
-res=PropertyList::load(str)
+res=OSX::PropertyList.load(str)
 if res['returnButton'].to_s != "OK" then
   newDate = nil
 else

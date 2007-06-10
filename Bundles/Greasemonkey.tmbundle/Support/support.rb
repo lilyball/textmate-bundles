@@ -134,7 +134,7 @@ class Greasemonkey
 		end
 		private
 		def self.load
-			PropertyList::load(File.new(FILE)) rescue {}
+			OSX::PropertyList.load(File.new(FILE)) rescue {}
 		end
 	end
 

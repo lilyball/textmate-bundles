@@ -25,7 +25,7 @@ ysuggest = []
     }
     plist = { 'menuItems' =&gt; ysuggest }.to_plist
 
-    res = PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+    res = OSX::PropertyList.load(`#{e_sh DIALOG} -up #{e_sh plist}`)
     TextMate.exit_show_tool_tip "No matches found" unless res.has_key? 'selectedMenuItem'
     url = res['selectedMenuItem']['url']
     title = res['selectedMenuItem']['title']

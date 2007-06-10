@@ -23,7 +23,7 @@ ysuggest = []
     }
     plist = { 'menuItems' =&gt; ysuggest }.to_plist
 
-    res = PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+    res = OSX::PropertyList.load(`#{e_sh DIALOG} -up #{e_sh plist}`)
     abort unless res.has_key? 'selectedMenuItem'
     TextMate.exit_replace_text res['selectedMenuItem']['title']</string>
 	<key>fallbackInput</key>

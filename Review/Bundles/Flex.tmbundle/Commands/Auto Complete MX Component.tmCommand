@@ -31,7 +31,7 @@ if words.size &gt; 1
 	}
 	plist = { 'menuItems' =&gt; words }.to_plist
 	
-	res = PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+	res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
 
 	TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
 	choice = res['selectedMenuItem']['data']

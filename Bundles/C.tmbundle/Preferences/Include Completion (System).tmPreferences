@@ -16,7 +16,7 @@ require ENV["TM_SUPPORT_PATH"] + "/lib/osx/plist"
 Dir.chdir "/System/Library/Frameworks"
 res = Dir["*.framework"]
 
-prefs = PropertyList::load(File.new("#{ENV["HOME"]}/Library/Preferences/com.apple.Xcode.plist"))
+prefs = OSX::PropertyList::load(File.new("#{ENV["HOME"]}/Library/Preferences/com.apple.Xcode.plist"))
 dir = prefs["PBXProductDirectory"]
 if dir &amp;&amp; File.exists?(File.expand_path("#{dir}/Release"))
   Dir.chdir File.expand_path("#{dir}/Release")

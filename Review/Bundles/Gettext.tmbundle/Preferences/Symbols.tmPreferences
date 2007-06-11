@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbols</string>
+	<key>scope</key>
+	<string>keyword.control.msgid.po</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>
+      s/^msgid\s+"(.*)"\s*$/$1/g;
+	  s/^msgid_plural\s+"(.*)"\s*$/$1/g;</string>
+	</dict>
+	<key>uuid</key>
+	<string>18BD097D-CDB4-431C-AE3F-52D96B452985</string>
+</dict>
+</plist>

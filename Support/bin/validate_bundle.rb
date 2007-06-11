@@ -76,7 +76,7 @@ ARGV.each do |bundle|
   if options[:legal_scopes]
     Dir["Syntaxes/*.{tmLanguage,plist}"].each do |grammar|
       open(grammar) do |io|
-        plist = PropertyList.load(io)
+        plist = OSX::PropertyList.load(io)
         bundle_name = ARGV.size == 1 ? nil : File.split(bundle).last
         visit_value plist['patterns'], bundle_name   if plist['patterns']
         visit_value plist['repository'], bundle_name if plist['repository']
@@ -90,7 +90,7 @@ ARGV.each do |bundle|
       Find.find(dir) do |path|
         if File.file?(path) and
            File.extname(path) =~ /.*\.(tm[A-Z][a-zA-Z]+|plist)\Z/
-          plist = File.open(path) { |io| PropertyList.load(io) }
+          plist = File.open(path) { |io| OSX::PropertyList.load(io) }
           uuid  = plist["uuid"]
           next if options[:white_list] and allowed_globals.include? uuid
           if plist["scope"].to_s.empty?

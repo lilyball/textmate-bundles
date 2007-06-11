@@ -5,6 +5,7 @@
 	<key>fileTypes</key>
 	<array>
 		<string>sml</string>
+		<string>sig</string>
 	</array>
 	<key>foldingStartMarker</key>
 	<string>\(\*|\b(struct|sig)\b</string>
@@ -34,9 +35,15 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(val|type|datatype|structure|struct|signature|sig|functor|end|as|if|then|else|andalso|orelse|let|in|abstype|local|where|case|of|fn|raise|exception|handle)\b</string>
+			<string>\b(val|datatype|struct|sig|end|as|let|in|abstype|local|where|case|of|fn|raise|exception|handle|ref|infix)\b</string>
 			<key>name</key>
 			<string>keyword.other.ml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(if|then|else)\b</string>
+			<key>name</key>
+			<string>keyword.control.ml</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -44,7 +51,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.ml</string>
+					<string>keyword.control.fun.ml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -54,6 +61,8 @@
 			</dict>
 			<key>match</key>
 			<string>\b(fun|and)\s+([\w']+)\b</string>
+			<key>name</key>
+			<string>meta.definition.fun.ml</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -112,6 +121,93 @@
 			<string>\b\d*\.?\d+\b</string>
 			<key>name</key>
 			<string>constant.numeric.ml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(andalso|orelse|not)\b</string>
+			<key>name</key>
+			<string>keyword.operator.logical.ml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?x)\b
+					(functor|structure|signature)\s+
+					(\w+)\s* # identifier</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.module.binder.ml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.type.module.ml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?==|:)</string>
+			<key>name</key>
+			<string>meta.module.ml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(open|include)\b</string>
+			<key>name</key>
+			<string>keyword.other.module.ml</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(nil|true|false|NONE|SOME)\b</string>
+			<key>name</key>
+			<string>constant.language.ml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*(type|eqtype) .* =</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.typeabbrev.ml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.typename.ml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>meta.typeabbrev.ml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(([a-zA-Z0-9\.\* ]|(\-&gt;))*)</string>
+					<key>name</key>
+					<string>meta.typeexp.ml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.other.type.ml</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>type annotation/ascription</string>
+			<key>match</key>
+			<string>[^:](:)\s*(([a-zA-Z0-9\.\*\_ ]|(\-&gt;))*)</string>
+			<key>name</key>
+			<string>meta.type.ascription.ml</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

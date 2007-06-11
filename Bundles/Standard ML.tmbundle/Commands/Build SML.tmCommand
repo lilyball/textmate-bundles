@@ -2,24 +2,27 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>autoScrollOutput</key>
-	<true/>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>require_cmd "${TM_SML:=sml}"
-"$TM_SML"|pre</string>
+	<string>if [[ -d "$TM_SMLNJ_HOME/base/system" ]]; then
+  cd "$TM_SMLNJ_HOME/base/system"
+  make
+else
+  echo "No such folder: $TM_SMLNJ_HOME/base/system"
+fi
+</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@r</string>
+	<string>@b</string>
 	<key>name</key>
-	<string>Run in SML</string>
+	<string>Build SML</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.ml</string>
 	<key>uuid</key>
-	<string>18819157-C273-4649-9013-3A2705993795</string>
+	<string>0E144686-095D-4B69-94D0-6E0ECA41C90D</string>
 </dict>
 </plist>

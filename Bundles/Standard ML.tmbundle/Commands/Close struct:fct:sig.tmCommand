@@ -2,24 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>autoScrollOutput</key>
-	<true/>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>require_cmd "${TM_SML:=sml}"
-"$TM_SML"|pre</string>
+	<string>ruby -- "$TM_SUPPORT_PATH/bin/checknest.rb" '(?x) (functor|structure) (.+) = (?=\s*struct)' 'end' 'end (* $1 $2 *)' -n$TM_LINE_NUMBER</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
-	<string>@r</string>
+	<string>~@.</string>
 	<key>name</key>
-	<string>Run in SML</string>
+	<string>Close Current Struct/Functor/Signature</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>afterSelectedText</string>
 	<key>scope</key>
 	<string>source.ml</string>
 	<key>uuid</key>
-	<string>18819157-C273-4649-9013-3A2705993795</string>
+	<string>C008E916-56AE-4310-9C05-D3070AAF1CF8</string>
 </dict>
 </plist>

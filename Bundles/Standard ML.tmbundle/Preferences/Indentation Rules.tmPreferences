@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Indentation Rules</string>
+	<key>scope</key>
+	<string>source.ml</string>
+	<key>settings</key>
+	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>^(?!(struct|sig))\s*(end|in)\b</string>
+		<key>increaseIndentPattern</key>
+		<string>(?x) .*\bsig\b(?!.*\bend\b)
+							| .*\bstruct\b(?!.*\bend\b) 
+							| .*\blet\b(?!.*\bin\b.*\bend\b)
+							| \blocal\b(?!.*\bin\b.*\bend\b)
+							| \bin\b(?!.*\bend\b)
+							| .*\(case\b(?!\))
+							| .*\bcase\b(?!(.*of.*=&gt;.*))</string>
+		<key>indentNextLinePattern</key>
+		<string>(?x) ^ .* : \s*(\(\* .* \*\))? \s* $
+							| ^.*fun.*(?=\n\s*\|)
+							| ^.*(?=\n\s*\|)</string>
+	</dict>
+	<key>uuid</key>
+	<string>12572377-6CB1-45C3-8012-4E2918D182C5</string>
+</dict>
+</plist>

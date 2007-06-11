@@ -2,24 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>autoScrollOutput</key>
-	<true/>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>require_cmd "${TM_SML:=sml}"
-"$TM_SML"|pre</string>
+echo "CM.make \"sources.cm\";"|"$TM_SML"|pre</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@r</string>
+	<string>^R</string>
 	<key>name</key>
-	<string>Run in SML</string>
+	<string>Build CM</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.ml</string>
 	<key>uuid</key>
-	<string>18819157-C273-4649-9013-3A2705993795</string>
+	<string>1EA6E877-4B4E-44EC-9118-9295A0F1432D</string>
 </dict>
 </plist>

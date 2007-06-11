@@ -1,0 +1,30 @@
+Running `Support/bin/validate_uuids.rb` shows this problem:
+
+    UUID Duplicates:
+
+    FA5DC73E-AAE0-4C69-86E1-87B9E0390FD0
+      Bundles/Blogging.tmbundle/Commands/Fetch Post.plist
+      Review/Bundles/TYPO3.tmbundle/Commands/Get TypoScript Setup.tmCommand
+
+This comes from duplicating bundle items on disk. NEVER do that, but if you do, ALWAYS give the duplicate a new UUID.
+
+Running `Support/bin/validate_bundle.rb` TYPO3.tmbundle shows this problem:
+
+    keyword.operator
+    variable.parameter
+    TYPO3.tmbundle: Setup Typo3 sites (C4380D36-E740-4970-B13B-6AC0BCB7F6D9) has a global scope.
+    TYPO3.tmbundle: Turn Default Completions Off (97548FF8-A1AA-4327-AB12-DA665966957F) has a global scope.
+
+Not having a scope selector on a preferences item is a sin! For the setup command, if the item is often useful w/o having a file of the bundle’s type open, then it is generally best to leave out an activation key (and thus scope selector). The user can always add a key (or use ⌃⌘T, as I do with things like Blogging → Fetch Post etc.).
+
+As for the invalid scopes, most likely they just need the language’s scope name as suffix. If you use Edit in TM from the bundle editor (with the grammar open), invalid scopes should be highlighted as such, plus ⎋ will give a menu-driven completion for scopes, so e.g. ‘keyword.⎋’ will show all official specializers of the keyword scope.
+
+Menu:
+
+ 1) Inconsistent use of case -- many items are not Title Cased, while I know it can be hard to apply Title Case to items which insert structures (where the item is literally showing what gets inserted), I think this bundle can do better than what’s presently there. I’d also write “Image” instead of “IMAGE” and “Image Resource” instead of “IMG_RESOURCE”.
+
+ 2) Redundancy in the form of prefixing lots of items with “Insert” and suffixing items with “Object” and “Snippet”. Generally it should be implied by the submenu title and/or the name of the item, that it inserts boilerplate, so “Insert label Snippet” should preferably just be “Label” and the submenu title should indicate that all items (of the submenu) are markup (to insert).
+
+ 3) GIFFBUILDER is an empty sub-menu (we generally do not want empty submenus)
+
+ 4) Too limited use of separators -- I’d use more separators and put more items in each menu and then also limit the depth. Looking e.g. at the TypoScript submenu, here we have 5 items, one an actual item, and 4 submenus of which 3 of them only has a single item (ignoring the empty GIFBUILDER submenu). Likely all this could be just one submenu using separators.

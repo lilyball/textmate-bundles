@@ -13,7 +13,7 @@ def get_item_uid(item, extension)
   separator_file = BundleDir + item + '/separator.' + extension
   uid = false
   if File.exists?(separator_file)
-    uid = PropertyList::load(File.read(separator_file))['uuid']
+    uid = OSX::PropertyList::load(File.read(separator_file))['uuid']
   else
     uid = (0..5).map{(0..5).map{rand(15).to_s(16) }.to_s.upcase}.join('-')
     File.open(BundleDir + item + '/separator.' + extension, 'w') do |separator|
@@ -45,7 +45,7 @@ order = []
   order += `grep -ho '[A-Z0-9]\\+-\\([A-Z0-9]\\+-\\?\\)\\{5,\\}' #{e_sh(BundleDir + item)}/*`.split("\n")
 end
 order.uniq!
-info = PropertyList::load(File.read(BundleDir + 'info.plist'))
+info = OSX::PropertyList::load(File.read(BundleDir + 'info.plist'))
 info['ordering'] = order
 File.open(BundleDir + 'info.plist', 'w') do |info_file|
   info_file << info.to_plist

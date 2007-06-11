@@ -27,7 +27,7 @@ module Browser
     def favorite
       rec = nil
       open(File.expand_path("~/Library/Preferences/com.apple.LaunchServices.plist")) do |io|
-        rec = PropertyList.load(io)["LSHandlers"].find { |info| info["LSHandlerURLScheme"] == "http" }
+        rec = OSX::PropertyList.load(io)["LSHandlers"].find { |info| info["LSHandlerURLScheme"] == "http" }
       end
     rescue
     ensure

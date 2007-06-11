@@ -58,7 +58,7 @@ module TextMate
     def prefs_for_key (key)
       prefs_file = "#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.plist"
       File.open(prefs_file) do |f|
-        return PropertyList::load(f)[key]
+        return OSX::PropertyList::load(f)[key]
       end
     end
 

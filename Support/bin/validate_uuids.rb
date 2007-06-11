@@ -19,7 +19,7 @@ ROOT_DIRS.each do |root_dir|
     if File.file?(path) and
        File.extname(path) =~ /.*\.(tm[A-Z][a-zA-Z]+|plist)\Z/
       begin
-        plist = File.open(path) { |io| PropertyList.load(io) }
+        plist = File.open(path) { |io| OSX::PropertyList.load(io) }
         if uuid = plist["uuid"]
           uuids[uuid] << path
         else

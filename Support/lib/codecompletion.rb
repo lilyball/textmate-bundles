@@ -304,7 +304,7 @@ class TextmateCompletionsPlist
       @fullsize = true
     end
         
-    pl = PropertyList.load(self.raw, true)[0]
+    pl = OSX::PropertyList.load(self.raw, true)[0]
     
     self.scope   = pl['scope'].split(/, ?/) if @fullsize and pl['scope']
     self.choices = (@fullsize ? pl['settings'] : pl)['completions']

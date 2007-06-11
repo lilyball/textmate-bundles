@@ -145,6 +145,8 @@ TEXT
       case @endpoint
       when %r{/mt-xmlrpc\.cgi}, %r{/backend/xmlrpc}
         @mode = 'mt'
+      when %r{/serendipity_xmlrpc\.php}
+        @mode = 's9y'
       when %r{/xmlrpc(\.php)?}
         @mode = 'wp'
       else
@@ -271,6 +273,9 @@ TEXT
       @post['mt_allow_pings'] = @headers['pings'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['pings']
       @post['mt_tags'] = @headers['tags'] if @headers['tags']
       @post['mt_basename'] = @headers['basename'] if @headers['basename']
+    elsif self.mode == 's9y'
+      @post['mt_allow_comments'] = @headers['comments'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['comments']
+      @post['mt_allow_pings'] = @headers['pings'] =~ /\b(on|1|y(es)?)\b/i ? '1' : '0' if @headers['pings']      
     elsif self.mode == 'wp'
       @post['mt_allow_comments'] = @headers['comments'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['comments']
       @post['mt_allow_pings'] = @headers['pings'] =~ /\b(on|1|y(es)?)\b/i ? 'open' : 'closed' if @headers['pings']

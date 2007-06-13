@@ -133,7 +133,7 @@ end
 # = Template helpers =
 # ====================
 def smarty(text)
-  text.to_s
+  text.to_s.
     sub(" -- ", ' — ').
     sub(/ -- /, ' — ')
 end

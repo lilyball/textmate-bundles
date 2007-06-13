@@ -35,9 +35,37 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(val|datatype|struct|sig|end|as|let|in|abstype|local|where|case|of|fn|raise|exception|handle|ref|infix)\b</string>
+			<string>\b(val|datatype|struct|as|let|in|abstype|local|where|case|of|fn|raise|exception|handle|ref|infix)\b</string>
 			<key>name</key>
 			<string>keyword.other.ml</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\b(sig)\b</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.delimiter.ml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.delimiter.ml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\b(end)\b</string>
+			<key>name</key>
+			<string>meta.module.sigdec.ml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#spec</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -131,7 +159,7 @@
 		<dict>
 			<key>begin</key>
 			<string>(?x)\b
-					(functor|structure|signature)\s+
+					(functor|structure|signature|funsig)\s+
 					(\w+)\s* # identifier</string>
 			<key>captures</key>
 			<dict>
@@ -149,11 +177,11 @@
 			<key>end</key>
 			<string>(?==|:)</string>
 			<key>name</key>
-			<string>meta.module.ml</string>
+			<string>meta.module.dec.ml</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(open|include)\b</string>
+			<string>\b(open)\b</string>
 			<key>name</key>
 			<string>keyword.other.module.ml</string>
 		</dict>
@@ -210,6 +238,85 @@
 			<string>meta.type.ascription.ml</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>spec</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(type)\b</string>
+					<key>name</key>
+					<string>meta.spec.ml.type</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(datatype)\b</string>
+					<key>name</key>
+					<string>meta.spec.ml.datatype</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(val)\s*\w+:</string>
+					<key>name</key>
+					<string>meta.spec.ml.val</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(structure)\s*\w+:</string>
+					<key>name</key>
+					<string>meta.spec.ml.structure</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(include)\b</string>
+					<key>name</key>
+					<string>meta.spec.ml.include</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.ml</string>
 	<key>uuid</key>

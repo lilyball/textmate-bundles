@@ -104,7 +104,6 @@ def print_data(query = nil)
 
   @query = query
   begin
-    throw Errno::ECONNREFUSED.new
     @result = @connection.do_query(run_query)
     if @result.is_a? Result
       @title = 'Query complete'

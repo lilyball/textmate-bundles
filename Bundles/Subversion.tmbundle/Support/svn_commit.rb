@@ -75,7 +75,7 @@ class SVNCommitTransaction
 
 private	
 	def matches_to_paths(matches)
-		paths = matches.collect {|m| Pathname.new(m[2]).realpath.to_s }
+		paths = matches.collect {|m| File.exist?(m[2]) ? Pathname.new(m[2]).realpath.to_s : m[2] }
 		paths.collect{|path| path.sub(/^#{Regexp.escape CurrentDir}/, "") }
 	end
 

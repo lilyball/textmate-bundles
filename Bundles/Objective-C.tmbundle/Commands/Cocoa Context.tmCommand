@@ -21,7 +21,7 @@ class String
   end
 end
 
-def caret_position
+def caret_position(line)
   tmp = ENV['TM_LINE_NUMBER'].to_i - ENV['TM_INPUT_START_LINE'].to_i
   if tmp &gt; 0
     caret_placement = line.index_of_nth_occurrence_of(tmp,?\n) + ENV['TM_LINE_INDEX'].to_i
@@ -467,14 +467,16 @@ if ENV['TERMINAL_MATE_NEW']
   {:tmVars =&gt; {'TM_LINE_NUMBER' =&gt; '31', 'TM_INPUT_START_LINE' =&gt; '31', 'TM_LINE_INDEX' =&gt; '30', 'TM_INPUT_START_LINE_INDEX' =&gt; '0'}, :line =&gt; '[obj set:[NSString role:@"eu" ]]'},
   {:tmVars =&gt; {'TM_LINE_NUMBER' =&gt; '32', 'TM_INPUT_START_LINE' =&gt; '32', 'TM_LINE_INDEX' =&gt; '35', 'TM_INPUT_START_LINE_INDEX' =&gt; '0'}, :line =&gt; '[obj set:[NSString role:@"eu" forYo]]'},
   {:tmVars =&gt; {'TM_LINE_NUMBER' =&gt; '33', 'TM_INPUT_START_LINE' =&gt; '33', 'TM_LINE_INDEX' =&gt; '40', 'TM_INPUT_START_LINE_INDEX' =&gt; '0'}, :line =&gt; '[obj set:[NSString role:@"eu" forYou:sel]]'},
-  {:tmVars =&gt; {'TM_LINE_NUMBER' =&gt; '34', 'TM_INPUT_START_LINE' =&gt; '34', 'TM_LINE_INDEX' =&gt; '26', 'TM_INPUT_START_LINE_INDEX' =&gt; '0'}, :line =&gt; '[obj postNotificationName: object:NSString *]'}]
+  {:tmVars =&gt; {'TM_LINE_NUMBER' =&gt; '34', 'TM_INPUT_START_LINE' =&gt; '34', 'TM_LINE_INDEX' =&gt; '26', 'TM_INPUT_START_LINE_INDEX' =&gt; '0'}, :line =&gt; '[obj postNotificationName: object:NSString *]'},
+  {:tmVars =&gt; {'TM_LINE_NUMBER'=&gt; '7','TM_INPUT_START_LINE'=&gt; '6','TM_LINE_INDEX'=&gt; '55', 'TM_INPUT_START_LINE_INDEX' =&gt; '0'}, :line =&gt; "[[NSNotificationCenter defaultCenter] addObserver:self\n                        selector:@selector(colorPicker:) ]"}]
+
   
   ENV['TM_BUNDLE_SUPPORT'] = "/Library/Application Support/TextMate/Bundles/Objective-C.tmbundle/Support"
   tc.each do |element|
     element[:tmVars].each do |key,value|
       ENV[key] = value
     end
-    caret_placement = caret_position
+    caret_placement = caret_position(element[:line])
 begin
     res = ObjCMethodCompletion.new(element[:line] , caret_placement).print
 rescue NoMethodError =&gt; boom
@@ -491,7 +493,7 @@ end
   
 else
 line = STDIN.read
-caret_placement = caret_position
+caret_placement = caret_position(line)
 res, os = ObjCMethodCompletion.new(line , caret_placement).print
 if res
   print e_sn(line[0..caret_placement]) + res + e_sn(line[caret_placement + 1 + os..-1]) 

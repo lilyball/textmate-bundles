@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>comment</key>
+	<string>
+TODO:  Command for copy original to untranslated, label as fuzzy, remove fuzzy, next fuzzy etc
+Create meta scope for each entry
+</string>
 	<key>fileTypes</key>
 	<array>
 		<string>po</string>
@@ -18,50 +23,106 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>begin</key>
+			<string>msgid\s+""</string>
+			<key>end</key>
+			<string>^$</string>
+			<key>name</key>
+			<string>entity.name.section.header.po</string>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.double-quote.po</string>
+				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>string.quoted.double.po</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.double-quote.po</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>^msgid(_plural)?\s+(".*")\s*$</string>
+			<string>^msgid(?:_plural)?\s+(")(.*)(")\s*$</string>
 			<key>name</key>
 			<string>keyword.control.msgid.po</string>
 		</dict>
 		<dict>
 			<key>captures</key>
 			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.double-quote.po</string>
+				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>string.quoted.double.po</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.double-quote.po</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>^msgstr(\[\d?\])?\s+(".*")\s*$</string>
+			<string>^msgstr(?:\[\d?\])?\s+(")(.*)(")\s*$</string>
 			<key>name</key>
 			<string>keyword.control.msgstr.po</string>
 		</dict>
 		<dict>
 			<key>captures</key>
 			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.double-quote.po</string>
+				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>string.quoted.double.po</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.double-quote.po</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>^msgctxt(\[\d?\])?\s+(".*")\s*$</string>
+			<string>^msgctxt(?:\[\d?\])?\s+(")(.*)(")\s*$</string>
 			<key>name</key>
 			<string>keyword.control.msgctxt.po</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.double-quote.po</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.po</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.double-quote.po</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^".+"\s*$</string>
+			<string>^(")(.+)(")\s*$</string>
 			<key>name</key>
 			<string>string.quoted.double.po</string>
 		</dict>
@@ -79,14 +140,14 @@
 					<key>name</key>
 					<string>keyword.other.flag.po</string>
 				</dict>
-				<key>5</key>
+				<key>6</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.flag.po</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^#,\s+((no-)?(c|objc|sh|lisp|elizp|librep|scheme|smalltalk|java|csharp|awk|object-pascal|ycp|tcl|perl|perl-brace|php|gcc-internal|qt|boost)-format)(,\s*((no-)?(c|objc|sh|lisp|elizp|librep|scheme|smalltalk|java|csharp|awk|object-pascal|ycp|tcl|perl|perl-brace|php|gcc-internal|qt|boost)-format))*\s*$</string>
+			<string>^#,\s+((fuzzy)|(no-)?(c|objc|sh|lisp|elisp|librep|scheme|smalltalk|java|csharp|awk|object-pascal|ycp|tcl|perl|perl-brace|php|gcc-internal|qt|boost)-format)(,\s*((fuzzy)|(no-)?(c|objc|sh|lisp|elisp|librep|scheme|smalltalk|java|csharp|awk|object-pascal|ycp|tcl|perl|perl-brace|php|gcc-internal|qt|boost)-format))*\s*$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.flag.po</string>
 		</dict>

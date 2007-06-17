@@ -152,8 +152,8 @@ def get_data_link(link, new_params = {})
   params << new_params[:query].to_s
   params << @options.page_size
   params << new_params[:offset].to_s
-  params.map!{|param| '%22' + param.to_s + '%22' }
-  "<a href='javascript:getData(" + params.join(', ') + ")'>" + link + "</a>"
+  params.map!{|param| "'" + e_js(escape(param.to_s)) + "'" }
+  '<a href="javascript:getData(' + params.join(', ') + ')">' + link + "</a>"
 end
 
 def render(template_file)

@@ -1,0 +1,41 @@
+<% if !js_mode then %>
+<div class="subversion info" id="container">
+<% end %>
+  <% document.elements.each("//entry") do |entry| %>
+
+    <h2><%= entry.attributes["path"] %></h2>
+    <p><label>Current revision</label> <%= entry.attributes["revision"] %></p>
+    <!-- <p>Kind: <%= entry.attributes["kind"] %></p> -->
+
+    <h3>Remote Info</h3>
+    <p><label>Repos. URL</label> <a href="<%= entry.get_elements("url")[0].text %>"><%= entry.get_elements("url")[0].text %></a></p>
+
+    <h3>Repository stuff</h3>
+    <p><label>Root</label> <%= entry.get_elements("repository/root")[0].text %></p>
+    <p><label>UUID</label> <%= entry.get_elements("repository/uuid")[0].text %></p>
+
+    <h3>Updates</h3>
+    <p><label>Schedule</label> <%= entry.get_elements("wc-info/schedule")[0].text %></p>
+    <p><label>Contents updated</label> <%= formated_date(entry.get_elements("wc-info/text-updated")[0].text) %></p>
+    <p><label>Properties updated</label> <%= formated_date(entry.get_elements("wc-info/prop-updated")[0].text) %></p>
+    <p><label>Checksum</label> <%= entry.get_elements("wc-info/checksum")[0].text %></p>
+
+    <h3>This Revision</h3>
+    <p><label>No.</label> <%= entry.get_elements("commit")[0].attributes["revision"] %></p>
+    <p><label>Author</label> <%= entry.get_elements("commit/author")[0].text %></p>
+    <p><label>Date</label> <%= formated_date(entry.get_elements("commit/date")[0].text) %></p>
+
+    <h3>Actions</h3>
+    <ul>
+      <li><a href="#" onclick="tm_svn_cmd('blame'); return false;">Blame</a></li>
+      <li>Log</li>
+    </ul>
+    
+  <% end %>
+  <% if document.has_text? then %>
+    <p><%= document.text %></p>
+  <% end %>
+
+<% if !js_mode then %>
+</div>
+<% end %>

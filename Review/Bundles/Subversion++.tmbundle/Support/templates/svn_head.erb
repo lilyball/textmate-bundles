@@ -1,0 +1,13 @@
+<script type="text/javascript" charset="utf-8">
+  function tm_svn_cmd(command) {
+    // window.location.hash = "#container";
+    var container = document.getElementById('container');
+    document.body.scrollTop = container.offsetTop + 8;
+    container.innerHTML = '<h3>Loading ' + command + '. Stand by…</h3>';
+    TextMate.isBusy = true;
+    var res = TextMate.system("<%= @cmd_base %> '" + command + "' 'js'" , null).outputString;
+    container.innerHTML = res;
+    container.className = "subversion info"
+    TextMate.isBusy = false;
+  }
+</script>

@@ -1,0 +1,6 @@
+    <tr>
+      <td class="linecol" <%= 'id="current_line"' if anchor_line %>><span><a href="<%= file_link %>" <%= 'onClick="window.close();"' if @close_window %> ><%= linecount %></a></span></td>
+      <td class="revcol <%= 'current_line' if current_line %>" title="<%= formated_date(date) %> <%= html_escape(revision_comment[revision]) unless revision_comment[revision].nil? %>"><%= revision %></td>
+      <td class="namecol <%= 'current_line' if current_line %>"><%= name %></td>
+      <td class="codecol <%= 'current_line' if current_line %>"><%= htmlize(content) %></td>
+    </tr>

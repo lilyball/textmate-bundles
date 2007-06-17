@@ -1,0 +1,16 @@
+  </table>
+  <% if linecount == 0 then %>
+    <p>Nothing and noone to blame. Is this file under version control?</p>
+  <% end %>
+
+  <h3>Actions</h3>
+  <ul>
+    <li><a href="#" onclick="tm_svn_cmd('info'); return false;">Info</a></li>
+    <li>Log</li>
+  </ul>
+  <script type="text/javascript" charset="utf-8">
+    window.location.hash = "current_line";
+  </script>
+<% if !js_mode then %>
+</div>
+<% end %>

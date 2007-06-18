@@ -52,7 +52,7 @@ module LaTeX
     def find_file(filename, extension, relative)
       filename.gsub!(/"/,"")
       filename.gsub!(/\.#{extension}$/,"")
-      return filename if File.exist?(filename) # First try the filename as is, without the extension
+      return filename if File.exist?(filename) && !File.directory?(filename)  # First try the filename as is, without the extension
       return "#{filename}.#{extension}" if File.exist?("#{filename}.#{extension}") # Then try with the added extension
       return nil if filename.match(/^\//) # If it is an absolute path, and the above two tests didn't find it, return nil
       texpath = LaTeX.tex_path

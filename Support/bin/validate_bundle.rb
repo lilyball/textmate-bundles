@@ -142,6 +142,8 @@ legal_scopes:
 - punctuation.section.
 - punctuation.separator.
 - punctuation.terminator.
+- punctuation.whitespace.comment.
+- punctuation.whitespace.embedded.
 - source.
 - storage.modifier.
 - storage.type.

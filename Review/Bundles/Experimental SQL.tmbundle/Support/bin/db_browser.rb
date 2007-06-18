@@ -8,7 +8,7 @@ require 'ostruct'
 require 'erb'
 require File.dirname(__FILE__) + '/db_browser_lib'
 require 'cgi'
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview" if ENV["TM_SUPPORT_PATH"]
 
 NO_TABLE = '__none__'
 
@@ -113,7 +113,7 @@ def print_data(query = nil)
         @pager = 'Records %d to %d' % [offset + 1, offset + @result.num_rows]
       end
     else
-      @message = @result.to_s + ' rows affected'
+      @message = @result.to_s + " row#{:s if @result.to_i != 1} affected"
     end
   rescue Exception => e
     @title = "Invalid query"
@@ -157,7 +157,7 @@ def get_data_link(link, new_params = {})
 end
 
 def render(template_file)
-  template = File.read(ENV['TM_BUNDLE_SUPPORT'] + '/templates/' + template_file + '.rhtml')
+  template = File.read(File.dirname(__FILE__) + '/../templates/' + template_file + '.rhtml')
   ERB.new(template).result(binding)
 end
 

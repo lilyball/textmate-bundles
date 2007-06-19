@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>TRST=${TM_RST2S5:=rst2s5.py}
 
-require_cmd "$TRST" "You can either set the &lt;tt&gt;TM_RST2S5&lt;/tt&gt; variable to the full path of your docutils (docutils.sourceforge.net) installation (e.g. &lt;tt&gt;/Library/Frameworks/Python.framework/Versions/2.4/bin&lt;/tt&gt; or set the &lt;tt&gt;PATH&lt;/tt&gt; variable to include the path of the docutils converters."
+require_cmd "$TRST" "You can either set the &lt;tt&gt;TM_RST2S5&lt;/tt&gt; variable to the full path of your docutils (docutils.sourceforge.net) installation (e.g. &lt;tt&gt;/Library/Frameworks/Python.framework/Versions/2.4/bin/rst2html.py&lt;/tt&gt; or set the &lt;tt&gt;PATH&lt;/tt&gt; variable to include the path of the docutils converters."
 
 $TRST "$TM_FILEPATH"</string>
 	<key>input</key>

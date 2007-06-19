@@ -146,7 +146,12 @@ elsif @options.mode == 'home'
   elsif ENV['TM_BUNDLE_SUPPORT']
     @content = File.read(ENV['TM_BUNDLE_SUPPORT'] + '/install.html')
   end
-  @databases = @connection.database_list
+  begin
+    @databases = @connection.database_list
+  rescue Exception => e
+    abort e.message
+  end
+  abort "Done"
   print render('main')
   html_footer
 elsif @options.query.to_s.size > 0

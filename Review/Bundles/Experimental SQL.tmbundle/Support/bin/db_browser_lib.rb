@@ -64,12 +64,14 @@ class Connector
   def database_list
     databases = []
     if @server == 'postgresql'
-      db_list = `psql -l --host="#{@settings.host}" --port="#{@settings.port}" --user="#{@settings.user}" --html`.to_a
+      db_list = `psql -l --host="#{@settings.host}" --port="#{@settings.port}" --user="#{@settings.user}" --html 2>&1`.to_a
+      raise Exception.new(db_list) unless $?.to_i == 0
       while line = db_list.shift
         databases << $2 if db_list.shift.match(/\s+(<td align=.*?>)(.*?)(<\/td>)/) if line.include? '<tr valign'
       end
     elsif @server == 'mysql'
-      db_list = `mysql -e 'show databases' --host="#{@settings.host}" --port="#{@settings.port}" --user="#{@settings.user}" --password="#{@settings.password}" --xml`
+      db_list = `mysql -e 'show databases' --host="#{@settings.host}" --port="#{@settings.port}" --user="#{@settings.user}" --password="#{@settings.password}" --xml 2>&1`
+      raise Exception.new(db_list) unless $?.to_i == 0
       db_list.each_line { |line| databases << $1 if line.match(/<(?:Database|field name="Database")>(.+)<\/(Database|field)>/) }
     end
     databases

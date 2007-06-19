@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-# Add the path to the bundled libs to be used if the native bindings aren't installed
-$: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
-
 require 'optparse'
 require 'ostruct'
 require 'erb'
@@ -52,35 +49,7 @@ rescue OptionParser::InvalidOption, OptionParser::InvalidArgument, OptionParser:
   exit
 end
 
-# Load connectors and set missing defaults
-if @options.server == 'mysql'
-  @options.database.name     ||= ENV['MYSQL_DB']    || ENV['USER']
-  @options.database.host     ||= (ENV['MYSQL_HOST'] || 'localhost')
-  @options.database.user     ||= (ENV['MYSQL_USER'] || ENV['USER'])
-  @options.database.password ||= ENV['MYSQL_PWD']
-  @options.database.port     ||= (ENV['MYSQL_PORT'] || 3306).to_i
-elsif @options.server == 'postgresql'
-  @options.database.name     ||= (ENV['PGDATABASE'] || ENV['USER'])
-  @options.database.host     ||= (ENV['PGHOST']     || 'localhost')
-  @options.database.user     ||= (ENV['PGUSER']     || ENV['USER'])
-  @options.database.password ||= ENV['PGPASS']
-  @options.database.port     ||= (ENV['PGPORT']     || 5432).to_i
-else
-  puts "Unsupported server type: #{@options.server}"
-  exit
-end
-
-@options.database.table ||= ENV['TM_DB_TABLE'] # Allow a default table to be specified
-if @options.database.table and @options.database.table.include? '.'
-  @options.database.schema, @options.database.table = @options.database.table.split('.')
-end
-
-begin
-  @connection = Connector.new(@options.server, @options.database)
-rescue LoadError
-  puts "Database connection library not found [#{$!}]"
-  exit
-end
+@connection = get_connection
 
 if @options.mode == 'version'
   puts @connection.server_version

@@ -1,3 +1,6 @@
+# Add the path to the bundled libs to be used if the native bindings aren't installed
+$: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
+
 class Connector
   def initialize(server, settings)
     @server = server
@@ -68,13 +71,14 @@ class Connector
     databases
   end
 
-  def get_fields
+  def get_fields(table = nil)
+    table ||= @settings.table
     field_list = []
     if @server == 'postgresql'
       query = "SELECT column_name, data_type, is_nullable, ordinal_position, column_default FROM information_schema.columns
-                WHERE table_name='%s' ORDER BY ordinal_position" % @settings.table
+                WHERE table_name='%s' ORDER BY ordinal_position" % table
     elsif @server == 'mysql'
-      query = 'DESCRIBE ' + @settings.table
+      query = 'DESCRIBE ' + table
     end
     fields = do_query(query).rows
     fields.each { |field| field_list << {:name => field[0], :type => field[1], :nullable => field[2], :default => field[4]} }
@@ -109,5 +113,31 @@ class Result
   
   def num_rows
     @res.num_rows
+  end
+end
+
+def get_connection
+  # Load connectors and set missing defaults
+  if @options.server == 'mysql'
+    @options.database.name     ||= ENV['MYSQL_DB']    || ENV['USER']
+    @options.database.host     ||= (ENV['MYSQL_HOST'] || 'localhost')
+    @options.database.user     ||= (ENV['MYSQL_USER'] || ENV['USER'])
+    @options.database.password ||= ENV['MYSQL_PWD']
+    @options.database.port     ||= (ENV['MYSQL_PORT'] || 3306).to_i
+  elsif @options.server == 'postgresql'
+    @options.database.name     ||= (ENV['PGDATABASE'] || ENV['USER'])
+    @options.database.host     ||= (ENV['PGHOST']     || 'localhost')
+    @options.database.user     ||= (ENV['PGUSER']     || ENV['USER'])
+    @options.database.password ||= ENV['PGPASS']
+    @options.database.port     ||= (ENV['PGPORT']     || 5432).to_i
+  else
+    puts "Unsupported server type: #{@options.server}"
+    exit
+  end
+
+  begin
+    @connection = Connector.new(@options.server, @options.database)
+  rescue LoadError
+    TextMate::exit_show_tool_tip "Database connection library not found [#{$!}]"
   end
 end

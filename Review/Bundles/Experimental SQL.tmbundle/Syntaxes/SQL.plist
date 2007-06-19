@@ -317,7 +317,7 @@
 			<key>comment</key>
 			<string>List of SQL99 built-in functions from http://www.oreilly.com/catalog/sqlnut/chapter/ch04.html</string>
 			<key>match</key>
-			<string>(?i)\b(AVG|COUNT|MIN|MAX|SUM)\b</string>
+			<string>(?i)\b(AVG|COUNT|MIN|MAX|SUM)(?=\s*\()</string>
 			<key>name</key>
 			<string>support.function.aggregate.sql</string>
 		</dict>

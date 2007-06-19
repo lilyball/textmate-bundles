@@ -8,7 +8,16 @@
 		<string>patch</string>
 	</array>
 	<key>firstLineMatch</key>
-	<string>^(=== modified file|====\s*//.+\s-\s.+\s+====|Index: |--- [^%]|\*\*\* |\d+(,\d+)*(a|d|c)\d+(,\d+)*$)</string>
+	<string>(?x)^
+		(===\ modified\ file
+		|==== \s* // .+ \s - \s .+ \s+ ====
+		|Index:\ 
+		|---\ [^%]
+		|\*\*\*
+		|\d+(,\d+)* (a|d|c) \d+(,\d+)* $
+		|diff\ --git\ 
+		)
+	</string>
 	<key>keyEquivalent</key>
 	<string>^~D</string>
 	<key>name</key>

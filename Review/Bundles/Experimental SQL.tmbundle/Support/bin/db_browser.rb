@@ -97,7 +97,7 @@ def print_data(query = nil)
   end
   run_query = query.sub(/;\s*$/, '')
   @limited  = true
-  if not query.include?('LIMIT') and run_query =~ /\s*SELECT/i
+  if not query=~ /\bLIMIT\b/i and run_query =~ /\s*SELECT/i
     run_query << ' LIMIT %d OFFSET %d' % [@page_size, offset]
     @limited = false
   end

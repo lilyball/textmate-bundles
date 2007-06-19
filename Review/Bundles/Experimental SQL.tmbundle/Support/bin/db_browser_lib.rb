@@ -2,6 +2,8 @@
 $: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
 
 class Connector
+  @@connector = nil
+
   def initialize(server, settings)
     @server = server
     @settings = settings
@@ -38,11 +40,13 @@ class Connector
   end
 
   def get_mysql(database = nil)
-    Mysql::new(@settings.host, @settings.user, @settings.password, database || @settings.name, @settings.port)
+    @@connector ||= Mysql::new(@settings.host, @settings.user, @settings.password, database || @settings.name, @settings.port)
+    @@connector
   end
 
   def get_pgsql(database = nil)
-    PostgresPR::Connection.new(database || @settings.name, @settings.user, @settings.password, 'tcp://' + @settings.host + ":" + @settings.port.to_s)
+    @@connector ||= PostgresPR::Connection.new(database || @settings.name, @settings.user, @settings.password, 'tcp://' + @settings.host + ":" + @settings.port.to_s)
+    @@connector
   end
   
   ####

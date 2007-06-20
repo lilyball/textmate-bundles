@@ -151,7 +151,6 @@ elsif @options.mode == 'home'
   rescue Exception => e
     abort e.message
   end
-  abort "Done"
   print render('main')
   html_footer
 elsif @options.query.to_s.size > 0

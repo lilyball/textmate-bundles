@@ -1,0 +1,16 @@
+- label: FIXME
+  color: "#A00000"
+  regexp: "/FIX ?ME[\s,:]+(\S.*)$/i"
+  trim_if_empty: false
+- label: TODO
+  color: "#CF830D"
+  regexp: "/TODO[\s,:]+(\S.*)$/i"
+  trim_if_empty: false
+- label: CHANGED
+  color: "#008000"
+  regexp: "/CHANGED[\s,:]+(\S.*)$/"
+  trim_if_empty: false
+- label: RADAR
+  color: "#0090C8"
+  regexp: "/(.*<)ra?dar:\/(?:\/problem|)\/([&0-9]+)(>.*)$/"
+  trim_if_empty: true

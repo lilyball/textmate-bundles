@@ -8,19 +8,20 @@
 	<string>0B296803-7D51-11D9-859D-000D93B6E43C</string>
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-
 html_header "TODO Bundle Help" "TODO"
 
-Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
 
-## TODO Bundle Help
+# Introduction
 
 The "Show TODO List" command will scan your current document (on disk) or documents in your project for lines containing certain tags (see below).
-It will show an ordered list of these tags and their context which can be clicked to jump to that line in that file.
+You will be presented with a row of “Tabs” that are counting matches while the search is going on. Once the search finishes a list for each of the tags and their context is shown. Each entry can be clicked to jump to that line in that file. The lists can be ordered by clicking on their column titles. Clicking on the Tabs will jump to the corresponding list.
 
-It will also ignore files whose name matches the enviromental variable `TM_TODO_IGNORE`.
+TextMate will ignore files whose full path matches the enviromental variable `TM_TODO_IGNORE`.
 
-### Tags
+Note: This command requires Ruby 1.8
+
+# Tags
 
 Preconfigured tags are:
 
@@ -29,11 +30,14 @@ Preconfigured tags are:
 * &lt;span style="color: #008000;"&gt;CHANGED&lt;/span&gt;
 * &lt;span style="color: #0090C8;"&gt;RADAR (as &amp;lt;radar://…&amp;gt; or &amp;lt;rdar://…&amp;gt;)&lt;/span&gt;
 
-Those tags consist of a label (like "TODO"), a color in which they will be printed and a regular expression to transform them. They can be adapted in the "Show TODO List" command (which is written in Ruby 1.8 — it will not work on Panther, sorry) by changing or adding to the `$tags` variable. Rearranging the entries will rearrange them in the output, too.
+Those tags consist of a label (like "TODO"), a color in which they will be printed and a regular expression to transform them. They can be adapted via the `tags.yaml` file in the Bundle’s Support directory. Rearranging the entries will rearrange them in the output, too.
 
-### Hints
+# Hints
 
-The list can be printed using _Print…_ (⌘P) from the _File_ menu.
+* The list can be printed using _Print…_ (⌘P) from the _File_ menu.
+* The Command will abort when the project directory resolves to the root folder.
+* Access keys: `⌃` + first letter of the tag (like `⌃T` for “TODO”) will jump to the respective section.
+
 EOF
 
 html_footer

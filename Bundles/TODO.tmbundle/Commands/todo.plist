@@ -5,68 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveModifiedFiles</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
-
-$tags = [
-  { :label =&gt; "FIXME",   :color =&gt; "#A00000", :regexp =&gt; /FIX ?ME[\s,:]+(\S.*)$/i },
-  { :label =&gt; "TODO",    :color =&gt; "#CF830D", :regexp =&gt; /TODO[\s,:]+(\S.*)$/i    },
-  { :label =&gt; "CHANGED", :color =&gt; "#008000", :regexp =&gt; /CHANGED[\s,:]+(\S.*)$/  },
-  { :label =&gt; "RADAR",   :color =&gt; "#0090C8", :regexp =&gt; /(.*&lt;)ra?dar:\/(?:\/problem|)\/([&amp;0-9]+)(&gt;.*)$/, :trim_if_empty =&gt; true },
-]
-
-if RUBY_VERSION =~ /^1\.6\./ then
-  puts &lt;&lt;-HTML
-&lt;p&gt;Sorry, but this function requires Ruby 1.8.&lt;/p&gt;
-&lt;p&gt;If you do have Ruby 1.8 installed (default for Tiger users) then you need to setup the path variable in &lt;tt&gt; ~/.MacOSX/environment.plist&lt;/tt&gt;.&lt;/p&gt;
-&lt;p&gt;For detailed instructions see &lt;a href="http://macromates.com/textmate/manual/shell_commands#search_path"&gt;the manual&lt;/a&gt; (scroll down to the paragraph starting with &lt;em&gt;Important&lt;/em&gt;.)&lt;/p&gt;
-HTML
-  abort
-end
-
-require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
-require "erb"
-include ERB::Util
-
-ignores = ENV['TM_TODO_IGNORE']
-
-def TextMate.file_link (file, line = 0)
-  return "txmt://open/?url=file://" +
-    file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
-    "&amp;amp;line=" + line.to_s
-end
-
-# setup empty array for per tag results
-$tags.each { |tag| tag[:matches] = [ ] }
-
-TextMate.each_text_file do |file|
-  next if (ignores != nil and file =~ /#{ignores}/) or File.symlink?(file)
-  $tags.each do |tag|
-    File.open(file) do |io|
-      io.grep(tag[:regexp]) do |content|
-        results = {
-          :file =&gt; file,
-          :line =&gt; io.lineno,
-          :content =&gt; content
-        }
-        if tag[:label] == "RADAR" then
-          url = "rdar://" + $2
-          results[:match] = html_escape($1) + "&lt;a href=\"" + url + "\"&gt;" + html_escape(url) + "&lt;/a&gt;" + html_escape($3)
-        else
-          results[:match] = html_escape($1)
-        end
-        tag[:matches] &lt;&lt; results
-      end
-    end
-  end
-end
-
-# trim tags that didn't match, if requested
-$tags.delete_if { |tag| tag[:trim_if_empty] and tag[:matches].empty? }
-
-tmpl_file = "#{ENV['TM_BUNDLE_SUPPORT']}/template.rhtml"
-puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result
-</string>
+	<string>"${TM_RUBY:-ruby}" -r "$TM_BUNDLE_SUPPORT/todo.rb"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

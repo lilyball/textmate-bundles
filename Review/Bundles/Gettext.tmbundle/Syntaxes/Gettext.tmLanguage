@@ -140,14 +140,9 @@ Create meta scope for each entry
 					<key>name</key>
 					<string>keyword.other.flag.po</string>
 				</dict>
-				<key>6</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.flag.po</string>
-				</dict>
 			</dict>
 			<key>match</key>
-			<string>^#,\s+((fuzzy)|(no-)?(c|objc|sh|lisp|elisp|librep|scheme|smalltalk|java|csharp|awk|object-pascal|ycp|tcl|perl|perl-brace|php|gcc-internal|qt|boost)-format)(,\s*((fuzzy)|(no-)?(c|objc|sh|lisp|elisp|librep|scheme|smalltalk|java|csharp|awk|object-pascal|ycp|tcl|perl|perl-brace|php|gcc-internal|qt|boost)-format))*\s*$</string>
+			<string>^#,\s+((?:(?:fuzzy)|(?:no-)?(?:c|objc|sh|lisp|elisp|librep|scheme|smalltalk|java|csharp|awk|object-pascal|ycp|tcl|perl|perl-brace|php|gcc-internal|qt|boost)-format)(?:,\s*(?:(?:fuzzy)|(?:no-)?(?:c|objc|sh|lisp|elisp|librep|scheme|smalltalk|java|csharp|awk|object-pascal|ycp|tcl|perl|perl-brace|php|gcc-internal|qt|boost)-format))*)\s*$</string>
 			<key>name</key>
 			<string>comment.line.number-sign.flag.po</string>
 		</dict>

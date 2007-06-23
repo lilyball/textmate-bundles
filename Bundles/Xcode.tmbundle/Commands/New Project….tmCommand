@@ -17,6 +17,7 @@ require "#{SUPPORT}/lib/escape"
 
 require "cgi"
 require "fileutils"
+require "find"
 require "iconv"
 
 module ProcessTemplate
@@ -68,10 +69,8 @@ module ProcessTemplate
       'YEAR'                      =&gt; Time.now.year,
     }
 
-    template_info = Dir.glob("#{dir}/*/TemplateInfo.plist")
-    exit if template_info.nil? || template_info.empty?
-
-    template_info = template_info.shift
+    template_info = Find.find(dir) { |path| break path if path =~ /\/TemplateInfo.plist$/ }
+    exit unless File.exist? template_info.to_s
 
     data = File.read(template_info)
     data = Iconv.conv('utf-8', 'mac', data) if mac_roman? data

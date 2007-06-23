@@ -493,8 +493,9 @@
 				 \s+(\() (?=                           # match "("
 				           (?&lt;fun&gt; [^()]++ | \( \g&lt;fun&gt;*+ \) )*+   # function arguments
 				    \)                                 # match ")"
-				 (\s+const)?\s*                        # optional const modifier
-				 ;)                                    # terminating semi-colon
+				 (\s+const)?                           # optional const modifier
+				 (\s*=\s*0)?                           # optional ‘= 0’ specifier (abstract functions)
+				 \s*;)                                 # terminating semi-colon
 			</string>
 			<key>beginCaptures</key>
 			<dict>

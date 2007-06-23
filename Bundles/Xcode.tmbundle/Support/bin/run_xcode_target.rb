@@ -284,8 +284,6 @@ class Xcode
           end
           
         else
-          block.call(:start, escaped_dir )
-
           cmd  = "clear; cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} ./#{escaped_file}; echo -ne \\\\n\\\\nPress RETURN to Continue...; read foo;"
           cmd += 'osascript &>/dev/null'
           cmd += ' -e "tell app \"TextMate\" to activate"'

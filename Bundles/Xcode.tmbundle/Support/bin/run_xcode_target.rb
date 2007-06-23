@@ -286,13 +286,13 @@ class Xcode
         else
           cmd  = "clear; cd #{escaped_dir}; env DYLD_FRAMEWORK_PATH=#{escaped_dir} DYLD_LIBRARY_PATH=#{escaped_dir} ./#{escaped_file}; echo -ne \\\\n\\\\nPress RETURN to Continue...; read foo;"
           cmd += 'osascript &>/dev/null'
-          cmd += ' -e "tell app \"TextMate\" to activate"'
-          cmd += ' -e "tell app \"Terminal\" to close first window" &'
+          cmd += " -e 'tell app \"TextMate\" to activate'"
+          cmd += " -e 'tell app \"Terminal\" to close first window' &"
 
           %x{osascript \
             -e 'tell app "Terminal"' \
             -e 'activate' \
-            -e 'do script "#{cmd.gsub(/[\\"]/, '\\\\\\0')}"' \
+            -e #{e_sh "do script \"#{cmd.gsub(/[\\"]/, '\\\\\\0')}\""} \
             -e 'set position of first window to { 100, 100 }' \
             -e 'set custom title of first window to "#{file_path}"' \
             -e 'end tell'

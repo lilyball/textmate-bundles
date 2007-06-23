@@ -1,9 +1,9 @@
-<tr <% if $count % 2 == 0 then %> class="alternate" <% end %>>
+<tr <% if count % 2 == 0 then %> class="alternate" <% end %>>
 	<td class="file">
-		<a title="<%= html_escape($match[:content].strip) %>" href="<%= TextMate.file_link($match[:file], $match[:line]) %>">
-		<%= "#{html_escape(File.basename($match[:file]))}" %></a> (<%= $match[:line] %>)
+		<a title="<%= html_escape(match[:content].strip) %>" href="<%= TextMate.file_link(match[:file], match[:line]) %>">
+		<%= "#{html_escape(File.basename(match[:file]))}" %></a> (<%= match[:line] %>)
 	</td>
 	<td class="comment">
-		<%= $match[:match] %>
+		<%= match[:match] %>
 	</td>
 </tr>

@@ -38,7 +38,6 @@
 - (BOOL)isAsync;
 - (void)wakeClient;
 - (NSMutableDictionary*)returnResult;
-
 @end
 
 @interface TMDNibWindowController : TMDWindowController
@@ -104,6 +103,8 @@
 		if([object respondsToSelector:@selector(commitEditing)])
 			[object commitEditing];
 	}
+
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)cleanupAndRelease:(id)sender

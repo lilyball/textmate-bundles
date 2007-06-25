@@ -1,16 +1,24 @@
 # Add the path to the bundled libs to be used if the native bindings aren't installed
 $: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
 
+require ENV['TM_SUPPORT_PATH'] + '/lib/password'
+
 class Connector
   @@connector = nil
 
   def initialize(server, settings)
     @server = server
     @settings = settings
-    if @server == 'mysql'
-      require 'mysql'
-    elsif @server == 'postgresql'
-      require 'postgres-compat'
+    begin
+      if @server == 'mysql'
+        require 'mysql'
+        get_mysql
+      elsif @server == 'postgresql'
+        require 'postgres-compat'
+        get_pgsql
+      end
+    rescue LoadError
+      TextMate::exit_show_tool_tip "Database connection library not found [#{$!}]"
     end
   end
 
@@ -128,22 +136,27 @@ def get_connection
     @options.database.name     ||= ENV['MYSQL_DB']    || ENV['USER']
     @options.database.host     ||= (ENV['MYSQL_HOST'] || 'localhost')
     @options.database.user     ||= (ENV['MYSQL_USER'] || ENV['USER'])
-    @options.database.password ||= ENV['MYSQL_PWD']
     @options.database.port     ||= (ENV['MYSQL_PORT'] || 3306).to_i
   elsif @options.server == 'postgresql'
     @options.database.name     ||= (ENV['PGDATABASE'] || ENV['USER'])
     @options.database.host     ||= (ENV['PGHOST']     || 'localhost')
     @options.database.user     ||= (ENV['PGUSER']     || ENV['USER'])
-    @options.database.password ||= ENV['PGPASS']
     @options.database.port     ||= (ENV['PGPORT']     || 5432).to_i
   else
     puts "Unsupported server type: #{@options.server}"
     exit
   end
+  proto = @options.security == 'postgresql' ? 'pgsq' : 'mysq'
 
-  begin
-    @connection = Connector.new(@options.server, @options.database)
-  rescue LoadError
-    TextMate::exit_show_tool_tip "Database connection library not found [#{$!}]"
+  TextMate.call_with_password(:user => @options.database.user, :url => "#{proto}://#{@options.database.host}") do |password|
+    @options.database.password = password
+    begin
+      @connection = Connector.new(@options.server, @options.database)
+      :accept_pw
+    rescue Mysql::Error => e
+      :reject_pw
+    end
   end
+  abort "Cancelled" unless @connection
+  @connection
 end

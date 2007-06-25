@@ -33,7 +33,6 @@ begin
     opts.on("--host host", "Set database host") { |host| @options.database.host = host }
     opts.on("--table table", "Set database table") { |table| @options.database.table = table }
     opts.on("--user user", "Set database user") { |user| @options.database.user = user }
-    opts.on("--password password", "Set database password") { |password| @options.database.password = password }
     opts.on("--port port", OptionParser::DecimalInteger, "Set database port") { |port| @options.database.port = port }
     opts.on("--query query", "Run query on database") { |query| @options.query = query }
     opts.on("--rows rows", OptionParser::DecimalInteger, "Set page size for query output") { |rows| @options.page_size = rows }

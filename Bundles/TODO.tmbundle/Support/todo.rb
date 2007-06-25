@@ -11,7 +11,10 @@ HTML
   abort
 end
 
+require "#{ENV['TM_SUPPORT_PATH']}/lib/web_preview"
+
 if ENV['TM_PROJECT_DIRECTORY'] == '/'
+  puts html_head(:window_title => "TODO", :page_title => "TODO List", :sub_title => "Error")
   puts <<-HTML
 <p>Warning: Your project directory is the root directory!</p>
 <p>This is problably because you have symbolic links or file references inside your project so that the most common directory of all the files in the project resolves to `/` (root).</p>
@@ -20,14 +23,21 @@ HTML
   abort
 end
 
+if ENV['TM_TODO_MARKERS'].nil? then
+  puts html_head(:window_title => "TODO", :page_title => "TODO List", :sub_title => "Error")
+  puts <<-HTML
+<h1>Error</h1>
+<p>Your setup is incomplete. Please invoke the Help for this bundle and look up how to specify TODO markers via a Preferences item.</p>
+HTML
+end
+
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
-require "#{ENV['TM_SUPPORT_PATH']}/lib/web_preview"
 require "erb"
 require "yaml"
 include ERB::Util
 
 tag_names = ENV['TM_TODO_MARKERS'].split(",")
-tag_trim = ENV['TM_TODO_MARKERS_TRIM'].split(",")
+tag_trim = ENV['TM_TODO_MARKERS_TRIM'].nil? ? [] : ENV['TM_TODO_MARKERS_TRIM'].split(",")
 
 trim_tags = []
 tag_trim.each { |name|
@@ -38,6 +48,7 @@ tags = []
 tag_names.each { |name|
   name.strip!
   regexp = ENV["TM_TODO_#{name}_REGEXP"]
+  next if regexp.nil?
   tags << {
     :label => name,
     :color => (ENV["TM_TODO_#{name}_COLOR"] or '#808080'),

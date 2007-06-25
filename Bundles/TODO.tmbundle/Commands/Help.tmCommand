@@ -32,6 +32,16 @@ Preconfigured tags are:
 
 Those tags consist of a label (like "TODO"), a color in which they will be printed and a regular expression to transform them. They can be adapted via the Preferences item in the Bundle. Rearranging the entries will rearrange them in the output, too.
 
+## Tag setup
+
+The shell variable `TM_TODO_MARKERS` has to be defined to make the TODO list work. It holds a comma separated list of markers. The default is: `FIXME, TODO, CHANGED, RADAR`.
+
+The regular expressions for those tags have to be set up as well. This can be done by specifying variables like `TM_TODO_FIXME_REGEXP` for the `FIXME` marker or `TM_TODO_TODO_COLOR` for the `TODO` marker. You should recognize the pattern here. An example for the default `FIXME` regexp is `/FIX ?ME[\s,:]+(\S.*)$/i`.
+
+Furthermore you may specify colors for each marker type. Analog to the regexps those variables are named `TM_TODO_CHANGED_COLOR` or `TM_TODO_FIXED_COLOR` and hold an HTML hexadecimal color value like `#FFD040`. If the color variable for a marker is not set the color will default to grey.
+
+Optionally you can set up a shell variable `TM_TODO_MARKERS_TRIM` which specifies the markers that are only shown when found. The default here is: `RADAR`. So if scanning your project or file did not find any `RADAR` items the section is not displayed at all.
+
 # Hints
 
 * The list can be printed using _Print…_ (⌘P) from the _File_ menu.

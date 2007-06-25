@@ -156,6 +156,26 @@ sub tagsDir {
 	return $d;
 }
 
+sub getQuotedDirs {
+    # get and quote the directory names so odd characters (spaces etc) don't mess up our script
+    
+	my $dir = shift;
+	my $dirString = "$dir:";
+	
+	if (  exists( $ENV{'TM_CTAGS_ADDITIONAL_DIRECTORIES'} )  )
+	{
+		$dirString = $dirString . $ENV{'TM_CTAGS_ADDITIONAL_DIRECTORIES'};
+	}
+	my @dirs = split(":", $dirString);
+	
+	my @quotedDirs = ();
+	for (my $i = 0; $i < @dirs; $i++)
+	{
+		$quotedDirs[$i] = "'$dirs[$i]'";
+	}
+	
+    return @quotedDirs;
+}
 sub updateTags {
 	my $dir=&tagsDir();
 	
@@ -170,10 +190,25 @@ sub updateTags {
 	#
 	# New way: If ctags takes longer than $CtagsTimeout kill it
 	#
+	
+	#my @directories = ($tdir, "");
+	
+	my @quotedDirs = &getQuotedDirs($dir);  #first quote (all) our directories.
+	
+	#now run it
 	{
+		my $cmd = "";
+		my $dirs = join( " ", @quotedDirs );
+	    
+		#print("tagfileName: ". $TagFileName);
+		$cmd = "'$ctags' -f $TagFileName $CtagsFlags $dirs |";
+		
 		$::_ctagsPID=undef;
+		#print($dir . "\n");
+		#print($cmd . "\n");
 		chdir($dir) or die("chdir to '$dir' failed: $!\n");
-		$::_ctagsPID=open(CTAGS,"'$ctags' -f $TagFileName $CtagsFlags '$dir' |");
+		
+		$::_ctagsPID=open(CTAGS,$cmd);
 		local $SIG{ALRM}=sub{kill(9,$::_ctagsPID);die("ctags timed out!\n")};
 		alarm($CtagsTimeout);
 		while(<CTAGS>)
@@ -181,10 +216,21 @@ sub updateTags {
 			# Discard output
 		}
 		close(CTAGS);
-		alarm(0);
+		alarm(0);		
 	}
 	
-	return "Created/updated $TagFileName at $dir\n";
+	my $count = @quotedDirs;
+	my $directory;
+	
+	if ($count != 1)
+	{
+		$directory = "directories";
+	}
+	else
+	{
+		$directory = "directory";
+	}
+	return "Created/updated $TagFileName for $count $directory\n";
 }
 
 sub findTags {

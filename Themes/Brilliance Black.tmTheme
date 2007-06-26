@@ -74,7 +74,7 @@
 			<key>name</key>
 			<string>~ String</string>
 			<key>scope</key>
-			<string>string -meta.tag -meta.doctype -string.regexp -string.literal -string.interpolated -string.quoted.literal -string.unquoted, variable.parameter.misc.css, text string source string, string.unquoted string, string.regexp string, string.interpolated string</string>
+			<string>string -meta.tag -meta.doctype -string.regexp -string.literal -string.interpolated -string.quoted.literal -string.unquoted, variable.parameter.misc.css, text string source string, string.unquoted string, string.regexp string, string.interpolated string, meta.tag source string</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -329,9 +329,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>√ global pre-defined variable</string>
+			<string>√ pre-defined variable</string>
 			<key>scope</key>
-			<string>variable.other.readwrite.global.pre-defined</string>
+			<string>variable.other.readwrite.global.pre-defined, variable.language</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -381,7 +381,7 @@
 			<key>name</key>
 			<string>√ Variable</string>
 			<key>scope</key>
-			<string>variable.language, variable.other, variable.js, punctuation.separator.variable</string>
+			<string>variable.other, variable.js, punctuation.separator.variable</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -488,7 +488,7 @@
 			<key>name</key>
 			<string>¢ Class name</string>
 			<key>scope</key>
-			<string>entity.name.class, entity.name.type.class</string>
+			<string>entity.name.class, entity.name.type.class, entity.name.type.module</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -1063,6 +1063,8 @@
 			<dict>
 				<key>fontStyle</key>
 				<string>bold</string>
+				<key>foreground</key>
+				<string>#95D4FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1170,6 +1172,17 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>M list</string>
+			<key>scope</key>
+			<string>markup.list</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#666666</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>—————————————————</string>
 			<key>settings</key>
 			<dict/>
@@ -1206,6 +1219,17 @@
 				<string>#00008033</string>
 				<key>foreground</key>
 				<string>#0008FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>§ Pseudo-Element</string>
+			<key>scope</key>
+			<string>entity.other.attribute-name.pseudo-element</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#4F00FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2178,13 +2202,13 @@
 			<key>name</key>
 			<string>Curly Punctuation</string>
 			<key>scope</key>
-			<string>meta.group.braces.curly punctuation.section.scope, meta.brace.curly</string>
+			<string>meta.group.braces.curly punctuation.section.scope, meta.brace.curly, punctuation.section.scope</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#FFFFFF</string>
+				<string>#999999</string>
 			</dict>
 		</dict>
 		<dict>

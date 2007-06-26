@@ -11,6 +11,7 @@
 		1726DCD10B806C0400FD11C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089C1672FE841209C02AAC07 /* Foundation.framework */; };
 		1726DD610B80700400FD11C0 /* tm_dialog in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1726DCB80B806ADC00FD11C0 /* tm_dialog */; };
 		174DE8E30AF5A1A60060BD80 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 174DE8E20AF5A1A60060BD80 /* Carbon.framework */; };
+		175F8F950C3144E40081BCF4 /* TMDChameleon.mm in Sources */ = {isa = PBXBuildFile; fileRef = 175F8F940C3144E40081BCF4 /* TMDChameleon.mm */; };
 		177E4DA309132A0F0064163D /* Dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 177E4DA209132A0F0064163D /* Dialog.mm */; };
 		178E031A0AED82FE0005685F /* ValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 178E03190AED82FE0005685F /* ValueTransformers.mm */; };
 		831625970B2752AF002857D1 /* TMDSemaphore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 831625950B2752AF002857D1 /* TMDSemaphore.mm */; };
@@ -49,6 +50,8 @@
 		1726DCAA0B806A9800FD11C0 /* tm_dialog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = tm_dialog.mm; sourceTree = "<group>"; };
 		1726DCB80B806ADC00FD11C0 /* tm_dialog */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tm_dialog; sourceTree = BUILT_PRODUCTS_DIR; };
 		174DE8E20AF5A1A60060BD80 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		175F8F940C3144E40081BCF4 /* TMDChameleon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TMDChameleon.mm; sourceTree = "<group>"; };
+		175F8F9C0C3144ED0081BCF4 /* TMDChameleon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMDChameleon.h; sourceTree = "<group>"; };
 		177E4DA109132A0F0064163D /* Dialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dialog.h; sourceTree = "<group>"; };
 		177E4DA209132A0F0064163D /* Dialog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Dialog.mm; sourceTree = "<group>"; };
 		178E03180AED82FE0005685F /* ValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTransformers.h; sourceTree = "<group>"; };
@@ -120,6 +123,8 @@
 				177E4DA109132A0F0064163D /* Dialog.h */,
 				178E03190AED82FE0005685F /* ValueTransformers.mm */,
 				178E03180AED82FE0005685F /* ValueTransformers.h */,
+				175F8F940C3144E40081BCF4 /* TMDChameleon.mm */,
+				175F8F9C0C3144ED0081BCF4 /* TMDChameleon.h */,
 				831625950B2752AF002857D1 /* TMDSemaphore.mm */,
 				831625960B2752AF002857D1 /* TMDSemaphore.h */,
 			);
@@ -270,6 +275,7 @@
 				177E4DA309132A0F0064163D /* Dialog.mm in Sources */,
 				178E031A0AED82FE0005685F /* ValueTransformers.mm in Sources */,
 				831625970B2752AF002857D1 /* TMDSemaphore.mm in Sources */,
+				175F8F950C3144E40081BCF4 /* TMDChameleon.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

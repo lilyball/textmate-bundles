@@ -247,7 +247,7 @@ int contact_server_async_list ()
 }
 
 // contact_server_show_nib: instantiate the nib inside TM
-int contact_server_show_nib (std::string nibName, NSMutableDictionary* someParameters, NSDictionary* initialValues, bool center, bool modal, bool quiet, bool async)
+int contact_server_show_nib (std::string nibName, NSMutableDictionary* someParameters, NSDictionary* initialValues, NSDictionary* dynamicClasses, bool center, bool modal, bool quiet, bool async)
 {
 	int res = -1;
 	id proxy;
@@ -255,7 +255,7 @@ int contact_server_show_nib (std::string nibName, NSMutableDictionary* someParam
 	if(validate_proxy(proxy))
 	{
 		NSString* aNibPath = [NSString stringWithUTF8String:nibName.c_str()];
-		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:(someParameters ?: [NSMutableDictionary dictionary]) andInitialValues:initialValues modal:modal center:center async:async];
+		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:(someParameters ?: [NSMutableDictionary dictionary]) andInitialValues:initialValues dynamicClasses:dynamicClasses modal:modal center:center async:async];
 
 		const char*	token = [[NSString stringWithFormat:@"%@", [parameters objectForKey:@"token"]] UTF8String];
 		
@@ -304,8 +304,8 @@ void usage ()
 {
 	fprintf(stderr, 
 		"%1$s r%2$s (" __DATE__ ")\n"
-		"Usage (dialog): %1$s [-cmqp] nib_file\n"
-		"Usage (window): %1$s [-cpaxts] nib_file\n"
+		"Usage (dialog): %1$s [-cdnmqp] nib_file\n"
+		"Usage (window): %1$s [-cdnpaxts] nib_file\n"
 		"Usage (alert): %1$s [-p] -e [-i|-c|-w]\n"
 //		"Usage (sheet): %1$s [-p] -e\n"
 		"Usage (menu): %1$s [-p] -u\n"
@@ -313,6 +313,7 @@ void usage ()
 		"Dialog Options:\n"
       " -c, --center                 Center the window on screen.\n"
       " -d, --defaults <plist>       Register initial values for user defaults.\n"
+      " -n, --new-items <plist>      A key/value list of classes (the key) which should dynamically be created at run-time for use as the NSArrayController’s object class. The value (a dictionary) is how instances of this class should be initialized (the actual instance will be an NSMutableDictionary with these values).\n"
       " -m, --modal                  Show window as modal (other windows will be inaccessible).\n"
       " -p, --parameters <plist>     Provide parameters as a plist.\n"
       " -q, --quiet                  Do not write result to stdout.\n"
@@ -418,6 +419,7 @@ int main (int argc, char* argv[])
 		{ "alert",				no_argument,			0,		'e'	},
 		{ "center",				no_argument,			0,		'c'	},
 		{ "defaults",			required_argument,	0,		'd'	},
+		{ "new-items",			required_argument,	0,		'n'	},
 		{ "modal",				no_argument,			0,		'm'	},
 		{ "parameters",		required_argument,	0,		'p'	},
 		{ "quiet",				no_argument,			0,		'q'	},
@@ -433,11 +435,12 @@ int main (int argc, char* argv[])
 	bool center = false, modal = false, quiet = false;
 	char const* parameters = NULL;
 	char const* defaults = NULL;
+	char const* dynamicClassesPlist = NULL;
 	char const* token = NULL;
 	char ch;
 	DialogAction dialogAction = kShowDialog;
 	
-	while((ch = getopt_long(argc, argv, "eacd:mp:quax:t:w:l", longopts, NULL)) != -1)
+	while((ch = getopt_long(argc, argv, "eacd:mn:p:quax:t:w:l", longopts, NULL)) != -1)
 	{
 		switch(ch)
 		{
@@ -445,6 +448,7 @@ int main (int argc, char* argv[])
 			case 'c':	center = true;				break;
 			case 'd':	defaults = optarg;		break;
 			case 'm':	modal = true;				break;
+			case 'n':	dynamicClassesPlist = optarg;			break;
 			case 'p':	parameters = optarg;		break;
 			case 'q':	quiet = true;				break;
 			case 'u':	dialogAction = kShowMenu;				break;
@@ -518,11 +522,12 @@ int main (int argc, char* argv[])
 		case kAsyncCreate:
 		{
 			id initialValues = read_property_list_from_string(defaults);
+			id dynamicClasses = read_property_list_from_string(dynamicClassesPlist);
 
 			if(argc == 1)
 			{
 				id plist = read_property_list_argument(parameters);
-				res = contact_server_show_nib(find_nib(argv[0]), plist, initialValues, center, modal, quiet, (dialogAction == kAsyncCreate));
+				res = contact_server_show_nib(find_nib(argv[0]), plist, initialValues, dynamicClasses, center, modal, quiet, (dialogAction == kAsyncCreate));
 			}
 			else
 			{

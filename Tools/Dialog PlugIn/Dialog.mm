@@ -3,6 +3,8 @@
 #import <sys/stat.h>
 #import "Dialog.h"
 #import "TMDSemaphore.h"
+#import "TMDChameleon.h"
+
 
 // Apple ought to document this <rdar://4821265>
 @interface NSMethodSignature (Undocumented)
@@ -561,8 +563,11 @@ static int sNextWindowControllerToken = 1;
 	return resultDict;
 }
 
-- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues modal:(BOOL)modal center:(BOOL)shouldCenter async:(BOOL)async
+- (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues dynamicClasses:(NSDictionary*)dynamicClasses modal:(BOOL)modal center:(BOOL)shouldCenter async:(BOOL)async
 {
+	enumerate([dynamicClasses allKeys], id key)
+		[TMDChameleon createSubclassNamed:key withValues:[dynamicClasses objectForKey:key]];
+
 	id output;
 	
 	if(![[NSFileManager defaultManager] fileExistsAtPath:aNibPath])

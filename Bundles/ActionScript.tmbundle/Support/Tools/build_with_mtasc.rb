@@ -19,6 +19,12 @@ require ENV["TM_SUPPORT_PATH"] + "/lib/web_preview"
 @file_name = ENV['TM_FILENAME']
 @project_path = ENV['TM_PROJECT_DIRECTORY']
 
+# For single-file compilations or projects without a mtasc.yaml file
+if !@project_path || !File.exist?("#{@project_path}/mtasc.yaml")
+  @project_path = File.dirname @file_path
+end
+
+
 # Utils
 @q = "\""
 
@@ -30,85 +36,81 @@ def warning(text, title)
   TextMate.exit_show_html
 end
 
-def mtasc_compile
-  if !@project_path || !File.exist?("#{@project_path}/mtasc.yaml")
-    @project_path = File.dirname @file_path
-  end
-  Dir.chdir(@project_path)
-  if File.exists?(@project_path + "/mtasc.yaml")
-    yml = YAML.load(File.open('mtasc.yaml'))
-    if yml['mtasc_path']
-      @mtasc_path = yml['mtasc_path']
-    else
-      @mtasc_path = ENV['TM_BUNDLE_SUPPORT'] + "/bin/mtasc"
-    end
-    @app = yml['app']
-    @swf = yml['swf']
-    @player = yml['player']
-    @width = yml['width']
-    @height = yml['height']
-    # If width or height is a percentage. MTASC chokes because it needs a number. Fix it.
-    if @width =~ /%/ || @height =~ /%/
-      @size_is_percentage = true
-      @width.gsub!(/%/,'')
-      @height.gsub!(/%/,'')
-    end
-    @fps = yml['fps']
-    @classpaths = yml['classpaths']
-    @trace = yml['trace'] if !yml['trace'].nil?
-    @preview = yml['preview'] || "textmate"
-    @bgcolor = yml['bgcolor'] || "FFFFFF"
-    @params = yml['params'] if !yml['params'].nil?
+def get_config
+  # Optional: mtasc_path, params, classpaths, trace
+  if !File.exists?("#{@project_path}/mtasc.yaml")
+    # Default config...
+    config = {
+        "app" => File.basename(@file_name),
+        "swf" => File.basename(@file_name,".as")+".swf",
+        "width" => 800,
+        "height" => 600,
+        "bgcolor" => "FFFFFF",
+        "player" => 8,
+        "fps" => 31,
+        "preview" => "textmate",
+        "trace" => "console",
+        "mtasc_path" => "#{ENV['TM_BUNDLE_PATH']}/Support/bin/mtasc"
+      }
+    return config
   else
-    @mtasc_path = ENV['TM_BUNDLE_SUPPORT'] + "/bin/mtasc"
-    @app = @file_name
-    @swf = File.basename(@file_name,".as") + ".swf"
-    @player = 8
-    @width = 800
-    @height = 600
-    @fps = 31
-    @preview = "textmate"
-    @bgcolor = "FFFFFF"
+    config = YAML.load(File.open("#{@project_path}/mtasc.yaml"))
+    # If width or height is a percentage. MTASC chokes because it needs a number. Fix it.
+    if config['width'] =~ /%/ || config['height'] =~ /%/
+      @size_is_percentage = true
+      config['width'].gsub!(/%/,'')
+      config['height'].gsub!(/%/,'')
+    end
+    if config['mtasc_path'].nil?
+      config['mtasc_path'] = "#{ENV['TM_BUNDLE_PATH']}/Support/bin/mtasc"
+    end
+    return config
   end
+end
+
+def mtasc_compile
+  Dir.chdir(@project_path)
+  config = get_config()
 
   # MTASC binary
-  cmd = @q + @mtasc_path + @q
+  cmd = @q + config['mtasc_path'] + @q
 
   # App name
-  cmd += " " + @q + @app + @q
+  cmd += " " + @q + config['app'] + @q
 
   # Player version
-  cmd += " -version " + @player.to_s
+  cmd += " -version " + config['player'].to_s
 
   # User-provided Classpath
-  if @classpaths
-    cmd += " -cp \"#{@classpaths.join('" -cp "')}\" "
+  if !config['classpaths'].nil?
+    cmd += " -cp \"" + config['classpaths'].join('" -cp "') + "\" "
   end
 
   # Additional parameters from mtasc.yaml
-  if @params
-    cmd += " #{@params} "
+  if config['params']
+    cmd += " #{config['params']} "
   end
-  if @trace
-    if @trace == "xtrace"
-      # Use XTrace for debugging
+
+  if config['trace']
+    if config['trace'] == "xtrace"
       `open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
-      cmd += " -pack com/mab/util "
       cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/\" "
+      cmd += " -pack com/mab/util "
       cmd += " -trace com.mab.util.debug.trace "
-    elsif @trace == "console"
-      # do nothing
+    elsif config['trace'] == "console"
+      `open -a Console.app "#{ENV['HOME']}/Library/Preferences/Macromedia/Flash Player/Logs/flashlog.txt"`
+    elsif config['trace'] == "no"
+      cmd += " -trace no "
     else
-      cmd += " -trace #{@trace} "
+      cmd += " -trace #{config['trace']} "
     end
   end
 
-  if !File.exists? @swf
-    cmd += " -header #{@width}:#{@height}:#{@fps}"
+  if !File.exists? config['swf']
+    cmd += " -header #{config['width']}:#{config['height']}:#{config['fps']}"
   end
 
-  cmd += " -main "
-  cmd += " -swf #{@swf}"
+  cmd += " -swf #{config['swf']}"
 
   stdin, stdout, stderr = Open3.popen3(cmd)
   warnings = []
@@ -133,26 +135,24 @@ def mtasc_compile
     warning "#{warnings.uniq.join('</p><p>')} <br/> <pre>#{cmd}</pre>", "Warnings:"
   end
   if errors.empty? && warnings.empty?
-    if @trace == "console"
-      `open -a Console.app "#{ENV['HOME']}/Library/Preferences/Macromedia/Flash Player/Logs/flashlog.txt"`
-    end
-    if @preview == "textmate"
+    if config['preview'] == "textmate"
       # Preview in TextMate
-      output_file = "#{@project_path}/#{@swf}"
+      output_file = "#{@project_path}/#{config['swf']}"
       if @size_is_percentage
-        @width += "%"
-        @height += "%"
+        config['width'] += "%"
+        config['height'] += "%"
       end
       puts "<html>"
-      puts "<head><title>#{@swf}</title></head>"
+      puts "<head><title>#{config['swf']}</title></head>"
       puts <<SWF_HTML
       <body style="margin: 0; padding: 0;">
-      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=#{@version},0,0,0" width="#{@width}" height="#{@height}" id="myApplication" align="middle">
+      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=#{config['version']},0,0,0" width="#{config['width']}" height="#{config['height']}" id="myApplication" align="middle">
         <param name="allowScriptAccess" value="always">
+        <param name="allowFullScreen" value="true">
         <param name="movie" value="#{output_file}">
         <param name="quality" value="high">
-        <param name="bgcolor" value="##{@bgcolor}">
-        <embed src="#{output_file}" quality="high" bgcolor="##{@bgcolor}" width="#{@width}" height="#{@height}" name="myApplication" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+        <param name="bgcolor" value="##{config['bgcolor']}">
+        <embed src="#{output_file}" quality="high" bgcolor="##{config['bgcolor']}" width="#{config['width']}" height="#{config['height']}" name="myApplication" align="middle" allowScriptAccess="always" allowFullScreen="true" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
       </object>
       </body>
       </html>
@@ -160,7 +160,7 @@ SWF_HTML
       TextMate.exit_show_html
     else
       # Open user-defined preview
-      `open #{@preview}`
+      `open #{config['preview']}`
     end
   else
     TextMate.exit_show_html

@@ -5,3 +5,6 @@
 
 @interface OakIntArrayToIndexSetTransformer : NSValueTransformer
 @end
+
+@interface OakStringToColorTransformer : NSValueTransformer
+@end

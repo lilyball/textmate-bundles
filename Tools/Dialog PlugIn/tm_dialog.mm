@@ -22,27 +22,38 @@ char const* current_version ()
 	return sscanf("$Revision$", "$%*[^:]: %s $", res) == 1 ? res : "???";
 }
 
+id read_property_list_from_data (NSData* data)
+{
+	if([data length] == 0)
+		return nil;
+
+	NSString* error = nil;
+	id plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:nil errorDescription:&error];
+
+	if(error || !plist)
+	{
+		fprintf(stderr, "%s: %s\n", AppName, [error UTF8String] ?: "unknown error parsing property list");
+		fwrite([data bytes], [data length], 1, stderr);
+		fprintf(stderr, "\n");
+	}
+
+	return plist;
+}
+
+id read_property_list_from_string (char const* str)
+{
+	return read_property_list_from_data([NSData dataWithBytes:str length:str ? strlen(str) : 0]);
+}
+
 id read_property_list_from_file (int fd)
 {
 	NSMutableData*	data = [NSMutableData data];
-	id plist;
 	
 	char buf[1024];
 	while(size_t len = read(fd, buf, sizeof(buf)))
 		[data appendBytes:buf length:len];
-	
-	plist = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:nil errorDescription:NULL] : [NSMutableDictionary dictionary];
-	return plist;
-}
 
-id read_property_list_from_string (const char* parameters)
-{
-	NSMutableData*	data = [NSMutableData data];
-	[data appendBytes:parameters length:strlen(parameters)];
-	
-	id plist = [data length] ? [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:nil errorDescription:NULL] : [NSMutableDictionary dictionary];
-	
-	return plist;
+	return read_property_list_from_data(data);
 }
 
 bool output_property_list (id plist)
@@ -117,7 +128,11 @@ int contact_server_async_update (const char* token, NSMutableDictionary* somePar
 	id	proxy;
 	int	returnCode = -1;
 
-	if(validate_proxy(proxy))
+	if(someParameters == nil)
+	{
+		fprintf(stderr, "%s: no property list given, skipping update\n", AppName);
+	}
+	else if(validate_proxy(proxy))
 	{
 		id result = [proxy updateNib:[NSString stringWithUTF8String:token] withParameters:someParameters];
 		returnCode = [[result objectForKey:@"returnCode"] intValue];
@@ -240,7 +255,7 @@ int contact_server_show_nib (std::string nibName, NSMutableDictionary* someParam
 	if(validate_proxy(proxy))
 	{
 		NSString* aNibPath = [NSString stringWithUTF8String:nibName.c_str()];
-		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:someParameters andInitialValues:initialValues modal:modal center:center async:async];
+		NSDictionary* parameters = (NSDictionary*)[proxy showNib:aNibPath withParameters:(someParameters ?: [NSMutableDictionary dictionary]) andInitialValues:initialValues modal:modal center:center async:async];
 
 		const char*	token = [[NSString stringWithFormat:@"%@", [parameters objectForKey:@"token"]] UTF8String];
 		
@@ -376,12 +391,7 @@ id read_property_list_argument(const char* parameters)
 			fprintf(stderr, "%s: Reading parameters from stdin... (press CTRL-D to proceed)\n", AppName);
 		plist = read_property_list_from_file(STDIN_FILENO);
 	}
-	
-	if(plist == nil)
-	{
-		plist = [NSMutableDictionary dictionary];
-	}
-	
+
 	return plist;
 }
 
@@ -412,11 +422,11 @@ int main (int argc, char* argv[])
 		{ "parameters",		required_argument,	0,		'p'	},
 		{ "quiet",				no_argument,			0,		'q'	},
 		{ "menu",				no_argument,			0,		'u'	},
-		{ "async-window",				no_argument,			0,		'a'	},
-		{ "close-window",				required_argument,			0,		'x'	},
-		{ "update-window",				required_argument,			0,		't'	},
-		{ "wait-for-input",				required_argument,			0,		'w'	},
-		{ "list-windows",				no_argument,			0,		'l'	},
+		{ "async-window",		no_argument,			0,		'a'	},
+		{ "close-window",		required_argument,	0,		'x'	},
+		{ "update-window",	required_argument,	0,		't'	},
+		{ "wait-for-input",	required_argument,	0,		'w'	},
+		{ "list-windows",		no_argument,			0,		'l'	},
 		{ 0,						0,							0,		0		}
 	};
 
@@ -473,8 +483,14 @@ int main (int argc, char* argv[])
 				id proxy;
 				if(validate_proxy(proxy))
 				{
-					id plist = read_property_list_argument(parameters);
-					output_property_list([proxy showMenuWithOptions:plist]);
+					if(id plist = read_property_list_argument(parameters))
+					{
+						output_property_list([proxy showMenuWithOptions:plist]);
+					}
+					else
+					{
+						fprintf(stderr, "%s: no property list given\n", AppName);
+					}
 				}
 			}
 			else
@@ -501,7 +517,7 @@ int main (int argc, char* argv[])
 		case kShowDialog:
 		case kAsyncCreate:
 		{
-			id initialValues = defaults ? [NSPropertyListSerialization propertyListFromData:[NSData dataWithBytes:defaults length:strlen(defaults)] mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL] : nil;
+			id initialValues = read_property_list_from_string(defaults);
 
 			if(argc == 1)
 			{

@@ -463,6 +463,8 @@ int main (int argc, char* argv[])
 			fprintf(stderr, "%s: warning: Ignoring 'quiet' option.\n", AppName);
 	}
 
+	@try {
+
 	switch(dialogAction)
 	{
 		case kShowMenu:
@@ -528,6 +530,10 @@ int main (int argc, char* argv[])
 		default:
 			usage();
 			break;
+	}
+
+	} @catch(NSException* e) {
+		fprintf(stderr, "%s: %s\n", AppName, [[e reason] UTF8String]);
 	}
 
 	[pool release];

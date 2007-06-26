@@ -1,13 +1,14 @@
 # Add the path to the bundled libs to be used if the native bindings aren't installed
 $: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
 
+require 'ostruct'
 require ENV['TM_SUPPORT_PATH'] + '/lib/password'
 
 class Connector
   @@connector = nil
 
-  def initialize(server, settings)
-    @server = server
+  def initialize(settings)
+    @server = settings.server
     @settings = settings
     begin
       if @server == 'mysql'
@@ -130,28 +131,30 @@ class Result
   end
 end
 
-def get_connection
-  # Load connectors and set missing defaults
-  if @options.server == 'mysql'
-    @options.database.name     ||= ENV['MYSQL_DB']    || ENV['USER']
-    @options.database.host     ||= (ENV['MYSQL_HOST'] || 'localhost')
-    @options.database.user     ||= (ENV['MYSQL_USER'] || ENV['USER'])
-    @options.database.port     ||= (ENV['MYSQL_PORT'] || 3306).to_i
-  elsif @options.server == 'postgresql'
-    @options.database.name     ||= (ENV['PGDATABASE'] || ENV['USER'])
-    @options.database.host     ||= (ENV['PGHOST']     || 'localhost')
-    @options.database.user     ||= (ENV['PGUSER']     || ENV['USER'])
-    @options.database.port     ||= (ENV['PGPORT']     || 5432).to_i
-  else
-    puts "Unsupported server type: #{@options.server}"
-    exit
-  end
-  proto = @options.security == 'postgresql' ? 'pgsq' : 'mysq'
+def get_connection_settings(options)
+  plist      = open(File.expand_path('~/Library/Preferences/com.macromates.textmate.plist')) { |io| OSX::PropertyList.load(io) }
+  connection = plist['sqlConnections'][plist['activeSqlConnection'].first.to_i]
 
+  options.host   = connection['hostName']
+  options.user   = connection['userName']
+  if connection['serverType'] && ['mysql', 'postgresql'].include?(connection['serverType'].downcase!)
+    options.server = connection['serverType']
+  else
+    options.server = 'mysql'
+  end
+  options.name   ||= connection['database']
+  options.port   = connection['port'].to_i || 3306
+end
+
+def get_connection
+  proto = @options.database.server == 'postgresql' ? 'pgsq' : 'mysq'
+
+  throw Exception.new('Missing configuration') unless @options.database.host# and @options.database.user
+  
   TextMate.call_with_password(:user => @options.database.user, :url => "#{proto}://#{@options.database.host}") do |password|
     @options.database.password = password
     begin
-      @connection = Connector.new(@options.server, @options.database)
+      @connection = Connector.new(@options.database)
       :accept_pw
     rescue Mysql::Error => e
       :reject_pw

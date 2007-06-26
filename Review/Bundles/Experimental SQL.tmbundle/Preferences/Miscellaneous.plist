@@ -8,8 +8,10 @@
 	<string>source.sql</string>
 	<key>settings</key>
 	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>\)(?!=.*\()</string>
 		<key>increaseIndentPattern</key>
-		<string>^\s*(create|grant|insert|delete|update)\b</string>
+		<string>^\s*(create|grant|insert|delete|update)\b|\((?!=.*\))</string>
 	</dict>
 	<key>uuid</key>
 	<string>9C3A0A63-E661-4B0B-855B-710EDBBDB00F</string>

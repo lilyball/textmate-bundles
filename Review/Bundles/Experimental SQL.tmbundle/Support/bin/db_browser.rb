@@ -10,12 +10,12 @@ require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview" if ENV["TM_SUPPORT_PATH"]
 NO_TABLE = '__none__'
 
 @options = OpenStruct.new
-@options.server    = 'mysql'
 @options.offset    = 0
 @options.page_size = 10
 @options.mode      = 'home'
 
 @options.database = OpenStruct.new
+@options.database.server   = 'mysql'
 @options.database.host     = nil
 @options.database.user     = nil
 @options.database.password = nil
@@ -23,18 +23,16 @@ NO_TABLE = '__none__'
 @options.database.name     = nil
 @options.database.table    = nil
 
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/osx/plist" if ENV["TM_SUPPORT_PATH"]
+
 # Parse commandline options
 begin
   OptionParser.new do |opts|
     opts.banner = "Usage: db_browse.rb [options]"
 
-    opts.on("--server database", ['mysql', 'postgresql'], "Set database driver (mysql, postgresql, default mysql)") { |database| @options.server = database }
     opts.on("--database database", "Set database name") { |database| @options.database.name = database }
-    opts.on("--host host", "Set database host") { |host| @options.database.host = host }
     opts.on("--table table", "Set database table") { |table| @options.database.table = table }
-    opts.on("--user user", "Set database user") { |user| @options.database.user = user }
-    opts.on("--port port", OptionParser::DecimalInteger, "Set database port") { |port| @options.database.port = port }
-    opts.on("--query query", "Run query on database") { |query| @options.query = query }
+    opts.on("--query query", "Run query on database") { |query| @options.query = query.to_s.strip }
     opts.on("--rows rows", OptionParser::DecimalInteger, "Set page size for query output") { |rows| @options.page_size = rows }
     opts.on("--offset offset", OptionParser::DecimalInteger, "Set offset") { |offset| @options.offset = offset }
 
@@ -48,7 +46,15 @@ rescue OptionParser::InvalidOption, OptionParser::InvalidArgument, OptionParser:
   exit
 end
 
-@connection = get_connection
+begin
+  get_connection_settings(@options.database)
+  @connection = get_connection
+rescue
+  puts html_head(:window_title => "SQL", :page_title => "SQL Bundle", :sub_title => 'Configuration')
+  print File.read(ENV['TM_BUNDLE_SUPPORT'] + '/install.html')
+  html_footer
+  exit
+end
 
 if @options.mode == 'version'
   puts @connection.server_version
@@ -143,7 +149,7 @@ elsif @options.mode == 'home'
   if @options.query.to_s.size > 0
     @content = print_data(@options.query)
   elsif ENV['TM_BUNDLE_SUPPORT']
-    @content = File.read(ENV['TM_BUNDLE_SUPPORT'] + '/install.html')
+    @content = '<h2>Database Browser</h2>Please choose a table from the left'
   end
   begin
     @databases = @connection.database_list

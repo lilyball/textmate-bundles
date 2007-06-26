@@ -7,7 +7,12 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
 @options = OpenStruct.new(:server => 'mysql', :database => OpenStruct.new)
 
-@connection = get_connection
+begin
+  get_connection_settings(@options.database)
+  @connection = get_connection
+rescue
+  TextMate::exit_show_tool_tip "No connection"
+end
 
 def completion_for(list, word)
   list = list.select { |e| e =~ /^#{Regexp.quote word}/ }

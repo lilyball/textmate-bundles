@@ -5,10 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>dbServe=$("${TM_BUNDLE_SUPPORT}/lib/choose_database.sh")
-query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
+	<string>query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
 
-db_browser.rb --server=$dbServe --query="$query"</string>
+db_browser.rb --query="$query"</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

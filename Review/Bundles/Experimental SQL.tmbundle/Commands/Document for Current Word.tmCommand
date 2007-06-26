@@ -5,22 +5,23 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>. "${TM_BUNDLE_SUPPORT}/lib/misc.sh"
-. "$TM_SUPPORT_PATH/lib/html.sh"
+	<string>#!/usr/bin/env ruby -wKU
 
-dbServe=$(database_choice)
+require ENV['TM_BUNDLE_SUPPORT'] + '/bin/db_browser_lib.rb'
 
-if [[ "$dbServe" == 'mysql' ]]; then
-	# VERSION=`db_browser.rb --server=mysql --version | cut -d. -f1-2`
-	URL="http://dev.mysql.com/${TM_CURRENT_WORD}"
-elif [[ "$dbServe" == 'postgresql' ]]; then
-	URL="http://www.postgresql.org/docs/current/static/sql-${TM_CURRENT_WORD}.html"
-	if ! curl --silent -I "$URL" | grep '200 OK' &gt; /dev/null; then
-		URL="http://search.postgresql.org/search?q=${TM_CURRENT_WORD}"
-	fi
-fi
+options = OpenStruct.new
+get_connection_settings(options)
 
-redirect "$URL"</string>
+if options.server == 'mysql'
+  url = "http://dev.mysql.com/#{ENV['TM_CURRENT_WORD']}"
+elsif options.server == 'postgresql'
+  url = "http://www.postgresql.org/docs/current/static/sql-#{ENV['TM_CURRENT_WORD']}.html"
+  unless `curl --silent -I "#{URL}" | grep '200 OK' &gt; /dev/null`
+    url = "http://search.postgresql.org/search?q=${ENV['TM_CURRENT_WORD']}"
+  end
+end
+
+puts "&lt;script&gt;window.location='#{url}'&lt;/script&gt;"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

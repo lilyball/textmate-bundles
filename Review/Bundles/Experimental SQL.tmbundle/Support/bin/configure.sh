@@ -1,0 +1,1 @@
+"$DIALOG" -d'{activeSqlConnection = 0; sqlConnections = ( { title = "New connection"; serverType = MySQL; hostName = localhost; } ); }' -n '{ SQL_New_Connection = { title = "New connection"; serverType = MySQL; hostName = localhost; }; }' -p{} "$TM_BUNDLE_SUPPORT"/nibs/connections.nib &>/dev/null &

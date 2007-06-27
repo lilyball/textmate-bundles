@@ -133,7 +133,7 @@ end
 
 def get_connection_settings(options)
   plist      = open(File.expand_path('~/Library/Preferences/com.macromates.textmate.plist')) { |io| OSX::PropertyList.load(io) }
-  connection = plist['sqlConnections'][plist['activeSqlConnection'].first.to_i]
+  connection = plist['SQL Connections'][plist['SQL Active Connection'].first.to_i]
 
   options.host   = connection['hostName']
   options.user   = connection['userName']

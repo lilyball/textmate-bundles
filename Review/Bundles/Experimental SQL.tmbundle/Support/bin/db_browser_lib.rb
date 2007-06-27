@@ -143,7 +143,7 @@ def get_connection_settings(options)
     options.server = 'mysql'
   end
   options.name   ||= connection['database']
-  options.port   = connection['port'].to_i || 3306
+  options.port   = connection['port'].to_i || (options.server == 'postgresql') ? 5432 : 3306
 end
 
 def get_connection

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>ENV['TM_${1:S}${1/(S)|B/(?1:UPPORT_PATH:UNDLE_SUPPORT)/}']</string>
+	<string>ENV['TM_${1:S}${1/^(S)|(B)$|.*/(?1:UPPORT_PATH:(?2:UNDLE_SUPPORT))/}']</string>
 	<key>name</key>
 	<string>ENV['TM_…']</string>
 	<key>scope</key>

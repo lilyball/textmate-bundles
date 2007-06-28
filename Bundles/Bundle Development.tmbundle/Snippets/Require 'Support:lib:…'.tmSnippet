@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>require ENV['TM_${1:S}${1/(S)|B/(?1:UPPORT_PATH:UNDLE_SUPPORT)/}'] + '/lib/$2'</string>
+	<string>require ENV['TM_${1:S}${1/^(S)|(B)$|.*/(?1:UPPORT_PATH:(?2:UNDLE_SUPPORT))/}'] + '/lib/$2'</string>
 	<key>name</key>
 	<string>Require 'Support/lib/…'</string>
 	<key>scope</key>

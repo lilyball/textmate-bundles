@@ -18,24 +18,12 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>\(\*</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.ml</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\*\)</string>
-			<key>name</key>
-			<string>comment.block.ml</string>
+			<key>include</key>
+			<string>#comments</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(val|datatype|struct|as|let|in|abstype|local|where|case|of|fn|raise|exception|handle|ref|infix|infixr|before)\b</string>
+			<string>\b(val|datatype|struct|as|let|in|abstype|local|where|case|of|fn|raise|exception|handle|ref|infix|infixr|before|end)\b</string>
 			<key>name</key>
 			<string>keyword.other.ml</string>
 		</dict>
@@ -88,7 +76,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(fun|and)\s+([\w']+)\b</string>
+			<string>\b(fun|and)\s+([\w]+)\b</string>
 			<key>name</key>
 			<string>meta.definition.fun.ml</string>
 		</dict>
@@ -240,6 +228,28 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\(\*</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.ml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\*\)</string>
+					<key>name</key>
+					<string>comment.block.ml</string>
+				</dict>
+			</array>
+		</dict>
 		<key>spec</key>
 		<dict>
 			<key>patterns</key>
@@ -282,7 +292,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(val)\s*\w+:</string>
+					<string>\b(val)\s*([^:]+)\s*:</string>
 					<key>name</key>
 					<string>meta.spec.ml.val</string>
 				</dict>
@@ -294,9 +304,14 @@
 							<key>name</key>
 							<string>keyword.other.ml</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.type.module.ml</string>
+						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(structure)\s*\w+:</string>
+					<string>\b(structure)\s*(\w+)\s*:</string>
 					<key>name</key>
 					<string>meta.spec.ml.structure</string>
 				</dict>
@@ -313,6 +328,10 @@
 					<string>\b(include)\b</string>
 					<key>name</key>
 					<string>meta.spec.ml.include</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
 				</dict>
 			</array>
 		</dict>

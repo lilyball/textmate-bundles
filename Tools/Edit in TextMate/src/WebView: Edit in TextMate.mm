@@ -6,7 +6,21 @@
 //
 
 #import <WebKit/WebKit.h>
+#import <vector>
 #import "Edit in TextMate.h"
+
+#ifndef sizeofA
+#define sizeofA(x) (sizeof(x)/sizeof(x[0]))
+#endif
+
+// only latest WebKit has this stuff, and it is private
+@interface DOMHTMLTextAreaElement (DOMHTMLTextAreaElementPrivate)
+- (int)selectionStart;
+- (void)setSelectionStart:(int)newSelectionStart;
+- (int)selectionEnd;
+- (void)setSelectionEnd:(int)newSelectionEnd;
+- (void)setSelectionRange:(int)start end:(int)end;
+@end
 
 @interface WebView (EditInTextMate)
 - (void)editInTextMate:(id)sender;
@@ -103,6 +117,35 @@ private:
 	BOOL atBeginOfLine;
 };
 
+struct helper
+{
+	helper (DOMHTMLTextAreaElement* textArea) : textArea(textArea)
+	{
+		value = [textArea value];
+		selectionStart = [textArea selectionStart];
+		selectionEnd = [textArea selectionEnd];
+	}
+
+	helper () : textArea(nil), value(nil)		{ }
+	bool should_change () const					{ return selectionStart != 0 || selectionEnd != [value length]; }
+	bool did_change () const						{ return selectionStart != [textArea selectionStart] || selectionEnd != [textArea selectionEnd]; }
+	void reset () const								{ if(did_change()) [textArea setSelectionRange:selectionStart end:selectionEnd]; }
+
+	static bool usable (DOMNode* node)
+	{
+		static SEL const selectors[] = { @selector(selectionStart), @selector(selectionEnd), @selector(setSelectionStart:), @selector(setSelectionEnd:), @selector(value), @selector(setValue:), @selector(setSelectionRange:end:) };
+		BOOL res = [node isKindOfClass:[DOMHTMLTextAreaElement class]] && ![(DOMHTMLTextAreaElement*)node disabled] && ![(DOMHTMLTextAreaElement*)node readOnly];
+		for(size_t i = 0; i < sizeofA(selectors); ++i)
+			res = res && [node respondsToSelector:selectors[i]];
+		return res;
+	}
+
+	DOMHTMLTextAreaElement* textArea;
+	NSString* value;
+	unsigned long selectionStart;
+	unsigned long selectionEnd;
+};
+
 void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 {
 	for(DOMNode* node = [treeWalker currentNode]; node; node = [treeWalker nextSibling])
@@ -133,103 +176,185 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 	}
 }
 
+static DOMHTMLTextAreaElement* find_active_text_area (WebView* webView, DOMDocument* doc)
+{
+	DOMHTMLTextAreaElement* res = nil;
+	if([doc respondsToSelector:@selector(focusNode)])
+	{
+		// OmniWeb 5.6 has a method to get the focused node
+		res = [doc performSelector:@selector(focusNode)];
+		if(!helper::usable(res))
+			res = nil;
+	}
+	else
+	{
+		// The following is a heuristic for finding the active text area:
+		// 
+		//  1. If there is just one text area, we use that.
+		// 
+		//  2. If there are multiple, we ask the web view to “select all”
+		//     which goes to the active text area (hopefully) and then we
+		//     check which of the text areas in the DOM actually changed.
+		// 
+		//     There is a problem if either a text area has no content (in
+		//     which case select all makes no changes) or if everything is
+		//     already selected. If only one text area is in the state of
+		//     “select all would not affect it” and no text areas were
+		//     changed, we assume the one with that state is the active.
+
+		std::vector<helper> v;
+		DOMNodeList* textAreas = [doc getElementsByTagName:@"TEXTAREA"];
+		for(unsigned long i = 0; i < [textAreas length]; ++i)
+		{
+			if(helper::usable([textAreas item:i]))
+				v.push_back((DOMHTMLTextAreaElement*)[textAreas item:i]);
+		}
+
+		if(v.size() == 1)
+		{
+			res = v[0].textArea;
+		}
+		else if(v.size() > 1)
+		{
+			[webView selectAll:nil];
+
+			size_t should_change = 0, did_change = 0;
+			for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)
+			{
+				did_change    += it->did_change()    ? 1 : 0;
+				should_change += it->should_change() ? 1 : 0;
+			}
+
+			if(did_change == 1)
+			{
+				for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)
+					res = it->did_change() ? it->textArea : res;
+			}
+			else if(did_change == 0 && should_change == v.size()-1)
+			{
+				for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)
+					res = !it->should_change() ? it->textArea : res;
+			}
+
+			for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)
+				it->reset();
+		}
+	}
+	return res;
+}
+
 @implementation WebView (EditInTextMate)
 - (void)editInTextMate:(id)sender
 {
-	// NSLog(@"%s %@", _cmd, [(DOMHTMLElement*)[[[self mainFrame] DOMDocument] documentElement] outerHTML]);
-	if(![self isEditable])
-		return (void)NSBeep();
-
-	NSString* const CARET = [NSString stringWithFormat:@"%C", 0xFFFD];
-	NSString* str = @"";
-	int lineNumber = 0;
-
-	DOMDocumentFragment* selection = [[self selectedDOMRange] cloneContents];
-	if(!selection)
+	if([self isEditable])
 	{
-		[self insertText:CARET];
-		[self selectAll:nil];
-		selection = [[self selectedDOMRange] cloneContents];
+		// Mail uses an editable WebView, in which case we want to send the entire page to TextMate
 
-		// remove the caret marker
-		if(NSUndoManager* undoManager = [self undoManager])
+		NSString* const CARET = [NSString stringWithFormat:@"%C", 0xFFFD];
+		NSString* str = @"";
+		int lineNumber = 0;
+
+		DOMDocumentFragment* selection = [[self selectedDOMRange] cloneContents];
+		if(!selection)
 		{
-			if([undoManager canUndo])
+			[self insertText:CARET]; // ugly hack, but we want to preserve the position of the caret
+			[self selectAll:nil];
+			selection = [[self selectedDOMRange] cloneContents];
+
+			// remove the caret marker. TODO we should start an undo group, so the (chunked) undo doesn’t remove more than just the caret
+			if(NSUndoManager* undoManager = [self undoManager])
 			{
-				[undoManager undo];
-				[self selectAll:nil];
+				if([undoManager canUndo])
+				{
+					[undoManager undo];
+					[self selectAll:nil];
+				}
 			}
 		}
-	}
 
-	if(selection)
-	{
-		str = convert_dom_to_text([[[self mainFrame] DOMDocument] createTreeWalker:selection :DOM_SHOW_ALL :nil :YES]);
-		while([str hasSuffix:@"\n\n"])
-			str = [str substringToIndex:[str length]-1];
-
-		NSArray* split = [str componentsSeparatedByString:CARET];
-		if([split count] == 2)
+		if(selection)
 		{
-			lineNumber = [[[split objectAtIndex:0] componentsSeparatedByString:@"\n"] count] - 1;
-			str = [split componentsJoinedByString:@""];
+			str = convert_dom_to_text([[[self mainFrame] DOMDocument] createTreeWalker:selection :DOM_SHOW_ALL :nil :YES]);
+			while([str hasSuffix:@"\n\n"])
+				str = [str substringToIndex:[str length]-1];
+
+			NSArray* split = [str componentsSeparatedByString:CARET];
+			if([split count] == 2)
+			{
+				lineNumber = [[[split objectAtIndex:0] componentsSeparatedByString:@"\n"] count] - 1;
+				str = [split componentsJoinedByString:@""];
+			}
 		}
+		[EditInTextMate externalEditString:str startingAtLine:lineNumber forView:self];
 	}
-	[EditInTextMate externalEditString:str startingAtLine:lineNumber forView:self];
+	else
+	{
+		// Likely the user wants to edit just a text area, so let’s try to find which
+		if(DOMHTMLTextAreaElement* textArea = find_active_text_area(self, [[self mainFrame] DOMDocument]))
+				[EditInTextMate externalEditString:[textArea value] startingAtLine:0 forView:self]; // TODO calculate the line number from selectionStart
+		else	NSBeep();
+	}
 }
 
 - (void)textMateDidModifyString:(NSString*)newString
 {
-	NSArray* lines = [newString componentsSeparatedByString:@"\n"];
-	NSMutableString* res = [NSMutableString string];
-	unsigned quoteLevel = 0;
-	for(unsigned i = 0; i != [lines count]; i++)
+	if([self isEditable])
 	{
-		NSString* line = [lines objectAtIndex:i];
+		NSArray* lines = [newString componentsSeparatedByString:@"\n"];
+		NSMutableString* res = [NSMutableString string];
+		unsigned quoteLevel = 0;
+		for(unsigned i = 0; i != [lines count]; i++)
+		{
+			NSString* line = [lines objectAtIndex:i];
 
-		unsigned newQuoteLevel = 0;
-		while([line hasPrefix:@"> "])
-		{
-			line = [line substringFromIndex:2];
-			newQuoteLevel++;
+			unsigned newQuoteLevel = 0;
+			while([line hasPrefix:@"> "])
+			{
+				line = [line substringFromIndex:2];
+				newQuoteLevel++;
+			}
+
+			if([line isEqualToString:@">"])
+			{
+				line = @"";
+				newQuoteLevel++;
+			}
+
+			if(newQuoteLevel > quoteLevel)
+			{
+				for(unsigned j = 0; j != newQuoteLevel - quoteLevel; j++)
+					[res appendString:@"<BLOCKQUOTE type=\"cite\">"];
+			}
+			else if(newQuoteLevel < quoteLevel)
+			{
+				for(unsigned j = 0; j != quoteLevel - newQuoteLevel; j++)
+					[res appendString:@"</BLOCKQUOTE>"];
+			}
+			quoteLevel = newQuoteLevel;
+
+			if([line isEqualToString:@""])
+			{
+				[res appendString:@"<DIV><BR></DIV>"];
+			}
+			else
+			{
+				line = [line TM_stringByNbspEscapingSpaces];
+				line = [line TM_stringByReplacingString:@"&" withString:@"&amp;"];
+				line = [line TM_stringByReplacingString:@"<" withString:@"&lt;"];
+				line = [line TM_stringByReplacingString:@">" withString:@"&gt;"];
+				[res appendFormat:@"<DIV>%@</DIV>", line];
+			}
 		}
 
-		if([line isEqualToString:@">"])
-		{
-			line = @"";
-			newQuoteLevel++;
-		}
-
-		if(newQuoteLevel > quoteLevel)
-		{
-			for(unsigned j = 0; j != newQuoteLevel - quoteLevel; j++)
-				[res appendString:@"<BLOCKQUOTE type=\"cite\">"];
-		}
-		else if(newQuoteLevel < quoteLevel)
-		{
-			for(unsigned j = 0; j != quoteLevel - newQuoteLevel; j++)
-				[res appendString:@"</BLOCKQUOTE>"];
-		}
-		quoteLevel = newQuoteLevel;
-
-		if([line isEqualToString:@""])
-		{
-			[res appendString:@"<DIV><BR></DIV>"];
-		}
-		else
-		{
-			line = [line TM_stringByNbspEscapingSpaces];
-			line = [line TM_stringByReplacingString:@"&" withString:@"&amp;"];
-			line = [line TM_stringByReplacingString:@"<" withString:@"&lt;"];
-			line = [line TM_stringByReplacingString:@">" withString:@"&gt;"];
-			[res appendFormat:@"<DIV>%@</DIV>", line];
-		}
+		[self replaceSelectionWithMarkupString:res];
+		if(![[self selectedDOMRange] cloneContents])
+			[self selectAll:nil];
 	}
-
-//	NSLog(@"%s %@", _cmd, res);
-
-	[self replaceSelectionWithMarkupString:res];
-	if(![[self selectedDOMRange] cloneContents])
-		[self selectAll:nil];
+	else
+	{
+		// FIXME we should ensure we send back to the same text area as we took the text from
+		if(DOMHTMLTextAreaElement* textArea = find_active_text_area(self, [[self mainFrame] DOMDocument]))
+			[textArea setValue:newString];
+	}
 }
 @end

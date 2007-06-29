@@ -94,6 +94,14 @@ This disables the history controls in the find panel. The reason for this settin
 
 When a command brings up a tool tip, mouse movements performed within the first second do not close the tool tip and after that second has elapsed, the mouse needs to be moved at least 5 pixels for the tool tip to close. These values can be adjusted using the `OakToolTipMouseMoveIgnorePeriod` and `OakToolTipMouseDistanceThreshold` defaults keys.
 
+## `OakWrapColumns`
+
+This is an array of the values which appear in the View → Wrap Column submenu. Defaults to showing 40 and 78 as possible wrap columns.
+
+Example:
+
+    defaults write com.macromates.textmate OakWrapColumns '( 60, 70, 80, 120 )'    
+
 ## `OakWordsExcludedFromCapitalization`
 
 The Text &#x2192; Convert &#x2192; to Titlecase action (&#x2303;&#x2325;U) excludes words found in this array.

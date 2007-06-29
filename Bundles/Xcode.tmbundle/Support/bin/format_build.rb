@@ -481,11 +481,23 @@ class Formatter
 		@mup.normal!( line )
 	end
 	
-	def play_sound(sound)
-		if ENV['TM_MUTE'].nil? then
-		  %x{cd "#{$support}"; bin/play Sounds/#{sound} &>/dev/null &}
-		end
-	end
+  def play_sound(name)
+    return if ENV['TM_MUTE']
+
+    src = [ ENV['TM_SUPPORT_PATH'], "#{ENV['HOME']}/Library", '/Library', '/Network/Library', '/System/Library' ]
+    src.each do |e|
+      Dir.chdir(e + '/Sounds') do |dir|
+        if sound = Dir.glob("#{name}.*").first
+          sound = "#{dir}/#{sound}"
+          play  = ENV['TM_SUPPORT_PATH'] + '/bin/play'
+          %x{ #{e_sh play} #{e_sh sound} &>/dev/null & }
+          return
+        end
+      end rescue nil
+    end
+
+    STDERR << "Could not locate sound named ‘#{name}’\n"
+  end
 
   def start_new_section
 		@mup.end_div!("target")
@@ -551,7 +563,7 @@ class Formatter
 			end
 		end
 
-		play_sound 'Harp.wav'
+		play_sound(ENV['TM_SUCCESS_SOUND'] || 'Hero')
 
 	end	
 	def failure
@@ -561,7 +573,7 @@ class Formatter
 				@mup.text("Build Failed")
 			end
 		end
-		play_sound 'Whistle.wav'
+		play_sound(ENV['TM_ERROR_SOUND'] || 'Basso')
 	end
 	
 end

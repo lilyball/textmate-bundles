@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>HTML_FILE_PATH=$(txt2tags -t html "$TM_FILEPATH" | sed -n 's/^txt2tags wrote //p')
+test -z "$HTML_FILE_PATH" || open "$HTML_FILE_PATH"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^@p</string>
+	<key>name</key>
+	<string>Convert to HTML and Preview in Browser</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>text.txt2tags</string>
+	<key>uuid</key>
+	<string>8EC9DC0F-5F86-4258-AC0B-304D90E1E126</string>
+</dict>
+</plist>

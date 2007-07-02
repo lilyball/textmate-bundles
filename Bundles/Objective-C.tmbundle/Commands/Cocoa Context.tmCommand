@@ -147,7 +147,7 @@ class ObjCMethodCompletion
       [((ca[1].nil? || !ca[4].nil? || c[1]=="") ? ca[0] : ca[0]+ca[1]),ca[0], candidate] 
     end
     unless arg_type.nil?
-      tmp = prettyCandidates.reject do |a,b|
+      tmp = prettyCandidates.reject do |junk1,junk2,b|
         v = b.split("\t")[2]
         v !=nil &amp;&amp; v != arg_type
       end

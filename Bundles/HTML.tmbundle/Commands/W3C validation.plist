@@ -5,9 +5,23 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>curl -sF uploaded_file=@-\;type=text/html http://validator.w3.org/check \
-| perl -pe 's|(Line (\d+) column (\d+))|&lt;a href="txmt://open?line=$2&amp;column=@{[$3 + 1]}"&gt;$1&lt;/a&gt;|'\
-| perl -pe 's|&lt;/title&gt;|$&amp;&lt;base href="http://validator.w3.org/"/&gt;|'</string>
+	<string>#!/usr/bin/env ruby -wKU
+STDOUT.sync = true
+
+page = STDIN.read
+page.gsub!(/&lt;\?(php|=).*?\?&gt;|&lt;%.*?%&gt;/m, '')
+
+open('|curl -sF uploaded_file=@-\;type=text/html http://validator.w3.org/check', 'r+') do |io|
+  io &lt;&lt; page; io.close_write
+  while line = io.gets
+    line.gsub!(/&lt;\/title&gt;/, '\&amp;&lt;base href="http://validator.w3.org/"&gt;')
+    line.gsub!(/Line (\d+) column (\d+)/) do
+      "&lt;a href='txmt://open?line=#$1&amp;column=#{$2.to_i + 1}'&gt;#$&amp;&lt;/a&gt;"
+    end
+    puts line
+  end
+end
+</string>
 	<key>dontFollowNewOutput</key>
 	<true/>
 	<key>input</key>

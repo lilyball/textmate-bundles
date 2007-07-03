@@ -3,12 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${TM_SELECTED_TEXT/(^|$|\t)/|/g}</string>
+	<string>!&lt;${1:http://site.com/image}(${2:Title})!</string>
 	<key>name</key>
-	<string>Convert Tabs To Table</string>
+	<string>Left Aligned Image</string>
 	<key>scope</key>
 	<string>text.html.textile</string>
+	<key>tabTrigger</key>
+	<string>imgl</string>
 	<key>uuid</key>
-	<string>E0D9B2D7-163F-493B-ACC6-29AF9C5F00BF</string>
+	<string>7AD0E35A-B14B-4B8E-8583-F3504C7E5A99</string>
 </dict>
 </plist>

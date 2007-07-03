@@ -3,12 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${TM_SELECTED_TEXT/(^|$|\t)/|/g}</string>
+	<string>bq. ${1:A quote...}
+
+$0</string>
 	<key>name</key>
-	<string>Convert Tabs To Table</string>
+	<string>Block Quote</string>
 	<key>scope</key>
 	<string>text.html.textile</string>
+	<key>tabTrigger</key>
+	<string>bq</string>
 	<key>uuid</key>
-	<string>E0D9B2D7-163F-493B-ACC6-29AF9C5F00BF</string>
+	<string>7D7529CF-11F4-43B4-8F8D-ACA66F64FCE7</string>
 </dict>
 </plist>

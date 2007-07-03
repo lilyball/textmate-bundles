@@ -19,7 +19,7 @@ Dir.chdir(dir)
 old = Dir.entries(".").find_all { |e| e =~ /^#{Regexp.escape file}_\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/}
 abort "Previous run of this command seems to have been unsuccesful, you need to manually cleanup the mess (sorry)." unless old.empty?
 
-patch_text = %x{svn diff #{e_sh file}}
+patch_text = %x{${TM_SVN:-svn} diff #{e_sh file}}
 patches    = patch_text.scan(/(^@@.*?@@)\n(.*?)(?=^@@|\z)/m)
 items      = patches.map { |e| { 'head' =&gt; e[0], 'body' =&gt; e[1] } }
 parameters = { 'items' =&gt; items }

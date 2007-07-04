@@ -77,7 +77,7 @@ $tags = [] #user defined contexts
 def readContexts(a)
   # processes contexts.gtd into script  
   context, tabCommand, tabString, regex, color = a.split(/\|/)
-  if (context != "+ DONE") and (context[0..1] != "&lt;-")
+  if (context != "+ DONE") and (context[0..1] != "&lt;-") #and (context[0..1] != "* ")
     $tags.push({:label =&gt; context[3..-1], :regexp =&gt; regex, :color =&gt; color, :matches =&gt; []})  
   end 
 end
@@ -146,7 +146,7 @@ $tags.each do |tag|
           else 
             ctask = re.match(line)
           end
-          if (ctask.pre_match == context) and (context != "+")
+          if (ctask.pre_match == context) and (context != "+") #and (context != "*")
             results = {
               :file =&gt; fileName[0..-5],
               :line =&gt; lineno,
@@ -174,7 +174,7 @@ puts ERB.new(File.open(tmpl_file), 0, '&lt;&gt;').result</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>text.plain.gtd</string>
+	<string>text.html.markdown.wiki.gtd</string>
 	<key>uuid</key>
 	<string>A108E6E4-317A-4883-B152-11A9E115BF1C</string>
 </dict>

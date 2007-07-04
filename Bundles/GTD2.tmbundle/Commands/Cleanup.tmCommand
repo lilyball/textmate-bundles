@@ -10,17 +10,14 @@
 myFile = ENV['TM_SELECTED_FILE']
 
 myText = File.open(myFile)
-myDone = ""
 re = /\s/
 myText.each do |line|
-  myTest = re.match(line)
-  if (myTest.pre_match != "+" and myTest.pre_match.length &gt; 0)
+  #myTest = re.match(line)
+  #if (myTest.pre_match != "+" and myTest.pre_match.length &gt; 0)
+  if line.length &gt; 1
     puts line
-  else 
-    myDone = myDone + line
   end
-end  
-puts myDone</string>
+end</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
@@ -30,7 +27,7 @@ puts myDone</string>
 	<key>output</key>
 	<string>replaceDocument</string>
 	<key>scope</key>
-	<string>text.plain.gtd</string>
+	<string>text.html.markdown.wiki.gtd</string>
 	<key>uuid</key>
 	<string>0CE0800F-C66A-476A-B67A-5B22087D4E70</string>
 </dict>

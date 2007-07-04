@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+# just to remind you of some useful environment variables
+# see Help / Environment Variables for the full list
+# echo File: "$TM_FILEPATH"
+
+archiveDate = `date +%Y-%m-%d`
+myArchive = ENV['TM_PROJECT_DIRECTORY'].to_s + '/ArchivedTasks.gtd'
+myTasks = ''
+myTask = (`date +%Y-%m-%d`).chomp + " " + ENV['TM_FILENAME'][0..-5] + ": " + ENV['TM_CURRENT_LINE'][3..-1] 
+#puts myArchive
+
+unless (File.exists?(myArchive))
+	exec "touch #{myArchive}"
+end 
+
+File.open(myArchive, "r").each do |line|
+  myTasks = myTasks + line
+end
+
+myTasks = myTasks + myTask + "\n"
+
+File.open(myArchive, "w") do |f|
+  f &lt;&lt; myTasks
+end</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Archive Task</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.html.markdown.wiki.gtd</string>
+	<key>tabTrigger</key>
+	<string>a</string>
+	<key>uuid</key>
+	<string>7FC498D7-1477-445B-A39B-FA63FDF10742</string>
+</dict>
+</plist>

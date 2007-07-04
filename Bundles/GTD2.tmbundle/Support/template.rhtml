@@ -1,12 +1,15 @@
 <%
 
-# $Revision: 623 $
+# $Revision: 624 $
 
 # FIXME Place named anchors in such a way that jumping to one does not crop the top part of the <th>.
 # TODO Try out PagePacker and adjust print styles accordingly, http://weblog.bignerdranch.com/?p=23
 # TODO Maybe remove project column from printed list views.
 # TODO Parse match[:content] and create txmt:// links to wiki pages if they exist.
 
+# [2007-06-30: REVISION 624]
+# [FIXED] Setting contexts inactive should work now.
+# [CHANGED] Project names are now hidden when the list view is printed.
 # [2007-06-08: REVISION 623]
 # [NEW] Tasks in inactive contexts are omitted from the list views. -- Inactive contexts are all those, which have their names added to "excluded.gtd"... entries present in "excluded.gtd", but prefixed with "#" are NOT treated at inactive, so you create blocks of contexts in "excluded.gtd" and easily enable or disable them.
 # [NEW] Links contained in task descriptions are now clickable in the list views.
@@ -16,8 +19,8 @@
 require 'digest/md5'
 
 excluded_contexts = []
-File.open(File.join(ENV['TM_DIRECTORY'], 'excluded.gtd'), 'r').each do |line|
-  next if line.match(/\s*#/) or line.match(/^\s*$/)
+File.readlines(File.join(ENV['TM_DIRECTORY'], 'excluded.gtd')).each do |line|
+  next if line.match(/^\s*#/) or line.match(/^\s*$/)
   excluded_contexts << line if !File.exist?(File.join(ENV['TM_DIRECTORY'], line.strip!))
 end
 
@@ -26,6 +29,7 @@ wiki_pattern = Regexp.new('([A-Z][a-z]+([A-Z][a-z]*)+)')
 
 no_actions = true
 $tags.each do |tag|
+  tag[:label].strip!
   tag[:excluded] = excluded_contexts.include?(tag[:label])
   tag[:hashed_label]  = 'x' + Digest::MD5.hexdigest(tag[:label])
   tag[:escaped_label] = html_escape(tag[:label]).strip
@@ -214,6 +218,7 @@ end
         th {
             border-bottom: 1px solid #000;
             padding: 0.5em 1em;
+            padding-left: 0.5em;
             color: #000;
             font-weight: bold;
             text-align: left;
@@ -222,6 +227,7 @@ end
         }
 
         td {
+			display: none;
             border-bottom: 1px solid #999;
             padding: 0.3em 1em 0.3em 2em;
             text-align: left;
@@ -230,11 +236,13 @@ end
         }
 
         td + td {
+			display: table-cell;
             padding-left: 0.5em;
             padding-right: 0;
         }
 
         td + td + td {
+			display: table-cell;
             width: 100%;
             padding-left: 0.25em;
             padding-right: 1em;
@@ -278,7 +286,7 @@ end
     <div id="timestamp"><%= Time.now.strftime('%A, %B %d, %Y &ndash; %H:%M, %Z') %></div>
     <table cellspacing="0">
     <% if no_actions %>
-        <tr><th>Wow, you got all things in your active projects and contexts done!</th></tr>
+        <tr><th>Wow, no unfinished tasks in any of your active projects and contexts!</th></tr>
     <% else no_actions %>
         <% $tags.each do |tag| %>
             <% unless tag[:matches].empty? or tag[:excluded] %>

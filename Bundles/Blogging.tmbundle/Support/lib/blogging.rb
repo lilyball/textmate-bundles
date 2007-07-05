@@ -158,7 +158,7 @@ TEXT
     if @endpoint =~ /^https?:\/\/([^\/]+?)(\/.+)$/
       @host = $1
       @path = $2
-      if @host =~ /^(.+)(?:[:](.+))?@(.+)/
+      if @host =~ /^([^:]+)(?:[:](.+))?@(.+)/
         @username = CGI.unescape($1)
         @password = CGI.unescape($2) if $2
         @host = $3

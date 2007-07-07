@@ -234,6 +234,7 @@ TEXT
       @post['mt_text_more'] = "\n" + @post['mt_text_more']
     end
     @post['title'] = @headers['title'] if @headers['title']
+    @post['wp_slug'] = @headers['slug'] if @headers['slug']
     self.post_id = @headers['post'].to_i if @headers['post']
 
     format = @headers['format']

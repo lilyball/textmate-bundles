@@ -23,37 +23,17 @@ HTML
   abort
 end
 
-if ENV['TM_TODO_MARKERS'].nil? then
-  puts html_head(:window_title => "TODO", :page_title => "TODO List", :sub_title => "Error")
-  puts <<-HTML
-<h1>Error</h1>
-<p>Your setup is incomplete. Please invoke the Help for this bundle and look up how to specify TODO markers via a Preferences item.</p>
-HTML
-end
-
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/settings.rb"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
 require "yaml"
 include ERB::Util
 
-tag_names = ENV['TM_TODO_MARKERS'].split(",")
-tag_trim = ENV['TM_TODO_MARKERS_TRIM'].nil? ? [] : ENV['TM_TODO_MARKERS_TRIM'].split(",")
-
-trim_tags = []
-tag_trim.each { |name|
-  trim_tags << name.strip
-}
-
-tags = []
-tag_names.each { |name|
-  name.strip!
-  regexp = ENV["TM_TODO_#{name}_REGEXP"]
-  next if regexp.nil?
-  tags << {
-    :label => name,
-    :color => (ENV["TM_TODO_#{name}_COLOR"] or '#808080'),
-    :regexp => Regexp.new(regexp.sub(/^\/(.*)\/i?$/, '\1'), (regexp =~ /i$/) ? 129 : 128),
-    :trim_if_empty => trim_tags.include?(name)
+tags = Settings.markers.map { |marker|
+  { :label => marker.name,
+    :color => marker.has_color? ? marker.color : '#808080',
+    :regexp => marker.regexp,
+    :trim_if_empty => marker.trim?
   }
 }
 ignores = ENV['TM_TODO_IGNORE']

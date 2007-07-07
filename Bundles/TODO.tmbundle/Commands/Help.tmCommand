@@ -7,17 +7,19 @@
 	<key>bundleUUID</key>
 	<string>0B296803-7D51-11D9-859D-000D93B6E43C</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+	<string>#!/usr/bin/env bash
+
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "TODO Bundle Help" "TODO"
 
-"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'MARKDOWN'
 
 # Introduction
 
 The "Show TODO List" command will scan your current document (on disk) or documents in your project for lines containing certain tags (see below).
 You will be presented with a row of “Tabs” that are counting matches while the search is going on. Once the search finishes a list for each of the tags and their context is shown. Each entry can be clicked to jump to that line in that file. The lists can be ordered by clicking on their column titles. Clicking on the Tabs will jump to the corresponding list.
 
-TextMate will ignore files whose full path matches the enviromental variable `TM_TODO_IGNORE`.
+TextMate will ignore files whose full path matches the environment variable `TM_TODO_IGNORE`.
 
 Note: This command requires Ruby 1.8
 
@@ -30,17 +32,7 @@ Preconfigured tags are:
 * &lt;span style="color: #008000;"&gt;CHANGED&lt;/span&gt;
 * &lt;span style="color: #0090C8;"&gt;RADAR (as &amp;lt;radar://…&amp;gt; or &amp;lt;rdar://…&amp;gt;)&lt;/span&gt;
 
-Those tags consist of a label (like "TODO"), a color in which they will be printed and a regular expression to transform them. They can be adapted via the Preferences item in the Bundle. Rearranging the entries will rearrange them in the output, too.
-
-## Tag setup
-
-The shell variable `TM_TODO_MARKERS` has to be defined to make the TODO list work. It holds a comma separated list of markers. The default is: `FIXME, TODO, CHANGED, RADAR`.
-
-The regular expressions for those tags have to be set up as well. This can be done by specifying variables like `TM_TODO_FIXME_REGEXP` for the `FIXME` marker or `TM_TODO_TODO_COLOR` for the `TODO` marker. You should recognize the pattern here. An example for the default `FIXME` regexp is `/FIX ?ME[\s,:]+(\S.*)$/i`.
-
-Furthermore you may specify colors for each marker type. Analog to the regexps those variables are named `TM_TODO_CHANGED_COLOR` or `TM_TODO_FIXED_COLOR` and hold an HTML hexadecimal color value like `#FFD040`. If the color variable for a marker is not set the color will default to grey.
-
-Optionally you can set up a shell variable `TM_TODO_MARKERS_TRIM` which specifies the markers that are only shown when found. The default here is: `RADAR`. So if scanning your project or file did not find any `RADAR` items the section is not displayed at all.
+Those tags can easily be set up via the &lt;span onClick="TextMate.system(&amp;apos;&amp;quot;${TM_RUBY:-ruby}&amp;quot; &amp;quot;$TM_BUNDLE_SUPPORT/lib/settings.rb&amp;quot; &amp;amp;&amp;gt;/dev/null &amp;amp;&amp;apos;, null)"&gt;“Preferences”&lt;/a&gt; command.
 
 # Hints
 
@@ -48,7 +40,7 @@ Optionally you can set up a shell variable `TM_TODO_MARKERS_TRIM` which specifie
 * The Command will abort when the project directory resolves to the root folder.
 * Access keys: `⌃` + first letter of the tag (like `⌃T` for “TODO”) will jump to the respective section.
 
-EOF
+MARKDOWN
 
 html_footer
 </string>

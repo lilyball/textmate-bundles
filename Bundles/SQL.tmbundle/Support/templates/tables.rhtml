@@ -1,0 +1,3 @@
+<% @tables.each do |table| %>
+    <li><%= get_data_link(table, :database => @options.database.name, :table => table) %></li>
+<% end %>

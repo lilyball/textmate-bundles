@@ -199,7 +199,19 @@ end
 
 def store_connection_password(options, password)
   proto = @options.database.server == 'postgresql' ? 'pgsq' : 'mysq'
-  if %x{security add-internet-password -a "#{options.user}" -s "#{options.host}" -r "#{proto}" -w "#{password}" 2>&1} =~ /already exists/
+
+  rd, wr = IO.pipe
+  if pid = fork
+    wr.close
+    Process.waitpid(pid)
+  else
+    STDERR.reopen(wr)
+    STDOUT.reopen('/dev/null', 'r')
+    rd.close; wr.close
+    exec(['/usr/bin/security', TextMate.app_path + "/Contents/MacOS/TextMate"], 'add-internet-password', '-a', options.user, '-s', options.host, '-r', proto, '-w', password)
+  end
+
+  if rd.gets =~ /already exists/
     TextMate::UI.alert(:warning, "Unable to store password", <<-WARNING
 There is already a keychain entry for
     #{options.user}@#{options.name} on #{options.host}

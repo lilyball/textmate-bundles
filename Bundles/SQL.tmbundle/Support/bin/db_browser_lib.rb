@@ -79,7 +79,7 @@ class Connector
     if @server == 'postgresql'
       # Postgres doesn't allow passwords to be specified on the commandline
       # We can use --password to force the password prompt and then provide the password (even if it's blank)
-      IO.popen("psql -l --host='#{@settings.host}' --port='#{@settings.port}' --user='#{@settings.user}' --password --html 2>&1", 'w+') do |proc|
+      IO.popen("${TM_PSQL:-psql} -l --host='#{@settings.host}' --port='#{@settings.port}' --user='#{@settings.user}' --password --html 2>&1", 'w+') do |proc|
         proc << @settings.password
         proc.close_write
         db_list = $'.strip.to_a if proc.read =~ /Password:/
@@ -89,7 +89,7 @@ class Connector
         databases << $2 if db_list.shift.match(/\s+(<td align=.*?>)(.*?)(<\/td>)/) if line.include? '<tr valign'
       end
     elsif @server == 'mysql'
-      db_list = `mysql -e 'show databases' --host="#{@settings.host}" --port="#{@settings.port}" --user="#{@settings.user}" --password="#{@settings.password}" --xml 2>&1`
+      db_list = `"${TM_MYSQL:-mysql}" -e 'show databases' --host="#{@settings.host}" --port="#{@settings.port}" --user="#{@settings.user}" --password="#{@settings.password}" --xml 2>&1`
       raise ConnectorException.new(db_list) unless $?.to_i == 0
       db_list.each_line { |line| databases << $1 if line.match(/<(?:Database|field name="Database")>(.+)<\/(Database|field)>/) }
     end

@@ -82,7 +82,7 @@ class Connector
       IO.popen("${TM_PSQL:-psql} -l --host='#{@settings.host}' --port='#{@settings.port}' --user='#{@settings.user}' --password --html 2>&1", 'w+') do |proc|
         proc << @settings.password
         proc.close_write
-        db_list = $'.strip.to_a if proc.read =~ /Password:/
+        db_list = $'.strip.to_a if proc.read =~ /Password.*?:/
       end
       raise ConnectorException.new(db_list) unless $?.to_i == 0
       while line = db_list.shift

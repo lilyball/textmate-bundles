@@ -220,7 +220,7 @@ def get_connection
     # Try to connect with either our stored password, or with no password
     @connection = Connector.new(@options.database)
   rescue Exception => error
-    if error.message.include?('access denied') or error.message.include?('no password specified') or error.message.include?('authentication failed')
+    if error.message.include?('Access denied') or error.message.include?('no password specified') or error.message.include?('authentication failed')
       # If we got an access denied error then we can request a password from the user
       begin
         # Longer prompts get cut off

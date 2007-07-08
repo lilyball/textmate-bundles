@@ -65,7 +65,7 @@
 
 struct convert_dom_to_text
 {
-	convert_dom_to_text (DOMTreeWalker* treeWalker) : string([NSMutableString new]), quoteLevel(0), pendingFlush(NO), didOutputText(NO), atBeginOfLine(YES) { visit_nodes(treeWalker); }
+	convert_dom_to_text (DOMTreeWalker* treeWalker) : string([NSMutableString new]), quoteLevel(0), pendingFlush(NO), pendingWhitespace(NO), didOutputText(NO), atBeginOfLine(YES) { visit_nodes(treeWalker); }
 	~convert_dom_to_text () { [string autorelease]; }
 	operator NSString* () const { return string; }
 
@@ -74,19 +74,27 @@ private:
 	{
 		pendingFlush |= didOutputText;
 		didOutputText = NO;
+		pendingWhitespace = NO;
 	}
 
 	void leave_block_tag ()
 	{
 		pendingFlush |= didOutputText;
 		didOutputText = NO;
+		pendingWhitespace = NO;
 	}
 
 	void output_text (NSString* str)
 	{
-		str = [str TM_stringByTrimmingWhitespace];
 		if([str isEqualToString:@""])
 			return;
+
+		str = [str TM_stringByTrimmingWhitespace];
+		if([str isEqualToString:@""])
+		{
+			pendingWhitespace = YES;
+			return;
+		}
 
 		str = [str TM_stringByReplacingString:[NSString stringWithUTF8String:" "] withString:@" "];
 
@@ -102,10 +110,15 @@ private:
 			for(unsigned i = 0; i < quoteLevel; i++)
 				[string appendString:@"> "];
 		}
+		else if(!atBeginOfLine && pendingWhitespace)
+		{
+			[string appendString:@" "];
+		}
 
 		[string appendString:str];
 		atBeginOfLine = NO;
 		didOutputText = YES;
+		pendingWhitespace = NO;
 	}
 
 	void visit_nodes (DOMTreeWalker* treeWalker);
@@ -113,6 +126,7 @@ private:
 	NSMutableString* string;
 	unsigned quoteLevel;
 	BOOL pendingFlush;
+	BOOL pendingWhitespace;
 	BOOL didOutputText;
 	BOOL atBeginOfLine;
 };

@@ -80,7 +80,7 @@ class Greasemonkey
 		%w{Date Alpha}.each { |o| parameters["listMy#{o}"] = parameters["list#{o}"].select &in_my_namespace }
 		
 		# Flags: modal, centered, parameters
-		dialog = `$DIALOG -mcp #{e_sh parameters.to_plist} #{e_sh "#{ENV['TM_BUNDLE_SUPPORT']}/nib/OpenInstalledScript.nib"}`
+		dialog = `"$DIALOG" -mcp #{e_sh parameters.to_plist} #{e_sh "#{ENV['TM_BUNDLE_SUPPORT']}/nib/OpenInstalledScript.nib"}`
 		pl = OSX::PropertyList.load(dialog)
 		
 		exit unless pl["returnButton"] == "Load"  # Bail if the user cancelled

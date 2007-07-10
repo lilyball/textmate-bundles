@@ -16,11 +16,10 @@ if options.server == 'mysql'
   url = "http://dev.mysql.com/#{ENV['TM_CURRENT_WORD'].downcase}"
 elsif options.server == 'postgresql'
   url = "http://www.postgresql.org/docs/current/static/sql-#{ENV['TM_CURRENT_WORD'].downcase}.html"
-  unless `curl --silent -I "#{url}" | grep '200 OK' &gt; /dev/null`
-    url = "http://search.postgresql.org/search?q=${ENV['TM_CURRENT_WORD'].downcase}"
+  if `curl --silent -I "#{url}" | grep '200 OK'`.empty?
+    url = "http://search.postgresql.org/search?q=#{ENV['TM_CURRENT_WORD'].downcase}"
   end
 end
-
 puts "&lt;script&gt;window.location='#{url}'&lt;/script&gt;"</string>
 	<key>input</key>
 	<string>none</string>

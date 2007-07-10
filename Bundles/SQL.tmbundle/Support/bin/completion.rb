@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -wKU
+#!/usr/bin/env ruby
 
 require 'ostruct'
 require File.dirname(__FILE__) + '/db_browser_lib'

@@ -13,11 +13,11 @@ options = OpenStruct.new
 get_connection_settings(options)
 
 if options.server == 'mysql'
-  url = "http://dev.mysql.com/#{ENV['TM_CURRENT_WORD']}"
+  url = "http://dev.mysql.com/#{ENV['TM_CURRENT_WORD'].downcase}"
 elsif options.server == 'postgresql'
-  url = "http://www.postgresql.org/docs/current/static/sql-#{ENV['TM_CURRENT_WORD']}.html"
-  unless `curl --silent -I "#{URL}" | grep '200 OK' &gt; /dev/null`
-    url = "http://search.postgresql.org/search?q=${ENV['TM_CURRENT_WORD']}"
+  url = "http://www.postgresql.org/docs/current/static/sql-#{ENV['TM_CURRENT_WORD'].downcase}.html"
+  unless `curl --silent -I "#{url}" | grep '200 OK' &gt; /dev/null`
+    url = "http://search.postgresql.org/search?q=${ENV['TM_CURRENT_WORD'].downcase}"
   end
 end
 

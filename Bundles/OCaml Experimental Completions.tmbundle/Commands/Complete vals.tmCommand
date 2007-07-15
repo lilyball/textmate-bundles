@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-require "#{ENV['TM_SUPPORT_PATH']}/lib/ocamlcompletion"
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/ocamlcompletion"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 
@@ -28,8 +28,11 @@ end
 
 
 def extract_module_from_line
+  if $line == "" then return ['',/^/] end
+
   accum = []
   start = [($linepos - 1), 0].max
+    
   start.downto(0) do |i|
     if $line[i].chr !~ /[A-Za-z_.]/
       break
@@ -38,7 +41,7 @@ def extract_module_from_line
   end
   
   full = accum.reverse.join
-  if full[-1] == '.'
+  if full[-1] == '.' || full.strip.length == 0
     [full.chomp('.'), /^/]
   else
     matches = /^(.*?)\.([^.]*)$/.match(full)
@@ -109,7 +112,7 @@ begin
   possible_completions = possible_completions.map do |c|
     chash = Hash.new
     chash['completion'] = c[/^val\s+(.*)/, 1]
-  
+      
     chash
   end
 
@@ -135,11 +138,11 @@ end</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
-	<string>~	</string>
+	<string>~</string>
 	<key>name</key>
 	<string>Complete vals</string>
 	<key>output</key>
-	<string>insertAsSnippet</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.ocaml</string>
 	<key>uuid</key>

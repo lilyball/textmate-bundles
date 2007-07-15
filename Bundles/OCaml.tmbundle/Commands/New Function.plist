@@ -5,10 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat &lt;&lt;SNIPPET
-let ${TM_SELECTED_TEXT:-$TM_CURRENT_WORD} \${1:args} =
-	\$0
-SNIPPET</string>
+	<string>echo let ${TM_SELECTED_TEXT:-$TM_CURRENT_WORD} \${1:args} =
+echo -n	\$0
+</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>

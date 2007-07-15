@@ -17,7 +17,8 @@ module OCamlCompletion
         '/opt/local/bin',
         '/opt/local/godi/bin',
         '/usr/local/godi/bin',
-        '/godi/bin'
+        '/godi/bin',
+        "#{ENV['TM_BUNDLE_SUPPORT']}"
       ].map { |p| Pathname.new p }
     locations.each do |l|
       if (l + command).exist? then return l + command end
@@ -93,7 +94,7 @@ module OCamlCompletion
       FileUtils.cd(File.dirname(ENV['TM_FILEPATH']))
     end
 
-    command = "#{find_command 'cmigrep'} #{openmodules} -package #{e_sh(packages)} #{searchtype_to_arg(searchtype)} #{e_sh(regexstr)} #{modules.join(' ')}"
+    command = "#{e_sh(find_command('cmigrep'))} #{openmodules} -package #{e_sh(packages)} #{searchtype_to_arg(searchtype)} #{e_sh(regexstr)} #{modules.join(' ')}"
     `#{command}`
   end
   

@@ -671,7 +671,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.type.class.module.erlang</string>
+							<string>support.other.module.erlang</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -874,6 +874,18 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.erlang</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>^\s*+([a-z][a-zA-Z\d@_]*+)\s*+(?=\()</string>
+				</dict>
+				<dict>
 					<key>begin</key>
 					<string>(?=\()</string>
 					<key>end</key>
@@ -893,18 +905,6 @@
 							<string>#internal-function-parts</string>
 						</dict>
 					</array>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>entity.name.function.erlang</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>^\s*+([a-z][a-zA-Z\d@_]*+)\s*+(?=\()</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -938,7 +938,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.type.class.module.erlang</string>
+							<string>support.other.module.erlang</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -980,17 +980,12 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.type.class.module.erlang</string>
+							<string>support.other.module.erlang</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.separator.module-function.erlang</string>
-						</dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
-							<string>entity.name.function.erlang</string>
 						</dict>
 						<key>5</key>
 						<dict>
@@ -1043,7 +1038,7 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.type.class.module.erlang</string>
+							<string>support.other.module.erlang</string>
 						</dict>
 						<key>5</key>
 						<dict>
@@ -1631,7 +1626,7 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.type.class.module.definition.erlang</string>
+					<string>support.other.module.definition.erlang</string>
 				</dict>
 				<key>5</key>
 				<dict>

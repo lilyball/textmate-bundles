@@ -1,14 +1,22 @@
 # Snippets
 
-A snippet is a piece of text that you would like to insert in your document. It can include code to run at insertion time, variables (like selected text), tab stops/placeholders for missing information (which you can tab through after insertion) and perform transformations on the data which you enter in the placeholders.
+<!-- A snippet is a piece of text that you would like to insert in your document. It can include code to run at insertion time, variables (like selected text), tab stops/placeholders for missing information (which you can tab through after insertion) and perform transformations on the data which you enter in the placeholders. -->
+
+スニペットとははドキュメントに挿入するテキストです。スニペットには、時間、（選択されたテキストのような）変数、タブストップやあなたが挿入後タブを使う欠けている情報のためのプレースホルダを挿入したり、プレースホルダに入力したデータの変更を実行するコードを含むことができます。
 
 ![Snippet Editor](snippet_editor.png)
 
 ## Plain Text
 
-In the simplest case, you can use snippets to insert text that you do not want to type again and again, either because you type it a lot, or because the actual text to insert is hard to remember (like your bank account details or the HTML entities for the Apple modifier keys).
+<!-- n the simplest case, you can use snippets to insert text that you do not want to type again and again, either because you type it a lot, or because the actual text to insert is hard to remember (like your bank account details or the HTML entities for the Apple modifier keys).-->
 
-If you use snippets to insert plain text there is only one thing you should be aware of: `$` and `` ` `` are reserved characters. So if you want to insert one of these, prefix it with an escape (i.e. `\$`). An escape not followed by one of these two characters (or followed by another escape) will be inserted as a literal character.
+もっとも単純な場合は、あなたが何度も何度も入力したくないテキストを挿入するスニペットを使う事が来ます。あなたが、何度も入力したり、実際に入力するテキストを覚えているのが大変だからといった理由でです。例えばあなたの銀行口座の詳細やAppleの修飾キーのHTMLの実体参照などがあります。
+
+<!-- If you use snippets to insert plain text there is only one thing you should be aware of: `$` and `` ` `` are reserved characters. So if you want to insert one of these, prefix it with an escape (i.e. `\$`). An escape not followed by one of these two characters (or followed by another escape) will be inserted as a literal character. -->
+
+もしあなたがプレーンテキストを挿入するスニペットを使う際に知っていなければいけないことは、`$`と`` ` ``は予約語であるということです。もしあなたがそれらを入力したい場合は、( `\$`のように)その語の前に置いてエスケープしてください。この二文字が後ろにないエスケープ（つまり他のエスケープにが後ろにくる）エスケープはリテラル文字として挿入されます。
+
+<!-- TODO リテラル文字　- == a literal character -->
 
 ## Variables
 

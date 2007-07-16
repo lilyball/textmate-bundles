@@ -50,6 +50,7 @@ def get_config
         "fps" => 31,
         "preview" => "textmate",
         "trace" => "console",
+        "params" => " -mx -main ",
         "mtasc_path" => "#{ENV['TM_BUNDLE_PATH']}/Support/bin/mtasc"
       }
     return config
@@ -98,7 +99,12 @@ def mtasc_compile
       cmd += " -pack com/mab/util "
       cmd += " -trace com.mab.util.debug.trace "
     elsif config['trace'] == "console"
-      `open -a Console.app "#{ENV['HOME']}/Library/Preferences/Macromedia/Flash Player/Logs/flashlog.txt"`
+      log_file_path = "#{ENV['HOME']}/Library/Preferences/Macromedia/Flash Player/Logs/"
+      if(!File.exist?(log_file_path))
+        Dir.mkdir(log_file_path)
+        File.new("#{log_file_path}/flashlog.txt",'w')
+      end
+      `open -a Console.app "#{log_file_path}/flashlog.txt"`
     elsif config['trace'] == "no"
       cmd += " -trace no "
     else

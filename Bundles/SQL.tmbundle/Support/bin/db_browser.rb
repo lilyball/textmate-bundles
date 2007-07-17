@@ -28,7 +28,7 @@ require "#{ENV["TM_SUPPORT_PATH"]}/lib/osx/plist" if ENV["TM_SUPPORT_PATH"]
 # Parse commandline options
 begin
   OptionParser.new do |opts|
-    opts.banner = "Usage: db_browse.rb [options]"
+    opts.banner = "Usage: db_browser.rb [options]"
 
     opts.on("--database database", "Set database name") { |database| @options.database.name = database }
     opts.on("--table table", "Set database table") { |table| @options.database.table = table }

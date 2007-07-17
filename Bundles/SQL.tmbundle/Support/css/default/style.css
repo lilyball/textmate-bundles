@@ -1,3 +1,9 @@
+#tm_webpreview_content {
+	padding: 0;
+	margin-top: 6em;
+}
+
+
 #sql_browser {
 /*    position: absolute;
     top: 0;
@@ -8,7 +14,10 @@
 /*    padding-right: 0px;*/
 /*    overflow: auto;*/
 /*    background: #fff;*/
-    margin: 0 1ex;
+
+/*    margin: 0 1ex;*/
+    overflow: auto;
+    height: 90%;
 }
 
 #sql_browser table {
@@ -91,24 +100,23 @@
 
 #dbbar {
     float: left;
-/*    width: 25%;*/
-    min-width: 12em;
-/*    height: 100%;*/
-/*    overflow: auto;*/
+
+    width: 15em;
+
     padding: 0 1ex;
     margin-right: 1ex;
-/*    background: #F1F1F1;*/
-/*    border-right: 2px solid #444;*/
-/*    border-bottom: 2px solid #444;*/
+
+    height: 90%;
+    overflow: auto;
 }
 
 #dbbar #database_list {
     padding-left: 0;
-    list-style: url('database.png');
+/*    list-style: url('database.png');*/
 }
 
 #dbbar .table_list {
-    padding-left: 2em;
+    padding-left: 2`5px;
     list-style: url('database_table.png');
 }
 

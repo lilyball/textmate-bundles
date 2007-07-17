@@ -3,6 +3,7 @@
 require 'optparse'
 require 'ostruct'
 require 'erb'
+require 'iconv'
 require File.dirname(__FILE__) + '/db_browser_lib'
 require 'cgi'
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview" if ENV["TM_SUPPORT_PATH"]
@@ -134,6 +135,11 @@ end
 
 def format(content, type)
   return '' unless content
+  begin
+    Iconv.iconv('utf-8', 'utf-8', content)
+  rescue Exception => e
+    content = content.unpack('C*').map { |ch| ch < 128 ? ch : ?? }.pack('C*')
+  end
   if type == :number
     content
   else

@@ -1,4 +1,4 @@
-# Snippets
+# Snippets （スニペット）
 
 <!-- A snippet is a piece of text that you would like to insert in your document. It can include code to run at insertion time, variables (like selected text), tab stops/placeholders for missing information (which you can tab through after insertion) and perform transformations on the data which you enter in the placeholders. -->
 
@@ -6,7 +6,7 @@
 
 ![Snippet Editor](snippet_editor.png)
 
-## Plain Text
+## Plain Text　（プレーンテキスト）
 
 <!-- n the simplest case, you can use snippets to insert text that you do not want to type again and again, either because you type it a lot, or because the actual text to insert is hard to remember (like your bank account details or the HTML entities for the Apple modifier keys).-->
 
@@ -18,29 +18,47 @@
 
 <!-- TODO リテラル文字　- == a literal character -->
 
-## Variables
+## Variables　（変数）
 
+<!-- 
 You can insert the value of a [variable][EnvVariables] by prefixing the name of the variable with `$`. All the normal dynamic variables are supported, the most useful probably being `TM_SELECTED_TEXT`. If for example we want to create a snippet which wraps the selection in a LaTeX `\textbf` command, we can make a snippet which is:
+ -->
+
+あなたは、`$`と一緒に変数名をつけることによって[変数][EnvVariables]の値を入力することもできます。全ての普通の動的な変数はサポートされています。おそらく一番役に立つは`TM_SELECTED_TEXT`です。例えばもし、LaTexの`\textbf`コマンドで選択範囲を包み込むスニペットを作りたければ、以下のようにすればできます。
 
     \textbf{$TM_SELECTED_TEXT}
 
-If no text is selected the variable will not be set, so nothing will be inserted in its place. We can provide a default value by using this syntax: `${«variable»:«default value»}`. For example:
+<!-- If no text is selected the variable will not be set, so nothing will be inserted in its place. We can provide a default value by using this syntax: `${«variable»:«default value»}`. For exa mple: -->
+
+もしテキストが選択されていない場合は、変数は設定されません。なのでその場所には何も挿入されません。`${«variable»:«default value»}`というシンタックスを使えばデフォルト値を与えることができます。例えば以下のようになります。
+
 
     \textbf{${TM_SELECTED_TEXT:no text was selected}}
 
-The default value can itself contain variables or shell code. If you want the default text to contain a `}`, you need to escape it. But all other characters are used verbatim.
+<!-- The default value can itself contain variables or shell code. If you want the default text to contain a `}`, you need to escape it. But all other characters are used verbatim. -->
 
-Variables also support [regular expression][RegularExpressions] replacements using this syntax: `${«variable»/«regexp»/«format»/«options»}`. If the variable is not set the replacement will be performed on the empty string. For example, to prepend a bullet to each non-empty line in the selection (and insert that) we can do:
+デフォルト値そのものが変数やシェルのコードを含むことができます。もし、デフォルトテキストに`}`を含む必要があれば、エスケープをする必要があります。しかし、他の文字は全て文字通りです。
+
+<!-- Variables also support [regular expression][RegularExpressions] replacements using this syntax: `${«variable»/«regexp»/«format»/«options»}`. If the variable is not set the replacement will be performed on the empty string. For example, to prepend a bullet to each non-empty line in the selection (and insert that) we can do: -->
+
+また`${«variable»/«regexp»/«format»/«options»}`といったシンタックスを用いて、変数は[正規表現][]による置換をサポートします。もし変数が与えられていない場合、置換は空の文字列に対して実行されます。例えば、選択範囲の中のひとつひとつの空ではない行に中点をつけ、（それを挿入するには）、以下のようにします。
+
 
     ${TM_SELECTED_TEXT/^.+$/• $0/g}
 
-## Interpolated Shell Code
+## Interpolated Shell Code (補完されたシェルコード）
 
-You can use backticks to have shell code executed when the snippet is inserted. The result from running the code gets inserted into the snippet, though with the last newline in the result removed (if present). So for example to create a snippet that wraps the selection in an HTML link, where the URL of that link comes from the clipboard, we can do:
+<!-- You can use backticks to have shell code executed when the snippet is inserted. The result from running the code gets inserted into the snippet, though with the last newline in the result removed (if present). So for example to create a snippet that wraps the selection in an HTML link, where the URL of that link comes from the clipboard, we can do: -->
+
+スニペットが挿入されたときにシェルコードを実行させるために、あなたはバックティックを用いることができます。そのコードを実行することによって得られた結果がスニペットに挿入されます。（もしあれば）最後のnewlineが取り除かれた状態でですが。なので、例えば、リンクのURLをクリップボードがから得て、選択範囲をHTMLリンクでラップするスニペットを作るためには、以下のようなコードになります。
+
 
     <a href="`pbpaste`">$TM_SELECTED_TEXT</a>
 
-Since this is normal bash code, we can write a small program. For example we can let it verify that the clipboard contains only a single line of text like this:
+<!-- Since this is normal bash code, we can write a small program. For example we can let it verify that the clipboard contains only a single line of text like this: -->
+
+これは普通のbashコードなので、小さなプログラムを書く事もできます。例えば、クリップゴードが一行のみを含むということを確認させるためには、以下のようにできます。
+
 
     <a href="`
         if [[ $(pbpaste|wc -l) -eq 0 ]]
@@ -51,53 +69,86 @@ Since this is normal bash code, we can write a small program. For example we can
 
 Inside shell code, the only character you need to escape is the backtick.
 
+シェルコードの中で、唯一エスケープが必要になるのはバックティックです。
+
+
 ## Tab Stops
 
-After insertion, the caret will be placed after the last character of the snippet. This is not always desirable and we can change that by using `$0` to mark where we want the caret to be. So if for example we make an HTML div-snippet and want the caret to end between the opening and closing tags, we could make it like this:
+<!-- After insertion, the caret will be placed after the last character of the snippet. This is not always desirable and we can change that by using `$0` to mark where we want the caret to be. So if for example we make an HTML div-snippet and want the caret to end between the opening and closing tags, we could make it like this: -->
+
+挿入後キャレットはスニペットの最後の文字のうしろにきます。これはいつも理想的とは限りません。なので、私たちはキャレットが来てほしい場所に印をつけるために`$0`を使って変更することができます。例えば、HTMLのdivのスニペットを作ってキャレットが開始タグと終了タグの間にようにできます。それは以下のようになります。
 
     <div>
         $0
     </div>
 
-Often though we want to fill in text in several places in the snippet. Multiple tab stops can be provided by inserting `$1`-`$n`. The caret will start at `$1`, then when pressing tab it will move to `$2` and `$3` on next tab etc. until there are no more tab stops. If you do not explicitly set `$0`, the caret will be at the end of the snippet.
+<!-- Often though we want to fill in text in several places in the snippet. Multiple tab stops can be provided by inserting `$1`-`$n`. The caret will start at `$1`, then when pressing tab it will move to `$2` and `$3` on next tab etc. until there are no more tab stops. If you do not explicitly set `$0`, the caret will be at the end of the snippet. -->
 
-So we could for example change the above to:
+しかし、私たちはスニペットの中のいくつかの場所を埋める必要がよくあります。`$1`-`$n`を挿入することによって複数のタブストップを与えられます。タブストップがなくなるまで、キャレットは`$1`で始まり、次にタブを押すと`$2`へ、次のタブで`$3`へと動きます。もしあなたが明示的に`$0`をセットしなければキャレットはスニペットの最後にきます。
+
+<!-- So we could for example change the above to: -->
+
+例えば、上のコードを次のように変更できます。
 
     <div$1>
         $0
     </div>
 
-This allows us to fill in an argument and then tab on to `$0`.
+<!-- This allows us to fill in an argument and then tab on to `$0`. -->
 
-## Placeholders
+これで引数を埋めた後、`$0`の位置へタブで移動できます。
 
-Like variables, tab stops can also have default values (and are generally referred to as placeholders when they do). The syntax is the same: `${«tab stop»:«default value»}`. And the default value can contain both text, shell code and other placeholders. So we can refine the previous example further:
+
+## Placeholders (プレースホルダ）
+
+<!-- Like variables, tab stops can also have default values (and are generally referred to as placeholders when they do). The syntax is the same: `${«tab stop»:«default value»}`. And the default value can contain both text, shell code and other placeholders. So we can refine the previous example further:-->
+
+また、変数のように、タブストップはデフォルト値をもつことができ、（そして、それは一般的にプレースホルダと言われます。）シンタックスは同じです：`${«tab stop»:«default value»}`。そしてデフォルト値はテキストとシェルコードと他のプレースホルダを含むことができます。なので私たちは前回の例をさらに洗練させることができます。
+
 
     <div${1: id="${2:some_id}"}>
         $0
     </div>
 
-Inserting this snippet will insert a `div` tag with the `id` argument selected and we can then decide either to overtype the argument (i.e. delete it) and press tab again to reach `$0`, or we can press tab immediately to get to the second tab stop (the value part of the argument) and edit that.
+<!-- Inserting this snippet will insert a `div` tag with the `id` argument selected and we can then decide either to overtype the argument (i.e. delete it) and press tab again to reach `$0`, or we can press tab immediately to get to the second tab stop (the value part of the argument) and edit that. -->
 
-When you edit the placeholder text, any embedded tab stops will be removed.
+このスニペットは選択された状態の`id`引数と`div`タグを挿入します。そしてそれから私たちはその引数を上書き（つまり削除）して、タブを押し`$0`の場所へ行く、もしくは、すぐにタブで二つ目のタブストップ（引数の値）へ行き、それを編集するかを決める事ができます。
 
-## Mirrors
+<!-- When you edit the placeholder text, any embedded tab stops will be removed. -->
 
-There are times when you need to provide the same value several places in the inserted text and in these situations you can re-use the tab stop to signal that you want it mirrored at that location. So for example to create a LaTeX environment with a snippet, we can use:
+プレースホルダのテキストを編集すると、あらゆる埋め込まれたタブは削除されます。
+
+## Mirrors　（ミラー）
+
+<!-- TODO mirrorってどうやって訳そうか。反映はreflectだし。全く同じものを作るって意味だけど。反射はおかしいよねぇ。 -->
+
+<!-- There are times when you need to provide the same value several places in the inserted text and in these situations you can re-use the tab stop to signal that you want it mirrored at that location. So for example to create a LaTeX environment with a snippet, we can use: -->
+
+挿入されたテキストのいくつかの場所へ同じ値を入れる必要がある場合、そんなときは、その場所にミラーされたものが必要ということを示すためにタブストップを再利用できます。だから、例えば、スニペットを使ってLaTex環境を作るためには、私たちは以下のようにできます。
 
     \begin{${1:enumerate}}
         $0
     \end{$1}
 
-After inserting this snippet, `enumerate` will be selected and if we edit it, the changes will be reflected in the `\end` part as well.
+<!-- After inserting this snippet, `enumerate` will be selected and if we edit it, the changes will be reflected in the `\end` part as well. -->
 
-## Transformations
+このスニペットを挿入したあと、`enumerate`が挿入され、編集されれば、その変化は`end`にも反映されます。
 
-There are situations where we want our placeholder text mirrored but with slight changes or where we want some text to appear depending on the value/presence of a placeholder.
+## Transformations（変形）
 
-We can accomplish this by doing a regular expression substitution on the placeholder text (when mirroring it). The syntax for this is: `${«tab stop»/«regexp»/«format»/«options»}`.
+<!-- There are situations where we want our placeholder text mirrored but with slight changes or where we want some text to appear depending on the value/presence of a placeholder. -->
 
-As an example, the Objective-C getter/setter methods often look like this:
+プレースホルダのテキストがミラーされてほしいが、少しだけ変化が必要な場合やプレースホルダの値／存在によってテキストを表示させたい場合があります。
+
+<!-- We can accomplish this by doing a regular expression substitution on the placeholder text (when mirroring it). The syntax for this is: `${«tab stop»/«regexp»/«format»/«options»}`. -->
+
+
+（ミラーをするときに）プレースホルダのテキストに対して正規表現の置換をすることによってこれを達成できます。シンタックスは以下のようになります：`${«tab stop»/«regexp»/«format»/«options»}`。
+
+
+<!-- As an example, the Objective-C getter/setter methods often look like this: -->
+
+例として、Objective-Cのgetter/setterメソッドはよくこのような形をしています：
 
     - (id)foo
     {
@@ -110,7 +161,9 @@ As an example, the Objective-C getter/setter methods often look like this:
         foo = [aValue retain];
     }
 
-In the [format string][FormatString] we can use `\u` to uppercase the next character, so a snippet that only asks for the name of the instance variable once could look like this:
+<!-- In the [format string][FormatString] we can use `\u` to uppercase the next character, so a snippet that only asks for the name of the instance variable once could look like this: -->
+
+[文字列のフォーマット][FormatString]では、私たちは、次の文字を大文字にするために`\u`を用います。それでスニペットは一度インスタンス変数の名前のみを尋ねるスニペットは以下のようになります。
 
     - (${1:id})${2:foo}
     {
@@ -123,11 +176,20 @@ In the [format string][FormatString] we can use `\u` to uppercase the next chara
         $2 = [aValue retain];
     }
 
-We can also use [conditional insertions][FormatStringConditionalInsertion] in the format string to make decisions. For example if we create a snippet for a method we can let the return type decide whether or not the method should include a `return` statement like this:
+<!-- We can also use [conditional insertions][FormatStringConditionalInsertion] in the format string to make decisions. For example if we create a snippet for a method we can let the return type decide whether or not the method should include a `return` statement like this: -->
+
+また私たちは、決定をするために、フォーマットの文字列の中に[条件付きの挿入][FormatStringConditionalInsertion]を使う事ができます。例えば、もしメソッドのためにスニペットをつくれば、戻り値のタイプによってメソッドが`return`命令を含むかどうかを判断させることが、以下のようにできます。
+
+<!-- TODO return type == 戻り値のタイプ？　日本語おかしい？ -->
+
+
 
     - (${1:void})${2:methodName}
     {${1/void$|(.+)/(?1:\n\treturn nil;)/}
     }
 
-Here we match placeholder 1 against `void` or anything (`.+`) and put the latter match in capture register 1. Then only if we did match something (other than `void`) will we insert a newline, tab and the `return nil;` text.
+<!-- Here we match placeholder 1 against `void` or anything (`.+`) and put the latter match in capture register 1. Then only if we did match something (other than `void`) will we insert a newline, tab and the `return nil;` text. -->
 
+<!-- TODO "put the latter match in capture register 1が意味不明。-->
+
+ここでは、`void`か何か(.`.+`)に対してプレースホルダ１をマッチさせ、キャプチャのレジスタ１に後者のマッチを入れます。それから（`void`以外の）何かとマッチしたときだけ、newline、タブ、`return nil:` というテキストを挿入します。

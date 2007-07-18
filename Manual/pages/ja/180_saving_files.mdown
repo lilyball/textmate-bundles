@@ -1,20 +1,26 @@
-# Saving Files
+# Saving Files ファイルの保存
 
-TextMate has a few options in the advanced preferences which affect how to save files.
+<!-- TextMate has a few options in the advanced preferences which affect how to save files.-->
+
+TextMateにはファイルの保存の仕方に影響する上級の環境設定にいくつかのオプションがあります。
 
 ![Prefs Saving](prefs_saving.png)
 
-## Atomic Saves
+## Atomic Saves　原子性での保存
 
-Atomic saves mean that instead of overwriting the file, TextMate saves to a new file and once this succeeds, overwrites the old file. This has the advantage that if your machine should crash while saving a file, you do not run the risk of losing the contents of both the old (last-saved) and new files.
+<!-- Atomic saves mean that instead of overwriting the file, TextMate saves to a new file and once this succeeds, overwrites the old file. This has the advantage that if your machine should crash while saving a file, you do not run the risk of losing the contents of both the old (last-saved) and new files. -->
 
-The downside is that since a new file is actually written to disk (with a new inode), you may break an alias to the file, although this happens only if you also moved the file, or will move it, since path has precedence over inodes when resolving aliases. Also, the Finder will reposition the icon of the file each time you save it (which is only a problem if the file is in a folder you keep in sight).
+原子性での保存とは、ファイルを上書きするのではなく、TextMateが新しいファイルを保存し、それが成功したら古いファイルを上書きするということです。これは、もしファイル保存中にマシンがクラッシュした場合、あなたは古い（つまり、最後に保存された）ファイルと新しいファイルの両方を失うというリスクを冒さずにすむという点での長所があります。
 
-## Creator Code
+<!-- The downside is that since a new file is actually written to disk (with a new inode), you may break an alias to the file, although this happens only if you also moved the file, or will move it, since path has precedence over inodes when resolving aliases. Also, the Finder will reposition the icon of the file each time you save it (which is only a problem if the file is in a folder you keep in sight). -->
+
+欠点は新しいファイルが実際に（新しいinodeとともに）書かれるので、ファイルへのエイリアスを壊してしまうかもしれないということです。しかし、これはファイルを移動したり、移動する予定であるときにのみ置きます。というのは、パスはエイリアスを解決する際にinodeより優先されるからです。また、Finderは保存するたびにファイルのアイコンの位置を変えます。（これはもしそのファイルがあなたの目に見えるフォオル谷あるときだけ問題になります。）
+
+## Creator Code （クリエータコード）
 
 The creator code is how Classic Macs associated a file with its application. On OS X the association is mainly through the file extension, which has the advantage that if you one day get a better program (!) to handle a given file type, you only need to update the association in one place, instead of changing the creator code of all your saved files. For this reason the recommendation is to not set this or set it to _Blank_.
 
-## Encoding
+## Encoding　（エンコーディング）
 
 TextMate is heavily biased toward UTF-8. UTF-8 is an ASCII compatible encoding, so using it should give no problems with existing tools such as `grep`, `diff`, `ruby` (the interpreter), `gcc` (the compiler) etc.
 

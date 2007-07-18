@@ -65,7 +65,7 @@ module TextMate
         plist['summary']  = options[:summary] || ''
         plist['log']      = options[:log]     || ''
 
-        `#{TM_DIALOG} -cap #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
+        `#{TM_DIALOG} -cqp #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
       end
   
       # pop up a menu on screen

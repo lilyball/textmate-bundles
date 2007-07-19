@@ -143,7 +143,8 @@ def format(content, type)
   if type == :number
     content
   else
-    full_content = content = escape(content).gsub("\n", "<br>")
+    full_content = escape(content)
+    content = escape(content).gsub("\n", "<br>")
     if content.length > 30
       content = content[0..30] + '<span style="color: red;font-weight: bold">' + '…</span>'
     end

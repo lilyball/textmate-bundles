@@ -599,7 +599,7 @@
 					<key>begin</key>
 					<string>(?=&lt;\?(?i:php|=)?)</string>
 					<key>end</key>
-					<string>(?&lt;=\?&gt;)</string>
+					<string>(?&lt;=\?&gt;)(?:\s*$\n)?</string>
 					<key>name</key>
 					<string>source.php.embedded.line.html</string>
 					<key>patterns</key>

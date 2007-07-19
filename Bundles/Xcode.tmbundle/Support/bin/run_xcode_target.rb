@@ -3,6 +3,7 @@
 require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/io"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/bin/xcode_version"
 require 'open3'
 require 'pty'
@@ -311,12 +312,17 @@ class Xcode
     def run(&block)
       targets = @project.targets.select { |t| [:application, :tool].include?(t.product_type) }
       case
-      when targets.size == 1
-        targets.first.run(&block)
       when targets.size == 0
         failed(targets, "The project has no immediately executable target to run.")
-      when ENV['XC_TARGET_NAME'].nil?
-        failed(targets, "The project has multiple executable products. Didn't know which to pick.\nTry setting project's XC_TARGET_NAME variable.")
+      when targets.size == 1
+        targets.first.run(&block)
+      when (targets.size > 1 && ENV['XC_TARGET_NAME'].nil?)
+        # multiple runnable targets
+        target_name = TextMate::UI.request_item(:title => 'Multiple Targets', :prompt => 'Run which target?', :items => targets.map {|t| t.name})
+        unless target_name.nil?
+          found_target = targets.find { |t| t.name == target_name }
+          found_target.run(&block)
+        end
       else
         info "Will try to run target #{ENV['XC_TARGET_NAME']}"
         found_target = targets.find { |t| t.name == ENV['XC_TARGET_NAME'] }

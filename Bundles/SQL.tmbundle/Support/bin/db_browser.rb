@@ -154,12 +154,11 @@ end
 
 def get_data_link(link, new_params = {})
   params = []
-  params << (new_params[:database] || @options.database.name)
-  params << (new_params[:table] || @options.database.table)
-  params << new_params[:query].to_s
-  params << @options.page_size
-  params << new_params[:offset].to_s
-  params.map!{|param| "'" + e_js(escape(param.to_s)) + "'" }
+  params << "'" + e_js(escape((new_params[:database] || @options.database.name).to_s)) + "'"
+  params << "'" + e_js(escape((new_params[:table] || @options.database.table).to_s)) + "'"
+  params << (new_params[:query] ? escape(new_params[:query].inspect) : "''")
+  params << @options.page_size.to_i
+  params << new_params[:offset].to_i
   '<a href="javascript:getData(' + params.join(', ') + ')">' + link + "</a>"
 end
 

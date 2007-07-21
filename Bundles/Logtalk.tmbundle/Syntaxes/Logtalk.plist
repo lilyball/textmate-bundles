@@ -99,7 +99,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(:-)\s+(dynamic|threaded)(?=[.])</string>
+			<string>(:-)\s+(dynamic|synchronized|threaded)(?=[.])</string>
 			<key>name</key>
 			<string>storage.modifier.others.logtalk</string>
 		</dict>
@@ -127,13 +127,13 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(:-)\s+(a(lias|tomic)|info|d(ynamic|iscontiguous)|m(eta_predicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|use(s|_module))(?=[(])</string>
+			<string>(:-)\s+(alias|info|d(ynamic|iscontiguous)|m(eta_predicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|use(s|_module)|synchronized)(?=[(])</string>
 			<key>name</key>
 			<string>storage.modifier.others.logtalk</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(::|\^\^)</string>
+			<string>(:|::|\^\^)</string>
 			<key>name</key>
 			<string>keyword.operator.message-sending.logtalk</string>
 		</dict>
@@ -313,7 +313,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(threaded_(call|exit))(?=[(])</string>
+			<string>\b(threaded(_(call|once|ignore|exit|peek|wait|notify))?)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.multi-threading.logtalk</string>
 		</dict>

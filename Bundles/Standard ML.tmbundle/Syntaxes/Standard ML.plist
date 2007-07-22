@@ -23,7 +23,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(val|datatype|struct|as|let|in|abstype|local|where|case|of|fn|raise|exception|handle|ref|infix|infixr|before|end)\b</string>
+			<string>\b(val|datatype|struct|as|let|in|abstype|local|where|case|of|fn|raise|exception|handle|ref|infix|infixr|before|end|structure)\b</string>
 			<key>name</key>
 			<string>keyword.other.ml</string>
 		</dict>
@@ -163,7 +163,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?==|:)</string>
+			<string>(?==|:|\()</string>
 			<key>name</key>
 			<string>meta.module.dec.ml</string>
 		</dict>
@@ -208,22 +208,6 @@
 					<string>meta.typeexp.ml</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>constant.other.type.ml</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>type annotation/ascription</string>
-			<key>match</key>
-			<string>[^:](:)\s*(([a-zA-Z0-9\.\*\_ ]|(\-&gt;))*)</string>
-			<key>name</key>
-			<string>meta.type.ascription.ml</string>
 		</dict>
 	</array>
 	<key>repository</key>

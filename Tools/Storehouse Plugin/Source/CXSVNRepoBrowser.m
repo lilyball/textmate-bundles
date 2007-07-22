@@ -31,8 +31,6 @@ const UInt16 kLeftQuoteUnicode	= 0x201C;
 const UInt16 kRightQuoteUnicode	= 0x201D;
 
 @interface CXToolbarItemView : NSView
-{
-}
 @end
 
 @implementation CXToolbarItemView
@@ -73,6 +71,10 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 
 #endif
 
+@interface CXSVNRepoBrowser (Private)
+- (void)checkoutNode:(CXSVNRepoNode *)node toLocation:(NSString *)destinationPath;
+- (void)exportNode:(CXSVNRepoNode *)node toLocation:(NSString *)destinationPath;
+@end
 
 @implementation CXSVNRepoBrowser
 
@@ -396,6 +398,7 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 #pragma mark Context menu
 #endif
 
+
 // TODO: item validation
 
 - (IBAction) contextExportFiles:(id)sender
@@ -403,7 +406,15 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 	CXSVNRepoNode *	node;
 	node = [fOutlineView itemAtRow:[fOutlineView selectedRow]];
 	
-//	[self exportNode:node];
+	[self exportNode:node toLocation:nil];
+}
+
+- (IBAction) contextCheckoutFiles:(id)sender
+{
+	CXSVNRepoNode *	node;
+	node = [fOutlineView itemAtRow:[fOutlineView selectedRow]];
+	
+	[self checkoutNode:node toLocation:nil];
 }
 
 - (IBAction) contextRemoveFile:(id)sender
@@ -465,9 +476,9 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 	// object each time the same file type is encountered.
 	//
 	// Although IconServices caches the underlying icon representation,
-	// so memory isn't wasted, NSWorkspace cannot (for various reasons)
-	// return the same NSImage object instance each time, and it turns
-	// out that creating an IconRef-based NSImage is relatively expensive.
+	// NSWorkspace cannot (for various reasons) return the same NSImage
+	// object instance each time, and it turns out that creating an
+	// IconRef-based NSImage is relatively expensive.
 	//
 	if(sFileTypeCache == nil)
 	{
@@ -766,6 +777,76 @@ const UInt16 kRightQuoteUnicode	= 0x201D;
 				action:@selector(copyURL:toURL:withDescription:)];
 }
 
+#if 0
+#pragma mark -
+#pragma mark Export/Checkout
+#endif
+
+- (void)askWhereToSaveNodeLocally:(CXSVNRepoNode *)node forSelector:(SEL)selector
+{
+	NSSavePanel *			savePanel = [NSSavePanel savePanel];
+	NSMutableDictionary *	dictionary = [NSMutableDictionary dictionary];
+	
+	[dictionary setObject:NSStringFromSelector(selector) forKey:@"selector"];
+	[dictionary setObject:node forKey:@"node"];
+	[dictionary retain];
+	
+	[savePanel beginSheetForDirectory:nil file:[[node URL] lastPathComponent] modalForWindow:[fURLHeaderView window] modalDelegate:self didEndSelector:@selector(savePanelDidEnd:returnCode:withInfo:) contextInfo:dictionary];
+}
+
+- (void)savePanelDidEnd:(NSSavePanel *)savePanel returnCode:(int)returnCode withInfo:(NSDictionary *)info
+{
+	NSString *		selectorString	= [info objectForKey:@"selector"];
+	CXSVNRepoNode *	node			= [info objectForKey:@"node"];
+	
+	// we retained the info dictionary in askWhereToSaveNodeLocally:forSelector:
+	[info autorelease];
+	
+	if(returnCode == NSOKButton)
+	{
+		CXSVNClient *		svnClient	= [self svnClient];
+		
+		NSLog(@"%@", selectorString);
+		if([selectorString isEqualToString:@"exportNode:toLocation:"])
+		{
+			[svnClient exportURL:[node URL] toLocalPath:[savePanel filename]];
+		}
+		else if([selectorString isEqualToString:@"checkoutNode:toLocation:"])
+		{
+			[svnClient checkoutURL:[node URL] toLocalPath:[savePanel filename]];
+		}
+	}
+}
+
+- (void)exportNode:(CXSVNRepoNode *)node toLocation:(NSString *)destinationPath
+{
+	CXSVNClient *		svnClient	= [self svnClient];
+	
+	// Ask for location
+	if(destinationPath == nil)
+	{
+		[self askWhereToSaveNodeLocally:node forSelector:_cmd];
+	}
+	else
+	{
+		[svnClient exportURL:[node URL] toLocalPath:destinationPath];
+	}
+}
+
+- (void)checkoutNode:(CXSVNRepoNode *)node toLocation:(NSString *)destinationPath
+{
+	CXSVNClient *		svnClient	= [self svnClient];
+	
+	// Ask for location
+	if(destinationPath == nil)
+	{
+		[self askWhereToSaveNodeLocally:node forSelector:_cmd];
+	}
+	else
+	{
+		[svnClient checkoutURL:[node URL] toLocalPath:destinationPath];
+	}
+}
 
 
 #if 0

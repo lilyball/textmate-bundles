@@ -68,6 +68,7 @@ typedef enum
 
 - (IBAction) contextRemoveFile:(id)sender;
 - (IBAction) contextExportFiles:(id)sender;
+- (IBAction) contextCheckoutFiles:(id)sender;
 - (IBAction) contextRefresh:(id)sender;
 - (IBAction) contextMakeDir:(id)sender;
 

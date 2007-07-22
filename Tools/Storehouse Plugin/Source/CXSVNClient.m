@@ -140,6 +140,12 @@ const NSString *		kExecutablePathNames[]	 = {	@"~/bin",			// version in user's $
 	[self launchWithArguments:arguments];
 }
 
+- (void) checkoutURL:(NSString *)sourceURL toLocalPath:(NSString *)path
+{
+	NSArray *	arguments = [NSArray arrayWithObjects:@"checkout", sourceURL, path, nil];
+
+	[self launchWithArguments:arguments];
+}
 
 - (void) removeURL:(NSString *)destURL withDescription:(NSString *)desc;
 {

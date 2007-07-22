@@ -28,6 +28,7 @@
 - (void) importLocalPath:(NSString *)sourcePath toURL:(NSString *)destURL withDescription:(NSString *)desc;
 
 - (void) exportURL:(NSString *)sourceURL toLocalPath:(NSString *)path;
+- (void) checkoutURL:(NSString *)sourceURL toLocalPath:(NSString *)path;
 
 - (void) listContentsOfURL:(NSString *)sourceURL toSelector:(SEL)sel ofObject:(id)target;
 

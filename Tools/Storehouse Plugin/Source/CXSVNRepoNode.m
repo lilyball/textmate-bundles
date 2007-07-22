@@ -9,8 +9,11 @@
 #import "CXSVNRepoNode.h"
 #import "CXSVNClient.h"
 
-@implementation CXSVNRepoNode
+@interface CXSVNRepoNode (Private)
+- (void) appendSubnodes:(NSArray *)arrayOfSubnodes;
+@end
 
+@implementation CXSVNRepoNode
 
 - (NSString *) nameForURL
 {

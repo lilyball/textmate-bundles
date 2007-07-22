@@ -59,6 +59,10 @@
 - (id)valueForKey:(NSString *)key;
 - (void)setValue:(id)value forKey:(NSString *)key;
 
+
+// Subclass use only
+- (void) launchNextTask;
+
 @end
 
 @interface NSObject (CXTaskTarget)

@@ -11,7 +11,6 @@
 
 @interface CXTask(Private)
 - (void) execute;
-- (void) launchNextTask;
 - (void) receivedData:(NSData *)data;
 @end
 

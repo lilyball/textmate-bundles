@@ -2,7 +2,7 @@
 //  WebView: Edit in TextMate.mm
 //
 //  Created by Allan Odgaard on 2005-11-27.
-//  Copyright (c) 2005 MacroMates. All rights reserved.
+//  See /trunk/LICENSE for license details
 //
 
 #import <WebKit/WebKit.h>

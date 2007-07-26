@@ -80,19 +80,20 @@ headers.each do |name|
       if m[2]
         k = str.match /@interface(?:\s|\n)+(\w+)[^\n]*/
         if k
-        methodType = "dm" if k[0].match /\(\s*\w*[Dd]elegate\w*\s*\)/
-        
+          methodType = "dm" if k[0].match /\(\s*\w*[Dd]elegate\w*\s*\)/
           className = k[1]
           if translate[framework]
-             frameworkName = translate[framework]
-           else
-             frameworkName = "NA"
-           end
+            frameworkName = translate[framework]
+          else
+            frameworkName = "NA"
+          end
           classList << "#{className}"
           classType = "Cl"
           inClass = true
           
           str = k.post_match
+        else
+          str = m.post_match
         end
       elsif m[3]
         inClass = false

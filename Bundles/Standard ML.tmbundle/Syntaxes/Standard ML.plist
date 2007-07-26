@@ -292,6 +292,25 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
+									<string>keyword.other.ml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.type.datatype.ml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\b(and)\s+([a-zA-Z][a-zA-Z0-9'_]*)\s*(?==)</string>
+							<key>name</key>
+							<string>meta.spec.ml.datatype</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
 									<string>variable.other.dcon.ml</string>
 								</dict>
 								<key>2</key>
@@ -321,7 +340,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>\|\s*([a-zA-Z][a-zA-Z0-9'_]*)\s+(of)?</string>
+							<string>\|\s*([a-zA-Z][a-zA-Z0-9'_]*)(\s+of)?</string>
 							<key>name</key>
 							<string>meta.datatype.rule.other.ml</string>
 						</dict>

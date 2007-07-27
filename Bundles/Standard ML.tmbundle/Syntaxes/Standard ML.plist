@@ -265,7 +265,26 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(eqtype|type)\s+('[a-zA-Z][a-zA-Z0-9]*\s+)?([a-zA-Z][a-zA-Z0-9'_]*)</string>
+					<string>\b(eqtype)\s+([a-zA-Z][a-zA-Z0-9'_]*)</string>
+					<key>name</key>
+					<string>meta.spec.ml.eqtype</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.type.abbrev.ml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(type)\s+('[a-zA-Z][a-zA-Z0-9]*\s+)?([a-zA-Z][a-zA-Z0-9'_]*)</string>
 					<key>name</key>
 					<string>meta.spec.ml.type</string>
 				</dict>

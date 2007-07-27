@@ -578,7 +578,7 @@
 					<key>applyEndPatternLast</key>
 					<integer>1</integer>
 					<key>begin</key>
-					<string>(?=&lt;\?(?i:php|=)?(?!.*\?&gt;))</string>
+					<string>(^\s*)?(?=&lt;\?(?i:php|=)?(?!.*\?&gt;))</string>
 					<key>end</key>
 					<string>(?&lt;=\?&gt;)(?:\s*$\n)?</string>
 					<key>name</key>
@@ -597,7 +597,7 @@
 					<key>begin</key>
 					<string>(?=&lt;\?(?i:php|=)?)</string>
 					<key>end</key>
-					<string>(?&lt;=\?&gt;)(?:\s*$\n)?</string>
+					<string>(?&lt;=\?&gt;)</string>
 					<key>name</key>
 					<string>source.php.embedded.line.html</string>
 					<key>patterns</key>

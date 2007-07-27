@@ -161,6 +161,7 @@ module TextMate
     end
 
     def invoke_interpreter(file, vars)
+      file="'#{file}'"
       require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
       # run interpreter using file and requested arguments
       filepath = e_sh(ENV['TM_FILEPATH'] || '/dev/null')

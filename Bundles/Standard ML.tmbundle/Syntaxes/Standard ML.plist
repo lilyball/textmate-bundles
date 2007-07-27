@@ -258,7 +258,7 @@
 							<key>name</key>
 							<string>keyword.other.ml</string>
 						</dict>
-						<key>3</key>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.type.abbrev.ml</string>
@@ -277,14 +277,18 @@
 							<key>name</key>
 							<string>keyword.other.ml</string>
 						</dict>
-						<key>3</key>
+						<key>6</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.type.abbrev.ml</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(type)\s+('[a-zA-Z][a-zA-Z0-9]*\s+)?([a-zA-Z][a-zA-Z0-9'_]*)</string>
+					<string>(?x)\b(type)
+					(\s+('[a-zA-Z][a-zA-Z0-9'_]*)|
+					(\(\s*'[a-zA-Z][a-zA-Z0-9'_]*
+					    (\s*,\s*'[a-zA-Z][a-zA-Z0-9'_]*\s*)*\)))?
+					        \s+([a-zA-Z][a-zA-Z0-9'_]*)</string>
 					<key>name</key>
 					<string>meta.spec.ml.type</string>
 				</dict>
@@ -315,7 +319,9 @@
 				<dict>
 					<key>begin</key>
 					<string>(?x)\b(datatype)
-					(\s+('[a-zA-Z][a-zA-Z0-9'_]*))?
+					(\s+('[a-zA-Z][a-zA-Z0-9'_]*)|
+					(\(\s*'[a-zA-Z][a-zA-Z0-9'_]*
+					    (\s*,\s*'[a-zA-Z][a-zA-Z0-9'_]*\s*)*\)))?
 					        \s+([a-zA-Z][a-zA-Z0-9'_]*)\s*(?==)</string>
 					<key>captures</key>
 					<dict>
@@ -324,7 +330,7 @@
 							<key>name</key>
 							<string>keyword.other.ml</string>
 						</dict>
-						<key>4</key>
+						<key>6</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.type.datatype.ml</string>
@@ -357,7 +363,21 @@
 							<key>match</key>
 							<string>\b(and)\s+([a-zA-Z][a-zA-Z0-9'_]*)\s*(?==)</string>
 							<key>name</key>
-							<string>meta.spec.ml.datatype</string>
+							<string>meta.spec.datatype.ml</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.other.ml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\b(withtype)\b</string>
+							<key>name</key>
+							<string>meta.spec.datatype.withtype.ml</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -377,7 +397,7 @@
 							<string>(?x)
 							=\s*([a-zA-Z][a-zA-Z0-9'_]*)(\s+of)?</string>
 							<key>name</key>
-							<string>meta.datatype.rule.main.ml</string>
+							<string>meta.spec.datatype.rule.main.ml</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -396,7 +416,7 @@
 							<key>match</key>
 							<string>\|\s*([a-zA-Z][a-zA-Z0-9'_]*)(\s+of)?</string>
 							<key>name</key>
-							<string>meta.datatype.rule.other.ml</string>
+							<string>meta.spec.datatype.rule.other.ml</string>
 						</dict>
 					</array>
 				</dict>

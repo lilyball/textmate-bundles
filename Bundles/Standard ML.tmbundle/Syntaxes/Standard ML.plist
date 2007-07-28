@@ -29,7 +29,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#sigdecl</string>
+			<string>#basesig</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -188,6 +188,35 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>basesig</key>
+		<dict>
+			<key>begin</key>
+			<string>\b(sig)\b</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.delimiter.ml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.delimiter.ml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\b(end)\b</string>
+			<key>name</key>
+			<string>meta.module.sigdec.ml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#spec</string>
+				</dict>
+			</array>
+		</dict>
 		<key>comments</key>
 		<dict>
 			<key>patterns</key>
@@ -217,32 +246,27 @@
 				</dict>
 			</array>
 		</dict>
-		<key>sigdecl</key>
+		<key>sigexp</key>
 		<dict>
-			<key>begin</key>
-			<string>\b(sig)\b</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.delimiter.ml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.delimiter.ml</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\b(end)\b</string>
-			<key>name</key>
-			<string>meta.module.sigdec.ml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(where type)\b</string>
+					<key>name</key>
+					<string>meta.module.sigexp.ml</string>
+				</dict>
+				<dict>
 					<key>include</key>
-					<string>#spec</string>
+					<string>#basesig</string>
 				</dict>
 			</array>
 		</dict>
@@ -346,6 +370,10 @@
 					<string>meta.spec.ml.datatype</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
 						<dict>
 							<key>captures</key>
 							<dict>
@@ -463,7 +491,11 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#sigdecl</string>
+							<string>#comments</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#basesig</string>
 						</dict>
 						<dict>
 							<key>match</key>
@@ -471,9 +503,23 @@
 							<key>name</key>
 							<string>keyword.other.ml</string>
 						</dict>
+						<dict>
+							<key>match</key>
+							<string>\b(where)\b</string>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\b(and)\b</string>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
 					</array>
 				</dict>
 				<dict>
+					<key>begin</key>
+					<string>\b(include)\b</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -482,10 +528,21 @@
 							<string>keyword.other.ml</string>
 						</dict>
 					</dict>
-					<key>match</key>
-					<string>\b(include)\b</string>
+					<key>end</key>
+					<string>(?=val|type|eqtype|datatype|structure|include|exception)</string>
 					<key>name</key>
 					<string>meta.spec.ml.include</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#sigexp</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>include</key>

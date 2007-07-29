@@ -138,7 +138,7 @@ begin
   if $repo_url.nil? or $repo_url.empty?
     make_error_head( 'Warning' )
     puts "format_log_xml.rb was not able to reconstruct the repository url so you won't<br />"+
-         "be able to click on the links. (if you get this everytime it could be a bug)"
+         "be able to click on the links. The reason for this is likely that you have last checked out from this repository with a version of svn older than 1.3.0. Please update your version of svn AND run 'svn up'."
     make_error_foot()
     $repo_url = ''
   end

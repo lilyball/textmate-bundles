@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>93A1530E-919D-11D9-AE7A-00039369B986</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+
+require "#{ENV['TM_BUNDLE_SUPPORT']}/objc_completion"
+
+def stripComments(line)
+  line.gsub(/((['"])(?:\\.|.)*?\2)|\/\*.*?\*\/|\/\/[^\n\r]*/m) do |s| 
+    if $1
+      s
+    else
+      ' ' * s.length()
+    end
+  end
+end
+
+class String
+  def index_of_nth_occurrence_of(n, ch)
+    self.unpack("U*").each_with_index do |e, i|
+      return i if e == ch &amp;&amp; (n -= 1) == 0
+    end
+    return -1
+  end
+end
+
+def caret_position(line)
+  tmp = ENV['TM_LINE_NUMBER'].to_i - ENV['TM_INPUT_START_LINE'].to_i
+  if tmp &gt; 0
+    caret_placement = line.index_of_nth_occurrence_of(tmp,?\n) + ENV['TM_LINE_INDEX'].to_i
+  else
+    caret_placement =ENV['TM_LINE_INDEX'].to_i-ENV['TM_INPUT_START_LINE_INDEX'].to_i - 1
+  end
+end
+
+
+
+class FScriptCocoaCompletion &lt; ObjCMethodCompletion
+  def initialize(line, caret_position)
+    @line = line
+  end
+
+  def print
+    line = @line
+    if k = line.match(/[a-zA-Z_0-1\'\]\)\}]\s+([a-zA-Z_][a-zA-Z_0-9]*)$/)
+      candidates = candidates_or_exit( k[1] + "[[:alpha:]]", nil, :methods)
+      res =pop_up(candidates, k[1])
+    else
+      res = ""
+    end
+  end
+end
+
+line = ENV['TM_CURRENT_LINE']
+i = ENV['TM_LINE_INDEX'].to_i - 1
+TextMate.exit_discard if i == -1
+line = line[0..i]
+caret_placement = caret_position(line)
+res = FScriptCocoaCompletion.new(stripComments(line) , caret_placement).print
+  os = 0
+print res
+</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>F-Script Completion</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.fscript</string>
+	<key>uuid</key>
+	<string>72B7DE39-A1F2-4D0E-96EF-72DF2DAF3ECA</string>
+</dict>
+</plist>

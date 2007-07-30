@@ -33,13 +33,13 @@
 			<key>argument</key>
 			<dict>
 				<key>action</key>
-				<string>count</string>
+				<string>replaceAll</string>
 				<key>findInProjectIgnoreCase</key>
 				<true/>
 				<key>findInProjectRegularExpression</key>
 				<false/>
 				<key>findString</key>
-				<string>(?m)\s*}\s*</string>
+				<string>(?m)\s*}[ \t]*\n?</string>
 				<key>ignoreCase</key>
 				<true/>
 				<key>regularExpression</key>
@@ -64,7 +64,7 @@
 				<key>findInProjectRegularExpression</key>
 				<false/>
 				<key>findString</key>
-				<string>(?m)\s*}\s*</string>
+				<string>(?m)\s*{[ \t]*</string>
 				<key>ignoreCase</key>
 				<true/>
 				<key>regularExpression</key>
@@ -72,7 +72,7 @@
 				<key>replaceAllScope</key>
 				<string>selection</string>
 				<key>replaceString</key>
-				<string>\n}\n</string>
+				<string> {</string>
 				<key>wrapAround</key>
 				<true/>
 			</dict>

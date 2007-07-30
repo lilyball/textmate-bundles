@@ -48,11 +48,61 @@ class FScriptCocoaCompletion &lt; ObjCMethodCompletion
   def initialize(line, caret_position)
     @line = line
   end
-
-  def print
+  
+  def match_iter(rgxp,str)
+    offset = 0
+    while m = str.match(rgxp)
+      yield [m, m.begin(0) + offset, m[0].length]
+      str = m.post_match
+      offset += m.end(0)
+    end
+  end
+  
+  def methodNames(line )
+    start = [0]
+    
+    #Count [
+    pat = /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|([\[\{\(])|([\]\)\]])|[a-zA-Z][a-zA-Z0-9]*:/
+    match_iter(pat , line) do |mat, beg, len|
+#puts mat[1].inspect + "&lt;&lt;&lt;"
+      if mat[1]
+        start &lt;&lt; beg
+      elsif mat[2]
+        start.pop
+      end
+    end
+    
+    unless start[-1] == 0
+      start = start[-1] + 1 
+    else
+      start = 0
+    end
+    
+    list = ""
+    up = 0
+    match_iter(pat , line[start..-1]) do |mat, beg, len|
+      if mat[1]
+        up +=1
+      elsif mat[2] &amp;&amp; up &gt; 0
+        up -=1
+      elsif up == 0 &amp;&amp; mat[0].match(/^\w/)
+        list &lt;&lt; mat[0]
+      end
+    end
+    return list
+  end
+  
+  def snippet_generator(cand, start, call)
+    start = cand.match(/#{@mn}/)[0].length
+    super
+  end
+  
+  def print 
     line = @line
     if k = line.match(/[a-zA-Z_0-1\'\]\)\}]\s+([a-zA-Z_][a-zA-Z_0-9]*)$/)
-      candidates = candidates_or_exit( k[1] + "[[:alpha:]]", nil, :methods)
+      mn = methodNames(line)
+      @mn = "(#{mn})?" + k[1] unless mn == ""
+      candidates = candidates_or_exit( @mn + "[[:alpha:]]", nil, :methods)
       res =pop_up(candidates, k[1])
     else
       res = ""

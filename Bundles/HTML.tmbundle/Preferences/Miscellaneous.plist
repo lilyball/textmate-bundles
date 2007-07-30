@@ -44,7 +44,7 @@
 		<string>(?x)
 		&lt;(?!\?|area|base|br|col|frame|hr|html|img|input|link|meta|param|[^&gt;]*/&gt;)
 		  ([A-Za-z0-9]+)(?=\s|&gt;)\b[^&gt;]*&gt;(?!.*&lt;/\1&gt;)
-		|&lt;!--(?!.*--&gt;)
+		|&lt;!--(?!.*--\s*&gt;)(?!&gt;)
 		|&lt;\?php.+?\b(if|else(?:if)?|for(?:each)?|while)\b.*:(?!.*end\1)
 		|\{[^}"']*$
 		</string>

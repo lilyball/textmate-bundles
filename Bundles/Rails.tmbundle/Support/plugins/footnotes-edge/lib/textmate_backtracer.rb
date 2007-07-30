@@ -22,7 +22,7 @@ end
 module ActionView
   class TemplateError < ActionViewError
     def line_number_link
-      file = File.expand_path(@file_name)
+      file = File.expand_path(@file_path)
       "<a href='txmt://open?url=file://#{file}&line=#{line_number}'>#{line_number}</a>"
     end
   end

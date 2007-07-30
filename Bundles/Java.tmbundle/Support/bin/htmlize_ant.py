@@ -33,6 +33,8 @@ while line:
 
     match = matcher.search(line)
 
+    print "<pre>"
+
     if not match:
         print line
     else:
@@ -60,7 +62,7 @@ while line:
         ),
         print line[match.end():]
 
-    print "<br />"
+    print "</pre>"
     sys.stdout.flush()
     
     ## read next line

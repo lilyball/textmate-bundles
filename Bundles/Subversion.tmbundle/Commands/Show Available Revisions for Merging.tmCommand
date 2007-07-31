@@ -11,22 +11,24 @@ require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either
 
 require_cmd "${TM_SVNMERGE:=svnmerge}" "If you have installed svnmerge, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVNMERGE&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
+workpath="$TM_SELECTED_FILE"
+if [[ ! -d "$workpath" ]]; then
+	pre &lt;&lt;&lt; "Please select a folder in the project drawer."
+	exit
+fi
 
 FORMAT_LOG="${TM_BUNDLE_SUPPORT}/format_log.rb"
 
-workpath="$TM_SELECTED_FILE"
-
 # svnmerge calls stty if COLUMNS is not set. Apparently Python has no is_tty? equivalent.
-COLUMNS=80
-export COLUMNS
+export COLUMNS=80
 
 cd "$workpath"
 
 # check for no or multiple HEADs
 integratedRevs=`svn propget svnmerge-integrated "$workpath"`
 if [[ -z "$integratedRevs" ]]; then
-	pre "Merge tracking has not been initialized for '$workpath'"
-	exit_discard
+	pre &lt;&lt;&lt; "Merge tracking has not been initialized for '$workpath'"
+	exit
 fi
 
 theHead=`osascript &lt;&lt;END

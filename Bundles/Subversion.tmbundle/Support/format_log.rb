@@ -12,10 +12,11 @@ $window_title	= 'Log'
 
 # we depend in this things
 require $bundle+'/svn_helper.rb'
+require $support+'/lib/escape.rb'
 require $support+'/lib/shelltokenize.rb'
 require $support+'/lib/textmate.rb'
+require $support+'/lib/web_preview.rb' 
 include SVNHelper
-
 
 # check for alternative titles
 ARGV.each do |arg|
@@ -32,7 +33,7 @@ begin
    
    # run svn to resolve a $repo_url for the directory we just found out, this
    # is the base url of all the files that pop up in the log.
-   $repo_url = `"${TM_SVN:=svn}" info #{working_copy.quote_filename_for_shell} 2>&1 | grep 'Repository Root:' | cut -b18- `.chop
+   $repo_url = `"${TM_SVN:=svn}" info #{e_sh working_copy} 2>&1 | grep 'Repository Root:' | cut -b18- `.chop
    
    
    # external (not changing) vars
@@ -69,11 +70,13 @@ begin
    state = :skipped_files
    
    
-   make_head( 'Subversion ' + $window_title,
-              [ $bundle+'/Stylesheets/svn_style.css',
-                $bundle+'/Stylesheets/svn_log_style.css'],
-              "<script type=\"text/javascript\">\n"+
-                 File.open($bundle+'/svn_log_helper.js', 'r').readlines.join+'</script>' )
+	 html_header($window_title, "Subversion", <<-HTML)
+		<style type="text/css">
+			@import 'file://#{$bundle}/Stylesheets/svn_style.css';
+			@import 'file://#{$bundle}/Stylesheets/svn_log_style.css';
+		</style>
+		<script src='file://#{$bundle}/svn_log_helper.js' type='text/javascript' charset='utf-8'></script>
+HTML
    
    # this should not happen but could :>
    if $repo_url.nil? or $repo_url.empty?
@@ -138,7 +141,7 @@ begin
                
                puts '<tr>  <th>Revision:</th>  <td>'+ $1 + '</td> </tr>'
                puts '<tr>  <th>Author:</th>    <td>'+ htmlize( $2 ) + '</td> </tr>'
-               puts '<tr>  <th>Date:</th>      <td>'+ htmlize( formated_date( $3 ), false ) + '</td></tr>'
+               puts '<tr>  <th>Date:</th>      <td>'+ htmlize( formated_date( $3 ) ) + '</td></tr>'
                puts '<tr>  <th>Changed Files:</th><td>'
                show_switch_next_time = true
                
@@ -200,7 +203,7 @@ begin
                   full_url_escaped = full_url.gsub(/[^a-zA-Z0-9_:.\/@+]/) { |m| sprintf("%%%02X", m[0] ) }
                   
                   filename = file.gsub(%r(.*/(.*?)$), '\1')
-                  filename_escaped = filename.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')
+                  filename_escaped = e_sh(filename).gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')
                   
                   
                   print '  <li class="'+path[0].to_s+'"><a href="#" onClick="javascript:export_file(' + "'#{$svn_cmd}', '#{full_url_escaped}', "
@@ -259,5 +262,5 @@ rescue LogLimitReachedException
 rescue => e
    handle_default_exceptions( e )
 ensure
-   make_foot()
+   # FIXME call make_footer
 end

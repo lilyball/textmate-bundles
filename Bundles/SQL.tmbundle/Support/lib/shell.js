@@ -1,6 +1,6 @@
 // Escape a string for passing to the shell
 function shell_escape(arg) {
-    arg = arg.replace(/(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])/g, '\\')
+    arg = arg.replace(/(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF])/g, '\\')
     return arg;
 }
 

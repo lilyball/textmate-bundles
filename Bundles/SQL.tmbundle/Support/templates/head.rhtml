@@ -45,8 +45,6 @@ function doSearch(database, table, fields) {
                     " --database=" + shell_escape(database) +
                     " --table=" + shell_escape(table);
     cmd = TextMate.system(commandString, function(cmd){
-        TextMate.log(cmd.outputString);
-        TextMate.log(cmd.errorString);
         updateResult(cmd.outputString);
     });
     cmd.write(values.toJSONString());

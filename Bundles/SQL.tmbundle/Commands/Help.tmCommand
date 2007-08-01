@@ -28,6 +28,8 @@ You must provide at least a username and a hostname (note that if you wish to co
 
 You can store multiple connections – use the ‘+’ button to add another connection. Whichever profile is selected when you close the dialog will be used when connecting.
 
+Alternatively you can set `TM_SQL_CONNECTION` to the title of a connection and it will take precedence. This is useful for setting connections on a per-project basis.
+
 # Execute Line / Selection as Query
 
 The _Execute Line / Selection as Query_ command takes the selected text or current line and submits it as a query to either MySQL or PostgreSQL.

@@ -104,7 +104,7 @@ def print_data(query = nil)
     @title = "Invalid query"
 
     if defined?(Mysql::Error) and e.is_a? Mysql::Error
-      @message = escape(smarty(e.message.gsub(/^#\d+/, '')))
+      @message = escape(smarty(e.message))
     elsif e.is_a? RuntimeError # used by Postgresql connector
       # This is my best guess at decyphering the error messages returned by Postgresql
       # I've added the rescue as a fallback

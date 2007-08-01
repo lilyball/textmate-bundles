@@ -514,11 +514,15 @@ class Mysql
     a = @net.read
     if a[0] == 255 then
       if a.length > 3 then
-	@errno = a[1]+a[2]*256
-	@error = a[3 .. -1]
+        # With server version 4.1 an extra 5-byte field (sqlstate marker) is returned
+        # This is present if the 4th byte is a #
+        # reference http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol#Error_Packet
+        @errno    = a[1]+a[2]*256
+        msg_start = a[3] == ?# ? 9 : 3
+        @error    = a[msg_start .. -1]
       else
-	@errno = Error::CR_UNKNOWN_ERROR
-	@error = Error::err @errno
+        @errno = Error::CR_UNKNOWN_ERROR
+        @error = Error::err @errno
       end
       raise Error::new(@errno, @error)
     end

@@ -9,7 +9,8 @@ function shell_escape(arg) {
 function shell_join_long_args(args) {
     commands = [];
     for (arg in args) {
-        commands.push('--' + arg + "=" + args[arg]);
+        if (typeof args[arg] != 'function')
+            commands.push('--' + arg + "=" + args[arg]);
     }
     return commands;
 }
@@ -32,10 +33,12 @@ function shell_run() {
         arg = args[key];
         if (typeof(arg) == 'object') {
             for (child_arg in arg) {
-                commands.push(shell_escape(arg[child_arg]));
+                if (typeof arg[child_arg] != 'function')
+                    commands.push(shell_escape(arg[child_arg]));
             }
         } else {
-            commands.push(shell_escape(arg));
+            if (typeof arg != 'function')
+                commands.push(shell_escape(arg));
         }
     }
   

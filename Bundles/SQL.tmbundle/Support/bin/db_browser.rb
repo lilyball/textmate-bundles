@@ -4,6 +4,7 @@ require 'optparse'
 require 'ostruct'
 require 'erb'
 require 'iconv'
+require ENV['TM_SUPPORT_PATH'] + '/lib/json'
 require File.dirname(__FILE__) + '/db_browser_lib'
 require 'cgi'
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview" if ENV["TM_SUPPORT_PATH"]
@@ -37,7 +38,7 @@ begin
     opts.on("--rows rows", OptionParser::DecimalInteger, "Set page size for query output") { |rows| @options.page_size = rows }
     opts.on("--offset offset", OptionParser::DecimalInteger, "Set offset") { |offset| @options.offset = offset }
 
-    opts.on('--mode=mode', ['home', 'frame', 'tables']) { |mode| @options.mode = mode }
+    opts.on('--mode=mode', ['home', 'frame', 'tables', 'search']) { |mode| @options.mode = mode }
     
     opts.on('--version', 'Print mysql server version and exit') { @options.mode = 'version' }
     opts.on_tail("-h", "--help", "Show this message") { puts opts; exit }
@@ -185,6 +186,16 @@ elsif @options.mode == 'home'
     end
     print render('main')
   end
+elsif @options.mode == 'search'
+  query = 'SELECT * FROM ' + @options.database.table
+  conditions = JSON.parse(STDIN.read)
+  unless conditions.empty?
+    query << ' WHERE '
+    conditions.each_pair do |field, value|
+      query << @connection.quote_field(field) + " = " + @connection.quote_value(value)
+    end
+  end
+  print print_data(query)
 elsif @options.query.to_s.size > 0
   print print_data(@options.query)
 elsif @options.database.table

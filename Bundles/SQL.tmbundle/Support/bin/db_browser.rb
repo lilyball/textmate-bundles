@@ -4,8 +4,8 @@ require 'optparse'
 require 'ostruct'
 require 'erb'
 require 'iconv'
-require ENV['TM_SUPPORT_PATH'] + '/lib/json'
 require File.dirname(__FILE__) + '/db_browser_lib'
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/json'
 require 'cgi'
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview" if ENV["TM_SUPPORT_PATH"]
 

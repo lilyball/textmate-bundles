@@ -1,5 +1,5 @@
 # Add the path to the bundled libs to be used if the native bindings aren't installed
-$: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
+$: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/' << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
 
 require 'ostruct'
 require ENV['TM_SUPPORT_PATH'] + '/lib/password'

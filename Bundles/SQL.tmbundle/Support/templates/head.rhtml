@@ -1,5 +1,5 @@
 <script src="file://<%= ENV['TM_BUNDLE_SUPPORT'] %>/lib/shell.js" type='text/javascript'> </script>
-<script src="file://<%= ENV['TM_SUPPORT_PATH'] %>/script/json.js" type='text/javascript'> </script>
+<script src="file://<%= ENV['TM_BUNDLE_SUPPORT'] %>/lib/json.js" type='text/javascript'> </script>
 <script>
 var image_path = "file:///<%= ENV['TM_SUPPORT_PATH'] %>/images/";
 
@@ -45,7 +45,7 @@ function doSearch(database, table, fields) {
                     " --database=" + shell_escape(database) +
                     " --table=" + shell_escape(table);
     cmd = TextMate.system(commandString, function(cmd){
-        // TextMate.log(cmd.outputString);
+        TextMate.log(cmd.outputString);
         TextMate.log(cmd.errorString);
         updateResult(cmd.outputString);
     });

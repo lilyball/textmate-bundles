@@ -1,0 +1,42 @@
+<%
+  output_file = @build_path + @config['swf']
+  if @size_is_percentage
+    @config['width'] += "%"
+    @config['height'] += "%"
+  end
+%><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title><%= @config['app'] %></title>
+  </head>
+  <body>
+    <h1><%= @config['app'] %></h1>
+    <object
+      classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+      codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=<%= @config['version'] %>,0,0,0"
+      width="<%= @config['width'] %>"
+      height="<%= @config['height'] %>"
+      id="myApplication"
+      align="middle">
+
+      <param name="allowScriptAccess" value="always">
+      <param name="allowFullScreen" value="true">
+      <param name="movie" value="<%= output_file %>">
+      <param name="quality" value="high">
+      <param name="bgcolor" value="#<%= @config['bgcolor'] %>">
+      <embed
+        src="<%= output_file %>"
+        quality="high"
+        bgcolor="#<%= @config['bgcolor'] %>"
+        width="<%= @config['width'] %>"
+        height="<%= @config['height'] %>"
+        name="myApplication"
+        align="middle"
+        allowScriptAccess="always"
+        allowFullScreen="true"
+        type="application/x-shockwave-flash"
+        pluginspage="http://www.macromedia.com/go/getflashplayer" />
+
+    </object>
+  </body>
+</html>

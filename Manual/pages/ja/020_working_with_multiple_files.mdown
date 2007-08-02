@@ -9,16 +9,11 @@
 
 ![Project Window](project_window.png)
 
-
 ファイルを（プロジェクト）ドロワにドラッグするか、（ギアのアイコンがついた）プロジェクドロワアクションメニューから、“Add Existing Files…”を使うことによってファイルを追加することが可能です。
-
 
 プロジェクトを作成する別の方法は、複数のファイルを直接（例えば、Dockにある）TextMateアプリケーションアイコンにドラッグすることです。これは、これらのファイルからなる新しいブロジェクとを作成する近道です。
 
-
 もうひとつのたいしたことのない詳細は、このようにプロジェクトを作成すると、プロジェクトを閉じるときに、プロジェクトを保存したいかどうかを尋ねられないということです。
-
-The advantage of saving a project is to maintain state (e.g. which files were open) and to be able to quickly re-open a particular set of files. If you leave a (saved) project open when you quit TextMate, it will automatically re-open that project the next time you launch TextMate.
 
 プロジェクトを保存すること利点は、（例えばどのファイルが開いていたかという）状態を保全でき、すぐに特定のファイル群を開くことができることにあります。もし、TextMateを修了するときに（保存された）プロジェクトを開いたままにしておくと、そのプロジェクトは次にTextMateを起動したときに自動的に開きます。
 
@@ -26,81 +21,100 @@ The advantage of saving a project is to maintain state (e.g. which files were op
 また[ターミナルからプロジェクトを作る][TerminalUsage]ことも可能です。たとえば、`mate`シェルコマンドをつかって。
 
 
-### Auto-Updating Projects
+### 自動的にアップデートするプロジェクト
 
-When you want to have your project mimic the files and folders on disk, you can drag a folder either onto the TextMate application icon, or into the project drawer.
+プロジェクトがディスクにあるファイルとフォルダーを模倣するためには、フォルダーをTextMateのアプリケーションアイコンかプロジェクトドロワにドラッグすることもできます。
 
-TextMate will then create a _folder reference_ where it automatically updates the contents of the folder when it changes on disk.
+
+TextMateはディスクでの変化にあわせてフォルダの中身を自動的にアップデートする、_フォルダレフェレンス　(folder reference)_を作ります。
 
 ![Project Window With Tabs](project_window_with_tabs.png)
 
-Currently updating is done when TextMate regains focus and can be slow for some network mounted disks, in which case you may want to settle for only adding individual files to the project (which can be grouped and re-ordered manually to mimic the structure on disk).
 
-_The refresh delay for network mounted disks will be addressed in a future release._
+現在のところ、アップデートはTextMateにフォーカスが戻ったときにされ、ネットワーク上のマウントされたディスクでは遅いかもしれません。その場合は、プロジェクトに追加したいファイルのみを追加し、解決した方がいいかもしれません。（追加されたファイルはディスクでの構造をまねるために手動でグループ化し並び替えることもできます。）
 
-### Filtering Unwanted Files
+_この、ネットワーク上のマウントされたディスクでの更新の遅れについては、将来のリリースで解決される予定です。_
 
-When using folder references, you may want to have certain files or folders excluded from the project. This can be done by changing the file and folder patterns found in Preferences &#x2192; Advanced &#x2192; Folder References.
+### 必要ないファイルをフィルタリングする
+
+
+フォルダレフェレンスを使っているとき、あなたはある個別のファイルやフォルダをプロジェクトから除外したいとおもうかもしれません。これは、Preferences &#x2192; Advanced &#x2192; Folder Referencesの中にあるファイルとフォルダのパタンを変えることによって可能です。
 
 ![Folder Reference Patterns](folder_reference_patterns.png)
 
-These are regular expressions which are matched against the full path of each file and folder. If the pattern does match the item, it is included, otherwise it is excluded. To reverse that, so that items which match are excluded from the project, prefix the pattern with an exclamation point (`!`).
 
-The patterns are only used when creating new folder references. For existing folder references one can select the folder reference in the project drawer and use the info button (a circled letter I) in the project drawer to edit the patterns.
+それぞれのファイルとフォルダの完全なパスにマッチする正規表現があります。もしそのパタンがアイテムとマッチしたら、そのアイテムは含まれます。そうでなければ、除外されます。これを反対にするためには、つまりマッチしたものをプロジェクトから除外するには、感嘆符(`!`)をパタンの前につけます。
 
-_The complexity of this system will be addressed in a future release._
+パタンは新しいフォルダを作るときだけ使われます。現在のフォルダレファレンスには、プロジェクトドロワの中のフォルダレフェレンスを使うことができ、プロジェクトドロワの(文字を丸で囲んだIという）インフォボタンを使い、パタンを編集することができます。
 
-### Text and Binary Files
+_このシステムの複雑さは将来のバージョンで解決される予定です。_
 
-You can either single or double click files in the project drawer. If you single click them and the file type is text, they open as a file tab in the main window.
+### テキストファイルとバイナリファイル
+
+
+プロジェクトドロワのファイルはシングルクリックもしくはダブルクリックすることができます。もしシングルクリックをして、そのファイルのタイプがテキストであれば、そのファイルはメインウインドウのタブで開きます。
 
 ![Tab Bar](tab_bar.png)
 
-If you double click a file, it will open using the default application. Note that folders can also be double clicked e.g. Interface Builder’s nib files will appear as folders, but can still be double clicked (and will then open in Interface Builder).
 
-As mentioned, only text files will open in the main window when single clicked. The way TextMate determines if a file is text is by its extension - if the extension is unknown it scans the first 8 KB of the file to see if it is valid UTF-8 (which is a superset of ASCII).
+もしファイルをダブルクリックすると、そのファイルはデフォルトのアプリケーションで開きます。フォルダーもダブルクリックされることがができることを覚えておいてください。例えばInterface Builderのnibファイルはフォルダとして表示され、ダブルクリックされることができ、（そして、Interface Builderで開きます。）
 
-If TextMate does not open your file and it does have an extension you can bring up the action menu for that file and pick the last item, which should read: _Treat Files With “.«ext»” Extension as Text_.
 
-### Positioning the Project Drawer
 
-The project drawer will by default open on the left side of the project window. If there is no room for it to open there, it will use the right side instead. This setting is sticky so will remember which side the project drawer was last opened on.
+前述のように、テキストファイルのみがメインウインドウで、シングルクリックされたときに開かれます。TextMateが、ファイルがテキストかどうかを判断する方法は、ファイルの拡張子によってです。 - もし拡張子が不明の場合ファイルの最初の8 KBを読み、それが有効な(ASCIIの上位集合である)UTF-8であるかどうかをチェックします。
+
+
+もしTextMateがあなたのファイルを開かず、そのファイルがアクションメニューを表示させる拡張子を持っている場合、その最後に以下のように表示されるはずです。_Treat Files With “.«ext»” Extension as Text (".«ext»"拡張子をもつファイルをテキストとして扱う)_
+
+### プロジェクトドロワのポジショニング
+
+
+デフォルトでは、プロジェクトドロワはプロジェクトウインドウの左側に開きます。もし左側に十分なスペースがない場合は、右側に開きます。この設定は固定されます。なので、どちら側でドロワが最後に開いたかを記憶します。
 
 ![Project Drawer](project_drawer.png)
 
-To move it back to the left side you need to close the drawer (View &#x2192; Hide Project Drawer) and then move the project window so that there is no longer room for the drawer on its right. When you then re-open the drawer, it will again appear on the left side and use that as the new default.
 
-The opposite can be done to force it to open on the right side.
+左側に戻すためには、いったんドロワを閉じ、(View &#x2192; Hide Project Drawer)、それから右側にスペースがないようにプロジェクトウインドウを移動させます。それから、ドロワを再度開きます。そうすればまた左側に開きそれが新しいデフォルトとなります。
+
+右側に強制的に開きたいばあいはその反対を行ってください。
 
 
-## Find and Replace in Projects
 
-Using Edit &#x2192; Find &#x2192; Find in Project… (&#x21E7;&#x2318;F) will bring up the window shown below.
+## プロジェクト内での検索と置換
+
+
+Edit &#x2192; Find &#x2192; Find in Project… (&#x21E7;&#x2318;F) を使って下にあるようなウインドウを表示させることができます。
 
 ![Find In Project](find_in_project.png)
 
-From here it is possible to search all (text) files in the current project and do replacements. After pressing Find it is possible to either press Replace All, or select which matches should be replaced, in which case the Replace All button will change to Replace Selected.
+ここから現在のプロジェクトのなかのすべての（テキスト）ファイルを検索し置換することができます。Findを押した後、Replace All（全て置換）もしくはどのマッチが置換されるべきかを選択することができます。その場合には、Replace AllボタンはReplace Selectedに変わります。
 
-Currently it is not possible to limit the scope of the search to anything other than all text files in the full project. As a workaround, when you want to search only a subset of your project, you can select the files you want to search in the project drawer and drag the selection to the TextMate application icon to create a new scratch project. A find/replace can then be performed on that project, which can then be closed.
+現在のところ、プロジェクト全体の全てのテキストファイル以外の何かに検索の対象をしぼる事はできます。事前策としては、もしあなたがプロジェクトのサブセットだけを検索したい場合、あなたはプロジェクトドロワのなかのファイルを選択して、その選択をTextMateのアプリケーションアイコンにドラッグして、全く新しいプロジェクトを作ることができます。検索／置換はそのプロジェクトで実行され、そのあと閉じることができます。
 
-## Moving Between Files (With Grace)
 
-When working with projects there are a few ways to move between the open files.
+## 優雅にファイル間を移動
 
-The most straightforward way is by clicking on the file tab you need. This can also be done from the keyboard by pressing &#x2318;1-9, which will switch to file tab 1-9.
 
-You can also use &#x2325;&#x2318;&#x2190; and &#x2325;&#x2318;&#x2192; to select the file tab to the left or right of the current one.
+プロジェクトで作業をしているとき、開いているファイル間を移動する２、３の方法があります。
 
-It is possible to re-arrange the file tabs by using the mouse to drag-sort them (click and hold the mouse button on a tab and then drag it to the new location). This should make it possible to arrange them so that keyboard switching is more natural.
+もっとも簡単な方法はあなたが使うファイルのタブをクリックすることです。また、キーボードからは&#x2318;1から9を押すことで可能です。ファイルタブの１から９へスイッチできます。
 
-One more key is &#x2325;&#x2318;&#x2191; which cycles through text files with the same base name as the current file. This is mainly useful when working with languages which have an interface file (header) and implementation file (source).
+またあなたは、現在のタブの左か右のファイルのタブを選択するためには&#x2325;&#x2318;&#x2190; と &#x2325;&#x2318;&#x2192;を使うことができます。
 
-When you want to move to a file which is not open you can use the Go to File… action in the Navigation menu (bound to &#x2318;T). This opens a window like the one shown below.
+
+マウスを使ってファイルタブ並べ直すことが可能です。（タブの上でマウスボタンをクリックしホールドして、その後、新しい場所へドラッグします。）このようにして、キーボードでのスイッチングがより自然になるように、並び替えることができます。
+
+
+もう一つのキーが&#x2325;&#x2318;&#x2191です。現在のファイルと同じベースネームをもったファイルのテキストファイルへの移動を繰り返します。これは、主にインターフェイスファイル（ヘッダ）と実装ファイル（ソース）をもつ言語での作業で役に立ちます。
+
+もし開いていないファイルへ移動したい場合、NavigationメニューにあるGo to File…(&#x2318;T)アクションを使うことができます。これは、下のようなウインドウを開きます。
 
 ![Go To File](go_to_file.png)
 
-This window lists all text files in the project sorted by last use, which means pressing return will open (or go to) the last file you worked on. So using it this way makes for easy switching to the most recently used file.
 
-You can enter a filter string to narrow down the number of files shown. This filter string is matched against the filenames as an abbreviation and the files are sorted according to how well they match the given abbreviation. For example in the picture above the filter string is `otv` and TextMate determines that `OakTextView.h` is the best match for that (by placing it at the top).
+このウインドウは最後の使用に従って、プロジェクトの全てのテキストファイルのリストを表示します。つまり、リターンを押すとあなたが最後に使用したファイルへ移動します。このように使うと、最近使ったファイルへ簡単に移動できます。
 
-The file I want is `OakTextView.mm` which ranks as #2. But since I have already corrected it in the past, TextMate has learned that this is the match that should go together with the `otv` filter string, i.e. it is adaptive and learns from your usage patterns.
+
+あなたは表示されるファイルの数を少なくするためにフィルタ文字列を入力することができます。このフィルタ文字列は省略形としてファイルネームに対してマッチします。それでファイルは与えられた省略形に対してどのくらいよくマッチするかによって並べ替えられます。例えば、上の画像ではフィルタ文字列は`otv`です。それでTextMateは`OakTextView.h`がベスとマッチだと（一番上に表示することによって）決めています。
+
+私が必要としているファイルは#2にランクしている`OakTextView.mm`です。しかし、私はすでに過去に修正したので、TextMateはこれが`otv`というフィルタ文字列とうまくいくマッチだと学びます。つまり、これは適応／順応的であり、あなたの使い方のパタンから学びます。

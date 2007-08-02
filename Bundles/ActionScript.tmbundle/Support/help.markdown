@@ -4,14 +4,15 @@ The "Build With MTASC" command will compile your ActionScript project without th
 
 ## Setup
 
-In order to build an ActionScript project, you'll need two things:
+In order to build an ActionScript project, you'll need:
 
-* A TextMate project (if you run the command from a single .as file you'll get an error).
-* A 'mtasc.yaml' file in your project root, where you tell MTASC how it should compile your project.
+* At least one .as file.
+* Optionally, a 'mtasc.yaml' file in your project root, where you tell MTASC how it should compile your project (the command is smart enough to use some sane defaults if you don't have it).
 
 The **"Install MTASC Support Files"** command will create a generic 'mtasc.yaml' in your project and open it for you to edit. The file is self-commented, so setting up your environment should be too hard.
 
 An MTASC Universal Binary is included with the bundle, but you can use your own version (HAMTASC, for example) by editing the 'mtasc.yaml' file.
+
 
 ## Compiling with MTASC
 
@@ -25,24 +26,40 @@ If you don't have a SWF file, MTASC will create a new one for you.
 
 ## Debugging
 
-Currently, the ActionScript bundle supports two debugging systems (three, if you count "No Debug" as a debugging system :)
+Currently, the ActionScript bundle supports the following debugging methods:
 
-* **Debugging using XTrace.**
-  XTrace is a graphical tool that accepts HTTP connections from any application. The bundle includes an ActionScript library you can use to send debugging information to XTrace.
+### Debugging using XTrace
 
-  To enable XTrace, add the line `trace: xtrace` to mtasc.yaml
+XTrace is a graphical tool that accepts HTTP connections from any application. The bundle includes an ActionScript library you can use to send debugging information to XTrace.
 
-  This will tell MTASC to include the required libraries and use the `com.mab.util.debug.trace()` function for debugging.
+To enable XTrace, add the line `trace: xtrace` to mtasc.yaml
 
-  You don't need to change your code for XTrace to work. Just use a simple `trace()` and the output will show up in XTrace.
+This will tell MTASC to include the required libraries and use the `com.mab.util.debug.trace()` function for debugging.
 
-  Everytime you compile the movie, TextMate will open XTrace if it's not open. The first time you open XTrace, though, it may not register log messages if the movie starts sending debug information before XTrace is fully loaded. I'm working on fixing this :)
+You don't need to change your code for XTrace to work. Just use a simple `trace()` and the output will show up in XTrace.
 
-  If you want to debug using XTrace, you need to adjust your security settings to allow local scripts to make HTTP connections (check [Adobe TechNote 4c093f20](http://www.adobe.com/go/4c093f20) for more information on why and how to do this).
-* **Debugging using Console.app**
-  See http://bomberstudios.com/ for information.
+Everytime you compile the movie, TextMate will open XTrace if it's not open. The first time you open XTrace, though, it may not register log messages if the movie starts sending debug information before XTrace is fully loaded. I'm working on fixing this :)
 
-# Where to go for help
+If you want to debug using XTrace, you need to adjust your security settings to allow local scripts to make HTTP connections (check [Adobe TechNote 4c093f20](http://www.adobe.com/go/4c093f20) for more information on why and how to do this).
+
+
+### Debugging using Console.app
+Check <http://bomberstudios.com/2007/03/14/how-to-use-consoleapp-for-flash-debugging/> for information, as the process is quite convoluted :)
+
+
+### Debugging with Terminal.app
+If want to use the `tail` command to debug your Flash movies, you can add this line to your `mtasc.yaml` file:
+
+    trace: terminal
+
+When you compile your movie, TextMate will open Terminal.app and run this command:
+
+    tail -f $HOME/Library/Preferences/Macromedia/Flash Player/Logs/flashlog.txt
+
+Make sure you read the post on the previous section.
+
+
+## Where to go for help
 
 The maintainer of the ActionScript bundle (Ale Muñoz) follows the [TextMate List](http://lists.macromates.com/mailman/listinfo/textmate), and will be happy to help you out with anything ActionScript-related.
 
@@ -50,7 +67,7 @@ Feel free to send your suggestions and code patches to ale AT bomberstudios DOT 
 
 Another good place to ask is the [MTASC Mailing List](http://lists.motion-twin.com/mailman/listinfo/mtasc), where the maintainer of MTASC is pretty active.
 
-# Acknowledgments & Credits
+## Acknowledgments & Credits
 
 * [MTASC](http://www.mtasc.org/) is released under the GPL License.
 * [XTrace](http://developer.mabwebdesign.com/xtrace.html) is released under the GPL License.

@@ -24,7 +24,6 @@ if !@project_path || !File.exist?("#{@project_path}/mtasc.yaml")
   @project_path = File.dirname @file_path
 end
 
-
 # Utils
 @q = "\""
 
@@ -41,18 +40,18 @@ def get_config
   if !File.exists?("#{@project_path}/mtasc.yaml")
     # Default config...
     config = {
-        "app" => File.basename(@file_name),
-        "swf" => File.basename(@file_name,".as")+".swf",
-        "width" => 800,
-        "height" => 600,
-        "bgcolor" => "FFFFFF",
-        "player" => 8,
-        "fps" => 31,
-        "preview" => "textmate",
-        "trace" => "console",
-        "params" => " -mx -main ",
-        "mtasc_path" => "#{ENV['TM_BUNDLE_PATH']}/Support/bin/mtasc"
-      }
+      "app" => File.basename(@file_name),
+      "swf" => File.basename(@file_name,".as")+".swf",
+      "width" => 800,
+      "height" => 600,
+      "bgcolor" => "FFFFFF",
+      "player" => 8,
+      "fps" => 31,
+      "preview" => "textmate",
+      "trace" => "console",
+      "params" => " -mx -main ",
+      "mtasc_path" => "#{ENV['TM_BUNDLE_PATH']}/Support/bin/mtasc"
+    }
     return config
   else
     config = YAML.load(File.open("#{@project_path}/mtasc.yaml"))
@@ -93,22 +92,28 @@ def mtasc_compile
   end
 
   if config['trace']
-    if config['trace'] == "xtrace"
-      `open "$TM_BUNDLE_SUPPORT/bin/XTrace.app"`
-      cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/\" "
-      cmd += " -pack com/mab/util "
-      cmd += " -trace com.mab.util.debug.trace "
-    elsif config['trace'] == "console"
-      log_file_path = "#{ENV['HOME']}/Library/Preferences/Macromedia/Flash Player/Logs/"
-      if(!File.exist?(log_file_path))
-        Dir.mkdir(log_file_path)
-        File.new("#{log_file_path}/flashlog.txt",'w')
-      end
-      `open -a Console.app "#{log_file_path}/flashlog.txt"`
-    elsif config['trace'] == "no"
-      cmd += " -trace no "
-    else
-      cmd += " -trace #{config['trace']} "
+    case config['trace']
+      when "xtrace"
+        %x(open "$TM_BUNDLE_SUPPORT/bin/XTrace.app")
+        cmd += " -cp \"#{ENV['TM_BUNDLE_SUPPORT']}/lib/\" -pack com/mab/util -trace com.mab.util.debug.trace "
+      when "console"
+        log_file_path = "#{ENV['HOME']}/Library/Preferences/Macromedia/Flash Player/Logs/"
+        if(!File.exist?(log_file_path))
+          Dir.mkdir(log_file_path)
+          File.new("#{log_file_path}/flashlog.txt",'w')
+        end
+        %x(open -a Console.app "#{log_file_path}/flashlog.txt")
+      when "terminal"
+        log_file_path = "#{ENV['HOME']}/Library/Preferences/Macromedia/Flash Player/Logs/"
+        if(!File.exist?(log_file_path))
+          Dir.mkdir(log_file_path)
+          File.new("#{log_file_path}/flashlog.txt",'w')
+        end
+        %x(osascript "$TM_BUNDLE_SUPPORT/Tools/tail.applescript")
+      when "no"
+        cmd += " -trace no "
+      else
+        cmd += " -trace #{config['trace']} "
     end
   end
 

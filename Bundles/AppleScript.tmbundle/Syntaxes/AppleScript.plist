@@ -10,7 +10,9 @@
 	<key>foldingStartMarker</key>
 	<string>(?x)
 		^\s*
-		(tell \s+ (?! .* \bto\b) .*
+		(
+		 tell \s+ (?! .* \b(to)\b) .*
+		|tell\b.*?\bto\ tell \s+ (?! .* \b(to)\b) .*
 		|using \s+ terms \s+ from \s+ .*
 		|if\b .* \bthen\b
 		|repeat\b .*
@@ -997,6 +999,65 @@
 							<key>include</key>
 							<string>#standard-suite</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(tell)\s+(?=app(lication)?\b)(?=.*?to tell\s*(?!.*\bto\b))</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>tell ... to tell generic application</string>
+					<key>end</key>
+					<string>^\s*(end tell)</string>
+					<key>name</key>
+					<string>meta.tell-block.application.generic.applescript</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#standard-suite</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^\s*(tell)\s+.*?(to tell)\s*(?!.*\bto\b)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.applescript</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>generic tell ... to tell block</string>
+					<key>end</key>
+					<string>^\s*(end tell)</string>
+					<key>name</key>
+					<string>meta.tell-block.generic.applescript</string>
+					<key>patterns</key>
+					<array>
 						<dict>
 							<key>include</key>
 							<string>$self</string>

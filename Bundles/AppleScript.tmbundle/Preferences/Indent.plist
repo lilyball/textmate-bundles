@@ -15,7 +15,10 @@
 		<key>increaseIndentPattern</key>
 		<string>(?x)
 		^\s*
-		(tell \s+ (?! .* \b(to)\b) .*
+		(
+		 tell \s+ (?! .* \b(to)\b) .*
+		|tell\b.*?\bto\ tell \s+ (?! .* \b(to)\b) .*
+		|using\ terms\ from\b.*
 		|if\b .* \bthen\b
 		|else\b .*
 		|repeat\b .*

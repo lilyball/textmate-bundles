@@ -11,6 +11,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
 require "erb"
 require "pp"
 include ERB::Util
+require "#{ENV['TM_BUNDLE_SUPPORT']}/gtd_functions" 
 
 $myPath = ENV['TM_DIRECTORY'] 
 $tags = [] #user defined contexts
@@ -64,8 +65,7 @@ end
 # sorting happens
 todoList = ""
 $tags.each do |tag| 
-  context = tag[:regexp]
-  todoList += tag[:label] + "\n"  
+  context = tag[:regexp] 
   matches = 0 
   myFiles = Dir.entries($myPath)
   myFiles.each do |fileName|
@@ -82,23 +82,27 @@ $tags.each do |tag|
           else 
             ctask = re.match(line)
           end
-          if (ctask.pre_match == context) and (context != "+")
+          if (ctask.pre_match == context) and ((line[0..2] == "-  ") or (line[0..2] == "!  "))
             results = (fileName[0..-5] + ":" + lineno.to_s + ": " + ctask.post_match)
-            todoList += results
             matches += 1
+            if matches == 1
+              todoList += "\n" + tag[:label] + "\n" 
+            end
+            todoList += results
           end        
         end
       end
     end
   end
   if matches == 0
-    todoList += "none\n"
+    # todoList += "none\n"
   end
   todoList += "\n"
 end
    
 File.open($myPath + "/todoList.txt", "w") {|f|
   f &lt;&lt; todoList}
+
 puts "GeekTool Updated."
 </string>
 	<key>input</key>

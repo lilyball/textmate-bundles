@@ -2,7 +2,8 @@
 $: << ENV['TM_BUNDLE_SUPPORT'] + '/lib/' << ENV['TM_BUNDLE_SUPPORT'] + '/lib/connectors' if ENV['TM_BUNDLE_SUPPORT']
 
 require 'ostruct'
-require ENV['TM_SUPPORT_PATH'] + '/lib/password'
+require ENV['TM_SUPPORT_PATH'] + '/lib/osx/keychain'
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
 class ConnectorException < Exception; end;
 class MissingConfigurationException < ConnectorException; end;
@@ -211,43 +212,13 @@ end
 def get_connection_password(options)
   proto = options.server == 'postgresql' ? 'pgsq' : 'mysq'
 
-  rd, wr = IO.pipe
-  if pid = fork
-    wr.close
-    Process.waitpid(pid)
-  else
-    STDERR.reopen(wr)
-    STDOUT.reopen('/dev/null', 'r')
-    rd.close; wr.close
-    exec(['/usr/bin/security', TextMate.app_path + "/Contents/MacOS/TextMate"], 'find-internet-password', '-g', '-a', options.user, '-s', options.host, '-r', proto)
-  end
-
-  $1 if rd.gets =~ /^password: "(.*)"$/
+  OSX::Keychain::internet_password_for :account => options.user, :server => options.host, :protocol => proto
 end
 
 def store_connection_password(options, password)
   proto = @options.database.server == 'postgresql' ? 'pgsq' : 'mysq'
 
-  rd, wr = IO.pipe
-  if pid = fork
-    wr.close
-    Process.waitpid(pid)
-  else
-    STDERR.reopen(wr)
-    STDOUT.reopen('/dev/null', 'r')
-    rd.close; wr.close
-    exec(['/usr/bin/security', TextMate.app_path + "/Contents/MacOS/TextMate"], 'add-internet-password', '-a', options.user, '-s', options.host, '-r', proto, '-w', password)
-  end
-
-  if rd.gets =~ /already exists/
-    TextMate::UI.alert(:warning, "Unable to store password", <<-WARNING
-There is already a keychain entry for
-    #{options.user}@#{options.name} on #{options.host}
-You must either change the entry manually or delete it so that it can be stored.
-Both can be done with the Keychain Access application found in /Applications/Utilities
-WARNING
-)
-  end
+  OSX::Keychain::set_internet_password_for :account => options.user, :server => options.host, :protocol => proto, :password => password
 end
 
 def get_connection

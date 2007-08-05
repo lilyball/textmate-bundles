@@ -1,0 +1,79 @@
+# keychain
+
+Ciarán Walsh  
+2/8/2007
+
+The keychain extension allows fetching and storing/updating OS X keychain items. Currently only internet items are supported.
+
+## Usage
+
+All functionality resides under the OSX::Keychain module.
+The module itself has 2 methods, `internet_password_for` and `set_internet_password_for`, both of which take 1 argument: a hash of the keychain item data.
+
+The common arguments are:
+
+#### Required
+
+`:account` => string    
+	The account name.
+
+`:server` => string  
+	The server name.
+
+`:protocol` => string  
+	The protocol name. Note that this will be truncated to the first 4 characters.  
+
+#### Optional
+
+`:auth` => string   
+	The authentication type. Note that this will be truncated to the first 4 characters.  
+	Defaults to `AuthenticationType::Default`
+
+`:path` => string   
+	The location path.  
+	Defaults to an empty string.
+
+`:port` => integer  
+	The port number.  
+	Defaults to 0.
+
+
+### Methods
+
+`OSX::Keychain.internet_password_for` searches for a keychain item with the given parameters and returns the password if found, or nil if it does not exist. Other errors will be raised as an exception: if the item exists but the user denied access to it, a SecurityError will be raised.
+
+`OSX::Keychain.set_internet_password_for` sets the password for the keychain item with the provided information. It takes one extra parameter, `:password`, which specifies the password to set.
+
+### Constants
+
+Constants are included for standard authentication and protocol types. They are separated into 2 separate modules:
+
+`OSX::Keychain::AuthenticationType::`
+
+    NTLM
+    MSN
+    DPA
+    RPA
+    HTTPBasic
+    HTTPDigest
+    HTMLForm
+    Default
+
+`OSX::Keychain::ProtocolType::`
+
+    HTTPS                   FTP
+    HTTPProxy               FTPAccount
+    HTTPSProxy              HTTP
+    FTPProxy                IRC
+    SMB                     NNTP
+    RTSP                    POP3
+    RTSPProxy               SMTP
+    DAAP                    SOCKS
+    EPPC                    IMAP
+    IPP                     LDAP
+    NNTPS                   AppleTalk
+    LDAPS                   AFP
+    TelnetS                 Telnet
+    IMAPS                   SSH
+    IRCS                    FTPS
+    POP3S

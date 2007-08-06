@@ -219,7 +219,10 @@ class TextmateCodeCompletion
     while @choices.last =~ EMPTY_ROW
       @choices.delete_at(@choices.length-1)
     end
-    @choices.each_with_index { |e, i| @choices[i] = '--' if e =~ EMPTY_ROW }
+    @choices.each_with_index do |e, i|
+      # e.gsub!(@options[:characters],'\1') #if @options[:strip]
+      @choices[i] = '--' if e =~ EMPTY_ROW
+    end
     
     @choices = @choices.grep(/^#{Regexp.escape @choice_partial}/).uniq if @choice_partial #and @choice_partial != ''
   end
@@ -262,7 +265,7 @@ class TextmateCodeCompletion
     
     snippet = ''
     # snippet << '${101:'
-    snippet << snippetize_methods(text)
+    snippet << snippetize_quotes(snippetize_methods(text))
     # snippet << '}$100'
     snippet << '$0'
     snippet
@@ -270,10 +273,20 @@ class TextmateCodeCompletion
   
   def snippetize_methods(text)
     text = text.to_s
-    place = 0
+    @place = 0
     text.gsub!(/([\(,])([^\),]*)/) do |g|
       thing = $2
-      "#{$1}${#{place += 1}:#{snip(thing,true)}}"
+      "#{$1}${#{@place += 1}:#{snippetize_quotes(thing,true)}}"
+    end
+    text
+  end
+  def snippetize_quotes(text,escape=false)
+    text = text.to_s
+    text = snip(text,escape) if escape
+    text.gsub!(/(["'])(?!\$\{)(.*?)(\1)/) do |g|
+      thing = $2
+      thing1 = $3
+      "#{$1}${#{@place += 1}:#{snippetize_quotes(thing,!escape)}}#{thing1}"
     end
     text
   end

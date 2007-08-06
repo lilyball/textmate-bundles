@@ -74,9 +74,9 @@ There's other stuff too, but I got bored with the documentation, haha! take THAT
 # Eventual goals: 
 # 
 # Allow for objects as input with snippets as output
-# Currently, the choices are simple an Array of strings.
+# Currently, the choices are simply an Array of strings.
 # We will need to extend this eventually to support objects with values that are snippets.
-# So you'll select your choice based on the key, but the calue of the key/value pair is inserted
+# So you'll select your choice based on the key, but the value of the key/value pair is inserted
 # 
 # Speed improvements.
 # Maybe cache the plists in ram or something
@@ -84,7 +84,7 @@ There's other stuff too, but I got bored with the documentation, haha! take THAT
 # Line only input.
 # Currently we have to do some fancy footwork to insert the right thing in the right way 
 # since the input can either be a selection or the current line.
-# And if you're input is a selection, then the command only replaces the selectio, 
+# And if you're input is a selection, then the command only replaces the selection, 
 # so you have to make sure you don't reinsert the context and the choice_partial and stuff like that.
 # 
 # 
@@ -345,9 +345,15 @@ class TextmateCompletionsParser
   PARSERS = {}
   
   def initialize(filepath=nil, options={})
-    path = filepath || ENV['TM_FILEPATH']
-    return false unless path and File.exist?(path)
-    return false if File.directory?(path)
+    unless options[:debug] and filepath.is_a? String
+      path = filepath || ENV['TM_FILEPATH']
+      return false unless path and File.exist?(path)
+      return false if File.directory?(path)
+      
+      @raw = IO.read(path)
+    else
+      @raw = filepath
+    end
     
     @options = {}
     @options[:split] = "\n"
@@ -355,7 +361,7 @@ class TextmateCompletionsParser
     @options.merge!(options)
     @options.merge!(PARSERS[options[:scope]]) if options[:scope]
     
-    @raw = IO.read(path).split(@options[:split])
+    @raw = @raw.split(@options[:split])
     
     @filter  = arrayify @options[:filter]
     @selects = arrayify @options[:select]
@@ -404,22 +410,24 @@ TextmateCompletionsParser::PARSERS[:css] = {
               ], 
   :filter => [/^#([0-9a-f]{6}|[0-9a-f]{3})/, /^..*#.*$/],
   :sort => true,
-  :characters => /[-_:#\.\w]/,
+  :characters => /[-_:#\.\w]+$|\.$/,
   :split => /[,;\n\s{}]|(\/\*|\*\/)/
 }
 
 TextmateCompletionsParser::PARSERS[:css_values] = {
   :sort => true,
-  :select => [/.*(#([0-9a-f]{6}|[0-9a-f]{3})).*/i, #HEX colors
-              /(url\([^\)]*\))/#URLs
-              ],
-  :characters => /[#0-9a-z]/
+  :select =>[
+              %r/(url\(.*?\))/,#URLs
+              %r/(#([0-9a-f]{6}|[0-9a-f]{3}))/i, #HEX colors
+            ],
+  :characters => /[#0-9a-z]+$/,
+  :split => /[ :;]/
 }
 
 TextmateCompletionsParser::PARSERS[:ruby] = {
-  :select => [/^[ \t]*(?:class)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/,
-              /^[ \t]*(?:def)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/,
-              /^[ \t]*(?:attr_.*?)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/], 
+  :select => [%r/^[ \t]*(?:class)\s*(.*?)\s*(<.*?)?\s*(#.*)?$/,
+              %r/^[ \t]*(?:def)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/,
+              %r/^[ \t]*(?:attr_.*?)\s*(.*?(\([^\)]*\))?)\s*(<.*?)?\s*(#.*)?$/], 
   :filter => [/test_/,'< Test::Unit::TestCase']
 }
 
@@ -427,3 +435,7 @@ TextmateCompletionsParser::PARSERS[:ruby] = {
 #   :select => TextmateCompletionsParser::PARSERS[:ruby][:select],
 #   :filter => TextmateCompletionsParser::PARSERS[:ruby][:filter]
 # }
+
+if $0 == __FILE__
+  puts "This is a library and cannot be executed directly."
+end

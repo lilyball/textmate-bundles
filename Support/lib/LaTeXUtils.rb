@@ -184,6 +184,9 @@ module LaTeX
       # LaTeX.set_paths
       labelsList = Array.new
       scanner = FileScanner.new(root)
+      scanner.extractors[/.*?\[.*label=(.*?)\,.*\]/] = Proc.new do |filename, line, groups, text| 
+        labelsList << Label.new(:file => filename, :line => line, :label => groups[0], :contents => text)
+      end
       scanner.extractors[/^[^%]*\\label\{([^\}]*)\}/] = Proc.new do |filename, line, groups, text| 
         labelsList << Label.new(:file => filename, :line => line, :label => groups[0], :contents => text)
       end

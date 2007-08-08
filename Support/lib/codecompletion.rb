@@ -441,7 +441,7 @@ TextmateCompletionsParser::PARSERS[:css] = {
 TextmateCompletionsParser::PARSERS[:html_attributes] = {
   :sort       => true,
   :characters => /\b\w*$/, 
-  :context    => /(<[^\s>]+ )[^>]*$/,
+  :context    => /(<[^\s>]+ )([^>]*(<\B.*?\B>)?)+$/,
   :padding    => ' '
 }
 

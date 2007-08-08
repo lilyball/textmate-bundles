@@ -148,6 +148,14 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
       {:scope => :html_attributes}
     ).to_snippet, $debug_codecompletion.inspect
   end
+  def test_html_with_embedded_source
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => %{<div><p><a><img class="<%= something %>" ></a></p></div>}, "TM_COLUMN_NUMBER" => "42", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<div><p><a><img class="<%= something %>" class="${1:}"$0></a></p></div>}, TextmateCodeCompletion.new(
+      ['<img id=""','<div id=""','<div class=""','<img class=""',], 
+      %{<div><p><a><img class="<%= something %>" ></a></p></div>}, 
+      {:scope => :html_attributes}
+    ).to_snippet, $debug_codecompletion.inspect
+  end
   
   def test_context_proximity
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<img>", "TM_COLUMN_NUMBER" => "5", "TM_INPUT_START_COLUMN" => "1"})

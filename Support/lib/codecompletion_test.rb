@@ -2,7 +2,8 @@
 # 
 # CodeCompletion TESTS
 # 
-require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/codecompletion'
 require 'test/unit'
 
 puts "\nJust keep hittin' 1\n\n"
@@ -56,7 +57,7 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     assert_equal "_match$0", TextmateCodeCompletion.new(['choice_partial_match'], %{selection}).to_snippet, $debug_codecompletion.inspect
   end
   
-  def test_selection_no_context
+  def test_selection_no_line
     set_tm_vars({"TM_SELECTED_TEXT" => "basic_selection", "TM_CURRENT_LINE" => "basic_selection", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal "test_selection$0", TextmateCodeCompletion.new(['test_selection'], %{basic_selection}).to_snippet, $debug_codecompletion.inspect
   end
@@ -82,6 +83,10 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "String", "TM_COLUMN_NUMBER" => "7", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal %{String="${1:some '${2:thing}'}"$0}, TextmateCodeCompletion.new([%{String="some 'thing'"}], %{String}).to_snippet, $debug_codecompletion.inspect
   end
+  def test_snippetize_quotes_without_breaking_quoted_line
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => %{Str"" }, "TM_COLUMN_NUMBER" => "7", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{String="${1:some '${2:thing}'}"$0}, TextmateCodeCompletion.new([%{String="some 'thing'"}], "Str'' ").to_snippet, $debug_codecompletion.inspect
+  end
   
   def test_spaces
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "  padding-top: 1px;", "TM_COLUMN_NUMBER" => "10", "TM_INPUT_START_COLUMN" => "1"})
@@ -106,26 +111,51 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => ".", "TM_COLUMN_NUMBER" => "2", "TM_INPUT_START_COLUMN" => "1"})
     tcc = TextmateCodeCompletion.new(['.aaa'], %{.}, {:characters => /[-_:#\.\w]$/})
     assert_equal ".aaa$0", tcc.to_snippet  , $debug_codecompletion.inspect
-    assert_equal 0, tcc.index             , $debug_codecompletion.inspect
+    assert_equal 0, tcc.index              , $debug_codecompletion.inspect
     assert_equal '.aaa', tcc.choice        , $debug_codecompletion.inspect
   end
   
-  # def test_html
-  #   set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<div><p><a><img ></a></p></div>", "TM_COLUMN_NUMBER" => "17", "TM_INPUT_START_COLUMN" => "1"})
-  #   assert_equal %{<div><p><a><img class="$0"></a></p></div>}, TextmateCodeCompletion.new(
-  #   ['<img class=""','<img id=""','<div id=""','<div class=""'], 
-  #   %{<div><p><a><img ></a></p></div>}, 
-  #   {:characters => /[<a-z]+[ \t]([^>]*)$/, :strip => true}
-  #   ).to_snippet, $debug_codecompletion.inspect
-  # end
-  # def test_html2
-  #   set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<div><p><a><img class=\"Value\" ></a></p></div>", "TM_COLUMN_NUMBER" => "31", "TM_INPUT_START_COLUMN" => "1"})
-  #   assert_equal %{<div><p><a><img class="Value" ></a></p></div>}, TextmateCodeCompletion.new(
-  #   ['<img class=""','<img id=""','<div id=""','<div class=""'], 
-  #   %{<div><p><a><img class="Value" id="$0"></a></p></div>}, 
-  #   {:characters => /<([<a-z]+)[^>] $/, :strip => true}
-  #   ).to_snippet, $debug_codecompletion.inspect
-  # end
+  def test_sort
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "basic", "TM_COLUMN_NUMBER" => "6", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal "basic$0", TextmateCodeCompletion.new(
+      %w[basic2 basic3 basic basic1], 
+      %{basic},
+      {:sort => true}
+    ).to_snippet
+  end
+  
+  def test_html
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<div><p><a><img ></a></p></div>", "TM_COLUMN_NUMBER" => "17", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<div><p><a><img one="${1:}"$0></a></p></div>}, TextmateCodeCompletion.new(
+      ['<img one=""','<img two=""','<div three=""','<div four=""'], 
+      %{<div><p><a><img ></a></p></div>}, 
+      {:scope => :html_attributes}
+    ).to_snippet, $debug_codecompletion.inspect
+  end
+  def test_context_sensitive_filter
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => %{<div><p><a><img class="Value" t></a></p></div>}, "TM_COLUMN_NUMBER" => "32", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<div><p><a><img class="Value" talc="${1:}"$0></a></p></div>}, TextmateCodeCompletion.new(
+      ['class=""','turtles=""','talc=""','id=""','zero=""','nada=""','<img one=""','<img two=""','<div three=""','<div four=""'], 
+      %{<div><p><a><img class="Value" t></a></p></div>}, 
+      {:scope => :html_attributes}
+    ).to_snippet, $debug_codecompletion.inspect
+  end
+  def test_html_with_other_attributes
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<div><p><a><img class=\"Value\" ></a></p></div>", "TM_COLUMN_NUMBER" => "31", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<div><p><a><img class="Value" class="${1:}"$0></a></p></div>}, TextmateCodeCompletion.new(
+      ['<img id=""','<div id=""','<div class=""','<img class=""',], 
+      %{<div><p><a><img class="Value" ></a></p></div>}, 
+      {:scope => :html_attributes}
+    ).to_snippet, $debug_codecompletion.inspect
+  end
+  
+  def test_context_proximity
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<img>", "TM_COLUMN_NUMBER" => "5", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<img ${0:}>}, TextmateCodeCompletion.new(['test'], %{<img>}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
+    
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<img >", "TM_COLUMN_NUMBER" => "6", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<img test$0>}, TextmateCodeCompletion.new(['test'], %{<img >}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
+  end
 end
 
 class TextmateCompletionsPlistTest < Test::Unit::TestCase

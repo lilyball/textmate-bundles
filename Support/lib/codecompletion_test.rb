@@ -83,10 +83,6 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "String", "TM_COLUMN_NUMBER" => "7", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal %{String="${1:some '${2:thing}'}"$0}, TextmateCodeCompletion.new([%{String="some 'thing'"}], %{String}).to_snippet, $debug_codecompletion.inspect
   end
-  def test_snippetize_quotes_without_breaking_quoted_line
-    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => %{Str"" }, "TM_COLUMN_NUMBER" => "7", "TM_INPUT_START_COLUMN" => "1"})
-    assert_equal %{String="${1:some '${2:thing}'}"$0}, TextmateCodeCompletion.new([%{String="some 'thing'"}], "Str'' ").to_snippet, $debug_codecompletion.inspect
-  end
   
   def test_spaces
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "  padding-top: 1px;", "TM_COLUMN_NUMBER" => "10", "TM_INPUT_START_COLUMN" => "1"})
@@ -157,13 +153,44 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     ).to_snippet, $debug_codecompletion.inspect
   end
   
-  def test_context_proximity
-    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<img>", "TM_COLUMN_NUMBER" => "5", "TM_INPUT_START_COLUMN" => "1"})
-    assert_equal %{<img ${0:}>}, TextmateCodeCompletion.new(['test'], %{<img>}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
-    
+  def test_padding
+    # Insert the padding character if it's not there already
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<img.>", "TM_COLUMN_NUMBER" => "6", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<img. test$0>}, TextmateCodeCompletion.new(['test'], %{<img.>}, :padding => ' ').to_snippet, $debug_codecompletion.inspect
+  end
+  def test_no_padding
+    # Don't insert the padding text if it's already there
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<img >", "TM_COLUMN_NUMBER" => "6", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal %{<img test$0>}, TextmateCodeCompletion.new(['test'], %{<img >}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
   end
+    
+  def test_nil_line_before
+    # Do insert if there's no line_before text
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => ">", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{test$0>}, TextmateCodeCompletion.new(['test'], %{>}).to_snippet, $debug_codecompletion.inspect
+    
+    # Don't insert anything if there's no line_before text and :nil_context===false
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => ">", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{${0:}>}, TextmateCodeCompletion.new(['test'], %{>}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
+    
+    # Don't insert anything if the line_before text doesn't match the :context and :nil_context===false
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "  <>", "TM_COLUMN_NUMBER" => "3", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{  ${0:}<>}, TextmateCodeCompletion.new(['test'], %{  <>}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
+    
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<>", "TM_COLUMN_NUMBER" => "3", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<>${0:}}, TextmateCodeCompletion.new(['test'], %{<>}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
+  end
+  
+  def test_caret_placement
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "\t\t</div>", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{test$0		</div>}, TextmateCodeCompletion.new(['test'], %{		</div>}).to_snippet, $debug_codecompletion.inspect
+  end
+  
+  def test_html_with_no_attributes
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "<div>", "TM_COLUMN_NUMBER" => "5", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %{<div class="${1:}"$0>}, TextmateCodeCompletion.new(['<div class=""'], %{<div>}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
+  end
+  
 end
 
 class TextmateCompletionsPlistTest < Test::Unit::TestCase

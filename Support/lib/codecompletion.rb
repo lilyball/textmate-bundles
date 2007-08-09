@@ -161,18 +161,20 @@ class TextmateCodeCompletion
     @line_before = @raw_line[0..caret_placement]
     @line_before = '' if caret_placement == -1
     get_choice_partial!
-    @selection      = @line if @has_selection
+    @selection   = @line if @has_selection
     @line_after  = @raw_line[caret_placement+1..@raw_line.length+1]
     
     @line_before.gsub!(/#{Regexp.escape @choice_partial}$/,'')
     @line_after.gsub!(/^#{Regexp.escape @selection}/,'') if @selection
     
+    cancel() if @options[:nil_context]==false and (!@line_before or @line_before == '')
+    
     if @debug
       $debug_codecompletion["caret_placement"] = caret_placement+2
-      $debug_codecompletion["line_before" ] = @line_before
+      $debug_codecompletion["line_before"    ] = @line_before
       $debug_codecompletion["choice_partial" ] = @choice_partial
       $debug_codecompletion["selection"      ] = @selection
-      $debug_codecompletion["line_after"  ] = @line_after
+      $debug_codecompletion["line_after"     ] = @line_after
     end
   end
   
@@ -182,12 +184,16 @@ class TextmateCodeCompletion
     caret_placement = 0
     caret_placement = ENV['TM_COLUMN_NUMBER'].to_i - 2
     caret_placement = ENV['TM_INPUT_START_COLUMN'].to_i - 2 if @has_selection
+    # caret_placement = 0 if caret_placement < 0
     
     # Fix those dang tabs being longer than 1 character
-    if @raw_line =~ /\t/    
-      tabes_to_spaces = ''; ENV['TM_TAB_SIZE'].to_i.times {tabes_to_spaces<<' '}
+    if @raw_line =~ /\t/
+      tabs_to_spaces = ''; ENV['TM_TAB_SIZE'].to_i.times {tabs_to_spaces<<' '}
       
-      number_of_tabs_before_cursor = @raw_line.gsub(' ','X').gsub("\t",tabes_to_spaces)[0..caret_placement].gsub(/[^ ]/,'').length / ENV['TM_TAB_SIZE'].to_i
+      number_of_tabs_before_cursor = 0
+      unless caret_placement <= 0
+        number_of_tabs_before_cursor = @raw_line.gsub(' ','X').gsub("\t",tabs_to_spaces)[0..caret_placement].gsub(/[^ ]/,'').length / ENV['TM_TAB_SIZE'].to_i
+      end
       
       add_to_caret_placement  = 0
       add_to_caret_placement -= number_of_tabs_before_cursor * ENV['TM_TAB_SIZE'].to_i
@@ -206,6 +212,8 @@ class TextmateCodeCompletion
     if @options[:context]
       match = @line_before.match(@options[:context])
       @strip_partial = match[1].to_s if match
+      cancel() unless @strip_partial
+      
       $debug_codecompletion["match"] = match
     end
     
@@ -236,7 +244,9 @@ class TextmateCodeCompletion
   end
   
   def choose
-    cancel() and return unless @choices
+    cancel() and return if @cancel
+    cancel() and return unless @choices and @choices!=[]
+    
     if @choices.length == 1
       val = 0
     else
@@ -256,10 +266,10 @@ class TextmateCodeCompletion
     completion << snip(@line_before) unless @has_selection
     if @cancel
       completion << snip(@choice_partial)
-      completion << "#{@options[:padding]}${0:#{snip(@selection)}}"
+      completion << "${0:#{snip(@selection)}}"
     else
       if @choice
-        completion << @options[:padding] unless @line_before.match(/#{Regexp.escape @options[:padding]}$/) if @options[:padding]
+        completion << @options[:padding] unless @line_before.match(/#{Regexp.escape @options[:padding]}$/) or @choice.match(/^#{Regexp.escape @options[:padding]}/) if @options[:padding]
         completion << snippetize(@choice) unless @cancel
       else
         completion << snip(@selection) if @selection
@@ -438,13 +448,6 @@ TextmateCompletionsParser::PARSERS[:css] = {
   :characters => /[-_:#\.\w]+$|\.$/
 }
 
-TextmateCompletionsParser::PARSERS[:html_attributes] = {
-  :sort       => true,
-  :characters => /\b\w*$/, 
-  :context    => /(<[^\s>]+ )([^>]*(<\B.*?\B>)?)+$/,
-  :padding    => ' '
-}
-
 TextmateCompletionsParser::PARSERS[:css_values] = {
   :select =>[%r/(url\(.*?\))/,#URLs
              %r/(#([0-9a-f]{6}|[0-9a-f]{3}))/i, #HEX colors
@@ -452,6 +455,14 @@ TextmateCompletionsParser::PARSERS[:css_values] = {
   :sort   => true,
   :characters => /[#0-9a-z]+$/,
   :split      => /[ :;]/
+}
+
+TextmateCompletionsParser::PARSERS[:html_attributes] = {
+  :sort        => true,
+  :characters  => /(?:<\w+\b ?)?(\b\w*)$/, 
+  :context     => /(<[^\s>]+ ?)([^>]*(<\B.*?\B>)?)+$/,
+  :nil_context => false,
+  :padding     => ' ',
 }
 
 TextmateCompletionsParser::PARSERS[:ruby] = {

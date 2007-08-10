@@ -38,7 +38,7 @@
 			<key>begin</key>
 			<string>^([ \t]*)(?=\S)</string>
 			<key>contentName</key>
-			<string>meta.paragraph.text</string>
+			<string>meta.paragraph.release-notes</string>
 			<key>end</key>
 			<string>^(?!\1(?=\S))</string>
 			<key>patterns</key>
@@ -47,7 +47,7 @@
 					<key>match</key>
 					<string>(https?|ftp|mailto):\S+?(?=[)&gt;,.':;"]*(\s|$)|$)</string>
 					<key>name</key>
-					<string>markup.underline.link</string>
+					<string>markup.underline.link.release-notes</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -101,7 +101,7 @@
 					<key>match</key>
 					<string>\b[A-Z]*[a-z]+[A-Z]\w*\b</string>
 					<key>name</key>
-					<string>meta.word.camel-case</string>
+					<string>meta.word.camel-case.release-notes</string>
 				</dict>
 				<dict>
 					<key>captures</key>

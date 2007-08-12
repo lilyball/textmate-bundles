@@ -109,7 +109,7 @@ module LaTeX
     # Processes the .bib file with title +file+, and returns an array of the
     # Citation objects.
     def parse_bibfile(file)
-      raise "Could not locate file #{file.to_s}" if (file.nil? or !File.exist?(file))
+      raise "Could not locate file: #{file.to_s}" if (file.nil? or !File.exist?(file))
       text = File.read(file)
       entries = text.scan(/^\s*@[^\{]*\{.*?(?=\n[ \t]*@|\z)/m)
       citations = entries.map do |text|
@@ -190,7 +190,7 @@ module LaTeX
       @includes = Hash.new
       @includes[/^[^%]*(?:\\include|\\input)\s*\{([^\}]*)\}/] = Proc.new {|m|
         m[0].split(",").map do |it|
-          LaTeX.find_file( it.strip, "tex", File.dirname(@root) )
+          LaTeX.find_file( it.strip, "tex", File.dirname(@root) ) || raise("Could not locate any file named '#{it}'")
         end
       }
       @extractors = Hash.new
@@ -246,6 +246,7 @@ module LaTeX
       scanner.extractors[biblio_regexp] = Proc.new do |filename, line, groups, text|
         groups[0].split(",").each do |it|
           file = LaTeX.find_file( it.strip, "bib", File.dirname(root) )
+          raise "Could not locate any file named '#{it}'" if file.nil?
           citationsList += LaTeX.parse_bibfile(file)
           citationsList += LaTeX.parse_bibfile(ENV["TM_LATEX_BIB"]) unless ENV["TM_LATEX_BIB"].nil?
         end

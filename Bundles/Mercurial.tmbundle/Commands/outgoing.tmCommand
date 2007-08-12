@@ -15,7 +15,7 @@ fi
       
 : ${TM_RUBY:=ruby}
 FORMAT_LOG="${TM_BUNDLE_SUPPORT}/format_log.rb"
-HG_STYLE="${TM_BUNDLE_SUPPORT}/map-cmdline.changelog"
+HG_STYLE="${TM_BUNDLE_SUPPORT}/map-log.changelog"
 
 
 "$TM_HG" outgoing -v --style "$HG_STYLE" 2&gt;&amp;1 |"$TM_RUBY" -- "$FORMAT_LOG" "--out"

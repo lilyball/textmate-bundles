@@ -5,8 +5,8 @@ require 'ostruct'
 require ENV['TM_SUPPORT_PATH'] + '/lib/osx/keychain'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
-class ConnectorException < Exception; end;
-class MissingConfigurationException < ConnectorException; end;
+class ConnectorException < Exception; end
+class MissingConfigurationException < ConnectorException; end
 
 class Connector
   @@connector = nil
@@ -80,23 +80,10 @@ class Connector
 
   def database_list
     databases = []
-    db_list = []
     if @server == 'postgresql'
-      # Postgres doesn't allow passwords to be specified on the commandline
-      # We can use --password to force the password prompt and then provide the password (even if it's blank)
-      IO.popen("${TM_PSQL:-psql} -l --host='#{@settings.host}' --port='#{@settings.port}' --user='#{@settings.user}' --password --html 2>&1", 'w+') do |proc|
-        proc << @settings.password
-        proc.close_write
-        db_list = $'.strip.to_a if proc.read =~ /Password.*?:/
-      end
-      raise ConnectorException.new(db_list) unless $?.to_i == 0
-      while line = db_list.shift
-        databases << $2 if db_list.shift.match(/\s+(<td align=.*?>)(.*?)(<\/td>)/) if line.include? '<tr valign'
-      end
+      do_query('SELECT datname FROM pg_catalog.pg_database').rows.each { |row| databases << row[0] }
     elsif @server == 'mysql'
-      db_list = `"${TM_MYSQL:-mysql}" -e 'show databases' --host="#{@settings.host}" --port="#{@settings.port}" --user="#{@settings.user}" --password="#{@settings.password}" --xml 2>&1`
-      raise ConnectorException.new(db_list) unless $?.to_i == 0
-      db_list.each_line { |line| databases << $1 if line.match(/<(?:Database|field name="Database")>(.+)<\/(Database|field)>/) }
+      do_query('SHOW DATABASES').rows.each { |row| databases << row[0] }
     end
     databases
   end
@@ -185,14 +172,14 @@ end
 
 def get_connection_settings(options)
   begin
-    plist      = open(File.expand_path('~/Library/Preferences/com.macromates.textmate.plist')) { |io| OSX::PropertyList.load(io) }
+    plist = open(File.expand_path('~/Library/Preferences/com.macromates.textmate.plist')) { |io| OSX::PropertyList.load(io) }
 
     unless connection = plist['SQL Connections'].find { |conn| conn['title'] == ENV['TM_SQL_CONNECTION'] }
       connection = plist['SQL Connections'][plist['SQL Active Connection'].first.to_i]
     end
 
-    options.host   = connection['hostName']
-    options.user   = connection['userName']
+    options.host = connection['hostName']
+    options.user = connection['userName']
     if connection['serverType'] && ['mysql', 'postgresql'].include?(connection['serverType'].downcase!)
       options.server = connection['serverType']
     else

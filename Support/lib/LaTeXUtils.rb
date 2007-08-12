@@ -1,4 +1,5 @@
 require 'strscan'
+require 'pathname'
 # The LaTeX module contains a lot of methods useful when dealing with LaTeX
 # files.
 #
@@ -9,18 +10,57 @@ module LaTeX
   def e_var(name)
     name.gsub(/[^a-zA-Z0-9\-_]/,"").gsub(/\-/,"_")
   end
+  # parse any %!TEX options in the first 20 lines of the file
+  # Only use the first 20 lines for compatibility with TeXShop
+  # returns a hash of the results
+  def self.options(filepath)
+    opts = {}
+    begin
+      File.open(filepath, "r") do |file|
+        1.upto(20) do
+          line = file.readline
+          if line =~ /^%!TEX (\S*) =\s*(.*)\s*$/
+            opts[$1] = $2
+          end
+        end
+      end
+    rescue EOFError
+      # Don't do anything
+    end
+    opts
+  end
+  
+  # Returns the root file for the given filepath
+  # If no master exists, return the given filepath
+  # Stop searching after 10 iterations, in case of loop
+  def self.master(filepath)
+    return nil if filepath.nil?
+    master = Pathname.new(filepath).cleanpath
+    opts = options(master)
+    iter = 0
+    while opts.has_key?('root') and iter < 10
+      new_master = (master.parent + Pathname.new(opts['root'])).cleanpath
+      break if new_master == master
+      master = new_master
+      opts = options(master)
+      iter += 1
+    end
+    master.to_s
+  end
   # Implements general methods that give information about the LaTeX document. 
   # Most of these commands recurse into \included files.
   class <<self
     # Returns an array of the label names. If you want actual Label objects, 
     # then use FileScanner.label_scan
     def get_labels
-      return FileScanner.label_scan(ENV["TM_LATEX_MASTER"] || ENV["TM_FILEPATH"]).map{|i| i.label}.sort
+      mFile = LaTeX.master(ENV["TM_LATEX_MASTER"] || ENV["TM_FILEPATH"])
+      return FileScanner.label_scan(mFile).map{|i| i.label}.sort
     end
     # Returns an array of the citation objects. If you only want the citekeys, 
     # use LaTeX.get_citekeys
     def get_citations
-      return FileScanner.cite_scan(ENV["TM_LATEX_MASTER"] || ENV["TM_FILEPATH"]).map{|i| i}.sort { |a,b| a.citekey <=> b.citekey }
+      mFile = LaTeX.master(ENV["TM_LATEX_MASTER"] || ENV["TM_FILEPATH"])
+      return FileScanner.cite_scan(mFile).map{|i| i}.sort { |a,b| a.citekey <=> b.citekey }
     end
     # Returns an array of the citekeys in the document.
     def get_citekeys

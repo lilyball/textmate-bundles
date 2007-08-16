@@ -188,7 +188,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=\s)(?:provides|requires|conflicts)(?!\S)</string>
+					<string>(?&lt;=\s)(?:provides|requires|conflicts|description)(?!\S)</string>
 					<key>name</key>
 					<string>keyword.other.variant.tcl.macports</string>
 				</dict>
@@ -197,6 +197,10 @@
 					<string>(?&lt;=\s)([\w-]+)</string>
 					<key>name</key>
 					<string>entity.name.function.variant.tcl.macports</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
 				</dict>
 				<dict>
 					<key>begin</key>

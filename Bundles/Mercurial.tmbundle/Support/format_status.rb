@@ -13,7 +13,18 @@ include HGHelper
 
 work_path			= ENV['WorkPath']
 work_paths		= TextMate.selected_paths_array
-ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
+ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|orig|pyc)|Icon)/
+
+input = STDIN.read
+
+if input.length < 1
+  make_head( "Hg Status", work_path,
+           [ bundle+"/Stylesheets/hg_style.css",
+             bundle+"/Stylesheets/hg_status_style.css"] )
+  puts "<p>File(s) not modified</p>"
+  make_foot
+  exit 0
+end
 
 
 # First escape for use in the shell, then escape for use in a JS string
@@ -159,19 +170,16 @@ js_functions = <<ENDJS #javascript
 					
 					hg_commit = function(){
 						TextMate.isBusy = true;
+						cmd = 'cd #{e_sh_js work_path};';
+						#{ %{cmd += "export            TM_HG=#{ e_sh_js ENV['TM_HG']            };";} if ENV['TM_HG']            }
+						#{ %{cmd += "export TM_BUNDLE_SUPPORT=#{ e_sh_js ENV['TM_BUNDLE_SUPPORT'] };";} if ENV['TM_BUNDLE_SUPPORT'] }
+						#{ %{cmd += "export   TM_SUPPORT_PATH=#{ e_sh_js ENV['TM_SUPPORT_PATH']   };";} if ENV['TM_SUPPORT_PATH']   }
+						#{ %{cmd += "export      CommitWindow=#{ e_sh_js ENV['CommitWindow']      };";} if ENV['CommitWindow']      }
+						#{ %{cmd += "export   TM_HG_DIFF_CMD=#{ e_sh_js ENV['TM_HG_DIFF_CMD']   };";} if ENV['TM_HG_DIFF_CMD']   }
+						#{ %{cmd += "export   TM_HG_FROM_STATUS=true;";}   }
 						
-
-						cmd = ""
-						cmd += 'cd #{e_sh work_path};';
-						#{ %{cmd += "export            TM_HG=#{ e_sh_js ENV['TM_HG']            }; ";} if ENV['TM_HG']            }
-						#{ %{cmd += "export TM_BUNDLE_SUPPORT=#{ e_sh_js ENV['TM_BUNDLE_SUPPORT'] }; ";} if ENV['TM_BUNDLE_SUPPORT'] }
-						#{ %{cmd += "export   TM_SUPPORT_PATH=#{ e_sh_js ENV['TM_SUPPORT_PATH']   }; ";} if ENV['TM_SUPPORT_PATH']   }
-						#{ %{cmd += "export      CommitWindow=#{ e_sh_js ENV['CommitWindow']      }; ";} if ENV['CommitWindow']      }
-						#{ %{cmd += "export   TM_HG_DIFF_CMD=#{ e_sh_js ENV['TM_HG_DIFF_CMD']   }; ";} if ENV['TM_HG_DIFF_CMD']   }
-						
-						cmd += '"#{ENV['TM_RUBY'] || "ruby"}" -- "#{ENV['TM_BUNDLE_SUPPORT']}/hg_commit.rb" "#{work_paths.join("\" \"")}"'
+						cmd += '"#{ENV['TM_RUBY'] || "ruby"}" -- #{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/hg_commit.rb'
 						document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'
-						// HGCommand(cmd, '_commit', '-', 'done')
 						
 						TextMate.isBusy = false;
 					};
@@ -264,7 +272,7 @@ make_head( "Hg Status", work_path,
 				removed_file_status   = 'R' + (' ' * (mup.status_column_count - 1))
 			
 				stdin_line_count = 1
-				STDIN.each_line do |line|
+				input.each_line do |line|
 				
 					# ignore lines consisting only of whitespace
 					next if line.squeeze.strip.empty?
@@ -320,8 +328,7 @@ make_head( "Hg Status", work_path,
 										# Diff Column (only available for text)
 										column_is_an_image = false
 									end
-#                   `cd #{work_path}`
-#                   puts `pwd`
+
 									mup.button_td!( ((not column_is_an_image) and (status != unknown_file_status)),
 													'Diff',
 													"diff_to_mate(#{esc_file},#{stdin_line_count}); return false")
@@ -346,17 +353,15 @@ make_head( "Hg Status", work_path,
 			}
 		end
 		
-# TODO: Figure out how to make commit work in status window
-# 		if $is_status then
-# 			mup.div(:id => 'actions'){
-# 				mup.a('Commit', :href => '#', :onclick => 'hg_commit(); return false')
-# 				mup.div(:style => 'clear:both'){}
-# 			}
-# 		end
+# CHANGED: Figured out how to make commit work in status window
+		if $is_status then
+			mup.div(:id => 'actions'){
+				mup.input(:type => 'button', :value => 'Commit', :onclick => 'hg_commit(); return false', :style => 'margin:10px 0;')
+				mup.div(:style => 'clear:both'){}
+			}
+		end
 		
 		mup.div(:id => 'commandOutput'){
 			mup << " "
-			#DEBUG# mup << display_title + "\n"
-			#DEBUG# ENV.sort.each { |key,value| puts key + ' = ' + value + "\n" }
 		}
 make_foot()

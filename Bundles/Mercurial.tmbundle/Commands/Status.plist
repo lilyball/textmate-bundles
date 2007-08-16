@@ -12,8 +12,14 @@ if [[ -d "$TM_PROJECT_DIRECTORY" ]]
    else export WorkPath="$TM_DIRECTORY"; cd "$TM_DIRECTORY"
 fi
 
+export CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"
+
 # show it..
-"$TM_HG" status --debug "$WorkPath" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
+
+"${TM_RUBY:-ruby}" -r "$TM_SUPPORT_PATH/lib/shelltokenize.rb" &lt;&lt;END
+	hg = ENV['TM_HG'] || "hg"
+	puts %x{#{hg} status --debug #{TextMate.selected_paths_for_shell} 2&gt;&amp;1|"${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"}
+END
 
 </string>
 	<key>input</key>

@@ -7,11 +7,11 @@ make_head( 'Hg Bundle Help', "Mercurial",
             [ $bundle+'/Stylesheets/hg_style.css',
               $bundle+'/Stylesheets/hg_help_style.css'] )
 
-body = <<HTML_HELP
+body = <<-HTML
 
-<p>This document describes the commands of the TextMate <a href="http://www.selenic.com/mercurial/">Mercurial</a> bundle and how you can <a href="#conf">fine-tune</a> their behavior. For general Mercurial help and tutorial, you should read the Mercurial man pages (hg(1), hgrc(5), hgmerge(1)), or check the <a href="http://www.selenic.com/mercurial/">wiki</a>.</p>
+<p>This document describes the commands of the TextMate <a href="http://www.selenic.com/mercurial/">Mercurial</a> bundle and how you can <a href="#conf">fine-tune</a> their behavior. For general Mercurial help and tutorial, you should read the Mercurial man pages (<a href="man:hg.1">hg(1)</a>, <a href="man:hgrc.5">hgrc(5)</a>, <a href="man:hgmerge.1">hgmerge(1)</a>, <a href="man:hgignore.5">hgignore(5)</a>), read the <a href="http://hgbook.red-bean.com/" title="Distributed revision control with Mercurial">hgbook</a> or check the <a href="http://www.selenic.com/mercurial/">wiki</a>.</p>
 
-<p><strong>NB: <a href="http://www.selenic.com/mercurial/release/">Mercurial 0.9.1 or greater</a> is required.</strong></p>
+<p><strong>NB: <a href="http://www.selenic.com/mercurial/release/">Mercurial 0.9.1 or greater</a> is required.</strong> (Tested up to 0.9.4).</p>
 
 <h2><a name="commands">Commands</a></h2>
  
@@ -166,10 +166,10 @@ body = <<HTML_HELP
 	
 	<dt><a name="status">Status</a></dt>
 	<dd>
-	   <div class="target">directory of active file</div>
+	   <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
 	   <div class="connect">No</div>
 	   <div class="description">
-		  Displays a list of files with changes in your working copy, along with the type of change for each file.
+		  Displays a list of files with changes in your working copy, along with the type of change for each file, and depending on the type of change: a link to diff with previous revision, a link to revert the changes, a link to add or remove files.
 	   </div>
 	</dd>
      
@@ -189,7 +189,7 @@ body = <<HTML_HELP
 	   <div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
 	   <div class="connect">No</div>
 	   <div class="description">
-           Update Working copy to tip.
+       Update Working copy to tip.
 		   Warns you if there is a conflict.			   </div>
 	</dd>
 	
@@ -222,9 +222,6 @@ body = <<HTML_HELP
 	   <div class="description">Here you can tweak with what Ruby the formatting scripts will be executed.</div>
 	</dd>
 	
-     <!-- CHANGED: Removed TM_HG_DATE_FORMAT for now 
-        -->
-	
 	<dt><a name="tm_hg_close">$TM_HG_CLOSE</a></dt>
 	<dd>
 	   <div class="default"><code>false</code></div>
@@ -248,7 +245,7 @@ body = <<HTML_HELP
 	<li>Ollivier Robert did the first version of this bundle</li>
 	<li>Frédéric "FredB" Ballériaux rewrited it to its current state</li>
  </ul>
-HTML_HELP
+HTML
 
 puts body
 

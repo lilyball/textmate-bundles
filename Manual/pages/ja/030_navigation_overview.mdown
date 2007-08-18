@@ -2,9 +2,7 @@
 
 ## ブックマーク
 
-
 もしあなたがキャレットをそのドキュメントのどこか別の場所に動かす必要があって、また早く戻ってくる必要があれば、あなたは現在の行にブックマークを設定することができます。
-
 
 これは、（ブックマークのためにある列の）ガッターをくりっくするか、&#x2318;F2を押すことによってなされます。ブックマークは以下のように星印で示されます。
 
@@ -14,21 +12,15 @@
 
 ## テキストブロックを折りたたむ (フォールディング)
 
-
 `{` … `}`, `do` … `end`, `<tag>` … `</tag>`のように、もしあなたが、ブロックにスタートとエンドのマーカーを持っている言語を使用しているとき、TextMateはこのブロックを見つけて、上向きと下向きの矢印をスタートとエンドマーカーのガッターに表示します。
-
 
 この矢印が表示されているとき、上下の矢印の表示をマウスでクリックするか、もしくはF1キーを押すことによってブロックを一つの行にたたむことが可能です。これは、ガッターの矢印を右向きに変え、全てのブロックが行末におかれたellipsisのマーカーを置くことによってたたまれたことを示します。二つのconstructorのサブブロックがたたまれた場合の例は以下のようになります。
 
-
 ![Folded Blocks](folded_blocks.png)
-
 
 テキストがたたまれた場合、F1を押すかもしくはガッターの矢印かellipsisのイメージを押すことによって広げることができます。また、マウスをellipsisイメージの上に置いてたたまれたブロックの中身を示すツールチップを出すことも可能です。後者の方法は、次の画像で示されます。
 
-
 ![Folding Tool Tip](folding_tool_tip.png)
-
 
 _警告:折り畳む機能は両方がともにはっきりとしたインデントマーカーをもっていて、**かつ**スタートとストップマーカーが同じインデントレベルにあることを基礎としています。つまり折りたたみは純粋にインデントに頼っているため、スタートとストップマーカーがalignしていない場合は現在サポートしていません。_
 
@@ -57,38 +49,30 @@ _警告:折り畳む機能は両方がともにはっきりとしたインデン
     foldingStopMarker = '^\s*\}';
 
 
-## ファンクションポップアップ
+## ファンクション（関数）ポップアップ
 
 
-ファンクションポップアップをサポートする言語に関しては、ステータスバーの一番右のポップアップが現在の“シンボル”をしめします。（キャレットの上のファンクションプロトタイプや見出しであることもありますが。）<!-- TODO ファンクションは「関数」って訳した方がいいか？ -->
+ファンクション（関数）ポップアップをサポートする言語に関しては、ステータスバーの一番右のポップアップが現在の“シンボル”をしめします。（キャレットの上の関数プロトタイプや見出しであることもありますが。）
 
 ![Status Bar](status_bar.png)
 
-
 ポップアップをクリックして現在のドキュメントの全てのシンボルのリストを出し、他のシンボルへキャレットを移動させることができます。これは以下のように示されます。
-
 
 ![Function Pop Up](function_pop_up.png)
 
-
 キーボード操作に関しては、以下のようなパネルを開くNavigation &#x2192; Go to Symbol… (&#x21E7;&#x2318;T)があります。このペインの中身はステータスバーのポップアップと同じですが、このパネルは[Go to File… panel][GoToFile] に似たようなフィルタリングをサポートします。（つまりフィルタリングの文字列は省略形として扱われ、照合はその省略形がどのくらいフィットするかによってランクされます。
-
 
 ![Symbol List](symbol_list.png)
 
-
 パネルは表示されたままになりドキュメントが編集されるにつれて自動的にアップデートされます。リストの中のアイテムをシングル・クリックすると、キャレットはクリックされたシンボルへ移動します。ダブルクリックすると同じ動作をしますが、パネルは閉じられます。
-
-
 
 ### リストをカスタマイズする
 
 シンボルリストは[language grammars][LanguageGrammars] と [scope selectors][ScopeSelectors]を使用して動作します。ランゲージグラマーはドキュメントのそれぞれのエレメントに名前を付与し、スコープセレクタはその名前に基づいてドキュメントのsubsetをターゲットにすることができます。普通は、そのパラレルはHTMLとCSSです。例えば、バックグラウンドを青に設定する[テーマアイテム][Themes]を作り、その後、スコープセレクタでドキュメントのどのエレメンツにこのテーマ（青いバックグラウンド
 ）が適用されるのを必要とするかを選びます。
 
-[Bundle preferences][PreferencesItems] work like theme items, except that instead of changing visual settings they (generally) change non-visual settings. One exception is the `showInSymbolList`. By setting this to `1` and using a scope selector which (for example) targets all function names, we are using that scope selector as a query to extract all the function names from the document, for use in the symbol list.
 
-視覚の設定を変えるのではなく、（一般的に）視覚ではない背ていを変更するという点以外は、[バンドル設定][PreferencesItems]もテーマアイテムと同じように動作します。例外のひとつは`showInSymbolList`です。これを`1`に設定して、例えば全てのファンクションの名前をターゲットにするスコープセレクタを使用することによって、シンボルリストで使うための、ドキュメントから全てのファンクションの名前を抽出するクエリとしてスコープセレクタを使っていることになります。
+視覚の設定を変えるのではなく、（一般的に）視覚ではない背ていを変更するという点以外は、[バンドル設定][PreferencesItems]もテーマアイテムと同じように動作します。例外のひとつは`showInSymbolList`です。これを`1`に設定して、例えば全ての\関数の名前をターゲットにするスコープセレクタを使用することによって、シンボルリストで使うための、ドキュメントから全ての関数の名前を抽出するクエリとしてスコープセレクタを使っていることになります。
 
 シンボルリストをpopulateするために必要なのは:
 
@@ -96,7 +80,6 @@ _警告:折り畳む機能は両方がともにはっきりとしたインデン
 
  2. `showInSimbolList`を`1`に設定して、シンボルリストに必要としているシンボルにマッリするスコープセレクタをを作る、バンドル設定アイテムを作ること。
 
-In addition to the `showInSymbolList` setting there is a `symbolTransformation` setting which is one or more regular expression substitutions which are performed on the text extracted. The value of this setting should be: `s/«regexp»/«format»/«options»` optionally followed by `;` and more substitutions. It is also possible to put comments in the value, these start with `#` and end at the next newline.
 
 `showInSymbolList`設定に加えて、抽出されるテキストを基に機能する一つかそれ以上の正規表現substitutionsである`symbolTransformation`があります。この設定の値は`s/«regexp»/«format»/«options»` でなければいけません。オプションとして、`:`とさらなるsubstitutionsを追加できます。また、値にコメントを付加することも可能です。これは、`#`で始まり、次のnewlineの最後に終わります。
 
@@ -112,7 +95,7 @@ In addition to the `showInSymbolList` setting there is a `symbolTransformation` 
 
     {  showInSymbolList = 1;   }
 
-<!-- This will include the leading `#` marks in the list, which is undesirable. We can either assign a name (via the language grammar) to the actual title, or we can perform a regular expression substitution to get rid of the leading `#` marks. The latter has the advantage that we can change these to indent, so that is what we do, by changing the preferences item to:-->
+
 
 このままでは最初の`#`マークまでリストに含んでしまうので、理想的ではありません。実際のタイトルに（ランゲージグラマーを通じて）名前を付与するか、もしくは最初の`#`を取り除くために正規表現substitutionを実行することができます。後者は好都合です。これらをインデントへ変え、設定アイテムを次のように変えることによってできます。<!-- TODO: I can't understand the passage well. I will revisit this passage. I hope the actual code helps. -->
 

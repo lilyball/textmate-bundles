@@ -36,7 +36,7 @@ A to-do list may look like
 
 Headers end with a colon (":"). Headers are listed in the [symbol list](http://macromates.com/textmate/manual/navigation_overview#function_pop-up). Somewhat unfortunately, checkmarks are used in the symbol list to denote the current item. That checkmark obviously does not reflect the to-do status of anything.
 
-Pending (uncompleted) tasks start with a hyphen ("-"). Completed tasks start with a checkmark ("✓"). The easiest way to get the checkmarks is to first [add a pending task](#new_task) and then [toggle it](#toggle_completed).
+Pending (uncompleted) tasks start with a hyphen ("-"). Completed tasks start with a checkmark ("✓"). The easiest way to get the checkmark is to first [add a pending task](#new_task) and then [toggle it](#toggle_completed).
 
 Headers and tasks can be indented for grouping/hierarchy, as seen in the example above.
 
@@ -87,9 +87,9 @@ These are some ways you can [modify your theme](http://macromates.com/textmate/m
 
 You can also change the symbols themselves, such as if you're using the to-do list in many different editors and find the checkmark symbol difficult to work with.
 
-The bundle commands refer to environmental variables for the symbols to use. [Add values](http://macromates.com/textmate/manual/environment_variables#static_variables) for &lt;code&gt;TM\_BULLET\_PENDING&lt;/code&gt; and &lt;code&gt;TM\_BULLET\_COMPLETED&lt;/code&gt; to set your own.
+The bundle commands refer to environment variables for the symbols to use. [Add values](http://macromates.com/textmate/manual/environment_variables#static_variables) for &lt;code&gt;TM\_BULLET\_PENDING&lt;/code&gt; and &lt;code&gt;TM\_BULLET\_COMPLETED&lt;/code&gt; to set your own.
 
-You also need to change the symbols in the grammar, which should be straightforward – each symbol appears only once. Note that the grammar is made up of regular expressions, so metacharacters like "+" will need to be escaped (like "\\\\+").
+You also need to change the symbols in the grammar, which should be straightforward – each symbol appears there only once. Note that the grammar is made up of regular expressions, so metacharacters like "+" will need to be escaped (to e.g. "\\\\+").
 
 
 

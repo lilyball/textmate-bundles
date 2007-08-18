@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+
+PENDING   = ENV['TM_BULLET_PENDING'] || '-'
+COMPLETED = ENV['TM_BULLET_COMPLETED'] || '✓'
+
+if ENV['TM_SELECTED_TEXT']
+  toggled_text = STDIN.read
+  if toggled_text =~ /^\s*#{Regexp.escape PENDING}/u  # Any pendings? Then check all!
+    toggled_text.gsub!(/^(\s*)(#{Regexp.escape PENDING})/u) { $1 + COMPLETED }
+  else  # Uncheck all!
+    toggled_text.gsub!(/^(\s*)(#{Regexp.escape COMPLETED})/u) { $1 + PENDING }
+  end
+  print '${0:' + e_snp(toggled_text) + '}'  # Wrap in selection
+else  # Work with current line
+  old_line = ENV['TM_CURRENT_LINE']
+  new_line = old_line.gsub(/^(\s*)([#{Regexp.escape COMPLETED}#{Regexp.escape PENDING}])/u) { $1 + ($2==PENDING ? COMPLETED : PENDING) }
+  column = ENV['TM_LINE_INDEX'].to_i
+  unless $1 &amp;&amp; column &lt;= $1.length  # If we're past the line-initial whitespace,
+    column += new_line.length - old_line.length  # compensate for different byte counts
+  end
+  new_line[column,0] = '${0}'  # Insert caret
+  print new_line
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@d</string>
+	<key>name</key>
+	<string>Toggle Completed</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.tasks</string>
+	<key>uuid</key>
+	<string>40140EB8-3634-465A-A656-32D6C879C85B</string>
+</dict>
+</plist>

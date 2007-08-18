@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+PENDING = ENV['TM_BULLET_PENDING'] || '-'
+
+line = ENV['TM_CURRENT_LINE'].rstrip
+column = ENV['TM_LINE_INDEX'].to_i
+line_is_empty   = line.strip.empty?
+start_of_row = !line_is_empty &amp;&amp; column==0
+initial_whitespace = line[/^\s*/]
+in_leading_whitespace  = (column &lt;= initial_whitespace.length)
+in_trailing_whitespace = (column &gt;= line.length)
+in_whitespace = in_leading_whitespace || in_trailing_whitespace
+
+print "\n" if !in_leading_whitespace &amp;&amp; !line_is_empty
+print initial_whitespace[column..-1] if in_leading_whitespace
+
+# If the caret is within the line text (not leading/trailing whitespace)
+# then don't offer a placeholder: we assume the user wants to break the list.
+placeholder = in_whitespace ? "item" : nil
+print "#{PENDING} ${0:#{e_snp placeholder}}"
+
+print "\n" if !line_is_empty &amp;&amp; in_leading_whitespace
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>New Task</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.tasks</string>
+	<key>uuid</key>
+	<string>9216E069-0972-4C19-8475-4943B4A51D0B</string>
+</dict>
+</plist>

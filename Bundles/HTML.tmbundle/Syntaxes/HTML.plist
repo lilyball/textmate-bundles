@@ -558,55 +558,15 @@
 		</dict>
 		<key>php</key>
 		<dict>
+			<key>begin</key>
+			<string>(?=(^\s*)?&lt;\?)</string>
+			<key>end</key>
+			<string>(?!(^\s*)?&lt;\?)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>source.php.embedded.line.empty.whitespace.html</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>&lt;\?(?i:php|=)?(\s*\?)&gt;</string>
-					<key>name</key>
-					<string>source.php.embedded.line.empty.html</string>
-				</dict>
-				<dict>
-					<key>applyEndPatternLast</key>
-					<integer>1</integer>
-					<key>begin</key>
-					<string>(^\s*)?(?=&lt;\?(?i:php|=)?(?!.*\?&gt;))</string>
-					<key>end</key>
-					<string>(?&lt;=\?&gt;)(?:\s*$\n)?</string>
-					<key>name</key>
-					<string>source.php.embedded.block.html</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>source.php</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>applyEndPatternLast</key>
-					<integer>1</integer>
-					<key>begin</key>
-					<string>(?=&lt;\?(?i:php|=)?)</string>
-					<key>end</key>
-					<string>(?&lt;=\?&gt;)</string>
-					<key>name</key>
-					<string>source.php.embedded.line.html</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>source.php</string>
-						</dict>
-					</array>
+					<key>include</key>
+					<string>source.php</string>
 				</dict>
 			</array>
 		</dict>

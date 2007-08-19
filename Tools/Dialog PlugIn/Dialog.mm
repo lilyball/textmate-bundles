@@ -4,7 +4,7 @@
 #import "Dialog.h"
 #import "TMDSemaphore.h"
 #import "TMDChameleon.h"
-
+#import "TMDIncrementalPopUpMenu.h"
 
 // Apple ought to document this <rdar://4821265>
 @interface NSMethodSignature (Undocumented)
@@ -563,6 +563,107 @@ static int sNextWindowControllerToken = 1;
 	return resultDict;
 }
 
+-(void)showExtendedPopupMenu:(NSDictionary*)initialValues
+{
+//NSLog(@"initialValues: %@", initialValues);
+	NSPoint pos = NSZeroPoint;
+	if(id textView = [NSApp targetForAction:@selector(positionForWindowUnderCaret)])
+		pos = [textView positionForWindowUnderCaret];
+
+	NSRect mainScreen = [[NSScreen mainScreen] frame];
+	enumerate([NSScreen screens], NSScreen* candidate)
+	{
+		if(NSMinX([candidate frame]) == 0.0f && NSMinY([candidate frame]) == 0.0f)
+			mainScreen = [candidate frame];
+	}
+
+	pos = NSMakePoint(pos.x,  pos.y);
+    TMDIncrementalPopUpMenu* xPopUp = [[TMDIncrementalPopUpMenu alloc] initWithDictionary:initialValues andEditor:nil];
+		
+	[[xPopUp window] setFrameTopLeftPoint:pos];
+    [xPopUp showWindow:self]; 
+	[self performSelector: @selector(eventHandlingForExtendedPopupMenu:)
+               withObject: xPopUp
+               afterDelay: 0.1];
+}
+
+-(void) eventHandlingForExtendedPopupMenu:(id)xPopUp
+{	
+	NSDate *distantFuture = [NSDate distantFuture];
+	NSEvent *event;
+	do{
+		event = [NSApp nextEventMatchingMask: NSAnyEventMask
+								   untilDate: distantFuture
+			   		       inMode: NSDefaultRunLoopMode
+					      dequeue: YES];
+		
+		if (event != nil)
+		{
+			NSEventType t = [event type];
+			if(t == NSKeyDown){
+				NSString* aString = [event characters];
+				unsigned int flags = [event modifierFlags];
+				unichar		key = 0;
+				if((flags & NSControlKeyMask) || (flags & NSAlternateKeyMask) || (flags & NSCommandKeyMask))
+				{
+					[NSApp sendEvent:event];
+					break;
+				}
+				else if([aString length] == 1){
+					key = [aString characterAtIndex:0];
+					if(key == NSCarriageReturnCharacter ){
+						[xPopUp keyDown:event];
+						break;
+					}
+					else if (key == NSBackspaceCharacter || key == NSDeleteCharacter){
+						[NSApp sendEvent:event];
+						if([[xPopUp mutablePrefix] length] > 0){
+							[xPopUp keyDown:event];
+							}
+						else{
+							break;
+						}
+					}else if ([event keyCode] == 53){
+						break;
+					
+					}else if(key == NSTabCharacter)
+					{ [xPopUp keyDown:event]; }   
+					else if (key == NSUpArrowFunctionKey || key == NSDownArrowFunctionKey)
+					{ 
+						[[xPopUp theTableView] keyDown:event];
+						
+					}
+					else if ([[NSCharacterSet alphanumericCharacterSet] characterIsMember:key]) {
+						[NSApp sendEvent:event];
+						[xPopUp keyDown:event];
+					}else{
+						[NSApp sendEvent:event];
+						//[xPopUp keyDown:event];
+						break;
+					}
+				}
+				else{
+						[NSApp sendEvent:event];
+						//[xPopUp keyDown:event];
+						break;
+				}
+			}else if(t == NSRightMouseDown || t == NSLeftMouseDown){
+				[NSApp sendEvent:event];
+				if(! NSPointInRect([NSEvent mouseLocation], [[xPopUp window] frame]))
+					break;
+			}
+			  else
+			{ 
+				[NSApp sendEvent:event];
+			}
+			
+			
+		}
+	}
+	while(1);
+	[xPopUp close];
+}
+
 - (id)showNib:(NSString*)aNibPath withParameters:(id)someParameters andInitialValues:(NSDictionary*)initialValues dynamicClasses:(NSDictionary*)dynamicClasses modal:(BOOL)modal center:(BOOL)shouldCenter async:(BOOL)async
 {
 	enumerate([dynamicClasses allKeys], id key)
@@ -669,7 +770,6 @@ static int sNextWindowControllerToken = 1;
 	return dict;
 }
 
-
 - (id)showMenuWithOptions:(NSDictionary*)someOptions
 {
 	MenuRef menu_ref;
@@ -724,5 +824,16 @@ static int sNextWindowControllerToken = 1;
 
 	DisposeMenu(menu_ref);
 	return selectedItem;
+}
+
+-(void)write
+{
+    if(id textView = [NSApp targetForAction:@selector(insertSnippetWithOptions:)])
+	{
+		[textView insertSnippetWithOptions:[NSDictionary dictionaryWithObjectsAndKeys:@"(${1:hello},${2:helloj});",@"content",nil]];
+		//[NSDictionary dictionaryWithObjectsAndKeys:@"content", @"(${1:hello})${0};", @"name", @"String", @"scope", @"source.c, source.objc++",@"uuid", "5449EC50-98FE-11D9-9BB8-000A95A89C98",nil]];
+		
+	 NSLog(@"%@", textView);
+	}
 }
 @end

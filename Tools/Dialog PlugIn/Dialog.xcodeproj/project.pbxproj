@@ -17,6 +17,11 @@
 		831625970B2752AF002857D1 /* TMDSemaphore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 831625950B2752AF002857D1 /* TMDSemaphore.mm */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
+		CA33CBD40C6CBCB3004A5579 /* IncrementalPopUpMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = CA33CBD30C6CBCB3004A5579 /* IncrementalPopUpMenu.nib */; };
+		CA33CBD70C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA33CBD50C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.mm */; };
+		CA33CBD80C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CA33CBD60C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.h */; };
+		CA33D1170C71B136004A5579 /* TMDBorderLessWindow.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CA33D1150C71B135004A5579 /* TMDBorderLessWindow.h */; };
+		CA33D1180C71B136004A5579 /* TMDBorderLessWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CA33D1160C71B136004A5579 /* TMDBorderLessWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +42,8 @@
 			dstSubfolderSpec = 7;
 			files = (
 				1726DD610B80700400FD11C0 /* tm_dialog in CopyFiles */,
+				CA33CBD80C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.h in CopyFiles */,
+				CA33D1170C71B136004A5579 /* TMDBorderLessWindow.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +68,11 @@
 		831625960B2752AF002857D1 /* TMDSemaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMDSemaphore.h; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Dialog.tmplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Dialog.tmplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		CA33CBD30C6CBCB3004A5579 /* IncrementalPopUpMenu.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = IncrementalPopUpMenu.nib; sourceTree = "<group>"; };
+		CA33CBD50C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = TMDIncrementalPopUpMenu.mm; sourceTree = "<group>"; };
+		CA33CBD60C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMDIncrementalPopUpMenu.h; sourceTree = "<group>"; };
+		CA33D1150C71B135004A5579 /* TMDBorderLessWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMDBorderLessWindow.h; sourceTree = "<group>"; };
+		CA33D1160C71B136004A5579 /* TMDBorderLessWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMDBorderLessWindow.m; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -94,6 +106,7 @@
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
+				CA33CBD30C6CBCB3004A5579 /* IncrementalPopUpMenu.nib */,
 			);
 			name = Dialog;
 			sourceTree = "<group>";
@@ -119,6 +132,8 @@
 		08FB77AFFE84173DC02AAC07 /* Dialog */ = {
 			isa = PBXGroup;
 			children = (
+				CA33CBD50C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.mm */,
+				CA33CBD60C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.h */,
 				177E4DA209132A0F0064163D /* Dialog.mm */,
 				177E4DA109132A0F0064163D /* Dialog.h */,
 				178E03190AED82FE0005685F /* ValueTransformers.mm */,
@@ -127,6 +142,8 @@
 				175F8F9C0C3144ED0081BCF4 /* TMDChameleon.h */,
 				831625950B2752AF002857D1 /* TMDSemaphore.mm */,
 				831625960B2752AF002857D1 /* TMDSemaphore.h */,
+				CA33D1150C71B135004A5579 /* TMDBorderLessWindow.h */,
+				CA33D1160C71B136004A5579 /* TMDBorderLessWindow.m */,
 			);
 			name = Dialog;
 			sourceTree = "<group>";
@@ -237,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
+				CA33CBD40C6CBCB3004A5579 /* IncrementalPopUpMenu.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +294,8 @@
 				178E031A0AED82FE0005685F /* ValueTransformers.mm in Sources */,
 				831625970B2752AF002857D1 /* TMDSemaphore.mm in Sources */,
 				175F8F950C3144E40081BCF4 /* TMDChameleon.mm in Sources */,
+				CA33CBD70C6CBCE4004A5579 /* TMDIncrementalPopUpMenu.mm in Sources */,
+				CA33D1180C71B136004A5579 /* TMDBorderLessWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

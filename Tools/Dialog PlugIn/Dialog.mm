@@ -579,16 +579,30 @@ static int sNextWindowControllerToken = 1;
 
 	pos = NSMakePoint(pos.x,  pos.y);
     TMDIncrementalPopUpMenu* xPopUp = [[TMDIncrementalPopUpMenu alloc] initWithDictionary:initialValues andEditor:nil];
-		
+	id extraChars;
+	if ([initialValues objectForKey:@"extraChars"])
+		extraChars = [initialValues objectForKey:@"extraChars"];
+	else
+		extraChars = [NSNull null];
 	[[xPopUp window] setFrameTopLeftPoint:pos];
     [xPopUp showWindow:self]; 
 	[self performSelector: @selector(eventHandlingForExtendedPopupMenu:)
-               withObject: xPopUp
+               withObject: [NSDictionary dictionaryWithObjectsAndKeys:xPopUp,@"xPopUp",extraChars,@"extraChars",nil]
                afterDelay: 0.1];
 }
 
--(void) eventHandlingForExtendedPopupMenu:(id)xPopUp
+-(void) eventHandlingForExtendedPopupMenu:(id)dict
 {	
+	id extraChars = [dict objectForKey:@"extraChars"];
+	TMDIncrementalPopUpMenu* xPopUp = [dict objectForKey:@"xPopUp"];
+	NSCharacterSet* whiteList;
+	if (extraChars == [NSNull null]){
+		whiteList = nil;
+	}
+	else{
+		NSLog(@"%@ extrachars",extraChars);
+		whiteList = [NSCharacterSet characterSetWithCharactersInString:extraChars];
+	}
 	NSDate *distantFuture = [NSDate distantFuture];
 	NSEvent *event;
 	do{
@@ -633,7 +647,8 @@ static int sNextWindowControllerToken = 1;
 						[[xPopUp theTableView] keyDown:event];
 						
 					}
-					else if ([[NSCharacterSet alphanumericCharacterSet] characterIsMember:key]) {
+					else if ([[NSCharacterSet alphanumericCharacterSet] characterIsMember:key] ||
+							(whiteList && [whiteList characterIsMember:key])) {
 						[NSApp sendEvent:event];
 						[xPopUp keyDown:event];
 					}else{

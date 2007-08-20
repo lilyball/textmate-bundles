@@ -19,9 +19,15 @@
         ed = [editor retain];
         suggestions = [NSArray arrayWithArray:[aDictionary objectForKey:@"suggestions"]];
 
-        
-        [mutablePrefix setString:[NSString stringWithString:[aDictionary objectForKey:@"mutablePrefix"]]];
-        staticPrefix = [NSString stringWithString:[aDictionary objectForKey:@"staticPrefix"]];
+        [mutablePrefix setString:[NSString stringWithString:[aDictionary objectForKey:@"currentWord"]]];
+        if([aDictionary objectForKey:@"staticPrefix"]){
+			staticPrefix = [NSString stringWithString:[aDictionary objectForKey:@"staticPrefix"]];
+			[staticPrefix retain];
+		}
+		else
+		{
+			staticPrefix = @"";
+		}
 		shell = nil;
 		if([aDictionary objectForKey:@"shell"]){
 			shell = [NSString stringWithString:[aDictionary objectForKey:@"shell"]];
@@ -30,7 +36,6 @@
 		NSPredicate* predicate = [NSPredicate predicateWithFormat:@"filterOn beginswith %@", [staticPrefix stringByAppendingString:mutablePrefix]];
 		suggestions = [suggestions retain];
         [self setFiltered:[suggestions filteredArrayUsingPredicate:predicate]];
-			[staticPrefix retain];
 		
     }
     return self;
@@ -114,11 +119,10 @@
 - (void)awakeFromNib
 {
     [theTableView setNextResponder: self];
-	[theTableView setDoubleAction:@selector(completeAndInsertSnippet)];
+	[theTableView setDoubleAction:@selector(completeAndInsertSnippet:)];
 }
-- (void)completeAndInsertSnippet
+- (void)completeAndInsertSnippet:(id)nothing
 {
-	//NSLog(@"insert");
 	if ([anArrayController selectionIndex] != NSNotFound){
 				id selection = [[filtered objectAtIndex:[anArrayController selectionIndex]] copy];
 				NSString* aString = [selection valueForKey:@"filterOn"];
@@ -157,13 +161,15 @@
 			[self filter];
 			//[self close];
         }
+		else if (key == NSUpArrowFunctionKey || key == NSDownArrowFunctionKey){
+			; // we need to catch this since an empty tableView passes the event on here.
+		}
         else if(key == NSCarriageReturnCharacter ){
-			[self completeAndInsertSnippet];
+			[self completeAndInsertSnippet:nil];
 			//[self close];
         } else if([aString isEqualToString:@"\t"]){
 			[self tab];
 		} else {
-        printf("key pressed: %s\n", [[anEvent description] cString]);
         
         //[self interpretKeyEvents:[NSArray arrayWithObject:anEvent]];
         [mutablePrefix appendString:aString];

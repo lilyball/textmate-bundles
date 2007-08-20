@@ -600,7 +600,6 @@ static int sNextWindowControllerToken = 1;
 		whiteList = nil;
 	}
 	else{
-		NSLog(@"%@ extrachars",extraChars);
 		whiteList = [NSCharacterSet characterSetWithCharactersInString:extraChars];
 	}
 	NSDate *distantFuture = [NSDate distantFuture];

@@ -1,3 +1,5 @@
+## From Allan Odgaard
+
 Running `Support/bin/validate_uuids.rb` shows this problem:
 
     UUID Duplicates:
@@ -28,3 +30,22 @@ Menu:
  3) GIFFBUILDER is an empty sub-menu (we generally do not want empty submenus)
 
  4) Too limited use of separators -- I’d use more separators and put more items in each menu and then also limit the depth. Looking e.g. at the TypoScript submenu, here we have 5 items, one an actual item, and 4 submenus of which 3 of them only has a single item (ignoring the empty GIFBUILDER submenu). Likely all this could be just one submenu using separators.
+
+---
+
+## From Michael Sheets
+
+- Help command should not have a key equivalent. See [style guide][1].
+- The ⌃M shortcut for 'Insert devLog|sysLog Entry' this is a bit high level, also as per the style guide should use ⌃⇧ or ⌃⇧⌘. But most importantly this collides with the shortcut for [multi-stroke keybindings][2] many of us have installed from jacobolus.
+- The 'Use Word / Selection as Marker' and such suffer the same issue.
+- The debug and sub snippet triggers might be a bit generic since they would be active in all PHP files. There isn't any collision currently, just something to think about.
+- fileTypes of tml and xml in T3DataStructure are too generic, would cause confusion. Should be left blank.
+
+TypoScript Grammar:
+
+- Invalid top level include key.
+- comment.line scopes need trailing .typoscript
+- Comment rules need $\n? added to the end to extend scope to end-of-line.
+
+[1]: http://macromates.com/wiki/Bundles/StyleGuide
+[2]: http://macromates.com/blog/2006/multi-stroke-key-bindings/

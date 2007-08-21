@@ -47,8 +47,15 @@ class Xcode
     
     def results_path
       # default to global build results
-      prefs = OSX::PropertyList.load(File.new("#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"))
-      dir = prefs['PBXProductDirectory'] || File.dirname(@project_path) + "/build"
+      global_path = "#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"
+      default_dir = File.dirname(@project_path) + "/build"
+      
+      dir = if File.exist?(global_path)
+        prefs = OSX::PropertyList.load(File.new(global_path))
+        prefs['PBXProductDirectory'] || default_dir
+      else
+        default_dir
+      end 
       
       # || user pref for SYMROOT + the active configuration
       if Xcode.supports_configurations? then

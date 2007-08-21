@@ -2,7 +2,7 @@
 //  CommitWindowController.m
 //
 //  Created by Chris Thomas on 2/6/05.
-//  Copyright 2005-2006 Chris Thomas. All rights reserved.
+//  Copyright 2005-2007 Chris Thomas. All rights reserved.
 //	MIT license.
 //
 
@@ -72,6 +72,23 @@
 	}
 	
 	[commandsForAction addObject:commandArguments];
+}
+
+- (BOOL)standardChosenStateForStatus:(NSString *)status
+{
+	BOOL	chosen = YES;
+
+	// Deselect external commits and files not added by default
+	// We intentionally do not deselect file conflicts by default
+	// -- those are most likely to be a problem.
+
+	if(	[status hasPrefix:@"X"]
+	 ||	[status hasPrefix:@"?"])
+	{
+		chosen = NO;
+	}
+	
+	return chosen;
 }
 
 // fFilesController and fFilesStatusStrings should be set up before calling setupUserInterface.
@@ -177,19 +194,7 @@
 			[dictionary setObject:status forKey:@"status"];
 			[dictionary setObject:[status attributedStatusString] forKey:@"attributedStatus"];
 
-			// Deselect external commits by default
-			// and files not added.
-			// We intentionally do not deselect file conflicts by default
-			// -- those are most likely to be a problem.
-			if([status hasPrefix:@"X"]
-			|| [status hasPrefix:@"?"])
-			{
-				itemSelectedForCommit = NO;
-			}
-			else
-			{
-				itemSelectedForCommit = YES;
-			}
+			itemSelectedForCommit = [self standardChosenStateForStatus:status];
 			[dictionary setObject:[NSNumber numberWithBool:itemSelectedForCommit] forKey:@"commit"]; 
 		}
 
@@ -476,8 +481,19 @@
 
 - (IBAction) revertToStandardChosenState:(id)sender
 {
-	[self chooseAllItems:YES];
-	[self choose:NO itemsWithStatus:@"X"];
+	NSArray *	files = [fFilesController arrangedObjects];
+	int			count = [files count];
+	int			i;
+	
+	for( i = 0; i < count; i += 1 )
+	{
+		NSMutableDictionary *	dictionary	= [files objectAtIndex:i];
+		BOOL					itemChosen = YES;
+		NSString *				status = [dictionary objectForKey:@"status"];
+
+		itemChosen = [self standardChosenStateForStatus:status];
+		[dictionary setObject:[NSNumber numberWithBool:itemChosen] forKey:@"commit"]; 
+	}
 }
 
 #if 0
@@ -591,6 +607,7 @@
 
 	[fileDictionary setObject:newStatus forKey:@"status"];
 	[fileDictionary setObject:[newStatus attributedStatusString] forKey:@"attributedStatus"];
+	[fileDictionary setObject:[NSNumber numberWithBool:[self standardChosenStateForStatus:newStatus]] forKey:@"commit"];
 	
 	[self resetStatusColumnSize];
 }

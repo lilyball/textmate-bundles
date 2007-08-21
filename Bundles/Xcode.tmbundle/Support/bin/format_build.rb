@@ -197,8 +197,11 @@ class Formatter
 			attr_accessor	:accumulated_prefix	# prefix text to insert in next div
 			
 			def borrow_xcode_icon(icon_name, background=false)
-				image(	:class => background ? "backgroundicon" : "icon",
-						:src => "file:///System/Library/PrivateFrameworks/DevToolsInterface.framework/Versions/A/Resources/#{icon_name}" )
+				image_path = "/System/Library/PrivateFrameworks/DevToolsInterface.framework/Versions/A/Resources/#{icon_name}"
+				if File.exist?(image_path)
+					image(	:class => background ? "backgroundicon" : "icon",
+							:src => "file://#{image_path}" )
+				end
 			end
 			
 			def div_stack

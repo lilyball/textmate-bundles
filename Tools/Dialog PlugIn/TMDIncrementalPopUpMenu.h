@@ -15,7 +15,9 @@
     NSString* staticPrefix;
     NSArray* filtered;
 	NSString* shell;
+	NSMutableAttributedString* attrString;
 	IBOutlet id theTableView;
+	float stringWidth;
 	
     id ed;
 }
@@ -26,6 +28,7 @@
 - (id)theTableView;
 - (void)keyDown:(NSEvent*)anEvent;
 - (void)tab;
+- (int)stringWidth;
 - (void)writeToTM:(NSString*)aString asSnippet:(BOOL)snippet;
 - (NSString*)executeShellCommand:(NSString*)command WithDictionary:(NSDictionary*)dict;
 - (NSArray*)filtered;

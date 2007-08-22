@@ -25,7 +25,5 @@
 - (id)showAlertForPath:(NSString*)filePath withParameters:(NSDictionary *)parameters modal:(BOOL)modal;
 // Menu
 - (id)showMenuWithOptions:(NSDictionary*)someOptions;
--(void)showExtendedPopupMenu:(NSDictionary*)initialValues;
-
--(void)write;
+- (void)showExtendedPopupMenu:(NSDictionary*)initialValues;
 @end

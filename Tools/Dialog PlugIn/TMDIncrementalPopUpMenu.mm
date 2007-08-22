@@ -6,6 +6,9 @@
 //
 
 #import "TMDIncrementalPopUpMenu.h"
+@interface NSObject (OakTextView)
+- (id)insertSnippetWithOptions:(NSDictionary*)options;
+@end
 
 @implementation TMDIncrementalPopUpMenu
 - (id)initWithDictionary:(NSDictionary*)aDictionary andEditor:(id)editor
@@ -36,6 +39,7 @@
 		NSPredicate* predicate = [NSPredicate predicateWithFormat:@"filterOn beginswith %@", [staticPrefix stringByAppendingString:mutablePrefix]];
 		suggestions = [suggestions retain];
         [self setFiltered:[suggestions filteredArrayUsingPredicate:predicate]];
+		attrString = [[NSMutableAttributedString alloc] initWithString:@"No completion found"];
 		
     }
     return self;
@@ -91,7 +95,7 @@
 
 		//[anArrayController rearrangeObjects];
 	} else {
-		myArray2 = [suggestions copy];
+		myArray2 = suggestions;
 	}
 	[self setValue:myArray2 forKey:@"filtered"];
 	NSPoint old = NSMakePoint([[self window] frame].origin.x,[[self window] frame].origin.y +[[self window] frame].size.height);
@@ -105,7 +109,7 @@
 	}
 	else
 	{
-			[[self window] setContentSize:NSMakeSize([[self window] frame].size.width, [theTableView rowHeight] *2)];
+			[[self window] setContentSize:NSMakeSize([[self window] frame].size.width, [theTableView rowHeight] *2 )];
 	}
 	[[self window] setFrameTopLeftPoint:old];
 }
@@ -114,8 +118,16 @@
 //    [self showWindow:self];
 //	[[self window] setContentView:theTableView];
     [self filter];
+	NSMutableAttributedString* s = [[NSMutableAttributedString alloc] initWithString:mutablePrefix];
+	[s addAttribute:NSFontAttributeName
+	          value:[NSFont fontWithName:[[NSUserDefaults standardUserDefaults] stringForKey:@"OakTextViewNormalFontName"] 
+	                                size:[[NSUserDefaults standardUserDefaults] integerForKey:@"OakTextViewNormalFontSize"] ?: 12 ]
+			  range:NSMakeRange(0,[mutablePrefix length])];
+	stringWidth = [s size].width;
+	[s release];
 }
-
+- (int) stringWidth;
+{ return stringWidth; }
 - (void)awakeFromNib
 {
     [theTableView setNextResponder: self];
@@ -168,7 +180,10 @@
 			[self completeAndInsertSnippet:nil];
 			//[self close];
         } else if([aString isEqualToString:@"\t"]){
-			[self tab];
+			if([filtered count] == 1)
+				[self completeAndInsertSnippet:nil];
+			else
+				[self tab];
 		} else {
         
         //[self interpretKeyEvents:[NSArray arrayWithObject:anEvent]];

@@ -487,24 +487,6 @@ int main (int argc, char* argv[])
 
 	switch(dialogAction)
 	{
-	    case kWrite:
-            if(argc == 0)
-			{
-				id proxy;
-				if(validate_proxy(proxy))
-				{
-				
-					
-						[proxy write];
-					
-					
-				}
-			}
-			else
-			{
-				usage();
-			}
-			break;
         case kShowXMenu:
             if(argc == 0)
 			{

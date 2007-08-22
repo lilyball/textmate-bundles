@@ -579,6 +579,9 @@ static int sNextWindowControllerToken = 1;
 
 	pos = NSMakePoint(pos.x,  pos.y);
     TMDIncrementalPopUpMenu* xPopUp = [[TMDIncrementalPopUpMenu alloc] initWithDictionary:initialValues andEditor:nil];
+	if((pos.x + [[xPopUp window] frame].size.width) > (mainScreen.size.width))
+		pos.x = pos.x - [[xPopUp window] frame].size.width;
+	pos.x = pos.x - [xPopUp stringWidth];
 	id extraChars;
 	if ([initialValues objectForKey:@"extraChars"])
 		extraChars = [initialValues objectForKey:@"extraChars"];
@@ -640,7 +643,17 @@ static int sNextWindowControllerToken = 1;
 						break;
 					
 					}else if(key == NSTabCharacter)
-					{ [xPopUp keyDown:event]; }   
+					{
+						if ([[xPopUp filtered] count] == 0){
+							[NSApp sendEvent:event];
+							break;
+						}
+						if ([[xPopUp filtered] count] == 1){
+							[xPopUp keyDown:event];
+							break;
+						}
+						[xPopUp keyDown:event];
+					}   
 					else if (key == NSUpArrowFunctionKey || key == NSDownArrowFunctionKey)
 					{ 
 						[[xPopUp theTableView] keyDown:event];
@@ -840,14 +853,4 @@ static int sNextWindowControllerToken = 1;
 	return selectedItem;
 }
 
--(void)write
-{
-    if(id textView = [NSApp targetForAction:@selector(insertSnippetWithOptions:)])
-	{
-		[textView insertSnippetWithOptions:[NSDictionary dictionaryWithObjectsAndKeys:@"(${1:hello},${2:helloj});",@"content",nil]];
-		//[NSDictionary dictionaryWithObjectsAndKeys:@"content", @"(${1:hello})${0};", @"name", @"String", @"scope", @"source.c, source.objc++",@"uuid", "5449EC50-98FE-11D9-9BB8-000A95A89C98",nil]];
-		
-	 NSLog(@"%@", textView);
-	}
-}
 @end

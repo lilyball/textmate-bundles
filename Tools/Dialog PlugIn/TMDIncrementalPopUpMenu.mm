@@ -97,21 +97,22 @@
 	} else {
 		myArray2 = suggestions;
 	}
-	[self setValue:myArray2 forKey:@"filtered"];
+	
 	NSPoint old = NSMakePoint([[self window] frame].origin.x,[[self window] frame].origin.y +[[self window] frame].size.height);
-	if([filtered count]>15)
+	if([myArray2 count]>15)
 	{
-			[[self window] setContentSize:NSMakeSize([[self window] frame].size.width, [theTableView rowHeight]*(15 + 1))];
+			[[self window] setContentSize:NSMakeSize([[self window] frame].size.width, [theTableView rowHeight]*15*1.15)];
 	}
-	else if([filtered count]>1)
+	else if([myArray2 count]>1)
 	{
-			[[self window] setContentSize:NSMakeSize([[self window] frame].size.width, [theTableView rowHeight]*([filtered count] + 1))];
+			[[self window] setContentSize:NSMakeSize([[self window] frame].size.width, [theTableView rowHeight]*[myArray2 count]*1.15)];
 	}
 	else
 	{
-			[[self window] setContentSize:NSMakeSize([[self window] frame].size.width, [theTableView rowHeight] *2 )];
+			[[self window] setContentSize:NSMakeSize([[self window] frame].size.width, [theTableView rowHeight] * 1.1 )];
 	}
 	[[self window] setFrameTopLeftPoint:old];
+	[self setValue:myArray2 forKey:@"filtered"];
 }
 - (void)windowDidLoad
 {

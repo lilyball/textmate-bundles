@@ -35,7 +35,7 @@ if q_object
     output << line.chomp
   end
   
-  output << "" << include_file if !found_include
+  output << "" << include_file << "" if !found_include
   
   print output.join("\n")
   exit 0

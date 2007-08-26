@@ -12,18 +12,18 @@ if [[ -z $TM_SELECTED_FILES ]]; then
 else
 	DARCSPaths="$TM_SELECTED_FILES";
 fi
-
+export DARCSPaths
 
 "${TM_RUBY:=ruby}" &lt;&lt;'EOF'
 require 'pathname'
 
 basedir = Pathname.new(ENV['TM_DIRECTORY']).realpath()
 addlist = Array.new()
-ENV['TM_SELECTED_FILES'].split(/' '/).each() { |addfile|
+ENV['DARCSPaths'].split(/' '/).each() { |addfile|
   addfile = addfile[/^'?(.*?)'?$/, 1]
   addlist &lt;&lt; "'#{Pathname.new(addfile).realpath.relative_path_from(basedir).to_s.gsub(/(')/, "\\\1")}'"
 }
-output = `darcs add -r #{addlist.join(' ')}`
+output = `darcs add -v -r #{addlist.join(' ')}`
 puts(output)</string>
 	<key>input</key>
 	<string>none</string>
@@ -32,7 +32,7 @@ puts(output)</string>
 	<key>name</key>
 	<string>Add File(s) to Repository</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>81229AD0-DE5C-11D9-823F-000A95A51A76</string>
 </dict>

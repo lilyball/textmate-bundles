@@ -1,7 +1,7 @@
 /*
 
 	DST=~/Library/Application\ Support/TextMate/Support/bin/find_app
-	g++ -Wall -Os -o "$DST" "$TM_FILEPATH" -framework ApplicationServices && strip "$DST"
+	g++ -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wall -Os -o "$DST" "$TM_FILEPATH" -framework ApplicationServices && strip "$DST"
 
 */
 

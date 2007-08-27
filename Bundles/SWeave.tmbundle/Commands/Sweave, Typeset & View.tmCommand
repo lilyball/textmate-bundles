@@ -39,7 +39,7 @@ html_header 'Sweave, Typeset &amp;amp; View' "$FILE"
 echo '&lt;h2&gt;Sweaving…&lt;/h2&gt;'
 
 SW=${TM_SWEAVE_WD:=${TM_DIRECTORY}}
-echo -e "setwd('$SW')\nSweave('$TM_FILEPATH')" | R --vanilla --quiet
+echo -e "setwd('$SW')\nSweave('$TM_FILEPATH')" | R --vanilla --quiet | pre
 
 # Check if we actually have a tex compiler
 require_cmd "$TEX" "You can either set the &lt;tt&gt;TM_LATEX_COMPILER&lt;/tt&gt; variable to the full path of your LaTeX compiler (e.g. &lt;tt&gt;/opt/local/bin/pdflatex&lt;/tt&gt; or set the &lt;tt&gt;PATH&lt;/tt&gt; variable to include the path of &lt;tt&gt;pdflatex&lt;/tt&gt;."

@@ -133,7 +133,7 @@ class RailsPath
       when %r{/controllers/(.+_controller\.(rb))$}   then :controller
       when %r{/controllers/(application\.(rb))$}     then :controller
       when %r{/helpers/(.+_helper\.rb)$}             then :helper
-      when %r{/views/(.+\.(rhtml|rxml|rxhtml|rjs))$} then :view
+      when %r{/views/(.+\.(rhtml|rxml|rxhtml|rjs|erb))$} then :view
       when %r{/models/(.+\.(rb))$}                   then :model
       when %r{/test/fixtures/(.+\.(yml|csv))$}       then :fixture
       when %r{/test/functional/(.+\.(rb))$}          then :functional_test

@@ -195,8 +195,8 @@ TEXT
           key = $1.downcase
           case key
           when 'ping'
-            @post['mt_tbping_urls'] = [] unless @post['mt_tbping_urls']
-            @post['mt_tbping_urls'].push($2)
+            @post['mt_tb_ping_urls'] = [] unless @post['mt_tb_ping_urls']
+            @post['mt_tb_ping_urls'].push($2)
           when 'category'
             @post['categories'] = [] unless @post['categories']
             @post['categories'].push($2)

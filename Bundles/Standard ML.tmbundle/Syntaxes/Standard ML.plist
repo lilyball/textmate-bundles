@@ -56,32 +56,8 @@
 			</array>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>\b(sig)\b</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.delimiter.ml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.delimiter.ml</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\b(end)\b</string>
-			<key>name</key>
-			<string>meta.module.sigdec.ml</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#spec</string>
-				</dict>
-			</array>
+			<key>include</key>
+			<string>#sigexp</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -278,6 +254,40 @@
 				</dict>
 			</array>
 		</dict>
+		<key>sigexp</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b(sig)\b</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.delimiter.ml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.delimiter.ml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\b(end)\b</string>
+					<key>name</key>
+					<string>meta.module.sigdec.ml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#spec</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>spec</key>
 		<dict>
 			<key>patterns</key>
@@ -414,7 +424,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=val|type|eqtype|datatype|structure|include)</string>
+					<string>(?=val|type|eqtype|datatype|structure|include|end)</string>
 					<key>name</key>
 					<string>meta.spec.ml.structure</string>
 					<key>patterns</key>
@@ -424,6 +434,14 @@
 							<string>\b(sharing)\b</string>
 							<key>name</key>
 							<string>keyword.other.ml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#sigexp</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
 						</dict>
 					</array>
 				</dict>

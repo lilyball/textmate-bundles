@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>.attr({${1:attribute1}: '${2:value1}', ${3:attribute2}: '${4:value2}'})$0</string>
+	<string>.attr({'${1:attribute1}'${2/(.+)/(?1:\: :)/}${2/(^[0-9]+$)|.+/(?1::')/}${2:value1}${2/(^[0-9]+$)|.+/(?1::')/}, '${3:attribute2}'${4/(.+)/(?1:\: :)/}${4/(^[0-9]+$)|.+/(?1::')/}${4:value2}${4/(^[0-9]+$)|.+/(?1::')/}})$0</string>
 	<key>name</key>
-	<string>attr (hash)</string>
+	<string>attr (map)</string>
 	<key>scope</key>
 	<string>source.js.jquery</string>
 	<key>tabTrigger</key>

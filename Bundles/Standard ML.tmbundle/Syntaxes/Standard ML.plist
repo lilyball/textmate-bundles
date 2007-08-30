@@ -194,7 +194,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\s*(type|eqtype) .* =</string>
+			<string>\b(eqtype|type)\s+([a-zA-Z][a-zA-Z0-9'_]*)\s+=</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -209,18 +209,11 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>$</string>
+			<string>(?=end|fun|structure|functor|val|type|eqtype)</string>
 			<key>name</key>
 			<string>meta.typeabbrev.ml</string>
 			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>(([a-zA-Z0-9\.\* ]|(\-&gt;))*)</string>
-					<key>name</key>
-					<string>meta.typeexp.ml</string>
-				</dict>
-			</array>
+			<array/>
 		</dict>
 	</array>
 	<key>repository</key>

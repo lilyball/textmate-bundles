@@ -1,22 +1,28 @@
 module TextMate
   module IO
+    
+    @sync = false
+    @blocksize = 4096
+    
     class << self
-      
+    
       attr_accessor :sync
-      @sync = false
       def sync?; @sync end
       
+      attr_accessor :blocksize
+
       def exhaust(named_fds, &block)
         
         leftovers = {}
         named_fds = named_fds.dup
         named_fds.delete_if { |key, value| value.nil? }
+        named_fds.each_key {|k| leftovers[k] = "" }
         
         until named_fds.empty? do
           
           fd   = select(named_fds.values)[0][0]
           name = named_fds.find { |key, value| fd == value }.first
-          data = fd.sysread(4096) rescue ""
+          data = fd.sysread(@blocksize) rescue ""
           
           if data.to_s.empty? then
             named_fds.delete(name)
@@ -24,6 +30,10 @@ module TextMate
           
           elsif not sync?
             if data =~ /\A(.*\n|)([^\n]*)\z/m
+              if $1 == ""
+                leftovers[name] += $2
+                next
+              end
               lines = leftovers[name].to_s + $1
               leftovers[name] = $2
               case block.arity
@@ -53,14 +63,17 @@ module TextMate
         end
         
       end
-      
+            
     end
+    
   end
 end
 
 # interactive unit tests
 if $0 == __FILE__
   require "open3"
+  #TextMate::IO.sync = false
+  #TextMate::IO.blocksize = 1
 
   puts "1=== Line by Line"
   stdin, stdout, stderr = Open3.popen3("echo 'foo\nbar'; echo 1>&2 bar; echo fud")
@@ -77,7 +90,7 @@ if $0 == __FILE__
   # check that everything still works with sync enabled.
   TextMate::IO.sync = true
 
-  puts "3==="  
+  puts "3=== Streaming"  
   stdin, stdout, stderr = Open3.popen3("echo 'foo\nbar'; echo 1>&2 bar; echo fud")
   TextMate::IO.exhaust(:out => stdout, :err => stderr) do |data, type|
     puts "#{type}: “#{data.rstrip}”"

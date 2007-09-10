@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require 'open3'
+require ENV["TM_SUPPORT_PATH"] + "/lib/web_preview"
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
+
+filename = ENV['TM_FILEPATH']
+
+cmd = "'#{ENV['TM_BUNDLE_SUPPORT']}/bin/mtasc' '#{filename}'"
+
+stdin, stdout, stderr = Open3.popen3(cmd)
+
+warnings = []
+errors = []
+while err = stderr.gets
+  if err[0, 10] == 'Warning : '
+    warnings.push(err.chomp)
+  else
+    m = /(.+):([0-9]+): characters ([0-9]+)-([0-9]+) : (.+)/.match(err)
+    if m != nil
+      a = "txmt://open?url=file://#{filename}&amp;line=#{m[2]}&amp;column=#{m[3].to_i + 1}"
+      err = "&lt;a href=\"#{a}\"&gt;#{File.basename(m[1])}, Line: #{m[2]} Column: #{m[3].to_i + 1} - #{m[5]}&lt;/a&gt;"
+    end
+    errors.push(err.chomp)
+  end
+end
+if !errors.empty?
+  #puts "#{errors.uniq.join('&lt;/p&gt;&lt;p&gt;')} &lt;br/&gt; &lt;pre&gt;#{cmd}&lt;/pre&gt;", "Errors:"
+end
+if !warnings.empty?
+  #puts "#{warnings.uniq.join('&lt;/p&gt;&lt;p&gt;')} &lt;br/&gt; &lt;pre&gt;#{cmd}&lt;/pre&gt;", "Warnings:"
+end
+if errors.empty? &amp;&amp; warnings.empty?
+  puts "Syntax Ok"
+  TextMate.exit_show_tool_tip
+else
+  html_header("Validating Syntax for #{File.basename(filename)}","Validate Syntax")
+  if !errors.empty?
+    puts "&lt;h2&gt;Errors&lt;/h2&gt;"
+    puts errors
+  end
+  if !warnings.empty?
+    puts "&lt;h2&gt;Warnings&lt;/h2&gt;"
+    puts warnings
+  end
+  html_footer
+  TextMate.exit_show_html
+end</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^V</string>
+	<key>name</key>
+	<string>Validate Syntax</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>source.actionscript</string>
+	<key>uuid</key>
+	<string>C8F898B5-87AD-443C-BBA1-9B611B6413A9</string>
+</dict>
+</plist>

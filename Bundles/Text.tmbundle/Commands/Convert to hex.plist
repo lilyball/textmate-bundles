@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>iconv -f utf-8 -t ucs-2|hexdump -ve '"\\\x" 1/2 "%02x"'</string>
+	<string>#!/usr/bin/env ruby -wKU
+print STDIN.read.unpack("U*").map { |e| sprintf('0x%02x', e) }.join(' ')</string>
 	<key>fallbackInput</key>
 	<string>character</string>
 	<key>input</key>

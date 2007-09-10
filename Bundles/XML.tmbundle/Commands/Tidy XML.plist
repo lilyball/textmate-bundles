@@ -5,13 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>result=`xmllint --format - 2&gt;&amp;1`
-  if [[ $? &gt; 0 ]];
-  then
-    exit_show_tool_tip "Errors: $result"
-  else
-    echo "$result"
-  fi</string>
+	<string>if [[ "$TM_SOFT_TABS" = "YES" ]];
+	then export XMLLINT_INDENT=`ruby -e"print(' ' * ${TM_TAB_SIZE})"`
+	else export XMLLINT_INDENT=$'\t'
+fi
+result=`xmllint --format - 2&gt;&amp;1`
+if [[ $? &gt; 0 ]];
+	then exit_show_tool_tip "Errors: $result"
+	else echo "$result"
+fi</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

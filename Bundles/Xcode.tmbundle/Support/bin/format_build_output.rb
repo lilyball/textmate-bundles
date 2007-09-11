@@ -40,16 +40,16 @@ class Formatter
 		@next_inner_id = "in00001"
 	end
 	
+	#
+	# Entrypoints for build parser
+	#
 	def start
 		emit_raw(html_head(:title => 'Build With Xcode', :sub_title => "Xcode"))
 	end
 	
-	#
-	# Entrypoints for build parser
-	#
-	def start_new_section(title)
+	def start_new_section(title = nil)
 		end_open_sections
-		emit_start_section(html_escape(title))
+		emit_start_section(title.nil? ? nil : html_escape(title))
 	end
 	
 	# target_name -- start a new target section
@@ -65,19 +65,20 @@ class Formatter
 				title += (" with build style ")
 			end
 		
-			title += %Q{<span class="name">#{html_escape(style)}</span><br /> <hr />}
+			title += %Q{<span class="name">#{html_escape(style)}</span><br />}
 		end
 		
 		emit_start_section(title, :css_suffix => 'target', :visibility => :show)
 	end
 	
 	def file_compiled( verb, file )
+		end_current_section if @current_section_class != 'section_target'
 		title = %Q{<span class="method">#{html_escape(verb)}</span> <span class="name">#{html_escape(file)}</span>}
 		emit_start_section(title, :css_suffix => 'build_command', :visibility => :hide)
 	end
 	
 	def build_noise(text)
-		return if text.empty?
+		return if text.strip.empty?
 		
 #		emit_raw("<p></b>section_class is: #{@current_section_class}</b></p>")
 		if @current_section_class == 'section_unadorned'
@@ -85,7 +86,7 @@ class Formatter
 			end_open_sections
 			emit_start_section(nil, :css_suffix => 'target', :visibility => :show)
 		end
-		emit_raw(html_escape(text) + "</br>")
+		emit_raw("<code>" + html_escape(text) + "</code>")
 	end
 	
 	# GCC sometimes outputs pertinent text preceding an "error:"  "warning:" line,

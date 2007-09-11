@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>class ${1:ClassName} {
+	var _${2/\u/_/g};
+	function $1($2){
+		_${2/:(.*)//g} = ${2/:(.*)//g};$0
+	}
+}</string>
+	<key>name</key>
+	<string>class</string>
+	<key>scope</key>
+	<string>source.actionscript</string>
+	<key>tabTrigger</key>
+	<string>class</string>
+	<key>uuid</key>
+	<string>D043AB42-266B-4715-A396-E6ECAF1F4BC0</string>
+</dict>
+</plist>

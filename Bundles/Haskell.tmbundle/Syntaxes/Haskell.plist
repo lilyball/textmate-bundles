@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -210,20 +210,8 @@
 			<string>comment.line.double-dash.haskell</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>{-</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.haskell</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>-}</string>
-			<key>name</key>
-			<string>comment.block.haskell</string>
+			<key>include</key>
+			<string>#block_comment</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -238,6 +226,43 @@
 			<string>entity.name.function.infix.haskell</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>block_comment</key>
+		<dict>
+			<key>applyEndPatternLast</key>
+			<integer>1</integer>
+			<key>begin</key>
+			<string>\{-</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.haskell</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>-\}</string>
+			<key>name</key>
+			<string>comment.block.haskell</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>comment</key>
+					<string>Not really sure what to call this. I think ‘{-#’ is a pragma, but disabled inside comments!?!</string>
+					<key>match</key>
+					<string>\{-#|#-\}</string>
+					<key>name</key>
+					<string>constant.character.escape.pragma-or-comment-marker.haskell</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#block_comment</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.haskell</string>
 	<key>uuid</key>

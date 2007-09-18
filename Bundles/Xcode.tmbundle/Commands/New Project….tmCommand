@@ -7,9 +7,10 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -wKU
 
-TEMPLATES = '/Library/Application Support/Apple/Developer Tools/Project Templates'
-SUPPORT   = ENV['TM_SUPPORT_PATH']
-MATE      = "#{SUPPORT}/bin/mate"
+TEMPLATE_DIRS = ['/Library/Application Support/Apple/Developer Tools/Project Templates', ENV['HOME'] + '/Library/Application Support/Apple/Developer Tools/Project Templates']
+SUPPORT       = ENV['TM_SUPPORT_PATH']
+DIALOG        = ENV['DIALOG']
+MATE          = "#{SUPPORT}/bin/mate"
 
 require "#{SUPPORT}/lib/osx/plist"
 require "#{SUPPORT}/lib/escape"
@@ -101,7 +102,7 @@ end
 def scan_dir(dir)
   entries = [ ]
   Dir.foreach(dir) do |entry|
-    next if entry =~ /^\./
+    next unless File.directory?(dir) and entry !~ /^\./
     entries &lt;&lt; { 'name' =&gt; entry, 'path' =&gt; File.join(dir, entry) }
   end
   entries 
@@ -109,9 +110,17 @@ end
 
 templates = [ ]
 
-Dir.foreach(TEMPLATES) do |dir|
-  next unless File.directory?(dir) and dir !~ /^\./
-  templates &lt;&lt; { 'name' =&gt; dir, 'children' =&gt; scan_dir(File.join(TEMPLATES, dir)) }
+TEMPLATE_DIRS.each do |templates_dir|
+  next unless File.directory?(templates_dir)
+  Dir.foreach(templates_dir) do |dir|
+    next if dir =~ /^\./
+    children = scan_dir(File.join(templates_dir, dir))
+    if template_list = templates.find { |tpl| tpl['name'] == dir }
+      template_list['children'] += children
+    else
+      templates &lt;&lt; { 'name' =&gt; dir, 'children' =&gt; children }
+    end
+  end
 end
 
 plist = { 'templates' =&gt; templates, 'projectName' =&gt; 'untitled' }.to_plist

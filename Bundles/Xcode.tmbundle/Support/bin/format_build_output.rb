@@ -157,15 +157,21 @@ HTML
   	end
 
 	def executable_output( line )
-		build_noise(line)
+		emit_raw('<div class="console">')
+		emit_raw(wrap_tag('code', html_escape(line) + wrap_tag('br')))
+		emit_raw('</div>')
 	end
 
 	def executable_error( line )
-		build_noise(line)
+		emit_raw('<div class="console_error">')
+		emit_raw(wrap_tag('code', html_escape(line) + wrap_tag('br')))
+		emit_raw('</div>')
 	end	
 
 	def executable_HTML( line )
-		emit_raw(line)
+		emit_raw('<div class="console">')
+		emit_raw(line + wrap_tag('br'))
+		emit_raw('</div>')
 	end
 	
  private
@@ -208,6 +214,19 @@ HTML
 	
 	def emit_raw(html)
 		print html
+		$stdout.flush
+	end	
+
+	def wrap_tag(tag, html = nil)
+		if html.nil?
+			"<#{tag} />"
+		else
+			"<#{tag}>#{html}<#{tag}>"
+		end
+	end
+
+	def emit_raw_tag(tag, html = nil)
+		print wrap_tag(tag, html)
 		$stdout.flush
 	end	
 	

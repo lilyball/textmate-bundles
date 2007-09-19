@@ -53,6 +53,10 @@ The file name used to store tags in. Default is *tmtags*.
 
 For backward-compatibility with the *Lookup Definition (ctags)* command from the Source bundle. Only makes sense inside a project. If set must contain the full path and filename for the tags file ctags will use. The path also is the root from which ctags does its work (although additional directories can be added).
 
+* TmCtagsFlags
+
+Any additional flags or options the ctags program should honor.
+
 * TmCtagsTimeout
 
 The timeout in seconds after which ctags is considered hanging (there are some bugs in ctags) and it is killed. Default is 30 seconds. For really large projects that may need to be increased.

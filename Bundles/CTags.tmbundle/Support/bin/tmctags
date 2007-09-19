@@ -41,10 +41,12 @@
 	
 	our $TagFileName=&setFromEnv('TmCtagsTagFileName','tmtags');
 	our $CtagsFlags="--fields=Kn --excmd=pattern -R";
+	our $CtagsOptFlags=&setFromEnv('TmCtagsFlags','');
+	our $AutoJump=&setFromEnv('TmCtagsAutoJump',1);
 	our $CtagsPGM="$ENV{'TM_BUNDLE_SUPPORT'}/bin/ctags";
 	our $CtagsPGMtmplugin="$ENV{'HOME'}/Library/Application Support/TextMate/PlugIns/TmCodeBrowser.tmplugin/Contents/Resources/ctags";
 	our $CtagsTimeout=&setFromEnv('TmCtagsTimeout',30);		# timeout if ctags does not finish within x seconds
-
+	
 	our $AutoJump=&setFromEnv('TmCtagsAutoJump',1);
 	
 	#our $OkSingleSound=&setFromEnv('TmCtagsOkSingleSound','Ping');
@@ -201,7 +203,7 @@ sub updateTags {
 		my $dirs = join( " ", @quotedDirs );
 	    
 		#print("tagfileName: ". $TagFileName);
-		$cmd = "'$ctags' -f $TagFileName $CtagsFlags $dirs |";
+		$cmd = "'$ctags' -f $TagFileName $CtagsFlags $CtagsOptFlags $dirs |";
 		
 		$::_ctagsPID=undef;
 		#print($dir . "\n");

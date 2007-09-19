@@ -3,7 +3,7 @@
 # Free to modify and redistribute non-commercially with due credit.
 
 
-SUPPORT_LIBS = %w{textmate osx/plist escape dialog progress}
+SUPPORT_LIBS = %w{textmate osx/plist escape ui progress}
 SUPPORT_LIBS.each {|lib| require "#{ENV['TM_SUPPORT_PATH']}/lib/#{lib}"}
 
 # Set up objects for the GM environment and the current script.

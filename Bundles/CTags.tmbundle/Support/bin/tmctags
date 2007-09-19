@@ -47,8 +47,6 @@
 	our $CtagsPGMtmplugin="$ENV{'HOME'}/Library/Application Support/TextMate/PlugIns/TmCodeBrowser.tmplugin/Contents/Resources/ctags";
 	our $CtagsTimeout=&setFromEnv('TmCtagsTimeout',30);		# timeout if ctags does not finish within x seconds
 	
-	our $AutoJump=&setFromEnv('TmCtagsAutoJump',1);
-	
 	#our $OkSingleSound=&setFromEnv('TmCtagsOkSingleSound','Ping');
 	our $OkSingleSound=&setFromEnv('TmCtagsOkSingleSound','');
 	our $OkMultiSound=&setFromEnv('TmCtagsOkMultiSound','Frog');

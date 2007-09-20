@@ -6,9 +6,9 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require ENV['TM_SUPPORT_PATH'] + "/lib/dialog"
+require ENV['TM_SUPPORT_PATH'] + "/lib/ui"
 tag = STDIN.read
-color = Dialog.request_color(STDIN.read)
+color = TextMate::UI.request_color(STDIN.read)
 print "#{tag}{color:#{color}}"</string>
 	<key>fallbackInput</key>
 	<string>word</string>

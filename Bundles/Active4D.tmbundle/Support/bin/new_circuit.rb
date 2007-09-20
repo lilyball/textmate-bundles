@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui.rb'
+
 circuitPath = ENV['TM_SELECTED_FILE']
 
 if not circuitPath then
@@ -16,7 +18,7 @@ if not test(?d, circuitPath) then
 end
 
 # Ask for the circuit name
-result = IO.popen(%Q{CocoaDialog inputbox --title "New Circuit" --informative-text "Enter the circuit name:" --button1 "OK" --button2 "Cancel"})
+result = TextMate::UI.request_string :title => "New Circuit", :prompt => "Enter the circuit name:"
 
 if result.readline.chomp == "1" then  # OK clicked
 	circuitName = result.readline.chomp
@@ -26,7 +28,7 @@ if result.readline.chomp == "1" then  # OK clicked
 	circuitDir = "#{circuitPath}/#{circuitName}"
 
 	if test(?d, "#{circuitDir}") then
-		system(%Q{CocoaDialog msgbox --title "Error" --text "That directory already exists." --button1 "OK"})
+		TextMate::UI.alert(:warning, "Error", "That directory already exists.", 'OK')
 		exit(200)
 	end
 

@@ -16,7 +16,7 @@
 # When you see this: [help!] in the comments, it is the user hitting the key equivalent
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/current_word"
-require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
 
 # grabs everything to the left of the cursor
@@ -109,7 +109,7 @@ if candidates.empty?
   print ""
 elsif candidates.length == 1
   print candidates.first
-elsif index = Dialog.menu(options)
+elsif index = TextMate::UI.menu(options)
   print candidates[index]
 end</string>
 	<key>input</key>

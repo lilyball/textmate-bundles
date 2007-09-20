@@ -599,8 +599,8 @@ TEXT
     end
     titles.sort!
 
-    require "#{ENV['TM_SUPPORT_PATH']}/lib/dialog.rb"
-    opt = Dialog.menu(titles)
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/ui.rb"
+    opt = TextMate::UI.menu(titles)
 
     if opt != nil
       TextMate.exit_insert_snippet("Blog: " + titles[opt] + '$0')

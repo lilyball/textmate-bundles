@@ -142,6 +142,11 @@ def find_language_ext
   ext.empty? ? 'txt' : ext
 end
 
+def strip_leading(text, ch = ' ')
+  count = text.gsub(/&lt;[^&gt;]+&gt;/, '').split("\n").map { |e| e =~ /^#{ch}*(?!#{ch})/ ? $&amp;.length : nil }.reject { |e| e.nil? }.min
+  text.map { |line| count.times { line.sub!(/^(&lt;[^&gt;]+&gt;)?#{ch}/, '\1') }; line }.join
+end
+
 def paste_stdin(priv, wrap)
   server = $1 if PASTE_URL =~ %r{.*?://(.*?)(/.*)?$}
   TextMate.call_with_progress(:title =&gt; 'Paste to Pastie', :message =&gt; "Contacting Server “#{server}”…") do
@@ -155,6 +160,8 @@ def paste_stdin(priv, wrap)
     end
 
     Zlib::GzipWriter.open(html_file) do |gz|
+      xml = strip_leading(xml, " ")
+      xml = strip_leading(xml, "\t")
       gz.write document_to_html(xml)
     end
 

@@ -10,7 +10,7 @@
 BUNDLE_SUPPORT = ENV['TM_BUNDLE_SUPPORT']
 SUPPORT_PATH = ENV['TM_SUPPORT_PATH']
 
-PASTE_URL = ENV['TM_PASTIE_URL'] || 'http://pastie.textmate.org/pastes/create'
+PASTE_URL = ENV['TM_PASTIE_URL'] || 'http://pastie.textmate.org/pastes/'
 
 require "#{BUNDLE_SUPPORT}/lib/doctohtml.rb"
 require "#{SUPPORT_PATH}/lib/textmate"

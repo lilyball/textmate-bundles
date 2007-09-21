@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -158,7 +158,7 @@ def paste_stdin(priv, wrap)
       gz.write document_to_html(xml)
     end
 
-    author = ENV['TM_AUTHOR'] || "#{`dscl . read "/Users/$USER" realname|cut -f2 -d:`.strip} (#{ENV['USER']})"
+    author = ENV['TM_AUTHOR'] || "#{`dscl . read "/Users/$USER" realname`.sub(/\A.*?realname:\s*(.*?)\s*\z/, '\1')} (#{ENV['USER']})"
     ext = find_language_ext
 
     %x{

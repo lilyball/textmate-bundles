@@ -4,7 +4,7 @@
 <dict>
 	<key>content</key>
 	<string>${1:subsection name}
-${1/(\w)|\s/(?1:-:-)/g}
+${1/(.)|\s/(?1:-:-)/g}
 $0</string>
 	<key>name</key>
 	<string>section 3</string>

@@ -17,6 +17,11 @@ class Xcode
 		@@xcode2dot1_or_later
 	end
 	
+	def Xcode.preferences
+		global_path = "#{ENV['HOME']}/Library/Preferences/com.apple.Xcode.plist"
+		open(global_path) { |io| OSX::PropertyList.load io } rescue { }
+	end
+	
 end
 
 

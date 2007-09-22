@@ -317,7 +317,7 @@ class ObjCMethodCompletion
           if  m = line.match(/^\[\s*\[\s*([A-Z][a-zA-Z][a-zA-Z0-9]*)\s/)
             framework = %x{ zgrep ^#{e_sh m[1] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
             unless framework.empty?
-              list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -i -n #{e_sh m[1]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+              list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectClass -i -n #{e_sh m[1]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
               list = list.select do |e|
                 e.match(/^(init(\b|[A-Z]))/)
               end
@@ -331,7 +331,7 @@ class ObjCMethodCompletion
             if (type = candidates[0].split("\t")[5].match(/[A-Za-z]+/))
               framework = %x{ zgrep ^#{e_sh type[0] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
               unless framework.empty?
-                list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -i -n #{e_sh type[0]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+                list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectClass -i -n #{e_sh type[0]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
               end
             end      
           end
@@ -340,7 +340,7 @@ class ObjCMethodCompletion
         obType = :classMethod
         framework = %x{ zgrep ^#{e_sh m[2] + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
         unless framework.empty?
-          list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectclass -c -n #{e_sh m[2]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+          list = %x{ #{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectClass -c -n #{e_sh m[2]} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
         end
       end
     end

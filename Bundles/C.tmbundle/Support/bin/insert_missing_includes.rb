@@ -1,6 +1,24 @@
 #!/usr/bin/env ruby
 
 require 'set'
+require "zlib"
+
+def find_include_lines(io)
+  res = []
+  in_synopsis = false
+  io.each_line do |line|
+    if in_synopsis then
+      case line
+      when /^\.In (\S+)$/:              res << $1
+      when /^\.\w+ #include <(\S+)>$/:  res << $1
+      when /^\.Sh /:                    break
+      end
+    elsif line =~ /^\.Sh SYNOPSIS/
+      in_synopsis = true
+    end
+  end
+  res
+end
 
 MARK = [0xFFFC].pack("U").freeze
 def esc (txt); txt.gsub(/[$`\\]/, '\\\\\0'); end
@@ -19,19 +37,10 @@ end.flatten.sort.uniq
 # harvest includes from man files
 includes = Set.new
 paths.each do |path|
-  File.open(path) do |io|
-    in_synopsis = false
-    io.each_line do |line|
-      if in_synopsis then
-        case line
-        when /^\.In (\S+)$/:              includes << $1
-        when /^\.\w+ #include <(\S+)>$/:  includes << $1
-        when /^\.Sh /:                    break
-        end
-      elsif line =~ /^\.Sh SYNOPSIS/
-        in_synopsis = true
-      end
-    end
+  if path =~ /\.gz$/
+    Zlib::GzipReader.open(path) { |io| includes.merge(find_include_lines io) }
+  else
+    File.open(path) { |io| includes.merge(find_include_lines io) }
   end
 end
 

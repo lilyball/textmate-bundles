@@ -10,7 +10,17 @@
 # The page created gets deleted after 5 minutes. The high time-out
 # is so that back and forward works (for 5 minutes).
 
-RMAN='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+RMAN_1='/Library/Application Support/Apple/Developer Tools/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+RMAN_2='/Developer/Library/Xcode/Plug-ins/DocViewerPlugIn.xcplugin/Contents/Resources/rman'
+
+if [[ -x "$RMAN_1" ]]; then
+	RMAN="$RMAN_1"
+elif [[ -x "$RMAN_2" ]]; then
+	RMAN="$RMAN_2"
+else
+	exit -1
+fi
+
 MAN=/usr/bin/man
 DST=$(mktemp /tmp/tm_man_XXXXXX).html
 
@@ -29,8 +39,8 @@ cat >"$DST" <<-HTML
 HTML
 
 "$MAN" "$SECTION" "$WORD"|"$RMAN" -fHTML \
-| perl -pe 's/(<TITLE>).*(<\/TITLE>)/$1Documentation for “'"$WORD"'”$2/' \
-| perl >>"$DST" -pe 's/HREF="([^#][^".]*)\.(\d+)"/HREF="javascript:man($2, &quot;$1&quot;)"/'
+| perl -pe 's/(<TITLE>).*(<\/TITLE>)/$1Documentation for “'"$WORD"'”$2/i' \
+| perl >>"$DST" -pe 's/HREF=["'\'']([^#][^"'\''.]*)\.(\d+)["'\'']/HREF="javascript:man($2, &quot;$1&quot;)"/i'
 
 { sleep 300; rm "$DST"; rm "${DST%.html}"; } &>/dev/null &
 

@@ -193,7 +193,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b((get|peek|put)_(char|code|byte)|nl)(?=[(])</string>
+			<string>\b((get|p(eek|ut))_(c(har|ode)|byte)|nl)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.chars-and-bytes-io.logtalk</string>
 		</dict>
@@ -205,19 +205,19 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(atom_(length|c(hars|o(ncat|des)))|sub_atom|char_code|number_c(hars|odes))(?=[(])</string>
+			<string>\b(atom_(length|c(hars|o(ncat|des)))|sub_atom|char_code|number_c(har|ode)s)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.atom-term-processing.logtalk</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(var|atom|integer|float|atomic|compound|n(onvar|umber))(?=[(])</string>
+			<string>\b(var|atom(ic)?|integer|float|compound|n(onvar|umber))(?=[(])</string>
 			<key>name</key>
 			<string>support.function.term-testing.logtalk</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(read_term|read|write|write(q|_(canonical|term))|op|current_op|char_conversion|current_char_conversion)(?=[(])</string>
+			<string>\b(read(_term)?|write(q|_(canonical|term))?|(current_)?(char_conversion|op))(?=[(])</string>
 			<key>name</key>
 			<string>support.function.term-io.logtalk</string>
 		</dict>
@@ -235,7 +235,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b((set|current)_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])</string>
+			<string>\b((se|curren)t_(in|out)put|open|close|flush_output|stream_property|at_end_of_stream|set_stream_position)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.stream-selection-and-control.logtalk</string>
 		</dict>
@@ -247,7 +247,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b((set|current)_prolog_flag)(?=[(])</string>
+			<string>\b((se|curren)t_prolog_flag)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.prolog-flags.logtalk</string>
 		</dict>
@@ -265,7 +265,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b((current|set)_logtalk_flag|halt)(?=[(])</string>
+			<string>\b((curren|se)t_logtalk_flag|halt)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.implementation-defined-hooks.logtalk</string>
 		</dict>
@@ -283,7 +283,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b((object|protocol|category)_property|extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiates|specializes)_class)(?=[(])</string>
+			<string>\b((object|protocol|category)_property|extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiat|specializ)es_class)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.reflection.logtalk</string>
 		</dict>
@@ -301,7 +301,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(a(bolish|ssert(a|z))|clause|retract|retractall)(?=[(])</string>
+			<string>\b(a(bolish|ssert(a|z))|clause|retract(all)?)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.database.logtalk</string>
 		</dict>

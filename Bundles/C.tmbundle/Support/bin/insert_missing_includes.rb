@@ -31,16 +31,16 @@ functions = src.scan(/(?:(?!->).(?!@|\.).|^\s*)\b([a-z]+)(?=\()/).flatten.to_set
 
 # collect paths to all man files involved
 paths = functions.collect do |func|
-  %x{ man 2>/dev/null -WS2:3 #{func} }.scan /.+/
+  %x{ man 2>/dev/null -WS2:3 #{func} }.scan(/.+/)
 end.flatten.sort.uniq
 
 # harvest includes from man files
 includes = Set.new
 paths.each do |path|
   if path =~ /\.gz$/
-    Zlib::GzipReader.open(path) { |io| includes.merge(find_include_lines io) }
+    Zlib::GzipReader.open(path) { |io| includes.merge(find_include_lines(io)) }
   else
-    File.open(path) { |io| includes.merge(find_include_lines io) }
+    File.open(path) { |io| includes.merge(find_include_lines(io)) }
   end
 end
 

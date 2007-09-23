@@ -87,7 +87,7 @@ def get_destinations
     'windowTitle'           =&gt; window_title,
     'destinations'          =&gt; destinations,
     'selectedDestinations'  =&gt; prefs['selectedDestinations'],
-    'private'               =&gt; 0,
+    'private'               =&gt; true,
     'lineWrap'              =&gt; default_wrap,
   }.to_plist
 
@@ -201,7 +201,7 @@ end
 Process.detach(pid)
 </string>
 	<key>fallbackInput</key>
-	<string>line</string>
+	<string>document</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>inputFormat</key>

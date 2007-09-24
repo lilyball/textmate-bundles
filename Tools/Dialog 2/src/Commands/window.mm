@@ -3,6 +3,7 @@
 #import <sys/stat.h>
 #import "../Dialog.h"
 #import "../TMDCommand.h"
+#import "../OptionParser.h"
 
 // ==========
 // = Window =
@@ -330,6 +331,20 @@ std::string find_nib (std::string nibName, std::string currentDirectory)
 	NSLog(@"%s TMDNib %@", _cmd, options);
 
 	NSArray* args = [options objectForKey:@"arguments"];
+
+	static option_t const expectedOptions[] =
+	{
+		{ "c", "center",		option_t::no_argument										},
+		{ "d", "defaults",	option_t::required_argument, option_t::plist			},
+		{ "m", "modal",		option_t::no_argument										},
+		{ "n", "new-items",	option_t::required_argument, option_t::plist			},
+		{ "p", "parameters",	option_t::required_argument, option_t::plist			},
+		{ "q", "quiet",		option_t::no_argument										},
+	};
+
+	NSDictionary* res = ParseOptions(args, expectedOptions);
+	NSLog(@"%s %@", _cmd, res);
+
 	NSString* command = [args objectAtIndex:2];
 	if([command isEqualToString:@"create"] || [command isEqualToString:@"show"])
 	{

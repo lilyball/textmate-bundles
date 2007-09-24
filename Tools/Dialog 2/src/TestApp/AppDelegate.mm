@@ -25,9 +25,9 @@
 		nil];
 
 	NSString* command = [args count] <= 1 ? @"help" : [args objectAtIndex:1];
-	id target = [TMDCommand objectForCommand:command];
-	NSLog(@"%s target: %@", _cmd, target);
-	[(target ?: self) performSelector:@selector(handleCommand:) withObject:newOptions];
+	if(id target = [TMDCommand objectForCommand:command])
+			[target performSelector:@selector(handleCommand:) withObject:newOptions];
+	else	[stderr_fh writeData:[@"unknown command, try help.\n" dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 - (void)hello:(id)options
@@ -36,17 +36,8 @@
 	[self performSelector:@selector(dispatch:) withObject:options afterDelay:0.0];
 }
 
-- (void)handleCommand:(id)options
-{
-	NSLog(@"%s fallback", _cmd);
-	NSFileHandle* stderr_fh = [options objectForKey:@"stderr"];
-	[stderr_fh writeData:[@"No such command\n" dataUsingEncoding:NSUTF8StringEncoding]];
-}
-
 - (void)awakeFromNib
 {
-	[TMDCommand registerObject:self forCommand:@"help"];
-
 	NSConnection* connection = [NSConnection new];
 	[connection setRootObject:self];
 	if([connection registerName:@"com.macromates.dialog"] == NO)

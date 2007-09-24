@@ -5,8 +5,23 @@
 #define enumerate(container,var) for(NSEnumerator* _enumerator = [container objectEnumerator]; var = [_enumerator nextObject]; )
 #endif
 
+inline char const* beginof (char const* cStr)								{ return cStr; }
+inline char const* endof (char const* cStr)									{ return cStr + strlen(cStr); }
+template <typename T, int N> T* beginof (T (&a)[N])						{ return a; }
+template <typename T, int N> T* endof (T (&a)[N])							{ return a + N; }
+template <typename T, int N, int M> T (*beginof(T (&m)[N][M]))[M]		{ return m; }
+template <typename T, int N, int M> T (*endof(T (&m)[N][M]))[M]		{ return m + N; }
+template <class T> typename T::const_iterator beginof (T const& c)	{ return c.begin(); }
+template <class T> typename T::const_iterator endof (T const& c)		{ return c.end(); }
+template <class T> typename T::iterator beginof (T& c)					{ return c.begin(); }
+template <class T> typename T::iterator endof (T& c)						{ return c.end(); }
+
+#ifndef foreach
+#define foreach(v,f,l) for(typeof(f) v = (f), _end = (l); v != _end; ++v)
+#endif
+
 #ifndef iterate
-#define iterate(v,c) for(typeof(c.begin()) v = (c.begin()), _end = (c.end()); v != _end; ++v)
+#define iterate(v,c) foreach(v, beginof(c), endof(c))
 #endif
 
 #ifndef sizeofA

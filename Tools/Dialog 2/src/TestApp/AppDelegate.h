@@ -4,10 +4,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
-@protocol DialogServerProtocol
-- (void)hello:(id)anArgument;
-@end
+#import "../Dialog.h"
 
 @interface AppDelegate : NSObject<DialogServerProtocol>
 {

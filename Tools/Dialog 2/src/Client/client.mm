@@ -3,7 +3,7 @@
 */
 
 //
-//  talk.mm
+//  client.mm
 //  Created by Allan Odgaard on 2007-09-22.
 //
 
@@ -94,11 +94,8 @@ int main (int argc, char const* argv[])
 	fd_map[stdout_fd]    = STDOUT_FILENO;
 	fd_map[stderr_fd]    = STDERR_FILENO;
 
-	while(!fd_map.empty())
+	while(fd_map.size() > 1 || (fd_map.size() == 1 && fd_map.find(STDIN_FILENO) == fd_map.end()))
 	{
-		if(fd_map.size() == 1 && fd_map.find(STDIN_FILENO) != fd_map.end())
-			break;
-
 		fd_set readfds, writefds, errorfds;
 		FD_ZERO(&readfds); FD_ZERO(&writefds); FD_ZERO(&errorfds);
 
@@ -110,38 +107,12 @@ int main (int argc, char const* argv[])
 			num_fds = std::max(num_fds, it->first + 1);
 		}
 
-		// if(fd_map.find(STDIN_FILENO) != fd_map.end())
-		// {
-		// 	FD_SET(stdin_fd, &errorfds);
-		// 	num_fds = std::max(num_fds, stdin_fd + 1);
-		// }
-
 		int i = select(num_fds, &readfds, &writefds, &errorfds, NULL);
-		// fprintf(stderr, "return: %d\n", i);
 		if(i == -1)
 		{
 			perror("Error from select");
 			continue;
 		}
-
-		// short pollEvents = POLLIN|POLLOUT|POLLATTRIB|POLLNLINK|POLLWRITE|POLLERR|POLLHUP;
-		// pollEvents = 0;//POLLIN|POLLOUT;
-		// struct pollfd status[] = {
-		// 	{ STDIN_FILENO,	pollEvents, 0 },
-		// 	{ stdin_fd,			pollEvents, 0 },
-		// 	{ stdout_fd,		pollEvents, 0 },
-		// 	{ stderr_fd,		pollEvents, 0 },
-		// };
-		// 
-		// int pres = poll(status, sizeofA(status), 0);
-		// fprintf(stderr, "poll returned %d\n", pres);
-		// for(size_t i = 0; i < sizeofA(status); ++i)
-		// 	fprintf(stderr, "fd %d, events %04x\n", status[i].fd, status[i].revents);
-
-		// if(FD_ISSET(stdin_fd, &writefds))
-		// 	fprintf(stderr, "*** we can write to stdin!\n");
-		// if(FD_ISSET(stdin_fd, &errorfds))
-		// 	fprintf(stderr, "*** we have an error stdin!\n");
 
 		std::vector<std::map<int, int>::iterator> to_remove;
 		iterate(it, fd_map)
@@ -152,26 +123,19 @@ int main (int argc, char const* argv[])
 				ssize_t len = read(it->first, buf, sizeof(buf));
 
 				if(len == 0)
-				{
-					to_remove.push_back(it); // we can’t remove as long as we need the iterator for the ++
-				}
-				else
-				{
-					// fprintf(stderr, "Got %zd bytes on %d\n", len, it->first);
-					write(it->second, buf, len);
-				}
+						to_remove.push_back(it); // we can’t remove as long as we need the iterator for the ++
+				else	write(it->second, buf, len);
 			}
 
 			if(FD_ISSET(it->first, &errorfds))
 			{
+				// anyone knows how to query the fd for what is wrong?
 				fprintf(stderr, "error condition on %d\n", it->first);
-				perror("what?");
 			}
 		}
 
 		iterate(it, to_remove)
 		{
-			// fprintf(stderr, "close and remove fd %d\n", (*it)->first);
 			if((*it)->second == stdin_fd)
 				close((*it)->second);
 			fd_map.erase(*it);

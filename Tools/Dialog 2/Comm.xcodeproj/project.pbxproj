@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 42;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,10 @@
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		CAE4623F0CA864D0008EFB3A /* extendedmenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = CAE462390CA864D0008EFB3A /* extendedmenu.mm */; };
+		CAE462400CA864D0008EFB3A /* IncrementalPopUpMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = CAE4623A0CA864D0008EFB3A /* IncrementalPopUpMenu.nib */; };
+		CAE462410CA864D0008EFB3A /* TMDBorderLessWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CAE4623C0CA864D0008EFB3A /* TMDBorderLessWindow.m */; };
+		CAE462420CA864D0008EFB3A /* TMDIncrementalPopUpMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = CAE4623E0CA864D0008EFB3A /* TMDIncrementalPopUpMenu.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +36,7 @@
 		1718162E0CA5E45600B9DDCF /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/TestApp/main.m; sourceTree = "<group>"; };
 		171816510CA5E5E400B9DDCF /* menu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = menu.mm; sourceTree = "<group>"; };
 		171816520CA5E5E400B9DDCF /* quit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = quit.mm; sourceTree = "<group>"; };
-		171816530CA5E5E400B9DDCF /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = window/window.mm; sourceTree = "<group>"; };
+		171816530CA5E5E400B9DDCF /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = window.mm; sourceTree = "<group>"; };
 		171816570CA5F7ED00B9DDCF /* alert.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = alert.mm; sourceTree = "<group>"; };
 		175CB7640CA761F5004710C2 /* help.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = help.mm; sourceTree = "<group>"; };
 		175CB7680CA76402004710C2 /* OptionParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OptionParser.mm; path = src/OptionParser.mm; sourceTree = "<group>"; };
@@ -40,8 +44,14 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Comm_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comm_Prefix.pch; sourceTree = "<group>"; };
-		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Comm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Comm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAE462390CA864D0008EFB3A /* extendedmenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = extendedmenu.mm; sourceTree = "<group>"; };
+		CAE4623A0CA864D0008EFB3A /* IncrementalPopUpMenu.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = IncrementalPopUpMenu.nib; sourceTree = "<group>"; };
+		CAE4623B0CA864D0008EFB3A /* TMDBorderLessWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMDBorderLessWindow.h; sourceTree = "<group>"; };
+		CAE4623C0CA864D0008EFB3A /* TMDBorderLessWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMDBorderLessWindow.m; sourceTree = "<group>"; };
+		CAE4623D0CA864D0008EFB3A /* TMDIncrementalPopUpMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMDIncrementalPopUpMenu.h; sourceTree = "<group>"; };
+		CAE4623E0CA864D0008EFB3A /* TMDIncrementalPopUpMenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TMDIncrementalPopUpMenu.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +88,7 @@
 		171816500CA5E5E400B9DDCF /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				CAE462380CA864D0008EFB3A /* ExtendedPopUp */,
 				171816570CA5F7ED00B9DDCF /* alert.mm */,
 				175CB7640CA761F5004710C2 /* help.mm */,
 				171816510CA5E5E400B9DDCF /* menu.mm */,
@@ -140,6 +151,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CAE462380CA864D0008EFB3A /* ExtendedPopUp */ = {
+			isa = PBXGroup;
+			children = (
+				CAE462390CA864D0008EFB3A /* extendedmenu.mm */,
+				CAE4623A0CA864D0008EFB3A /* IncrementalPopUpMenu.nib */,
+				CAE4623B0CA864D0008EFB3A /* TMDBorderLessWindow.h */,
+				CAE4623C0CA864D0008EFB3A /* TMDBorderLessWindow.m */,
+				CAE4623D0CA864D0008EFB3A /* TMDIncrementalPopUpMenu.h */,
+				CAE4623E0CA864D0008EFB3A /* TMDIncrementalPopUpMenu.mm */,
+			);
+			path = ExtendedPopUp;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -167,7 +191,6 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Comm" */;
-			compatibilityVersion = "Xcode 3.0";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Comm */;
 			projectDirPath = "";
@@ -185,6 +208,7 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				CAE462400CA864D0008EFB3A /* IncrementalPopUpMenu.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +228,9 @@
 				171816580CA5F7ED00B9DDCF /* alert.mm in Sources */,
 				175CB7650CA761F5004710C2 /* help.mm in Sources */,
 				175CB7690CA76402004710C2 /* OptionParser.mm in Sources */,
+				CAE4623F0CA864D0008EFB3A /* extendedmenu.mm in Sources */,
+				CAE462410CA864D0008EFB3A /* TMDBorderLessWindow.m in Sources */,
+				CAE462420CA864D0008EFB3A /* TMDIncrementalPopUpMenu.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,7 +294,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
 		};
@@ -281,7 +308,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Release;
 		};

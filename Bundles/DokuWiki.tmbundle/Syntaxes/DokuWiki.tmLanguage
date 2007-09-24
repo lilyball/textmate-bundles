@@ -10,6 +10,8 @@
 	<string>(&lt;(php|html|file|nowiki)&gt;|&lt;code(\s*.*)?&gt;)|/\*\*|\{\s*$</string>
 	<key>foldingStopMarker</key>
 	<string>(&lt;/(code|php|html|file|nowiki)&gt;)|\*\*/|^\s*\}</string>
+	<key>keyEquivalent</key>
+	<string>^~D</string>
 	<key>name</key>
 	<string>DokuWiki</string>
 	<key>patterns</key>
@@ -188,10 +190,20 @@
 			<string>(\&lt;)(file|nowiki)(\&gt;)</string>
 			<key>captures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.template.dokuwiki</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.tag.dokuwiki</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.dokuwiki</string>
 				</dict>
 				<key>3</key>
 				<dict>
@@ -222,9 +234,14 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;)html(&gt;)</string>
+			<string>(&lt;)(html)(&gt;)</string>
 			<key>captures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.template.block.dokuwiki</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
@@ -233,11 +250,16 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>entity.name.tag.dokuwiki</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>punctuation.definition.tag.dokuwiki</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(&lt;/)html(&gt;)</string>
+			<string>(&lt;/)(html)(&gt;)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -257,10 +279,20 @@
 			<string>(\&lt;)(sub|sup|del)(\&gt;)</string>
 			<key>captures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.template.dokuwiki</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.tag.dokuwiki</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.dokuwiki</string>
 				</dict>
 				<key>3</key>
 				<dict>
@@ -282,9 +314,14 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;)code(?:\s+[^&gt;]*)?(&gt;)</string>
+			<string>(&lt;)(code)(?:\s+[^&gt;]*)?(&gt;)</string>
 			<key>captures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.template.code.dokuwiki</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
@@ -293,11 +330,16 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>entity.name.tag.dokuwiki</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>punctuation.definition.tag.dokuwiki</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(&lt;/)code(&gt;)</string>
+			<string>(&lt;/)(code)(&gt;)</string>
 			<key>name</key>
 			<string>markup.raw.dokuwiki</string>
 		</dict>
@@ -490,68 +532,109 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>applyEndPatternLast</key>
-					<integer>1</integer>
-					<key>begin</key>
-					<string>(?:^\s*)(?=&lt;\?(?i:php|=)?(?!.*\?&gt;))</string>
-					<key>comment</key>
-					<string>match only multi-line PHP with leading whitespace</string>
-					<key>end</key>
-					<string>(?&lt;=\?&gt;)(?:\s*$\n)?</string>
-					<key>name</key>
-					<string>source.php.embedded.dokuwiki</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>source.php</string>
-						</dict>
-					</array>
+					<key>include</key>
+					<string>source.php</string>
 				</dict>
 				<dict>
-					<key>applyEndPatternLast</key>
-					<integer>1</integer>
 					<key>begin</key>
-					<string>(?=&lt;\?(?i:php|=)?)</string>
-					<key>end</key>
-					<string>(?&lt;=\?&gt;)</string>
-					<key>name</key>
-					<string>source.php.embedded.dokuwiki</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>source.php</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>applyEndPatternLast</key>
-					<integer>1</integer>
-					<key>begin</key>
-					<string>(&lt;)php(&gt;)</string>
-					<key>captures</key>
+					<string>(^\s*)?(?=&lt;php&gt;)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.tag.dokuwiki</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.tag.dokuwiki</string>
+							<string>punctuation.whitespace.embedded.leading.dokuwiki</string>
 						</dict>
 					</dict>
+					<key>contentName</key>
+					<string>meta.embedded.php</string>
 					<key>end</key>
-					<string>(&lt;/)php(&gt;)</string>
-					<key>name</key>
-					<string>source.php.embedded.dokuwiki</string>
+					<string>(?&lt;=&lt;/php&gt;)(?!&lt;php&gt;)(\s*$\n?)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.whitespace.embedded.trailing.dokuwiki</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>include</key>
+							<key>begin</key>
+							<string>((&lt;)(php)(&gt;))</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.embedded.begin.dokuwiki</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.template.dokuwiki</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.dokuwiki</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.dokuwiki</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.dokuwiki</string>
+								</dict>
+							</dict>
+							<key>contentName</key>
 							<string>source.php</string>
+							<key>end</key>
+							<string>(((&lt;/))(php)(&gt;))</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.embedded.end.dokuwiki</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.template.dokuwiki</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.dokuwiki</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>source.php</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.dokuwiki</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.dokuwiki</string>
+								</dict>
+							</dict>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>source.php</string>
+								</dict>
+							</array>
 						</dict>
 					</array>
 				</dict>

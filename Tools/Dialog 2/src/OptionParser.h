@@ -1,8 +1,6 @@
 //
 //  OptionParser.h
-//
-//  Created by  on 2007-09-24.
-//  Copyright (c) 2007 MacroMates. All rights reserved.
+//  Created by Allan Odgaard on 2007-09-24.
 //
 
 #import <Cocoa/Cocoa.h>

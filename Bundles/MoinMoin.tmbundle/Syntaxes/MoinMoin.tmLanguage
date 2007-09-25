@@ -27,7 +27,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(=)\s.*\s(=)\n</string>
+			<string>^\s*(=)\s.*\s(=)$\n?</string>
 			<key>name</key>
 			<string>markup.heading.1.moinmoin</string>
 		</dict>
@@ -46,7 +46,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(==)\s.*\s(==)\n</string>
+			<string>^\s*(==)\s.*\s(==)$\n?</string>
 			<key>name</key>
 			<string>markup.heading.2.moinmoin</string>
 		</dict>
@@ -65,7 +65,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(===)\s.*\s(===)\n</string>
+			<string>^\s*(===)\s.*\s(===)$\n?</string>
 			<key>name</key>
 			<string>markup.heading.3.moinmoin</string>
 		</dict>
@@ -84,7 +84,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(====)\s.*\s(====)\n</string>
+			<string>^\s*(====)\s.*\s(====)$\n?</string>
 			<key>name</key>
 			<string>markup.heading.4.moinmoin</string>
 		</dict>
@@ -103,13 +103,13 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(=====)\s.*\s(=====)\n</string>
+			<string>^\s*(=====)\s.*\s(=====)$\n?</string>
 			<key>name</key>
 			<string>markup.heading.5.moinmoin</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*-----\s*\n</string>
+			<string>^\s*-----\s*$\n?</string>
 			<key>name</key>
 			<string>meta.separator.moinmoin</string>
 		</dict>

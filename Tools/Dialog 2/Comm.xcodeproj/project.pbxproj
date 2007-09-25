@@ -13,13 +13,15 @@
 		171816310CA5E45600B9DDCF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1718162E0CA5E45600B9DDCF /* main.m */; };
 		171816540CA5E5E400B9DDCF /* menu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 171816510CA5E5E400B9DDCF /* menu.mm */; };
 		171816550CA5E5E400B9DDCF /* quit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 171816520CA5E5E400B9DDCF /* quit.mm */; };
-		171816560CA5E5E400B9DDCF /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = 171816530CA5E5E400B9DDCF /* window.mm */; };
 		171816580CA5F7ED00B9DDCF /* alert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 171816570CA5F7ED00B9DDCF /* alert.mm */; };
 		175CB7650CA761F5004710C2 /* help.mm in Sources */ = {isa = PBXBuildFile; fileRef = 175CB7640CA761F5004710C2 /* help.mm */; };
 		175CB7690CA76402004710C2 /* OptionParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 175CB7680CA76402004710C2 /* OptionParser.mm */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		91E5F1520CA9992A00A824F3 /* TMDChameleon.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91E5F14E0CA9992A00A824F3 /* TMDChameleon.mm */; };
+		91E5F1530CA9992A00A824F3 /* ValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91E5F1500CA9992A00A824F3 /* ValueTransformers.mm */; };
+		91E5F1540CA9992A00A824F3 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91E5F1510CA9992A00A824F3 /* window.mm */; };
 		CAE4623F0CA864D0008EFB3A /* extendedmenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = CAE462390CA864D0008EFB3A /* extendedmenu.mm */; };
 		CAE462400CA864D0008EFB3A /* IncrementalPopUpMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = CAE4623A0CA864D0008EFB3A /* IncrementalPopUpMenu.nib */; };
 		CAE462410CA864D0008EFB3A /* TMDBorderLessWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CAE4623C0CA864D0008EFB3A /* TMDBorderLessWindow.m */; };
@@ -36,7 +38,6 @@
 		1718162E0CA5E45600B9DDCF /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/TestApp/main.m; sourceTree = "<group>"; };
 		171816510CA5E5E400B9DDCF /* menu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = menu.mm; sourceTree = "<group>"; };
 		171816520CA5E5E400B9DDCF /* quit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = quit.mm; sourceTree = "<group>"; };
-		171816530CA5E5E400B9DDCF /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = window.mm; sourceTree = "<group>"; };
 		171816570CA5F7ED00B9DDCF /* alert.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = alert.mm; sourceTree = "<group>"; };
 		175CB7640CA761F5004710C2 /* help.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = help.mm; sourceTree = "<group>"; };
 		175CB7680CA76402004710C2 /* OptionParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OptionParser.mm; path = src/OptionParser.mm; sourceTree = "<group>"; };
@@ -45,7 +46,12 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Comm_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comm_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Comm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Comm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Comm.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Comm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91E5F14D0CA9992A00A824F3 /* TMDChameleon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMDChameleon.h; sourceTree = "<group>"; };
+		91E5F14E0CA9992A00A824F3 /* TMDChameleon.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = TMDChameleon.mm; sourceTree = "<group>"; };
+		91E5F14F0CA9992A00A824F3 /* ValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ValueTransformers.h; sourceTree = "<group>"; };
+		91E5F1500CA9992A00A824F3 /* ValueTransformers.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = ValueTransformers.mm; sourceTree = "<group>"; };
+		91E5F1510CA9992A00A824F3 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = window.mm; sourceTree = "<group>"; };
 		CAE462390CA864D0008EFB3A /* extendedmenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = extendedmenu.mm; sourceTree = "<group>"; };
 		CAE4623A0CA864D0008EFB3A /* IncrementalPopUpMenu.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = IncrementalPopUpMenu.nib; sourceTree = "<group>"; };
 		CAE4623B0CA864D0008EFB3A /* TMDBorderLessWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMDBorderLessWindow.h; sourceTree = "<group>"; };
@@ -93,7 +99,7 @@
 				175CB7640CA761F5004710C2 /* help.mm */,
 				171816510CA5E5E400B9DDCF /* menu.mm */,
 				171816520CA5E5E400B9DDCF /* quit.mm */,
-				171816530CA5E5E400B9DDCF /* window.mm */,
+				91E5F14C0CA9992A00A824F3 /* window */,
 			);
 			name = Commands;
 			path = src/Commands;
@@ -149,6 +155,18 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		91E5F14C0CA9992A00A824F3 /* window */ = {
+			isa = PBXGroup;
+			children = (
+				91E5F14D0CA9992A00A824F3 /* TMDChameleon.h */,
+				91E5F14E0CA9992A00A824F3 /* TMDChameleon.mm */,
+				91E5F14F0CA9992A00A824F3 /* ValueTransformers.h */,
+				91E5F1500CA9992A00A824F3 /* ValueTransformers.mm */,
+				91E5F1510CA9992A00A824F3 /* window.mm */,
+			);
+			path = window;
 			sourceTree = "<group>";
 		};
 		CAE462380CA864D0008EFB3A /* ExtendedPopUp */ = {
@@ -224,13 +242,15 @@
 				171816310CA5E45600B9DDCF /* main.m in Sources */,
 				171816540CA5E5E400B9DDCF /* menu.mm in Sources */,
 				171816550CA5E5E400B9DDCF /* quit.mm in Sources */,
-				171816560CA5E5E400B9DDCF /* window.mm in Sources */,
 				171816580CA5F7ED00B9DDCF /* alert.mm in Sources */,
 				175CB7650CA761F5004710C2 /* help.mm in Sources */,
 				175CB7690CA76402004710C2 /* OptionParser.mm in Sources */,
 				CAE4623F0CA864D0008EFB3A /* extendedmenu.mm in Sources */,
 				CAE462410CA864D0008EFB3A /* TMDBorderLessWindow.m in Sources */,
 				CAE462420CA864D0008EFB3A /* TMDIncrementalPopUpMenu.mm in Sources */,
+				91E5F1520CA9992A00A824F3 /* TMDChameleon.mm in Sources */,
+				91E5F1530CA9992A00A824F3 /* ValueTransformers.mm in Sources */,
+				91E5F1540CA9992A00A824F3 /* window.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -235,7 +235,7 @@ TEXT
     end
     @post['title'] = @headers['title'] if @headers['title']
     @post['wp_slug'] = @headers['slug'] if @headers['slug']
-    self.post_id = @headers['post'].to_i if @headers['post']
+    self.post_id = @headers['post'] if @headers['post']
 
     format = @headers['format']
     self.post['mt_convert_breaks'] = format if format

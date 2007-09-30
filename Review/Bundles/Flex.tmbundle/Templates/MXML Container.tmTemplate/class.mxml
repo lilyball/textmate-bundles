@@ -3,40 +3,42 @@
 	
 	<!-- Copyright ${TM_YEAR} ${TM_ORGANIZATION_NAME}. -->
 	
-	<mx:Script><![CDATA[
+	<mx:Script>
+	    <![CDATA[
 		
 		import mx.events.CloseEvent;
 		import mx.events.FlexEvent;
 		import mx.managers.PopUpManager;
 		
-		/*
-		*	Description
-		*
-		*	@langversion ActionScript 3.0
-		*	@playerversion Flash 9.0
-		*
-		*	@author ${TM_USERNAME}
-		*	@since  ${TM_DATE}
-		*/
+		/**
+		 *	Description
+		 *
+		 *	@langversion ActionScript 3.0
+		 *	@playerversion Flash 9.0
+		 *
+		 *	@author ${TM_USERNAME}
+		 *	@since  ${TM_DATE}
+		 */
 		
-		/*
-		*	Event handler for Creation Complete event.
-		*	
-		*	@see mx.events.FlexEvent
-		*/
+		/**
+		 *	Event handler for Creation Complete event.
+		 *	
+		 *	@see mx.events.FlexEvent
+		 */
 		private function onCreationComplete(event:FlexEvent) : void {
 			PopUpManager.centerPopUp(this);
 		}
 		
-		/*
-		*	Event handler for Creation Complete event.
-		*	
-		*	@see mx.events.CloseEvent
-		*/
+		/**
+		 *	Event handler for Creation Complete event.
+		 *	
+		 *	@see mx.events.CloseEvent
+		 */
 		private function onClosePopUp(event:CloseEvent) : void {
 			PopUpManager.removePopUp(this);
 		}
 		
-	]]></mx:Script>
+	    ]]>
+	</mx:Script>
 
 </mx:TitleWindow>

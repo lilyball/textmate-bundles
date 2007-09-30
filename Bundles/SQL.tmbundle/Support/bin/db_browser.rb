@@ -147,9 +147,11 @@ def format(content, type)
     full_content = escape(content)
     content = escape(content).gsub("\n", "<br>")
     if content.length > 30
-      content = content[0..30] + '<span style="color: red;font-weight: bold">' + '…</span>'
+      content = content[/\A.{29}\w*/m] + '<span style="color: red;font-weight: bold">' + '…</span>'
     end
-    '<span title="' + full_content + '">' + content + '</span>'
+    tag = '<span'
+    tag << ' title="' + full_content + '"' if content != full_content
+    tag << '>' + content + '</span>'
   end
 end
 

@@ -126,14 +126,14 @@ class Formatter
 		end_open_sections
 		
 		title = html_escape(message.split(" ").collect { |word| word.capitalize }.join(" "))
-		emit_start_section("<h2>#{title}</h2>", :css_suffix => 'info', :visibility => :hide)
+		emit_start_section(%Q{<span class="message_title">#{title}</span>}, :css_suffix => 'info', :visibility => :hide)
 		
 		play_sound(ENV['TM_SUCCESS_SOUND'] || 'Hero')
 	end	
 
 	def failure
 		end_open_sections
-		emit_start_section("<h2>Build Failed</h2>", :css_suffix => 'info', :visibility => :hide)
+		emit_start_section(%Q{<span class="message_title">Build Failed</span>}, :css_suffix => 'error', :visibility => :hide)
 
 		play_sound(ENV['TM_ERROR_SOUND'] || 'Basso')
 	end

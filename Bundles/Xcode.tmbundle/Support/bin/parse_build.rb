@@ -96,6 +96,8 @@ formatter = Formatter.new
 last_line = ""
 #seen_first_line = false
 
+error_log = File.open(ENV['TM_PROJECT_DIRECTORY'] + '/.tm_build_errors', 'w')
+
 formatter.start
 
 #
@@ -144,6 +146,8 @@ STDIN.each_line do |line|
 			path		= $1
 			line_number = $2
 			error_desc	= $3
+			
+			error_log << [$1, $2, $3].join('|') + "\n"
 		
 			# if the file doesn't exist, we probably snagged something that's not an error
 			if File.exist?(path)
@@ -186,6 +190,7 @@ STDIN.each_line do |line|
 	end
 	
 end
+error_log.close
 
 # report success/failure
 success = /\*\* ((BUILD|CLEAN) SUCCEEDED) \*\*/.match(last_line)

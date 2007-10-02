@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+
+LogFile = ENV['TM_PROJECT_DIRECTORY'] + '/.tm_build_errors'
+
+abort "No errors found" unless File.exists?(LogFile)
+
+errors = []
+File.readlines(LogFile).map do |error|
+  file, line, error = error.split('|')
+  if existing_error = errors.find { |e| e[:file] == file and e[:line] == line }
+    existing_error[:error] &lt;&lt; error
+  else
+    errors &lt;&lt; {:file =&gt; file, :line =&gt; line, :error =&gt; error}
+  end
+end
+
+abort "No errors found" if errors.empty?
+
+current_error = nil
+
+errors.each_with_index do |error, index|
+  if error[:file] == ENV['TM_FILEPATH'] and error[:line] == ENV['TM_LINE_NUMBER']
+    current_error = index
+    break
+  end
+end
+
+if current_error
+  current_error += 1
+  current_error = 0 if current_error &gt; errors.size - 1
+else
+  current_error = 0
+end
+
+TextMate.go_to :file =&gt; errors[current_error][:file], :line =&gt; errors[current_error][:line]
+print errors[current_error][:error]</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@=</string>
+	<key>name</key>
+	<string>Jump to Next Error</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>BA7499F1-F44C-43BC-9D81-AA1E889B35F7</string>
+</dict>
+</plist>

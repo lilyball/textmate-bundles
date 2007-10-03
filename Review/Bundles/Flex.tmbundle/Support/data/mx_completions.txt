@@ -68,6 +68,7 @@
 
 # P
 <mx:Parallel>$0</mx:Parallel>
+<mx:Pause ${1:id="$2" }${3:duration="$4" }/>
 
 # R
 <mx:RadioButtonGroup ${1:id="$2" }${3:itemClick="$4" }/>
@@ -77,14 +78,15 @@
 <mx:Repeater id="${1:repId}" dataProvider="{ ${2:data} }" ${3:recycleChildren="${4:false|true}"}>$0</mx:Repeater>
 
 # S
-<mx:Script><![CDATA[ $0 ]]></mx:Script>
 <mx:Script source="${1:filename}"/>
+<mx:Script><![CDATA[ $0 ]]></mx:Script>
+<mx:Sequence id="$1"></mx:Sequence>
 <mx:SetEventHandler name="${1:null}" handlerFunction="${2:null}" target="${3:null}" handler="$4" />
 <mx:SetProperty target="$1" name="$2" value="$3" />
 <mx:SetStyle name="$1" target="$2" value="$3" />
+<mx:Slider direction="${1:horizontal|vertical}" liveDragging="${2:false|true}" minimum="$3" maximum="$4" showDataTip="${5:true|false}" value="$6" change="$7" />
 <mx:Sort ${1:compareFunction="${2:method}" }${3:fields="${4:null}" }${5:unique="${6:false|}true"} />
 <mx:Spacer width="${1:100%}" />
-<mx:Slider direction="${1:horizontal|vertical}" liveDragging="${2:false|true}" minimum="$3" maximum="$4" showDataTip="${5:true|false}" value="$6" change="$7" />
 <mx:State name="$1">$0</mx:State>
 <mx:states>$0</mx:states>
 <mx:Stroke id="${1:strokeId}" color="${2:0x0000FF}" weight="${3:1}"/>
@@ -107,6 +109,8 @@
 <mx:VDividedBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:VDividedBox>
 <mx:VSlider liveDragging="${1:false|true}" minimum="$2" maximum="$3" showDataTip="${4:true|false}" value="$5" change="$6" />
 <mx:ViewStack historyManagementEnabled="${1:false|true}" resizeToContent="${2:false|true}"  selectedIndex="${3:0}" change="${4:method(event)}" >$0</mx:ViewStack>
+<mx:VRule ${1:width="${2:100%}" }${3:strokeColor="${4:0xC4CCCC}" }${5:shadowColor="${6:0xEEEEEE}" }${7:strokeWidth="${8:1}" }/>
+
 
 # X
 <mx:XML id="${1:modelId}" format="${2:e4x|xml}" source="${3:filename}" xmlns="${4:namespace}">$0</mx:XML>

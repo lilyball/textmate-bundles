@@ -5,25 +5,45 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
+	<string>#!/usr/bin/env ruby -wKU
 
-def fileSearch fileExt
+SUPPORT = ENV['TM_SUPPORT_PATH']
+require SUPPORT + '/lib/exit_codes'
+require SUPPORT + '/lib/textmate'
 
-	file = ENV['TM_CURRENT_WORD'].to_s + fileExt
-	dir = $:.find { |d| File.exist?(File.join(d, file)) }
+current_word = ENV['TM_CURRENT_WORD'].to_s
 
-	if dir &amp;&amp; file then
-	  	ENV['FILE'] = File.join(dir, file)
-		%x{ "$TM_SUPPORT_PATH/bin/mate" "$FILE" }
-  		exit
-	end
+def fileSearch fileName
+
+   TextMate.each_text_file do |file|
+       if File.basename(file, ".as" ) == fileName || File.basename(file, ".mxml" ) == fileName
+           ENV['FILE'] = file.to_s
+           %x{ "$TM_SUPPORT_PATH/bin/mate" "$FILE" }
+		 exit
+       end
+   end
 
 end
 
-fileSearch( ".as" )
-fileSearch( ".mxml" )
+fileSearch current_word
 
-puts "File not found."
+TextMate.exit_show_tool_tip( "Open Component Command &gt; File not found (" + current_word + ")." )
+
+# TODO: Pro's/Con's of the differences with this:
+#
+# def fileSearch fileExt
+# 
+#   file = ENV['TM_CURRENT_WORD'].to_s + fileExt
+#   dir = $:.find { |d| File.exist?(File.join(d, file)) }
+# 
+#   if dir &amp;&amp; file then
+#       ENV['FILE'] = File.join(dir, file)
+#       %x{ "$TM_SUPPORT_PATH/bin/mate" "$FILE" }
+#           exit
+#   end
+# 
+# end
+# 
 </string>
 	<key>input</key>
 	<string>none</string>
@@ -32,7 +52,7 @@ puts "File not found."
 	<key>name</key>
 	<string>Open Component</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>entity.name.tag.localname.xml.mxml</string>
 	<key>uuid</key>

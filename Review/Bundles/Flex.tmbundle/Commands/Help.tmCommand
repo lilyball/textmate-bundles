@@ -6,16 +6,46 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "Flex Help"
+html_header "Flex Help Bundle Help" "Flex"
 
-Markdown.pl &lt;&lt;'EOF'
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
 
-For build commands and Documenation make sure you have the ActionScript 3 bundle enabled.
+# Installation
 
-See **Bundles** &gt; **ActionScript 3** &gt;  **Help** for help on installing and setting up the flex environment.
+See **Bundles** &gt; **ActionScript 3** &gt;  **Help** for help on installing and setting up the Flex environment.
 
+# Commands
 
-EOF</string>
+For Build Commands and Documenation support please enable the ActionScript 3 bundle.
+
+## Auto Complete Tag
+
+**Target:** Current Word  
+**Key Equivalent:**  ⌥⎋  
+Attempts to auto complete the tag you have partially typed.
+
+## Open Code Behind
+
+**Target:** Document  
+**Key Equivalent:**  ⇧⌘D  
+**Scope:** text.xml.mxml  
+Attempts to locate then open the "Code Behind" the current document.
+
+## Open Component
+
+**Target:** Current Word  
+**Key Equivalent:**  ⇧⌘D  
+**Scope:** entity.name.tag.localname.xml.mxml  
+Attempts to locate then open the Class referenced by the current word.
+
+## Generate Manifest
+
+**Target:** Project  
+Genrates a Manifest for all source files located within the project src directory.
+
+EOF
+
+html_footer</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

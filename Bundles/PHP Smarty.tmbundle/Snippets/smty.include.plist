@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>{include file="$1" [assign=varname foo="bar"] }</string>
+	<string>{include file="$1"${2: assign=${3:var}}</string>
 	<key>name</key>
 	<string>Include</string>
 	<key>scope</key>
-	<string>text.html.smarty</string>
+	<string>source.smarty</string>
 	<key>tabTrigger</key>
-	<string>{include</string>
+	<string>{inc</string>
 	<key>uuid</key>
 	<string>D68BA3F9-D7BE-40E5-9223-71EA2618076F</string>
 </dict>

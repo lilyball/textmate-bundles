@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>{foreach from=${1:$varname} item=i [key=k name=""] }
-$2
-{/foreach}</string>
+	<string>{foreach from=\$${1:varname} item=${2:item}${3: key=${4:key}}${5: name=${6:loop1}}}
+	$0
+{/foreach</string>
 	<key>name</key>
 	<string>Foreach</string>
 	<key>scope</key>
-	<string>text.html.smarty</string>
+	<string>source.smarty</string>
 	<key>tabTrigger</key>
 	<string>{foreach</string>
 	<key>uuid</key>

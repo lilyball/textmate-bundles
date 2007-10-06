@@ -3,14 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>{if ${1:varname}${2:eq,neq,gt,lt,gte,lte,is [not] even|odd,not,mod,div by} "${3:foo}"}
-{* $varname can also be a php call *}
-$4
-{/if}</string>
+	<string>{if $1}
+	$0
+{/if</string>
 	<key>name</key>
 	<string>If</string>
 	<key>scope</key>
-	<string>text.html.smarty</string>
+	<string>source.smarty</string>
 	<key>tabTrigger</key>
 	<string>{if</string>
 	<key>uuid</key>

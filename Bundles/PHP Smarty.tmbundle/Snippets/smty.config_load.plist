@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>{config_load file="#INSERTION#" [section="" scope="local|parent|global"] }</string>
+	<string>{config_load file="$1"${2: section="$3"}${4: scope="${5:local|parent|global}"}</string>
 	<key>name</key>
 	<string>Config Load</string>
 	<key>scope</key>
-	<string>text.html.smarty</string>
+	<string>source.smarty</string>
 	<key>tabTrigger</key>
 	<string>{config_load</string>
 	<key>uuid</key>

@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>{fetch file="#SELSTART#http:// or file#SELEND#" assign=varname} </string>
+	<string>{fetch file="${1:filename}"${2: assign=${3:var}}</string>
 	<key>name</key>
 	<string>Fetch</string>
 	<key>scope</key>
-	<string>text.html.smarty</string>
+	<string>source.smarty</string>
 	<key>tabTrigger</key>
 	<string>{fetch</string>
 	<key>uuid</key>

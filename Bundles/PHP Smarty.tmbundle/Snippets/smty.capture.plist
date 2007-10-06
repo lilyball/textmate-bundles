@@ -3,13 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>{capture name=#INSERTION#}
-#SELECT#
-{/capture}</string>
+	<string>{capture${1: name=$2}${3: assign=$4}}$0{/capture</string>
 	<key>name</key>
 	<string>Capture</string>
 	<key>scope</key>
-	<string>text.html.smarty</string>
+	<string>source.smarty</string>
 	<key>tabTrigger</key>
 	<string>{capture</string>
 	<key>uuid</key>

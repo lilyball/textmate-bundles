@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>|regex_replace:"${1:regex}":"$2" </string>
+	<string>|regex_replace:"/${1:.*}/":"$2"</string>
 	<key>name</key>
 	<string>Regex Replace</string>
 	<key>scope</key>
-	<string>text.html.smarty</string>
+	<string>source.smarty</string>
 	<key>tabTrigger</key>
-	<string>|regex_replace</string>
+	<string>|regex</string>
 	<key>uuid</key>
 	<string>B2D2BE2D-900B-418F-8414-F90A0A8D8AB0</string>
 </dict>

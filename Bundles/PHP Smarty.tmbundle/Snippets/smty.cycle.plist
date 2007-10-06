@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>{cycle values="#SELSTART#foo,bar#SELEND#" name="default" print=true advance=true delimiter="," assign=varname }</string>
+	<string>{cycle values="${1:on},${2:off}"${3: name="${4:name}"}</string>
 	<key>name</key>
 	<string>Cycle</string>
 	<key>scope</key>
-	<string>text.html.smarty</string>
+	<string>source.smarty</string>
 	<key>tabTrigger</key>
 	<string>{cycle</string>
 	<key>uuid</key>

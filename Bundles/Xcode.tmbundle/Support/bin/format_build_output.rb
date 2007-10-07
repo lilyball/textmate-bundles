@@ -91,15 +91,14 @@ class Formatter
 	
 	# GCC sometimes outputs pertinent text preceding an "error:"  "warning:" line,
 	# we need to hang onto that text until we know whether it's an error or a warning.
-	# FIXME: not really implemented
 	def message_prefix( line )
-		emit_raw(html_escape(line))
+		@message_prefix ||= ''
+		@message_prefix << (html_escape(line) + "<br>")
 	end
 
 	# error messages
 	# cssclass may be nil
 	def error_message( cssclass, path, line, error_desc )
-
 		cssclass = cssclass.downcase
 		cssclass = case cssclass
 			when ""
@@ -118,6 +117,10 @@ class Formatter
 		
 #		@mup.new_div!(cssclass) { @mup.h2(cssclass) }
 
+		if defined?(@message_prefix) and (not @message_prefix.empty?)
+			emit_raw(@message_prefix)
+			@message_prefix = ''
+		end
 		emit_raw("<p>" + txtmt_link(path, line) + ":" + html_escape(error_desc) + "</p>")
 
 	end

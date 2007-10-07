@@ -162,13 +162,6 @@ class UserScript
 end
 
 class ScriptMate < CommandMate
-  def initialize(command)
-    # ScriptMate expects an instance of the (sub)class UserScript.
-    @error = ""
-    STDOUT.sync = true
-    @command = command
-    @mate = self.class.name
-  end
 
   protected
     def emit_header

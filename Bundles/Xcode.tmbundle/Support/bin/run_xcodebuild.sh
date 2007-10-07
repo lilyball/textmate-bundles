@@ -61,4 +61,4 @@ else
 fi
 
 export PROJECT_FILE
-xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} ${TM_TARGET:+-target $TM_TARGET} $BUILD_STYLE $XCODE_BUILD_VERB 2>&1| ruby -- "${TM_BUNDLE_SUPPORT}/bin/format_build.rb"
+xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} ${TM_TARGET:+-target $TM_TARGET} $BUILD_STYLE $XCODE_BUILD_VERB 2>&1| ruby -- "${TM_BUNDLE_SUPPORT}/bin/format_build_output.rb"

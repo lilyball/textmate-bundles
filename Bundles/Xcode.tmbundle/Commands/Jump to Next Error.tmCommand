@@ -9,7 +9,9 @@
 
 require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
 
-LogFile = ENV['TM_PROJECT_DIRECTORY'] + '/.tm_build_errors'
+project_file = ENV['XCODE_PROJECT_FILE'] || %x{ruby -- "${TM_BUNDLE_SUPPORT}/bin/find_xcode_project.rb"}.strip
+
+LogFile = project_file + '/' + ENV['LOGNAME'] + '.tm_build_errors'
 
 abort "No errors found" unless File.exists?(LogFile)
 

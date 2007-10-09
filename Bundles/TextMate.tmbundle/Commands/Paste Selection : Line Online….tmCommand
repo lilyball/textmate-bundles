@@ -191,7 +191,7 @@ pid = fork do
       puts "Server Error:  Your paste could not be made at this time.  " +
            "Please wait a moment and try again."
     else
-      dests = Iconv.iconv('mac', 'utf-8', dests)
+      dests = Iconv.iconv('mac', 'utf-8', dests) if %x{ sysctl -n kern.osversion } =~ /\A8/
       %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/paste_to_destinations.scpt")} #{e_sh url} #{e_sh dests} }
       puts "Pasted #{url}"
     end

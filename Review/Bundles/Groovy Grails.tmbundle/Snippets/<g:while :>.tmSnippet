@@ -4,8 +4,8 @@
 <dict>
 	<key>content</key>
 	<string>&lt;g:while test="\${$1}"&gt;
-	$2
-&lt;/g:while&gt;$0
+	${0:$TM_SELECTED_TEXT}
+&lt;/g:while&gt;
 </string>
 	<key>name</key>
 	<string>&lt;g:while&gt;</string>

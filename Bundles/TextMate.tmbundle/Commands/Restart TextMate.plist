@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -8,7 +8,7 @@
 	<string>{ APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
   osascript -e 'tell app "TextMate" to quit'
 
-  for (( i = 0; i &lt; 50 &amp;&amp; $(echo $(ps -xp $PPID|wc -l))-1; i++ )); do
+  for (( i = 0; i &lt; 500 &amp;&amp; $(echo $(ps -xp $PPID|wc -l))-1; i++ )); do
     sleep .2;
   done
 

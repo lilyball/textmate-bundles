@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>require_cmd fpc 'The Free Pascal Compiler is available from &lt;a href="http://www.freepascal.org/"&gt;http://www.freepascal.org/&lt;/a&gt;'
+
+cd "$TM_DIRECTORY"
+fpc "$TM_FILENAME"
+if [[ $? == 0 ]]; then
+  SCRIPT="TM_DIRECTORY=$TM_DIRECTORY"$'\nTM_FILENAME='"$TM_FILENAME"$'\ncd "$TM_DIRECTORY" &amp;&amp; clear &amp;&amp; "./${TM_FILENAME%.*}" &amp;&amp; exit'
+  osascript &lt;&lt;APPLESCRIPT
+    tell app "Terminal"
+      activate
+      do script "${SCRIPT//\"/\"}"
+    end tell
+APPLESCRIPT
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.pascal</string>
+	<key>uuid</key>
+	<string>8E597879-2721-424B-B4F5-974259B67697</string>
+</dict>
+</plist>

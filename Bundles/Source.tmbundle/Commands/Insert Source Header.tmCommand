@@ -42,8 +42,7 @@ if comment_end.empty?
 	indent = ' '
 end
 
-# Leopard doesn't have niutil
-username	= `dscl -raw . read /Users/#{ENV['USER']} realname | ruby -e 'puts STDIN.read.sub(/.*realname:\s*(.*)$/, "\\\\1")'`.strip
+username	= ENV['TM_FULLNAME']
 date		= `date +%Y-%m-%d`.chomp
 
 # Default to username if no organization name

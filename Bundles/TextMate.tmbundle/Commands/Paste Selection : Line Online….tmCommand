@@ -165,7 +165,7 @@ def paste_stdin(priv, wrap)
       gz.write document_to_html(xml)
     end
 
-    author = ENV['TM_AUTHOR'] || "#{`dscl . read "/Users/$USER" realname`.sub(/\A.*?realname:\s*(.*?)\s*\z/, '\1')} (#{ENV['USER']})"
+    author = ENV['TM_AUTHOR'] || "#{ENV['TM_FULLNAME']} (#{ENV['USER']})"
     ext = find_language_ext
 
     %x{

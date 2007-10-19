@@ -6,8 +6,8 @@
 	<string>&lt;?php
 /** \page $TM_FILEPATH ${1:A documentation page}
 	${2:longer description}
-© Copyright `date +%Y` $TM_ORGANIZATION_NAME - ${TM_AUTHOR:`niutil -readprop / "/users/$USER" realname`}. All Rights Reserved.
-	\author ${TM_AUTHOR:`niutil -readprop / "/users/$USER" realname`} $TM_ORGANIZATION_NAME
+© Copyright `date +%Y` $TM_ORGANIZATION_NAME - ${TM_AUTHOR:$TM_FULLNAME}. All Rights Reserved.
+	\author ${TM_AUTHOR:$TM_FULLNAME} $TM_ORGANIZATION_NAME
 	\author \$LastChangedBy\$
 	\date `date +%Y-%m-%d`
 	\date \$LastChangedDate\$

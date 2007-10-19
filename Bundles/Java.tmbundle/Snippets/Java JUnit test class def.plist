@@ -13,7 +13,7 @@ import `echo $TM_FILEPATH |  sed 's/\//./g' | sed 's/^.//' | sed 's/.*test.//' |
 /**
  * ${2:`echo $TM_FILEPATH |  sed 's/\//./g' | sed 's/^.//' | sed 's/.*test.//' | sed 's/.*\.\([A-Za-z]*\).java/\1/g'`}
  *
- * @author ${4:`niutil -readprop / /users/$USER realname`}
+ * @author ${4:$TM_FULLNAME}
  * @since `date +%D`
  */
 public class ${2:`echo $TM_FILEPATH |  sed 's/\//./g' | sed 's/^.//' | sed 's/.*test.//' | sed 's/.*\.\([A-Za-z]*\).java/\1/g'`} extends TestCase {

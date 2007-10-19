@@ -245,7 +245,7 @@ module TextMate
     def var_username
       # store the username into the variable stash so we don't have
       # to do this again...
-      @global_vars['username'] = "#{%x{niutil -readprop / /users/#{ENV['USER']} realname}}".chomp
+      @global_vars['username'] = ENV['TM_FULLNAME']
     end
 
     def process_document(doc, vars)

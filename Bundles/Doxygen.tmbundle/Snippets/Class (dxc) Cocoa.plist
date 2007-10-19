@@ -7,9 +7,9 @@
 	
 	${4:undocumented class}
 	
-© Copyright `date +%Y` $TM_ORGANIZATION_NAME - ${TM_AUTHOR:`niutil -readprop / "/users/$USER" realname`}. All Rights Reserved.
+© Copyright `date +%Y` $TM_ORGANIZATION_NAME - ${TM_AUTHOR:$TM_FULLNAME}. All Rights Reserved.
 
-	\author ${TM_AUTHOR:`niutil -readprop / "/users/$USER" realname`} $TM_ORGANIZATION_NAME
+	\author ${TM_AUTHOR:$TM_FULLNAME} $TM_ORGANIZATION_NAME
 	\author \$LastChangedBy\$
 	\date `date +%Y-%m-%d`
 	\date \$LastChangedDate\$

@@ -5,7 +5,6 @@
 	<key>command</key>
 	<string>export TM_YEAR=`date +%Y`
 export TM_DATE=`date +%Y-%m-%d`
-export TM_USERNAME=`niutil -readprop / /users/\$USER realname`
 TM_HEADER="$TM_NEW_FILE_DIRECTORY/$TM_NEW_FILE_BASENAME.h"
 
 if [[ ! (-f $TM_NEW_FILE || -f $TM_HEADER) ]]; then

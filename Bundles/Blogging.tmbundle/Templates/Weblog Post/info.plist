@@ -9,7 +9,6 @@
 	TM_YEAR=`date +%Y` \
 	TM_DATE=`date +%Y-%m-%d` \
 	TM_ISO_DATE=`date +"%Y-%m-%d %H:%M:%S"` \
-	TM_USERNAME=`niutil -readprop / /users/\$USER realname` \
 	perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' &lt; untitled.blog.markdown &gt; "$TM_NEW_FILE"
 fi</string>
 	<key>extension</key>

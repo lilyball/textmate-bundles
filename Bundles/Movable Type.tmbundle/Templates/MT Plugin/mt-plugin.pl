@@ -1,5 +1,5 @@
 # MyPlugin - A plugin for Movable Type.
-# Copyright (c) ${TM_YEAR}, ${TM_USERNAME}.
+# Copyright (c) ${TM_YEAR}, ${TM_FULLNAME}.
 
 package MT::Plugin::MyPlugin;
 
@@ -14,7 +14,7 @@ MT->add_plugin($plugin = __PACKAGE__->new({
 	name            => "My Plugin",
 	version         => $VERSION,
 	description     => "Description of this plugin.",
-	author_name     => "${TM_USERNAME}",
+	author_name     => "${TM_FULLNAME}",
 	author_link     => "http://www.example.com/",
 	plugin_link     => "http://www.example.com/myplugin/",
 	doc_link        => "http://www.example.com/myplugin/docs/",

@@ -5,7 +5,6 @@
 	<key>command</key>
 	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
    TM_DATE=`date '+%B %e, %Y'` \
-   TM_USERNAME=`niutil -readprop / /users/\$USER realname` \
    perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
       &lt; template_in.txt &gt; "$TM_NEW_FILE"
 fi</string>

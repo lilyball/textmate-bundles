@@ -1,10 +1,10 @@
 \header{
 	filename = "${TM_NEW_FILE_BASENAME}.ly"
-	composer          = "${TM_USERNAME}"
+	composer          = "${TM_FULLNAME}"
 	title             = "${TM_NEW_FILE_BASENAME}"
 
 	copyright         = "Creative Commons Attribution-ShareAlike 2.5"
-	maintainer        = "${TM_USERNAME}"
+	maintainer        = "${TM_FULLNAME}"
 	lastupdated       = "${TM_DATE}"
 }
 

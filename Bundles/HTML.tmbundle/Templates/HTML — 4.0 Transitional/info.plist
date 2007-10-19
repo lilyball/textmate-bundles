@@ -5,7 +5,6 @@
 	<key>command</key>
 	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
    TM_DATE=`date +%Y-%m-%d` \
-   TM_USERNAME=`niutil -readprop / /users/\$USER realname` \
    perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
       &lt; index.html &gt; "$TM_NEW_FILE"
 fi</string>

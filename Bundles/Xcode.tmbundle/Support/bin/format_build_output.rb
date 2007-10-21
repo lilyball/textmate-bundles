@@ -153,10 +153,15 @@ HTML
 	end
 
 	# Running the build result
-	
+
 	def run_executable( name )
 		end_open_sections
-		emit_start_section("</h2>Running #{html_escape(name)}</h2>", :visibility => :show)
+
+		# button to clear the run log
+		clear_buttom_html = %Q{<input type="button" value="Clear Log" onclick="javascript:clearElement('console_output_b')" />}
+
+		emit_start_section("</h2>Running #{html_escape(name)}</h2> #{clear_buttom_html}", :inner_content_id => 'console_output', :css_suffix => 'console', :visibility => :show)
+		
   	end
 
 	def executable_output( line )
@@ -244,7 +249,7 @@ HTML
 		visibility	= options[:visibility]		
 		
 		section_id = @next_section_id
-		inner_id = @next_inner_id
+		inner_id = options[:inner_content_id] || @next_inner_id
 		
 		emit_raw(%Q{<div class="section_#{css_suffix}" id="#{section_id}">})
 

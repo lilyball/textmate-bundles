@@ -24,3 +24,8 @@ function hideElement(id)
    s.style.display = "inline";
    h.style.display = "none";
 }
+
+function clearElement(id)
+{
+	document.getElementById(id).innerHTML = ""
+}

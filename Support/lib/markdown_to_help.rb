@@ -66,7 +66,7 @@ IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
 </style>
 <script type="text/javascript" charset="utf-8">
 function goTo (id) {
-  document.body.scrollTop = document.getElementById(id).offsetTop + 8;
+  document.body.scrollTop = document.getElementById(id).offsetTop - document.images[0].height - 1;
 }
 
 function e_sh(string) {

@@ -170,7 +170,7 @@ class Xcode
         end
 
         next unless obj['isa'] == 'PBXFileReference'
-        next unless obj['path'].include? basename
+        next unless obj['path'].include? '/' + basename or obj['path'] == basename
         path = path_for_fileref(key) + '/' + obj['path']
         break
       end

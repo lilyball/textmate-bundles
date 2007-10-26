@@ -11,3 +11,11 @@
 * `Open Ant.dtd` has a typo, refers to Generate Ant.dtd instead of Create Ant.dtd.
 
 [1]: http://macromates.com/wiki/Bundles/StyleGuide
+
+## Simon - 10/26/07
+
+* File types in the grammar files removed. With the exception of the users selecting the Ant Language Grammar via ctrl-alt-shift-A is there an elegant way that Ant build files may be detected?
+* Help and Manual now have no shortcut.
+* The Manual command will only open the manual in the TextMate window, and is now commented - please sanity check. Opening a new document was an obvious mistake.
+* Validation has been switched to (⌃⇧V)
+* I have doubts about the usefulness of validating against the Ant.dtd (as it rarely works in practice for me - build files can be too dynamic ) so it may be simpler to ditch the functionality directly and just suggest it in a comment in the validation command. Leaving "Create Ant.dtd" to open in a new document.

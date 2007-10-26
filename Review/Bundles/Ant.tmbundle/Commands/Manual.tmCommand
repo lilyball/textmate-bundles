@@ -5,28 +5,26 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ "$TM_ANT_MANUAL_PATH" == "" ]]; then
+	<string># Where there is no manual path specified try the one default location Apple may have installed the manual at, otherwise fall back to the ant.apache.org site.
+if [[ "$TM_ANT_MANUAL_PATH" == "" ]]; then
 	TM_ANT_MANUAL_PATH="/Developer/Java/Ant/docs/manual/index.html"
 fi
 
 if [[ -f "$TM_ANT_MANUAL_PATH" ]]; then
 
 	echo "&lt;meta http-equiv=\"refresh\" content=\"0; tm-file://$TM_ANT_MANUAL_PATH\"&gt;"
-	exit_show_html;
-	
-else
 
-	open -a "Safari.app" "http://ant.apache.org/manual/index.html";
-	
+else	
+
+	echo "&lt;meta http-equiv=\"refresh\" content=\"0; http://ant.apache.org/manual/index.html\" &gt;"
+
 fi</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Manual</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>text.xml.ant</string>
 	<key>uuid</key>

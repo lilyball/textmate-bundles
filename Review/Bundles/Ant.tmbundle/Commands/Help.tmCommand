@@ -27,7 +27,7 @@ This is Experimental - The location of a script to format the output of ant. Scr
 When set to "true" the Validate Build File command will check that the document is valid against the ant.dtd (if available).
 
 * `TM_ANT_MANUAL_PATH`
-The local location of ant manaul index.html file. If this is not specified the bundle checks the default manual location when Apple Developer Tools are installed, if this is unsuccessful then [ant.apache.org/manual](http://ant.apache.org/manual/index.html) is opened by Safari.
+The local location of you Ant manuals index.html file. If this is not specified the bundle checks the default manual location when Apple Developer Tools are installed, if this is unsuccessful then [ant.apache.org/manual](http://ant.apache.org/manual/index.html) is opened.
 
 # Commands
 
@@ -49,7 +49,7 @@ Creates/Updates the ant.dtd file and displays it in the html output window. A co
 ## Validate Build File
 
 **Target:** Current Document  
-**Key Equivalent:**  ⌘S  
+**Key Equivalent:**  ⌃⇧V    
 **Scope:** text.xml.ant  
 Validates the current document as valid XML. When the `TM_ANT_DTD_VALIDATION` [environmental variable](?environment_variables) has been set to true, and the ant.dtd is available (see Create Ant.dtd Command) the document is also validated against the ant.dtd.
 
@@ -68,8 +68,6 @@ EOF
 html_footer</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Help</string>
 	<key>output</key>

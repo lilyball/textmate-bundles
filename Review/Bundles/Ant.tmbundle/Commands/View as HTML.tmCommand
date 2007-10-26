@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+# WARN: Assumes that the first line of the doc is the xml declaration.
+# TODO: Match against &lt;?xml version=
+
+# NOTE: We need to output to tmp as the document doesn't render when piped directly to "Show as HTML"
+tmp_build_uri = "/tmp/tm_ant_build.xml"
+
+doc_arr = STDIN.read
+doc_arr = doc_arr.split( "\n" )
+doc_arr.insert( 1, '&lt;?xml-stylesheet type="text/xsl" href="' + ENV['TM_BUNDLE_SUPPORT'] + '/style/ant2html.xsl"?&gt;' )
+tmp_build_xml = File.open( tmp_build_uri, "w" )
+doc_arr.each { |line| tmp_build_xml.puts line }
+tmp_build_xml.close()
+
+`cp "$TM_BUNDLE_SUPPORT/style/ant2html.css" "/tmp/ant2html.css"`
+
+puts "&lt;meta http-equiv=\"refresh\" content=\"0; tm-file://#{tmp_build_uri}\"&gt;"
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^H</string>
+	<key>name</key>
+	<string>View as HTML</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.xml.ant</string>
+	<key>uuid</key>
+	<string>62CAE21C-2269-489F-B5AB-3E652AE6E51F</string>
+</dict>
+</plist>

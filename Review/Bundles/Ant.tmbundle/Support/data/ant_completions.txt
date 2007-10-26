@@ -1,0 +1,8 @@
+<ant ${1:antfile="$2" }${3:target="$4" }>$0</ant>
+<arg ${1:value="$2" }${3:pathref="$4" }>$0</arg>
+<classpath ${1:path="$2" }${3:refid="$4" }>$0</classpath>
+<exec ${1:command="$2" }${3:dir="$4" }${5:os="$6" }${7:output="$8" }>$0</exec>
+<pathelement ${1:location="$2" }${3:path="$4" }>$0</pathelement>
+<project ${1:name="$2" }${3:default="$4" }${5:basedir="$6" }>$0</project>
+<property ${1:name="$2" }${3:value="$4" }>$0</property>
+<target ${1:name="$2" }${3:description="$4" }${5:depends="$6" }>$0</target>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Apache Ant Bundle Help" "Ant"
+
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
+# Installation
+
+The most recent version of Ant can be downloaded [here](http://ant.apache.org/bindownload.cgi). An installation guide can be found [here]( http://www.asceticmonk.com/blog/?p=388 ). Alternatively Ant can be found on the Apple Developer Tools Install Disk, however as of Tiger this is not the most recent version. 
+
+# Configuration Options
+
+These environment variables allow you to define or customise the behavior of certain commands. For help on setting them up please see [TextMate help](?environment_variables).
+
+* `TM_ANT_BUILD_FILE`
+The location of the ant build file you wish to target by default.
+
+* `TM_ANT_BUILD_PARSER`
+This is Experimental - The location of a script to format the output of ant. Scripts are available to prettify the output for Java and Flex - in their respective bundles. If this variable is not set the output is wrapped in pre tags.
+
+* `TM_ANT_DTD_VALIDATION`  
+When set to "true" the Validate Build File command will check that the document is valid against the ant.dtd (if available).
+
+* `TM_ANT_MANUAL_PATH`
+The local location of ant manaul index.html file. If this is not specified the bundle checks the default manual location when Apple Developer Tools are installed, if this is unsuccessful then [ant.apache.org/manual](http://ant.apache.org/manual/index.html) is opened by Safari.
+
+# Commands
+
+## Build
+  
+**Key Equivalent:**  ⌘B  
+Attempts to locate a build file and execute it.
+
+## Build Target
+
+**Target:** Selected Text or Current Document  
+**Key Equivalent:**  ⇧⌘B  
+Parses the current document for build targets
+
+## Create Ant.dtd
+
+Creates/Updates the ant.dtd file and displays it in the html output window. A copy of the file is kept in the Bundle and the Validate Build File command can be configured to validate against the dtd.
+
+## Validate Build File
+
+**Target:** Current Document  
+**Key Equivalent:**  ⌘S  
+**Scope:** text.xml.ant  
+Validates the current document as valid XML. When the `TM_ANT_DTD_VALIDATION` [environmental variable](?environment_variables) has been set to true, and the ant.dtd is available (see Create Ant.dtd Command) the document is also validated against the ant.dtd.
+
+# TODO
+
+Detecting ant - in Build Target Command.  
+Pretty Printing of output - linking errors to files in TM.  
+Generation of Auto Completions via Ant.dtd (maybe even the language file ?).
+
+# Contributors
+
+[Simon Gregory](http://blog.simongregory.com)  
+
+EOF
+
+html_footer</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.xml.ant</string>
+	<key>uuid</key>
+	<string>B34D55F6-17C3-4698-973F-FDE059BEB675</string>
+</dict>
+</plist>

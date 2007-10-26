@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+SUPPORT = ENV['TM_SUPPORT_PATH']
+DIALOG = SUPPORT + '/bin/tm_dialog'
+
+require SUPPORT + '/lib/escape'
+require SUPPORT + '/lib/exit_codes'
+require SUPPORT + '/lib/osx/plist'
+
+#Search for
+word = STDIN.read.strip
+TextMate.exit_show_tool_tip("Please select a term to complete.") if word.empty?
+
+words = `grep "#{word}" "$TM_BUNDLE_PATH/support/data/ant_completions.txt"`.split("\n")
+TextMate.exit_show_tool_tip "No completion available" if words.empty?
+
+if words.size &gt; 1
+    
+	words = words.collect { |e| 
+	    antTag = /\w+/.match(e)
+	    { 'title' =&gt; antTag[0] , 'data' =&gt; e } 
+	}
+	plist = { 'menuItems' =&gt; words }.to_plist
+	
+	res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+
+	TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
+	choice = res['selectedMenuItem']['data']
+
+else
+
+	choice = words.pop
+
+end
+
+print choice
+
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>Auto Complete Tag</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.xml.ant</string>
+	<key>uuid</key>
+	<string>4BCBC20D-A418-412D-AD95-1CBB62AF1760</string>
+</dict>
+</plist>

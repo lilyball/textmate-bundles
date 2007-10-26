@@ -18,9 +18,9 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;=&lt;mx:Script&gt;)</string>
+			<string>(?&lt;=&lt;mx:Script&gt;)|(?&lt;=&lt;Script&gt;)</string>
 			<key>end</key>
-			<string>(?=&lt;/mx:Script&gt;)</string>
+			<string>(?=&lt;/mx:Script&gt;)|(?=&lt;/Script&gt;)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -31,9 +31,9 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;=&lt;mx:Metadata&gt;)</string>
+			<string>(?&lt;=&lt;mx:Metadata&gt;)|(?&lt;=&lt;Metadata&gt;)</string>
 			<key>end</key>
-			<string>(?=&lt;/mx:Metadata&gt;)</string>
+			<string>(?&lt;=&lt;/mx:Metadata&gt;)|(?&lt;=&lt;/Metadata&gt;)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -44,11 +44,11 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;=&lt;mx:Style&gt;)</string>
+			<string>(?&lt;=&lt;mx:Style&gt;)|(?&lt;=&lt;Style&gt;)</string>
 			<key>contentName</key>
 			<string>source.css.embedded.mxml</string>
 			<key>end</key>
-			<string>(?=&lt;/mx:Style&gt;)</string>
+			<string>(?=&lt;/mx:Style&gt;)|(?=&lt;/Style&gt;)</string>
 			<key>patterns</key>
 			<array>
 				<dict>

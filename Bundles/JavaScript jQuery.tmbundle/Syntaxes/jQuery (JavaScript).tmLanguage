@@ -50,7 +50,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>'</string>
+					<string>'(?!&lt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -79,7 +79,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"</string>
+					<string>"(?!&lt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -103,6 +103,64 @@
 						<dict>
 							<key>include</key>
 							<string>#css-selector</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'(?=&lt;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.begin.js</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.end.js</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html.basic</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"(?=&lt;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.begin.js</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.end.js</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html.basic</string>
 						</dict>
 					</array>
 				</dict>
@@ -148,7 +206,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>'</string>
+					<string>'(?!&lt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -177,7 +235,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>"</string>
+					<string>"(?!&lt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -201,6 +259,64 @@
 						<dict>
 							<key>include</key>
 							<string>#css-selector</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'(?=&lt;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.begin.js</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.end.js</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html.basic</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"(?=&lt;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.begin.js</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.selector.end.js</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html.basic</string>
 						</dict>
 					</array>
 				</dict>

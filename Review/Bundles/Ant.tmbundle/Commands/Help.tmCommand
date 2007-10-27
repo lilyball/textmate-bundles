@@ -18,40 +18,42 @@ The most recent version of Ant can be downloaded [here](http://ant.apache.org/bi
 These environment variables allow you to define or customise the behavior of certain commands. For help on setting them up please see [TextMate help](?environment_variables).
 
 * `TM_ANT_BUILD_FILE`
-The location of the ant build file you wish to target by default.
+The location of the ant build file you wish to target by default. This can be either the full path, or relative to the current project.
 
 * `TM_ANT_BUILD_PARSER`
 This is Experimental - The location of a script to format the output of ant. Scripts are available to prettify the output for Java and Flex - in their respective bundles. If this variable is not set the output is wrapped in pre tags.
 
-* `TM_ANT_DTD_VALIDATION`  
-When set to "true" the Validate Build File command will check that the document is valid against the ant.dtd (if available).
+* `TM_ANT_DTD_VALIDATION`
+When set (to anything but the empty string) the _Validate Build File_ command will, in addition to verify that the XML is well-formed, check that the document conforms to `ant.dtd` (if available).
 
 * `TM_ANT_MANUAL_PATH`
-The local location of you Ant manuals index.html file. If this is not specified the bundle checks the default manual location when Apple Developer Tools are installed, if this is unsuccessful then [ant.apache.org/manual](http://ant.apache.org/manual/index.html) is opened.
+If you have installed your own version of Ant, you can set this variable to the location of its manual.  
+For example if you installed it via MacPorts then set it to `/opt/local/share/java/apache-ant/docs/manual`.  
+The default is to use the manual included with Apple’s developer tools with the [online version](http://ant.apache.org/manual/index.html) as a fallback.
 
 # Commands
 
 ## Build
   
 **Key Equivalent:**  ⌘B  
-Attempts to locate a build file and execute it.
+Uses `TM_ANT_BUILD_FILE` if set, otherwise attempts to locate a build file and execute it.
 
 ## Build Target
 
-**Target:** Selected Text or Current Document  
+**Target:** `TM_ANT_BUILD_FILE`, Selected Text or Current Document  
 **Key Equivalent:**  ⇧⌘B  
-Parses the current document for build targets
+Uses `TM_ANT_BUILD_FILE` if set, otherwise parses the current document for build targets from which you can select which one to execute.
 
 ## Create Ant.dtd
 
-Creates/Updates the ant.dtd file and displays it in the html output window. A copy of the file is kept in the Bundle and the Validate Build File command can be configured to validate against the dtd.
+Creates/Updates the `ant.dtd` file and displays it in the html output window. A copy of the file is kept in the Bundle and the Validate Build File command can be configured to validate against the dtd.
 
 ## Validate Build File
 
 **Target:** Current Document  
 **Key Equivalent:**  ⌃⇧V    
 **Scope:** text.xml.ant  
-Validates the current document as valid XML. When the `TM_ANT_DTD_VALIDATION` [environmental variable](?environment_variables) has been set to true, and the ant.dtd is available (see Create Ant.dtd Command) the document is also validated against the ant.dtd.
+Validates the current document as valid XML. When the `TM_ANT_DTD_VALIDATION` [environmental variable](?environment_variables) has been set to true, and the `ant.dtd` is available (see *Create Ant.dtd* Command) the document is also validated against the `ant.dtd`.
 
 # TODO
 

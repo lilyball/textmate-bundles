@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -37,10 +37,78 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>&lt;(c|code|event|example|exception|exclude|include|list|note|overloads|para|param|paramref|permission|preliminary|remarks|returns|see|seealso|summary|threadsafety|value)&gt;</string>
+					<key>begin</key>
+					<string>(&lt;/?)(?:([-_a-zA-Z0-9]+)((:)))?([-_a-zA-Z0-9:]+)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.c#</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.namespace.c#</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.c#</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.namespace.c#</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.localname.c#</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(/?&gt;)</string>
 					<key>name</key>
 					<string>keyword.other.documentation.c#</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>entity.other.attribute-name.namespace.c#</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.other.attribute-name.c#</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.namespace.c#</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>entity.other.attribute-name.localname.c#</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string> (?:([-_a-zA-Z0-9]+)((:)))?([_a-zA-Z-]+)=</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#doubleQuotedString</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#singleQuotedString</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
@@ -106,7 +174,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#class-inheritance</string>
+					<string>#classInheritance</string>
 				</dict>
 			</array>
 		</dict>
@@ -143,7 +211,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#statement-remainder</string>
+					<string>#statementRemainder</string>
 				</dict>
 			</array>
 		</dict>
@@ -184,6 +252,117 @@
 			<string>storage.modifier.c#</string>
 		</dict>
 		<dict>
+			<key>include</key>
+			<string>#doubleQuotedStringLiteral</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#doubleQuotedString</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#singleQuotedString</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.using.c#</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.package.c#</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(using)\s+([^ ;]*);</string>
+			<key>name</key>
+			<string>meta.keyword.using.c#</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#builtinTypes</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.namespace.c#</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.namespace.c#</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(namespace)\s+([^ ]+)(?:\s*{)?$</string>
+			<key>name</key>
+			<string>meta.keyword.namespace.c#</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.import.c#</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^(#)\s*(if|else|elif|endif|define|undef|warning|error|line|region|endregion)\b</string>
+			<key>name</key>
+			<string>meta.preprocessor.c#</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>builtinTypes</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(bool|byte|sbyte|char|decimal|double|float|int|uint|long|ulong|object|short|ushort|string|void|class|struct|enum|interface)\b</string>
+					<key>name</key>
+					<string>storage.type.c#</string>
+				</dict>
+			</array>
+		</dict>
+		<key>classInheritance</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>:</string>
+					<key>end</key>
+					<string>(?={)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>storage.type.c#</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\s*,?([A-Za-z_]\w*)\b</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>doubleQuotedString</key>
+		<dict>
 			<key>begin</key>
 			<string>"</string>
 			<key>beginCaptures</key>
@@ -216,6 +395,32 @@
 				</dict>
 			</array>
 		</dict>
+		<key>doubleQuotedStringLiteral</key>
+		<dict>
+			<key>begin</key>
+			<string>@"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.c#</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>([^"]|"")*"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.c#</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.double.literal.c#</string>
+		</dict>
+		<key>singleQuotedString</key>
 		<dict>
 			<key>begin</key>
 			<string>'</string>
@@ -238,7 +443,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.single.c#</string>
+			<string>string.quoted.single.xml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -249,110 +454,7 @@
 				</dict>
 			</array>
 		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.using</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.package.c#</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>^\s*(using)\s+([^ ;]*);</string>
-			<key>name</key>
-			<string>meta.keyword.using.c#</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#builtin-types</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.namespace</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.namespace.c#</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>^\s*(namespace)\s+([^ ]+)(?:\s*{)?$</string>
-			<key>name</key>
-			<string>meta.keyword.namespace</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.import.c#</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>^(#)\s*(if|else|elif|endif|define|undef|warning|error|line|region|endregion)\b</string>
-			<key>name</key>
-			<string>meta.preprocessor.c#</string>
-		</dict>
-	</array>
-	<key>repository</key>
-	<dict>
-		<key>builtin-types</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\b(bool|byte|sbyte|char|decimal|double|float|int|uint|long|ulong|object|short|ushort|string|void|class|struct|enum|interface)\b</string>
-					<key>name</key>
-					<string>storage.type.c#</string>
-				</dict>
-			</array>
-		</dict>
-		<key>class-inheritance</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>begin</key>
-					<string>:</string>
-					<key>end</key>
-					<string>(?={)</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#class-inheritanceII</string>
-						</dict>
-					</array>
-				</dict>
-			</array>
-		</dict>
-		<key>class-inheritanceII</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.c#</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>\s*,?([A-Za-z_]\w*)\b</string>
-		</dict>
-		<key>statement-remainder</key>
+		<key>statementRemainder</key>
 		<dict>
 			<key>patterns</key>
 			<array>
@@ -367,7 +469,7 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#builtin-types</string>
+							<string>#builtinTypes</string>
 						</dict>
 					</array>
 				</dict>

@@ -19,3 +19,11 @@
 * The Manual command will only open the manual in the TextMate window, and is now commented - please sanity check. Opening a new document was an obvious mistake.
 * Validation has been switched to (⌃⇧V)
 * I have doubts about the usefulness of validating against the Ant.dtd (as it rarely works in practice for me - build files can be too dynamic ) so it may be simpler to ditch the functionality directly and just suggest it in a comment in the validation command. Leaving "Create Ant.dtd" to open in a new document.
+
+## Infininight - 10/26/07
+
+* The 'ant.xml' fileTypes was a good method, it's the best current way to do things. So you'd name your ant files "foo.ant.xml" for instance.
+* Validation should give a success message perhaps? I get nothing if the file is determined valid.
+* Now that validation doesn't override ⌘S you can stop saving the current file before running the command.
+
+Other than that it's looking good to me, poked allan about providing some feedback about the ant.dtd file.

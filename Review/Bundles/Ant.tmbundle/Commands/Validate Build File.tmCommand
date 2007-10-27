@@ -3,27 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string># When formatting is ok keep quiet, otherwise show lint errors as a tooltip
-
-if [ "$TM_ANT_DTD_VALIDATION" == "true" ]; then
+	<string>if [ "$TM_ANT_DTD_VALIDATION" == "true" ]; then
 	
 	TM_ANT_DTD_FILE="$TM_BUNDLE_PATH/Support/data/ant.dtd"
 
 	if [[ -f "$TM_ANT_DTD_FILE" ]]; then
-		xmllint --noout --dtdvalid "$TM_ANT_DTD_FILE" - &amp;&amp; exit_discard
+		xmllint --noout --dtdvalid "$TM_ANT_DTD_FILE" - &amp;&amp; echo "XML syntax OK, DTD Valid";
 	else
 		echo "Please run the command 'Create Ant.dtd' to validate against the default ant.dtd."
 	fi
 
 else
 
-	xmllint --noout - &amp;&amp; exit_discard
+	xmllint --noout - &amp;&amp; echo "XML syntax OK";
 
 fi
-
-
 </string>
 	<key>input</key>
 	<string>document</string>

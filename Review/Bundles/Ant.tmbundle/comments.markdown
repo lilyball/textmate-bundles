@@ -27,3 +27,11 @@
 * Now that validation doesn't override ⌘S you can stop saving the current file before running the command.
 
 Other than that it's looking good to me, poked allan about providing some feedback about the ant.dtd file.
+
+## Simon - 10/27/07
+
+* 'ant.xml' fileTypes re-introduced. Would a first line match with <\!\-\-ant\-\-\> anywhere on the line be possible? This would be less intrusive for existing projects.
+* Validation now shows a tooltip on success. 
+* Saving the current file on validation has been removed.
+
+Thank you for the feedback.

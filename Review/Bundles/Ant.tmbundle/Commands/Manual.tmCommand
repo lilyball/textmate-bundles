@@ -7,12 +7,12 @@
 	<key>command</key>
 	<string># Where there is no manual path specified try the one default location Apple may have installed the manual at, otherwise fall back to the ant.apache.org site.
 if [[ "$TM_ANT_MANUAL_PATH" == "" ]]; then
-	TM_ANT_MANUAL_PATH="/Developer/Java/Ant/docs/manual/index.html"
+	TM_ANT_MANUAL_PATH="/Developer/Java/Ant/docs/manual"
 fi
 
-if [[ -f "$TM_ANT_MANUAL_PATH" ]]; then
+if [[ -f "$TM_ANT_MANUAL_PATH/index.html" ]]; then
 
-	echo "&lt;meta http-equiv=\"refresh\" content=\"0; tm-file://$TM_ANT_MANUAL_PATH\"&gt;"
+	echo "&lt;meta http-equiv=\"refresh\" content=\"0; tm-file://$TM_ANT_MANUAL_PATH/index.html\"&gt;"
 
 else	
 

@@ -35,3 +35,39 @@ Other than that it's looking good to me, poked allan about providing some feedba
 * Saving the current file on validation has been removed.
 
 Thank you for the feedback.
+
+## Allan -- 2007-10-27 (hey guys, there is an `isoD⇥` tab trigger!)
+<!-- My comments are best read with Markdown → Preview :) -->
+
+* The *Build File* template specifies encoding as `ISO-8859-1`, wtf!?!
+
+* No [Contact / Description][2] in `info.plist`.
+
+* As for `TM_ANT_DTD_VALIDATION`, might be better to simply check if it is set (to anything but the empty string), that way the user won’t have to check if it has to be `1`, `YES`, `TRUE`, and/or if `TRUE` works in addition to `true`.
+
+* The documentation for `TM_ANT_DTD_VALIDATION` could be changed from:
+  > When set to “true” the Validate Build File command will check that the document is valid against the ant.dtd (if available).
+
+  Into something like (the idea being to make it clear that the command does more than check against the DTD):
+  > When set (to anything but the empty string) the _Validate Build File_ command will, in addition to verify that the XML is well-formed, check that the document conforms to `ant.dtd` (if available).
+
+* As for the `TM_ANT_MANUAL_PATH` manual entry, I think it could be made better by asking *“What does this mean for the user?”* rather than *“How is this implemented?”*.
+
+  The current text is:
+  > The local location of your Ant manual’s `index.html` file. If this is not specified the bundle checks the default manual location when Apple Developer Tools are installed, if this is unsuccessful then ant.apache.org/manual is opened.
+
+  Here is what I suggest:
+  > If you have installed your own version of Ant, you can set this variable to the location of its manual.  
+  > For example if you installed it via MacPorts then set it to `/opt/local/share/java/apache-ant/docs/manual`.  
+  > The default is to use the manual included with Apple’s developer tools with the online version as a fallback.
+
+* In the manual, generally wrap file names in `` `…` ``. I.e. `index.html`, `ant.dtd`, etc. I also use *emphasis* for command names like *Validate Build File*.
+
+* Specify `ant.xml` as the extension in the *Build File* template (then New From Template → Ant → Build File will open with proper language grammar and saving the build file uses the double extension).
+
+* I don’t fully understand the purpose of `ant.dtd` -- is this so that the user can customize the DTD for his particular build environment? If so, it would seem that optionally reading the file from `TM_PROJECT_DIRECTORY` is the way to go (and if the user wants to edit it, ask if it should copy it to that location first, if he says no, probably not allow editing the DTD).
+
+* The `firstLineMatch` for an ant comment sounds fine.
+
+[2]: http://macromates.com/wiki/Bundles/StyleGuide
+

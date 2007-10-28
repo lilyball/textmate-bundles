@@ -397,9 +397,7 @@
 		</dict>
 		<key>doubleQuotedStringLiteral</key>
 		<dict>
-			<key>begin</key>
-			<string>@"</string>
-			<key>beginCaptures</key>
+			<key>captures</key>
 			<dict>
 				<key>0</key>
 				<dict>
@@ -407,16 +405,8 @@
 					<string>punctuation.definition.string.begin.c#</string>
 				</dict>
 			</dict>
-			<key>end</key>
-			<string>([^"]|"")*"</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.c#</string>
-				</dict>
-			</dict>
+			<key>match</key>
+			<string>@"([^"]|"")*"</string>
 			<key>name</key>
 			<string>string.quoted.double.literal.c#</string>
 		</dict>

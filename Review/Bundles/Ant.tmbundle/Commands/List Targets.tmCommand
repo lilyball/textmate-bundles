@@ -9,8 +9,7 @@
 	exit_show_tool_tip "Please select a file from the file drawer to scan for ant targets.";
 fi
 
-cat "$TM_SELECTED_FILE" | grep '&lt;target' | grep 'name=".*" ' -o | grep '".*' -o
-</string>
+ant -p "$TM_SELECTED_FILE"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

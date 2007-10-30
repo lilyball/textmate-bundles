@@ -55,7 +55,11 @@ class Connector
   def get_mysql(database = nil)
     unless @@connector
       @@connector = Mysql::new(@settings.host, @settings.user, @settings.password, database || @settings.name, @settings.port)
-      encoding = @@connector.query('SELECT @@character_set_database AS server').fetch_hash
+      begin
+        encoding = @@connector.query('SELECT @@character_set_database AS server').fetch_hash
+      rescue
+        encoding = {:server => 'utf8'}
+      end
       @@connector.query('SET NAMES utf8;') if encoding["server"] != 'latin1'
     end
     @@connector

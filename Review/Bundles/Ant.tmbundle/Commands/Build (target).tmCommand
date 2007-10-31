@@ -16,9 +16,16 @@ require SUPPORT + '/lib/osx/plist'
 require SUPPORT + '/lib/web_preview'
 require 'rexml/document'
 
-puts html_head(:window_title =&gt; "Ant Build (target)", :page_title =&gt; "Build:", :sub_title =&gt; "Target" );
+STDOUT.sync = true
 
-#TODO: Test for ant.
+puts html_head(:window_title =&gt; "Ant Build (target)", :page_title =&gt; "Build (target)", :sub_title =&gt; "__" );
+
+ant_version = `ant -version`
+if ant_version.nil? | ant_version.empty?
+	puts "&lt;h1&gt;Error&lt;/h1&gt;Ant was not found, please ensure that it has been installed and your $PATH is set correctly."
+	exit 
+end
+
 base_dir = ""
 ant_build_file = "" 
 ant_build_file = ENV['TM_ANT_BUILD_FILE'] if ENV['TM_ANT_BUILD_FILE'] != nil
@@ -49,10 +56,9 @@ selected_desc = res['selectedMenuItem']['description']
 
 puts "&lt;h1&gt;#{selected_target}:&lt;/h1&gt;&lt;p&gt;#{selected_desc}&lt;/p&gt;"
 puts "&lt;pre&gt;"
-puts `ant -buildfile "#{ENV['TM_FILEPATH']}" #{selected_target}`
+print `ant -buildfile "#{ant_build_file}" #{selected_target}`
 puts "&lt;/pre&gt;"
 
-#TextMate.exit_show_html();
 </string>
 	<key>fallbackInput</key>
 	<string>document</string>

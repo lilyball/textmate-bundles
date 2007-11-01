@@ -20,11 +20,18 @@ STDOUT.sync = true
 
 puts html_head(:window_title =&gt; "Ant Build (target)", :page_title =&gt; "Build (target)", :sub_title =&gt; "__" );
 
-ant_version = `ant -version`
-if ant_version.nil? | ant_version.empty?
-	puts "&lt;h1&gt;Error&lt;/h1&gt;Ant was not found, please ensure that it has been installed and your $PATH is set correctly."
-	exit 
+def require_cmd(cmd)
+    exists = ENV['PATH'].split(':').any? { |dir| 
+        File.executable? File.join(dir, cmd)
+    }
+    unless exists
+        puts '&lt;h3 class="error"&gt;Couldn\'t find ‘' + cmd + '’&lt;/h3&gt;&lt;p&gt;Locations searched:&lt;/p&gt;&lt;p&gt;&lt;pre&gt;'
+        puts ENV['PATH'].gsub(/:/, "\n") + '&lt;/pre&gt;&lt;/p&gt;'
+        TextMate.exit_show_html()
+    end    
 end
+
+require_cmd "ant"
 
 base_dir = ""
 ant_build_file = "" 

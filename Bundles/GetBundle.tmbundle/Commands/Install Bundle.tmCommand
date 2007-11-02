@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>command</key>
-	<string>APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
+	<string>
 PTRN=$(ruby -rtextmate -e 'print Dir.entries(TextMate.app_path + "/Contents/SharedSupport/Bundles").grep(/.tmbundle$/).join("|")')
 INST=$(ruby -rtextmate -e 'print Dir.entries( File.expand_path("~/Library/Application Support/TextMate/Pristine Copy/Bundles")).grep(/.tmbundle$/).join("|")')
 
@@ -43,7 +43,7 @@ eval '"$SVN"' co "$SVN_OPTS" '"${BASE_URL}/Bundles/${bu}.tmbundle"' \
 
 if [[ $? == 0 ]]; then
   osascript -e 'tell app "TextMate" to reload bundles'
-  CocoaDialog bubble --title "Installed Bundle: ${bu}" --text 'You now can use the new Bundle' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
+  "${TM_RUBY:-ruby}" -wKU "$TM_BUNDLE_SUPPORT/notify.rb" installed "${bu}"
 fi
 </string>
 	<key>input</key>

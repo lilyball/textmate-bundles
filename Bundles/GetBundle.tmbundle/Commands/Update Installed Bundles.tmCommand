@@ -3,8 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>command</key>
-	<string>APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
-
+	<string>
 SVN="${TM_BUNDLE_SUPPORT}/bin/svn"
 
 REV=$(&lt; "$TM_SUPPORT_PATH/version")
@@ -16,9 +15,9 @@ if [[ $? == 0 ]]; then
    2&gt; &gt;(CocoaDialog progressbar --indeterminate --title 'Updating all your Bundles' --text 'This could take a while...')
 
   osascript -e 'tell app "TextMate" to reload bundles'
-  CocoaDialog bubble --title 'All Bundles Updated' --text 'You can use them now' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
+  "${TM_RUBY:-ruby}" -wKU "$TM_BUNDLE_SUPPORT/notify.rb" updated
 else
-  CocoaDialog bubble --title 'No Bundles to update' --text 'Use \"Install Bundles\".' --icon-file "${APP_PATH}/Contents/Resources/Textmate.icns"
+  "${TM_RUBY:-ruby}" -wKU "$TM_BUNDLE_SUPPORT/notify.rb" update_failed
 fi
 </string>
 	<key>name</key>

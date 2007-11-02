@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -64,6 +64,12 @@ If no text is selected, the task on the current line is toggled: if it's pending
 If text is selected, every task in the selection is toggled in batch: if any of the tasks are pending, all are marked as completed; if all are completed, they're marked as pending.
 
 
+## Expire Completed (&amp;#x2318;E)
+
+Press &amp;#x2318;E to remove completed tasks in the selection or else the entire document.
+
+
+
 ## Help
 
 This document in a web window.
@@ -105,12 +111,12 @@ CONTENTS
 html_footer</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Help</string>
 	<key>output</key>
 	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.tasks</string>
 	<key>uuid</key>
 	<string>4D618628-5F6E-40DC-8812-306E79678FCC</string>
 </dict>

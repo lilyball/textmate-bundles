@@ -7,8 +7,8 @@ Generally speaking the goal is to be as general with the scopes as you can be at
 ✓ punctuation.definition.separator should be punctuation.definition.header, the third level here should describe what it is defining.
 - Seeing that source already has a rule for meta.toc-list being in the symbol list both of those preferences are superfluous no?
 ✓ meta.leading-whitespace should use the new punctuation.whitespace.list_item.leading.tasks
-- punctuation.definition.bullet isn't defining the bullet it's defining the start of a task, hense punctuation.definition.list_item Has the benefit of sharing the same scopes as Markdown.
-- Being that this is a basically a list of tasks the scope for the items can share the scope Markdown and such use: markup.list. So perhaps… markup.list.pending|completed.tasks
+✓ punctuation.definition.bullet isn't defining the bullet it's defining the start of a task, hense punctuation.definition.list_item Has the benefit of sharing the same scopes as Markdown.
+✓ Being that this is a basically a list of tasks the scope for the items can share the scope Markdown and such use: markup.list. So perhaps… markup.list.pending|completed.tasks
 ✓ Help command should not have a key equiv as per the [style guide][1]. Needs to have a scope.
 
 [1]: http://macromates.com/wiki/Bundles/StyleGuide

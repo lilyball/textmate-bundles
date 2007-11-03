@@ -3,11 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>foreach ($1 in $2) {
+	<string>foreach (${1:Type} in ${2:Collection})
+{
 	$0
 }</string>
 	<key>name</key>
-	<string>foreach</string>
+	<string>Foreach</string>
 	<key>scope</key>
 	<string>source.c#</string>
 	<key>tabTrigger</key>

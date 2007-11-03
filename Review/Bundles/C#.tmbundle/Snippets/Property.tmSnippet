@@ -3,16 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:public} ${2:Type} ${3:Name} {
-	set {
+	<string>${1:public} ${2:Type} ${3:PropertyName}
+{
+	set
+	{
 		$0
 	}
-	get {
+	get
+	{
 
 	}
 }</string>
 	<key>name</key>
-	<string>property (prop)</string>
+	<string>Property</string>
 	<key>scope</key>
 	<string>source.c#</string>
 	<key>tabTrigger</key>

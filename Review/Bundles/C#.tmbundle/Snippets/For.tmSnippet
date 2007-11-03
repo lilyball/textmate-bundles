@@ -3,11 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for ($1;$2;$3) {
+	<string>for (${1:Initializer}; ${2:Condition}; ${3:Update})
+{
 	$0
 }</string>
 	<key>name</key>
-	<string>for</string>
+	<string>For</string>
 	<key>scope</key>
 	<string>source.c#</string>
 	<key>tabTrigger</key>

@@ -3,20 +3,25 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>/// &lt;summary&gt;
-///   Description of class goes here
-/// &lt;/summary&gt;
-${1:public} class ${2:ClassName}
+	<string>try
 {
-	$0
+	${2:// expression}
+}
+catch (${1:System.Exception} e) 
+{
+	${3:// expression}
+}
+finally
+{
+	${0:// expression}
 }</string>
 	<key>name</key>
-	<string>Class</string>
+	<string>Try / Catch / Finally</string>
 	<key>scope</key>
 	<string>source.c#</string>
 	<key>tabTrigger</key>
-	<string>class</string>
+	<string>try</string>
 	<key>uuid</key>
-	<string>B20CDBF9-F842-462E-BA33-AE671E0D3D25</string>
+	<string>9E4C6824-F9E0-4B64-B1F6-8DCF5F610DAC</string>
 </dict>
 </plist>

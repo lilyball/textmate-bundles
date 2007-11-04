@@ -4,19 +4,18 @@
 <dict>
 	<key>content</key>
 	<string>/// &lt;summary&gt;
-///   Description of class goes here
+///   Description of delegate goes here
 /// &lt;/summary&gt;
-${1:public} class ${2:ClassName}
-{
-	$0
-}</string>
+public delegate ${1:ReturnType} ${2:DelegateName}(${3:ParameterType} ${4:ParameterName});
+$0
+</string>
 	<key>name</key>
-	<string>Class</string>
+	<string>Delegate</string>
 	<key>scope</key>
 	<string>source.c#</string>
 	<key>tabTrigger</key>
-	<string>class</string>
+	<string>delegate</string>
 	<key>uuid</key>
-	<string>B20CDBF9-F842-462E-BA33-AE671E0D3D25</string>
+	<string>EED18275-324E-4176-8806-89938FE0146B</string>
 </dict>
 </plist>

@@ -96,8 +96,10 @@ formatter = Formatter.new
 last_line = ""
 #seen_first_line = false
 
-LogFile = ENV['PROJECT_FILE'] + '/' + ENV['LOGNAME'] + '.tm_build_errors' rescue nil
-error_log = File.open(LogFile, 'w') if LogFile
+unless ENV['PROJECT_FILE'].empty?
+  LogFile = ENV['PROJECT_FILE'] + '/' + ENV['LOGNAME'] + '.tm_build_errors' rescue nil
+  error_log = File.open(LogFile, 'w') if LogFile
+end
 
 formatter.start
 

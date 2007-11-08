@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List: Headers</string>
+	<key>scope</key>
+	<string>markup.heading</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>
+		s/^\s*//;                   # remove leading spaces
+		s/\s*=+(\[[-\w]+\])?\s*$//; # remove anchor and close marks =
+		s/^=====\s*/\t\t\t\t/;      # identify hierarchy with TABs
+		s/^====\s*/\t\t\t/;
+		s/^===\s*/\t\t/;
+		s/^==\s*/\t/;
+		s/^=\s*//;
+	</string>
+	</dict>
+	<key>uuid</key>
+	<string>BD01DD68-6B67-4768-A782-4BD8FD240FF2</string>
+</dict>
+</plist>

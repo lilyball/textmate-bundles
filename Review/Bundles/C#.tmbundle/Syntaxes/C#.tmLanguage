@@ -180,10 +180,53 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?x)^\s*		# start of line
-((?:\b(?:new|public|protected|internal|private|static|virtual|sealed|override|abstract|extern)\b\s)*) 					# method-modifiers
-\b((?:\w+\.)*[A-Za-z_]\w*)\b\s		# type
-([A-Za-z_]\w*)\s*					# name
+			<string>(?x)^\s*	                                                                            	# start of line
+((?:\b(?:new|public|protected|internal|private|static|virtual|sealed|override|abstract|extern)\b\s*)*) 			# method-modifiers
+\b((?:\w+\.)*[A-Za-z_]\w*)\b\s*	                                                                            	# type
+(operator)\s+        			                                                                            	# operator overload
+((?:\+|-|!|~|\+\+|--|true|false|\*|/|%|\&amp;|\||\^|&lt;&lt;|&gt;&gt;|==|!=|&lt;|&gt;|&lt;=|&gt;=)\s*)	                                	# operator name
+(?=\()</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.c#</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.c#</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.c#</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.c#</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>meta.definition.operator.c#</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#statementRemainder</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?x)^\s*	                                                                            	# start of line
+((?:\b(?:new|public|protected|internal|private|static|virtual|sealed|override|abstract|extern)\b\s*)*) 			# method-modifiers
+\b((?:\w+\.)*[A-Za-z_]\w*)\b\s*		                                                                            # type
+([A-Za-z_]\w*)\s*					                                                                            # name
 (?=\()</string>
 			<key>captures</key>
 			<dict>
@@ -229,7 +272,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(if|else|while|for|foreach|do|return|continue|break|switch|case|default|goto|throw|try|catch|finally|lock)\b</string>
+			<string>\b(if|else|while|for|foreach|do|return|continue|break|switch|case|default|goto|throw|try|catch|finally|lock|yield)\b</string>
 			<key>name</key>
 			<string>keyword.control.c#</string>
 		</dict>
@@ -247,7 +290,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(internal|public|protected|private|static|const|new|sealed|abstract|override|extern|unsafe|readonly|volatile)\b</string>
+			<string>\b(internal|public|protected|private|static|const|new|sealed|abstract|override|extern|unsafe|readonly|volatile|operator)\b</string>
 			<key>name</key>
 			<string>storage.modifier.c#</string>
 		</dict>

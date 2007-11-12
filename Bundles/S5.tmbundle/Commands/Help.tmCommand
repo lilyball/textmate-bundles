@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-htmlHeader "S5 Slide Show Help" "S5 Slide Show"
+html_header "S5 Slide Show Help" "S5 Slide Show"
 Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl
 
 S5: A Simple Standards-Based Slide Show System
@@ -108,13 +108,11 @@ This bundle is maintained by [Brad Choate][1]. The S5 CSS and HTML framework was
 [3]: http://www.meyerweb.com/eric/tools/s5/
 
 EOF
-htmlFooter</string>
+html_footer</string>
 	<key>fallbackInput</key>
 	<string>scope</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string>@?</string>
 	<key>name</key>
 	<string>Help</string>
 	<key>output</key>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+#  Created by Jon Roberts on 2007-10-18.
+# Maya must first run the command:
+# commandPort -n ":2222";
+
+require 'socket'
+
+begin
+  mel = STDIN.read
+  s = TCPSocket.open("localhost", 2222)
+  s.puts(mel)
+rescue Exception =&gt; e
+  puts("Error:\n"+e+"\n...is commandPort enabled? See help command.")
+end
+</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Send to Maya</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.mel</string>
+	<key>uuid</key>
+	<string>F122D96A-781F-4934-89AD-3BE0BFCDB3C1</string>
+</dict>
+</plist>

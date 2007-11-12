@@ -1,11 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat "${TM_BUNDLE_SUPPORT}/README.html"</string>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "SVK Bundle Help" "SVK"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
+
+This README just documents what the commands of this Bundle do and how you can &lt;a href="#sect_2"&gt;fine-tune&lt;/a&gt; their behaviour; if you need general SVK Help/Introduction, you should look at the &lt;a href="http://svk.elixus.org/"&gt;SVK homepage&lt;/a&gt;.
+      
+# Commands
+         
+-   **Add to Repository**
+
+    __Target__:  selected project files/folders or the active file if it doesn't belong to a project
+    
+    Adds the targets to the repository.
+
+-   **Blame**
+
+    __Target__:  active file
+        
+    Displays a line-by-line history of the file, showing you who wrote which line in what revision.  Click a line to jump to it in an editor window.  Hover over a revision number or author name to see when the corresponding line was last changed. The date format is &lt;a href="#sect_2"&gt;adjustable&lt;/a&gt; with `TM_SVK_DATE_FORMAT`.
+    
+    "wc" means the last change was in your working copy.
+
+-   **Commit**
+
+    __Target__:  selected project files/folders or the active file if it doesn't belong to a project
+    
+    Commits your changed files to the repository. A dialog asks you for the description of your changes; you may also choose to exclude files from the commit by un-checking them. If no files are selected or active, this command does nothing. If the target files have no local changes, nothing happens.
+    
+-   **Diff With Working Copy (BASE)**
+    
+    __Target__:  active file
+    
+    Displays the differences between the active file and an unaltered, pristine copy of the file at the same revision.
+    
+    Equivalent to `svk diff -rBASE`
+        
+-   **Info**
+
+    __Target__:  selected project files/folders or the active file if it doesn't belong to a project
+
+    Displays detailed information about the selected files. Some parameters are configurable via shell variables; see the &lt;a href="#sect_2"&gt;Configuration Options&lt;/a&gt; section below.
+    
+-   **Log**
+
+    __Target__:  selected project files/folders or the active file if it doesn't belong to a project
+    
+    Displays the commit message history for the selected files. Some parameters are configurable via shell variables; see the &lt;a href="#sect_2"&gt;Configuration Options&lt;/a&gt; section below.  (TODO: if multiple files are selected, only the logs from the first are shown.)
+
+-   **Revert**
+
+    __Target__:  active file
+    
+    Revert changes made in checkout copies.
+
+-   **Status**
+
+    __Target__:  directory of active file
+    
+    Displays a list of files with changes in your working copy, along with the type of change for each file.
+
+-   **Update to Newest**
+
+    __Target__:  selected project files/folders or the active file if it doesn't belong to a project
+    
+    Updates the targets with the newest changes from the repository.
+
+
+# Configuration Options
+         
+These [static variables](?static_variables) allow you to tweak the behaviour of the certain commands if need be. The default values should make sense for normal use.
+         
+-   `TM_SVK`
+
+    __Default__: `svk`
+    
+    The path to your svk executable.
+            
+-   `TM_RUBY`
+
+    __Default__: `ruby`
+    
+    Here you can tweak with what Ruby the formatting scripts will be executed.
+            
+-   `TM_SVK_DATE_FORMAT`
+
+    __Default__: *not set* (No Changes, just show what SVK shows)
+                  
+    A date format string that allows you to tweak the format in which Blame, Log and Info show you dates.  See &lt;a title="Manual Page For strftime(3)" href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html"&gt;strftime(3)&lt;/a&gt; for what you can enter here.
+            
+-   `TM_SVK_CLOSE`
+
+    __Default__: `false`
+    
+	With this option you can adjust whether the windows of Blame and Info close if you click on a link which opens a file in TM.  Set it to `1` or `true` if windows should close or to something else if they should not.
+            
+-   `TM_SVK_LOG_RANGE`
+
+    __Default__: `BASE:1`
+
+    The default range to query for log messages.
+            
+-   `TM_SVK_LOG_LIMIT`
+
+    __Default__: `9`
+
+    The number of messages to show. `0` means no limit.
+            
+-   `TM_SVK_INFO_HIDE`
+
+    __Default__: *not set* (nothing)
+    
+    Here you can adjust what keys of the info stream you don't want to see, it is case insensitive and a comma (`,`) separated list.  If you enter a `*`, it is assumed that you want to hide all vars, if so, you can make some values visible again with `TM_SVK_INFO_SHOW`.
+            
+-   `TM_SVK_INFO_SHOW`
+
+    __Default__: *not set* (everything else)
+    
+    This is also a comma-separated list of keys, it just makes sense if you did hide all with the above var. `*` has no special meaning here. Everything you enter here will be shown if you want to hide everything else.
+
+
+# Authors
+         
+- &lt;a href="mailto:glasser@mit.edu"&gt;David Glasser&lt;/a&gt;, ported to SVK from Subversion
+- Chris Thomas (Subversion bundle) (Idea, Status, Diffs, Commit, Add, and Updates)
+- Torsten Becker (Subversion bundle) (Blame, Log, Info, and Revert)
+
+EOF
+html_footer
+</string>
 	<key>dontFollowNewOutput</key>
 	<integer>1</integer>
 	<key>input</key>

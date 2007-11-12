@@ -1,80 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "GTD Bundle Help file" "Getting Things Done"
+html_header "GTD Bundle Help" "Getting Things Done"
 Markdown.pl &lt;&lt;"EOF"|SmartyPants.pl
-# GTD Bundle Help
-This bundle is shamelessly taken from the TODO bundle and reconfigured for GTD.  For more info on GTD see &lt;http://www.davidco.com&gt;
-&lt;h2&gt;Setting up the GTD Bundle&lt;/h2&gt;
-The latest version of the GTD bundle can always be found at [textmate
-repository]. &amp;nbsp;Additionally, you'll need two files, a contexts file
-and an exclusions file. &amp;nbsp;These files need to go into a folder
-where you plan to place all of yoour .gtd files. &amp;nbsp;I keep mine in
-~/Documents/ToDo.&lt;br&gt;
-&lt;br&gt;
-Basically, the contexts.gtd file is a list of contexts, as described
-above. &amp;nbsp;There are several data elements for each file, a couple of
-which I no longer use, but keep so that I don't break the system.
-&amp;nbsp;The big things to get right are the context (first cell), the
-shortcut key (second cell) and the context string (third element).
-&amp;nbsp;&lt;br&gt;
-&lt;br&gt;
-The exclusions.gtd file is a list of gtd files that you &lt;span style="font-style: italic;"&gt;don't&lt;/span&gt;
-want to see listed in the rollup of tasks. &amp;nbsp;Why? &amp;nbsp;Well, it
-allows me to create project files that I can hide until I want to deal
-with them. &amp;nbsp;For example, I created a ookshelf.gtd file that lists
-all of the tasks assosciated with building shelves in my garage.
-&amp;nbsp;However, I'm not ready for that project yet, so I hide it from my
-rollup. &amp;nbsp;I've tried to make the GTD bundle as customizable as
-posssible, so while you must have the excluded.gtd file, you are free
-to not use it. &amp;nbsp;
-&lt;h2&gt;Using the GTD Bundle&lt;/h2&gt;
-Now that you have downloaded the bundle and the supporting files, you
-are ready to jump in! &amp;nbsp;First, create a new project file in your
-ToDo folder (or whatever you call it). &amp;nbsp;Then begin adding tasks by
-entering a shortcut and hitting the "&lt;span style="font-weight: bold;"&gt;Enter&lt;/span&gt;"
-key - not "Return." &amp;nbsp;This should replace the shortcut with the
-corresponding context string from contexts.gtd. &amp;nbsp;Then tab to the
-data field(s) for that task and hit return to finish entering the task.&lt;br&gt;
-&lt;br&gt;
-Contexts are great, but there is also a status component of the gtd
-list in the GTD bundle. &amp;nbsp;The normal status is how the task is
-created. &amp;nbsp;The two modified statuses are "WAIT" and "DONE."
-&amp;nbsp;To change the status of a task to "WAIT" type "w" and then the
-tab key anywhere on the tasks line (just make sure it is either the
-first character or there is a pace in from of the "w"). &amp;nbsp;Then,
-when you want to "unwait" the task, do the same thing with "u".
-&amp;nbsp;When a task is done, mark it as "DONE" using "d" and the tab key.&lt;br&gt;
-&lt;br&gt;
-Like I said in the beginning, my objective is to plan in project,
-execute in context. &amp;nbsp;So, I have a couple of list views, "Active
-GTD List View" and "GTD List View". &amp;nbsp;The major difference between
-the two is that the active list does not show completed tasks, although
-it does show "WAIT" tasks. &amp;nbsp;Either way, the bundle creates a nice
-looking list of tasks, arranged by context.&lt;br&gt;
-&lt;br&gt;
-One other subject area is additional list formatting. &amp;nbsp;You can
-sort all of the tasks in a project by context by pressing F5. &amp;nbsp;I
-personally don't like this, because my projects are generally built in
-a rough sequence. &amp;nbsp;I have to look up a phone number before I can
-call it, for example. &amp;nbsp;So, the feature is there, but I don't
-really use it. &amp;nbsp;There are also a couple of cleanup commands.
-&amp;nbsp;Cleanup (CTRL-Shift-C) moves all of the "DONE" tasks to the
-bottom of a project list. &amp;nbsp;Remove (CTRL-ALT-Shift-C) does what it
-says; it removes completed tasks.&lt;br&gt;
+
+This bundle is shamelessly taken from the TODO bundle and reconfigured for GTD. [More information](http://www.davidco.com) on GTD.
+
+# Setting up the GTD Bundle
+
+The latest version of the GTD bundle can always be found at [textmate repository]. Additionally, you'll need two files, a contexts file and an exclusions file. These files need to go into a folder where you plan to place all of your .gtd files. I keep mine in `~/Documents/ToDo`.
+
+Basically, the `contexts.gtd` file is a list of contexts, as described above. There are several data elements for each file, a couple of which I no longer use, but keep so that I don't break the system. The big things to get right are the context (first cell), the shortcut key (second cell) and the context string (third element).
+
+The `exclusions.gtd` file is a list of gtd files that you *don't* want to see listed in the rollup of tasks. Why? Well, it allows me to create project files that I can hide until I want to deal with them. For example, I created a `bookshelf.gtd` file that lists all of the tasks associated with building shelves in my garage. However, I'm not ready for that project yet, so I hide it from my rollup. I've tried to make the GTD bundle as customizable as possible, so while you must have the `excluded.gtd` file, you are free to not use it.
+
+# Using the GTD Bundle
+
+Now that you have downloaded the bundle and the supporting files, you are ready to jump in! First, create a new project file in your ToDo folder (or whatever you call it). Then begin adding tasks by entering a shortcut and hitting the "**Enter**" key - not "Return." This should replace the shortcut with the corresponding context string from `contexts.gtd`. Then tab to the data field(s) for that task and hit return to finish entering the task.
+
+Contexts are great, but there is also a status component of the gtd list in the GTD bundle. The normal status is how the task is created. The two modified statuses are "WAIT" and "DONE." To change the status of a task to "WAIT" type "w" and then the tab key anywhere on the tasks line (just make sure it is either the first character or there is a pace in from of the "w"). Then, when you want to "unwait" the task, do the same thing with "u". When a task is done, mark it as "DONE" using "d" and the tab key.
+
+Like I said in the beginning, my objective is to plan in project, execute in context. So, I have a couple of list views, "Active GTD List View" and "GTD List View". The major difference between the two is that the active list does not show completed tasks, although it does show "WAIT" tasks. Either way, the bundle creates a nice looking list of tasks, arranged by context.
+
+One other subject area is additional list formatting. You can sort all of the tasks in a project by context by pressing `F5`. I personally don't like this, because my projects are generally built in a rough sequence. I have to look up a phone number before I can call it, for example. So, the feature is there, but I don't really use it. There are also a couple of cleanup commands. Cleanup (CTRL-Shift-C) moves all of the "DONE" tasks to the bottom of a project list. Remove (CTRL-ALT-Shift-C) does what it says; it removes completed tasks.
 
 EOF
 html_footer
 </string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string>^H</string>
 	<key>name</key>
 	<string>Help</string>
 	<key>output</key>

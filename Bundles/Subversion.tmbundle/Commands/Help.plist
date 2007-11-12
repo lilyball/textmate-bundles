@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -8,13 +8,13 @@
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "Subversion Help" "Subversion"
 
-Markdown.pl &lt;&lt;'EOF'
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
 
 This document describes the commands of the TextMate Subversion bundle and how you can fine-tune their behavior. For general Subversion help and tutorial, you should read the [Subversion book](http://svnbook.red-bean.com/ "Version Control with Subversion").
 
-## Command Reference
+# Command Reference
 
-### Adding, Removing, Updating, Committing
+## Adding, Removing, Updating, Committing
 
 These commmands operate on the selected files/folders in the project, or the active file if it doesn't belong to a project.
 
@@ -41,7 +41,7 @@ These commmands operate on the selected files/folders in the project, or the act
 	If no files are selected or active, this command does nothing. If the target files
 	have no local changes, nothing happens.
 
-### Information, Logs, Status
+## Information, Logs, Status
 
 *	__Blame__
 
@@ -67,7 +67,7 @@ These commmands operate on the selected files/folders in the project, or the act
 	Displays the modification status for each of the selected files/folders, or for the active file's directory if there is no project.
 	Does not access the repository.
 
-### Comparing Revisions
+## Comparing Revisions
 
 These commands operate on the active file.
 
@@ -94,7 +94,7 @@ These commands operate on the active file.
 	
 	Displays the differences between the active file and a different revision of the same file. This command presents you with a list of revisions to choose from.
 	
-### Merging Revisions
+## Merging Revisions
 
 *	__Show Available Revisions for Merging__
 
@@ -108,17 +108,17 @@ These commands operate on the active file.
 
 	Removes conflict-related artifact files for the selected file, allowing the file to be committed after you have fixed the conflicts. Does not remove conflict markers or resolve conflicts itself.
 
-### Check Out
+## Check Out
 
 *	__Check Out&amp;hellip;__
 	
 	Check out a local working copy of a repository directory. Asks for a path to the repository directory to check out.
 
-## Configuration Options
+# Configuration Options
 
-These shell variables allow you to tweak the behavior of the certain commands if need be. The default values should make sense for normal use.
+These shell variables allow you to tweak the behavior of the certain commands if need be. The default values should make sense for normal use. Learn [how to set these variables](?static_variables).
 
-### Tools
+## Tools
 
 *	`$TM_SVN` (default: `svn`)
 	
@@ -136,14 +136,14 @@ These shell variables allow you to tweak the behavior of the certain commands if
 	
 	Allows you to set a command that should be used to present file differences. If you want use Apple’s FileMerge application, use [`fmdiff`](http://ssel.vub.ac.be/ssel/internal:fmdiff).
 
-### Date Format
+## Date Format
 
 *	&lt;a name="tm_svn_date_format"&gt;`$TM_SVN_DATE_FORMAT`&lt;/a&gt; (default: not set&amp;mdash;no changes, just show what SVN shows)
 	
 	A date format string that allows you to tweak the format in which Blame, Log and Info show you dates.	 
 	See [strftime(3)](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man3/strftime.3.html "man page for strftime(3)") for what you can enter here.
 
-### Blame, Info, and Log Options
+## Blame, Info, and Log Options
 
 *	`$TM_SVN_CLOSE` (default: false)
 	

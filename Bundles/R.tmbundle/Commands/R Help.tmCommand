@@ -1,74 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat &lt;&lt;"HTML"
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta http-equiv="Content-type" content="text/html; charset=utf-8"&gt;
-        &lt;title&gt;R Help&lt;/title&gt;
-        &lt;style type="text/css" media="screen"&gt;
-dt {
-    margin-top: 0.6em;
-    font-weight: bold;
-}
-h2 {
-    margin-top: 1.4em;
-}
-tt {
-    font-size: 0.9em;
-}
-        &lt;/style&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;h1 style="text-shadow: 3px 3px 5px grey"&gt;R Help&lt;/h1&gt;
-        &lt;p&gt;R is a language and environment for statistical computing and graphics. It is a &lt;a href="http://www.gnu.org/"&gt;GNU project&lt;/a&gt; which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&amp;amp;T, now Lucent Technologies) by John Chambers and colleagues. R can be considered as a different implementation of S. There are some important differences, but much code written for S runs unaltered under R.&lt;/p&gt;
-        &lt;p&gt;R provides a wide variety of statistical (linear and nonlinear modelling, classical statistical tests, time-series analysis, classification, clustering, ...) and graphical techniques, and is highly extensible. The S language is often the vehicle of choice for research in statistical methodology, and R provides an Open Source route to participation in that activity.&lt;/p&gt;
-        &lt;p style="font-size: smaller; color: grey;"&gt;(Text taken from &lt;a href="http://www.r-project.org/about.html"&gt;What is R?&lt;/a&gt;)&lt;/p&gt;
-        &lt;p&gt;More information about R can be found at &lt;a href="http://www.r-project.org/"&gt;r-project.org&lt;/a&gt;.&lt;/p&gt;
-        &lt;h2&gt;Commands&lt;/h2&gt;
-        &lt;dl&gt;
-            &lt;dt&gt;Execute Document In R&lt;/dt&gt;
-            &lt;dd&gt;Executes the current document in the command-line version of R and displays the output in an HTML window. By default new plots use the "pdf" device and are placed in a temporary folder and opened upon completion of the script.&lt;/dd&gt;
-            &lt;dt&gt;Send Selection / Document to R&lt;/dt&gt;
-            &lt;dd&gt;Sends the current selected text or the entire document to R.app using AppleScript. Also changes the current working directory to that of the script if it's been saved. Useful for those times when you want to execute a script in the context of an existing workspace, or when you need an interactive graphics device.&lt;/dd&gt;
-            &lt;dt&gt;Show in R Help&lt;/dt&gt;
-            &lt;dd&gt;Shows an HTML document with help for the current word.&lt;/dd&gt;
-            &lt;dt&gt;Command Usage&lt;/dt&gt;
-            &lt;dd&gt;Shows a tooltip with the function signature for the current word.&lt;/dd&gt;
-            &lt;dt&gt;Insert Command Template&lt;/dt&gt;
-            &lt;dd&gt;Inserts a snippet with the function signature for the current word. Effectively an autocomplete.&lt;/dd&gt;
-        &lt;/dl&gt;
-        &lt;h2&gt;R Console&lt;/h2&gt;
-        &lt;p&gt;The R Console language is used to turn the TextMate window into effectively an R console. It works by sending commands to R.app with AppleScript and retrieving the results.&lt;/p&gt;
-        &lt;dl&gt;
-            &lt;dt&gt;Execute Line / Selection&lt;/dt&gt;
-            &lt;dd&gt;If the line begins with "&gt; ", that line will be sent to R.app when you hit return.&lt;/dd&gt;
-            &lt;dt&gt;Show Line Output as Tool Tip&lt;/dt&gt;
-            &lt;dd&gt;Same as the previous command but shows the result as a tooltip rather than inserting the results into the document.&lt;/dd&gt;
-            &lt;dt&gt;Show History List&lt;/dt&gt;
-            &lt;dd&gt;Shows a menu containing all the commands executed in the current document.&lt;/dd&gt;
-            &lt;dt&gt;Previous History Item&lt;/dt&gt;
-            &lt;dd&gt;Replaces the current line with the previous item from history.&lt;/dd&gt;
-            &lt;dt&gt;Next History Item&lt;/dt&gt;
-            &lt;dd&gt;Replaces the current line with the next item from history.&lt;/dd&gt;
-            &lt;dt&gt;Copy to Clipboard&lt;/dt&gt;
-            &lt;dd&gt;Copies all the user commands (lines beginning with "&gt; ") from the current selection or document to the clipboard.&lt;/dd&gt;
-        &lt;/dl&gt;
-        &lt;h2&gt;Troubleshooting&lt;/h2&gt;
-        &lt;p&gt;If you see the message &lt;tt&gt;`re-encoding is not available on this system'&lt;/tt&gt; or receive an error about &lt;tt&gt;`object ".PSenv" not found'&lt;/tt&gt; then you are most likely using an older version of R. In this case you should upgrade to the latest (currently, version 2.4.0) by downloading the pre-built universal R.app installer from &lt;a href="http://www.r-project.org"&gt;r-project.org&lt;/a&gt;.&lt;/p&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-HTML</string>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "R Bundle Help" "R"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'MARKDOWN'
+
+# Introduction
+
+R is a language and environment for statistical computing and graphics. It is a [GNU project](http://www.gnu.org/) which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&amp;T, now Lucent Technologies) by John Chambers and colleagues. R can be considered as a different implementation of S. There are some important differences, but much code written for S runs unaltered under R.
+
+R provides a wide variety of statistical (linear and nonlinear modelling, classical statistical tests, time-series analysis, classification, clustering, ...) and graphical techniques, and is highly extensible. The S language is often the vehicle of choice for research in statistical methodology, and R provides an Open Source route to participation in that activity.
+
+(Text taken from [What is R?](http://www.r-project.org/about.html))
+
+More information about R can be found at [r-project.org](http://www.r-project.org/).
+       
+# Commands
+
+-   __Execute Document In R__
+
+    Executes the current document in the command-line version of R and displays the output in an HTML window. By default new plots use the "pdf" device and are placed in a temporary folder and opened upon completion of the script.
+    
+-   __Send Selection / Document to R__
+
+    Sends the current selected text or the entire document to R.app using AppleScript. Also changes the current working directory to that of the script if it's been saved. Useful for those times when you want to execute a script in the context of an existing workspace, or when you need an interactive graphics device.
+    
+-   __Show in R Help__
+
+    Shows an HTML document with help for the current word.
+    
+-   __Command Usage__
+
+    Shows a tooltip with the function signature for the current word.
+    
+-   __Insert Command Template__
+
+    Inserts a snippet with the function signature for the current word. Effectively an autocomplete.
+
+# R Console
+
+The R Console language is used to turn the TextMate window into effectively an R console. It works by sending commands to R.app with AppleScript and retrieving the results.
+
+-   __Execute Line / Selection__
+
+    If the line begins with "&gt; ", that line will be sent to R.app when you hit return.
+    
+-   __Show Line Output as Tool Tip__
+
+    Same as the previous command but shows the result as a tooltip rather than inserting the results into the document.
+    
+-   __Show History List__
+
+    Shows a menu containing all the commands executed in the current document.
+    
+-   __Previous History Item__
+
+    Replaces the current line with the previous item from history.
+    
+-   __Next History Item__
+
+    Replaces the current line with the next item from history.
+    
+-   __Copy to Clipboard__
+
+    Copies all the user commands (lines beginning with "&gt; ") from the current selection or document to the clipboard.
+
+# Troubleshooting
+
+If you see the message `'re-encoding is not available on this system'` or receive an error about `'object ".PSenv" not found'` then you are most likely using an older version of R. In this case you should upgrade to the latest (currently, version 2.4.0) by downloading the pre-built universal R.app installer from &lt;a href="http://www.r-project.org"&gt;r-project.org&lt;/a&gt;.
+
+MARKDOWN
+html_footer</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
-	<string>R Help</string>
+	<string>Help</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>

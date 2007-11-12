@@ -115,17 +115,24 @@ class CommandMate
 end
 
 class UserScript
-  attr_reader :display_name, :path
+  attr_reader :display_name, :path, :warning
   def initialize(content, write_content_to_stdin=true)
+    @warning = nil
     @write_content_to_stdin = write_content_to_stdin
     @content = content
-    #match the entire she-bang.
+    # match the entire she-bang.
     @hashbang = $1 if @content =~ /\A#!(.*)$/
     if ENV.has_key? 'TM_FILEPATH' then
       @path = ENV['TM_FILEPATH']
       @display_name = File.basename(@path)
       # save file
-      open(@path, "w") { |io| io.write @content }
+      begin
+        open(@path, "w") { |io| io.write @content }
+      rescue Errno::EACCES
+        @path = '-'
+        @display_name += ' '
+        @warning = "File could not be saved before run."
+      end
     else
       @path = '-'
       @display_name = 'untitled'
@@ -154,7 +161,7 @@ class UserScript
       cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten)
       stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
       if @write_content_to_stdin
-        Thread.new { stdin.write @content; stdin.close } unless ENV.has_key? 'TM_FILEPATH'
+        Thread.new { stdin.write @content; stdin.close } if @path == "-"
       end
       wr.close
       [ stdout, stderr, rd, pid ]
@@ -243,6 +250,7 @@ HTML
     	color: #FF5600;
     }
   </style>
+  <strong class="warning" style="float:left; color:#B4AF00;">#{@command.warning}</strong>
   <div class="scriptmate #{@mate.downcase}">
   <div class="controls" style="text-align:right;">
     <a style="text-decoration: none;" href="#" onclick="copyOutput(document.getElementById('_script_output'))">copy output</a>

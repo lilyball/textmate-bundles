@@ -1,6 +1,11 @@
 #!/bin/bash
 
 SEARCH_DIR="/private/etc/httpd/users"
+
+if [[ -d "/etc/apache2/users" ]]; then
+	SEARCH_DIR="/etc/apache2/users"
+fi
+
 SEARCH_FILE_EXT="conf"
 
 getDirContentsList()
@@ -31,6 +36,7 @@ getDirContentsList $SEARCH_DIR ","
 if [ "$REPLY" == "" ]
 	then
 	#There's nothing to pick from so exit
+	echo "No user configuration files found in $SEARCH_DIR."
 	exit 0;
 fi
 	
@@ -43,5 +49,5 @@ EOF`
 	
 if [ "$selectedFile" != "false" ]
 	then
-	open -a TextMate "$SEARCH_DIR/$selectedFile"
+	open -a TextMate "$SEARCH_DIR/$selectedFile"	
 fi

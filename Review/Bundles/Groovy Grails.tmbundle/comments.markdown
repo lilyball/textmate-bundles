@@ -64,3 +64,11 @@ All the groovy tags would be meta.tag.template. Was just pointing out that you l
 
 Allan will be commenting here… ::pokes allan with a stick::
 
+## daleyl - 2007-11-14
+
+* Renamed grammar to GSP
+
+* Sanitised menu layout
+
+
+

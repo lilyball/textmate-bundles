@@ -69,6 +69,3 @@ Allan will be commenting here… ::pokes allan with a stick::
 * Renamed grammar to GSP
 
 * Sanitised menu layout
-
-
-

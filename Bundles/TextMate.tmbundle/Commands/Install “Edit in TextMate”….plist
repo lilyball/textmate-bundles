@@ -8,19 +8,11 @@
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "Install “Edit in TextMate…”"
 
-SRC="$(ruby -r"$TM_SUPPORT_PATH/lib/textmate.rb" -e 'print TextMate.app_path')/Contents/Resources/Edit in TextMate"
-
-# check if we have the input manager in TextMate.app
-[[ ! -d "$SRC" ]] &amp;&amp; { echo "&lt;h2&gt;Error&lt;/h2&gt;&lt;p&gt;The input manager (&lt;tt&gt;$SRC&lt;/tt&gt;) was not found in the TextMate application bundle.&lt;p&gt;You may need a newer version of TextMate."; exit; }
-
 # javascript which creates the link (by calling out to the shell)
 cat &lt;&lt;HTML
 &lt;script&gt;
 function installInputManager () {
-  var cmd = TextMate.system(
-    "{ mkdir -p ~/Library/InputManagers" +
-    " &amp;&amp; ln -s '$SRC' ~/Library/InputManagers" +
-    " &amp;&amp; echo '&lt;strong&gt;Success!&lt;/strong&gt; Link to &lt;tt&gt;$SRC&lt;/tt&gt; created in &lt;tt&gt;~/Library/InputManagers&lt;/tt&gt;.'; } 2&gt;&amp;1", null);
+  var cmd = TextMate.system('install_edit_in_tm.sh', null);
   var res = document.getElementById("result");
   res.innerHTML = "&lt;p&gt;" + cmd.outputString + "&lt;/p&gt;";
 }
@@ -40,7 +32,7 @@ This allow you to call upon TextMate to edit the text in the current web form (S
 
 The Input Manager is preferably installed by creating a symbolic link in `~/Library/InputManagers` which point to the location of the input manager (inside the TextMate application bundle).
 
-You can create this link by using the button below.
+You can create this link by using the button below. **Note for Leopard users:** The script requires you to enter an administrator password to install the Input Manager (see [this post](http://blog.macromates.com/2007/inputmanagers-on-leopard/))
 
 &lt;div id="result"&gt;&lt;input type="Button" value="Create Symbolic Link" onClick="installInputManager();"&gt;&lt;/div&gt;
 

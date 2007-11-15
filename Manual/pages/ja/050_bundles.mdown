@@ -145,6 +145,14 @@ The HTML bundle contains useful stuff for working with HTML. A few particularly 
 
 The HTML bundle also has a drag command for images which insert the dropped image with proper dimensions (width/height) and an alternative text derived from the file name.
 
+A lot of actions in the HTML bundle will cause tags to be inserted. E.g. pressing ⌃↩ inserts `<br>`, dropping an image on a HTML document inserts `<img …>`, etc.
+
+If you want tags with an EMPTY content model to use the minimized (XHTML) form (that is `<br />` instead of `<br>`) then in _Preferences_ → _Advanced_ create a new variable named `TM_XHTML` and set it to ‘` /`’ (the value of this variable will be inserted before the `>` in the generated tags with EMPTY content model).
+
+For the records have a look at [Sending XHTML as text/html Considered Harmful][XHTML] before embracing XHTML.
+
+[XHTML]: http://www.hixie.ch/advocacy/xhtml
+
 ### LaTeX
 
 Three commands of special interest in the LaTeX bundle are:

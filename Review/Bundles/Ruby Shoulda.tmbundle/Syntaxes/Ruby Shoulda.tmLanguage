@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>shoulda.rb</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>(?x)^
+	    (\s*+
+	        (module|class|def
+	        |unless|if
+	        |case
+	        |begin
+	        |for|while|until
+			 |^=begin
+	        |(  "(\\.|[^"])*+"          # eat a double quoted string
+	         | '(\\.|[^'])*+'        # eat a single quoted string
+	         |   [^#"']                # eat all but comments and strings
+	         )*
+	         (                        \s   (do|begin|case)
+	         | (?&lt;!\$)[-+=&amp;|*/~%^&lt;&gt;~] \s*+ (if|unless)
+	         )
+	        )\b
+	        (?! [^;]*+ ; .*? \bend\b )
+	    |(  "(\\.|[^"])*+"              # eat a double quoted string
+	     | '(\\.|[^'])*+'            # eat a single quoted string
+	     |   [^#"']                    # eat all but comments and strings
+	     )*
+	     ( \{ (?!  [^}]*+ \} )
+	     | \[ (?! [^\]]*+ \] )
+	     )
+	    ).*$
+	|   [#] .*? \(fold\) \s*+ $         # Sune’s special marker
+	</string>
+	<key>foldingStopMarker</key>
+	<string>(?x)
+		(   (^|;) \s*+ end   \s*+ ([#].*)? $
+		|   (^|;) \s*+ end \. .* $
+		|   ^     \s*+ [}\]] \s*+ ([#].*)? $
+		|   [#] .*? \(end\) \s*+ $    # Sune’s special marker
+		|   ^=end
+		)</string>
+	<key>name</key>
+	<string>Ruby Shoulda</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>include</key>
+			<string>#context</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#should</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.ruby</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>context</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*(context)\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.context.ruby.shoulda</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\b(do)\s*$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.start-block.ruby.shoulda</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.context.ruby.shoulda</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+			</array>
+		</dict>
+		<key>should</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*(should)\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.should.ruby.shoulda</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\b(do)\s*$</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.start-block.ruby.shoulda</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.should.ruby.shoulda</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.ruby</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>scopeName</key>
+	<string>source.ruby.shoulda</string>
+	<key>uuid</key>
+	<string>7ED2CAAB-8CE7-4A09-9E66-1D622C60029B</string>
+</dict>
+</plist>

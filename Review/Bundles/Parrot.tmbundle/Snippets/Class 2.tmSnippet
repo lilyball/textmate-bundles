@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>class_pmc = newclass '${1:classname}'
+.namespace["$1"]
+	.sub init :method
+		$2
+	.end
+.namespace</string>
+	<key>name</key>
+	<string>Class</string>
+	<key>scope</key>
+	<string>source.parrot.pir</string>
+	<key>tabTrigger</key>
+	<string>class</string>
+	<key>uuid</key>
+	<string>1F3B62E0-2AEB-441E-A2C3-091A7E742494</string>
+</dict>
+</plist>

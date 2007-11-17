@@ -1,7 +1,7 @@
 <? $name = $_ENV["TM_NEW_FILE_BASENAME"] ?>
 <? $project = $_ENV["TM_PROJECT_FILEPATH"] ?>
 <? $company = $_ENV["TM_ORGANIZATION_NAME"] ?>
-<? $realname = chop(`niutil -readprop / /users/\$USER realname`) ?>
+<? $realname = chop($_ENV["TM_FULLNAME"]) ?>
 %{
 (************************************************************************
 *

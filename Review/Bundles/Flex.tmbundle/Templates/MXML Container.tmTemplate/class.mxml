@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" title="New Window" showCloseButton="true" close="onClosePopUp(event);" creationComplete="onCreationComplete(event);">
+<mx:Container xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="onCreationComplete(event);">
 	
 	<!-- Copyright ${TM_YEAR} ${TM_ORGANIZATION_NAME}. -->
 	
 	<mx:Script>
 	    <![CDATA[
 		
-		import mx.events.CloseEvent;
 		import mx.events.FlexEvent;
-		import mx.managers.PopUpManager;
 		
 		/**
 		 *	Description
@@ -25,20 +23,9 @@
 		 *	
 		 *	@see mx.events.FlexEvent
 		 */
-		private function onCreationComplete(event:FlexEvent) : void {
-			PopUpManager.centerPopUp(this);
-		}
-		
-		/**
-		 *	Event handler for Creation Complete event.
-		 *	
-		 *	@see mx.events.CloseEvent
-		 */
-		private function onClosePopUp(event:CloseEvent) : void {
-			PopUpManager.removePopUp(this);
-		}
+		private function onCreationComplete(event:FlexEvent) : void {}
 		
 	    ]]>
 	</mx:Script>
 
-</mx:TitleWindow>
+</mx:Container>

@@ -9,6 +9,10 @@
 export TM_RUBY=$(which "${TM_RUBY:-ruby}")
 export TM_GRAILS=$(which "${TM_GRAILS:-grails}")
 
+require_cmd "$TM_GRAILS" "If you have installed grails, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_GRAILS&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+
+require_cmd "$TM_RUBY" "We need Ruby to proceed."
+
 "${TM_RUBY}" -- "$TM_BUNDLE_SUPPORT/GrailsMate/create_domain_class.rb"</string>
 	<key>input</key>
 	<string>none</string>

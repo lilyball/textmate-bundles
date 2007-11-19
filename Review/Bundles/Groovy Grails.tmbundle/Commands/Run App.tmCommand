@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>export RUBYLIB="$TM_BUNDLE_SUPPORT/GrailsMate${RUBYLIB:+:$RUBYLIB}"
 export TM_RUBY=$(which "${TM_RUBY:-ruby}")
-export TM_GRAILS=$(which "${TM_GRAILS:-grailsx}")
+export TM_GRAILS=$(which "${TM_GRAILS:-grails}")
 
 require_cmd "$TM_GRAILS" "If you have installed grails, then you need to either &lt;a href="help:anchor='search_path'%20bookID='TextMate%20Help'"&gt;update your &lt;tt&gt;PATH&lt;/tt&gt;&lt;/a&gt; or set the &lt;tt&gt;TM_GRAILS&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 

@@ -43,6 +43,7 @@ if File.exists?( ant_build_file )
   source = REXML::Document.new( File.open( ant_build_file, "r"))
 else 
   source = REXML::Document.new(STDIN.read)
+  ant_build_file = ENV['TM_FILEPATH']
 end 
 
 ant_targets = []

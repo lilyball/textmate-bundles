@@ -449,8 +449,12 @@ static int sNextWindowControllerToken = 1;
 		if([connection registerName:@"TextMate dialog server"] == NO)
 			NSLog(@"couldn't setup TextMate dialog server."), NSBeep();
 
-		if(NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tm_dialog" ofType:nil])
-			setenv("DIALOG", [path UTF8String], 1);
+		if(NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tm_dialog" ofType:nil]) {
+			if (!getenv("DIALOG"))
+				setenv("DIALOG", [path UTF8String], 1);
+			else
+				setenv("DIALOG_1", [path UTF8String], 1);
+		}
 	}
 	return self;
 }

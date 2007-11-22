@@ -1,59 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>### Preview in All Active Browsers
-### v1.0. 2005-03-29
-### v1.1. 2005-12-04
-### v2.2. 2006-11-03
-###
-###	CONFIG OPTION:: Set TM_PROJECT_SITEURL in your TM Project Window Info Button in the following form: [ http://your.site.ext/ ]
-###
+	<string>#!/usr/bin/env ruby -wKU
+# 
+# Open Document in Running Browser(s)
+# v3 - November 22, 2007
+# 
+# Now supports multiple running versions of a single browser along
+# with a range of new/old browsers. Bring back support for Firefox.
+# 
+# Options: Set TM_PROJECT_SITEURL in your TM Project Window Info Button
+# in the following form: "http://example.com/"
 
-# 1. Check if we have a SITE_URL
-if [[ -n "$TM_PROJECT_SITEURL" ]]
-    then activeURL="$TM_PROJECT_SITEURL${TM_FILEPATH##$TM_PROJECT_DIRECTORY}"
-    else activeURL="file://$TM_FILEPATH"
-fi
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
 
-osascript &lt;&lt;"APPLESCRIPT" - "$activeURL"
-on run(argv)
-    set activeURL to item 1 of argv
-    tell app "System Events" to set proclist to name of every application process
-    if proclist contains "Webkit" then
-        run script "on run(argv)" &amp; return &amp; "tell app \"Webkit\" to make new document with properties {URL: item 1 of argv}" &amp; return &amp; "end run" with parameters {activeURL}
-    end if
-    if proclist contains "Safari" then
-        run script "on run(argv)" &amp; return &amp; "tell app \"Safari\" to make new document with properties {URL: item 1 of argv}" &amp; return &amp; "end run" with parameters {activeURL}
-    end if
-    
-    if proclist contains "$1" then
-    run script "on run(argv)" &amp; return &amp; "tell app \"$1\" to `pbpaste`" &amp; return &amp; "end run" with parameters {activeURL}
-end if
-    
-    if proclist contains "Shiira" then
-        run script "on run(argv)" &amp; return &amp; "tell app \"Shiira\" to make new document with properties {URL: item 1 of argv}" &amp; return &amp; "end run" with parameters {activeURL}
-    end if
-    if proclist contains "Firefox" then
-        run script "on run(argv)" &amp; return &amp; "tell app \"Firefox\" to Get URL (item 1 of argv) inside window 1" &amp; return &amp; "end run" with parameters {activeURL}
-    end if
-    if proclist contains "Internet Explorer" then
-        run script "on run(argv)" &amp; return &amp; "tell app \"Internet Explorer\" to activate OpenURL (item 1 of argv) toWindow 0 Flags 1" &amp; return &amp; "end run" with parameters {activeURL}
-    end if
-    if proclist contains "OmniWeb" then
-        run script "on run(argv)" &amp; return &amp; "tell app \"OmniWeb\" to GetURL (item 1 of argv)" &amp; return &amp; "end run" with parameters {activeURL}
-    end if
-    if proclist contains "Camino" then
-        run script "on run(argv)" &amp; return &amp; "tell app \"Camino\" to Get URL (item 1 of argv)" &amp; return &amp; "end run" with parameters {activeURL}
-    end if
-    if proclist contains "Xyle scope" then
-        run script "on run(argv)" &amp; return &amp; "tell app \"Xyle scope\" to Get URL (item 1 of argv)" &amp; return &amp; "end run" with parameters {activeURL}
-    end if
-end run
-APPLESCRIPT</string>
+if ENV['TM_PROJECT_SITEURL']
+  url = "#{ENV['TM_PROJECT_SITEURL']}" + ENV['TM_FILEPATH'].sub(/^#{Regexp.escape(ENV['TM_PROJECT_DIRECTORY'])}\//, '') 
+else
+  url = "file://#{ENV['TM_FILEPATH']}"
+end
+
+proclist = `ps -x -o command`
+active = []
+os = `defaults read /System/Library/CoreServices/SystemVersion ProductVersion`
+
+browsers = %w[ Safari OmniWeb Camino Shiira firefox-bin Xyle\ scope Opera Internet\ Explorer flock-bin iCab Sunrise seamonkey-bin navigator-bin ].join('|')
+
+# Build paths to each active browser
+#
+# Notes:
+#   - 'WebKit' look ahead is to rule it out so we can use the working
+#      rule below.
+#   - 'LaunchCFMApp' portion is so iCab works.
+active = proclist.scan(%r{^(?:/.*LaunchCFMApp )?(/.*\.app)(?=/Contents/MacOS/(?:#{browsers})\b(?!\s-WebKit))})
+
+# Special check for WebKit as it appears as Safari
+# Note: Only supports one running instance of WebKit, picked at random.
+if proclist =~ %r{/Contents/MacOS/Safari.*-WebKit(DeveloperExtras|ScriptDebuggerEnabled)}
+  active &lt;&lt; "WebKit"
+end
+
+# TODO: Change when Leopard Only
+# On Leopard use the -g option to open in background.
+if os =~ /^10\.(5|6)/
+  active.each {|p| `open -g -a #{e_sh(p)} #{e_sh(url)}` }
+else
+  active.each {|p| `open -a #{e_sh(p)} #{e_sh(url)}` }
+end</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

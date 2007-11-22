@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+require_cmd ant "Ant was not found, please ensure that it has been installed and your $PATH is set correctly."
+
+html_header "Ant Run"
+
+if [[ "$TM_ANT_BUILD_PARSER" == "" ]]; then 
+	TM_ANT_BUILD_PARSER=pre
+fi
+
+ant -buildfile "$TM_FILEPATH" | "$TM_ANT_BUILD_PARSER"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.xml.ant</string>
+	<key>uuid</key>
+	<string>7B5E4852-8B66-461F-A32A-A820625256A5</string>
+</dict>
+</plist>

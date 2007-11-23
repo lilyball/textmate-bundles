@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
-require_cmd ant "Ant was not found, please ensure that it has been installed and your $PATH is set correctly."
+require_cmd "${TM_ANT:=ant}" "Ant was not found, please ensure that it has been installed and your \$PATH is set correctly."
 
 html_header "Ant Build"
 
@@ -21,15 +21,15 @@ fi
 
 if [[ -f "$TM_PROJECT_DIR/$TM_ANT_BUILD_FILE" ]]; then
  
-	ant -buildfile "$TM_PROJECT_DIR/$TM_ANT_BUILD_FILE" | "$TM_ANT_BUILD_PARSER"
+	"$TM_ANT" -buildfile "$TM_PROJECT_DIR/$TM_ANT_BUILD_FILE" | "$TM_ANT_BUILD_PARSER"
 
 elif [[ -f "$TM_ANT_BUILD_FILE" ]]; then
 	
-	ant -buildfile "$TM_ANT_BUILD_FILE" | "$TM_ANT_BUILD_PARSER"
+	"$TM_ANT" -buildfile "$TM_ANT_BUILD_FILE" | "$TM_ANT_BUILD_PARSER"
 	
 else
 
-	ant -find build.xml | "$TM_ANT_BUILD_PARSER"
+	"$TM_ANT" -find build.xml | "$TM_ANT_BUILD_PARSER"
 
 fi
 </string>

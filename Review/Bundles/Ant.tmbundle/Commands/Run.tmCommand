@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
-require_cmd ant "Ant was not found, please ensure that it has been installed and your $PATH is set correctly."
+require_cmd "${TM_ANT:=ant}" "Ant was not found, please ensure that it has been installed and your \$PATH is set correctly."
 
 html_header "Ant Run"
 
@@ -15,7 +15,7 @@ if [[ "$TM_ANT_BUILD_PARSER" == "" ]]; then
 	TM_ANT_BUILD_PARSER=pre
 fi
 
-ant -buildfile "$TM_FILEPATH" | "$TM_ANT_BUILD_PARSER"</string>
+"$TM_ANT" -buildfile "$TM_FILEPATH" | "$TM_ANT_BUILD_PARSER"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

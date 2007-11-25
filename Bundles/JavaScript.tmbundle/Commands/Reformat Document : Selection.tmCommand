@@ -19,14 +19,18 @@ You are free to use this in any way you want, in case you find this useful or wo
 
 Ported with permission to TextMate by Ale Muñoz.
 
+(Based on v34 of JS Beautifier)
+
 */
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
+
 $n = 1;
 define('IN_EXPR',          ++$n);
 define('IN_BLOCK',         ++$n);
+
 
 define('TK_UNKNOWN',       ++$n);
 define('TK_WORD',          ++$n);
@@ -48,8 +52,10 @@ define('PRINT_NONE',       ++$n);
 define('PRINT_SPACE',      ++$n);
 define('PRINT_NL',         ++$n);
 
-function js_beautify($js_source_text, $tab_size = 4){
-    global $output, $token_text, $last_type, $in, $ins, $indent, $tab_string, $is_last_nl;
+
+function js_beautify($js_source_text, $tab_size = 4)
+{
+    global $output, $token_text, $last_type, $last_text, $in, $ins, $indent, $tab_string, $is_last_nl;
 
     global $input, $input_length;
 
@@ -327,6 +333,9 @@ function js_beautify($js_source_text, $tab_size = 4){
     return $output;
 }
 
+
+
+
 function nl($ignore_repeated = true)
 {
     global $indent, $output, $tab_string, $is_last_nl;
@@ -342,8 +351,10 @@ function nl($ignore_repeated = true)
     $output .= "\n" . str_repeat($tab_string, $indent);
 }
 
+
 // hack for correct multiple newline handling 
-function safe_nl($newlines = 1){
+function safe_nl($newlines = 1)
+{
     global $output;
     if ($newlines) {
         $output .= str_repeat("\n", $newlines - 1);
@@ -351,7 +362,9 @@ function safe_nl($newlines = 1){
     nl();
 }
 
-function space(){
+
+function space()
+{
     global $output, $is_last_nl;
     
     $is_last_nl = false;
@@ -362,25 +375,31 @@ function space(){
 }
 
 
-function token(){
+function token()
+{
     global $token_text, $output, $is_last_nl;
     $output .= $token_text;
     $is_last_nl = false;
 }
 
-function indent(){
+function indent()
+{
     global $indent;
     $indent ++;
 }
 
-function unindent(){
+
+function unindent()
+{
     global $indent;
     if ($indent) {
         $indent --;
     }
 }
 
-function remove_indent(){
+
+function remove_indent()
+{
     global $tab_string, $output;
     $tab_string_len = strlen($tab_string);
     if (substr($output, -$tab_string_len) == $tab_string) {
@@ -388,18 +407,25 @@ function remove_indent(){
     }
 }
 
-function in($where){
+
+function in($where)
+{
     global $ins, $in;
     array_push($ins, $in);
     $in = $where;
 }
 
-function in_pop(){
+
+function in_pop()
+{
     global $ins, $in;
     $in = array_pop($ins);
 }
 
-function make_array($str){
+
+
+function make_array($str)
+{
     $res = array();
     for ($i = 0; $i &lt; strlen($str); $i++) {
         $res[] = $str[$i];
@@ -407,15 +433,18 @@ function make_array($str){
     return $res;
 }
 
-function get_next_token(&amp;$pos){
-    global $last_type;
+
+
+function get_next_token(&amp;$pos)
+{
+    global $last_type, $last_text;
     global $whitespace, $wordchar, $punct;
     global $input, $input_length, $is_last_nl;
 
 
     if (!$whitespace) $whitespace = make_array("\n\r\t ");
     if (!$wordchar)   $wordchar   = make_array('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$');
-    if (!$punct)      $punct  = explode(' ', '+ - * / % &amp; ++ -- = += -= *= /= %= == === != !== &gt; &lt; &gt;= &lt;= &gt;&gt; &lt;&lt; &gt;&gt;&gt; &lt;&lt;&lt; &gt;&gt;= &lt;&lt;= &amp;&amp;  | || ! !! , : ?'); 
+    if (!$punct)      $punct  = explode(' ', '+ - * / % &amp; ++ -- = += -= *= /= %= == === != !== &gt; &lt; &gt;= &lt;= &gt;&gt; &lt;&lt; &gt;&gt;&gt; &lt;&lt;&lt; &gt;&gt;= &lt;&lt;= &amp;&amp;  | || ! !! , : ? ^ ^= |='); 
 
     $n_newlines = 0;
     do {
@@ -498,7 +527,8 @@ function get_next_token(&amp;$pos){
 
     if ($c == "'" || // string
         $c == '"' || // string
-        ($c == '/' &amp;&amp; ($last_type == TK_START_EXPR || $last_type == TK_END_BLOCK || $last_type == TK_OPERATOR || $last_type == TK_EOF || $last_type == TK_END_COMMAND))) { // regexp
+        ($c == '/' &amp;&amp; 
+            (($last_type == TK_WORD and $last_text == 'return') or ($last_type == TK_START_EXPR || $last_type == TK_END_BLOCK || $last_type == TK_OPERATOR || $last_type == TK_EOF || $last_type == TK_END_COMMAND)))) { // regexp
         $sep = $c;
         $c   = '';
         $esc = false;

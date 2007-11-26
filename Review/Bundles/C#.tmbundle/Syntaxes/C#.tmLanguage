@@ -27,13 +27,13 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.comment.c#</string>
+					<string>punctuation.definition.comment.source.cs</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>comment.documentation.c#</string>
+			<string>comment.documentation.source.cs</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -44,33 +44,33 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.tag.c#</string>
+							<string>punctuation.definition.tag.source.cs</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.tag.namespace.c#</string>
+							<string>entity.name.tag.namespace.source.cs</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.tag.c#</string>
+							<string>entity.name.tag.source.cs</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.separator.namespace.c#</string>
+							<string>punctuation.separator.namespace.source.cs</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.tag.localname.c#</string>
+							<string>entity.name.tag.localname.source.cs</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(/?&gt;)</string>
 					<key>name</key>
-					<string>keyword.other.documentation.c#</string>
+					<string>keyword.other.documentation.source.cs</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -79,22 +79,22 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>entity.other.attribute-name.namespace.c#</string>
+									<string>entity.other.attribute-name.namespace.source.cs</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>entity.other.attribute-name.c#</string>
+									<string>entity.other.attribute-name.source.cs</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.separator.namespace.c#</string>
+									<string>punctuation.separator.namespace.source.cs</string>
 								</dict>
 								<key>4</key>
 								<dict>
 									<key>name</key>
-									<string>entity.other.attribute-name.localname.c#</string>
+									<string>entity.other.attribute-name.localname.source.cs</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -120,13 +120,13 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.comment.c#</string>
+					<string>punctuation.definition.comment.source.cs</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>\*/\n?</string>
 			<key>name</key>
-			<string>comment.block.c#</string>
+			<string>comment.block.source.cs</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -134,13 +134,13 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.comment.c#</string>
+					<string>punctuation.definition.comment.source.cs</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>(//)(?!/).*$\n?</string>
 			<key>name</key>
-			<string>comment.line.double-slash.c#</string>
+			<string>comment.line.double-slash.source.cs</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -153,23 +153,23 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.modifier.c#</string>
+					<string>storage.modifier.source.cs</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.c#</string>
+					<string>storage.type.source.cs</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.class.c#</string>
+					<string>entity.name.class.source.cs</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>{</string>
 			<key>name</key>
-			<string>meta.definition.class.c#</string>
+			<string>meta.definition.class.source.cs</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -180,39 +180,39 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?x)^\s*	                                                                            	# start of line
-((?:\b(?:new|public|protected|internal|private|static|virtual|sealed|override|abstract|extern)\b\s*)*) 			# method-modifiers
-\b((?:\w+\.)*[A-Za-z_]\w*)\b\s*	                                                                            	# type
-(operator)\s+        			                                                                            	# operator overload
-((?:\+|-|!|~|\+\+|--|true|false|\*|/|%|\&amp;|\||\^|&lt;&lt;|&gt;&gt;|==|!=|&lt;|&gt;|&lt;=|&gt;=)\s*)	                                	# operator name
+			<string>(?x)^\s*	                                                                            # start of line
+((?:\b(?:new|public|protected|internal|private|static|virtual|sealed|override|abstract|extern)\b\s*)*) 		# method-modifiers
+\b((?:\w+\.)*[A-Za-z_]\w*)\b\s*	                                                                      		# type
+(operator)\s+        			                                                                      		# operator overload
+((?:\+|-|!|~|\+\+|--|true|false|\*|/|%|\&amp;|\||\^|&lt;&lt;|&gt;&gt;|==|!=|&lt;|&gt;|&lt;=|&gt;=)\s*)	                          		# operator name
 (?=\()</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.modifier.c#</string>
+					<string>storage.modifier.source.cs</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.c#</string>
+					<string>storage.type.source.cs</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>storage.modifier.c#</string>
+					<string>storage.modifier.source.cs</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.c#</string>
+					<string>entity.name.function.source.cs</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>meta.definition.operator.c#</string>
+			<string>meta.definition.operator.source.cs</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -223,33 +223,33 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?x)^\s*	                                                                            	# start of line
-((?:\b(?:new|public|protected|internal|private|static|virtual|sealed|override|abstract|extern)\b\s*)*) 			# method-modifiers
-\b((?:\w+\.)*[A-Za-z_]\w*)\b\s*		                                                                            # type
-([A-Za-z_]\w*)\s*					                                                                            # name
+			<string>(?x)^\s*	                                                                        # start of line
+((?:\b(?:new|public|protected|internal|private|static|virtual|sealed|override|abstract|extern)\b\s*)*) 	# method-modifiers
+\b((?:\w+\.)*[A-Za-z_]\w*)\b\s*		                                                                  	# type
+([A-Za-z_]\w*)\s*					         			                                   			 	# name
 (?=\()</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.modifier.c#</string>
+					<string>storage.modifier.source.cs</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.c#</string>
+					<string>storage.type.source.cs</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.c#</string>
+					<string>entity.name.function.source.cs</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>\)</string>
 			<key>name</key>
-			<string>meta.definition.method.c#</string>
+			<string>meta.definition.method.source.cs</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -262,37 +262,37 @@
 			<key>match</key>
 			<string>\b(true|false|null|this|base)\b</string>
 			<key>name</key>
-			<string>constant.language.c#</string>
+			<string>constant.language.source.cs</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\b</string>
 			<key>name</key>
-			<string>constant.numeric.c#</string>
+			<string>constant.numeric.source.cs</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(if|else|while|for|foreach|do|return|continue|break|switch|case|default|goto|throw|try|catch|finally|lock|yield)\b</string>
 			<key>name</key>
-			<string>keyword.control.c#</string>
+			<string>keyword.control.source.cs</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(new|is|checked|unchecked|typeof|sizeof|override|in|out|ref|readonly|params|stackalloc|as)\b</string>
 			<key>name</key>
-			<string>keyword.operator.c#</string>
+			<string>keyword.operator.source.cs</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(event|delegate|explicit|implicit|in|set|get)\b</string>
 			<key>name</key>
-			<string>keyword.other.c#</string>
+			<string>keyword.other.source.cs</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b(internal|public|protected|private|static|const|new|sealed|abstract|override|extern|unsafe|readonly|volatile|operator)\b</string>
 			<key>name</key>
-			<string>storage.modifier.c#</string>
+			<string>storage.modifier.source.cs</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -312,18 +312,18 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.using.c#</string>
+					<string>keyword.other.using.source.cs</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.package.c#</string>
+					<string>entity.name.package.source.cs</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>^\s*(using)\s+([^ ;]*);</string>
 			<key>name</key>
-			<string>meta.keyword.using.c#</string>
+			<string>meta.keyword.using.source.cs</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -335,18 +335,18 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.namespace.c#</string>
+					<string>keyword.other.namespace.source.cs</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.namespace.c#</string>
+					<string>entity.name.namespace.source.cs</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>^\s*(namespace)\s+([^ ]+)(?:\s*{)?$</string>
 			<key>name</key>
-			<string>meta.keyword.namespace.c#</string>
+			<string>meta.keyword.namespace.source.cs</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -354,13 +354,13 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.import.c#</string>
+					<string>keyword.control.import.source.cs</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>^(#)\s*(if|else|elif|endif|define|undef|warning|error|line|region|endregion)\b</string>
 			<key>name</key>
-			<string>meta.preprocessor.c#</string>
+			<string>meta.preprocessor.source.cs</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -373,7 +373,7 @@
 					<key>match</key>
 					<string>\b(bool|byte|sbyte|char|decimal|double|float|int|uint|long|ulong|object|short|ushort|string|void|class|struct|enum|interface)\b</string>
 					<key>name</key>
-					<string>storage.type.c#</string>
+					<string>storage.type.source.cs</string>
 				</dict>
 			</array>
 		</dict>
@@ -394,7 +394,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>storage.type.c#</string>
+									<string>storage.type.source.cs</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -413,7 +413,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.begin.c#</string>
+					<string>punctuation.definition.string.begin.source.cs</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -423,18 +423,18 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.end.c#</string>
+					<string>punctuation.definition.string.end.source.cs</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.double.c#</string>
+			<string>string.quoted.double.source.cs</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escape.c#</string>
+					<string>constant.character.escape.source.cs</string>
 				</dict>
 			</array>
 		</dict>
@@ -445,13 +445,13 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.begin.c#</string>
+					<string>punctuation.definition.string.begin.source.cs</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>@"([^"]|"")*"</string>
 			<key>name</key>
-			<string>string.quoted.double.literal.c#</string>
+			<string>string.quoted.double.literal.source.cs</string>
 		</dict>
 		<key>singleQuotedString</key>
 		<dict>
@@ -462,7 +462,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.begin.c#</string>
+					<string>punctuation.definition.string.begin.source.cs</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -472,7 +472,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.end.c#</string>
+					<string>punctuation.definition.string.end.source.cs</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -483,7 +483,7 @@
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
-					<string>constant.character.escape.c#</string>
+					<string>constant.character.escape.source.cs</string>
 				</dict>
 			</array>
 		</dict>
@@ -497,7 +497,7 @@
 					<key>end</key>
 					<string>(?=\))</string>
 					<key>name</key>
-					<string>meta.definition.param-list.c#</string>
+					<string>meta.definition.param-list.source.cs</string>
 					<key>patterns</key>
 					<array>
 						<dict>

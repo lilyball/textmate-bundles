@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -1561,7 +1561,7 @@
 									\.(?:parameter|language|other)
 								)?
 							)?
-							((?&lt;!')[^\s,()&amp;|\[\]:"'{}&lt;&gt;*?=^;]*(?&lt;!\.))?
+							((?&lt;!')[^\s,()&amp;|\[\]:"'{}&lt;&gt;*?=^;#]*(?&lt;!\.))?
 							([^']*)?
 						(')								# Close String
 					</string>
@@ -1651,7 +1651,7 @@
 									\.(?:parameter|language|other)
 								)?
 							)?
-							((?&lt;!")[^\s,()&amp;|\[\]:"'{}&lt;&gt;*?=^;]*(?&lt;!\.))?
+							((?&lt;!")[^\s,()&amp;|\[\]:"'{}&lt;&gt;*?=^;#]*(?&lt;!\.))?
 							([^"]*)?
 						(")								# Close String
 					</string>
@@ -1685,11 +1685,16 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
+							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
 							<string>punctuation.definition.string.end.tm-grammar</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(')(?:((?:source|text)(?='|\.)[^']*)|([^']*))(')</string>
+					<string>(')(?:((?:source|text)\.[^\s,()&amp;|\[\]:"'{}&lt;&gt;*?=^;#]*)([^']*)|([^']*))(')</string>
 					<key>name</key>
 					<string>string.quoted.single.scope.root.tm-grammar</string>
 				</dict>
@@ -1714,11 +1719,16 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
+							<string>invalid.deprecated.scope_not_allowed.tm-grammar</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
 							<string>punctuation.definition.string.end.tm-grammar</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(")(?:((?:source|text)(?="|\.)[^"]*)|([^"]*))(")</string>
+					<string>(")(?:((?:source|text)\.[^\s,()&amp;|\[\]:"'{}&lt;&gt;*?=^;#]*)([^"]*)|([^"]*))(")</string>
 					<key>name</key>
 					<string>string.quoted.double.scope.root.tm-grammar</string>
 				</dict>

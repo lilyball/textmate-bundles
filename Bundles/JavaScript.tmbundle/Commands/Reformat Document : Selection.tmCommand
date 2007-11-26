@@ -19,7 +19,7 @@ You are free to use this in any way you want, in case you find this useful or wo
 
 Ported with permission to TextMate by Ale Muñoz.
 
-(Based on v34 of JS Beautifier)
+(Based on v35 of JS Beautifier)
 
 */
 
@@ -444,7 +444,7 @@ function get_next_token(&amp;$pos)
 
     if (!$whitespace) $whitespace = make_array("\n\r\t ");
     if (!$wordchar)   $wordchar   = make_array('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$');
-    if (!$punct)      $punct  = explode(' ', '+ - * / % &amp; ++ -- = += -= *= /= %= == === != !== &gt; &lt; &gt;= &lt;= &gt;&gt; &lt;&lt; &gt;&gt;&gt; &lt;&lt;&lt; &gt;&gt;= &lt;&lt;= &amp;&amp;  | || ! !! , : ? ^ ^= |='); 
+    if (!$punct)      $punct  = explode(' ', '+ - * / % &amp; ++ -- = += -= *= /= %= == === != !== &gt; &lt; &gt;= &lt;= &gt;&gt; &lt;&lt; &gt;&gt;&gt; &lt;&lt;&lt; &gt;&gt;= &lt;&lt;= &amp;&amp; &amp;= | || ! !! , : ? ^ ^= |='); 
 
     $n_newlines = 0;
     do {

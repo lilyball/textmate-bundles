@@ -1,7 +1,18 @@
 <ant ${1:antfile="$2" }${3:target="$4" }>$0</ant>
 <arg ${1:value="$2" }${3:pathref="$4" }>$0</arg>
+<buildnumber ${1:file="${2:build.number}"}/>
+<bzip2 src="${1:test.tar}" destfile="${2:test.tar.bz2}"/>
+<chmod file="${1:file}" perm="${2:755}"/>
 <classpath ${1:path="$2" }${3:refid="$4" }>$0</classpath>
+<exclude name="${1:**/ant.jar}"/>
 <exec ${1:command="$2" }${3:dir="$4" }${5:os="$6" }${7:output="$8" }>$0</exec>
+<fileset dir="${1:my/src/dir}">$0</fileset>
+<gzip src="${1:test.tar}" destfile="${2:test.tar.gz}"/>
+<include name="${1:**/*.jar}"/>
+<mapper type="${1:glob}" from="${2:*}" to="${3:*.bak}"/>
+<mkdir dir="${1:directory}" />
+<move file="${1:src/dir}" tofile="${2:new/dir/to/move/to}"/>
+<move todir="${1:some/new/dir}" ${2:includeemptydirs="{3:false}"}>$0</move>
 <pathelement ${1:location="$2" }${3:path="$4" }>$0</pathelement>
 <project ${1:name="$2" }${3:default="$4" }${5:basedir="$6" }>$0</project>
 <property ${1:name="$2" }${3:value="$4" }>$0</property>

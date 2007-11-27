@@ -221,7 +221,7 @@ TEXT
           end
         end
       end
-      @post[ separator ? 'mt_text_more' : 'description' ] += line
+      @post[ separator ? 'mt_text_more' : 'description' ] << line
     end
 
     @post['description'].strip!
@@ -230,7 +230,7 @@ TEXT
     if (@post['mt_text_more'] == '') || (@post['mt_text_more'] == nil)
       @post.delete('mt_text_more')
     else
-      @post['description'] += "\n\n"
+      @post['description'] << "\n\n"
       @post['mt_text_more'] = "\n" + @post['mt_text_more']
     end
     @post['title'] = @headers['title'] if @headers['title']
@@ -397,50 +397,51 @@ TEXT
     end
 
     blog = self.endpoints[self.endpoint] || self.endpoint
-    doc += "Type: Blog Post (#{format})\n"
-    doc += "Blog: #{blog}\n"
-    doc += "Link: #{self.post['permaLink']}\n" if self.post['permaLink']
-    doc += "Post: #{self.post_id}\n"
-    doc += "Title: #{self.post['title']}\n"
-    doc += "Slug: #{self.post['wp_slug']}\n" if self.post['wp_slug']
-    doc += "Keywords: #{self.post['mt_keywords']}\n" if self.post['mt_keywords']
-    doc += "Tags: #{self.post['mt_tags']}\n" if self.post['mt_tags'] && (self.post['mt_tags'] != '')
+    doc << "Type: Blog Post (#{format})\n"
+    doc << "Blog: #{blog}\n"
+    doc << "Link: #{self.post['permaLink']}\n" if self.post['permaLink']
+    doc << "Post: #{self.post_id}\n"
+    doc << "Title: #{self.post['title']}\n"
+    doc << "Slug: #{self.post['wp_slug']}\n" unless self.post['wp_slug'].to_s.empty?
+    doc << "Keywords: #{self.post['mt_keywords']}\n" unless self.post['mt_keywords'].to_s.empty?
+    doc << "Tags: #{self.post['mt_tags']}\n" if self.post['mt_tags'] && (self.post['mt_tags'] != '')
+    doc << "Status: #{self.post['post_status']}\n" if self.post['post_status']
     if (self.mode == 'wp') && self.post['category']
       cats = self.post['category'].split(/,/)
-      cats.each { | cat | doc += "Category: #{cat}\n" }
+      cats.each { | cat | doc << "Category: #{cat}\n" }
     end
-    doc += "Format: #{self.post['mt_convert_breaks']}\n" if self.post['mt_convert_breaks']
+    doc << "Format: #{self.post['mt_convert_breaks']}\n" if self.post['mt_convert_breaks']
 
     # Convert XMLRPC:DateTime to a regular DateTime object so
     # that we can show the date using the users local time zone.
     d = DateTime.civil(*self.post['dateCreated'].to_a)
-    doc += d.new_offset(DateTime.now.offset).strftime("Date: %F %T %z") + "\n"
+    doc << d.new_offset(DateTime.now.offset).strftime("Date: %F %T %z") + "\n"
 
     if self.post['mt_allow_pings'] && (self.post['mt_allow_pings'] == 1)
-      doc += "Pings: On\n"
+      doc << "Pings: On\n"
     else
-      doc += "Pings: Off\n"
+      doc << "Pings: Off\n"
     end
     if self.post['mt_allow_comments'] && (self.post['mt_allow_comments'] == 1)
-      doc += "Comments: On\n"
+      doc << "Comments: On\n"
     else
-      doc += "Comments: Off\n"
+      doc << "Comments: Off\n"
     end
-    doc += "Basename: " + self.post['mt_basename'] + "\n" if self.post['mt_basename']
+    doc << "Basename: " + self.post['mt_basename'] + "\n" if self.post['mt_basename']
     if self.post['categories']
       self.post['categories'].each do | cat |
-        doc += "Category: #{cat}\n"
+        doc << "Category: #{cat}\n"
       end
     end
-    doc += "\n"
-    doc += self.post['description'].to_s.strip + "\n"
+    doc << "\n"
+    doc << self.post['description'].to_s.strip + "\n"
     unless self.post['mt_text_more'].nil?
       if (more = self.post['mt_text_more'].strip) && more != ''
-        doc += "\n#{DIVIDER * 10}\n\n"
+        doc << "\n#{DIVIDER * 10}\n\n"
         if (self.mode == 'wp')
           more.gsub!('<!--more-->', DIVIDER * 10)
         end
-        doc += more + "\n"
+        doc << more + "\n"
       end
     end
     doc
@@ -618,7 +619,7 @@ TEXT
     @endpoint = 'x'
     format = ENV['TM_SCOPE']
     doc = "#{self.post['description']}"
-    doc += "#{self.post['mt_text_more']}" if self.post['mt_text_more']
+    doc << "#{self.post['mt_text_more']}" if self.post['mt_text_more']
     if self.headers['link']
       base = %Q{<base href="#{self.headers['link']}" />}
     elsif ENV['TM_FILEPATH']
@@ -630,17 +631,17 @@ TEXT
     case format
       when /\.textile/
         require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth.rb"
-        html += RedCloth.new(doc).to_html
+        html << RedCloth.new(doc).to_html
       when /\.markdown/
         require "#{ENV['TM_SUPPORT_PATH']}/lib/bluecloth.rb"
         require "#{ENV['TM_SUPPORT_PATH']}/lib/rubypants.rb"
-        html += RubyPants.new(BlueCloth.new(doc).to_html).to_html
+        html << RubyPants.new(BlueCloth.new(doc).to_html).to_html
       when /\.html/
-        html += doc
+        html << doc
       when /\.text/
-        html += %Q{<div style="white-space: pre">#{doc}</div>}
+        html << %Q{<div style="white-space: pre">#{doc}</div>}
     end
-    html += `. "${TM_SUPPORT_PATH}/lib/webpreview.sh"; html_footer`
+    html << `. "${TM_SUPPORT_PATH}/lib/webpreview.sh"; html_footer`
     html
   end
 

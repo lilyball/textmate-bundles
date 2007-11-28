@@ -14,7 +14,7 @@
 				<key>findInProjectRegularExpression</key>
 				<false/>
 				<key>findString</key>
-				<string>\xFFF3</string>
+				<string>￳</string>
 				<key>ignoreCase</key>
 				<false/>
 				<key>regularExpression</key>
@@ -35,10 +35,14 @@
 				<key>beforeRunningCommand</key>
 				<string>nop</string>
 				<key>command</key>
-				<string>export RES=$(perl -e '
-#!/usr/bin/perl -X
+				<string>export __CF_USER_TEXT_ENCODING=0x1F5:0x8000100:0x8000100
+perl -e '
 no warnings;
-undef $/;
+use HTML::Parser;
+
+our @stack = ();
+our $start;
+our $end;
 
 $utf8a = q{
 	 	[\x00-\x7F]
@@ -53,95 +57,109 @@ $utf8a = q{
 	|	\xFD[\x88-\xBF][\x88-\xBF][\x88-\xBF][\x88-\xBF][\x88-\xBF]
 	     };
 
+undef $/;
 $org = &lt;&gt;;
 $line = $ENV{"TM_LINE_NUMBER"}-1;
 $line_index = $ENV{"TM_LINE_INDEX"}+0;
 
-#search left from caret backwards in blocks
-$count = $line;
-$pos = 0;
+# get position of the caret and set it to $curindex
+## perl crashes with that regexp on large documents
+## $org =~ m/((.*\n){$line})(.{$line_index})/;
+## $text = "$1$3";
+$count = $line; $curindex = 0;
 while($count--){
-	$pos = index($org,"\n",$pos);
-	$pos++;
+	$curindex = index($org,"\n",$curindex);
+	$curindex++;
 }
-$pos += $line_index;
-$text = substr($org,0,$pos);
+$curindex += $line_index;
 
-#perl crashes with that regexp on large documents
-#$org =~ m/((.*\n){$line})(.{$line_index})/;
-#$text = "$1$3";
+######   parse left from caret
+our $p = HTML::Parser-&gt;new( api_version =&gt; 3,
+		start_h     =&gt; [\&amp;starttag,"tagname, offset, line, offset_end"],
+		end_h       =&gt; [\&amp;endtag,  "tagname"],
+                             );
 
-$curindex = length($text);
-
-if($ENV{"TM_MODE"} =~ /HTML|Property List/ ) {
-	$text =~ s!&lt;(/?(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param).*?/?)&gt;!repl1($&amp;)!eisg;
+if(defined($ENV{"TM_HTML_EMPTY_TAGS"})) {
+	@ign_tag = split(/\|/, $ENV{"TM_HTML_EMPTY_TAGS"});
+	$p-&gt;ignore_tags( @ign_tag );
 }
-$text=~s/&lt;(\/){0}[^&gt;]*?\/&gt;/repl1($&amp;)/esg;
+$p-&gt;xml_mode(1) if($ENV{"TM_MODE"} =~ m/(xml|property list|xlst)/i);
 
-#first loop fast search near caret
-$first = 2;
-$pos = $curindex-6000;
-while($first--){
-	$first++;
-	$pos = 0 if ($pos&lt;0);
-	pos($text) = $pos;
-	while($text =~ m/&lt;(\/)?(\w[\w:-]*)[^&gt;]*&gt;/sog){
-		if (!defined($1)) {
-			unshift(@stack, [$2,(pos($text)-length($&amp;))]);
-		} else {
-			while(@stack) { last if (shift(@stack)-&gt;[0] eq $2) };
-		}
-	}
-	$start = shift(@stack);
-	last if (defined($start-&gt;[0]) || $pos == 0);
-	$pos = 0;
-}
+$text = substr($org,0,$curindex);
+$p-&gt;parse($text);
+$start = shift(@stack);
 
-#calculate $column for setting the caret
-$offset = rindex substr($text,0,$start-&gt;[1]), "\n";
-$offtext = substr($text, $offset+1, $start-&gt;[1]-$offset);
+# calculate $column for setting the caret and check for the very left edge of a multi-line block
+$offset  = rindex(substr($text,0,$start-&gt;[1]), "\n");
+$offtext = substr($org, $offset+1, $start-&gt;[1]-$offset);
+$offtext =~ m/^([ \t]*?)&lt;$/;$a=$1;
+$offtext =~ m/^(.*?)&lt;$/;    $b=$1;
+
+## in case that close tag is not the very right edge
 @len = $offtext =~ /$utf8a/gox;
-$column = $#len+1;
+$column_temp = $#len+1;
+$column = $column_temp;
+$start_temp  = $start-&gt;[1];
+$is_edge = 0;
+if(length($a)==length($b)) { $start-&gt;[1] -= length($a); $column = 1; $is_edge = 1; }
 
-#search right from caret
+#######   search right from caret
 @stack = ();
-$text = substr($org,$curindex,length($org)-$curindex);
-if($ENV{"TM_MODE"} =~ /HTML|Property List/ ) {
-	$text =~ s!&lt;(/?(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param).*?/?)&gt;!repl1($&amp;)!eisg;
+
+$p = HTML::Parser-&gt;new( api_version =&gt; 3,
+		start_h     =&gt; [\&amp;starttag_r,"tagname"],
+		end_h       =&gt; [\&amp;endtag_r,  "tagname, offset_end"],
+                             );
+
+if(defined($ENV{"TM_HTML_EMPTY_TAGS"})) {
+	@ign_tag = split(/\|/, $ENV{"TM_HTML_EMPTY_TAGS"});
+	$p-&gt;ignore_tags( @ign_tag );
 }
-$text=~s/&lt;(\/){0}[^&gt;]*?\/&gt;/repl1($&amp;)/esg;
-while($text =~ m/&lt;(\/)?(\w[\w:-]*)[^&gt;]*&gt;/sog){
-	if (!defined($1)) {
-		unshift(@stack, [$2,(pos($text))]);
+$p-&gt;xml_mode(1) if($ENV{"TM_MODE"} =~ m/(xml|property list|xlst)/i);
+
+# adjust caret if inside of a tag
+$curindex = $start-&gt;[3];
+$text = substr($org,$curindex,length($org)-$curindex);
+
+$p-&gt;parse($text);
+
+# check for the very right edge of a multi-line block
+if($is_edge) {
+	$offtext = substr($org,$end-&gt;[1]+$curindex,length($org)-$end-&gt;[1]-$curindex);
+	$offtext = substr($offtext,0,index($offtext,"\n"));
+	$offtext =~ m/^([ \t]*$)/m; $a=$1;
+	$offtext =~ m/^(.*?)$/m;    $b=$1;
+	if(length($a)==length($b)){
+		$end-&gt;[1] += length($1)+1;
 	} else {
-		if (!@stack) {
-			$end = [$2,(pos($text))];
-			last if ($end-&gt;[0] eq $start-&gt;[0]);
-		} else {
-			while(@stack) { last if (shift(@stack)-&gt;[0] eq $2) };
-		}
+		$column = $column_temp;
+		$start-&gt;[1] = $start_temp;
 	}
 }
 
-#set caret
-if(!length($start-&gt;[0])){
-	system("osascript -e beep &amp;&gt;/dev/null &amp;");
-	exit;
-}
-if($start-&gt;[0] ne $end-&gt;[0]){
-	system("osascript -e beep &amp;&gt;/dev/null &amp;");
-}
-@cnl = substr($org,$start-&gt;[1],$curindex-$start-&gt;[1]) =~ m/(\n)/g;
-$start_line = $line - $#cnl;
-system("open \"txmt://open/?line=$start_line&amp;column=$column\"");
+# beep and exit if no open tag is found
+if(!length($start-&gt;[0])){ beep(); exit; }
+
+# beep if open and close tag names differ
+beep() if($start-&gt;[0] ne $end-&gt;[0]);
+
+# set the caret and return the chunk
+system("open \"txmt://open/?line=$start-&gt;[2]&amp;column=$column\"");
 print substr($org,$start-&gt;[1],$end-&gt;[1]+$curindex-$start-&gt;[1]);
 
-sub repl1{ $_ = shift(); s/[^\t\n]/ /sg; return $_; }
-')
+sub starttag { unshift(@stack, [@_]); }
+sub endtag   { ($tag) = @_; while(@stack) { last if (shift(@stack)-&gt;[0] eq $tag) }; }
+sub starttag_r { unshift(@stack, [@_]); }
+sub endtag_r   {
+	($tag, $offset_end) = @_;
+	if(!@stack){ $end = [$tag,$offset_end]; $p-&gt;eof() if ($end-&gt;[0] eq $tag); } 
+		else { while(@stack) { last if (shift(@stack)-&gt;[0] eq $tag) }; }
+}
 
-/bin/bash -c 'export __CF_USER_TEXT_ENCODING=0x1F5:0x8000100:0x8000100;echo -n "$RES" | pbcopy -pboard find'
+sub repl1 { $_ = shift(); s/[^\t\n]/ /sg; return $_; }
+sub beep  { system("osascript -e beep &amp;&gt;/dev/null &amp;"); }
 
-</string>
+' | pbcopy -pboard find</string>
 				<key>input</key>
 				<string>document</string>
 				<key>keyEquivalent</key>
@@ -164,7 +182,7 @@ sub repl1{ $_ = shift(); s/[^\t\n]/ /sg; return $_; }
 	<key>keyEquivalent</key>
 	<string>@B</string>
 	<key>name</key>
-	<string>Select Balanced XHTML Tags</string>
+	<string>Select Balanced HTML/XML Tag</string>
 	<key>scope</key>
 	<string>text.html -(comment.block.html) -(text.html source), text.xml -(comment.block.xml) -(text.xml source)</string>
 	<key>uuid</key>

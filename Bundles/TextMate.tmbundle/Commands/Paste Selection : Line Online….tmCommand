@@ -91,7 +91,7 @@ def get_destinations
     'lineWrap'              =&gt; default_wrap,
   }.to_plist
 
-  res = %x{ "$TM_SUPPORT_PATH/bin/tm_dialog" -cmp #{e_sh parameters} pastebin }
+  res = %x{ "$DIALOG" -cmp #{e_sh parameters} pastebin }
   exit if $? != 0
 
   res = OSX::PropertyList.load(res)
@@ -184,6 +184,9 @@ def paste_stdin(priv, wrap)
 end
 
 pid = fork do
+  STDOUT.reopen(open('/dev/null'))
+  STDERR.reopen(open('/dev/null'))
+
   dests, priv, wrap = get_destinations
   unless dests.empty?
     url = paste_stdin(priv, wrap)

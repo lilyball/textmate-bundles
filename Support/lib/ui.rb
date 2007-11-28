@@ -191,6 +191,11 @@ module TextMate
             @dialog_token = %x{#{command}}.chomp
             raise WindowNotFound, "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
       #      raise "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
+
+            # this is a workaround for a presumed Leopard bug, see log entry for revision 8566 for more info
+            if animate = start_parameters['progressAnimate']
+              open("|#{TM_DIALOG} -t#{@dialog_token}", "w") { |io| io << { 'progressAnimate' => animate }.to_plist }
+            end
           end
 
           # wait for the user to press a button (with performButtonClick: or returnArguments: action)

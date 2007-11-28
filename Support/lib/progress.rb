@@ -25,7 +25,9 @@ module TextMate
     params = {'title' => title,
               'summary' => message,
               'details' => details,
-              'isIndeterminate' => indeterminate}
+              'isIndeterminate' => indeterminate,
+              'progressAnimate' => true
+    }
 
     params['cancelButtonHidden'] = false unless cancel_proc.nil?
     

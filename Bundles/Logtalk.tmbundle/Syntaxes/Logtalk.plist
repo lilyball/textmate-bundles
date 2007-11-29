@@ -181,7 +181,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(true|fail|repeat)\b(?![()])</string>
+			<string>\b(true|fail|repeat)\b(?![-!(^~])</string>
 			<key>name</key>
 			<string>support.function.control.logtalk</string>
 		</dict>
@@ -241,7 +241,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(flush_output|at_end_of_stream)\b(?![()])</string>
+			<string>\b(flush_output|at_end_of_stream)\b</string>
 			<key>name</key>
 			<string>support.function.stream-selection-and-control.logtalk</string>
 		</dict>
@@ -331,7 +331,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(expand_term|term_expansion|phrase)(?=[(])</string>
+			<string>\b(expand_term|(goal|term)_expansion|phrase)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.grammar-rule.logtalk</string>
 		</dict>

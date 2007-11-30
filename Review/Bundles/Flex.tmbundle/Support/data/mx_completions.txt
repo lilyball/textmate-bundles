@@ -30,6 +30,7 @@
 <mx:entries>$0</mx:entries>
 
 # F
+<mx:Fade id="${1:fadeIn}" alphaFrom="${2:0}" alphaTo="${3:1}" />
 <mx:Form width="${1:100%}" height="${2:100%}">$0</mx:Form>
 <mx:FormHeading label="${1:Form heading}"/>
 <mx:FormItem label="${1:label}" direction="${2:horizontal|vertical}">$0</mx:FormItem>
@@ -60,15 +61,18 @@
 <mx:Metadata >${1:[Event("enableChange")]}</mx:Metadata>
 <mx:Model id="${1:modelId}"><${2:modelnode}/></mx:Model>
 <mx:Module  width="${1:100%}" height="${2:100%}" ${3:xmlns:mx="http://www.adobe.com/2006/mxml"} />
+<mx:Move id="${1:moveId}" ${2:xFrom="${3:0}" yFrom="${3:0}"} xTo="${5:0}" yTo="${6:0}" xBy="${7:0}" yBy="${8:0}" />
+
+# N
 <mx:NumericStepper maxChars="${1:10}" maximum="${2:10}" minimum="${3:0}" stepSize="${4:1}" value="${5:0}" change="$6" />
+
+# P
 <mx:Panel id="${1:pnPanel}" title="${2:My Panel}">$0</mx:Panel>
+<mx:Parallel>$0</mx:Parallel>
+<mx:Pause ${1:id="$2" }${3:duration="$4" }/>
 <mx:PopUpButton openAlways="${1:false|true}" popUp="${2:IUIComponent}" close="$3" open="$4" />
 <mx:PopUpMenuButton openAlways="${1:false|true}" popUp="${2:IUIComponent}" close="$3" open="$4" dataDescriptor="$5" dataProvider="$6" />
 <mx:ProgressBar ${1:id="$2" }${3:labelPlacement="${4:left|right|top|bottom}" }${5:minimum="${6:0}" }${7:maximum="${8:100}" }${9:label="${10:Loading: %3%%}" }${11:mode="${12:event|manual|polled}" }${13:width="${14:100%}" }/>
-
-# P
-<mx:Parallel>$0</mx:Parallel>
-<mx:Pause ${1:id="$2" }${3:duration="$4" }/>
 
 # R
 <mx:RadioButtonGroup ${1:id="$2" }${3:itemClick="$4" }/>

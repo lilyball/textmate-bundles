@@ -48,7 +48,7 @@ module TextMate
         # invoke processing block in one process
         run_block_process = Process.pid
 #        run_block_process = fork do
-            trap('SIGINT'){cancel_proc.call}
+            trap('SIGUSR1'){cancel_proc.call}
  #       end
 
         # invoke ui waiting in a second process
@@ -56,7 +56,7 @@ module TextMate
           begin
             dialog.wait_for_input do |params|
               # tell the main process to run the cancel_proc
-              Process.kill('SIGINT', run_block_process) if params['returnButton'] == 'Cancel' # FIXME localization problem...
+              Process.kill('SIGUSR1', run_block_process) if params['returnButton'] == 'Cancel' # FIXME localization problem...
               false
             end
           rescue TextMate::WindowNotFound

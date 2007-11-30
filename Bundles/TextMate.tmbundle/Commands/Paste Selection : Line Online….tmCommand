@@ -21,6 +21,7 @@ require 'fileutils'
 require 'zlib'
 require "yaml"
 require "iconv"
+require "tempfile"
 
 def temp_script(script)
   dest = %x{ /usr/bin/mktemp -t tm_paste }.chomp
@@ -113,11 +114,13 @@ def get_destinations
   [ actions.join("\n"), res['private'], res['lineWrap'] ]
 end
 
+TM_APP_PATH = TextMate.app_path
+
 def find_language_ext
 	bundle_dirs = [
 		File.expand_path('~/Library/Application Support/TextMate/Bundles'),
 		'/Library/Application Support/TextMate/Bundles',
-		TextMate.app_path + '/Contents/SharedSupport/Bundles'
+		TM_APP_PATH + '/Contents/SharedSupport/Bundles'
 	]
 
   if scope = ENV['TM_SCOPE'] then
@@ -149,37 +152,46 @@ end
 
 def paste_stdin(priv, wrap)
   server = $1 if PASTE_URL =~ %r{.*?://(.*?)(/.*)?$}
-  TextMate.call_with_progress(:title =&gt; 'Paste to Pastie', :message =&gt; "Contacting Server “#{server}”…") do
-    text_file, html_file = `/usr/bin/mktemp -t tm_paste &amp;&amp; /usr/bin/mktemp -t tm_paste`.split("\n")
-    at_exit { File.delete(text_file); File.delete(html_file) }
+  TextMate.call_with_progress(:title =&gt; 'Paste to Pastie', :message =&gt; "Contacting Server “#{server}”…", :cancel =&gt; lambda { Process.kill("INT", -Process.pid); open("/tmp/log", "w") { |io| io &lt;&lt; "kill -#{Process.pid}" } }) do
+    text_file = Tempfile.new('tm_paste_text')
+    html_file = Tempfile.new('tm_paste_html')
 
     xml = STDIN.read
 
-    open(text_file, 'w') do |io|
-      io &lt;&lt; CGI::unescapeHTML(xml.gsub(/&lt;[^&gt;]*&gt;/, ''))
-    end
+    text_file &lt;&lt; CGI::unescapeHTML(xml.gsub(/&lt;[^&gt;]*&gt;/, ''))
+    text_file.close
 
-    Zlib::GzipWriter.open(html_file) do |gz|
-      xml = strip_leading(xml, " ")
-      xml = strip_leading(xml, "\t")
-      gz.write document_to_html(xml)
-    end
+    gz = Zlib::GzipWriter.new(html_file)
+    gz.write(document_to_html(strip_leading(strip_leading(xml, " "), "\t")))
+    gz.close
+    html_file.close
 
     author = ENV['TM_AUTHOR'] || "#{ENV['TM_FULLNAME']} (#{ENV['USER']})"
     ext = find_language_ext
 
-    %x{
-      curl #{PASTE_URL} \
-      -s -L -o /dev/null -w "%{url_effective}" \
-      -H "Expect:" \
-      -F "paste[parser]=plaintext" \
-      -F "paste[restricted]=#{priv}" \
-      -F "paste[wrap]=#{wrap}" \
-      -F "paste[display_name]=#{author}" \
-      -F "paste[file_extension]=#{ext}" \
-      -F "paste[body]=&lt;#{text_file}" \
-      -F "paste[textmate_html_gz]=&lt;#{html_file}"
-    }
+    oldpgid = Process.getpgid(0)
+    Process.setpgid(0, 0)
+    rd, wr = IO.pipe
+    pid = fork do
+      STDOUT.reopen(wr)
+      rd.close
+      exec('curl', PASTE_URL,
+        '-s', '-L', '-o', '/dev/null', '-w', '%{url_effective}',
+        '-H', 'Expect:',
+        '-F', 'paste[parser]=plaintext',
+        '-F', "paste[restricted]=#{priv}",
+        '-F', "paste[wrap]=#{wrap}",
+        '-F', "paste[display_name]=#{author}",
+        '-F', "paste[file_extension]=#{ext}",
+        '-F', "paste[body]=&lt;#{text_file.path}",
+        '-F', "paste[textmate_html_gz]=&lt;#{html_file.path}"
+      )
+    end
+    Process.setpgid(0, oldpgid)
+    wr.close
+    res = rd.read
+    Process.wait(pid)
+    return res
   end
 end
 
@@ -214,7 +226,7 @@ Process.detach(pid)
 	<key>name</key>
 	<string>Paste Document / Selection Online…</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>discard</string>
 	<key>uuid</key>
 	<string>6E779E48-F146-49BF-B60C-EFDFD1380772</string>
 </dict>

@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>{ APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
+	<string>#!/bin/sh
+
+{ APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
   osascript -e 'tell app "TextMate" to quit'
 
   for (( i = 0; i &lt; 500 &amp;&amp; $(echo $(ps -xp $PPID|wc -l))-1; i++ )); do

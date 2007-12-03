@@ -3,18 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:ClassName} {
-	${1:ClassName}${2/(^.*?\S.*)|.*/(?1:\()/}${2:args}${2/(^.*?\S.*)|.*/(?1:\))/}
-		$0
-	}
+	<string>private ${1:String}${1/(.+)/(?1: )/}${2:methodName}(${3:args}) {
+	$0
 }</string>
 	<key>name</key>
-	<string>class .. with constructor</string>
+	<string>private method() { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>cla</string>
+	<string>pm</string>
 	<key>uuid</key>
-	<string>9642F99D-E7A2-47B8-8AB2-706A8E650025</string>
+	<string>334E5D2A-DD89-4FB4-B46B-73C0FD2B5447</string>
 </dict>
 </plist>

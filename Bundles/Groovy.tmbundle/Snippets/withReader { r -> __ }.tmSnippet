@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>withReader { ${2:reader} -&gt; $1 }</string>
+	<string>withReader { ${1:${2:reader} -&gt; }$0 }</string>
 	<key>name</key>
-	<string>withReader { r -&gt; .. }</string>
+	<string>withReader { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

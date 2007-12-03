@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>any { ${1:e}-&gt; $0 }</string>
+	<string>any { ${1:${2:e} -&gt; }$0 }</string>
 	<key>name</key>
-	<string>any{ e -&gt; .. }</string>
+	<string>any { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

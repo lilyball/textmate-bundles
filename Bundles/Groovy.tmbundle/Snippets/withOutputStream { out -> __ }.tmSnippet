@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>withOutputStream { ${2:out} -&gt; $1 }</string>
+	<string>withOutputStream { ${1:${2:out} -&gt; }$0 }</string>
 	<key>name</key>
-	<string>withOutputStream { out -&gt; .. }</string>
+	<string>withOutputStream { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${2:NameOfTestCases}Tests extends GroovyTestCase {
-	def test${3:case_name}() {
+	<string>class ${2:${TM_FILENAME/(.*?)(\..+)/$1/}} extends GroovyTestCase {
+	void test${3:case_name}() {
 		$0
 	}
 }</string>
 	<key>name</key>
-	<string>class ... TestCase</string>
+	<string>class … extends GroovyTestCase { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

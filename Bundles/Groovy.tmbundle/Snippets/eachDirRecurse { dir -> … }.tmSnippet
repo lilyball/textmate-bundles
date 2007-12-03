@@ -3,18 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:ClassName} extends ${2:ParentClass} {
-	${1:ClassName}${3/(^.*?\S.*)|.*/(?1:\()/}${3:args}${2/(^.*?\S.*)|.*/(?1:\))/}
-		$0
-	}
-}</string>
+	<string>eachDirRecurse { ${1:${2:dir} -&gt; }$0 }</string>
 	<key>name</key>
-	<string>class .. with cunstructor, parent</string>
+	<string>eachDirRecurse { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>cla</string>
+	<string>eadr</string>
 	<key>uuid</key>
-	<string>5215F176-D0CD-4D30-B900-40C7765212AA</string>
+	<string>502CA3F8-ABED-4A0B-A8A9-6DA10AC32EB5</string>
 </dict>
 </plist>

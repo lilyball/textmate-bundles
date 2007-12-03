@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>def ${1:name} = new ${2:Object}(${3:args})</string>
+	<string>private static ${1:String}${1/(.+)/(?1: )/}${2:methodName}(${3:args}) {
+	$0
+}</string>
 	<key>name</key>
-	<string>def .. Object</string>
+	<string>private static method() { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>def</string>
+	<string>psm</string>
 	<key>uuid</key>
-	<string>D835C85D-0E1F-4776-88B8-1D964CD6310E</string>
+	<string>A32F6740-9803-4B05-A35B-E9D04B331593</string>
 </dict>
 </plist>

@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>withStreams { ${1:${2:Socket socket} -&gt; }$0 }</string>
+	<string>static final ${1:String}${1/(.+)/(?1: )/}${2:var}${3: = ${4:null}}$0</string>
 	<key>name</key>
-	<string>withStreams { … }</string>
+	<string>static final var</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>with</string>
+	<string>sfv</string>
 	<key>uuid</key>
-	<string>2F09117B-A382-489F-9E7C-5EAB720EA6B1</string>
+	<string>846E1FF7-576F-4B33-AF6E-D382A4568D29</string>
 </dict>
 </plist>

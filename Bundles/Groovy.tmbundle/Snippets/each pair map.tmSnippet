@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>each { ${1:name}, ${2:val} -&gt; $0 }</string>
+	<string>each { ${1:key}, ${2:value} -&gt; $0 }</string>
 	<key>name</key>
-	<string>each pair map</string>
+	<string>each { key, value -&gt; … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

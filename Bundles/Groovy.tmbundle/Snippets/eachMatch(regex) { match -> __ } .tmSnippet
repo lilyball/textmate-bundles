@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>eachMatch(/${1:regex}/) { ${2:${3:file} -&gt; }$0 }</string>
+	<string>eachMatch(/${1:regex}/) { ${3:match} -&gt; $2 }</string>
 	<key>name</key>
-	<string>eachMatch(regex) { … } </string>
+	<string>eachMatch(regex) { match -&gt; .. } </string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

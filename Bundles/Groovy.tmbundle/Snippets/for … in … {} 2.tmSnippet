@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>@author ${0:${JAVADOC_AUTHOR:`niutil -readprop / "/users/$USER" realname`}}</string>
+	<string>for(${1:element} in ${2:collection}) {
+	${1:element}.$0
+}</string>
 	<key>name</key>
-	<string>@author</string>
+	<string>for … in … {} 2</string>
 	<key>scope</key>
-	<string>source.groovy comment.block.documentation.javadoc</string>
+	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>@</string>
+	<string>for</string>
 	<key>uuid</key>
-	<string>6CBBA65F-4DE1-4B59-B016-0D8CE3FFA2AD</string>
+	<string>AA9CB5C8-0723-474A-92CA-A3098EC660E5</string>
 </dict>
 </plist>

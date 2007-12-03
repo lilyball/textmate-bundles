@@ -3,16 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>static ${1:String}${1/(.+)/(?1: )/}${2:methodName}(${3:args}) {
-	$0
-}</string>
+	<string>eachWithIndex { ${1:element}, ${2:idx} -&gt; ${1:element}.$0 }</string>
 	<key>name</key>
-	<string>static method() { … }</string>
+	<string>eachWithIndex</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>sm</string>
+	<string>ewi</string>
 	<key>uuid</key>
-	<string>64B1A830-646A-439E-BB31-77E26299EAEC</string>
+	<string>FFD2650A-9698-44F7-9F69-DB8E07F62C5A</string>
 </dict>
 </plist>

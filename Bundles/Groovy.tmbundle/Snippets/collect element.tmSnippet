@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>static ${1:String}${1/(.+)/(?1: )/}${2:var}${3: = ${4:null}}$0</string>
+	<string>collect { ${1:element} -&gt; ${1:element}.$0 }</string>
 	<key>name</key>
-	<string>static var</string>
+	<string>collect element</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>sv</string>
+	<string>collect</string>
 	<key>uuid</key>
-	<string>59D7ECC5-A7E5-4984-94D4-31ADD463E078</string>
+	<string>C7063678-5921-41DC-B73F-A6FEEF058953</string>
 </dict>
 </plist>

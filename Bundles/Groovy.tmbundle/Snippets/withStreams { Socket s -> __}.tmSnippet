@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>withStreams { ${1:${2:Socket socket} -&gt; }$0 }</string>
+	<string>withStreams { Socket ${2:socket} -&gt; $1 }</string>
 	<key>name</key>
-	<string>withStreams { … }</string>
+	<string>withStreams { Socket s -&gt; ..}</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

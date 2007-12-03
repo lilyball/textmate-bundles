@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>replaceAll( /${1:regex}/ ) { ${2:${3:file} -&gt; }${0:"replacement"} } </string>
+	<string>replaceAll( /${1:regex}/ ) { {2:match} -&gt; {3:"replacement"} } </string>
 	<key>name</key>
-	<string>replaceAll(regex) { … }</string>
+	<string>replaceAll(regex) { match -&gt; ..}</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

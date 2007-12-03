@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>withPrintWriter { ${1:${2:writer} -&gt; }$0 }</string>
+	<string>withPrintWriter { ${2:writer} -&gt; $1 }</string>
 	<key>name</key>
-	<string>withPrintWriter { … }</string>
+	<string>withPrintWriter { pw -&gt; ..}</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

@@ -3,16 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>private void ${1:methodName}(${2:args}) {
-	$0
-}</string>
+	<string>each { ${1:element} -&gt; ${1:element}.$0 }</string>
 	<key>name</key>
-	<string>private void method() { … }</string>
+	<string>each element</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>pvm</string>
+	<string>each</string>
 	<key>uuid</key>
-	<string>566F39BB-E6C6-4E20-A860-C9CA2831D84A</string>
+	<string>BE323645-3C3B-4CE0-9313-EF669DE13BB2</string>
 </dict>
 </plist>

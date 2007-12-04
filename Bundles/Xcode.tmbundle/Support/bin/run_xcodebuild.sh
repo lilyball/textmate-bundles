@@ -60,5 +60,12 @@ else
 	BUILD_STYLE="-active$STYLEARGNAME"
 fi
 
+#
+# Force xcodebuild to honour the user's OBJROOT preference as set in Xcode.
+# 
+
+OBJROOT=$("${TM_BUNDLE_SUPPORT}"/bin/find_objroot.rb)
+echo $OBJROOT
+
 export PROJECT_FILE
-xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} ${TM_TARGET:+-target $TM_TARGET} $BUILD_STYLE $XCODE_BUILD_VERB 2>&1| ruby -- "${TM_BUNDLE_SUPPORT}/bin/format_build_output.rb"
+xcodebuild ${PROJECT_FILE:+-project "$PROJECT_FILE"} ${TM_TARGET:+-target $TM_TARGET} $BUILD_STYLE $XCODE_BUILD_VERB ${OBJROOT:+"OBJROOT=$OBJROOT"} 2>&1| ruby -- "${TM_BUNDLE_SUPPORT}/bin/format_build_output.rb"

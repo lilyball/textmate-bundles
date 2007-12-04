@@ -156,7 +156,7 @@ STDIN.each_line do |line|
 			if File.exist?(path)
 
 				# parse for "error", "warning", and "info" and use appropriate CSS classes					
-				cssclass = /^\s*(error|warning|info|message)/i.match(error_desc)
+				cssclass = /^\s*(error|warning|info|message|note)/i.match(error_desc)
 				if cssclass.nil?
 					cssclass = "" 
 				else

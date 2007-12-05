@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>D1292E00-39A8-4B13-8E90-484CEA13F53A</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
+redirect "http://www.google.com/search?hl=en&amp;safe=off&amp;q=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}+site%3Amootools.net+-404"
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation for Word / Selection</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.js.mootools</string>
+	<key>uuid</key>
+	<string>E4B3D86C-56DB-490C-A6D2-F9E4DCB3B80C</string>
+</dict>
+</plist>

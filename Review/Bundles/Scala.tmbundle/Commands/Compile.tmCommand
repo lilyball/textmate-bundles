@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+cd "$TM_DIRECTORY"
+result=`scalac -encoding UTF8 "$TM_FILENAME" &amp;&gt; &gt;("${TM_RUBY:-ruby}" -rtm_parser -eTextMate.parse_errors)`
+
+if (($? == 0)); 
+then
+	exit_show_tool_tip "No compile errors compiling ${TM_FILENAME}"
+fi
+
+html_header "Compiling “${TM_FILENAME}”…"
+echo "$result"
+html_footer
+exit_show_html</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Compile</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>source.scala</string>
+	<key>uuid</key>
+	<string>EAD3249B-58D9-47A9-996B-3C0F2FF6E172</string>
+</dict>
+</plist>

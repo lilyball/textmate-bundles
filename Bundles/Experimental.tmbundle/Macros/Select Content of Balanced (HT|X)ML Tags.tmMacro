@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleUUID</key>
+	<string>B5A22967-2E6A-4B66-9C71-DA8762C01E27</string>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>action</key>
+				<string>findNext</string>
+				<key>findInProjectIgnoreCase</key>
+				<true/>
+				<key>findInProjectRegularExpression</key>
+				<false/>
+				<key>findString</key>
+				<string>￳</string>
+				<key>ignoreCase</key>
+				<false/>
+				<key>regularExpression</key>
+				<false/>
+				<key>replaceAllScope</key>
+				<string>document</string>
+				<key>replaceString</key>
+				<string>$1</string>
+				<key>wrapAround</key>
+				<true/>
+			</dict>
+			<key>command</key>
+			<string>findWithOptions:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>beforeRunningCommand</key>
+				<string>nop</string>
+				<key>command</key>
+				<string>export __CF_USER_TEXT_ENCODING=0x1F5:0x8000100:0x8000100
+perl -Xe '
+##########################################
+## Select Content of Balanced (HT|X)ML Tags: bug report/feature request to Hans-Jörg Bibiko bibiko@eva.mpg.de
+###########################################
+BEGIN {
+	if (!eval { require HTML::Parser}) {
+		print STDERR "The Perl package HTML::Parser is not installed!\n\nExecute in Terminal:\nsudo -H cpan -i HTML::Parser\n\nHint: You need install Apple\x27s developer toolkit (gcc compiler).";
+		exit 1;
+	}
+}
+
+our @stack = (); our $start; our $end;
+
+$utf8a = q{
+	 	[\x00-\x7F]
+	|	[\xC2-\xDF][\x80-\xBF]
+	|	\xE0[\xA0-\xBF][\x80-\xBF]
+	|	[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
+	|	\xF0[\x90-\xBF][\x80-\xBF][\x80-\xBF]
+	|	[\xF1-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF]
+	|	\xF8[\x88-\xBF][\x80-\xBF][\x80-\xBF][\x80-\xBF]
+	|	[\xF9-\xFB][\x88-\xBF][\x88-\xBF][\x88-\xBF][\x88-\xBF]
+	|	\xFC[\x84-\xBF][\x88-\xBF][\x88-\xBF][\x88-\xBF][\x88-\xBF]
+	|	\xFD[\x88-\xBF][\x88-\xBF][\x88-\xBF][\x88-\xBF][\x88-\xBF]
+	     };
+
+undef $/;
+$org = &lt;&gt;;
+if(defined($ENV{"TM_INPUT_START_LINE"})) {
+	$line = $ENV{"TM_INPUT_START_LINE"}-1;
+	$line_index = $ENV{"TM_INPUT_START_LINE_INDEX"}+0;
+} else {
+	$line = $ENV{"TM_LINE_NUMBER"}-1;
+	$line_index = $ENV{"TM_LINE_INDEX"}+0;
+}
+
+# get position of the caret and set it to $curindex
+our $curindex = 0; $count = $line;
+while($count--){
+	$curindex = index($org,"\n",$curindex);
+	$curindex++;
+}
+$curindex += $line_index;
+# avoid endless loop for a selection
+$curindex-- if(defined($ENV{"TM_INPUT_START_LINE"}));
+@ign_tag = ();
+if(defined($ENV{"TM_HTML_EMPTY_TAGS"})) {
+	@ign_tag = split(/\|/, $ENV{"TM_HTML_EMPTY_TAGS"});
+	push(@ign_tag,map{$_."/"}@ign_tag);
+}
+$xmlmode = ($ENV{"TM_MODE"} =~ m/(xml|property list|xlst)/i) ? 1 : 0;
+
+######   parse left from caret
+
+# start parse left from caret
+@stack = ();
+$p = HTML::Parser-&gt;new( api_version =&gt; 3,
+		start_h     =&gt; [\&amp;starttag_left,"tagname, offset, line, offset_end"],
+		end_h       =&gt; [\&amp;endtag_left,  "tagname"],
+);
+$p-&gt;ignore_tags( @ign_tag );
+$p-&gt;xml_mode($xmlmode);
+$text = substr($org,0,$curindex);
+$p-&gt;parse($text);
+
+$start = shift(@stack);
+# calculate $column for setting the caret
+$offset  = rindex(substr($text,0,$start-&gt;[3]), "\n");
+$offtext = substr($org, $offset+1, $start-&gt;[3]-$offset);
+@len = $offtext =~ /$utf8a/gox;
+$column = $#len + 1;
+
+undef $text;
+
+#######   search right from caret
+@stack = ();
+
+$p = HTML::Parser-&gt;new( api_version =&gt; 3,
+		start_h     =&gt; [\&amp;starttag_right,"tagname"],
+		end_h       =&gt; [\&amp;endtag_right,  "tagname, offset"],
+);
+
+$p-&gt;ignore_tags( @ign_tag );
+$p-&gt;xml_mode($xmlmode);
+
+# readjust caret
+$curindex = $start-&gt;[3];
+
+$p-&gt;parse(substr($org,$curindex,length($org)-$curindex));
+
+# exit if no open tag is found
+if(!length($start-&gt;[0])){ print STDERR "No balanced tags found!"; exit 1; }
+
+# warn if open and close tag names differ
+print STDERR "Please verify start/end tag:\n\n\x27$start-&gt;[0]\x27 ≠ \x27$end-&gt;[0]\x27" if($start-&gt;[0] ne $end-&gt;[0]);
+
+# set the caret and return the chunk
+system("open \"txmt://open/?line=$start-&gt;[2]&amp;column=$column\"");
+print substr($org,$start-&gt;[3],$end-&gt;[1]+$curindex-$start-&gt;[3]);
+
+sub starttag_left  { unshift(@stack, [@_]); }
+sub endtag_left    { ($tag) = @_; while(@stack) { last if (shift(@stack)-&gt;[0] eq $tag) }; }
+sub starttag_right { unshift(@stack, [@_]); }
+sub endtag_right   {
+	($tag, $offset) = @_;
+	if(!@stack){ $end = [$tag,$offset]; $p-&gt;eof() if ($end-&gt;[0] eq $tag); } 
+		else { while(@stack) { last if (shift(@stack)-&gt;[0] eq $tag) }; }
+}
+
+' | pbcopy -pboard find</string>
+				<key>input</key>
+				<string>document</string>
+				<key>keyEquivalent</key>
+				<string>^1</string>
+				<key>name</key>
+				<string>start</string>
+				<key>output</key>
+				<string>showAsTooltip</string>
+				<key>uuid</key>
+				<string>44875D0C-086B-4B25-9F6F-79B9BAA1C03A</string>
+			</dict>
+			<key>command</key>
+			<string>executeCommandWithOptions:</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<string>findNext:</string>
+		</dict>
+	</array>
+	<key>keyEquivalent</key>
+	<string>~@B</string>
+	<key>name</key>
+	<string>Select Content of Balanced (HT|X)ML Tags</string>
+	<key>scope</key>
+	<string>text.html -(comment.block.html) -(text.html source), text.xml -(comment.block.xml) -(text.xml source)</string>
+	<key>uuid</key>
+	<string>A0A40B0E-7E6C-4D71-AF5B-27712243CB08</string>
+</dict>
+</plist>

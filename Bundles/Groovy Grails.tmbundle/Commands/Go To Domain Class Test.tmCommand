@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>RUBYLIB="$TM_BUNDLE_SUPPORT/lib:$RUBYLIB"
+"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/bin/go_to_alternate_file.rb" domain_class_test</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@</string>
+	<key>name</key>
+	<string>Go To Domain Class Test</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.groovy</string>
+	<key>uuid</key>
+	<string>9DD9D0CD-7470-49A0-97B8-78852DF6D401</string>
+</dict>
+</plist>

@@ -12,7 +12,7 @@ require "erb"
 bundle				= ENV['TM_BUNDLE_SUPPORT']
 work_path			= ENV['WorkPath']
 work_paths			= TextMate.selected_paths_array
-ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
+ignore_file_pattern = %r{(^|/)(\.[^/]+|Icon|.*\.(tmproj|o|pyc))$}
 
 # First escape for use in the shell, then escape for use in a JS string
 def e_sh_js(str)

@@ -150,24 +150,12 @@ def strip_leading(text, ch = ' ')
   text.map { |line| count.times { line.sub!(/^(&lt;[^&gt;]+&gt;)*#{ch}/, '\1') }; line }.join
 end
 
-def paste_stdin(priv, wrap)
-  server = $1 if PASTE_URL =~ %r{.*?://(.*?)(/.*)?$}
-  TextMate.call_with_progress(:title =&gt; 'Paste to Pastie', :message =&gt; "Contacting Server “#{server}”…", :cancel =&gt; lambda { Process.kill("INT", -Process.pid); open("/tmp/log", "w") { |io| io &lt;&lt; "kill -#{Process.pid}" } }) do
-    text_file = Tempfile.new('tm_paste_text')
-    html_file = Tempfile.new('tm_paste_html')
+def connect_to_server(name, url, *args)
+  $status, res = :unknown, nil
 
-    xml = STDIN.read
-
-    text_file &lt;&lt; CGI::unescapeHTML(xml.gsub(/&lt;[^&gt;]*&gt;/, ''))
-    text_file.close
-
-    gz = Zlib::GzipWriter.new(html_file)
-    gz.write(document_to_html(strip_leading(strip_leading(xml, " "), "\t")))
-    gz.close
-    html_file.close
-
-    author = ENV['TM_AUTHOR'] || "#{ENV['TM_FULLNAME']} (#{ENV['USER']})"
-    ext = find_language_ext
+  server = $1 if url =~ %r{.*?://(.*?)(/.*)?$}
+  TextMate.call_with_progress(:title =&gt; "Paste to #{name}", :message =&gt; "Contacting Host “#{server}”…", :cancel =&gt; lambda { $status = :cancel; Process.kill("INT", -Process.pid) }) do
+    thr = Thread.new { sleep 4.0; $status = :timeout; Process.kill("INT", -Process.pid) rescue nil }
 
     oldpgid = Process.getpgid(0)
     Process.setpgid(0, 0)
@@ -175,24 +163,69 @@ def paste_stdin(priv, wrap)
     pid = fork do
       STDOUT.reopen(wr)
       rd.close
-      exec('curl', PASTE_URL,
-        '-s', '-L', '-o', '/dev/null', '-w', '%{url_effective}',
-        '-H', 'Expect:',
-        '-F', 'paste[parser]=plaintext',
-        '-F', "paste[restricted]=#{priv}",
-        '-F', "paste[wrap]=#{wrap}",
-        '-F', "paste[display_name]=#{author}",
-        '-F', "paste[file_extension]=#{ext}",
-        '-F', "paste[body]=&lt;#{text_file.path}",
-        '-F', "paste[textmate_html_gz]=&lt;#{html_file.path}"
-      )
+      exec('curl', url, '-sLo/dev/null', '-w%{url_effective}', *args)
     end
     Process.setpgid(0, oldpgid)
     wr.close
     res = rd.read
     Process.wait(pid)
-    return res
+
+    $status = :success if $?.exitstatus == 0 &amp;&amp; $status == :unknown
+
+    thr.kill unless $status == :timeout
+    thr.join
   end
+
+  $status = :error if res == url # pastie returns the initial URL on some errors
+  return $status, res
+end
+
+def paste_stdin(priv, wrap)
+  xml       = STDIN.read
+
+  text_file = Tempfile.new('tm_paste_text')
+  html_file = Tempfile.new('tm_paste_html')
+
+  text_file &lt;&lt; CGI::unescapeHTML(xml.gsub(/&lt;[^&gt;]*&gt;/, ''))
+  text_file.close
+
+  gz = Zlib::GzipWriter.new(html_file)
+  gz.write(document_to_html(strip_leading(strip_leading(xml, " "), "\t")))
+  gz.close
+  html_file.close
+
+  author  = ENV['TM_AUTHOR'] || "#{ENV['TM_FULLNAME']} (#{ENV['USER']})"
+  ext     = find_language_ext
+
+  $status, res = connect_to_server("Pastie", PASTE_URL,
+    "-HExpect:",
+    "-Fpaste[parser]=plaintext",
+    "-Fpaste[restricted]=#{priv}",
+    "-Fpaste[wrap]=#{wrap}",
+    "-Fpaste[display_name]=#{author}",
+    "-Fpaste[file_extension]=#{ext}",
+    "-Fpaste[body]=&lt;#{text_file.path}",
+    "-Fpaste[textmate_html_gz]=&lt;#{html_file.path}"
+  )
+
+  paste_via_rafb = 
+  case $status
+    when :timeout:  TextMate::UI.alert(:warning, "Timeout Pasting", "There was a problem pasting your text (timeout).\nWould you like to use RAFB.net instead?", "Paste via RAFB", "Cancel") != "Cancel"
+    when :unknown:  TextMate::UI.alert(:warning, "Error Pasting", "There was a problem pasting your text (unknown).\nWould you like to use RAFB.net instead?", "Paste via RAFB", "Cancel") != "Cancel"
+    else false
+  end
+
+  if paste_via_rafb
+    mode = $&amp; if ENV['TM_MODE'] =~ /^(C89|C|C\+\+|C#|Java|Pascal|Perl|PHP|PL\/I|Python|Ruby|SQL|VB)$/
+    $status, res = connect_to_server("RAFB.net", "http://rafb.net/paste/paste.php",
+      "-Fnick=#{ENV['USER']}",
+      "-Fcvt_tabs=#{ENV['TM_TAB_SIZE']}",
+      "-Ftext=&lt;#{text_file.path}",
+      "-Flang=#{mode || "Plain Text"}"
+    )
+  end
+
+  return $status == :success ? res : nil
 end
 
 pid = fork do
@@ -201,14 +234,9 @@ pid = fork do
 
   dests, priv, wrap = get_destinations
   unless dests.empty?
-    url = paste_stdin(priv, wrap)
-    if url == PASTE_URL  # pastie error--something went wrong
-      puts "Server Error:  Your paste could not be made at this time.  " +
-           "Please wait a moment and try again."
-    else
+    if url = paste_stdin(priv, wrap)
       dests = Iconv.iconv('mac', 'utf-8', dests) if %x{ defaults read /System/Library/CoreServices/SystemVersion ProductVersion } =~ /\A10\.4/
       %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/paste_to_destinations.scpt")} #{e_sh url} #{e_sh dests} }
-      puts "Pasted #{url}"
     end
   end
 end

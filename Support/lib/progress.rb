@@ -62,6 +62,7 @@ module TextMate
           rescue TextMate::WindowNotFound
               # ignore; the window was probably canceled
           end
+          exit!
         end
         return_val = run_block.call(dialog)
         

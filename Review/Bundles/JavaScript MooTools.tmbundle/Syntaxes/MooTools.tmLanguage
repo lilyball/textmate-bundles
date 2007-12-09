@@ -22,6 +22,59 @@ Based on the initial MooTools TextMate bundle by Joe Maller.</string>
 	<array>
 		<dict>
 			<key>begin</key>
+			<string>((\$\$))(\()(')</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.function-call.static.js.mootools</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.js.mootools</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.scope.begin.js.mootools</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.js.mootools</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>meta.selector.css</string>
+			<key>end</key>
+			<string>(')(\))?</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.js.mootools</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.scope.end.js.mootools</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>source.css.selectors.embedded.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.css.selectors</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>(?x) (?&lt;!\.) (?= \. [_$a-zA-Z][_$\w]* \( ) (\.)</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -55,7 +108,7 @@ Based on the initial MooTools TextMate bundle by Joe Maller.</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>$self</string>
+					<string>$base</string>
 				</dict>
 			</array>
 		</dict>
@@ -78,7 +131,7 @@ Based on the initial MooTools TextMate bundle by Joe Maller.</string>
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\b(abs|acos|addClass|addEvent|addEvents|adopt|alt|appendText|asin|associate|atan|atan2|attempt|bind|bindWithEvent|camelCase|capitalize|ceil|clean|client.x|client.y|clone|cloneEvents|computePosition|constructor|contains|control|cos|create|delay|destroy|dispose|each|eliminate|empty|erase|escapeRegExp|every|exp|extend|fade|filter|fireEvent|flatten|floor|get|getAllNext|getAllPrevious|getChildren|getClean|getComputedStyle|getCoordinates|getDocument|getElement|getElements|getFirst|getKeys|getLast|getLength|getNext|getOffsetParent|getOffsetSize|getParent|getParents|getPosition|getPrevious|getProperties|getProperty|getRandom|getRelativePosition|getScroll|getScrollSize|getStyle|getStyles|getValues|getWindow|grab|has|hasChild|hasClass|hexToRgb|highlight|hsbToRgb|hyphenate|include|inject|key|keyOf|limit|link|load|log|makeDraggable|makeResizable|map|match|max|merge|meta|min|morph|newElement|newTextNode|page.x|page.y|pass|periodical|position|positioned|pow|preventDefault|relatedTarget|remove|removeClass|removeEvent|removeEvents|removeProperties|removeProperty|replaces|retrieve|rgbToHex|rgbToHsb|round|run|scrollTo|send|set|setProperties|setProperty|setStyle|setStyles|shift|sin|slide|some|sqrt|stop|stopPropagation|store|stripScripts|tan|target|test|times|toFloat|toggleClass|toInt|toJSON|toQueryString|trim|tween|wheel|wraps)\b</string>
+					<string>\b(\$|\$\$|\$A|\$arguments|\$chk|\$clear|\$defined|\$E|\$each|\$empty|\$exec|\$extend|\$H|\$HEX|\$HSB|\$lambda|\$merge|\$pick|\$random|\$RGB|\$splat|\$time|\$try|\$type|\$unlink|abs|acos|addClass|addEvent|addEvents|adopt|alt|appendText|asin|associate|atan|atan2|attempt|bind|bindWithEvent|camelCase|capitalize|ceil|clean|client.x|client.y|clone|cloneEvents|computePosition|constructor|contains|control|cos|create|delay|destroy|dispose|each|eliminate|empty|erase|escapeRegExp|every|exp|extend|fade|filter|fireEvent|flatten|floor|get|getAllNext|getAllPrevious|getChildren|getClean|getComputedStyle|getCoordinates|getDocument|getElement|getElements|getFirst|getKeys|getLast|getLength|getNext|getOffsetParent|getOffsetSize|getParent|getParents|getPosition|getPrevious|getProperties|getProperty|getRandom|getRelativePosition|getScroll|getScrollSize|getStyle|getStyles|getValues|getWindow|grab|has|hasChild|hasClass|hexToRgb|highlight|hsbToRgb|hyphenate|include|inject|key|keyOf|limit|link|load|log|makeDraggable|makeResizable|map|match|max|merge|meta|min|morph|newElement|newTextNode|page.x|page.y|pass|periodical|position|positioned|pow|preventDefault|relatedTarget|remove|removeClass|removeEvent|removeEvents|removeProperties|removeProperty|replaces|retrieve|rgbToHex|rgbToHsb|round|run|scrollTo|send|set|setProperties|setProperty|setStyle|setStyles|shift|sin|slide|some|sqrt|stop|stopPropagation|store|stripScripts|tan|target|test|times|toFloat|toggleClass|toInt|toJSON|toQueryString|trim|tween|wheel|wraps)\b</string>
 					<key>name</key>
 					<string>support.function.method.js.mootools</string>
 				</dict>

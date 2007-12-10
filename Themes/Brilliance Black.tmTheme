@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>comment</key>
-	<string>Thomas Aylott ㊷ subtleGradient.com</string>
 	<key>author</key>
 	<string>Thomas Aylott</string>
+	<key>comment</key>
+	<string>Thomas Aylott ㊷ subtleGradient.com</string>
 	<key>name</key>
 	<string>Brilliance Black</string>
 	<key>settings</key>
@@ -18,7 +18,7 @@
 				<key>caret</key>
 				<string>#3333FF</string>
 				<key>foreground</key>
-				<string>#CCCCCC</string>
+				<string>#EEEEEE</string>
 				<key>invisibles</key>
 				<string>#CCCCCC1A</string>
 				<key>lineHighlight</key>
@@ -55,19 +55,6 @@
 				<string>underline</string>
 				<key>foreground</key>
 				<string>#555555</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>——————————————————</string>
-			<key>scope</key>
-			<string>meta.subtlegradient</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#FFFFFF</string>
-				<key>foreground</key>
-				<string>#E6E6E6</string>
 			</dict>
 		</dict>
 		<dict>
@@ -576,8 +563,6 @@
 			<dict>
 				<key>background</key>
 				<string>#340C2133</string>
-				<key>foreground</key>
-				<string>#999999</string>
 			</dict>
 		</dict>
 		<dict>
@@ -678,7 +663,10 @@
 			<key>name</key>
 			<string>™ Function Punctuation</string>
 			<key>scope</key>
-			<string>meta.group.braces.round punctuation.section.scope, meta.group.braces.round meta.delimiter.object.comma, meta.brace.round</string>
+			<string>meta.group.braces.round punctuation.section.scope, 
+meta.group.braces.round meta.delimiter.object.comma, 
+meta.group.braces.curly.function meta.delimiter.object.comma, 
+meta.brace.round</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -1202,8 +1190,6 @@
 			<string>meta.selector</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#00000080</string>
 				<key>foreground</key>
 				<string>#666666</string>
 			</dict>
@@ -2008,7 +1994,7 @@
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#FFFFFF</string>
+				<string>#7F7F7F</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2019,7 +2005,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#000000BF</string>
+				<string>#00000080</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2166,7 +2152,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>—————————————————</string>
+			<string>———————— PUNCTUATION ————————</string>
 			<key>settings</key>
 			<dict/>
 		</dict>
@@ -2202,7 +2188,7 @@
 			<key>name</key>
 			<string>Curly Punctuation</string>
 			<key>scope</key>
-			<string>meta.group.braces.curly punctuation.section.scope, meta.brace.curly, punctuation.section.scope</string>
+			<string>punctuation.section.scope.curly, punctuation.section.scope</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -2215,7 +2201,11 @@
 			<key>name</key>
 			<string>Object Punctuation</string>
 			<key>scope</key>
-			<string>punctuation.separator.objects, meta.group.braces.curly meta.delimiter.object.comma, punctuation.separator.key-value -meta.tag, source.ocaml punctuation.separator.match-definition</string>
+			<string>punctuation.separator.objects, 
+meta.group.braces.curly meta.delimiter.object.comma, 
+punctuation.separator.key-value -meta.tag, 
+source.ocaml punctuation.separator.match-definition
+</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -2228,7 +2218,7 @@
 			<key>name</key>
 			<string>Function Punctuation</string>
 			<key>scope</key>
-			<string>punctuation.definition.function, punctuation.separator.function-return, punctuation.separator.function-definition</string>
+			<string>punctuation.separator.parameters.function.js,punctuation.definition.function, punctuation.separator.function-return, punctuation.separator.function-definition</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -2261,8 +2251,6 @@
 				<string>#00000080</string>
 				<key>fontStyle</key>
 				<string></string>
-				<key>foreground</key>
-				<string>#CCCCCC</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2285,6 +2273,51 @@
 			<string>source.js meta.group.braces.round, meta.scope.heredoc</string>
 			<key>settings</key>
 			<dict/>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>º Even</string>
+			<key>scope</key>
+			<string>source.ruby meta.even-tab, source.ruby meta.even-tab.group2, source.ruby meta.even-tab.group4, source.ruby meta.even-tab.group6, source.ruby meta.even-tab.group8, source.ruby meta.even-tab.group10, source.ruby meta.even-tab.group12
+</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#00000080</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>º meta.block.slate </string>
+			<key>scope</key>
+			<string>meta.block.slate</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#666666</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>º meta.block.content.slate </string>
+			<key>scope</key>
+			<string>meta.block.content.slate </string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#CCCCCC</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Function Group1</string>
+			<key>scope</key>
+			<string>meta.function meta.group.braces.curly.function -(meta.group meta.group), meta.function meta.odd-tab.group1</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#0A0006</string>
+			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -2409,41 +2442,7 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>º Even</string>
-			<key>scope</key>
-			<string>source.ruby meta.even-tab, source.ruby meta.even-tab.group2, source.ruby meta.even-tab.group4, source.ruby meta.even-tab.group6, source.ruby meta.even-tab.group8, source.ruby meta.even-tab.group10, source.ruby meta.even-tab.group12
-</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#00000080</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>º meta.block.slate </string>
-			<key>scope</key>
-			<string>meta.block.slate</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#666666</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>º meta.block.content.slate </string>
-			<key>scope</key>
-			<string>meta.block.content.slate </string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#CCCCCC</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>—————————————————</string>
+			<string>———————— END ————————</string>
 			<key>settings</key>
 			<dict/>
 		</dict>

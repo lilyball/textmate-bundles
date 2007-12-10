@@ -20,7 +20,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^(?=\s*[:.*#a-zA-Z])</string>
+			<string>((?&lt;=\})|^)(?=\s*[:.*#a-zA-Z])</string>
 			<key>end</key>
 			<string>(?=\{)</string>
 			<key>name</key>

@@ -4,6 +4,7 @@
 <bzip2 src="${1:test.tar}" destfile="${2:test.tar.bz2}"/>
 <chmod file="${1:file}" perm="${2:755}"/>
 <classpath ${1:path="$2" }${3:refid="$4" }>$0</classpath>
+<delete ${1:file="$2" }/>
 <exclude name="${1:**/ant.jar}"/>
 <exec ${1:command="$2" }${3:dir="$4" }${5:os="$6" }${7:output="$8" }>$0</exec>
 <fileset dir="${1:my/src/dir}">$0</fileset>

@@ -31,7 +31,7 @@ end
 if !context.empty? &amp;&amp; !should.empty?
   puts "shoulda"
   context = parse_from_quotes( context )
-  name = "#{context} should #{should}".gsub(/\s/){ |c| "\\#{c}" }
+  name = "#{context} should #{should}".gsub(/[\+\.\s\'\"\(\)]/,'.')
   print "--name=/#{name}/ -v v"  
 end
 
@@ -57,7 +57,7 @@ if [[ -z "$args" ]]; then
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>source.ruby.shoulda</string>
+	<string>source.ruby.rails.shoulda</string>
 	<key>uuid</key>
 	<string>6AFF5956-7774-4175-A005-9A03AF7F29B3</string>
 </dict>

@@ -3,16 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>should "$1" do
-  $0
+	<string>should_be_restful do |resource|
+  resource.denied.actions  = :${1:all}
+  resource.denied.flash    = /${2:must be logged in}/i
+  resource.denied.redirect = '${3:login_url}'
 end</string>
 	<key>name</key>
-	<string>should block</string>
+	<string>should_be_restful denied</string>
 	<key>scope</key>
 	<string>source.ruby.rails.shoulda</string>
 	<key>tabTrigger</key>
-	<string>should</string>
+	<string>sbrdenied</string>
 	<key>uuid</key>
-	<string>D8AB6BAF-153A-4134-9A46-B1273943F16D</string>
+	<string>436D0EC3-9F61-46E7-9A86-C775D4515DB5</string>
 </dict>
 </plist>

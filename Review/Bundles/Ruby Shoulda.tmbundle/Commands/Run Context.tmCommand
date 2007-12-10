@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -27,7 +27,7 @@ end
 if !context.empty? &amp;&amp; !should.empty?
   puts "shoulda"
   context = parse_from_quotes( context )
-  name = "#{context}".gsub(/ /,'\ ')
+  name = "#{context}".gsub(/[\+\.\s\'\"\(\)]/,'.')
   print "--name=/#{name}/ -v v"  
 end
 
@@ -51,7 +51,7 @@ if [[ -z "$args" ]]; then
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>source.ruby.shoulda</string>
+	<string>source.ruby.rails.shoulda</string>
 	<key>uuid</key>
 	<string>2989704F-8F6B-439F-83A7-368BB174A010</string>
 </dict>

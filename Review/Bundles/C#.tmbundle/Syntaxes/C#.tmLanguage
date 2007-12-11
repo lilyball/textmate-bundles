@@ -7,12 +7,9 @@
 		<string>cs</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(?x)
-		 /\*\*(?!\*)
-		|^(?![^{]*?//|[^{]*?/\*(?!.*?\*/.*?\{)).*?\{\s*($|//|/\*(?!.*?\*/.*\S))
-	</string>
+	<string>^\s*/\*|^(?![^{]*?//|[^{]*?/\*(?!.*?\*/.*?\{)).*?\{\s*($|//|/\*(?!.*?\*/.*\S))</string>
 	<key>foldingStopMarker</key>
-	<string>(?&lt;!\*)\*\*/|^\s*\}</string>
+	<string>^\s*\*/|^\s*\}</string>
 	<key>keyEquivalent</key>
 	<string>^~C</string>
 	<key>name</key>
@@ -33,7 +30,7 @@
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
-			<string>comment.documentation.source.cs</string>
+			<string>comment.block.documentation.source.cs</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -163,7 +160,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.class.source.cs</string>
+					<string>entity.name.type.class.source.cs</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -317,7 +314,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.package.source.cs</string>
+					<string>entity.name.type.package.source.cs</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -340,7 +337,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.namespace.source.cs</string>
+					<string>entity.name.type.namespace.source.cs</string>
 				</dict>
 			</dict>
 			<key>match</key>

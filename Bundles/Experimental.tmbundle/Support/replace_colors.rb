@@ -28,6 +28,7 @@ unless @original_color and @original_color.match(VALID_COLOR)
 end
 
 @replaced_color = TextMate::UI.request_color(@original_color)
+error! if @replaced_color.nil?
 
 norm = normalize_color(@replaced_color)
 error! unless norm

@@ -384,7 +384,7 @@ class Xcode
     end
     
     def info(message)
-      puts output.gsub(/\n/, '<br>\n')
+      puts message.gsub(/\n/, '<br>\n')
     end
     
     def failed(targets, message)

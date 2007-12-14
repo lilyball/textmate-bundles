@@ -33,13 +33,13 @@ Normally it should work out-of-the-box when dragging the folder containing your 
 
     Scan the project file for a target of type _application_ or _tool_ and run it.
     
-    For _application_ targets, TextMate will use the [`open`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/open.1.html) command to run the application. This means that output is sent to the shared console log, which is viewable by &lt;a href="javascript:TextMate.system('open -a Console.app', null)"&gt;launching the Console utility&lt;/a&gt;.
+    For _application_ targets, TextMate will display the application’s output in the command’s HTML window.
 
     For _tool_ targets, TextMate will use the Terminal application to run the tool.
 
     The `DYLD_FRAMEWORK_PATH` and `DYLD_LIBRARY_PATH` environment variables are set to the targets folder before running the target.
 
-    If the project has multiple _tool_ and _application_ targets, the command will currently show an error (rather than pick the active).
+    If the project has multiple _tool_ and _application_ targets the command will display a dialog from which you can choose the target you wish to run. You can set `XC_TARGET_NAME` to always run a single target, see Settings below for how to configure this.
 
 *   __Run Tests__
 
@@ -76,6 +76,10 @@ Normally it should work out-of-the-box when dragging the folder containing your 
 *   `TM_MUTE`
 
     If you do not like the samples being played after a build, you can set this variable to 1. This can be done in Preferences &amp;#x2192; Advanced &amp;#x2192; Shell Variables.
+
+*   `XC_TARGET_NAME`
+
+    If there are multiple targets in a project then you can set this environment variable to the name of the target you want to run to avoid the pop-up selector. This would normally be set as a project specific variable (see `TM_XCODE_PROJECT` above for how to do this).
 
 ## Credits
 

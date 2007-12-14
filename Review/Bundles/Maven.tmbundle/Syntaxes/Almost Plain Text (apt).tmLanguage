@@ -20,16 +20,10 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>markup.heading.1.apt</string>
-						</dict>
-					</dict>
 					<key>match</key>
-					<string>\s+(.+)$</string>
+					<string>\s+.+$\n?</string>
+					<key>name</key>
+					<string>markup.heading.title.apt</string>
 				</dict>
 			</array>
 		</dict>
@@ -68,55 +62,61 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>({{)({)(.+)(})(.+)(}})</string>
+			<string>({{)({)(.+?)(})(.+?)(}})</string>
 			<key>name</key>
 			<string>meta.link.inline.apt</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\s+\*\s(.+)$\n</string>
+			<string>\s+\*\s(.+)$\n?</string>
 			<key>name</key>
 			<string>markup.list.unnumbered.apt</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>^\*\s+.*$\n</string>
-			<key>name</key>
-			<string>markup.heading.2.apt</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>^\*\*\s+.*$\n</string>
-			<key>name</key>
-			<string>markup.heading.3.apt</string>
-		</dict>
-		<dict>
 			<key>begin</key>
-			<string>^\+---(?:-*)\+?\s*$\n</string>
+			<string>^\+---(?:-*)\+?\s*$</string>
 			<key>contentName</key>
 			<string>markup.raw.block.apt</string>
 			<key>end</key>
-			<string>^\+---(?:-*)\+?\s*$\n</string>
+			<string>^\+---(?:-*)\+?\s*$</string>
 			<key>name</key>
 			<string>meta.block-level.apt</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>&lt;&lt;&lt;.+?&gt;&gt;&gt;</string>
+			<string>&lt;&lt;&lt;.*?&gt;&gt;&gt;</string>
 			<key>name</key>
 			<string>markup.raw.inline.bold.apt</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>&lt;&lt;.+?&gt;&gt;</string>
+			<string>&lt;&lt;.*?&gt;&gt;</string>
 			<key>name</key>
 			<string>markup.bold.apt</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>&lt;.+?&gt;</string>
+			<string>&lt;.*?&gt;</string>
 			<key>name</key>
 			<string>markup.italic.apt</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\w.*$\n?</string>
+			<key>name</key>
+			<string>markup.heading.2.apt</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\*\s+.*$\n?</string>
+			<key>name</key>
+			<string>markup.heading.3.apt</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\*\*\s+.*$\n?</string>
+			<key>name</key>
+			<string>markup.heading.4.apt</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

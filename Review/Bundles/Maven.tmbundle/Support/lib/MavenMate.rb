@@ -42,16 +42,19 @@ class MavenMate
 		
 		task.run do |line, mode|
 			if @green_patterns.detect { |pattern| line =~ pattern }
-				print "<span style=\"color: green\">#{line.chomp}</span><br />"
+				line ="<span style=\"color: green\">#{line.chomp}</span><br />"
 			elsif @red_patterns.detect { |pattern| line =~ pattern }
-				print "<span style=\"color: red\">#{line.chomp}</span><br />"
+				line = "<span style=\"color: red\">#{line.chomp}</span><br />"
 			elsif @orange_patterns.detect { |pattern| line =~ pattern }
-				print "<span style=\"color: orange\">#{line.chomp}</span><br />"
+				line = "<span style=\"color: orange\">#{line.chomp}</span><br />"
 			elsif @blue_patterns.detect { |pattern| line =~ pattern }
-				print "<span style=\"color: blue\">#{line.chomp}</span><br />"
+				line ="<span style=\"color: blue\">#{line.chomp}</span><br />"
 			else
-				print htmlize(line)
+				line = htmlize(line)
 			end
+			
+			line.sub!(/(http(s)?:\/\/([\S]+))/, '<a href="\1">\1</a>')
+			print line
 			$stdout.flush
 		end
 			

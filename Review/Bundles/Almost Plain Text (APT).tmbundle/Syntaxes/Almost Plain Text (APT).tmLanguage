@@ -9,7 +9,7 @@
 	<key>keyEquivalent</key>
 	<string>^~A</string>
 	<key>name</key>
-	<string>Almost Plain Text (apt)</string>
+	<string>Almost Plain Text (APT)</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -28,51 +28,6 @@
 			</array>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.link.begin.apt</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.link.address.begin.apt</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>markup.underline.link.apt</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.link.address.end.apt</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>string.other.link.title.apt</string>
-				</dict>
-				<key>7</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.link.end.apt</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>({{)({)(.+?)(})(.+?)(}})</string>
-			<key>name</key>
-			<string>meta.link.inline.apt</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\s+\*\s(.+)$\n?</string>
-			<key>name</key>
-			<string>markup.list.unnumbered.apt</string>
-		</dict>
-		<dict>
 			<key>begin</key>
 			<string>^\+---(?:-*)\+?\s*$</string>
 			<key>contentName</key>
@@ -83,42 +38,182 @@
 			<string>meta.block-level.apt</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>&lt;&lt;&lt;.*?&gt;&gt;&gt;</string>
+			<key>begin</key>
+			<string>^\s{2,}(?=\w.*$)</string>
+			<key>end</key>
+			<string>^(?=\s*$)</string>
 			<key>name</key>
-			<string>markup.raw.inline.bold.apt</string>
+			<string>meta.paragraph.apt</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>&lt;&lt;.*?&gt;&gt;</string>
-			<key>name</key>
-			<string>markup.bold.apt</string>
+			<key>include</key>
+			<string>#headings</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>&lt;.*?&gt;</string>
-			<key>name</key>
-			<string>markup.italic.apt</string>
+			<key>include</key>
+			<string>#inline</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>^\w.*$\n?</string>
-			<key>name</key>
-			<string>markup.heading.2.apt</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>^\*\s+.*$\n?</string>
-			<key>name</key>
-			<string>markup.heading.3.apt</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>^\*\*\s+.*$\n?</string>
-			<key>name</key>
-			<string>markup.heading.4.apt</string>
+			<key>include</key>
+			<string>#lists</string>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>formatting</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.begin.apt</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.content.raw.apt</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.raw.end.apt</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(&lt;&lt;&lt;)(.*?)(&gt;&gt;&gt;)</string>
+					<key>name</key>
+					<string>markup.raw.inline.apt</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>&lt;&lt;.*?&gt;&gt;</string>
+					<key>name</key>
+					<string>markup.bold.inline.apt</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>&lt;.*?&gt;</string>
+					<key>name</key>
+					<string>markup.italic.inline.apt</string>
+				</dict>
+			</array>
+		</dict>
+		<key>headings</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>^\w.*$\n?</string>
+					<key>name</key>
+					<string>markup.heading.2.apt</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>^\*\s+.*$\n?</string>
+					<key>name</key>
+					<string>markup.heading.3.apt</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>^\*\*\s+.*$\n?</string>
+					<key>name</key>
+					<string>markup.heading.4.apt</string>
+				</dict>
+			</array>
+		</dict>
+		<key>inline</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#formatting</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#links</string>
+				</dict>
+			</array>
+		</dict>
+		<key>links</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.begin.apt</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.address.begin.apt</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link.apt</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.address.end.apt</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>string.other.link.title.apt</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.end.apt</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>({{)({)(.*?)(})(.*?)(}})</string>
+					<key>name</key>
+					<string>meta.link.inline.apt</string>
+				</dict>
+			</array>
+		</dict>
+		<key>lists</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\s+\*</string>
+					<key>end</key>
+					<string>$\n?</string>
+					<key>name</key>
+					<string>markup.list.unnumbered.apt</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>text.html.apt</string>
 	<key>uuid</key>

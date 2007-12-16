@@ -1,24 +1,101 @@
 <ant ${1:antfile="$2" }${3:target="$4" }>$0</ant>
 <arg ${1:value="$2" }${3:pathref="$4" }>$0</arg>
+<and>$0</and>
+<antcall target="${1:doSomethingElse}">$0</antcall>
+<antstructure output="${1:project.dtd}" />
+<apply executable="${1:ls}"></apply>
+<apt srcdir="${1:src}" destdir="${2:build}" classpath="${3:xyz.jar}" debug="${4:on}" compile="${5:true}" factory="${6:org.domain.AnnotationProcessorFactory}" factorypathref="${7:my.factorypath.id}" preprocessdir="${8:preprocess.dir}">$0</apt>
+<available classname="${1:org.domain.MyClass}" property="${2:MyClass.present}"/>
+<basename property="${1:jar.filename}" file="${2:lib.jarfile}"/>
 <buildnumber ${1:file="${2:build.number}"}/>
+<bunzip2 src="${1:test.tar.bz2}"/>
 <bzip2 src="${1:test.tar}" destfile="${2:test.tar.bz2}"/>
+<cvschangelog dir="${1:dev/network}" destfile="${2:changelog.xml}" />
+<checksum file="${1:foo.bar}"/>
 <chmod file="${1:file}" perm="${2:755}"/>
 <classpath ${1:path="$2" }${3:refid="$4" }>$0</classpath>
+<concat destfile="${1:README.txt}">${2:Hello, World!}</concat>
+<condition property="${1:javamail.complete}">$0</condition>
 <copy file="${1:file.path}" tofile="${2:file.path}"/>
+<copydir src="${1:src/resources}" dest="${2:dist}" />
+<copyfile src="${1:src/resources}" dest="${2:dist}" />
+<cvs cvsRoot="${1::pserver:anoncvs@cvs.apache.org:/home/cvspublic}" package="${2:ant}" dest="${3:ws.dir}" />
+<cvspass cvsroot="${1::pserver:anoncvs@cvs.apache.org:/home/cvspublic}" password="${2:anoncvs}" />
+<cvstagdiff destfile="${1:tagdiff.xml}" package="${2:ant}" startDate="${3:2002-01-01}" endDate="{4:2002-31-01}" />
+<cvsversion cvsRoot="${1::pserver:anoncvs@cvs.apache.org:/home/cvspublic}" passfile="${2:/home/myself/.cvspass}" serverversionproperty="${3:apachecvsversion}" clientversionproperty="${4:localcvsversion}" />
+<defaultexcludes remove="${1:**/.svn}"/>
 <delete ${1:file="$2" }/>
+<deltree dir="${1:dist}"/>
+<dependset>$0</dependset>
+<diagnostics/>
+<dirname property="${1:antfile.dir}" file="${2:ant.file}"/>
+<ear destfile="${1:build/myapp.ear}" appxml="${2:src/metadata/application.xml}" >$0</ear>
 <echo>$1</echo>
+<echoxml ${1:file="${2:subbuild.xml}"}>$0</echoxml>
 <exclude name="${1:**/ant.jar}"/>
 <exec ${1:command="$2" }${3:dir="$4" }${5:os="$6" }${7:output="$8" }>$0</exec>
+<fail ${1:unless="${2:thisdoesnotexist}"}>${3:Fail Message}</fail>
+<filter token="${1:year}" value="${2:2000}"/>
 <fileset dir="${1:my/src/dir}">$0</fileset>
+<fixcrlf srcdir="${1:src}" includes="${2:**/*.sh}" eol="${3:lf}" eof="${4:remove}" />
+<genkey alias="${1:apache-group}" storepass="${2:secret}" >$0</genkey>
+<get src="${1:http://ant.apache.org/}" dest="${2:help/index.html}"/>
+<gunzip src="${1:test.tar.gz}"/>
 <gzip src="${1:test.tar}" destfile="${2:test.tar.gz}"/>
+<import file="${1:path/to/imported.xml}"/>
+<input>${1:Press Return key to continue...}</input>
 <include name="${1:**/*.jar}"/>
+<jar destfile="${1:dist/lib/app.jar}" basedir="${2:build/classes}"/>
 <java jar="${1:jar}" fork="${2:true}" failonerror="${3:true}">$0</java>
 <jvmarg value="$1"/>
+<javac srcdir="${1:src}" destdir="${2:build}" classpath="${3:xyz.jar}" debug="${4:on}" source="${5:1.4}" />
+<javadoc destdir="${1:docs/api}" author="${2:true}" version="${3:true}" use="${4:true}" windowtitle="${5:Window Title}">$0</javadoc>
+<length string="${1:foo}" property="${2:length.foo}" />
+<loadfile property="${1:message}" srcFile="${2:message.txt}"/>
+<loadproperties srcFile="${1:file.properties}"/>
+<loadresource property="${1:homepage}">$0</loadresource>
+<macrodef name="${1:testing}">$0</macrodef>
+<mail from="${1:me}" tolist="${2:you}" subject="${3:Results of nightly build}" files="${4:build.log}"/>
+<makeurl file="${1:user.home/m2/repository}" property="${2:m2.repository.url}"/>
+<manifest file="${1:MANIFEST.MF}"></manifest>
+<manifestclasspath property="${1:jar.classpath}" jarfile="${2:build/acme.jar}">$0</manifestclasspath>
 <mapper type="${1:glob}" from="${2:*}" to="${3:*.bak}"/>
 <mkdir dir="${1:directory}" />
 <move file="${1:src/dir}" tofile="${2:new/dir/to/move/to}"/>
 <move todir="${1:some/new/dir}" ${2:includeemptydirs="{3:false}"}>$0</move>
+<nice newpriority="${1:10}"/>
+<not>$0</not>
+<parallel>$0</parallel>
+<patch patchfile="${1:module.1.0-1.1.patch}"/>
+<pathconvert targetos="${1:unix}" property="${2:wl.path.unix}" refid="${3:wl.path}">
 <pathelement ${1:location="$2" }${3:path="$4" }>$0</pathelement>
+<presetdef name="${1:my.javac}">$0</presetdef>
 <project ${1:name="$2" }${3:default="$4" }${5:basedir="$6" }>$0</project>
 <property ${1:name="$2" }${3:value="$4" }>$0</property>
+<record name="${1:ISO.log}" loglevel="${2:verbose}"/>
+<rename src="${1:foo}" dest="${2:bar}"/>
+<replace file="${1:src/index.html}" token="${2:@@@}" value="${3:wombat}"/>
+<resourcecount property="${1:count.foo}">$0</resourcecount>
+<rmic classname="${1:org.xyz.FooBar}" base="${2:build/classes}"/>
+<sequential>$0</sequential>
+<signjar jar="${1:dist/lib/ant.jar}" alias="${2:apache-group}" storepass="${3:secret}"/>
+<sleep seconds="${1:2}"/>
+<sql driver="${1:org.database.jdbcDriver}" url="${2:jdbc:database-url}" userid="${3:sa}" password="${4:pass}" >$0</sql>
+<style basedir="${1:doc}" destdir="${2:build/doc}" extension="${3:.html}" style="${4:style/apache.xsl}"/>
+<subant target="$1">$0</subant>
+<sync todir="${1:site}">$0</sync>
+<tar destfile="${1:dist/manual.tar}"/>
 <target ${1:name="$2" }${3:description="$4" }${5:depends="$6" }>$0</target>
+<taskdef name="${1:myjavadoc}" classname="${2:com.mydomain.JavadocTask}"/>
+<tempfile property="${1:temp.file}" suffix="${2:.xml}"/>
+<touch file="${1:myfile}"/>
+<tstamp/>
+<typedef name="${1:urlset}" classname="${2:org.domain.URLSet}"/>
+<untar src="${1:tools.tar}" dest="${2:tools.home}"/>
+<unzip src="${1:tomcat_src/tools-src.zip}" dest="${2:tools.home}"/>
+<uptodate property="${1:isUpToDate}" srcfile="${2:/usr/local/bin/testit}" targetfile="${3:build/.flagfile}"/>
+<waitfor maxwait="${1:30}" maxwaitunit="${2:second}">$0</waitfor>
+<war destfile="${1:myapp.war}" webxml="${2:src/metadata/myapp.xml}">$0</war>
+<whichresource resource="${1:/log4j.properties}" property="${2:log4j.url}" />
+<xmlproperty file="${1:somefile.xml}"/>
+<zip destfile="${1:dist/manual.zip}" basedir="${2:htdocs/manual}" />

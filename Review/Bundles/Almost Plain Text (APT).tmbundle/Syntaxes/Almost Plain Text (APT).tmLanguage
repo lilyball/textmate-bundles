@@ -14,16 +14,18 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^\s+---(?:-*)\s*$\n</string>
+			<string>^\s+-{3,}$\n</string>
 			<key>end</key>
-			<string>^\s+(?:-*)---\s*$\n</string>
+			<string>^\s+-{3,}$\n</string>
+			<key>name</key>
+			<string>meta.heading.apt</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\s+.+$\n?</string>
+					<string>^\s+\w.+$\n?</string>
 					<key>name</key>
-					<string>markup.heading.title.apt</string>
+					<string>markup.heading.title-author-or-date.apt</string>
 				</dict>
 			</array>
 		</dict>
@@ -67,6 +69,18 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>^\s*~~.*$\n?</string>
+					<key>name</key>
+					<string>comment.line.tilde.apt</string>
+				</dict>
+			</array>
+		</dict>
 		<key>formatting</key>
 		<dict>
 			<key>patterns</key>
@@ -137,6 +151,10 @@
 		<dict>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#formatting</string>

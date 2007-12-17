@@ -8,20 +8,6 @@ require SUPPORT + "/lib/web_preview"
 
 ANT_HELP_DICT = ENV['TM_BUNDLE_SUPPORT'] + '/data/ant_doc_dictionary.xml'
 
-WORD = STDIN.read.strip
-
-if WORD.empty?
-    
-    puts html_head( :title => "Error", :sub_title => "Ant Documentation" )
-    puts "<h1>Please specify a search term.</h1>"
-    html_footer
-    TextMate.exit_show_html
-
-end
-
-puts html_head( :title => "Ant Documentation Search", :sub_title => "Apache Ant" )
-puts "<h1>Results for ‘#{WORD}’</h1><p>"
-
 # Work out what uri to use for the manual
 # If the user has specified the path use it, 
 # otherwise fall back on the default apple 
@@ -31,6 +17,21 @@ ant_manual_path = "/Developer/Java/Ant/docs/manual" if !ENV['TM_ANT_MANUAL_PATH'
 ant_manual_uri = "http://ant.apache.org/manual"
 ant_manual_uri = "file://" + ant_manual_path if File.directory? ant_manual_path
 ant_manual_uri = ant_manual_uri.gsub( /\/$/, '' )
+
+WORD = STDIN.read.strip
+
+if WORD.empty?
+    
+    puts html_head( :title => "Error", :sub_title => "Ant Documentation" )
+    puts "<h1>Please specify a search term.</h1>"
+    puts "<p><a href='" + ant_manual_uri + "/index.html'>Ant Manual</a></p>"
+    html_footer
+    TextMate.exit_show_html
+
+end
+
+puts html_head( :title => "Ant Documentation Search", :sub_title => "Apache Ant" )
+puts "<h1>Results for ‘#{WORD}’</h1><p>"
 
 # Open the ANT_HELP_DICT xml file and
 # collect matching results.
@@ -43,7 +44,7 @@ ant_doc.elements.each( "dict/a" ) do |tag|
     if e[/#{WORD}/i]
         href = tag.attributes["href"]
         tag.attributes["href"] = ant_manual_uri + "/" + href;
-        tag.attributes["title"] = ant_manual_uri+ "/" + href;
+        tag.attributes["title"] = href.split(/\/|\#/).join( " > " ).sub( ".html", "");
         search_results.push( tag )
     end
     

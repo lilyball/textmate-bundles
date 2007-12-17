@@ -637,7 +637,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\{)((\@)link)(?:\s+(\S+))?(?:\s+(.+))?\s*(\})</string>
+					<string>(\{)((\@)link)(?:\s+(\S+?))?(?:\s+(.+?))?\s*(\})</string>
 					<key>name</key>
 					<string>meta.directive.link.javadoc</string>
 				</dict>
@@ -676,7 +676,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\{)((\@)linkplain)(?:\s+(\S+))?(?:\s+(.+))?\s*(\})</string>
+					<string>(\{)((\@)linkplain)(?:\s+(\S+?))?(?:\s+(.+?))?\s*(\})</string>
 					<key>name</key>
 					<string>meta.directive.linkplain.javadoc</string>
 				</dict>
@@ -710,7 +710,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\{)((\@)value)\s*(\S+)?\s*(\})</string>
+					<string>(\{)((\@)value)\s*(\S+?)?\s*(\})</string>
 					<key>name</key>
 					<string>meta.directive.value.javadoc</string>
 				</dict>

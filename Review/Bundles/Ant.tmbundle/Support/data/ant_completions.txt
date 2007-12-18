@@ -1,6 +1,7 @@
 <and>$0</and>
 <ant ${1:antfile="$2" }${3:target="$4" }>$0</ant>
 <antcall target="${1:doSomethingElse}">$0</antcall>
+<antlib>$0</antlib>
 <antlr target="${1:etc/java.g}" outputdirectory="${2:build/src}"/>
 <antstructure output="${1:project.dtd}"/>
 <apply executable="${1:ls}"></apply>
@@ -17,6 +18,7 @@
 <chgrp file="${1:dist/start.sh}" group="${2:coders}"/>
 <chmod file="${1:file}" perm="${2:755}"/>
 <chown file="${1:dist/start.sh}" owner="${2:coderjoe}"/>
+<classfileset>$0</classfileset>
 <classpath ${1:path="$2" }${3:refid="$4" }>$0</classpath>
 <concat destfile="${1:README.txt}">${2:Hello, World!}</concat>
 <condition property="${1:javamail.complete}">$0</condition>
@@ -33,8 +35,10 @@
 <deltree dir="${1:dist}"/>
 <depend srcdir="${1:src/main}" destdir="${2:build/classes}" cache="${3:depcache}" closure="${4:yes}"/>
 <dependset>$0</dependset>
+<description>$0</description>
 <diagnostics/>
 <dirname property="${1:antfile.dir}" file="${2:ant.file}"/>
+<dirset dir="${1:build}">$0</dirset>
 <ear destfile="${1:build/myapp.ear}" appxml="${2:src/metadata/application.xml}">$0</ear>
 <echo>$1</echo>
 <echoproperties destfile="${1:my.properties}"/>
@@ -42,19 +46,28 @@
 <entry key="${1:key}" value="${2:value}"/>
 <exclude name="${1:**/ant.jar}"/>
 <exec ${1:command="$2" }${3:dir="$4" }${5:os="$6" }${7:output="$8" }>$0</exec>
+<extension extensionName="${1:MyExtensions}"/>
 <fail ${1:unless="${2:thisdoesnotexist}"}>${3:Fail Message}</fail>
+<filelist dir="${1:doc.src}" files="${2:foo.xml,bar.xml}"/>
 <fileset dir="${1:my/src/dir}">$0</fileset>
+<fileset dir="${1:server.src}" >$0</fileset>
 <filter token="${1:year}" value="${2:2000}"/>
+<filterchain>$0</filterchain>
+<filterreader classname="${1:org.apache.tools.ant.filters.EscapeUnicode}"/>
+<filterset>$0</filterset>
 <fixcrlf srcdir="${1:src}" includes="${2:**/*.sh}" eol="${3:lf}" eof="${4:remove}"/>
 <ftp server="${1:ftp.apache.org}" userid="${2:anonymous}" password="${3:me@domain.org}">$0</ftp>
 <genkey alias="${1:apache-group}" storepass="${2:secret}">$0</genkey>
 <get src="${1:http://ant.apache.org/}" dest="${2:help/index.html}"/>
+<grant class="${1:java.security.AllPermission}"/>
 <gunzip src="${1:test.tar.gz}"/>
 <gzip src="${1:test.tar}" destfile="${2:test.tar.gz}"/>
 <image srcdir="${1:src}" destdir="${2:dest}" includes="${3:*.png}"></image>
 <import file="${1:path/to/imported.xml}"/>
 <include name="${1:**/*.jar}"/>
 <input>${1:Press Return key to continue...}</input>
+<isfalse value="${1:some.property}"/>
+<istrue value="${1:some.property}"/>
 <jar destfile="${1:dist/lib/app.jar}" basedir="${2:build/classes}"/>
 <jarlib-available property="${1:myext.present}" file="${2:myfile.jar}">$0</jarlib-available>
 <jarlib-display file="${1:myfile.jar}">$0</jarlib-display>
@@ -83,6 +96,7 @@
 <manifest file="${1:MANIFEST.MF}"></manifest>
 <manifestclasspath property="${1:jar.classpath}" jarfile="${2:build/acme.jar}">$0</manifestclasspath>
 <mapper type="${1:glob}" from="${2:*}" to="${3:*.bak}"/>
+<mapper type="${1:identity}"/>
 <mimemail messageMimeType="${1:text/html}" messageFile="${2:test.html}" tolist="${3:you}" subject="${4:Email Subject}" from="${5:me}"/>
 <mkdir dir="${1:directory}"/>
 <move file="${1:src/dir}" tofile="${2:new/dir/to/move/to}"/>
@@ -95,18 +109,23 @@
 <patch patchfile="${1:module.1.0-1.1.patch}"/>
 <pathconvert targetos="${1:unix}" property="${2:wl.path.unix}" refid="${3:wl.path}">$0</pathconvert>
 <pathelement ${1:location="$2" }${3:path="$4" }>$0</pathelement>
+<patternset>$0</patternset>
+<permissions>$0</permissions>
 <presetdef name="${1:my.javac}">$0</presetdef>
 <project ${1:name="$2" }${3:default="$4" }${5:basedir="$6" }>$0</project>
 <property ${1:name="$2" }${3:value="$4" }>$0</property>
 <propertyfile file="${1:my.properties}" comment="${2:My properties}">$0</propertyfile>
+<propertyset>$0</propertyset>
 <pvcs repository="${1:/mnt/pvcs}">$0</pvcs>
 <pvcsproject name="${1:/myprj}"/>
 <record name="${1:ISO.log}" loglevel="${2:verbose}"/>
+<regexp id="${1:myregexp}" pattern="${2:alpha(.+)beta}"/>
 <rename src="${1:foo}" dest="${2:bar}"/>
 <renameext srcDir="${1:/source/project1}" fromExtension="${2:.java.keep}" toExtension="${3:.java}"/>
 <replace file="${1:src/index.html}" token="${2:@@@}" value="${3:wombat}"/>
 <replaceregexp file="${1:src/build.properties}" match="${2:OldProperty=(.*)}" replace="${3:NewProperty=\1}"/>
 <resourcecount property="${1:count.foo}">$0</resourcecount>
+<revoke class="${1:java.util.PropertyPermission}"/>
 <rexec server="${1:localhost}"/>
 <rmic classname="${1:org.xyz.FooBar}" base="${2:build/classes}"/>
 <scale proportions="${1:width}" width="${2:40}"/>
@@ -129,7 +148,8 @@
 <symlink link="${1:dir/foo}" resource="${2:dir/subdir/bar.foo}"/>
 <sync todir="${1:site}">$0</sync>
 <tar destfile="${1:dist/manual.tar}"/>
-<target ${1:name="$2" }${3:description="$4" }${5:depends="$6" }>$0</target>
+<tarfileset>$0</tarfileset>
+<target name="${1:targetName}" ${2:description="$3" }${4:depends="$5" }>$0</target>
 <taskdef name="${1:myjavadoc}" classname="${2:com.mydomain.JavadocTask}"/>
 <telnet userid="${1:bob}" password="${2:badpass}" server="${3:localhost}">$0</telnet>
 <tempfile property="${1:temp.file}" suffix="${2:.xml}"/>
@@ -144,6 +164,8 @@
 <war destfile="${1:myapp.war}" webxml="${2:src/metadata/myapp.xml}">$0</war>
 <whichresource resource="${1:/log4j.properties}" property="${2:log4j.url}"/>
 <wljspc src="${1:/myserver/public_html}" dest="${2:/myserver/serverclasses}" package="${3:myapp.jsp}">$0</wljspc>
+<xmlcatalog>$0</xmlcatalog>
 <xmlproperty file="${1:somefile.xml}"/>
 <xmlvalidate file="${1:toto.xml}"/>
 <zip destfile="${1:dist/manual.zip}" basedir="${2:htdocs/manual}"/>
+<zipfileset>$0</zipfileset>

@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<ant_completion_list>
+	<and>$0</and>
+	<ant antfile="$2" target="$4">$0</ant>
+	<antcall target="doSomethingElse">$0</antcall>
+	<antlib>$0</antlib>
+	<antlr target="etc/java.g" outputdirectory="build/src"/>
+	<antstructure output="project.dtd"/>
+	<apply executable="ls"/>
+	<apt srcdir="src" destdir="build" classpath="xyz.jar" debug="on" compile="true" factory="org.domain.AnnotationProcessorFactory" factorypathref="my.factorypath.id" preprocessdir="preprocess.dir">$0</apt>
+	<arg value="example"/>
+	<attrib file="dist/run.bat" readonly="true" hidden="true"/>
+	<available classname="org.domain.MyClass" property="MyClass.present"/>
+	<basename property="jar.filename" file="lib.jarfile"/>
+	<buildnumber file="build.number"/>
+	<bunzip2 src="test.tar.bz2"/>
+	<bzip2 src="test.tar" destfile="test.tar.bz2"/>
+	<cab cabfile="dist/manual.cab" basedir="htdocs/manual"/>
+	<checksum file="foo.bar"/>
+	<chgrp file="dist/start.sh" group="coders"/>
+	<chmod file="file" perm="755"/>
+	<chown file="dist/start.sh" owner="coderjoe"/>
+	<classfileset>$0</classfileset>
+	<classpath path="the.path" refid="id">$0</classpath>
+	<concat destfile="README.txt">Hello, World!</concat>
+	<condition property="javamail.complete">$0</condition>
+	<copy file="file.path" tofile="file.path"/>
+	<copydir src="src/resources" dest="dist"/>
+	<copyfile src="src/resources" dest="dist"/>
+	<cvs cvsRoot=":pserver:anoncvs@cvs.apache.org:/home/cvspublic" package="ant" dest="ws.dir"/>
+	<cvschangelog dir="dev/network" destfile="changelog.xml"/>
+	<cvspass cvsroot=":pserver:anoncvs@cvs.apache.org:/home/cvspublic" password="anoncvs"/>
+	<cvstagdiff destfile="tagdiff.xml" package="ant" startDate="2002-01-01" endDate="{4:2002-31-01"/>
+	<cvsversion cvsRoot=":pserver:anoncvs@cvs.apache.org:/home/cvspublic" passfile="/home/myself/.cvspass" serverversionproperty="apachecvsversion" clientversionproperty="localcvsversion"/>
+	<defaultexcludes remove="**/.svn"/>
+	<delete file="$2"/>
+	<deltree dir="dist"/>
+	<depend srcdir="src/main" destdir="build/classes" cache="depcache" closure="yes"/>
+	<dependset>$0</dependset>
+	<description>$0</description>
+	<diagnostics/>
+	<dirname property="antfile.dir" file="ant.file"/>
+	<dirset dir="build">$0</dirset>
+	<ear destfile="build/myapp.ear" appxml="src/metadata/application.xml">$0</ear>
+	<echo>$1</echo>
+	<echoproperties destfile="my.properties"/>
+	<echoxml file="subbuild.xml">$0</echoxml>
+	<entry key="key" value="value"/>
+	<exclude name="**/ant.jar"/>
+	<exec command="$2" dir="$4" os="$6" output="$8">$0</exec>
+	<extension extensionName="MyExtensions"/>
+	<fail unless="thisdoesnotexist">Fail Message</fail>
+	<filelist dir="doc.src" files="foo.xml,bar.xml"/>
+	<fileset dir="my/src/dir">$0</fileset>
+	<fileset dir="server.src">$0</fileset>
+	<filter token="year" value="2000"/>
+	<filterchain>$0</filterchain>
+	<filterreader classname="org.apache.tools.ant.filters.EscapeUnicode"/>
+	<filterset>$0</filterset>
+	<fixcrlf srcdir="src" includes="**/*.sh" eol="lf" eof="remove"/>
+	<ftp server="ftp.apache.org" userid="anonymous" password="me@domain.org">$0</ftp>
+	<genkey alias="apache-group" storepass="secret">$0</genkey>
+	<get src="http://ant.apache.org/" dest="help/index.html"/>
+	<grant class="java.security.AllPermission"/>
+	<gunzip src="test.tar.gz"/>
+	<gzip src="test.tar" destfile="test.tar.gz"/>
+	<image srcdir="src" destdir="dest" includes="*.png"/>
+	<import file="path/to/imported.xml"/>
+	<include name="**/*.jar"/>
+	<input>Press Return key to continue...</input>
+	<isfalse value="some.property"/>
+	<istrue value="some.property"/>
+	<jar destfile="dist/lib/app.jar" basedir="build/classes"/>
+	<jarlib-available property="myext.present" file="myfile.jar">$0</jarlib-available>
+	<jarlib-display file="myfile.jar">$0</jarlib-display>
+	<jarlib-manifest destfile="myManifest.txt">$0</jarlib-manifest>
+	<jarlib-resolve property="dve.library">$0</jarlib-resolve>
+	<java jar="jar" fork="true" failonerror="true">$0</java>
+	<javac srcdir="src" destdir="build" classpath="xyz.jar" debug="on" source="1.4"/>
+	<javacc target="src/Parser.jj" outputdirectory="build/src" javacchome="/Applications/JavaCC" static="true"/>
+	<javadoc destdir="docs/api" author="true" version="true" use="true" windowtitle="Window Title">$0</javadoc>
+	<javah destdir="c" class="org.foo.Bar"/>
+	<jdepend classpathref="base.path">$0</jdepend>
+	<jjdoc target="src/Parser.jj" outputfile="doc/ParserBNF.html" javacchome="/Applications/JavaCC"/>
+	<jjtree target="src/Parser.jjt" outputdirectory="build/src" javacchome="/Applications/JavaCC" nodeusesparser="true"/>
+	<jlink compress="false" outfile="out.jar">$0</jlink>
+	<jspc srcdir="/dev/asf/ant-core/src/war" destdir="/dev/asf/ant-core/gensrc" package="org.domain.jsp" compiler="jasper41" verbose="9">$0</jspc>
+	<junit>$0</junit>
+	<junitreport todir="./reports">$0</junitreport>
+	<jvmarg value="$1"/>
+	<length string="foo" property="length.foo"/>
+	<loadfile property="message" srcFile="message.txt"/>
+	<loadproperties srcFile="file.properties"/>
+	<loadresource property="homepage">$0</loadresource>
+	<macrodef name="testing">$0</macrodef>
+	<mail from="me" tolist="you" subject="Results of nightly build" files="build.log"/>
+	<makeurl file="user.home/m2/repository" property="m2.repository.url"/>
+	<manifest file="MANIFEST.MF"/>
+	<manifestclasspath property="jar.classpath" jarfile="build/acme.jar">$0</manifestclasspath>
+	<mapper type="glob" from="*" to="*.bak"/>
+	<mapper type="identity"/>
+	<mimemail messageMimeType="text/html" messageFile="test.html" tolist="you" subject="Email Subject" from="me"/>
+	<mkdir dir="directory"/>
+	<move file="src/dir" tofile="new/dir/to/move/to"/>
+	<move todir="some/new/dir" includeemptydirs="false">$0</move>
+	<native2ascii dest="srcdir"/>
+	<netrexxc srcDir="/source/project" destDir="/source/project/build"/>
+	<nice newpriority="10"/>
+	<not>$0</not>
+	<parallel>$0</parallel>
+	<patch patchfile="module.1.0-1.1.patch"/>
+	<pathconvert targetos="unix" property="wl.path.unix" refid="wl.path">$0</pathconvert>
+	<pathelement location="$2" path="$4">$0</pathelement>
+	<patternset>$0</patternset>
+	<permissions>$0</permissions>
+	<presetdef name="my.javac">$0</presetdef>
+	<project name="$2" default="$4" basedir="$6">$0</project>
+	<property name="$2" value="$4">$0</property>
+	<propertyfile file="my.properties" comment="My properties">$0</propertyfile>
+	<propertyset>$0</propertyset>
+	<pvcs repository="/mnt/pvcs">$0</pvcs>
+	<pvcsproject name="/myprj"/>
+	<record name="ISO.log" loglevel="verbose"/>
+	<regexp id="myregexp" pattern="alpha(.+)beta"/>
+	<rename src="foo" dest="bar"/>
+	<renameext srcDir="/source/project1" fromExtension=".java.keep" toExtension=".java"/>
+	<replace file="src/index.html" token="@@@" value="wombat"/>
+	<replaceregexp file="src/build.properties" match="OldProperty=(.*)" replace="NewProperty=\1"/>
+	<resourcecount property="count.foo">$0</resourcecount>
+	<revoke class="java.util.PropertyPermission"/>
+	<rexec server="localhost"/>
+	<rmic classname="org.xyz.FooBar" base="build/classes"/>
+	<scale proportions="width" width="40"/>
+	<schemavalidate noNamespaceFile="document.xsd" file="xml/endpiece.xml">$0</schemavalidate>
+	<scp file="myfile.txt" todir="user:password@somehost:/home/foo"/>
+	<script language="ruby">$0</script>
+	<scriptdef name="scripttest" language="javascript">$0</scriptdef>
+	<sequential>$0</sequential>
+	<serverdeploy action="deploy" source="lib/ejb_myApp.ear">$0</serverdeploy>
+	<setproxy proxyhost="firewall"/>
+	<signjar jar="dist/lib/ant.jar" alias="apache-group" storepass="secret"/>
+	<sleep seconds="2"/>
+	<sound>$0</sound>
+	<splash imageurl="http://jakarta.apache.org/images/jakarta-logo.gif" useproxy="true" showduration="5000"/>
+	<sql driver="org.database.jdbcDriver" url="jdbc:database-url" userid="sa" password="pass">$0</sql>
+	<sshexec host="somehost" password="yo" command="touch somefile"/>
+	<style basedir="doc" destdir="build/doc" extension=".html" style="style/apache.xsl"/>
+	<stylebook targetdirectory="build/docs" book="src/xdocs/book.xml" skindirectory="src/skins/myskin"/>
+	<subant target="$1">$0</subant>
+	<symlink link="dir/foo" resource="dir/subdir/bar.foo"/>
+	<sync todir="site">$0</sync>
+	<tar destfile="dist/manual.tar"/>
+	<tarfileset>$0</tarfileset>
+	<target name="targetName" description="$3" depends="$5">$0</target>
+	<taskdef name="myjavadoc" classname="com.mydomain.JavadocTask"/>
+	<telnet userid="bob" password="badpass" server="localhost">$0</telnet>
+	<tempfile property="temp.file" suffix=".xml"/>
+	<touch file="myfile"/>
+	<translate toDir="dest.dir/ja" starttoken="#" endtoken="#" bundle="resource/BaseResource">$0</translate>
+	<tstamp/>
+	<typedef name="urlset" classname="org.domain.URLSet"/>
+	<untar src="tools.tar" dest="tools.home"/>
+	<unzip src="tomcat_src/tools-src.zip" dest="tools.home"/>
+	<uptodate property="isUpToDate" srcfile="/usr/local/bin/testit" targetfile="build/.flagfile"/>
+	<waitfor maxwait="30" maxwaitunit="second">$0</waitfor>
+	<war destfile="myapp.war" webxml="src/metadata/myapp.xml">$0</war>
+	<whichresource resource="/log4j.properties" property="log4j.url"/>
+	<wljspc src="/myserver/public_html" dest="/myserver/serverclasses" package="myapp.jsp">$0</wljspc>
+	<xmlcatalog>$0</xmlcatalog>
+	<xmlproperty file="somefile.xml"/>
+	<xmlvalidate file="toto.xml"/>
+	<zip destfile="dist/manual.zip" basedir="htdocs/manual"/>
+	<zipfileset>$0</zipfileset>
+</ant_completion_list>

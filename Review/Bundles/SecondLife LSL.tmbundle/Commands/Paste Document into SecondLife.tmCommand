@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>pbcopy
+osascript -e 'tell application "Second Life" to activate' -e 'tell application "System Events"' -e 'tell application process "Second Life"' -e 'delay 0.1' -e 'keystroke "a" using command down' -e 'keystroke "v" using command down' -e 'end tell' -e 'end tell'
+echo "Selection Sent to SecondLife"
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@D</string>
+	<key>name</key>
+	<string>Paste Document into SecondLife</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.lsl</string>
+	<key>uuid</key>
+	<string>72E259D0-AD46-46D7-960C-575BCD67080B</string>
+</dict>
+</plist>

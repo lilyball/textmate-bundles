@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
+# redirect "http://www.lslwiki.com/lslwiki/wakka.php?wakka=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}"
+redirect "http://rpgstats.com/wiki/index.php?title=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>LSLWiki Search</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.lsl</string>
+	<key>uuid</key>
+	<string>93FED4D7-C2C2-4C9F-872A-342A6FBC2EF2</string>
+</dict>
+</plist>

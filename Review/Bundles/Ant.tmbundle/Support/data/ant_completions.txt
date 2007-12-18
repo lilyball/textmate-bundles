@@ -28,7 +28,7 @@
 <cvs cvsRoot="${1::pserver:anoncvs@cvs.apache.org:/home/cvspublic}" package="${2:ant}" dest="${3:ws.dir}"/>
 <cvschangelog dir="${1:dev/network}" destfile="${2:changelog.xml}"/>
 <cvspass cvsroot="${1::pserver:anoncvs@cvs.apache.org:/home/cvspublic}" password="${2:anoncvs}"/>
-<cvstagdiff destfile="${1:tagdiff.xml}" package="${2:ant}" startDate="${3:2002-01-01}" endDate="{4:2002-31-01}"/>
+<cvstagdiff destfile="${1:tagdiff.xml}" package="${2:ant}" startDate="${3:2002-01-01}" endDate="${4:2002-31-01}"/>
 <cvsversion cvsRoot="${1::pserver:anoncvs@cvs.apache.org:/home/cvspublic}" passfile="${2:/home/myself/.cvspass}" serverversionproperty="${3:apachecvsversion}" clientversionproperty="${4:localcvsversion}"/>
 <defaultexcludes remove="${1:**/.svn}"/>
 <delete ${1:file="$2" }/>
@@ -100,7 +100,7 @@
 <mimemail messageMimeType="${1:text/html}" messageFile="${2:test.html}" tolist="${3:you}" subject="${4:Email Subject}" from="${5:me}"/>
 <mkdir dir="${1:directory}"/>
 <move file="${1:src/dir}" tofile="${2:new/dir/to/move/to}"/>
-<move todir="${1:some/new/dir}" ${2:includeemptydirs="{3:false}"}>$0</move>
+<move todir="${1:some/new/dir}" ${2:includeemptydirs="${3:false}"}>$0</move>
 <native2ascii dest="${1:srcdir}"/>
 <netrexxc srcDir="${1:/source/project}" destDir="${2:/source/project/build}"/>
 <nice newpriority="${1:10}"/>

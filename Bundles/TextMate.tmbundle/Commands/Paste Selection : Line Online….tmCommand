@@ -155,7 +155,7 @@ def connect_to_server(name, url, *args)
 
   server = $1 if url =~ %r{.*?://(.*?)(/.*)?$}
   TextMate.call_with_progress(:title =&gt; "Paste to #{name}", :message =&gt; "Contacting Host “#{server}”…", :cancel =&gt; lambda { $status = :cancel; Process.kill("INT", -Process.pid) }) do
-    thr = Thread.new { sleep 4.0; $status = :timeout; Process.kill("INT", -Process.pid) rescue nil }
+    thr = Thread.new { sleep 15.0; $status = :timeout; Process.kill("INT", -Process.pid) rescue nil }
 
     oldpgid = Process.getpgid(0)
     Process.setpgid(0, 0)

@@ -5,17 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [[ -f "/etc/apache2/users/$USER.conf" ]]
-
-	then
-	#Apache 2
-	open -a TextMate "/etc/apache2/users/$USER.conf"
-
-elif [[ -f "/private/etc/httpd/users/$USER.conf" ]]
+	<string>if [[ "$TM_APACHE_DIRECTORY" == "" ]]; then
 	
-	then
-	#Apache 1
-	open -a TextMate "/private/etc/httpd/users/$USER.conf"
+	if [[ -d "/etc/apache2" ]]; then
+		TM_APACHE_DIRECTORY="/etc/apache2"
+	else [[ -d "/etc/httpd" ]]; then
+		TM_APACHE_DIRECTORY="/etc/httpd"
+	fi
+
+fi
+
+if [[ -f "$TM_APACHE_DIRECTORY/users/$USER.conf" ]]
 
 else 
 	

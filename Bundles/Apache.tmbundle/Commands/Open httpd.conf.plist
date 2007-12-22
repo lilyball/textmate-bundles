@@ -5,16 +5,23 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#Opens http.conf from its default location in OS X.
-if [[ -f "/etc/apache2/httpd.conf" ]]; then
+	<string>if [[ "$TM_APACHE_DIRECTORY" == "" ]]; then
+	
+	if [[ -d "/etc/apache2" ]]; then
+		TM_APACHE_DIRECTORY="/etc/apache2"
+	else [[ -d "/etc/httpd" ]]; then
+		TM_APACHE_DIRECTORY="/etc/httpd"
+	fi
+fi
 
-	#Apache 2
-	open -a TextMate "/etc/apache2/httpd.conf"
+if [[ -f "$TM_APACHE_DIRECTORY/httpd.conf" ]]; then
+	
+	open -a TextMate "$TM_APACHE_DIRECTORY/httpd.conf"
 
 else
 
-	#Apache 1
-	open -a TextMate "/etc/httpd/httpd.conf"
+	exit_show_tool_tip "http.conf not located."
+
 fi
 
 </string>

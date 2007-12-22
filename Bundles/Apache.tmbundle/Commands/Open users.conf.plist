@@ -1,24 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#To select a specific user from all available.
-"${TM_BUNDLE_SUPPORT}/EditUserConf.sh"
+	<string>#!/usr/bin/env ruby -wKU
 
-#To open all users as a tmproj.
-#open -a TextMate "/private/etc/httpd/users"
+SUPPORT = ENV['TM_SUPPORT_PATH']
+DIALOG = SUPPORT + '/bin/tm_dialog'
 
+require SUPPORT + '/lib/escape'
+require SUPPORT + '/lib/exit_codes'
+require SUPPORT + '/lib/osx/plist'
 
+def find_apache
+    return [ ENV['TM_APACHE_DIRECTORY'].to_s, 
+             "/etc/apache2", 
+             "/private/etc/httpd" ].find { |path| File.directory? path }
+end
+
+#Search the path for any filename ending with .conf
+def search_for_conf path
+    confs = []    
+    search_path = find_apache.to_s + path    
+    Dir.open( search_path ).each do |file|    
+        if file.to_s =~ /\.conf$/
+            menu_item = { 'title' =&gt; File.basename(file), 'path' =&gt; search_path + "/" + file.to_s }
+            confs.push(menu_item)
+        end
+    end if File.exists?( search_path )
+    confs.push( { 'title' =&gt; "-" } ) if !confs.empty?
+    return confs
+end
+
+conf_files = search_for_conf( "" ) +
+             search_for_conf( "/users" ) +
+             search_for_conf( "/extra" ) + 
+             search_for_conf( "/other" )
+
+conf_files.pop()
+
+TextMate.exit_show_tool_tip( "No .conf files found ") if conf_files.empty?
+
+plist = { 'menuItems' =&gt; conf_files }.to_plist
+res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+
+TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
+
+`open -a TextMate #{res['selectedMenuItem']['path']}`
 </string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>
-	<string>Open Config for User…</string>
+	<string>Open Config…</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>source.apache-config</string>
 	<key>uuid</key>

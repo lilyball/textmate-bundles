@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#require_cmd gnatmake 'The GNAT Ada build system is available for free at&lt;a href="http://www.macada.org/macada/Downloads.html"&gt;macada.org&lt;/a&gt;.'
+
+#cd "$TM_DIRECTORY"
+#gnatmake "$TM_FILENAME"
+#if [[ $? == 0 ]]; then
+#  SCRIPT="TM_DIRECTORY=$TM_DIRECTORY"$'\nTM_FILENAME='"$TM_FILENAME"$'\ncd #"$TM_DIRECTORY" &amp;&amp; clear &amp;&amp; "./${TM_FILENAME%.*}" &amp;&amp; exit'
+#  osascript &lt;&lt;APPLESCRIPT
+#    tell app "Terminal"
+#      activate
+#      do script "${SCRIPT//\"/\"}"
+#    end tell
+#APPLESCRIPT
+#fi
+
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Compiling “${TM_FILENAME}”…"
+
+cd "$TM_DIRECTORY"
+gnatmake "$TM_FILENAME" &amp;&gt; &gt;("${TM_RUBY:-ruby}" -rtm_parser -eTextMate.parse_errors)
+if (($? &gt;= 1)); then exit; fi
+
+{ "./${TM_FILENAME%.adb}"
+  echo -e "\nProgram exited with status $?."; }|pre
+
+# # if you want to run the program in Terminal.app
+# osascript &lt;&lt;EOF
+#    tell application "Terminal"
+#       activate
+#       do script "cd '$TM_DIRECTORY'; java '${TM_FILENAME%.java}'"
+#    end tell
+# EOF
+
+html_footer
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Build and Run</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.ada</string>
+	<key>uuid</key>
+	<string>97B21BF7-073D-4070-850C-DD8761B18DBC</string>
+</dict>
+</plist>

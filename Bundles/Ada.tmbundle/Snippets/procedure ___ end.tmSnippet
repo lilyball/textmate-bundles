@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>procedure ${1:Procedure} is
+	$2
+begin -- ${1/([a-zA-Z0-9_]*).*$/$1/}
+	$0
+end ${1/([a-zA-Z0-9_]*).*$/$1/};</string>
+	<key>name</key>
+	<string>procedure ... end</string>
+	<key>scope</key>
+	<string>source.ada</string>
+	<key>tabTrigger</key>
+	<string>pro</string>
+	<key>uuid</key>
+	<string>14543854-D4EC-48E5-8F0B-2663F288DCBE</string>
+</dict>
+</plist>

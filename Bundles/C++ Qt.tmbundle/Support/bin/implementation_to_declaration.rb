@@ -23,14 +23,6 @@ def print_function(tag)
 
   if !tag.result_type.nil?
     r << "#$indent#{tag.result_type}#{tag.name}#{signature_to_implementation_signature(tag.signature)};"
-  # elsif tag.name[0] != ?~
-  #   # Constructor
-  #   parent = tags.class_parent(tag.name) || "Parent"
-  #   r << "#$indent\${1:#{tag.name}::}\${1#{class_regexp}}#{signature_to_implementation_signature(tag.signature)}"
-  #   r << "#$indent\t: \${2:#{parent}(#{signature_to_arguments(tag.signature)})}"
-  # else
-  #   # Destructor
-  #   r << "#$indent\${1:#{tag.name[1..-1]}::}~\${1#{class_regexp}}()"
   end
   return r
 end
@@ -49,12 +41,7 @@ def implementation_to_declaration(tags)
 end
 
 if __FILE__ == $0
-  # Due to the way TextMate passes strings, if it passed
-  # only one string without newline, but thought that it
-  # selected the entire line (Input: Selected Text or Line),
-  # then it will append additonal newline to the end
-  extra_newline = ""
-  input.each { |line| extra_newline = "\n" if line.chomp != line }
-
-  print implementation_to_declaration(CTags.parse_data(input)).join("\n").chomp + extra_newline
+  process_ctags_function(input) do |inp|
+    implementation_to_declaration(inp)
+  end
 end

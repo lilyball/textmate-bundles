@@ -36,3 +36,14 @@ def temp_file(name)
   File.delete(temp)
   return temp
 end
+
+def process_ctags_function(input)
+  # Due to the way TextMate passes strings, if it passed
+  # only one string without newline, but thought that it
+  # selected the entire line (Input: Selected Text or Line),
+  # then it will append additonal newline to the end
+  extra_newline = ""
+  input.each { |line| extra_newline = "\n" if line.chomp != line }
+
+  print yield(CTags.parse_data(input)).join("\n").chomp + extra_newline
+end

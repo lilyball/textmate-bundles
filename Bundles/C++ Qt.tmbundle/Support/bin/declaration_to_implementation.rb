@@ -75,12 +75,7 @@ def declaration_to_implementation(tags)
 end
 
 if __FILE__ == $0
-  # Due to the way TextMate passes strings, if it passed
-  # only one string without newline, but thought that it
-  # selected the entire line (Input: Selected Text or Line),
-  # then it will append additonal newline to the end
-  extra_newline = ""
-  input.each { |line| extra_newline = "\n" if line.chomp != line }
-  
-  print declaration_to_implementation(CTags.parse_data(input)).join("\n").chomp + extra_newline
+  process_ctags_function(input) do |inp|
+    declaration_to_implementation(inp)
+  end
 end

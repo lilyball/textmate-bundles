@@ -25,7 +25,7 @@ class CTags
         self.klass = f(args, "class") || ""
         self.inherits = nil
         self.signature = f(args, "signature") { |s| s.chomp } || ""
-        self.result_type = $1 if pattern =~ /^\/\^\s*(.+)#{Regexp.escape(name)}\s*\(/
+        self.result_type = $1 if pattern =~ /^\/\^\s*(.+?)(#{Regexp.escape(klass)}::)?#{Regexp.escape(name)}\s*\(/
       end
     end
   

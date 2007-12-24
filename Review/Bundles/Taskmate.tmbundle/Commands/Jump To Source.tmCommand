@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/taskmate.rb'
+
+file = ENV['TM_FILEPATH']
+line = ENV['TM_LINE_NUMBER']
+
+begin
+	Taskmate.new.jump_to_sourcefile(file, line)
+rescue NotImplementedError =&gt; e
+	puts e.message
+end
+
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Jump to Source</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>meta.item.taskmate, keyword.control.header.taskmate</string>
+	<key>uuid</key>
+	<string>536A261F-39B3-4C73-AAE0-FED51A47FF13</string>
+</dict>
+</plist>

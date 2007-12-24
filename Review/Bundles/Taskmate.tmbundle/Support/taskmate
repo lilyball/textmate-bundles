@@ -1,0 +1,40 @@
+#!/usr/bin/ruby 
+
+require 'getoptlong'
+require File.dirname(__FILE__) + '/lib/taskmate.rb'
+
+command = $*[0].intern
+
+case command
+when :write_files
+  opts = GetoptLong.new(
+    [ "--dir",  "-d", GetoptLong::REQUIRED_ARGUMENT ]
+  )
+  dir = '.'
+when :toggle_completed
+  opts = GetoptLong.new(
+    [ "--dir",  "-d", GetoptLong::REQUIRED_ARGUMENT ],
+    [ "--file", "-f", GetoptLong::REQUIRED_ARGUMENT ],
+    [ "--line", "-l", GetoptLong::REQUIRED_ARGUMENT ]  
+  )  
+  dir = '.'
+  file = ''
+  line = 0
+end rescue nil
+
+opts.each do |opt, arg|
+  case opt
+  when '--dir' then  dir = arg
+  when '--file' then file = arg
+  when '--line' then line = arg
+  end
+end
+
+mate = Taskmate.new(dir)
+case command
+when :write_files
+  mate.write_files dir
+when :toggle_completed
+  mate.toggle_completed file, line
+  puts File.open(file, "r"){ |f| f.read }
+end

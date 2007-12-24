@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/taskmate.rb'
+
+file = ENV['TM_FILEPATH']
+line = ENV['TM_LINE_NUMBER']
+tag = '@' + ENV['TM_CURRENT_WORD']
+
+begin
+	Taskmate.new.jump_from_tag(file, line, tag)
+rescue NotImplementedError =&gt; e
+	puts e.message
+end
+
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Jump From Tag</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>meta.tag.taskmate</string>
+	<key>uuid</key>
+	<string>6D03DA59-0211-4D1E-A767-99BD08650468</string>
+</dict>
+</plist>

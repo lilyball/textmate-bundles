@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/taskmate.rb'
+
+file = ENV['TM_FILEPATH']
+line = ENV['TM_LINE_NUMBER']
+
+begin
+	mate = Taskmate.new
+	mate.toggle_completed(file, line)
+	# mate = Taskmate.new
+	mate.rebuild_files
+	puts File.open(file, "r"){ |f| f.read }
+rescue NotImplementedError =&gt; e
+	puts e.message +  "\nHit cmd-z to undo this message."
+end
+
+
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>Toggle Completed</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>meta.item.taskmate, meta.tag.taskmate, string.other.tag.taskmate.today</string>
+	<key>uuid</key>
+	<string>4DF94B5D-B952-4110-A1A6-C539D448FEC3</string>
+</dict>
+</plist>

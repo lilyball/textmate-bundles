@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/taskmate.rb'
+
+begin 
+	mate = Taskmate.new
+	filenames = mate.rebuild_files
+	report = filenames.empty? ? 'none' : (filenames.join("\n") || '(none)') 
+	puts "files written: \n\n" + report + "\n\n" + mate.stats
+rescue NotImplementedError =&gt; e
+	puts e.message
+end
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~$</string>
+	<key>name</key>
+	<string>Rebuild Files</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>text.taskmate</string>
+	<key>uuid</key>
+	<string>BB7D4EA7-DD18-4100-AE93-9EA4FC026D03</string>
+</dict>
+</plist>

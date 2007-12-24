@@ -155,7 +155,7 @@ def connect_to_server(name, url, *args)
 
   server = $1 if url =~ %r{.*?://(.*?)(/.*)?$}
   TextMate.call_with_progress(:title =&gt; "Paste to #{name}", :message =&gt; "Contacting Host “#{server}”…", :cancel =&gt; lambda { $status = :cancel; Process.kill("INT", -Process.pid) }) do
-    thr = Thread.new { sleep 15.0; $status = :timeout; Process.kill("INT", -Process.pid) rescue nil }
+    thr = Thread.new { sleep 60.0; $status = :timeout; Process.kill("INT", -Process.pid) rescue nil }
 
     oldpgid = Process.getpgid(0)
     Process.setpgid(0, 0)
@@ -194,9 +194,10 @@ def paste_stdin(priv, wrap)
   gz.close
   html_file.close
 
-  author  = ENV['TM_AUTHOR'] || "#{ENV['TM_FULLNAME']} (#{ENV['USER']})"
-  ext     = find_language_ext
+  author = ENV['TM_AUTHOR'] || "#{ENV['TM_FULLNAME']} (#{ENV['USER']})"
+  ext    = find_language_ext
 
+  start_time   = Time.now
   $status, res = connect_to_server("Pastie", PASTE_URL,
     "-HExpect:",
     "-Fpaste[parser]=plaintext",
@@ -207,6 +208,17 @@ def paste_stdin(priv, wrap)
     "-Fpaste[body]=&lt;#{text_file.path}",
     "-Fpaste[textmate_html_gz]=&lt;#{html_file.path}"
   )
+
+  open(File.expand_path('~/Library/Logs/Pastie.log'), 'a') do |io|
+    amount       = (File.size(text_file.path) + File.size(html_file.path)).to_s.gsub(/\d{1,3}(?=(\d{3})+(?!\d))/, '\0,') + " bytes"
+    time_elapsed = '%.1f seconds' % (Time.now - start_time)
+    io &lt;&lt; start_time.strftime('%F %T %Z: ') &lt;&lt;
+      case $status
+        when :timeout: "Timeout pasting #{amount} after #{time_elapsed}\n"
+        when :cancel:  "User cancelled pasting of #{amount} after #{time_elapsed}\n"
+        else           "Pasted #{amount} in #{time_elapsed}\n"
+      end
+  end
 
   paste_via_rafb = 
   case $status

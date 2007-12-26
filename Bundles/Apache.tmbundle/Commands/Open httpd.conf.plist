@@ -9,7 +9,7 @@
 	
 	if [[ -d "/etc/apache2" ]]; then
 		TM_APACHE_DIRECTORY="/etc/apache2"
-	else [[ -d "/etc/httpd" ]]; then
+	elif [[ -d "/etc/httpd" ]]; then
 		TM_APACHE_DIRECTORY="/etc/httpd"
 	fi
 fi
@@ -30,7 +30,7 @@ fi
 	<key>name</key>
 	<string>Open httpd Config</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.apache-config</string>
 	<key>uuid</key>

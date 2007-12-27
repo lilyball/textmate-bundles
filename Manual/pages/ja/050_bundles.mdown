@@ -1,42 +1,52 @@
 # Bundles
 
-A lot of functionality in TextMate is provided through various bundles, many of which are language specific.
+TextMateのたくさんの機能はさまざまなバンドルを通じて提供されます。多くのものは言語に依存です。
 
-The default bundles are located in `/path/to/TextMate.app/Contents/SharedSupport/Bundles`. Normally you do not need to care about this, as you inspect (and edit) the bundles through the bundle editor (which can be reached through the Window menu).
+デフォルトのバンドルは、`/path/to/TextMate.app/Contents/SharedSupport/Bundles`にあります。普通であればこのことは意識しなくてもいいです。Windowメニューにあるバンドルエディタを通して、バンドルをみたり、（編集したり)するからです。
 
-## Activation of Bundle Items
+## バンドルアイテムの有効化（アクティベーション)
 
-If you select Bundles &#x2192; Bundle Editor &#x2192; Show Bundle Editor you will see the command center for customizing TextMate.
+<!-- TODO: perhaps 実行っていういったほうがいいかなアクティベーションじゃわかりづらい。-->
+
+Bundles &#x2192; Bundle Editor &#x2192; Show Bundle EditorでTextMateをカスタマイズするためのコマンドセンタを表示できます。
+
 
 ![Bundle Editor](bundle_editor.png)
 
-From this window you can create and edit things like snippets, commands, language grammars, etc. which will be explained in more detail in the following sections.
 
-Most items edited in the Bundle Editor represent actions you want to execute while editing text. TextMate offers a few ways to do this and has a simple yet powerful system to understand the current context when evaluating which action the activation method should result in, called [scope selectors][ScopeSelectors], which is explained in a later chapter.
+このウインドウからスニペットやコマンド、言語の文法を作ったり編集したりします。詳しくは、後のセクションで説明します。
+
+Bundle Editorで編集されるほとんどのアイテムはテキストを編集しているときに実行したいアクションを示します。TextMateはそのためにいくつかの方法を提供し、アクティベーションの方法がどのアクションにつながるかを調べる際に、現在のコンテクストを理解する、シンプルですが、パワフルな方法があります。このシステムは、後のチャプタで説明されますが、[スコープセレクタ][ScopeSelectors]とよばれます。
 
 
-### Key Equivalents
+### Key Equivalents　（キーボードショートカット）
 
-The easiest way to perform an action (from the keyboard) is in the form of a key equivalent. A key equivalent can be any key with optional modifiers and is configured by activating the key equivalent field and pressing the key to which the item should be bound.
+キーボードからアクションを実行する一番簡単な方法は、キーボードショートカットです。キーボードショートカットは任意のmodifierと任意のキーからなり、key equivalent フィールドを有効化してアクションと結びつけられるキーを押すことによって設定できます。
 
 ![Key Equivalent](key_equivalent.png)
 
-If you want to disassociate a key equivalent with an item, press the X shown while the key equivalent field is in _recording_ mode.
 
-If multiple items are given the same key equivalent then a menu will appear when that key equivalent is pressed, as shown below (all of the items in the Math bundle are bound to &#x2303;&#x21E7;C so a menu with each key equivalent option is displayed).
+もしキーボードショートカットとアイテムの関係をなくしたいのであれば、key equivalentが`入力`されるmモードのときに、Xを押してください。
+
+もし複数のアイテムに同じキーボードショートカットが付与されていると、そのショートカットが押されたときに、下のようなメニューが現れます。（Mathバンドルのすべてのアイテムが&#x2303;&#x21E7;Cに割り当てられているので、すべての選択肢がメニューといっしょに表示されます。
+
 
 ![Key Equivalent Ambiguity](key_equivalent_ambiguity.png)
 
 
-### Tab Triggers
+### Tab Triggers　（タブトリガー）
 
-As well as assigning a single key equivalent to a bundle item, it is possible to assign a _tab trigger_ to the item. This is a sequence of text that you enter in the document and follow it by pressing the tab key (&#x21E5;). This will remove the sequence entered and then execute the bundle item.
+バンドルアイテムにショートカットを割り当てることができるとともに、アイテムに対してタブトリガーを割り当てられます。これは、タブキー(&#x21E5;)の前に、あなたがドキュメントに入力するテキストです。これは、あなたが入力したテキストを削除し、バンドルアイテムを入力します。
 
-For example the Text bundle has a snippet which inserts the current date conforming to ISO 8601 (YYYY-MM-DD). The tab trigger for this snippet is `isoD` (short for ISO Date). In your document it is thus possible to type `isoD` and press tab to “expand” that to the current date.
+例えば、TextバンドルにはISO 8601 (YYYY-MM-DD)に準拠した現在の日付を入力するスニペットがあります。このスニペットのためのタブトリガーは(ISO Dateの略である)`isoD`です。ドキュメントの中で、`isoD`とタイプし、タブを押すことで、そのテキストを現在の日付に”展開"することができます。
 
 This allows you to create much better mnemonics for your bundle items as you can literally type the thing you want to execute (e.g. the snippet to insert). It is generally a good idea to use actual words instead of abbreviations (like use `list` instead of `lst`) since the purpose is to make it easier to remember, so the tab trigger should generally be the first thing that pops into your mind in the unabbreviated form.
 
+このようにして、あなたが文字通り実行したいものをタイプするように、あなたのバンドルアイテムに覚えやすい言葉を作ることができます。一般的に、この目的は思い出しやすくするためなので、省略語を使うのではなくて、実際の言葉を用いた方がよいです。（例えば`lst`の代わりに`list`を使うように）。よってタブトリガーは省略されていない形、
+
 Tab triggers are rendered in the right side of the menu item with a slightly rounded rectangle as background and the tab character (&#x21E5;) shown as a suffix to the tab trigger.
+
+タブトリガーは、少し丸みを持った四角の背景にタブトリガーの末尾に表示されたタブ文字(&#x21E5;)で
 
 ![Tab Trigger Menu](tab_trigger_menu.png)
 

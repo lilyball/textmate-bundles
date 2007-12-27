@@ -62,19 +62,38 @@ TerminalでいくつかのファイルをUTF-8に変更するには、以下の�
     for f in *.txt; do iconv -f mac -t utf-8 "$f" >"$f.utf8"; done
 
 
-## Extended Attributes (Metadata)
+## Extended Attributes (Metadata)　拡張された属性（メタデータ）
 
-Starting with Tiger, OS X supports [`setxattr`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/setxattr.2.html) and friends.
 
-TextMate makes use of extended attributes to store the carets position, bookmarks, what text is folded and is likely to make further use of extended attributes in the future.
+TigerからOS Xは[`setxattr`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/setxattr.2.html)とその仲間をサポートします。
 
-For filesystems which do not natively support extended attributes (like network mounted disks), OS X instead stores the extra information in a file named `._«filename»`, where `«filename»` is the name of the original file.
+TextMateは拡張された属性をキャレットのポジション、ブックマーク、どのテキストが折り畳まれているかといった情報を保存するために利用し、将来的には更なる活用をするとのなるでしょう。
 
-Since not all users think that this extra (hidden) file is worth having in order for TextMate to remember state, it is possible to disable the use of extended attributes by quitting TextMate and running the following from the shell:
+（ネットワークでマウントされたディスクなどの）拡張された属性ををネイティブでサポートしないファイルシステムのために、OS Xは代わりにその情報を`«filename»`がオリジナルのフォイル名である場合、`._«filename»`というファイルの中に保存します。
+
+すべてのユーザが、TextMateが状態覚えておくために、この特別の（隠された）ファイルが役にたつとは思わないので、この拡張された属性を無効化することができます。TexMateを終了させて、シェルから次のコマンドを実行することで無効化できます。
+
+
 
     defaults write com.macromates.textmate OakDocumentDisableFSMetaData 1
 
 
-## Save Automatically when Focus Is Lost
+## Save Automatically when Focus Is Lost　フォーカスがなくなったときに自動的に保存
 
-If you are working with a project where you test your work by switching to another application (e.g. Terminal or a browser) you can set TextMate to save all modified files, when the focus is lost. That way, when you switch to the other application, TextMate will automatically save all your changes.
+もしあなたが、Terminalやブラウザのようなアプリケーションに切り替えてテストするようなプロジェクトをしているなら、フォーカスをがなくなったときに、修正されたすべてのファイルを保存するようにTextMateを設定することができます。そうして、ほかのアプリケーションに切り替えたとき、TextMateは自動的にすべての変更をを保存します。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

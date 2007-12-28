@@ -1,39 +1,43 @@
-# Preferences Items
+# Preferences Items 設定アイテム
 
-For settings where differing values are useful to have based on a file type or the context of the caret position in a document, the bundle editor allows you to set and specify a scope selector which selects which scope the particular settings should apply.
+ファイルタイプやドキュメントの中のキャレットの位置などに基づいて、さまざまな値を保つことが有益な設定に関しては, 
+バンドルエディタで、どのスコープが適用されるかを選ぶスコープセレクタを指定することができます。
 
-Currently the preferences are specified in the [old-style property list][PropertyListFormat] format.
+現在設定は[古いスタイルのプロパティーリスト][PropertyListFormat]フォーマットで指定されています。
 
 ![Preferences Editor](preferences_editor.png)
 
-## Completions
+## Completions　補完
 
- * `completions` — an array of additional candidates when cycling through completion candidates from the current document.
- * `completionCommand` — a shell command (string) which should return a list of candidates to complete the current word (obtained via the `TM_CURRENT_WORD` variable).
- * `disableDefaultCompletion` — set to `1` if you want to exclude matches from the current document when asking for completion candidates (useful when you provide your own completion command).
-
+ * `completions` — 現在のドキュメントから補完の候補を順番に表示するときのための追加候補の配列
+ * `completionCommand` — (`TM_CURRENT_WORD`変数から得られる)現在の単語を補完するための候補のリストを返すシェルコマンド（文字列）
+ * `disableDefaultCompletion` — 補完候補が求められたとき、もし現在のドキュメントからマッチを除外したいなら、`1`をセットしてください。（あなたが自分の補完コマンドを使うときに役にたちます。）
+ 
 For more info see section on [completions][Completions].
 
-## Indentation
+より詳しい情報は[補完][Completions]のセクションをみてください。
 
- * `decreaseIndentPattern` — regular expression.
- * `increaseIndentPattern` — regular expression.
- * `indentNextLinePattern` — regular expression.
- * `unIndentedLinePattern` — regular expression.
 
-For more information see [indentation rules][IndentRules].
+## Indentation　インデント
 
-## Symbol List
+ * `decreaseIndentPattern` — 正規表現.
+ * `increaseIndentPattern` — 正規表現
+ * `indentNextLinePattern` — 正規表現
+ * `unIndentedLinePattern` — 正規表現
 
- * `showInSymbolList` — set to `1` to include in the symbol list.
- * `symbolTransformation` — a “program” consisting of one or more `s/«regexp»/«format»/«options»;` transformations which will be applied to the extracted “symbol”.
+より詳しい情報は[インデントルール][IndentRules]を見てください。
 
-For more information see [customizing the symbol list][CustomizeSymbolList].
+## Symbol List　シンボルリスト
 
-## Paired Characters
+ * `showInSymbolList` — シンボルリストに含むためには`1`をセットしてください。
+ * `symbolTransformation` — 引き出された"symbol"に対して適用される 一つ以上の`s/«regexp»/«format»/«options»;`という変形からなる"プログラム"。
+ 
+詳しくは[シンボルリストのカスタマイズ][CustomizeSymbolList]を見てください。
 
- * `highlightPairs` — an array of arrays, each containing a pair of characters where, when the caret moves over the second, the first one will be highlighted for a short moment, if found.
- * `smartTypingPairs` — an array of arrays, each containing a pair of characters where when the first is typed, the second will be inserted. An example is shown below. For more information see [auto-paired characters][AutoPairs].
+## Paired Characters　ペアになる文字
+
+ * `highlightPairs` — もし見つかれば、キャレットが二つ目を超えたとき、一つ目が短い間強調して表示される場合の、それぞれが文字のペアを持っている配列の配列。
+ * `smartTypingPairs` —  一つ目がタイプされたときに、二つ目が挿入される場合の、それぞれが文字のペアを持っている配列の配列。 例えば、以下のようなものがあります。[自動でペアになる文字][AutoPairs]を見てください。
 
     	smartTypingPairs = (
     		( '"', '"' ),
@@ -46,8 +50,8 @@ For more information see [customizing the symbol list][CustomizeSymbolList].
     	);
 
 
-## Other
+## Other その他
 
- * `shellVariables` — an array of key/value pairs. See [context dependent variables][ScopedEnvVariables].
- * `spellChecking` — set to `0`/`1` to disable/enable spell checking.
+ * `shellVariables` — キー／値のペアの配列 [コンテクスト依存変数][ScopedEnvVariables]をみてください。
+ * `spellChecking` — スペルチェックを無効化／有効化するには、`0`/`1`をセットしてください。
 

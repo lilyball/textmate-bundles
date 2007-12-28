@@ -13,10 +13,10 @@ RESPONSE=`exec osascript &lt;&lt;EOF | tr "\r" "\n"
  	
  	--To skip password vaildation then change this... not for the security conscious.
  	--do shell script "apachectl graceful" password "the_password" with administrator privileges
- 	
+
 EOF`
  
-echo $RESPONSE
+echo "$RESPONSE"
 
 # Otherwise, to store your password in the Keychain check this script in the Bundle Support folder.
 #
@@ -27,6 +27,8 @@ echo $RESPONSE
 #"$TM_BUNDLE_SUPPORT/lib/apachectlUsingKeychain.sh" graceful</string>
 	<key>input</key>
 	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
 	<key>name</key>
 	<string>graceful</string>
 	<key>output</key>

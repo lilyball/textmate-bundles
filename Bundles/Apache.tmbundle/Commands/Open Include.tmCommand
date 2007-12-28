@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/apache_mate'
+
+include = STDIN.read.strip
+
+TextMate.exit_show_tool_tip( "Include line not recognised." ) if include.empty?
+
+include_path = include.sub( "Include ", "" ).sub( "*.conf", "" )
+
+unless include_path =~ /^\//
+	include_path = findServerRoot + "/" + include_path
+end
+	
+if File.exist?(include_path)
+   `open -a TextMate "#{include_path}"`
+else
+    TextMate.exit_show_tool_tip( "Include file could not be located." )
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@D</string>
+	<key>name</key>
+	<string>Open Include</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.include.apache-config</string>
+	<key>uuid</key>
+	<string>19821FE1-709A-4B9D-B51C-68DBF8C2A93F</string>
+</dict>
+</plist>

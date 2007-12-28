@@ -1,62 +1,63 @@
-# Scope Selectors
+# スコープセレクタ
 
-A _scope selector_ is a pattern much like a CSS selector which is matched against the scope of the caret (i.e. current context) and the outcome is either a match or a non-match (see also: ranking matches further down).
+_スコープセレクタ_はキャレット（つまり現在のコンテクスト）のスコープに対してマッチして、マッチするかしないかを結果として持つ、CSSセレクタにとても似ています。（この最下にあるマッチのランク付けというところも見てください。）
 
 ![Scope Selector](scope_selector.png)
 
-This allows the [activation method][ActivatingBundleItems] of a bundle item to be limited to contexts like “inside a comment” or “in an HTML document”. The advantage of this is that it allows a tab trigger like `for` to be re-used in different languages and works smoothly for mixed documents like HTML which can have embedded CSS, PHP, Ruby and JavaScript.
+バンドルアイテムの[アクティベーションの方法][ActivatingBundleItems]が"コメントの中"とか"HTML文書の中"といったようなコンテクストに限られることを可能にします。この利点は、`for`のようなタブトリガーがいろいろな言語で利用可能になり、HTMLような、CSS, PHP, RubyやJavaScriptが混在したドキュメントでスムーズに動作します。
 
-Scope selectors are also used with [preference items][PreferencesItems] and [themes][Themes]. In the latter case they are used to style elements of a document and in the former case to adjust various aspects of editing etc. on a granular basis.
+スコープセレクタは[設定アイテム][PreferencesItems]と[テーマ][Themes]と一緒に使われます。テーマでは、ドキュメントの要素にスタイルを加えます。設定アイテムでは編集のなどさまざまな側面を粒子単位で調整できます。
 
 
-## Element Names
+## 要素名
 
-Generally a document consists of many different elements. A prose document may contain headings, paragraphs, bullet lists, emphasized text where source code will often contain strings, comments, keywords, storage types etc.
+一般的に、一つのドキュメントはたくさんの要素からなります。散文のドキュメントであれば、見出し、パラグラフ、箇条書きのリスト、強調テキストがあります。一方、ソースコードは文字列、コメント、キーワード、保存タイプなどがあります。
 
-In TextMate the [language grammars][LanguageGrammars] will match these elements and assign a name to each. This name should be dot separated with each additional part specializing the kind of element matched. For example a double-quoted string in C will get `string.quoted.double.c` assigned as its scope name (see [naming conventions][NamingConventions] for more info).
+TexMateには、[ランゲージグラマー][LanguageGrammars]がこの要素とマッチして、それぞれに名前を割り当てます。この名前はドットによって区別され、それぞれに追加されたものがマッチした要素の種類に特化します。例えば、Cの二重引用符文字列は`string.quoted.double.c`がスコープ名として付与されます。（詳しくは[命名規約][NamingConventions]を見てください。）
 
-A scope selector in its simplest form is an element name to match, but it only needs to specify a prefix of the actual element name. So if we specify `string` as our scope selector it will also match all quoted strings. Likewise if we specify `string.quoted` it will match single, double and triple quoted strings.
+最もシンプルな形のスコープセレクタはマッチする要素名です。しかし、実際の要素名の接頭辞のみを指定する必要があるだけです。よって、スコープセレクタとして、`string`と指定すると、すべての引用の文字列にマッチします。同じように、`string.quoted`と指定すると、一重引用符文字列にも二重引用符文字列にも三重引用符文字列にもマッチします。
 
-An empty scope selector will match all scopes but with the lowest possible rank (see [ranking matches][RankingMatches] later).
+空のスコープセレクタはすべてのスコープにマッチしますが、一番低いランクになります。（後述の[マッチのランク付け][RankingMatches]を見てください。)
 
-## Descendant Selectors
+## 子孫セレクタ
 
-As with CSS, it is possible to use the context of an element in the scope selector. The picture below shows the scope for the string as a tool tip (via &#x2303;&#x21E7;P). The direct parent of the string is `source.php.embedded.html` and  `text.html.basic` is an ancestor.
+CSSのように、スコープセレクタで要素のコンテクストを使うことが可能です。下の画像は、（&#x2303;&#x21E7;P経由で）ツールチップとして、文字列のスコープを示しています。文字列の直接の親は`source.php.embedded.html`であり、`text.html.basic`は祖先になります。
+
 
 ![Show Scope](show_scope.png)
 
-In the scope selector we specify element names as a space separated list to indicate that each element should be present in the scope (and in the same order). So if we want to target all strings in PHP, we can use `source.php string`, or we can use `text.html source.php` to target PHP embedded in HTML.
+スコープセレクタでは、スペースで区切られたリストで要素名を指定することで、スコープの中で（それと同じ順番で、）それぞれの要素が現れていなければいけないということを指示できます。PHPのすべての文字列をターゲットにしたいなら、`source.php string`を使うことができます。あるいは、HTMLに埋め込まれたPHPをターゲットにするためには、`text.html source.php`を使うことができます。
 
-## Excluding Elements
+## 要素を除外する
 
-There are situations where we want to match a subset of a document but exclude particular subsets of this subset.
+ドキュメントのサブセットにマッチさせたいが、そのセットの個別のサブセットを除外したいときもあります。
 
-For example in Ruby it is possible to embed code in strings using `#{…}`, so a nice snippet would be to insert that when pressing `#` inside of a string. The scope selector for that would be: `source.ruby string`.
+例えば、Rubyでは、`#{…}`を使って文字列の中にコードを埋め込むことができます。文字列の中で`#`が押されたときに挿入されるスニペットは役に立つでしょう。そのためのスコープセレクタは`source.ruby string`です。
 
-This unfortunately means that even inside code (embedded in strings) `#` will insert `#{…}`. To avoid this, we can subtract scope selectors to get the (asymmetric) difference using the minus operator. So a better scope selector for our snippet would be `source.ruby string - string source`.
+しかし残念なことに、（文字列に埋め込まれた）コードの中でさえ`#`が押されると`#{…}`が挿入されてしまいます。これをさけるためには、マイナス演算子を使って（非対称の）違いを得るためにスコープセレクタを差し引く必要があります。なので、よりよいスコープセレクタは`source.ruby string - string source`になります。
 
-Below is an illustration of what that scope selector would target.
+以下はそのスコープセレクタが何をターゲットにするかを説明しています。
+
 
     puts "Today is #{Date.today}."
          ^^^^^^^^^^             ^^
 
-## Grouping
+## グルーピング
 
-When we want something to match several distinct scopes, we can group scope selectors with the comma operator. For example to match both strings and comments the scope selector would be: `string, comment`.
+それぞれ別のスコープをマッチングしたものが必要であれば、コンマ演算子を使って、スコープセレクタをグループ化できます。例えば、文字列とコメントの虜法にマッチさせるには、スコープセレクタは`string, comment`になります。
 
-## Ranking Matches
+## マッチのランク付け
 
-If more than one scope selector matches the current scope then they are ranked according to how “good” a match they each are.
+もし一つ以上のスコープセレクタが現在のスコープにマッチすると、それぞれのマッチがどれだけ"よい"かに従ってランク付けされます。
 
-The winner is the scope selector which (in order of precedence):
+勝者になるスコープセレクタは以下の順番で決まります（優先順位が高い順です。）:
 
- 1. Match the element deepest down in the scope e.g. `string` wins over `source.php` when the scope is `source.php string.quoted`.
+ 1. スコープの一番深い要素　例えば、スコープが`source.php string.quoted`の時、`string`は`source.php`に勝ちます。
 
- 2. Match most of the deepest element e.g. `string.quoted` wins over `string`.
+ 2. 一番深い要素のなるべく多くにマッチする　例えば`string.quoted`は`string`に勝ちます。
 
- 3. Rules 1 and 2 applied again to the scope selector when removing the deepest element (in the case of a tie), e.g. `text source string` wins over `source string`.
+ 3. （引き分けのとき）一番深い要素を省いて、ルール１と２がサイドスコープセレクタに適用されてます　例えば`text source string`は`source string`に勝ちます。
 
-In the case of tab triggers, key equivalents and dropped files ([drag commands][DragCommands]), a menu is presented for the best matches when these are identical in rank (which would mean the scope selector in that case was identical).
+タブトリガー、キーボードショートカットとドロップされたファイル([ドラッグコマンド][DragCommands])の場合、もしランク上で同一のものは、（それは、つまりスコープセレクタが全く同じ場合、）一番よいマッチのためにメニューが表示されます。
 
-For themes and preference items, the winner is undefined when multiple items use the same scope selector, though this is on a per-property basis. So for example if one theme item sets the background to blue for `string.quoted` and another theme item sets the foreground to white, again for `string.quoted`, the result would be that the foreground was taken from the latter item and background from the former.
-
+テーマと設定アイテムに関して、プロパティー毎が基準になりますが、もし複数のアイテムが同じスコープセレクタを使うと、勝者は決められません。例えば、あるテーマアイテムが`string.quoted`の背景を青にセットして、他のテーマアイテムが`string.quoted`の前面を白に設定すると、結果としては、前面は後者から選択されで、背景は前者から選択されます。

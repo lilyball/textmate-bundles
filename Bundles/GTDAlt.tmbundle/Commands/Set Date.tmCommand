@@ -21,22 +21,22 @@ else
   absoluteYear, absoluteMonth, absoluteDay = date.year, date.month, date.day
   weekdayDay = date.wday
 end
-  tod = Date.today
+tod = Date.today
 def to_cocoa_date(date)
   ((date - Date.new(2001, 1, 1)+1)* 3600 * 24).to_i
 end
 def from_cocoa_date(number)
   Date.new(2001,1,1)+number.to_i/(3600 * 24) - 1
 end
-def format(date)
+def myformat(date)
   date.strftime("%A, %m/%d/%Y")
 end
 plist = { 
-  'currentDeadline' =&gt; "Current value: " + format(date),
+  'currentDeadline' =&gt; "Current value: " + myformat(date),
   'daysFromToday' =&gt; "Current value: " + (date - tod).to_s,
   'newDeadlineDate' =&gt; to_cocoa_date(date),
   'newDaysFromToday' =&gt; (date - tod).to_i,
-  'today' =&gt; "Today is " + format(tod)
+  'today' =&gt; "Today is " + myformat(tod)
 }.to_plist
 str = `#{e_sh dialog} datePicker -mp #{e_sh plist}`
 res=OSX::PropertyList.load(str)

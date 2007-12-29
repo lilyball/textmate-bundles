@@ -1,53 +1,55 @@
-# Regular Expressions
+# 正規表現
 
-## Introduction
+## イントロダクション
 
-A regular expression is a domain specific language for matching text. Naively we could write a small program to match text, but this is error-prone, tedious and not very portable or flexible.
+正規表現は、テキストのマッチのための領域固有言語です。テキストのマッチのために小さなプログラムをゼロから作ることもできますが、間違いを起こしやすいですし、面倒くさいですし、あまりポータブルでもフレキシブルでもありません。
 
-Instead we use regular expressions which describe the match as a string which (in a simple case) consists of the character types to match and quantifiers for how many times we want to have the character type matched.
+代わりにマッチを（シンプルなケースでは）マッチする文字タイプとどれだけの文字をマッチさせたいかを決める数量詞を文字列として表現する正規表現を使います。
 
-For example normal letters and digits match literally. Something like `\w` will match word characters, where `\s` will match whitespace characters (space, tab, newline, etc.). The period (`.`) will match any character (except newline).
+例えば、普通の文字と数字は文字通りマッチします。`\w`は単語の文字にマッチし、`\s`は（スペース、タブ、改行など）の空白文字にマッチします。ピリオド（`.`）は（改行をのぞいて）あらゆる文字にマッチします。
 
-The basic quantifiers are the asterisk (`*`) to specify that the match should happen zero or more times, plus (`+`) for one or more times, or a range can be given as `{min,max}`.
+基本的な数量詞は、マッチがゼロ回かそれ以上あるアスタリスク(`*`)、１回かそれ以上nマッチするプラス(`+`)、`{min,max}`という形で表される範囲です。
 
-This alone gives us capabilities like finding words (`\w+`) or finding an image tag with an `alt` argument (`<img.*alt=".*">`).
+これだけで、語を探す(`\w+`)機能や画像タグの中の`alt`属性(`<img.*alt=".*">`)を探す機能が手に入ります。
 
-Matching longer text sequences is one thing, but often we are interested in the subset of the match. For example, in the above example we may want to replace the `alt` argument text. If we enclose part of the regular expression with parentheses, we _capture_ that part in a variable that can be used in the replacement string. The format of the replacement string is described at the end of this section, but to refer to the first capture, we use `$1`, `$2` for the second etc.
+もっと長いテキストのマッチも必要ですが、マッチの部分集合（subset)が必要だと感じることも多いと思います。例えば、上記の例では、もし`alt`属性のテキストを置換したいとします。もし、括弧を使って、正規表現を囲むと、置換のための文字列のなかで使われうる変数を _捕まえる（キャプチャ）_ ことができます。置換のための文字列のフォーマットはこのセクションの最後で説明しますが、初めに捕まえたもの（キャプチャ）には、`$1`、２番目は`$2`を使います。
 
-So to change the `alt` argument text we could search for `(<img.*alt=").*(">)` and replace that with `$1Text Intentionally Removed$2`.
+なので、`alt`属性のテキストを変えるためには、`(<img.*alt=").*(">)`を検索して、それを`$1Text Intentionally Removed$2`に置換できます。
 
 
-_Note that in the examples above `.*` is used. The asterisk operator is however greedy, meaning that it will match as many characters as possible (which still allow a match to occur), so often we want to change it to non-greedy by adding `?`, making it `.*?`._
+_上記の例では`.*`が使われています。しかしながら、アスタリスク演算子はどん欲(greedy)です。つまり、（マッチする限り）できるだけたくさんの文字にマッチします。なので、どん欲ではなくしたい場合は`?`を加えて`.*?`にします。_
 
-### External Resources
+
+### 外部リソース
 
 * [Regular-Expressions.info](http://www.regular-expressions.info/)
-* A.M. Kuchling’s [Regular Expression HOWTO](http://www.amk.ca/python/howto/regex/)
-* Steve Mansour’s [A Tao of Regular Expressions](http://linuxreviews.org/beginner/tao_of_regular_expressions/)
-* Jeffrey Friedl’s [Mastering Regular Expressions](http://www.oreilly.com/catalog/regex2/) (book)
+* A.M. Kuchlingの [Regular Expression HOWTO](http://www.amk.ca/python/howto/regex/)
+* Steve Mansourの [A Tao of Regular Expressions](http://linuxreviews.org/beginner/tao_of_regular_expressions/)
+* Jeffrey Friedlの [Mastering Regular Expressions](http://www.oreilly.com/catalog/regex2/) (書籍)
 
 
-## Regular Expressions in TextMate
+## TextMateでの正規表現
 
-Here is a list of places where TextMate makes use of regular expressions:
+これはTextMateが正規表現を活用できる機会のリストです:
 
- * Filtering which files should be shown in folder references (added to projects) is done by providing regular expressions.
- * Find and Find in Project both allow regular expression replacements.
- * Folding markers are found via regular expressions.
- * Indentation calculations are based on regular expression matches.
- * Language grammars are basically a tree (with cycles) that have regular expressions in each node.
- * Snippets allow regular expression replacements to be applied to variables and (in realtime) mirrored placeholders.
- 
-So needless to say, these play a big role in TextMate. While you can live a happy life without knowing about them, it is strongly recommended that you do pick up a book, tutorial or similar to get better acquainted with these (if you are not already).
+ * （プロジェクトに加えられた）フォルダレファランスで表示されるファイルを正規表現を使うことによってフィルタリングする。
+ * 検索とプロジェクト内の検索は正規表現を代わりに使うことができます。
+ * 正規表現を使ってフォールディング（たたむ）マーカを
+ 見つける
+ * 正規表現のマッチに基づいて、インデントを計算する。
+ * ランゲージグラマーは基本的には、それぞれのモードで、正規表現をもつ（サイクルつきの）木構造です。
+ * スニペットでは正規表現を変数に適用できたり、（リアルタイムに）ミラーリングされたプレースホルダに適用できます。
 
-In addition to TextMate, many common shell commands support regular expressions (`sed`, `grep`, `awk`, `find`) and popular scripting languages like Perl and Ruby have regular expressions ingrained deep into the language.
+よって、言うまでもなく正規表現はTextMateでは重要な役割をします。知らなくても幸せな生活を送ることができますが、（もしまだ詳しくないなら）本やチュートリアルなどを使って、正規表現により詳しくなることを強く推奨します。
+
+TextMateだけではなく、(`sed`, `grep`, `awk`, `find`などの)多くのシェルコマンドでは正規表現をサポートします。PerlやRubyのような有名なスクリプト言語には、言語の深いレベルで正規表現をサポートしています。
 
 
-## Syntax (Oniguruma)
+## シンタックス (鬼車)
 
-TextMate uses the Oniguruma regular expression library by K. Kosako.
+TextMateではK. Kosakoさんによる鬼車正規表現ライブラリを使います。
 
-The following is taken from <http://www.geocities.jp/kosako3/oniguruma/doc/RE.txt>.
+以下は<http://www.geocities.jp/kosako3/oniguruma/doc/RE.txt>からの引用です。
 
     Oniguruma Regular Expressions Version 3.6.0    2005/02/01
 
@@ -436,47 +438,68 @@ The following is taken from <http://www.geocities.jp/kosako3/oniguruma/doc/RE.tx
     // END
 
 
-## Replacement String Syntax (Format Strings)
-
-When you perform a regular expression replace, the replace string is interpreted as a format string which can reference captures, perform case foldings, do conditional insertions (based on capture registers) and support a minimal amount of escape sequences.
-
-### Captures
-
-To reference a capture, use `$n` where `n` is the capture register number. Using `$0` means the entire match.
-
-Example:
-
-       Find: <img src="(.*?)">
-    Replace: <img src="$1" alt="$1">
-
-### Case Foldings
-
-It is possible to convert the next character to upper or lowercase by prepending it with `\u` or `\l`. This is mainly useful when the next character stems from a capture register. Example:
-
-       Find: (<a.*?>)(.*?)(</a>)
-    Replace: $1\u$2$3
-
-You can also convert a longer sequence to upper or lowercase by using `\U` or `\L` and then `\E` to disable the case folding again. Example:
-
-       Find: (<a.*?>)(.*?)(</a>)
-    Replace: $1\U$2\E$3
-
-### Conditional Insertions
-
-There are times where the replacements depends on whether or not something was matched. This can be done using `(?«n»:«insertion»)` to insert `«insertion»` if capture `«n»` was matched. You can also use `(?«n»:«insertion»:«otherwise»)` to have `«otherwise»` inserted when capture `«n»` was not matched.
-
-To make a capture conditional either place it in an alternation, e.g. `foo|(bar)|fud` or append a question mark to it: `(bar)?`. Note that `(.*)` will result in a match, even when zero characters are matched, so use `(.+)?` instead.
-
-So for example if we wish to truncate text to eight words and insert ellipsis only if there were more than eight words, we can use:
-
-       Find: (\w+(?:\W+\w+){,7})\W*(.+)?
-    Replace: $1(?2:…)
-
-Here we first match a word (`\w+`) followed by up to seven words (`(?:\W+\w+){,7}`) each preceded by non-word characters (spacing). Then optionally put anything following that (separated by non-word characters) into capture register 2 (`(.+)?`).
-
-The replacement first inserts the (up to) eight words matched (`$1`) and then only if capture 2 matched something, ellipsis (`(?2:…)`).
+## 置換文字列シンタックス（フォーマット文字列）
 
 
-### Escape Codes
+正規表現の置換を使うとき、置換のための文字列は、キャプチャを参照したり、ケースフォールディングを実行したり、（キャプチャのレジスタに基づいて）条件付きの挿入をしたり、最小限のエスケープ文字列をサポートするフォーマット文字列として解釈されます。
 
-In addition to the case folding escape codes, you can insert a newline character with `\n`, a tab character with `\t` and a dollar sign with `\$`.
+### キャプチャ
+
+キャプチャを参照するには、`$n`を使ってください（`n`はキャプチャレジスタの番号です）。`$0`はマッチ全体を意味します。
+
+用例:
+
+       検索: <img src="(.*?)">
+    置換: <img src="$1" alt="$1">
+
+### コードフォールディング
+
+`\u`か`\l`を先頭に追加することによってその次文字を大文字に変えたり、小文字に変えたりすることができます。これは、主に、その次の文字がキャプチャレジスタに由来するときに便利です。用例:
+
+
+       検索: (<a.*?>)(.*?)(</a>)
+    置換: $1\u$2$3
+
+より長い文字列を`\U`や`\L`を使って大文字や小文字に変換できます。`E`を使って、コードフォールディングを無効にできます。用例:
+
+       検索: (<a.*?>)(.*?)(</a>)
+    置換: $1\U$2\E$3
+
+### 条件付きの挿入
+
+置換が何かがマッチしたかどうかによることがあります。これは、キャプチャ`«n»`がマッチしたら、`«insertion»`を挿入するために、`(?«n»:«insertion»)`を使えばできます。キャプチャ`«n»`がマッチしなかったら、`«otherwise»`を挿入するために`(?«n»:«insertion»:«otherwise»)`を使うこともできます。
+
+キャプチャを条件付きにするには、`foo|(bar)|fud`のように変形の中に置いてください。もしくは、`(bar)?`のようにクエスチョンマークを加えることができます。`(.*)`ゼロ個の文字でもマッチしてしまうので、代わりに`(.+)?`を使ってください。
+
+例えば、もし文字五文字以上の時に、８文字に切り詰めて、省略記号を挿入したい時には、、以下のようにします:
+
+       検索: (\w+(?:\W+\w+){,7})\W*(.+)?
+       置換: $1(?2:…)
+
+ここではまず、それぞれの語が語ではない文字（スペースに）先行された、７つの語(`(?:\W+\w+){,7}`)が後にくる(`\w+`)にマッチさせます。その後、、任意で、キャプチャレジスタ２(`(.+)?`)へ（語ではない文字によって区切られた）それに続くものは何でも書き入れます。
+
+置換はまず、マッチした８文字まで(`$1`)を挿入します。それからもしキャプチャ２が何かにしたら、省略記号(`(?2:…)`)を挿入します。
+
+### エスケープコード
+
+ケースフォールディングのエスケープコードに加えて、`\n`で改行文字を、`\t`でタブ文字を、`\$`でドル文字を挿入できます。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

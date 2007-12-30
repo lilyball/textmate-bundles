@@ -85,7 +85,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])</string>
+			<string>\b(complements|extends|i(nstantiates|mp(orts|lements))|specializes)(?=[(])</string>
 			<key>name</key>
 			<string>storage.type.relations.logtalk</string>
 		</dict>
@@ -283,7 +283,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b((object|protocol|category)_property|extends_(object|protocol)|imp(orts_category|lements_protocol)|(instantiat|specializ)es_class)(?=[(])</string>
+			<string>\b((object|protocol|category)_property|complements_object|extends_(object|protocol|category)|imp(orts_category|lements_protocol)|(instantiat|specializ)es_class)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.reflection.logtalk</string>
 		</dict>

@@ -1,0 +1,130 @@
+
+         HTML::Template - a Perl module to use HTML Templates
+
+CHANGES
+
+2.9
+   - New Feature: the new force_untaint option makes sure you do not
+     pass tainted values to param(). [Sven Neuhaus]
+
+   - New Feature: Added ESCAPE=NONE as a synonym for ESCAPE=0.  Fixed 
+     both to work with default_escape. [cpan@punch.net]
+
+   - Bug Fix: DEFAULT didn't work with URL and JS escaping. 
+
+   - Bug Fix: Long-standing bug where variables set in a loop weren't
+     available inside inner loops under global_vars if the variable
+     wasn't actually used in the outer loop.  (Thanks to Richard Fein
+     for help debugging the fix.)
+
+   - Doc Fix: Changed references to CVS in the docs to Subversion now that
+     the switch is complete.
+
+   - Test Fix: At long last, the work from the Phalanx project has
+     been merged!  The tests are now more complete and easier to work
+     on.  Thanks Phalanx guys!
+
+DESCRIPTION
+
+This module attempts make using HTML templates simple and natural.  It
+extends standard HTML with a few new HTML-esque tags - <TMPL_VAR>,
+<TMPL_LOOP>, <TMPL_INCLUDE>, <TMPL_IF> and <TMPL_ELSE>.  The file
+written with HTML and these new tags is called a template.  It is
+usually saved separate from your script - possibly even created by
+someone else!  Using this module you fill in the values for the
+variables, loops and branches declared in the template.  This allows
+you to seperate design - the HTML - from the data, which you generate
+in the Perl script.
+
+A Japanese translation of the documentation is available at:
+
+   http://member.nifty.ne.jp/hippo2000/perltips/html/template.htm
+
+MOTIVATION
+
+It is true that there are a number of packages out there to do HTML
+templates.  On the one hand you have things like HTML::Embperl which
+allows you freely mix Perl with HTML.  On the other hand lie
+home-grown variable substitution solutions.  Hopefully the module can
+find a place between the two.
+
+One advantage of this module over a full HTML::Embperl-esque solution
+is that it enforces an important divide - design and programming.  By
+limiting the programmer to just using simple variables and loops in
+the HTML, the template remains accessible to designers and other
+non-perl people.  The use of HTML-esque syntax goes further to make
+the format understandable to others.  In the future this similarity
+could be used to extend existing HTML editors/analyzers to support
+this syntax.
+
+An advantage of this module over home-grown tag-replacement schemes is
+the support for loops.  In my work I am often called on to produce
+tables of data in html.  Producing them using simplistic HTML
+templates results in CGIs containing lots of HTML since the HTML
+itself could not represent loops.  The introduction of loop statements
+in the HTML simplifies this situation considerably.  The designer can
+layout a single row and the programmer can fill it in as many times as
+necessary - all they must agree on is the parameter names.
+
+For all that, I think the best thing about this module is that it does
+just one thing and it does it quickly and carefully.  It doesn't try
+to replace Perl and HTML, it just augments them to interact a little
+better.  And it's pretty fast.
+
+
+DOCUMENTATION
+
+The documentation is in Template.pm in the form of POD format
+perldocs.  Even the above text might be out of date, so be sure to
+check the perldocs for the straight truth!
+
+
+INSTALLATION
+
+In case this is your first module, the usual methods are:
+
+        perl Makefile.PL
+        make
+        make test
+        make install
+
+If you plan to use the shared memory cache you might want to test it
+before you install.  Make sure you have an up-to-date copy of
+IPC::SharedCache installed (available from the same place you got
+HTML::Template, either CPAN or SourceForge) and then do:
+
+       TEST_SHARED_MEMORY=1 make test
+
+CONTACT INFO
+
+This module was written by Sam Tregar (sam@tregar.com) for Vanguard
+Media (http://www.vm.com).  You can join the HTML::Template
+mailing-list by sending a blank message to
+htmltmpl-subscribe@lists.vm.com.
+
+LICENSE
+
+HTML::Template : A module for using HTML Templates with Perl
+Copyright (C) 2000 Sam Tregar (sam@tregar.com)
+
+This module is free software; you can redistribute it and/or modify it
+under the terms of either:
+
+a) the GNU General Public License as published by the Free Software
+Foundation; either version 1, or (at your option) any later version,
+or
+
+b) the "Artistic License" which comes with this module.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either
+the GNU General Public License or the Artistic License for more details.
+
+You should have received a copy of the Artistic License with this
+module, in the file ARTISTIC.  If not, I'll be glad to provide one.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+USA

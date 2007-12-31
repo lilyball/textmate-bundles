@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>WPP Hotel Directory Vistor Comments: <TMPL_VAR PROPNAME></TITLE>
+
+
+<SCRIPT LANGUAGE = "JavaScript">
+
+
+<!--
+
+// Browser detect 
+
+
+
+        bName = navigator.appName;
+
+        bVer = parseInt(navigator.appVersion.charAt(0));
+
+        
+
+        if ((bName == "Netscape" && bVer >= 3) || (bName == "Microsoft Internet         Explorer" && bVer >= 4)) br = "n3"; 
+
+        else if(bName == "Netscape" && bVer >= 2) br = "n2";
+
+        else if(bName == "Microsoft Internet Explorer" &&       navigator.appVersion.indexOf('3.')!=-1) br = "ie3";
+
+        else br = "n0"
+
+
+	    if (document.images) {
+	
+	    img1on = new Image();          
+	    img1on.src = "/images/hotel/nav_wpp_2.gif";			// Active Inside wpp
+	    img1off = new Image();         
+	    img1off.src = "/images/hotel/nav_wpp_1.gif";			// Inactive inside wpp
+	
+	    img2on = new Image();          
+	    img2on.src = "/images/hotel/nav_newsearch_2.gif";		// Active new search
+	    img2off = new Image();         
+	    img2off.src = "/images/hotel/nav_newsearch_1.gif";		// Inactive new search
+	
+	    img3on = new Image(); 
+	    img3on.src = "/images/hotel/nav_list_2.gif";			// Active return to hotel list
+	    img3off = new Image(); 
+	    img3off.src = "/images/hotel/nav_list_1.gif";			// Inactive return to hotel list
+	
+	    img4on = new Image(); 
+	    img4on.src = "/images/hotel/hotel_door_info_2.gif";	// Active return to hotel info
+	    img4off = new Image(); 
+	    img4off.src = "/images/hotel/hotel_door_info_1.gif";	// Inactive return to hotel info
+	
+	    img5on = new Image(); 
+	    img5on.src = "/images/hotel/hotel_door_rate_2.gif";	// Active return to hotel rate
+	    img5off = new Image(); 
+	    img5off.src = "/images/hotel/hotel_door_rate_1.gif";	// Inactive return to hotel rate
+	
+	    img6on = new Image(); 
+	    img6on.src = "/images/hotel/hotel_door_fac_2.gif";     // Active return to hotel facilities
+	    img6off = new Image(); 
+	    img6off.src = "/images/hotel/hotel_door_fac_1.gif";	// Inactive return to hotel facilities
+	
+	    img7on = new Image(); 
+	    img7on.src = "/images/hotel/hotel_door_pol_2.gif";		// Active return to hotel policies
+	    img7off = new Image(); 
+	    img7off.src = "/images/hotel/hotel_door_pol_1.gif";	// Inactive return to hotel policies
+	
+	    img8on = new Image(); 
+	    img8on.src = "/images/hotel/hotel_door_area_2.gif";	// Active return to hotel area
+	    img8off = new Image(); 
+	    img8off.src = "/images/hotel/hotel_door_area_1.gif";	// Inactive return to hotel area
+	
+	    img9on = new Image(); 
+	    img9on.src = "/images/hotel/hotel_info_navaddress_2.gif";		// Active adress and contact info
+	    img9off = new Image(); 
+	    img9off.src = "/images/hotel/hotel_info_navaddress_1.gif";		// Inactive adress and contact info
+	
+	    img10on = new Image(); 
+	    img10on.src = "/images/hotel/hotel_info_navdescrip_2.gif";		// Active 
+	    img10off = new Image(); 
+	    img10off.src = "/images/hotel/hotel_info_navdescrip_1.gif";	// Inactive 
+	
+	    img11on = new Image(); 
+	    img11on.src = "/images/hotel/hotel_info_navrating_2.gif";	// Active 
+	    img11off = new Image(); 
+	    img11off.src = "/images/hotel/hotel_info_navrating_1.gif";	// Inactive 
+	
+	    img12on = new Image(); 
+	    img12on.src = "/images/hotel/hotel_info_navairport_2.gif";		// Active 
+	    img12off = new Image(); 
+	    img12off.src = "/images/hotel/hotel_info_navairport_1.gif";	// Inactive 
+	
+	    img13on = new Image(); 
+	    img13on.src = "/images/hotel/hotel_info_navcity_2.gif";	// Active 
+	    img13off = new Image(); 
+	    img13off.src = "/images/hotel/hotel_info_navcity_1.gif";	// Inactive 
+	
+	    img14on = new Image(); 
+	    img14on.src = "/images/hotel/hotel_info_viewmap_2.gif";	// Active 
+	    img14off = new Image(); 
+	    img14off.src = "/images/hotel/hotel_info_viewmap_1.gif";	// Inactive 
+	
+	    imgCOMon = new Image(); 
+	    imgCOMon.src = "/images/hotel/hotel_comments_2.gif";	// Active 
+	    imgCOMoff = new Image(); 
+	    imgCOMoff.src = "/images/hotel/hotel_comments_1.gif";	// Inactive 
+	
+	    imgTopAon = new Image(); 
+	    imgTopAon.src = "/images/hotel/hotel_top_2.gif";	// Active return to top
+	    imgTopAoff = new Image(); 
+	    imgTopAoff.src = "/images/hotel/hotel_top_1.gif";	// Inactive return to top
+	
+	    imgTopBon = new Image(); 
+	    imgTopBon.src = "/images/hotel/hotel_top_2.gif";	// Active return to top
+	    imgTopBoff = new Image(); 
+	    imgTopBoff.src = "/images/hotel/hotel_top_1.gif";	// Inactive return to top
+	
+	    imgTopCon = new Image(); 
+	    imgTopCon.src = "/images/hotel/hotel_top_2.gif";	// Active return to top
+	    imgTopCoff = new Image(); 
+	    imgTopCoff.src = "/images/hotel/hotel_top_1.gif";	// Inactive return to top
+	
+	    imgTopDon = new Image(); 
+	    imgTopDon.src = "/images/hotel/hotel_top_2.gif";	// Active return to top
+	    imgTopDoff = new Image(); 
+	    imgTopDoff.src = "/images/hotel/hotel_top_1.gif";	// Inactive return to top
+	
+	    imgTopEon = new Image(); 
+	    imgTopEon.src = "/images/hotel/hotel_top_2.gif";	// Active return to top
+	    imgTopEoff = new Image(); 
+	    imgTopEoff.src = "/images/hotel/hotel_top_1.gif";	// Inactive return to top
+	
+	    imgTopFon = new Image(); 
+	    imgTopFon.src = "/images/hotel/hotel_top_2.gif";	// Active return to top
+	    imgTopFoff = new Image(); 
+	    imgTopFoff.src = "/images/hotel/hotel_top_1.gif";	// Inactive return to top
+	
+	    imgTopGon = new Image(); 
+	    imgTopGon.src = "/images/hotel/hotel_top_2.gif";	// Active return to top
+	    imgTopGoff = new Image(); 
+	    imgTopGoff.src = "/images/hotel/hotel_top_1.gif";	// Inactive return to top
+
+    }
+
+
+    function imgOn(imgName) {
+
+                if (document.images) {
+
+                document[imgName].src = eval(imgName + "on.src");       
+
+                }
+
+    }
+
+
+    function imgOff(imgName) {
+
+                if (document.images) {
+
+                document[imgName].src = eval(imgName + "off.src");        
+
+                }
+
+        }
+
+<TMPL_VAR JAVASCRIPT>
+
+// -->
+
+
+</SCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LINK="#3366CC" ALINK="#003399" VLINK="#993399">
+
+<FORM ACTION=browser.cgi METHOD=POST>
+
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="613">
+
+	<TR>
+		<TD WIDTH="230" ALIGN=LEFT VALIGN=TOP><a href="/" onmouseover = "imgOn('img1')" onmouseout = "imgOff('img1')"><IMG SRC="/images/hotel/nav_wpp_1.gif" NAME="img1" WIDTH="50" HEIGHT="35" BORDER="0" ALT="Inside WPP"></A><a href="javascript:submit_form('search')" onmouseover = "imgOn('img2')" onmouseout = "imgOff('img2')"><IMG SRC="/images/hotel/nav_newsearch_1.gif" NAME="img2" ALT="New search" WIDTH="67" HEIGHT="35" BORDER="0"></a><a href="javascript:submit_form('results')" onmouseover = "imgOn('img3')" onmouseout = "imgOff('img3')"><IMG SRC="/images/hotel/nav_list_1.gif" NAME="img3" ALT="Return to hotel list" WIDTH="113" HEIGHT="35" BORDER="0"></a></TD>
+		<TD WIDTH="383" ALIGN=RIGHT VALIGN=TOP><a name="top"><IMG SRC="/images/hotel/hd_logo.gif" ALT="WPP Hotel Directory" WIDTH="207" HEIGHT="35" BORDER="0"></A></TD>
+	</TR>
+	
+</TABLE>
+
+
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="613">
+
+	<TR>
+		<TD WIDTH="72" ALIGN="left" ROWSPAN="2"><IMG SRC="/images/hotel/hotel_door_sidetop.gif" ALT="WPP Hotel Directory" WIDTH="72" HEIGHT="18" BORDER="0"><IMG SRC="/images/hotel/hotel_door_sidebottom.gif" ALT="WPP Hotel Directory" WIDTH="72" HEIGHT="99" BORDER="0"></TD>
+		<TD WIDTH="540" ALIGN="left" COLSPAN="2"><FONT FACE="ARIAL, GENEVA" SIZE="4" COLOR="#993300"><B><TMPL_VAR PROPNAME></B></FONT></TD>
+	</TR>
+	
+	<TR>		
+		<TD ALIGN=LEFT VALIGN=TOP><IMG SRC="/images/hotel/hotel_door_info_3.gif" NAME="img4" WIDTH="50" HEIGHT="99" BORDER="0" ALT="General Info"><a href="javascript:submit_form('hotel_rate')" onmouseover = "imgOn('img5')" onmouseout = "imgOff('img5')"><IMG SRC="/images/hotel/hotel_door_rate_1.gif" NAME="img5" ALT="Rates and Charges" WIDTH="50" HEIGHT="99" BORDER="0"></a><a href="javascript:submit_form('hotel_fac')" onmouseover = "imgOn('img6')" onmouseout = "imgOff('img6')"><IMG SRC="/images/hotel/hotel_door_fac_1.gif" NAME="img6" ALT="Facilities and Amenities" WIDTH="56" HEIGHT="99" BORDER="0"></a><a href="javascript:submit_form('hotel_pol')" onmouseover = "imgOn('img7')" onmouseout = "imgOff('img7')"><IMG SRC="/images/hotel/hotel_door_pol_1.gif" NAME="img7" ALT="Policies" WIDTH="47" HEIGHT="99" BORDER="0"></a><a href="javascript:submit_form('hotel_area')" onmouseover = "imgOn('img8')" onmouseout = "imgOff('img8')"><IMG SRC="/images/hotel/hotel_door_area_1.gif" NAME="img8" ALT="Also in the area" WIDTH="57" HEIGHT="99" BORDER="0"></a><a href="comments.cgi?hotelkey=<TMPL_VAR HOTEL_KEY>" onmouseover = "imgOn('imgCOM')" onmouseout = "imgOff('imgCOM')"><IMG SRC="/images/hotel/hotel_comments_1.gif" NAME="imgCOM" ALT="Comments" WIDTH="63" HEIGHT="99" BORDER="0"></a></TD>
+
+	</TR>
+</TABLE>
+
+</FORM>
+
+<FORM ACTION=comments.cgi METHOD=POST>
+<INPUT TYPE=HIDDEN NAME=rm VALUE=command>
+<INPUT TYPE=HIDDEN NAME=hotelkey VALUE=<TMPL_VAR HOTEL_KEY>>
+
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="613">
+
+<TR>
+	<TD WIDTH="200" ALIGN=LEFT VALIGN=TOP><a href="#top" onmouseover = "imgOn('imgTopA')" onmouseout = "imgOff('imgTopA')"><IMG SRC="/images/hotel/hotel_top_1.gif" NAME="imgTopA" ALT="Back to the top" WIDTH="31" HEIGHT="29" BORDER="0"></A><FONT SIZE="+1" COLOR="#000000" FACE="ARIAL, GENEVA">Vistor Comments<TMPL_VAR ALERT></FONT></TD>
+        <TD ALIGN=RIGHT><TMPL_VAR NEW_COMMENT_BUTTON></TD>
+</TR>
+
+</TABLE>
+
+<TMPL_LOOP NAME=COMMENTS>
+   <TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="613">
+   <TR><TD COLSPAN=2>
+   <TABLE BGCOLOR=#993300 BORDER=0 CELLSPACING=1 WIDTH=100%>
+
+   <TR><TD><TABLE WIDTH=100% CELLSPACING=0>
+
+   <TR>
+
+   <TD BGCOLOR=<TMPL_VAR COLOR>><FONT SIZE="-1" COLOR="#000000" FACE="ARIAL, GENEVA">
+   <B>Posted by:</B> <TMPL_VAR NAME=posted_by> <TMPL_VAR NAME=posted_on>
+   </TD>
+
+   <TD BGCOLOR=<TMPL_VAR COLOR>><FONT SIZE="-1" COLOR="#000000" FACE="ARIAL, GENEVA">
+   <B>Rating:</B> <TMPL_VAR NAME=stars>
+   </TD>
+   </TR>
+
+   <TR>
+   <TD BGCOLOR=<TMPL_VAR COLOR> COLSPAN=2><FONT SIZE="-1" COLOR="#000000" FACE="ARIAL, GENEVA">
+   <B>Comment</B><BR>
+   <TMPL_VAR NAME=comment><BR>
+   <TMPL_VAR NAME=approval_button><TMPL_VAR NAME=edit_button><TMPL_VAR NAME=delete_button><BR>
+   </TD>
+   </TR>
+   </TABLE></TD></TR><BR><FONT SIZE=-1>&nbsp;
+   </TABLE>   </TD></TR>
+   </TABLE>
+</TMPL_LOOP>
+
+<TMPL_LOOP NAME=COMMENT_EDITOR>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="613">
+   <TR><TD COLSPAN=2>
+   <TABLE BGCOLOR=#993300 BORDER=0 CELLSPACING=1 WIDTH=100%>
+   <TR><TD><TABLE WIDTH=100% CELLSPACING=0>
+
+   <TR>
+
+   <TD BGCOLOR=<TMPL_VAR COLOR>><FONT SIZE="-1" COLOR="#000000" FACE="ARIAL, GENEVA">
+   <B>Posted by:</B> <TMPL_VAR NAME=posted_by> <TMPL_VAR NAME=posted_on>
+   </TD>
+
+   <TD BGCOLOR=<TMPL_VAR COLOR>><FONT SIZE="-1" COLOR="#000000" FACE="ARIAL, GENEVA">
+   <B>Rating:</B> <TMPL_VAR NAME=stars>
+   </TD>
+   </TR>
+
+   <TR>
+   <TD BGCOLOR=<TMPL_VAR COLOR> COLSPAN=2><FONT SIZE="-1" COLOR="#000000" FACE="ARIAL, GENEVA">
+   <B>Comment</B><BR>
+   <TMPL_VAR NAME=comment><BR>
+   <TMPL_VAR NAME=ok_button><TMPL_VAR NAME=cancel_button><BR>
+   </TD>
+   </TR>
+   </TABLE></TD></TR><BR><FONT SIZE=-1>&nbsp;
+   </TABLE>   </TD></TR>
+</TABLE>
+</TMPL_LOOP>
+
+<TMPL_LOOP NAME=COMMENT_CREATED>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="613">
+   <TR><TD COLSPAN=2>
+   <TABLE BGCOLOR=#993300 BORDER=0 CELLSPACING=1 WIDTH=100%>
+   <TR><TD> <TABLE WIDTH=100% CELLSPACING=0>
+
+   <TR>
+
+   <TD BGCOLOR=#FFFFFF><FONT COLOR="#000000" FACE="ARIAL, GENEVA">
+   Thank you for you comment <TMPL_VAR NAME=posted_by>!<BR>
+   The moderators have been notified of your new comment - they will review it as soon as possible.<P>
+<INPUT TYPE=SUBMIT NAME=list VALUE="Return to the Vistor Comments List"><BR>&nbsp;
+
+   </TD>
+   </TR>
+   </TABLE></TD></TR><BR><FONT SIZE=-1>&nbsp;
+
+   </TABLE>   </TD></TR>
+</TABLE>
+</TMPL_LOOP>
+
+</TABLE>
+
+</TABLE>
+
+<BR>
+</FORM>
+
+</BODY>
+</HTML>
+ 

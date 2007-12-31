@@ -1,0 +1,11 @@
+
+Some global var: <TMPL_VAR GLOBAL>
+
+Some Loop.
+<TMPL_LOOP OUTER_LOOP>
+  <TMPL_LOOP LOOP>
+    Some local data <TMPL_VAR LOCAL><TMPL_VAR GLOBAL>
+    Something global, but hidden <TMPL_IF HIDDEN_GLOBAL>Hidden!</TMPL_IF>
+  </TMPL_LOOP>
+</TMPL_LOOP>
+

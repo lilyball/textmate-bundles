@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Edit this if you'd like to change the default location
+if [ "${TM_PROJECT_DIRECTORY}" == "" ]; then
+	echo "&lt;h3 style="color:red"&gt;JSDoc can only be built for projects, not single files.&lt;/h3&gt;"
+	exit
+fi
+
+DOCS_DIR="${TM_PROJECT_DIRECTORY}"/docs/cs/jsdoc
+
+# Confirm the user wants to build docs
+rv=$(CocoaDialog msgbox --text "Building JS Documenation may take a while. Continue?" \
+	--informative-text "JSdocs will be written to this folder: $DOCS_DIR" \
+	 --button1 "Continue" --button2 "Cancel")
+
+if [ "$rv" == "1" ]; then
+
+	echo "&lt;h1&gt;Writing JavaScript Documentation&lt;/h1&gt;"
+	echo "&lt;pre style='font-size:10px'&gt;"
+
+	# Tell perl where to look for support libraries
+	export PERL5LIB="${TM_BUNDLE_SUPPORT}"/JSdoc/
+
+	# Make the dir if it doesn't already exist
+	if [ ! -d $DOCS_DIR ]; then
+		mkdir -p $DOCS_DIR
+	fi
+
+	# Run jsdoc
+	"${TM_BUNDLE_SUPPORT}"/JSdoc/jsdoc.pl -r -d $DOCS_DIR "${TM_PROJECT_DIRECTORY}"
+
+	echo "&lt;/pre&gt;"
+	echo "&lt;h4&gt;Finished writing docs to &lt;strong&gt;$DOCS_DIR&lt;/strong&gt;&lt;/h4&gt;"
+
+elif [ "$rv" == "2" ]; then
+    exit
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Create Docs</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.js</string>
+	<key>uuid</key>
+	<string>0D7ED0EC-3B62-49B0-BEED-04CF958DAFA6</string>
+</dict>
+</plist>

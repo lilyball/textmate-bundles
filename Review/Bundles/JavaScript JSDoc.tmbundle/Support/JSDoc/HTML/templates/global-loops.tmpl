@@ -1,0 +1,9 @@
+global: <tmpl_var global>
+<tmpl_loop outer_loop>
+  outer loop foo: <tmpl_var foo>
+  <tmpl_loop inner_loop>
+     inner loop bar:    <tmpl_var bar>
+     inner loop foo:    <tmpl_var foo>
+     inner loop global: <tmpl_var global>
+  </tmpl_loop>
+</tmpl_loop>

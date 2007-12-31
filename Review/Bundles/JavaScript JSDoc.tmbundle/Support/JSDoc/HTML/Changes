@@ -1,0 +1,289 @@
+2.9 Mon Jan 29 15:54:03 EST 2007
+   - New Feature: the new force_untaint option makes sure you do not
+     pass tainted values to param(). [Sven Neuhaus]
+
+   - New Feature: Added ESCAPE=NONE as a synonym for ESCAPE=0.  Fixed 
+     both to work with default_escape. [cpan@punch.net]
+
+   - Bug Fix: DEFAULT didn't work with URL and JS escaping. 
+
+   - Bug Fix: Long-standing bug where variables set in a loop weren't
+     available inside inner loops under global_vars if the variable
+     wasn't actually used in the outer loop.  (Thanks to Richard Fein
+     for help debugging the fix.)
+
+   - Doc Fix: Changed references to CVS in the docs to Subversion now that
+     the switch is complete.
+
+   - Test Fix: At long last, the work from the Phalanx project has
+     been merged!  The tests are now more complete and easier to work
+     on.  Thanks Phalanx guys!
+
+2.8 Wed Dec 21 18:37:39 EST 2005
+   - New Feature: the new default_escape option allows you to apply
+     escaping to all variables in a template. [Alex Kapranoff]
+
+   - Bug Fix: ESCAPE wasn't working on variables containing code-refs.
+
+   - Bug Fix: Changed HTML::Template to help sub-classes by called
+     _new_from_loop() via ref($self) rather than hard-coding the package
+     name. [Mark Stosberg]
+
+   - Bug Fix: Including more than one <tmpl_else> tag in <tmpl_unless> or
+     <tmpl_unless> now dies with an error message, instead of silently ignoring
+     one of the clauses. [Mitar and Mark Stosberg]
+
+   - Bug Fix: Fixed HTML::Template to re-evaluate conditions to handle
+     <tmpl_else>.  This bug could cause HTML::Template to take both
+     branches of a conditional if a code-ref parameter returned a
+     different value when called a second time. [Emanuele Zeppieri]
+
+
+2.7 Thu Jun 24 12:00:00 2004
+   - New Feature: Added javascript escaping with ESCAPE=JS. (Craig Manley)
+
+   - Bug Fix: Improved cache keying to be sensitive to options which
+              alter the compilation of templates (path, search_path,
+              loop_context_vars and global_vars).  Calls to new() with
+              different settings for any of these options will no longer pull
+              incorrect cached objects.
+
+   - Bug Fix: Added code to detect broken Perl 5.8.0 installs
+              during installation (i.e. Redhat 8 and 9).
+
+   - Bug Fix: Fixed parsing of ESCAPE='URL' (Paul Baker)
+
+   - Bug Fix: Added check for empty filename passed to new().
+
+   - Test Fix: Migrated tests to Test::More.  This will allow the
+               easier introduction of new tests and the use of
+               Devel::Cover. (Gabor Szabo)
+
+2.6 Thu Aug 29 12:00:00 2002
+   - New Feature: HTML::Template will combine HTML_TEMPLATE_ROOT
+                  environment variable and path option if both are
+                  available. (Jesse Erlbaum)
+   - New Feature: __counter__ variable now available when
+                  loop_context_vars is set (Simran Gambhir)
+   - New Feature: The default attribute allows you to specify
+                  defaults for <tmpl_var> tags.
+   - Bug Fix: fixed parser to reject <tmpl_var>s with no names.
+              (crazyinsomniac)
+   - Doc Fix: fixed documentation to correctly describe the
+              interaction of case_sensitive and loop_context_vars.
+              (Peter Claus Lamprecht)
+   - Doc Fix: updated mailing-list information to reflect move from
+              vm.com to sourceforge.net
+
+2.5 Fri Feb 01 12:00:00 2002
+   - Bug Fix: global_vars fixed for loops within loops
+   - Bug Fix: include paths were broken under Windows (David Ferrance)
+   - Bug Fix: nested include path handling was wrong (Gyepi Sam)
+   - Bug Fix: MD5 signatures for file cache corrected (Martin Schroth)
+   - Bug Fix: print_to was broken for tied filehandles (Darren Chamberlain)
+   - Doc Fix: added mailing-list archive URL to FAQ, added link to
+              tutorial, fixed typos and formatting
+   - Doc Fix: added reference to new HTML::Template website at
+              http://html-template.sourceforge.net/
+
+2.4 Mon August 27 12:00:00 2001
+   - Bug Fix: case_sensitive option broke loops (Peter Leonard)
+   - Bug Fix: code-ref params now work with IF and UNLESS
+
+2.3 Thu June 28 12:00:00 2001
+   - New Feature: template tags can now span lines.  (Roland Giersig)
+   - New Feature: new() option 'filehandle'. (Roland Giersig)
+   - Bug Fix: includes were broken in some cases using scalarref
+     templates. (Lance Thomas)
+   - Bug Fix: recursive include detection was broken for scalarref
+     templates. (Mark Stosberg)
+   - Bug Fix: cleaned up more 5.004 warnings. (Jere Julian)
+
+   
+2.2 Sat December 23 12:00:00 2000
+   - Bug Fix: fixed memory leak in global_vars implementation 
+     (Ade Olonoh)
+   - Bug Fix: fixed file_cache not reloading templates on changes
+     (T.J. Mather)
+   - Bug Fix: fixed broken error checking in param() (Mark Stosberg)
+
+2.1 Sun December 18 12:00:00 2000
+   - New Feature: new 'file_cache' and 'double_file_cache' options
+     provide a file based caching method (T.J. Mather)
+   - New Feature: new 'print_to' option for output() allows
+     output() to print to a filehandle as it runs. 
+     (Chris Nokleberg)
+   - New Feature: new 'case_sensitive' option to allow template
+     variable names to be case sensitive. (Matthew Wickline)       
+   - New Feature: new 'filter' option allows pre-parse filtering of
+     template files.
+   - Bug Fix: added single-quote escaping to HTML escaping code 
+     (Ralph Corderoy)
+   - Bug Fix: fixed a noisy bug in param() when used with 'associate'
+     (William Ward)
+   - Doc Fix: broke out FAQ into separate file.
+
+2.0 Sun September 16 12:00:00 2000 
+   - New Feature: new 'search_path_on_include' option (Jody Biggs)
+   - New Feature: much requested variable __ODD__ added to set of
+     loop_context_vars.
+   - New Feature: new 'no_includes' option (Scott Guelich)
+   - Doc Addition: Added link to Japanese translation (Kawai Takanori)
+   - Bug Fix: loop_context_vars was mostly broken (T.J. Mather, 
+     Martin Schroth and Dave Wolfe)
+   - Bug Fix: vanguard_compatibility_mode was broken on first line of
+     included files. (uchum)
+
+1.8 Sun June 25 12:00:00 2000
+   - New Feature: global_vars option makes outer variables visible
+     inside loops.
+   - Bug Fix: Use File::Spec to construct pathnames.  This means 
+     that HTML::Template should now work on VMS and MacOS.
+     (Larry Moore)
+   - Bug Fix: loop_context_vars were broken in an unusual case
+     (Todd Larason)
+   - Bug Fix: ESCAPE was broken in some cases.
+   - New License: switched to GPL/Artistic hybrid normally used
+     with Perl modules.
+
+1.7 Fri March 24 12:00:00 2000
+   - New Feature: new method query() enables introspection into 
+     loops (Chris Houser)
+   - New Feature: Better error handling with Carp      
+   - Bug Fix: URLESCAPE was skipping some important escapes (Simran Gambhir)
+   - New FAQ: How can I execute a program from inside my template?
+
+1.6 Sun March 05 12:00:00 2000
+   - New Feature: double_cache combines shared memory and local memory
+     caching for twice the speedup!
+   - New feature: ESCAPE=URL (added by Tobias Brox)
+   - Bug Fix: allow for blessed objects in calls to param()
+     (thanks to Michael Lloyd and David Glasser)
+   - Bug Fix: _mtime was broken in 1.5, fixed a typo.
+
+1.5.1 Wed February 23 12:00:00 2000
+   - Bug Fix: 1.5 broke caching in some cases - thanks to Drew Taylor 
+     for help solving this one.
+
+1.5 Mon February 17 12:00:00 2000
+    - Shared cache now uses IPC::SharedCache and is much more stable.
+    - Fixed problem with mixed case associated CGI.pm parameters
+    - param() now accepts subroutine refs for TMPL_VARs.       
+
+1.4 Sat January 8 12:00:00 2000
+    - New feature: new() option 'shared_cache' enables experimental
+      IPC shared memory caching!
+    - TMPL_IF now works on TMPL_LOOP variables.
+    - Public CVS server available at www.sourceforge.net.
+    - Bug Fix from Doug Steinwand: loop_context_vars not working
+      on one-item loops.
+
+1.3 Fri December 17 12:00:00 1999 
+     - Omnibus regex patch from Matthew Wickline: a faster and more
+       robust parse().
+     - New tag: TMPL_UNLESS, the opposite of TMPL_IF.
+     - Numerous bug fixes: mixed-case filenames in includes,
+       recursive TMPL_INCLUDEs, reporting filename and line number
+       inside included files, better syntax-error detection.
+     - Optional loop context variables - __FIRST__, __LAST__ and
+       __INNER__.
+
+1.2.1 Wed November 17 12:00:01 1999
+     - tiny bug fix
+
+1.2 Wed November 17 12:00:00 1999
+     - Added multi-parameter and hash-ref syntax for param() calls.
+     - Added DTD-compliant <!-- TMPL_* --> syntax patch from
+       Matthew Wickline - Thanks!
+     - vanguard_compatibility_mode = 1 implies die_on_bad_params = 0
+
+1.1 Fri November 05 12:00:00 1999
+     - Lifted requirement that <TMPL_INCLUDE>s be alone on a line
+     - Added "path" option to new() to manipulate search path for 
+       templates.
+     - bug fixes        
+
+1.0 Fri October 28 12:00:00 1999
+     - An HTML::Template mailing-list!  Send a blank message to
+       htmltmpl-subscribe@lists.vm.com to join.
+     - bug fixes
+     - improved docs
+
+0.96  October 14th 1999 15:49
+     - Added "ESCAPE=1" option to <TMPL_VAR> to HTML-escape
+       variable values.  (Peter Marelas, thanks!)
+     - more bug fixes (David Glasses, James William Carlson - 
+       thanks)
+     - even *more* code cleanup!
+     - new FAQ concerning pre-loading templates and mod_perl.
+
+0.95  October 8th 1999 12:28 
+     - bug fix: some lines were getting chomped (Eric Zylberstejn)
+     - *NUMEROUS* bug fixes (David Glasser - Thanks a lot!)
+     - new FAQ section in documentation
+     - code cleanup and improved comments
+
+0.91  September 29th 1999 17:59 
+     - bug fix: possible loss of text after a </TMPL_IF>
+       (Thanks to Tom Huskins for alerting me to this one!)
+
+0.9  September 28th 1999 17:46
+     - <TMPL_IF> and <TMPL_ELSE>
+     - near total rewrite - faster, smaller, more "compiler-esque" code.
+     - *MASSIVE* speedups in all modes - up to 10x faster!1
+     - bug fix : param() wasn't returning names of LOOPs
+     - This really is version 0.9 so 1.0 is coming up.  Get those
+       bug reports in!
+
+0.06  September 19th 1999 23:09 
+     - added associate parameter to new() and obsoleted
+       associate_CGI() (still supported for now)
+     - added support for HTML_TEMPLATE_ROOT environment variable
+     - small performance improvements using typeglobs
+     - added a performance testing script: time_trial.pl
+     
+0.051  September 10th 1999 17:30
+     - small problem with make test fixed.
+
+0.05  September 10th 1999 17:18
+     - Added <TMPL_INCLUDE> functionality!
+     - Added associate_CGI() method - donated by Richard Dice
+     - Cleaned up internal access to new() options.
+     - more bug fixes from such notables as Kevin Puetz, and Steve
+       Reppucci.       
+
+0.04  Fri June 18 12:00:00 1999
+     - fixed cacheing - under certain conditions it was totally broken!
+     - changed {param} to {param_values} - some older perls complained.
+     - die_on_bad_params => 0 now also applied to loop body.
+     - added copious comments about how bad m//i is to avoid future
+       bug reports about [tT][hH][iI][sS]!
+     - added numerous bug fixes and optimizations submitted by Mike
+       Blazer, Adriano Nagelschmidt Rodrigues, Andrej Mikus and
+       Ilya Obshadko.  Thanks!
+     
+0.03  Fri June 11 17:37:00 1999
+     - fixed a few irritating "undefined variable" errors in -w
+     - big speedup on large TMPL_LOOPs.  They are at least one order of
+       magnitude faster now!
+     - die_on_bad_params => 0 never really worked!  It does now.
+
+0.02  Mon May 31 12:47:00 1999
+     - die on multiple source parameters in new()
+     - tries to preserve newlines in loop body
+     - copies in array contents from array refs on param call
+       i.e. allows for reuse of scratch arrays on calling side
+     - Added a CREDITS section to the docs, inaugurated it with
+       Richard Chen for his many fixes.
+     - Added type => 'sometype', source => 'source' new() syntax.
+     - made "NAME=" in tags optional.  Added a test.pl to check for
+       this.
+
+0.01  Mon May 17 15:17:00 1999
+     - added cacheing to module and perldoc
+     - moved .tmpl files used by 'make test' to /templates
+     - first release!
+
+0.00  Fri May 14 14:59:06 1999
+     - original version; created by h2xs 1.18
+

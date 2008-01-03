@@ -1,10 +1,10 @@
-# Working With Text テキストでの作業
+# テキストでの作業
 
 TextMateはほとんどの部分は、MailやSafariや基本的な全ての他のCocoaアプリケーションによって使われているシステムコンポ年とである`NSTextView`の振る舞いをまねようとしています。
 
 このセクションではテキスト編集に関連した、その他の機能の一部をカバーします。
 
-## Auto-Paired Characters (Quotes etc.)　自動的にペアになる文字（引用など）
+## 自動的にペアになる文字（引用など）
 
 （マークアップやソースコードのような）構造化されたテキストを書くとき、ペアになる文字があります。例えばプログラミング言語では、左中括弧(`{`)を使って、右中括弧(`}`)を使わないといったことは滅多にありません。
 
@@ -12,16 +12,14 @@ TextMateはほとんどの部分は、MailやSafariや基本的な全ての他�
 
 またテキストを選択し、開始文字によって、開始／終了文字で選択範囲を包むことができます。例えば、`foo`とタイプして、それを選択し、`(`をタイプします。そうすると、TextMateはそれを`(foo)`にして、最後の括弧の後にキャレットを移動します。
 
-The actual character pairs are defined in the [bundle preferences][PairedCharactersPrefs] with different settings for different languages and contexts. For example, in source code an apostrophe is set up to have itself as a closing character, except for comments and strings. This is achieved using [scope selectors][ScopeSelectors].
 
-実際の文字ペアは、さまざまな言語とコンテキストのさまざまな設定といっしょに[bundle preferences][PairedCharactersPrefs]で定義されています。例えば、ソースコードではアポストロフィは、コメントや文字列を除き、それ自身が週虜文字として登場するまでセットされます。これは[スコープセレクタ][ScopeSelectors]を使う事によって達成されています。
+実際の文字ペアは、さまざまな言語とコンテキストのさまざまな設定といっしょに[bundle preferences][PairedCharactersPrefs]で定義されています。例えば、ソースコードではアポストロフィは、コメントや文字列を除き、それ自身が週虜文字として登場するまでセットされます。これは[スコープセレクタ][ScopeSelectors]を使う事によって実現しています。
 
 （[Source bundle][SourceBundle]のマクロとして定義され、いくつかの言語では上書きされる）自動にペアになった文字に関連してふたつのショートカットは:
 
  1. &#x2318;&#x21A9;  
     行の最後に移動し、新しい行を挿入する。
     例えば、もしあなたが、以下のように書き：
-    For example if you write:
 
         print("foo
     キャレットの右側に`")`があると、&#x2318;&#x21A9;を使って、この二つの文字を飛ばして、新しい行を挿入します。
@@ -30,52 +28,50 @@ The actual character pairs are defined in the [bundle preferences][PairedCharact
     行の最後へ移動し、`;`を挿入し、新しい行を挿入します。
 
 
-## Completion　補完
+## 補完
 
-TextMate has a simple yet effective completion function on &#x238B;
-(escape). It will complete the current word based on matches in the current document. If there are multiple matches, you can cycle through these by pressing &#x238B; continuously. It is also possible to cycle backwards using &#x21E7;&#x238B;.
+TextMateには、シンプルですが、効果的な補完機能が&#x238B;(エスケープ)にあります。これは、現在のドキュメントの中でのマッチをベースにした現在の語を補完します。もし、複数のマッチがあれば、&#x238B;を押すことで順に移動できます。&#x21E7;&#x238B;を使うことによって逆順に移動もできます。
 
-The matches are sorted by distance from the caret, meaning candidates which are closer to the caret will be suggested before candidates farther away.
+マッチはキャレットからの距離によって並び替えられています。つまり、キャレットに近い候補は遠い場所にある候補より先に表示されます。
 
-Two possibilities exist for augmenting this default completion. Both are done via [bundle preferences][CompletionsPrefs].
+このデフォルトの補完機能を強化するには二つの方法があります。両方とも[バンドルの設定][CompletionsPrefs]によって実現します。
 
-The first option is to provide a list of candidates which should always be suggested. For example the Objective-C bundle has a list of commonly used Cocoa framework methods. This is an array of the candidates, e.g.:
+最初のオプションは常に推薦されるべき候補のリストを提供することです。例えば、Objective-CバンドルにはCocoaフレームワークでよく使われるメソッドのリストがあります。これは、候補の配列です。例えば:
 
     completions = ( 'retain', 'release', 'autorelease', 'description' );
 
-The other option is to set a custom shell command to gather the completions. The shell command will have the `TM_CURRENT_WORD` [environment variable][EnvVariables] available (as the word which needs to be completed) along with the other variables.
+もう一つの方法は、候補を集めるためのシェルコマンドをカスタムで設定することです。シェルコマンドは他の変数といっしょ、（補完される言語で）利用可能な`TM_CURRENT_WORD`[環境変数][EnvVariables]
 
-For example the C bundle has a custom completion command setup for when the caret is inside the preprocessor include directive, it looks like this:
+例えば、Cバンドルにはキャレットがpreprocessor include directiveの中にある時のためのカスタムの補完コマンド設定があります。以下のようなものです:
 
     completionCommand = 'find "$TM_DIRECTORY" \
         -name "$TM_CURRENT_WORD*.h" -maxdepth 2 \
         -exec basename "{}" \;|sort';
 
-This will find as matches, any file in the current directory (and direct sub-directories) which have the current word as prefix and an `.h` extension.
+これは、現在の語をprefixとして、`.h`拡張子を持っている、現在のディレクトリ（とその直下のサブディレクトリ）にあるいかなるファイルにもマッチとして見つけます。
 
-When you provide your own completion command (or list) you may want to disable the default matches. This can be done by setting `disableDefaultCompletion` to `1`.
+あなた自身の補完コマンド（またはリスト）を提供すると、デフォルトのマッチを無効化したいかもしれません。これは、`disableDefaultCompletion`を`1`にセットすることで可能です。
 
 
+## コピー・ペースト
 
-## Copy and Paste コピー・ペースト
+### クリップボードヒストリー
 
-### Clipboard History　クリップボードヒストリー
+テキストをコピーまたはカットすると毎回、テキストはスタックにに押し出されます。
 
-Each time you copy or cut text, the text is pushed onto a stack.
-
-By pressing &#x2303;&#x2325;&#x2318;V you will see the list of all previous clippings and can pick the one you want to paste using arrow keys. Use return to insert it and escape to dismiss the list. If you dismiss the list, the currently selected clipping will be what gets pasted the next time you use the paste function.
+&#x2303;&#x2325;&#x2318;Vを押すと全ての過去のクリッピングのリストを見ることができ、そこから矢印キーを使ってペーストしたいものを選ぶことができます。挿入するにはリターン、リストを消すためにはエスケープを使ってください。リストを消すと、現在選択されたクリッピングが次のときにペースト機能を使ったときにペーストされます。
 
 ![Clipboard History](clipboard_history.png)
 
-Instead of having to pick the clip from the list, you can use &#x21E7;&#x2318;V to paste the previous clip in the list. Using that key again will advance to the clip before that and so on. To go back you can use &#x2325;&#x2318;V. These key equivalents are useful when you want to make multiple copies from one document and then paste these LIFO-style (Last In First Out) into another document (or another location in the same document).
+リストからクリップを選ばなくても、リストの前のクリップをペーストするのに、&#x21E7;&#x2318;Vを使うことができます。もう一度キーを押すともう一つ前のクリップへと移動します。戻るには、&#x2325;&#x2318;Vを使えます。これらのキーボードショートカットは、一つのドキュメントから複数のコピーを作って、LIFO-style (Last In First Out)で他のドキュメント（もしくは同じドキュメントの他の場所）にペーストする際に便利です。
 
-### Re-indented Paste
+### インデントし直されたペースト
 
-When pasting text, TextMate will estimate the indent of the text pasted as well as the current indent level and adjust the pasted text so that it matches the current indent.
+テキストをペースとするときに、TextMateは、現在のインデントのレベルだけでなく、ペーストされるテキストのインデントを見積もり、現在のインデントとマッチするようにペーストされるテキストを調節します。
 
-The estimates are done using the indentation rules mentioned in the [Re-Indent Text][ReIndentText] section.
+[テキストをインデントし直す][ReIndentText]のセクションで触れられるインデントルールを使って見積もられます。
 
-If you temporarily want to avoid this you can paste text using &#x2303;&#x2318;V. You can also permanently disable re-indented pasting in the Text Editing part of the Preferences.
+もし一時的にこれを回避したい時は、&#x2303;&#x2318;Vを使ってペーストできます。また、PreferencesのText Editingにて永久にテキストがインデントし直されるのを無効化できます。
 
 
 ## 編集モード
@@ -86,7 +82,6 @@ Edit &#x2192; Mode submenu (&#x2325;&#x2318;E)でフリーハンド編集を有�
 
 このモードが有効化されているとき、キャレットの移動は行末やタブストップに制限されません。
 
-<!-- This is useful when working with ASCII diagrams, when inserting something at a given column on several lines (and you do not want to insert the padding) and in a few other situations. -->
 
 これは、いくつかの行のある一定の列に何かを挿入し、（そしてパディングを挿入したくない）ときやその他のシチュエーションで、ASCIIダイアグラムでの作業に役に立ちます。
 
@@ -96,64 +91,67 @@ Edit &#x2192; Mode submenu (&#x2325;&#x2318;E)でフリーハンド編集を有�
 
 
 
-### Overwrite Mode
+### 上書きモード
 
-By enabling overwrite mode in the Edit &#x2192; Mode submenu (&#x2325;&#x2318;O) characters already in the document will be overwritten as you type rather than inserted as normal.
+Edit &#x2192; Mode サブメニュー (&#x2325;&#x2318;O)で上書きモードを有効にすることによって、ドキュメントにすでにある文字はいつものように挿入されず、あなたがタイプするにしたがって上書きされます。
 
-This is useful when working with column data, e.g.:
+これは以下のようなカラムデータで作業をするとき便利です:
 
     foo     jaz
     bar     sub
     fud     dub
 
-Imagine we want to overwrite some of the values in the first column. Somewhat similarly, we may have a line of a fixed width and want to replace part of it but preserve the width, for example we could have code like this where we must right-align the value to column 20 but want to overwrite the label:
+最初のカラムの値のいくつかを上書きしたいときを想像してください。同じように、固定された幅のリストがあり、その一部を幅を保ちながら置換したいかもしれません。例えば、カラム20で右寄せしなければいけないが、レーベルを上書きしたい、以下のようなコードがあるかもしれません:
 
     printf("Value is         %3d", 37).
 
 
-## Find and Replace
+## 検索と置換
 
-In addition to the standard find dialog, TextMate has a Find submenu (located in the Edit menu) which gives you key equivalents for find and replace actions.
+スタンダードの検索ダイアログに加えて、TextMateには、検索と置換アクションのためのショートカットをもった（Editメニューにある）Findサブメニューがあります。
 
 ![Find Menu](find_menu.png)
 
-### Inserting Newlines and Tabs in the Find Dialog
+### 検索ダイアログに改行とタブを挿入する
 
-The find dialog uses normal system controls for accepting input. You can toggle between single line and multi line text controls using the arrow next to the Replace text field.
+検索ダイアログは、インプットを受け付けるために通常のシステムコントロールを使用しています。置換テキストフィールドの隣にある矢印を使うことによって、一行と複数行のテキストコントロールを切り替えられます。
+
 
 ![Multi Line Find Dialog](multi_line_find_dialog.png)
 
-If you need to insert a newline or tab character into either of the text fields, you can hold down option (&#x2325;) while pressing the tab (&#x21E5;) or return (&#x21A9;) key. This will insert a literal tab or newline character.
+もしテキストフィールドに改行やタブ文字を挿入する必要がある場合は、タブ(&#x21E5;)もしくは、リターン (&#x21A9;) キーを押すときに、オプション(&#x2325;)をホールドしておく必要があります。これで、リテラルのタブや改行文字が挿入されます。
+
+### 検索クリップボード
+
+&#x2318;E と &#x2318;Gという二つの便利なキーボードショートカットがあります。初めのものは選択範囲を共有された検索クリップボードにコピーします。これは、多くのアプリケーションで動作し、&#x2318;Gによって、その文字列が次にある場所を見つけることができます。<!-- TODO: 検索クリップボード？ -->
+
+検索クリップボードはSafari, TextEdit, Mail, TextMate, Terminal, Consoleであれ、アプリケーション間で動作します。選択されたキスとを検索クリップボードにコピーして、アプリケーションを切り替え、その文字列を見つけるために、&#x2318;Gを使用できます。
+
+それに加え、TextMateは選択範囲を置換クリップボードにコピーする、&#x21E7;&#x2318;Eを提供します。これは検索ダイアログに移動せずにすむため便利です。例えば、もし、アイテムのリストのために改行をパイプ文字(`|`)と置換したい場合、改行を選択し、それを検索文字列として使うために&#x2318;Eを押してください。そして、`|`とタイプし、選択して、それが置換クリップボードにコピーされるように&#x21E7;&#x2318;Eを押してください。
+
+次のステップは、ドキュメント全体に対して置換を実行するために&#x2303;&#x2318;Fを押すか、置換を実行したい範囲を選択して&#x2303;&#x21E7;&#x2318;Fを押してください。
 
 
-### Find Clipboard
+## テキストの移動
 
-Two useful key equivalents are &#x2318;E and &#x2318;G. The first copies the selection to the shared find clipboard. This works in the majority of applications and allows you to find the next occurrence of that string by then pressing &#x2318;G.
+### インデントレベルを上げる／下げる
 
-The find clipboard works across applications so whether in Safari, TextEdit, Mail, TextMate, Terminal, Console, or similar, one can copy the selected text to the find clipboard, switch application and use &#x2318;G to find that string.
+Textメニューには、Shift LeftとShift Rightアクションがあり、それぞれ &#x2318;[ と &#x2318;]が割り当てられています。これらは、一つのタブのサイズ毎にインデントの上げ、下げをします。
 
-In addition TextMate offers &#x21E7;&#x2318;E to copy the selection to the replace clipboard. This is often useful to save a trip to the find dialog, for example if you want to replace newlines with the pipe character (`|`) for a list of items, select a newline, press &#x2318;E to use that as the find string. Now type a `|`, select it and press &#x21E7;&#x2318;E so that it is copied to the replace clipboard.
+多くのヨーロッパのキーレイアウトでは、このキーはかなりやりにくい、ので、これに加えて、&#x2325;&#x21E5;　と &#x2325;&#x21E4;を使うことができます。（&#x21E4;は&#x21E7;&#x21E5;を使って実現できます。）
 
-The next step is then to either press &#x2303;&#x2318;F to perform the replacement in the entire document, or select the range in which you want the replacement to occur and use &#x2303;&#x21E7;&#x2318;F instead.
+### テキストを上下左右に移動する
+
+もし、一行やブロックを数行分上下に動かしたり、一単語／カラムを動かしたい場合は、&#x2303;&#x2318;をホールドして、矢印キーで選択範囲を動かせます。選択範囲なしだと、行を上下に移動します。
 
 
-## Moving Text
+### テキストをインデントし直す
 
-### Increase/Decrease Indent Level
-
-In the Text menu there is a Shift Left and Shift Right action bound to &#x2318;[ and &#x2318;]. These will increase and decrease the indent by the size of one tab.
-
-On many european key layouts these keys are rather awkward, so in addition to these, you can also use &#x2325;&#x21E5; and &#x2325;&#x21E4; (where &#x21E4; is achieved using &#x21E7;&#x21E5;).
-
-### Move Text Up/Down/Left/Right
-
-If you want to move a line/block up/down a few lines or move a word/column selection, it can be done by holding down &#x2303;&#x2318; and using the arrow keys to move the selection around. It also works for moving lines up/down without a selection.
-
-### Re-indent Text
-
-If you have code which has broken indent, you can select it and use Text &#x2192; Indent Selection (without a selection it indents the current line).
+それを選択して、Text &#x2192; Indent Selectionを使うことができます。（もし選択範囲がない場合は現在の行をインデントします。）
 
 The rules for estimating the indent are setup per-language using [bundle preferences][PreferencesItems]. For more details see the [indentation rules section][IndentRules].
+
+インデントの見積もりのルールは[バンドル設定を使って][PreferencesItems]言語毎に設定されます。[インデントルールのセクション][IndentRules]詳しくはを見てください。
 
 ## テキストの選択
 
@@ -170,27 +168,25 @@ The rules for estimating the indent are setup per-language using [bundle prefere
 
 ### カラムの選択
 
-<!-- It is possible to select column data either by holding down &#x2325; and making the selection with the mouse, or making a regular selection and then pressing &#x2325; once (which toggles between the two types of selection). -->
-
 カラムデータを&#x2325;をホールドしてマウスで選択範囲を作る事によって、もしくは、普通の選択範囲を作り&#x2325;を一度押すこと（選択範囲のふたつのタイプの間をトグルする）によってカラムデータを選択することが可能です。<!-- TODO トグルするって意味不明？　-->
 
 カラムの選択にはは全ての普通のアクションが実行可能です。例えば、選択の移動、選択の置換、（行の）トランスポーズ、Textメニューからのアクション、シェルコマンドを通しての、選択範囲のフィルタリングなど。
 
-## Column Movement / Typing
+## カラムの移動／タイピング
 
-Using arrow up/down with &#x2325; will move the caret to the first/last row in the current column. Hold down &#x21E7; to get it selected.
+矢印キーの上下を&#x2325;といっしょに使って、キャレットを現在のカラムの最初／最後の列に移動します。選択するためには&#x21E7;をホールドしてください。
 
 ![Column Data](column_data.png)
 
-For example if you have column data as shown above with the caret in front of `foo`, press &#x2325;&#x21E7;&#x2193; and it will move the caret down in front of `fud` and leave the text between `foo` and `fud` selected.
+例えば、上に示すようなカラムデータをもっていて、キャレットが`foo`の前にあるとき、&#x2325;&#x21E7;&#x2193;をおせば、キャレトが`fud`の前に移動して、`foo`と`fud`の間のテキストが選択されます。
 
 ![Column Movement](column_movement.png)
 
-You may now either want to press &#x2325; once to switch to a zero-width column selection, then start typing to type on each line.
+&#x2325;を押せば幅がゼロのカラム選択にスイッチして、それぞれの行をタイプし始めてください。
 
 ![Column Typing](column_typing.png)
 
-Alternatively use &#x2325;&#x21E7;&#x2192; and then &#x2325; to leave the entire column selected (in column mode).
+もしくは、&#x2325;&#x21E7;&#x2192;を使い、&#x2325を使ってください。（カラムモードで）カラム全体が選択された状態になります。
 
 ![Column Selection](column_selection.png)
 
@@ -208,8 +204,6 @@ Alternatively use &#x2325;&#x21E7;&#x2192; and then &#x2325; to leave the entire
 TextMateはシステムワイドの'Check Spelling as You Type（タイプしながらスペルチェック）'をサポートします。これはEdit &#x2192; Spellingで変更可能です。
 
 間違ってスペルが書かれた文字がスペリングのサジェスチョンを得るためにはコンテキストメニューを出すことができます。
-
-<!-- Since TextMate is intended for structured text it is possible to exclude parts of the document from being checked. This is done by creating a [preferences item][PreferencesItems] in the bundle editor, setting `spellChecking` to `0` and filling in the [scope selector][ScopeSelectors] with the selector to target for no spell checking. -->
 
 TextMateは構造化されたテキストの使用を意図しているため、ドキュメントの一部をチェックの対象から除外することがかのうです。これは、バンドルエディタの[preferences item][PreferencesItems]を作り、`spellChecking`を`0`に設定し、[スコープセレクタ][ScopeSelectors]をスペルチェックをしないターゲットのセレクタに書き入れることでできます。
 

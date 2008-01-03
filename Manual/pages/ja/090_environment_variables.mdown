@@ -1,100 +1,99 @@
-# Environment Variables
+# 環境変数
 
-Environment variables are used extensively in TextMate to provide scripts and commands with information.
+環境変数は情報とともにスクリプトやコマンドを提供するためにTextMateでは広範囲に使われています。
 
-Here is how to read the value of a variable (named `VAR`) in different scripting languages:
+さまざまなスクリプト言語で(`VAR`という名前の)変数の値を読み込むにはこのようにします。
 
  * Bash — `"$VAR"`
  * Perl — `$ENV{'VAR'}`
  * PHP — `$_ENV['VAR']`
- * Python — `os.environ['VAR']` (remember to `import os` first)
+ * Python — `os.environ['VAR']` (初めに`import os`を実行するのを忘れないでください。)
  * Ruby — `ENV['VAR']`
 
-You can use them directly in Snippets, like in bash. Both bash and snippets support an extended form (`${VAR}`) where it is possible to do replacements in the variable, provide fallback values (if it is unset) etc.
+シェルスクリプトで使われる変数は必ず二重引用符を使ってください。そうでないと、bashは初めに変数を値に展開してinput-field-separator characters(read as the `IFS` 変数, defaults to スペース, タブ and 改行)に従って分割されます。つまり、もし`TM_FILENAME`が`My Document.txt`であり、`rm $TM_FILENAME`を実行すると、`rm`は実際には二つの引数を持ちます。一つ目は`My`で二つ目は　`Document.txt`です。
 
-Remember to double-quote variables used in shell scripts, otherwise bash will first expand the variable to its value and then split this according to the input-field-separator characters (read as the `IFS` variable, defaults to spaces, tabs and newlines). This means if `TM_FILENAME` is `My Document.txt` and we execute `rm $TM_FILENAME` then `rm` will actually get two arguments, first one being `My` and the second one being `Document.txt`.
-
-For info about what can be done with environment variables in bash, see [this blog post](http://macromates.com/blog/archives/2005/09/26/shell-variables/) about the issue or check out the bash man file.
+bashでの環境変数でできることについての情報について、問題点は[このブログポスト](http://macromates.com/blog/archives/2005/09/26/shell-variables/)を見てください。また、bashのmanファイルを確認してください。
 
 
-## Dynamic Variables
+## 動的変数
 
-The following variables reflect the users current configuration, which file he has open, where the caret is located in that file, the selection in the project drawer and so on.
+次の変数はユーザーの現在の設定を反映します。その設定とは、どのファイルが開かれていて、そのファイルのどこにキャレットがあり、プロジェクトドロワのの選択しているところはどこかなどです。
 
-A script can read these variables and make decisions accordingly.
+スクリプトはこの変数を読み込んで、それに従って決定をします。
 
-Some of the variables are not always present. For example if the current file is untitled, or there is no selection, the corresponding variable will be unset. This is useful for example to make a command work with the selection, but fall back on the current line or word.
+変数の中には、いつも現れていないものもあります。例えばもし現在のファイルに名前がついていない(untitled)場合や選択範囲がない場合は、それに対応する変数はセットされません。これは例えば、あるコマンドを選択範囲に対して実行して、もし選択範囲がない場合は現在の行や単語に対して実行させるときなど便利です。
 
-Bash has shorthand notation for providing a default value when a variable is not set, for example to fallback on the current word when there is no selection, we would use: `"${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}"`.
+Bashには変数がセットされていないときにでデフォルトの値を提供する簡易な記述法があります。例えば選択範囲がない場合に現在の単語を代替としてつかうには、`"${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}"`を使うことができます。
 
- * `TM_BUNDLE_SUPPORT` — shell commands which are (indirectly) triggered from a bundle item (which could be a [Command][Commands], [Drag Command][DragCommands], [Macro][Macros], or [Snippet][Snippets]) will have this variable pointing to the Support folder of the bundle that ran the item, if such a folder exists. In addition, `$TM_BUNDLE_SUPPORT/bin` will be added to the path.
 
- * `TM_CURRENT_LINE` — textual content of the current line.
+ * `TM_BUNDLE_SUPPORT` — バンドルアイテム（[コマンド][Commands], [ドラッグコマンド][DragCommands], [マクロ][Macros], もしくは [スニペット][Snippets]）から（間接的に）使われるシェルコマンドは、（もしあれば）そのアイテムを実行するバンドルのサポートフォルダを指す、この変数を持ちます。さらに、`$TM_BUNDLE_SUPPORT/bin`がパスに追加されます。
 
- * `TM_CURRENT_WORD` — the word in which the caret is located.
+ * `TM_CURRENT_LINE` — 現在の行のテキストの内容
 
- * `TM_DIRECTORY` — the folder of the current document (may not be set).
+ * `TM_CURRENT_WORD` — キャレットがある場所の単語
 
- * `TM_FILEPATH` — path (including file name) for the current document (may not be set).
+ * `TM_DIRECTORY` — 現在のドキュメントのあるフォルダ（セットされていないかもしれません。）
 
- * `TM_LINE_INDEX` — the index in the current line which marks the caret’s location. This index is zero-based and takes the utf-8 encoding of the line (e.g. read as `TM_CURRENT_LINE`) into account. So to split a line into what is to the left and right of the caret you could do:
+ * `TM_FILEPATH` — 現在のドキュメントのパス（ファイル名を含む）（セットされていないかもしれません。）
+ 
+ * `TM_LINE_INDEX` — キャレットの位置を示す現在の行のインデックス。このインデックスはゼロを起点にして（例えば`TM_CURRENT_LINE`で読み込まれる）その行のutf-8エンコーディングを考慮します。なので、その行をキャレットの左と右に分けるためには、以下のようにできます:
  
         echo "Left:  »${TM_CURRENT_LINE:0:TM_LINE_INDEX}«"
         echo "Right: »${TM_CURRENT_LINE:TM_LINE_INDEX}«"
 
- * `TM_LINE_NUMBER` — the carets line position (counting from 1). For example if you need to work with the part of the document above the caret you can set the commands input to “Entire Document” and use the following to cut off the part below and including the current line:
+ * `TM_LINE_NUMBER` — （１から数えられた）キャレットの行の場所。例えば、もしキャレットのある場所より前の部分を使う必要がある場合は、コマンドインプットを“Entire Document”（ドキュメント全体）とし現在の行とその下全てを削除するために次のコマンドを使うことができます:
 
         head -n$((TM_LINE_NUMBER-1))
 
 
- * `TM_PROJECT_DIRECTORY` — the top-level folder in the project drawer (may not be set).
+ * `TM_PROJECT_DIRECTORY` — プロジェクトドロワの最上位のフォルダ（セットされていないかもしれません。）
 
- * `TM_SCOPE` — the scope that the caret is inside. See [scope selectors][ScopeSelectors] for information about scopes.
+ * `TM_SCOPE` — キャレットがある場所のスコープ。スコープについては[スコープセレクタ][ScopeSelectors]を見てください。
 
- * `TM_SELECTED_FILES` — space separated list of the files and folders selected in the project drawer (may not be set). The paths are shell-escaped, so to use these, you need to prefix the line with `eval` (to make the shell re-evaluate the line, after expanding the variable). For example to run the `file` command on all selected files in the project drawer, the shell command would be:
+ * `TM_SELECTED_FILES` — パスはシェルでエスケープされます。よって使うときは（変数が展開された後、シェルがその行を評価するように）`eval`をその行の始めに加えてください。例えば、プロジェクトドロワで、選択された全てのファイルに`file`コマンドを実行するためには、次のようなコマンドが使えます。
 
         eval file "$TM_SELECTED_FILES"
 
-    It is also possible to convert it to an (bash) array and iterate over this, for example:
+    また、(bashの)配列に変換して、それに対してiterateすることもできます。以下は例:
     
         eval arr=("$TM_SELECTED_FILES")
         for (( i = 0; i < ${#arr[@]}; i++ )); do
             file "${arr[$i]}"
         done
 
- * `TM_SELECTED_FILE` — full path of the first selected file or folder in the project drawer (may not be set).
+ * `TM_SELECTED_FILE` — プロジェクトドロワで最初に選択されているファイルもしくはフォルダの完全なパス（セットされていないかもしれません。）
 
- * `TM_SELECTED_TEXT` — full content of the selection (may not be set). Note that environment variables have a size limitation of roughly 64 KB, so if the user selects more than that, this variable will not reflect the actual selection (commands that need to work with the selection should generally set this to be the standard input).
+ * `TM_SELECTED_TEXT` — 選択範囲の全ての内容（セットされていないかもしれません。）。環境変数には代替64 KBというサイズ制限があります。なので、もしそれ以上を選択すると、この変数は実際の選択内容を反映しません。（一般的に、そのような選択範囲を使う必要があるコマンドは、標準インプット(standard input)を使うべきでしょう。）
 
- * `TM_SOFT_TABS` — this will have the value `YES` if the user has enabled soft tabs, otherwise it has the value `NO`. This is useful when a shell command generates an indented result and wants to match the users preferences with respect to tabs versus spaces for the indent.
+ * `TM_SOFT_TABS` — `YES`が値に入ります。そうでなければ、`NO`が入っています。これは、シェルコマンドがインデントされた結果を表示し、そのインデントがタブかスペースを、ユーザーの設定によってマッチさせたい時に便利です。
 
- * `TM_SUPPORT_PATH` — the TextMate application bundle contains a [support folder][SupportFolder] with several items which are used by some of the default commands (for example CocoaDialog, Markdown, the SCM commit window, Textile, tidy, etc.). This variable points to that support folder. Generally you would not need to use the variable directly since `$TM_SUPPORT_PATH/bin` is added to the path, so using some of the bundled commands can be done without having to specify their full path.
+ * `TM_SUPPORT_PATH` —  TextMateアプリケーションバンドルは、（CocoaDialog, Markdown, the SCM commit window, Textile, tidyなどの）デフォルトコマンドで使われるアイテムを含む[サポートフォルダ][SupportFolder]を含みます。`$TM_SUPPORT_PATH/bin`がパスに追加されるので、一般的にこの変数を直接使う必要はありません。よって、バンドルコマンドにはその完全なパスを指定しなくても使えるものがあります。
 
- * `TM_TAB_SIZE` — the tab size as shown in the status bar. This is useful when creating commands which need to present the current document in another form (Tidy, convert to HTML or similar) or generate a result which needs to match the tab size of the document. See also `TM_SOFT_TABS`.
+ * `TM_TAB_SIZE` — ステータスバーで表示されるタブサイズ。現在のドキュメントを（Tidy, convert to HTMLなどの）別の形で表示する必要があり、その結果を表示する際にドキュメントのタブサイズをマッチされた結果を作り出すためのコマンドを作る時に便利です。`TM_SOFT_TABS`も参照にしてください。
 
-## Static Variables
+## 静的変数
 
-In addition to the dynamic variables, which TextMate provides automatically, it is sometimes useful to provide a list of static variables.
+TextMateが自動的に提供する動的変数だけでなく、静的な変数のリストがあれば便利な時もあります。
 
-For example you may have templates or snippets that should insert your company name and prefer not to put the value directly in these, or there could be shared commands which need localized settings, for example the SQL bundle has a query command which use variables for username, password and database.
+例えば、会社名を挿入するテンプレートやスニペットがありその値を直接書き込みたくないときや、ローカライズされた設定が必要な共有コマンドがあるかもしれません。例えばSQLバンドルにはユーザ名、パスワード、データベースに変数を使うクエリコマンドがあります。
 
-For this reason it is possible to set a default list of environment variables in Preferences &#x2192; Advanced &#x2192; Shell Variables.
+このため、Preferences &#x2192; Advanced &#x2192; Shell Variablesにて環境変数のデフォルトのリストをセットすることができます。
 
 ![Shell Variables](shell_variables.png)
 
-These variables are given to all shell commands started from TextMate and can also be used in snippets (as can the dynamic variables for that matter).
+この変数は、TextMateから実行される全てのシェルコマンドに与えられます。また、（動的変数と同じように）スニペットで使うこともできます。
 
-## Context Dependent Variables
+## コンテクスト依存変数
 
-Some variables are a cross between dynamic and static. For example the Source bundle contains a Toggle Comment command which will toggle the comment for the current line or selection. This command uses three variables to decide what type of comment style the user wants.
+変数には動的にも静的にもなるものもあります。例えば、Sourceバンドルは現在の行か選択範囲をコメントにしたり、コメントアウトするToggle Commentコマンドがあります。このコマンドはユーザのが必要としているコメントのスタイルを決めるために３つの変数を使用します。
 
-A user who works with multiple languages will however need to specify this per language. This can be done by setting the `shellVariables` array in the [bundle preferences][PreferencesItems] and provide the proper [scope selector][ScopeSelectors] to limit these variables.
+しかしながら複数の言語を使うユーザは言語毎にこれを指定しなければいけません。[バンドルの設定][PreferencesItems]の`shellVariables`をセットし、この変数を制限するために、適切な[スコープセレクタ][ScopeSelectors]を与える必要があります。
 
 ![Scoped Environment Variables](scoped_environment_variables.png)
 
-This has the advantage of actually being based on the carets location, which for the Toggle Comment command allows us to have it work differently for JavaScript, CSS, HTML and embedded PHP + Ruby, all in the same document.
+これは、キャレットの位置に基づいて行われることに利点があります。というのは、Toggle Commentを使うことによって、一つのドキュメントにあるJavaScript, CSS, HTML, 埋め込まれたPHPやRubyを問題なく扱うことができます。
 
-An example of setting the 3 variables to comment the entire block (instead of line-by-line) with the HTML/SGML/XML comment markers is shown here:
+HTML/SGML/XMLのコメントマーカーを使って（行語とでなく）全てのブロックをコメントにする3つの変数を設定する例は以下のようになります。
 
     shellVariables = (
        {  name = 'TM_COMMENT_START';
@@ -109,10 +108,10 @@ An example of setting the 3 variables to comment the entire block (instead of li
     );
 
 
-## Project Dependent Variables
+## プロジェクト依存の変数
 
-Sometimes it is useful to have a command customized differently depending on the project. For this reason, it is possible to set variables for individual projects.
+プロジェクトによって、別にカスタマイズされたコマンドがあると便利な時もあります。そういう理由で、個別のプロジェクト毎に変数を設定することが可能です。
 
-The way to do this is currently a little secret but if you deselect everything in the project drawer, then click the info (circled I) button, a panel will appear where you can set variables.
+この方法は現在では、少し隠されていいます。プロジェクトドロワの全てから選択をはずし、（Iに丸がついている）インフォボタンをクリックすると、変数を設定するパネルが現れます。
 
-These variables are saved in the project file (`*.tmproj`) and will exist only for snippets and (shell) commands executed in the context of that project.
+この変数はプロジェクトファイル(`*.tmproj`)に保存され、そのプロジェクトの中で実行されるスニペットと（シェル）コマンドのみ保持します。

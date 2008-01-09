@@ -102,10 +102,10 @@
 		<dict>
 			<key>begin</key>
 			<string>(?x)^\s*
-    		        ((?:\b(abstract|protected|private|sealed)\b\s*)*)
+    		        ((?:\b(abstract|protected|private|sealed|case)\b\s*)*)
     				(class|object|trait)\s+
     				(\w+)\s*  # identifier;
-    				(?=\()</string>
+    				(?=\(*)</string>
 			<key>captures</key>
 			<dict>
 				<key>2</key>
@@ -261,7 +261,7 @@
 			<string>\b(super|this)\b</string>
 			<key>name</key>
 			<string>variable.language.scala</string>
-		</dict>		
+		</dict>
 		<dict>
 			<key>match</key>
 			<string>\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul)?\b</string>

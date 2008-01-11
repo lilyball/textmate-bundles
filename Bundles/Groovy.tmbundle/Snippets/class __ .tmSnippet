@@ -3,15 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>class ${1:ClassName} {
+	<string>$1${1/(.+)/(?1: )/}class ${2:${TM_FILENAME/(.*?)(\..+)/$1/}} ${3:extends ${4:Parent} }${5:implements ${6:Interface} }{
+	
 	$0
+
 }</string>
 	<key>name</key>
-	<string>class .. </string>
+	<string>class { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>
-	<string>cla</string>
+	<string>class</string>
 	<key>uuid</key>
 	<string>E7414082-0A63-4933-BB9E-9FB9C491749C</string>
 </dict>

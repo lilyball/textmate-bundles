@@ -4,15 +4,15 @@
 <dict>
 	<key>content</key>
 	<string>switch(${1:value}) {
-	case ${2:CASE}:
-       $4
-     break
-     default:
-       $3
-     break
+	case ${3:CASE}:
+		$4
+	break$0
+	default:
+		$2
+	break
 }</string>
 	<key>name</key>
-	<string>switch..case..default</string>
+	<string>switch … case … default</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

@@ -1,0 +1,49 @@
+package test
+import java.util.Map
+
+/**
+ * @author Luke Daley
+ */
+class Test extends Object implements Serializable {
+    
+    static String s = null
+    private n = -3459
+    def l = [1,2,3]
+    def c = [blah: new Integer(5), ghe: testMethod(false, "bah")]
+    def p = /sdasd/
+    def m = [key1: "value1", key2: "value2", (l): "value3"]
+
+    def testMethod(arg1, String typed) {
+        return 6
+    }
+    
+    static main(args) {
+        def n = -234e12
+        def t = true ? n : new Integer(1)
+        assert t : "Failure message"
+        def m = new HashMap(key1: "123", key2: "123")
+        m?.equals key1: "123"
+        
+
+        
+        switch(t) {
+            case m:
+                
+            break
+            case "CASE_NAME":
+                
+            break
+            default:
+                
+            break
+        }
+        
+        println "OK!"
+    }
+}
+
+private class PrivateTest {
+    
+    
+
+}

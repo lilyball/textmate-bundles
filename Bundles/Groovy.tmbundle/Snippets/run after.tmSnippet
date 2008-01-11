@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>runAfter(${2:delay}) { $1 }</string>
+	<string>runAfter(${1:delay}) {
+	$0
+}</string>
 	<key>name</key>
-	<string>run after</string>
+	<string>runAfter() { … }</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>tabTrigger</key>

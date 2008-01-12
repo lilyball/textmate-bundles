@@ -71,3 +71,9 @@ Thank you for the feedback.
 
 [2]: http://macromates.com/wiki/Bundles/StyleGuide
 
+## Simon -- 2008-01-12
+
+* I've address all of the issues and suggestions made. ( ISO-8859-1, wtf?! indeed, erm.. :$ )
+
+* Regarding the `ant.dtd` - Ant doesn't have an official / static dtd as it's so extendable. It does however provide a *task* to create a basic dtd for users to extend if appropriate. As I mentioned before I have doubts about it's usefulness so I've removed the associated *Create Ant.dtd* command and will leave it up to users to override the default behaviour of the validiation command.
+

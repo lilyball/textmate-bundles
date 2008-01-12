@@ -30,9 +30,7 @@ This is Experimental - The location of a script to format the output of ant. Scr
 The location of a custom `ant.dtd` against which, in addition to verifying that the XML is well-formed, the _Validate Build File_ command can check the document conforms. It is possible to generate an `ant.dtd` by running a `&lt;target&gt;` with the following contents: `&lt;antstructure output="ant.dtd" /&gt;`.
 
 * `TM_ANT_MANUAL_PATH`
-If you have installed your own version of Ant, you can set this variable to the location of its manual.  
-For example if you installed it via MacPorts then set it to `/opt/local/share/java/apache-ant/docs/manual`.  
-The default is to use the manual included with Apple’s developer tools with the [online version](http://ant.apache.org/manual/index.html) as a fallback.
+If you have installed your own version of Ant, you can set this variable to the location of its manual. For example if you installed it via MacPorts then set it to `/opt/local/share/java/apache-ant/docs/manual`. The default is to use the manual included with Apple’s developer tools with the [online version](http://ant.apache.org/manual/index.html) as a fallback.
 
 # Commands
 
@@ -47,9 +45,10 @@ Uses `TM_ANT_BUILD_FILE` if set, otherwise attempts to locate a build file and e
 **Key Equivalent:**  ⇧⌘B  
 Uses `TM_ANT_BUILD_FILE` if set, otherwise parses the current document for build targets from which you can select which one to execute.
 
-## Create Ant.dtd
-
-Creates/Updates the `ant.dtd` file and displays it in the html output window. A copy of the file is kept in the Bundle and the Validate Build File command can be configured to validate against the dtd.
+## Run
+  
+**Key Equivalent:**  ⌘R  
+Executes the current document.
 
 ## Validate Build File
 

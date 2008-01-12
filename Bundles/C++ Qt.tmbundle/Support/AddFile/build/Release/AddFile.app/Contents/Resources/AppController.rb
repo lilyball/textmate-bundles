@@ -104,8 +104,6 @@ private
   end
 
   def tm_directory
-    # `pwd`.chop
-    "/Users/mblsha/src/psi-svn/src"
-    # ENV['TM_DIRECTORY']
+    ENV['TM_DIRECTORY']
   end
 end

@@ -82,7 +82,7 @@ def get_destinations
 
   prefs = load_prefs(destinations)
 
-  window_title = if ENV.has_key? 'TM_SELECTED_TEXT'; 'Paste Selection Online'; else 'Paste Line Online'; end
+  window_title = if ENV.has_key? 'TM_SELECTED_TEXT'; 'Paste Selection Online'; else 'Paste Document Online'; end
   default_wrap = (ENV['TM_SCOPE'] =~ /^text\./) ? 1 : 0
   parameters = {
     'windowTitle'           =&gt; window_title,

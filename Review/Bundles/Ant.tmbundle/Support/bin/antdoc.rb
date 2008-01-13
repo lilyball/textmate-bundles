@@ -11,11 +11,12 @@ ANT_HELP_DICT = ENV['TM_BUNDLE_SUPPORT'] + '/data/ant_doc_dictionary.xml'
 # Work out what uri to use for the manual
 # If the user has specified the path use it, 
 # otherwise fall back on the default apple 
-# developer tools install location, then onto the apache website.
+# developer tools install location, then onto 
+# the apache website.
 
 ant_manual_path = "/Developer/Java/Ant/docs/manual" if !ENV['TM_ANT_MANUAL_PATH']
 ant_manual_uri = "http://ant.apache.org/manual"
-ant_manual_uri = "file://" + ant_manual_path if File.directory? ant_manual_path
+ant_manual_uri = "tm-file://" + ant_manual_path if File.directory? ant_manual_path
 ant_manual_uri = ant_manual_uri.gsub( /\/$/, '' )
 
 WORD = STDIN.read.strip
@@ -52,13 +53,16 @@ end
 
 if search_results.size == 1
 
-    puts "<meta http-equiv=\"refresh\" content=\"0; tm-file://#{search_results[0].attributes['href']}\">"
-
+    puts "<p>Redirecting: <ul>"
+    puts "<li>" + search_results[0].to_s + "</li>"
+    puts "<meta http-equiv=\"refresh\" content=\"0; #{search_results[0].attributes['href']}\">"
+    puts "</ul></p>"
+    
 elsif search_results.size > 0
     
     puts "<p><ul>"
     search_results.each { |tag| puts "<li>" + tag.to_s + "</li>" }
-    puts "</ul></p>"    
+    puts "</ul></p>"
 
 else
 

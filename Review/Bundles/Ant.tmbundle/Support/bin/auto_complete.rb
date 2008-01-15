@@ -15,11 +15,11 @@ TextMate.exit_show_tool_tip("Please select a term to complete.") if word.empty?
 
 search_results = [];
 ant_doc = REXML::Document.new File.new(ANT_COMPS)
-ant_doc.elements.each( "ant_completion_list/*" ) do |tag|
+ant_doc.elements.each( "completion_list/*" ) do |tag|
 
     n = tag.local_name
     
-    if n[/#{word}/i]
+    if n[/^#{word}/i]
         
         snip_num = 1;
         tag.attributes.each do |name, value| 
@@ -27,9 +27,16 @@ ant_doc.elements.each( "ant_completion_list/*" ) do |tag|
             snip_num = snip_num + 1
         end
         
-        #$0 tag.has_elements?
-        search_results.push( { 'title' => n , 'data' => tag.to_s }  )
-
+        unless tag.text == nil
+            if tag.text == " "
+                tag.text = "$0"
+            else
+                tag.text = '${' + snip_num.to_s + ':' + tag.text + '}'
+            end
+        end
+        
+        search_results.push( { 'title' => n , 'data' => tag.to_s.gsub( "'", '"' ) }  )
+        
     end
     
 end
@@ -46,7 +53,7 @@ if search_results.size > 1
 
 else
 
-	choice = search_results.pop
+	choice = search_results.pop['data']
 
 end
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
+"$TM_RUBY" -- "$TM_BUNDLE_SUPPORT/NuMate/run_script.rb"</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.nu</string>
+	<key>uuid</key>
+	<string>82E4152A-57BA-476F-9FC1-83920DFE2ADD</string>
+</dict>
+</plist>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -215,7 +215,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(with|function)(?=(\s*$|.*-&gt;))\b|((?&lt;!\|)(\|)(?!\|)(?=.*-&gt;))</string>
+			<string>\b(with|function)(?=(\s*$|.*-&gt;))\b|((?&lt;!\S)(\|)(?!\|)(?=.*-&gt;))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -1493,20 +1493,15 @@
 						</dict>
 						<dict>
 							<key>begin</key>
-							<string>(~)([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
+							<string>([a-z][a-zA-Z0-9'_]*)\s*(:)\s*</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.labeled-parameter.ocaml</string>
-								</dict>
-								<key>2</key>
-								<dict>
-									<key>name</key>
 									<string>entity.name.tag.label.ocaml</string>
 								</dict>
-								<key>3</key>
+								<key>2</key>
 								<dict>
 									<key>name</key>
 									<string>punctuation.separator.label.ocaml</string>

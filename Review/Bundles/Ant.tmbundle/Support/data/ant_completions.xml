@@ -155,7 +155,7 @@
 	<sync todir="site"> </sync>
 	<tar destfile="dist/manual.tar"/>
 	<tarfileset> </tarfileset>
-	<target name="targetName" description="does" depends="Anther target"> </target>
+	<target name="targetName" description="does" depends="another_target"> </target>
 	<taskdef name="myjavadoc" classname="com.mydomain.JavadocTask"/>
 	<telnet userid="bob" password="badpass" server="localhost"> </telnet>
 	<tempfile property="temp.file" suffix=".xml"/>

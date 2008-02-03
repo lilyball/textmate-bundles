@@ -2,18 +2,18 @@
 
 ## msheets - Feb 2
 
-* The standard name for beautify commands is 'Reformat Document / Selection', Textmate will pick the appropriate suffix based on if there is a selection or not. Should have a shortcut of ⌃⇧H
-* Since this is part of the main repository now Beautify C/ObjC should be submitted to that bundle and removed here.
-* Presuming the `TM_COMMENT_START` preference of ';; ' is intentional; the comment/uncomment command needs `TM_COMMENT_START_2` of '; ' and `TM_COMMENT_START_3` of '# ' to be added. (First is always added, 2+ are looked at when removing comments.)
-* Paths to executables are hardcoded, should really look at the PATH before falling back on something hardcoded.
-* Key equivalent for the grammar should be ⌃⌥⇧N rather than ⌃⌥⌘N
+**FIXED** * The standard name for beautify commands is 'Reformat Document / Selection', Textmate will pick the appropriate suffix based on if there is a selection or not. Should have a shortcut of ⌃⇧H
+**FIXED** * Since this is part of the main repository now Beautify C/ObjC should be submitted to that bundle and removed here.
+**FIXED** * Presuming the `TM_COMMENT_START` preference of ';; ' is intentional; the comment/uncomment command needs `TM_COMMENT_START_2` of '; ' and `TM_COMMENT_START_3` of '# ' to be added. (First is always added, 2+ are looked at when removing comments.)
+**FIXED** * Paths to executables are hardcoded, should really look at the PATH before falling back on something hardcoded.
+**FIXED** * Key equivalent for the grammar should be ⌃⌥⇧N rather than ⌃⌥⌘N
 * Here strings need punctuation scopes added.
 
 #### Grammar Notes
 
 Note that I'm not actually familiar with the syntax, just noting things that appear missing or wrong.
 
-* string.regex.nu typo, should be string.regexp.nu
+**FIXED** * string.regex.nu typo, should be string.regexp.nu
 * The \b starting the constant.numeric match is preventing negative numbers from being matched (-0).
 * constant.character match does not catch four character integers ('psLt' 'psA4').
 * constant.character could be more specific in it's matching to catch errors.

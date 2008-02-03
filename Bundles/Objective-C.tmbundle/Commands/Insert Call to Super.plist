@@ -21,19 +21,18 @@ proto_re = /
             ^\s*                # Start of the line and optional space
             [+-]\s*             # a plus or minus for method specifier
             \([^)]+\)           # the return type in brackets
-            ((?:\n|[^{;])*)     
-            (?m:[^;]*?)         
+            ((?:\n|[^{])*)     
+            (?m:.*?)         
             \{                  
           /x
 
 previous_lines  = STDIN.readlines[1..ENV['TM_LINE_NUMBER'].to_i - 1]
 invocation_line = previous_lines[-1]
-
 proto = previous_lines.join.scan(proto_re)[-1]
 
 exit if proto.nil? or proto.empty?
 
-last_proto_sel_with_types = proto[0].strip.sub(/\s+/, '').sub(%r{\s*//.*$}, '').gsub(/\n\s*/, ' ')
+last_proto_sel_with_types = proto[0].strip.sub(/^\s+/, '').sub(%r{\s*//.*$}, '').gsub(/\n\s*/, ' ')
 
 tabstop = 0
 

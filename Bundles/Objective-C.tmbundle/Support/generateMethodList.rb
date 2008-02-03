@@ -42,6 +42,9 @@ require 'optparse'
     opts.on("-m", "--methodOutput FILENAME", "Run verbosely") do |v|
       options[:method] = v
     end
+    opts.on("-w", "--withCocoaAncestry FILENAME", "Run verbosely") do |v|
+      options[:super] = v
+    end
   end.parse!
 
 def method_parse(k)
@@ -59,11 +62,56 @@ def method_parse(k)
   [methodName, types]
   
 end
+xlist = ["action:\tAK\tCl\tNSActionCell\tim\tvoid\tid",
+ "alertDidEnd:returnCode:contextInfo:\tAK\tCl\tNSAlert\tim\tvoid\tNSAlert *\tint\tvoid *",
+ "sheetDidEnd:returnCode:contextInfo:\tAK\tCl\tNSApplication\tim\tvoid\tNSWindow *\tint\tvoid *",
+ "myCustomDrawMethod:\tAK\tCl\tNSCustomImageRep\tim\tvoid\tid",
+ "document:didSave:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "document:shouldClose:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "didPresentErrorWithRecovery:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tBOOL\tvoid *",
+ "document:didPrint:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "document:didRunPageLayoutAndUserAccepted:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "document:didRunPrintOperation:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "document:didSave:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "document:didSave:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "document:didSave:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "document:didSave:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "document:shouldClose:contextInfo:\tAK\tCl\tNSDocument\tim\tvoid\tNSDocument *\tBOOL\tvoid *",
+ "documentController:didCloseAll:contextInfo:\tAK\tCl\tNSDocumentController\tim\tvoid\tNSDocumentController *\tBOOL\tvoid *",
+ "didPresentErrorWithRecovery:contextInfo:\tAK\tCl\tNSDocumentController\tim\tvoid\tBOOL\tvoid *",
+ "documentController:didReviewAll:contextInfo:\tAK\tCl\tNSDocumentController\tim\tvoid\tNSDocumentController *\tBOOL\tvoid *",
+ "action:\tAK\tCl\tNSFontManager\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSMatrix\tim\tvoid\tid",
+ "sortAction:\tAK\tCl\tNSMatrix\tim\tNSComparisonResult\tid",
+ "editor:didCommit:contextInfo:\tAK\tCl\tNSObject\tim\tvoid\tid\tBOOL\tvoid *",
+ "openPanelDidEnd:returnCode:contextInfo:\tAK\tCl\tNSOpenPanel\tim\tvoid\tNSSavePanel *\tint\tvoid *",
+ "openPanelDidEnd:returnCode:contextInfo:\tAK\tCl\tNSOpenPanel\tim\tvoid\tNSSavePanel *\tint\tvoid *",
+ "pageLayoutDidEnd:returnCode:contextInfo:\tAK\tCl\tNSPageLayout\tim\tvoid\tNSPageLayout *\tint\tvoid *",
+ "printOperationDidRun:success:contextInfo:\tAK\tCl\tNSPrintOperation\tim\tvoid\tNSPrintOperation *\tBOOL\tvoid *",
+ "printPanelDidEnd:returnCode:contextInfo:\tAK\tCl\tNSPrintPanel\tim\tvoid\tNSPrintPanel *\tint\tvoid *",
+ "didPresentErrorWithRecovery:contextInfo:\tAK\tCl\tNSResponder\tim\tvoid\tBOOL\tvoid *",
+ "savePanelDidEnd:returnCode:contextInfo:\tAK\tCl\tNSSavePanel\tim\tvoid\tNSSavePanel *\tint\tvoid *",
+ "action:\tAK\tCl\tNSStatusItem\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSStatusItem\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSTableView\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSToolbarItem\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSBrowser\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSBrowser\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSColorPanel\tim\tvoid\tid",
+ "editor:didCommit:contextInfo:\tAK\tCl\tNSController\tim\tvoid\tid\tBOOL\tvoid *",
+ "action:\tAK\tCl\tNSMenu\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSMenu\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSMenu\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSMenuItem\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSMenuItem\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSPopUpButton\tim\tvoid\tid",
+ "action:\tAK\tCl\tNSPopUpButtonCell\tim\tvoid\tid"]
 #headers = %x{find /System/Library/Frameworks/*.framework -name \*.h}.split("\n")
-headers = STDIN.read.split("\n")
+headers = STDIN.read.split("\0")
 #headers = ["test.h"]
 rgxp = /^((@interface)|(@end)|((\-|\+)\s*\()|((\-|\+)[^;]*\;)|(@protocol[^\n;]*\n))/
 list = []
+hash = {}
 classList = []
 headers.each do |name|
   if mat = name.match(/(\w*)\.framework/)
@@ -72,20 +120,24 @@ headers.each do |name|
     framework = "Priv"
   end
   filename = name.match(/(\w*)\.h/)[1]
-  unless framework == "JavaVM"
+  unless framework == "JavaVM" || framework == "vecLib"
+    #puts name
   open(name) do |file|
     str = file.read
     while m = str.match(rgxp)
       str = m[0] + m.post_match
       if m[2]
-        k = str.match /@interface(?:\s|\n)+(\w+)[^\n]*/
+        k = str.match /@interface(?:\s|\n)+(\w+)(?:\s*:\s*(\w+))?[^\n]*/
         if k
-          methodType = "dm" if k[0].match /\(\s*\w*[Dd]elegate\w*\s*\)/
+        methodType = "dm" if k[0].match /\(\s*\w*[Dd]elegate\w*\s*\)/
           className = k[1]
           if translate[framework]
             frameworkName = translate[framework]
           else
             frameworkName = "NA"
+          end
+          if k[2] && k[2]!="" #&&  options[:super]
+            hash[className] = {:super => k[2]}
           end
           classList << "#{className}"
           classType = "Cl"
@@ -100,7 +152,7 @@ headers.each do |name|
         str = m.post_match
       elsif m[4]
         k = str.match /[^;{]+?(;|\{)/
-        if inClass
+        if inClass && k
           methodName, types = method_parse(k[0])
           na = className
           na += ";#{filename}" unless className == filename
@@ -111,8 +163,10 @@ headers.each do |name|
              frameworkName = "NA"
            end
           list << "#{methodName}\t#{frameworkName}\t#{classType}\t#{na}\t#{methodType}\t#{types.join("\t")}"
+          str = k.post_match
+        else
+          str = m.post_match
         end
-        str = k.post_match
 
       elsif m[6]
         if inClass
@@ -146,13 +200,60 @@ headers.each do |name|
   end
 end
 end
+puts hash.inspect
+
 if options.empty?
   print list.join("\n")
 else
-  File.open(options[:class],"w")do |f| f.write(classList.uniq.join("\n")) end unless options[:class].nil?
+  if !hash.empty?
+    classList = [] # clear classList
+    require 'set'
+    if options[:super]
+      cocoaSet = %x{gunzip -c #{e_sh options[:super]} |cut -f1}.split("\n").to_set
+      hash.keys.each do |name|
+        if cocoaSet.include? hash[name][:super]
+          hash[name][:cocoa] = true
+        else
+          hash[name][:cocoa] = false
+        end
+      end
+    else
+      hash["NSObject"] = {:super => nil}
+      hash["NSProxy"] = {:super => nil}      
+    end
+    hash.keys.each do |name|
+     
+      tName = name
+      tString = "#{name}\t#{name}:"
+      i = 0
+      until hash[tName].nil? || ((hash[tName][:cocoa] && options[:super])) || i > 10
+        tName = hash[tName][:super]
+        tString += "#{tName}:"
+        i += 1
+      end
+      tString += hash[tName][:super] if hash[tName] && hash[tName][:cocoa]
+      classList << tString
+    end
+  end
+    File.open(options[:class],"w")do |f| f.write(classList.uniq.join("\n")) end unless options[:class].nil?
   File.open(options[:method],"w")do |f| f.write(list.join("\n")) end unless options[:method].nil?
 end
+ #s.split("\n").select{|a| a.match(/sel_of_type/)}.collect{|b| b.match(/"\(([^"]+)/)[0]}
 p options
-#netService:didNotPublish:	F	Cl	NSNetService;NSNetServices	dm	void	NSNetService *	NSDictionary *
-#begin = '((:))\s*(\()';
-#					end = '(\))\s*(\w+\b)?';
+extra = '
+cn = "" # use the xml exception files from BridgeSupport
+list = []
+l.each do |elem|
+  cn = elem.match(/class name=("|\')(.+?)\1/)[2]
+  ms = elem.split("\n").select{|a| a.match(/sel_of_type/)}.collect{|b| b.match(/sel_of_type="([^"]+)/)}
+  if ms && !ms.empty?
+    ms.each do |k|
+      puts k[1]
+      #.inspect
+      methodName, types = method_parse("-" + k[1])
+      list << "#{methodName}\tAK\tCl\t#{cn}\tim\t#{types.join("\t")}"
+    end
+  end
+end
+'
+

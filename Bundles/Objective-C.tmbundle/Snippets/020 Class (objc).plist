@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>@interface ${1:class} : ${2:NSObject}
+	<string>@interface ${1:${TM_FILENAME/\...*$|(^$)/(?1:object)/}} : ${2:NSObject}
 {
 }
 @end
 
-@implementation ${1:class}
+@implementation $1
 - (id)init
 {
 	if(self = [super init])
@@ -18,8 +18,6 @@
 }
 @end
 </string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Class</string>
 	<key>scope</key>

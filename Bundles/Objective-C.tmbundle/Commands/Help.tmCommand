@@ -19,11 +19,11 @@ In addition to this help file there are also 3 screencasts dedicated to showing 
 
  1. The [most recent][SC1] is by Joachim Mårtensson and shows completion, bracket matching, reformatting methods, and documentation lookup.
  2. [Objective-C Part 2][SC2] by Allan Odgaard.
- 3. [Graceful Objective-C Snippets][SC3] by Allan Objective.
+ 3. [Graceful Objective-C Snippets][SC3] by Allan Odgaard.
 
 You can see [all screencasts here][AllCasts].
 
-[SC1]: http://home.mac.se/joachimm/Post.html
+[SC1]: http://macromates.com/screencast/TextMateObjCScreenCast.mov
 [SC2]: http://macromates.com/blog/archives/2006/04/29/objective-c-part-2-screencast/
 [SC3]: http://macromates.com/blog/archives/2006/03/17/graceful-objective-c-snippets/
 [AllCasts]: http://macromates.com/screencasts
@@ -62,13 +62,13 @@ If the selector is partially typed, and the receiver is not a known class object
 
 Then a list is shown with all Cocoa methods starting with `setV`.
 
-Currently the list of completion candidates is not filtered to those implemented by `object`, since the type of `object` is unknown.
+Currently the list of completion candidates are only filtered to those implemented by `object`, when object is a method local variable of a type that has been indexed.
 
 One exception is when the receiver is itself a method call, for example in the following case:
 
 	[[object string] ‸]
 
-Here only methods implemented by `NSString` are suggested, since we know that the result of the `string` selector is an `NSString` object.
+Here only methods implemented by `NSString` are suggested, since it is know that the result of the `string` selector is an `NSString` object.
 
 For selectors with multiple arguments, it is possible to activate completion when entering the name of a later argument, for example:
 
@@ -82,7 +82,7 @@ When at the argument position, like here:
 
     [NSString stringWithCString:"foo" encoding:‸]
 
-Then it will check the argument type and find all constants which match that type. In the above example that would be all string encoding constants.
+The completion command will check the argument type and find all constants which match that type. In the above example that would be all string encoding constants.
 
 ## Outside of Brackets
 
@@ -118,11 +118,11 @@ The candidates suggested for the 6 different scopes are:
 
 ## Completing User Methods
 
-By default compleiton candidates comes from the various Apple frameworks (mostly under the Cocoa umbrella).
+By default completion candidates comes from the various Apple frameworks (mostly under the Cocoa umbrella).
 
-If you wish to have your own methods shown as completion candidates, you can invoke the *Index Headers for Completion* command.
+If you wish to have your own methods and classes shown as completion candidates, you can invoke the *Index Headers for Completion* command.
 
-This scans all headers in the current project folder and saves the result as `.methods.TM_Completions.txt.gz` in your project folder.
+This scans all headers in the current project folder and saves the result as `.methods.TM_Completions.txt.gz` and `.classes.TM_Completions.txt.gz` in your project folder.
 
 You can later re-run the command to update the index.
 
@@ -130,7 +130,7 @@ You can later re-run the command to update the index.
 
 ## Wrapping Selectors
 
-When you want to send a message (selector) to an object, you need to wrap both the object and message in square brackets (`[object message]`). If you did not already put the opening bracket at the start of the expression, then there is no need to go back and place it, since TextMate is smart enough to figure out where to place the start bracket, when typing the close bracket.
+When you want to send a message (selector) to an object, you need to wrap both the object and message in square brackets (`[object message]`). Even if you did not put an opening bracket at the start of the expression, there is no need to go back and place it, since TextMate is smart enough to figure out where to place the start bracket, when typing an unmatched close bracket.
 
 Here are two simple examples:
 
@@ -147,7 +147,7 @@ Then there are two candidates for the outcome:
     1. [obj message:arg otherMessage:arg2]
     2. obj message:[arg otherMessage:arg2]
 
-If `message:otherMessage:` is a known Cocoa method, then the first one is picked, otherwise the second one.
+If `message:otherMessage:` is a known Cocoa method or one of your indexed methods, then the first one is picked, otherwise the second one.
 
 ## Wrapping Objects
 

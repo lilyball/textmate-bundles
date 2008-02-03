@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>comment</key>
@@ -34,17 +34,27 @@
 	<array>
 		<dict>
 			<key>include</key>
+			<string>#special_block</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>source.c</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(friend|explicit|private|protected|public|virtual)\b</string>
+			<string>\b(friend|explicit|virtual)\b</string>
 			<key>name</key>
 			<string>storage.modifier.c++</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(catch|namespace|operator|try|throw|using)\b</string>
+			<string>\b(private:|protected:|public:)</string>
+			<key>name</key>
+			<string>storage.modifier.c++</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(catch|operator|try|throw|using)\b</string>
 			<key>name</key>
 			<string>keyword.control.c++</string>
 		</dict>
@@ -101,20 +111,18 @@
 		<dict>
 			<key>begin</key>
 			<string>(?x)
-				(?:  ^                                 # begin-of-line
-				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
-				)
-				((?:[A-Za-z_][A-Za-z0-9_]*::)*+~[A-Za-z_][A-Za-z0-9_]*) # actual name
-				 \s*(\() (?=[^)]*\)                      # match "(" and use look-ahead for ")"
-				 (\s*=\s*0)?\s*                        # optional pure modifier
-				 (\{|\n))                              # start bracket or end-of-line
-			</string>
+    				(?:  ^                                 # begin-of-line
+    				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
+    				)
+    				((?:[A-Za-z_][A-Za-z0-9_]*::)*+~[A-Za-z_][A-Za-z0-9_]*) # actual name
+    				 \s*(\()                           # start bracket or end-of-line
+    			</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.c</string>
+					<string>entity.name.function.c++</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -145,20 +153,18 @@
 		<dict>
 			<key>begin</key>
 			<string>(?x)
-				(?:  ^                                 # begin-of-line
-				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
-				)
-				((?:[A-Za-z_][A-Za-z0-9_]*::)*+~[A-Za-z_][A-Za-z0-9_]*) # actual name
-				 \s*(\() (?=[^)]*\)                      # match "(" and use look-ahead for ")"
-				 (\s*=\s*0)?\s*                        # optional pure modifier
-				 ;)                                    # terminating semi-colon
-			</string>
+    				(?:  ^                                 # begin-of-line
+    				  |  (?: (?&lt;!else|new|=) )             #  or word + space before name
+    				)
+    				((?:[A-Za-z_][A-Za-z0-9_]*::)*+~[A-Za-z_][A-Za-z0-9_]*) # actual name
+    				 \s*(\()                           # terminating semi-colon
+    			</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.c</string>
+					<string>entity.name.function.c++</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -186,51 +192,294 @@
 				</dict>
 			</array>
 		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>angle_brackets</key>
 		<dict>
 			<key>begin</key>
-			<string>(?x)
-				(?:  ^\s*)                             # begin-of-line
-				((?!while|for|do|if|else|switch|catch|enumerate|r?iterate)[A-Za-z_][A-Za-z0-9_:]*) # actual name
-				 \s*(\() (?=                             # match "("
-				           (?&lt;arg&gt; [^()]++ | \( \g&lt;arg&gt;*+ \) )*+   # function arguments
-				    \)                                 # match ")"
-				 (\s* : (?&lt;base&gt; \s* [A-Za-z_][A-Za-z0-9_]* \( \g&lt;arg&gt;*+ \) ) (, \g&lt;base&gt;)* (, (?=\s*\n))? )? \s*  # optional base constructors
-				 (\{|\n))                              # start bracket or end-of-line
-			</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.c</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.parameters.c</string>
-				</dict>
-			</dict>
+			<string>&lt;</string>
 			<key>end</key>
-			<string>\)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.parameters.c</string>
-				</dict>
-			</dict>
+			<string>&gt;</string>
 			<key>name</key>
-			<string>meta.function.constructor.c++</string>
+			<string>meta.angle-brackets.c++</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#angle_brackets</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>$base</string>
 				</dict>
 			</array>
 		</dict>
-	</array>
+		<key>block</key>
+		<dict>
+			<key>begin</key>
+			<string>\{</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>name</key>
+			<string>meta.block.c++</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.any-method.c</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.parameters.c</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?x)
+    				(
+    					(?!while|for|do|if|else|switch|catch|enumerate|return|r?iterate)(?: \b[A-Za-z_][A-Za-z0-9_]*+\b | :: )*+                  # actual name
+    				)
+    				 \s*(\()</string>
+					<key>name</key>
+					<string>meta.function-call.c</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
+				</dict>
+			</array>
+		</dict>
+		<key>constructor</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?x)
+    				(?:  ^\s*)                             # begin-of-line
+    				((?!while|for|do|if|else|switch|catch|enumerate|r?iterate)[A-Za-z_][A-Za-z0-9_:]*) # actual name
+    				 \s*(\()                            # start bracket or end-of-line
+    			</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.c++</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.parameters.c</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.parameters.c</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.function.constructor.c++</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x)
+    				(:)                            # begin-of-line
+    				((?=\s*[A-Za-z_][A-Za-z0-9_:]* # actual name
+    				 \s*(\()))                      # start bracket or end-of-line
+    			</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.parameters.c</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\{)</string>
+					<key>name</key>
+					<string>meta.function.constructor.initializer-list.c++</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>special_block</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b(namespace)\s+([A-Za-z_][_A-Za-z0-9:]*\b)?+(?!\s*?(;|=|,))</string>
+					<key>end</key>
+					<string>(?&lt;=\})</string>
+					<key>name</key>
+					<string>meta.namespace-block.c++</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>\{</string>
+							<key>end</key>
+							<string>\}</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#special_block</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#constructor</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>$base</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b(class|struct)\s+([_A-Za-z][_A-Za-z0-9]*\b)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.c++</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.type.c++</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?&lt;=\})|(?=(;|,|\(|\)|&gt;|\[|\]))</string>
+					<key>name</key>
+					<string>meta.class-struct-block.c++</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#angle_brackets</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(\{)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.c++</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(\})(\s*\n)?</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.c++</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>illegal.you-forgot-semicolon.c++</string>
+								</dict>
+							</dict>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#special_block</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#constructor</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>$base</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b(extern)(?=\s*")</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.c++</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?&lt;=\})|(?=\w)</string>
+					<key>name</key>
+					<string>meta.extern-block.c++</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>\{</string>
+							<key>end</key>
+							<string>\}</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#special_block</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>$base</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>$base</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.c++</string>
 	<key>uuid</key>

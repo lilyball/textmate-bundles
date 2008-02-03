@@ -22,7 +22,7 @@ paths.each do |path|
   colors = %w[ white lightsteelblue ]
 
   file = if path == base then '.' else git.shorten(path, base) end
-  open("|git log #{e_sh file}") do |io|
+  open("|#{git.git} log #{e_sh file}") do |io|
     io.read.scan(/^commit (.+)$\n((?:\w+: .*\n)*)((?m:.*?))(?=^commit|\z)/) do |e|
       commit, msg = $1, $3
       headers = $2.scan(/(\w+):\s+(.+)/)

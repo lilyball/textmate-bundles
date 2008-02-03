@@ -23,7 +23,7 @@ if 'Revert' == TextMate::UI.alert(:warning, "Revert #{files}?", "Do you really w
   Dir.chdir(base)
 
   paths.each do |e|
-    puts %x{git checkout #{e_sh git.shorten(e, base)}}
+    puts %x{#{git.git} checkout #{e_sh git.shorten(e, base)}}
   end
 
   git.rescan_project

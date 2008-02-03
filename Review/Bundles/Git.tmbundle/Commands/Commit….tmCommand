@@ -54,7 +54,7 @@ STDOUT.flush
 
 unless files.empty?
   puts "&lt;h2&gt;Result:&lt;/h2&gt;"
-  res = %x{git commit -m #{e_sh msg} #{files.map { |e| e_sh e }.join(' ')}}
+  res = %x{#{git.git} commit -m #{e_sh msg} #{files.map { |e| e_sh e }.join(' ')}}
   puts "&lt;pre&gt;#{htmlize(res)}&lt;/pre&gt;"
 end
 </string>

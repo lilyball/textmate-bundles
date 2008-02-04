@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# run with find /System/Library/Frameworks/*.framework -name \*.h | ruby generateMethodList.rb
+# run with find /System/Library/Frameworks/*.framework -name \*.h -print0 | ruby generateMethodList.rb
 translate = {"Message" => "Me",
 "AddressBook" => "AB",
 "SecurityFoundation" => "SF",

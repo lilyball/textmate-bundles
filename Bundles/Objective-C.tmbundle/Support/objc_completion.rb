@@ -621,7 +621,7 @@ class ObjCMethodCompletion
     k = k.match(/[^;\{]+?(;|\{)/)
     if k
       l = k[0].scan(/(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*([_a-zA-Z][_a-zA-Z0-9]*)|(([a-zA-Z][a-zA-Z0-9]*)?:)/)
-      types = l.select {|item| item[3] && item[3].match(/([A-Z]\w)\s*\*/) &&  item[5] }
+      types = l.select {|item| item[3] && item[3].match(/([A-Z]\w*)\s*\*/) &&  item[5] }
       h = {}
       types.each{|item| h[item[5]] = item[3].gsub(/(\w)\s*\*/,'\1 *') }
       l = k.post_match.scan(/([A-Z]\w+)\s*\*\s*(\w+(?:\s*\,\s*\*\s*\w+)*)/)

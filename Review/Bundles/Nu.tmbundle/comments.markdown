@@ -17,8 +17,8 @@ Note that I'm not actually familiar with the syntax, just noting things that app
 * The \b starting the constant.numeric match is preventing negative numbers from being matched (-0).
 * constant.character match does not catch four character integers ('psLt' 'psA4').
 * constant.character could be more specific in it's matching to catch errors.
-* Appears to be a lot of operators missing from keyword.operator?
-* Is constant.language missing YES|NO|ZERO|NULL?
+**FIXED** * Appears to be a lot of operators missing from keyword.operator?
+**FIXED** * Is constant.language missing YES|NO|ZERO|NULL?
 * Second imethod/cmethod incorrectly matched in:
     
     (imethod (void) test-imethod is 1234)
@@ -26,7 +26,7 @@ Note that I'm not actually familiar with the syntax, just noting things that app
     
 * Strings missing #{(+ 1 1 1)} interpolation matching.
 * Escapes in double-quoted strings don't match octal, hexadecimal or unicode escapes, ditto in <<+ here-strings.
-* The options in the regexp end match should match only [isxlm]*
+**FIXED** * The options in the regexp end match should match only [isxlm]*
 * The -/+ prefixing double-quoted strings should be matched as part of the string punctuation.
 * With the previous added they could actually be split into two rules with one not supporting escapes and #{} matching.
 

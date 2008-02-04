@@ -23,7 +23,7 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>\b(?i:nil|self|super)\b</string>
+			<string>\b(?i:nil|self|super|YES|NO|margs)\b</string>
 			<key>name</key>
 			<string>constant.language.nu</string>
 		</dict>
@@ -133,7 +133,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>/[a-z]*</string>
+			<string>/[isxlm]*</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
@@ -218,6 +218,35 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b((ivar)\s+((\w|\-|\!|\?)*)(\s+(is)\s+((\w|\-|\!|\?)*))?|ivars|ivar-accessors)</string>
+			<key>name</key>
+			<string>meta.ivars.nu</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
 					<string>storage.type.function-type.nu</string>
 				</dict>
 				<key>2</key>
@@ -233,7 +262,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i:let|set|global|cond|case|do|loop|until|while|for|break|continue|if|else|then|unless|try|throw|catch)\b</string>
+			<string>\b(?i:let|set|global|cond|case|do|loop|until|while|for|break|continue|if|else|then|unless|try|throw|catch|array|dict|list)\b</string>
 			<key>name</key>
 			<string>keyword.control.nu</string>
 		</dict>

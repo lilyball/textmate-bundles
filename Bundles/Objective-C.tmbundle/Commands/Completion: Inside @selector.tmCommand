@@ -135,9 +135,9 @@ if k = line[0..caret_placement].match(methodDeclaration)
   candidates = candidates_or_exit( k[1], nil, "cocoa.txt.gz")
   res =pop_up(candidates, k[1])
   TextMate.exit_discard if res == "$0"
-  print "@selector(" + k[1] + res + line[caret_placement + 1 ..  -1]
+  print "@selector(" + k[1] + res + e_sn(line[caret_placement + 1 ..  -1])
 else
-  #TextMate.exit_discard
+  TextMate.exit_discard
 end
 </string>
 	<key>disableOutputAutoIndent</key>

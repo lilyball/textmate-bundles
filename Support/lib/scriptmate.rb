@@ -6,6 +6,9 @@ require SUPPORT_LIB + 'io'
 require 'cgi'
 require 'fcntl'
 
+$KCODE = 'u'
+require 'jcode'
+
 $SCRIPTMATE_VERSION = "$Revision$"
 
 def my_popen3(*cmd) # returns [stdin, stdout, strerr, pid]

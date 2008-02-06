@@ -249,6 +249,11 @@ HTML
     div.scriptmate a {
     	color: #FF5600;
     }
+    
+    div#exception_report pre.snippet {
+      margin:4pt;
+      padding:4pt;
+    }
   </style>
   <strong class="warning" style="float:left; color:#B4AF00;">#{@command.warning}</strong>
   <div class="scriptmate #{@mate.downcase}">

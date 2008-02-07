@@ -31,6 +31,7 @@ translate = {"Message" => "Me",
 "XgridFoundation" => "Grid",
 "IOBluetoothUI" => "BUI"}
 require 'optparse'
+require 'escape'
 
   options = {}
   OptionParser.new do |opts|

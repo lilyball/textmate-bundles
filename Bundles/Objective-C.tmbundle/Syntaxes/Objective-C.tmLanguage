@@ -571,6 +571,26 @@
 				</dict>
 			</array>
 		</dict>
+		<key>disabled</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*#\s*if(n?def)?\b.*$</string>
+			<key>comment</key>
+			<string>eat nested preprocessor if(def)s</string>
+			<key>end</key>
+			<string>^\s*#\s*endif\b.*$</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#disabled</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#pragma-mark</string>
+				</dict>
+			</array>
+		</dict>
 		<key>implementation_innards</key>
 		<dict>
 			<key>patterns</key>
@@ -770,6 +790,31 @@
 					<string>$base</string>
 				</dict>
 			</array>
+		</dict>
+		<key>pragma-mark</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.preprocessor.c</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.import.pragma.c</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>meta.toc-list.pragma-mark.c</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(#\s*(pragma\s+mark)\s+(.*))</string>
+			<key>name</key>
+			<string>meta.section</string>
 		</dict>
 		<key>preprocessor-rule-disabled-implementation</key>
 		<dict>
@@ -1087,6 +1132,33 @@
 				<dict>
 					<key>include</key>
 					<string>#implementation_innards</string>
+				</dict>
+			</array>
+		</dict>
+		<key>preprocessor-rule-other-interface</key>
+		<dict>
+			<key>begin</key>
+			<string>^\s*(#\s*(if(n?def)?)\b.*?(?:(?=(?://|/\*))|$))</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.preprocessor.c</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.import.c</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>^\s*(#\s*(endif)\b).*$</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#interface_innards</string>
 				</dict>
 			</array>
 		</dict>

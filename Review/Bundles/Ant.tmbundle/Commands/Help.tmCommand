@@ -17,7 +17,7 @@ The most recent version of Ant can be downloaded [here](http://ant.apache.org/bi
 
 These environment variables allow you to define or customise the behavior of certain commands. For help on setting them up please see [TextMate help](?environment_variables).
 
-* `$TM_ANT` (default: `ant`)
+* `TM_ANT` (default: `ant`)
 The path to your ant executable.
 
 * `TM_ANT_BUILD_FILE`
@@ -55,12 +55,7 @@ Executes the current document.
 **Target:** Current Document  
 **Key Equivalent:**  ⌃⇧V    
 **Scope:** text.xml.ant  
-Validates the current document as valid XML. When the `TM_ANT_DTD_FILE` [environmental variable](?environment_variables) has been set the document is also validated against the requested `ant.dtd`.
-
-# TODO
- 
-Pretty Printing of output - linking errors to files in TM.  
-Generation of Auto Completions via Ant.dtd (maybe even the language file ?).
+Validates the current document as valid XML. When the `TM_ANT_DTD_FILE` [environmental variable](?environment_variables) has been set the document is also validated against the requested `ant.dtd`.  
 
 # Contributors
 

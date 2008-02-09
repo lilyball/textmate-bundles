@@ -14,7 +14,7 @@
 Note that I'm not actually familiar with the syntax, just noting things that appear missing or wrong.
 
 **FIXED** * string.regex.nu typo, should be string.regexp.nu
-* The \b starting the constant.numeric match is preventing negative numbers from being matched (-0).
+**FIXED** * The \b starting the constant.numeric match is preventing negative numbers from being matched (-0).
 * constant.character match does not catch four character integers ('psLt' 'psA4').
 * constant.character could be more specific in it's matching to catch errors.
 **FIXED** * Appears to be a lot of operators missing from keyword.operator?

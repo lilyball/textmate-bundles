@@ -274,6 +274,12 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>[/*+-/&amp;|&gt;&lt;=!]</string>
+			<key>name</key>
+			<string>keyword.operator.symbolic.nu</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>\b(?i:append|atom|cons|car|cdr|context|eval|head|quote|parse|progn|send|tail|load|system|puts|help|version|beep)\b</string>
 			<key>name</key>
 			<string>support.function.nu</string>

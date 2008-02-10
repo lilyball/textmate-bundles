@@ -19,15 +19,17 @@ def join_code s
         line
       end
     end
-  print s.split("\n").map {|line| line.strip}.join(" ")
+  s.split("\n").map {|line| line.strip}.join(" ")
 end
 
 def print_line(line, indent, for_ticker)
-  puts "" if for_ticker == 0
-  print $tab*indent + line # the space should be replaced with soft or hard tab
+  s = ""
+  s = "\n" if for_ticker == 0
+  s + $tab*indent + line # the space should be replaced with soft or hard tab
 end
 
 def split_code s
+  res = []
   indent = 0
   for_ticker = 1
   # this regexp should not have a capture depth deeper than 1
@@ -36,23 +38,36 @@ def split_code s
     l = l.strip
     case l
     when /^for\s*\(/
-      print_line(l, indent, for_ticker)
+      res &lt;&lt; print_line(l, indent, for_ticker)
       for_ticker = 5
     when "{"
-      print_line(l, indent, for_ticker)
+      s = print_line(l, indent, for_ticker)
+	 for_ticker -= 1 unless for_ticker == 0
       indent += 1
+	  s += print_line("", indent, for_ticker)
+      res &lt;&lt; s
     when "}"
       indent -= 1
-      print_line(l, indent, for_ticker)
+      res &lt;&lt; print_line(l, indent, for_ticker)
+      res &lt;&lt; print_line("", indent, for_ticker)
     when ";"
-      print l
+      res &lt;&lt; l
+	 res &lt;&lt; print_line("", indent, for_ticker)
     when /^\s*$/
 	 for_ticker += 1 # if empty string maintain the status-quo
     else
-      print_line(l, indent, for_ticker)
+      res &lt;&lt; l
     end
     for_ticker -= 1 unless for_ticker == 0
   end
+
+require "enumerator"
+out = []
+res.each_cons(2) do |a,b|
+   # remove empty lines inserted when ; is followed by { or }
+	out &lt;&lt; a unless a.match(/^\n\s*$/) &amp;&amp; b.match(/^\n\s*(\}|\{)\s*$/)
+end
+print out.join
 end
 
 if line.count("\n") &gt; 1

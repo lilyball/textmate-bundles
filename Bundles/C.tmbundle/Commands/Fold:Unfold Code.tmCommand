@@ -52,7 +52,11 @@ def split_code s
       res &lt;&lt; print_line("", indent, for_ticker)
     when ";"
       res &lt;&lt; l
-	 res &lt;&lt; print_line("", indent, for_ticker)
+      if for_ticker == 0
+        res &lt;&lt; print_line("", indent, for_ticker)
+      else
+        res &lt;&lt; " "
+      end
     when /^\s*$/
 	 for_ticker += 1 # if empty string maintain the status-quo
     else

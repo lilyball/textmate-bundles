@@ -19,7 +19,7 @@ def join_code s
         line
       end
     end
-  s.split("\n").map {|line| line.strip}.join(" ")
+  print s.split("\n").map {|line| line.strip}.join(" ")
 end
 
 def print_line(line, indent, for_ticker)

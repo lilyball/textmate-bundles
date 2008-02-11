@@ -3,7 +3,7 @@
 require "rexml/document"
 
 #Locates the ServerRoot path.
-def findServerRoot
+def find_server_root
     conf = File.open( ENV['TM_FILEPATH'], "r" )
     conf.each do |line|
         if line =~ /^ServerRoot/ 
@@ -19,9 +19,9 @@ end
 #       /Library/WebServer/share/httpd/manual/mod/directives.html       
 # TODO: Update the xPath definition to use the directives.html.
 #
-# Example useage: generateDefinitionCompletions( "directive_list.xml" )
+# Example useage: generate_definition_completions( "directive_list.xml" )
 #
-def generateDefinitionCompletions( directive_list )
+def generate_definition_completions( directive_list )
 
     completions = "{ completions = ( "
     
@@ -37,7 +37,7 @@ def generateDefinitionCompletions( directive_list )
     
 end
 
-# TODO: generateModuleCompletions
+# TODO: generate_module_completions
 # /Library/WebServer/share/httpd/manual/mod/index.html
 #def generateModuleCompletions( module_list )
 #end

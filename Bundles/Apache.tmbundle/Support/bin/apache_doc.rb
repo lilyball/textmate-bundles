@@ -16,7 +16,7 @@ APACHE_HELP_DICT = ENV['TM_BUNDLE_SUPPORT'] + '/data/apache_doc_dictionary.xml'
 # install location, then onto the apache website.
 
 apache_web_manual = "http://httpd.apache.org/docs/2.2"
-localhost_manual  = "http://localhost/manual"
+localhost_manual  = "http://localhost/manual/"
 file_manual       = "/Library/WebServer/share/httpd/manual"
 user_manual       = ENV['TM_APACHE_MANUAL_URI']
 apache_manual_uri = if !user_manual then localhost_manual else user_manual end
@@ -28,7 +28,10 @@ if apache_manual_uri =~ /^http:\/\//
 
         #Try and see if we can reach our server.
         httpd_running = Net::HTTP.get_response(URI.parse( apache_manual_uri ))
-        unless httpd_running === Net::HTTPSuccess or httpd_running === Net::HTTPRedirection
+        puts httpd_running.to_s
+        if httpd_running === Net::HTTPSuccess or httpd_running === Net::HTTPRedirection
+            #All is ok.
+        else
             #If we can't use it try file://.
             apache_manual_uri = file_manual
         end
@@ -58,10 +61,10 @@ WORD = STDIN.read.strip
 
 #Temp detection of OS and if it's < Leopard, stick with the old system.
 #This is because I don't have Tiger to test against at the moment.
-system_version = `defaults read /System/Library/CoreServices/SystemVersion ProductVersion`
-unless system_version =~ /10.5.*/
-    print "<html><head><meta http-equiv=\"Refresh\" content=\"0; http://search.apache.org/index.cgi?query=#{WORD}\"></head><body></body></html>"
-end
+# system_version = `defaults read /System/Library/CoreServices/SystemVersion ProductVersion`
+# unless system_version =~ /10.5.*/
+#     print "<html><head><meta http-equiv=\"Refresh\" content=\"0; http://search.apache.org/index.cgi?query=#{WORD}\"></head><body></body></html>"
+# end
 
 if WORD.empty?
     

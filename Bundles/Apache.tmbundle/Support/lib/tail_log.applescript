@@ -1,4 +1,5 @@
-#!/usr/bin/osascript
+--#!/usr/bin/osascript
+-- The line above is Leopard only
 
 on run argv
 	

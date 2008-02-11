@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -23,7 +23,8 @@ fi
 
 if [[ -f "$TM_APACHE_ERROR_LOG" ]]; then
 
-	tailLog "$TM_APACHE_ERROR_LOG" "httpd Error Log"
+	#tailLog "$TM_APACHE_ERROR_LOG" "httpd Error Log"
+	osascript "$TM_BUNDLE_SUPPORT/lib/tail_log.applescript" "$TM_APACHE_ERROR_LOG" "httpd Error Log" &gt;/dev/null;
 
 else
 
@@ -40,6 +41,6 @@ fi
 	<key>scope</key>
 	<string>source.apache-config</string>
 	<key>uuid</key>
-	<string>9460A02A-EC2A-4A03-9F99-21201D7B7988</string>
+	<string>1A0D0005-C4A6-4CCE-BB67-5E6FA53D31E0</string>
 </dict>
 </plist>

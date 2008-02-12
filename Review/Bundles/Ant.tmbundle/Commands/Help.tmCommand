@@ -11,7 +11,9 @@ html_header "Apache Ant Bundle Help" "Ant"
 "$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
 # Installation
 
-The most recent version of Ant can be downloaded [here](http://ant.apache.org/bindownload.cgi). An installation guide can be found [here]( http://www.asceticmonk.com/blog/?p=388 ). Alternatively Ant can be found on the Apple Developer Tools Install Disk, however as of Tiger this is not the most recent version. 
+The most recent version of Ant can be downloaded [here](http://ant.apache.org/bindownload.cgi). An installation guide can be found [here]( http://www.asceticmonk.com/blog/?p=388 ). Alternatively Ant can be found on the Apple Developer Tools Install Disk, the Leopard install includes the most recent version of Ant (1.7.0) but Tiger is out of date.
+
+As Ant files are XML TextMate won't automatically recognise the language, to achive this you can suffix your files with `ant.xml` or include `&lt;!--ant--&gt;` on the first line.
 
 # Configuration Options
 

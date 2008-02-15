@@ -21,7 +21,7 @@ class TextmateCodeCompletion
       options[:select     ] = ENV['TM_COMPLETION_select'     ] if ENV['TM_COMPLETION_select'     ]
       options[:sort       ] = ENV['TM_COMPLETION_sort'       ] if ENV['TM_COMPLETION_sort'       ]
       options[:unique     ] = ENV['TM_COMPLETION_unique'     ] if ENV['TM_COMPLETION_unique'     ]
-      options[:scope      ] = ENV['TM_COMPLETION_scope'      ] if ENV['TM_COMPLETION_scope'      ]
+      options[:scope      ] = ENV['TM_COMPLETION_scope'      ].to_sym if ENV['TM_COMPLETION_scope'      ]
       
       options[:sort       ] = true  if options[:sort       ] == 'true'
       options[:sort       ] = false if options[:sort       ] == 'false'
@@ -58,7 +58,7 @@ class TextmateCodeCompletion
     @options[:characters] = /\w+$/
     
     @options.merge!(options)
-    @options.merge!(TextmateCompletionsParser::PARSERS[options[:scope]]) if options[:scope]
+    @options.merge!(TextmateCompletionsParser::PARSERS[options[:scope]] || {}) if options[:scope]
     
     @debug = true
     

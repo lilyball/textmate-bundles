@@ -9,7 +9,8 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-print TextmateCodeCompletion.new(TextmateCompletionsText.new(ENV['TM_COMPLETIONS'],{:split=&gt;''}).to_ary,STDIN.read,{:unique =&gt; true}).to_snippet</string>
+TextmateCodeCompletion.go!({:split=&gt;'', :unique =&gt; true})
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

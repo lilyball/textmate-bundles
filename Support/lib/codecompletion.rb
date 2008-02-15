@@ -12,7 +12,24 @@ class TextmateCodeCompletion
   EMPTY_ROW = /(^\s*$)/
   
   class << self
+    def parse_options(options={})
+      options[:split      ] = ENV['TM_COMPLETION_split'      ] if ENV['TM_COMPLETION_split'      ]
+      options[:characters ] = ENV['TM_COMPLETION_characters' ] if ENV['TM_COMPLETION_characters' ]
+      options[:filter     ] = ENV['TM_COMPLETION_filter'     ] if ENV['TM_COMPLETION_filter'     ]
+      options[:nil_context] = ENV['TM_COMPLETION_nil_context'] if ENV['TM_COMPLETION_nil_context']
+      options[:padding    ] = ENV['TM_COMPLETION_padding'    ] if ENV['TM_COMPLETION_padding'    ]
+      
+      options[:select     ] = ENV['TM_COMPLETION_select'     ] if ENV['TM_COMPLETION_select'     ]
+      options[:sort       ] = ENV['TM_COMPLETION_sort'       ] if ENV['TM_COMPLETION_sort'       ]
+      
+      options[:select     ] = true  if options[:select     ] == 'true'
+      options[:sort       ] = true  if options[:sort       ] == 'true'
+      options[:select     ] = false if options[:select     ] == 'false'
+      options[:sort       ] = false if options[:sort       ] == 'false'
+      return options
+    end
     def go!(options={})
+      options = TextmateCodeCompletion.parse_options(options)
       print TextmateCodeCompletion.new(
         TextmateCompletionsText.new(ENV['TM_COMPLETIONS'],{:split=>','}.merge(options)).to_ary,
         STDIN.read,
@@ -34,6 +51,8 @@ class TextmateCodeCompletion
   end
   
   def initialize(choices=nil,line=nil,options={})
+    options = TextmateCodeCompletion.parse_options(options)
+    
     @options = {}
     @options[:characters] = /\w+$/
     
@@ -279,6 +298,9 @@ class TextmateCompletionsText
   attr :choices, true
   
   def initialize(path,options={})
+    return false unless path
+    options = TextmateCodeCompletion.parse_options(options)
+    
     options[:split] ||= "\n"
     
     if path.match(options[:split])

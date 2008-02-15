@@ -211,6 +211,15 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     assert_equal "basic$0", text
   end
   
+  def test_go_vars
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "basic", "TM_COLUMN_NUMBER" => "6", "TM_INPUT_START_COLUMN" => "1"})
+    ENV['TM_COMPLETIONS'] = 'basicbasic1'
+    ENV['TM_COMPLETION_split'] = ''
+    
+    text = TextmateCodeCompletion.go!
+    assert_equal "basic$0", text
+  end
+  
   def test_shouldnt_have_to_escape_dollars
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
     assert_equal %q{\$\$(${1:'${2:selectors:mixed}'})\$\$$0}, TextmateCodeCompletion.new(["$$('selectors:mixed')$$"]).to_snippet

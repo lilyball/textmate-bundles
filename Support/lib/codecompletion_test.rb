@@ -210,6 +210,12 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     text = TextmateCodeCompletion.go!
     assert_equal "basic$0", text
   end
+  
+  def test_shouldnt_have_to_escape_dollars
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
+    assert_equal %q{\$\$(${1:'${2:selectors:mixed}'})\$\$$0}, TextmateCodeCompletion.new(["$$('selectors:mixed')$$"]).to_snippet
+    assert_equal %q{\$apple\$$0}, TextmateCodeCompletion.new(["$apple$"]).to_snippet
+  end
 end
 
 # DEPRECATED

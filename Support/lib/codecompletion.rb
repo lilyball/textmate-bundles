@@ -217,6 +217,7 @@ class TextmateCodeCompletion
   def snippetize_methods(text)
     text = text.to_s
     @place = 0
+    text.gsub!(/(\$)/) { |g| snip($1) }
     text.gsub!(/([\(,])([^\),]*)/) do |g|
       thing = $2
       "#{$1}${#{@place += 1}:#{snippetize_quotes(thing,true)}}"

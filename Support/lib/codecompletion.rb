@@ -18,14 +18,14 @@ class TextmateCodeCompletion
       options[:filter     ] = ENV['TM_COMPLETION_filter'     ] if ENV['TM_COMPLETION_filter'     ]
       options[:nil_context] = ENV['TM_COMPLETION_nil_context'] if ENV['TM_COMPLETION_nil_context']
       options[:padding    ] = ENV['TM_COMPLETION_padding'    ] if ENV['TM_COMPLETION_padding'    ]
-      
       options[:select     ] = ENV['TM_COMPLETION_select'     ] if ENV['TM_COMPLETION_select'     ]
       options[:sort       ] = ENV['TM_COMPLETION_sort'       ] if ENV['TM_COMPLETION_sort'       ]
+      options[:unique     ] = ENV['TM_COMPLETION_unique'     ] if ENV['TM_COMPLETION_unique'     ]
       
-      options[:select     ] = true  if options[:select     ] == 'true'
       options[:sort       ] = true  if options[:sort       ] == 'true'
-      options[:select     ] = false if options[:select     ] == 'false'
       options[:sort       ] = false if options[:sort       ] == 'false'
+      options[:unique     ] = true  if options[:unique     ] == 'true'
+      options[:unique     ] = false if options[:unique     ] == 'false'
       return options
     end
     def go!(options={})

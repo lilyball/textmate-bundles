@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Apache HTTP Server Bundle Help" "Apache"
+
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
+# Installation
+
+The Apache HTTP Server is installed by default on OS X and can be enabled here "Sytem Preferences &amp;#x2192; Sharing &amp;#x2192; Web Sharing". 
+
+If you would like to install it manually then the most recent version of Apache can be downloaded [here](http://httpd.apache.org/download.cgi).
+
+# Configuration Options
+
+These environment variables allow you to define or customise the behavior of certain commands. For help on setting them please see [TextMate help](?environment_variables).
+
+*  `$TM_APACHE_DIRECTORY`  
+
+If you have installed your own version of Apache you can set this variable to allow TextMate to use it rather than the default.
+For example if you installed it via MacPorts then set it to `/opt/local/apache2`.
+
+*  `TM_APACHE_ACCESS_LOG`  
+
+The path to the access log to open when running the _Tail Access Log_ command. This is optional and will use apache's default when not defined.  
+
+*  `TM_APACHE_ERROR_LOG`  
+
+The path to the error log to open when running the _Tail Error Log_ command. This is optional and will use apache's default when not defined.  
+
+
+* `TM_APACHE_MANUAL_URI`
+
+Currently for Leopard users only. If you have installed your own version of Apache HTTP Server, you can set this variable to the location of its manual. It is recommended that this is accessible via the server itself, using a http prefix ie `http://localhost/manual`. If you use a file path ie `/Library/WebServer/share/httpd/manual` the documenation command will open the inital documentation page but any hyperlinks within will fail. If the manual directory is not located the _Documentation for Word/Selection_ command will fall back to the [httpd.apache.org](http://httpd.apache.org/docs/2.2) website using the documentation for Apache 2.2.  
+
+EOF
+
+html_footer</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.apache-config</string>
+	<key>uuid</key>
+	<string>5B7DE766-BAA9-44B1-B9AD-6BE331E29A03</string>
+</dict>
+</plist>

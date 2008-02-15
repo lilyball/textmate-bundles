@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>.addEvents({
+	'${1:click}': function(${20:event}){
+		$0${20/(.+)/(?1:
+		event.stop\(\);)/}
+	},
+});
+</string>
+	<key>name</key>
+	<string>.addEvents({…})</string>
+	<key>scope</key>
+	<string>source.js.mootools</string>
+	<key>tabTrigger</key>
+	<string>.addEvents</string>
+	<key>uuid</key>
+	<string>D8693F7E-B189-4D28-B4CA-45061DB0DD4E</string>
+</dict>
+</plist>

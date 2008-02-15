@@ -24,6 +24,11 @@ For Build Commands and Documenation support please enable the ActionScript 3 bun
 **Key Equivalent:**  ⌥⎋  
 Attempts to auto complete the tag you have partially typed.
 
+## Generate Manifest
+
+**Target:** Project  
+Genrates a Manifest for all source files located within the project src directory.
+
 ## Open Code Behind
 
 **Target:** Document  
@@ -38,10 +43,12 @@ Attempts to locate then open the "Code Behind" the current document.
 **Scope:** entity.name.tag.localname.xml.mxml  
 Attempts to locate then open the Class referenced by the current word.
 
-## Generate Manifest
+## Tidy
 
-**Target:** Project  
-Genrates a Manifest for all source files located within the project src directory.
+**Target:** Selected Text or Document  
+**Key Equivalent:**  ^⇧H 
+**Scope:** text.xml.mxml  
+Pretty prints the document or selection using `tidy`.
 
 EOF
 

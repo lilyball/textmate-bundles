@@ -1,92 +1,8 @@
-# Textmate Code Completion
-# Version: 7 (version numbers are integers, no beta bologna!)
 # 
-#  By: Thomas Aylott / subtleGradient, oblivious@
-# And: nobody else yet
-#   If you make any changes, add your name and be famous! ;)
+# TextMate Code Completion
+# Version: 8
+# By: Thomas Aylott / subtleGradient, oblivious@
 # 
-# (fold)
-=begin
-
-README
-How to use this version
-  Create a tmCommand, input selection or line, output insert as snippet, contents like this:
-
-#!/usr/bin/env ruby
-require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-TextmateCodeCompletion.simple
-
-By default, it'll look for a tmPreference in that bundle with the name "CodeCompletions".
-That preference should be like this:
-
-{	completions = ( 'fibbity', 'flabbity', 'floo' ); }
-
-Where the completions is an array of strings.
-You can overwrite that by passing in a different name for the preference like this:
-
-TextmateCodeCompletion.simple('SomeOtherNameForMyCompletions')
-
-Or you can use any random plist file like this:
-
-#!/usr/bin/env ruby
-require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-choices = TextmateCompletionsPlist.new('path_to_my_plist_file_of_doom')
-print TextmateCodeCompletion.new(choices,STDIN.read).to_s
-
-
-Or you can just pass in an array manually like so:
-
-#!/usr/bin/env ruby
-require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-print TextmateCodeCompletion.new([ 'fibbity', 'flabbity', 'floo' ],STDIN.read).to_snippet
-
-There's other stuff too, but I got bored with the documentation, haha! take THAT!
-=end
-
-# TESTS are in the file codecompletion_test.rb
-# Do no commit changes to this file unless all tests pass.
-# If you add any functionality, be sure to create tests that really try to break it.
-# 
-# GOALS:
-# 
-# Release 1:
-#   Just the basics.
-#   Grab the choices from a tmPreference plist or an array
-#   Filter based on line (allowing for something external to overwrite the method used)
-#   Show the menu and select a choice
-#   Convert the selection into a snippet
-#   Return the snippet to be inserted somehow
-#   TextmateCodeCompletion.simple method to allow for really quick and simple default behavior in tmCommands
-# 
-# Release 2:
-#   Support for pure text based completion lists (by file or string).
-#   Support for the simple form of plist completions (the same format in TextMate's bundle editor)
-# 
-# Release 3:
-#   New TextmateCompletionsParser class to parse out a text file and return an array of whatever
-#   You can pass in a Regexp or an array or Regexps for either the :select or :filter
-#   The select thing will use the first Regexp group thing as the replacement pattern
-# 
-# Release 4:
-#   I dunno, fanciness of some sort perhaps
-# 
-# Eventual goals: 
-# 
-# Allow for objects as input with snippets as output
-# Currently, the choices are simply an Array of strings.
-# We will need to extend this eventually to support objects with values that are snippets.
-# So you'll select your choice based on the key, but the value of the key/value pair is inserted
-# 
-# Speed improvements.
-# Maybe cache the plists in ram or something
-# 
-# Line only input.
-# Currently we have to do some fancy footwork to insert the right thing in the right way 
-# since the input can either be a selection or the current line.
-# And if you're input is a selection, then the command only replaces the selection, 
-# so you have to make sure you don't reinsert the line and the choice_partial and stuff like that.
-# 
-# (end)
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 
@@ -96,6 +12,14 @@ class TextmateCodeCompletion
   EMPTY_ROW = /(^\s*$)/
   
   class << self
+    def go!(options={})
+      print TextmateCodeCompletion.new(
+        TextmateCompletionsText.new(ENV['TM_COMPLETIONS'],{:split=>','}.merge(options)).to_ary,
+        STDIN.read,
+        options
+      ).to_snippet
+    end
+    
     def plist(preference='Completions')
       choices = TextmateCompletionsPlist.new( "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}#{'.tmPreferences' if preference !~ /\./}" )
       print TextmateCodeCompletion.new(choices,STDIN.read).to_snippet
@@ -317,6 +241,7 @@ class TextmateCodeCompletion
   end
 end
 
+# TextmateCompletionsPlist is now DEPRECATED. Will be removed soon #
 class TextmateCompletionsPlist
   require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
   

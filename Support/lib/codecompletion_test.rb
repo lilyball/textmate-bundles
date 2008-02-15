@@ -8,6 +8,18 @@ require 'test/unit'
 
 puts "\nJust keep hittin' 1\n\n"
 
+class String
+  def read
+    'basic'
+  end
+end
+
+def print(text)
+  return text
+end
+
+STDIN = ""
+
 class TextmateCodeCompletionTest < Test::Unit::TestCase
   def test_blank
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
@@ -191,24 +203,33 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     assert_equal %{<div class="${1:}"$0>}, TextmateCodeCompletion.new(['<div class=""'], %{<div>}, :scope => :html_attributes).to_snippet, $debug_codecompletion.inspect
   end
   
+  def test_go_basic
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "basic", "TM_COLUMN_NUMBER" => "6", "TM_INPUT_START_COLUMN" => "1"})
+    ENV['TM_COMPLETIONS'] = 'basic,basic1'
+    
+    text = TextmateCodeCompletion.go!
+    assert_equal "basic$0", text
+  end
 end
 
-class TextmateCompletionsPlistTest < Test::Unit::TestCase
-  def test_plist
-    completions = TextmateCompletionsPlist.new(
-      "#{ENV['TM_SUPPORT_PATH']}/../Bundles/Objective-C.tmbundle/Preferences/Cocoa completions.plist"
-    )
-    assert_not_nil completions
-    assert_kind_of Array, completions.to_ary
-    assert completions.to_ary.length > 0
-  end
-  def test_plist_string
-    completions = TextmateCompletionsPlist.new("{	completions = ( 'fibbity', 'flabbity', 'floo' ); }")
-    assert_not_nil completions
-    assert_kind_of Array, completions.to_ary
-    assert completions.to_ary.length == 3, completions.choices
-  end
-end
+# DEPRECATED
+# 
+# class TextmateCompletionsPlistTest < Test::Unit::TestCase
+#   def test_plist
+#     completions = TextmateCompletionsPlist.new(
+#       "#{ENV['TM_SUPPORT_PATH']}/../Bundles/Objective-C.tmbundle/Preferences/Cocoa completions.plist"
+#     )
+#     assert_not_nil completions
+#     assert_kind_of Array, completions.to_ary
+#     assert completions.to_ary.length > 0
+#   end
+#   def test_plist_string
+#     completions = TextmateCompletionsPlist.new("{ completions = ( 'fibbity', 'flabbity', 'floo' ); }")
+#     assert_not_nil completions
+#     assert_kind_of Array, completions.to_ary
+#     assert completions.to_ary.length == 3, completions.choices
+#   end
+# end
 
 class TextmateCompletionsTextTest < Test::Unit::TestCase
   def test_txt

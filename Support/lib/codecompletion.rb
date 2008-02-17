@@ -1,6 +1,6 @@
 # 
 # TextMate Code Completion
-# Version: 8
+# Version: 9
 # By: Thomas Aylott / subtleGradient, oblivious@
 # 
 
@@ -31,13 +31,15 @@ class TextmateCodeCompletion
     end
     def go!(options={})
       options = TextmateCodeCompletion.parse_options(options)
-      print TextmateCodeCompletion.new(
-        TextmateCompletionsText.new(ENV['TM_COMPLETIONS'],{:split=>','}.merge(options)).to_ary,
-        STDIN.read,
-        options
-      ).to_snippet
+      if options[:split] == 'plist'
+        choices = TextmateCompletionsPlist.new(ENV['TM_COMPLETIONS']).to_ary
+      else
+        choices = TextmateCompletionsText.new(ENV['TM_COMPLETIONS'],{:split=>','}.merge(options)).to_ary
+      end
+      print TextmateCodeCompletion.new( choices, STDIN.read, options ).to_snippet
     end
     
+    # DEPRECATED
     def plist(preference='Completions')
       choices = TextmateCompletionsPlist.new( "#{ENV['TM_BUNDLE_PATH']}/Preferences/#{preference}#{'.tmPreferences' if preference !~ /\./}" )
       print TextmateCodeCompletion.new(choices,STDIN.read).to_snippet
@@ -262,16 +264,14 @@ class TextmateCodeCompletion
   end
 end
 
-# TextmateCompletionsPlist is now DEPRECATED. Will be removed soon #
 class TextmateCompletionsPlist
-  require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-  
   attr :raw, true
   attr :scope, true
+  attr :format, true
   attr :choices, true
   
-  def initialize(filepath=nil,options={})
-    path = filepath || "#{ENV['TM_BUNDLE_PATH']}/Preferences/CodeCompletion.tmPreferences"
+  def initialize(path='',options={})
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
     
     if path.match(/\{/)
       self.raw = path.to_s
@@ -281,15 +281,27 @@ class TextmateCompletionsPlist
       self.raw = File.new(path).read
       @fullsize = true
     end
-        
+    
     pl = OSX::PropertyList.load(self.raw, true)[0]
     
     self.scope   = pl['scope'].split(/, ?/) if @fullsize and pl['scope']
+    
+    # This is for parsing tmPreference file completions directly from the bundle. DEPRECATED
     self.choices = (@fullsize ? pl['settings'] : pl)['completions']
+    
+    # This is for parsing the new format of plist that is used in Dialog2
+    self.choices = pl['suggestions'] if pl['suggestions']
+    
+    self.format  = self.choices[0].is_a?(Array) ? :array : :hash
   end
   
   def to_ary
-    self.choices
+    return self.choices if self.format == :array
+    return self.choices.map{|c|c['title']}
+  end
+  def to_hash
+    return self.choices if self.format == :hash
+    return self.choices.map{|c| {"title" => c} }
   end
 end
 
@@ -300,7 +312,6 @@ class TextmateCompletionsText
   
   def initialize(path,options={})
     return false unless path
-    options = TextmateCodeCompletion.parse_options(options)
     
     options[:split] ||= "\n"
     

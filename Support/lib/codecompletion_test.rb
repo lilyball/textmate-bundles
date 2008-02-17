@@ -8,17 +8,16 @@ require 'test/unit'
 
 puts "\nJust keep hittin' 1\n\n"
 
-class String
-  def read
-    'basic'
-  end
-end
-
 def print(text)
   return text
 end
 
-STDIN = ""
+class FakeStdin < String
+  def read
+    self
+  end
+end
+STDIN = FakeStdin.new ''
 
 class TextmateCodeCompletionTest < Test::Unit::TestCase
   def test_blank
@@ -225,26 +224,66 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     assert_equal %q{\$\$(${1:'${2:selectors:mixed}'})\$\$$0}, TextmateCodeCompletion.new(["$$('selectors:mixed')$$"]).to_snippet
     assert_equal %q{\$apple\$$0}, TextmateCodeCompletion.new(["$apple$"]).to_snippet
   end
+  
+  def test_plist_split
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "basic", "TM_COLUMN_NUMBER" => "6", "TM_INPUT_START_COLUMN" => "1"})
+    ENV['TM_COMPLETIONS'] = %{{ suggestions =(
+          { title = "basic"; },
+          { title = "basic1"; },
+          { title = "basic2"; }
+        );}}
+    ENV['TM_COMPLETION_split'] = 'plist'
+    
+    text = TextmateCodeCompletion.go!
+    assert_equal "basic$0", text
+  end
+  
+  def test_plist_snippet
+    set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "basic", "TM_COLUMN_NUMBER" => "6", "TM_INPUT_START_COLUMN" => "1"})
+    ENV['TM_COMPLETIONS'] = %{{ suggestions =( { title = "basic 'All this text should be removed'"; snippet = "basic"; } );}}
+    ENV['TM_COMPLETION_split'] = 'plist'
+    
+    text = TextmateCodeCompletion.go!
+    # assert_equal "basic$0", text
+    # Haven't implemented the code to make this pass yet :-!
+  end
 end
 
-# DEPRECATED
-# 
-# class TextmateCompletionsPlistTest < Test::Unit::TestCase
-#   def test_plist
-#     completions = TextmateCompletionsPlist.new(
-#       "#{ENV['TM_SUPPORT_PATH']}/../Bundles/Objective-C.tmbundle/Preferences/Cocoa completions.plist"
-#     )
-#     assert_not_nil completions
-#     assert_kind_of Array, completions.to_ary
-#     assert completions.to_ary.length > 0
-#   end
-#   def test_plist_string
-#     completions = TextmateCompletionsPlist.new("{ completions = ( 'fibbity', 'flabbity', 'floo' ); }")
-#     assert_not_nil completions
-#     assert_kind_of Array, completions.to_ary
-#     assert completions.to_ary.length == 3, completions.choices
-#   end
-# end
+class TextmateCompletionsPlistTest < Test::Unit::TestCase
+
+  def test_plist_file
+    `echo "{settings={ completions = ( 'fibbity', 'flabbity', 'floo' ); };}" >/tmp/test_plist_file.plist`
+    completions = TextmateCompletionsPlist.new("/tmp/test_plist_file.plist")
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length > 0
+  end
+  
+  def test_plist_string_format1
+    completions = TextmateCompletionsPlist.new("{ completions = ( 'fibbity', 'flabbity', 'floo' ); }")
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3, completions.choices
+  end
+  
+  def test_plist_string_format2
+    completions = TextmateCompletionsPlist.new %{{ suggestions =( { title = "basic"; }, { title = "basic1"; }, { title = "basic2"; } );}}
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3, completions.choices
+  end
+  
+  def test_plist_both_formats
+    completions = TextmateCompletionsPlist.new %{{
+      completions = ( 'fibbity', 'flabbity', 'floo' );
+      suggestions = ( { title = "basic"; }, { title = "basic1"; }, { title = "basic2"; } );
+    }}
+    assert ['basic', 'basic1', 'basic2'] == completions.to_ary
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3, completions.choices
+  end
+end
 
 class TextmateCompletionsTextTest < Test::Unit::TestCase
   def test_txt

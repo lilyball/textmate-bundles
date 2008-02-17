@@ -16,10 +16,10 @@ Note that I'm not actually familiar with the syntax, just noting things that app
 **FIXED** * string.regex.nu typo, should be string.regexp.nu
 **FIXED** * The \b starting the constant.numeric match is preventing negative numbers from being matched (-0).
 * constant.character match does not catch four character integers ('psLt' 'psA4').
-* constant.character could be more specific in it's matching to catch errors.
+**FIXED** constant.character could be more specific in it's matching to catch errors.
 **FIXED** * Appears to be a lot of operators missing from keyword.operator?
 **FIXED** * Is constant.language missing YES|NO|ZERO|NULL?
-* Second imethod/cmethod incorrectly matched in:
+**FIXED** * Second imethod/cmethod incorrectly matched in:
     
     (imethod (void) test-imethod is 1234)
     (cmethod (void) test-cmethod is 1234)

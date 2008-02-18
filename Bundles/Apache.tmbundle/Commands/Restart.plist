@@ -5,26 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># Use this for a simple solution..
-RESPONSE=`exec osascript &lt;&lt;EOF | tr "\r" "\n"
- 	
- 	--To be asked for your password each time then use:
- 	do shell script "apachectl restart" with administrator privileges
- 	
- 	--To skip password vaildation then change this... not for the security conscious.
- 	--do shell script "apachectl restart" password "the_password" with administrator privileges
- 	
-EOF`
- 
-echo $RESPONSE
+	<string>#!/usr/bin/env ruby -rjcode -Ku
 
-# Otherwise, to store your password in the Keychain check this script in the Bundle Support folder.
-#
-# To use the Keychain to store the admin password then open /Applications/Utilities/Keychain Access.app
-# Add a new keychain called "TextMate" 
-# Add a Key with the name "ApacheBundle" to the new Keychaing then store your admin password in it.
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/apache_ctl.rb"
 
-#"$TM_BUNDLE_SUPPORT/lib/apachectlUsingKeychain.sh" restart</string>
+ApacheCTL.new.restart</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -32,7 +17,7 @@ echo $RESPONSE
 	<key>name</key>
 	<string>restart</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>source.apache-config</string>
 	<key>uuid</key>

@@ -23,7 +23,8 @@ fi
 
 if [[ -f "$TM_APACHE_ACCESS_LOG" ]]; then
 
-	tailLog "$TM_APACHE_ACCESS_LOG" "httpd Access Log"
+	#tailLog "$TM_APACHE_ACCESS_LOG" "httpd Access Log"
+	osascript "$TM_BUNDLE_SUPPORT/lib/tail_log.applescript" "$TM_APACHE_ACCESS_LOG" "httpd Access Log" &gt;/dev/null;
 
 else
 

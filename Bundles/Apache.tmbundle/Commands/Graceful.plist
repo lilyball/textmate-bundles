@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Use this for a simple solution..
+RESPONSE=`exec osascript &lt;&lt;EOF | tr "\r" "\n"
+ 	
+ 	--To be asked for your password each time then use:
+ 	do shell script "apachectl graceful" with administrator privileges
+ 	
+ 	--To skip password vaildation then change this... not for the security conscious.
+ 	--do shell script "apachectl graceful" password "the_password" with administrator privileges
+
+EOF`
+ 
+echo "$RESPONSE"
+
+# Otherwise, to store your password in the Keychain check this script in the Bundle Support folder.
+#
+# To use the Keychain to store the admin password then open /Applications/Utilities/Keychain Access.app
+# Add a new keychain called "TextMate" 
+# Add a Key with the name "ApacheBundle" to the new Keychaing then store your admin password in it.
+
+#"$TM_BUNDLE_SUPPORT/lib/apachectlUsingKeychain.sh" graceful</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>graceful</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.apache-config</string>
+	<key>uuid</key>
+	<string>A33BD582-D5BB-4C5B-A14C-5E47A90B01E3</string>
+</dict>
+</plist>

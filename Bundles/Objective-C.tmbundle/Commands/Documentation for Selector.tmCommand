@@ -73,10 +73,9 @@ end
 
 up =-1
 list = ""
-
-if line.match(/^(-|\+)/) &amp;&amp; m = line.match(/;$/)
+if line.match(/^(-|\+)/)
   start[-1] = 0
-  last = m.begin(0)
+  last = line.length
   up = 0
 end
 

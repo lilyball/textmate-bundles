@@ -70,7 +70,13 @@ start = 0
   end
 out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless (stuff.size &lt; 4)
   if ENV['TM_SCOPE'].include? "meta.scope.implementation.objc"
-    rv = "\treturn nil;\n" unless stuff[5].match(/^void$/) || stuff[5].match(/IBAction/)
+    if stuff[5].match(/^void$/) || stuff[5].match(/IBAction/)
+      rv = ""
+    elsif stuff[5].match(/^BOOL$/)
+      rv = "\treturn ${1:Y}${1/^(?:(Y)|(N)|.*)/(?1:ES:(?2:O))/};\n"
+    else
+      rv = "\treturn nil;\n"
+    end
     
     out = out.chomp.strip + "\n\{$0\n#{rv}\}"
   else

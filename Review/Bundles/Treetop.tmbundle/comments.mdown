@@ -1,0 +1,27 @@
+# Treetop Comments
+
+## Infininight 2008-02-19
+
+* Grammar should be renamed to Ruby Treetop since it is a Ruby library.
+* Menu item names are sort of obscure, would probably be better to say what each is. The people that would need to refer to the menu won't remember what each does? My best try at simplifying it, but there are lots of ways to go: (I also capitalized the first two snippets.)
+
+    <http://img.skitch.com/20080219-jtp2849ub2ac5ae3849j6j3tph.jpg>
+
+* keyword.control.grammar|rule should be storage.type.grammar|rule, ditto for keyword.control.end
+* comment.single-line → comment.line.number-sign.treetop
+* Line comment should end with $\n? to match the whole line.
+* constant.any-char → constant.character.any-char.treetop
+* string.literal → string.quoted.single | string.quoted.double
+* invalid.floating-punctuation → invalid.illegal.floating-punctuation.treetop
+* variable.non-terminal → variable.other.non-terminal.treetop
+* meta.function-call.ordered-choice is sort of an operator perhaps?
+* punctuation.definition.string.begin|end.ruby → punctuation.section.embedded.begin|end.ruby
+* punctuation.grouping → punctuation.definition.group.treetop
+* Unsure exactly what to make punctuation.quantifier|predicate but they shouldn't be punctuation. Generally speaking punctuation should be delimiters only, if a character does something/has meaning it's not punctuation. Best I can see it keyword.operator, other ideas?
+* In source.ruby {} not escaped.
+* Need some punctuation scopes added on stuff like strings. If your not sure what to add ask me on irc or email me. :)
+* Needs a TM_COMMENT_START preference.
+* Does not match "include SQL".
+* Does not match <ParenNode>.
+* Labels not matched: "first_letter:[a-z]"
+* Missing description in info.plist.

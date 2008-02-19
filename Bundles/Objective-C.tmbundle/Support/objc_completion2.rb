@@ -357,7 +357,7 @@ class ObjCMethodCompletion
   end
 
   def prettify(cand, call, type, staticPrefix, word)
-    stuff = cand.split("\t")
+    stuff = cand.chomp.split("\t")
     ind = staticPrefix.size + word.size
     k = stuff[0][ind..-1].index(":")
     if k
@@ -506,7 +506,7 @@ class ObjCMethodCompletion
            'staticPrefix'=> static,
            'currentWord'=> word,
           }
-    io = open('|"$DIALOG" -f', "r+")
+    io = open('|"$DIALOG" popup', "r+")
     io <<  pl.to_plist
     io.close_write
     TextMate.exit_discard

@@ -17,13 +17,13 @@ def snippet_generator(cand, start)
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
 
         if (name_array.size == i)
-            out << name_array[i] + ":${0:"+(i+2).to_s + ":"+ arg
+            out << name_array[i] + ":${0:"+(i+2).to_s + ":"+ arg +"} "
         else
 
-          out << name_array[i] +  ":${"+(i+2).to_s + ":"+ arg+"} "
+          out << name_array[i] +  ":${"+(i+2).to_s + ":"+ arg +"} "
         end
       end
-      out = "${1:#{stuff[6]}}" + out
+      out = "${1:#{stuff[6]}} " + out
       
     rescue NoMethodError
       out = "$0"

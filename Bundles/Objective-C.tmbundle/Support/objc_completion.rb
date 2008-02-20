@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+require "zlib"
+require "set"
 
 # Zlib::GzipReader.new(ARGF).each { |l| f = l.split("\t"); puts l if f[0] =~ /\S/ and f[3] =~ /\S/ }
 class ObjCFallbackCompletion
@@ -119,10 +121,10 @@ class ObjCFallbackCompletion
             r = ["#Character","#FunctionKey"] if type == "unichar"
           end
         elsif k[3] #uppercase
-          files = [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnonymousEnums.txt.gz",true,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz",false,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false]]
+          files = [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true, :non],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnonymousEnums.txt.gz",true,false,:non],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz",false,false,:non],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false,:non]]
           candidates = candidates_or_exit(k[1]+ "[[:space:]]", files)
           r = [candidates[0][0].split("\t")[2]] unless candidates.empty?
 
@@ -141,10 +143,10 @@ class ObjCFallbackCompletion
   
   def candidates_or_exit(methodSearch,files)
     candidates = []
-    files.each do |name, pure,noArg|
+    files.each do |name, pure,noArg, type|
       zGrepped = %x{zgrep -e ^#{e_sh methodSearch } #{name}}
       candidates += zGrepped.split("\n").map do |elem|
-        [elem, pure, noArg]
+        [elem, pure, noArg, type]
       end
     end
     TextMate.exit_show_tool_tip "No completion available" if candidates.empty?
@@ -200,7 +202,7 @@ class ObjCFallbackCompletion
     start = searchTerm.size
 
     prettyCandidates = candidates.map do |cand|
-      [prettify(cand[0]), cand[0],cand[1],cand[2]]
+      [prettify(cand[0]), cand[0],cand[1],cand[2],cand[3]]
     end.sort {|x,y| x[1].downcase <=> y[1].downcase }
 
     
@@ -230,12 +232,29 @@ class ObjCFallbackCompletion
       #  searchTerm << candidates[0][index].chr
       #  index +=1
       #end
+      rubyCommand = "ruby \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
       require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-      pl = {'menuItems' => prettyCandidates.map { |pretty, full, pure, noArg | { 'title' => pretty, 'cand' => full, 'pure'=> pure, 'noArg'=> noArg} }}
+      pl = {'suggestions' => prettyCandidates.map { |pretty, full, pure, noArg, type | { 'title' => pretty, 'cand' => full, 'pure'=> pure.inspect, 'noArg'=> noArg.inspect, 'type'=> type.to_s ,'filterOn'=> full.split("\t")[0]} },'shell' => rubyCommand,
+       'extraChars' => "_",
+       'staticPrefix'=> "",
+       'currentWord'=> searchTerm,
+       'extraOptions' => {'crazy' => "crous"},
+      }
+
+      
+      
+      
       open("/dev/console", "w") { |io| io << pl.to_plist }
-      io = open('|"$DIALOG" -u', "r+")
+      io = open('|"$DIALOG" popup', "r+")
       io << pl.to_plist
       io.close_write
+      
+      #io = open('|"$DIALOG" popup', "r+")
+      #io <<  pl.to_plist
+      #io.close_write
+      #puts pl.inspect.gsub("},", "},\n")
+      #TextMate.exit_create_new_document
+      TextMate.exit_discard # create_new_document
       res = OSX::PropertyList::load(io.read)
       if res.has_key? 'selectedMenuItem'
         b = {0 => false , 1 => true}
@@ -263,7 +282,7 @@ class ObjCFallbackCompletion
        TextMate.exit_discard
     end
 
-    backContext = line[1+caret_placement..-1].match /^[a-zA-Z0-9_]/
+    backContext = line[1+caret_placement..-1].match(/^[a-zA-Z0-9_]/)
 
     if backContext
       TextMate.exit_discard
@@ -271,33 +290,33 @@ class ObjCFallbackCompletion
 
     star = arg_name = false
     if ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
-      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaProtocols.txt.gz",false,false]]
+      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaProtocols.txt.gz",false,false, :constant]]
     elsif ENV['TM_SCOPE'].include?("meta.scope.implementation.objc") ||  ENV['TM_SCOPE'].include?("meta.interface-or-protocol.objc")
-      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false]]
-      files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz", true, false]] if ENV['TM_SCOPE'].include?("meta.scope.interface.objc")
-      userClasses = ["#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz", false,false]
+      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false, :constant]]
+      files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz", true, false, :constant]] if ENV['TM_SCOPE'].include?("meta.scope.interface.objc")
+      userClasses = ["#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz", false,false,:constant]
       files += [userClasses] if File.exists? userClasses[0]
       if ENV['TM_SCOPE'].include?("meta.function.objc")
         star = true
-        files += [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false]]
+        files += [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false, :constant]]
       elsif ENV['TM_SCOPE'].include? "meta.scope.implementation.objc"
         star = arg_name = true
-        files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false],
-        [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true],
-        [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false],
-        ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false]]
-        files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false]] if ENV['TM_SCOPE'].include? "source.objc++"
+        files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false, :functions],
+        [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true, :constant],
+        [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false, :constant],
+        ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false, :functions]]
+        files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false, :functions]] if ENV['TM_SCOPE'].include? "source.objc++"
       elsif ENV['TM_SCOPE'].include? "meta.scope.interface.objc"
         star = arg_name = true
       end
     else
       star = arg_name = true
-      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false],
-      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true],
-      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false],
-      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false],
-      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false]]
-      files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false]] if ENV['TM_SCOPE'].include? "source.objc++"
+      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false, :constant],
+      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true, :constant],
+      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false, :constant],
+      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false, :constant, :functions],
+      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false, :functions]]
+      files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false, :functions]] if ENV['TM_SCOPE'].include? "source.objc++"
     end
     alpha_and_caret = /(==|!=|(?:\+|\-|\*|\/)?=)?\s*([a-zA-Z_][_a-zA-Z0-9]*)\(?$/
     if k = line[0..caret_placement].match(alpha_and_caret)
@@ -308,12 +327,12 @@ class ObjCFallbackCompletion
           candidates = candidates_or_exit(k[2], files)
           res = pop_up(candidates, k[2],star,arg_name)
         else
-          files = [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",false,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnonymousEnums.txt.gz",false,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz",false,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false],
-          [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false]]
-          files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false]] if ENV['TM_SCOPE'].include? "source.objc++"
+          files = [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",false,false, :constant],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnonymousEnums.txt.gz",false,false, :constant],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz",false,false, :constant],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false, :functions],
+          [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false, :functions]]
+          files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false, :functions]] if ENV['TM_SCOPE'].include? "source.objc++"
           candidates = candidates_or_exit(k[2], files)
           temp = []
           unless candidates.empty?
@@ -354,8 +373,15 @@ class ObjCMethodCompletion
     end
   end
 
-  def prettify(cand, call)
-    stuff = cand.split("\t")
+  def prettify(cand, call, type, staticPrefix, word)
+    stuff = cand.chomp.split("\t")
+    ind = staticPrefix.size + word.size
+    k = stuff[0][ind..-1].index(":")
+    if k
+      filterOn = stuff[0][0..k+ind]
+    else
+      filterOn = stuff[0]
+    end
     if stuff[0].count(":") > 0
       name_array = stuff[0].split(":")
       out = ""
@@ -370,12 +396,13 @@ class ObjCMethodCompletion
       out = stuff[0]
     end
     out = "(#{stuff[5].gsub(/ \*/,(ENV['TM_C_POINTER'] || " *").rstrip)})#{out}" unless call || (stuff.size < 4)
-
-    return [out.chomp.strip, stuff[0], cand]
+    
+    return [out, filterOn, cand, type]
   end
 
   def snippet_generator(cand, start, call)
     start = 0 unless call
+    cand = cand.strip
     stuff = cand[start..-1].split("\t")
     if stuff[0].count(":") > 0
 
@@ -404,15 +431,16 @@ class ObjCMethodCompletion
     return out.chomp.strip
   end
 
-  def pop_up(candidates, searchTerm, call = true)
-    start = searchTerm.size
-    prettyCandidates = candidates.map { |candidate| prettify(candidate,call) }.sort
+  def pop_up(candidates, staticPrefix, word, call = true)
+    start = staticPrefix.size + word.size
+    prettyCandidates = candidates.map { |candidate,type| prettify(candidate, call, type, staticPrefix, word) }
+    prettyCandidates = prettyCandidates.sort{|x,y| x[1] <=> y[1] }
     if prettyCandidates.size > 1
       require "enumerator"
       pruneList = []  
 
-      prettyCandidates.each_cons(2) do |a| 
-        pruneList << (a[0][0] != a[1][0]) # check if prettified versions are the same
+      prettyCandidates.each_cons(2) do |a,b| 
+        pruneList << (a[0] != b[0]) # check if prettified versions are the same
       end
       pruneList << true
       ind = -1
@@ -433,37 +461,46 @@ class ObjCMethodCompletion
       #  index +=1
       #end
       prettyCandidates = prettyCandidates.sort {|x,y| x[1].downcase <=> y[1].downcase }
-      show_dialog(prettyCandidates,start) do |c,s|
+      show_dialog(prettyCandidates,start,staticPrefix,word) do |c,s|
         snippet_generator(c,s, call)
       end
     else
-      snippet_generator( candidates[0], start, call )
+      snippet_generator( candidates[0][0], start, call )
     end
   end
 
   def cfunc_snippet_generator(c,s)
-    c = c.split"\t"
+    c , type = c
+    c = c.split("\t")
     i = 0
-    ((c.size < 2 || c.size > 4 || c[1]=="") ? c[0][s..-1]+"$0" : c[0][s..-1]+"("+c[1][1..-2].split(",").collect do |arg| 
-      "${"+(i+=1).to_s+":"+ arg.strip + "}" 
-    end.join(", ")+")$0")
+    if type == :functions
+      tmp = c[1][1..-2].split(",").collect do |arg| 
+        "${"+(i+=1).to_s+":"+ arg.strip + "}" 
+      end
+      tmp = tmp.join(", ")+")$0"
+      tmp = c[0][s..-1]+"(" + tmp
+    else
+      c[0][s..-1]+"$0"
+    end
   end
 
-  def c_snip_gen(c,si,arg_type=nil)
+  def c_popup_gen(c,si,arg_type=nil)
     s = si.size
-    prettyCandidates = c.map do |candidate|
+    #puts c.inspect.gsub("],", "],\n")
+    #c.each {|e| puts e unless e.class == Array}
+    prettyCandidates = c.map do |candidate, type|
       ca = candidate.split("\t")
-      [((ca[1].nil? || !ca[4].nil? || c[1]=="") ? ca[0] : ca[0]+ca[1]),ca[0], candidate] 
-    end
-    unless arg_type.nil?
-      tmp = prettyCandidates.reject do |junk1,junk2,b|
-        v = b.split("\t")[2]
-        v !=nil && !arg_type.include?(v)
+      if type == :functions
+        [ca[0]+ca[1], ca[0], candidate,type]
+      else
+        [ca[0], ca[0], candidate,type]
       end
-      prettyCandidates = tmp unless tmp.empty?
+        
+      #[((ca[1].nil? || !ca[4].nil? || c[1]=="") ? ca[0] : ca[0]+ca[1]),ca[0], candidate] 
     end
+
     if prettyCandidates.size > 1
-      show_dialog(prettyCandidates,s) do |cand,size|
+      show_dialog(prettyCandidates,s,"",si) do |cand,size|
         cfunc_snippet_generator(cand,size)
       end
     else
@@ -473,12 +510,25 @@ class ObjCMethodCompletion
 
 
 
-  def show_dialog(prettyCandidates,start,&snip_gen)
+  def show_dialog(prettyCandidates,start,static,word,&snip_gen)
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-    pl = {'menuItems' => prettyCandidates.map { |pretty, junk, full | { 'title' => pretty, 'cand' => full} }}
-    io = open('|"$DIALOG" -u', "r+")
+    rubyCommand = "ruby \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
+   # rubyCommand = "ruby -e \"puts \\\"#{rubyCommand2}\\\"\""
+    #puts rubyCommand
+    pl = {'suggestions' => prettyCandidates.map do |pretty, filter, full, type | 
+            { 'title' => pretty, 'cand' => full, 'filterOn'=> filter, 'type'=> type.to_s}
+          end,
+           'shell' => rubyCommand,
+           'extraChars' => "_:",
+           'staticPrefix'=> static,
+           'currentWord'=> word,
+          }
+    io = open('|"$DIALOG" popup', "r+")
     io <<  pl.to_plist
     io.close_write
+    
+    #TextMate.exit_insert_text pl.to_plist.inspect
+    TextMate.exit_discard
     res = OSX::PropertyList::load(io.read)
     if res.has_key? 'selectedMenuItem'
       snip_gen.call( res['selectedMenuItem']['cand'], start )
@@ -522,29 +572,32 @@ class ObjCMethodCompletion
     candidates = []
     if obType && obType == :initObject
       if methodSearch.match /^(i(n(i(t([A-Z]\w*)?)?)?)?)?(\[\[:alpha:\]:\])?$/
-        methodSearch = "init[[:space:][:upper:]]" unless methodSearch.match(/^init(\b|[A-Z])/)
+        methodSearch = "init(\b|[A-Z])" unless methodSearch.match(/^init(\b|[A-Z])/)
       end
     end
+    n = []
+    k = (/^#{methodSearch}/)
     fileNames.each do |fileName|
-      zGrepped = %x{ zgrep -e ^#{e_sh methodSearch } #{e_sh fileName }}
-      candidates += zGrepped.split("\n")
-    end
+      z = Zlib::GzipReader.open(fileName).each do |l|
+        if l =~k
 
-
-    return [] if candidates.empty?
-    if list.nil?
-      return candidates
-    else
-      n = []
-      candidates.each do |cand|
-        n << cand if list.include?(cand.split("\t")[0])
+          f = l.split("\t")
+          if types == :methods
+            n << [l,:methods] if list && list.include?(f[3].split(";")[0])
+          else
+            n << [l.strip,types] if list && list.include?(f[2].split("\n"))
+          end
+          candidates << [l.strip, types]
+        end
       end
-      n = (n.empty? ? candidates : n)
-
-      return n
+      z.close
+        # zGrepped = %x{ zgrep -e ^#{e_sh methodSearch } #{e_sh fileName }}
+        #candidates += zGrepped.split("\n")
     end
-  end
 
+    n = (n.empty? ? candidates : n)
+    return n  
+  end
 
 
   def match_iter(rgxp,str)
@@ -586,33 +639,38 @@ class ObjCMethodCompletion
     end
     if arg_types
       candidates = []
-      candidates += candidate_list(search, nil, :annotated)
-      candidates += candidate_list(search, nil, :anonymous)
-      candidates += candidate_list(search, nil, :functions)
-      candidates += candidate_list(search, nil, :constants)
-      res = c_snip_gen(candidates, search, arg_types)
+      types = [arg_types.to_set]
+      candidates += candidate_list(search, types, :annotated)
+      candidates += candidate_list(search, types, :anonymous)
+      candidates += candidate_list(search, types, :functions)
+      candidates += candidate_list(search, types, :constants)
+      #puts candidates.inspect.gsub(",","\n")
+      res = c_popup_gen(candidates, search, arg_types)
     else
       candidates = candidate_list(mn, nil, :methods)
       if typeName
         temp = candidates.select do |e|
-          c = e.split("\t")[3].match(/[A-Za-z0-9_]+/)[0]
+          c = e[0].split("\t")[3].match(/[A-Za-z0-9_]+/)[0]
           c == typeName
         end
         candidates = temp unless temp.empty?
       end
-      arg_types = candidates.map{|e| e.split("\t")[5+mn.count(":")]} unless candidates.empty?
+      arg_types = candidates.map{|e| e[0].split("\t")[5+mn.count(":")]} unless candidates.empty?
 
       if show_arg && !arg_types.nil?
         candidates = arg_types.uniq
       else
         candidates = []
       end
-      candidates += candidate_list(search, nil, :annotated)
-      candidates += candidate_list(search, nil, :anonymous)
-      candidates += candidate_list(search, nil, :functions)
-      candidates += candidate_list(search, nil, :constants)
+      types = [candidates.to_set]
+      candidates += candidate_list(search, types, :annotated)
+      candidates += candidate_list(search, types, :anonymous)
+      candidates += candidate_list(search, types, :functions)
+      candidates += candidate_list(search, types, :constants)
+#      puts candidates.inspect.gsub(",","\n")
       TextMate.exit_show_tool_tip "No completion available" if candidates.empty?
-      res = c_snip_gen(candidates, search, arg_types)
+
+      res = c_popup_gen(candidates, search, arg_types)
     end
   end
 
@@ -621,7 +679,7 @@ class ObjCMethodCompletion
     k = k.match(/[^;\{]+?(;|\{)/)
     if k
       l = k[0].scan(/(\-|\+)\s*\((([^\(\)]|\([^\)]*\))*)\)|\((([^\(\)]|\([^\)]*\))*)\)\s*([_a-zA-Z][_a-zA-Z0-9]*)|(([a-zA-Z][a-zA-Z0-9]*)?:)/)
-      types = l.select {|item| item[3] && item[3].match(/([A-Z]\w*)\s*\*/) &&  item[5] }
+      types = l.select {|item| item[3] && item[3].match(/([A-Z]\w)\s*\*/) &&  item[5] }
       h = {}
       types.each{|item| h[item[5]] = item[3].gsub(/(\w)\s*\*/,'\1 *') }
       l = k.post_match.scan(/([A-Z]\w+)\s*\*\s*(\w+(?:\s*\,\s*\*\s*\w+)*)/)
@@ -640,12 +698,9 @@ class ObjCMethodCompletion
 
 
   def list_from_shell_command(className, type)
-    methodTypes = {:initObject => "-i", :classMethod => "-c", :instanceMethod => "-i"}
-    framework = %x{ zgrep ^#{e_sh className + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz }.split("\n")
-    unless framework.empty?
-      list = %x{#{e_sh ENV['TM_BUNDLE_SUPPORT']}/bin/inspectClass #{methodTypes[type]} -n #{e_sh className} -f #{e_sh framework[0].split("\t")[1]}}.split("\n")
+    framework = %x{ zgrep ^#{e_sh className + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithAncestry.txt.gz }.split("\n")
+    list = framework[0].split("\t")[1].split(":").to_set unless framework.empty?
 
-    end
     return list
   end
 
@@ -706,20 +761,12 @@ class ObjCMethodCompletion
           typeName = h[m[3]].match(/[A-Za-z0-1]*/)[0]
           obType = :instanceMethod
           list = list_from_shell_command(typeName, obType)
-          if list.nil? && File.exists?(userMethods = "#{ENV['TM_PROJECT_DIRECTORY']}/.methods.TM_Completions.txt.gz") && File.exists?(userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz")
+          if list.nil? && File.exists?(userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz")
             candidates = %x{ zgrep ^#{e_sh h[m[3]] + "[[:space:]]" } #{userClasses} }.split("\n")
-            cocoaSet = []
-            cocoaSet = %x{gunzip -c #{e_sh userMethods} |cut -f1,4}.split("\n")
-            unless candidates.empty? || cocoaSet.empty?
-              list = []
+            unless candidates.empty?
+              list = Set.new
               c = candidates[0].split("\t")[1].split(":")
-              cocoaSet.each do |element|
-                me, cl = element.split("\t")
-                c.each do |cand|
-                  list << me if cl.match(/\w+/)[0] == cand
-                end
-              end
-              
+              list = c.to_set
               l = list_from_shell_command(c[-1], :instanceMethod)
               list += l unless l.nil?
             end
@@ -777,19 +824,18 @@ class ObjCMethodCompletion
     elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
       # [obj mess ^]
       candidates = candidates_or_exit( mn + (backContext || "[[:alpha:]:]"), list, :methods ) # the alpha is to prevent satisfaction with just one part
-      res = pop_up(candidates, mn)
+      res = pop_up(candidates, mn, "")
       [res , (backContext && (res != "$0") ? bcL : 0)]
     elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
       # [obj mess^]
       if mline[start[-1]..k.begin(0)-1+start[-1]].match alpha_and_space
-        mn += k[0]
-        candidates = candidates_or_exit( mn + (backContext || "[[:alpha:]:]"), list, :methods)
-        res =pop_up(candidates, mn)
+        candidates = candidates_or_exit( mn +k[0] + (backContext || "[[:alpha:]:]"), list, :methods)
+        res =pop_up(candidates, mn, k[0])
         [res , (backContext && (res != "$0") ? bcL : 0)]
         # [NSOb^]
       elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[\s*$/)
         candidates = candidates_or_exit( k[0] + (backContext || "[[:alpha:]]"), nil, :classes)
-        res =pop_up(candidates, k[0])
+        res =pop_up(candidates, "",k[0])
         [res , (backContext && (res != "$0") ? bcL : 0)]
       elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(colon_and_space)
         #  [obj mess: arg^]

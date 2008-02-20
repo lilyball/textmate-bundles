@@ -45,6 +45,7 @@ def cfunction_snippet_generator(c)
 end
 
 
+#puts ENV['TM_SUPPORT_PATH']
 require "/Library/Application Support/TextMate/Support/lib/osx/plist"
 s = STDIN.read
 res = OSX::PropertyList::load(s)

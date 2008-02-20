@@ -121,10 +121,10 @@ class ObjCFallbackCompletion
             r = ["#Character","#FunctionKey"] if type == "unichar"
           end
         elsif k[3] #uppercase
-          files = [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnonymousEnums.txt.gz",true,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz",false,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false]]
+          files = [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true, :constant],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnonymousEnums.txt.gz",true,false,:anonymous],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz",false,false,:annotated],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false,:functions]]
           candidates = candidates_or_exit(k[1]+ "[[:space:]]", files)
           r = [candidates[0][0].split("\t")[2]] unless candidates.empty?
 
@@ -143,10 +143,10 @@ class ObjCFallbackCompletion
   
   def candidates_or_exit(methodSearch,files)
     candidates = []
-    files.each do |name, pure,noArg|
+    files.each do |name, pure,noArg, type|
       zGrepped = %x{zgrep -e ^#{e_sh methodSearch } #{name}}
       candidates += zGrepped.split("\n").map do |elem|
-        [elem, pure, noArg]
+        [elem, pure, noArg, type]
       end
     end
     TextMate.exit_show_tool_tip "No completion available" if candidates.empty?
@@ -202,7 +202,7 @@ class ObjCFallbackCompletion
     start = searchTerm.size
 
     prettyCandidates = candidates.map do |cand|
-      [prettify(cand[0]), cand[0],cand[1],cand[2]]
+      [prettify(cand[0]), cand[0],cand[1],cand[2],cand[3]]
     end.sort {|x,y| x[1].downcase <=> y[1].downcase }
 
     
@@ -232,12 +232,28 @@ class ObjCFallbackCompletion
       #  searchTerm << candidates[0][index].chr
       #  index +=1
       #end
+      rubyCommand = "ruby \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
       require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-      pl = {'menuItems' => prettyCandidates.map { |pretty, full, pure, noArg | { 'title' => pretty, 'cand' => full, 'pure'=> pure, 'noArg'=> noArg} }}
+      pl = {'suggestions' => prettyCandidates.map { |pretty, full, pure, noArg, type | { 'title' => pretty, 'cand' => full, 'pure'=> pure.inspect, 'noArg'=> noArg.inspect, 'type'=> type.to_s ,'filterOn'=> full.split("\t")[0]} },'shell' => rubyCommand,
+       'extraChars' => "_",
+       'staticPrefix'=> "",
+       'currentWord'=> searchTerm,
+      }
+
+      
+      
+      
       open("/dev/console", "w") { |io| io << pl.to_plist }
-      io = open('|"$DIALOG" -u', "r+")
+      io = open('|"$DIALOG" popup', "r+")
       io << pl.to_plist
       io.close_write
+      
+      #io = open('|"$DIALOG" popup', "r+")
+      #io <<  pl.to_plist
+      #io.close_write
+      #puts pl.inspect.gsub("},", "},\n")
+      #TextMate.exit_create_new_document
+      TextMate.exit_discard # create_new_document
       res = OSX::PropertyList::load(io.read)
       if res.has_key? 'selectedMenuItem'
         b = {0 => false , 1 => true}
@@ -273,33 +289,33 @@ class ObjCFallbackCompletion
 
     star = arg_name = false
     if ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
-      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaProtocols.txt.gz",false,false]]
+      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaProtocols.txt.gz",false,false, :constant]]
     elsif ENV['TM_SCOPE'].include?("meta.scope.implementation.objc") ||  ENV['TM_SCOPE'].include?("meta.interface-or-protocol.objc")
-      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false]]
-      files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz", true, false]] if ENV['TM_SCOPE'].include?("meta.scope.interface.objc")
-      userClasses = ["#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz", false,false]
+      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false, :constant]]
+      files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz", true, false, :constant]] if ENV['TM_SCOPE'].include?("meta.scope.interface.objc")
+      userClasses = ["#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz", false,false,:constant]
       files += [userClasses] if File.exists? userClasses[0]
       if ENV['TM_SCOPE'].include?("meta.function.objc")
         star = true
-        files += [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false]]
+        files += [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false, :constant]]
       elsif ENV['TM_SCOPE'].include? "meta.scope.implementation.objc"
         star = arg_name = true
-        files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false],
-        [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true],
-        [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false],
-        ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false]]
-        files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false]] if ENV['TM_SCOPE'].include? "source.objc++"
+        files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false, :functions],
+        [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true, :constant],
+        [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false, :constant],
+        ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false, :functions]]
+        files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false, :functions]] if ENV['TM_SCOPE'].include? "source.objc++"
       elsif ENV['TM_SCOPE'].include? "meta.scope.interface.objc"
         star = arg_name = true
       end
     else
       star = arg_name = true
-      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false],
-      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true],
-      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false],
-      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false],
-      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false]]
-      files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false]] if ENV['TM_SCOPE'].include? "source.objc++"
+      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false, :constant],
+      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true, :constant],
+      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false, :constant],
+      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false, :constant, :functions],
+      [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false, :functions]]
+      files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false, :functions]] if ENV['TM_SCOPE'].include? "source.objc++"
     end
     alpha_and_caret = /(==|!=|(?:\+|\-|\*|\/)?=)?\s*([a-zA-Z_][_a-zA-Z0-9]*)\(?$/
     if k = line[0..caret_placement].match(alpha_and_caret)
@@ -310,12 +326,12 @@ class ObjCFallbackCompletion
           candidates = candidates_or_exit(k[2], files)
           res = pop_up(candidates, k[2],star,arg_name)
         else
-          files = [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",false,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnonymousEnums.txt.gz",false,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz",false,false],
-          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false],
-          [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false]]
-          files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false]] if ENV['TM_SCOPE'].include? "source.objc++"
+          files = [[ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",false,false, :constant],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnonymousEnums.txt.gz",false,false, :constant],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz",false,false, :constant],
+          ["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false, :functions],
+          [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false, :functions]]
+          files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false, :functions]] if ENV['TM_SCOPE'].include? "source.objc++"
           candidates = candidates_or_exit(k[2], files)
           temp = []
           unless candidates.empty?
@@ -509,6 +525,8 @@ class ObjCMethodCompletion
     io = open('|"$DIALOG" popup', "r+")
     io <<  pl.to_plist
     io.close_write
+    
+    #TextMate.exit_insert_text pl.to_plist.inspect
     TextMate.exit_discard
     res = OSX::PropertyList::load(io.read)
     if res.has_key? 'selectedMenuItem'

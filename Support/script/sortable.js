@@ -91,7 +91,7 @@ function ts_resortTable(lnk, clid) {
 	// Work out a type for the column
 	if (t.rows.length <= 1) return;
 	var itm = "";
-	var i = 0;
+	var i = 1;
 	while (itm == "" && i < t.tBodies[0].rows.length) {
 		var itm = ts_getInnerText(t.tBodies[0].rows[i].cells[column]);
 		itm = trim(itm);
@@ -106,6 +106,7 @@ function ts_resortTable(lnk, clid) {
 	if (itm.match(/^\d\d[\/\.-]\d\d[\/\.-]\d\d\d{2}?$/)) sortfn = ts_sort_date;
 	if (itm.match(/^-?[£$Û¢´]\d/)) sortfn = ts_sort_numeric;
 	if (itm.match(/^-?(\d+[,\.]?)+(E[-+][\d]+)?%?$/)) sortfn = ts_sort_numeric;
+	if (itm.match(/^(.*?)\s+\(\d+\)\s*$/)) sortfn = ts_sort_todo;
 	SORT_COLUMN_INDEX = column;
 	var firstRow = new Array();
 	var newRows = new Array();
@@ -231,6 +232,19 @@ function ts_sort_date(a,b) {
 		return -1;
 	}
 	return 1;
+}
+function ts_sort_todo(a,b) {
+	var mda = ts_getInnerText(a.cells[SORT_COLUMN_INDEX]).match(/^\s*(.*?)\s+\((\d+)\)\s*$/)
+	var mdb = ts_getInnerText(b.cells[SORT_COLUMN_INDEX]).match(/^\s*(.*?)\s+\((\d+)\)\s*$/)
+	
+	if(!mda && !mdb) {
+		return ts_sort_caseinsensitive(a,b);
+	}
+	
+	if(mda[1] == mdb[1]) {
+		return compare_numeric(mda[2], mdb[2]);
+	}
+	return mda[1] < mdb[1];
 }
 function ts_sort_numeric(a,b) {
 	var aa = ts_getInnerText(a.cells[SORT_COLUMN_INDEX]);

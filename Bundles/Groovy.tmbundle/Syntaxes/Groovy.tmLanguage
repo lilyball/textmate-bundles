@@ -156,7 +156,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(extends)\s+([a-zA-Z0-9_]+(?:&lt;(?:[a-zA-Z0-9_, ])+&gt;)?)\s*</string>
+					<string>(extends)\s+([a-zA-Z0-9_\.]+(?:&lt;(?:[a-zA-Z0-9_, ])+&gt;)?)\s*</string>
 					<key>name</key>
 					<string>meta.definition.class.inherited.classes.groovy</string>
 				</dict>
@@ -417,7 +417,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(assert)</string>
+					<string>\b(assert)\s</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>

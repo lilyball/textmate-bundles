@@ -19,7 +19,7 @@ html_header "TODO Bundle Help" "TODO"
 The "Show TODO List" command will scan your current document (on disk) or documents in your project for lines containing certain tags (see below).
 You will be presented with a row of “Tabs” that are counting matches while the search is going on. Once the search finishes a list for each of the tags and their context is shown. Each entry can be clicked to jump to that line in that file. The lists can be ordered by clicking on their column titles. Clicking on the Tabs will jump to the corresponding list.
 
-TextMate will ignore files whose full path matches the environment variable `TM_TODO_IGNORE`.
+TextMate will ignore files whose full path matches the regular expression defined by the environment variable `TM_TODO_IGNORE`.
 
 Note: This command requires Ruby 1.8
 

@@ -232,7 +232,7 @@ class ObjCFallbackCompletion
       #  searchTerm << candidates[0][index].chr
       #  index +=1
       #end
-      rubyCommand = "ruby \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
+      rubyCommand = "ruby -r \"#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist\" \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
       require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
       pl = {'suggestions' => prettyCandidates.map { |pretty, full, pure, noArg, type | { 'title' => pretty, 'cand' => full, 'pure'=> pure.inspect, 'noArg'=> noArg.inspect, 'type'=> type.to_s ,'filterOn'=> full.split("\t")[0]} },'shell' => rubyCommand,
        'extraChars' => "_",
@@ -511,7 +511,7 @@ class ObjCMethodCompletion
 
   def show_dialog(prettyCandidates,start,static,word,&snip_gen)
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-    rubyCommand = "ruby \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
+    rubyCommand = "ruby -r \"#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist\" \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
    # rubyCommand = "ruby -e \"puts \\\"#{rubyCommand2}\\\"\""
     #puts rubyCommand
     pl = {'suggestions' => prettyCandidates.map do |pretty, filter, full, type | 

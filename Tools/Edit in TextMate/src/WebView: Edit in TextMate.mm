@@ -328,7 +328,20 @@ static DOMHTMLTextAreaElement* find_active_text_area (WebView* view)
 	{
 		// Likely the user wants to edit just a text area, so let’s try to find which
 		if(DOMHTMLTextAreaElement* textArea = find_active_text_area(self))
-				[EditInTextMate externalEditString:[textArea value] startingAtLine:0 forView:self]; // TODO calculate the line number from selectionStart
+			{
+				NSString* str = [textArea value];
+				unsigned long selectionStart = [textArea selectionStart];
+				int lineNumber = 0;
+				NSRange range = NSMakeRange(0, 0);
+				do {
+					NSRange oldRange = range;
+					range = [str lineRangeForRange:NSMakeRange(NSMaxRange(range), 0)];
+					if(NSMaxRange(oldRange) == NSMaxRange(range) || selectionStart < NSMaxRange(range))
+						break;
+					lineNumber++;
+				} while(true);
+				[EditInTextMate externalEditString:str startingAtLine:lineNumber forView:self];
+			}
 		else	NSBeep();
 	}
 }

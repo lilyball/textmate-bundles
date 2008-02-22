@@ -190,9 +190,10 @@ void convert_dom_to_text::visit_nodes (DOMTreeWalker* treeWalker)
 	}
 }
 
-static DOMHTMLTextAreaElement* find_active_text_area (WebView* webView, DOMDocument* doc)
+static DOMHTMLTextAreaElement* find_active_text_area_for_frame (WebFrame* frame)
 {
 	DOMHTMLTextAreaElement* res = nil;
+	DOMDocument* doc = [frame DOMDocument];
 	if([doc respondsToSelector:@selector(focusNode)])
 	{
 		// OmniWeb 5.6 has a method to get the focused node
@@ -230,7 +231,7 @@ static DOMHTMLTextAreaElement* find_active_text_area (WebView* webView, DOMDocum
 		}
 		else if(v.size() > 1)
 		{
-			[webView selectAll:nil];
+			[[frame webView] selectAll:nil];
 
 			size_t should_change = 0, did_change = 0;
 			for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)
@@ -253,6 +254,21 @@ static DOMHTMLTextAreaElement* find_active_text_area (WebView* webView, DOMDocum
 			for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)
 				it->reset();
 		}
+	}
+	return res;
+}
+
+static DOMHTMLTextAreaElement* find_active_text_area (WebView* view)
+{
+	DOMHTMLTextAreaElement* res = nil;
+	if([view respondsToSelector:@selector(selectedFrame)])
+		res = find_active_text_area_for_frame([view performSelector:@selector(selectedFrame)]);
+	else
+	{
+		WebFrame* frame = [view mainFrame];
+		NSArray* frames = [[NSArray arrayWithObject: frame] arrayByAddingObjectsFromArray: [frame childFrames]];
+		for(unsigned i = 0; i != [frames count] && !res; i++)
+			res = find_active_text_area_for_frame([frames objectAtIndex:i]);
 	}
 	return res;
 }
@@ -304,7 +320,7 @@ static DOMHTMLTextAreaElement* find_active_text_area (WebView* webView, DOMDocum
 	else
 	{
 		// Likely the user wants to edit just a text area, so let’s try to find which
-		if(DOMHTMLTextAreaElement* textArea = find_active_text_area(self, [[self mainFrame] DOMDocument]))
+		if(DOMHTMLTextAreaElement* textArea = find_active_text_area(self))
 				[EditInTextMate externalEditString:[textArea value] startingAtLine:0 forView:self]; // TODO calculate the line number from selectionStart
 		else	NSBeep();
 	}
@@ -367,7 +383,7 @@ static DOMHTMLTextAreaElement* find_active_text_area (WebView* webView, DOMDocum
 	else
 	{
 		// FIXME we should ensure we send back to the same text area as we took the text from
-		if(DOMHTMLTextAreaElement* textArea = find_active_text_area(self, [[self mainFrame] DOMDocument]))
+		if(DOMHTMLTextAreaElement* textArea = find_active_text_area(self))
 			[textArea setValue:newString];
 	}
 }

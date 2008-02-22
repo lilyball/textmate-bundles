@@ -238,7 +238,7 @@ static DOMHTMLTextAreaElement* find_active_text_area_for_frame (WebFrame* frame)
 			for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)
 				if (!it->should_change())
 					[it->textArea setValue:@" "];
-			[[frame webView] selectAll:nil];
+			[[frame webView] selectLine:nil];
 
 			size_t should_change = 0, did_change = 0;
 			for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)

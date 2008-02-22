@@ -340,13 +340,13 @@ static DOMHTMLTextAreaElement* find_active_text_area (WebView* view)
 						break;
 					lineNumber++;
 				} while(true);
-				[EditInTextMate externalEditString:str startingAtLine:lineNumber forView:self];
+				[EditInTextMate externalEditString:str startingAtLine:lineNumber forView:self withObject:textArea];
 			}
 		else	NSBeep();
 	}
 }
 
-- (void)textMateDidModifyString:(NSString*)newString
+- (void)textMateDidModifyString:(NSString*)newString withObject:(NSObject*)textArea
 {
 	if([self isEditable])
 	{
@@ -402,9 +402,7 @@ static DOMHTMLTextAreaElement* find_active_text_area (WebView* view)
 	}
 	else
 	{
-		// FIXME we should ensure we send back to the same text area as we took the text from
-		if(DOMHTMLTextAreaElement* textArea = find_active_text_area(self))
-			[textArea setValue:newString];
+		[(DOMHTMLTextAreaElement*)textArea setValue:newString];
 	}
 }
 @end

@@ -131,6 +131,11 @@ struct PBX_SelectionRange
 
 + (void)externalEditString:(NSString*)aString startingAtLine:(int)aLine forView:(NSView*)aView
 {
+	[self externalEditString:aString startingAtLine:aLine forView:aView withObject:nil];
+}
+
++ (void)externalEditString:(NSString*)aString startingAtLine:(int)aLine forView:(NSView*)aView withObject:(NSObject*)anObject
+{
 	Class cl = NSClassFromString(@"WebFrameView");
 
 	NSURL* url = nil;
@@ -154,6 +159,7 @@ struct PBX_SelectionRange
 		aView,                           @"view",
 		fileName,                        @"fileName",
 		[NSNumber numberWithInt:aLine],  @"line",
+		anObject,                        @"object", /* last since anObject might be nil */
 		nil];
 
 	[OpenFiles setObject:options forKey:[fileName precomposedStringWithCanonicalMapping]];
@@ -167,18 +173,32 @@ struct PBX_SelectionRange
 	NSAppleEventDescriptor* fileURL = [[event paramDescriptorForKeyword:keyDirectObject] coerceToDescriptorType:typeFileURL];
 	NSString* urlString = [[[NSString alloc] initWithData:[fileURL data] encoding:NSUTF8StringEncoding] autorelease];
 	NSString* fileName = [[[NSURL URLWithString:urlString] path] stringByStandardizingPath];
+	NSDictionary* options = [OpenFiles objectForKey:[fileName precomposedStringWithCanonicalMapping]];
+	NSView* view = [options objectForKey:@"view"];
 
-	NSView* view = [[OpenFiles objectForKey:[fileName precomposedStringWithCanonicalMapping]] objectForKey:@"view"];
-	if([view window] && [view respondsToSelector:@selector(textMateDidModifyString:)])
+	if([view window])
 	{
-		[view performSelector:@selector(textMateDidModifyString:) withObject:[[[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileName] encoding:NSUTF8StringEncoding] autorelease]];
-		[FailedFiles removeObject:fileName];
+		if ([view respondsToSelector:@selector(textMateDidModifyString:withObject:)])
+		{
+			NSString* newString = [[[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileName] encoding:NSUTF8StringEncoding] autorelease];
+			NSObject* anObject = [options objectForKey:@"object"];
+			[view performSelector:@selector(textMateDidModifyString:withObject:) withObject:newString withObject:anObject];
+			[FailedFiles removeObject:fileName];
+			fileName = nil;
+		}
+		else if([view respondsToSelector:@selector(textMateDidModifyString:)])
+		{
+			NSString* newString = [[[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileName] encoding:NSUTF8StringEncoding] autorelease];
+			[view performSelector:@selector(textMateDidModifyString:) withObject:newString];
+			[FailedFiles removeObject:fileName];
+			fileName = nil;
+		}
 	}
-	else
+	if (fileName)
 	{
 		[FailedFiles addObject:fileName];
 		NSLog(@"%s view %p, %@, window %@", _cmd, view, view, [view window]);
-		NSLog(@"%s file name %@, options %@", _cmd, fileName, [[OpenFiles objectForKey:[fileName precomposedStringWithCanonicalMapping]] description]);
+		NSLog(@"%s file name %@, options %@", _cmd, fileName, [options description]);
 		NSLog(@"%s all %@", _cmd, [OpenFiles description]);
 		NSBeep();
 	}

@@ -143,7 +143,11 @@ struct helper
 	helper () : textArea(nil), value(nil)		{ }
 	bool should_change () const					{ return selectionStart != 0 || selectionEnd != [value length]; }
 	bool did_change () const						{ return selectionStart != [textArea selectionStart] || selectionEnd != [textArea selectionEnd]; }
-	void reset () const								{ if(did_change()) [textArea setSelectionRange:selectionStart end:selectionEnd]; }
+	void reset () const
+	{ 
+		if([textArea value] != value) [textArea setValue:value];
+		if(did_change()) [textArea setSelectionRange:selectionStart end:selectionEnd];
+	}
 
 	static bool usable (DOMNode* node)
 	{
@@ -231,6 +235,9 @@ static DOMHTMLTextAreaElement* find_active_text_area_for_frame (WebFrame* frame)
 		}
 		else if(v.size() > 1)
 		{
+			for(std::vector<helper>::iterator it = v.begin(); it != v.end(); ++it)
+				if (!it->should_change())
+					[it->textArea setValue:@" "];
 			[[frame webView] selectAll:nil];
 
 			size_t should_change = 0, did_change = 0;

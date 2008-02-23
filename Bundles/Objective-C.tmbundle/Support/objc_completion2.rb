@@ -542,13 +542,7 @@ class ObjCMethodCompletion
     return x
   end
 
-  def candidate_list(methodSearch, list, types)
-    unless list.nil?
-      obType = list[1]
-      list = list[0]
-    end
-
-    notif = false
+  def file_names(types)
     if types == :classes
       userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz"
       fileNames = ["#{ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz"]
@@ -567,6 +561,16 @@ class ObjCMethodCompletion
     elsif types == :annotated
       fileNames = "#{ENV['TM_BUNDLE_SUPPORT']}/CocoaAnnotatedStrings.txt.gz"
     end
+    return fileNames
+  end
+
+  def candidate_list(methodSearch, list, types)
+    unless list.nil?
+      obType = list[1]
+      list = list[0]
+    end
+
+    
 
     candidates = []
     if obType && obType == :initObject
@@ -574,6 +578,9 @@ class ObjCMethodCompletion
         methodSearch = "init(\b|[A-Z])" unless methodSearch.match(/^init(\b|[A-Z])/)
       end
     end
+    
+    fileNames = file_names(types)
+    
     n = []
     k = (/^#{methodSearch}/)
     fileNames.each do |fileName|

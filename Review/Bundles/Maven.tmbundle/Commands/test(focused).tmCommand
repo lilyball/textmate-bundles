@@ -7,16 +7,16 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>mavenmate.sh "MavenCommand.new('test')"</string>
+	<string>mavenmate.sh "MavenCommand.new('test -Dtest=' + ENV['TM_FILENAME'].sub(/\.\w+$/, ''))"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^M</string>
 	<key>name</key>
-	<string>Test All</string>
+	<string>Test Current File</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>C72F43DD-60E7-4F7C-B63B-84ADC3E1B67A</string>
+	<string>2D3E0685-1F92-47E8-AE17-07F7B15AEDD2</string>
 </dict>
 </plist>

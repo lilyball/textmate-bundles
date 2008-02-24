@@ -11,5 +11,6 @@ require_cmd "$TM_RUBY" "We need Ruby to proceed."
 
 export TM_MVN=`which $TM_MVN`
 export TM_RUBY=`which $TM_RUBY`
+HERE=
 
-$TM_RUBY -rMavenMate -e "MavenMate.new($1).emit_html"
+$TM_RUBY -rMavenMate -e "MavenProfileManager.new().set_profiles"

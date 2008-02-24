@@ -1,133 +1,144 @@
 #!/usr/bin/env ruby -w
 
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
+# require "stdin_dialog"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/scriptmate"
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+
 require "pstore"
-require "erb"
-include ERB::Util
+require "cgi"
+require "open3"
 
-class MavenMate
-	
-	VERSION = "1.0.0".freeze
+TextMate::IO.sync = false
 
-	attr_reader :green_patterns, :red_patterns
-	
-	def initialize(task, &option_getter)
+$SCRIPTMATE_VERSION = "$Revision: 8136 $"
 
-		@location = (ENV["TM_PROJECT_DIRECTORY"] || ENV["TM_DIRECTORY"]).freeze
-		Dir.chdir(@location)
-		header()
-		
-		@green_patterns = [/BUILD SUCCESSFUL/, /Tests run: ([^0]\d*), Failures: 0, Errors: 0/]
-		@red_patterns = [/\[ERROR\]/, /Tests run: ([^0]\d*)(.)+(Failures: ([^0]\d*)|Errors: ([^0]\d*)+)/]
-		@orange_patterns = [/\[WARNING\]/, /There are no tests to run\./, /Tests run: 0,/]
-		@blue_patterns = [/\[INFO\] \[(.)+:(.)+\]/]
-		
-		@task = task
-		@option_getter = option_getter
-		
-		
-		@maven = ENV["TM_MVN"]
-		if @maven.nil? or not File.exist? @maven
-			error("maven not found. Please set TM_MVN.")
-		end
-	end
-	
-	def run()
-		command = get_full_command()
-		print "#{command}<br />"
-		puts ""
-		task = MavenTask.new(command)
-		
-		task.run do |line, mode|
-			if @green_patterns.detect { |pattern| line =~ pattern }
-				line ="<span style=\"color: green\">#{line.chomp}</span><br />"
-			elsif @red_patterns.detect { |pattern| line =~ pattern }
-				line = "<span style=\"color: red\">#{line.chomp}</span><br />"
-			elsif @orange_patterns.detect { |pattern| line =~ pattern }
-				line = "<span style=\"color: orange\">#{line.chomp}</span><br />"
-			elsif @blue_patterns.detect { |pattern| line =~ pattern }
-				line ="<span style=\"color: blue\">#{line.chomp}</span><br />"
-			else
-				line = htmlize(line)
-			end
-			
-			line.sub!(/(http(s)?:\/\/([\S]+))/, '<a href="\1">\1</a>')
-			print line
-			$stdout.flush
-		end
-			
-	end
-	
-	private
-	
-	def get_full_command()
-		if (@option_getter.nil?)
-			return "#{@maven} #{@task}"
-		else
-			prefs = PStore.new(File.expand_path( "~/Library/Preferences/com.macromates.textmate.mavenmate"))
-			pref_key = "#{@location}::#{@task}"
-			last_value = prefs.transaction(true) { prefs[pref_key] }
-			option = @option_getter[last_value]
-			prefs.transaction { prefs[pref_key] = option }
-			command = @maven
-			command += " #{@task}" unless @task.empty?
-			command += " #{option}" unless option.empty?
-			return command
-		end
-	end
-	
-	def header()
-		html_header("MavenMate", "mvn")
-		puts "<pre>"
-		puts "MavenMate v#{VERSION} running on Ruby v#{RUBY_VERSION} (#{ENV["TM_RUBY"].strip})"
-		$stdout.flush
-	end
-	
-	def error(error)
-		puts error
-		footer()
-		exit
-	end
+class MavenProfileManager
+  
+  def initialize()
+    @location = MavenMate.location
+    @key = "#{@location}::profiles"
+    @profiles = nil
+  end
+  
+  def set_profiles
+    newprofiles = TextMate::UI.request_string( 
+      :title => "MavenMate - Profile Manager",
+      :prompt => 'Enter a comma delimited list of profiles to activate',
+      :default => profiles
+    )
+    MavenMate.prefs.transaction { MavenMate.prefs[@key] = newprofiles }
+  end
+  
+  def profiles
+    MavenMate.prefs.transaction { @profiles = MavenMate.prefs[@key] } if @profiles.nil?
+    @profiles
+  end
+  
+  def add_profiles_to_command(command)
+    if profiles.nil? or profiles.empty?
+      return command
+    else  
+      return command + ' -P "' + profiles + '"'
+    end
+  end
+  
+end
 
-	def footer
-		puts "</pre>"
-		html_footer
-	end
+class MavenCommand
+  
+  attr_reader :stdin, :stdout, :stderr, :pid, :task , :location
+    
+  def to_s
+    return "MavenMate"
+  end
+  
+  def initialize(task)
+    
+    @task = task
+    @previous_args_for_task_pref_key = "#{@location}::#{@task}::previousargs"
+    @previous_command_pref_key = "#{@location}::previouscommand"
+    @full_command = nil
+    
+  end
+  
+  def full_command
+    if @full_command.nil?
+      prefs = MavenMate.prefs
+      previous_args_for_task = prefs.transaction(true) { prefs[@previous_args_for_task_pref_key] }
+      args_for_task = TextMate::UI.request_string( 
+        :title => (@task.empty? ? "MavenMate" : "MavenMate - #{@task}"),
+        :prompt => 'Enter any command options',
+        :default => previous_args_for_task
+      )
+      prefs.transaction { prefs[@previous_args_for_task_pref_key] = args_for_task }
+      command = ""
+      command += " #{@task}" unless @task.empty?
+      command += " #{args_for_task}" unless args_for_task.empty?
+      
+      profilemanager = MavenProfileManager.new
+      command = profilemanager.add_profiles_to_command(command)
+      prefs.transaction { prefs[@previous_command_pref_key] = command }
+      
+      @full_command = command
+    end
+    return @full_command
+  end
+  
+  def run
+
+    rd, wr = IO.pipe
+    rd.fcntl(Fcntl::F_SETFD, 1)
+    @stdin, @stdout, @stderr, @pid = my_popen3(MavenMate.mvn + full_command)
+    wr.close
+    [@stdout, @stderr, rd, @pid]
+  end
 
 end
 
-class MavenTask
-	
-	def initialize(task = nil, *options)
-		@mode = :line_by_line
-		build_maven_command(task, *options)
-	end
-	
-	def run(&block)
-		open(@command) do | maven_task |
-			if block.nil?
-				maven_task.read
-			else
-				loop do
-					break if maven_task.eof?
-					new_content = (@mode == :char_by_char) ? maven_task.getc.chr : maven_task.gets
-					@mode = (block.arity == 2) ? block[new_content, @mode] : block[new_content]
-				end
-			end
-		end
-	end
-	
-	private
-	
-	def build_maven_command(task, *options)
-		@command =	"|"
-		@command << " " << task unless task.nil?
-		unless options.empty?
-			@command << " " << options.map { |arg| e_sh(arg) }.join(" ")
-		end
-		@command << " 2>&1"
-	end
-	
+class PreviousMavenCommand < MavenCommand
+  def full_command
+    @@prefs.transaction { @@prefs[@previous_command_pref_key] }
+  end
+end
+
+class MavenMate < CommandMate
+  
+  @@prefs = PStore.new(File.expand_path( "~/Library/Preferences/com.macromates.textmate.mavenmate"))
+  def self.prefs; @@prefs end
+  
+  @@mvn = ENV["TM_MVN"]
+  def self.mvn; @@mvn end
+  
+  @@location = (ENV["TM_PROJECT_DIRECTORY"] || ENV["TM_DIRECTORY"]).freeze
+  def self.location; @@location end
+  
+  attr_reader :colorisations
+  
+  def initialize(command, location = nil)
+    Dir.chdir(@@location)
+    super command
+    @colorisations = {
+      "green" => [/BUILD SUCCESSFUL/, /Tests run: ([^0]\d*), Failures: 0, Errors: 0/],
+      "red" => [/\[ERROR\]/, /Tests run: ([^0]\d*)(.)+(Failures: ([^0]\d*)|Errors: ([^0]\d*)+)/],
+      "orange" => [/\[WARNING\]/, /There are no tests to run\./, /Tests run: 0,/],
+      "blue" => [/\[INFO\] \[(.)+:(.)+\]/]
+    }
+  end
+  
+  def emit_header
+    puts html_head(:window_title => "#{@command}", :page_title => "#{@command}", :sub_title => "#{@command.location}")
+    puts "<pre>"
+    puts "<strong>mvn" + htmlize(@command.full_command) + "</strong><br>\n"
+  end
+  
+  def filter_stdout(line)
+    match = false
+    @colorisations.each do | color, patterns |
+      if match == false and patterns.detect { |pattern| line =~ pattern }
+        match = "<span style=\"color: #{color}\">#{htmlize line.chomp}</span><br>"
+      end
+    end
+    match = (htmlize line.chomp) + "<br>" unless match 
+    return match
+  end
 end

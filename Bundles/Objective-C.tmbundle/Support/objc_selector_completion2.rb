@@ -70,8 +70,9 @@ class ObjcSelectorCompletion
 
   def show_dialog(prettyCandidates,searchTerm,start)
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-    pl = {'suggestions' => prettyCandidates.map { |pretty , junk1, junk2| { 'title' => junk1} },'currentWord' => searchTerm,'extraChars' => "_:",}
-    io = open('|"$DIALOG" popup', "r+")
+    pl = {'suggestions' => prettyCandidates.map { |pretty , junk1, junk2| { 'title' => junk1} }}
+    flags = " --current-word '#{searchTerm}' --extra-chars '_:'"
+    io = open('|"$DIALOG" popup' + flags, "r+")
     io <<  pl.to_plist
     io.close_write
     TextMate.exit_discard

@@ -96,10 +96,7 @@ formatter = Formatter.new
 last_line = ""
 #seen_first_line = false
 
-unless ENV['PROJECT_FILE'].empty?
-  LogFile = ENV['PROJECT_FILE'] + '/' + ENV['LOGNAME'] + '.tm_build_errors' rescue nil
-  error_log = File.open(LogFile, 'w') if LogFile
-end
+error_log_entries = []
 
 formatter.start
 
@@ -150,7 +147,7 @@ STDIN.each_line do |line|
 			line_number = $2
 			error_desc	= $3
 			
-			error_log << [$1, $2, $3].join('|') + "\n" if error_log
+			error_log_entries << [$1, $2, $3]
 		
 			# if the file doesn't exist, we probably snagged something that's not an error
 			if File.exist?(path)
@@ -193,7 +190,20 @@ STDIN.each_line do |line|
 	end
 	
 end
-error_log.close if error_log
+
+unless ENV['PROJECT_FILE'].empty? or error_log_entries.length == 0
+  p error_log_entries
+  project = Xcode::Project.new(ENV['PROJECT_FILE'])
+  LogFile = ENV['PROJECT_FILE'] + '/' + ENV['LOGNAME'] + '.tm_build_errors' rescue nil
+  if LogFile
+    File.open(LogFile, 'w') do |error_log|
+      error_log_entries.each do |entry|
+        error_log << entry.join('|') + "\n"
+      end
+      error_log.close if error_log
+    end
+  end
+end
 
 # report success/failure
 success = /\*\* ((BUILD|CLEAN) SUCCEEDED) \*\*/.match(last_line)

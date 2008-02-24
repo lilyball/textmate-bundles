@@ -234,18 +234,17 @@ class ObjCFallbackCompletion
       #end
       rubyCommand = "ruby -r \"#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist\" \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
       require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-      pl = {'suggestions' => prettyCandidates.map { |pretty, full, pure, noArg, type | { 'title' => pretty, 'cand' => full, 'pure'=> pure.inspect, 'noArg'=> noArg.inspect, 'type'=> type.to_s ,'filterOn'=> full.split("\t")[0]} },'shell' => rubyCommand,
+      pl = {'suggestions' => prettyCandidates.map { |pretty, full, pure, noArg, type | { 'title' => pretty, 'cand' => full, 'pure'=> pure.inspect, 'noArg'=> noArg.inspect, 'type'=> type.to_s ,'filterOn'=> full.split("\t")[0]} },
+       
        'extraOptions' => {'star' => star.inspect, 'arg_name' => arg_name.inspect},
-       'extraChars' => "_",
-       'staticPrefix'=> "",
-       'currentWord'=> searchTerm,
       }
 
+      flags = "--shell-cmd '#{rubyCommand}' --extra-chars '_' --current-word '#{searchTerm}'"
       
       
       
       open("/dev/console", "w") { |io| io << pl.to_plist }
-      io = open('|"$DIALOG" popup', "r+")
+      io = open('|"$DIALOG" popup '+ flags, "r+")
       io << pl.to_plist
       io.close_write
       
@@ -517,13 +516,11 @@ class ObjCMethodCompletion
     #puts rubyCommand
     pl = {'suggestions' => prettyCandidates.map do |pretty, filter, full, type | 
             { 'title' => pretty, 'cand' => full, 'filterOn'=> filter, 'type'=> type.to_s}
-          end,
-           'shell' => rubyCommand,
-           'extraChars' => "_:",
-           'staticPrefix'=> static,
-           'currentWord'=> word,
+          end
           }
-    io = open('|"$DIALOG" popup', "r+")
+    flags = "--static-prefix '#{static}' --shell-cmd '#{rubyCommand}' --extra-chars '_:' --current-word '#{word}'"
+    
+    io = open('|"$DIALOG" popup ' + flags, "r+")
     io <<  pl.to_plist
     io.close_write
     

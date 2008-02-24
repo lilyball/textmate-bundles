@@ -36,6 +36,37 @@ def snippet_generator(cand, start)
   return out.chomp.strip
 end
 
+def construct_arg_name(arg)
+  a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUYi])?[A-Za-z_0-9]+)/)
+  unless a.nil?
+    (a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&.upcase }
+  else
+    ""
+  end
+end
+
+def type_declaration_snippet_generator(dict)
+  
+  arg_name = dict['extraOptions']['arg_name'] == "true" && dict['noArg'] == "false"
+  star = dict['extraOptions']['star'] == "true" && dict['pure'] == "false"
+  pointer = dict['environment']['TM_C_POINTER']
+  pointer = " *" unless pointer
+  
+  if arg_name
+    name = "${2:#{construct_arg_name dict['filterOn']}}"
+    if star
+      name = ("${1:#{pointer}#{name}}")
+    else
+      name = " " + name
+    end
+
+  else
+    name = pointer.rstrip if star
+  end
+  #  name = name[0..-2].rstrip unless arg_name
+  name + "$0"
+end
+
 def cfunction_snippet_generator(c)
   c = c.split"\t"
   i = 0
@@ -46,11 +77,14 @@ end
 
 s = STDIN.read
 res = OSX::PropertyList::load(s)
+#puts res.inspect.gsub("\",", "\",\n")
 
 if res['type'] == "methods"
   r = snippet_generator(res['cand'], res['filterOn'].size)
 elsif res['type'] == "functions"
   r = cfunction_snippet_generator(res['cand'])
+elsif res['pure'] && res['noArg']
+  r = type_declaration_snippet_generator res
 else 
   r = "$0"
 end

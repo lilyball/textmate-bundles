@@ -10,7 +10,11 @@
 	<string>#!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
-require "#{ENV['TM_BUNDLE_SUPPORT']}/objc_completion"
+if ENV['DIALOG'] =~ /2$/
+  require "#{ENV['TM_BUNDLE_SUPPORT']}/objc_completion2"
+else
+  require "#{ENV['TM_BUNDLE_SUPPORT']}/objc_completion"
+end
 
 def stripComments(line)
   line.gsub(/((['"])(?:\\.|.)*?\2)|\/\*.*?\*\/|\/\/[^\n\r]*/m) do |s| 

@@ -235,6 +235,7 @@ class ObjCFallbackCompletion
       rubyCommand = "ruby -r \"#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist\" \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
       require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
       pl = {'suggestions' => prettyCandidates.map { |pretty, full, pure, noArg, type | { 'title' => pretty, 'cand' => full, 'pure'=> pure.inspect, 'noArg'=> noArg.inspect, 'type'=> type.to_s ,'filterOn'=> full.split("\t")[0]} },'shell' => rubyCommand,
+       'extraOptions' => {'star' => star.inspect, 'arg_name' => arg_name.inspect},
        'extraChars' => "_",
        'staticPrefix'=> "",
        'currentWord'=> searchTerm,
@@ -291,7 +292,7 @@ class ObjCFallbackCompletion
     if ENV['TM_SCOPE'].include? "meta.protocol-list.objc"
       files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaProtocols.txt.gz",false,false, :constant]]
     elsif ENV['TM_SCOPE'].include?("meta.scope.implementation.objc") ||  ENV['TM_SCOPE'].include?("meta.interface-or-protocol.objc")
-      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false, :constant]]
+      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false, :classes]]
       files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz", true, false, :constant]] if ENV['TM_SCOPE'].include?("meta.scope.interface.objc")
       userClasses = ["#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz", false,false,:constant]
       files += [userClasses] if File.exists? userClasses[0]
@@ -310,7 +311,7 @@ class ObjCFallbackCompletion
       end
     else
       star = arg_name = true
-      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false, :constant],
+      files = [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithFramework.txt.gz",false,false, :classes],
       [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaConstants.txt.gz",true,true, :constant],
       [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaTypes.txt.gz",true,false, :constant],
       [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CLib.txt.gz",false,false, :constant, :functions],

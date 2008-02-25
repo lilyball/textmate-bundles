@@ -5,18 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>mavenmate.sh "
-require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
-
-m = MavenMate.new('') do |default| 
-	TextMate::UI.request_string( 
-		:title =&gt; 'Run Maven Task',
-		:prompt =&gt; 'Enter a command to pass to mvn',
-		:default =&gt; default
-	)
-end
-m.run
-"</string>
+	<string>mavenmate.sh -t</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

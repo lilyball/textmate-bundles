@@ -5,13 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>mavenmate.sh "MavenMate.new('test -Dtest=' + ENV['TM_FILENAME'].sub(/\.\w+$/, '')).run"</string>
+	<string>mavenmate.sh -f $TM_FILENAME</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^M</string>
 	<key>name</key>
-	<string>Test Current File</string>
+	<string>Test (Current File)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

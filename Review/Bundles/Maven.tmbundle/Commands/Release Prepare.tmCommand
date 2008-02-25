@@ -2,21 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>autoScrollOutput</key>
-	<true/>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>mavenmate.sh -t site:run</string>
+	<string>mavenmate.sh -t release:prepare -s</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^M</string>
 	<key>name</key>
-	<string>Site Run</string>
+	<string>Release Prepare</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
-	<string>E7AF434A-F2F7-431B-B796-403C35E2EBDF</string>
+	<string>73AF2F5B-353A-40C7-A72F-50D4AF95450D</string>
 </dict>
 </plist>

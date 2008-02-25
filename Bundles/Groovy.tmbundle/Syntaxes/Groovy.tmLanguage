@@ -37,12 +37,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.package.groovy</string>
+					<string>keyword.other.package.groovy</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.package.groovy</string>
+					<string>storage.type.package.groovy</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -56,12 +56,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.language.import.groovy</string>
+					<string>keyword.other.import.groovy</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.other.import.groovy</string>
+					<string>storage.type.import.groovy</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -183,7 +183,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>entity.other.implemented-interface.groovy</string>
+									<string>entity.other.inherited-class.interface.groovy</string>
 								</dict>
 								<key>2</key>
 								<dict>
@@ -396,7 +396,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.defintion.case-terminator.groovy</string>
+							<string>punctuation.definition.case-terminator.groovy</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -413,7 +413,7 @@
 					<key>match</key>
 					<string>\b(new)\b</string>
 					<key>name</key>
-					<string>keyword.language.new.groovy</string>
+					<string>keyword.other.new.groovy</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -423,7 +423,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.language.assert.groovy</string>
+							<string>keyword.control.assert.groovy</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -448,7 +448,7 @@
 					<key>match</key>
 					<string>\b(throws)\b</string>
 					<key>name</key>
-					<string>keyword.language.throws.groovy</string>
+					<string>keyword.other.throws.groovy</string>
 				</dict>
 			</array>
 		</dict>
@@ -490,7 +490,7 @@
 					<key>match</key>
 					<string>&lt;&lt;</string>
 					<key>name</key>
-					<string>keyword.operatory.leftshift.groovy</string>
+					<string>keyword.operator.leftshift.groovy</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -805,7 +805,7 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.constructor.groovy</string>
+							<string>entity.name.function.constructor.groovy</string>
 						</dict>
 						<key>5</key>
 						<dict>
@@ -883,7 +883,7 @@
 						<key>12</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.method.groovy</string>
+							<string>entity.name.function.groovy</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1275,7 +1275,7 @@
 					<key>match</key>
 					<string>,</string>
 					<key>name</key>
-					<string>punctuation.seperator.groovy</string>
+					<string>punctuation.definition.separator.groovy</string>
 				</dict>
 			</array>
 		</dict>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/bin/bash
+export TM_MAUDE=${TM_MAUDE:-maude}
+require_cmd "$TM_MAUDE"
+
+trim () {
+STR="$1" ruby &lt;&lt;"RUBY"
+	str = ENV['STR']
+	str = str.sub(/^\s*(\*{3}|-{3})\s*/, '')
+	str = str.sub(/^.*Maude&gt;\s*/, '')
+	str = str.sub(/\s*(\*{3}|-{3}).*$/, '')
+	puts str
+RUBY
+}
+
+TM_LINE="$(trim "${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}")"
+
+export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
+"$TM_RUBY" -- "$TM_BUNDLE_SUPPORT/run_maudemate.rb" "$TM_LINE"</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^E</string>
+	<key>name</key>
+	<string>Execute Line / Selection in Maude</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.maude</string>
+	<key>uuid</key>
+	<string>87DB6135-3D82-4ADB-B036-925AB4B4CE87</string>
+</dict>
+</plist>

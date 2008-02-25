@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+snip = 'op ${1:from} to ${2:to}'
+scope = ENV['TM_SCOPE']
+snip &lt;&lt; ' .' if scope =~ /\bmeta\.view\b/
+
+print snip</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Rename Operator … to …</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.maude meta.view, source.maude meta.module.rename</string>
+	<key>tabTrigger</key>
+	<string>op</string>
+	<key>uuid</key>
+	<string>34183C99-3572-4FC3-A196-FEB08D9D15E5</string>
+</dict>
+</plist>

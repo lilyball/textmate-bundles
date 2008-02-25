@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/bin/bash
+export TM_MAUDE=${TM_MAUDE:-maude}
+require_cmd "$TM_MAUDE"
+
+TM_WORD="${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}"
+
+export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
+"$TM_RUBY" -- "$TM_BUNDLE_SUPPORT/run_maudemate.rb" "parse $TM_WORD ."</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Parse Word / Selection</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.maude</string>
+	<key>uuid</key>
+	<string>CB628949-9F82-4FAB-AD25-864FEBE33E51</string>
+</dict>
+</plist>

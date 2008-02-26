@@ -5,13 +5,13 @@
 	<key>name</key>
 	<string>Symbol List: Build -&gt; Plugins -&gt; Plugin</string>
 	<key>scope</key>
-	<string>text.pom.xml meta.build.plugins.plugin.id</string>
+	<string>text.xml.pom meta.build meta.plugins meta.plugin meta.plugin-id</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolTransformation</key>
-		<string>s/.*/    $0/</string>
+		<string>s/.*/    plugin: $0/</string>
 	</dict>
 	<key>uuid</key>
 	<string>3BC64EF1-67CD-4689-9B37-9D754F0E9A9D</string>

@@ -5,13 +5,13 @@
 	<key>name</key>
 	<string>Symbol List: Dependencies -&gt; Dependency</string>
 	<key>scope</key>
-	<string>text.pom.xml meta.dependencies.dependency</string>
+	<string>text.xml.pom meta.dependencies meta.dependency meta.dependency-id</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolTransformation</key>
-		<string>s/^.*&lt;artifactId&gt;(.*)&lt;\/artifactId&gt;.*$/  $1/</string>
+		<string>s/.*/  depedency: $0/</string>
 	</dict>
 	<key>uuid</key>
 	<string>A46B4CCE-8BD1-46AA-9B28-A95864E14E4B</string>

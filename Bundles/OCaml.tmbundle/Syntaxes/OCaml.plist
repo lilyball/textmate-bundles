@@ -191,7 +191,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>storage.type.user-defined.ocaml</string>
+							<string>storage.type.ocaml</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -275,7 +275,7 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.user-defined.ocaml</string>
+					<string>storage.type.ocaml</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -301,7 +301,7 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.user-defined.ocaml</string>
+					<string>storage.type.ocaml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -342,7 +342,7 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.user-defined.ocaml</string>
+					<string>storage.type.ocaml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -381,7 +381,7 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.user-defined.ocaml</string>
+					<string>storage.type.ocaml</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -571,7 +571,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>storage.type.user-defined.ocaml</string>
+							<string>storage.type.ocaml</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -596,7 +596,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>storage.type.user-defined.ocaml</string>
+							<string>storage.type.ocaml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1324,6 +1324,22 @@
 				</dict>
 			</array>
 		</dict>
+		<key>definite_storagetypes</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#storagetypes</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b[a-zA-Z0-9'_]+\b</string>
+					<key>name</key>
+					<string>storage.type.ocaml</string>
+				</dict>
+			</array>
+		</dict>
 		<key>lists</key>
 		<dict>
 			<key>patterns</key>
@@ -1489,7 +1505,7 @@
 							<key>match</key>
 							<string>(\?)([a-z][a-zA-Z0-9_]*)\s*(:)</string>
 							<key>name</key>
-							<string>variable.parameter.optional.ocaml</string>
+							<string>variable.parameter.ameter.optional.ocaml</string>
 						</dict>
 						<dict>
 							<key>begin</key>
@@ -1506,6 +1522,11 @@
 									<key>name</key>
 									<string>punctuation.separator.label.ocaml</string>
 								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>storage.type.ocaml</string>
+								</dict>
 							</dict>
 							<key>end</key>
 							<string>\s</string>
@@ -1515,7 +1536,7 @@
 							<array>
 								<dict>
 									<key>include</key>
-									<string>#variables</string>
+									<string>#definite_storagetypes</string>
 								</dict>
 							</array>
 						</dict>
@@ -1547,7 +1568,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=\b(type|val|external|class|module|end)\b)|^\s*$</string>
+					<string>(?=\b(type|val|external|class|module|let|end)\b)|^\s*$</string>
 					<key>name</key>
 					<string>meta.module.signature.external.ocaml</string>
 					<key>patterns</key>

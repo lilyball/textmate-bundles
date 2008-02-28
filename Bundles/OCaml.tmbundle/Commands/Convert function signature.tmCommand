@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+# Converts function signatures into function defs
+# val of_gtk : ?cols:cols 
+#   -&gt; ?expand:expand
+#   -&gt; ?fill:bool 
+#   -&gt; GObj.widget 
+#   -&gt; unit t
+
+val = $stdin.read
+
+start_padding = val[/^\s*/m]
+end_padding = val[/\s*$/m]
+val.strip!
+
+parts = val.split(/:/)
+
+name = parts[0]
+name.sub!(/^(\s*)val/, "\1let")
+
+args = parts[1..-1].join(':').split(/\s*-&gt;\s*/)
+next_arg = 'a'
+args = args.map do |arg|
+  arg.strip!
+  if arg =~ /^\?.*:/
+    arg[/^(\?.*?):/, 1]
+  elsif arg =~ /:/
+    "~" + arg[/^(.*?):/, 1]
+  elsif arg == "unit"
+    "()"
+  else
+    arg = next_arg
+    next_arg = next_arg.succ
+    arg
+  end
+end
+
+print "#{start_padding}#{name.rstrip} #{args.join(' ')} =\n\n;;#{end_padding}" 
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@c</string>
+	<key>name</key>
+	<string>Convert function signature</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.ocaml</string>
+	<key>uuid</key>
+	<string>BD73877C-081E-4326-A532-8117047F6B1A</string>
+</dict>
+</plist>

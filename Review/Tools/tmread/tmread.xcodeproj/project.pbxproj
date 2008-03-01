@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A33D8EB70D74291500844000 /* tmread.h in Headers */ = {isa = PBXBuildFile; fileRef = A33D8EB50D74291500844000 /* tmread.h */; };
 		A33D8EB80D74291500844000 /* tmread.c in Sources */ = {isa = PBXBuildFile; fileRef = A33D8EB60D74291500844000 /* tmread.c */; };
+		A3764F950D792C01008EC6BF /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3764F940D792C01008EC6BF /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		A33D8EB50D74291500844000 /* tmread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tmread.h; sourceTree = "<group>"; };
 		A33D8EB60D74291500844000 /* tmread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tmread.c; sourceTree = "<group>"; };
+		A3764F940D792C01008EC6BF /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		D2AAC0630554660B00DB518D /* tmread.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = tmread.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -39,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3764F950D792C01008EC6BF /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +51,7 @@
 		08FB7794FE84155DC02AAC07 /* tmread */ = {
 			isa = PBXGroup;
 			children = (
+				A3764F940D792C01008EC6BF /* CoreFoundation.framework */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 			);

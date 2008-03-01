@@ -11,6 +11,23 @@
 		A33D8EB80D74291500844000 /* tmread.c in Sources */ = {isa = PBXBuildFile; fileRef = A33D8EB60D74291500844000 /* tmread.c */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildStyle section */
+		A3128BBA0D785187002593A5 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Development;
+		};
+		A3128BBB0D785187002593A5 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
 /* Begin PBXFileReference section */
 		A33D8EB50D74291500844000 /* tmread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tmread.h; sourceTree = "<group>"; };
 		A33D8EB60D74291500844000 /* tmread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tmread.c; sourceTree = "<group>"; };
@@ -91,6 +108,12 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = A33D8EAE0D7427B900844000 /* Build configuration list for PBXProject "tmread" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				A3128BBA0D785187002593A5 /* Development */,
+				A3128BBB0D785187002593A5 /* Deployment */,
+			);
 			hasScannedForEncodings = 1;
 			mainGroup = 08FB7794FE84155DC02AAC07 /* tmread */;
 			projectDirPath = "";

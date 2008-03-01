@@ -11,6 +11,8 @@ fi
 
 export DYLD_INSERT_LIBRARIES=$lib
 export DYLD_FORCE_FLAT_NAMESPACE=
-export COCOADIALOG_PATH="/Applications/TextMate.app/Contents/SharedSupport/Support/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog"
+
+export DIALOG="/Applications/TextMate.app/Contents/PlugIns/Dialog.tmplugin/Contents/Resources/tm_dialog"
+export DIALOG_NIB="/Applications/TextMate.app/Contents/SharedSupport/Support/nibs/RequestString.nib"
 
 $dir/test.rb

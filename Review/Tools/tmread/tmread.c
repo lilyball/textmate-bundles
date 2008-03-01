@@ -15,58 +15,137 @@
 #include <string.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 #ifndef TM_READ_DEBUG
 #define TM_READ_DEBUG 1
 #endif
 
-#ifndef TM
-#define TM_READ_COCOA_DIALOG_PATH_ENV_VAR "COCOADIALOG_PATH"
+#ifndef DIALOG
+#define DIALOG "DIALOG"
 #endif
 
-#ifndef TM
-#define TM_READ_COCOA_DIALOG_OPTIONS "inputbox --title 'TextMate Input' --informative-text 'A running process is requesting input:' --button1 'Send' --button2 'Send End of File' --float"
+#ifndef DIALOG_NIB
+#define DIALOG_NIB "DIALOG_NIB"
 #endif
 
-char* getCocoaDialogPath() {
-    static char *path = NULL;
-    
-    if (path == NULL) {
-        path = getenv(TM_READ_COCOA_DIALOG_PATH_ENV_VAR);
-        if (path == NULL) {
-            write(STDERR_FILENO, "tmread failure: ", 16);
-            write(STDERR_FILENO, TM_READ_COCOA_DIALOG_PATH_ENV_VAR, strlen(TM_READ_COCOA_DIALOG_PATH_ENV_VAR));
-            write(STDERR_FILENO, " is not set", 11);
-            exit(1);
-        }
-    }
-    
-    return path;
+#ifndef DIALOG_PROMPT
+#define DIALOG_PROMPT "DIALOG_PROMPT"
+#endif
+
+#ifndef DIALOG_TITLE
+#define DIALOG_TITLE "DIALOG_TITLE"
+#endif
+
+#ifndef ERROR_BUFFER_SIZE
+#define ERROR_BUFFER_SIZE 4096
+#endif
+
+#ifndef TM_DIALOG_OUTPUT_CHUNK_SIZE
+#define TM_DIALOG_OUTPUT_CHUNK_SIZE 4096
+#endif
+
+void die(char *msg) {
+    fprintf(stderr, "tmread failure: %s", msg);
+    exit(1);
 }
 
-char* getCocoaDialogCommand() {
-    static char command[4096];
-    char *path = NULL;
-    if (command[0] == '\0') {
-        path = getCocoaDialogPath();
-        strcpy(command, path);
-        command[strlen(path)] = ' ';
-        strcpy(&command[strlen(path) + 1], TM_READ_COCOA_DIALOG_OPTIONS);
-        command[strlen(path) + 1 + strlen(TM_READ_COCOA_DIALOG_OPTIONS)] = '\0';
+void free_then_die(char *msg, bool freemsg) {
+    fprintf(stderr, "tmread failure: %s", msg);
+    free(msg);
+    exit(1);
+}
+
+char * get_tm_dialog_command() {
+    
+    char *tm_dialog = getenv(DIALOG);
+    char *nib = getenv(DIALOG_NIB);
+    char *command;
+    char error[ERROR_BUFFER_SIZE];
+
+    // TODO Should I validate the tm_dialog and nib are existing files here?
+    if (tm_dialog == NULL || strlen(tm_dialog) == 0) {
+        snprintf(error, ERROR_BUFFER_SIZE, "Cannot execute tm_dialog, %s is empty or not set", DIALOG);
+        die(error);
     }
 
+    if (nib == NULL || strlen(nib) == 0) {
+        snprintf(error, ERROR_BUFFER_SIZE, "No nib specified for tm_dialog, %s is empty or not set", DIALOG_NIB);
+        die(error);
+    }
+
+    asprintf(&command, "%s -q -p {} %s", tm_dialog, nib);
+    if (command == NULL) {
+        die("Failed to allocate for command string");
+    }
+   
+    #ifdef TM_READ_DEBUG
+        printf("get_tm_dialog_command(): %s\n", command);
+    #endif
+    
     return command;
+ }
+
+char *get_tm_dialog_output(FILE *tm_dialog) {
+    char *output_buf = malloc(TM_DIALOG_OUTPUT_CHUNK_SIZE);
+    ssize_t output_buf_len = TM_DIALOG_OUTPUT_CHUNK_SIZE;
+    char c;
+    size_t i = 0;
+    
+    if (output_buf == NULL) die("failed to allocate initial buffer for tm_dialog output");
+    
+    for (i = 0; (c = getc(tm_dialog)) != EOF; ++i) {
+        if (i == output_buf_len) {
+            output_buf = realloc(output_buf, output_buf_len + TM_DIALOG_OUTPUT_CHUNK_SIZE);
+            if (output_buf == NULL) die("failed to increase allocation for tm_dialog output buffer");
+            output_buf_len = output_buf_len + TM_DIALOG_OUTPUT_CHUNK_SIZE;
+        }
+        output_buf[i] = c;
+    }
+    
+    if (i++ == output_buf_len) {
+        output_buf = realloc(output_buf, output_buf_len + 1);
+        if (output_buf == NULL) die("failed to increase allocation for tm_dialog output buffer");
+        output_buf_len = output_buf_len + 1;
+    }
+    
+    output_buf[i] = '\0';
+    
+    #ifdef TM_READ_DEBUG
+        printf("get_tm_dialog_output(): %s", output_buf);
+    #endif
+    
+    return output_buf;
+} 
+
+ssize_t read_using_tm_dialog(void *buf, size_t buf_len) {
+
+    char *tm_dialog_command = get_tm_dialog_command();
+    char *tm_dialog_output = NULL;
+    FILE *tm_dialog;
+    
+    #ifdef TM_READ_DEBUG
+        puts("read_using_tm_dialog(): about to open tm_dialog");
+    #endif
+    
+    tm_dialog = popen(tm_dialog_command, "r");
+    if (tm_dialog == NULL) die("failed to open tm_dialog");
+    tm_dialog_output = get_tm_dialog_output(tm_dialog);
+    
+    strncpy(buf, tm_dialog_output, buf_len);
+    free(tm_dialog_output);
+    
+    return strlen(buf);
 }
 
-ssize_t read(int d, void *buf, size_t nbytes) {
-    ssize_t bytesReadBySyscall = 0;
-    int i = 0;
-    int c = 0;
-    char *charBuf = (char *)buf;
-    FILE *ifp;
+/*
+ *    
+ */
+ssize_t read(int d, void *buf, size_t buf_len) {
     
-    if (d == STDIN_FILENO) { // We are trying to read from STDIN
-        
+    ssize_t bytes_read = 0;
+    
+    if (d == STDIN_FILENO) {
         #ifdef TM_READ_DEBUG
         puts("Setting fd to non blocking");
         #endif
@@ -75,46 +154,24 @@ ssize_t read(int d, void *buf, size_t nbytes) {
         #ifdef TM_READ_DEBUG
         puts("About to read from STDIN using syscall");
         #endif
-        bytesReadBySyscall = syscall(SYS_read, d, buf, nbytes);
+        bytes_read = syscall(SYS_read, d, buf, buf_len);
         #ifdef TM_READ_DEBUG
-        printf("read syscall returned: %d\n", bytesReadBySyscall);
+        printf("read syscall returned: %d\n", bytes_read);
         #endif
 
-        if (bytesReadBySyscall > 0) {
+        if (bytes_read > 0) {
             #ifdef TM_READ_DEBUG
-            puts("Returning result of read syscall");
+            printf("read() got %d bytes, returning that", bytes_read);
             #endif
-            return bytesReadBySyscall;
+            return bytes_read;
         } else {
-
-            ifp = popen(getCocoaDialogCommand(), "r");
-            if (ifp == NULL) {
-                #ifdef TM_READ_DEBUG
-                puts("popen() return NULL");
-                #endif
-                write(STDERR_FILENO, "tmread failure: Could not open CocoaDialog @ ", 46);
-                exit(1);
-            }
-            
             #ifdef TM_READ_DEBUG
-            puts("Reading dialog response ...");
+            puts("calling read_using_tm_dialog()");
             #endif
-            while ((c = getc(ifp)) != EOF) {
-                if (c == '\n')
-                    break;
-            }
-            
-            for (i = 0; i < nbytes; ++i) {
-                c = getc(ifp);
-                if (c == EOF) {
-                    break;
-                }
-                charBuf[i] = c;
-            }
-            return i;
+            return read_using_tm_dialog(buf, buf_len);
         }
     } else {
-        return syscall(SYS_read, d, buf, nbytes);
+        return syscall(SYS_read, d, buf, buf_len);
     }
 }
 

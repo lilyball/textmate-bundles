@@ -91,7 +91,7 @@ match_iter(pat , line[start[-1]..last]) do |tok, beg, len|
 end
 
 if list == ""
-  m = line[start[-1]..last].match(/([a-zA-Z][a-zA-Z0-9]*:?)\s*$/)
+  m = line[start[-1]..last].match(/([a-zA-Z][a-zA-Z0-9]*:?)\s*(;)?$/)
   if m
     list = m[1]
     last = m.begin(0)

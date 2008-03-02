@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
 require 'io/wait'
-
-puts STDIN.gets
+STDOUT.flush
+puts DATA.gets
 
 __END__
 123

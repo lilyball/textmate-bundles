@@ -297,7 +297,7 @@ char * get_tm_dialog_output(FILE *tm_dialog) {
     output_buffer[i] = '\0';
     
     #ifdef TM_DIALOG_READ_DEBUG
-        printf("get_tm_dialog_output(): %s", output_buffer;
+        printf("get_tm_dialog_output(): %s", output_buffer);
     #endif
     
     return output_buffer;

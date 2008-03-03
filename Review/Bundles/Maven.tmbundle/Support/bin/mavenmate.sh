@@ -9,8 +9,8 @@ require_cmd "$TM_MVN" "If you have installed maven, then you need to either <a h
 
 require_cmd "$TM_RUBY" "We need Ruby to proceed."
 
-export TM_MVN=`which $TM_MVN`
-export TM_RUBY=`which $TM_RUBY`
+export TM_MVN=`which "$TM_MVN"`
+export TM_RUBY=`which "$TM_RUBY"`
 
 if [ "$TM_PROJECT_DIRECTORY" ]
 then

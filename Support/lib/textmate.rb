@@ -42,6 +42,12 @@ module TextMate
         raise SystemExit
       end
     end
+
+    def rescan_project
+      `osascript &>/dev/null \
+    	   -e 'tell app "SystemUIServer" to activate' \
+    	   -e 'tell app "TextMate" to activate' &`
+    end
   end
 
   class ProjectFileFilter

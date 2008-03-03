@@ -1,27 +1,17 @@
 #!/usr/bin/env bash
 
 dir=`dirname $0`
-lib=$dir/../target/Release/tm_dialog_read.dylib
+TM_DIALOG_READ_DYLIB=$dir/../target/Release/tm_dialog_read.dylib
 
-if [ ! -f $lib ]
+if [ ! -f $TM_DIALOG_READ_DYLIB ]
 then
-    echo "$lib doesn't exist, build it first with 'Release' profile"
-    exit 1
+    echo "$TM_DIALOG_READ_DYLIB doesn't exist, build it first with 'Release' profile"
+    exit 1  
 fi
 
-if [ $DYLD_INSERT_LIBRARIES ]
-then
-    export DYLD_INSERT_LIBRARIES="$lib:$DYLD_INSERT_LIBRARIES"
-else
-    export DYLD_INSERT_LIBRARIES="$lib"
-fi 
+. $dir/../tm_dialog_read_init.sh
 
-export DYLD_FORCE_FLAT_NAMESPACE=
-
-#export DIALOG="/Applications/TextMate.app/Contents/PlugIns/Dialog.tmplugin/Contents/Resources/tm_dialog"
-#export DIALOG_NIB="RequestString"
-export DIALOG_PROMPT="Custom Prompt"
-export DIALOG_TITLE="Custom Title"
+tm_dialog_read_init -p "Custom Prompt" -t "Custom Title" -n "/Applications/TextMate.app/Contents/SharedSupport/Support/nibs/RequestString.nib"
 
 # Does a simple gets with no DATA - this seems to work as expected
 $dir/simple-test.rb 

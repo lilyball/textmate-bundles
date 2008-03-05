@@ -3,25 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>if [ -e "${TM_FILEPATH}" ]; then
-    "$GROOVY_HOME/bin/groovy" "${TM_FILEPATH}"
-    exit_show_html
-else
-	puts "File not found or not saved. Please save first or try 'Run script' on a selection of text"
-fi
-</string>
+	<string>groovymate.sh</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>
-	<string>none</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>@r</string>
 	<key>name</key>
 	<string>Run</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.groovy</string>
 	<key>uuid</key>

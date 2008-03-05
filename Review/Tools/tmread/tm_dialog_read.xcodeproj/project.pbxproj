@@ -13,6 +13,23 @@
 		BA7D9B6A0D7B79BC00D87A71 /* tm_dialog_read.h in Headers */ = {isa = PBXBuildFile; fileRef = BA7D9B680D7B79BC00D87A71 /* tm_dialog_read.h */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildStyle section */
+		A3D585850D7EBA6B00F379A7 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Development;
+		};
+		A3D585860D7EBA6B00F379A7 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
 /* Begin PBXFileReference section */
 		A3764F940D792C01008EC6BF /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		A3ED136E0D7A2D4400A80EC3 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -99,6 +116,12 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = A33D8EAE0D7427B900844000 /* Build configuration list for PBXProject "tm_dialog_read" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				A3D585850D7EBA6B00F379A7 /* Development */,
+				A3D585860D7EBA6B00F379A7 /* Deployment */,
+			);
 			hasScannedForEncodings = 1;
 			mainGroup = 08FB7794FE84155DC02AAC07 /* tmread */;
 			projectDirPath = "";

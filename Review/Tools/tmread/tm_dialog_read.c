@@ -131,10 +131,10 @@ char * get_tm_dialog_parameters() {
     char *title_env_value = getenv(DIALOG_TITLE_ENV_VAR);
     if (title_env_value) {
         
-        CFStringRef title_key = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_TITLE_KEY, kCFStringEncodingUTF8, kCFAllocatorNull);
+        CFStringRef title_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_TITLE_KEY, kCFStringEncodingMacRoman);
         if (title_key == NULL) die("Failed to create string for title key");
         
-        CFStringRef title = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, title_env_value, kCFStringEncodingUTF8, kCFAllocatorNull);
+        CFStringRef title = CFStringCreateWithCString(kCFAllocatorDefault, title_env_value, kCFStringEncodingUTF8);
         if (title == NULL) die("Failed to create string from title env var");
         
         CFDictionaryAddValue(parameters, title_key, title);
@@ -145,10 +145,10 @@ char * get_tm_dialog_parameters() {
     char *prompt_env_value = getenv(DIALOG_PROMPT_ENV_VAR);
     if (prompt_env_value) {
         
-        CFStringRef prompt_key = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_PROMPT_KEY, kCFStringEncodingUTF8, kCFAllocatorNull);
+        CFStringRef prompt_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_PROMPT_KEY, kCFStringEncodingMacRoman);
         if (prompt_key == NULL) die("Failed to create string for prompt key");
         
-        CFStringRef prompt = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, prompt_env_value, kCFStringEncodingUTF8, kCFAllocatorNull);
+        CFStringRef prompt = CFStringCreateWithCString(kCFAllocatorDefault, prompt_env_value, kCFStringEncodingUTF8);
         if (prompt == NULL) die("Failed to create string from prompt env var");
         
         CFDictionaryAddValue(parameters, prompt_key, prompt);
@@ -159,10 +159,10 @@ char * get_tm_dialog_parameters() {
     char *string_env_value = getenv(DIALOG_STRING_ENV_VAR);
     if (string_env_value) {
         
-        CFStringRef string_key = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_STRING_KEY, kCFStringEncodingUTF8, kCFAllocatorNull);
+        CFStringRef string_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_STRING_KEY, kCFStringEncodingMacRoman);
         if (string_key == NULL) die("Failed to create string for string key");
         
-        CFStringRef string = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, string_env_value, kCFStringEncodingUTF8, kCFAllocatorNull);
+        CFStringRef string = CFStringCreateWithCString(kCFAllocatorDefault, string_env_value, kCFStringEncodingUTF8);
         if (string == NULL) die("Failed to create string from string env var");
         
         CFDictionaryAddValue(parameters, string_key, string);
@@ -170,20 +170,20 @@ char * get_tm_dialog_parameters() {
         CFRelease(string);
     }
 
-    CFStringRef button1_key = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_BUTTON_1_KEY, kCFStringEncodingUTF8, kCFAllocatorNull);
+    CFStringRef button1_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_BUTTON_1_KEY, kCFStringEncodingMacRoman);
     if (button1_key == NULL) die("Failed to create string for button1 key");
     
-    CFStringRef button1 = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_BUTTON_1, kCFStringEncodingUTF8, kCFAllocatorNull);
+    CFStringRef button1 = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_BUTTON_1, kCFStringEncodingMacRoman);
     if (button1 == NULL) die("Failed to create string for button1 value");
     
     CFDictionaryAddValue(parameters, button1_key, button1);
     CFRelease(button1_key);
     CFRelease(button1);
 
-    CFStringRef button2_key = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_BUTTON_2_KEY, kCFStringEncodingUTF8, kCFAllocatorNull);
+    CFStringRef button2_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_BUTTON_2_KEY, kCFStringEncodingMacRoman);
     if (button2_key == NULL) die("Failed to create string for button2 key");
     
-    CFStringRef button2 = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_BUTTON_2, kCFStringEncodingUTF8, kCFAllocatorNull);
+    CFStringRef button2 = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_BUTTON_2, kCFStringEncodingMacRoman);
     if (button2 == NULL) die("Failed to create string for button2 value");
     
     CFDictionaryAddValue(parameters, button2_key, button2);
@@ -204,7 +204,7 @@ char * get_tm_dialog_parameters() {
 	    
         char error_as_chars[ERROR_BUFFER_SIZE];
         
-        if (!CFStringGetCString(error, error_as_chars, ERROR_BUFFER_SIZE, kCFStringEncodingUTF8)) {
+        if (!CFStringGetCString(error, error_as_chars, ERROR_BUFFER_SIZE, kCFStringEncodingMacRoman)) {
             die("converting tm_dialog_output to property list failed, and so did trying to get the failure message");
         } else {
             die("something went wrong writing the parameters property list to the stream, and we couldn't get the actual error");
@@ -316,7 +316,7 @@ CFPropertyListRef convert_tm_dialog_output_to_plist(char *tm_dialog_output) {
         puts("convert_tm_dialog_output_to_plist(): converting output to data");
     #endif
     
-    CFDataRef tm_dialog_output_data = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)tm_dialog_output, strlen(tm_dialog_output), kCFAllocatorNull);
+    CFDataRef tm_dialog_output_data = CFDataCreate(kCFAllocatorDefault, (UInt8*)tm_dialog_output, strlen(tm_dialog_output));
     if (tm_dialog_output_data == NULL) die("failed to allocate tm_dialog_output_data");
     
     #ifdef TM_DIALOG_READ_DEBUG
@@ -334,7 +334,7 @@ CFPropertyListRef convert_tm_dialog_output_to_plist(char *tm_dialog_output) {
 	    
         char error_as_chars[ERROR_BUFFER_SIZE];
         
-        if (!CFStringGetCString(error, error_as_chars, ERROR_BUFFER_SIZE, kCFStringEncodingUTF8)) {
+        if (!CFStringGetCString(error, error_as_chars, ERROR_BUFFER_SIZE, kCFStringEncodingMacRoman)) {
             die("converting tm_dialog_output to property list failed, and so did trying to get the failure message");
         }
             
@@ -396,7 +396,7 @@ ssize_t extract_input_from_plist(CFPropertyListRef plist, char *buffer, size_t b
     if (CFGetTypeID(plist) != CFDictionaryGetTypeID()) 
         die("extract_input_from_plist(): root element of plist is not dictionary");
     
-    CFStringRef results_key = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_RESULT_KEY, kCFStringEncodingUTF8, kCFAllocatorNull);
+    CFStringRef results_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_RESULT_KEY, kCFStringEncodingMacRoman);
     CFDictionaryRef results;
     
     if (CFDictionaryGetValueIfPresent(plist, results_key, (void *)&results)) {
@@ -406,7 +406,7 @@ ssize_t extract_input_from_plist(CFPropertyListRef plist, char *buffer, size_t b
         
         CFRelease(results_key);
         
-        CFStringRef return_argument_key = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, DIALOG_RETURN_ARGUMENT_KEY, kCFStringEncodingUTF8, kCFAllocatorNull);
+        CFStringRef return_argument_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_RETURN_ARGUMENT_KEY, kCFStringEncodingMacRoman);
         CFStringRef return_argument;
         
         if (CFDictionaryGetValueIfPresent(results, return_argument_key, (void *)&return_argument)) {
@@ -542,7 +542,7 @@ ssize_t read(int d, void *buffer, size_t buffer_length) {
             }
             
             char process_name_chars[PROCESS_NAME_BUFFER_SIZE];
-            if (!CFStringGetCString(process_name, process_name_chars, PROCESS_NAME_BUFFER_SIZE, kCFStringEncodingUTF8)) die("couldnt get process name as chars");
+            if (!CFStringGetCString(process_name, process_name_chars, PROCESS_NAME_BUFFER_SIZE, kCFStringEncodingMacRoman)) die("couldnt get process name as chars");
             if (process_name_chars == NULL) die("could not get process name as chars");
             CFRelease(process_name);
             

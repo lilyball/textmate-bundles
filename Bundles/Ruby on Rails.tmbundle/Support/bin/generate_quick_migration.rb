@@ -42,7 +42,6 @@ end
 generated_code = <<-RUBY
 class #{camelized} < ActiveRecord::Migration
   def self.up
-    mtab
   end
 
   def self.down
@@ -50,8 +49,7 @@ class #{camelized} < ActiveRecord::Migration
 end
 RUBY
 
-FileUtils.mkdir_p migration_dir
 new_migration_filename = File.join(migration_dir, number + "_" + underscored + ".rb")
 File.open(new_migration_filename, "w") { |f| f.write generated_code }
 TextMate.refresh_project_drawer
-TextMate.open(new_migration_filename, 2, 8)
+TextMate.open(new_migration_filename)

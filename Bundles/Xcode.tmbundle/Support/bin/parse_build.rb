@@ -192,7 +192,6 @@ STDIN.each_line do |line|
 end
 
 unless ENV['PROJECT_FILE'].empty? or error_log_entries.length == 0
-  p error_log_entries
   project = Xcode::Project.new(ENV['PROJECT_FILE'])
   LogFile = ENV['PROJECT_FILE'] + '/' + ENV['LOGNAME'] + '.tm_build_errors' rescue nil
   if LogFile

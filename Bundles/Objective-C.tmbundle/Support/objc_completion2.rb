@@ -317,6 +317,16 @@ class ObjCFallbackCompletion
       [ "#{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaFunctions.txt.gz",false,false, :functions]]
       files += [["#{e_sh ENV['TM_BUNDLE_SUPPORT']}/C++Lib.txt.gz",false,false, :functions]] if ENV['TM_SCOPE'].include? "source.objc++"
     end
+    dot_alpha_and_caret = /\.([a-zA-Z][a-zA-Z0-9]*)?$/
+    if temp =line[0..caret_placement].match( dot_alpha_and_caret)
+      obc = ObjCMethodCompletion.new(line, caret_placement)
+      list = obc.try_find_class(@full, 0)
+      candidates = obc.candidates_or_exit( temp[0][1..-1] + "[a-zA-Z0-9]+\\s", list, :methods )
+      res = obc.pop_up(candidates, temp[0][1..-1], "")
+      return res
+    end
+    
+    
     alpha_and_caret = /(==|!=|(?:\+|\-|\*|\/)?=)?\s*([a-zA-Z_][_a-zA-Z0-9]*)\(?$/
     if k = line[0..caret_placement].match(alpha_and_caret)
       if k[1]
@@ -700,6 +710,25 @@ class ObjCMethodCompletion
     end
   end
 
+  def instance_methods_for_variable(var,line)
+    h = method_parse(line)
+    if h &&  h[var]
+      typeName = h[var].match(/[A-Za-z0-1]*/)[0]
+      obType = :instanceMethod
+      list = list_from_shell_command(typeName, obType)
+      if list.nil? && File.exists?(userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz")
+        candidates = %x{ zgrep ^#{e_sh h[var] + "[[:space:]]" } #{userClasses} }.split("\n")
+        unless candidates.empty?
+          list = Set.new
+          c = candidates[0].split("\t")[1].split(":")
+          list = c.to_set
+          l = list_from_shell_command(c[-1], :instanceMethod)
+          list += l unless l.nil?
+        end
+      end
+    end
+    return list
+  end
 
   def list_from_shell_command(className, type)
     framework = %x{ zgrep ^#{e_sh className + "[[:space:]]" } #{e_sh ENV['TM_BUNDLE_SUPPORT']}/CocoaClassesWithAncestry.txt.gz }.split("\n")
@@ -709,7 +738,7 @@ class ObjCMethodCompletion
   end
 
   def try_find_class(line, start)
-    if  m = line[start..-1].match(/^\[\s*(\[|([A-Z][a-zA-Z][a-zA-Z0-9]*)\s|([a-z_][_a-zA-Z0-9]*)\s)/)
+    if  m = line[start..-1].match(/^\[\s*(\[|([A-Z][a-zA-Z][a-zA-Z0-9]*)\s|([a-z_][_a-zA-Z0-9]*)\s)|((\b[a-z_][_a-zA-Z0-9]*)\.([a-z_][_a-zA-Z0-9]*)?$)/)
       if m[1] == "["
         pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
         up = -2
@@ -760,22 +789,10 @@ class ObjCMethodCompletion
         list = list_from_shell_command(typeName, obType)
 
       elsif m[3] && ENV['TM_SCOPE'].include?("meta.function-with-body.objc") && ENV['TM_SCOPE'].include?("meta.block.c")
-        h = method_parse(line)
-        if h &&  h[m[3]]
-          typeName = h[m[3]].match(/[A-Za-z0-1]*/)[0]
-          obType = :instanceMethod
-          list = list_from_shell_command(typeName, obType)
-          if list.nil? && File.exists?(userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz")
-            candidates = %x{ zgrep ^#{e_sh h[m[3]] + "[[:space:]]" } #{userClasses} }.split("\n")
-            unless candidates.empty?
-              list = Set.new
-              c = candidates[0].split("\t")[1].split(":")
-              list = c.to_set
-              l = list_from_shell_command(c[-1], :instanceMethod)
-              list += l unless l.nil?
-            end
-          end
-        end
+        list = instance_methods_for_variable(m[3], line)
+
+      elsif m[4] && ENV['TM_SCOPE'].include?("meta.function-with-body.objc") && ENV['TM_SCOPE'].include?("meta.block.c")
+        list = instance_methods_for_variable(m[5], line)
       end
     end
     return list, obType, typeName
@@ -814,6 +831,7 @@ class ObjCMethodCompletion
     colon_and_space = /([a-zA-Z][a-zA-Z0-9]*:)\s*$/
     alpha_and_space = /[a-zA-Z0-9"\)\]]\s+$/
     alpha_and_caret = /[a-zA-Z][a-zA-Z0-9]*$/
+    dot_alpha_and_caret = /\.([a-zA-Z][a-zA-Z0-9]*)?$/
 
     mline = line.gsub(/\n/, " ")
     # find Nested method
@@ -825,6 +843,10 @@ class ObjCMethodCompletion
       # [obj mess:^]
       [res = return_type_based_c_constructs_suggestions(mn, "", true, typeName) , 0]
 
+    elsif temp =mline[start[-1]..caret_placement].match( dot_alpha_and_caret)
+      candidates = candidates_or_exit( temp[0][1..-1] + "[a-zA-Z0-9]+\\s", list, :methods )
+      res = pop_up(candidates, temp[0][1..-1], "")
+      [res , 0]
     elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
       # [obj mess ^]
       candidates = candidates_or_exit( mn + (backContext || "[[:alpha:]:]"), list, :methods ) # the alpha is to prevent satisfaction with just one part

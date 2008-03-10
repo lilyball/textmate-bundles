@@ -42,7 +42,12 @@ begin
 rescue
   query = nil
 end
-query = TextMate.input("Input search word", query ? query : "") if do_input
+query = TextMate::UI.request_string(
+  :title => "Documentation Search", 
+  :default => query ? query : "",
+  :prompt => "Input search word:",
+  :button1 => 'Search'
+) if do_input
 
 if query.nil? or query.length < 1
   close_browser

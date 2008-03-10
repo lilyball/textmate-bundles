@@ -65,6 +65,50 @@ There are environment variables you can set to customise the window title, promp
 * `DIALOG_PROMPT`
 * `DIALOG_STRING`
 
+### Helper Functions
+
+#### Bash Function
+
+A bash function is provided to initialize the environment  ...
+
+*Note here about where the tm_dialog_read_init.sh file lives*
+	
+	tm_dialog_read_init -n MyNib -p "My Prompt" -t "My Title" -s "My Default String"
+
+All arguments are optional.
+
+#### Ruby Method
+
+A ruby method is also provided ...
+
+*Note here about where the tm_dialog_read.rb file lives*
+
+	TextMate::DialogRead.init :nib => MyNib, :prompt => "My Prompt", :title => "My Title", :string => "My Default String"
+
+All arguments are optional.
+
+### About Output Buffering
+
+To get the maximum benefit from this, you should consider the output buffering of the process that is utilising tm\_dialog_read. A common idiom is for scripts/processes to do something like the following:
+
+	Please enter something: *
+
+Where the `*` is the cursor position (when running on the command line).
+
+If you are running a process and writing it's output to TM's html output window then you might find that the tm\_dialog_read requester appears to the user, but they have no idea of what is being requested of them. This can be caused by a number of things ...
+
+* Script/process being run is not flushing output before requesting input
+
+Unfortunately, there is not much you can do about this. Unless you are able to modify the source of course.
+
+* You are reading the output of the script being run a line at a time
+
+The solution to this is obviously not to read a line at a time. Note that `TextMate::IO.exhaust()` read returns complete lines by default. You can turn this off by setting `TextMate::IO.sync` to `true`.
+
+* If rendering to HTML, your are outputting incomplete tags
+
+WebKit uses it's own output buffering. A way to get around this is to wrap each write in a tag (A `<span>` tag for example). This seems to force WebKit to write it out.
+
 ### Bugs
 
 There is only one known bug, but it's more of a limitation than a bug. The returned input is limited to the size of the buffer passed to read (which seems to be usually `4096`). This shouldn't be too much of a problem as the buffer is rather large and you wouldn't expect the user to input such a quantity of data. If the user did input more data into the dialog than the buffer can handle, it will be silently truncated.

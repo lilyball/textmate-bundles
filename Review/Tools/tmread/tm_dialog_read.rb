@@ -2,6 +2,9 @@ module TextMate
   module DialogRead
     
     @lib = ENV['TM_DIALOG_READ_DYLIB']
+    raise "'TM_DIALOG_READ_DYLIB' env var is not set" unless @lib
+    
+    # @lib = ENV['TM_SUPPORT_PATH'] + '/lib/tm_dialog_read'
     
     class << self
       def init(settings)
@@ -18,9 +21,9 @@ module TextMate
 
       def insert
         if ENV['DYLD_INSERT_LIBRARIES']
-            ENV['DYLD_INSERT_LIBRARIES'] = @lib + ':' + ENV['DYLD_INSERT_LIBRARIES']
+            ENV['DYLD_INSERT_LIBRARIES'] = "#{@lib}" + ':' + ENV['DYLD_INSERT_LIBRARIES']
         else
-            ENV['DYLD_INSERT_LIBRARIES'] = @lib
+            ENV['DYLD_INSERT_LIBRARIES'] = "#{@lib}"
         end
         ENV['DYLD_FORCE_FLAT_NAMESPACE'] = "1"
       end

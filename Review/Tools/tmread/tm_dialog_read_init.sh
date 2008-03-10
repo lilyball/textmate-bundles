@@ -1,7 +1,14 @@
 # This probably seems a bit weird right now, it just means you have to set this
 # yourself, but hopefully we could set it to $TM_SUPPORT/lib/tm_dialog_read.dylib 
 # when in production
-TM_DIALOG_READ_DYLIB="$TM_DIALOG_READ_DYLIB" 
+
+if [ ! $TM_DIALOG_READ_DYLIB ]
+then
+    echo "TM_DIALOG_READ_DYLIB not set"
+    exit 1
+fi
+
+#TM_DIALOG_READ_DYLIB="$TM_SUPPORT_PATH/lib/tm_dialog_read.dylib" 
 
 function tm_dialog_read_init {
 

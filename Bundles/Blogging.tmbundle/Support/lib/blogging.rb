@@ -1,6 +1,7 @@
 require 'cgi'
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes.rb"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
-require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/textmate.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/keychain.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/metaweblog.rb"
 
@@ -72,8 +73,11 @@ TEXT
   def fetch_credentials_from_keychain
     # we have @endpoint and possibly @username. fill in the blanks...
     if @username == nil
-      @username = TextMate.standard_input_box("Blogging",
-        "Enter the username to login at #{self.endpoint}")
+      @username = TextMate::UI.request_string(
+        :title => "Blog Username", 
+        :prompt => "Enter the username to login at #{self.endpoint}:",
+        :button1 => 'Login'
+      )
       TextMate.exit_discard if self.username == nil
     end
 
@@ -82,8 +86,11 @@ TEXT
       if @password == nil
         current_endpoint = self.endpoint.dup
         current_endpoint.sub!(/#.+/, '') if current_endpoint =~ /#.+/
-        @password = TextMate.secure_standard_input_box("Blogging",
-          "Enter the password to login at #{current_endpoint}")
+        @password = TextMate::UI.request_secure_string(
+          :title => "Blog Password", 
+          :prompt => "Enter the password to login at #{current_endpoint}:",
+          :button1 => 'Login'
+        )
         TextMate.exit_discard if @password == nil
         @save_password_on_success = true
       end
@@ -111,8 +118,11 @@ TEXT
         # The endpoint is a recognized URL; nothing else to do
       else
         # the endpoint is a URL but unrecognized... ask for a pretty name
-        name = TextMate.standard_input_box("Blogging",
-          "Enter a name for this endpoint: #{@endpoint}")
+        name = TextMate::UI.request_string(
+          :title => "Endpoint Name", 
+          :prompt => "Enter a name for: #{@endpoint}",
+          :button1 => 'OK'
+        )
         if name != nil
           self.endpoints[name] = @endpoint
           self.endpoints[@endpoint] = name
@@ -123,8 +133,11 @@ TEXT
       end
     else
       if !self.endpoints[@endpoint]
-        url = TextMate.standard_input_box("Blogging",
-          "Enter an endpoint URL for blog #{@endpoint}")
+        url = TextMate::UI.request_string(
+          :title => "Endpoint URL", 
+          :prompt => "Enter an endpoint URL for blog #{@endpoint}",
+          :button1 => 'OK'
+        )
         if url != nil
           self.endpoints[@endpoint] = url
           self.endpoints[url] = @endpoint
@@ -448,7 +461,12 @@ TEXT
   end
 
   def request_title(default)
-    result = TextMate.input_box('Title of Post', 'Enter a title for this post.', default, 'Post')
+    result = TextMate::UI.request_string(
+      :title => "Post Title", 
+      :default => default,
+      :prompt => "Enter a title for this post:",
+      :button1 => 'Post'
+    )
     TextMate.exit_discard if result.nil?
     result
   end
@@ -468,18 +486,17 @@ TEXT
   end
 
   def select_post(posts)
-    titles = posts.map { |p| e_sh p['title'] }
+    titles = posts.map { |p| p['title'] }
 
-    result = TextMate.dropdown(%Q{--title 'Fetch Post' \
-      --text 'Select a recent post to edit' \
-      --button1 Load --button2 Cancel \
-      --items #{titles.join(' ')}})
-
-    result = result.split(/\n/)
-    if result[0] == "1"
-      return posts[result[1].to_i]
-    end
-    nil
+    result = TextMate::UI.request_item(
+      :title => "Fetch Post",
+      :prompt => "Select a recent post to edit:",
+      :items => titles,
+      :button1 => 'Load'
+    )
+    
+    return nil if result.nil?
+    return posts[titles.index(result)]
   end
 
   def select_endpoint
@@ -494,7 +511,7 @@ TEXT
 
     titles = []
     self.endpoints.each_key do | name |
-      titles << e_sh(name) unless name =~ /^https?:/
+      titles << name unless name =~ /^https?:/
     end
 
     if titles.length == 0
@@ -502,17 +519,14 @@ TEXT
     end
 
     titles.sort!
-    result = TextMate.dropdown(%Q{--title 'Select Blog' \
-      --text 'Choose a blog' \
-      --button1 Ok --button2 Cancel \
-      --items #{titles.join(' ')}})
+    result = TextMate::UI.request_item(
+      :title => "Choose Blog",
+      :prompt => "Choose a blog:",
+      :items => titles,
+      :button1 => 'Choose'
+    )
 
-    result = result.split(/\n/)
-    if result[0] == "1"
-      name = titles[result[1].to_i].gsub(/\\(.)/, '\\1') # FIXME rather than cleanup after e_sh, we should keep the unescaped name, as we don’t really know what e_sh does
-      return self.endpoints[name]
-    end
-    nil
+    return self.endpoints[result]
   end
 
   # Command: Post
@@ -663,7 +677,12 @@ TEXT
     if ENV['TM_MODIFIER_FLAGS'] =~ /OPTION/
 
       suggested_name = prefix + file.gsub(/[ ]+/, '-')
-      result = TextMate.input_box('Upload Image', 'Name to use for uploaded file:', suggested_name, 'Upload')
+      result = TextMate::UI.request_string(
+        :title => "Upload Image",
+        :default => suggested_name,
+        :prompt => "Name to use for uploaded file:",
+        :button1 => 'Upload'
+      )
       TextMate.exit_discard if result.nil?
 
       alt = result.sub(/\.[^.]+\z/, '').gsub(/[_-]/, ' ').capitalize.gsub(/\w{4,}/) { |m| m.capitalize }
@@ -675,7 +694,12 @@ TEXT
       ext           = file[(base.length)..-1]
       suggested_alt = base.gsub(/[_-]/, ' ').gsub(/[a-z](?=[A-Z0-9])/, '\0 ').capitalize.gsub(/\w{4,}/) { |m| m.capitalize }
 
-      result = TextMate.input_box('Upload Image', 'Image description (a filename will be derived from it):', suggested_alt, 'Upload')
+      result = TextMate::UI.request_string(
+        :title => "Upload Image",
+        :default => suggested_alt,
+        :prompt => "Image description (a filename will be derived from it):",
+        :button1 => 'Upload'
+      )
       TextMate.exit_discard if result.nil?
 
       require "iconv"

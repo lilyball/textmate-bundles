@@ -103,10 +103,6 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#comments</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#variables</string>
 				</dict>
 			</array>
@@ -856,7 +852,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+(?&lt;![:^@])(:&gt;|:(?![:=])))</string>
+			<string>(\()(?=(~[a-z][a-zA-Z0-9_]*:|("(\\"|[^"])*")|[^\(\)~"])+(?&lt;!:)(:&gt;|:(?![:=])))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -1893,7 +1889,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>\s</string>
+					<string>(?=(-&gt;|\s))</string>
 					<key>name</key>
 					<string>variable.parameter.labeled.ocaml</string>
 					<key>patterns</key>

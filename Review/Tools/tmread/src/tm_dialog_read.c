@@ -19,10 +19,11 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <CoreFoundation/CoreFoundation.h>
-#include <Carbon/Carbon.h>
 
+extern char **environ;
+    
 #ifndef TM_DIALOG_READ_DEBUG
-// #define TM_DIALOG_READ_DEBUG
+//#define TM_DIALOG_READ_DEBUG
 #endif
 
 #ifndef DIALOG_ENV_VAR
@@ -123,7 +124,7 @@ void die(char *msg) {
     
     The return char * must be free'd by the caller.
 */
-char * get_tm_dialog_parameters() {
+char * get_tm_dialog_input() {
     
     CFMutableDictionaryRef parameters = CFDictionaryCreateMutable(kCFAllocatorDefault, 5, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     if (parameters == NULL) die("failed to allocate dict for dialog parameters");
@@ -199,7 +200,7 @@ char * get_tm_dialog_parameters() {
     
     if (error) {
         #ifdef TM_DIALOG_READ_DEBUG
-            puts("get_tm_dialog_parameters(): writing parameters property list to stream failed");
+            fputs("get_tm_dialog_input(): writing parameters property list to stream failed", stderr);
         #endif
 	    
         char error_as_chars[ERROR_BUFFER_SIZE];
@@ -224,7 +225,7 @@ char * get_tm_dialog_parameters() {
     CFRelease(parameters_data);
     
     #ifdef TM_DIALOG_READ_DEBUG
-        printf("get_tm_dialog_parameters(): %s\n", parameters_chars);
+        fprintf(stderr, "get_tm_dialog_input(): %s\n", parameters_chars);
     #endif
     
     return parameters_chars;
@@ -240,7 +241,7 @@ char * get_tm_dialog_parameters() {
     
     The caller is responsible for freeing the returned char *.
 */
-char * get_tm_dialog_command() {
+char * get_tm_dialog_path() {
     
     char error[ERROR_BUFFER_SIZE];
     
@@ -249,43 +250,44 @@ char * get_tm_dialog_command() {
         snprintf(error, ERROR_BUFFER_SIZE, "Cannot execute tm_dialog, %s is empty or not set", DIALOG_ENV_VAR);
         die(error);
     }
+        
+    return tm_dialog;
+}
+
+char * get_tm_dialog_nib() {
 
     char *nib = getenv(DIALOG_NIB_ENV_VAR);
     if (nib == NULL || strlen(nib) == 0) {
         nib = DIALOG_NIB_DEFAULT;
     }
 
-    char *command;
-    asprintf(&command, "%s -q %s", tm_dialog, nib);
-    if (command == NULL) die("Failed to allocate for command string");
-   
-    #ifdef TM_DIALOG_READ_DEBUG
-        printf("get_tm_dialog_command(): %s\n", command);
-    #endif
-    
-    return command;
- }
+    return nib;
+}
 
 /*
     Exhaustively reads the output of the already opened tm_dialog process.
     
     The caller is responsible for freeing the result.
 */
-char * get_tm_dialog_output(FILE *tm_dialog) {
+char * get_tm_dialog_output(int tm_dialog) {
+    
     char *output_buffer = malloc(TM_DIALOG_OUTPUT_CHUNK_SIZE);
+    if (output_buffer == NULL) die("failed to allocate initial buffer for tm_dialog output");
     ssize_t output_buffer_length = TM_DIALOG_OUTPUT_CHUNK_SIZE;
+    
     char c;
     size_t i = 0;
     
-    if (output_buffer == NULL) die("failed to allocate initial buffer for tm_dialogoutput");
-    
-    for (i = 0; (c = getc(tm_dialog)) != EOF; ++i) {
+    size_t bytes_read = syscall(SYS_read, tm_dialog, &c, 1);
+    while (bytes_read > 0) {
         if (i == output_buffer_length) {
             output_buffer = realloc(output_buffer, output_buffer_length + TM_DIALOG_OUTPUT_CHUNK_SIZE);
             if (output_buffer == NULL) die("failed to increase allocation for tm_dialogoutput buffer");
             output_buffer_length = output_buffer_length + TM_DIALOG_OUTPUT_CHUNK_SIZE;
         }
-        output_buffer[i] = c;
+        
+        output_buffer[i++] = c;
+        bytes_read = syscall(SYS_read, tm_dialog, &c, 1);
     }
     
     if (i++ == output_buffer_length) {
@@ -297,7 +299,7 @@ char * get_tm_dialog_output(FILE *tm_dialog) {
     output_buffer[i] = '\0';
     
     #ifdef TM_DIALOG_READ_DEBUG
-        printf("get_tm_dialog_output(): %s", output_buffer);
+        fprintf(stderr, "get_tm_dialog_output(): %s", output_buffer);
     #endif
     
     return output_buffer;
@@ -313,14 +315,14 @@ char * get_tm_dialog_output(FILE *tm_dialog) {
 CFPropertyListRef convert_tm_dialog_output_to_plist(char *tm_dialog_output) {
     
     #ifdef TM_DIALOG_READ_DEBUG
-        puts("convert_tm_dialog_output_to_plist(): converting output to data");
+        fputs("convert_tm_dialog_output_to_plist(): converting output to data", stderr);
     #endif
     
     CFDataRef tm_dialog_output_data = CFDataCreate(kCFAllocatorDefault, (UInt8*)tm_dialog_output, strlen(tm_dialog_output));
     if (tm_dialog_output_data == NULL) die("failed to allocate tm_dialog_output_data");
     
     #ifdef TM_DIALOG_READ_DEBUG
-        puts("convert_tm_dialog_output_to_plist(): creating property list from data");
+        fputs("convert_tm_dialog_output_to_plist(): creating property list from data", stderr);
     #endif
     
 	CFStringRef error = NULL;
@@ -329,7 +331,7 @@ CFPropertyListRef convert_tm_dialog_output_to_plist(char *tm_dialog_output) {
 	if (error) {
 	    
 	    #ifdef TM_DIALOG_READ_DEBUG
-            puts("convert_tm_dialog_output_to_plist(): creating property list failed");
+            fputs("convert_tm_dialog_output_to_plist(): creating property list failed", stderr);
         #endif
 	    
         char error_as_chars[ERROR_BUFFER_SIZE];
@@ -356,7 +358,7 @@ CFPropertyListRef convert_tm_dialog_output_to_plist(char *tm_dialog_output) {
 ssize_t copy_return_argument_into_buffer(CFStringRef return_argument, char *buffer, ssize_t buffer_length) {
     
     #ifdef TM_DIALOG_READ_DEBUG
-        printf("copy_return_argument_into_buffer(): copying return argument into original buffer\n");
+        fprintf(stderr, "copy_return_argument_into_buffer(): copying return argument into original buffer\n");
     #endif
     
     CFIndex return_argument_length = CFStringGetLength(return_argument);
@@ -423,7 +425,7 @@ ssize_t extract_input_from_plist(CFPropertyListRef plist, char *buffer, size_t b
         
     } else {
         #ifdef TM_DIALOG_READ_DEBUG
-            printf("extract_input_from_plist(): plist has no %s key, so returning nothing", DIALOG_RESULT_KEY);
+            fprintf(stderr, "extract_input_from_plist(): plist has no %s key, so returning nothing", DIALOG_RESULT_KEY);
         #endif
         CFRelease(results_key);
         return 0; // EOF
@@ -438,41 +440,66 @@ ssize_t extract_input_from_plist(CFPropertyListRef plist, char *buffer, size_t b
 */
 ssize_t read_using_tm_dialog(void *buffer, size_t buffer_length) {
 
-    FILE *tm_dialog;
-    char *tm_dialog_command = get_tm_dialog_command();
-    #ifdef TM_DIALOG_READ_DEBUG
-        puts("read_using_tm_dialog(): about to open tm_dialog");
-    #endif
-    tm_dialog = popen(tm_dialog_command, "r+");
-    if (tm_dialog == NULL) die("failed to open tm_dialog");
+    char *tm_dialog_input = get_tm_dialog_input();
+    int tm_dialog_input_length = strlen(tm_dialog_input);
     
-    char *tm_dialog_parameters = get_tm_dialog_parameters();
-    int tm_dialog_parameters_length = strlen(tm_dialog_parameters);
+    enum {R,W,N};
+    int input[N],output[N];
     
-    size_t bytes_written = fwrite(tm_dialog_parameters, sizeof(char), tm_dialog_parameters_length, tm_dialog);
-    if (bytes_written < tm_dialog_parameters_length) die("failed to write all of parameter input to tm_dialog");
+    if (pipe(input) < 0) die("failed to create input pipe for tm_dialog");
+    if (pipe(output) < 0) die("failed to create output pipe for tm_dialog");
+    
+    int child = fork();
+    if (child < 0) die("failed to fork() for tm_dialog");
+    
+    if (child == 0) {
+        close(0); 
+        dup(input[R]); 
+        close(input[0]); 
+        close(input[1]);
+        close(1); 
+        dup(output[W]); 
+        close(output[0]); 
+        close(output[1]);
+
+        unsetenv("DYLD_INSERT_LIBRARIES");
+        unsetenv("DYLD_FORCE_FLAT_NAMESPACE");
+
+        if (0 > execl(get_tm_dialog_path(), "-q", get_tm_dialog_nib(), NULL)) {
+            char error[ERROR_BUFFER_SIZE];
+            snprintf(error, ERROR_BUFFER_SIZE, "execve() failed, %s", strerror(errno));
+            die(error);
+        }
+    } else {
+        close(input[R]); 
+        close(output[W]);
         
-    free(tm_dialog_parameters);
+        size_t bytes_written = write(input[W], tm_dialog_input, tm_dialog_input_length);
+        if (bytes_written < tm_dialog_input_length) die("failed to write all of parameter input to tm_dialog");
+        close(input[W]);
+        free(tm_dialog_input);
+        
+        char *tm_dialog_output = get_tm_dialog_output(output[R]);
+        close(output[R]);
+        
+        int tm_dialog_return_code;
+        wait(&tm_dialog_return_code);
+        if (tm_dialog_return_code) {
+            char error[ERROR_BUFFER_SIZE];
+            snprintf(error, ERROR_BUFFER_SIZE, "tm_dialog returned with code %d, output: %s", tm_dialog_return_code, tm_dialog_output);
+            die(error);
+        }
 
-    char *tm_dialog_output = NULL;    
-    tm_dialog_output = get_tm_dialog_output(tm_dialog);
+        CFPropertyListRef plist;
+        plist = convert_tm_dialog_output_to_plist(tm_dialog_output);
+        free(tm_dialog_output);
 
-    int tm_dialog_return_code = pclose(tm_dialog);
-    if (tm_dialog_return_code) {
-        char error[ERROR_BUFFER_SIZE];
-        snprintf(error, ERROR_BUFFER_SIZE, "tm_dialog returned with code %d, output: %s", tm_dialog_return_code, tm_dialog_output);
-        die(error);
+        ssize_t bytes_read;
+        bytes_read = extract_input_from_plist(plist, buffer, buffer_length);
+        CFRelease(plist);
+
+        return bytes_read;
     }
-    
-    CFPropertyListRef plist;
-    plist = convert_tm_dialog_output_to_plist(tm_dialog_output);
-    free(tm_dialog_output);
-    
-    ssize_t bytes_read;
-    bytes_read = extract_input_from_plist(plist, buffer, buffer_length);
-    CFRelease(plist);
-    
-    return bytes_read;
 }
 
 /*
@@ -498,67 +525,27 @@ ssize_t read(int d, void *buffer, size_t buffer_length) {
         
     if (d == STDIN_FILENO) {
         
-        fcntl(d, F_SETFL, O_NONBLOCK);
-                
         ssize_t bytes_read = 0;
+        fcntl(d, F_SETFL, O_NONBLOCK);
         bytes_read = syscall(SYS_read, d, buffer, buffer_length);
 
         #ifdef TM_DIALOG_READ_DEBUG
-            printf("read(): syscall returned %d bytes\n", bytes_read);
+            fprintf(stderr, "read(): syscall returned %d bytes\n", bytes_read);
         #endif
 
         if (bytes_read > 0) {
             #ifdef TM_DIALOG_READ_DEBUG
-                puts("read(): not invoking tm_dialog");
+                fputs("read(): not invoking tm_dialog", stderr);
             #endif
-            
+
             return bytes_read;
         } else {
             
-            // We need to work out if this process is actually tm_dialog.
-            // If it is we just want to return nothing and not invoke tm_dialog
-            // recursively.
-            
             #ifdef TM_DIALOG_READ_DEBUG
-                puts("read(): calculating current process name");
+                fputs("read(): calling read_using_tm_dialog()", stderr);
             #endif
             
-            ProcessSerialNumber psn;
-            OSErr err = GetCurrentProcess(&psn);
-            
-            if (err) {
-                char error[ERROR_BUFFER_SIZE];
-                sprintf(error, "failed to get current process serial number, error code %d", err);
-                die(error);
-            }
-            
-            CFStringRef process_name;
-            OSStatus stat = CopyProcessName(&psn, &process_name);
-
-            if (stat) {
-                char error[ERROR_BUFFER_SIZE];
-                sprintf(error, "failed to get current process name, error code %d", err);
-                die(error);
-            }
-            
-            char process_name_chars[PROCESS_NAME_BUFFER_SIZE];
-            if (!CFStringGetCString(process_name, process_name_chars, PROCESS_NAME_BUFFER_SIZE, kCFStringEncodingMacRoman)) die("couldnt get process name as chars");
-            if (process_name_chars == NULL) die("could not get process name as chars");
-            CFRelease(process_name);
-            
-            if (strcmp(process_name_chars, TM_DIALOG_PROCESS_NAME) != 0) {
-                #ifdef TM_DIALOG_READ_DEBUG
-                    puts("read(): calling read_using_tm_dialog()");
-                #endif
-            
-                return read_using_tm_dialog(buffer, buffer_length);                
-            } else {
-                #ifdef TM_DIALOG_READ_DEBUG
-                    puts("read(): process is tm_dialog so returning 0");
-                #endif
-
-                return 0;
-            }
+            return read_using_tm_dialog(buffer, buffer_length);
         }
     } else {
         return syscall(SYS_read, d, buffer, buffer_length);

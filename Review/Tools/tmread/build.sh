@@ -9,4 +9,4 @@ then
     mkdir $build
 fi
 
-gcc -dynamiclib -o "$build/tm_dialog_read.dylib" -fno-common -framework CoreFoundation -framework Carbon -mmacosx-version-min=10.4 "$src/tm_dialog_read.c" 
+gcc -dynamiclib -o "$build/tm_dialog_read.dylib" -fno-common -framework CoreFoundation -mmacosx-version-min=10.4 -Xlinker -undefined -Xlinker dynamic_lookup  "$src/tm_dialog_read.c" 

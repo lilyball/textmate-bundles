@@ -38,6 +38,10 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#method_calls</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#modules</string>
 		</dict>
 		<dict>
@@ -230,6 +234,39 @@
 				</dict>
 			</array>
 		</dict>
+		<key>method_calls</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>applyEndPatternLast</key>
+					<integer>1</integer>
+					<key>begin</key>
+					<string>(?&lt;!\w)([a-z]\w*)(\.)</string>
+					<key>end</key>
+					<string>(?=.)</string>
+					<key>name</key>
+					<string>meta.method-call.fsharp</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.method-call.fsharp</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>[A-Z]\w*(\.)</string>
+							<key>name</key>
+							<string>meta.method.fsharp</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>modules</key>
 		<dict>
 			<key>patterns</key>
@@ -279,23 +316,23 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^\s*(module)\s+([A-Z_][a-zA-Z0-9'_]*)\s*(=)\s*([A-Z][a-zA-Z0-9'_]*)</string>
+					<string>^\s*(module)\s+([A-Z][a-zA-Z0-9'_]*)\s*(=)\s*([A-Z][a-zA-Z0-9'_]*)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.other.module-definition.ocaml</string>
+							<string>keyword.other.module-definition.fsharp</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.type.module.ocaml</string>
+							<string>entity.name.type.module.fsharp</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.separator.module-definition.ocaml</string>
+							<string>punctuation.separator.module-definition.fsharp</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -325,6 +362,46 @@
 							</dict>
 							<key>match</key>
 							<string>(\.)([A-Z][a-zA-Z0-9'_]*)</string>
+							<key>name</key>
+							<string>support.other.module.fsharp</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>applyEndPatternLast</key>
+					<integer>1</integer>
+					<key>begin</key>
+					<string>(?&lt;!\w)([A-Z][a-zA-Z0-9_]*)(\.)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.other.module.fsharp</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.module-reference.fsharp</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=.)</string>
+					<key>name</key>
+					<string>meta.module.reference.fsharp</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.module-reference.fsharp</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>[A-Z][a-zA-Z0-9_]+(\.)</string>
 							<key>name</key>
 							<string>support.other.module.fsharp</string>
 						</dict>

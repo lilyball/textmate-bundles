@@ -21,7 +21,7 @@
 #include <CoreFoundation/CoreFoundation.h>
     
 #ifndef TM_DIALOG_READ_DEBUG
-#define TM_DIALOG_READ_DEBUG
+//#define TM_DIALOG_READ_DEBUG
 #endif
 
 #ifndef DIALOG_ENV_VAR
@@ -475,17 +475,22 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
  * The overall goal here is to us tm_dialog to get the input from the user if 
  * the following conditions are met:
  * <ul>
- *     <li>- we are wanting to read from stdin
- *     <li>- stdin has no data available
+ *     <li>we are wanting to read from stdin
+ *     <li>we are *not* requesting a non blocking read
+ *     <li>stdin has no data available
  * </ul>    
  * If we aren't reading from stdin, then we just fallback to the normal read() impl.
  * To see if stdin has data, we do a non blocking read using the normal read() impl, 
  * if it returns data, then we give that back. Otherwise, we call tm_dialog_read.
 */
 ssize_t read(int d, void *buffer, size_t buffer_length) {
-        
+    
+    // Only interested in STDIN
     if (d != STDIN_FILENO) return syscall(SYS_read, d, buffer, buffer_length);
-        
+    
+    // It doesn't make sense to invoke tm_dialog if the caller wanted a non blocking read
+    if (fcntl(d, F_GETFL) & O_NONBLOCK) return syscall(SYS_read, d, buffer, buffer_length);
+
     fcntl(d, F_SETFL, O_NONBLOCK);
     ssize_t bytes_read = syscall(SYS_read, d, buffer, buffer_length);
 

@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>read.table(${1:filename}${2:, header=${3:TRUE}})</string>
+	<string>read.table("${1:filename}"${2:, header = ${3:TRUE},  sep = "${4:\t}",  stringsAsFactors = ${5:FALSE}})</string>
 	<key>name</key>
 	<string>Read From File</string>
 	<key>scope</key>
-	<string>source.r</string>
+	<string>source.r, source.rd.console</string>
 	<key>tabTrigger</key>
 	<string>rea</string>
 	<key>uuid</key>

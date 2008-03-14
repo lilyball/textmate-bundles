@@ -1,0 +1,42 @@
+<html>
+<head>
+<script type='text/javascript' charset='utf-8'>
+function Search(term) {
+var w = (document.sform.where[0].checked) ? '1':'0';
+if (term.length > 0) {
+TextMate.isBusy = true;
+TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" ' + w, null);
+parent.head.location.reload();
+TextMate.isBusy = false;
+TextMate.system('sleep 0.9', null);
+parent.data.location.reload();
+}
+}
+function Rdoc() {
+TextMate.system('open "${R_HOME:=/Library/Frameworks/R.framework/Versions/Current/Resources}/doc/html/index.html"', null);
+}
+</script>
+</head>
+<body bgcolor='#ECECEC''>
+<table>
+<tr>
+<td>
+<form name='sform'>
+<small><small><i>Search for</i><br /></small></small>
+<input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' placeholder='egrep -i [REGEXP]' onsearch='Search(this.value)'>
+</td>
+<td>
+<font style='font-size:7pt'>
+<input type='radio' id='where' name='where' value='key' checked  onclick='Search(document.sform.search.value)'>keywords<br /><input type='radio' id='where' name='where' value='full' onclick='Search(document.sform.search.value)'>full&nbsp;text
+</font>
+</form>
+</td>
+</tr>
+<tr>
+<td align=center colspan=3>
+<input onclick='Rdoc()' type=button value='R documentation'>
+</td>
+</tr>
+</table>
+</body>
+</html>

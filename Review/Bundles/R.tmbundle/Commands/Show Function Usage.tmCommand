@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>TEXT=$(cat)
+
+if [ -z "$TM_SELECTED_TEXT" ]; then
+	export WORD=$(ruby -- &lt;&lt;-SCR1 
+		require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
+		word = Word.current_word(/\w\./)
+		word.gsub!(/^[\d\.\-]+$/,"")
+		print word
+	SCR1
+	)
+
+	if [ -z "$WORD" ]; then
+		#look for nested commands
+		export WORD=$(perl -e '
+		$line=$ENV{"TM_CURRENT_LINE"};$col=$ENV{"TM_LINE_INDEX"};
+		$line=substr($line,0,$col);
+		$line=~s/ //g;
+		@arr=split(//,$line);$c=0;
+		for($i=$#arr;$i&gt;-1;$i--){$c-- if($arr[$i] eq ")");$c++ if($arr[$i] eq "(");last if $c&gt;0;}
+		if($i==-1) {
+			print "";
+		} else {
+			substr($line,0,$i)=~m/([\w\.]+)$/;
+			print $1 if defined($1);
+		}
+		')
+	fi
+else
+	#take the selected text
+	export WORD=$(echo -en "$TM_SELECTED_TEXT" | perl -e '$_=&lt;&gt;;chomp;s/^[\t ]*//;s/([\w\.]+)[ \(\{].*/$1/g;print')
+fi
+
+#check whether WORD is defined otherwise quit
+[[ -z "$WORD" ]] &amp;&amp; echo "No keyword found" &amp;&amp; exit_show_tool_tip
+
+RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
+RD1=1
+[[ "${TM_CURRENT_LINE:0:1}" == "+" ]] &amp;&amp; RD="0" &amp;&amp; RD1=0
+
+if [ $RD -gt 0 ]; then
+	RDHOME="$HOME/Rdaemon"
+	if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+		RDRAMDISK="/tmp/TMRramdisk1"
+	else
+		RDRAMDISK="$HOME"/Rdaemon
+	fi
+	#get R's PID
+	RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
+	#check whether Rdaemon runs
+	if [ -z $RPID ]; then
+		RDTEXT="•• Rdaemon is not running."
+	else
+		[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
+
+		TASK="@|sink('$RDRAMDISK/r_tmp')"
+		echo "$TASK" &gt; "$RDHOME"/r_in
+		TASK="@|args($WORD)"
+		echo "$TASK" &gt; "$RDHOME"/r_in
+		TASK="@|sink(file=NULL)"
+		echo "$TASK" &gt; "$RDHOME"/r_in
+
+		while [ 1 ]
+		do
+			RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+			[[ "$RES" == "&gt; " ]] &amp;&amp; break
+			sleep 0.02
+		done
+		RES=$(cat "$RDRAMDISK"/r_tmp | sed 's/NULL$//;')
+
+		[[ "$RES" == "NULL" ]] &amp;&amp; RES=""
+
+		if [ ! -z "$RES" ]; then
+			echo -en "$WORD${RES:9}" | perl -pe 's/\n/ /g;s/ {2,}/ /g' | fmt | perl -e 'undef($/);$a=&lt;&gt;;$a=~s/\n/\n\t/g;$a=~s/\n\t$//;print $a'
+			exit_show_tool_tip
+		fi
+	fi
+fi
+
+. "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
+
+#get the reference for WORD
+FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}')
+#get the library in which WORD is defined
+LIB=$(echo -en \"$FILE\" | perl -pe 's!.*/library/(.*?)/latex.*!$1!')
+
+#check whether something is found within the installed packages or within the current doc otherwise quit
+if [ -z "$FILE" ]; then #look for local defined functions
+	OUT=$(echo -en "$TEXT" | egrep -A 10 "${WORD//./\\.} *&lt;\- *function *\(" | perl -e 'undef($/);$a=&lt;&gt;;$a=~s/.*?&lt;\- *function *(\(.*?\)) *[\t\n\{\w].*/$1/s;$a=~s/\t//sg;$a=~s/\n/ /g;print "$a" if($a=~m/^\(/ &amp;&amp; $a=~m/\)$/s)' | fmt | perl -e 'undef($/);$a=&lt;&gt;;$a=~s/\n/\n\t/g;$a=~s/\n\t$//;print $a')
+	LIB="local"
+
+	[[ -z "$OUT" ]] &amp;&amp; echo "Nothing found" &amp;&amp; exit_show_tool_tip
+
+	OUT=$WORD$OUT
+else #get the usage from the latex file
+	OUT=$(cat "$FILE" | perl -e '
+		undef($/);$w=$ENV{"WORD"};$a=&lt;&gt;;
+		$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\))\n.*?\\end\{verbatim\}/s;
+		if(length($1)) {
+			print $1;
+		} else {
+			$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\)).*?\\end\{verbatim\}/s;
+			print "$1";
+		}
+	')
+fi
+
+#if no usage is found show the HTML page for WORD otherwise output the command usage
+if [ -z "$OUT" ]; then
+	FILE=$(echo -en "$FILE" | sed 's/latex/html/;s/\.tex//')
+	cat "$FILE".html
+	echo "&lt;base href='tm-file://$FILE'&gt;"
+	exit_show_html
+else
+	echo -n "$OUT"
+fi
+
+#output the library in which WORD is defined
+if [ $RD -gt 0 -a $RD1 -eq 1 ]; then
+	echo -en "\n• Library “${LIB}” not yet loaded! [press CTRL+SHIFT+L]"
+else
+	echo -en "\n•• library: $LIB ••"
+fi
+echo -e "\n$RDTEXT"</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>~H</string>
+	<key>name</key>
+	<string>Show Function Usage</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.r, source.rd.console</string>
+	<key>uuid</key>
+	<string>797A6B84-49BB-4BBD-8F51-9A225433CA9C</string>
+</dict>
+</plist>

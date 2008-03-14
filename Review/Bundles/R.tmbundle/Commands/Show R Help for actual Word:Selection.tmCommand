@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if [ -z "$TM_SELECTED_TEXT" ]; then
+	export WORD=$(ruby -- &lt;&lt;-SCR1 
+		require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
+		word = Word.current_word(/\w\./)
+		word.gsub!(/^[\d\.\-]+$/,"")
+		print word
+	SCR1
+	)
+
+	if [ -z "$WORD" ]; then
+		#look for nested commands
+		export WORD=$(perl -e '
+		$line=$ENV{"TM_CURRENT_LINE"};$col=$ENV{"TM_LINE_INDEX"};
+		$line=substr($line,0,$col);
+		$line=~s/ //g;
+		@arr=split(//,$line);$c=0;
+		for($i=$#arr;$i&gt;-1;$i--){$c-- if($arr[$i] eq ")");$c++ if($arr[$i] eq "(");last if $c&gt;0;}
+		if($i==-1) {
+			print "";
+		} else {
+			substr($line,0,$i)=~m/([\w\.]+)$/;
+			print $1 if defined($1);
+		}
+		')
+	fi
+else
+	#take the selected text
+	export WORD=$(echo -en "$TM_SELECTED_TEXT" | perl -e '$_=&lt;&gt;;chomp;s/^[\t ]*//;s/([\w\.]+)[ \(\{].*/$1/g;print')
+fi
+
+if [ -z "$WORD" ]; then
+	WORD=$("$DIALOG" -m -p 'prompt="Search for:";title="Look up in R Documentation";' RequestString | perl -e 'undef($/);$a=&lt;&gt;;$a=~s/\n|\t//mg;$a=~m/.*?&lt;key&gt;returnArgument&lt;\/key&gt;&lt;string&gt;(.*?)&lt;\/string&gt;.*/; print $1 if (length($1))')
+	[[ -z "$WORD" ]] &amp;&amp; exit_discard
+fi
+
+#check whether WORD is defined otherwise quit
+[[ -z "$WORD" ]] &amp;&amp; echo "No keyword found" &amp;&amp; exit_show_tool_tip
+
+. "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
+
+#get the reference for WORD
+FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}' | perl -pe 's!/latex/!/html/!;s!tex$!html!')
+if [ ! -z "$FILE" ]; then
+	cat "$FILE"
+	echo "&lt;base href='tm-file://$FILE'&gt;"
+	exit_show_html
+fi
+
+FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!/latex/!/html/!;s!tex$!html!')
+
+printframe() {
+	ROWSIZE=$1
+	cat &lt;&lt;-HF
+	&lt;HTML&gt;
+	&lt;HEAD&gt;
+	&lt;META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8"&gt;
+	&lt;TITLE&gt;TextMate&amp;apos;s R Help&lt;/TITLE&gt;
+	&lt;/HEAD&gt;
+	&lt;FRAMESET COLS="$ROWSIZE,*" FRAMEBORDER="5" FRAMESPACING="5" BORDER="7" FRAMEBORDER="YES" onload='parent.search.sform.search.value="$WORD";parent.search.sform.search.select();parent.search.sform.search.focus()'&gt;
+		&lt;FRAMESET ROWS="*,80" FRAMEBORDER="1" FRAMESPACING="0" BORDER="1" FRAMEBORDER="NO"&gt;
+			&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/head.html" NAME="head" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
+			&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/search.html" NAME="search" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="NO"&gt;
+		&lt;/FRAMESET&gt;
+		&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/data.html" NAME="data" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
+	&lt;/FRAMESET&gt;
+	&lt;/HTML&gt;
+HF
+
+}
+
+HEAD="$TM_BUNDLE_SUPPORT/lib/head.html"
+DATA="$TM_BUNDLE_SUPPORT/lib/data.html"
+SEARCH="$TM_BUNDLE_SUPPORT/lib/search.html"
+RHOME=${R_HOME:=/Library/Frameworks/R.framework/Versions/Current/Resources}
+
+cat &lt;&lt;-"HFS" &gt; "$SEARCH"
+&lt;html&gt;
+	&lt;head&gt;
+	&lt;script type='text/javascript' charset='utf-8'&gt;
+		function Search(term) {
+			var w = (document.sform.where[0].checked) ? '1':'0';
+			if (term.length &gt; 0) {
+			TextMate.isBusy = true;
+			TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" ' + w, null);
+			parent.head.location.reload();
+			TextMate.isBusy = false;
+			TextMate.system('sleep 0.9', null);
+			parent.data.location.reload();
+			}
+		}
+		function Rdoc() {
+			TextMate.system('open "${R_HOME:=/Library/Frameworks/R.framework/Versions/Current/Resources}/doc/html/index.html"', null);
+		}
+	&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body bgcolor='#ECECEC''&gt;
+	&lt;table&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+			&lt;form name='sform'&gt;
+			&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;
+			&lt;input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' placeholder='egrep -i [REGEXP]' onsearch='Search(this.value)'&gt;
+			&lt;/td&gt;
+			&lt;td&gt;
+			&lt;font style='font-size:7pt'&gt;
+			&lt;input type='radio' id='where' name='where' value='key' checked  onclick='Search(document.sform.search.value)'&gt;keywords&lt;br /&gt;&lt;input type='radio' id='where' name='where' value='full' onclick='Search(document.sform.search.value)'&gt;full&amp;nbsp;text
+			&lt;/font&gt;
+			&lt;/form&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td align=center colspan=3&gt;
+			&lt;input onclick='Rdoc()' type=button value='R documentation'&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+HFS
+
+echo "&lt;html&gt;&lt;body style='margin-top:5mm'&gt;" &gt; "$HEAD"
+echo "&lt;table style='border-collapse:collapse'&gt;&lt;tr&gt;&lt;td style='padding-right:1cm;border-bottom:1px solid black'&gt;&lt;b&gt;Package&lt;/b&gt;&lt;/td&gt;&lt;td style='border-bottom:1px solid black'&gt;&lt;b&gt;Topic&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+
+CNT=$(echo -en "$FILE" | wc -l)
+HCNT=0
+for i in `echo $FILE`
+do
+	echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
+	echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/' &gt;&gt; "$HEAD"
+	echo "&lt;/td&gt;&lt;td&gt;&lt;a href='$i' target='data'&gt;" &gt;&gt; "$HEAD"
+	echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/' &gt;&gt; "$HEAD"
+	echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+#	HCNT=$(($HCNT + 1))
+#	PCNT=$(echo  $HCNT-$CNT | perl -e '@a=split(/-/,&lt;&gt;);printf("%3.0f",$a[0]*100/$a[1]);')
+#	echo "$PCNT $(($CNT - $HCNT)) files left. Please wait…";
+	echo "100 Searching…"
+done|CocoaDialog progressbar --indeterminate --title "R Documentation"
+echo "&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;" &gt;&gt; "$HEAD"
+
+if [ "$CNT" -lt "2" ]; then
+	cat "$FILE" &gt; "$DATA"
+	echo "&lt;base href='tm-file://$FILE'&gt;" &gt;&gt; "$DATA"
+else
+	echo "&lt;html&gt;&lt;/html&gt;" &gt; "$DATA"
+fi
+
+printframe 340
+if [ $CNT -eq 0 ]; then
+{   
+	echo "100 Searching…"
+	. "$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "$WORD" 1
+} &gt; &gt;(CocoaDialog progressbar --indeterminate --title "R Documentation")
+fi
+exit_show_html
+
+</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Show R Help for actual Word/Selection</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.r, source.rd.console</string>
+	<key>uuid</key>
+	<string>3F849C03-8BFC-4A54-B985-09BB453AF679</string>
+</dict>
+</plist>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>RHOME=${R_HOME:=/Library/Frameworks/R.framework/Versions/Current/Resources}
+
+echo "&lt;base href='tm-file://${RHOME// /%20}/doc/html/packages.html'&gt;"
+cat "${RHOME// /%20}"/doc/html/packages.html
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@H</string>
+	<key>name</key>
+	<string>Show Package Documentation</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.r, source.rd.console</string>
+	<key>uuid</key>
+	<string>77F10958-105F-4F73-B634-98E4932D4944</string>
+</dict>
+</plist>

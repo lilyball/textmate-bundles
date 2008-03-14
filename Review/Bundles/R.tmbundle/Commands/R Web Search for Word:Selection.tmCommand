@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>
+if [ -z "$TM_SELECTED_TEXT" ]; then
+	WORD=$(ruby -- &lt;&lt;-SCR1 
+		require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
+		word = Word.current_word(/\w\./)
+		word.gsub!(/^[\d\.\-]+$/,"")
+		print word
+	SCR1
+	)
+else
+	WORD=$TM_SELECTED_TEXT
+fi
+
+if [ -z "$WORD" ]; then
+	open "http://www.rseek.org"
+else
+	open "http://www.rseek.org/?cx=010923144343702598753%3Aboaz1reyxd4&amp;q=$WORD&amp;sa=Search+functions%2C+lists%2C+and+more&amp;cof=FORID%3A11"
+fi
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~@h</string>
+	<key>name</key>
+	<string>R Web Search for Word/Selection</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.r</string>
+	<key>uuid</key>
+	<string>4DCF1FF7-D104-43C3-B0E3-8333A50CA5AA</string>
+</dict>
+</plist>

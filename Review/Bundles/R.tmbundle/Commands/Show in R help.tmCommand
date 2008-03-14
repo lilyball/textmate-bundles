@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+# Lots of stuff in this command shamelessly stolen from Ruby's Documentation for Word / Selection
+
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/exit_codes"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
+require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word")
+
+require 'base64'
+
+LINKED_RHELP = "#{ENV["TM_BUNDLE_SUPPORT"]}/bin/LINKED_RHELP.rb"
+LIBDIR = File.join((ENV["R_HOME"] || '/Library/Frameworks/R.framework/Resources'), '/library')
+# first escape for use in the shell, then escape for use in a JS string
+def e_js_sh(str)
+  (e_sh str).gsub("\\", "\\\\\\\\")
+end
+
+# escape single-quotes for use in javascript strings
+def e_js(str)
+  str.gsub("'", "\\'")
+end
+
+# Prompts the user for words, for the cases where matches are not found
+def get_word_from_user(prompt = "Please select word to look for")
+  TextMate::UI.request_string(:title =&gt; "Look up in R Documentation", :prompt =&gt; prompt)
+end
+def look_up_term(term)
+  `awk -- '/^Entry:/ { entry = $2 } /[[:space:]]'#{e_sh Regexp.escape(term)}'([[:space:]]|$)/,/^URL:/ { if(match($0,/^URL:/)) { sub(/^URL: /, ""); sub(/^(\\.\\.\\/)*library\\//, ""); print entry, $0; } }' #{e_sh LIBDIR}/*/CONTENTS`.split("\n")
+end
+
+term = Word.current_word(/\w./)
+if term.empty? then
+  TextMate.exit_discard unless term = get_word_from_user
+end
+# TextMate.exit_show_tool_tip("Please select a term to look up.") if 
+
+files = look_up_term(term)
+while files.empty? do
+  TextMate.exit_discard unless term = get_word_from_user("Current word not found! Please select word to look for")
+  files = look_up_term(term)
+end
+# TextMate.exit_show_tool_tip("Nothing found for #{term}.") if files.empty?
+
+if files.size &gt; 1
+  documentation = "&lt;h1&gt;Multiple Matches:&lt;/h1&gt;&lt;ul&gt;"
+  files.each do |file|
+    name,path = file.split(" ", 2)
+    documentation &lt;&lt; %{&lt;li&gt;&lt;a href="javascript:window.top.location.href='javascript:rhelp(\\'#{path}\\')'"&gt;#{name}&lt;/a&gt;&lt;/li&gt;}
+  end
+  documentation &lt;&lt; "&lt;/ul&gt;"
+else
+  name,path = files.first.split(" ", 2)
+  documentation = `#{e_sh LINKED_RHELP} 2&gt;&amp;1 '#{path}' '#{LIBDIR}'`
+end
+
+html_header("Documentation for ‘#{term}’", "R help", &lt;&lt;-HTML)
+  &lt;script type="text/javascript" charset="utf-8"&gt;
+    // function taken from http://textsnippets.com/posts/show/686
+    function getElementsByClassName(oElm, strTagName, strClassName){
+      var arrElements = (strTagName == "*" &amp;&amp; document.all)? document.all : oElm.getElementsByTagName(strTagName);
+      var arrReturnElements = new Array();
+      strClassName = strClassName.replace(/\\-/g, "\\\\-");
+      var oRegExp = new RegExp("(^|\\\\s)" + strClassName + "(\\\\s|$)");
+      var oElement;
+      for(var i=0; i&lt;arrElements.length; i++){
+        oElement = arrElements[i];
+        if(oRegExp.test(oElement.className)){
+          arrReturnElements.push(oElement);
+        }
+      }
+      return (arrReturnElements)
+    }
+    var workingName;
+    function rhelp(path) {
+      TextMate.isBusy = true;
+      // double-escaping is necessary because ruby heredocs interpret backslash-escapes
+      workingName = path.replace(/.*\\/|\\.html$/, "");
+        // Apparently synchronous TextMate.system() has a habit of returning not quite
+        //  all of the data so we're trying asynchronous now
+      var sysObj = TextMate.system("#{e_js_sh LINKED_RHELP} 2&gt;&amp;1 '"+path.replace(/'/,"'\\\\''")+"' #{e_js_sh LIBDIR} base64", rhelpDone);
+    }
+    function rhelpDone(sysObj) {
+      TextMate.isBusy = false;
+      var res = sysObj.outputString;
+      var elt = document.getElementById("actual_output");
+      elt.data = 'data:text/html;charset=utf8;base64,' + res;
+      // for some reason, the object tag doesn't like to refresh properly when
+      // its data is set from this asynchronous event handler
+      // So lets force it to re-draw by poking its className
+      elt.className = elt.className;
+      var docString = "Documentation for ‘" + workingName + "’";
+      var headline = getElementsByClassName(document, "p", "headline")[0];
+      headline.innerText = docString;
+      document.getElementsByTagName("title")[0].innerText = docString;
+    }
+    function outputInit() {
+      var elt = document.getElementById("actual_output");
+      elt.data = 'data:text/html;charset=utf8;base64,#{Base64.encode64(documentation).gsub("\n", "")}';
+    }
+  &lt;/script&gt;
+  &lt;style type="text/css"&gt;
+  body {
+  	overflow: hidden;
+  }
+  #output_wrapper {
+    display: table;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .output_wrapper_row {
+    display: table-row;
+  }
+  .output_wrapper_row &gt; * {
+    display: table-cell;
+    width: 100%;
+    height: 100%;
+  }
+  #actual_output {
+    background-color: white;
+  }
+  &lt;/style&gt;
+HTML
+
+puts &lt;&lt;-HTML
+  &lt;div id="output_wrapper"&gt;
+  &lt;div class="output_wrapper_row"&gt;&lt;div style="height: 60px"&gt;&amp;nbsp;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="output_wrapper_row"&gt;
+      &lt;object id="actual_output"&gt;&lt;/object&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;script type="text/javascript" charset="utf8"&gt;
+    outputInit();
+  &lt;/script&gt;
+HTML
+html_footer
+TextMate.exit_show_html
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation for Word / Selection</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.r</string>
+	<key>uuid</key>
+	<string>B8902A32-4E8C-4A20-ABB5-7563B908A30B</string>
+</dict>
+</plist>

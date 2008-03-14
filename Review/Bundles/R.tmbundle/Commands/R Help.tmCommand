@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "R Bundle Help" "R"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'MARKDOWN'
+
+# Introduction
+
+R is a language and environment for statistical computing and graphics. It is a [GNU project](http://www.gnu.org/) which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&amp;T, now Lucent Technologies) by John Chambers and colleagues. R can be considered as a different implementation of S. There are some important differences, but much code written for S runs unaltered under R.
+
+R provides a wide variety of statistical (linear and nonlinear modelling, classical statistical tests, time-series analysis, classification, clustering, ...) and graphical techniques, and is highly extensible. The S language is often the vehicle of choice for research in statistical methodology, and R provides an Open Source route to participation in that activity.
+
+(Text taken from [What is R?](http://www.r-project.org/about.html))
+
+More information about R can be found at [r-project.org](http://www.r-project.org/).
+       
+# Commands
+
+-   __Execute Document In R__
+
+    Executes the current document in the command-line version of R and displays the output in an HTML window. By default new plots use the "pdf" device and are placed in a temporary folder and opened upon completion of the script.
+    
+-   __Send Selection / Document to R__
+
+    Sends the current selected text or the entire document to R.app using AppleScript. Also changes the current working directory to that of the script if it's been saved. Useful for those times when you want to execute a script in the context of an existing workspace, or when you need an interactive graphics device.
+    
+-   __Show in R Help__
+
+    Shows an HTML document with help for the current word.
+    
+-   __Command Usage__
+
+    Shows a tooltip with the function signature for the current word.
+    
+-   __Insert Command Template__
+
+    Inserts a snippet with the function signature for the current word. Effectively an autocomplete.
+
+# R Console
+
+The R Console language is used to turn the TextMate window into effectively an R console. It works by sending commands to R.app with AppleScript and retrieving the results.
+
+-   __Execute Line / Selection__
+
+    If the line begins with "&gt; ", that line will be sent to R.app when you hit return.
+    
+-   __Show Line Output as Tool Tip__
+
+    Same as the previous command but shows the result as a tooltip rather than inserting the results into the document.
+    
+-   __Show History List__
+
+    Shows a menu containing all the commands executed in the current document.
+    
+-   __Previous History Item__
+
+    Replaces the current line with the previous item from history.
+    
+-   __Next History Item__
+
+    Replaces the current line with the next item from history.
+    
+-   __Copy to Clipboard__
+
+    Copies all the user commands (lines beginning with "&gt; ") from the current selection or document to the clipboard.
+
+# Troubleshooting
+
+If you see the message `'re-encoding is not available on this system'` or receive an error about `'object ".PSenv" not found'` then you are most likely using an older version of R. In this case you should upgrade to the latest (currently, version 2.4.0) by downloading the pre-built universal R.app installer from &lt;a href="http://www.r-project.org"&gt;r-project.org&lt;/a&gt;.
+
+MARKDOWN
+html_footer</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.r</string>
+	<key>uuid</key>
+	<string>8A8B6803-AF20-47EC-9382-62E1EBA76B4A</string>
+</dict>
+</plist>

@@ -41,19 +41,21 @@ if [ -z "$WORD" ]; then
 fi
 
 #check whether WORD is defined otherwise quit
-[[ -z "$WORD" ]] &amp;&amp; echo "No keyword found" &amp;&amp; exit_show_tool_tip
+[[ -z "$WORD" ]] &amp;&amp; echo "No keyword found." &amp;&amp; exit_show_tool_tip
 
 . "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
 
 #get the reference for WORD
 FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}' | perl -pe 's!/latex/!/html/!;s!tex$!html!')
-if [ ! -z "$FILE" ]; then
+CNT=$(echo -e "$FILE" | wc -l)
+[[ -z "$FILE" ]] &amp;&amp; CNT=0
+if [ $CNT == 1 ]; then
 	cat "$FILE"
 	echo "&lt;base href='tm-file://$FILE'&gt;"
 	exit_show_html
 fi
 
-FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!/latex/!/html/!;s!tex$!html!')
+[[ $CNT == 0 ]] &amp;&amp; FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!/latex/!/html/!;s!tex$!html!')
 
 printframe() {
 	ROWSIZE=$1

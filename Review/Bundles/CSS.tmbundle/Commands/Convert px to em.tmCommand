@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+DEFAULT_SIZE = ENV['TM_EMSIZE'] || 12
+
+def css_px_to_ems(txt)
+  return txt unless txt =~ /px\b/
+  txt.gsub!(/(\d+)(?:\/(\d+))?px/) do |s|
+    (($1.to_i / ($2||DEFAULT_SIZE).to_f * 10000).round.to_f / 10000).to_s + "em"
+  end
+end
+
+# Do it!
+print css_px_to_ems(STDIN.read)
+
+# Test it!
+=begin
+require "test/unit"
+class TestCssPxtoEms &lt; Test::Unit::TestCase
+  def test_selection
+    assert_equal "  margin-bottom: 0.6875em;
+      padding-bottom: 3em;
+      padding-bottom: 0.25em;
+      padding-bottom: 0.1667em;
+      padding-bottom: 0.1875em;
+      padding-top: 0.25em;", 
+      css_px_to_ems(%{  margin-bottom: 11/16px;
+      padding-bottom: 3em;
+      padding-bottom: 3px;
+      padding-bottom: 1/6px;
+      padding-bottom: 3/16px;
+      padding-top: 4/16px;})
+  end
+  def test_line
+    assert_equal "      margin-bottom: 0.6875em;",   css_px_to_ems("      margin-bottom: 11/16px;")
+    assert_equal "      padding-bottom: 3em;",       css_px_to_ems("      padding-bottom: 3em;"   )
+    assert_equal "      padding-bottom: 0.25em;",    css_px_to_ems("      padding-bottom: 3px;"   )
+    assert_equal "      padding-bottom: 0.1667em;",  css_px_to_ems("      padding-bottom: 1/6px;" )
+    assert_equal "      padding-bottom: 0.1875em;",  css_px_to_ems("      padding-bottom: 3/16px;")
+    assert_equal "      padding-top: 0.25em;",       css_px_to_ems("      padding-top: 4/16px;"   )
+  end
+end
+=begin
+=end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^m</string>
+	<key>name</key>
+	<string>Convert px to em</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.css</string>
+	<key>uuid</key>
+	<string>AFEFC5A8-F900-46F9-ACB6-11C3917B2E07</string>
+</dict>
+</plist>

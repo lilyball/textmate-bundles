@@ -1,4 +1,4 @@
-# tm_dialog_read
+# `tm_dialog_read`
 
 Luke Daley "ld at ldaley dot com"
 

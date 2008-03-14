@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>WORD=$("$DIALOG" -m -p 'prompt="Search for:";title="Rdaemon History List";' RequestString | perl -e 'undef($/);$a=&lt;&gt;;$a=~s/\n|\t//mg;$a=~m/.*?&lt;key&gt;returnArgument&lt;\/key&gt;&lt;string&gt;(.*?)&lt;\/string&gt;.*/; print $1 if (length($1))')
+
+[[ -z "$WORD" ]] &amp;&amp; exit_discard
+
+#show Rhistory as inline menu in reversed order grepped
+L=$(tail -r "$HOME/Rdaemon"/history/Rhistory.txt | egrep -i "$WORD" | uniq | ruby -e '
+	require File.join(ENV["TM_SUPPORT_PATH"], "lib/ui.rb")
+	words = STDIN.read().split("\n")
+	index=TextMate::UI.menu(words)
+	if index != nil
+		print "&gt; " + words[index]
+	end
+')
+
+if [ -n "$L" ]; then
+	L=${L//$/\\$}
+	L=${L//\`/\\\`}
+	echo -n "$L"
+else
+	exit_discard
+fi
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>Search in History List</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>DF4A33C2-091E-4DD7-A379-97A7861B83F8</string>
+</dict>
+</plist>

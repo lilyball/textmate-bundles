@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#get R's PID
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
+#check whether Rdaemon runs
+test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
+
+kill -s INT $RPID</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~@c</string>
+	<key>name</key>
+	<string>Try to interrupt current task</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>34A37FE6-794D-4AA5-A300-BB446654E0A6</string>
+</dict>
+</plist>

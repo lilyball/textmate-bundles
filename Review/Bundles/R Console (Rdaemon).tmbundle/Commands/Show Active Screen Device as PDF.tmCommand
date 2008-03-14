@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#get R's PID
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
+#check whether Rdaemon runs
+test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
+
+echo "@|dev.print(pdf, file='~/Rdaemon/plots/RcurrentPlot.pdf')" &gt; ~/Rdaemon/r_in
+sleep 0.5
+open -a ${TM_RdaemonPDFVIEWER:-Preview} "file://$HOME/Rdaemon/plots/RcurrentPlot.pdf"
+
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@g</string>
+	<key>name</key>
+	<string>Show Active Screen Device as PDF</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>FA204D99-DC57-46C9-A727-8D54AAA59897</string>
+</dict>
+</plist>

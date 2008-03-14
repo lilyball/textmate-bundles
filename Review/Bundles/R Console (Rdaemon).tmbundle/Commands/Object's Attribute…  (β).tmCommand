@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>RDHOME="$HOME/Rdaemon"
+if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RDRAMDISK="/tmp/TMRramdisk1"
+else
+	RDRAMDISK="$HOME"/Rdaemon
+fi
+
+
+function getSig {
+	WORD=$1
+	[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
+	TASK="@|sink('$RDRAMDISK/r_tmp')"
+	echo -e "$TASK" &gt; "$RDHOME"/r_in
+	TASK="@|try(cat(unlist(attributes($WORD)),sep=';'))"
+	echo -e "$TASK" &gt; "$RDHOME"/r_in
+	TASK="@|sink(file=NULL)"
+	echo -e "$TASK" &gt; "$RDHOME"/r_in
+
+	#get R's PID
+	RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+	#check whether Rdaemon runs
+	test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
+
+	while [ 1 ]
+	do
+		RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+		#expect these things from R
+		[[ "$RES" == "&gt; " ]] &amp;&amp; break
+		[[ "$RES" == "+ " ]] &amp;&amp; break
+		[[ "$RES" == ": " ]] &amp;&amp; break
+		sleep 0.05
+	done
+	export RES=$(cat "$RDRAMDISK"/r_tmp)
+
+}
+
+WORD=$(ruby -- &lt;&lt;-SCR1 
+require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
+word = Word.current_word(/\w./)
+print word
+SCR1
+)
+
+echo -en "\$"
+if [ "${#WORD}" -eq 0 ]; then
+	exit_insert_text
+fi
+
+WORDORG="$WORD"
+
+getSig "$WORDORG"
+
+if [ "${#RES}" -eq 0 ]; then
+	exit_insert_text
+fi
+#echo -en "$RES" &amp;&amp; exit_create_new_document
+ruby -- &lt;&lt;-SCRIPT 2&gt; /dev/null
+require File.join(ENV["TM_SUPPORT_PATH"], "lib/exit_codes.rb")
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
+word = "$WORD"
+wordorg = "$WORDORG"
+text = ENV['RES']
+funs = text.split(";")
+TextMate.exit_discard if funs.size &lt; 1
+
+if funs.size == 1
+  function = funs.first
+else
+	idx = TextMate::UI.menu(funs)
+	TextMate.exit_discard if idx.nil?
+	function = funs[idx]
+end
+TextMate.exit_discard if function.empty?
+print function
+SCRIPT
+</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Object's Attribute…  (β)</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>DC7AC092-0A49-4CB0-A0FE-6993963F5BC6</string>
+</dict>
+</plist>

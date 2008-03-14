@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#show Rhistory as inline menu in reversed order
+
+RDHOME="$HOME/Rdaemon"
+
+L=$(tail -r "$RDHOME"/history/Rhistory.txt | uniq | ruby -e '
+	require File.join(ENV["TM_SUPPORT_PATH"], "lib/ui.rb")
+	words = STDIN.read().split("\n")
+	index=TextMate::UI.menu(words)
+	if index != nil
+		print "&gt; " + words[index]
+	end
+')
+if [ -n "$L" ]; then
+	L=${L//$/\\$}
+	L=${L//\`/\\\`}
+
+	echo -n "$L"
+else
+	exit_discard
+fi
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>Show History List</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>84EB83FE-A3FF-4C32-8912-3F5B82A66AAF</string>
+</dict>
+</plist>

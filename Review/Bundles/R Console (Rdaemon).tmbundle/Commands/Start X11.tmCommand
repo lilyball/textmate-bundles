@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>OS=$(uname -r | perl -pe 's/(\d+)\..*/$1/')
+if [ $OS -eq 8 ]; then
+	export DISPLAY=:0.0
+	open -a X11
+	osascript &lt;&lt;-AS &amp;&gt;/dev/null
+ 		tell application "TextMate"
+ 			activate
+	 	end tell
+	AS
+else
+	echo "Only necessary for Mac OSX 10.4.x (Tiger)"
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@c</string>
+	<key>name</key>
+	<string>Start X11</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>B9DD511C-6147-4ACF-8538-226554F62B81</string>
+</dict>
+</plist>

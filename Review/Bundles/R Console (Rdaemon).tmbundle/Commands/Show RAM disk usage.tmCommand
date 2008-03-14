@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+echo "RAM drive on '/tmp/TMRramdrive1':"
+RES=$(df -H | grep TMRramdisk1 | awk '{ print $5 }')
+echo -n " $RES are used of"
+RES=$(df -H | grep TMRramdisk1 | awk '{ print $2 }')
+echo -n " $RES."
+else
+echo "Rdaemon is not using a RAM drive."
+fi</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@t</string>
+	<key>name</key>
+	<string>Show RAM disk usage</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>CADF7EC3-54F3-4AB5-9D77-DEF83CE73EA4</string>
+</dict>
+</plist>

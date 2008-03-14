@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>DA2A7475-3FDF-4D66-A796-1C45F6BBF5B9</string>
+	<key>command</key>
+	<string>VAR=$(ruby -- &lt;&lt;-SCR1 
+	require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
+	word = Word.current_word(/\w\./)
+print word
+SCR1
+)
+
+[[ -z $VAR ]] &amp;&amp; exit_discard
+
+if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RDRAMDISK="/tmp/TMRramdisk1"
+else
+	RDRAMDISK="$HOME"/Rdaemon
+fi
+
+TASK="@|cat(is.vector($VAR))"
+RES=$("$HOME"/Rdaemon/daemon/execRStr.sh "$TASK" | tail -n 1)
+[[ "$RES" != "TRUE&gt; " ]] &amp;&amp; echo "'$VAR' is not a vector." &amp;&amp; exit_show_tool_tip
+
+TASK="@|sink('$RDRAMDISK/r_tmp');cat($VAR, sep='\\\\\\\n');sink(file=NULL);"
+"$HOME"/Rdaemon/daemon/execRStr.sh "$TASK" &gt; /dev/null
+
+RES=$(cat "$RDRAMDISK/r_tmp")
+
+LC=$(echo -e "$RES" | wc -l)
+LC=$(($LC * 26 + 110))
+[[ $LC -gt 630 ]] &amp;&amp; LC=630
+cat &lt;&lt;HTML0 
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Rdaemon &amp;mdash; Vector Editor&lt;/title&gt;
+&lt;style type="text/css"&gt;
+&lt;!--
+INPUT {
+border: #AAAAAA 0px solid;
+background-color: #FFFFFF;
+text-align:right;
+font-family:Monaco
+}
+BODY {
+font-family:Monaco;
+}
+.var {
+border: lightgrey 0px solid;
+background-color: white;
+text-align:left;
+text-weight:bold;
+font-size:11pt;
+}
+--&gt;
+&lt;/style&gt;
+&lt;script type="text/javascript"&gt;
+	function saveIt() {
+		TextMate.isBusy = true;
+		var inp = document.getElementsByTagName("input");
+//		var reg = new RegExp("(^\"?\-?[0-9]+\.?[0-9]*\"?$)|(^NA$)");
+		var reg = new RegExp("(^\"?\-?[0-9\.]+[0-9]*\"?$)|(^NA$)");
+		accu = new Array();
+		for (var i=1; i&lt;inp.length; i++) {
+			if (inp[i].value.length == 0) {
+				accu.push("NA");
+			} else {
+				if (reg.test(inp[i].value)) {
+					accu.push(inp[i].value);
+				} else {
+					accu.push("as.character(\""+inp[i].value+"\")");
+				}
+			}
+		}
+		var cmd = "echo '" + inp[0].value +"&lt;-c(" + accu.join(", ") + ")' &gt; ~/Rdaemon/r_tmp;echo -e '@|source(\"$HOME/Rdaemon/r_tmp\")' &gt; ~/Rdaemon/r_in";
+		TextMate.system(cmd,null);
+		TextMate.isBusy = false;
+		window.close();
+	}
+	function init() {
+		document.getElementsByTagName('input')[1].focus();
+	}
+	function keyalert(index)
+	{
+		var VK_LEFT = 37;
+		var VK_UP = 38;
+		var VK_RIGHT = 39;
+		var VK_DOWN = 40;
+		var VK_PAGEUP = 33;
+		var VK_PAGEDOWN = 34;
+		var VK_ESC = 27;
+		switch (event.keyCode){
+			case VK_ESC : {
+				//window.close();
+				break;
+			}
+			case VK_UP : {
+				if (index&gt;1) {
+					document.getElementsByTagName('input')[index-1].focus();
+					document.getElementsByTagName('input')[index-1].select();
+				}
+				break;
+			}
+			case VK_DOWN : {
+				if (index&lt;document.getElementsByTagName("input").length) {
+					document.getElementsByTagName('input')[index+1].focus();
+					document.getElementsByTagName('input')[index+1].select();
+				}
+				break;
+			}
+		}
+	}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;
+&lt;div style="background-color:white;padding:2mm"&gt;
+&lt;font color=grey&gt;&lt;small&gt;vector:&lt;/small&gt;&lt;/font&gt; &lt;input size=10 class=var value="$VAR" id="var"&gt;
+&lt;/div&gt;
+
+&lt;table border=1 style="border-collapse:collapse"&gt;
+
+HTML0
+C=1
+echo -e "$RES" | while read LINE
+do
+	echo "&lt;tr&gt;&lt;td align=right bgcolor=#ECECEC&gt;&lt;small&gt;[$C]&lt;/small&gt;&lt;/td&gt;&lt;td&gt;&lt;input type='text' value='$LINE' onkeyup=keyalert($C)&gt;&lt;/td&gt;&lt;/tr&gt;"
+	C=$(($C + 1))
+done
+
+cat &lt;&lt;HTML5
+&lt;/table&gt;
+&lt;div style="margin-top:2mm;background-color:lightgrey;padding:2mm"&gt;
+&lt;button onclick="saveIt()"&gt;&amp;nbsp;Save&amp;nbsp;&lt;/button&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;button onclick="window.close()"&gt;Cancel&lt;/button&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;window.onload = init;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+HTML5
+
+exit_show_html
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Vector Editor (β)</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>DDB68BBA-7243-4DCE-B940-B0E82CA9B9AA</string>
+</dict>
+</plist>

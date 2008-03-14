@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>
+RDHOME="$HOME/Rdaemon"
+if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RDRAMDISK="/tmp/TMRramdisk1"
+else
+	RDRAMDISK="$HOME"/Rdaemon
+fi
+#get R's PID
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
+#check whether Rdaemon runs
+test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
+
+
+function getSig {
+	[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
+
+	#get R's PID
+	RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+	#check whether Rdaemon runs
+	test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
+
+	WORD=$1
+	TASK="@|sink('$RDRAMDISK/r_tmp')"
+	echo "$TASK" &gt; "$RDHOME"/r_in
+	TASK="@|cat(paste(.getSig(if ('${WORD}' %in% (ary0815 &lt;- sort(apropos('${WORD}', mode='function')))) '${WORD}' else ary0815), collapse='\\n'))"
+	echo "$TASK" &gt; "$RDHOME"/r_in
+	TASK="@|rm(ary0815); sink(file=NULL)"
+	echo "$TASK" &gt; "$RDHOME"/r_in
+
+	while [ 1 ]
+	do
+		RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+		#expect these things from R
+		[[ "$RES" == "&gt; " ]] &amp;&amp; break
+		[[ "$RES" == "+ " ]] &amp;&amp; break
+		[[ "$RES" == ": " ]] &amp;&amp; break
+		sleep 0.05
+	done
+	export RES=$(cat "$RDRAMDISK"/r_tmp)
+
+}
+
+WORD=$(ruby -- &lt;&lt;-SCR1 
+require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
+word = Word.current_word(/\w./)
+print word
+SCR1
+)
+
+WORDORG="$WORD"
+
+getSig "^$WORDORG"
+
+if [ "${#RES}" -eq 0 ]; then
+	echo "No signatur found for '$WORDORG'"
+	exit_show_tool_tip
+fi
+
+ruby -- &lt;&lt;-SCRIPT 2&gt; /dev/null
+require File.join(ENV["TM_SUPPORT_PATH"], "lib/exit_codes.rb")
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
+word = "$WORD"
+wordorg = "$WORDORG"
+text = ENV['RES']
+funs = text.split("\n")
+functions = funs.select{|item| item =~ /^#{word}/}
+func = funs.select{|item| item !~ /^#{word}/}
+f = func.collect { |f| f[0...f.index("(")] }
+fp = f.join("\n")
+TextMate.exit_show_tool_tip("Only found :\n#{fp}") if functions.size &lt; 1
+
+if functions.size == 1
+  function = functions.first
+else
+	idx = TextMate::UI.menu functions.collect { |f| f[0...f.index("(")] }
+	TextMate.exit_discard if idx.nil?
+	function = functions[idx]
+end
+#TextMate.exit_discard if function.empty?
+if ENV['TM_SELECTED_TEXT'].nil? or ENV['TM_SELECTED_TEXT'].empty?
+  print function[wordorg.length..-1]
+else
+  print function
+end
+SCRIPT
+</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^$</string>
+	<key>name</key>
+	<string>Command Template</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>32812513-77C4-4C5C-9D8D-6467680759F7</string>
+</dict>
+</plist>

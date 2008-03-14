@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>DA2A7475-3FDF-4D66-A796-1C45F6BBF5B9</string>
+	<key>command</key>
+	<string>VAR=$(ruby -- &lt;&lt;-SCR1 
+	require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
+	word = Word.current_word(/\w\./)
+print word
+SCR1
+)
+
+[[ -z $VAR ]] &amp;&amp; exit_discard
+
+if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RDRAMDISK="/tmp/TMRramdisk1"
+else
+	RDRAMDISK="$HOME"/Rdaemon
+fi
+
+TASK="@|cat(is.matrix($VAR))"
+RES=$("$HOME"/Rdaemon/daemon/execRStr.sh "$TASK" | tail -n 1)
+[[ "$RES" != "TRUE&gt; " ]] &amp;&amp; echo "'$VAR' is not a matrix." &amp;&amp; exit_show_tool_tip
+
+TASK="@|sink('$RDRAMDISK/r_tmp');cat(dim($VAR)[1], sep='\\\\\\\n');cat(dim($VAR)[2], sep='\\\\\\\n');if(is.null(dimnames($VAR)[1]) || length(dimnames($VAR)[[1]])==0) cat(paste('[', c(1:dim($VAR)[1]), ',]', sep=''),sep='\\\\\\\n') else cat(dimnames($VAR)[[1]], sep='\\\\\\\n');if(is.null(dimnames($VAR)[2]) || length(dimnames($VAR)[[2]])==0) cat(paste('[,', c(1:dim($VAR)[2]), ']', sep=''),sep='\\\\\\\n') else cat(dimnames($VAR)[[2]], sep='\\\\\\\n');cat(t($VAR), sep='\\\\\\\n');sink(file=NULL);"
+"$HOME"/Rdaemon/daemon/execRStr.sh "$TASK" &gt; /dev/null
+
+RES=$(cat "$RDRAMDISK/r_tmp")
+ROWS=$(echo -e "$RES" | head -n 1 )
+RES=$(echo -e "$RES" | sed '1,1d')
+COLS=$(echo -e "$RES" | head -n 1 )
+
+LC=$(($ROWS * 26 + 135))
+[[ $LC -gt 630 ]] &amp;&amp; LC=630
+cat &lt;&lt;HTML0 
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Rdaemon &amp;mdash; Matrix Editor&lt;/title&gt;
+&lt;style type="text/css"&gt;
+&lt;!--
+INPUT {
+border: #AAAAAA 0px solid;
+background-color: #FFFFFF;
+text-align:right;
+font-family:Monaco
+}
+BODY {
+font-family:Monaco;
+}
+.var {
+border: lightgrey 0px dotted;
+background-color: white;
+text-align:left;
+text-weight:bold;
+font-size:11pt;
+}
+.var1 {
+border: lightgrey 0px dotted;
+background-color: #ECECEC;
+text-align:center;
+font-size:8pt;
+}
+.var2 {
+border: lightgrey 0px dotted;
+background-color: #ECECEC;
+text-align:right;
+font-size:8pt;
+}
+--&gt;
+&lt;/style&gt;
+&lt;script type="text/javascript"&gt;
+	function saveIt() {
+		TextMate.isBusy = true;
+		var reg = new RegExp("(^\"?\-?[0-9\.]+[0-9]*\"?$)|(^NA$)");
+		var data = new Array();
+		var dim=$COLS*$ROWS;
+		var rownames = new Array();
+		if (document.getElementById("row_1").value.substr(0,1)!="[") {
+			for (var i=1; i&lt;=$ROWS; i++) {
+				var rn = document.getElementById("row_"+String(i));
+				rownames.push("as.character(\""+rn.value+"\")");
+			}
+			var rnames = "c(" + rownames.join(",") + ")";
+		} else {
+			var rnames = "NULL";
+		}
+		var colnames = new Array();
+		if (document.getElementById("col_1").value.substr(0,1)!="[") {
+			for (var i=1; i&lt;=$COLS; i++) {
+				var rn = document.getElementById("col_"+String(i));
+				colnames.push("as.character(\""+rn.value+"\")");
+			}
+			var cnames = "c(" + colnames.join(",") + ")";
+		} else {
+			var cnames = "NULL";
+		}
+		for (var i=1; i&lt;=dim; i++) {
+			var inp = document.getElementById("in_"+String(i));
+			if (inp.value.length == 0) {
+				data.push("NA");
+			} else {
+				if (reg.test(inp.value)) {
+					data.push(inp.value);
+				} else {
+					data.push("as.character(\""+inp.value+"\")");
+				}
+			}
+		}
+		var cmd = "echo '" + document.getElementById("varname").value +"&lt;-matrix(c(" + data.join(",") + "),ncol=$COLS,byrow=T,dimnames=list(" + rnames + "," + cnames + "))' &gt; ~/Rdaemon/r_tmp;echo -e '@|source(\"$HOME/Rdaemon/r_tmp\")' &gt; ~/Rdaemon/r_in";
+		TextMate.system(cmd,null);
+		TextMate.isBusy = false;
+		window.close();
+	}
+	function init() {
+		document.getElementById('in_1').focus();
+		//window.resizeTo(480,$LC);
+	}
+	function keyalert(index)
+	{
+		var VK_LEFT = 37;
+		var VK_UP = 38;
+		var VK_RIGHT = 39;
+		var VK_DOWN = 40;
+		var VK_PAGEUP = 33;
+		var VK_PAGEDOWN = 34;
+		var VK_ESC = 27;
+		if (!event.altKey &amp; !event.ctrlKey &amp; !event.shiftKey) {
+		switch (event.keyCode){
+			case VK_ESC : {
+				//window.close();
+				break;
+			}
+			case VK_UP : {
+				if (index&gt;$COLS) {
+					var rind = 'in_' + String(index-$COLS)
+					document.getElementById(rind).focus();
+					document.getElementById(rind).select();
+				}
+				break;
+			}
+			case VK_RIGHT : {
+				if (index&gt;0) {
+					var rind = 'in_' + String(index+1)
+					document.getElementById(rind).focus();
+					document.getElementById(rind).select();
+				}
+				break;
+			}
+			case VK_LEFT : {
+				if (index&gt;1) {
+					var rind = 'in_' + String(index-1)
+					document.getElementById(rind).focus();
+					document.getElementById(rind).select();
+				}
+				break;
+			}
+			case VK_DOWN : {
+				if (index&lt;document.getElementsByTagName("input").length) {
+					var rind = 'in_' + String(index+$COLS)
+					document.getElementById(rind).focus();
+					document.getElementById(rind).select();
+				}
+				break;
+			}
+		}
+		}
+	}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;
+&lt;div style="background-color:white;padding:2mm"&gt;
+&lt;font color=grey&gt;&lt;small&gt;matrix:&lt;/small&gt;&lt;/font&gt; &lt;input id=varname size=10 class=var value="$VAR" id="var"&gt;
+&lt;/div&gt;
+&lt;table border=1 style="border-collapse:collapse;"&gt;
+
+
+HTML0
+
+cat "$RDRAMDISK/r_tmp" | perl -e '
+$cols=&lt;&gt;;chomp($cols);
+$rows=&lt;&gt;;chomp($rows);
+@rownames=();
+@colnames=();
+for($i=0;$i&lt;$cols;$i++) {
+	$item=&lt;&gt;;
+	chomp($item);
+#	$item =~ s/ /&amp;nbsp;/g;
+	push(@colnames,"$item");
+}
+for($i=0;$i&lt;$rows;$i++) {
+	$item=&lt;&gt;;
+	chomp($item);
+#	$item =~ s/ /&amp;nbsp;/g;
+	push(@rownames,"$item");
+}
+$rcnt=1;
+$ccnt=0;
+$cnt=1;
+print "&lt;tr&gt;&lt;td bgcolor=#ECECEC align=right&gt;&amp;nbsp;&lt;/td&gt;";
+for($i=1;$i&lt;=$rows;$i++) {
+	print "&lt;td bgcolor=#ECECEC align=center&gt;&lt;small&gt;&lt;input id=col_$i size=8 type=text class=var1 value=\"".$rownames[$i-1]."\"&gt;&lt;/small&gt;&lt;/td&gt;";
+	if(! ($i % 10)){
+		print "&lt;td bgcolor=#ECECEC align=right&gt;&lt;small&gt;&amp;nbsp;&lt;/small&gt;&lt;/td&gt;\n";
+	}
+}
+print "&lt;/tr&gt;\n";
+$flag=0;
+while(&lt;&gt;){
+	$LINE=$_;
+	chomp($LINE);
+	if( $cnt&gt;1 &amp;&amp; (! (($cnt-1) % 10))){
+		$rcnt--;
+		print "&lt;td bgcolor=#ECECEC align=center&gt;&lt;small&gt;&lt;small&gt;".$colnames[$rcnt-1]."&lt;/small&gt;&lt;/td&gt;\n";
+		$rcnt++;
+	}
+	if($cnt==1 || (! (($cnt-1) % ($rows)))){
+		if(! ($rcnt % 20)) {
+		print "&lt;tr&gt;&lt;td bgcolor=#ECECEC&gt;&amp;nbsp;&lt;/td&gt;";
+		for($i=1;$i&lt;=$rows;$i++) {
+			print "&lt;td bgcolor=#ECECEC align=right&gt;&lt;small&gt;&lt;small&gt;".$rownames[$i-1]."&lt;/small&gt;&lt;/td&gt;";
+			if(! ($i % 10)){
+				print "&lt;td bgcolor=#ECECEC align=right&gt;&lt;small&gt;&lt;small&gt;&amp;nbsp;&lt;/small&gt;&lt;/td&gt;\n";
+			}
+		}
+		print "&lt;/tr&gt;\n";
+		}
+		print "&lt;tr&gt;&lt;td bgcolor=#ECECEC align=right&gt;&lt;small&gt;&lt;input id=row_$rcnt size=8 type=text class=var2 value=\"".$colnames[$rcnt-1]."\"&gt;&lt;/small&gt;&lt;/td&gt;\n";
+		$rcnt++;
+	}
+	print "&lt;td&gt;&lt;input id=in_$cnt size=8 type=\"text\" value=\"$LINE\" onkeyup=keyalert($cnt)&gt;&lt;/td&gt;\n";
+	$cnt++;
+}
+$rcnt--;
+print "&lt;td bgcolor=#ECECEC align=center&gt;&lt;small&gt;&lt;small&gt;".$colnames[$rcnt-1]."&lt;/small&gt;&lt;/td&gt;&lt;/tr&gt;\n";
+'
+
+cat &lt;&lt;HTML5
+&lt;/table&gt;
+&lt;div style="margin-top:2mm;background-color:lightgrey;padding:2mm"&gt;
+&lt;button onclick="saveIt()"&gt;&amp;nbsp;Save&amp;nbsp;&lt;/button&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;button onclick="window.close()"&gt;Cancel&lt;/button&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;window.onload = init;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+HTML5
+
+exit_show_html
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Matrix Editor (β)</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>627438F9-5393-4D64-A0ED-18F58A35F1CA</string>
+</dict>
+</plist>

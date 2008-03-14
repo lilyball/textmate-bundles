@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>C=$(cat "$HOME/Rdaemon"/history/Rhistcounter.txt)
+C=$(($C+1))
+
+HC=$(wc -l "$HOME/Rdaemon"/history/Rhistory.txt | awk '{print $1}')
+[[ $C -gt $HC ]] &amp;&amp; exit_discard
+
+L=$(tail -r "$HOME/Rdaemon"/history/Rhistory.txt | uniq | cat -n | egrep "^ *$C	" | sed 's/^.*	//' )
+
+echo -n $C &gt; "$HOME/Rdaemon"/history/Rhistcounter.txt
+L=${L//$/\\$}
+L=${L//\`/\\\`}
+
+echo -n "&gt; $L"</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Previous History Item</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.rd.console.prompt</string>
+	<key>uuid</key>
+	<string>C14369D7-79B8-4D9B-BB90-E91B36C79AF2</string>
+</dict>
+</plist>

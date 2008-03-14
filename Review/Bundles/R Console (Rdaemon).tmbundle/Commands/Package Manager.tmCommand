@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RDRAMDISK="/tmp/TMRramdisk1"
+else
+	RDRAMDISK="$HOME"/Rdaemon
+fi
+#get R's PID
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
+#check whether Rdaemon runs
+test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
+
+
+cat&lt;&lt;END
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Rdaemon Package Manager&lt;/title&gt;
+&lt;style type="text/css"&gt;
+&lt;!--
+.helpSym {
+	background-color:lightgrey;
+	color:black;
+	cursor:pointer;
+	font-size:8pt;
+}
+--&gt;
+&lt;/style&gt;
+&lt;script type="text/javascript"&gt;
+		function getR(Rcmd) {
+		    var cmd = '"$HOME/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
+		    document.getElementById("main").innerHTML = "&lt;pre&gt;&lt;font style='font-size:8pt'&gt;" + TextMate.system(cmd, null).outputString
+		}
+        function pkgMan(pkg) {
+		    var cmd; var Rcmd;
+			if(pkg.checked == true) {
+				Rcmd = 'library(' + pkg.name + ')';
+			    cmd = '"$HOME/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
+			    myCommand = TextMate.system(cmd, function (task) { });
+			} else {
+				Rcmd = 'detach(package:' + pkg.name + ')';
+				cmd = '"$HOME/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
+				myCommand = TextMate.system(cmd, function (task) { });
+			}
+        }
+
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+END
+"$HOME/Rdaemon/daemon/execRStr.sh" "@|sink('$RDRAMDISK/r_tmp');source('~/Rdaemon/help/pkgMan.R');sink(file=NULL);" &gt; /dev/null
+cat "$RDRAMDISK"/r_tmp
+exit_show_html</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@p</string>
+	<key>name</key>
+	<string>Package Manager</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>F349C212-E113-47F2-A4E3-95F6BF3C9310</string>
+</dict>
+</plist>

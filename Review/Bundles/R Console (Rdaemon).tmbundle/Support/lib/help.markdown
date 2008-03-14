@@ -1,0 +1,429 @@
+
+# Introduction
+
+The "R Console (Rdaemon)" bundle allows to run the command-line version of R ***inside*** of TextMate using a daemon which runs within an hidden pseudo terminal. In addition it provides some commands which allow to use that bundle as a kind of GUI.
+
+The entire source code is written in scripting languages (Ruby, Perl, HTML (JavaScript), and Bash) hence the user can modify it rather easily in order to adapt it to its own purposes.
+
+***Important*** This bundle is an extension to the "R Bundle" which comes with syntax highlighting, help functionality, etc. Thus it is recommended to install that bundle as well.
+
+# Installation
+
+In order to work with the Rdaemon it is necessary to install the Rdaemon in `~/Rdaemon`.
+
+Simply do execute the command "Install Rdaemon" (Bundle Menu > Rdaemon Tools > Install Rdaemon) or type "installrd" and press "&#x21E5;".
+
+***Please note that the folder `~/Rdaemon` may not yet exist.***
+
+# General Usage
+
+## Start Rdaemon<a name="start">
+
+To start Rdaemon set the language grammar of a document to "R Console (Rdaemon)" and either type `start` and press  <button>&#x21E5;</button> or press <button>&#x2325;&#x2318;C</button> for the command menu "General Control" and choose "Start Rdaemon". The start procedure will take a few seconds.
+
+An other option to start Rdaemon is to press <button>^&#x2325;&#x2318;R</button>. This will start the Rdaemon and it will open the Rsession project.
+
+## Quit Rdaemon
+
+To quit the Rdaemon you can either use the command menu "General Control" <button>&#x2325;&#x2318;C</button> and choose one of the following commands: "Quit and Don't Save", "Quit and Save" or type "q" and press <button>&#x21E5;</button>.
+
+If an exceptional case occurs you can kill the Rdaemon process by executing "Bundle Menu > Rdaemon Tools > Force Kill Rdaemon" or type "kill" and press  <button>&#x21E5;</button>.
+
+Of course, it is also possible to execute the R command "q()" or "quit()" within the console window.
+
+## Execute a R command or a bunch of selected commands
+
+After starting the Rdaemon the document window behaves like a normal R console. If a line starts with "> " or "+ " (the standard prompt and continue prompt which must be unchanged) one can type a R command and press <button>&#x21A9;</button> or <button>&#x2305;</button>. If a line does not start with "> " or "+ " or if one wants to execute a selection of several commands only <button>&#x2305;</button> will work.
+
+In addition there is the key equivalent <button>⇧&#x21A9;</button> which will execute the last command(s) of the current document. It jumps to the end of the current document and it selects by searching from the end everything to "> ".
+
+***Hints:***
+
+-    For inserting "new line" press <button>&#x2318;&#x21A9;</button>
+
+-    If a selection of R commands shall be executed the selection will send line by line.
+
+### The R commands: readline(), edit(), fix() 
+
+-   __readline()__
+
+    On basis of the used implementation the R command `readline(prompt="a prompt")` __only__ works properly if the string `a prompt` ends with ": "!
+
+    ***Example***<pre>&gt; x &lt;- readline("value for x: ")
+    value for x: 
+    &gt; 3
+    &gt; x
+    [1] "3"
+    </pre>
+
+    ***Hint: Internally used readline() ends on ": ".***
+
+-   __edit()__ and __fix()__
+
+    These commands can __only__ be executed by using "Execute Line/Selection (Background > r_res)" <button>⇧&#x2305;</button>! These commands call `mate -w`. Otherwise TextMate will freeze and you can only interrupt the command by pressing <button>&#x2318;.</button>.
+
+## History List
+
+If a line starts with "> " one can use <button>&#x2191;</button> or <button>&#x2193;</button> to insert the previous or next command from the history list. This history list is stored persistently, i.e. the entire list is also available after restarting Rdaemon.
+In addition while starting a Rdaemon session a time stamp will be inserted into the history list.
+
+<button>&#x2303;&#x2325;&#x2191;</button> shows an inline menu with all commands.
+
+<button>&#x2303;&#x2325;&#x2193;</button> opens a dialog to enter a regular expression to search within the history list.
+
+
+To clear that history list open the command menu "Tools" <button>&#x2325;&#x2318;T</button> and choose "Clear History".
+
+***Hint: For moving the caret up or down press <button>&#x2318;&#x2191;</button> or <button>&#x2318;&#x2193;</button>.***
+
+# Commands
+
+***Note*** Almost all commands specified within the "R" bundle can be used.
+
+## Execute Line
+<button>&#x21A9;</button>
+It sends the current line to the Rdaemon and inserts the result as snippet. As selection will be ignored.
+
+## Execute Last Command(s)
+<button>⇧&#x21A9;</button>
+It executes the last command(s) of the current document. It jumps to the end of the current document and it selects by searching from the end everything to "> ".
+
+## Execute Selection
+<button>&#x2305;</button>
+It executes the selection line by line or the current line.
+
+## Execute Line/Selection (Background > r_res)
+<button>⇧&#x2305;</button>
+It sends the current line or the selection line by line to the Rdaemon and does not wait for the result. The result will be written into `~/Rdaemon/r_res`. This is useful if one knows that the task will take some minutes, thus one does not block TextMate.
+
+This command must be executed if you want to use the R commands `fix()` or `edit()`!
+
+## Completion… (R.bundle)
+<blockquote><small>This command is defined within the R.bundle, but it differs a bit if it will be invoked from the Rdaemon scope.</small></blockquote>
+
+<button>&nbsp;^.&nbsp;</button> Based on all installed packages and local function declarations it shows an inline menu with completion suggestions for the current word or selection as <code style="background-color:lightgrey;color:black">&nbsp;command&nbsp;library&nbsp;</code>. The library `local` refers to functions defined within the current document.
+
+-   <code style="background-color:lightgrey;color:black">&nbsp;command&nbsp;…library…&nbsp;</code>
+    `…library…` indicates that the required library is loaded
+
+-   <code style="background-color:lightgrey;color:black">&nbsp;command&nbsp;{library}&nbsp;</code>
+    `{library}` indicates that the required library is __not__ yet loaded
+
+As default it also displays an inline menu if there is only one suggestion found in order to give you an hint for the required library. You can force TextMate to complete it without displaying that menu by setting the shell variable `R_AUTOCOMPLETE` to `1`. But the inline menu will be displayed if the suggested command is defined within a package which is not yet loaded.
+
+***Hint*** This command works case-sensitively. E.g. if you type `math` (without selection and there is no command beginning with `math`) and invoke this command it lists all case-insensitive matched commands like `Math.fraction`, etc. as a tooltip caused by the chosen "Insert as Snippet" mechanism.
+
+# Command Menus
+
+## General Control
+<button>&#x2325;&#x2318;C</button>
+
+-    __Start Rdaemon__
+
+      Starts the Rdaemon. See [General Usage: Start Rdaemon](#sect_3.1)
+
+-    __Quit and Don't Save__
+
+      Quits the Rdaemon session and does not save the workspace.
+
+-    __Quit and Save__
+
+      Quits the Rdaemon session and saves the workspace in the working directory `~/Rdaemon`.
+
+-    __History__
+
+      See [General Usage: History List](#sect_3.4)
+
+-    __Open Rsession__
+
+      Opens the Rsession project which is stored as `~/Rdaemon/Rsession.tmproj`.
+
+-    __Edit StartOptions__
+
+      Opens the file `~/Rdaemon/startOptions.R`. This file will be execute while starting Rdaemon.
+
+-    __Start X11__
+
+      Starts the X11 server.
+
+-    __Try to interrupt current task__
+
+      Sends the signal INT to the Rdaemon process. This is not always successful.
+
+## Workspace
+<button>&#x2325;&#x2318;W</button>
+
+-    __Show Workspace__
+
+      Shows a window displaying all defined objects in the current session based on the R commands `ls()` and `str()`.
+
+      "edit" will open the chosen object in a new TextMate window using `fix()`.
+
+      "remove" will remove the chosen object from the workspace.
+
+-    __Save/Load Default Workspace__
+
+      Saves the workspace into `~/Rdaemon` or loads it.
+
+-    __Clear Workspace__
+
+      Remove all objects from the workspace using `rm(list = ls())`.
+
+## Packages 
+<button>&#x2325;&#x2318;P</button>
+
+-    __Package Manager__
+
+      Shows a window with all installed R packages. With the help of the check boxes one can load or detach packages. "?" will open the help page for the chosen package.
+
+## Graphics
+<button>&#x2325;&#x2318;G</button>
+
+-    __Graphic Manager__
+
+     Opens a window displaying all open grDevices as PDFs. A preview will only be shown if the grDevice is a screen device (like quartz, png, x11, etc.). For opened grDevices like pdf or postscript a dummy PDF will be displayed instead. A red frame indicates the current device. For zooming resize the window.
+
+     Functions:
+     - click at an image to set that device to the current one (`dev.set`)
+     - press <button>Close Device</button> to close that device (`dev.off`)
+     - press <button>Close All Devices</button> to close all device (`graphics.off`)
+     - press <button>Refresh</button> to refresh the window.
+     - press <button>Save</button> to save it.
+       
+       Formats:
+          - __pdf__ - it will copy the shown pdf to the chosen destination without any modifications (you also can drag and drop the image directly)
+          - __eps__ - it uses `dev.copy2eps` to generate the eps which will be saved to the chosen destination without any modifications
+          - __all other formats__ - it will convert the PDF into an image by using `sips`. Up to now it will generate pixel images with 150 dpi.
+
+     - ***Hint*** To create a transparent PDF, open a `png(bg = "transparent")` device, fill it with the desired data, and open the Graphic Manager.
+
+
+-    __Show Current Plot as PDF__
+
+      Executes `dev.print(pdf)` and opens the created PDF file in Preview. You can change the default PDF viewer by setting the shell variable `TM_RdaemonPDFVIEWER` to e.g. "PDFView" or "Safari".
+
+-    __New Quartz() {CarbonEL}__
+
+      Loads the library "CarbonEL" and opens a new Quartz device using `quartz()`.
+
+      ***Hint:*** The library "CarbonEL" is needed in order to make it possible to work with the Quartz device properly!
+
+-    __Order Front all Quartz Windows__
+
+      Shows all Quartz windows.
+
+-    __Close all Graphic Devices__
+
+      Executes `graphics.off()` to close all graphic devices.
+
+## Auxiliaries
+<button>&#x2325;&#x2318;A</button>
+
+-    __Reset Output__
+
+      Some commands make usage of `sink()`. In an exceptional case it could be necessary to reset the output path. In a few very rare exceptional cases one has to reset more than once.
+
+-    __Show Last Error Message__
+
+      Shows the output of the R command `geterrmessage()` as tooltip.
+
+## Tools
+<button>&#x2325;&#x2318;T</button>
+
+-    __Clear History__
+
+      Removes all items from the history list.
+
+-    __Reveal "Rdaemon" in Finder/as TM Project__
+
+      Opens the folder `~/Rdaemon` in Finder or as a TextMate project.
+
+-    __Show End of r_out__
+
+      Shows the tail of the console logfile "r_out" containing the raw data coming from Rdaemon.
+
+-    __Open Console Logfile__
+
+      Opens the console logfile "r_out" containing the raw data coming from Rdaemon.
+
+-    __Open Result File r_res__
+
+      Opens the file "r_res" containing the result of R code executed in the background.
+
+-    __Show RAM disk usage__
+
+      If the Rdaemon is using a RAM drive it shows the available space. See more under ["Advanced Topics"](sect_6).
+
+-    __Show R CPU coverage__
+
+      Shows the current CPU coverage of the Rdaemon. Only useful if one sent a background task.
+ 
+-    __Show PIDs__
+
+      Shows the process IDs of the daemon (Ruby) and the Rdaemon (R). Only useful if one has to kill these processes manually.
+
+-    __Rescan Open Files__
+
+      Rescans all opened files/folders.
+
+# Advanced Topics
+
+-   __Usage of a RAM drive__
+
+    To store the console output of Rdaemon at a RAM drive (mount point `/tmp/TMRramdisk1`) set a TextMate shell variable named `TM_RdaemonRAMDRIVE` to "1". This will increase the speed of the interaction between TextMate and Rdaemon in certain circumstances enormously and will reduce the hard disk access. If `TM_RdaemonRAMSIZE` is unset the default size is 50MB.
+
+    Rdaemon's console logfile can be found at  `/tmp/TMRramdisk1/r_out`.
+
+    Unfortunately it is up to now not possible to detach the RAM drive after quitting Rdaemon. Thus use it __only__ if enough RAM space is available. Only a restart of the entire Mac will detach that RAM drive called "TMRdaemon".
+
+-   __Internal File Structure__
+
+    All needed files are stored in the folder `~/Rdaemon`.
+
+    * console.Rcon [console file used by the Rsession]
+    * __daemon__
+
+        * dummy&#95;noimage.pdf_[dummy pdf for the Graphic Maganger]
+
+        * execRStr.sh [bash script executing R code as arg1 and outputs its result; mainly used by JavaScript]
+
+        * Rdaemon.rb [the actual daemon written in Ruby 1.8]
+
+        * start.r [R source file which calls getSig.R and startOptions.R]
+
+        * startR.sh [bash script executing Rdaemon.rb as background process]
+
+        * startScript.sh [bash script starting the entire Rdaemon; used by "Start Rdaemon"]
+
+        * {x11runs} [if existing tells Rdaemon: don't shut down X11]
+
+    * __help__
+
+        * getSig.R [R script containing the code for inserting the command signature on run-time &mdash; obsolete]
+
+        * grMan.sh and grMan2.sh are used by the Graphic Manager to generate the HTML page
+
+        * pkgMan.R [R script for generating the HTML output used by the "Package Manager"]
+
+        * __savePlotAs__ [contains all files to save/convert a chosen PDF within the Graphic Manager]
+
+        * savePlotAs.sh [calls a dialog to save/convert a chosen PDF within the Graphic Manager]
+
+    * __history__
+
+        * Rhistcounter.txt [contains the current line number of the history list used by prev/next history item]
+
+        * Rhistory.txt [contains the actual history list]
+
+   * __plots__ [output path of PDF files]
+
+   * r_in [Rdaemon reads on that named pipe]
+
+   * r&#95;out [if existing contains the raw output data coming from Rdaemon; see also [Usage of a RAM drive](#sect_6) ]
+
+   * r&#95;res [if existing contains the output for R code sent as background task]
+
+   * r&#95;tmp [if existing used as temporary container variable]
+
+   * startOptions.R [R script containing all start options for the Rdaemon]
+
+-   __Rdaemon runs in the background__
+
+    This means that you can quit TextMate (without quitting the Rdaemon) and restart TextMate without loosing the current Rdaemon session. Furthermore you have access to the Rdaemon also from other applications by using the pipe `~/Rdaemon/r_in` for sending tasks to the Rdaemon, or you can use the bash script `~/Rdaemon/daemon/execRStr.sh TASKS` which will output the result on stdout.
+
+-   __Different TextMate documents are set to "R Console (Rdaemon)"__
+
+    Based on the issue that Rdaemon is a daemon there is no problem to have more than one window open set to "R Console (Rdaemon)". All these windows execute R code within the same Rdaemon session.
+
+# Shell variables
+
+-   __TM_RdaemonPDFVIEWER__
+
+	If set it calls that application for showing the current plot as PDF. Its default is `Preview`.
+
+-   __TM_RdaemonRAMDRIVE__
+
+    To store the console output of Rdaemon at a RAM drive (mount point `/tmp/TMRramdisk1`) set `TM_RdaemonRAMDRIVE` to "1". This will increase the speed of the interaction between TextMate and Rdaemon in certain circumstances enormously and will reduce the hard disk access. If `TM_RdaemonRAMSIZE` is unset the default size is 50MB.
+
+    Unfortunately it is up to now __not__ possible to detach the RAM drive after quitting Rdaemon. Thus use it __only__ if enough RAM space is available. Only a restart of the entire Mac will detach that RAM drive called "TMRdaemon".
+
+-   __TM_RdaemonRAMSIZE__
+
+    `TM_RdaemonRAMSIZE` set as integer in MB specifies the size of the used RAM drive. The default is 50 meaning 50MB.
+
+-   __Locales: TM&#95;RdaemonXXXXX__
+
+    XXXXX specifies the different locales:
+    * LC_ALL
+    * LC_TIME
+    * LC_COLLATE
+    * LC_CTYPE
+    * LC_MONETARY
+    * LC_NUMERIC
+    * LC_MESSAGES
+    * LC_PAPER
+    * LC_MEASUREMENT
+
+    If unset Rdaemon uses the system defaults.
+
+    ***Example:*** `TM_RdaemonLC_ALL = de_DE` will set Rdaemon to output messages in German.
+
+# Troubleshooting &amp; FAQ
+
+Each command should be cancelled by pressing <button>&#x2318;.</button>.
+
+-   __How can I change the language, time format, etc. used by the Rdaemon?__
+
+    Set the locales LC&#95;ALL, etc. See [Locales: TM&#95;RdaemonXXXXX](#sect_7)
+
+-   __Error in library(CarbonEL) : there is no package called 'CarbonEL'__
+
+    That error message indicates (showing after a plot command) that the package "CarbonEL" was not yet installed. This package is necessary to work with the Quartz device properly. You can install it by using `install.packages("CarbonEL")`.
+
+-   __Rdaemon freezes after executing a command (esp. for "readline")__
+
+    Did you change `options()$prompt` or `options()$continue`? defaults: "> " and "+ "
+
+    Does end your prompt used by `readline()` at ": "? See also [here](#sect_3.3)
+
+    ***Background:*** If a R command is sent to the Rdaemon the used TextMate command will wait for R until R returned something which ends at: "> ", "+ ", or ": ". Otherwise that command runs in an eternal loop. You can cancel it by pressing "&#x2318;.". In some cases you have to switch to an other application and back to TextMate in order to get the focus back.
+
+-   __`After calling locator() there is no way to get out of the Quartz device`__
+
+    To finish the `locator` command with a Quartz device you have to press the red dot of the quartz window to "close" it. ESC won't work unfortunately. You will still see the window __BUT__ the device was closed! If you need the `locator` functionality please use the x11 device instead.
+
+-   __`fix()` or `edit()` blocks TextMate__
+
+    Both commands can __only__ be executed in the background (using "Execute Line/Selection (Background > r_res)") because the Rdaemon will call TextMate via `mate -w`.
+
+-   __I cannot use non-Latin and non-ASCII letters as labels in Quartz__
+
+    Non-ASCII but Latin letters should be displayed in a PDF plot correctly. Up to now it is not possible to use non-Latin letters in any graphical devices easily.
+
+-   __`readline(prompt="a prompt: ")` places the caret beneath the prompt__
+
+    This is the normal case. See more [here](#sect_3.3.1).
+
+-   __The Quartz device blocks itself__
+
+    The Quartz device only works properly if you load the library "CarbonEL" in beforehand.
+
+-   __How can I save a plot as JPEG, PNG, etc.__
+
+    Open the "Graphic Manager" and press "Save" or open the current plot in "Preview" and choose "Save As".
+
+-   __Can I run more than one instance of Rdaemon?__
+
+    No.
+
+-   __Can I run Rdaemon, R.app, or R in the terminal at the same time?__
+
+    Yes. Rdaemon should not interfere R.app or R running in the Terminal.
+
+# Main Bundle Maintainer
+
+***Date: Mar 06 2008***
+
+<pre>
+-  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>
+</pre>

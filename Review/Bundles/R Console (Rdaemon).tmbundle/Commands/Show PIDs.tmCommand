@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>RUBYRUN=$(ps xw | grep 'Rdaemon\.rb')
+RRUN=$(ps aw | grep 'Librar.*--TMRdaemon')
+if [ ! ${#RRUN} == 0 -a ! ${#RUBYRUN} == 0 ]; then
+	RUBYRUN=$(echo -en "$RUBYRUN" | awk '{print $1;}')
+	RRUN=$(echo -en "$RRUN" | awk '{print $1;}')
+	echo -en "Rdaemon: $RUBYRUN\nR      : $RRUN"
+else
+	echo -en "Rdaemon is not running!"
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@t</string>
+	<key>name</key>
+	<string>Show PIDs</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>1B07309F-2D19-455E-9B39-A1CD1D19F97E</string>
+</dict>
+</plist>

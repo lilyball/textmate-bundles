@@ -1,0 +1,222 @@
+#################
+#
+# 21 Nov 2006 - written by Hans-Jörg Bibiko   bibiko@eva.mpg.de
+#
+#   exportpl set BASH variables according to the property list <key>=<value>
+#
+#    all variables are set as 'export TMD_<key>' except arrays (see option -a)
+#
+#    if <value> is an array tag a BASH array will be returned
+#        if the option -a is given the array will be outputted as single string delimited by TABs \t
+#        [BASH doesn't allow to export an array for parent processes]
+#
+#    if <value> is a date tag output format YYYY-MM-DDTHH:MM:SSZGMTshift
+#
+#    if <value> is a boolean tag the output is an integer: true := 1 , false := 0
+#
+#    data and nested dict tags will be ignored
+#
+#    all variable values are UTF-8 encoded
+#
+#    if a given key is not specified in plist an empty string will be returned
+#
+#    each variable is named TMD_<key>
+#
+#    each used bash variable within this function will be unset at the end
+#
+#   Usage:
+#
+#     exportpl {-a} <data|file> {key1 key2 key3 ... keyn}
+#
+#     -a          := if given an array will be outputted as single string delimited by TABs \t
+#     data        := string containing valid plist data
+#     file        := plist file [.plist extension is not necessary]
+#     key1...keyn :=　valid key(s) for plist
+#
+#   Error handling:
+#
+#     -valid BASH identifier
+#     -valid property list syntax
+#     -valid file path
+#     -argument checking
+#
+#     All error messages are outputted via exit_show_tool_tip.
+#
+#   Temporary file:
+#
+#      If no plist file is given <data> will be saved as a temporary file:
+#           ${TMPDIR-/tmp}/TextMatePLutf8DATA.$RANDOM.$RANDOM.plist
+#
+#   Examples: ( test.plist contains the keys returnCode and output; output is an array with 8 items )
+#
+#   a)
+#   KEY=("returnCode" "output")
+#   . "$TM_BUNDLE_SUPPORT"/bin/exportpl.sh "$TM_BUNDLE_SUPPORT"/bin/test.plist ${KEY[@]}
+#   echo $TMD_returnCode
+#   echo ${TMD_output[0]}
+#
+#   b)
+#   . "$TM_BUNDLE_SUPPORT"/bin/exportpl.sh "$TM_BUNDLE_SUPPORT"/bin/test returnCode output
+#   echo $TMD_returnCode
+#   echo ${TMD_output[5]}
+#
+#   c)
+#   DIA=$( cat "$TM_BUNDLE_SUPPORT"/bin/test.plist | tm_dialog -m test )
+#   . "$TM_BUNDLE_SUPPORT"/bin/exportpl.sh "$DIA"
+#   #all key(s) for $DIA are exported
+#
+#   d)
+#   . "$TM_BUNDLE_SUPPORT"/bin/exportpl.sh -a "$TM_BUNDLE_SUPPORT"/bin/test returnCode output
+#   echo $TMD_returnCode
+#   echo "$TMD_output"
+#   > key 1\tkey 2\tkey 3\tkey 4\tkey 5\tkey 6\tkey 7\tkey 8
+#
+#
+###############
+
+# check for no arguments
+if [ ${#1} -eq 0 ]; then
+	echo -e "\n \n exportpl Usage:\n\n    exportpl {-a} <data|file> {key1 key2 key3 ... keyn}  \n \n"
+	exit 206
+fi
+
+# check for option -a (array as string delimited by TAB \t)
+if [ ${1:0:2} == "-a" ]; then
+	TM1_ARR=1
+	shift
+else
+	TM1_ARR=0
+fi
+
+# check for no arguments
+if [ ${#1} -eq 0 ]; then
+	echo -e "\n \n exportpl Usage:\n\n    exportpl {-a} <data|file> {key1 key2 key3 ... keyn}  \n \n"
+	exit 206
+fi
+
+# check for plist extension
+if [ ${1:0:1} != "<" ] && [ ${1##*.} != "plist" ]; then
+	TM1_PLIST="$1.plist"
+else
+	TM1_PLIST="$1"
+fi
+
+# create tmp plist file for data if no file is given
+if [ ! -e "$TM1_PLIST" ]; then
+	TM1_tmp=${TMPDIR-/tmp}
+	TM1_tfile=TextMatePLutf8DATA.$RANDOM.$RANDOM
+	echo "$1" > "$TM1_tmp/$TM1_tfile.plist"
+	TM1_PLIST="$TM1_tmp/$TM1_tfile.plist"
+fi
+
+# check plist for syntax
+TM1_PLERR=$(plutil -lint -s "$TM1_PLIST")
+if [ ${#TM1_PLERR} -gt 0 ]; then
+	if [ -e "$TM1_tmp/$TM1_tfile".plist ]; then
+		rm "$TM1_tmp/$TM1_tfile".plist
+	fi
+	echo -e "exportpl Error:\n Data not valid or could not open plist file!"
+	exit 206
+fi
+
+export TM1_PLIST
+export TM1_ARR
+
+# check if key(s) are specified
+if [ $# -gt 1 ]; then # export only given keys
+	shift      # shift file
+	TM1_INP="" # specified key(s)
+	while [ "$#" -gt "0" ]; do # build parameter for piping to perl
+		TM1_INP="$TM1_INP$1\n"
+		shift
+	done
+
+TM1_RES=$(echo -e "$TM1_INP" | perl -e '
+use Foundation;
+$arrfmt = $ENV{"TM1_ARR"};
+$file = $ENV{"TM1_PLIST"};
+@keys = <>; chomp(@keys); pop(@keys);
+$plist = NSDictionary->dictionaryWithContentsOfFile_( $file );
+if ( $plist and $$plist) {
+	foreach $key (@keys){
+		if($key =~ m/[^A-Za-z0-9_]+/) {
+			print "echo -e \"exportpl Error:\n The key TMD_$key is not a valid BASH identifier!\"\n exit_show_tool_tip"; last; }
+		$arr_flag = 0;
+		$val = $plist->objectForKey_( $key );
+		if($val and $$val) {
+			if ( !$val->isKindOfClass_( NSData->class ) && !$val->isKindOfClass_( NSDictionary->class ) ) {
+				$aval = $val->description()->UTF8String();
+				$aval =~ s/\\/\\\\/g;$aval =~ s/\"/\\\"/g;$aval =~ s/\!/\"\!\"/g;
+				$aval =~ s/\`/\\\`/g;$aval =~ s/\$/\\\$/g;
+				if ( $val->isKindOfClass_( NSArray->class ) ) {
+					@arr = ();
+					$arr_flag = 1 if(!$arrfmt);
+					for($i=0; $i<$val->count(); $i++) {
+						if($arrfmt) { push(@arr, $val->objectAtIndex_( $i )->description()->UTF8String()); }
+							else { push(@arr, "\"" . $val->objectAtIndex_( $i )->description()->UTF8String() . "\""); }
+					}
+					$aval = ($arrfmt) ? "\"".join("\t",@arr)."\"" : "(".join(" ",@arr).")";
+				}
+				$aval =~ s/(.*?)( )(.*?)( )(.*)/$1T$3Z$5/ if ( $val->isKindOfClass_( NSDate->class ) );
+				$aval = "\"" . "$aval" . "\"" if ( $val->isKindOfClass_( NSString->class ) );
+				print "export " if (!$arr_flag);
+				print "TMD_$key=$aval\n";
+			}
+		} else {
+			print "export TMD_$key=\"\"\n";
+		}
+	}
+} else {
+	print "echo -e \"exportpl Error:\n Could not open plist file or wrong option is given!\"\n exit 206";
+}
+')
+
+else # export all key(s) from plist
+
+TM1_RES=$(perl -e '
+use Foundation;
+$arrfmt = $ENV{"TM1_ARR"};
+$file = $ENV{"TM1_PLIST"};
+$plist = NSDictionary->dictionaryWithContentsOfFile_( $file );
+if ( $plist and $$plist) {
+	$enum = $plist->keyEnumerator();
+	while($key = $enum->nextObject() and $$key){
+		if($key->description()->UTF8String() =~ m/[^A-Za-z0-9_]+/) {
+			print "echo -e \"exportpl Error:\n The key TMD_$key is not a valid BASH identifier!\"\n exit_show_tool_tip";last; }
+		$arr_flag = 0;
+		$val = $plist->objectForKey_( $key );
+		if ( !$val->isKindOfClass_( NSData->class ) && !$val->isKindOfClass_( NSDictionary->class ) ) {
+			$aval = $val->description()->UTF8String();
+			$aval =~ s/\\/\\\\/g;$aval =~ s/\"/\\\"/g;$aval =~ s/\!/\"\!\"/g;
+			$aval =~ s/\`/\\\`/g;$aval =~ s/\$/\\\$/g;
+			if ( $val->isKindOfClass_( NSArray->class ) ) {
+				@arr = ();
+				$arr_flag = 1 if(!$arrfmt);
+				for($i=0; $i<$val->count(); $i++) {
+					if($arrfmt) { push(@arr, $val->objectAtIndex_( $i )->description()->UTF8String()); }
+						else { push(@arr, "\"" . $val->objectAtIndex_( $i )->description()->UTF8String() . "\""); }
+				}
+				$aval = ($arrfmt) ? "\"".join("\t",@arr)."\"" : "(".join(" ",@arr).")";
+			}
+			$aval =~ s/(.*?)( )(.*?)( )(.*)/$1T$3Z$5/ if ( $val->isKindOfClass_( NSDate->class ) );
+			$aval = "\"" . "$aval" . "\"" if ( $val->isKindOfClass_( NSString->class ) );
+			print "export " if (!$arr_flag);
+			print "TMD_".$key->description()->UTF8String()."=$aval\n";
+		}
+	}
+} else {
+	print "echo -e \"exportpl Error:\n Could not open plist file or wrong option is given!\"\n exit 206";
+}
+')
+fi
+
+# delete tmp plist if needed
+if [ -e "$TM1_tmp/$TM1_tfile".plist ]; then
+	rm "$TM1_tmp/$TM1_tfile".plist
+fi
+
+# evaluate plist variables with prefix TMD_
+eval "$TM1_RES"
+
+#unset all function variables
+unset TM1_RES TM1_ARR TM1_PLIST TM1_tmp TM1_tfile TM1_PLERR

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RDRAMDISK="/tmp/TMRramdisk1"
+else
+	RDRAMDISK="$HOME"/Rdaemon
+fi
+
+#get R's PID
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
+#check whether Rdaemon runs
+test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
+
+cat&lt;&lt;HTML
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Rdaemon Workspace&lt;/title&gt;
+&lt;style type="text/css"&gt;
+&lt;!--
+.helpSym {
+	background-color:lightgrey;
+	color:black;
+	cursor:pointer;
+	font-size:8pt;
+}
+.nonVisible {
+	display:none;
+}
+.selected {
+	background-color:lightblue;
+}
+.unselected {
+	background-color:white;
+}
+#ask {
+    position: absolute;
+    top: -300;
+    left: 60;
+    height: 80px;
+	width: 200px;
+    background: rgba(238,238,238,0.85);
+    border-bottom: 1px solid rgb(80, 80, 80);
+    padding: 2px 8px;
+	z-index: 1000;
+}
+--&gt;
+&lt;/style&gt;
+&lt;script type="text/javascript"&gt;
+		var item = null;
+		function askForRemove(elt) {
+			item = elt;
+			document.getElementById("object").innerHTML = "&lt;b&gt;Removing of '" + item + "'&lt;/b&gt;";
+			var panel=document.getElementById('ask').style;
+			panel.top = window.pageYOffset;
+			panel.left = window.innerWidth/2-100;
+			document.getElementById(item).className = "selected";
+		}
+		function askForRemoveHide() {
+			document.getElementById(item).className = "unselected";
+			var panel=document.getElementById('ask').style;
+			panel.top = -300;
+		}
+		function exec() {
+			askForRemoveHide();
+			var cmd = 'echo "@|rm('+item+');gc(reset(TRUE))" &gt; "$HOME"/Rdaemon/r_in';
+			TextMate.system(cmd, null);
+			document.getElementById(item).className = "nonVisible";
+		}
+		function edit(item) {
+			var cmd = 'echo "@|fix('+item+')" &gt; "$HOME"/Rdaemon/r_in';
+			TextMate.system(cmd, null);
+			window.close();
+		}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="ask"&gt;
+&lt;center&gt;
+&lt;p&gt;
+&lt;span id="object" style="font-size:9pt;"&gt;&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-size:7pt;"&gt;Are you sure?&lt;/span&gt;
+&lt;/p&gt;
+&lt;input onclick="askForRemoveHide()" type="button" value="Cancel"&gt;
+&amp;nbsp;&amp;nbsp;
+&lt;input onclick="exec()" type="button" value="Yes"&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;table border=1 cellpadding="5" style='border-collapse:collapse;'&gt;
+HTML
+
+"$HOME/Rdaemon/daemon/execRStr.sh" "@|sink('$RDRAMDISK/r_tmp');try({ifelse((length(ls())&gt;0),{for(ü in 1:(length(ls()))){cat('&lt;tr id=\"');cat(ls()[ü]);cat('\"&gt;&lt;td align=right bgcolor=#EEEEEE&gt;&lt;b&gt;');cat(ls()[ü]);cat('&lt;/b&gt;&lt;td&gt;');cat(str(get(ls()[ü])));cat('&lt;/td&gt;&lt;td&gt;&lt;span onclick=\"edit(\'');cat(ls()[ü]);cat('\')\" class=\"helpSym\"&gt;&amp;nbsp;edit&amp;nbsp;&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span onclick=\"askForRemove(\'');cat(ls()[ü]);cat('\')\" class=\"helpSym\"&gt;&amp;nbsp;remove&amp;nbsp;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;');rm(ü)}},{cat('Workspace is empty.')})});sink(file=NULL);" &gt; /dev/null
+cat "$RDRAMDISK"/r_tmp | sed 's/\$/&lt;br&gt;&lt;font color=blue&gt;\$&lt;\/font&gt;/g'
+echo "&lt;/table&gt;"
+
+exit_show_html</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@w</string>
+	<key>name</key>
+	<string>Show Workspace</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>7536CA0C-A1ED-41B3-A82B-BF514A1C22A3</string>
+</dict>
+</plist>

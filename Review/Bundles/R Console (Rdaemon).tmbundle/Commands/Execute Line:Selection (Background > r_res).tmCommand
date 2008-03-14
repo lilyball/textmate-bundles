@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>B5A22967-2E6A-4B66-9C71-DA8762C01E27</string>
+	<key>command</key>
+	<string>######### global variables #########
+
+RDHOME="$HOME/Rdaemon"
+if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RDRAMDISK="/tmp/TMRramdisk1"
+else
+	RDRAMDISK="$HOME"/Rdaemon
+fi
+
+
+######### begin script #########
+
+#get R's PID
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
+#check whether Rdaemon runs
+test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
+
+#check free space on ram drive
+if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RES=$(df -H | grep TMRramdisk1 | awk '{ print $5 }' | perl -e 'print &lt;&gt;+0;')
+	if [ $RES -gt 96 ]; then
+		"$DIALOG" -e -p '{messageTitle="Rdaemon – RAM drive – Security Alert"; alertStyle="critical"; informativeText="Free disk space is less than 3%!\nFor safety reasons save your data image and restart the Rdaemon!";}' &gt;/dev/null
+		echo "RAM drive on '/tmp/TMRramdrive1':"
+		RES=$(df -H | grep TMRramdisk1 | awk '{ print $5 }')
+		echo -n " $RES are used of"
+		RES=$(df -H | grep TMRramdisk1 | awk '{ print $2 }')
+		echo -n " $RES."
+		exit 206
+	fi
+fi
+
+#get the task from TM and delete beginning &gt;+: SPACE TAB
+TASK=$(cat | sed -e 's/Browse\[.*\]//;s/^[&gt;+:] \{0,1\}//;s/	/    /g;s/\\/\\\\/g;')
+
+#check named input pipe for safety reasons
+if [ ! -p "$RDHOME"/r_in ]; then
+	echo -en "Rdaemon Error:\nThe pipe /tmp/r_in is not found!\n\nYou have to kill Rdaemon manually!"
+	exit 206
+fi
+
+#check if user wants to quit
+QTASK=$(echo -en "$TASK" | perl -pe 's/ *//g')
+if [ "$QTASK" == "q()" -o "$QTASK" == "quit()" ]; then
+	ANS=$("$DIALOG" -e -p "{messageTitle='Closing Rdaemon';informativeText='Save workspace image?';buttonTitles=('Save','Cancel','Don\'t Save');}")
+	if [ "$ANS" == "1" ]; then
+		echo -en "&gt; "
+		exit 204
+	else
+		if [ "$ANS" == "0" ]; then
+			echo -e "@|q()\n@|y\n" &gt; "$HOME/Rdaemon/r_in"
+		fi
+		if [ "$ANS" == "2" ]; then
+			echo -e "@|q()\n@|y\n" &gt; "$HOME/Rdaemon/r_in"
+		fi
+		if [ ! -e "$HOME"/Rdaemon/daemon/x11runs ]; then
+			osascript &lt;&lt;-AS &amp;&gt;/dev/null
+	 			ignoring application responses
+	 			tell application "X11" to quit
+	 			end ignoring
+			AS
+		fi
+		exit 200
+	fi
+fi
+
+#set history counter to 0
+echo -n 0 &gt; "$HOME/Rdaemon/history"/Rhistcounter.txt
+
+#send task to Rdaemon and give Rdaemon the chance to read from the pipe
+echo -e "@|sink('~/Rdaemon/r_res')"  &gt; "$RDHOME"/r_in
+#send task to Rdaemon
+if [ -z "$TM_SELECTED_TEXT" ]; then
+	echo -e "$TASK" &gt; "$RDHOME"/r_in
+else
+	echo -e "$TASK" | while read LINE
+	do
+		echo -e "$LINE" &gt; "$RDHOME"/r_in
+		sleep 0.002
+		echo "$LINE"
+	done|CocoaDialog progressbar --indeterminate --title "Rdaemon is busy ..."
+fi
+echo "@|sink(file=NULL)" &gt; ~/Rdaemon/r_in
+
+echo "Result is being written into 'r_res'"
+exit_show_tool_tip
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>$</string>
+	<key>name</key>
+	<string>Execute Line/Selection (Background &gt; r_res)</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>60C2BE95-B3D8-4BB4-ACBC-8638E8CEC58F</string>
+</dict>
+</plist>

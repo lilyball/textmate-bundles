@@ -2,7 +2,7 @@
 # yourself, but hopefully we could set it to $TM_SUPPORT/lib/tm_dialog_read.dylib 
 # when in production
 
-if [ ! $TM_DIALOG_READ_DYLIB ]
+if [ ! "$TM_DIALOG_READ_DYLIB" ]
 then
     echo "TM_DIALOG_READ_DYLIB not set"
     exit 1
@@ -35,7 +35,7 @@ function tm_dialog_read_dylib_isnt_inserted {
 }
 
 function insert_tm_dialog_read_dylib {
-    if [ $DYLD_INSERT_LIBRARIES ]
+    if [ "$DYLD_INSERT_LIBRARIES" ]
     then
         export DYLD_INSERT_LIBRARIES="$TM_DIALOG_READ_DYLIB:$DYLD_INSERT_LIBRARIES"
     else

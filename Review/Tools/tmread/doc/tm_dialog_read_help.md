@@ -29,7 +29,7 @@ For example ...
     export DYLD_FORCE_FLAT_NAMESPACE=
 
 	tm_read=/path/to/tm_dialog_read.dylib
-	if [ $DYLD_INSERT_LIBRARIES ]
+	if [ "$DYLD_INSERT_LIBRARIES" ]
 	then
 	    export DYLD_INSERT_LIBRARIES="$tm_read:$DYLD_INSERT_LIBRARIES"
 	else

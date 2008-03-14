@@ -267,7 +267,7 @@ char * create_string_from_tm_dialog_output(int tm_dialog) {
         output_buffer_length = output_buffer_length + 1;
     }
     
-    output_buffer[i] = '\0';
+    output_buffer[i-1] = '\0';
     
     #ifdef TM_DIALOG_READ_DEBUG
         fprintf(stderr, "create_string_from_tm_dialog_output(): %s\n", output_buffer);

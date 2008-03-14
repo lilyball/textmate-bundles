@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "R Console (R.app) Bundle Help" "R"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'MARKDOWN'
+
+# Introduction
+
+The "R Console (R.app)" bundle provides some commands to remote the Mac OSX GUI R.app using AppleScript.
+       
+# Commands
+
+-   __Send Selection / Document to R.app__
+
+    Executes the current document or selection in R.app and switches to R.app's Console.
+
+-   __Show Line Output as Tool Tip__
+
+    Executes the current line or selection in R.app and shows only the result as tooltip.
+    
+-   __Execute Line / Selection__
+
+    Executes the current line or selection in R.app and inserts the result into the current document.
+    
+-   __Copy Commands into Clipboard__
+
+    Parses the current document or selection for lines beginning with "&gt; " and pastes all found commands into the clipboard.
+    
+-   __Show History List__
+
+    Shows as inline menu all commands entered in the current document.
+
+-   __Next/Previous History Item__
+
+    Inserts the next/previous command found in the current document.
+
+   ***Notes***
+    &lt;blockquote&gt;
+    All commands specified within the "R" bundle can be used.
+    &lt;/blockquote&gt;
+    &lt;blockquote&gt;
+    If the "Rdaemon" also runs in the background and the library "CarbonEL" is loaded the communication between TextMate and R.app wont't work.
+    &lt;/blockquote&gt;
+
+
+# Main Bundle Maintainer
+
+***Date: Jan 09 2008***
+
+&lt;pre&gt;
+-  Charilaos Skiadas&amp;nbsp;&lt;a href="mailto:cskiadas@gmail.com"&gt;cskiadas@gmail.com&lt;/a&gt;
+-  Hans-Jörg Bibiko&amp;nbsp;&amp;nbsp;&lt;a href="mailto:bibiko@eva.mpg.de"&gt;bibiko@eva.mpg.de&lt;/a&gt;
+&lt;/pre&gt;
+
+MARKDOWN
+html_footer</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.rapp-console</string>
+	<key>uuid</key>
+	<string>CAEB703B-1D79-4D3A-90BB-2A2C2BD846F7</string>
+</dict>
+</plist>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>echo
+#test=`tail -c+2`
+test=$(cat)
+osascript &lt;&lt;-APPLESCRIPT | tail -n +2  | perl -pe 'BEGIN {$/=undef} s/&gt; $//;s/\n\z//'
+tell application "System Events"
+    -- Get a reference to the text field
+    set text_area to (process "R")'s (window "R Console")'s (scroll area 1)'s text area 1
+    
+    -- Get text before and after our command
+    set oldtext to text_area's value
+    tell application "R" to cmd "${test//\"/\"}" 
+    set newtext to text_area's value
+
+    -- Find the difference between old and new
+    text from (oldtext's length + 1) to -1 of newtext
+end tell
+APPLESCRIPT</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@T</string>
+	<key>name</key>
+	<string>Show Line Output as Tool Tip</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rapp-console</string>
+	<key>uuid</key>
+	<string>1A8EC6F7-D254-4888-9095-75C9DBA519F7</string>
+</dict>
+</plist>

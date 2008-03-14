@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/ruby
+require ENV['TM_BUNDLE_SUPPORT'] + "/lib/historyList.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/ui.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes.rb"
+require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb"
+doc = STDIN.read
+list = HistoryList.new(doc)
+choice = TextMate::UI.menu(list.list)
+TextMate.exit_discard if choice.nil?
+print e_sn(list.add_line(list.list[choice]))</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~</string>
+	<key>name</key>
+	<string>Show History List</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.rapp-console</string>
+	<key>uuid</key>
+	<string>613CDD87-1F8B-484E-B741-74B95F3C878B</string>
+</dict>
+</plist>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># input is selection or document
+rawText="`cat`"
+
+curDir=''
+if [[ ${#TM_DIRECTORY} -gt 0 ]]; then
+	curDir="$TM_DIRECTORY"
+fi
+
+osascript -e 'on run(theCode)' \
+		  -e 'tell application "R" to activate' \
+		  -e 'if (item 2 of theCode) is not "" then tell application "R" to cmd "setwd('\''" &amp; (item 2 of theCode) &amp; "'\'')"' \
+		  -e 'tell application "R" to cmd (item 1 of theCode)' \
+		  -e 'end run' -- "$rawText" "$curDir"
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@R</string>
+	<key>name</key>
+	<string>Send Selection / Document to R.app</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rapp-console</string>
+	<key>uuid</key>
+	<string>B2E62E8B-6E70-11D9-A369-000D93B3A10E</string>
+</dict>
+</plist>

@@ -453,9 +453,9 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
         
         int tm_dialog_return_code;
         wait(&tm_dialog_return_code);
-        if (tm_dialog_return_code) {
+        if (WEXITSTATUS(tm_dialog_return_code) != 0) {
             char error[ERROR_BUFFER_SIZE];
-            snprintf(error, ERROR_BUFFER_SIZE, "tm_dialog returned with code %d, output: %s", tm_dialog_return_code, tm_dialog_output);
+            snprintf(error, ERROR_BUFFER_SIZE, "tm_dialog returned with code %d, output: %s", WEXITSTATUS(tm_dialog_return_code), tm_dialog_output);
             die(error);
         }
 

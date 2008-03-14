@@ -192,10 +192,11 @@ char * get_tm_dialog_input() {
     if (parameters_data == NULL) die("failed to extract data from parameters property list stream");
     
     CFIndex data_length = CFDataGetLength(parameters_data);
-    char *parameters_chars = malloc(data_length);
+    char *parameters_chars = malloc(data_length + 1);
     if (parameters_chars == NULL) die("failed to allocate char buffer for parameters property list");
     
     CFDataGetBytes(parameters_data, CFRangeMake(0, data_length), (UInt8 *)parameters_chars);
+    parameters_chars[data_length] = '\0';
     CFRelease(parameters_data);
     
     #ifdef TM_DIALOG_READ_DEBUG

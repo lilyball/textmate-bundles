@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dir=`dirname "$0"`
+dir="$(dirname "$0")"
 build="$dir/build"
 src="$dir/src"
 

@@ -6,7 +6,7 @@
 # The reason for the begin/rescue is that read_nonblock errors if it gets EOF
 # which it will.
 
-. `dirname $0`/setup.sh
+. "$(dirname "$0")/setup.sh"
 tm_dialog_read_init -t "Ruby Test"
 ruby -e "
 begin 

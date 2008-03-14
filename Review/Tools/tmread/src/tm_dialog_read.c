@@ -506,3 +506,11 @@ ssize_t read(int d, void *buffer, size_t buffer_length) {
     
     return (bytes_read > 0) ? bytes_read : tm_dialog_read(buffer, buffer_length);
 }
+
+ssize_t	read_unix2003(int d, void *buffer, size_t buffer_length) {
+	return read(d, buffer, buffer_length);
+}
+
+ssize_t read_nocancel_unix2003(int d, void *buffer, size_t buffer_length) {
+	return read(d, buffer, buffer_length);	
+}

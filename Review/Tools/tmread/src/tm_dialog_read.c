@@ -470,6 +470,7 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
 
         return bytes_read;
     }
+    return 0; // avoid compiler warning about not returning a result
 }
 
 /**
@@ -502,7 +503,7 @@ ssize_t read(int d, void *buffer, size_t buffer_length) {
 
     if (bytes_read < 0) {
         char error[ERROR_BUFFER_SIZE];
-        snprintf(error, ERROR_BUFFER_SIZE, "read syscall produced error: '%s'", bytes_read, strerror(errno));
+        snprintf(error, ERROR_BUFFER_SIZE, "read syscall produced error: '%s' (%zd bytes read)", strerror(errno), bytes_read);
         die(error);
     }
  

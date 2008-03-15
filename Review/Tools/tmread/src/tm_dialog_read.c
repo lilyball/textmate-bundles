@@ -117,7 +117,7 @@ void die(char *msg) {
  */
 void add_key_value_to_dictionary(CFMutableDictionaryRef dictionary, char* key, char* value) {
  
-    CFStringRef cf_key = CFStringCreateWithCString(kCFAllocatorDefault, key, kCFStringEncodingMacRoman);
+    CFStringRef cf_key = CFStringCreateWithCString(kCFAllocatorDefault, key, kCFStringEncodingUTF8);
     if (cf_key == NULL) {
         char error[ERROR_BUFFER_SIZE];
         snprintf(error, ERROR_BUFFER_SIZE, "failed to create CFStringRef from '%s'", key);
@@ -181,7 +181,7 @@ char * get_tm_dialog_input() {
  
         char error_as_chars[ERROR_BUFFER_SIZE];
  
-        if (!CFStringGetCString(error, error_as_chars, ERROR_BUFFER_SIZE, kCFStringEncodingMacRoman)) {
+        if (!CFStringGetCString(error, error_as_chars, ERROR_BUFFER_SIZE, kCFStringEncodingUTF8)) {
             die("converting tm_dialog_output to property list failed, and so did trying to get the failure message");
         } else {
             die("something went wrong writing the parameters property list to the stream, and we couldn't get the actual error");
@@ -309,7 +309,7 @@ CFPropertyListRef create_plist_from_tm_dialog_output_string(char *tm_dialog_outp
  
         char error_as_chars[ERROR_BUFFER_SIZE];
  
-        if (!CFStringGetCString(error, error_as_chars, ERROR_BUFFER_SIZE, kCFStringEncodingMacRoman)) {
+        if (!CFStringGetCString(error, error_as_chars, ERROR_BUFFER_SIZE, kCFStringEncodingUTF8)) {
             die("converting tm_dialog_output to property list failed, and so did trying to get the failure message");
         }
  
@@ -339,7 +339,7 @@ ssize_t copy_input_from_plist_into_buffer(CFPropertyListRef plist, char *buffer,
     if (CFGetTypeID(plist) != CFDictionaryGetTypeID())
         die("get_return_argument_element_from_plist(): root element of plist is not dictionary");
  
-    CFStringRef results_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_RESULT_KEY, kCFStringEncodingMacRoman);
+    CFStringRef results_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_RESULT_KEY, kCFStringEncodingUTF8);
     CFDictionaryRef results;
  
     bool has_results = CFDictionaryGetValueIfPresent(plist, results_key, (void *)&results);
@@ -355,7 +355,7 @@ ssize_t copy_input_from_plist_into_buffer(CFPropertyListRef plist, char *buffer,
     if (CFGetTypeID(results) != CFDictionaryGetTypeID())
         die("results entry of output is not a dictionary");
  
-    CFStringRef return_argument_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_RETURN_ARGUMENT_KEY, kCFStringEncodingMacRoman);
+    CFStringRef return_argument_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_RETURN_ARGUMENT_KEY, kCFStringEncodingUTF8);
     CFStringRef return_argument;
  
     if (!CFDictionaryGetValueIfPresent(results, return_argument_key, (void *)&return_argument))

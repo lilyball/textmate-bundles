@@ -7,11 +7,10 @@
 # which it will.
 
 . "$(dirname "$0")/setup.sh"
-tm_dialog_read_init -t "Ruby Test"
-ruby -e "
+tm_dialog_read_exec -t "Ruby Test" -e "ruby -e '
 begin 
     puts STDIN.read_nonblock(1)
 rescue
-    puts 'non blocking read done'
-end"
+    puts \"non blocking read done\"
+end'"
 

@@ -28,13 +28,13 @@ For example ...
     
     export DYLD_FORCE_FLAT_NAMESPACE=
 
-	tm_read=/path/to/tm_dialog_read.dylib
-	if [ "$DYLD_INSERT_LIBRARIES" ]
-	then
-	    export DYLD_INSERT_LIBRARIES="$tm_read:$DYLD_INSERT_LIBRARIES"
-	else
-	    export DYLD_INSERT_LIBRARIES="$tm_read"
-	fi
+    tm_read=/path/to/tm_dialog_read.dylib
+    if [ "$DYLD_INSERT_LIBRARIES" ]
+    then
+        export DYLD_INSERT_LIBRARIES="$tm_read:$DYLD_INSERT_LIBRARIES"
+    else
+        export DYLD_INSERT_LIBRARIES="$tm_read"
+    fi
      
     groovy somescript.groovy
 
@@ -69,13 +69,13 @@ There are environment variables you can set to customise the window title, promp
 
 #### Bash Function
 
-A bash function is provided to initialize the environment  ...
+A bash function is provided to launch a process that you want to use tm\_dialog_read  ...
 
-*Note here about where the tm_dialog_read_init.sh file lives*
-	
-	tm_dialog_read_init -n MyNib -p "My Prompt" -t "My Title" -s "My Default String"
+*Note here about where the tm_dialog_read.sh file lives*
+    
+    tm_dialog_read_exec -n MyNib -p "My Prompt" -t "My Title" -s "My Default String" -e somescript.sh
 
-All arguments are optional.
+The `-n`, `-p`, `-t` and `-s` switches are optional. The `-e` switch is mandatory and that argument to it is the command that will be executed with the correct environment to use tm\_dialog_read.
 
 #### Ruby Method
 
@@ -83,7 +83,10 @@ A ruby method is also provided ...
 
 *Note here about where the tm_dialog_read.rb file lives*
 
-	TextMate::DialogRead.init :nib => MyNib, :prompt => "My Prompt", :title => "My Title", :string => "My Default String"
+    TextMate::DialogRead.use :title => "Title", :prompt => "Prompt", :string => "String", :nib => "RequestString" do 
+      # Open Process Here
+    end
+    
 
 All arguments are optional.
 
@@ -91,7 +94,7 @@ All arguments are optional.
 
 To get the maximum benefit from this, you should consider the output buffering of the process that is utilising tm\_dialog_read. A common idiom is for scripts/processes to do something like the following:
 
-	Please enter something: *
+    Please enter something: *
 
 Where the `*` is the cursor position (when running on the command line).
 

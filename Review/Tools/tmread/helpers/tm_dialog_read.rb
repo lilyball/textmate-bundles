@@ -1,32 +1,42 @@
 module TextMate
   module DialogRead
     
-    @lib = ENV['TM_DIALOG_READ_DYLIB']
+    @lib = ENV['TM_DIALOG_READ_DYLIB'] # ENV['TM_SUPPORT_PATH'] + '/lib/tm_dialog_read.dylib'
     raise "'TM_DIALOG_READ_DYLIB' env var is not set" unless @lib
+
+    @switches_and_envars = {
+      :nib => 'DIALOG_NIB',
+      :title => 'DIALOG_TITLE',
+      :prompt => 'DIALOG_PROMPT',
+      :string => 'DIALOG_STRING'
+    }
     
-    # @lib = ENV['TM_SUPPORT_PATH'] + '/lib/tm_dialog_read'
+    @affected_env_vars = ['DYLD_INSERT_LIBRARIES', 'DYLD_FORCE_FLAT_NAMESPACE'] + @switches_and_envars.values
     
     class << self
-      def init(settings)
-        ENV['DIALOG_PROMPT'] = (settings.has_key? :prompt) ? settings[:prompt] : nil
-        ENV['DIALOG_TITLE'] = (settings.has_key? :title) ? settings[:title] : nil
-        ENV['DIALOG_STRING'] = (settings.has_key? :string) ? settings[:string] : nil
-        ENV['DIALOG_NIB'] = (settings.has_key? :nib) ? settings[:nib] : nil
-        insert unless inserted?
-      end
-    
-      def inserted? 
-          ENV['DYLD_INSERT_LIBRARIES'] =~ /$lib/
-      end
+      def use(settings, &block)
 
-      def insert
-        if ENV['DYLD_INSERT_LIBRARIES']
-            ENV['DYLD_INSERT_LIBRARIES'] = "#{@lib}" + ':' + ENV['DYLD_INSERT_LIBRARIES']
-        else
-            ENV['DYLD_INSERT_LIBRARIES'] = "#{@lib}"
-        end
+        prev_envs = {}
+        
+        @affected_env_vars.each { |v| prev_envs[v] = ENV[v] if ENV.has_key? v }
+        @switches_and_envars.each { |s,e| ENV[e] = settings[s] if settings.has_key? s }
+        
+        dil = ENV['DYLD_INSERT_LIBRARIES']
+        ENV['DYLD_INSERT_LIBRARIES'] = (dil) ? "#{@lib}:#{dil}" : @lib unless (dil =~ /#{@lib}/)
         ENV['DYLD_FORCE_FLAT_NAMESPACE'] = "1"
+        
+        block.call
+        
+        @affected_env_vars.each do |v| 
+          if prev_envs.has_key? v
+            ENV[v] = prev_envs[v]
+          else
+            ENV.delete(v)
+          end
+        end
+        
       end
     end
+    
   end
 end

@@ -10,38 +10,33 @@ fi
 
 #TM_DIALOG_READ_DYLIB="$TM_SUPPORT_PATH/lib/tm_dialog_read.dylib" 
 
-function tm_dialog_read_init {
+function tm_dialog_read_exec {
 
-    while getopts "n:t:p:s:" optionName; do
+    nib=
+    title=
+    prompt=
+    string=
+
+    while getopts "n:t:p:s:e:" optionName; do
         case "$optionName" in
-            n) export DIALOG_NIB="$OPTARG";;
-            t) export DIALOG_TITLE="$OPTARG";;
-            p) export DIALOG_PROMPT="$OPTARG";;
-            s) export DIALOG_STRING="$OPTARG";;
+            n) nib="$OPTARG";;
+            t) title="$OPTARG";;
+            p) prompt="$OPTARG";;
+            s) string="$OPTARG";;
+            e) exec="$OPTARG";;
             [?]) exit 1;;
         esac
     done
     
-    if tm_dialog_read_dylib_isnt_inserted
+    if [ "$exec" ]
     then
-        insert_tm_dialog_read_dylib
-    fi
-}
-
-function tm_dialog_read_dylib_isnt_inserted {
-    expr "$DYLD_INSERT_LIBRARIES" : ".*$TM_DIALOG_READ_DYLIB.*" > /dev/null
-    [ $? -ne 0 ]
-    return $?
-}
-
-function insert_tm_dialog_read_dylib {
-    if [ "$DYLD_INSERT_LIBRARIES" ]
-    then
-        export DYLD_INSERT_LIBRARIES="$TM_DIALOG_READ_DYLIB:$DYLD_INSERT_LIBRARIES"
+        DIALOG_NIB="$nib" DIALOG_TITLE="$title" DIALOG_PROMPT="$prompt" DIALOG_STRING="$string" \
+        DYLD_INSERT_LIBRARIES="$TM_DIALOG_READ_DYLIB${DYLD_INSERT_LIBRARIES:+:$DYLD_INSERT_LIBRARIES}" \
+        DYLD_FORCE_FLAT_NAMESPACE=1 \
+        eval "$exec"
     else
-        export DYLD_INSERT_LIBRARIES="$TM_DIALOG_READ_DYLIB"
+        echo "tm_dialog_read_exec(): -e is required"
+        exit 1
     fi
-    export DYLD_FORCE_FLAT_NAMESPACE=
-    
-    return 0
+
 }

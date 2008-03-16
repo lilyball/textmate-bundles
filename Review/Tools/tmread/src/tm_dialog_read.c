@@ -86,20 +86,12 @@
 #define DIALOG_RETURN_ARGUMENT_KEY "returnArgument"
 #endif
 
-#ifndef TM_DIALOG_PROCESS_NAME
-#define TM_DIALOG_PROCESS_NAME "tm_dialog"
-#endif
-
 #ifndef TM_DIALOG_OUTPUT_CHUNK_SIZE
 #define TM_DIALOG_OUTPUT_CHUNK_SIZE 1024
 #endif
 
 #ifndef ERROR_BUFFER_SIZE
 #define ERROR_BUFFER_SIZE 4096
-#endif
-
-#ifndef PROCESS_NAME_BUFFER_SIZE
-#define PROCESS_NAME_BUFFER_SIZE 1024
 #endif
 
 /**
@@ -338,9 +330,10 @@ ssize_t copy_input_from_plist_into_buffer(CFPropertyListRef plist, char *buffer,
  
     if (CFGetTypeID(plist) != CFDictionaryGetTypeID())
         die("get_return_argument_element_from_plist(): root element of plist is not dictionary");
- 
-    CFStringRef results_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_RESULT_KEY, kCFStringEncodingUTF8);
+     
     CFDictionaryRef results;
+    CFStringRef results_key = CFSTR(DIALOG_RESULT_KEY);
+    if (results_key == NULL) die("failed to create CFStringRef for dialog result key");
  
     bool has_results = CFDictionaryGetValueIfPresent(plist, results_key, (void *)&results);
     CFRelease(results_key);
@@ -355,7 +348,9 @@ ssize_t copy_input_from_plist_into_buffer(CFPropertyListRef plist, char *buffer,
     if (CFGetTypeID(results) != CFDictionaryGetTypeID())
         die("results entry of output is not a dictionary");
  
-    CFStringRef return_argument_key = CFStringCreateWithCString(kCFAllocatorDefault, DIALOG_RETURN_ARGUMENT_KEY, kCFStringEncodingUTF8);
+    CFStringRef return_argument_key = CFSTR(DIALOG_RETURN_ARGUMENT_KEY);
+    if (return_argument_key == NULL) die("failed to create CFStringRef for return_argument_key");
+   
     CFStringRef return_argument;
  
     if (!CFDictionaryGetValueIfPresent(results, return_argument_key, (void *)&return_argument))
@@ -377,7 +372,7 @@ ssize_t copy_input_from_plist_into_buffer(CFPropertyListRef plist, char *buffer,
     copy_range.location = 0;
     copy_range.length = (return_argument_length > buffer_length) ? buffer_length : return_argument_length;
  
-    if (0 == CFStringGetBytes(return_argument, copy_range, kCFStringEncodingUTF8, 0, false, (UInt8 *)buffer, buffer_length, &copy_count)) {
+    if (CFStringGetBytes(return_argument, copy_range, kCFStringEncodingUTF8, 0, false, (UInt8 *)buffer, buffer_length, &copy_count) == 0) {
         die("failed to copy return argument into buffer");
     }
  

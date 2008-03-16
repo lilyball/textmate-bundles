@@ -119,11 +119,26 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;&lt;[+-](.*)</string>
+			<string>&lt;&lt;[+](.*)</string>
 			<key>end</key>
 			<string>\1</string>
 			<key>name</key>
-			<string>string.unquoted.heredoc.nu</string>
+			<string>string.heredoc.escaped.nu</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escaped_char</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>&lt;&lt;[-](.*)</string>
+			<key>end</key>
+			<string>\1</string>
+			<key>name</key>
+			<string>string.heredoc.unescaped.nu</string>
 		</dict>
 		<dict>
 			<key>begin</key>

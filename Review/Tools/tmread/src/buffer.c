@@ -48,17 +48,19 @@ buffer_t* create_buffer_with(char* bytes, size_t len) {
  */
 buffer_t * create_buffer_from_file_descriptor(int fd) {
  
-    char *intermediary_buffer = malloc(READ_BLOCK_SIZE);
-    if (intermediary_buffer == NULL) die("failed to allocate itermediary buffer for tm_dialog output");
+    char intermediary_buffer[READ_BLOCK_SIZE];
     buffer_t *buffer = create_buffer();
      
-    size_t bytes_read = syscall(SYS_read, fd, intermediary_buffer, READ_BLOCK_SIZE);
-    D("create_buffer_from_file_descriptor(): got %d bytes from fd\n", (int)bytes_read);
-    while (bytes_read > 0) {
-        add_to_buffer(buffer, intermediary_buffer, bytes_read);
-        bytes_read = syscall(SYS_read, fd, intermediary_buffer, READ_BLOCK_SIZE);
-        D("create_buffer_from_file_descriptor(): got %d bytes from fd\n", (int)bytes_read);
-    }
+    ssize_t bytes_read;
+    do {
+
+        bytes_read = syscall(SYS_read, fd, intermediary_buffer, sizeof(intermediary_buffer));
+        D("create_buffer_from_file_descriptor(): got %zd bytes from fd\n", bytes_read);
+        if (bytes_read > 0) {
+            add_to_buffer(buffer, intermediary_buffer, bytes_read);
+        }
+
+    } while(bytes_read > 0);
 
     return buffer;
 }

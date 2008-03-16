@@ -4,6 +4,6 @@ ENV['TM_DIALOG_READ_DYLIB'] = File.dirname(__FILE__) + "/../build/tm_dialog_read
 require "../helpers/tm_dialog_read"
 require ENV['TM_SUPPORT_PATH'] + "/lib/scriptmate"
 
-TextMate::DialogRead.use :title => "Title", :prompt => "Prompt", :string => "String", :nib => "RequestSecureString" do 
+TextMate::DialogRead.use "Ruby Helper Test" do 
   my_popen3('ruby -e "puts gets"')
 end

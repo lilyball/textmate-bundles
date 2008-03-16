@@ -12,25 +12,12 @@ fi
 
 function tm_dialog_read_exec {
 
-    nib=
-    title=
-    prompt=
-    string=
-
-    while getopts "n:t:p:s:e:" optionName; do
-        case "$optionName" in
-            n) nib="$OPTARG";;
-            t) title="$OPTARG";;
-            p) prompt="$OPTARG";;
-            s) string="$OPTARG";;
-            e) exec="$OPTARG";;
-            [?]) exit 1;;
-        esac
-    done
+    exec="$1"
+    title="$2"
     
     if [ "$exec" ]
     then
-        DIALOG_NIB="$nib" DIALOG_TITLE="$title" DIALOG_PROMPT="$prompt" DIALOG_STRING="$string" \
+        DIALOG_TITLE="$title" \
         DYLD_INSERT_LIBRARIES="$TM_DIALOG_READ_DYLIB${DYLD_INSERT_LIBRARIES:+:$DYLD_INSERT_LIBRARIES}" \
         DYLD_FORCE_FLAT_NAMESPACE=1 \
         eval "$exec"

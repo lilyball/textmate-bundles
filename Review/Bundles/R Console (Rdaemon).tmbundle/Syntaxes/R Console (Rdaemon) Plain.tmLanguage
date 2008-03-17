@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>Rcon</string>
+	</array>
+	<key>keyEquivalent</key>
+	<string>^~R</string>
+	<key>name</key>
+	<string>R Console (Rdaemon) Plain</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>(?i)^(error|erreur|fehler|errore|erro)( |:)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>constant.rd.console.error</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(.*)(?=&gt; )</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.embedded.rd.console</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>markup.quote.rd.console.error</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^(Warning|Warning messages?|Message d.avis|Warnmeldung|Messaggio di avvertimento|Mensagem de aviso):</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.rd.console.warning</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>.*(?=&gt; )</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.embedded.rd.console</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>storage.type.method.rd.console.warning</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^[&gt;+:] </string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.embedded.rd.console</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\n\z</string>
+			<key>name</key>
+			<string>source.rd.console.prompt</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.r</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^Browse\[\d+\]</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>comment.embedded.rd.console</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\n\z</string>
+			<key>name</key>
+			<string>source.rd.console.prompt</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.r</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^(?&lt;![&gt;+:])</string>
+			<key>end</key>
+			<string>\n</string>
+			<key>name</key>
+			<string>source.r.embedded</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.rd.console.plain</string>
+	<key>uuid</key>
+	<string>CB39EEE4-89EC-4ADE-8316-BC825F1CE056</string>
+</dict>
+</plist>

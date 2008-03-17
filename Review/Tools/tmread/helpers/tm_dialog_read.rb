@@ -4,7 +4,7 @@ module TextMate
     @lib = ENV['TM_DIALOG_READ_DYLIB'] # ENV['TM_SUPPORT_PATH'] + '/lib/tm_dialog_read.dylib'
     raise "'TM_DIALOG_READ_DYLIB' env var is not set" unless @lib
     
-    @affected_env_vars = ['DYLD_INSERT_LIBRARIES', 'DYLD_FORCE_FLAT_NAMESPACE', 'DIALOG_TITLE']
+    @affected_env_vars = ['DYLD_INSERT_LIBRARIES', 'DYLD_FORCE_FLAT_NAMESPACE', 'DIALOG_TITLE', 'DIALOG']
     
     class << self
       def use(title, &block)
@@ -17,6 +17,7 @@ module TextMate
         ENV['DYLD_INSERT_LIBRARIES'] = (dil) ? "#{@lib}:#{dil}" : @lib unless (dil =~ /#{@lib}/)
         ENV['DYLD_FORCE_FLAT_NAMESPACE'] = "1"
         ENV['DIALOG_TITLE'] = title if title
+        ENV['DIALOG'] = ENV['DIALOG_1'] if ENV.has_key? 'DIALOG_1'
         
         block.call
         

@@ -5,8 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>echo
-cat | R --slave</string>
+	<string>if [ -z "$TM_SELECTED_TEXT" ]; then
+	echo
+	cat | R --slave
+else
+	cat | R --slave
+	exit_replace_text
+fi</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

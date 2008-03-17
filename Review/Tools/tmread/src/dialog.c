@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <unistd.h>
+#include <ctype.h>
 
 #ifndef DIALOG_ENV_VAR
 #define DIALOG_ENV_VAR "DIALOG"
@@ -49,6 +50,16 @@
 #define DIALOG_RETURN_ARGUMENT_KEY "returnArgument"
 #endif
 
+#ifndef PROMPT_SIZE
+#define PROMPT_SIZE 64
+#endif
+
+#ifndef FALLBACK_PROMPT
+#define FALLBACK_PROMPT "The processing is requesting input:"
+#endif
+
+static char prompt[PROMPT_SIZE];
+
 /**
  * Constructs the input parameters for tm_dialog.
  * 
@@ -66,6 +77,10 @@ CFDictionaryRef create_input_dictionary() {
         CFDictionaryAddValue(parameters, cf_title_key, cf_title);
         CFRelease(cf_title);
     }
+    
+    CFStringRef dialog_prompt = cstr_2_cfstr((strlen(prompt) == 0) ? FALLBACK_PROMPT : prompt);
+    CFDictionaryAddValue(parameters, CFSTR("prompt"), dialog_prompt);
+    CFRelease(dialog_prompt);
 
     CFDictionaryAddValue(parameters, CFSTR(DIALOG_BUTTON_1_KEY), CFSTR(DIALOG_BUTTON_1));
     CFDictionaryAddValue(parameters, CFSTR(DIALOG_BUTTON_2_KEY), CFSTR(DIALOG_BUTTON_2));
@@ -256,4 +271,37 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
     size_t bytes_read = get_user_input_from_output(output_buffer, buffer, buffer_length);
     destroy_buffer(output_buffer);
     return bytes_read;
- }
+}
+
+void capture_for_prompt(const void *buffer, size_t buffer_length) {
+    char storage[PROMPT_SIZE];
+    char *cbuffer = (char *)buffer;
+
+    D("capture_for_prompt(): buffer_length = %d\n", (int)buffer_length);
+    
+    // Scan back past any white space.
+    ssize_t i;
+    for (i = buffer_length; i >= 0 && isspace(cbuffer[i - 1]); --i);
+    D("capture_for_prompt(): i after scanning backwards past space = %d\n", (int)i);
+    
+    // Whole line was space
+    if (i < 0) return;
+    
+    size_t x;
+    for (x = 0; (x < (PROMPT_SIZE - 1)) && i > 0; ++x) {
+        char c = cbuffer[--i];
+        if (c == '\n') break;
+        storage[x] = c;
+    }
+    D("capture_for_prompt(): reverse storage has %i bytes\n", (int)x + 1);
+    
+    --x;
+    size_t z;
+    for (z = 0; z <= x; ++z) {
+        prompt[z] = storage[x - z];  
+    }
+    D("capture_for_prompt(): copied %i bytes from storage\n", (int)z + 1);
+    prompt[z] = '\0';
+    
+    D("capture_for_prompt(): prompt = '%s'\n", prompt);
+}

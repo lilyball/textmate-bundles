@@ -18,6 +18,7 @@ gcc -dynamiclib -Wmost -Os -fno-common \
  -mmacosx-version-min=10.4 \
  -isysroot /Developer/SDKs/MacOSX10.4u.sdk \
  "$src/read.c" \
+ "$src/write.c" \
  "$src/die.c" \
  "$src/buffer.c" \
  "$src/stringutil.c" \

@@ -32,5 +32,5 @@ OUT=$(cat "$RDRAMDISK/r_tmp")
 if [ "${#OUT}" -gt "30" ]; then
 	echo "$OUT" | sed 's/^\[1\] "//;s/"$//'
 else
-	echo "No Graphic Devices found." && exit 206
+	echo "<small>No Graphic Devices found or press 'Refresh'.</small>"
 fi

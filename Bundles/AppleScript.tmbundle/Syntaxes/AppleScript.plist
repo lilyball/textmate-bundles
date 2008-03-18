@@ -21,7 +21,7 @@
 		|with \s+ timeout .*
 		|script\b .*
 		|( considering | ignoring )\b .*
-		)\s*$
+		)\s*(--.*?)?$
 	</string>
 	<key>foldingStopMarker</key>
 	<string>^\s*end\b.*$</string>
@@ -306,6 +306,18 @@
 					<string>\b\d+((\.(\d+\b)?)?(?i:e\+?\d*\b)?|\b)</string>
 					<key>name</key>
 					<string>constant.numeric.applescript</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>variable.other.applescript</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?&lt;=set[ \t])\s*([_a-zA-Z][_a-zA-Z0-9]*)\s*(?=[ \t]+to)</string>
 				</dict>
 			</array>
 		</dict>

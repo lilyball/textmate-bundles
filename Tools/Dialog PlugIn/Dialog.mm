@@ -446,8 +446,11 @@ static int sNextWindowControllerToken = 1;
 	{
 		NSConnection* connection = [NSConnection new];
 		[connection setRootObject:self];
-		if([connection registerName:@"TextMate dialog server"] == NO)
-			NSLog(@"couldn't setup TextMate dialog server."), NSBeep();
+
+		NSString* portName = [NSString stringWithFormat:@"%@.%d", @"com.macromates.dialog_1", getpid()];
+		if([connection registerName:portName] == NO)
+			NSLog(@"couldn't setup port: ", portName), NSBeep();
+		setenv("DIALOG_1_PORT_NAME", [portName UTF8String], 1);
 
 		if(NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tm_dialog" ofType:nil]) {
 			if (!getenv("DIALOG"))

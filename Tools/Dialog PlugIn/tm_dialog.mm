@@ -87,7 +87,11 @@ bool validate_proxy (id & outProxy)
 	// (during the very short life of an instance of this tool)
 	if(not proxyValid)
 	{
-		proxy = [NSConnection rootProxyForConnectionWithRegisteredName:@"TextMate dialog server" host:nil];
+		NSString* portName = @"TextMate dialog server";
+		if(char const* var = getenv("DIALOG_1_PORT_NAME"))
+			portName = [NSString stringWithUTF8String:var];
+
+		proxy = [NSConnection rootProxyForConnectionWithRegisteredName:portName host:nil];
 		[proxy setProtocolForProxy:@protocol(TextMateDialogServerProtocol)];
 
 		if([proxy textMateDialogServerProtocolVersion] == TextMateDialogServerProtocolVersion)

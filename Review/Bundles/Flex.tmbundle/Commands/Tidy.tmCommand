@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -19,8 +19,22 @@ out = `tidy -iq -utf8 \
           --indent-attributes yes \
           --tidy-mark no`
 
-print out
-</string>
+# Manually add white space between components, with the following limitations:
+# Comments containing &gt; grow as tidy skips them.
+# Last match adds 2 newlines.
+
+out.each_with_index { |line, i|  
+    if i &gt; 0
+        print line.sub( /&gt;(\s+)?\n/, "&gt;\n\n" )
+    else
+        print line
+    end
+}
+
+#Ruby 1.8 doesn't have look-behind... otherwise we could use this.
+# out.each do | line |
+#   print line.sub( /(?&lt;!\?)&gt;(\s+)?\n/, "&gt;\n\n" )
+# end</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

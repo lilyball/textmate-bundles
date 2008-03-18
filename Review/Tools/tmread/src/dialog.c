@@ -180,7 +180,7 @@ void open_tm_dialog(int in[], int out[]) {
     unsetenv("DYLD_INSERT_LIBRARIES");
     unsetenv("DYLD_FORCE_FLAT_NAMESPACE");
 
-    if (execl(get_path(), "-q", get_nib(), NULL) < 0) 
+    if (execl(get_path(), get_path(), "-q", get_nib(), NULL) < 0) 
         die("execl() failed, %s", strerror(errno));
 }
 

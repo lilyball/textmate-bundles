@@ -461,6 +461,133 @@
 				</dict>
 			</array>
 		</dict>
+		<key>groovy-plugin</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(&lt;)(artifactId)(&gt;)(groovy-maven-plugin)(&lt;/)(artifactId)(&gt;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>meta.groovy-plugin.identifier.xml.pom</string>
+						</dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.pom</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.pom</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.pom</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>meta.plugin-id.xml.pom</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.pom</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.pom</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.pom</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=&lt;/plugin&gt;)</string>
+					<key>name</key>
+					<string>meta.plugin.groovy-plugin.xml.pom</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(&lt;)(source)(&gt;)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.plugin.begin.xml.pom</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.pom</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.xml.pom</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.pom</string>
+								</dict>
+							</dict>
+							<key>contentName</key>
+							<string>source.groovy</string>
+							<key>end</key>
+							<string>(&lt;/)(source)(&gt;)</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.plugin.end.xml.pom</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.pom</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.xml.pom</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.pom</string>
+								</dict>
+							</dict>
+							<key>name</key>
+							<string>meta.source.groovy.xml.pom</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>source.groovy</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>text.xml</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>plugin</key>
 		<dict>
 			<key>patterns</key>
@@ -520,6 +647,10 @@
 					<string>meta.plugin.xml.pom</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#groovy-plugin</string>
+						</dict>
 						<dict>
 							<key>begin</key>
 							<string>(?&lt;=&lt;artifactId&gt;)</string>

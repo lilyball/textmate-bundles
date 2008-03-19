@@ -734,7 +734,7 @@ meta.brace.round</string>
 			<key>name</key>
 			<string>™ Keyword Operator</string>
 			<key>scope</key>
-			<string>keyword.operator, declaration.function.operator, meta.preprocessor.c.include</string>
+			<string>keyword.operator, declaration.function.operator, meta.preprocessor.c.include, punctuation.separator.operator</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -1196,19 +1196,6 @@ meta.brace.round</string>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>§ Attribute-Match</string>
-			<key>scope</key>
-			<string>meta.attribute-match.css</string>
-			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#00008033</string>
-				<key>foreground</key>
-				<string>#0008FF</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>§ Pseudo-Element</string>
 			<key>scope</key>
 			<string>entity.other.attribute-name.pseudo-element</string>
@@ -1275,6 +1262,28 @@ meta.brace.round</string>
 				<string>bold</string>
 				<key>foreground</key>
 				<string>#FF7900</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>§ Attribute</string>
+			<key>scope</key>
+			<string>entity.other.attribute-name.attribute.css</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#C25A00</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>§ Attribute-Match</string>
+			<key>scope</key>
+			<string>meta.attribute-match.css, punctuation.separator.operator.css</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#813C00</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2218,7 +2227,7 @@ source.ocaml punctuation.separator.match-definition
 			<key>name</key>
 			<string>Function Punctuation</string>
 			<key>scope</key>
-			<string>punctuation.separator.parameters.function.js,punctuation.definition.function, punctuation.separator.function-return, punctuation.separator.function-definition</string>
+			<string>punctuation.separator.parameters.function.js,punctuation.definition.function, punctuation.separator.function-return, punctuation.separator.function-definition, punctuation.definition.arguments, punctuation.separator.arguments</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>

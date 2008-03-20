@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>comment</key>
-	<string></string>
+	<string>CSS loves you!</string>
 	<key>fileTypes</key>
 	<array>
 		<string>css</string>
@@ -18,25 +18,6 @@
 	<string>CSS</string>
 	<key>patterns</key>
 	<array>
-		<dict>
-			<key>begin</key>
-			<string>((?&lt;=\})|^)(?=\s*[:.*#a-zA-Z])</string>
-			<key>end</key>
-			<string>(?=\{)</string>
-			<key>name</key>
-			<string>meta.selector.css</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#comment-block</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#source_css_selectors</string>
-				</dict>
-			</array>
-		</dict>
 		<dict>
 			<key>include</key>
 			<string>#comment-block</string>
@@ -135,7 +116,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\s*((?=;|\}))</string>
+			<string>\s*(?=&lt;/style)|\s*((?=;|\}))</string>
 			<key>name</key>
 			<string>meta.at-rule.media.css</string>
 			<key>patterns</key>
@@ -143,6 +124,25 @@
 				<dict>
 					<key>include</key>
 					<string>$self</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>((?&lt;=\})|^)(?=\s*[\[:.*#a-zA-Z])</string>
+			<key>end</key>
+			<string>\s*(?=&lt;/style)|(?=\{)</string>
+			<key>name</key>
+			<string>meta.selector.css</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment-block</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#source_css_selectors</string>
 				</dict>
 			</array>
 		</dict>
@@ -158,14 +158,22 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\}</string>
+			<string>\s*(?=&lt;/style)|\}</string>
 			<key>name</key>
-			<string>meta.property-list.css</string>
+			<string>meta.scope.property-list.css</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#nest_curly</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#comment-block</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#source_css_rules-vendor</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -193,6 +201,25 @@
 			<key>name</key>
 			<string>comment.block.css</string>
 		</dict>
+		<key>nest_curly</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\{</string>
+					<key>end</key>
+					<string>\}</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#nest_curly</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>source_css_rules</key>
 		<dict>
 			<key>patterns</key>
@@ -201,11 +228,77 @@
 					<key>begin</key>
 					<string>(?&lt;![-a-z])(?=[-a-z])</string>
 					<key>end</key>
-					<string>$|(?![-a-z])</string>
+					<string>\s*(:)?(?![-a-z])</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.key-value.css</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>meta.property-name.css</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>meta.vendor.atsc</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>meta.vendor.microsoft</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>meta.vendor.microsoft.office</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>meta.vendor.mozilla</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>meta.vendor.opera</string>
+								</dict>
+								<key>6</key>
+								<dict>
+									<key>name</key>
+									<string>meta.vendor.wap</string>
+								</dict>
+								<key>7</key>
+								<dict>
+									<key>name</key>
+									<string>meta.vendor.webkit</string>
+								</dict>
+								<key>8</key>
+								<dict>
+									<key>name</key>
+									<string>meta.vendor.other</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(?x) (?&lt;! [-a-z]) (?:
+								 ( -atsc   -[-\w]+)
+								|( -ms     -[-\w]+)
+								|( mso     -[-\w]+)
+								|( -moz    -[-\w]+)
+								|( -o      -[-\w]+)
+								|( -wap    -[-\w]+)
+								|( -webkit -[-\w]+)
+								|( -[-\w]+ -[-\w]+)
+							)\b</string>
+							<key>name</key>
+							<string>support.type.property-name.vendor.css</string>
+						</dict>
 						<dict>
 							<key>match</key>
 							<string>\b(azimuth|background-attachment|background-color|background-image|background-position|background-repeat|background|border-bottom-color|border-bottom-style|border-bottom-width|border-bottom|border-collapse|border-color|border-left-color|border-left-style|border-left-width|border-left|border-right-color|border-right-style|border-right-width|border-right|border-spacing|border-style|border-top-color|border-top-style|border-top-width|border-top|border-width|border|bottom|caption-side|clear|clip|color|content|counter-increment|counter-reset|cue-after|cue-before|cue|cursor|direction|display|elevation|empty-cells|float|font-family|font-size-adjust|font-size|font-stretch|font-style|font-variant|font-weight|font|height|left|letter-spacing|line-height|list-style-image|list-style-position|list-style-type|list-style|margin-bottom|margin-left|margin-right|margin-top|marker-offset|margin|marks|max-height|max-width|min-height|min-width|-moz-border-radius|opacity|orphans|outline-color|outline-style|outline-width|outline|overflow(-[xy])?|padding-bottom|padding-left|padding-right|padding-top|padding|page-break-after|page-break-before|page-break-inside|page|pause-after|pause-before|pause|pitch-range|pitch|play-during|position|quotes|richness|right|size|speak-header|speak-numeral|speak-punctuation|speech-rate|speak|stress|table-layout|text-align|text-decoration|text-indent|text-shadow|text-transform|top|unicode-bidi|vertical-align|visibility|voice-family|volume|white-space|widows|width|word-spacing|z-index)\b</string>
@@ -216,17 +309,9 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(:)\s*</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.separator.key-value.css</string>
-						</dict>
-					</dict>
+					<string>(?&lt;=:)\s*</string>
 					<key>end</key>
-					<string>\s*(;|(?=[\}]))</string>
+					<string>\s*(?=&lt;/style)|\s*(;|(?=[\}]))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -239,6 +324,20 @@
 					<string>meta.property-value.css</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#nest_curly</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#comment-block</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>(?x) (?&lt;! [-a-z])( -webkit- [-\w]+)\b</string>
+							<key>name</key>
+							<string>support.constant.property-value.vendor.webkit.css</string>
+						</dict>
 						<dict>
 							<key>match</key>
 							<string>\b(absolute|all-scroll|always|auto|baseline|below|bidi-override|block|bold|bolder|both|bottom|break-all|break-word|capitalize|center|char|circle|col-resize|collapse|crosshair|dashed|decimal|default|disabled|disc|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ellipsis|fixed|groove|hand|help|hidden|horizontal|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|inactive|inherit|inline-block|inline|inset|inside|inter-ideograph|inter-word|italic|justify|keep-all|left|lighter|line-edge|line-through|line|list-item|loose|lower-alpha|lower-roman|lowercase|lr-tb|ltr|medium|middle|move|n-resize|ne-resize|newspaper|no-drop|no-repeat|nw-resize|none|normal|not-allowed|nowrap|oblique|outset|outside|overline|pointer|progress|relative|repeat-x|repeat-y|repeat|right|ridge|row-resize|rtl|s-resize|scroll|se-resize|separate|small-caps|solid|square|static|strict|super|sw-resize|table-footer-group|table-header-group|tb-rl|text-bottom|text-top|text|thick|thin|top|transparent|underline|upper-alpha|upper-roman|uppercase|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace)\b</string>
@@ -367,13 +466,154 @@
 				</dict>
 			</array>
 		</dict>
+		<key>source_css_rules-vendor</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z])(?= -atsc-   [-\w])</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.atsc</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z])(?= -ms-   [-\w])</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.microsoft</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z])(?= mso-   [-\w])</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.microsoft.office</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z])(?= -moz-   [-\w])</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.mozilla</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z])(?= -o-   [-\w])</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.opera</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z])(?= -wap-   [-\w])</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.wap</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z])(?= -webkit-   [-\w])</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.webkit</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>(?x)-webkit-(?:
+								 transform-origin
+								|transform
+							)\b</string>
+							<key>name</key>
+							<string>support.type.property-name.effect.transform.css</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>(?x)-webkit-(?:
+								 transition-timing-function
+								|transition-property
+								|transition-duration
+								|transition
+							)\b</string>
+							<key>name</key>
+							<string>support.type.property-name.effect.transition.css</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>source_css_selectors</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>include</key>
+					<string>#source_css_selectors-namespace</string>
+				</dict>
+				<dict>
 					<key>match</key>
-					<string>\b(a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\b</string>
+					<string>\*</string>
+					<key>name</key>
+					<string>entity.name.tag.wildcard.css</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?i)\b(a|abbr|acronym|address|area|b|base|big|blockquote|body|br|button|caption|cite|code|col|colgroup|dd|del|dfn|div|dl|dt|em|fieldset|form|frame|frameset|(h[1-6])|head|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|meta|noframes|noscript|object|ol|optgroup|option|p|param|pre|q|samp|script|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|ul|var)\b</string>
 					<key>name</key>
 					<string>entity.name.tag.css</string>
 				</dict>
@@ -387,7 +627,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\.)[a-zA-Z0-9_-]+</string>
+					<string>(\.)[a-zA-Z][a-zA-Z0-9_-]*</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.class.css</string>
 				</dict>
@@ -404,12 +644,6 @@
 					<string>(#)[a-zA-Z][a-zA-Z0-9_-]*</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.id.css</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\*</string>
-					<key>name</key>
-					<string>entity.name.tag.wildcard.css</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -440,56 +674,137 @@
 					<string>entity.other.attribute-name.pseudo-class.css</string>
 				</dict>
 				<dict>
-					<key>captures</key>
+					<key>begin</key>
+					<string>(\[)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.entity.css</string>
+							<string>punctuation.definition.entity.begin.css</string>
 						</dict>
-						<key>2</key>
+					</dict>
+					<key>comment</key>
+					<string>http://www.w3.org/TR/css3-selectors/#attribute-selectors</string>
+					<key>end</key>
+					<string>(\]|(?&lt;!\\)\n)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
 						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.end.css</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.attribute-selector.css</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_selectors-namespace</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>(?i)(?&lt;=[\[\|])[a-z][a-z0-9_-]*\b</string>
 							<key>name</key>
 							<string>entity.other.attribute-name.attribute.css</string>
 						</dict>
-						<key>3</key>
 						<dict>
+							<key>match</key>
+							<string>\|=</string>
 							<key>name</key>
-							<string>punctuation.separator.operator.css</string>
+							<string>keyword.operator.comparison.other.css</string>
 						</dict>
-						<key>4</key>
 						<dict>
+							<key>match</key>
+							<string>~=</string>
+							<key>name</key>
+							<string>keyword.operator.comparison.begins.css</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\^=</string>
+							<key>name</key>
+							<string>keyword.operator.comparison.ends.css</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\$=</string>
+							<key>name</key>
+							<string>keyword.operator.comparison.contains.css</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\*=</string>
+							<key>name</key>
+							<string>keyword.operator.comparison.contains.delimited.space.css</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>=</string>
+							<key>name</key>
+							<string>keyword.operator.comparison.equal.css</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#string-double</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#string-single</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>(?i)(?&lt;==).*?(?=\])</string>
 							<key>name</key>
 							<string>string.unquoted.attribute-value.css</string>
 						</dict>
-						<key>5</key>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>source_css_selectors-namespace</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.double.attribute-value.css</string>
+							<string>entity.name.section.namespace.css</string>
 						</dict>
-						<key>6</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.begin.css</string>
-						</dict>
-						<key>7</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.end.css</string>
+							<string>punctuation.definition.parameters.css</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?x)(?i)
-						(\[)\s*
-							 (-?[ _a-z \\ [[:^ascii:]] ][ _a-z0-9 \- \\ [[:^ascii:]] ]*)
-							(?:\s*
-								([~|^$*]?=) \s*(?:
-							 (-?[ _a-z \\ [[:^ascii:]] ][ _a-z0-9 \- \\ [[:^ascii:]] ]*)
-							|((?&gt;(['"])(?:[^\\]|\\.)*?(\6)))
-							))?
-						\s*(\])</string>
+					<string>(?i)(?&lt;=(?:^|\s|\[))[a-z][-_\w]*(\|)</string>
 					<key>name</key>
-					<string>meta.attribute-selector.css</string>
+					<string>meta.namespace-selector.css</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.section.namespace.wildcard.css</string>
+						</dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.parameters.css</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?&lt;=(?:^|\s|\[))\*?(\|)</string>
+					<key>name</key>
+					<string>meta.namespace-selector.css</string>
 				</dict>
 			</array>
 		</dict>
@@ -506,7 +821,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>"</string>
+			<string>"|(?&lt;!\\\\)(?=\n)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
@@ -519,6 +834,12 @@
 			<string>string.quoted.double.css</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>match</key>
+					<string>\\\n</string>
+					<key>name</key>
+					<string>constant.character.escape.newline.css</string>
+				</dict>
 				<dict>
 					<key>match</key>
 					<string>\\.</string>
@@ -540,7 +861,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>'</string>
+			<string>'|(?&lt;!\\)(?=\n)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
@@ -553,6 +874,12 @@
 			<string>string.quoted.single.css</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>match</key>
+					<string>\\\n</string>
+					<key>name</key>
+					<string>constant.character.escape.newline.css</string>
+				</dict>
 				<dict>
 					<key>match</key>
 					<string>\\.</string>

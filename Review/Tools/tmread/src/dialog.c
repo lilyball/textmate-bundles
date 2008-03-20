@@ -63,8 +63,11 @@
 #define FALLBACK_PROMPT "The processing is requesting input:"
 #endif
 
+buffer_t* input_buffer = NULL;
+
 static char prompt[PROMPT_SIZE];
 pthread_mutex_t prompt_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /**
  * After locking the prompt_mutex, creates a copy of the prompt and returns it after
@@ -78,6 +81,11 @@ char* create_prompt_copy() {
 	strcpy(prompt_copy, prompt);
 	pthread_mutex_unlock(&prompt_mutex);
 	return prompt_copy;
+}
+
+buffer_t* get_input_buffer() {
+	if (input_buffer == NULL) input_buffer = create_buffer();
+	return input_buffer; 
 }
 
 /**
@@ -220,7 +228,7 @@ void open_tm_dialog(int in[], int out[]) {
  * @param buffer_length The maximum size of buffer
  * @return The number of bytes written to buffer
  */
-size_t get_user_input_from_output(buffer_t* output, char *buffer, size_t buffer_length) {
+buffer_t* create_user_input_from_output(buffer_t* output) {
 
     CFPropertyListRef plist;
     plist = create_plist_from_buffer(output);
@@ -228,32 +236,16 @@ size_t get_user_input_from_output(buffer_t* output, char *buffer, size_t buffer_
     CFStringRef return_argument = CFRetain(get_return_argument_from_output_plist(plist));
     CFRelease(plist);
 
-    size_t bytes_read;
-    if (return_argument == NULL) {
-        bytes_read = 0; 
-    } else {
-        bytes_read = copy_cfstr_into_cstr(return_argument, buffer, buffer_length - 1);
-        ((char *)buffer)[bytes_read++] = '\n';
-    }
-    CFRelease(return_argument);
-
-    return bytes_read;
-    
+	if (return_argument == NULL) return NULL;
+	buffer_t* input = create_buffer_from_cfstr(return_argument);
+	add_to_buffer(input, "\n", 1);
+	return input;
 }
-/**
- * Attempts to launch tm_dialog in order to get an input string from the user.
- *
- * tm_dialog is launched by forking, setting up file descriptors for stdin and stdout, then executing tm_dialog.
- *
- * @see create_input_dictionary()
- * @see open_tm_dialog()
- * @see get_user_input_from_output()
- * @param buffer The destination of the input
- * @param buffer_length The limit of chars to copy
- * @return the number of bytes copied into buffer
- */
-ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
 
+void get_input_from_user() {
+	
+	assert(input_buffer == NULL);
+	
     // We do this now so we hit any errors before we attempt a fork.
     CFDictionaryRef parameters = create_input_dictionary();
     buffer_t* parameters_buffer = create_buffer_of_dictionary_as_xml(parameters);
@@ -290,9 +282,38 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
     if (WEXITSTATUS(return_code) != 0)
         die("tm_dialog returned with code %d, output ... \n%s", WEXITSTATUS(return_code), create_cstr_from_buffer(output_buffer));
 
-    size_t bytes_read = get_user_input_from_output(output_buffer, buffer, buffer_length);
-    destroy_buffer(output_buffer);
-    return bytes_read;
+	input_buffer = create_user_input_from_output(output_buffer);
+	destroy_buffer(output_buffer);
+}
+
+/**
+ * Attempts to launch tm_dialog in order to get an input string from the user.
+ *
+ * tm_dialog is launched by forking, setting up file descriptors for stdin and stdout, then executing tm_dialog.
+ *
+ * @see create_input_dictionary()
+ * @see open_tm_dialog()
+ * @see get_user_input_from_output()
+ * @param buffer The destination of the input
+ * @param buffer_length The limit of chars to copy
+ * @return the number of bytes copied into buffer
+ */
+ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
+	pthread_mutex_lock(&input_mutex);
+	if (input_buffer == NULL) {
+		D("input_buffer == NULL, getting input from user\n");
+		get_input_from_user();
+	}
+	if (input_buffer == NULL) {
+		D("input_buffer still == NULL, user entered nothing\n");
+		return 0;
+	} 
+	
+	D("reading %d into read buffer from input buffer\n", (int)buffer_length);
+	size_t consumed = consume_from_head_of_buffer(input_buffer, buffer, buffer_length);
+	if (input_buffer->size == 0) input_buffer = NULL;
+	pthread_mutex_unlock(&input_mutex);
+	return consumed;
 }
 
 void capture_for_prompt(const void *buffer, size_t buffer_length) {

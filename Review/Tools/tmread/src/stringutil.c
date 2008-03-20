@@ -19,18 +19,3 @@ CFStringRef cstr_2_cfstr(char* cstr) {
     if (cfstr == NULL) die("failed to create CFStringRef from %s", cstr);
     return cfstr;
 }
-
-size_t copy_cfstr_into_cstr(CFStringRef cfstr, char *cstr, size_t cstr_length) {
- 
-    CFIndex cfstr_length = CFStringGetLength(cfstr);
-
-    CFRange copy_range; 
-    copy_range.location = 0;
-    copy_range.length = (cfstr_length < cstr_length) ? cfstr_length : cstr_length;
-    
-    CFIndex copy_count;
- 
-    CFStringGetBytes(cfstr, copy_range, kCFStringEncodingUTF8, 0, false, (UInt8 *)cstr, cstr_length, &copy_count);
-    D("cstr_2_cfstr(): cstr after copy == '%s'\n", cstr);
-    return copy_count;
-}

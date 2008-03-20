@@ -6,6 +6,5 @@
 
 char* cfstr_2_cstr(CFStringRef);
 CFStringRef cstr_2_cfstr(char*);
-size_t copy_cfstr_into_cstr(CFStringRef, char *, size_t);
 
 #endif /* _STRINGUTIL_H_ */

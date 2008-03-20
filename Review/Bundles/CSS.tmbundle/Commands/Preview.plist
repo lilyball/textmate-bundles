@@ -168,7 +168,7 @@ def preview_css(str)
 	orig_css.strip!
 
 	#meta.selector.css -&gt; wraps the selector
-	#meta.property-list.css -&gt; wraps the properties
+	#meta.scope.property-list.css -&gt; wraps the properties
 	rules = str.scan(/&lt;meta\.selector\.css&gt;\s*(.+?)\s*&lt;\/meta\.selector\.css&gt;.*?&lt;meta\.property-list\.css&gt;(.+?)&lt;\/meta\.property-list\.css&gt;/m)
 
 	html = ''

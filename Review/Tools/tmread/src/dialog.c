@@ -9,6 +9,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <pthread.h>
 
 #ifndef DIALOG_ENV_VAR
 #define DIALOG_ENV_VAR "DIALOG"
@@ -24,6 +25,10 @@
 
 #ifndef DIALOG_TITLE_KEY
 #define DIALOG_TITLE_KEY "title"
+#endif
+
+#ifndef DIALOG_PROMPT_KEY
+#define DIALOG_PROMPT_KEY "prompt"
 #endif
 
 #ifndef DIALOG_BUTTON_1
@@ -59,6 +64,21 @@
 #endif
 
 static char prompt[PROMPT_SIZE];
+pthread_mutex_t prompt_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+/**
+ * After locking the prompt_mutex, creates a copy of the prompt and returns it after
+ * unlocking prompt_mutex.
+ * 
+ * @return A copy of the prompt that must be freed by the caller.
+ */
+char* create_prompt_copy() {
+	pthread_mutex_lock(&prompt_mutex);
+	char* prompt_copy = malloc(strlen(prompt) + 1);
+	strcpy(prompt_copy, prompt);
+	pthread_mutex_unlock(&prompt_mutex);
+	return prompt_copy;
+}
 
 /**
  * Constructs the input parameters for tm_dialog.
@@ -78,8 +98,10 @@ CFDictionaryRef create_input_dictionary() {
         CFRelease(cf_title);
     }
     
+	char* prompt_copy = create_prompt_copy();
     CFStringRef dialog_prompt = cstr_2_cfstr((strlen(prompt) == 0) ? FALLBACK_PROMPT : prompt);
-    CFDictionaryAddValue(parameters, CFSTR("prompt"), dialog_prompt);
+	free(prompt_copy);
+    CFDictionaryAddValue(parameters, CFSTR(DIALOG_PROMPT_KEY), dialog_prompt);
     CFRelease(dialog_prompt);
 
     CFDictionaryAddValue(parameters, CFSTR(DIALOG_BUTTON_1_KEY), CFSTR(DIALOG_BUTTON_1));
@@ -296,12 +318,15 @@ void capture_for_prompt(const void *buffer, size_t buffer_length) {
     D("capture_for_prompt(): reverse storage has %i bytes\n", (int)x + 1);
     
     --x;
+
+	pthread_mutex_lock(&prompt_mutex);
     size_t z;
     for (z = 0; z <= x; ++z) {
         prompt[z] = storage[x - z];  
     }
     D("capture_for_prompt(): copied %i bytes from storage\n", (int)z + 1);
     prompt[z] = '\0';
-    
+    pthread_mutex_unlock(&prompt_mutex);
+
     D("capture_for_prompt(): prompt = '%s'\n", prompt);
 }

@@ -783,7 +783,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?i)(?&lt;=(?:^|\s|\[))[a-z][-_\w]*(\|)</string>
+					<string>(?i)(?&lt;=(?:^|\s|\[))[a-z][-_\w]*(\|)(?!=)</string>
 					<key>name</key>
 					<string>meta.namespace-selector.css</string>
 				</dict>
@@ -802,7 +802,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=(?:^|\s|\[))\*?(\|)</string>
+					<string>(?&lt;=(?:^|\s|\[))\*?(\|(?!=))</string>
 					<key>name</key>
 					<string>meta.namespace-selector.css</string>
 				</dict>

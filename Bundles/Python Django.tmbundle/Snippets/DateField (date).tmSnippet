@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:FIELDNAME} = models.DateField(${2:auto_now${3:_add}=True})</string>
+	<string>${1:FIELDNAME} = models.DateField(${2:default=datetime.datetime.today})</string>
 	<key>name</key>
 	<string>DateField</string>
 	<key>scope</key>

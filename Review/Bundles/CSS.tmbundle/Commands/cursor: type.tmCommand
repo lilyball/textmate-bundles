@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+choices = %{url('cursor.cur'), pointer
+--
+default
+auto
+--
+pointer
+text
+--
+crosshair
+move
+wait
+help
+--
+n-resize
+s-resize
+e-resize
+w-resize
+--
+ne-resize
+nw-resize
+--
+se-resize
+sw-resize
+}.split("\n")
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
+print "cursor: ${100:" + choices[TextMate::UI::menu(choices)].gsub('cursor.cur','${1:cursor.cur}') +"};$0"
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>cursor: type (Choose)</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.css meta.property-name</string>
+	<key>tabTrigger</key>
+	<string>cursor</string>
+	<key>uuid</key>
+	<string>FF3DFC30-EA7F-41ED-B291-A87830869B90</string>
+</dict>
+</plist>

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Completions</string>
+	<string>Selector Completions</string>
 	<key>scope</key>
 	<string>source.css -meta.scope.property-list</string>
 	<key>settings</key>
@@ -114,9 +114,57 @@
 				<key>name</key>
 				<string>TM_COMPLETIONS</string>
 				<key>value</key>
-				<string>#
-*
+				<string>
+:link
+:visited
+:active
+--
+:hover
+:focus
+--
+[foo]
+[foo="bar"]
+[foo~="bar"]
+[hreflang|="en"]
+--
+[foo^="bar"]
+[foo$="bar"]
+[foo*="bar"]
+--
+:first-child
+:root
+:nth-child(n)
+:nth-last-child(n)
+:nth-of-type(n)
+:nth-last-of-type(n)
+:last-child
+:first-of-type
+:last-of-type
+:only-child
+:only-of-type
+:empty
+--
+:lang(fr)
+:target
+:disabled
+:enabled
+:checked
+--
+::first-line
+::first-letter
+::before
+::after
+::selection
+--
+ &gt; 
+ + 
+ ~ 
+:not( selector )
+--
+#
 .
+--
+*
 a
 abbr
 acronym

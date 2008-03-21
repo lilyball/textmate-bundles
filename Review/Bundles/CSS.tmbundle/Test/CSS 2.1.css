@@ -21,7 +21,7 @@ div{something: "public class foo
     }
 
 }";}
-/*;}*/
+;}
 
 /* /Misc **/
 
@@ -91,11 +91,9 @@ h3, h4 & h5 {color: red }
 h6 {color: black }
 /*Here is a more complex example. The first two pairs of curly braces are inside a string, and do not mark the end of the selector. This is a valid CSS 2.1 rule.*/
 
-/*FAIL*/
 p[example="public 
 class"] {}
 
-/*PASS*/
 p[example=publicclass] {}
 p[example=public\
 class] {}
@@ -374,7 +372,7 @@ User agents may vary in how they handle invalid URIs or URIs that designate unav
 
 /** 4.3.5 Counters  */
 
-Counters are denoted by identifiers (see the 'counter-increment' and 'counter-reset' properties). To refer to the value of a counter, the notation 'counter(<identifier>)' or 'counter(<identifier>, <'list-style-type'>)', with optional whitespace separating the tokens, is used. The default style is 'decimal'.
+/*Counters are denoted by identifiers (see the 'counter-increment' and 'counter-reset' properties). To refer to the value of a counter, the notation 'counter(<identifier>)' or 'counter(<identifier>, <'list-style-type'>)', with optional whitespace separating the tokens, is used. The default style is 'decimal'.
 
 To refer to a sequence of nested counters of the same name, the notation is 'counters(<identifier>, <string>)' or 'counters(<identifier>, <string>, <'list-style-type'>)' with optional whitespace separating the tokens.
 
@@ -383,7 +381,7 @@ See "Nested counters and scope" in the chapter on generated content for how user
 In CSS 2.1, the values of counters can only be referred to from the 'content' property. Note that 'none' is a possible <'list-style-type'>: 'counter(x, none)' yields an empty string.
 
 Here is a style sheet that numbers paragraphs (p) for each chapter (h1). The paragraphs are numbered with roman numerals, followed by a period and a space:
-
+*/
 p {counter-increment: par-num}
 h1 {counter-reset: par-num}
 p:before {content: counter(par-num, upper-roman) ". "}
@@ -393,7 +391,7 @@ p:before {content: counter(par-num, upper-roman) ". "}
 
 /** 4.3.6 Colors  */
 
-A <color> is either a keyword or a numerical RGB specification.
+/*A <color> is either a keyword or a numerical RGB specification.
 
 The list of color keywords is: aqua, black, blue, fuchsia, gray, green, lime, maroon, navy, olive, orange, purple, red, silver, teal, white, and yellow. These 17 colors have the following values:
 
@@ -402,17 +400,17 @@ purple #800080fuchsia #ff00ffwhite #fffffflime #00ff00green #008000
 navy #000080blue #0000ffaqua #00ffffteal #008080
 black #000000silver #c0c0c0gray #808080
 In addition to these color keywords, users may specify keywords that correspond to the colors used by certain objects in the user's environment. Please consult the section on system colors for more information.
-
+*/
 body {color: black; background: white }
 h1 { color: maroon }
 h2 { color: olive }
-The RGB color model is used in numerical color specifications. These examples all specify the same color:
+/*The RGB color model is used in numerical color specifications. These examples all specify the same color:*/
 
 em { color: #f00 }              /* #rgb */
 em { color: #ff0000 }           /* #rrggbb */
 em { color: rgb(255,0,0) }      
 em { color: rgb(100%, 0%, 0%) } 
-The format of an RGB value in hexadecimal notation is a '#' immediately followed by either three or six hexadecimal characters. The three-digit RGB notation (#rgb) is converted into six-digit form (#rrggbb) by replicating digits, not by adding zeros. For example, #fb0 expands to #ffbb00. This ensures that white (#ffffff) can be specified with the short notation (#fff) and removes any dependencies on the color depth of the display.
+/*The format of an RGB value in hexadecimal notation is a '#' immediately followed by either three or six hexadecimal characters. The three-digit RGB notation (#rgb) is converted into six-digit form (#rrggbb) by replicating digits, not by adding zeros. For example, #fb0 expands to #ffbb00. This ensures that white (#ffffff) can be specified with the short notation (#fff) and removes any dependencies on the color depth of the display.
 
 The format of an RGB value in the functional notation is 'rgb(' followed by a comma-separated list of three numerical values (either three integer values or three percentage values) followed by ')'. The integer value 255 corresponds to 100%, and to F or FF in the hexadecimal notation: rgb(255,255,255) = rgb(100%,100%,100%) = #FFF. Whitespace characters are allowed around the numerical values.
 
@@ -420,22 +418,22 @@ All RGB colors are specified in the sRGB color space (see [SRGB]). User agents m
 
 Conforming user agents may limit their color-displaying efforts to performing a gamma-correction on them. sRGB specifies a display gamma of 2.2 under specified viewing conditions. User agents should adjust the colors given in CSS such that, in combination with an output device's "natural" display gamma, an effective display gamma of 2.2 is produced. See the section on gamma correction for further details. Note that only colors specified in CSS are affected; e.g., images are expected to carry their own color information.
 
-Values outside the device gamut should be clipped or mapped into the gamut when the gamut is known: the red, green, and blue values must be changed to fall within the range supported by the device. Users agents may perform higher quality mapping of colors from one gamut to another. For a typical CRT monitor, whose device gamut is the same as sRGB, the four rules below are equivalent:
+Values outside the device gamut should be clipped or mapped into the gamut when the gamut is known: the red, green, and blue values must be changed to fall within the range supported by the device. Users agents may perform higher quality mapping of colors from one gamut to another. For a typical CRT monitor, whose device gamut is the same as sRGB, the four rules below are equivalent:*/
 
 em { color: rgb(255,0,0) }       /* integer range 0 - 255 */
 em { color: rgb(300,0,0) }       /* clipped to rgb(255,0,0) */
 em { color: rgb(255,-10,0) }     /* clipped to rgb(255,0,0) */
 em { color: rgb(110%, 0%, 0%) }  /* clipped to rgb(100%,0%,0%) */
-Other devices, such as printers, have different gamuts than sRGB; some colors outside the 0..255 sRGB range will be representable (inside the device gamut), while other colors inside the 0..255 sRGB range will be outside the device gamut and will thus be mapped.
+/*Other devices, such as printers, have different gamuts than sRGB; some colors outside the 0..255 sRGB range will be representable (inside the device gamut), while other colors inside the 0..255 sRGB range will be outside the device gamut and will thus be mapped.
 
 Note. Mapping or clipping of color values should be done to the actual device gamut if known (which may be larger or smaller than 0..255).
-
+*/
 /* /4.3.6 Colors **/
 
 
 /** 4.3.7 Strings  */
 
-Strings can either be written with double quotes or with single quotes. Double quotes cannot occur inside double quotes, unless escaped (e.g., as '\"' or as '\22'). Analogously for single quotes (e.g., "\'" or "\27").
+/*Strings can either be written with double quotes or with single quotes. Double quotes cannot occur inside double quotes, unless escaped (e.g., as '\"' or as '\22'). Analogously for single quotes (e.g., "\'" or "\27").
 
 "this is a 'string'"
 "this is a \"string\""
@@ -444,7 +442,7 @@ Strings can either be written with double quotes or with single quotes. Double q
 A string cannot directly contain a newline. To include a newline in a string, use an escape representing the line feed character in ISO-10646 (U+000A), such as "\A" or "\00000a". This character represents the generic notion of "newline" in CSS. See the 'content' property for an example.
 
 It is possible to break strings over several lines, for esthetic or other reasons, but in such a case the newline itself has to be escaped with a backslash (\). For instance, the following two selectors are exactly the same:
-
+*/
 a[title="a not s\
 o very long title"] {/*...*/}
 a[title="a not so very long title"] {/*...*/}
@@ -464,3 +462,29 @@ a[title="a not so very long title"] {/*...*/}
 
 /* /4.3.8 Unsupported Values **/
 
+div{
+	background: rgb(128, 128, 128);
+	background: rgba(128, 128, 128, 0.5);
+	background: rgba(0%, 25%, 50%, 0.5);
+	background: url(0%, 25%, 50%, 0.5);
+	background: url(0%, 25%, 50%, 0.5);
+	background: url( 0%, 25%, 50%, 0.5  );
+	background: url( http://www.image.com/image.gif?image );
+	background: url( 'http://www.image.com/image.gif?image' );
+	background: url( "http://www.image.com/image.gif?image" );
+	
+	
+}
+em { color: rgb(255,0,0) }      /* integer range 0 - 255 */
+em { color: rgba(255,0,0,1) }   /* the same, with explicit opacity of 1 */
+em { color: rgb(100%,0%,0%) }   /* float range 0.0% - 100.0% */
+em { color: rgba(100%,0%,0%,1) }/* the same, with explicit opacity of 1 */
+em { color: rgb(256,0,0) }      /* integer range 0 - 255 */
+em { color: rgba(255,.0,0,1) }   /* the same, with explicit opacity of 1 */
+em { color: rgb(100%,0,0%) }   /* float range 0.0% - 100.0% */
+em { color: rgba(100%,0%,0%,1.0) }/* the same, with explicit opacity of 1 */
+* { color: hsl(0, 100%, 50%) }   /* red */
+* { color: hsl(120, 100%, 50%) } /* green */ 
+* { color: hsl(120, 100%, 25%) } /* light green */ 
+* { color: hsl(120, 100%, 75%) } /* dark green */ 
+* { color: hsl(120, 50%, 50%) }  /* pastel green, and so on */

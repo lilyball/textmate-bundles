@@ -1,58 +1,88 @@
 /*http://www.w3.org/TR/css3-selectors/*/
 
-PATTERN               {}/* MEANING                                                                                                                          DESCRIBED IN SECTION                    FIRST DEFINED IN CSS LEVEL */
-
-*                     {}/* any element                                                                                                                      Universal selector                      2                          */
-E                     {}/* an element of type E                                                                                                             Type selector                           1                          */
-
-E[foo]                {}/* an E element with a "foo" attribute                                                                                              Attribute selectors                     2                          */
-E[foo="bar"]          {}/* an E element whose "foo" attribute value is exactly equal to "bar"                                                               Attribute selectors                     2                          */
-E[foo~="bar"]         {}/* an E element whose "foo" attribute value is a list of space-separated values, one of which is exactly equal to "bar"             Attribute selectors                     2                          */
-E[foo^="bar"]         {}/* an E element whose "foo" attribute value begins exactly with the string "bar"                                                    Attribute selectors                     3                          */
-E[foo$="bar"]         {}/* an E element whose "foo" attribute value ends exactly with the string "bar"                                                      Attribute selectors                     3                          */
-E[foo*="bar"]         {}/* an E element whose "foo" attribute value contains the substring "bar"                                                            Attribute selectors                     3                          */
-E[hreflang|="en"]     {}/* an E element whose "hreflang" attribute has a hyphen-separated list of values beginning (from the left) with "en"                Attribute selectors                     2                          */
-
-E:root                {}/* an E element, root of the document                                                                                               Structural pseudo-classes               3                          */
-E:nth-child(n)        {}/* an E element, the n-th child of its parent                                                                                       Structural pseudo-classes               3                          */
-E:nth-last-child(n)   {}/* an E element, the n-th child of its parent, counting from the last one                                                           Structural pseudo-classes               3                          */
-E:nth-of-type(n)      {}/* an E element, the n-th sibling of its type                                                                                       Structural pseudo-classes               3                          */
-E:nth-last-of-type(n) {}/* an E element, the n-th sibling of its type, counting from the last one                                                           Structural pseudo-classes               3                          */
-E:first-child         {}/* an E element, first child of its parent                                                                                          Structural pseudo-classes               2                          */
-E:last-child          {}/* an E element, last child of its parent                                                                                           Structural pseudo-classes               3                          */
-E:first-of-type       {}/* an E element, first sibling of its type                                                                                          Structural pseudo-classes               3                          */
-E:last-of-type        {}/* an E element, last sibling of its type                                                                                           Structural pseudo-classes               3                          */
-E:only-child          {}/* an E element, only child of its parent                                                                                           Structural pseudo-classes               3                          */
-E:only-of-type        {}/* an E element, only sibling of its type                                                                                           Structural pseudo-classes               3                          */
-E:empty               {}/* an E element that has no children (including text nodes)                                                                         Structural pseudo-classes               3                          */
-
-E:link                {}/* an E element being the source anchor of a hyperlink of which the target is not yet visited (:link) or already visited (:visited) The link pseudo-classes                 1                          */
-E:visited             {}/*  */                                                                                                                                                                      
-E:active              {}/*  */                                                                                                                                                                      
-
-E:hover               {}/* an E element during certain user actions                                                                                         The user action pseudo-classes          1 and 2                    */
-E:focus               {}/*  */                                                                                                                                                                      
-
-E:target              {}/* an E element being the target of the referring URI                                                                               The target pseudo-class                 3                          */
-E:lang(fr)            {}/* an element of type E in language "fr" (the document language specifies how language is determined)                               The :lang() pseudo-class                2                          */
-E:enabled             {}/*  */                                                                                                                                                                      
-E:disabled            {}/* a user interface element E which is enabled or disabled                                                                          The UI element states pseudo-classes    3                          */
-E:checked             {}/* a user interface element E which is checked (for instance a radio-button or checkbox)                                            The UI element states pseudo-classes    3                          */
-
-E::first-line         {}/* the first formatted line of an E element                                                                                         The ::first-line pseudo-element         1                          */
-E::first-letter       {}/* the first formatted letter of an E element                                                                                       The ::first-letter pseudo-element       1                          */
-E::selection          {}/* the portion of an E element that is currently selected/highlighted by the user                                                   The UI element fragments pseudo-elements3                          */
-E::before             {}/* generated content before an E element                                                                                            The ::before pseudo-element             2                          */
-E::after              {}/* generated content after an E element                                                                                             The ::after pseudo-element              2                          */
-
-E.warning             {}/* an E element whose class is "warning" (the document language specifies how class is determined).                                 Class selectors                         1                          */
-E#myid                {}/* an E element with ID equal to "myid".                                                                                            ID selectors                            1                          */
-
-E:not(s)              {}/* an E element that does not match simple selector s                                                                               Negation pseudo-class                   3                          */
-E F                   {}/* an F element descendant of an E element                                                                                          Descendant combinator                   1                          */
-E > F                 {}/* an F element child of an E element                                                                                               Child combinator                        2                          */
-E + F                 {}/* an F element immediately preceded by an E element                                                                                Adjacent sibling combinator             2                          */
-E ~ F                 {}/* an F element preceded by an E element                                                                                            General sibling combinator              3                          */
+PATTERN               {}/* FIRST DEFINED IN CSS LEVEL	MEANING                                                                                                                          DESCRIBED IN SECTION                    */
+                                                                                                                                                                                                                               
+E                     {}/* 1      	an element of type E                                                                                                             Type selector                           */
+*                     {}/* 2      	any element                                                                                                                      Universal selector                      */
+                                  	                                                                                                                                                                         
+E[foo]                {}/* 2      	an E element with a "foo" attribute                                                                                              Attribute selectors                     */
+E[foo="bar"]          {}/* 2      	an E element whose "foo" attribute value is exactly equal to "bar"                                                               Attribute selectors                     */
+E[foo~="bar"]         {}/* 2      	an E element whose "foo" attribute value is a list of space-separated values, one of which is exactly equal to "bar"             Attribute selectors                     */
+E[hreflang|="en"]     {}/* 2      	an E element whose "hreflang" attribute has a hyphen-separated list of values beginning (from the left) with "en"                Attribute selectors                     */
+                                  	
+E[foo^="bar"]         {}/* 3      	an E element whose "foo" attribute value begins exactly with the string "bar"                                                    Attribute selectors                     */
+E[foo$="bar"]         {}/* 3      	an E element whose "foo" attribute value ends exactly with the string "bar"                                                      Attribute selectors                     */
+E[foo*="bar"]         {}/* 3      	an E element whose "foo" attribute value contains the substring "bar"                                                            Attribute selectors                     */
+                                  	                                                                                                                                                                         
+E:first-child         {}/* 2      	an E element, first child of its parent                                                                                          Structural pseudo-classes               */
+E:root                {}/* 3      	an E element, root of the document                                                                                               Structural pseudo-classes               */
+E:nth-child(n)        {}/* 3      	an E element, the n-th child of its parent                                                                                       Structural pseudo-classes               */
+E:nth-last-child(n)   {}/* 3      	an E element, the n-th child of its parent, counting from the last one                                                           Structural pseudo-classes               */
+E:nth-of-type(n)      {}/* 3      	an E element, the n-th sibling of its type                                                                                       Structural pseudo-classes               */
+E:nth-last-of-type(n) {}/* 3      	an E element, the n-th sibling of its type, counting from the last one                                                           Structural pseudo-classes               */
+E:last-child          {}/* 3      	an E element, last child of its parent                                                                                           Structural pseudo-classes               */
+E:first-of-type       {}/* 3      	an E element, first sibling of its type                                                                                          Structural pseudo-classes               */
+E:last-of-type        {}/* 3      	an E element, last sibling of its type                                                                                           Structural pseudo-classes               */
+E:only-child          {}/* 3      	an E element, only child of its parent                                                                                           Structural pseudo-classes               */
+E:only-of-type        {}/* 3      	an E element, only sibling of its type                                                                                           Structural pseudo-classes               */
+E:empty               {}/* 3      	an E element that has no children (including text nodes)                                                                         Structural pseudo-classes               */
+                                  	                                                                                                                                                                         
+E:link                {}/* 1      	an E element being the source anchor of a hyperlink of which the target is not yet visited (:link) or already visited (:visited) The link pseudo-classes                 */
+E:visited             {}/* 1      	 */                                                                                                                                                                      
+E:active              {}/* 1      	 */                                                                                                                                                                      
+                                  	                                                                                                                                                                         
+E:hover               {}/* 1 and 2	an E element during certain user actions                                                                                         The user action pseudo-classes          */
+E:focus               {}/* 1 and 2	 */                                                                                                                                                                      
+                                  	                                                                                                                                                                         
+E:lang(fr)            {}/* 2      	an element of type E in language "fr" (the document language specifies how language is determined)                               The :lang() pseudo-class                */
+E:target              {}/* 3      	an E element being the target of the referring URI                                                                               The target pseudo-class                 */
+E:disabled            {}/* 3      	a user interface element E which is enabled or disabled                                                                          The UI element states pseudo-classes    */
+E:enabled             {}/* 3      	 */                                                                                                                                                                      
+E:checked             {}/* 3      	a user interface element E which is checked (for instance a radio-button or checkbox)                                            The UI element states pseudo-classes    */
+                                  	                                                                                                                                                                         
+E::first-line         {}/* 1      	the first formatted line of an E element                                                                                         The ::first-line pseudo-element         */
+E::first-letter       {}/* 1      	the first formatted letter of an E element                                                                                       The ::first-letter pseudo-element       */
+E::before             {}/* 2      	generated content before an E element                                                                                            The ::before pseudo-element             */
+E::after              {}/* 2      	generated content after an E element                                                                                             The ::after pseudo-element              */
+E::selection          {}/* 3      	the portion of an E element that is currently selected/highlighted by the user                                                   The UI element fragments pseudo-elements*/
+                                  	                                                                                                                                                                         
+E.warning             {}/* 1      	an E element whose class is "warning" (the document language specifies how class is determined).                                 Class selectors                         */
+E#myid                {}/* 1      	an E element with ID equal to "myid".                                                                                            ID selectors                            */
+                                  	                                                                                                                                                                         
+E F                   {}/* 1      	an F element descendant of an E element                                                                                          Descendant combinator                   */
+E > F                 {}/* 2      	an F element child of an E element                                                                                               Child combinator                        */
+E + F                 {}/* 2      	an F element immediately preceded by an E element                                                                                Adjacent sibling combinator             */
+E ~ F                 {}/* 3      	an F element preceded by an E element                                                                                            General sibling combinator              */
+E:not(s)              {}/* 3      	an E element that does not match simple selector s                                                                               Negation pseudo-class                   */
 
 
 div[height=23][width="100%"] {}
+
+
+div:nth-child(n)        {}
+div:nth-last-child(n)   {}
+div:nth-of-type(n)      {}
+div:nth-last-of-type(n) {height: 10px;}
+
+
+tr:nth-child(2n+1) /* represents every odd row of an HTML table */
+tr:nth-child(odd)  /* same */
+tr:nth-child(2n)   /* represents every even row of an HTML table */
+tr:nth-child(even) /* same */
+
+/* Alternate paragraph colours in CSS */
+p:nth-child(4n+1) { color: navy; }
+p:nth-child(4n+2) { color: green; }
+p:nth-child(4n+3) { color: maroon; }
+p:nth-child(4n+4) { color: purple; }
+
+html|tr:nth-child(-n+6)  /* represents the 6 first rows of XHTML tables */
+
+body > h2:nth-of-type(n+2):nth-last-of-type(n+2) {}
+
+html body {}
+
+html:lang(fr-be)  {}
+html:lang(de)     {}
+:lang(fr-be) > q  {}
+:lang(de) > q     {}

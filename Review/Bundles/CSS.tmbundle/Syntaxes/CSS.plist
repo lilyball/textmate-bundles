@@ -39,7 +39,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\s*((?=;|\}))</string>
+			<string>(?i)\s*(?=&lt;/style)|\s*((?=;|\}))</string>
 			<key>name</key>
 			<string>meta.at-rule.import.css</string>
 			<key>patterns</key>
@@ -65,7 +65,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>\s*(\))\s*</string>
+					<string>(?i)\s*(?=&lt;/style)|\s*(\))\s*</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -116,7 +116,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\s*(?=&lt;/style)|\s*((?=;|\}))</string>
+			<string>(?i)\s*(?=&lt;/style)|\s*((?=;|\}))</string>
 			<key>name</key>
 			<string>meta.at-rule.media.css</string>
 			<key>patterns</key>
@@ -129,9 +129,9 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>((?&lt;=\})|^)(?=\s*[\[:.*#a-zA-Z])</string>
+			<string>((?&lt;=\})|^)(?=\s*[\|\[:.*#a-zA-Z])</string>
 			<key>end</key>
-			<string>\s*(?=&lt;/style)|(?=\{)</string>
+			<string>(?i)\s*(?=&lt;/style)|(?=\{)</string>
 			<key>name</key>
 			<string>meta.selector.css</string>
 			<key>patterns</key>
@@ -158,7 +158,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\s*(?=&lt;/style)|\}</string>
+			<string>(?i)\s*(?=&lt;/style)|\}</string>
 			<key>name</key>
 			<string>meta.scope.property-list.css</string>
 			<key>patterns</key>
@@ -197,7 +197,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\*/</string>
+			<string>(?i)\s*(?=&lt;/style)|\*/</string>
 			<key>name</key>
 			<string>comment.block.css</string>
 		</dict>
@@ -209,7 +209,7 @@
 					<key>begin</key>
 					<string>\{</string>
 					<key>end</key>
-					<string>\}</string>
+					<string>(?i)\s*(?=&lt;/style)|\}</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -228,7 +228,7 @@
 					<key>begin</key>
 					<string>(?&lt;![-a-z:])(?=[-a-z])</string>
 					<key>end</key>
-					<string>\s*(:)?(?![-a-z])</string>
+					<string>(?i)\s*(?=&lt;/style)|\s*(:)?(?![-a-z])</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -311,7 +311,7 @@
 					<key>begin</key>
 					<string>(?&lt;=:)\s*</string>
 					<key>end</key>
-					<string>\s*(?=&lt;/style)|\s*(;|(?=[\}]))</string>
+					<string>(?i)\s*(?=&lt;/style)|\s*(;|(?=[\}]))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -402,28 +402,131 @@
 						</dict>
 						<dict>
 							<key>begin</key>
-							<string>(rgb|url|attr|counter|counters)\s*(\()</string>
+							<string>(?i)\b(rgba?)\s*(\()</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>support.function.misc.css</string>
+									<string>support.constant.property-value.css</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.section.function.css</string>
+									<string>punctuation.definition.arguments.begin.css</string>
 								</dict>
 							</dict>
 							<key>end</key>
-							<string>(\))</string>
+							<string>(?i)\s*(?=&lt;/style)|(\))</string>
 							<key>endCaptures</key>
 							<dict>
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.section.function.css</string>
+									<string>punctuation.definition.arguments.end.css</string>
+								</dict>
+							</dict>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>captures</key>
+									<dict>
+										<key>1</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.separator.arguments.css</string>
+										</dict>
+										<key>2</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.separator.arguments.css</string>
+										</dict>
+										<key>3</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.separator.arguments.css</string>
+										</dict>
+									</dict>
+									<key>match</key>
+									<string>(?x)
+										          \b   0*(?:(?:1?[0-9]{1,2})|(?:2(?:[0-4][0-9]|5[0-5]))) # Red
+										   \s*(,)\s*   0*(?:(?:1?[0-9]{1,2})|(?:2(?:[0-4][0-9]|5[0-5]))) # Green
+										   \s*(,)\s*   0*(?:(?:1?[0-9]{1,2})|(?:2(?:[0-4][0-9]|5[0-5]))) # Blue
+										(?:\s*(,)\s*   (?:1(?:\.0+)?|0(?:\.[0-9]+)?) # Opacity
+										                |\b                 # Or just the end
+										)
+									</string>
+									<key>name</key>
+									<string>constant.other.color.rgb-value.css</string>
+								</dict>
+								<dict>
+									<key>captures</key>
+									<dict>
+										<key>1</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.separator.arguments.css</string>
+										</dict>
+										<key>2</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.separator.arguments.css</string>
+										</dict>
+										<key>3</key>
+										<dict>
+											<key>name</key>
+											<string>punctuation.separator.arguments.css</string>
+										</dict>
+									</dict>
+									<key>match</key>
+									<string>(?x)\b
+										             (?:[0-9]{1,2}|100)\s*% # Red
+										   \s*(,)\s* (?:[0-9]{1,2}|100)\s*% # Green
+										   \s*(,)\s* (?:[0-9]{1,2}|100)\s*% # Blue
+										(?:\s*(,)\s* (?:1(?:\.0+)?|0(?:\.[0-9]+)?) # Opacity
+										)?
+									</string>
+									<key>name</key>
+									<string>constant.other.color.rgb-percentage.css</string>
+								</dict>
+								<dict>
+									<key>captures</key>
+									<dict>
+										<key>1</key>
+										<dict>
+											<key>name</key>
+											<string>invalid.SOMETHING.value.range.css</string>
+										</dict>
+									</dict>
+									<key>match</key>
+									<string>(.*?)(?=\s*\))</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?i)\b(url|attr|counter|counters)\s*(\()\s*</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>support.constant.property-value.css</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.arguments.begin.css</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?i)\s*(?=&lt;/style)|\s*(\))</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.arguments.end.css</string>
 								</dict>
 							</dict>
 							<key>patterns</key>
@@ -437,22 +540,16 @@
 									<string>#string-double</string>
 								</dict>
 								<dict>
+									<key>captures</key>
+									<dict>
+										<key>1</key>
+										<dict>
+											<key>name</key>
+											<string>string.unquoted.css</string>
+										</dict>
+									</dict>
 									<key>match</key>
-									<string>(\b0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\s*,\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\s*,\s*)(0*((1?[0-9]{1,2})|(2([0-4][0-9]|5[0-5])))\b)</string>
-									<key>name</key>
-									<string>constant.other.color.rgb-value.css</string>
-								</dict>
-								<dict>
-									<key>match</key>
-									<string>\b([0-9]{1,2}|100)\s*%,\s*([0-9]{1,2}|100)\s*%,\s*([0-9]{1,2}|100)\s*%</string>
-									<key>name</key>
-									<string>constant.other.color.rgb-percentage.css</string>
-								</dict>
-								<dict>
-									<key>match</key>
-									<string>[^'") \t]+</string>
-									<key>name</key>
-									<string>variable.parameter.misc.css</string>
+									<string>(.*?)(?=\s*\))</string>
 								</dict>
 							</array>
 						</dict>
@@ -602,6 +699,60 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>match</key>
+					<string></string>
+					<key>name</key>
+					<string>invalid.illegal.css</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?ix)
+						 \[\]
+						|[\.#](?![a-z])
+					</string>
+					<key>name</key>
+					<string>invalid.illegal.css</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>This is totally useless as far as i can tell, but here it is anyway!</string>
+					<key>disabled</key>
+					<integer>1</integer>
+					<key>match</key>
+					<string>(?i)(?&lt;=[\w\)\]])\s+(?=[a-z\*\|\[\.\#\:])</string>
+					<key>name</key>
+					<string>meta.selector.descendant.css</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.directive.css</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.array.selectors.css</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?ix)
+						(?&lt;=[\w\)\]])
+							 (\s* [\&gt;\+~] \s*)
+							|(\s* ,       \s*)
+						(?=$|[a-z\*\|\[\.\#\:])</string>
+				</dict>
+				<dict>
+					<key>disabled</key>
+					<integer>1</integer>
+					<key>match</key>
+					<string>(?i)(?&lt;=[\w\)\]])\s*(,)\s*(?=[a-z\*\|\[\.\#\:])</string>
+					<key>name</key>
+					<string>punctuation.separator.array.selectors.css</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#source_css_selectors-namespace</string>
 				</dict>
@@ -641,7 +792,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(#)[a-zA-Z][a-zA-Z0-9_-]*</string>
+					<string>(?i)(#)[a-z][a-z0-9_-]*</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.id.css</string>
 				</dict>
@@ -655,7 +806,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(:+)\b(after|before|first-child|first-letter|first-line|selection)\b</string>
+					<string>(?i)(:+)\b(after|before|first-child|first-letter|first-line|selection)\b</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.pseudo-element.css</string>
 				</dict>
@@ -669,7 +820,156 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(:)\b(active|hover|link|visited|focus)\b</string>
+					<string>(?i)(:+)\b(root|last-child|first-of-type|last-of-type|only-child|only-of-type|empty|target|disabled|enabled|checked)\b</string>
+					<key>name</key>
+					<string>entity.other.attribute-name.pseudo-element.css.3</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?i)(:+)\b(?:nth-child|nth-last-child|nth-of-type|nth-last-of-type)\b(\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.css</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.begin.css</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?i)\s*(?=&lt;/style)|(\))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.end.css</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>entity.other.attribute-name.pseudo-element.css.3</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>\b(even|odd)\b</string>
+							<key>name</key>
+							<string>constant.language.css</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>(\+|-)</string>
+							<key>name</key>
+							<string>keyword.operator.arithmetic.css</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>[0-9]+(\.[0-9]+)?</string>
+							<key>name</key>
+							<string>constant.numeric.css</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\bn\b</string>
+							<key>name</key>
+							<string>keyword.other.css</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?i)(:+)\blang\b(\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.css</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.begin.css</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?i)\s*(?=&lt;/style)|(\))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.end.css</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>entity.other.attribute-name.pseudo-element.css.2</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>[\w-]+</string>
+							<key>name</key>
+							<string>string.unquoted.language.css</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?i)(:+)\b(not)\b(\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.css</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.logical.css</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.begin.css</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?i)\s*(?=&lt;/style)|(\))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.end.css</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>entity.other.attribute-name.pseudo-element.css.3</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_selectors</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.entity.css</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?i)(:)\b(active|hover|link|visited|focus)\b</string>
 					<key>name</key>
 					<string>entity.other.attribute-name.pseudo-class.css</string>
 				</dict>
@@ -687,7 +987,7 @@
 					<key>comment</key>
 					<string>http://www.w3.org/TR/css3-selectors/#attribute-selectors</string>
 					<key>end</key>
-					<string>(\]|(?&lt;!\\)\n)</string>
+					<string>(?i)\s*(?=&lt;/style)|(\]|(?&lt;!\\)\n)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -802,7 +1102,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=(?:^|\s|\[))\*?(\|(?!=))</string>
+					<string>(?&lt;=(?:^|\s|\[|\(|\}))\*?(\|(?!=))</string>
 					<key>name</key>
 					<string>meta.namespace-selector.css</string>
 				</dict>
@@ -821,7 +1121,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>"|(?&lt;!\\\\)(?=\n)</string>
+			<string>(?i)\s*(?=&lt;/style)|"|(?&lt;!\\\\)(?=\n)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
@@ -861,7 +1161,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>'|(?&lt;!\\)(?=\n)</string>
+			<string>(?i)\s*(?=&lt;/style)|'|(?&lt;!\\)(?=\n)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>

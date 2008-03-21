@@ -226,9 +226,9 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;![-a-z:])(?=[-a-z])</string>
+					<string>(?&lt;![-_*a-z:])(?=[-_*a-z])</string>
 					<key>end</key>
-					<string>(?i)\s*(?=&lt;/style)|\s*(:)?(?![-a-z])</string>
+					<string>(?i)\s*(?=&lt;/style)|\s*(:)?(?![-_*a-z])</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -300,8 +300,141 @@
 							<string>support.type.property-name.vendor.css</string>
 						</dict>
 						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.entity.css</string>
+								</dict>
+							</dict>
 							<key>match</key>
-							<string>\b(azimuth|background-attachment|background-color|background-image|background-position|background-repeat|background|border-bottom-color|border-bottom-style|border-bottom-width|border-bottom|border-collapse|border-color|border-left-color|border-left-style|border-left-width|border-left|border-right-color|border-right-style|border-right-width|border-right|border-spacing|border-style|border-top-color|border-top-style|border-top-width|border-top|border-width|border|bottom|caption-side|clear|clip|color|content|counter-increment|counter-reset|cue-after|cue-before|cue|cursor|direction|display|elevation|empty-cells|float|font-family|font-size-adjust|font-size|font-stretch|font-style|font-variant|font-weight|font|height|left|letter-spacing|line-height|list-style-image|list-style-position|list-style-type|list-style|margin-bottom|margin-left|margin-right|margin-top|marker-offset|margin|marks|max-height|max-width|min-height|min-width|-moz-border-radius|opacity|orphans|outline-color|outline-style|outline-width|outline|overflow(-[xy])?|padding-bottom|padding-left|padding-right|padding-top|padding|page-break-after|page-break-before|page-break-inside|page|pause-after|pause-before|pause|pitch-range|pitch|play-during|position|quotes|richness|right|size|speak-header|speak-numeral|speak-punctuation|speech-rate|speak|stress|table-layout|text-align|text-decoration|text-indent|text-shadow|text-transform|top|unicode-bidi|vertical-align|visibility|voice-family|volume|white-space|widows|width|word-spacing|z-index)\b</string>
+							<string>(?x)(?&lt;![-_*a-z:])(_|\*)?(
+								 azimuth
+								|background-attachment
+								|background-color
+								|background-image
+								|background-position
+								|background-repeat
+								|background
+								|border-bottom-color
+								|border-bottom-style
+								|border-bottom-width
+								|border-bottom
+								|border-collapse
+								|border-color
+								|border-left-color
+								|border-left-style
+								|border-left-width
+								|border-left
+								|border-right-color
+								|border-right-style
+								|border-right-width
+								|border-right
+								|border-spacing
+								|border-style
+								|border-top-color
+								|border-top-style
+								|border-top-width
+								|border-top
+								|border-width
+								|border
+								|bottom
+								|caption-side
+								|clear
+								|clip
+								|color
+								|content
+								|counter-increment
+								|counter-reset
+								|cue-after
+								|cue-before
+								|cue
+								|cursor
+								|direction
+								|display
+								|elevation
+								|empty-cells
+								|float
+								|font-family
+								|font-size-adjust
+								|font-size
+								|font-stretch
+								|font-style
+								|font-variant
+								|font-weight
+								|font
+								|height
+								|left
+								|letter-spacing
+								|line-height
+								|list-style-image
+								|list-style-position
+								|list-style-type
+								|list-style
+								|margin-bottom
+								|margin-left
+								|margin-right
+								|margin-top
+								|marker-offset
+								|margin
+								|marks
+								|max-height
+								|max-width
+								|min-height
+								|min-width
+								|-moz-border-radius
+								|opacity
+								|orphans
+								|outline-color
+								|outline-style
+								|outline-width
+								|outline
+								|overflow(-[xy])?
+								|padding-bottom
+								|padding-left
+								|padding-right
+								|padding-top
+								|padding
+								|page-break-after
+								|page-break-before
+								|page-break-inside
+								|page
+								|pause-after
+								|pause-before
+								|pause
+								|pitch-range
+								|pitch
+								|play-during
+								|position
+								|quotes
+								|richness
+								|right
+								|size
+								|speak-header
+								|speak-numeral
+								|speak-punctuation
+								|speech-rate
+								|speak
+								|stress
+								|table-layout
+								|text-align
+								|text-decoration
+								|text-indent
+								|text-shadow
+								|text-transform
+								|top
+								|unicode-bidi
+								|vertical-align
+								|visibility
+								|voice-family
+								|volume
+								|white-space
+								|widows
+								|width
+								|word-spacing
+								|z-index
+							)\b</string>
 							<key>name</key>
 							<string>support.type.property-name.css</string>
 						</dict>
@@ -340,13 +473,160 @@
 						</dict>
 						<dict>
 							<key>match</key>
-							<string>\b(absolute|all-scroll|always|auto|baseline|below|bidi-override|block|bold|bolder|both|bottom|break-all|break-word|capitalize|center|char|circle|col-resize|collapse|crosshair|dashed|decimal|default|disabled|disc|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ellipsis|fixed|groove|hand|help|hidden|horizontal|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|inactive|inherit|inline-block|inline|inset|inside|inter-ideograph|inter-word|italic|justify|keep-all|left|lighter|line-edge|line-through|line|list-item|loose|lower-alpha|lower-roman|lowercase|lr-tb|ltr|medium|middle|move|n-resize|ne-resize|newspaper|no-drop|no-repeat|nw-resize|none|normal|not-allowed|nowrap|oblique|outset|outside|overline|pointer|progress|relative|repeat-x|repeat-y|repeat|right|ridge|row-resize|rtl|s-resize|scroll|se-resize|separate|small-caps|solid|square|static|strict|super|sw-resize|table-footer-group|table-header-group|tb-rl|text-bottom|text-top|text|thick|thin|top|transparent|underline|upper-alpha|upper-roman|uppercase|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace)\b</string>
+							<string>(?x)\b(
+								 absolute
+								|all-scroll
+								|always
+								|auto
+								|baseline
+								|below
+								|bidi-override
+								|block
+								|bold
+								|bolder
+								|both
+								|bottom
+								|break-all
+								|break-word
+								|capitalize
+								|center
+								|char
+								|circle
+								|col-resize
+								|collapse
+								|crosshair
+								|dashed
+								|decimal
+								|default
+								|disabled
+								|disc
+								|distribute-all-lines
+								|distribute-letter
+								|distribute-space
+								|distribute
+								|dotted
+								|double
+								|e-resize
+								|ellipsis
+								|fixed
+								|groove
+								|hand
+								|help
+								|hidden
+								|horizontal
+								|ideograph-alpha
+								|ideograph-numeric
+								|ideograph-parenthesis
+								|ideograph-space
+								|inactive
+								|inherit
+								|inline-block
+								|inline
+								|inset
+								|inside
+								|inter-ideograph
+								|inter-word
+								|italic
+								|justify
+								|keep-all
+								|left
+								|lighter
+								|line-edge
+								|line-through
+								|line
+								|list-item
+								|loose
+								|lower-alpha
+								|lower-roman
+								|lowercase
+								|lr-tb
+								|ltr
+								|medium
+								|middle
+								|move
+								|n-resize
+								|ne-resize
+								|newspaper
+								|no-drop
+								|no-repeat
+								|nw-resize
+								|none
+								|normal
+								|not-allowed
+								|nowrap
+								|oblique
+								|outset
+								|outside
+								|overline
+								|pointer
+								|progress
+								|relative
+								|repeat-x
+								|repeat-y
+								|repeat
+								|right
+								|ridge
+								|row-resize
+								|rtl
+								|s-resize
+								|scroll
+								|se-resize
+								|separate
+								|small-caps
+								|solid
+								|square
+								|static
+								|strict
+								|super
+								|sw-resize
+								|table-footer-group
+								|table-header-group
+								|tb-rl
+								|text-bottom
+								|text-top
+								|text
+								|thick
+								|thin
+								|top
+								|transparent
+								|underline
+								|upper-alpha
+								|upper-roman
+								|uppercase
+								|vertical-ideographic
+								|vertical-text
+								|visible
+								|w-resize
+								|wait
+								|whitespace
+							)\b</string>
 							<key>name</key>
 							<string>support.constant.property-value.css</string>
 						</dict>
 						<dict>
 							<key>match</key>
-							<string>(\b(?i:arial|century|comic|courier|garamond|georgia|helvetica|impact|lucida|symbol|system|tahoma|times|trebuchet|utopia|verdana|webdings|sans-serif|serif|monospace)\b)</string>
+							<string>(?x)(\b(?i:
+								 arial
+								|century
+								|comic
+								|courier
+								|garamond
+								|georgia
+								|helvetica
+								|impact
+								|lucida
+								|symbol
+								|system
+								|tahoma
+								|times
+								|trebuchet
+								|utopia
+								|verdana
+								|webdings
+								|sans-serif
+								|serif
+								|monospace
+							)\b)</string>
 							<key>name</key>
 							<string>support.constant.font-name.css</string>
 						</dict>
@@ -567,6 +847,44 @@
 		<dict>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z;]) (?= _ [-\w])</string>
+					<key>comment</key>
+					<string>I can't seem to find a way to make it start after a ; and then end
+							   after a ; withoug breaking the universe, therefore I made it so
+							   that you have to have a bit of space</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.microsoft.trident.4</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?x) (?&lt;! [-a-z;]) (?= \* [-\w])</string>
+					<key>comment</key>
+					<string>I can't seem to find a way to make it start after a ; and then end
+							   after a ; withoug breaking the universe, therefore I made it so
+							   that you have to have a bit of space</string>
+					<key>end</key>
+					<string>((?&lt;=;)|(?=[\}]))</string>
+					<key>name</key>
+					<string>meta.property.vendor.microsoft.trident.5</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source_css_rules</string>
+						</dict>
+					</array>
+				</dict>
 				<dict>
 					<key>begin</key>
 					<string>(?x) (?&lt;! [-a-z])(?= -atsc-   [-\w])</string>

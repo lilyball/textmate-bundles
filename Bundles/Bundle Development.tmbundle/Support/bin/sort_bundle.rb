@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby -wKU
-require File.join(File.dirname(__FILE__), '../lib/escape')
-require File.join(File.dirname(__FILE__), '../lib/osx/plist')
+
+$: << '/Applications/TextMate.app/Contents/SharedSupport/Support/lib/'
+$: << '/Library/Application Support/TextMate/Support/lib/'
+$: << '~/Library/Application Support/TextMate/Support/lib/'
+require 'escape'
+require 'osx/plist'
 
 BundleDir = Dir.pwd + '/'
 

@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby -wKU
 
 require "find"
-require File.join(File.dirname(__FILE__), *%w[.. lib osx plist])
+
+$: << '/Applications/TextMate.app/Contents/SharedSupport/Support/lib/'
+$: << '/Library/Application Support/TextMate/Support/lib/'
+$: << '~/Library/Application Support/TextMate/Support/lib/'
+require "osx/plist"
 
 ROOT_DIRS = if ARGV.empty?
   %w[Bundles Review Disabled\ Bundles].map do |rel|

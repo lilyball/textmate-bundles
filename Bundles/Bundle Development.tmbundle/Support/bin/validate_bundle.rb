@@ -3,7 +3,9 @@
 require "yaml"
 require "find"
 
-$: << File.join(File.split(__FILE__).first, '../lib')
+$: << '/Applications/TextMate.app/Contents/SharedSupport/Support/lib/'
+$: << '/Library/Application Support/TextMate/Support/lib/'
+$: << '~/Library/Application Support/TextMate/Support/lib/'
 require "osx/plist"
 
 $legal_scopes, allowed_globals =

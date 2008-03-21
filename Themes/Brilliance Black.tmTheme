@@ -1196,6 +1196,20 @@ meta.brace.round</string>
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Property Value Parens</string>
+			<key>scope</key>
+			<string>source.css meta.scope.property-list meta.property-value punctuation.definition.arguments,
+source.css meta.scope.property-list meta.property-value punctuation.separator.arguments</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#006680</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>§ Pseudo-Element</string>
 			<key>scope</key>
 			<string>entity.other.attribute-name.pseudo-element</string>
@@ -1320,7 +1334,7 @@ meta.brace.round</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#000000</string>
+				<string>#0D0D0D</string>
 				<key>fontStyle</key>
 				<string></string>
 				<key>foreground</key>
@@ -1335,7 +1349,7 @@ meta.brace.round</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#0D0D0D</string>
+				<string>#19191980</string>
 				<key>fontStyle</key>
 				<string></string>
 				<key>foreground</key>
@@ -1847,7 +1861,7 @@ meta.brace.round</string>
 			<key>name</key>
 			<string>Invalid</string>
 			<key>scope</key>
-			<string>invalid</string>
+			<string>invalid -invalid.SOMETHING</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -1856,6 +1870,19 @@ meta.brace.round</string>
 				<string>bold</string>
 				<key>foreground</key>
 				<string>#330004</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Invalid Value</string>
+			<key>scope</key>
+			<string>invalid.SOMETHING</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>underline</string>
+				<key>foreground</key>
+				<string>#FF3600</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2454,6 +2481,37 @@ source.ocaml punctuation.separator.match-definition
 			<string>———————— END ————————</string>
 			<key>settings</key>
 			<dict/>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>IE6</string>
+			<key>scope</key>
+			<string>meta.property.vendor.microsoft.trident.4, 
+meta.property.vendor.microsoft.trident.4 support.type.property-name,
+meta.property.vendor.microsoft.trident.4 punctuation.terminator.rule</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#1B95E2</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>IE7</string>
+			<key>scope</key>
+			<string>meta.property.vendor.microsoft.trident.5, 
+meta.property.vendor.microsoft.trident.5 support.type.property-name,
+meta.property.vendor.microsoft.trident.5 punctuation.separator.key-value,
+meta.property.vendor.microsoft.trident.5 punctuation.terminator.rule</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#F5C034</string>
+			</dict>
 		</dict>
 	</array>
 	<key>uuid</key>

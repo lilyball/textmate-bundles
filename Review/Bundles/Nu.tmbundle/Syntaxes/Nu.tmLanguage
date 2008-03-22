@@ -120,8 +120,24 @@
 		<dict>
 			<key>begin</key>
 			<string>&lt;&lt;[+](.*)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.nu</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\1</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.nu</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.heredoc.escaped.nu</string>
 			<key>patterns</key>
@@ -135,8 +151,24 @@
 		<dict>
 			<key>begin</key>
 			<string>&lt;&lt;[-](.*)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.nu</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\1</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.nu</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.heredoc.unescaped.nu</string>
 		</dict>

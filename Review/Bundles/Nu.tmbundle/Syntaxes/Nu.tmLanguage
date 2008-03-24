@@ -84,7 +84,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>"</string>
+			<string>-"</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -104,7 +104,38 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.double.nu</string>
+			<string>string.quoted.double.unescaped.nu</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#interpolated_nu</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\+?"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.nu</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.nu</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.double.escaped.nu</string>
 			<key>patterns</key>
 			<array>
 				<dict>

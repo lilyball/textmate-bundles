@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;&lt;-${1:identifier}
-$0${1:identifier})</string>
+	<string>&lt;&lt;+${1:identifier}
+$0${1/(.*)\n(?m:.*)/$1/})</string>
 	<key>name</key>
 	<string>here string (escaped)</string>
 	<key>scope</key>
 	<string>source.nu</string>
 	<key>tabTrigger</key>
-	<string>&lt;&lt;-</string>
+	<string>&lt;&lt;+</string>
 	<key>uuid</key>
 	<string>DBDD1C05-DE75-44A0-85F0-80AC8E6646B7</string>
 </dict>

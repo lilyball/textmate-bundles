@@ -378,7 +378,7 @@
 		<key>escaped_char</key>
 		<dict>
 			<key>match</key>
-			<string>\\.</string>
+			<string>\\([0-7]{3}|x\h{2}|u\h{4}|.)</string>
 			<key>name</key>
 			<string>constant.character.escape.nu</string>
 		</dict>

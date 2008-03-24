@@ -170,12 +170,16 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.heredoc.escaped.nu</string>
+			<string>string.unquoted.heredoc.escaped.nu</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
 					<string>#escaped_char</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#interpolated_nu</string>
 				</dict>
 			</array>
 		</dict>
@@ -201,7 +205,14 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.heredoc.unescaped.nu</string>
+			<string>string.unquoted.heredoc.unescaped.nu</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#interpolated_nu</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>

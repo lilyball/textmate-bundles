@@ -399,7 +399,7 @@ class Block
   def words_to(n)
     re = Regexp.new("^(.{0,#{n}})(?:\s|$)")
     text =~ re
-    $1
+    $1 || text[0...n]
   end
 end
 

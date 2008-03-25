@@ -24,7 +24,7 @@ def stripComments(line)
     if $1
       s
     else
-      ' ' * s.length()
+      s.split("\n").map{|e| ' ' * e.length() }.join("\n")
     end
   end
 end

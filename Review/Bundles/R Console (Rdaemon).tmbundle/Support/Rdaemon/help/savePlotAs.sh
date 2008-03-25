@@ -19,9 +19,37 @@ echo -ne "Enter a valid and non-existing file name without an extension" | perl 
 
 while [ "$TMD_returnCode" != 6 ]
 do
-	DIA=$( cat "$MYDIR"/bin/icf.plist | "$DIALOG" -m "$MYDIR"/nibs/saveimage.nib )
-
-	. "$MYDIR"/bin/exportpl "$DIA" returnCode outfmtValue filename qualityValue tiffcompValue gray
+	export DIA=$( cat "$MYDIR"/bin/icf.plist | "$DIALOG" -m "$MYDIR"/nibs/saveimage.nib )
+	TMD_returnCode=`cat <<-AS | ruby --
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+    print OSX::PropertyList::load(%x{echo -en "$DIA"})["returnCode"]
+    AS
+    `
+	TMD_outfmtValue=`cat <<-AS | ruby --
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+    print OSX::PropertyList::load(%x{echo -en "$DIA"})["outfmtValue"]
+    AS
+    `
+	TMD_filename=`cat <<-AS | ruby --
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+    print OSX::PropertyList::load(%x{echo -en "$DIA"})["filename"]
+    AS
+    `
+	TMD_qualityValue=`cat <<-AS | ruby --
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+    print OSX::PropertyList::load(%x{echo -en "$DIA"})["qualityValue"]
+    AS
+    `
+	TMD_tiffcompValue=`cat <<-AS | ruby --
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+    print OSX::PropertyList::load(%x{echo -en "$DIA"})["tiffcompValue"]
+    AS
+    `
+	TMD_gray=`cat <<-AS | ruby --
+    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+    print OSX::PropertyList::load(%x{echo -en "$DIA"})["gray"]
+    AS
+    `
 	if [ "$TMD_returnCode" -eq 5 ]; then
 		echo "$DIA" >  "$MYDIR"/bin/icf.plist
 		TMD_filename=${TMD_filename//~/$HOME}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>#foreach(\$${1:temp_variable} in \$${2:array})
+	#${3:thing_to_do}
+#end</string>
+	<key>name</key>
+	<string>foreach</string>
+	<key>scope</key>
+	<string>source.velocity, text.html.velocity</string>
+	<key>tabTrigger</key>
+	<string>foreach</string>
+	<key>uuid</key>
+	<string>EDEE782B-9D6E-4F94-B24F-E4ADA87FD6F5</string>
+</dict>
+</plist>

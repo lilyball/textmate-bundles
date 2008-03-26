@@ -804,7 +804,7 @@ class ObjCMethodCompletion
     line = @line
     bc = line[1+caret_placement..-1].match /\A[a-zA-Z0-9_]+(:)?/
     if bc
-      backContext = "[[:alpha:]]*" + bc[0]
+      backContext = "[[:alnum:]]*" + bc[0]
       bcL = bc[0].length
     end
 
@@ -849,18 +849,18 @@ class ObjCMethodCompletion
       [res , 0]
     elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
       # [obj mess ^]
-      candidates = candidates_or_exit( mn + (backContext || "[[:alpha:]:]"), list, :methods ) # the alpha is to prevent satisfaction with just one part
+      candidates = candidates_or_exit( mn + (backContext || "[[:alnum:]:]"), list, :methods ) # the alpha is to prevent satisfaction with just one part
       res = pop_up(candidates, mn, "")
       [res , (backContext && (res != "$0") ? bcL : 0)]
     elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
       # [obj mess^]
       if mline[start[-1]..k.begin(0)-1+start[-1]].match alpha_and_space
-        candidates = candidates_or_exit( mn +k[0] + (backContext || "[[:alpha:]:]"), list, :methods)
+        candidates = candidates_or_exit( mn +k[0] + (backContext || "[[:alnum:]:]"), list, :methods)
         res =pop_up(candidates, mn, k[0])
         [res , (backContext && (res != "$0") ? bcL : 0)]
         # [NSOb^]
       elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[\s*$/)
-        candidates = candidates_or_exit( k[0] + (backContext || "[[:alpha:]]"), nil, :classes)
+        candidates = candidates_or_exit( k[0] + (backContext || "[[:alnum:]]"), nil, :classes)
         res =pop_up(candidates, "",k[0])
         [res , (backContext && (res != "$0") ? bcL : 0)]
       elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(colon_and_space)

@@ -45,7 +45,7 @@ begin
         revision_number = $1.to_i
         revision_comment[revision_number] = ''
       else
-        if line !~ /^-----/ then
+        if line !~ /^-----/ && revision_number > 0 then
           revision_comment[revision_number] += line
         end
       end

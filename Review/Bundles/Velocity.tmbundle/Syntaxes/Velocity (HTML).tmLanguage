@@ -6,6 +6,35 @@
 	<array>
 		<string>fhtml</string>
 	</array>
+	<key>foldingStartMarker</key>
+	<string>(?x)
+		(
+		\#(?:
+			    (?:macro|if|foreach)\b \s* \(
+			|\{ (?:macro|if|foreach)\b \s* \(
+		).*(?!\#\{?end).*$
+		)
+		| # Copied from HTML
+		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|li|form|dl)\b.*?&gt;
+		|&lt;!--(?!.*--\s*&gt;)
+		|^&lt;!--\ \#tminclude\ (?&gt;.*?--&gt;)$
+		|&lt;\?(?:php)?.*\b(if|for(each)?|while)\b.+:
+		|\{\{?(if|foreach|capture|literal|foreach|php|section|strip)
+		|\{\s*($|\?&gt;\s*$|//|/\*(.*\*/\s*$|(?!.*?\*/)))
+		)</string>
+	<key>foldingStopMarker</key>
+	<string>(?x)
+		(\#end\b|\#\{end)
+		
+		
+		| # Copied from HTML
+		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|li|form|dl)&gt;
+		|^(?!.*?&lt;!--).*?--\s*&gt;
+		|^&lt;!--\ end\ tminclude\ --&gt;$
+		|&lt;\?(?:php)?.*\bend(if|for(each)?|while)\b
+		|\{\{?/(if|foreach|capture|literal|foreach|php|section|strip)
+		|^[^{]*\}
+		)</string>
 	<key>keyEquivalent</key>
 	<string>^@V</string>
 	<key>name</key>

@@ -153,7 +153,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(andalso|orelse)\b</string>
+			<string>\b(andalso|orelse|not)\b</string>
 			<key>name</key>
 			<string>keyword.operator.logical.ml</string>
 		</dict>
@@ -273,6 +273,10 @@
 					<string>meta.module.sigdec.ml</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#spec</string>
@@ -402,6 +406,27 @@
 				</dict>
 				<dict>
 					<key>begin</key>
+					<string>\b(exception)\s*(\w+)\s*</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.exception.ml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=val|type|eqtype|datatype|structure|include|exception|end)</string>
+					<key>name</key>
+					<string>meta.spec.ml.exception</string>
+				</dict>
+				<dict>
+					<key>begin</key>
 					<string>\b(structure)\s*(\w+)\s*:</string>
 					<key>captures</key>
 					<dict>
@@ -417,11 +442,17 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=val|type|eqtype|datatype|structure|include|end)</string>
+					<string>(?=val|type|eqtype|datatype|structure|include|exception|end)</string>
 					<key>name</key>
 					<string>meta.spec.ml.structure</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>match</key>
+							<string>\b(sharing type)\b</string>
+							<key>name</key>
+							<string>keyword.other.ml</string>
+						</dict>
 						<dict>
 							<key>match</key>
 							<string>\b(sharing)\b</string>

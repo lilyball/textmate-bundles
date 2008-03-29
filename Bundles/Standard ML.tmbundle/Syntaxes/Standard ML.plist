@@ -310,7 +310,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(datatype)\s+([a-zA-Z][a-zA-Z0-9'_]*)\s*(?==)</string>
+					<string>\b(datatype)\s+(\(.*\))?\s*([a-zA-Z][a-zA-Z0-9'_]*)\s*(?==)</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -318,7 +318,7 @@
 							<key>name</key>
 							<string>keyword.other.ml</string>
 						</dict>
-						<key>2</key>
+						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.type.datatype.ml</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>comment</key>
@@ -14,6 +14,8 @@
 		Ok, hopefully this grammar works better on quoted stuff now.  It
 		may break for fancy macros, but should generally work pretty
 		smoothly.  -- Jacob Rus
+		
+		\b &lt;- [()\[\]\\;#,`\"] //ignore this for now... -- ozy`
 	</string>
 	<key>fileTypes</key>
 	<array>
@@ -73,7 +75,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.comment.semicolon.scheme</string>
+					<string>punctuation.definition.comment.scheme</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -93,25 +95,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=[\(\s])(#e|#i)?[0-9][0-9.]*</string>
-					<key>name</key>
-					<string>constant.numeric.scheme</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=[\(\s])(#x)[0-9a-fA-F]+</string>
-					<key>name</key>
-					<string>constant.numeric.scheme</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=[\(\s])(#o)[0-7]+</string>
-					<key>name</key>
-					<string>constant.numeric.scheme</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=[\(\s])(#b)[01]+</string>
+					<string>(?&lt;=[\(\s])((#e|#i)?[0-9]+(\.[0-9]+)?|(#x)[0-9a-fA-F]+|(#o)[0-7]+|(#b)[01]+)</string>
 					<key>name</key>
 					<string>constant.numeric.scheme</string>
 				</dict>
@@ -120,7 +104,7 @@
 		<key>illegal</key>
 		<dict>
 			<key>match</key>
-			<string>[()]</string>
+			<string>[()\[\]]</string>
 			<key>name</key>
 			<string>invalid.illegal.parenthesis.scheme</string>
 		</dict>
@@ -131,7 +115,7 @@
 				<dict>
 					<key>match</key>
 					<string>(?x)
-						(?&lt;=(\s|\()) # preceded by space or ( 
+						(?&lt;=(\s|\(|\[)) # preceded by space or ( 
 						( do|or|and|else|quasiquote|begin|if|case|set!|
 						  cond|let|unquote|define|let\*|unquote-splicing|delay|
 						  letrec)
@@ -213,7 +197,7 @@
 						(?=(\s|\()) # followed by space or (
 						</string>
 					<key>name</key>
-					<string>support.function.arithmetic-operators.scheme</string>
+					<string>keyword.operator.arithmetic.scheme</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -527,8 +511,10 @@
 						(\() # opening paren
 						((?:
 						  ([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._])
-						  \s*
-						)*)
+						  \s+
+						)*(?:
+						  ([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._])
+						)?)
 						(\)) # closing paren
 					</string>
 					<key>captures</key>
@@ -541,7 +527,17 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
+							<string>punctuation.definition.variable.scheme</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
 							<string>variable.parameter.scheme</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.variable.scheme</string>
 						</dict>
 					</dict>
 					<key>comment</key>

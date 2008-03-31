@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>nutest $TM_FILENAME</string>
+	<string>require_cmd "${TM_NUTEST:=nutest}" "If you have installed Nu, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_NUBILE&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+
+$TM_NUTEST $TM_FILENAME</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

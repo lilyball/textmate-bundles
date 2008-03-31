@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
+   TM_DATE=`date +%Y-%m-%d` \
+   perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
+      &lt; NewWikiPage.wiki &gt; "$TM_NEW_FILE"
+fi</string>
+	<key>extension</key>
+	<string>wiki</string>
+	<key>name</key>
+	<string>Google Code Wiki Page</string>
+	<key>scope</key>
+	<string>text.html.googlecodewiki</string>
+	<key>uuid</key>
+	<string>60BA67CD-B92D-4ECC-8811-24497DC35397</string>
+</dict>
+</plist>

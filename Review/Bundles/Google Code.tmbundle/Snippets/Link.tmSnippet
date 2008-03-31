@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>[${1:LinkTarget} ${2:`if test -n "$TM_SELECTED_TEXT"; then echo $TM_SELECTED_TEXT; else echo "Link Text"; fi`}$0]</string>
+	<key>keyEquivalent</key>
+	<string>^L</string>
+	<key>name</key>
+	<string>Link</string>
+	<key>scope</key>
+	<string>text.html.googlecodewiki</string>
+	<key>uuid</key>
+	<string>F9C9AF67-3D15-4844-B16C-F4E318DA0EAA</string>
+</dict>
+</plist>

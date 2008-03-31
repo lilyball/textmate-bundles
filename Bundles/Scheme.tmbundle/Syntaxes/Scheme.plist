@@ -15,7 +15,12 @@
 		may break for fancy macros, but should generally work pretty
 		smoothly.  -- Jacob Rus
 		
-		\b &lt;- [()\[\]\\;#,`\"] //ignore this for now... -- ozy`
+		I have attempted to get this under control but because of the way folding
+		and indentation interact in Textmate, I am not sure if it is possible. In the
+		meantime, I have implemented Python-style folding anchored at newlines.
+		Additionally, I have made some minor improvements to the numeric constant
+		highlighting. Next up is square bracket expressions, I guess, but that
+		should be trivial. -- ozy`
 	</string>
 	<key>fileTypes</key>
 	<array>
@@ -29,12 +34,7 @@
 	  )
 	$</string>
 	<key>foldingStopMarker</key>
-	<string>(?x)^ [ \t]*
-	  (?&lt;par&gt;
-	    ( [^()\n]++ | \( \g&lt;par&gt; \) )*+
-	  )
-	  ( \) [ \t]*+ ) ++
-	$</string>
+	<string>^\s*$</string>
 	<key>keyEquivalent</key>
 	<string>^~S</string>
 	<key>name</key>
@@ -95,7 +95,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=[\(\s])((#e|#i)?[0-9]+(\.[0-9]+)?|(#x)[0-9a-fA-F]+|(#o)[0-7]+|(#b)[01]+)</string>
+					<string>(?&lt;=[\(\s])((#e|#i)?[0-9]+(\.[0-9]+)?|(#x)[0-9a-fA-F]+|(#o)[0-7]+|(#b)[01]+)(?=[\s;()'",\[\]])</string>
 					<key>name</key>
 					<string>constant.numeric.scheme</string>
 				</dict>

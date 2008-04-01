@@ -88,12 +88,12 @@ module TextMate
       # 
       # +choices+ should be an array of dictionaries with the following keys:
       # 
-      # * +title+     -- The title to display in the suggestions list
-      # * +snippet+   -- Snippet to insert after selection
-      # * +image+     -- An image name, see the <tt>:images</tt> option
-      # * +filterOn+  -- Typed text to filter on (defaults to +title+)
+      # * +display+ -- The title to display in the suggestions list
+      # * +insert+  -- Snippet to insert after selection
+      # * +image+   -- An image name, see the <tt>:images</tt> option
+      # * +match+   -- Typed text to filter on (defaults to +display+)
       # 
-      # All options except +title+ are optional.
+      # All options except +display+ are optional.
       # 
       # +options+ is a hash which can accept the following keys:
       #
@@ -132,10 +132,10 @@ module TextMate
               ENV['SNIPPET'] = lambda{|choice|
                 # choice = OSX::PropertyList::load(choice)
                 
-                #Show the tool_tip before inserting the snippet to make it align to the end of the title
+                #Show the tool_tip before inserting the snippet to make it align to the end of the match
                 TextMate::UI.tool_tip(choice['tool_tip']) if choice['tool_tip']
                 
-                choice['snippet']
+                choice['insert']
               }.call(OSX::PropertyList::load(io.read))
             end
             `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
@@ -415,7 +415,7 @@ require "test/unit"
 
 
 class TestCompletes < Test::Unit::TestCase
-  def test_basic
+  def test_basic_completion
     setup!
     #Should complete the snippet, if there is one, without requiring a block
     TextMate::UI.complete(@choices)
@@ -454,21 +454,21 @@ class TestCompletes < Test::Unit::TestCase
     TextMate::UI.complete(@choices) do |choice|
       TextMate::UI.complete(@choices) do |choice|
         TextMate::UI.complete(@choices) do |choice|
-          choice['snippet']
+          choice['insert']
         end
-        choice['snippet']
+        choice['insert']
       end
-      choice['snippet']
+      choice['insert']
     end
 
   end
   
-  def test_display_different_from_title
+  def test_display_different_from_match
     setup!
     @choices = [
-      {'filterOn' => 'moo', 'title' => 'Hairy Monkey'},
-      {'filterOn' => 'foo', 'title' => 'Purple Turtles'},
-      {'filterOn' => 'bar', 'title' => 'Angry Elephant'},
+      {'match' => 'moo', 'display' => 'Hairy Monkey'},
+      {'match' => 'foo', 'display' => 'Purple Turtles'},
+      {'match' => 'bar', 'display' => 'Angry Elephant'},
     ]
     TextMate::UI.complete(@choices)
 
@@ -478,9 +478,9 @@ class TestCompletes < Test::Unit::TestCase
   def setup!
     make_front!
     @choices = [
-      {'image' => 'Drag',    'title' => 'moo', 'snippet' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},
-      {'image' => 'Macro',   'title' => 'foo', 'snippet' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip' => "(one, two)\n This method does something or other maybe.\n Insert longer description of it here."},
-      {'image' => 'Command', 'title' => 'bar', 'snippet' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})', 'tool_tip' => "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here."},
+      {'image' => 'Drag',    'display' => 'moo', 'insert' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},
+      {'image' => 'Macro',   'display' => 'foo', 'insert' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip' => "(one, two)\n This method does something or other maybe.\n Insert longer description of it here."},
+      {'image' => 'Command', 'display' => 'bar', 'insert' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})', 'tool_tip' => "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here."},
     ]
   end
   def make_front!

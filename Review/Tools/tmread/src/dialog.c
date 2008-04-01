@@ -4,6 +4,7 @@
 #include "plist.h"
 #include "buffer.h"
 
+#include <signal.h>
 #include <sys/syscall.h>
 #include <stdlib.h>
 #include <CoreFoundation/CoreFoundation.h>
@@ -256,6 +257,8 @@ void get_input_from_user() {
  
     if (pipe(input) < 0) die("failed to create input pipe for tm_dialog");
     if (pipe(output) < 0) die("failed to create output pipe for tm_dialog");
+
+	sig_t previous_sigchld_handler = signal(SIGCHLD, SIG_DFL);
  
     int child = fork();
     if (child < 0) die("failed to fork() for tm_dialog");
@@ -273,15 +276,22 @@ void get_input_from_user() {
     destroy_buffer(parameters_buffer);
 
     // Read all of tm_dialog's output
+	D("about to consume tm_dialog's output\n");
     buffer_t* output_buffer = create_buffer_from_file_descriptor(output[R]);
     close(output[R]);
 
     // Wait for tm_dialog to finish
     int return_code;
-    wait(&return_code);
+
+	D("about to wait ...\n");
+	int waitError = wait(&return_code);
+	if(waitError == -1)
+		die("tm_dialog wait() failed: %s\n", strerror(errno));
     if (WEXITSTATUS(return_code) != 0)
         die("tm_dialog returned with code %d, output ... \n%s", WEXITSTATUS(return_code), create_cstr_from_buffer(output_buffer));
 
+	signal(SIGCHLD, previous_sigchld_handler);
+	
 	input_buffer = create_user_input_from_output(output_buffer);
 	destroy_buffer(output_buffer);
 }

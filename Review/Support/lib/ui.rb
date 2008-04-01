@@ -1,6 +1,9 @@
 require 'English'
-require File.dirname(__FILE__) + '/escape'
-require File.dirname(__FILE__) + '/osx/plist'
+# require File.dirname(__FILE__) + '/escape'
+# require File.dirname(__FILE__) + '/osx/plist'
+# Need to change this for testing the file in another folder
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 
 TM_DIALOG = e_sh ENV['DIALOG'] unless defined?(TM_DIALOG)
 
@@ -76,14 +79,31 @@ module TextMate
           
           options[:currentword] = ENV['TM_CURRENT_WORD']
           
+          images = {
+            "Macro"      => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png",
+            "Language"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
+            "Template"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png",
+            "Templates"  => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Templates.png",
+            "Snippet"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png",
+            "Preference" => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Preferences.png",
+            "Drag"       => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png",
+            "Command"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png"
+          }
+          images.merge!(options[:images]) if options[:images]
+          
+          
           ENV['CURRENT_WORD'] = options[:currentword]
           IO.popen('"$DIALOG" popup --wait --current-word "$CURRENT_WORD"', 'w+') do |io|
-            io << ({'suggestions' => choices}.to_plist)
+            io << ({'suggestions' => choices, 'images' => images}.to_plist)
             io.close_write
+            
             if block_given?
               ENV['SNIPPET'] = yield io.read
-              `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
+            else
+              ENV['SNIPPET'] = lambda{|choice| choices.find{|c| c['title'] == choice }['snippet'] }.call(io.read)
             end
+            `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
+            
           end
         end
       end
@@ -340,13 +360,16 @@ if $0 == __FILE__
 # Test TextMate::UI.complete
 `open "txmt://open?url=file://$TM_FILEPATH"`
 choices = [
-  {'title' => 'foo'},
-  {'title' => 'bar'},
+  {'image' => 'Drag', 'title' => 'moo', 'snippet' => '(one, two, four[, five])'},
+  {'image' => 'Macro', 'title' => 'foo', 'snippet' => '(one, two)'},
+  {'image' => 'Command', 'title' => 'bar', 'snippet' => '(one, two[, three])'},
 ]
 
-TextMate::UI.complete(choices) do |choice|
-  "some snippet involving \"#{choice}\""
-end
+TextMate::UI.complete(choices) #Should complete the snippet, if there is one, without requiring a block
+
+# TextMate::UI.complete(choices) do |choice|
+#   "some snippet involving \"#{choice}\""
+# end
 
 end
 

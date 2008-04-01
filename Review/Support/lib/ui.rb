@@ -71,6 +71,25 @@ module TextMate
         `#{TM_DIALOG} -cqp #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
       end
   
+      # Show Tooltip
+      def tooltip(content, options={})
+        IO.popen(%{"$DIALOG" tooltip #{'-t' if options[:transparent]}}, 'w') do |proc|
+          proc << content
+          proc << '<style>' + options[:css] + '</style>' if options[:css]
+          if options[:color] or options[:background]
+            proc << <<-HTML
+            <style>
+            body{
+              #{'color:'      + options[:color]      +' ;' if options[:color]     };
+              #{'background:' + options[:background] +' ;' if options[:background]};
+            }
+            </style>
+            HTML
+          end
+          proc.close_write
+        end
+      end
+      
       # Interactive Code Completion Selector
       def complete(choices, options = {})
         pid = fork do
@@ -100,7 +119,10 @@ module TextMate
             if block_given?
               ENV['SNIPPET'] = yield io.read
             else
-              ENV['SNIPPET'] = lambda{|choice| choices.find{|c| c['title'] == choice }['snippet'] }.call(io.read)
+              ENV['SNIPPET'] = lambda{|choice| choices.find do |c|
+                TextMate::UI.tooltip(c['tooltip']) if c['title'] == choice and c['tooltip']
+                c['title'] == choice
+              end['snippet'] }.call(io.read)
             end
             `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
             
@@ -360,12 +382,17 @@ if $0 == __FILE__
 # Test TextMate::UI.complete
 `open "txmt://open?url=file://$TM_FILEPATH"`
 choices = [
-  {'image' => 'Drag', 'title' => 'moo', 'snippet' => '(one, two, four[, five])'},
-  {'image' => 'Macro', 'title' => 'foo', 'snippet' => '(one, two)'},
-  {'image' => 'Command', 'title' => 'bar', 'snippet' => '(one, two[, three])'},
+  {'image' => 'Drag', 'title' => 'moo', 'snippet' => '(one, two, four[, five])', 'tooltip' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
+  {'image' => 'Macro', 'title' => 'foo', 'snippet' => '(one, two)', 'tooltip' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
+  {'image' => 'Command', 'title' => 'bar', 'snippet' => '(one, two[, three])', 'tooltip' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
 ]
 
-TextMate::UI.complete(choices) #Should complete the snippet, if there is one, without requiring a block
+# TextMate::UI.complete(choices) #Should complete the snippet, if there is one, without requiring a block
+TextMate::UI.tooltip('Normal Tooltip')
+TextMate::UI.tooltip('<div style="background:blue">{:transparent => true}</div>', {:transparent => true})
+TextMate::UI.tooltip("{:transparent => true, :color => 'blue', :background => 'black'}", {:transparent => true, :color => 'blue', :background => 'black'})
+TextMate::UI.tooltip('{:css => {:color => "green"}}', {:color => 'green'})
+TextMate::UI.tooltip('RAW CSS', {:css => "html{background:red} body{margin:1em; background:transparent; color: yellow;}"})
 
 # TextMate::UI.complete(choices) do |choice|
 #   "some snippet involving \"#{choice}\""

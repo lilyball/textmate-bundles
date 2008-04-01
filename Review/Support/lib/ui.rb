@@ -68,6 +68,26 @@ module TextMate
         `#{TM_DIALOG} -cqp #{e_sh plist.to_plist} #{e_sh nib} &> /dev/null &`
       end
   
+      # Interactive Code Completion Selector
+      def complete(choices, options = {})
+        pid = fork do
+          STDOUT.reopen(open('/dev/null'))
+          STDERR.reopen(open('/dev/null'))
+          
+          options[:currentword] = ENV['TM_CURRENT_WORD']
+          
+          ENV['CURRENT_WORD'] = options[:currentword]
+          IO.popen('"$DIALOG" popup --wait --current-word "$CURRENT_WORD"', 'w+') do |io|
+            io << ({'suggestions' => choices}.to_plist)
+            io.close_write
+            if block_given?
+              ENV['SNIPPET'] = yield io.read
+              `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
+            end
+          end
+        end
+      end
+      
       # pop up a menu on screen
       def menu(options)
         return nil if options.empty?
@@ -295,6 +315,7 @@ module TextMate
         options["string-output"] = ""
         options
       end
+      
     end
   end
 end
@@ -303,7 +324,7 @@ end
 if $0 == __FILE__
 #  puts TextMate::UI.request_secure_string(:title => "Hotness", :prompt => 'Please enter some hotness', :default => 'teh hotness')
 
-  puts TextMate::UI.request_item(:title => "Hotness", :prompt => 'Please enter some hotness', :items => ['hotness', 'coolness', 'iceness'])
+  # puts TextMate::UI.request_item(:title => "Hotness", :prompt => 'Please enter some hotness', :items => ['hotness', 'coolness', 'iceness'])
 
   # params = {'title' => "Hotness", 'prompt' => 'Please enter some hotness', 'string' => 'teh hotness'}
   # return_value = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + '/nibs/RequestString')}}
@@ -315,5 +336,17 @@ if $0 == __FILE__
 #	result = TextMate::UI.alert(:warning, 'The wallaby has escaped.', 'The hard disk may be full, or maybe you should try using a larger cage.', 'Dagnabit', 'I Am Relieved', 'Heavens')
 	
 #	puts "Button pressed: #{result}"
+
+# Test TextMate::UI.complete
+`open "txmt://open?url=file://$TM_FILEPATH"`
+choices = [
+  {'title' => 'foo'},
+  {'title' => 'bar'},
+]
+
+TextMate::UI.complete(choices) do |choice|
+  "some snippet involving \"#{choice}\""
+end
+
 end
 

@@ -77,7 +77,7 @@ buffer_t * create_buffer_from_file_descriptor(int fd) {
         if (bytes_read > 0) {
             add_to_buffer(buffer, intermediary_buffer, bytes_read);
         } else if (bytes_read < 0) {
-			D("read on tm_dialog output produced '%s'", strerror(errno));
+			D("create_buffer_from_file_descriptor(): read error = '%s'\n", strerror(errno));
 		}
 
     } while(bytes_read != 0);

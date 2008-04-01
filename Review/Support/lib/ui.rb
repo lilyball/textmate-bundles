@@ -112,7 +112,7 @@ module TextMate
           STDOUT.reopen(open('/dev/null'))
           STDERR.reopen(open('/dev/null'))
           
-          options[:currentword] = ENV['TM_CURRENT_WORD']
+          options[:currentword] ||= ENV['TM_CURRENT_WORD']
           command =  "#{TM_DIALOG} popup --wait"
           command << " --current-word #{e_sh options[:currentword]}"    if options[:currentword]
           command << " --static-prefix #{e_sh options[:static_prefix]}" if options[:static_prefix]
@@ -377,6 +377,7 @@ end
 
 # interactive unit tests
 if $0 == __FILE__
+require "test/unit"
 # =========================
 # = request_secure_string =
 # =========================
@@ -411,84 +412,117 @@ if $0 == __FILE__
 # ================== #
 # = complete usage = #
 # ================== #
-# =begin
 
-`open "txmt://open?url=file://$TM_FILEPATH"` #For testing purposes, make this document the topmost so that the complete popup works
 
-# Set 
-choices = [
-  {'image' => 'Drag',    'title' => 'moo', 'snippet' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},
-  {'image' => 'Macro',   'title' => 'foo', 'snippet' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip' => "(one, two)\n This method does something or other maybe.\n Insert longer description of it here."},
-  {'image' => 'Command', 'title' => 'bar', 'snippet' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})', 'tool_tip' => "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here."},
-]
+class TestCompletes < Test::Unit::TestCase
+  def test_basic
+    setup!
+    #Should complete the snippet, if there is one, without requiring a block
+    TextMate::UI.complete(@choices)
 
-# TO TEST THE COMPLETIONS YOU SHOULD COMMENT THEM ALL OUT EXCEPT ONE AT A TIME
+  end
+  
+  def test_with_images
+    setup!
+    @images = {
+      "Macro"      => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png",
+      "Language"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
+      "Template"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png",
+      "Templates"  => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Templates.png",
+      "Snippet"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png",
+      "Preference" => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Preferences.png",
+      "Drag"       => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png",
+      "Command"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png"
+    }
+    
+    TextMate::UI.complete @choices, :images => @images
 
-#Should complete the snippet, if there is one, without requiring a block
-TextMate::UI.complete(choices)
+  end
+  
+  def test_with_block
+    setup!
+    #Use a block to create a custom snippet to be inserted, the block gets passed your choice as a hash
+    TextMate::UI.complete(@choices){|choice| e_sn choice.inspect }
 
-#Use a block to create a custom snippet to be inserted, the block gets passed your choice as a hash
-TextMate::UI.complete(choices){|choice| e_sn choice.inspect }
-
-#Supply a hash of images
-images = {
-  "Macro"      => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png",
-  "Language"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
-  "Template"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png",
-  "Templates"  => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Templates.png",
-  "Snippet"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png",
-  "Preference" => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Preferences.png",
-  "Drag"       => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png",
-  "Command"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png"
-}
-TextMate::UI.complete choices, :images => images
-
-# Nested completes
-# Put a complete in the block of another complete 
-# to make it wait for you to choose the first before starting the next.
-TextMate::UI.complete(choices) do |choice|
-  TextMate::UI.complete(choices) do |choice|
-    TextMate::UI.complete(choices) do |choice|
+  end
+  
+  def test_nested_or_stacked
+    setup!
+    # Nested completes
+    # Put a complete in the block of another complete 
+    # to make it wait for you to choose the first before starting the next.
+    TextMate::UI.complete(@choices) do |choice|
+      TextMate::UI.complete(@choices) do |choice|
+        TextMate::UI.complete(@choices) do |choice|
+          choice['snippet']
+        end
+        choice['snippet']
+      end
       choice['snippet']
     end
-    choice['snippet']
+
   end
-  choice['snippet']
+  
+  def test_display_different_from_title
+    setup!
+    @choices = [
+      {'filterOn' => 'moo', 'title' => 'Hairy Monkey'},
+      {'filterOn' => 'foo', 'title' => 'Purple Turtles'},
+      {'filterOn' => 'bar', 'title' => 'Angry Elephant'},
+    ]
+    TextMate::UI.complete(@choices)
+
+  end
+  
+  private
+  def setup!
+    make_front!
+    @choices = [
+      {'image' => 'Drag',    'title' => 'moo', 'snippet' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},
+      {'image' => 'Macro',   'title' => 'foo', 'snippet' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip' => "(one, two)\n This method does something or other maybe.\n Insert longer description of it here."},
+      {'image' => 'Command', 'title' => 'bar', 'snippet' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})', 'tool_tip' => "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here."},
+    ]
+  end
+  def make_front!
+    `open "txmt://open?url=file://$TM_FILEPATH"` #For testing purposes, make this document the topmost so that the complete popup works
+  end
 end
 
-=begin
-=end
 
 # ================== #
 # = tool_tip usage = #
 # ================== #
-# =begin
 
-# Insert normal text for a normal tool_tip:
-TextMate::UI.tool_tip('Normal Tooltip')
-
-# Use the :transparent option to make custom shaped tool_tips:
-TextMate::UI.tool_tip('<h1 style="background:white; -webkit-border-radius: 15px; padding:1em; -webkit-transform: rotate(5deg); margin-top:100px">Transparent Tooltip!</h1>', {:transparent => true, :format => :html})
-
-# Use the :format option to use html in your tool_tip:
-TextMate::UI.tool_tip <<-HTML, :format => :html
-<h1>
-  Allow <strong>html</strong>
-</h1>
-<p>To be used</p>
-HTML
-
-# Text is also the default format
-TextMate::UI.tool_tip <<-TEXT, :format => :text
+class TestToolTips < Test::Unit::TestCase
+  def test_basic
+    # Insert normal text for a normal tool_tip:
+    TextMate::UI.tool_tip('Normal Tooltip')
+  end
+  def test_transparent
+    # Use the :transparent option to make custom shaped tool_tips:
+    TextMate::UI.tool_tip('<h1 style="background:white; -webkit-border-radius: 15px; padding:1em; -webkit-transform: rotate(5deg); margin-top:100px">Transparent Tooltip!</h1>', {:transparent => true, :format => :html})
+  end
+  def test_html
+    # Use the :format option to use html in your tool_tip:
+    TextMate::UI.tool_tip <<-HTML, :format => :html
+    <h1>
+      Allow <strong>html</strong>
+    </h1>
+    <p>To be used</p>
+    HTML
+  end
+  def test_text_formatting
+    # Text is also the default format
+    TextMate::UI.tool_tip <<-TEXT, :format => :text
 This 
   should    keep 
     all the whitespace 
       that    is    given 
         in     this      here
           s    t    r    i    n    g
-TEXT
+    TEXT
+  end
+end
 
-=begin
-=end
 end #Tests
 

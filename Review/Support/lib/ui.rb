@@ -83,35 +83,50 @@ module TextMate
       end
       
       # Interactive Code Completion Selector
-      def complete(choices, options = {})
+      # Displays the pop-up completion menu with the list of +choices+ provided.
+      # This method will fork execution so that control returns to TextMate.
+      # 
+      # +choices+ should be an array of dictionaries with the following keys:
+      # 
+      # * +title+     -- The title to display in the suggestions list
+      # * +snippet+   -- Snippet to insert after selection
+      # * +image+     -- An image name, see the <tt>:images</tt> option
+      # * +filterOn+  -- Typed text to filter on (defaults to +title+)
+      # 
+      # All options except +title+ are optional.
+      # 
+      # +options+ is a hash which can accept the following keys:
+      #
+      # * <tt>:extra_chars</tt>       -- by default only alphanumeric characters will be accepted,
+      #   you can augment the list with this option
+      # * <tt>:case_insensitive</tt>  -- ignore case when filtering
+      # * <tt>:static_prefix</tt>     -- a prefix which is used when filtering suggestions.
+      # * <tt>:currentword</tt>       -- defaults to the current word
+      # * <tt>:images</tt>            -- a +Hash+ of image names to paths
+      # 
+      # If a block is given, the selected item from the +choices+ array will be yielded
+      # (with a new key +index+ added, which is the index of the +choice+ into the +choices+ array)
+      # and the result of the block inserted as a snippet
+      def complete(choices, options = {}) #  :yields: choice
         pid = fork do
           STDOUT.reopen(open('/dev/null'))
           STDERR.reopen(open('/dev/null'))
           
           options[:currentword] = ENV['TM_CURRENT_WORD']
+          command =  "#{TM_DIALOG} popup --wait"
+          command << " --current-word #{e_sh options[:currentword]}"    if options[:currentword]
+          command << " --static-prefix #{e_sh options[:static_prefix]}" if options[:static_prefix]
+          command << " --extra-chars #{e_sh options[:extra_chars]}"     if options[:extra_chars]
+          command << " --case-insensitive"                              if options[:case_insensitive]
           
-          # Supply a list of default images
-          # FIXME: Change this hash to a list of better default images
-          images = {
-            "Macro"      => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png",
-            "Language"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
-            "Template"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png",
-            "Templates"  => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Templates.png",
-            "Snippet"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png",
-            "Preference" => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Preferences.png",
-            "Drag"       => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png",
-            "Command"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png"
-          }
-          images.merge!(options[:images]) if options[:images]
+          plist = {'suggestions' => choices}
+          plist['images'] = options[:images] if options[:images]
           
-          
-          ENV['CURRENT_WORD'] = options[:currentword]
-          IO.popen('"$DIALOG" popup --wait --current-word "$CURRENT_WORD"', 'w+') do |io|
-            io << ({'suggestions' => choices, 'images' => images}.to_plist)
+          IO.popen(command, 'w+') do |io|
+            io << plist.to_plist
             io.close_write
-            
             if block_given?
-              ENV['SNIPPET'] = yield OSX::PropertyList::load(io.read)
+              ENV['SNIPPET'] = yield OSX::PropertyList.load(io.read)
             else
               # Run a default block if no block is given.
               ENV['SNIPPET'] = lambda{|choice|
@@ -124,7 +139,6 @@ module TextMate
               }.call(OSX::PropertyList::load(io.read))
             end
             `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
-            
           end
         end
       end
@@ -418,9 +432,14 @@ TextMate::UI.complete(choices){|choice| e_sn choice.inspect }
 
 #Supply a hash of images
 images = {
-  "Drag"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
-  "Macro"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png",
-  "Command" => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png",
+  "Macro"      => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png",
+  "Language"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
+  "Template"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png",
+  "Templates"  => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Templates.png",
+  "Snippet"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png",
+  "Preference" => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Preferences.png",
+  "Drag"       => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png",
+  "Command"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png"
 }
 TextMate::UI.complete choices, :images => images
 

@@ -72,20 +72,12 @@ module TextMate
       end
   
       # Show Tooltip
-      def tooltip(content, options={})
-        IO.popen(%{"$DIALOG" tooltip #{'-t' if options[:transparent]}}, 'w') do |proc|
+      def tool_tip(content, options={}) # Possible options = {:format => :html|:text, :transparent => true}
+        command =  %{"$DIALOG" tooltip}
+        command << ' -t' if options[:transparent]
+        command << ' -format = ' + options[:format].to_s if options[:format]
+        IO.popen(command, 'w') do |proc|
           proc << content
-          proc << '<style>' + options[:css] + '</style>' if options[:css]
-          if options[:color] or options[:background]
-            proc << <<-HTML
-            <style>
-            body{
-              #{'color:'      + options[:color]      +' ;' if options[:color]     };
-              #{'background:' + options[:background] +' ;' if options[:background]};
-            }
-            </style>
-            HTML
-          end
           proc.close_write
         end
       end
@@ -98,6 +90,8 @@ module TextMate
           
           options[:currentword] = ENV['TM_CURRENT_WORD']
           
+          # Supply a list of default images
+          # FIXME: Change this hash to a list of better default images
           images = {
             "Macro"      => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png",
             "Language"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
@@ -117,12 +111,17 @@ module TextMate
             io.close_write
             
             if block_given?
-              ENV['SNIPPET'] = yield io.read
+              ENV['SNIPPET'] = yield OSX::PropertyList::load(io.read)
             else
-              ENV['SNIPPET'] = lambda{|choice| choices.find do |c|
-                TextMate::UI.tooltip(c['tooltip']) if c['title'] == choice and c['tooltip']
-                c['title'] == choice
-              end['snippet'] }.call(io.read)
+              # Run a default block if no block is given.
+              ENV['SNIPPET'] = lambda{|choice|
+                # choice = OSX::PropertyList::load(choice)
+                
+                #Show the tool_tip before inserting the snippet to make it align to the end of the title
+                TextMate::UI.tool_tip(choice['tool_tip']) if choice['tool_tip']
+                
+                choice['snippet']
+              }.call(OSX::PropertyList::load(io.read))
             end
             `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
             
@@ -364,39 +363,100 @@ end
 
 # interactive unit tests
 if $0 == __FILE__
-#  puts TextMate::UI.request_secure_string(:title => "Hotness", :prompt => 'Please enter some hotness', :default => 'teh hotness')
+# =========================
+# = request_secure_string =
+# =========================
+# puts TextMate::UI.request_secure_string(:title => "Hotness", :prompt => 'Please enter some hotness', :default => 'teh hotness')
 
-  # puts TextMate::UI.request_item(:title => "Hotness", :prompt => 'Please enter some hotness', :items => ['hotness', 'coolness', 'iceness'])
+# ================
+# = request_item =
+# ================
+# puts TextMate::UI.request_item(:title => "Hotness", :prompt => 'Please enter some hotness', :items => ['hotness', 'coolness', 'iceness'])
 
-  # params = {'title' => "Hotness", 'prompt' => 'Please enter some hotness', 'string' => 'teh hotness'}
-  # return_value = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + '/nibs/RequestString')}}
-  # return_hash = OSX::PropertyList::load(return_value)
-  # puts return_hash['result'].inspect
-  
+# ========
+# = Misc =
+# ========
+# params = {'title' => "Hotness", 'prompt' => 'Please enter some hotness', 'string' => 'teh hotness'}
+# return_value = %x{#{TM_DIALOG} -cmp #{e_sh params.to_plist} #{e_sh(ENV['TM_SUPPORT_PATH'] + '/nibs/RequestString')}}
+# return_hash = OSX::PropertyList::load(return_value)
+# puts return_hash['result'].inspect
+
+# ==========
+# = dialog =
+# ==========
 #  puts TextMate::UI.dialog(:nib => , :parameters => , :center => true)
-  
+
+# ===============
+# = alert usage =
+# ===============
 #	result = TextMate::UI.alert(:warning, 'The wallaby has escaped.', 'The hard disk may be full, or maybe you should try using a larger cage.', 'Dagnabit', 'I Am Relieved', 'Heavens')
-	
+# 
 #	puts "Button pressed: #{result}"
 
-# Test TextMate::UI.complete
-`open "txmt://open?url=file://$TM_FILEPATH"`
+
+# ================== #
+# = complete usage = #
+# ================== #
+# =begin
+
+`open "txmt://open?url=file://$TM_FILEPATH"` #For testing purposes, make this document the topmost so that the complete popup works
+
+# Set 
 choices = [
-  {'image' => 'Drag', 'title' => 'moo', 'snippet' => '(one, two, four[, five])', 'tooltip' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
-  {'image' => 'Macro', 'title' => 'foo', 'snippet' => '(one, two)', 'tooltip' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
-  {'image' => 'Command', 'title' => 'bar', 'snippet' => '(one, two[, three])', 'tooltip' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
+  {'image' => 'Drag',    'title' => 'moo', 'snippet' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},
+  {'image' => 'Macro',   'title' => 'foo', 'snippet' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip' => "(one, two)\n This method does something or other maybe.\n Insert longer description of it here."},
+  {'image' => 'Command', 'title' => 'bar', 'snippet' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})', 'tool_tip' => "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here."},
 ]
 
-# TextMate::UI.complete(choices) #Should complete the snippet, if there is one, without requiring a block
-TextMate::UI.tooltip('Normal Tooltip')
-TextMate::UI.tooltip('<div style="background:blue">{:transparent => true}</div>', {:transparent => true})
-TextMate::UI.tooltip("{:transparent => true, :color => 'blue', :background => 'black'}", {:transparent => true, :color => 'blue', :background => 'black'})
-TextMate::UI.tooltip('{:css => {:color => "green"}}', {:color => 'green'})
-TextMate::UI.tooltip('RAW CSS', {:css => "html{background:red} body{margin:1em; background:transparent; color: yellow;}"})
+# TO TEST THE COMPLETIONS YOU SHOULD COMMENT THEM ALL OUT EXCEPT ONE AT A TIME
 
-# TextMate::UI.complete(choices) do |choice|
-#   "some snippet involving \"#{choice}\""
-# end
+#Should complete the snippet, if there is one, without requiring a block
+TextMate::UI.complete(choices)
 
-end
+#Use a block to create a custom snippet to be inserted, the block gets passed your choice as a hash
+TextMate::UI.complete(choices){|choice| e_sn choice.inspect }
+
+#Supply a hash of images
+images = {
+  "Drag"    => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
+  "Macro"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png",
+  "Command" => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png",
+}
+TextMate::UI.complete choices, :images => images
+
+=begin
+=end
+
+# ================== #
+# = tool_tip usage = #
+# ================== #
+# =begin
+
+# Insert normal text for a normal tool_tip:
+TextMate::UI.tool_tip('Normal Tooltip')
+
+# Use the :transparent option to make custom shaped tool_tips:
+TextMate::UI.tool_tip('<h1 style="background:white; -webkit-border-radius: 15px; padding:1em; -webkit-transform: rotate(5deg); margin-top:100px">Transparent Tooltip!</h1>', {:transparent => true, :format => :html})
+
+# Use the :format option to use html in your tool_tip:
+TextMate::UI.tool_tip <<-HTML, :format => :html
+<h1>
+  Allow <strong>html</strong>
+</h1>
+<p>To be used</p>
+HTML
+
+# Text is also the default format
+TextMate::UI.tool_tip <<-TEXT, :format => :text
+This 
+  should    keep 
+    all the whitespace 
+      that    is    given 
+        in     this      here
+          s    t    r    i    n    g
+TEXT
+
+=begin
+=end
+end #Tests
 

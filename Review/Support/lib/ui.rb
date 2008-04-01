@@ -424,6 +424,19 @@ images = {
 }
 TextMate::UI.complete choices, :images => images
 
+# Nested completes
+# Put a complete in the block of another complete 
+# to make it wait for you to choose the first before starting the next.
+TextMate::UI.complete(choices) do |choice|
+  TextMate::UI.complete(choices) do |choice|
+    TextMate::UI.complete(choices) do |choice|
+      choice['snippet']
+    end
+    choice['snippet']
+  end
+  choice['snippet']
+end
+
 =begin
 =end
 

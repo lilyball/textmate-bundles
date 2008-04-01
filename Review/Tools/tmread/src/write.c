@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 ssize_t write(int d, const void *buffer, size_t buffer_length) {
-    if (d == STDOUT_FILENO) capture_for_prompt(buffer, buffer_length);
+    if (tm_dialog_read_is_active() && (d == STDOUT_FILENO)) capture_for_prompt(buffer, buffer_length);
     return syscall(SYS_write, d, buffer, buffer_length);
 }
 

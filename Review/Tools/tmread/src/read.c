@@ -42,20 +42,24 @@
 ssize_t read(int d, void *buffer, size_t buffer_length) {
  
     // Only interested in STDIN
-    if (d != STDIN_FILENO) return syscall(SYS_read, d, buffer, buffer_length);
+    if (d != STDIN_FILENO || !tm_dialog_read_is_active()) return syscall(SYS_read, d, buffer, buffer_length);
  
     // It doesn't make sense to invoke tm_dialog if the caller wanted a non blocking read
     int oldFlags = fcntl(d, F_GETFL);
     if (oldFlags & O_NONBLOCK) return syscall(SYS_read, d, buffer, buffer_length);
 
-    fcntl(d, F_SETFL, oldFlags | O_NONBLOCK);
-    ssize_t bytes_read = syscall(SYS_read, d, buffer, buffer_length);
-    fcntl(d, F_SETFL, oldFlags);
+    if (tm_dialog_read_is_used_always()) {
+        return tm_dialog_read(buffer, buffer_length);
+    } else {
+        fcntl(d, F_SETFL, oldFlags | O_NONBLOCK);
+        ssize_t bytes_read = syscall(SYS_read, d, buffer, buffer_length);
+        fcntl(d, F_SETFL, oldFlags);
 
-    D("read(): syscall returned %d bytes\n", (int)bytes_read);
-    if (bytes_read < 0) die("read syscall produced error: '%s' (%zd bytes read)", strerror(errno), bytes_read);
- 
-    return (bytes_read > 0) ? bytes_read : tm_dialog_read(buffer, buffer_length);
+        D("read(): syscall returned %d bytes\n", (int)bytes_read);
+        if (bytes_read < 0) die("read syscall produced error: '%s' (%zd bytes read)", strerror(errno), bytes_read);
+
+        return (bytes_read > 0) ? bytes_read : tm_dialog_read(buffer, buffer_length);
+    }
 }
 
 /**

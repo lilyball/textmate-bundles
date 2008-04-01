@@ -6,4 +6,5 @@ then
     exit 1  
 fi
 
-. "$(dirname "$0")/../helpers/tm_dialog_read.sh"
+export DYLD_INSERT_LIBRARIES="$TM_DIALOG_READ_DYLIB${DYLD_INSERT_LIBRARIES:+:$DYLD_INSERT_LIBRARIES}"
+export DYLD_FORCE_FLAT_NAMESPACE=1

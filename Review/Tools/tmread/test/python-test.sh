@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 . "$(dirname "$0")/setup.sh"
-tm_dialog_read_exec 'python -c "import sys ; sys.stdout.write(sys.stdin.readline())"' "Python Test"
+TM_INTERACTIVE_INPUT=AUTO python -c "import sys ; sys.stdout.write(sys.stdin.readline())"

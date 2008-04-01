@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-
-echo "s"
+echo "Enter Username: "
 read x
-echo $x
+echo "Enter Password: "
+read x
+

@@ -338,7 +338,7 @@ void capture_for_prompt(const void *buffer, size_t buffer_length) {
     D("capture_for_prompt(): i after scanning backwards past space = %d\n", (int)i);
     
     // Whole line was space
-    if (i < 0) return;
+    if (i <= 0) return;
     
     size_t x;
     for (x = 0; (x < (PROMPT_SIZE - 1)) && i > 0; ++x) {

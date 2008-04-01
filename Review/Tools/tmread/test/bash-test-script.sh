@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-echo "Enter Username: "
+echo -n "Enter Username: "
 read x
-echo "Enter Password: "
+echo $x
+echo -n "Enter Password: "
 read x
-
+echo $x
+echo -n "Enter Username: "
+read x
+echo $x

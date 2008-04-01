@@ -36,6 +36,10 @@
 #define DIALOG_NIB_DEFAULT "RequestString"
 #endif
 
+#ifndef DIALOG_NIB_SECURE
+#define DIALOG_NIB_SECURE "RequestSecureString"
+#endif
+
 #ifndef DIALOG_TITLE_ENV_VAR
 #define DIALOG_TITLE_ENV_VAR "DIALOG_TITLE"
 #endif
@@ -183,14 +187,20 @@ char * get_path() {
 }
 
 /**
- * Returns the nib to use based on the value of DIALOG_NIB_ENV_VAR.
+ * Returns the nib to use based on whether the prompt contains 'password' or not.
  * 
- * @todo Try and work out when it is appropriate to use RequestSecureString
+ * The prompt is case insensitively searched for 'password', if it is found DIALOG_NIB_SECURE
+ * is returned, otherwise DIALOG_NIB_DEFAULT.
+ *
+ * This acquires a lock on prompt_mutex before searching the prompt.
+ * 
  * @return The nib argument for tm_dialog
  */
 char* get_nib() {
-
-    return DIALOG_NIB_DEFAULT;
+    pthread_mutex_lock(&prompt_mutex);
+    char *nib = (strcasestr(prompt, "password") == NULL) ? DIALOG_NIB_DEFAULT : DIALOG_NIB_SECURE;
+    pthread_mutex_unlock(&prompt_mutex);
+    return nib;
 }
 
 /**

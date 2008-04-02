@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>shouldFail(${1:Exception}) {
+	<string>shouldFail${1/(.+)/(?1:\()/}${1:Exception}${1/(.+)/(?1:\))/} {
 	$0
 }</string>
 	<key>name</key>

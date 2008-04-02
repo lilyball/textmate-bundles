@@ -24,3 +24,5 @@ fi
 
 
 $TM_RUBY  -- "$TM_BUNDLE_SUPPORT/lib/MavenMate.rb" -m "$TM_MVN" -l "$MVN_PROJECT" $@
+
+rescan_project

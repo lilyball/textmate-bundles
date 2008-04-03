@@ -12,7 +12,7 @@ fi
 gcc -dynamiclib -Wmost -Os -fno-common \
  -DNDEBUG=1 \
  -DDATE=\"$(date +%Y-%m-%d)\" \
- -o "$build/tm_dialog_read.dylib" \
+ -o "$build/tm_interactive_input.dylib" \
  -framework CoreFoundation \
  -arch ppc -arch i386 \
  -mmacosx-version-min=10.4 \
@@ -23,4 +23,5 @@ gcc -dynamiclib -Wmost -Os -fno-common \
  "$src/buffer.c" \
  "$src/stringutil.c" \
  "$src/dialog.c" \
- "$src/plist.c"
+ "$src/plist.c" \
+ "$src/mode.c"

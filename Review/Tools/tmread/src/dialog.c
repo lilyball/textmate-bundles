@@ -12,22 +12,6 @@
 #include <ctype.h>
 #include <pthread.h>
 
-#ifndef MODE_SPECIFIER_ENV_VAR
-#define MODE_SPECIFIER_ENV_VAR "TM_INTERACTIVE_INPUT"
-#endif
-
-#ifndef ALWAYS_MODE
-#define ALWAYS_MODE "ALWAYS"
-#endif
-
-#ifndef AUTO_MODE
-#define AUTO_MODE "AUTO"
-#endif
-
-#ifndef NEVER_MODE
-#define NEVER_MODE "NEVER"
-#endif
-
 #ifndef DIALOG_ENV_VAR
 #define DIALOG_ENV_VAR "DIALOG"
 #endif
@@ -85,41 +69,11 @@
 #endif
 
 buffer_t* input_buffer = NULL;
+pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static char prompt[PROMPT_SIZE];
 pthread_mutex_t prompt_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-char *mode = NULL;
-
-bool is_active = false;
-bool is_active_is_set = false;
-
-bool is_used_always = false;
-bool is_used_always_is_set = false;
-
-char* get_mode() {
-    if (mode == NULL) {
-        mode = getenv(MODE_SPECIFIER_ENV_VAR);
-        if (mode == NULL) mode = NEVER_MODE;
-    }
-    return mode;
-}
-
-bool tm_dialog_read_is_active() {
-    if (!is_active_is_set) {
-        is_active = (strcmp(get_mode(), NEVER_MODE) != 0) ? true : false;
-        is_active_is_set = true;
-    }
-    return is_active;
-}
-
-bool tm_dialog_read_is_used_always() {
-    if (!is_used_always_is_set) {
-        is_used_always = strcmp(get_mode(), ALWAYS_MODE) == 0;
-    }
-    return is_used_always;
-}
 
 /**
  * After locking the prompt_mutex, creates a copy of the prompt and returns it after

@@ -1,17 +1,19 @@
 #include "write.h"
 #include "dialog.h"
+#include "mode.h"
 
 #include <sys/syscall.h>
 #include <sys/types.h>
 #include <unistd.h>
 
+
 ssize_t write(int d, const void *buffer, size_t buffer_length) {
     
     #ifdef NDEBUG
-        if (tm_dialog_read_is_active() && (d == STDOUT_FILENO || d == STDERR_FILENO)) 
+        if (tm_interactive_input_is_active() && (d == STDOUT_FILENO || d == STDERR_FILENO)) 
             capture_for_prompt(buffer, buffer_length);
     #else
-        if (tm_dialog_read_is_active() && (d == STDOUT_FILENO)) 
+        if (tm_interactive_input_is_active() && (d == STDOUT_FILENO)) 
             capture_for_prompt(buffer, buffer_length);
     #endif
     

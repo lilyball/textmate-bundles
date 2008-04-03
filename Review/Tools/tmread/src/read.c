@@ -17,6 +17,7 @@
 #include "die.h"
 #include "debug.h"
 #include "dialog.h"
+#include "mode.h"
 
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -42,13 +43,13 @@
 ssize_t read(int d, void *buffer, size_t buffer_length) {
  
     // Only interested in STDIN
-    if (d != STDIN_FILENO || !tm_dialog_read_is_active()) return syscall(SYS_read, d, buffer, buffer_length);
+    if (d != STDIN_FILENO || !tm_interactive_input_is_active()) return syscall(SYS_read, d, buffer, buffer_length);
  
     // It doesn't make sense to invoke tm_dialog if the caller wanted a non blocking read
     int oldFlags = fcntl(d, F_GETFL);
     if (oldFlags & O_NONBLOCK) return syscall(SYS_read, d, buffer, buffer_length);
 
-    if (tm_dialog_read_is_used_always()) {
+    if (tm_interactive_input_is_in_always_mode()) {
         return tm_dialog_read(buffer, buffer_length);
     } else {
         fcntl(d, F_SETFL, oldFlags | O_NONBLOCK);

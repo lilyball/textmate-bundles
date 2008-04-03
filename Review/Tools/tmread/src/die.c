@@ -4,11 +4,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-/**
- * Prints a msg to standard out, then exits with code 1.
- *
- * @param msg The message to be printed to the screen before dieing.
- */
 void die(char *fmt, ...) {
     va_list ap;
     char *msg;

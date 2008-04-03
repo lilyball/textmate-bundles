@@ -14,5 +14,3 @@
 #endif
 
 #endif /* _DEBUG_H_ */
-
-

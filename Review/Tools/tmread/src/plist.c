@@ -3,11 +3,8 @@
 #include "stringutil.h"
 #include "die.h"
 
-/**
- *
- */
 CFPropertyListRef create_plist_from_buffer(buffer_t *buffer) {
- 
+
     D("create_plist_from_buffer(): creating data ref of buffer\n");
 
     CFDataRef buffer_as_data = CFDataCreate(kCFAllocatorDefault, (UInt8*)buffer->data, buffer->size);
@@ -22,8 +19,8 @@ CFPropertyListRef create_plist_from_buffer(buffer_t *buffer) {
         D("create_plist_from_buffer(): creating property list failed\n");
         die(cfstr_2_cstr(error));
     }
- 
+
     CFRelease(buffer_as_data);
- 
+
     return plist;
 }

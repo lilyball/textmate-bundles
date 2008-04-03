@@ -115,7 +115,7 @@ module TextMate
           characters = "a-zA-Z0-9"
           
           require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
-          characters += Regexp.escape(options[:extra_chars] || '')# rescue system "cat <<EOF | mate\nRESCUE ME\nEOF"
+          characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
           
           options[:currentword] ||= Word.current_word characters, :left
           
@@ -423,6 +423,9 @@ require "test/unit"
 # ================== #
 # = complete usage = #
 # ================== #
+# HOW TO TEST:
+# 1) Place your caret on the blank line in one of the test methods
+# 2) Use "Run Focused Unit Test" 
 
 
 class TestCompletes < Test::Unit::TestCase
@@ -430,7 +433,7 @@ class TestCompletes < Test::Unit::TestCase
     setup!
     #Should complete the snippet, if there is one, without requiring a block
     TextMate::UI.complete(@choices)
-
+    # 
   end
   
   def test_with_images
@@ -447,7 +450,7 @@ class TestCompletes < Test::Unit::TestCase
     }
     
     TextMate::UI.complete @choices, :images => @images
-
+    # 
   end
   
   def test_with_block
@@ -455,7 +458,7 @@ class TestCompletes < Test::Unit::TestCase
     #Use a block to create a custom snippet to be inserted, the block gets passed your choice as a hash
     # Cancelling the popup will pass nil to the block
     TextMate::UI.complete(@choices){|choice| e_sn choice.inspect }
-
+    # 
   end
   
   def test_nested_or_stacked
@@ -472,7 +475,7 @@ class TestCompletes < Test::Unit::TestCase
       end
       choice['insert']
     end
-
+    # 
   end
   
   def test_display_different_from_match
@@ -483,7 +486,22 @@ class TestCompletes < Test::Unit::TestCase
       {'match' => 'bar', 'display' => 'Angry Elephant'},
     ]
     TextMate::UI.complete(@choices)
-
+    # 
+  end
+  
+  def test_with_extra_chars
+    setup!
+    @choices = [
+      {'display' => '^moo'},
+      {'display' => '$foo'},
+      {'display' => '\bar'},
+      {'display' => '.bar'},
+    ]
+    TextMate::UI.complete(@choices, :extra_chars => '^$\.')
+    # ^
+    # $
+    # \
+    # .
   end
   
   private

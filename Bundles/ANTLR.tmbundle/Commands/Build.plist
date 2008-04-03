@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>TM_JAVA=$(which "${TM_JAVA:-java}")
+	<string># To install ANTLR via MacPorts
+# 1. sudo port install antlr
+# 2. set TM_ANTLR to -classpath /opt/local/lib/antlr.jar antlr/Tool
+
+TM_JAVA=$(type -p "${TM_JAVA:-java}")
 TM_ANTLR="${TM_ANTLR:-org.antlr.Tool}"
 
 cd "$TM_DIRECTORY"

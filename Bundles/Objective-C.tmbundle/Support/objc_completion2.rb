@@ -3,6 +3,96 @@ require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "zlib"
 require "set"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
+
+
+class ExternalSnippetizer
+def snippet_generator(cand, start)
+
+  cand = cand.strip
+  oldstuff = cand[0..-1].split("\t")
+  stuff = cand[start..-1].split("\t")
+  stuffSize = stuff[0].size
+  if oldstuff[0].count(":") == 1
+    out = "${0:#{stuff[6]}}"
+  elsif oldstuff[0].count(":") > 1
+
+    name_array = stuff[0].split(":")
+    name_array = [""] if name_array.empty?
+    out = ""
+    begin
+      stuff[-(name_array.size)..-1].each_with_index do |arg,i|
+        if (name_array.size == i)
+          out << name_array[i] + ":${0:"+(i+2).to_s + ":"+ arg +"} "
+        else
+          out << name_array[i] +  ":${"+(i+2).to_s + ":"+ arg +"} "
+        end
+      end
+      out = "${1:#{stuff[6]}} " + out
+
+    rescue NoMethodError
+      out = "$0"
+    end
+
+  else
+    out = "$0"
+  end
+  #puts out.inspect
+  return out.chomp.strip
+end
+
+def construct_arg_name(arg)
+  a = arg.match(/(NS|AB|CI|CD)?(Mutable)?(([AEIOQUYi])?[A-Za-z_0-9]+)/)
+  unless a.nil?
+    (a[4].nil? ? "a": "an") + a[3].sub!(/\b\w/) { $&.upcase }
+  else
+    ""
+  end
+end
+
+def type_declaration_snippet_generator(dict)
+
+  arg_name = dict['extraOptions']['arg_name'] == "true" && dict['noArg'] == "false"
+  star = dict['extraOptions']['star'] && dict['pure']
+  pointer = dict['environment']['TM_C_POINTER']
+  pointer = " *" unless pointer
+
+  if arg_name
+    name = "${2:#{construct_arg_name dict['filterOn']}}"
+    if star
+      name = ("${1:#{pointer}#{name}}")
+    else
+      name = " " + name
+    end
+
+  else
+    name = pointer.rstrip if star
+  end
+  #  name = name[0..-2].rstrip unless arg_name
+  name + "$0"
+end
+
+def cfunction_snippet_generator(c)
+  c = c.split"\t"
+  i = 0
+  "("+c[1][1..-2].split(",").collect do |arg| 
+    "${"+(i+=1).to_s+":"+ arg.strip + "}" 
+  end.join(", ")+")$0"
+end
+
+def run(res, len = 0)
+  if res['type'] == "methods"
+    r = snippet_generator(res['cand'], len)
+  elsif res['type'] == "functions"
+    r = cfunction_snippet_generator(res['cand'])
+  elsif res['pure'] && res['noArg']
+    r = type_declaration_snippet_generator res
+  else 
+    r = "$0"
+  end
+  return r
+end
+end
 
 # Zlib::GzipReader.new(ARGF).each { |l| f = l.split("\t"); puts l if f[0] =~ /\S/ and f[3] =~ /\S/ }
 class ObjCFallbackCompletion
@@ -232,35 +322,25 @@ class ObjCFallbackCompletion
       #  searchTerm << candidates[0][index].chr
       #  index +=1
       #end
-      rubyCommand = "ruby -r \"#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist\" \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
-      require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-      pl = {'suggestions' => prettyCandidates.map { |pretty, full, pure, noArg, type | { 'title' => pretty, 'cand' => full, 'pure'=> pure.inspect, 'noArg'=> noArg.inspect, 'type'=> type.to_s ,'filterOn'=> full.split("\t")[0]} },
-       
-       'extraOptions' => {'star' => star.inspect, 'arg_name' => arg_name.inspect},
-      }
-
-      flags = "--shell-cmd '#{rubyCommand}' --extra-chars '_' --current-word '#{searchTerm}'"
-      
-      
-      
-      open("/dev/console", "w") { |io| io << pl.to_plist }
-      io = open('|"$DIALOG" popup '+ flags, "r+")
-      io << pl.to_plist
-      io.close_write
-      
-      #io = open('|"$DIALOG" popup', "r+")
-      #io <<  pl.to_plist
-      #io.close_write
-      #puts pl.inspect.gsub("},", "},\n")
-      #TextMate.exit_create_new_document
-      TextMate.exit_discard # create_new_document
-      res = OSX::PropertyList::load(io.read)
-      if res.has_key? 'selectedMenuItem'
-        b = {0 => false , 1 => true}
-        snippet_generator( res['selectedMenuItem']['cand'], start, star&& !b[res['selectedMenuItem']['pure']],arg_name && !b[res['selectedMenuItem']['noArg']] )
-      else
-        "$0"
+     pl = prettyCandidates.map do |pretty, full, pure, noArg, type |
+        { 'display' => pretty,
+          'cand' => full,
+          'pure'=> pure, 
+          'noArg'=> noArg,
+          'type'=> type.to_s,
+          'match'=> full.split("\t")[0]
+        }
       end
+
+      flags = {}
+      flags[:extra_chars]= '_'
+      flags[:currentword]= searchTerm
+      TextMate::UI.complete(pl, flags)  do |hash|
+        hash['extraOptions'] = {'star' => star.inspect, 'arg_name' => arg_name.inspect}
+        hash['environment']={'TM_C_POINTER' => ENV['TM_C_POINTER']}
+        ExternalSnippetizer.new.run(hash)
+      end
+     TextMate.exit_discard # create_new_document
     else
       snippet_generator( candidates[0][0], start, star && !candidates[0][1], arg_name && !candidates[0][2] )
     end
@@ -524,12 +604,18 @@ class ObjCMethodCompletion
     rubyCommand = "ruby -r \"#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist\" \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
    # rubyCommand = "ruby -e \"puts \\\"#{rubyCommand2}\\\"\""
     #puts rubyCommand
-    pl = {'suggestions' => prettyCandidates.map do |pretty, filter, full, type | 
-            { 'title' => pretty, 'cand' => full, 'filterOn'=> filter, 'type'=> type.to_s}
-          end
-          }
-    flags = "--static-prefix '#{static}' --shell-cmd '#{rubyCommand}' --extra-chars '_:' --current-word '#{word}'"
-    
+    pl = prettyCandidates.map do |pretty, filter, full, type | 
+            { 'display' => pretty, 'cand' => full, 'match'=> filter, 'type'=> type.to_s}
+    end
+        
+    flags = {}
+    flags[:static_prefix] =static
+    flags[:extra_chars]= '_:'
+    flags[:currentword]= word
+    TextMate::UI.complete(pl, flags) do |hash|
+      ExternalSnippetizer.new.run(hash, word.size)
+    end
+    TextMate.exit_discard
     io = open('|"$DIALOG" popup ' + flags, "r+")
     io <<  pl.to_plist
     io.close_write
@@ -802,29 +888,20 @@ class ObjCMethodCompletion
 
     caret_placement = @car
     line = @line
-    bc = line[1+caret_placement..-1].match /\A[a-zA-Z0-9_]+(:)?/
+    secondhalf = line.scan(/./mu)[1+caret_placement..-1].join
+    bc = secondhalf.match /\A[a-zA-Z0-9_]+(:)?/
     if bc
       backContext = "[[:alnum:]]*" + bc[0]
       bcL = bc[0].length
     end
 
-    pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/
+    pat = /("(\\.|[^"\\])*"|\[|\]|@selector\([^\)]*\)|[a-zA-Z][a-zA-Z0-9]*:)/u
 
     if caret_placement == -1
       TextMate.exit_discard
     end
 
-    up = 0
-    start = [0]
-    #Count [
-    match_iter(pat , line[0..caret_placement]) do |tok, beg, len|
-      t = tok[0].chr
-      if t == "["
-        start << beg
-      elsif t == "]"
-        start.pop
-      end
-    end
+
     
     
 
@@ -835,45 +912,55 @@ class ObjCMethodCompletion
 
     mline = line.gsub(/\n/, " ")
     # find Nested method
-    list = try_find_class(mline[0..caret_placement], start[-1])
+    up = 0
+    start = [0]
+    #Count [
+    fromstart = mline.scan(/./u)[0..caret_placement].join
+    match_iter(pat , fromstart) do |tok, beg, len|
+      t = tok[0].chr
+      if t == "["
+        start << beg
+      elsif t == "]"
+        start.pop
+      end
+    end
+    list = try_find_class(fromstart, start[-1])
     typeName = list[2]
-    mn = methodNames(line[start[-1]..caret_placement])
+    precaret = fromstart[start[-1]..-1]
+    mn = methodNames(precaret)
 
-    if mline[start[-1]..caret_placement].match colon_and_space
+    if precaret.match colon_and_space
       # [obj mess:^]
       [res = return_type_based_c_constructs_suggestions(mn, "", true, typeName) , 0]
 
-    elsif temp =mline[start[-1]..caret_placement].match( dot_alpha_and_caret)
+    elsif temp =precaret.match( dot_alpha_and_caret)
       candidates = candidates_or_exit( temp[0][1..-1] + "[a-zA-Z0-9]+\\s", list, :methods )
       res = pop_up(candidates, temp[0][1..-1], "")
       [res , 0]
-    elsif temp =mline[start[-1]..caret_placement].match( alpha_and_space)
+    elsif temp =precaret.match( alpha_and_space)
       # [obj mess ^]
       candidates = candidates_or_exit( mn + (backContext || "[[:alnum:]:]"), list, :methods ) # the alpha is to prevent satisfaction with just one part
       res = pop_up(candidates, mn, "")
       [res , (backContext && (res != "$0") ? bcL : 0)]
-    elsif k = mline[start[-1]..caret_placement].match( alpha_and_caret)
+    elsif k = precaret.match( alpha_and_caret)
       # [obj mess^]
-      if mline[start[-1]..k.begin(0)-1+start[-1]].match alpha_and_space
+      t = mline[start[-1]..k.begin(0)-1+start[-1]]
+      if t.match alpha_and_space
         candidates = candidates_or_exit( mn +k[0] + (backContext || "[[:alnum:]:]"), list, :methods)
         res =pop_up(candidates, mn, k[0])
         [res , (backContext && (res != "$0") ? bcL : 0)]
         # [NSOb^]
-      elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(/\[\s*$/)
+      elsif t.match(/\[\s*$/)
         candidates = candidates_or_exit( k[0] + (backContext || "[[:alnum:]]"), nil, :classes)
         res =pop_up(candidates, "",k[0])
         [res , (backContext && (res != "$0") ? bcL : 0)]
-      elsif mline[start[-1]..k.begin(0)-1+start[-1]].match(colon_and_space)
+      elsif t.match(colon_and_space)
         #  [obj mess: arg^]
         res = return_type_based_c_constructs_suggestions(mn, k[0], false,typeName)
         [res , (backContext && (res != "$0") ? bcL : 0)]
-
-        # else
-        #  TextMate.exit_discard
       end
-      #else
-      # 
     end
 
   end
 end
+

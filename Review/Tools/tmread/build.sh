@@ -17,11 +17,4 @@ gcc -dynamiclib -Wmost -Os -fno-common \
  -arch ppc -arch i386 \
  -mmacosx-version-min=10.4 \
  -isysroot /Developer/SDKs/MacOSX10.4u.sdk \
- "$src/read.c" \
- "$src/write.c" \
- "$src/die.c" \
- "$src/buffer.c" \
- "$src/stringutil.c" \
- "$src/dialog.c" \
- "$src/plist.c" \
- "$src/mode.c"
+ `ls $src/*.c`

@@ -288,15 +288,16 @@ void open_tm_dialog(int in[], int out[]) {
  */
 buffer_t* create_user_input_from_output(buffer_t* output) {
 
-    CFPropertyListRef plist;
-    plist = create_plist_from_buffer(output);
-
-    CFStringRef return_argument = CFRetain(get_return_argument_from_output_plist(plist));
+    CFPropertyListRef plist = create_plist_from_buffer(output);
+    buffer_t* input = NULL;
+    
+    CFStringRef return_argument = get_return_argument_from_output_plist(plist);
+    if (return_argument != NULL) {
+        input = create_buffer_from_cfstr(return_argument);
+        add_to_buffer(input, "\n", 1);
+    }
+    
     CFRelease(plist);
-
-	if (return_argument == NULL) return NULL;
-	buffer_t* input = create_buffer_from_cfstr(return_argument);
-	add_to_buffer(input, "\n", 1);
 	return input;
 }
 

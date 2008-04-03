@@ -112,7 +112,13 @@ module TextMate
           STDOUT.reopen(open('/dev/null'))
           STDERR.reopen(open('/dev/null'))
           
-          options[:currentword] ||= ENV['TM_CURRENT_WORD']
+          characters = "a-zA-Z0-9"
+          
+          require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
+          characters += Regexp.escape(options[:extra_chars] || '')# rescue system "cat <<EOF | mate\nRESCUE ME\nEOF"
+          
+          options[:currentword] ||= Word.current_word characters, :left
+          
           command =  "#{TM_DIALOG} popup --wait"
           command << " --current-word #{e_sh options[:currentword]}"    if options[:currentword]
           command << " --static-prefix #{e_sh options[:static_prefix]}" if options[:static_prefix]
@@ -125,18 +131,23 @@ module TextMate
           IO.popen(command, 'w+') do |io|
             io << plist.to_plist
             io.close_write
+            
+            plistify = lambda do |io|
+              OSX::PropertyList.load io rescue nil
+            end
+            
             if block_given?
-              ENV['SNIPPET'] = yield OSX::PropertyList.load(io.read)
+              ENV['SNIPPET'] = yield plistify.call(io.read)
             else
               # Run a default block if no block is given.
               ENV['SNIPPET'] = lambda{|choice|
-                # choice = OSX::PropertyList::load(choice)
+                return nil unless choice
                 
                 #Show the tool_tip before inserting the snippet to make it align to the end of the match
                 TextMate::UI.tool_tip(choice['tool_tip']) if choice['tool_tip']
                 
                 choice['insert']
-              }.call(OSX::PropertyList::load(io.read))
+              }.call plistify.call(io.read)
             end
             `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
           end
@@ -442,6 +453,7 @@ class TestCompletes < Test::Unit::TestCase
   def test_with_block
     setup!
     #Use a block to create a custom snippet to be inserted, the block gets passed your choice as a hash
+    # Cancelling the popup will pass nil to the block
     TextMate::UI.complete(@choices){|choice| e_sn choice.inspect }
 
   end

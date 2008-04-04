@@ -128,7 +128,10 @@ size_t consume_from_head_of_buffer(buffer_t* buffer, char* dest, size_t dest_siz
 
     size_t consumption_size = (buffer->size < dest_size) ? buffer->size : dest_size;
     D("consumption_size = %d\n", (int)consumption_size);
-    strncpy(dest, buffer->data, consumption_size);
+    
+    if (dest != NULL) {
+        strncpy(dest, buffer->data, consumption_size);
+    }
 
     size_t new_data_size = buffer->size - consumption_size;
     D("new_data_size = %d\n", (int)new_data_size);

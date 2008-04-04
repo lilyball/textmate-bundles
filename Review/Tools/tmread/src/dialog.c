@@ -3,6 +3,7 @@
 #include "stringutil.h"
 #include "plist.h"
 #include "buffer.h"
+#include "process_name.h"
 
 #include <signal.h>
 #include <sys/syscall.h>
@@ -92,13 +93,10 @@ CFDictionaryRef create_input_dictionary() {
     CFMutableDictionaryRef parameters = CFDictionaryCreateMutable(kCFAllocatorDefault, 5, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     if (parameters == NULL) die("failed to allocate dict for dialog parameters");
 
-    char *title = getenv(DIALOG_TITLE_ENV_VAR);
-    if (title) {
-        CFStringRef cf_title_key = CFSTR(DIALOG_TITLE_KEY);
-        CFStringRef cf_title = cstr_2_cfstr(title);
-        CFDictionaryAddValue(parameters, cf_title_key, cf_title);
-        CFRelease(cf_title);
-    }
+    CFStringRef cf_title_key = CFSTR(DIALOG_TITLE_KEY);
+    CFStringRef cf_title = cstr_2_cfstr(get_process_name());
+    CFDictionaryAddValue(parameters, cf_title_key, cf_title);
+    CFRelease(cf_title);
 
     char* prompt_copy = create_prompt_copy();
     CFStringRef dialog_prompt = cstr_2_cfstr((strlen(prompt) == 0) ? FALLBACK_PROMPT : prompt);

@@ -19,34 +19,14 @@
 #define NEVER_MODE "NEVER"
 #endif
 
-char *mode = NULL;
-
-bool is_active = false;
-bool is_active_is_set = false;
-
-bool is_in_always_mode = false;
-bool is_in_always_mode_is_set = false;
-
 char* get_tm_interactive_input_mode() {
-    if (mode == NULL) {
-        mode = getenv(MODE_SPECIFIER_ENV_VAR);
-        if (mode == NULL) mode = NEVER_MODE;
-    }
-    return mode;
+    return getenv(MODE_SPECIFIER_ENV_VAR);
 }
 
 bool tm_interactive_input_is_active() {
-    if (!is_active_is_set) {
-        is_active = (strcmp(get_tm_interactive_input_mode(), NEVER_MODE) != 0) ? true : false;
-        is_active_is_set = true;
-    }
-    return is_active;
+    return (strcmp(get_tm_interactive_input_mode(), NEVER_MODE) != 0) ? true : false;
 }
 
 bool tm_interactive_input_is_in_always_mode() {
-    if (!is_in_always_mode_is_set) {
-        is_in_always_mode = strcmp(get_tm_interactive_input_mode(), ALWAYS_MODE) == 0;
-        is_in_always_mode_is_set = true;
-    }
-    return is_in_always_mode;
+    return strcmp(get_tm_interactive_input_mode(), ALWAYS_MODE) == 0;
 }

@@ -255,6 +255,11 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
     if (input_buffer == NULL) {
         D("input_buffer == NULL, getting input from user\n");
         get_input_from_user();
+
+        // This is trying to simulate what happens typically on the command line.
+        // Input is requested of the user and when they hit enter which in essence 
+        // writes a newline.
+        syscall(SYS_write, STDOUT_FILENO, "\n", 1);
     }
     
     if (input_buffer == NULL) {

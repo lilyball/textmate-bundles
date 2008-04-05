@@ -40,3 +40,7 @@ echo "Merging…"
 cd "$DST_DIR"
 lipo -create tm_interactive_input_*.dylib -output "$LIB_NAME" && rm tm_interactive_input_*.dylib
 lipo -info "$LIB_NAME"
+
+SUPPORT_LIB="$TM_SUPPORT_PATH/lib"
+echo "Copying to support…"
+cp "$LIB_NAME" "$SUPPORT_LIB"

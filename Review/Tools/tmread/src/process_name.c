@@ -10,14 +10,7 @@
 #include <string.h>
 #include <signal.h>
 
-#ifndef PS_OUTPUT_HEADER
-#define PS_OUTPUT_HEADER "UCOMM\n"
-#endif
-
-buffer_t* process_name_buffer = NULL;
-pthread_mutex_t process_name_buffer_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-void calculate_process_name() {
+buffer_t* get_ps_output() {
     pid_t pid = getpid();
     D("pid = %d\n", pid);
 
@@ -25,43 +18,46 @@ void calculate_process_name() {
     asprintf(&get_process_name_command, "ps -p %i -o ucomm", pid);
     if (get_process_name_command == NULL) die("failed to create ps command");
     D("ps command = %s\n", get_process_name_command);
-
     sig_t previous_sigchld_handler = signal(SIGCHLD, SIG_DFL);
     FILE* out = popen(get_process_name_command, "r");
     free(get_process_name_command);
 
-    process_name_buffer = create_buffer_from_file_descriptor(fileno(out));
+    buffer_t* ps_output = create_buffer_from_file_descriptor(fileno(out));
 
     int ps_result = pclose(out);
     signal(SIGCHLD, previous_sigchld_handler);
     
-    if (ps_result != 0) die("ps returned %d, output = %*.s", ps_result, process_name_buffer->size, process_name_buffer->data);
-    if (process_name_buffer->size == 0) die("ps did not return any output");
+    if (ps_result != 0) die("ps returned %d, output = %*.s", ps_result, ps_output->size, ps_output->data);
+    if (ps_output->size == 0) die("ps did not return any output");
     
-    consume_from_head_of_buffer(process_name_buffer, NULL, strlen(PS_OUTPUT_HEADER));
-    if (process_name_buffer->size == 0) die("ps did not return a process name, which usually means there is no process with pid %d", pid);
-    
-    // ps returns the name with a lot of whitespace at the end, 
-    // we scan backwards looking for the first non space char
-    // and put a \0 after it.
-    
-    int i;
-    for (i = process_name_buffer->size - 1; i >= 0; --i) {
-        if (isspace(process_name_buffer->data[i]) == false) break;
-    }
-    
-    if (i == process_name_buffer->size - 1) {
-        add_to_buffer(process_name_buffer, "\0", 1);
-    } else {
-        process_name_buffer->data[i + 1] = '\0';
-    }
-    
-    D("process name = %s\n", process_name_buffer->data);
+    return ps_output;
 }
 
-char* get_process_name() {
-    pthread_mutex_lock(&process_name_buffer_mutex);
-    if (process_name_buffer == NULL) calculate_process_name();
-    pthread_mutex_unlock(&process_name_buffer_mutex);
-    return process_name_buffer->data;
+char* create_process_name() {
+    buffer_t* ps_output = get_ps_output();
+    
+    // ps output has a column name header line, so we need ignore it
+    int index_of_process_name_line = strlen("UCOMM\n");
+    
+    // Ignore any whitespace before the process name
+    int first_non_space_char_index;
+    for (first_non_space_char_index = index_of_process_name_line; first_non_space_char_index < ps_output->size; ++first_non_space_char_index) {
+        if (isspace(ps_output->data[first_non_space_char_index]) == false) break;
+    }
+    
+    // Ignore any whitespace after the process name
+    int last_non_space_char_index;
+    for (last_non_space_char_index = ps_output->size - 1; last_non_space_char_index >= index_of_process_name_line; --last_non_space_char_index) {
+        if (isspace(ps_output->data[last_non_space_char_index]) == false) break;
+    }
+    
+    size_t process_name_length = last_non_space_char_index - first_non_space_char_index + 1;
+    char* process_name = malloc(process_name_length + 1); // +1 for \0
+    strncpy(process_name, ps_output->data + index_of_process_name_line, process_name_length);
+    process_name[process_name_length] = '\0';
+    
+    destroy_buffer(ps_output);
+    
+    D("process name = %s\n", process_name);
+    return process_name;
 }

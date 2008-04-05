@@ -94,8 +94,10 @@ CFDictionaryRef create_input_dictionary() {
     if (parameters == NULL) die("failed to allocate dict for dialog parameters");
 
     CFStringRef cf_title_key = CFSTR(DIALOG_TITLE_KEY);
-    CFStringRef cf_title = cstr_2_cfstr(get_process_name());
+    char* process_name = create_process_name();
+    CFStringRef cf_title = cstr_2_cfstr(process_name);
     CFDictionaryAddValue(parameters, cf_title_key, cf_title);
+    free(process_name);
     CFRelease(cf_title);
 
     char* prompt_copy = create_prompt_copy();

@@ -36,7 +36,9 @@ void calculate_process_name() {
     consume_from_head_of_buffer(process_name_buffer, NULL, strlen(PS_OUTPUT_HEADER));
     if (process_name_buffer->size == 0) die("ps did not return a process name, which usually means there is no process with pid %d", pid);
     
-    // ps returns the name with a lot of whitespace at the end, we can backwards looking for the first non space char
+    // ps returns the name with a lot of whitespace at the end, 
+    // we scan backwards looking for the first non space char
+    // and put a \0 after it.
     
     int i;
     for (i = process_name_buffer->size - 1; i >= 0; --i) {

@@ -249,19 +249,23 @@ void get_input_from_user() {
 }
 
 ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
+    size_t consumed;
+    
     pthread_mutex_lock(&input_mutex);
     if (input_buffer == NULL) {
         D("input_buffer == NULL, getting input from user\n");
         get_input_from_user();
     }
+    
     if (input_buffer == NULL) {
         D("input_buffer still == NULL, user entered nothing\n");
-        return 0;
+        consumed = 0;
+    } else {
+        D("reading %d into read buffer from input buffer\n", (int)buffer_length);
+        consumed = consume_from_head_of_buffer(input_buffer, buffer, buffer_length);
+        if (input_buffer->size == 0) input_buffer = NULL;
     } 
 
-    D("reading %d into read buffer from input buffer\n", (int)buffer_length);
-    size_t consumed = consume_from_head_of_buffer(input_buffer, buffer, buffer_length);
-    if (input_buffer->size == 0) input_buffer = NULL;
     pthread_mutex_unlock(&input_mutex);
     return consumed;
 }

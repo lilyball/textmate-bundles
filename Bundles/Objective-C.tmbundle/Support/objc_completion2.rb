@@ -52,13 +52,13 @@ end
 
 def type_declaration_snippet_generator(dict)
 
-  arg_name = dict['extraOptions']['arg_name'] == "true" && dict['noArg'] == "false"
+  arg_name = dict['extraOptions']['arg_name'] && dict['noArg']
   star = dict['extraOptions']['star'] && dict['pure']
   pointer = dict['environment']['TM_C_POINTER']
   pointer = " *" unless pointer
 
   if arg_name
-    name = "${2:#{construct_arg_name dict['filterOn']}}"
+    name = "${2:#{construct_arg_name dict['match']}}"
     if star
       name = ("${1:#{pointer}#{name}}")
     else
@@ -336,7 +336,7 @@ class ObjCFallbackCompletion
       flags[:extra_chars]= '_'
       flags[:currentword]= searchTerm
       TextMate::UI.complete(pl, flags)  do |hash|
-        hash['extraOptions'] = {'star' => star.inspect, 'arg_name' => arg_name.inspect}
+        hash['extraOptions'] = {'star' => star, 'arg_name' => arg_name}
         hash['environment']={'TM_C_POINTER' => ENV['TM_C_POINTER']}
         ExternalSnippetizer.new.run(hash)
       end
@@ -589,9 +589,7 @@ class ObjCMethodCompletion
     end
 
     if prettyCandidates.size > 1
-      show_dialog(prettyCandidates,s,"",si) do |cand,size|
-        cfunc_snippet_generator(cand,size)
-      end
+      show_dialog(prettyCandidates,s,"",si) 
     else
       cfunc_snippet_generator(c[0],s)
     end
@@ -599,11 +597,7 @@ class ObjCMethodCompletion
 
 
 
-  def show_dialog(prettyCandidates,start,static,word,&snip_gen)
-    require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-    rubyCommand = "ruby -r \"#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist\" \"#{ENV['TM_BUNDLE_SUPPORT']}/ExternalSnippetizer.rb\""
-   # rubyCommand = "ruby -e \"puts \\\"#{rubyCommand2}\\\"\""
-    #puts rubyCommand
+  def show_dialog(prettyCandidates,start,static,word)
     pl = prettyCandidates.map do |pretty, filter, full, type | 
             { 'display' => pretty, 'cand' => full, 'match'=> filter, 'type'=> type.to_s}
     end
@@ -622,12 +616,6 @@ class ObjCMethodCompletion
     
     #TextMate.exit_insert_text pl.to_plist.inspect
     TextMate.exit_discard
-    res = OSX::PropertyList::load(io.read)
-    if res.has_key? 'selectedMenuItem'
-      snip_gen.call( res['selectedMenuItem']['cand'], start )
-    else
-      "$0"
-    end
   end
 
   def candidates_or_exit(methodSearch, list, fileNames)

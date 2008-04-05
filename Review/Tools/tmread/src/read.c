@@ -31,10 +31,10 @@ ssize_t read(int d, void *buffer, size_t buffer_length) {
         fcntl(d, F_SETFL, oldFlags);
 
         /*
-            If reading from stdin produced an error, then we just return 
-            it's result. Except when the error is EAGAIN because processes
-            running under TM may have their stdin closed, and that will
-            cause EAGAIN which in our context is not really an error.
+            If reading from stdin produced an error, then we just return the result 
+            of the syscall (previously we died fatally). Except when the error is EAGAIN. 
+            Processes running under TM may have their stdin closed, and that will cause 
+            EAGAIN which in our context is not really an error.
         */
 
         D("read(): syscall returned %d bytes\n", (int)bytes_read);

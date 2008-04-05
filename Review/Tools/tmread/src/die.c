@@ -10,11 +10,11 @@ void die(char *fmt, ...) {
 
     va_start(ap, fmt);
     if (vasprintf(&msg, fmt, ap) == -1) {
-        fputs("tm_dialog_read failure: FAILED TO ALLOCATE ERROR STRING", stderr);
+        fputs("tm_interactive_input failure: FAILED TO ALLOCATE ERROR STRING", stderr);
         exit(1);
     }
     va_end(ap);
     
-    fprintf(stderr, "tm_dialog_read failure: %s\n", msg);
+    fprintf(stderr, "tm_interactive_input failure: %s\n", msg);
     exit(1);
 }

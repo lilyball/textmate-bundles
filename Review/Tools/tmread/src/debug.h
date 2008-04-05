@@ -2,7 +2,7 @@
 #define _DEBUG_H_
 
 #ifndef NDEBUG
-#define D(format, args...) fprintf(stderr, format ,## args)
+#define D(format, args...) fprintf(stderr, "%s(): ", __FUNCTION__); fprintf(stderr, format ,## args)
 #else
 #define D(format, args...) 
 #endif

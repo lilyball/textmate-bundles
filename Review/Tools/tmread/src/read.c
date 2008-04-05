@@ -37,9 +37,9 @@ ssize_t read(int d, void *buffer, size_t buffer_length) {
             EAGAIN which in our context is not really an error.
         */
 
-        D("read(): syscall returned %d bytes\n", (int)bytes_read);
+        D("syscall returned %d bytes\n", (int)bytes_read);
         if (bytes_read < 0 && errno != EAGAIN) {
-            D("read syscall error: '%s'", strerror(errno), bytes_read);
+            D("read syscall error: '%s'", strerror(errno));
             return bytes_read;
         }
 

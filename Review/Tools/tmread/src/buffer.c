@@ -61,11 +61,11 @@ buffer_t * create_buffer_from_file_descriptor(int fd) {
     do {
 
         bytes_read = syscall(SYS_read, fd, intermediary_buffer, sizeof(intermediary_buffer));
-        D("create_buffer_from_file_descriptor(): got %zd bytes from fd\n", bytes_read);
+        D("got %zd bytes from fd\n", bytes_read);
         if (bytes_read > 0) {
             add_to_buffer(buffer, intermediary_buffer, bytes_read);
         } else if (bytes_read < 0) {
-            D("create_buffer_from_file_descriptor(): read error = '%s'\n", strerror(errno));
+            D("read error = '%s'\n", strerror(errno));
         }
 
     } while(bytes_read != 0);
@@ -96,9 +96,7 @@ buffer_t* create_buffer_from_dictionary_as_xml(CFDictionaryRef dictionary) {
     CFDataGetBytes(data, CFRangeMake(0, data_length), (UInt8 *)bytes);
     buffer_t* buffer = create_buffer_with(bytes, data_length);
 
-    D("create_buffer_of_tm_dialog_input(): ");
-    DB(buffer);
-    D("\n");
+    D("buffer = %*s\n", (int)buffer->size, buffer->data);
 
     return buffer;
 }
@@ -112,9 +110,10 @@ char* create_cstr_from_buffer(buffer_t* buffer) {
 
 void add_to_buffer(buffer_t* buffer, char* bytes, size_t len) {
     if (buffer->capacity < buffer->size + len) {
-        D("Resizing buffer (need to add %d) from %d to ", (int)len, (int)buffer->capacity); 
+        
+        D("Resizing buffer (need to add %d) from %d\n", (int)len, (int)buffer->capacity); 
         buffer->capacity = ceil((buffer->size + len) / ALLOC_SIZE + 1) * ALLOC_SIZE;
-        D("%d bytes\n", (int)buffer->capacity);
+        D("New target size = %d\n", (int)buffer->capacity);
         buffer->data = realloc(buffer->data, buffer->capacity);
         if (buffer->data == NULL) die("reallocation of buffer failed");
     }

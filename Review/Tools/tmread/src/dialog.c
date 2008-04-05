@@ -129,7 +129,7 @@ char* get_nib() {
 CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
 
     if (CFGetTypeID(plist) != CFDictionaryGetTypeID())
-        die("get_return_argument_element_from_plist(): root element of plist is not dictionary");
+        die("root element of plist is not dictionary");
 
     CFDictionaryRef results;
     CFStringRef results_key = CFSTR(DIALOG_RESULT_KEY);
@@ -138,7 +138,7 @@ CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
     CFRelease(results_key);
 
     if (!has_results) {
-        D("get_return_argument_element_from_plist(): plist has no %s key, so returning nothing\n", DIALOG_RESULT_KEY);
+        D("plist has no %s key, so returning nothing\n", DIALOG_RESULT_KEY);
         return NULL;
     }
 
@@ -279,12 +279,12 @@ void capture_for_prompt(const void *buffer, size_t buffer_length) {
     char storage[PROMPT_SIZE];
     char *cbuffer = (char *)buffer;
 
-    D("capture_for_prompt(): buffer_length = %d\n", (int)buffer_length);
+    D("buffer_length = %d\n", (int)buffer_length);
 
     // Scan back past any white space.
     ssize_t i;
     for (i = buffer_length; i >= 0 && isspace(cbuffer[i - 1]); --i);
-    D("capture_for_prompt(): i after scanning backwards past space = %d\n", (int)i);
+    D("i after scanning backwards past space = %d\n", (int)i);
 
     // Whole line was space
     if (i <= 0) return;
@@ -295,7 +295,7 @@ void capture_for_prompt(const void *buffer, size_t buffer_length) {
         if (c == '\n') break;
         storage[x] = c;
     }
-    D("capture_for_prompt(): reverse storage has %i bytes\n", (int)x + 1);
+    D("reverse storage has %i bytes\n", (int)x + 1);
 
     --x;
 
@@ -304,9 +304,9 @@ void capture_for_prompt(const void *buffer, size_t buffer_length) {
     for (z = 0; z <= x; ++z) {
         prompt[z] = storage[x - z];  
     }
-    D("capture_for_prompt(): copied %i bytes from storage\n", (int)z + 1);
+    D("copied %i bytes from storage\n", (int)z + 1);
     prompt[z] = '\0';
     pthread_mutex_unlock(&prompt_mutex);
 
-    D("capture_for_prompt(): prompt = '%s'\n", prompt);
+    D("prompt = '%s'\n", prompt);
 }

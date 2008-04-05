@@ -25,6 +25,7 @@ function build {
     -arch "$1" \
     -o "$DST_DIR/tm_interactive_input_$1.dylib" \
     "$SRC_DIR"/*.c
+    [ $? = 0 ] || exit 1
 }
 
 if [[ -d "$DST_DIR" ]]; then

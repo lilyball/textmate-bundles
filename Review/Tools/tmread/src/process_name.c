@@ -2,11 +2,13 @@
 #include "buffer.h"
 #include "die.h"
 #include "debug.h"
+
 #include <pthread.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 
 #ifndef PS_OUTPUT_HEADER
 #define PS_OUTPUT_HEADER "UCOMM\n"
@@ -24,13 +26,16 @@ void calculate_process_name() {
     if (get_process_name_command == NULL) die("failed to create ps command");
     D("ps command = %s\n", get_process_name_command);
 
+    sig_t previous_sigchld_handler = signal(SIGCHLD, SIG_DFL);
     FILE* out = popen(get_process_name_command, "r");
     free(get_process_name_command);
 
     process_name_buffer = create_buffer_from_file_descriptor(fileno(out));
 
     int ps_result = pclose(out);
-    if (ps_result != 0) die("ps returned %d, output = %*.s", ps_result, process_name_buffer->data, process_name_buffer->size);
+    signal(SIGCHLD, previous_sigchld_handler);
+    
+    if (ps_result != 0) die("ps returned %d, output = %*.s", ps_result, process_name_buffer->size, process_name_buffer->data);
     if (process_name_buffer->size == 0) die("ps did not return any output");
     
     consume_from_head_of_buffer(process_name_buffer, NULL, strlen(PS_OUTPUT_HEADER));

@@ -1,87 +1,120 @@
-#!/usr/bin/env ruby -w
-
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/web_preview"
-require "GrailsTask"
+require "#{ENV["TM_SUPPORT_PATH"]}/lib/scriptmate"
 require "pstore"
 require "erb"
 include ERB::Util
 
-class GrailsMate
+class GrailsCommand
   
-  VERSION = "1.0.0".freeze
-
-  attr_reader :green_patterns, :red_patterns
+  attr_reader :location
   
-  def initialize(task, &option_getter)
-
-    @location = (ENV["TM_PROJECT_DIRECTORY"] || ENV["TM_DIRECTORY"]).freeze
-    Dir.chdir(@location)
-    header()
-    
-    @green_patterns = [/SUCCESS/,/Tests passed/,/Server running/]
-    @red_patterns = [/FAILURE/,/Tests failed/,/Compilation error/,/threw exception/]
-    
+  def initialize(grails, location, task, option_getter)
+    @grails = grails
     @task = task
+    @location = location
     @option_getter = option_getter
-    
-    
-    @grails = ENV["TM_GRAILS"]
-    if @grails.nil? or not File.exist? @grails
-      error("grails not found.  Please set TM_GRAILS.")
-    end
+    @command = nil
   end
   
-  def run()
-    command = get_full_command()
-    print "#{command}<br />"
-    task = GrailsTask.new(command)
-    
-    task.run do |line, mode|
-      if @green_patterns.detect { |pattern| line =~ pattern }
-        print "<span style=\"color: green\">#{line.chomp}</span><br />"
-      elsif @red_patterns.detect { |pattern| line =~ pattern }
-        print "<span style=\"color: red\">#{line.chomp}</span><br />"
+  def to_s
+    command
+  end
+  
+  def command
+    if @command.nil?
+      if (@option_getter.nil?)
+        @command = "#{@task}"
       else
-        print htmlize(line)
+        prefs = PStore.new(File.expand_path( "~/Library/Preferences/com.macromates.textmate.grailsmate"))
+        pref_key = "#{@location}::#{@task}"
+        last_value = prefs.transaction(true) { prefs[pref_key] }
+        option = @option_getter[last_value]
+        prefs.transaction { prefs[pref_key] = option }
+        @command = "#{@task} #{option}"
       end
-      $stdout.flush
     end
-      
+    @command
   end
   
-  private
-  
-  def get_full_command()
-    if (@option_getter.nil?)
-      return "#{@grails} #{@task}"
-    else
-      prefs = PStore.new(File.expand_path( "~/Library/Preferences/com.macromates.textmate.grailsmate"))
-      pref_key = "#{@location}::#{@task}"
-      last_value = prefs.transaction(true) { prefs[pref_key] }
-      option = @option_getter[last_value]
-      prefs.transaction { prefs[pref_key] = option }
-      return "#{@grails} #{@task} #{option}"
-    end
+  def full_command
+    @grails + " " + command
   end
   
-  def header()
-    html_header("GrailsMate", "grails")
+  def run
+    Dir.chdir(@location)
+    rd, wr = IO.pipe
+    rd.fcntl(Fcntl::F_SETFD, 1)
+    stdin, stdout, stderr, pid = my_popen3(full_command)
+    wr.close
+    [stdout, stderr, rd, pid]
+  end
+  
+end
+
+class GrailsMate < CommandMate
+  
+  attr_reader :colorisations, :command
+    
+  def initialize(task, &option_getter) 
+    super(GrailsCommand.new(ENV['TM_GRAILS'], ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY'], task, option_getter))
+    setup_default_colorisations
+  end
+
+  def setup_default_colorisations
+    @colorisations = {
+      "green" => [/SUCCESS/,/Tests passed/,/Server running/],
+      "red" => [/FAILURE/,/Tests failed/,/Compilation error/,/threw exception/, /Exception:/],
+      "blue" => [/Environment set to/]
+    }
+  end
+  
+  def emit_header
+    puts html_head(:window_title => "GrailsMate", :page_title => "GrailsMate", :sub_title => "#{@command.location}")
     puts "<pre>"
-    puts "GrailsMate v#{VERSION} running on Ruby v#{RUBY_VERSION} (#{ENV["TM_RUBY"].strip})"
-    $stdout.flush
+    puts "<strong>grails " + htmlize(@command.command) + "</strong><br>\n"
   end
   
-  def error(error)
-    puts error
-    footer()
-    exit
+  def filter_stderr(line)
+    filter_stdout(line.chomp!)
   end
-
-  def footer
-    puts "</pre>"
-    html_footer
+  
+  def filter_stdout(line)
+    line.chomp!
+    match = false
+    @colorisations.each do | color, patterns |
+      if match == false and patterns.detect { |pattern| line =~ pattern }
+        match = "<span style=\"color: #{color}\">#{line}</span><br>"
+      end
+    end
+    match = (line) + "<br>" unless match 
+    return match
   end
-
+  
+  def emit_html
+    stdout, stderr, stack_dump, @pid = @command.run
+    %w[INT TERM].each do |signal|
+      trap(signal) do
+        begin
+          Process.kill("KILL", @pid)
+          sleep 0.5
+          Process.kill("TERM", @pid)
+        rescue
+          # process doesn't exist anymore
+        end
+      end
+    end
+    emit_header()
+    TextMate::IO.exhaust(:out => stdout, :err => stderr, :stack => stack_dump) do |str, type|
+      case type
+        when :out   then print filter_stdout(str)
+        when :err   then print filter_stderr(str)
+        when :stack then @error << str
+      end
+    end
+    emit_footer()
+    Process.waitpid(@pid)
+  end
+  
 end

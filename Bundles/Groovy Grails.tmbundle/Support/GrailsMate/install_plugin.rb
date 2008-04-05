@@ -1,8 +1,3 @@
-#!/usr/bin/env ruby
-
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
-require "GrailsMate"
-
 gm = GrailsMate.new("install-plugin") do |default|
   TextMate::UI.request_string( 
     :title => "Install Grails Plug-in",
@@ -11,6 +6,6 @@ gm = GrailsMate.new("install-plugin") do |default|
   )
 end
 
-gm.green_patterns << /Plugin (.)+ installed/
-gm.red_patterns << /Plugin (.)+ was not found in repository/
-gm.run
+gm.colorisations['green'] << /Plugin (.)+ installed/
+gm.colorisations['red'] << /Plugin (.)+ was not found in repository/
+gm.emit_html

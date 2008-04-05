@@ -1,8 +1,3 @@
-#!/usr/bin/env ruby
-
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
-require "GrailsMate"
-
 gm = GrailsMate.new("") do |default|
   TextMate::UI.request_string( 
     :title => "Run Grails Task",
@@ -11,4 +6,4 @@ gm = GrailsMate.new("") do |default|
   )
 end
 
-gm.run
+gm.emit_html

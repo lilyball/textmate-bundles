@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
-require "GrailsMate"
 gm = GrailsMate.new("run-app")
-gm.run
+gm.colorisations['red'] << /Server failed to start/
+gm.emit_html

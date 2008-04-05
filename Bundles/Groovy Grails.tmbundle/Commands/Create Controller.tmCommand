@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>autoScrollOutput</key>
+	<true/>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>export RUBYLIB="$TM_BUNDLE_SUPPORT/GrailsMate${RUBYLIB:+:$RUBYLIB}"
-TM_RUBY=${TM_RUBY:-ruby}
-TM_GRAILS=${TM_GRAILS:-grails}
-
-require_cmd "$TM_GRAILS" "If you have installed grails, then you need to either &lt;a href="help:anchor='search_path'%20bookID='TextMate%20Help'"&gt;update your &lt;tt&gt;PATH&lt;/tt&gt;&lt;/a&gt; or set the &lt;tt&gt;TM_GRAILS&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
-
-require_cmd "$TM_RUBY" "We need Ruby to proceed."
-
-export TM_GRAILS=`which $TM_GRAILS`
-export TM_RUBY=`which $TM_RUBY`
-
-"${TM_RUBY}" -- "$TM_BUNDLE_SUPPORT/GrailsMate/create_controller.rb"</string>
+	<string>grailsmate_bootstrap.sh create_controller</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

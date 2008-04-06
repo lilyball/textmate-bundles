@@ -38,12 +38,14 @@ ssize_t read(int d, void *buffer, size_t buffer_length) {
         */
 
         D("syscall returned %d bytes\n", (int)bytes_read);
-        if (bytes_read < 0 && errno != EAGAIN) {
-            D("read syscall error: '%s'", strerror(errno));
-            return bytes_read;
-        }
 
-        return (bytes_read > 0) ? bytes_read : tm_dialog_read(buffer, buffer_length);
+        static bool did_see_eof = false;
+        if((bytes_read == -1 && errno == EAGAIN) || (bytes_read == 0 && did_see_eof))
+            return tm_dialog_read(buffer, buffer_length);
+        
+        if(bytes_read == 0)
+            did_see_eof = true;
+        return bytes_read;
     }
 }
 

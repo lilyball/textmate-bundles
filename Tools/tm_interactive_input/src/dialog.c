@@ -210,7 +210,7 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
         get_input_from_user();
 
         
-        if (tm_interactive_input_is_in_echo_mode()) {
+        if (tm_interactive_input_is_in_echo_mode() && input_buffer != NULL) {
             if (use_secure_nib()) {
                 char *input_str = create_cstr_from_buffer(input_buffer);
                 CFStringRef input_cfstr = cstr_2_cfstr(input_str);

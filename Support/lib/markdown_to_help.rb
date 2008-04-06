@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -wKU
 
-require 'escape.rb'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape.rb'
 
 class TreeNode
   attr_accessor :heading, :attributes, :parent, :level, :count

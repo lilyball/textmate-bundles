@@ -26,6 +26,21 @@ buffer_t* create_buffer() {
     return res;
 }
 
+size_t get_buffer_size(buffer_t *b) {
+    return b->size;
+}
+size_t get_buffer_capacity(buffer_t *b) {
+    return b->capacity;
+}
+char* get_buffer_data(buffer_t *b) {
+    return b->data;
+}
+
+char get_buffer_byte_at(buffer_t *b, size_t at) {
+    if (at < 0 || at >= b->size) die("buffer access out of range: %d for buffer of size %d", at, b->size);
+    return b->data[at];
+}
+
 buffer_t* create_buffer_with(char* bytes, size_t len) {
     buffer_t* b = create_buffer();
     b->data = bytes;
@@ -147,4 +162,8 @@ size_t consume_from_head_of_buffer(buffer_t* buffer, char* dest, size_t dest_siz
 void destroy_buffer(buffer_t* buffer) {
    if (buffer->data != NULL) free(buffer->data);
    free(buffer);
+}
+
+int write_buffer_to_fd(buffer_t* b, int fd) {
+    return write(fd, b->data, b->size);
 }

@@ -175,8 +175,8 @@ void get_input_from_user() {
     close(output[W]);
 
     // Write our parameters to tm_dialog's input
-    size_t bytes_written = write(input[W], parameters_buffer->data, parameters_buffer->size);
-    if (bytes_written < parameters_buffer->size) die("failed to write all of parameter input to tm_dialog");
+    size_t bytes_written = write_buffer_to_fd(parameters_buffer, input[W]);
+    if (bytes_written < get_buffer_size(parameters_buffer)) die("failed to write all of parameter input to tm_dialog");
     close(input[W]);
     destroy_buffer(parameters_buffer);
 
@@ -222,7 +222,7 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
                     syscall(SYS_write, STDOUT_FILENO, "*", 1);
                 syscall(SYS_write, STDOUT_FILENO, "\n", 1);
             } else {
-                syscall(SYS_write, STDOUT_FILENO, input_buffer->data, input_buffer->size);
+                write_buffer_to_fd(input_buffer, STDOUT_FILENO);
             }
         }
     }
@@ -233,7 +233,7 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
     } else {
         D("reading %d into read buffer from input buffer\n", (int)buffer_length);
         consumed = consume_from_head_of_buffer(input_buffer, buffer, buffer_length);
-        if (input_buffer->size == 0) input_buffer = NULL;
+        if (get_buffer_size(input_buffer) == 0) input_buffer = NULL;
     } 
 
     pthread_mutex_unlock(&input_mutex);

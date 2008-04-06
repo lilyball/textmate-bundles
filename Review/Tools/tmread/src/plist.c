@@ -7,7 +7,7 @@ CFPropertyListRef create_plist_from_buffer(buffer_t *buffer) {
 
     D("creating data ref of buffer\n");
 
-    CFDataRef buffer_as_data = CFDataCreate(kCFAllocatorDefault, (UInt8*)buffer->data, buffer->size);
+    CFDataRef buffer_as_data = CFDataCreate(kCFAllocatorDefault, (UInt8*)get_buffer_data(buffer), buffer->size);
     if (buffer_as_data == NULL) die("failed to allocate tm_dialog_output_data");
 
     D("creating property list from data\n");

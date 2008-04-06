@@ -23,9 +23,9 @@ else
 	TextMate.exit_insert_text(ENV['TM_CURRENT_LINE'][col..-1] + "\n" + ENV['TM_CURRENT_LINE'][0...col])
 end</string>
 	<key>fallbackInput</key>
-	<string>line</string>
-	<key>input</key>
 	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^D</string>
 	<key>name</key>

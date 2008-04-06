@@ -15,66 +15,11 @@
 #include <pthread.h>
 #include <stdbool.h>
 
-#ifndef DIALOG_ENV_VAR
-#define DIALOG_ENV_VAR "DIALOG"
-#endif
-
-#ifndef DIALOG_NIB_DEFAULT
-#define DIALOG_NIB_DEFAULT "RequestString"
-#endif
-
-#ifndef DIALOG_NIB_SECURE
-#define DIALOG_NIB_SECURE "RequestSecureString"
-#endif
-
-#ifndef DIALOG_TITLE_ENV_VAR
-#define DIALOG_TITLE_ENV_VAR "DIALOG_TITLE"
-#endif
-
-#ifndef DIALOG_TITLE_KEY
-#define DIALOG_TITLE_KEY "title"
-#endif
-
-#ifndef DIALOG_PROMPT_KEY
-#define DIALOG_PROMPT_KEY "prompt"
-#endif
-
-#ifndef DIALOG_BUTTON_1
-#define DIALOG_BUTTON_1 "Send"
-#endif
-
-#ifndef DIALOG_BUTTON_1_KEY
-#define DIALOG_BUTTON_1_KEY "button1"
-#endif
-
-#ifndef DIALOG_BUTTON_2
-#define DIALOG_BUTTON_2 "Send EOF"
-#endif
-
-#ifndef DIALOG_BUTTON_2_KEY
-#define DIALOG_BUTTON_2_KEY "button2"
-#endif
-
-#ifndef DIALOG_RESULT_KEY
-#define DIALOG_RESULT_KEY "result"
-#endif
-
-#ifndef DIALOG_RETURN_ARGUMENT_KEY
-#define DIALOG_RETURN_ARGUMENT_KEY "returnArgument"
-#endif
-
-#ifndef PROMPT_SIZE
-#define PROMPT_SIZE 64
-#endif
-
-#ifndef FALLBACK_PROMPT
-#define FALLBACK_PROMPT "The processing is requesting input:"
-#endif
-
 buffer_t* input_buffer = NULL;
 pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static char prompt[PROMPT_SIZE];
+static char prompt[64];
+static size_t prompt_capacity = 64;
 pthread_mutex_t prompt_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 char* create_prompt_copy() {
@@ -95,7 +40,7 @@ CFDictionaryRef create_input_dictionary() {
     CFMutableDictionaryRef parameters = CFDictionaryCreateMutable(kCFAllocatorDefault, 5, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     if (parameters == NULL) die("failed to allocate dict for dialog parameters");
 
-    CFStringRef cf_title_key = CFSTR(DIALOG_TITLE_KEY);
+    CFStringRef cf_title_key = CFSTR("title");
     char* process_name = create_process_name();
     CFStringRef cf_title = cstr_2_cfstr(process_name);
     CFDictionaryAddValue(parameters, cf_title_key, cf_title);
@@ -103,22 +48,22 @@ CFDictionaryRef create_input_dictionary() {
     CFRelease(cf_title);
 
     char* prompt_copy = create_prompt_copy();
-    CFStringRef dialog_prompt = cstr_2_cfstr((strlen(prompt) == 0) ? FALLBACK_PROMPT : prompt);
+    CFStringRef dialog_prompt = cstr_2_cfstr((strlen(prompt) == 0) ? "The processing is requesting input:" : prompt);
     free(prompt_copy);
-    CFDictionaryAddValue(parameters, CFSTR(DIALOG_PROMPT_KEY), dialog_prompt);
+    CFDictionaryAddValue(parameters, CFSTR("prompt"), dialog_prompt);
     CFRelease(dialog_prompt);
 
-    CFDictionaryAddValue(parameters, CFSTR(DIALOG_BUTTON_1_KEY), CFSTR(DIALOG_BUTTON_1));
-    CFDictionaryAddValue(parameters, CFSTR(DIALOG_BUTTON_2_KEY), CFSTR(DIALOG_BUTTON_2));
+    CFDictionaryAddValue(parameters, CFSTR("button1"), CFSTR("Send"));
+    CFDictionaryAddValue(parameters, CFSTR("button2"), CFSTR("Send EOF"));
 
     return parameters;
 }
 
 char * get_path() {
 
-    char *path = getenv(DIALOG_ENV_VAR);
+    char *path = getenv("DIALOG");
     if (path == NULL)
-        die("Cannot execute tm_dialog, %s is empty or not set", DIALOG_ENV_VAR);
+        die("Cannot execute tm_dialog, DIALOG is empty or not set");
 
     return path;
 }
@@ -131,7 +76,7 @@ bool use_secure_nib() {
 }
 
 char* get_nib() {
-    return (use_secure_nib()) ? DIALOG_NIB_SECURE : DIALOG_NIB_DEFAULT;
+    return (use_secure_nib()) ? "RequestSecureString" : "RequestString";
 }
 
 CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
@@ -140,20 +85,20 @@ CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
         die("root element of plist is not dictionary");
 
     CFDictionaryRef results;
-    CFStringRef results_key = CFSTR(DIALOG_RESULT_KEY);
+    CFStringRef results_key = CFSTR("result");
 
     bool has_results = CFDictionaryGetValueIfPresent(plist, results_key, (void *)&results);
     CFRelease(results_key);
 
     if (!has_results) {
-        D("plist has no %s key, so returning nothing\n", DIALOG_RESULT_KEY);
+        D("plist has no result key, so returning nothing\n");
         return NULL;
     }
 
     if (CFGetTypeID(results) != CFDictionaryGetTypeID())
         die("results entry of output is not a dictionary");
 
-    CFStringRef return_argument_key = CFSTR(DIALOG_RETURN_ARGUMENT_KEY);
+    CFStringRef return_argument_key = CFSTR("returnArgument");
     CFStringRef return_argument;
 
     if (!CFDictionaryGetValueIfPresent(results, return_argument_key, (void *)&return_argument))
@@ -288,7 +233,7 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
 }
 
 void capture_for_prompt(const void *buffer, size_t buffer_length) {
-    char storage[PROMPT_SIZE];
+    char storage[prompt_capacity];
     char *cbuffer = (char *)buffer;
 
     D("buffer_length = %d\n", (int)buffer_length);
@@ -302,7 +247,7 @@ void capture_for_prompt(const void *buffer, size_t buffer_length) {
     if (i <= 0) return;
 
     size_t x;
-    for (x = 0; (x < (PROMPT_SIZE - 1)) && i > 0; ++x) {
+    for (x = 0; (x < (prompt_capacity - 1)) && i > 0; ++x) {
         char c = cbuffer[--i];
         if (c == '\n') break;
         storage[x] = c;

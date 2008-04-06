@@ -107,7 +107,7 @@ module TextMate
       # If a block is given, the selected item from the +choices+ array will be yielded
       # (with a new key +index+ added, which is the index of the +choice+ into the +choices+ array)
       # and the result of the block inserted as a snippet
-      def complete(choices, options = {}) #  :yields: choice
+      def complete(choices, options = {}, &block) #  :yields: choice
         pid = fork do
           STDOUT.reopen(open('/dev/null'))
           STDERR.reopen(open('/dev/null'))
@@ -127,28 +127,44 @@ module TextMate
 
           plist = {'suggestions' => choices}
           plist['images'] = options[:images] if options[:images]
-          
-          IO.popen(command, 'w+') do |io|
-            io << plist.to_plist
-            io.close_write
-            
-            plist = OSX::PropertyList.load io rescue nil
-            
-            if block_given?
-              ENV['SNIPPET'] = yield plist
-            else
-              # Run a default block if no block is given.
-              ENV['SNIPPET'] = lambda{|choice|
-                return nil unless choice
-                
-                #Show the tool_tip before inserting the snippet to make it align to the end of the match
-                TextMate::UI.tool_tip(choice['tool_tip']) if choice['tool_tip']
-                
-                choice['insert']
-              }.call plist
+
+          to_insert = ''
+          result    = nil
+          if ENV['DIALOG'] =~ /2$/
+            # If the user has Dialog 2 available we can show the popup
+            IO.popen(command, 'w+') do |io|
+              io << plist.to_plist
+              io.close_write
+              result = OSX::PropertyList.load io rescue nil
             end
-            `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
+          else
+            # For users without Dialog 2 we show a simple menu with the suggestion titles
+            # We need to filter the list of suggestions down so that only the matches are included in the menu
+            choices      = choices.select { |c| (c['match'] || c['display']) =~ /^#{Regexp.quote(options[:initial_filter])}/ }
+            menu_choices = choices.map { |c| c['display'] }
+            choice       = menu(menu_choices)
+            if choice
+              result = choices[choice]
+              # With the popup the match text will always be inserted first, so we must emulate it too
+              to_insert << e_sn((result['match'] || result['display'])[options[:initial_filter].length..-1])
+            end
           end
+
+          # Use a default block if none was provided
+          block ||= lambda do |choice|
+            return nil unless choice
+            
+            #Show the tool_tip before inserting the snippet to make it align to the end of the match
+            TextMate::UI.tool_tip(choice['tool_tip']) if choice['tool_tip']
+            
+            choice['insert']
+          end
+
+          # The block should return the text to insert as a snippet
+          to_insert << block.call(result).to_s
+
+          # Insert the snippet if necessary
+          `"$DIALOG" x-insert #{e_sh to_insert}` unless to_insert.empty?
         end
       end
       

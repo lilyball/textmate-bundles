@@ -75,7 +75,7 @@ module TextMate
       def tool_tip(content, options={}) # Possible options = {:format => :html|:text, :transparent => true}
         command =  %{"$DIALOG" tooltip}
         command << ' -t' if options[:transparent]
-        command << ' --format = ' + options[:format].to_s if options[:format]
+        command << ' --format ' + e_sh(options[:format].to_s) if options[:format]
         IO.popen(command, 'w') do |proc|
           proc << content
           proc.close_write

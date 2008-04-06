@@ -101,7 +101,7 @@ module TextMate
       #   you can augment the list with this option
       # * <tt>:case_insensitive</tt>  -- ignore case when filtering
       # * <tt>:static_prefix</tt>     -- a prefix which is used when filtering suggestions.
-      # * <tt>:currentword</tt>       -- defaults to the current word
+      # * <tt>:initial_filter</tt>    -- defaults to the current word
       # * <tt>:images</tt>            -- a +Hash+ of image names to paths
       # 
       # If a block is given, the selected item from the +choices+ array will be yielded
@@ -117,10 +117,10 @@ module TextMate
           require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
           characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
           
-          options[:currentword] ||= Word.current_word characters, :left
+          options[:initial_filter] ||= Word.current_word characters, :left
           
           command =  "#{TM_DIALOG} popup --wait"
-          command << " --current-word #{e_sh options[:currentword]}"    if options[:currentword]
+          command << " --current-word #{e_sh options[:initial_filter]}" if options[:initial_filter]
           command << " --static-prefix #{e_sh options[:static_prefix]}" if options[:static_prefix]
           command << " --extra-chars #{e_sh options[:extra_chars]}"     if options[:extra_chars]
           command << " --case-insensitive"                              if options[:case_insensitive]

@@ -334,7 +334,7 @@ class ObjCFallbackCompletion
 
       flags = {}
       flags[:extra_chars]= '_'
-      flags[:currentword]= searchTerm
+      flags[:initial_filter]= searchTerm
       begin
         TextMate::UI.complete(pl, flags)  do |hash|
           hash['extraOptions'] = {'star' => star, 'arg_name' => arg_name}
@@ -609,7 +609,7 @@ class ObjCMethodCompletion
     flags = {}
     flags[:static_prefix] =static
     flags[:extra_chars]= '_:'
-    flags[:currentword]= word
+    flags[:initial_filter]= word
     begin
       TextMate::UI.complete(pl, flags) do |hash|
         ExternalSnippetizer.new.run(hash, word.size)

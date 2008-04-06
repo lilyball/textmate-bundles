@@ -335,10 +335,14 @@ class ObjCFallbackCompletion
       flags = {}
       flags[:extra_chars]= '_'
       flags[:currentword]= searchTerm
-      TextMate::UI.complete(pl, flags)  do |hash|
-        hash['extraOptions'] = {'star' => star, 'arg_name' => arg_name}
-        hash['environment']={'TM_C_POINTER' => ENV['TM_C_POINTER']}
-        ExternalSnippetizer.new.run(hash)
+      begin
+        TextMate::UI.complete(pl, flags)  do |hash|
+          hash['extraOptions'] = {'star' => star, 'arg_name' => arg_name}
+          hash['environment']={'TM_C_POINTER' => ENV['TM_C_POINTER']}
+          ExternalSnippetizer.new.run(hash)
+        end
+      rescue NoMethodError
+        TextMate.exit_show_tool_tip "you have Dialog2 installed but not the ui.rb in review"
       end
      TextMate.exit_discard # create_new_document
     else
@@ -606,8 +610,12 @@ class ObjCMethodCompletion
     flags[:static_prefix] =static
     flags[:extra_chars]= '_:'
     flags[:currentword]= word
-    TextMate::UI.complete(pl, flags) do |hash|
-      ExternalSnippetizer.new.run(hash, word.size)
+    begin
+      TextMate::UI.complete(pl, flags) do |hash|
+        ExternalSnippetizer.new.run(hash, word.size)
+      end
+    rescue NoMethodError
+        TextMate.exit_show_tool_tip "you have Dialog2 installed but not the ui.rb in review"
     end
     TextMate.exit_discard
     io = open('|"$DIALOG" popup ' + flags, "r+")

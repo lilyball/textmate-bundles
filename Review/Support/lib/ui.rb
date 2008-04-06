@@ -120,11 +120,11 @@ module TextMate
           options[:initial_filter] ||= Word.current_word characters, :left
           
           command =  "#{TM_DIALOG} popup --wait"
-          command << " --current-word #{e_sh options[:initial_filter]}" if options[:initial_filter]
-          command << " --static-prefix #{e_sh options[:static_prefix]}" if options[:static_prefix]
-          command << " --extra-chars #{e_sh options[:extra_chars]}"     if options[:extra_chars]
-          command << " --case-insensitive"                              if options[:case_insensitive]
-          
+          command << " --initial-filter #{e_sh options[:initial_filter]}"
+          command << " --static-prefix #{e_sh options[:static_prefix]}"   if options[:static_prefix]
+          command << " --extra-chars #{e_sh options[:extra_chars]}"       if options[:extra_chars]
+          command << " --case-insensitive"                                if options[:case_insensitive]
+
           plist = {'suggestions' => choices}
           plist['images'] = options[:images] if options[:images]
           
@@ -132,12 +132,10 @@ module TextMate
             io << plist.to_plist
             io.close_write
             
-            plistify = lambda do |io|
-              OSX::PropertyList.load io rescue nil
-            end
+            plist = OSX::PropertyList.load io rescue nil
             
             if block_given?
-              ENV['SNIPPET'] = yield plistify.call(io.read)
+              ENV['SNIPPET'] = yield plist
             else
               # Run a default block if no block is given.
               ENV['SNIPPET'] = lambda{|choice|
@@ -147,7 +145,7 @@ module TextMate
                 TextMate::UI.tool_tip(choice['tool_tip']) if choice['tool_tip']
                 
                 choice['insert']
-              }.call plistify.call(io.read)
+              }.call plist
             end
             `"$DIALOG" x-insert "$SNIPPET"` if ENV['SNIPPET']
           end

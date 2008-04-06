@@ -212,6 +212,14 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
         
         if (tm_interactive_input_is_in_echo_mode()) {
             if (use_secure_nib()) {
+                char *input_str = create_cstr_from_buffer(input_buffer);
+                CFStringRef input_cfstr = cstr_2_cfstr(input_str);
+                CFIndex char_count = CFStringGetLength(input_cfstr);
+                free(input_str);
+                CFRelease(input_cfstr);
+                size_t i;
+                for (i = 1; i < char_count; ++i) // Not <= because of \n on end
+                    syscall(SYS_write, STDOUT_FILENO, "*", 1);
                 syscall(SYS_write, STDOUT_FILENO, "\n", 1);
             } else {
                 syscall(SYS_write, STDOUT_FILENO, input_buffer->data, input_buffer->size);

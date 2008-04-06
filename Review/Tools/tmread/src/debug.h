@@ -1,6 +1,8 @@
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
+#include <stdio.h>
+
 #ifndef NDEBUG
 #define D(format, args...) fprintf(stderr, "%s(): ", __FUNCTION__); fprintf(stderr, format ,## args)
 #else

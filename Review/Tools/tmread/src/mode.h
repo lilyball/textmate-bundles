@@ -5,5 +5,6 @@
 
 bool tm_interactive_input_is_active();
 bool tm_interactive_input_is_in_always_mode();
+bool tm_interactive_input_is_in_echo_mode();
 
 #endif /* _MODE_H_ */

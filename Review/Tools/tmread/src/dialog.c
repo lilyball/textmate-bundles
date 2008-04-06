@@ -4,6 +4,7 @@
 #include "plist.h"
 #include "buffer.h"
 #include "process_name.h"
+#include "mode.h"
 
 #include <signal.h>
 #include <sys/syscall.h>
@@ -12,6 +13,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <pthread.h>
+#include <stdbool.h>
 
 #ifndef DIALOG_ENV_VAR
 #define DIALOG_ENV_VAR "DIALOG"
@@ -121,11 +123,15 @@ char * get_path() {
     return path;
 }
 
-char* get_nib() {
+bool use_secure_nib() {
     pthread_mutex_lock(&prompt_mutex);
-    char *nib = (strcasestr(prompt, "password") == NULL) ? DIALOG_NIB_DEFAULT : DIALOG_NIB_SECURE;
+    bool should = (strcasestr(prompt, "password") != NULL);
     pthread_mutex_unlock(&prompt_mutex);
-    return nib;
+    return should;
+}
+
+char* get_nib() {
+    return (use_secure_nib()) ? DIALOG_NIB_SECURE : DIALOG_NIB_DEFAULT;
 }
 
 CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
@@ -258,10 +264,14 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
         D("input_buffer == NULL, getting input from user\n");
         get_input_from_user();
 
-        // This is trying to simulate what happens typically on the command line.
-        // Input is requested of the user and when they hit enter which in essence 
-        // writes a newline.
-        syscall(SYS_write, STDOUT_FILENO, "\n", 1);
+        
+        if (tm_interactive_input_is_in_echo_mode()) {
+            if (use_secure_nib()) {
+                syscall(SYS_write, STDOUT_FILENO, "\n", 1);
+            } else {
+                syscall(SYS_write, STDOUT_FILENO, input_buffer->data, input_buffer->size);
+            }
+        }
     }
     
     if (input_buffer == NULL) {

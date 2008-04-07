@@ -1,3 +1,4 @@
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"

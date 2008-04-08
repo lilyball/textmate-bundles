@@ -8,7 +8,6 @@
 	<string>#!/usr/bin/env ruby -wKU
 
 SUPPORT = ENV['TM_SUPPORT_PATH']
-DIALOG = SUPPORT + '/bin/tm_dialog'
 
 require SUPPORT + '/lib/escape'
 require SUPPORT + '/lib/exit_codes'
@@ -44,7 +43,7 @@ conf_files.pop()
 TextMate.exit_show_tool_tip( "No .conf files found ") if conf_files.empty?
 
 plist = { 'menuItems' =&gt; conf_files }.to_plist
-res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+res = OSX::PropertyList::load(`"$DIALOG" -up #{e_sh plist}`)
 
 TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
 

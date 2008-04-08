@@ -18,26 +18,19 @@ def snippet_generator(cand, start)
   elsif oldstuff[0].count(":") > 1
 
     name_array = stuff[0].split(":")
-    name_array = [""] if name_array.empty?
-    out = ""
-    begin
+    out = "${1:#{stuff[-name_array.size - 1]}} "
+    unless name_array.empty?
+    begin      
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-        if (name_array.size == i)
-          out << name_array[i] + ":${0:"+(i+2).to_s + ":"+ arg +"} "
-        else
           out << name_array[i] +  ":${"+(i+2).to_s + ":"+ arg +"} "
-        end
       end
-      out = "${1:#{stuff[6]}} " + out
-
     rescue NoMethodError
       out = "$0"
     end
-
+  end
   else
     out = "$0"
   end
-  #puts out.inspect
   return out.chomp.strip
 end
 
@@ -82,7 +75,7 @@ end
 
 def run(res, len = 0)
   if res['type'] == "methods"
-    r = snippet_generator(res['cand'], len)
+    r = snippet_generator(res['cand'], res['match'].size)
   elsif res['type'] == "functions"
     r = cfunction_snippet_generator(res['cand'])
   elsif res['pure'] && res['noArg']
@@ -617,12 +610,6 @@ class ObjCMethodCompletion
     rescue NoMethodError
         TextMate.exit_show_tool_tip "you have Dialog2 installed but not the ui.rb in review"
     end
-    TextMate.exit_discard
-    io = open('|"$DIALOG" popup ' + flags, "r+")
-    io <<  pl.to_plist
-    io.close_write
-    
-    #TextMate.exit_insert_text pl.to_plist.inspect
     TextMate.exit_discard
   end
 

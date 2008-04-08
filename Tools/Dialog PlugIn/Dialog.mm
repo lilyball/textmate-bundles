@@ -705,7 +705,7 @@ static int sNextWindowControllerToken = 1;
 		// AppendMenuItemTextWithCFString(menu_ref, NULL, kMenuItemAttrSectionHeader, 0, NULL);
 	}
 
-	NSPoint pos = NSZeroPoint;
+	NSPoint pos = [NSEvent mouseLocation];
 	if(id textView = [NSApp targetForAction:@selector(positionForWindowUnderCaret)])
 		pos = [textView positionForWindowUnderCaret];
 

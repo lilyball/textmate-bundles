@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>n=$'\n'
+
+cat &lt;&lt;-AS | iconv -f UTF-8 -t MACROMAN | osascript --
+  tell application "Script Editor"
+      activate
+      set theDocument to make new document
+      tell theDocument
+          set contents of selection to "tell application \"TextMate\" $n activate $n tell application \"System Events\" to keystroke \"r\" using {control down, command down, option down} $n end tell"
+          try
+              check syntax
+              save as "application bundle" in "$HOME/Desktop/TM_Rdaemon.app" run only TRUE startup screen FALSE
+          on error error_message number the error_number
+              display dialog "Error: " &amp; the error_number &amp; ". " &amp; the error_message buttons {"OK"} default button 1
+          end try
+      end tell
+         quit
+  end tell
+AS
+
+cp ~/Desktop/TMRdaemonLogo/TMRdaemonLogo.icns ~/Desktop/TM_Rdaemon.app/Contents/Resources/
+
+cat ~/Desktop/TM_Rdaemon.app/Contents/Info.plist | perl -e '$/="";$pl=&lt;&gt;;$pl=~s!(CFBundleIconFile&lt;/key&gt;\n\t{1,}&lt;string&gt;)(.*?)(&lt;/string&gt;)!$1TMRdaemonLogo$3!;print $pl' &gt; ~/Desktop/TM_Rdaemon.app/Contents/Info1.plist
+rm ~/Desktop/TM_Rdaemon.app/Contents/Info.plist
+cat ~/Desktop/TM_Rdaemon.app/Contents/Info1.plist &gt; ~/Desktop/TM_Rdaemon.app/Contents/Info.plist
+rm ~/Desktop/TM_Rdaemon.app/Contents/Info1.plist</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Create TM_Rdaemon.app</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rd.console</string>
+	<key>uuid</key>
+	<string>F43C0D32-2402-4542-8FB9-EF9AF960E3B9</string>
+</dict>
+</plist>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -20,11 +20,11 @@ cat &lt;&lt;-AS | iconv -f UTF-8 -t MACROMAN | osascript --
               display dialog "Error: " &amp; the error_number &amp; ". " &amp; the error_message buttons {"OK"} default button 1
           end try
       end tell
-         quit
+         --quit
   end tell
 AS
 
-cp ~/Desktop/TMRdaemonLogo/TMRdaemonLogo.icns ~/Desktop/TM_Rdaemon.app/Contents/Resources/
+cp "$TM_BUNDLE_PATH"/Support/lib/TMRdaemonLogo.icns ~/Desktop/TM_Rdaemon.app/Contents/Resources/
 
 cat ~/Desktop/TM_Rdaemon.app/Contents/Info.plist | perl -e '$/="";$pl=&lt;&gt;;$pl=~s!(CFBundleIconFile&lt;/key&gt;\n\t{1,}&lt;string&gt;)(.*?)(&lt;/string&gt;)!$1TMRdaemonLogo$3!;print $pl' &gt; ~/Desktop/TM_Rdaemon.app/Contents/Info1.plist
 rm ~/Desktop/TM_Rdaemon.app/Contents/Info.plist
@@ -35,7 +35,7 @@ rm ~/Desktop/TM_Rdaemon.app/Contents/Info1.plist</string>
 	<key>name</key>
 	<string>Create TM_Rdaemon.app</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>openAsNewDocument</string>
 	<key>scope</key>
 	<string>source.rd.console</string>
 	<key>uuid</key>

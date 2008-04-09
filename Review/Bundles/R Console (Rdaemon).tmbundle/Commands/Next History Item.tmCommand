@@ -12,6 +12,7 @@ C=$(($C-1))
 L=$(tail -r "$HOME/Rdaemon"/history/Rhistory.txt | uniq | cat -n | egrep "^ *$C	" | sed 's/^.*	//' )
 
 echo -n $C &gt; "$HOME/Rdaemon"/history/Rhistcounter.txt
+L=${L//\\\\/\\\\}
 L=${L//$/\\$}
 L=${L//\`/\\\`}
 

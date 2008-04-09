@@ -125,6 +125,7 @@ module TextMate
           command << " --extra-chars #{e_sh options[:extra_chars]}"       if options[:extra_chars]
           command << " --case-insensitive"                                if options[:case_insensitive]
 
+          choices = choices.map! {|c| {'display' => c.to_s} } unless choices[0].is_a? Hash
           plist = {'suggestions' => choices}
           plist['images'] = options[:images] if options[:images]
 

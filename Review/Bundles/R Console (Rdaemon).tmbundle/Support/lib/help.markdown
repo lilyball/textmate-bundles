@@ -1,4 +1,4 @@
-
+<img align=right src="lib/TMRdaemonLogo.icns" width=60>
 # Introduction
 
 The "R Console (Rdaemon)" bundle allows to run the command-line version of R ***inside*** of TextMate using a daemon which runs within an hidden pseudo terminal. In addition it provides some commands which allow to use that bundle as a kind of GUI.
@@ -75,6 +75,10 @@ In addition while starting a Rdaemon session a time stamp will be inserted into 
 To clear that history list open the command menu "Tools" <button>&#x2325;&#x2318;T</button> and choose "Clear History".
 
 ***Hint: For moving the caret up or down press <button>&#x2318;&#x2191;</button> or <button>&#x2318;&#x2193;</button>.***
+
+## Autostarter TM_Rdaemon.app
+
+`TM_Rdaemon.app` is an AppleScript application which starts TextMate and the Rdaemon automatically. If you invoke "Create TM&#95;Rdaemon.app" (Bundle Menu > Rdaemon Tools > Create TM&#95;Rdaemon.app) this command will create `TM_Rdaemon.app` at your Desktop. It also changes the icon but it could take a bit time for the Finder to realize it (relaunching the Finder will update it at once). That application you could drag'n'drop to the Dock or to Finder's toolbar to start Rdaemon much more faster.
 
 # Commands
 

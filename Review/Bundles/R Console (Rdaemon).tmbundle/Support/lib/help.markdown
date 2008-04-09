@@ -144,7 +144,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Start X11__
 
-      Starts the X11 server.
+      Starts the X11 server. [not needed on Mac OSX 10.5.x]
 
 -    __Try to interrupt current task__
 
@@ -390,7 +390,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 -   __`After calling locator() there is no way to get out of the Quartz device`__
 
-    To finish the `locator` command with a Quartz device you have to press the red dot of the quartz window to "close" it. ESC won't work unfortunately. You will still see the window __BUT__ the device was closed! If you need the `locator` functionality please use the x11 device instead.
+    To finish the `locator` command with a Quartz device you have to press the red dot of the quartz window to "close" it. ESC won't work unfortunately.
 
 -   __`fix()` or `edit()` blocks TextMate__
 
@@ -422,7 +422,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 # Main Bundle Maintainer
 
-***Date: Mar 06 2008***
+***Date: Apr 09 2008***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

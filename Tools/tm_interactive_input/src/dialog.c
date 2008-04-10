@@ -101,13 +101,14 @@ CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
     CFStringRef return_argument_key = CFSTR("returnArgument");
     CFStringRef return_argument;
 
-    if (!CFDictionaryGetValueIfPresent(results, return_argument_key, (void *)&return_argument))
-        die("results entry of output does not contain an entry for return value");
-
+    if (CFDictionaryGetValueIfPresent(results, return_argument_key, (void *)&return_argument)) {
+        if (CFGetTypeID(return_argument) != CFStringGetTypeID())
+            die("return value entry in results entry of output is not a string");
+    } else {
+        return_argument = CFSTR("");
+    }
+        
     CFRelease(return_argument_key);
-
-    if (CFGetTypeID(return_argument) != CFStringGetTypeID())
-        die("return value entry in results entry of output is not a string");
 
     return return_argument;
 }

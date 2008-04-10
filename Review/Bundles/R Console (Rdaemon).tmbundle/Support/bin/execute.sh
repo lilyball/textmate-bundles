@@ -84,7 +84,7 @@ if [ -z "$TM_SELECTED_TEXT" ]; then
 else
 	echo -e "$TASK" | while read LINE
 	do
-		echo -e "$LINE" > "$RDHOME"/r_in
+		echo -e "${LINE//\\/\\\\\\\\}" > "$RDHOME"/r_in
 		sleep 0.002
 		echo "$LINE"
 	done|CocoaDialog progressbar --indeterminate --title "Rdaemon is busy ..."
@@ -102,6 +102,7 @@ do
 	[[ "$RES" == "> " ]] && break
 	[[ "$RES" == "+ " ]] && break
 	[[ "$RES" == ": " ]] && break
+#	[[ `ps -p $RPID | tail -n 1 | awk '{print $3}'` == "S+" ]] && break
 	#monitoring of the CPU coverage as progress bar
 	cpu=$(ps o pcpu -p "$RPID" | tail -n 1)
 	[[ "${cpu:0:1}" == "%" ]] && break

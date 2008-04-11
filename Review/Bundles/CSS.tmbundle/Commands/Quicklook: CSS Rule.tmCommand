@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+
+CSS = STDIN.read
+
+CSS.gsub!(/(url\('?)\/?/,"\\1file://#{ENV['TM_PROJECT_DIRECTORY']}/")
+fix_absolute = CSS =~ /position:\s*absolute/im
+
+html = &lt;&lt;-HTML
+&lt;head&gt;
+&lt;style type="text/css" media="screen"&gt;
+body{padding:1em;}
+#css0 {
+  margin:1em;
+  padding: 1em;
+  background: rgba(100%,100%,100%,0.8);
+  -webkit-border-radius: 1em;
+  -webkit-box-shadow: 0.2em 0.3em 1em #000;
+  -webkit-transition: -webkit-transform 0.3s ease-in, opacity 0.5s ease-in;
+  -webkit-transform: scale(0.8);
+  opacity:0;
+  #{"min-width:640px; min-height:480px;" if fix_absolute}
+}
+#css {
+  #{CSS}
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body onload="document.getElementById('css0').style.opacity='1';document.getElementById('css0').style.webkitTransform='scale(1)'"&gt;
+
+&lt;div id="css0"&gt;
+&lt;div id="css"&gt;
+#{CSS.gsub(/^\n/,"").gsub("\n","&lt;br&gt;\n")}
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+HTML
+
+TextMate::UI.tool_tip html, :format =&gt; :html, :transparent =&gt; true
+
+# color:blue
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Quicklook: CSS Rule</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>meta.scope.property-list.css -punctuation.section.property-list</string>
+	<key>uuid</key>
+	<string>FA3E115E-7A3F-496A-8080-976E8627EA16</string>
+</dict>
+</plist>

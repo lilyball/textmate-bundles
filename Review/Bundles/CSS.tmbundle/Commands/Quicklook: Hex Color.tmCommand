@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+
+raw    = STDIN.read
+colors = raw.scan /#(?:[0-9a-f]{3}|[0-9a-f]{6})\b/i
+@COLOR = colors.uniq.map{|c| %{&lt;div style="background: #{c};"&gt;#{c}&lt;/div&gt;} }
+
+html = &lt;&lt;-HTML
+&lt;head&gt;
+&lt;style type="text/css" media="screen"&gt;
+body{padding:1em;max-width:400px;}
+#css0 {
+  -webkit-transition: all 0.3s ease-in;
+  -webkit-transform: scale(0.5);
+  opacity:0;
+}
+div div {
+	padding: 0.8em 0.5em;
+	color:#fff;
+	text-shadow: 1px 1px 2px #000;
+	-webkit-box-shadow: 0.2em 0.3em 1em #000;
+	-webkit-border-radius: 1.25em;
+	line-height: 2.5em;
+	padding: 0 1em;
+	float: left;
+/*	-webkit-box-shadow: 1px 1px 2px #000;*/
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body onload="document.getElementById('css0').style.opacity='1';document.getElementById('css0').style.webkitTransform='scale(1)'"&gt;
+
+&lt;div id="css0"&gt;
+#{@COLOR}
+&lt;/div&gt;
+
+&lt;/body&gt;
+HTML
+
+TextMate::UI.tool_tip html, :format =&gt; :html, :transparent =&gt; true
+
+# #124 #098 #687 #987 #687632 #987643 #654 #321654 #987654 #321548
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Quicklook: Hex Color</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>constant.other.color.rgb-value.css</string>
+	<key>uuid</key>
+	<string>D40CC348-536F-4068-B724-7252ADDD507C</string>
+</dict>
+</plist>

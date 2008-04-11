@@ -137,6 +137,9 @@ do
 	sleep .05
 done|CocoaDialog progressbar --indeterminate --title "Rdaemon"
 
+#get R's PID
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
 runs
 if [ $? == 1 ]; then
 	# check for R errors while starting

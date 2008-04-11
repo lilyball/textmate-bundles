@@ -57,7 +57,8 @@ def header
   elsif ENV['TM_CURRENT_LINE'] =~ /#\s*(?:include|import)\s*([&lt;"])(.*?)["&gt;]/;
     [$1 == '&lt;' ? :system : :user, $2]
   else
-    header = TextMate::UI.request_string :title =&gt; "Quick Open", :prompt =&gt; "Which header file do you wish to open?"
+    defaultText = %x{ __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbpaste -pboard find }
+    header = TextMate::UI.request_string :title =&gt; "Quick Open", :default =&gt; defaultText, :prompt =&gt; "Which header file do you wish to open?"
     [:all, header]
   end
 end

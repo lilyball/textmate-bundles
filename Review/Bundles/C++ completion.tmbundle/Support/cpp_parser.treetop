@@ -1,0 +1,179 @@
+grammar Cpp
+rule cpp
+statement+ {
+	def types
+		r = {}
+		elements.each do |e|
+			key, value = e.types
+			r[key] = value if key && value
+		end
+		return r
+	end
+}
+end
+
+rule statement
+ 'typedef' explicit_space complete_declare {
+	def types
+	    key = "eu"
+	    return key, {:type => "do"}
+	end
+}
+/ complete_declare
+/
+current_type
+/
+allan_macro
+/dec 
+{
+	def types
+	end
+}
+/ 
+string {
+	def types
+	end
+}
+/ other {
+	def types
+	end
+}
+end
+
+rule complete_declare
+dec space variable {
+	def types
+		return variable.text_value , dec.types#(:type)
+	end
+}
+end
+
+
+rule current_type
+	method_chain prefix {
+		def types
+			r = method_chain.types
+			r << {:prefix => prefix.text_value}
+			return :current_type, r
+		end
+	}
+end
+
+rule method_chain
+	(v:variable p:parens? t:tie)+ {
+		def types
+		  r = elements.map do|e|
+          if e.p.empty?
+		    val = :field
+		  else
+			val = :method # + :access
+		  end
+		    { :kind => val, :name => e.v.text_value, :bind => e.t.text_value } 
+		  end
+		  return r
+		end
+	}
+
+end
+
+rule allan_macro
+	"iterate(" space it:variable space ',' space dref:'*'* space mc:method_chain? variable p:parens? space ')' {
+		def types
+		    t = []
+		    t << mc.types unless mc.empty?
+		    if p.empty?
+    	      val = :field
+    		else
+    		  val = :method # + :access
+    		end
+    		t << { :kind => val, :name => variable.text_value, :bind => "." } 
+		    
+		    r = { :type_of => t.flatten, :iterator =>true, :dref => !dref.empty? }
+    		return it.text_value, r
+		end
+}
+end 
+
+rule parens
+ '(' ')' / '(' inner+ ')' 
+end
+
+rule inner
+	(!('(' / ')') . ) / parens
+end
+
+rule prefix
+ ([a-zA-Z_] [a-zA-Z0-9_]* )? caret
+end
+
+rule tie
+	('.' / '->')
+end
+
+rule caret
+  !.
+end
+
+rule dec
+std
+/
+declaration  {
+	def types #key
+	    key = :type
+		return { key => text_value }
+	end
+}
+end
+
+rule std
+"std::" type:("map" / "vector" / "queue") template it:"::iterator"? "*"* {
+	def types # key
+	    key = :type
+		r= template.types
+		r[key] = "std::" + type.text_value + it.text_value
+		return r
+	end
+
+}
+end
+
+rule declaration
+("::"? variable template?  )+ "*"*
+end
+
+rule variable
+[a-zA-Z_] [_a-zA-Z0-9]* {
+	def types		 
+	end
+}
+end
+
+rule template
+'<'  contains:(first:dec following:(',' val:dec )*)?  '>' {
+	def types
+		r = {}
+		if contains.elements
+			r[1] = contains.elements.first.types 
+			i = 2
+			contains.following.elements.each {|e| r[i] =e.val.types; i+=1} if contains.following.elements
+		end
+		return r
+	end
+}
+end
+
+rule string
+ '"' (!'"' . / '\"')* '"'
+end
+
+rule space
+ [ ]* 
+end
+
+rule explicit_space
+ [ ]+
+end	
+rule other
+.
+end
+end

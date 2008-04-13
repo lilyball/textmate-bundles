@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_SUPPORT_PATH'] + "/lib/exit_codes"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+if ENV['DIALOG'] =~ /2$/
+  require "#{ENV['TM_BUNDLE_SUPPORT']}/cpp_completion"
+else
+  TextMate.exit_show_tool_tip "cpp completion requires Dialog2 installed"
+end
+
+def stripComments(line)
+  line.gsub(/((['"])(?:\\.|.)*?\2)|\/\*.*?\*\/|\/\/[^\n\r]*/m) do |s| 
+    if $1
+      s
+    else
+      s.split("\n").map{|e| ' ' * e.length() }.join("\n")
+    end
+  end
+end
+
+class String
+  def index_of_nth_occurrence_of(n, ch)
+    self.unpack("U*").each_with_index do |e, i|
+      return i if e == ch &amp;&amp; (n -= 1) == 0
+    end
+    return -1
+  end
+end
+
+def caret_position(line)
+  tmp = ENV['TM_LINE_NUMBER'].to_i - ENV['TM_INPUT_START_LINE'].to_i
+  if tmp &gt; 0
+    caret_placement = line.index_of_nth_occurrence_of(tmp,?\n) + ENV['TM_LINE_INDEX'].to_i
+  else
+    caret_placement =ENV['TM_LINE_INDEX'].to_i-ENV['TM_INPUT_START_LINE_INDEX'].to_i - 1
+  end
+end
+
+line = STDIN.read
+caret_placement = caret_position(line)
+line = stripComments(line)
+CppMethodCompletion.new(line[0..caret_placement]).print
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>C++ member function completion</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.c++ meta.block.c , source.objc++ meta.block.c -</string>
+	<key>uuid</key>
+	<string>C3F7AB04-A563-41E7-A6A8-C863DDC610BA</string>
+</dict>
+</plist>

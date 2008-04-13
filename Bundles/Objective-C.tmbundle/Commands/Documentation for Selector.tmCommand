@@ -159,7 +159,7 @@ end
   tLeopard = {"AK" =&gt; "/Developer/Documentation/DocSets/com.apple.ADC_Reference_Library.CoreReference.docset/Contents/Resources/Documents/documentation/Cocoa/Reference/ApplicationKit/",
     "F"  =&gt; "/Developer/Documentation/DocSets/com.apple.ADC_Reference_Library.CoreReference.docset/Contents/Resources/Documents/documentation/Cocoa/Reference/Foundation/", 
     "CI" =&gt; "/Developer/ADC Reference Library/documentation/GraphicsImaging/Reference/QuartzCoreFramework/",
-  "WK" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/WebKit/",
+  "WK" =&gt; "/Developer/Documentation/DocSets/com.apple.ADC_Reference_Library.CoreReference.docset/Contents/Resources/Documents/documentation/Cocoa/Reference/WebKit/",
     "CD" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/CoreDataFramework/",
     "Cl" =&gt; "Classes/#{className}_Class/Reference/",
     "Pr" =&gt; "Protocols/#{className}_Protocol/Reference/",
@@ -193,7 +193,7 @@ t = {"AK" =&gt; "/Developer/ADC Reference Library/documentation/Cocoa/Reference/
     url += "#{className}.html"
     loadHTMLPage(url,className,methodName,ref)
   end
-TextMate.exit_discard
+TextMate.exit_show_tool_tip "We found the selector, but the file on disk was not found. Debug info:\n#{result.gsub(/\t/, ', ')}"
 </string>
 	<key>fallbackInput</key>
 	<string>scope</string>

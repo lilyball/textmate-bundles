@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<hibernate-mapping>
+	<class name="@@PACKAGE@@.@@CLASSNAME@@" table="XXX">
+		<meta attribute="class-description">
+			CLASS DESCRIPTION
+			@author @@AUTHOR@@ (with help from Hibernate)
+		</meta>
+
+		<id name="id" ...>
+			<generator class="native"/>
+		</id>
+
+		<property name="propName" type="string" not-null="true">
+			<meta attribute="field-description">describe the property</meta>
+		</property>
+	</class>
+</hibernate-mapping>

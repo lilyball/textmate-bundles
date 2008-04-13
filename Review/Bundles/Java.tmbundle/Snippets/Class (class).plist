@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${1:public }class ${2:${TM_FILENAME/(.*?)(\..+)/$1/}} extends ${3:Object}
+{
+	$2 (${4:arguments}) {
+		${0:// expression}
+	}
+}
+</string>
+	<key>name</key>
+	<string>Class</string>
+	<key>scope</key>
+	<string>source.java</string>
+	<key>tabTrigger</key>
+	<string>class</string>
+	<key>uuid</key>
+	<string>8092FC08-5291-4A9F-BAF3-DB352DDB6043</string>
+</dict>
+</plist>

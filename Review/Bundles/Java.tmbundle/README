@@ -1,0 +1,20 @@
+-- Java syntax dictionary for TextMate.
+-- Author: Brian Lalor <blalor@bravo5.org>
+-- 
+-- $URL$
+-- $Id$
+
+Hey!  One I actually wrote! :-)
+
+Features the following:
+• bare-bones command for running ant.
+  I'm not too happy with the way TM handles the external command or the new
+  window, so I mostly stick with Terminal.app for this one.
+• snippet for creating getters and setters
+  I'm pretty happy with this one. The order you do the placeholders is a
+  little weird, but it does work...
+• syntaxes for properties files and the Java language
+• "Java Class" and "Java Interface" templates, which attempt to set the
+  package and @author tag automagically
+
+The templates now properly generate the package name based on the directory structure.  The templates assume that your .java files are in package structure in a directory named "src".  If this is not the case, add a shell variable named "org_bravo5_Java_pkgregexp"; the default value is a regexp (^.*src/) passed to sed that operates on the TM_NEW_FILE_DIRECTORY variable.

@@ -5,6 +5,7 @@
 #include "dialog.h"
 #include "mode.h"
 #include "stdin_fd_tracker.h"
+#include "textmate.h"
 
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -19,7 +20,8 @@
 ssize_t read(int d, void *buffer, size_t buffer_length) {
 
     // Only interested in STDIN
-    if (!tm_interactive_input_is_active() || stdin_fd_tracker_is_stdin(d) == false) return syscall(SYS_read, d, buffer, buffer_length);
+    if (!tm_interactive_input_is_active() || !stdin_fd_tracker_is_stdin(d) || !fd_is_owned_by_tm(d)) 
+        return syscall(SYS_read, d, buffer, buffer_length);
 
     // It doesn't make sense to invoke tm_dialog if the caller wanted a non blocking read
     int oldFlags = fcntl(d, F_GETFL);

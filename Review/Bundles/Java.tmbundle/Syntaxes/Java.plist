@@ -263,7 +263,7 @@
 		<key>class</key>
 		<dict>
 			<key>begin</key>
-			<string>(?=(?:[^\s]*)|(?:\s*)(?:class|(?:@)?interface)\s+\w+)</string>
+			<string>(?=[^=;]*(?:class|(?:@)?interface)\s+\w+)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

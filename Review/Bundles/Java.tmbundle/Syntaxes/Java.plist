@@ -34,9 +34,14 @@
 					<key>name</key>
 					<string>storage.modifier.package.java</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.terminator.java</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(package)\s+([^ ;]+?);$\n</string>
+			<string>^\s*(package)\s+([^ ;]+?)(;)$\n</string>
 			<key>name</key>
 			<string>meta.package.java</string>
 		</dict>
@@ -53,9 +58,14 @@
 					<key>name</key>
 					<string>storage.modifier.import.java</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.terminator.java</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(import)\s+([^ ;$]+);?$\n</string>
+			<string>^\s*(import)\s+([^ ;$]+)(;)?$\n</string>
 			<key>name</key>
 			<string>meta.import.java</string>
 		</dict>
@@ -186,6 +196,19 @@
 					<array>
 						<dict>
 							<key>begin</key>
+							<string>\[</string>
+							<key>end</key>
+							<string>\]</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#code</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
 							<string>{</string>
 							<key>end</key>
 							<string>(?=})</string>
@@ -240,9 +263,7 @@
 		<key>class</key>
 		<dict>
 			<key>begin</key>
-			<string>(?x)
-   					\b(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)
-   					(?=.*\s+(?:class|(?:@)?interface)\s+\w+\s+)</string>
+			<string>\s*(?=.*\s+(?:class|(?:@)?interface)\s+\w+)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -355,11 +376,11 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#comments</string>
+					<string>#class</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#class</string>
+					<string>#comments</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -487,21 +508,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>^\s*((//).*$\n?)</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.java</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(//).*$\n?</string>
-					<key>name</key>
-					<string>comment.line.double-slash.java</string>
+					<string>\s*((//).*$\n?)</string>
 				</dict>
 			</array>
 		</dict>
@@ -618,7 +625,7 @@
 		<key>methods</key>
 		<dict>
 			<key>begin</key>
-			<string>(?:^\s*|;)(?!.*=)(?=.*\()</string>
+			<string>(?:^|;)(?!.*//)(?!.*=)(?=.*\()</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -722,6 +729,30 @@
 							<string>&gt;|[^\w\s,&lt;]</string>
 							<key>name</key>
 							<string>storage.type.generic.java</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*[a-z]+\w*)(?=\[)</string>
+					<key>end</key>
+					<string>(?=[^\]\s])</string>
+					<key>name</key>
+					<string>storage.type.object.array.java</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>\[</string>
+							<key>end</key>
+							<string>\]</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#code</string>
+								</dict>
+							</array>
 						</dict>
 					</array>
 				</dict>
@@ -930,7 +961,9 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?={)</string>
+			<string>(?={|;)</string>
+			<key>name</key>
+			<string>meta.throwables.java</string>
 			<key>patterns</key>
 			<array>
 				<dict>

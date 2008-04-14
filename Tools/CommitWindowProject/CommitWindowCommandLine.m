@@ -56,6 +56,19 @@
 			argument	= [args objectAtIndex:i];
 			[fRequestText setStringValue:argument];
 		}
+		else if( [argument isEqualToString:@"--log"] )
+		{
+			// Next argument should be the initial log message text.
+			if( i >= (argc - 1) )
+			{
+				fprintf(stderr, "commit window: missing text: --log \"log message text\"\n");
+				[self cancel:nil];
+			}
+			
+			i += 1;
+			argument	= [args objectAtIndex:i];
+			[fCommitMessage setString:argument];
+		}
 		else if( [argument isEqualToString:@"--status"] )
 		{
 			// Next argument should be a colon-seperated list of status strings, one for each path

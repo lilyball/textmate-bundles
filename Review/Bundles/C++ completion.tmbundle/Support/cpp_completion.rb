@@ -101,7 +101,8 @@ def initialize(line)
   @line = line
   @parser = CppParser.new
   @std = {
-      "std::map" => { :methods => { "begin" =>[{ :r => "std::map::iterator", :a => "()"}],
+  "std::map" => { :methods => { 
+      "begin" =>[{ :r => "std::map::iterator", :a => "()"}],
       "clear" =>[{ :r => "void", :a => "()"}],
       "count" =>[{ :r => "size_type", :a => "( const key_type& key )"}],
       "empty" =>[{ :r => "bool", :a => "()"}],
@@ -119,37 +120,44 @@ def initialize(line)
       "swap" =>[{ :r => "void", :a => "( container& from )"}],
       "upper_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
       "value_comp" =>[{ :r => "value_compare", :a => "()"}],
-                                        }
-                    },
-"std::pair<iterator,bool>" => {:methods=>{"first"=>[{:a=>"",:r=>"std::map::iterator"}],
-                                              "second"=>[{:a=>"",:r=>"bool"}]
-                                             }
-                                  },
-"std::pair<iterator,iterator>" => {:methods=>{"first"=>[{:a=>"",:r=>"std::map::iterator"}],
-                                                                                "second"=>[{:a=>"",:r=>"std::map::iterator"}]
-                                                                               }
-                                                                    },
-    "std::vector" => {:methods => { "assign" =>[{ :r => "void", :a => "( size_type num, const TYPE& val )"},{ :r => "void", :a => "( input_iterator start, input_iterator end )"}],
-                    "at" =>[{ :r => 1, :a => "( size_type loc )"}],
-                    "back" =>[{ :r => 1, :a => "()"}],
-                    "begin" =>[{ :r => "std::vector::iterator", :a => "()"}],
-                    "capacity" =>[{ :r => "size_type", :a => "()"}],
-                    "clear" =>[{ :r => "void", :a => "()"}],
-                    "empty" =>[{ :r => "bool", :a => "()"}],
-                    "end" =>[{ :r => "std::vector::iterator", :a => "()"}],
-                    "erase" =>[{ :r => "std::vector::iterator", :a => "( iterator loc )"},{ :r => "std::vector::iterator", :a => "( iterator start, iterator end )"}],
-                    "front" =>[{ :r => 1, :a => "()"}],
-                    "insert" =>[{ :r => "std::vector::iterator", :a => "( iterator loc, const TYPE& val )"},{ :r => "void", :a => "( iterator loc, size_type num, const TYPE& val )"}],
-                    "insert" =>[{ :r => "void", :a => "( iterator loc, input_iterator start, input_iterator end )"}],
-                    "max_size" =>[{ :r => "size_type", :a => "()"}],
-                    "pop_back" =>[{ :r => "void", :a => "()"}],
-                    "push_back" =>[{ :r => "void", :a => "( const TYPE& val )"}],
-                    "rbegin" =>[{ :r => "std::vector::iterator", :a => "()"}],
-                    "rend" =>[{ :r => "std::vector::iterator", :a => "()"},],
-                    "reserve" =>[{ :r => "void", :a => "( size_type size )"}],
-                    "resize" =>[{ :r => "void", :a => "( size_type num, const TYPE& val = TYPE() )"}],
-                    "size" =>[{ :r => "size_type", :a => "()"}],
-                    "swap" =>[{ :r => "void", :a => "( container& from )"}],
+      }
+  },
+  "std::pair<iterator,bool>" => {:methods=>{
+      "first"=>[{:a=>"",:r=>"std::map::iterator"}],
+      "second"=>[{:a=>"",:r=>"bool"}]
+      }
+  },
+  "std::pair<iterator,iterator>" => {:methods=>{
+      "first"=>[{:a=>"",:r=>"std::map::iterator"}],
+      "second"=>[{:a=>"",:r=>"std::map::iterator"}]
+  }},
+  
+  "std::vector" => {:methods => { 
+    "assign" =>[{ :r => "void", :a => "( size_type num, const TYPE& val )"},
+                { :r => "void", :a => "( input_iterator start, input_iterator end )"}],
+    "at" =>[{ :r => 1, :a => "( size_type loc )"}],
+    "back" =>[{ :r => 1, :a => "()"}],
+    "begin" =>[{ :r => "std::vector::iterator", :a => "()"}],
+    "capacity" =>[{ :r => "size_type", :a => "()"}],
+    "clear" =>[{ :r => "void", :a => "()"}],
+    "empty" =>[{ :r => "bool", :a => "()"}],
+    "end" =>[{ :r => "std::vector::iterator", :a => "()"}],
+    "erase" =>[{ :r => "std::vector::iterator", :a => "( iterator loc )"},
+       { :r => "std::vector::iterator", :a => "( iterator start, iterator end )"}],
+    "front" =>[{ :r => 1, :a => "()"}],
+    "insert" =>[{ :r => "std::vector::iterator",
+                  :a => "( iterator loc, const TYPE& val )"},
+      { :r => "void", :a => "( iterator loc, size_type num, const TYPE& val )"}],
+    "insert" =>[{ :r => "void", :a => "( iterator loc, input_iterator start, input_iterator end )"}],
+    "max_size" =>[{ :r => "size_type", :a => "()"}],
+    "pop_back" =>[{ :r => "void", :a => "()"}],
+    "push_back" =>[{ :r => "void", :a => "( const TYPE& val )"}],
+    "rbegin" =>[{ :r => "std::vector::iterator", :a => "()"}],
+    "rend" =>[{ :r => "std::vector::iterator", :a => "()"},],
+    "reserve" =>[{ :r => "void", :a => "( size_type size )"}],
+    "resize" =>[{ :r => "void", :a => "( size_type num, const TYPE& val = TYPE() )"}],
+    "size" =>[{ :r => "size_type", :a => "()"}],
+    "swap" =>[{ :r => "void", :a => "( container& from )"}],
                                   }
                      },
     "std::vector::iterator" => {:methods =>{"->" => [{:a =>"",:r=>1}] }},

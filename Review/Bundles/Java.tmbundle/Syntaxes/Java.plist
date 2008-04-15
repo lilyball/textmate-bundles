@@ -41,7 +41,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(package)\s+([^ ;]+?)(;)$\n</string>
+			<string>^\s*(package)\b(?:\s*([^ ;$]+)\s*(;)?$\n?)?</string>
 			<key>name</key>
 			<string>meta.package.java</string>
 		</dict>
@@ -65,7 +65,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(import)\s+([^ ;$]+)(;)?$\n</string>
+			<string>^\s*(import)\b(?:\s*([^ ;$]+)\s*(;)?$\n?)?</string>
 			<key>name</key>
 			<string>meta.import.java</string>
 		</dict>

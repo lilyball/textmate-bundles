@@ -101,13 +101,34 @@ def initialize(line)
   @line = line
   @parser = CppParser.new
   @std = {
-      "std::map" => { :methods => { "begin" =>[{:a=>"()",:r=>"std::map::iterator"}],
-                                    "clear" => [{:a=>"()",:r => "void"}],
-                                    "count" =>[{:a=>"( const key_type& key )",
-                                                :r => "size_type"}]
-                                  }
+      "std::map" => { :methods => { "begin" =>[{ :r => "std::map::iterator", :a => "()"}],
+      "clear" =>[{ :r => "void", :a => "()"}],
+      "count" =>[{ :r => "size_type", :a => "( const key_type& key )"}],
+      "empty" =>[{ :r => "bool", :a => "()"}],
+      "end" =>[{ :r => "std::map::iterator", :a => "()"}],
+      "equal_range"=>[{:r=>"std::pair<iterator,iterator>",:a=>"( const key_type& key )"}],
+      "erase" =>[{ :r => "void", :a => "( iterator pos )"},{ :r => "void", :a => "( iterator start, iterator end )"},{ :r => "size_type", :a => "( const key_type& key )"}],
+      "find" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
+      "insert" =>[{ :r => "std::map::iterator", :a => "( iterator i, const TYPE& pair )"},{ :r => "void", :a => "( input_iterator start, input_iterator end )"},{ :r => "std::pair<iterator,bool>", :a => "( const TYPE& pair )"}],
+      "key_comp" =>[{ :r => "key_compare", :a => "()"}],
+      "lower_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
+      "max_size" =>[{ :r => "size_type", :a => "()"}],
+      "rbegin" =>[{ :r => "std::map::iterator", :a => "()"}],
+      "rend" =>[{ :r => "std::map::iterator", :a => "()"}],
+      "size" =>[{ :r => "size_type", :a => "()"}],
+      "swap" =>[{ :r => "void", :a => "( container& from )"}],
+      "upper_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
+      "value_comp" =>[{ :r => "value_compare", :a => "()"}],
+                                        }
                     },
-
+"std::pair<iterator,bool>" => {:methods=>{"first"=>[{:a=>"",:r=>"std::map::iterator"}],
+                                              "second"=>[{:a=>"",:r=>"bool"}]
+                                             }
+                                  },
+"std::pair<iterator,iterator>" => {:methods=>{"first"=>[{:a=>"",:r=>"std::map::iterator"}],
+                                                                                "second"=>[{:a=>"",:r=>"std::map::iterator"}]
+                                                                               }
+                                                                    },
     "std::vector" => {:methods => { "assign" =>[{ :r => "void", :a => "( size_type num, const TYPE& val )"},{ :r => "void", :a => "( input_iterator start, input_iterator end )"}],
                     "at" =>[{ :r => 1, :a => "( size_type loc )"}],
                     "back" =>[{ :r => 1, :a => "()"}],

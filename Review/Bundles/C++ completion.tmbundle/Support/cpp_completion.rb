@@ -97,129 +97,159 @@ class CppMethodCompletion
   Treetop.load "#{ENV['TM_BUNDLE_SUPPORT']}/cpp_parser"
   
 
-def initialize(line)
-  @line = line
-  @parser = CppParser.new
-  @std = {
-  "std::map" => { :methods => { 
-      "begin" =>[{ :r => "std::map::iterator", :a => "()"}],
+  def initialize(line)
+    @line = line
+    @parser = CppParser.new
+    @std = {
+    "std::map" => { :methods => { 
+        "begin" =>[{ :r => "std::map::iterator", :a => "()"}],
+        "clear" =>[{ :r => "void", :a => "()"}],
+        "count" =>[{ :r => "size_type", :a => "( const key_type& key )"}],
+        "empty" =>[{ :r => "bool", :a => "()"}],
+        "end" =>[{ :r => "std::map::iterator", :a => "()"}],
+        "equal_range"=>[{:r=>"std::pair", #<iterator,iterator>",
+                         :a=>"( const key_type& key )",
+                         :t=>{ 1=>{:type=>"std::map::iterator", 1=>1,2=>2}, 
+                               2=>{:type=>"std::map::iterator", 1=>1,2=>2}}}],
+        "erase" =>[{ :r => "void", :a => "( iterator pos )"},{ :r => "void", :a => "( iterator start, iterator end )"},{ :r => "size_type", :a => "( const key_type& key )"}],
+        "find" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
+        "insert" =>[{ :r => "std::map::iterator", :a => "( iterator i, const TYPE& pair )"},{ :r => "void", :a => "( input_iterator start, input_iterator end )"},
+          { :r => "std::pair",
+            :a => "( const TYPE& pair )",
+            :t => {1=>{:type=>"std::map::iterator", 1=>1,2=>2},
+                   2=>{:type=>"bool"}  }}],
+        "key_comp" =>[{ :r => "key_compare", :a => "()"}],
+        "lower_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
+        "max_size" =>[{ :r => "size_type", :a => "()"}],
+        "rbegin" =>[{ :r => "std::map::iterator", :a => "()"}],
+        "rend" =>[{ :r => "std::map::iterator", :a => "()"}],
+        "size" =>[{ :r => "size_type", :a => "()"}],
+        "swap" =>[{ :r => "void", :a => "( container& from )"}],
+        "upper_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
+        "value_comp" =>[{ :r => "value_compare", :a => "()"}],
+        }
+    },
+    "std::pair<iterator,bool>" => {:methods=>{
+        "first"=>[{:a=>"",:r=>"std::map::iterator"}],
+        "second"=>[{:a=>"",:r=>"bool"}]
+        }
+    },
+    "std::pair<iterator,iterator>" => {:methods=>{
+        "first"=>[{:a=>"",:r=>"std::map::iterator"}],
+        "second"=>[{:a=>"",:r=>"std::map::iterator"}]
+    }},
+    
+    "std::vector" => {:methods => { 
+      "assign" =>[{ :r => "void", :a => "( size_type num, const TYPE& val )"},
+                  { :r => "void", :a => "( input_iterator start, input_iterator end )"}],
+      "at" =>[{ :r => 1, :a => "( size_type loc )"}],
+      "back" =>[{ :r => 1, :a => "()"}],
+      "begin" =>[{ :r => "std::vector::iterator", :a => "()"}],
+      "capacity" =>[{ :r => "size_type", :a => "()"}],
       "clear" =>[{ :r => "void", :a => "()"}],
-      "count" =>[{ :r => "size_type", :a => "( const key_type& key )"}],
       "empty" =>[{ :r => "bool", :a => "()"}],
-      "end" =>[{ :r => "std::map::iterator", :a => "()"}],
-      "equal_range"=>[{:r=>"std::pair<iterator,iterator>",:a=>"( const key_type& key )"}],
-      "erase" =>[{ :r => "void", :a => "( iterator pos )"},{ :r => "void", :a => "( iterator start, iterator end )"},{ :r => "size_type", :a => "( const key_type& key )"}],
-      "find" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
-      "insert" =>[{ :r => "std::map::iterator", :a => "( iterator i, const TYPE& pair )"},{ :r => "void", :a => "( input_iterator start, input_iterator end )"},{ :r => "std::pair<iterator,bool>", :a => "( const TYPE& pair )"}],
-      "key_comp" =>[{ :r => "key_compare", :a => "()"}],
-      "lower_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
+      "end" =>[{ :r => "std::vector::iterator", :a => "()"}],
+      "erase" =>[{ :r => "std::vector::iterator", :a => "( iterator loc )"},
+         { :r => "std::vector::iterator", :a => "( iterator start, iterator end )"}],
+      "front" =>[{ :r => 1, :a => "()"}],
+      "insert" =>[{ :r => "std::vector::iterator",
+                    :a => "( iterator loc, const TYPE& val )"},
+        { :r => "void", :a => "( iterator loc, size_type num, const TYPE& val )"}],
+      "insert" =>[{ :r => "void", 
+                    :a => "( iterator loc, input_iterator start, input_iterator end )"}],
       "max_size" =>[{ :r => "size_type", :a => "()"}],
-      "rbegin" =>[{ :r => "std::map::iterator", :a => "()"}],
-      "rend" =>[{ :r => "std::map::iterator", :a => "()"}],
+      "pop_back" =>[{ :r => "void", :a => "()"}],
+      "push_back" =>[{ :r => "void", :a => "( const TYPE& val )"}],
+      "rbegin" =>[{ :r => "std::vector::iterator", :a => "()"}],
+      "rend" =>[{ :r => "std::vector::iterator", :a => "()"},],
+      "reserve" =>[{ :r => "void", :a => "( size_type size )"}],
+      "resize" =>[{ :r => "void", :a => "( size_type num, const TYPE& val = TYPE() )"}],
       "size" =>[{ :r => "size_type", :a => "()"}],
       "swap" =>[{ :r => "void", :a => "( container& from )"}],
-      "upper_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
-      "value_comp" =>[{ :r => "value_compare", :a => "()"}],
-      }
-  },
-  "std::pair<iterator,bool>" => {:methods=>{
-      "first"=>[{:a=>"",:r=>"std::map::iterator"}],
-      "second"=>[{:a=>"",:r=>"bool"}]
-      }
-  },
-  "std::pair<iterator,iterator>" => {:methods=>{
-      "first"=>[{:a=>"",:r=>"std::map::iterator"}],
-      "second"=>[{:a=>"",:r=>"std::map::iterator"}]
-  }},
+                                    }
+                       },
+      "std::vector::iterator" => {:methods =>{"->" => [{:a =>"",:r=>1}] }},
+      "std::map::iterator" => {:methods=>{"->" =>[{:a => "", :r=>"std::pair"}]}},
+      "std::pair" =>{:methods=>{"first"=>[{:a=>"",:r=>1}],
+                                "second"=>[{:a=>"",:r=>2}]
+                               }
+                    },
   
-  "std::vector" => {:methods => { 
-    "assign" =>[{ :r => "void", :a => "( size_type num, const TYPE& val )"},
-                { :r => "void", :a => "( input_iterator start, input_iterator end )"}],
-    "at" =>[{ :r => 1, :a => "( size_type loc )"}],
-    "back" =>[{ :r => 1, :a => "()"}],
-    "begin" =>[{ :r => "std::vector::iterator", :a => "()"}],
-    "capacity" =>[{ :r => "size_type", :a => "()"}],
-    "clear" =>[{ :r => "void", :a => "()"}],
-    "empty" =>[{ :r => "bool", :a => "()"}],
-    "end" =>[{ :r => "std::vector::iterator", :a => "()"}],
-    "erase" =>[{ :r => "std::vector::iterator", :a => "( iterator loc )"},
-       { :r => "std::vector::iterator", :a => "( iterator start, iterator end )"}],
-    "front" =>[{ :r => 1, :a => "()"}],
-    "insert" =>[{ :r => "std::vector::iterator",
-                  :a => "( iterator loc, const TYPE& val )"},
-      { :r => "void", :a => "( iterator loc, size_type num, const TYPE& val )"}],
-    "insert" =>[{ :r => "void", :a => "( iterator loc, input_iterator start, input_iterator end )"}],
-    "max_size" =>[{ :r => "size_type", :a => "()"}],
-    "pop_back" =>[{ :r => "void", :a => "()"}],
-    "push_back" =>[{ :r => "void", :a => "( const TYPE& val )"}],
-    "rbegin" =>[{ :r => "std::vector::iterator", :a => "()"}],
-    "rend" =>[{ :r => "std::vector::iterator", :a => "()"},],
-    "reserve" =>[{ :r => "void", :a => "( size_type size )"}],
-    "resize" =>[{ :r => "void", :a => "( size_type num, const TYPE& val = TYPE() )"}],
-    "size" =>[{ :r => "size_type", :a => "()"}],
-    "swap" =>[{ :r => "void", :a => "( container& from )"}],
-                                  }
-                     },
-    "std::vector::iterator" => {:methods =>{"->" => [{:a =>"",:r=>1}] }},
-    "std::map::iterator" => {:methods=>{"->" =>[{:a => "", :r=>"std::pair"}]}},
-    "std::pair" =>{:methods=>{"first"=>[{:a=>"",:r=>1}],
-                              "second"=>[{:a=>"",:r=>2}]
-                             }
-                  },
-
-    "a" => {:methods => {"methodA1"=>[{:a=>"()",:r => "b"}], 
-                         "methodA2"=>[{:a=>"()",:r => "c"}]}},
-    "b" => {:methods => {"methodB1"=>[{:a=>"()",:r => "a"}], 
-                         "methodB2"=>[{:a=>"()",:r => "c"}]}},
-    "c" => {:methods => {"methodC1"=>[{:a=>"()",:r => "a"}], 
-                         "methodC2"=>[{:a=>"()",:r => "b"}]}},
-  }
-end
-
-def lookupClass(name)
-  @std[name]
-end
-
-def updateClass(res, initial)
-  previousClass = res[0][:r]
-  if previousClass.class.inspect == "Fixnum"
-    initial = initial[previousClass]
-    if initial.nil?
-      TextMate.exit_show_tool_tip "could not find type info for the dereferenced object, template arg ##{previousClass} missing"
-    end
-    previousClass = lookupClass(initial[:type])
-  elsif previousClass.class.inspect == "String"
-    previousClass = lookupClass(previousClass)
+      "a" => {:methods => {"methodA1"=>[{:a=>"()",:r => "b"}], 
+                           "methodA2"=>[{:a=>"()",:r => "c"}]}},
+      "b" => {:methods => {"methodB1"=>[{:a=>"()",:r => "a"}], 
+                           "methodB2"=>[{:a=>"()",:r => "c"}]}},
+      "c" => {:methods => {"methodC1"=>[{:a=>"()",:r => "a"}], 
+                           "methodC2"=>[{:a=>"()",:r => "b"}]}},
+    }
   end
-  return previousClass, initial
-end
-
-def complete(item, previousClass)
-  suggestions = []
-  mat = (/^#{item[:prefix]}./)
-  previousClass[:methods].each do |key, value|
-    if key =~ mat
-      value.each do |item|
-        suggestions << { 'display' => key + item[:a], 'cand' => key+"\t"+item[:a], 'match'=> key, 'type'=> "functions"}
+  
+  def lookupClass(name)
+    @std[name]
+  end
+  
+  def complete(item, previousClass)
+    suggestions = []
+    mat = (/^#{item[:prefix]}./)
+    previousClass[:methods].each do |key, value|
+      if key =~ mat
+        value.each do |item|
+          suggestions << { 'display' => key + item[:a], 'cand' => key+"\t"+item[:a], 'match'=> key, 'type'=> "functions"}
+        end
       end
     end
-  end
-  flags = {}
-  flags[:extra_chars]= '_'
-  flags[:initial_filter]= item[:prefix]
-  begin
-    TextMate::UI.complete(suggestions, flags) do |hash|
-      ExternalSnippetizer.new.run(hash)
+    flags = {}
+    flags[:extra_chars]= '_'
+    flags[:initial_filter]= item[:prefix]
+    begin
+      TextMate::UI.complete(suggestions, flags) do |hash|
+        ExternalSnippetizer.new.run(hash)
+      end
+    rescue NoMethodError
+      TextMate.exit_show_tool_tip "you have Dialog2 installed but not the ui.rb in review"
     end
-  rescue NoMethodError
-    TextMate.exit_show_tool_tip "you have Dialog2 installed but not the ui.rb in review"
+    TextMate.exit_discard
   end
-  TextMate.exit_discard
-end
-$t = true
-def po s
-  TextMate.exit_show_tool_tip s
-end
+  
+  def po s
+    TextMate.exit_show_tool_tip s
+  end
+  
+  def pd s
+    TextMate.exit_create_new_document s
+  end
+  
+  def updateInitial(previousClass, res, initial)
+    res.each do |key, value|
+      if value.kind_of? Hash
+        updateInitial(previousClass, value, initial)
+      elsif value.kind_of? Integer
+        res[key] = initial[value]
+      end
+    end
+    res[:type] = previousClass
+    return res
+  end
+  
+  def updateClass(res, initial)
+    previousClass = res[0][:r]
+    if res[0][:t]
+      initial = updateInitial(previousClass, res[0][:t].dup, initial)
+      #pd "#{initial.inspect}  #{previousClass}"
+      return lookupClass(previousClass), initial
+    end
+    
+    if previousClass.class.inspect == "Fixnum"
+      initial = initial[previousClass]
+      if initial.nil?
+        TextMate.exit_show_tool_tip "could not find type info for the dereferenced object, template arg ##{previousClass} missing"
+      end
+      previousClass = lookupClass(initial[:type])
+    elsif previousClass.class.inspect == "String"
+      previousClass = lookupClass(previousClass)
+    end
+    return previousClass, initial
+  end
 
   def rightMostClass(type_chain, res)
   first = type_chain.shift

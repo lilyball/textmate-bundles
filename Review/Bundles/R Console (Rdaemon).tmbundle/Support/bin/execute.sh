@@ -79,12 +79,13 @@ POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 PROMPT=$(tail -n 1 "$RDRAMDISK"/r_out | sed 's/> $//')
 
 #send task to Rdaemon and give Rdaemon the chance to read from the pipe
+#[[ -f "$HOME/Rdaemon/status.txt" ]] && rm "$HOME/Rdaemon/status.txt"
 if [ -z "$TM_SELECTED_TEXT" ]; then
 	echo -e "$TASK" > "$RDHOME"/r_in
 else
-	echo -e "$TASK" | while read LINE
+	echo "$TASK" | sed 's/\\n/\\\\n/g' | while read LINE
 	do
-		echo -e "${LINE//\\/\\\\\\\\}" > "$RDHOME"/r_in
+		echo "$LINE" > "$RDHOME"/r_in
 		sleep 0.002
 		echo "$LINE"
 	done|CocoaDialog progressbar --indeterminate --title "Rdaemon is busy ..."
@@ -99,9 +100,10 @@ while [ 1 ]
 do
 	RES=$(tail -c 2 "$RDRAMDISK"/r_out)
 	#expect these things from R
-	[[ "$RES" == "> " ]] && break
-	[[ "$RES" == "+ " ]] && break
-	[[ "$RES" == ": " ]] && break
+#	[[ -f "$HOME/Rdaemon/status.txt" ]] && break
+    [[ "$RES" == "> " ]] && break
+    [[ "$RES" == "+ " ]] && break
+    [[ "$RES" == ": " ]] && break
 #	[[ `ps -p $RPID | tail -n 1 | awk '{print $3}'` == "S+" ]] && break
 	#monitoring of the CPU coverage as progress bar
 	cpu=$(ps o pcpu -p "$RPID" | tail -n 1)

@@ -15,7 +15,10 @@ def my_popen3(*cmd) # returns [stdin, stdout, strerr, pid]
   pw = IO::pipe   # pipe[0] for read, pipe[1] for write
   pr = IO::pipe
   pe = IO::pipe
-
+  
+  # F_SETOWN = 6, ideally this would be under Fcntl::F_SETOWN
+  pw[0].fcntl(6, ENV['TM_PID'].to_i) if ENV.has_key? 'TM_PID'
+  
   pid = fork{
     pw[1].close
     STDIN.reopen(pw[0])

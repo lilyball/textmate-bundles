@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-source $TM_SUPPORT_PATH/lib/bash_init.sh
-
-export TM_DIALOG_READ_DYLIB="$TM_BUNDLE_SUPPORT/lib/tm_dialog_read.dylib"
+source "$TM_SUPPORT_PATH/lib/bash_init.sh"
 
 export TM_RUBY=${TM_RUBY:-ruby}
 export TM_GROOVY=${TM_GROOVY:-groovy}

@@ -3,7 +3,6 @@
 require ENV["TM_SUPPORT_PATH"] + "/lib/scriptmate"
 require ENV['TM_SUPPORT_PATH'] + '/lib/io'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
-require ENV['TM_BUNDLE_SUPPORT'] + '/lib/tm_dialog_read'
 require "pstore"
 require 'tempfile'
 
@@ -39,11 +38,6 @@ class GroovyScript < UserScript
       cmd << args
     end
     return cmd
-  end
-
-  def run
-    TextMate::DialogRead.init :title => 'GroovyMate', :prompt => "The script is requesting some input:"
-    super
   end
   
   def lang

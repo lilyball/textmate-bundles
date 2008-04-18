@@ -355,13 +355,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(let|set|global|cond|case|do|loop|until|while|for|break|continue|if|else|then|unless|try|throw|catch|array|dict|list)\b</string>
+			<string>\b(let|set|global|cond|case|do|loop|until|while|for|break|continue|if|else|elseif|then|unless|try|throw|catch|array|dict|list)\b</string>
 			<key>name</key>
 			<string>keyword.control.nu</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(eq|neq|and|or|synchronized)\b</string>
+			<string>\b(eq|neq|and|or|synchronized|not)\b</string>
 			<key>name</key>
 			<string>keyword.operator.nu</string>
 		</dict>
@@ -373,7 +373,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(append|atom|cons|car|cdr|context|eval|head|quote|parse|progn|send|tail|load|system|puts|help|version|beep)\b</string>
+			<string>\b(append|atom|cons|car|cdr|context|eval|head|quote|parse|progn|send|tail|load|system|puts|help|version|beep|first|rest)\b</string>
 			<key>name</key>
 			<string>support.function.nu</string>
 		</dict>

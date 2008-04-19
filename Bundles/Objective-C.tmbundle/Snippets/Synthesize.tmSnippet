@@ -3,22 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>- (id)delegate
-{
-	return $1;
-}
-
-- (void)setDelegate:(id)aDelegate
-{
-	${1:delegate} = aDelegate;
-}</string>
+	<string>@synthesize ${1:property};</string>
 	<key>name</key>
-	<string>Delegate</string>
+	<string>Synthesize Property</string>
 	<key>scope</key>
 	<string>(source.objc | source.objc++) &amp; meta.scope.implementation.objc - meta.function-with-body</string>
 	<key>tabTrigger</key>
-	<string>delacc</string>
+	<string>syn</string>
 	<key>uuid</key>
-	<string>A975FA00-98FE-11D9-9BB8-000A95A89C98</string>
+	<string>C0B942C9-07CE-46B6-8FAE-CB8496F9F544</string>
 </dict>
 </plist>

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>autoScrollOutput</key>
+	<true/>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>mavenmate.sh -t release:branch -s</string>
+	<string>mavenmate.sh -t release:branch</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -13,7 +15,7 @@
 	<key>name</key>
 	<string>Release Branch</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>showAsHTML</string>
 	<key>uuid</key>
 	<string>1BFA4873-D0F9-47A1-B4D4-22325F5FD4F3</string>
 </dict>

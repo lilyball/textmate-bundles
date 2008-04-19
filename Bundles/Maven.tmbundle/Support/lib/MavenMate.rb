@@ -215,9 +215,6 @@ opts.on("-P", "--profiles", "Set the profiles") do
   MavenMate.set_profiles(location)
   exit
 end
-opts.on("-s", "--shell", "Use shell instead of MavenMate") do |s|
-  use_shell = s
-end
 opts.on("-t", "--task [TASK]", "Execute task") do |t|
   if t.nil?
     command = MavenCommand.new(mvn, location, '')
@@ -238,4 +235,4 @@ raise "Missing -p or -t arguments" if command.nil?
 raise "Missing -l" if location.nil?
 raise "Missing -m" if mvn.nil?
 
-use_shell ? command.shell : command.html
+command.html

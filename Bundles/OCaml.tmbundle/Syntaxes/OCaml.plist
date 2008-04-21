@@ -1199,7 +1199,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\(\*\*?(\*)\)</string>
+					<string>\(\*+(\*)\)</string>
 					<key>name</key>
 					<string>comment.block.ocaml</string>
 				</dict>
@@ -1210,21 +1210,6 @@
 					<string>\*\)</string>
 					<key>name</key>
 					<string>comment.block.ocaml</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>/\*</string>
-					<key>end</key>
-					<string>\*/</string>
-					<key>name</key>
-					<string>comment.block.ocamlyacc</string>
 					<key>patterns</key>
 					<array>
 						<dict>

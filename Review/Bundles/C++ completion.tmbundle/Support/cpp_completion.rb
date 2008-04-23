@@ -99,9 +99,11 @@ class CppMethodCompletion
 
   def initialize(line)
     @line = line
+    @scopes = nil
     @parser = CppParser.new
     @std = {
-    "std::map" => { :methods => { 
+      :namespace => { "std" =>{ :classes => {
+    "map" => { :methods => { 
         "begin" =>[{ :r => "std::map::iterator", :a => "()"}],
         "clear" =>[{ :r => "void", :a => "()"}],
         "count" =>[{ :r => "size_type", :a => "( const key_type& key )"}],
@@ -127,19 +129,11 @@ class CppMethodCompletion
         "swap" =>[{ :r => "void", :a => "( container& from )"}],
         "upper_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
         "value_comp" =>[{ :r => "value_compare", :a => "()"}],
-        }
+        },
+        :classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :r=>"std::pair"}]}},}
     },
-    "std::pair<iterator,bool>" => {:methods=>{
-        "first"=>[{:a=>"",:r=>"std::map::iterator"}],
-        "second"=>[{:a=>"",:r=>"bool"}]
-        }
-    },
-    "std::pair<iterator,iterator>" => {:methods=>{
-        "first"=>[{:a=>"",:r=>"std::map::iterator"}],
-        "second"=>[{:a=>"",:r=>"std::map::iterator"}]
-    }},
     
-    "std::vector" => {:methods => { 
+    "vector" => {:methods => { 
       "assign" =>[{ :r => "void", :a => "( size_type num, const TYPE& val )"},
                   { :r => "void", :a => "( input_iterator start, input_iterator end )"}],
       "at" =>[{ :r => 1, :a => "( size_type loc )"}],
@@ -166,26 +160,90 @@ class CppMethodCompletion
       "resize" =>[{ :r => "void", :a => "( size_type num, const TYPE& val = TYPE() )"}],
       "size" =>[{ :r => "size_type", :a => "()"}],
       "swap" =>[{ :r => "void", :a => "( container& from )"}],
-                                    }
+                                    },
+      :classes => {"iterator" => {:methods =>{"->" => [{:a =>"",:r=>1}] }},},
                        },
-      "std::vector::iterator" => {:methods =>{"->" => [{:a =>"",:r=>1}] }},
-      "std::map::iterator" => {:methods=>{"->" =>[{:a => "", :r=>"std::pair"}]}},
-      "std::pair" =>{:methods=>{"first"=>[{:a=>"",:r=>1}],
-                                "second"=>[{:a=>"",:r=>2}]
-                               }
-                    },
-  
+      "pair" =>{:methods=>{"first"=>[{:a=>"",:r=>1}],
+                                           "second"=>[{:a=>"",:r=>2}]
+                                          }
+                               },
+                             },},},
+   :classes => {
       "a" => {:methods => {"methodA1"=>[{:a=>"()",:r => "b"}], 
                            "methodA2"=>[{:a=>"()",:r => "c"}]}},
       "b" => {:methods => {"methodB1"=>[{:a=>"()",:r => "a"}], 
                            "methodB2"=>[{:a=>"()",:r => "c"}]}},
       "c" => {:methods => {"methodC1"=>[{:a=>"()",:r => "a"}], 
                            "methodC2"=>[{:a=>"()",:r => "b"}]}},
+                         },
     }
   end
   
-  def lookupClass(name)
-    @std[name]
+  def create_scope_hierarchy()
+    q = "" # ENV['namespace'].split("::")
+    dir = []
+    dir << ["#global", userdefinedplusstatic]
+    q.each do |elem|
+      if m = dir[-1][1][:namespace][elem]
+        dir << [elem, m]
+      elsif m = dir[-1][1][:classes][elem]
+        dir << [elem, m]
+      else
+        po "'#{elem}' part of qualifier not found"
+      end
+    end
+    return dir
+  end
+  
+  def find(res, key, elem )
+    if k = res[key]
+      if r = k[elem]
+        return r
+      end
+    end
+    return nil
+  end
+  
+  def dig_to_find(q, dir)
+    res = dir
+   # pd "#{q.inspect}"
+    q.each do |elem|
+      if m = find(res,:namespace,elem)
+        res = m
+      elsif m = find(res,:classes,elem)
+        res = m
+      elsif m = find(res,:typedefs,elem)
+        #initial = m[:t] if m[:t]
+        res, junk = lookup_class2(m, nil)
+      else
+        res = nil
+      end
+    end
+    return res
+  end
+
+  def userdefinedplusstatic
+     @std
+   end
+
+  def lookup_class2(name, initial)
+    return nil if name.class.inspect == "Fixnum"
+    q = name.split("::")
+    if q[0] == "" # ::something
+      res = dig_to_find(q, userdefinedplusstatic)
+    else      
+      @scopes = create_scope_hierarchy() if @scopes.nil?
+      @scopes.reverse_each do |name, dir| 
+        res = dig_to_find(q, dir)
+        break if res
+      end
+    end
+    return res, initial
+  end
+  
+  def lookup_class(name, initial)
+    #@std[name]
+    return lookup_class2(name, initial)
   end
   
   def complete(item, previousClass)
@@ -234,9 +292,9 @@ class CppMethodCompletion
   def updateClass(res, initial)
     previousClass = res[0][:r]
     if res[0][:t]
-      initial = updateInitial(previousClass, res[0][:t].dup, initial)
-      #pd "#{initial.inspect}  #{previousClass}"
-      return lookupClass(previousClass), initial
+      k = res[0][:t].dup
+      initial = updateInitial(previousClass, k, initial)
+      return lookup_class(previousClass, initial)
     end
     
     if previousClass.class.inspect == "Fixnum"
@@ -244,41 +302,49 @@ class CppMethodCompletion
       if initial.nil?
         TextMate.exit_show_tool_tip "could not find type info for the dereferenced object, template arg ##{previousClass} missing"
       end
-      previousClass = lookupClass(initial[:type])
+      return lookup_class(initial[:type],initial)
     elsif previousClass.class.inspect == "String"
-      previousClass = lookupClass(previousClass)
+      return lookup_class(previousClass, initial)
     end
-    return previousClass, initial
+    po "this should not be reached"
   end
 
   def rightMostClass(type_chain, res)
   first = type_chain.shift
-
   #po first.inspect + type_chain.inspect + res.inspect.gsub(',',",\n")
   #$t = false
   if first[:kind] == :field
     initial = res[first[:name]]
     #TextMate.exit_create_new_document res.inspect
-    po("could not find type of '#{first[:name]}'") if initial.nil?
     if initial[:type]
-      previousClass = lookupClass(initial[:type])
+      previousClass, junk = lookup_class(initial[:type], nil)
     else
       iterate = initial[:iterator]
       dref = initial[:dref]
-      #po initial.inspect
-      initial = rightMostClass(initial[:type_of],res)
-      initial = initial[1] if dref
+      val = initial[:type_of].dup
+      initial = rightMostClass(val,res)
+      if dref  && iterate
+        previousClass, junk = lookup_class(initial[:type] + "::iterator", nil)
+        if previousClass[:methods]["->"] && (previousClass[:methods]["->"][0][:r] == 1)
+          initial = initial[1]          
+        elsif previousClass[:methods]["->"] && previousClass[:methods]["->"]
+          po "can not iterate over '#{previousClass[:methods]["->"][0][:r]}'"
+        else
+          po "could not assign iterable to '#{first[:name]}'"
+        end
+      end
+      po "could not dereference '#{res[first[:name]].inspect}'" if initial.nil?
       name = initial[:type] + (iterate ? "::iterator" : "")
       # add the resolved var to the global list
       h = initial.dup
       h[:type] = name
       res[first[:name]] = h
-      previousClass = lookupClass(name)
+      previousClass, junk = lookup_class(name, nil)
     end
 
-   # po previousClass.inspect.gsub(',',",\n") if $t
-   # $t = false
+  # pd res.inspect + " == " + previousClass.inspect if first[:name] == "ito"
    po "could not find '#{name}'" if previousClass.nil?
+   pd "f#{type_chain.inspect} #{previousClass.inspect} -------\n #{initial.inspect}" if previousClass[:methods].nil?
     if first[:bind] == "->" && previousClass[:methods]["->"]
       previousClass, initial = updateClass(previousClass[:methods]["->"], initial)
     end
@@ -289,8 +355,8 @@ class CppMethodCompletion
     if item[:name]
       if item[:kind] == :method || item[:kind] == :field
         r =previousClass[:methods][item[:name]]
-        unless r.nil?          
-          r1 = lookupClass( r[0][:r] )
+        unless r.nil?
+          r1, junk = lookup_class( r[0][:r], nil )
           if r1 && item[:bind] == "->" && r1[:methods]["->"]
             # the only classes that are allowed to have -> are defined in std
             # along with what they return
@@ -325,7 +391,7 @@ def print()
   a = @parser.parse(@line)
   TextMate.exit_discard if a.nil?
   res = a.types
-  type_chain = res[:current_type]
+  type_chain = res[:current_type].dup
   TextMate.exit_discard if type_chain.nil?
   #special treatment for first element since we do not know what class we are in
   rightMostClass(type_chain, res)
@@ -334,7 +400,7 @@ end
 
 end
 #{:current_type=>[{:name=>"map", :kind=>:field, :bind=>"."},
-#                 {:name=>"begin", :kind=>:method, :bind=>"->"},
+#                 {:name=>"begin", :kind=>:method, :bind=>"->"}, 046 2859123
 #                 {:name=>"second", :kind=>:field, :bind=>"."},
 #                 {:prefix=>"met"}]
 # "map"=>{:type=>"std::map", 1=>{:type=>"std::vector", 1=>{:type=>"a"}}, 2=>{:type=>"b"}}}

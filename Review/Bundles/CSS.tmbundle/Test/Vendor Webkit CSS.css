@@ -1,0 +1,73 @@
+#sections    {
+}
+.section     {
+	-webkit-transition: all 0.1s ease-in;
+}
+.section:hover {
+	background: blue;
+	color:white;
+	
+}
+
+.section img {
+}
+.section a   {
+}
+
+.whatever {
+	 -webkit-transition-timing-function: dldkjflkdj;
+	-webkit-transform: ;
+	-webkit-transform-origin:  top left/top center/top right/center left/center center/center right/bottom left/bottom center/bottom right/x-% y-%/x-pos y-pos;
+	background-position: top left/top center/top right/center left/center center/center right/bottom left/bottom center/bottom right/x-% y-%/x-pos y-pos;
+	
+	-webkit-transition: ;
+	
+	-webkit-transition-property: ;
+	-webkit-transition-duration: ;
+	-webkit-transition-timing-function: ;
+}
+.examples{
+	-webkit-transition: -webkit-transform 3s ease-in;
+
+	-webkit-transition-property: opacity, left;
+	-webkit-transition-duration: 2s, 4s;
+	-webkit-box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+}
+
+/*
+-ms-	Microsoft
+mso-	Microsoft Office
+-moz-	Mozilla
+-o-	Opera Software
+-atsc-	Advanced Television Standards Committee
+-wap-	The WAP Forum
+*/
+
+
+/** CSS Transforms  */
+
+/*WebKit now has rudimentary support for specifying transforms through CSS. Boxes can be scaled, rotated, skewed and translated. The current nightly builds support affine transformations.*/
+
+/*A transform can be specified using the -webkit-transform property. It supports a list of functions, where each single function represents a transform operation to apply. You can chain together operations to apply multiple transforms at once to an object (e.g., if you want to both scale and rotate a box). The supported primitives are:*/
+
+/*scale, scaleX, scaleY - Scale an object around the transform origin. These functions take a number as an argument. The number can be negative (if you want to flip an object).*/
+/*rotate - Rotate an object around the transform origin. This function takes a CSS angle (e.g., degrees or radian units).*/
+/*translate, translateX, translateY - Translate an object. These functions take lengths or percentages as arguments. Percentages are relative to the border box of the object.*/
+/*skew, skewX, skewY - Skew an object. These functions take CSS angles.*/
+/*matrix - Specify a full affine transform matrix. This function takes six values. The last two values are the tx and ty, and they can be lengths or percentages.*/
+
+/*In addition to the -webkit-transform property, we have introduced a -webkit-transform-origin property that allows you to specify the origin of the transform. It has the same syntax as background-position and defaults to the center of the object (so that scales and rotates will be around the center of the border box by default).*/
+
+/*At the moment transforms do not affect layout, so they are similar to relative positioning in that respect. We are exploring ideas for how to do transforms in ways that could affect layout.*/
+
+
+/* /CSS Transforms **/
+top left
+top center
+top right
+center left
+center center
+center right
+bottom left
+bottom center
+bottom right

@@ -1,0 +1,99 @@
+# CSS Groups
+
+## box-model
+
+padding, padding-top, padding-right, padding-bottom, padding-left, border, border-top, border-right, border-bottom, border-left, border-style, border-top-style, border-right-style, border-bottom-style, border-left-style, border-color, border-top-color, border-right-color, border-bottom-color, border-left-color, border-width, border-top-width, border-right-width, border-bottom-width, border-left-width, outline, outline-style, outline-color, outline-width, margin, margin-top, margin-right, margin-bottom, margin-left, width, height, min-width, max-width, min-height, max-height
+
+position, top, right, bottom, left, clip, overflow, z-index, float, clear
+
+## display
+
+display, visibility, list-style-type, list-style-image, list-style-position, list-style, content, counter-increment, counter-reset, quotes
+
+## type
+
+font, font-family, font-size, font-weight, font-style, font-variant, line-height, letter-spacing, word-spacing, text-align, text-decoration, text-indent, text-transform, vertical-align, unicode-bidi, direction
+
+## style
+
+color, background-color, background, background-image, background-repeat, background-position, background-attachment
+
+## effect
+
+-webkit-transform, -webkit-transform-origin
+-webkit-transition, -webkit-transition-property, -webkit-transition-duration, -webkit-transition-timing-function
+
+## print
+
+marks, page-break-before, page-break-after, page-break-inside, orphans, size, widows
+
+## aural
+
+stress, richness, azimuth, elevation, voice-family, speak, speak-punctuation, speak-numeral, pitch, pitch-range, speech-rate, play-during, pause, pause-before, pause-after, cue, cue-before, cue-after
+
+(Aural and print could be combined into media.)
+
+## other
+
+cursor
+
+
+## Examples
+
+<style type="text/css">
+	
+	/* meta.scope.item.css*/
+	
+	/* meta.selector.css*/
+	html img.foo
+	/*/meta.selector.css*/
+	
+	/*meta.scope.property-list.css*/
+	{ 
+		/* meta.property.vendor.effect.webkit-transition-property.css*/
+		
+		/* meta.property-name.css*/
+		-webkit-transition-property: 
+		/*/meta.property-name.css*/
+		
+		/* meta.property-value.css*/
+		opacity; 
+		/*/meta.property-value.css*/
+		
+		/*/meta.property.vendor.effect.webkit-transition-property.css*/
+	} 
+	/*/meta.scope.property-list.css*/
+	
+	/*/meta.scope.item.css*/
+	
+</style>
+
+
+	meta.scope.item.css
+
+could also be
+
+	meta.scope.item.hack.star-hack.css 
+
+scopes in bold would be the same for all items 
+meta.property examples: 
+
+	support.type.property-name.transition.css
+
+	meta.property.type.font-style.css 
+	meta.property.style.background-color.css 
+	meta.property.vendor.effect.webkit-transition-property.css 
+	meta.property.vendor.type.webkit-text-fill-color.css 
+	meta.property.vendor.box-model.webkit-box-orient.css 
+
+	meta.property.type.font-style.css                             support.type.property-name.css
+	meta.property.style.background-color.css                      support.type.property-name.css
+	meta.property.vendor.effect.webkit-transition-property.css    support.type.property-name.css
+	meta.property.vendor.type.webkit-text-fill-color.css          support.type.property-name.css
+	meta.property.vendor.box-model.webkit-box-orient.css          support.type.property-name.css
+
+meta.scope.property-list includes the trailing : character 
+meta.property-value includes the terminating ; character 
+CSS inside style="" could be  meta.scope.property-list.attribute.html.css
+
+

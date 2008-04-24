@@ -925,7 +925,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?x) (?&lt;! [-a-z])(?= -atsc-   [-\w])</string>
+					<string>(?x) (?&lt;! [-a-z;])(?= -atsc-   [-\w])</string>
 					<key>end</key>
 					<string>((?&lt;=;)|(?=[\}]))</string>
 					<key>name</key>
@@ -940,7 +940,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?x) (?&lt;! [-a-z])(?= -ms-   [-\w])</string>
+					<string>(?x) (?&lt;! [-a-z;])(?= -ms-   [-\w])</string>
 					<key>end</key>
 					<string>((?&lt;=;)|(?=[\}]))</string>
 					<key>name</key>
@@ -955,7 +955,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?x) (?&lt;! [-a-z])(?= mso-   [-\w])</string>
+					<string>(?x) (?&lt;! [-a-z;])(?= mso-   [-\w])</string>
 					<key>end</key>
 					<string>((?&lt;=;)|(?=[\}]))</string>
 					<key>name</key>
@@ -970,7 +970,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?x) (?&lt;! [-a-z])(?= -moz-   [-\w])</string>
+					<string>(?x) (?&lt;! [-a-z;])(?= -moz-   [-\w])</string>
 					<key>end</key>
 					<string>((?&lt;=;)|(?=[\}]))</string>
 					<key>name</key>
@@ -985,7 +985,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?x) (?&lt;! [-a-z])(?= -o-   [-\w])</string>
+					<string>(?x) (?&lt;! [-a-z;])(?= -o-   [-\w])</string>
 					<key>end</key>
 					<string>((?&lt;=;)|(?=[\}]))</string>
 					<key>name</key>
@@ -1000,7 +1000,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?x) (?&lt;! [-a-z])(?= -wap-   [-\w])</string>
+					<string>(?x) (?&lt;! [-a-z;])(?= -wap-   [-\w])</string>
 					<key>end</key>
 					<string>((?&lt;=;)|(?=[\}]))</string>
 					<key>name</key>
@@ -1015,7 +1015,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?x) (?&lt;! [-a-z])(?= -webkit-   [-\w])</string>
+					<string>(?x) (?&lt;! [-a-z;])(?= -webkit-   [-\w])</string>
 					<key>end</key>
 					<string>((?&lt;=;)|(?=[\}]))</string>
 					<key>name</key>

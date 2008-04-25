@@ -18,8 +18,8 @@
 buffer_t* input_buffer = NULL;
 pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static char prompt[64];
-static size_t prompt_capacity = 64;
+static char prompt[128];
+static size_t prompt_capacity = 128;
 pthread_mutex_t prompt_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 char* create_prompt_copy() {

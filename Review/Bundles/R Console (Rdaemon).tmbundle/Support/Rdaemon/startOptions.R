@@ -30,7 +30,7 @@ file.edit <- function(..., title = file, editor = "mate") {
 }
 
 file.choose <- function() {
-	system("osascript -e 'tell application \"TextMate\"' -e 'activate' -e 'set f to choose file' -e 'POSIX path of f' -e 'end tell'", intern=T)
+	system("osascript -e 'tell application \"TextMate\"' -e 'activate' -e 'POSIX path of (choose file)' -e 'end tell' 2>/dev/null", intern=T)
 }
 
 alarm <- function() {

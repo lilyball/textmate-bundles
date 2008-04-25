@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb";
+text = STDIN.read
+text = `pbpaste` if text.empty?
+text &lt;&lt; "\n" if ! text.match(/\n$/)
+rcnt = text.count "\n"
+print "${1:${2:x} &lt;- }matrix(c("+e_sn(text).sub(/\s+$/,"").gsub(/([a-zA-Z]+)/, '"\1"').gsub(/\s+/,", ") + "), nrow=#{rcnt}, byrow=TRUE)"</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~c</string>
+	<key>name</key>
+	<string>Create Matrix from Selection</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.r, source.rd.console</string>
+	<key>uuid</key>
+	<string>BC6C2055-67E1-4902-98B0-AACDFEE031BB</string>
+</dict>
+</plist>

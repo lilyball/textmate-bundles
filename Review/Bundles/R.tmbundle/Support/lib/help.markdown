@@ -115,9 +115,9 @@ This is an auxiliary tool command with these two different tasks based on a sele
 
   it only inserts the according digits.
 
-## Create Vector from Selection
+## Create Vector/Matrix from Selection
 <button>&nbsp;^&#x2325;C&nbsp;</button>
-It inserts a vector in the form of `x <- c(x1, x2, ...)` as snippet taken from a selected string or the current content of the clipboard. Delimiters are " ", "&#x21A9;", or "&#x21E5;". If an element doesn't consist of digits the element will be enclosed by double-quotes.
+It inserts a vector in the form of `x <- c(x1, x2, ...)` resp. `x <- matrix(c(x1, x2, ...))` as snippet taken from a selected string or the current content of the clipboard. Delimiters are " ", "&#x21A9;", or "&#x21E5;". If an element doesn't consist of digits the element will be enclosed by double-quotes. It won't be checked for creating a matrix whether the length of the vector is a sub-multiple of the numbers of rows.
 
 ## Next/Previous List Element/Parameter Value
 <button>&nbsp;^&#x2325;&#x2192;&nbsp;</button><button>&nbsp;^&#x2325;&#x2190;&nbsp;</button>

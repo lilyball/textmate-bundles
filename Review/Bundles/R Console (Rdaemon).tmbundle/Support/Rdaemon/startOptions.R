@@ -29,6 +29,10 @@ file.edit <- function(..., title = file, editor = "mate") {
 		editor))
 }
 
+file.choose <- function() {
+	system("osascript -e 'tell application \"TextMate\"' -e 'activate' -e 'set f to choose file' -e 'POSIX path of f' -e 'end tell'", intern=T)
+}
+
 alarm <- function() {
 	system("osascript -e beep")
 }

@@ -163,7 +163,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(mod|rem)\b</string>
+			<string>\b(mod|rem)\b(?![-!(^~])</string>
 			<key>name</key>
 			<string>keyword.operator.evaluable.logtalk</string>
 		</dict>
@@ -178,6 +178,12 @@
 			<string>(:-|!|\\+|,|;|--&gt;|-&gt;|=|\=|\.|=\.\.|\bis\b)</string>
 			<key>name</key>
 			<string>keyword.operator.misc.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(a(bs|tan)|c(eiling|os)|exp|flo(at(_(integer|fractional)_part)?|or)|log|mod|r(em|ound)|s(i(n|gn)|qrt)|truncate)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.evaluable.logtalk</string>
 		</dict>
 		<dict>
 			<key>match</key>

@@ -16,16 +16,38 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
+printframe() {
+	cat &lt;&lt;-HF
+	&lt;HTML&gt;
+	&lt;HEAD&gt;
+	&lt;META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8"&gt;
+	&lt;TITLE&gt;Rdaemon &amp;mdash; Package Manager&lt;/TITLE&gt;
+	&lt;/HEAD&gt;
+	&lt;FRAMESET ROWS="*,45%" FRAMEBORDER="5" FRAMESPACING="5" BORDER="7" FRAMEBORDER="YES"&gt;
+		&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/pkman.html" NAME="head" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
+		&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/pkdata.html" NAME="data" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
+	&lt;/FRAMESET&gt;
+	&lt;/HTML&gt;
+HF
 
-cat&lt;&lt;END
-&lt;html&gt;&lt;head&gt;&lt;title&gt;Rdaemon Package Manager&lt;/title&gt;
+}
+
+HEAD="$TM_BUNDLE_SUPPORT/lib/pkman.html"
+DATA="$TM_BUNDLE_SUPPORT/lib/pkdata.html"
+
+
+cat&lt;&lt;END &gt; "$HEAD"
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Rdaemon &amp;mdash; Package Manager&lt;/title&gt;
 &lt;style type="text/css"&gt;
 &lt;!--
-.helpSym {
-	background-color:lightgrey;
-	color:black;
+.point {
 	cursor:pointer;
-	font-size:8pt;
+}
+tr {
+	-webkit-transition: all 200ms ease-out;
+}
+tr:hover {
+	background-color:lightblue;
 }
 --&gt;
 &lt;/style&gt;
@@ -45,14 +67,19 @@ cat&lt;&lt;END
 				cmd = '"$HOME/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
 				myCommand = TextMate.system(cmd, function (task) { });
 			}
-        }
+		}
+		function show(arg) {
+			parent.data.location.href = arg;
+		}
 
 &lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
 END
 "$HOME/Rdaemon/daemon/execRStr.sh" "@|sink('$RDRAMDISK/r_tmp');source('~/Rdaemon/help/pkgMan.R');sink(file=NULL);" &gt; /dev/null
-cat "$RDRAMDISK"/r_tmp
+cat "$RDRAMDISK"/r_tmp &gt;&gt; "$HEAD"
+echo "&lt;html&gt;&lt;/html&gt;" &gt; "$DATA"
+printframe
 exit_show_html</string>
 	<key>input</key>
 	<string>none</string>

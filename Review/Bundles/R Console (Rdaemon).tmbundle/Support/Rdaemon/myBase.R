@@ -8,8 +8,10 @@
 ####### please change the following lines only if you know what do you are doing
 
 unlockBinding("readline", environment(readline))
-readline <- function(prompt = "") {
-	res=system(paste("~/Rdaemon/daemon/readline.sh", " '", prompt, "'",  sep=''), intern=T)
+readline <- function(prompt = "",  alert=FALSE) {
+	input <- "default answer \"\""
+	if(alert) input <- ""
+	res=system(paste("~/Rdaemon/daemon/readline.sh", " '", prompt, "' '", input , "'", sep=''), intern=T)
 	return(res)
 }
 lockBinding("readline", environment(readline))

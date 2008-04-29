@@ -10,6 +10,6 @@
 unlockBinding("menu", environment(menu))
 menu <- function(choises, graphics=FALSE,  title="Rdaemon") {
 	res=system(paste("~/Rdaemon/daemon/menu.sh", " '", paste('"', choises, '"', sep='', collapse=','), "' '", title, "'",  sep=''), intern=T)
-	return(which(choises==res))
+	return(ifelse(length(which(choises==res))>0, which(choises==res),  0))
 }
 lockBinding("menu", environment(menu))

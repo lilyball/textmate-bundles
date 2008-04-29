@@ -17,8 +17,8 @@ options(echo = T)
 options(editor = "mate -w")
 options(htmlhelp = T)
 options(menu.graphics = F)
-if (getOption("repos")[[1]] == "@CRAN@") 
-	options(repos = "http://cran.cnr.Berkeley.edu")
+# if (getOption("repos")[[1]] == "@CRAN@") 
+# 	options(repos = "http://cran.cnr.Berkeley.edu")
 options(width = 100)
 options(device = "quartz")
 options(keep.source = FALSE)
@@ -31,6 +31,11 @@ file.edit <- function(..., title = file, editor = "mate") {
 
 file.choose <- function() {
 	system("osascript -e 'tell application \"TextMate\"' -e 'activate' -e 'POSIX path of (choose file)' -e 'end tell' 2>/dev/null", intern=T)
+}
+
+menu <- function(choises, graphics=FALSE,  title="Rdaemon") {
+	res=system(paste("~/Rdaemon/daemon/menu.sh", " '", paste('"', choises, '"', sep='', collapse=','), "' '", title, "'",  sep=''), intern=T)
+	return(ifelse(length(which(choises==res))>0, which(choises==res),  0))
 }
 
 alarm <- function() {

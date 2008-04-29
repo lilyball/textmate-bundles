@@ -117,6 +117,8 @@ As default it also displays an inline menu if there is only one suggestion found
 
 ***Hint*** This command works case-sensitively. E.g. if you type `math` (without selection and there is no command beginning with `math`) and invoke this command it lists all case-insensitive matched commands like `Math.fraction`, etc. as a tooltip caused by the chosen "Insert as Snippet" mechanism.
 
+## Open Rsession
+<button>&#x2303;&#x2325;&#x2318;R</button> Opens the Rsession project which is stored as `~/Rdaemon/Rsession.tmproj`. If Rdaemon is not running it will start it.
 # Command Menus
 
 ## General Control
@@ -138,9 +140,9 @@ As default it also displays an inline menu if there is only one suggestion found
 
       See [General Usage: History List](#sect_3.4)
 
--    __Open Rsession__
+-    __Set Working Directory__
 
-      Opens the Rsession project which is stored as `~/Rdaemon/Rsession.tmproj`.
+      <button>&#x2318;D</button> Opens a folder choose menu and sets the chosen folder using `setwd(FOLDER)`.
 
 -    __Edit StartOptions__
 
@@ -426,7 +428,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 # Main Bundle Maintainer
 
-***Date: Apr 09 2008***
+***Date: Apr 29 2008***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

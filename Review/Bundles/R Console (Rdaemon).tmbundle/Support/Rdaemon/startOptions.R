@@ -75,6 +75,11 @@ select.list <- function(list, preselect = NULL, multiple = FALSE, title="Rdaemon
 	return(res)
 }
 
+readline <- function(prompt = "") {
+	res=system(paste("~/Rdaemon/daemon/readline.sh", " '", prompt, "'",  sep=''), intern=T)
+	return(res)
+}
+
 alarm <- function() {
 	system("osascript -e beep")
 }

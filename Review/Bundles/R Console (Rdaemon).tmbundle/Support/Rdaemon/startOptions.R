@@ -17,11 +17,35 @@ options(echo = T)
 options(editor = "mate -w")
 options(htmlhelp = T)
 options(menu.graphics = F)
-# if (getOption("repos")[[1]] == "@CRAN@") 
-# 	options(repos = "http://cran.cnr.Berkeley.edu")
+options(repos = list(CRAN="http://cran.cnr.Berkeley.edu"))
 options(width = 100)
 options(device = "quartz")
 options(keep.source = FALSE)
+
+# options for plotting
+formals(pdf)[c("file", "width", "height")] <- list("~/Rdaemon/plots/Rplot%03d.pdf", 10, 10)
+formals(png)[c("filename", "width", "height",  "bg",  "res")] <- list("~/Rdaemon/plots/Rplot%03d.png", 900, 900, "transparent", 150)
+formals(jpeg)[c("filename", "width", "height")] <- list("~/Rdaemon/plots/Rplot%03d.png", 900, 900)
+
+#################################################################################################
+######### user defined start options here:
+
+
+
+
+
+
+
+#########################################################################################
+####################################### internals #######################################
+#########################################################################################
+quartz <- function(display = "", width = 9, height = 9, pointsize = 12, 
+	family = "Helvetica", antialias = TRUE, autorefresh = TRUE) {
+	library(CarbonEL)
+	.External("Quartz", display, width, height, pointsize, 
+		family, antialias, autorefresh, PACKAGE = "grDevices")
+	invisible()
+}
 
 file.edit <- function(..., title = file, editor = "mate") {
 	file <- c(...)
@@ -41,20 +65,6 @@ menu <- function(choises, graphics=FALSE,  title="Rdaemon") {
 alarm <- function() {
 	system("osascript -e beep")
 }
-
-# options for plotting
-formals(pdf)[c("file", "width", "height")] <- list("~/Rdaemon/plots/Rplot%03d.pdf", 10, 10)
-formals(png)[c("filename", "width", "height",  "bg",  "res")] <- list("~/Rdaemon/plots/Rplot%03d.png", 900, 900, "transparent", 150)
-formals(jpeg)[c("filename", "width", "height")] <- list("~/Rdaemon/plots/Rplot%03d.png", 900, 900)
-
-quartz <- function(display = "", width = 9, height = 9, pointsize = 12, 
-	family = "Helvetica", antialias = TRUE, autorefresh = TRUE) {
-	library(CarbonEL)
-	.External("Quartz", display, width, height, pointsize, 
-		family, antialias, autorefresh, PACKAGE = "grDevices")
-	invisible()
-}
-
 
 .chooseActiveScreenDevice <- function() {
 	plots <- dev.list()
@@ -113,7 +123,3 @@ quartz <- function(display = "", width = 9, height = 9, pointsize = 12,
 	}
 	out
 }
-
-
-#################################################################################################
-######### user defined start options here:

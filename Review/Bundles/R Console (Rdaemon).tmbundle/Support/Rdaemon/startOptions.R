@@ -62,6 +62,19 @@ menu <- function(choises, graphics=FALSE,  title="Rdaemon") {
 	return(ifelse(length(which(choises==res))>0, which(choises==res),  0))
 }
 
+select.list <- function(list, preselect = NULL, multiple = FALSE, title="Rdaemon") {
+	if(multiple) {
+		multipleArg <- "with multiple selections allowed"
+	} else {
+		multipleArg <- ""
+		if(!is.null(preselect)) preselect <- preselect[1]
+	}
+	res=system(paste("~/Rdaemon/daemon/selectlist.sh", " '", paste('"', list, '"', sep='', collapse=','), "' '", title, "' '", paste('"', preselect, '"', sep='', collapse=','), "' '", multipleArg, "'", sep=''), intern=T)
+	res <- unlist(strsplit(res, "!@#@!"))[-1]
+	if(!length(res)) return(character(0))
+	return(res)
+}
+
 alarm <- function() {
 	system("osascript -e beep")
 }

@@ -119,6 +119,11 @@ alarm <- function() {
 .chooseActiveScreenDevice <- function() {
 	plots <- dev.list()
 	out <- ""
+	if (getRversion() < "2.7") {
+		exclDevs <- c("pdf", "postscript")
+	} else {
+		exclDevs <- c("pdf", "postscript", "png", "jpeg", "tiff", "bmp", "quartz_off_screen")
+	}
 	if (length(plots) > 0) {
 		actPlot <- dev.cur()
 		randomNum <- rnorm(1, mean = 10) * 1e+05
@@ -130,7 +135,7 @@ alarm <- function() {
 			  "#DDDDDD")
 			btnVisibility <- ifelse(actPlot == plots[i], 
 			  "hidden", "visible")
-			if (!names(plots[i]) %in% c("pdf", "postscript")) {
+			if (!names(plots[i]) %in% exclDevs) {
 			  dev.set(plots[i])
 			  out <- paste(out, "<div id='dev", plots[i], 
 				"'><h3>Device ", plots[i], " (", names(plots[i]), 

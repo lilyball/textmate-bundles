@@ -122,7 +122,7 @@ alarm <- function() {
 	if (getRversion() < "2.7") {
 		exclDevs <- c("pdf", "postscript")
 	} else {
-		exclDevs <- c("pdf", "postscript", "png", "jpeg", "tiff", "bmp", "quartz_off_screen")
+		exclDevs <- c("pdf", "postscript", "quartz_off_screen")
 	}
 	if (length(plots) > 0) {
 		actPlot <- dev.cur()

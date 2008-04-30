@@ -23,14 +23,8 @@ options(device = "quartz")
 options(keep.source = FALSE)
 
 # options for plotting
-if (getRversion() < "2.7") {
-	formals(pdf)[c("file", "width", "height")] <- list("./plots/Rplot%03d.pdf", 10, 10)
-	formals(png)[c("filename", "width", "height", "bg", "res")] <- list("./plots/Rplot%03d.png", 700, 700, "transparent", 150)
-	formals(jpeg)[c("filename", "width", "height")] <- list("./plots/Rplot%03d.jpeg", 700, 700)
-} else {
-	formals(pdf)[c("file", "width", "height")] <- list("./plots/Rplot%03d.pdf", 10, 10)
-	formals(png)[c("filename", "width", "height", "bg", "res", "type")] <- list("./plots/Rplot%03d.png", 700, 700, "transparent", 150, "quartz")
-	formals(jpeg)[c("filename", "width", "height", "type")] <- list("./plots/Rplot%03d.jpeg", 700, 700, "quartz")
-}
+formals(pdf)[c("file", "width", "height")] <- list("./plots/Rplot%03d.pdf", 10, 10)
+formals(png)[c("filename", "width", "height", "bg", "res")] <- list("./plots/Rplot%03d.png", 700, 700, "transparent", 150)
+formals(jpeg)[c("filename", "width", "height")] <- list("./plots/Rplot%03d.jpeg", 700, 700)
 
 

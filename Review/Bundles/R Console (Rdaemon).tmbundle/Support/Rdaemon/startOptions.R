@@ -24,7 +24,7 @@ options(keep.source = FALSE)
 
 # options for plotting
 formals(pdf)[c("file", "width", "height")] <- list("~/Rdaemon/plots/Rplot%03d.pdf", 10, 10)
-formals(png)[c("filename", "width", "height",  "bg",  "res")] <- list("~/Rdaemon/plots/Rplot%03d.png", 900, 900, "transparent", 150)
-formals(jpeg)[c("filename", "width", "height")] <- list("~/Rdaemon/plots/Rplot%03d.png", 900, 900)
+formals(png)[c("filename", "width", "height",  "bg",  "res")] <- list("~/Rdaemon/plots/Rplot%03d.png", 700, 700, "transparent", 150)
+formals(jpeg)[c("filename", "width", "height")] <- list("~/Rdaemon/plots/Rplot%03d.jpeg", 700, 700)
 
 

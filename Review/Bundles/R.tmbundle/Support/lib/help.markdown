@@ -119,6 +119,10 @@ This is an auxiliary tool command with these two different tasks based on a sele
 <button>&nbsp;^&#x2325;C&nbsp;</button>
 It inserts a vector in the form of `x <- c(x1, x2, ...)` resp. `x <- matrix(c(x1, x2, ...))` as snippet taken from a selected string or the current content of the clipboard. Delimiters are " ", "&#x21A9;", or "&#x21E5;". If an element doesn't consist of digits the element will be enclosed by double-quotes. It won't be checked for creating a matrix whether the length of the vector is a sub-multiple of the numbers of rows.
 
+## Show File Header
+<button>&nbsp;&#x2325;&#x2318;F&nbsp;</button>
+If one only selects a file path this command shows you the first three lines of that file as tooltip. Useful for the import of data files to determine whether the data file has an header or not etc.
+
 ## Next/Previous List Element/Parameter Value
 <button>&nbsp;^&#x2325;&#x2192;&nbsp;</button><button>&nbsp;^&#x2325;&#x2190;&nbsp;</button>
 It tries to highlight the next/previous element (if quoted only the content) of a list/vector or the value of function parameters.
@@ -205,7 +209,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Mar 06 2008***
+***Date: Apr 30 2008***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

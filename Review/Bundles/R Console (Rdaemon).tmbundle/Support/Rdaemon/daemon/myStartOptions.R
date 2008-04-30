@@ -11,12 +11,14 @@
 #########################################################################################
 ####################################### internals #######################################
 #########################################################################################
+if (getRversion() < "2.7") {
 quartz <- function(display = "", width = 9, height = 9, pointsize = 12, 
 	family = "Helvetica", antialias = TRUE, autorefresh = TRUE) {
 	library(CarbonEL)
 	.External("Quartz", display, width, height, pointsize, 
 		family, antialias, autorefresh, PACKAGE = "grDevices")
 	invisible()
+}
 }
 
 file.edit <- function(..., title = file, editor = "mate") {

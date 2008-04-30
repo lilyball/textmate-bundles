@@ -207,11 +207,9 @@ As default it also displays an inline menu if there is only one suggestion found
 
       Executes `dev.print(pdf)` and opens the created PDF file in Preview. You can change the default PDF viewer by setting the shell variable `TM_RdaemonPDFVIEWER` to e.g. "PDFView" or "Safari".
 
--    __New Quartz() {CarbonEL}__
+-    __New Quartz()__
 
-      Loads the library "CarbonEL" and opens a new Quartz device using `quartz()`.
-
-      ***Hint:*** The library "CarbonEL" is needed in order to make it possible to work with the Quartz device properly!
+      Opens a new Quartz device using `quartz()`. If you run a R version prior than 2.7.0 it also loads the library "CarbonEL".
 
 -    __Order Front all Quartz Windows__
 
@@ -389,7 +387,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 -   __Error in library(CarbonEL) : there is no package called 'CarbonEL'__
 
-    That error message indicates (showing after a plot command) that the package "CarbonEL" was not yet installed. This package is necessary to work with the Quartz device properly. You can install it by using `install.packages("CarbonEL")`.
+    That error message indicates (showing after a plot command) that the package "CarbonEL" was not yet installed. This package is necessary __only__ for versions of R prior than 2.7.0 to work with the Quartz device properly. You can install it by using `install.packages("CarbonEL")`. With the version 2.7.0 the quartz device has a built-in loop event handler.
 
 -   __Rdaemon freezes after executing a command (esp. for "readline")__
 
@@ -414,10 +412,6 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 -   __`readline(prompt="a prompt: ")` places the caret beneath the prompt__
 
     This is the normal case. See more [here](#sect_3.3.1).
-
--   __The Quartz device blocks itself__
-
-    The Quartz device only works properly if you load the library "CarbonEL" in beforehand.
 
 -   __How can I save a plot as JPEG, PNG, etc.__
 

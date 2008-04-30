@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -47,10 +47,11 @@ fi
 
 #get the reference for WORD
 FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}' | perl -pe 's!/latex/!/html/!;s!tex$!html!')
+
 CNT=$(echo -e "$FILE" | wc -l)
 [[ -z "$FILE" ]] &amp;&amp; CNT=0
 if [ $CNT == 1 ]; then
-	cat "$FILE"
+	cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
 	echo "&lt;base href='tm-file://$FILE'&gt;"
 	exit_show_html
 fi

@@ -3,7 +3,7 @@
 
 The "R Console (Rdaemon)" bundle allows to run the command-line version of R ***inside*** of TextMate using a daemon which runs within an hidden pseudo terminal. In addition it provides some commands which allow to use that bundle as a kind of GUI.
 
-The entire source code is written in scripting languages (Ruby, Perl, HTML (JavaScript), and Bash) hence the user can modify it rather easily in order to adapt it to its own purposes.
+The entire source code is written in scripting languages (Ruby, Perl, HTML (JavaScript), AppleScript, and Bash) hence the user can modify it rather easily in order to adapt it to its own purposes.
 
 ***Important*** This bundle is an extension to the "R Bundle" which comes with syntax highlighting, help functionality, etc. Thus it is recommended to install that bundle as well.
 
@@ -19,7 +19,7 @@ Simply do execute the command "Install Rdaemon" (Bundle Menu > Rdaemon Tools > I
 
 ## Start Rdaemon<a name="start">
 
-To start Rdaemon set the language grammar of a document to "R Console (Rdaemon)" and either type `start` and press  <button>&#x21E5;</button> or press <button>&#x2325;&#x2318;C</button> for the command menu "General Control" and choose "Start Rdaemon". The start procedure will take a few seconds.
+To start Rdaemon set the language grammar of a document to "R Console (Rdaemon)" or to "R Console (Rdaemon) Plain" (R's output will not be syntax highlighted) and either type `start` and press  <button>&#x21E5;</button> or press <button>&#x2325;&#x2318;C</button> for the command menu "General Control" and choose "Start Rdaemon". The start procedure will take a few seconds.
 
 An other option to start Rdaemon is to press <button>^&#x2325;&#x2318;R</button>. This will start the Rdaemon and it will open the Rsession project.
 
@@ -180,7 +180,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Package Manager__
 
-      Shows a window with all installed R packages. With the help of the check boxes one can load or detach packages. "?" will open the help page for the chosen package.
+      Shows a window with all installed R packages. With the help of the check boxes one can load or detach packages. If one clicks at an item the help page for the chosen package will be displayed.
 
 ## Graphics
 <button>&#x2325;&#x2318;G</button>
@@ -202,7 +202,6 @@ As default it also displays an inline menu if there is only one suggestion found
           - __all other formats__ - it will convert the PDF into an image by using `sips`. Up to now it will generate pixel images with 150 dpi.
 
      - ***Hint*** To create a transparent PDF, open a `png(bg = "transparent")` device, fill it with the desired data, and open the Graphic Manager.
-
 
 -    __Show Current Plot as PDF__
 
@@ -292,6 +291,12 @@ As default it also displays an inline menu if there is only one suggestion found
         * dummy&#95;noimage.pdf_[dummy pdf for the Graphic Maganger]
 
         * execRStr.sh [bash script executing R code as arg1 and outputs its result; mainly used by JavaScript]
+
+        * myBase.R [contains functions which are overwritten in the base package]
+
+        * myUtils.R [contains functions which are overwritten in the utils package]
+
+        * myStartOptions.R [contains Rdaemon specific start options]
 
         * Rdaemon.rb [the actual daemon written in Ruby 1.8]
 
@@ -428,7 +433,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 # Main Bundle Maintainer
 
-***Date: Apr 29 2008***
+***Date: Apr 30 2008***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

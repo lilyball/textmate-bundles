@@ -5,17 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>require_cmd "${TM_NUTEST:=nutest}" "If you have installed Nu, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_NUBILE&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+	<string>require_cmd "${TM_NUTEST:=nutest}" "If you have installed Nu, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_NUTEST&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-$TM_NUTEST $TM_FILENAME</string>
+export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
+"$TM_RUBY" -- "$TM_BUNDLE_SUPPORT/NuMate/run_tests.rb"</string>
 	<key>input</key>
-	<string>none</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>@R</string>
 	<key>name</key>
 	<string>Run Tests</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.nu</string>
 	<key>uuid</key>

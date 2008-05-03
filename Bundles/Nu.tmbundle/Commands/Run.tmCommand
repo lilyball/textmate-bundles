@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>require_cmd "${TM_NUSH:=nush}" "If you have installed Nu, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_NUBILE&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+	<string>require_cmd "${TM_NUSH:=nush}" "If you have installed Nu, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_NUSH&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
 export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
 "$TM_RUBY" -- "$TM_BUNDLE_SUPPORT/NuMate/run_script.rb"</string>

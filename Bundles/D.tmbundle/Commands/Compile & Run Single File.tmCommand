@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "${TM_FILENAME}"
+
+cd "$TM_DIRECTORY"
+
+echo '&lt;h2&gt;Compiling...&lt;/h2&gt;'
+
+OUT=$(gdmd -debug -unittest -gc -od$TMPDIR "$TM_FILENAME" 2&gt;&amp;1)
+
+if [ $? -eq 0 ] ; then
+  echo $OUT | grep -v 'indirect jmp without'
+  echo '&lt;h2&gt;Running...&lt;/h2&gt;'
+  BIN="$(echo "$TM_FILENAME"|sed 's/\.d$//g')"
+  ./"$BIN" | pre
+  rm -f $BIN
+else
+  echo $OUT | grep -v 'indirect jmp without' | pre
+fi
+
+html_footer
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Compile &amp; Run Single File</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.d</string>
+	<key>uuid</key>
+	<string>CC26BACA-2BA5-4179-A05E-DB80360440E6</string>
+</dict>
+</plist>

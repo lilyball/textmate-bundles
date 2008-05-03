@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>require_cmd dsss
+
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "${TM_FILENAME}"
+
+cd "$TM_PROJECT_DIRECTORY"
+
+echo '&lt;h2&gt;Building...&lt;/h2&gt;'
+
+dsss build 2&gt;&amp;1 | grep -v 'indirect jmp without' | grep -vE 'Default prefix .+ is unwritable, using .+ instead' | pre
+
+html_footer
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Build</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.d</string>
+	<key>uuid</key>
+	<string>BB84553C-7D75-4D17-9E49-FADADC13F187</string>
+</dict>
+</plist>

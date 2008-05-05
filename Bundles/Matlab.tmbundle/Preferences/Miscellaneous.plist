@@ -9,7 +9,7 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>^\s*end\b</string>
+		<string>^\s*(end|else)\b</string>
 		<key>highlightPairs</key>
 		<array>
 			<array>
@@ -30,7 +30,7 @@
 			</array>
 		</array>
 		<key>increaseIndentPattern</key>
-		<string>^\s*(function|if|switch|while|for|try)\b(?!.*\bend\b).*$</string>
+		<string>^\s*(function|if|else|elseif|switch|while|for|try)\b(?!.*\bend\b).*$</string>
 		<key>shellVariables</key>
 		<array>
 			<dict>

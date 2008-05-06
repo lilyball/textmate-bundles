@@ -85,7 +85,7 @@ module ProcessTemplate
       from = File.join(dir, expand(key, variables))
       to = File.join(dir, expand(value, variables))
       FileUtils.mv(from, to) if File.exist?(from) &amp;&amp; !File.exist?(to)
-    end
+    end unless plist['FilesToRename'].nil?
 
     src_dir = File.split(template_info).first
     Dir.glob("#{src_dir}/*.*").each do |file|
@@ -99,7 +99,7 @@ module ProcessTemplate
     plist['FilesToMacroExpand'].each do |file|
       variables['FILENAME'] = file
       expand_file(File.join(dir, expand(file, variables)), variables)
-    end
+    end unless plist['FilesToMacroExpand'].nil?
   end
 end
 

@@ -110,34 +110,8 @@
 			</array>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>/\*</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.source.cs</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\*/\n?</string>
-			<key>name</key>
-			<string>comment.block.source.cs</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.source.cs</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(//)(?!/).*$\n?</string>
-			<key>name</key>
-			<string>comment.line.double-slash.source.cs</string>
+			<key>include</key>
+			<string>#comments</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -398,6 +372,42 @@
 							<string>\s*,?([A-Za-z_]\w*)\b</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>/\*</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.source.cs</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\*/\n?</string>
+					<key>name</key>
+					<string>comment.block.source.cs</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.source.cs</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(//).*$\n?</string>
+					<key>name</key>
+					<string>comment.line.double-slash.source.cs</string>
 				</dict>
 			</array>
 		</dict>

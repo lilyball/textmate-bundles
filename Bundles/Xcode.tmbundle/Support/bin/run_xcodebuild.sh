@@ -51,7 +51,7 @@ if [[ -n $TM_BUILDSTYLE ]]; then
 
 	# If we have an Xcode project, and it doesn't contain the build style we're looking for,
 	# accept the active build style in the project.
-	if [[ -d $PROJECT_FILE ]] && xcodebuild -project "$PROJECT_FILE" -list | awk 'display == "yes" { sub(/^[ \t]+/, ""); print }; /^Build styles/ { display = "yes" }' | grep -F "${BUILD_STYLE}" &>/dev/null; then
+	if [[ -d $PROJECT_FILE ]] && xcodebuild -project "$PROJECT_FILE" -list | awk 'display == "yes" { sub(/^[ \t]+/, ""); print }; /Build (styles|Configurations)/ { display = "yes" }' | grep -F "${BUILD_STYLE}" &>/dev/null; then
 		BUILD_STYLE="-$STYLEARGNAME $BUILD_STYLE";
 	else
 		BUILD_STYLE="-active$STYLEARGNAME"

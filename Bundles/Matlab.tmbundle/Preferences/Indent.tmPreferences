@@ -9,16 +9,16 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>^\s*(end|catch|else|elseif|case|otherwise)\b)</string>
+		<string>^\s*\b(end\w*|catch|else|elseif|case|otherwise)\b</string>
 		<key>increaseIndentPattern</key>
-		<string>(?x)^
-    (\s*
-        (function
-        |if|else|elseif
-        |switch|case|otherwise
-        |for|while|
-	   |try
-        ).*$</string>
+		<string>(?x)^\s*
+    \b(
+       function
+       |if|else|elseif
+       |switch|case|otherwise
+       |for|while
+	  |try|catch
+	)\b</string>
 	</dict>
 	<key>uuid</key>
 	<string>2CD1353B-AEC7-4BBF-8061-6038D1E93FA8</string>

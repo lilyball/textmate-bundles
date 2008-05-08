@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>#ifndef _${1:${TM_FILENAME/([. ])|./(?1:_:\u$0)/g}}_
-#define _$1_
+	<string>#ifndef ${1:`uuidgen|tr - _`}
+#define $1
 
 $0
 
-#endif /* _$1_ */
+#endif /* end of include guard */
 </string>
 	<key>name</key>
 	<string>Header Include-Guard</string>

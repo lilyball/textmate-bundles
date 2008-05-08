@@ -8,8 +8,6 @@
 	<string>source.matlab</string>
 	<key>settings</key>
 	<dict>
-		<key>decreaseIndentPattern</key>
-		<string>^\s*(end|else)\b</string>
 		<key>highlightPairs</key>
 		<array>
 			<array>
@@ -29,8 +27,6 @@
 				<string>"</string>
 			</array>
 		</array>
-		<key>increaseIndentPattern</key>
-		<string>^\s*(function|if|else|elseif|switch|while|for|try)\b(?!.*\bend\b).*$</string>
 		<key>shellVariables</key>
 		<array>
 			<dict>
@@ -57,6 +53,10 @@
 			<array>
 				<string>"</string>
 				<string>"</string>
+			</array>
+			<array>
+				<string>'</string>
+				<string>'</string>
 			</array>
 		</array>
 	</dict>

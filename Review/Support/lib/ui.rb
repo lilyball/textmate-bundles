@@ -84,7 +84,6 @@ module TextMate
       
       # Interactive Code Completion Selector
       # Displays the pop-up completion menu with the list of +choices+ provided.
-      # This method will fork execution so that control returns to TextMate.
       # 
       # +choices+ should be an array of dictionaries with the following keys:
       # 
@@ -112,27 +111,26 @@ module TextMate
           STDOUT.reopen(open('/dev/null'))
           STDERR.reopen(open('/dev/null'))
           
-          characters = "a-zA-Z0-9"
-          
           require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
+          characters = "a-zA-Z0-9"
           characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
           
           options[:initial_filter] ||= Word.current_word characters, :left
-          
-          command =  "#{TM_DIALOG} popup --wait"
-          command << " --initial-filter #{e_sh options[:initial_filter]}"
-          command << " --static-prefix #{e_sh options[:static_prefix]}"   if options[:static_prefix]
-          command << " --extra-chars #{e_sh options[:extra_chars]}"       if options[:extra_chars]
-          command << " --case-insensitive"                                if options[:case_insensitive]
 
-          choices = choices.map! {|c| {'display' => c.to_s} } unless choices[0].is_a? Hash
-          plist = {'suggestions' => choices}
+          choices         = choices.map! {|c| {'display' => c.to_s} } unless choices[0].is_a? Hash
+          plist           = {'suggestions' => choices}
           plist['images'] = options[:images] if options[:images]
 
           to_insert = ''
           result    = nil
-          if ENV['DIALOG'] =~ /2$/
+          if ENV['DIALOG'] =~ /2$/ and not ENV['TM_USE_MENU_COMPLETION']
             # If the user has Dialog 2 available we can show the popup
+
+            command =  "#{TM_DIALOG} popup --wait"
+            command << " --initial-filter #{e_sh options[:initial_filter]}"
+            command << " --static-prefix #{e_sh options[:static_prefix]}"   if options[:static_prefix]
+            command << " --extra-chars #{e_sh options[:extra_chars]}"       if options[:extra_chars]
+            command << " --case-insensitive"                                if options[:case_insensitive]
             IO.popen(command, 'w+') do |io|
               io << plist.to_plist
               io.close_write

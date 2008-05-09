@@ -3,14 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>clear('${1:all}'$2);</string>
+	<string>switch ${1:var}
+case ${2:'${3:string}'}
+	$4
+otherwise
+	$5
+end</string>
 	<key>name</key>
-	<string>clear</string>
+	<string>switch … case … otherwise … end</string>
 	<key>scope</key>
 	<string>source.matlab</string>
 	<key>tabTrigger</key>
-	<string>clear</string>
+	<string>switcho</string>
 	<key>uuid</key>
-	<string>B5FEAC12-94C4-4D45-9907-7EE843F09C0D</string>
+	<string>C600A817-A58A-4884-9BDC-F7CB13407CB6</string>
 </dict>
 </plist>

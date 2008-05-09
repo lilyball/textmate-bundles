@@ -9,6 +9,7 @@ Created by Jay Soffian on 2007-03-21.
 import sys
 import os
 import re
+import sqlite3
 
 def usage():
     print "Usage: cookie URL COOKIE_NAME"
@@ -103,6 +104,18 @@ def mozilla_cookie(fname, name, domain, path):
         f.close()
     return cookie.get('Value')
 
+def mozilla3_cookie(fname, name, domain, path):
+    cookie = Cookie(name, domain, path)
+    fields = ('Name', 'Domain', 'Path', 'Value')
+    select = "select name, host, path, value from moz_cookies"
+    con = sqlite3.connect(fname)
+    try:
+        for vals in con.execute(select):
+            cookie.update_maybe(dict(zip(fields, vals)))
+    finally:
+        con.close()
+    return cookie.get('Value')
+
 def get_dispatch(name, domain, path):
     dispatch = []
     home = os.environ['HOME']
@@ -132,6 +145,11 @@ def get_dispatch(name, domain, path):
         if os.path.isfile(fname):
             dispatch.append(
                 lambda fname=fname: mozilla_cookie(fname, name, domain, path)
+            )
+        fname = join(d, 'cookies.sqlite')
+        if os.path.isfile(fname):
+            dispatch.append(
+                lambda fname=fname: mozilla3_cookie(fname, name, domain, path)
             )
     return dispatch
 

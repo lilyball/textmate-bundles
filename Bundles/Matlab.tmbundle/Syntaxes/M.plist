@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>foldingStartMarker</key>
-	<string>^\s*(function|if|switch|while|for|try)\b(?!.*\bend\b).*$</string>
+	<string>^\s*(function|if|switch|while|for|try|unwind_protect)\b(?!.*\bend\b).*$</string>
 	<key>foldingStopMarker</key>
-	<string>^\s*(end|return)\b.*$</string>
+	<string>^\s*(end|endif|endwhile|endswitch|endfunction|end_try_catch|end_unwind_protect|return)\b.*$</string>
 	<key>keyEquivalent</key>
 	<string>^~M</string>
 	<key>name</key>
@@ -219,7 +219,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(all_va_args|clf|endfor|if|break|endfunction|persistent|catch|endif|return|continue|endwhile|try|else|for|unwind_protect|elseif|function|unwind_protect_cleanup|end|global|while|end_try_catch|gplot|end_unwind_protect|gsplot|switch)\b</string>
+			<string>\b(all_va_args|clf|endfor|if|break|endfunction|persistent|catch|endif|return|continue|endwhile|endswitch|try|else|for|unwind_protect|elseif|function|unwind_protect_cleanup|end|global|while|end_try_catch|gplot|end_unwind_protect|gsplot|switch)\b</string>
 			<key>name</key>
 			<string>keyword.other.matlab</string>
 		</dict>

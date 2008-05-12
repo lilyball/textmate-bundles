@@ -3,20 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>if ${1:condition}
+	<string>try 
+	$1
+catch 
 	$0
 `if [[ $TM_USE_OCTAVE -ne '0' ]]
-	then echo "endif"
+	then echo "end_try_catch"
 else
 	echo "end"
 fi`</string>
 	<key>name</key>
-	<string>if … end</string>
+	<string>try … catch … end</string>
 	<key>scope</key>
 	<string>source.matlab</string>
 	<key>tabTrigger</key>
-	<string>if</string>
+	<string>try</string>
 	<key>uuid</key>
-	<string>876FEC4C-FD21-401A-8947-0B2E232E19CA</string>
+	<string>B287F24B-9BC5-4EAB-9621-1E73D367AAB7</string>
 </dict>
 </plist>

@@ -7,8 +7,12 @@
 case ${2:'${3:string}'}
 	$4
 otherwise
-	$5
-end</string>
+	$0
+`if [[ $TM_USE_OCTAVE -ne '0' ]]
+	then echo "endswitch"
+else
+	echo "end"
+fi`</string>
 	<key>name</key>
 	<string>switch … case … otherwise … end</string>
 	<key>scope</key>

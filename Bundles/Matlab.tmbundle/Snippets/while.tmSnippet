@@ -5,7 +5,11 @@
 	<key>content</key>
 	<string>while ${1:condition}
 	$0
-end</string>
+`if [[ $TM_USE_OCTAVE -ne '0' ]]
+	then echo "endwhile"
+else
+	echo "end"
+fi`</string>
 	<key>name</key>
 	<string>while … end</string>
 	<key>scope</key>

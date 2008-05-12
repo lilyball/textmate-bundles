@@ -12,7 +12,16 @@
 %	Created by $TM_FULLNAME on `date +%Y-%m-%d`.
 %	Copyright (c) ${TM_YEAR} ${TM_ORGANIZATION_NAME}. All rights reserved.
 
-$0</string>
+$0
+
+`if [[ $TM_CLOSE_FUNCTIONS -ne '0' ]]
+	then
+	if [[ $TM_USE_OCTAVE -ne '0' ]]
+		then echo "endfunction"
+	else
+		echo "end % function" 
+	fi
+fi`</string>
 	<key>name</key>
 	<string>function</string>
 	<key>scope</key>

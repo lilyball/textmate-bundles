@@ -7,7 +7,11 @@
 	$2
 else
 	$3
-end</string>
+`if [[ $TM_USE_OCTAVE -ne '0' ]]
+	then echo "endif"
+else
+	echo "end"
+fi`</string>
 	<key>name</key>
 	<string>if … else …end</string>
 	<key>scope</key>

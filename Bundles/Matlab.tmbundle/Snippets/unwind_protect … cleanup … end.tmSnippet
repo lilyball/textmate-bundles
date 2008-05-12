@@ -3,20 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>if ${1:condition}
+	<string>unwind_protect 
+	$1
+unwnd_protect_cleanup 
 	$0
-`if [[ $TM_USE_OCTAVE -ne '0' ]]
-	then echo "endif"
-else
-	echo "end"
-fi`</string>
+end_unwind_protect</string>
 	<key>name</key>
-	<string>if … end</string>
+	<string>unwind_protect … cleanup … end</string>
 	<key>scope</key>
 	<string>source.matlab</string>
 	<key>tabTrigger</key>
-	<string>if</string>
+	<string>unwind</string>
 	<key>uuid</key>
-	<string>876FEC4C-FD21-401A-8947-0B2E232E19CA</string>
+	<string>9475371F-F8A7-4C46-BAC9-B42E7E34F2AD</string>
 </dict>
 </plist>

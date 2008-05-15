@@ -218,6 +218,92 @@
 			</array>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>(?x)
+							 (?=function\b) # borrowed from ruby bundle 
+							 (?&lt;=^|\s)(function)\s+ # the function keyword
+							 (?&gt;\[(.*)\])?	# match various different combination of output arguments
+							 ((?&gt;[a-zA-Z_]\w*))?
+							 (?&gt;\s*=\s*)?
+							 ((?&gt;[a-zA-Z_]\w*(?&gt;[?!]|=(?!&gt;))? )) # the function name
+							 (?=[ \t]*[^\s%]) # make sure arguments and not a comment follow
+							\s*(\() # the opening parenthesis for arguments 
+							</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.function.matlab</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.output.function.matlab</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.output.function.matlab</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.matlab</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>variable.parameter.input.function.matlab</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.matlab</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function.with-arguments.matlab</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.function.matlab</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.output.function.matlab</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.output.function.matlab</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.matlab</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?x)
+							 (?=function\b) # borrowed from ruby bundle 
+							 (?&lt;=^|\s)(function)\s+ # the function keyword
+								 (?&gt;\[(.*)\])?	# match various different combination of output arguments
+								 ((?&gt;[a-zA-Z_]\w*))?
+								 (?&gt;\s*=\s*)?
+							 ((?&gt;[a-zA-Z_]\w*(?&gt;[?!]|=(?!&gt;))? )) # the function name
+							</string>
+			<key>name</key>
+			<string>meta.function.without-arguments.matlab</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\b(all_va_args|clf|endfor|if|break|endfunction|persistent|catch|endif|return|continue|endwhile|endswitch|try|else|for|unwind_protect|elseif|function|unwind_protect_cleanup|end|global|while|end_try_catch|gplot|end_unwind_protect|gsplot|switch)\b</string>
 			<key>name</key>

@@ -3,12 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>#ifndef ${1:`uuidgen|tr - _`}
+	<string>#ifndef ${1:`#!/usr/bin/env ruby -wKU -riconv
+name = ENV["TM_FILENAME"] || "untitled"
+name = Iconv.iconv("ASCII//TRANSLIT", "UTF-8", name).first
+name = name.gsub(/[^a-z0-9]+/i, "_")
+uuid = (rand * 2821109907455).round.to_s(36)
+print "#{name}_#{uuid}".tr("[a-z]", "[A-Z]")
+`}
 #define $1
 
 $0
 
-#endif /* end of include guard */
+#endif /* end of include guard: $1 */
 </string>
 	<key>name</key>
 	<string>Header Include-Guard</string>

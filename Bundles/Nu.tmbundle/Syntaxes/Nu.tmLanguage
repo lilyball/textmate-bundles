@@ -282,6 +282,25 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>storage.type.protocol.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(protocol)\s+((\w)*)</string>
+			<key>name</key>
+			<string>meta.protocol.nu</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
 					<string>storage.type.class.nu</string>
 				</dict>
 				<key>2</key>

@@ -14,19 +14,11 @@ require SUPPORT + '/lib/escape'
 require SUPPORT + '/lib/exit_codes'
 require SUPPORT + '/lib/osx/plist'
 
-#Search for
-word = STDIN.read.strip
-TextMate.exit_show_tool_tip("Please select a term to complete.") if word.empty?
+word = "mx:"
+words = `grep "#{word}" "$TM_BUNDLE_PATH/support/data/mx_completions.txt"`.split("\n")
 
-word = "mx:"+word if word !~ /mx/
-
-words = `grep -i "#{word}" "$TM_BUNDLE_PATH/support/data/mx_completions.txt"`.split("\n")
-TextMate.exit_show_tool_tip "No completion available" if words.empty?
-
-if words.size &gt; 1
-    
-	words = words.collect { |e| 
-	    mxmlTag = /mx\:(\w+)(\s(\(\w+\)))?/.match(e)
+words = words.collect { |e| 
+     mxmlTag = /mx\:(\w+)(\s(\(\w+\)))?/.match(e)
 		suffix = " "
 		tag = e
 		if mxmlTag[3] != nil
@@ -34,36 +26,28 @@ if words.size &gt; 1
 			tag = e.sub(mxmlTag[3],'')
 		end
 	    { 'title' =&gt; mxmlTag[1] + suffix, 'data' =&gt; tag } 
-	}
-	plist = { 'menuItems' =&gt; words }.to_plist
-	
-	res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+}
+plist = { 'menuItems' =&gt; words }.to_plist
 
-	TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
-	choice = res['selectedMenuItem']['data']
+res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
 
-else
+TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
+choice = res['selectedMenuItem']['data']
 
-	choice = words.pop
-
-end
-
-print choice
-
-</string>
+print choice</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>
 	<string>selection</string>
-	<key>keyEquivalent</key>
-	<string>~</string>
 	<key>name</key>
-	<string>Auto Complete MX Component</string>
+	<string>mx</string>
 	<key>output</key>
 	<string>insertAsSnippet</string>
 	<key>scope</key>
 	<string>text.xml.mxml</string>
+	<key>tabTrigger</key>
+	<string>mx</string>
 	<key>uuid</key>
-	<string>44EE8C38-BC20-41A2-86D2-82EF987B3010</string>
+	<string>587F82F0-ABFE-4498-ADD1-07457058C284</string>
 </dict>
 </plist>

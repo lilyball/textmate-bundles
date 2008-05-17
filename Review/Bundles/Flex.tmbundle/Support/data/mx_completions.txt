@@ -1,6 +1,6 @@
 # A
 <mx:Accordion ${1:id="$2" }${3:width="$4" }${5:height="$6"}>$0</mx:Accordion>
-<mx:AddChild target="${1:null}" targetFactory="${2:null}" creationPolicy="${3:auto|all|none}" position="${4:before|after|firstChild|lastChild}" relativeTo="${5:null}" />
+<mx:AddChild${1: target="${2:null}"}${3: targetFactory="${4:null}"}${5: creationPolicy="${6:auto|all|none}"}${7: position="${8:before|after|firstChild|lastChild}"}${9: relativeTo="${10:null}"}>$0</mx:AddChild>
 <mx:AnimateProperty id="${1:ID}" property="${2:name}" fromValue="${3:0}" toValue="${4:0}" isStyle="${5:false|true}" roundValue="${6:false|true}"/>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml">$0</mx:Application>
 <mx:ApplicationControlBar ${1:dropShadowEnabled="${2:true}"}>$0</mx:ApplicationControlBar>
@@ -8,10 +8,10 @@
 <mx:ArrayCollection source="${1:null}"/>
 
 # B
-<mx:Box id="${1:bBox}" direction="${2:${3:vertical}${4:|horizontal}}">$0</mx:Box>
-<mx:Button id="${1:btn}" label="${2:label txt}" labelPlacement="${3:right}" click="${4:method(event);}"/>
-<mx:ButtonBar horizontalGap="5" itemClick="${1:clickHandler(event);}">$0</mx:ButtonBar>
 <mx:Binding source="${1:objA.property}" destination="${2:objB.property}" />
+<mx:Box id="${1:bBox}" direction="${2:${3:vertical}${4:|horizontal}}">$0</mx:Box>
+<mx:Button ${1:id="$2" }${3:label="$4" }${5:click="$6" }/>
+<mx:ButtonBar horizontalGap="5" itemClick="${1:clickHandler(event);}">$0</mx:ButtonBar>
 
 # C
 <mx:Canvas ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:Canvas>
@@ -23,8 +23,11 @@
 <mx:CreditCardValidator allowedFormatChars=" -" cardNumberListener="object" cardNumberProperty="no default" cardNumberSource="no default" cardTypeListener="object" cardTypeProperty="no default" cardTypeSource="no default" invalidCharError="message"  invalidNumberError="message" noNumError="message" noTypeError="message" wrongLengthError="message" wrongTypeError="message" />
 
 # D
+<mx:DataGrid id="${1:dgGrid}" rowCount="${2:3}" dataProvider="${3:{employees}}"> </mx:DataGrid>$0
+<mx:DataGridColumn dataField="${1:field}" headerText="${2:Field}"/>$0
 <mx:dataProvider>$0</mx:dataProvider>
 <mx:DateChooser id="dateChooser" yearNavigationEnabled="true" change="clickMethod"/>$0
+<mx:DateField id="${1:dateField}" yearNavigationEnabled="true" change="$2"/>$0
 
 # E
 <mx:entries>$0</mx:entries>
@@ -41,6 +44,7 @@
 
 # H
 <mx:HBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:HBox>
+<mx:HDividedBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:HDividedBox>
 <mx:HorizontalList ${1:width="${2:100%}" }${3:height="$4" }${5:dataProvider="$6" }${7:change="$8"}>$0</mx:HorizontalList>
 <mx:HRule ${1:width="${2:100%}" }${3:strokeColor="${4:0xC4CCCC}" }${5:shadowColor="${6:0xEEEEEE}" }${7:strokeWidth="${8:1}" }/>
 <mx:HSlider liveDragging="${1:false|true}" minimum="$2" maximum="$3" showDataTip="${4:true|false}" value="$5" change="$6" />
@@ -50,11 +54,11 @@
 
 # L
 <mx:Label id="${1:lLabel}" text="${2:label text}"/>$0
-<mx:List ${1:width="${2:100%}" }${3:height="$4" }${5:dataProvider="$6" }${7:change="$8"}>$0</mx:List>
-<mx:ListCollectionView ${1:filterFunction="null"} ${2:list="null"} ${3:sort="null"} ${4:collectionChange="method(event)"} />
 <mx:LinearGradient>$0</mx:LinearGradient>
 <mx:LinkBar ${1:id="$2" }${3:width="${4:100%}" }${5:itemClick="$6"}>$0</mx:LinkBar>
 <mx:LinkButton ${1:id="$2" }${3:label="$4" }${5:click="$6" }/>
+<mx:List ${1:width="${2:100%}" }${3:height="$4" }${5:dataProvider="$6" }${7:change="$8"}>$0</mx:List>
+<mx:ListCollectionView ${1:filterFunction="null"} ${2:list="null"} ${3:sort="null"} ${4:collectionChange="method(event)"} />
 
 # M
 <mx:MenuBar dataDescriptor="$1" dataProvider="$2" showRoot="${3:true|false}" itemClick="$4" />
@@ -75,15 +79,15 @@
 <mx:ProgressBar ${1:id="$2" }${3:labelPlacement="${4:left|right|top|bottom}" }${5:minimum="${6:0}" }${7:maximum="${8:100}" }${9:label="${10:Loading: %3%%}" }${11:mode="${12:event|manual|polled}" }${13:width="${14:100%}" }/>
 
 # R
-<mx:RadioButtonGroup ${1:id="$2" }${3:itemClick="$4" }/>
-<mx:RemoveChild target="{${1:sprite}}" />
-<mx:RegExpValidator expression="${1:regex}" ${2:flags="${3:regexFlags}"} ${4:noExpressionError="${5:error message}"} ${6:noMatchError="${5:no match message}"} />
 <mx:RadialGradient angle="${1:0}" foculPointRatio="${2:0}" />
+<mx:RadioButtonGroup ${1:id="$2" }${3:itemClick="$4" }/>
+<mx:RegExpValidator expression="${1:regex}" ${2:flags="${3:regexFlags}"} ${4:noExpressionError="${5:error message}"} ${6:noMatchError="${5:no match message}"} />
+<mx:RemoveChild target="{${1:sprite}}" />
 <mx:Repeater id="${1:repId}" dataProvider="{ ${2:data} }" ${3:recycleChildren="${4:false|true}"}>$0</mx:Repeater>
 
 # S
-<mx:Script source="${1:filename}"/>
 <mx:Script><![CDATA[ $0 ]]></mx:Script>
+<mx:Script (external)source="${1:filename}"/>
 <mx:Sequence id="$1"></mx:Sequence>
 <mx:SetEventHandler name="${1:null}" handlerFunction="${2:null}" target="${3:null}" handler="$4" />
 <mx:SetProperty target="$1" name="$2" value="$3" />
@@ -111,13 +115,13 @@
 <mx:Validator enabled="${1:true|false}" listener="null" property="null" required="true|false" requiredFieldError="This field is required." source="No default" trigger="Value of the source property" triggerEvent="valueCommit" />
 <mx:VBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:VBox>
 <mx:VDividedBox ${1:id="$2" }${3:label="$4" }${5:width="$6" }${7:height="$8"}>$0</mx:VDividedBox>
-<mx:VSlider liveDragging="${1:false|true}" minimum="$2" maximum="$3" showDataTip="${4:true|false}" value="$5" change="$6" />
 <mx:ViewStack historyManagementEnabled="${1:false|true}" resizeToContent="${2:false|true}"  selectedIndex="${3:0}" change="${4:method(event)}" >$0</mx:ViewStack>
 <mx:VRule ${1:width="${2:100%}" }${3:strokeColor="${4:0xC4CCCC}" }${5:shadowColor="${6:0xEEEEEE}" }${7:strokeWidth="${8:1}" }/>
-
+<mx:VSlider liveDragging="${1:false|true}" minimum="$2" maximum="$3" showDataTip="${4:true|false}" value="$5" change="$6" />
 
 # X
 <mx:XML id="${1:modelId}" format="${2:e4x|xml}" source="${3:filename}" xmlns="${4:namespace}">$0</mx:XML>
+<mx:XML (external)${1:id="${2:modelId}" }${3:format="${4:e4x}${5:|xml}" }source="$6" xmlns="${7:namspace}"/>$0
 <mx:XMLListCollection source="${1:null}" />
 
 # Z

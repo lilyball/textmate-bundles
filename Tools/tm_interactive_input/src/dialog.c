@@ -53,6 +53,8 @@ CFDictionaryRef create_input_dictionary() {
     CFDictionaryAddValue(parameters, CFSTR("prompt"), dialog_prompt);
     CFRelease(dialog_prompt);
 
+    CFDictionaryAddValue(parameters, CFSTR("string"), CFSTR(""));
+
     CFDictionaryAddValue(parameters, CFSTR("button1"), CFSTR("Send"));
     CFDictionaryAddValue(parameters, CFSTR("button2"), CFSTR("Send EOF"));
 

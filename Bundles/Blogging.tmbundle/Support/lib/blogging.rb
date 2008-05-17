@@ -275,10 +275,13 @@ TEXT
 
     date_created = DateTime.parse(@headers['date']) if @headers['date']
     if date_created && self.mode != 'mt' then
-      # Convert to GMT and then to an XMLRPC:DateTime object to
-      # workaround xmlrpc/create.rb’s poor handling of DateTime.
+      # We manually create an XMLRPC:DateTime object because
+      # xmlrpc/create.rb (prior to 2007-02-23 = Tiger version)
+      # will not include the time part of the DateTime object
+      d = date_created
+      @post['dateCreated']      = XMLRPC::DateTime.new(d.year, d.mon, d.day, d.hour, d.min, d.sec)
       d = date_created.new_offset(0)
-      @post['dateCreated'] = XMLRPC::DateTime.new(d.year, d.mon, d.day, d.hour, d.min, d.sec)
+      @post['date_created_gmt'] = XMLRPC::DateTime.new(d.year, d.mon, d.day, d.hour, d.min, d.sec)
     end
 
     if self.mode == 'mt'
@@ -425,10 +428,14 @@ TEXT
     end
     doc << "Format: #{self.post['mt_convert_breaks']}\n" if self.post['mt_convert_breaks']
 
-    # Convert XMLRPC:DateTime to a regular DateTime object so
-    # that we can show the date using the users local time zone.
-    d = DateTime.civil(*self.post['dateCreated'].to_a)
-    doc << d.new_offset(DateTime.now.offset).strftime("Date: %F %T %z") + "\n"
+    if self.post.has_key? 'date_created_gmt'
+      d = DateTime.civil(*self.post['date_created_gmt'].to_a)
+      d = d.new_offset(DateTime.now.offset)
+      doc << d.strftime("Date: %F %T %z") + "\n"
+    elsif self.post.has_key? 'dateCreated'
+      d = DateTime.civil(*(self.post['dateCreated'].to_a << DateTime.now.offset))
+      doc << d.strftime("Date: %F %T %z") + "\n"
+    end
 
     if self.post['mt_allow_pings'] && (self.post['mt_allow_pings'] == 1)
       doc << "Pings: On\n"

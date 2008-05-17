@@ -99,3 +99,29 @@ int close(int);int close(int fd) {
     if (tm_interactive_input_is_active()) stdin_fd_tracker_did_close(fd);
     return res;
 }
+
+int select(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
+
+    int tm_fds = stdin_fd_tracker_count_tm_stdin_in_fd_set(readfds);
+
+    if (tm_fds > 0)
+        return tm_fds;
+    else
+        return syscall(SYS_select, nfds, readfds, writefds, errorfds, timeout);
+}
+
+int select_darwinextsn(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
+    return select(nfds, readfds, writefds, errorfds, timeout);
+}
+
+int select_darwinextsn_nocancel(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
+    return select(nfds, readfds, writefds, errorfds, timeout);
+}
+
+int select_nocancel_unix2003(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
+    return select(nfds, readfds, writefds, errorfds, timeout);
+}
+
+int select_unix2003(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
+    return select(nfds, readfds, writefds, errorfds, timeout);
+}

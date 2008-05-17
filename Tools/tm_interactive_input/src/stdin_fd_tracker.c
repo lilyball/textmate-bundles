@@ -1,6 +1,7 @@
 #include "stdin_fd_tracker.h"
 #include "intset.h"
 #include "debug.h"
+#include "textmate.h"
 #include <pthread.h>
 
 pthread_mutex_t storage_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -41,4 +42,22 @@ void stdin_fd_tracker_did_close(int target) {
         remove_from_intset(fds, target);
     }
     pthread_mutex_unlock(&storage_mutex);
+}
+
+int stdin_fd_tracker_count_tm_stdin_in_fd_set(fd_set *fds __restrict) {
+    pthread_mutex_lock(&storage_mutex);
+    intset_t* storage = get_storage();
+    int count = 0;
+
+    int i;
+    for (i = 0; i < intset_size(storage); ++i) {
+        int fd = intset_get(storage, i);
+        if (FD_ISSET(fd, fds)) 
+            if (fd_is_owned_by_tm(fd))
+                ++count;
+    }
+    
+    pthread_mutex_unlock(&storage_mutex);
+    
+    return count;
 }

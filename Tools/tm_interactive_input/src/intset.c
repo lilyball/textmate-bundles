@@ -77,3 +77,12 @@ bool intset_contains(intset_t* set, int target) {
     }
     return false;
 }
+
+size_t intset_size(intset_t* set) {
+    return set->size;
+}
+
+int intset_get(intset_t* set, ssize_t i) {
+    if (i < 0 || (i + 1) > set->size) die("%d is out of range (size = %d)", i, set->size);
+    return set->ints[i];
+}

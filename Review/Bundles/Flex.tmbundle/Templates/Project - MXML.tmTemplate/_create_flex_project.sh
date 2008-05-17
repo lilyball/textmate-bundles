@@ -71,7 +71,7 @@ if [ -n "$fullProjectPath" ]; then
 		export TM_DATE=`date "+%d.%m.%Y"`;
 
 		# Customise file variables for the new project and rename files to match the project name
-		perl -pe 's/\%\{([^}]*)\}/$ENV{$1}/g' < "actionScriptProperties.xml" > "$projectPath/$projectName/.actionScriptProperties";
+		# perl -pe 's/\%\{([^}]*)\}/$ENV{$1}/g' < "actionScriptProperties.xml" > "$projectPath/$projectName/.actionScriptProperties";
 		perl -pe 's/\%\{([^}]*)\}/$ENV{$1}/g' < "build.xml" > "$projectPath/$projectName/build/build.xml";
 		perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' < "compile.sh" > "$projectPath/$projectName/build/compile.sh";
 		perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' < "index.html" > "$projectPath/$projectName/deploy/index.html";
@@ -79,7 +79,7 @@ if [ -n "$fullProjectPath" ]; then
 		perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' < "Project-config.xml" > "$projectPath/$projectName/src/$projectName-config.xml";
 		perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' < "Project.mxml" > "$projectPath/$projectName/src/$projectName.mxml";
 		perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' < "Project.tmproj.xml" > "$projectPath/$projectName/$projectName.tmproj";
-		perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' < "project.xml" > "$projectPath/$projectName/.project";
+		# perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' < "project.xml" > "$projectPath/$projectName/.project";
 		perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' < "window_close.js" > "$projectPath/$projectName/deploy/_assets/js/window_close.js";
 		
 		# cp for run project command compatibility
@@ -88,8 +88,8 @@ if [ -n "$fullProjectPath" ]; then
 		#Copy static files.
 		#cp "asdoc.sh" "$projectPath/$projectName/build/asdoc.sh";
 		cp "app_style.css" "$projectPath/$projectName/library/css/app_style.css";
-		cp "flexProperties.xml" "$projectPath/$projectName/.flexProperties"
-		cp "org.eclipse.core.resources.prefs" "$projectPath/$projectName/.settings/org.eclipse.core.resources.prefs"
+		# cp "flexProperties.xml" "$projectPath/$projectName/.flexProperties"
+		# cp "org.eclipse.core.resources.prefs" "$projectPath/$projectName/.settings/org.eclipse.core.resources.prefs"
 		
 		cp "AC_OETags.js" "$projectPath/$projectName/deploy/_assets/js/AC_OETags.js";
 		cp "history.htm" "$projectPath/$projectName/deploy/_assets/html/history.htm";

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -19,26 +19,30 @@
 		<dict>
 			<key>begin</key>
 			<string>(?&lt;=&lt;mx:Script&gt;)|(?&lt;=&lt;Script&gt;)</string>
+			<key>contentName</key>
+			<string>source.actionscript.3.embedded.mxml</string>
 			<key>end</key>
 			<string>(?=&lt;/mx:Script&gt;)|(?=&lt;/Script&gt;)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#script-stuff</string>
+					<string>#scriptStuff</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
 			<string>(?&lt;=&lt;mx:Metadata&gt;)|(?&lt;=&lt;Metadata&gt;)</string>
+			<key>contentName</key>
+			<string>source.actionscript.3.embedded.mxml</string>
 			<key>end</key>
 			<string>(?=&lt;/mx:Metadata&gt;)|(?=&lt;/Metadata&gt;)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#script-stuff</string>
+					<string>#scriptStuff</string>
 				</dict>
 			</array>
 		</dict>
@@ -224,42 +228,10 @@
 			<key>name</key>
 			<string>string.quoted.double.xml.mxml</string>
 		</dict>
-		<key>script-stuff</key>
-		<dict>
-			<key>begin</key>
-			<string>&lt;!\[CDATA\[</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>string.unquoted.cdata.xml.mxml punctuation.definition.string.begin.xml.mxml</string>
-				</dict>
-			</dict>
-			<key>contentName</key>
-			<string>source.actionscript.3.embedded.mxml</string>
-			<key>end</key>
-			<string>\]\]&gt;</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>string.unquoted.cdata.xml.mxml punctuation.definition.string.end.xml.mxml</string>
-				</dict>
-			</dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>source.actionscript.3</string>
-				</dict>
-			</array>
-		</dict>
 		<key>scriptBinding</key>
 		<dict>
 			<key>begin</key>
-			<string>"{</string>
+			<string>"\s*{</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -271,13 +243,43 @@
 			<key>contentName</key>
 			<string>source.actionscript.3.embedded.binding.mxml</string>
 			<key>end</key>
-			<string>}"</string>
+			<string>}\s*"</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.binding.end.mxml</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.actionscript.3</string>
+				</dict>
+			</array>
+		</dict>
+		<key>scriptStuff</key>
+		<dict>
+			<key>begin</key>
+			<string>&lt;!\[CDATA\[</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.cdata.xml.mxml punctuation.definition.string.begin.xml.mxml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\]\]&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.cdata.xml.mxml punctuation.definition.string.end.xml.mxml</string>
 				</dict>
 			</dict>
 			<key>patterns</key>

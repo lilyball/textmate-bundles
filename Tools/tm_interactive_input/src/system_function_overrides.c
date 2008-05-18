@@ -101,19 +101,16 @@ int close(int);int close(int fd) {
 }
 
 int select(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
-
-    fd_set orig_readfds;
-
-    // FD_COPY should do this for us, but it caused problems when I tried it.
-    int i;
-    for (i = 0; i < nfds; ++i) {
-        if (FD_ISSET(i, readfds)) {
-            FD_SET(i, &orig_readfds);
-        }
+    if (readfds == NULL) {
+        return syscall(SYS_select, nfds, readfds, writefds, errorfds, timeout);
+    } else {
+        fd_set orig_readfds;
+        FD_ZERO(&orig_readfds);
+        FD_COPY(readfds, &orig_readfds);
+        
+        int fd_count = syscall(SYS_select, nfds, readfds, writefds, errorfds, timeout);
+        return fd_count + stdin_fd_tracker_inspect_select_readfds(nfds, &orig_readfds, readfds);
     }
-    
-    int fd_count = syscall(SYS_select, nfds, readfds, writefds, errorfds, timeout);
-    return fd_count + stdin_fd_tracker_inspect_select_readfds(nfds, &orig_readfds, readfds);
 }
 
 int select_darwinextsn(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {

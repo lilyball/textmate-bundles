@@ -74,7 +74,7 @@ if [ ! -z "$TM_DIRECTORY" ]; then
 fi
 
 #send task to Rdaemon and give Rdaemon the chance to read from the pipe
-echo "$TASK" | sed 's/\\n/\\\\n/g' | while read LINE
+echo "$TASK" | sed 's/\\/\\\\/g' | while read LINE
 do
 	echo -e "@|$LINE" &gt; "$RDHOME"/r_in
 	sleep 0.002

@@ -1,3 +1,5 @@
+require 'spec/runner/formatter/html_formatter'
+
 module Spec
   module Runner
     module Formatter

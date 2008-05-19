@@ -8,6 +8,9 @@ elsif ENV['TM_RSPEC_HOME']
   rspec_lib = File.join(ENV['TM_RSPEC_HOME'], 'lib')
   raise "TM_RSPEC_HOME points to a bad location: #{ENV['TM_RSPEC_HOME']}" unless File.directory?(rspec_lib)
   $LOAD_PATH.unshift(rspec_lib)
+else
+  # assume it's a gem
+  gem 'rspec', '>= 1.1.0'
 end
 
 require 'spec'
@@ -44,7 +47,7 @@ class SpecMate
     end
     argv += ENV['TM_RSPEC_OPTS'].split(" ") if ENV['TM_RSPEC_OPTS']
     Dir.chdir(ENV['TM_PROJECT_DIRECTORY']) do
-      ::Spec::Runner::CommandLine.run(argv, STDERR, stdout, false, true)
+      ::Spec::Runner::CommandLine.run(Spec::Runner::OptionParser.parse(argv, STDERR, stdout))
     end
   end
 end

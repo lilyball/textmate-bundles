@@ -22,13 +22,13 @@
 			<string>(?ix)
 			^\s*	# Start of the line with optional preceding space
 			(?:	# Either a control flow keyword
-				((?:end)?(?:if|while|foreach)|return)
+				((?:end)?(?:if|while|foreach|else)|return)
 				|	# Or a function
 				(s(?:tring|ite_name|ource_group|ubdir(?:s|_depends)|e(?:t(?:_(?:source_files_properties|t(?:ests_properties|arget_properties)|directory_properties|property))?|parate_arguments))|c(?:onfigure_file|reate_test_sourcelist|make(?:_(?:policy|minimum_required)| version 2.6-patch 0))|t(?:arget_link_libraries|ry_(?:compile|run))|i(?:n(?:stall(?:_(?:targets|programs|files))?|clude(?:_(?:directories|external_msproject|regular_expression))?)|f)|o(?:utput_required_files|ption)|define_property|u(?:se_mangled_mesa|tility_source)|project|e(?:n(?:d(?:if|f(?:oreach|unction)|while|macro)|able_(?:testing|language))|lse(?:if)?|x(?:port(?:_library_dependencies)?|ec(?:_program|ute_process)))|variable_(?:watch|requires)|qt_wrap_(?:cpp|ui)|f(?:i(?:nd_(?:p(?:a(?:ckage|th)|rogram)|file|library)|le)|oreach|unction|ltk_wrap_ui)|w(?:hile|rite_file)|l(?:i(?:st|nk_(?:directories|libraries))|oad_c(?:ommand|ache))|a(?:dd_(?:subdirectory|custom_(?:command|target)|test|de(?:pendencies|finitions)|executable|library)|ux_source_directory)|re(?:turn|move(?:_definitions)?)|get_(?:source_file_property|cmake_property|t(?:est_property|arget_property)|directory_property|property|filename_component)|m(?:essage|a(?:cro|th|ke_directory|rk_as_advanced))|b(?:uild_(?:name|command)|reak))
 				|	# Or some function we don’t know about
 				(\w+)
 			)
-			(\()	# Finally, the opening parenthesis for the argument list
+			\s*(\()	# Finally, the opening parenthesis for the argument list
 			</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -107,7 +107,7 @@
 		<key>constants</key>
 		<dict>
 			<key>match</key>
-			<string>(?i)FALSE|OFF|NO|\w+-NOTFOUND</string>
+			<string>(?i)\b(FALSE|OFF|NO|\w+-NOTFOUND)\b</string>
 			<key>name</key>
 			<string>constant.language.boolean.cmake</string>
 		</dict>
@@ -190,7 +190,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(\$\{)\w+(\})</string>
+			<string>(\$(ENV)?\{)\w+(\})</string>
 			<key>name</key>
 			<string>variable.cmake</string>
 		</dict>

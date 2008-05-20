@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -44,13 +44,13 @@ The "R Console (R.app)" bundle provides some commands to remote the Mac OSX GUI 
     All commands specified within the "R" bundle can be used.
     &lt;/blockquote&gt;
     &lt;blockquote&gt;
-    If the "Rdaemon" also runs in the background and the library "CarbonEL" is loaded the communication between TextMate and R.app wont't work.
+    If the "Rdaemon" also runs in the background and the library "CarbonEL" (R 2.6.x) or RQuartz (R 2.7.x) is loaded the communication between TextMate and R.app wont't work caused by the issue that the event loop handler (R 2.6.x) resp. the RQuartz window handler (R 2.7.x) has the same name "R".
     &lt;/blockquote&gt;
 
 
 # Main Bundle Maintainer
 
-***Date: Jan 09 2008***
+***Date: Mai 20 2008***
 
 &lt;pre&gt;
 -  Charilaos Skiadas&amp;nbsp;&lt;a href="mailto:cskiadas@gmail.com"&gt;cskiadas@gmail.com&lt;/a&gt;

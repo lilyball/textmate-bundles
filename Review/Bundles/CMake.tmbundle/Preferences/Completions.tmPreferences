@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Completions</string>
+	<key>scope</key>
+	<string>source.cmake</string>
+	<key>settings</key>
+	<dict>
+		<key>completionCommand</key>
+		<string>
+	# Commands are by convention written in all uppercase, but the command list is given in lowercase,
+	# so we print both to enable people to use either
+	# The first line is always the CMake executable version, so it gets stripped off
+	cmake --help-command-list | tail -n+2 | tee &gt;(tr "[a-z]" "[A-Z]") | grep "^$TM_CURRENT_WORD"
+	</string>
+	</dict>
+	<key>uuid</key>
+	<string>E60C579C-BEE8-4C0F-8FA3-0F9E1A851154</string>
+</dict>
+</plist>

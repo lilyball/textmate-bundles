@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+
+WORD=`tr 'a-z' 'A-Z' &lt;&lt;&lt;"${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}"`
+
+html_header "Documentation for $WORD"
+"${TM_CMAKE:-cmake}" --help-command "$WORD" | pre
+html_footer
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation For Word / Selection</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.cmake</string>
+	<key>uuid</key>
+	<string>6AA1ED0A-6E0F-48EC-965C-D57AD98A100B</string>
+</dict>
+</plist>

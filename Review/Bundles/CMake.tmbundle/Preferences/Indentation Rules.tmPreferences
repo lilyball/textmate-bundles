@@ -9,9 +9,17 @@
 	<key>settings</key>
 	<dict>
 		<key>decreaseIndentPattern</key>
-		<string>(?i)end(if|foreach|while)|else</string>
+		<string>(?xi)
+	    \b end(function|macro|if|foreach|while) \b
+	 |  \b else(if)? \b
+	 |  ^ [^(]* \) \s* $
+	</string>
 		<key>increaseIndentPattern</key>
-		<string>(?i)(if|foreach|while|else)</string>
+		<string>(?xi)
+	    \b (function|macro|if|foreach|while) \b
+	 |  \b else(if)? \b
+	 |  \( [^)]* $
+	</string>
 	</dict>
 	<key>uuid</key>
 	<string>D58FED93-633B-4C26-89C1-53198843416A</string>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>MACRO(${1:MACRO_NAME}${2/(.+)/(?1: )/}${2:arg1})
+	$0
+ENDMACRO()</string>
+	<key>name</key>
+	<string>Macro … EndMacro</string>
+	<key>scope</key>
+	<string>source.cmake</string>
+	<key>tabTrigger</key>
+	<string>mac</string>
+	<key>uuid</key>
+	<string>DA433498-38DE-4E5D-B3DA-64D8F793CECB</string>
+</dict>
+</plist>

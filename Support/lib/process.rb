@@ -90,7 +90,6 @@ module TextMate
         }
 
         options.merge! cmd.pop if cmd.last.is_a? Hash
-        Integer
 
         io = []
         3.times { io << ::IO::pipe }

@@ -3,6 +3,7 @@ require SUPPORT_LIB + 'escape'
 require SUPPORT_LIB + 'web_preview'
 require SUPPORT_LIB + 'process'
 
+require 'shellwords'
 require 'cgi'
 require 'fcntl'
 
@@ -132,7 +133,8 @@ class UserScript
       stack_rd.fcntl(Fcntl::F_SETFD, 1)
       ENV['TM_ERROR_FD'] = stack_wr.to_i.to_s
 
-      cmd = filter_cmd([executable, args, @path, ARGV.to_a].flatten)
+      exe = @hashbang.nil? ? executable : Shellwords.shellwords(@hashbang)
+      cmd = filter_cmd([exe, args, @path, ARGV.to_a].flatten)
       input = (@write_content_to_stdin and @path == '-') ? @content : nil
       TextMate::Process.run(cmd, :echo => echo, :input => input, :env => env, :granularity => granularity, &block)
 

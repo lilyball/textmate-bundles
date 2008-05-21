@@ -1,9 +1,8 @@
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'escape'
 require SUPPORT_LIB + 'web_preview'
-require SUPPORT_LIB + 'process'
+require SUPPORT_LIB + 'io'
 
-require 'shellwords'
 require 'cgi'
 require 'fcntl'
 
@@ -12,9 +11,51 @@ require 'jcode'
 
 $SCRIPTMATE_VERSION = "$Revision$"
 
+def my_popen3(*cmd) # returns [stdin, stdout, strerr, pid]
+  pw = IO::pipe   # pipe[0] for read, pipe[1] for write
+  pr = IO::pipe
+  pe = IO::pipe
+  
+  # F_SETOWN = 6, ideally this would be under Fcntl::F_SETOWN
+  pw[0].fcntl(6, ENV['TM_PID'].to_i) if ENV.has_key? 'TM_PID'
+  
+  pid = fork{
+    pw[1].close
+    STDIN.reopen(pw[0])
+    pw[0].close
+
+    pr[0].close
+    STDOUT.reopen(pr[1])
+    pr[1].close
+
+    pe[0].close
+    STDERR.reopen(pe[1])
+    pe[1].close
+
+    tm_interactive_input = SUPPORT_LIB + '/tm_interactive_input.dylib'
+    if (File.exists? tm_interactive_input) 
+      dil = ENV['DYLD_INSERT_LIBRARIES']
+      ENV['DYLD_INSERT_LIBRARIES'] = (dil) ? "#{tm_interactive_input}:#{dil}" : tm_interactive_input unless (dil =~ /#{tm_interactive_input}/)
+      ENV['DYLD_FORCE_FLAT_NAMESPACE'] = "1"
+      ENV['TM_INTERACTIVE_INPUT'] = 'AUTO|ECHO'
+    end
+    
+    exec(*cmd)
+  }
+
+  pw[0].close
+  pr[1].close
+  pe[1].close
+
+  pw[1].sync = true
+
+  [pw[1], pr[0], pe[0], pid]
+end
+
 def cmd_mate(cmd)
-  # cmd can be either a string or a list of strings to be passed to TextMate::Process.run()
-  # this command will write the output of the `cmd` on STDOUT, formatted in HTML.
+  # cmd can be either a string or a list of strings to be passed to Popen3
+  # this command will write the output of the `cmd` on STDOUT, formatted in
+  # HTML.
   c = UserCommand.new(cmd)
   m = CommandMate.new(c)
   m.emit_html
@@ -25,9 +66,9 @@ class UserCommand
   def initialize(cmd)
     @cmd = cmd
   end
-  def run(&block)
-    TextMate::Process.run(@cmd, :echo => true, &block)
-    ""
+  def run
+    stdin, stdout, stderr, pid = my_popen3(@cmd)
+    return stdout, stderr, nil, pid
   end
   def to_s
     @cmd.to_s
@@ -37,10 +78,7 @@ end
 class CommandMate
     def initialize (command)
       # the object `command` needs to implement a method `run`.  `run` should
-      # accept a 2 argument block, where the first arg is a chunk of output and the 
-      # second arg specifies whether the output came from stdout (:out) or stderr (:err).
-      # It can optionally return HTML to be output after the command has terminated 
-      # (e.g. a stacktrace)
+      # return an array of three file descriptors [stdout, stderr, stack_dump].
       @error = ""
       @command = command
       STDOUT.sync = true
@@ -65,14 +103,28 @@ class CommandMate
     end
   public
     def emit_html
+      stdout, stderr, stack_dump, @pid = @command.run
+      %w[INT TERM].each do |signal|
+        trap(signal) do
+          begin
+            Process.kill("KILL", @pid)
+            sleep 0.5
+            Process.kill("TERM", @pid)
+          rescue
+            # process doesn't exist anymore
+          end
+        end
+      end
       emit_header()
-      @error = @command.run do |str, type|
+      TextMate::IO.exhaust(:out => stdout, :err => stderr, :stack => stack_dump) do |str, type|
         case type
           when :out   then print filter_stdout(str)
           when :err   then puts filter_stderr(str)
+          when :stack then @error << str
         end
       end
       emit_footer()
+      Process.waitpid(@pid)
     end
 end
 
@@ -110,36 +162,23 @@ class UserScript
     end
     def filter_cmd(cmd)
       # this method is called with this list:
-      #     [executable, args, @path, ARGV.to_a ].flatten
+      #     [executable, args, e_sh(@path), ARGV.to_a ].flatten
       cmd
     end
     def version_string
       # return the version string of the executable.
     end
-    def env
-      # return a hash of environment variables to set for the process
-      nil
-    end
-    def granularity
-      # return an output buffer size, or :line for line by line output
-      :line
-    end
-    def echo
-      # Return whether any interactive input will be echoed to the output or not
-      true
-    end
-    def run(&block)
-      stack_rd, stack_wr = IO.pipe
-      stack_rd.fcntl(Fcntl::F_SETFD, 1)
-      ENV['TM_ERROR_FD'] = stack_wr.to_i.to_s
-
-      exe = @hashbang.nil? ? executable : Shellwords.shellwords(@hashbang)
-      cmd = filter_cmd([exe, args, @path, ARGV.to_a].flatten)
-      input = (@write_content_to_stdin and @path == '-') ? @content : nil
-      TextMate::Process.run(cmd, :echo => echo, :input => input, :env => env, :granularity => granularity, &block)
-
-      stack_wr.close
-      stack_rd.read
+    def run
+      rd, wr = IO.pipe
+      rd.fcntl(Fcntl::F_SETFD, 1)
+      ENV['TM_ERROR_FD'] = wr.to_i.to_s
+      cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten)
+      stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
+      if @write_content_to_stdin
+        Thread.new { stdin.write @content; stdin.close } if @path == "-"
+      end
+      wr.close
+      [ stdout, stderr, rd, pid ]
     end
 end
 

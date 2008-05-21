@@ -4,13 +4,13 @@
 <dict>
 	<key>content</key>
 	<string>function ${1:Output variables} = ${2:functionName}(${3:Input variables})
-% ${2/.*/\U$0/}   ${4:Short description}
-%		[${1/.*/\U$0/}] = ${2/.*/\U$0/}(${6:${3/.*/\U$0/}})
-%
-%	${5:Long description}
-%	
-%	Created by $TM_FULLNAME on `date +%Y-%m-%d`.
-%	Copyright (c) ${TM_YEAR} ${TM_ORGANIZATION_NAME}. All rights reserved.
+$TM_COMMENT_START	${2/.*/\U$0/}   ${4:Short description}
+$TM_COMMENT_START		[${1/.*/\U$0/}] = ${2/.*/\U$0/}(${6:${3/.*/\U$0/}})
+$TM_COMMENT_START
+$TM_COMMENT_START	${5:Long description}
+$TM_COMMENT_START	
+$TM_COMMENT_START	Created by $TM_FULLNAME on `date +%Y-%m-%d`.
+$TM_COMMENT_START	Copyright (c) ${TM_YEAR} ${TM_ORGANIZATION_NAME}. All rights reserved.
 
 $0
 
@@ -19,7 +19,7 @@ $0
 	if [[ $TM_USE_OCTAVE -ne '0' ]]
 		then echo "endfunction"
 	else
-		echo "end % function" 
+		echo "end $TM_COMMENT_START function" 
 	fi
 fi`</string>
 	<key>name</key>

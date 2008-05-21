@@ -8,3 +8,7 @@ function aa = test
 % at least it's detected as a function!
 function bb = test3 ...
 	(a, b, c)
+
+% Octave style testing:
+function test_neither_hash # comment
+function [a, b, c] = test_both_hash(a, b, c) # Both input and output arguments

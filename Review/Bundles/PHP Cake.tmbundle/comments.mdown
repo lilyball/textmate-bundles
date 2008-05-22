@@ -1,22 +1,9 @@
-# PHP Cake Bundle Comments – Infininight (msheets)
+# PHP Cake Bundle Comments
 
-- No reason to duplicate the paste online feature, should be removed in favor of the one in the Textmate bundle.
-- Lookup in API's key equivalent isn't correct, ideally documentation is ⌃H but that would override the main PHP one, so try ⌃⌥H.
-- A few snippets still have the trigger in parens, no longer needed.
-- Snippet scopes are too loose, many being active in any HTML file. Seems this was a known issue as the snippet triggers seem designed to be hard to type by accident? Will get to scope issues later…
-- echo snippet has an unescaped stray $ (Ditto with debug snippet).
-- Many of the snippets end with $0, this is the default so not needed. Not hurting anything, just fyi.
-- Seems to be a couple stray, unorganized items at the bottom of the menu.
-- Admin_index.thtml snippet should perhaps be a template?
-- Grammar claims the 'thtml' extension, probably a bit presumptuous as other languages use thtml as well.
-- Need to copy the foldingStartMarker/foldingStopMarker verbatim from the HTML grammar, much better that the ones present now.
+## Infininight (msheets) - 2008-05-20
 
-### Grammar Issues
-
-The grammar seems pretty broken, other than giving the file the incorrect scope of source.php.cake it can't match anything because where all the rules would be your already in PHP mode and the rules are no longer active…
-
-This is really an issue with the design of the PHP/HTML grammars that I'm hoping to rectify soon. For now the best you can do is basically a grammar that gives a scope of "text.html.php.cake" and then just includes the grammar "text.html". Since it includes the PHP grammar that's all you need.
-
-This also gives a unique scope for all the snippets and such to target. Either "text.html.php.cake" or "text.html.php.cake source.php". Later on we can reintroduce the highlighting of the specific functions and such.
+* "function onError" snippet missing tab inside brackets (and a tab stop?).
+* Scope of the three commands is too broad. Should just be text.html.php.cake.
+* Shortcut of Cookbook and Browse Source commands is non-standard. Secondary help is typically ⌃⇧H
 
 ---

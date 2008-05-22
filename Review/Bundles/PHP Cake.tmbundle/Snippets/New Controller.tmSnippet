@@ -1,62 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;?php
-/** \brief  ${2:undocumented class}
-	
-	&amp;copy; Copyright `date +%Y` `echo $TM_ORGANIZATION_NAME` - `echo $TM_AUTHOR`. All Rights Reserved.
-
-	\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
-	\\author \$LastChangedBy\$
- 	\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
-	\\date \$LastChangedDate\$
-	\\version \$Rev\$
-	\\sa
-**/
-class ${1:PluralPart}sController extends AppController 
-{
-	var \$name = '$1s';
-	${3:var \$scaffold;}
-	${4:var \$helpers = array(${5:'html', 'ajax', 'text', 'time'}${6:,helpers});}
-	${7:var \$components = array(${8:'email'}${9:,components});}
-	$0
-
-
-	function __construct() {
-		parent::__construct();
-	}
-	
-	
-	/** \\brief index the model for return to a view
-		\\author `echo $TM_AUTHOR` `echo $TM_ORGANIZATION_NAME`
-		\\date `TZ=GMT date +%Y-%m-%d # T%H:%M:%SZ`
-
-		\\sa
-	**/
-	function index()
-	{
-		  \$this-&gt;set('data',\$this-&gt;$1-&gt;findAll());
-	} // END function index
-	
-	function ${10}view(\$id)
-	{
-		\$this-&gt;$1-&gt;id = \$id;
-		\$this-&gt;set('data', \$this-&gt;$1-&gt;read());
-	}
-	
-
-
-	
-} // END class $1sController
-?&gt;</string>
+	<string>class ${1:My}Controller extends AppController {
+	$2
+}</string>
 	<key>name</key>
 	<string>New Controller</string>
 	<key>scope</key>
-	<string>text.html, source.php.cake</string>
+	<string>text.html.php.cake source.php</string>
 	<key>tabTrigger</key>
-	<string>Ccontroller</string>
+	<string>newc</string>
 	<key>uuid</key>
 	<string>03D809B4-7F9C-4F30-A402-60DDF7F8EBE6</string>
 </dict>

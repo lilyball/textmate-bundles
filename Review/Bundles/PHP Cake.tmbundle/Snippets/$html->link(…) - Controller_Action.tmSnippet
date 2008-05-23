@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;?php echo \$html-&gt;link('$1', array('controller' =&gt; '$2', 'action' =&gt; '$3')) ?&gt;</string>
+	<string>&lt;?php echo \$html-&gt;link('${1:Link Title}', array('controller' =&gt; '${2:controller_name}', 'action' =&gt; '${3:action_name}')) ?&gt;</string>
 	<key>name</key>
 	<string>$html-&gt;link(…) — Controller/Action</string>
 	<key>scope</key>

@@ -7,24 +7,24 @@
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
-WORD=`tr 'a-z' 'A-Z' &lt;&lt;&lt;"${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}"`
+COMMAND=`cat | tr -d ' \t' | grep -o '^\w\+' | tr 'a-z' 'A-Z'`
 
-html_header "Documentation for $WORD"
-"${TM_CMAKE:-cmake}" --help-command "$WORD" | pre
+html_header "Documentation for $COMMAND"
+"${TM_CMAKE:-cmake}" --help-command "$COMMAND" | pre
 html_footer
 </string>
 	<key>fallbackInput</key>
-	<string>line</string>
+	<string>scope</string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^h</string>
 	<key>name</key>
-	<string>Documentation For Word / Selection</string>
+	<string>Documentation For Command</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>source.cmake</string>
+	<string>source.cmake meta.function-call</string>
 	<key>uuid</key>
 	<string>6AA1ED0A-6E0F-48EC-965C-D57AD98A100B</string>
 </dict>

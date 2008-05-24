@@ -8,7 +8,7 @@
 	<string>#!/bin/sh
 
 { APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
-  osascript -e 'tell app "TextMate" to quit'
+  osascript -e "tell app \"$(basename "$APP_PATH")\" to quit"
 
   for (( i = 0; i &lt; 500 &amp;&amp; $(echo $(ps -xp $PPID|wc -l))-1; i++ )); do
     sleep .2;

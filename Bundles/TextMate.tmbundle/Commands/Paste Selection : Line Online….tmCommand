@@ -14,6 +14,7 @@ PASTE_URL = ENV['TM_PASTIE_URL'] || 'http://pastie.textmate.org/pastes/'
 
 require "#{BUNDLE_SUPPORT}/lib/doctohtml.rb"
 require "#{SUPPORT_PATH}/lib/textmate"
+require "#{SUPPORT_PATH}/lib/tm/detach"
 require "#{SUPPORT_PATH}/lib/progress"
 require "#{SUPPORT_PATH}/lib/escape"
 require 'cgi'
@@ -251,10 +252,7 @@ def paste_stdin(priv, wrap)
   return $status == :success ? res : nil
 end
 
-pid = fork do
-  STDOUT.reopen(open('/dev/null'))
-  STDERR.reopen(open('/dev/null'))
-
+TextMate.detach {
   dests, priv, wrap = get_destinations
   unless dests.empty?
     if url = paste_stdin(priv, wrap)
@@ -262,9 +260,7 @@ pid = fork do
       %x{ osascript #{e_sh temp_script(BUNDLE_SUPPORT + "/paste_to_destinations.scpt")} #{e_sh url} #{e_sh dests} }
     end
   end
-end
-
-Process.detach(pid)
+}
 </string>
 	<key>fallbackInput</key>
 	<string>document</string>

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>get_pw () {
-  res=$(CocoaDialog 2&gt;/dev/null secure-inputbox --float --no-newline \
-    --title 'Encrypt Text With AES 128' \
-    --informative-text "$1" \
-    --button1 "$2" --button2 Cancel)
+	res=$(ruby -rui -e"puts TextMate::UI.request_secure_string(
+			:title =&gt; 'Encrypt Text With AES 128',
+			:prompt =&gt; '$1',
+			:button1 =&gt; '$2',
+			:button2 =&gt; 'Cancel
+		)")
   [[ ${res:0:1} == 1 ]] &amp;&amp; echo -n "${res:2}"
 }
 

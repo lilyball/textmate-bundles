@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,23 +7,45 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-# [hH]otFlamingCats -&gt; hot_flaming_cats
-def camelcase_to_underscore(word)
-	word.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').gsub(/([a-z\d])([A-Z])/,'\1_\2').downcase
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
+
+# Test Cases
+# 
+# AFooBar -&gt; a_foo_bar -&gt; aFooBar -&gt; AFooBar
+# URLString -&gt; url_string -&gt; urlString -&gt; UrlString
+# TestURLString -&gt; test_url_string -&gt; testUrlString -&gt; TestUrlString
+# test -&gt; Test -&gt; test
+# test_URL_STRING -&gt; testUrlString -&gt; TestUrlString -&gt; test_url_string
+
+
+# HotFlamingCats -&gt; hot_flaming_cats
+def pascalcase_to_snakecase(word)
+	word.gsub(/\B([A-Z])(?=[a-z0-9])|([a-z0-9])([A-Z])/, '\2_\+').downcase
 end
 
 # hot_flaming_cats -&gt; hotFlamingCats
-def underscore_to_camelcase(word)
-	word.gsub(/\_(.)/) {|c| c[1].chr.upcase}
+def snakecase_to_camelcase(word)
+  word.gsub(/_([^_]+)/) { $1.capitalize }
+end
+
+# hotFlamingCats -&gt; HotFlamingCats
+def camelcase_to_pascalcase(word)
+	word.gsub(/^\w{1}/) {|c| c.upcase}
 end
 
 word = $stdin.gets
-is_camel = word.match(/[A-Z]/) ? true : false
 
-if is_camel then
-	print camelcase_to_underscore(word) 
+TextMate.exit_discard if word.nil?
+
+is_pascal = word.match(/^[A-Z]{1}/) ? true : false
+is_snake = word.match(/_/) ? true : false
+
+if is_pascal then
+	print pascalcase_to_snakecase(word)
+elsif is_snake then
+	print snakecase_to_camelcase(word)
 else
-	print underscore_to_camelcase(word)
+	print camelcase_to_pascalcase(word) 
 end
 </string>
 	<key>fallbackInput</key>
@@ -33,7 +55,7 @@ end
 	<key>keyEquivalent</key>
 	<string>^_</string>
 	<key>name</key>
-	<string>Toggle camelCase / underscore_delimited</string>
+	<string>Toggle camelCase / snake_case / PascalCase</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>

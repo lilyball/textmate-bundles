@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,19 +7,18 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-# we seem to have to provide the full path
-# here... which is a pain. Some shell guru
-# can no doubt explain why.
-output = `'#{ENV['TM_SUPPORT_PATH']}/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog' inputbox --title "Strip Matching Lines" --informative-text 'Regular Expression' --button1 'Strip' --button2 'Cancel'`
-output = output.split("\n")
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui.rb"
 
-# check the button pressed, exit if it wasn't Record
-if(output[0] !~ /^1$/)
-	$stdin.each_line() { |l| $stdout.write l }
-	exit;
-end
+regex_string = TextMate::UI.request_string(
+  :title =&gt; 'Strip Matching Lines', 
+  :prompt =&gt; 'Regular Expression',
+  :button1 =&gt; 'Strip'
+)
 
-re = Regexp.new(output[1])
+TextMate.exit_discard if regex_string.nil?
+
+re = Regexp.new(regex_string)
 $stdin.each_line() do |line|
 	print line if !re.match(line)
 end

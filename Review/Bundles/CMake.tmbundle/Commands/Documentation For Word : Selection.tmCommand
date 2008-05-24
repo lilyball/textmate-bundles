@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
-COMMAND=`cat | tr -d ' \t' | grep -o '^\w\+' | tr 'a-z' 'A-Z'`
+COMMAND=`cat | tr -d ' \t' | grep -m1 -o '^\w\+' | tr 'a-z' 'A-Z'`
 
 html_header "Documentation for $COMMAND"
 "${TM_CMAKE:-cmake}" --help-command "$COMMAND" | pre

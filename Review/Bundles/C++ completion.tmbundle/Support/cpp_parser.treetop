@@ -13,7 +13,7 @@ statement+ {
 end
 
 rule statement
- 'typedef' explicit_space complete_declare {
+ 'typedef' explicit_space 'typename'? explicit_space complete_declare {
 	def types
 	    key = "eu"
 	    return key, {:type => "do"}

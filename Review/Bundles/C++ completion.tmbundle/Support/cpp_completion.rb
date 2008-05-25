@@ -25,7 +25,7 @@ class ExternalSnippetizer
       unless name_array.empty?
         begin      
           stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-            out << name_array[i] +  ":${"+(i+2).to_s + ":"+ arg +"} "
+            out << name_array[i] +  ":${"+(i+2).to_s + ":"+ arg + "} "
           end
         rescue NoMethodError
           out = "$0"
@@ -227,7 +227,7 @@ class CppMethodCompletion
    end
 
   def lookup_class2(name, initial)
-    return nil if name.class.inspect == "Fixnum"
+    return nil if name.kind_of?(Fixnum)
     q = name.split("::")
     if q[0] == "" # ::something
       res = dig_to_find(q, userdefinedplusstatic)
@@ -297,13 +297,13 @@ class CppMethodCompletion
       return lookup_class(previousClass, initial)
     end
     
-    if previousClass.class.inspect == "Fixnum"
+    if previousClass.kind_of?(Fixnum)
       initial = initial[previousClass]
       if initial.nil?
         TextMate.exit_show_tool_tip "could not find type info for the dereferenced object, template arg ##{previousClass} missing"
       end
       return lookup_class(initial[:type],initial)
-    elsif previousClass.class.inspect == "String"
+    elsif previousClass.kind_of?(String)
       return lookup_class(previousClass, initial)
     end
     po "this should not be reached"
@@ -362,10 +362,8 @@ class CppMethodCompletion
             # along with what they return
             
             previousClass, initial = updateClass(r1[:methods]["->"], initial)           
-          elsif r
-            previousClass, initial = updateClass(r, initial)
           else
-            puts "strange"
+            previousClass, initial = updateClass(r, initial)
           end
         else
           # Trying to find a method with the correct name in the correct class failed
@@ -400,7 +398,7 @@ end
 
 end
 #{:current_type=>[{:name=>"map", :kind=>:field, :bind=>"."},
-#                 {:name=>"begin", :kind=>:method, :bind=>"->"}, 046 2859123
+#                 {:name=>"begin", :kind=>:method, :bind=>"->"},
 #                 {:name=>"second", :kind=>:field, :bind=>"."},
 #                 {:prefix=>"met"}]
 # "map"=>{:type=>"std::map", 1=>{:type=>"std::vector", 1=>{:type=>"a"}}, 2=>{:type=>"b"}}}

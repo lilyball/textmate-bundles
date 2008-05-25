@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>res=$(CocoaDialog inputbox --title "Manual Page" \
-    --informative-text "What manual page do you want?" \
-    --button1 "Okay" --button2 "Cancel")
+	<string>res=$(ruby -rui -e"print TextMate::UI.request_string(:title =&gt; 'Manual Page', :prompt =&gt; 'What manual page do you want?', :button1 =&gt; 'View', :button2 =&gt; 'Cancel').to_s")
 
-[[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit_discard
+[[ -z "$res" ]] &amp;&amp; exit_discard
 
-res=$(tail -n1 &lt;&lt;&lt;"$res")
 $("$TM_BUNDLE_SUPPORT/mman"&lt;&lt;&lt;"$res")
 </string>
 	<key>input</key>

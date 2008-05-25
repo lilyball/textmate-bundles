@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>get_pw () {
-  ruby -rui -e"print TextMate::UI.request_secure_string(:title =&gt; 'Encrypt Text With AES 128', :prompt =&gt; '$1', :button1 =&gt; '$2', :button2 =&gt; 'Cancel')"
+  ruby -rui -e"print TextMate::UI.request_secure_string(:title =&gt; 'Encrypt Text With AES 128', :prompt =&gt; '$1', :button1 =&gt; '$2', :button2 =&gt; 'Cancel').to_s"
 }
 pw1=$(get_pw 'What password should be used?'   Continue)
 [[ -z "$pw1" ]] &amp;&amp; exit_discard

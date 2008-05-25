@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>get_pw () {
-  ruby -rui -e"print TextMate::UI.request_secure_string(:title =&gt; 'Decrypt AES 128 Encrypted Text', :prompt =&gt; '$1', :button1 =&gt; '$2', :button2 =&gt; 'Cancel')"
+  ruby -rui -e"print TextMate::UI.request_secure_string(:title =&gt; 'Decrypt AES 128 Encrypted Text', :prompt =&gt; '$1', :button1 =&gt; '$2', :button2 =&gt; 'Cancel').to_s"
 }
 
 pw=$(get_pw 'What is the password?' Decrypt)

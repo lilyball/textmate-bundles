@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,18 +7,24 @@
 	<key>command</key>
 	<string>cd "${TM_PROJECT_DIRECTORY:=$TM_DIRECTORY}";
 
-"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
-output = `CocoaDialog inputbox --title Input --informative-text 'Record Message' --button1 Record --button2 'Abort'`
-output = output.split("\n")
+"${TM_RUBY:=ruby}" &lt;&lt;'RUBY'
 
-# check the button pressed, exit if it wasn't Record
-if(output[0] !~ /^1$/)
-	exit
-end
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui.rb"
 
-output = `darcs record -a -m '#{output[1].strip.gsub(/(')/, '\\\\1')}'`
+output = TextMate::UI.request_string(
+  :title =&gt; 'Input', 
+  :prompt =&gt; 'Record Message',
+  :button1 =&gt; 'Record'
+)
 
-puts(output)</string>
+TextMate.exit_discard if output.nil?
+
+output = `darcs record -a -m '#{output.strip.gsub(/(')/, '\\\\1')}'`
+
+puts(output)
+
+RUBY</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

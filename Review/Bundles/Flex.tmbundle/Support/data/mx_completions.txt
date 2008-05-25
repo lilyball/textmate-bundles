@@ -26,7 +26,7 @@
 <mx:DataGrid id="${1:dgGrid}" rowCount="${2:3}" dataProvider="${3:{employees}}"> </mx:DataGrid>$0
 <mx:DataGridColumn dataField="${1:field}" headerText="${2:Field}"/>$0
 <mx:dataProvider>$0</mx:dataProvider>
-<mx:DateChooser id="dateChooser" yearNavigationEnabled="true" change="clickMethod"/>$0
+<mx:DateChooser id="${1:dateChooser}" yearNavigationEnabled="${2:true}" change="${3:clickMethod}"/>$0
 <mx:DateField id="${1:dateField}" yearNavigationEnabled="true" change="$2"/>$0
 
 # E

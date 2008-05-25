@@ -19,6 +19,48 @@
 	<array>
 		<dict>
 			<key>begin</key>
+			<string>(?i)^\s*(function|macro)\s*(\()</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.cmake</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.begin.command.cmake</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>meta.function-call.function.cmake</string>
+			<key>end</key>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.end.command.cmake</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function-call.command.cmake</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#argument-constants</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#items</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>(?ix)
 			^\s*	# Start of the line with optional preceding space
 			(?:	# Either a control flow keyword

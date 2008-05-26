@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>{ APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
-  osascript -e 'tell app "TextMate" to quit'
+  osascript -e "tell app \"$(basename "$APP_PATH")\" to quit"
 
   for (( i = 0; i &lt; 50 &amp;&amp; $(echo $(ps -xp $PPID|wc -l))-1; i++ )); do
     sleep .2;
   done
 
   if [[ $(ps -xp $PPID|wc -l) -ne 2 ]]; then
-    defaults write com.macromates.textmate WebKitScriptDebuggerEnabled -bool true
-    defaults write com.macromates.textmate WebKitDeveloperExtras -bool true
-    env DYLD_FRAMEWORK_PATH="$(find_app org.webkit.nightly.WebKit)/Contents/Resources" WEBKIT_UNSET_DYLD_FRAMEWORK_PATH=YES "$(find_app com.macromates.textmate)/Contents/MacOS/TextMate" &amp;
+    DYLD_FRAMEWORK_PATH="$(find_app org.webkit.nightly.WebKit)/Contents/Resources" WEBKIT_UNSET_DYLD_FRAMEWORK_PATH=YES "${APP_PATH}/Contents/MacOS/TextMate" -WebKitScriptDebuggerEnabled YES -WebKitDeveloperExtras YES
   else
     echo &gt;/dev/console "$(date +%Y-%m-%d\ %H:%M:%S): TextMate is still running. Relaunch aborted."
   fi

@@ -199,6 +199,12 @@ As default TextMate displays an inline menu if there is only one suggestion foun
 
     The help index files will only be rebuilt if these don't exist or if one removed/installed R packages. An update of a package won't be recognized. Run "Create Command Help Index" manually.
 
+-   __.../R.tmbundle/Support/lib/popen3.rb:18: warning: Insecure world writable dir "DIR"  in PATH, mode 040777__
+
+    If Rmate is outputting this warning message it is very likely that "DIR" has write permissions set to **group** and **others**. To change the permission for that "DIR" run this command from a Terminal window:
+
+    `chmod og-w 'DIR'`
+
 # The bundle "R Console (Rdaemon)"
 
 In addition there is the bundle "R Console (Rdaemon)" available. This bundle allows to run the command-line version of R ***inside*** TextMate. A normal document window, which is set to the language "R Console (Rdaemon)", serves as R console. More details within this bundle.  
@@ -209,7 +215,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Apr 30 2008***
+***Date: Mai 26 2008***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

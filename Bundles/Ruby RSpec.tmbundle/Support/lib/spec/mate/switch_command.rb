@@ -1,5 +1,8 @@
 module Spec
   module Mate
+    require ENV['TM_SUPPORT_PATH'] + '/lib/textmate.rb'
+    require ENV['TM_SUPPORT_PATH'] + '/lib/ui.rb'
+
     # This is based on Ruy Asan's initial code:
     # http://ruy.ca/posts/6-A-simple-switch-between-source-and-spec-file-command-for-textmate-with-auto-creation-
     class SwitchCommand
@@ -55,8 +58,12 @@ module Spec
       end
       
       def create?(relative_twin, file_type)
-        answer = `#{ ENV['TM_SUPPORT_PATH'] }/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog yesno-msgbox --no-cancel --icon document --informative-text "#{relative_twin}" --text "Create missing #{file_type}?"`
-        answer.to_s.chomp == "1"
+        TextMate::UI.request_confirmation(
+          :button1 => "Create",
+          :button2 => "Cancel",
+          :title => "Create missing #{file_type}?",
+          :prompt => "#{relative_twin}"
+        )
       end
 
       def content_for(file_type, relative_path)
@@ -109,7 +116,7 @@ SPEC
       def write_and_open(path, content)
         `mkdir -p "#{File.dirname(path)}"`
         `touch "#{path}"`
-        `osascript &>/dev/null -e 'tell app "SystemUIServer" to activate' -e 'tell app "TextMate" to activate'`
+        TextMate.rescan_project
         `"$TM_SUPPORT_PATH/bin/mate" "#{path}"`
         escaped_content = content.gsub("\n","\\n").gsub('$','\\$').gsub('"','\\\\\\\\\\\\"')
         `osascript &>/dev/null -e "tell app \\"TextMate\\" to insert \\"#{escaped_content}\\" as snippet true"`      

@@ -55,7 +55,8 @@ Dir::mkdir(tmpDir)
 stdin, stdout, stderr = popen3("R", "--vanilla", "--no-readline", "--slave", "--encoding=UTF-8")
 
 stdin.puts(%{options(device="pdf")})
-stdin.puts(%{formals(pdf)[c("file","onefile","width","height")] <- list("#{tmpDir}/Rplot%03d.pdf", F, 8, 8)})
+stdin.puts(%{formals(pdf)[c("file","onefile","width","height")] <- list("#{tmpDir}/Rplot%03d.pdf", FALSE, 8, 8)})
+stdin.puts(%{if(getRversion()>="2.7") pdf.options(onefile=FALSE)})
 stdin.puts(%{options(pager="/bin/cat")})
 stdin.puts("options(echo=T)")
 

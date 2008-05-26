@@ -8,7 +8,7 @@ class PerlScript < UserScript
   def executable; @hashbang || ENV['TM_PERL'] || 'perl' end
   def args
     ["-I#{e_sh(Pathname.new(ENV['TM_BUNDLE_SUPPORT']) + "PerlMate")}",
-     "-Mexception_handler -MTMInput"]
+     "-Mexception_handler"]
   end
   def version_string
     %x{#{executable} -e 'printf "Perl v%vd", $^V'} + " (" + \

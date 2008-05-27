@@ -31,6 +31,18 @@ There is one command which does not support giving arguments in the `EDITOR` var
     ln -s mate ~/bin/mate_wait   # run this once to create the link
     export EDITOR='mate_wait'    # use in your ~/.bash_profile
 
+### Git Editor
+
+When you commit to a [Git][] repository you may find that your caret is not at the first line.
+
+This is because Git reuses the temporary file used for the commit message and TextMate stores per-file caret position (via extended attributes).
+
+To avoid this problem you can set the Git editor to `mate -wl1`. This instructs TextMate to open with the caret at line 1 rather than where it last was.
+
+To set it like this for Git, you can set the `GIT_EDITOR` variable or Git’s `core.editor` configuration variable.
+
+[Git]: http://git.or.cz/ "Git - Fast Version Control System"
+    
 ### TeX Editor
 
 When TeX gives an error message relating to a file, you can enter `e` to edit the file (and correct the error).

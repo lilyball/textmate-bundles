@@ -1,10 +1,10 @@
-# Bundles
+# Bundles {bundles}
 
 TextMateのたくさんの機能はさまざまなバンドルを通じて提供されます。多くのものは言語に依存です。
 
 デフォルトのバンドルは、`/path/to/TextMate.app/Contents/SharedSupport/Bundles`にあります。普通であればこのことは意識しなくてもいいです。Windowメニューにあるバンドルエディタを通して、バンドルをみたり、（編集したり)するからです。
 
-## バンドルアイテムの有効化（アクティベーション)
+## バンドルアイテムの有効化（アクティベーション) {activation_of_bundle_items}
 
 <!-- TODO: perhaps 実行っていういったほうがいいかなアクティベーションじゃわかりづらい。-->
 
@@ -19,7 +19,7 @@ Bundles &#x2192; Bundle Editor &#x2192; Show Bundle EditorでTextMateをカス�
 Bundle Editorで編集されるほとんどのアイテムはテキストを編集しているときに実行したいアクションを示します。TextMateはそのためにいくつかの方法を提供し、アクティベーションの方法がどのアクションにつながるかを調べる際に、現在のコンテクストを理解する、シンプルですが、パワフルな方法があります。このシステムは、後のチャプタで説明されますが、[スコープセレクタ][ScopeSelectors]とよばれます。
 
 
-### Key Equivalents　（キーボードショートカット）
+### Key Equivalents　（キーボードショートカット） {key_equivalents}
 
 キーボードからアクションを実行する一番簡単な方法は、キーボードショートカットです。キーボードショートカットは任意のmodifierと任意のキーからなり、key equivalent フィールドを有効化してアクションと結びつけられるキーを押すことによって設定できます。
 
@@ -34,7 +34,7 @@ Bundle Editorで編集されるほとんどのアイテムはテキストを編�
 ![Key Equivalent Ambiguity](key_equivalent_ambiguity.png)
 
 
-### Tab Triggers　（タブトリガー）
+### Tab Triggers　（タブトリガー） {tab_triggers}
 
 バンドルアイテムにショートカットを割り当てることができるとともに、アイテムに対してタブトリガーを割り当てられます。これは、タブキー(&#x21E5;)の前に、あなたがドキュメントに入力するテキストです。これは、あなたが入力したテキストを削除し、バンドルアイテムを入力します。
 
@@ -54,7 +54,7 @@ Bundle Editorで編集されるほとんどのアイテムはテキストを編�
 ![Tab Trigger Ambiguity](tab_trigger_ambiguity.png)
 
 
-## Editing Default Bundles / Items　デフォルトのバンドル／アイテムの編集
+## Editing Default Bundles / Items　デフォルトのバンドル／アイテムの編集 {editing_default_bundles_items}
 
 デフォルトのアイテムにはあなたの好みに合わないものもあるかもしれません。例えばスニペットのコーディングスタイルがあなたのコーディングスタイルと違ったりするとです。なので、ほかのタブトリガーやショートカットが欲しくなったり、修正をしたいと思うでしょう。
 
@@ -64,7 +64,7 @@ TextMateにドラッグしたり、ダブルクリックすることでインス
 
 もしローカルでの変更を破棄したい場合は、`~/Library/Application Support/TextMate/Bundles`からその変更を削除することが現在できる唯一の方法です。
 
-## Deleting Default Bundles / Items　デフォルトのバンドル／アイテムの削除
+## Deleting Default Bundles / Items　デフォルトのバンドル／アイテムの削除 {deleting_default_bundles_items}
 
 バンドルエディタから簡単にデフォルトのバンドルを削除したりばんどるアイテムを削除したりできます。しかし、アイテムはTextMateのアプリケーションと同時にshippingされるため、ディスクからはさくじょされません。そのため、
 アップグレードの後にまた現れます。
@@ -86,7 +86,7 @@ TextMateにドラッグしたり、ダブルクリックすることでインス
 
 
 
-## Hiding Bundles　バンドルを隠す
+## Hiding Bundles　バンドルを隠す {hiding_bundles}
 
 デフォルトのバンドルを削除する代わりに、（いつかそのデフォルトのバンドルが必要になる日がくるかもしれないので、）ただ隠したいと思うかもしれません。
 
@@ -96,7 +96,7 @@ TextMateにドラッグしたり、ダブルクリックすることでインス
 ![Hiding Bundles](hiding_bundles.png)
 
 
-## Sharing Bundles and Bundle Items　バンドルとバンドルアイテムを共有する
+## Sharing Bundles and Bundle Items　バンドルとバンドルアイテムを共有する {sharing_bundles_and_bundle_items}
 
 バンドルや個別のバンドルアイテムを共有したいなら、バンドルエディタから（ウインドウの左側のリストから）直接Finderへドラッグすることでできます。
 
@@ -104,7 +104,7 @@ TextMateにドラッグしたり、ダブルクリックすることでインス
 このアイテムは他の人に送られて、その人がダブルクリックしてインストールすることができます。（注意：これはスニペットやコマンドのような、ひとつひとつのアイテムでも同様です。）
 
 
-## Assorted Bundles さまざまなバンドル
+## Assorted Bundles さまざまなバンドル {assorted_bundles}
 
 
 たいていの場合は、バンドルは個別の言語のサポートを提供します。（Source, Text, TextMateバンドルといったような例外はありますが。）バンドルがどのような機能を提供するかを知るには（Windowメニューからアクセスできる）バンドルエディタでそのバンドルを調べてみるとよいでしょう。適切な場合、言語のバンドル、次のもの、キーボードショートカットといっしょに提供します。
@@ -139,7 +139,7 @@ TextMateにドラッグしたり、ダブルクリックすることでインス
 以下はその他のバンドルのハイライトです。
 
 
-### Diff
+### Diff {diff}
 
 Diff バンドルは、[`diff`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/diff.1.html)シェルコマンドからのアウトプットのための[言語文法][LanguageGrammars]です。
 
@@ -152,7 +152,7 @@ Diff バンドルは、[`diff`](http://developer.apple.com/documentation/Darwin/
 またこのバンドルでは現在のドキュメントと保存されたコピーとの違い、プロジェクトドロワで選択されたファイル同士の違い(HTMLアウトプットでの表示オプション付き)を表示させることもできます。さらにAppleの[`opendiff`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/opendiff.1.html)を使うFileMergeで選択されたファイルを開くコマンドもあります。(デベロッパツールがインストールされている必要があります。)
 
 
-### HTML
+### HTML {html}
 
 HTMLバンドルはHTMLを扱うのに役にたつものを含みます。特に役に立つものは以下の通りです:
 
@@ -179,7 +179,7 @@ For the records have a look at [Sending XHTML as text/html Considered Harmful][X
 
 [XHTML]: http://www.hixie.ch/advocacy/xhtml
 
-### LaTeX
+### LaTeX {latex}
 
 
 LaTeXバンドルにはとても役に立つ３つのコマンドがあります:
@@ -198,21 +198,21 @@ LaTeXバンドルにはとても役に立つ３つのコマンドがあります
     sudo port install teTeX
 
 
-### Source
+### Source {source}
 
 Sourceバンドルはソースコードのためのデフォルトのアクションや設定を含みます。興味深いのは、現在の行や選択範囲をコメント文字でトグルする_Comment Line / Selection_ (&#x2318;/)です。このコマンドは３つの[コンテクスト依存の変数(context dependent variables)][ScopedEnvVariables]を通して、様々な言語で設定されています。
 
 行末に移動して行末のターミネータ文字（デフォルトでは`;`）を挿入して、新しい行を挿入したりする、いろいろなマクロはとても実用的です。
 
 
-### SQL
+### SQL {sql}
 
 SQLバンドルには現在の行もしくは選択範囲をMySQLかPostgresのクエリを送り(&#x2303;&#x21E7;Q)、結果をHTMLアウトプットで表示するコマンドがあります。
 
 いくつかの接続の詳細を保持するために[環境変数][EnvVariables]を使います。バンドルのHelpファイルに説明されています。
 
 
-### Subversion
+### Subversion {subversion}
 
 Subverionsのアイテムはすべて、&#x2303;&#x21E7;Aを通じてアクセスできます。このアクションは日常的なワークフローで使われるコマンドを提供します。
 
@@ -224,7 +224,7 @@ Subverionsのアイテムはすべて、&#x2303;&#x21E7;Aを通じてアクセ�
 
 コミットウインドウでは, 右下の"Commit"ボタンの代わりにエンターキー(&#x2305;)を使うことができます。
 
-### Text
+### Text {text}
 
 Textバンドルは基本的なテキスト編集に関するアクションや設定に関連したものです。ユーザーの視点からすると、いくつかの機能はひとつのバンドルであるよりもよりネイティブな位置にあるべきだろうと思うかもしれません。
 
@@ -238,7 +238,7 @@ Textバンドルは基本的なテキスト編集に関するアクションや�
 
  * _Sort Lines in Document / Selection_ (F5) — これは行や選択範囲をアルファベット順に並び替えます。
 
-### TextMate
+### TextMate {textmate}
 
 TextMateバンドルはメタバンドルの一種です。つまりテキストエディティングのためのアクションではなく、新しいバンドルアイテムを作ったり、メーリングリストのアーカイブを検索したり、現在の選択範囲をIRCチャンネルなどにペーストします。
 
@@ -247,7 +247,7 @@ TextMateバンドルはメタバンドルの一種です。つまりテキスト
 [テーマ][Themes]や[言語文法（ランゲージグラマー）][LanguageGrammars]を扱う際に役に立つコマンドが、現在のキャレットのスコープを表示する_Show Scope_ (&#x2303;&#x21E7;P)です。([スコープに関しては後で詳しく][ScopeSelectors])。
 
 
-### Xcode
+### Xcode {xcode}
 
 Xcodeバンドルには現在のドキュメントやプロジェクトを含むフォルダのXcodeプルジェクトをビルドしたり結果として生じたターゲットを実行するアクションがあります。
 
@@ -256,11 +256,11 @@ Xcodeバンドルには現在のドキュメントやプロジェクトを含む
 Xcodeプロジェクトをインポートするコマンドもありますが、たいていはXcodeプロジェクトと一緒にフォルダをTextMateのアプリケーションアイコンにドラッグしたほうがよいです。なぜなら現在は`TM_PROJECT_DIRECTORY`という変数がインポートされたプロジェクトでは正しくセットアップされません。多くのバンドルアクションはこれに依存します。（例えばSubversion関連)
 
 
-## Getting More Bundles もっとバンドルを手に入れる
+## Getting More Bundles もっとバンドルを手に入れる {getting_more_bundles}
 
 人気のあるバンドルのみTextMateに含まれます。さまざまな言語のサポートを主とした、多数のほかのバンドルのためのSubversionレポジトリがあります。[こちらでバンドルのリストをみることができます。](http://macromates.com/svn/Bundles/trunk/Bundles/)
 
-### Installing Subversion Subversionをインストールする
+### Installing Subversion Subversionをインストールする {installing_subversion}
 
 もしバンドルをインストールしたいなら、[subversionクライアント](http://subversion.tigris.org/project_packages.html#binary-packages)がインストールされていることが必要です。
 
@@ -276,7 +276,7 @@ Xcodeプロジェクトをインポートするコマンドもありますが、
 
 もしFinkもMacPortsも使っていないなら、[Martin Ott's homepage](http://homepage.mac.com/martinott/)のsubversionや[ここにある](http://metissian.com/projects/macosx/subversion/)プリビルドバイナリーのどれかを手に入れることができます。
 
-### Setting `LC_CTYPE`　`LC_CTYPE`を設定する
+### Setting `LC_CTYPE`　`LC_CTYPE`を設定する {setting_lc_ctype}
 
 あなたは、`LC_CTYPE`変数がUTF-8を使うように設定しなければいけません。さもないと、`svn`は（いくつかのバンドルアイテムが使う）ASCIIではないファイル名に遭遇するときに
 `svn: Can't recode string`というエラーメッセージを表示します。
@@ -295,7 +295,7 @@ Xcodeプロジェクトをインポートするコマンドもありますが、
 また、`LC_ALL`環境変数は`LC_CTYPE`より優先するというとを知っていてください。なので、もしあなたがほかでセットしてしまうと、もとに戻すかそれをUTF-8を使うように変更しなければいけません。
 
 
-### Installing a Bundle　バンドルのインストール
+### Installing a Bundle　バンドルのインストール {installing_a_bundle}
 
 svnがインストールされていれば、バンドルをcheckoutかexportすることが比較的簡単にできます。TextMateはすべての普通のライブラリの場所を検索してバンドルを探します。なので、もしあなたが（あなたのマシンで）そうする還元を持っていれば、すべてのcheckoutを`~/Library`ではなく`/Library`で行うことを推奨します。なぜなら、こうすることで、インストールされたバンドルがカスタムバンドル（つまりあなたが編集したバンドル）と別にしておけます。
 
@@ -319,7 +319,7 @@ svnがインストールされていれば、バンドルをcheckoutかexportす
 これは、TextMateから、Bundles &#x2192; Bundle Editor &#x2192; Reload Bundlesを選択するのと同じことです。
 
 
-### Support Folder （サポートフォルダ）
+### Support Folder （サポートフォルダ） {support_folder}
 
 TextMateに含まれるのは、いろいろなバンドルアイテムに使われるさまざまなサポートアイテムを含むサポートフォルダです。このフォルダは、`TM_SUPPORT_PATH` [環境変数][EnvVariables]からみつかります。普通は`/Applications/TextMate.app/Contents/SharedSupport/Support`を指します。
 
@@ -346,6 +346,6 @@ After this you can test it by pasting the following line into TextMate and press
 
 
 
-### RSS Feed With Bundle Change Log バンドル変更履歴のRSSフィード
+### RSS Feed With Bundle Change Log バンドル変更履歴のRSSフィード {rss_feed_with_bundle_change_log}
 
 バンドルに対しての変更は普通のリリースノートに含まれません。代わりに[RSSフィードで手に入れることができます。](feed://macromates.com/svnlog/bundles.rss)

@@ -1,12 +1,12 @@
-# Appendix
+# Appendix {appendix}
 
-## Property List Format
+## Property List Format {property_list_format}
 
 Normally TextMate presents settings and such using a GUI, but for the [language grammars][LanguageGrammars] and [preferences items][PreferencesItems] it exposes you to the [old-style property list format](http://developer.apple.com/documentation/Cocoa/Conceptual/PropertyLists/Articles/OldStylePListsConcept.html).
 
 For the purposes of TextMate this format has 3 data types which are described below. Notice that the escape rules for strings have been changed slightly compared to Apple's official format. This was done to make the language grammars more readable, since these need a lot of literal escape characters.
 
-### Strings
+### Strings {strings}
 
 The basic type is a string which can be either single or double quoted.
 
@@ -32,7 +32,7 @@ When a string consists entirely of letters, underscores and dashes, it is possib
     this_is_a_string
     justLettersInThisOne
 
-### Arrays
+### Arrays {arrays}
 
 Arrays are collections of elements, each element can be another array, a string or a dictionary. Elements are comma separated and the entire list is enclosed in parentheses. Some examples:
 
@@ -43,7 +43,7 @@ It is allowable to put a comma after the last element, like this:
 
     ( "foo", "bar", "fud", )
 
-### Dictionaries
+### Dictionaries {dictionaries}
 
 Dictionaries associate a value with a name (key). They are also known as maps, hashes, associative arrays and probably go under a few other terms as well.
 
@@ -53,16 +53,16 @@ The structure is: `{ «key» = «value»; }` here `«key»` is a string and `«v
     { colors = ( "red", "green", "blue" ); }
 
 
-## Indentation Rules
+## Indentation Rules {indentation_rules}
 
-### Introduction
+### Introduction {introduction}
 
 Source code and structured text generally have indentation conventions. TextMate can help you with these if you tell it when to increase and decrease the indent.
 
 Having TextMate figure out the proper indentation is useful when you paste text in another part of the source (where the indentation is different), when you press return on a line that affects the indentation (for next line), or when you press tab at the beginning of the line (and want as much indentation as appropriate for that line).
 
 
-### The System
+### The System {the_system}
 
 Some languages go a little beyond a single character/keyword to increase and another to decrease, so TextMate has four (regexp) patterns you can set to tell it about your indentation conventions.
 
@@ -88,7 +88,7 @@ We will use the following code example to explain the four patterns:
     14  }
 
 
-### Increase Pattern
+### Increase Pattern {increase_pattern}
 
 The `increaseIndentPattern` should match the lines which increase the indent. In our example above, this is the `{` characters at lines 2 and 4 (the if on line 5 will be discussed later).
 
@@ -109,7 +109,7 @@ we need to make it a little more complicated, by ensuring that no }, `"` or `'` 
     increaseIndentPattern = "^.*\{[^}\"']*$";
 
 
-### Decrease Pattern
+### Decrease Pattern {decrease_pattern}
 
 The `decreaseIndentPattern` should match the counterpart of our increase indent pattern. In our example the indent is increased by lines 12 and 14. The character here is } and so the simple decrease indent pattern would be setup as:
 
@@ -120,7 +120,7 @@ the more complex version may allow only comment end markers in front of the `}` 
     decreaseIndentPattern = '^(.*\*/)?\s*\}[;\s]*$';
 
 
-### Increase Only Next Line
+### Increase Only Next Line {increase_only_next_line}
 
 We ignored line 5 in the increase indent pattern, that is because it does not really increase the indent, it only causes the next line to be indented if a block is not started.
 
@@ -145,7 +145,7 @@ To solve that, we start with a negative look-ahead assertion in this case and th
     indentNextLinePattern = '^(?!.*;\s*//).*[^\s;{}]\s*$';
 
 
-### Ignoring Lines
+### Ignoring Lines {ignoring_lines}
 
 Sometimes we have lines which are outside the normal indent, or does not affect the indent despite matching our rather general `indentNextLinePattern`. In our example these are the preprocessor lines (line 7, 9 and, 11).
 
@@ -165,7 +165,7 @@ To instruct it to ignore preprocessor lines, lines with leading comments or a fe
     unIndentedLinePattern =
        '^\s*((/\*|\*/\s*$|//|#|@interface|@implementation|@end).*)?$';
 
-## Plug-in API
+## Plug-in API {plug-in_api}
 
 When launched, TextMate loads plug-ins located in `~/‍Library/‍Application Support/‍TextMate/‍PlugIns`. The plug-in should be a normal Objective-C bundle with a principal class which will receive an `initWithPlugInController:` when instantiated.
 

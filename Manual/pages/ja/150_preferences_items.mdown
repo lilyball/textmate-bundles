@@ -1,4 +1,4 @@
-# Preferences Items 設定アイテム
+# Preferences Items 設定アイテム {preferences_items}
 
 ファイルタイプやドキュメントの中のキャレットの位置などに基づいて、さまざまな値を保つことが有益な設定に関しては, 
 バンドルエディタで、どのスコープが適用されるかを選ぶスコープセレクタを指定することができます。
@@ -7,7 +7,7 @@
 
 ![Preferences Editor](preferences_editor.png)
 
-## Completions　補完
+## Completions　補完 {completions}
 
  * `completions` — 現在のドキュメントから補完の候補を順番に表示するときのための追加候補の配列
  * `completionCommand` — (`TM_CURRENT_WORD`変数から得られる)現在の単語を補完するための候補のリストを返すシェルコマンド（文字列）
@@ -18,7 +18,7 @@ For more info see section on [completions][Completions].
 より詳しい情報は[補完][Completions]のセクションをみてください。
 
 
-## Indentation　インデント
+## Indentation　インデント {indentation}
 
  * `decreaseIndentPattern` — 正規表現.
  * `increaseIndentPattern` — 正規表現
@@ -27,14 +27,14 @@ For more info see section on [completions][Completions].
 
 より詳しい情報は[インデントルール][IndentRules]を見てください。
 
-## Symbol List　シンボルリスト
+## Symbol List　シンボルリスト {symbol_list}
 
  * `showInSymbolList` — シンボルリストに含むためには`1`をセットしてください。
  * `symbolTransformation` — 引き出された"symbol"に対して適用される 一つ以上の`s/«regexp»/«format»/«options»;`という変形からなる"プログラム"。
  
 詳しくは[シンボルリストのカスタマイズ][CustomizeSymbolList]を見てください。
 
-## Paired Characters　ペアになる文字
+## Paired Characters　ペアになる文字 {paired_characters}
 
  * `highlightPairs` — もし見つかれば、キャレットが二つ目を超えたとき、一つ目が短い間強調して表示される場合の、それぞれが文字のペアを持っている配列の配列。
  * `smartTypingPairs` —  一つ目がタイプされたときに、二つ目が挿入される場合の、それぞれが文字のペアを持っている配列の配列。 例えば、以下のようなものがあります。[自動でペアになる文字][AutoPairs]を見てください。
@@ -50,7 +50,7 @@ For more info see section on [completions][Completions].
     	);
 
 
-## Other その他
+## Other その他 {other}
 
  * `shellVariables` — キー／値のペアの配列 [コンテクスト依存変数][ScopedEnvVariables]をみてください。
  * `spellChecking` — スペルチェックを無効化／有効化するには、`0`/`1`をセットしてください。

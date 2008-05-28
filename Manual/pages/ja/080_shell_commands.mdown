@@ -1,4 +1,4 @@
-# Shell Commands　（シェルコマンド）
+# Shell Commands　（シェルコマンド） {shell_commands}
 
 シェルはいろいろなプログラム（シェルコマンド）を統合するためのスクリプト言語で、例えば、ターミナルを起動して実行するコマンドを入力したときのようにインタラクティブに使われることも多いです。
 
@@ -7,7 +7,7 @@
 
 [AppleShellTutorial]: http://developer.apple.com/documentation/OpenSource/Conceptual/ShellScripting/index.html
 
-## Executing Commands / Filtering Text　コマンドの実行／テキストのフィルタリング
+## Executing Commands / Filtering Text　コマンドの実行／テキストのフィルタリング {executing_commands_filtering_text}
 
 TextMateではさまざまなコンテクストでシェルコマンドを実行できます。実用的な方法には次のようなものがあります:
 
@@ -24,7 +24,7 @@ TextMateではさまざまなコンテクストでシェルコマンドを実行
     ![Command Editor](command_editor.png)
 
 
-## Search Path サーチパス
+## Search Path サーチパス {search_path}
 
 ターミナルでコマンドを実行すると、（絶対パスなしで設定されている）シェルは`PATH`変数の値を使って、コマンドを見つけます。例えば`ruby`は`/usr/bin/ruby`にあります。`svn`は（私のでは)`/opt/local/bin/svn`にあります。
 

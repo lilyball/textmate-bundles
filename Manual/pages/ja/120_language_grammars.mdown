@@ -1,4 +1,4 @@
-# Language Grammars
+# Language Grammars {language_grammars}
 
 Language grammars are used to assign names to document elements such as keywords, comments, strings or similar. The purpose of this is to allow styling (syntax highlighting) and to make the text editor “smart” about which context the caret is in. For example you may want a key stroke or tab trigger to act differently depending on the context, or you may want to disable spell check as you type those portions of your text document which are not prose (e.g. HTML tags).
 
@@ -6,7 +6,7 @@ The language grammar is used only to parse the document and assign names to subs
 
 For a more thorough introduction to this concept see the [introduction to scopes](http://macromates.com/blog/archives/2005/07/06/introduction-to-scopes/) blog post.
 
-## Example Grammar
+## Example Grammar {example_grammar}
 
 You can create a new language grammar by opening the bundle editor (Window &#x2192; Show Bundle Editor) and select “New Language” from the add button in the lower left corner.
 
@@ -48,7 +48,7 @@ There are two additional (root level) keys which are not used in the example:
 
  * `repository` — a dictionary (i.e. key/value pairs) of rules which can be included from other places in the grammar. The key is the name of the rule and the value is the actual rule. Further explanation (and example) follow with the description of the `include` rule key.
 
-## Language Rules
+## Language Rules {language_rules}
 
 A language rule is responsible for matching a portion of the document. Generally a rule will specify a name which gets assigned to the part of the document which is matched by that rule.
 
@@ -60,7 +60,7 @@ In this latter form, the rule can have sub-rules which are matched against the p
 
 _Note that the regular expressions are matched against only a **single line of the document** at a time. That means it is **not possible to use a pattern that matches multiple lines**._ The reason for this is technical: being able to restart the parser at an arbitrary line and having to re-parse only the minimal number of lines affected by an edit. In most situations it is possible to use the begin/end model to overcome this limitation.
 
-## Rule Keys
+## Rule Keys {rule_keys}
 
 What follows is a list of all keys which can be used in a rule.
 
@@ -156,7 +156,7 @@ What follows is a list of all keys which can be used in a rule.
         This will correctly match a string like: `qq( this (is (the) entire) string)`.
 
 
-## Naming Conventions
+## Naming Conventions {naming_conventions}
 
 <!-- punctuation scope: http://pastie.textmate.org/15698 -->
 

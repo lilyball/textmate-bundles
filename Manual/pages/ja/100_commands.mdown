@@ -1,4 +1,4 @@
-# Commands
+# Commands {commands}
 
 Commands are scripts interpreted by bash or the interpreter specified at the top using shebang notation (e.g. `#!/usr/bin/ruby`).
 
@@ -8,7 +8,7 @@ Editing commands is done from the Bundle Editor which you can open by selecting 
 
 TextMate can save either the current document or all modified documents in the project, before running the command. This is set using the top pop-up control. A document will only be saved when it has been modified.
 
-## Command Input
+## Command Input {command_input}
 
 When running a command the various [environment variables][EnvVariables] will be available for the command to read and use. In addition, the command can read either the entire document or the selected text as input (stdin).
 
@@ -22,7 +22,7 @@ This means that if the language grammar marks up URLs and gives these a scope of
 
 When a command name is shown outside the bundle editor (like in the menus) and a fallback unit is provided then TextMate will substitute “_Unit_ / Selection” (in its name) with either “_Unit_” or “Selection” depending on whether or not text is selected. The text used for _Unit_ should be a single word representing the fallback unit, i.e. Character, Word, Line, Scope (or what the scope represents, but as a single word), or Document. So if you make a command with the name “Encrypt Document / Selection” and specify its input as Selected Text, but with Document set as a fallback, this command will be presented as “Encrypt Document” when no text is selected, otherwise “Encrypt Selection.”
 
-## Command Output
+## Command Output {command_output}
 
 TextMate can do miscellaneous things with the output (stdout) of a command, the options are:
 
@@ -43,7 +43,7 @@ TextMate can do miscellaneous things with the output (stdout) of a command, the 
    ![Diff Result](diff_result.png)
 
 
-## HTML Output
+## HTML Output {html_output}
 
 The HTML output option has a few advantages in addition to providing access to [WebKit’s](http://webkit.opendarwin.org/) HTML and CSS engine.
 
@@ -81,7 +81,7 @@ Due to a (presumed) security restriction with WebKit it is not possible to have 
 
 For a longer post about how the HTML output can be used visit [the TextMate blog](http://macromates.com/blog/archives/2005/09/28/html-output-for-commands/).
 
-## Changing Output Type
+## Changing Output Type {changing_output_type}
 
 There are situations where it is useful to change the output option of a command from within the command. For example a command which looks up documentation for the current word may want to show a “no documentation found” tool tip for when there is no documentation, but otherwise use the HTML output option for the result.
 
@@ -107,7 +107,7 @@ So for example the Diff bundle has a “[Diff] Document With Saved Copy” that 
        else exit_show_tool_tip "No saved copy exists."
     fi
 
-## Useful bash Functions
+## Useful bash Functions {useful_bash_functions}
 
 When running commands there are a few predefined bash functions which might be useful:
 
@@ -127,7 +127,7 @@ The functions mentioned above are all defined in `$TM_SUPPORT_PATH/lib/bash_init
     redirect "http://example.com/"
 
 
-## Dialogs (Requesting Input & Showing Progress)
+## Dialogs (Requesting Input & Showing Progress) {dialogs_requesting_input_showing_progress}
 
 TextMate ships with CocoaDialog so this can be used out-of-the-box. You call [CocoaDialog](http://cocoadialog.sourceforge.net/documentation.html) (follow the link for full documentation) with the type of dialog you want and it will return two lines of text, the first is the button pressed (as a number) and the second is the actual result. While a little cumbersome, here is an example of how to request a line of text and only proceed if the user did not cancel:
 

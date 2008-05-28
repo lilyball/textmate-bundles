@@ -1,6 +1,6 @@
-# 他のアプリケーションからTextMateを使用する
+# 他のアプリケーションからTextMateを使用する {calling_textmate_from_other_applications}
 
-## シェル／ターミナル
+## シェル／ターミナル {shell_terminal}
 
 Mac OS Xには[`open`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man1/open.1.html)が付属します。このシェルコマンドはTerminalからダブルクリックをシミュレートします。引数`-a`を使うことによって_Open With…_の動作をすることもできます。例えば、`open -a TextMate .`で現在のフォルダを（まっさらのプロジェクトを）TextMateで開きます。
 
@@ -19,7 +19,7 @@ Mac OS Xには[`open`](http://developer.apple.com/documentation/Darwin/Reference
 
 このリンクを作った後、TextMateを他のアプリケーションの外部エディタとして使うためのシェル変数を設定する必要があるでしょう。
 
-### 一般的な EDITOR 変数
+### 一般的な EDITOR 変数 {the_general_editor_variable}
 
 The `EDITOR` variable is used by many shell commands, like `svn` (subversion) and `CVS`. To use TextMate as the editor for the `EDITOR` variable, set it like this (for bash and zsh users e.g. in `~/.bash_profile` or `~/.zshrc`):
 
@@ -34,7 +34,7 @@ TextMateがファイルを閉じるまで、コマンドを再会するのを待
     ln -s mate ~/bin/mate_wait   # run this once to create the link
     export EDITOR='mate_wait'    # use in your ~/.bash_profile
 
-### Git Editor
+### Git Editor {git_editor}
 
 When you commit to a [Git][] repository you may find that your caret is not at the first line.
 
@@ -46,7 +46,7 @@ To set it like this for Git, you can set the `GIT_EDITOR` variable or Git’s `c
 
 [Git]: http://git.or.cz/ "Git - Fast Version Control System"
 
-### TeX エディタ
+### TeX エディタ {tex_editor}
 
 TeXがファイルに関するエラーメッセージを表示する際、`e`を押すことで、ファイルを編集（し、エラーを訂正）することができます。
 
@@ -54,7 +54,7 @@ TextMateがこのように使われるように設定するためには`TEXEDIT`
 
     export TEXEDIT='mate -w -l %d "%s"'
 
-### `less`での編集
+### `less`での編集 {edit_from_less}
 
 `less`ページャーは`v`を押すことで、そのファイルを編集することができます。TextMateをlessで使うためには、`LESSEDIT`変数をする必要があります:
 
@@ -62,7 +62,7 @@ TextMateがこのように使われるように設定するためには`TEXEDIT`
     export LESSEDIT='mate -l %lm %f'
 
 
-## URLスキーム (HTML)
+## URLスキーム (HTML) {url_scheme_html}
 
 `txmt`というURLスキームを使うことによって、例えば、HTMLドキュメント（アンカー）の中にあるハイパーリンク経由でTextMateでファイルを開くことができます。ローカルのファイルを参照できるので次のようなときに役に立ちます:
 
@@ -82,7 +82,7 @@ URLスキームは`txmt:`で現在は`open`というコマンドを使ってい�
 
     txmt://open/?url=file://~/.bash_profile&line=11&column=2
 
-## ODBエディタスイート
+## ODBエディタスイート {odb_editor_suite}
 
 TextMateはODBエディタスイートのサーバーサイドを実装しています。このことによって、そのプロトコルのクライアントサイドを実装しているプログラムの外部エディタとして使うことができます。
 
@@ -90,7 +90,7 @@ TextMateはODBエディタスイートのサーバーサイドを実装してい
 
 [外部テキストエディタとして設定できるアプリケーション](http://macromates.com/wiki/Main/TextMateAwarePrograms)を追跡するwikiページあります。
 
-## Cocoaテキストフィールド
+## Cocoaテキストフィールド {cocoa_text_fields}
 
 TextMateには（Mailで使われているのを含めて）TextMateをスタンダードCocoaテキストエディタコントロールからTextMateを呼び出すことができる、"Edit in TextMate"というインプットマネージャーが含まれます。これは、Safariのフォーム要素のように、ODBエディタスイートを実装しないプログラムで使うときに便利です。
 

@@ -1,4 +1,4 @@
-# Saving Files ファイルの保存
+# Saving Files ファイルの保存 {saving_files}
 
 <!-- TextMate has a few options in the advanced preferences which affect how to save files.-->
 
@@ -6,7 +6,7 @@ TextMateにはファイルの保存の仕方に影響する上級の環境設定
 
 ![Prefs Saving](prefs_saving.png)
 
-## Atomic Saves　原子性での保存
+## Atomic Saves　原子性での保存 {atomic_saves}
 
 <!-- Atomic saves mean that instead of overwriting the file, TextMate saves to a new file and once this succeeds, overwrites the old file. This has the advantage that if your machine should crash while saving a file, you do not run the risk of losing the contents of both the old (last-saved) and new files. -->
 
@@ -16,13 +16,13 @@ TextMateにはファイルの保存の仕方に影響する上級の環境設定
 
 欠点は新しいファイルが実際に（新しいinodeとともに）書かれるので、ファイルへのエイリアスを壊してしまうかもしれないということです。しかし、これはファイルを移動したり、移動する予定であるときにのみ置きます。というのは、パスはエイリアスを解決する際にinodeより優先されるからです。また、Finderは保存するたびにファイルのアイコンの位置を変えます。（これはもしそのファイルがあなたの目に見えるフォオル谷あるときだけ問題になります。）
 
-## Creator Code （クリエータコード）
+## Creator Code （クリエータコード） {creator_code}
 
 <!-- The creator code is how Classic Macs associated a file with its application. On OS X the association is mainly through the file extension, which has the advantage that if you one day get a better program (!) to handle a given file type, you only need to update the association in one place, instead of changing the creator code of all your saved files. For this reason the recommendation is to not set this or set it to _Blank_. -->
 
 クリエータコードはClassicのMacがファイルとアプリケーションを関連づける方法です。OS Xでは、関連付けは主にファイル拡張子を通じて行われます。もしある日与えられたファイルタイプを扱うもっとよいプログラム（！）が見つかった場合に、あなたは全てのファイルのクリエータコードを変えるのではなく、一カ所の関連付けをアップデートしさえすればよいので、拡張子には利点があります。このため、これをセットせず、ブランク(_Blank_)に設定しておくよう推奨します。
 
-## Encoding　（エンコーディング）
+## Encoding　（エンコーディング） {encoding}
 
 <!-- TextMate is heavily biased toward UTF-8. UTF-8 is an ASCII compatible encoding, so using it should give no problems with existing tools such as `grep`, `diff`, `ruby` (the interpreter), `gcc` (the compiler) etc. -->
 
@@ -62,7 +62,7 @@ TerminalでいくつかのファイルをUTF-8に変更するには、以下の�
     for f in *.txt; do iconv -f mac -t utf-8 "$f" >"$f.utf8"; done
 
 
-## Extended Attributes (Metadata)　拡張された属性（メタデータ）
+## Extended Attributes (Metadata)　拡張された属性（メタデータ） {extended_attributes_metadata}
 
 
 TigerからOS Xは[`setxattr`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/setxattr.2.html)とその仲間をサポートします。
@@ -78,7 +78,7 @@ TextMateは拡張された属性をキャレットのポジション、ブック
     defaults write com.macromates.textmate OakDocumentDisableFSMetaData 1
 
 
-## Save Automatically when Focus Is Lost　フォーカスがなくなったときに自動的に保存
+## Save Automatically when Focus Is Lost　フォーカスがなくなったときに自動的に保存 {save_automatically_when_focus_is_lost}
 
 もしあなたが、Terminalやブラウザのようなアプリケーションに切り替えてテストするようなプロジェクトをしているなら、フォーカスをがなくなったときに、修正されたすべてのファイルを保存するようにTextMateを設定することができます。そうして、ほかのアプリケーションに切り替えたとき、TextMateは自動的にすべての変更をを保存します。
 

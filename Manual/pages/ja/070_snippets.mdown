@@ -1,4 +1,4 @@
-# Snippets （スニペット）
+# Snippets （スニペット） {snippets}
 
 <!-- A snippet is a piece of text that you would like to insert in your document. It can include code to run at insertion time, variables (like selected text), tab stops/placeholders for missing information (which you can tab through after insertion) and perform transformations on the data which you enter in the placeholders. -->
 
@@ -6,7 +6,7 @@
 
 ![Snippet Editor](snippet_editor.png)
 
-## Plain Text　（プレーンテキスト）
+## Plain Text　（プレーンテキスト） {plain_text}
 
 <!-- n the simplest case, you can use snippets to insert text that you do not want to type again and again, either because you type it a lot, or because the actual text to insert is hard to remember (like your bank account details or the HTML entities for the Apple modifier keys).-->
 
@@ -18,7 +18,7 @@
 
 <!-- TODO リテラル文字　- == a literal character -->
 
-## Variables　（変数）
+## Variables　（変数） {variables}
 
 <!-- 
 You can insert the value of a [variable][EnvVariables] by prefixing the name of the variable with `$`. All the normal dynamic variables are supported, the most useful probably being `TM_SELECTED_TEXT`. If for example we want to create a snippet which wraps the selection in a LaTeX `\textbf` command, we can make a snippet which is:
@@ -46,7 +46,7 @@ You can insert the value of a [variable][EnvVariables] by prefixing the name of 
 
     ${TM_SELECTED_TEXT/^.+$/• $0/g}
 
-## Interpolated Shell Code (補完されたシェルコード）
+## Interpolated Shell Code (補完されたシェルコード） {interpolated_shell_code}
 
 <!-- You can use backticks to have shell code executed when the snippet is inserted. The result from running the code gets inserted into the snippet, though with the last newline in the result removed (if present). So for example to create a snippet that wraps the selection in an HTML link, where the URL of that link comes from the clipboard, we can do: -->
 
@@ -72,7 +72,7 @@ Inside shell code, the only character you need to escape is the backtick.
 シェルコードの中で、唯一エスケープが必要になるのはバックティックです。
 
 
-## Tab Stops
+## Tab Stops {tab_stops}
 
 <!-- After insertion, the caret will be placed after the last character of the snippet. This is not always desirable and we can change that by using `$0` to mark where we want the caret to be. So if for example we make an HTML div-snippet and want the caret to end between the opening and closing tags, we could make it like this: -->
 
@@ -99,7 +99,7 @@ Inside shell code, the only character you need to escape is the backtick.
 これで引数を埋めた後、`$0`の位置へタブで移動できます。
 
 
-## Placeholders (プレースホルダ）
+## Placeholders (プレースホルダ） {placeholders}
 
 <!-- Like variables, tab stops can also have default values (and are generally referred to as placeholders when they do). The syntax is the same: `${«tab stop»:«default value»}`. And the default value can contain both text, shell code and other placeholders. So we can refine the previous example further:-->
 
@@ -118,7 +118,7 @@ Inside shell code, the only character you need to escape is the backtick.
 
 プレースホルダのテキストを編集すると、あらゆる埋め込まれたタブは削除されます。
 
-## Mirrors　（ミラー）
+## Mirrors　（ミラー） {mirrors}
 
 <!-- TODO mirrorってどうやって訳そうか。反映はreflectだし。全く同じものを作るって意味だけど。反射はおかしいよねぇ。 -->
 
@@ -134,7 +134,7 @@ Inside shell code, the only character you need to escape is the backtick.
 
 このスニペットを挿入したあと、`enumerate`が挿入され、編集されれば、その変化は`end`にも反映されます。
 
-## Transformations（変形）
+## Transformations（変形） {transformations}
 
 <!-- There are situations where we want our placeholder text mirrored but with slight changes or where we want some text to appear depending on the value/presence of a placeholder. -->
 

@@ -654,9 +654,8 @@ TEXT
         require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth.rb"
         html << RedCloth.new(doc).to_html
       when /\.markdown/
-        require "#{ENV['TM_SUPPORT_PATH']}/lib/bluecloth.rb"
-        require "#{ENV['TM_SUPPORT_PATH']}/lib/rubypants.rb"
-        html << RubyPants.new(BlueCloth.new(doc).to_html).to_html
+        require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/markdown"
+        html << TextMate::Markdown.to_html(doc)
       when /\.html/
         html << doc
       when /\.text/

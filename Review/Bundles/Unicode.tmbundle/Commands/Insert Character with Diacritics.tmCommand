@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+# coding=utf-8
+
+import sys
+import unicodedata
+import re
+
+from os import popen2, path, environ as env
+
+tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
+if not tm_support_path in env:
+     sys.path.insert(0, tm_support_path)
+
+import tm_helpers
+
+run = 0
+try: env["TM_SELECTED_TEXT"]
+except KeyError:
+     run = 1
+
+if run == 0:
+     print "Please remove the selection firstly."
+     sys.exit(206)
+
+inputleft  = unicode(tm_helpers.current_word(r".*", "left"),  "UTF-8")
+if len(inputleft) == 0:
+     sys.exit(200)
+
+tail       = unicode(tm_helpers.current_word(r".*", "right"), "UTF-8")
+char       = inputleft[-1]
+head       = inputleft[:-1]
+
+
+
+# get the suggestion for 'char' by using grep
+inp, out = popen2("grep '^"+char.encode("UTF-8")+"\t' '"+path.join(env["TM_BUNDLE_PATH"], "Support/lib/charList.txt'"))
+inp.close()
+suggestions = list(list(unicode(out.read(), "UTF-8"))[2:])
+out.close()
+
+if len(suggestions) == 0:
+    mes = "Nothing found for '" + char + "'."
+    sys.__stdout__.write(mes.encode("UTF-8"))
+    sys.exit(206)
+
+# build plist for dialog
+cnt = 0
+plist = u"'{menuItems=("
+for item in suggestions[:-1]:
+     plist = plist + "{title=\"" + item + "\t" + unicodedata.name(suggestions[cnt]) + "\";},"
+     cnt = cnt + 1
+plist = plist[:-1] + ");}'"
+
+# menu dialog
+menudialog = "'" + env["DIALOG"] +"' -up "
+cmd = unicode(menudialog + plist.encode('utf-8') + "| grep 'integer'" , "UTF-8")
+inp, out = popen2(cmd.encode("UTF-8"))
+inp.close()
+result = out.read()
+if len(result) == 0:
+    sys.exit(206)
+index = eval(re.sub(r'.*?(\d+).*',r'\1', result))
+out.close()
+
+
+sys.__stdout__.write(head.encode("UTF-8"))
+sys.__stdout__.write(suggestions[index].encode("UTF-8"))
+sys.__stdout__.write(tail.encode("UTF-8"))
+
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^U</string>
+	<key>name</key>
+	<string>Insert Character with Diacritics</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>56AD1851-4682-46FC-BE6C-91F8CB26ACFF</string>
+</dict>
+</plist>

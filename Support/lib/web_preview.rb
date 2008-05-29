@@ -117,8 +117,9 @@ def html_head(options = { })
 end
 
 # compatibility function
-def html_header(tm_html_title, tm_html_lang = "", tm_extra_head = "")
-  puts html_head(:title => tm_html_title, :sub_title => tm_html_lang, :html_head => tm_extra_head)
+def html_header(tm_html_title, tm_html_lang = "", tm_extra_head = "", tm_window_title = nil, tm_fix_href = nil)
+  puts html_head(:title => tm_html_title, :sub_title => tm_html_lang, :html_head => tm_extra_head,
+                 :window_title => tm_window_title, :fix_href => tm_fix_href)
 end
 
 def html_footer

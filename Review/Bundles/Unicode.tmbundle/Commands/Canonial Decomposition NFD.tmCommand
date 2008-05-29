@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -10,7 +10,7 @@ cat &lt;&lt;-PY | python -
 # coding=utf-8
 import unicodedata
 import sys
-sys.__stdout__.write(unicodedata.normalize("NFKD", unicode("$T", "UTF-8")).encode("UTF-8"))
+sys.__stdout__.write(unicodedata.normalize("NFD", unicode("$T", "UTF-8")).encode("UTF-8"))
 sys.__stdout__.flush()
 PY</string>
 	<key>input</key>
@@ -18,10 +18,10 @@ PY</string>
 	<key>keyEquivalent</key>
 	<string>^U</string>
 	<key>name</key>
-	<string>Canonial Decomposition NFKD</string>
+	<string>Canonial Decomposition NFD</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>uuid</key>
-	<string>C2DAC5C4-8742-4C2B-8032-3C8C9D5C7CDF</string>
+	<string>E410A55D-CF02-412A-9978-85DA185243ED</string>
 </dict>
 </plist>

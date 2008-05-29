@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/python
+import unicodedata
+import sys
+import re
+
+for a in re.compile("(?um)(.)").split(unicode(sys.stdin.read(), "UTF-8")):
+     if (len(a)==1) and (a != '\n'):
+          res = a + " : " + unicodedata.name(a)
+          print res.encode("UTF-8")</string>
+	<key>fallbackInput</key>
+	<string>character</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^U</string>
+	<key>name</key>
+	<string>Show Unicode Names</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>13FB5612-63F9-4FE5-B43C-ACB0E45B7386</string>
+</dict>
+</plist>

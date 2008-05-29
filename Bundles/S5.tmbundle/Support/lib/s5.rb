@@ -1,7 +1,6 @@
 # Module for S5 presenation; S5 by Eric Meyer; module by Brad Choate
 
-require "#{ENV['TM_SUPPORT_PATH']}/lib/bluecloth.rb"
-require "#{ENV['TM_SUPPORT_PATH']}/lib/rubypants.rb"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/markdown"
 
 class S5 < String
   DIVIDER = '✂------'
@@ -57,12 +56,12 @@ class S5 < String
 
     require 'cgi'
     # set values for template
-    @title = RubyPants.new(CGI::escapeHTML("#{headers['Title']}")).to_html
+    @title = TextMate::Markdown.to_html(CGI::escapeHTML("#{headers['Title']}"), :no_markdown => true)
     @date = headers['Date']
-    @subtitle = RubyPants.new(CGI::escapeHTML("#{headers['Subtitle']}")).to_html
-    @location = RubyPants.new(CGI::escapeHTML("#{headers['Location']}")).to_html
-    @presenter = RubyPants.new(CGI::escapeHTML("#{headers['Presenter'] || headers['Author']}")).to_html
-    @organization = RubyPants.new(CGI::escapeHTML("#{headers['Organization'] || headers['Company']}")).to_html
+    @subtitle = TextMate::Markdown.to_html(CGI::escapeHTML("#{headers['Subtitle']}"), :no_markdown => true)
+    @location = TextMate::Markdown.to_html(CGI::escapeHTML("#{headers['Location']}"), :no_markdown => true)
+    @presenter = TextMate::Markdown.to_html(CGI::escapeHTML("#{headers['Presenter'] || headers['Author']}"), :no_markdown => true)
+    @organization = TextMate::Markdown.to_html(CGI::escapeHTML("#{headers['Organization'] || headers['Company']}"), :no_markdown => true)
     @theme = headers['Theme'] || 'default'
     @defaultView = headers['View'] || 'slideshow'
     @controlVis = headers['Controls'] || 'visible'
@@ -129,9 +128,9 @@ class S5 < String
         handout = nil
         notes = nil
       end
-      content = RubyPants.new(BlueCloth.new(content).to_html).to_html
-      notes = RubyPants.new(BlueCloth.new(notes).to_html).to_html unless notes.nil?
-      handout = RubyPants.new(BlueCloth.new(handout).to_html).to_html unless handout.nil?
+      content = TextMate::Markdown.to_html(content)
+      notes = TextMate::Markdown.to_html(notes) unless notes.nil?
+      handout = TextMate::Markdown.to_html(handout) unless handout.nil?
 
       all_slides += eval '%Q{' + slide_tmpl + '}'
     end

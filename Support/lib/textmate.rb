@@ -26,7 +26,7 @@ module TextMate
     end
 
     def require_cmd(command, message = nil)
-      if `which #{command}`.empty?
+      if `which "#{command}"`.empty?
         require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview'
         
         html_header("Command Not Found", "", "", "Command Not Found - #{command}")

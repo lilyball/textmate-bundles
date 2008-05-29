@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>T=$(perl -pe 's/\\/\\\\/g;s/\n/\\n/g;s/"/\\"/g')
-cat &lt;&lt;-PY | python - | perl -e 'no warnings;binmode (STDIN, ":utf8");while(&lt;&gt;){s/[\x{0300}-\x{0362}\x{3099}-\x{309C}\x{FF9E}\x{FF9F}]//g;print}'
+cat &lt;&lt;-PY | python - | perl -e 'no warnings;binmode (STDIN, ":utf8");while(&lt;&gt;){s/[\x{0300}-\x{0362}\x{3099}-\x{309C}\x{FF9E}\x{FF9F}]//g;s/\x{0142}/l/g;s/\x{0141}/L/g;s/\x{00F8}/o/g;s/\x{00D8}/O/g;print}'
 # coding=utf-8
 import unicodedata
 import sys

@@ -10,7 +10,7 @@ cat &lt;&lt;-PY | python -
 # coding=utf-8
 import unicodedata
 import sys
-sys.__stdout__.write(unicodedata.normalize("NFC", unicode("$T", "UTF-8")).encode("UTF-8"))
+sys.__stdout__.write(unicodedata.normalize("NFD", unicode("$T", "UTF-8")).encode("UTF-8"))
 sys.__stdout__.flush()
 PY</string>
 	<key>input</key>
@@ -18,10 +18,10 @@ PY</string>
 	<key>keyEquivalent</key>
 	<string>^U</string>
 	<key>name</key>
-	<string>Canonial Composition NFC</string>
+	<string>Canonical Decomposition NFD</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>uuid</key>
-	<string>9515D271-DEB0-4836-8CD3-477B1EF287E2</string>
+	<string>A2F33C69-E40F-42F0-8308-7590EDFAA1E6</string>
 </dict>
 </plist>

@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
 
 module TextMate
 
@@ -21,6 +22,33 @@ module TextMate
         `open "txmt://open?url=file://#{e_url options[:file]}&line=#{options[:line]}&column=#{options[:column]}"`
       else
         `open "txmt://open?line=#{options[:line]}&column=#{options[:column]}"`
+      end
+    end
+
+    def require_cmd(command, message = nil)
+      if `which #{command}`.empty?
+        require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview'
+        
+        html_header("Command Not Found", "", "", "Command Not Found - #{command}")
+        puts <<-HTML
+          <h3 class="error">Unable to locate <tt>#{command}</tt></h3>
+          
+          <p>#{message || "To succesfully run this action you need to
+          install <tt>«#{command}»</tt>. If you know that it is already
+          installed on your system, you instead need to update
+          your search path.</p>
+
+          <p>The manual has a section about <a href=\"help:anchor='search_path'%20bookID='TextMate%20Help'\">how to update your search path</a>."}</p>
+
+          <p>For diagnostic purposes, the paths searched for <tt>«#{command}»</tt> were:</p>
+          
+          <ul>
+            #{`echo $PATH`.gsub(/:/, "\n").gsub(/^(.*)$/, "<li>\\&</li>")}
+          </ul>
+        HTML
+        html_footer
+        
+        TextMate.exit_show_html
       end
     end
 

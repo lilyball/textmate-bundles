@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>and_return ${1:{}${1/^(?:(d(o)?)|(\{)|).*/(?1:(?2::o)\n\t:(?3: ))/}$2${1/^(?:(d(o)?)|(\{)|).*/(?1:\nend:(?3: }))/}</string>
+	<string>and_return { $1 }</string>
 	<key>name</key>
 	<string>and_return with block</string>
 	<key>scope</key>

@@ -18,7 +18,7 @@ if not sys.version.startswith("2.5"):
         return not bool(len([truth for truth in it if truth is False]))
 
 def item(val):
-    if isinstance(val, str):
+    if isinstance(val, (unicode, str)):
         return {"title": val}
     if isinstance(val, tuple):
         return {"title": val[0]}
@@ -43,8 +43,8 @@ def menu(options):
     hashed_options = False
     if not options:
         return None
-    if all_are_instance(options, (str, NoneType)):
-        menu = dict(menuItems=[item(val) for val in options])    
+    if all_are_instance(options, (unicode, str, NoneType)):
+        menu = dict(menuItems=[item(val) for val in options])
     elif all_are_instance(options, (tuple, NoneType)):
         hashed_options = True
         menu = dict(menuItems=[item(pair) for pair in options])

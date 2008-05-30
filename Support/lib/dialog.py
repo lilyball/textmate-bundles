@@ -3,15 +3,14 @@ import sys
 import os
 import re
 
+from tm_helpers import sh, sh_escape, to_plist, from_plist
+
 # fix up path
 tm_support_path = os.path.join(os.environ["TM_SUPPORT_PATH"], "lib")
 if not tm_support_path in os.environ:
     sys.path.insert(0, tm_support_path)
 
-from tm_helpers import sh, sh_escape, to_plist, from_plist
-
-support = os.environ["TM_SUPPORT_PATH"]
-dialog = os.path.join(support, 'bin/tm_dialog')
+dialog = os.environ["DIALOG"]
 
 if not sys.version.startswith("2.5"):
     def all(it):

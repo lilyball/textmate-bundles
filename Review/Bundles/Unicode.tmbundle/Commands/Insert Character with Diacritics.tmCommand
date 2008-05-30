@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,6 +7,8 @@
 	<key>command</key>
 	<string>#!/usr/bin/env python
 # coding=utf-8
+
+# written by Hans-Jörg Bibiko; bibiko at eva.mpg.de
 
 import sys
 import unicodedata
@@ -19,6 +21,7 @@ if not tm_support_path in env:
      sys.path.insert(0, tm_support_path)
 
 import tm_helpers
+import dialog
 
 run = 0
 try: env["TM_SELECTED_TEXT"]
@@ -29,15 +32,15 @@ if run == 0:
      print "Please remove the selection firstly."
      sys.exit(206)
 
-inputleft  = unicode(tm_helpers.current_word(r".*", "left"),  "UTF-8")
+inputleft = unicode(tm_helpers.current_word(r".*", "left"),  "UTF-8")
 if len(inputleft) == 0:
      sys.exit(200)
 
-tail       = unicode(tm_helpers.current_word(r".*", "right"), "UTF-8")
-char       = inputleft[-1]
-head       = inputleft[:-1]
+tail = unicode(tm_helpers.current_word(r".*", "right"), "UTF-8")
+char = inputleft[-1]
+head = inputleft[:-1]
 
-# get the suggestion for 'char' by using grep
+# get the suggestion for 'char' by using grep against charList.txt
 inp, out = popen2("grep '"+char.encode("UTF-8")+"' '"+path.join(env["TM_BUNDLE_PATH"], "Support/lib/charList.txt'"))
 inp.close()
 suggestions = list(unicode(out.read(), "UTF-8"))
@@ -48,27 +51,12 @@ if len(suggestions) == 0:
     sys.__stdout__.write(mes.encode("UTF-8"))
     sys.exit(206)
 
-# build plist for dialog
-cnt = 0
-plist = u"'{menuItems=("
-for item in suggestions[:-1]:
-     plist = plist + "{title=\"" + item + "\t" + unicodedata.name(suggestions[cnt]) + "\";},"
-     cnt = cnt + 1
-plist = plist[:-1] + ");}'"
-
-# menu dialog
-menudialog = "'" + env["DIALOG"] +"' -up "
-cmd = unicode(menudialog + plist.encode('utf-8') + "| grep 'integer'" , "UTF-8")
-inp, out = popen2(cmd.encode("UTF-8"))
-inp.close()
-result = out.read()
-if len(result) == 0:
+result=dialog.menu([a + "\t" + unicodedata.name(a) for a in suggestions[:-1]])
+if not result:
     sys.exit(206)
-index = eval(re.sub(r'.*?(\d+).*',r'\1', result))
-out.close()
 
 sys.__stdout__.write(head.encode("UTF-8"))
-sys.__stdout__.write(suggestions[index].encode("UTF-8"))
+sys.__stdout__.write(result.split('\t')[0].encode("UTF-8"))
 sys.__stdout__.write(tail.encode("UTF-8"))
 
 </string>

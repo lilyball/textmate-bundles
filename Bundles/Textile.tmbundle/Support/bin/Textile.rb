@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "redcloth"
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/redcloth'
 
 contents = Array.new()
 $stdin.each_line() { |line|

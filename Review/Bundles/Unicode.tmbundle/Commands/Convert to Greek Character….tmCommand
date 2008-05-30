@@ -59,7 +59,7 @@ if len(suggestions) == 1:
     sys.__stdout__.write(head.encode("UTF-8"))
     sys.__stdout__.write(re.sub(r'\\','',suggestions[0]).encode("UTF-8"))
     sys.__stdout__.write(tail.encode("UTF-8"))
-    sys.exit()
+    sys.exit(201)
 try:
     result=dialog.menu([tm_helpers.sh_escape(a) + "\t" + unicodedata.name(a) for a in suggestions])
     if not result:
@@ -68,8 +68,9 @@ try:
     sys.__stdout__.write(head.encode("UTF-8"))
     sys.__stdout__.write(re.sub(r'\\','',result.split('\t')[0]).encode("UTF-8"))
     sys.__stdout__.write(tail.encode("UTF-8"))
+    sys.exit(201)
 except KeyError:
-    sys.exit(200)
+    sys.exit(206)
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>
@@ -80,7 +81,7 @@ except KeyError:
 	<key>name</key>
 	<string>Convert to Greek Character…</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>AC1FF4B5-2F93-4816-AA54-F4B150AFEFD2</string>
 </dict>

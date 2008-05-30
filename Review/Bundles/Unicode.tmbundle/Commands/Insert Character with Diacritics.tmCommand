@@ -59,15 +59,16 @@ if len(suggestions) == 0:
     sys.exit(206)
 
 try:
-    result=dialog.menu([tm_helpers.sh_escape(a) + "\t" + unicodedata.name(a) for a in suggestions])
+    result=dialog.menu([re.sub(r"(?=[^a-zA-Z0-9_ .\/\-\x7F-\xFF\n])", r'\\', a) + "\t" + unicodedata.name(a) for a in suggestions])
     if not result:
         sys.exit(200)
 
     sys.__stdout__.write(head.encode("UTF-8"))
     sys.__stdout__.write(re.sub(r'\\','',result.split('\t')[0]).encode("UTF-8"))
     sys.__stdout__.write(tail.encode("UTF-8"))
+    sys.exit(201)
 except KeyError:
-    sys.exit(200)
+    sys.exit(206)
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>
@@ -78,7 +79,7 @@ except KeyError:
 	<key>name</key>
 	<string>Convert to a similar Unicode Character…</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>56AD1851-4682-46FC-BE6C-91F8CB26ACFF</string>
 </dict>

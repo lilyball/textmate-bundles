@@ -20,7 +20,6 @@ tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
 if not tm_support_path in env:
      sys.path.insert(0, tm_support_path)
 
-import tm_helpers
 import dialog
 
 run = 0
@@ -32,18 +31,22 @@ if run == 0:
      print "Please remove the selection firstly."
      sys.exit(206)
 
-inputleft = unicode(tm_helpers.current_word(r".*", "left"),  "UTF-8")
+line, x = env["TM_CURRENT_LINE"], int(env["TM_LINE_INDEX"])
+
+inputleft = unicode(line[:x], "UTF-8")
+
 if len(inputleft) == 0:
      sys.exit(200)
 
-tail = unicode(tm_helpers.current_word(r".*", "right"), "UTF-8")
+tail = unicode(line[x:], "UTF-8")
 char = inputleft[-1]
 head = inputleft[:-1]
 
 # get the suggestion for 'char' by using grep against charList.txt
-inp, out = popen2("grep '"+char.encode("UTF-8")+"' '"+path.join(env["TM_BUNDLE_PATH"], "Support/lib/charList.txt'"))
+# and replace all newline by -
+inp, out = popen2("grep '"+char.encode("UTF-8")+"' '"+path.join(env["TM_BUNDLE_PATH"], "Support/lib/charList.txt' | perl -pe 's/\n/-/g'"))
 inp.close()
-suggestions = list(unicode(out.read(), "UTF-8"))
+suggestions = list(unicode(out.read(), "UTF-8"))[:-1]
 out.close()
 
 if len(suggestions) == 0:
@@ -51,7 +54,8 @@ if len(suggestions) == 0:
     sys.__stdout__.write(mes.encode("UTF-8"))
     sys.exit(206)
 
-result=dialog.menu([a + "\t" + unicodedata.name(a) for a in suggestions[:-1]])
+
+result=dialog.menu([a + "\t" + unicodedata.name(a) for a in suggestions])
 if not result:
     sys.exit(206)
 

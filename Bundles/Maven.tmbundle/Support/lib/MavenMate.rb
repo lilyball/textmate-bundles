@@ -2,8 +2,10 @@
 
 require ENV["TM_SUPPORT_PATH"] + "/lib/scriptmate"
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/process'
 
 require "pstore"
+require "yaml"
 
 $SCRIPTMATE_VERSION = "$Revision: 8136 $"
 $VERBOSE = nil
@@ -38,32 +40,26 @@ class MavenCommand
       
       MavenMate.set_pref(@previous_args_pref_key, args_for_task) if args_for_task != previous_args_for_task
 
-      @command = ""
-      @command += "#{@task}" unless @task.empty?
-      
-      unless args_for_task.empty?
-        @command += " " unless @command.empty?
-        @command += "#{args_for_task}"
-      end
-      MavenMate.set_pref(@previous_command_pref_key, @command)
+      @command = []
+      @command << @task unless @task.empty?
+      @command << "#{args_for_task}" unless args_for_task.empty?
+    
+      MavenMate.set_pref(@previous_command_pref_key, @command.to_yaml)
       @command = MavenMate.add_profiles_to_command(@location, @command)
     end
     @command
   end
   
   def full_command
-    @mvn + " " + command
+    command.unshift(@mvn)
   end
   
-  def run
-    Dir.chdir(@location)
-    rd, wr = IO.pipe
-    rd.fcntl(Fcntl::F_SETFD, 1)
-    stdin, stdout, stderr, pid = my_popen3(full_command)
-    wr.close
-    [stdout, stderr, rd, pid]
+  def run(&block)
+    Dir.chdir(@location) do
+      TextMate::Process.run(full_command, :echo => true, &block)
+    end
   end
-  
+
   def html
     mavenmate = MavenMate.new(self)
     mavenmate.emit_html
@@ -85,7 +81,7 @@ class PreviousMavenCommand < MavenCommand
   
   def command
     if @command.nil?
-      @command = MavenMate.get_pref(@previous_command_pref_key)
+      @command = YAML::load(MavenMate.get_pref(@previous_command_pref_key))
       @command = MavenMate.add_profiles_to_command(@location, @command)
     end
     @command
@@ -94,7 +90,7 @@ end
 
 class MavenFocusedTestCommand < MavenCommand
   def initialize(mvn, location, test)
-    super(mvn, location, 'test -Dtest=' + test.sub(/\.\w+$/, ''))
+    super(mvn, location, ['test', '-Dtest=' + test.sub(/\.\w+$/, '')])
   end
 end
 
@@ -132,7 +128,7 @@ class MavenMate < CommandMate
   def emit_header
     puts html_head(:window_title => "MavenMate", :page_title => "MavenMate", :sub_title => "#{@command.location}")
     puts "<pre>"
-    puts "<strong>mvn " + htmlize(@command.command) + "</strong><br>\n"
+    puts "<strong>mvn " + htmlize(@command.command.join(' ')) + "</strong><br>\n"
   end
   
   def filter_stdout(line)
@@ -181,9 +177,8 @@ class MavenMate < CommandMate
     p = profiles(location)
     return command if p.nil? or p.empty?
       
-    command += " " unless command.empty?
-    command += "-P #{p}"
-    command
+    command << "-P"
+    command << p
   end
   
   def shell

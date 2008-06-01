@@ -33,7 +33,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(build)(&gt;)</string>
+					<string>(&lt;)(build)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -58,7 +58,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(build)(&gt;)</string>
+					<string>(&lt;/)(build)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -108,7 +108,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(dependencies)(&gt;)</string>
+					<string>(&lt;)(dependencies)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -133,7 +133,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(dependencies)(&gt;)</string>
+					<string>(&lt;/)(dependencies)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -179,7 +179,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(dependency)(&gt;)</string>
+					<string>(&lt;)(dependency)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -204,7 +204,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(dependency)(&gt;)</string>
+					<string>(&lt;/)(dependency)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -254,7 +254,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(distributionManagement)(&gt;)</string>
+					<string>(&lt;)(distributionManagement)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -279,7 +279,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(distributionManagement)(&gt;)</string>
+					<string>(&lt;/)(distributionManagement)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -321,7 +321,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(extension)(&gt;)</string>
+					<string>(&lt;)(extension)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -346,7 +346,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(extension)(&gt;)</string>
+					<string>(&lt;/)(extension)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -396,7 +396,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(extensions)(&gt;)</string>
+					<string>(&lt;)(extensions)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -421,7 +421,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(extensions)(&gt;)</string>
+					<string>(&lt;/)(extensions)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -467,7 +467,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>((&lt;)(artifactId)(&gt;))(groovy-maven-plugin)((&lt;/)(artifactId)(&gt;))</string>
+					<string>((&lt;)(artifactId)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;))(groovy-maven-plugin)((&lt;/)(artifactId)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;))</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -529,7 +529,7 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>(&lt;)(source)(&gt;)</string>
+							<string>(&lt;)(source)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>0</key>
@@ -556,7 +556,7 @@
 							<key>contentName</key>
 							<string>source.groovy</string>
 							<key>end</key>
-							<string>(&lt;/)(source)(&gt;)</string>
+							<string>(&lt;/)(source)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 							<key>endCaptures</key>
 							<dict>
 								<key>0</key>
@@ -638,7 +638,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(plugin)(&gt;)</string>
+					<string>(&lt;)(plugin)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -663,7 +663,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(plugin)(&gt;)</string>
+					<string>(&lt;/)(plugin)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -717,7 +717,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(plugins)(&gt;)</string>
+					<string>(&lt;)(plugins)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -742,7 +742,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(plugins)(&gt;)</string>
+					<string>(&lt;/)(plugins)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -818,7 +818,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(profile)(&gt;)</string>
+					<string>(&lt;)(profile)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -843,7 +843,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(profile)(&gt;)</string>
+					<string>(&lt;/)(profile)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -893,7 +893,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(profiles)(&gt;)</string>
+					<string>(&lt;)(profiles)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -918,7 +918,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(profiles)(&gt;)</string>
+					<string>(&lt;/)(profiles)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -960,7 +960,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(reporting)(&gt;)</string>
+					<string>(&lt;)(reporting)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -985,7 +985,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(reporting)(&gt;)</string>
+					<string>(&lt;/)(reporting)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1031,7 +1031,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(repositories)(&gt;)</string>
+					<string>(&lt;)(repositories)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1056,7 +1056,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(&lt;/)(repositories)(&gt;)</string>
+					<string>(&lt;/)(repositories)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>

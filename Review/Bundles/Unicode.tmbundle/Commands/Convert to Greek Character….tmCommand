@@ -23,12 +23,7 @@ if not tm_support_path in env:
 import dialog
 import tm_helpers
 
-run = 0
-try: env["TM_SELECTED_TEXT"]
-except KeyError:
-     run = 1
-
-if run == 0:
+if "TM_SELECTED_TEXT" in env:
      print "Please remove the selection firstly."
      sys.exit(206)
 

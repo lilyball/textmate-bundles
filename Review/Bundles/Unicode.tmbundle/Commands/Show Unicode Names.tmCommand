@@ -12,9 +12,12 @@ import re
 import os
 
 if "TM_SELECTED_TEXT" in os.environ:
-    for a in re.compile("(?um)(.)").split(unicode(sys.stdin.read(), "UTF-8")):
-         if (len(a)==1) and (a != '\n'):
-              res = a + " : " + unicodedata.name(a, "U+%04X" % ord(a))
+    for a in unicode(sys.stdin.read(), "UTF-8"):
+         if a != '\n':
+              res = u"%s : U+%04X" % (a, ord(a))
+              name = unicodedata.name(a, None)
+              if name:
+                  res += u" : %s" % name
               print res.encode("UTF-8")
 else:
     line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
@@ -26,11 +29,11 @@ else:
 
 </string>
 	<key>fallbackInput</key>
-	<string>none</string>
+	<string>word</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^U</string>
+	<string>^~@u</string>
 	<key>name</key>
 	<string>Show Unicode Name(s)</string>
 	<key>output</key>

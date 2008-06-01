@@ -6,11 +6,96 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/python
+# encoding: utf-8
 import unicodedata
 import sys
 import re
 import os
 import urllib
+
+cat = {
+'Lu': 'Letter, Uppercase',
+'Ll': 'Letter, Lowercase',
+'Lt': 'Letter, Titlecase',
+'Lm': 'Letter, Modifier',
+'Lo': 'Letter, Other',
+'Mn': 'Mark, Nonspacing',
+'Mc': 'Mark, Spacing Combining',
+'Me': 'Mark, Enclosing',
+'Nd': 'Number, Decimal Digit',
+'Nl': 'Number, Letter',
+'No': 'Number, Other',
+'Pc': 'Punctuation, Connector',
+'Pd': 'Punctuation, Dash',
+'Ps': 'Punctuation, Open',
+'Pe': 'Punctuation, Close',
+'Pi': 'Punctuation, Initial quote (may behave like Ps or Pe depending on usage)',
+'Pf': 'Punctuation, Final quote (may behave like Ps or Pe depending on usage)',
+'Po': 'Punctuation, Other',
+'Sm': 'Symbol, Math',
+'Sc': 'Symbol, Currency',
+'Sk': 'Symbol, Modifier',
+'So': 'Symbol, Other',
+'Zs': 'Separator, Space',
+'Zl': 'Separator, Line',
+'Zp': 'Separator, Paragraph',
+'Cc': 'Other, Control',
+'Cf': 'Other, Format',
+'Cs': 'Other, Surrogate',
+'Co': 'Other, Private Use',
+'Cn': 'Other, Not Assigned (no characters in the file have this property)',
+}
+
+bidi = {
+'L': 'Left-to-Right',
+'LRE': 'Left-to-Right Embedding',
+'LRO': 'Left-to-Right Override',
+'R': 'Right-to-Left',
+'AL': 'Right-to-Left Arabic',
+'RLE': 'Right-to-Left Embedding',
+'RLO': 'Right-to-Left Override',
+'PDF': 'Pop Directional Format',
+'EN': 'European Number',
+'ES': 'European Number Separator',
+'ET': 'European Number Terminator',
+'AN': 'Arabic Number',
+'CS': 'Common Number Separator',
+'NSM': 'Non-Spacing Mark',
+'BN': 'Boundary Neutral',
+'B': 'Paragraph Separator',
+'S': 'Segment Separator',
+'WS': 'Whitespace',
+'ON': 'Other Neutrals',
+}
+
+combclass = {
+'0': 'Spacing, split, enclosing, reordrant, and Tibetan subjoined',
+'1': 'Overlays and interior',
+'7': 'Nuktas',
+'8': 'Hiragana/Katakana voicing marks',
+'9': 'Viramas',
+'10': 'Start of fixed position classes',
+'199': 'End of fixed position classes',
+'200': 'Below left attached',
+'202': 'Below attached',
+'204': 'Below right attached',
+'208': 'Left attached (reordrant around single base character)',
+'210': 'Right attached',
+'212': 'Above left attached',
+'214': 'Above attached',
+'216': 'Above right attached',
+'218': 'Below left',
+'220': 'Below',
+'222': 'Below right',
+'224': 'Left (reordrant around single base character)',
+'226': 'Right',
+'228': 'Above left',
+'230': 'Above',
+'232': 'Above right',
+'233': 'Double below',
+'234': 'Double above',
+'240': 'Below (iota subscript)',
+}
 
 if "TM_SELECTED_TEXT" in os.environ:
     sys.exit(200)
@@ -19,19 +104,26 @@ else:
     char = unicode(line[:x], "UTF-8")[-1]
     if len(char) == 0:
         sys.exit(200)
-    res = char + " : " + unicodedata.name(char, "U+%04X" % ord(char))
+    res = " " + char + " : " + unicodedata.name(char, "U+%04X" % ord(char))
     print res.encode("UTF-8")
-    print "Codepoints:"
-    print "  UCS dec:   %u"   % ord(char)
-    print "  UCS hex:   %04X" % ord(char)
-    print "  UTF-8  :  " + re.sub(r'%', ' ', urllib.quote( char.encode("UTF-8")))
+#    sys.__stdout__.write(u"────────────────────\n".encode("UTF-8"))
+    print "Category       : " + cat[unicodedata.category(char)]
+    print "Bidirectional  : " + bidi[unicodedata.bidirectional(char)]
+    print "Combining Class: " + combclass[str(unicodedata.combining(char))]
+#    print "east_asian_width  : " + unicodedata.east_asian_width(char)
+    print "Mirrored       : " + str(unicodedata.mirrored(char))
+    print "Decomposition  : " + unicodedata.decomposition(char).encode("UTF-8")
+    print "Codepoints     :"
+    print "        UCS dec:   %u"   % ord(char)
+    print "        UCS hex:   %04X" % ord(char)
+    print "        UTF-8  :  " + re.sub(r'%', ' ', urllib.quote( char.encode("UTF-8")))
 </string>
 	<key>fallbackInput</key>
 	<string>none</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^U</string>
+	<string>^~@u</string>
 	<key>name</key>
 	<string>Show Unicode Properties</string>
 	<key>output</key>

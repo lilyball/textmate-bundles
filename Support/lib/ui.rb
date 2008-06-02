@@ -109,6 +109,7 @@ module TextMate
         _options["informative-text"] = options[:prompt] || ""
         _options["text"] = options[:default] || ""
         _options["select-only-directories"] = "" if options[:only_directories]
+        _options["with-directory"] = options[:directory] if options[:directory]
         cocoa_dialog("fileselect", _options,&block)
       end
       
@@ -119,6 +120,7 @@ module TextMate
         _options["informative-text"] = options[:prompt] || ""
         _options["text"] = options[:default] || ""
         _options["select-only-directories"] = "" if options[:only_directories]
+        _options["with-directory"] = options[:directory] if options[:directory]
         _options["select-multiple"] = ""
         cocoa_dialog("fileselect", _options,&block)
       end

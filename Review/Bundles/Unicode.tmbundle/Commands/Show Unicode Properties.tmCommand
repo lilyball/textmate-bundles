@@ -102,6 +102,13 @@ if "TM_SELECTED_TEXT" in os.environ:
 else:
     line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
     char = unicode(line[:x], "UTF-8")[-1]
+
+    # get all data from Apple's internal UniDict
+    inp, out = os.popen2("sqlite3 /System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/Resources/kanji.db 'select * from unihan_dict where uchr=\""+char.encode("UTF-8")+"\";'")
+    inp.close()
+    unidata = unicode(out.read(), "UTF-8")
+    out.close()
+    sys.__stdout__.write(unidata.encode("UTF-8"))
     if len(char) == 0:
         sys.exit(200)
     res = " " + char + " : " + unicodedata.name(char, "U+%04X" % ord(char))
@@ -116,7 +123,7 @@ else:
     print "Codepoints     :"
     print "        UCS dec:   %u"   % ord(char)
     print "        UCS hex:   %04X" % ord(char)
-    print "        UTF-8  :  " + re.sub(r'%', ' ', urllib.quote( char.encode("UTF-8")))
+#todo    print "        UTF-8  :  " + re.sub(r'%', ' ', urllib.quote( char.encode("UTF-8")))
 </string>
 	<key>fallbackInput</key>
 	<string>none</string>

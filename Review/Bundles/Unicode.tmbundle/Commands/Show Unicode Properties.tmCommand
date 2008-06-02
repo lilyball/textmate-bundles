@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/python
+	<string>#!/usr/bin/env python
 # encoding: utf-8
 import unicodedata
 import sys
 import re
 import os
 import urllib
+import codecs
+
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
 cat = {
 'Lu': 'Letter, Uppercase',
@@ -103,26 +107,46 @@ else:
     line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
     char = unicode(line[:x], "UTF-8")[-1]
 
-    # get all data from Apple's internal UniDict
-    inp, out = os.popen2("sqlite3 /System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/Resources/kanji.db 'select * from unihan_dict where uchr=\""+char.encode("UTF-8")+"\";'")
-    inp.close()
-    unidata = unicode(out.read(), "UTF-8")
-    out.close()
-    sys.__stdout__.write(unidata.encode("UTF-8"))
     if len(char) == 0:
         sys.exit(200)
+
+    resPath1 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/Resources/"
+    resPath2 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/Resources/"
+
     res = " " + char + " : " + unicodedata.name(char, "U+%04X" % ord(char))
-    print res.encode("UTF-8")
-#    sys.__stdout__.write(u"────────────────────\n".encode("UTF-8"))
+    print res
+    if res.find("CJK") != -1:
+        # get all data from Apple's internal UniDict
+        inp, out = os.popen2("sqlite3 "+resPath1+"kanji.db 'select * from unihan_dict where uchr=\""+char+"\";'")
+        inp.close()
+        uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhBishuBianhao, zhBishuBianhao1, a2, glyph, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, a3 = unicode(out.read().rstrip(), "UTF-8").split('|')
+        out.close()
+        print "Japanese"
+        print "  kun / on     : " + readings
+        print "Chinese"
+        print "  Pinyin       : " + pinyin1
+        print "  Zhuyin       : " + Bopomofo
+        print "  Wubi Xing    : " + zhWubiXing
+        print "Korean"
+        print "  name &lt;sound&gt; : " + hangul_name_sound
+
+        # get CJK data from Apple's internal plist
+        inp, out = os.popen2("grep -A 9 '"+char+"' "+resPath2+"Radical.plist | perl -pe 's/&lt;key&gt;.*?&lt;\/key&gt;//g;s/&lt;.*?&gt;//g;s/\t*//g;' | perl -e 'undef $/;$a='0,';$a.=&lt;&gt;;$a=~s/(\n)+/|/mg;$a=~s/.*(\d+)\D*?"+char+".*?\|(.*)/$1|$2/;$a=~s/\x0D//g;print $a'")
+        inp.close()
+        ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = unicode(out.read(), "UTF-8").split('|')
+        out.close()
+        print "Radical        : " + RadNum + "." + ExtStrokeCnt + " ( " + Rad + " - " + RadName + " )"
+        print "Strokes        : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
+
     print "Category       : " + cat[unicodedata.category(char)]
     print "Bidirectional  : " + bidi[unicodedata.bidirectional(char)]
     print "Combining Class: " + combclass[str(unicodedata.combining(char))]
 #    print "east_asian_width  : " + unicodedata.east_asian_width(char)
     print "Mirrored       : " + str(unicodedata.mirrored(char))
-    print "Decomposition  : " + unicodedata.decomposition(char).encode("UTF-8")
-    print "Codepoints     :"
-    print "        UCS dec:   %u"   % ord(char)
-    print "        UCS hex:   %04X" % ord(char)
+    print "Decomposition  : " + unicodedata.decomposition(char)
+    print "Codepoints      "
+    print "        UCS dec: %u"   % ord(char)
+    print "        UCS hex: %04X" % ord(char)
 #todo    print "        UTF-8  :  " + re.sub(r'%', ' ', urllib.quote( char.encode("UTF-8")))
 </string>
 	<key>fallbackInput</key>

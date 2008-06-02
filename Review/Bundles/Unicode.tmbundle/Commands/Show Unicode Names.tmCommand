@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/python
+	<string>#!/usr/bin/env python
+# encoding: utf-8
+
 import unicodedata
 import sys
 import re
 import os
+import codecs
+
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
 if "TM_SELECTED_TEXT" in os.environ:
-    for a in unicode(sys.stdin.read(), "UTF-8"):
+    for a in sys.stdin.read():
          if a != '\n':
               res = u"%s : U+%04X" % (a, ord(a))
               name = unicodedata.name(a, None)
               if name:
                   res += u" : %s" % name
-              print res.encode("UTF-8")
+              print res
 else:
     line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
     char = unicode(line[:x], "UTF-8")[-1]
     if len(char) == 0:
         sys.exit(200)
     res = char + " : " + unicodedata.name(char, "U+%04X" % ord(char))
-    print res.encode("UTF-8")
+    print res
 
 </string>
 	<key>fallbackInput</key>

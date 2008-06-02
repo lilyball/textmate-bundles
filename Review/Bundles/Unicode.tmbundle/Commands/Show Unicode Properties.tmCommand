@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -113,7 +113,7 @@ else:
     resPath1 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/Resources/"
     resPath2 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/Resources/"
 
-    res = " " + char + " : " + unicodedata.name(char, "U+%04X" % ord(char))
+    res = " " + char + "  : " + unicodedata.name(char, "U+%04X" % ord(char))
     print res
     if res.find("CJK") != -1:
         # get all data from Apple's internal UniDict
@@ -122,31 +122,33 @@ else:
         uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhBishuBianhao, zhBishuBianhao1, a2, glyph, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, a3 = unicode(out.read().rstrip(), "UTF-8").split('|')
         out.close()
         print "Japanese"
-        print "  kun / on     : " + readings
+        print "  kun / on      : " + readings
         print "Chinese"
-        print "  Pinyin       : " + pinyin1
-        print "  Zhuyin       : " + Bopomofo
-        print "  Wubi Xing    : " + zhWubiXing
+        print "  Pinyin        : " + pinyin1
+        print "  Zhuyin        : " + Bopomofo
+        print "  Wubi Xing     : " + zhWubiXing
         print "Korean"
-        print "  name &lt;sound&gt; : " + hangul_name_sound
+        print "  name &lt;sound&gt;  : " + hangul_name_sound
 
         # get CJK data from Apple's internal plist
         inp, out = os.popen2("grep -A 9 '"+char+"' "+resPath2+"Radical.plist | perl -pe 's/&lt;key&gt;.*?&lt;\/key&gt;//g;s/&lt;.*?&gt;//g;s/\t*//g;' | perl -e 'undef $/;$a='0,';$a.=&lt;&gt;;$a=~s/(\n)+/|/mg;$a=~s/.*(\d+)\D*?"+char+".*?\|(.*)/$1|$2/;$a=~s/\x0D//g;print $a'")
         inp.close()
         ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = unicode(out.read(), "UTF-8").split('|')
         out.close()
-        print "Radical        : " + RadNum + "." + ExtStrokeCnt + " ( " + Rad + " - " + RadName + " )"
-        print "Strokes        : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
+        print "Radical         : " + RadNum + "." + ExtStrokeCnt + " ( " + Rad + " - " + RadName + " )"
+        print "Strokes         : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
 
-    print "Category       : " + cat[unicodedata.category(char)]
-    print "Bidirectional  : " + bidi[unicodedata.bidirectional(char)]
-    print "Combining Class: " + combclass[str(unicodedata.combining(char))]
-#    print "east_asian_width  : " + unicodedata.east_asian_width(char)
-    print "Mirrored       : " + str(unicodedata.mirrored(char))
-    print "Decomposition  : " + unicodedata.decomposition(char)
+    print "Category        : " + cat[unicodedata.category(char)]
+    print "Bidirectional   : " + bidi[unicodedata.bidirectional(char)]
+    print "Combining Class : " + combclass[str(unicodedata.combining(char))]
+#    print "east_asian_width   : " + unicodedata.east_asian_width(char)
+    if unicodedata.mirrored(char) != 0:
+        print "Mirrored        : " + str(unicodedata.mirrored(char))
+    if unicodedata.decomposition(char):
+        print "Decomposition   : " + unicodedata.decomposition(char)
     print "Codepoints      "
-    print "        UCS dec: %u"   % ord(char)
-    print "        UCS hex: %04X" % ord(char)
+    print "  UCS-2 dec/hex : %(val)u / %(val)04X "   % {'val': ord(char)}
+
 #todo    print "        UTF-8  :  " + re.sub(r'%', ' ', urllib.quote( char.encode("UTF-8")))
 </string>
 	<key>fallbackInput</key>

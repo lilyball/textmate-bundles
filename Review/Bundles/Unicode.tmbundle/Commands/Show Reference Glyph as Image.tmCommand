@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+# encoding: utf-8
+
+import sys
+import os
+
+if "TM_SELECTED_TEXT" in os.environ:
+    sys.exit(200)
+
+line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
+char = unicode(line[:x], "UTF-8")[-1]
+
+if len(char) == 0:
+    sys.exit(200)
+
+charcode = "%04X" % ord(char)
+
+print "\
+&lt;html&gt; \
+&lt;head&gt; \
+&lt;title&gt;www.unicode.org &amp;mdash; Reference Glyph&lt;/title&gt; \
+&lt;script type='text/javascript'&gt; \
+function init() { \
+window.resizeTo(350,110); \
+} \
+&lt;/script&gt; \
+&lt;/head&gt; \
+&lt;body onclick='window.close();'&gt; \
+&lt;center&gt; \
+&lt;img src='http://www.unicode.org/cgi-bin/refglyph?24-" + charcode + "'&gt; \
+"
+print "&lt;br /&gt;&lt;b&gt;U+" + charcode + "&lt;/b&gt;"
+print " \
+&lt;/center&gt; \
+&lt;script type='text/javascript'&gt;window.onload = init;&lt;/script&gt; \
+&lt;/body&gt; \
+&lt;/html&gt; \
+"</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@u</string>
+	<key>name</key>
+	<string>Show Reference Glyph as Image</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>54242A63-3362-4196-BCA7-6631774FD8C8</string>
+</dict>
+</plist>

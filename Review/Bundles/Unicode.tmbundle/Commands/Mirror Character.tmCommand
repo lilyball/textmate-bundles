@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+# coding=utf-8
+
+# written by Hans-Jörg Bibiko; bibiko at eva.mpg.de
+import sys
+import os
+
+if "TM_SELECTED_TEXT" in os.environ:
+     print "Please remove the selection firstly."
+     sys.exit(206)
+
+line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
+
+inputleft = unicode(line[:x], "UTF-8")
+
+if len(inputleft) == 0:
+     sys.exit(200)
+
+tail = unicode(line[x:], "UTF-8")
+char = inputleft[-1]
+head = inputleft[:-1]
+
+inp, out = os.popen2("grep '^"+char.encode("UTF-8")+"' '"+os.path.join(os.environ["TM_BUNDLE_PATH"], "support/lib/mirror.txt'"))
+inp.close()
+data = unicode(out.read(), "UTF-8").rstrip()
+out.close()
+
+if len(data) &lt; 3:
+    sys.exit(200)
+
+cc, mirror = data.split('\t')
+
+if len(mirror):
+    sys.__stdout__.write(head.encode("UTF-8"))
+    sys.__stdout__.write(mirror.encode("UTF-8"))
+    sys.__stdout__.write(tail.encode("UTF-8"))
+    sys.exit(201)
+
+sys.exit(200)
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@u</string>
+	<key>name</key>
+	<string>Mirror Character</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>E66F57C4-1A0C-4836-8ADE-8D4D3ACB22FD</string>
+</dict>
+</plist>

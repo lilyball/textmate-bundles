@@ -115,18 +115,35 @@ else:
     res = char + "               : " + unicodedata.name(char, "U+%04X" % ord(char))
     print res
     if res.find("CJK") != -1:
+
+        # get CJK data from Apple's internal plist
+        inp, out = os.popen2("grep -A 9 '"+char+"' "+resPath2+"Radical.plist | perl -pe 's/&lt;key&gt;.*?&lt;\/key&gt;//g;s/&lt;.*?&gt;//g;s/\t*//g;' | perl -e 'undef $/;$a='0,';$a.=&lt;&gt;;$a=~s/(\n)+/|/mg;$a=~s/.*%%(\d+).*?"+char+".*?\|(.*)/$1|$2/;$a=~s/\x0D//g;print $a'")
+        inp.close()
+        ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = unicode(out.read(), "UTF-8").split('|')
+        out.close()
+        print "Radical (trad.) : " + Rad + " (" + RadStrokeCnt + u"画 - " + RadName + ") " + RadNum + "." + ExtStrokeCnt
+        print "Strokes (trad.) : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
+
         # get all data from Apple's internal UniDict
         inp, out = os.popen2("sqlite3 "+resPath1+"kanji.db 'select * from unihan_dict where uchr=\""+char+"\";'")
         inp.close()
         uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBishuBianhao, a2, zhCangjieCh, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = unicode(out.read().rstrip(), "UTF-8").split('|')
         out.close()
-        print a2
-        print glyph1
         if len(readings):
             print "Japanese"
             print "  kun / on      : " + readings
-        if len(pinyin1)+len(Bopomofo) &gt; 0:
+
+        # get Chinese simplified/traditional equivalent
+        inp, out = os.popen2("egrep '^" + char + "' '" + os.environ["TM_BUNDLE_PATH"] + "/support/lib/zhSimTradHanzi.txt'")
+        inp.close()
+        c1,st,data = unicode(out.read(), "UTF-8").split('\t')
+        if len(pinyin1)+len(Bopomofo)+len(data) &gt; 0:
             print "Chinese"
+            if len(data):
+                if st == 'T':
+                    print "  Traditional   : " + data.rstrip()
+                if st == 'S':
+                    print "  Simplified     : " + data.rstrip()
             if len(pinyin1):
                 print "  Pinyin        : " + pinyin1
             if len(Bopomofo):
@@ -143,14 +160,6 @@ else:
             print "Korean"
             print "  name &lt;sound&gt;  : " + hangul_name_sound
 
-        # get CJK data from Apple's internal plist
-        inp, out = os.popen2("grep -A 9 '"+char+"' "+resPath2+"Radical.plist | perl -pe 's/&lt;key&gt;.*?&lt;\/key&gt;//g;s/&lt;.*?&gt;//g;s/\t*//g;' | perl -e 'undef $/;$a='0,';$a.=&lt;&gt;;$a=~s/(\n)+/|/mg;$a=~s/.*%%(\d+).*?"+char+".*?\|(.*)/$1|$2/;$a=~s/\x0D//g;print $a'")
-        inp.close()
-        ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = unicode(out.read(), "UTF-8").split('|')
-        out.close()
-        print "Radical         : " + Rad + " (" + RadStrokeCnt + u"画 - " + RadName + ") " + RadNum + "." + ExtStrokeCnt
-        print "Strokes         : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
-
     print "Category        : " + cat[unicodedata.category(char)]
     print "Bidirectional   : " + bidi[unicodedata.bidirectional(char)]
     print "Combining Class : " + combclass[str(unicodedata.combining(char))]
@@ -160,8 +169,14 @@ else:
     decomp = unicodedata.decomposition(char).lstrip(' ').rstrip(' ')
     if len(decomp):
         def cDec(x): return unichr(int(x,16))
+        def rDec(x): return "%04X" % ord(x)
         clist = decomp.split(' ')
-        print "Decomposition   : " + " ".join(map(cDec, clist)) + " (U+" + " U+".join(clist) + ")"
+        decomp = "Decomposition   : " + " ".join(map(cDec, clist)) + " (U+" + " U+".join(clist) + ")"
+        cflist = list(unicodedata.normalize("NFKD", char))
+        if len(clist) != len(cflist):
+            print decomp + "; " + " ".join(cflist) + "(U+" + " U+".join(map(rDec, cflist)) + ")"
+        else:
+            print decomp
     print "Codepoints      "
     print "  UCS-2 dec/hex : %(val)u / U+%(val)04X "   % {'val': ord(char)}
     print "  UTF-8         : " + " ".join(repr(char.encode("UTF-8")).split('\\x')).lstrip("' ").rstrip("'").upper()

@@ -190,7 +190,7 @@ else:
 #    print "east_asian_width   : " + unicodedata.east_asian_width(char)
     if unicodedata.mirrored(char) != 0:
         print "Mirrored        : " + str(unicodedata.mirrored(char))
-    decomp = unicodedata.decomposition(char).lstrip(' ').rstrip(' ')
+    decomp = unicodedata.decomposition(char).strip()
     if len(decomp):
         def cDec(x): return unichr(int(x,16))
         def rDec(x): return "%04X" % ord(x)
@@ -203,7 +203,7 @@ else:
             print decomp
     print "Codepoints      "
     print "  UCS-2 dec/hex : %(val)u / U+%(val)04X "   % {'val': ord(char)}
-    print "  UTF-8         : " + " ".join(repr(char.encode("UTF-8")).split('\\x')).lstrip("' ").rstrip("'").upper()
+    print "  UTF-8         : %s" % " ".join(hex(ord(c))[2:].upper() for  c in char.encode("utf-8"))
 </string>
 	<key>fallbackInput</key>
 	<string>none</string>

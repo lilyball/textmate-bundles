@@ -195,6 +195,7 @@ print "Combining Class : " + combclass[str(unicodedata.combining(char))]
 
 if unicodedata.mirrored(char) != 0:
     print "Mirrored        : " + str(unicodedata.mirrored(char))
+
 decomp = unicodedata.decomposition(char).strip()
 if len(decomp):
     def cDec(x): return unichr(int(x,16))
@@ -206,14 +207,10 @@ if len(decomp):
         print decomp + "; " + " ".join(cflist) + "(U+" + " U+".join(map(rDec, cflist)) + ")"
     else:
         print decomp
+
 print "Codepoints      "
 print "  UCS-2 dec/hex : %(val)u / U+%(val)04X "   % {'val': ord(char)}
-if len(char.encode("utf-8")) == 1:
-    print "  UTF-8         : %s" % hex(ord(char.encode("utf-8")))[2:].upper()
-else:
-    print "  UTF-8         : " + " ".join(repr(char.encode("UTF-8")).split('\\x'))[2:-1].upper()
-
-
+print "  UTF-8         : %s" % " ".join([hex(ord(c))[2:].upper() for c in char.encode("utf-8")])
 </string>
 	<key>fallbackInput</key>
 	<string>none</string>

@@ -30,7 +30,10 @@ else:
     char = unicode(line[:x], "UTF-8")[-1]
     if len(char) == 0:
         sys.exit(200)
-    res = char + " : " + unicodedata.name(char, "U+%04X" % ord(char))
+    res = u"%s : U+%04X" % (char, ord(char))
+    name = unicodedata.name(char, None)
+    if name:
+        res += u" : %s" % name
     print res
 
 </string>

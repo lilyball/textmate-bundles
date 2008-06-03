@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -11,7 +11,6 @@ import unicodedata
 import sys
 import re
 import os
-import urllib
 import codecs
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
@@ -113,25 +112,33 @@ else:
     resPath1 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/Resources/"
     resPath2 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/Resources/"
 
-    res = " " + char + "  : " + unicodedata.name(char, "U+%04X" % ord(char))
+    res = char + "               : " + unicodedata.name(char, "U+%04X" % ord(char))
     print res
     if res.find("CJK") != -1:
         # get all data from Apple's internal UniDict
         inp, out = os.popen2("sqlite3 "+resPath1+"kanji.db 'select * from unihan_dict where uchr=\""+char+"\";'")
         inp.close()
-        uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhBishuBianhao, zhBishuBianhao1, a2, glyph, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, a3 = unicode(out.read().rstrip(), "UTF-8").split('|')
+        uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBishuBianhao, a2, zhCangjieCh, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = unicode(out.read().rstrip(), "UTF-8").split('|')
         out.close()
+        print a2
+        print glyph1
         if len(readings):
             print "Japanese"
             print "  kun / on      : " + readings
-        if len(pinyin1)+len(Bopomofo)+len(zhWubiXing) &gt; 0:
+        if len(pinyin1)+len(Bopomofo) &gt; 0:
             print "Chinese"
             if len(pinyin1):
                 print "  Pinyin        : " + pinyin1
             if len(Bopomofo):
                 print "  Zhuyin        : " + Bopomofo
-            if len(zhWubiXing):
+        if len(zhWubiXing):
                 print "  Wubi Xing     : " + zhWubiXing
+        if len(zhWubiHua):
+                print "  Wubi Hua      : " + zhWubiHua
+        if len(zhBishuBianhao):
+                print "  Bishu Bianhao : " + zhBishuBianhao
+        if len(zhCangjie):
+                print "  Cang Jie      : " + zhCangjie + " " + zhCangjieCh
         if len(hangul_name_sound):
             print "Korean"
             print "  name &lt;sound&gt;  : " + hangul_name_sound
@@ -150,12 +157,14 @@ else:
 #    print "east_asian_width   : " + unicodedata.east_asian_width(char)
     if unicodedata.mirrored(char) != 0:
         print "Mirrored        : " + str(unicodedata.mirrored(char))
-    if unicodedata.decomposition(char):
-        print "Decomposition   : " + unicodedata.decomposition(char)
+    decomp = unicodedata.decomposition(char).lstrip(' ').rstrip(' ')
+    if len(decomp):
+        def cDec(x): return unichr(int(x,16))
+        clist = decomp.split(' ')
+        print "Decomposition   : " + " ".join(map(cDec, clist)) + " (U+" + " U+".join(clist) + ")"
     print "Codepoints      "
     print "  UCS-2 dec/hex : %(val)u / U+%(val)04X "   % {'val': ord(char)}
-
-#todo    print "        UTF-8  :  " + re.sub(r'%', ' ', urllib.quote( char.encode("UTF-8")))
+    print "  UTF-8         : " + " ".join(repr(char.encode("UTF-8")).split('\\x')).lstrip("' ").rstrip("'").upper()
 </string>
 	<key>fallbackInput</key>
 	<string>none</string>

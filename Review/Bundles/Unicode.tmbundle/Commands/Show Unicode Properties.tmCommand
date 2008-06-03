@@ -100,6 +100,27 @@ combclass = {
 '240': 'Below (iota subscript)',
 }
 
+decompclass = {
+'&lt;font&gt;': 'A font variant (e.g. a blackletter form).',
+'&lt;noBreak&gt;': 'A no-break version of a space or hyphen.',
+'&lt;initial&gt;': 'An initial presentation form (Arabic).',
+'&lt;medial&gt;': 'A medial presentation form (Arabic).',
+'&lt;final&gt;': 'A final presentation form (Arabic).',
+'&lt;isolated&gt;': 'An isolated presentation form (Arabic).',
+'&lt;circle&gt;': 'An encircled form.',
+'&lt;super&gt;': 'A superscript form.',
+'&lt;sub&gt;': 'A subscript form.',
+'&lt;vertical&gt;': 'A vertical layout presentation form.',
+'&lt;wide&gt;': 'A wide (or zenkaku) compatibility character.',
+'&lt;narrow&gt;': 'A narrow (or hankaku) compatibility character.',
+'&lt;small&gt;': 'A small variant form (CNS compatibility).',
+'&lt;square&gt;': 'A CJK squared font variant.',
+'&lt;fraction&gt;': 'A vulgar fraction form.',
+'&lt;compat&gt;': 'Otherwise unspecified compatibility character.',
+}
+
+#name,cat,combclass,bidi,decomp,numtype,bidimirror,oldname,comment,upcase,lowcase,titlecase
+
 if "TM_SELECTED_TEXT" in os.environ:
     sys.exit(200)
 else:
@@ -136,7 +157,10 @@ else:
         # get Chinese simplified/traditional equivalent
         inp, out = os.popen2("egrep '^" + char + "' '" + os.environ["TM_BUNDLE_PATH"] + "/support/lib/zhSimTradHanzi.txt'")
         inp.close()
-        c1,st,data = unicode(out.read(), "UTF-8").split('\t')
+        simtrad = unicode(out.read(), "UTF-8")
+        data = ""
+        if len(simtrad):
+            c1,st,data = unicode(out.read(), "UTF-8").split('\t')
         if len(pinyin1)+len(Bopomofo)+len(data) &gt; 0:
             print "Chinese"
             if len(data):

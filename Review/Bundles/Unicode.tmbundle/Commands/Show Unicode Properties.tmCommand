@@ -121,21 +121,27 @@ else:
         inp.close()
         uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhBishuBianhao, zhBishuBianhao1, a2, glyph, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, a3 = unicode(out.read().rstrip(), "UTF-8").split('|')
         out.close()
-        print "Japanese"
-        print "  kun / on      : " + readings
-        print "Chinese"
-        print "  Pinyin        : " + pinyin1
-        print "  Zhuyin        : " + Bopomofo
-        print "  Wubi Xing     : " + zhWubiXing
-        print "Korean"
-        print "  name &lt;sound&gt;  : " + hangul_name_sound
+        if len(readings):
+            print "Japanese"
+            print "  kun / on      : " + readings
+        if len(pinyin1)+len(Bopomofo)+len(zhWubiXing) &gt; 0:
+            print "Chinese"
+            if len(pinyin1):
+                print "  Pinyin        : " + pinyin1
+            if len(Bopomofo):
+                print "  Zhuyin        : " + Bopomofo
+            if len(zhWubiXing):
+                print "  Wubi Xing     : " + zhWubiXing
+        if len(hangul_name_sound):
+            print "Korean"
+            print "  name &lt;sound&gt;  : " + hangul_name_sound
 
         # get CJK data from Apple's internal plist
-        inp, out = os.popen2("grep -A 9 '"+char+"' "+resPath2+"Radical.plist | perl -pe 's/&lt;key&gt;.*?&lt;\/key&gt;//g;s/&lt;.*?&gt;//g;s/\t*//g;' | perl -e 'undef $/;$a='0,';$a.=&lt;&gt;;$a=~s/(\n)+/|/mg;$a=~s/.*(\d+)\D*?"+char+".*?\|(.*)/$1|$2/;$a=~s/\x0D//g;print $a'")
+        inp, out = os.popen2("grep -A 9 '"+char+"' "+resPath2+"Radical.plist | perl -pe 's/&lt;key&gt;.*?&lt;\/key&gt;//g;s/&lt;.*?&gt;//g;s/\t*//g;' | perl -e 'undef $/;$a='0,';$a.=&lt;&gt;;$a=~s/(\n)+/|/mg;$a=~s/.*%%(\d+).*?"+char+".*?\|(.*)/$1|$2/;$a=~s/\x0D//g;print $a'")
         inp.close()
         ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = unicode(out.read(), "UTF-8").split('|')
         out.close()
-        print "Radical         : " + RadNum + "." + ExtStrokeCnt + " ( " + Rad + " - " + RadName + " )"
+        print "Radical         : " + Rad + " (" + RadStrokeCnt + u"画 - " + RadName + ") " + RadNum + "." + ExtStrokeCnt
         print "Strokes         : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
 
     print "Category        : " + cat[unicodedata.category(char)]
@@ -147,7 +153,7 @@ else:
     if unicodedata.decomposition(char):
         print "Decomposition   : " + unicodedata.decomposition(char)
     print "Codepoints      "
-    print "  UCS-2 dec/hex : %(val)u / %(val)04X "   % {'val': ord(char)}
+    print "  UCS-2 dec/hex : %(val)u / U+%(val)04X "   % {'val': ord(char)}
 
 #todo    print "        UTF-8  :  " + re.sub(r'%', ' ', urllib.quote( char.encode("UTF-8")))
 </string>

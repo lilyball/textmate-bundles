@@ -170,7 +170,7 @@ if len(UnicodeData) == 0:
         name = "Plane 16 Private Use : U+" + lastCharUCShexCode
 
 else:
-    dummy1,name,category,combingclass,bidiinfo,decomposition,numtype,bidimirror,oldname,comment,upcase,lowcase,titlecase,dummy2,dummy3 = UnicodeData.split(';')
+    dummy1,name,category,combiningclass,bididir,decomposition,numtype1,numtype2,numtype3,bidimirror,oldname,comment,upcase,lowcase,titlecase =  UnicodeData.strip().split(';')
 
 def getBlockName(s):
     if 0x0000 <= s <= 0x007F:
@@ -576,20 +576,38 @@ if res.find("CJK") != -1 and not charIsPaneB:
     if len(hangul_name_sound):
         print "Korean"
         print "  name <sound>  : " + hangul_name_sound
-
-if not charIsPaneB:
-    print "Category        : " + cat[unicodedata.category(char)]
-    print "Bidirectional   : " + bidi[unicodedata.bidirectional(char)]
-    print "Combining Class : " + combclass[str(unicodedata.combining(char))]
-    if unicodedata.mirrored(char) != 0:
-        print "Mirrored        : " + str(unicodedata.mirrored(char))
-
-    decomp = unicodedata.decomposition(char).strip()
-    if len(decomp):
+else:
+    print "Category        : " + cat[category]
+    if len(oldname):
+        print "Old Name        : " + oldname
+    print "Bidirectional   : " + bidi[bididir]
+    print "Combining Class : " + combclass[combiningclass]
+    if len(bidimirror):
+        print "Mirrored        : " + bidimirror
+    if len(upcase):
+        print "Upper Case      : " + upcase
+    if len(numtype1):
+        print "Numeral Type    : " + numtype1
+    if len(numtype2):
+        print "Numeral Type    : " + numtype2
+    if len(numtype3):
+        print "Numeral Type    : " + numtype3
+    if len(lowcase):
+        print "Lower Case      : " + lowcase
+    if len(titlecase):
+        print "Title Case      : " + titlecase
+    decompStr = "Decomposition   : "
+    if decomposition[0] == '<':
+        dc = decomposition.split(' ')
+        print "Decomposition   : " + decompclass[dc[0]]
+        decompStr = "                  "
+        decomposition = " ".join(dc[1:])
+    decomp = decomposition
+    if len(decomp) and not charIsPaneB:
         def cDec(x): return unichr(int(x,16))
         def rDec(x): return "%04X" % ord(x)
         clist = decomp.split(' ')
-        decomp = "Decomposition   : " + " ".join(map(cDec, clist)) + " (U+" + " U+".join(clist) + ")"
+        decomp = decompStr + " ".join(map(cDec, clist)) + " (U+" + " U+".join(clist) + ")"
         cflist = list(unicodedata.normalize("NFKD", char))
         if len(clist) != len(cflist):
             print decomp + "; " + " ".join(cflist) + "(U+" + " U+".join(map(rDec, cflist)) + ")"

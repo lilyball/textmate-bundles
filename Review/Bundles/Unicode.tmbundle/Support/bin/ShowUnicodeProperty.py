@@ -170,7 +170,7 @@ if len(UnicodeData) == 0:
         name = "Plane 16 Private Use : U+" + lastCharUCShexCode
 
 else:
-    dummy1,name,category,combiningclass,bididir,decomposition,numtype1,numtype2,numtype3,bidimirror,oldname,comment,upcase,lowcase,titlecase =  UnicodeData.strip().split(';')
+    dummy1,name,category,combiningclass,bididir,decomposition,numtype1,numtype2,numtype3,bidimirror,oldname,comment,upcase,lowcase,titlecase = UnicodeData.strip().split(';')
 
 def getBlockName(s):
     if 0x0000 <= s <= 0x007F:
@@ -518,70 +518,75 @@ def getBlockName(s):
     return block
 
 
-if charIsPaneB:
-    res = char + "               : CJK U+" + lastCharUCShexCode
-else:
-    res = char + "               : " + unicodedata.name(char, "U+%04X" % ord(char))
+# if charIsPaneB:
+#     res = char + "               : CJK U+" + lastCharUCShexCode
+# else:
+#     res = char + "               : " + unicodedata.name(char, "U+%04X" % ord(char))
+# print res
+res = char + "               : " + name
 print res
 print "Unicode Block   : " + getBlockName(lastCharDecCode)
 
-if res.find("CJK") != -1 and not charIsPaneB:
+if res.find("CJK") != -1:
+    if not charIsPaneB:
+        # get CJK data from Apple's internal plist
+        inp, out = os.popen2("grep -A 9 '" + char + "' " + source2 + " | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'")
+        inp.close()
+        gdata = unicode(out.read(), "UTF-8")
+        out.close()
+        if len(gdata):
+            ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = gdata.split('\t')
+            print "Radical (trad.) : " + Rad + " (" + RadStrokeCnt + u"画 - " + RadName + ") " + RadNum + "." + ExtStrokeCnt
+            print "Strokes (trad.) : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
 
-    # get CJK data from Apple's internal plist
-    inp, out = os.popen2("grep -A 9 '" + char + "' " + source2 + " | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'")
-    inp.close()
-    gdata = unicode(out.read(), "UTF-8")
-    out.close()
-    if len(gdata):
-        ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = gdata.split('\t')
-        print "Radical (trad.) : " + Rad + " (" + RadStrokeCnt + u"画 - " + RadName + ") " + RadNum + "." + ExtStrokeCnt
-        print "Strokes (trad.) : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
+        # get all data from Apple's internal UniDict
+        inp, out = os.popen2("sqlite3 " + source1 + " 'select * from unihan_dict where uchr=\"" + char + "\";'")
+        inp.close()
+        uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBishuBianhao, a2, zhCangjieCh, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = unicode(out.read().rstrip(), "UTF-8").split('|')
+        out.close()
+        if len(readings):
+            print "Japanese"
+            print "  kun / on      : " + readings
 
-    # get all data from Apple's internal UniDict
-    inp, out = os.popen2("sqlite3 " + source1 + " 'select * from unihan_dict where uchr=\"" + char + "\";'")
-    inp.close()
-    uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBishuBianhao, a2, zhCangjieCh, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = unicode(out.read().rstrip(), "UTF-8").split('|')
-    out.close()
-    if len(readings):
-        print "Japanese"
-        print "  kun / on      : " + readings
-
-    # get Chinese simplified/traditional equivalent
-    inp, out = os.popen2("egrep '^" + char + "' '" + bundleLibPath + "zhSimTradHanzi.txt'")
-    inp.close()
-    simtrad = unicode(out.read(), "UTF-8")
-    out.close()
-    data = ""
-    if len(simtrad):
-        c1,st,data = simtrad.split('\t')
-    if len(pinyin1)+len(Bopomofo)+len(data) > 0:
-        print "Chinese"
-        if len(data):
-            if st == 'T':
-                print "  Traditional   : " + data.rstrip()
-            if st == 'S':
-                print "  Simplified     : " + data.rstrip()
-        if len(pinyin1):
-            print "  Pinyin        : " + pinyin1
-        if len(Bopomofo):
-            print "  Zhuyin        : " + Bopomofo
-    if len(zhWubiXing):
-            print "  Wubi Xing     : " + zhWubiXing
-    if len(zhWubiHua):
-            print "  Wubi Hua      : " + zhWubiHua
-    if len(zhBishuBianhao):
-            print "  Bishu Bianhao : " + zhBishuBianhao
-    if len(zhCangjie):
-            print "  Cang Jie      : " + zhCangjie + " " + zhCangjieCh
-    if len(hangul_name_sound):
-        print "Korean"
-        print "  name <sound>  : " + hangul_name_sound
+        # get Chinese simplified/traditional equivalent
+        inp, out = os.popen2("egrep '^" + char + "' '" + bundleLibPath + "zhSimTradHanzi.txt'")
+        inp.close()
+        simtrad = unicode(out.read(), "UTF-8")
+        out.close()
+        data = ""
+        if len(simtrad):
+            c1,st,data = simtrad.split('\t')
+        if len(pinyin1)+len(Bopomofo)+len(data) > 0:
+            print "Chinese"
+            if len(data):
+                if st == 'T':
+                    print "  Traditional   : " + data.rstrip()
+                if st == 'S':
+                    print "  Simplified     : " + data.rstrip()
+            if len(pinyin1):
+                print "  Pinyin        : " + pinyin1
+            if len(Bopomofo):
+                print "  Zhuyin        : " + Bopomofo
+        if len(zhWubiXing):
+                print "  Wubi Xing     : " + zhWubiXing
+        if len(zhWubiHua):
+                print "  Wubi Hua      : " + zhWubiHua
+        if len(zhBishuBianhao):
+                print "  Bishu Bianhao : " + zhBishuBianhao
+        if len(zhCangjie):
+                print "  Cang Jie      : " + zhCangjie + " " + zhCangjieCh
+        if len(hangul_name_sound):
+            print "Korean"
+            print "  name <sound>  : " + hangul_name_sound
 else:
-    print "Category        : " + cat[category]
+    if len(category):
+        print "Category        : " + cat[category]
     if len(oldname):
         print "Old Name        : " + oldname
-    print "Bidirectional   : " + bidi[bididir]
-    print "Combining Class : " + combclass[combiningclass]
+    if len(bididir):
+        print "Bidirectional   : " + bidi[bididir]
+    if len(combiningclass):
+        print "Combining Class : " + combclass[combiningclass]
     if len(bidimirror):
         print "Mirrored        : " + bidimirror
     if len(upcase):
@@ -596,14 +601,15 @@ else:
         print "Lower Case      : " + lowcase
     if len(titlecase):
         print "Title Case      : " + titlecase
-    decompStr = "Decomposition   : "
-    if decomposition[0] == '<':
-        dc = decomposition.split(' ')
-        print "Decomposition   : " + decompclass[dc[0]]
-        decompStr = "                  "
-        decomposition = " ".join(dc[1:])
-    decomp = decomposition
-    if len(decomp) and not charIsPaneB:
+
+    if len(decomposition) and not charIsPaneB:
+        decompStr = "Decomposition   : "
+        if decomposition[0] == '<':
+            dc = decomposition.split(' ')
+            print "Decomposition   : " + decompclass[dc[0]]
+            decompStr = "                  "
+            decomposition = " ".join(dc[1:])
+        decomp = decomposition
         def cDec(x): return unichr(int(x,16))
         def rDec(x): return "%04X" % ord(x)
         clist = decomp.split(' ')

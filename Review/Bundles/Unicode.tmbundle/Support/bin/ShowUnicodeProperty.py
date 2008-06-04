@@ -147,30 +147,37 @@ inp, out = os.popen2("zgrep '^" + lastCharUCShexCode + "' '" + bundleLibPath + "
 inp.close()
 UnicodeData = unicode(out.read(), "UTF-8")
 out.close()
+
+name = ""
+
 if len(UnicodeData) == 0:
     if 0x3400 <= lastCharDecCode <= 0x4DB5:
         name = "CJK Ideograph Extension A : U+" + lastCharUCShexCode
-    if 0x4E00 <= lastCharDecCode <= 0x9FC3:
+    elif 0x4E00 <= lastCharDecCode <= 0x9FC3:
         name = "CJK Ideograph : U+" + lastCharUCShexCode
-    if 0xAC00 <= lastCharDecCode <= 0xD7A3: # Hangul
+    elif 0xAC00 <= lastCharDecCode <= 0xD7A3: # Hangul
         name = unicodedata.name(char, "U+%04X" % ord(char))
-    if 0xD800 <= lastCharDecCode <= 0xDB7F:
+    elif 0xD800 <= lastCharDecCode <= 0xDB7F:
         name = "Non Private Use High Surrogate : U+" + lastCharUCShexCode
-    if 0xDB80 <= lastCharDecCode <= 0xDBFF:
+    elif 0xDB80 <= lastCharDecCode <= 0xDBFF:
         name = "Private Use High Surrogate : U+" + lastCharUCShexCode
-    if 0xDC00 <= lastCharDecCode <= 0xDFFF:
+    elif 0xDC00 <= lastCharDecCode <= 0xDFFF:
         name = "Low Surrogate : U+" + lastCharUCShexCode
-    if 0xE000 <= lastCharDecCode <= 0xF8FF:
+    elif 0xE000 <= lastCharDecCode <= 0xF8FF:
         name = "Private Use : U+" + lastCharUCShexCode
-    if 0x20000 <= lastCharDecCode <= 0x2A6D6:
+    elif 0x20000 <= lastCharDecCode <= 0x2A6D6:
         name = "CJK Ideograph Extension B : U+" + lastCharUCShexCode
-    if 0xF0000 <= lastCharDecCode <= 0xFFFFD:
+    elif 0xF0000 <= lastCharDecCode <= 0xFFFFD:
         name = "Plane 15 Private Use : U+" + lastCharUCShexCode
-    if 0x100000 <= lastCharDecCode <= 0x10FFFD:
+    elif 0x100000 <= lastCharDecCode <= 0x10FFFD:
         name = "Plane 16 Private Use : U+" + lastCharUCShexCode
+    else:
+        print char + " U+" + lastCharUCShexCode
+        print "not defined"
+        sys.exit(206)
 
 else:
-    dummy1,name,category,combiningclass,bididir,decomposition,numtype1,numtype2,numtype3,bidimirror,oldname,comment,upcase,lowcase,titlecase = UnicodeData.strip().split(';')
+    dummy1, name, category, combiningclass, bididir, decomposition, numtype1, numtype2, numtype3, bidimirror, oldname, comment, upcase, lowcase, titlecase = UnicodeData.strip().split(';')
 
 def getBlockName(s):
     if 0x0000 <= s <= 0x007F:
@@ -518,11 +525,6 @@ def getBlockName(s):
     return block
 
 
-# if charIsPaneB:
-#     res = char + "               : CJK U+" + lastCharUCShexCode
-# else:
-#     res = char + "               : " + unicodedata.name(char, "U+%04X" % ord(char))
-# print res
 res = char + "               : " + name
 print res
 print "Unicode Block   : " + getBlockName(lastCharDecCode)
@@ -590,17 +592,17 @@ else:
     if len(bidimirror):
         print "Mirrored        : " + bidimirror
     if len(upcase):
-        print "Upper Case      : " + upcase
+        print "Upper Case      : " + unichr(int(upcase,16)) + " (U+" + upcase + ")"
+    if len(lowcase):
+        print "Lower Case      : " + unichr(int(lowcase,16)) + " (U+" + lowcase + ")"
+    if len(titlecase):
+        print "Title Case      : " + unichr(int(titlecase,16)) + " (U+" + titlecase + ")"
     if len(numtype1):
         print "Numeral Type    : " + numtype1
     if len(numtype2):
         print "Numeral Type    : " + numtype2
     if len(numtype3):
         print "Numeral Type    : " + numtype3
-    if len(lowcase):
-        print "Lower Case      : " + lowcase
-    if len(titlecase):
-        print "Title Case      : " + titlecase
 
     if len(decomposition) and not charIsPaneB:
         decompStr = "Decomposition   : "

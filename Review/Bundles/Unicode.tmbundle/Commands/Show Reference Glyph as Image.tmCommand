@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -11,38 +11,70 @@
 import sys
 import os
 
+def codepoints(s):
+    hs = 0
+    for c in s:
+        c = ord(c)
+        if 0xdc00 &lt;= c &lt;= 0xdfff and hs:
+            yield ((hs&amp;0x3ff)&lt;&lt;10 | (c&amp;0x3ff)) + 0x10000
+            hs = 0
+        elif 0xd800 &lt;= c &lt;= 0xdbff:
+            hs = c
+        else:
+            yield c
+    if hs:
+        yield hs
+
+
 if "TM_SELECTED_TEXT" in os.environ:
-    sys.exit(200)
+    print "\
+    &lt;html&gt; \
+    &lt;head&gt; \
+    &lt;title&gt;www.unicode.org &amp;mdash; Reference Glyphs&lt;/title&gt; \
+    &lt;/head&gt; \
+    &lt;body onclick='window.close();'&gt; \
+    "
+    for c in codepoints(unicode(os.environ["TM_SELECTED_TEXT"], "UTF-8")):
+        charcode = "%04X" % c
+        if c == 10:
+            print "&lt;br /&gt;"
+        elif c == 9:
+            print "&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;"
+        elif c == 32:
+            print "&amp;nbsp;"
+        else:
+            print "&lt;img src='http://www.unicode.org/cgi-bin/refglyph?24-" + charcode + "'&gt;"
+    print "&lt;/body&gt;&lt;/html&gt;"
+else:
+    line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
+    char = unicode(line[:x], "UTF-8")[-1]
 
-line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
-char = unicode(line[:x], "UTF-8")[-1]
+    if len(char) == 0:
+        sys.exit(200)
 
-if len(char) == 0:
-    sys.exit(200)
+    charcode = "%04X" % ord(char)
 
-charcode = "%04X" % ord(char)
-
-print "\
-&lt;html&gt; \
-&lt;head&gt; \
-&lt;title&gt;www.unicode.org &amp;mdash; Reference Glyph&lt;/title&gt; \
-&lt;script type='text/javascript'&gt; \
-function init() { \
-window.resizeTo(350,110); \
-} \
-&lt;/script&gt; \
-&lt;/head&gt; \
-&lt;body onclick='window.close();'&gt; \
-&lt;center&gt; \
-&lt;img src='http://www.unicode.org/cgi-bin/refglyph?24-" + charcode + "'&gt; \
-"
-print "&lt;br /&gt;&lt;b&gt;U+" + charcode + "&lt;/b&gt;"
-print " \
-&lt;/center&gt; \
-&lt;script type='text/javascript'&gt;window.onload = init;&lt;/script&gt; \
-&lt;/body&gt; \
-&lt;/html&gt; \
-"</string>
+    print "\
+    &lt;html&gt; \
+    &lt;head&gt; \
+    &lt;title&gt;www.unicode.org &amp;mdash; Reference Glyph&lt;/title&gt; \
+    &lt;script type='text/javascript'&gt; \
+    function init() { \
+    window.resizeTo(350,110); \
+    } \
+    &lt;/script&gt; \
+    &lt;/head&gt; \
+    &lt;body onclick='window.close();'&gt; \
+    &lt;center&gt; \
+    &lt;img src='http://www.unicode.org/cgi-bin/refglyph?24-" + charcode + "'&gt; \
+    "
+    print "&lt;br /&gt;&lt;b&gt;U+" + charcode + "&lt;/b&gt;"
+    print " \
+    &lt;/center&gt; \
+    &lt;script type='text/javascript'&gt;window.onload = init;&lt;/script&gt; \
+    &lt;/body&gt; \
+    &lt;/html&gt; \
+    "</string>
 	<key>fallbackInput</key>
 	<string>none</string>
 	<key>input</key>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/python
+# encoding: utf-8
+
+import unicodedata
+import sys
+import os
+import codecs
+
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
+
+def wunichr(dec):
+    return eval('u"\U' + "%08X" % dec + '"')
+
+def codepoints(s):
+    hs = 0
+    for c in s:
+        c = ord(c)
+        if 0xdc00 &lt;= c &lt;= 0xdfff and hs:
+            yield ((hs&amp;0x3ff)&lt;&lt;10 | (c&amp;0x3ff)) + 0x10000
+            hs = 0
+        elif 0xd800 &lt;= c &lt;= 0xdbff:
+            hs = c
+        else:
+            yield c
+    if hs:
+        yield hs
+
+text = sys.stdin.read()
+for c in codepoints(text):
+    if 12353 &lt;= c &lt;= 12436:
+        sys.stdout.write(unichr(c+96))
+    else:
+        sys.stdout.write(wunichr(c))
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@j</string>
+	<key>name</key>
+	<string>Hiragana &gt; Katakana</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>4504668F-F3B3-4C5D-BE9D-7213B297F0B4</string>
+</dict>
+</plist>

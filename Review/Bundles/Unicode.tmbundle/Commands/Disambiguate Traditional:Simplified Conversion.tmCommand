@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/python
+# coding=utf-8
+
+# written by Hans-Jörg Bibiko; bibiko at eva.mpg.de
+
+import sys
+import codecs
+from os import popen2, path, environ as env
+
+tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
+if not tm_support_path in env:
+     sys.path.insert(0, tm_support_path)
+import dialog
+import tm_helpers
+
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
+
+text = sys.stdin.read()
+
+if text:
+    org, opt = text[:-1].split("=")
+    if opt:
+        choices = opt.split("|")
+        result=dialog.menu(choices)
+        if result:
+            sys.stdout.write(result)
+        else:
+            sys.exit(200)
+    else: sys.exit(200)
+else:
+     print u"Please find '\{.*?=.*?\}' firstly."
+     sys.exit(206)
+</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@c</string>
+	<key>name</key>
+	<string>Disambiguate Traditional/Simplified Conversion</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>B33FB6FB-54CC-4BF4-BC6E-ECFB206F45AE</string>
+</dict>
+</plist>

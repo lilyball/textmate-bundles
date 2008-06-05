@@ -10,13 +10,19 @@
 
 import sys
 import os
+import re
 import codecs
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
+bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
+
 def wunichr(dec):
     return eval('u"\U%08X"' % dec)
+
+def snp_escape(s):
+    return re.sub(r"(?=[$`\\])", r'\\', s)
 
 def codepoints(s):
     hs = 0
@@ -33,21 +39,42 @@ def codepoints(s):
         yield hs
 
 text = sys.stdin.read()
+
+tradsim = unicode(os.popen("grep 'S' '" + bundleLibPath +"zhSimtradHanzi.txt'").read(), "UTF-8").strip()
+
+if not tradsim:
+    print "Error"
+    sys.exit(206)
+
+conv = {}
+
+for c in tradsim.split('\n'):
+    trad, dummy, sim = c.split('\t')
+    conv[trad] = sim
+
+cnt = 1
 for c in codepoints(text):
-    if 12353 &lt;= c &lt;= 12436:
-        sys.stdout.write(unichr(c+96))
-    else:
-        sys.stdout.write(wunichr(c))
+    try:
+        sim = conv[wunichr(c)]
+        if sim.find(" ") != -1:
+            sys.stdout.write(u"${" + str(cnt) + ":{" + wunichr(c) + u"=" + u"|".join(sim.split(' ')) + u"\}}")
+            cnt += 1
+        else:
+            sys.stdout.write(sim)
+    except:
+        sys.stdout.write(snp_escape(wunichr(c)))
+
+if cnt &gt; 1: sys.stdout.write(u"${0:}")
 </string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^~@j</string>
+	<string>^~@c</string>
 	<key>name</key>
-	<string>Hiragana &gt; Katakana</string>
+	<string>Traditional &gt; Simplified</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>insertAsSnippet</string>
 	<key>uuid</key>
-	<string>4504668F-F3B3-4C5D-BE9D-7213B297F0B4</string>
+	<string>2B54167E-A468-452A-BB80-11989C735891</string>
 </dict>
 </plist>

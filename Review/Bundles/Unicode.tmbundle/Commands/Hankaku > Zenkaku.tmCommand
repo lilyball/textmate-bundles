@@ -15,6 +15,8 @@ import codecs
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
+bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
+
 def wunichr(dec):
     return eval('u"\U%08X"' % dec)
 
@@ -33,21 +35,36 @@ def codepoints(s):
         yield hs
 
 text = sys.stdin.read()
+
+hanzen = unicode(os.popen("cat '" + bundleLibPath +"HanZenKaku.txt'").read(), "UTF-8").strip()
+
+if not hanzen:
+    print "Error"
+    sys.exit(206)
+
+conv = {}
+
+for c in hanzen.split('\n'):
+    han, zen = c.split('\t')
+    conv[han] = zen
+
 for c in codepoints(text):
-    if 12353 &lt;= c &lt;= 12436:
-        sys.stdout.write(unichr(c+96))
-    else:
+    try:
+        zen = conv[wunichr(c)]
+        sys.stdout.write(zen)
+    except:
         sys.stdout.write(wunichr(c))
+
 </string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
 	<string>^~@j</string>
 	<key>name</key>
-	<string>Hiragana &gt; Katakana</string>
+	<string>Hankaku &gt; Zenkaku</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>uuid</key>
-	<string>4504668F-F3B3-4C5D-BE9D-7213B297F0B4</string>
+	<string>BA369A82-8B7C-4638-868C-A1C30C60D514</string>
 </dict>
 </plist>

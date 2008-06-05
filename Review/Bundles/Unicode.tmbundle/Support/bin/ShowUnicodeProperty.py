@@ -508,8 +508,7 @@ def getNameForRange(s):
     return name
 
 
-if "TM_SELECTED_TEXT" in os.environ:
-    sys.exit(200)
+if "TM_SELECTED_TEXT" in os.environ: sys.exit(200)
 
 line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
 
@@ -517,8 +516,7 @@ line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
 char = wunichr(lastCharDecCode)
 lastCharUCShexCode = "%04X" % lastCharDecCode
 
-if len(char) == 0:
-    sys.exit(200)
+if len(char) == 0: sys.exit(200)
 
 UnicodeData = os.popen("zgrep '^" + lastCharUCShexCode + "' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("utf-8")
 
@@ -529,15 +527,14 @@ if len(UnicodeData) == 0:
 else:
     dummy1, name, category, combiningclass, bididir, decomposition, numtype1, numtype2, numtype3, bidimirror, oldname, comment, upcase, lowcase, titlecase = UnicodeData.strip().split(';')
 
-if name[0] == '<':
-    name = getNameForRange(lastCharDecCode)
+if name[0] == '<': name = getNameForRange(lastCharDecCode)
  
 res = char + "\t\t\t\t: " + name
 print res
 
 print "Unicode Block\t: " + getBlockName(lastCharDecCode)
 
-if res.find("CJK") != -1:
+if res.find("CJK") != -1 and res.find("Ideo"):
     if not charIsPaneB:
         # get CJK data from Apple's internal plist
         inp, out = os.popen2("grep -A 9 '" + char + "' " + source2 + " | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'")
@@ -555,9 +552,10 @@ if res.find("CJK") != -1:
         udata = unicode(out.read(), "UTF-8")
         out.close()
         if udata:
-            uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBishuBianhao, a2, zhCangjieCh, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = udata.split('|')
+            uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBianhao, a2, zhCangjieCh, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = udata.split('|')
+            zhCangjie = zhCangjie.strip()
 
-        if len(readings):
+        if readings:
             print "Japanese"
             print "  kun / on\t\t: " + readings
 
@@ -567,57 +565,39 @@ if res.find("CJK") != -1:
         simtrad = unicode(out.read(), "UTF-8")
         out.close()
         data = ""
-        if len(simtrad):
+        if simtrad:
             c1, st, data = simtrad.split('\t')
-        if pinyin1 or Bopomofo or data or zhWubiXing or zhWubiHua or zhBishuBianhao or zhCangjie or zhCangjieCh:
+        if pinyin1 or Bopomofo or data or zhWubiXing or zhWubiHua or zhBianhao or zhCangjie or zhCangjieCh:
             print "Chinese"
-            if len(data):
+            if data:
                 if st == 'T':
                     print "  Traditional\t: " + data.rstrip()
                 if st == 'S':
-                    print "  Simplified\t\t: " + data.rstrip()
-            if len(pinyin1):
-                print "  Pinyin\t\t: " + pinyin1
-            if len(Bopomofo):
-                print "  Zhuyin\t\t: " + Bopomofo
-            if len(zhWubiXing):
-                    print "  Wubi Xing\t\t: " + zhWubiXing
-            if len(zhWubiHua):
-                    print "  Wubi Hua\t\t: " + zhWubiHua
-            if len(zhBishuBianhao):
-                    print "  Bishu Bianhao\t: " + zhBishuBianhao
-            if len(zhCangjie):
-                    print "  Cang Jie\t\t: %s %s" % (zhCangjie.strip(), zhCangjieCh)
+                    print "  Simplified\t: " + data.rstrip()
+            if pinyin1:    print "  Pinyin\t\t: " + pinyin1
+            if Bopomofo:   print "  Zhuyin\t\t: " + Bopomofo
+            if zhWubiXing: print "  Wubi Xing\t\t: " + zhWubiXing
+            if zhWubiHua:  print "  Wubi Hua\t\t: " + zhWubiHua
+            if zhBianhao:  print "  Bishu Bianhao\t: " + zhBianhao
+            if zhCangjie:  print "  Cang Jie\t\t: %s %s" % (zhCangjie, zhCangjieCh)
         if len(hangul_name_sound):
             print "Korean"
             print "  name <sound>\t: " + hangul_name_sound
 else:
     if name.find('HANGUL') != -1:
         print "Decomposition\t: " + " ".join(list(unicodedata.normalize("NFKD", char)))
-    if len(UnicodeData) == 0:
-        sys.exit(206)
-    if len(category):
-        print "Category\t\t: " + cat[category]
-    if len(oldname):
-        print "Old Name\t\t: " + oldname
-    if len(bididir):
-        print "Bidirectional\t: " + bidi[bididir]
-    if len(combiningclass):
-        print "Combining Class\t: " + combclass[combiningclass]
-    if len(bidimirror):
-        print "Mirrored\t\t: " + bidimirror
-    if len(upcase):
-        print "Upper Case\t\t: " + wunichr(int(upcase,16)) + " (U+" + upcase + ")"
-    if len(lowcase):
-        print "Lower Case\t\t: " + wunichr(int(lowcase,16)) + " (U+" + lowcase + ")"
-    if len(titlecase):
-        print "Title Case\t\t: " + wunichr(int(titlecase,16)) + " (U+" + titlecase + ")"
-    if len(numtype1):
-        print "Numeral Type\t: " + numtype1
-    if len(numtype2):
-        print "Numeral Type\t: " + numtype2
-    if len(numtype3):
-        print "Numeral Type\t: " + numtype3
+    if not UnicodeData:sys.exit(206)
+    if category:       print "Category\t\t: " + cat[category]
+    if oldname:        print "Old Name\t\t: " + oldname
+    if bididir:        print "Bidirectional\t: " + bidi[bididir]
+    if combiningclass: print "Combining Class\t: " + combclass[combiningclass]
+    if bidimirror:     print "Mirrored\t\t: " + bidimirror
+    if upcase:         print "Upper Case\t\t: " + wunichr(int(upcase,16)) + " (U+" + upcase + ")"
+    if lowcase:        print "Lower Case\t\t: " + wunichr(int(lowcase,16)) + " (U+" + lowcase + ")"
+    if titlecase:      print "Title Case\t\t: " + wunichr(int(titlecase,16)) + " (U+" + titlecase + ")"
+    if numtype1:       print "Numeral Type\t: " + numtype1
+    if numtype2:       print "Numeral Type\t: " + numtype2
+    if numtype3:       print "Numeral Type\t: " + numtype3
 
     if len(decomposition) and not charIsPaneB:
         decompStr = "Decomposition\t: "

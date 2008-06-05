@@ -76,7 +76,8 @@ def getUnicodeName(dec):
     data = {}
     for c in UnicodeData.split('\n'):
         uniData = c.strip().split(';')
-        data[uniData[0]] = uniData[1]
+        if len(uniData) &gt; 1:
+            data[uniData[0]] = uniData[1]
     for c in dec:
         if c != 10:
             try:

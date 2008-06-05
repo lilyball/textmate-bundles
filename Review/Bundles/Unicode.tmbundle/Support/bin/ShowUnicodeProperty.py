@@ -583,6 +583,8 @@ if res.find("CJK") != -1:
             print "Korean"
             print "  name <sound>\t: " + hangul_name_sound
 else:
+    if name.find('HANGUL') != -1:
+        print "Decomposition\t: " + " ".join(list(unicodedata.normalize("NFKD", char)))
     if len(UnicodeData) == 0:
         sys.exit(206)
     if len(category):

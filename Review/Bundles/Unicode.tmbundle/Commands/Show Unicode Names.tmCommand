@@ -10,7 +10,6 @@
 
 import unicodedata
 import sys
-import re
 import os
 import codecs
 
@@ -40,69 +39,62 @@ def codepoints(s):
     if hs:
         yield hs
 
-def getUnicodeName(dec):
-    lastCharUCShexCode = "%04X" % dec
-    inp, out = os.popen2("zgrep '^" + lastCharUCShexCode + "' '" + bundleLibPath + "UnicodeData.txt.zip'")
-    inp.close()
-    UnicodeData = unicode(out.read(), "UTF-8")
-    out.close()
-    name = ""
-    if len(UnicodeData) == 0:
-        if 0x3400 &lt;= dec &lt;= 0x4DB5:
-            name = "CJK Ideograph Extension A : U+" + lastCharUCShexCode
-        elif 0x4E00 &lt;= dec &lt;= 0x9FC3:
-            name = "CJK Ideograph : U+" + lastCharUCShexCode
-        elif 0xAC00 &lt;= dec &lt;= 0xD7A3: # Hangul
-            name = unicodedata.name(char, "U+%04X" % ord(char))
-        elif 0xD800 &lt;= dec &lt;= 0xDB7F:
-            name = "Non Private Use High Surrogate : U+" + lastCharUCShexCode
-        elif 0xDB80 &lt;= dec &lt;= 0xDBFF:
-            name = "Private Use High Surrogate : U+" + lastCharUCShexCode
-        elif 0xDC00 &lt;= dec &lt;= 0xDFFF:
-            name = "Low Surrogate : U+" + lastCharUCShexCode
-        elif 0xE000 &lt;= dec &lt;= 0xF8FF:
-            name = "Private Use : U+" + lastCharUCShexCode
-        elif 0x20000 &lt;= dec &lt;= 0x2A6D6:
-            name = "CJK Ideograph Extension B : U+" + lastCharUCShexCode
-        elif 0xF0000 &lt;= dec &lt;= 0xFFFFD:
-            name = "Plane 15 Private Use : U+" + lastCharUCShexCode
-        elif 0x100000 &lt;= dec &lt;= 0x10FFFD:
-            name = "Plane 16 Private Use : U+" + lastCharUCShexCode
+def rangeName(dec):
+    if 0x3400 &lt;= dec &lt;= 0x4DB5:
+        return  "CJK Ideograph Extension A"
+    elif 0x4E00 &lt;= dec &lt;= 0x9FC3:
+        return  "CJK Ideograph"
+    elif 0xAC00 &lt;= dec &lt;= 0xD7A3: # Hangul
+        return  unicodedata.name(unichr(dec), "U+%04X" % dec)
+    elif 0xD800 &lt;= dec &lt;= 0xDB7F:
+        return  "Non Private Use High Surrogate"
+    elif 0xDB80 &lt;= dec &lt;= 0xDBFF:
+        return  "Private Use High Surrogate"
+    elif 0xDC00 &lt;= dec &lt;= 0xDFFF:
+        return  "Low Surrogate"
+    elif 0xE000 &lt;= dec &lt;= 0xF8FF:
+        return  "Private Use"
+    elif 0x20000 &lt;= dec &lt;= 0x2A6D6:
+        return  "CJK Ideograph Extension B"
+    elif 0xF0000 &lt;= dec &lt;= 0xFFFFD:
+        return  "Plane 15 Private Use"
+    elif 0x100000 &lt;= dec &lt;= 0x10FFFD:
+        return  "Plane 16 Private Use"
     else:
-        name = UnicodeData.strip().split(';')[1]
-    return name
+        return  "not defined"
+    
+
+def getUnicodeName(dec):
+    regExp = []
+    for c in dec:
+        hexCode = "%04X" % int(c)
+        regExp.append(hexCode)
+    inp, out = os.popen2("zgrep -E '^(" + "|".join(regExp) + ")' '" + bundleLibPath + "UnicodeData.txt.zip'")
+    inp.close()
+    UnicodeData = unicode(out.read(), "UTF-8").strip()
+    out.close()
+    data = {}
+    for c in UnicodeData.split('\n'):
+        uniData = c.strip().split(';')
+        data[uniData[0]] = uniData[1]
+    for c in dec:
+        if c != 10:
+            try:
+                name = data["%04X" % int(c)]
+            except:
+                name = rangeName(c)
+            if c == 9:
+                char = ""
+            else:
+                char = eval('u"\U' + "%08X" % c + '"')
+            print char + "\t: U+" "%04X" % int(c) + "\t: " + name
+    sys.exit(206)
 
 if "TM_SELECTED_TEXT" in os.environ:
-    cnt = 0
-    for c in codepoints(unicode(os.environ["TM_SELECTED_TEXT"], "UTF-8")):
-         cnt += 1
-         if cnt &gt; 50:
-             print "... displays only the first 50 characters"
-             sys.exit(206)
-         if c != 10:
-             char = eval('u"\U' + "%08X" % c + '"')
-             lastCharUCShexCode = "%04X" % c
-             if c == 9:
-                 res = u"%s: U+%s" % (char, lastCharUCShexCode)
-             else:
-                 res = u"%s\t: U+%s" % (char, lastCharUCShexCode)
-             name = getUnicodeName(c)
-             if len(name) &gt; 0:
-                 res += u"\t: %s" % name
-             print res
+    getUnicodeName(list(codepoints(unicode(os.environ["TM_SELECTED_TEXT"], "UTF-8"))))
 else:
     line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
-    lastCharDecCode = lastCharInUCSdec(unicode(line[:x], "UTF-8"))
-    char = eval('u"\U' + "%08X" % lastCharInUCSdec(unicode(line[:x], "UTF-8")) + '"')
-    lastCharUCShexCode = "%04X" % lastCharDecCode
-    if len(char) == 0:
-        sys.exit(200)
-    res = u"%s : U+%s" % (char, lastCharUCShexCode)
-    name = getUnicodeName(lastCharDecCode)
-    if len(name) &gt; 0:
-        res += u" : %s" % name
-    print res
-
+    getUnicodeName([lastCharInUCSdec(unicode(line[:x], "UTF-8"))])
 </string>
 	<key>fallbackInput</key>
 	<string>none</string>

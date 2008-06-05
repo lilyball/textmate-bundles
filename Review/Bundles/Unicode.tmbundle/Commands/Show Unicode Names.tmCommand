@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -69,10 +69,7 @@ def getUnicodeName(dec):
     for c in dec:
         hexCode = "%04X" % int(c)
         regExp.append(hexCode)
-    inp, out = os.popen2("zgrep -E '^(" + "|".join(regExp) + ")' '" + bundleLibPath + "UnicodeData.txt.zip'")
-    inp.close()
-    UnicodeData = unicode(out.read(), "UTF-8").strip()
-    out.close()
+    UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp) + ")' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
     data = {}
     for c in UnicodeData.split('\n'):
         uniData = c.strip().split(';')
@@ -84,10 +81,12 @@ def getUnicodeName(dec):
                 name = data["%04X" % int(c)]
             except:
                 name = rangeName(c)
+            if name[0] == '&lt;':
+                name = rangeName(c)
             if c == 9:
                 char = ""
             else:
-                char = eval('u"\U' + "%08X" % c + '"')
+                char = eval('u"\U%08X"' % c)
             print char + "\t: U+" "%04X" % int(c) + "\t: " + name
     sys.exit(206)
 

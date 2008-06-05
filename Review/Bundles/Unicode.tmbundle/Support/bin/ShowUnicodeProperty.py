@@ -127,10 +127,13 @@ def lastCharInUCSdec(s):
     return -1
 
 
+def wunichr(dec):
+    return eval('u"\U' + "%08X" % dec + '"')
+
 line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
 
 lastCharDecCode = lastCharInUCSdec(unicode(line[:x], "UTF-8"))
-char = eval('u"\U' + "%08X" % lastCharInUCSdec(unicode(line[:x], "UTF-8")) + '"')
+char = wunichr(lastCharInUCSdec(unicode(line[:x], "UTF-8")))
 lastCharUCShexCode = "%04X" % lastCharDecCode
 
 if len(char) == 0:
@@ -525,9 +528,9 @@ def getBlockName(s):
     return block
 
 
-res = char + "               : " + name
+res = char + "\t\t\t\t: " + name
 print res
-print "Unicode Block   : " + getBlockName(lastCharDecCode)
+print "Unicode Block\t: " + getBlockName(lastCharDecCode)
 
 if res.find("CJK") != -1:
     if not charIsPaneB:
@@ -535,11 +538,10 @@ if res.find("CJK") != -1:
         inp, out = os.popen2("grep -A 9 '" + char + "' " + source2 + " | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'")
         inp.close()
         gdata = unicode(out.read(), "UTF-8")
-        out.close()
-        if len(gdata):
+        if gdata != '%0,':
             ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = gdata.split('\t')
-            print "Radical (trad.) : " + Rad + " (" + RadStrokeCnt + u"画 - " + RadName + ") " + RadNum + "." + ExtStrokeCnt
-            print "Strokes (trad.) : " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
+            print "Radical (trad.)\t: " + Rad + " (" + RadStrokeCnt + u"画 - " + RadName + ") " + RadNum + "." + ExtStrokeCnt
+            print "Strokes (trad.)\t: " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
 
         # get all data from Apple's internal UniDict
         inp, out = os.popen2("sqlite3 " + source1 + " 'select * from unihan_dict where uchr=\"" + char + "\";'")
@@ -548,7 +550,7 @@ if res.find("CJK") != -1:
         out.close()
         if len(readings):
             print "Japanese"
-            print "  kun / on      : " + readings
+            print "  kun / on\t\t: " + readings
 
         # get Chinese simplified/traditional equivalent
         inp, out = os.popen2("egrep '^" + char + "' '" + bundleLibPath + "zhSimTradHanzi.txt'")
@@ -558,57 +560,59 @@ if res.find("CJK") != -1:
         data = ""
         if len(simtrad):
             c1,st,data = simtrad.split('\t')
-        if len(pinyin1)+len(Bopomofo)+len(data) > 0:
+        if len(pinyin1) + len(Bopomofo) + len(data) + len(zhWubiXing) + len(zhWubiHua) + len(zhBishuBianhao) + len(zhCangjie) + len(zhCangjieCh) > 0:
             print "Chinese"
             if len(data):
                 if st == 'T':
-                    print "  Traditional   : " + data.rstrip()
+                    print "  Traditional\t: " + data.rstrip()
                 if st == 'S':
-                    print "  Simplified     : " + data.rstrip()
+                    print "  Simplified\t\t: " + data.rstrip()
             if len(pinyin1):
-                print "  Pinyin        : " + pinyin1
+                print "  Pinyin\t\t: " + pinyin1
             if len(Bopomofo):
-                print "  Zhuyin        : " + Bopomofo
-        if len(zhWubiXing):
-                print "  Wubi Xing     : " + zhWubiXing
-        if len(zhWubiHua):
-                print "  Wubi Hua      : " + zhWubiHua
-        if len(zhBishuBianhao):
-                print "  Bishu Bianhao : " + zhBishuBianhao
-        if len(zhCangjie):
-                print "  Cang Jie      : " + zhCangjie + " " + zhCangjieCh
+                print "  Zhuyin\t\t: " + Bopomofo
+            if len(zhWubiXing):
+                    print "  Wubi Xing\t\t: " + zhWubiXing
+            if len(zhWubiHua):
+                    print "  Wubi Hua\t\t: " + zhWubiHua
+            if len(zhBishuBianhao):
+                    print "  Bishu Bianhao\t: " + zhBishuBianhao
+            if len(zhCangjie):
+                    print "  Cang Jie\t\t: " + zhCangjie + " " + zhCangjieCh
         if len(hangul_name_sound):
             print "Korean"
-            print "  name <sound>  : " + hangul_name_sound
+            print "  name <sound>\t: " + hangul_name_sound
 else:
+    if len(UnicodeData) == 0:
+        sys.exit(206)
     if len(category):
-        print "Category        : " + cat[category]
+        print "Category\t\t: " + cat[category]
     if len(oldname):
-        print "Old Name        : " + oldname
+        print "Old Name\t\t\t: " + oldname
     if len(bididir):
-        print "Bidirectional   : " + bidi[bididir]
+        print "Bidirectional\t: " + bidi[bididir]
     if len(combiningclass):
-        print "Combining Class : " + combclass[combiningclass]
+        print "Combining Class\t: " + combclass[combiningclass]
     if len(bidimirror):
-        print "Mirrored        : " + bidimirror
+        print "Mirrored\t\t: " + bidimirror
     if len(upcase):
-        print "Upper Case      : " + unichr(int(upcase,16)) + " (U+" + upcase + ")"
+        print "Upper Case\t\t: " + wunichr(int(upcase,16)) + " (U+" + upcase + ")"
     if len(lowcase):
-        print "Lower Case      : " + unichr(int(lowcase,16)) + " (U+" + lowcase + ")"
+        print "Lower Case\t\t: " + wunichr(int(lowcase,16)) + " (U+" + lowcase + ")"
     if len(titlecase):
-        print "Title Case      : " + unichr(int(titlecase,16)) + " (U+" + titlecase + ")"
+        print "Title Case\t\t: " + wunichr(int(titlecase,16)) + " (U+" + titlecase + ")"
     if len(numtype1):
-        print "Numeral Type    : " + numtype1
+        print "Numeral Type\t: " + numtype1
     if len(numtype2):
-        print "Numeral Type    : " + numtype2
+        print "Numeral Type\t: " + numtype2
     if len(numtype3):
-        print "Numeral Type    : " + numtype3
+        print "Numeral Type\t: " + numtype3
 
     if len(decomposition) and not charIsPaneB:
-        decompStr = "Decomposition   : "
+        decompStr = "Decomposition\t: "
         if decomposition[0] == '<':
             dc = decomposition.split(' ')
-            print "Decomposition   : " + decompclass[dc[0]]
+            print "Decomposition\t: " + decompclass[dc[0]]
             decompStr = "                  "
             decomposition = " ".join(dc[1:])
         decomp = decomposition
@@ -622,6 +626,6 @@ else:
         else:
             print decomp
 
-print "Codepoints      "
-print "  UCS-2 dec/hex : " + str(lastCharDecCode) + " / U+" + lastCharUCShexCode 
-print "  UTF-8         : %s" % " ".join([hex(ord(c))[2:].upper() for c in char.encode("utf-8")])
+print "Codepoints"
+print "  UCS-2 dec/hex\t: " + str(lastCharDecCode) + " / U+" + lastCharUCShexCode 
+print "  UTF-8\t\t\t: %s" % " ".join([hex(ord(c))[2:].upper() for c in char.encode("utf-8")])

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -26,6 +26,16 @@ def codepoints(s):
         yield hs
 
 
+def lastCharInUCSdec(s):
+    if s:
+        if u"\udc00" &lt;= s[-1] &lt;= u"\udfff" and len(s) &gt;= 2 and u"\ud800" &lt;= s[-2] &lt;= u"\udbff":
+            global charIsPaneB
+            charIsPaneB = 1
+            return ((ord(s[-2])&amp;0x3ff)&lt;&lt;10 | (ord(s[-1])&amp;0x3ff)) + 0x10000
+        return ord(s[-1])
+    return -1
+
+
 if "TM_SELECTED_TEXT" in os.environ:
     print "\
     &lt;html&gt; \
@@ -47,12 +57,11 @@ if "TM_SELECTED_TEXT" in os.environ:
     print "&lt;/body&gt;&lt;/html&gt;"
 else:
     line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
-    char = unicode(line[:x], "UTF-8")[-1]
+    lastCharDecCode = lastCharInUCSdec(unicode(line[:x], "UTF-8"))
+    charcode = "%04X" % lastCharDecCode
 
-    if len(char) == 0:
+    if len(charcode) == 0:
         sys.exit(200)
-
-    charcode = "%04X" % ord(char)
 
     print "\
     &lt;html&gt; \

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>perl -Xpe '
+binmode STDIN,":utf8";undef $/;
+s/U\+([0-9A-F]{4,6} ?)/chr(hex($1))/ieg;
+'</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@u</string>
+	<key>name</key>
+	<string>UCS Hex U+XXXXXX to glyph(s)</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>807F2002-5E22-498A-8482-585EF63984F5</string>
+</dict>
+</plist>

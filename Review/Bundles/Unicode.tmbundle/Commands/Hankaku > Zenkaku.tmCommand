@@ -1,69 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/python
-# encoding: utf-8
-
-import sys
-import os
-import codecs
-
-sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
-sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
-
-bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
-
-def wunichr(dec):
-    return eval('u"\U%08X"' % dec)
-
-def codepoints(s):
-    hs = 0
-    for c in s:
-        c = ord(c)
-        if 0xdc00 &lt;= c &lt;= 0xdfff and hs:
-            yield ((hs&amp;0x3ff)&lt;&lt;10 | (c&amp;0x3ff)) + 0x10000
-            hs = 0
-        elif 0xd800 &lt;= c &lt;= 0xdbff:
-            hs = c
-        else:
-            yield c
-    if hs:
-        yield hs
-
-text = sys.stdin.read()
-
-hanzen = unicode(os.popen("cat '" + bundleLibPath +"HanZenKaku.txt'").read(), "UTF-8").strip()
-
-if not hanzen:
-    print "Error"
-    sys.exit(206)
-
-conv = {}
-
-for c in hanzen.split('\n'):
-    han, zen = c.split('\t')
-    conv[han] = zen
-
-for c in codepoints(text):
-    try:
-        zen = conv[wunichr(c)]
-        sys.stdout.write(zen)
-    except:
-        sys.stdout.write(wunichr(c))
-
-</string>
+	<string>/usr/bin/python "$TM_BUNDLE_PATH/support/bin/FullHalfWidthConverter.py" "toFull"</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^~@j</string>
+	<string>^~@u</string>
 	<key>name</key>
-	<string>Hankaku &gt; Zenkaku</string>
+	<string>Convert Selection/Document to Fullwidth</string>
 	<key>output</key>
-	<string>replaceSelectedText</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>BA369A82-8B7C-4638-868C-A1C30C60D514</string>
 </dict>

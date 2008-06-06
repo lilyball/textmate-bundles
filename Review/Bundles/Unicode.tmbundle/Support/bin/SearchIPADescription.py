@@ -13,12 +13,12 @@ sourceFile = "IPAnames.txt"
 
 if len(sys.argv) != 3:
     print "Wrong number of arguments."
-    sys.exit(206)
+#    sys.exit(206)
 
 searchkind = sys.argv[1]
 if not (searchkind == 'word' or searchkind == 'full'):
     print "Wrong first argument. Only 'word' or 'full'."
-    sys.exit(206)
+#    sys.exit(206)
 
 if searchkind == "full":
     grepopt = ""
@@ -45,7 +45,7 @@ except:
 
 if not suggestions:
     print "Nothing found"
-    sys.exit(206)
+#    sys.exit(206)
 
 print suggestions
 

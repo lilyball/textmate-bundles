@@ -37,11 +37,14 @@ def format_specifier_for_type(type)
 end
 
 def transformer_for(type, name)
-  return "NSStringFromRect(#{name})" if type == 'NSRect'
-  return "NSStringFromPoint(#{name})" if type == 'NSPoint'
-  return "NSStringFromSize(#{name})" if type == 'NSSize'
-  return "NSStringFromSelector(#{name})" if type == 'SEL'
-  name
+  case type
+  when 'NSRect':  "NSStringFromRect(#{name})"
+  when 'NSRange': "NSStringFromRange(#{name})"
+  when 'NSPoint': "NSStringFromPoint(#{name})"
+  when 'NSSize':  "NSStringFromSize(#{name})"
+  when 'SEL':     "NSStringFromSelector(#{name})"
+  else name
+  end
 end
 
 print 'NSLog(@"[%@ '

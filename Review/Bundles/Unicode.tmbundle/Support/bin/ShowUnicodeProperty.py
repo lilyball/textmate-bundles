@@ -467,42 +467,44 @@ def getBlockName(s):
 
 
 def lastCharInUCSdec(s):
-    isPaneB = 0
+    isPaneB = False
     if s:
         if u"\udc00" <= s[-1] <= u"\udfff" and len(s) >= 2 and u"\ud800" <= s[-2] <= u"\udbff":
-            isPaneB = 1
+            isPaneB = True
             return (((ord(s[-2])&0x3ff)<<10 | (ord(s[-1])&0x3ff)) + 0x10000, isPaneB)
         return (ord(s[-1]), isPaneB)
     return (-1, isPaneB)
 
 
 def wunichr(dec):
-    return eval('u"\U%08X"' % dec)
+    return ("\\U%08X" % dec).decode("unicode-escape")
 
 
-def getNameForRange(s):
-    if 0x3400 <= lastCharDecCode <= 0x4DB5:
-        name = "CJK Ideograph Extension A : U+" + lastCharUCShexCode
-    elif 0x4E00 <= lastCharDecCode <= 0x9FC3:
-        name = "CJK Ideograph : U+" + lastCharUCShexCode
-    elif 0xAC00 <= lastCharDecCode <= 0xD7A3: # Hangul
-        name = unicodedata.name(char, "U+%04X" % ord(char))
-    elif 0xD800 <= lastCharDecCode <= 0xDB7F:
-        name = "Non Private Use High Surrogate : U+" + lastCharUCShexCode
-    elif 0xDB80 <= lastCharDecCode <= 0xDBFF:
-        name = "Private Use High Surrogate : U+" + lastCharUCShexCode
-    elif 0xDC00 <= lastCharDecCode <= 0xDFFF:
-        name = "Low Surrogate : U+" + lastCharUCShexCode
-    elif 0xE000 <= lastCharDecCode <= 0xF8FF:
-        name = "Private Use : U+" + lastCharUCShexCode
-    elif 0x20000 <= lastCharDecCode <= 0x2A6D6:
-        name = "CJK Ideograph Extension B : U+" + lastCharUCShexCode
-    elif 0xF0000 <= lastCharDecCode <= 0xFFFFD:
-        name = "Plane 15 Private Use : U+" + lastCharUCShexCode
-    elif 0x100000 <= lastCharDecCode <= 0x10FFFD:
-        name = "Plane 16 Private Use : U+" + lastCharUCShexCode
+def getNameForRange(dec):
+    hexcode = " : U+%04X" % dec
+    name = ""
+    if 0x3400 <= dec <= 0x4DB5:
+        name = "CJK Ideograph Extension A" + hexcode
+    elif 0x4E00 <= dec <= 0x9FC3:
+        name = "CJK Ideograph" + hexcode
+    elif 0xAC00 <= dec <= 0xD7A3: # Hangul
+        name = unicodedata.name(unichr(dec), "U+%04X" % dec)
+    elif 0xD800 <= dec <= 0xDB7F:
+        name = "Non Private Use High Surrogate" + hexcode
+    elif 0xDB80 <= dec <= 0xDBFF:
+        name = "Private Use High Surrogate" + hexcode
+    elif 0xDC00 <= dec <= 0xDFFF:
+        name = "Low Surrogate" + hexcode
+    elif 0xE000 <= dec <= 0xF8FF:
+        name = "Private Use" + hexcode
+    elif 0x20000 <= dec <= 0x2A6D6:
+        name = "CJK Ideograph Extension B" + hexcode
+    elif 0xF0000 <= dec <= 0xFFFFD:
+        name = "Plane 15 Private Use" + hexcode
+    elif 0x100000 <= dec <= 0x10FFFD:
+        name = "Plane 16 Private Use" + hexcode
     else:
-        print char + " U+" + lastCharUCShexCode
+        print char + hexcode
         print "not defined"
         sys.exit(206)
     return name
@@ -516,13 +518,13 @@ line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
 char = wunichr(lastCharDecCode)
 lastCharUCShexCode = "%04X" % lastCharDecCode
 
-if len(char) == 0: sys.exit(200)
+if not char: sys.exit(200)
 
-UnicodeData = os.popen("zgrep '^" + lastCharUCShexCode + "' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("utf-8")
+UnicodeData = os.popen("zgrep '^" + lastCharUCShexCode + ";' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("utf-8")
 
 name = ""
 
-if len(UnicodeData) == 0:
+if not UnicodeData:
     name = getNameForRange(lastCharDecCode)
 else:
     dummy1, name, category, combiningclass, bididir, decomposition, numtype1, numtype2, numtype3, bidimirror, oldname, comment, upcase, lowcase, titlecase = UnicodeData.strip().split(';')
@@ -532,9 +534,10 @@ if name[0] == '<': name = getNameForRange(lastCharDecCode)
 res = char + "\t\t\t\t: " + name
 print res
 
-print "Unicode Block\t: " + getBlockName(lastCharDecCode)
+block = getBlockName(lastCharDecCode)
+print "Unicode Block\t: " + block
 
-if res.find("CJK") != -1 and res.find("Ideo"):
+if "CJK" in res and "Ideo" in res:
     if not charIsPaneB:
         # get CJK data from Apple's internal plist
         inp, out = os.popen2("grep -A 9 '" + char + "' " + source2 + " | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'")
@@ -572,7 +575,7 @@ if res.find("CJK") != -1 and res.find("Ideo"):
             if data:
                 if st == 'T':
                     print "  Traditional\t: " + data.rstrip()
-                if st == 'S':
+                elif st == 'S':
                     print "  Simplified\t: " + data.rstrip()
             if pinyin1:    print "  Pinyin\t\t: " + pinyin1
             if Bopomofo:   print "  Zhuyin\t\t: " + Bopomofo
@@ -580,12 +583,12 @@ if res.find("CJK") != -1 and res.find("Ideo"):
             if zhWubiHua:  print "  Wubi Hua\t\t: " + zhWubiHua
             if zhBianhao:  print "  Bishu Bianhao\t: " + zhBianhao
             if zhCangjie:  print "  Cang Jie\t\t: %s %s" % (zhCangjie, zhCangjieCh)
-        if len(hangul_name_sound):
+        if hangul_name_sound:
             print "Korean"
             print "  name <sound>\t: " + hangul_name_sound
 else:
-    if name.find('HANGUL') != -1:
-        print "Decomposition\t: " + " ".join(list(unicodedata.normalize("NFKD", char)))
+    if 'HANGUL' in name and not 'Jamo' in block:
+        print "Decomposition\t: " + " ".join(unicodedata.normalize("NFKD", char))
     if not UnicodeData:sys.exit(206)
     if category:       print "Category\t\t: " + cat[category]
     if oldname:        print "Old Name\t\t: " + oldname
@@ -599,7 +602,7 @@ else:
     if numtype2:       print "Numeral Type\t: " + numtype2
     if numtype3:       print "Numeral Type\t: " + numtype3
 
-    if len(decomposition) and not charIsPaneB:
+    if decomposition and not charIsPaneB:
         decompStr = "Decomposition\t: "
         if decomposition[0] == '<':
             dc = decomposition.split(' ')
@@ -608,12 +611,12 @@ else:
             decomposition = " ".join(dc[1:])
         decomp = decomposition
         def cDec(x): return unichr(int(x,16))
-        def rDec(x): return "%04X" % ord(x)
+        def rDec(x): return "U+%04X" % ord(x)
         clist = decomp.split(' ')
         decomp = decompStr + " ".join(map(cDec, clist)) + " (U+" + " U+".join(clist) + ")"
-        cflist = list(unicodedata.normalize("NFKD", char))
+        cflist = unicodedata.normalize("NFKD", char)
         if len(clist) != len(cflist):
-            print decomp + "; " + " ".join(cflist) + "(U+" + " U+".join(map(rDec, cflist)) + ")"
+            print decomp + "; " + " ".join(cflist) + "(" + " ".join(map(rDec, cflist)) + ")"
         else:
             print decomp
 

@@ -11,7 +11,7 @@ sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
 
 def wunichr(dec):
-    return eval('u"\U%08X"' % dec)
+    return ("\\U%08X" % dec).decode("unicode-escape")
 
 def codepoints(s):
     hs = 0

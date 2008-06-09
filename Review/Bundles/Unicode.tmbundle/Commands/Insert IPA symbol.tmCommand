@@ -5,24 +5,27 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat &lt;&lt;-HTML
+	<string>echo "under construction"
+exit 206
+
+cat &lt;&lt;-HTML
 &lt;html&gt;
 	&lt;head&gt;
 	&lt;title&gt;Insert IPA Symbols&lt;/title&gt;
 	&lt;script&gt;
 		var myCommand = null;
 		function startSearch(term) {
-			//var w = (document.getElementById("where").checked) ? 'full':'word';
+			var w = (document.getElementById("where").checked) ? 'full':'word';
 			if (term.length &gt; 0) {
 				TextMate.isBusy = true;
-				var cmd = "/usr/bin/python '$TM_BUNDLE_SUPPORT/bin/SearchIPADescription.py' word '"+term+"'";
+				var cmd = "/usr/bin/python '$TM_BUNDLE_SUPPORT/bin/SearchIPADescription.py' '"+w+"' '"+term+"'";
 				myCommand = TextMate.system(cmd, function (task) { });
 				myCommand.onreadoutput = output;
 				TextMate.isBusy = false;
 			}
 		}
 		function output(str) {
-			document.getElementById("result").innerText = str;
+			document.getElementById("result").innerHTML = str;
 		}
 	&lt;/script&gt;
 	&lt;/head&gt;
@@ -30,22 +33,22 @@
 &lt;div&gt;
 &lt;input tabindex='0' id='search' type='search' incremental autosave='TMIPASearch' results='20' placeholder='look for description' onsearch='startSearch(this.value);'&gt;
 &lt;input type='checkbox' id='where' name='where' value='key' &gt;Full Text
-&lt;/div&gt;	
+&lt;/div&gt;
+&lt;hr/&gt;
 &lt;div id="result"&gt;
 Result
 &lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-HTML
-</string>
+HTML</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^~@i</string>
 	<key>name</key>
-	<string>Insert IPA symbol</string>
+	<string>Insert IPA symbol…</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>9A799A30-82FC-40A0-AAD4-EF5DA3A07B49</string>
 </dict>

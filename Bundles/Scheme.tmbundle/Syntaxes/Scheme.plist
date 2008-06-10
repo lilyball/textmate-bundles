@@ -457,13 +457,13 @@
 					<string>(?x)
 						(?&lt;=\()       # preceded by (
 						(define)\s+   # define
-						\(            # list of parameters
+						(\()          # list of parameters
 						  ([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*)
 						  ((\s+
 						    ([[:alnum:]][[:alnum:]!$%&amp;*+-./:&lt;=&gt;?@^_~]*|[._])
 						   )*
 						  )\s*
-						\)
+						(\))
 					</string>
 					<key>captures</key>
 					<dict>
@@ -475,12 +475,22 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.scheme</string>
+							<string>punctuation.definition.function.scheme</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
+							<string>entity.name.function.scheme</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
 							<string>variable.parameter.function.scheme</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.scheme</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -534,7 +544,7 @@
 							<key>name</key>
 							<string>variable.parameter.scheme</string>
 						</dict>
-						<key>4</key>
+						<key>6</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.variable.scheme</string>

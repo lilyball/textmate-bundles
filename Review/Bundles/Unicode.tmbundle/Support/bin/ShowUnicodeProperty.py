@@ -13,6 +13,9 @@ source1 = "/System/Library/Components/CharacterPalette.component/Contents/Shared
 CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/Resources/kanji.db"
 source2 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/\
 CharPaletteServer.app/Contents/Resources/Radical.plist"
+source3 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/\
+CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/\
+Resources/CharPaletteRelatedChar.charDict"
 
 bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
 
@@ -551,37 +554,33 @@ if "CJK" in res and "Ideo" in res:
         cmd = "sqlite3 " + source1 + " 'select * from unihan_dict where uchr=\"" + char + "\";'"
         udata = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
         if udata:
-            uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBianhao, a2, zhCangjieCh, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = udata.split('|')
+            uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBianhao, a2, zhCangjieCh, zhDayi, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = udata.split('|')
             zhCangjie = zhCangjie.strip()
-
         if readings:
             print "Japanese"
-            print "  kun / on\t\t: " + readings
-
+            kunon = readings.split('/')
+            if kunon[0]: print "  Kun\t\t\t: " + kunon[0]
+            if kunon[1]: print "  On\t\t\t: " + kunon[1]
         # get Chinese simplified/traditional equivalent
-        inp, out = os.popen2("egrep '^" + char + "' '" + bundleLibPath + "zhSimTradHanzi.txt'")
-        inp.close()
-        simtrad = unicode(out.read(), "UTF-8")
-        out.close()
+        cmd = "egrep '^" + char + "' '" + bundleLibPath + "zhSimTradHanzi.txt'"
+        simtrad = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
         data = ""
-        if simtrad:
-            c1, st, data = simtrad.split('\t')
-        if pinyin1 or Bopomofo or data or zhWubiXing or zhWubiHua or zhBianhao or zhCangjie or zhCangjieCh:
+        if simtrad: c1, st, data = simtrad.split('\t')
+        if pinyin1 or Bopomofo or data or zhWubiXing or zhWubiHua or zhBianhao or zhCangjie or zhCangjieCh or zhDayi:
             print "Chinese"
             if data:
                 if st == 'T':
                     print "  Traditional\t: " + data.rstrip()
                 elif st == 'S':
-                    print "  Simplified\t: " + data.rstrip()
-            if pinyin1:    print "  Pinyin\t\t: " + pinyin1
-            if Bopomofo:   print "  Zhuyin\t\t: " + Bopomofo
-            if zhWubiXing: print "  Wubi Xing\t\t: " + zhWubiXing
-            if zhWubiHua:  print "  Wubi Hua\t\t: " + zhWubiHua
-            if zhBianhao:  print "  Bishu Bianhao\t: " + zhBianhao
-            if zhCangjie:  print "  Cang Jie\t\t: %s %s" % (zhCangjie, zhCangjieCh)
-        if hangul_name_sound:
-            print "Korean"
-            print "  name <sound>\t: " + hangul_name_sound
+                    print "  Simplified\t\t: " + data.rstrip()
+            if pinyin1:         print "  Pinyin\t\t: " + pinyin1
+            if Bopomofo:        print "  Zhuyin\t\t: " + Bopomofo
+            if zhWubiXing:      print "  Wubi Xing\t\t: " + zhWubiXing
+            if zhWubiHua:       print "  Wubi Hua\t\t: " + zhWubiHua
+            if zhBianhao:       print "  Bishu Bianhao\t: " + zhBianhao
+            if zhCangjie:       print "  Cang Jie\t\t: %s %s" % (zhCangjie, zhCangjieCh)
+            if zhDayi:          print "  Dayi:\t\t\t: %s" % zhDayi
+        if hangul_name_sound:   print "Korean\n  name <sound>\t: %s" % hangul_name_sound
 else:
     if 'HANGUL' in name and not 'Jamo' in block:
         print "Decomposition\t: " + " ".join(unicodedata.normalize("NFKD", char))
@@ -617,5 +616,5 @@ else:
             print decomp
 
 print "Codepoints"
-print "  UCS-2 dec/hex\t: " + str(lastCharDecCode) + " / U+" + lastCharUCShexCode 
+print "  UCS-2 dec/hex\t: %s / U+%s" % (str(lastCharDecCode), lastCharUCShexCode)
 print "  UTF-8\t\t\t: %s" % " ".join([hex(ord(c))[2:].upper() for c in char.encode("utf-8")])

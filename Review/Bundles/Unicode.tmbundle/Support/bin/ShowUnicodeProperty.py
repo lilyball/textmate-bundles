@@ -513,6 +513,21 @@ def getNameForRange(dec):
     return name
 
 
+def codepoints(s):
+    hs = 0
+    for c in s:
+        c = ord(c)
+        if 0xdc00 <= c <= 0xdfff and hs:
+            yield ((hs&0x3ff)<<10 | (c&0x3ff)) + 0x10000
+            hs = 0
+        elif 0xd800 <= c <= 0xdbff:
+            hs = c
+        else:
+            yield c
+    if hs:
+        yield hs
+
+
 if "TM_SELECTED_TEXT" in os.environ: sys.exit(200)
 
 line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
@@ -542,6 +557,7 @@ print "Unicode Block\t: " + block
 
 if "CJK" in res and "Ideo" in res:
     if not charIsPaneB:
+
         # get CJK data from Apple's internal plist
         cmd = "grep -A 9 '" + char + "' '" + source2 + "' | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'"
         gdata = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
@@ -561,6 +577,7 @@ if "CJK" in res and "Ideo" in res:
             kunon = readings.split('/')
             if kunon[0]: print "  Kun\t\t\t: " + kunon[0]
             if kunon[1]: print "  On\t\t\t: " + kunon[1]
+
         # get Chinese simplified/traditional equivalent
         cmd = "egrep '^" + char + "' '" + bundleLibPath + "zhSimTradHanzi.txt'"
         simtrad = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
@@ -614,6 +631,34 @@ else:
             print decomp + "; " + " ".join(cflist) + "(" + " ".join(map(rDec, cflist)) + ")"
         else:
             print decomp
+
+# frel = open(source3, "rb")
+# reldata = frel.read()
+# frel.close()
+# for part in reldata.split("rel0")[1:-1]:
+#     off = ord(part[-1])
+#     look = part[0:off]
+#     try:
+#         print look.decode("utf-16-be")
+#         if char in look.decode("utf-16-be"):
+#             print repr(look.decode("utf-16-be"))
+#             found = look
+#             break
+#     except:
+#         try:
+#             look = part[0:off+1]
+#             print look.decode("utf-16-be")
+#             if char in look.decode("utf-16-be"):
+#                 print repr(look.decode("utf-16-be"))
+#                 found = look
+#                 break
+#         except:
+#             print repr(part)
+#         
+# else:
+#    raise ValueError("nix gefunden")
+# 
+# print found.decode("utf-16-be")
 
 print "Codepoints"
 print "  UCS-2 dec/hex\t: %s / U+%s" % (str(lastCharDecCode), lastCharUCShexCode)

@@ -540,20 +540,16 @@ print "Unicode Block\t: " + block
 if "CJK" in res and "Ideo" in res:
     if not charIsPaneB:
         # get CJK data from Apple's internal plist
-        inp, out = os.popen2("grep -A 9 '" + char + "' " + source2 + " | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'")
-        inp.close()
-        gdata = unicode(out.read(), "UTF-8")
-        out.close()
+        cmd = "grep -A 9 '" + char + "' '" + source2 + "' | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'"
+        gdata = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
         if gdata != '%0,':
             ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = gdata.split('\t')
             print "Radical (trad.)\t: " + Rad + " (" + RadStrokeCnt + u"画 - " + RadName + ") " + RadNum + "." + ExtStrokeCnt
             print "Strokes (trad.)\t: " + str(int(RadStrokeCnt) + int(ExtStrokeCnt))
 
         # get all data from Apple's internal UniDict
-        inp, out = os.popen2("sqlite3 " + source1 + " 'select * from unihan_dict where uchr=\"" + char + "\";'")
-        inp.close()
-        udata = unicode(out.read(), "UTF-8")
-        out.close()
+        cmd = "sqlite3 " + source1 + " 'select * from unihan_dict where uchr=\"" + char + "\";'"
+        udata = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
         if udata:
             uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBianhao, a2, zhCangjieCh, glyph1, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = udata.split('|')
             zhCangjie = zhCangjie.strip()

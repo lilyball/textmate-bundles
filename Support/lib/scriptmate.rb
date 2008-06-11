@@ -171,6 +171,7 @@ class UserScript
       @temp_path = @path 
       begin
         f = open(@path, 'w')
+        ENV["TM_SCRIPT_IS_UNTITLED"] = "true"
         f.write @content
       rescue Errno::EACCES
         saved = false
@@ -180,9 +181,8 @@ class UserScript
       end
     end
     
-    if not saved # revert to writing to stdin if we haven't had success saving
-      @path = "-"
-      @display_name = "untitled" + default_extension
+    if not saved
+      raise Exception("Could not save file or write to temporary directory.")
     end
   end
   

@@ -148,8 +148,8 @@ class UserScript
     
     saved = true
     if ENV.has_key? 'TM_FILEPATH' then
-      @display_name = File.basename(@path)
       @path = ENV['TM_FILEPATH']
+      @display_name = File.basename(@path)
       begin
         f = open(@path, 'w')
         f.write @content

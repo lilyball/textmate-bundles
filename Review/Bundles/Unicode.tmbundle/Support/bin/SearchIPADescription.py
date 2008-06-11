@@ -5,7 +5,7 @@ import sys
 import os
 import codecs
 import unicodedata
-import cgi
+import time
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
@@ -30,7 +30,11 @@ pattern = sys.argv[2]
 
 if not os.path.exists(bundleLibPath + sourceFile):
     res = os.popen("'" + bundleLibPath + "/aux/createIPAnamesDB.sh" + "'")
-    print "<i><b>Index was created. Please press RETURN again.</b></i><br><br>"
+    print "<i><b>Index was built. Please press RETURN again.</b></i><br><br>"
+
+if os.stat(bundleLibPath + sourceFile + ".txt")[8] > os.stat(bundleLibPath + sourceFile)[8]:
+    res = os.popen("'" + bundleLibPath + "/aux/createIPAnamesDB.sh" + "'")
+    print "<i><b>Index was rebuilt. Please press RETURN again.</b></i><br><br>"
 
 grepcmds = []
 froms = []

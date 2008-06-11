@@ -531,12 +531,10 @@ def codepoints(s):
 if "TM_SELECTED_TEXT" in os.environ: sys.exit(200)
 
 line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
-
+if not x: sys.exit(200)
 (lastCharDecCode, charIsPaneB) = lastCharInUCSdec(unicode(line[:x], "UTF-8"))
 char = wunichr(lastCharDecCode)
 lastCharUCShexCode = "%04X" % lastCharDecCode
-
-if not char: sys.exit(200)
 
 UnicodeData = os.popen("zgrep '^" + lastCharUCShexCode + ";' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("utf-8")
 
@@ -555,8 +553,8 @@ print res
 block = getBlockName(lastCharDecCode)
 print "Unicode Block\t: " + block
 
-if "CJK" in res and "Ideo" in res:
-    if not charIsPaneB:
+if "CJK" in res and ("IDEO" in res or "Ideo" in res):
+    if True:
 
         # get CJK data from Apple's internal plist
         cmd = "grep -A 9 '" + char + "' '" + source2 + "' | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'"
@@ -572,32 +570,32 @@ if "CJK" in res and "Ideo" in res:
         if udata:
             uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBianhao, a2, zhCangjieCh, zhDayi, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = udata.split('|')
             zhCangjie = zhCangjie.strip()
-        if readings:
-            print "Japanese"
-            kunon = readings.split('/')
-            if kunon[0]: print "  Kun\t\t\t: " + kunon[0]
-            if kunon[1]: print "  On\t\t\t: " + kunon[1]
+            if readings:
+                print "Japanese"
+                kunon = readings.split('/')
+                if kunon[0]: print "  Kun\t\t\t: " + kunon[0]
+                if kunon[1]: print "  On\t\t\t: " + kunon[1]
 
-        # get Chinese simplified/traditional equivalent
-        cmd = "egrep '^" + char + "' '" + bundleLibPath + "zhSimTradHanzi.txt'"
-        simtrad = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
-        data = ""
-        if simtrad: c1, st, data = simtrad.split('\t')
-        if pinyin1 or Bopomofo or data or zhWubiXing or zhWubiHua or zhBianhao or zhCangjie or zhCangjieCh or zhDayi:
-            print "Chinese"
-            if data:
-                if st == 'T':
-                    print "  Traditional\t: " + data.rstrip()
-                elif st == 'S':
-                    print "  Simplified\t\t: " + data.rstrip()
-            if pinyin1:         print "  Pinyin\t\t: " + pinyin1
-            if Bopomofo:        print "  Zhuyin\t\t: " + Bopomofo
-            if zhWubiXing:      print "  Wubi Xing\t\t: " + zhWubiXing
-            if zhWubiHua:       print "  Wubi Hua\t\t: " + zhWubiHua
-            if zhBianhao:       print "  Bishu Bianhao\t: " + zhBianhao
-            if zhCangjie:       print "  Cang Jie\t\t: %s %s" % (zhCangjie, zhCangjieCh)
-            if zhDayi:          print "  Dayi:\t\t\t: %s" % zhDayi
-        if hangul_name_sound:   print "Korean\n  name <sound>\t: %s" % hangul_name_sound
+            # get Chinese simplified/traditional equivalent
+            cmd = "egrep '^" + char + "' '" + bundleLibPath + "zhSimTradHanzi.txt'"
+            simtrad = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
+            data = ""
+            if simtrad: c1, st, data = simtrad.split('\t')
+            if pinyin1 or Bopomofo or data or zhWubiXing or zhWubiHua or zhBianhao or zhCangjie or zhCangjieCh or zhDayi:
+                print "Chinese"
+                if data:
+                    if st == 'T':
+                        print "  Traditional\t: " + data.rstrip()
+                    elif st == 'S':
+                        print "  Simplified\t\t: " + data.rstrip()
+                if pinyin1:         print "  Pinyin\t\t: " + pinyin1
+                if Bopomofo:        print "  Zhuyin\t\t: " + Bopomofo
+                if zhWubiXing:      print "  Wubi Xing\t\t: " + zhWubiXing
+                if zhWubiHua:       print "  Wubi Hua\t\t: " + zhWubiHua
+                if zhBianhao:       print "  Bishu Bianhao\t: " + zhBianhao
+                if zhCangjie:       print "  Cang Jie\t\t: %s %s" % (zhCangjie, zhCangjieCh)
+                if zhDayi:          print "  Dayi:\t\t\t: %s" % zhDayi
+            if hangul_name_sound:   print "Korean\n  name <sound>\t: %s" % hangul_name_sound
 else:
     if 'HANGUL' in name and not 'Jamo' in block:
         print "Decomposition\t: " + " ".join(unicodedata.normalize("NFKD", char))
@@ -632,33 +630,13 @@ else:
         else:
             print decomp
 
-# frel = open(source3, "rb")
-# reldata = frel.read()
-# frel.close()
-# for part in reldata.split("rel0")[1:-1]:
-#     off = ord(part[-1])
-#     look = part[0:off]
-#     try:
-#         print look.decode("utf-16-be")
-#         if char in look.decode("utf-16-be"):
-#             print repr(look.decode("utf-16-be"))
-#             found = look
-#             break
-#     except:
-#         try:
-#             look = part[0:off+1]
-#             print look.decode("utf-16-be")
-#             if char in look.decode("utf-16-be"):
-#                 print repr(look.decode("utf-16-be"))
-#                 found = look
-#                 break
-#         except:
-#             print repr(part)
-#         
-# else:
-#    raise ValueError("nix gefunden")
-# 
-# print found.decode("utf-16-be")
+# look for related chars
+frel = open(bundleLibPath + "relatedChars.txt", "rb")
+reldata = frel.read().decode("UTF-8")
+frel.close()
+for part in reldata.split('\n'):
+    if char in part: break
+if part: print "Related to\t\t: " + part
 
 print "Codepoints"
 print "  UCS-2 dec/hex\t: %s / U+%s" % (str(lastCharDecCode), lastCharUCShexCode)

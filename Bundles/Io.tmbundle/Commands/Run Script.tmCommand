@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
+"$TM_RUBY" -- "$TM_BUNDLE_SUPPORT/run_script.rb"</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run Script</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.io</string>
+	<key>uuid</key>
+	<string>F35C936A-92CD-4D36-925D-F4457A52BCEE</string>
+</dict>
+</plist>

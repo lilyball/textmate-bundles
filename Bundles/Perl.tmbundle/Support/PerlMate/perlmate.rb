@@ -5,6 +5,7 @@ require "pathname"
 
 class PerlScript < UserScript
   def lang; "Perl" end
+  def default_extension; '.pl' end
   def executable; @hashbang || ENV['TM_PERL'] || 'perl' end
   def args
     ["-I#{e_sh(Pathname.new(ENV['TM_BUNDLE_SUPPORT']) + "PerlMate")}",

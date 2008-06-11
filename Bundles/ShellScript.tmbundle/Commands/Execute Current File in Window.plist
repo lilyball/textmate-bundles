@@ -5,30 +5,12 @@
 	<key>autoScrollOutput</key>
 	<integer>1</integer>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "Run ‘${TM_FILENAME}’"
-
-if [ ! -x "$TM_FILEPATH" ]; then
-
-  res=$(iconv &lt;&lt;APPLESCRIPT -f utf-8 -t mac|osascript 2&gt;/dev/null
-  tell app "TextMate" to return button returned of ¬
-    (display dialog "To run “${TM_FILENAME}” as a shell script it needs to be executable.\n\nWould you like to make it executable?" ¬
-      buttons {"Cancel", "Make Executable"} ¬
-      with icon 1 default button 2)
-APPLESCRIPT)
-
-  if [[ "$res" != "Make Executable" ]]; then echo '&lt;script&gt;window.close()&lt;/script&gt;'; abort; exit; fi
-  chmod a+x "$TM_FILEPATH"
-fi
-
-"$TM_FILEPATH" 2&gt;&amp;1|pre
-echo "Program exited with status $?."
-html_footer
-</string>
+	<string>export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
+"$TM_RUBY" -- "$TM_BUNDLE_SUPPORT/run_script.rb"</string>
 	<key>input</key>
-	<string>none</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>@r</string>
 	<key>name</key>

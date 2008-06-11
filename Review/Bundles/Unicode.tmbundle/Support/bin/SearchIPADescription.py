@@ -10,7 +10,8 @@ import cgi
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
-bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
+bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
+
 sourceFile = "IPAnames"
 
 if len(sys.argv) != 3:
@@ -27,35 +28,37 @@ else:
 
 pattern = sys.argv[2]
 
-if pattern.find(" ") == -1:
-    grepcmd = "sqlite3 -separator ';' '%s%s' 'SELECT DISTINCT n.char, n.name, 1 FROM nameindex AS i, names AS n where i.word LIKE \"%s%s%s\" AND n.char = i.char ORDER BY n.name'" % (bundleLibPath, sourceFile, grepopt, pattern, '%')
-else:
-    grepcmds = []
-    rank = 0
-    for pat in pattern.split(' '):
-        if pat:
-            grepcmds.append("i.word LIKE \"%s%s%s\"" % (grepopt, pat, '%'))
-            rank += 1
-            grepcmd =  "sqlite3 -separator ';' '%s%s' 'SELECT DISTINCT n.char, n.name, count(*) AS rank FROM nameindex AS i, names AS n where (%s) AND n.char = i.char GROUP BY n.char HAVING rank = %s' ORDER BY n.char" %  (bundleLibPath, sourceFile, " OR ".join(grepcmds), rank)
+if not os.path.exists(bundleLibPath + sourceFile):
+    res = os.popen("'" + bundleLibPath + "/aux/createIPAnamesDB.sh" + "'")
+    print "<i><b>Index was created. Please press RETURN again.</b></i><br><br>"
+
+grepcmds = []
+froms = []
+jns = []
+tbl = 1
+for pat in pattern.split(' '):
+    if pat:
+        grepcmds.append("i%s.word LIKE \"%s%s%s\"" % (str(tbl), grepopt, pat, '%'))
+        froms.append("nameindex AS i%s" % str(tbl))
+        jns.append("n.char = i%s.char" % str(tbl))
+        tbl += 1
+
+grepcmd =  "sqlite3 -separator ';' '%s%s' 'SELECT DISTINCT n.char, n.name FROM %s, names AS n WHERE %s AND %s ORDER BY n.char'" %  (bundleLibPath, sourceFile, ", ".join(froms), " AND ".join(grepcmds), " AND ".join(jns))
 
 try:
-    suggestions = os.popen(grepcmd).read().decode("utf-8")
+    #suggestions = os.popen(grepcmd).read().decode("utf-8").strip()
+    inp, out = os.popen2(grepcmd.encode("UTF-8"))
+    inp.close()
+    suggestions = out.read().decode("utf-8").strip()
+    out.close()
 except:
     print "Error"
 
 if not suggestions:
     print "Nothing found"
 
-#print "<table border=1>"
-print "<span style='font-family:Charis SIL, Lucida Grande'>"
+print "<span style='font-family:Charis SIL, Lucida Grande'><table>"
 for i in suggestions.split('\n'):
-    if i:
-        c, n, d = i.strip().split(';')
-        print "e&#%s;g\t\t%s<br/>" % (str(ord(c)), "n.rstrip()")
- #       print "<tr><td style='font-family:Charis SIL, Lucida Grande'>"
-#        if unicodedata.name(c).find("MODIFIER") > -1 or unicodedata.name(c).find("COMBINING") > -1:
- #       print "<big><font color=silver>e</font>%s<font color=silver>g</font></big></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>%s</td></tr>" % (c.strip(), n.strip())
- #       else:
-  #      print "%s</span></td><td>%s</td></tr>" % (cgi.escape(c), cgi.escape(n))
-#print "</table>"
-print "</span>"
+    c, n = i.split(';')
+    print "<tr><td><big>e<font color=blue>&#%s;</font>g</big></td><td>&nbsp;&nbsp;&nbsp;</td><td>%s</td></tr>" % (str(ord(c)), n)
+print "</table></span>"

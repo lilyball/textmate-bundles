@@ -20,6 +20,7 @@ sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
 bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
+pyversion = int("".join(sys.version.split()[0].split('.')))
 
 def wunichr(dec):
     return ("\\U%08X" % dec).decode("unicode-escape")
@@ -103,7 +104,14 @@ if not part:
     print "Nothing found for: U+" + "%04X " % int(inputleft[-1]) + char + "."
     sys.exit(206)
 
-suggestions = list(set(codepoints(part)))
+if pyversion > 250:
+    suggestions = list(set(codepoints(part)))
+else:
+    suggestions = list(codepoints(part))
+    skeys = {}
+    for e in suggestions: skeys[e] = 1
+    suggestions = skeys.keys()
+
 suggestions.sort()
 
 sugglist = []

@@ -94,6 +94,7 @@ if "TM_SELECTED_TEXT" in os.environ:
     getUnicodeName(list(codepoints(unicode(os.environ["TM_SELECTED_TEXT"], "UTF-8"))))
 else:
     line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
+    if not x: sys.exit(200)
     getUnicodeName([lastCharInUCSdec(unicode(line[:x], "UTF-8"))])
 </string>
 	<key>fallbackInput</key>

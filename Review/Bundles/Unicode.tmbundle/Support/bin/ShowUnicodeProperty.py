@@ -513,21 +513,6 @@ def getNameForRange(dec):
     return name
 
 
-def codepoints(s):
-    hs = 0
-    for c in s:
-        c = ord(c)
-        if 0xdc00 <= c <= 0xdfff and hs:
-            yield ((hs&0x3ff)<<10 | (c&0x3ff)) + 0x10000
-            hs = 0
-        elif 0xd800 <= c <= 0xdbff:
-            hs = c
-        else:
-            yield c
-    if hs:
-        yield hs
-
-
 if "TM_SELECTED_TEXT" in os.environ: sys.exit(200)
 
 line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>echo "under construction"
+exit 206
+
+cat &lt;&lt;-HTML
+&lt;html&gt;
+	&lt;head&gt;
+	&lt;title&gt;Insert IPA Symbols&lt;/title&gt;
+	&lt;script&gt;
+		var myCommand = null;
+		outStr = "";
+		function startSearch(term) {
+			var w = (document.getElementById("where").checked) ? 'full':'word';
+			if (term.length &gt; 0) {
+				TextMate.isBusy = true;
+				outStr = "";
+				var cmd = "/usr/bin/python '$TM_BUNDLE_SUPPORT/bin/SearchUNInames.py' '"+w+"' '"+term+"'";
+				myCommand = TextMate.system(cmd, function (task) { });
+				myCommand.onreadoutput = output;
+				TextMate.isBusy = false;
+			}
+		}
+		function output(str) {
+              outStr += str;
+			document.getElementById("result").innerHTML = outStr;
+		}
+	&lt;/script&gt;
+	&lt;/head&gt;
+&lt;body&gt;
+&lt;div&gt;
+&lt;input tabindex='0' id='search' type='search' incremental autosave='TMIPASearch' results='20' placeholder='look for description' onsearch='startSearch(this.value);'&gt;
+&lt;input type='checkbox' id='where' name='where' value='key' onchange='startSearch(document.getElementById("search").value);document.getElementById("search").focus()'&gt;Full Text
+&lt;/div&gt;
+&lt;hr/&gt;
+&lt;div id='result'&gt;
+...
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+HTML</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~@i</string>
+	<key>name</key>
+	<string>Insert Unicode Character via Name…</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>8FE43DD3-89E4-47D5-AF9D-4AA4CFEC580D</string>
+</dict>
+</plist>

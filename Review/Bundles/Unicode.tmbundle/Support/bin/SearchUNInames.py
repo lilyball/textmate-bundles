@@ -12,7 +12,7 @@ sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
 bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 
-sourceFile = "IPAnames"
+sourceFile = "UNInames"
 
 if len(sys.argv) != 3:
     print "Wrong number of arguments."
@@ -29,11 +29,11 @@ else:
 pattern = sys.argv[2]
 
 if not os.path.exists(bundleLibPath + sourceFile):
-    res = os.popen("'" + bundleLibPath + "/aux/createIPAnamesDB.sh" + "'")
+    res = os.popen("'" + bundleLibPath + "/aux/createUnicodeNamesDB.sh" + "'")
     print "<i><b>Index was built. Please press RETURN again.</b></i><br><br>"
 
-if os.stat(bundleLibPath + sourceFile + ".txt")[8] > os.stat(bundleLibPath + sourceFile)[8]:
-    res = os.popen("'" + bundleLibPath + "/aux/createIPAnamesDB.sh" + "'")
+if os.stat(bundleLibPath + "UnicodeData.txt.zip")[8] > os.stat(bundleLibPath + sourceFile)[8]:
+    res = os.popen("'" + bundleLibPath + "/aux/createUnicodeNamesDB.sh" + "'")
     print "<i><b>Index was rebuilt. Please press RETURN again.</b></i><br><br>"
 
 grepcmds = []
@@ -48,7 +48,7 @@ for pat in pattern.split(' '):
         tbl += 1
 
 grepcmd =  "sqlite3 -separator ';' '%s%s' 'SELECT DISTINCT n.char, n.name FROM %s, names AS n WHERE %s AND %s ORDER BY n.char'" %  (bundleLibPath, sourceFile, ", ".join(froms), " AND ".join(grepcmds), " AND ".join(jns))
-
+print grepcmd
 suggestions = os.popen(grepcmd).read().decode("utf-8").strip()
 
 if not suggestions:
@@ -57,5 +57,5 @@ if not suggestions:
 print "<span style='font-family:Charis SIL, Lucida Grande'><table>"
 for i in suggestions.split('\n'):
     c, n = i.split(';')
-    print "<tr><td><big>e<font color=blue>&#%s;</font>g</big></td><td>&nbsp;&nbsp;&nbsp;</td><td>%s</td></tr>" % (str(ord(c)), n)
+    print "<tr><td><big>&%s;</big></td><td>&nbsp;&nbsp;&nbsp;</td><td>%s</td></tr>" % (c, n)
 print "</table></span>"

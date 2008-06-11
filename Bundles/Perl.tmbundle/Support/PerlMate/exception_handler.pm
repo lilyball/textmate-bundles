@@ -57,7 +57,7 @@ sub url_and_display_name {
 	my $file = shift;
 	my $url = "";
 	my $display_name = "";
-	if ($file ne "-") {
+	if ($file ne "-" && !$ENV{TM_SCRIPT_IS_UNTITLED}) {
 		$display_name = basename($file);
 		$url = 'url=file://' . quote($file);
 	} else {
@@ -116,10 +116,10 @@ sub tm_die {
   if (ineval()) {
       realdie ($arg,@rest) if ineval();
   }
-  if (!ref($arg) and $^S) {
+  if (!ref($arg)) {
     print TM_ERROR_FD longmess($arg,@rest);
-    exit($^S);
   }
+  exit($!);
 }
 
 1;

@@ -6,6 +6,7 @@ import os
 import codecs
 import unicodedata
 import time
+from binascii import hexlify
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
@@ -32,6 +33,8 @@ else:
 
 pattern = sys.argv[2]
 
+print "<p>&nbsp;<br><br></p>"
+
 if not os.path.exists(bundleLibPath + sourceFile):
     res = os.popen("'" + bundleLibPath + "/aux/createUnicodeNamesDB.sh" + "'")
     print "<i><b>Index was built. Please press RETURN again.</b></i><br><br>"
@@ -55,17 +58,17 @@ for pat in pattern.split(' '):
         tbl += 1
 
 grepcmd =  "sqlite3 -separator ';' '%s%s' 'SELECT DISTINCT n.char, n.name FROM %s, names AS n WHERE %s AND %s LIMIT 500'" %  (bundleLibPath, sourceFile, ", ".join(froms), " AND ".join(grepcmds), " AND ".join(jns))
-#print grepcmd
+
 suggestions = os.popen(grepcmd).read().decode("utf-8").strip()
 
 if not suggestions:
     print "<i><small>Nothing found</small></i>"
 
-print "<p>&nbsp;</p><p class='res'>"
+print "<p class='res'>"
 for i in suggestions.split('\n'):
     c, n = i.split(';')
     t = ""
     if "COMBINING" in n: t = u"<small>◌</small>"
-    print "<span onclick='insertChar(\"%s\")' onmouseout='clearName()'; onmouseover='showName(\"U+%s : %s\")' class='char'>%s%s</span> " % (wunichr(int(c,16)),c, n, t, wunichr(int(c,16)))
+    print "<span onclick='insertChar(\"%s\")' onmouseout='clearName()'; onmouseover='showName(\"U+%s : %s\")' class='char'>%s%s</span> " % (hexlify(wunichr(int(c,16)).encode('utf-8')),c, n, t, wunichr(int(c,16)))
 print "</p><p class='res'> </p>"
 

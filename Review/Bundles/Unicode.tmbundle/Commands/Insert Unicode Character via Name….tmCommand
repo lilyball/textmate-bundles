@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -66,7 +66,7 @@ cat &lt;&lt;-HTML
 			}
 		}
 		function insertChar(c) {
-			var cmd = 'open "txmt://open?";osascript -e \'tell application "TextMate" to insert "'+c+'"\' &amp;';
+			var cmd = 'open "txmt://open?";"$TM_BUNDLE_SUPPORT/bin/TMinsertUTF8text.sh" "'+c+'" &amp;';
 			TextMate.system(cmd, null);
 		}
 		function output(str) {

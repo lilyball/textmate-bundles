@@ -14,6 +14,10 @@ bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 
 sourceFile = "UNInames"
 
+def wunichr(dec):
+    return ("\\U%08X" % dec).decode("unicode-escape")
+
+
 if len(sys.argv) != 3:
     print "Wrong number of arguments."
 
@@ -42,20 +46,26 @@ jns = []
 tbl = 1
 for pat in pattern.split(' '):
     if pat:
-        grepcmds.append("i%s.word LIKE \"%s%s%s\"" % (str(tbl), grepopt, pat, '%'))
+        if tbl==1:
+            grepcmds.append("i%s.word LIKE \"%s%s%s\"" % (str(tbl), grepopt, pat, grepopt))
+        else:
+            grepcmds.append("i%s.word LIKE \"%s%s%s\"" % (str(tbl), grepopt, pat, '%'))
         froms.append("nameindex AS i%s" % str(tbl))
         jns.append("n.char = i%s.char" % str(tbl))
         tbl += 1
 
-grepcmd =  "sqlite3 -separator ';' '%s%s' 'SELECT DISTINCT n.char, n.name FROM %s, names AS n WHERE %s AND %s ORDER BY n.char'" %  (bundleLibPath, sourceFile, ", ".join(froms), " AND ".join(grepcmds), " AND ".join(jns))
-print grepcmd
+grepcmd =  "sqlite3 -separator ';' '%s%s' 'SELECT DISTINCT n.char, n.name FROM %s, names AS n WHERE %s AND %s LIMIT 500'" %  (bundleLibPath, sourceFile, ", ".join(froms), " AND ".join(grepcmds), " AND ".join(jns))
+#print grepcmd
 suggestions = os.popen(grepcmd).read().decode("utf-8").strip()
 
 if not suggestions:
-    print "Nothing found"
+    print "<i><small>Nothing found</small></i>"
 
-print "<span style='font-family:Charis SIL, Lucida Grande'><table>"
+print "<p>&nbsp;</p><p class='res'>"
 for i in suggestions.split('\n'):
     c, n = i.split(';')
-    print "<tr><td><big>&%s;</big></td><td>&nbsp;&nbsp;&nbsp;</td><td>%s</td></tr>" % (c, n)
-print "</table></span>"
+    t = ""
+    if "COMBINING" in n: t = u"<small>◌</small>"
+    print "<span onclick='insertChar(\"%s\")' onmouseout='clearName()'; onmouseover='showName(\"U+%s : %s\")' class='char'>%s%s</span> " % (wunichr(int(c,16)),c, n, t, wunichr(int(c,16)))
+print "</p><p class='res'> </p>"
+

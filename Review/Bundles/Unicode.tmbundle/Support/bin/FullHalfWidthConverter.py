@@ -8,7 +8,7 @@ import codecs
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
-bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
+bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 
 def wunichr(dec):
     return ("\\U%08X" % dec).decode("unicode-escape")

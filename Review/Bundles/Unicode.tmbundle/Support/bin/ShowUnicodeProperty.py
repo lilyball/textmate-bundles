@@ -17,7 +17,7 @@ source3 = "/System/Library/Components/CharacterPalette.component/Contents/Shared
 CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/\
 Resources/CharPaletteRelatedChar.charDict"
 
-bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
+bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 
 cat = {
 'Lu': 'Letter, Uppercase',

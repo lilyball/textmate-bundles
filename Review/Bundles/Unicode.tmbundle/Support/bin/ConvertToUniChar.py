@@ -19,7 +19,7 @@ import tm_helpers
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
-bundleLibPath = os.environ["TM_BUNDLE_PATH"] + "/Support/lib/"
+bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 pyversion = int("".join(sys.version.split()[0].split('.')))
 
 def wunichr(dec):

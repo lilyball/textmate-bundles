@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -40,7 +40,7 @@ head = inputleft[:-1]
 
 # get the suggestion for 'char' by using grep against charList.txt
 # and replace all newline by -
-inp, out = popen2("grep '^"+char.encode("UTF-8")+"' '"+path.join(env["TM_BUNDLE_PATH"], "Support/lib/greekList.txt' | perl -pe 's/\n/-/g'"))
+inp, out = popen2("grep '^"+char.encode("UTF-8")+"' '"+path.join(env["TM_BUNDLE_SUPPORT"], "lib/greekList.txt' | perl -pe 's/\n/-/g'"))
 inp.close()
 suggestions = list(unicode(out.read(), "UTF-8"))[1:-1]
 out.close()

@@ -5,6 +5,7 @@ import sys
 import re
 import os
 import codecs
+from binascii import hexlify
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
@@ -626,3 +627,6 @@ if part: print "Related to\t\t: " + part
 print "Codepoints"
 print "  UCS-2 dec/hex\t: %s / U+%s" % (str(lastCharDecCode), lastCharUCShexCode)
 print "  UTF-8\t\t\t: %s" % " ".join([hex(ord(c))[2:].upper() for c in char.encode("utf-8")])
+utf16be = hexlify(char.encode("utf-16-be")).upper()
+if len(utf16be)>4:
+    print "  UTF-16BE\t\t: " + utf16be[:4] + "+" + utf16be[4:]

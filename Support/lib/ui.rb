@@ -191,8 +191,13 @@ module TextMate
             center_arg = center.nil? ? '' : '-c'
             defaults_args = defaults.nil? ? '' : %Q{-d #{e_sh defaults.to_plist}}
 
-            command = %Q{#{TM_DIALOG} -a #{center_arg} -p #{e_sh start_parameters.to_plist} #{defaults_args} #{e_sh nib_path}}
-            @dialog_token = %x{#{command}}.chomp
+            command = %Q{#{TM_DIALOG} -a #{center_arg} #{defaults_args} #{e_sh nib_path}}
+            @dialog_token = ::IO.popen(command, 'w+') do |io|
+              io << start_parameters.to_plist
+              io.close_write
+              io.read.chomp
+            end
+            
             raise WindowNotFound, "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
       #      raise "No such dialog (#{@dialog_token})\n} for command: #{command}" if $CHILD_STATUS != 0
 
@@ -227,10 +232,14 @@ module TextMate
 
           # update bindings with new value(s)
           def parameters=(parameters)
-            text = %x{#{TM_DIALOG} -t #{@dialog_token} -p #{e_sh parameters.to_plist}}
+            text = ::IO.popen("#{TM_DIALOG} -t #{@dialog_token}", 'w+') do |io|
+              io << parameters.to_plist
+              io.close_write
+              io.read
+            end
             raise "Could not update (#{text})" if $CHILD_STATUS != 0
           end
-
+          
           # close the window
           def close
             %x{#{TM_DIALOG} -x #{@dialog_token}}

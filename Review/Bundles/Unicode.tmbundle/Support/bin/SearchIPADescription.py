@@ -18,14 +18,12 @@ sourceFile = "IPANames.txt"
 def wunichr(dec):
     return ("\\U%08X" % dec).decode("unicode-escape")
 
-
 def wuniord(s):
     if s:
         if u"\udc00" <= s[-1] <= u"\udfff" and len(s) >= 2 and u"\ud800" <= s[-2] <= u"\udbff":
             return (((ord(s[-2])&0x3ff)<<10 | (ord(s[-1])&0x3ff)) + 0x10000)
         return (ord(s[-1]))
     return (-1)
-
 
 if len(sys.argv) != 3:
     print "Wrong number of arguments."
@@ -68,7 +66,22 @@ for i in suggestions.split('\n'):
     cnt += 1
     c, n = i.split('\t')
     if len(c)==1:
-        uname = unicodedata.name(c,"Private Use Area")
+        uname = unicodedata.name(c,'unknown')
+        if uname == "unknown":
+            if c == u"":
+                uname = "Private Use Area (defined in e.g. Charis SIL)"
+            elif c == u"ᶹ":
+                uname = "MODIFIER LETTER SMALL V WITH HOOK"
+            elif c == u"͓":
+                uname = "COMBINING X BELOW"
+            elif c == u"͜":
+                uname = "COMBINING DOUBLE BREVE BELOW"
+            elif c == u"͗":
+                uname = "COMBINING RIGHT HALF RING ABOVE"
+            elif c == u"͑":
+                uname = "COMBINING LEFT HALF RING ABOVE"
+            else:
+                uname = ""
         t = ""
         if "COMBINING" in uname: t = u"<small>◌</small>"
         print "<span onclick='insertChar(\"%s\")' onmouseout='clearName()'; onmouseover='showName(\"U+%s : %s<br>%s\")' class='char'>%s%s</span> " % (hexlify(c.encode("UTF-8")),"%04X" % wuniord(c), n, uname, t, c)
@@ -77,9 +90,7 @@ for i in suggestions.split('\n'):
 
 pl = ""
 if cnt > 1: pl = "es"
-if cnt>499:
-     print "</p><i><small>More than 500 matches found. Please narrow down.</small></i>"
-else:
-     print "</p><i><small>"+str(cnt)+" match"+pl+"</small></i>"
+
+print "</p><i><small>"+str(cnt)+" match"+pl+"</small></i>"
 
 os.popen("rm -f /tmp/TM_db.busy")

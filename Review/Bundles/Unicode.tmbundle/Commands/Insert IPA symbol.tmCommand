@@ -1,46 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>echo "under construction"
-exit 206
-
+	<string>[[ -e /tmp/TM_db.busy ]] &amp;&amp; rm - f /tmp/TM_db.busy
 cat &lt;&lt;-HTML
 &lt;html&gt;
 	&lt;head&gt;
-	&lt;title&gt;Insert IPA Symbols&lt;/title&gt;
+	&lt;title&gt;Insert IPA Symbol&lt;/title&gt;
+	&lt;style type="text/css"&gt; 
+		.res {
+			font-family:'Charis SIL','Lucida Grande';
+			font-size:14pt;
+			line-height:40pt;
+		}
+		.names {
+			font-size:9pt;
+			color:#eee;
+			background:#de7008;
+			z-index:105;
+			text-align:center;
+			position:fixed;
+			bottom:0px;
+			left:0px;
+			width:100%;
+			height:40px;
+			padding:5mm;
+			font-weight: bold;
+		}
+		.head {
+			font-size:10pt;
+			color:#eee;
+			background:#de7008;
+			z-index: 106;
+			text-align:center;
+			position:fixed;
+			top:0px;
+			left:0px;
+			width:100%;
+			padding:5mm;
+		}
+		.char {
+			border:1px dotted silver;
+			display:inline;
+			width:50px;
+			heigth:50px;
+			cursor:pointer;
+		}
+	&lt;/style&gt; 
 	&lt;script&gt;
 		var myCommand = null;
+		var oldterm;
 		outStr = "";
-		function startSearch(term) {
+		var aTimer;
+		var term;
+		var ft;
+		function startSearch(t, f) {
+			term = t;
+			ft = f;
+			window.clearTimeout(aTimer);
+			aTimer = window.setTimeout("startSearchTimed()",500);
+		}
+		function startSearchTimed() {
 			var w = (document.getElementById("where").checked) ? 'full':'word';
-			if (term.length &gt; 0) {
+			term = term.replace(/^\s+|\s+$/g,"");
+			term = term.replace(/^ {2,}/g," ");					if ((oldterm != term || ft==1) &amp;&amp; term.length &gt; 0) {
+				oldterm = term
 				TextMate.isBusy = true;
 				outStr = "";
-				var cmd = "/usr/bin/python '$TM_BUNDLE_SUPPORT/bin/SearchIPADescription.py' '"+w+"' '"+term+"'";
+				document.getElementById("result").innerHTML = "";
+				var cmd = "[[ ! -e /tmp/TM_db.busy ]] &amp;&amp; /usr/bin/python '$TM_BUNDLE_SUPPORT/bin/SearchIPADescription.py' '"+w+"' '"+term+"'";
 				myCommand = TextMate.system(cmd, function (task) { });
 				myCommand.onreadoutput = output;
 				TextMate.isBusy = false;
 			}
 		}
+		function insertChar(c) {
+			var cmd = 'open "txmt://open?";"$TM_BUNDLE_SUPPORT/bin/TMinsertUTF8text.sh" "'+c+'" &amp;';
+			TextMate.system(cmd, null);
+		}
 		function output(str) {
               outStr += str;
 			document.getElementById("result").innerHTML = outStr;
 		}
+		function showName(str) {
+			document.getElementById("uniname").innerHTML = str;
+		}
+		function clearName(str) {
+			document.getElementById("uniname").innerHTML = " ";
+		}
 	&lt;/script&gt;
 	&lt;/head&gt;
-&lt;body&gt;
-&lt;div&gt;
-&lt;input tabindex='0' id='search' type='search' incremental autosave='TMIPASearch' results='20' placeholder='look for description' onsearch='startSearch(this.value);'&gt;
-&lt;input type='checkbox' id='where' name='where' value='key' onchange='startSearch(document.getElementById("search").value);document.getElementById("search").focus()'&gt;Full Text
+&lt;body onload='document.getElementById("search").focus()'&gt;
+&lt;div class='head'&gt;
+&lt;input tabindex='0' id='search' type='search' incremental autosave='TMIPASearch' results='20' placeholder='look for descriptions' onsearch='startSearch(this.value,0);'&gt;
+&lt;input type='checkbox' id='where' name='where' value='key' onchange='startSearch(document.getElementById("search").value,1);document.getElementById("search").focus()'&gt;Full Text
+&amp;nbsp;&amp;nbsp;&amp;nbsp;
 &lt;/div&gt;
 &lt;hr/&gt;
 &lt;div id='result'&gt;
 ...
 &lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;&lt;p&gt; &lt;/p&gt;
+&lt;div id='uniname' class='names'&gt;&amp;nbsp;&lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 HTML</string>

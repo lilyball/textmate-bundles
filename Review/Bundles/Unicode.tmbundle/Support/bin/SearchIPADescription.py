@@ -5,14 +5,27 @@ import sys
 import os
 import codecs
 import unicodedata
-import time
+from binascii import hexlify
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
 bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 
-sourceFile = "IPAnames"
+sourceFile = "IPANames.txt"
+
+
+def wunichr(dec):
+    return ("\\U%08X" % dec).decode("unicode-escape")
+
+
+def wuniord(s):
+    if s:
+        if u"\udc00" <= s[-1] <= u"\udfff" and len(s) >= 2 and u"\ud800" <= s[-2] <= u"\udbff":
+            return (((ord(s[-2])&0x3ff)<<10 | (ord(s[-1])&0x3ff)) + 0x10000)
+        return (ord(s[-1]))
+    return (-1)
+
 
 if len(sys.argv) != 3:
     print "Wrong number of arguments."
@@ -21,41 +34,52 @@ searchkind = sys.argv[1]
 if not (searchkind == 'word' or searchkind == 'full'):
     print "Wrong first argument. Only 'word' or 'full'."
 
+os.popen("touch /tmp/TM_db.busy")
+
 if searchkind == "full":
-    grepopt = "%"
-else:
     grepopt = ""
+else:
+    grepopt = "\\b"
 
 pattern = sys.argv[2]
 
-if not os.path.exists(bundleLibPath + sourceFile):
-    res = os.popen("'" + bundleLibPath + "/aux/createIPAnamesDB.sh" + "'")
-    print "<i><b>Index was built. Please press RETURN again.</b></i><br><br>"
-
-if os.stat(bundleLibPath + sourceFile + ".txt")[8] > os.stat(bundleLibPath + sourceFile)[8]:
-    res = os.popen("'" + bundleLibPath + "/aux/createIPAnamesDB.sh" + "'")
-    print "<i><b>Index was rebuilt. Please press RETURN again.</b></i><br><br>"
+print "<p>&nbsp;<br><br></p>"
 
 grepcmds = []
-froms = []
-jns = []
-tbl = 1
 for pat in pattern.split(' '):
     if pat:
-        grepcmds.append("i%s.word LIKE \"%s%s%s\"" % (str(tbl), grepopt, pat, '%'))
-        froms.append("nameindex AS i%s" % str(tbl))
-        jns.append("n.char = i%s.char" % str(tbl))
-        tbl += 1
+        if not grepcmds:
+            grepcmds.append("egrep -i '%s%s' '%s%s'" % (grepopt, pat, bundleLibPath, sourceFile))
+        else:
+            grepcmds.append("egrep -i '%s%s'" % (grepopt, pat))
 
-grepcmd =  "sqlite3 -separator ';' '%s%s' 'SELECT DISTINCT n.char, n.name FROM %s, names AS n WHERE %s AND %s ORDER BY n.char'" %  (bundleLibPath, sourceFile, ", ".join(froms), " AND ".join(grepcmds), " AND ".join(jns))
+grepcmd = " | ".join(grepcmds)
 
 suggestions = os.popen(grepcmd).read().decode("utf-8").strip()
 
 if not suggestions:
-    print "Nothing found"
+    print "<i><small>Nothing found</small></i>"
+    os.popen("rm -f /tmp/TM_db.busy")
 
-print "<span style='font-family:Charis SIL, Lucida Grande'><table>"
+print "<p class='res'>"
+cnt = 0
+
 for i in suggestions.split('\n'):
-    c, n = i.split(';')
-    print "<tr><td><big>e<font color=blue>&#%s;</font>g</big></td><td>&nbsp;&nbsp;&nbsp;</td><td>%s</td></tr>" % (str(ord(c)), n)
-print "</table></span>"
+    cnt += 1
+    c, n = i.split('\t')
+    if len(c)==1:
+        uname = unicodedata.name(c,"Private Use Area")
+        t = ""
+        if "COMBINING" in uname: t = u"<small>◌</small>"
+        print "<span onclick='insertChar(\"%s\")' onmouseout='clearName()'; onmouseover='showName(\"U+%s : %s<br>%s\")' class='char'>%s%s</span> " % (hexlify(c.encode("UTF-8")),"%04X" % wuniord(c), n, uname, t, c)
+    else:
+        print "<span onclick='insertChar(\"%s\")' onmouseout='clearName()'; onmouseover='showName(\"%s\")' class='char'>%s%s</span> " % (hexlify(c.encode("UTF-8")), n, t, c)
+
+pl = ""
+if cnt > 1: pl = "es"
+if cnt>499:
+     print "</p><i><small>More than 500 matches found. Please narrow down.</small></i>"
+else:
+     print "</p><i><small>"+str(cnt)+" match"+pl+"</small></i>"
+
+os.popen("rm -f /tmp/TM_db.busy")

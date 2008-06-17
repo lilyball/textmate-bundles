@@ -163,7 +163,7 @@ module TextMate
         IO.blocksize = previous_block_size
         IO.sync = previous_sync
 
-        block.nil? ? [out,err] : nil
+        block_given? ? nil : [out,err]
       end
 
     end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -28,8 +28,8 @@ cat &lt;&lt;-HTML
 			background:#de7008;
 			z-index:105;
 			text-align:center;
-			position:fixed;
 			bottom:0px;
+			position:fixed;
 			left:0px;
 			width:100%;
 			height:40px;
@@ -46,7 +46,8 @@ cat &lt;&lt;-HTML
 			top:0px;
 			left:0px;
 			width:100%;
-			height:40px;
+			min-width:580px;
+			height:28px;
 			padding:2mm;
 		}
 		.char {
@@ -59,8 +60,8 @@ cat &lt;&lt;-HTML
 		.tt {
 			border:1px dotted silver;
 			display:inline;
-			font-size:14pt;
-			width:50px;
+			font-size:13pt;
+			width:80px;
 			heigth:50px;
 			cursor:pointer;
 			font-family:'Charis SIL','Lucida Grande';
@@ -69,7 +70,7 @@ cat &lt;&lt;-HTML
 		.tt1 {
 			border:1px dotted silver;
 			display:inline;
-			font-size:14pt;
+			font-size:13pt;
 			width:25px;
 			heigth:50px;
 			cursor:pointer;
@@ -78,10 +79,40 @@ cat &lt;&lt;-HTML
 		}
 		.tt0 {
 			display:inline;
-			font-size:14pt;
+			font-size:13pt;
 			width:25px;
 			heigth:50px;
 		}
+		.fadeIn {
+			position:fixed;
+			top:95px;
+			width:520px;
+			left:50%;
+			opacity:1;
+			height:100px;
+			margin: -50px auto auto -260px;
+			-webkit-transition:top 0.3s 0.3s ease-in-out;
+		    -webkit-transition:opacity 0.3s ease-in-out;
+		}
+		.fadeOut {
+			position:fixed;
+			top:-1000px;
+			width:520px;
+			left:50%;
+			opacity:0;
+			height:100px;
+			margin: -50px auto auto -260px;
+		    -webkit-transition:top 0.3s 0.3s ease-in-out;
+		    -webkit-transition:opacity 0.3s ease-in-out;
+		}
+		.rot90 {
+			-webkit-transform:skew(15deg,-35deg);
+			font-size:6pt;
+			width:26px;
+			vertical-align:bottom;
+			text-align:center;
+		}
+		th {font-size:6pt;}
 	&lt;/style&gt; 
 	&lt;script&gt;
 		var myCommand = null;
@@ -125,12 +156,12 @@ cat &lt;&lt;-HTML
 			document.getElementById("uniname").innerHTML = " ";
 		}
 		function toggle(plane,btn) {
-			document.getElementById("Vowels").style.display = 'none';
-			document.getElementById("Consonants").style.display = 'none';
-			document.getElementById("Diacritics").style.display = 'none';
-			document.getElementById("Others").style.display = 'none';
-			document.getElementById("result").style.display = 'none';
-			document.getElementById(plane).style.display = '';
+			document.getElementById("Vowels").className = 'fadeOut';
+			document.getElementById("Consonants").className = 'fadeOut';
+			document.getElementById("Diacritics").className = 'fadeOut';
+			document.getElementById("Others").className = 'fadeOut';
+			document.getElementById("result").className = 'fadeOut';
+			document.getElementById(plane).className = 'fadeIn';
 			document.getElementById("1").className = 'buttonInAct';
 			document.getElementById("2").className = 'buttonInAct';
 			document.getElementById("3").className = 'buttonInAct';
@@ -143,11 +174,13 @@ cat &lt;&lt;-HTML
 		document.onkeyup = function keyPress(event) {
 			if ( typeof event == "undefined" ) event = window.event;
 			wkey = event.keyCode;
-			if ( wkey == 27 ) window.close();
+			if ( wkey == 27 ) {
+				window.close();
+			}
 		}
 	&lt;/script&gt;
 	&lt;/head&gt;
-&lt;body&gt;
+&lt;body onload='window.resizeTo(580,600)'&gt;
 &lt;div class='head'&gt;
 &lt;button accesskey="v" id='1' onclick='toggle("Vowels",1)' class='buttonAct'&gt;Vowels&lt;/button&gt;
 &lt;button accesskey="c" id='2' onclick='toggle("Consonants",2)' class='buttonInAct'&gt;Consonants&lt;/button&gt;
@@ -158,11 +191,22 @@ cat &lt;&lt;-HTML
 &amp;nbsp;&amp;nbsp;&amp;nbsp;
 &lt;/div&gt;
 &lt;p&gt; &lt;/p&gt;&lt;p&gt; &lt;/p&gt;
-&lt;div id='Vowels'&gt;
+&lt;div id='Vowels' class='fadeIn'&gt;
 &lt;center&gt;
 &lt;h3&gt;Vowels&lt;/h3&gt;
 &lt;table&gt;
 &lt;tr&gt;
+&lt;th colspan=1&gt;&lt;/th&gt;
+&lt;th colspan=4&gt;Front&lt;/th&gt;
+&lt;th colspan=3&gt;&lt;/th&gt;
+&lt;th colspan=4&gt;Central&lt;/th&gt;
+&lt;th colspan=2&gt;&lt;/th&gt;
+&lt;th colspan=4&gt;Back&lt;/th&gt;
+&lt;th colspan=10&gt;&lt;/th&gt;
+&lt;th colspan=8&gt;Tones and Word Accents&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td class='rot90'&gt;Close&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("69")' onmouseout='clearName()'; onmouseover='showName("U+0069 : Close front unrounded vowel&lt;br&gt;LATIN SMALL LETTER I")' colspan=2&gt;i&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("79")' onmouseout='clearName()'; onmouseover='showName("U+0079 : Close front rounded vowel&lt;br&gt;LATIN SMALL LETTER Y")' colspan=2&gt;y&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
@@ -174,10 +218,12 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=10&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cc8b")' onmouseout='clearName()'; onmouseover='showName("U+030B : Extra high&lt;br&gt;COMBINING DOUBLE ACUTE ACCENT")' colspan=2&gt;◌̋&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cba5")' onmouseout='clearName()'; onmouseover='showName("U+02E5 : Extra high&lt;br&gt;MODIFIER LETTER EXTRA-HIGH TONE BAR")' colspan=2&gt;˥&lt;/td&gt;
+	&lt;td class='tt1' onclick='insertChar("cc8c")' onmouseout='clearName()'; onmouseover='showName("U+030C : Rising&lt;br&gt;COMBINING CARON")' colspan=2&gt;◌̌&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("e28693")' onmouseout='clearName()'; onmouseover='showName("U+2193 : Downstep (ExtIPA: ingressive airflow)&lt;br&gt;DOWNWARDS ARROW")' colspan=2&gt;↓&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("cb88")' onmouseout='clearName()'; onmouseover='showName("U+02C8 : Primary stress&lt;br&gt;MODIFIER LETTER VERTICAL LINE")' colspan=2&gt;ˈ&lt;/td&gt;
+	
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;&lt;/td&gt;
 	&lt;td class='tt0' colspan=2&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("c9aa")' onmouseout='clearName()'; onmouseover='showName("U+026A : Near-close near-front unrounded vowel&lt;br&gt;LATIN LETTER SMALL CAPITAL I")' colspan=2&gt;ɪ&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("ca8f")' onmouseout='clearName()'; onmouseover='showName("U+028F : Near-close near-front rounded vowel&lt;br&gt;LATIN LETTER SMALL CAPITAL Y")' colspan=2&gt;ʏ&lt;/td&gt;
@@ -186,10 +232,12 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=13&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cc81")' onmouseout='clearName()'; onmouseover='showName("U+0301 : High&lt;br&gt;COMBINING ACUTE ACCENT")' colspan=2&gt;◌́&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cba6")' onmouseout='clearName()'; onmouseover='showName("U+02E6 : High&lt;br&gt;MODIFIER LETTER HIGH TONE BAR")' colspan=2&gt;˦&lt;/td&gt;
+	&lt;td class='tt1' onclick='insertChar("cc82")' onmouseout='clearName()'; onmouseover='showName("U+0302 : Falling&lt;br&gt;COMBINING CIRCUMFLEX ACCENT")' colspan=2&gt;◌̂&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("e28691")' onmouseout='clearName()'; onmouseover='showName("U+2191 : Upstep (ExtIPA: egressive airflow)&lt;br&gt;UPWARDS ARROW")' colspan=2&gt;↑&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("cb8c")' onmouseout='clearName()'; onmouseover='showName("U+02CC : Secondary stress&lt;br&gt;MODIFIER LETTER LOW VERTICAL LINE")' colspan=2&gt;ˌ&lt;/td&gt;
+	
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;&lt;/td&gt;
 	&lt;td class='tt0' colspan=1&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("65")' onmouseout='clearName()'; onmouseover='showName("U+0065 : Close-mid front unrounded vowel&lt;br&gt;LATIN SMALL LETTER E")' colspan=2&gt;e&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("c3b8")' onmouseout='clearName()'; onmouseover='showName("U+00F8 : Close-mid front rounded vowel&lt;br&gt;LATIN SMALL LETTER O WITH STROKE")' colspan=2&gt;ø&lt;/td&gt;
@@ -204,10 +252,11 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=4&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cc84")' onmouseout='clearName()'; onmouseover='showName("U+0304 : Mid&lt;br&gt;COMBINING MACRON")' colspan=2&gt;◌̄&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cba7")' onmouseout='clearName()'; onmouseover='showName("U+02E7 : Mid&lt;br&gt;MODIFIER LETTER MID TONE BAR")' colspan=2&gt;˧&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("e28697")' onmouseout='clearName()'; onmouseover='showName("U+2197 : Global rise&lt;br&gt;NORTH EAST ARROW")' colspan=2&gt;↗&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("cb90")' onmouseout='clearName()'; onmouseover='showName("U+02D0 : Long&lt;br&gt;MODIFIER LETTER TRIANGULAR COLON")' colspan=2&gt;◌ː&lt;/td&gt;
+	&lt;td class='tt1' onclick='insertChar("e1b784")' onmouseout='clearName()'; onmouseover='showName("U+1DC4 : High rising&lt;br&gt;COMBINING MACRON-ACUTE")' colspan=2&gt;◌᷄&lt;/td&gt;	&lt;td class='tt1' onclick='insertChar("e28697")' onmouseout='clearName()'; onmouseover='showName("U+2197 : Global rise&lt;br&gt;NORTH EAST ARROW")' colspan=2&gt;↗&lt;/td&gt;
+	
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;mid&lt;/td&gt;
 	&lt;td class='tt0' colspan=8&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("c999")' onmouseout='clearName()'; onmouseover='showName("U+0259 : Mid central vowel&lt;br&gt;LATIN SMALL LETTER SCHWA")' colspan=2&gt;ə&lt;/td&gt;
 	&lt;td class='tt0' colspan=11&gt;&lt;/td&gt;
@@ -215,10 +264,12 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=4&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cc80")' onmouseout='clearName()'; onmouseover='showName("U+0300 : Low&lt;br&gt;COMBINING GRAVE ACCENT")' colspan=2&gt;◌̀&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cba8")' onmouseout='clearName()'; onmouseover='showName("U+02E8 : Low&lt;br&gt;MODIFIER LETTER LOW TONE BAR")' colspan=2&gt;˨&lt;/td&gt;
+	&lt;td class='tt1' onclick='insertChar("e1b785")' onmouseout='clearName()'; onmouseover='showName("U+1DC5 : Low rising&lt;br&gt;COMBINING GRAVE-MACRON")' colspan=2&gt;◌᷅&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("e28698")' onmouseout='clearName()'; onmouseover='showName("U+2198 : Global fall&lt;br&gt;SOUTH EAST ARROW")' colspan=2&gt;↘&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("cb91")' onmouseout='clearName()'; onmouseover='showName("U+02D1 : Half-long&lt;br&gt;MODIFIER LETTER HALF TRIANGULAR COLON")' colspan=2&gt;◌ˑ&lt;/td&gt;
+	
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;&lt;/td&gt;
 	&lt;td class='tt0' colspan=2&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("c99b")' onmouseout='clearName()'; onmouseover='showName("U+025B : Open-mid front unrounded vowel&lt;br&gt;LATIN SMALL LETTER OPEN E")' colspan=2&gt;ɛ&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("c593")' onmouseout='clearName()'; onmouseover='showName("U+0153 : Open-mid front rounded vowel&lt;br&gt;LATIN SMALL LIGATURE OE")' colspan=2&gt;œ&lt;/td&gt;
@@ -233,19 +284,19 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=4&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cc8f")' onmouseout='clearName()'; onmouseover='showName("U+030F : Extra low&lt;br&gt;COMBINING DOUBLE GRAVE ACCENT")' colspan=2&gt;◌̏&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cba9")' onmouseout='clearName()'; onmouseover='showName("U+02E9 : Extra low&lt;br&gt;MODIFIER LETTER EXTRA-LOW TONE BAR")' colspan=2&gt;˩&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("7c")' onmouseout='clearName()'; onmouseover='showName("U+007C : Minor (foot) group&lt;br&gt;VERTICAL LINE")' colspan=2&gt;|&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("cc86")' onmouseout='clearName()'; onmouseover='showName("U+0306 : Extra-short&lt;br&gt;COMBINING BREVE")' colspan=2&gt;◌̆&lt;/td&gt;
+	&lt;td class='tt1' onclick='insertChar("e1b788")' onmouseout='clearName()'; onmouseover='showName("U+1DC8 : Rising-falling&lt;br&gt;COMBINING GRAVE-ACUTE-GRAVE")' colspan=2&gt;◌᷈&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("c3a6")' onmouseout='clearName()'; onmouseover='showName("U+00E6 : Near-open front unrounded vowel&lt;br&gt;LATIN SMALL LETTER AE")' colspan=2&gt;æ&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("c990")' onmouseout='clearName()'; onmouseover='showName("U+0250 : Near-open central vowel&lt;br&gt;LATIN SMALL LETTER TURNED A")' colspan=2&gt;ɐ&lt;/td&gt;
 	&lt;td class='tt0' colspan=21&gt;&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("e28096")' onmouseout='clearName()'; onmouseover='showName("U+2016 : Major (intonation) group&lt;br&gt;DOUBLE VERTICAL LINE")' colspan=2&gt;‖&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("e280bf")' onmouseout='clearName()'; onmouseover='showName("U+203F : Linking (absence of a break)&lt;br&gt;UNDERTIE")' colspan=2&gt;‿&lt;/td&gt;
+		
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;Open&lt;/td&gt;
 	&lt;td class='tt0' colspan=4&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("61")' onmouseout='clearName()'; onmouseover='showName("U+0061 : Open front unrounded vowel&lt;br&gt;LATIN SMALL LETTER A")' colspan=2&gt;a&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("c9b6")' onmouseout='clearName()'; onmouseover='showName("U+0276 : Open front rounded vowel&lt;br&gt;LATIN LETTER SMALL CAPITAL OE")' colspan=2&gt;ɶ&lt;/td&gt;
@@ -255,12 +306,43 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=18&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
+&lt;br&gt;
+&lt;table width='70%'&gt;
+&lt;th colspan=9&gt;Suprasegmentals&lt;/th&gt;
+&lt;tr&gt;
+	&lt;td class='tt' onclick='insertChar("cb88")' onmouseout='clearName()'; onmouseover='showName("U+02C8 : Primary stress&lt;br&gt;MODIFIER LETTER VERTICAL LINE")'&gt;ˈ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("cb8c")' onmouseout='clearName()'; onmouseover='showName("U+02CC : Secondary stress&lt;br&gt;MODIFIER LETTER LOW VERTICAL LINE")'&gt;ˌ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("cb90")' onmouseout='clearName()'; onmouseover='showName("U+02D0 : Long&lt;br&gt;MODIFIER LETTER TRIANGULAR COLON")' colspan=2&gt;&amp;nbsp;&amp;nbsp;◌ː&amp;nbsp;&amp;nbsp;&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("cb91")' onmouseout='clearName()'; onmouseover='showName("U+02D1 : Half-long&lt;br&gt;MODIFIER LETTER HALF TRIANGULAR COLON")'&gt;◌ˑ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("cc86")' onmouseout='clearName()'; onmouseover='showName("U+0306 : Extra-short&lt;br&gt;COMBINING BREVE")'&gt;◌̆&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("7c")' onmouseout='clearName()'; onmouseover='showName("U+007C : Minor (foot) group&lt;br&gt;VERTICAL LINE")'&gt;|&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("e28096")' onmouseout='clearName()'; onmouseover='showName("U+2016 : Major (intonation) group&lt;br&gt;DOUBLE VERTICAL LINE")'&gt;‖&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("2e")' onmouseout='clearName()'; onmouseover='showName("U+002E : Syllable break&lt;br&gt;FULL STOP")'&gt;.&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("e280bf")' onmouseout='clearName()'; onmouseover='showName("U+203F : Linking (absence of a break)&lt;br&gt;UNDERTIE")'&gt;‿&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/center&gt;
 &lt;/div&gt;
-&lt;div id='Consonants' style="display:none"&gt;
+&lt;div id='Consonants' class='fadeOut'&gt;
 &lt;center&gt;
-&lt;h3&gt;Consonants&lt;/h3&gt;
+&lt;h3&gt;Consonants (Pulmonic)&lt;/h3&gt;
 &lt;table&gt;
 &lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th colspan=2&gt;Bilabial&lt;/th&gt;
+&lt;th colspan=2&gt;Labiodental&lt;/th&gt;
+&lt;th colspan=2&gt;Dental&lt;/th&gt;
+&lt;th colspan=2&gt;Alveolar&lt;/th&gt;
+&lt;th colspan=2&gt;Postalveolar&lt;/th&gt;
+&lt;th colspan=2&gt;Retroflex&lt;/th&gt;
+&lt;th colspan=2&gt;Palatal&lt;/th&gt;
+&lt;th colspan=2&gt;Velar&lt;/th&gt;
+&lt;th colspan=2&gt;Uvular&lt;/th&gt;
+&lt;th colspan=2&gt;Pharyngeal&lt;/th&gt;
+&lt;th colspan=2&gt;Glottal&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td class='rot90'&gt;&lt;br&gt;Plosive&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("70")' onmouseout='clearName()'; onmouseover='showName("U+0070 : Voiceless bilabial plosive&lt;br&gt;LATIN SMALL LETTER P")'&gt;p&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("62")' onmouseout='clearName()'; onmouseover='showName("U+0062 : Voiced bilabial plosive&lt;br&gt;LATIN SMALL LETTER B")'&gt;b&lt;/td&gt;
 	&lt;td class='tt0' colspan=4&gt;&lt;/td&gt;
@@ -280,6 +362,7 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0'&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;Nasal&lt;/td&gt;
 	&lt;td class='tt0'&gt;&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("6d")' onmouseout='clearName()'; onmouseover='showName("U+006D : Voiced bilabial nasal&lt;br&gt;LATIN SMALL LETTER M")'&gt;m&lt;/td&gt;
 	&lt;td class='tt0'&gt;&lt;/td&gt;
@@ -297,6 +380,7 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colpsan=4&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;Trill&lt;/td&gt;
 	&lt;td class='tt0'&gt;&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("ca99")' onmouseout='clearName()'; onmouseover='showName("U+0299 : Voiced bilabial trill&lt;br&gt;LATIN LETTER SMALL CAPITAL B")'&gt;ʙ&lt;/td&gt;
 	&lt;td class='tt0' colspan=5&gt;&lt;/td&gt;
@@ -307,8 +391,9 @@ cat &lt;&lt;-HTML
 
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;Tap or Flap&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ef899f")' onmouseout='clearName()'; onmouseover='showName("U+F25F : Voiced labiodental flap&lt;br&gt;Private Use Area (defined in e.g. Charis SIL)")'&gt;&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("e2b1b1")' onmouseout='clearName()'; onmouseover='showName("U+2C71 : Voiced labiodental flap&lt;br&gt;LATIN SMALL LETTER V WITH RIGHT HOOK")'&gt;ⱱ&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("c9be")' onmouseout='clearName()'; onmouseover='showName("U+027E : Voiced alveolar flap&lt;br&gt;LATIN SMALL LETTER R WITH FISHHOOK")'&gt;ɾ&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
@@ -316,6 +401,7 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=10&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;Fricative&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("c9b8")' onmouseout='clearName()'; onmouseover='showName("U+0278 : Voiceless bilabial fricative&lt;br&gt;LATIN SMALL LETTER PHI")'&gt;ɸ&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("ceb2")' onmouseout='clearName()'; onmouseover='showName("U+03B2 : Voiced bilabial fricative&lt;br&gt;GREEK SMALL LETTER BETA")'&gt;β&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("66")' onmouseout='clearName()'; onmouseover='showName("U+0066 : Voiceless labiodental fricative&lt;br&gt;LATIN SMALL LETTER F")'&gt;f&lt;/td&gt;
@@ -340,12 +426,14 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt' onclick='insertChar("c9a6")' onmouseout='clearName()'; onmouseover='showName("U+0266 : Voiced glottal fricative&lt;br&gt;LATIN SMALL LETTER H WITH HOOK")'&gt;ɦ&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;Lateral fricative&lt;/td&gt;
 	&lt;td class='tt0' colspan=6&gt;&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("c9ac")' onmouseout='clearName()'; onmouseover='showName("U+026C : Voiceless alveolar lateral fricative&lt;br&gt;LATIN SMALL LETTER L WITH BELT")'&gt;ɬ&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("c9ae")' onmouseout='clearName()'; onmouseover='showName("U+026E : Voiced alveolar lateral fricative&lt;br&gt;LATIN SMALL LETTER LEZH")'&gt;ɮ&lt;/td&gt;
 	&lt;td class='tt0' colspan=14&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;Approximant&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("ca8b")' onmouseout='clearName()'; onmouseover='showName("U+028B : Voiced labiodental approximant&lt;br&gt;LATIN SMALL LETTER V WITH HOOK")'&gt;ʋ&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
@@ -359,6 +447,7 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=6&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+	&lt;td class='rot90'&gt;Lateral approximant&lt;/td&gt;
 	&lt;td class='tt0' colspan=7&gt;&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("6c")' onmouseout='clearName()'; onmouseover='showName("U+006C : Voiced alveolar lateral approximant&lt;br&gt;LATIN SMALL LETTER L")'&gt;l&lt;/td&gt;
 	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
@@ -371,9 +460,34 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt' onclick='insertChar("c9ab")' onmouseout='clearName()'; onmouseover='showName("U+026B : Voiced velarized/pharyngealized alveolar lateral approximant&lt;br&gt;LATIN SMALL LETTER L WITH MIDDLE TILDE")'&gt;ɫ&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
+&lt;h4&gt;Consonants (Non-Pulmonic)&lt;/h4&gt;
+&lt;table&gt;
+&lt;tr&gt;
+	&lt;th colspan=5&gt;Clicks&lt;/th&gt;
+	&lt;th&gt;&lt;/th&gt;
+	&lt;th colspan=5&gt;Voiced implosives&lt;/th&gt;
+	&lt;th&gt;&lt;/th&gt;
+	&lt;th&gt;Ejectives&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+	&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+	&lt;td class='tt'&gt;a&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
 &lt;/center&gt;
 &lt;/div&gt;
-&lt;div id='Diacritics' style="display:none"&gt;
+&lt;div id='Diacritics' class='fadeOut'&gt;
 &lt;center&gt;
 &lt;h3&gt;Diacritics&lt;/h3&gt;
 &lt;table&gt;
@@ -452,7 +566,7 @@ cat &lt;&lt;-HTML
 &lt;/table&gt;
 &lt;/center&gt;
 &lt;/div&gt;
-&lt;div id='Others' style="display:none"&gt;
+&lt;div id='Others' class='fadeOut'&gt;
 &lt;center&gt;
 &lt;h3&gt;Others&lt;/h3&gt;
 &lt;table&gt;
@@ -487,8 +601,9 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt' onclick='insertChar("c9a7")' onmouseout='clearName()'; onmouseover='showName("U+0267 : Voiceless simultaneous postalveolar and velar fricative&lt;br&gt;LATIN SMALL LETTER HENG WITH HOOK")'&gt;ɧ&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
+&lt;/center&gt;
 &lt;/div&gt;
-&lt;div id='result' style="display:none"&gt;
+&lt;div id='result' class='fadeOut'&gt;
 ...
 &lt;/div&gt;
 &lt;p&gt; &lt;/p&gt;&lt;p&gt; &lt;/p&gt;

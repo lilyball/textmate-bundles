@@ -78,6 +78,14 @@ for i in suggestions.split('\n'):
                 uname = "COMBINING RIGHT HALF RING ABOVE"
             elif c == u"͑":
                 uname = "COMBINING LEFT HALF RING ABOVE"
+            elif c == u"᷄":
+                uname = "COMBINING MACRON-ACUTE"
+            elif c == u"᷅":
+                uname = "COMBINING GRAVE-MACRON"
+            elif c == u"᷈":
+                uname = "COMBINING GRAVE-ACUTE-GRAVE"
+            elif c == u"ⱱ":
+                uname = "LATIN SMALL LETTER V WITH RIGHT HOOK"
             else:
                 uname = ""
         t = ""

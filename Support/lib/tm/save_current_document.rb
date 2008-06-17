@@ -1,6 +1,6 @@
 module TextMate
   class << self
-
+    # 
     # Calling TextMate.save ensures that one of the following hold true:
     #  • The current document is saved, if TM_FILEPATH is writeable.
     #    In this case, TM_FILEPATH, TM_FILENAME, TM_DISPLAYNAME are left as is.
@@ -17,7 +17,7 @@ module TextMate
     #      TM_FILE_IS_UNTITLED will be set to “true”
     #      TM_DISPLAYNAME will be set to “untitled”
 
-    def save()
+    def save_current_document()
       doc, dst = STDIN.read, ENV['TM_FILEPATH']
       ENV['TM_DISPLAYNAME'] = ENV['TM_FILENAME']
 

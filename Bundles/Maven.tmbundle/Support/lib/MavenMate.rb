@@ -53,11 +53,14 @@ class MavenCommand
   def full_command
     command.unshift(@mvn)
   end
-  
+
   def run(&block)
-    Dir.chdir(@location) do
-      TextMate::Process.run(full_command, :echo => true, &block)
-    end
+    Dir.chdir(@location)
+    rd, wr = IO.pipe
+    rd.fcntl(Fcntl::F_SETFD, 1)
+    stdin, stdout, stderr, pid = my_popen3(full_command)
+    wr.close
+    block.call(stdout, stderr, rd, pid)
   end
 
   def html

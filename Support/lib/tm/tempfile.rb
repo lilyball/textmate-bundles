@@ -1,10 +1,12 @@
 module TextMate
   module IO
     class << self
+      # Allows use with a block or without.
+      # 
+      # Block usage:
+      # 
       # Requires a file ext and takes an optional leading name string.
-      # 
-      # Usage:
-      # 
+      #
       #     TextMate::IO.tempfile('diff', 'foo') { |file|
       #       file.write(diff)
       #       `mate -w #{e_sh(file.path)}`
@@ -12,6 +14,14 @@ module TextMate
       #
       # Note: If you want to use mate to open the result you will need
       # to use the -w option.
+      # 
+      # Standalone usage:
+      # 
+      # Returns the open file as a file handle, the file will be
+      # unlinked when the script exits.
+      # 
+      #   file = TextMate::IO.tempfile('diff', 'foo')
+      # 
       def tempfile(ext, name=nil)
         require 'tmpdir'
 
@@ -22,12 +32,21 @@ module TextMate
           )
           
           file.sync = true
-          res = yield(file)
           
-          file.close
-          File.unlink(file.path)
+          if block_given?
+            res = yield(file)
 
-          return res
+            file.close
+            File.unlink(file.path)
+            
+            return res
+          else
+            at_exit {
+              file.close
+              File.unlink(file.path)              
+            }
+            return file
+          end
         rescue Errno::EEXIST
           retry
         end

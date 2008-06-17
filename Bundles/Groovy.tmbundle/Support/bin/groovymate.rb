@@ -12,10 +12,6 @@ class GroovyScript < UserScript
 
   def initialize(content) 
     @prefs = PStore.new(File.expand_path( "~/Library/Preferences/com.macromates.textmate.groovymate"))  
-    unless ENV.has_key? 'TM_FILEPATH'
-      f = Tempfile.new("groovy")
-      ENV['TM_FILEPATH'] = f.path
-    end
     super(content)
   end
   
@@ -29,6 +25,7 @@ class GroovyScript < UserScript
   def executable
     ENV['TM_GROOVY']
   end
+  def default_extension; "groovy" end
   
   def filter_cmd(cmd)
     if ENV.include? 'TM_GROOVYMATE_GET_ARGS'

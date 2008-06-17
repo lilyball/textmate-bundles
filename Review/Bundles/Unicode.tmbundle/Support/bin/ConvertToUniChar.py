@@ -126,10 +126,7 @@ for c in suggestions:
     hexcode = "%04X" % int(c)
     theChar = re.sub(r"(?=[\"])", r'\\', wunichr(c))
     if theChar == '"': theChar = '\\"'
-    if len(hexcode) > 4:
-        sugglist.append(theChar + "\tU+" + hexcode + "\t" + name)
-    else:
-        sugglist.append(theChar + "\tU+" + hexcode + "\t\t" + name)
+    sugglist.append(theChar + "\tU+" + hexcode + "\t\t\t" + name)
 
 try:
     result=dialog.menu(sugglist)

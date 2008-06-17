@@ -573,7 +573,7 @@ if "CJK" in res and ("IDEO" in res or "Ideo" in res):
                     if st == 'T':
                         print "  Traditional\t: " + data.rstrip()
                     elif st == 'S':
-                        print "  Simplified\t\t: " + data.rstrip()
+                        print "  Simplified\t: " + data.rstrip()
                 if pinyin1:         print "  Pinyin\t\t: " + pinyin1
                 if Bopomofo:        print "  Zhuyin\t\t: " + Bopomofo
                 if zhWubiXing:      print "  Wubi Xing\t\t: " + zhWubiXing

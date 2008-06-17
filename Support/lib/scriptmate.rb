@@ -2,10 +2,10 @@ SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'escape'
 require SUPPORT_LIB + 'web_preview'
 require SUPPORT_LIB + 'io'
+require SUPPORT_LIB + 'tm/tempfile'
 
 require 'cgi'
 require 'fcntl'
-require 'tempfile'
 
 $KCODE = 'u'
 require 'jcode'
@@ -74,7 +74,6 @@ class UserCommand
   def to_s
     @cmd.to_s
   end
-  def cleanup; end
 end
 
 class CommandMate
@@ -89,7 +88,9 @@ class CommandMate
   protected
     def filter_stdout(str)
       # strings from stdout are passed through this method before being printed
-      htmlize(str).gsub(/\<br\>/, "<br>\n")
+      # txmt://open?line=3&url=file:///var/folders/Gx/Gxr7D8ILFba5bZaZC6rrCE%2B%2B%2BTQ/-Tmp-/untitled_m16p.py
+      str = htmlize(str).gsub(/\<br\>/, "<br>\n")
+
     end
     def filter_stderr(str)
       # strings from stderr are passwed through this method before printing
@@ -105,100 +106,66 @@ class CommandMate
     end
   public
     def emit_html
-      stdout, stderr, stack_dump, @pid = @command.run
-      %w[INT TERM].each do |signal|
-        trap(signal) do
-          begin
-            Process.kill("KILL", @pid)
-            sleep 0.5
-            Process.kill("TERM", @pid)
-          rescue
-            # process doesn't exist anymore
+      @command.run do |stdout, stderr, stack_dump, pid|
+        %w[INT TERM].each do |signal|
+          trap(signal) do
+            begin
+              Process.kill("KILL", pid)
+              sleep 0.5
+              Process.kill("TERM", pid)
+            rescue
+              # process doesn't exist anymore
+            end
           end
         end
-      end
-      emit_header()
-      TextMate::IO.exhaust(:out => stdout, :err => stderr, :stack => stack_dump) do |str, type|
-        case type
-          when :out   then print filter_stdout(str)
-          when :err   then puts filter_stderr(str)
-          when :stack then @error << str
+        emit_header()
+        TextMate::IO.exhaust(:out => stdout, :err => stderr, :stack => stack_dump) do |str, type|
+          case type
+            when :out   then print filter_stdout(str)
+            when :err   then puts filter_stderr(str)
+            when :stack then
+              unless @command.temp_file.nil?
+                str.gsub!(/(href=("|')(?:txmt:\/\/open\?(?:[a-z]+=[0-9]+)*?))(&url=.*)([a-z]+=[0-9]+)?(\2)/, '\1\2')
+                ext = @command.default_extension
+                str.gsub!(File.basename(@command.temp_file), "untitled")
+              end
+              @error << str
+          end
         end
+        emit_footer()
+        Process.waitpid(pid)
       end
-      emit_footer()
-      Process.waitpid(@pid)
-      @command.cleanup
     end
-end
-
-
-def String.random_alphanumeric(size=16)
-  s = ""
-  size.times { s << (i = Kernel.rand(62); i += ((i < 10) ? 48 : ((i < 36) ? 55 : 61 ))).chr }
-  s
 end
 
 class UserScript
   attr_reader :display_name, :path, :warning
+  attr_reader :temp_file
   def initialize(content)
     
     @warning = ''
     @content = content
     @hashbang = $1 if @content =~ /\A#!(.*)$/
     
-    saved = true
+    @saved = true
     if ENV.has_key? 'TM_FILEPATH' then
       @path = ENV['TM_FILEPATH']
       @display_name = File.basename(@path)
       begin
-        f = open(@path, 'w')
-        f.write @content
+        file = open(@path, 'w')
+        file.write @content
       rescue Errno::EACCES
-        saved = false
+        @saved = false
         @warning = "Could not save #{@path} before running, using temp file..."
       ensure
-        f.close
+        file.close unless file.nil?
       end
+    else
+      @saved = false
     end
-    
-    @temp_path = nil
-    if not saved or not ENV.has_key? 'TM_FILEPATH'
-      saved = true
-      @display_name = "untitled" + default_extension
-      @path = random_file_name
-      # store @path as @temp_path so we don't accidentally unlink
-      # an non-temporary file.
-      @temp_path = @path 
-      begin
-        f = open(@path, 'w')
-        ENV["TM_SCRIPT_IS_UNTITLED"] = "true"
-        f.write @content
-      rescue Errno::EACCES
-        saved = false
-        @warning += "\nCould not open temp file, writing script on stdin..."
-      ensure
-        f.close
-      end
-    end
-    
-    if not saved
-      raise Exception("Could not save file or write to temporary directory.")
-    end
-  end
-  
-  def random_file_name
-    p = "/tmp/tm_script" + String.random_alphanumeric(4) + default_extension()
-    while File.exists? p
-      p  = "/tmp/tm_script" + String.random_alphanumeric(4) + default_extension()
-    end
-    p
   end
   
   public
-    
-    def cleanup
-      File.unlink(@temp_path) if @temp_path and File.exists? @temp_path
-    end
     
     def executable
       # return the path to the executable that will run @content.
@@ -218,17 +185,26 @@ class UserScript
     def default_extension
       # return the extension to use if the script has not yet been saved
     end
-    def run
+    def run(&block)
       rd, wr = IO.pipe
       rd.fcntl(Fcntl::F_SETFD, 1)
       ENV['TM_ERROR_FD'] = wr.to_i.to_s
-      cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten)
-      stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
-      # if @path == "-"
-      #   Thread.new { stdin.write @content; stdin.close }
-      # end
-      wr.close
-      [ stdout, stderr, rd, pid ]
+      if @saved
+        cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten) 
+        stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
+        wr.close
+        block.call(stdout, stderr, rd, pid)
+      else
+        TextMate::IO.tempfile(default_extension) do |f|
+          f.write @content
+          @display_name = "untitled"
+          @temp_file = f.path
+          cmd = filter_cmd([executable, args, e_sh(f.path), ARGV.to_a ].flatten)
+          stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
+          wr.close
+          block.call(stdout, stderr, rd, pid)
+        end
+      end
     end
 end
 

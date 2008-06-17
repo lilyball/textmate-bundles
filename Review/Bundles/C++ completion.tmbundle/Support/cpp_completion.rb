@@ -95,7 +95,7 @@ end
 class CppMethodCompletion
   #require "#{ENV['TM_BUNDLE_SUPPORT']}/cpp_parser"
   Treetop.load "#{ENV['TM_BUNDLE_SUPPORT']}/cpp_parser"
-  
+  attr_accessor :res_hier
 
   def initialize(line)
     @line = line
@@ -103,153 +103,98 @@ class CppMethodCompletion
     @parser = CppParser.new
     @std = {
       :namespace => { "std" =>{ :classes => {
+    "map" => {:classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"std::pair"}]}},},
+       :methods => { "begin" =>[{ :type => "std::map::iterator", :a => "()"}],}}}}}}
+    
+    @std2 = {
+      :namespace => { "std" =>{ :classes => {
     "map" => { :methods => { 
-        "begin" =>[{ :r => "std::map::iterator", :a => "()"}],
-        "clear" =>[{ :r => "void", :a => "()"}],
-        "count" =>[{ :r => "size_type", :a => "( const key_type& key )"}],
-        "empty" =>[{ :r => "bool", :a => "()"}],
-        "end" =>[{ :r => "std::map::iterator", :a => "()"}],
-        "equal_range"=>[{:r=>"std::pair", #<iterator,iterator>",
+        "begin" =>[{ :type => "std::map::iterator", :a => "()"}],
+        "clear" =>[{ :type => "void", :a => "()"}],
+        "count" =>[{ :type => "size_type", :a => "( const key_type& key )"}],
+        "empty" =>[{ :type => "bool", :a => "()"}],
+        "end" =>[{ :type => "std::map::iterator", :a => "()"}],
+        "equal_range"=>[{:type=>"std::pair", #<iterator,iterator>",
                          :a=>"( const key_type& key )",
-                         :t=>{ 1=>{:type=>"std::map::iterator", 1=>1,2=>2}, 
-                               2=>{:type=>"std::map::iterator", 1=>1,2=>2}}}],
-        "erase" =>[{ :r => "void", :a => "( iterator pos )"},{ :r => "void", :a => "( iterator start, iterator end )"},{ :r => "size_type", :a => "( const key_type& key )"}],
-        "find" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
-        "insert" =>[{ :r => "std::map::iterator", :a => "( iterator i, const TYPE& pair )"},{ :r => "void", :a => "( input_iterator start, input_iterator end )"},
-          { :r => "std::pair",
+                         :t=>{ 1=>{:type=>"std::map::iterator", :t=>{1=>1,2=>2}
+                                  }, 
+                               2=>{:type=>"std::map::iterator", :t=>{1=>1,2=>2}
+                                  }
+                              }
+                        }],
+        "erase" =>[{ :type => "void", :a => "( iterator pos )"},{ :type => "void", :a => "( iterator start, iterator end )"},{ :type => "size_type", :a => "( const key_type& key )"}],
+        "find" =>[{ :type => "std::map::iterator", :a => "( const key_type& key )"}],
+        "insert" =>[{ :type => "std::map::iterator", :a => "( iterator i, const TYPE& pair )"},{ :type => "void", :a => "( input_iterator start, input_iterator end )"},
+          { :type => "std::pair",
             :a => "( const TYPE& pair )",
-            :t => {1=>{:type=>"std::map::iterator", 1=>1,2=>2},
+            :t => {1=>{:type=>"std::map::iterator", :t=>{1=>1,2=>2}},
                    2=>{:type=>"bool"}  }}],
-        "key_comp" =>[{ :r => "key_compare", :a => "()"}],
-        "lower_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
-        "max_size" =>[{ :r => "size_type", :a => "()"}],
-        "rbegin" =>[{ :r => "std::map::iterator", :a => "()"}],
-        "rend" =>[{ :r => "std::map::iterator", :a => "()"}],
-        "size" =>[{ :r => "size_type", :a => "()"}],
-        "swap" =>[{ :r => "void", :a => "( container& from )"}],
-        "upper_bound" =>[{ :r => "std::map::iterator", :a => "( const key_type& key )"}],
-        "value_comp" =>[{ :r => "value_compare", :a => "()"}],
+        "key_comp" =>[{ :type => "key_compare", :a => "()"}],
+        "lower_bound" =>[{ :type => "std::map::iterator", :a => "( const key_type& key )"}],
+        "max_size" =>[{ :type => "size_type", :a => "()"}],
+        "rbegin" =>[{ :type => "std::map::iterator", :a => "()"}],
+        "rend" =>[{ :type => "std::map::iterator", :a => "()"}],
+        "size" =>[{ :type => "size_type", :a => "()"}],
+        "swap" =>[{ :type => "void", :a => "( container& from )"}],
+        "upper_bound" =>[{ :type => "std::map::iterator", :a => "( const key_type& key )"}],
+        "value_comp" =>[{ :type => "value_compare", :a => "()"}],
         },
-        :classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :r=>"std::pair"}]}},}
+        :classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"std::pair"}]}},}
     },
     
     "vector" => {:methods => { 
-      "assign" =>[{ :r => "void", :a => "( size_type num, const TYPE& val )"},
-                  { :r => "void", :a => "( input_iterator start, input_iterator end )"}],
-      "at" =>[{ :r => 1, :a => "( size_type loc )"}],
-      "back" =>[{ :r => 1, :a => "()"}],
-      "begin" =>[{ :r => "std::vector::iterator", :a => "()"}],
-      "capacity" =>[{ :r => "size_type", :a => "()"}],
-      "clear" =>[{ :r => "void", :a => "()"}],
-      "empty" =>[{ :r => "bool", :a => "()"}],
-      "end" =>[{ :r => "std::vector::iterator", :a => "()"}],
-      "erase" =>[{ :r => "std::vector::iterator", :a => "( iterator loc )"},
-         { :r => "std::vector::iterator", :a => "( iterator start, iterator end )"}],
-      "front" =>[{ :r => 1, :a => "()"}],
-      "insert" =>[{ :r => "std::vector::iterator",
+      "assign" =>[{ :type => "void", :a => "( size_type num, const TYPE& val )"},
+                  { :type => "void", :a => "( input_iterator start, input_iterator end )"}],
+      "at" =>[{ :type => 1, :a => "( size_type loc )"}],
+      "back" =>[{ :type => 1, :a => "()"}],
+      "begin" =>[{ :type => "std::vector::iterator", :a => "()"}],
+      "capacity" =>[{ :type => "size_type", :a => "()"}],
+      "clear" =>[{ :type => "void", :a => "()"}],
+      "empty" =>[{ :type => "bool", :a => "()"}],
+      "end" =>[{ :type => "std::vector::iterator", :a => "()"}],
+      "erase" =>[{ :type => "std::vector::iterator", :a => "( iterator loc )"},
+         { :type => "std::vector::iterator", :a => "( iterator start, iterator end )"}],
+      "front" =>[{ :type => 1, :a => "()"}],
+      "insert" =>[{ :type => "std::vector::iterator",
                     :a => "( iterator loc, const TYPE& val )"},
-        { :r => "void", :a => "( iterator loc, size_type num, const TYPE& val )"}],
-      "insert" =>[{ :r => "void", 
+        { :type => "void", :a => "( iterator loc, size_type num, const TYPE& val )"}],
+      "insert" =>[{ :type => "void", 
                     :a => "( iterator loc, input_iterator start, input_iterator end )"}],
-      "max_size" =>[{ :r => "size_type", :a => "()"}],
-      "pop_back" =>[{ :r => "void", :a => "()"}],
-      "push_back" =>[{ :r => "void", :a => "( const TYPE& val )"}],
-      "rbegin" =>[{ :r => "std::vector::iterator", :a => "()"}],
-      "rend" =>[{ :r => "std::vector::iterator", :a => "()"},],
-      "reserve" =>[{ :r => "void", :a => "( size_type size )"}],
-      "resize" =>[{ :r => "void", :a => "( size_type num, const TYPE& val = TYPE() )"}],
-      "size" =>[{ :r => "size_type", :a => "()"}],
-      "swap" =>[{ :r => "void", :a => "( container& from )"}],
+      "max_size" =>[{ :type => "size_type", :a => "()"}],
+      "pop_back" =>[{ :type => "void", :a => "()"}],
+      "push_back" =>[{ :type => "void", :a => "( const TYPE& val )"}],
+      "rbegin" =>[{ :type => "std::vector::iterator", :a => "()"}],
+      "rend" =>[{ :type => "std::vector::iterator", :a => "()"},],
+      "reserve" =>[{ :type => "void", :a => "( size_type size )"}],
+      "resize" =>[{ :type => "void", :a => "( size_type num, const TYPE& val = TYPE() )"}],
+      "size" =>[{ :type => "size_type", :a => "()"}],
+      "swap" =>[{ :type => "void", :a => "( container& from )"}],
                                     },
-      :classes => {"iterator" => {:methods =>{"->" => [{:a =>"",:r=>1}] }},},
+      :classes => {"iterator" => {:methods =>{"->" => [{:a =>"",:type=>1}] }},},
                        },
-      "pair" =>{:methods=>{"first"=>[{:a=>"",:r=>1}],
-                                           "second"=>[{:a=>"",:r=>2}]
+      "pair" =>{:methods=>{"first"=>[{:a=>"",:type=>1}],
+                           "second"=>[{:a=>"",:type=>2}]
                                           }
                                },
                              },},},
    :classes => {
-      "a" => {:methods => {"methodA1"=>[{:a=>"()",:r => "b"}], 
-                           "methodA2"=>[{:a=>"()",:r => "c"}]}},
-      "b" => {:methods => {"methodB1"=>[{:a=>"()",:r => "a"}], 
-                           "methodB2"=>[{:a=>"()",:r => "c"}]}},
-      "c" => {:methods => {"methodC1"=>[{:a=>"()",:r => "a"}], 
-                           "methodC2"=>[{:a=>"()",:r => "b"}]}},
+      "a" => {:methods => {"methodA1"=>[{:a=>"()",:type => "b"}], 
+                           "methodA2"=>[{:a=>"()",:type => "c"}]}},
+      "b" => {:methods => {"methodB1"=>[{:a=>"()",:type => "a"}], 
+                           "methodB2"=>[{:a=>"()",:type => "c"}]}},
+      "c" => {:methods => {"methodC1"=>[{:a=>"()",:type => "a"}], 
+                           "methodC2"=>[{:a=>"()",:type => "b"}]}},
                          },
     }
   end
   
-  def create_scope_hierarchy()
-    q = "" # ENV['namespace'].split("::")
-    dir = []
-    dir << ["#global", userdefinedplusstatic]
-    q.each do |elem|
-      if m = dir[-1][1][:namespace][elem]
-        dir << [elem, m]
-      elsif m = dir[-1][1][:classes][elem]
-        dir << [elem, m]
-      else
-        po "'#{elem}' part of qualifier not found"
-      end
-    end
-    return dir
-  end
   
-  def find(res, key, elem )
-    if k = res[key]
-      if r = k[elem]
-        return r
-      end
-    end
-    return nil
-  end
-  
-  def dig_to_find(q, dir)
-    res = dir
-   # pd "#{q.inspect}"
-    q.each do |elem|
-      if m = find(res,:namespace,elem)
-        res = m
-      elsif m = find(res,:classes,elem)
-        res = m
-      elsif m = find(res,:typedefs,elem)
-        #initial = m[:t] if m[:t]
-        res, junk = lookup_class2(m, nil)
-      else
-        res = nil
-      end
-    end
-    return res
-  end
-
-  def userdefinedplusstatic
-     @std
-   end
-
-  def lookup_class2(name, initial)
-    return nil if name.kind_of?(Fixnum)
-    q = name.split("::")
-    if q[0] == "" # ::something
-      res = dig_to_find(q, userdefinedplusstatic)
-    else      
-      @scopes = create_scope_hierarchy() if @scopes.nil?
-      @scopes.reverse_each do |name, dir| 
-        res = dig_to_find(q, dir)
-        break if res
-      end
-    end
-    return res, initial
-  end
-  
-  def lookup_class(name, initial)
-    #@std[name]
-    return lookup_class2(name, initial)
-  end
-  
-  def complete(item, previousClass)
+  def complete(item, scope, qualifier)
+    symbolDict = lookupList(item, scope, qualifier)
     suggestions = []
+    
     mat = (/^#{item[:prefix]}./)
-    previousClass[:methods].each do |key, value|
+    symbolDict.each do |key, value|
       if key =~ mat
         value.each do |item|
           suggestions << { 'display' => key + item[:a], 'cand' => key+"\t"+item[:a], 'match'=> key, 'type'=> "functions"}
@@ -277,122 +222,254 @@ class CppMethodCompletion
     TextMate.exit_create_new_document s
   end
   
-  def updateInitial(previousClass, res, initial)
-    res.each do |key, value|
-      if value.kind_of? Hash
-        updateInitial(previousClass, value, initial)
-      elsif value.kind_of? Integer
-        res[key] = initial[value]
+  def create_scope_hierarchy()
+    q = "" # ENV['namespace'].split("::")
+    dir = []
+    dir << ["#global", userdefinedplusstatic]
+    q.each do |elem|
+      if m = dir[-1][1][:namespace][elem]
+        dir << [elem, m]
+      elsif m = dir[-1][1][:classes][elem]
+        dir << [elem, m]
+      else
+        po "'#{elem}' part of qualifier not found"
       end
     end
-    res[:type] = previousClass
-    return res
+    return dir
   end
   
-  def updateClass(res, initial)
-    previousClass = res[0][:r]
-    if res[0][:t]
-      k = res[0][:t].dup
-      initial = updateInitial(previousClass, k, initial)
-      return lookup_class(previousClass, initial)
+  
+  def userdefinedplusstatic
+     @std
+   end
+
+  def lookup_class2(name, currentTemplateArgs, res)
+    return nil if name.kind_of?(Fixnum)
+    q = name.split("::")
+    if q[0] == "" # ::something
+      res = dig_to_find(q, userdefinedplusstatic)
+    else      
+      @scopes = create_scope_hierarchy() if @scopes.nil?
+      @scopes.reverse_each do |name, dir| 
+        res = dig_to_find(q, dir)
+        break if res
+      end
+    end
+    return res, currentTemplateArgs
+  end
+  
+  def lookup_class(name, currentTemplateArgs, res)
+    # lookup in methodscope
+    temp = res[name]
+    if temp && temp[:typedef]
+      currentTemplateArgs = {}
+      temp.each do |key, value|
+        if key.kind_of?(Fixnum)
+          currentTemplateArgs[key] = value
+        end
+      end
+      n = temp[:typedef]
+      currentTemplateArgs[:type] = n
+      k = lookup_class(n, currentTemplateArgs, res)
+      return k
+    end
+    #@std[name]
+    return lookup_class2(name, currentTemplateArgs, res)
+  end
+  
+  
+  
+  def updateClass(ret, currentTemplateArgs, res)
+    previousClass = ret[0][:r]
+    if ret[0][:t]
+      k = ret[0][:t].dup
+      currentTemplateArgs = updateInitial(previousClass, k, currentTemplateArgs)
+      return lookup_class(previousClass, currentTemplateArgs, res)
     end
     
     if previousClass.kind_of?(Fixnum)
-      initial = initial[previousClass]
-      if initial.nil?
-        TextMate.exit_show_tool_tip "could not find type info for the dereferenced object, template arg ##{previousClass} missing"
+      ocurrentTemplateArgs = currentTemplateArgs
+      currentTemplateArgs = currentTemplateArgs[previousClass]
+      if currentTemplateArgs.nil?
+        TextMate.exit_show_tool_tip "could not find type info for the dereferenced object, template arg ##{previousClass} missing in #{ret.inspect} + #{ocurrentTemplateArgs.inspect}"
       end
-      return lookup_class(initial[:type],initial)
+      return lookup_class(currentTemplateArgs[:type],currentTemplateArgs, res)
     elsif previousClass.kind_of?(String)
-      return lookup_class(previousClass, initial)
+      return lookup_class(previousClass, currentTemplateArgs, res)
     end
     po "this should not be reached"
   end
-
-  def rightMostClass(type_chain, res)
-  first = type_chain.shift
-  #po first.inspect + type_chain.inspect + res.inspect.gsub(',',",\n")
-  #$t = false
-  if first[:kind] == :field
-    initial = res[first[:name]]
-    #TextMate.exit_create_new_document res.inspect
-    if initial[:type]
-      previousClass, junk = lookup_class(initial[:type], nil)
-    else
-      iterate = initial[:iterator]
-      dref = initial[:dref]
-      val = initial[:type_of].dup
-      initial = rightMostClass(val,res)
-      if dref  && iterate
-        previousClass, junk = lookup_class(initial[:type] + "::iterator", nil)
-        if previousClass[:methods]["->"] && (previousClass[:methods]["->"][0][:r] == 1)
-          initial = initial[1]          
-        elsif previousClass[:methods]["->"] && previousClass[:methods]["->"]
-          po "can not iterate over '#{previousClass[:methods]["->"][0][:r]}'"
-        else
-          po "could not assign iterable to '#{first[:name]}'"
-        end
+  
+  def dereference(currentTemplateArgs, variable)
+    puts "dereferenc"
+    po "#{currentTemplateArgs[:pointers]} \n #{variable[:dref]} }"
+  end
+  
+  def find(res, key, elem )
+    if k = res[key]
+      if r = k[elem]
+        return r
       end
-      po "could not dereference '#{res[first[:name]].inspect}'" if initial.nil?
-      name = initial[:type] + (iterate ? "::iterator" : "")
-      # add the resolved var to the global list
-      h = initial.dup
-      h[:type] = name
-      res[first[:name]] = h
-      previousClass, junk = lookup_class(name, nil)
     end
-
-  # pd res.inspect + " == " + previousClass.inspect if first[:name] == "ito"
-   po "could not find '#{name}'" if previousClass.nil?
-   pd "f#{type_chain.inspect} #{previousClass.inspect} -------\n #{initial.inspect}" if previousClass[:methods].nil?
-    if first[:bind] == "->" && previousClass[:methods]["->"]
-      previousClass, initial = updateClass(previousClass[:methods]["->"], initial)
-    end
-  elsif
-    TextMate.exit_show_tool_tip "completing with a method as base is currently not supported"
-  end  
-  type_chain.each do |item|
-    if item[:name]
-      if item[:kind] == :method || item[:kind] == :field
-        r =previousClass[:methods][item[:name]]
-        unless r.nil?
-          r1, junk = lookup_class( r[0][:r], nil )
-          if r1 && item[:bind] == "->" && r1[:methods]["->"]
-            # the only classes that are allowed to have -> are defined in std
-            # along with what they return
-            
-            previousClass, initial = updateClass(r1[:methods]["->"], initial)           
-          else
-            previousClass, initial = updateClass(r, initial)
-          end
-        else
-          # Trying to find a method with the correct name in the correct class failed
-          # here it would be handy if we could look up any methodname declared
-          # regardless of class belonging
-        end
-
-      end
-    elsif item[:prefix]
-      if previousClass.nil?
-        TextMate.exit_show_tool_tip "No completion found"
-      else
-        complete(item, previousClass)
+    return nil
+  end
+  
+  def updateTemplate(variableT, returnType )
+    returnType.each do |key, value|
+      if value.kind_of? Hash
+        updateTemplate(returnType, variableT)
+      elsif value.kind_of? Integer
+        returnType[key] = variableT[value]
       end
     end
   end
-  return initial
   
-end
+  def traverse(scope, tableRoot)
+    return tableRoot if scope.empty?
+    r = scope.inject(tableRoot) do |result, element|
+      res = nil
+      [:namespace, :classes].each do |e|
+        res = result[e][element] if result[e]
+        break unless res.nil?
+      end
+      break if res.nil?
+      res
+    end
+    return r
+  end
+  
+  def lookupTHelp(hierachy, scope, qualifier, verify_presence_of)
+    scopeCopy = scope.dup
+    hierachy.reverse_each do |lib|
+      (scope.length + 1 ).times do
+        if verify_presence_of == [:methods, "begin"]
+          puts "scope->" + scope.inspect 
+          puts qualifier
+          puts "lib" + lib.inspect
+        end
+        unless qualifier[0].empty?
+          r = traverse(scope, lib)
+          r = traverse(qualifier, r) unless r.nil?
+        else
+          r = traverse(qualifier, lib)
+        end
+        #k = traverse(verify_presence_of, r)
+        k = verify_presence_of.inject(r) do |result, elem|
+          break if result.nil?
+          result[elem]
+        end
+
+        return k if k
+        scope.pop
+      end
+      puts "scopeCopy"
+      scope = scopeCopy.dup
+    end 
+    nil
+  end
+  
+  def lookupT(item, scope, qualifier)
+    r = lookup(scope, qualifier, [item[:kind], item[:name]])
+    return r[0]
+  end
+  
+  def lookupList(item, scope, qualifier)
+    r = lookup(scope, qualifier, [:methods])
+    if r.nil?
+      po "could not find symbols starting with #{item[:prefix]}"
+    end
+    
+    return r
+  end
+  
+  def lookup(scope, qualifier, verify_presence_of)
+    returnT = nil
+    std_hier = @std
+    user_hier = {}
+    hierachy = [std_hier, user_hier]
+    if qualifier.last == "#localScope"
+     hierachy << res_hier
+    end
+    returnT = lookupTHelp(hierachy, scope, qualifier, verify_presence_of)
+    if returnT.nil?
+      #return returnT
+      po "could not look up #{verify_presence_of.last} in scope #{scope.inspect} + #{qualifier.inspect}"
+    else
+      return returnT
+    end
+  end
+  
+  def dereference(variableT, item, currentScope)
+    vtp = variableT[:pointers] || 0
+    ip = item[:pointers] || 0
+    if ip >= vtp
+      return false
+    else
+      val = lookupT(variableT, currentScope)
+      unless val.nil?
+        updateTemplate(variableT, val)
+        return true
+      end
+    end
+  end
+  
+  def updateScope(variableT, currentScope)
+  end
+
+  def rightMostClass(type_chain, currentScope, qualifier)
+    originalScope = currentScope.dup
+    if type_chain.first[:name] == "this"
+      qualifier.pop
+    end
+    variableT = {}
+    
+    type_chain.each do |item|
+      # item[:name] = "at"
+      if item[:name]
+        # scope = rubinius::Array::#localScope
+        returnType = lookupT(item, currentScope, qualifier)
+        qualifier = returnType[:type].split("::")
+        # returnType = {:type=>"std::vector::iterator", :t=>{1=>1}},
+        # returnType = {:type=>1}
+        # item = {:name=>"map", :kind=>:field, :bind=>"."},
+        #updateTemplate(variableT, returnType[:t]) if returnType[:t]
+        #
+        ## variableT = {:type=>"std::vector::iterator", :t=>{1=>{:type=>"a"}}},
+        #dreffed = dereference(variableT, item, currentScope)
+        #currentScope = originalScope if dreffed
+        #updateScope(variableT, currentScope)
+        # dereference
+      elsif item[:prefix]
+        if qualifier.nil?
+          TextMate.exit_show_tool_tip "No completion found"
+        else
+
+          complete(item, currentScope, qualifier)
+        end
+      end
+    end
+    return currentTemplateArgs
+  end
 
 def print()
   #TextMate.exit_show_tool_tip @line
   a = @parser.parse(@line)
   TextMate.exit_discard if a.nil?
-  res = a.types
-  type_chain = res[:current_type].dup
-  TextMate.exit_discard if type_chain.nil?
-  #special treatment for first element since we do not know what class we are in
-  rightMostClass(type_chain, res)
+  qualifier = ["className"] 
+  namespace = ["namespace"]
+  temp = a.types
+  @res_hier = {}
+  k = (namespace + qualifier).inject(@res_hier) do |result, elem|
+    a = {}
+    result[:classes] = { elem => a}
+    a
+  end
+  k[:classes] = {}
+  k[:classes]["#localScope"] = temp
+  qualifier << "#localScope"
+  # TextMate.exit_discard unless res_hier[:current_type]
+  type_chain = temp[:current_type].dup
+  rightMostClass(type_chain, ["namespace"],qualifier)
 
 end
 

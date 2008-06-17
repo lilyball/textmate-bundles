@@ -2,10 +2,16 @@ grammar Cpp
 rule cpp
 statement+ {
 	def types
-		r = {}
+		r = { :field => {}}
 		elements.each do |e|
 			key, value = e.types
-			r[key] = value if key && value
+			if key && value
+			  if key == :current_type
+			    r[key] = value
+		    else
+			    r[:field][key] = value 
+			  end
+		  end
 		end
 		return r
 	end
@@ -13,10 +19,14 @@ statement+ {
 end
 
 rule statement
- 'typedef' explicit_space 'typename'? explicit_space complete_declare {
+ 'typedef' (explicit_space 'typename')? explicit_space complete_declare {
 	def types
-	    key = "eu"
-	    return key, {:type => "do"}
+	  key, value, type = complete_declare.types
+    s = value[:type]
+    value[:typedef] = s
+    value.delete(:type)
+    return key, value
+	  #  return complete_declare.types
 	end
 }
 / complete_declare
@@ -41,9 +51,19 @@ string {
 end
 
 rule complete_declare
-dec space variable {
+st:(beginnings space)? dec space variable en:(space "=" !"=")? {
 	def types
-		return variable.text_value , dec.types#(:type)
+	  #heuristic to separate multiplications from pointer declarations
+	  unless st.empty?
+	    t = st.text_value.strip
+	    if t == "=" || t == ","
+	      return nil
+      elsif t == "(" && en.empty?
+        return nil
+      end
+    end
+    
+		return variable.text_value , [dec.types] ,:type
 	end
 }
 end
@@ -60,19 +80,37 @@ rule current_type
 end
 
 rule method_chain
-	(v:variable p:parens? t:tie)+ {
+	variable p:parens? tie m:method_chain? {
 		def types
-		  r = elements.map do|e|
-          if e.p.empty?
+		  r = []
+      if p.empty?
 		    val = :field
 		  else
-			val = :method # + :access
+			  val = :methods # + :access
 		  end
-		    { :kind => val, :name => e.v.text_value, :bind => e.t.text_value } 
-		  end
-		  return r
+		  num = (tie.text_value == "->" ? 1 : 0)
+		  r <<  { :kind => val, :name => variable.text_value, :dref => num }		  
+		  r << m.types unless m.empty? 
+		  return r.flatten
 		end
 	}
+	
+/
+'(' space dref:"*"* space m1:method_chain? variable p:parens? ')' tie m2:method_chain? {
+  def types
+    r = []
+    r = m1.types unless m1.empty?
+    if p.empty?
+	    val = :fields
+	  else
+		  val = :methods # + :access
+	  end
+	  num = dref.text_value.size + (tie.text_value == "->" ? 1 : 0)
+    r <<  { :kind => val, :name => variable.text_value, :dref => num }		  
+    r << m2.types unless m2.empty? 
+    return r.flatten
+  end
+}
 
 end
 
@@ -84,11 +122,11 @@ rule allan_macro
 		    if p.empty?
     	      val = :field
     		else
-    		  val = :method # + :access
+    		  val = :methods # + :access
     		end
-    		t << { :kind => val, :name => variable.text_value, :bind => "." } 
+    		t << { :kind => val, :name => variable.text_value, :dref => dref.text_value.size} 
 		    
-		    r = { :type_of => t.flatten, :iterator =>true, :dref => !dref.empty? }
+		    r = { :type_of => t.flatten, :iterator =>true  }
     		return it.text_value, r
 		end
 }
@@ -117,20 +155,16 @@ end
 rule dec
 std
 /
-declaration  {
-	def types #key
-	    key = :type
-		return { key => text_value }
-	end
-}
+declaration
 end
 
 rule std
-"std::" type:("map" / "vector" / "queue") template it:"::iterator"? "*"* {
+"std::" variable template it:"::iterator"? pointer:"*"* {
 	def types # key
-	    key = :type
+	  key = :type
 		r= template.types
-		r[key] = "std::" + type.text_value + it.text_value
+		r[key] = "std::" + variable.text_value + it.text_value
+		r[:pointers] = pointer.text_value.size()
 		return r
 	end
 
@@ -138,8 +172,22 @@ rule std
 end
 
 rule declaration
-("::"? variable template?  )+ "*"*
+text:("::"? variable )+ pointer:"*"* {
+	def types #key
+ 
+	  key = :type
+	  r = {}
+	  r[key] = text.text_value
+	  r[:pointers] = pointer.text_value.size()
+		return r
+	end
+}
 end
+
+rule beginnings
+"=" / "(" / ","
+end
+
 
 rule variable
 [a-zA-Z_] [_a-zA-Z0-9]* {
@@ -149,7 +197,7 @@ rule variable
 end
 
 rule template
-'<'  contains:(first:dec following:(',' val:dec )*)?  '>' {
+'<' space contains:(first:dec space following:(',' space val:dec )*)? space '>' {
 	def types
 		r = {}
 		if contains.elements
@@ -157,7 +205,8 @@ rule template
 			i = 2
 			contains.following.elements.each {|e| r[i] =e.val.types; i+=1} if contains.following.elements
 		end
-		return r
+		
+		return :t => r
 	end
 }
 end

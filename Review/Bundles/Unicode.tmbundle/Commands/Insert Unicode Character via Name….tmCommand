@@ -91,6 +91,11 @@ cat &lt;&lt;-HTML
 		function clearName(str) {
 			document.getElementById("uniname").innerText = " ";
 		}
+		document.onkeyup = function keyPress(event) {
+			if ( typeof event == "undefined" ) event = window.event;
+			wkey = event.keyCode;
+			if ( wkey == 27 ) window.close();
+		}
 	&lt;/script&gt;
 	&lt;/head&gt;
 &lt;body onload='document.getElementById("search").focus()'&gt;

@@ -525,10 +525,11 @@ distinct = 0
 regExp = []
 data = {}
 for ch in keys:
-    if not (0x3400 &lt;= ch &lt;= 0x4DBF or 0x20000 &lt;= ch &lt;= 0x2A6DF or 0x2F800 &lt;= ch &lt;= 0x2FA1F):
-        hexCode = "%04X" % int(ch)
-        regExp.append(hexCode)
+    hexCode = "%04X" % int(ch)
+    regExp.append(hexCode)
+
 UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
+
 for c in UnicodeData.split('\n'):
     uniData = c.strip().split(';')
     if len(uniData) &gt; 1: data[uniData[0]] = uniData[1]

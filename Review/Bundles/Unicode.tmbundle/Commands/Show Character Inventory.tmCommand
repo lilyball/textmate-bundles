@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -498,8 +498,7 @@ text-align:center; \n\
 &lt;/style&gt; \n\
 &lt;/head&gt; \n\
 &lt;body&gt; \n\
-&lt;p style='font-size:10pt;text-align:right;'&gt;&lt;i&gt;"
-print str(len(text)) + " characters in total&lt;br&gt;"
+"
 
 chKeys = {}
 for c in text:
@@ -511,35 +510,48 @@ for c in text:
 keys = chKeys.keys()
 keys.sort()
 
-print str(len(keys)) + " distinct characters&lt;/i&gt;&lt;/p&gt;&lt;br&gt;&lt;div id='1'&gt;&lt;table border=1&gt;&lt;tr&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(0)'&gt;Character&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(1)'&gt;Occurrences&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(0)'&gt;UCS&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(3)'&gt;Unicode Block&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(4)'&gt;Unicode Name&lt;/a&gt;&lt;/th&gt;&lt;/tr&gt;&lt;tbody id='theTable'&gt;"
 
+print "&lt;table border=1&gt;&lt;tr&gt;"
+
+if len(keys)&lt;400:
+    print "&lt;th&gt;&lt;a href='' onclick='return sortTable2(0)'&gt;Character&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(1)'&gt;Occurrences&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(0)'&gt;UCS&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(3)'&gt;Unicode Block&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a href='' onclick='return sortTable2(4)'&gt;Unicode Name&lt;/a&gt;&lt;/th&gt;"
+else:
+    print "&lt;th&gt;Character&lt;/th&gt;&lt;th&gt;Occurrences&lt;/th&gt;&lt;th&gt;UCS&lt;/th&gt;&lt;th&gt;Unicode Block&lt;/th&gt;&lt;th&gt;Unicode Name&lt;/th&gt;"
+
+print "&lt;/tr&gt;&lt;tbody id='theTable'&gt;"
+#len(text) and len(keys) don't work caused by uni chars &gt; U+FFFF
+total = 0
+distinct = 0
 regExp = []
 data = {}
 for ch in keys:
-    hexCode = "%04X" % int(ch)
-    regExp.append(hexCode)
-    UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
-    for c in UnicodeData.split('\n'):
-        uniData = c.strip().split(';')
-        if len(uniData) &gt; 1:
-            data[uniData[0]] = uniData[1]
+    if not (0x3400 &lt;= ch &lt;= 0x4DBF or 0x20000 &lt;= ch &lt;= 0x2A6DF or 0x2F800 &lt;= ch &lt;= 0x2FA1F):
+        hexCode = "%04X" % int(ch)
+        regExp.append(hexCode)
+UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
+for c in UnicodeData.split('\n'):
+    uniData = c.strip().split(';')
+    if len(uniData) &gt; 1: data[uniData[0]] = uniData[1]
+
 for c in keys:
     if c != 10:
+        total += chKeys[c]
+        distinct += 1
         t = wunichr(c)
         try:
             name = data["%04X" % int(c)]
         except:
             name = rangeName(c)
-        if name[0] == '&lt;':
-            name = rangeName(c)
-        if c == 9:
-            char = ""
-        else:
-            char = eval('u"\U%08X"' % c)
+        if name[0] == '&lt;': name = rangeName(c)
         if "COMBINING" in name: t = u"◌" + t
         print "&lt;tr&gt;&lt;td class='a'&gt;", t, "&lt;/td&gt;&lt;td class='a'&gt;", chKeys[c], "&lt;/td&gt;&lt;td&gt;", "U+%04X" % int(c), "&lt;/td&gt;&lt;td&gt;", getBlockName(c), "&lt;/td&gt;&lt;td&gt;", name, "&lt;/tr&gt;"
 
-print "&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;"
+print "&lt;/tbody&gt;&lt;/table&gt;"
+
+print "&lt;p style='font-size:8pt;'&gt;&lt;i&gt;"
+print str(total) + " characters in total&lt;br&gt;"
+print str(distinct) + " distinct characters&lt;/i&gt;&lt;/p&gt;"
+
 print "&lt;/body&gt;&lt;/html&gt;"</string>
 	<key>input</key>
 	<string>selection</string>

@@ -13,7 +13,7 @@ cat &lt;&lt;-HTML
 	&lt;style type="text/css"&gt; 
 		.res {
 			font-family:Monaco;
-			font-size:13pt;
+			font-size:15pt;
 			line-height:40pt;
 		}
 		.names {
@@ -100,8 +100,8 @@ cat &lt;&lt;-HTML
 	&lt;/head&gt;
 &lt;body onload='document.getElementById("search").focus()'&gt;
 &lt;div class='head'&gt;
-&lt;input tabindex='0' id='search' type='search' incremental autosave='TMUNISearch' results='20' placeholder='look for names' onsearch='startSearch(this.value,0);'&gt;
-&lt;input type='checkbox' id='where' name='where' value='key' onchange='startSearch(document.getElementById("search").value,1);document.getElementById("search").focus()'&gt;Full Text
+&lt;input accesskey="f" tabindex='0' id='search' type='search' incremental autosave='TMUNISearch' results='20' placeholder='look for names' onsearch='startSearch(this.value,0);'&gt;
+&lt;input accesskey="t" type='checkbox' id='where' name='where' value='key' onchange='startSearch(document.getElementById("search").value,1);document.getElementById("search").focus()'&gt;Full Text
 &amp;nbsp;&amp;nbsp;&amp;nbsp;
 &lt;/div&gt;
 &lt;hr/&gt;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -12,8 +12,8 @@ cat &lt;&lt;-HTML
 	&lt;title&gt;Insert IPA Symbol&lt;/title&gt;
 	&lt;style type="text/css"&gt; 
 		.res {
-			font-family:'Charis SIL','Lucida Grande';
-			font-size:14pt;
+			font-family:'Charis SIL','Lucida Grande','Helvetica','Tahoma';
+			font-size:16pt;
 			line-height:40pt;
 		}
 		.buttonInAct {
@@ -64,7 +64,7 @@ cat &lt;&lt;-HTML
 			width:80px;
 			heigth:50px;
 			cursor:pointer;
-			font-family:'Charis SIL','Lucida Grande';
+			font-family:'Charis SIL','Lucida Grande','Helvetica','Tahoma';
 			text-align:center;
 		}
 		.tt1 {
@@ -74,7 +74,17 @@ cat &lt;&lt;-HTML
 			width:25px;
 			heigth:50px;
 			cursor:pointer;
-			font-family:'Charis SIL','Lucida Grande';
+			font-family:'Charis SIL','Lucida Grande','Helvetica','Tahoma';
+			text-align:center;
+		}
+		.tt2 {
+			border:1px dotted silver;
+			display:inline;
+			font-size:19pt;
+			width:80px;
+			heigth:50px;
+			cursor:pointer;
+			font-family:'Charis SIL','Lucida Grande','Helvetica','Tahoma';
 			text-align:center;
 		}
 		.tt0 {
@@ -252,7 +262,8 @@ cat &lt;&lt;-HTML
 	&lt;td class='tt0' colspan=4&gt;&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cc84")' onmouseout='clearName()'; onmouseover='showName("U+0304 : Mid&lt;br&gt;COMBINING MACRON")' colspan=2&gt;◌̄&lt;/td&gt;
 	&lt;td class='tt1' onclick='insertChar("cba7")' onmouseout='clearName()'; onmouseover='showName("U+02E7 : Mid&lt;br&gt;MODIFIER LETTER MID TONE BAR")' colspan=2&gt;˧&lt;/td&gt;
-	&lt;td class='tt1' onclick='insertChar("e1b784")' onmouseout='clearName()'; onmouseover='showName("U+1DC4 : High rising&lt;br&gt;COMBINING MACRON-ACUTE")' colspan=2&gt;◌᷄&lt;/td&gt;	&lt;td class='tt1' onclick='insertChar("e28697")' onmouseout='clearName()'; onmouseover='showName("U+2197 : Global rise&lt;br&gt;NORTH EAST ARROW")' colspan=2&gt;↗&lt;/td&gt;
+	&lt;td class='tt1' onclick='insertChar("e1b784")' onmouseout='clearName()'; onmouseover='showName("U+1DC4 : High rising&lt;br&gt;COMBINING MACRON-ACUTE")' colspan=2&gt;◌᷄&lt;/td&gt;
+	&lt;td class='tt1' onclick='insertChar("e28697")' onmouseout='clearName()'; onmouseover='showName("U+2197 : Global rise&lt;br&gt;NORTH EAST ARROW")' colspan=2&gt;↗&lt;/td&gt;
 	
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -491,76 +502,78 @@ cat &lt;&lt;-HTML
 &lt;h3&gt;Diacritics&lt;/h3&gt;
 &lt;table&gt;
 &lt;tr&gt;
-	&lt;td class='tt' onclick='insertChar("cca5")' onmouseout='clearName()'; onmouseover='showName("U+0325 : Voiceless&lt;br&gt;COMBINING RING BELOW")'&gt;◌̥&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cca4")' onmouseout='clearName()'; onmouseover='showName("U+0324 : Breathy voiced&lt;br&gt;COMBINING DIAERESIS BELOW")'&gt;◌̤&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cc9d")' onmouseout='clearName()'; onmouseover='showName("U+031D : Raised&lt;br&gt;COMBINING UP TACK BELOW")'&gt;◌̝&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ccaa")' onmouseout='clearName()'; onmouseover='showName("U+032A : Dental&lt;br&gt;COMBINING BRIDGE BELOW")'&gt;◌̪&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cc83")' onmouseout='clearName()'; onmouseover='showName("U+0303 : Nasalized&lt;br&gt;COMBINING TILDE")'&gt;◌̃&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cca5")' onmouseout='clearName()'; onmouseover='showName("U+0325 : Voiceless&lt;br&gt;COMBINING RING BELOW")'&gt;◌̥&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cca4")' onmouseout='clearName()'; onmouseover='showName("U+0324 : Breathy voiced&lt;br&gt;COMBINING DIAERESIS BELOW")'&gt;◌̤&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc9d")' onmouseout='clearName()'; onmouseover='showName("U+031D : Raised&lt;br&gt;COMBINING UP TACK BELOW")'&gt;◌̝&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccaa")' onmouseout='clearName()'; onmouseover='showName("U+032A : Dental&lt;br&gt;COMBINING BRIDGE BELOW")'&gt;◌̪&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc83")' onmouseout='clearName()'; onmouseover='showName("U+0303 : Nasalized&lt;br&gt;COMBINING TILDE")'&gt;◌̃&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cab7")' onmouseout='clearName()'; onmouseover='showName("U+02B7 : Labialized&lt;br&gt;MODIFIER LETTER SMALL W")'&gt;◌ʷ&lt;/td&gt;
 	&lt;td&gt;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("caac")' onmouseout='clearName()'; onmouseover='showName("U+02AC : Bilabial percussive&lt;br&gt;LATIN LETTER BILABIAL PERCUSSIVE")'&gt;ʬ&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd8d")' onmouseout='clearName()'; onmouseover='showName("U+034D : Labial spreading&lt;br&gt;COMBINING LEFT RIGHT ARROW BELOW")'&gt;◌͍&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd8e")' onmouseout='clearName()'; onmouseover='showName("U+034E : Whistled articulation&lt;br&gt;COMBINING UPWARDS ARROW BELOW")'&gt;◌͎&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd88")' onmouseout='clearName()'; onmouseover='showName("U+0348 : Strong articulation&lt;br&gt;COMBINING DOUBLE VERTICAL LINE BELOW")'&gt;◌͈&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("c2a1")' onmouseout='clearName()'; onmouseover='showName("U+00A1 : Sublaminal lower alveolar percussive click&lt;br&gt;INVERTED EXCLAMATION MARK")'&gt;¡&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd8d")' onmouseout='clearName()'; onmouseover='showName("U+034D : Labial spreading&lt;br&gt;COMBINING LEFT RIGHT ARROW BELOW")'&gt;◌͍&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd8e")' onmouseout='clearName()'; onmouseover='showName("U+034E : Whistled articulation&lt;br&gt;COMBINING UPWARDS ARROW BELOW")'&gt;◌͎&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd88")' onmouseout='clearName()'; onmouseover='showName("U+0348 : Strong articulation&lt;br&gt;COMBINING DOUBLE VERTICAL LINE BELOW")'&gt;◌͈&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-	&lt;td class='tt' onclick='insertChar("ccac")' onmouseout='clearName()'; onmouseover='showName("U+032C : Voiced&lt;br&gt;COMBINING CARON BELOW")'&gt;◌̬&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ccb0")' onmouseout='clearName()'; onmouseover='showName("U+0330 : Creaky voiced&lt;br&gt;COMBINING TILDE BELOW")'&gt;◌̰&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cb94")' onmouseout='clearName()'; onmouseover='showName("U+02D4 : Raised&lt;br&gt;MODIFIER LETTER UP TACK")'&gt;◌˔&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ccba")' onmouseout='clearName()'; onmouseover='showName("U+033A : Apical&lt;br&gt;COMBINING INVERTED BRIDGE BELOW")'&gt;◌̺&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cc88")' onmouseout='clearName()'; onmouseover='showName("U+0308 : Centralized&lt;br&gt;COMBINING DIAERESIS")'&gt;◌̈&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccac")' onmouseout='clearName()'; onmouseover='showName("U+032C : Voiced&lt;br&gt;COMBINING CARON BELOW")'&gt;◌̬&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccb0")' onmouseout='clearName()'; onmouseover='showName("U+0330 : Creaky voiced&lt;br&gt;COMBINING TILDE BELOW")'&gt;◌̰&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cb94")' onmouseout='clearName()'; onmouseover='showName("U+02D4 : Raised&lt;br&gt;MODIFIER LETTER UP TACK")'&gt;◌˔&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccba")' onmouseout='clearName()'; onmouseover='showName("U+033A : Apical&lt;br&gt;COMBINING INVERTED BRIDGE BELOW")'&gt;◌̺&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc88")' onmouseout='clearName()'; onmouseover='showName("U+0308 : Centralized&lt;br&gt;COMBINING DIAERESIS")'&gt;◌̈&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cab2")' onmouseout='clearName()'; onmouseover='showName("U+02B2 : Palatalized&lt;br&gt;MODIFIER LETTER SMALL J")'&gt;◌ʲ&lt;/td&gt;
 	&lt;td&gt;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("caad")' onmouseout='clearName()'; onmouseover='showName("U+02AD : Bidental percussive&lt;br&gt;LATIN LETTER BIDENTAL PERCUSSIVE")'&gt;ʭ&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd86")' onmouseout='clearName()'; onmouseover='showName("U+0346 : Dentolabial&lt;br&gt;COMBINING BRIDGE ABOVE")'&gt;◌͆&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd8a")' onmouseout='clearName()'; onmouseover='showName("U+034A : Denasal&lt;br&gt;COMBINING NOT TILDE ABOVE")'&gt;◌͊&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cda2")' onmouseout='clearName()'; onmouseover='showName("U+0362 : Strong articulation&lt;br&gt;COMBINING DOUBLE RIGHTWARDS ARROW BELOW")'&gt;◌͢&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("c783c2a1")' onmouseout='clearName()'; onmouseover='showName("Alveolar and sublaminal click (cluck-click)")'&gt;ǃ¡&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd86")' onmouseout='clearName()'; onmouseover='showName("U+0346 : Dentolabial&lt;br&gt;COMBINING BRIDGE ABOVE")'&gt;◌͆&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd8a")' onmouseout='clearName()'; onmouseover='showName("U+034A : Denasal&lt;br&gt;COMBINING NOT TILDE ABOVE")'&gt;◌͊&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cda2")' onmouseout='clearName()'; onmouseover='showName("U+0362 : Sliding articulation&lt;br&gt;COMBINING DOUBLE RIGHTWARDS ARROW BELOW")'&gt;◌͢&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-	&lt;td class='tt' onclick='insertChar("ccb9")' onmouseout='clearName()'; onmouseover='showName("U+0339 : More rounded&lt;br&gt;COMBINING RIGHT HALF RING BELOW")'&gt;◌̹&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ccbc")' onmouseout='clearName()'; onmouseover='showName("U+033C : Linguolabial&lt;br&gt;COMBINING SEAGULL BELOW")'&gt;◌̼&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cc9e")' onmouseout='clearName()'; onmouseover='showName("U+031E : Lowered&lt;br&gt;COMBINING DOWN TACK BELOW")'&gt;◌̞&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ccbb")' onmouseout='clearName()'; onmouseover='showName("U+033B : Laminal&lt;br&gt;COMBINING SQUARE BELOW")'&gt;◌̻&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ccbd")' onmouseout='clearName()'; onmouseover='showName("U+033D : Mid-centralized&lt;br&gt;COMBINING X ABOVE")'&gt;◌̽&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccb9")' onmouseout='clearName()'; onmouseover='showName("U+0339 : More rounded&lt;br&gt;COMBINING RIGHT HALF RING BELOW")'&gt;◌̹&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccbc")' onmouseout='clearName()'; onmouseover='showName("U+033C : Linguolabial&lt;br&gt;COMBINING SEAGULL BELOW")'&gt;◌̼&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc9e")' onmouseout='clearName()'; onmouseover='showName("U+031E : Lowered&lt;br&gt;COMBINING DOWN TACK BELOW")'&gt;◌̞&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccbb")' onmouseout='clearName()'; onmouseover='showName("U+033B : Laminal&lt;br&gt;COMBINING SQUARE BELOW")'&gt;◌̻&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccbd")' onmouseout='clearName()'; onmouseover='showName("U+033D : Mid-centralized&lt;br&gt;COMBINING X ABOVE")'&gt;◌̽&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cba0")' onmouseout='clearName()'; onmouseover='showName("U+02E0 : Velarized&lt;br&gt;MODIFIER LETTER SMALL GAMMA")'&gt;◌ˠ&lt;/td&gt;
 	&lt;td&gt;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("caaa")' onmouseout='clearName()'; onmouseover='showName("U+02AA : Voiceless lateralized alveolar fricative&lt;br&gt;LATIN SMALL LETTER LS DIGRAPH")'&gt;ʪ&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd86ccaa")' onmouseout='clearName()'; onmouseover='showName("Interdental/bidental")'&gt;◌̪͆&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd8b")' onmouseout='clearName()'; onmouseover='showName("U+034B : Nasal escape&lt;br&gt;COMBINING HOMOTHETIC ABOVE")'&gt;◌͋&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cbac")' onmouseout='clearName()'; onmouseover='showName("U+02EC : Voicing&lt;br&gt;MODIFIER LETTER VOICING")'&gt;ˬ&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd86ccaa")' onmouseout='clearName()'; onmouseover='showName("Interdental/bidental")'&gt;◌̪͆&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd8b")' onmouseout='clearName()'; onmouseover='showName("U+034B : Nasal escape&lt;br&gt;COMBINING HOMOTHETIC ABOVE")'&gt;◌͋&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cbac")' onmouseout='clearName()'; onmouseover='showName("U+02EC : Voicing&lt;br&gt;MODIFIER LETTER VOICING")'&gt;ˬ&lt;/td&gt;
 	&lt;td class='tt0'&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-	&lt;td class='tt' onclick='insertChar("cc9c")' onmouseout='clearName()'; onmouseover='showName("U+031C : Less rounded&lt;br&gt;COMBINING LEFT HALF RING BELOW")'&gt;◌̜&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cca9")' onmouseout='clearName()'; onmouseover='showName("U+0329 : Syllabic&lt;br&gt;COMBINING VERTICAL LINE BELOW")'&gt;◌̩&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cb95")' onmouseout='clearName()'; onmouseover='showName("U+02D5 : Lowered&lt;br&gt;MODIFIER LETTER DOWN TACK")'&gt;◌˕&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd9c")' onmouseout='clearName()'; onmouseover='showName("U+035C : Affricate or double articulation&lt;br&gt;COMBINING DOUBLE BREVE BELOW")'&gt;◌͜&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ccb4")' onmouseout='clearName()'; onmouseover='showName("U+0334 : Velarized or pharyngealized&lt;br&gt;COMBINING TILDE OVERLAY")'&gt;◌̴&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc9c")' onmouseout='clearName()'; onmouseover='showName("U+031C : Less rounded&lt;br&gt;COMBINING LEFT HALF RING BELOW")'&gt;◌̜&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cca9")' onmouseout='clearName()'; onmouseover='showName("U+0329 : Syllabic&lt;br&gt;COMBINING VERTICAL LINE BELOW")'&gt;◌̩&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cb95")' onmouseout='clearName()'; onmouseover='showName("U+02D5 : Lowered&lt;br&gt;MODIFIER LETTER DOWN TACK")'&gt;◌˕&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd9c")' onmouseout='clearName()'; onmouseover='showName("U+035C : Affricate or double articulation&lt;br&gt;COMBINING DOUBLE BREVE BELOW")'&gt;◌͜&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccb4")' onmouseout='clearName()'; onmouseover='showName("U+0334 : Velarized or pharyngealized&lt;br&gt;COMBINING TILDE OVERLAY")'&gt;◌̴&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cba4")' onmouseout='clearName()'; onmouseover='showName("U+02E4 : Pharyngealized&lt;br&gt;MODIFIER LETTER SMALL REVERSED GLOTTAL STOP")'&gt;◌ˤ&lt;/td&gt;
 	&lt;td&gt;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("caab")' onmouseout='clearName()'; onmouseover='showName("U+02AB : Voiced lateralized alveolar fricative&lt;br&gt;LATIN SMALL LETTER LZ DIGRAPH")'&gt;ʫ&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd87")' onmouseout='clearName()'; onmouseover='showName("U+0347 : Alveolar&lt;br&gt;COMBINING EQUALS SIGN BELOW")'&gt;◌͇&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd8c")' onmouseout='clearName()'; onmouseover='showName("U+034C : Velopharyngeal friction&lt;br&gt;COMBINING ALMOST EQUAL TO ABOVE")'&gt;◌͌&lt;/td&gt;
-	&lt;td class='tt'onclick='insertChar("e29d8d")' onmouseout='clearName()'; onmouseover='showName("U+274D : Unidentified segment(s)&lt;br&gt;SHADOWED WHITE CIRCLE")'&gt;❍&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd87")' onmouseout='clearName()'; onmouseover='showName("U+0347 : Alveolar&lt;br&gt;COMBINING EQUALS SIGN BELOW")'&gt;◌͇&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd8c")' onmouseout='clearName()'; onmouseover='showName("U+034C : Velopharyngeal friction&lt;br&gt;COMBINING ALMOST EQUAL TO ABOVE")'&gt;◌͌&lt;/td&gt;
+	&lt;td class='tt2'onclick='insertChar("e29d8d")' onmouseout='clearName()'; onmouseover='showName("U+274D : Unidentified segment(s)&lt;br&gt;SHADOWED WHITE CIRCLE")'&gt;❍&lt;/td&gt;
 	&lt;td class='tt0'&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-	&lt;td class='tt' onclick='insertChar("cc9f")' onmouseout='clearName()'; onmouseover='showName("U+031F : Advanced&lt;br&gt;COMBINING PLUS SIGN BELOW")'&gt;◌̟&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("ccaf")' onmouseout='clearName()'; onmouseover='showName("U+032F : Non-syllabic&lt;br&gt;COMBINING INVERTED BREVE BELOW")'&gt;◌̯&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cc98")' onmouseout='clearName()'; onmouseover='showName("U+0318 : Advanced tongue root&lt;br&gt;COMBINING LEFT TACK BELOW")'&gt;◌̘&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cda1")' onmouseout='clearName()'; onmouseover='showName("U+0361 : Affricate or double articulation&lt;br&gt;COMBINING DOUBLE INVERTED BREVE")'&gt;◌͡&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cc9a")' onmouseout='clearName()'; onmouseover='showName("U+031A : No audible release&lt;br&gt;COMBINING LEFT ANGLE ABOVE")'&gt;◌̚&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc9f")' onmouseout='clearName()'; onmouseover='showName("U+031F : Advanced&lt;br&gt;COMBINING PLUS SIGN BELOW")'&gt;◌̟&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("ccaf")' onmouseout='clearName()'; onmouseover='showName("U+032F : Non-syllabic&lt;br&gt;COMBINING INVERTED BREVE BELOW")'&gt;◌̯&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc98")' onmouseout='clearName()'; onmouseover='showName("U+0318 : Advanced tongue root&lt;br&gt;COMBINING LEFT TACK BELOW")'&gt;◌̘&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cda1")' onmouseout='clearName()'; onmouseover='showName("U+0361 : Affricate or double articulation&lt;br&gt;COMBINING DOUBLE INVERTED BREVE")'&gt;◌͡&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc9a")' onmouseout='clearName()'; onmouseover='showName("U+031A : No audible release&lt;br&gt;COMBINING LEFT ANGLE ABOVE")'&gt;◌̚&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("e281bf")' onmouseout='clearName()'; onmouseover='showName("U+207F : Nasal release&lt;br&gt;SUPERSCRIPT LATIN SMALL LETTER N")'&gt;◌ⁿ&lt;/td&gt;
 	&lt;td&gt;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("caa9")' onmouseout='clearName()'; onmouseover='showName("U+02A9 : Velopharyngeal fricative&lt;br&gt;LATIN SMALL LETTER FENG DIGRAPH")'&gt;ʩ&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cd89")' onmouseout='clearName()'; onmouseover='showName("U+0349 : Weak articulation&lt;br&gt;COMBINING LEFT ANGLE BELOW")'&gt;◌͉&lt;/td&gt;
-	&lt;td class='tt0' colspan=3&gt;&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cd89")' onmouseout='clearName()'; onmouseover='showName("U+0349 : Weak articulation&lt;br&gt;COMBINING LEFT ANGLE BELOW")'&gt;◌͉&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cbad")' onmouseout='clearName()'; onmouseover='showName("U+20ED : Unaspirated&lt;br&gt;MODIFIER LETTER UNASPIRATED")'&gt;◌˭&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("e2828d")' onmouseout='clearName()'; onmouseover='showName("U+208D : Initial partial&lt;br&gt;SUBSCRIPT LEFT PARENTHESIS")'&gt;₍◌&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-	&lt;td class='tt' onclick='insertChar("cca0")' onmouseout='clearName()'; onmouseover='showName("U+0320 : Retracted&lt;br&gt;COMBINING MINUS SIGN BELOW")'&gt;◌̠&lt;/td&gt;
-	&lt;td class='tt0'&gt;&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cc99")' onmouseout='clearName()'; onmouseover='showName("U+0319 : Retracted tongue root&lt;br&gt;COMBINING RIGHT TACK BELOW")'&gt;◌̙&lt;/td&gt;
-	&lt;td class='tt' onclick='insertChar("cabc")' onmouseout='clearName()'; onmouseover='showName("U+02BC : Ejective&lt;br&gt;MODIFIER LETTER APOSTROPHE")'&gt;◌ʼ&lt;/td&gt;
-	&lt;td class='tt0'&gt;&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cca0")' onmouseout='clearName()'; onmouseover='showName("U+0320 : Retracted&lt;br&gt;COMBINING MINUS SIGN BELOW")'&gt;◌̠&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cb9e")' onmouseout='clearName()'; onmouseover='showName("U+02DE : Rhoticity&lt;br&gt;MODIFIER LETTER RHOTIC HOOK")'&gt;◌˞&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cc99")' onmouseout='clearName()'; onmouseover='showName("U+0319 : Retracted tongue root&lt;br&gt;COMBINING RIGHT TACK BELOW")'&gt;◌̙&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cabc")' onmouseout='clearName()'; onmouseover='showName("U+02BC : Ejective&lt;br&gt;MODIFIER LETTER APOSTROPHE")'&gt;◌ʼ&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cab0")' onmouseout='clearName()'; onmouseover='showName("U+02B0 : Aspirated&lt;br&gt;MODIFIER LETTER SMALL H")'&gt;◌ʰ&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("cba1")' onmouseout='clearName()'; onmouseover='showName("U+02E1 : Lateral release&lt;br&gt;MODIFIER LETTER SMALL L")'&gt;◌ˡ&lt;/td&gt;
 	&lt;td&gt;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
-	&lt;td class='tt0' colspan=5&gt;&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("5c")' onmouseout='clearName()'; onmouseover='showName("U+005C : Reiterated articulation&lt;br&gt;REVERSE SOLIDUS")'&gt;\&lt;/td&gt;
+	&lt;td class='tt0' colspan=1&gt;&lt;/td&gt;
+	&lt;td class='tt2' onclick='insertChar("e2828e")' onmouseout='clearName()'; onmouseover='showName("U+208E : Final partial&lt;br&gt;SUBSCRIPT RIGHT PARENTHESIS")'&gt;◌₎&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
 &lt;/center&gt;
@@ -572,22 +585,40 @@ cat &lt;&lt;-HTML
 &lt;tr&gt;
 	&lt;td class='tt' onclick='insertChar("ca8d")' onmouseout='clearName()'; onmouseover='showName("U+028D : Voiceless labial-velar fricative&lt;br&gt;LATIN SMALL LETTER TURNED W")'&gt;ʍ&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("caa1")' onmouseout='clearName()'; onmouseover='showName("U+02A1 : Epiglottal plosive&lt;br&gt;LATIN LETTER GLOTTAL STOP WITH STROKE")'&gt;ʡ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caac")' onmouseout='clearName()'; onmouseover='showName("U+02AC : Bilabial percussive&lt;br&gt;LATIN LETTER BILABIAL PERCUSSIVE")'&gt;ʬ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("c2a1")' onmouseout='clearName()'; onmouseover='showName("U+00A1 : Sublaminal lower alveolar percussive click&lt;br&gt;INVERTED EXCLAMATION MARK")'&gt;¡&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 	&lt;td class='tt' onclick='insertChar("77")' onmouseout='clearName()'; onmouseover='showName("U+0077 : Voiced labial-velar approximant&lt;br&gt;LATIN SMALL LETTER W")'&gt;w&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("c995")' onmouseout='clearName()'; onmouseover='showName("U+0255 : Voiceless alveolo-palatal fricative&lt;br&gt;LATIN SMALL LETTER C WITH CURL")'&gt;ɕ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caad")' onmouseout='clearName()'; onmouseover='showName("U+02AD : Bidental percussive&lt;br&gt;LATIN LETTER BIDENTAL PERCUSSIVE")'&gt;ʭ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("c783c2a1")' onmouseout='clearName()'; onmouseover='showName("Alveolar and sublaminal click (cluck-click)")'&gt;ǃ¡&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 	&lt;td class='tt' onclick='insertChar("c9a5")' onmouseout='clearName()'; onmouseover='showName("U+0265 : Voiced labial-palatal approximant&lt;br&gt;LATIN SMALL LETTER TURNED H")'&gt;ɥ&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("ca91")' onmouseout='clearName()'; onmouseover='showName("U+0291 : Voiced alveolo-palatal fricative&lt;br&gt;LATIN SMALL LETTER Z WITH CURL")'&gt;ʑ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caaa")' onmouseout='clearName()'; onmouseover='showName("U+02AA : Voiceless lateralized alveolar fricative&lt;br&gt;LATIN SMALL LETTER LS DIGRAPH")'&gt;ʪ&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 	&lt;td class='tt' onclick='insertChar("ca9c")' onmouseout='clearName()'; onmouseover='showName("U+029C : Voiceless epiglottal fricative&lt;br&gt;LATIN LETTER SMALL CAPITAL H")'&gt;ʜ&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("c9ba")' onmouseout='clearName()'; onmouseover='showName("U+027A : Voiced alveolar lateral flap&lt;br&gt;LATIN SMALL LETTER TURNED R WITH LONG LEG")'&gt;ɺ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caab")' onmouseout='clearName()'; onmouseover='showName("U+02AB : Voiced lateralized alveolar fricative&lt;br&gt;LATIN SMALL LETTER LZ DIGRAPH")'&gt;ʫ&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 	&lt;td class='tt' onclick='insertChar("caa2")' onmouseout='clearName()'; onmouseover='showName("U+02A2 : Voiced epiglottal fricative&lt;br&gt;LATIN LETTER REVERSED GLOTTAL STOP WITH STROKE")'&gt;ʢ&lt;/td&gt;
 	&lt;td class='tt' onclick='insertChar("c9a7")' onmouseout='clearName()'; onmouseover='showName("U+0267 : Voiceless simultaneous postalveolar and velar fricative&lt;br&gt;LATIN SMALL LETTER HENG WITH HOOK")'&gt;ɧ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caa9")' onmouseout='clearName()'; onmouseover='showName("U+02A9 : Velopharyngeal fricative&lt;br&gt;LATIN SMALL LETTER FENG DIGRAPH")'&gt;ʩ&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;h4&gt;Other precomposed symbols&lt;/h4&gt;
+&lt;table&gt;
+&lt;tr&gt;
+	&lt;td class='tt' onclick='insertChar("caa7")' onmouseout='clearName()'; onmouseover='showName("U+02A7 : Voiceless postalveolar affricate&lt;br&gt;LATIN SMALL LETTER TESH DIGRAPH")'&gt;ʧ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caa4")' onmouseout='clearName()'; onmouseover='showName("U+02A4 : Voiced postalveolar affricate&lt;br&gt;LATIN SMALL LETTER DESH DIGRAPH")'&gt;ʤ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caa6")' onmouseout='clearName()'; onmouseover='showName("U+02A6 : Voiceless dental affricate&lt;br&gt;LATIN SMALL LETTER TS DIGRAPH")'&gt;ʦ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caa3")' onmouseout='clearName()'; onmouseover='showName("U+02A3 : Voiced dental affricate&lt;br&gt;LATIN SMALL LETTER DZ DIGRAPH")'&gt;ʣ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caa8")' onmouseout='clearName()'; onmouseover='showName("U+02A8 : Voiceless alveolo-palatal affricate&lt;br&gt;LATIN SMALL LETTER TC DIGRAPH WITH CURL")'&gt;ʨ&lt;/td&gt;
+	&lt;td class='tt' onclick='insertChar("caa5")' onmouseout='clearName()'; onmouseover='showName("U+02A5 : Voiceless alveolo-palatal affricate&lt;br&gt;LATIN SMALL LETTER DZ DIGRAPH WITH CURL")'&gt;ʥ&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
 &lt;/center&gt;

@@ -101,12 +101,12 @@ class CppMethodCompletion
     @line = line
     @scopes = nil
     @parser = CppParser.new
+#    @std = {
+#      :namespace => { "std" =>{ :classes => {
+#    "map" => {:classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"std::pair"}]}},},
+#       :methods => { "begin" =>[{ :type => "std::map::iterator", :a => "()"}],}}}}}}
+#    
     @std = {
-      :namespace => { "std" =>{ :classes => {
-    "map" => {:classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"std::pair"}]}},},
-       :methods => { "begin" =>[{ :type => "std::map::iterator", :a => "()"}],}}}}}}
-    
-    @std2 = {
       :namespace => { "std" =>{ :classes => {
     "map" => { :methods => { 
         "begin" =>[{ :type => "std::map::iterator", :a => "()"}],
@@ -342,11 +342,11 @@ class CppMethodCompletion
     scopeCopy = scope.dup
     hierachy.reverse_each do |lib|
       (scope.length + 1 ).times do
-        if verify_presence_of == [:methods, "begin"]
-          puts "scope->" + scope.inspect 
-          puts qualifier
-          puts "lib" + lib.inspect
-        end
+        #if verify_presence_of == [:methods, "begin"]
+        #  puts "scope->" + scope.inspect 
+        #  puts qualifier
+        #  puts "lib" + lib.inspect
+        #end
         unless qualifier[0].empty?
           r = traverse(scope, lib)
           r = traverse(qualifier, r) unless r.nil?
@@ -362,7 +362,6 @@ class CppMethodCompletion
         return k if k
         scope.pop
       end
-      puts "scopeCopy"
       scope = scopeCopy.dup
     end 
     nil
@@ -416,19 +415,33 @@ class CppMethodCompletion
   def updateScope(variableT, currentScope)
   end
 
+  def returnTypeHandling(returnType, templates, qualifier)
+    value = returnType[:type]
+    if value.kind_of? Numeric
+      returnType = templates[value].dup
+      returnTypeHandling(returnType, templates, qualifier)
+    elsif value.kind_of? Hash
+      updateTemplate(variableT, returnType)
+    else
+      qualifier.replace value.split("::")
+    end
+  end
+
   def rightMostClass(type_chain, currentScope, qualifier)
     originalScope = currentScope.dup
     if type_chain.first[:name] == "this"
       qualifier.pop
     end
-    variableT = {}
+    templates = {}
     
     type_chain.each do |item|
       # item[:name] = "at"
       if item[:name]
         # scope = rubinius::Array::#localScope
         returnType = lookupT(item, currentScope, qualifier)
-        qualifier = returnType[:type].split("::")
+        templates = returnType[:t] if returnType[:t]
+        returnTypeHandling(returnType,templates, qualifier)
+
         # returnType = {:type=>"std::vector::iterator", :t=>{1=>1}},
         # returnType = {:type=>1}
         # item = {:name=>"map", :kind=>:field, :bind=>"."},
@@ -458,6 +471,7 @@ def print()
   qualifier = ["className"] 
   namespace = ["namespace"]
   temp = a.types
+  pd temp
   @res_hier = {}
   k = (namespace + qualifier).inject(@res_hier) do |result, elem|
     a = {}

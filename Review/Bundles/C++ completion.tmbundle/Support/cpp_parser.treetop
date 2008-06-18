@@ -9,6 +9,7 @@ statement+ {
 			  if key == :current_type
 			    r[key] = value
 		    else
+		      puts "r[:field][key] = value"
 			    r[:field][key] = value 
 			  end
 		  end
@@ -25,6 +26,7 @@ rule statement
     s = value[:type]
     value[:typedef] = s
     value.delete(:type)
+    puts key.inspect
     return key, value
 	  #  return complete_declare.types
 	end

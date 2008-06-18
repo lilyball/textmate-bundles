@@ -525,6 +525,7 @@ for ch in keys:
             data[uniData[0]] = uniData[1]
 for c in keys:
     if c != 10:
+        t = wunichr(c)
         try:
             name = data["%04X" % int(c)]
         except:
@@ -535,7 +536,8 @@ for c in keys:
             char = ""
         else:
             char = eval('u"\U%08X"' % c)
-        print "&lt;tr&gt;&lt;td class='a'&gt;", wunichr(c), "&lt;/td&gt;&lt;td class='a'&gt;", chKeys[c], "&lt;/td&gt;&lt;td&gt;", "U+%04X" % int(c), "&lt;/td&gt;&lt;td&gt;", getBlockName(c), "&lt;/td&gt;&lt;td&gt;", name, "&lt;/tr&gt;"
+        if "COMBINING" in name: t = u"◌" + t
+        print "&lt;tr&gt;&lt;td class='a'&gt;", t, "&lt;/td&gt;&lt;td class='a'&gt;", chKeys[c], "&lt;/td&gt;&lt;td&gt;", "U+%04X" % int(c), "&lt;/td&gt;&lt;td&gt;", getBlockName(c), "&lt;/td&gt;&lt;td&gt;", name, "&lt;/tr&gt;"
 
 print "&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;"
 print "&lt;/body&gt;&lt;/html&gt;"</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -41,9 +41,9 @@ def codepoints(s):
 
 def rangeName(dec):
     if 0x3400 &lt;= dec &lt;= 0x4DB5:
-        return  "CJK Ideograph Extension A"
+        return  "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0x4E00 &lt;= dec &lt;= 0x9FC3:
-        return  "CJK Ideograph"
+        return  "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0xAC00 &lt;= dec &lt;= 0xD7A3: # Hangul
         return  unicodedata.name(unichr(dec), "U+%04X" % dec)
     elif 0xD800 &lt;= dec &lt;= 0xDB7F:
@@ -55,7 +55,7 @@ def rangeName(dec):
     elif 0xE000 &lt;= dec &lt;= 0xF8FF:
         return  "Private Use"
     elif 0x20000 &lt;= dec &lt;= 0x2A6D6:
-        return  "CJK Ideograph Extension B"
+        return  "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0xF0000 &lt;= dec &lt;= 0xFFFFD:
         return  "Plane 15 Private Use"
     elif 0x100000 &lt;= dec &lt;= 0x10FFFD:

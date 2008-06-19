@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -11,6 +11,7 @@
 import sys
 import os
 import codecs
+import unicodedata
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
@@ -382,9 +383,9 @@ def getBlockName(s):
 
 def rangeName(dec):
     if 0x3400 &lt;= dec &lt;= 0x4DB5:
-        return  "CJK Ideograph Extension A"
+        return  "CJK UNIFIED IDEOGRAPH"
     elif 0x4E00 &lt;= dec &lt;= 0x9FC3:
-        return  "CJK Ideograph"
+        return  "CJK UNIFIED IDEOGRAPH"
     elif 0xAC00 &lt;= dec &lt;= 0xD7A3: # Hangul
         return  unicodedata.name(unichr(dec), "U+%04X" % dec)
     elif 0xD800 &lt;= dec &lt;= 0xDB7F:
@@ -396,7 +397,7 @@ def rangeName(dec):
     elif 0xE000 &lt;= dec &lt;= 0xF8FF:
         return  "Private Use"
     elif 0x20000 &lt;= dec &lt;= 0x2A6D6:
-        return  "CJK Ideograph Extension B"
+        return  "CJK UNIFIED IDEOGRAPH"
     elif 0xF0000 &lt;= dec &lt;= 0xFFFFD:
         return  "Plane 15 Private Use"
     elif 0x100000 &lt;= dec &lt;= 0x10FFFD:
@@ -406,6 +407,7 @@ def rangeName(dec):
 
 
 text = list(codepoints(sys.stdin.read()))
+if not text: sys.exit(200)
 
 print "&lt;html&gt; \
 &lt;head&gt;&lt;title&gt;Character Inventory&lt;/title&gt; \
@@ -522,13 +524,15 @@ print "&lt;/tr&gt;&lt;tbody id='theTable'&gt;"
 #len(text) and len(keys) don't work caused by uni chars &gt; U+FFFF
 total = 0
 distinct = 0
-regExp = []
+regExp = {}
 data = {}
 for ch in keys:
-    hexCode = "%04X" % int(ch)
-    regExp.append(hexCode)
+    try:
+        data["%04X" % int(ch)] = unicodedata.name(wunichr(ch))
+    except:
+        regExp["%04X" % int(ch)] = 1
 
-UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
+UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
 
 for c in UnicodeData.split('\n'):
     uniData = c.strip().split(';')
@@ -542,15 +546,17 @@ for c in keys:
         try:
             name = data["%04X" % int(c)]
         except:
-            name = rangeName(c)
-        if name[0] == '&lt;': name = rangeName(c)
+            name = rangeName(c) + "-%04X" % int(c)
+        if name[0] == '&lt;': name = rangeName(c) + "-%04X" % int(c)
         if "COMBINING" in name: t = u"◌" + t
         print "&lt;tr&gt;&lt;td class='a'&gt;", t, "&lt;/td&gt;&lt;td class='a'&gt;", chKeys[c], "&lt;/td&gt;&lt;td&gt;", "U+%04X" % int(c), "&lt;/td&gt;&lt;td&gt;", getBlockName(c), "&lt;/td&gt;&lt;td&gt;", name, "&lt;/tr&gt;"
 
 print "&lt;/tbody&gt;&lt;/table&gt;"
 
 print "&lt;p style='font-size:8pt;'&gt;&lt;i&gt;"
-print str(total) + " characters in total&lt;br&gt;"
+pl = "s"
+if total &lt; 2: pl = ""
+print str(total) + " character%s in total (without '\\n')&lt;br&gt;" % pl
 print str(distinct) + " distinct characters&lt;/i&gt;&lt;/p&gt;"
 
 print "&lt;/body&gt;&lt;/html&gt;"</string>

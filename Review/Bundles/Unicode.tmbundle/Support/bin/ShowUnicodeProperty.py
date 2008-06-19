@@ -488,30 +488,27 @@ def getNameForRange(dec):
     hexcode = " : U+%04X" % dec
     name = ""
     if 0x3400 <= dec <= 0x4DB5:
-        name = "CJK Ideograph Extension A" + hexcode
+        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0x4E00 <= dec <= 0x9FC3:
-        name = "CJK Ideograph" + hexcode
+        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0xAC00 <= dec <= 0xD7A3: # Hangul
-        name = unicodedata.name(unichr(dec), "U+%04X" % dec)
+        return unicodedata.name(unichr(dec), "U+%04X" % dec)
     elif 0xD800 <= dec <= 0xDB7F:
-        name = "Non Private Use High Surrogate" + hexcode
+        return "Non Private Use High Surrogate" + hexcode
     elif 0xDB80 <= dec <= 0xDBFF:
-        name = "Private Use High Surrogate" + hexcode
+        return "Private Use High Surrogate" + hexcode
     elif 0xDC00 <= dec <= 0xDFFF:
-        name = "Low Surrogate" + hexcode
+        return "Low Surrogate" + hexcode
     elif 0xE000 <= dec <= 0xF8FF:
-        name = "Private Use" + hexcode
+        return "Private Use" + hexcode
     elif 0x20000 <= dec <= 0x2A6D6:
-        name = "CJK Ideograph Extension B" + hexcode
+        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0xF0000 <= dec <= 0xFFFFD:
-        name = "Plane 15 Private Use" + hexcode
+        return "Plane 15 Private Use" + hexcode
     elif 0x100000 <= dec <= 0x10FFFD:
-        name = "Plane 16 Private Use" + hexcode
+        return "Plane 16 Private Use" + hexcode
     else:
-        print char + hexcode
-        print "not defined"
-        sys.exit(206)
-    return name
+        return "not defined"
 
 
 if "TM_SELECTED_TEXT" in os.environ: sys.exit(200)
@@ -522,14 +519,17 @@ if not x: sys.exit(200)
 char = wunichr(lastCharDecCode)
 lastCharUCShexCode = "%04X" % lastCharDecCode
 
-UnicodeData = os.popen("zgrep '^" + lastCharUCShexCode + ";' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("utf-8")
+UnicodeData = os.popen("zgrep '^" + lastCharUCShexCode + ";' '" + bundleLibPath + 
+                        "UnicodeData.txt.zip'").read().decode("utf-8")
 
 name = ""
 
 if not UnicodeData:
     name = getNameForRange(lastCharDecCode)
 else:
-    dummy1, name, category, combiningclass, bididir, decomposition, numtype1, numtype2, numtype3, bidimirror, oldname, comment, upcase, lowcase, titlecase = UnicodeData.strip().split(';')
+    (dummy1, name, category, combiningclass, bididir, 
+    decomposition, numtype1, numtype2, numtype3, bidimirror, 
+    oldname, comment, upcase, lowcase, titlecase) = UnicodeData.strip().split(';')
 
 if name[0] == '<': name = getNameForRange(lastCharDecCode)
  
@@ -543,7 +543,9 @@ if "CJK" in res and ("IDEO" in res or "Ideo" in res):
     if True:
 
         # get CJK data from Apple's internal plist
-        cmd = "grep -A 9 '" + char + "' '" + source2 + "' | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'"
+        cmd = "grep -A 9 '" + char + "' '" + source2 + \
+                "' | perl -pe 's/<key>.*?<\/key>//g;s/<.*?>//g;s/\t*//g;' | perl -e 'undef $/;$a=\"%0,\";$a.=<>;$a=~s/(\n)+/\t/mg; $a=~s/.*%(\d+).*?" \
+                + char +".*?\t(.*)/$1\t$2/;$a=~s/\x0D//g;print $a'"
         gdata = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
         if gdata != '%0,':
             ExtStrokeCnt, RadNum, RadName, Rad, RadStrokeCnt, Dummy = gdata.split('\t')
@@ -554,7 +556,9 @@ if "CJK" in res and ("IDEO" in res or "Ideo" in res):
         cmd = "sqlite3 " + source1 + " 'select * from unihan_dict where uchr=\"" + char + "\";'"
         udata = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
         if udata:
-            uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, zhWubiHua, zhBianhao, a2, zhCangjieCh, zhDayi, pinyin1, Bopomofo, jaKun, jaOn, pinyin, zhCangjie = udata.split('|')
+            (uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, 
+            zhWubiHua, zhBianhao, a2, zhCangjieCh, zhDayi, pinyin1, 
+            Bopomofo, jaKun, jaOn, pinyin, zhCangjie) = udata.split('|')
             zhCangjie = zhCangjie.strip()
             if readings:
                 print "Japanese"
@@ -567,7 +571,8 @@ if "CJK" in res and ("IDEO" in res or "Ideo" in res):
             simtrad = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
             data = ""
             if simtrad: c1, st, data = simtrad.split('\t')
-            if pinyin1 or Bopomofo or data or zhWubiXing or zhWubiHua or zhBianhao or zhCangjie or zhCangjieCh or zhDayi:
+            if pinyin1 or Bopomofo or data or zhWubiXing or zhWubiHua or \
+                zhBianhao or zhCangjie or zhCangjieCh or zhDayi:
                 print "Chinese"
                 if data:
                     if st == 'T':

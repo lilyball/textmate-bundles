@@ -145,7 +145,7 @@ module TextMate
         out = ""
         err = ""
 
-        callback = block || proc { |str, fd|
+        block ||= proc { |str, fd|
           case fd
             when :out then out << str
             when :err then err << str
@@ -157,7 +157,7 @@ module TextMate
         previous_sync = IO.sync
         IO.sync = true unless options[:granularity] == :line
 
-        IO.exhaust(:out => io[1][0], :err => io[2][0], &callback)
+        IO.exhaust(:out => io[1][0], :err => io[2][0], &block)
         ::Process.waitpid(pid)
 
         IO.blocksize = previous_block_size

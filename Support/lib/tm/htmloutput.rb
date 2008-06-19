@@ -1,3 +1,18 @@
+# tm/htmloutput.rb
+
+# Provides an API function in the TextMate namespace TextMate::HTMLOutput.show
+# This function expects a block, and basically just calls web_preview's html_header
+# before the block is executed, and html_footer after the block is executed.
+
+# The block itself is given an io object (stdout) to which it can write whatever html it
+# would like to have appear between the header and footer.
+
+# Call it like this:
+
+# TextMate::HTMLOutput(:title => "My Title", :sub_title => "Your subtitle") do |io|
+#   io << «something something»
+# end
+
 require 'erb'
 require 'cgi'
 

@@ -8,6 +8,7 @@ import os
 import codecs
 import re
 import zipfile
+import unicodedata
 
 tm_support_path = os.path.join(os.environ["TM_SUPPORT_PATH"], "lib")
 if not tm_support_path in os.environ:
@@ -41,9 +42,9 @@ def codepoints(s):
 
 def rangeName(dec):
     if 0x3400 <= dec <= 0x4DB5:
-        return  "CJK Ideograph Extension A"
+        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0x4E00 <= dec <= 0x9FC3:
-        return  "CJK Ideograph"
+        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0xAC00 <= dec <= 0xD7A3: # Hangul
         return  unicodedata.name(unichr(dec), "U+%04X" % dec)
     elif 0xD800 <= dec <= 0xDB7F:
@@ -55,7 +56,7 @@ def rangeName(dec):
     elif 0xE000 <= dec <= 0xF8FF:
         return  "Private Use"
     elif 0x20000 <= dec <= 0x2A6D6:
-        return  "CJK Ideograph Extension B"
+        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0xF0000 <= dec <= 0xFFFFD:
         return  "Plane 15 Private Use"
     elif 0x100000 <= dec <= 0x10FFFD:
@@ -85,14 +86,14 @@ tail = unicode(line[x:], "UTF-8")
 char = wunichr(inputleft[-1])
 head = inputleft[:-1]
 
-# build Unicode name dict
-unames = {}
-zUniData = zipfile.ZipFile(bundleLibPath + "UnicodeData.txt.zip", "r")
-for line in zUniData.read("UnicodeData.txt").decode("UTF-8").split('\n'):
-    udata = line.split(';')
-    if udata:
-        unames[udata[0]] = udata[1]
-zUniData.close()
+# # build Unicode name dict
+# unames = {}
+# zUniData = zipfile.ZipFile(bundleLibPath + "UnicodeData.txt.zip", "r")
+# for line in zUniData.read("UnicodeData.txt").decode("UTF-8").split('\n'):
+#     udata = line.split(';')
+#     if udata:
+#         unames[udata[0]] = udata[1]
+# zUniData.close()
 
 # get the suggestion for 'char' by using grep against source.txt
 frel = open(bundleLibPath + source + ".txt", "rb")
@@ -114,7 +115,23 @@ else:
 
 suggestions.sort()
 
+regExp = {}
+unames = {}
+for ch in suggestions:
+    try:
+        unames["%04X" % int(ch)] = unicodedata.name(unichr(ch))
+    except:
+        regExp["%04X" % int(ch)] = 1
+
+if regExp:
+    UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
+
+    for c in UnicodeData.split('\n'):
+        uniData = c.strip().split(';')
+        if len(uniData) > 1: unames[uniData[0]] = uniData[1]
+
 sugglist = []
+
 for c in suggestions:
     name = ""
     try:

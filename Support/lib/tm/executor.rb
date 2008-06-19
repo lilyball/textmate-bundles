@@ -2,32 +2,27 @@
 #
 # Provides some tools to create “Run Script” commands
 # that fancily HTML format stdout/stderr.
-# 
+#
 # Nice features include:
 #  • Automatic interactive input.
 #  • Automatic Fancy HTML headers
 #  • The environment variable TM_ERROR_FD will contain a file descriptor to which HTML-formatted
 #    exceptions can be written.
-# 
+#
 # Executor runs best if TextMate.save_current_document is called first.  Doing so ensures
 # that TM_FILEPATH contains the path to the contents of your current document, even if the
 # current document has not yet been saved, or the file is unwriteable.
-# 
+#
 # Call it like this (you'll get rudimentary htmlification of the executable's output):
 #
 #   TextMate::Executor.run(ENV['TM_SHELL'] || ENV['SHELL'] || 'bash', ENV['TM_FILEPATH'])
-# 
+#
 # Or like this if you want to transform the output yourself:
 #
 #   TextMate::Executor.run(ENV['TM_SHELL'] || ENV['SHELL'] || 'bash', ENV['TM_FILEPATH']) do |str, type|
-#     case type
-#     when :err
-#       $stdout << str
-#     when :out
-#       $stdout << str
-#     end
+#     str = htmlize(str)
+#     str =  "<span class=\"stderr\">#{htmlize(str)}</span>" if type == :out
 #   end
-
 
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'tm/process'
@@ -44,45 +39,45 @@ $stdout.sync = true
 module TextMate
   module Executor
     class << self
-      
+
       # Textmate::Executor.run
       #   Provides an API function for running
-      
+
       def run(*args, &block)
-        
+
         args.flatten!
-        
+
         options = {:version_args  => ['--version'],
                    :version_regex => /\A(.*)$/,
                    :env           => ENV}
-        
+
         options.merge! args.pop if args.last.is_a? Hash
-        
-        args[0] = $1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1]) || args[0]
+
+        args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
 
         tm_error_fd_read, tm_error_fd_write = ::IO.pipe
         tm_error_fd_read.fcntl(Fcntl::F_SETFD, 1)
         ENV['TM_ERROR_FD'] = tm_error_fd_write.to_i.to_s
-        
+
         # version = $1 if options[:version_regex] =~ Process.run(args[0], options[:version_args], :interactive_input => true)[0]
         version = $1 if options[:version_regex] =~ `#{e_sh args[0]} #{options[:version_args].flatten.join(" ")}`
-        
+
         TextMate::HTMLOutput.show(:title => "Running “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version) do |io|
-            
+
           block ||= proc do |str, type|
             str = htmlize(str).gsub(/\<br\>/, "<br>\n")
             str = "<span style='color: red'>#{str}</span>" if type == :err
-            io << str
           end
 
+          callback = proc {|str, type| io << block.call(str,type)}
           process_output_wrapper(io) do
-            TextMate::Process.run(args, :env => options[:env], &block)
+            TextMate::Process.run(args, :env => options[:env], &callback)
           end
-          
+
           tm_error_fd_write.close
           error = tm_error_fd_read.read
           tm_error_fd_read.close
-      
+
           if ENV.has_key? "TM_FILE_IS_UNTITLED"
             # replace links to temporary file with links to current (unsaved) file, by removing
             # the url option from any txmt:// links.
@@ -96,14 +91,14 @@ module TextMate
             error.gsub!(ENV['TM_FILENAME'], ENV['TM_ORIG_FILENAME'])
             error.gsub!(e_url(ENV['TM_FILENAME']), e_url(ENV['TM_ORIG_FILENAME']))
           end
-          
+
           io << error
           io << '<div id="exception_report" class="framed">Program exited.</div>'
         end
       end
-      
+
       private
-            
+
       def process_output_wrapper(io)
         io << <<-HTML
 <!-- executor javascripts -->
@@ -131,7 +126,7 @@ function copyOutput(link) {
     font-style: normal;
     color: #FF5600;
   }
-  
+
   div.executor p#exception strong
   {
     color: #E4450B;

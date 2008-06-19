@@ -86,15 +86,6 @@ tail = unicode(line[x:], "UTF-8")
 char = wunichr(inputleft[-1])
 head = inputleft[:-1]
 
-# # build Unicode name dict
-# unames = {}
-# zUniData = zipfile.ZipFile(bundleLibPath + "UnicodeData.txt.zip", "r")
-# for line in zUniData.read("UnicodeData.txt").decode("UTF-8").split('\n'):
-#     udata = line.split(';')
-#     if udata:
-#         unames[udata[0]] = udata[1]
-# zUniData.close()
-
 # get the suggestion for 'char' by using grep against source.txt
 frel = open(bundleLibPath + source + ".txt", "rb")
 reldata = frel.read().decode("UTF-8")
@@ -123,12 +114,13 @@ for ch in suggestions:
     except:
         regExp["%04X" % int(ch)] = 1
 
+# add Unicode names from 5.1 if desired
 if regExp:
     UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
-
-    for c in UnicodeData.split('\n'):
-        uniData = c.strip().split(';')
-        if len(uniData) > 1: unames[uniData[0]] = uniData[1]
+    if UnicodeData:
+        for c in UnicodeData.split('\n'):
+            uniData = c.strip().split(';')
+            if len(uniData) > 1: unames[uniData[0]] = uniData[1]
 
 sugglist = []
 

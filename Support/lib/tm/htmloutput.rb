@@ -127,6 +127,7 @@ module TextMate
           theme_path += "default"
         end
 
+        $stdout.sync = true
         $stdout << ERB.new(HTML_TEMPLATE).result(binding)
   
         block.call($stdout)

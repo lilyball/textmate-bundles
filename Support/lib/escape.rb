@@ -25,10 +25,15 @@ def e_url(str)
   end
 end
 
-# Make string suitable for display as HTML, preserve spaces
-def htmlize(str)
+# Make string suitable for display as HTML, preserve spaces. Set :no_newline_after_br => true
+# to cause “\n” to be substituted by “<br>” instead of “<br>\n”
+def htmlize(str, opts = {})
   str = str.to_s.gsub("&", "&amp;").gsub("<", "&lt;")
   str = str.gsub(/\t+/, '<span style="white-space:pre;">\0</span>')
   str = str.reverse.gsub(/ (?= |$)/, ';psbn&').reverse
-  str.gsub("\n", "<br>")
+  if opts[:no_newline_after_br].nil?
+    str.gsub("\n", "<br>\n")
+  else
+    str.gsub("\n", "<br>")
+  end
 end

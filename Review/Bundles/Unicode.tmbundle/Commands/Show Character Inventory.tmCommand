@@ -35,6 +35,7 @@ def codepoints(s):
     if hs:
         yield hs
 
+
 def getBlockName(s):
     if 0x0000 &lt;= s &lt;= 0x007F:
         return "Basic Latin"
@@ -497,6 +498,10 @@ td {padding:1mm;} \n\
 .a { \n\
 text-align:center; \n\
 } \n\
+.b { \n\
+text-align:center; \n\
+cursor:pointer; \n\
+} \n\
 &lt;/style&gt; \n\
 &lt;/head&gt; \n\
 &lt;body&gt; \n\
@@ -549,7 +554,7 @@ for c in keys:
             name = rangeName(c) + "-%04X" % int(c)
         if name[0] == '&lt;': name = rangeName(c) + "-%04X" % int(c)
         if "COMBINING" in name: t = u"◌" + t
-        print "&lt;tr&gt;&lt;td class='a'&gt;", t, "&lt;/td&gt;&lt;td class='a'&gt;", chKeys[c], "&lt;/td&gt;&lt;td&gt;", "U+%04X" % int(c), "&lt;/td&gt;&lt;td&gt;", getBlockName(c), "&lt;/td&gt;&lt;td&gt;", name, "&lt;/tr&gt;"
+        print "&lt;tr&gt;&lt;td class='a'&gt;", t, "&lt;/td&gt;&lt;td class='a'&gt;", chKeys[c], "&lt;/td&gt;&lt;td&gt;", "U+%04X" % (int(c)), "&lt;/td&gt;&lt;td&gt;", getBlockName(c), "&lt;/td&gt;&lt;td&gt;", name, "&lt;/tr&gt;"
 
 print "&lt;/tbody&gt;&lt;/table&gt;"
 

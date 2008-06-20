@@ -21,18 +21,363 @@ def lastCharInUCSdec(s):
     return -1
 
 
+def getPDFRange(s):
+    if 0x0000 &lt;= s &lt;= 0x007F:
+        return "U0000.pdf"
+    elif 0x0080 &lt;= s &lt;= 0x00FF:
+        return "U0080.pdf"
+    elif 0x0100 &lt;= s &lt;= 0x017F:
+        return "U0100.pdf"
+    elif 0x0180 &lt;= s &lt;= 0x024F:
+        return "U0180.pdf"
+    elif 0x0250 &lt;= s &lt;= 0x02AF:
+        return "U0250.pdf"
+    elif 0x02B0 &lt;= s &lt;= 0x02FF:
+        return "U02B0.pdf"
+    elif 0x0300 &lt;= s &lt;= 0x036F:
+        return "U0300.pdf"
+    elif 0x0370 &lt;= s &lt;= 0x03FF:
+        return "U0370.pdf"
+    elif 0x0400 &lt;= s &lt;= 0x04FF:
+        return "U0400.pdf"
+    elif 0x0500 &lt;= s &lt;= 0x052F:
+        return "U0500.pdf"
+    elif 0x0530 &lt;= s &lt;= 0x058F:
+        return "U0530.pdf"
+    elif 0x0590 &lt;= s &lt;= 0x05FF:
+        return "U0590.pdf"
+    elif 0x0600 &lt;= s &lt;= 0x06FF:
+        return "U0600.pdf"
+    elif 0x0700 &lt;= s &lt;= 0x074F:
+        return "U0700.pdf"
+    elif 0x0750 &lt;= s &lt;= 0x077F:
+        return "U0750.pdf"
+    elif 0x0780 &lt;= s &lt;= 0x07BF:
+        return "U0780.pdf"
+    elif 0x07C0 &lt;= s &lt;= 0x07FF:
+        return "U07C0.pdf"
+    elif 0x0900 &lt;= s &lt;= 0x097F:
+        return "U0900.pdf"
+    elif 0x0980 &lt;= s &lt;= 0x09FF:
+        return "U0980.pdf"
+    elif 0x0A00 &lt;= s &lt;= 0x0A7F:
+        return "U0A00.pdf"
+    elif 0x0A80 &lt;= s &lt;= 0x0AFF:
+        return "U0A80.pdf"
+    elif 0x0B00 &lt;= s &lt;= 0x0B7F:
+        return "U0B00.pdf"
+    elif 0x0B80 &lt;= s &lt;= 0x0BFF:
+        return "U0B80.pdf"
+    elif 0x0C00 &lt;= s &lt;= 0x0C7F:
+        return "U0C00.pdf"
+    elif 0x0C80 &lt;= s &lt;= 0x0CFF:
+        return "U0C80.pdf"
+    elif 0x0D00 &lt;= s &lt;= 0x0D7F:
+        return "U0D00.pdf"
+    elif 0x0D80 &lt;= s &lt;= 0x0DFF:
+        return "U0D80.pdf"
+    elif 0x0E00 &lt;= s &lt;= 0x0E7F:
+        return "U0E00.pdf"
+    elif 0x0E80 &lt;= s &lt;= 0x0EFF:
+        return "U0E80.pdf"
+    elif 0x0F00 &lt;= s &lt;= 0x0FFF:
+        return "U0F00.pdf"
+    elif 0x1000 &lt;= s &lt;= 0x109F:
+        return "U1000.pdf"
+    elif 0x10A0 &lt;= s &lt;= 0x10FF:
+        return "U10A0.pdf"
+    elif 0x1100 &lt;= s &lt;= 0x11FF:
+        return "U1100.pdf"
+    elif 0x1200 &lt;= s &lt;= 0x137F:
+        return "U1200.pdf"
+    elif 0x1380 &lt;= s &lt;= 0x139F:
+        return "U1380.pdf"
+    elif 0x13A0 &lt;= s &lt;= 0x13FF:
+        return "U13A0.pdf"
+    elif 0x1400 &lt;= s &lt;= 0x167F:
+        return "U1400.pdf"
+    elif 0x1680 &lt;= s &lt;= 0x169F:
+        return "U1680.pdf"
+    elif 0x16A0 &lt;= s &lt;= 0x16FF:
+        return "U16A0.pdf"
+    elif 0x1700 &lt;= s &lt;= 0x171F:
+        return "U1700.pdf"
+    elif 0x1720 &lt;= s &lt;= 0x173F:
+        return "U1720.pdf"
+    elif 0x1740 &lt;= s &lt;= 0x175F:
+        return "U1740.pdf"
+    elif 0x1760 &lt;= s &lt;= 0x177F:
+        return "U1760.pdf"
+    elif 0x1780 &lt;= s &lt;= 0x17FF:
+        return "U1780.pdf"
+    elif 0x1800 &lt;= s &lt;= 0x18AF:
+        return "U1800.pdf"
+    elif 0x1900 &lt;= s &lt;= 0x194F:
+        return "U1900.pdf"
+    elif 0x1950 &lt;= s &lt;= 0x197F:
+        return "U1950.pdf"
+    elif 0x1980 &lt;= s &lt;= 0x19DF:
+        return "U1980.pdf"
+    elif 0x19E0 &lt;= s &lt;= 0x19FF:
+        return "U19E0.pdf"
+    elif 0x1A00 &lt;= s &lt;= 0x1A1F:
+        return "U1A00.pdf"
+    elif 0x1B00 &lt;= s &lt;= 0x1B7F:
+        return "U1B00.pdf"
+    elif 0x1B80 &lt;= s &lt;= 0x1BBF:
+        return "U1B80.pdf"
+    elif 0x1C00 &lt;= s &lt;= 0x1C4F:
+        return "U1C00.pdf"
+    elif 0x1C50 &lt;= s &lt;= 0x1C7F:
+        return "U1C50.pdf"
+    elif 0x1D00 &lt;= s &lt;= 0x1D7F:
+        return "U1D00.pdf"
+    elif 0x1D80 &lt;= s &lt;= 0x1DBF:
+        return "U1D80.pdf"
+    elif 0x1DC0 &lt;= s &lt;= 0x1DFF:
+        return "U1DC0.pdf"
+    elif 0x1E00 &lt;= s &lt;= 0x1EFF:
+        return "U1E00.pdf"
+    elif 0x1F00 &lt;= s &lt;= 0x1FFF:
+        return "U1F00.pdf"
+    elif 0x2000 &lt;= s &lt;= 0x206F:
+        return "U2000.pdf"
+    elif 0x2070 &lt;= s &lt;= 0x209F:
+        return "U2070.pdf"
+    elif 0x20A0 &lt;= s &lt;= 0x20CF:
+        return "U20A0.pdf"
+    elif 0x20D0 &lt;= s &lt;= 0x20FF:
+        return "U20D0.pdf"
+    elif 0x2100 &lt;= s &lt;= 0x214F:
+        return "U2100.pdf"
+    elif 0x2150 &lt;= s &lt;= 0x218F:
+        return "U2150.pdf"
+    elif 0x2190 &lt;= s &lt;= 0x21FF:
+        return "U2190.pdf"
+    elif 0x2200 &lt;= s &lt;= 0x22FF:
+        return "U2200.pdf"
+    elif 0x2300 &lt;= s &lt;= 0x23FF:
+        return "U2300.pdf"
+    elif 0x2400 &lt;= s &lt;= 0x243F:
+        return "U2400.pdf"
+    elif 0x2440 &lt;= s &lt;= 0x245F:
+        return "U2440.pdf"
+    elif 0x2460 &lt;= s &lt;= 0x24FF:
+        return "U2460.pdf"
+    elif 0x2500 &lt;= s &lt;= 0x257F:
+        return "U2500.pdf"
+    elif 0x2580 &lt;= s &lt;= 0x259F:
+        return "U2580.pdf"
+    elif 0x25A0 &lt;= s &lt;= 0x25FF:
+        return "U25A0.pdf"
+    elif 0x2600 &lt;= s &lt;= 0x26FF:
+        return "U2600.pdf"
+    elif 0x2700 &lt;= s &lt;= 0x27BF:
+        return "U2700.pdf"
+    elif 0x27C0 &lt;= s &lt;= 0x27EF:
+        return "U27C0.pdf"
+    elif 0x27F0 &lt;= s &lt;= 0x27FF:
+        return "U27F0.pdf"
+    elif 0x2800 &lt;= s &lt;= 0x28FF:
+        return "U2800.pdf"
+    elif 0x2900 &lt;= s &lt;= 0x297F:
+        return "U2900.pdf"
+    elif 0x2980 &lt;= s &lt;= 0x29FF:
+        return "U2980.pdf"
+    elif 0x2A00 &lt;= s &lt;= 0x2AFF:
+        return "U2A00.pdf"
+    elif 0x2B00 &lt;= s &lt;= 0x2BFF:
+        return "U2B00.pdf"
+    elif 0x2C00 &lt;= s &lt;= 0x2C5F:
+        return "U2C00.pdf"
+    elif 0x2C60 &lt;= s &lt;= 0x2C7F:
+        return "U2C60.pdf"
+    elif 0x2C80 &lt;= s &lt;= 0x2CFF:
+        return "U2C80.pdf"
+    elif 0x2D00 &lt;= s &lt;= 0x2D2F:
+        return "U2D00.pdf"
+    elif 0x2D30 &lt;= s &lt;= 0x2D7F:
+        return "U2D30.pdf"
+    elif 0x2D80 &lt;= s &lt;= 0x2DDF:
+        return "U2D80.pdf"
+    elif 0x2DE0 &lt;= s &lt;= 0x2DFF:
+        return "U2DE0.pdf"
+    elif 0x2E00 &lt;= s &lt;= 0x2E7F:
+        return "U2E00.pdf"
+    elif 0x2E80 &lt;= s &lt;= 0x2EFF:
+        return "U2E80.pdf"
+    elif 0x2F00 &lt;= s &lt;= 0x2FDF:
+        return "U2F00.pdf"
+    elif 0x2FF0 &lt;= s &lt;= 0x2FFF:
+        return "U2FF0.pdf"
+    elif 0x3000 &lt;= s &lt;= 0x303F:
+        return "U3000.pdf"
+    elif 0x3040 &lt;= s &lt;= 0x309F:
+        return "U3040.pdf"
+    elif 0x30A0 &lt;= s &lt;= 0x30FF:
+        return "U30A0.pdf"
+    elif 0x3100 &lt;= s &lt;= 0x312F:
+        return "U3100.pdf"
+    elif 0x3130 &lt;= s &lt;= 0x318F:
+        return "U3130.pdf"
+    elif 0x3190 &lt;= s &lt;= 0x319F:
+        return "U3190.pdf"
+    elif 0x31A0 &lt;= s &lt;= 0x31BF:
+        return "U31A0.pdf"
+    elif 0x31C0 &lt;= s &lt;= 0x31EF:
+        return "U31C0.pdf"
+    elif 0x31F0 &lt;= s &lt;= 0x31FF:
+        return "U31F0.pdf"
+    elif 0x3200 &lt;= s &lt;= 0x32FF:
+        return "U3200.pdf"
+    elif 0x3300 &lt;= s &lt;= 0x33FF:
+        return "U3300.pdf"
+    elif 0x3400 &lt;= s &lt;= 0x4DBF:
+        return "U3400.pdf"
+    elif 0x4DC0 &lt;= s &lt;= 0x4DFF:
+        return "U4DC0.pdf"
+    elif 0x4E00 &lt;= s &lt;= 0x9FFF:
+        return "U4E00.pdf"
+    elif 0xA000 &lt;= s &lt;= 0xA48F:
+        return "UA000.pdf"
+    elif 0xA490 &lt;= s &lt;= 0xA4CF:
+        return "UA490.pdf"
+    elif 0xA500 &lt;= s &lt;= 0xA63F:
+        return "UA500.pdf"
+    elif 0xA640 &lt;= s &lt;= 0xA69F:
+        return "UA640.pdf"
+    elif 0xA700 &lt;= s &lt;= 0xA71F:
+        return "UA700.pdf"
+    elif 0xA720 &lt;= s &lt;= 0xA7FF:
+        return "UA720.pdf"
+    elif 0xA800 &lt;= s &lt;= 0xA82F:
+        return "UA800.pdf"
+    elif 0xA840 &lt;= s &lt;= 0xA87F:
+        return "UA840.pdf"
+    elif 0xA880 &lt;= s &lt;= 0xA8DF:
+        return "UA880.pdf"
+    elif 0xA900 &lt;= s &lt;= 0xA92F:
+        return "UA900.pdf"
+    elif 0xA930 &lt;= s &lt;= 0xA95F:
+        return "UA930.pdf"
+    elif 0xAA00 &lt;= s &lt;= 0xAA5F:
+        return "UAA00.pdf"
+    elif 0xAC00 &lt;= s &lt;= 0xD7AF:
+        return "UAC00.pdf"
+    elif 0xD800 &lt;= s &lt;= 0xDB7F:
+        return "UD800.pdf"
+    elif 0xDB80 &lt;= s &lt;= 0xDBFF:
+        return "UDB80.pdf"
+    elif 0xDC00 &lt;= s &lt;= 0xDFFF:
+        return "UDC00.pdf"
+    elif 0xE000 &lt;= s &lt;= 0xF8FF:
+        return "UE000.pdf"
+    elif 0xF900 &lt;= s &lt;= 0xFAFF:
+        return "UF900.pdf"
+    elif 0xFB00 &lt;= s &lt;= 0xFB4F:
+        return "UFB00.pdf"
+    elif 0xFB50 &lt;= s &lt;= 0xFDFF:
+        return "UFB50.pdf"
+    elif 0xFE00 &lt;= s &lt;= 0xFE0F:
+        return "UFE00.pdf"
+    elif 0xFE10 &lt;= s &lt;= 0xFE1F:
+        return "UFE10.pdf"
+    elif 0xFE20 &lt;= s &lt;= 0xFE2F:
+        return "UFE20.pdf"
+    elif 0xFE30 &lt;= s &lt;= 0xFE4F:
+        return "UFE30.pdf"
+    elif 0xFE50 &lt;= s &lt;= 0xFE6F:
+        return "UFE50.pdf"
+    elif 0xFE70 &lt;= s &lt;= 0xFEFF:
+        return "UFE70.pdf"
+    elif 0xFF00 &lt;= s &lt;= 0xFFEF:
+        return "UFF00.pdf"
+    elif 0xFFF0 &lt;= s &lt;= 0xFFFF:
+        return "UFFF0.pdf"
+    elif 0x10000 &lt;= s &lt;= 0x1007F:
+        return "U10000.pdf"
+    elif 0x10080 &lt;= s &lt;= 0x100FF:
+        return "U10080.pdf"
+    elif 0x10100 &lt;= s &lt;= 0x1013F:
+        return "U10100.pdf"
+    elif 0x10140 &lt;= s &lt;= 0x1018F:
+        return "U10140.pdf"
+    elif 0x10190 &lt;= s &lt;= 0x101CF:
+        return "U10190.pdf"
+    elif 0x101D0 &lt;= s &lt;= 0x101FF:
+        return "U101D0.pdf"
+    elif 0x10280 &lt;= s &lt;= 0x1029F:
+        return "U10280.pdf"
+    elif 0x102A0 &lt;= s &lt;= 0x102DF:
+        return "U102A0.pdf"
+    elif 0x10300 &lt;= s &lt;= 0x1032F:
+        return "U10300.pdf"
+    elif 0x10330 &lt;= s &lt;= 0x1034F:
+        return "U10330.pdf"
+    elif 0x10380 &lt;= s &lt;= 0x1039F:
+        return "U10380.pdf"
+    elif 0x103A0 &lt;= s &lt;= 0x103DF:
+        return "U103A0.pdf"
+    elif 0x10400 &lt;= s &lt;= 0x1044F:
+        return "U10400.pdf"
+    elif 0x10450 &lt;= s &lt;= 0x1047F:
+        return "U10450.pdf"
+    elif 0x10480 &lt;= s &lt;= 0x104AF:
+        return "U10480.pdf"
+    elif 0x10800 &lt;= s &lt;= 0x1083F:
+        return "U10800.pdf"
+    elif 0x10900 &lt;= s &lt;= 0x1091F:
+        return "U10900.pdf"
+    elif 0x10920 &lt;= s &lt;= 0x1093F:
+        return "U10920.pdf"
+    elif 0x10A00 &lt;= s &lt;= 0x10A5F:
+        return "U10A00.pdf"
+    elif 0x12000 &lt;= s &lt;= 0x123FF:
+        return "U12000.pdf"
+    elif 0x12400 &lt;= s &lt;= 0x1247F:
+        return "U12400.pdf"
+    elif 0x1D000 &lt;= s &lt;= 0x1D0FF:
+        return "U1D000.pdf"
+    elif 0x1D100 &lt;= s &lt;= 0x1D1FF:
+        return "U1D100.pdf"
+    elif 0x1D200 &lt;= s &lt;= 0x1D24F:
+        return "U1D200.pdf"
+    elif 0x1D300 &lt;= s &lt;= 0x1D35F:
+        return "U1D300.pdf"
+    elif 0x1D360 &lt;= s &lt;= 0x1D37F:
+        return "U1D360.pdf"
+    elif 0x1D400 &lt;= s &lt;= 0x1D7FF:
+        return "U1D400.pdf"
+    elif 0x1F000 &lt;= s &lt;= 0x1F02F:
+        return "U1F000.pdf"
+    elif 0x1F030 &lt;= s &lt;= 0x1F09F:
+        return "U1F030.pdf"
+    elif 0x20000 &lt;= s &lt;= 0x2A6DF:
+        return "U20000.pdf"
+    elif 0x2F800 &lt;= s &lt;= 0x2FA1F:
+        return "U2F800.pdf"
+    elif 0xE0000 &lt;= s &lt;= 0xE007F:
+        return "UE0000.pdf"
+    elif 0xE0100 &lt;= s &lt;= 0xE01EF:
+        return "UE0100.pdf"
+    elif 0xF0000 &lt;= s &lt;= 0xFFFFF:
+        return "UF0000.pdf"
+    elif 0x100000 &lt;= s &lt;= 0x10FFFF:
+        return "U100000.pdf"
+    else:
+        return ""
+
+
 if "TM_SELECTED_TEXT" in os.environ:
     sys.exit(200)
 
 line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
 
 lastCharDecCode = lastCharInUCSdec(unicode(line[:x], "UTF-8"))
-charcode = "%04X" % lastCharDecCode
 
-if len(charcode) == 0:
-    sys.exit(200)
+if not lastCharDecCode: sys.exit(200)
 
-inp, out = os.popen2("open 'http://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=" + charcode + "&amp;useutf8=false'")
+inp, out = os.popen2("open -a Safari 'http://www.unicode.org/charts/PDF/" + getPDFRange(lastCharDecCode) + "?"+"%04X" % lastCharDecCode +"'")
 inp.close()
 out.close()
 </string>

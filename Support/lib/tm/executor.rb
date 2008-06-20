@@ -67,6 +67,7 @@ module TextMate
           block ||= proc do |str, type|
             str = htmlize(str).gsub(/\<br\>/, "<br>\n")
             str = "<span style='color: red'>#{str}</span>" if type == :err
+            str
           end
 
           callback = proc {|str, type| io << block.call(str,type)}

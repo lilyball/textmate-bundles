@@ -74,7 +74,7 @@
 					<key>comment</key>
 					<string>do we want a special rule for ( expr )?</string>
 					<key>match</key>
-					<string>==|~=|&amp;|~|\|</string>
+					<string>==|~=|!=|&amp;|~|!|\|</string>
 					<key>name</key>
 					<string>keyword.operator.logical.matlab</string>
 				</dict>
@@ -345,12 +345,6 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(DEFAULT_EXEC_PATH|ignore_function_time_stamp|DEFAULT_LOADPATH|max_recursion_depth|EDITOR|output_max_field_width|EXEC_PATH|output_precision|IMAGEPATH|page_output_immediately|INFO_FILE|page_screen_output|INFO_PROGRAM|print_answer_id_name|LOADPATH|print_empty_dimensions|MAKEINFO_PROGRAM|print_rhs_assign_val|PAGER|save_header_format_string|PS1|save_precision|PS2|saving_history|PS4|sighup_dumps_octave_core|sigterm_dumps_octave_core|silent_functions|ans|split_long_rows|automatic_replot|string_fill_char|beep_on_error|struct_levels_to_print|completion_append_char|suppress_verbose_help_message|crash_dumps_octave_core|variables_can_hide_functions|current_script_file_name|warn_assign_as_truth_value|debug_on_error|warn_divide_by_zero|debug_on_interrupt|warn_empty_list_elements|debug_on_warning|warn_fortran_indexing|debug_symtab_lookups|warn_function_name_clash|default_save_format|warn_future_time_stamp|echo_executing_commands|warn_imag_to_real|fixed_point_format|warn_matlab_incompatible|gnuplot_binary|warn_missing_semicolon|gnuplot_command_axes|warn_neg_dim_as_zero|gnuplot_command_end|warn_num_to_str|gnuplot_command_plot|warn_precedence_change|gnuplot_command_replot|warn_reload_forces_clear|gnuplot_command_splot|warn_resize_on_range_error|gnuplot_command_title|warn_separator_insert|gnuplot_command_using|warn_single_quote_string|gnuplot_command_with|warn_str_to_num|gnuplot_has_frames|warn_undefined_return_values|history_file|warn_variable_switch_label|history_size)\b</string>
-			<key>name</key>
-			<string>support.variable.matlab</string>
-		</dict>
-		<dict>
-			<key>match</key>
 			<string>\b(diary|isvarname|set|echo|load|show|cd|edit_history|ls|type|chdir|format|mark_as_command|unmark_command|clear|gset|mislocked|which|dbclear|gshow|mlock|who|dbstatus|help|more|whos|dbstop|history|munlock|dbtype|hold|run_history|dbwhere|iskeyword|save)\b</string>
 			<key>name</key>
 			<string>keyword.other.commands.matlab</string>
@@ -363,7 +357,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(ERRNO|iscellstr|ischar|iscntrl|iscomplex|isdigit|abs|isempty|acos|isfield|acosh|isfinite|airy|isglobal|all|isgraph|angle|ishold|any|isieee|append|isinf|arg|iskeyword|asin|islist|asinh|islogical|assignin|islower|atan|ismatrix|atan2|isna|atanh|isnan|atexit|isnumeric|balance|isprint|besselh|ispunct|besseli|isreal|besselj|isspace|besselk|isstream|bessely|isstreamoff|betainc|isstruct|casesen|isupper|cd|isvarname|ceil|isxdigit|cell|kbhit|cellstr|keyboard|char|kill|chdir|kron|chol|lasterr|class|lastwarn|clc|length|clear|lgamma|clear/|link|clg|linspace|closeplot|list|colloc|load|completion_matches|localtime|conj|log|cos|log10|cosh|lpsolve|cumprod|lpsolve_options|cumsum|ls|daspk|lsode|daspk_options|lsode_options|dasrt|lstat|dasrt_options|lu|dassl|mark_as_command|dassl_options|max|dbclear|min|dbstatus|mislocked|dbstop|mkdir|dbtype|mkfifo|dbwhere|mkstemp|det|mktime|diag|mlock|diary|more|disp|munlock|do_string_escapes|nargin|document|nargout|dup2|native_float_format|echo|ndims|edit_history|nth|eig|numel|endgrent|octave_config_info|endpwent|octave_tmp_file_name|erf|odessa|erfc|odessa_options|error|ones|error_text|pause|eval|pclose|evalin|permute|exec|pinv|exist|pipe|exit|popen|exp|printf|expm|prod|eye|purge_tmp_files|fclose|putenv|fcntl|puts|fdisp|pwd|feof|qr|ferror|quad|feval|quad_options|fflush|quit|fft|qz|fft2|rand|fgetl|randn|fgets|read_readline_init_file|fieldnames|readdir|file_in_loadpath|readlink|file_in_path|real|filter|rehash|find|rename|find_first_of_in_loadpath|reshape|finite|reverse|fix|rmdir|floor|round|fmod|run_history|fnmatch|save|fopen|scanf|fork|schur|format|set|fprintf|setgrent|fputs|setpwent|fread|shell_cmd|freport|show|frewind|sign|fscanf|sin|fseek|sinh|fsolve|size|fsolve_options|sleep|ftell|sort|func2str|source|functions|splice|fwrite|sprintf|gamma|sqrt|gammainc|sqrtm|gammaln|squeeze|getegid|sscanf|getenv|stat|geteuid|str2func|getgid|streamoff|getgrent|strftime|getgrgid|strptime|getgrnam|sum|getpgrp|sumsq|getpid|svd|getppid|syl|getpwent|symlink|getpwnam|system|getpwuid|tan|getrusage|tanh|getuid|tilde_expand|givens|time|glob|tmpfile|gmtime|tmpnam|graw|toascii|gset|tolower|gshow|toupper|help|type|hess|typeinfo|history|umask|hold|undo_string_escapes|home|unlink|ifft|unmark_command|ifft2|usage|imag|usleep|input|va_arg|input_event_hook|va_start|inv|vr_val|inverse|waitpid|ipermute|warning|is_nan_or_na|warranty|isalnum|which|isalpha|who|isascii|whos|isbool|zeros|iscell)\b</string>
+			<string>\b(edit|ERRNO|iscellstr|ischar|iscntrl|iscomplex|isdigit|abs|isempty|acos|isfield|acosh|isfinite|airy|isglobal|all|isgraph|angle|ishold|any|isieee|append|isinf|arg|iskeyword|asin|islist|asinh|islogical|assignin|islower|atan|ismatrix|atan2|isna|atanh|isnan|atexit|isnumeric|balance|isprint|besselh|ispunct|besseli|isreal|besselj|isspace|besselk|isstream|bessely|isstreamoff|betainc|isstruct|casesen|isupper|cd|isvarname|ceil|isxdigit|cell|kbhit|cellstr|keyboard|char|kill|chdir|kron|chol|lasterr|class|lastwarn|clc|length|clear|lgamma|clear/|link|clg|linspace|closeplot|list|colloc|load|completion_matches|localtime|conj|log|cos|log10|cosh|lpsolve|cumprod|lpsolve_options|cumsum|ls|daspk|lsode|daspk_options|lsode_options|dasrt|lstat|dasrt_options|lu|dassl|mark_as_command|dassl_options|max|dbclear|min|dbstatus|mislocked|dbstop|mkdir|dbtype|mkfifo|dbwhere|mkstemp|det|mktime|diag|mlock|diary|more|disp|munlock|do_string_escapes|nargin|document|nargout|dup2|native_float_format|echo|ndims|edit_history|nth|eig|numel|endgrent|octave_config_info|endpwent|octave_tmp_file_name|erf|odessa|erfc|odessa_options|error|ones|error_text|pause|eval|pclose|evalin|permute|exec|pinv|exist|pipe|exit|popen|exp|printf|expm|prod|eye|purge_tmp_files|fclose|putenv|fcntl|puts|fdisp|pwd|feof|qr|ferror|quad|feval|quad_options|fflush|quit|fft|qz|fft2|rand|fgetl|randn|fgets|read_readline_init_file|fieldnames|readdir|file_in_loadpath|readlink|file_in_path|real|filter|rehash|find|rename|find_first_of_in_loadpath|reshape|finite|reverse|fix|rmdir|floor|round|fmod|run_history|fnmatch|save|fopen|scanf|fork|schur|format|set|fprintf|setgrent|fputs|setpwent|fread|shell_cmd|freport|show|frewind|sign|fscanf|sin|fseek|sinh|fsolve|size|fsolve_options|sleep|ftell|sort|func2str|source|functions|splice|fwrite|sprintf|gamma|sqrt|gammainc|sqrtm|gammaln|squeeze|getegid|sscanf|getenv|stat|geteuid|str2func|getgid|streamoff|getgrent|strftime|getgrgid|strptime|getgrnam|sum|getpgrp|sumsq|getpid|svd|getppid|syl|getpwent|symlink|getpwnam|system|getpwuid|tan|getrusage|tanh|getuid|tilde_expand|givens|time|glob|tmpfile|gmtime|tmpnam|graw|toascii|gset|tolower|gshow|toupper|help|type|hess|typeinfo|history|umask|hold|undo_string_escapes|home|unlink|ifft|unmark_command|ifft2|usage|imag|usleep|input|va_arg|input_event_hook|va_start|inv|vr_val|inverse|waitpid|ipermute|warning|is_nan_or_na|warranty|isalnum|which|isalpha|who|isascii|whos|isbool|zeros|iscell)\b</string>
 			<key>name</key>
 			<string>support.function.general.matlab</string>
 		</dict>
@@ -417,7 +411,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(casesen|is_bool|is_matrix|is_struct|setstr|is_complex|is_scalar|is_symmetric|struct_contains|is_global|is_square|is_vector|struct_elements|is_list|is_stream|isstr)\b</string>
+			<string>\b(casesen|is_bool|is_matrix|is_struct|setstr|is_complex|is_scalar|is_symmetric|struct_contains|is_global|is_square|is_vector|struct_elements|is_list|is_stream|isstr|__gnuplot_set__|__gnuplot_show__|__gnuplot_plot__|__gnuplot_splot__|__gnuplot_replot__)\b</string>
 			<key>name</key>
 			<string>invalid.deprecated.function.matlab</string>
 		</dict>
@@ -489,6 +483,12 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>\b((u)?int(8|16|32|64)|intmin|intmax|double|single)\b</string>
+			<key>name</key>
+			<string>support.function.class.matlab</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>\b(arch_fit|detrend|hamming|spectral_adf|arch_rnd|diffpara|hanning|spectral_xdf|arch_test|durbinlevinson|hurst|spencer|arma_rnd|fftconv|periodogram|stft|autocor|fftfilt|rectangle_lw|synthesis|autocov|fftshift|rectangle_sw|triangle_lw|autoreg_matrix|fractdiff|sinc|triangle_sw|bartlett|freqz|sinetone|unwrap|blackman|freqz_plot|sinewave|yulewalker)\b</string>
 			<key>name</key>
 			<string>support.function.signal.matlab</string>
@@ -545,7 +545,13 @@
 			<key>match</key>
 			<string>\b__(abcddims|gnuplot_save_data|isequal|pltopt|area|gnuplot_send_inline_data|lin_interpn|print_symbol_info|axes_limits|gnuplot_set|line|print_symtab_info|axis_label|nargin|qp|bar|next_line_color|quiver|bars|gnuplot_version|norm|request_drawnow|bodquist|go_axes|outlist|scatter|clear_plot_window|go_axes_init|patch|splinen|contour|go_close_all|pchip_deriv|stem|contourc|go_delete|plr1|stepimp|default_plot_options|go_draw_axes|plr2|syschnamesl|delaunayn|go_draw_figure|plt1|sysconcat|dsearchn|go_figure|plt2|syscont_disc|end|go_figure_handles|plt2mm|sysdefioname|errcomm|go_handles|plt2mv|sysdefstname|error_text|go_image|plt2ss|sysgroupn|errplot|go_line|plt2sv|tf2sysl|freqresp|go_patch|plt2vm|tfl|fsolve_defopts|go_surface|plt2vs|token_count|glpk|go_text|plt2vv|version_info|gud_mode|plt|voronoi|gnuplot_raw|img|plt_get_axis_arg|zgpbal|gnuplot_replot|img_via_file|pltopt1|zp2ssg2)__\b</string>
 			<key>name</key>
-			<string>support.function.octave_internal.matlab</string>
+			<string>support.function.octave.internal.matlab</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(DEFAULT_EXEC_PATH|ignore_function_time_stamp|DEFAULT_LOADPATH|max_recursion_depth|EDITOR|output_max_field_width|EXEC_PATH|output_precision|IMAGEPATH|page_output_immediately|INFO_FILE|page_screen_output|INFO_PROGRAM|print_answer_id_name|LOADPATH|print_empty_dimensions|MAKEINFO_PROGRAM|print_rhs_assign_val|PAGER|save_header_format_string|PS1|save_precision|PS2|saving_history|PS4|sighup_dumps_octave_core|sigterm_dumps_octave_core|silent_functions|ans|split_long_rows|automatic_replot|string_fill_char|beep_on_error|struct_levels_to_print|completion_append_char|suppress_verbose_help_message|crash_dumps_octave_core|variables_can_hide_functions|current_script_file_name|warn_assign_as_truth_value|debug_on_error|warn_divide_by_zero|debug_on_interrupt|warn_empty_list_elements|debug_on_warning|warn_fortran_indexing|debug_symtab_lookups|warn_function_name_clash|default_save_format|warn_future_time_stamp|echo_executing_commands|warn_imag_to_real|fixed_point_format|warn_matlab_incompatible|gnuplot_binary|warn_missing_semicolon|gnuplot_command_axes|warn_neg_dim_as_zero|gnuplot_command_end|warn_num_to_str|gnuplot_command_plot|warn_precedence_change|gnuplot_command_replot|warn_reload_forces_clear|gnuplot_command_splot|warn_resize_on_range_error|gnuplot_command_title|warn_separator_insert|gnuplot_command_using|warn_single_quote_string|gnuplot_command_with|warn_str_to_num|gnuplot_has_frames|warn_undefined_return_values|history_file|warn_variable_switch_label|history_size)\b</string>
+			<key>name</key>
+			<string>support.function.octave.setting.matlab</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

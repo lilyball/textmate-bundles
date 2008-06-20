@@ -152,7 +152,9 @@ cat &lt;&lt;-HTML
 			}
 		}
 		function insertChar(c) {
-			var cmd = 'open "txmt://open?";"$TM_BUNDLE_SUPPORT/bin/TMinsertUTF8text.sh" "'+c+'" &amp;';
+			cmd  = "echo -en 'tell app \"TextMate\" to insert «data utf8" + c + "»\n";
+			cmd += "tell app \"System Events\" to keystroke \"\`\" using (command down)' ";
+			cmd += "| iconv -f UTF-8 -t MACROMAN | osascript --  &amp;";
 			TextMate.system(cmd, null);
 		}
 		function output(str) {

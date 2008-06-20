@@ -23,6 +23,12 @@
 #     str = htmlize(str)
 #     str =  "<span class=\"stderr\">#{htmlize(str)}</span>" if type == :out
 #   end
+#
+#  TextMate::Executor.run also accepts three optional named arguments.
+#    :version_args are arguments that will be passed to the executable to generate a version string for use as the page's subtitle.
+#    :version_regex is a regular expression to which the resulting version string is passed.
+#      $1 of this regex is used as the subtitle of the Executor.run output.  By default, this just takes the first line.
+#    :env is the environment in which the command will be run.  Default is ENV.
 
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'tm/process'

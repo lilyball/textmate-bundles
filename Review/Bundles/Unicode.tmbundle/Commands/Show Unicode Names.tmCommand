@@ -87,7 +87,11 @@ def getUnicodeName(dec):
                 char = ""
             else:
                 char = eval('u"\U%08X"' % c)
-            print char + "\t: U+" "%04X" % int(c) + "\t: " + name
+            t = ""
+            if "COMBINING" in name: t = u"◌"
+
+            #print char + "\t: U+" "%04X" % int(c) + "\t: " + " ".join([hex(ord(c))[2:].upper() for c in char.encode("utf-8")]) + "\t: " + name
+            print "%s%s\t: U+%04X\t: %-11s\t: %s" % (t, char, int(c), " ".join([hex(ord(c))[2:].upper() for c in char.encode("utf-8")]), name)
     sys.exit(206)
 
 if "TM_SELECTED_TEXT" in os.environ:

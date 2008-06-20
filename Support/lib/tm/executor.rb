@@ -71,7 +71,7 @@ module TextMate
 
           callback = proc {|str, type| io << block.call(str,type)}
           process_output_wrapper(io) do
-            TextMate::Process.run(args, :env => options[:env], :echo => true, &callback)
+            TextMate::Process.run(args, :env => options[:env], :echo => true, &block)
           end
 
           tm_error_fd_write.close

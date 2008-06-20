@@ -132,10 +132,9 @@ for c in suggestions:
         name = rangeName(c)
     if name[0] == '<':
         name = rangeName(c)
-    hexcode = "%04X" % int(c)
     theChar = re.sub(r"(?=[\"])", r'\\', wunichr(c))
     if theChar == '"': theChar = '\\"'
-    sugglist.append(theChar + "\tU+" + hexcode + "\t\t\t" + name)
+    sugglist.append("%s\t:   U+%-5s\t :   %s" % (theChar, "%04X" % int(c), name))
 
 try:
     result=dialog.menu(sugglist)

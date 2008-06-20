@@ -3,14 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>set(gca,'YTick',${1:[${2}]});</string>
+	<string>error(nargchk(${1:min}, ${2:max}, ${3:nargin}, `if [[ $TM_USE_OCTAVE -eq '0' ]]; then
+	echo -n "'struct'"
+fi` ));
+</string>
 	<key>name</key>
-	<string>ytick</string>
+	<string>nargchk</string>
 	<key>scope</key>
 	<string>source.matlab</string>
 	<key>tabTrigger</key>
-	<string>ytick</string>
+	<string>nargchk</string>
 	<key>uuid</key>
-	<string>2FED97FA-0EB0-45E3-B92F-757903E79684</string>
+	<string>8325A3D7-1025-48C4-810F-CF41E7E71DA2</string>
 </dict>
 </plist>

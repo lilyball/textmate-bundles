@@ -96,7 +96,7 @@ class MavenCommand
         cmd = command
         io << "<pre>"
         io << "<strong>mvn " + htmlize(cmd.join(' ')) + "</strong><br/>\n"
-        TextMate::Process.run(@mvn, *cmd) do |line, type|
+        TextMate::Process.run(@mvn, *cmd, :echo => true) do |line, type|
           case type
           when :out
             line.chomp!

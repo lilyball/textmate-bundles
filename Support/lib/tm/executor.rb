@@ -55,7 +55,7 @@ module TextMate
 
         options = {:version_args  => ['--version'],
                    :version_regex => /\A(.*)$/,
-                   :env           => ENV,
+                   :env           => nil,
                    :script_args   => []}
 
         options.merge! args.pop if args.last.is_a? Hash

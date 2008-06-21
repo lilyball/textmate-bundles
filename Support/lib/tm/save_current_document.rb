@@ -22,7 +22,7 @@ module TextMate
     def save_current_document()
       
       doc, dst = STDIN.read, ENV['TM_FILEPATH']
-      ENV['TM_DISPLAYNAME'] = File.basename ENV['TM_FILEPATH']
+      ENV['TM_DISPLAYNAME'] = ENV['TM_FILENAME']
 
       return unless dst.nil? || File.read(dst) != doc
       

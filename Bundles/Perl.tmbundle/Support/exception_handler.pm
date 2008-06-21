@@ -49,7 +49,7 @@ sub longmess_heavy {
 
 sub quote {
 	my $str = shift;
-	$str =~ s/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg;
+	$str =~ s/([^A-Za-z0-9\/_.-])/sprintf("%%%02X", ord($1))/seg;
 	return $str;
 }
 
@@ -57,13 +57,8 @@ sub url_and_display_name {
 	my $file = shift;
 	my $url = "";
 	my $display_name = "";
-	if ($file ne "-" && !$ENV{TM_SCRIPT_IS_UNTITLED}) {
-		$display_name = basename($file);
-		$url = 'url=file://' . quote($file);
-	} else {
-		$url = "";
-		$display_name = 'untitled';
-	}
+	$display_name = basename($file);
+	$url = 'url=file://' . quote($file);
 	return ($url, $display_name);
 }
 
@@ -72,7 +67,6 @@ sub url_and_display_name {
 sub ret_backtrace { 
   my ($i, $arg, @rest) = @_;
   my $mess;
-  #my $err = join '', @error;
   $i++;
 
   my $tid_msg = '';
@@ -82,18 +76,16 @@ sub ret_backtrace {
   }
 
   my %i = Carp::caller_info($i);
-  # foreach $key (keys %i) {
-  #     print STDERR "$key  :  $i{$key}\n";
-  # }
   $arg =~ s/\n/\<br\>/g;
+  $i{sub} =~ s/tm_die/die/g;
   $mess .= "<div id='exception_report' class='framed'>\n";
   $mess .= "<p id='exception'><strong>$arg</strong></p>\n";
   $mess .= "<blockquote><table border='0' cellspacing='0' cellpadding='0'>\n";
   my ($url, $display_name) = url_and_display_name($i{file});
-  $mess .= "<tr><td><a href='txmt://open?" . $url . "&amp;line=$i{line}'>$i{sub}</a></td><td>&nbsp; in $display_name line $i{line}$tid_msg</td></tr>\n";
+  $mess .= "<tr><td><a href='txmt://open?line=$i{line}&" . $url . "'>$i{sub}</a></td><td>&nbsp;in $display_name at line $i{line}$tid_msg</td></tr>\n";
   while (my %i = Carp::caller_info(++$i)) {
       ($url, $display_name) = url_and_display_name($i{file});
-      $mess .= "<tr><td><a href='txmt://open?" . $url . "&amp;line=$i{line}'>$i{sub}</a></td><td>&nbsp; in $display_name line $i{line}$tid_msg</td></tr>\n";
+      $mess .= "<tr><td><a href='txmt://open?line=$i{line}&" . $url . "'>$i{sub}</a></td><td>&nbsp;in $display_name at line $i{line}$tid_msg</td></tr>\n";
   }
   $mess .= "</table></blockquote></div>";
   return $mess;

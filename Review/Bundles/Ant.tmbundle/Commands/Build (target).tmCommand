@@ -8,30 +8,23 @@
 	<string>#!/usr/bin/env ruby
 
 SUPPORT = ENV['TM_SUPPORT_PATH']
-DIALOG = SUPPORT + '/bin/tm_dialog'
+DIALOG  = SUPPORT + '/bin/tm_dialog'
 
-require SUPPORT + '/lib/escape'
 require SUPPORT + '/lib/exit_codes'
-require SUPPORT + '/lib/osx/plist'
+require SUPPORT + '/lib/textmate'
+require SUPPORT + '/lib/escape'
+require SUPPORT + '/lib/ui'
+require SUPPORT + '/lib/tm/process'
 require SUPPORT + '/lib/web_preview'
 require 'rexml/document'
 
+TextMate.require_cmd "ant"
+
 STDOUT.sync = true
 
-puts html_head(:window_title =&gt; "Ant Build (target)", :page_title =&gt; "Build (target)", :sub_title =&gt; "__" );
-
-def require_cmd(cmd)
-    exists = ENV['PATH'].split(':').any? { |dir| 
-        File.executable? File.join(dir, cmd)
-    }
-    unless exists
-        puts '&lt;h3 class="error"&gt;Couldn\'t find ‘' + cmd + '’&lt;/h3&gt;&lt;p&gt;Locations searched:&lt;/p&gt;&lt;p&gt;&lt;pre&gt;'
-        puts ENV['PATH'].gsub(/:/, "\n") + '&lt;/pre&gt;&lt;/p&gt;'
-        TextMate.exit_show_html()
-    end    
-end
-
-require_cmd "ant"
+puts html_head( :window_title =&gt; "Ant Build (target)",
+				:page_title =&gt; "Build (target)",
+				:sub_title =&gt; "__" );
 
 base_dir = ""
 ant_build_file = "" 
@@ -44,29 +37,39 @@ if File.exists?( ant_build_file )
 else 
   source = REXML::Document.new(STDIN.read)
   ant_build_file = ENV['TM_FILEPATH']
-end 
+end
 
 ant_targets = []
-source.each_element('//target'){ |targ| ant_targets.push( { 'title' =&gt; targ.attributes['name'], 'description' =&gt; targ.attributes['description'].to_s } ) }
+source.each_element('//target'){ |targ| 
+	ant_targets.push( { 'title' =&gt; targ.attributes['name'], 
+						'description' =&gt; targ.attributes['description'].to_s } ) 
+}
 
 TextMate.exit_show_html( "&lt;h1&gt;No targets found.&lt;/h1&gt;") if ant_targets.empty?
 
-ant_targets = ant_targets.sort {| a,b | a['title'] &lt;=&gt;  b['title'] }
+ant_targets = ant_targets.sort {| a,b | a['title'] &lt;=&gt; b['title'] }
+
+#Conflicts with something in IO ?
+# res = TextMate::UI.menu(ant_targets)
+# TextMate.exit_discard() if res == nil
+# selected_target = res['title']
+# selected_desc = res['description']
 
 plist = { 'menuItems' =&gt; ant_targets }.to_plist
-
 res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
-
 TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
-
 selected_target = res['selectedMenuItem']['title']
 selected_desc = res['selectedMenuItem']['description']
 
 puts "&lt;h1&gt;#{selected_target}:&lt;/h1&gt;&lt;p&gt;#{selected_desc}&lt;/p&gt;"
-puts "&lt;pre&gt;"
-print `ant -buildfile "#{ant_build_file}" #{selected_target}`
-puts "&lt;/pre&gt;"
 
+puts "&lt;pre&gt;"
+
+TextMate::Process.run("ant -buildfile #{ant_build_file} #{selected_target}") do |str|
+	STDOUT &lt;&lt; htmlize(str, :no_newline_after_br =&gt; true)
+end
+
+puts "&lt;/pre&gt;"
 </string>
 	<key>fallbackInput</key>
 	<string>document</string>

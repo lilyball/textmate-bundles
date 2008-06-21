@@ -1,3 +1,3 @@
-gm = GrailsMate.new("war")
-gm.colorisations['green'] << /Created WAR (.)+/
-gm.emit_html
+gc = GrailsCommand.new("war")
+gc.colorisations['green'] << /Created WAR (.)+/
+gc.emit_html

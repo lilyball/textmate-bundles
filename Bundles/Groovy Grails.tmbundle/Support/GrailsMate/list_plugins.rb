@@ -1,2 +1,2 @@
-gm = GrailsMate.new("list-plugins")
-gm.emit_html
+gc = GrailsCommand.new("list-plugins")
+gc.run

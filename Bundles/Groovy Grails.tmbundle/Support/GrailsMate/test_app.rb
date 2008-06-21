@@ -1,2 +1,1 @@
-gm = GrailsMate.new("test-app")
-gm.emit_html
+GrailsCommand.new("test-app").run

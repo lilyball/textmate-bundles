@@ -1,4 +1,4 @@
-gm = GrailsMate.new("") do |default|
+gc = GrailsCommand.new("") do |default|
   TextMate::UI.request_string( 
     :title => "Run Grails Task",
     :prompt => "Enter a command to pass to grails",
@@ -6,4 +6,4 @@ gm = GrailsMate.new("") do |default|
   )
 end
 
-gm.emit_html
+gc.run

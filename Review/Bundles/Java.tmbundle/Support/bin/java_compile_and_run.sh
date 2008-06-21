@@ -1,3 +1,11 @@
+#!/usr/bin/env bash
+
+if [ "$1" = "--version" ]
+then
+    "$TM_JAVA" -version 2>&1 | head -1
+    exit 0
+fi
+
 SOURCE="$1"
 shift
 TMP=/tmp/tm_javamate 

@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>require_cmd "${TM_NUSH:=nush}" "If you have installed Nu, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_NUSH&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
+	<string>require_cmd "${TM_NUTEST:=nutest}" "If you have installed Nu, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_NUTEST&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
 $(type -p "${TM_RUBY:-ruby}") -e'
 

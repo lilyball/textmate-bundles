@@ -13,7 +13,7 @@ require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
 
 TextMate.save_current_document
-TextMate::Executor.run(ENV["TM_NUSH"] || "nush", ENV["TM_FILEPATH"], :version_args =&gt; ["-e \"(puts (version))\"", "2&gt;&amp;1"])'&lt;&amp;0</string>
+TextMate::Executor.run(ENV["TM_NUTEST"] || "nutest", ENV["TM_FILEPATH"])'&lt;&amp;0</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

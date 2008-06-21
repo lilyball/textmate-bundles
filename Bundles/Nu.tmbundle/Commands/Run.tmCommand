@@ -7,8 +7,7 @@
 	<key>command</key>
 	<string>require_cmd "${TM_NUSH:=nush}" "If you have installed Nu, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_NUSH&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
-"$TM_RUBY" -e'
+$(type -p "${TM_RUBY:-ruby}") -e'
 
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
@@ -18,7 +17,7 @@ TextMate::Executor.run(ENV["TM_NUSH"] || "nush", ENV["TM_FILEPATH"], :version_ar
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
-	<string>@r</string>
+	<string>@q</string>
 	<key>name</key>
 	<string>Run</string>
 	<key>output</key>

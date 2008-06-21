@@ -55,7 +55,8 @@ module TextMate
 
         options = {:version_args  => ['--version'],
                    :version_regex => /\A(.*)$/,
-                   :env           => ENV}
+                   :env           => ENV,
+                   :script_args   => []}
 
         options.merge! args.pop if args.last.is_a? Hash
 
@@ -67,6 +68,8 @@ module TextMate
 
         # version = $1 if options[:version_regex] =~ Process.run(args[0], options[:version_args], :interactive_input => true)[0]
         version = $1 if options[:version_regex] =~ `#{e_sh args[0]} #{options[:version_args].flatten.join(" ")}`
+
+        options[:script_args].each { |arg| args << arg }
 
         TextMate::HTMLOutput.show(:title => "Running “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version) do |io|
 

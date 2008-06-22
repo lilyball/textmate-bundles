@@ -101,16 +101,25 @@ int close(int);int close(int fd) {
 }
 
 int select(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
+    D("in select\n");
+    int result;
     if (readfds == NULL) {
-        return syscall(SYS_select, nfds, readfds, writefds, errorfds, timeout);
+        D("readfds is null\n");
+        result = syscall(SYS_select, nfds, readfds, writefds, errorfds, timeout);
     } else {
+        D("readfds is not null\n");
         fd_set orig_readfds;
         FD_ZERO(&orig_readfds);
         FD_COPY(readfds, &orig_readfds);
         
+        D("making syscall\n");
         int fd_count = syscall(SYS_select, nfds, readfds, writefds, errorfds, timeout);
-        return fd_count + stdin_fd_tracker_inspect_select_readfds(nfds, &orig_readfds, readfds);
+        D("returned from syscall\n");
+        result = fd_count + stdin_fd_tracker_inspect_select_readfds(nfds, &orig_readfds, readfds);
     }
+
+    D("select returing %d\n", result);
+    return result;
 }
 
 int select_darwinextsn(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {

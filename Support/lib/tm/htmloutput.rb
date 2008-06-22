@@ -28,6 +28,7 @@ HTML_TEMPLATE = <<-HTML
   <% } %>
   <% bundle_styles.each { |style| %>
     <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
+    <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/print.css"   type="text/css" charset="utf-8" media="screen">
   <% } %>
   <% user_styles.each { |style| %>
     <link rel="stylesheet" href="file://<%= user_path %>/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">

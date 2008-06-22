@@ -222,98 +222,6 @@ class CppMethodCompletion
     TextMate.exit_create_new_document s
   end
   
-  def create_scope_hierarchy()
-    q = "" # ENV['namespace'].split("::")
-    dir = []
-    dir << ["#global", userdefinedplusstatic]
-    q.each do |elem|
-      if m = dir[-1][1][:namespace][elem]
-        dir << [elem, m]
-      elsif m = dir[-1][1][:classes][elem]
-        dir << [elem, m]
-      else
-        po "'#{elem}' part of qualifier not found"
-      end
-    end
-    return dir
-  end
-  
-  
-  def userdefinedplusstatic
-     @std
-   end
-
-  def lookup_class2(name, currentTemplateArgs, res)
-    return nil if name.kind_of?(Fixnum)
-    q = name.split("::")
-    if q[0] == "" # ::something
-      res = dig_to_find(q, userdefinedplusstatic)
-    else      
-      @scopes = create_scope_hierarchy() if @scopes.nil?
-      @scopes.reverse_each do |name, dir| 
-        res = dig_to_find(q, dir)
-        break if res
-      end
-    end
-    return res, currentTemplateArgs
-  end
-  
-  def lookup_class(name, currentTemplateArgs, res)
-    # lookup in methodscope
-    temp = res[name]
-    if temp && temp[:typedef]
-      currentTemplateArgs = {}
-      temp.each do |key, value|
-        if key.kind_of?(Fixnum)
-          currentTemplateArgs[key] = value
-        end
-      end
-      n = temp[:typedef]
-      currentTemplateArgs[:type] = n
-      k = lookup_class(n, currentTemplateArgs, res)
-      return k
-    end
-    #@std[name]
-    return lookup_class2(name, currentTemplateArgs, res)
-  end
-  
-  
-  
-  def updateClass(ret, currentTemplateArgs, res)
-    previousClass = ret[0][:r]
-    if ret[0][:t]
-      k = ret[0][:t].dup
-      currentTemplateArgs = updateInitial(previousClass, k, currentTemplateArgs)
-      return lookup_class(previousClass, currentTemplateArgs, res)
-    end
-    
-    if previousClass.kind_of?(Fixnum)
-      ocurrentTemplateArgs = currentTemplateArgs
-      currentTemplateArgs = currentTemplateArgs[previousClass]
-      if currentTemplateArgs.nil?
-        TextMate.exit_show_tool_tip "could not find type info for the dereferenced object, template arg ##{previousClass} missing in #{ret.inspect} + #{ocurrentTemplateArgs.inspect}"
-      end
-      return lookup_class(currentTemplateArgs[:type],currentTemplateArgs, res)
-    elsif previousClass.kind_of?(String)
-      return lookup_class(previousClass, currentTemplateArgs, res)
-    end
-    po "this should not be reached"
-  end
-  
-  def dereference(currentTemplateArgs, variable)
-    puts "dereferenc"
-    po "#{currentTemplateArgs[:pointers]} \n #{variable[:dref]} }"
-  end
-  
-  def find(res, key, elem )
-    if k = res[key]
-      if r = k[elem]
-        return r
-      end
-    end
-    return nil
-  end
-  
   def updateTemplate(variableT, returnType )
     returnType.each do |key, value|
       if value.kind_of? Hash
@@ -324,42 +232,53 @@ class CppMethodCompletion
     end
   end
   
-  def traverse(scope, tableRoot)
-    return tableRoot if scope.empty?
+  def traverse(scope, tableRoot, lookIn)
+    return tableRoot, nil if scope.empty?
+    lookInUsed = nil
+    
     r = scope.inject(tableRoot) do |result, element|
       res = nil
-      [:namespace, :classes].each do |e|
+      lookIn.each do |e|
+        lookInUsed = e
         res = result[e][element] if result[e]
         break unless res.nil?
       end
-      break if res.nil?
+      if res.nil?
+        lookInUsed = nil
+        break
+      end
+      
       res
     end
-    return r
+    return r, lookInUsed
   end
   
   def lookupTHelp(hierachy, scope, qualifier, verify_presence_of)
     scopeCopy = scope.dup
+    default = [:namespace, :classes]
+    qualiferDefault = [:namespace, :classes, :typedefs]
     hierachy.reverse_each do |lib|
-      (scope.length + 1 ).times do
-        #if verify_presence_of == [:methods, "begin"]
-        #  puts "scope->" + scope.inspect 
-        #  puts qualifier
-        #  puts "lib" + lib.inspect
-        #end
-        unless qualifier[0].empty?
-          r = traverse(scope, lib)
-          r = traverse(qualifier, r) unless r.nil?
+      (scope.length + 1 ).times do |i|
+        #pd hierachy.inspect + "empty.>" if lib.empty?
+        if qualifier.first && qualifier.first.empty?
+          r, k = traverse(qualifier, lib, qualiferDefault)
         else
-          r = traverse(qualifier, lib)
+          r, k = traverse(scope, lib, default)
+          r, k = traverse(qualifier, r, qualiferDefault) unless r.nil?
+         
         end
         #k = traverse(verify_presence_of, r)
-        k = verify_presence_of.inject(r) do |result, elem|
+        if k == :typedefs
+          qualifier.replace(r[:type].split("::"))
+          retry
+        end
+
+        r = verify_presence_of.inject(r) do |result, elem|
           break if result.nil?
           result[elem]
         end
 
-        return k if k
+        return r if r
         scope.pop
       end
       scope = scopeCopy.dup
@@ -367,32 +286,21 @@ class CppMethodCompletion
     nil
   end
   
-  def lookupT(item, scope, qualifier)
-    r = lookup(scope, qualifier, [item[:kind], item[:name]])
-    return r[0]
-  end
   
-  def lookupList(item, scope, qualifier)
-    r = lookup(scope, qualifier, [:methods])
-    if r.nil?
-      po "could not find symbols starting with #{item[:prefix]}"
-    end
-    
-    return r
-  end
   
   def lookup(scope, qualifier, verify_presence_of)
+    original = scope.dup
     returnT = nil
     std_hier = @std
     user_hier = {}
     hierachy = [std_hier, user_hier]
-    if qualifier.last == "#localScope"
+    if scope.last == "#localScope"
      hierachy << res_hier
     end
     returnT = lookupTHelp(hierachy, scope, qualifier, verify_presence_of)
     if returnT.nil?
       #return returnT
-      po "could not look up #{verify_presence_of.last} in scope #{scope.inspect} + #{qualifier.inspect}"
+      po "could not look up '#{qualifier.join("::")}' in scope '#{original.join("::")}'"
     else
       return returnT
     end
@@ -413,6 +321,21 @@ class CppMethodCompletion
   end
   
   def updateScope(variableT, currentScope)
+  end
+  
+  def lookupT(item, scope, qualifier)
+    r = lookup(scope, qualifier, [item[:kind], item[:name]])
+    return r[0] if item[:kind] == :methods
+    return r
+  end
+  
+  def lookupList(item, scope, qualifier)
+    r = lookup(scope, qualifier, [:methods])
+    if r.nil?
+      po "could not find symbols starting with #{item[:prefix]}"
+    end
+    
+    return r
   end
 
   def returnTypeHandling(returnType, templates, qualifier)
@@ -442,16 +365,6 @@ class CppMethodCompletion
         templates = returnType[:t] if returnType[:t]
         returnTypeHandling(returnType,templates, qualifier)
 
-        # returnType = {:type=>"std::vector::iterator", :t=>{1=>1}},
-        # returnType = {:type=>1}
-        # item = {:name=>"map", :kind=>:field, :bind=>"."},
-        #updateTemplate(variableT, returnType[:t]) if returnType[:t]
-        #
-        ## variableT = {:type=>"std::vector::iterator", :t=>{1=>{:type=>"a"}}},
-        #dreffed = dereference(variableT, item, currentScope)
-        #currentScope = originalScope if dreffed
-        #updateScope(variableT, currentScope)
-        # dereference
       elsif item[:prefix]
         if qualifier.nil?
           TextMate.exit_show_tool_tip "No completion found"
@@ -468,22 +381,21 @@ def print()
   #TextMate.exit_show_tool_tip @line
   a = @parser.parse(@line)
   TextMate.exit_discard if a.nil?
-  qualifier = ["className"] 
-  namespace = ["namespace"]
+  qualifier = [] 
+  namespace = ["namespace", "className", "#localScope" ]
   temp = a.types
-  pd temp
   @res_hier = {}
-  k = (namespace + qualifier).inject(@res_hier) do |result, elem|
+  k = namespace.inject(@res_hier) do |result, elem|
     a = {}
     result[:classes] = { elem => a}
     a
   end
-  k[:classes] = {}
-  k[:classes]["#localScope"] = temp
-  qualifier << "#localScope"
+  k.replace( temp)
+  #pd @res_hier.inspect
+
   # TextMate.exit_discard unless res_hier[:current_type]
   type_chain = temp[:current_type].dup
-  rightMostClass(type_chain, ["namespace"],qualifier)
+  rightMostClass(type_chain, namespace, qualifier)
 
 end
 

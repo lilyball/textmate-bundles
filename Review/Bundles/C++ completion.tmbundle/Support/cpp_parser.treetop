@@ -2,15 +2,17 @@ grammar Cpp
 rule cpp
 statement+ {
 	def types
-		r = { :field => {}}
+		r = { :field => {}, :typedefs => {}}
 		elements.each do |e|
-			key, value = e.types
+			key, value, type = e.types
 			if key && value
 			  if key == :current_type
 			    r[key] = value
-		    else
-		      puts "r[:field][key] = value"
-			    r[:field][key] = value 
+		    elsif type == :type
+			    r[:field][key] = value
+		    elsif type == :typedefs
+		      r[:typedefs][key] = value
+
 			  end
 		  end
 		end
@@ -21,14 +23,9 @@ end
 
 rule statement
  'typedef' (explicit_space 'typename')? explicit_space complete_declare {
-	def types
+	def types	  
 	  key, value, type = complete_declare.types
-    s = value[:type]
-    value[:typedef] = s
-    value.delete(:type)
-    puts key.inspect
-    return key, value
-	  #  return complete_declare.types
+    return key, value, :typedefs
 	end
 }
 / complete_declare
@@ -65,7 +62,7 @@ st:(beginnings space)? dec space variable en:(space "=" !"=")? {
       end
     end
     
-		return variable.text_value , [dec.types] ,:type
+		return variable.text_value , dec.types ,:type
 	end
 }
 end

@@ -7,6 +7,6 @@
 
 SVN=svn
 
-#. "$(dirname "$0")/setup.sh"
+. "$(dirname "$0")/setup.sh"
 "$SVN" --version | head -1
 TM_INTERACTIVE_INPUT=AUTO "$SVN" log http://macromates.com/svn/Bundles --limit 1

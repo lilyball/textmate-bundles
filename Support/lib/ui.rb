@@ -78,7 +78,7 @@ module TextMate
           options = options.collect { |e| e == nil ? { 'separator' => 1 } : { 'title' => e } }
         end
 
-        res = IO.popen("#{TM_DIALOG} -u", "r+") do |io|
+        res = ::IO.popen("#{TM_DIALOG} -u", "r+") do |io|
           Thread.new do
             plist = { 'menuItems' => options }.to_plist
             io.write plist; io.close_write

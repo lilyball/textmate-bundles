@@ -14,6 +14,7 @@ bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 def wunichr(dec):
     return ("\\U%08X" % dec).decode("unicode-escape")
 
+
 def codepoints(s):
     hs = 0
     for c in s:
@@ -375,6 +376,7 @@ def getBlockName(s):
     else:
         return "unknown"
 
+
 def rangeName(dec):
     if 0x3400 <= dec <= 0x4DB5:
         return  "CJK UNIFIED IDEOGRAPH"
@@ -406,80 +408,6 @@ if not text: sys.exit(200)
 print """<html>
 <head><title>Character Inventory</title>
 <script type='text/javascript'>//<![CDATA[
-function sortTable2(col) {
-  var tblEl = document.getElementById('theTable');
-  if (tblEl.reverseSort == null)
-    tblEl.reverseSort = new Array();
-  if (col == tblEl.lastColumn)
-    tblEl.reverseSort[col] = !tblEl.reverseSort[col];
-  tblEl.lastColumn = col;
-  var oldDsply = tblEl.style.display;
-  tblEl.style.display = 'none';
-  var tmpEl;
-  var i, j;
-  var minVal, minIdx;
-  var testVal;
-  var cmp;
-  for (i = 0; i < tblEl.rows.length - 1; i++) {
-    minIdx = i;
-    minVal = getTextValue(tblEl.rows[i].cells[col]);
-    for (j = i + 1; j < tblEl.rows.length; j++) {
-      testVal = getTextValue(tblEl.rows[j].cells[col]);
-      cmp = compareValues(minVal, testVal);
-      if (tblEl.reverseSort[col])
-        cmp = -cmp;
-      if (cmp > 0) {
-        minIdx = j;
-        minVal = testVal;
-      }
-    }
-    if (minIdx > i) {
-      tmpEl = tblEl.removeChild(tblEl.rows[minIdx]);
-      tblEl.insertBefore(tmpEl, tblEl.rows[i]);
-    }
-  }
-  tblEl.style.display = oldDsply;
-  return false;
-}
-if (document.ELEMENT_NODE == null) {
-  document.ELEMENT_NODE = 1;
-  document.TEXT_NODE = 3;
-}
-function getTextValue(el) {
-  var i;
-  var s;
-  s = '';
-  for (i = 0; i < el.childNodes.length; i++)
-    if (el.childNodes[i].nodeType == document.TEXT_NODE)
-      s += el.childNodes[i].nodeValue;
-    else if (el.childNodes[i].nodeType == document.ELEMENT_NODE &&
-             el.childNodes[i].tagName == 'BR')
-      s += ' ';
-    else
-      s += getTextValue(el.childNodes[i]);
-  return normalizeString(s);
-}
-function compareValues(v1, v2) {
-  var f1, f2;
-  f1 = parseFloat(v1);
-  f2 = parseFloat(v2);
-  if (!isNaN(f1) && !isNaN(f2)) {
-    v1 = f1;
-    v2 = f2;
-  }
-  if (v1 == v2)
-    return 0;
-  if (v1 > v2)
-    return 1
-  return -1;
-}
-var whtSpEnds = new RegExp('^\\s*|\\s*$', 'g');
-var whtSpMult = new RegExp('\\s\\s+', 'g');
-function normalizeString(s) {
-  s = s.replace(whtSpMult, ' ');  // Collapse any multiple whites space.
-  s = s.replace(whtSpEnds, '');   // Remove leading or trailing white space.
-  return s;
-}
 //]]></script>
 <style type='text/css'>
 th {
@@ -491,6 +419,12 @@ td {padding:1mm;}
 .a {
 text-align:center;
 }
+.tr1 {
+background-color:SandyBrown;
+}
+.tr2 {
+background-color:Cornsilk;
+}
 .b {
 text-align:center;
 cursor:pointer;
@@ -500,6 +434,7 @@ cursor:pointer;
 <body>
 """
 
+# dict of unique chars in doc and the number of its occurrence
 chKeys = {}
 for c in text:
     try:
@@ -510,33 +445,66 @@ for c in text:
 keys = chKeys.keys()
 keys.sort()
 
+relDataFile = file(bundleLibPath + "relatedChars.txt", 'r')
+relData = relDataFile.read().decode("UTF-8").split('\n')
+relDataFile.close()
+groups = {}    # groups of related chars
+unrel  = []    # list of chars which are not in groups
+for ch in keys:
+    for index, group in enumerate(relData):
+        if wunichr(ch) in group:
+            try:
+                groups[index].append(ch)
+            except:
+                groups[index] = []
+                groups[index].append(ch)
+            break
+    else:
+        unrel.append(ch)
+        
+grkeys = groups.keys()
+grkeys.sort()
 
-print "<table border=1><tr>"
+print "<table border=1>"
+print "<tr><th>Character</th><th>Occurrences</th><th>UCS</th><th>Unicode Block</th><th>Unicode Name</th></tr>"
 
-if len(keys)<400:
-    print "<th><a href='' onclick='return sortTable2(0)'>Character</a></th><th><a href='' onclick='return sortTable2(1)'>Occurrences</a></th><th><a href='' onclick='return sortTable2(0)'>UCS</a></th><th><a href='' onclick='return sortTable2(3)'>Unicode Block</a></th><th><a href='' onclick='return sortTable2(4)'>Unicode Name</a></th>"
-else:
-    print "<th>Character</th><th>Occurrences</th><th>UCS</th><th>Unicode Block</th><th>Unicode Name</th>"
+total = distinct = 0
 
-print "</tr><tbody id='theTable'>"
-#len(text) and len(keys) don't work caused by uni chars > U+FFFF
-total = 0
-distinct = 0
-regExp = {}
-data = {}
+# get Unicode names of all chars in doc; if not in Unicodedata, get them from UnicodeData.txt.zip
+regExp = data = {}
 for ch in keys:
     try:
         data["%04X" % int(ch)] = unicodedata.name(wunichr(ch))
     except:
         regExp["%04X" % int(ch)] = 1
-
 UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
-
 for c in UnicodeData.split('\n'):
     uniData = c.strip().split(';')
     if len(uniData) > 1: data[uniData[0]] = uniData[1]
 
-for c in keys:
+
+bgclasses = ['tr1', 'tr2']
+
+for gr in grkeys:
+    # alternate background colours
+    clss = bgclasses.pop()
+    bgclasses.insert(0, clss)
+    for c in groups[gr]:
+        if c != 10:
+            total += chKeys[c]
+            distinct += 1
+            t = wunichr(c)
+            try:
+                name = data["%04X" % int(c)]
+            except:
+                name = rangeName(c) + "-%04X" % int(c)
+            if name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
+            if "COMBINING" in name: t = u"◌" + t
+            clsstr = clss
+            if len(groups[gr]) == 1: clsstr = ''   # if groups[gr] has only one element shows up it as not grouped
+            print "<tr class='"+clsstr+"'><td class='a'>", t, "</td><td class='a'>", chKeys[c], "</td><td>", "U+%04X" % (int(c)), "</td><td>", getBlockName(c), "</td><td>", name, "</tr>"
+
+for c in unrel:
     if c != 10:
         total += chKeys[c]
         distinct += 1
@@ -549,12 +517,4 @@ for c in keys:
         if "COMBINING" in name: t = u"◌" + t
         print "<tr><td class='a'>", t, "</td><td class='a'>", chKeys[c], "</td><td>", "U+%04X" % (int(c)), "</td><td>", getBlockName(c), "</td><td>", name, "</tr>"
 
-print "</tbody></table>"
-
-print "<p style='font-size:8pt;'><i>"
-pl = "s"
-if total < 2: pl = ""
-print str(total) + " character%s in total (without '\\n')<br>" % pl
-print str(distinct) + " distinct characters</i></p>"
-
-print "</body></html>"
+print "</table></body></html>"

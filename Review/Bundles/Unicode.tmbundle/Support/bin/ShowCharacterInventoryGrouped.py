@@ -477,7 +477,8 @@ for ch in keys:
         data["%04X" % int(ch)] = unicodedata.name(wunichr(ch))
     except:
         regExp["%04X" % int(ch)] = 1
-UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
+UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + \
+                bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
 for c in UnicodeData.split('\n'):
     uniData = c.strip().split(';')
     if len(uniData) > 1: data[uniData[0]] = uniData[1]
@@ -487,8 +488,7 @@ bgclasses = ['tr1', 'tr2']
 
 for gr in grkeys:
     # alternate background colours
-    clss = bgclasses.pop()
-    bgclasses.insert(0, clss)
+    bgclasses.insert(0, bgclasses.pop())
     for c in groups[gr]:
         if c != 10:
             total += chKeys[c]
@@ -500,9 +500,13 @@ for gr in grkeys:
                 name = rangeName(c) + "-%04X" % int(c)
             if name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
             if "COMBINING" in name: t = u"◌" + t
-            clsstr = clss
-            if len(groups[gr]) == 1: clsstr = ''   # if groups[gr] has only one element shows up it as not grouped
-            print "<tr class='"+clsstr+"'><td class='a'>", t, "</td><td class='a'>", chKeys[c], "</td><td>", "U+%04X" % (int(c)), "</td><td>", getBlockName(c), "</td><td>", name, "</tr>"
+            if len(groups[gr]) == 1:
+                clsstr = ''   # if groups[gr] has only one element shows up it as not grouped
+            else:
+                clsstr = bgclasses[0]
+            print "<tr class='" + clsstr + "'><td class='a'>", \
+                    t, "</td><td class='a'>", chKeys[c], "</td><td>", \
+                    "U+%04X" % (int(c)), "</td><td>", getBlockName(c), "</td><td>", name, "</tr>"
 
 for c in unrel:
     if c != 10:
@@ -515,6 +519,16 @@ for c in unrel:
             name = rangeName(c) + "-%04X" % int(c)
         if name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
         if "COMBINING" in name: t = u"◌" + t
-        print "<tr><td class='a'>", t, "</td><td class='a'>", chKeys[c], "</td><td>", "U+%04X" % (int(c)), "</td><td>", getBlockName(c), "</td><td>", name, "</tr>"
+        print "<tr><td class='a'>", t, "</td><td class='a'>", chKeys[c], \
+                "</td><td>", "U+%04X" % (int(c)), "</td><td>", \
+                getBlockName(c), "</td><td>", name, "</tr>"
 
-print "</table></body></html>"
+print "</table>"
+
+print "<p style='font-size:8pt;'><i>"
+pl = "s"
+if total < 2: pl = ""
+print str(total) + " character%s in total (without '\\n')<br>" % pl
+print str(distinct) + " distinct characters</i></p>"
+
+print "</body></html>"

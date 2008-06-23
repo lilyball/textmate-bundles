@@ -19,6 +19,9 @@
 # If FLASH_TEST_URL is not set, the resulting .swf is used directly
 #
 
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Build in Flash"
+
 require_cmd flashcommand
 
 SWF="/tmp/temp.swf"

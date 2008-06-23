@@ -55,16 +55,27 @@ lines = lines.map {|l| l.strip}.delete_if {|l| l == "" || l.index("Total ActionS
 
 errors = []
 for i in 0..lines.length/2-1
-  error = lines[i*2].scan(/(\/.*?): Line (.*?):(.*)/)[0]
-  error << lines[i*2+1]
-  errors.push(error)
+    
+    begin  
+
+        error = lines[i*2].scan(/(\/.*?): Line (.*?):(.*)/)[0]
+        error << lines[i*2+1]
+        errors.push(error)
+
+    rescue
+
+        puts "WARNING, TextMate ActionScript Bundle Error, Unable to parse output: <br/>"
+        puts "<pre>" + lines[i*2].to_s + "</pre>"
+        
+    end
+    
 end
 
 puts "<html>#{header}<body>"
 #puts "<pre style=\"font-size: 50%\">" + ARGV[0] +"</pre>"
 
 if errors.size == 0
-  puts "<div class=\"success\">Built successful</div>"
+  puts "<div class=\"success\">Build successful</div>"
   puts "</body></html>"
   exit 0
 else

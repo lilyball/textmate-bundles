@@ -475,7 +475,7 @@ total = distinct = 0
 regExp = data = {}
 for ch in keys:
     try:
-        data["%04X" % int(ch)] = unicodedata.name(wunichr(ch), 1)
+        data["%04X" % int(ch)] = unicodedata.name(wunichr(ch), "<")
     except TypeError:
         regExp["%04X" % int(ch)] = 1
 
@@ -496,7 +496,8 @@ for (i, gr) in enumerate(groups.keys()):
         distinct += 1
         t = wunichr(c)
         name = data.get("%04X" % int(c), rangeName(c) + "-%04X" % int(c))
-        if name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
+        # I have no idea why name can be 1 ??
+        if name == 1 or name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
         if "COMBINING" in name: t = u"◌" + t
         # if groups[gr] has only one element shows up it as not grouped; otherwise bgcolor alternates
         if len(groups[gr]) == 1: clsstr = ''

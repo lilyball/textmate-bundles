@@ -441,7 +441,8 @@ cursor:pointer;
 
 # dict of unique chars in doc and the number of its occurrence
 chKeys = {}
-for c in text: chKeys[c] = chKeys.get(c, 0) + 1
+for c in text:
+    if c != 10: chKeys[c] = chKeys.get(c, 0) + 1
 
 keys = chKeys.keys()
 keys.sort()
@@ -463,7 +464,7 @@ for ch in keys:
                 groups[index].append(ch)
             break
     else:
-        if c != 10: unrel.append(ch)
+        unrel.append(ch)
 
 print "<table border=1>"
 print "<tr><th>Character</th><th>Occurrences</th><th>UCS</th><th>Unicode Block</th><th>Unicode Name</th></tr>"

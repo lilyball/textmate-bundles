@@ -26,8 +26,8 @@ for line in data.split('\n'):
     dec = int(token[0],16)
     if 44032 <= dec <=55203:
         for hangul in range(44032,55204):
-            print unichr(hangul) + ";" + unicodedata.name(unichr(hangul))
+            print unichr(hangul) + "\t" + unicodedata.name(unichr(hangul))
     else:
         if token[1][0] != '<' and not "COMPATIBILITY IDEOGRAPH" in token[1] and not "VARIATION SELECTOR" in token[1]:
-            d = (wunichr(int(token[0],16)) + ";" + token[1])
+            d = (wunichr(int(token[0],16)) + "\t" + token[1])
             print d

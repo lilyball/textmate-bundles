@@ -23,8 +23,7 @@ TextMate.require_cmd "ant"
 STDOUT.sync = true
 
 puts html_head( :window_title =&gt; "Ant Build (target)",
-				:page_title =&gt; "Build (target)",
-				:sub_title =&gt; "__" );
+				:page_title =&gt; "Build (target)" );
 
 base_dir = ""
 ant_build_file = "" 

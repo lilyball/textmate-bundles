@@ -1,10 +1,13 @@
 #!/usr/bin/python
 # encoding: utf-8
 
+
 import sys
 import os
 import codecs
 import unicodedata
+import itertools
+import time
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
@@ -402,7 +405,10 @@ def rangeName(dec):
         return  "not defined"
 
 
+ts = time.time()
+#text = filter(lambda x: x != 10, list(codepoints(sys.stdin.read())))
 text = list(codepoints(sys.stdin.read()))
+
 if not text: sys.exit(200)
 
 print """<html>
@@ -436,34 +442,29 @@ cursor:pointer;
 
 # dict of unique chars in doc and the number of its occurrence
 chKeys = {}
-for c in text:
-    try:
-        chKeys[c] += 1
-    except:
-        chKeys[c] = 1
+for c in text: chKeys[c] = chKeys.get(c, 0) + 1
 
 keys = chKeys.keys()
 keys.sort()
 
 relDataFile = file(bundleLibPath + "relatedChars.txt", 'r')
-relData = relDataFile.read().decode("UTF-8").split('\n')
+relData = relDataFile.read().decode("UTF-8").splitlines()
 relDataFile.close()
 groups = {}    # groups of related chars
 unrel  = []    # list of chars which are not in groups
+
 for ch in keys:
+    wch = wunichr(ch)
     for index, group in enumerate(relData):
-        if wunichr(ch) in group:
+        if wch in group:
             try:
                 groups[index].append(ch)
-            except:
+            except KeyError:
                 groups[index] = []
                 groups[index].append(ch)
             break
     else:
-        unrel.append(ch)
-        
-grkeys = groups.keys()
-grkeys.sort()
+        if c != 10: unrel.append(ch)
 
 print "<table border=1>"
 print "<tr><th>Character</th><th>Occurrences</th><th>UCS</th><th>Unicode Block</th><th>Unicode Name</th></tr>"
@@ -474,60 +475,55 @@ total = distinct = 0
 regExp = data = {}
 for ch in keys:
     try:
-        data["%04X" % int(ch)] = unicodedata.name(wunichr(ch))
-    except:
+        data["%04X" % int(ch)] = unicodedata.name(wunichr(ch), 1)
+    except TypeError:
         regExp["%04X" % int(ch)] = 1
-UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + \
-                bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
-for c in UnicodeData.split('\n'):
-    uniData = c.strip().split(';')
-    if len(uniData) > 1: data[uniData[0]] = uniData[1]
 
+if regExp:
+    UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + \
+                    bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
+    for c in UnicodeData.splitlines():
+        uniData = c.strip().split(';')
+        if len(uniData) > 1: data[uniData[0]] = uniData[1]
 
 bgclasses = ['tr1', 'tr2']
 
-for gr in grkeys:
-    # alternate background colours
-    bgclasses.insert(0, bgclasses.pop())
+for (clsstr, gr) in itertools.izip(itertools.cycle(bgclasses), groups.keys()):
     for c in groups[gr]:
-        if c != 10:
-            total += chKeys[c]
-            distinct += 1
-            t = wunichr(c)
-            try:
-                name = data["%04X" % int(c)]
-            except:
-                name = rangeName(c) + "-%04X" % int(c)
-            if name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
-            if "COMBINING" in name: t = u"◌" + t
-            if len(groups[gr]) == 1:
-                clsstr = ''   # if groups[gr] has only one element shows up it as not grouped
-            else:
-                clsstr = bgclasses[0]
-            print "<tr class='" + clsstr + "'><td class='a'>", \
-                    t, "</td><td class='a'>", chKeys[c], "</td><td>", \
-                    "U+%04X" % (int(c)), "</td><td>", getBlockName(c), "</td><td>", name, "</tr>"
-
-for c in unrel:
-    if c != 10:
         total += chKeys[c]
         distinct += 1
         t = wunichr(c)
-        try:
-            name = data["%04X" % int(c)]
-        except:
-            name = rangeName(c) + "-%04X" % int(c)
+        name = data.get("%04X" % int(c), rangeName(c) + "-%04X" % int(c))
         if name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
         if "COMBINING" in name: t = u"◌" + t
-        print "<tr><td class='a'>", t, "</td><td class='a'>", chKeys[c], \
-                "</td><td>", "U+%04X" % (int(c)), "</td><td>", \
-                getBlockName(c), "</td><td>", name, "</tr>"
+        # if groups[gr] has only one element shows up it as not grouped; otherwise bgcolor alternates
+        if len(groups[gr]) == 1: clsstr = ''
+        print "<tr class='" + clsstr + "'><td class='a'>", \
+                t, "</td><td class='a'>", chKeys[c], "</td><td>", \
+                "U+%04X" % (int(c)), "</td><td>", getBlockName(c), "</td><td>", name, "</tr>"
+
+for c in unrel:
+    total += chKeys[c]
+    distinct += 1
+    t = wunichr(c)
+    name = data.get("%04X" % int(c), rangeName(c) + "-%04X" % int(c))
+    if name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
+    if "COMBINING" in name: t = u"◌" + t
+    print "<tr><td class='a'>", t, "</td><td class='a'>", chKeys[c], \
+            "</td><td>", "U+%04X" % (int(c)), "</td><td>", \
+            getBlockName(c), "</td><td>", name, "</tr>"
 
 print "</table>"
 
+print str(time.time() - ts)
+
 print "<p style='font-size:8pt;'><i>"
-pl = "s"
-if total < 2: pl = ""
+
+if total < 2:
+    pl = ""
+else:
+    pl = "s"
+
 print str(total) + " character%s in total (without '\\n')<br>" % pl
 print str(distinct) + " distinct characters</i></p>"
 

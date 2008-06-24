@@ -466,6 +466,9 @@ for ch in keys:
     else:
         unrel.append(ch)
 
+grKeys = groups.keys()
+grKeys.sort()
+
 print "<table border=1>"
 print "<tr><th>Character</th><th>Occurrences</th><th>UCS</th><th>Unicode Block</th><th>Unicode Name</th></tr>"
 
@@ -489,7 +492,7 @@ if regExp:
 bgclasses = ['tr1', 'tr2']
 
 #for (clsstr, gr) in itertools.izip(itertools.cycle(bgclasses), groups.keys()):
-for (i, gr) in enumerate(groups.keys()):
+for (i, gr) in enumerate(grKeys):
     clsstr = bgclasses[i%2]
     for c in groups[gr]:
         total += chKeys[c]

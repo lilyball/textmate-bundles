@@ -6,8 +6,8 @@ import sys
 import os
 import codecs
 import unicodedata
-import itertools
-import time
+# import itertools
+# import time
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
@@ -405,8 +405,7 @@ def rangeName(dec):
         return  "not defined"
 
 
-ts = time.time()
-#text = filter(lambda x: x != 10, list(codepoints(sys.stdin.read())))
+# ts = time.time()
 text = list(codepoints(sys.stdin.read()))
 
 if not text: sys.exit(200)
@@ -488,7 +487,9 @@ if regExp:
 
 bgclasses = ['tr1', 'tr2']
 
-for (clsstr, gr) in itertools.izip(itertools.cycle(bgclasses), groups.keys()):
+#for (clsstr, gr) in itertools.izip(itertools.cycle(bgclasses), groups.keys()):
+for (i, gr) in enumerate(groups.keys()):
+    clsstr = bgclasses[i%2]
     for c in groups[gr]:
         total += chKeys[c]
         distinct += 1
@@ -515,7 +516,7 @@ for c in unrel:
 
 print "</table>"
 
-print str(time.time() - ts)
+# print str(time.time() - ts)
 
 print "<p style='font-size:8pt;'><i>"
 

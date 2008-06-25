@@ -513,7 +513,7 @@ for c in unrel:
     distinct += 1
     t = wunichr(c)
     name = data.get("%04X" % int(c), rangeName(c) + "-%04X" % int(c))
-    if name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
+    if name == 1 or name[0] == '<': name = rangeName(c) + "-%04X" % int(c)
     if "COMBINING" in name: t = u"◌" + t
     print "<tr><td class='a'>", t, "</td><td class='a'>", chKeys[c], \
             "</td><td>", "U+%04X" % (int(c)), "</td><td>", \

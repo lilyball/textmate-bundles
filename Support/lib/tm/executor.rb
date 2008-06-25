@@ -66,8 +66,8 @@ module TextMate
         tm_error_fd_read.fcntl(Fcntl::F_SETFD, 1)
         ENV['TM_ERROR_FD'] = tm_error_fd_write.to_i.to_s
 
-        # version = $1 if options[:version_regex] =~ Process.run(args[0], options[:version_args], :interactive_input => true)[0]
-        version = $1 if options[:version_regex] =~ `#{e_sh args[0]} #{options[:version_args].flatten.join(" ")}`
+        out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
+        version = $1 if options[:version_regex] =~ (out + err)
 
         options[:script_args].each { |arg| args << arg }
 

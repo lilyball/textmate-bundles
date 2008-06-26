@@ -1,0 +1,29 @@
+# K Bundle Comments
+
+## Infininight - 2008-06-25
+
+* Needs a comment type preference, see many of the other bundles for an example.
+* Nothing wrong with the various _foo matches in the grammar but the _ doesn't need to be escaped and you can put it outside the parens to simplify them a bit.
+* A couple of the scopes in the grammar have 'untitled' in the name still, should be removed.
+
+Language Grammar: (Note that I don't know the language, just looked at some sample code and docs.)
+
+* I saw a reference that comments are also allowed on a line with code provided there is whitespace (or the beginning of the line) to the left of the /
+* It seems the . and _ operators need whitespace around them, at least in some cases. [1]
+* There was no match for numeric constants, whipped up a couple based on my observations:
+
+	    (?<!-)0[nN]|-?0[iI]\b
+	    (\B-)?(\b\d+(\.\d*)?|((?<=\d)|\B)\.\d+)([eE][-+]?\d+)?((?<=\.)|\b)
+	
+  These should be placed before the operator match to work correctly.
+		
+* The escape characters inside a string should be "\\(b|n|t|"|\\|[0-7]{1,3})" [1]
+* The symbols match was missing periods, also taken from [1]: "`(?![0-9])(\w|\.(?!\.\.))*(?![\w.])"
+* The symbols also allow quotes around names that wouldn't otherwise be allowed as a name. [1]
+* "Adverbs" aren't matched, didn't come up with anything here but appeared pretty straight-forward.
+* ` is being matched as a operator, should be a symbol.
+* Appears that :, do, if, while should be keyword.control at least when beside []
+
+Document I referenced:
+
+[1]: http://web.archive.org/web/20050320100737/http://www.netcase.co.uk/daniel/kdocs/Reference%20Manual.pdf

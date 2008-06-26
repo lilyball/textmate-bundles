@@ -25,8 +25,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.k</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.k</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.untitled.k</string>
 			<key>patterns</key>
@@ -52,8 +68,16 @@
 			<string>support.function.system.k</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.symbol.k</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(\`[a-zA-Z_]\w+)\b</string>
+			<string>((\`)[a-zA-Z_]\w+)\b</string>
 			<key>name</key>
 			<string>entity.name.tag.k</string>
 		</dict>
@@ -70,8 +94,21 @@
 			<string>support.function.io.k</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.k</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.k</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(^[\s]+/.*$\n?)|(^/.*$\n?)</string>
+			<string>(^[\s]+(/).*$\n?)|(^(/).*$\n?)</string>
 			<key>name</key>
 			<string>comment.line.slash.k</string>
 		</dict>

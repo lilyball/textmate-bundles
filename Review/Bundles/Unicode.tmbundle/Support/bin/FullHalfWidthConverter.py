@@ -31,7 +31,7 @@ if not halffull:
 
 conv = {}
 
-for c in halffull.splitline():
+for c in halffull.splitlines():
     half, full = c.split('\t')
     if direction == 'toFull':
         conv[half] = full

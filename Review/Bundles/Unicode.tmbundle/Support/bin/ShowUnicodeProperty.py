@@ -67,8 +67,12 @@ else:
 
 outDict = SeqDict()
 
-line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
-if not x: sys.exit(200)
+if "TM_CURRENT_LINE" in os.environ and "TM_LINE_INDEX" in os.environ and int(os.environ["TM_LINE_INDEX"]):
+    line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
+else:
+    sys.exit(206)
+
+
 (lastCharDecCode, charIsPaneB) = lastCharInUCSdec(unicode(line[:x], "UTF-8"))
 char = wunichr(lastCharDecCode)
 lastCharUCShexCode = "%04X" % lastCharDecCode

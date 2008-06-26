@@ -50,7 +50,7 @@ head = inputleft[:-1]
 frel = open(bundleLibPath + source + ".txt", "rb")
 reldata = frel.read().decode("UTF-8")
 frel.close()
-for part in reldata.splitline():
+for part in reldata.splitlines():
     if char in part: break
 if not part:
     print "Nothing found for: U+" + "%04X " % int(inputleft[-1]) + char + "."

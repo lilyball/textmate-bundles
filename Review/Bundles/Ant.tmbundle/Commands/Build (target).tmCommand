@@ -19,6 +19,7 @@ require SUPPORT + '/lib/web_preview'
 require 'rexml/document'
 
 TextMate.require_cmd "ant"
+TextMate.min_support 9280
 
 STDOUT.sync = true
 
@@ -49,16 +50,16 @@ TextMate.exit_show_html( "&lt;h1&gt;No targets found.&lt;/h1&gt;") if ant_target
 ant_targets = ant_targets.sort {| a,b | a['title'] &lt;=&gt; b['title'] }
 
 #Conflicts with something in IO ?
-# res = TextMate::UI.menu(ant_targets)
-# TextMate.exit_discard() if res == nil
-# selected_target = res['title']
-# selected_desc = res['description']
+res = TextMate::UI.menu(ant_targets)
+TextMate.exit_discard() if res == nil
+selected_target = res['title']
+selected_desc = res['description']
 
-plist = { 'menuItems' =&gt; ant_targets }.to_plist
-res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
-TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
-selected_target = res['selectedMenuItem']['title']
-selected_desc = res['selectedMenuItem']['description']
+#plist = { 'menuItems' =&gt; ant_targets }.to_plist
+#res = OSX::PropertyList::load(`#{e_sh DIALOG} -up #{e_sh plist}`)
+#TextMate.exit_discard() unless res.has_key? 'selectedMenuItem'
+#selected_target = res['selectedMenuItem']['title']
+#selected_desc = res['selectedMenuItem']['description']
 
 puts "&lt;h1&gt;#{selected_target}:&lt;/h1&gt;&lt;p&gt;#{selected_desc}&lt;/p&gt;"
 

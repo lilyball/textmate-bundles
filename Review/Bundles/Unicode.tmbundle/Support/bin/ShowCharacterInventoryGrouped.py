@@ -8,14 +8,14 @@ import codecs
 import unicodedata
 import itertools
 from UniTools import *
-import time
+# import time
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
 bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 
-ts = time.time()
+# ts = time.time()
 text = list(codepoints(sys.stdin.read()))
 
 if not text: sys.exit(200)
@@ -109,6 +109,8 @@ for ch in keys:
         data["%04X" % int(ch)] = unicodedata.name(wunichr(ch), "<")
     except ValueError:
         regExp["%04X" % int(ch)] = 1
+    except TypeError:
+        regExp["%04X" % int(ch)] = 1
 
 if regExp:
     UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + \
@@ -147,7 +149,7 @@ for c in unrel:
 
 print "</table>"
 
-print str(time.time() - ts)
+# print str(time.time() - ts)
 
 print "<p style='font-size:8pt;'><i>"
 

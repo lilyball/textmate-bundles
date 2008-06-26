@@ -141,6 +141,8 @@ for ch in keys:
         data["%04X" % int(ch)] = unicodedata.name(wunichr(ch))
     except ValueError:
         regExp["%04X" % int(ch)] = 1
+    except TypeError:
+        regExp["%04X" % int(ch)] = 1
 
 UnicodeData = os.popen("zgrep -E '^(" + "|".join(regExp.keys()) + ");' '" + bundleLibPath + "UnicodeData.txt.zip'").read().decode("UTF-8")
 

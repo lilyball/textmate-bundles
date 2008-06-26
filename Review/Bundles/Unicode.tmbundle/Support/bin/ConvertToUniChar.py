@@ -9,6 +9,7 @@ import codecs
 import re
 import zipfile
 import unicodedata
+from UniTools import wunichr, codepoints, getNameForRange
 
 tm_support_path = os.path.join(os.environ["TM_SUPPORT_PATH"], "lib")
 if not tm_support_path in os.environ:
@@ -22,47 +23,6 @@ sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
 bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 pyversion = int("".join(sys.version.split()[0].split('.')))
-
-def wunichr(dec):
-    return ("\\U%08X" % dec).decode("unicode-escape")
-
-def codepoints(s):
-    hs = 0
-    for c in s:
-        c = ord(c)
-        if 0xdc00 <= c <= 0xdfff and hs:
-            yield ((hs&0x3ff)<<10 | (c&0x3ff)) + 0x10000
-            hs = 0
-        elif 0xd800 <= c <= 0xdbff:
-            hs = c
-        else:
-            yield c
-    if hs:
-        yield hs
-
-def rangeName(dec):
-    if 0x3400 <= dec <= 0x4DB5:
-        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
-    elif 0x4E00 <= dec <= 0x9FC3:
-        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
-    elif 0xAC00 <= dec <= 0xD7A3: # Hangul
-        return  unicodedata.name(unichr(dec), "U+%04X" % dec)
-    elif 0xD800 <= dec <= 0xDB7F:
-        return  "Non Private Use High Surrogate"
-    elif 0xDB80 <= dec <= 0xDBFF:
-        return  "Private Use High Surrogate"
-    elif 0xDC00 <= dec <= 0xDFFF:
-        return  "Low Surrogate"
-    elif 0xE000 <= dec <= 0xF8FF:
-        return  "Private Use"
-    elif 0x20000 <= dec <= 0x2A6D6:
-        return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
-    elif 0xF0000 <= dec <= 0xFFFFD:
-        return  "Plane 15 Private Use"
-    elif 0x100000 <= dec <= 0x10FFFD:
-        return  "Plane 16 Private Use"
-    else:
-        return  "not defined"
 
 
 if "TM_SELECTED_TEXT" in os.environ:
@@ -90,7 +50,7 @@ head = inputleft[:-1]
 frel = open(bundleLibPath + source + ".txt", "rb")
 reldata = frel.read().decode("UTF-8")
 frel.close()
-for part in reldata.split('\n'):
+for part in reldata.splitline():
     if char in part: break
 if not part:
     print "Nothing found for: U+" + "%04X " % int(inputleft[-1]) + char + "."
@@ -111,7 +71,7 @@ unames = {}
 for ch in suggestions:
     try:
         unames["%04X" % int(ch)] = unicodedata.name(unichr(ch))
-    except:
+    except ValueError:
         regExp["%04X" % int(ch)] = 1
 
 # add Unicode names from 5.1 if desired
@@ -128,10 +88,10 @@ for c in suggestions:
     name = ""
     try:
         name = unames["%04X" % int(c)]
-    except:
-        name = rangeName(c)
+    except KeyError:
+        name = getNameForRange(c)
     if name[0] == '<':
-        name = rangeName(c)
+        name = getNameForRange(c)
     theChar = re.sub(r"(?=[\"])", r'\\', wunichr(c))
     if theChar == '"': theChar = '\\"'
     sugglist.append("%s\t:   U+%-5s\t :   %s" % (theChar, "%04X" % int(c), name))

@@ -1,112 +1,134 @@
 
 import unicodedata
 
+def codepoints(s):
+    hs = 0
+    for c in s:
+        c = ord(c)
+        if 0xdc00 <= c <= 0xdfff and hs:
+            yield ((hs&0x3ff)<<10 | (c&0x3ff)) + 0x10000
+            hs = 0
+        elif 0xd800 <= c <= 0xdbff:
+            hs = c
+        else:
+            yield c
+    if hs:
+        yield hs
+
+
 def expandUniCombiningClass(abbr):
-    abbr = str(abbr)
-    if   abbr == "0":   return "Spacing, split, enclosing, reordrant, and Tibetan subjoined"
-    elif abbr == "1":   return "Overlays and interior"
-    elif abbr == "7":   return "Nuktas"
-    elif abbr == "8":   return "Hiragana/Katakana voicing marks"
-    elif abbr == "9":   return "Viramas"
-    elif abbr == "10":  return "Start of fixed position classes"
-    elif abbr == "199": return "End of fixed position classes"
-    elif abbr == "200": return "Below left attached"
-    elif abbr == "202": return "Below attached"
-    elif abbr == "204": return "Below right attached"
-    elif abbr == "208": return "Left attached (reordrant around single base character)"
-    elif abbr == "210": return "Right attached"
-    elif abbr == "212": return "Above left attached"
-    elif abbr == "214": return "Above attached"
-    elif abbr == "216": return "Above right attached"
-    elif abbr == "218": return "Below left"
-    elif abbr == "220": return "Below"
-    elif abbr == "222": return "Below right"
-    elif abbr == "224": return "Left (reordrant around single base character)"
-    elif abbr == "226": return "Right"
-    elif abbr == "228": return "Above left"
-    elif abbr == "230": return "Above"
-    elif abbr == "232": return "Above right"
-    elif abbr == "233": return "Double below"
-    elif abbr == "234": return "Double above"
-    elif abbr == "240": return "Below (iota subscript)"
-    else: return ""
+    d = {
+    '0': 'Spacing, split, enclosing, reordrant, and Tibetan subjoined',
+    '1': 'Overlays and interior',
+    '7': 'Nuktas',
+    '8': 'Hiragana/Katakana voicing marks',
+    '9': 'Viramas',
+    '10': 'Start of fixed position classes',
+    '199': 'End of fixed position classes',
+    '200': 'Below left attached',
+    '202': 'Below attached',
+    '204': 'Below right attached',
+    '208': 'Left attached (reordrant around single base character)',
+    '210': 'Right attached',
+    '212': 'Above left attached',
+    '214': 'Above attached',
+    '216': 'Above right attached',
+    '218': 'Below left',
+    '220': 'Below',
+    '222': 'Below right',
+    '224': 'Left (reordrant around single base character)',
+    '226': 'Right',
+    '228': 'Above left',
+    '230': 'Above',
+    '232': 'Above right',
+    '233': 'Double below',
+    '234': 'Double above',
+    '240': 'Below (iota subscript)',
+    }
+    return d.get(str(abbr), "")
 
 
 def expandUniDirectionClass(abbr):
-    if   abbr == "L":   return "Left-to-Right"
-    elif abbr == "LRE": return "Left-to-Right Embedding"
-    elif abbr == "LRO": return "Left-to-Right Override"
-    elif abbr == "R":   return "Right-to-Left"
-    elif abbr == "AL":  return "Right-to-Left Arabic"
-    elif abbr == "RLE": return "Right-to-Left Embedding"
-    elif abbr == "RLO": return "Right-to-Left Override"
-    elif abbr == "PDF": return "Pop Directional Format"
-    elif abbr == "EN":  return "European Number"
-    elif abbr == "ES":  return "European Number Separator"
-    elif abbr == "ET":  return "European Number Terminator"
-    elif abbr == "AN":  return "Arabic Number"
-    elif abbr == "CS":  return "Common Number Separator"
-    elif abbr == "NSM": return "Non-Spacing Mark"
-    elif abbr == "BN":  return "Boundary Neutral"
-    elif abbr == "B":   return "Paragraph Separator"
-    elif abbr == "S":   return "Segment Separator"
-    elif abbr == "WS":  return "Whitespace"
-    elif abbr == "ON":  return "Other Neutrals"
-    else: return ""
+    d = {
+    'L': 'Left-to-Right',
+    'LRE': 'Left-to-Right Embedding',
+    'LRO': 'Left-to-Right Override',
+    'R': 'Right-to-Left',
+    'AL': 'Right-to-Left Arabic',
+    'RLE': 'Right-to-Left Embedding',
+    'RLO': 'Right-to-Left Override',
+    'PDF': 'Pop Directional Format',
+    'EN': 'European Number',
+    'ES': 'European Number Separator',
+    'ET': 'European Number Terminator',
+    'AN': 'Arabic Number',
+    'CS': 'Common Number Separator',
+    'NSM': 'Non-Spacing Mark',
+    'BN': 'Boundary Neutral',
+    'B': 'Paragraph Separator',
+    'S': 'Segment Separator',
+    'WS': 'Whitespace',
+    'ON': 'Other Neutrals',
+    }
+    return d.get(abbr, "")
 
 
 def expandUniCategories(abbr):
-    if   abbr == "Lu": return "Letter, Uppercase"
-    elif abbr == "Ll": return "Letter, Lowercase"
-    elif abbr == "Lt": return "Letter, Titlecase"
-    elif abbr == "Lm": return "Letter, Modelifier"
-    elif abbr == "Lo": return "Letter, Other"
-    elif abbr == "Mn": return "Mark, Nonspacing"
-    elif abbr == "Mc": return "Mark, Spacing Combining"
-    elif abbr == "Me": return "Mark, Enclosing"
-    elif abbr == "Nd": return "Number, Decimal Digit"
-    elif abbr == "Nl": return "Number, Letter"
-    elif abbr == "No": return "Number, Other"
-    elif abbr == "Pc": return "Punctuation, Connector"
-    elif abbr == "Pd": return "Punctuation, Dash"
-    elif abbr == "Ps": return "Punctuation, Open"
-    elif abbr == "Pe": return "Punctuation, Close"
-    elif abbr == "Pi": return "Punctuation, Initial quote (may behave like Ps or Pe depending on usage)"
-    elif abbr == "Pf": return "Punctuation, Final quote (may behave like Ps or Pe depending on usage)"
-    elif abbr == "Po": return "Punctuation, Other"
-    elif abbr == "Sm": return "Symbol, Math"
-    elif abbr == "Sc": return "Symbol, Currency"
-    elif abbr == "Sk": return "Symbol, Modelifier"
-    elif abbr == "So": return "Symbol, Other"
-    elif abbr == "Zs": return "Separator, Space"
-    elif abbr == "Zl": return "Separator, Line"
-    elif abbr == "Zp": return "Separator, Paragraph"
-    elif abbr == "Cc": return "Other, Control"
-    elif abbr == "Cf": return "Other, Format"
-    elif abbr == "Cs": return "Other, Surrogate"
-    elif abbr == "Co": return "Other, Private Use"
-    elif abbr == "Cn": return "Other, Not Assigned (no characters in the file have this property)"
-    else: return ""
+    d = {
+    'Lu': 'Letter, Uppercase',
+    'Ll': 'Letter, Lowercase',
+    'Lt': 'Letter, Titlecase',
+    'Lm': 'Letter, Modifier',
+    'Lo': 'Letter, Other',
+    'Mn': 'Mark, Nonspacing',
+    'Mc': 'Mark, Spacing Combining',
+    'Me': 'Mark, Enclosing',
+    'Nd': 'Number, Decimal Digit',
+    'Nl': 'Number, Letter',
+    'No': 'Number, Other',
+    'Pc': 'Punctuation, Connector',
+    'Pd': 'Punctuation, Dash',
+    'Ps': 'Punctuation, Open',
+    'Pe': 'Punctuation, Close',
+    'Pi': 'Punctuation, Initial quote (may behave like Ps or Pe depending on usage)',
+    'Pf': 'Punctuation, Final quote (may behave like Ps or Pe depending on usage)',
+    'Po': 'Punctuation, Other',
+    'Sm': 'Symbol, Math',
+    'Sc': 'Symbol, Currency',
+    'Sk': 'Symbol, Modifier',
+    'So': 'Symbol, Other',
+    'Zs': 'Separator, Space',
+    'Zl': 'Separator, Line',
+    'Zp': 'Separator, Paragraph',
+    'Cc': 'Other, Control',
+    'Cf': 'Other, Format',
+    'Cs': 'Other, Surrogate',
+    'Co': 'Other, Private Use',
+    'Cn': 'Other, Not Assigned (no characters in the file have this property)',
+    }
+    return d.get(abbr, "")
 
 
 def expandUniDecompositionClass(abbr):
-    if   abbr == "<font>":    return "A font variant (e.g. a blackletter form)."
-    elif abbr == "<noBreak>": return "A no-break version of a space or hyphen."
-    elif abbr == "<initial>": return "An initial presentation form (Arabic)."
-    elif abbr == "<medial>":  return "A medial presentation form (Arabic)."
-    elif abbr == "<final>":   return "A final presentation form (Arabic)."
-    elif abbr == "<isolated>":return "An isolated presentation form (Arabic)."
-    elif abbr == "<circle>":  return "An encircled form."
-    elif abbr == "<super>":   return "A superscript form."
-    elif abbr == "<sub>":     return "A subscript form."
-    elif abbr == "<vertical>":return "A vertical layout presentation form."
-    elif abbr == "<wide>":    return "A wide (or zenkaku) compatibility character."
-    elif abbr == "<narrow>":  return "A narrow (or hankaku) compatibility character."
-    elif abbr == "<font>":    return "A small variant form (CNS compatibility)."
-    elif abbr == "<square>":  return "A CJK squared font variant."
-    elif abbr == "<fraction>":return "A vulgar fraction form."
-    elif abbr == "<compat>":  return "Otherwise unspecified compatibility character."
-    else: return ""
+    d = {
+    '<font>': 'A font variant (e.g. a blackletter form).',
+    '<noBreak>': 'A no-break version of a space or hyphen.',
+    '<initial>': 'An initial presentation form (Arabic).',
+    '<medial>': 'A medial presentation form (Arabic).',
+    '<final>': 'A final presentation form (Arabic).',
+    '<isolated>': 'An isolated presentation form (Arabic).',
+    '<circle>': 'An encircled form.',
+    '<super>': 'A superscript form.',
+    '<sub>': 'A subscript form.',
+    '<vertical>': 'A vertical layout presentation form.',
+    '<wide>': 'A wide (or zenkaku) compatibility character.',
+    '<narrow>': 'A narrow (or hankaku) compatibility character.',
+    '<font color=#555555>': 'A small variant form (CNS compatibility).',
+    '<square>': 'A CJK squared font variant.',
+    '<fraction>': 'A vulgar fraction form.',
+    '<compat>': 'Otherwise unspecified compatibility character.',
+    }
+    return d.get(abbr, "")
 
 
 def wunichr(dec):
@@ -114,15 +136,22 @@ def wunichr(dec):
     return ("\\U%08X" % dec).decode("unicode-escape")
 
 
+def wuniord(s):
+    if s:
+        if u"\udc00" <= s[-1] <= u"\udfff" and len(s) >= 2 and u"\ud800" <= s[-2] <= u"\udbff":
+            return (((ord(s[-2])&0x3ff)<<10 | (ord(s[-1])&0x3ff)) + 0x10000)
+        return (ord(s[-1]))
+    return (-1)
+
+
 def getNameForRange(dec):
     hexcode = " : U+%04X" % dec
-    name = ""
     if 0x3400 <= dec <= 0x4DB5:
         return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0x4E00 <= dec <= 0x9FC3:
         return "CJK UNIFIED IDEOGRAPH" + "-%04X" % dec
     elif 0xAC00 <= dec <= 0xD7A3: # Hangul
-        return unicodedata.name(unichr(dec), "U+%04X" % dec)
+        return unicodedata.name(unichr(dec), hexcode)
     elif 0xD800 <= dec <= 0xDB7F:
         return "Non Private Use High Surrogate" + hexcode
     elif 0xDB80 <= dec <= 0xDBFF:

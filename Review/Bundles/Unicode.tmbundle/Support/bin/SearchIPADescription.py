@@ -6,6 +6,7 @@ import os
 import codecs
 import unicodedata
 from binascii import hexlify
+from UniTools import wunichr, wuniord
 
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
@@ -13,17 +14,6 @@ sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 
 sourceFile = "IPANames.txt"
-
-
-def wunichr(dec):
-    return ("\\U%08X" % dec).decode("unicode-escape")
-
-def wuniord(s):
-    if s:
-        if u"\udc00" <= s[-1] <= u"\udfff" and len(s) >= 2 and u"\ud800" <= s[-2] <= u"\udbff":
-            return (((ord(s[-2])&0x3ff)<<10 | (ord(s[-1])&0x3ff)) + 0x10000)
-        return (ord(s[-1]))
-    return (-1)
 
 if len(sys.argv) != 3:
     print "Wrong number of arguments."

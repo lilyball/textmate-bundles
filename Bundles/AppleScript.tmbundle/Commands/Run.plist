@@ -1,50 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "AppleScript Runner" "${TM_FILENAME:-}"
+	<string>/usr/bin/env ruby -e'
+require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
+require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
 
-"${TM_RUBY:-ruby}" -e '
-  require "iconv"
-  require "open3"
-  require "#{ENV["TM_SUPPORT_PATH"]}/lib/escape"
+TextMate.save_current_document
 
-  scrpt = STDIN.read
-  scrpt = Iconv.conv("macroman//TRANSLIT", "utf-8", scrpt)
+error_fd = nil
+document = File.read(ENV["TM_FILEPATH"])
 
-  stdin, stdout, stderr = Open3.popen3("osascript", "-ss")
-  Thread.new { stdin.write scrpt; stdin.close }
+TextMate::Executor.run(ENV["TM_OSASCRIPT"] || "osascript", "-ss", ENV["TM_FILEPATH"], :version_args =&gt; ["-e", "\"AppleScript \" &amp; (AppleScript'\''s version as string)"]) do |str, type|
+  error_fd ||= IO.for_fd(ENV["TM_ERROR_FD"].to_i)
+  case type
+  when :err
+    if str =~ /^([^\:]+):(\d+):(\d+): (.*?): (.*) \((-?\d+)\)$/ then
+      filepath, start,  stop, err, msg, status = $1, $2.to_i, $3.to_i, $4, $5, $6
 
-  res = stdout.read
-  puts "&lt;pre style=\"white-space:normal\"&gt;#{htmlize res}&lt;/pre&gt;" unless res.empty?
+      err = err.gsub(/\b\w(?=\w{3,})/) { |m| m.upcase }
+      
+      error_fd &lt;&lt; "&lt;div id=\"exception_report\" class=\"framed\"&gt;\n"
+      error_fd &lt;&lt; "&lt;p id=\"exception\"&gt;&lt;strong&gt;#{htmlize err}&lt;/strong&gt;: #{htmlize msg}&lt;/p&gt;\n"
 
-  if stderr.read =~ /^(\d+):(\d+): (.*?): (.*) \((-?\d+)\)$/ then
-    start, stop, err, msg, status = $1.to_i, $2.to_i, $3, $4, $5
+      from = document[0..start].rindex(/^/)
+      to = start + document[start..-1].index(/$/)
+      src = document[from...to]
 
-    err = err.gsub(/\b\w(?=\w{3,})/) { |m| m.upcase }
-    puts "&lt;h2&gt;#{htmlize err}&lt;/h2&gt;"
-    puts "&lt;p&gt;#{htmlize msg}&lt;/p&gt;"
+      line = document[0...start].count("\n") + 1
+      column = start - from + 1
 
-    from = scrpt[0..start].rindex(/^/)
-    to = start + scrpt[start..-1].index(/$/)
-    src = Iconv.conv("utf-8", "macroman", scrpt[from...to])
+      link = "txmt://open?line=#{line}&amp;column=#{column}"
+      error_fd &lt;&lt; "&lt;pre&gt;#{src}\n"
+      error_fd &lt;&lt; "#{"&amp;nbsp;" * column}↑&lt;/pre&gt;"
+      error_fd &lt;&lt;  "&lt;blockquote&gt;&lt;a href=\"#{link}\"&gt;line #{line}, column #{column}&lt;/a&gt; in #{ENV["TM_DISPLAYNAME"]}\n"
 
-    line = scrpt[0...start].count("\n") + 1
-    column = start - from + 1
-
-    link = "txmt://open?line=#{line}&amp;column=#{column}"
-    puts "&lt;blockquote&gt;&lt;a href=\"#{link}\"&gt;line #{line}, column #{column}&lt;/a&gt;: &lt;code&gt;#{src}&lt;/code&gt;&lt;/blockquote&gt;"
-
-    puts "&lt;p&gt;Error #{status}.&lt;/p&gt;"
-  else
-    puts "&lt;p&gt;Program terminated.&lt;/p&gt;"
-  end'
-
-html_footer</string>
+      error_fd &lt;&lt; "&lt;p&gt;Error #{status}.&lt;/p&gt;\n"
+      error_fd &lt;&lt; "&lt;/div&gt;\n"
+      
+      error_fd.flush
+      ""
+    else
+      "&lt;span class=\"err\" style=\"color:red;\"&gt;#{htmlize(str)}&lt;/span&gt;&lt;br/&gt;"
+    end
+  when :out
+    htmlize(str)
+  end
+end' &lt;&amp;0
+</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

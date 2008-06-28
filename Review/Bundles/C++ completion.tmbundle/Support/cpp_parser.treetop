@@ -1,10 +1,10 @@
 grammar Cpp
 rule cpp
 statement+ {
-	def types
+	def types(scope)
 		r = { :field => {}, :typedefs => {}}
 		elements.each do |e|
-			key, value, type = e.types
+			key, value, type = e.types(scope)
 			if key && value
 			  if key == :current_type
 			    r[key] = value
@@ -23,8 +23,8 @@ end
 
 rule statement
  'typedef' (explicit_space 'typename')? explicit_space complete_declare {
-	def types	  
-	  key, value, type = complete_declare.types
+	def types(scope)	  
+	  key, value, type = complete_declare.types(scope)
     return key, value, :typedefs
 	end
 }
@@ -35,23 +35,23 @@ current_type
 allan_macro
 /dec 
 {
-	def types
+	def types(scope)
 	end
 }
 / 
 string {
-	def types
+	def types(scope)
 	end
 }
 / other {
-	def types
+	def types(scope)
 	end
 }
 end
 
 rule complete_declare
 st:(beginnings space)? dec space variable en:(space "=" !"=")? {
-	def types
+	def types(scope)
 	  #heuristic to separate multiplications from pointer declarations
 	  unless st.empty?
 	    t = st.text_value.strip
@@ -62,7 +62,7 @@ st:(beginnings space)? dec space variable en:(space "=" !"=")? {
       end
     end
     
-		return variable.text_value , dec.types ,:type
+		return variable.text_value , dec.types(scope) ,:type
 	end
 }
 end
@@ -70,8 +70,8 @@ end
 
 rule current_type
 	method_chain prefix {
-		def types
-			r = method_chain.types
+		def types(scope)
+			r = method_chain.types(scope)
 			r << {:prefix => prefix.text_value}
 			return :current_type, r
 		end
@@ -80,7 +80,7 @@ end
 
 rule method_chain
 	variable p:parens? tie m:method_chain? {
-		def types
+		def types(scope)
 		  r = []
       if p.empty?
 		    val = :field
@@ -89,16 +89,16 @@ rule method_chain
 		  end
 		  num = (tie.text_value == "->" ? 1 : 0)
 		  r <<  { :kind => val, :name => variable.text_value, :dref => num }		  
-		  r << m.types unless m.empty? 
+		  r << m.types(scope) unless m.empty? 
 		  return r.flatten
 		end
 	}
 	
 /
 '(' space dref:"*"* space m1:method_chain? variable p:parens? ')' tie m2:method_chain? {
-  def types
+  def types(scope)
     r = []
-    r = m1.types unless m1.empty?
+    r = m1.types(scope) unless m1.empty?
     if p.empty?
 	    val = :fields
 	  else
@@ -106,7 +106,7 @@ rule method_chain
 	  end
 	  num = dref.text_value.size + (tie.text_value == "->" ? 1 : 0)
     r <<  { :kind => val, :name => variable.text_value, :dref => num }		  
-    r << m2.types unless m2.empty? 
+    r << m2.types(scope) unless m2.empty? 
     return r.flatten
   end
 }
@@ -115,9 +115,9 @@ end
 
 rule allan_macro
 	"iterate(" space it:variable space ',' space dref:'*'* space mc:method_chain? variable p:parens? space ')' {
-		def types
+		def types(scope)
 		    t = []
-		    t << mc.types unless mc.empty?
+		    t << mc.types(scope) unless mc.empty?
 		    if p.empty?
     	      val = :field
     		else
@@ -159,9 +159,9 @@ end
 
 rule std
 "std::" variable template it:"::iterator"? pointer:"*"* {
-	def types # key
+	def types(scope) # key
 	  key = :type
-		r= template.types
+		r= template.types(scope)
 		r[key] = "std::" + variable.text_value + it.text_value
 		r[:pointers] = pointer.text_value.size()
 		return r
@@ -172,7 +172,7 @@ end
 
 rule declaration
 text:("::"? variable )+ pointer:"*"* {
-	def types #key
+	def types(scope) #key
  
 	  key = :type
 	  r = {}
@@ -190,19 +190,26 @@ end
 
 rule variable
 [a-zA-Z_] [_a-zA-Z0-9]* {
-	def types		 
+	def types(scope)		 
 	end
 }
 end
 
 rule template
 '<' space contains:(first:dec space following:(',' space val:dec )*)? space '>' {
-	def types
+	def types(scope)
 		r = {}
 		if contains.elements
-			r[1] = contains.elements.first.types 
-			i = 2
-			contains.following.elements.each {|e| r[i] =e.val.types; i+=1} if contains.following.elements
+			r[1] = contains.elements.first.types(scope)
+			r[1][:scope] = scope
+			if contains.following.elements
+			  i = 2
+			  contains.following.elements.each do |e|
+			    r[i] =e.val.types(scope)
+			    r[i][:scope] = scope
+			    i+=1
+		    end
+		  end
 		end
 		
 		return :t => r

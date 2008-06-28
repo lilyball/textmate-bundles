@@ -93,6 +93,7 @@ end
 
 
 class CppMethodCompletion
+  #require "cpp_parser"
   #require "#{ENV['TM_BUNDLE_SUPPORT']}/cpp_parser"
   Treetop.load "#{ENV['TM_BUNDLE_SUPPORT']}/cpp_parser"
   attr_accessor :res_hier
@@ -106,6 +107,7 @@ class CppMethodCompletion
 #    "map" => {:classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"std::pair"}]}},},
 #       :methods => { "begin" =>[{ :type => "std::map::iterator", :a => "()"}],}}}}}}
 #    
+  @res_hier = {}
     @std = {
       :namespace => { "std" =>{ :classes => {
     "map" => { :methods => { 
@@ -172,18 +174,19 @@ class CppMethodCompletion
                                     },
       :classes => {"iterator" => {:methods =>{"->" => [{:a =>"",:type=>1}] }},},
                        },
-      "pair" =>{:methods=>{"first"=>[{:a=>"",:type=>1}],
-                           "second"=>[{:a=>"",:type=>2}]
-                                          }
+      "pair" =>{:field=>{"first"=>{:a=>"",:type=>1},
+                           "second"=>{:a=>"",:type=>2}
+                                          },
+                 # :methods =>{"hello" => [{:a =>"",:type=>1}] }
                                },
                              },},},
    :classes => {
-      "a" => {:methods => {"methodA1"=>[{:a=>"()",:type => "b"}], 
-                           "methodA2"=>[{:a=>"()",:type => "c"}]}},
-      "b" => {:methods => {"methodB1"=>[{:a=>"()",:type => "a"}], 
-                           "methodB2"=>[{:a=>"()",:type => "c"}]}},
-      "c" => {:methods => {"methodC1"=>[{:a=>"()",:type => "a"}], 
-                           "methodC2"=>[{:a=>"()",:type => "b"}]}},
+      "a" => {:methods => {"methodAb"=>[{:a=>"()",:type => "b"}], 
+                           "methodAc"=>[{:a=>"()",:type => "c"}]}},
+      "b" => {:methods => {"methodBa"=>[{:a=>"()",:type => "a"}], 
+                           "methodBc"=>[{:a=>"()",:type => "c"}]}},
+      "c" => {:methods => {"methodCa"=>[{:a=>"()",:type => "a"}], 
+                           "methodCb"=>[{:a=>"()",:type => "b"}]}},
                          },
     }
   end
@@ -196,8 +199,12 @@ class CppMethodCompletion
     mat = (/^#{item[:prefix]}./)
     symbolDict.each do |key, value|
       if key =~ mat
-        value.each do |item|
-          suggestions << { 'display' => key + item[:a], 'cand' => key+"\t"+item[:a], 'match'=> key, 'type'=> "functions"}
+        if value.kind_of?(Array)
+          value.each do |item|
+            suggestions << { 'display' => key + item[:a], 'cand' => key+"\t"+item[:a], 'match'=> key, 'type'=> "functions"}
+          end
+        else
+          suggestions << { 'display' => key + value[:a], 'cand' => key+"\t"+value[:a], 'match'=> key, 'type'=> "functions"}
         end
       end
     end
@@ -253,8 +260,33 @@ class CppMethodCompletion
     return r, lookInUsed
   end
   
+  def applyTypedefHelp(old, typedef)
+      vtp = old[:pointers] || 0
+      old[:pointers] = vtp + typedef[:pointers]
+      old[:t] = typedef[:t]
+  end      
+  
+  def applyTypedef(r, typedef)
+    old = r
+    if typedef == nil
+      typedef = r
+    else
+      old = r.dup
+      if old.kind_of?(Array)
+        old.each do |elem|
+          applyTypedefHelp(elem, typedef)
+        end
+      else
+        applyTypedefHelp(old, typedef)
+      end
+    end
+    return typedef, old
+    
+  end
+  
   def lookupTHelp(hierachy, scope, qualifier, verify_presence_of)
     scopeCopy = scope.dup
+    typedef = nil
     default = [:namespace, :classes]
     qualiferDefault = [:namespace, :classes, :typedefs]
     hierachy.reverse_each do |lib|
@@ -270,6 +302,7 @@ class CppMethodCompletion
         #k = traverse(verify_presence_of, r)
         if k == :typedefs
           qualifier.replace(r[:type].split("::"))
+          typedef, junk = applyTypedef(r, typedef)
           retry
         end
 
@@ -278,6 +311,7 @@ class CppMethodCompletion
           result[elem]
         end
 
+        junk, r = applyTypedef(r, typedef) if typedef && r
         return r if r
         scope.pop
       end
@@ -289,7 +323,6 @@ class CppMethodCompletion
   
   
   def lookup(scope, qualifier, verify_presence_of)
-    original = scope.dup
     returnT = nil
     std_hier = @std
     user_hier = {}
@@ -298,51 +331,65 @@ class CppMethodCompletion
      hierachy << res_hier
     end
     returnT = lookupTHelp(hierachy, scope, qualifier, verify_presence_of)
-    if returnT.nil?
-      #return returnT
-      po "could not look up '#{qualifier.join("::")}' in scope '#{original.join("::")}'"
-    else
-      return returnT
-    end
+    return returnT
   end
   
-  def dereference(variableT, item, currentScope)
+  # dereferences containers iterators
+  def dereference(variableT, item, currentScope, qualifier)
+    origScope = currentScope.dup
+    origQualifier = qualifier.dup
     vtp = variableT[:pointers] || 0
-    ip = item[:pointers] || 0
-    if ip >= vtp
-      return false
+    ip = item[:dref]
+    if ip <= vtp
+      return nil
     else
-      val = lookupT(variableT, currentScope)
+      val = lookup(currentScope, qualifier, [:methods, "->"])
       unless val.nil?
-        updateTemplate(variableT, val)
-        return true
+        return val[0]
+      else
+        currentScope.replace origScope
+        qualifier.replace origQualifier
+        return nil
       end
     end
   end
   
-  def updateScope(variableT, currentScope)
-  end
-  
+  # modifies scope and qualifier
   def lookupT(item, scope, qualifier)
+    original = scope.dup
     r = lookup(scope, qualifier, [item[:kind], item[:name]])
+    if r.nil?
+      po "could not look up '#{qualifier.join("::")}' in scope '#{original.join("::")}'"
+    end
     return r[0] if item[:kind] == :methods
     return r
   end
   
   def lookupList(item, scope, qualifier)
-    r = lookup(scope, qualifier, [:methods])
-    if r.nil?
+    r = lookup(scope.dup, qualifier.dup, [:methods])
+    k = lookup(scope.dup, qualifier.dup, [:field])
+    puts "r k"
+    p r
+    p k
+    if r.nil? && k.nil?
       po "could not find symbols starting with #{item[:prefix]}"
+    elsif r.nil?
+      return k
+    elsif k.nil?
+      return r
+    else
+      return k.merge(r)
     end
-    
-    return r
   end
 
-  def returnTypeHandling(returnType, templates, qualifier)
+  def returnTypeHandling(returnType, templates, currentScope, qualifier)
     value = returnType[:type]
     if value.kind_of? Numeric
+      #po templates.inspect unless templates[value]
       returnType = templates[value].dup
-      returnTypeHandling(returnType, templates, qualifier)
+      templates.replace( returnType[:t]) if returnType[:t]
+      currentScope.replace returnType[:scope].dup
+      returnTypeHandling(returnType, templates, currentScope, qualifier)
     elsif value.kind_of? Hash
       updateTemplate(variableT, returnType)
     else
@@ -362,8 +409,25 @@ class CppMethodCompletion
       if item[:name]
         # scope = rubinius::Array::#localScope
         returnType = lookupT(item, currentScope, qualifier)
-        templates = returnType[:t] if returnType[:t]
-        returnTypeHandling(returnType,templates, qualifier)
+        if returnType[:t]
+          templates = returnType[:t].dup
+        end
+        returnTypeHandling(returnType,templates, currentScope, qualifier)
+        # we can mess up the returnType since it is not used again until next
+        # loop where it is replaced anyway
+        p templates
+        if returnType = dereference(returnType, item, currentScope, qualifier)
+          puts "item"
+          p item
+          p currentScope
+          p qualifier
+          p templates
+         # pd returnType.inspect
+          if returnType[:t]
+            templates = returnType[:t].dup
+          end
+          returnTypeHandling(returnType,templates, currentScope, qualifier)
+        end
 
       elsif item[:prefix]
         if qualifier.nil?
@@ -383,8 +447,8 @@ def print()
   TextMate.exit_discard if a.nil?
   qualifier = [] 
   namespace = ["namespace", "className", "#localScope" ]
-  temp = a.types
-  @res_hier = {}
+  temp = a.types namespace.dup
+
   k = namespace.inject(@res_hier) do |result, elem|
     a = {}
     result[:classes] = { elem => a}
@@ -393,13 +457,21 @@ def print()
   k.replace( temp)
   #pd @res_hier.inspect
 
-  # TextMate.exit_discard unless res_hier[:current_type]
+  po "No completion available" unless temp[:current_type]
   type_chain = temp[:current_type].dup
   rightMostClass(type_chain, namespace, qualifier)
 
 end
 
 end
+#
+#test = CppMethodCompletion.new nil
+#qualifier = [] 
+#namespace = ["namespace", "className", "#localScope" ]
+#test.res_hier = {:classes=>{"namespace"=>{:classes=>{"className"=>{:classes=>{"#localScope"=>{:typedefs=>{"x"=>{:type=>"std::vector", :pointers=>0, :t=>{1=>{:type=>"a", :scope=>["namespace", "className", "#localScope"], :pointers=>0}}}}, :current_type=>nil, :field=>{"v"=>{:type=>"x", :pointers=>0}}}}}}}}}
+#k = [{:kind=>:field, :dref=>0, :name=>"v"}, {:kind=>:methods, :dref=>1, :name=>"begin"}, {:prefix=>""}]
+#test.rightMostClass(k, namespace, qualifier)
+#
 #{:current_type=>[{:name=>"map", :kind=>:field, :bind=>"."},
 #                 {:name=>"begin", :kind=>:method, :bind=>"->"},
 #                 {:name=>"second", :kind=>:field, :bind=>"."},

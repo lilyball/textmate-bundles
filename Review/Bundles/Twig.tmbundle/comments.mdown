@@ -1,0 +1,30 @@
+# Twig Comments
+
+## Infininight - 2008-06-26
+
+* Menu needs to be cleaned up, select the bundle in the bundle editor and you'll be able to edit the structure of the menu and add groups, dividers, etc.
+* Need to add comment preferences so the generic comment/uncomment commands work. (See most other bundles for an example.)
+* The filter snippet seems to be misnamed?
+* The Translate command can simply be a snippet with the same content of the command sans echo.
+
+Suggestions:
+
+* The blank tag snippets could be bound to ⌃> as in erb/ruby templates. In that we have it set so when you hit it repeatedly the tag cycles between the options. Nicely ties in since the HTML tag insert is ⌃< The goal is to have all embedded languages use this to insert tags.
+* The filter snippets could be bound to a tab trigger of | one less shortcut to remember. :)
+* You may want some completion preferences scoped to inside the tags. To the valid default words, etc.
+
+#### Language Grammar
+
+* Grammar should have a shortcut of ⌃⌥⇧T
+* The first variable rule should be a match not a begin/end.
+* comment.line should be comment.block
+* There's no reason for variable.other to use a begin/end, should just be a match.
+* string.other should be string.quoted.(single|double).twig respectively.
+* The scope suffixes of twig.template.tag and twig.template aren't needed as you can use scopes to determine where a scope is located. .twig alone should suffice.
+* Template Tags should be named meta.tag.template, this is a new standard we're introducing into all meta.tag and html template languages. See <http://pastie.textmate.org/private/ghcjf0b86u2qheoghfuw>
+* entity.other.twig.tagbraces should instead be punctuation.definition.tag.(begin|end) to match HTML tags.
+* The scope for ${} tags should likely be meta.tag.template.expression as they contain more than just the variable. The variable name could still have the variable scope.
+* The spaces inside the folding rules should be replaced with \s*
+* keyword.operator does not match the list inside the twig spec?
+* For support.function.filter the | should really be a keyword.operator
+* Escapes missing inside quoted string rules.

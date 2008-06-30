@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commands</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<string>moveToEndOfParagraph:</string>
+		</dict>
+		<dict>
+			<key>argument</key>
+			<dict>
+				<key>beforeRunningCommand</key>
+				<string>nop</string>
+				<key>command</key>
+				<string>#!/usr/bin/env ruby
+
+i = 1
+if ENV['TM_CURRENT_LINE'] =~ /^\s*(\d+):/
+	i = $1.to_i + 1
+end
+
+puts
+print "${1:#{i}}${1/.+/: /m}${2:i32} ${3:field}${4/.+/ = /m}${4:value},$0"
+</string>
+				<key>fallbackInput</key>
+				<string>line</string>
+				<key>input</key>
+				<string>none</string>
+				<key>output</key>
+				<string>insertAsSnippet</string>
+			</dict>
+			<key>command</key>
+			<string>executeCommandWithOptions:</string>
+		</dict>
+	</array>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>struct field</string>
+	<key>scope</key>
+	<string>meta.struct.thrift</string>
+	<key>uuid</key>
+	<string>ED84802A-BD69-4810-9F0B-547A9DA70033</string>
+</dict>
+</plist>

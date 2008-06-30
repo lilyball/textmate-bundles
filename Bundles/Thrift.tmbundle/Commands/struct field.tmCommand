@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+# this command is intended to be used to generate the struct field macro
+# the struct field macro is ^E followed by this command.
+
+i = 1
+if ENV['TM_CURRENT_LINE'] =~ /^\s*(\d+):/
+	i = $1.to_i + 1
+end
+
+puts
+print "${1:#{i}}${1/.+/: /m}${2:i32} ${3:field}${4/.+/ = /m}${4:value},$0"
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>struct field</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>meta.struct.thrift</string>
+	<key>uuid</key>
+	<string>9240E318-0643-4BF7-8EBA-DD947C8CB7B9</string>
+</dict>
+</plist>

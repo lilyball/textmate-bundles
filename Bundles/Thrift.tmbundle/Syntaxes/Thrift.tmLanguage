@@ -596,103 +596,93 @@
 		</dict>
 		<key>field</key>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>(?x)
+						(?&lt;![^\s{(])
+						\s*(\d+\s*:)?\s*
+						(?:	(required|optional)(?!\S)\s*
+						|	(?=.)(?!=required|optional|\d)
+						)</string>
+			<key>beginCaptures</key>
 			<dict>
-				<key>10</key>
-				<dict>
-					<key>name</key>
-					<string>constant.other.field-data.thrift</string>
-				</dict>
-				<key>11</key>
-				<dict>
-					<key>name</key>
-					<string>string.quoted.thrift</string>
-				</dict>
-				<key>13</key>
-				<dict>
-					<key>name</key>
-					<string>meta.array.thrift</string>
-				</dict>
-				<key>14</key>
-				<dict>
-					<key>name</key>
-					<string>meta.map.thrift</string>
-				</dict>
-				<key>15</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.xsd-optional.thrift</string>
-				</dict>
-				<key>16</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.xsd-nillable.thrift</string>
-				</dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>entity.other.field-id.thrift</string>
 				</dict>
-				<key>3</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.requiredness.thrift</string>
 				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.field.thrift</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.cpp-type.thrift</string>
-				</dict>
-				<key>6</key>
-				<dict>
-					<key>name</key>
-					<string>variable.other.field-name.thrift</string>
-				</dict>
-				<key>8</key>
-				<dict>
-					<key>name</key>
-					<string>constant.numeric.float.thrift</string>
-				</dict>
-				<key>9</key>
-				<dict>
-					<key>name</key>
-					<string>constant.numeric.integer.thrift</string>
-				</dict>
 			</dict>
-			<key>match</key>
-			<string>(?x)(?&lt;field&gt;
-						(?&lt;![^\s{(])
-						(\d+\s*:)?\s*
-						(required|optional)?\s*
-						(?:
+			<key>end</key>
+			<string>[,;]|$</string>
+			<key>name</key>
+			<string>meta.field.thrift</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?x)
 							(?&lt;ft&gt;
 								map\s*&lt;\s*\g&lt;ft&gt;\s*,\s*\g&lt;ft&gt;\s*&gt; |
 								set\s*&lt;\s*\g&lt;ft&gt;\s*&gt; |
 								list\s*&lt;\s*\g&lt;ft&gt;\s*&gt;\s*(cpp_type(?!\S))? |
 								[a-zA-Z_][\w.]*
 							)\s*
-							(?:([a-zA-Z_][\w.]*)\s* # identifier
-								(?:=\s* # const value
-									(?&lt;cv&gt;
-										(?&lt;float&gt;[+-]?\d*\.\d+([eE][+-]?\d+)?) | # float
-										(?&lt;integer&gt;[+-]?\d+) | # integer
-										(?&lt;identifier&gt;[a-zA-Z_][\w.]*) | # identifier
-										(?&lt;string&gt;(?&lt;quote&gt;['"])(?&gt;.*?\k&lt;quote&gt;?))
-										(?&lt;array&gt;\[\g&lt;cv&gt;\])
-										(?&lt;map&gt;\{\g&lt;cv&gt;\})
-									)
-								)?\s* # end const value
-								(?&lt;xsd_opt&gt;(?&lt;!\S)xsd_optional(?!\S))?\s*
-								(?&lt;xsd_nil&gt;(?&lt;!\S)xsd_nillable(?&lt;!\S))?\s*
-								[,;]?
-							)?
-						)?
-						)</string>
+							(?:([a-zA-Z_][\w.]*)\s*)? # identifier
+							</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.field.thrift</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.cpp-type.thrift</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>variable.other.field-name.thrift</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=[,;])|$</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>=</string>
+							<key>end</key>
+							<string>[,;]|$</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>match</key>
+									<string>(?&lt;!\S)(xsd_optional)\b</string>
+									<key>name</key>
+									<string>keyword.other.xsd_optional.thrift</string>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>(?&lt;!\S)(xsd_nillable)\b</string>
+									<key>name</key>
+									<string>keyword.other.xsd_nillable.thrift</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#value</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
 		</dict>
 		<key>value</key>
 		<dict>

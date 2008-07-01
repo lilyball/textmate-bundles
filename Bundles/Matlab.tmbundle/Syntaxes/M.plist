@@ -5,7 +5,7 @@
 	<key>foldingStartMarker</key>
 	<string>^\s*(function|if|switch|while|for|try|unwind_protect)\b(?!.*\bend\b).*$</string>
 	<key>foldingStopMarker</key>
-	<string>^\s*(end|endif|endwhile|endswitch|endfunction|end_try_catch|end_unwind_protect|return)\b.*$</string>
+	<string>^\s*(end|endif|endwhile|endfor|endswitch|endfunction|end_try_catch|end_unwind_protect|return)\b.*$</string>
 	<key>keyEquivalent</key>
 	<string>^~M</string>
 	<key>name</key>
@@ -162,8 +162,10 @@
 			<string>comment.line.pound_sign.matlab</string>
 		</dict>
 		<dict>
+			<key>comment</key>
+			<string>TODO: add look ahead to check there's not closing quote?</string>
 			<key>match</key>
-			<string>[a-zA-Z)\]]'</string>
+			<string>\b[a-zA-Z]*[a-zA-Z)\]]'</string>
 			<key>name</key>
 			<string>variable.other.transpose.matlab</string>
 		</dict>

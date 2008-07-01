@@ -598,10 +598,10 @@
 		<dict>
 			<key>begin</key>
 			<string>(?x)
-						(?&lt;![^\s{(])
-						\s*(\d+\s*:)?\s*
+						(?&lt;![^\s{(])(?=\S)
+						(\d+\s*:)?\s*
 						(?:	(required|optional)(?!\S)\s*
-						|	(?=.)(?!=required|optional|\d)
+						|	(?=\S)(?!=required|optional|\d)
 						)</string>
 			<key>beginCaptures</key>
 			<dict>

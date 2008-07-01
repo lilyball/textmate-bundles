@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby -wKU
 require ENV['TM_SUPPORT_PATH'] + "/lib/escape.rb";
 text = STDIN.read
-text = `pbpaste` if text.empty?
+text = `export __CF_USER_TEXT_ENCODING=0x1F5:0x8000100:0x8000100; pbpaste` if text.empty?
 text.gsub!(/(^\s+|\s+$)/,"")
 text.gsub!(/\s{1,}/," ")
 print "${1:${2:x} &lt;- }c("

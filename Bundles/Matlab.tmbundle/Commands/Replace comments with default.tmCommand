@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+input = STDIN.readlines
+
+input.each do |str|
+  puts case str
+  when /\A(.*?)#+\s*(.*)$/: $1 + ENV['TM_COMMENT_START'] + $2  
+  when /\A(.*?)%+\s*(.*)$/: $1 + ENV['TM_COMMENT_START'] + $2  
+  # Default case
+  else str
+  end
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^@C</string>
+	<key>name</key>
+	<string>Replace comments with default</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>source.matlab</string>
+	<key>uuid</key>
+	<string>321567FE-2E57-4D5C-BEFB-98FE869FF4D7</string>
+</dict>
+</plist>

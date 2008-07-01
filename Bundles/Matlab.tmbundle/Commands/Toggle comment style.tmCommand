@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+print case str = STDIN.read
+  when /\A(.*?)\%(.*)$/: $1 + '#' + $2  
+  when /\A(.*?)#(.*)$/: $1 + '%' + $2
+  # Default case
+  else str
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@C</string>
+	<key>name</key>
+	<string>Toggle comment style</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.matlab</string>
+	<key>uuid</key>
+	<string>BEAE3101-B710-4BDE-A178-247F9FB6C018</string>
+</dict>
+</plist>

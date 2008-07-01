@@ -599,8 +599,8 @@
 			<key>begin</key>
 			<string>(?x)
 						(?&lt;![^\s{(])(?=\S)
-						(\d+\s*:)?\s*
-						(?:	(required|optional)(?!\S)\s*
+						(\d+\s*:)?[ \t]*
+						(?:	(required|optional)(?!\S)[ \t]*
 						|	(?=\S)(?!=required|optional|\d)
 						)</string>
 			<key>beginCaptures</key>
@@ -630,8 +630,8 @@
 								set\s*&lt;\s*\g&lt;ft&gt;\s*&gt; |
 								list\s*&lt;\s*\g&lt;ft&gt;\s*&gt;\s*(cpp_type(?!\S))? |
 								[a-zA-Z_][\w.]*
-							)\s*
-							(?:([a-zA-Z_][\w.]*)\s*)? # identifier
+							)[ \t]*
+							(?:([a-zA-Z_][\w.]*)[ \t]*)? # identifier
 							</string>
 					<key>beginCaptures</key>
 					<dict>

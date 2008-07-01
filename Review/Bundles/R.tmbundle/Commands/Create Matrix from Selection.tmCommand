@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -11,7 +11,24 @@ text = STDIN.read
 text = `pbpaste` if text.empty?
 text &lt;&lt; "\n" if ! text.match(/\n$/)
 rcnt = text.count "\n"
-print "${1:${2:x} &lt;- }matrix(c("+e_sn(text).sub(/\s+$/,"").gsub(/([a-zA-Z]+)/, '"\1"').gsub(/\s+/,", ") + "), nrow=#{rcnt}, byrow=TRUE)"</string>
+
+text.gsub!(/(^\s+|\s+$)/,"")
+text.gsub!(/\s{1,}/," ")
+print "${1:${2:x} &lt;- }matrix(c("
+out = Array.new
+text.split.each{|b|
+	if b.to_f == 0 &amp;&amp; ! b.match(/-?\.?0\.?0*/) || b.match(/^\d+[^\d\-\.eE]+/)
+		out &lt;&lt; '"' + e_sn(b) + '"'
+	else
+		out &lt;&lt; e_sn(b)
+	end
+}
+print out.join(', ')
+print "), nrow=#{rcnt}, byrow=TRUE)"
+
+
+
+#print "${1:${2:x} &lt;- }matrix(c("+e_sn(text).sub(/\s+$/,"").gsub(/([a-zA-Z]+)/, '"\1"').gsub(/\s+/,", ") + "), nrow=#{rcnt}, byrow=TRUE)"</string>
 	<key>fallbackInput</key>
 	<string>none</string>
 	<key>input</key>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -69,9 +69,9 @@ echo -n 0 &gt; "$HOME/Rdaemon/history"/Rhistcounter.txt
 POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 PROMPT=$(tail -n 1 "$RDRAMDISK"/r_out | sed 's/&gt; $//')
 
-if [ ! -z "$TM_DIRECTORY" ]; then
-	echo -e  "@|setwd('$TM_DIRECTORY')" &gt; "$RDHOME"/r_in
-fi
+#if [ ! -z "$TM_DIRECTORY" ]; then
+#	echo -e  "@|setwd('$TM_DIRECTORY')" &gt; "$RDHOME"/r_in
+#fi
 
 #send task to Rdaemon and give Rdaemon the chance to read from the pipe
 echo "$TASK" | sed 's/\\/\\\\/g' | while read LINE
@@ -98,6 +98,28 @@ do
 	echo "$CP `tail -n 1 "$RDRAMDISK"/r_out`"
 	sleep 0.1
 done|CocoaDialog progressbar --title "Rdaemon is busy ..."
+
+#read only the current response from Rdaemon
+POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
+OFF=$(($POSNEW - $POS + 2))
+#clean/escape the response
+echo -en "$PROMPT"
+RES=$(tail -c $OFF "$RDRAMDISK"/r_out | perl -e '
+	undef($/); $a=&lt;&gt;;
+	$a=~s/\x0D{1,}/\x0D/sg;
+	while($a=~m/(.*?)\x0D&lt;.{50}(.) +\x08+(.*)/) { $a=~s/(.*?)\x0D&lt;.{50}(.) +\x08+(.*)/$1$2$3/sg; }
+	$a=~s/\\/\\\\/g;$a=~s/\`/\\\`/sg;$a=~s/\$/\\\$/sg;$a=~s/_\x08//sg;
+	$a=~s/\x07//sg;
+	$a .= "\n&gt; " if ($a!~/&gt; $/ &amp;&amp; $a!~/\+ $/);
+	print "$a";
+')
+ERR=$(echo -en "$RES" | egrep -i '^\s*err' | wc -l)
+if [ $ERR -gt 0 ]; then
+	echo -en "$RES" &gt; /tmp/TMRdaemon_error.rCon
+	mate /tmp/TMRdaemon_error.Rcon
+	exit
+fi
+
 
 if [ "$RdaemonWASrunning" == "0" ]; then
 #read only the current response from Rdaemon

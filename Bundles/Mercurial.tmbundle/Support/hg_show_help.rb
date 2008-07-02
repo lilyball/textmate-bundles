@@ -11,7 +11,7 @@ body = <<-HTML
 
 <p>This document describes the commands of the TextMate <a href="http://www.selenic.com/mercurial/">Mercurial</a> bundle and how you can <a href="#conf">fine-tune</a> their behavior. For general Mercurial help and tutorial, you should read the Mercurial man pages (<a href="man:hg.1">hg(1)</a>, <a href="man:hgrc.5">hgrc(5)</a>, <a href="man:hgmerge.1">hgmerge(1)</a>, <a href="man:hgignore.5">hgignore(5)</a>), read the <a href="http://hgbook.red-bean.com/" title="Distributed revision control with Mercurial">hgbook</a> or check the <a href="http://www.selenic.com/mercurial/">wiki</a>.</p>
 
-<p><strong>NB: <a href="http://www.selenic.com/mercurial/release/">Mercurial 0.9.1 or greater</a> is required.</strong> (Tested up to 0.9.4).</p>
+<p><strong>NB: <a href="http://www.selenic.com/mercurial/release/">Mercurial 0.9.1 or greater</a> is required.</strong> (Tested up to 1.0.1).</p>
 
 <h2><a name="commands">Commands</a></h2>
  
@@ -207,7 +207,7 @@ body = <<-HTML
 
 <h2><a name="conf">Configuration Options</a></h2>
  
- <p>These shell variables allow you to tweak the behavior of the certain commands if need be. The default values should make sense for normal use.</p>
+ <p>These shell variables allow you to tweak the behavior of the certain commands if need be. The default values should make sense for normal use. Learn <a href="help:anchor='static_variables'%20bookID='TextMate%20Help'">how to set these variables</a>.</p>
  
  <dl>
 	<dt><a name="tm_hg">$TM_HG</a></dt>
@@ -228,13 +228,20 @@ body = <<-HTML
 	   <div class="description">With this option you can adjust whether the windows of <a href="#Annotate">Annotate</a> close if you click on a link which opens a file in TM.  Set it to <code>1</code> or <code>true</code> if windows should close or to something else if they should not.</div>
 	</dd>
 
-	<dt><a name="tm_hg_log">$TM_HG_LOG_LIMIT</a></dt>
-	<dd>
-	   <div class="default"><code>10</code></div>
-	   <div class="description">The number of messages to show. <code>0</code> means no limit.</div>
-	</dd>
-	
-	
+   <dt><a name="tm_hg_log">$TM_HG_LOG_LIMIT</a></dt>
+   <dd>
+      <div class="default"><code>10</code></div>
+      <div class="description">The number of messages to show. <code>0</code> means no limit.</div>
+   </dd>
+   
+   <dt><a name="tm_hg_ext_diff">$TM_HG_EXT_DIFF</a></dt>
+   <dd>
+      <div class="default"><code>None</code></div>
+      <div class="description">Specify the external GUI diff tool to use. If this variable is not set, the bundle will use <code>hg diff</code>, output a .diff file and open it in TM. <br />
+         <strong>To use <a href="http://changesapp.com/" title="Changes">Changes.app</a>:</strong> Follow <a href="http://wiki.changesapp.com/index.php/SCM_Integration_Scripts#Mercurial_.28Hg.29_Integration">these instructions</a> to setup Changes integration in Mercurial, then set <code>TM_HG_EXT_DIFF</code> to <code>chdiff</code>.<br />
+        <strong> To use FileMerge.app:</strong> Follow <a href="http://www.selenic.com/mercurial/wiki/index.cgi/TipsAndTricks#head-eb500c4bf0eed0b501bb7a5266fd3c4729105fca">these instructions</a> to setup FileMerge integration in Mercurial, then set <code>TM_HG_EXT_DIFF</code> to <code>opendiff</code>.
+      </div>
+   </dd>
  </dl>
 
 

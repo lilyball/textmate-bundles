@@ -184,13 +184,19 @@ js_functions = <<ENDJS #javascript
 						TextMate.isBusy = false;
 					};
 					// the filename passed in to the following functions is already properly shell escaped
-					diff_to_mate = function(filename,id){
-						TextMate.isBusy = true;
-						tmp = '/tmp/hg_diff_to_mate' + id + '.diff'
-						cmd = 'cd #{e_sh_js work_path};#{e_sh_js hg} 2>&1 diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
-						document.getElementById('commandOutput').innerHTML += TextMate.system(cmd, null).outputString + ' \\n'
-						TextMate.isBusy = false;
-					};
+               diff_to_mate = function(filename,id){
+                  TextMate.isBusy = true;
+                  tmp = '/tmp/hg_diff_to_mate' + id + '.diff'
+                  cmd = 'cd #{e_sh_js work_path};#{e_sh_js hg} 2>&1 diff ' + filename + ' >' + tmp + ' && open -a TextMate ' + tmp
+                  document.getElementById('commandOutput').innerHTML += TextMate.system(cmd, null).outputString + ' \\n'
+                  TextMate.isBusy = false;
+               };
+               extdiff_to_mate = function(filename,difftool){
+                  TextMate.isBusy = true;
+                  cmd = 'cd #{e_sh_js work_path};#{e_sh_js hg} 2>&1 ' + difftool + ' ' + filename
+                  document.getElementById('commandOutput').innerHTML += TextMate.system(cmd, null).outputString + ' \\n'
+                  TextMate.isBusy = false;
+               };
 					hg_add = function(filename,id){
 						TextMate.isBusy = true;
 						
@@ -328,10 +334,15 @@ make_head( "Hg Status", work_path,
 										# Diff Column (only available for text)
 										column_is_an_image = false
 									end
-
-									mup.button_td!( ((not column_is_an_image) and (status != unknown_file_status)),
+                           if ENV['TM_HG_EXT_DIFF']
+                              mup.button_td!( ((not column_is_an_image) and (status != unknown_file_status)),
+													'Diff',
+													"extdiff_to_mate(#{esc_file},&quot;#{ENV['TM_HG_EXT_DIFF']}&quot;); return false")
+									else
+									   mup.button_td!( ((not column_is_an_image) and (status != unknown_file_status)),
 													'Diff',
 													"diff_to_mate(#{esc_file},#{stdin_line_count}); return false")
+									end
 								end
 
 								# FILE Column

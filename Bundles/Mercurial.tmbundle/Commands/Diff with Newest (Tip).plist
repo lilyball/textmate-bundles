@@ -13,7 +13,11 @@ if [[ -d "$TM_PROJECT_DIRECTORY" ]]
 fi
 
 "${TM_RUBY:=ruby}" -I "$TM_BUNDLE_SUPPORT/" &lt;&lt;END
-	require 'hg_diff'
+	if ENV['TM_HG_EXT_DIFF']
+		require 'hg_extdiff'
+	else
+		require 'hg_diff'
+	end
 	Mercurial::diff_active_file("-r tip", "Diff With Tip")
 END
 </string>

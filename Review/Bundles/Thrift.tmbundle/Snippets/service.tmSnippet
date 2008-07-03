@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>service ${1:Name} ${2/.+/extends /m}${2:Super} {
+	<string>service ${1:Name}${2/.+/ extends /m}${2:Super} {
 	${3:void} ${4:method}(${5:args})
 }</string>
 	<key>name</key>

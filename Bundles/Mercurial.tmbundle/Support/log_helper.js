@@ -17,6 +17,12 @@ function diff_and_open_tm( workpath, hg, url, rev, filename )
 	TextMate.system('cd '+workpath+';"'+hg+'" diff -r "'+(rev-1)+'" -r "'+rev+'" '+url+' &> '+filename+'; open -a TextMate '+filename, didFinishCommand );
 }
 
+function ext_diff( workpath, hg, url, rev, difftool )
+{
+	TextMate.isBusy = true;
+	TextMate.system('cd '+workpath+';"'+hg+'" '+difftool+ ' -r "'+(rev-1)+'" -r "'+rev+'" '+url, didFinishCommand );
+}
+
 
 /* show: files + hide-button,  hide: show-button.. */
 function show_files( base_id )

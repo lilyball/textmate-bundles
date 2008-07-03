@@ -48,8 +48,12 @@ def link_for( path, rev, state )
   filename_escaped = filename.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')
 
   workpath_escaped = $work_path.quote_filename_for_shell.gsub('\\','\\\\\\\\').gsub('"', '\\\&#34;').gsub("'", '&#39;')
-
-  result = " &nbsp;<small>(<a href=\"#\" onclick=\"javascript:diff_and_open_tm('#{workpath_escaped}', '#{$hg}', '#{full_url_escaped}', #{revi}, '/tmp/#{filename_escaped}.diff'); return false;\">Diff With Previous</a>)</small>"
+  
+  if difftool = ENV['TM_HG_EXT_DIFF']
+    result = " &nbsp;<small>(<a href=\"#\" onclick=\"javascript:ext_diff('#{workpath_escaped}', '#{$hg}', '#{full_url_escaped}', #{revi},'#{difftool}'); return false;\">Diff With Previous</a>)</small>"
+  else
+    result = " &nbsp;<small>(<a href=\"#\" onclick=\"javascript:diff_and_open_tm('#{workpath_escaped}', '#{$hg}', '#{full_url_escaped}', #{revi}, '/tmp/#{filename_escaped}.diff'); return false;\">Diff With Previous</a>)</small>"
+  end
 
 end
 

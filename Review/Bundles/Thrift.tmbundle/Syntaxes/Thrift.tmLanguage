@@ -144,7 +144,7 @@
 			<key>comment</key>
 			<string>begin the definition list</string>
 			<key>end</key>
-			<string>$ ^</string>
+			<string>(?x)$.^ # this regex should never end</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -686,7 +686,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(#).*</string>
+					<string>#.*\n?</string>
 					<key>name</key>
 					<string>comment.line.number-sign.thrift</string>
 				</dict>
@@ -700,7 +700,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(//).*</string>
+					<string>//.*\n?</string>
 					<key>name</key>
 					<string>comment.line.double-slash.thrift</string>
 				</dict>
@@ -777,7 +777,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>[,;]|$</string>
+			<string>[,;]|(?=\))|$</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
@@ -820,14 +820,14 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=[,;])|$</string>
+					<string>(?=[,;]|\))|$</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>begin</key>
 							<string>=</string>
 							<key>end</key>
-							<string>[,;]|$</string>
+							<string>(?=[,;]|\))|$</string>
 							<key>patterns</key>
 							<array>
 								<dict>

@@ -43,20 +43,7 @@ In addition there is the key equivalent <button>⇧&#x21A9;</button> which will 
 
 -    If a selection of R commands shall be executed the selection will send line by line.
 
-### The R commands: readline(), edit(), fix() 
-
--   __readline()__
-
-    On basis of the used implementation the R command `readline(prompt="a prompt")` __only__ works properly if the string `a prompt` ends with ": "!
-
-    ***Example***<pre>&gt; x &lt;- readline("value for x: ")
-    value for x: 
-    &gt; 3
-    &gt; x
-    [1] "3"
-    </pre>
-
-    ***Hint: Internally used readline() ends on ": ".***
+### The R commands: edit(), fix() 
 
 -   __edit()__ and __fix()__
 
@@ -389,17 +376,15 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
     That error message indicates (showing after a plot command) that the package "CarbonEL" was not yet installed. This package is necessary __only__ for versions of R prior than 2.7.0 to work with the Quartz device properly. You can install it by using `install.packages("CarbonEL")`. With the version 2.7.0 the quartz device has a built-in loop event handler.
 
--   __Rdaemon freezes after executing a command (esp. for "readline")__
+-   __Rdaemon freezes after executing a command__
 
     Did you change `options()$prompt` or `options()$continue`? defaults: "> " and "+ "
 
-    Does end your prompt used by `readline()` at ": "? See also [here](#sect_3.3)
-
     ***Background:*** If a R command is sent to the Rdaemon the used TextMate command will wait for R until R returned something which ends at: "> ", "+ ", or ": ". Otherwise that command runs in an eternal loop. You can cancel it by pressing "&#x2318;.". In some cases you have to switch to an other application and back to TextMate in order to get the focus back.
 
--   __`After calling locator() there is no way to get out of the Quartz device`__
+-   __`After calling locator() there is no way to get out of a graphic device`__
 
-    To finish the `locator` command with a Quartz device you have to press the red dot of the quartz window to "close" it. ESC won't work unfortunately.
+    Up to now it is not possible to call `locator()` without the argument `n`! `locator(n=3)` will work as expected. If one called `locator()` the only chance to get out of the loop is to close the graphic device.
 
 -   __`fix()` or `edit()` blocks TextMate__
 
@@ -408,10 +393,6 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 -   __I cannot use non-Latin and non-ASCII letters as labels in Quartz__
 
     Non-ASCII but Latin letters should be displayed in a PDF plot correctly. Up to now it is not possible to use non-Latin letters in any graphical devices easily.
-
--   __`readline(prompt="a prompt: ")` places the caret beneath the prompt__
-
-    This is the normal case. See more [here](#sect_3.3.1).
 
 -   __How can I save a plot as JPEG, PNG, etc.__
 
@@ -423,11 +404,11 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 -   __Can I run Rdaemon, R.app, or R in the terminal at the same time?__
 
-    Yes. Rdaemon should not interfere R.app or R running in the Terminal.
+    Yes. Rdaemon should not interfere R.app or R running in the Terminal. The only thing which won't work is the usage of Rdaemon together with the remote bundle "R Console (R.app)" if Rdaemon had plotted something in a Quartz device a helper application is open. "R Console (R.app)" is using AppleScript to interact with R.app.  Unfortunately this helper application and R.app have the same AppleScript name "R".
 
 # Main Bundle Maintainer
 
-***Date: Apr 30 2008***
+***Date: Jul 03 2008***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

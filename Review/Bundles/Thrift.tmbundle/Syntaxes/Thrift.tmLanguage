@@ -173,11 +173,15 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>$|^</string>
 					<key>name</key>
 					<string>meta.const.thrift</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#value</string>
@@ -206,9 +210,16 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>$|^</string>
 					<key>name</key>
 					<string>meta.typedef.thrift</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -227,7 +238,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>(?&lt;=\})|$</string>
 					<key>name</key>
 					<string>meta.enum.thrift</string>
 					<key>patterns</key>
@@ -303,7 +314,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>(?&lt;=\})|$</string>
 					<key>name</key>
 					<string>meta.senum.thrift</string>
 					<key>patterns</key>
@@ -374,7 +385,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>(?&lt;=\})|$</string>
 					<key>name</key>
 					<string>meta.struct.thrift</string>
 					<key>patterns</key>
@@ -437,7 +448,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>(?&lt;=\})|$</string>
 					<key>name</key>
 					<string>meta.exception.thrift</string>
 					<key>patterns</key>
@@ -504,7 +515,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>(?&lt;=\})|$</string>
 					<key>name</key>
 					<string>meta.service.thrift</string>
 					<key>patterns</key>
@@ -573,7 +584,7 @@
 										</dict>
 									</dict>
 									<key>end</key>
-									<string>$</string>
+									<string>$|^</string>
 									<key>name</key>
 									<string>meta.service.function.thrift</string>
 									<key>patterns</key>
@@ -660,6 +671,10 @@
 													</array>
 												</dict>
 											</array>
+										</dict>
+										<dict>
+											<key>include</key>
+											<string>#comments</string>
 										</dict>
 									</array>
 								</dict>

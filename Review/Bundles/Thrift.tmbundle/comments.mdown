@@ -1,0 +1,38 @@
+# Thrift Bundle Review Comments
+
+## Infininight - 2008-07-02
+
+* In the service snippet moving the space before extends into the replacement string gives cleaner results if Super is deleted.
+* Menu item names should be titlecased[4].
+* Perl and PHP (at least) need their firstLineMatch improved to not get triggered due to thrift using the words as arguments. (I'll take care of this -Infininight)
+
+#### Language Grammar
+
+* Several entity scopes are invalid[1]:
+
+	* entity.name.enum.thrift
+	* entity.name.senum.thrift
+	* entity.name.struct.thrift
+	* entity.name.exception.thrift
+	* entity.name.service.thrift
+	* entity.name.service.extends.thrift
+	* entity.other.field-id.thrift
+
+* The end of "$ ^" accomplishes the task of never ending, should probably add a comment to explain that is the goal as it's not clear. ("(?=not)possible" is used in some of other places to help make this clear.)
+* comment.line should include $\n? in the match to properly scope the caret at the end of a comment.
+* Two string.quoted scopes are invalid, but lets discuss on the mailing list wether we will reorganize the string scopes before fixing this.
+* The #field repository item has a bug when used in some cases[2]. Adding a look-ahead assertion of ) to all three end matches fixes it.
+* The third end match inside #field consumes the closing comma leaving nothing for the first end match to consume[3].
+* The end match for meta.service, etc could add a look-behind of } to allow comments after the closing }
+* If there is no closing comma/semicolon to a #field comments aren't being allowed to follow. Unsure if this is legal or not however.
+* string.quoted.double..thrift contains a stray extra dot.
+* meta.const|typedef needs a look-ahead assertion in the end match to allow comments to follow. (?=#|//|/\*|$)
+* entity.name.service.extends should be entity.other.inherited-class.
+
+
+[1]: http://manual.macromates.com/en/language_grammars#naming_conventions
+[2]: http://pastie.textmate.org/private/vp28umezwy62vnzzpju9gw
+[3]: http://pastie.textmate.org/private/7gljwqlg2qtg3z7qxh0ja
+[4]: http://wiki.macromates.com/Bundles/StyleGuide
+
+---

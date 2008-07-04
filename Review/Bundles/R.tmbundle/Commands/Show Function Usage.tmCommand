@@ -123,7 +123,7 @@ else
 fi
 
 #output the library in which WORD is defined
-if [ $RD -gt 0 -a $RD1 -eq 1 ]; then
+if [ $RD -gt 0 -a $RD1 -eq 1 -a "$LIB" != "base" ]; then
 	echo -en "\n• Library “${LIB}” not yet loaded! [press CTRL+SHIFT+L]"
 else
 	echo -en "\n•• library: $LIB ••"

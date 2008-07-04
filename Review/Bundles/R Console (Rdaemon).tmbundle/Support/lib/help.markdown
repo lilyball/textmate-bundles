@@ -384,7 +384,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 -   __`After calling locator() there is no way to get out of a graphic device`__
 
-    Up to now it is not possible to call `locator()` without the argument `n`! `locator(n=3)` will work as expected. If one called `locator()` the only chance to get out of the loop is to close the graphic device.
+    To finish the `locator()` command please do a CONTROL+click with the mouse.
 
 -   __`fix()` or `edit()` blocks TextMate__
 
@@ -408,7 +408,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 # Main Bundle Maintainer
 
-***Date: Jul 03 2008***
+***Date: Jul 04 2008***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

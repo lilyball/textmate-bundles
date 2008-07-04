@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+SUPPORT = ENV['TM_SUPPORT_PATH']
+SCOPE = ENV['TM_SCOPE']
+
+require SUPPORT + '/lib/exit_codes'
+require SUPPORT + '/lib/escape'
+require 'rexml/document'
+
+begin
+	tag = REXML::Document.new(STDIN.read)
+rescue Exception =&gt; e
+	TextMate.exit_show_tool_tip("Tag parsing failed.\nIs it valid xml?")
+end
+
+type = tag.root.name
+prop = tag.root.attributes['id']
+prop = "test" if prop == nil
+
+output = ""
+
+output &lt;&lt; "public var #{prop}:#{type};\n"
+
+tag.root.attributes.each do |name,value|
+	if name != "id"
+		value = value.sub(/;$/,"")
+		output &lt;&lt; "#{prop}.#{name} = #{value};\n"
+	end	
+end
+
+if SCOPE =~ /text\.xml\.mxml/
+	`echo #{e_sh output} | pbcopy`
+	TextMate.exit_show_tool_tip("ActionScript copied to clipboard.")
+else
+	TextMate.exit_insert_snippet(output)
+end
+
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Convert Tag to ActionScript</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>source.actionscript.3, text.xml.mxml</string>
+	<key>uuid</key>
+	<string>F5486AE8-453C-4A2D-B3B0-F5C47D09F77D</string>
+</dict>
+</plist>

@@ -701,7 +701,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>#.*\n?</string>
+					<string>(#).*\n?</string>
 					<key>name</key>
 					<string>comment.line.number-sign.thrift</string>
 				</dict>
@@ -715,7 +715,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>//.*\n?</string>
+					<string>(//).*\n?</string>
 					<key>name</key>
 					<string>comment.line.double-slash.thrift</string>
 				</dict>
@@ -894,7 +894,7 @@
 					<string>'</string>
 					<key>beginCaptures</key>
 					<dict>
-						<key>1</key>
+						<key>0</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.begin.thrift</string>
@@ -904,7 +904,7 @@
 					<string>'</string>
 					<key>endCaptures</key>
 					<dict>
-						<key>1</key>
+						<key>0</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.end.thrift</string>
@@ -918,7 +918,7 @@
 					<string>"</string>
 					<key>beginCaptures</key>
 					<dict>
-						<key>1</key>
+						<key>0</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.begin.thrift</string>
@@ -928,7 +928,7 @@
 					<string>"</string>
 					<key>endCaptures</key>
 					<dict>
-						<key>1</key>
+						<key>0</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.string.begin.thrift</string>

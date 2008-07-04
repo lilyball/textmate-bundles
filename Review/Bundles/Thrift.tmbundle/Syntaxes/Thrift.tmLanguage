@@ -792,7 +792,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>[,;]|(?=\))|$</string>
+			<string>[,;]|(?=[)#])|$</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
@@ -835,14 +835,14 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=[,;]|\))|$</string>
+					<string>(?=[,;]|[)#])|$</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>begin</key>
 							<string>=</string>
 							<key>end</key>
-							<string>(?=[,;]|\))|$</string>
+							<string>(?=[,;]|[)#])|$</string>
 							<key>patterns</key>
 							<array>
 								<dict>

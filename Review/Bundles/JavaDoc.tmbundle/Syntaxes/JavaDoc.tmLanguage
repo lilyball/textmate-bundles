@@ -39,28 +39,11 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#invalid</string>
+					<string>#inline</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*(?=\w)</string>
-					<key>contentName</key>
-					<string>text.html</string>
-					<key>end</key>
-					<string>(?=\s*\*\s*@)|(?=\s*\*\s*/)</string>
-					<key>name</key>
-					<string>meta.documentation.comment.javadoc</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#inline</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>\*\s*((\@)param)</string>
+					<string>((\@)param)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -90,7 +73,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)return)</string>
+					<string>((\@)return)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -120,7 +103,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)throws)</string>
+					<string>((\@)throws)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -150,7 +133,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)exception)</string>
+					<string>((\@)exception)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -180,7 +163,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)author)</string>
+					<string>((\@)author)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -210,7 +193,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)version)</string>
+					<string>((\@)version)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -240,7 +223,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)see)</string>
+					<string>((\@)see)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -270,7 +253,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)since)</string>
+					<string>((\@)since)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -300,7 +283,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)serial)</string>
+					<string>((\@)serial)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -330,7 +313,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)serialField)</string>
+					<string>((\@)serialField)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -360,7 +343,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)serialData)</string>
+					<string>((\@)serialData)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -390,7 +373,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\*\s*((\@)deprecated)</string>
+					<string>((\@)deprecated)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -433,7 +416,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\*\s*((\@)\S+)\s</string>
+					<string>((\@)\S+)\s</string>
 				</dict>
 			</array>
 		</dict>
@@ -444,10 +427,6 @@
 		<dict>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>include</key>
-					<string>#invalid</string>
-				</dict>
 				<dict>
 					<key>include</key>
 					<string>#inline-formatting</string>
@@ -713,18 +692,6 @@
 					<string>(\{)((\@)value)\s*(\S+?)?\s*(\})</string>
 					<key>name</key>
 					<string>meta.directive.value.javadoc</string>
-				</dict>
-			</array>
-		</dict>
-		<key>invalid</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>^(?!\s*\*).*$\n?</string>
-					<key>name</key>
-					<string>invalid.illegal.missing-asterisk.javadoc</string>
 				</dict>
 			</array>
 		</dict>

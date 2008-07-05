@@ -90,7 +90,7 @@ module TextMate
   
         common_styles  = ['default'];
         user_styles    = [];
-        bundle_styles  = ['default'];
+        bundle_styles  = bundle_support.nil? ? [] : ['default'];
 
         Dir.foreach(user_path) { |file|
           user_styles << file if File.exist?(user_path + file + '/style.css')

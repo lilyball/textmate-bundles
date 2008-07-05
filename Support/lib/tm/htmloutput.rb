@@ -9,7 +9,7 @@
 
 # Call it like this:
 
-# TextMate::HTMLOutput(:title => "My Title", :sub_title => "Your subtitle") do |io|
+# TextMate::HTMLOutput.show(:title => "My Title", :sub_title => "Your subtitle") do |io|
 #   io << «something something»
 # end
 

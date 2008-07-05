@@ -2,17 +2,16 @@ grammar Cpp
 rule cpp
 statement+ {
 	def types(scope)
-		r = { :field => {}, :typedefs => {}}
+		#r = { :field => {}, :typedefs => {}, :classes => {}}
+		r = {}
 		elements.each do |e|
 			key, value, type = e.types(scope)
 			if key && value
 			  if key == :current_type
 			    r[key] = value
-		    elsif type == :type
-			    r[:field][key] = value
-		    elsif type == :typedefs
-		      r[:typedefs][key] = value
-
+		    elsif type
+		        r[type] ||= {}
+		        r[type][key] = value
 			  end
 		  end
 		end
@@ -22,12 +21,9 @@ statement+ {
 end
 
 rule statement
- 'typedef' (explicit_space 'typename')? explicit_space complete_declare {
-	def types(scope)	  
-	  key, value, type = complete_declare.types(scope)
-    return key, value, :typedefs
-	end
-}
+class_def
+/
+type_def
 / complete_declare
 /
 current_type
@@ -43,26 +39,122 @@ string {
 	def types(scope)
 	end
 }
+/ braces
 / other {
 	def types(scope)
 	end
 }
 end
 
+rule type_def
+'typedef' (explicit_space 'typename')? explicit_space complete_declare {
+	def types(scope)	  
+	  key, value, type = complete_declare.types(scope)
+    return key, value, :typedefs
+	end
+}
+end
+
+rule class_def
+forward_declare / namespace explicit_space variable space (':' ( !('{' / ';') . )+ )? '{' ci:(class_internals+) '}' {
+  def types(scope)
+    rettype = namespace.namespace_type
+    retkey = variable.text_value
+    retvalue = {}
+    
+    ci.elements.each do |elem|
+      key, value, type = elem.types(scope)
+      if key && value && type
+
+        retvalue[type] ||= {}
+        if type == :methods
+          if k = retvalue[type][key]
+            k << value
+          else
+            retvalue[type][key] = [value]
+          end
+        else
+          retvalue[type][key] = value
+        end
+      end
+    end
+    return retkey, retvalue, rettype
+  end
+}
+end
+
+rule forward_declare
+  namespace explicit_space variable space ';' {
+    def types(scope)
+      return nil
+      #return variable.text_value, {:forward => true}, namespace.namespace_type
+    end
+  }
+end
+
+rule namespace
+  ('class' / 'namespace' / "struct" ) {
+    def namespace_type
+      if text_value == 'namespace'
+        return :namespace
+      else
+        return :classes
+      end
+    end
+  }
+end
+
+rule class_internals
+  class_def / methods_def / braces / type_def/ complete_declare / string / anything_but_end_brace
+end
+
+rule anything_but_end_brace
+  !'}' . {
+     def types(scope)
+     end
+   }
+end
+
+rule braces
+ ( '{' '}' / '{' bracesinner+ '}' ) {
+   def types(scope)
+   end
+ }
+end
+
+rule bracesinner
+	(!('{' / '}') . ) / braces
+end
+
+rule methods_def
+  complete_declare space parens {
+    def types(scope)
+      key, value, type = complete_declare.types(scope)
+      type = :methods if type == :field
+      type = :smethods if type == :sfield
+      value[:a] = parens.text_value
+      return key, value, type
+    end
+  }
+end
+
 rule complete_declare
-st:(beginnings space)? dec space variable en:(space "=" !"=")? {
+start:(beginnings space)? m:( modifiers explicit_space )* dec space variable en:(space "=" !"=")? {
 	def types(scope)
 	  #heuristic to separate multiplications from pointer declarations
-	  unless st.empty?
-	    t = st.text_value.strip
+	  unless start.empty?
+	    t = start.text_value.strip
 	    if t == "=" || t == ","
 	      return nil
       elsif t == "(" && en.empty?
         return nil
       end
     end
-    
-		return variable.text_value , dec.types(scope) ,:type
+    type = :field
+    m.elements.each do |k|
+      type = :sfield if k.modifiers.text_value == 'static'
+    end
+		return variable.text_value , dec.types(scope) , type
 	end
 }
 end
@@ -170,7 +262,7 @@ rule std
 end
 
 rule declaration
-text:("::"? variable )+ pointer:"*"* {
+ text:("::"? variable )+ pointer:"*"* {
 	def types(scope) #key
  
 	  key = :type
@@ -180,6 +272,10 @@ text:("::"? variable )+ pointer:"*"* {
 		return r
 	end
 }
+end
+
+rule modifiers
+  'static' / 'extern' / 'register' / 'mutable' / 'friend' / 'inline' / 'virtual' / 'const'
 end
 
 rule beginnings
@@ -217,7 +313,10 @@ rule template
 end
 
 rule string
- '"' (!'"' . / '\"')* '"'
+ '"' (!'"' . / '\"')* '"' {
+   def types(scope)
+   end
+ }
 end
 
 rule space

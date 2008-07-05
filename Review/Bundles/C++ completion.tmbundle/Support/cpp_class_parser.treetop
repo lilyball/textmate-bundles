@@ -39,11 +39,23 @@ string {
 	def types(scope)
 	end
 }
+/ pre_processor
 / braces
 / other {
 	def types(scope)
 	end
 }
+end
+
+rule pre_processor
+ '#' ((!('\\' EOL ) . )* '\\' EOL )* (!EOL .)* EOL {
+   def types(scope)
+   end
+ }
+end
+
+rule EOL
+ [\n]
 end
 
 rule type_def
@@ -105,7 +117,7 @@ rule namespace
 end
 
 rule class_internals
-  class_def / methods_def / braces / type_def/ complete_declare / string / anything_but_end_brace
+  class_def / methods_def / braces / type_def/ complete_declare / string / pre_processor / anything_but_end_brace
 end
 
 rule anything_but_end_brace

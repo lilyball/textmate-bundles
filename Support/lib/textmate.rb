@@ -27,26 +27,31 @@ module TextMate
 
     def require_cmd(command, message = nil)
       if `which "#{command}"`.empty?
-        require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview'
+        require ENV['TM_SUPPORT_PATH'] + '/lib/tm/htmloutput'
         
-        html_header("Command Not Found", "", "", "Command Not Found - #{command}")
-        puts <<-HTML
-          <h3 class="error">Unable to locate <tt>#{command}</tt></h3>
-          
-          <p>#{message || "To succesfully run this action you need to
-          install <tt>«#{command}»</tt>. If you know that it is already
-          installed on your system, you instead need to update
-          your search path.</p>
+        TextMate::HTMLOutput.show(
+          :title      => "Command Not Found",
+          :sub_title  => "Command Not Found - #{command}"
+        ) do |io|
+          io << <<-HTML
+            <h3 class="error">Unable to locate <tt>#{command}</tt></h3>
 
-          <p>The manual has a section about <a href=\"help:anchor='search_path'%20bookID='TextMate%20Help'\">how to update your search path</a>."}</p>
+            <p>#{message || "To succesfully run this action you need to
+            install <tt>«#{command}»</tt>. If you know that it is already
+            installed on your system, you instead need to update
+            your search path.</p>
 
-          <p>For diagnostic purposes, the paths searched for <tt>«#{command}»</tt> were:</p>
-          
-          <ul>
-            #{`echo $PATH`.gsub(/:/, "\n").gsub(/^(.*)$/, "<li>\\&</li>")}
-          </ul>
-        HTML
-        html_footer
+            <p>The manual has a section about
+            <a href=\"help:anchor='search_path'%20bookID='TextMate%20Help'\">
+            how to update your search path</a>."}</p>
+
+            <p>For diagnostic purposes, the paths searched for <tt>«#{command}»</tt> were:</p>
+
+            <ul>
+              #{`echo $PATH`.gsub(/:/, "\n").gsub(/^(.*)$/, "<li>\\&</li>")}
+            </ul>
+          HTML
+        end
         
         TextMate.exit_show_html
       end

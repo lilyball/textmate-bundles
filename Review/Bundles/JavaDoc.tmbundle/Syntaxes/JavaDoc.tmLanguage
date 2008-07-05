@@ -455,7 +455,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.begin.javadoc</string>
+							<string>punctuation.definition.tag.template.begin.javadoc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -477,11 +477,11 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.end.javadoc</string>
+							<string>punctuation.definition.tag.template.end.javadoc</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.directive.code.javadoc</string>
+					<string>meta.tag.template.code.javadoc</string>
 					<key>patterns</key>
 					<array/>
 				</dict>
@@ -493,7 +493,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.begin.javadoc</string>
+							<string>punctuation.definition.tag.template.begin.javadoc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -515,11 +515,11 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.end.javadoc</string>
+							<string>punctuation.definition.tag.template.end.javadoc</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.directive.literal.javadoc</string>
+					<string>meta.tag.template.literal.javadoc</string>
 					<key>patterns</key>
 					<array/>
 				</dict>
@@ -529,7 +529,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.begin.javadoc</string>
+							<string>punctuation.definition.tag.template.begin.javadoc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -544,13 +544,13 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.end.javadoc</string>
+							<string>punctuation.definition.tag.template.end.javadoc</string>
 						</dict>
 					</dict>
 					<key>match</key>
 					<string>(\{)((\@)docRoot)(\})</string>
 					<key>name</key>
-					<string>meta.directive.docRoot.javadoc</string>
+					<string>meta.tag.template.docRoot.javadoc</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -558,7 +558,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.begin.javadoc</string>
+							<string>punctuation.definition.tag.template.begin.javadoc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -573,13 +573,13 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.end.javadoc</string>
+							<string>punctuation.definition.tag.template.end.javadoc</string>
 						</dict>
 					</dict>
 					<key>match</key>
 					<string>(\{)((\@)inheritDoc)(\})</string>
 					<key>name</key>
-					<string>meta.directive.inheritDoc.javadoc</string>
+					<string>meta.tag.template.inheritDoc.javadoc</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -587,7 +587,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.begin.javadoc</string>
+							<string>punctuation.definition.tag.template.begin.javadoc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -612,13 +612,13 @@
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.end.javadoc</string>
+							<string>punctuation.definition.tag.template.end.javadoc</string>
 						</dict>
 					</dict>
 					<key>match</key>
 					<string>(\{)((\@)link)(?:\s+(\S+?))?(?:\s+(.+?))?\s*(\})</string>
 					<key>name</key>
-					<string>meta.directive.link.javadoc</string>
+					<string>meta.tag.template.link.javadoc</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -626,7 +626,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.begin.javadoc</string>
+							<string>punctuation.definition.tag.template.begin.javadoc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -651,13 +651,13 @@
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.end.javadoc</string>
+							<string>punctuation.definition.tag.template.end.javadoc</string>
 						</dict>
 					</dict>
 					<key>match</key>
 					<string>(\{)((\@)linkplain)(?:\s+(\S+?))?(?:\s+(.+?))?\s*(\})</string>
 					<key>name</key>
-					<string>meta.directive.linkplain.javadoc</string>
+					<string>meta.tag.template.linkplain.javadoc</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -665,7 +665,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.begin.javadoc</string>
+							<string>punctuation.definition.tag.template.begin.javadoc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -685,13 +685,13 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.directive.end.javadoc</string>
+							<string>punctuation.definition.tag.template.end.javadoc</string>
 						</dict>
 					</dict>
 					<key>match</key>
 					<string>(\{)((\@)value)\s*(\S+?)?\s*(\})</string>
 					<key>name</key>
-					<string>meta.directive.value.javadoc</string>
+					<string>meta.tag.template.value.javadoc</string>
 				</dict>
 			</array>
 		</dict>

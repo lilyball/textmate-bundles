@@ -633,7 +633,7 @@
 		<key>methods</key>
 		<dict>
 			<key>begin</key>
-			<string>(?=\w)(?!.*;)(?!.*//)(?!.*=)(?=.*\()</string>
+			<string>(?=\w)(?![^{]*;)(?!.*//)(?!.*=)(?=.*\()</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

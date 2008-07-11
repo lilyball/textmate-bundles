@@ -104,44 +104,44 @@ class CppMethodCompletion
     @parser = CppParser.new
 #    @std = {
 #      :namespace => { "std" =>{ :classes => {
-#    "map" => {:classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"std::pair"}]}},},
-#       :methods => { "begin" =>[{ :type => "std::map::iterator", :a => "()"}],}}}}}}
+#    "map" => {:classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"pair"}]}},},
+#       :methods => { "begin" =>[{ :type => "map::iterator", :a => "()"}],}}}}}}
 #    
   @res_hier = {}
     @std = {
       :namespace => { "std" =>{ :classes => {
     "map" => { :methods => { 
-        "begin" =>[{ :type => "std::map::iterator", :a => "()"}],
+        "begin" =>[{ :type => "map::iterator", :a => "()"}],
         "clear" =>[{ :type => "void", :a => "()"}],
         "count" =>[{ :type => "size_type", :a => "( const key_type& key )"}],
         "empty" =>[{ :type => "bool", :a => "()"}],
-        "end" =>[{ :type => "std::map::iterator", :a => "()"}],
-        "equal_range"=>[{:type=>"std::pair", #<iterator,iterator>",
+        "end" =>[{ :type => "map::iterator", :a => "()"}],
+        "equal_range"=>[{:type=>"pair", #<iterator,iterator>",
                          :a=>"( const key_type& key )",
-                         :t=>{ 1=>{:type=>"std::map::iterator", :t=>{1=>1,2=>2}
+                         :t=>{ 1=>{:type=>"map::iterator", :t=>{1=>1,2=>2}
                                   }, 
-                               2=>{:type=>"std::map::iterator", :t=>{1=>1,2=>2}
+                               2=>{:type=>"map::iterator", :t=>{1=>1,2=>2}
                                   }
                               }
                         }],
         "erase" =>[{ :type => "void", :a => "( iterator pos )"},{ :type => "void", :a => "( iterator start, iterator end )"},{ :type => "size_type", :a => "( const key_type& key )"}],
-        "find" =>[{ :type => "std::map::iterator", :a => "( const key_type& key )"}],
-        "insert" =>[{ :type => "std::map::iterator", :a => "( iterator i, const TYPE& pair )"},{ :type => "void", :a => "( input_iterator start, input_iterator end )"},
-          { :type => "std::pair",
+        "find" =>[{ :type => "map::iterator", :a => "( const key_type& key )"}],
+        "insert" =>[{ :type => "map::iterator", :a => "( iterator i, const TYPE& pair )"},{ :type => "void", :a => "( input_iterator start, input_iterator end )"},
+          { :type => "pair",
             :a => "( const TYPE& pair )",
-            :t => {1=>{:type=>"std::map::iterator", :t=>{1=>1,2=>2}},
+            :t => {1=>{:type=>"map::iterator", :t=>{1=>1,2=>2}},
                    2=>{:type=>"bool"}  }}],
         "key_comp" =>[{ :type => "key_compare", :a => "()"}],
-        "lower_bound" =>[{ :type => "std::map::iterator", :a => "( const key_type& key )"}],
+        "lower_bound" =>[{ :type => "map::iterator", :a => "( const key_type& key )"}],
         "max_size" =>[{ :type => "size_type", :a => "()"}],
-        "rbegin" =>[{ :type => "std::map::iterator", :a => "()"}],
-        "rend" =>[{ :type => "std::map::iterator", :a => "()"}],
+        "rbegin" =>[{ :type => "map::iterator", :a => "()"}],
+        "rend" =>[{ :type => "map::iterator", :a => "()"}],
         "size" =>[{ :type => "size_type", :a => "()"}],
         "swap" =>[{ :type => "void", :a => "( container& from )"}],
-        "upper_bound" =>[{ :type => "std::map::iterator", :a => "( const key_type& key )"}],
+        "upper_bound" =>[{ :type => "map::iterator", :a => "( const key_type& key )"}],
         "value_comp" =>[{ :type => "value_compare", :a => "()"}],
         },
-        :classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"std::pair"}]}},}
+        :classes => {"iterator" => {:methods=>{"->" =>[{:a => "", :type=>"pair"}]}},}
     },
     
     "vector" => {:methods => { 
@@ -149,15 +149,15 @@ class CppMethodCompletion
                   { :type => "void", :a => "( input_iterator start, input_iterator end )"}],
       "at" =>[{ :type => 1, :a => "( size_type loc )"}],
       "back" =>[{ :type => 1, :a => "()"}],
-      "begin" =>[{ :type => "std::vector::iterator", :a => "()"}],
+      "begin" =>[{ :type => "vector::iterator", :a => "()"}],
       "capacity" =>[{ :type => "size_type", :a => "()"}],
       "clear" =>[{ :type => "void", :a => "()"}],
       "empty" =>[{ :type => "bool", :a => "()"}],
-      "end" =>[{ :type => "std::vector::iterator", :a => "()"}],
-      "erase" =>[{ :type => "std::vector::iterator", :a => "( iterator loc )"},
-         { :type => "std::vector::iterator", :a => "( iterator start, iterator end )"}],
+      "end" =>[{ :type => "vector::iterator", :a => "()"}],
+      "erase" =>[{ :type => "vector::iterator", :a => "( iterator loc )"},
+         { :type => "vector::iterator", :a => "( iterator start, iterator end )"}],
       "front" =>[{ :type => 1, :a => "()"}],
-      "insert" =>[{ :type => "std::vector::iterator",
+      "insert" =>[{ :type => "vector::iterator",
                     :a => "( iterator loc, const TYPE& val )"},
         { :type => "void", :a => "( iterator loc, size_type num, const TYPE& val )"}],
       "insert" =>[{ :type => "void", 
@@ -165,8 +165,8 @@ class CppMethodCompletion
       "max_size" =>[{ :type => "size_type", :a => "()"}],
       "pop_back" =>[{ :type => "void", :a => "()"}],
       "push_back" =>[{ :type => "void", :a => "( const TYPE& val )"}],
-      "rbegin" =>[{ :type => "std::vector::iterator", :a => "()"}],
-      "rend" =>[{ :type => "std::vector::iterator", :a => "()"},],
+      "rbegin" =>[{ :type => "vector::iterator", :a => "()"}],
+      "rend" =>[{ :type => "vector::iterator", :a => "()"},],
       "reserve" =>[{ :type => "void", :a => "( size_type size )"}],
       "resize" =>[{ :type => "void", :a => "( size_type num, const TYPE& val = TYPE() )"}],
       "size" =>[{ :type => "size_type", :a => "()"}],
@@ -291,13 +291,14 @@ class CppMethodCompletion
     qualiferDefault = [:namespace, :classes, :typedefs]
     hierachy.reverse_each do |lib|
       (scope.length + 1 ).times do |i|
-        #pd hierachy.inspect + "empty.>" if lib.empty?
+        # search at top scope if first part of qualifier is empty
+        # e.g.  ::scope::something
         if qualifier.first && qualifier.first.empty?
+          qualifier.shift
           r, k = traverse(qualifier, lib, qualiferDefault)
         else
           r, k = traverse(scope, lib, default)
           r, k = traverse(qualifier, r, qualiferDefault) unless r.nil?
-         
         end
         #k = traverse(verify_presence_of, r)
         if k == :typedefs
@@ -312,15 +313,16 @@ class CppMethodCompletion
         end
 
         junk, r = applyTypedef(r, typedef) if typedef && r
-        return r if r
+        if r
+          scope.concat(  qualifier)
+          return r
+        end 
         scope.pop
       end
-      scope = scopeCopy.dup
+      scope.replace scopeCopy.dup
     end 
     nil
   end
-  
-  
   
   def lookup(scope, qualifier, verify_presence_of)
     returnT = nil
@@ -357,7 +359,18 @@ class CppMethodCompletion
   # modifies scope and qualifier
   def lookupT(item, scope, qualifier)
     original = scope.dup
-    r = lookup(scope, qualifier, [item[:kind], item[:name]])
+    kind = item[:kind]
+    lookupTable = {:sfield => :sfield,
+                   :field => :sfield,
+                   :smethod => :smethod,
+                   :method => :smethod}
+                
+    skind = lookupTable[kind]
+    r = lookup(scope, qualifier, [skind, item[:name]])
+    unless r || ( kind == skind)
+      scope.replace original.dup
+      r = lookup(scope, qualifier, [item[:kind], item[:name]])
+    end
     if r.nil?
       po "could not look up '#{qualifier.join("::")}' in scope '#{original.join("::")}'"
     end
@@ -368,9 +381,7 @@ class CppMethodCompletion
   def lookupList(item, scope, qualifier)
     r = lookup(scope.dup, qualifier.dup, [:methods])
     k = lookup(scope.dup, qualifier.dup, [:field])
-    puts "r k"
-    p r
-    p k
+
     if r.nil? && k.nil?
       po "could not find symbols starting with #{item[:prefix]}"
     elsif r.nil?
@@ -400,8 +411,13 @@ class CppMethodCompletion
   def rightMostClass(type_chain, currentScope, qualifier)
     originalScope = currentScope.dup
     if type_chain.first[:name] == "this"
-      qualifier.pop
+      currentScope.pop
     end
+    
+    if q = type_chain.first[:qualifier]
+      qualifier = q.dup
+    end
+    
     templates = {}
     
     type_chain.each do |item|
@@ -415,13 +431,7 @@ class CppMethodCompletion
         returnTypeHandling(returnType,templates, currentScope, qualifier)
         # we can mess up the returnType since it is not used again until next
         # loop where it is replaced anyway
-        p templates
         if returnType = dereference(returnType, item, currentScope, qualifier)
-          puts "item"
-          p item
-          p currentScope
-          p qualifier
-          p templates
          # pd returnType.inspect
           if returnType[:t]
             templates = returnType[:t].dup
@@ -448,15 +458,12 @@ def print()
   qualifier = [] 
   namespace = ["namespace", "className", "#localScope" ]
   temp = a.types namespace.dup
-
   k = namespace.inject(@res_hier) do |result, elem|
     a = {}
     result[:classes] = { elem => a}
     a
   end
   k.replace( temp)
-  #pd @res_hier.inspect
-
   po "No completion available" unless temp[:current_type]
   type_chain = temp[:current_type].dup
   rightMostClass(type_chain, namespace, qualifier)
@@ -464,16 +471,3 @@ def print()
 end
 
 end
-#
-#test = CppMethodCompletion.new nil
-#qualifier = [] 
-#namespace = ["namespace", "className", "#localScope" ]
-#test.res_hier = {:classes=>{"namespace"=>{:classes=>{"className"=>{:classes=>{"#localScope"=>{:typedefs=>{"x"=>{:type=>"std::vector", :pointers=>0, :t=>{1=>{:type=>"a", :scope=>["namespace", "className", "#localScope"], :pointers=>0}}}}, :current_type=>nil, :field=>{"v"=>{:type=>"x", :pointers=>0}}}}}}}}}
-#k = [{:kind=>:field, :dref=>0, :name=>"v"}, {:kind=>:methods, :dref=>1, :name=>"begin"}, {:prefix=>""}]
-#test.rightMostClass(k, namespace, qualifier)
-#
-#{:current_type=>[{:name=>"map", :kind=>:field, :bind=>"."},
-#                 {:name=>"begin", :kind=>:method, :bind=>"->"},
-#                 {:name=>"second", :kind=>:field, :bind=>"."},
-#                 {:prefix=>"met"}]
-# "map"=>{:type=>"std::map", 1=>{:type=>"std::vector", 1=>{:type=>"a"}}, 2=>{:type=>"b"}}}

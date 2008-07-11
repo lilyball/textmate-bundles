@@ -185,11 +185,8 @@ rule method_chain
 	variable p:parens? tie m:method_chain? {
 		def types(scope)
 		  r = []
-      if p.empty?
-		    val = :field
-		  else
-			  val = :methods # + :access
-		  end
+      val = ( p.empty? ? :field : :methods)
+		  val = (:field ? :sfield : :smethods) if tie.text_value == "::"
 		  num = (tie.text_value == "->" ? 1 : 0)
 		  r <<  { :kind => val, :name => variable.text_value, :dref => num }		  
 		  r << m.types(scope) unless m.empty? 
@@ -247,7 +244,7 @@ rule prefix
 end
 
 rule tie
-	('.' / '->')
+	('.' / '->' / '::' )
 end
 
 rule caret

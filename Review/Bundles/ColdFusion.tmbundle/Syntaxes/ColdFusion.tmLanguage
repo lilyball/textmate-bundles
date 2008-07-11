@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -10,12 +10,12 @@
 	</array>
 	<key>foldingStartMarker</key>
 	<string>(?x)
-		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|cfloop|cfif|cfswitch|cfcomponent)\b.*?&gt;
+		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|cfloop|cfif|cfswitch|cfcomponent|cffunction)\b.*?&gt;
 		|&lt;!---(?!.*---\s*&gt;)
 		)</string>
 	<key>foldingStopMarker</key>
 	<string>(?x)
-		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|cfloop|cfif|cfswitch|cfcomponent)&gt;
+		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|cfloop|cfif|cfswitch|cfcomponent|cffunction)&gt;
 		|^(?!.*?&lt;!---).*?---\s*&gt;
 		)</string>
 	<key>keyEquivalent</key>
@@ -24,6 +24,52 @@
 	<string>ColdFusion</string>
 	<key>patterns</key>
 	<array>
+		<dict>
+			<key>begin</key>
+			<string>(?:^\s+)?&lt;((?i:cfscript))\b(?![^&gt;]*/&gt;)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.cfscript.cfm</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&lt;/((?i:cfscript))&gt;(?:\s*\n)?</string>
+			<key>name</key>
+			<string>meta.tag.cfscript.cfm</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tag-stuff</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>&gt;</string>
+					<key>contentName</key>
+					<string>meta.scope.cfscript.cfm</string>
+					<key>end</key>
+					<string>(?=&lt;/(?i:cfoutput))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#coldfusion-functions</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source.js</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<dict>
 			<key>begin</key>
 			<string>(?:^\s+)?&lt;((?i:cfoutput))\b(?![^&gt;]*/&gt;)</string>
@@ -57,6 +103,10 @@
 						<dict>
 							<key>include</key>
 							<string>$self</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#coldfusion-functions</string>
 						</dict>
 					</array>
 				</dict>
@@ -94,6 +144,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>text.html.cfm</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>source.sql</string>
 						</dict>
 					</array>
@@ -102,7 +156,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;/?((?i:cf)([a-zA-Z0-9]+))(?=[^&gt;]*&gt;)</string>
+			<string>&lt;/?((?i:cf)([\w\d]+))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -150,10 +204,40 @@
 				</dict>
 			</array>
 		</dict>
-		<key>embedded-code</key>
+		<key>coldfusion-functions</key>
 		<dict>
 			<key>patterns</key>
-			<array/>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>([^\(|\.]\w+)(?=\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\W|\S|\(</string>
+					<key>name</key>
+					<string>meta.tag.any.cfm</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#tag-stuff</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?i)(Abs|ACos|AddSOAPRequestHeader|AddSOAPResponseHeader|AjaxLink|AjaxOnLoad|ArrayAppend|ArrayAvg|ArrayClear|ArrayDeleteAt|ArrayInsertAt|ArrayIsDefined|ArrayIsEmpty|ArrayLen|ArrayMax|ArrayMin|ArraySet|ArraySort|ArraySum|ArraySwap|ArrayToList|Asc|ASin|Atn|BinaryDecode|BinaryEncode|BitAnd|BitMaskClear|BitMaskRead|BitMaskSet|BitNot|BitOr|BitSHLN|BitSHRN|BitXor|Ceiling|CharsetDecode|CharsetEncode|Chr|CJustify|Compare|CompareNoCase|Cos|CreateDate|CreateDateTime|CreateObject|CreateODBCDate|CreateODBCDateTime|CreateODBCTime|CreateTime|CreateTimeSpan|CreateUUID|DateAdd|DateCompare|DateConvert|DateDiff|DateFormat|DatePart|Day|DayOfWeek|DayOfWeekAsString|DayOfYear|DaysInMonth|DaysInYear|DE|DecimalFormat|DecrementValue|Decrypt|DecryptBinary|DeleteClientVariable|DeserializeJSON|DirectoryExists|DollarFormat|DotNetToCFType|Duplicate|Encrypt|EncryptBinary|Evaluate|Exp|ExpandPath|FileClose|FileCopy|FileDelete|FileExists|FileIsEOF|FileMove|FileOpen|FileRead|FileReadBinary|FileReadLine|FileSetAccessMode|FileSetAttribute|FileSetLastModified|FileWrite|Find|FindNoCase|FindOneOf|FirstDayOfMonth|Fix|FormatBaseN|GenerateSecretKey|GetAuthUser|GetBaseTagData|GetBaseTagList|GetBaseTemplatePath|GetClientVariablesList|GetComponentMetaData|GetContextRoot|GetCurrentTemplatePath|GetDirectoryFromPath|GetEncoding|GetException|GetFileFromPath|GetFileInfo|GetFunctionList|GetGatewayHelper|GetHttpRequestData|GetHttpTimeString|GetK2ServerDocCount|GetK2ServerDocCountLimit|GetLocale|GetLocaleDisplayName|GetLocalHostIP|GetMetaData|GetMetricData|GetPageContext|GetPrinterInfo|GetProfileSections|GetProfileString|GetReadableImageFormats|GetSOAPRequest|GetSOAPRequestHeader|GetSOAPResponse|GetSOAPResponseHeader|GetTempDirectory|GetTempFile|GetTemplatePath|GetTickCount|GetTimeZoneInfo|GetToken|GetUserRoles|GetWriteableImageFormats|Hash|Hour|HTMLCodeFormat|HTMLEditFormat|IIf|ImageAddBorder|ImageBlur|ImageClearRect|ImageCopy|ImageCrop|ImageDrawArc|ImageDrawBeveledRect|ImageDrawCubicCurve|ImageDrawLine|ImageDrawLines|ImageDrawOval|ImageDrawPoint|ImageDrawQuadraticCurve|ImageDrawRect|ImageDrawRoundRect|ImageDrawText|ImageFlip|ImageGetBlob|ImageGetBufferedImage|ImageGetEXIFTag|ImageGetHeight|ImageGetIPTCTag|ImageGetWidth|ImageGrayscale|ImageInfo|ImageNegative|ImageNew|ImageOverlay|ImagePaste|ImageRead|ImageReadBase64|ImageResize|ImageRotate|ImageRotateDrawingAxis|ImageScaleToFit|ImageSetAntialiasing|ImageSetBackgroundColor|ImageSetDrawingColor|ImageSetDrawingStroke|ImageSetDrawingTransparency|ImageSharpen|ImageShear|ImageShearDrawingAxis|ImageTranslate|ImageTranslateDrawingAxis|ImageWrite|ImageWriteBase64|ImageXORDrawingMode|IncrementValue|InputBaseN|Insert|Int|IsArray|IsBinary|IsBoolean|IsCustomFunction|IsDate|IsDDX|IsDebugMode|IsDefined|IsImage|IsImageFile|IsInstanceOf|IsJSON|IsLeapYear|IsLocalHost|IsNumeric|IsNumericDate|IsObject|IsPDFFile|IsPDFObject|IsQuery|IsSimpleValue|IsSOAPRequest|IsStruct|IsUserInAnyRole|IsUserInRole|IsUserLoggedIn|IsValid|IsWDDX|IsXML|IsXmlAttribute|IsXmlDoc|IsXmlElem|IsXmlNode|IsXmlRoot|JavaCast|JSStringFormat|LCase|Left|Len|ListAppend|ListChangeDelims|ListContains|ListContainsNoCase|ListDeleteAt|ListFind|ListFindNoCase|ListFirst|ListGetAt|ListInsertAt|ListLast|ListLen|ListPrepend|ListQualify|ListRest|ListSetAt|ListSort|ListToArray|ListValueCount|ListValueCountNoCase|LJustify|Log|Log10|LSCurrencyFormat|LSDateFormat|LSEuroCurrencyFormat|LSIsCurrency|LSIsDate|LSIsNumeric|LSNumberFormat|LSParseCurrency|LSParseDateTime|LSParseEuroCurrency|LSParseNumber|LSTimeFormat|LTrim|Max|Mid|Min|Minute|Month|MonthAsString|Now|NumberFormat|ParagraphFormat|ParseDateTime|Pi|PrecisionEvaluate|PreserveSingleQuotes|Quarter|QueryAddColumn|QueryAddRow|QueryConvertForGrid|QueryNew|QuerySetCell|QuotedValueList|Rand|Randomize|RandRange|REFind|REFindNoCase|ReleaseComObject|REMatch|REMatchNoCase|RemoveChars|RepeatString|Replace|ReplaceList|ReplaceNoCase|REReplace|REReplaceNoCase|Reverse|Right|RJustify|Round|RTrim|Second|SendGatewayMessage|SerializeJSON|SetEncoding|SetLocale|SetProfileString|SetVariable|Sgn|Sin|Sleep|SpanExcluding|SpanIncluding|Sqr|StripCR|StructAppend|StructClear|StructCopy|StructCount|StructDelete|StructFind|StructFindKey|StructFindValue|StructGet|StructInsert|StructIsEmpty|StructKeyArray|StructKeyExists|StructKeyList|StructNew|StructSort|StructUpdate|Tan|TimeFormat|ToBase64|ToBinary|ToScript|ToString|Trim|UCase|URLDecode|URLEncodedFormat|URLSessionFormat|Val|ValueList|VerifyClient|Week|Wrap|Wrap|WriteOutput|XmlChildPos|XmlElemNew|XmlFormat|XmlGetNodeType|XmlNew|XmlParse|XmlSearch|XmlTransform|XmlValidate|Year|YesNoFormat)(?=\()</string>
+					<key>name</key>
+					<string>entity.name.function</string>
+				</dict>
+			</array>
 		</dict>
 		<key>entities</key>
 		<dict>
@@ -288,6 +372,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#coldfusion-functions</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#tag-id-attribute</string>
 				</dict>
 				<dict>
@@ -301,6 +389,10 @@
 				<dict>
 					<key>include</key>
 					<string>#string-single-quoted</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#coldfusion-script</string>
 				</dict>
 				<dict>
 					<key>include</key>

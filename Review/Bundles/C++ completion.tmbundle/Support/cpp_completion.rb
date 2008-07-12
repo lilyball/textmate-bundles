@@ -394,9 +394,19 @@ class CppMethodCompletion
   end
 
   def returnTypeHandling(returnType, templates, currentScope, qualifier)
+
+    iterator = false
+    if returnType[:type_of]
+      iterator = returnType[:iterator]
+      returnType, t = rightMostClass(returnType[:type_of],
+                                              currentScope, qualifier)
+      templates.replace t
+      qualifier << "iterator" if iterator
+      return
+    end
+      
     value = returnType[:type]
     if value.kind_of? Numeric
-      #po templates.inspect unless templates[value]
       returnType = templates[value].dup
       templates.replace( returnType[:t]) if returnType[:t]
       currentScope.replace returnType[:scope].dup
@@ -406,6 +416,7 @@ class CppMethodCompletion
     else
       qualifier.replace value.split("::")
     end
+    
   end
 
   def rightMostClass(type_chain, currentScope, qualifier)
@@ -419,36 +430,31 @@ class CppMethodCompletion
     end
     
     templates = {}
-    
+    returnType = nil
     type_chain.each do |item|
-      # item[:name] = "at"
       if item[:name]
-        # scope = rubinius::Array::#localScope
         returnType = lookupT(item, currentScope, qualifier)
         if returnType[:t]
           templates = returnType[:t].dup
         end
         returnTypeHandling(returnType,templates, currentScope, qualifier)
-        # we can mess up the returnType since it is not used again until next
-        # loop where it is replaced anyway
-        if returnType = dereference(returnType, item, currentScope, qualifier)
-         # pd returnType.inspect
-          if returnType[:t]
-            templates = returnType[:t].dup
+        
+        if rt = dereference(returnType, item, currentScope, qualifier)
+          if rt[:t]
+            templates = rt[:t].dup
           end
-          returnTypeHandling(returnType,templates, currentScope, qualifier)
+          returnType = returnTypeHandling(rt,templates, currentScope, qualifier)
         end
 
       elsif item[:prefix]
         if qualifier.nil?
           TextMate.exit_show_tool_tip "No completion found"
         else
-
           complete(item, currentScope, qualifier)
         end
       end
     end
-    return currentTemplateArgs
+    return returnType, templates
   end
 
 def print()
@@ -464,6 +470,9 @@ def print()
     a
   end
   k.replace( temp)
+  #require 'pp'
+  #pp temp
+  #pd ""
   po "No completion available" unless temp[:current_type]
   type_chain = temp[:current_type].dup
   rightMostClass(type_chain, namespace, qualifier)

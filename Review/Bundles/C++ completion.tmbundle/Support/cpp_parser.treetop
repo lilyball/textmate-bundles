@@ -226,7 +226,7 @@ rule method_chain
 end
 
 rule allan_macro
-	"iterate(" space it:variable space ',' space dref:'*'* space mc:method_chain? variable p:parens? space ')' {
+	'iterate' '(' space it:variable space ',' space dref:'*'* space mc:method_chain? variable p:parens? space ')' {
 		def types(scope)
 		    t = []
 		    t << mc.types(scope) unless mc.empty?
@@ -238,7 +238,7 @@ rule allan_macro
     		t << { :kind => val, :name => variable.text_value, :dref => dref.text_value.size} 
 		    
 		    r = { :type_of => t.flatten, :iterator =>true  }
-    		return it.text_value, r
+    		return it.text_value, r, :field
 		end
 }
 end 

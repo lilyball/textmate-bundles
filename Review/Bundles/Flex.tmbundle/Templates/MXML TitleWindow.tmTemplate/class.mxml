@@ -25,7 +25,8 @@
 		*	
 		*	@see mx.events.FlexEvent
 		*/
-		private function onCreationComplete(event:FlexEvent) : void {
+		private function onCreationComplete(event:FlexEvent):void
+		{
 			PopUpManager.centerPopUp(this);
 		}
 		
@@ -34,7 +35,8 @@
 		*	
 		*	@see mx.events.CloseEvent
 		*/
-		private function onClosePopUp(event:CloseEvent) : void {
+		private function onClosePopUp(event:CloseEvent):void
+		{
 			PopUpManager.removePopUp(this);
 		}
 		

@@ -1,71 +1,78 @@
-/* AS3
-	Copyright ${TM_YEAR} ${TM_ORGANIZATION_NAME}.
-*/
-package ${TM_CLASS_PATH} {
+//AS3///////////////////////////////////////////////////////////////////////////
+// 
+// Copyright ${TM_YEAR} ${TM_ORGANIZATION_NAME:-$TM_FULLNAME}
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+package ${TM_CLASS_PATH}
+{
 	
-	import mx.core.Container;
+import mx.core.Container;
+
+/**
+ *	Class description.
+ *
+ *	@langversion ActionScript 3.0
+ *	@playerversion Flash 9.0
+ *
+ *	@author ${TM_FULLNAME}
+ *	@since  ${TM_DATE}
+ */
+public class ${TM_NEW_FILE_BASENAME} extends Container
+{
+	
+	//--------------------------------------
+	// CLASS CONSTANTS
+	//--------------------------------------
+	
+	//--------------------------------------
+	//  CONSTRUCTOR
+	//--------------------------------------
+	
+	/**
+	 *	@constructor
+	 */
+	public function ${TM_NEW_FILE_BASENAME}()
+	{
+		super();
+	}
+	
+	//--------------------------------------
+	//  PRIVATE VARIABLES
+	//--------------------------------------
+	
+	//--------------------------------------
+	//  GETTER/SETTERS
+	//--------------------------------------
+	
+	//--------------------------------------
+	//  PUBLIC METHODS
+	//--------------------------------------
+
+	//--------------------------------------
+	//  EVENT HANDLERS
+	//--------------------------------------
+	
+	//--------------------------------------
+	//  PRIVATE & PROTECTED INSTANCE METHODS
+	//--------------------------------------
 
 	/**
-	 *	Class description.
-	 *
-	 *	@langversion ActionScript 3.0
-	 *	@playerversion Flash 9.0
-	 *
-	 *	@author ${TM_FULLNAME}
-	 *	@since  ${TM_DATE}
+	 *	@private
 	 */
-	public class ${TM_NEW_FILE_BASENAME} extends Container {
-		
-		//--------------------------------------
-		// CLASS CONSTANTS
-		//--------------------------------------
-		
-		//--------------------------------------
-		//  CONSTRUCTOR
-		//--------------------------------------
-		
-		/**
-		 *	@Constructor
-		 */
-		public function ${TM_NEW_FILE_BASENAME}(){
-			super();
-		}
-		
-		//--------------------------------------
-		//  PRIVATE VARIABLES
-		//--------------------------------------
-		
-		//--------------------------------------
-		//  GETTER/SETTERS
-		//--------------------------------------
-		
-		//--------------------------------------
-		//  PUBLIC METHODS
-		//--------------------------------------
-
-		//--------------------------------------
-		//  EVENT HANDLERS
-		//--------------------------------------
-		
-		//--------------------------------------
-		//  PRIVATE & PROTECTED INSTANCE METHODS
-		//--------------------------------------
-
-		/**
-		 *	@private
-		 */
-		override protected function createChildren() : void {
-			super.createChildren();
-		}
-		
-		/**
-		 *	@private
-		 */
-		override protected function commitProperties() : void {
-			super.commitProperties();
-		}
-
-		
+	override protected function createChildren():void
+	{
+		super.createChildren();
 	}
+	
+	/**
+	 *	@private
+	 */
+	override protected function commitProperties():void
+	{
+		super.commitProperties();
+	}
+
+}
 	
 }

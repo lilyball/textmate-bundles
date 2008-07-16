@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -63,7 +63,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(&lt;)(mx)(:)([a-zA-Z0-9]+)(?=[^&gt;]*&gt;&lt;/mx:\4&gt;)</string>
+			<string>(&lt;)\s*(\w+([^\s&gt;]+))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -74,78 +74,9 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.namespace.xml.mxml</string>
+					<string>meta.definition.component.xml.mxml</string>
 				</dict>
 				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.namespace.xml.mxml</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.localname.xml.mxml</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(&gt;(&lt;)/)(mx)(:)(\4)(&gt;)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.xml.mxml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>meta.scope.between-tag-pair.xml.mxml</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.namespace.xml.mxml</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.namespace.xml.mxml</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.localname.xml.mxml</string>
-				</dict>
-				<key>6</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.xml.mxml</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.tag.xml.mxml</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(&lt;/?)(\w*)(:)([^\s&gt;]+)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.xml.mxml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.namespace.xml.mxml</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.namespace.xml.mxml</string>
-				</dict>
-				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.tag.localname.xml.mxml</string>
@@ -195,6 +126,121 @@
 					<string>#singlequotedString</string>
 				</dict>
 			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;)((\w+)(:)([^\s&gt;]+))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.xml.mxml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.definition.component.xml.mxml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.namespace.xml.mxml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.namespace.xml.mxml</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.localname.xml.mxml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.xml.mxml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.tag.xml.mxml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.namespace.xml.mxml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.localname.xml.mxml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string> (?:([-_a-zA-Z0-9]+):)?([a-zA-Z-]+)</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#scriptBinding</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#doublequotedString</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#singlequotedString</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;/)(\w+)(:)([^\s&gt;]+)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.xml.mxml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.namespace.xml.mxml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.namespace.xml.mxml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.localname.xml.mxml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.xml.mxml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.tag.end.xml.mxml</string>
 		</dict>
 		<dict>
 			<key>include</key>

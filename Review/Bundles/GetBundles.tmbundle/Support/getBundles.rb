@@ -186,7 +186,7 @@ def getBundleLists
         'targetSelection'         => 'Users Lib Pristine',
         'nocancel'                => false,
         'repoColor'               => '#0000FF',
-        'logPath'                 => %x{cat '#{$logFile}'}
+        'logPath'                 => %x{cat '#{$logFile}'},
       }
       updateDIALOG
       bundlearray = [ ]
@@ -259,7 +259,8 @@ def getBundleLists
         $numberOfBundles = $dataarray.size
         $params['numberOfBundles'] = "%d found" % $numberOfBundles
         if $numberOfNoDesc > 0
-          $params['numberOfNoDesc'] = "%d missing" % $numberOfNoDesc
+          $params['updateBtnLabel'] = 'Update (%d missing)' % $numberOfNoDesc
+          # $params['numberOfNoDesc'] = "%d missing" % $numberOfNoDesc
         end
         $params['dataarray'] = $dataarray
         updateDIALOG
@@ -341,7 +342,8 @@ def getSVNBundleDescriptions
   end
   $params['dataarray'] = $dataarray
   $params['isBusy'] = false
-  $params['numberOfNoDesc'] = " "
+  # $params['numberOfNoDesc'] = " "
+  $params['updateBtnLabel'] = "Update Descriptions"
   updateDIALOG
   $listsLoaded = true
   # suppress the updating of the table to preserve the selection
@@ -550,6 +552,7 @@ $params['nocancel'] = true
 orderOutDIALOG
 writeToLogFile("Get Bundles DIALOG runs at token #{$token}")
 $params['nocancel'] = false
+$params['updateBtnLabel'] = 'Update Descriptions'
 updateDIALOG
 
 $x1 = Thread.new do
@@ -564,6 +567,7 @@ end
 
 while $run do
   getResultFromDIALOG
+  # writeToLogFile($dialogResult.inspect())
   if $dialogResult.has_key?('returnArgument')
     if $dialogResult['returnArgument'] == 'updateButtonIsPressed'
       $x0 = Thread.new do
@@ -580,6 +584,22 @@ while $run do
         installBundles
       end
     end
+  elsif $dialogResult.has_key?('segmentSelection')
+    # writeToLogFile($dialogResult['segmentSelection'])
+    b = []
+    if $dialogResult['segmentSelection'] == 'GitHub'
+      b = $dataarray.select {|v| v['repo'] == 'G'}
+    elsif $dialogResult['segmentSelection'] == 'Review'
+      b = $dataarray.select {|v| v['repo'] == 'R'}
+    elsif $dialogResult['segmentSelection'] == 'Bundles'
+      b = $dataarray.select {|v| v['repo'] == 'B'}
+    else
+      b = $dataarray
+    end
+    $params['numberOfBundles'] = "%d found" % b.size
+    $params['dataarray'] = b
+    $params['segmentSelection'] == $dialogResult['segmentSelection']
+    updateDIALOG
   else ###### closing the window
     $close = true
     if ! $listsLoaded  # while fetching something from the net wait for aborting of threads

@@ -60,6 +60,40 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.variable.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(@)[a-zA-Z_]\w*</string>
+			<key>name</key>
+			<string>variable.other.readwrite.instance.nu</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\$)[a-zA-Z_]\w*</string>
+			<key>name</key>
+			<string>variable.other.readwrite.global.nu</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b[A-Z]\w*\b</string>
+			<key>name</key>
+			<string>support.class.nu</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
 					<string>punctuation.definition.comment.nu</string>
 				</dict>
 			</dict>
@@ -253,7 +287,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.class.nu</string>
+					<string>keyword.control.class.nu</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -263,7 +297,7 @@
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.class.nu</string>
+					<string>keyword.control.is.nu</string>
 				</dict>
 				<key>6</key>
 				<dict>
@@ -282,7 +316,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.protocol.nu</string>
+					<string>keyword.control.protocol.nu</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -301,28 +335,18 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.class.nu</string>
+					<string>keyword.control.import.nu</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.nu</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.class.nu</string>
-				</dict>
-				<key>6</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.nu</string>
+					<string>entity.name.type.class.nu</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b((?&lt;!-)[ic]?method)\s+((\w|\-|\!|\?)*)(\s+(is)\s+((\w|\-|\!|\?)*))?</string>
+			<string>\((import)\s+(\w*)</string>
 			<key>name</key>
-			<string>meta.method.nu</string>
+			<string>meta.import.nu</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -330,7 +354,217 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>keyword.control.global.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.readwrite.global.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\((global)\s+([\w\-]*)</string>
+			<key>name</key>
+			<string>meta.global.nu</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.method.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
 					<string>storage.type.class.nu</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.is.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\(([+-]|[ic]method)\s+\((\w+)\)\s+(\w+)\s+(is)</string>
+			<key>name</key>
+			<string>meta.method.nu.zero-args</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.method.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.nu</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.is.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\(([+-]|[ic]method)\s+\((\w+)\)\s+(\w+\:)\s*\((\w+)\)\s+(\w+)\s+(is)</string>
+			<key>name</key>
+			<string>meta.method.nu.one-arg</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.method.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.nu</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.nu</string>
+				</dict>
+				<key>9</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.is.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\(([+-]|[ic]method)\s+\((\w+)\)\s+(\w+\:)\s*\((\w+)\)\s+(\w+)\s+(\w+\:)\s*\((\w+)\)\s+(\w+)\s+(is)</string>
+			<key>name</key>
+			<string>meta.method.nu.two-args</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.method.nu</string>
+				</dict>
+				<key>10</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>11</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.nu</string>
+				</dict>
+				<key>12</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.is.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.nu</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.nu</string>
+				</dict>
+				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.nu</string>
+				</dict>
+				<key>9</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\(([+-]|[ic]method)\s+\((\w+)\)\s+(\w+\:)\s*\((\w+)\)\s+(\w+)\s+(\w+\:)\s*\((\w+)\)\s+(\w+)\s+(\w+\:)\s*\((\w+)\)\s+(\w+)\s+(is)</string>
+			<key>name</key>
+			<string>meta.method.nu.three-args</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.class.nu</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -340,7 +574,7 @@
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.class.nu</string>
+					<string>keyword.control.class.nu</string>
 				</dict>
 				<key>6</key>
 				<dict>
@@ -359,7 +593,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.function-type.nu</string>
+					<string>keyword.control.function-type.nu</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -374,7 +608,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(let|set|global|cond|case|do|loop|until|while|for|break|continue|if|else|elseif|then|unless|try|throw|catch|array|dict|list|return)\b</string>
+			<string>\b(let|set|cond|case|do|loop|until|while|for|break|continue|if|else|elseif|then|unless|try|throw|catch|array|dict|list|return)\b</string>
 			<key>name</key>
 			<string>keyword.control.nu</string>
 		</dict>

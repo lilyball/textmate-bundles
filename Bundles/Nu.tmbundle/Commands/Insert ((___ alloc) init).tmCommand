@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+def e (str); str.gsub(/\($`\\\)/, '\\\\\0'); end
+
+line = STDIN.read
+col = ENV['TM_LINE_INDEX'].to_i
+
+left, right = line[0...col], line[col..-1]
+
+if left =~ /(.*?)(\w+)\s+$/ then
+  lead, cl = $1, $2
+  print "#{e lead}((#{e cl} alloc) init$0)"
+  print right.empty? ? "" : "#{e right}"
+else
+  # this is only if we were not able to interpret the line
+  print "#{e left}$0#{e right}"
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Insert ((... alloc) init)</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.nu</string>
+	<key>tabTrigger</key>
+	<string>alloc</string>
+	<key>uuid</key>
+	<string>E63988FF-4701-4B7B-8877-43621D8AB749</string>
+</dict>
+</plist>

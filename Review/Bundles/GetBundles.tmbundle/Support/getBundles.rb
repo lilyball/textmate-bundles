@@ -73,6 +73,8 @@ def targetPaths
     'Users Lib Bundles'   => "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles",
     'Lib Bundles'         => "/Library/Application Support/TextMate/Bundles",
     'App Bundles'         => "/Applications/TextMate.app/Contents/SharedSupport/Bundles",
+    'Users Desktop'       => "#{ENV["HOME"]}/Desktop",
+    'Users Downloads'     => "#{ENV["HOME"]}/Downloads",
   }
 end
 
@@ -83,7 +85,8 @@ def getInstallPathFor(abbr)
   if targetPaths.has_key?(abbr)
     return targetPaths[abbr]
   else
-    return %x{osascript -e 'tell application "TextMate"' -e 'activate' -e 'POSIX path of (choose folder with prompt "as installation target")' -e 'end tell' 2>/dev/null}.strip().gsub(/\/$/,'')
+    return "#{ENV["HOME"]}/Desktop"
+    # return %x{osascript -e 'tell application "TextMate"' -e 'activate' -e 'POSIX path of (choose folder with prompt "as installation target")' -e 'end tell' 2>/dev/null}.strip().gsub(/\/$/,'')
   end
 end
 
@@ -181,7 +184,7 @@ def getBundleLists
         'updateBtn'               => 'updateButtonIsPressed',
         'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
         'targets'                 => [ 
-          'Users Lib Pristine', 'Users Lib Bundles', 'Lib Bundles', 'App Bundles', 'user defined'
+          'Users Lib Pristine', 'Users Lib Bundles', 'Lib Bundles', 'App Bundles', 'Users Desktop', 'Users Downloads'
           ],
         'targetSelection'         => 'Users Lib Pristine',
         'nocancel'                => false,
@@ -199,6 +202,7 @@ def getBundleLists
         rescue Timeout::Error
           writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
           $params['progressText'] = 'Timeout'
+          $params['logPath'] = %x{cat '#{$logFile}'}
           $params['isBusy'] = false
           updateDIALOG
         end
@@ -233,6 +237,7 @@ def getBundleLists
         rescue Timeout::Error
           writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
           $params['progressText'] = 'Timeout'
+          $params['logPath'] = %x{cat '#{$logFile}'}
           $params['isBusy'] = false
           updateDIALOG
         end
@@ -586,6 +591,9 @@ while $run do
     end
   elsif $dialogResult.has_key?('segmentSelection')
     # writeToLogFile($dialogResult['segmentSelection'])
+    $params['isBusy'] = true
+    $params['progressText'] = "Filtering data…"
+    updateDIALOG
     b = []
     if $dialogResult['segmentSelection'] == 'GitHub'
       b = $dataarray.select {|v| v['repo'] == 'G'}
@@ -599,6 +607,8 @@ while $run do
     $params['numberOfBundles'] = "%d found" % b.size
     $params['dataarray'] = b
     $params['segmentSelection'] == $dialogResult['segmentSelection']
+    updateDIALOG
+    $params['isBusy'] = false
     updateDIALOG
   else ###### closing the window
     $close = true

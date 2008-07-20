@@ -181,7 +181,6 @@ def getBundleLists
         'isBusy'                  => true,
         'progressText'            => 'Fetching List for %s…' % r[:display].to_s,
         'progressIsIndeterminate' => true,
-        'updateBtn'               => 'updateButtonIsPressed',
         'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
         'targets'                 => [ 
           'Users Lib Pristine', 'Users Lib Bundles', 'Lib Bundles', 'App Bundles', 'Users Desktop', 'Users Downloads'
@@ -190,6 +189,7 @@ def getBundleLists
         'nocancel'                => false,
         'repoColor'               => '#0000FF',
         'logPath'                 => %x{cat '#{$logFile}'},
+        'segmentSelection'        => 'All',
       }
       updateDIALOG
       bundlearray = [ ]
@@ -272,6 +272,9 @@ def getBundleLists
         updateDIALOG
       end
     end
+    $params['progressText'] = 'Please update the descriptions (%d missing)' % $numberOfNoDesc
+    updateDIALOG
+    sleep(3)
     $params['isBusy'] = false
     updateDIALOG
     $listsLoaded = true
@@ -335,7 +338,7 @@ def getSVNBundleDescriptions
           end
           if ! $close
             $params['dataarray'] = $dataarray
-            $params['segmentSelection'] = '        All        '
+            $params['segmentSelection'] = 'All'
             $params['progressIsIndeterminate'] = false
             updateDIALOG
             writeSVNDescriptionCacheToDisk
@@ -351,6 +354,7 @@ def getSVNBundleDescriptions
   $params['isBusy'] = false
   # $params['numberOfNoDesc'] = " "
   $params['updateBtnLabel'] = "Update Descriptions"
+  $params['doUpdate'] = 0
   updateDIALOG
   $listsLoaded = true
   # suppress the updating of the table to preserve the selection
@@ -421,7 +425,7 @@ def installBundles
       name = URI.unescape(name)
       writeToLogFile("Install “%s” into %s" % [name, installPath])
       if File.directory?(installPath + "/#{name}.tmbundle")
-        if askDIALOG("“#{name}” folder already exists.", "Do you want to replace it?\n➠If yes, the old folder will be renamed by appending a time stamp!") == 0
+        if askDIALOG("“#{name}” folder already exists.", "Do you want to replace it?\n➠If yes, the old folder will be renamed\nby appending a time stamp!") == 0
           mode = 'skip'
           writeToLogFile("Installation of “#{name}” was skipped")
         else
@@ -576,11 +580,7 @@ while $run do
   getResultFromDIALOG
   # writeToLogFile($dialogResult.inspect())
   if $dialogResult.has_key?('returnArgument')
-    if $dialogResult['returnArgument'] == 'updateButtonIsPressed'
-      $x0 = Thread.new do
-        getSVNBundleDescriptions
-      end
-    elsif $dialogResult['returnArgument'] == 'updateTMlibButtonIsPressed'
+    if $dialogResult['returnArgument'] == 'updateTMlibButtonIsPressed'
       updateTMlibPath
     else
       if $dialogResult.has_key?('paths') and $dialogResult['paths'].size > 10
@@ -590,6 +590,10 @@ while $run do
       else
         installBundles
       end
+    end
+  elsif $dialogResult.has_key?('doUpdate') && $dialogResult['doUpdate'] == 1
+    $x0 = Thread.new do
+      getSVNBundleDescriptions
     end
   elsif $dialogResult.has_key?('segmentSelection')
     # writeToLogFile($dialogResult['segmentSelection'])
@@ -608,8 +612,8 @@ while $run do
     end
     $params['numberOfBundles'] = "%d found" % b.size
     $params['dataarray'] = b
-    $params['segmentSelection'] == $dialogResult['segmentSelection']
-    updateDIALOG
+    $params['progressIsIndeterminate'] = true
+    $params['segmentSelection'] = $dialogResult['segmentSelection']
     $params['isBusy'] = false
     updateDIALOG
   else ###### closing the window

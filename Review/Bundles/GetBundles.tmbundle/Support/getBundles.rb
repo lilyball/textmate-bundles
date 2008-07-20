@@ -22,7 +22,7 @@ $chplistPath      = File.dirname(__FILE__) + "/lib/cachedDescriptions.plist"
 # internal used cache for svn descriptions
 $chplist          = { }
 # the log file
-$logFile          = File.dirname(__FILE__) + "/lib/GetBundles.log"
+$logFile          = "#{e_sh ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
 # DIALOG's parameters hash
 $params           = { }
 # DIALOG's async token

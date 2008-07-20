@@ -267,6 +267,7 @@ def getBundleLists
           $params['updateBtnLabel'] = 'Update (%d missing)' % $numberOfNoDesc
           # $params['numberOfNoDesc'] = "%d missing" % $numberOfNoDesc
         end
+        $dataarray.sort!{|a,b| a['name'] <=> b['name']}
         $params['dataarray'] = $dataarray
         updateDIALOG
       end
@@ -334,6 +335,7 @@ def getSVNBundleDescriptions
           end
           if ! $close
             $params['dataarray'] = $dataarray
+            $params['segmentSelection'] = '        All        '
             $params['progressIsIndeterminate'] = false
             updateDIALOG
             writeSVNDescriptionCacheToDisk

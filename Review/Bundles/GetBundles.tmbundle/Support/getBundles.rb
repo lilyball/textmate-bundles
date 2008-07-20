@@ -272,9 +272,11 @@ def getBundleLists
         updateDIALOG
       end
     end
-    $params['progressText'] = 'Please update the descriptions (%d missing)' % $numberOfNoDesc
-    updateDIALOG
-    sleep(3)
+    if $numberOfNoDesc > 0
+      $params['progressText'] = 'Please update the descriptions (%d missing)' % $numberOfNoDesc
+      updateDIALOG
+      sleep(3)
+    end
     $params['isBusy'] = false
     updateDIALOG
     $listsLoaded = true

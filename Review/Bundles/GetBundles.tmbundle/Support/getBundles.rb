@@ -202,7 +202,7 @@ def getBundleLists
         rescue Timeout::Error
           writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
           $params['progressText'] = 'Timeout'
-          $params['logPath'] = %x{cat '#{$logFile}'}
+          # $params['logPath'] = %x{cat '#{$logFile}'}
           $params['isBusy'] = false
           updateDIALOG
         end
@@ -237,7 +237,7 @@ def getBundleLists
         rescue Timeout::Error
           writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
           $params['progressText'] = 'Timeout'
-          $params['logPath'] = %x{cat '#{$logFile}'}
+          # $params['logPath'] = %x{cat '#{$logFile}'}
           $params['isBusy'] = false
           updateDIALOG
         end
@@ -262,7 +262,7 @@ def getBundleLists
       end
       if ! $close
         $numberOfBundles = $dataarray.size
-        $params['numberOfBundles'] = "%d found" % $numberOfBundles
+        $params['numberOfBundles'] = "%d in total found" % $numberOfBundles
         if $numberOfNoDesc > 0
           $params['updateBtnLabel'] = 'Update (%d missing)' % $numberOfNoDesc
           # $params['numberOfNoDesc'] = "%d missing" % $numberOfNoDesc
@@ -398,6 +398,8 @@ def writeToLogFile(text)
   f.puts text
   f.flush
   f.close
+  $params['logPath'] = %x{cat '#{$logFile}'}
+  updateDIALOG
 end
 
 def installBundles
@@ -446,7 +448,7 @@ def installBundles
           $params['progressText'] = "Installing #{name} (#{cnt} / #{items.size})…"
         end
       end
-      $params['logPath'] = %x{cat '#{$logFile}'}
+      # $params['logPath'] = %x{cat '#{$logFile}'}
       updateDIALOG
       mode += $GIT if mode == 'git' # git := install via zipball, gitclone := install via 'git clone...'
       if mode == 'git' ##################### if git is not installed
@@ -507,7 +509,7 @@ def installBundles
       end
     end
     $params['progressText'] = "Reload Bundles…"
-    $params['logPath'] = %x{cat '#{$logFile}'}
+    # $params['logPath'] = %x{cat '#{$logFile}'}
     updateDIALOG
     %x{osascript -e 'tell app "TextMate" to reload bundles'}
     if errorcnt > 0
@@ -533,7 +535,7 @@ def updateTMlibPath
   $params['isBusy'] = true
   $params['progressIsIndeterminate'] = true
   $params['progressText'] = 'Installing Support/lib'
-  $params['logPath'] = %x{cat '#{$logFile}'}
+  # $params['logPath'] = %x{cat '#{$logFile}'}
   updateDIALOG
   begin
     Timeout::timeout(25) do
@@ -547,13 +549,13 @@ def updateTMlibPath
     %x{rm -rf '#{installPath}/libTEMP'}
     writeToLogFile("Renaming of “#{installPath}/lib#{ts}” into “#{installPath}/lib”")
     $params['progressText'] = 'Error while installing Support/lib. System was reset.'
-    $params['logPath'] = %x{cat '#{$logFile}'}
+    # $params['logPath'] = %x{cat '#{$logFile}'}
     updateDIALOG
     sleep(10)
   end
   $params['isBusy'] = false
   $params['progressText'] = ''
-  $params['logPath'] = %x{cat '#{$logFile}'}
+  # $params['logPath'] = %x{cat '#{$logFile}'}
   updateDIALOG
 end
 
@@ -600,6 +602,7 @@ while $run do
   elsif $dialogResult.has_key?('segmentSelection')
     # writeToLogFile($dialogResult['segmentSelection'])
     $params['isBusy'] = true
+    $params['segmentSelection'] = $dialogResult['segmentSelection']
     $params['progressText'] = "Filtering data…"
     updateDIALOG
     b = []
@@ -612,10 +615,9 @@ while $run do
     else
       b = $dataarray
     end
-    $params['numberOfBundles'] = "%d found" % b.size
+    $params['numberOfBundles'] = "%d in total found" % b.size
     $params['dataarray'] = b
     $params['progressIsIndeterminate'] = true
-    $params['segmentSelection'] = $dialogResult['segmentSelection']
     $params['isBusy'] = false
     updateDIALOG
   else ###### closing the window

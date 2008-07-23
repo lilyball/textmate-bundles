@@ -147,7 +147,7 @@ def helpDIALOG
   if $isDIALOG2
     %x{#{$DIALOG} window show -m -p "{path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
   else
-    open("|#{$DIALOG} -t#{$token}", "w") { |io| io.write $params.to_plist }
+    %x{#{$DIALOG} -m -p "{path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
   end
 end
 

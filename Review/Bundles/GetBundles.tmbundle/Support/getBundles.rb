@@ -3,6 +3,7 @@
 SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/escape.rb'
 require SUPPORT + '/lib/osx/plist'
+require SUPPORT + '/lib/textmate.rb'
 require 'erb'
 require "fileutils"
 require "open-uri"
@@ -52,6 +53,10 @@ $ts
 $installFolderExists = false
 # error counter
 $errorcnt         = 0
+# temp dir for installation
+$tempDir          = "/tmp/TM_GetBundlesTEMP"
+# global timeout in seconds
+$timeout          = 30
 
 CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as]
 
@@ -193,7 +198,7 @@ def getBundleLists
       if r[:scm] == :svn
         list = [ ]
         begin
-          Timeout::timeout(20) do
+          Timeout::timeout($timeout) do
             list = Net::HTTP.get( URI.parse(r[:url]) ).gsub( /<[^>]+?>/, '').gsub( /(?m)^.*?\.\.\n/, '').gsub( /(?m)\/[^\/]*$/, '').strip().split(/\n/)
           end
         rescue Timeout::Error
@@ -225,7 +230,7 @@ def getBundleLists
       elsif r[:scm] == :git
         list = [ ]
         begin
-          Timeout::timeout(20) do
+          Timeout::timeout($timeout) do
             list = YAML.load(open(r[:url]))['repositories'].
                 find_all{|result| result['name'].match("")}.
                 sort{|a,b| a['name'] <=> b['name']}
@@ -396,159 +401,12 @@ def writeToLogFile(text)
   updateDIALOG
 end
 
-# def installBundles
-#   errorcnt = 0
-#   cnt = 0 # counter for installed bundles
-#   $params['nocancel'] = true # avoid pressing Cancel
-#   updateDIALOG
-#   # $dialogResult['returnArgument'] helds the installation target 
-#   installPath = getInstallPathFor($dialogResult['returnArgument'])
-#   if installPath.length() > 0 and $dialogResult.has_key?('paths')
-#     FileUtils.mkdir_p installPath
-#     items = $dialogResult['paths']
-#     items.each do |item|
-#       $params['isBusy'] = true
-#       $params['progressIsIndeterminate'] = true
-#       $params['progressText'] = "Installing…"
-#       updateDIALOG
-#       cnt += 1
-#       path = item.split("|").last
-#       mode = item.split("|").first
-#       name = ""
-#       if mode == 'git'
-#         name = normalize_github_repo_name(path.gsub(/.*github.com\/.*?\/(.*?)\/.*/,'\1')).split('.').first
-#       elsif mode == 'svn'
-#         name = path.gsub(/.*\/(.*)\.tmbundle.*/,'\1')
-#       end
-#       name = URI.unescape(name)
-#       writeToLogFile("Install “%s” into %s" % [name, installPath])
-#       if File.directory?(installPath + "/#{name}.tmbundle")
-#         if askDIALOG("“#{name}” folder already exists.", "Do you want to replace it?\n➠If yes, the old folder will be renamed\nby appending a time stamp!") == 0
-#           mode = 'skip'
-#           writeToLogFile("Installation of “#{name}” was skipped")
-#         else
-#           $installFolderExists = true
-#           # rename old folder by appending a time stamp
-#           $ts = Time.now.strftime("%m%d%Y%H%M%S")
-#           writeToLogFile("Renaming of “#{installPath}/#{name}.tmbundle” into “#{installPath}/#{name}.tmbundle#{$ts}”")
-#           # %x{rm -rf '#{installPath}/#{name}.tmbundle'}
-#           %x{mv '#{installPath}/#{name}.tmbundle' '#{installPath}/#{name}.tmbundle#{$ts}'}
-#           sleep(0.3)
-#         end
-#       else
-#         $installFolderExists = false
-#       end
-#       if mode != 'skip'
-#         if items.size == 1
-#           $params['progressText'] = "Installing #{name}…"
-#         else
-#           $params['progressText'] = "Installing #{name} (#{cnt} / #{items.size})…"
-#         end
-#       end
-#       updateDIALOG
-#       mode += $GITMODE if mode == 'git' # git := install via zipball, gitclone := install via 'git clone...'
-#       if mode == 'git' ##################### if git is not installed
-#         gitdir = "/tmp/TM_GetGITBundle"
-#         download_file = "/tmp/TM_GetGITBundle/github.tmbundle.zip"
-#         # the name of the bundle
-#         name = normalize_github_repo_name(path.gsub(/.*github.com\/.*?\/(.*?)\/.*/,'\1')).split('.').first + ".tmbundle"
-#         # the name of the zipball without zip id
-#         idname = path.gsub(/.*github.com\/(.*?)\/(.*?)\/zipball.*/,'\1-\2')
-#         writeToLogFile("Install:\t%s\ninto:\t%s/%s\nusing:\tunzip\ntemp folder:\t%s" % [path,installPath,name,gitdir])
-#         begin
-#           %x{rm -r #{gitdir}}
-#           FileUtils.mkdir_p gitdir
-#           Timeout::timeout(20) do
-#             File.open(download_file, 'w') { |f| f.write(open(path).read)}
-#             system "/usr/bin/unzip '#{download_file}' -d '#{gitdir}'"
-#             # get the zip id from the downloaded zipball
-#             id = %x{/usr/bin/unzip -z '#{download_file}' | head -n2 | tail -n1}
-#             idname += "-" + id.strip!
-#             FileUtils.rm(download_file)
-#             %x{cd '#{gitdir}'; mv '#{idname}' '#{name}'}
-#             %x{cp -r '#{gitdir}/#{name}' #{e_sh installPath}}
-#             %x{rm -r #{gitdir}}
-#           end
-#         rescue Timeout::Error
-#           errorcnt += 1
-#           writeToLogFile("Timeout error while installing %s" % item)
-#           if $installFolderExists
-#             %x{mv '#{installPath}/#{name}' '#{installPath}/#{name}TEMP'}
-#             %x{mv '#{installPath}/#{name}#{$ts}' '#{installPath}/#{name}'}
-#             %x{rm -rf '#{installPath}/#{name}TEMP'}
-#             writeToLogFile("Reset: Renaming of “#{installPath}/#{name}#{$ts}” into “#{installPath}/#{name}”")
-#           end
-#         end
-#       elsif mode == 'gitclone' ############# if git is installed
-#         if ENV.has_key?('TM_GIT')
-#           git = "'%s'" % ENV['TM_GIT']
-#         else
-#           git = "git"
-#         end
-#         thePath = path.sub('http', 'git').sub('/zipball/master', '.git')
-#         theName = normalize_github_repo_name(path.sub('/zipball/master', '').gsub(/.*\/(.*)/, '\1'))
-#         writeToLogFile("Execute:\n#{git} clone #{e_sh thePath} #{e_sh installPath}/#{e_sh theName} -q 2>&1")
-#         begin
-#           Timeout::timeout(20) do
-#             d = %x{#{git} clone #{e_sh thePath} #{e_sh installPath}/#{e_sh theName} 2>&1}
-#             writeToLogFile(d.gsub(/[\r|\n]/,"§").split('§').select{|v| v =~ /(fatal|error|done|100)/}.join("\n"))
-#           end
-#         rescue Timeout::Error
-#           errorcnt += 1
-#           writeToLogFile("Timeout error while installing %s" % theName)
-#           if $installFolderExists
-#             %x{mv '#{installPath}/#{theName}' '#{installPath}/#{theName}TEMP'}
-#             %x{mv '#{installPath}/#{theName}#{$ts}' '#{installPath}/#{theName}'}
-#             %x{rm -rf '#{installPath}/#{theName}TEMP'}
-#             writeToLogFile("Reset: Renaming of “#{installPath}/#{theName}#{$ts}” into “#{installPath}/#{theName}”")
-#           end
-#         end
-#       elsif mode == 'svn' ################## svn
-#         if $SVN.length > 0
-#           writeToLogFile("Execute:\nexport LC_CTYPE=en_US.UTF-8;cd '#{installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}' 2>&1")
-#           begin
-#             Timeout::timeout(2) do
-#               d = %x{export LC_CTYPE=en_US.UTF-8;cd '#{installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}' 2>&1}
-#               writeToLogFile(d)
-#             end
-#           rescue Timeout::Error
-#             errorcnt += 1
-#             writeToLogFile("Timeout error while installing %s" % name)
-#             if $installFolderExists
-#               %x{mv '#{installPath}/#{name}.tmbundle' '#{installPath}/#{name}.tmbundleTEMP'}
-#               %x{mv '#{installPath}/#{name}.tmbundle#{$ts}' '#{installPath}/#{name}.tmbundle'}
-#               %x{rm -rf '#{installPath}/#{name}.tmbundleTEMP'}
-#               writeToLogFile("Reset: Renaming of “#{installPath}/#{name}.tmbundle#{$ts}” into “#{installPath}/#{name}.tmbundle”")
-#             end
-#           end
-#         else
-#           writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
-#           $params['progressText'] = 'No svn client found! Please check the Activity Log.'
-#           updateDIALOG
-#           sleep(3)
-#         end
-#       end
-#     end
-#     $params['progressText'] = "Reload Bundles…"
-#     updateDIALOG
-#     %x{osascript -e 'tell app "TextMate" to reload bundles'}
-#     if errorcnt > 0
-#       $params['progressText'] = 'Error while installing! Please check the Activity Log.'
-#       updateDIALOG
-#       sleep(3)
-#     end
-#     $params['isBusy'] = false
-#     $params['progressText'] = ""
-#     updateDIALOG
-#   end
-#   $params['nocancel'] = false
-#   updateDIALOG
-# end
-
 def resetOldBundleFolder(aFolder)
   executeShell("cp -r '#{aFolder}' '#{aFolder}TEMP' 1> /dev/null")
+  executeShell("rm -rf '#{aFolder}' 1> /dev/null")
   executeShell("cp -r '#{aFolder}#{$ts}' '#{aFolder}' 1> /dev/null")
-  executeShell("rm -rf '#{installPath}/#{name}TEMP' 1> /dev/null")
+  executeShell("rm -rf '#{aFolder}TEMP' 1> /dev/null")
+  executeShell("rm -rf '#{aFolder}#{$ts}' 1> /dev/null")
   if $errorcnt > 0
     writeToLogFile("Error while resetting “#{aFolder}#{$ts}” to “#{aFolder}”")
   else
@@ -580,25 +438,25 @@ def executeShell(cmd, cmdToLog = false, outToLog = false)
   if ! err.empty?
     $errorcnt += 1
     writeToLogFile(err)
+    return
   end
   return out
 end
 
 def installGitZipball(path, installPath)
   errors = ""
-  gitdir        = "/tmp/TM_GetGITBundle"
-  download_file = "#{gitdir}/github.tmbundle.zip"
+  download_file = "#{$tempDir}/github.tmbundle.zip"
   # the name of the bundle
   name = normalize_github_repo_name( 
     path.gsub(/.*github.com\/.*?\/(.*?)\/.*/,'\1') ).split('.').first + ".tmbundle"
   # the name of the zipball without zip id
   idname = path.gsub(/.*github.com\/(.*?)\/(.*?)\/zipball.*/,'\1-\2')
   writeToLogFile("Install:\t%s\ninto:\t%s/%s\nusing:\t/usr/bin/unzip\ntemp folder:\t%s" \
-    % [path, installPath, name, gitdir])
-  %x{rm -rf #{gitdir} 1> /dev/null}
-  FileUtils.mkdir_p gitdir
+    % [path, installPath, name, $tempDir])
+  %x{rm -rf #{$tempDir} 1> /dev/null}
+  FileUtils.mkdir_p $tempDir
   begin
-    Timeout::timeout(15) do
+    Timeout::timeout($timeout) do
       begin
         File.open(download_file, 'w') { |f| f.write(open(path).read)}
       rescue
@@ -609,41 +467,123 @@ def installGitZipball(path, installPath)
     end
   rescue Timeout::Error
     $errorcnt += 1
-    %x{rm -rf #{gitdir}}
+    %x{rm -rf #{$tempDir}}
     writeToLogFile("Timeout error while installing %s" % name)
     return
   end
   if $errorcnt == 0
     # try to unzip the zipball
-    executeShell("/usr/bin/unzip '#{download_file}' -d '#{gitdir}' 1> /dev/null")
+    executeShell("/usr/bin/unzip '#{download_file}' -d '#{$tempDir}' 1> /dev/null")
     if $errorcnt > 0
-      %x{rm -rf #{gitdir}}
+      %x{rm -rf #{$tempDir}}
       return
     end
     # get the zip id from the downloaded zipball
     id = executeShell("/usr/bin/unzip -z '#{download_file}' | head -n2 | tail -n1")
     if id.nil? or id.length == 0
       $errorcnt += 1
-      %x{rm -rf #{gitdir}}
+      %x{rm -rf #{$tempDir}}
       writeToLogFile("Cannot get the zip id from “#{download_file}”!")
       return
     end
     idname += "-" + id.strip!
     FileUtils.rm(download_file)
-    executeShell("cd '#{gitdir}'; mv '#{idname}' '#{name}' 1> /dev/null")
+    executeShell("cd '#{$tempDir}'; mv '#{idname}' '#{name}' 1> /dev/null")
     if $errorcnt > 0
-      %x{rm -r #{gitdir}}
+      %x{rm -r #{$tempDir}}
       return
     end
     renameOldBundleFolder("#{installPath}/#{name}") if $installFolderExists
-    executeShell("cp -r '#{gitdir}/#{name}' #{e_sh installPath}")
+    executeShell("cp -r '#{$tempDir}/#{name}' #{e_sh installPath}")
     if $errorcnt > 0
-      %x{rm -r #{gitdir}}
-      writeToLogFile("Cannot copy “#{gitdir}/#{name}” to “#{installPath}”")
+      %x{rm -r #{$tempDir}}
+      writeToLogFile("Cannot copy “#{$tempDir}/#{name}” to “#{installPath}”")
       resetOldBundleFolder("#{installPath}/#{name}") if $installFolderExists
       return
     end
-    %x{rm -r #{gitdir}}
+    %x{rm -r #{$tempDir}}
+  end
+end
+
+def installGitClone(path, installPath)
+  %x{rm -rf #{$tempDir} 1> /dev/null}
+  FileUtils.mkdir_p $tempDir
+  if ENV.has_key?('TM_GIT')
+    git = "'%s'" % ENV['TM_GIT']
+  else
+    git = "git"
+  end
+  thePath = path.sub('http', 'git').sub('/zipball/master', '.git')
+  theName = normalize_github_repo_name(path.sub('/zipball/master', '').gsub(/.*\/(.*)/, '\1'))
+  begin
+    Timeout::timeout($timeout) do
+      d = executeShell("#{git} clone #{e_sh thePath} #{$tempDir}/#{e_sh theName}",true,true)
+      if $errorcnt > 0
+        %x{rm -r #{$tempDir}}
+        return
+      end
+      writeToLogFile(d.gsub(/[\r|\n]/,"§").split('§').select{|v| v =~ /(fatal|error|done|100)/}.join("\n"))
+    end
+  rescue Timeout::Error
+    $errorcnt += 1
+    %x{rm -rf #{$tempDir}}
+    writeToLogFile("Timeout error while installing %s" % theName)
+    return
+  end
+  if $errorcnt == 0
+    renameOldBundleFolder("#{installPath}/#{theName}") if $installFolderExists
+    executeShell("cp -r '#{$tempDir}/#{theName}' '#{installPath}/#{theName}'")
+    if $errorcnt > 0
+      %x{rm -r #{$tempDir}}
+      writeToLogFile("Cannot copy “#{$tempDir}/#{theName}” to “#{installPath}/#{theName}”")
+      resetOldBundleFolder("#{installPath}/#{theName}") if $installFolderExists
+      return
+    end
+  end
+  %x{rm -r #{$tempDir}}
+end
+
+def installSVN(path, installPath)
+  %x{rm -rf #{$tempDir} 1> /dev/null}
+  FileUtils.mkdir_p $tempDir
+  name = path.gsub(/.*\/(.*)\.tmbundle.*/,'\1')
+  if $SVN.length > 0
+    begin
+      Timeout::timeout($timeout) do
+        executeShell("export LC_CTYPE=en_US.UTF-8;cd '#{$tempDir}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}'",true,true)
+        if $errorcnt > 0
+          %x{rm -r #{$tempDir}}
+          return
+        end
+      end
+    rescue Timeout::Error
+      $errorcnt += 1
+      %x{rm -rf #{$tempDir}}
+      writeToLogFile("Timeout error while installing %s" % name)
+      return
+    end
+    # get the bundle's real name (esp. for spaces and other symbols)
+    realname = executeShell("ls '#{$tempDir}' | head -n1").strip!
+    if $errorcnt > 0
+      %x{rm -r #{$tempDir}}
+      return
+    end
+    if $errorcnt == 0
+      renameOldBundleFolder("#{installPath}/#{realname}") if $installFolderExists
+      executeShell("cp -r '#{$tempDir}/#{realname}' '#{installPath}/#{realname}'")
+      if $errorcnt > 0
+        %x{rm -r #{$tempDir}}
+        writeToLogFile("Cannot copy “#{$tempDir}#{realname}” to “#{installPath}/#{realname}”")
+        resetOldBundleFolder("#{installPath}/#{realname}") if $installFolderExists
+        return
+      end
+    end
+    %x{rm -r #{$tempDir}}
+  else          #### no svn client found
+    writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
+    $params['progressText'] = 'No svn client found! Please check the Activity Log.'
+    updateDIALOG
+    sleep(3)
   end
 end
 
@@ -689,56 +629,19 @@ def installBundles
       end
       updateDIALOG
       mode += $GITMODE if mode == 'git' # git := install via zipball, gitclone := install via 'git clone...'
-      if mode == 'git'          ############# if git is not installed
+      if mode == 'git'
         installGitZipball(path, installPath)
-      elsif mode == 'gitclone'  ############# if git is installed
-        if ENV.has_key?('TM_GIT')
-          git = "'%s'" % ENV['TM_GIT']
-        else
-          git = "git"
-        end
-        thePath = path.sub('http', 'git').sub('/zipball/master', '.git')
-        theName = normalize_github_repo_name(path.sub('/zipball/master', '').gsub(/.*\/(.*)/, '\1'))
-        writeToLogFile("Execute:\n#{git} clone #{e_sh thePath} #{e_sh installPath}/#{e_sh theName} -q 2>&1")
-        begin
-          Timeout::timeout(20) do
-            d = %x{#{git} clone #{e_sh thePath} #{e_sh installPath}/#{e_sh theName} 2>&1}
-            writeToLogFile(d.gsub(/[\r|\n]/,"§").split('§').select{|v| v =~ /(fatal|error|done|100)/}.join("\n"))
-          end
-        rescue Timeout::Error
-          $errorcnt += 1
-          writeToLogFile("Timeout error while installing %s" % theName)
-          if $installFolderExists
-            %x{mv '#{installPath}/#{theName}' '#{installPath}/#{theName}TEMP'}
-            %x{mv '#{installPath}/#{theName}#{$ts}' '#{installPath}/#{theName}'}
-            %x{rm -rf '#{installPath}/#{theName}TEMP'}
-            writeToLogFile("Reset: Renaming of “#{installPath}/#{theName}#{$ts}” into “#{installPath}/#{theName}”")
-          end
-        end
-      elsif mode == 'svn' ################## svn
-        if $SVN.length > 0
-          writeToLogFile("Execute:\nexport LC_CTYPE=en_US.UTF-8;cd '#{installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}' 2>&1")
-          begin
-            Timeout::timeout(20) do
-              d = %x{export LC_CTYPE=en_US.UTF-8;cd '#{installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}' 2>&1}
-              writeToLogFile(d)
-            end
-          rescue Timeout::Error
-            $errorcnt += 1
-            writeToLogFile("Timeout error while installing %s" % name)
-            if $installFolderExists
-              %x{mv '#{installPath}/#{name}.tmbundle' '#{installPath}/#{name}.tmbundleTEMP'}
-              %x{mv '#{installPath}/#{name}.tmbundle#{$ts}' '#{installPath}/#{name}.tmbundle'}
-              %x{rm -rf '#{installPath}/#{name}.tmbundleTEMP'}
-              writeToLogFile("Reset: Renaming of “#{installPath}/#{name}.tmbundle#{$ts}” into “#{installPath}/#{name}.tmbundle”")
-            end
-          end
-        else
-          writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
-          $params['progressText'] = 'No svn client found! Please check the Activity Log.'
-          updateDIALOG
-          sleep(3)
-        end
+      elsif mode == 'gitclone'
+        installGitClone(path, installPath)
+      elsif mode == 'svn'
+        installSVN(path, installPath)
+      end
+      if $errorcnt > 0
+        $params['progressText'] = 'Error while installing! Please check the Activity Log.'
+        updateDIALOG
+        sleep(3)
+        $errorcnt = 0
+        break
       end
     end
     $params['progressText'] = "Reload Bundles…"
@@ -758,34 +661,49 @@ def installBundles
 end
 
 def updateTMlibPath
+  return if askDIALOG("Do you really want to install TextMate's lastest Support folder?","") == 0
   path = "http://macromates.com/svn/Bundles/trunk/Support/lib/"
-  installPath = "/Applications/TextMate.app/Contents/SharedSupport/Support"
-  writeToLogFile("Execute:\nexport LC_CTYPE=en_US.UTF-8;cd '#{installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}' 2>&1")
-  $ts = Time.now.strftime("%m%d%Y%H%M%S")
-  writeToLogFile("Renaming of “#{installPath}/lib” into “#{installPath}/lib#{$ts}”")
-  %x{mv '#{installPath}/lib' '#{installPath}/lib#{$ts}'}
+  $params['isBusy'] = true
+  $params['progressText'] = "Installing TextMate's Support folder…"
+  updateDIALOG
+  begin
+    installPath = TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Support"
+  rescue
+    $errorcnt += 1
+    writeToLogFile("No path to TextMate found!")
+    return
+  end
+  if ! File.directory?(installPath)
+    $errorcnt += 1
+    writeToLogFile("#{installPath} not found!")
+    return
+  end
+  if $SVN.length == 0
+    $errorcnt += 1
+    writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
+    $params['progressText'] = 'No svn client found! Please check the Activity Log.'
+    updateDIALOG
+    sleep(3)
+    return
+  end
   $params['isBusy'] = true
   $params['progressIsIndeterminate'] = true
   $params['progressText'] = 'Installing Support/lib'
   updateDIALOG
+  renameOldBundleFolder("#{installPath}/lib")
+  return if $errorcnt > 0
   begin
-    Timeout::timeout(25) do
-      d = %x{export LC_CTYPE=en_US.UTF-8;cd '#{installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}' 2>&1}
-      writeToLogFile(d)
+    Timeout::timeout($timeout) do
+      executeShell("export LC_CTYPE=en_US.UTF-8;cd '#{e_sh installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}'", true, true)
+      if $errorcnt > 0
+        resetOldBundleFolder("#{installPath}/lib")
+        return
+      end
     end
   rescue Timeout::Error
-    writeToLogFile("Timeout error while installing “TextMate's Support Lib”. ")
-    %x{mv '#{installPath}/lib' '#{installPath}/libTEMP'}
-    %x{mv '#{installPath}/lib#{$ts}' '#{installPath}/lib'}
-    %x{rm -rf '#{installPath}/libTEMP'}
-    writeToLogFile("Reset: Renaming of “#{installPath}/lib#{$ts}” into “#{installPath}/lib”")
-    $params['progressText'] = 'Error while installing Support/lib. System was reset.'
-    updateDIALOG
-    sleep(5)
+    $errorcnt += 1
+    resetOldBundleFolder("#{installPath}/lib")
   end
-  $params['isBusy'] = false
-  $params['progressText'] = ''
-  updateDIALOG
 end
 
 def filterBundleList
@@ -825,7 +743,7 @@ if ENV.has_key?('TM_SVN')
 end
 
 $GITMODE = ""
-if ! %x{type -p git1}.strip!().nil?
+if ! %x{type -p git}.strip!().nil?
   $GITMODE = "clone"
 end
 
@@ -851,7 +769,16 @@ while $run do
   # writeToLogFile($dialogResult.inspect())
   if $dialogResult.has_key?('returnArgument')
     if $dialogResult['returnArgument'] == 'updateTMlibButtonIsPressed'
+      $errorcnt = 0
       updateTMlibPath
+      if $errorcnt > 0
+        $params['progressText'] = 'Error while installing! Please check the Activity Log.'
+        updateDIALOG
+        sleep(3)
+      end
+      $errorcnt = 0
+      $params['isBusy'] = false
+      updateDIALOG
     else
       if $dialogResult.has_key?('paths') and $dialogResult['paths'].size > 10
         if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1

@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>/usr/bin/env ruby -e'
+	<string>#!/usr/bin/env ruby
+require "iconv"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
 
@@ -14,30 +15,30 @@ TextMate.save_current_document
 error_fd = nil
 document = File.read(ENV["TM_FILEPATH"])
 
-TextMate::Executor.run(ENV["TM_OSASCRIPT"] || "osascript", "-ss", ENV["TM_FILEPATH"], :version_args =&gt; ["-e", "\"AppleScript \" &amp; (AppleScript'\''s version as string)"]) do |str, type|
+TextMate::Executor.run(ENV["TM_OSASCRIPT"] || "osascript", "-ss", ENV["TM_FILEPATH"], :version_args =&gt; ["-e", "'AppleScript ' &amp; (AppleScript's version as string)"]) do |str, type|
   error_fd ||= IO.for_fd(ENV["TM_ERROR_FD"].to_i)
   case type
-  when :err
+  when :err    # 
     if str =~ /^([^\:]+):(\d+):(\d+): (.*?): (.*) \((-?\d+)\)$/ then
       filepath, start,  stop, err, msg, status = $1, $2.to_i, $3.to_i, $4, $5, $6
-
+    
       err = err.gsub(/\b\w(?=\w{3,})/) { |m| m.upcase }
       
       error_fd &lt;&lt; "&lt;div id=\"exception_report\" class=\"framed\"&gt;\n"
       error_fd &lt;&lt; "&lt;p id=\"exception\"&gt;&lt;strong&gt;#{htmlize err}&lt;/strong&gt;: #{htmlize msg}&lt;/p&gt;\n"
-
+    
       from = document[0..start].rindex(/^/)
       to = start + document[start..-1].index(/$/)
-      src = document[from...to]
-
+      src =  document[from...to]
+    
       line = document[0...start].count("\n") + 1
-      column = start - from + 1
-
+      column = start - from
+    
       link = "txmt://open?line=#{line}&amp;column=#{column}"
       error_fd &lt;&lt; "&lt;pre&gt;#{src}\n"
-      error_fd &lt;&lt; "#{"&amp;nbsp;" * column}↑&lt;/pre&gt;"
-      error_fd &lt;&lt;  "&lt;blockquote&gt;&lt;a href=\"#{link}\"&gt;line #{line}, column #{column}&lt;/a&gt; in #{ENV["TM_DISPLAYNAME"]}\n"
-
+      error_fd &lt;&lt; "#{' ' * (column)}↑&lt;/pre&gt;"
+      error_fd &lt;&lt;  "&lt;blockquote&gt;&lt;a href=\"#{link}\"&gt;line #{line}, column #{column}&lt;/a&gt; in #{ENV['TM_DISPLAYNAME']}\n"
+    
       error_fd &lt;&lt; "&lt;p&gt;Error #{status}.&lt;/p&gt;\n"
       error_fd &lt;&lt; "&lt;/div&gt;\n"
       
@@ -49,7 +50,7 @@ TextMate::Executor.run(ENV["TM_OSASCRIPT"] || "osascript", "-ss", ENV["TM_FILEPA
   when :out
     htmlize(str)
   end
-end' &lt;&amp;0
+end
 </string>
 	<key>input</key>
 	<string>document</string>

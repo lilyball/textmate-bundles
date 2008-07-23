@@ -143,6 +143,14 @@ def updateDIALOG
   end
 end
 
+def helpDIALOG
+  if $isDIALOG2
+    %x{#{$DIALOG} window show -m -p "{path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
+  else
+    open("|#{$DIALOG} -t#{$token}", "w") { |io| io.write $params.to_plist }
+  end
+end
+
 def askDIALOG(msg, text)
   resStr = 0
   if $isDIALOG2
@@ -184,6 +192,7 @@ def getBundleLists
         'progressText'            => 'Fetching List for %s…' % r[:display].to_s,
         'progressIsIndeterminate' => true,
         'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
+        'showHelpBtn'             => 'helpButtonIsPressed',
         'targets'                 => [ 
           'Users Lib Pristine', 'Users Lib Bundles', 'Lib Bundles', 'App Bundles', 'Users Desktop', 'Users Downloads'
           ],
@@ -786,6 +795,8 @@ while $run do
       $errorcnt = 0
       $params['isBusy'] = false
       updateDIALOG
+    elsif $dialogResult['returnArgument'] == 'helpButtonIsPressed'
+      helpDIALOG
     else
       if $dialogResult.has_key?('paths') and $dialogResult['paths'].size > 10
         if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1

@@ -191,7 +191,8 @@ def getBundleLists
         'nocancel'                => false,
         'repoColor'               => '#0000FF',
         'logPath'                 => %x{cat '#{$logFile}'},
-        'bundleSelection'        => 'All',
+        'bundleSelection'         => 'All',
+        'usingGitZip'             => false,
       }
       updateDIALOG
       bundlearray = [ ]
@@ -517,11 +518,13 @@ def installGitClone(path, installPath)
   theName = normalize_github_repo_name(path.sub('/zipball/master', '').gsub(/.*\/(.*)/, '\1'))
   begin
     Timeout::timeout($timeout) do
-      d = executeShell("#{git} clone #{e_sh thePath} #{$tempDir}/#{e_sh theName}",true,true)
-      if $errorcnt > 0
+      d = executeShell("#{git} clone #{e_sh thePath} '#{$tempDir}/#{theName}' 2>&1", true, false)
+      if d.match(/(fatal|error)/)
+        writeToLogFile(d)
         %x{rm -r #{$tempDir}}
         return
       end
+      # avoid outputting all xx% stuff, only for 100% or error
       writeToLogFile(d.gsub(/[\r|\n]/,"§").split('§').select{|v| v =~ /(fatal|error|done|100)/}.join("\n"))
     end
   rescue Timeout::Error
@@ -590,6 +593,7 @@ end
 def installBundles
   cnt = 0 # counter for installed bundles
   $params['nocancel'] = true # avoid pressing Cancel
+  $params['usingGitZip'] = $dialogResult['usingGitZip']
   updateDIALOG
   # $dialogResult['returnArgument'] helds the installation target 
   installPath = getInstallPathFor($dialogResult['returnArgument'])
@@ -628,7 +632,8 @@ def installBundles
         $params['progressText'] += (items.size == 1) ? "…" : " (#{cnt} / #{items.size})…"
       end
       updateDIALOG
-      mode += $GITMODE if mode == 'git' # git := install via zipball, gitclone := install via 'git clone...'
+      # git := install via zipball, gitclone := install via 'git clone...'
+      mode += $GITMODE if mode == 'git' and ! $dialogResult['usingGitZip']
       if mode == 'git'
         installGitZipball(path, installPath)
       elsif mode == 'gitclone'
@@ -643,12 +648,13 @@ def installBundles
         $errorcnt = 0
         break
       end
+      writeToLogFile("Installation of “%s” done." % name)
     end
     $params['progressText'] = "Reload Bundles…"
     updateDIALOG
     %x{osascript -e 'tell app "TextMate" to reload bundles'}
     if $errorcnt > 0
-      $params['progressText'] = 'Error while installing! Please check the Activity Log.'
+      $params['progressText'] = 'General error while installing! Please check the Activity Log.'
       updateDIALOG
       sleep(3)
     end
@@ -708,9 +714,10 @@ end
 
 def filterBundleList
   $params['isBusy'] = true
-  $params['bundleSelection'] = $dialogResult['bundleSelection']
-  $params['targetSelection'] = $dialogResult['targetSelection']
-  $params['progressText'] = "Filtering bundle list…"
+  $params['bundleSelection']  = $dialogResult['bundleSelection']
+  $params['targetSelection']  = $dialogResult['targetSelection']
+  $params['usingGitZip']      = $dialogResult['usingGitZip']
+  $params['progressText']     = "Filtering bundle list…"
   updateDIALOG
   b = []
   if $dialogResult['bundleSelection'] == 'GitHub'

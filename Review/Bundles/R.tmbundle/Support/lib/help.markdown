@@ -149,7 +149,7 @@ It inserts:<br><pre>	x <- function(var) {
 ## Drag&amp;Drop Facilities
 -   __load (*.Rdata)__
 
-	If a `*.Rdata` file is drag&amp;dropped to a R/R console document it inserts:
+	If a `*.Rdata` or `*.Rda` file is drag&amp;dropped to a R/R console document it inserts:
 	
 	`load(FILE)`.
 	
@@ -215,7 +215,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Mai 26 2008***
+***Date: Jul 23 2008***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

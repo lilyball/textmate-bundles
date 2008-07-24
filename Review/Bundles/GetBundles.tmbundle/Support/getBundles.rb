@@ -30,6 +30,7 @@ $logFile          = "#{e_sh ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
 $params           = { }
 # DIALOG's async token
 $token            = nil
+$infoToken        = nil
 # result hash of the the DIALOG
 $dialogResult     = { }
 # table of all bundles with repo, name, bundleDescription, path
@@ -232,7 +233,6 @@ def infoDIALOG
         return
       end
       data.each_line do |l|
-        writeToLogFile(l)
         info[l.split(': ').first] = l.split(': ').last
       end
       f = File.open("#{$tempDir}/info.html", "w")
@@ -265,10 +265,18 @@ def infoDIALOG
   # %x{textutil -convert rtfd '#{$tempDir}/info.html'}
   $params['isBusy'] = false
   updateDIALOG
+  $infoTokenOld = $infoToken
   if $isDIALOG2
-    %x{#{$DIALOG} window show -m -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}" help}
+    $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}" help }
   else
-    %x{#{$DIALOG} -m -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}" help}
+    $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}"}
+  end
+  if ! $infoTokenOld.nil?
+    if $isDIALOG2
+      %x{#{$DIALOG} window close #{$infoTokenOld}}
+    else
+      %x{#{$DIALOG} -x#{$infoTokenOld}}
+    end
   end
   %x{rm -rf #{$tempDir} 1> /dev/null}
 end

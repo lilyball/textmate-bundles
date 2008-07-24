@@ -146,9 +146,9 @@ end
 
 def helpDIALOG
   if $isDIALOG2
-    %x{#{$DIALOG} window show -m -p "{title='GetBundle — Help';path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
+    %x{#{$DIALOG} window show -m -p "{title='GetBundle — Help';path='#{ENV['TM_BUNDLE_SUPPORT']}/help.html';}" help}
   else
-    %x{#{$DIALOG} -m -p "{title='GetBundle — Help';path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
+    %x{#{$DIALOG} -m -p "{title='GetBundle — Help';path='#{ENV['TM_BUNDLE_SUPPORT']}/help.html';}" help}
   end
 end
 

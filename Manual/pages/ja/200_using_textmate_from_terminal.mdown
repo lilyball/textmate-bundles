@@ -33,15 +33,15 @@ TextMateがファイルを閉じるまで、コマンドを再会するのを待
     ln -s mate ~/bin/mate_wait   # run this once to create the link
     export EDITOR='mate_wait'    # use in your ~/.bash_profile
 
-### Git Editor {git_editor}
+### Git エディタ {git_editor}
 
-When you commit to a [Git][] repository you may find that your caret is not at the first line.
+Gitレポジトリにコミットすると、キャレットが最初の行にないことに気づくかもしれません。
 
-This is because Git reuses the temporary file used for the commit message and TextMate stores per-file caret position (via extended attributes).
+これは、Gitがコミットメッセージに使うテンプラリファイルを再利用して、TextMateが(拡張属性経由で)ファイル毎にキャレットを保存するからです。
 
-To avoid this problem you can set the Git editor to `mate -wl1`. This instructs TextMate to open with the caret at line 1 rather than where it last was.
+Gitエディタを`mate -wl1`に設定することで、この問題を回避できます。こうして、最後に位置していた場所ではなく、１行目にキャレットが位置していた状態でTextMateはファイルを開きます。
 
-To set it like this for Git, you can set the `GIT_EDITOR` variable or Git’s `core.editor` configuration variable.
+このようにGitを設定するには、`GIT_EDITOR`変数を設定するかGitの`core.editor`の設定変数を指定してください。
 
 [Git]: http://git.or.cz/ "Git - Fast Version Control System"
 

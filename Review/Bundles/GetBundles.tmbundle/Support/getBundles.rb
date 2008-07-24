@@ -145,11 +145,7 @@ def updateDIALOG
 end
 
 def helpDIALOG
-  if $isDIALOG2
-    %x{#{$DIALOG} window show -m -p "{title='GetBundle — Help';path='#{ENV['TM_BUNDLE_SUPPORT']}/help.html';}" help}
-  else
-    %x{#{$DIALOG} -m -p "{title='GetBundle — Help';path='#{ENV['TM_BUNDLE_SUPPORT']}/help.html';}" help}
-  end
+  %x{'#{ENV['TM_BUNDLE_SUPPORT']}/bin/showHelp.sh'}
 end
 
 def infoDIALOG

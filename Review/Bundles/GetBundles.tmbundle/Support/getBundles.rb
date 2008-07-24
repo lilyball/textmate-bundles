@@ -82,7 +82,7 @@ end
 
 def getInstallPathFor(abbr)
   # update params
-  $params['targetSelection'] = $dialogResult['returnArgument']
+  $params['targetSelection'] = abbr
   updateDIALOG
   if targetPaths.has_key?(abbr)
     return targetPaths[abbr]
@@ -383,6 +383,11 @@ def joinThreads
     $x0.kill
   rescue
   end
+  begin
+    $x2.join
+    $x2.kill
+  rescue
+  end
 end
 
 def killThreads
@@ -392,6 +397,10 @@ def killThreads
   end
   begin
     $x0.kill
+  rescue
+  end
+  begin
+    $x2.kill
   rescue
   end
 end
@@ -481,6 +490,7 @@ def installGitZipball(path, installPath)
     writeToLogFile("Timeout error while installing %s" % name)
     return
   end
+  return if $close
   if $errorcnt == 0
     # try to unzip the zipball
     executeShell("/usr/bin/unzip '#{download_file}' -d '#{$tempDir}' 1> /dev/null")
@@ -488,6 +498,7 @@ def installGitZipball(path, installPath)
       %x{rm -rf #{$tempDir}}
       return
     end
+    return if $close
     # get the zip id from the downloaded zipball
     id = executeShell("/usr/bin/unzip -z '#{download_file}' | head -n2 | tail -n1")
     if id.nil? or id.length == 0
@@ -498,6 +509,7 @@ def installGitZipball(path, installPath)
     end
     idname += "-" + id.strip!
     FileUtils.rm(download_file)
+    return if $close
     executeShell("cd '#{$tempDir}'; mv '#{idname}' '#{name}' 1> /dev/null")
     if $errorcnt > 0
       %x{rm -r #{$tempDir}}
@@ -542,6 +554,7 @@ def installGitClone(path, installPath)
     writeToLogFile("Timeout error while installing %s" % theName)
     return
   end
+  return if $close
   if $errorcnt == 0
     renameOldBundleFolder("#{installPath}/#{theName}") if $installFolderExists
     executeShell("cp -r '#{$tempDir}/#{theName}' '#{installPath}/#{theName}'")
@@ -580,6 +593,7 @@ def installSVN(path, installPath)
       %x{rm -r #{$tempDir}}
       return
     end
+    return if $close
     if $errorcnt == 0
       renameOldBundleFolder("#{installPath}/#{realname}") if $installFolderExists
       executeShell("cp -r '#{$tempDir}/#{realname}' '#{installPath}/#{realname}'")
@@ -599,17 +613,19 @@ def installSVN(path, installPath)
   end
 end
 
-def installBundles
+def installBundles(dlg)
+  $listsLoaded = false
   cnt = 0 # counter for installed bundles
-  $params['nocancel'] = true # avoid pressing Cancel
-  $params['usingGitZip'] = $dialogResult['usingGitZip']
+  # $params['nocancel'] = false # avoid pressing Cancel
+  $params['usingGitZip'] = dlg['usingGitZip']
   updateDIALOG
   # $dialogResult['returnArgument'] helds the installation target 
-  installPath = getInstallPathFor($dialogResult['returnArgument'])
-  if installPath.length() > 0 and $dialogResult.has_key?('paths')
+  installPath = getInstallPathFor(dlg['returnArgument'])
+  if installPath.length() > 0 and dlg.has_key?('paths') and ! $close
     FileUtils.mkdir_p installPath
-    items = $dialogResult['paths']
+    items = dlg['paths']
     items.each do |item|
+      break if $close
       $errorcnt = 0
       $params['isBusy'] = true
       $params['progressIsIndeterminate'] = true
@@ -625,6 +641,7 @@ def installBundles
         name = path.gsub(/.*\/(.*)\.tmbundle.*/,'\1')
       end
       name = URI.unescape(name)
+      break if $close
       writeToLogFile("Install “%s” into %s" % [name, installPath])
       if File.directory?(installPath + "/#{name}.tmbundle")
         if askDIALOG("“#{name}” folder already exists.", "Do you want to replace it?\n➠If yes, the old folder will be renamed\nby appending a time stamp!") == 0
@@ -642,7 +659,8 @@ def installBundles
       end
       updateDIALOG
       # git := install via zipball, gitclone := install via 'git clone...'
-      mode += $GITMODE if mode == 'git' and ! $dialogResult['usingGitZip']
+      mode += $GITMODE if mode == 'git' and ! dlg['usingGitZip']
+      break if $close
       if mode == 'git'
         installGitZipball(path, installPath)
       elsif mode == 'gitclone'
@@ -650,6 +668,7 @@ def installBundles
       elsif mode == 'svn'
         installSVN(path, installPath)
       end
+      break if $close
       if $errorcnt > 0
         $params['progressText'] = 'Error while installing! Please check the Activity Log.'
         updateDIALOG
@@ -671,8 +690,10 @@ def installBundles
     $params['progressText'] = ""
     updateDIALOG
   end
-  $params['nocancel'] = false
-  updateDIALOG
+  # $params['nocancel'] = false
+  # updateDIALOG
+  %x{rm -rf #{$tempDir} 1> /dev/null}
+  $listsLoaded = true
 end
 
 def updateTMlibPath
@@ -800,10 +821,14 @@ while $run do
     else
       if $dialogResult.has_key?('paths') and $dialogResult['paths'].size > 10
         if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
-          installBundles
+          $x2 = Thread.new do
+            installBundles($dialogResult)
+          end
         end
       else
-        installBundles
+        $x2 = Thread.new do
+          installBundles($dialogResult)
+        end
       end
     end
   elsif $dialogResult.has_key?('doUpdate') && $dialogResult['doUpdate'] == 1

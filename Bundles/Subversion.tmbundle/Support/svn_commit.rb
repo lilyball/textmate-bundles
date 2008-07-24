@@ -15,7 +15,6 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/io"
-require "#{ENV['TM_SUPPORT_PATH']}/lib/scriptmate"
 
 # puts ARGV.inspect
 # puts 'TM_SELECTED_FILES  '+ ENV['TM_SELECTED_FILES'] rescue nil #DEBUG
@@ -124,16 +123,33 @@ public
 		$CHILD_STATUS
 	end
 	
-	def commit(&output_block)
-		stdin, stdout, stderr, pid = my_popen3("#{@svn_tool} commit  --force-log #{@commit_args}")
-		all_output = ''
-			
-    TextMate::IO.exhaust(:out => stdout, :err => stderr) do |data|
-	    data.each_line do |line|
-		    all_output << line
-        output_block.call(:output, line.chomp)
-	    end
+	def handle_authentication(line, complete_text, stdin, output_block)
+	  case line
+    when /^Authentication realm:\s*(.*)/
+      @auth_realm = $1
+    when /^Password for/
+      stdin.puts(TextMate::UI.request_secure_string(:title => 'Subversion Password', :prompt => "#{defined?(@auth_realm) ? (@auth_realm + ':') : ''}#{line}"))
+    when /^Username/
+      stdin.puts(TextMate::UI.request_string(:title => 'Subversion Username', :prompt => "#{defined?(@auth_realm) ? (@auth_realm + ':') : ''}#{line}"))
+    # when /^Transmitting file data/
+    #   output_block.call(:transmitting, line.chomp)
     end
+  end
+	
+	def commit(&output_block)
+		require "open3"
+
+		Open3.popen3("#{@svn_tool} commit  --force-log #{@commit_args}") do |stdin, stdout, stderr|
+		  all_output = ''
+			
+      TextMate::IO.exhaust(:out => stdout, :err => stderr) do |data|
+		    data.each_line do |line|
+			    handle_authentication(line, all_output, stdin, output_block)
+			    all_output << line
+          output_block.call(:output, line.chomp)
+		    end
+      end
+		end
 	end
 end
 

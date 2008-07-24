@@ -4,6 +4,7 @@ SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/escape.rb'
 require SUPPORT + '/lib/osx/plist'
 require SUPPORT + '/lib/textmate.rb'
+require 'rexml/document'
 require 'erb'
 require "fileutils"
 require "open-uri"
@@ -145,10 +146,138 @@ end
 
 def helpDIALOG
   if $isDIALOG2
-    %x{#{$DIALOG} window show -m -p "{path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
+    %x{#{$DIALOG} window show -m -p "{title='GetBundle — Help';path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
+  else
+    %x{#{$DIALOG} -m -p "{title='GetBundle — Help';path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
+  end
+end
+
+def infoDIALOG
+  return if ! $dialogResult.has_key?('path')
+  %x{rm -rf #{$tempDir} 1> /dev/null}
+  FileUtils.mkdir_p $tempDir
+  path = $dialogResult['path'].split('|').last
+  mode = $dialogResult['path'].split('|').first
+  searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
+  url = path.gsub(/zipball\/master/, '')
+  info = { }
+  readme = ""
+  css = ""
+  data = ""
+  $params['isBusy'] = true
+  $params['progressIsIndeterminate'] = true
+  $params['progressText'] = "Fetching information…"
+  updateDIALOG
+  if mode == 'git'
+    begin
+      Timeout::timeout($timeout) do
+        info = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))['repositories'].first
+      end
+    rescue Timeout::Error
+      $params['isBusy'] = false
+      updateDIALOG
+      %x{rm -rf #{$tempDir}}
+      writeToLogFile("Timeout error while fetching information")
+      return
+    end
+    begin
+      Timeout::timeout($timeout) do
+        data = Net::HTTP.get( URI.parse("#{url}tree/master") )
+      end
+    rescue Timeout::Error
+      $params['isBusy'] = false
+      updateDIALOG
+      %x{rm -rf #{$tempDir}}
+      writeToLogFile("Timeout error while fetching information")
+      return
+    end
+    readme = data.gsub( /.*?(<div id="readme">.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
+    readme = "<br /><i>No README found</i><br />" if ! readme.match(/readme/i)
+    css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
+    data = ""
+    f = File.open("#{$tempDir}/info.html", "w")
+    f.puts "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
+    f.puts "<base href='http://github.com'>"
+    f.puts "<head>"
+    f.puts "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>"
+    f.puts "#{css}"
+    f.puts "</head>"
+    f.puts "<body><div id='main'><div class='site'>"
+    f.puts "<font color='blue' size=12pt>#{info['name']}</font><br /><br />"
+    f.puts "<table>"
+    f.puts "<tr><td width='150px'>Name:</td><td>#{info['name']}</td></tr>"
+    f.puts "<tr><td>URL:</td><td><a href='#{url}'>#{url}</a></td></tr>"
+    f.puts "<tr><td>Description:</td><td>#{info['description']}</td></tr>"
+    f.puts "<tr><td>Owner:</td><td><a href='http://github.com/#{info['owner']}'>#{info['owner']}</a></td></tr>"
+    f.puts "<tr><td>Watchers:</td><td>#{info['watchers']}</td></tr>"
+    f.puts "<tr><td>Private:</td><td>#{info['private']}</td></tr>"
+    f.puts "<tr><td>Forks:</td><td>#{info['forks']}</td></tr>"
+    f.puts "</table>"
+    f.puts "<br /><br />"
+    f.puts "#{readme}</div></div>"
+    f.puts "</body></html>"
+    f.flush
+    f.close
+  elsif mode == 'svn'
+    if $SVN.length > 0
+      begin
+        Timeout::timeout($timeout) do
+          data = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' info '#{path}'")
+          if $errorcnt > 0
+            %x{rm -r #{$tempDir}}
+            $params['isBusy'] = false
+            updateDIALOG
+            return
+          end
+        end
+      rescue Timeout::Error
+        %x{rm -rf #{$tempDir}}
+        writeToLogFile("Timeout error while fetching information")
+        return
+      end
+      writeToLogFile(data)
+      data.each_line do |l|
+        writeToLogFile(l)
+        info[l.split(': ').first] = l.split(': ').last
+      end
+      writeToLogFile(info.inspect())
+      f = File.open("#{$tempDir}/info.html", "w")
+      f.puts "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
+      f.puts "<head>"
+      f.puts "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>"
+      f.puts "</head>"
+      f.puts "<body style='font-family:Lucida Grande'>"
+      f.puts "<font color='blue' size=12pt>#{info['Path']}</font><br /><br />"
+      f.puts "<table>"
+      f.puts "<tr><td width='150px'>Path:</td><td>#{info['Path']}</td></tr>"
+      f.puts "<tr><td>URL:</td><td><a href='#{info['URL']}'>#{info['URL']}</a></td></tr>"
+      f.puts "<tr><td>Revision:</td><td>#{info['Revision']}</td></tr>"
+      f.puts "<tr><td>Last Changed Author:</td><td>#{info['Last Changed Author']}</td></tr>"
+      f.puts "<tr><td>Last Changed Rev:</td><td>#{info['Last Changed Rev']}</td></tr>"
+      f.puts "<tr><td>Last Changed Date:</td><td>#{info['Last Changed Date']}</td></tr>"
+      f.puts "</table>"
+      f.puts "</body></html>"
+      f.flush
+      f.close
+      
+    else          #### no svn client found
+      writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
+      $params['progressText'] = 'No svn client found! Please check the Activity Log.'
+      updateDIALOG
+      sleep(3)
+    end
+  else
+    return
+  end
+  %x{textutil -convert rtfd '#{$tempDir}/info.html'}
+  $params['isBusy'] = false
+  updateDIALOG
+  if $isDIALOG2
+    %x{#{$DIALOG} window show -m -p "{title='GetBundle — Info';path='#{$tempDir}/info.rtfd';}" help}
   else
     %x{#{$DIALOG} -m -p "{path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
   end
+  %x{rm -rf #{$tempDir} 1> /dev/null}
 end
 
 def askDIALOG(msg, text)
@@ -193,6 +322,7 @@ def getBundleLists
         'progressIsIndeterminate' => true,
         'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
         'showHelpBtn'             => 'helpButtonIsPressed',
+        'infoBtn'                 => 'infoButtonIsPressed',
         'targets'                 => [ 
           'Users Lib Pristine', 'Users Lib Bundles', 'Lib Bundles', 'App Bundles', 'Users Desktop', 'Users Downloads'
           ],
@@ -818,6 +948,8 @@ while $run do
       updateDIALOG
     elsif $dialogResult['returnArgument'] == 'helpButtonIsPressed'
       helpDIALOG
+    elsif $dialogResult['returnArgument'] == 'infoButtonIsPressed'
+      infoDIALOG
     else
       if $dialogResult.has_key?('paths') and $dialogResult['paths'].size > 10
         if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1

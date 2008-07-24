@@ -235,12 +235,10 @@ def infoDIALOG
         writeToLogFile("Timeout error while fetching information")
         return
       end
-      writeToLogFile(data)
       data.each_line do |l|
         writeToLogFile(l)
         info[l.split(': ').first] = l.split(': ').last
       end
-      writeToLogFile(info.inspect())
       f = File.open("#{$tempDir}/info.html", "w")
       f.puts "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
       f.puts "<head>"
@@ -259,7 +257,6 @@ def infoDIALOG
       f.puts "</body></html>"
       f.flush
       f.close
-      
     else          #### no svn client found
       writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
       $params['progressText'] = 'No svn client found! Please check the Activity Log.'
@@ -269,13 +266,13 @@ def infoDIALOG
   else
     return
   end
-  %x{textutil -convert rtfd '#{$tempDir}/info.html'}
+  # %x{textutil -convert rtfd '#{$tempDir}/info.html'}
   $params['isBusy'] = false
   updateDIALOG
   if $isDIALOG2
-    %x{#{$DIALOG} window show -m -p "{title='GetBundle — Info';path='#{$tempDir}/info.rtfd';}" help}
+    %x{#{$DIALOG} window show -m -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}" help}
   else
-    %x{#{$DIALOG} -m -p "{path='#{ENV['TM_BUNDLE_SUPPORT']}/help.rtfd';}" help}
+    %x{#{$DIALOG} -m -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}" help}
   end
   %x{rm -rf #{$tempDir} 1> /dev/null}
 end

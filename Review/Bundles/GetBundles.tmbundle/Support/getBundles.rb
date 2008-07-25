@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby 
+#!/usr/bin/env ruby -wKU
 
 SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/escape.rb'
@@ -49,7 +49,7 @@ $numberOfNoDesc   = 0
 # main run loop variable
 $run              = true
 # time stamp for renaming existing folders
-$ts
+$ts               = ""
 # does the installation folder exist
 $installFolderExists = false
 # error counter
@@ -58,6 +58,8 @@ $errorcnt         = 0
 $tempDir          = "/tmp/TM_GetBundlesTEMP"
 # global timeout in seconds
 $timeout          = 30
+# global thread vars
+$x0=$x1=$x2=$x3   = nil
 # init DIALOG's parameters hash
 $params = {
   'isBusy'                  => true,
@@ -172,7 +174,8 @@ def closeDIALOG
       %x{#{$DIALOG} -x#{t}}
     end
   end
-  %x{open 'txmt://open?'}
+  # go back to the front most doc if TM is running
+  %x{open 'txmt://open?'} if ! getInstallPathFor("App Bundles").empty?
 end
 
 def updateDIALOG
@@ -917,7 +920,8 @@ def installBundles(dlg)
     end
     $params['progressText'] = "Reload Bundles…"
     updateDIALOG
-    %x{osascript -e 'tell app "TextMate" to reload bundles'}
+    # reload bundles only if TM is running
+    %x{osascript -e 'tell app "TextMate" to reload bundles'} if ! getInstallPathFor("App Bundles").empty?
     if $errorcnt > 0
       $params['progressText'] = 'General error while installing! Please check the Activity Log.'
       updateDIALOG

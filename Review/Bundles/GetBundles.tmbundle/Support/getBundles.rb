@@ -4,7 +4,6 @@ SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/escape.rb'
 require SUPPORT + '/lib/osx/plist'
 require SUPPORT + '/lib/textmate.rb'
-require 'rexml/document'
 require 'erb'
 require "fileutils"
 require "open-uri"
@@ -76,7 +75,7 @@ def targetPaths
     'Users Lib Pristine'  => "#{ENV["HOME"]}/Library/Application Support/TextMate/Pristine Copy/Bundles",
     'Users Lib Bundles'   => "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles",
     'Lib Bundles'         => "/Library/Application Support/TextMate/Bundles",
-    'App Bundles'         => "/Applications/TextMate.app/Contents/SharedSupport/Bundles",
+    'App Bundles'         => "",
     'Users Desktop'       => "#{ENV["HOME"]}/Desktop",
     'Users Downloads'     => "#{ENV["HOME"]}/Downloads",
   }
@@ -87,6 +86,16 @@ def getInstallPathFor(abbr)
   $params['targetSelection'] = abbr
   updateDIALOG
   if targetPaths.has_key?(abbr)
+    if abbr == 'App Bundles'
+      begin
+        path = TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Bundles"
+      rescue
+        $errorcnt += 1
+        writeToLogFile("No path to TextMate found!")
+        return ""
+      end
+      return path
+    end
     return targetPaths[abbr]
   else
     return "#{ENV["HOME"]}/Desktop"
@@ -212,6 +221,8 @@ def infoDIALOG(dlg)
         end
       end
     rescue Timeout::Error
+      $params['isBusy'] = false
+      updateDIALOG
       %x{rm -rf #{$tempDir}}
       writeToLogFile("Timeout error while fetching information")
       return
@@ -272,6 +283,8 @@ def infoDIALOG(dlg)
           end
         end
       rescue Timeout::Error
+        $params['isBusy'] = false
+        updateDIALOG
         %x{rm -rf #{$tempDir}}
         writeToLogFile("Timeout error while fetching information")
         return
@@ -293,6 +306,8 @@ def infoDIALOG(dlg)
           end
         end
       rescue Timeout::Error
+        $params['isBusy'] = false
+        updateDIALOG
         %x{rm -rf #{$tempDir}}
         writeToLogFile("Timeout error while fetching information")
         return
@@ -403,6 +418,7 @@ def getBundleLists
         'logPath'                 => %x{cat '#{$logFile}'},
         'bundleSelection'         => 'All',
         'usingGitZip'             => false,
+        'timeout'                 => '30',
       }
       updateDIALOG
       bundlearray = [ ]
@@ -1025,6 +1041,19 @@ end
 while $run do
   getResultFromDIALOG
   # writeToLogFile($dialogResult.inspect())
+  if $dialogResult.has_key?('timeout')
+    begin
+      $timeout = $dialogResult['timeout'].to_i
+    rescue
+      $timeout = 30
+      writeToLogFile("Timeout was set to 30")
+    end
+    if $timeout < 1 or $timeout > 600
+      $timeout = 30
+      writeToLogFile("Timeout was set to 30")
+    end
+  end
+  $params['timeout'] = $timeout.to_s
   if $dialogResult.has_key?('returnArgument')
     if $dialogResult['returnArgument'] == 'updateTMlibButtonIsPressed'
       $errorcnt = 0

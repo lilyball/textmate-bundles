@@ -192,8 +192,30 @@ def infoDIALOG(dlg)
       return
     end
     return if $close
-    readme = data.gsub( /.*?(<div id="readme">.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
-    readme = "<br /><i>No README found</i><br />" if ! readme.match(/readme/i)
+    begin
+      Timeout::timeout($timeout) do
+        begin
+          plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{url}tree/master/info.plist?raw=true")).gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
+        rescue
+          writeToLogFile($!)
+        end
+      end
+    rescue Timeout::Error
+      %x{rm -rf #{$tempDir}}
+      writeToLogFile("Timeout error while fetching information")
+      return
+    end
+    return if $close
+    writeToLogFile(plist.inspect())
+    plist['name'] = info['path'] if plist['name'].nil?
+    plist['description'] = "" if plist['description'].nil?
+    plist['contactName'] = "" if plist['contactName'].nil?
+    plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
+    if ! data.index('<div id="readme">').nil?
+      readme = data.gsub( /.*?(<div id="readme">.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
+    else
+      readme = "<br /><i>No README found</i><br />"
+    end
     css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
     data = ""
     return if $close
@@ -205,15 +227,23 @@ def infoDIALOG(dlg)
     f.puts "#{css}"
     f.puts "</head>"
     f.puts "<body><div id='main'><div class='site'>"
-    f.puts "<font color='blue' size=12pt>#{info['name']}</font><br /><br />"
+    f.puts "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
+    f.puts "<h3><u>git Information:</u></h3>"
+    f.puts "<b>Description:</b><br />&nbsp;#{info['description']}<br />"
     f.puts "<b>Name:</b><br />&nbsp;#{info['name']}<br />"
     f.puts "<b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />"
-    f.puts "<b>Description:</b><br />&nbsp;#{info['description']}<br />"
     f.puts "<b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />"
     f.puts "<b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />"
     f.puts "<b>Private:</b><br />&nbsp;#{info['private']}<br />"
     f.puts "<b>Forks:</b><br />&nbsp;#{info['forks']}<br />"
+    if ! plist['contactName'].empty? or ! plist['contactEmailRot13'].empty? or ! plist['description'].empty?
+      f.puts "<br /><br />"
+      f.puts "<h3><u>Bundle Information (info.plist):</u></h3>"
+      f.puts "#{plist['description']}<br /><br />"
+      f.puts "<b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />"
+    end
     f.puts "<br /><br />"
+    f.puts "<h2><u>README:</u></h2><br />"
     f.puts "#{readme}</div></div>"
     f.puts "</body></html>"
     f.flush
@@ -413,20 +443,22 @@ def getBundleLists
         end
         list.each do |result|
           break if $close
-          theName = normalize_github_repo_name(result['name']).split('.').first
-          theDescription = ""
-          if result.has_key?('description')
-            theDescription = strip_html(result['description'])
+          if result['url'] =~ /tmbundle$/
+            theName = normalize_github_repo_name(result['name']).split('.').first
+            theDescription = ""
+            if result.has_key?('description')
+              theDescription = strip_html(result['description'])
+            end
+            theDescription += " (by %s)" % result['owner']
+            thePath = r[:scm].to_s + "|" + URI.escape(result['url'] + "/zipball/master") unless result['url'].nil?
+            $dataarray << {
+              'name' => theName,
+              'path' => thePath,
+              'bundleDescription' => theDescription,
+              'searchpattern' => theName.downcase+" "+theDescription.downcase,
+              'repo' => r[:name].to_s
+            }
           end
-          theDescription += " (by %s)" % result['owner']
-          thePath = r[:scm].to_s + "|" + URI.escape(result['url'] + "/zipball/master") unless result['url'].nil?
-          $dataarray << {
-            'name' => theName,
-            'path' => thePath,
-            'bundleDescription' => theDescription,
-            'searchpattern' => theName.downcase+" "+theDescription.downcase,
-            'repo' => r[:name].to_s
-          }
         end
       else
       end
@@ -454,6 +486,15 @@ def getBundleLists
     $params['isBusy'] = false
     updateDIALOG
   end
+  if $dataarray.size == 0
+    writeToLogFile("Probably no internet connection available")
+    $params['isBusy'] = true
+    $params['progressText'] = 'Probably no internet connection available'
+    updateDIALOG
+    sleep(3)
+    $params['isBusy'] = false
+    updateDIALOG
+  end    
   # suppress the updating of the table to preserve the selection
   $params.delete('dataarray')
 end

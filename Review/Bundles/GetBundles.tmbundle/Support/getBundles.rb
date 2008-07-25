@@ -149,23 +149,25 @@ def helpDIALOG
   %x{'#{ENV['TM_BUNDLE_SUPPORT']}/bin/showHelp.sh'}
 end
 
-def infoDIALOG
-  return if ! $dialogResult.has_key?('path')
+def infoDIALOG(dlg)
+  return if ! dlg.has_key?('path')
   %x{rm -rf #{$tempDir} 1> /dev/null}
   FileUtils.mkdir_p $tempDir
-  path = $dialogResult['path'].split('|').last
-  mode = $dialogResult['path'].split('|').first
-  searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
-  url = path.gsub(/zipball\/master/, '')
-  info = { }
-  readme = ""
-  css = ""
-  data = ""
+  path = dlg['path'].split('|').last
+  mode = dlg['path'].split('|').first
+  info    = { }
+  readme  = ""
+  css     = ""
+  data    = ""
+  plist   = { }
   $params['isBusy'] = true
   $params['progressIsIndeterminate'] = true
   $params['progressText'] = "Fetching information…"
   updateDIALOG
+  return if $close
   if mode == 'git'
+    searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
+    url = path.gsub(/zipball\/master/, '')
     begin
       Timeout::timeout($timeout) do
         info = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))['repositories'].first
@@ -177,6 +179,7 @@ def infoDIALOG
       writeToLogFile("Timeout error while fetching information")
       return
     end
+    return if $close
     begin
       Timeout::timeout($timeout) do
         data = Net::HTTP.get( URI.parse("#{url}tree/master") )
@@ -188,10 +191,12 @@ def infoDIALOG
       writeToLogFile("Timeout error while fetching information")
       return
     end
+    return if $close
     readme = data.gsub( /.*?(<div id="readme">.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
     readme = "<br /><i>No README found</i><br />" if ! readme.match(/readme/i)
     css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
     data = ""
+    return if $close
     f = File.open("#{$tempDir}/info.html", "w")
     f.puts "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
     f.puts "<base href='http://github.com'>"
@@ -201,15 +206,13 @@ def infoDIALOG
     f.puts "</head>"
     f.puts "<body><div id='main'><div class='site'>"
     f.puts "<font color='blue' size=12pt>#{info['name']}</font><br /><br />"
-    f.puts "<table>"
-    f.puts "<tr><td width='150px'>Name:</td><td>#{info['name']}</td></tr>"
-    f.puts "<tr><td>URL:</td><td><a href='#{url}'>#{url}</a></td></tr>"
-    f.puts "<tr><td>Description:</td><td>#{info['description']}</td></tr>"
-    f.puts "<tr><td>Owner:</td><td><a href='http://github.com/#{info['owner']}'>#{info['owner']}</a></td></tr>"
-    f.puts "<tr><td>Watchers:</td><td>#{info['watchers']}</td></tr>"
-    f.puts "<tr><td>Private:</td><td>#{info['private']}</td></tr>"
-    f.puts "<tr><td>Forks:</td><td>#{info['forks']}</td></tr>"
-    f.puts "</table>"
+    f.puts "<b>Name:</b><br />&nbsp;#{info['name']}<br />"
+    f.puts "<b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />"
+    f.puts "<b>Description:</b><br />&nbsp;#{info['description']}<br />"
+    f.puts "<b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />"
+    f.puts "<b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />"
+    f.puts "<b>Private:</b><br />&nbsp;#{info['private']}<br />"
+    f.puts "<b>Forks:</b><br />&nbsp;#{info['forks']}<br />"
     f.puts "<br /><br />"
     f.puts "#{readme}</div></div>"
     f.puts "</body></html>"
@@ -232,24 +235,46 @@ def infoDIALOG
         writeToLogFile("Timeout error while fetching information")
         return
       end
+      return if $close
       data.each_line do |l|
         info[l.split(': ').first] = l.split(': ').last
       end
+      begin
+        Timeout::timeout($timeout) do
+          begin
+            plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{path}/info.plist")))
+          rescue
+            begin
+              plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{thePath}/info.plist"))))
+            rescue
+              plist = OSX::PropertyList::load("{description='?';}")
+            end
+          end
+        end
+      rescue Timeout::Error
+        %x{rm -rf #{$tempDir}}
+        writeToLogFile("Timeout error while fetching information")
+        return
+      end
+      return if $close
+      plist['name'] = info['path'] if plist['name'].nil?
+      plist['description'] = "" if plist['description'].nil?
+      plist['contactName'] = "" if plist['contactName'].nil?
+      plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
       f = File.open("#{$tempDir}/info.html", "w")
       f.puts "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
       f.puts "<head>"
       f.puts "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>"
       f.puts "</head>"
       f.puts "<body style='font-family:Lucida Grande'>"
-      f.puts "<font color='blue' size=12pt>#{info['Path']}</font><br /><br />"
-      f.puts "<table>"
-      f.puts "<tr><td width='150px'>Path:</td><td>#{info['Path']}</td></tr>"
-      f.puts "<tr><td>URL:</td><td><a href='#{info['URL']}'>#{info['URL']}</a></td></tr>"
-      f.puts "<tr><td>Revision:</td><td>#{info['Revision']}</td></tr>"
-      f.puts "<tr><td>Last Changed Author:</td><td>#{info['Last Changed Author']}</td></tr>"
-      f.puts "<tr><td>Last Changed Rev:</td><td>#{info['Last Changed Rev']}</td></tr>"
-      f.puts "<tr><td>Last Changed Date:</td><td>#{info['Last Changed Date']}</td></tr>"
-      f.puts "</table>"
+      f.puts "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
+      f.puts "#{plist['description']}<br /><br />"
+      f.puts "<b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />"
+      f.puts "<b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />"
+      f.puts "<b>Revision:</b><br />&nbsp;#{info['Revision']}<br />"
+      f.puts "<b>Last Changed Date:</b><br />&nbsp;#{info['Last Changed Date']}<br />"
+      f.puts "<b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />"
+      f.puts "<b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />"
       f.puts "</body></html>"
       f.flush
       f.close
@@ -266,6 +291,10 @@ def infoDIALOG
   $params['isBusy'] = false
   updateDIALOG
   $infoTokenOld = $infoToken
+  if $close
+    %x{rm -rf #{$tempDir} 1> /dev/null}
+    return
+  end
   if $isDIALOG2
     $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}" help }
   else
@@ -519,6 +548,11 @@ def joinThreads
     $x2.kill
   rescue
   end
+  begin
+    $x3.join
+    $x3.kill
+  rescue
+  end
 end
 
 def killThreads
@@ -532,6 +566,10 @@ def killThreads
   end
   begin
     $x2.kill
+  rescue
+  end
+  begin
+    $x3.kill
   rescue
   end
 end
@@ -950,7 +988,9 @@ while $run do
     elsif $dialogResult['returnArgument'] == 'helpButtonIsPressed'
       helpDIALOG
     elsif $dialogResult['returnArgument'] == 'infoButtonIsPressed'
-      infoDIALOG
+      $x3 = Thread.new do
+        infoDIALOG($dialogResult)
+      end
     else
       if $dialogResult.has_key?('paths') and $dialogResult['paths'].size > 10
         if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1

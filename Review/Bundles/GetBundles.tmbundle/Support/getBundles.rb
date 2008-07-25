@@ -129,10 +129,21 @@ def orderOutDIALOG
 end
 
 def closeDIALOG
+  list = ""
   if $isDIALOG2
     %x{#{$DIALOG} window close #{$token}}
+    list = %x{#{$DIALOG} window list | egrep 'GetBundles'}
+    list.each_line do |l|
+      t = l.split(' ').first
+      %x{#{$DIALOG} window close #{t}}
+    end
   else
     %x{#{$DIALOG} -x#{$token}}
+    list = %x{#{$DIALOG} -l | egrep 'GetBundles'}
+    list.each_line do |l|
+      t = l.split(' ').first
+      %x{#{$DIALOG} -x#{t}}
+    end
   end
   %x{open 'txmt://open?'}
 end
@@ -326,9 +337,9 @@ def infoDIALOG(dlg)
     return
   end
   if $isDIALOG2
-    $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}" help }
+    $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}" help }
   else
-    $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundle — Info';path='#{$tempDir}/info.html';}"}
+    $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
   end
   if ! $infoTokenOld.nil?
     if $isDIALOG2
@@ -486,7 +497,7 @@ def getBundleLists
     $params['isBusy'] = false
     updateDIALOG
   end
-  if $dataarray.size == 0
+  if $dataarray.size == 0 and ! $close
     writeToLogFile("Probably no internet connection available")
     $params['isBusy'] = true
     $params['progressText'] = 'Probably no internet connection available'

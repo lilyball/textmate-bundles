@@ -6,15 +6,15 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>if [ `echo -n "$DIALOG" | tail -c 1` != "2" ]; then
-	CHECK=$("$DIALOG" -l | egrep -c 'Get Bundles')
+	CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
 else
-	CHECK=$("$DIALOG" window list | egrep -c 'Get Bundles')
+	CHECK=$("$DIALOG" window list | egrep -c 'TextMate — GetBundles')
 fi
 
 if [ $CHECK == 0 ]; then
 	"${TM_RUBY:-ruby}" -wKU "$TM_BUNDLE_SUPPORT/getBundles.rb" &amp;&gt;/dev/null &amp;
 else
-	echo "The window “Get Bundles” is already opened"
+	echo "The window “GetBundles” is already opened"
 fi</string>
 	<key>input</key>
 	<string>none</string>

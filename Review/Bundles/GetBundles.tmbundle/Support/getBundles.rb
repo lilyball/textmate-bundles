@@ -58,6 +58,24 @@ $errorcnt         = 0
 $tempDir          = "/tmp/TM_GetBundlesTEMP"
 # global timeout in seconds
 $timeout          = 30
+# init DIALOG's parameters hash
+$params = {
+  'isBusy'                  => true,
+  'progressIsIndeterminate' => true,
+  'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
+  'showHelpBtn'             => 'helpButtonIsPressed',
+  'infoBtn'                 => 'infoButtonIsPressed',
+  'targets'                 => [ 
+    'Users Lib Pristine', 'Users Lib Bundles', 'Lib Bundles', 'App Bundles', 'Users Desktop', 'Users Downloads'
+    ],
+  'targetSelection'         => 'Users Lib Pristine',
+  'nocancel'                => false,
+  'repoColor'               => '#0000FF',
+  'logPath'                 => %x{cat '#{$logFile}'},
+  'bundleSelection'         => 'All',
+  'usingGitZip'             => false,
+  'timeout'                 => '30',
+}
 
 CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as]
 
@@ -401,25 +419,7 @@ def getBundleLists
     $dataarray  = [ ]
     remote_bundle_locations.each do |r|
       break if $close
-      # init DIALOG's parameters hash
-      $params = {
-        'isBusy'                  => true,
-        'progressText'            => 'Fetching List for %s…' % r[:display].to_s,
-        'progressIsIndeterminate' => true,
-        'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
-        'showHelpBtn'             => 'helpButtonIsPressed',
-        'infoBtn'                 => 'infoButtonIsPressed',
-        'targets'                 => [ 
-          'Users Lib Pristine', 'Users Lib Bundles', 'Lib Bundles', 'App Bundles', 'Users Desktop', 'Users Downloads'
-          ],
-        'targetSelection'         => 'Users Lib Pristine',
-        'nocancel'                => false,
-        'repoColor'               => '#0000FF',
-        'logPath'                 => %x{cat '#{$logFile}'},
-        'bundleSelection'         => 'All',
-        'usingGitZip'             => false,
-        'timeout'                 => '30',
-      }
+      $params['progressText'] = 'Fetching List for %s…' % r[:display].to_s
       updateDIALOG
       bundlearray = [ ]
       if r[:scm] == :svn
@@ -913,7 +913,7 @@ def installBundles(dlg)
         $errorcnt = 0
         break
       end
-      writeToLogFile("Installation of “%s” done." % name)
+      writeToLogFile("Installation of “%s” done." % name) if mode != 'skip'
     end
     $params['progressText'] = "Reload Bundles…"
     updateDIALOG

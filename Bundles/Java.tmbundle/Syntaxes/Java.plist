@@ -230,22 +230,35 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(\w+)\s*\(</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>storage.type.java</string>
-						</dict>
-					</dict>
+					<string>(?=\w.*\()</string>
 					<key>end</key>
-					<string>\)</string>
+					<string>(?&lt;=\))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#code</string>
+							<string>#object-types</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>\(</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>storage.type.java</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>\)</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#code</string>
+								</dict>
+							</array>
 						</dict>
 					</array>
 				</dict>

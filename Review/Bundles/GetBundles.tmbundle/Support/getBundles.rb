@@ -60,24 +60,6 @@ $tempDir          = "/tmp/TM_GetBundlesTEMP"
 $timeout          = 30
 # global thread vars
 $x0=$x1=$x2=$x3   = nil
-# init DIALOG's parameters hash
-$params = {
-  'isBusy'                  => true,
-  'progressIsIndeterminate' => true,
-  'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
-  'showHelpBtn'             => 'helpButtonIsPressed',
-  'infoBtn'                 => 'infoButtonIsPressed',
-  'targets'                 => [ 
-    'Users Lib Pristine', 'Users Lib Bundles', 'Lib Bundles', 'App Bundles', 'Users Desktop', 'Users Downloads'
-    ],
-  'targetSelection'         => 'Users Lib Pristine',
-  'nocancel'                => false,
-  'repoColor'               => '#0000FF',
-  'logPath'                 => %x{cat '#{$logFile}'},
-  'bundleSelection'         => 'All',
-  'usingGitZip'             => false,
-  'timeout'                 => '30',
-}
 
 CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as]
 
@@ -150,11 +132,15 @@ def writeSVNDescriptionCacheToDisk
 end
 
 def orderOutDIALOG
-  if $isDIALOG2
+  $params['nocancel'] = true
+    if $isDIALOG2
     $token = %x{#{$DIALOG} window create -p #{e_sh $params.to_plist} #{e_sh $NIB} }
   else
     $token = %x{#{$DIALOG} -a #{e_sh $NIB} -p #{e_sh $params.to_plist}}
   end
+  writeToLogFile("Get Bundles DIALOG runs at token #{$token}")
+  $params['nocancel'] = false
+  updateDIALOG
 end
 
 def closeDIALOG
@@ -192,15 +178,12 @@ end
 
 def infoDIALOG(dlg)
   return if ! dlg.has_key?('path')
+  info = plist = { }
+  readme = css = data = ""
   %x{rm -rf #{$tempDir} 1> /dev/null}
   FileUtils.mkdir_p $tempDir
   path = dlg['path'].split('|').last
   mode = dlg['path'].split('|').first
-  info    = { }
-  readme  = ""
-  css     = ""
-  data    = ""
-  plist   = { }
   $params['isBusy'] = true
   $params['progressIsIndeterminate'] = true
   $params['progressText'] = "Fetching information…"
@@ -262,35 +245,40 @@ def infoDIALOG(dlg)
     css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
     data = ""
     return if $close
-    f = File.open("#{$tempDir}/info.html", "w")
-    f.puts "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
-    f.puts "<base href='http://github.com'>"
-    f.puts "<head>"
-    f.puts "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>"
-    f.puts "#{css}"
-    f.puts "</head>"
-    f.puts "<body><div id='main'><div class='site'>"
-    f.puts "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
-    f.puts "<h3><u>git Information:</u></h3>"
-    f.puts "<b>Description:</b><br />&nbsp;#{info['description']}<br />"
-    f.puts "<b>Name:</b><br />&nbsp;#{info['name']}<br />"
-    f.puts "<b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />"
-    f.puts "<b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />"
-    f.puts "<b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />"
-    f.puts "<b>Private:</b><br />&nbsp;#{info['private']}<br />"
-    f.puts "<b>Forks:</b><br />&nbsp;#{info['forks']}<br />"
-    if ! plist['contactName'].empty? or ! plist['contactEmailRot13'].empty? or ! plist['description'].empty?
-      f.puts "<br /><br />"
-      f.puts "<h3><u>Bundle Information (info.plist):</u></h3>"
-      f.puts "#{plist['description']}<br /><br />"
-      f.puts "<b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />"
+    File.open("#{$tempDir}/info.html", "w") do |io|
+      io << <<-HTML01
+        <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+        <base href='http://github.com'>
+        <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        #{css}
+        </head>
+        <body><div id='main'><div class='site'>
+        <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
+        <h3><u>git Information:</u></h3>
+        <b>Description:</b><br />&nbsp;#{info['description']}<br />
+        <b>Name:</b><br />&nbsp;#{info['name']}<br />
+        <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
+        <b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />
+        <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
+        <b>Private:</b><br />&nbsp;#{info['private']}<br />
+        <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
+      HTML01
+      if ! plist['contactName'].empty? or ! plist['contactEmailRot13'].empty? or ! plist['description'].empty?
+        io << <<-HTML02
+        <br /><br />
+        <h3><u>Bundle Information (info.plist):</u></h3>
+        #{plist['description']}<br /><br />
+        <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
+        HTML02
+      end
+      io << <<-HTML03
+        <br /><br />
+        <h2><u>README:</u></h2><br />
+        #{readme}</div></div>
+        </body></html>
+      HTML03
     end
-    f.puts "<br /><br />"
-    f.puts "<h2><u>README:</u></h2><br />"
-    f.puts "#{readme}</div></div>"
-    f.puts "</body></html>"
-    f.flush
-    f.close
   elsif mode == 'svn'
     if $SVN.length > 0
       begin
@@ -338,28 +326,26 @@ def infoDIALOG(dlg)
       plist['description'] = "" if plist['description'].nil?
       plist['contactName'] = "" if plist['contactName'].nil?
       plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
-      f = File.open("#{$tempDir}/info.html", "w")
-      f.puts "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
-      f.puts "<head>"
-      f.puts "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>"
-      f.puts "</head>"
-      f.puts "<body style='font-family:Lucida Grande'>"
-      f.puts "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
-      f.puts "#{plist['description']}<br /><br />"
-      f.puts "<b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />"
-      f.puts "<b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />"
-      f.puts "<b>Revision:</b><br />&nbsp;#{info['Revision']}<br />"
-      f.puts "<b>Last Changed Date:</b><br />&nbsp;#{info['Last Changed Date']}<br />"
-      f.puts "<b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />"
-      f.puts "<b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />"
-      f.puts "</body></html>"
-      f.flush
-      f.close
+      File.open("#{$tempDir}/info.html", "w") do |io|
+        io << <<-HTML11
+          <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+          <head>
+          <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+          </head>
+          <body style='font-family:Lucida Grande'>
+          <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
+          #{plist['description']}<br /><br />
+          <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
+          <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
+          <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
+          <b>Last Changed Date:</b><br />&nbsp;#{info['Last Changed Date']}<br />
+          <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
+          <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
+          </body></html>
+        HTML11
+      end
     else          #### no svn client found
-      writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
-      $params['progressText'] = 'No svn client found! Please check the Activity Log.'
-      updateDIALOG
-      sleep(3)
+      noSVNclientFound
     end
   else
     return
@@ -385,6 +371,13 @@ def infoDIALOG(dlg)
     end
   end
   %x{rm -rf #{$tempDir} 1> /dev/null}
+end
+
+def noSVNclientFound
+  writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
+  $params['progressText'] = 'No svn client found! Please check the Activity Log.'
+  updateDIALOG
+  sleep(3)
 end
 
 def askDIALOG(msg, text)
@@ -846,10 +839,7 @@ def installSVN(path, installPath)
     end
     %x{rm -r #{$tempDir}}
   else          #### no svn client found
-    writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
-    $params['progressText'] = 'No svn client found! Please check the Activity Log.'
-    updateDIALOG
-    sleep(3)
+    noSVNclientFound
   end
 end
 
@@ -916,7 +906,7 @@ def installBundles(dlg)
         $errorcnt = 0
         break
       end
-      writeToLogFile("Installation of “%s” done." % name) if mode != 'skip'
+      writeToLogFile("Installation of “%s” done." % name) if mode != 'skip' and $errorcnt == 0
     end
     $params['progressText'] = "Reload Bundles…"
     updateDIALOG
@@ -1007,10 +997,56 @@ def filterBundleList
   updateDIALOG
 end
 
+def setTimeout
+  if $dialogResult.has_key?('timeout')
+    begin
+      $timeout = $dialogResult['timeout'].to_i
+    rescue
+      $timeout = 30
+      writeToLogFile("Timeout was set to 30")
+    end
+    if $timeout < 1 or $timeout > 600
+      $timeout = 30
+      writeToLogFile("Timeout was set to 30")
+    end
+  end
+  $params['timeout'] = $timeout.to_s
+end
+
 ##------- main -------##
+
+# init DIALOG's parameters hash
+$params = {
+  'isBusy'                  => true,
+  'progressIsIndeterminate' => true,
+  'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
+  'showHelpBtn'             => 'helpButtonIsPressed',
+  'infoBtn'                 => 'infoButtonIsPressed',
+  'targets'                 => targetPaths.keys.sort {|x,y| y <=> x },
+  'targetSelection'         => targetPaths.keys.sort {|x,y| y <=> x }.first,
+  'nocancel'                => false,
+  'repoColor'               => '#0000FF',
+  'logPath'                 => %x{cat '#{$logFile}'},
+  'bundleSelection'         => 'All',
+  'usingGitZip'             => false,
+  'timeout'                 => '30',
+  'updateBtnLabel'          => 'Update Descriptions',
+}
 
 initSVNDescriptionCache
 initLogFile
+
+orderOutDIALOG
+
+$x1 = Thread.new do
+  begin
+    getBundleLists
+  rescue
+    writeToLogFile("Fatal Error")
+    $run = false
+    exit 0
+  end
+end
 
 $SVN = ""
 if ! %x{type -p svn}.strip!().nil?
@@ -1025,39 +1061,10 @@ if ! %x{type -p git}.strip!().nil?
   $GITMODE = "clone"
 end
 
-$params['nocancel'] = true
-orderOutDIALOG
-writeToLogFile("Get Bundles DIALOG runs at token #{$token}")
-$params['nocancel'] = false
-$params['updateBtnLabel'] = 'Update Descriptions'
-updateDIALOG
-
-$x1 = Thread.new do
-  begin
-    getBundleLists
-  rescue
-    writeToLogFile("Fatal Error")
-    $run = false
-    exit 0
-  end
-end
-
 while $run do
   getResultFromDIALOG
+  setTimeout
   # writeToLogFile($dialogResult.inspect())
-  if $dialogResult.has_key?('timeout')
-    begin
-      $timeout = $dialogResult['timeout'].to_i
-    rescue
-      $timeout = 30
-      writeToLogFile("Timeout was set to 30")
-    end
-    if $timeout < 1 or $timeout > 600
-      $timeout = 30
-      writeToLogFile("Timeout was set to 30")
-    end
-  end
-  $params['timeout'] = $timeout.to_s
   if $dialogResult.has_key?('returnArgument')
     if $dialogResult['returnArgument'] == 'updateTMlibButtonIsPressed'
       $errorcnt = 0

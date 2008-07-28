@@ -2,7 +2,7 @@
 # txt2tags - generic text conversion tool
 # http://txt2tags.sf.net
 #
-# Copyright 2001, 2002, 2003, 2004, 2005, 2006 Aurelio Marinho Jargas
+# Copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Aurelio Jargas
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,13 +20,11 @@
 #
 #   BORING CODE EXPLANATION AHEAD
 #
-# Just read if you wish to understand how the txt2tags code works
+# Just read it if you wish to understand how the txt2tags code works.
 #
 ########################################################################
 #
-# Version 2.0 was a complete rewrite for the program 'core'.
-#
-# Now the code that [1] parses the marked text is separated from the
+# The code that [1] parses the marked text is separated from the
 # code that [2] insert the target tags.
 #
 #   [1] made by: def convert()
@@ -45,27 +43,22 @@
 #
 # In other words, whenever inside a block, the parser *holds* the tag
 # insertion process, waiting until the full block is read. That was
-# needed primary to close paragraphs for the new XHTML target, but
+# needed primary to close paragraphs for the XHTML target, but
 # proved to be a very good adding, improving many other processing.
 #
 # -------------------------------------------------------------------
 #
-# There is also a brand new code for the Configuration schema, 100%
-# rewritten. There are new classes, all self documented: CommandLine,
-# SourceDocument, ConfigMaster and ConfigLines. In short, a new RAW
-# Config format was created, and all kind of configuration is first
-# converted to this format, and then a generic method parses it.
+# These important classes are all documented:
+# CommandLine, SourceDocument, ConfigMaster, ConfigLines.
 #
-# The init processing was changed also, and now the functions which
-# gets informations about the input files are: get_infiles_config(),
-#  process_source_file() and convert_this_files()
+# There is a RAW Config format and all kind of configuration is first
+# converted to this format. Then a generic method parses it.
 #
-# Other parts are untouched, and remains the same as in v1.7, as the
-# marks regexes, target Headers and target Tags & Rules.
+# These functions get information about the input file(s) and take
+# care of the init processing:
+# get_infiles_config(), process_source_file() and convert_this_files()
 #
 ########################################################################
-
-# Now I think the code is nice, easier to read and understand
 
 #XXX Python coding warning
 # Avoid common mistakes:
@@ -115,7 +108,7 @@ import re, string, os, sys, time, getopt
 my_url = 'http://txt2tags.sf.net'
 my_name = 'txt2tags'
 my_email = 'verde@aurelio.net'
-my_version = '2.4'
+my_version = '2.5'
 
 # i18n - just use if available
 if USE_I18N:
@@ -140,20 +133,22 @@ else:
 #
 # FLAGS and OPTIONS are configs that affect the converted document.
 # They usually have also a --no-<option> to turn them OFF.
+#
 # ACTIONS are needed because when doing multiple input files, strange
 # behavior would be found, as use command line interface for the
 # first file and gui for the second. There is no --no-<action>.
 # --version and --help inside %!options are also odd
 #
-TARGETS  = ['html', 'xhtml', 'sgml', 'tex', 'lout', 'man', 'mgp',
-            'moin', 'pm6'  , 'txt']
+TARGETS  = 'html xhtml sgml tex lout man mgp wiki gwiki doku moin pm6 txt'.split()
+
 FLAGS    = {'headers'    :1 , 'enum-title' :0 , 'mask-email' :0 ,
             'toc-only'   :0 , 'toc'        :0 , 'rc'         :1 ,
             'css-sugar'  :0 , 'css-suggar' :0 , 'css-inside' :0 ,
             'quiet'      :0 }
 OPTIONS  = {'target'     :'', 'toc-level'  :3 , 'style'      :'',
             'infile'     :'', 'outfile'    :'', 'encoding'   :'',
-            'config-file':'', 'split'      :0 , 'lang'       :''}
+            'config-file':'', 'split'      :0 , 'lang'       :'',
+            'show-config-value':'' }
 ACTIONS  = {'help'       :0 , 'version'    :0 , 'gui'        :0 ,
             'verbose'    :0 , 'debug'      :0 , 'dump-config':0 ,
             'dump-source':0 }
@@ -165,6 +160,7 @@ NO_MULTI_INPUT = ['gui','dump-config','dump-source']
 CONFIG_KEYWORDS = [
             'target', 'encoding', 'style', 'options', 'preproc','postproc',
             'guicolors']
+
 TARGET_NAMES = {
   'html' : _('HTML page'),
   'xhtml': _('XHTML page'),
@@ -173,6 +169,9 @@ TARGET_NAMES = {
   'lout' : _('Lout document'),
   'man'  : _('UNIX Manual page'),
   'mgp'  : _('MagicPoint presentation'),
+  'wiki' : _('Wikipedia page'),
+  'gwiki': _('Google Wiki page'),
+  'doku' : _('DokuWiki page'),
   'moin' : _('MoinMoin page'),
   'pm6'  : _('PageMaker document'),
   'txt'  : _('Plain Text'),
@@ -212,7 +211,8 @@ USAGE = string.join([
 _("Usage: %s [OPTIONS] [infile.t2t ...]") % my_name,
 '',
 _("  -t, --target=TYPE   set target document type. currently supported:"),
-'                      %s' % re.sub(r"[]'[]",'',repr(TARGETS)),
+'                      %s,' % string.join(TARGETS[:8], ', '),
+'                      %s'  % string.join(TARGETS[8:], ', '),
 _("  -i, --infile=FILE   set FILE as the input file name ('-' for STDIN)"),
 _("  -o, --outfile=FILE  set FILE as the output file name ('-' for STDOUT)"),
 _("  -H, --no-headers    suppress header, title and footer contents"),
@@ -427,9 +427,36 @@ HEADER_TEMPLATE = {
 %(HEADER3)s
 """,
 
+  'gwiki': """\
+*%(HEADER1)s*
+
+%(HEADER2)s
+
+_%(HEADER3)s_
+
+""",
+
+  'doku': """\
+===== %(HEADER1)s =====
+
+**//%(HEADER2)s//**
+
+//%(HEADER3)s//
+""",
+
+  'wiki': """\
+'''%(HEADER1)s'''
+
+%(HEADER2)s
+
+''%(HEADER3)s''
+
+""",
+
   'tex': \
 r"""\documentclass{article}
 \usepackage{graphicx}
+\usepackage[normalem]{ulem} %% needed by strike
 \usepackage[urlcolor=blue,colorlinks=true]{hyperref}
 \usepackage[%(ENCODING)s]{inputenc}  %% char encoding
 \usepackage{%(STYLE)s}  %% user defined
@@ -470,46 +497,64 @@ r"""\documentclass{article}
 def getTags(config):
 	"Returns all the known tags for the specified target"
 	
-	keys = [
-	'paragraphOpen','paragraphClose',
-	'title1','title2','title3','title4','title5',
-	'title1Open','title1Close','title2Open','title2Close',
-	'blocktitle1Open','title1Close','title2Open','title2Close',
-	'title3Open','title3Close','title4Open','title4Close',
-	'title5Open','title5Close',
-	'numtitle1','numtitle2','numtitle3','numtitle4','numtitle5',
-	'blockVerbOpen','blockVerbClose',
-	'blockQuoteOpen','blockQuoteClose','blockQuoteLine',
-	'blockCommentOpen','blockCommentClose',
-	'fontMonoOpen','fontMonoClose',
-	'fontBoldOpen','fontBoldClose',
-	'fontItalicOpen','fontItalicClose',
-	'fontUnderlineOpen','fontUnderlineClose',
-	'listOpen','listClose',
-	'listItemOpen','listItemClose','listItemLine',
-	'numlistOpen','numlistClose',
-	'numlistItemOpen','numlistItemClose','numlistItemLine',
-	'deflistOpen','deflistClose',
-	'deflistItem1Open','deflistItem1Close',
-	'deflistItem2Open','deflistItem2Close',
-	'bar1','bar2',
-	'url','urlMark','email','emailMark',
-	'img','imgAlignLeft','imgAlignRight','imgAlignCenter',
-	'tableOpen','tableClose',
-	'tableRowOpen','tableRowClose','tableRowSep',
-	'tableCellOpen','tableCellClose','tableCellSep',
-	'tableTitleCellOpen','tableTitleCellClose','tableTitleCellSep',
-	'tableTitleRowOpen','tableTitleRowClose',
-	'tableBorder', 'tableAlignLeft', 'tableAlignCenter',
-	'tableCellAlignLeft','tableCellAlignRight','tableCellAlignCenter',
-	'tableColAlignLeft','tableColAlignRight','tableColAlignCenter',
-	'tableColAlignSep', 'tableCellColSpan',
-	'anchor','comment','pageBreak',
-	'TOC','tocOpen','tocClose',
-	'cssOpen', 'cssClose',
-	'bodyOpen','bodyClose',
-	'EOD'
-	]
+	keys = """
+	title1              numtitle1
+	title2              numtitle2
+	title3              numtitle3
+	title4              numtitle4
+	title5              numtitle5
+	title1Open          title1Close
+	title2Open          title2Close
+	title3Open          title3Close
+	title4Open          title4Close
+	title5Open          title5Close
+	blocktitle1Open     blocktitle1Close
+	blocktitle2Open     blocktitle2Close
+	blocktitle3Open     blocktitle3Close
+
+	paragraphOpen       paragraphClose
+	blockVerbOpen       blockVerbClose
+	blockQuoteOpen      blockQuoteClose blockQuoteLine
+	blockCommentOpen    blockCommentClose
+
+	fontMonoOpen        fontMonoClose
+	fontBoldOpen        fontBoldClose
+	fontItalicOpen      fontItalicClose
+	fontUnderlineOpen   fontUnderlineClose
+	fontStrikeOpen      fontStrikeClose
+
+	listOpen            listClose
+	listItemOpen        listItemClose     listItemLine
+	numlistOpen         numlistClose
+	numlistItemOpen     numlistItemClose  numlistItemLine
+	deflistOpen         deflistClose
+	deflistItem1Open    deflistItem1Close
+	deflistItem2Open    deflistItem2Close deflistItem2LinePrefix
+
+	bar1                bar2
+	url                 urlMark
+	email               emailMark
+	img                 imgAlignLeft  imgAlignRight  imgAlignCenter
+	                   _imgAlignLeft _imgAlignRight _imgAlignCenter
+
+	tableOpen           tableClose
+	_tableBorder        _tableAlignLeft      _tableAlignCenter
+	tableRowOpen        tableRowClose        tableRowSep
+	tableTitleRowOpen   tableTitleRowClose
+	tableCellOpen       tableCellClose       tableCellSep
+	tableTitleCellOpen  tableTitleCellClose  tableTitleCellSep
+	_tableColAlignLeft  _tableColAlignRight  _tableColAlignCenter
+	_tableCellAlignLeft _tableCellAlignRight _tableCellAlignCenter
+	_tableCellColSpan   tableColAlignSep
+
+	bodyOpen            bodyClose
+	cssOpen             cssClose
+	tocOpen             tocClose             TOC
+	anchor
+	comment
+	pageBreak
+	EOD
+	""".split()
 	
 	# TIP: \a represents the current text on the mark
 	# TIP: ~A~, ~B~ and ~C~ are expanded to other tags parts
@@ -534,64 +579,66 @@ def getTags(config):
 	},
 	
 	'html': {
-	   'paragraphOpen'       : '<P>'            ,
-	   'paragraphClose'      : '</P>'           ,
-	   'title1'              : '~A~<H1>\a</H1>' ,
-	   'title2'              : '~A~<H2>\a</H2>' ,
-	   'title3'              : '~A~<H3>\a</H3>' ,
-	   'title4'              : '~A~<H4>\a</H4>' ,
-	   'title5'              : '~A~<H5>\a</H5>' ,
-	   'blockVerbOpen'       : '<PRE>'          ,
-	   'blockVerbClose'      : '</PRE>'         ,
-	   'blockQuoteOpen'      : '<BLOCKQUOTE>'   ,
-	   'blockQuoteClose'     : '</BLOCKQUOTE>'  ,
-	   'fontMonoOpen'        : '<CODE>'         ,
-	   'fontMonoClose'       : '</CODE>'        ,
-	   'fontBoldOpen'        : '<B>'            ,
-	   'fontBoldClose'       : '</B>'           ,
-	   'fontItalicOpen'      : '<I>'            ,
-	   'fontItalicClose'     : '</I>'           ,
-	   'fontUnderlineOpen'   : '<U>'            ,
-	   'fontUnderlineClose'  : '</U>'           ,
-	   'listOpen'            : '<UL>'           ,
-	   'listClose'           : '</UL>'          ,
-	   'listItemOpen'        : '<LI>'           ,
-	   'numlistOpen'         : '<OL>'           ,
-	   'numlistClose'        : '</OL>'          ,
-	   'numlistItemOpen'     : '<LI>'           ,
-	   'deflistOpen'         : '<DL>'           ,
-	   'deflistClose'        : '</DL>'          ,
-	   'deflistItem1Open'    : '<DT>'           ,
-	   'deflistItem1Close'   : '</DT>'          ,
-	   'deflistItem2Open'    : '<DD>'           ,
-	   'bar1'                : '<HR NOSHADE SIZE=1>'        ,
-	   'bar2'                : '<HR NOSHADE SIZE=5>'        ,
-	   'url'                 : '<A HREF="\a">\a</A>'        ,
-	   'urlMark'             : '<A HREF="\a">\a</A>'        ,
-	   'email'               : '<A HREF="mailto:\a">\a</A>' ,
-	   'emailMark'           : '<A HREF="mailto:\a">\a</A>' ,
-	   'img'                 : '<IMG~A~ SRC="\a" BORDER="0" ALT="">',
-	   'imgAlignLeft'        : ' ALIGN="left"'  ,
-	   'imgAlignCenter'      : ' ALIGN="middle"',
-	   'imgAlignRight'       : ' ALIGN="right"' ,
-	   'tableOpen'           : '<TABLE~A~ CELLPADDING="4"~B~>',
-	   'tableClose'          : '</TABLE>'       ,
-	   'tableRowOpen'        : '<TR>'           ,
-	   'tableRowClose'       : '</TR>'          ,
-	   'tableCellOpen'       : '<TD~A~~S~>'      ,
-	   'tableCellClose'      : '</TD>'          ,
-	   'tableTitleCellOpen'  : '<TH~S~>'        ,
-	   'tableTitleCellClose' : '</TH>'          ,
-	   'tableBorder'         : ' BORDER="1"'    ,
-	   'tableAlignCenter'    : ' ALIGN="center"',
-	   'tableCellAlignRight' : ' ALIGN="right"' ,
-	   'tableCellAlignCenter': ' ALIGN="center"',
-	   'tableCellColSpan'    : ' COLSPAN="\a"'  ,
-	   'anchor'              : '<A NAME="\a"></A>\n',
-	   'cssOpen'             : '<STYLE TYPE="text/css">',
-	   'cssClose'            : '</STYLE>'       ,
-	   'comment'             : '<!-- \a -->'    ,
-	   'EOD'                 : '</BODY></HTML>'
+	   'paragraphOpen'        : '<P>'            ,
+	   'paragraphClose'       : '</P>'           ,
+	   'title1'               : '~A~<H1>\a</H1>' ,
+	   'title2'               : '~A~<H2>\a</H2>' ,
+	   'title3'               : '~A~<H3>\a</H3>' ,
+	   'title4'               : '~A~<H4>\a</H4>' ,
+	   'title5'               : '~A~<H5>\a</H5>' ,
+	   'anchor'               : '<A NAME="\a"></A>\n',
+	   'blockVerbOpen'        : '<PRE>'          ,
+	   'blockVerbClose'       : '</PRE>'         ,
+	   'blockQuoteOpen'       : '<BLOCKQUOTE>'   ,
+	   'blockQuoteClose'      : '</BLOCKQUOTE>'  ,
+	   'fontMonoOpen'         : '<CODE>'         ,
+	   'fontMonoClose'        : '</CODE>'        ,
+	   'fontBoldOpen'         : '<B>'            ,
+	   'fontBoldClose'        : '</B>'           ,
+	   'fontItalicOpen'       : '<I>'            ,
+	   'fontItalicClose'      : '</I>'           ,
+	   'fontUnderlineOpen'    : '<U>'            ,
+	   'fontUnderlineClose'   : '</U>'           ,
+	   'fontStrikeOpen'       : '<S>'            ,
+	   'fontStrikeClose'      : '</S>'           ,
+	   'listOpen'             : '<UL>'           ,
+	   'listClose'            : '</UL>'          ,
+	   'listItemOpen'         : '<LI>'           ,
+	   'numlistOpen'          : '<OL>'           ,
+	   'numlistClose'         : '</OL>'          ,
+	   'numlistItemOpen'      : '<LI>'           ,
+	   'deflistOpen'          : '<DL>'           ,
+	   'deflistClose'         : '</DL>'          ,
+	   'deflistItem1Open'     : '<DT>'           ,
+	   'deflistItem1Close'    : '</DT>'          ,
+	   'deflistItem2Open'     : '<DD>'           ,
+	   'bar1'                 : '<HR NOSHADE SIZE=1>'        ,
+	   'bar2'                 : '<HR NOSHADE SIZE=5>'        ,
+	   'url'                  : '<A HREF="\a">\a</A>'        ,
+	   'urlMark'              : '<A HREF="\a">\a</A>'        ,
+	   'email'                : '<A HREF="mailto:\a">\a</A>' ,
+	   'emailMark'            : '<A HREF="mailto:\a">\a</A>' ,
+	   'img'                  : '<IMG~A~ SRC="\a" BORDER="0" ALT="">',
+	   '_imgAlignLeft'        : ' ALIGN="left"'  ,
+	   '_imgAlignCenter'      : ' ALIGN="middle"',
+	   '_imgAlignRight'       : ' ALIGN="right"' ,
+	   'tableOpen'            : '<TABLE~A~~B~ CELLPADDING="4">',
+	   'tableClose'           : '</TABLE>'       ,
+	   'tableRowOpen'         : '<TR>'           ,
+	   'tableRowClose'        : '</TR>'          ,
+	   'tableCellOpen'        : '<TD~A~~S~>'     ,
+	   'tableCellClose'       : '</TD>'          ,
+	   'tableTitleCellOpen'   : '<TH~S~>'        ,
+	   'tableTitleCellClose'  : '</TH>'          ,
+	   '_tableBorder'         : ' BORDER="1"'    ,
+	   '_tableAlignCenter'    : ' ALIGN="center"',
+	   '_tableCellAlignRight' : ' ALIGN="right"' ,
+	   '_tableCellAlignCenter': ' ALIGN="center"',
+	   '_tableCellColSpan'    : ' COLSPAN="\a"'  ,
+	   'cssOpen'              : '<STYLE TYPE="text/css">',
+	   'cssClose'             : '</STYLE>'       ,
+	   'comment'              : '<!-- \a -->'    ,
+	   'EOD'                  : '</BODY></HTML>'
 	},
 	
 	#TIP xhtml inherits all HTML definitions (lowercased)
@@ -614,6 +661,7 @@ def getTags(config):
 	   'title3'              : '<sect2>\a~A~<p>'    ,
 	   'title4'              : '<sect3>\a~A~<p>'    ,
 	   'title5'              : '<sect4>\a~A~<p>'    ,
+	   'anchor'              : '<label id="\a">'    ,
 	   'blockVerbOpen'       : '<tscreen><verb>'    ,
 	   'blockVerbClose'      : '</verb></tscreen>'  ,
 	   'blockQuoteOpen'      : '<quote>'            ,
@@ -647,25 +695,25 @@ def getTags(config):
 	   'tableClose'          : '</tabular></table>' ,
 	   'tableRowSep'         : '<rowsep>'           ,
 	   'tableCellSep'        : '<colsep>'           ,
-	   'tableColAlignLeft'   : 'l'                  ,
-	   'tableColAlignRight'  : 'r'                  ,
-	   'tableColAlignCenter' : 'c'                  ,
+	   '_tableColAlignLeft'  : 'l'                  ,
+	   '_tableColAlignRight' : 'r'                  ,
+	   '_tableColAlignCenter': 'c'                  ,
 	   'comment'             : '<!-- \a -->'        ,
-	   'anchor'              : '<label id="\a">'    ,
 	   'TOC'                 : '<toc>'              ,
 	   'EOD'                 : '</article>'
 	},
 	
 	'tex': {
-	   'title1'              : '\n\section*{\a}'     ,
-	   'title2'              : '\\subsection*{\a}'   ,
-	   'title3'              : '\\subsubsection*{\a}',
+	   'title1'              : '\n~A~\section*{\a}'     ,
+	   'title2'              : '~A~\\subsection*{\a}'   ,
+	   'title3'              : '~A~\\subsubsection*{\a}',
 	   # title 4/5: DIRTY: para+BF+\\+\n
-	   'title4'              : '\\paragraph{}\\textbf{\a}\\\\\n',
-	   'title5'              : '\\paragraph{}\\textbf{\a}\\\\\n',
-	   'numtitle1'           : '\n\section{\a}'      ,
-	   'numtitle2'           : '\\subsection{\a}'    ,
-	   'numtitle3'           : '\\subsubsection{\a}' ,
+	   'title4'              : '~A~\\paragraph{}\\textbf{\a}\\\\\n',
+	   'title5'              : '~A~\\paragraph{}\\textbf{\a}\\\\\n',
+	   'numtitle1'           : '\n~A~\section{\a}'      ,
+	   'numtitle2'           : '~A~\\subsection{\a}'    ,
+	   'numtitle3'           : '~A~\\subsubsection{\a}' ,
+	   'anchor'              : '\\hypertarget{\a}{}\n'  ,
 	   'blockVerbOpen'       : '\\begin{verbatim}'   ,
 	   'blockVerbClose'      : '\\end{verbatim}'     ,
 	   'blockQuoteOpen'      : '\\begin{quotation}'  ,
@@ -678,6 +726,8 @@ def getTags(config):
 	   'fontItalicClose'     : '}'                   ,
 	   'fontUnderlineOpen'   : '\\underline{'        ,
 	   'fontUnderlineClose'  : '}'                   ,
+	   'fontStrikeOpen'      : '\\sout{'             ,
+	   'fontStrikeClose'     : '}'                   ,
 	   'listOpen'            : '\\begin{itemize}'    ,
 	   'listClose'           : '\\end{itemize}'      ,
 	   'listItemOpen'        : '\\item '             ,
@@ -700,9 +750,9 @@ def getTags(config):
 	   'tableRowOpen'        : '\\hline ' ,
 	   'tableRowClose'       : ' \\\\'    ,
 	   'tableCellSep'        : ' & '      ,
-	   'tableColAlignLeft'   : 'l'        ,
-	   'tableColAlignRight'  : 'r'        ,
-	   'tableColAlignCenter' : 'c'        ,
+	   '_tableColAlignLeft'  : 'l'        ,
+	   '_tableColAlignRight' : 'r'        ,
+	   '_tableColAlignCenter': 'c'        ,
 	   'tableColAlignSep'    : '|'        ,
 	   'comment'             : '% \a'     ,
 	   'TOC'                 : '\\tableofcontents',
@@ -718,15 +768,15 @@ def getTags(config):
 	   'blockTitle2Close'    : ' @EndSubSections'        ,
 	   'blockTitle3Open'     : '  @BeginSubSubSections'  ,
 	   'blockTitle3Close'    : '  @EndSubSubSections'    ,
-	   'title1Open'          : '\n@Section @Title { \a } @Begin',
+	   'title1Open'          : '\n~A~@Section @Title { \a } @Begin',
 	   'title1Close'         : '@End @Section'           ,
-	   'title2Open'          : '\n @SubSection @Title { \a } @Begin',
+	   'title2Open'          : '\n~A~ @SubSection @Title { \a } @Begin',
 	   'title2Close'         : ' @End @SubSection'       ,
-	   'title3Open'          : '\n  @SubSubSection @Title { \a } @Begin',
+	   'title3Open'          : '\n~A~  @SubSubSection @Title { \a } @Begin',
 	   'title3Close'         : '  @End @SubSubSection'   ,
-	   'title4Open'          : '\n@LP @LeftDisplay @B { \a }',
-	   'title5Open'          : '\n@LP @LeftDisplay @B { \a }',
-	   'anchor'              : '@Tag { \a }'             ,
+	   'title4Open'          : '\n~A~@LP @LeftDisplay @B { \a }',
+	   'title5Open'          : '\n~A~@LP @LeftDisplay @B { \a }',
+	   'anchor'              : '@Tag { \a }\n'       ,
 	   'blockVerbOpen'       : '@LP @ID @F @RawVerbatim @Begin',
 	   'blockVerbClose'      : '@End @RawVerbatim'   ,
 	   'blockQuoteOpen'      : '@QD {'               ,
@@ -761,9 +811,9 @@ def getTags(config):
 	   'email'               : '{blue @Colour { \a }}'      ,
 	   'emailMark'           : '\a ({blue Colour{ \a }})'   ,
 	   'img'                 : '~A~@IncludeGraphic { \a }'  ,  # eps only!
-	   'imgAlignLeft'        : '@LeftDisplay '              ,
-	   'imgAlignRight'       : '@RightDisplay '             ,
-	   'imgAlignCenter'      : '@CentredDisplay '           ,
+	   '_imgAlignLeft'       : '@LeftDisplay '              ,
+	   '_imgAlignRight'      : '@RightDisplay '             ,
+	   '_imgAlignCenter'     : '@CentredDisplay '           ,
 	   # lout tables are *way* complicated, no support for now
 	   #'tableOpen'          : '~A~@Tbl~B~\naformat{ @Cell A | @Cell B } {',
 	   #'tableClose'         : '}'     ,
@@ -772,7 +822,7 @@ def getTags(config):
 	   #'tableCenterAlign'   : '@CentredDisplay '         ,
 	   #'tableCellOpen'      : '\a {'                     ,  # A, B, ...
 	   #'tableCellClose'     : '}'                        ,
-	   #'tableBorder'        : '\nrule {yes}'             ,
+	   #'_tableBorder'       : '\nrule {yes}'             ,
 	   'comment'             : '# \a'                     ,
 	   # @MakeContents must be on the config file
 	   'TOC'                 : '@DP @ContentsGoesHere @DP',
@@ -780,7 +830,50 @@ def getTags(config):
 	   'EOD'                 : '@End @Text'
 	},
 	
+	# http://moinmo.in/SyntaxReference
 	'moin': {
+	   'title1'                : '= \a ='        ,
+	   'title2'                : '== \a =='      ,
+	   'title3'                : '=== \a ==='    ,
+	   'title4'                : '==== \a ===='  ,
+	   'title5'                : '===== \a =====',
+	   'blockVerbOpen'         : '{{{'           ,
+	   'blockVerbClose'        : '}}}'           ,
+	   'blockQuoteLine'        : '  '            ,
+	   'fontMonoOpen'          : '{{{'           ,
+	   'fontMonoClose'         : '}}}'           ,
+	   'fontBoldOpen'          : "'''"           ,
+	   'fontBoldClose'         : "'''"           ,
+	   'fontItalicOpen'        : "''"            ,
+	   'fontItalicClose'       : "''"            ,
+	   'fontUnderlineOpen'     : '__'            ,
+	   'fontUnderlineClose'    : '__'            ,
+	   'fontStrikeOpen'        : '--('           ,
+	   'fontStrikeClose'       : ')--'           ,
+	   'listItemOpen'          : ' * '           ,
+	   'numlistItemOpen'       : ' \a. '         ,
+	   'deflistItem1Open'      : ' '             ,
+	   'deflistItem1Close'     : '::'            ,
+	   'deflistItem2LinePrefix': ' :: '          ,
+	   'bar1'                  : '----'          ,
+	   'bar2'                  : '--------'      ,
+	   'url'                   : '[\a]'          ,
+	   'urlMark'               : '[\a \a]'       ,
+	   'email'                 : '[\a]'          ,
+	   'emailMark'             : '[\a \a]'       ,
+	   'img'                   : '[\a]'          ,
+	   'tableRowOpen'          : '||'            ,
+	   'tableCellOpen'         : '~A~'           ,
+	   'tableCellClose'        : '||'            ,
+	   'tableTitleCellClose'   : '||'            ,
+	   '_tableCellAlignRight'  : '<)>'           ,
+	   '_tableCellAlignCenter' : '<:>'           ,
+	   'comment'               : '/* \a */'      ,
+	   'TOC'                   : '[[TableOfContents]]'
+	},
+
+	# http://code.google.com/p/support/wiki/WikiSyntax
+	'gwiki': {
 	   'title1'              : '= \a ='        ,
 	   'title2'              : '== \a =='      ,
 	   'title3'              : '=== \a ==='    ,
@@ -791,30 +884,121 @@ def getTags(config):
 	   'blockQuoteLine'      : '  '            ,
 	   'fontMonoOpen'        : '{{{'           ,
 	   'fontMonoClose'       : '}}}'           ,
-	   'fontBoldOpen'        : "'''"           ,
-	   'fontBoldClose'       : "'''"           ,
-	   'fontItalicOpen'      : "''"            ,
-	   'fontItalicClose'     : "''"            ,
+	   'fontBoldOpen'        : '*'             ,
+	   'fontBoldClose'       : '*'             ,
+	   'fontItalicOpen'      : '_'             , # underline == italic
+	   'fontItalicClose'     : '_'             ,
+	   'fontStrikeOpen'      : '~~'            ,
+	   'fontStrikeClose'     : '~~'            ,
+	   'listItemOpen'        : ' * '           ,
+	   'numlistItemOpen'     : ' # '           ,
+	   'url'                 : '\a'            ,
+	   'urlMark'             : '[\a \a]'       ,
+	   'email'               : 'mailto:\a'     ,
+	   'emailMark'           : '[mailto:\a \a]',
+	   'img'                 : '[\a]'          ,
+	   'tableRowOpen'        : '|| '           ,
+	   'tableRowClose'       : ' ||'           ,
+	   'tableCellSep'        : ' || '          ,
+	},
+
+	# http://wiki.splitbrain.org/wiki:syntax
+	# Hint: <br> is \\ $
+	# Hint: You can add footnotes ((This is a footnote))
+	'doku': {
+	   'title1'              : '===== \a =====',
+	   'title2'              : '==== \a ===='  ,
+	   'title3'              : '=== \a ==='    ,
+	   'title4'              : '== \a =='      ,
+	   'title5'              : '= \a ='        ,
+	   # DokuWiki uses '  ' identation to mark verb blocks (see indentverbblock)
+	   'blockQuoteLine'      : '>'             ,
+	   'fontMonoOpen'        : "''"            ,
+	   'fontMonoClose'       : "''"            ,
+	   'fontBoldOpen'        : "**"            ,
+	   'fontBoldClose'       : "**"            ,
+	   'fontItalicOpen'      : "//"            ,
+	   'fontItalicClose'     : "//"            ,
 	   'fontUnderlineOpen'   : "__"            ,
 	   'fontUnderlineClose'  : "__"            ,
-	   'listItemOpen'        : ' * '           ,
-	   'numlistItemOpen'     : ' \a. '         ,
+	   'fontStrikeOpen'      : '<del>'         ,
+	   'fontStrikeClose'     : '</del>'        ,
+	   'listItemOpen'        : '  * '          ,
+	   'numlistItemOpen'     : '  - '          ,
 	   'bar1'                : '----'          ,
-	   'url'                 : '[\a]'          ,
-	   'urlMark'             : '[\a \a]'       ,
-	   'email'               : '[\a]'          ,
-	   'emailMark'           : '[\a \a]'       ,
-	   'img'                 : '[\a]'          ,
-	   'tableRowOpen'        : '||'            ,
-	   'tableCellOpen'       : '~A~'           ,
-	   'tableCellClose'      : '||'            ,
-	   'tableTitleCellClose' : '||'            ,
-	   'tableCellAlignRight' : '<)>'           ,
-	   'tableCellAlignCenter': '<:>'           ,
-	   'comment'             : '## \a'         ,
-	   'TOC'                 : '[[TableOfContents]]'
+	   'url'                 : '[[\a]]'        ,
+	   'urlMark'             : '[[\a|\a]]'     ,
+	   'email'               : '[[\a]]'        ,
+	   'emailMark'           : '[[\a|\a]]'     ,
+	   'img'                 : '{{\a}}'        ,
+	   'imgAlignLeft'        : '{{\a }}'       ,
+	   'imgAlignRight'       : '{{ \a}}'       ,
+	   'imgAlignCenter'      : '{{ \a }}'      ,
+	   'tableTitleRowOpen'   : '^ '            ,
+	   'tableTitleRowClose'  : ' ^'            ,
+	   'tableTitleCellSep'   : ' ^ '           ,
+	   'tableRowOpen'        : '| '            ,
+	   'tableRowClose'       : ' |'            ,
+	   'tableCellSep'        : ' | '           ,
+# DokuWiki has no attributes. The content must be aligned!
+#	   '_tableCellAlignRight' : '<)>'           , # ??
+#	   '_tableCellAlignCenter': '<:>'           , # ??
+# DokuWiki colspan is the same as txt2tags' with multiple |||
+	   # 'comment'             : '## \a'         , # ??
+	   # TOC is automatic
 	},
 	
+	# http://en.wikipedia.org/wiki/Help:Editing
+	'wiki': {
+	   'title1'              : '== \a =='        ,
+	   'title2'              : '=== \a ==='      ,
+	   'title3'              : '==== \a ===='    ,
+	   'title4'              : '===== \a ====='  ,
+	   'title5'              : '====== \a ======',
+	   'blockVerbOpen'       : '<pre>'           ,
+	   'blockVerbClose'      : '</pre>'          ,
+	   'blockQuoteOpen'      : '<blockquote>'    ,
+	   'blockQuoteClose'     : '</blockquote>'   ,
+	   'fontMonoOpen'        : '<tt>'            ,
+	   'fontMonoClose'       : '</tt>'           ,
+	   'fontBoldOpen'        : "'''"             ,
+	   'fontBoldClose'       : "'''"             ,
+	   'fontItalicOpen'      : "''"              ,
+	   'fontItalicClose'     : "''"              ,
+	   'fontUnderlineOpen'   : '<u>'             ,
+	   'fontUnderlineClose'  : '</u>'            ,
+	   'fontStrikeOpen'      : '<s>'             ,
+	   'fontStrikeClose'     : '</s>'            ,
+		#XXX Mixed lists not working: *#* list inside numlist inside list
+	   'listItemLine'        : '*'               ,
+	   'numlistItemLine'     : '#'               ,
+	   'deflistItem1Open'    : '; '              ,
+	   'deflistItem2LinePrefix': ': '            ,
+	   'bar1'                : '----'            ,
+	   'url'                 : '[\a]'            ,
+	   'urlMark'             : '[\a \a]'         ,
+	   'email'               : 'mailto:\a'       ,
+	   'emailMark'           : '[mailto:\a \a]'  ,
+	   # [[Image:foo.png|right|Optional alt/caption text]] (right, left, center, none)
+	   'img'                 : '[[Image:\a~A~]]' ,
+	   '_imgAlignLeft'       : '|left'           ,
+	   '_imgAlignCenter'     : '|center'         ,
+	   '_imgAlignRight'      : '|right'          ,
+		# {| border="1" cellspacing="0" cellpadding="4" align="center"
+	   'tableOpen'           : '{|~A~~B~ cellpadding="4"',
+	   'tableClose'          : '|}'              ,
+	   'tableRowOpen'        : '|-\n| '          ,
+	   'tableTitleRowOpen'   : '|-\n! '          ,
+	   'tableCellSep'        : ' || '            ,
+	   'tableTitleCellSep'   : ' !! '            ,
+	   '_tableBorder'        : ' border="1"'     ,
+	   '_tableAlignCenter'   : ' align="center"' ,
+	   'comment'             : '<!-- \a -->'     ,
+	   'TOC'                 : '__TOC__'         ,
+	},
+	
+	# http://www.inference.phy.cam.ac.uk/mackay/mgp/SYNTAX
+	# http://en.wikipedia.org/wiki/MagicPoint
 	'mgp': {
 	   'paragraphOpen'       : '%font "normal", size 5'     ,
 	   'title1'              : '%page\n\n\a\n'              ,
@@ -836,6 +1020,7 @@ def getTags(config):
 	   'fontUnderlineClose'  : '\n%cont, fore "white"\n'    ,
 	   'listItemLine'        : '\t'                         ,
 	   'numlistItemLine'     : '\t'                         ,
+	   'numlistItemOpen'     : '\a. '                       ,
 	   'deflistItem1Open'    : '\t\n%cont, font "normal-b"\n',
 	   'deflistItem1Close'   : '\n%cont, font "normal"\n'   ,
 	   'bar1'                : '%bar "white" 5'             ,
@@ -849,9 +1034,9 @@ def getTags(config):
 	   'emailMark'           : '\a \n%cont, fore "cyan"\n\a'+\
 	                           '\n%cont, fore "white"\n'    ,
 	   'img'                 : '~A~\n%newimage "\a"\n%left\n',
-	   'imgAlignLeft'        : '\n%left'                    ,
-	   'imgAlignRight'       : '\n%right'                   ,
-	   'imgAlignCenter'      : '\n%center'                  ,
+	   '_imgAlignLeft'       : '\n%left'                    ,
+	   '_imgAlignRight'      : '\n%right'                   ,
+	   '_imgAlignCenter'     : '\n%center'                  ,
 	   'comment'             : '%% \a'                      ,
 	   'pageBreak'           : '%page\n\n\n'                ,
 	   'EOD'                 : '%%EOD'
@@ -890,11 +1075,11 @@ def getTags(config):
 	   'tableClose'          : '.TE'     ,
 	   'tableRowOpen'        : ' '       ,
 	   'tableCellSep'        : '^'       ,
-	   'tableAlignCenter'    : 'center, ',
-	   'tableBorder'         : 'allbox, ',
-	   'tableColAlignLeft'   : 'l'       ,
-	   'tableColAlignRight'  : 'r'       ,
-	   'tableColAlignCenter' : 'c'       ,
+	   '_tableAlignCenter'   : 'center, ',
+	   '_tableBorder'        : 'allbox, ',
+	   '_tableColAlignLeft'  : 'l'       ,
+	   '_tableColAlignRight' : 'r'       ,
+	   '_tableColAlignCenter': 'c'       ,
 	   'comment'             : '.\\" \a'
 	},
 	
@@ -1005,6 +1190,7 @@ def getRules(config):
 	  'indentverbblock',      # add leading spaces to verb block lines
 	  'breaktablecell',       # break lines after any table cell
 	  'breaktablelineopen',   # break line after opening table line
+	  'breaktitleopen',       # break line after any title
 	  'notbreaklistopen',     # don't break line after opening a new list
 	  'notbreakparaopen',     # don't break line after opening a new para
 	  'keepquoteindent',      # don't remove the leading TABs on quotes
@@ -1013,11 +1199,14 @@ def getRules(config):
 	  'blankendtable',        # append a blank line at the table end
 	  'blankendautotoc',      # append a blank line at the auto TOC end
 	  'tagnotindentable',     # tags must be placed at the line begining
+	  'spacedlistitemopen',   # append a space after the list item open tag
+	  'spacednumlistitemopen',# append a space after the numlist item open tag
+	  'deflisttextstrip',     # strip the contents of the deflist text
 	
 	# Value settings
 	  'listmaxdepth',         # maximum depth for lists
 	  'quotemaxdepth',        # maximum depth for quotes
-	  'tablecellaligntype'    # type of table cell align: cell, column
+	  'tablecellaligntype',   # type of table cell align: cell, column
 	]
 	
 	rules_bank = {
@@ -1028,7 +1217,7 @@ def getRules(config):
 	    'keeplistindent':1,
 	    'barinsidequote':1,
 	    'autotocwithbars':1,
-	    'blankendmotherlist':1
+	    'blankendmotherlist':1,
 	    },
 	  'html': {
 	    'indentverbblock':1,
@@ -1052,7 +1241,7 @@ def getRules(config):
 	    'barinsidequote':1,
 	    'autotocwithbars':1,
 	    'tablecellspannable':1,
-	    'tablecellaligntype':'cell'
+	    'tablecellaligntype':'cell',
 	    },
 	  #TIP xhtml inherits all HTML rules
 	  'xhtml': {
@@ -1072,7 +1261,7 @@ def getRules(config):
 	    'keepquoteindent':1,
 	    'barinsidequote':1,
 	    'finalescapetitle':1,
-	    'tablecellaligntype':'column'
+	    'tablecellaligntype':'column',
 	    },
 	  'mgp' : {
 	    'blankendmotherlist':1,
@@ -1100,16 +1289,19 @@ def getRules(config):
 	    'finalescapetitle':1,
 	    'autotocnewpageafter':1,
 	    'mapbar2pagebreak':1,
-	    'tablecellaligntype':'column'
+	    'tablecellaligntype':'column',
 	    },
 	  'lout': {
 	    'keepquoteindent':1,
+	    'keeplistindent':1,
+	    'deflisttextstrip':1,
 	    'escapeurl':1,
 	    'verbblocknotescaped':1,
 	    'imgalignable':1,
 	    'mapbar2pagebreak':1,
 	    'titleblocks':1,
-	    'notbreakparaopen':1
+	    'autonumberlist':1,
+	    'notbreakparaopen':1,
 	    },
 	  'moin': {
 	    'spacedlistitem':1,
@@ -1122,7 +1314,47 @@ def getRules(config):
 	    'tabletitlerowinbold':1,
 	    'tablecellstrip':1,
 	    'autotocwithbars':1,
-	    'tablecellaligntype':'cell'
+	    'tablecellaligntype':'cell',
+	    'deflisttextstrip':1,
+	    },
+	  'gwiki': {
+	    'spacedlistitem':1,
+	    'linkable':1,
+	    'blankendmotherlist':1,
+	    'keeplistindent':1,
+	    'tableable':1,
+	    'tabletitlerowinbold':1,
+	    'tablecellstrip':1,
+	    'autonumberlist':1,
+	    'breaktitleopen':1,
+	    },
+	  'doku': {
+	    'indentverbblock':1,           # DokuWiki uses '  ' to mark verb blocks
+	    'spacedlistitem':1,
+	    'linkable':1,
+	    'blankendmotherlist':1,
+	    'keeplistindent':1,
+	    'tableable':1,
+	    'barinsidequote':1,
+	    'blankendtable':1,
+	    'tablecellstrip':1,
+	    'autotocwithbars':1,
+	    'autonumberlist':1,
+	    'imgalignable':1,
+	    'tablecellaligntype':'cell',
+	    },
+	  'wiki': {
+	    'linkable':1,
+	    'blankendmotherlist':1,
+	    'tableable':1,
+	    'blankendtable':1,
+	    'tablecellstrip':1,
+	    'autotocwithbars':1,
+	    'spacedlistitemopen':1,
+	    'spacednumlistitemopen':1,
+	    'deflisttextstrip':1,
+	    'autonumberlist':1,
+	    'imgalignable':1,
 	    },
 	  'man' : {
 	    'spacedlistitem':1,
@@ -1134,7 +1366,6 @@ def getRules(config):
 	    'tabletitlerowinbold':1,
 	    'tablecellstrip':1,
 	    'blankendtable':1,
-	    'keeplistindent':0,
 	    'barinsidequote':1,
 	    'parainsidelist':0,
 	    },
@@ -1208,6 +1439,8 @@ def getRegexes():
 		re.compile(  r'//([^\s](|.*?[^\s])/*)//'),
 	'fontUnderline':
 		re.compile(  r'__([^\s](|.*?[^\s])_*)__'),
+	'fontStrike':
+		re.compile(  r'--([^\s](|.*?[^\s])-*)--'),
 	'list':
 		re.compile(r'^( *)(-) (?=[^ ])'),
 	'numlist':
@@ -1436,18 +1669,18 @@ class CommandLine:
 	  _compose_long_opts() -> list
 	      Compose the valid short and long options list, on the
 	      'getopt' format.
-	  
+	
 	  parse() -> (opts, args)
 	      Call getopt to check and parse the command line.
 	      It expects to receive the command line as a list, and
 	      without the program name (sys.argv[1:]).
-	  
+	
 	  get_raw_config() -> [RAW config]
 	      Scans command line and convert the data to the RAW config
 	      format. See ConfigMaster class to the RAW format description.
 	      Optional 'ignore' and 'filter' arguments are used to filter
 	      in or out specified keys.
-	  
+	
 	  compose_cmdline(dict) -> [Command line]
 	      Compose a command line list from an already parsed config
 	      dictionary, generated from RAW by ConfigMaster(). Use
@@ -1502,7 +1735,7 @@ class CommandLine:
 	
 	def _tokenize(self, cmd_string=''):
 		"Convert a command line string to a list"
-		#TODO protect quotes contents
+		#TODO protect quotes contents -- Don't use it, pass cmdline as list
 		return string.split(cmd_string)
 	
 	def parse(self, cmdline=[]):
@@ -1521,7 +1754,8 @@ class CommandLine:
 		if not cmdline: return []
 		ret = []
 		# We need lists, not strings
-		if type(cmdline) == type(''): cmdline = self._tokenize(cmdline)
+		if type(cmdline) in (type(''), type(u'')):
+			cmdline = self._tokenize(cmdline)
 		opts, args = self.parse(cmdline[:])
 		# Parse all options
 		for name,value in opts:
@@ -1828,7 +2062,7 @@ class ConfigMaster:
 			kind = type(self.defaults[key])
 			if kind == type(9):
 				off[key] = 0
-			elif kind == type(''):
+			elif kind == type('') or kind == type(u''):
 				off[key] = ''
 			elif kind == type([]):
 				off[key] = []
@@ -2422,13 +2656,22 @@ class TitleMaster:
 		# Close previous section area
 		ret.extend(self.tag_hold)
 		self.tag_hold = []
-		 
-		# Finish title, adding "underline" on TXT target
+		
 		tagged = regex['x'].sub(full_title, self.tag)
+
+		if rules['breaktitleopen']:
+			tagged = tagged + LB
+		
+		# Adds "underline" on TXT target
 		if TARGET == 'txt':
 			ret.append('') # blank line before
 			ret.append(tagged)
-			ret.append(regex['x'].sub('='*len(full_title),self.tag))
+			# Get the right letter count for UTF
+			if string.lower(CONF['encoding']) == 'utf-8':
+				i = len(full_title.decode('utf-8'))
+			else:
+				i = len(full_title)
+			ret.append(regex['x'].sub('='*i, self.tag))
 			ret.append('') # blank line after
 		else:
 			ret.append(tagged)
@@ -2490,8 +2733,8 @@ class TableMaster:
 	
 	def _get_open_tag(self):
 		topen     = TAGS['tableOpen']
-		tborder   = TAGS['tableBorder']
-		talign    = TAGS['tableAlign'+self.align]
+		tborder   = TAGS['_tableBorder']
+		talign    = TAGS['_tableAlign'+self.align]
 		calignsep = TAGS['tableColAlignSep']
 		calign    = ''
 		
@@ -2499,7 +2742,7 @@ class TableMaster:
 		if not self.border: tborder = ''
 		# Set the columns alignment
 		if rules['tablecellaligntype'] == 'column':
-			calign = map(lambda x: TAGS['tableColAlign%s'%x],
+			calign = map(lambda x: TAGS['_tableColAlign%s'%x],
 			             self.cellalign)
 			calign = string.join(calign, calignsep)
 		# Align full table, set border and Column align (if any)
@@ -2539,14 +2782,14 @@ class TableMaster:
 		open   = TAGS['tableCellOpen']
 		close  = TAGS['tableCellClose']
 		sep    = TAGS['tableCellSep']
-		calign = map(lambda x: TAGS['tableCellAlign'+x],
+		calign = map(lambda x: TAGS['_tableCellAlign'+x],
 		             rowdata['cellalign'])
 		# Populate the span tag
 		cspan = []
 		for i in rowdata['cellspan']:
 			if i > 0:
 				cspan.append(regex['x'].sub(
-				str(i), TAGS['tableCellColSpan']))
+				str(i), TAGS['_tableCellColSpan']))
 			else:
 				cspan.append('')
 		
@@ -2784,7 +3027,7 @@ class BlockMaster:
 		ret = []
 		for line in self.hold():
 			linetype = type(line)
-			if linetype == type(''):
+			if linetype == type('') or linetype == type(u''):
 				ret.append(self._last_escapes(line))
 			elif linetype == type([]):
 				ret.extend(line)
@@ -2901,7 +3144,7 @@ class BlockMaster:
 		listline  = TAGS.get(name+'ItemLine')
 		itemcount = 0
 		if rules['tagnotindentable']: tagindent = ''
-		if not rules['keeplistindent']: indent = ''
+		if not rules['keeplistindent']: indent = tagindent = ''
 		
 		if name == 'deflist':
 			itemopen  = TAGS[name+'Item1Open']
@@ -2915,10 +3158,13 @@ class BlockMaster:
 		
 		# ItemLine: number of leading chars identifies list depth
 		if listline:
-			itemopen  = listline*self.depth
-			# Dirty fix for mgp
-			if name == 'numlist': itemopen = itemopen + '\a. '
+			itemopen  = listline*self.depth + itemopen
 		
+		# Adds trailing space on opening tags
+		if (name == 'list'    and rules['spacedlistitemopen']) or \
+		   (name == 'numlist' and rules['spacednumlistitemopen']):
+			itemopen = itemopen + ' '
+			
 		# Remove two-blanks from list ending mark, to avoid <p>
 		items[-1] = self._remove_twoblanks(items[-1])
 		
@@ -2937,7 +3183,8 @@ class BlockMaster:
 				n = str(itemcount)
 				itemopen = regex['x'].sub(n, itemopenorig)
 				del n
-			
+
+			# Tag it
 			item[0] = self._last_escapes(item[0])
 			if name == 'deflist':
 				z,term,rest = string.split(item[0],SEPARATOR,2)
@@ -2956,13 +3203,21 @@ class BlockMaster:
 					result.extend(line)
 				else:
 					line = self._last_escapes(line)
+					
 					# Blank lines turns to <p>
 					if not line and rules['parainsidelist']:
 						line = string.rstrip(indent   +\
 						         TAGS['paragraphOpen']+\
 						         TAGS['paragraphClose'])
-					if not rules['keeplistindent']:
+						
+					# Some targets don't like identation here (wiki)
+					if not rules['keeplistindent'] or (name == 'deflist' and rules['deflisttextstrip']):
 						line = string.lstrip(line)
+
+					# Maybe we have a line prefix to add? (wiki)
+					if name == 'deflist' and TAGS['deflistItem2LinePrefix']:
+						line = TAGS['deflistItem2LinePrefix'] + line
+						
 					result.append(line)
 			
 			# Close item (if needed)
@@ -3433,7 +3688,11 @@ def enclose_me(tagname, txt):
 	return TAGS.get(tagname+'Open') + txt + TAGS.get(tagname+'Close')
 
 def beautify_me(name, line):
-	"where name is: bold, italic or underline"
+	"where name is: bold, italic, underline or strike"
+
+	# Exception: Doesn't parse an horizontal bar as strike
+	if name == 'strike' and regex['bar'].search(line): return line
+	
 	name  = 'font%s' % string.capitalize(name)
 	open  = TAGS['%sOpen'%name]
 	close = TAGS['%sClose'%name]
@@ -3653,6 +3912,16 @@ def process_source_file(file='', noconf=0, contents=[]):
 		if full_parsed.get('dump-config'):
 			dumpConfig(source_raw, full_parsed)
 			Quit()
+		# The user just want to know a single config value (hidden feature)
+		#TODO pick a better name than --show-config-value
+		elif full_parsed.get('show-config-value'):
+			config_value = full_parsed.get(full_parsed['show-config-value'])
+			if config_value:
+				if type(config_value) == type([]):
+					print '\n'.join(config_value)
+				else:
+					print config_value
+			Quit()
 		# Okay, all done
 		Debug("FULL config for this file: %s"%full_parsed, 1)
 	else:
@@ -3720,13 +3989,19 @@ def parse_images(line):
 		txt = regex['img'].search(line).group(1)
 		tag = TAGS['img']
 		
-		# HTML, XHTML and mgp!
+		# If target supports image alignment, here we go
 		if rules['imgalignable']:
-			align = get_image_align(line)
-			# Add align on tag
-			align_name = string.capitalize(align)
-			align_tag = TAGS['imgAlign'+align_name]
-			tag = regex['_imgAlign'].sub(align_tag, tag, 1)
+			
+			align = get_image_align(line)         # right
+			align_name = string.capitalize(align) # Right
+			
+			# The align is a full tag, or part of the image tag (~A~)
+			if TAGS['imgAlign'+align_name]:
+				tag = TAGS['imgAlign'+align_name]
+			else:
+				align_tag = TAGS['_imgAlign'+align_name]
+				tag = regex['_imgAlign'].sub(align_tag, tag, 1)
+				
 			# Dirty fix to allow centered solo images
 			if align == 'center' and TARGET in ('html','xhtml'):
 				rest = regex['img'].sub('',line,1)
@@ -3744,8 +4019,8 @@ def parse_images(line):
 
 def add_inline_tags(line):
 	# Beautifiers
-	for beauti in ('Bold', 'Italic', 'Underline'):
-		if regex['font%s'%beauti].search(line):
+	for beauti in ('bold', 'italic', 'underline', 'strike'):
+		if regex['font%s'%beauti.capitalize()].search(line):
 			line = beautify_me(beauti, line)
 	
 	line = parse_images(line)
@@ -4204,6 +4479,8 @@ def convert(bodylines, config, firstlinenr=1):
 			BLOCK.tableparser.add_row(tablerow)     # save config
 			
 			# Maintain line to unmask and inlines
+			# XXX Bug: | **bo | ld** | turns **bo\x01ld** and gets converted :(
+			# TODO isolate unmask+inlines parsing to use here
 			line = string.join(tablerow['cells'], SEPARATOR)
 		
 		#---------------------[ Paragraph ]-------------------------
@@ -4711,5 +4988,4 @@ if __name__ == '__main__':
 		sys.exit(1)
 	Quit()
 
-
-# vim: ts=8
+# The End.

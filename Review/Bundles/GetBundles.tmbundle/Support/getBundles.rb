@@ -1042,6 +1042,8 @@ $params = {
   'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
   'showHelpBtn'             => 'helpButtonIsPressed',
   'infoBtn'                 => 'infoButtonIsPressed',
+  'revealBtn'               => 'revealButtonIsPressed',
+  'openBundleEditorBtn'     => 'openBundleEditorButtonIsPressed',
   'targets'                 => targetPaths.keys.sort {|x,y| y <=> x },
   'targetSelection'         => targetPaths.keys.sort {|x,y| y <=> x }.first,
   'nocancel'                => false,
@@ -1103,6 +1105,10 @@ while $run do
       $x3 = Thread.new do
         infoDIALOG($dialogResult)
       end
+    elsif $dialogResult['returnArgument'] == 'revealButtonIsPressed'
+      %x{open -a Finder '#{getInstallPathFor($dialogResult['folder'])}'}
+    elsif $dialogResult['returnArgument'] == 'openBundleEditorButtonIsPressed'
+      %x{osascript -e 'tell app "System Events" to keystroke "b" using {control down, option down, command down}' }
     else
       if $dialogResult.has_key?('paths') and $dialogResult['paths'].size > 10
         if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1

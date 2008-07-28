@@ -11,7 +11,6 @@ require "yaml"
 require 'net/http'
 require 'uri'
 require 'cgi'
-require "timeout"
 require "open3"
 
 include ERB::Util
@@ -63,6 +62,28 @@ $x0=$x1=$x2=$x3   = nil
 
 CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as]
 
+module GBTimeout
+  class Error<Interrupt
+  end
+  def timeout(sec, exception=Error)
+    return yield if sec == nil or sec.zero?
+    raise ThreadError, "timeout within critical session" if Thread.critical
+    begin
+      x = Thread.current
+      y = Thread.start {
+        s = Time.now.to_i
+        while Time.now.to_i - s < sec and ! $close do sleep 0.5 end
+        writeToLogFile("Cancel button was pressed while executing Timeout block") if $close
+        x.raise exception, "execution expired" if x.alive?
+      }
+      yield sec
+    ensure
+      y.kill if y and y.alive?
+    end
+  end
+  module_function :timeout
+end
+
 def remote_bundle_locations
   [ {:display => :'Macromates Bundles', :scm => :svn, :name => 'B',
       :url => 'http://macromates.com/svn/Bundles/trunk/Bundles/'},
@@ -83,9 +104,9 @@ def targetPaths
   }
 end
 
-def getInstallPathFor(abbr)
+def getInstallPathFor(abbr, copyToParams = true)
   # update params
-  $params['targetSelection'] = abbr
+  $params['targetSelection'] = abbr if copyToParams
   updateDIALOG
   if targetPaths.has_key?(abbr)
     if abbr == 'App Bundles'
@@ -161,6 +182,7 @@ def closeDIALOG
     end
   end
   # go back to the front most doc if TM is running
+  %x{rm -rf #{$tempDir} 1> /dev/null}
   %x{open 'txmt://open?'} if ! getInstallPathFor("App Bundles").empty?
 end
 
@@ -193,10 +215,10 @@ def infoDIALOG(dlg)
     searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
     url = path.gsub(/zipball\/master/, '')
     begin
-      Timeout::timeout($timeout) do
+      GBTimeout::timeout($timeout) do
         info = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))['repositories'].first
       end
-    rescue Timeout::Error
+    rescue GBTimeout::Error
       $params['isBusy'] = false
       updateDIALOG
       %x{rm -rf #{$tempDir}}
@@ -205,10 +227,10 @@ def infoDIALOG(dlg)
     end
     return if $close
     begin
-      Timeout::timeout($timeout) do
+      GBTimeout::timeout($timeout) do
         data = Net::HTTP.get( URI.parse("#{url}tree/master") )
       end
-    rescue Timeout::Error
+    rescue GBTimeout::Error
       $params['isBusy'] = false
       updateDIALOG
       %x{rm -rf #{$tempDir}}
@@ -217,14 +239,14 @@ def infoDIALOG(dlg)
     end
     return if $close
     begin
-      Timeout::timeout($timeout) do
+      GBTimeout::timeout($timeout) do
         begin
           plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{url}tree/master/info.plist?raw=true")).gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
         rescue
           writeToLogFile($!)
         end
       end
-    rescue Timeout::Error
+    rescue GBTimeout::Error
       $params['isBusy'] = false
       updateDIALOG
       %x{rm -rf #{$tempDir}}
@@ -232,7 +254,6 @@ def infoDIALOG(dlg)
       return
     end
     return if $close
-    writeToLogFile(plist.inspect())
     plist['name'] = info['path'] if plist['name'].nil?
     plist['description'] = "" if plist['description'].nil?
     plist['contactName'] = "" if plist['contactName'].nil?
@@ -282,7 +303,7 @@ def infoDIALOG(dlg)
   elsif mode == 'svn'
     if $SVN.length > 0
       begin
-        Timeout::timeout($timeout) do
+        GBTimeout::timeout($timeout) do
           data = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' info '#{path}'")
           if $errorcnt > 0
             %x{rm -r #{$tempDir}}
@@ -291,7 +312,7 @@ def infoDIALOG(dlg)
             return
           end
         end
-      rescue Timeout::Error
+      rescue GBTimeout::Error
         $params['isBusy'] = false
         updateDIALOG
         %x{rm -rf #{$tempDir}}
@@ -303,7 +324,7 @@ def infoDIALOG(dlg)
         info[l.split(': ').first] = l.split(': ').last
       end
       begin
-        Timeout::timeout($timeout) do
+        GBTimeout::timeout($timeout) do
           begin
             plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{path}/info.plist")))
           rescue
@@ -314,7 +335,7 @@ def infoDIALOG(dlg)
             end
           end
         end
-      rescue Timeout::Error
+      rescue GBTimeout::Error
         $params['isBusy'] = false
         updateDIALOG
         %x{rm -rf #{$tempDir}}
@@ -350,7 +371,6 @@ def infoDIALOG(dlg)
   else
     return
   end
-  # %x{textutil -convert rtfd '#{$tempDir}/info.html'}
   $params['isBusy'] = false
   updateDIALOG
   $infoTokenOld = $infoToken
@@ -421,10 +441,10 @@ def getBundleLists
       if r[:scm] == :svn
         list = [ ]
         begin
-          Timeout::timeout($timeout) do
+          GBTimeout::timeout($timeout) do
             list = Net::HTTP.get( URI.parse(r[:url]) ).gsub( /<[^>]+?>/, '').gsub( /(?m)^.*?\.\.\n/, '').gsub( /(?m)\/[^\/]*$/, '').strip().split(/\n/)
           end
-        rescue Timeout::Error
+        rescue GBTimeout::Error
           writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
           $params['progressText'] = 'Timeout'
           $params['isBusy'] = false
@@ -453,12 +473,12 @@ def getBundleLists
       elsif r[:scm] == :git
         list = [ ]
         begin
-          Timeout::timeout($timeout) do
+          GBTimeout::timeout($timeout) do
             list = YAML.load(open(r[:url]))['repositories'].
                 find_all{|result| result['name'].match("")}.
                 sort{|a,b| a['name'] <=> b['name']}
           end
-        rescue Timeout::Error
+        rescue GBTimeout::Error
           writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
           $params['progressText'] = 'Timeout'
           $params['isBusy'] = false
@@ -708,7 +728,7 @@ def installGitZipball(path, installPath)
   %x{rm -rf #{$tempDir} 1> /dev/null}
   FileUtils.mkdir_p $tempDir
   begin
-    Timeout::timeout($timeout) do
+    GBTimeout::timeout($timeout) do
       begin
         File.open(download_file, 'w') { |f| f.write(open(path).read)}
       rescue
@@ -717,7 +737,7 @@ def installGitZipball(path, installPath)
         return
       end
     end
-  rescue Timeout::Error
+  rescue GBTimeout::Error
     $errorcnt += 1
     %x{rm -rf #{$tempDir}}
     writeToLogFile("Timeout error while installing %s" % name)
@@ -771,7 +791,7 @@ def installGitClone(path, installPath)
   thePath = path.sub('http', 'git').sub('/zipball/master', '.git')
   theName = normalize_github_repo_name(path.sub('/zipball/master', '').gsub(/.*\/(.*)/, '\1'))
   begin
-    Timeout::timeout($timeout) do
+    GBTimeout::timeout($timeout) do
       d = executeShell("#{git} clone #{e_sh thePath} '#{$tempDir}/#{theName}' 2>&1", true, false)
       if d.match(/(fatal|error)/)
         writeToLogFile(d)
@@ -781,7 +801,7 @@ def installGitClone(path, installPath)
       # avoid outputting all xx% stuff, only for 100% or error
       writeToLogFile(d.gsub(/[\r|\n]/,"§").split('§').select{|v| v =~ /(fatal|error|done|100)/}.join("\n"))
     end
-  rescue Timeout::Error
+  rescue GBTimeout::Error
     $errorcnt += 1
     %x{rm -rf #{$tempDir}}
     writeToLogFile("Timeout error while installing %s" % theName)
@@ -807,14 +827,14 @@ def installSVN(path, installPath)
   name = path.gsub(/.*\/(.*)\.tmbundle.*/,'\1')
   if $SVN.length > 0
     begin
-      Timeout::timeout($timeout) do
+      GBTimeout::timeout($timeout) do
         executeShell("export LC_CTYPE=en_US.UTF-8;cd '#{$tempDir}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}'",true,true)
         if $errorcnt > 0
           %x{rm -r #{$tempDir}}
           return
         end
       end
-    rescue Timeout::Error
+    rescue GBTimeout::Error
       $errorcnt += 1
       %x{rm -rf #{$tempDir}}
       writeToLogFile("Timeout error while installing %s" % name)
@@ -911,12 +931,12 @@ def installBundles(dlg)
     $params['progressText'] = "Reload Bundles…"
     updateDIALOG
     # reload bundles only if TM is running
-    %x{osascript -e 'tell app "TextMate" to reload bundles'} if ! getInstallPathFor("App Bundles").empty?
-    if $errorcnt > 0
-      $params['progressText'] = 'General error while installing! Please check the Activity Log.'
-      updateDIALOG
-      sleep(3)
-    end
+    %x{osascript -e 'tell app "TextMate" to reload bundles'} if ! getInstallPathFor("App Bundles", false).empty?
+    # if $errorcnt > 0
+    #   $params['progressText'] = 'General error while installing! Please check the Activity Log.'
+    #   updateDIALOG
+    #   sleep(3)
+    # end
     $params['isBusy'] = false
     $params['progressText'] = ""
     updateDIALOG
@@ -960,14 +980,14 @@ def updateTMlibPath
   renameOldBundleFolder("#{installPath}/lib")
   return if $errorcnt > 0
   begin
-    Timeout::timeout($timeout) do
+    GBTimeout::timeout($timeout) do
       executeShell("export LC_CTYPE=en_US.UTF-8;cd '#{e_sh installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}'", true, true)
       if $errorcnt > 0
         resetOldBundleFolder("#{installPath}/lib")
         return
       end
     end
-  rescue Timeout::Error
+  rescue GBTimeout::Error
     $errorcnt += 1
     resetOldBundleFolder("#{installPath}/lib")
   end

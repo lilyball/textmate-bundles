@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+SUPPORT = ENV['TM_SUPPORT_PATH']
+
+require SUPPORT + '/lib/escape'
+require SUPPORT + '/lib/exit_codes'
+require SUPPORT + '/lib/ui'
+
+words = `grep "^$TM_CURRENT_WORD" "$TM_BUNDLE_PATH/support/data/completions.txt"`.split("\n")
+TextMate.exit_show_tool_tip "No completion available" if words.empty?
+
+if words.size &gt; 1
+
+	i = TextMate::UI.menu(words)
+	TextMate.exit_discard() if i == nil
+	choice = words[i]
+	
+else
+	choice = words.pop
+end
+
+snip = choice[ENV['TM_CURRENT_WORD'].length..-1]
+
+i=0
+print snip.gsub( /([a-zA-Z0-9\:\.]+?)([,\)])/ ) {
+	"${" + String(i+=1) + ":" + $1 + "}" + $2
+}</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~</string>
+	<key>name</key>
+	<string>Auto Complete Method / Property</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.js.jsfl</string>
+	<key>uuid</key>
+	<string>C97C9490-30DF-4DC7-B5A1-9E3FA9691317</string>
+</dict>
+</plist>

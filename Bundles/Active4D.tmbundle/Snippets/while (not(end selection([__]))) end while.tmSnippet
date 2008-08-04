@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>while (not(end selection([${1:table}])))
+	$0
+
+	next record([$1])
+end while</string>
+	<key>name</key>
+	<string>while (not(end selection([..]))) end while</string>
+	<key>scope</key>
+	<string>source.active4d - text.xml</string>
+	<key>tabTrigger</key>
+	<string>whe</string>
+	<key>uuid</key>
+	<string>7D145756-3329-4D73-B1E5-F83D88E58EA6</string>
+</dict>
+</plist>

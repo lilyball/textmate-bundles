@@ -40,9 +40,9 @@ TextMateにはGUIでは見えない設定がいくつかあります。
 
 ## `OakBundleItemsPopUpMenuKeyEquivalent` {oakbundleitemspopupmenukeyequivalent}
 
-The key equivalent which should open the gear menu in the status bar. This is a key equivalent description as used in the [system key bindings file](http://macromates.com/blog/archives/2005/07/05/key-bindings-for-switchers/). The default value is "^\033" (control escape).
+ステータスバーにあるギアメニューを開くキーボードショートカット。このキーは[system key bindings file](http://macromates.com/blog/archives/2005/07/05/key-bindings-for-switchers/)で説明されています。デフォルトの値は"^\033"(コントロール エスケープです)。
 
-For more information about key codes see [this letter](http://lists.macromates.com/pipermail/textmate/2006-April/009955.html).
+キーコードに関する詳しい情報は、[このメール](http://lists.macromates.com/pipermail/textmate/2006-April/009955.html)を参照してください。
 
 ## `OakBundleManagerDisambiguateMenuFontSize` {oakbundlemanagerdisambiguatemenufontsize}
 
@@ -76,7 +76,7 @@ For more information about key codes see [this letter](http://lists.macromates.c
 
 ## `OakDocumentCustomFSMetaData` {oakdocumentcustomfsmetadata}
 
-An array of file systems for which TextMate should use its own functions for storing meta data ([`setxattr`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/setxattr.2.html) replacement). The meta data is stored in AppleDouble format. The default value is `( afpfs, nfs, msdos )` since `setxattr` can cause a kernel panic for these file systems ([rdar://4162474](rdar://problem/4162474)).
+TextMateがメタデータ([`setxattr`](http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/setxattr.2.html) replacement)を保存するときに使う関数のためのファイルシステムの配列です。メタデータはAppleDoubleフォーマットで保存されます。デフォルト値は`( afpfs, nfs, msdos )`になっています。こうなっている理由は、`setxattr`がこれらのファイルシステムでカーネルパニックを発生させるからです。([rdar://4162474](rdar://problem/4162474))
 
 例:
 
@@ -86,23 +86,25 @@ An array of file systems for which TextMate should use its own functions for sto
 
 ## `OakDocumentDisableFSMetaData` {oakdocumentdisablefsmetadata}
 
-それ以上の情報は[extended attributes][ExtendedAttributes]をみてください。
+詳しい情報は[extended attributes][ExtendedAttributes]をみてください。
 
 ## `OakFindPanelDisableHistory` {oakfindpaneldisablehistory}
 
-This disables the history controls in the find panel. The reason for this setting is only because some users have experienced crashes when using the tab key in the find dialog and this is caused by the history controls used. Currently the only workaround is to disable the use of these controls:
+これは、検索パネルの履歴を残さないようにするためです。この設定はユーザーの中に検索ダイアログでタブキーを押したときにクラッシュを経験した人がいるからです。履歴のコントロールによってこのクラッシュが発生します。現在のところ、このコントロールを使えなくすることでのみこの問題を回避できます。
 
     defaults write com.macromates.textmate OakFindPanelDisableHistory 1
 
 ## `OakToolTipMouseMoveIgnorePeriod` and `OakToolTipMouseDistanceThreshold` {oaktooltipmousemoveignoreperiod_and_oaktooltipmousedistancethreshold}
 
-When a command brings up a tool tip, mouse movements performed within the first second do not close the tool tip and after that second has elapsed, the mouse needs to be moved at least 5 pixels for the tool tip to close. These values can be adjusted using the `OakToolTipMouseMoveIgnorePeriod` and `OakToolTipMouseDistanceThreshold` defaults keys.
+コマンドをツールチップを出したときに最初の１秒の間はマウスを動かしてもツールチップは閉じません。１秒後ツールチップが閉じます。ツールチップを閉じるためには、少なくとも5ピクセル分
+マウスを動かす必要があります。`OakToolTipMouseMoveIgnorePeriod`と`OakToolTipMouseDistanceThreshold`を使うことでこの値を変更できます。
 
 ## `OakWrapColumns` {oakwrapcolumns}
 
-This is an array of the values which appear in the View → Wrap Column submenu. Defaults to showing 40 and 78 as possible wrap columns.
+これは、View → Wrap Column サブメニューで使われる値の配列です。デフォルトでは、40と78が使われています。
 
-Example:
+
+例:
 
     defaults write com.macromates.textmate OakWrapColumns '( 60, 70, 80, 120 )'    
 

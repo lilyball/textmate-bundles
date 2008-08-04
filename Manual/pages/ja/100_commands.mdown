@@ -1,85 +1,91 @@
-# Commands {commands}
+# コマンド {commands}
 
-Commands are scripts interpreted by bash or the interpreter specified at the top using shebang notation (e.g. `#!/usr/bin/ruby`).
+コマンドはbashや`#!/usr/bin/ruby`のように最初の行にあるshebang記法で定められたインタープリターで実行されるスクリプトです。
 
-Editing commands is done from the Bundle Editor which you can open by selecting Bundles &#x2192; Bundle Editor &#x2192; Edit Commands…
+Bundles &#x2192; Bundle Editor &#x2192; Edit Commands…を洗濯してバンドルエディタを開きコマンドを編集することができます。
 
 ![Command Editor](command_editor.png)
 
-TextMate can save either the current document or all modified documents in the project, before running the command. This is set using the top pop-up control. A document will only be saved when it has been modified.
+コマンドが実行される前に、現在のドキュメントかプロジェクトの中にある編集された全てのドキュメントが保存されます。これは、一番上のポップアップで設定できます。ドキュメントは変更された場合のみ保存されます。
 
 ## Command Input {command_input}
 
-When running a command the various [environment variables][EnvVariables] will be available for the command to read and use. In addition, the command can read either the entire document or the selected text as input (stdin).
+コマンドを実行するときには、いろいろな[環境変数][EnvVariables]を使用することができます。また、コマンドでは、インプット（標準入力）として、ドキュメント全体を読みこむこともできるほか、選択されたテキストを読みこむことができます。
 
-If the input is set to “Selected Text” and there is no selection, the command will instead get the fallback unit specified in the additional input pop-up control. If the fallback unit is used and the output is set to “Replace Selection” then the unit used as input will be replaced. So if we make a command like `tr '[a-z]' '[A-Z]'` (uppercase text) and set input to Selected Text but fallback to word and set output to replace selected text, then running the command with no selection, will uppercase the current word.
+<!-- TODO: use of the word "fallback" and "unit" may requrie reconsideration. -->
+
+もしインプットが“Selected Text”に設定されているにもかかわらず、何も選択されていない場合は、他のインプットポップアップで設定されているユニットにフォールバックします。フォールバックが使用され、もしアウトプットが“Replace Selection”に設定されていれば、インプットは置換されます。もし`tr '[a-z]' '[A-Z]'`(小文字を大文字に)というコマンドを実行して、インプットがSelected Textに設定されていて、一語にフォールバックする場合し、アウトプットがReplace Selected Textに設定されている場合、選択範囲なしでコマンドを実行すると、現在の単語を大文字に変換します。
 
 ![Input Fallback Options](input_fallback_options.png)
 
-One fallback unit which requires a little explanation is _Scope_. When the input is set to this, TextMate will search backwards and forwards for the first character which is not matched by the scope selector of the command and use those as boundaries for the input.
+フォールバックユニットについてですが、_Scope_(スコープ)については少し説明が必要でしょう。インプットにスコープをセットすると、コマンドのスコープセレクタにマッチしない最初の文字を前方と後方へ向かって検索します。そして、その境界の最初から最後までをインプットとして扱います。
 
-This means that if the language grammar marks up URLs and gives these a scope of `markup.underline.url` then a command with that as the scope selector can set its input to _Selection or Scope_ and will thus get the URL as input, when this command is executed with the caret on an URL.
+つまり、もしランゲージグラマーでURLをマークアップ際に、このスコープに`markup.underline.url`を指定した状態で、_Selection or Scope_と設定すれば、URL上にキャレットがあるときにこのコマンドが実行されれば、URLをインプットとして取得します。
 
-When a command name is shown outside the bundle editor (like in the menus) and a fallback unit is provided then TextMate will substitute “_Unit_ / Selection” (in its name) with either “_Unit_” or “Selection” depending on whether or not text is selected. The text used for _Unit_ should be a single word representing the fallback unit, i.e. Character, Word, Line, Scope (or what the scope represents, but as a single word), or Document. So if you make a command with the name “Encrypt Document / Selection” and specify its input as Selected Text, but with Document set as a fallback, this command will be presented as “Encrypt Document” when no text is selected, otherwise “Encrypt Selection.”
+コマンド名が例えば、メニュー上などのバンドルエディタの外で表されている場合で、フォールバックユニットが必要な時は、テキストが選択されているかどうかに従って“_Unit_ / Selection”を“_Unit_” もしくは “Selection”に置き換えられます。_Unit_に使われるテキストはフォールバックユニットをしめす一つの単語でなくてはいけません。すなわちCharacter、 Word、 Line、 Scope、 Documentということです。もし“Encrypt Document / Selection”という名前のコマンドを作成し、インプットにSelected Textを指定し、フォールバックとして、Documentを指定すると、このコマンドは、何もテキストが選択されていない場合には、“Encrypt Document”として実行され、テキストが選択されている
+場合には、“Encrypt Selection.”として実行されます。
 
-## Command Output {command_output}
+## コマンドアウトプット {command_output}
 
-TextMate can do miscellaneous things with the output (stdout) of a command, the options are:
+アウトプット（標準出力）ではさまざまなことができます。以下ではさまざまなオプションを説明します。
 
- * _Replace Selected Text / Document_ — this output option is mainly for commands which transform the selection/document, for example running the document through `tidy` or sort the lines read from stdin.
+ * _Replace Selected Text / Document_ — これは主に選択範囲やドキュメントを変形するコマンドで使われます。例えば、ドキュメント全体に`tidy`を実行したり、標準入力から読み込まれた行をソートしたりするときに使われます。
 
- * _Insert as Text / Snippet_ — commands which generate output to be inserted in the document, for example inserting missing close tag (by parsing the document read from stdin down to the caret position) or similar.
+ * _Insert as Text / Snippet_ — 生成されたアウトプットがドキュメントに挿入されるコマンド、例えば、(標準入力からキャレットの位置までのドキュメントを解析して)足りない閉じるタグを挿入したりするときに使うことができます。
 
- * _Show as Tool Tip_ — commands which are mainly actions, like submit the selection to a pasting service or similar can discretely report the status of the action using just a tool tip.
+<!-- TODO: What's the good word for "close tag"? -->
+
+ * _Show as Tool Tip_ — これは、主に選択範囲をペースティング・サービスに送信したりしたあとに、そのアクションのステータスをツールチップを使ってリポートするといったようなことに使われます。
 
    ![Tool Tip Output](tool_tip_output.png)
 
- * _Show as HTML_ — this output option simply shows the output as HTML, but has some additional advantages mentioned in next section. It is especially useful for commands which need to report incremental progress, as shown with the Xcode Build below.
+ * _Show as HTML_ — アプトプットをただ単にHTMLとして表示します。これについての利点は次のセクションで説明します。 Xcode Buildのように、インクリメンタルに進捗をリポートする必要があるコマンドではとても有用です。
 
    ![Build With Xcode](build_with_xcode.png)
 
- * _Create New Document_ — with some transformations (like converting a Markdown document to HTML) it may be preferable to open the result in a new document rather than overwrite the existing document and that is what this option is for. There are also commands for which the result is best shown as a document, for example the output from `diff` can be shown as a (new) document to get nice syntax coloring.
+ * _Create New Document_ — MarkdownをHTMLに変換するというような変換が必要な場合は、今使っているドキュメントを上書きするよりも、結果を新しいドキュメントで表示させるほうがよいかもしれません。そのような場合には、このオプションが最適です。また、結果をドキュメントして表示するのがふさわしいコマンドもあります。例えば、`diff`の結果は新しいドキュメントでシンタックス・カラーリングがある状態で見た方がよいでしょう。
 
    ![Diff Result](diff_result.png)
 
 
-## HTML Output {html_output}
+## HTML アウトプット {html_output}
 
-The HTML output option has a few advantages in addition to providing access to [WebKit’s](http://webkit.opendarwin.org/) HTML and CSS engine.
+HTMLアウトプットには、[WebKitの](http://webkit.opendarwin.org/)HTML/CSSエンジンの機能に加えていくつかの機能があります。
 
- 1. The HTML output does not stall TextMate while the command is running. A progress indicator is shown in the upper right hand corner while the command is running and it can be aborted by closing the output window (a confirmation requester is presented).
+ 1. HTMLアウトプットを使ったコマンドが実行中でも、TextMateがストール（停止）してしまうことはありません。進捗インディケータがコマンドが実行されている間に右上の角に表示されます。もし終了(abort)したい場合は、アウトプットのウインドウを閉じるだけです。（閉じようとすると確認のダイアログが表示されます。）
 
     ![Html Output Progress Indicator](html_output_progress_indicator.png)
 
- 2. JavaScript running as part of the output has access to a `TextMate` object with a `system` method that mimics the one [provided to Dashboard widgets](http://developer.apple.com/documentation/AppleApplications/Conceptual/Dashboard_ProgTopics/Articles/CommandLine.html). The `TextMate` object also has an `isBusy` property which can be set to `true` or `false` to control the windows progress indicator. So in the simplest case, to allow the user to start/stop the progress indicator one could make a command like this:
+ 2. アウトプットの一部で実行されているJavaScriptは`TextMate`オブジェクトで`system`メソッドにアクセスできます。これは、[Dashboard widgetsで提供されている](http://developer.apple.com/documentation/AppleApplications/Conceptual/Dashboard_ProgTopics/Articles/CommandLine.html)ものをまねたものです。`TextMate`オブジェクトは`isBusy`プロパティを持っていて、プログレスインディケータをコントロールするために`true`もしくは`false`に設定可能です。一番簡単な例では、プログレスインディケータをユーザがスタート／ストップできるようにするもので以下のようになります。
 
         cat <<'EOF'
            <a href="javascript:TextMate.isBusy = true">Start</a>
            <a href="javascript:TextMate.isBusy = false">Stop</a>
         EOF
 
-    To create a link which opens the user’s browser, one could use the `system` method like this:
+    ユーザのブラウザで開くためのリンクを作るためには`system`メソッドが使用できます。
 
         cat <<'EOF'
            <a href="javascript:TextMate.system(
               'open http://example.com/', null);">Open Link</a>
         EOF
 
-    The `system` method allows starting (and stopping) of commands asynchronously, reading standard out/error from the command and sending data to the commands standard input. For further information see [the Dashboard documentation](http://developer.apple.com/documentation/AppleApplications/Conceptual/Dashboard_ProgTopics/Articles/CommandLine.html).
+    `system`メソッドはコマンドのスタート（とストップ）を非同期的に実行できるため、コマンドからの標準出力（エラー）を読み込んだりや
+コマンドの標準入力データを送ることができます。より詳しい情報は[the Dashboard documentation](http://developer.apple.com/documentation/AppleApplications/Conceptual/Dashboard_ProgTopics/Articles/CommandLine.html)を参照してください。
 
- 3. The HTML output allows the use of the [TextMate URL scheme][TextMateURLScheme] to link back to a given document. This is useful either when the command reports errors (or warnings) with the current document (e.g. a build command or a validator) or when the command refers to other files in the project, e.g. `svn status`.
+ 3. HTMLアプトプットでは、元のドキュメントに戻るために、[TextMate URL スキーム][TextMateURLScheme]を使用できます。例えば、（ビルドコマンドやバリデータのように）コマンドが現在のドキュメントのエラー（や警告）をレポートしたりするときに便利です。また、`svn status`のようにコマンドがプロジェクト内の他のファイルを参照する際にも便利です。
 
- 4. Using either Tiger or Schuberts [PDF Browser Plug-in](http://www.schubert-it.com/pluginpdf/) it is possible to have the HTML output show PDF files. Mainly this is useful for typesetting programs like LaTeX, where it is then possible to typeset and view the result without leaving TextMate.
+　4. TigerかSchuberts [PDF Browser Plug-in](http://www.schubert-it.com/pluginpdf/)を使えば、HTMLアウトプットにPDFファイルを表示させることもできます。これは主にLaTeXのような活字を組むプログラムには便利でしょう。これによって、TextMateから離れることなく活字をセットして結果を確認することができます。
 
- 5. It is possible to redirect to other pages and thereby treat the HTML output as a shortcut to your browser. For example in PHP the “Documentation for Word” command outputs a line like this:
+ 5. 他のページにリダイレクトして、HTMLアウトプットをブラウザへのショートカットのように使うこともできます。例えば、PHPでは“Documentation for Word”というコマンドは次のような出力をします。
 
         echo "<meta http-equiv='Refresh'
                 content='0;URL=http://php.net/$TM_CURRENT_WORD'>"
 
+WebKitにある（おそらく）セキュリティー上の制約のために、`file:`URL
+スキームを使用してのHTMLアウトプットをディスク上の他のファイルへリダイレクトしたり、リンクしたり、参照することはできません。その代わりに、`tm-file:` URL スキームを使って、`file:`と全く同じようなことができますが、スキームを超えての制約はありません。
 
-Due to a (presumed) security restriction with WebKit it is not possible to have the HTML output redirect, link or reference files on your disk via the `file:` URL scheme. Instead you can use the `tm-file:` URL scheme, which works exactly like `file:`, but does not have this cross-scheme restriction.
-
-For a longer post about how the HTML output can be used visit [the TextMate blog](http://macromates.com/blog/archives/2005/09/28/html-output-for-commands/).
+HTMLアウトプットの使い方に関してのより詳しい説明は[the TextMate blog](http://macromates.com/blog/archives/2005/09/28/html-output-for-commands/)を参照してください。.
 
 ## Changing Output Type {changing_output_type}
 

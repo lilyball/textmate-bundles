@@ -3,6 +3,8 @@ rule cpp
 statement+ {
 	def types(scope)
 		#r = { :field => {}, :typedefs => {}, :classes => {}}
+		puts "hello"
+		
 		r = {}
 		elements.each do |e|
 			key, value, type = e.types(scope)
@@ -10,13 +12,34 @@ statement+ {
 			  if key == :current_type
 			    r[key] = value
 		    elsif type
-		        r[type] ||= {}
-		        r[type][key] = value
+		      helper(r, key, value, type )
+		        
 			  end
 		  end
 		end
 		return r
 	end
+	
+  def helperhelper(ipoint, value)
+	  value.each do |k,v|
+      if v.kind_of?(Hash) && ipoint[k]
+        helperhelper(ipoint[k], v)
+      else
+        ipoint[k] = v
+      end
+    end
+    
+  end
+  
+	def helper(dict, key, value, type )
+	  dict[type] ||= {}
+    ipoint = dict[type][key]
+    if ipoint.kind_of?(Hash)
+      helperhelper(ipoint, value)
+    else
+      dict[type][key] = value
+    end
+  end
 }
 end
 
@@ -86,7 +109,14 @@ forward_declare / namespace explicit_space variable space (':' ( !('{' / ';') . 
             retvalue[type][key] = [value]
           end
         else
-          retvalue[type][key] = value
+          ipoint = retvalue[type][key]
+          # instead of overwriting, Hashes are merged
+          # allowing for namespaces (and classes) to be reopened.
+	        if ipoint && ipoint.kind_of?(Hash)
+	          ipoint.merge! value
+          else
+            retvalue[type][key] = value
+          end
         end
       end
     end

@@ -295,6 +295,7 @@ class CppMethodCompletion
         # e.g.  ::scope::something
         if qualifier.first && qualifier.first.empty?
           qualifier.shift
+          scope.replace []
           r, k = traverse(qualifier, lib, qualiferDefault)
         else
           r, k = traverse(scope, lib, default)
@@ -366,7 +367,10 @@ class CppMethodCompletion
                    :method => :smethod}
                 
     skind = lookupTable[kind]
+    # first look up among the static:s
     r = lookup(scope, qualifier, [skind, item[:name]])
+    # if we didn't find anything look up among non-static
+    # provided we are supposed to look in both
     unless r || ( kind == skind)
       scope.replace original.dup
       r = lookup(scope, qualifier, [item[:kind], item[:name]])

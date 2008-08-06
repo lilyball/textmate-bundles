@@ -12,13 +12,13 @@ rescue
 end
 
 def find_bundle_dir(target)
-	p = @bundle_paths.find { |dir| File.directory? "#{dir}/#{target}" }
+	p = @bundle_paths.find { |dir| File.directory? "#{dir}#{target}" }
 	return "#{p}/#{target}" if p
 end
 
 def find_bundle_item(target)
-	p = @bundle_paths.find { |dir| File.exist? "#{dir}/#{target}" }
-	return "#{p}/#{target}" if p
+	p = @bundle_paths.find { |dir| File.exist? "#{dir}#{target}" }
+	return "#{p}#{target}" if p
 end
 
 # Tests.

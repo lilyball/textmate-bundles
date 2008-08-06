@@ -429,7 +429,21 @@
 			<string>#block</string>
 		</dict>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>(?x)
+    		(?:  ^                                 # begin-of-line
+    		  |  
+    		     (?: (?= \s )           (?&lt;!else|new|return) (?&lt;=\w)      #  or word + space before name
+    		       | (?= \s*[A-Za-z_] ) (?&lt;!&amp;&amp;)       (?&lt;=[*&amp;&gt;])   #  or type modifier before name
+    		     )
+    		)
+    		(\s*) (?!(while|for|do|if|else|switch|catch|enumerate|return|r?iterate)\s*\()
+    		(
+    			(?: [A-Za-z_][A-Za-z0-9_]*+ | :: )++ |                  # actual name
+    			(?: (?&lt;=operator) (?: [-*&amp;&lt;&gt;=+!]+ | \(\) | \[\] ) )  # if it is a C++ operator
+    		)
+    		 \s*(?=\()</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -447,66 +461,19 @@
 					<string>punctuation.definition.parameters.c</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>(?x)
-    		(?:  ^                                 # begin-of-line
-    		  |  
-    		     (?: (?= \s )           (?&lt;!else|new|return) (?&lt;=\w)      #  or word + space before name
-    		       | (?= \s*[A-Za-z_] ) (?&lt;!&amp;&amp;)       (?&lt;=[*&amp;&gt;])   #  or type modifier before name
-    		     )
-    		)
-    		(\s*) (?!(while|for|do|if|else|switch|catch|enumerate|return|r?iterate)\s*\()
-    		(
-    			(?: [A-Za-z_][A-Za-z0-9_]*+ | :: )++ |                  # actual name
-    			(?: (?&lt;=operator) (?: [-*&amp;&lt;&gt;=+!]+ | \(\) | \[\] ) )  # if it is a C++ operator
-    		)
-    		 \s*(\()</string>
+			<key>end</key>
+			<string>(?&lt;=\})|(?=#)|(;)</string>
 			<key>name</key>
 			<string>meta.function.c</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(?x)
-    		(?:  ^                                        # begin-of-line
-    		  |  (?: (?= \s )           (?&lt;!else|new|return) (?&lt;=\w)\s+      #  or word + space before name
-    		       | (?= \s*[A-Za-z_] ) (?&lt;!&amp;&amp;)              (?&lt;=[*&amp;])\s*    #  or type modifier before name
-    		     )
-    		)
-    		(
-    			(?: [A-Za-z_][A-Za-z0-9_]*+ | :: )*+                  # actual name
-    			(?: (?&lt;=operator) (?: [-*&amp;&lt;&gt;=+!]+ | \(\) | \[\] ) )?  # if it is a C++ operator
-    		)
-    		 \s+(\()</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.c</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.parameters.c</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.parameters.c</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.function.prototype.c</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>$base</string>
+					<string>#parens</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#block</string>
 				</dict>
 			</array>
 		</dict>
@@ -661,6 +628,22 @@
 				<dict>
 					<key>include</key>
 					<string>#pragma-mark</string>
+				</dict>
+			</array>
+		</dict>
+		<key>parens</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>meta.parens.c</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$base</string>
 				</dict>
 			</array>
 		</dict>

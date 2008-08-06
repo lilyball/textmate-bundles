@@ -204,16 +204,14 @@ class CppMethodCompletion
   end
   
   def handleInput(line)
-    puts line.inspect
     m = line.match(/\A[^{]+\{/)
     # get class and method name
     header = m[0]
     post = m.post_match
-    puts "--"
-    puts post
     fname = header.match(/^\s*((?:[A-Za-z_][A-Za-z0-9_]*|::)+)\s*\(/)
     @namespace = fname[1].split("::")
-    line =  fname.post_match + post
+    args = fname.post_match.match(/\)\s*\{/).pre_match.split(',').join(';')
+    line =  args + post
     return line
   end
   
@@ -452,6 +450,7 @@ class CppMethodCompletion
     originalScope = currentScope.dup
     if type_chain.first[:name] == "this"
       currentScope.pop
+      type_chain.shift
     end
     
     if q = type_chain.first[:qualifier]
@@ -493,7 +492,6 @@ def print()
   qualifier = []
   #pop off methodname 
   @namespace.pop
-  puts @namespace.inspect
   
   namespace = ["rubinius"]
   namespace += @namespace

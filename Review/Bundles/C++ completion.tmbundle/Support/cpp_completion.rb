@@ -99,7 +99,8 @@ class CppMethodCompletion
   attr_accessor :res_hier
 
   def initialize(line)
-    @line = line
+     
+    @line = handleInput(line)
     @scopes = nil
     @parser = CppParser.new
 #    @std = {
@@ -108,6 +109,17 @@ class CppMethodCompletion
 #       :methods => { "begin" =>[{ :type => "map::iterator", :a => "()"}],}}}}}}
 #    
   @res_hier = {}
+  @usr_hier = {}
+  
+    if p = ENV['TM_PROJECT_DIRECTORY']
+      name = "#{ENV['TM_PROJECT_DIRECTORY']}/.cpp.TM_Completions"
+      if File.exist? name
+        File.open(name) do |file|
+          @usr_hier = Marshal.load(file.read)
+        end
+      end
+    end
+
     @std = {
       :namespace => { "std" =>{ :classes => {
     "map" => { :methods => { 
@@ -191,11 +203,24 @@ class CppMethodCompletion
     }
   end
   
+  def handleInput(line)
+    puts line.inspect
+    m = line.match(/\A[^{]+\{/)
+    # get class and method name
+    header = m[0]
+    post = m.post_match
+    puts "--"
+    puts post
+    fname = header.match(/^\s*((?:[A-Za-z_][A-Za-z0-9_]*|::)+)\s*\(/)
+    @namespace = fname[1].split("::")
+    line =  fname.post_match + post
+    return line
+  end
+  
   
   def complete(item, scope, qualifier)
     symbolDict = lookupList(item, scope, qualifier)
-    suggestions = []
-    
+    suggestions = []   
     mat = (/^#{item[:prefix]}./)
     symbolDict.each do |key, value|
       if key =~ mat
@@ -204,7 +229,7 @@ class CppMethodCompletion
             suggestions << { 'display' => key + item[:a], 'cand' => key+"\t"+item[:a], 'match'=> key, 'type'=> "functions"}
           end
         else
-          suggestions << { 'display' => key + value[:a], 'cand' => key+"\t"+value[:a], 'match'=> key, 'type'=> "functions"}
+          suggestions << { 'display' => key, 'cand' => key, 'match'=> key, 'type'=> "functions"}
         end
       end
     end
@@ -241,7 +266,7 @@ class CppMethodCompletion
   
   def traverse(scope, tableRoot, lookIn)
     return tableRoot, nil if scope.empty?
-    lookInUsed = nil
+    lookInUsed = nil # it is interesting to know if :typedef was used
     
     r = scope.inject(tableRoot) do |result, element|
       res = nil
@@ -328,7 +353,7 @@ class CppMethodCompletion
   def lookup(scope, qualifier, verify_presence_of)
     returnT = nil
     std_hier = @std
-    user_hier = {}
+    user_hier = @usr_hier
     hierachy = [std_hier, user_hier]
     if scope.last == "#localScope"
      hierachy << res_hier
@@ -465,8 +490,14 @@ def print()
   #TextMate.exit_show_tool_tip @line
   a = @parser.parse(@line)
   TextMate.exit_discard if a.nil?
-  qualifier = [] 
-  namespace = ["namespace", "className", "#localScope" ]
+  qualifier = []
+  #pop off methodname 
+  @namespace.pop
+  puts @namespace.inspect
+  
+  namespace = ["rubinius"]
+  namespace += @namespace
+  namespace << "#localScope"
   temp = a.types namespace.dup
   k = namespace.inject(@res_hier) do |result, elem|
     a = {}

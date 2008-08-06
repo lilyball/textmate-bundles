@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>2E5097FC-08AF-4350-9EB5-CE60D1476E0E</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require "rubygems"
+require "treetop"
+require "pp"
+Treetop.load "#{ENV['TM_BUNDLE_SUPPORT']}/cpp_parser"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
+
+parser = CppParser.new
+list = Dir["#{ENV['TM_PROJECT_DIRECTORY']}/**/*.hpp"]
+
+def stripComments(line)
+  line.gsub!(/((['"])(?:\\.|.)*?\2)|\/\*.*?\*\/|\/\/[^\n\r]*/m) do |s| 
+    if $1
+      s
+    else
+      s.split("\n").map{|e| ' ' * e.length() }.join("\n")
+    end
+  end
+end
+
+dict = {}
+
+TextMate.call_with_progress(:title =&gt;'Indexing...',
+        :summary =&gt; 'Starting Up...',
+        :indeterminate =&gt; false,
+        :cancel =&gt; lambda {puts "Canceled!"; exit 0} ) do |dialog|
+
+  step = 100 / list.size
+  progress = 0
+
+  list.each do |name|
+    File.open(name) do |file|
+      dialog.parameters = {'summary' =&gt; File.basename(file.path),'progressValue' =&gt; progress }
+      str = file.read
+      stripComments(str)
+      if p = parser.parse(str)
+        dict = p.types("", dict)
+      end
+      progress += step
+    end
+  end
+  
+  dialog.parameters = {'summary' =&gt; 'Writing Index to Disk','progressValue' =&gt; 99 }
+  str = Marshal.dump(dict)
+  File.open("#{ENV['TM_PROJECT_DIRECTORY']}/.cpp.TM_Completions",'w') do |file|
+    file.write(str)
+  end
+  dialog.parameters = {'summary' =&gt; 'Complete!','progressValue' =&gt; 100 }
+end
+
+
+
+
+	</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Index Headers for Completion</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.c++</string>
+	<key>uuid</key>
+	<string>4A9C8939-C49C-4674-9109-AB091B068321</string>
+</dict>
+</plist>

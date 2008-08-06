@@ -1,11 +1,8 @@
 grammar Cpp
 rule cpp
 statement+ {
-	def types(scope)
+	def types(scope, r = {})
 		#r = { :field => {}, :typedefs => {}, :classes => {}}
-		puts "hello"
-		
-		r = {}
 		elements.each do |e|
 			key, value, type = e.types(scope)
 			if key && value
@@ -313,7 +310,7 @@ rule std
 end
 
 rule declaration
- text:("::"? variable )+ pointer:"*"* {
+ text:("::"? variable )+ space pointer:"*"* {
 	def types(scope) #key
  
 	  key = :type

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+s = ENV['TM_CURRENT_LINE']
+
+# See if the current line is a query. If it is, process it.
+
+if s =~ /^(\s*)(query(?: selection)?\s*)\(\[([^\]]+)\]/i then
+	ws = $1
+	command = $2
+	table = $3
+
+	# See if ;* has been added to the end of the query. If not, add it.
+	if not s =~ %r{(^.*);\s*\*\s*\)\s*(`.*|//.*|.*)$}i then
+		s = s.gsub(%r{(^.*)(\s*\))(\s*(`.*|//.*|.*)$)}, '\1; *\2')
+	end
+
+	print s.gsub(/[\$`]/) { |s| "\\#{s}" }
+	print "\n#{ws}#{command}([${1:#{table}}]; ${2:conjunction}; [$1]${3:field})"
+else
+	# Current line is not a query, discard the output, which does nothing
+	exit(200)
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@*</string>
+	<key>name</key>
+	<string>Build Query</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.active4d</string>
+	<key>tabTrigger</key>
+	<string>qq</string>
+	<key>uuid</key>
+	<string>693C1CFB-85A8-4807-B7F6-41380BAE8B8C</string>
+</dict>
+</plist>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#
+# This command searches around the caret/selection for the nearest quotes and expands
+# the name to the full quoted text, then tries to open the file at the path described
+# by that text.
+#
+
+"$TM_BUNDLE_SUPPORT/bin/open_include.rb"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@D</string>
+	<key>name</key>
+	<string>Open Include File</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.active4d</string>
+	<key>uuid</key>
+	<string>A8C76535-C283-4C2C-8367-66368A3DBCFB</string>
+</dict>
+</plist>

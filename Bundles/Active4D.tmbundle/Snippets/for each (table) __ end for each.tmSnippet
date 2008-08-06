@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;date name="${1:name}" $2/&gt;</string>
+	<string>for each ([${1:table}]${2:; \$index})
+	$0
+end for each</string>
 	<key>name</key>
-	<string>&lt;date ../&gt;</string>
+	<string>for each (table) .. end for each</string>
 	<key>scope</key>
-	<string>source.active4d text.xml</string>
+	<string>source.active4d - text.xml</string>
 	<key>tabTrigger</key>
-	<string>date</string>
+	<string>fet</string>
 	<key>uuid</key>
-	<string>763279DE-5570-4982-B1DB-383815F7F526</string>
+	<string>AB6D85C5-49C5-47BB-ACAD-1471D4D97A08</string>
 </dict>
 </plist>

@@ -3,14 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;date name="${1:name}" $2/&gt;</string>
+	<string>array text(${1:\$array}; 0)
+set array($1; "${2:text}")$0</string>
 	<key>name</key>
-	<string>&lt;date ../&gt;</string>
+	<string>array text .. set array ..</string>
 	<key>scope</key>
-	<string>source.active4d text.xml</string>
+	<string>source.active4d - text.xml</string>
 	<key>tabTrigger</key>
-	<string>date</string>
+	<string>arrs</string>
 	<key>uuid</key>
-	<string>763279DE-5570-4982-B1DB-383815F7F526</string>
+	<string>DBDED4B6-5FA9-492C-A25C-69785CE75B89</string>
 </dict>
 </plist>

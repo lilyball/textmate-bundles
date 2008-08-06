@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;date name="${1:name}" $2/&gt;</string>
+	<string>order by([${1:table}]; [$1]${2:field}${3:; &gt;}$0)</string>
 	<key>name</key>
-	<string>&lt;date ../&gt;</string>
+	<string>order by ..</string>
 	<key>scope</key>
-	<string>source.active4d text.xml</string>
+	<string>source.active4d - text.xml</string>
 	<key>tabTrigger</key>
-	<string>date</string>
+	<string>ob</string>
 	<key>uuid</key>
-	<string>763279DE-5570-4982-B1DB-383815F7F526</string>
+	<string>64662E01-ED28-47E5-9260-0E12543ED409</string>
 </dict>
 </plist>

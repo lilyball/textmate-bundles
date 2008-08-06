@@ -3,14 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;date name="${1:name}" $2/&gt;</string>
+	<string>case of
+	:(${1:condition})
+		$0
+
+else
+	
+end case</string>
 	<key>name</key>
-	<string>&lt;date ../&gt;</string>
+	<string>case of .. else end case</string>
 	<key>scope</key>
-	<string>source.active4d text.xml</string>
+	<string>source.active4d - text.xml</string>
 	<key>tabTrigger</key>
-	<string>date</string>
+	<string>casee</string>
 	<key>uuid</key>
-	<string>763279DE-5570-4982-B1DB-383815F7F526</string>
+	<string>55991B2C-7B1B-4908-AA8B-B052AD16A12E</string>
 </dict>
 </plist>

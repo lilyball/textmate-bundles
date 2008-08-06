@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>&lt;date name="${1:name}" $2/&gt;</string>
+	<string>\$${1:query} := RowSet.newFromSelection(-&gt;[${2:table}]; ${3:\$map})</string>
 	<key>name</key>
-	<string>&lt;date ../&gt;</string>
+	<string>RowSet.newFromSelection ..</string>
 	<key>scope</key>
-	<string>source.active4d text.xml</string>
+	<string>source.active4d - text.xml</string>
 	<key>tabTrigger</key>
-	<string>date</string>
+	<string>rs</string>
 	<key>uuid</key>
-	<string>763279DE-5570-4982-B1DB-383815F7F526</string>
+	<string>E742B26D-8C6D-46AE-A10D-818379B4416D</string>
 </dict>
 </plist>

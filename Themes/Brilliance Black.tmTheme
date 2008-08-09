@@ -22,7 +22,7 @@
 				<key>invisibles</key>
 				<string>#CCCCCC1A</string>
 				<key>lineHighlight</key>
-				<string>#0000801A</string>
+				<string>#00008033</string>
 				<key>selection</key>
 				<string>#0010B499</string>
 			</dict>
@@ -216,6 +216,19 @@
 				<string>#43800033</string>
 				<key>foreground</key>
 				<string>#00FFF8</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>~ String RegEx Definition Keyword</string>
+			<key>scope</key>
+			<string>string.regexp punctuation.definition.string keyword.other</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#803D00</string>
 			</dict>
 		</dict>
 		<dict>
@@ -560,10 +573,7 @@
 			<key>scope</key>
 			<string>meta.function, meta.property.function, declaration.function</string>
 			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#340C2133</string>
-			</dict>
+			<dict/>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -999,9 +1009,14 @@ meta.brace.round</string>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>M markdown</string>
+			<string>text meta.paragraph</string>
+			<key>scope</key>
+			<string>text meta.paragraph</string>
 			<key>settings</key>
-			<dict/>
+			<dict>
+				<key>foreground</key>
+				<string>#999999</string>
+			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -1036,10 +1051,10 @@ meta.brace.round</string>
 			<string>markup.heading</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#33333380</string>
+				<key>fontStyle</key>
+				<string></string>
 				<key>foreground</key>
-				<string>#666666</string>
+				<string>#FFFFFF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1052,7 +1067,7 @@ meta.brace.round</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 				<key>foreground</key>
-				<string>#95D4FF</string>
+				<string>#95D4FF80</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1142,9 +1157,7 @@ meta.brace.round</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#000000</string>
-				<key>foreground</key>
-				<string>#999999</string>
+				<string>#80808040</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1162,11 +1175,78 @@ meta.brace.round</string>
 			<key>name</key>
 			<string>M list</string>
 			<key>scope</key>
-			<string>markup.list</string>
+			<string>markup.list meta.paragraph</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string></string>
+				<key>foreground</key>
+				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>—————————————————</string>
+			<key>settings</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Markdown</string>
+			<key>scope</key>
+			<string>text.html.markdown</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FFFFFF</string>
+				<key>foreground</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>text.html.markdown meta.paragraph</string>
+			<key>scope</key>
+			<string>text.html.markdown meta.paragraph</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#666666</string>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>text.html.markdown markup.list meta.paragraph</string>
+			<key>scope</key>
+			<string>text.html.markdown markup.list meta.paragraph</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#555555</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>text.html.markdown markup.heading</string>
+			<key>scope</key>
+			<string>text.html.markdown markup.heading</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>text.html.markdown string</string>
+			<key>scope</key>
+			<string>text.html.markdown string</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#8A5420</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1297,7 +1377,7 @@ source.css meta.scope.property-list meta.property-value punctuation.separator.ar
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#813C00</string>
+				<string>#673000</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1742,8 +1822,6 @@ source.css meta.scope.property-list meta.property-value punctuation.separator.ar
 			<string>source</string>
 			<key>settings</key>
 			<dict>
-				<key>background</key>
-				<string>#000000</string>
 				<key>fontStyle</key>
 				<string></string>
 			</dict>
@@ -1789,7 +1867,7 @@ source.css meta.scope.property-list meta.property-value punctuation.separator.ar
 			<key>name</key>
 			<string>◊ Source Embeded Source</string>
 			<key>scope</key>
-			<string>source.java.embedded</string>
+			<string>source source, source.java.embedded</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2194,6 +2272,19 @@ source.css meta.scope.property-list meta.property-value punctuation.separator.ar
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>punctuation.separator.parameters</string>
+			<key>scope</key>
+			<string>punctuation.separator.parameters</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+				<key>foreground</key>
+				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>meta.brace.pipe</string>
 			<key>scope</key>
 			<string>meta.brace.pipe</string>
@@ -2265,7 +2356,7 @@ source.ocaml punctuation.separator.match-definition
 			<key>name</key>
 			<string>Array Punctuation</string>
 			<key>scope</key>
-			<string>meta.group.braces.square punctuation.section.scope, meta.group.braces.square meta.delimiter.object.comma, meta.brace.square, punctuation.separator.array, punctuation.section.array</string>
+			<string>meta.group.braces.square punctuation.section.scope, meta.group.braces.square meta.delimiter.object.comma, meta.brace.square, punctuation.separator.array, punctuation.section.array, punctuation.definition.array, punctuation.definition.constant.range</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2278,9 +2369,20 @@ source.ocaml punctuation.separator.match-definition
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Array, Range</string>
+			<key>scope</key>
+			<string>meta.structure.array -punctuation.definition.array, meta.definition.range -punctuation.definition.constant.range</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#803D001A</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>meta.brace.curly meta.group</string>
 			<key>scope</key>
-			<string>meta.brace.curly meta.group</string>
+			<string>meta.brace.curly meta.group.css</string>
 			<key>settings</key>
 			<dict>
 				<key>background</key>
@@ -2350,10 +2452,7 @@ source.ocaml punctuation.separator.match-definition
 			<key>scope</key>
 			<string>meta.function meta.group.braces.curly.function -(meta.group meta.group), meta.function meta.odd-tab.group1</string>
 			<key>settings</key>
-			<dict>
-				<key>background</key>
-				<string>#0A0006</string>
-			</dict>
+			<dict/>
 		</dict>
 		<dict>
 			<key>name</key>

@@ -443,14 +443,12 @@ require "test/unit"
 
 class TestCompletes < Test::Unit::TestCase
   def test_basic_completion
-    setup!
     #Should complete the snippet, if there is one, without requiring a block
     TextMate::UI.complete(@choices)
     # 
   end
   
   def test_with_images
-    setup!
     @images = {
       "Macro"      => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png",
       "Language"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png",
@@ -467,7 +465,6 @@ class TestCompletes < Test::Unit::TestCase
   end
   
   def test_with_block
-    setup!
     #Use a block to create a custom snippet to be inserted, the block gets passed your choice as a hash
     # Cancelling the popup will pass nil to the block
     TextMate::UI.complete(@choices){|choice| e_sn choice.inspect }
@@ -475,7 +472,6 @@ class TestCompletes < Test::Unit::TestCase
   end
   
   def test_nested_or_stacked
-    setup!
     # Nested completes
     # Put a complete in the block of another complete 
     # to make it wait for you to choose the first before starting the next.
@@ -492,7 +488,6 @@ class TestCompletes < Test::Unit::TestCase
   end
   
   def test_display_different_from_match
-    setup!
     @choices = [
       {'match' => 'moo', 'display' => 'Hairy Monkey'},
       {'match' => 'foo', 'display' => 'Purple Turtles'},
@@ -503,7 +498,6 @@ class TestCompletes < Test::Unit::TestCase
   end
   
   def test_with_extra_chars
-    setup!
     @choices = [
       {'display' => '^moo'},
       {'display' => '$foo'},
@@ -518,7 +512,7 @@ class TestCompletes < Test::Unit::TestCase
   end
   
   private
-  def setup!
+  def setup
     make_front!
     @choices = [
       {'image' => 'Drag',    'display' => 'moo', 'insert' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},

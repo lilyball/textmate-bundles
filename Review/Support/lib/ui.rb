@@ -536,7 +536,8 @@ class TestMenu < Test::Unit::TestCase
       'item2',
       'item3',
     ]
-    TextMate::UI.menu(@items)
+    t = TextMate::UI.menu(@items)
+    assert_equal(0, t)
     # 
   end
   
@@ -546,8 +547,32 @@ class TestMenu < Test::Unit::TestCase
       { 'title' => 'item2' },
       { 'title' => 'item3' },
     ]
-    TextMate::UI.menu(@items)
+    t = TextMate::UI.menu(@items)
+    assert_equal({"title"=>"item1"}, t)
     # 
+  end
+  
+  def test_should_return_nil_on_empty_set
+    @items = [
+    ]
+    t = TextMate::UI.menu(@items)
+    assert_equal(nil, t)
+    # 
+  end
+  
+  def test_should_return_nil_on_abort
+    @items = [
+      'Tester: Hit Escape!'
+    ]
+    t = TextMate::UI.menu(@items)
+    assert_equal(nil, t, 'You need to his escape when the menu comes up to get this test to pass')
+    # 
+  end
+  
+  def test_should_work_with_dialog1
+  end
+  
+  def test_should_work_with_dialog2
   end
   
   private

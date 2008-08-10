@@ -5,6 +5,7 @@
 # 
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
+USE_DIALOG2 = ENV['DIALOG'] =~ /2$/ # DIALOG 2
 
 class TextmateCodeCompletion
   $debug_codecompletion = {}
@@ -31,11 +32,24 @@ class TextmateCodeCompletion
     end
     def go!(options={})
       options = TextmateCodeCompletion.parse_options(options)
+      
+      if USE_DIALOG2
+        
+        if options[:split] == 'plist'
+          choices = TextmateCompletionsPlist.new(ENV['TM_COMPLETIONS']).to_ary
+        else
+          choices = TextmateCompletionsText.new(ENV['TM_COMPLETIONS'],{:split=>','}.merge(options)).to_ary
+        end
+        return print(TextmateCodeCompletion.new( choices, STDIN.read, options ).to_snippet)
+      end
+      
       if options[:split] == 'plist'
         choices = TextmateCompletionsPlist.new(ENV['TM_COMPLETIONS']).to_ary
       else
         choices = TextmateCompletionsText.new(ENV['TM_COMPLETIONS'],{:split=>','}.merge(options)).to_ary
       end
+      
+      
       print TextmateCodeCompletion.new( choices, STDIN.read, options ).to_snippet
     end
     
@@ -265,12 +279,13 @@ class TextmateCodeCompletion
 end
 
 class TextmateCompletionsPlist
-  attr :raw, true
-  attr :scope, true
-  attr :format, true
-  attr :choices, true
+  attr_accessor :raw
+  attr_accessor :scope
+  attr_accessor :format
+  attr_accessor :choices
+  attr_accessor :parsed
   
-  def initialize(path='',options={})
+  def initialize(path=nil,options={})
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
     
     if path.match(/\{/)
@@ -278,30 +293,54 @@ class TextmateCompletionsPlist
       @fullsize = false
     else
       return false unless File.exist?(path)
-      self.raw = File.new(path).read
+      self.raw = File.read(path)
       @fullsize = true
     end
     
-    pl = OSX::PropertyList.load(self.raw, true)[0]
+    @parsed = OSX::PropertyList.load(self.raw)
+    # p parsed unless parsed.is_a? Array
+    p @parsed if @parsed.is_a? Array
+    @parsed = @parsed.first if @parsed.is_a? Array
     
-    self.scope   = pl['scope'].split(/, ?/) if @fullsize and pl['scope']
+    self.scope   = @parsed['scope'].split(/, ?/) if @fullsize and @parsed['scope']
     
     # This is for parsing tmPreference file completions directly from the bundle. DEPRECATED
-    self.choices = (@fullsize ? pl['settings'] : pl)['completions']
+    self.choices = (@fullsize ? @parsed['settings'] : @parsed)['completions']
     
     # This is for parsing the new format of plist that is used in Dialog2
-    self.choices = pl['suggestions'] if pl['suggestions']
+    self.choices = @parsed['suggestions'] if @parsed['suggestions']
     
     self.format  = self.choices[0].is_a?(Array) ? :array : :hash
   end
   
   def to_ary
     return self.choices if self.format == :array
-    return self.choices.map{|c|c['title']}
+    return self.choices.map{|c|c['title'] || c['match'] || c['display']}
   end
   def to_hash
-    return self.choices if self.format == :hash
-    return self.choices.map{|c| {"title" => c} }
+    # return self.choices if self.choices.is_a? Hash
+    
+    self.choices = self.choices.map do |choice|
+      next unless choice and choice.respond_to? :to_str or choice.respond_to? :keys
+      
+      hashed_choice ||= choice if choice.respond_to? :keys
+      
+      if choice.respond_to? :to_str and choice.to_str =~ /^--/
+        hashed_choice ||= { 'separator' => choice.to_str.gsub(/^-+\s*|\s*-+$/,'') } 
+      end
+      
+      # Add all characters in every choice to the extra_chars
+      # @extra_chars ||= []
+      # @extra_chars += choice.to_str.scan(/[^a-z]/i)
+      # @extra_chars.uniq!
+      
+      hashed_choice ||= { 'display' => choice.to_str }
+      
+      hashed_choice
+    end
+    
+    return {'completions' => self.choices, 'extra_chars' => @extra_chars, 'images' => @images}
+    
   end
 end
 
@@ -440,14 +479,14 @@ if $0 == __FILE__
 
 require 'test/unit'
 require "stringio"
-STDIN = StringIO.new
+# STDIN = StringIO.new
 
 puts "\nJust keep hittin' 1\n\n"
 
 def print(text)
   return text
 end
-  
+# =begin
 class TextmateCodeCompletionTest < Test::Unit::TestCase
   def test_blank
     set_tm_vars({"TM_SELECTED_TEXT" => nil, "TM_CURRENT_LINE" => "", "TM_COLUMN_NUMBER" => "1", "TM_INPUT_START_COLUMN" => "1"})
@@ -677,7 +716,8 @@ class TextmateCodeCompletionTest < Test::Unit::TestCase
     # Haven't implemented the code to make this pass yet :-!
   end
 end
-
+# =begin
+# =end
 class TextmateCompletionsPlistTest < Test::Unit::TestCase
 
   def test_plist_file
@@ -690,6 +730,209 @@ class TextmateCompletionsPlistTest < Test::Unit::TestCase
   
   def test_plist_string_format1
     completions = TextmateCompletionsPlist.new("{ completions = ( 'fibbity', 'flabbity', 'floo' ); }")
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3, completions.choices
+  end
+  
+  def test_plist_string_format1_dialog2
+    completions = TextmateCompletionsPlist.new %q`
+    {
+        completions =     (
+                    {
+                display    = moo;
+                image      = Drag;
+                insert     = "(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})";
+                "tool_tip" = "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here.";
+            },
+                    {
+                display    = foo;
+                image      = Macro;
+                insert     = "(${1:one}, \"${2:one}\", ${3:three}${4:, ${5:five}, ${6:six}})";
+                "tool_tip" = "(one, two)\n This method does something or other maybe.\n Insert longer description of it here.";
+            },
+                    {
+                display    = bar;
+                image      = Command;
+                insert     = "(${1:one}, ${2:one}, \"${3:three}\"${4:, \"${5:five}\", ${6:six}})";
+                "tool_tip" = "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here.";
+            }
+        );
+        images         = {
+            Command    = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png";
+            Drag       = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png";
+            Language   = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png";
+            Macro      = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png";
+            Preference = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Preferences.png";
+            Snippet    = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png";
+            Template   = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png";
+            Templates  = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Templates.png";
+        };
+    }
+    `
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert_kind_of Hash, completions.to_hash
+    assert_equal [
+        {'image' => 'Drag',    'display' => 'moo', 'insert' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},
+        {'image' => 'Macro',   'display' => 'foo', 'insert' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip' => "(one, two)\n This method does something or other maybe.\n Insert longer description of it here."},
+        {'image' => 'Command', 'display' => 'bar', 'insert' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})', 'tool_tip' => "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here."},
+    ], completions.to_hash['completions']
+    assert completions.to_ary.length == 3, completions.choices
+  end
+  def test_plist_string_format1_dialog2_xml
+    
+    completions = TextmateCompletionsPlist.new %q{
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>completions</key>
+  <array>
+    <dict>
+      <key>display</key>
+      <string>moo</string>
+      <key>image</key>
+      <string>Drag</string>
+      <key>insert</key>
+      <string>(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})</string>
+      <key>tool_tip</key>
+      <string>(one, two, four[, five])
+ This method does something or other maybe.
+ Insert longer description of it here.</string>
+    </dict>
+    <dict>
+      <key>display</key>
+      <string>foo</string>
+      <key>image</key>
+      <string>Macro</string>
+      <key>insert</key>
+      <string>(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})</string>
+      <key>tool_tip</key>
+      <string>(one, two)
+ This method does something or other maybe.
+ Insert longer description of it here.</string>
+    </dict>
+    <dict>
+      <key>display</key>
+      <string>bar</string>
+      <key>image</key>
+      <string>Command</string>
+      <key>insert</key>
+      <string>(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})</string>
+      <key>tool_tip</key>
+      <string>(one, two[, three])
+ This method does something or other maybe.
+ Insert longer description of it here.</string>
+    </dict>
+  </array>
+  <key>images</key>
+  <dict>
+    <key>Command</key>
+    <string>/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png</string>
+    <key>Drag</key>
+    <string>/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png</string>
+    <key>Language</key>
+    <string>/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png</string>
+    <key>Macro</key>
+    <string>/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png</string>
+    <key>Preference</key>
+    <string>/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Preferences.png</string>
+    <key>Snippet</key>
+    <string>/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png</string>
+    <key>Template</key>
+    <string>/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png</string>
+    <key>Templates</key>
+    <string>/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Templates.png</string>
+  </dict>
+</dict>
+</plist>
+    }
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3, completions.choices
+  end
+  
+  def test_plist_string_format1_dialog2_only_completions
+    plist = <<-PLIST
+{	completions = (
+		{	display = 'moo';
+			image = 'Drag';
+			insert = '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})';
+			tool_tip = '(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here.';
+		},
+		{	display = 'foo';
+			image = 'Macro';
+			insert = '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})';
+			tool_tip = '(one, two)\n This method does something or other maybe.\n Insert longer description of it here.';
+		},
+		{	display = 'bar';
+			image = 'Command';
+			insert = '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})';
+			tool_tip = '(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here.';
+		},
+	);
+}
+    PLIST
+    completions = TextmateCompletionsPlist.new plist
+    
+    assert_equal OSX::PropertyList.load(plist), completions.parsed
+    
+    assert_not_nil completions
+    assert_kind_of Array, completions.to_ary
+    assert completions.to_ary.length == 3, completions.choices
+  end
+  def test_plist_string_format1_dialog2_only_completions_xml
+    plist = <<-'XML'
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+    	<key>completions</key>
+    	<array>
+    		<dict>
+    			<key>display</key>
+    			<string>moo</string>
+    			<key>image</key>
+    			<string>Drag</string>
+    			<key>insert</key>
+    			<string>(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})</string>
+    			<key>tool_tip</key>
+    			<string>(one, two, four[, five])
+     This method does something or other maybe.
+     Insert longer description of it here.</string>
+    		</dict>
+    		<dict>
+    			<key>display</key>
+    			<string>foo</string>
+    			<key>image</key>
+    			<string>Macro</string>
+    			<key>insert</key>
+    			<string>(${1:one}, &quot;${2:one}&quot;, ${3:three}${4:, ${5:five}, ${6:six}})</string>
+    			<key>tool_tip</key>
+    			<string>(one, two)
+     This method does something or other maybe.
+     Insert longer description of it here.</string>
+    		</dict>
+    		<dict>
+    			<key>display</key>
+    			<string>bar</string>
+    			<key>image</key>
+    			<string>Command</string>
+    			<key>insert</key>
+    			<string>(${1:one}, ${2:one}, &quot;${3:three}&quot;${4:, &quot;${5:five}&quot;, ${6:six}})</string>
+    			<key>tool_tip</key>
+    			<string>(one, two[, three])
+     This method does something or other maybe.
+     Insert longer description of it here.</string>
+    		</dict>
+    	</array>
+    </dict>
+    </plist>
+    XML
+    completions = TextmateCompletionsPlist.new plist
+    
+    assert_equal OSX::PropertyList.load(plist), completions.parsed
     assert_not_nil completions
     assert_kind_of Array, completions.to_ary
     assert completions.to_ary.length == 3, completions.choices
@@ -797,3 +1040,6 @@ def set_tm_vars(env)
 end
   
 end # TESTS
+
+=begin
+=end

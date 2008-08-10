@@ -433,9 +433,9 @@ require "test/unit"
 #	puts "Button pressed: #{result}"
 
 
-# ================== #
-# = complete usage = #
-# ================== #
+# ==================
+# = complete usage =
+# ==================
 # HOW TO TEST:
 # 1) Place your caret on the blank line in one of the test methods
 # 2) Use "Run Focused Unit Test" 
@@ -526,12 +526,42 @@ class TestCompletes < Test::Unit::TestCase
 end
 
 
-# ================== #
-# = tool_tip usage = #
-# ================== #
+# ==============
+# = menu usage =
+# ==============
+class TestMenu < Test::Unit::TestCase
+  def test_should_accept_array_of_strings
+    @items = [
+      'item1',
+      'item2',
+      'item3',
+    ]
+    TextMate::UI.menu(@items)
+    # 
+  end
+  
+  def test_should_accept_array_of_hashes
+    @items = [
+      { 'title' => 'item1' },
+      { 'title' => 'item2' },
+      { 'title' => 'item3' },
+    ]
+    TextMate::UI.menu(@items)
+    # 
+  end
+  
+  private
+  def setup
+    @items = []
+  end
+end
+
+# ==================
+# = tool_tip usage =
+# ==================
 
 class TestToolTips < Test::Unit::TestCase
-  def test_basic
+  def test_basic_tooltip
     # Insert normal text for a normal tool_tip:
     TextMate::UI.tool_tip('Normal Tooltip')
   end

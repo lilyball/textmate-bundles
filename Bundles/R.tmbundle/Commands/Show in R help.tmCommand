@@ -37,7 +37,7 @@ def look_up_term(term)
   `awk -- '/^Entry:/ { entry = $2 } /[[:space:]]'#{e_sh Regexp.escape(term)}'([[:space:]]|$)/,/^URL:/ { if(match($0,/^URL:/)) { sub(/^URL: /, ""); sub(/^(\\.\\.\\/)*library\\//, ""); print entry, $0; } }' #{e_sh LIBDIR}/*/CONTENTS`.split("\n")
 end
 
-term = Word.current_word(/\w./)
+term = Word.current_word('\w\.')
 if term.empty? then
   TextMate.exit_discard unless term = get_word_from_user
 end

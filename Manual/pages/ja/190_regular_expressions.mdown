@@ -51,11 +51,10 @@ TextMateではK. Kosakoさんによる鬼車正規表現ライブラリを使い
 
 以下は<http://www.geocities.jp/kosako3/oniguruma/doc/RE.ja.txt>からの引用です。
 
-<!-- TODO: Allan's version uses v3.6.0. Which seems not be available from the website any longer. "Oniguruma Regular Expressions Version 3.6.0    2005/02/01" -->
-<!-- Yen symbol needs to be replaced with backslash or adequate explanation is necessary. -->
+<!-- TODO: Yen symbol needs to be replaced with backslash or adequate explanation is necessary. -->
 
 
-		鬼車 正規表現 Version 5.9.1    2007/09/05
+		鬼車 正規表現 Version 5.6.0    2007/04/03
 
 		使用文法: ONIG_SYNTAX_RUBY (既定値)
 
@@ -301,11 +300,7 @@ TextMateではK. Kosakoさんによる鬼車正規表現ライブラリを使い
 
 		8. 後方参照
 
-		  ¥n          番号指定参照     (n >= 1)
-		  ¥k<n>       番号指定参照     (n >= 1)
-		  ¥k'n'       番号指定参照     (n >= 1)
-		  ¥k<-n>      相対番号指定参照 (n >= 1)
-		  ¥k'-n'      相対番号指定参照 (n >= 1)
+		  ¥n          番号指定参照 (n >= 1)
 		  ¥k<name>    名前指定参照
 		  ¥k'name'    名前指定参照
 
@@ -320,17 +315,10 @@ TextMateではK. Kosakoさんによる鬼車正規表現ライブラリを使い
 
 		  ネストレベル付き後方参照
 
-		    level: 0, 1, 2, ...
-
-		    ¥k<n+level>     (n >= 1)
-		    ¥k<n-level>     (n >= 1)
-		    ¥k'n+level'     (n >= 1)
-		    ¥k'n-level'     (n >= 1)
-
-		    ¥k<name+level>
-		    ¥k<name-level>
-		    ¥k'name+level'
-		    ¥k'name-level'
+		    ¥k<name+n>     n: 0, 1, 2, ...
+		    ¥k<name-n>     n: 0, 1, 2, ...
+		    ¥k'name+n'     n: 0, 1, 2, ...
+		    ¥k'name-n'     n: 0, 1, 2, ...
 
 		    後方参照の位置から相対的な部分式呼出しネストレベルを指定して、そのレベルでの
 		    捕獲値を参照する。
@@ -358,10 +346,8 @@ TextMateではK. Kosakoさんによる鬼車正規表現ライブラリを使い
 
 		  ¥g<name>    名前指定呼出し
 		  ¥g'name'    名前指定呼出し
-		  ¥g<n>       番号指定呼出し    (n >= 1)
-		  ¥g'n'       番号指定呼出し    (n >= 1)
-		  ¥g<-n>      相対番号指定呼出し (n >= 1)
-		  ¥g'-n'      相対番号指定呼出し (n >= 1)
+		  ¥g<n>       番号指定呼出し (n >= 1)
+		  ¥g'n'       番号指定呼出し (n >= 1)
 
 		  ※ 最左位置での再帰呼出しは禁止される。
 		     例. (?<name>a|¥g<name>b)   => error
@@ -500,19 +486,15 @@ TextMateではK. Kosakoさんによる鬼車正規表現ライブラリを使い
 
 		補記 6. 問題点
 
-		   + エンコーディングバイト値が適正な価かどうかのチェックは行なっていない。
-
-		     例: UTF-8
+		   + UTF-8で、バイト値が適正な価かどうかのチェックは行なっていない。
 
 		     * 先頭バイトとして不正なバイトを一文字とみなす
 		       /./u =~ "¥xa3"
 
 		     * 不完全なバイトシーケンスのチェックをしない
-		      /¥w+/u =~ "a¥xf3¥x8ec"
+		      /¥w+/ =~ "a¥xf3¥x8ec"
 
 		     これを調べることは可能ではあるが、遅くなるので行なわない。
-
-		     文字列として、そのようなバイト列を指定した場合の動作は保証しない。
 
 		終り
 

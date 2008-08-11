@@ -8,7 +8,7 @@
 	<string>#!/usr/bin/env ruby -wKU
 
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
-require ENV['TM_BUNDLE_SUPPORT'] + '/lib/as3_bundle_locator'
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/bundle_locator'
 
 fm_path = find_bundle_item("/ActionScript 3.tmbundle/Support/lib/flex_mate.rb")
 
@@ -31,7 +31,7 @@ end
 	<key>name</key>
 	<string>Open MX Sourcecode</string>
 	<key>output</key>
-	<string>openAsNewDocument</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>source.actionscript.3, text.xml.mxml</string>
 	<key>uuid</key>

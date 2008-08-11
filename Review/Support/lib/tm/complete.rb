@@ -45,6 +45,8 @@ module TextMate
     
     private
     def data(raw_data=ENV['TM_COMPLETIONS'])
+      return {} unless raw_data and not raw_data.empty?
+      
       return @data = OSX::PropertyList.load(raw_data) if \
         ENV['TM_COMPLETIONS_SPLIT'] == 'plist'
       

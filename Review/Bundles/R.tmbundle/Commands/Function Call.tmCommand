@@ -9,7 +9,7 @@
 require ENV['TM_SUPPORT_PATH'] +'/lib/escape.rb'
 require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
 if ENV['TM_SELECTED_TEXT'].nil? or ENV['TM_SELECTED_TEXT'].empty?
-	word = Word.current_word(/\w\./)
+	word = Word.current_word('\w\.')
 else
 	word = ENV['TM_SELECTED_TEXT']
 end

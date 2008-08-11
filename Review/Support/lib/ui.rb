@@ -115,7 +115,7 @@ module TextMate
           STDOUT.reopen(open('/dev/null'))
           STDERR.reopen(open('/dev/null'))
           
-          require ENV['TM_SUPPORT_PATH'] + '/lib/tm/current_word'
+          require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
           options[:chars] ||= "a-zA-Z0-9"
           characters = options[:chars] if options[:chars]
           characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]

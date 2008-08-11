@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/current_word'
+require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
 module TextMate

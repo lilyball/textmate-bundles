@@ -112,7 +112,8 @@ module TextMate
           STDERR.reopen(open('/dev/null'))
           
           require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
-          characters = "a-zA-Z0-9"
+          options[:chars] ||= "a-zA-Z0-9"
+          characters  = Regexp.escape(options[:chars]) || "a-zA-Z0-9"
           characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
           
           options[:initial_filter] ||= Word.current_word characters, :left
@@ -509,6 +510,24 @@ class TestCompletes < Test::Unit::TestCase
     # $
     # \
     # .
+  end
+  
+  def test_should_use_chars
+    @choices = [
+      {'display' => '^^^^'},
+      {'display' => '$$$$'},
+      {'display' => '\\\\\\\\'},
+      {'display' => '....'},
+      {'display' => 'bar'},
+    ]
+    TextMate::UI.complete(@choices, :chars => '^$\.')
+    # Should limit to only 1 choice:
+    # ^
+    # $
+    # \
+    # .
+    # Should show all choices:
+    # b
   end
   
   private

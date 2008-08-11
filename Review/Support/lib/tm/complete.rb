@@ -20,7 +20,7 @@ module TextMate
     
     # 0-config completion command using environment variables for everything
     def complete!
-      return TextMate::UI.tool_tip('Nothing to Complete') unless choices
+      return choices unless choices
       TextMate::UI.complete(choices, {:images => images, :chars => chars, :extra_chars => extra_chars})
     end
     
@@ -46,6 +46,7 @@ module TextMate
     private
     def data(raw_data=ENV['TM_COMPLETIONS'])
       return {} unless raw_data and not raw_data.empty?
+      ENV['TM_COMPLETIONS_SPLIT'] ||= ENV['TM_COMPLETIONS_split']
       
       return @data = OSX::PropertyList.load(raw_data) if \
         ENV['TM_COMPLETIONS_SPLIT'] == 'plist'
@@ -59,7 +60,13 @@ module TextMate
     end
     
     def array_to_suggestions(suggestions)
-      suggestions.map { |c| {'display' => c} }
+      suggestions.delete('')
+      
+      suggestions.map! do |c|
+        {'display' => c}
+      end
+      
+      suggestions
     end
     
   end

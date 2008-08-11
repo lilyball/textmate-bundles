@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/current_word'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
 module TextMate
@@ -58,6 +58,10 @@ require "test/unit"
 class TestComplete < Test::Unit::TestCase
 	def test_basic_complete
 		ENV['TM_COMPLETIONS'] = 'ad(),adipisicing,aliqua,aliquip,amet,anim,aute,cillum,commodo,consectetur,consequat,culpa,cupidatat,deserunt,do,dolor,dolore,Duis,ea,eiusmod,elit,enim,esse,est,et,eu,ex,Excepteur,exercitation,fugiat,id,in,incididunt,ipsum,irure,labore,laboris,laborum,Lorem,magna,minim,mollit,nisi,non,nostrud,nulla,occaecat,officia,pariatur,proident,qui,quis,reprehenderit,sed,sint,sit,sunt,tempor,ullamco,Ut,ut,velit,veniam,voluptate,'
+		
+		assert_equal ENV['TM_COMPLETIONS'].split(','), TextMate::Complete.choices.map{|c| c['display']}
+		assert_equal TextMate::Complete::IMAGES, TextMate::Complete.images
+		
 		TextMate::Complete.complete!
 		# 
 	end

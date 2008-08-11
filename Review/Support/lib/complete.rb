@@ -35,13 +35,13 @@ module TextMate
 			def data
 				return @data if @data
 				return @data = OSX::PropertyList.load(ENV['TM_COMPLETIONS']) if \
-					ENV['TM_COMPLETIONS_split'] == 'plist'
+					ENV['TM_COMPLETIONS_SPLIT'] == 'plist'
 				
-				ENV['TM_COMPLETIONS_split'] ||= ','
+				ENV['TM_COMPLETIONS_SPLIT'] ||= ','
 				
 				@data = {}
 				@data['suggestions'] = ENV['TM_COMPLETIONS']\
-					.split(ENV['TM_COMPLETIONS_split'])\
+					.split(ENV['TM_COMPLETIONS_SPLIT'])\
 					.map { |c| {'display' => c} }
 				
 				return @data
@@ -62,7 +62,7 @@ class TestComplete < Test::Unit::TestCase
 		# 
 	end
 	def test_should_support_plist
-		ENV['TM_COMPLETIONS_split']='plist'
+		ENV['TM_COMPLETIONS_SPLIT']='plist'
 		ENV['TM_COMPLETIONS'] = <<-'PLIST'
 		{ suggestions = ( 
 				{ display = moo; image = Drag;    insert = "(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})";         tool_tip = "moo(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."; }, 

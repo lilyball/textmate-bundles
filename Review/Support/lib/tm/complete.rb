@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+require 'pp'
 
 module TextMate
   class Complete
@@ -44,19 +46,55 @@ module TextMate
     end
     
     private
-    def data(raw_data=ENV['TM_COMPLETIONS'])
-      return {} unless raw_data and not raw_data.empty?
-      ENV['TM_COMPLETIONS_SPLIT'] ||= ENV['TM_COMPLETIONS_split']
+    def data(raw_data=nil)
+      fix_legacy
       
-      return @data = OSX::PropertyList.load(raw_data) if \
-        ENV['TM_COMPLETIONS_SPLIT'] == 'plist'
+      raw_data ||= read_data
+      return {} unless raw_data and not raw_data.empty?
+      
+      @data = parse_data raw_data
+      return @data
+    end
+    
+    def read_data
+      raw_data = read_file
+      raw_data ||= read_string
+      raw_data
+    end
+    def read_file
+      # Expand Completion File Path
+      if ENV['TM_COMPLETIONS_FILE'] and not File.exists? ENV['TM_COMPLETIONS_FILE']
+        ENV['TM_COMPLETIONS_FILE'] = ENV['TM_BUNDLE_SUPPORT'] + '/' + ENV['TM_COMPLETIONS_FILE']
+      end
+      
+      return nil unless ENV['TM_COMPLETIONS_FILE'] and File.exists? ENV['TM_COMPLETIONS_FILE']
+      
+      ENV['TM_COMPLETIONS_SPLIT'] ||= ENV['TM_COMPLETIONS_FILE'].scan(/\.([^\.]+)$/)[0][0]
+      
+      File.read(ENV['TM_COMPLETIONS_FILE'])
+    end
+    def read_string
+      ENV['TM_COMPLETIONS']
+    end
+    
+    def parse_data(raw_data)
+      raw_data = parse_plist raw_data
+      raw_data = parse_string raw_data
+    end
+    def parse_string(raw_data)
+      return {} unless raw_data
+      return raw_data unless raw_data.respond_to? :to_str
+      raw_data = raw_data.to_str
       
       ENV['TM_COMPLETIONS_SPLIT'] ||= ','
       
-      @data = {}
-      @data['suggestions'] = array_to_suggestions(ENV['TM_COMPLETIONS'].split(ENV['TM_COMPLETIONS_SPLIT']))
-      
-      return @data
+      data = {}
+      data['suggestions'] = array_to_suggestions(raw_data.split(ENV['TM_COMPLETIONS_SPLIT']))
+      data
+    end
+    def parse_plist(raw_data)
+      return raw_data unless ENV['TM_COMPLETIONS_SPLIT'] == 'plist'
+      OSX::PropertyList.load(raw_data)
     end
     
     def array_to_suggestions(suggestions)
@@ -69,6 +107,9 @@ module TextMate
       suggestions
     end
     
+    def fix_legacy
+      ENV['TM_COMPLETIONS_SPLIT'] ||= ENV['TM_COMPLETIONS_split'] 
+    end
   end
 end
 
@@ -116,6 +157,7 @@ class TestComplete < Test::Unit::TestCase
     
     fred = TextMate::Complete.new
     
+    assert_not_nil fred.choices
     assert_equal ENV['TM_COMPLETIONS'].split(','), fred.choices.map{|c| c['display']}
     fred.choices.reject!{|choice| choice['display'] !~ /^a/ }
     assert_equal ENV['TM_COMPLETIONS'].split(',').grep(/^a/), fred.choices.map{|c| c['display']}

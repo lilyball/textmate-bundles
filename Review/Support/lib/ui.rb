@@ -13,7 +13,7 @@ module TextMate
 
     class << self
       # safest way to use Dialog
-    	# see initialize for calling info
+      # see initialize for calling info
       def dialog(*args)
         d = Dialog.new(*args)
         begin
@@ -26,14 +26,14 @@ module TextMate
       end
 
       # present an alert
-    	def alert(style, title, message, *buttons)
-    		styles = [:warning, :informational, :critical]
-    		raise "style must be one of #{types.inspect}" unless styles.include?(style)
-		
-    		params = {'alertStyle' => style.to_s, 'messageTitle' => title, 'informativeText' => message, 'buttonTitles' => buttons}
+      def alert(style, title, message, *buttons)
+        styles = [:warning, :informational, :critical]
+        raise "style must be one of #{types.inspect}" unless styles.include?(style)
+
+        params = {'alertStyle' => style.to_s, 'messageTitle' => title, 'informativeText' => message, 'buttonTitles' => buttons}
         button_index = %x{#{TM_DIALOG} -ep #{e_sh params.to_plist}}.chomp.to_i
-    		buttons[button_index]
-    	end
+        buttons[button_index]
+      end
 
       # show the system color picker and return a hex-format color (#RRGGBB).
       # If the input string is a recognizable hex string, the default color will be set to it.
@@ -120,7 +120,7 @@ module TextMate
           characters = options[:chars] if options[:chars]
           characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
           # `echo '#{characters}'>/tmp/characters.txt` #DEBUG
-					
+
           options[:initial_filter] ||= Word.current_word characters, :left
 
           choices         = choices.map! {|c| {'display' => c.to_s} } unless choices[0].is_a? Hash
@@ -263,7 +263,7 @@ module TextMate
         title   = options[:title]   || "Something Happened"
         prompt  = options[:prompt]  || "Should we continue or cancel?"
 
-      	res = alert(:informational, title, prompt, button1, button2)
+        res = alert(:informational, title, prompt, button1, button2)
 
         if res == button1 then
           block_given? ? yield : true
@@ -278,16 +278,16 @@ module TextMate
 
         class Dialog    
           # instantiate an asynchronous nib
-      		# two ways to call:
-      		# Dialog.new(nib_path, parameters, defaults=nil)
-      		# Dialog.new(:nib => path, :parameters => params, [:defaults => defaults], [:center => true/false])
+          # two ways to call:
+          # Dialog.new(nib_path, parameters, defaults=nil)
+          # Dialog.new(:nib => path, :parameters => params, [:defaults => defaults], [:center => true/false])
           def initialize(*args)
-      			nib_path, start_parameters, defaults, center = if args.size > 1
-      				args
-      			else
-      				args = args[0]
-      				[args[:nib], args[:parameters], args[:defaults], args[:center]]
-      			end
+            nib_path, start_parameters, defaults, center = if args.size > 1
+              args
+            else
+              args = args[0]
+              [args[:nib], args[:parameters], args[:defaults], args[:center]]
+            end
 
             center_arg = center.nil? ? '' : '-c'
             defaults_args = defaults.nil? ? '' : %Q{-d #{e_sh defaults.to_plist}}

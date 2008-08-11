@@ -65,6 +65,7 @@ end
 
 if __FILE__ == $0
 `open "txmt://open?url=file://$TM_FILEPATH"` #For testing purposes, make this document the topmost so that the complete popup works
+ENV['WEB_PREVIEW_RUBY']='NO-RUN'
 
 require "test/unit"
 # require "complete"

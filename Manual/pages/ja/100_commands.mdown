@@ -87,15 +87,15 @@ WebKitにある（おそらく）セキュリティー上の制約のために�
 
 HTMLアウトプットの使い方に関してのより詳しい説明は[the TextMate blog](http://macromates.com/blog/archives/2005/09/28/html-output-for-commands/)を参照してください。.
 
-## Changing Output Type {changing_output_type}
+## コマンドのアウトプットタイプを変更する {changing_output_type}
 
-There are situations where it is useful to change the output option of a command from within the command. For example a command which looks up documentation for the current word may want to show a “no documentation found” tool tip for when there is no documentation, but otherwise use the HTML output option for the result.
+コマンド内でコマンドのアウトプットオプションを変更したいときもあるかもしれません。例えば、現在の単語のドキュメンテーションを調べるコマンドは、もしドキュメンテーションが見つからなければ、"no documentation found"というツールチップを見せたいですし、そうでない場合は、結果をHTMLアウトプットで表示したいでしょう。
 
 ![Command Output Options](command_output_options.png)
 
-TextMate has a few predefined bash functions which can be used for this purpose. They optionally take a string as an argument which is first `echo`’ed to stdout.
+TextMateには、この目的で使うために定期済みのbash関数があいます。これはの関数は任意に最初に標準出力へ`echo`された引数を文字列としてとります。
 
-These functions only work when the initial output option is _not_ set as "Show as HTML". The list of functions is as follows:
+この関数は初期のアウトプットオプションが"Show as HTML"_ではない_ときに使用できます。以下が関数のリストです。
 
  * `exit_discard`
  * `exit_replace_text`
@@ -106,28 +106,29 @@ These functions only work when the initial output option is _not_ set as "Show a
  * `exit_show_tool_tip`
  * `exit_create_new_document`
 
-So for example the Diff bundle has a “[Diff] Document With Saved Copy” that compares the current document with the version saved on disk. The default output option for that is to create a new document (showing the diff output with syntax highlighting), but it will show an error (as a tool tip) if there is no file on disk. This can be done using the following command:
+例えば、Diffバンドルには"[Diff] Document With Saved Copy"というコマンドがあります。これは、現在のドキュメントとディスクに保存されたバージョンを比較するものです。デフォルトのアウトプットオプションは、(diffの結果をシンタックス・カラーリングで表示した)新規ドキュメントの作成です。しかし、もしディクスにファイルがない場合は(ツールチップとして)エラーを表示します。これは、次のようなコマンドを使うことで可能になります。
 
     if [[ -e "$TM_FILEPATH" ]] # does the file exist?
        then diff -u "$TM_FILEPATH" -
        else exit_show_tool_tip "No saved copy exists."
     fi
 
-## Useful bash Functions {useful_bash_functions}
+## 便利なbash関数 {useful_bash_functions}
 
-When running commands there are a few predefined bash functions which might be useful:
+コマンドを実行するときには、以下に挙げる定期済みのbash関数を使うと便利です。
 
- * `require_cmd` — ensure that the command given as the first argument exists in the path and otherwise report an error to the user and abort the command. This is useful if you rely on commands not shipped with OS X and want to distribute your work, for example the Subversion commands start by doing:
+ * `require_cmd` — これは、与えられた最初の引数がパスに存在することを確認します。存在しない場合は、ユーザーにエラーをレポートし、コマンドを中断します。もし、OS Xに付属しないコマンドを使わなければいけないときで、あなたが作ったものを配布したいときに便利です。例えば、Subversionコマンドは以下のように始まります。
 
         require_cmd svn
 
- * `rescan_project` — currently TextMate will only update the project drawer (and reload the current file if it was  changed externally) when regaining focus. This bash function is shorthand for using AppleScript to deactivate and reactivate TextMate. It is useful if your command either modifies the current document (on disk) or changes files in folders which are part of the current project.
+ * `rescan_project` — 現在のところプロジェクトドロワーはフォーカスがあたったときだけアップデートされ、外部から変更された場合は現在のファイルをリロードします。もしあなたのコマンドが（ディスク上の）現在のドキュメントが修正したり、もしくは、現在のドキュメントのあるフォルダのファイルを変更するときに便利です。
 
- * `pre` — this command reads text from stdin and outputs an HTML-escaped version to stdout, putting the entire thing in `<pre>…</pre>` (though with word wrap enabled) and converting `<`, `>` and `&` to the corresponding HTML entities. This is useful when you want to show raw output but use the HTML output option. In the simplest case you can just specify `pre` as the command and set input to “Entire Document” and output to “Show as HTML”, but generally you would probably want the result from some command to be piped through `pre`, for example:
+ * `pre` — このコマンドは標準入力からテキストを読み込みHTMLのエスケープをされたものを標準出力へ出力します。その際にテキストをワードラップが使用可能になっていますが`<pre>…</pre>`の中に入れます。そして、`<`と`>`と`&`をHTMLエンティティに変換します。これは、生のアウトプットをHTMLアウトプットオプションを使って表示したいときに便利です。もっともシンプルな例では、コマンドとして`pre`を指定して、インプットに"Entire Document"、そして、アウトプットに"Show as HTML"を設定すればよいだけです。しかしたいていは、`pre`にパイプでなんらかのコマンドを結果として表示したいでしょう。例えば、次のように。
 
         make clean|pre
 
-The functions mentioned above are all defined in `$TM_SUPPORT_PATH/lib/bash_init.sh`. There are also functions to aid in HTML construction (from bash) in `$TM_SUPPORT_PATH/lib/html.sh`, but this file is not sourced by default. So to use the functions defined in that file you would start by sourcing it e.g.:
+この関数はすべて`$TM_SUPPORT_PATH/lib/bash_init.sh`で定義されています。また、(bashから)HTML作成を助ける関数も`$TM_SUPPORT_PATH/lib/html.sh`で定義されています。しかし、このファイルはデフォルトでは、ソースとして使われません。そのためこのファイルで定義されている関数を使うためには、以下のようにソースとして取り込みます。
+
 
     . "$TM_SUPPORT_PATH/lib/html.sh"
     redirect "http://example.com/"

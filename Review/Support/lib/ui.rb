@@ -97,7 +97,11 @@ module TextMate
       # +options+ is a hash which can accept the following keys:
       #
       # * <tt>:extra_chars</tt>       -- by default only alphanumeric characters will be accepted,
-      #   you can augment the list with this option
+      #   you can add additional characters to the list with this option.
+      # 	This string is escaped for regex. List each character in a simple string EG: '{<#^'
+      # * <tt>:chars</tt>             -- by default only alphanumeric characters will be accepted,
+      #   you can replace the list with this option.
+      # 	This string is not escaped for regex. Use the regex character set syntax EG: 'a-zA-Z0-9'
       # * <tt>:case_insensitive</tt>  -- ignore case when filtering
       # * <tt>:static_prefix</tt>     -- a prefix which is used when filtering suggestions.
       # * <tt>:initial_filter</tt>    -- defaults to the current word
@@ -113,9 +117,10 @@ module TextMate
           
           require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
           options[:chars] ||= "a-zA-Z0-9"
-          characters  = Regexp.escape(options[:chars]) || "a-zA-Z0-9"
+          characters = options[:chars] if options[:chars]
           characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
-          
+          # `echo '#{characters}'>/tmp/characters.txt` #DEBUG
+					
           options[:initial_filter] ||= Word.current_word characters, :left
 
           choices         = choices.map! {|c| {'display' => c.to_s} } unless choices[0].is_a? Hash
@@ -441,7 +446,7 @@ require "test/unit"
 # 1) Place your caret on the blank line in one of the test methods
 # 2) Use "Run Focused Unit Test" 
 
-
+ENV['WEB_PREVIEW_RUBY']='NO-RUN'
 class TestCompletes < Test::Unit::TestCase
   def test_basic_completion
     #Should complete the snippet, if there is one, without requiring a block

@@ -14,7 +14,7 @@
 #   It's reversed you see
 # 
 module Word
-  def self.current_word(pat, direction = :both)
+  def self.current_word(pat='a-zA-Z0-9', direction=:both)
     word = ENV['TM_SELECTED_TEXT']
     
     if word.nil? or word.empty?
@@ -63,7 +63,7 @@ if __FILE__ == $0
       EOF
       ENV['TM_LINE_INDEX']   = '10'
       ENV['TM_TAB_SIZE']     = '2'
-      assert_equal 'BeforeAfter', Word.current_word('a-zA-Z0-9')
+      assert_equal 'BeforeAfter', Word.current_word
       assert_equal 'Before',      Word.current_word('a-zA-Z0-9',:left)
       assert_equal 'After',       Word.current_word('a-zA-Z0-9',:right)
       
@@ -78,7 +78,7 @@ if __FILE__ == $0
       EOF
       ENV['TM_LINE_INDEX']   = '8'
       ENV['TM_TAB_SIZE']     = '2'
-      assert_equal 'BeforeAfter', Word.current_word('a-zA-Z0-9')
+      assert_equal 'BeforeAfter', Word.current_word
       assert_equal 'Before',      Word.current_word('a-zA-Z0-9',:left)
       assert_equal 'After',       Word.current_word('a-zA-Z0-9',:right)
       

@@ -43,7 +43,7 @@ function getSig {
 
 WORD=$(ruby -- &lt;&lt;-SCR1 
 require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
-word = Word.current_word(/\w./)
+word = Word.current_word('\w\.')
 print word
 SCR1
 )

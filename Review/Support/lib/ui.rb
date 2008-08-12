@@ -99,9 +99,6 @@ module TextMate
       # * <tt>:extra_chars</tt>       -- by default only alphanumeric characters will be accepted,
       #   you can add additional characters to the list with this option.
       # 	This string is escaped for regex. List each character in a simple string EG: '{<#^'
-      # * <tt>:chars</tt>             -- by default only alphanumeric characters will be accepted,
-      #   you can replace the list with this option.
-      # 	This string is not escaped for regex. Use the regex character set syntax EG: 'a-zA-Z0-9'
       # * <tt>:case_insensitive</tt>  -- ignore case when filtering
       # * <tt>:static_prefix</tt>     -- a prefix which is used when filtering suggestions.
       # * <tt>:initial_filter</tt>    -- defaults to the current word
@@ -116,8 +113,7 @@ module TextMate
           STDERR.reopen(open('/dev/null'))
           
           require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
-          options[:chars] ||= "a-zA-Z0-9"
-          characters = options[:chars] if options[:chars]
+          characters = "a-zA-Z0-9" # Hard-coded into D2
           characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
           # `echo '#{characters}'>/tmp/characters.txt` #DEBUG
 
@@ -515,24 +511,6 @@ class TestCompletes < Test::Unit::TestCase
     # $
     # \
     # .
-  end
-  
-  def test_should_use_chars
-    @choices = [
-      {'display' => '^^^^'},
-      {'display' => '$$$$'},
-      {'display' => '\\\\\\\\'},
-      {'display' => '....'},
-      {'display' => 'bar'},
-    ]
-    TextMate::UI.complete(@choices, :chars => '^$\.')
-    # Should limit to only 1 choice:
-    # ^
-    # $
-    # \
-    # .
-    # Should show all choices:
-    # b
   end
   
   private

@@ -25,7 +25,7 @@ module TextMate
     # 0-config completion command using environment variables for everything
     def complete!
       return choices unless choices
-      TextMate::UI.complete(choices, {:images => images, :chars => chars, :extra_chars => extra_chars})
+      TextMate::UI.complete(choices, {:images => images, :extra_chars => extra_chars})
     end
     
     def choices
@@ -44,7 +44,7 @@ module TextMate
     end
     
     def chars
-      ENV['TM_COMPLETIONS_CHARS']
+      "a-zA-Z0-9"
     end
     
     private
@@ -198,6 +198,11 @@ class TestComplete < Test::Unit::TestCase
   end
   # 
   def test_should_support_json
+    ENV.delete 'TM_COMPLETIONS'
+    assert_nil(ENV['TM_COMPLETIONS'])
+    ENV.delete 'TM_COMPLETIONS_SPLIT'
+    assert_nil(ENV['TM_COMPLETIONS_SPLIT'])
+    
     ENV['TM_COMPLETIONS_SPLIT']='json'
     ENV['TM_COMPLETIONS'] = @json_raw
     fred = TextMate::Complete.new
@@ -229,7 +234,9 @@ class TestComplete < Test::Unit::TestCase
   end
   # 
   def test_should_parse_files_based_on_extension_txt
+    ENV.delete 'TM_COMPLETIONS'
     assert_nil(ENV['TM_COMPLETIONS'])
+    ENV.delete 'TM_COMPLETIONS_SPLIT'
     assert_nil(ENV['TM_COMPLETIONS_SPLIT'])
     
     ENV['TM_COMPLETIONS_FILE'] = '/tmp/completions_test.txt'

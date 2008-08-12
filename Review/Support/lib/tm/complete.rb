@@ -68,7 +68,7 @@ module TextMate
       
       return nil unless ENV['TM_COMPLETIONS_FILE'] and File.exists? ENV['TM_COMPLETIONS_FILE']
       
-      ENV['TM_COMPLETIONS_SPLIT'] ||= ENV['TM_COMPLETIONS_FILE'].scan(/\.([^\.]+)$/).last.last
+      ENV['TM_COMPLETIONS_SPLIT'] = ENV['TM_COMPLETIONS_FILE'].scan(/\.([^\.]+)$/).last.last
       
       File.read(ENV['TM_COMPLETIONS_FILE'])
     end
@@ -200,6 +200,19 @@ class TestComplete < Test::Unit::TestCase
     assert_equal(@string_raw.split(','), fred.choices.map{|c| c['display']})
     # 
   end
+  
+  def test_should_override_split_with_extension
+    ENV['TM_COMPLETIONS_SPLIT'] = ','
+    ENV['TM_COMPLETIONS_FILE'] = '/tmp/completions_test.plist'
+    
+    File.open(ENV['TM_COMPLETIONS_FILE'],'w'){|file| file.write @plist_raw }
+    assert File.exists?(ENV['TM_COMPLETIONS_FILE'])
+    
+    fred = TextMate::Complete.new
+    assert_equal(['moo', 'foo', 'bar'], fred.choices.map{|c| c['display']})
+    # 
+  end
+  
 end
 
 end#if

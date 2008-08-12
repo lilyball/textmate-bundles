@@ -2,7 +2,6 @@
 require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
-require 'pp'
 
 module TextMate
   class Complete
@@ -69,7 +68,7 @@ module TextMate
       
       return nil unless ENV['TM_COMPLETIONS_FILE'] and File.exists? ENV['TM_COMPLETIONS_FILE']
       
-      ENV['TM_COMPLETIONS_SPLIT'] ||= ENV['TM_COMPLETIONS_FILE'].scan(/\.([^\.]+)$/)[0][0]
+      ENV['TM_COMPLETIONS_SPLIT'] ||= ENV['TM_COMPLETIONS_FILE'].scan(/\.([^\.]+)$/).last.last
       
       File.read(ENV['TM_COMPLETIONS_FILE'])
     end
@@ -86,6 +85,7 @@ module TextMate
       return raw_data unless raw_data.respond_to? :to_str
       raw_data = raw_data.to_str
       
+      ENV['TM_COMPLETIONS_SPLIT'] = "\n" if ENV['TM_COMPLETIONS_SPLIT'] == 'txt'
       ENV['TM_COMPLETIONS_SPLIT'] ||= ','
       
       data = {}
@@ -120,18 +120,10 @@ ENV['WEB_PREVIEW_RUBY']='NO-RUN'
 require "test/unit"
 # require "complete"
 class TestComplete < Test::Unit::TestCase
-  def test_basic_complete
-    ENV['TM_COMPLETIONS'] = 'ad(),adipisicing,aliqua,aliquip,amet,anim,aute,cillum,commodo,consectetur,consequat,culpa,cupidatat,deserunt,do,dolor,dolore,Duis,ea,eiusmod,elit,enim,esse,est,et,eu,ex,Excepteur,exercitation,fugiat,id,in,incididunt,ipsum,irure,labore,laboris,laborum,Lorem,magna,minim,mollit,nisi,non,nostrud,nulla,occaecat,officia,pariatur,proident,qui,quis,reprehenderit,sed,sint,sit,sunt,tempor,ullamco,Ut,ut,velit,veniam,voluptate,'
+  def setup
+    @string_raw = 'ad(),adipisicing,aliqua,aliquip,amet,anim,aute,cillum,commodo,consectetur,consequat,culpa,cupidatat,deserunt,do,dolor,dolore,Duis,ea,eiusmod,elit,enim,esse,est,et,eu,ex,Excepteur,exercitation,fugiat,id,in,incididunt,ipsum,irure,labore,laboris,laborum,Lorem,magna,minim,mollit,nisi,non,nostrud,nulla,occaecat,officia,pariatur,proident,qui,quis,reprehenderit,sed,sint,sit,sunt,tempor,ullamco,Ut,ut,velit,veniam,voluptate,'
     
-    assert_equal ENV['TM_COMPLETIONS'].split(','), TextMate::Complete.new.choices.map{|c| c['display']}
-    assert_equal TextMate::Complete::IMAGES, TextMate::Complete.new.images
-    
-    TextMate::Complete.new.complete!
-    # 
-  end
-  def test_should_support_plist
-    ENV['TM_COMPLETIONS_SPLIT']='plist'
-    ENV['TM_COMPLETIONS'] = <<-'PLIST'
+    @plist_raw = <<-'PLIST'
     { suggestions = ( 
         { display = moo; image = Drag;    insert = "(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})";         tool_tip = "moo(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."; }, 
         { display = foo; image = Macro;   insert = "(${1:one}, \"${2:one}\", ${3:three}${4:, ${5:five}, ${6:six}})";     tool_tip = "foo(one, two)\n This method does something or other maybe.\n Insert longer description of it here."; }, 
@@ -149,11 +141,27 @@ class TestComplete < Test::Unit::TestCase
       }; 
     }
     PLIST
+  end
+  
+  def test_basic_complete
+    ENV['TM_COMPLETIONS'] = @string_raw
+    
+    assert_equal ENV['TM_COMPLETIONS'].split(','), TextMate::Complete.new.choices.map{|c| c['display']}
+    assert_equal TextMate::Complete::IMAGES, TextMate::Complete.new.images
+    
     TextMate::Complete.new.complete!
     # 
   end
+  
+  def test_should_support_plist
+    ENV['TM_COMPLETIONS_SPLIT']='plist'
+    ENV['TM_COMPLETIONS'] = @plist_raw
+    TextMate::Complete.new.complete!
+    # 
+  end
+  
   def test_should_be_able_to_modify_the_choices
-    ENV['TM_COMPLETIONS'] = 'ad(),adipisicing,aliqua,aliquip,amet,anim,aute,cillum,commodo,consectetur,consequat,culpa,cupidatat,deserunt,do,dolor,dolore,Duis,ea,eiusmod,elit,enim,esse,est,et,eu,ex,Excepteur,exercitation,fugiat,id,in,incididunt,ipsum,irure,labore,laboris,laborum,Lorem,magna,minim,mollit,nisi,non,nostrud,nulla,occaecat,officia,pariatur,proident,qui,quis,reprehenderit,sed,sint,sit,sunt,tempor,ullamco,Ut,ut,velit,veniam,voluptate,'
+    ENV['TM_COMPLETIONS'] = @string_raw
     
     fred = TextMate::Complete.new
     
@@ -164,7 +172,32 @@ class TestComplete < Test::Unit::TestCase
     
     fred.choices=%w[fred is not my name]
     assert_equal %w[fred is not my name], fred.choices.map{|c| c['display']}
+    # 
+  end
+  
+  def test_should_parse_files_based_on_extension_plist
+    ENV['TM_COMPLETIONS_FILE'] = '/tmp/completions_test.plist'
     
+    File.open(ENV['TM_COMPLETIONS_FILE'],'w'){|file| file.write @plist_raw }
+    assert File.exists?(ENV['TM_COMPLETIONS_FILE'])
+    
+    fred = TextMate::Complete.new
+    assert_equal(['moo', 'foo', 'bar'], fred.choices.map{|c| c['display']})
+    # 
+  end
+  
+  def test_should_parse_files_based_on_extension_txt
+    assert_nil(ENV['TM_COMPLETIONS'])
+    assert_nil(ENV['TM_COMPLETIONS_SPLIT'])
+    
+    ENV['TM_COMPLETIONS_FILE'] = '/tmp/completions_test.txt'
+    
+    File.open(ENV['TM_COMPLETIONS_FILE'],'w'){|file| file.write @string_raw.gsub(',',"\n") }
+    assert File.exists?(ENV['TM_COMPLETIONS_FILE'])
+    
+    fred = TextMate::Complete.new
+    
+    assert_equal(@string_raw.split(','), fred.choices.map{|c| c['display']})
     # 
   end
 end

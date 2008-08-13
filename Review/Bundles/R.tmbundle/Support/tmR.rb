@@ -18,6 +18,8 @@ def esc(str)
   CGI.escapeHTML(str)
 end
 
+outputFont = (ENV['TM_RMATE_OUTPUT_FONT'] == nil) ? "Monaco" : ENV['TM_RMATE_OUTPUT_FONT']
+
 what = (ENV['TM_SELECTED_TEXT'] == nil) ? "document" : "selection"
 # Headers...
 print <<-EOS
@@ -29,14 +31,14 @@ EOS
 # Prepare some values for later.
 myFile = __FILE__
 myDir = File.dirname(myFile) + '/'
-File.open(File.join(myDir, 'pastel.css')) {|f| f.each_line {|l| print l} }
+File.open(File.join(myDir, 'pastel.css')) {|f| f.each_line {|l| print l.gsub('FONTPLACEHOLDER',outputFont)} }
 print <<-HTML
 </style>
 </head>
 <body>
 <div id="script_output" class="framed">
-<pre><strong>RMate. Executing #{what} in R. This may take a while...</strong>
-<div id="actual_output" style="-khtml-line-break: after-white-space;">
+<div id="start_message"><pre><strong>RMate. Executing #{what} in R. This may take a while...</strong></pre></div>
+<pre><div id="actual_output" style="-khtml-line-break: after-white-space;">
 HTML
 
 def recursive_delete(path)
@@ -60,7 +62,8 @@ stdin.puts(%{if(getRversion()>="2.7") pdf.options(onefile=FALSE)})
 stdin.puts(%{options(pager="/bin/cat")})
 stdin.puts("options(echo=T)")
 
-STDOUT.sync = true
+# stdout.sync = false
+# stderr.sync = false
 
 # suggestion by Hans-J. Bibiko: if a doc is too large give R the chance to execute code, otherwise the pipe blocks (?)
 Thread.new {
@@ -73,6 +76,8 @@ Thread.new {
 
 #stdin.write(STDIN.read.chomp)
 
+hideStartMessageJS = %{<script type="text/javascript">document.getElementById('start_message').className='hidden'</script>}
+
 descriptors = [stdout, stderr]
 descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
 until descriptors.empty?
@@ -81,16 +86,20 @@ until descriptors.empty?
     if str.empty?
       descriptors.delete io
       io.close
-    elsif io == stdout
-      print( str.map do |line|
-        if line =~ /^(?:>|\+) / then
-          %{<span style="color: darkcyan">#{esc line.chomp}</span>\n}
-        else
-          esc line
-        end
-      end.join )
     elsif io == stderr
-      print %{<span style="color: red">#{esc str}</span>}
+      print hideStartMessageJS
+      if str.match(/(?i)^\s*(error|erreur|fehler|errore|erro)( |:)/)
+        print %{<span style="color: red">#{esc str}</span>}
+      elsif str.match(/^Execution halted/)
+        print %{<span style="color: darkred;">#{esc str}</span>}
+      else
+        print %{<span style="color: darkgray;font-style:italic;">#{esc str}</span>}
+      end
+    elsif io == stdout
+      print hideStartMessageJS
+      print( str.map do |line|
+          esc(line).gsub(/^(&gt;|\+)/,'<span style="color: darkcyan">\1</span>')
+      end.join )
     end
   end
 end

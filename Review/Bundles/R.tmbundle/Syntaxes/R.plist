@@ -35,6 +35,20 @@
 			<string>comment.line.number-sign.r</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>invalid.character.r</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>.*([\x{0300}-\x{0362}\x{3099}-\x{309C}\x{FF9E}\x{FF9F}])</string>
+			<key>name</key>
+			<string>invalid.character.detection.r</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\b(logical|numeric|character|complex|matrix|array|data\.frame|list|factor)(?=\s*\()</string>
 			<key>name</key>
@@ -180,7 +194,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>([a-zA-Z._][a-zA-Z0-9._]*)\s*(&lt;-)\s*(function)</string>
+			<string>([[:alpha:].][[:alnum:]._]*)\s*(&lt;-)\s*(function)</string>
 			<key>name</key>
 			<string>meta.function.r</string>
 		</dict>
@@ -205,7 +219,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>([a-zA-Z._][a-zA-Z0-9._]*)\s*\(</string>
+			<string>([[:alpha:].][[:alnum:]._]*)\s*\(</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -222,11 +236,17 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>([a-zA-Z._][a-zA-Z0-9._]*)\s*(=)(?=[^=])</string>
+			<string>([[:alpha:].][[:alnum:]._]*)\s*(=)(?=[^=])</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b([a-zA-Z._][a-zA-Z0-9._]*)\b</string>
+			<string>\b([\d_][[:alnum:]._]+)\b</string>
+			<key>name</key>
+			<string>invalid.variable.other.r</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b([[:alnum:]._]+)\b</string>
 			<key>name</key>
 			<string>variable.other.r</string>
 		</dict>

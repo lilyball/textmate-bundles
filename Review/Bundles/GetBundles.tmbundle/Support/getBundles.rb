@@ -674,9 +674,9 @@ def writeToLogFile(text)
 end
 
 def resetOldBundleFolder(aFolder)
-  executeShell("cp -r '#{aFolder}' '#{aFolder}TEMP' 1> /dev/null")
+  executeShell("cp -R '#{aFolder}' '#{aFolder}TEMP' 1> /dev/null")
   executeShell("rm -rf '#{aFolder}' 1> /dev/null")
-  executeShell("cp -r '#{aFolder}#{$ts}' '#{aFolder}' 1> /dev/null")
+  executeShell("cp -R '#{aFolder}#{$ts}' '#{aFolder}' 1> /dev/null")
   executeShell("rm -rf '#{aFolder}TEMP' 1> /dev/null")
   executeShell("rm -rf '#{aFolder}#{$ts}' 1> /dev/null")
   if $errorcnt > 0
@@ -691,7 +691,7 @@ def renameOldBundleFolder(aFolder)
   # rename old folder by appending a time stamp
   $ts = Time.now.strftime("%m%d%Y%H%M%S")
   writeToLogFile("Renaming of “#{aFolder}” into “#{aFolder}#{$ts}”")
-  executeShell("cp -r '#{aFolder}' '#{aFolder}#{$ts}' 1> /dev/null")
+  executeShell("cp -R '#{aFolder}' '#{aFolder}#{$ts}' 1> /dev/null")
   executeShell("rm -r '#{aFolder}' 1> /dev/null")
   if $errorcnt > 0
     writeToLogFile("Cannot rename “#{aFolder}” into “#{aFolder}#{$ts}”")
@@ -769,7 +769,7 @@ def installGitZipball(path, installPath)
       return
     end
     renameOldBundleFolder("#{installPath}/#{name}") if $installFolderExists
-    executeShell("cp -r '#{$tempDir}/#{name}' #{e_sh installPath}")
+    executeShell("cp -R '#{$tempDir}/#{name}' #{e_sh installPath}")
     if $errorcnt > 0
       %x{rm -r #{$tempDir}}
       writeToLogFile("Cannot copy “#{$tempDir}/#{name}” to “#{installPath}”")
@@ -810,7 +810,7 @@ def installGitClone(path, installPath)
   return if $close
   if $errorcnt == 0
     renameOldBundleFolder("#{installPath}/#{theName}") if $installFolderExists
-    executeShell("cp -r '#{$tempDir}/#{theName}' '#{installPath}/#{theName}'")
+    executeShell("cp -R '#{$tempDir}/#{theName}' '#{installPath}/#{theName}'")
     if $errorcnt > 0
       %x{rm -r #{$tempDir}}
       writeToLogFile("Cannot copy “#{$tempDir}/#{theName}” to “#{installPath}/#{theName}”")
@@ -849,7 +849,7 @@ def installSVN(path, installPath)
     return if $close
     if $errorcnt == 0
       renameOldBundleFolder("#{installPath}/#{realname}") if $installFolderExists
-      executeShell("cp -r '#{$tempDir}/#{realname}' '#{installPath}/#{realname}'")
+      executeShell("cp -R '#{$tempDir}/#{realname}' '#{installPath}/#{realname}'")
       if $errorcnt > 0
         %x{rm -r #{$tempDir}}
         writeToLogFile("Cannot copy “#{$tempDir}#{realname}” to “#{installPath}/#{realname}”")

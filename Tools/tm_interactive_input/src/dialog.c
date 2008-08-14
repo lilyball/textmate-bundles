@@ -81,6 +81,11 @@ char* get_nib() {
     return (use_secure_nib()) ? "RequestSecureString" : "RequestString";
 }
 
+int get_echo_fd() {
+    char *echo_fd = getenv("TM_INTERACTIVE_INPUT_ECHO_FD");
+    return (echo_fd == NULL) ? STDERR_FILENO : atoi(echo_fd);
+}
+
 CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
 
     if (CFGetTypeID(plist) != CFDictionaryGetTypeID())
@@ -214,6 +219,7 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
 
         
         if (tm_interactive_input_is_in_echo_mode() && input_buffer != NULL) {
+            int echo_fd = get_echo_fd();
             if (use_secure_nib()) {
                 char *input_str = create_cstr_from_buffer(input_buffer);
                 CFStringRef input_cfstr = cstr_2_cfstr(input_str);
@@ -222,10 +228,10 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
                 CFRelease(input_cfstr);
                 size_t i;
                 for (i = 1; i < char_count; ++i) // Not <= because of \n on end
-                    syscall(SYS_write, STDOUT_FILENO, "*", 1);
-                syscall(SYS_write, STDOUT_FILENO, "\n", 1);
+                    syscall(SYS_write, echo_fd, "*", 1);
+                syscall(SYS_write, echo_fd, "\n", 1);
             } else {
-                write_buffer_to_fd(input_buffer, STDOUT_FILENO);
+                write_buffer_to_fd(input_buffer, echo_fd);
             }
         }
     }

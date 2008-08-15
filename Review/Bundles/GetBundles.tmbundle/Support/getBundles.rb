@@ -473,10 +473,14 @@ def getBundleLists
       elsif r[:scm] == :git
         list = [ ]
         begin
-          GBTimeout::timeout($timeout) do
-            list = YAML.load(open(r[:url]))['repositories'].
-                find_all{|result| result['name'].match("")}.
-                sort{|a,b| a['name'] <=> b['name']}
+          GBTimeout::timeout($timeout+10) do
+            page = 1
+            while true
+              found = YAML.load(open("#{r[:url]}?page=#{page}"))['repositories']
+              break if found.empty?
+              page += 1
+              list << found
+            end
           end
         rescue GBTimeout::Error
           writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
@@ -484,6 +488,8 @@ def getBundleLists
           $params['isBusy'] = false
           updateDIALOG
         end
+        list.flatten!
+        list.find_all{|result| result['name'].match("")}.sort{|a,b| a['name'] <=> b['name']}
         list.each do |result|
           break if $close
           if result['url'] =~ /tmbundle$/

@@ -354,8 +354,14 @@ def infoDIALOG(dlg)
           <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
           </head>
           <body style='font-family:Lucida Grande'>
-          <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
-          #{plist['description']}<br /><br />
+        HTML11
+        if plist['description'].match(/<hr[^>]*\/>/)
+          io << "#{plist['description'].gsub(/.*?<hr[^>]*\/>/,'')}<br /><br />"
+        else
+          io << "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
+          io << "#{plist['description']}<br /><br />"
+        end
+        io << <<-HTML12
           <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
           <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
           <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
@@ -363,7 +369,7 @@ def infoDIALOG(dlg)
           <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
           <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
           </body></html>
-        HTML11
+        HTML12
       end
     else          #### no svn client found
       noSVNclientFound
@@ -605,7 +611,7 @@ def getSVNBundleDescriptions
             myBundleName = bundle['name']
             bundle['uuid'] = plist['uuid'] unless plist['uuid'].nil?
             bundle['name'] = plist['name'] unless plist['name'].nil?
-            bundle['bundleDescription'] = strip_html plist['description'].to_s.gsub(/\n/, ' ')
+            bundle['bundleDescription'] = strip_html plist['description'].to_s.gsub(/(?m)<hr[^>]*?\/>.*/,'').gsub(/\n/, ' ')
             # update the cache only if something is found
             $chplist[r[:name]][myBundleName] = bundle['bundleDescription'] if bundle['bundleDescription'] != '?'
             $params['progressText'] = "Updating Descriptions for %s (#{$params['progressValue'] + 1} / #{bundles.size})…" % r[:display]

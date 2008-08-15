@@ -58,7 +58,7 @@ $tempDir          = "/tmp/TM_GetBundlesTEMP"
 # global timeout in seconds
 $timeout          = 30
 # global thread vars
-$x0=$x1=$x2=$x3   = nil
+$x0=$x1=$x2=$x3=$x4 = nil
 
 CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as]
 
@@ -73,7 +73,7 @@ module GBTimeout
       y = Thread.start {
         s = Time.now.to_i
         while Time.now.to_i - s < sec and ! $close do sleep 0.5 end
-        writeToLogFile("Cancel button was pressed while executing Timeout block") if $close
+        writeToLogFile("Current task was interrupted by the user") if $close
         x.raise exception, "execution expired" if x.alive?
       }
       yield sec
@@ -222,7 +222,7 @@ def infoDIALOG(dlg)
       $params['isBusy'] = false
       updateDIALOG
       %x{rm -rf #{$tempDir}}
-      writeToLogFile("Timeout error while fetching information")
+      writeToLogFile("Timeout error while fetching information") if ! $close
       return
     end
     return if $close
@@ -234,7 +234,7 @@ def infoDIALOG(dlg)
       $params['isBusy'] = false
       updateDIALOG
       %x{rm -rf #{$tempDir}}
-      writeToLogFile("Timeout error while fetching information")
+      writeToLogFile("Timeout error while fetching information") if ! $close
       return
     end
     return if $close
@@ -250,7 +250,7 @@ def infoDIALOG(dlg)
       $params['isBusy'] = false
       updateDIALOG
       %x{rm -rf #{$tempDir}}
-      writeToLogFile("Timeout error while fetching information")
+      writeToLogFile("Timeout error while fetching information") if ! $close
       return
     end
     return if $close
@@ -316,7 +316,7 @@ def infoDIALOG(dlg)
         $params['isBusy'] = false
         updateDIALOG
         %x{rm -rf #{$tempDir}}
-        writeToLogFile("Timeout error while fetching information")
+        writeToLogFile("Timeout error while fetching information") if ! $close
         return
       end
       return if $close
@@ -339,7 +339,7 @@ def infoDIALOG(dlg)
         $params['isBusy'] = false
         updateDIALOG
         %x{rm -rf #{$tempDir}}
-        writeToLogFile("Timeout error while fetching information")
+        writeToLogFile("Timeout error while fetching information") if ! $close
         return
       end
       return if $close
@@ -423,6 +423,7 @@ def getResultFromDIALOG
   else
     resStr = %x{#{$DIALOG} -w#{$token}}
   end
+  $close = false
   begin
     $dialogResult = OSX::PropertyList.load(resStr)
   rescue
@@ -430,13 +431,23 @@ def getResultFromDIALOG
 end
 
 def getBundleLists
+  $params['dataarray'] = [ ]
+  updateDIALOG
   begin
     $listsLoaded = false
     $dataarray  = [ ]
     remote_bundle_locations.each do |r|
       break if $close
-      $params['progressText'] = 'Fetching List for %s…' % r[:display].to_s
+      $params = {
+        'isBusy'                  => true,
+        'bundleSelection'         => 'All',
+        'progressText'            => 'Fetching List for %s…' % r[:display].to_s,
+        'progressIsIndeterminate' => true,
+        'progressValue'           => 0,
+      }
       updateDIALOG
+      # $params['progressText'] = 'Fetching List for %s…' % r[:display].to_s
+      # updateDIALOG
       bundlearray = [ ]
       if r[:scm] == :svn
         list = [ ]
@@ -445,7 +456,7 @@ def getBundleLists
             list = Net::HTTP.get( URI.parse(r[:url]) ).gsub( /<[^>]+?>/, '').gsub( /(?m)^.*?\.\.\n/, '').gsub( /(?m)\/[^\/]*$/, '').strip().split(/\n/)
           end
         rescue GBTimeout::Error
-          writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
+          writeToLogFile("Timeout for fetching %s list" % r[:display].to_s) if ! $close
           $params['progressText'] = 'Timeout'
           $params['isBusy'] = false
           updateDIALOG
@@ -483,7 +494,7 @@ def getBundleLists
             end
           end
         rescue GBTimeout::Error
-          writeToLogFile("Timout for fetching %s list" % r[:display].to_s)
+          writeToLogFile("Timeout for fetching %s list" % r[:display].to_s) if ! $close
           $params['progressText'] = 'Timeout'
           $params['isBusy'] = false
           updateDIALOG
@@ -528,10 +539,12 @@ def getBundleLists
       sleep(3)
     end
     $params['isBusy'] = false
+    $params['rescanBundleList'] = 0
     updateDIALOG
     $listsLoaded = true
   rescue
     $params['progressText'] = 'Unknown error occured!'
+    $params['rescanBundleList'] = 0
     $params['isBusy'] = false
     updateDIALOG
   end
@@ -542,6 +555,7 @@ def getBundleLists
     updateDIALOG
     sleep(3)
     $params['isBusy'] = false
+    $params['rescanBundleList'] = 0
     updateDIALOG
   end    
   # suppress the updating of the table to preserve the selection
@@ -643,6 +657,11 @@ def joinThreads
     $x3.kill
   rescue
   end
+  begin
+    $x4.join
+    $x4.kill
+  rescue
+  end
 end
 
 def killThreads
@@ -660,6 +679,10 @@ def killThreads
   end
   begin
     $x3.kill
+  rescue
+  end
+  begin
+    $x4.kill
   rescue
   end
 end
@@ -746,7 +769,7 @@ def installGitZipball(path, installPath)
   rescue GBTimeout::Error
     $errorcnt += 1
     %x{rm -rf #{$tempDir}}
-    writeToLogFile("Timeout error while installing %s" % name)
+    writeToLogFile("Timeout error while installing %s" % name) if ! $close
     return
   end
   return if $close
@@ -810,7 +833,7 @@ def installGitClone(path, installPath)
   rescue GBTimeout::Error
     $errorcnt += 1
     %x{rm -rf #{$tempDir}}
-    writeToLogFile("Timeout error while installing %s" % theName)
+    writeToLogFile("Timeout error while installing %s" % theName) if ! $close
     return
   end
   return if $close
@@ -843,7 +866,7 @@ def installSVN(path, installPath)
     rescue GBTimeout::Error
       $errorcnt += 1
       %x{rm -rf #{$tempDir}}
-      writeToLogFile("Timeout error while installing %s" % name)
+      writeToLogFile("Timeout error while installing %s" % name) if ! $close
       return
     end
     # get the bundle's real name (esp. for spaces and other symbols)
@@ -1050,6 +1073,7 @@ $params = {
   'infoBtn'                 => 'infoButtonIsPressed',
   'revealBtn'               => 'revealButtonIsPressed',
   'openBundleEditorBtn'     => 'openBundleEditorButtonIsPressed',
+  'cancelBtn'               => 'cancelButtonIsPressed',
   'targets'                 => targetPaths.keys.sort {|x,y| y <=> x },
   'targetSelection'         => targetPaths.keys.sort {|x,y| y <=> x }.first,
   'nocancel'                => false,
@@ -1107,6 +1131,8 @@ while $run do
       updateDIALOG
     elsif $dialogResult['returnArgument'] == 'helpButtonIsPressed'
       helpDIALOG
+    elsif $dialogResult['returnArgument'] == 'cancelButtonIsPressed'
+      $close = true
     elsif $dialogResult['returnArgument'] == 'infoButtonIsPressed'
       $x3 = Thread.new do
         infoDIALOG($dialogResult)
@@ -1131,6 +1157,16 @@ while $run do
   elsif $dialogResult.has_key?('doUpdate') && $dialogResult['doUpdate'] == 1
     $x0 = Thread.new do
       getSVNBundleDescriptions
+    end
+  elsif $dialogResult.has_key?('rescanBundleList') && $dialogResult['rescanBundleList'] == 1
+    $x4 = Thread.new do
+      begin
+        getBundleLists
+      rescue
+        writeToLogFile("Fatal Error")
+        $run = false
+        exit 0
+      end
     end
   elsif $dialogResult.has_key?('bundleSelection')
     filterBundleList

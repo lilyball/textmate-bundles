@@ -87,6 +87,7 @@ module TextMate
           :granularity => :line,
           :input => nil,
           :env => nil,
+          :watch_fds => { },
         }
 
         options.merge! cmd.pop if cmd.last.is_a? Hash
@@ -136,6 +137,10 @@ module TextMate
 
         [ io[0][0], io[1][1], io[2][1] ].each { |fd| fd.close }
 
+        if echo_fd = ENV['TM_INTERACTIVE_INPUT_ECHO_FD']
+          ::IO.for_fd(echo_fd.to_i).close
+        end
+
         if options[:input].nil?
           io[0][1].close
         else
@@ -157,7 +162,7 @@ module TextMate
         previous_sync = IO.sync
         IO.sync = true unless options[:granularity] == :line
 
-        IO.exhaust(:out => io[1][0], :err => io[2][0], &block)
+        IO.exhaust(options[:watch_fds].merge(:out => io[1][0], :err => io[2][0]), &block)
         ::Process.waitpid(pid)
 
         IO.blocksize = previous_block_size

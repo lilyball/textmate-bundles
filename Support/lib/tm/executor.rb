@@ -62,12 +62,16 @@ module TextMate
 
         args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
 
+        out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
+        version = $1 if options[:version_regex] =~ (out + err)
+
         tm_error_fd_read, tm_error_fd_write = ::IO.pipe
         tm_error_fd_read.fcntl(Fcntl::F_SETFD, 1)
         ENV['TM_ERROR_FD'] = tm_error_fd_write.to_i.to_s
 
-        out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
-        version = $1 if options[:version_regex] =~ (out + err)
+        tm_echo_fd_read, tm_echo_fd_write = ::IO.pipe
+        tm_echo_fd_read.fcntl(Fcntl::F_SETFD, 1)
+        ENV['TM_INTERACTIVE_INPUT_ECHO_FD'] = tm_echo_fd_write.to_i.to_s
 
         options[:script_args].each { |arg| args << arg }
 
@@ -76,12 +80,13 @@ module TextMate
           block ||= proc do |str, type|
             str = htmlize(str).gsub(/\<br\>/, "<br>\n")
             str = "<span style='color: red'>#{str}</span>" if type == :err
+            str = "<span style='font-style: italic'>#{str}</span>" if type == :echo
             str
           end
 
           callback = proc {|str, type| io << block.call(str,type)}
           process_output_wrapper(io) do
-            TextMate::Process.run(args, :env => options[:env], :echo => true, &callback)
+            TextMate::Process.run(args, :env => options[:env], :echo => true, :watch_fds => { :echo => tm_echo_fd_read }, &callback)
           end
 
           tm_error_fd_write.close

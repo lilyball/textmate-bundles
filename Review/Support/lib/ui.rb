@@ -156,11 +156,7 @@ module TextMate
             return nil unless choice
             
             #Show the tool_tip before inserting the snippet to make it align to the end of the match
-            TextMate::UI.tool_tip(<<-'HTML'+choice['tool_tip'], {:format => :html}) if choice['tool_tip']
-            <style type="text/css" media="screen">
-              body{max-width:500px;}
-            </style>
-            HTML
+            TextMate::UI.tool_tip(choice['tool_tip']) if choice['tool_tip']
             
             choice['insert']
           end

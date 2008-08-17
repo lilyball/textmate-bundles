@@ -5,6 +5,7 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
 require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 require 'rubygems'
 require 'json'
+require 'shellwords'
 
 module TextMate
   class Complete
@@ -63,54 +64,72 @@ module TextMate
       raw_data ||= read_string
       raw_data
     end
+    
     def read_file
-      # Expand Completion File Path
-      if ENV['TM_COMPLETIONS_FILE'] and not File.exists? ENV['TM_COMPLETIONS_FILE']
-        ENV['TM_COMPLETIONS_FILE'] = ENV['TM_BUNDLE_SUPPORT'] + '/' + ENV['TM_COMPLETIONS_FILE']
+      paths = [ENV['TM_COMPLETIONS_FILE']] if ENV['TM_COMPLETIONS_FILE']
+      paths ||= Shellwords.shellwords( ENV['TM_COMPLETIONS_FILES'] ) if ENV.has_key?('TM_COMPLETIONS_FILES')
+      return nil unless paths
+      
+      paths.map do |path|
+        next unless path and not path.empty?
+        path = ENV['TM_BUNDLE_SUPPORT'] + '/' + path unless File.exists? path
+        next unless File.exists? path
+        
+        { :data   => File.read(path),
+          :format => path.scan(/\.([^\.]+)$/).last.last
+        }
       end
-      
-      return nil unless ENV['TM_COMPLETIONS_FILE'] and File.exists? ENV['TM_COMPLETIONS_FILE']
-      self.raw_format = ENV['TM_COMPLETIONS_FILE'].scan(/\.([^\.]+)$/).last.last
-      
-      File.read(ENV['TM_COMPLETIONS_FILE'])
     end
+    
     def read_string
-      self.raw_format = ENV['TM_COMPLETIONS_SPLIT']
-      ENV['TM_COMPLETIONS']
+      [{:data   => ENV['TM_COMPLETIONS'],
+        :format => ENV['TM_COMPLETIONS_SPLIT']
+      }]
     end
     
-    attr_accessor :raw_format
+    attr_accessor :filepath
     
-    def parse_data(raw_data)
-      case raw_format
-      when 'plist'
-        parse_plist raw_data
-      when 'json'
-        parse_json raw_data
-      when "txt"
-        self.raw_format = "\n"
-        parse_string raw_data
-      when nil
-        self.raw_format = ","
-        parse_string raw_data
-      else
-        parse_string raw_data
+    def parse_data(raw_datas)
+      return @parsed if @parsed
+      parsed = {"suggestions"=>[]}
+      
+      raw_datas.each do |raw_data|
+        suggestions = parsed['suggestions']
+        
+        case raw_data[:format]
+        when 'plist'
+          parsed.merge! parse_plist(raw_data)
+        when 'json'
+          parsed.merge! parse_json(raw_data)
+        when "txt"
+          raw_data[:format] = "\n"
+          parsed.merge! parse_string(raw_data)
+        when nil
+          raw_data[:format] = ","
+          parsed.merge! parse_string(raw_data)
+        else
+          parsed.merge! parse_string(raw_data)
+        end
+        
+        parsed['suggestions'] = suggestions + parsed['suggestions']
       end
+      
+      @parsed = parsed
     end
     def parse_string(raw_data)
-      return {} unless raw_data
-      return raw_data unless raw_data.respond_to? :to_str
-      raw_data = raw_data.to_str
+      return {} unless raw_data and raw_data[:data]
+      return raw_data[:data] unless raw_data[:data].respond_to? :to_str
+      raw_data[:data] = raw_data[:data].to_str
       
       data = {}
-      data['suggestions'] = array_to_suggestions(raw_data.split(raw_format))
+      data['suggestions'] = array_to_suggestions(raw_data[:data].split(raw_data[:format]))
       data
     end
     def parse_plist(raw_data)
-      OSX::PropertyList.load(raw_data)
+      OSX::PropertyList.load(raw_data[:data])
     end
     def parse_json(raw_data)
-      JSON.parse(raw_data)
+      JSON.parse(raw_data[:data])
     end
     
     def array_to_suggestions(suggestions)
@@ -247,6 +266,27 @@ class TestComplete < Test::Unit::TestCase
     fred = TextMate::Complete.new
     
     assert_equal(@string_raw.split(','), fred.choices.map{|c| c['display']})
+  end
+  # 
+  def test_should_parse_multiple_files
+    ENV.delete 'TM_COMPLETIONS'
+    assert_nil(ENV['TM_COMPLETIONS'])
+    ENV.delete 'TM_COMPLETIONS_SPLIT'
+    assert_nil(ENV['TM_COMPLETIONS_SPLIT'])
+    ENV.delete 'TM_COMPLETIONS_FILE'
+    assert_nil(ENV['TM_COMPLETIONS_FILE'])
+    
+    ENV['TM_COMPLETIONS_FILES'] = "'/tmp/completions_test.txt' '/tmp/completions_test1.txt' '/tmp/completions_test2.txt'"
+    
+    require 'shellwords'
+    Shellwords.shellwords( ENV['TM_COMPLETIONS_FILES'] ).each_with_index do |filepath,i|
+      File.open(filepath,'w'){|file| file.write @string_raw.gsub(',',"#{i}\n") }
+      assert File.exists?(filepath)
+    end
+    
+    fred = TextMate::Complete.new
+    
+    assert_equal(@string_raw.split(',').uniq.length * 3, fred.choices.map{|c| c['display']}.length )
   end
   # 
   def test_should_override_split_with_extension

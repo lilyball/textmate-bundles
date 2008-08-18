@@ -14,6 +14,7 @@ SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 hideStartMessageJS = %{<script type="text/javascript">document.getElementById('start_message').className='hidden'</script>}
 # line counter for hyperlinking R's prompt to jump back to the doc
 linecounter = 1
+linecountermarker = " #§*"
 
 # HTML escaping function.
 def esc(str)
@@ -119,7 +120,7 @@ stdin.puts("options(echo=T)")
 # suggestion by Hans-J. Bibiko: if a doc is too large give R the chance to execute code, otherwise the pipe blocks (?)
 Thread.new {
   STDIN.each do |line|
-    stdin.puts(line.chomp)
+    stdin.puts(line.chomp + "#{linecountermarker}")
   end
   stdin.close
 }
@@ -142,6 +143,10 @@ until descriptors.empty?
       print hideStartMessageJS
       str.each_line do |line|
         # check for comment sign at the beginning of a line
+        if line.include?("#{linecountermarker}")
+          linecounter += 1
+          line.sub!("#{linecountermarker}", '')
+        end
         if line.match(/^>\s*#/)
           print "<i><font color=blue>#{esc(line)}</font></i>"
         # check for comment at the end of a line
@@ -150,7 +155,7 @@ until descriptors.empty?
           print "<i><font color=blue>#{esc(m[2])}</font></i>\n"
         # check for error messages
         elsif m=line.match(/(?i)^\s*(error|erreur|fehler|errore|erro)( |:)/)
-          print "<span style='color: red'>#{esc str.gsub(%r{(?m).*?#{m[1]}},m[1]).chomp} at <a href='txmt://open?line=#{linecounter-1}'>line #{linecounter-1}</a></span><br />"
+          print "<span style='color: red'>#{esc str.gsub(%r{(?m).*?#{m[1]}},m[1]).chomp}<br /><i>RMate</i> stopped at <a href='txmt://open?line=#{linecounter-1}'>line #{linecounter-1}</a></span><br />".gsub(%r{source\(&quot;(.*?)&quot;\)},'source(&quot;<a href="txmt://open?url=file://\1">\1</a>&quot;)')
           break
         # check for warnings
         elsif line.match(/^\s*(Warning|Warning messages?|Message d.avis|Warnmeldung|Messaggio di avvertimento|Mensagem de aviso):/)
@@ -159,7 +164,7 @@ until descriptors.empty?
         else
           print esc(line).gsub(/^[\x0-\x9]?(&gt;|\+)/,'<a class="prompt" href="txmt://open?line='+linecounter.to_s+'">\1</a>')
         end
-        linecounter += 1 if line.match(/^[\x0-\x9]?(>|\+) /)
+        # linecounter += 1 if line.match(/^[\x0-\x9]?(>|\+) /)
       end
     end
   end

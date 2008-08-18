@@ -142,15 +142,16 @@ until descriptors.empty?
     elsif io == stdout
       print hideStartMessageJS
       str.each_line do |line|
-        # check for comment sign at the beginning of a line
+        # line counter for top level source
         if line.include?("#{linecountermarker}")
           linecounter += 1
           line.sub!("#{linecountermarker}", '')
         end
+        # check for comment sign at the beginning of a line
         if line.match(/^>\s*#/)
           print "<i><font color=blue>#{esc(line)}</font></i>"
         # check for comment at the end of a line
-        elsif m=line.match(/(.*?)(\s#[^"']*)\n/)
+        elsif m=line.match(/(.*?)(\s#[^"']*)$/)
           print esc(m[1]).gsub(/^(&gt;|\+)/,'<a class="prompt" href="txmt://open?line='+linecounter.to_s+'">\1</a>')
           print "<i><font color=blue>#{esc(m[2])}</font></i>\n"
         # check for error messages

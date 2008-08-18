@@ -9,6 +9,7 @@ require 'shellwords'
 
 module TextMate
   class Complete
+    IMAGES_FOLDER_NAME = 'icons'
     IMAGES = {
       "C"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png",
       "D"   => "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png",
@@ -37,7 +38,18 @@ module TextMate
     end
     
     def images
-      data['images'] ||= IMAGES
+      @images = data['images'] || IMAGES
+      
+      data['images'].each_pair do |name,path|
+        @images[name] = path
+        next if File.exists? @images[name]
+        @images[name] = ENV['TM_BUNDLE_SUPPORT'] + "/#{IMAGES_FOLDER_NAME}/" + path
+        next if File.exists? @images[name]
+        @images[name] = ENV['TM_SUPPORT_PATH']   + "/#{IMAGES_FOLDER_NAME}/" + path
+        next if File.exists? @images[name]
+      end
+      
+      @images
     end
     
     def extra_chars
@@ -167,14 +179,14 @@ class TestComplete < Test::Unit::TestCase
       ); 
       extra_chars = '.';
       images = { 
-        Command    = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Commands.png"; 
-        Drag       = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Drag Commands.png"; 
-        Language   = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Languages.png"; 
-        Macro      = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Macros.png"; 
-        Preference = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Preferences.png"; 
-        Snippet    = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Snippets.png"; 
-        Template   = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Template Files.png"; 
-        Templates  = "/Applications/TextMate.app/Contents/Resources/Bundle Item Icons/Templates.png"; 
+        Command    = "Commands.png"; 
+        Drag       = "Drag Commands.png"; 
+        Language   = "Languages.png"; 
+        Macro      = "Macros.png"; 
+        Preference = "Preferences.png"; 
+        Snippet    = "Snippets.png"; 
+        Template   = "Template Files.png"; 
+        Templates  = "Templates.png"; 
       }; 
     }
     PLIST
@@ -319,6 +331,24 @@ class TestComplete < Test::Unit::TestCase
     assert_equal('.', fred.extra_chars)
   end
   # 
+  def test_should_fix_image_paths
+    ENV['TM_COMPLETIONS_SPLIT'] = 'plist'
+    ENV['TM_COMPLETIONS']       = @plist_raw
+    ENV['TM_BUNDLE_SUPPORT']    = '/tmp'
+    ENV['TM_SUPPORT_PATH']      = '/tmp'
+    
+    images = OSX::PropertyList.load(@plist_raw)['images']
+    
+    FileUtils.mkdir_p "#{ENV['TM_SUPPORT_PATH']}/#{TextMate::Complete::IMAGES_FOLDER_NAME}"
+    images.each_pair do |name,path|
+      File.open("#{ENV['TM_SUPPORT_PATH']}/#{TextMate::Complete::IMAGES_FOLDER_NAME}/#{path}", 'w'){ |file| file.write('') }
+    end
+    
+    TextMate::Complete.new.images.each_pair do |name,path|
+      assert File.exists?(path)
+    end
+    
+  end
 end
 
 end#if

@@ -148,12 +148,9 @@ until descriptors.empty?
           line.sub!("#{linecountermarker}", '')
         end
         # check for comment sign at the beginning of a line
-        if line.match(/^>\s*#/)
-          print "<i><font color=blue>#{esc(line)}</font></i>"
-        # check for comment at the end of a line
-        elsif m=line.match(/(.*?)(\s#[^"']*)$/)
+        if m=line.match(/(.*?)(#[^"']*)$/)
           print esc(m[1]).gsub(/^(&gt;|\+)/,'<a class="prompt" href="txmt://open?line='+linecounter.to_s+'">\1</a>')
-          print "<i><font color=blue>#{esc(m[2])}</font></i>\n"
+          print "<i><font color=blue>#{esc(m[2]).chomp}</font></i>\n"
         # check for error messages
         elsif m=line.match(/(?i)^\s*(error|erreur|fehler|errore|erro)( |:)/)
           print "<span style='color: red'>#{esc str.gsub(%r{(?m).*?#{m[1]}},m[1]).chomp}<br /><i>RMate</i> stopped at <a href='txmt://open?line=#{linecounter-1}'>line #{linecounter-1}</a></span><br />".gsub(%r{source\(&quot;(.*?)&quot;\)},'source(&quot;<a href="txmt://open?url=file://\1">\1</a>&quot;)')
@@ -162,10 +159,11 @@ until descriptors.empty?
         elsif line.match(/^\s*(Warning|Warning messages?|Message d.avis|Warnmeldung|Messaggio di avvertimento|Mensagem de aviso):/)
           print "<span style='color: gray'>#{esc line}</span>"
         # print line simply with hyperlinked prompt if given
+        elsif line.match(/_\x8./)
+          print "#{line.gsub(/_\x8(.)/,'<b>\1</b>')}"
         else
           print esc(line).gsub(/^[\x0-\x9]?(&gt;|\+)/,'<a class="prompt" href="txmt://open?line='+linecounter.to_s+'">\1</a>')
         end
-        # linecounter += 1 if line.match(/^[\x0-\x9]?(>|\+) /)
       end
     end
   end

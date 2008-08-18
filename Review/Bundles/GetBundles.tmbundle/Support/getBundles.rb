@@ -16,7 +16,14 @@ require "open3"
 include ERB::Util
 
 $DIALOG           = e_sh ENV['DIALOG']
-$NIB              = 'BundlesTree'
+os_version = `uname -r`
+if os_version =~ /^8/
+  # Tiger
+elsif os_version =~ /^9/
+  # Leopard
+end
+
+$NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
 $isDIALOG2        = ! $DIALOG.match(/2$/).nil?
 # cache file for the svn descriptions
 $chplistPath      = File.dirname(__FILE__) + "/lib/cachedDescriptions.plist"

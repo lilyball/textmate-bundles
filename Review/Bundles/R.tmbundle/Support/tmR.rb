@@ -13,7 +13,7 @@ SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 # JavaScript to hide the start message on runtime
 hideStartMessageJS = %{<script type="text/javascript">document.getElementById('start_message').className='hidden'</script>}
 # line counter for hyperlinking R's prompt to jump back to the doc
-linecounter = 1
+linecounter = 0
 linecountermarker = " #§*"
 
 # HTML escaping function.
@@ -48,7 +48,7 @@ def my_popen3(*cmd) # returns [stdin, stdout, strerr, pid]
       dil = ENV['DYLD_INSERT_LIBRARIES']
       ENV['DYLD_INSERT_LIBRARIES'] = (dil) ? "#{tm_interactive_input}:#{dil}" : tm_interactive_input unless (dil =~ /#{tm_interactive_input}/)
       ENV['DYLD_FORCE_FLAT_NAMESPACE'] = "1"
-      ENV['TM_INTERACTIVE_INPUT'] = 'AUTO|ECHO'
+      ENV['TM_INTERACTIVE_INPUT'] = 'AUTO'
     end
     
     exec(*cmd)
@@ -109,9 +109,10 @@ Dir::mkdir(tmpDir)
 
 # Mechanism for dynamic reading
 # stdin, stdout, stderr = popen3("R", "--vanilla", "--no-readline", "--slave", "--encoding=UTF-8")
-stdin, stdout, stderr, pid = my_popen3("R --vanilla --no-readline --slave --encoding=UTF-8 2>&1")
+stdin, stdout, stderr, pid = my_popen3("R --vanilla --slave --encoding=UTF-8 2>&1")
 # init the R slave
 stdin.puts(%{options(device="pdf")})
+stdin.puts(%{options(repos="http://cran.cnr.Berkeley.edu")})
 stdin.puts(%{formals(pdf)[c("file","onefile","width","height")] <- list("#{tmpDir}/Rplot%03d.pdf", FALSE, 8, 8)})
 stdin.puts(%{if(getRversion()>="2.7") pdf.options(onefile=FALSE)})
 stdin.puts(%{options(pager="/bin/cat")})
@@ -147,13 +148,16 @@ until descriptors.empty?
           linecounter += 1
           line.sub!("#{linecountermarker}", '')
         end
-        # check for comment sign at the beginning of a line
-        if m=line.match(/(.*?)(#[^"']*)$/)
+        # check for a comment sign at the beginning of a line
+        if line.match(/>\s*#/)
+          print "<i><font color=blue>#{esc line.chomp}</font></i>\n"
+        # check for a comment within a line - regexp should be improved yet!
+        elsif m=line.match(/(.*?)(#[^"']*)$/)
           print esc(m[1]).gsub(/^(&gt;|\+)/,'<a class="prompt" href="txmt://open?line='+linecounter.to_s+'">\1</a>')
           print "<i><font color=blue>#{esc(m[2]).chomp}</font></i>\n"
         # check for error messages
         elsif m=line.match(/(?i)^\s*(error|erreur|fehler|errore|erro)( |:)/)
-          print "<span style='color: red'>#{esc str.gsub(%r{(?m).*?#{m[1]}},m[1]).chomp}<br /><i>RMate</i> stopped at <a href='txmt://open?line=#{linecounter-1}'>line #{linecounter-1}</a></span><br />".gsub(%r{source\(&quot;(.*?)&quot;\)},'source(&quot;<a href="txmt://open?url=file://\1">\1</a>&quot;)')
+          print "<span style='color: red'>#{esc str.gsub(%r{(?m).*?#{m[1]}},m[1]).chomp}<br /><i>RMate</i> stopped at <a href='txmt://open?line=#{linecounter}'>line #{linecounter}</a></span><br />".gsub(%r{source\(&quot;(.*?)&quot;\)},'source(&quot;<a href="txmt://open?url=file://\1">\1</a>&quot;)')
           break
         # check for warnings
         elsif line.match(/^\s*(Warning|Warning messages?|Message d.avis|Warnmeldung|Messaggio di avvertimento|Mensagem de aviso):/)

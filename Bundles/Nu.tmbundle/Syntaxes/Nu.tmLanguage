@@ -602,9 +602,121 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(function|macro)\s+((\w|\-|\!|\?)*)</string>
+			<string>\b(function|macro|macro-0)\s+((\w|\-|\!|\?)*)</string>
 			<key>name</key>
 			<string>meta.function.nu</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.task.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.task.nu</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.colon.nu</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.description.task.nu</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.is.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(task)\s+(\"\w+")\s?(:?)\s?(\"\w+\")?\s+(is)</string>
+			<key>name</key>
+			<string>meta.nukefile.task.nu</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.task.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.task.nu</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.colon.nu</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.description.task.nu</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.arrow.nu</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>support.dependency.task.nu</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.is.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(task)\s+(\"\w+\")\s?(:)?\s?(\".+\")?\s?(=&gt;?)\s?(\"[\"\w\s]+\")?\s+(is)</string>
+			<key>name</key>
+			<string>meta.nukefile.task.with-dependencies.nu</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.task.nu</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.task.nu</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.arrow.nu</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>support.name.task.nu</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.is.nu</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(task)\s+(\"default\")\s+(=&gt;)\s+(\"\w+\")</string>
+			<key>name</key>
+			<string>meta.nukefile.default.task.nu</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -632,9 +744,15 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(assert_equal|assert_not_equal|assert_throws|assert_in_delta|assert_true|assert_false)\b</string>
+			<string>\b(assert_equal|assert_not_equal|assert_throws|assert_in_delta|assert_true|assert_false|assert_less_than|assert_greater_than)\b</string>
 			<key>name</key>
 			<string>support.function.testing.nu</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(task|application-tasks|bundle-tasks|compilation-tasks|dylib-tasks|framework-tasks|library-tasks)\b</string>
+			<key>name</key>
+			<string>keyword.nukefile.nu</string>
 		</dict>
 	</array>
 	<key>repository</key>

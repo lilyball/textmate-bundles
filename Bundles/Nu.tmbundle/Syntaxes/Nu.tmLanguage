@@ -636,7 +636,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(task)\s+(\"\w+")\s?(:?)\s?(\".+\")?\s+(is)</string>
+			<string>(task)\s+(\"\w+")\s?(:?)\s?(\"[\w\s]+\")?\s+(is)</string>
 			<key>name</key>
 			<string>meta.nukefile.task.nu</string>
 		</dict>
@@ -680,7 +680,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(task)\s+(\"\w+\")\s?(:)?\s?(\".+\")?\s?(=&gt;?)\s?(\"[\"\w\s]+\")?\s+(is)</string>
+			<string>(task)\s+(\"\w+\")\s?(:)?\s?(\"[\w\s]+\")?\s?(=&gt;?)\s?(\"[\"\w\s]+\")?\s+(is)</string>
 			<key>name</key>
 			<string>meta.nukefile.task.with-dependencies.nu</string>
 		</dict>

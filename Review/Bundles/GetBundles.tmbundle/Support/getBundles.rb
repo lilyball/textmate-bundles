@@ -983,7 +983,7 @@ def installBundles(dlg)
 end
 
 def updateTMlibPath
-  return if askDIALOG("Do you really want to install TextMate's lastest Support folder?","") == 0
+  return if askDIALOG("Do you really want to update the Support/lib folder?","") == 0
   path = "http://macromates.com/svn/Bundles/trunk/Support/lib/"
   $params['isBusy'] = true
   $params['progressText'] = "Installing TextMate's Support folder…"

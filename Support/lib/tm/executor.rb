@@ -23,12 +23,17 @@
 #     str = htmlize(str)
 #     str =  "<span class=\"stderr\">#{htmlize(str)}</span>" if type == :out
 #   end
+# 
+# Your block will be called with type :out or :err.  If you don't want to handle a particular type,
+# return nil and Executor will apply basic formatting for you.
 #
-#  TextMate::Executor.run also accepts three optional named arguments.
-#    :version_args are arguments that will be passed to the executable to generate a version string for use as the page's subtitle.
-#    :version_regex is a regular expression to which the resulting version string is passed.
-#      $1 of this regex is used as the subtitle of the Executor.run output.  By default, this just takes the first line.
-#    :env is the environment in which the command will be run.  Default is ENV.
+# TextMate::Executor.run also accepts four optional named arguments.
+#   :version_args are arguments that will be passed to the executable to generate a version string for use as the page's subtitle.
+#   :version_regex is a regular expression to which the resulting version string is passed.
+#     $1 of this regex is used as the subtitle of the Executor.run output.  By default, this just takes the first line.
+#   :env is the environment in which the command will be run.  Default is ENV.
+#   :script_args are arguments to be passed to the *script* as opposed to the interpreter.  They will
+#     be appended after the path to the script in the arguments to the interpreter.
 
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'tm/process'
@@ -77,14 +82,19 @@ module TextMate
 
         TextMate::HTMLOutput.show(:title => "Running “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version) do |io|
 
-          block ||= proc do |str, type|
-            str = htmlize(str).gsub(/\<br\>/, "<br>\n")
-            str = "<span style='color: red'>#{str}</span>" if type == :err
-            str = "<span style='font-style: italic'>#{str}</span>" if type == :echo
-            str
+          callback = proc do |str, type|
+            str.gsub!(ENV["TM_FILEPATH"], "untitled") if ENV["TM_FILE_IS_UNTITLED"]
+            filtered_str = block.call(str,type) if [:err, :out].include? type
+            if [:err, :out].include?(type) and not filtered_str.nil?
+              io << filtered_str
+            else
+              str = htmlize(str).gsub(/\<br\>/, "<br>\n")
+              str = "<span style='color: red'>#{str}</span>" if type == :err
+              str = "<span style='font-style: italic'>#{str}</span>" if type == :echo
+              io << str
+            end
           end
 
-          callback = proc {|str, type| io << block.call(str,type)}
           process_output_wrapper(io) do
             TextMate::Process.run(args, :env => options[:env], :echo => true, :watch_fds => { :echo => tm_echo_fd_read }, &callback)
           end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -8,7 +8,9 @@
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
 html_header "Txt2tags Preview"
-txt2tags -t html -i- -o-
+txt2tags -t html -i- -o- |
+	sed "s|&lt;HEAD&gt;|&amp;&lt;base href='tm-file://${TM_FILEPATH// /%20}'&gt;|"
+	# ^needed for images, CSS files and friends
 html_footer
 </string>
 	<key>input</key>

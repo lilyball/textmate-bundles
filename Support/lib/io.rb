@@ -37,8 +37,8 @@ module TextMate
               lines = leftovers[name].to_s + $1
               leftovers[name] = $2
               case block.arity
-                when 1: lines.each { |line| block.call(line) }
-                when 2: lines.each { |line| block.call(line, name) }
+                when 1 then lines.each_line { |line| block.call(line) }
+                when 2 then lines.each_line { |line| block.call(line, name) }
               end
             else
               raise "Allan's regexp did not match #{str}" 
@@ -46,8 +46,8 @@ module TextMate
           
           elsif sync?
             case block.arity
-              when 1: block.call(data)
-              when 2: block.call(data, name)
+              when 1 then block.call(data)
+              when 2 then block.call(data, name)
             end
           
           end
@@ -57,8 +57,8 @@ module TextMate
         if not sync?
           leftovers.delete_if {|name,crumb| crumb == ""}
           case block.arity
-            when 1: leftovers.each_pair { |name, crumb| block.call(crumb) }
-            when 2: leftovers.each_pair { |name, crumb| block.call(crumb, name) }
+            when 1 then leftovers.each_pair { |name, crumb| block.call(crumb) }
+            when 2 then leftovers.each_pair { |name, crumb| block.call(crumb, name) }
           end
         end
         

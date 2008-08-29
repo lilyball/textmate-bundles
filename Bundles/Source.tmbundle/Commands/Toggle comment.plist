@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -72,7 +72,8 @@ var_suffixes.each do |suffix|
   case com[:mode]
   when "line"  # line by line comment
     if text !~ /\A[\t ]+\z/ &amp;&amp;
-       text.map { |l| !!(l =~ /\A\s*(#{com[:esc_start]}|$)/) }.uniq == [true]
+       text.send(text.respond_to?(:lines) ? :lines : :to_s).
+            map { |l| !!(l =~ /\A\s*(#{com[:esc_start]}|$)/) }.uniq == [true]
       if $selected
         out text.gsub( /^(\s*)#{com[:esc_start]}(.*?)#{com[:esc_end]}(\s*)$/,
                        '\1\2\3' )
@@ -122,7 +123,7 @@ when "line"  # apply comment line by line
   else
     indent = text.scan(/^[\t \0]*(?=\S)/).
                   min { |a, b| a.length &lt;=&gt; b.length } || ""
-    text.map do |line|
+    text.send(text.respond_to?(:lines) ? :lines : :to_s).map do |line|
       if line =~ /^(#{indent})(.*)$(\n?)/ then
         out $1 + default[:start] + $2 + default[:end] + $3
       elsif line =~ /^(.*)$(\n?)/ then

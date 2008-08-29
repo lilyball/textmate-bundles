@@ -57,7 +57,11 @@
  */
 
 #include <ruby.h>
+#if HAVE_RUBY_ST_H
+#include <ruby/st.h>
+#else
 #include <st.h>
+#endif
 #include <CoreFoundation/CoreFoundation.h>
 
 // Here's some convenience macros
@@ -165,14 +169,14 @@ VALUE plist_load(int argc, VALUE *argv, VALUE self) {
 		// even though binary shouldn't be < 6 characters
 		UInt8 *bytes;
 		int len;
-		if (RSTRING(buffer)->len < 6) {
+		if (RSTRING_LEN(buffer) < 6) {
 			bytes = ALLOC_N(UInt8, 6);
 			memset(bytes, '\n', 6);
-			MEMCPY(bytes, RSTRING(buffer)->ptr, UInt8, RSTRING(buffer)->len);
+			MEMCPY(bytes, RSTRING_PTR(buffer), UInt8, RSTRING_LEN(buffer));
 			len = 6;
 		} else {
-			bytes = (UInt8 *)RSTRING(buffer)->ptr;
-			len = RSTRING(buffer)->len;
+			bytes = (UInt8 *)RSTRING_PTR(buffer);
+			len = RSTRING_LEN(buffer);
 		}
 		CFReadStreamRef readStream = CFReadStreamCreateWithBytesNoCopy(kCFAllocatorDefault, bytes, len, kCFAllocatorNull);
 		CFReadStreamOpen(readStream);
@@ -181,7 +185,7 @@ VALUE plist_load(int argc, VALUE *argv, VALUE self) {
 		CFRelease(readStream);
 	} else {
 		// Format wasn't requested
-		CFDataRef data = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)RSTRING(buffer)->ptr, RSTRING(buffer)->len, kCFAllocatorNull);
+		CFDataRef data = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)RSTRING_PTR(buffer), RSTRING_LEN(buffer), kCFAllocatorNull);
 		plist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, data, kCFPropertyListImmutable, &error);
 		CFRelease(data);
 	}
@@ -364,15 +368,10 @@ VALUE plist_dump(int argc, VALUE *argv, VALUE self) {
 	} else {
 		type = rb_to_id(type);
 	}
-	if (type != id_xml && type != id_binary && type != id_openstep) {
-		rb_raise(rb_eArgError, "Argument 3 must be one of :xml1, :binary1, or :openstep");
-		return Qnil;
-	}
 	if (!RTEST(rb_respond_to(io, id_write))) {
 		rb_raise(rb_eArgError, "Argument 1 must be an IO object");
 		return Qnil;
 	}
-	CFPropertyListRef plist = convertObject(obj);
 	CFPropertyListFormat format;
 	if (type == id_xml) {
 		format = kCFPropertyListXMLFormat_v1_0;
@@ -380,7 +379,11 @@ VALUE plist_dump(int argc, VALUE *argv, VALUE self) {
 		format = kCFPropertyListBinaryFormat_v1_0;
 	} else if (type == id_openstep) {
 		format = kCFPropertyListOpenStepFormat;
+	} else {
+		rb_raise(rb_eArgError, "Argument 3 must be one of :xml1, :binary1, or :openstep");
+		return Qnil;
 	}
+	CFPropertyListRef plist = convertObject(obj);
 	VALUE data = convertPlistToString(plist, format);
 	if (NIL_P(data)) {
 		return Qnil;
@@ -406,11 +409,6 @@ VALUE obj_to_plist(int argc, VALUE *argv, VALUE self) {
 	} else {
 		type = rb_to_id(type);
 	}
-	if (type != id_xml && type != id_binary && type != id_openstep) {
-		rb_raise(rb_eArgError, "Argument 2 must be one of :xml1, :binary1, or :openstep");
-		return Qnil;
-	}
-	CFPropertyListRef plist = convertObject(self);
 	CFPropertyListFormat format;
 	if (type == id_xml) {
 		format = kCFPropertyListXMLFormat_v1_0;
@@ -418,7 +416,11 @@ VALUE obj_to_plist(int argc, VALUE *argv, VALUE self) {
 		format = kCFPropertyListBinaryFormat_v1_0;
 	} else if (type == id_openstep) {
 		format = kCFPropertyListOpenStepFormat;
+	} else {
+		rb_raise(rb_eArgError, "Argument 2 must be one of :xml1, :binary1, or :openstep");
+		return Qnil;
 	}
+	CFPropertyListRef plist = convertObject(self);
 	VALUE data = convertPlistToString(plist, format);
 	CFRelease(plist);
 	if (type == id_xml || type == id_binary) {
@@ -455,15 +457,15 @@ CFPropertyListRef convertString(VALUE obj) {
 	if (RTEST(str_blob(obj))) {
 		// convert to CFDataRef
 		StringValue(obj);
-		CFDataRef data = CFDataCreate(kCFAllocatorDefault, (const UInt8*)RSTRING(obj)->ptr, (CFIndex)RSTRING(obj)->len);
+		CFDataRef data = CFDataCreate(kCFAllocatorDefault, (const UInt8*)RSTRING_PTR(obj), (CFIndex)RSTRING_LEN(obj));
 		return data;
 	} else {
 		// convert to CFStringRef
 		StringValue(obj);
-		CFStringRef string = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8*)RSTRING(obj)->ptr, (CFIndex)RSTRING(obj)->len, kCFStringEncodingUTF8, false);
+		CFStringRef string = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8*)RSTRING_PTR(obj), (CFIndex)RSTRING_LEN(obj), kCFStringEncodingUTF8, false);
 		if (!string) {
 			// try MacRoman
-			string = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8*)RSTRING(obj)->ptr, (CFIndex)RSTRING(obj)->len, kCFStringEncodingMacRoman, false);
+			string = CFStringCreateWithBytes(kCFAllocatorDefault, (const UInt8*)RSTRING_PTR(obj), (CFIndex)RSTRING_LEN(obj), kCFStringEncodingMacRoman, false);
 		}
 		return string;
 	}
@@ -481,9 +483,15 @@ int iterateHash(VALUE key, VALUE val, VALUE dict) {
 
 // Converts a Hash to a CFDictionaryREf
 CFDictionaryRef convertHash(VALUE obj) {
-	CFIndex count = (CFIndex)RHASH(obj)->tbl->num_entries;
+	// RHASH_TBL exists in ruby 1.8.7 but not ruby 1.8.6
+#ifdef RHASH_TBL
+	st_table *tbl = RHASH_TBL(obj);
+#else
+	st_table *tbl = RHASH(obj)->tbl;
+#endif
+	CFIndex count = (CFIndex)tbl->num_entries;
 	CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, count, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-	st_foreach(RHASH(obj)->tbl, iterateHash, (VALUE)dict);
+	st_foreach(tbl, iterateHash, (VALUE)dict);
 	return dict;
 }
 

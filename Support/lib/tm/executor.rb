@@ -56,6 +56,7 @@ module TextMate
 
       def run(*args, &block)
 
+        block ||= Proc.new {}
         args.flatten!
 
         options = {:version_args  => ['--version'],

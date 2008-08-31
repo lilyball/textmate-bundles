@@ -442,6 +442,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#parens</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#constants-and-special-vars</string>
 				</dict>
 				<dict>
@@ -857,6 +861,20 @@
 					<string>\w+</string>
 					<key>name</key>
 					<string>variable.parameter.java</string>
+				</dict>
+			</array>
+		</dict>
+		<key>parens</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#code</string>
 				</dict>
 			</array>
 		</dict>

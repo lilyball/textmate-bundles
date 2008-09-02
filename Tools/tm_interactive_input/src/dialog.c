@@ -257,15 +257,15 @@ void capture_for_prompt(const void *buffer, size_t buffer_length) {
 
     // Scan back past any white space.
     ssize_t i;
-    for (i = buffer_length; i >= 0 && isspace(cbuffer[i - 1]); --i);
+    for (i = buffer_length - 1; i >= 0 && isspace(cbuffer[i]); --i);
     D("i after scanning backwards past space = %d\n", (int)i);
 
     // Whole line was space
-    if (i <= 0) return;
+    if (i < 0) return;
 
     size_t x;
-    for (x = 0; (x < (prompt_capacity - 1)) && i > 0; ++x) {
-        char c = cbuffer[--i];
+    for (x = 0; (x < (prompt_capacity - 1)) && i >= 0; ++x) {
+        char c = cbuffer[i--];
         if (c == '\n') break;
         storage[x] = c;
     }

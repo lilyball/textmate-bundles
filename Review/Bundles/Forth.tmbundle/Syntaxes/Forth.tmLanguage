@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>frt</string>
+		<string>fs</string>
+	</array>
+	<key>foldingStartMarker</key>
+	<string>/\*\*|\{\s*$</string>
+	<key>foldingStopMarker</key>
+	<string>\*\*/|^\s*\}</string>
+	<key>keyEquivalent</key>
+	<string>^~F</string>
+	<key>name</key>
+	<string>Forth</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>(?i:(?&lt;=^|\s)(TRUE|FALSE|BL|PI|CELL|C/L|R/O|W/O|R/W)(?=\s))</string>
+			<key>name</key>
+			<string>constant.language.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|\s)([$#%]?[-+]?[0-9]+(\.[0-9]*e(-?[0-9]+)|\.?[0-9a-fA-F]*))(?=\s)</string>
+			<key>name</key>
+			<string>constant.numeric.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(([&amp;^]\S)|(("|')\S("|')))(?=\s)</string>
+			<key>name</key>
+			<string>constant.character.forth</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>line comments for iForth</string>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(-- .*$)</string>
+			<key>name</key>
+			<string>comment.line.double-dash.forth</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>ANSI line comment</string>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(\\ .*$)</string>
+			<key>name</key>
+			<string>comment.line.backslash.forth</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>gForth line comment</string>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(\\[Gg] .*$)</string>
+			<key>name</key>
+			<string>comment.line.backslash-g.forth</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?&lt;=^|\s)(\(\*)(?=\s)</string>
+			<key>comment</key>
+			<string>multiline comments for iForth</string>
+			<key>end</key>
+			<string>(?&lt;=^|\s)(\*\))(?=\s)</string>
+			<key>name</key>
+			<string>comment.block.forth</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\b(?i:DOC)\b</string>
+			<key>comment</key>
+			<string>documentation comments for iForth</string>
+			<key>end</key>
+			<string>\b(?i:ENDDOC)\b</string>
+			<key>name</key>
+			<string>comment.block.documentation.forth</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>ANSI line comment</string>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(\.?\( [^)]*\))</string>
+			<key>name</key>
+			<string>comment.line.parentheses.forth</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string></string>
+			<key>match</key>
+			<string>(?i:((?&lt;=ABORT" )|(?&lt;=BREAK" )|(?&lt;=\." )|(C" )|(S\\?" )))[^"]+"</string>
+			<key>name</key>
+			<string>string.quoted.double.forth</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string></string>
+			<key>match</key>
+			<string>(?i:((?&lt;=INCLUDE)|(?&lt;=NEEDS)|(?&lt;=REQUIRE)|(?&lt;=USE)))[ ]\S+(?=\s)</string>
+			<key>name</key>
+			<string>string.unquoted.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|\s)\[(?i:(\?DO|\+LOOP|AGAIN|BEGIN|DO|ELSE|ENDIF|FOR|IF|IFDEF|IFUNDEF|LOOP|NEXT|REPEAT|THEN|UNTIL|WHILE))\](?=\s)</string>
+			<key>name</key>
+			<string>keyword.control.immediate.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(?i:(COMPILE-ONLY|IMMEDIATE|IS|RESTRICT|TO|WHAT'S))(?=\s)</string>
+			<key>name</key>
+			<string>keyword.other.immediate.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(?i:(-DO|\-LOOP|\?DO|\?LEAVE|\+DO|\+LOOP|ABORT\"|AGAIN|AHEAD|BEGIN|CASE|DO|ELSE|ENDCASE|ENDIF|ENDOF|ENDTRY\-IFERROR|ENDTRY|FOR|IF|IFERROR|LEAVE|LOOP|NEXT|RECOVER|REPEAT|RESTORE|THEN|TRY|U\-DO|U\+DO|UNTIL|WHILE))(?=\s)</string>
+			<key>name</key>
+			<string>keyword.control.compile-only.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(?i:(\?DUP-0=-IF|\?DUP-IF|\)|\['\]|\[CHAR\]|\[COMPILE\]|\[IS\]|\[TO\]|&lt;COMPILATION|&lt;INTERPRETATION|ASSERT\(|ASSERT0\(|ASSERT1\(|ASSERT2\(|ASSERT3\(|COMPILATION&gt;|DEFERS|DOES&gt;|INTERPRETATION&gt;|OF|POSTPONE))(?=\s)</string>
+			<key>name</key>
+			<string>keyword.other.compile-only.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(?i:('|&lt;IS&gt;|&lt;TO&gt;|CHAR|END-STRUCT|INCLUDE[D]?|LOAD|NEEDS|REQUIRE[D]?|REVISION|SEE|STRUCT|THRU|USE))(?=\s)</string>
+			<key>name</key>
+			<string>keyword.other.non-immediate.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(?i:(~~|BREAK:|BREAK"|DBG))(?=\s)</string>
+			<key>name</key>
+			<string>keyword.other.warning.forth</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(?i:I|J)\b</string>
+			<key>name</key>
+			<string>variable.language.forth</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string></string>
+			<key>match</key>
+			<string>(?&lt;=^|\s)(?i:(2CONSTANT|2VARIABLE|ALIAS|CONSTANT|CREATE-INTERPRET/COMPILE[:]?|CREATE|DEFER|FCONSTANT|FIELD|FVARIABLE|USER|VALUE|VARIABLE|VOCABULARY))(?=\s)</string>
+			<key>name</key>
+			<string>storage.type.forth</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.forth</string>
+	<key>uuid</key>
+	<string>0AAA4CFD-D621-4B33-BB76-E5D9EDE64E84</string>
+</dict>
+</plist>

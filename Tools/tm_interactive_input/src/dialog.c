@@ -19,7 +19,6 @@ buffer_t* input_buffer = NULL;
 pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static char prompt[128];
-static size_t prompt_capacity = 128;
 pthread_mutex_t prompt_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 char* create_prompt_copy() {
@@ -251,36 +250,31 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
 }
 
 void capture_for_prompt(const void *buffer, size_t buffer_length) {
-    char storage[prompt_capacity];
     char *cbuffer = (char *)buffer;
-
     D("buffer_length = %d\n", (int)buffer_length);
 
-    // Scan back past any white space.
-    ssize_t i;
-    for (i = buffer_length - 1; i >= 0 && isspace(cbuffer[i]); --i);
-    D("i after scanning backwards past space = %d\n", (int)i);
+    // First skip trailing whitespace (including newlines)
+    char* to = cbuffer + buffer_length;
+    while(to != cbuffer && isspace(to[-1]))
+        --to;
 
-    // Whole line was space
-    if (i < 0) return;
+    // Second search back for the begin-of-(last)-line
+    char* from = to;
+    while(from != cbuffer && from[-1] != '\n')
+        --from;
 
-    size_t x;
-    for (x = 0; (x < (prompt_capacity - 1)) && i >= 0; ++x) {
-        char c = cbuffer[i--];
-        if (c == '\n') break;
-        storage[x] = c;
-    }
-    D("reverse storage has %i bytes\n", (int)x + 1);
+    // If we end with an empty string, do nothing (we probably have a prompt from a previous write)
+    if(from == to)
+        return;
 
-    --x;
+    // Third, truncate line (by cutting head) if larger than prompt capacity
+    if(to - from > sizeof(prompt)-1)
+        from = to - (sizeof(prompt)-1);
 
     pthread_mutex_lock(&prompt_mutex);
-    size_t z;
-    for (z = 0; z <= x; ++z) {
-        prompt[z] = storage[x - z];  
-    }
-    D("copied %i bytes from storage\n", (int)z + 1);
-    prompt[z] = '\0';
+    strncpy(prompt, from, to - from);
+    prompt[to - from] = '\0';
+    D("copied %i bytes to prompt\n", (int)to - from);
     pthread_mutex_unlock(&prompt_mutex);
 
     D("prompt = '%s'\n", prompt);

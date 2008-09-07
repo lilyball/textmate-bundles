@@ -140,8 +140,8 @@ int select_override(char * system_symbol, int nfds, fd_set * __restrict readfds,
             timeout->tv_sec = 0;
         }
         
-        int fd_count = system_select(system_symbol, nfds, readfds, writefds, errorfds, timeout);
-        result = fd_count + stdin_fd_tracker_augment_select_result(nfds, &orig_readfds, readfds);
+        result = system_select(system_symbol, nfds, readfds, writefds, errorfds, timeout);
+        if (result != -1) result += stdin_fd_tracker_augment_select_result(nfds, &orig_readfds, readfds);
     }
 
     return result;

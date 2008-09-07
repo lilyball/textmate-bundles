@@ -245,8 +245,11 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
     } else {
         D("reading %d into read buffer from input buffer\n", (int)buffer_length);
         consumed = consume_from_head_of_buffer(input_buffer, buffer, buffer_length);
-        if (get_buffer_size(input_buffer) == 0) input_buffer = NULL;
-    } 
+        if (get_buffer_size(input_buffer) == 0) {
+            destroy_buffer(input_buffer);
+            input_buffer = NULL;
+        }
+    }
 
     pthread_mutex_unlock(&input_mutex);
     return consumed;

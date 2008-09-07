@@ -37,7 +37,7 @@ char* get_buffer_data(buffer_t *b) {
 }
 
 char get_buffer_byte_at(buffer_t *b, size_t at) {
-    if (at < 0 || at >= b->size) die("buffer access out of range: %d for buffer of size %d", at, b->size);
+    if (at >= b->size) die("buffer access out of range: %d for buffer of size %d", at, b->size);
     return b->data[at];
 }
 

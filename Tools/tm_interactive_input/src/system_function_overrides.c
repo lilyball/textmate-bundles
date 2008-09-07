@@ -6,7 +6,6 @@
 #include "stdin_fd_tracker.h"
 #include "textmate.h"
 
-#include <sys/syscall.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -18,19 +17,20 @@
 
 ssize_t read(int d, void *buffer, size_t buffer_length) {
 
+    int (*system_read)(int, void*, size_t) = dlsym(RTLD_NEXT, "read");
     // Only interested in STDIN
     if (!tm_interactive_input_is_active() || !stdin_fd_tracker_is_stdin(d) || !fd_is_owned_by_tm(d)) 
-        return syscall(SYS_read, d, buffer, buffer_length);
+        return system_read(d, buffer, buffer_length);
 
     // It doesn't make sense to invoke tm_dialog if the caller wanted a non blocking read
     int oldFlags = fcntl(d, F_GETFL);
-    if (oldFlags & O_NONBLOCK) return syscall(SYS_read, d, buffer, buffer_length);
+    if (oldFlags & O_NONBLOCK) return system_read(d, buffer, buffer_length);
 
     if (tm_interactive_input_is_in_always_mode()) {
         return tm_dialog_read(buffer, buffer_length);
     } else {
         fcntl(d, F_SETFL, oldFlags | O_NONBLOCK);
-        ssize_t bytes_read = syscall(SYS_read, d, buffer, buffer_length);
+        ssize_t bytes_read = system_read(d, buffer, buffer_length);
         fcntl(d, F_SETFL, oldFlags);
 
         /*
@@ -77,8 +77,8 @@ ssize_t write(int d, const void *buffer, size_t buffer_length) {
     if (tm_interactive_input_is_active() && (d == STDOUT_FILENO || d == STDERR_FILENO)) {
         capture_for_prompt(buffer, buffer_length);
     }
-
-    return syscall(SYS_write, d, buffer, buffer_length);
+    int (*system_write)(int, const void*, size_t) = dlsym(RTLD_NEXT, "write");
+    return system_write(d, buffer, buffer_length);
 }
 
 ssize_t write_unix2003(int d, const void *buffer, size_t buffer_length) {
@@ -90,13 +90,15 @@ ssize_t write_nocancel_unix2003(int d, const void *buffer, size_t buffer_length)
 }
 
 int dup(int orig) {
-    int dup = syscall(SYS_dup, orig);
+    int (*system_dup)(int) = dlsym(RTLD_NEXT, "dup");
+    int dup = system_dup(orig);
     if (tm_interactive_input_is_active()) stdin_fd_tracker_did_dup(orig, dup);
     return dup;
 }
 
-int close(int);int close(int fd) {
-    int res = syscall(SYS_close, fd);
+int close(int fd) {
+    int (*system_close)(int) = dlsym(RTLD_NEXT, "close");
+    int res = system_close(fd);
     if (tm_interactive_input_is_active()) stdin_fd_tracker_did_close(fd);
     return res;
 }

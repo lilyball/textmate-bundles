@@ -6,7 +6,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
-#include <sys/syscall.h>
+#include <dlfcn.h>
 #include <unistd.h>
 
 #ifndef ALLOC_SIZE
@@ -74,8 +74,8 @@ buffer_t * create_buffer_from_file_descriptor(int fd) {
 
     ssize_t bytes_read;
     do {
-
-        bytes_read = syscall(SYS_read, fd, intermediary_buffer, sizeof(intermediary_buffer));
+        int (*system_read)(int, void*, size_t) = dlsym(RTLD_NEXT, "read");
+        bytes_read = system_read(fd, intermediary_buffer, sizeof(intermediary_buffer));
         D("got %zd bytes from fd\n", bytes_read);
         if (bytes_read > 0) {
             add_to_buffer(buffer, intermediary_buffer, bytes_read);

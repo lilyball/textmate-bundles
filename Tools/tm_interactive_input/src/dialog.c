@@ -7,7 +7,7 @@
 #include "mode.h"
 
 #include <signal.h>
-#include <sys/syscall.h>
+#include <dlfcn.h>
 #include <stdlib.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <unistd.h>
@@ -227,9 +227,10 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
                 free(input_str);
                 CFRelease(input_cfstr);
                 size_t i;
+                int (*system_write)(int, const void*, size_t) = dlsym(RTLD_NEXT, "write");
                 for (i = 1; i < char_count; ++i) // Not <= because of \n on end
-                    syscall(SYS_write, echo_fd, "*", 1);
-                syscall(SYS_write, echo_fd, "\n", 1);
+                    system_write(echo_fd, "*", 1);
+                system_write(echo_fd, "\n", 1);
             } else {
                 write_buffer_to_fd(input_buffer, echo_fd);
             }

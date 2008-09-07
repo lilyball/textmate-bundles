@@ -50,8 +50,11 @@ int stdin_fd_tracker_augment_select_result(int max, fd_set *orig_fds __restrict,
     int count = 0;
 
     int i;
-    for (i = 0; i < intset_size(storage) && i < max; ++i) {
+    for (i = 0; i < intset_size(storage); ++i) {
         int fd = intset_get(storage, i);
+        if(fd >= max)
+            continue;
+
         if (FD_ISSET(fd, orig_fds) && !FD_ISSET(fd, changed_fds) && fd_is_owned_by_tm(fd)) {
             ++count;
             FD_SET(fd, changed_fds);
@@ -69,8 +72,11 @@ int stdin_fd_tracker_count_stdins_in_fdset(int max, fd_set *fds) {
     int count = 0;
 
     int i;
-    for (i = 0; i < intset_size(storage) && i < max; ++i) {
+    for (i = 0; i < intset_size(storage); ++i) {
         int fd = intset_get(storage, i);
+        if(fd >= max)
+            continue;
+
         if (FD_ISSET(fd, fds) && fd_is_owned_by_tm(fd)) {
             ++count;
         }

@@ -103,11 +103,11 @@ int close(int);int close(int fd) {
 
 int select(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
     D("in select\n");
-    int (*real_select)(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) = dlsym(RTLD_NEXT, "select");
+    int (*system_select)(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) = dlsym(RTLD_NEXT, "select");
     int result;
     if (readfds == NULL) {
         D("readfds is null\n");
-        result = real_select(nfds, readfds, writefds, errorfds, timeout);
+        result = system_select(nfds, readfds, writefds, errorfds, timeout);
     } else {
         D("readfds is not null\n");
         fd_set orig_readfds;
@@ -115,7 +115,7 @@ int select(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, 
         FD_COPY(readfds, &orig_readfds);
         
         D("making syscall\n");
-        int fd_count = real_select(nfds, readfds, writefds, errorfds, timeout);
+        int fd_count = system_select(nfds, readfds, writefds, errorfds, timeout);
         D("returned from syscall\n");
         result = fd_count + stdin_fd_tracker_inspect_select_readfds(nfds, &orig_readfds, readfds);
     }

@@ -14,6 +14,7 @@
 #include <ctype.h>
 #include <pthread.h>
 #include <stdbool.h>
+#include <xlocale.h>
 
 buffer_t* input_buffer = NULL;
 pthread_mutex_t input_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -220,16 +221,18 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
         if (tm_interactive_input_is_in_echo_mode() && input_buffer != NULL) {
             int echo_fd = get_echo_fd();
             if (use_secure_nib()) {
-                char *input_str = create_cstr_from_buffer(input_buffer);
-                CFStringRef input_cfstr = cstr_2_cfstr(input_str);
-                CFIndex char_count = CFStringGetLength(input_cfstr);
-                free(input_str);
-                CFRelease(input_cfstr);
-                size_t i;
                 int (*system_write)(int, const void*, size_t) = dlsym(RTLD_NEXT, "write");
-                for (i = 1; i < char_count; ++i) // Not <= because of \n on end
+                locale_t l = newlocale(LC_CTYPE_MASK, "", NULL);
+                char const* str = get_buffer_data(input_buffer);
+                int i, len = get_buffer_size(input_buffer);
+                for(i = 0; i < len - 1; i += mblen_l(str + i, len - i, l))
+                {
                     system_write(echo_fd, "*", 1);
+                    if(mblen_l(str + i, len - i, l) <= 0) // encoding error
+                        break;
+                }
                 system_write(echo_fd, "\n", 1);
+                freelocale(l);
             } else {
                 write_buffer_to_fd(input_buffer, echo_fd);
             }

@@ -250,16 +250,16 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
 }
 
 void capture_for_prompt(const void *buffer, size_t buffer_length) {
-    char *cbuffer = (char *)buffer;
+	char const* cbuffer = buffer;
     D("buffer_length = %d\n", (int)buffer_length);
 
     // First skip trailing whitespace (including newlines)
-    char* to = cbuffer + buffer_length;
+	char const* to = cbuffer + buffer_length;
     while(to != cbuffer && isspace(to[-1]))
         --to;
 
     // Second search back for the begin-of-(last)-line
-    char* from = to;
+	char const* from = to;
     while(from != cbuffer && from[-1] != '\n')
         --from;
 

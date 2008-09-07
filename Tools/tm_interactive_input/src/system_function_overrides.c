@@ -131,14 +131,10 @@ int select_override(char * system_symbol, int nfds, fd_set * __restrict readfds,
         result = system_select(system_symbol, nfds, readfds, writefds, errorfds, timeout);
     } else {
         fd_set orig_readfds; FD_ZERO(&orig_readfds); FD_COPY(readfds, &orig_readfds);
+        struct timeval t = { };
         
-        if (stdin_fd_tracker_count_stdins_in_fdset(nfds, readfds) > 0) {
-            if (timeout == NULL) {
-                struct timeval t;
-                timeout = &t;
-            }
-            timeout->tv_sec = 0;
-        }
+        if (stdin_fd_tracker_count_stdins_in_fdset(nfds, readfds) > 0)
+            timeout = &t;
         
         result = system_select(system_symbol, nfds, readfds, writefds, errorfds, timeout);
         if (result != -1) result += stdin_fd_tracker_augment_select_result(nfds, &orig_readfds, readfds);

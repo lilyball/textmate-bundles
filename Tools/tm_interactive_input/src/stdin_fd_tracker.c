@@ -44,7 +44,7 @@ void stdin_fd_tracker_did_close(int target) {
     pthread_mutex_unlock(&storage_mutex);
 }
 
-int stdin_fd_tracker_inspect_select_readfds(int max, fd_set *orig_fds __restrict, fd_set *changed_fds) {
+int stdin_fd_tracker_augment_select_result(int max, fd_set *orig_fds __restrict, fd_set *changed_fds) {
     pthread_mutex_lock(&storage_mutex);
     intset_t* storage = get_storage();
     int count = 0;

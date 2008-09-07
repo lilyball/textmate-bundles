@@ -119,7 +119,7 @@ int select(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, 
         D("making syscall\n");
         int fd_count = system_select(nfds, readfds, writefds, errorfds, timeout);
         D("returned from syscall\n");
-        result = fd_count + stdin_fd_tracker_inspect_select_readfds(nfds, &orig_readfds, readfds);
+        result = fd_count + stdin_fd_tracker_augment_select_result(nfds, &orig_readfds, readfds);
     }
 
     D("select returing %d\n", result);

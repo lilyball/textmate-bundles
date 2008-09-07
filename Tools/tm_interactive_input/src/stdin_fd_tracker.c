@@ -52,14 +52,10 @@ int stdin_fd_tracker_inspect_select_readfds(int max, fd_set *orig_fds __restrict
     int i;
     for (i = 0; i < intset_size(storage) && i < max; ++i) {
         int fd = intset_get(storage, i);
-        if (FD_ISSET(fd, orig_fds) != 0) {
-            if (FD_ISSET(fd, changed_fds) == 0) {
-                if (fd_is_owned_by_tm(fd)) {
-                    ++count;
-                    FD_SET(fd, changed_fds);
-                }
-            }
-        } 
+        if (FD_ISSET(fd, orig_fds) && !FD_ISSET(fd, changed_fds) && fd_is_owned_by_tm(fd)) {
+            ++count;
+            FD_SET(fd, changed_fds);
+        }
     }
     
     pthread_mutex_unlock(&storage_mutex);

@@ -95,7 +95,6 @@ CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
     CFStringRef results_key = CFSTR("result");
 
     bool has_results = CFDictionaryGetValueIfPresent(plist, results_key, (void *)&results);
-    CFRelease(results_key);
 
     if (!has_results) {
         D("plist has no result key, so returning nothing\n");
@@ -114,8 +113,6 @@ CFStringRef get_return_argument_from_output_plist(CFPropertyListRef plist) {
     } else {
         return_argument = CFSTR("");
     }
-        
-    CFRelease(return_argument_key);
 
     return return_argument;
 }

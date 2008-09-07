@@ -5,9 +5,9 @@
 #include "buffer.h"
 #include "process_name.h"
 #include "mode.h"
+#include "system_function_overrides.h"
 
 #include <signal.h>
-#include <dlfcn.h>
 #include <stdlib.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <unistd.h>
@@ -218,17 +218,16 @@ ssize_t tm_dialog_read(void *buffer, size_t buffer_length) {
         if (tm_interactive_input_is_in_echo_mode() && input_buffer != NULL) {
             int echo_fd = get_echo_fd();
             if (use_secure_nib()) {
-                int (*system_write)(int, const void*, size_t) = dlsym(RTLD_NEXT, "write");
                 locale_t l = newlocale(LC_CTYPE_MASK, "", NULL);
                 char const* str = get_buffer_data(input_buffer);
                 int i, len = get_buffer_size(input_buffer);
                 for(i = 0; i < len - 1; i += mblen_l(str + i, len - i, l))
                 {
-                    system_write(echo_fd, "*", 1);
+                    system_write("write", echo_fd, "*", 1);
                     if(mblen_l(str + i, len - i, l) <= 0) // encoding error
                         break;
                 }
-                system_write(echo_fd, "\n", 1);
+                system_write("write", echo_fd, "\n", 1);
                 freelocale(l);
             } else {
                 write_buffer_to_fd(input_buffer, echo_fd);

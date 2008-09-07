@@ -32,40 +32,15 @@ void add_to_intset(intset_t* is, int i) {
 }
 
 bool remove_from_intset(intset_t* set, int target) {
-    bool found = false;
     size_t i = 0;
-    size_t target_index = 0;
-     
     for (i = 0; i < set->size; ++i) {
         if (set->ints[i] == target) {
-            found = true;
-            break;
+            memmove(set->ints + i, set->ints + i + 1, set->size - i);
+            --set->size;
+            return true;
         }
     }
-    
-    if (found) {
-        int* new_ints = malloc(set->capacity);
-        if (new_ints == NULL) die("failed to allocate new storage for intset");
-        
-        ssize_t low = 0;
-        ssize_t high = target_index - 1;
-        ssize_t low_copy = high - low + 1;
-        
-        if (high >= low) {
-            memcpy(new_ints, set->ints, low_copy);
-        }
-        
-        low = target_index + 1;
-        high = set->size - 1;
-        
-        if (low <= high) {
-            memcpy(new_ints + low_copy, set->ints + target_index + 1, high - low + 1);
-        }
-        
-        --set->size;
-    }
-    
-    return found;
+    return false;
 }
 
 bool intset_contains(intset_t* set, int target) {

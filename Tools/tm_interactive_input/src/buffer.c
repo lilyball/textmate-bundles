@@ -147,15 +147,9 @@ size_t consume_from_head_of_buffer(buffer_t* buffer, char* dest, size_t dest_siz
         strncpy(dest, buffer->data, consumption_size);
     }
 
-    size_t new_data_size = buffer->size - consumption_size;
-    D("new_data_size = %d\n", (int)new_data_size);
-    char* new_data = malloc(new_data_size);
-    strncpy(new_data, buffer->data + consumption_size, new_data_size);
-
-    free(buffer->data);
-    buffer->data = new_data;
-    buffer->size = new_data_size;
-    buffer->capacity = new_data_size;
+    buffer->size -= consumption_size;
+    D("new_data_size = %d\n", (int)buffer->size);
+    memmove(buffer->data, buffer->data + consumption_size, buffer->size);
     return consumption_size;
 }
 

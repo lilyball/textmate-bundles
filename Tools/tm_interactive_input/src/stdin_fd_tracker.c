@@ -62,3 +62,21 @@ int stdin_fd_tracker_augment_select_result(int max, fd_set *orig_fds __restrict,
     
     return count;
 }
+
+int stdin_fd_tracker_count_stdins_in_fdset(int max, fd_set *fds) {
+    pthread_mutex_lock(&storage_mutex);
+    intset_t* storage = get_storage();
+    int count = 0;
+
+    int i;
+    for (i = 0; i < intset_size(storage) && i < max; ++i) {
+        int fd = intset_get(storage, i);
+        if (FD_ISSET(fd, fds) && fd_is_owned_by_tm(fd)) {
+            ++count;
+        }
+    }
+    
+    pthread_mutex_unlock(&storage_mutex);
+    
+    return count;
+}

@@ -104,27 +104,29 @@ int close(int fd) {
 }
 
 int select(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
-    D("in select\n");
     int (*system_select)(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) = dlsym(RTLD_NEXT, "select");
     int result;
+    
     if (readfds == NULL) {
-        D("readfds is null\n");
         result = system_select(nfds, readfds, writefds, errorfds, timeout);
     } else {
-        D("readfds is not null\n");
-        fd_set orig_readfds;
-        FD_ZERO(&orig_readfds);
-        FD_COPY(readfds, &orig_readfds);
+        fd_set orig_readfds; FD_ZERO(&orig_readfds); FD_COPY(readfds, &orig_readfds);
         
-        D("making syscall\n");
+        if (stdin_fd_tracker_count_stdins_in_fdset(nfds, readfds) > 0) {
+            if (timeout == NULL) {
+                struct timeval t;
+                timeout = &t;
+            }
+            timeout->tv_sec = 0;
+        }
+        
         int fd_count = system_select(nfds, readfds, writefds, errorfds, timeout);
-        D("returned from syscall\n");
         result = fd_count + stdin_fd_tracker_augment_select_result(nfds, &orig_readfds, readfds);
     }
 
-    D("select returing %d\n", result);
     return result;
 }
+
 
 int select_darwinextsn(int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
     return select(nfds, readfds, writefds, errorfds, timeout);

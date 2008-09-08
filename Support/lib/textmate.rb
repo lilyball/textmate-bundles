@@ -9,7 +9,8 @@ module TextMate
 
   class << self
     def app_path
-      %x{ps -xwwco "pid command"}.grep(/^\s*(\d+)\s+(TextMate)$/) do |match|
+      apps = %x{ps -xwwco "pid command"}
+      apps.send(apps.respond_to?(:lines) ? :lines : :to_s).grep(/^\s*(\d+)\s+(TextMate)$/) do |match|
         return %x{ps -xwwp #{$1} -o "command"|tail -n1}.sub(%r{(.app)/Contents/MacOS/TextMate.*\n}, '\1')
       end
       raise AppPathNotFoundException

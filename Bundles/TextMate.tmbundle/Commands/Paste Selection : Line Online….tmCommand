@@ -148,7 +148,7 @@ end
 
 def strip_leading(text, ch = ' ')
   count = text.gsub(/&lt;[^&gt;]+&gt;/, '').split("\n").map { |e| e =~ /^#{ch}*(?!#{ch}|$)/ ? $&amp;.length : nil }.reject { |e| e.nil? }.min
-  text.map { |line| count.times { line.sub!(/^(&lt;[^&gt;]+&gt;)*#{ch}/, '\1') }; line }.join
+  text.send(text.respond_to?(:lines) ? :lines : :to_s).map { |line| count.times { line.sub!(/^(&lt;[^&gt;]+&gt;)*#{ch}/, '\1') }; line }.join
 end
 
 URL_REGEXP = %r{
@@ -225,17 +225,17 @@ def paste_stdin(priv, wrap)
     time_elapsed = '%.1f seconds' % (Time.now - start_time)
     io &lt;&lt; start_time.strftime('%F %T %Z: ') &lt;&lt;
       case $status
-        when :timeout: "Timeout pasting #{amount} after #{time_elapsed}\n"
-        when :cancel:  "User cancelled pasting of #{amount} after #{time_elapsed}\n"
-        when :error:   "Unknown error after #{time_elapsed} pasting #{amount}\n"
+        when :timeout then "Timeout pasting #{amount} after #{time_elapsed}\n"
+        when :cancel  then "User cancelled pasting of #{amount} after #{time_elapsed}\n"
+        when :error   then "Unknown error after #{time_elapsed} pasting #{amount}\n"
         else           "Pasted #{amount} in #{time_elapsed}\n"
       end
   end
 
   paste_via_rafb = 
   case $status
-    when :timeout:  TextMate::UI.alert(:warning, "Timeout Pasting", "There was a problem pasting your text (timeout).\nWould you like to use RAFB.net instead?", "Paste via RAFB", "Cancel") != "Cancel"
-    when :error:    TextMate::UI.alert(:warning, "Error Pasting", "There was a problem pasting your text (unknown).\nWould you like to use RAFB.net instead?", "Paste via RAFB", "Cancel") != "Cancel"
+    when :timeout then TextMate::UI.alert(:warning, "Timeout Pasting", "There was a problem pasting your text (timeout).\nWould you like to use RAFB.net instead?", "Paste via RAFB", "Cancel") != "Cancel"
+    when :error   then TextMate::UI.alert(:warning, "Error Pasting", "There was a problem pasting your text (unknown).\nWould you like to use RAFB.net instead?", "Paste via RAFB", "Cancel") != "Cancel"
     else false
   end
 

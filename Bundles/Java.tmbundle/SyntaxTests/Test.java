@@ -42,3 +42,9 @@ interface Foo /* bar */
 class Foo
 {
 }
+
+class Assertion 
+{
+    assert 1 = 1 : "Failure message";
+    assert 1 = 1;
+}

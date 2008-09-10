@@ -573,7 +573,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\.)?\b([A-Z][A-Z0-9_]+)\b</string>
+					<string>(\.)?\b([A-Z][A-Z0-9_]+)(?!&lt;|\.class)\b</string>
 					<key>name</key>
 					<string>constant.other.java</string>
 				</dict>
@@ -738,7 +738,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*[a-z]+\w*)&lt;</string>
+					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*)&lt;</string>
 					<key>end</key>
 					<string>&gt;|[^\w\s,&lt;]</string>
 					<key>name</key>
@@ -763,7 +763,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*[a-z]+\w*)(?=\[)</string>
+					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*)(?=\[)</string>
 					<key>end</key>
 					<string>(?=[^\]\s])</string>
 					<key>name</key>
@@ -795,7 +795,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(?:[a-z]\w*(\.))*[A-Z]+\w*[a-z]+\w*\b</string>
+					<string>\b(?:[a-z]\w*(\.))*[A-Z]+\w*\b</string>
 					<key>name</key>
 					<string>storage.type.java</string>
 				</dict>
@@ -807,7 +807,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*[a-z]+\w*)&lt;</string>
+					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*)&lt;</string>
 					<key>end</key>
 					<string>&gt;|[^\w\s,&lt;]</string>
 					<key>name</key>
@@ -840,7 +840,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(?:[a-z]\w*(\.))*[A-Z]+\w*[a-z]+\w*\b</string>
+					<string>\b(?:[a-z]\w*(\.))*[A-Z]+\w*</string>
 					<key>name</key>
 					<string>entity.other.inherited-class.java</string>
 				</dict>
@@ -858,7 +858,15 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#all-types</string>
+					<string>#primitive-arrays</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#primitive-types</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#object-types</string>
 				</dict>
 				<dict>
 					<key>match</key>

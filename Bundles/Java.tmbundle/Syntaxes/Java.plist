@@ -573,7 +573,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\.)?\b([A-Z][A-Z0-9_]+)(?!&lt;|\.class)\b</string>
+					<string>(\.)?\b([A-Z][A-Z0-9_]+)(?!&lt;|\.class|\s*\w+\s*=)\b</string>
 					<key>name</key>
 					<string>constant.other.java</string>
 				</dict>

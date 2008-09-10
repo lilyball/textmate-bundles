@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require 'tmpdir'
+
+require ENV["TM_SUPPORT_PATH"] + "/lib/tm/tempfile"
+require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
+
+scratchdir = ENV["TM_SCRATCH_DIRECTORY"] || Dir::tmpdir
+scratchdir += "/" if scratchdir[-1] != "/"
+
+suffix = ENV["TM_FILEPATH"] ? File.extname(ENV["TM_FILEPATH"]) : ".tmp"
+prefix = "textmate_scratch_#{Time.now.strftime("%F.%H.%M.%S")}"
+
+path = '%s/%s_%s%s' % [scratchdir, prefix, rand(1679615).to_s(36), suffix]
+
+File.open(path, File::RDWR|File::CREAT|File::EXCL, 0600) do
+	|io| io &lt;&lt; $stdin.read
+end
+
+`mate #{e_sh(path)}`
+
+
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@c</string>
+	<key>name</key>
+	<string>Scratch from Current Selection / Line</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>4810FDD1-6B51-4C92-91A9-52E4ABA4639C</string>
+</dict>
+</plist>

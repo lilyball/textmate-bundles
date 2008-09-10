@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require "tmpdir"
+
+require ENV["TM_SUPPORT_PATH"] + "/lib/tm/htmloutput"
+require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
+
+scratchdir = ENV["TM_SCRATCH_DIRECTORY"] || Dir::tmpdir
+scratchdir += "/" if scratchdir[-1] != "/"
+
+TextMate::HTMLOutput.show(:title =&gt; "Recent Scratches…", :sub_title =&gt; "") do
+	Dir.glob("#{scratchdir}textmate_scratch_*").reverse.each do |path|
+		puts "&lt;div class=\"scratch\"&gt;"
+		puts "&lt;a href=\"txmt://open?url=file://#{e_url path}\"&gt;"
+		puts "&lt;pre&gt;&lt;code&gt;"
+		File.readlines(path).each do |line|
+			puts line
+		end
+		puts "&lt;/code&gt;&lt;/pre&gt;"
+		puts "&lt;/a&gt;"
+		puts "&lt;/div&gt;"
+	end
+end</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~@c</string>
+	<key>name</key>
+	<string>Show Recent Scratches</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>883F209A-C381-4FB2-9EA6-681AF6A4CA38</string>
+</dict>
+</plist>

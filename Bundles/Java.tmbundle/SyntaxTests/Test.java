@@ -43,6 +43,38 @@ class Foo
 {
 }
 
+class Foo extends Bar // bar
+{
+}
+
+class Foo extends Bar /* bar */
+{
+}
+
+class Foo extends Bar implements Bat // bar
+{
+}
+
+class Foo extends Bar implements Bat /* bar */
+{
+}
+
+class Foo implements Bar // bar
+{
+}
+
+class Foo implements Bar /* bar */
+{
+}
+
+interface Foo extends Bar // bar
+{
+}
+
+interface Foo extends Bar /* bar */
+{
+}
+
 class Assertion 
 {
     assert 1 = 1 : "Failure message";

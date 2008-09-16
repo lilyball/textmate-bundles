@@ -15,7 +15,7 @@ bootstrap = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh"
 lang = ENV["TM_SCOPE"].slice(/^source\.(c(\+\+)?)/, 1)
 
 TextMate.save_current_document
-TextMate::Executor.run(bootstrap, lang, ENV["TM_FILEPATH"], :version_args =&gt; ["--version", lang])
+TextMate::Executor.run(bootstrap, lang, ENV["TM_FILEPATH"], :version_args =&gt; ["--version", lang], :version_regex =&gt; /\A(.*) \(GCC\)/)
 </string>
 	<key>input</key>
 	<string>document</string>

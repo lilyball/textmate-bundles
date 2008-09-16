@@ -81,7 +81,7 @@ module TextMate
 
         options[:script_args].each { |arg| args << arg }
 
-        TextMate::HTMLOutput.show(:title => "Running “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version) do |io|
+        TextMate::HTMLOutput.show(:title => "Running “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
 
           callback = proc do |str, type|
             str.gsub!(ENV["TM_FILEPATH"], "untitled") if ENV["TM_FILE_IS_UNTITLED"]
@@ -90,8 +90,8 @@ module TextMate
               io << filtered_str
             else
               str = htmlize(str).gsub(/\<br\>/, "<br>\n")
-              str = "<span style='color: red'>#{str}</span>" if type == :err
-              str = "<span style='font-style: italic'>#{str}</span>" if type == :echo
+              str = "<span class=\"err\">#{str}</span>" if type == :err
+              str = "<span class=\"echo\">#{str}</span>" if type == :echo
               io << str
             end
           end
@@ -127,77 +127,113 @@ module TextMate
 
       def process_output_wrapper(io)
         io << <<-HTML
-<!-- executor javascripts -->
-<script type="text/javascript" charset="utf-8">
-function press(evt) {
-   if (evt.keyCode == 67 && evt.ctrlKey == true) {
-      TextMate.system("kill -s INT #{@pid}; sleep 0.5; kill -s TERM #{@pid}", null);
-   }
-}
-document.body.addEventListener('keydown', press, false);
-
-function copyOutput(link) {
-  output = document.getElementById('_scriptmate_output').innerText;
-  cmd = TextMate.system('__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbcopy', function(){});
-  cmd.write(output);
-  cmd.close();
-  link.innerText = 'output copied to clipboard';
-}
-</script>
-<!-- end javascript -->
-<style type="text/css">
-
-  div.executor pre em
-  {
-    font-style: normal;
-    color: #FF5600;
-  }
-
-  div.executor p#exception strong
-  {
-    color: #E4450B;
-  }
-
-  div.executor p#traceback
-  {
-    font-size: 8pt;
-  }
-
-  div.executor blockquote {
-    font-style: normal;
-    border: none;
-  }
-
-  div.executor table {
-    margin: 0;
-    padding: 0;
-  }
-
-  div.executor td {
-    margin: 0;
-    padding: 2px 2px 2px 5px;
-    font-size: 10pt;
-  }
-
-  div.executor a {
-    color: #FF5600;
-  }
-
-  div#exception_report pre.snippet {
-    margin:4pt;
-    padding:4pt;
-  }
-</style>
 <div class="executor">
-<div class="controls" style="text-align:right;">
-  <a style="text-decoration: none;" href="#" onclick="copyOutput(document.getElementById('_executor_output'))">copy output</a>
+<div class="controls">
+  <a href="#" onclick="copyOutput(document.getElementById('_executor_output'))">copy output</a>
 </div>
 <!-- first box containing version info and script output -->
 <pre>
-<div id="_executor_output" style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
+<div id="_executor_output" > <!-- Script output -->
 HTML
         yield
         io << '</div></pre></div>'
+      end
+      
+      def script_style_header
+        return <<-HTML
+<!-- executor javascripts -->
+  <script type="text/javascript" charset="utf-8">
+  function press(evt) {
+     if (evt.keyCode == 67 && evt.ctrlKey == true) {
+        TextMate.system("kill -s INT #{@pid}; sleep 0.5; kill -s TERM #{@pid}", null);
+     }
+  }
+  document.body.addEventListener('keydown', press, false);
+
+  function copyOutput(element) {
+    output = element.innerText;
+    cmd = TextMate.system('__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbcopy', function(){});
+    cmd.write(output);
+    cmd.close();
+    element.innerText = 'output copied to clipboard';
+  }
+  </script>
+  <!-- end javascript -->
+  <style type="text/css">
+
+    div.executor .controls {
+      text-align:right;
+    }
+    div.executor .controls a {
+      text-decoration: none;
+    }
+
+    div.executor pre em
+    {
+      font-style: normal;
+      color: #FF5600;
+    }
+
+    div.executor p#exception strong
+    {
+      color: #E4450B;
+    }
+
+    div.executor p#traceback
+    {
+      font-size: 8pt;
+    }
+
+    div.executor blockquote {
+      font-style: normal;
+      border: none;
+    }
+
+    div.executor table {
+      margin: 0;
+      padding: 0;
+    }
+
+    div.executor td {
+      margin: 0;
+      padding: 2px 2px 2px 5px;
+      font-size: 10pt;
+    }
+
+    div.executor a {
+      color: #FF5600;
+    }
+
+    div.executor div#_executor_output {
+      white-space: normal;
+      -khtml-nbsp-mode: space;
+      -khtml-line-break: after-white-space;
+    }
+
+    div#_executor_output .out {  
+
+    }
+    div#_executor_output .err {  
+      color: red;
+    }
+    div#_executor_output .echo {
+      font-style: italic;
+    }
+    div#_executor_output .test {
+      font-weight: bold;
+    }
+    div#_executor_output .test.ok {  
+      color: green;
+    }
+    div#_executor_output .test.fail {  
+      color: red;
+    }
+    div#exception_report pre.snippet {
+      margin:4pt;
+      padding:4pt;
+    }
+  </style>
+HTML
       end
     end
   end

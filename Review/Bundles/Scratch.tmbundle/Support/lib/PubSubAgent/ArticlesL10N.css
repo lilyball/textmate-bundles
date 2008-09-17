@@ -1,0 +1,36 @@
+/* This defines the order of article counts and their text
+    To change the default "xxx New, xxx Total" to "New xxx, Total xxx", use
+    #apple-rss-unread-count:before, #apple-rss-total-count:before {
+        content: attr(text)" "
+    }
+*/
+#apple-rss-unread-count:after,
+#apple-rss-total-count:after
+{
+    content: " "attr(text)
+}
+
+
+/* Turn on all of the following rules (by removing the comments wrapping them)
+   if you want to increase the width of the sidebar, to accommodate longer
+   strings therein. Remember to adjust the numbers below as you require, adding
+   more pixels to each measurement to grow the sidebar, or removing to make it smaller. 
+   The example below gives you a sidebar that is 10 pixels wider than in English. 
+*/
+/*
+#apple-rss-content-area {
+    right: 168px;
+}
+#apple-rss-sidebar-background {
+    width: 167px;
+}
+#apple-rss-sidebar {
+    width: 131px;
+}
+#apple-rss-searchfield {
+    max-width: 127px;
+}
+#apple-rss-sliderdiv input {
+    max-width: 93px;
+}
+*/

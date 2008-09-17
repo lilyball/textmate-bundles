@@ -1,0 +1,111 @@
+<html>
+<script language="JavaScript" src="file://localhost#{auxpath}Articles.js"></script>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta id="AppleSyndicationInfo" alternateURL="" />
+    <link id="apple-rss-icon" rel="icon" href="file://localhost#{auxpath}favicon.tif" type="image/x-icon" />
+    <link rel="stylesheet" href="file://localhost#{auxpath}Main.css" title="default" type="text/css" />
+    <link rel="stylesheet" href="file://localhost#{auxpath}ArticlesL10N.css" title="default" type="text/css" />
+    <script language="JavaScript">sMinFirstDate = "0";sMaxLastDate = "0";sClickToMarkRead = false;</script>
+    <style type='text/css'>
+    .hidden {display:none;}
+    .showbox {
+      -webkit-transition: all 0.1s ease-in-out;
+      -webkit-transform: scale(0.6);
+      vertical-align:middle;
+    }
+    .scale:hover { -webkit-transform: scale(1); }
+    </style>
+    <script type="text/javascript" charset="utf-8">
+        function compareDates( a,b )
+        {
+            var adate = a.getAttribute("articlesortdate");
+            var bdate = b.getAttribute("articlesortdate");
+            if( adate < bdate )
+                return -1;                       // We want them in _reverse_ order
+            else if( adate == bdate ) {
+                var alocal = a.getAttribute("articlelocaldate");
+                var blocal = b.getAttribute("articlelocaldate");
+                if( alocal < blocal)
+                    return 1;
+                else if( alocal == blocal ) {
+                    var aid = a.getAttribute("articlesortid");
+                    var bid = b.getAttribute("articlesortid");
+                    if( aid < bid )
+                        return 1;
+                }
+            }
+            return -1;
+        }
+        function deleteScratch (f) {
+            TextMate.system("rm '"+f+"'", function (task) { });
+            document.getElementById(f).className="hidden";
+            incrementCounts(-1,-1);
+            sCountsDiv = sCountsDiv - 1;
+            sTotalCountSpan = sTotalCountSpan - 1;
+            sTotalArticleCount = sTotalArticleCount -1 ;
+        }
+        function copyScratch (f) {
+            TextMate.system("cat '"+f+"' | pbcopy", function (task) { });
+        }
+        function insertScratch (f) {
+            TextMate.system("cat '"+f+"' | pbcopy", function (task) { });
+            cmd  = "open 'txmt://open?';";
+            cmd += "osascript -e 'tell app \"System Events\" to keystroke \"v\" using (command down)' ";
+            TextMate.system(cmd, null);
+        }
+    </script>
+    <title>Recent Scratches…</title>
+</head>
+
+<body class="apple-rss-no-unread-mode" onLoad="setup(null)">
+    <div id="apple-rss-sidebar-background"></div>
+    <div id="apple-rss-banner">
+        <div id="apple-rss-title">
+            <span id="apple-rss-title-text">Recent Scratches…</span>
+        </div>
+        <div id="apple-rss-counts">
+            <span id="apple-rss-total-count" text="Total">#{files.length},#{files.length}</span>
+            <script language="JavaScript">incrementCounts(#{files.length},#{files.length});</script>
+        </div>
+        </div>
+        <div id="apple-rss-scroller" onScroll="slipDiffScroll(this)" >
+            <div id="apple-rss-sidebar">
+                <div class="apple-rss-group" id="apple-rss-filtergroup">
+                    <div class="apple-rss-group-title">Search Scratches:</div>
+                    <input type="search" id="apple-rss-search-field" results="0" incremental="1" placeholder="" value=""
+                        onKeyDown="handleScrollKeys(event)" 
+                        onSearch="setContentFilter(this.value)" /> 
+
+                </div>
+                <div class="apple-rss-group" id="apple-rss-slidergroup">
+                    <div class="apple-rss-group-title">Display Length:</div>
+                    <div id="apple-rss-slider-div">
+                        <img src="file://localhost#{auxpath}Smaller.tif" width="16" height="16" onclick="scaleToMin()" />
+                        <input id="apple-rss-slider" type="range" min="0" value="100" max="100" onmousedown="startScale()" onmouseup="endScale()" oninput="scaleArticles(this.value)" />
+                        <img src="file://localhost#{auxpath}Bigger.tif" width="16" height="16" onclick="scaleToMax()" />
+                    </div>
+                </div>
+                <div class="apple-rss-group" id="apple-rss-sorts">
+                    <div class="apple-rss-group-title">Sort By:</div>
+                    <!-- <div class="apple-rss-current" name="0"><a href="javascript:sortArticlesBy(0)">Date</a></div> -->
+                    <div name="1"><a href="javascript:sortArticlesBy(1)">Grammar</a></div>
+                    <div name="2"><a href="javascript:sortArticlesBy(2)">Content</a></div>
+                    <div name="0"><a href="javascript:sortArticlesBy(0)">Date</a></div>
+                    <script language="JavaScript">sSortType = 0;</script>
+                </div>
+                <div class="apple-rss-group" id="apple-rss-timespans">
+                    <div class="apple-rss-group-title">Filter Scratches:</div>
+                        <div class="apple-rss-current" name="0"
+                                firstDate="0" lastDate="0" 
+                                noarticles="No Articles">
+                            <a href="javascript:setDateFilter(0)"><span onclick="setContentFilter('');">All</span></a>
+                        </div>
+                        <div  name="1" firstDate="0" lastDate="0" noarticles="No Articles">
+                                <a href="javascript:setDateFilter(1)"><span onclick="setContentFilter('[#{currentext}]');">Current Grammar [#{currentext}]</span></a>
+                        </div>
+#{filters}
+                    </div>
+                </div>
+                <div id="apple-rss-content-area">
+                                <div class="apple-rss-content apple-rss-multi-line-mode" id="apple-rss-content" style="appleLineClamp:100%;">

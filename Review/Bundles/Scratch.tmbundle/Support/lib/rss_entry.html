@@ -1,0 +1,17 @@
+                <div id=\"#{id}\" class=\"apple-rss-article apple-rss-read\" showSeparator=\"true\" articlesortdate=\"#{articlesortdate}\" articlesorttitle=\"#{articlesorttitle}\" articlesortsource=\"\" sourceindex=\"0\" articlesortid=\"#{articlesortid}\" articlelocaldate=\"#{articlelocaldate}\">
+                    <div class=\"apple-rss-article-footer\"></div>
+                    <div class=\"apple-rss-article-head\">
+                        <div class=\"apple-rss-subject\" title=\"Edit Scratch\"><a href=\"txmt://open?url=file://#{url}\">Scratch</a></div>
+                        <a href=\"txmt://open?url=file://#{url}\"><img class=\"showbox scale\" title=\"Edit Scratch\" style=\"cursor:pointer;\" src=\"file://localhost#{auxpath}Edit.tiff\" width=\"24\"></a>
+                        <img class=\"showbox scale\" title=\"Copy Scratch\" style=\"cursor:pointer;\" onclick='copyScratch(\"#{path}\")' src=\"file://localhost#{auxpath}Copy.png\" width=\"24\">
+                        <img class=\"showbox scale\" title=\"Copy&Paste Scratch\" style=\"cursor:pointer;\" onclick='insertScratch(\"#{path}\")' src=\"file://localhost#{auxpath}Paste.png\" width=\"24\">
+                        &nbsp;&nbsp;
+                        <img class=\"showbox scale\" title=\"Erase Scratch\" style=\"cursor:pointer;\" onclick='deleteScratch(\"#{path}\")' src=\"file://localhost#{auxpath}trash.tiff\" width=\"24\">
+                        &nbsp;&nbsp;
+                        <div class=\"apple-rss-summary\" >[#{author}] #{summary}</div>
+                        <div class=\"apple-rss-author\" title=\"Scratch Grammar\">#{author}</div>
+                        <div class=\"apple-rss-date\" title=\"Modified Date\">#{date}.</div>
+                    </div>
+                    <div class=\"apple-rss-article-body-container\">
+                    <div class=\"apple-rss-article-body\" title=\"\">
+                    <pre style=\"background-color:#EEEEEE;padding:1mm\"><code>

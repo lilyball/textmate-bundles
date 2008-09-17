@@ -1,0 +1,632 @@
+body {
+    margin: 0px 0px 0px 0px;
+}
+
+
+h1, h2, h3 {
+    margin: 0px;
+    padding: 0px;
+}
+
+
+/* @group Links */
+
+a:link {
+    color: rgb(34,98,245);
+    text-decoration: none;
+}
+
+a:visited {
+    color: rgb(34,98,245);
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(34,98,245); 
+    text-decoration: underline;
+}
+a:active {
+    color: rgb(34,98,245);
+    text-decoration: underline;
+}
+
+a.ljtag {
+    font-weight: bold;
+}
+
+/* @end */
+
+
+/* @group Banner */
+
+@media screen {
+    #apple-rss-banner {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    /*line-height: 140%;*/
+    text-align: left;
+    width: 100%;
+    background-color: rgb(81,118,236);
+    background-image: url(BlueBanner.tif);
+    background-repeat: repeat-x;
+    background-position: top left;
+    padding: 0px;
+    margin: 0px;
+    height: 42px;
+    font-family: Helvetica, sans-serif;
+    -apple-text-size-adjust: none;
+    cursor: default;
+    color: #FFFFFF;
+    -khtml-user-select: none;
+    }
+}
+
+@media print {
+    #apple-rss-banner {
+        display: none; /* hidden while printing */
+    }
+}
+
+#apple-rss-banner #apple-rss-title {
+    position: absolute;
+    top:  6px;
+    bottom: 0px;
+    right: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 24px;
+    letter-spacing: 0.07em;
+}
+
+
+#apple-rss-banner #apple-rss-title a:link,
+#apple-rss-banner #apple-rss-title a:visited,
+#apple-rss-banner #apple-rss-title a:hover
+{
+    color: inherit; /* prevent titles from being colored */;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#apple-rss-banner #apple-rss-counts {
+    padding-left: 15px;
+    font: normal 18px Helvetica, sans-serif;
+    line-spacing: 0.07em;
+    padding-top: 5px;
+    position: absolute;
+    bottom: 10px;
+    text-align: right;
+}
+
+/* @end */
+
+
+/* @group Content Area */
+
+@media screen {  /* when printing, we don't want absolute positioning */
+    #apple-rss-scroller {
+        position: absolute;
+        top: 42px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        overflow: overlay;
+    }
+}
+
+#apple-rss-content-area {
+    display: block;
+    background-color: #FFFFFF;
+}
+
+
+/* @group Alert Banner */
+
+#apple-rss-alert-banner {
+    padding: 12px 36px 12px 6px; 
+    font: bold 12px Helvetica, sans-serif;
+    min-height: 17px;
+    background: #FFFFCC url(AlertBottom.tif) repeat-x bottom left;
+}
+
+#apple-rss-alert-banner a:link,
+#apple-rss-alert-banner a:visited
+{
+    color: #333333;
+    text-decoration: underline;
+}
+
+#apple-rss-alert-icon {
+    position: absolute;
+    top: 4px;
+    left: 7px;
+}
+
+#apple-rss-alert-text {
+    position: absolute; left: 45px; right: 14px;
+    line-height: 16px;
+    color: black;
+    text-align: left;
+    text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+}
+
+#apple-rss-alert-form {
+    margin-top: 22px;
+    margin-bottom: -14px;
+    margin-left: 38px;
+}
+
+
+#apple-rss-alert-username-span {
+
+}
+
+
+#apple-rss-alert-password-span {
+    margin-left: 8px;
+}
+
+#apple-rss-alert-username-span input,
+#apple-rss-alert-password-span input
+{
+    margin-left: 2px;
+    width: 117px;
+    max-width: 117px;
+}
+
+#apple-rss-alert-submit-span input {
+    margin-left: 8px;
+}
+
+/* @end */
+
+
+@media screen {  /* when printing, we don't want absolute positioning */
+    #apple-rss-content-area {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 158px;
+    }
+}
+
+
+/* @group Pagination */
+
+.apple-rss-pagination {
+    padding-top: 11px;
+    padding-bottom: 18px;
+    padding-right: 11px;
+    padding-left: 11px;
+    font: bold 13px "Lucida Grande", sans-serif;
+    color: rgb(133,161,242);
+}
+
+.apple-rss-pagination > img {
+    padding: 0px;
+    margin: 0px -4px -1px -3px;
+    vertical-align: text-bottom;
+    cursor: pointer;
+}
+
+#apple-rss-previous-articles,
+#apple-rss-next-articles,
+#apple-rss-current-articles > a
+{
+    padding: 1px 4px;
+    text-align: center;
+    background-color: rgb(236,240,253);
+    margin-left: 1px;
+}
+
+#apple-rss-current-articles .apple-rss-selected {
+    color: rgb(65,109,234);
+}
+
+.apple-rss-pagination a {
+    color: rgb(133,161,242);
+    text-decoration:none;
+}
+
+/* @end */
+
+
+#apple-rss-total-article-count,
+#apple-rss-articles-per-page
+{
+    display: none;
+}
+
+#apple-rss-no-articles {
+    display: none;
+    font: bold 23px Helvetica, sans-serif;
+    color: #BBB;
+    text-align: center;
+    position: absolute;
+    top: 135px;
+    left: 0px;
+    right: 158px;
+}
+
+.apple-rss-content {
+    font: normal 12px Helvetica, sans-serif;
+    color: #333333;
+    line-height: 130%;
+    padding: 4px 4px 0px 4px;
+    overflow: hidden;
+    display: -khtml-box;
+    -khtml-box-orient: vertical;
+    -apple-line-clamp: 100%;    
+}
+
+.apple-rss-content > div {
+    overflow: hidden;
+    position: relative;    
+}
+
+div.apple-rss-article {
+    display: block;
+    background-color: white;
+    border: 1px solid transparent;
+} 
+
+
+/* @group Article Header */
+
+.apple-rss-content .apple-rss-article-head {
+    font-family: Helvetica, sans-serif;
+    position: relative;
+    color: black;
+    white-space: nowrap;
+    display: -khtml-box;
+    -khtml-box-orient: horizontal;
+    -khtml-box-align: baseline;
+    text-decoration: none;
+}
+
+.apple-rss-article-head a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.apple-rss-author, .apple-rss-subject, .apple-rss-summary, .apple-rss-source {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: intrinsic;
+    width: 0px;
+    min-width: 0px;
+    margin-right: 1em;
+}
+
+.apple-rss-author, .apple-rss-date, .apple-rss-source {
+    font-size: 13px;
+    font-weight: bold;
+    color: rgb(177,177,177);
+}
+
+.apple-rss-unread-dot {
+    position: absolute;
+    top: 0px;
+    left: -16px;
+    margin-top: 0.2em; /* Tweaked for Helvetica */
+    height: 0.4em;     /* Tweaked for Helvetica */
+    width: 9px;
+}
+
+.apple-rss-unread-dot img {
+    position: absolute;
+}
+
+.apple-rss-subject {
+    cursor: pointer;
+    font-weight: bold;
+    color: black;
+    padding-bottom: 3px;
+}
+
+.apple-rss-summary {
+    font-size: 12px;
+    color: rgb(177,177,177);
+    -khtml-user-select: none;
+    text-decoration: none;
+}
+
+/* @end */
+
+
+.apple-rss-content .apple-rss-article-content {
+    background-color: #eee;
+}
+
+.apple-rss-article-body {
+    -khtml-margin-top-collapse:discard;
+}
+
+.apple-rss-article-footer {
+    background-color: inherit;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;    
+    padding-bottom: 0px;
+    padding-right: 0px;
+}
+
+a.apple-rss-article-link {
+    text-decoration: underline;
+    white-space: nowrap;
+}
+
+a.apple-rss-article-link:link,
+a.apple-rss-article-link:visited {             /* SL says "Read More..." links shouldn't change color once visited */
+    color: rgb(34,98,245);
+}
+
+
+/* @group Enclosures */
+
+.apple-rss-enclosures {
+    -khtml-margin-top-collapse:discard;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.apple-rss-enclosure {
+    display: inline-block;
+    line-height: 16px;
+    margin-right: 10px;
+    margin-top: 2px; margin-bottom: 2px;
+}
+
+.apple-rss-enclosure-image {
+    position: absolute;
+}
+
+.apple-rss-enclosure-filename {
+    padding-left: 34px;
+    white-space: nowrap;
+}
+
+.apple-rss-enclosure-length {
+    padding-left: 34px;
+    white-space: nowrap;
+}
+
+/* @end */
+
+
+#apple-rss-itunes-link {
+    display: none;
+}
+
+img.apple-rss-article-icon {
+    display: block;
+    float: right;
+    margin-bottom: 4px;
+    padding: 1px;
+    border-style: inset;
+    border-width: 2px;
+    margin-left: 4px;
+    margin-top: 2px;
+    margin-right: 2px;
+}
+
+
+/* @group Sidebar */
+
+@media screen {
+    #apple-rss-sidebar-background {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 157px;
+    bottom: 0px;
+    border-left: 1px #C3C3C3 solid;
+    background-color: #F2F2F2;
+    }
+}
+
+@media print {
+    #apple-rss-sidebar-background { 
+        display: none; /* hidden for printing */
+    }
+}
+
+@media screen {
+    #apple-rss-sidebar {
+        position: absolute;
+        top: 0px;
+        right: 16px;    /* leave room for scrollbar */
+        width: 121px;
+        padding-left: 10px;
+        color: rgb(91,91,91);
+        padding-right: 10px;
+        padding-top: 2px;
+        font: 12px Helvetica, sans-serif;
+        letter-spacing: 0.08em;
+        -apple-text-size-adjust: none;
+        cursor: default;
+        white-space: nowrap;
+        -khtml-user-select: none;
+    }
+}
+
+@media print {
+    #apple-rss-sidebar { 
+        display: none; /* hidden for printing */
+    }
+}
+
+#apple-rss-sidebar .apple-rss-group {
+    padding-top: 8px;
+    padding-left: 1px;
+    padding-bottom: 11px;
+    background: url(Separator.tif) no-repeat center top;
+    line-height: 130%;
+}
+
+#apple-rss-sidebar .apple-rss-group-title {
+    color: black;
+    font-weight: bold;
+    line-height: 180%;
+}
+
+#apple-rss-filtergroup {
+    background: none !important;
+    padding-top: 3px !important;
+    padding-bottom: 4px !important;
+}
+
+#apple-rss-slidergroup {
+    background: none !important;
+    padding-top: 5px !important;
+    padding-bottom: 0px !important;
+}
+
+#apple-rss-sorts {
+    background: none !important;
+    padding-top: 0px !important;
+}
+
+
+#apple-rss-search-field {
+    max-width: 117px;
+    margin-left: 1px;
+}
+
+
+#apple-rss-sidebar #apple-rss-slider-div {
+    margin-top: -2px;
+    margin-left: -3px;
+    margin-right: -10px;
+    margin-bottom: 4px;
+}
+
+#apple-rss-slider-div input {
+    max-width: 83px;
+}
+
+#apple-rss-sidebar a:link,
+#apple-rss-sidebar a:visited {
+    color: rgb(91,91,91);
+    cursor: pointer;
+}
+
+#apple-rss-source-list > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+ 
+#apple-rss-friends-list > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#apple-rss-sidebar a:hover {
+    text-decoration: underline;
+}
+
+#apple-rss-sidebar .apple-rss-current a:link {
+    font-weight: bold;
+    color: rgb(0,81,210);
+}
+
+#apple-rss-more-foaf {
+    display: none;
+}
+
+/* @end */
+
+/* @group Display Modes */
+
+/* Unread Background */
+
+/* left padding to article, bump up when in show-unread mode to make room for bullets */ 
+.apple-rss-no-unread-mode .apple-rss-article { padding-right: 0px; padding-left: 0px; }
+.apple-rss-no-unread-mode .apple-rss-content .apple-rss-article { margin-left: 8px; margin-right: 8px; }
+
+.apple-rss-show-unread-mode .apple-rss-multi-line-mode  .apple-rss-unread  { padding-right: 20px; padding-left: 20px; }
+.apple-rss-show-unread-mode .apple-rss-multi-line-mode  .apple-rss-read    { margin-left: 10px; margin-right: 10px; padding-right: 10px; padding-left: 10px; }
+.apple-rss-show-unread-mode .apple-rss-single-line-mode .apple-rss-article { padding-right: 8px;  padding-left: 20px; }
+
+
+@media screen {
+	.apple-rss-show-unread-mode .apple-rss-multi-line-mode .apple-rss-unread {
+	    background-color: rgb(240, 243, 252);
+	    border: 1px solid rgb(198, 209, 237);
+	    -webkit-border-radius: 6px;
+	}
+
+	.apple-rss-multi-line-mode .apple-rss-read[showSeparator],
+	.apple-rss-no-unread-mode .apple-rss-multi-line-mode .apple-rss-article {
+	    border-bottom: 1px solid #ccc;
+	}
+}
+
+@media print {
+	/* when printing, no unread bg, and always draw separators */
+	.apple-rss-multi-line-mode .apple-rss-article {
+	    border-bottom: 1px solid #ccc;
+	}
+}
+
+/* left padding to title, bump up when in show-unread mode to align with articles */ 
+.apple-rss-no-unread-mode   #apple-rss-title  { left:  12px; }
+.apple-rss-show-unread-mode #apple-rss-title  { left:  24px; }
+.apple-rss-no-unread-mode   #apple-rss-counts { right: 12px; }
+.apple-rss-show-unread-mode #apple-rss-counts { right: 24px; }
+
+.apple-rss-show-unread-mode .apple-rss-read .apple-rss-unread-dot,
+.apple-rss-no-unread-mode .apple-rss-unread-dot { display: none; }
+
+/* offset to first article */ 
+.apple-rss-multi-line-mode  { padding-left: 4px; margin-top: 0px; }
+.apple-rss-single-line-mode { padding-left: 4px; margin-top: 6px; }
+
+/* space between articles */
+.apple-rss-multi-line-mode  .apple-rss-article { margin: 0px 0px 4px 0px; padding-top: 7px; padding-bottom: 10px; }
+.apple-rss-single-line-mode .apple-rss-article { margin: 0px 0px 2px 0px; padding-top: 0px; padding-bottom: 0px;  }
+
+/* space from articles header to content */
+.apple-rss-multi-line-mode  .apple-rss-article-head { margin-bottom: 7px; }
+.apple-rss-single-line-mode .apple-rss-article-head { margin-bottom: 0px; }
+
+.apple-rss-multi-line-mode  .apple-rss-article-footer { height: 8px; }
+.apple-rss-single-line-mode .apple-rss-article-footer { border-bottom: none; height: 0px; }
+
+.apple-rss-multi-line-mode  .apple-rss-article-body-container { }
+.apple-rss-single-line-mode .apple-rss-article-body-container { height: 0px; max-height: 0px; }
+
+.apple-rss-multi-line-mode  .apple-rss-article-body { }
+.apple-rss-single-line-mode .apple-rss-article-body { display: table-cell; visibility: collapse; }
+
+/* We must set the font for both subject and unread-dot, since unread-dot uses em positioning */
+.apple-rss-multi-line-mode  .apple-rss-subject,
+.apple-rss-multi-line-mode  .apple-rss-unread-dot { letter-spacing: 0.07em; font-size: 15px; }
+.apple-rss-single-line-mode .apple-rss-subject,
+.apple-rss-single-line-mode .apple-rss-unread-dot { font-size: 12px; }
+
+.apple-rss-multi-line-mode  .apple-rss-subject a:hover { border-bottom: 2px solid #888; }
+.apple-rss-single-line-mode .apple-rss-subject a:hover { text-decoration: underline; }
+
+/* Tweak the offset of the unread dot a bit so it matches spec.  height is 9px, so true bottom would be -4.5px */
+.apple-rss-multi-line-mode  .apple-rss-unread-dot img { bottom: -3px; }
+.apple-rss-single-line-mode .apple-rss-unread-dot img { bottom: -5px; }
+
+/* Expanded Mode Header Divs */
+.apple-rss-multi-line-mode  .apple-rss-subject { -khtml-box-flex: 60;                                           }
+.apple-rss-multi-line-mode  .apple-rss-source  {  visibility: collapse;                                         }
+.apple-rss-multi-line-mode  .apple-rss-author  { -khtml-box-flex: 40;                                           }
+.apple-rss-multi-line-mode  .apple-rss-summary {  visibility: collapse;                                         }
+.apple-rss-multi-line-mode  .apple-rss-date    {  font-size: 13px; text-align: left;      }
+
+/* Collapsed Mode Header Divs */
+.apple-rss-single-line-mode .apple-rss-subject { -khtml-box-flex: 1; -khtml-box-flex-group: 1;                  }
+.apple-rss-single-line-mode .apple-rss-source  { -khtml-box-flex: 1; -khtml-box-flex-group: 2; font-size: 12px; }
+.apple-rss-single-line-mode .apple-rss-author  {  visibility: collapse;                                         }
+.apple-rss-single-line-mode .apple-rss-summary { -khtml-box-flex: 1; -khtml-box-flex-group: 4;                  }    
+.apple-rss-single-line-mode .apple-rss-date    { -khtml-box-flex: 1; -khtml-box-flex-group: 100; font-size: 12px; text-align: right; margin-right: 0; }
+
+/* @end */

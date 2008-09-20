@@ -24,7 +24,7 @@ File.open(path, File::RDWR|File::CREAT|File::EXCL, 0600) do
 	|io| io &lt;&lt; $stdin.read
 end
 
-`mate #{e_sh(path)}`
+`#{e_sh ENV["TM_SUPPORT_PATH"]}/bin/mate #{e_sh(path)}`
 
 
 </string>

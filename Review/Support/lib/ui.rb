@@ -91,13 +91,10 @@ module TextMate
   
       # Show Tooltip
       def tool_tip(content, options={}) # Possible options = {:format => :html|:text, :transparent => true}
-        command =  %{"$DIALOG" tooltip}
-        command << ' -t' if options[:transparent]
-        command << ' --format ' + e_sh(options[:format].to_s) if options[:format]
-        IO.popen(command, 'w') do |proc|
-          proc << content
-          proc.close_write
-        end
+        command = %{"$DIALOG" tooltip}
+        command << ' --transparent' if options[:transparent]
+        format = options[:format] ? options[:format].to_s : 'text'
+        command << ' --' << format << ' ' << e_sh(content)
       end
       
       # Interactive Code Completion Selector
@@ -183,7 +180,7 @@ module TextMate
           to_insert << block.call(result).to_s
 
           # Insert the snippet if necessary
-          `"$DIALOG" x-insert #{e_sh to_insert}` unless to_insert.empty?
+          `"$DIALOG" x-insert --snippet #{e_sh to_insert}` unless to_insert.empty?
         end
       end
       

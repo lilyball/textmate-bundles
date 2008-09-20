@@ -95,6 +95,7 @@ module TextMate
         command << ' --transparent' if options[:transparent]
         format = options[:format] ? options[:format].to_s : 'text'
         command << ' --' << format << ' ' << e_sh(content)
+        %x{ #{command} }
       end
       
       # Interactive Code Completion Selector

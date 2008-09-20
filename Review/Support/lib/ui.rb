@@ -19,11 +19,29 @@ module TextMate
         begin
           yield d
         rescue StandardError => error
-          puts 'Received exception:' + error
+          puts 'Received exception: ' + error
+          puts pretty_print_exception(error)
         ensure
           d.close
         end
       end
+
+      def pretty_print_exception(e)
+        str = "#{e.class.name}: #{e.message.sub(/`(\w+)'/, '‘\1’').sub(/ -- /, ' — ')}\n\n"
+
+        e.backtrace.each do |b|
+          if b =~ /(.*?):(\d+)(?::in\s*`(.*?)')?/ then
+            file, line, method = $1, $2, $3
+            display_name = File.basename(file)
+            str << "At line #{line} in ‘#{display_name}’ "
+            str << (method ? "(inside method ‘#{method}’)" : "(top level)")
+            str << "\n"
+          end
+        end
+
+        str
+      end
+
 
       # present an alert
       def alert(style, title, message, *buttons)

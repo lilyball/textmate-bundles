@@ -10,7 +10,9 @@ require_cmd "$TM_RUBY" "We need Ruby to proceed."
 
 export TM_GRAILS=`which $TM_GRAILS`
 export TM_RUBY=`which $TM_RUBY`
+script="$1"
+shift
 
-"${TM_RUBY}" -r GrailsMate -r ui -- "$TM_BUNDLE_SUPPORT/GrailsMate/$1.rb"
+"${TM_RUBY}" -r GrailsMate -r ui -- "$TM_BUNDLE_SUPPORT/GrailsMate/$script.rb" $@
 
 rescan_project

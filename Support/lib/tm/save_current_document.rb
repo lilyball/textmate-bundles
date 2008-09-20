@@ -1,5 +1,7 @@
 require "fileutils"
 
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/tempfile'
+
 module TextMate
   class << self
     # 

@@ -37,7 +37,6 @@
 
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'tm/process'
-require SUPPORT_LIB + 'tm/tempfile'
 require SUPPORT_LIB + 'tm/htmloutput'
 require SUPPORT_LIB + 'escape'
 require SUPPORT_LIB + 'io'
@@ -89,7 +88,7 @@ module TextMate
             if [:err, :out].include?(type) and not filtered_str.nil?
               io << filtered_str
             else
-              str = htmlize(str).gsub(/\<br\>/, "<br>\n")
+              str = htmlize(str)
               str = "<span class=\"err\">#{str}</span>" if type == :err
               str = "<span class=\"echo\">#{str}</span>" if type == :echo
               io << str

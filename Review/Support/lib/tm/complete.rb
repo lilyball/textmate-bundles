@@ -30,6 +30,39 @@ module TextMate
       TextMate::UI.complete(choices, {:images => images, :extra_chars => extra_chars})
     end
     
+    def tip!
+      # If there is no current_word, then check the next current_word
+      #   If there really is no current_word, then show a menu of choices
+      
+      chars = "a-zA-Z0-9" # Hard-coded into D2
+      chars += Regexp.escape(extra_chars) if extra_chars
+      current_word ||= Word.current_word chars, :both
+      
+      result = nil
+      menu_choices = nil
+      choices      = nil
+      choice       = 0
+      
+      [current_word, current_method_name, current_collection_name].each do |initial_filter|
+        next unless initial_filter and not initial_filter.empty?
+        p initial_filter
+        
+        choices = self.choices.select { |c| (c['match'] || c['display']) =~ /^#{Regexp.quote(initial_filter)}/ }
+        
+        p choices
+        break if choices and not choices.empty?
+      end
+      choices ||= self.choices
+      
+      menu_choices = choices.map { |c| c['display'] }
+      choice = TextMate::UI.menu(menu_choices) if menu_choices and menu_choices.length > 1
+      if choice
+        result = choices[choice]
+      end
+      
+      TextMate::UI.tool_tip( result['tool_tip'], {:format => result['tool_tip_format'] || :text }) if result
+    end
+    
     def choices
       @choices ||= data['suggestions']
     end
@@ -164,6 +197,29 @@ module TextMate
       end
       
       suggestions
+    end
+    def current_method_name
+      # Regex for finding a method or function name that's close to your caret position using Word.current_word
+      # TODO: Allow completion prefs to define their own Complete.tip! method_name
+      
+      characters = "a-zA-Z0-9" # Hard-coded into D2
+      characters += Regexp.escape(extra_chars) if extra_chars
+      
+      regex = %r/
+      (?> [^\(\)]+ | \)   (?> [^\(\)]+ | \)   (?> [^\(\)]+ | \)   (?> [^\(\)]+ | \)   (?> [^\(\)]+ | \)   (?> [^\(\)]* )   \( | )+   \( | )+   \( | )+   \( | )+   \( | )+
+      (?: \(([#{characters}]+) )?/ix
+      
+      Word.current_word(regex,:left)
+    end
+    def current_collection_name
+      characters = "a-zA-Z0-9" # Hard-coded into D2
+      characters += Regexp.escape(extra_chars) if extra_chars
+      
+      regex = %r/
+      (?> [^\[\]]+ | \]   (?> [^\[\]]+ | \]   (?> [^\[\]]+ | \]   (?> [^\[\]]+ | \]   (?> [^\[\]]+ | \]   (?> [^\[\]]* )   \[ | )+   \[ | )+   \[ | )+   \[ | )+   \[ | )+
+      (?: \[([#{characters}]+) )?/ix
+      
+      Word.current_word(regex,:left)
     end
     
     def fix_legacy
@@ -398,6 +454,48 @@ class TestComplete < Test::Unit::TestCase
     assert fred.choices.first['tool_tip'].match(/^prefix/)
   end
   # 
+  def test_should_show_tooltip_without_inserting_anything
+    # This method passes if it shows a tooltip when selecting a menu-item 
+    # and DOESN'T insert anything or cause the document think anything has changed
+    ENV.delete 'TM_COMPLETIONS'
+    assert_nil(ENV['TM_COMPLETIONS'])
+    ENV.delete 'TM_COMPLETIONS_SPLIT'
+    assert_nil(ENV['TM_COMPLETIONS_SPLIT'])
+    
+    ENV['TM_COMPLETIONS_SPLIT']='json'
+    ENV['TM_COMPLETIONS'] = @json_raw
+    fred = TextMate::Complete.new
+    assert_equal(3, fred.choices.length)
+    
+    TextMate::Complete.new.tip!
+  end
+  # 
+  def test_tip_should_look_for_the_current_word_and_then_try_the_closest_function_name
+    ENV.delete 'TM_COMPLETIONS'
+    assert_nil(ENV['TM_COMPLETIONS'])
+    ENV.delete 'TM_COMPLETIONS_SPLIT'
+    assert_nil(ENV['TM_COMPLETIONS_SPLIT'])
+    
+    ENV['TM_COMPLETIONS_SPLIT']='json'
+    ENV['TM_COMPLETIONS'] = @json_raw
+    fred = TextMate::Complete.new
+    assert_equal(3, fred.choices.length)
+    
+    TextMate::Complete.new.tip!
+    # 
+    # This test passes if, when run, you see the tooltip for closest function
+    #   Be sure to more your caret around and try a few times
+    # Showing a menu is a fail
+    # 
+    # foo( bar(  ), '.moo' ) 
+    #    ^ Caret here should give the tip for 'foo'
+    #          ^ Caret here should give the tip for 'bar'
+    #                     ^ Caret here should give the tip for 'bar'
+    #                ^ Caret here should give the tip for '.moo'
+    # foo( bar(one,two,foo), '.moo' ) 
+    # foo['bar']
+  end
+  #
 end
 
 end#if

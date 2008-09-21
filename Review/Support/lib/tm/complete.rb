@@ -52,6 +52,10 @@ module TextMate
       @images
     end
     
+    def tool_tip_prefix
+      @tool_tip_prefix ||= data['tool_tip_prefix']
+    end
+    
     def extra_chars
       ENV['TM_COMPLETIONS_EXTRACHARS'] || data['extra_chars']
     end
@@ -110,19 +114,27 @@ module TextMate
         
         case raw_data[:format]
         when 'plist'
-          parsed.merge! parse_plist(raw_data)
+          par = parse_plist(raw_data)
         when 'json'
-          parsed.merge! parse_json(raw_data)
+          par = parse_json(raw_data)
         when "txt"
           raw_data[:format] = "\n"
-          parsed.merge! parse_string(raw_data)
+          par = parse_string(raw_data)
         when nil
           raw_data[:format] = ","
-          parsed.merge! parse_string(raw_data)
+          par = parse_string(raw_data)
         else
-          parsed.merge! parse_string(raw_data)
+          par = parse_string(raw_data)
         end
         
+        if par['tool_tip_prefix']
+          par['suggestions'] = par['suggestions'].map do |suggestion|
+            suggestion['tool_tip'] = par['tool_tip_prefix'] + suggestion['tool_tip']
+            suggestion
+          end
+        end
+        
+        parsed.merge! par
         parsed['suggestions'] = suggestions + parsed['suggestions']
       end
       
@@ -351,6 +363,41 @@ class TestComplete < Test::Unit::TestCase
     
   end
 =end
+  def test_should_apply_prefix
+    ENV.delete 'TM_COMPLETIONS'
+    assert_nil(ENV['TM_COMPLETIONS'])
+    ENV.delete 'TM_COMPLETIONS_SPLIT'
+    assert_nil(ENV['TM_COMPLETIONS_SPLIT'])
+    
+    @json_raw = <<-'JSON'
+    {
+    	"extra_chars": "-_$.",
+    	"tool_tip_prefix":"prefix",
+    	"suggestions": [
+    		{ "display": ".moo", "image": "", "insert": "(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})",         "tool_tip": "moo(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here." },
+    		{ "display": "foo",  "image": "", "insert": "(${1:one}, \"${2:one}\", ${3:three}${4:, ${5:five}, ${6:six}})",     "tool_tip": "foo(one, two)\n This method does something or other maybe.\n Insert longer description of it here." },
+    		{ "display": "bar",  "image": "", "insert": "(${1:one}, ${2:one}, \"${3:three}\"${4:, \"${5:five}\", ${6:six}})", "tool_tip": "bar(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here." }
+    	],
+    	"images": {
+    		"String"  : "String.png",
+    		"RegExp"  : "RegExp.png",
+    		"Number"  : "Number.png",
+    		"Array"   : "Array.png",
+    		"Function": "Function.png",
+    		"Object"  : "Object.png",
+    		"Node"    : "Node.png",
+    		"NodeList": "NodeList.png"
+    	}
+    }
+    JSON
+    
+    ENV['TM_COMPLETIONS_SPLIT']='json'
+    ENV['TM_COMPLETIONS'] = @json_raw
+    fred = TextMate::Complete.new
+    assert_equal(3, fred.choices.length)
+    assert fred.choices.first['tool_tip'].match(/^prefix/)
+  end
+  # 
 end
 
 end#if

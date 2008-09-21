@@ -172,7 +172,9 @@ module TextMate
             return nil unless choice
             
             #Show the tool_tip before inserting the snippet to make it align to the end of the match
-            TextMate::UI.tool_tip(choice['tool_tip']) if choice['tool_tip']
+            if choice['tool_tip'] and not ENV.has_key?('TM_DISABLE_TOOL_TIPS')
+              TextMate::UI.tool_tip( choice['tool_tip'], {:format => choice['tool_tip_format'] || :text }) 
+            end
             
             choice['insert']
           end
@@ -529,13 +531,30 @@ class TestCompletes < Test::Unit::TestCase
     # .
   end
   
+  def test_with_tooltip_format
+    # Should show a tooltip in the correct format
+    @choices = [
+      {'image' => 'Drag',    'display' => 'text', 'insert' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip_format' => "text", 'tool_tip' => "<div> not html <div>"},
+      {'image' => 'Macro',   'display' => 'html', 'insert' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip_format' => "html", 'tool_tip' => "<div><strong> html </strong></div>"},
+      {'image' => 'Command', 'display' => 'text', 'insert' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})',                              'tool_tip' => "<div> not html <div>"},
+    ]
+    TextMate::UI.complete(@choices)
+    # 
+  end
+  
+  def test_with_tooltips
+    # Should show a tooltip that includes the prefix
+    TextMate::UI.complete(@choices, {:tool_tip_prefix => 'prefix'})
+    # 
+  end
+  
   private
   def setup
     make_front!
     @choices = [
-      {'image' => 'Drag',    'display' => 'moo', 'insert' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},
-      {'image' => 'Macro',   'display' => 'foo', 'insert' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip' => "(one, two)\n This method does something or other maybe.\n Insert longer description of it here."},
-      {'image' => 'Command', 'display' => 'bar', 'insert' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})', 'tool_tip' => "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here."},
+      {'image' => 'Drag',    'display' => 'moo', 'insert' => '(${1:one}, ${2:one}, ${3:three}${4:, ${5:five}, ${6:six}})',     'tool_tip_format' => "text", 'tool_tip' => "(one, two, four[, five])\n This method does something or other maybe.\n Insert longer description of it here."},
+      {'image' => 'Macro',   'display' => 'foo', 'insert' => '(${1:one}, "${2:one}", ${3:three}${4:, ${5:five}, ${6:six}})',   'tool_tip_format' => "html", 'tool_tip' => "(one, two)\n This method does something or other maybe.\n Insert longer description of it here."},
+      {'image' => 'Command', 'display' => 'bar', 'insert' => '(${1:one}, ${2:one}, "${3:three}"${4:, "${5:five}", ${6:six}})',                              'tool_tip' => "(one, two[, three])\n This method does something or other maybe.\n Insert longer description of it here."},
     ]
   end
   def make_front!

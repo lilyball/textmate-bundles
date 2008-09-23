@@ -11,7 +11,7 @@ if [ ! -z "$TM_OBJJ_MASTER_FILE" ]; then
 fi
 
 if [ ! -z $TM_PROJECT_DIRECTORY ]; then
-	open "file://${TM_OBJJ_MASTER_FILE// /%20}"/index.html"
+	open "file://${TM_PROJECT_DIRECTORY// /%20}/index.html"
 else
 	D=`dirname "$TM_FILEPATH"`
 	while [ -z `find "$D" -name index.html` ]; do
@@ -28,7 +28,7 @@ fi</string>
 	<key>name</key>
 	<string>Run in Browser</string>
 	<key>output</key>
-	<string>discard</string>
+	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.js.objj</string>
 	<key>uuid</key>

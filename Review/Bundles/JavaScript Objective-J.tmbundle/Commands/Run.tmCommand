@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>if [ ! -z "$TM_OBJJ_MASTER_FILE" ]; then
+cat &lt;&lt;-HTML
+&lt;body onload='javascript:window.location.href="tm-file://${TM_OBJJ_MASTER_FILE// /%20}"'&gt;
+&lt;/body&gt;
+HTML
+exit 205
+fi
+
+
+if [ ! -z $TM_PROJECT_DIRECTORY ]; then
+cat &lt;&lt;-HTML
+&lt;body onload='javascript:window.location.href="tm-file://${TM_PROJECT_DIRECTORY// /%20}/index.html"'&gt;
+&lt;/body&gt;
+HTML
+exit 205
+else
+D=`dirname "$TM_FILEPATH"`
+while [ -z `find "$D" -name index.html` ]; do
+  D=`dirname "$D"`
+done
+F="${D}/index.html"
+cat &lt;&lt;-HTML
+&lt;body onload='javascript:window.location.href="tm-file://${F// /%20}"'&gt;
+&lt;/body&gt;
+HTML
+exit 205
+fi</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.js.objj</string>
+	<key>uuid</key>
+	<string>0C55A19B-3B2D-418F-B7FD-7E64B736F379</string>
+</dict>
+</plist>

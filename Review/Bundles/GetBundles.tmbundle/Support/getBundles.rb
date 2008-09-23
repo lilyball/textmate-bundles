@@ -983,13 +983,16 @@ def installBundles(dlg)
 end
 
 def updateTMlibPath
-  return if askDIALOG("Do you really want to update the Support/lib folder?","") == 0
-  path = "http://macromates.com/svn/Bundles/trunk/Support/lib/"
+  return if askDIALOG("Do you really want to update the TextMate's Support folder?","") == 0
+  path = "http://macromates.com/svn/Bundles/trunk/Support/"
+  # path = "http://macromates.com/svn/Bundles/trunk/Support/lib"
   $params['isBusy'] = true
   $params['progressText'] = "Installing TextMate's Support folder…"
   updateDIALOG
   begin
-    installPath = TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Support"
+    installPath = "/Library/Application Support/TextMate"
+    %x{mkdir -p "#{e_sh installPath}"}
+    # installPath = TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Support"
   rescue
     $errorcnt += 1
     writeToLogFile("No path to TextMate found!")
@@ -1010,21 +1013,24 @@ def updateTMlibPath
   end
   $params['isBusy'] = true
   $params['progressIsIndeterminate'] = true
-  $params['progressText'] = 'Installing Support/lib'
+  $params['progressText'] = 'Installing Support folder'
   updateDIALOG
-  renameOldBundleFolder("#{installPath}/lib")
+  # renameOldBundleFolder("#{installPath}")
+  ts = Time.now.strftime("%m%d%Y%H%M%S")
+  writeToLogFile("Backup of “#{installPath}” into “#{installPath}#{ts}”")
+  executeShell("cp -R '#{installPath}' '#{installPath}#{ts}' 1> /dev/null")
   return if $errorcnt > 0
   begin
     GBTimeout::timeout($timeout) do
-      executeShell("export LC_CTYPE=en_US.UTF-8;cd '#{e_sh installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}'", true, true)
+      executeShell("export LC_CTYPE=en_US.UTF-8;cd '#{installPath}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}'", true, true)
       if $errorcnt > 0
-        resetOldBundleFolder("#{installPath}/lib")
+        # resetOldBundleFolder("#{installPath}")
         return
       end
     end
   rescue GBTimeout::Error
     $errorcnt += 1
-    resetOldBundleFolder("#{installPath}/lib")
+    # resetOldBundleFolder("#{installPath}")
   end
 end
 

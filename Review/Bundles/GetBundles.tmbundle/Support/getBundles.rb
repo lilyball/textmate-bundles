@@ -407,6 +407,8 @@ def noSVNclientFound
 end
 
 def askDIALOG(msg, text)
+  msg.gsub!("'","’")
+  text.gsub!("'","’")
   resStr = 0
   if $isDIALOG2
     resStr = %x{"$DIALOG" alert -s critical -m "#{msg}" -t "#{text}" -1 No -2 Yes}
@@ -983,7 +985,7 @@ def installBundles(dlg)
 end
 
 def updateTMlibPath
-  return if askDIALOG("Do you really want to update the TextMate's Support folder?","") == 0
+  return if askDIALOG("Do you really want to update TextMate's Support folder?","") == 0
   path = "http://macromates.com/svn/Bundles/trunk/Support/"
   # path = "http://macromates.com/svn/Bundles/trunk/Support/lib"
   $params['isBusy'] = true

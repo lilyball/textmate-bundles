@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -13,14 +13,23 @@ HTML
 exit 205
 fi
 
-
 if [ ! -z $TM_PROJECT_DIRECTORY ]; then
 cat &lt;&lt;-HTML
 &lt;body onload='javascript:window.location.href="tm-file://${TM_PROJECT_DIRECTORY// /%20}/index.html"'&gt;
 &lt;/body&gt;
 HTML
 exit 205
-else
+fi
+
+if [ ! -z $TM_DIRECTORY ]; then
+cat &lt;&lt;-HTML
+&lt;body onload='javascript:window.location.href="tm-file://${TM_DIRECTORY// /%20}/index.html"'&gt;
+&lt;/body&gt;
+HTML
+exit 205
+fi
+
+
 D=`dirname "$TM_FILEPATH"`
 while [ -z `find "$D" -name index.html` ]; do
   D=`dirname "$D"`

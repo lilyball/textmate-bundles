@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>[[ -z $OBJJ_HOME ]] &amp;&amp; echo "OBJJ_HOME wasn't set!" &amp;&amp; exit 206
+
+PLIST=$("$DIALOG" -m -c NewApp)
+
+PLIST=$(echo -en "$PLIST" | ruby -e '
+require ENV["TM_SUPPORT_PATH"] + "/lib/osx/plist"
+begin
+	res = OSX::PropertyList.load(STDIN.read)
+	if res.has_key?("returnCode") and res["returnCode"] == 1
+		aTitle = (res["appTitle"].nil?) ? "New App" :  res["appTitle"]
+		puts aTitle
+		puts (res["projTitle"].nil?) ? aTitle :  res["projTitle"]
+		puts (res["embedded"].nil?) ? "0" :  res["embedded"]
+	end
+rescue
+end
+')
+
+[[ -z $PLIST ]] &amp;&amp; exit 200
+
+
+PROJECTTITLE=$(echo -en "$PLIST" | head -n 2 | tail -n 1)
+
+TARGETDIR="$HOME/Desktop/$PROJECTTITLE"
+
+[[ -d "$TARGETDIR" ]] &amp;&amp; echo "'$TARGETDIR' already exists." &amp;&amp; exit 206
+
+mkdir -p "$TARGETDIR"
+
+TEMPLATEDIR="$TM_BUNDLE_SUPPORT/AppTemplate"
+
+TITLE=$(echo -en "$PLIST" | head -n 1)
+
+FEMBEDDED=$(echo -en "$PLIST" | tail -n 1)
+
+AUTHOR=${TM_ORGANIZATION_NAME:__Author__}
+DATE=`date "+%b %d, %Y"`
+YEAR=`date "+%Y"`
+
+cat "$TEMPLATEDIR/index.html" | perl -pe "
+s/#\{app_title\}/$TITLE/g;
+s/#\{author\}/$AUTHOR/g;
+s/#\{date\}/$DATE/g;
+s/#\{year\}/$YEAR/g;
+" &gt; "$TARGETDIR/index.html"
+
+cat "$TEMPLATEDIR/main.j" | perl -pe "
+s/#\{app_title\}/$TITLE/g;
+s/#\{author\}/$AUTHOR/g;
+s/#\{date\}/$DATE/g;
+s/#\{year\}/$YEAR/g;
+" &gt; "$TARGETDIR/main.j"
+
+cat "$TEMPLATEDIR/Info.plist" | perl -pe "
+s/#\{app_title\}/$AUTHOR/g;
+" &gt; "$TARGETDIR/Info.plist"
+
+cat "$TEMPLATEDIR/AppController.j" | perl -pe "
+s/#\{author\}/$AUTHOR/g;
+" &gt; "$TARGETDIR/AppController.j"
+
+if [ $FEMBEDDED == 1 ]; then
+  cp -R "$OBJJ_HOME/Frameworks" "$TARGETDIR"
+else
+  ln -s "$OBJJ_HOME/Frameworks" "$TARGETDIR/Frameworks"
+fi
+
+mate "$TARGETDIR"
+mate "$TARGETDIR/main.j"
+
+
+
+</string>
+	<key>name</key>
+	<string>New Application</string>
+	<key>uuid</key>
+	<string>49C7F8B7-1F2F-4362-BCB2-6C6BC86646A6</string>
+</dict>
+</plist>

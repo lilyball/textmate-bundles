@@ -139,6 +139,7 @@ module TextMate
 
         if echo_fd = ENV['TM_INTERACTIVE_INPUT_ECHO_FD']
           ::IO.for_fd(echo_fd.to_i).close
+          ENV.delete('TM_INTERACTIVE_INPUT_ECHO_FD')
         end
 
         if options[:input].nil?

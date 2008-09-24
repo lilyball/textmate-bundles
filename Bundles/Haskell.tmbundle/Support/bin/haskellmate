@@ -15,7 +15,7 @@ until (STDIN.eof?)
   fname, line, column = m[1..3] if m
   if m && File.exist?(fname)
 #     puts line
-    s.gsub!(/#{fname}:#{line}:#{column}/,"<a href='txmt://open?url=file://#{proper_escape fname}&line=#{line}&column=#{column}'>#{fname}:#{line}:#{column}</a>")
+    s.gsub!(/#{fname}:#{line}:#{column}/,"<a href='txmt://open?url=file://#{proper_escape fname}&line=#{line}&column=#{column.to_i+1}'>#{fname}:#{line}:#{column}</a>")
   end
   puts s
   STDOUT.flush

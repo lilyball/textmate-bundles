@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -147,8 +147,10 @@ if [ `echo $TM_SCOPE | grep -c 'meta.bracketed.js.objj'` -gt 0 ]; then
     end      
     STDIN.read().scan(/\b[_]{0,2}[NC][APS]\w+(?=[^\.])\b/) {|c| classes &lt;&lt; c if ! classes.include?(c) &amp;&amp; known_classes.include?(c)}
     classes.sort!
-    classes &lt;&lt; "--"
-    classes += known_classes
+    if classes != known_classes
+      classes &lt;&lt; "--"
+      classes += known_classes
+    end
     if classes.length == 1
       if classes.first != "--"
         print classes.first
@@ -181,7 +183,13 @@ if [ `echo $TM_SCOPE | grep -c 'meta.bracketed.js.objj'` -gt 0 ]; then
 
   # check for inherited methods
   ANKER=`cat "$OBJJ_HOME/Documentation/classes/$CLASS.html" | egrep -o "[^#\"]+?html#$METHOD" | head -n 1`
-  [[ ! -z "$ANKER" ]] &amp;&amp; showUpClassPage "$ANKER"
+#  echo $CLASS; echo $METHOD; echo $ANKER; exit 206
+
+  CLASS=$(echo -en "$ANKER" | perl -pe 's/(.*?)\.html.*/$1/;')
+  # find the correct anker within the new CLASS.html
+  ANKER=`cat "$OBJJ_HOME/Documentation/classes/$CLASS.html" | egrep -o "\"#$METHOD.*?\"" | sed -e 's/^"//;s/".*//' | head -n 1`
+  [[ ! -z "$ANKER" ]] &amp;&amp; showUpClassPage "$CLASS.html$ANKER"
+  # [[ ! -z "$ANKER" ]] &amp;&amp; showUpClassPage "$ANKER"
 
 fi
 

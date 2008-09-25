@@ -37,7 +37,7 @@ class GrailsCommand
     end
     @command
   end
-    
+      
   def run
     Dir.chdir(@location) do 
       TextMate::HTMLOutput.show(:window_title => "GrailsMate", :page_title => "GrailsMate", :sub_title => "#{@location}") do |io|
@@ -47,9 +47,13 @@ class GrailsCommand
         TextMate::Process.run(@grails, cmd) do |line|
           line.chomp!
           match = false
-          @colorisations.each do | color, patterns |
-            if match == false and patterns.detect { |pattern| line =~ pattern }
-              match = "<span style=\"color: #{color}\">#{htmlize line}</span><br/>"
+          if line =~ /^(Running test )(\w+)(.+)$/
+            match = $1 + "<a href='txmt://open?url=file://#{@location}/test/reports/plain/TEST-#{$2}.txt'>#{$2}</a>" + $3 + "</br>"
+          else 
+            @colorisations.each do | color, patterns |
+              if match == false and patterns.detect { |pattern| line =~ pattern }
+                match = "<span style=\"color: #{color}\">#{htmlize line}</span><br/>"
+              end
             end
           end
           io << (match ? match : "#{htmlize line}<br/>")

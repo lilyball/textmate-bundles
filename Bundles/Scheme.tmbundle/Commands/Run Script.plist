@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -23,7 +23,7 @@ TM_ERRORTEMP=$(mktemp -t scheme)
 
 # Run depending on the system are we on?
 if [ $CMD == "mzscheme" ] ; then
-	"$INTERPRET" -M errortrace -r "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
+	"$INTERPRET" -e '(require (lib "errortrace.ss" "errortrace"))' -r "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
 elif [ $CMD == "csi" ] ; then
 	"$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
 elif [ $CMD = "guile" ] ; then

@@ -333,7 +333,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\b(namespace)\s+([A-Za-z_][_A-Za-z0-9:]*\b)?+(?!\s*?(;|=|,))</string>
+					<string>\b(namespace)\b\s*([A-Za-z_][_A-Za-z0-9:]*\b)?+(?!\s*?(;|=|,))</string>
 					<key>end</key>
 					<string>(?&lt;=\})</string>
 					<key>name</key>

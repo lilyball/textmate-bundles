@@ -35,6 +35,13 @@ cat &lt;&lt;-HTML
 &lt;base href="file://${INDEXFILE// /%20}"&gt;
 HTML
 cat "$INDEXFILE"
+[[ ! -z $(grep 'objj_exception_setOutputStream' "$INDEXFILE") ]] &amp;&amp; exit 205
+cat &lt;&lt;-JS
+&lt;script type="text/javascript" charset="utf-8"&gt;
+objj_exception_setOutputStream(function(aString) { console.log(aString);alert(aString) });
+&lt;/script&gt;
+JS
+
 exit 205
 </string>
 	<key>input</key>

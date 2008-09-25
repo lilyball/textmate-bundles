@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>3CC1A984-EF93-4011-ADDC-FE2E10C6FB23</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+#
+#  regexp_to_list.rb
+#  Created by Hans-Jörg Bibiko on 2008-09-22.
+#
+#  Read a optimized regexp from stdin and output a list of all matched keywords
+#
+
+def decompileRe (reStr)
+  # handle foo(bar|boo|bou)? =&gt; foo|foobar|fooboo|foobou
+  re = Regexp.new(/\b(\w+)\(([^(]+?)\)\?/)
+  while m = reStr.match(re) do
+    reStr.sub!(re, "#{m[1]}|#{m[2].split('|').map {|x| m[1] + x }.join('|')}")
+  end
+  # handle foo(bar|boo|bou) =&gt; foobar|fooboo|foobou recursively
+  re = Regexp.new(/\b(\w+)\(([^(]+?)\)/)
+  while m = reStr.match(re)  do
+    reStr.sub!(re, "#{m[2].split('|').map {|x| m[1] + x }.join('|')}")
+  end
+  # return sorted array and delete last () if there're
+  return reStr.split('|').map {|x| x.gsub(/(\(|\))/,'')}.sort
+end
+
+
+decompileRe(STDIN.read.chomp).each {|r| puts r}</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Deoptimize Regex Alternations</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>uuid</key>
+	<string>857CF8FA-C613-4D48-9739-58EE774D639E</string>
+</dict>
+</plist>

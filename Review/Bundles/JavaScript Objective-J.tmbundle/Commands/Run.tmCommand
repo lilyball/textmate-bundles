@@ -5,42 +5,38 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>if [ ! -z "$TM_OBJJ_MASTER_FILE" ]; then
-cat &lt;&lt;-HTML
-&lt;body onload='javascript:window.location.href="tm-file://${TM_OBJJ_MASTER_FILE// /%20}"'&gt;
-&lt;/body&gt;
-HTML
-exit 205
+	<string>
+[[ ! -z $TM_OBJJ_MASTER_FILE ]] &amp;&amp; INDEXFILE="$TM_OBJJ_MASTER_FILE"
+
+[[ ! -z $TM_PROJECT_DIRECTORY ]] &amp;&amp; INDEXFILE="$TM_PROJECT_DIRECTORY/index.html"
+
+[[ ! -z $TM_DIRECTORY ]] &amp;&amp; INDEXFILE="$TM_DIRECTORY/index.html"
+
+if [ -z "$INDEXFILE" ]; then
+	D=`dirname "$TM_FILEPATH"`
+	while [ -z `find "$D" -name index.html` ]; do
+  		D=`dirname "$D"`
+	done
+	INDEXFILE="${D}/index.html"
 fi
 
-if [ ! -z $TM_PROJECT_DIRECTORY ]; then
-cat &lt;&lt;-HTML
-&lt;body onload='javascript:window.location.href="tm-file://${TM_PROJECT_DIRECTORY// /%20}/index.html"'&gt;
-&lt;/body&gt;
-HTML
-exit 205
-fi
+[[ -z $INDEXFILE ]] &amp;&amp; echo "No start file found. Please set the shell variable 'OBJJ_MASTER_FILE'" &amp;&amp; exit 206
 
-if [ ! -z $TM_DIRECTORY ]; then
 cat &lt;&lt;-HTML
-&lt;body onload='javascript:window.location.href="tm-file://${TM_DIRECTORY// /%20}/index.html"'&gt;
-&lt;/body&gt;
+    &lt;script type="text/javascript" charset="utf-8"&gt;
+    try { 
+        if (TextMate.system("", function (task) { })) {
+            var __TM_confirm_Status;
+            alert = function(s){TextMate.system("\"$DIALOG\" -e -p '{messageTitle=\"JavaScript\";informativeText=\""+s.toString().replace(/\x27/g,"’").replace(/\"/g,'\\\"')+"\";}'",null);};
+            confirm = function(s){TextMate.system("\"$DIALOG\" -e -p '{messageTitle=\"JavaScript\";informativeText=\""+s.toString().replace(/\x27/g,"’").replace(/\"/g,'\\\"')+"\";buttonTitles=(\"OK\",\"Cancel\");}'",null).onreadoutput=function(s){if(s==1){__TM_confirm_Status=false}else{__TM_confirm_Status=true}};return(__TM_confirm_Status)};
+        }
+    } catch(e) {}
+    &lt;/script&gt;
+&lt;base href="file://${INDEXFILE// /%20}"&gt;
 HTML
+cat "$INDEXFILE"
 exit 205
-fi
-
-
-D=`dirname "$TM_FILEPATH"`
-while [ -z `find "$D" -name index.html` ]; do
-  D=`dirname "$D"`
-done
-F="${D}/index.html"
-cat &lt;&lt;-HTML
-&lt;body onload='javascript:window.location.href="tm-file://${F// /%20}"'&gt;
-&lt;/body&gt;
-HTML
-exit 205
-fi</string>
+</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

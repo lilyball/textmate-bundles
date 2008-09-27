@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -22,7 +22,7 @@ osascript &lt;&lt;- APPLESCRIPT
 tell app "Terminal"
 	launch
 	activate
-	do script "clear; cd $(esc "${TM_DIRECTORY}"); ${THASKELL} ${TM_FILEPATH}"
+	do script "clear; cd $(esc "${TM_DIRECTORY}"); ${THASKELL} $(esc "${TM_FILEPATH}")"
 	set position of first window to {100, 100}
 end tell
 APPLESCRIPT

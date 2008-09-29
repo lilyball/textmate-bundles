@@ -47,7 +47,7 @@ class GrailsCommand
         TextMate::Process.run(@grails, cmd) do |line|
           line.chomp!
           match = false
-          if line =~ /^(Running test )(\w+)(.+)$/
+          if line =~ /^(Running test )(\S+)(\.\.\.)$/
             match = $1 + "<a href='txmt://open?url=file://#{@location}/test/reports/plain/TEST-#{$2}.txt'>#{$2}</a>" + $3 + "</br>"
           else 
             @colorisations.each do | color, patterns |

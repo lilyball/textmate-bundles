@@ -121,6 +121,25 @@ module TextMate
           io << '<div id="exception_report" class="framed">Program exited.</div>'
         end
       end
+      
+      def make_project_master_current_document
+        if (ENV.has_key?("TM_PROJECT_DIRECTORY") and ENV.has_key?("TM_PROJECT_MASTER"))
+          proj_dir    = ENV["TM_PROJECT_DIRECTORY"]
+          proj_master = ENV["TM_PROJECT_MASTER"]
+          if proj_master[0].chr == "/"
+            filepath = proj_master
+          else
+            filepath = "#{proj_dir}/#{proj_master}"
+          end
+          if File.exists?(filepath)
+            ENV['TM_FILEPATH']    = filepath
+            ENV['TM_FILENAME']    = File.basename filepath
+            ENV['TM_DISPLAYNAME'] = File.basename filepath
+          else
+            ENV["TM_EXECUTOR_WARNING"] += "The file suggested by TM_PROJECT_MASTER does not exist.\n"
+          end
+        end
+      end
 
       private
 

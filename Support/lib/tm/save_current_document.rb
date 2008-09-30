@@ -5,7 +5,7 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/tm/tempfile'
 module TextMate
   class << self
     # 
-    # Calling TextMate.save ensures that one of the following hold true:
+    # Calling TextMate.save_current_document ensures that one of the following hold true:
     #  1. If TM_FILEPATH is writeable, then the current document is saved.
     #     In this case, TM_FILEPATH, TM_FILENAME, TM_DISPLAYNAME are left as is.
     #  2. If TM_FILEPATH is not writeable, then the contents of the current
@@ -24,11 +24,14 @@ module TextMate
     #  not yet been saved.  In this case TM_FILEPATH is set, but no file exists at that
     #  path.  If the directory is writeable, we touch the file and fall through to the 
     #  above cases.  If the directory is unwritable, we fall through without action.
-    #    
+    #
+    # TextMate.save_current_document also accepts an optional `temp_ext` argument.  If
+    # a temporary file is used it will have `temp_ext` as it's extension.
+    #
     # Note that this method calls STDIN.read.  If you want to access the contents of the
     # current document after you've called this method, do File.read(ENV['TM_FILEPATH']).
 
-    def save_current_document()
+    def save_current_document(temp_ext='tmp')
       
       doc, dst = STDIN.read, ENV['TM_FILEPATH']
       ENV['TM_DISPLAYNAME'] = ENV['TM_FILENAME']
@@ -39,14 +42,14 @@ module TextMate
       end
       
       if dst.nil?
-        ENV['TM_FILEPATH']         = dst = TextMate::IO.tempfile("tmp").path
+        ENV['TM_FILEPATH']         = dst = TextMate::IO.tempfile(temp_ext).path
         ENV['TM_FILENAME']         = File.basename dst
         ENV['TM_FILE_IS_UNTITLED'] = "true"
         ENV['TM_DISPLAYNAME']      = 'untitled'        
       elsif not File.writable? dst
         ENV['TM_ORIG_FILEPATH']    = dst
         ENV['TM_ORIG_FILENAME']    = File.basename dst
-        ENV['TM_FILEPATH']         = dst = TextMate::IO.tempfile("tmp").path
+        ENV['TM_FILEPATH']         = dst = TextMate::IO.tempfile(temp_ext).path
         ENV['TM_FILENAME']         = File.basename dst
         ENV['TM_DISPLAYNAME']     += ' (M)'
       end

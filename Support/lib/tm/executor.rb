@@ -127,15 +127,18 @@ module TextMate
       def process_output_wrapper(io)
         io << <<-HTML
 <div class="executor">
-<div class="controls">
-  <a href="#" onclick="copyOutput(document.getElementById('_executor_output'))">copy output</a>
-</div>
 <!-- first box containing version info and script output -->
 <pre>
 <div id="_executor_output" > <!-- Script output -->
 HTML
         yield
-        io << '</div></pre></div>'
+        io << <<-HTML
+        </div></pre>
+        <div class="controls">
+          <a href="#" onclick="copyOutput(document.getElementById('_executor_output'))">copy output</a>
+        </div>
+        </div>
+        HTML
       end
       
       def script_style_header
@@ -162,6 +165,7 @@ HTML
 
     div.executor .controls {
       text-align:right;
+      float:right;
     }
     div.executor .controls a {
       text-decoration: none;

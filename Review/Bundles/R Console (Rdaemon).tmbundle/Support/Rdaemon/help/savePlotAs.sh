@@ -32,7 +32,7 @@ do
     `
 	TMD_filename=`cat <<-AS | ruby --
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
-    print OSX::PropertyList::load(%x{echo -en "$DIA"})["filename"]
+    print OSX::PropertyList::load(%x{echo -en "$DIA"})["filename"].gsub(/^~/,ENV["HOME"])
     AS
     `
 	TMD_qualityValue=`cat <<-AS | ruby --

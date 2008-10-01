@@ -60,6 +60,7 @@ module TextMate
 
         options = {:version_args  => ['--version'],
                    :version_regex => /\A(.*)$/,
+                   :verb          => "Running",
                    :env           => nil,
                    :script_args   => []}
 
@@ -80,7 +81,7 @@ module TextMate
 
         options[:script_args].each { |arg| args << arg }
 
-        TextMate::HTMLOutput.show(:title => "Running “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
+        TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
 
           callback = proc do |str, type|
             str.gsub!(ENV["TM_FILEPATH"], "untitled") if ENV["TM_FILE_IS_UNTITLED"]

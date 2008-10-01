@@ -217,7 +217,7 @@ if dialog2:
             except AttributeError:
                 dlgout += "<tr><td align=right style=\"color:grey;white-space:nowrap;\">%s</td><td>&nbsp;</td><td style=\"white-space:nowrap;\">%s</td></tr>" % (k, v)
 
-    cmd = "'%s' tooltip -f html <<< '%s'" % (os.environ["DIALOG"], dlgout.replace("'", u"＇"))
+    cmd = "'%s' tooltip --html '%s'" % (os.environ["DIALOG"], dlgout.replace("'", u"＇"))
     os.popen(cmd.encode("UTF-8"))
     sys.exit(206)
 else:

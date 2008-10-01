@@ -24,10 +24,16 @@ module TextMate
       # 
       def tempfile(ext, name=nil)
         require 'tmpdir'
-
+        
+        if ENV.has_key?('TM_PID')
+          unique_id = ENV["TM_PID"].to_i
+        else
+          unique_id = ENV['LOGNAME'].sum(10)
+        end
+        
         begin
           file = File.new(
-            '%s/%s_%s.%s' % [Dir::tmpdir, name || 'untitled', rand(1679615).to_s(36), ext],
+            '%s/%s_%s.%s' % [Dir::tmpdir, name || 'untitled', unique_id.to_s(36), ext],
             File::RDWR|File::CREAT|File::EXCL, 0600
           )
           
@@ -48,6 +54,7 @@ module TextMate
             return file
           end
         rescue Errno::EEXIST
+          unique_id += 1
           retry
         end
       end

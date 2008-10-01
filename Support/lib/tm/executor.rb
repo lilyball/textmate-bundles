@@ -31,6 +31,7 @@
 #   :version_args are arguments that will be passed to the executable to generate a version string for use as the page's subtitle.
 #   :version_regex is a regular expression to which the resulting version string is passed.
 #     $1 of this regex is used as the subtitle of the Executor.run output.  By default, this just takes the first line.
+#   :verb describes what the call to Executor is doing.  Default is “Running”.
 #   :env is the environment in which the command will be run.  Default is ENV.
 #   :script_args are arguments to be passed to the *script* as opposed to the interpreter.  They will
 #     be appended after the path to the script in the arguments to the interpreter.

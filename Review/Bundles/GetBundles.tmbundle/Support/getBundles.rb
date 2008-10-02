@@ -60,7 +60,12 @@ $timeout          = 30
 # global thread vars
 $x0=$x1=$x2=$x3=$x4 = nil
 
-CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as]
+CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as iphone]
+
+$gitKeywords      = ["bundle","tmbundle","textmate"]
+$stopGitKeywords  = ["my own","my personal","personal bundle","obsolete","deprecated","work in progress"]
+
+
 
 module GBTimeout
   class Error<Interrupt
@@ -90,7 +95,7 @@ def remote_bundle_locations
     {:display => :'Macromates Review', :scm => :svn, :name => 'R',
       :url => 'http://macromates.com/svn/Bundles/trunk/Review/Bundles/'},
     {:display => :'GitHub', :scm => :git, :name => 'G',
-      :url => 'http://github.com/api/v1/yaml/search/tmbundle'} ]
+      :url => 'http://github.com/api/v1/yaml/search/'} ]
 end
 
 def targetPaths
@@ -129,10 +134,10 @@ end
 def normalize_github_repo_name(name)
   # Convert a GitHub repo name into a "normal" TM bundle name
   # e.g. ruby-on-rails-tmbundle => Ruby on Rails.tmbundle
-  name = name.gsub("-", " ").split.each{|part|
+  name = name.gsub(/\btextmate\b/i,"").gsub(/\bbundle\b/,"").gsub(/\btm\b/,"").gsub(/-+/,"-").gsub("-", " ").split.each{|part|
     part.capitalize! unless CAPITALIZATION_EXCEPTIONS.include? part}.join(" ")
   name[-9] = ?. if name =~ / tmbundle$/
-  name
+  name.gsub("iphone","iPhone") # ;)
 end
 
 def strip_html(text)
@@ -206,24 +211,45 @@ def infoDIALOG(dlg)
   FileUtils.mkdir_p $tempDir
   path = dlg['path'].split('|').last
   mode = dlg['path'].split('|').first
+  # writeToLogFile(path)
+  # return #<span id="repository_description" rel="/protocool/ack-tmbundle/edit/update" class="">&quot;Ack in Project&quot; TextMate bundle</span>
   $params['isBusy'] = true
   $params['progressIsIndeterminate'] = true
   $params['progressText'] = "Fetching information…"
   updateDIALOG
   return if $close
   if mode == 'git'
+    namehasdot = false
     searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
     url = path.gsub(/zipball\/master/, '')
-    begin
-      GBTimeout::timeout($timeout) do
-        info = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))['repositories'].first
+    if ! url.match(/.*?com\/(.*?)\/(.*?)\..*/)
+      begin
+        GBTimeout::timeout($timeout) do
+          d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))
+          if d.has_key?('repositories') and d['repositories'].size > 0
+            info = d['repositories'].first
+          else
+            d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"))
+            if d.has_key?('repositories') and d['repositories'].size > 0
+              info = d['repositories'].first
+            else
+              info = {}
+            end
+          end
+        end
+      rescue GBTimeout::Error
+        $params['isBusy'] = false
+        updateDIALOG
+        %x{rm -rf #{$tempDir}}
+        writeToLogFile("Timeout error while fetching information") if ! $close
+        return
       end
-    rescue GBTimeout::Error
-      $params['isBusy'] = false
-      updateDIALOG
-      %x{rm -rf #{$tempDir}}
-      writeToLogFile("Timeout error while fetching information") if ! $close
-      return
+    else
+      namehasdot = true
+      info = {}
+      info['name'] = ""
+      info['description'] = ""
+      info['owner'] = url.gsub(/.*?com\/(.*?)\/.*\//,'\1')
     end
     return if $close
     begin
@@ -266,6 +292,7 @@ def infoDIALOG(dlg)
     css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
     data = ""
     return if $close
+    gitbugreport = (namehasdot) ? "&nbsp;&nbsp;&nbsp;<i><small>incomplete caused by the dot in project name (known GitHub bug)</small></i><br>" : ""
     File.open("#{$tempDir}/info.html", "w") do |io|
       io << <<-HTML01
         <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
@@ -276,9 +303,9 @@ def infoDIALOG(dlg)
         </head>
         <body><div id='main'><div class='site'>
         <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
-        <h3><u>git Information:</u></h3>
+        <h3><u>git Information:</u></h3>#{gitbugreport}
         <b>Description:</b><br />&nbsp;#{info['description']}<br />
-        <b>Name:</b><br />&nbsp;#{info['name']}<br />
+        <b>Name:</b><br />&nbsp;#{plist['name']}<br />
         <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
         <b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />
         <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
@@ -491,41 +518,63 @@ def getBundleLists
         end
       elsif r[:scm] == :git
         list = [ ]
-        begin
-          GBTimeout::timeout($timeout+10) do
-            page = 1
-            while true
-              found = YAML.load(open("#{r[:url]}?page=#{page}"))['repositories']
-              break if found.empty?
-              page += 1
-              list << found
+        gitThreads = [ ]
+        t_counter = 0
+        $gitKeywords.each do |keyword|
+          gitThreads[t_counter] = Thread.new do
+            begin
+              GBTimeout::timeout($timeout) do
+                page=1
+                while true
+                  found = YAML.load(open("http://github.com/api/v1/yaml/search/#{keyword}?page=#{page}"))['repositories']
+                  break if found.empty?
+                  page += 1
+                  list << found
+                end
+              end
+            rescue GBTimeout::Error
+              writeToLogFile("Timeout while fetching GitHub list for %s" % keyword) if ! $close
+              t_error = true
             end
           end
-        rescue GBTimeout::Error
-          writeToLogFile("Timeout for fetching %s list" % r[:display].to_s) if ! $close
-          $params['progressText'] = 'Timeout'
-          $params['isBusy'] = false
-          updateDIALOG
+          t_counter += 1
         end
+        begin
+          GBTimeout::timeout($timeout) do
+            gitThreads.each {|t| t.join}
+          end
+        rescue GBTimeout::Error
+          gitThreads.each {|t| t.kill}
+          writeToLogFile("Timeout while fetching GitHub lists") if ! $close
+          t_error = true
+        end
+        if t_error and ! $close
+          $params['progressText'] = 'Error while fetching GitHub lists. Please check the Activity Log'
+          updateDIALOG
+          sleep(2)
+        end
+        $seen = []
         list.flatten!
-        list.find_all{|result| result['name'].match("")}.sort{|a,b| a['name'] <=> b['name']}
-        list.each do |result|
+        list.find_all{|result| result['name'].match(/(tmbundle|textmate.bundle|tm.bundle)$/)}.sort{|a,b| a['name'] <=> b['name']}.each do |result|
           break if $close
-          if result['url'] =~ /tmbundle$/
-            theName = normalize_github_repo_name(result['name']).split('.').first
-            theDescription = ""
-            if result.has_key?('description')
-              theDescription = strip_html(result['description'])
+          if not $seen.include?result['url']
+            if result['description'].nil? or not result['description'].match(/\b(#{$stopGitKeywords.join('|')})\b/i)
+              $seen << result['url']
+              theName = normalize_github_repo_name(result['name']).split('.').first
+              theDescription = ""
+              if result.has_key?('description')
+                theDescription = strip_html(result['description'])
+              end
+              theDescription += " (by %s)" % result['owner']
+              thePath = r[:scm].to_s + "|" + URI.escape(result['url'] + "/zipball/master") unless result['url'].nil?
+              $dataarray << {
+                'name' => theName,
+                'path' => thePath,
+                'bundleDescription' => theDescription,
+                'searchpattern' => theName.downcase+" "+theDescription.downcase,
+                'repo' => r[:name].to_s
+              }
             end
-            theDescription += " (by %s)" % result['owner']
-            thePath = r[:scm].to_s + "|" + URI.escape(result['url'] + "/zipball/master") unless result['url'].nil?
-            $dataarray << {
-              'name' => theName,
-              'path' => thePath,
-              'bundleDescription' => theDescription,
-              'searchpattern' => theName.downcase+" "+theDescription.downcase,
-              'repo' => r[:name].to_s
-            }
           end
         end
       else
@@ -805,6 +854,12 @@ def installGitZipball(path, installPath)
       %x{rm -r #{$tempDir}}
       return
     end
+    info = executeShell("cd '#{$tempDir}'; find . -name info.plist")
+    if info.nil? or info.empty?
+      writeToLogFile("The bundle #{name} does not contain the file 'info.plist'.")
+      $errorcnt += 1
+      return
+    end
     renameOldBundleFolder("#{installPath}/#{name}") if $installFolderExists
     executeShell("cp -R '#{$tempDir}/#{name}' #{e_sh installPath}")
     if $errorcnt > 0
@@ -846,6 +901,12 @@ def installGitClone(path, installPath)
   end
   return if $close
   if $errorcnt == 0
+    info = executeShell("cd '#{$tempDir}'; find . -name info.plist")
+    if info.nil? or info.empty?
+      writeToLogFile("The bundle #{theName} does not contain the file 'info.plist'.")
+      $errorcnt += 1
+      return
+    end
     renameOldBundleFolder("#{installPath}/#{theName}") if $installFolderExists
     executeShell("cp -R '#{$tempDir}/#{theName}' '#{installPath}/#{theName}'")
     if $errorcnt > 0
@@ -885,6 +946,12 @@ def installSVN(path, installPath)
     end
     return if $close
     if $errorcnt == 0
+      info = executeShell("cd '#{$tempDir}'; find . -name info.plist")
+      if info.nil? or info.empty?
+        writeToLogFile("The bundle #{realname} does not contain the file 'info.plist'.")
+        $errorcnt += 1
+        return
+      end
       renameOldBundleFolder("#{installPath}/#{realname}") if $installFolderExists
       executeShell("cp -R '#{$tempDir}/#{realname}' '#{installPath}/#{realname}'")
       if $errorcnt > 0

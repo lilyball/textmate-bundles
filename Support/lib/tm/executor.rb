@@ -67,7 +67,9 @@ module TextMate
 
         options.merge! args.pop if args.last.is_a? Hash
 
-        args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
+        if File.exists?(args[-1])
+          args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
+        end
 
         out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
         version = $1 if options[:version_regex] =~ (out + err)
@@ -83,7 +85,13 @@ module TextMate
         options[:script_args].each { |arg| args << arg }
 
         TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
-
+          
+          if ENV.has_key?("TM_EXECUTOR_PROJECT_MASTER_IS_MISSING")
+            io << "<h2 class=\"warning\">The file suggested by <code>TM_PROJECT_MASTER</code> does not exist.</h2>\n"
+            io << "<p>The file “<code>#{ENV["TM_FILEPATH"]}</code>” named by the environment variable <code>TM_PROJECT_MASTER</code> could not be found.  Please unset or correct TM_PROJECT_MASTER.</p>"
+            return
+          end
+          
           callback = proc do |str, type|
             str.gsub!(ENV["TM_FILEPATH"], "untitled") if ENV["TM_FILE_IS_UNTITLED"]
             filtered_str = block.call(str,type) if [:err, :out].include? type
@@ -133,13 +141,12 @@ module TextMate
           else
             filepath = "#{proj_dir}/#{proj_master}"
           end
-          if File.exists?(filepath)
-            ENV['TM_FILEPATH']    = filepath
-            ENV['TM_FILENAME']    = File.basename filepath
-            ENV['TM_DISPLAYNAME'] = File.basename filepath
-          else
-            ENV["TM_EXECUTOR_WARNING"] += "The file suggested by TM_PROJECT_MASTER does not exist.\n"
+          unless File.exists?(filepath)
+            ENV["TM_EXECUTOR_PROJECT_MASTER_IS_MISSING"] = 'true'
           end
+          ENV['TM_FILEPATH']    = filepath
+          ENV['TM_FILENAME']    = File.basename filepath
+          ENV['TM_DISPLAYNAME'] = File.basename filepath
         end
       end
 

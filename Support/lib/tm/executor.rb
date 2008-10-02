@@ -85,7 +85,7 @@ module TextMate
         options[:script_args].each { |arg| args << arg }
 
         TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
-          
+          io << '<div class="executor">'
           if ENV.has_key?("TM_EXECUTOR_PROJECT_MASTER_IS_MISSING")
             io << "<h2 class=\"warning\">The file suggested by <code>TM_PROJECT_MASTER</code> does not exist.</h2>\n"
             io << "<p>The file “<code>#{ENV["TM_FILEPATH"]}</code>” named by the environment variable <code>TM_PROJECT_MASTER</code> could not be found.  Please unset or correct TM_PROJECT_MASTER.</p>"
@@ -128,7 +128,9 @@ module TextMate
           end
 
           io << error
+          io << '<div class="controls"><a href="#" onclick="copyOutput(document.getElementById(\'_executor_output\'))">copy output</a></div>'
           io << '<div id="exception_report" class="framed">Program exited.</div>'
+          io << '</div>'
         end
       end
       
@@ -154,7 +156,6 @@ module TextMate
 
       def process_output_wrapper(io)
         io << <<-HTML
-<div class="executor">
 <!-- first box containing version info and script output -->
 <pre>
 <div id="_executor_output" > <!-- Script output -->
@@ -162,10 +163,6 @@ HTML
         yield
         io << <<-HTML
         </div></pre>
-        <div class="controls">
-          <a href="#" onclick="copyOutput(document.getElementById('_executor_output'))">copy output</a>
-        </div>
-        </div>
         HTML
       end
       
@@ -229,10 +226,6 @@ HTML
       margin: 0;
       padding: 2px 2px 2px 5px;
       font-size: 10pt;
-    }
-
-    div.executor a {
-      color: #FF5600;
     }
 
     div.executor div#_executor_output {

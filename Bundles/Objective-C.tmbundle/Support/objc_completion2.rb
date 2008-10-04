@@ -7,6 +7,13 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 
 
 class ExternalSnippetizer
+  
+  def initialize(options = {})
+    @star = options[:star] || nil
+    @arg_name = options[:arg_name] || nil
+    @tm_C_pointer = options[:tm_C_pointer] || nil
+  end
+  
 def snippet_generator(cand, start)
 
   cand = cand.strip
@@ -22,7 +29,7 @@ def snippet_generator(cand, start)
     unless name_array.empty?
     begin      
       stuff[-(name_array.size)..-1].each_with_index do |arg,i|
-          out << name_array[i] +  ":${"+(i+2).to_s + ":"+ arg +"} "
+          out << name_array[i] + ":${"+(i+2).to_s + ":"+ arg + "} "
       end
     rescue NoMethodError
       out = "$0"
@@ -45,9 +52,9 @@ end
 
 def type_declaration_snippet_generator(dict)
 
-  arg_name = dict['extraOptions']['arg_name'] && dict['noArg']
-  star = dict['extraOptions']['star'] && dict['pure']
-  pointer = dict['environment']['TM_C_POINTER']
+  arg_name = @arg_name && dict['noArg']
+  star = @star && dict['pure']
+  pointer = @tm_C_pointer
   pointer = " *" unless pointer
 
   if arg_name
@@ -73,7 +80,7 @@ def cfunction_snippet_generator(c)
   end.join(", ")+")$0"
 end
 
-def run(res, len = 0)
+def run(res)
   if res['type'] == "methods"
     r = snippet_generator(res['cand'], res['match'].size)
   elsif res['type'] == "functions"
@@ -329,11 +336,13 @@ class ObjCFallbackCompletion
       flags[:extra_chars]= '_'
       flags[:initial_filter]= searchTerm
       begin
-        TextMate::UI.complete(pl, flags)  do |hash|
-          hash['extraOptions'] = {'star' => star, 'arg_name' => arg_name}
-          hash['environment']={'TM_C_POINTER' => ENV['TM_C_POINTER']}
-          ExternalSnippetizer.new.run(hash)
+        TextMate::UI.complete(pl, flags)  do |hash| 
+          es = ExternalSnippetizer.new({:star => star,
+               :arg_name => arg_name,
+               :tm_C_pointer => ENV['TM_C_POINTER']})
+          es.run(hash)
         end
+        
       rescue NoMethodError
         TextMate.exit_show_tool_tip "you have Dialog2 installed but not the ui.rb in review"
       end
@@ -605,7 +614,7 @@ class ObjCMethodCompletion
     flags[:initial_filter]= word
     begin
       TextMate::UI.complete(pl, flags) do |hash|
-        ExternalSnippetizer.new.run(hash, word.size)
+        ExternalSnippetizer.new.run(hash)
       end
     rescue NoMethodError
         TextMate.exit_show_tool_tip "you have Dialog2 installed but not the ui.rb in review"

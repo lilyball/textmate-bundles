@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [ `echo -n "$DIALOG" | tail -c 1` != "2" ]; then
-	CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
-else
-	CHECK=$("$DIALOG" window list | egrep -c 'TextMate — GetBundles')
-fi
+	<string>CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
 
 if [ $CHECK == 0 ]; then
 	"${TM_RUBY:-ruby}" -wKU "$TM_BUNDLE_SUPPORT/getBundles.rb" &amp;&gt;/dev/null &amp;
 else
-	echo "The window “GetBundles” is already opened"
+	echo "The “GetBundles” window has already opened."
 fi</string>
 	<key>input</key>
 	<string>none</string>

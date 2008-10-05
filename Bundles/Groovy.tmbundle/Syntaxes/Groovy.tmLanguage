@@ -46,7 +46,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(package)\s+([^ ;]+)</string>
+			<string>(package)\s+([\w\.]*)</string>
 			<key>name</key>
 			<string>meta.package.groovy</string>
 		</dict>
@@ -65,7 +65,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(import)\s+([^ ;$]+);?</string>
+			<string>(import)\s+([\w\.]*)</string>
 			<key>name</key>
 			<string>meta.import.groovy</string>
 		</dict>
@@ -512,7 +512,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>$</string>
+					<string>(?=$|\)|})</string>
 					<key>name</key>
 					<string>meta.evaluation.ternary.groovy</string>
 					<key>patterns</key>

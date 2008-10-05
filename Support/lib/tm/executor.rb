@@ -55,7 +55,6 @@ module TextMate
       #   Provides an API function for running
 
       def run(*args, &block)
-
         block ||= Proc.new {}
         args.flatten!
 
@@ -84,7 +83,9 @@ module TextMate
 
         options[:script_args].each { |arg| args << arg }
 
+        
         TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
+          
           io << '<div class="executor">'
           if ENV.has_key?("TM_EXECUTOR_PROJECT_MASTER_IS_MISSING")
             io << "<h2 class=\"warning\">The file suggested by <code>TM_PROJECT_MASTER</code> does not exist.</h2>\n"
@@ -104,11 +105,13 @@ module TextMate
               io << str
             end
           end
-
+          
+          start = Time.now
           process_output_wrapper(io) do
             TextMate::Process.run(args, :env => options[:env], :echo => true, :watch_fds => { :echo => tm_echo_fd_read }, &callback)
           end
-
+          finish = Time.now
+          
           tm_error_fd_write.close
           error = tm_error_fd_read.read
           tm_error_fd_read.close
@@ -129,7 +132,8 @@ module TextMate
 
           io << error
           io << '<div class="controls"><a href="#" onclick="copyOutput(document.getElementById(\'_executor_output\'))">copy output</a></div>'
-          io << '<div id="exception_report" class="framed">Program exited.</div>'
+          io << format("<div id=\"exception_report\" class=\"framed\">Program exited after %0.2f seconds.</div>", finish-start)
+          
           io << '</div>'
         end
       end

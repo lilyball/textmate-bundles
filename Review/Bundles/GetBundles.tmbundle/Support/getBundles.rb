@@ -1057,14 +1057,12 @@ end
 def updateTMlibPath
   return if askDIALOG("Do you really want to update TextMate's Support folder?","") == 0
   path = "http://macromates.com/svn/Bundles/trunk/Support/"
-  # path = "http://macromates.com/svn/Bundles/trunk/Support/lib"
   $params['isBusy'] = true
   $params['progressText'] = "Installing TextMate's Support folder…"
   updateDIALOG
   begin
     installPath = "/Library/Application Support/TextMate"
-    %x{mkdir -p "#{e_sh installPath}"}
-    # installPath = TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Support"
+    %x{mkdir -p "#{installPath}"}
   rescue
     $errorcnt += 1
     writeToLogFile("No path to TextMate found!")

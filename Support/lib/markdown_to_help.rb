@@ -34,7 +34,7 @@ class TreeNode
   end
 end
 
-IO.popen("Markdown.pl|SmartyPants.pl", "r+") do |io|
+IO.popen('"$TM_SUPPORT_PATH/bin/Markdown.pl"|"$TM_SUPPORT_PATH/bin/SmartyPants.pl"', "r+") do |io|
 
   Thread.new { ARGF.each_line { |line| 
     io << line.gsub(/\[(.+?)\]\(\?(.+?)\)/){ '[' + $1 + '][?' + $2 + ']' + "\n[?" + $2 + "]: help:anchor='" + e_url($2) + "'%20bookID='TextMate%20Help'\n" }

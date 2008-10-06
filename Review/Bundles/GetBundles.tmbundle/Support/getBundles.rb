@@ -62,10 +62,10 @@ $x0=$x1=$x2=$x3=$x4 = nil
 
 CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as iphone]
 
+# keywords used in GitHub's search API to find as much as possible tmbundles
 $gitKeywords      = ["bundle","tmbundle","textmate"]
+# if at least one of these stop words occurs in the description do not show up it
 $stopGitKeywords  = ["my own","my personal","personal bundle","obsolete","deprecated","work in progress"]
-
-
 
 module GBTimeout
   class Error<Interrupt
@@ -134,6 +134,7 @@ end
 def normalize_github_repo_name(name)
   # Convert a GitHub repo name into a "normal" TM bundle name
   # e.g. ruby-on-rails-tmbundle => Ruby on Rails.tmbundle
+  # and delete all variants like "textmate bundle", "tm bundle", or "bundle"
   name = name.gsub(/\btextmate\b/i,"").gsub(/\bbundle\b/,"").gsub(/\btm\b/,"").gsub(/-+/,"-").gsub("-", " ").split.each{|part|
     part.capitalize! unless CAPITALIZATION_EXCEPTIONS.include? part}.join(" ")
   name[-9] = ?. if name =~ / tmbundle$/
@@ -186,8 +187,8 @@ def closeDIALOG
       %x{#{$DIALOG} -x#{t}}
     end
   end
-  # go back to the front most doc if TM is running
   %x{rm -rf #{$tempDir} 1> /dev/null}
+  # go back to the front most doc if TM is running
   # %x{open 'txmt://open?'} if ! getInstallPathFor("App Bundles").empty?
 end
 
@@ -211,8 +212,6 @@ def infoDIALOG(dlg)
   FileUtils.mkdir_p $tempDir
   path = dlg['path'].split('|').last
   mode = dlg['path'].split('|').first
-  # writeToLogFile(path)
-  # return #<span id="repository_description" rel="/protocool/ack-tmbundle/edit/update" class="">&quot;Ack in Project&quot; TextMate bundle</span>
   $params['isBusy'] = true
   $params['progressIsIndeterminate'] = true
   $params['progressText'] = "Fetching information…"
@@ -229,9 +228,11 @@ def infoDIALOG(dlg)
           if d.has_key?('repositories') and d['repositories'].size > 0
             info = d['repositories'].first
           else
+            # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
             d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"))
             if d.has_key?('repositories') and d['repositories'].size > 0
               info = d['repositories'].first
+            # if .../search/foo+bar+foo1 fails init an empty dict
             else
               info = {}
             end
@@ -520,6 +521,7 @@ def getBundleLists
         list = [ ]
         gitThreads = [ ]
         t_counter = 0
+        # collect all bundles for gitKeywords in separate threads
         $gitKeywords.each do |keyword|
           gitThreads[t_counter] = Thread.new do
             begin
@@ -553,6 +555,7 @@ def getBundleLists
           updateDIALOG
           sleep(2)
         end
+        # hash to make git bundles unique by using their urls
         $seen = []
         list.flatten!
         list.find_all{|result| result['name'].match(/(tmbundle|textmate.bundle|tm.bundle)$/)}.sort{|a,b| a['name'] <=> b['name']}.each do |result|

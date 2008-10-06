@@ -188,7 +188,7 @@ def closeDIALOG
   end
   # go back to the front most doc if TM is running
   %x{rm -rf #{$tempDir} 1> /dev/null}
-  %x{open 'txmt://open?'} if ! getInstallPathFor("App Bundles").empty?
+  # %x{open 'txmt://open?'} if ! getInstallPathFor("App Bundles").empty?
 end
 
 def updateDIALOG

@@ -30,6 +30,12 @@ It executes the current document or selection in R.app and switches to R.app's C
 
 ***Hint*** To use that command you have to install R.app in beforehand.
 
+## Send Selection/Document to R.app & Step
+<button>&nbsp;&#x2325;&#x21E7;↩&nbsp;</button>
+It executes the current line or selection in R.app and goes to the end of the next line. TextMate keeps its focus.
+
+***Hint*** To use that command you have to install R.app in beforehand.
+
 ## Completion…
 <button>&nbsp;^.&nbsp;</button>
 Based on all installed packages and local function declarations it shows an inline menu with completion suggestions for the current word or selection as <code style="background-color:lightgrey;color:black">&nbsp;command&nbsp;{library}&nbsp;</code>. The library `local` refers to functions defined within the current document.
@@ -215,7 +221,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Jul 23 2008***
+***Date: Oct 06 2008***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

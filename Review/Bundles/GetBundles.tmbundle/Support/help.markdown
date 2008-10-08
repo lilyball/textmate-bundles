@@ -1,4 +1,3 @@
-
 ---
 
 <center><big>"Get Bundles" provides an easy to use interface to install available TextMate's bundles which are hosted on macromates' svn repositories and on github.com.</big></center>

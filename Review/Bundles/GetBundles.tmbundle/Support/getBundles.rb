@@ -201,7 +201,8 @@ def updateDIALOG
 end
 
 def helpDIALOG
-  %x{'#{ENV['TM_BUNDLE_SUPPORT']}/bin/showHelp.sh'}
+  err = %x{open "txmt://open?"; osascript -e 'tell application "TextMate" to activate' -e 'tell application "System Events" to tell process "TextMate" to tell menu bar 1 to tell menu bar item "Bundles" to tell menu "Bundles" to tell menu item "GetBundles" to tell menu "GetBundles" to click menu item "Help"' 2>&1}
+  writeToLogFile(err) if err.match(/error/)
 end
 
 def infoDIALOG(dlg)

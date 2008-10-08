@@ -33,7 +33,7 @@ The entire scanning process can be cancelled by hitting <button>&#x238B;</button
 Once you have the list you can select one or more bundles and hit the `Install Bundles` button to install it/them. After installing TextMate will be forced to execute "Reload Bundles". The installation of a bundle or bundles can be cancelled by hitting <button>&#x238B;</button> as long as the script will not install that bundle physically. If a given bundle has been already installed the script will ask you whether that bundle should really be installed. If the user commits it the "old" bundle will be renamed into "THEBUNDLENAME.tmbundleTIMESTAMP" for safety reasons.
 
 
-The default installation path is `~/Library/Application Support/TextMate/Pristine Copy/Bundles` (Users Lib Pristine). This path can be changed in the "Advanced Drawer" dialog (more detail in 3.2). Please note for svn repositories that the script will perform a clean svn checkout. In order to avoid certain conflicts it is recommended if the user wants to work with a given bundle via svn afterwards to change the installation to `~/Library/Application Support/TextMate/Bundles` (Users Lib Bundles). The same for installing bundles from github.com using `git`.
+The default installation path is `~/Library/Application Support/TextMate/Pristine Copy/Bundles` (Users Lib Pristine). This path can be changed in the "Advanced Drawer" dialog (more detail [here](#sect_4)). Please note for svn repositories that the script will perform a clean svn checkout. In order to avoid certain conflicts it is recommended if the user wants to work with a given bundle via svn afterwards to change the installation to `~/Library/Application Support/TextMate/Bundles` (Users Lib Bundles). The same for installing bundles from github.com using `git`.
 
 
 "Get Bundles" also allows you to do a complete svn checkout of TextMate's Support Library from `http://macromates.com/svn/Bundles/trunk/Support/` into `/Library/Application Support/TextMate`. It can be invoked by clicking at the "Update Support Folder" button in the "Advanced Drawer" dialog.
@@ -58,10 +58,11 @@ You can use the search field to enter a search term. The search function will lo
 
 to display only those bundles which are hosted on the selected repository:
 
-*  Bundles <font color=blue>B</font>:
- [http://macromates.com/svn/Bundles/trunk/Bundles/](http://macromates.com/svn/Bundles/trunk/Bundles/)
-*  Review <font color=blue>R</font>: [http://macromates.com/svn/Bundles/trunk/Review/Bundles/](http://macromates.com/svn/Bundles/trunk/Review/Bundles/)
-*  GitHub <font color=blue>G</font>: [http://github.com/](http://github.com/)
+<table style="margin-left:1cm">
+    <tr><td><font color=blue>B</font></td><td>Bundles</td><td><a href="http://macromates.com/svn/Bundles/trunk/Bundles/">http://macromates.com/svn/Bundles/trunk/Bundles/</a> </td></tr>
+    <tr><td><font color=blue>R</font></td><td>Review</td><td><a href="http://macromates.com/svn/Bundles/trunk/Review/Bundles/">http://macromates.com/svn/Bundles/trunk/Review/Bundles/</a></td></tr>
+    <tr><td><font color=blue>G</font></td><td>GitHub</td><td><a href="http://github.com/">http://github.com/</a></td></tr>
+</table>
 
 
 ### Get Bundle Info ###
@@ -73,20 +74,55 @@ to display only those bundles which are hosted on the selected repository:
 <button>&#x2318;&#x238B;</button> <img valign=middle src="images/img_gear.png"><br>
 ![](images/img_gear_menu.png)
 
-### Message Field + Cancel current Task ###
+The Gear Action Menu provides some additional commands:
 
+#### Update Descriptions ####
+
+This command updates the local copy of descriptions for all svn repositories. It is recommended to update this list regularly in order to be up-to-date. The underlying script will only recognize if a new bundle was added but not if the description of an already existing bundle was changed meanwhile.
+
+#### Rescan Bundle List ####
+
+This command deletes the current list of bundles and rescans all repositories.
+
+#### Show Activity Log Drawer ####
+
+<button>&#x2325;&#x21E7;&#x2318;L</button> Opens or closes a drawer with advanced commands. More details [here](#sect_4).
+
+#### Show Advanced Drawer ####
+
+<button>&#x2325;&#x21E7;&#x2318;A</button> Opens or closes a drawer displaying GetBundles' console log file. The path to the log file is `~/Library/Logs/TextMateGetBundles.log`.
+
+### Message Field + Cancel current Task ###
 
 ![](images/img_message.png)
 
+All activities and warnings will be shown in that message field. To cancelled the current task it is possible to click into the spinning wheel or hit <button>&#x238B;</button>. While installing a bundle it is possible to cancel the process as long as the script does not install the bundle physically.
 
 ### Show Help ###
 
-![](images/img_help.png)
-
+<img valign=middle src="images/img_help.png"> Opens that "Help".
 
 # Advanced Drawer #
 
 ![](images/img_adv_drawer.png)
+
+### Installation
+
+#### Target Folder ####
+
+#### Timeout ####
+
+### git Installation ###
+
+#### using zip archive
+
+### Reveal Target Folder in Finder ###
+
+### Open Bundle Editor ###
+
+### Update Support Folder ###
+
+
 
 # Activity Log Drawer #
 
@@ -96,8 +132,8 @@ to display only those bundles which are hosted on the selected repository:
 <table>
 <tr><td align="center"><button>&#x21A9;</button></td><td>Install selected bundle(s)</td></tr>
 <tr><td align="center"><button>&#x2318;I</button></td><td>Get details about selected bundle</td></tr>
-<tr><td align="center"><button>&#x238B;</button></td><td>Interrupt current task</td></tr>
-<tr><td align="center"><button>&#x2318;&#x238B;</button></td><td>Open Gear Action menu</td></tr>
+<tr><td align="center"><button>&#x238B;</button></td><td>Cancel current task</td></tr>
+<tr><td align="center"><button>&#x2318;&#x238B;</button></td><td>Open Gear Action Menu</td></tr>
 <tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;L</button></td><td>Open/Close Activity Log Drawer</td></tr>
 <tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;A</button></td><td>Open/Close Advanced Drawer</td></tr>
 <tr><td align="center"><button>&#x2318;W</button></td><td>Close the "Get Bundles" dialog</td></tr>

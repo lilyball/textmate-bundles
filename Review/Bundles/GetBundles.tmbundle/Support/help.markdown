@@ -15,6 +15,7 @@ The computer has to be connected to the internet.
     cmd += 'echo -n "“TM_SVN” set to: ";echo -n "${TM_SVN:-}";echo -n "<br><br>";';
     cmd += 'echo -n "“git” client found in: ";which git && git --version | head -n1;echo -n "<br><br>";';
     cmd += 'echo -n "“TM_GIT” set to: ";echo -n "${TM_GIT:-}";echo -n "<br><br>";';
+    cmd += 'echo -n "“GIT_PROXY_COMMAND” set to: ";echo -n "${GIT_PROXY_COMMAND:-}";echo -n "<br><br>";';
     cmd += 'echo -n "“unzip” found in: ";which unzip;echo -n "<br><br>";';
     cmd += 'echo -n "“ruby”: ";/usr/bin/env ruby -v;echo -n "<br><br>";';
     cmd += 'echo -n "“ping macromates”:<br>";ping -c 1 macromates.com | head -n2;echo -n "<br><br>";';
@@ -48,6 +49,34 @@ For installing a bundle by downloading it as zip archive the script needs `unzip
     document.getElementById("zip").innerHTML = outstr1;
   }
 </script>
+
+### using `git clone` behind a firewall ###
+
+`git clone` uses the port 9148. If you are behind a firewall it could be that this port is denied. To check it run for instance that command in the Terminal:
+<pre>
+  cd ~/Desktop
+  git clone git://github.com/timcharper/git-tmbundle.git
+</pre>
+If nothing happens after initializing an empty Git repository or if you see an error message like "fatal: unable to connect a socket (Operation timed out)" then it is very likely that a firewall (mostly not your firewall on the Mac) denies that port.
+
+One simple solution is to install that bundle by downloading it as zip archive (zipball) (see "Advanced Drawer" [here](#sect_4.1.2.1)).
+
+But if you need to execute `git clone` then you can try the following:<br>
+You can ask your IT department to open that port for you. But in many cases the IT department says "no" for some reasons. Fortunately `git` supports to set up a proxy via the shell variable `GIT_PROXY_COMMAND`.<br>
+
+*  check whether the UNIX command `socket` is installed at your system. If not, download the source code from http://www.bibiko.de/socket-1.1.mac.zip <button onclick="TextMate.system('open http://www.bibiko.de/socket-1.1.mac.zip',null)" title="Click to download it by using the default browser">download it</button>, decompress it, and run `make; sudo make install` in the Terminal.
+*  ask your IT department for a Web Proxy (HTTP) PROXY_URL and the port PORT (maybe it is already set in "System Preferences" > "Network" > "Advanced" > "Proxies" <button onclick='TextMate.system("open /System/Library/PreferencePanes/Network.prefPane/",null)'>Click to open that pane</button>)
+*  write a shell script e.g. `proxy-git.sh`:
+<pre>
+  (echo "CONNECT $1:$2 HTTP/1.0"; echo; cat ) | socket PROXY_URL PORT | (read a; read a; cat )
+</pre>
+*  save that shell script to a reachable place like `/usr/local/bin` and make sure that the script is executable
+*  add to the file ~/.profile
+<pre>
+export GIT_PROXY_COMMAND=PATH_TO/proxy-git.sh
+</pre>
+
+
 
 # General Operating Mode
 After invoking "GetBundles" the script scans these repositories:
@@ -364,7 +393,7 @@ Both variables can be set in TextMate's Preferences Pane under the item "Advance
 > This could happen esp. for bundles hosted on GitHub. The actual name shown in TextMate's Bundles list is set in the file "info.plist". Within the dialog's list the name of that project will be shown in the column "name", **not** the name set in "info.plist". 
 
 * While installing a bundle a "timeout" message appears. Why?
->  There're some reasons for that. ❶ Something went wrong while the installation, i.e. no e.g. connection to the host. ❷ The host's respond is too slow. To fix that you can increase the timeout. See [here](#sect_4.1.1.2). ❸ Some commands cannot be executed for some reasons. **Thus in any case please check the "Activity Log"** <button>&#x2325;&#x21E7;&#x2318;L</button>.
+>  There're some reasons for that. <br>❶ Something went wrong while the installation, i.e. no e.g. connection to the host. <br>❷ The host's respond is too slow. To fix that you can increase the timeout. See [here](#sect_4.1.1.2). <br>❸ Some commands cannot be executed for some reasons (not found or no permission). <button>&#x2325;&#x21E7;&#x2318;L</button>. <br>❹ If you were installing a bundle by using `git clone` and you are sure that the host is not down then it is very likely that a firewall denies `git`'s port 9148. If so please read more [here](#sect_1.2.1).<br><br>**Thus in any case please check the "Activity Log"**
 
 * The description in the list differs to that one in the Info Window. Why?
 > There is a convention to "info.plist"'s description key: In the dialog everything before the HTML tag &lt;hr&gt; will be displayed as short description (without any other HTML tags). If the description contains the HTML tag &lt;hr&gt; everything after that tag will be shown as long description.

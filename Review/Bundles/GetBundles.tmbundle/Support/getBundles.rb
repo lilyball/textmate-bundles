@@ -1017,7 +1017,8 @@ def installBundles(dlg)
       end
       updateDIALOG
       # git := install via zipball, gitclone := install via 'git clone...'
-      mode += $GITMODE if mode == 'git' and ! dlg['usingGitZip']
+      # dlg['usingGitZip'] could give 0 (DIALOG1) or false (DIALOG2)
+      mode += $GITMODE if mode == 'git' and (dlg['usingGitZip'] == false or dlg['usingGitZip'] == 0)
       break if $close
       if mode == 'git'
         installGitZipball(path, installPath)

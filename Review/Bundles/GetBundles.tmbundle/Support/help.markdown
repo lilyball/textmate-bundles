@@ -1,18 +1,56 @@
 ---
 
-<center><big>"Get Bundles" provides an easy to use interface to install available TextMate's bundles which are hosted on macromates' svn repositories and on github.com.</big></center>
+<center><big>"GetBundles" provides an easy to use interface to install available TextMate's bundles which are hosted on macromates' svn repositories and on github.com.</big></center>
 
 # Requirements
 The computer has to be connected to the internet.
+
+<button onclick="cr()" title="Press to check requirements">Check Requirements</button>
+<div id="check" style="margin-left:1cm;"></div>
+
+<script type="text/javascript" charset="utf-8">
+  var outstr2 = "";
+  function cr () {
+    var cmd = 'echo -n "“svn” client found in: ";which svn && svn --version | head -n1;echo -n "<br><br>";';
+    cmd += 'echo -n "“TM_SVN” set to: ";echo -n "${TM_SVN:-}";echo -n "<br><br>";';
+    cmd += 'echo -n "“git” client found in: ";which git && git --version | head -n1;echo -n "<br><br>";';
+    cmd += 'echo -n "“TM_GIT” set to: ";echo -n "${TM_GIT:-}";echo -n "<br><br>";';
+    cmd += 'echo -n "“unzip” found in: ";which unzip;echo -n "<br><br>";';
+    cmd += 'echo -n "“ruby”: ";/usr/bin/env ruby -v;echo -n "<br><br>";';
+    cmd += 'echo -n "“ping macromates”:<br>";ping -c 1 macromates.com | head -n2;echo -n "<br><br>";';
+    cmd += 'echo -n "“ping github”:<br>";ping -c 1 github.com | head -n2;echo -n "<br><br>";';
+    myCommand = TextMate.system(cmd, function (task) { });
+    myCommand.onreadoutput = setStr2;
+  }
+  function setStr2 (str) {
+    outstr2 += str
+    document.getElementById("check").innerHTML = outstr2;
+  }
+</script>
+
 
 ## svn Repositories
 In order to check out bundles hosted on a svn repository the underlying script makes usage of the UNIX command `svn`. On Mac OSX 10.5.x `svn` is pre-installed. On Mac OSX 10.4.x one has to install it in beforehand ([here](http://www.collab.net/downloads/community/)). Furthermore the script recognizes if the user set TextMate's shell variable `TM_SVN`. See also [here](#sect_2.1).
 
 ## git Repositories
-Bundles hosted as a git repository ([a fast version control system](http://git.or.cz/)) can be also installed by downloading it as a zip archive. Thus it is not necessary to install `git`. If `git` is installed and the user did not check the option "using zip archive" in the Advanced Drawer `git` will be used to install the bundle(s). Furthermore the script recognizes if the user set TextMate's shell variable `TM_GIT`. See also [here](#sect_2.2).
+Bundles hosted as a git repository ([a fast version control system](http://git.or.cz/)) can be also installed by downloading it as a zip archive. Thus it is not necessary to install `git`. If `git` is installed and the user did not check the option "using zip archive" in the Advanced Drawer `git clone` will be used to install the bundle(s). Furthermore the script recognizes if the user set TextMate's shell variable `TM_GIT`. See also [here](#sect_2.2).
+
+For installing a bundle by downloading it as zip archive the script needs `unzip`. This command should be installed as default on any Mac OSX. <button onclick="cfu()" title="Press to execute 'which unzip'">Check for unzip</button> <span id="zip"></span>
+<script type="text/javascript" charset="utf-8">
+  var outstr1 = "";
+  function cfu () {
+    var cmd = 'echo -n "found in: ";which unzip';
+    myCommand = TextMate.system(cmd, function (task) { });
+    myCommand.onreadoutput = setStr1;
+  }
+  function setStr1 (str) {
+    outstr1 += str
+    document.getElementById("zip").innerHTML = outstr1;
+  }
+</script>
 
 # General Operating Mode
-After invoking "Get Bundles" the script scans these repositories:
+After invoking "GetBundles" the script scans these repositories:
 
 * [http://macromates.com/svn/Bundles/trunk/Bundles/](http://macromates.com/svn/Bundles/trunk/Bundles/) (Bundles <font color=blue>B</font>)
 * [http://macromates.com/svn/Bundles/trunk/Review/Bundles/](http://macromates.com/svn/Bundles/trunk/Review/Bundles/) (Review <font color=blue>R</font>)
@@ -21,28 +59,30 @@ After invoking "Get Bundles" the script scans these repositories:
 for TextMate bundles.
 
 
-In order to increase the speed of scanning the svn repositories the descriptions are saved locally. If a new bundle was uploaded to a svn repository and the local copy of the descriptions will not find a matching description the user will be notified by a message to "Update the Descriptions". This can be done by invoking the gear action command "Update Descriptions". It is recommended to update the locally saved descriptions regularly due to the fact that the script will <b>not</b> recognize if a bundle description was changed meanwhile.
+In order to increase the speed of scanning the svn repositories the descriptions are saved locally. If a new bundle was uploaded to a svn repository and the local copy of the descriptions will not find a matching description the user will be notified by a message to "Update the Descriptions". This can be done by invoking the "Gear Action Menu" command "Update Descriptions". It is recommended to update the locally saved descriptions regularly due to the fact that the script will <b>not</b> recognize if a bundle description was changed meanwhile.
 
 
-The descriptions of all bundles hosted on github.com will be scanned automatically.
+The descriptions of all bundles hosted on github.com will not be cached locally.
 
 
-The entire scanning process can be cancelled by hitting <button>&#x238B;</button> or by clicking into the spinning wheel. The bundle list can be rescanned by the gear action command "Rescan Bundle List".
+The entire scanning process can be cancelled by hitting <button>&#x238B;</button> or by clicking into the spinning wheel. The bundle list can be rescanned by the "Gear Action Menu" command "Rescan Bundle List".
 
 
-Once you have the list you can select one or more bundles and hit the `Install Bundles` button to install it/them. After installing TextMate will be forced to execute "Reload Bundles". The installation of a bundle or bundles can be cancelled by hitting <button>&#x238B;</button> as long as the script will not install that bundle physically. If a given bundle has been already installed the script will ask you whether that bundle should really be installed. If the user confirms it the "old" bundle will be renamed into "THEBUNDLENAME.tmbundleTIMESTAMP" for safety reasons.
+Once you have the list you can select one or more bundles and hit <button>Install Bundles</button> to install it/them. After installing TextMate will be forced to execute "Reload Bundles". The installation of a bundle or bundles can be cancelled by hitting <button>&#x238B;</button> as long as the script will not install that bundle physically (it uses a temporary folder first). If a given bundle has been already installed the script will ask you whether that bundle should really be installed. If the user confirms it the "old" bundle will be renamed into "THEBUNDLENAME.tmbundleTIMESTAMP" for safety reasons.
+
+*Example* Java.tmbundle09022008085943 means a backup of Java.tmbundle done at Feb 9 2008, 08:59:43.
 
 
-The default installation path is `~/Library/Application Support/TextMate/Pristine Copy/Bundles` (Users Lib Pristine). This path can be changed in the "Advanced Drawer" dialog (more detail [here](#sect_4)). Please note for svn repositories that the script will perform a clean svn checkout. In order to avoid certain conflicts it is recommended if the user wants to work with a given bundle via svn afterwards to change the installation to `~/Library/Application Support/TextMate/Bundles` (Users Lib Bundles). The same for installing bundles from github.com using `git`.
+The default installation path is `~/Library/Application Support/TextMate/Pristine Copy/Bundles` (Users Lib Pristine). This path can be changed in the "Advanced Drawer" dialog (more detail [here](#sect_4)). Please note for svn repositories that the script will perform a clean svn checkout. In order to avoid certain conflicts it is recommended if the user wants to work with a given bundle via `svn` afterwards to change the installation to `~/Library/Application Support/TextMate/Bundles` (Users Lib Bundles). The same for installing bundles from github.com using `git clone`.
 
 
-"Get Bundles" also allows you to do a complete svn checkout of TextMate's Support Library from `http://macromates.com/svn/Bundles/trunk/Support/` into `/Library/Application Support/TextMate`. It can be invoked by clicking at the "Update Support Folder" button in the "Advanced Drawer" dialog.
+"GetBundles" also allows you to do a complete svn checkout of TextMate's Support Library from `http://macromates.com/svn/Bundles/trunk/Support/` into `/Library/Application Support/TextMate`. It can be invoked by hitting <button>Update Support Folder</button>" in the "Advanced Drawer" dialog.
 
 
-In order to close the "Get Bundles" dialog simply hit the <button>&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;</button> button or press <button>&#x2318;W</button>.
+In order to close the "GetBundles" dialog simply hit <button>&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;</button> or press <button>&#x2318;W</button>.
 
 <pre>
-<small><i>Hint</i> The underlying script is written in Ruby 1.8 attested on Mac OSX 10.4.x and 10.5.x. It can be supposed that the script will not run with Ruby 1.9. If Ruby 1.9 is released officially the script will be updated if needed.
+<small><i>Hint</i> The underlying script is written in Ruby 1.8 attested on Mac OSX 10.4.x and 10.5.x. It can be supposed that the script will not run with Ruby 1.9. If Ruby 1.9 is officially released the script will be updated if needed.
 </small>
 </pre>
 
@@ -103,8 +143,8 @@ If `git` is not installed or the checkbox "using zip archive" in the "Advanced D
 
 <pre>
   download URLBUNDLE/zipball/master to /tmp/TM_GetBundlesTEMP/github.tmbundle.zip
-  /usr/bin/unzip /tmp/TM_GetBundlesTEMP/github.tmbundle.zip -d /tmp/TM_GetBundlesTEMP/
-  remove ID by using /usr/bin/zip
+  unzip /tmp/TM_GetBundlesTEMP/github.tmbundle.zip -d /tmp/TM_GetBundlesTEMP/
+  remove ID by using unzip
   if info.plist is found
     if BUNDLE.tmbundle already exists in INST_FOLDER
       ask for replacing
@@ -142,13 +182,13 @@ The second column "Name" displays the actual name. Please note that names for bu
 
 The third column "Description" displays the description of bundle taken from the info.plist for svn repositories and the description tag for git repositories.
 
-All three columns can be sorted separately by clicking into the header.
+All three columns can be sorted by clicking into the header.
 
 It is possible to select more than one bundle at the same time to install all of them.
 
 ### Filtering/Searching ###
 
-You can use the search field to enter a search term to look for bundles containing the search term (case insensitively). The search only recognizes the fields "name" or "description" (for GitHub bundles also for "author"). To sub-filter the list you can select one of these buttons
+You can use the search field to enter a search term to look for bundles containing the search term (case insensitively). The search only looks for it in the fields "name" and "description" (for GitHub bundles also for "author"). To sub-filter the list you can select one of these buttons
 
 ![](images/img_repo_filter.png)
 
@@ -171,13 +211,13 @@ to display only those bundles which are hosted on the selected repository:
 <button>&#x2318;&#x238B;</button> <img valign=middle src="images/img_gear.png"><br>
 ![](images/img_gear_menu.png)
 
-The Gear Action Menu provides some additional commands:
+The "Gear Action Menu" provides some additional commands:
 
 #### Update Descriptions / Update (x missing) ####
 
 This command updates the local copy of descriptions for all svn repositories. It is recommended to update this copy regularly in order to be up-to-date. The underlying script will only recognize if a new bundle was added but **not** if the description of an already existing bundle was changed meanwhile.
 
-If some descriptions are not found in the local copy of the descriptions the name of that command will be changed to "Update (x missing)" indicating that x descriptions are missing.
+If some descriptions are not found in the local copy of the descriptions the name of that command will be changed into "Update (x missing)" indicating that x descriptions are missing.
 
 #### Rescan Bundle List ####
 
@@ -220,7 +260,9 @@ By using this pull down menu you can specify the installation folder for all sel
   <tr><td>Users Downloads</td><td>&nbsp;</td><td><a onclick='TextMate.system("open \"$HOME/Downloads\"",null);' style="cursor:pointer">~/Downloads</a></td></tr>
 </table>
 
-The default installation folder is **Users Lib Pristine**. The same folder will be chosen if you installs a bundle by double-clicking at a downloaded bundle. If you want to use `svn` or `git` afterwards with a bundle it is recommended to choose **Users Lib Bundles** or for core bundles (shipped with the default installation of TextMate) **Lib Bundles**. All bundles in **Lib Bundles** override the core bundles in **App Bundles**. Therefor **App Bundles** as installation folder should only be used in cases of exception.
+The default installation folder is **Users Lib Pristine**. The same folder will be chosen if you install a bundle by double-clicking at a downloaded bundle. If you want to use `svn` or `git` afterwards with a bundle it is recommended to choose **Users Lib Bundles** or if these bundles should be available for all users **Lib Bundles**.
+
+*Note:* **App Bundles** as installation folder should only be used in cases of exception!
 
 For testing you can choose **Users Desktop** or **Users Downloads** as installation folder. Bundles which are downloaded here will **not** be installed. 
 
@@ -234,7 +276,7 @@ If you want to cancel the current task you can press <button>&#x238B;</button> o
 
 #### using zip archive ####
 
-If you check this checkbox you can tell the script to install a bundle hosted on GitHub by downloading the zip archive (zipball) even if `git` is installed. This is especially useful if you have installed `git` but sitting behind a firewall.
+If you check this checkbox you can tell the script to install a bundle hosted on GitHub by downloading the zip archive (zipball) even if `git` is installed. This is especially useful if you have installed `git` but sitting behind a firewall which denies the git port.
 
 ### Reveal Target Folder in Finder ###
 
@@ -246,15 +288,15 @@ This opens TextMate's "Bundle Editor".
 
 ### Update Support Folder ###
 
-As default TextMate ships with a support folder located in <span style="color:silver;">PathToTextMate.app</span>`/Contents/SharedSupport/Support`. After downloading and installing TextMate for the first time the development of TextMate's bundles and additional scripts etc. will be continued. Due to that fact it could happen that a bundle makes usage of new or changed features in the "Support Folder". For that reason it is sometimes necessary to update that "Support Folder".
+As default TextMate ships with a support folder located in <span style="color:silver;">PathToTextMate.app</span>`/Contents/SharedSupport/Support`. After downloading and installing TextMate for the first time or after a new release the development of TextMate's bundles and additional scripts etc. will be continued. Due to that fact it could happen that a bundle makes usage of new or changed features in the "Support Folder". For that reason it is sometimes necessary to update that "Support Folder".
 
 An update will be installed into `/Library/Application Support/TextMate/Support`. After this update TextMate's shell variable `TM_SUPPORT_PATH` will be set to that folder.
 
 <button onclick='chtmsp()'>Click to check the current content of `TM_SUPPORT_PATH` and version</button> <div id="out"></div>
 <script type="text/javascript" charset="utf-8">
-  var outstr = "TM_SUPPORT_PATH: ";
+  var outstr = "TM_SUPPORT_PATH:<br>";
   function chtmsp () {
-    var cmd = 'echo -en "$TM_SUPPORT_PATH"; echo -en " (version: ";cat "$TM_SUPPORT_PATH/version";echo -en ")"';
+    var cmd = 'echo -en "$TM_SUPPORT_PATH"; echo -en " (version: ";cat "$TM_SUPPORT_PATH/version";echo -en ")<br>"';
     myCommand = TextMate.system(cmd, function (task) { });
     myCommand.onreadoutput = setStr;
   }
@@ -267,17 +309,17 @@ An update will be installed into `/Library/Application Support/TextMate/Support`
 
 ![](images/img_act_log.png)
 
-This drawer shows the current content of the log file <a onclick='TextMate.system("open \"$HOME/Library/Logs/TextMateGetBundles.log\"",null);' style="cursor:pointer">~/Library/Logs/TextMateGetBundles.log</a>. The log file will be overwritten each time if you invoke "Get Bundles". 
+This drawer shows the current content of the log file <a onclick='TextMate.system("open \"$HOME/Library/Logs/TextMateGetBundles.log\"",null);' style="cursor:pointer">~/Library/Logs/TextMateGetBundles.log</a>. The log file will be overwritten each time if you invoke "GetBundles". 
 
 # Additional Keyboard Shortcuts #
-<table>
+<table style="margin-left:1cm">
 <tr><td align="center"><button>&#x21A9;</button></td><td>Install selected bundle(s)</td></tr>
 <tr><td align="center"><button>&#x2318;I</button></td><td>Get details about selected bundle</td></tr>
 <tr><td align="center"><button>&#x238B;</button></td><td>Cancel current task</td></tr>
-<tr><td align="center"><button>&#x2318;&#x238B;</button></td><td>Open Gear Action Menu</td></tr>
-<tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;L</button></td><td>Open/Close Activity Log Drawer</td></tr>
-<tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;A</button></td><td>Open/Close Advanced Drawer</td></tr>
-<tr><td align="center"><button>&#x2318;W</button></td><td>Close the "Get Bundles" dialog</td></tr>
+<tr><td align="center"><button>&#x2318;&#x238B;</button></td><td>Open "Gear Action Menu"</td></tr>
+<tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;L</button></td><td>Open/Close "Activity Log Drawer"</td></tr>
+<tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;A</button></td><td>Open/Close "Advanced Drawer"</td></tr>
+<tr><td align="center"><button>&#x2318;W</button></td><td>Close the "GetBundles" dialog</td></tr>
 </table>
 
 # Used Shell Variables
@@ -291,14 +333,14 @@ Both variables can be set in TextMate's Preferences Pane under the item "Advance
 
 # Troubleshooting & FAQ #
 
-* GetBundles said that no `svn` client is found. What can I do?
+* "GetBundles" said that no `svn` client is found. What can I do?
 >  There're two reasons for that: ❶ You haven't yet installed a `svn` client. If so, have a look [here](http://www.collab.net/downloads/community/) and install a client (on Mac OSX 10.5.x it is pre-installed). ❷ TextMate can't find `svn` in `$PATH`. If so, set TextMate's shell variable `TM_SVN` accordingly.
 
-* Why does a known bundle hosted on github.com is not listed?
+* Why is a known bundle hosted on github.com not listed?
 >  There is a convention for naming a TextMate bundle hosted on github.com. The project name should end with "-tmbundle" or ".tmbundle". Due to the fact that not all of these bundles followed that convention the script is using github's search API. The search terms are "tmbundle", "textmate", and "bundle". Only those projects are listed which end with "tmbundle","bundle", "textmate bundle", or "tm bundle". Furthermore if one of these key phrases are found within the description tag: "my own", "my personal", "personal bundle", "obsolete", "deprecated", or "work in progress" the bundle won't be listed. An other convention is that the bundle structure must be at the project's root level, i.e. not hidden in a subfolder of that project. 
 
 * I try to filter one repository, but it is empty. Why?
->  It could happen that one repository is down or not accessible. Then the script will skip it. If the list is empty at all it is very likely that you are not connected to the internet.
+>  It could happen that one repository is down or not accessible. Then the script will skip it. If the list is empty at all it is very likely that you are not connected to the internet. An other issue is to clear the search field.
 
 * I press the Help button but no "Help" will be shown. Why?
 >  Due to an internal issue the script has to call the bundle's "Help" command by using AppleScript. This AppleScript only works properly if you enabled in "System Preferences" > "Universal Access" > "Enable access for assistive devices". <button onclick='TextMate.system("open /System/Library/PreferencePanes/UniversalAccessPref.prefPane/",null)'>Click to open that pane</button>
@@ -313,13 +355,13 @@ Both variables can be set in TextMate's Preferences Pane under the item "Advance
 >  Simply press <button>&#x238B;</button> or click into the spinning wheel. Please note that the physical installation of a bundle cannot be cancelled for safety reasons.
 
 * What does it mean: "No info.plist is found"?
->  Each bundle must contain a file called "info.plist". Otherwise TextMate is not be able to install it properly. If you encountered that case please mail it to TextMate's mailing list (<a href="mailto:textmate@lists.macromates.com">textmate@lists.macromates.com</a>).
+>  Each bundle must contain a file called "info.plist". Otherwise TextMate is not able to install it properly. If you encountered that case please mail it to TextMate's mailing list (<a href="mailto:textmate@lists.macromates.com">textmate@lists.macromates.com</a>).
 
 * What does "…not yet downloaded…" mean in the description?
->  This phrase will only displayed if the local copy of your svn descriptions doesn't contain a description for that bundle. To update the local copy simply go to the "Gear Action Menu" and invoke "Update (x missing)".
+>  This phrase will only be displayed if the local copy of your svn descriptions doesn't contain a description for that bundle. To update the local copy simply go to the "Gear Action Menu" and invoke "Update (x missing)".
 
-* Why does the name of bundle listed in GetBundles differs to the actually installed name?
-> This only could happen esp. for bundles hosted on GitHub. The actual name shown in TextMate's Bundles list is set in the file "info.plist". Within the dialog's list the name of that project will be shown in the column "name", **not** the name set in "info.plist". 
+* Why does the name of a bundle listed in "GetBundles" differs to the actually installed name?
+> This could happen esp. for bundles hosted on GitHub. The actual name shown in TextMate's Bundles list is set in the file "info.plist". Within the dialog's list the name of that project will be shown in the column "name", **not** the name set in "info.plist". 
 
 * While installing a bundle a "timeout" message appears. Why?
 >  There're some reasons for that. ❶ Something went wrong while the installation, i.e. no e.g. connection to the host. ❷ The host's respond is too slow. To fix that you can increase the timeout. See [here](#sect_4.1.1.2). ❸ Some commands cannot be executed for some reasons. **Thus in any case please check the "Activity Log"** <button>&#x2325;&#x21E7;&#x2318;L</button>.
@@ -332,7 +374,7 @@ Both variables can be set in TextMate's Preferences Pane under the item "Advance
 
 # Main Bundle Maintainer
 
-***Date: Oct 08 2008***
+***Date: Oct 10 2008***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

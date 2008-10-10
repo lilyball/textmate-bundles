@@ -813,7 +813,7 @@ def installGitZipball(path, installPath)
     path.gsub(/.*github.com\/.*?\/(.*?)\/.*/,'\1') ).split('.').first + ".tmbundle"
   # the name of the zipball without zip id
   idname = path.gsub(/.*github.com\/(.*?)\/(.*?)\/zipball.*/,'\1-\2')
-  writeToLogFile("Install:\t%s\ninto:\t%s/%s\nusing:\t/usr/bin/unzip\ntemp folder:\t%s" \
+  writeToLogFile("Install:\t%s\ninto:\t%s/%s\nusing:\tunzip\ntemp folder:\t%s" \
     % [path, installPath, name, $tempDir])
   %x{rm -rf #{$tempDir} 1> /dev/null}
   FileUtils.mkdir_p $tempDir
@@ -836,14 +836,14 @@ def installGitZipball(path, installPath)
   return if $close
   if $errorcnt == 0
     # try to unzip the zipball
-    executeShell("/usr/bin/unzip '#{download_file}' -d '#{$tempDir}' 1> /dev/null")
+    executeShell("unzip '#{download_file}' -d '#{$tempDir}' 1> /dev/null")
     if $errorcnt > 0
       %x{rm -rf #{$tempDir}}
       return
     end
     return if $close
     # get the zip id from the downloaded zipball
-    id = executeShell("/usr/bin/unzip -z '#{download_file}' | head -n2 | tail -n1")
+    id = executeShell("unzip -z '#{download_file}' | head -n2 | tail -n1")
     if id.nil? or id.length == 0
       $errorcnt += 1
       %x{rm -rf #{$tempDir}}

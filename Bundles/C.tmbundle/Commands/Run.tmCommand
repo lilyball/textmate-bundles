@@ -11,11 +11,22 @@ require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
 require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
 
-bootstrap = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh"
-lang = ENV["TM_SCOPE"].slice(/^source\.(c(\+\+)?)/, 1)
 
 TextMate.save_current_document
-TextMate::Executor.run(bootstrap, lang, ENV["TM_FILEPATH"], :version_args =&gt; ["--version", lang], :version_regex =&gt; /\A(.*) \(GCC\)/)
+
+bootstrap = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh"
+ENV["TM_GCC_MODE"] = ENV["TM_SCOPE"].slice(/^source\.(c(\+\+)?)/, 1)
+
+unless ENV["TM_GCC_ARGS"].nil?
+  args = ENV["TM_GCC_ARGS"].split(" ")
+else
+  args = []
+end
+args &lt;&lt; ENV["TM_FILEPATH"]
+
+opts = {:version_args =&gt; ["--version"], :version_regex =&gt; /\A(.*) \(GCC\)/}
+
+TextMate::Executor.run(bootstrap, args, opts)
 </string>
 	<key>input</key>
 	<string>document</string>

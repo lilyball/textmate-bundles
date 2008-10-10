@@ -1,16 +1,21 @@
 #!/bin/bash
 
-if [ "$1" = "--version" ]; then
-  if [ $2 = "c" ]; then gcc --version;
-  elif [ $2 = "c++" ]; then g++ --version; fi
+if [ $TM_GCC_MODE = "c" ]; then
+  compiler=${TM_GCC:-gcc};
+elif [ $TM_GCC_MODE = "c++" ]; then
+  compiler=${TM_GPP:-g++};
 fi
 
-if [ "$1" = "c" ]; then
-  gcc -x "$1" -o "$2.out" "$2";
-elif [ "$1" = "c++" ]; then
-  g++ -x "$1" -o "$2.out" "$2";
-fi
+for p in $@; do
+  if [ p = "--version" ]; then
+    $compiler $@;
+    exit;
+  fi
+done
+
+eval last=\$$#;
+$compiler $@ -o "${last}.out";
 
 if [ $? -eq 0 ]; then
-  "$2.out"
+  "${last}.out";
 fi

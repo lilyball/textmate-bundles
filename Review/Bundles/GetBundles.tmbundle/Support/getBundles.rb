@@ -790,12 +790,12 @@ end
 
 def executeShell(cmd, cmdToLog = false, outToLog = false)
   writeToLogFile(cmd) if cmdToLog
-  stdin, stdout, stderr = Open3.popen3(cmd)
-  out = stdout.read
-  err = stderr.read
-  stdin.close
-  stdout.close
-  stderr.close
+  out = ""
+  err = ""
+  Open3.popen3(cmd) { |stdin, stdout, stderr|
+    out << stdout.read
+    err << stderr.read
+  }
   writeToLogFile(out) if (! out.empty? and outToLog)
   if ! err.empty?
     $errorcnt += 1
@@ -888,14 +888,11 @@ def installGitClone(path, installPath)
   theName = normalize_github_repo_name(path.sub('/zipball/master', '').gsub(/.*\/(.*)/, '\1'))
   begin
     GBTimeout::timeout($timeout) do
-      d = executeShell("#{git} clone #{e_sh thePath} '#{$tempDir}/#{theName}' 2>&1", true, false)
-      if d.match(/(fatal|error)/)
-        writeToLogFile(d)
+      executeShell("#{git} clone #{e_sh thePath} '#{$tempDir}/#{theName}'", true, true)
+      if $errorcnt > 0
         %x{rm -r #{$tempDir}}
         return
       end
-      # avoid outputting all xx% stuff, only for 100% or error
-      writeToLogFile(d.gsub(/[\r|\n]/,"§").split('§').select{|v| v =~ /(fatal|error|done|100)/}.join("\n"))
     end
   rescue GBTimeout::Error
     $errorcnt += 1

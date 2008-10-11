@@ -11,22 +11,31 @@ require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
 require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
 
+mode = ENV["TM_SCOPE"].slice(/^source\.(c(\+\+)?)/, 1)
 
-TextMate.save_current_document
+TextMate.save_current_document(mode.gsub(/\+\+/, "c"))
+TextMate::Executor.make_project_master_current_document
 
-bootstrap = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh"
-ENV["TM_GCC_MODE"] = ENV["TM_SCOPE"].slice(/^source\.(c(\+\+)?)/, 1)
-
-unless ENV["TM_GCC_ARGS"].nil?
-  args = ENV["TM_GCC_ARGS"].split(" ")
+case mode
+when "c"
+  compiler = ENV["TM_GCC"] || "gcc"
+when "c++"
+  compiler = ENV["TM_GPP"] || "g++"
 else
-  args = []
+  raise "Unrecognized Mode for C bundle's Run command."
 end
-args &lt;&lt; ENV["TM_FILEPATH"]
 
-opts = {:version_args =&gt; ["--version"], :version_regex =&gt; /\A(.*) \(GCC\)/}
+args = [compiler]
+unless ENV["TM_GCC_ARGS"].nil?
+  ENV["TM_GCC_ARGS"].split(" ").map {|a| args &lt;&lt; a}
+end
+args &lt;&lt; ENV["TM_FILEPATH"].gsub(" ", "\ ")
 
-TextMate::Executor.run(bootstrap, args, opts)
+opts = {:version_args =&gt; ["--version"],
+        :version_regex =&gt; /\A(.*) \(GCC\)/,
+        :bootstrap =&gt; ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh"}
+
+TextMate::Executor.run(args, opts)
 </string>
 	<key>input</key>
 	<string>document</string>

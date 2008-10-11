@@ -99,7 +99,9 @@ module TextMate
         io[0][0].fcntl(6, ENV['TM_PID'].to_i) if ENV.has_key? 'TM_PID'
 
         pid = fork {
-
+          
+          at_exit { exit! }
+          
           STDIN.reopen(io[0][0])
           STDOUT.reopen(io[1][1])
           STDERR.reopen(io[2][1])

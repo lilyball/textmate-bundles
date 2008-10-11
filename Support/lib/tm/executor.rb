@@ -58,7 +58,8 @@ module TextMate
         block ||= Proc.new {}
         args.flatten!
 
-        options = {:version_args  => ['--version'],
+        options = {:bootstrap     => nil,
+                   :version_args  => ['--version'],
                    :version_regex => /\A(.*)$/,
                    :verb          => "Running",
                    :env           => nil,
@@ -72,7 +73,20 @@ module TextMate
 
         out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
         version = $1 if options[:version_regex] =~ (out + err)
-
+        
+        unless $?.exitstatus == 0
+          TextMate::HTMLOutput.show(:title => "Can't find “#{args[0]}” on PATH.", :sub_title => "") do |io|
+            io << "<p>The current PATH is:</p>"
+            io << "<blockquote>"
+            ENV["PATH"].split(":").each do |p|
+              io << htmlize(p + "\n")
+            end
+            io << "</blockquote>"
+            io << "<p>Please add the directory containing “<code>#{args[0]}</code>” to <code>PATH</code> in TextMate's Shell Variables preferences.</p>"
+          end
+          return
+        end
+        
         tm_error_fd_read, tm_error_fd_write = ::IO.pipe
         tm_error_fd_read.fcntl(Fcntl::F_SETFD, 1)
         ENV['TM_ERROR_FD'] = tm_error_fd_write.to_i.to_s
@@ -82,7 +96,6 @@ module TextMate
         ENV['TM_INTERACTIVE_INPUT_ECHO_FD'] = tm_echo_fd_write.to_i.to_s
 
         options[:script_args].each { |arg| args << arg }
-
         
         TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
           
@@ -104,6 +117,12 @@ module TextMate
               str = "<span class=\"echo\">#{str}</span>" if type == :echo
               io << str
             end
+          end
+          
+          io << "<!-- » #{args[0,args.length-1].join(" ")} #{ENV["TM_DISPLAYNAME"]} -->"
+          
+          unless options[:bootstrap].nil?
+            args[0,0] = options[:bootstrap] # add the bootstrap script to the front of args
           end
           
           start = Time.now

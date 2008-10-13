@@ -21,6 +21,11 @@
 			<string>(&lt;)((mx)(:))?(Metadata|Script)(&gt;)</string>
 			<key>beginCaptures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.script-metadata.start.xml.mxml</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
@@ -53,6 +58,11 @@
 			<string>(&lt;/)((mx)(:))?(Metadata|Script)(&gt;)</string>
 			<key>endCaptures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.script-metadata.end.xml.mxml</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
@@ -79,8 +89,6 @@
 					<string>punctuation.definition.tag.xml.mxml</string>
 				</dict>
 			</dict>
-			<key>name</key>
-			<string>meta.tag.metadata.xml.mxml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -94,6 +102,11 @@
 			<string>(&lt;)((mx)(:))?(Style)(&gt;)</string>
 			<key>beginCaptures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.css.start.xml.mxml</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
@@ -126,6 +139,11 @@
 			<string>(&lt;/)((mx)(:))?(Style)(&gt;)</string>
 			<key>endCaptures</key>
 			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.css.end.xml.mxml</string>
+				</dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
@@ -152,8 +170,6 @@
 					<string>punctuation.definition.tag.xml.mxml</string>
 				</dict>
 			</dict>
-			<key>name</key>
-			<string>meta.tag.style.xml.mxml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -279,6 +295,44 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>cdata</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.xml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>]]&gt;</string>
+					<key>name</key>
+					<string>string.unquoted.cdata.end.xml</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.xml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>&lt;!\[CDATA\[</string>
+					<key>name</key>
+					<string>string.unquoted.cdata.start.xml</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.actionscript.3</string>
+				</dict>
+			</array>
+		</dict>
 		<key>doublequotedString</key>
 		<dict>
 			<key>begin</key>

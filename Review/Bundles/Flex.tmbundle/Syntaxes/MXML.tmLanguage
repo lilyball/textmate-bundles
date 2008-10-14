@@ -237,10 +237,6 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#scriptBinding</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#doublequotedString</string>
 				</dict>
 				<dict>
@@ -357,11 +353,18 @@
 			</dict>
 			<key>name</key>
 			<string>string.quoted.double.xml.mxml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#scriptBinding</string>
+				</dict>
+			</array>
 		</dict>
 		<key>scriptBinding</key>
 		<dict>
 			<key>begin</key>
-			<string>"\s*{</string>
+			<string>{</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -373,7 +376,7 @@
 			<key>contentName</key>
 			<string>source.actionscript.3.embedded.binding.mxml</string>
 			<key>end</key>
-			<string>}\s*"</string>
+			<string>}</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>

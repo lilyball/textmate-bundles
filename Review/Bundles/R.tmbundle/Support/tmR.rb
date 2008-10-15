@@ -132,8 +132,11 @@ descriptors = [stdout, stderr]
 descriptors.each { |fd| fd.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK) }
 until descriptors.empty?
   select(descriptors).shift.each do |io|
-    str = io.read
-    if str.empty?
+    begin
+      str = io.readline
+    rescue
+    end
+    if str.nil? or str.empty?
       descriptors.delete io
       io.close
     elsif io == stderr

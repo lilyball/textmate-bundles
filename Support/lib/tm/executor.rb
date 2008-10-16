@@ -39,6 +39,7 @@
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'tm/process'
 require SUPPORT_LIB + 'tm/htmloutput'
+require SUPPORT_LIB + 'tm/require_cmd'
 require SUPPORT_LIB + 'escape'
 require SUPPORT_LIB + 'io'
 
@@ -71,21 +72,10 @@ module TextMate
           args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
         end
 
+        TextMate.require_cmd(args[0])
+        
         out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
         version = $1 if options[:version_regex] =~ (out + err)
-        
-        unless $?.exitstatus == 0
-          TextMate::HTMLOutput.show(:title => "Can't find “#{args[0]}” on PATH.", :sub_title => "") do |io|
-            io << "<p>The current PATH is:</p>"
-            io << "<blockquote>"
-            ENV["PATH"].split(":").each do |p|
-              io << htmlize(p + "\n")
-            end
-            io << "</blockquote>"
-            io << "<p>Please add the directory containing “<code>#{args[0]}</code>” to <code>PATH</code> in TextMate's Shell Variables preferences.</p>"
-          end
-          return
-        end
         
         tm_error_fd_read, tm_error_fd_write = ::IO.pipe
         tm_error_fd_read.fcntl(Fcntl::F_SETFD, 1)

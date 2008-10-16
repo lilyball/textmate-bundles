@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+print STDIN.read.gsub(/=\n/, '').gsub(/=([0-9A-F]{2})/) { $1.to_i(16).chr }
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Decode Quoted Printables</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>C0DD4A50-F63F-444F-8661-98FAEC220F51</string>
+</dict>
+</plist>

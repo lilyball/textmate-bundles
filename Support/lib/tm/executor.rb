@@ -72,7 +72,11 @@ module TextMate
           args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
         end
 
-        TextMate.require_cmd(args[0])
+        # TODO: checking for an array here because a #! line
+        # in the script will cause args[0] set to an array by the previous statement.
+        # This array could begin with /usr/bin/env and I'm not sure what require_cmd
+        # should do in that case -- Alex Ross
+        TextMate.require_cmd(args[0]) unless args[0].is_a?(Array)
         
         out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
         version = $1 if options[:version_regex] =~ (out + err)

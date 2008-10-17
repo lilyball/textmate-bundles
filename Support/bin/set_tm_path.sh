@@ -8,8 +8,10 @@
   done
 
   if [[ $(ps -xp $PPID|wc -l) -ne 2 ]]; then
-    osascript -e "tell application \"Terminal\" to do script \"defaults write com.macromates.textmate OakShellVariables -array-add \\\"{ enabled = 1; variable = PATH; value = '\$PATH'; }\\\"\""
-    open "$APP_PATH"
+    osascript <<APPLESCRIPT
+      tell application "Terminal" to do script "defaults write com.macromates.textmate OakShellVariables -array-add \"{ enabled = 1; variable = PATH; value = '\$PATH'; }\" && open \"$APP_PATH\""
+APPLESCRIPT
+    
   else
     echo >/dev/console "$(date +%Y-%m-%d\ %H:%M:%S): TextMate is still running. Relaunch aborted."
   fi

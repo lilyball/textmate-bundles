@@ -14,7 +14,8 @@ module TextMate
           end
           io << "</blockquote>"
           io << "<p>Please add the directory containing “<code>#{cmd}</code>” to <code>PATH</code> in TextMate's Shell Variables preferences.</p>"
-          io << "<p>Alternatively, TextMate can retrieve the <code>PATH</code> from Terminal install it in TextMate's preferences for you. TextMate will be restarted.</p>"
+          io << "<p>Alternatively, TextMate can retrieve the <code>PATH</code> from Terminal install it in TextMate's preferences for you.</p>"
+          io << "<h4 class=\"warn\">TextMate will be restarted.</h4>"
           io << "<p><button onclick=\"TextMate.system('#{(ENV["TM_SUPPORT_PATH"]+"/bin/set_tm_path.sh").gsub(" ", "\\\\\\\\ ")}', null)\">Set PATH</button></p>"
         end
         TextMate.exit_show_html

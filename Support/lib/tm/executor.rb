@@ -59,7 +59,7 @@ module TextMate
         block ||= Proc.new {}
         args.flatten!
 
-        options = {:bootstrap     => nil,
+        options = {:bootstrap     => ENV["TM_BUNDLE_SUPPORT"]+"/bin/bootstrap.sh",
                    :version_args  => ['--version'],
                    :version_regex => /\A(.*)$/,
                    :verb          => "Running",
@@ -115,7 +115,8 @@ module TextMate
           
           io << "<!-- » #{args[0,args.length-1].join(" ")} #{ENV["TM_DISPLAYNAME"]} -->"
           
-          unless options[:bootstrap].nil?
+          if File.exists?(options[:bootstrap])
+            raise "Bootstrap script is not executable." unless File.executable?(options[:bootstrap])
             args[0,0] = options[:bootstrap] # add the bootstrap script to the front of args
           end
           

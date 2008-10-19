@@ -167,6 +167,7 @@ module TextMate
           ENV['TM_FILEPATH']    = filepath
           ENV['TM_FILENAME']    = File.basename filepath
           ENV['TM_DISPLAYNAME'] = File.basename filepath
+          Dir.chdir(File.dirname(filepath))
         end
       end
 

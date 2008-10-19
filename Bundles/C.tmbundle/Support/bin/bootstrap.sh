@@ -1,8 +1,7 @@
 #!/bin/bash
 
-eval last=\${$#};
-"$@" -o "${last}.out";
+eval '"$1"' "$2" '"$3"' -o '"$3".out'
 
 if [ $? -eq 0 ]; then
-  "${last}.out";
+  "$3".out;
 fi

@@ -8,7 +8,7 @@
   done
 
   if [[ $(ps -xp $PPID|wc -l) -ne 2 ]]; then
-    osascript <<APPLESCRIPT
+    exec -c /usr/bin/osascript <<APPLESCRIPT
       tell application "Terminal" to do script "defaults write com.macromates.textmate OakShellVariables -array-add \"{ enabled = 1; variable = PATH; value = '\$PATH'; }\" && open \"$APP_PATH\""
 APPLESCRIPT
     

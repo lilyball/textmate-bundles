@@ -17,9 +17,9 @@ TextMate::Executor.make_project_master_current_document
 
 g = {"c" =&gt; "GCC", "c++" =&gt; "GXX"}[mode]
 flags = ENV["TM_#{g}_FLAGS"] || "-Wall -include stdio.h #{"-include iostream" if mode == "c++"}"
-args = [ENV["TM_#{g}"] || g.downcase.gsub("x", "+"), flags  &lt;&lt; " -x #{mode}", ENV["TM_FILEPATH"]] 
+args = [ENV["TM_#{g}"] || g.downcase.gsub("x", "+"), flags + " -x #{mode}", ENV["TM_FILEPATH"]] 
 
-TextMate::Executor.run(args, :version_args =&gt; ["--version"], :version_regex =&gt; /\A(.*) \(GCC\)/)
+TextMate::Executor.run(args, :bootstrap =&gt; ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh", :version_args =&gt; ["--version"], :version_regex =&gt; /\A(.*) \(GCC\)/)
 </string>
 	<key>input</key>
 	<string>document</string>

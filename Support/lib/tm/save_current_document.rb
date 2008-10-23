@@ -45,7 +45,8 @@ module TextMate
         ENV['TM_FILEPATH']         = dst = TextMate::IO.tempfile(temp_ext).path
         ENV['TM_FILENAME']         = File.basename dst
         ENV['TM_FILE_IS_UNTITLED'] = "true"
-        ENV['TM_DISPLAYNAME']      = 'untitled'        
+        ENV['TM_DISPLAYNAME']      = 'untitled'
+        Dir.chdir(File.dirname(ENV["TM_FILEPATH"]))
       elsif not File.writable? dst
         ENV['TM_ORIG_FILEPATH']    = dst
         ENV['TM_ORIG_FILENAME']    = File.basename dst

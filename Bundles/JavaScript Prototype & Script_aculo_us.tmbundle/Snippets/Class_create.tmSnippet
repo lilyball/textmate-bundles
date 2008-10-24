@@ -3,14 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>var ${1:MyClass} = Class.create();
-${2:Object.extend($1.prototype, ${3:MySuperClass});
-
-}$1.prototype = {
+	<string>var ${1:MyClass} = Class.create(${2:MySuperClass}${2/.+/, /}{
 	initialize: function($4) {
 		$5
 	}
-}</string>
+});</string>
 	<key>name</key>
 	<string>Class.create</string>
 	<key>scope</key>

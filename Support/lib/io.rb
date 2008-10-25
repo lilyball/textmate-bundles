@@ -13,6 +13,10 @@ module TextMate
 
       def exhaust(named_fds, &block)
         
+        f = open(ENV["HOME"]+"/Library/Logs/textmate-io.rb-exhaust.log", 'a')
+        f << "--" << Time.now.to_s << "--\n"
+        named_fds.each_key { |k| f << k.to_s << ", " << named_fds[k].to_i << ", " << named_fds[k].stat.inspect << "\n" }
+        
         leftovers = {}
         named_fds = named_fds.dup
         named_fds.delete_if { |key, value| value.nil? }
@@ -20,7 +24,15 @@ module TextMate
         
         until named_fds.empty? do
           
-          fd   = select(named_fds.values)[0][0]
+          begin
+            fd   = select(named_fds.values)[0][0]
+          rescue Errno::EINVAL
+            f << "select threw Errno::EINVAL."
+            $stderr << "Select threw Errno::EINVAL.  Please report this error to the TextMate mailing list or to ##textmate on irc.freenode.net." << "\n\n"
+            f.close
+            raise
+          end
+          
           name = named_fds.find { |key, value| fd == value }.first
           data = fd.sysread(@blocksize) rescue ""
           
@@ -62,8 +74,13 @@ module TextMate
           end
         end
         
+        f << "\n"
+        f.close
+        
       end
-            
+      
+      
+      
     end
     
   end

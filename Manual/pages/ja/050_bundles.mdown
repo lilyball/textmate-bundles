@@ -258,7 +258,7 @@ Xcodeプロジェクトをインポートするコマンドもありますが、
 
 ## Getting More Bundles もっとバンドルを手に入れる {getting_more_bundles}
 
-人気のあるバンドルのみTextMateに含まれます。さまざまな言語のサポートを主とした、多数のほかのバンドルのためのSubversionレポジトリがあります。[こちらでバンドルのリストをみることができます。](http://macromates.com/svn/Bundles/trunk/Bundles/)
+人気のあるバンドルのみTextMateに含まれます。さまざまな言語のサポートを主とした、多数のほかのバンドルのためのSubversionレポジトリがあります。[こちらでバンドルのリストをみることができます。](http://svn.textmate.org/trunk/Bundles/)
 
 ### Installing Subversion Subversionをインストールする {installing_subversion}
 
@@ -301,7 +301,7 @@ svnがインストールされていれば、バンドルをcheckoutかexportす
 
     mkdir -p /Library/Application\ Support/TextMate/Bundles
     cd /Library/Application\ Support/TextMate/Bundles
-    svn co http://macromates.com/svn/Bundles/trunk/Bundles/Haskell.tmbundle
+    svn co http://svn.textmate.org/trunk/Bundles/Haskell.tmbundle
 
 あとで、この２行のコマンドを実行することで、インストールしたバンドルをアップデートできます:
 
@@ -326,7 +326,7 @@ TextMateに含まれるのは、いろいろなバンドルアイテムに使わ
 
 
     cd /Library/Application\ Support/TextMate
-    svn co http://macromates.com/svn/Bundles/trunk/Support
+    svn co http://svn.textmate.org/trunk/Support
 
 After this you can test it by pasting the following line into TextMate and pressing &#x2303;R (to execute it):
 

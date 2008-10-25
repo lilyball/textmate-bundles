@@ -227,7 +227,7 @@ It also has commands to import an Xcode project but generally it is better to dr
 
 ## Getting More Bundles
 
-Only the most popular bundles are included with TextMate. There is a subversion repository which has dozens of other bundles mostly adding support for various languages. You can [see the list of bundles here](http://macromates.com/svn/Bundles/trunk/Bundles/).
+Only the most popular bundles are included with TextMate. There is a subversion repository which has dozens of other bundles mostly adding support for various languages. You can [see the list of bundles here](http://svn.textmate.org/trunk/Bundles/).
 
 ### Installing Subversion
 
@@ -267,7 +267,7 @@ As an example, to install the Haskell bundle, first create the install directory
 
     mkdir -p /Library/Application\ Support/TextMate/Bundles
     cd /Library/Application\ Support/TextMate/Bundles
-    svn co http://macromates.com/svn/Bundles/trunk/Bundles/Haskell.tmbundle
+    svn co http://svn.textmate.org/trunk/Bundles/Haskell.tmbundle
 
 At a later time you can update the bundles which you have installed by executing these two lines:
 
@@ -290,7 +290,7 @@ If you checkout a bundle from the subversion repository then this bundle may rel
 The process is similar to checking out a bundle, first ensure you have [`LC_CTYPE`][LC_CTYPE] setup properly and then execute the following in your shell:
 
     cd /Library/Application\ Support/TextMate
-    svn co http://macromates.com/svn/Bundles/trunk/Support
+    svn co http://svn.textmate.org/trunk/Support
 
 After this you can test it by pasting the following line into TextMate and pressing &#x2303;R (to execute it):
 

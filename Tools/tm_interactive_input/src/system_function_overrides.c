@@ -124,6 +124,18 @@ int system_select(char * symbol, int nfds, fd_set * __restrict readfds, fd_set *
     return select_impl(nfds, readfds, writefds, errorfds, timeout);
 }
 
+FILE* open_log ()
+{
+       char* logfile;
+       FILE* fp;
+
+       asprintf(&logfile, "%s/Library/Logs/tm_interactive_read.log", getenv("HOME"));
+       fp = fopen(logfile, "a");
+       free(logfile);
+
+       return fp;
+}
+
 int select_override(char * system_symbol, int nfds, fd_set * __restrict readfds, fd_set * __restrict writefds, fd_set * __restrict errorfds, struct timeval * __restrict timeout) {
     int result;
     
@@ -133,6 +145,16 @@ int select_override(char * system_symbol, int nfds, fd_set * __restrict readfds,
         fd_set orig_readfds; FD_ZERO(&orig_readfds); FD_COPY(readfds, &orig_readfds);
         struct timeval t = { };
         
+        if (t.tv_sec != 0 || t.tv_usec != 0)
+        {
+            FILE* logfile = open_log();
+            fprintf(logfile, "timeout had values: %ld, %d\n", t.tv_sec, t.tv_usec);
+            fclose(logfile);
+
+            t.tv_sec = 0;
+            t.tv_usec = 0;
+        }
+
         if (stdin_fd_tracker_count_stdins_in_fdset(nfds, readfds) > 0)
             timeout = &t;
         

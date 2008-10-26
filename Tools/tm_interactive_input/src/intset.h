@@ -1,5 +1,5 @@
-#ifndef _INTSET_H_
-#define _INTSET_H_
+#ifndef INTSET_H_FW2SWPAB
+#define INTSET_H_FW2SWPAB
 
 #include <stdbool.h>
 #include <sys/types.h>
@@ -18,4 +18,4 @@ bool intset_contains(intset_t*, int);
 size_t intset_size(intset_t* set);
 int intset_get(intset_t* set, ssize_t i);
 
-#endif /* _INTSET_H_ */
+#endif /* end of include guard: INTSET_H_FW2SWPAB */

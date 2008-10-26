@@ -1,5 +1,5 @@
-#ifndef _BUFFER_H_
-#define _BUFFER_H_
+#ifndef BUFFER_H_Z38W1DOX
+#define BUFFER_H_Z38W1DOX
 
 #include <sys/types.h>
 #include <CoreFoundation/CoreFoundation.h>
@@ -25,4 +25,4 @@ void add_to_buffer(buffer_t*, char*, size_t);
 size_t consume_from_head_of_buffer(buffer_t*, char*, size_t);
 int write_buffer_to_fd(buffer_t*, int);
 
-#endif /* _BUFFER_H_ */
+#endif /* end of include guard: BUFFER_H_Z38W1DOX */

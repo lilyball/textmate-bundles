@@ -1,8 +1,8 @@
-#ifndef _TEXTMATE_H_
-#define _TEXTMATE_H_
+#ifndef TEXTMATE_H_ZD09ZIDY
+#define TEXTMATE_H_ZD09ZIDY
 
 #include <stdbool.h>
 
 bool fd_is_owned_by_tm(int);
 
-#endif /* _TEXTMATE_H_ */
+#endif /* end of include guard: TEXTMATE_H_ZD09ZIDY */

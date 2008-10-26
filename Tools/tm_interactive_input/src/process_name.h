@@ -1,6 +1,6 @@
-#ifndef _PROCESS_NAME_H_
-#define _PROCESS_NAME_H_
+#ifndef PROCESS_NAME_H_6XWET0N
+#define PROCESS_NAME_H_6XWET0N
 
 char* create_process_name();
 
-#endif /* _PROCESS_NAME_H_ */
+#endif /* end of include guard: PROCESS_NAME_H_6XWET0N */

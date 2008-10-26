@@ -1,5 +1,5 @@
-#ifndef _SYSTEM_FUNCTION_OVERRIDES_H_
-#define _SYSTEM_FUNCTION_OVERRIDES_H_
+#ifndef SYSTEM_FUNCTION_OVERRIDES_H_OD5QRJC5
+#define SYSTEM_FUNCTION_OVERRIDES_H_OD5QRJC5
 
 #include <sys/types.h>
 #include <sys/select.h>
@@ -30,4 +30,4 @@ int select_darwinextsn_nocancel(int, fd_set * __restrict, fd_set * __restrict, f
 int select_nocancel_unix2003(int, fd_set * __restrict, fd_set * __restrict, fd_set * __restrict, struct timeval * __restrict) __asm("_select$NOCANCEL$UNIX2003");
 int select_unix2003(int, fd_set * __restrict, fd_set * __restrict, fd_set * __restrict, struct timeval * __restrict) __asm("_select$UNIX2003");
 
-#endif /* _SYSTEM_FUNCTION_OVERRIDES_H_ */
+#endif /* end of include guard: SYSTEM_FUNCTION_OVERRIDES_H_OD5QRJC5 */

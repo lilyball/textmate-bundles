@@ -1,6 +1,6 @@
-#ifndef _DIE_H_
-#define _DIE_H_
+#ifndef DIE_H_U3C78NAP
+#define DIE_H_U3C78NAP
 
 void die(char *, ...);
 
-#endif /* _DIE_H_ */
+#endif /* end of include guard: DIE_H_U3C78NAP */

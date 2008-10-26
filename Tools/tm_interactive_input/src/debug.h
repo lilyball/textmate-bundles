@@ -1,5 +1,5 @@
-#ifndef _DEBUG_H_
-#define _DEBUG_H_
+#ifndef DEBUG_H_8I80DRD8
+#define DEBUG_H_8I80DRD8
 
 #include <stdio.h>
 
@@ -15,4 +15,4 @@
 #define DB(buffer) 
 #endif
 
-#endif /* _DEBUG_H_ */
+#endif /* end of include guard: DEBUG_H_8I80DRD8 */

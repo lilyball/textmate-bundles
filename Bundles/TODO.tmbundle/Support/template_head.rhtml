@@ -8,8 +8,8 @@
 
 	<ul class="counters">
 		<% tags.each do |tag| %>
-			<li id="counter_tab_<%= tag[:label] %>" class="bg_<%= tag[:label] %>" <% if tag[:trim_if_empty] then %>style="display: none;"<% end %>><a onclick="goTo('jump_to_<%= tag[:label] %>'); return false;" href="#jump_to_<%= tag[:label] %>" accesskey="<%= tag[:label][0..0] %>"><%= tag[:label] %></a>: <span id="count_<%= tag[:label] %>">0</span></li>
+			<li id="counter_tab_<%= tag[:label].sub(/\W/, '_') %>" class="bg_<%= tag[:label].sub(/\W/, '_') %>" <% if tag[:trim_if_empty] then %>style="display: none;"<% end %>><a onclick="goTo('jump_to_<%= tag[:label].sub(/\W/, '_') %>'); return false;" href="#jump_to_<%= tag[:label].sub(/\W/, '_') %>" accesskey="<%= tag[:label][0..0] %>"><%= tag[:label] %></a>: <span id="count_<%= tag[:label].sub(/\W/, '_') %>">0</span></li>
 		<% end %>
-		<li id="total_count">counting…</li>
+		<li id="counter_tab_total" class="bg_total %>"><a href="#" onclick="return false;">Total</a>: <span id="total_count">counting…</span></li>
 	</ul>
 	<p id="current_dir_container" style="clear: both;">Scanning directory: <span id="current_dir"></span></p>

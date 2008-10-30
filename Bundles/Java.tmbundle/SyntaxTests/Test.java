@@ -80,3 +80,9 @@ class Assertion
     assert 1 = 1 : "Failure message";
     assert 1 = 1;
 }
+
+class AnonymousClassExample {
+    public Object m() {
+        return new Object() { /* meta.anon-class.java */ };
+    }  
+}

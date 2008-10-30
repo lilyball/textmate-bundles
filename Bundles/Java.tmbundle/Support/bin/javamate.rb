@@ -18,6 +18,7 @@ class JavaMatePrefs
 end
 
 TextMate.save_current_document
+TextMate::Executor.make_project_master_current_document
 
 cmd = ["java_compile_and_run.sh"]
 cmd << ENV['TM_FILEPATH']

@@ -86,3 +86,11 @@ class AnonymousClassExample {
         return new Object() { /* meta.anon-class.java */ };
     }  
 }
+
+public class Ticket3D1E429A 
+{ 
+    public static void main(String[] args) 
+    { 
+        System.out.println("      Java: " + profiler.profileJava(new ArrayList<Int>(), new Random(seed)));
+    } 
+}

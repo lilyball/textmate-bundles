@@ -136,9 +136,38 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#javaAttributes</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#javaProperties</string>
 				</dict>
 			</array>
+		</dict>
+		<key>javaAttributes</key>
+		<dict>
+			<key>begin</key>
+			<string>\@{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.java-attrib.begin.ant</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.java-attrib.end.ant</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>source.java-attrib.embedded.ant</string>
 		</dict>
 		<key>javaProperties</key>
 		<dict>
@@ -191,6 +220,10 @@
 			<string>string.quoted.single.ant</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#javaAttributes</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#javaProperties</string>

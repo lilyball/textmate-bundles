@@ -26,7 +26,7 @@ int main (int argc, char const* argv[])
 		else	bundleID = CFStringCreateWithBytes(kCFAllocatorDefault, (UInt8*)argv[1], strlen(argv[1]), kCFStringEncodingUTF8, FALSE);
 
 		CFURLRef url = NULL;
-		if(noErr == LSFindApplicationForInfo(0, bundleID, appName, NULL, &url))
+		if(noErr == LSFindApplicationForInfo(kLSUnknownCreator, bundleID, appName, NULL, &url))
 		{
 			CFStringRef str = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
 

@@ -94,3 +94,11 @@ public class Ticket3D1E429A
         System.out.println("      Java: " + profiler.profileJava(new ArrayList<Int>(), new Random(seed)));
     } 
 }
+
+public class Foo
+{
+   public void bar() {
+       Int[] int1 = new Int[10];
+       Int[] int2 = new Int[10];
+   }
+}

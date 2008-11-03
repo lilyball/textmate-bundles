@@ -41,6 +41,7 @@ require SUPPORT_LIB + 'tm/process'
 require SUPPORT_LIB + 'tm/htmloutput'
 require SUPPORT_LIB + 'tm/require_cmd'
 require SUPPORT_LIB + 'escape'
+require SUPPORT_LIB + 'exit_codes'
 require SUPPORT_LIB + 'io'
 
 $KCODE = 'u'
@@ -59,12 +60,13 @@ module TextMate
         block ||= Proc.new {}
         args.flatten!
 
-        options = {:bootstrap     => ENV["TM_BUNDLE_SUPPORT"]+"/bin/bootstrap.sh",
-                   :version_args  => ['--version'],
+        options = {:version_args  => ['--version'],
                    :version_regex => /\A(.*)$/,
                    :verb          => "Running",
                    :env           => nil,
                    :script_args   => []}
+
+        options[:bootstrap] = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh" unless ENV["TM_BUNDLE_SUPPORT"].nil?
 
         options.merge! args.pop if args.last.is_a? Hash
 
@@ -94,11 +96,6 @@ module TextMate
         TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
           
           io << '<div class="executor">'
-          if ENV.has_key?("TM_EXECUTOR_PROJECT_MASTER_IS_MISSING")
-            io << "<h2 class=\"warning\">The file suggested by <code>TM_PROJECT_MASTER</code> does not exist.</h2>\n"
-            io << "<p>The file “<code>#{ENV["TM_FILEPATH"]}</code>” named by the environment variable <code>TM_PROJECT_MASTER</code> could not be found.  Please unset or correct TM_PROJECT_MASTER.</p>"
-            return
-          end
           
           callback = proc do |str, type|
             str.gsub!(ENV["TM_FILEPATH"], "untitled") if ENV["TM_FILE_IS_UNTITLED"]
@@ -115,7 +112,7 @@ module TextMate
           
           io << "<!-- » #{args[0,args.length-1].join(" ")} #{ENV["TM_DISPLAYNAME"]} -->"
           
-          if File.exists?(options[:bootstrap])
+          if options.has_key?(:bootstrap) and File.exists?(options[:bootstrap])
             raise "Bootstrap script is not executable." unless File.executable?(options[:bootstrap])
             args[0,0] = options[:bootstrap] # add the bootstrap script to the front of args
           end
@@ -153,7 +150,7 @@ module TextMate
       end
       
       def make_project_master_current_document
-        if (ENV.has_key?("TM_PROJECT_DIRECTORY") and ENV.has_key?("TM_PROJECT_MASTER"))
+        if (ENV.has_key?("TM_PROJECT_DIRECTORY") and ENV.has_key?("TM_PROJECT_MASTER") and not ENV["TM_PROJECT_MASTER"] == "")
           proj_dir    = ENV["TM_PROJECT_DIRECTORY"]
           proj_master = ENV["TM_PROJECT_MASTER"]
           if proj_master[0].chr == "/"
@@ -162,7 +159,11 @@ module TextMate
             filepath = "#{proj_dir}/#{proj_master}"
           end
           unless File.exists?(filepath)
-            ENV["TM_EXECUTOR_PROJECT_MASTER_IS_MISSING"] = 'true'
+            TextMate::HTMLOutput.show(:title => "Bad TM_PROJECT_MASTER!", :sub_title => "") do |io|
+              io << "<h2 class=\"warning\">The file suggested by <code>TM_PROJECT_MASTER</code> does not exist.</h2>\n"
+              io << "<p>The file “<code>#{filepath}</code>” named by the environment variable <code>TM_PROJECT_MASTER</code> could not be found.  Please unset or correct TM_PROJECT_MASTER.</p>"
+            end
+            TextMate.exit_show_html
           end
           ENV['TM_FILEPATH']    = filepath
           ENV['TM_FILENAME']    = File.basename filepath

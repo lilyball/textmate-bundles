@@ -1,6 +1,6 @@
 ---
 
-<center><font color="red"><big><big>This is a tentative version!<br>This bundle will be rewritten entirely in the near future!</big></big></font></center>
+<center><font color="red"><big><big>This is a tentative version!<br>This bundle will be rewritten entirely in the near future!!</big></big></font></center>
 
 <center><big>"GetBundles" provides an easy to use interface to install available TextMate's bundles which are hosted on macromates' svn repositories and on github.com.</big></center>
 

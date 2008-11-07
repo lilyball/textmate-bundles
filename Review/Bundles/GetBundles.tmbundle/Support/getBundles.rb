@@ -62,6 +62,8 @@ $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json.gz"
 $supportFolder = "/Library/Application Support/TextMate"
 # should the Support Folder updated in beforehand?
 $updateSupportFolder = true
+# last bundle filter selection
+$lastBundleFilterSelection = "All"
 
 
 module GBTimeout
@@ -839,6 +841,7 @@ def filterBundleList
     when "Official": $dataarray.select {|v| v['repo'] == 'O'}
     else $dataarray
   end
+  $lastBundleFilterSelection = $dialogResult['bundleSelection']
   $params['numberOfBundles'] = "%d in total found" % b.size
   $params['dataarray'] = b
   $params['progressIsIndeterminate'] = true
@@ -940,6 +943,8 @@ while $run do
         exit 0
       end
     end
+  elsif $dialogResult.has_key?('bundleSelection') and $lastBundleFilterSelection != $dialogResult['bundleSelection']
+    filterBundleList
   elsif $dialogResult.has_key?('supportFolderCheck')
     if $dialogResult['supportFolderCheck'] == 1
       doUpdateSupportFolder
@@ -950,8 +955,6 @@ while $run do
     end
     $params['supportFolderCheck'] = 0
     updateDIALOG
-  elsif $dialogResult.has_key?('bundleSelection')
-    filterBundleList
   else ###### closing the window
     $close = true
     if ! $listsLoaded  # while fetching something from the net wait for aborting of threads

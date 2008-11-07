@@ -12,16 +12,14 @@ require 'net/http'
 require 'uri'
 require 'cgi'
 require "open3"
+require "time"
 
 include ERB::Util
 
 $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
 $isDIALOG2        = false # ! $DIALOG.match(/2$/).nil?
-# cache file for short svn descriptions
-$chplistPath      = File.dirname(__FILE__) + "/lib/cachedDescriptions.plist"
-# internal used cache for svn descriptions
-$chplist          = { }
+
 # the log file
 $logFile          = "#{e_sh ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
 # DIALOG's parameters hash
@@ -35,22 +33,14 @@ $dialogResult     = { }
 $dataarray        = [ ]
 # thread array for downloading svn descriptions
 $threads          = [ ]
-# default bundleDescription if no description is available
-$notDownloadedStr = "…not yet downloaded…"
 # set to true if Cancel button was pressed to interrput threads and each loops
 $close            = false
 # set to true for fetching something from the net (used for shut down procedure)
 $listsLoaded      = false
 # total number of found bundles
 $numberOfBundles  = 0
-# total number of bundles without downloaded description
-$numberOfNoDesc   = 0
 # main run loop variable
 $run              = true
-# time stamp for renaming existing folders
-$ts               = ""
-# does the installation folder exist
-$installFolderExists = false
 # error counter
 $errorcnt         = 0
 # temp dir for installation
@@ -59,13 +49,14 @@ $tempDir          = "/tmp/TM_GetBundlesTEMP"
 $timeout          = 30
 # global thread vars
 $x0=$x1=$x2=$x3=$x4 = nil
+# bundle data hash containing data.json.gz 
+$bundleCache = { }
+# available installation modi
+$availableModi = ["svn", "zip"]
+# URL to the bundle server's cache file
+$bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json.gz"
+# $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json"
 
-CAPITALIZATION_EXCEPTIONS = %w[tmbundle on as iphone]
-
-# keywords used in GitHub's search API to find as much as possible tmbundles
-$gitKeywords      = ["bundle","tmbundle","textmate"]
-# if at least one of these stop words occurs in the description do not show up it
-$stopGitKeywords  = ["my own","my personal","personal bundle","obsolete","deprecated","work in progress"]
 
 module GBTimeout
   class Error<Interrupt
@@ -89,73 +80,8 @@ module GBTimeout
   module_function :timeout
 end
 
-def remote_bundle_locations
-  [ {:display => :'Macromates Bundles', :scm => :svn, :name => 'B',
-      :url => 'http://macromates.com/svn/Bundles/trunk/Bundles/'},
-    {:display => :'Macromates Review', :scm => :svn, :name => 'R',
-      :url => 'http://macromates.com/svn/Bundles/trunk/Review/Bundles/'},
-    {:display => :'GitHub', :scm => :git, :name => 'G',
-      :url => 'http://github.com/api/v1/yaml/search/'} ]
-end
-
-def targetPaths
-  {
-    'Users Lib Pristine'  => "#{ENV["HOME"]}/Library/Application Support/TextMate/Pristine Copy/Bundles",
-    'Users Lib Bundles'   => "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles",
-    'Lib Bundles'         => "/Library/Application Support/TextMate/Bundles",
-    'App Bundles'         => "",
-    'Users Desktop'       => "#{ENV["HOME"]}/Desktop",
-    'Users Downloads'     => "#{ENV["HOME"]}/Downloads",
-  }
-end
-
-def getInstallPathFor(abbr, copyToParams = true)
-  # update params
-  $params['targetSelection'] = abbr if copyToParams
-  updateDIALOG
-  if targetPaths.has_key?(abbr)
-    if abbr == 'App Bundles'
-      begin
-        path = TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Bundles"
-      rescue
-        $errorcnt += 1
-        writeToLogFile("No path to TextMate found!")
-        return ""
-      end
-      return path
-    end
-    return targetPaths[abbr]
-  else
-    return "#{ENV["HOME"]}/Desktop"
-    # return %x{osascript -e 'tell application "TextMate"' -e 'activate' -e 'POSIX path of (choose folder with prompt "as installation target")' -e 'end tell' 2>/dev/null}.strip().gsub(/\/$/,'')
-  end
-end
-
-def normalize_github_repo_name(name)
-  # Convert a GitHub repo name into a "normal" TM bundle name
-  # e.g. ruby-on-rails-tmbundle => Ruby on Rails.tmbundle
-  # and delete all variants like "textmate bundle", "tm bundle", or "bundle"
-  name = name.gsub(/\btextmate\b/i,"").gsub(/\bbundle\b/,"").gsub(/\btm\b/,"").gsub(/-+/,"-").gsub("-", " ").split.each{|part|
-    part.capitalize! unless CAPITALIZATION_EXCEPTIONS.include? part}.join(" ")
-  name[-9] = ?. if name =~ / tmbundle$/
-  name.gsub("iphone","iPhone") # ;)
-end
-
 def strip_html(text)
   text.gsub(/<[^>]+>/, '')
-end
-
-def initSVNDescriptionCache
-  # get cached svn descriptions; if this fails an empty cached plist will be used
-  begin     # try to load cache
-    $chplist = OSX::PropertyList::load(File.read($chplistPath))
-  rescue    # if that fails use an empty plist instead
-    remote_bundle_locations.each {|r| $chplist[r[:name]] = {} if r[:scm] == :svn }
-  end
-end
-
-def writeSVNDescriptionCacheToDisk
-  open($chplistPath, "w") { |io| io.write $chplist.to_plist }
 end
 
 def orderOutDIALOG
@@ -187,7 +113,7 @@ def closeDIALOG
       %x{#{$DIALOG} -x#{t}}
     end
   end
-  %x{rm -rf #{$tempDir} 1> /dev/null}
+  removeTempDir
   # go back to the front most doc if TM is running
   # %x{open 'txmt://open?'} if ! getInstallPathFor("App Bundles").empty?
 end
@@ -209,7 +135,7 @@ def infoDIALOG(dlg)
   return if ! dlg.has_key?('path')
   info = plist = { }
   readme = css = data = ""
-  %x{rm -rf #{$tempDir} 1> /dev/null}
+  removeTempDir
   FileUtils.mkdir_p $tempDir
   path = dlg['path'].split('|').last
   mode = dlg['path'].split('|').first
@@ -242,7 +168,7 @@ def infoDIALOG(dlg)
       rescue GBTimeout::Error
         $params['isBusy'] = false
         updateDIALOG
-        %x{rm -rf #{$tempDir}}
+        removeTempDir
         writeToLogFile("Timeout error while fetching information") if ! $close
         return
       end
@@ -261,7 +187,7 @@ def infoDIALOG(dlg)
     rescue GBTimeout::Error
       $params['isBusy'] = false
       updateDIALOG
-      %x{rm -rf #{$tempDir}}
+      removeTempDir
       writeToLogFile("Timeout error while fetching information") if ! $close
       return
     end
@@ -277,7 +203,7 @@ def infoDIALOG(dlg)
     rescue GBTimeout::Error
       $params['isBusy'] = false
       updateDIALOG
-      %x{rm -rf #{$tempDir}}
+      removeTempDir
       writeToLogFile("Timeout error while fetching information") if ! $close
       return
     end
@@ -335,7 +261,7 @@ def infoDIALOG(dlg)
         GBTimeout::timeout($timeout) do
           data = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' info '#{path}'")
           if $errorcnt > 0
-            %x{rm -r #{$tempDir}}
+            removeTempDir
             $params['isBusy'] = false
             updateDIALOG
             return
@@ -344,7 +270,7 @@ def infoDIALOG(dlg)
       rescue GBTimeout::Error
         $params['isBusy'] = false
         updateDIALOG
-        %x{rm -rf #{$tempDir}}
+        removeTempDir
         writeToLogFile("Timeout error while fetching information") if ! $close
         return
       end
@@ -367,7 +293,7 @@ def infoDIALOG(dlg)
       rescue GBTimeout::Error
         $params['isBusy'] = false
         updateDIALOG
-        %x{rm -rf #{$tempDir}}
+        removeTempDir
         writeToLogFile("Timeout error while fetching information") if ! $close
         return
       end
@@ -410,7 +336,7 @@ def infoDIALOG(dlg)
   updateDIALOG
   $infoTokenOld = $infoToken
   if $close
-    %x{rm -rf #{$tempDir} 1> /dev/null}
+    removeTempDir
     return
   end
   if $isDIALOG2
@@ -425,7 +351,7 @@ def infoDIALOG(dlg)
       %x{#{$DIALOG} -x#{$infoTokenOld}}
     end
   end
-  %x{rm -rf #{$tempDir} 1> /dev/null}
+  removeTempDir
 end
 
 def noSVNclientFound
@@ -468,233 +394,113 @@ def getResultFromDIALOG
 end
 
 def getBundleLists
+  
   $params['dataarray'] = [ ]
   updateDIALOG
-  begin
-    $listsLoaded = false
-    $dataarray  = [ ]
-    remote_bundle_locations.each do |r|
-      break if $close
-      $params = {
-        'isBusy'                  => true,
-        'bundleSelection'         => 'All',
-        'progressText'            => 'Fetching List for %s…' % r[:display].to_s,
-        'progressIsIndeterminate' => true,
-        'progressValue'           => 0,
-      }
-      updateDIALOG
-      # $params['progressText'] = 'Fetching List for %s…' % r[:display].to_s
-      # updateDIALOG
-      bundlearray = [ ]
-      if r[:scm] == :svn
-        list = [ ]
-        begin
-          GBTimeout::timeout($timeout) do
-            list = Net::HTTP.get( URI.parse(r[:url]) ).gsub( /<[^>]+?>/, '').gsub( /(?m)^.*?\.\.\n/, '').gsub( /(?m)\/[^\/]*$/, '').strip().split(/\n/)
-          end
-        rescue GBTimeout::Error
-          writeToLogFile("Timeout for fetching %s list" % r[:display].to_s) if ! $close
-          $params['progressText'] = 'Timeout'
-          $params['isBusy'] = false
-          updateDIALOG
-        end
-        list.collect! {|x| CGI::unescapeHTML(x.strip())}
-        list.each do |io|
-          break if $close
-          theName = io.gsub(/^(.*)\.tmbundle$/,'\1')
-          theDescription = ""
-          # do we have the description in the cache
-          if $chplist[r[:name]][theName].nil?
-            theDescription = $notDownloadedStr
-            $numberOfNoDesc += 1
-          else
-            theDescription = $chplist[r[:name].to_s][theName]
-          end
-          $dataarray << {
-            'name' => theName,
-            'path' => r[:scm].to_s + "|" + URI.escape(r[:url] + io),
-            'bundleDescription' => theDescription,
-            'searchpattern' => theName.downcase+" "+theDescription.downcase,
-            'repo' => r[:name].to_s
-          }
-        end
-      elsif r[:scm] == :git
-        list = [ ]
-        gitThreads = [ ]
-        t_counter = 0
-        # collect all bundles for gitKeywords in separate threads
-        $gitKeywords.each do |keyword|
-          gitThreads[t_counter] = Thread.new do
-            begin
-              GBTimeout::timeout($timeout) do
-                page=1
-                while true
-                  found = YAML.load(open("http://github.com/api/v1/yaml/search/#{keyword}?page=#{page}"))['repositories']
-                  break if found.empty?
-                  page += 1
-                  list << found
-                end
-              end
-            rescue GBTimeout::Error
-              writeToLogFile("Timeout while fetching GitHub list for %s" % keyword) if ! $close
-              t_error = true
-            end
-          end
-          t_counter += 1
-        end
-        begin
-          GBTimeout::timeout($timeout) do
-            gitThreads.each {|t| t.join}
-          end
-        rescue GBTimeout::Error
-          gitThreads.each {|t| t.kill}
-          writeToLogFile("Timeout while fetching GitHub lists") if ! $close
-          t_error = true
-        end
-        if t_error and ! $close
-          $params['progressText'] = 'Error while fetching GitHub lists. Please check the Activity Log'
-          updateDIALOG
-          sleep(2)
-        end
-        # hash to make git bundles unique by using their urls
-        $seen = []
-        list.flatten!
-        list.find_all{|result| result['name'].match(/(tmbundle|textmate.bundle|tm.bundle)$/)}.sort{|a,b| a['name'] <=> b['name']}.each do |result|
-          break if $close
-          if not $seen.include?result['url']
-            if result['description'].nil? or not result['description'].match(/\b(#{$stopGitKeywords.join('|')})\b/i)
-              $seen << result['url']
-              theName = normalize_github_repo_name(result['name']).split('.').first
-              theDescription = ""
-              if result.has_key?('description')
-                theDescription = strip_html(result['description'])
-              end
-              theDescription += " (by %s)" % result['owner']
-              thePath = r[:scm].to_s + "|" + URI.escape(result['url'] + "/zipball/master") unless result['url'].nil?
-              $dataarray << {
-                'name' => theName,
-                'path' => thePath,
-                'bundleDescription' => theDescription,
-                'searchpattern' => theName.downcase+" "+theDescription.downcase,
-                'repo' => r[:name].to_s
-              }
-            end
-          end
-        end
-      else
-      end
-      if ! $close
-        $numberOfBundles = $dataarray.size
-        $params['numberOfBundles'] = "%d in total found" % $numberOfBundles
-        if $numberOfNoDesc > 0
-          $params['updateBtnLabel'] = 'Update (%d missing)' % $numberOfNoDesc
-        end
-        $dataarray.sort!{|a,b| a['name'] <=> b['name']}
-        $params['dataarray'] = $dataarray
-        updateDIALOG
-      end
-    end
-    if $numberOfNoDesc > 0
-      $params['progressText'] = 'Please update the descriptions (%d missing)' % $numberOfNoDesc
-      updateDIALOG
-      sleep(3)
-    end
-    $params['isBusy'] = false
-    $params['rescanBundleList'] = 0
-    updateDIALOG
-    $listsLoaded = true
-  rescue
-    $params['progressText'] = 'Unknown error occured!'
-    $params['rescanBundleList'] = 0
-    $params['isBusy'] = false
-    updateDIALOG
-  end
-  if $dataarray.size == 0 and ! $close
-    writeToLogFile("Probably no internet connection available")
-    $params['isBusy'] = true
-    $params['progressText'] = 'Probably no internet connection available'
-    updateDIALOG
-    sleep(3)
-    $params['isBusy'] = false
-    $params['rescanBundleList'] = 0
-    updateDIALOG
-  end    
-  # suppress the updating of the table to preserve the selection
-  $params.delete('dataarray')
-end
-
-def getSVNBundleDescriptions
+  
   $listsLoaded = false
-  $threads.each {|t| t.kill}
-  remote_bundle_locations.each do |r|
-    # update only svn stuff
-    if r[:scm] == :svn && ! $close
-      bundles = $dataarray.select {|v| v['repo'] == r[:name]}
-      $params = {
-        'isBusy'                  => true,
-        'progressText'            => 'Updating Descriptions for %s…' % r[:display],
-        'progressIsIndeterminate' => true,
-        'progressValue'           => 0,
-        'progressMinValue'        => 0,
-        'progressMaxValue'        => bundles.size,
-      }
-      updateDIALOG
-      # how many thread groups to download the descriptions
-      grp = 6
-      offset = (bundles.size/grp).to_i + 1
-      offset.times do |i|
-        break if $close
-        $threads[i] = Thread.new do
-          itemStart = i*grp
-          itemEnd   = i*grp+grp-1
-          if itemEnd >= bundles.size
-            itemEnd = bundles.size - 1
-          end
-          bundles[itemStart..itemEnd].each do |bundle|
-            break if $close
-            thePath = bundle['path'].split("|").last
-            begin
-              plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{thePath}/info.plist")))
-            rescue
-              begin
-                plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{thePath}/info.plist"))))
-              rescue
-                plist = OSX::PropertyList::load("{description='?';}")
-              end
-            end
-            # sometimes the svn name differs from the actual bundle name (only for caching)
-            myBundleName = bundle['name']
-            bundle['uuid'] = plist['uuid'] unless plist['uuid'].nil?
-            bundle['name'] = plist['name'] unless plist['name'].nil?
-            bundle['bundleDescription'] = strip_html plist['description'].to_s.gsub(/(?m)<hr[^>]*?\/>.*/,'').gsub(/\n/, ' ')
-            # update the cache only if something is found
-            $chplist[r[:name]][myBundleName] = bundle['bundleDescription'] if bundle['bundleDescription'] != '?'
-            $params['progressText'] = "Updating Descriptions for %s (#{$params['progressValue'] + 1} / #{bundles.size})…" % r[:display]
-            $params['progressValue'] += 1
-          end
-          if ! $close
-            $params['dataarray'] = $dataarray
-            $params['bundleSelection'] = 'All'
-            $params['progressIsIndeterminate'] = false
-            updateDIALOG
-            writeSVNDescriptionCacheToDisk
-          end
-        end
+  $dataarray  = [ ]
+  break if $close
+  
+  $params = {
+    'isBusy'                  => true,
+    'bundleSelection'         => 'All',
+    'progressText'            => 'Connecting Bundle Server…',
+    'progressIsIndeterminate' => true,
+    'progressValue'           => 0,
+  }
+  updateDIALOG
+  
+  
+  begin
+    GBTimeout::timeout($timeout) do
+      # download data.json.gu from textmate.org
+      data_file = "#{$tempDir}/data.json.gz"
+      FileUtils.mkdir_p $tempDir
+      begin
+        File.open(data_file, 'w') { |f| f.write(open($bundleServerFile).read) }
+      rescue
+        writeTimedMessage("Error: #{$!} while fetching the Bundle List file from the Bundle Server")
+        return
       end
-      # wait for threads before downloading the descriptions for the next trunk
-      $threads.each {|t| t.join}
-      $threads.each {|t| t.kill}
+      # decompress data.json.gz
+      begin
+        %x{gzip -d '#{data_file}'}
+      rescue
+        writeTimedMessage("Error: #{$!} while decompressing the Bundle List file")
+      end
+      begin
+        $bundleCache = YAML.load(open("#{$tempDir}/data.json"))
+      rescue
+        writeTimedMessage("Error: #{$!} while parsing the Bundle List file")
+      end
+      # data_file = "#{$tempDir}/data.json"
+      # FileUtils.mkdir_p $tempDir
+      # begin
+      #   File.open(data_file, 'w') { |f| f.write(open($bundleServerFile).read) }
+      # rescue
+      #   writeTimedMessage("Error: #{$!} while fetching the Bundle List file from the Bundle Server")
+      #   return
+      # end
+      # begin
+      #   $bundleCache = YAML.load(open(data_file))
+      # rescue
+      #   writeTimedMessage("Error: #{$!} while parsing the Bundle List file")
+      # end
     end
+  rescue GBTimeout::Error
+    writeTimedMessage("Timeout while connecting Bundle Server", "Timeout while connecting Bundle Server")
+  rescue
+    writeTimedMessage("Error: #{$!} while connecting Bundle Server")
   end
-  $params['dataarray'] = $dataarray
+  unless $bundleCache.has_key?('bundles')
+    writeTimedMessage("Structural error in Bundle Server File")
+    return
+  end
+  index = 0
+  $bundleCache['bundles'].sort!{|a,b| (n = a['name'] <=> b['name']).zero? ? a['status'] <=> b['status'] : n}
+  $bundleCache['bundles'].each do |bundle|
+    break if $close
+    author = (bundle['contact'].empty?) ? "" : " (by %s)" % bundle['contact']
+    desc = strip_html(bundle['description'].gsub(/(?m)<hr[^>]*?\/>.*/,'').gsub(/\n/, ' ') + author)
+    repo = case bundle['status']
+      when "Official": "O"
+      when "Under Review": "R"
+      else "❸"
+    end
+    if repo == "❸" && bundle.has_key?('url')
+      repo = case bundle['url']
+        when /github\.com/: "G"
+        else "P"
+      end
+    end
+    $dataarray << {
+      'name' => bundle['name'],
+      'path' => index.to_s,
+      'bundleDescription' => desc,
+      'searchpattern' => "#{bundle['name']} #{desc}",
+      'repo' => repo,
+      'rev' => Time.parse(bundle['revision']).strftime("%Y/%m/%d %H:%M:%S"),
+      'updated' => ""
+    }
+    index += 1
+  end
+  writeToLogFile("Cache File lists %d bundles. Last modified date: %s" % [$dataarray.size, $bundleCache['cache_date'].to_s])
+  unless $close
+    $numberOfBundles = $dataarray.size
+    $params['numberOfBundles'] = "%d in total found" % $numberOfBundles
+    $params['dataarray'] = $dataarray
+    updateDIALOG
+  end
   $params['isBusy'] = false
-  # $params['numberOfNoDesc'] = " "
-  $params['updateBtnLabel'] = "Update Descriptions"
-  $params['doUpdate'] = 0
+  $params['rescanBundleList'] = 0
   updateDIALOG
   $listsLoaded = true
+  writeTimedMessage("Probably no internet connection available", "Probably no internet connection available") if $dataarray.empty? and ! $close
+
   # suppress the updating of the table to preserve the selection
   $params.delete('dataarray')
+
 end
 
 def joinThreads
@@ -749,8 +555,17 @@ def killThreads
 end
 
 def initLogFile
-  f = File.open($logFile, "w")
-  f.close
+  File.open($logFile, "w") {}
+end
+
+def removeTempDir
+  if File.directory?($tempDir)
+    if $tempDir == "/tmp/TM_GetBundlesTEMP"
+      %x{rm -r #{$tempDir} 1> /dev/null}
+    else
+      writeToLogFile("TempDir alert!")
+    end
+  end
 end
 
 def writeToLogFile(text)
@@ -761,31 +576,6 @@ def writeToLogFile(text)
   f.close
   $params['logPath'] = %x{cat '#{$logFile}'}
   updateDIALOG
-end
-
-def resetOldBundleFolder(aFolder)
-  executeShell("cp -R '#{aFolder}' '#{aFolder}TEMP' 1> /dev/null")
-  executeShell("rm -rf '#{aFolder}' 1> /dev/null")
-  executeShell("cp -R '#{aFolder}#{$ts}' '#{aFolder}' 1> /dev/null")
-  executeShell("rm -rf '#{aFolder}TEMP' 1> /dev/null")
-  executeShell("rm -rf '#{aFolder}#{$ts}' 1> /dev/null")
-  if $errorcnt > 0
-    writeToLogFile("Error while resetting “#{aFolder}#{$ts}” to “#{aFolder}”")
-  else
-    writeToLogFile("Reset: Renaming of “#{aFolder}#{$ts}” into “#{aFolder}”")
-  end
-end
-
-def renameOldBundleFolder(aFolder)
-  $installFolderExists = true
-  # rename old folder by appending a time stamp
-  $ts = Time.now.strftime("%m%d%Y%H%M%S")
-  writeToLogFile("Renaming of “#{aFolder}” into “#{aFolder}#{$ts}”")
-  executeShell("cp -R '#{aFolder}' '#{aFolder}#{$ts}' 1> /dev/null")
-  executeShell("rm -r '#{aFolder}' 1> /dev/null")
-  if $errorcnt > 0
-    writeToLogFile("Cannot rename “#{aFolder}” into “#{aFolder}#{$ts}”")
-  end
 end
 
 def executeShell(cmd, cmdToLog = false, outToLog = false)
@@ -805,164 +595,79 @@ def executeShell(cmd, cmdToLog = false, outToLog = false)
   return out
 end
 
-def installGitZipball(path, installPath)
-  errors = ""
-  download_file = "#{$tempDir}/github.tmbundle.zip"
-  # the name of the bundle
-  name = normalize_github_repo_name( 
-    path.gsub(/.*github.com\/.*?\/(.*?)\/.*/,'\1') ).split('.').first + ".tmbundle"
-  # the name of the zipball without zip id
-  idname = path.gsub(/.*github.com\/(.*?)\/(.*?)\/zipball.*/,'\1-\2')
-  writeToLogFile("Install:\t%s\ninto:\t%s/%s\nusing:\tunzip\ntemp folder:\t%s" \
-    % [path, installPath, name, $tempDir])
-  %x{rm -rf #{$tempDir} 1> /dev/null}
+def installZIP(name, path, zip_path)
+  removeTempDir
   FileUtils.mkdir_p $tempDir
   begin
     GBTimeout::timeout($timeout) do
       begin
-        File.open(download_file, 'w') { |f| f.write(open(path).read)}
+        if path =~ /^http:\/\/github\.com/
+          executeShell(%Q{
+if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
+  if unzip --qq "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
+    rm "#{$tempDir}/archive.zip"
+    mv "#{$tempDir}/"* "#{$tempDir}/#{name}.tmbundle"
+  fi
+fi
+          }, false, true)
+        elsif !zip_path.nil? and zip_path =~ /\.tmbundle$/
+          executeShell(%Q{
+if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
+  if unzip --qq "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
+    rm "#{$tempDir}/archive.zip"
+    [[ ! -e "#{$tempDir}/#{zip_path}" ]] && mv "#{$tempDir}/"*"/#{zip_path}" "#{$tempDir}/#{name}.tmbundle"
+  fi
+fi
+          }, false, true)
+          name = zip_path.gsub(".tmbundle","")
+        else
+          $errorcnt += 1
+          writeToLogFile("Could not install “#{name}” by using “#{path}”")
+          removeTempDir
+          return
+        end
       rescue
         $errorcnt += 1
-        writeToLogFile("No access to “#{path}”")
+        writeToLogFile("Error: #{$!}")
         return
       end
     end
   rescue GBTimeout::Error
     $errorcnt += 1
-    %x{rm -rf #{$tempDir}}
     writeToLogFile("Timeout error while installing %s" % name) if ! $close
     return
   end
   return if $close
-  if $errorcnt == 0
-    # try to unzip the zipball
-    executeShell("unzip '#{download_file}' -d '#{$tempDir}' 1> /dev/null")
-    if $errorcnt > 0
-      %x{rm -rf #{$tempDir}}
-      return
-    end
-    return if $close
-    # get the zip id from the downloaded zipball
-    id = executeShell("unzip -z '#{download_file}' | head -n2 | tail -n1")
-    if id.nil? or id.length == 0
-      $errorcnt += 1
-      %x{rm -rf #{$tempDir}}
-      writeToLogFile("Cannot get the zip id from “#{download_file}”!")
-      return
-    end
-    idname += "-" + id.strip!
-    FileUtils.rm(download_file)
-    return if $close
-    executeShell("cd '#{$tempDir}'; mv '#{idname}' '#{name}' 1> /dev/null")
-    if $errorcnt > 0
-      %x{rm -r #{$tempDir}}
-      return
-    end
-    info = executeShell("cd '#{$tempDir}'; find . -name info.plist")
-    if info.nil? or info.empty?
-      writeToLogFile("The bundle #{name} does not contain the file 'info.plist'.")
-      $errorcnt += 1
-      return
-    end
-    renameOldBundleFolder("#{installPath}/#{name}") if $installFolderExists
-    executeShell("cp -R '#{$tempDir}/#{name}' #{e_sh installPath}")
-    if $errorcnt > 0
-      %x{rm -r #{$tempDir}}
-      writeToLogFile("Cannot copy “#{$tempDir}/#{name}” to “#{installPath}”")
-      resetOldBundleFolder("#{installPath}/#{name}") if $installFolderExists
-      return
-    end
-    %x{rm -r #{$tempDir}}
-  end
+  executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
+  removeTempDir
 end
 
-def installGitClone(path, installPath)
-  %x{rm -rf #{$tempDir} 1> /dev/null}
+def installSVN(name, path)
+  removeTempDir
   FileUtils.mkdir_p $tempDir
-  if ENV.has_key?('TM_GIT')
-    git = "'%s'" % ENV['TM_GIT']
-  else
-    git = "git"
-  end
-  thePath = path.sub('http', 'git').sub('/zipball/master', '.git')
-  theName = normalize_github_repo_name(path.sub('/zipball/master', '').gsub(/.*\/(.*)/, '\1'))
-  begin
-    GBTimeout::timeout($timeout) do
-      executeShell("#{git} clone #{e_sh thePath} '#{$tempDir}/#{theName}'", true, true)
-      if $errorcnt > 0
-        %x{rm -r #{$tempDir}}
-        return
-      end
-    end
-  rescue GBTimeout::Error
-    $errorcnt += 1
-    %x{rm -rf #{$tempDir}}
-    writeToLogFile("Timeout error while installing %s" % theName) if ! $close
-    return
-  end
-  return if $close
-  if $errorcnt == 0
-    info = executeShell("cd '#{$tempDir}'; find . -name info.plist")
-    if info.nil? or info.empty?
-      writeToLogFile("The bundle #{theName} does not contain the file 'info.plist'.")
-      $errorcnt += 1
-      return
-    end
-    renameOldBundleFolder("#{installPath}/#{theName}") if $installFolderExists
-    executeShell("cp -R '#{$tempDir}/#{theName}' '#{installPath}/#{theName}'")
-    if $errorcnt > 0
-      %x{rm -r #{$tempDir}}
-      writeToLogFile("Cannot copy “#{$tempDir}/#{theName}” to “#{installPath}/#{theName}”")
-      resetOldBundleFolder("#{installPath}/#{theName}") if $installFolderExists
-      return
-    end
-  end
-  %x{rm -r #{$tempDir}}
-end
-
-def installSVN(path, installPath)
-  %x{rm -rf #{$tempDir} 1> /dev/null}
-  FileUtils.mkdir_p $tempDir
-  name = path.gsub(/.*\/(.*)\.tmbundle.*/,'\1')
   if $SVN.length > 0
     begin
-      GBTimeout::timeout($timeout) do
-        executeShell("export LC_CTYPE=en_US.UTF-8;cd '#{$tempDir}';'#{$SVN}' co --no-auth-cache --non-interactive '#{path}'",true,true)
+      GBTimeout::timeout(60) do
+        executeShell(%Q{
+export LC_CTYPE=en_US.UTF-8
+cd '#{$tempDir}'
+'#{$SVN}' co --no-auth-cache --non-interactive '#{path}' '#{name}.tmbundle'
+        }, true, true)
         if $errorcnt > 0
-          %x{rm -r #{$tempDir}}
+          removeTempDir
           return
         end
       end
     rescue GBTimeout::Error
       $errorcnt += 1
-      %x{rm -rf #{$tempDir}}
-      writeToLogFile("Timeout error while installing %s" % name) if ! $close
+      removeTempDir
+      writeToLogFile("Timeout error while installing %s" % name) unless $close
       return
     end
     # get the bundle's real name (esp. for spaces and other symbols)
-    realname = executeShell("ls '#{$tempDir}' | head -n1").strip!
-    if $errorcnt > 0
-      %x{rm -r #{$tempDir}}
-      return
-    end
     return if $close
-    if $errorcnt == 0
-      info = executeShell("cd '#{$tempDir}'; find . -name info.plist")
-      if info.nil? or info.empty?
-        writeToLogFile("The bundle #{realname} does not contain the file 'info.plist'.")
-        $errorcnt += 1
-        return
-      end
-      renameOldBundleFolder("#{installPath}/#{realname}") if $installFolderExists
-      executeShell("cp -R '#{$tempDir}/#{realname}' '#{installPath}/#{realname}'")
-      if $errorcnt > 0
-        %x{rm -r #{$tempDir}}
-        writeToLogFile("Cannot copy “#{$tempDir}#{realname}” to “#{installPath}/#{realname}”")
-        resetOldBundleFolder("#{installPath}/#{realname}") if $installFolderExists
-        return
-      end
-    end
-    %x{rm -r #{$tempDir}}
+    executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
+    removeTempDir
   else          #### no svn client found
     noSVNclientFound
   end
@@ -971,62 +676,59 @@ end
 def installBundles(dlg)
   $listsLoaded = false
   cnt = 0 # counter for installed bundles
-  # $params['nocancel'] = false # avoid pressing Cancel
-  $params['usingGitZip'] = dlg['usingGitZip']
-  updateDIALOG
-  # $dialogResult['returnArgument'] helds the installation target 
-  installPath = getInstallPathFor(dlg['returnArgument'])
-  if installPath.length() > 0 and dlg.has_key?('paths') and ! $close
-    FileUtils.mkdir_p installPath
-    items = dlg['paths']
+  unless $close
+    $params['isBusy'] = true
+    $params['progressIsIndeterminate'] = true
+    $params['progressText'] = "Installing…"
+    updateDIALOG
+    items = dlg['returnArgument']
     items.each do |item|
       break if $close
       $errorcnt = 0
-      $params['isBusy'] = true
-      $params['progressIsIndeterminate'] = true
-      $params['progressText'] = "Installing…"
-      updateDIALOG
       cnt += 1
-      path = item.split("|").last
-      mode = item.split("|").first
-      name = ""
-      if mode == 'git'
-        name = normalize_github_repo_name(path.gsub(/.*github.com\/.*?\/(.*?)\/.*/,'\1')).split('.').first
-      elsif mode == 'svn'
-        name = path.gsub(/.*\/(.*)\.tmbundle.*/,'\1')
+      # get the bundle data (from json file)
+      bundleData = $bundleCache['bundles'][item.to_i]
+      name = bundleData['name']
+      zip_path = nil
+      source = nil
+      $availableModi.each do |mode|
+        source = bundleData['source'].find { |m| m['method'] == mode }
+        (source.nil?) ? next : break
       end
-      name = URI.unescape(name)
+      if source.nil?
+        writeTimedMessage("No method found to install “#{name}”", "Installation was skipped.", 1)
+        next
+      end
+      path = source['url']
+      mode = source['method']
+      zip_path = source['zip_path'] if source.has_key?('zip_path')
       break if $close
-      writeToLogFile("Install “%s” into %s" % [name, installPath])
-      if File.directory?(installPath + "/#{name}.tmbundle")
-        if askDIALOG("“#{name}” folder already exists.", "Do you want to replace it?\n➠If yes, the old folder will be renamed\nby appending a time stamp!") == 0
-          mode = 'skip'
-          writeToLogFile("Installation of “#{name}” was skipped")
-        else
-          $installFolderExists = true
-        end
-      else
-        $installFolderExists = false
+      writeToLogFile("Installing “%s”" % name)
+      if mode.nil? or path.nil?
+        writeTimedMessage("No valid source data found")
+        mode = "skip"
       end
       if mode != 'skip'
-        $params['progressText'] = "Installing #{name}"
+        $params['progressText'] = "Installing “#{name}”"
         $params['progressText'] += (items.size == 1) ? "…" : " (#{cnt} / #{items.size})…"
       end
       updateDIALOG
-      # git := install via zipball, gitclone := install via 'git clone...'
-      # dlg['usingGitZip'] could give 0 (DIALOG1) or false (DIALOG2)
-      mode += $GITMODE if mode == 'git' and (dlg['usingGitZip'] == false or dlg['usingGitZip'] == 0)
       break if $close
-      if mode == 'git'
-        installGitZipball(path, installPath)
-      elsif mode == 'gitclone'
-        installGitClone(path, installPath)
-      elsif mode == 'svn'
-        installSVN(path, installPath)
+      case mode
+        when "svn" 
+          installSVN(name, path)
+        when "zip"
+          installZIP(name, path, zip_path)
+        else
+          writeToLogFile("No method found to install “#{name}”")
+          $params['progressText'] = "Installing “#{name}” was skipped. Please check the Log."
+          updateDIALOG
+          sleep(1)
+          next
       end
       break if $close
       if $errorcnt > 0
-        $params['progressText'] = 'Error while installing! Please check the Activity Log.'
+        $params['progressText'] = 'Error while installing! Please check the Log.'
         updateDIALOG
         sleep(3)
         $errorcnt = 0
@@ -1034,22 +736,22 @@ def installBundles(dlg)
       end
       writeToLogFile("Installation of “%s” done." % name) if mode != 'skip' and $errorcnt == 0
     end
-    $params['progressText'] = "Reload Bundles…"
-    updateDIALOG
-    # reload bundles only if TM is running
-    %x{osascript -e 'tell app "TextMate" to reload bundles'} if ! getInstallPathFor("App Bundles", false).empty?
-    # if $errorcnt > 0
-    #   $params['progressText'] = 'General error while installing! Please check the Activity Log.'
-    #   updateDIALOG
-    #   sleep(3)
-    # end
+    # $params['progressText'] = "Reload Bundles…"
+    # updateDIALOG
+    # # reload bundles only if TM is running
+    # %x{osascript -e 'tell app "TextMate" to reload bundles'} if ! getInstallPathFor("App Bundles", false).empty?
+    # # if $errorcnt > 0
+    # #   $params['progressText'] = 'General error while installing! Please check the Activity Log.'
+    # #   updateDIALOG
+    # #   sleep(3)
+    # # end
     $params['isBusy'] = false
     $params['progressText'] = ""
     updateDIALOG
   end
   # $params['nocancel'] = false
   # updateDIALOG
-  %x{rm -rf #{$tempDir} 1> /dev/null}
+  removeTempDir
   $listsLoaded = true
 end
 
@@ -1110,15 +812,11 @@ def filterBundleList
   $params['usingGitZip']      = $dialogResult['usingGitZip']
   $params['progressText']     = "Filtering bundle list…"
   updateDIALOG
-  b = []
-  if $dialogResult['bundleSelection'] == 'GitHub'
-    b = $dataarray.select {|v| v['repo'] == 'G'}
-  elsif $dialogResult['bundleSelection'] == 'Review'
-    b = $dataarray.select {|v| v['repo'] == 'R'}
-  elsif $dialogResult['bundleSelection'] == 'Bundles'
-    b = $dataarray.select {|v| v['repo'] == 'B'}
-  else
-    b = $dataarray
+  b = case $dialogResult['bundleSelection']
+    when "3rd Party":  $dataarray.select {|v| v['repo'] !~ /^O|R$/}
+    when "Review":  $dataarray.select {|v| v['repo'] == 'R'}
+    when "Official": $dataarray.select {|v| v['repo'] == 'O'}
+    else $dataarray
   end
   $params['numberOfBundles'] = "%d in total found" % b.size
   $params['dataarray'] = b
@@ -1127,20 +825,16 @@ def filterBundleList
   updateDIALOG
 end
 
-def setTimeout
-  if $dialogResult.has_key?('timeout')
-    begin
-      $timeout = $dialogResult['timeout'].to_i
-    rescue
-      $timeout = 30
-      writeToLogFile("Timeout was set to 30")
-    end
-    if $timeout < 1 or $timeout > 600
-      $timeout = 30
-      writeToLogFile("Timeout was set to 30")
-    end
-  end
-  $params['timeout'] = $timeout.to_s
+def writeTimedMessage(logtext, displaytext="An error occurred. Please check the Log.", sleepFor=2)
+  return if $close
+  writeToLogFile(logtext)
+  $params['isBusy'] = true
+  $params['progressText'] = displaytext
+  updateDIALOG
+  sleep(sleepFor)
+  $params['isBusy'] = false
+  $params['rescanBundleList'] = 0
+  updateDIALOG
 end
 
 ##------- main -------##
@@ -1152,21 +846,14 @@ $params = {
   'updateTMlibBtn'          => 'updateTMlibButtonIsPressed',
   'showHelpBtn'             => 'helpButtonIsPressed',
   'infoBtn'                 => 'infoButtonIsPressed',
-  'revealBtn'               => 'revealButtonIsPressed',
-  'openBundleEditorBtn'     => 'openBundleEditorButtonIsPressed',
   'cancelBtn'               => 'cancelButtonIsPressed',
-  'targets'                 => targetPaths.keys.sort {|x,y| y <=> x },
-  'targetSelection'         => targetPaths.keys.sort {|x,y| y <=> x }.first,
   'nocancel'                => false,
   'repoColor'               => '#0000FF',
   'logPath'                 => %x{cat '#{$logFile}'},
   'bundleSelection'         => 'All',
-  'usingGitZip'             => false,
-  'timeout'                 => '30',
-  'updateBtnLabel'          => 'Update Descriptions',
+  'openBundleEditor'        => 0,
 }
 
-initSVNDescriptionCache
 initLogFile
 
 orderOutDIALOG
@@ -1175,9 +862,7 @@ $x1 = Thread.new do
   begin
     getBundleLists
   rescue
-    writeToLogFile("Fatal Error")
-    $run = false
-    exit 0
+    writeTimedMessage("Error while connecting Bundle Server:\n#{$!}", "An error occurred. Please check the Log!")
   end
 end
 
@@ -1189,14 +874,8 @@ if ENV.has_key?('TM_SVN')
   $SVN = ENV['TM_SVN']
 end
 
-$GITMODE = ""
-if ! %x{type -p git}.strip!().nil?
-  $GITMODE = "clone"
-end
-
 while $run do
   getResultFromDIALOG
-  setTimeout
   # writeToLogFile($dialogResult.inspect())
   if $dialogResult.has_key?('returnArgument')
     if $dialogResult['returnArgument'] == 'updateTMlibButtonIsPressed'
@@ -1215,36 +894,26 @@ while $run do
     elsif $dialogResult['returnArgument'] == 'cancelButtonIsPressed'
       $close = true
     elsif $dialogResult['returnArgument'] == 'infoButtonIsPressed'
-      $x3 = Thread.new do
-        infoDIALOG($dialogResult)
-      end
-    elsif $dialogResult['returnArgument'] == 'revealButtonIsPressed'
-      %x{open -a Finder '#{getInstallPathFor($dialogResult['folder'])}'}
-    elsif $dialogResult['returnArgument'] == 'openBundleEditorButtonIsPressed'
-      %x{osascript -e 'tell app "System Events" to keystroke "b" using {control down, option down, command down}' }
+      $x3 = Thread.new { infoDIALOG($dialogResult) }
     else
-      if $dialogResult.has_key?('paths') and $dialogResult['paths'].size > 10
+      if $dialogResult['returnArgument'].size > 10
         if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
-          $x2 = Thread.new do
-            installBundles($dialogResult)
-          end
+          $x2 = Thread.new { installBundles($dialogResult) }
         end
       else
-        $x2 = Thread.new do
-          installBundles($dialogResult)
-        end
+        $x2 = Thread.new { installBundles($dialogResult) }
       end
     end
-  elsif $dialogResult.has_key?('doUpdate') && $dialogResult['doUpdate'] == 1
-    $x0 = Thread.new do
-      getSVNBundleDescriptions
-    end
+  elsif $dialogResult.has_key?('openBundleEditor') && $dialogResult['openBundleEditor'] == 1
+    %x{osascript -e 'tell app "System Events" to keystroke "b" using {control down, option down, command down}' }
+    $params['openBundleEditor'] = 0
+    updateDIALOG
   elsif $dialogResult.has_key?('rescanBundleList') && $dialogResult['rescanBundleList'] == 1
     $x4 = Thread.new do
       begin
         getBundleLists
       rescue
-        writeToLogFile("Fatal Error")
+        writeToLogFile("Fatal Error 02: #{$!}")
         $run = false
         exit 0
       end

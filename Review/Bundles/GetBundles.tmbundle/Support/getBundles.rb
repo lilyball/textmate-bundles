@@ -808,8 +808,6 @@ end
 def filterBundleList
   $params['isBusy'] = true
   $params['bundleSelection']  = $dialogResult['bundleSelection']
-  $params['targetSelection']  = $dialogResult['targetSelection']
-  $params['usingGitZip']      = $dialogResult['usingGitZip']
   $params['progressText']     = "Filtering bundle list…"
   updateDIALOG
   b = case $dialogResult['bundleSelection']

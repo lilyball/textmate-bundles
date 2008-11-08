@@ -962,7 +962,7 @@ while $run do
       doUpdateSupportFolder
       checkForSupportFolderUpdate
     else
-      writeToLogFile("Update “Support Folder” was switched off")
+      writeToLogFile("Update “Support Folder” was switched off") if $updateSupportFolder
       $updateSupportFolder = false
     end
     $params['supportFolderCheck'] = 0

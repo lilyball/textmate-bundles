@@ -785,9 +785,6 @@ def doUpdateSupportFolder
     writeTimedMessage("No Support Folder URL found in cache file")
     return
   end
-  $params['isBusy'] = true
-  $params['progressText'] = "Updating TextMate's “Support Folder”…"
-  updateDIALOG
   unless File.directory?($supportFolder)
     $errorcnt += 1
     writeTimedMessage("‘#{$supportFolder}’ not found.")
@@ -798,7 +795,22 @@ def doUpdateSupportFolder
     noSVNclientFound
     return
   end
+  doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolder}/Support'"))
+  supportURL = doc.root.elements['//info/entry/url'].text
+  if supportURL =~ /^http:\/\/macromates/
+    executeShell(%Q{
+cd '/Library/Application Support/TextMate/Support'
+svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn.textmate.org/trunk/Support/
+    }, true, true)
+    if $errorcnt == 0
+      writeToLogFile("“Support Folder”s svn repository was relocated")
+    else
+      writeTimedMessage("Error while relocating the svn repository of the “Support Folder”")
+      return
+    end
+  end
   $params['isBusy'] = true
+  $params['progressText'] = "Updating TextMate's “Support Folder”…"
   $params['progressIsIndeterminate'] = true
   updateDIALOG
   begin

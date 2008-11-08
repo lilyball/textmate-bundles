@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV["TM_BUNDLE_SUPPORT"] + "/lib/MATLABUtils.rb"
+include MATLAB
+variables = MATLAB.get_variables
+puts "save(${1:'${2:filename}'},${3:'${4:#{variables.join("','")}}'}$5);"
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>save</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.matlab, source.octave</string>
+	<key>tabTrigger</key>
+	<string>save</string>
+	<key>uuid</key>
+	<string>EA2AB0C2-A215-4503-930C-785CDF66F95B</string>
+</dict>
+</plist>

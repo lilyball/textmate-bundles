@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>warning('${1:Description}');</string>
+	<string>warning(['${1:Description}']);</string>
 	<key>name</key>
 	<string>warning</string>
 	<key>scope</key>
-	<string>source.matlab</string>
+	<string>source.matlab, source.octave</string>
 	<key>tabTrigger</key>
 	<string>war</string>
 	<key>uuid</key>

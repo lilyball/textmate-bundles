@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+width = 80
+buffer = 5
+
+print "%%${1/^" + "(.)?"*(width) + ".*$/"
+1.upto(width-2-buffer) { |i| print "(?#{i}::=)" }
+print "/}".ljust(buffer+2)
+print "${1:Header}" + "\n$0"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Insert section division</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.matlab, source.octave</string>
+	<key>tabTrigger</key>
+	<string>div</string>
+	<key>uuid</key>
+	<string>D21BACE2-24A1-43EF-854C-460F5A55694E</string>
+</dict>
+</plist>

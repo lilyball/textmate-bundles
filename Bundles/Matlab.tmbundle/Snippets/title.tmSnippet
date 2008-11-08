@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>title(${1:'${2}'});</string>
+	<string>set(get(gca,'Title'),'String',${1:'${2}'});</string>
 	<key>name</key>
 	<string>title</string>
 	<key>scope</key>
-	<string>source.matlab</string>
+	<string>source.matlab , source.octave</string>
 	<key>tabTrigger</key>
-	<string>title</string>
+	<string>zla</string>
 	<key>uuid</key>
 	<string>7298E093-E86F-4A60-ACFF-67580F24FD27</string>
 </dict>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+# Wrap the current word or selected text in num2str()
+# or insert " if there is no word
+
+seltext = ENV['TM_SELECTED_TEXT'].to_s 
+curword = ENV['TM_CURRENT_WORD'].to_s
+
+if !seltext.empty?
+	print "num2str(", seltext, ")"
+elsif  !curword.empty?
+	print "num2str(", curword, ")"
+else
+    print "\""
+end</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^'</string>
+	<key>name</key>
+	<string>num2str</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>(source.matlab|source.octave) - (string.quoted.single.matlab | comment.line.percentage.matlab | comment.double.percentage.matlab)</string>
+	<key>uuid</key>
+	<string>6F519B71-2D99-455B-9E4A-F614FD9CA253</string>
+</dict>
+</plist>

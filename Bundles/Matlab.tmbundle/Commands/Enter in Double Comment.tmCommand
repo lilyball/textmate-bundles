@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+thisline = ENV['TM_CURRENT_LINE']
+soft_tabs = ENV['TM_SOFT_TABS']
+tab_size = ENV['TM_TAB_SIZE'].to_i
+# thisline = "asdfasd f				% asdfasdfadsfasd"
+# thisline = "aasdfasd ff				% asdfasdfadsfasd"
+# thisline = "aasdfasd fff				% asdfasdfadsfasd"
+spaces = thisline.match(/^(.*?)(%%|%|#)(\s*).*$/)
+
+leading_spaces = spaces.captures[0].gsub(/[^\t]{4}/,"\t").gsub(/[^\t]{1,3}\t/,"\t")
+
+if spaces.captures[0] =~ /\S/
+	leading_spaces.gsub!(/\t/,"".ljust(tab_size)) if ENV['TM_SOFT_TABS'] == "YES"
+else
+	leading_spaces = ""
+end
+
+print "\n#{leading_spaces}#{spaces.captures[1] + spaces.captures[2]}$1"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Enter in Comment</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>comment.line.percentage.matlab, comment.double.percentage.matlab, comment.line.percentage.octave, comment.double.percentage.octave, comment.line.pound.octave</string>
+	<key>uuid</key>
+	<string>615CF7DB-FDB1-4013-9725-FDF4BE64E8A4</string>
+</dict>
+</plist>

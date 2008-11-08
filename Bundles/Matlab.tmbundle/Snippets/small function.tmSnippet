@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>%% ${1:functionname}: ${2:function description}
+function [${3:outputs}] = ${1}(${4:arg})
+${3/,?\s*([a-zA-Z]\w*)|,\s*/(?1:\t$1 = ;\n)/g}</string>
+	<key>name</key>
+	<string>small function</string>
+	<key>scope</key>
+	<string>source.matlab, source.octave</string>
+	<key>tabTrigger</key>
+	<string>func</string>
+	<key>uuid</key>
+	<string>2376F2E2-E240-422F-B6E8-48B6AA20C9EE</string>
+</dict>
+</plist>

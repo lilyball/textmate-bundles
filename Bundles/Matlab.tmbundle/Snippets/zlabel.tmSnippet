@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>xlabel(${1:'${2}'});</string>
+	<string>set(get(gca,'ZLabel'),'String',${1:'${2}'});</string>
 	<key>name</key>
 	<string>zlabel</string>
 	<key>scope</key>
-	<string>source.matlab</string>
+	<string>source.matlab , source.octave</string>
 	<key>tabTrigger</key>
-	<string>zlabel</string>
+	<string>zla</string>
 	<key>uuid</key>
 	<string>3C12382B-FD63-4DD8-9198-02D25AF755FF</string>
 </dict>

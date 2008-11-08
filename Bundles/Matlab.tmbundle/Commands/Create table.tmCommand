@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+if ENV.has_key?('TM_SELECTED_TEXT') then
+	result = ENV['TM_SELECTED_TEXT'].strip
+	case result
+	when /'.*'/
+		@pad = "' '"
+	else
+		@pad = "0"
+	end
+	@input_table = result.to_a.collect {|row| row.chomp.split(/\s+|,/)}
+	rows = @input_table.length
+	columns = @input_table.inject { |memo, row| memo.length &gt; row.length ? memo : row }.length
+else
+	result=`"$TM_SUPPORT_PATH/bin"/CocoaDialog.app/Contents/MacOS/CocoaDialog standard-inputbox \
+	--title 'Matlab Array Creation' \
+	--informative-text 'Number of rows and columns:' \
+	--text '6 4'`.split
+	exit if result[0] == "2" || result.length == 1
+	@input_table = nil
+	result.collect! { |num| num.to_i}
+	result[2] = result[1] if result.length == 2
+	# We'll only create up to two-dimensional arrays
+	# with up to N elements
+	N = 200
+	product = result[1..2].inject(1) {|product, num| product * num }
+	if product.zero?
+		# give error message
+		exit
+	elsif product &gt; N
+		open('|"$DIALOG" tooltip', 'w') do |io|
+			io &lt;&lt; "The matrix dimensions are too large.\nThe maximum is set to #{N} elements."
+		end
+		exit
+	else
+		rows, columns = result[1..2]
+	end
+end
+
+@pos = 0
+def self.insert(row,column)
+	if @input_table.nil?
+		@pos += 1
+		"${#{@pos}:#{@pos}}"
+	else
+		ret = @input_table[row][column]
+		if ret.nil?
+			@pos += 1
+			"${#{@pos}:#{@pad}}"
+		else
+			ret
+		end
+	end
+end
+
+table = ""
+table += "[" if rows &gt; 1
+rows.times do |m|
+	table += "["
+	columns.times do |n|
+		table += insert(m,n)
+		table += (n == columns-1) ? "]" : "\t"
+	end
+	table += ";\n" unless (m == rows-1)
+end
+table += "]" if rows &gt; 1
+table += "${#{@pos+1}:;}\n$0"
+puts table
+</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^@T</string>
+	<key>name</key>
+	<string>Create matrix</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.matlab, source.octave</string>
+	<key>uuid</key>
+	<string>F23DAE9B-A27A-41D3-B57B-DED30729243C</string>
+</dict>
+</plist>

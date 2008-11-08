@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+# Due to many special cases, this is rather ugly.
+
+# Set up all parameters
+debug = false
+textarray = STDIN.readlines
+linenumber = ENV['TM_LINE_NUMBER'].to_i
+numlines = textarray.size
+# Adjust for missing empty last line if last character is a newline
+numlines += 1 if textarray.last[-1] == 10
+lineindex = ENV['TM_LINE_INDEX'].to_i
+scopes = ENV['TM_SCOPE'].split
+preceding_string = scopes.index("punctuation.definition.string.begin.matlab")
+escaped_quote = scopes.index("constant.character.escape.matlab")
+if debug
+    print "preceding_string", "\t\t= ___", preceding_string, "___\n"
+    print "escaped_quote", "\t\t= ___", escaped_quote, "___\n"
+end
+
+thisline = ENV['TM_CURRENT_LINE']
+firsthalf = thisline.slice(0...lineindex).gsub(/\$/,"\\\$")
+secondhalf = thisline.slice(lineindex...thisline.length).gsub(/\$/,"\\\$")
+
+atEOL = (thisline.length == lineindex)
+atEOF = (atEOL &amp;&amp; numlines == linenumber)
+firstmatch = firsthalf.match(/(')(('{2}|[^'])*)(')?$/)
+secondmatch = secondhalf.match(/(')?(('{2}|[^'])*)(')?/)
+
+if atEOF
+    if firstmatch.nil?
+        puts "we have no quotes on this line" if debug
+        # insert closing quote on preceding line and an enter
+    elsif firstmatch.captures.last == "'"
+        puts "we have a closing quote. insert enter" if debug
+        firsthalf += "\n"
+    else
+        puts "we must close the string and insert an enter" if debug
+        firsthalf += "'\n"
+    end
+else
+    if preceding_string
+        puts "we're preceding a string. insert dots and an enter" if debug
+        # check for =-+/*
+        firsthalf += " ..." unless firsthalf.match(/[\=\+\-\*\/]\s*$/).nil?
+        firsthalf += "\n"
+    elsif atEOL
+        puts "we're at the end of the line. insert a quote and an enter" if debug
+        firsthalf += "'" if secondmatch.captures.first.nil? &amp;&amp; secondmatch.captures.last.nil? &amp;&amp; firstmatch.captures.last.nil?
+        firsthalf += "\n"
+    else
+        # check if firsthalf is a closed string
+        firsthalf.insert(firstmatch.begin(0),"[")
+        if firstmatch.captures.last == "'"
+            puts "first half is a closed string. insert brackets and dots" if debug
+        else
+            puts "first half is not closed. insert brackets, closing quote, and dots" if debug
+            firsthalf += "'"
+        end
+        firsthalf += " ...\n"
+        
+        if secondmatch.captures.first.nil?
+            puts "second half has no opening quote. insert leading quote and closing bracket" if debug
+            secondhalf = "'" + secondhalf
+        end
+        if secondmatch.captures.last.nil?
+            puts "second half has no closing quote. insert ending quote" if debug
+            secondhalf += "']"
+        else
+            puts "second half has no closing bracket. insert ending bracket" if debug
+            bias = secondmatch.captures.first.nil? ? 1 : 0 # compensate index for added quote
+            secondhalf.insert(secondmatch.end(0) + bias,"]")
+        end
+    end
+end
+
+if debug
+    print "linenumber", "\t= ___", linenumber, "___\n"
+    print "numlines", "\t= ___", numlines, "___\n"
+    print "lineindex", "\t= ___", lineindex, "___\n"
+    print "firsthalf", "\t= ___", firsthalf, "___\n"
+    print "secondhalf", "\t= ___", secondhalf, "___\n"
+    print "scopes", "\t\t= ___", scopes, "___\n"
+    print "preceding_string", "\t\t= ___", preceding_string, "___\n"
+    print "escaped_quote", "\t\t= ___", escaped_quote, "___\n"
+    print "atEOL", "\t\t= ___", atEOL, "___\n"
+    print "atEOF", "\t\t= ___", atEOF, "___\n"
+    print "debug", "\t\t= ___", debug, "___\n"
+    print "firstmatch", "\t= ___", firstmatch, "___\n"
+    print "firstmatch.begin(0)", "\t= ___", firstmatch.begin(0), "___\n"
+    print "secondmatch", "\t= ___", secondmatch, "___\n"
+    print "secondmatch.end(3)", "\t= ___", firstmatch.begin(3), "___\n"
+    print "firstmatch.captures\t\t", firstmatch.captures.inspect, "\n"
+    print "secondmatch.captures\t", secondmatch.captures.inspect, "\n"
+end
+
+print firsthalf, '$1', secondhalf
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Enter in String</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>string.quoted.single.matlab - meta.brackets.matlab, string.quoted.single.matlab - meta.parens.matlab</string>
+	<key>uuid</key>
+	<string>12A5489D-0A50-4420-A53D-FB0C6A2794CD</string>
+</dict>
+</plist>

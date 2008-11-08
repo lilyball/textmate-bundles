@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+lineindex = ENV['TM_LINE_INDEX'].to_i
+thisline = ENV['TM_CURRENT_LINE']
+scopes = ENV['TM_SCOPE'].split
+
+firsthalf = thisline.slice(0...lineindex)
+secondhalf = thisline.slice(lineindex..-1)
+
+if scopes[0] == "source.matlab"
+	firsthalf.sub!(/\s*\.*\s*$/," ...")
+elsif scopes[0] == "source.octave"
+	firsthalf.sub!(/\s*(\.*|\\)\s*$/," ...")
+end
+firsthalf += "\n"
+print firsthalf, '$1', secondhalf
+
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Enter in Incomplete Variable Assignment</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.matlab invalid.illegal.incomplete-variable-assignment.matlab, source.octave invalid.illegal.incomplete-variable-assignment.matlab</string>
+	<key>uuid</key>
+	<string>FD9512A7-561A-4140-A425-567B8D2862EA</string>
+</dict>
+</plist>

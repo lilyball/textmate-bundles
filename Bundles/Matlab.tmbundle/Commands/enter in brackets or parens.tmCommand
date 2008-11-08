@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+textarray = STDIN.readlines
+currentline = ENV['TM_LINE_NUMBER'].to_i
+numlines = textarray.size.to_i
+lineindex = ENV['TM_LINE_INDEX'].to_i
+thisline = ENV['TM_CURRENT_LINE']
+columns = ENV['TM_LINE_INDEX'].to_i
+
+
+if (textarray.size == currentline) &amp;&amp; (textarray.last.length == lineindex)
+    # We're at the very end.
+    if thisline.slice(0...lineindex).slice(/(\)|\])$/)
+        # We're outside closed brackets/parens. Just insert an enter
+        print "\n"
+    else
+        print " ...\n"
+    end
+else
+    # Let's add some dots. If we already have a dot or two, we won't print all three dots
+    dots = thisline.slice(0...lineindex).slice(/\.+$/).to_s.length
+    case dots
+    when 0
+        print " ..."
+    when 1
+        print ".."
+    when 2
+        print "."
+    end
+    print "\n"
+end
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Enter in Brackets or Parens Scope</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>(meta.brackets.matlab|meta.brackets.octave) - string.quoted.single.matlab,(meta.parens.matlab|meta.parens.octave) - string.quoted.single.matlab,(meta.brackets.curly.matlab|meta.brackets.curly.octave) - string.quoted.single.matlab</string>
+	<key>uuid</key>
+	<string>8A857EDA-B07B-4304-BA10-29C3D22A3B1B</string>
+</dict>
+</plist>

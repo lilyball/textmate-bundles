@@ -4,18 +4,15 @@
 <dict>
 	<key>content</key>
 	<string>while ${1:condition}
-	$0
-`if [[ $TM_USE_OCTAVE -ne '0' ]]
-	then echo "endwhile"
-else
-	echo "end"
-fi`</string>
+	${2:body}
+end
+</string>
 	<key>name</key>
-	<string>while … end</string>
-	<key>scope</key>
-	<string>source.matlab</string>
-	<key>tabTrigger</key>
 	<string>while</string>
+	<key>scope</key>
+	<string>source.matlab , source.octave</string>
+	<key>tabTrigger</key>
+	<string>whi</string>
 	<key>uuid</key>
 	<string>ADE63DB1-7F3A-4EAC-A5A4-3A35A28FE8F0</string>
 </dict>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+textarray = STDIN.readlines
+currentline = ENV['TM_LINE_NUMBER'].to_i
+numlines = textarray.size.to_i
+lineindex = ENV['TM_LINE_INDEX'].to_i
+thisline = ENV['TM_CURRENT_LINE']
+columns = ENV['TM_LINE_INDEX'].to_i
+if columns == 0 &amp;&amp; thisline[0] == ?'
+    print "...\n"
+else
+    if thisline.slice(0...lineindex).slice(/\'+$/).to_s.length.modulo(2) == 0
+        # We must insert a quote
+        print "'"
+    end
+    if (textarray.size == currentline) &amp;&amp; (textarray.last.length == lineindex)
+        # We're at the very end. If the last character is a quotation mark
+        # we'll not add a leading quote.
+        print " ...\n'$1']"
+    else
+        print " ...\n'"
+    end
+end</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Enter in String in Brackets Scope</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>meta.brackets.matlab string.quoted.single.matlab</string>
+	<key>uuid</key>
+	<string>732F1DA4-166B-44AF-88CD-5A944574D3CC</string>
+</dict>
+</plist>

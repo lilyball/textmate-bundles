@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>switch ${1:switch_expression}
+	case ${2:case_expression}
+		${3:body}
+	otherwise
+		${4:body}
+end</string>
+	<key>name</key>
+	<string>switch ... case ... otherwise ... end</string>
+	<key>scope</key>
+	<string>source.matlab, source.octave</string>
+	<key>tabTrigger</key>
+	<string>switch</string>
+	<key>uuid</key>
+	<string>89BADD5A-72B8-4FE5-B082-499C7E7AB452</string>
+</dict>
+</plist>

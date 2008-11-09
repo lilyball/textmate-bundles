@@ -140,25 +140,32 @@ def helpDIALOG
 end
 
 def infoDIALOG(dlg)
-  # return unless dlg.has_key?('path')
-  # info = { }
-  # plist = { }
-  # readme = ""
-  # css = ""
-  # data = ""
-  # removeTempDir
-  # FileUtils.mkdir_p $tempDir
-  # bundle = $bundleCache['bundles'][dlg['path'].first.to_i]
-  # $params['isBusy'] = true
-  # $params['progressIsIndeterminate'] = true
-  # $params['progressText'] = "Fetching information…"
-  # updateDIALOG
-  # return if $close
-  # mode = case bundle
-  #   when /github\.com/: "git"
-  #   when 
-  # end
-  # if mode == 'git'
+  return unless dlg.has_key?('path')
+  info = { }
+  plist = { }
+  readme = ""
+  css = ""
+  data = ""
+  removeTempDir
+  FileUtils.mkdir_p $tempDir
+  bundle = $bundleCache['bundles'][dlg['path'].to_i]
+  $params['isBusy'] = true
+  $params['progressIsIndeterminate'] = true
+  $params['progressText'] = "Fetching information…"
+  updateDIALOG
+  return if $close
+  mode = case bundle['status']
+    when "Official": "svn"
+    when "Under Review": "svn"
+    else "url"
+  end
+  if mode == ">" && bundle.has_key?('url')
+    mode = case bundle['url']
+      when /github\.com/: "github"
+      else "url"
+    end
+  end
+  if mode == 'git'
   #   namehasdot = false
   #   searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
   #   url = path.gsub(/zipball\/master/, '')
@@ -269,103 +276,103 @@ def infoDIALOG(dlg)
   #       </body></html>
   #     HTML03
   #   end
-  # elsif mode == 'svn'
-  #   if $SVN.length > 0
-  #     begin
-  #       GBTimeout::timeout($timeout) do
-  #         data = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' info '#{path}'")
-  #         if $errorcnt > 0
-  #           removeTempDir
-  #           $params['isBusy'] = false
-  #           updateDIALOG
-  #           return
-  #         end
-  #       end
-  #     rescue GBTimeout::Error
-  #       $params['isBusy'] = false
-  #       updateDIALOG
-  #       removeTempDir
-  #       writeToLogFile("Timeout error while fetching information") if ! $close
-  #       return
-  #     end
-  #     return if $close
-  #     data.each_line do |l|
-  #       info[l.split(': ').first] = l.split(': ').last
-  #     end
-  #     begin
-  #       GBTimeout::timeout($timeout) do
-  #         begin
-  #           plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{path}/info.plist")))
-  #         rescue
-  #           begin
-  #             plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{thePath}/info.plist"))))
-  #           rescue
-  #             plist = OSX::PropertyList::load("{description='?';}")
-  #           end
-  #         end
-  #       end
-  #     rescue GBTimeout::Error
-  #       $params['isBusy'] = false
-  #       updateDIALOG
-  #       removeTempDir
-  #       writeToLogFile("Timeout error while fetching information") if ! $close
-  #       return
-  #     end
-  #     return if $close
-  #     plist['name'] = info['path'] if plist['name'].nil?
-  #     plist['description'] = "" if plist['description'].nil?
-  #     plist['contactName'] = "" if plist['contactName'].nil?
-  #     plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
-  #     File.open("#{$tempDir}/info.html", "w") do |io|
-  #       io << <<-HTML11
-  #         <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
-  #         <head>
-  #         <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-  #         </head>
-  #         <body style='font-family:Lucida Grande'>
-  #       HTML11
-  #       if plist['description'].match(/<hr[^>]*\/>/)
-  #         io << "#{plist['description'].gsub(/.*?<hr[^>]*\/>/,'')}<br /><br />"
-  #       else
-  #         io << "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
-  #         io << "#{plist['description']}<br /><br />"
-  #       end
-  #       io << <<-HTML12
-  #         <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
-  #         <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
-  #         <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
-  #         <b>Last Changed Date:</b><br />&nbsp;#{info['Last Changed Date']}<br />
-  #         <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
-  #         <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
-  #         </body></html>
-  #       HTML12
-  #     end
-  #   else          #### no svn client found
-  #     noSVNclientFound
-  #   end
-  # else
-  #   return
-  # end
-  # $params['isBusy'] = false
-  # updateDIALOG
-  # $infoTokenOld = $infoToken
-  # if $close
-  #   removeTempDir
-  #   return
-  # end
-  # if $isDIALOG2
-  #   $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}" help }
-  # else
-  #   $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
-  # end
-  # if ! $infoTokenOld.nil?
-  #   if $isDIALOG2
-  #     %x{#{$DIALOG} window close #{$infoTokenOld}}
-  #   else
-  #     %x{#{$DIALOG} -x#{$infoTokenOld}}
-  #   end
-  # end
-  # removeTempDir
+  elsif mode == 'svn'
+    if $SVN.length > 0
+      begin
+        GBTimeout::timeout($timeout) do
+          data = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' info '#{bundle['source'].first['url']}'")
+          if $errorcnt > 0
+            removeTempDir
+            $params['isBusy'] = false
+            updateDIALOG
+            return
+          end
+        end
+      rescue GBTimeout::Error
+        $params['isBusy'] = false
+        updateDIALOG
+        removeTempDir
+        writeToLogFile("Timeout error while fetching information") if ! $close
+        return
+      end
+      return if $close
+      data.each_line do |l|
+        info[l.split(': ').first] = l.split(': ').last
+      end
+      begin
+        GBTimeout::timeout($timeout) do
+          begin
+            plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{path}/info.plist")))
+          rescue
+            begin
+              plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{bundle['source'].first['url']}/info.plist"))))
+            rescue
+              plist = OSX::PropertyList::load("{description='?';}")
+            end
+          end
+        end
+      rescue GBTimeout::Error
+        $params['isBusy'] = false
+        updateDIALOG
+        removeTempDir
+        writeToLogFile("Timeout error while fetching information") if ! $close
+        return
+      end
+      return if $close
+      plist['name'] = info['path'] if plist['name'].nil?
+      plist['description'] = "" if plist['description'].nil?
+      plist['contactName'] = "" if plist['contactName'].nil?
+      plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
+      File.open("#{$tempDir}/info.html", "w") do |io|
+        io << <<-HTML11
+          <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+          <head>
+          <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+          </head>
+          <body style='font-family:Lucida Grande'>
+        HTML11
+        if plist['description'].match(/<hr[^>]*\/>/)
+          io << "#{plist['description'].gsub(/.*?<hr[^>]*\/>/,'')}<br /><br />"
+        else
+          io << "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
+          io << "#{plist['description']}<br /><br />"
+        end
+        io << <<-HTML12
+          <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
+          <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
+          <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
+          <b>Last Changed Date:</b><br />&nbsp;#{info['Last Changed Date']}<br />
+          <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
+          <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
+          </body></html>
+        HTML12
+      end
+    else          #### no svn client found
+      noSVNclientFound
+    end
+  else
+    return
+  end
+  $params['isBusy'] = false
+  updateDIALOG
+  $infoTokenOld = $infoToken
+  if $close
+    removeTempDir
+    return
+  end
+  if $isDIALOG2
+    $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}" help }
+  else
+    $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
+  end
+  if ! $infoTokenOld.nil?
+    if $isDIALOG2
+      %x{#{$DIALOG} window close #{$infoTokenOld}}
+    else
+      %x{#{$DIALOG} -x#{$infoTokenOld}}
+    end
+  end
+  removeTempDir
 end
 
 def noSVNclientFound
@@ -624,6 +631,21 @@ def executeShell(cmd, cmdToLog = false, outToLog = false)
   return out
 end
 
+def waitForTMtoInstall(folder)
+  # TM moves the bundle by installation, thus wait as long as the folder exists wrapped into a timeout
+  begin
+    GBTimeout::timeout(5) do
+      loop do
+        break unless File.directory?("#{$tempDir}/#{folder}")
+      end
+    end
+  rescue GBTimeout::Error
+    writeTimedMessage("Something went wrong while installing a bundle")
+    $errorcnt += 1
+    return
+  end
+end
+
 def installZIP(name, path, zip_path)
   removeTempDir
   FileUtils.mkdir_p $tempDir
@@ -668,7 +690,7 @@ fi
   end
   return if $close
   executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
-  removeTempDir
+  waitForTMtoInstall("#{name}.tmbundle")
 end
 
 def installSVN(name, path)
@@ -680,7 +702,7 @@ def installSVN(name, path)
         executeShell(%Q{
 export LC_CTYPE=en_US.UTF-8
 cd '#{$tempDir}'
-'#{$SVN}' co --no-auth-cache --non-interactive '#{path}' '#{name}.tmbundle'
+'#{$SVN}' export '#{path}' '#{name}.tmbundle'
         }, true, true)
         if $errorcnt > 0
           removeTempDir
@@ -696,6 +718,7 @@ cd '#{$tempDir}'
     # get the bundle's real name (esp. for spaces and other symbols)
     return if $close
     executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
+    waitForTMtoInstall("#{name}.tmbundle")
   else          #### no svn client found
     noSVNclientFound
   end

@@ -140,226 +140,232 @@ def helpDIALOG
 end
 
 def infoDIALOG(dlg)
-  return if ! dlg.has_key?('path')
-  info = plist = { }
-  readme = css = data = ""
-  removeTempDir
-  FileUtils.mkdir_p $tempDir
-  path = dlg['path'].split('|').last
-  mode = dlg['path'].split('|').first
-  $params['isBusy'] = true
-  $params['progressIsIndeterminate'] = true
-  $params['progressText'] = "Fetching information…"
-  updateDIALOG
-  return if $close
-  if mode == 'git'
-    namehasdot = false
-    searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
-    url = path.gsub(/zipball\/master/, '')
-    if ! url.match(/.*?com\/(.*?)\/(.*?)\..*/)
-      begin
-        GBTimeout::timeout($timeout) do
-          d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))
-          if d.has_key?('repositories') and d['repositories'].size > 0
-            info = d['repositories'].first
-          else
-            # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
-            d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"))
-            if d.has_key?('repositories') and d['repositories'].size > 0
-              info = d['repositories'].first
-            # if .../search/foo+bar+foo1 fails init an empty dict
-            else
-              info = {}
-            end
-          end
-        end
-      rescue GBTimeout::Error
-        $params['isBusy'] = false
-        updateDIALOG
-        removeTempDir
-        writeToLogFile("Timeout error while fetching information") if ! $close
-        return
-      end
-    else
-      namehasdot = true
-      info = {}
-      info['name'] = ""
-      info['description'] = ""
-      info['owner'] = url.gsub(/.*?com\/(.*?)\/.*\//,'\1')
-    end
-    return if $close
-    begin
-      GBTimeout::timeout($timeout) do
-        data = Net::HTTP.get( URI.parse("#{url}tree/master") )
-      end
-    rescue GBTimeout::Error
-      $params['isBusy'] = false
-      updateDIALOG
-      removeTempDir
-      writeToLogFile("Timeout error while fetching information") if ! $close
-      return
-    end
-    return if $close
-    begin
-      GBTimeout::timeout($timeout) do
-        begin
-          plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{url}tree/master/info.plist?raw=true")).gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
-        rescue
-          writeToLogFile($!)
-        end
-      end
-    rescue GBTimeout::Error
-      $params['isBusy'] = false
-      updateDIALOG
-      removeTempDir
-      writeToLogFile("Timeout error while fetching information") if ! $close
-      return
-    end
-    return if $close
-    plist['name'] = info['path'] if plist['name'].nil?
-    plist['description'] = "" if plist['description'].nil?
-    plist['contactName'] = "" if plist['contactName'].nil?
-    plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
-    if ! data.index('<div id="readme">').nil?
-      readme = data.gsub( /.*?(<div id="readme">.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
-    else
-      readme = "<br /><i>No README found</i><br />"
-    end
-    css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
-    data = ""
-    return if $close
-    gitbugreport = (namehasdot) ? "&nbsp;&nbsp;&nbsp;<i><small>incomplete caused by the dot in project name (known GitHub bug)</small></i><br>" : ""
-    File.open("#{$tempDir}/info.html", "w") do |io|
-      io << <<-HTML01
-        <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
-        <base href='http://github.com'>
-        <head>
-        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-        #{css}
-        </head>
-        <body><div id='main'><div class='site'>
-        <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
-        <h3><u>git Information:</u></h3>#{gitbugreport}
-        <b>Description:</b><br />&nbsp;#{info['description']}<br />
-        <b>Name:</b><br />&nbsp;#{plist['name']}<br />
-        <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
-        <b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />
-        <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
-        <b>Private:</b><br />&nbsp;#{info['private']}<br />
-        <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
-      HTML01
-      if ! plist['contactName'].empty? or ! plist['contactEmailRot13'].empty? or ! plist['description'].empty?
-        io << <<-HTML02
-        <br /><br />
-        <h3><u>Bundle Information (info.plist):</u></h3>
-        #{plist['description']}<br /><br />
-        <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
-        HTML02
-      end
-      io << <<-HTML03
-        <br /><br />
-        <h2><u>README:</u></h2><br />
-        #{readme}</div></div>
-        </body></html>
-      HTML03
-    end
-  elsif mode == 'svn'
-    if $SVN.length > 0
-      begin
-        GBTimeout::timeout($timeout) do
-          data = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' info '#{path}'")
-          if $errorcnt > 0
-            removeTempDir
-            $params['isBusy'] = false
-            updateDIALOG
-            return
-          end
-        end
-      rescue GBTimeout::Error
-        $params['isBusy'] = false
-        updateDIALOG
-        removeTempDir
-        writeToLogFile("Timeout error while fetching information") if ! $close
-        return
-      end
-      return if $close
-      data.each_line do |l|
-        info[l.split(': ').first] = l.split(': ').last
-      end
-      begin
-        GBTimeout::timeout($timeout) do
-          begin
-            plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{path}/info.plist")))
-          rescue
-            begin
-              plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{thePath}/info.plist"))))
-            rescue
-              plist = OSX::PropertyList::load("{description='?';}")
-            end
-          end
-        end
-      rescue GBTimeout::Error
-        $params['isBusy'] = false
-        updateDIALOG
-        removeTempDir
-        writeToLogFile("Timeout error while fetching information") if ! $close
-        return
-      end
-      return if $close
-      plist['name'] = info['path'] if plist['name'].nil?
-      plist['description'] = "" if plist['description'].nil?
-      plist['contactName'] = "" if plist['contactName'].nil?
-      plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
-      File.open("#{$tempDir}/info.html", "w") do |io|
-        io << <<-HTML11
-          <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
-          <head>
-          <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-          </head>
-          <body style='font-family:Lucida Grande'>
-        HTML11
-        if plist['description'].match(/<hr[^>]*\/>/)
-          io << "#{plist['description'].gsub(/.*?<hr[^>]*\/>/,'')}<br /><br />"
-        else
-          io << "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
-          io << "#{plist['description']}<br /><br />"
-        end
-        io << <<-HTML12
-          <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
-          <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
-          <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
-          <b>Last Changed Date:</b><br />&nbsp;#{info['Last Changed Date']}<br />
-          <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
-          <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
-          </body></html>
-        HTML12
-      end
-    else          #### no svn client found
-      noSVNclientFound
-    end
-  else
-    return
-  end
-  $params['isBusy'] = false
-  updateDIALOG
-  $infoTokenOld = $infoToken
-  if $close
-    removeTempDir
-    return
-  end
-  if $isDIALOG2
-    $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}" help }
-  else
-    $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
-  end
-  if ! $infoTokenOld.nil?
-    if $isDIALOG2
-      %x{#{$DIALOG} window close #{$infoTokenOld}}
-    else
-      %x{#{$DIALOG} -x#{$infoTokenOld}}
-    end
-  end
-  removeTempDir
+  # return unless dlg.has_key?('path')
+  # info = { }
+  # plist = { }
+  # readme = ""
+  # css = ""
+  # data = ""
+  # removeTempDir
+  # FileUtils.mkdir_p $tempDir
+  # bundle = $bundleCache['bundles'][dlg['path'].first.to_i]
+  # $params['isBusy'] = true
+  # $params['progressIsIndeterminate'] = true
+  # $params['progressText'] = "Fetching information…"
+  # updateDIALOG
+  # return if $close
+  # mode = case bundle
+  #   when /github\.com/: "git"
+  #   when 
+  # end
+  # if mode == 'git'
+  #   namehasdot = false
+  #   searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
+  #   url = path.gsub(/zipball\/master/, '')
+  #   if ! url.match(/.*?com\/(.*?)\/(.*?)\..*/)
+  #     begin
+  #       GBTimeout::timeout($timeout) do
+  #         d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))
+  #         if d.has_key?('repositories') and d['repositories'].size > 0
+  #           info = d['repositories'].first
+  #         else
+  #           # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
+  #           d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"))
+  #           if d.has_key?('repositories') and d['repositories'].size > 0
+  #             info = d['repositories'].first
+  #           # if .../search/foo+bar+foo1 fails init an empty dict
+  #           else
+  #             info = {}
+  #           end
+  #         end
+  #       end
+  #     rescue GBTimeout::Error
+  #       $params['isBusy'] = false
+  #       updateDIALOG
+  #       removeTempDir
+  #       writeToLogFile("Timeout error while fetching information") if ! $close
+  #       return
+  #     end
+  #   else
+  #     namehasdot = true
+  #     info = {}
+  #     info['name'] = ""
+  #     info['description'] = ""
+  #     info['owner'] = url.gsub(/.*?com\/(.*?)\/.*\//,'\1')
+  #   end
+  #   return if $close
+  #   begin
+  #     GBTimeout::timeout($timeout) do
+  #       data = Net::HTTP.get( URI.parse("#{url}tree/master") )
+  #     end
+  #   rescue GBTimeout::Error
+  #     $params['isBusy'] = false
+  #     updateDIALOG
+  #     removeTempDir
+  #     writeToLogFile("Timeout error while fetching information") if ! $close
+  #     return
+  #   end
+  #   return if $close
+  #   begin
+  #     GBTimeout::timeout($timeout) do
+  #       begin
+  #         plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{url}tree/master/info.plist?raw=true")).gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
+  #       rescue
+  #         writeToLogFile($!)
+  #       end
+  #     end
+  #   rescue GBTimeout::Error
+  #     $params['isBusy'] = false
+  #     updateDIALOG
+  #     removeTempDir
+  #     writeToLogFile("Timeout error while fetching information") if ! $close
+  #     return
+  #   end
+  #   return if $close
+  #   plist['name'] = info['path'] if plist['name'].nil?
+  #   plist['description'] = "" if plist['description'].nil?
+  #   plist['contactName'] = "" if plist['contactName'].nil?
+  #   plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
+  #   if ! data.index('<div id="readme">').nil?
+  #     readme = data.gsub( /.*?(<div id="readme">.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
+  #   else
+  #     readme = "<br /><i>No README found</i><br />"
+  #   end
+  #   css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
+  #   data = ""
+  #   return if $close
+  #   gitbugreport = (namehasdot) ? "&nbsp;&nbsp;&nbsp;<i><small>incomplete caused by the dot in project name (known GitHub bug)</small></i><br>" : ""
+  #   File.open("#{$tempDir}/info.html", "w") do |io|
+  #     io << <<-HTML01
+  #       <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+  #       <base href='http://github.com'>
+  #       <head>
+  #       <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  #       #{css}
+  #       </head>
+  #       <body><div id='main'><div class='site'>
+  #       <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
+  #       <h3><u>git Information:</u></h3>#{gitbugreport}
+  #       <b>Description:</b><br />&nbsp;#{info['description']}<br />
+  #       <b>Name:</b><br />&nbsp;#{plist['name']}<br />
+  #       <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
+  #       <b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />
+  #       <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
+  #       <b>Private:</b><br />&nbsp;#{info['private']}<br />
+  #       <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
+  #     HTML01
+  #     if ! plist['contactName'].empty? or ! plist['contactEmailRot13'].empty? or ! plist['description'].empty?
+  #       io << <<-HTML02
+  #       <br /><br />
+  #       <h3><u>Bundle Information (info.plist):</u></h3>
+  #       #{plist['description']}<br /><br />
+  #       <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
+  #       HTML02
+  #     end
+  #     io << <<-HTML03
+  #       <br /><br />
+  #       <h2><u>README:</u></h2><br />
+  #       #{readme}</div></div>
+  #       </body></html>
+  #     HTML03
+  #   end
+  # elsif mode == 'svn'
+  #   if $SVN.length > 0
+  #     begin
+  #       GBTimeout::timeout($timeout) do
+  #         data = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' info '#{path}'")
+  #         if $errorcnt > 0
+  #           removeTempDir
+  #           $params['isBusy'] = false
+  #           updateDIALOG
+  #           return
+  #         end
+  #       end
+  #     rescue GBTimeout::Error
+  #       $params['isBusy'] = false
+  #       updateDIALOG
+  #       removeTempDir
+  #       writeToLogFile("Timeout error while fetching information") if ! $close
+  #       return
+  #     end
+  #     return if $close
+  #     data.each_line do |l|
+  #       info[l.split(': ').first] = l.split(': ').last
+  #     end
+  #     begin
+  #       GBTimeout::timeout($timeout) do
+  #         begin
+  #           plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{path}/info.plist")))
+  #         rescue
+  #           begin
+  #             plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{thePath}/info.plist"))))
+  #           rescue
+  #             plist = OSX::PropertyList::load("{description='?';}")
+  #           end
+  #         end
+  #       end
+  #     rescue GBTimeout::Error
+  #       $params['isBusy'] = false
+  #       updateDIALOG
+  #       removeTempDir
+  #       writeToLogFile("Timeout error while fetching information") if ! $close
+  #       return
+  #     end
+  #     return if $close
+  #     plist['name'] = info['path'] if plist['name'].nil?
+  #     plist['description'] = "" if plist['description'].nil?
+  #     plist['contactName'] = "" if plist['contactName'].nil?
+  #     plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
+  #     File.open("#{$tempDir}/info.html", "w") do |io|
+  #       io << <<-HTML11
+  #         <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+  #         <head>
+  #         <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  #         </head>
+  #         <body style='font-family:Lucida Grande'>
+  #       HTML11
+  #       if plist['description'].match(/<hr[^>]*\/>/)
+  #         io << "#{plist['description'].gsub(/.*?<hr[^>]*\/>/,'')}<br /><br />"
+  #       else
+  #         io << "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
+  #         io << "#{plist['description']}<br /><br />"
+  #       end
+  #       io << <<-HTML12
+  #         <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
+  #         <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
+  #         <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
+  #         <b>Last Changed Date:</b><br />&nbsp;#{info['Last Changed Date']}<br />
+  #         <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
+  #         <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
+  #         </body></html>
+  #       HTML12
+  #     end
+  #   else          #### no svn client found
+  #     noSVNclientFound
+  #   end
+  # else
+  #   return
+  # end
+  # $params['isBusy'] = false
+  # updateDIALOG
+  # $infoTokenOld = $infoToken
+  # if $close
+  #   removeTempDir
+  #   return
+  # end
+  # if $isDIALOG2
+  #   $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}" help }
+  # else
+  #   $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
+  # end
+  # if ! $infoTokenOld.nil?
+  #   if $isDIALOG2
+  #     %x{#{$DIALOG} window close #{$infoTokenOld}}
+  #   else
+  #     %x{#{$DIALOG} -x#{$infoTokenOld}}
+  #   end
+  # end
+  # removeTempDir
 end
 
 def noSVNclientFound
@@ -690,7 +696,6 @@ cd '#{$tempDir}'
     # get the bundle's real name (esp. for spaces and other symbols)
     return if $close
     executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
-    removeTempDir
   else          #### no svn client found
     noSVNclientFound
   end

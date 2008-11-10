@@ -22,7 +22,11 @@ $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'Bundles
 $isDIALOG2        = false # ! $DIALOG.match(/2$/).nil?
 
 # the log file
-$logFile          = "#{e_sh ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
+$logFile          = "#{ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
+# GetBundles plist file
+$plistFile        = "#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.getbundles.plist"
+# GetBundles' plist hash
+$gbplist          = nil
 # DIALOG's parameters hash
 $params           = { }
 # DIALOG's async token
@@ -44,6 +48,8 @@ $numberOfBundles  = 0
 $run              = true
 # error counter
 $errorcnt         = 0
+# warning counter
+$warningcnt       = 0
 # temp dir for installation
 $tempDir          = "/tmp/TM_GetBundlesTEMP"
 # global timeout in seconds
@@ -58,8 +64,10 @@ $availableModi = ["svn", "zip"]
 $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json.gz"
 # $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json"
 
+# Pristine's Support Folder
+$supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
 # TextMate's Support Folder
-$supportFolder = "/Library/Application Support/TextMate"
+$supportFolder = "/Library/Application Support/TextMate/Support"
 # should the Support Folder updated in beforehand?
 $updateSupportFolder = true
 # last bundle filter selection
@@ -524,21 +532,6 @@ def getBundleLists
 
 end
 
-def checkForSupportFolderUpdate
-  val = 1
-  if File.directory?("#{$supportFolder}/Support")
-    # get svn info
-    doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolder}/Support'"))
-    localRev = Time.parse(doc.root.elements['//info/entry/commit/date'].text).getutc
-    cacheRev = Time.parse($bundleCache['SupportFolder']['revision']).getutc
-    val = (cacheRev > localRev) ? 1 : 0
-    $updateSupportFolder = (cacheRev > localRev) ? true : false
-  end
-  $params['supportFolderCheck'] = val
-  updateDIALOG
-  writeToLogFile("It's recommended to update TextMate's “Support Folder”.\nGetBundles will update it before the next installation of a bundles.") if val == 1
-end
-
 def joinThreads
   begin
     $x1.join
@@ -594,6 +587,12 @@ def initLogFile
   File.open($logFile, "w") {}
 end
 
+def initGetBundlesPlist
+  File.open($plistFile, "w") { |io| io << {}.to_plist } unless File.exist?($plistFile)
+  $gbplist = OSX::PropertyList::load(open($plistFile))
+  p $gbplist.to_s
+end
+
 def removeTempDir
   if File.directory?($tempDir)
     if $tempDir == "/tmp/TM_GetBundlesTEMP"
@@ -616,7 +615,7 @@ end
 
 def writeTimedMessage(logtext, displaytext="An error occurred. Please check the Log.", sleepFor=2)
   return if $close
-  writeToLogFile(logtext)
+  writeToLogFile(logtext) unless logtext.nil?
   $params['isBusy'] = true
   $params['progressText'] = displaytext
   updateDIALOG
@@ -646,15 +645,14 @@ end
 def waitForTMtoInstall(folder)
   # TM moves the bundle by installation, thus wait as long as the folder exists wrapped into a timeout
   begin
-    GBTimeout::timeout(5) do
+    GBTimeout::timeout(3) do
       loop do
         break unless File.directory?("#{$tempDir}/#{folder}")
       end
     end
   rescue GBTimeout::Error
-    writeTimedMessage("Something went wrong while installing a bundle")
-    $errorcnt += 1
-    return
+    writeToLogFile("Warning: TextMate probably did not installed the bundle.")
+    $warningcnt += 1
   end
 end
 
@@ -714,29 +712,16 @@ def installBundles(dlg)
       end
       break if $close
       if $errorcnt > 0
-        $params['progressText'] = 'Error while installing! Please check the Log.'
-        updateDIALOG
-        sleep(3)
+        writeTimedMessage(nil,'Error while installing! Please check the Log.')
         $errorcnt = 0
         break
       end
-      writeToLogFile("Installation of “%s” done." % name) if mode != 'skip' and $errorcnt == 0
+      writeToLogFile("Installation of “%s” done." % name) if mode != 'skip' and $errorcnt == 0 and $warningcnt == 0
     end
-    # $params['progressText'] = "Reload Bundles…"
-    # updateDIALOG
-    # # reload bundles only if TM is running
-    # %x{osascript -e 'tell app "TextMate" to reload bundles'} if ! getInstallPathFor("App Bundles", false).empty?
-    # # if $errorcnt > 0
-    # #   $params['progressText'] = 'General error while installing! Please check the Activity Log.'
-    # #   updateDIALOG
-    # #   sleep(3)
-    # # end
     $params['isBusy'] = false
     $params['progressText'] = ""
     updateDIALOG
   end
-  # $params['nocancel'] = false
-  # updateDIALOG
   removeTempDir
   $listsLoaded = true
 end
@@ -819,6 +804,24 @@ cd '#{$tempDir}'
   end
 end
 
+def checkForSupportFolderUpdate
+  val = 1
+  if File.directory?("#{$supportFolderPristine}/.svn")
+    # get svn info
+    begin
+      doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolderPristine}'"))
+      localRev = Time.parse(doc.root.elements['//info/entry/commit/date'].text).getutc
+      cacheRev = Time.parse($bundleCache['SupportFolder']['revision']).getutc
+    rescue
+      writeTimedMessage("Error while getting 'svn info' data of the “Support Folder”")
+      return
+    end
+    val = (cacheRev > localRev) ? 1 : 0
+    $updateSupportFolder = (cacheRev > localRev) ? true : false
+  end
+  writeToLogFile("TextMate's “Support Folder” (#{$supportFolderPristine}) will be updated.") if val == 1
+end
+
 def doUpdateSupportFolder
   path = $bundleCache['SupportFolder']['url']
   folderCreated = false
@@ -826,14 +829,13 @@ def doUpdateSupportFolder
     writeTimedMessage("No Support Folder URL found in cache file")
     return
   end
-  FileUtils.mkdir_p($supportFolder) unless File.directory?($supportFolder)
   if $SVN.empty?
     $errorcnt += 1
     noSVNclientFound
     return
   end
-  if File.directory?("#{$supportFolder}/Support")
-    doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolder}/Support'"))
+  if File.directory?("#{$supportFolderPristine}/.svn") 
+    doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolderPristine}'"))
     supportURL = doc.root.elements['//info/entry/url'].text
     if supportURL =~ /^http:\/\/macromates/
       executeShell(%Q{
@@ -848,8 +850,23 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
       end
     end
   else
-    FileUtils.mkdir_p("#{$supportFolder}/Support")
+    begin
+      FileUtils.rm_rf($supportFolderPristine)
+      FileUtils.mkdir_p($supportFolderPristine)
+    rescue
+      writeTimedMessage("Error while creating “Support Folder”: #{$!}")
+      return
+    end
     folderCreated = true
+  end
+  begin
+    File.symlink($supportFolderPristine, $supportFolder) unless File.directory?($supportFolder)
+  rescue
+    writeTimedMessage("Error while creating a symbolic link: #{$!}")
+    return
+  end
+  if File.directory?($supportFolder) and ! File.symlink?($supportFolder)
+    writeToLogFile("Please note that you are using your own “Support Folder” (#{$supportFolder}) which won't be touch by GetBundles' update!\n To use the update simply rename or delete ‘#{$supportFolder}’ and rerun ‘Update “Support Folder”’.")
   end
   $params['isBusy'] = true
   $params['progressText'] = "Updating TextMate's “Support Folder”…"
@@ -857,17 +874,17 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
   updateDIALOG
   begin
     GBTimeout::timeout(120) do
-      if File.directory?("#{$supportFolder}/Support") and ! folderCreated
+      if File.directory?($supportFolderPristine) and ! folderCreated
         executeShell(%Q{
 export LC_CTYPE=en_US.UTF-8;
-cd '#{$supportFolder}/Support';
+cd '#{$supportFolderPristine}';
 '#{$SVN}' up
         }, true, true)
         return if $errorcnt > 0
       else
         executeShell(%Q{
 export LC_CTYPE=en_US.UTF-8;
-cd '#{$supportFolder}';
+cd '#{$supportFolderPristine.gsub('/Support','')}';
 '#{$SVN}' co --no-auth-cache --non-interactive '#{path}'
         }, true, true)
         return if $errorcnt > 0
@@ -919,10 +936,11 @@ $params = {
   'logPath'                 => %x{cat '#{$logFile}'},
   'bundleSelection'         => 'All',
   'openBundleEditor'        => 0,
-  'supportFolderCheck'      => 1,
+  'supportFolderCheck'      => 0,
 }
 
 initLogFile
+initGetBundlesPlist
 orderOutDIALOG
 
 $x1 = Thread.new do

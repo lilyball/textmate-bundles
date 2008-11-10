@@ -390,14 +390,14 @@ def noSVNclientFound
   sleep(3)
 end
 
-def askDIALOG(msg, text)
+def askDIALOG(msg, text, btn1="No", btn2="Yes")
   msg.gsub!("'","’")
   text.gsub!("'","’")
   resStr = 0
   if $isDIALOG2
-    resStr = %x{"$DIALOG" alert -s critical -m "#{msg}" -t "#{text}" -1 No -2 Yes}
+    resStr = %x{"$DIALOG" alert -s critical -m "#{msg}" -t "#{text}" -1 "#{btn1}" -2 "#{btn2}"}
   else
-    resStr = %x{"$DIALOG" -e -p '{messageTitle="#{msg}";alertStyle=critical;informativeText="#{text}";buttonTitles=("No","Yes");}'}
+    resStr = %x{"$DIALOG" -e -p '{messageTitle="#{msg}";alertStyle=critical;informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
     return resStr.to_i
   end
   begin
@@ -920,6 +920,14 @@ def filterBundleList
   updateDIALOG
 end
 
+def checkUniversalAccess
+  ui = %x{osascript -e 'tell app "System Events" to set isUIScriptingEnabled to UI elements enabled'}
+  if ui =~ /^false/
+    if askDIALOG("AppleScript's “UI scripting” is not enabled. Getbundles needs it to perform “Show Help Window”, “Open Bundle Editor”, and “to activate Getbundles if it's already open”.", "Do you want to open “System Preferences” to enable “Enable access for assistive devices”?", "Continue", "Cancel") == 0
+      %x{osascript -e 'tell app "System Preferences" ' -e 'activate' -e 'set current pane to pane "com.apple.preference.universalaccess"' -e 'end tell'}
+    end
+  end
+end
 
 ##------- main -------##
 
@@ -942,6 +950,7 @@ $params = {
 initLogFile
 initGetBundlesPlist
 orderOutDIALOG
+checkUniversalAccess
 
 $x1 = Thread.new do
   begin
@@ -964,18 +973,7 @@ while $run do
   getResultFromDIALOG
   # writeToLogFile($dialogResult.inspect())
   if $dialogResult.has_key?('returnArgument')
-    if $dialogResult['returnArgument'] == 'updateTMlibButtonIsPressed'
-      $errorcnt = 0
-      updateTMlibPath
-      if $errorcnt > 0
-        $params['progressText'] = 'Error while installing! Please check the Activity Log.'
-        updateDIALOG
-        sleep(3)
-      end
-      $errorcnt = 0
-      $params['isBusy'] = false
-      updateDIALOG
-    elsif $dialogResult['returnArgument'] == 'helpButtonIsPressed'
+    if $dialogResult['returnArgument'] == 'helpButtonIsPressed'
       helpDIALOG
     elsif $dialogResult['returnArgument'] == 'cancelButtonIsPressed'
       $close = true
@@ -1018,7 +1016,7 @@ while $run do
     updateDIALOG
   else ###### closing the window
     $close = true
-    if ! $listsLoaded  # while fetching something from the net wait for aborting of threads
+    unless $listsLoaded  # while fetching something from the net wait for aborting of threads
       $params['isBusy'] = true
       $params['progressText'] = 'Closing…'
       $params['progressIsIndeterminate'] = true

@@ -122,6 +122,7 @@ module TextMate
             TextMate::Process.run(args, :env => options[:env], :echo => true, :watch_fds => { :echo => tm_echo_fd_read }, &callback)
           end
           finish = Time.now
+          exit_code = $?.exitstatus
           
           tm_error_fd_write.close
           error = tm_error_fd_read.read
@@ -143,7 +144,7 @@ module TextMate
 
           io << error
           io << '<div class="controls"><a href="#" onclick="copyOutput(document.getElementById(\'_executor_output\'))">copy output</a></div>'
-          io << format("<div id=\"exception_report\" class=\"framed\">Program exited after %0.2f seconds.</div>", finish-start)
+          io << format("<div id=\"exception_report\" class=\"framed\">Program exited with code #{exit_code} after %0.2f seconds.</div>", finish-start)
           
           io << '</div>'
         end

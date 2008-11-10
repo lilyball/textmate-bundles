@@ -3,8 +3,6 @@
 SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/escape.rb'
 require SUPPORT + '/lib/osx/plist'
-# require SUPPORT + '/lib/textmate.rb'
-require 'erb'
 require "fileutils"
 require "open-uri"
 require "yaml"
@@ -14,8 +12,6 @@ require 'cgi'
 require "open3"
 require "time"
 require "rexml/document"
-
-include ERB::Util
 
 $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
@@ -57,17 +53,21 @@ $timeout          = 30
 # global thread vars
 $x0=$x1=$x2=$x3=$x4 = nil
 # bundle data hash containing data.json.gz 
-$bundleCache = { }
+$bundleCache      = { }
+# hash of used nicknames
+$nicknames        = { }
 # available installation modi
-$availableModi = ["svn", "zip"]
+$availableModi    = ["svn", "zip"]
 # URL to the bundle server's cache file
 $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json.gz"
 # $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json"
+# URL to nicknames.txt
+$nickNamesFile = "http://bibiko.textmate.org/bundleserver/nicknames.txt"
 
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
 # TextMate's Support Folder
-$supportFolder = "/Library/Application Support/TextMate/Support"
+$supportFolder    = "/Library/Application Support/TextMate/Support"
 # should the Support Folder updated in beforehand?
 $updateSupportFolder = true
 # last bundle filter selection
@@ -130,8 +130,6 @@ def closeDIALOG
     end
   end
   removeTempDir
-  # go back to the front most doc if TM is running
-  # %x{open 'txmt://open?'} if ! getInstallPathFor("App Bundles").empty?
 end
 
 def updateDIALOG
@@ -300,17 +298,17 @@ def infoDIALOG(dlg)
         $params['isBusy'] = false
         updateDIALOG
         removeTempDir
-        writeToLogFile("Timeout error while fetching information") if ! $close
+        writeToLogFile("Timeout error while fetching information") unless $close
         return
       end
       return if $close
       data.each_line do |l|
-        info[l.split(': ').first] = l.split(': ').last
+        info[l.split(': ').first] = l.split(': ').last.chomp
       end
       begin
         GBTimeout::timeout($timeout) do
           begin
-            plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{path}/info.plist")))
+            plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{bundle['source'].first['url']}/info.plist")))
           rescue
             begin
               plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{bundle['source'].first['url']}/info.plist"))))
@@ -323,14 +321,16 @@ def infoDIALOG(dlg)
         $params['isBusy'] = false
         updateDIALOG
         removeTempDir
-        writeToLogFile("Timeout error while fetching information") if ! $close
+        writeToLogFile("Timeout error while fetching information") unless $close
         return
       end
       return if $close
-      plist['name'] = info['path'] if plist['name'].nil?
+      plist['name'] = bundle['name'] if plist['name'].nil?
       plist['description'] = "" if plist['description'].nil?
       plist['contactName'] = "" if plist['contactName'].nil?
       plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
+      writeToLogFile("q#{info['Last Changed Author']}p")
+      info['Last Changed Author'] = $nicknames[info['Last Changed Author']] if ! $nicknames.nil? and $nicknames.has_key?(info['Last Changed Author'])
       File.open("#{$tempDir}/info.html", "w") do |io|
         io << <<-HTML11
           <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
@@ -346,12 +346,15 @@ def infoDIALOG(dlg)
           io << "#{plist['description']}<br /><br />"
         end
         io << <<-HTML12
+          <span style="background-color:#EEEEEE">
+          <b>UUID:</b><br />&nbsp;#{plist['uuid']}<br />
           <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
           <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
           <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
-          <b>Last Changed Date:</b><br />&nbsp;#{info['Last Changed Date']}<br />
+          <b>Last Changed Date:</b><br />&nbsp;#{Time.parse(info['Last Changed Date']).getutc.to_s}<br />
           <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
           <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
+          </span>
           </body></html>
         HTML12
       end
@@ -373,7 +376,7 @@ def infoDIALOG(dlg)
   else
     $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
   end
-  if ! $infoTokenOld.nil?
+  unless $infoTokenOld.nil?
     if $isDIALOG2
       %x{#{$DIALOG} window close #{$infoTokenOld}}
     else
@@ -443,8 +446,9 @@ def getBundleLists
   
   begin
     GBTimeout::timeout($timeout) do
-      # download data.json.gu from textmate.org
+      # download data.json.gz from textmate.org
       data_file = "#{$tempDir}/data.json.gz"
+      nicks = nil
       FileUtils.mkdir_p $tempDir
       begin
         File.open(data_file, 'w') { |f| f.write(open($bundleServerFile).read) }
@@ -462,6 +466,17 @@ def getBundleLists
         $bundleCache = YAML.load(open("#{$tempDir}/data.json"))
       rescue
         writeTimedMessage("Error: #{$!} while parsing the Bundle List file")
+      end
+      begin
+        nicks = Net::HTTP.get(URI.parse($nickNamesFile))
+      rescue
+        writeToLogFile("Could not load nicknames: #{$!}")
+      end
+      unless nicks.nil?
+        nicks.each_line do |l|
+          $nicknames[l.split("\t").first] = l.split("\t").last
+        end
+        writeToLogFile($nicknames.inspect)
       end
       # data_file = "#{$tempDir}/data.json"
       # FileUtils.mkdir_p $tempDir
@@ -588,9 +603,8 @@ def initLogFile
 end
 
 def initGetBundlesPlist
-  File.open($plistFile, "w") { |io| io << {}.to_plist } unless File.exist?($plistFile)
+  File.open($plistFile, "w") { |io| io << [].to_plist } unless File.exist?($plistFile)
   $gbplist = OSX::PropertyList::load(open($plistFile))
-  p $gbplist.to_s
 end
 
 def removeTempDir
@@ -634,26 +648,12 @@ def executeShell(cmd, cmdToLog = false, outToLog = false)
     err << stderr.read
   }
   writeToLogFile(out) if (! out.empty? and outToLog)
-  if ! err.empty?
+  unless err.empty?
     $errorcnt += 1
     writeToLogFile(err)
     return
   end
   return out
-end
-
-def waitForTMtoInstall(folder)
-  # TM moves the bundle by installation, thus wait as long as the folder exists wrapped into a timeout
-  begin
-    GBTimeout::timeout(3) do
-      loop do
-        break unless File.directory?("#{$tempDir}/#{folder}")
-      end
-    end
-  rescue GBTimeout::Error
-    writeToLogFile("Warning: TextMate probably did not installed the bundle.")
-    $warningcnt += 1
-  end
 end
 
 def installBundles(dlg)
@@ -716,7 +716,6 @@ def installBundles(dlg)
         $errorcnt = 0
         break
       end
-      writeToLogFile("Installation of “%s” done." % name) if mode != 'skip' and $errorcnt == 0 and $warningcnt == 0
     end
     $params['isBusy'] = false
     $params['progressText'] = ""
@@ -765,12 +764,11 @@ fi
     end
   rescue GBTimeout::Error
     $errorcnt += 1
-    writeToLogFile("Timeout error while installing %s" % name) if ! $close
+    writeToLogFile("Timeout error while installing %s" % name) unless $close
     return
   end
   return if $close
   executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
-  waitForTMtoInstall("#{name}.tmbundle")
 end
 
 def installSVN(name, path)
@@ -798,7 +796,6 @@ cd '#{$tempDir}'
     # get the bundle's real name (esp. for spaces and other symbols)
     return if $close
     executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
-    waitForTMtoInstall("#{name}.tmbundle")
   else          #### no svn client found
     noSVNclientFound
   end
@@ -962,7 +959,7 @@ $x1 = Thread.new do
 end
 
 $SVN = ""
-if ! %x{type -p svn}.strip!().nil?
+unless %x{type -p svn}.strip!().nil?
   $SVN = "svn"
 end
 if ENV.has_key?('TM_SVN')

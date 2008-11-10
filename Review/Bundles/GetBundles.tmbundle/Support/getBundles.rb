@@ -160,128 +160,139 @@ def infoDIALOG(dlg)
   $params['progressText'] = "Fetching information…"
   updateDIALOG
   return if $close
+  url = bundle['url']
   mode = case bundle['status']
     when "Official": "svn"
     when "Under Review": "svn"
     else "url"
   end
-  if mode == ">" && bundle.has_key?('url')
+  if mode == "url" && bundle.has_key?('url')
     mode = case bundle['url']
-      when /github\.com/: "github"
+      when /^http:\/\/github\.com/: "github"
       else "url"
     end
   end
-  if mode == 'git'
-  #   namehasdot = false
-  #   searchPath = path.gsub(/.*?com\/(.*?)\/(.*?)\/.*/, '\1-\2')
-  #   url = path.gsub(/zipball\/master/, '')
-  #   if ! url.match(/.*?com\/(.*?)\/(.*?)\..*/)
-  #     begin
-  #       GBTimeout::timeout($timeout) do
-  #         d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))
-  #         if d.has_key?('repositories') and d['repositories'].size > 0
-  #           info = d['repositories'].first
-  #         else
-  #           # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
-  #           d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"))
-  #           if d.has_key?('repositories') and d['repositories'].size > 0
-  #             info = d['repositories'].first
-  #           # if .../search/foo+bar+foo1 fails init an empty dict
-  #           else
-  #             info = {}
-  #           end
-  #         end
-  #       end
-  #     rescue GBTimeout::Error
-  #       $params['isBusy'] = false
-  #       updateDIALOG
-  #       removeTempDir
-  #       writeToLogFile("Timeout error while fetching information") if ! $close
-  #       return
-  #     end
-  #   else
-  #     namehasdot = true
-  #     info = {}
-  #     info['name'] = ""
-  #     info['description'] = ""
-  #     info['owner'] = url.gsub(/.*?com\/(.*?)\/.*\//,'\1')
-  #   end
-  #   return if $close
-  #   begin
-  #     GBTimeout::timeout($timeout) do
-  #       data = Net::HTTP.get( URI.parse("#{url}tree/master") )
-  #     end
-  #   rescue GBTimeout::Error
-  #     $params['isBusy'] = false
-  #     updateDIALOG
-  #     removeTempDir
-  #     writeToLogFile("Timeout error while fetching information") if ! $close
-  #     return
-  #   end
-  #   return if $close
-  #   begin
-  #     GBTimeout::timeout($timeout) do
-  #       begin
-  #         plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{url}tree/master/info.plist?raw=true")).gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
-  #       rescue
-  #         writeToLogFile($!)
-  #       end
-  #     end
-  #   rescue GBTimeout::Error
-  #     $params['isBusy'] = false
-  #     updateDIALOG
-  #     removeTempDir
-  #     writeToLogFile("Timeout error while fetching information") if ! $close
-  #     return
-  #   end
-  #   return if $close
-  #   plist['name'] = info['path'] if plist['name'].nil?
-  #   plist['description'] = "" if plist['description'].nil?
-  #   plist['contactName'] = "" if plist['contactName'].nil?
-  #   plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
-  #   if ! data.index('<div id="readme">').nil?
-  #     readme = data.gsub( /.*?(<div id="readme">.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
-  #   else
-  #     readme = "<br /><i>No README found</i><br />"
-  #   end
-  #   css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
-  #   data = ""
-  #   return if $close
-  #   gitbugreport = (namehasdot) ? "&nbsp;&nbsp;&nbsp;<i><small>incomplete caused by the dot in project name (known GitHub bug)</small></i><br>" : ""
-  #   File.open("#{$tempDir}/info.html", "w") do |io|
-  #     io << <<-HTML01
-  #       <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
-  #       <base href='http://github.com'>
-  #       <head>
-  #       <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-  #       #{css}
-  #       </head>
-  #       <body><div id='main'><div class='site'>
-  #       <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
-  #       <h3><u>git Information:</u></h3>#{gitbugreport}
-  #       <b>Description:</b><br />&nbsp;#{info['description']}<br />
-  #       <b>Name:</b><br />&nbsp;#{plist['name']}<br />
-  #       <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
-  #       <b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />
-  #       <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
-  #       <b>Private:</b><br />&nbsp;#{info['private']}<br />
-  #       <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
-  #     HTML01
-  #     if ! plist['contactName'].empty? or ! plist['contactEmailRot13'].empty? or ! plist['description'].empty?
-  #       io << <<-HTML02
-  #       <br /><br />
-  #       <h3><u>Bundle Information (info.plist):</u></h3>
-  #       #{plist['description']}<br /><br />
-  #       <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
-  #       HTML02
-  #     end
-  #     io << <<-HTML03
-  #       <br /><br />
-  #       <h2><u>README:</u></h2><br />
-  #       #{readme}</div></div>
-  #       </body></html>
-  #     HTML03
-  #   end
+  if mode == 'github'
+    namehasdot = false
+    searchPath = url.gsub(/.*?com\/(.*?)\/(.*)/, '\1-\2')
+    writeToLogFile(searchPath)
+    unless searchPath =~ /\./
+      begin
+        GBTimeout::timeout($timeout) do
+          d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))
+          if d.has_key?('repositories') and d['repositories'].size > 0
+            info = d['repositories'].first
+          else
+            # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
+            d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"))
+            if d.has_key?('repositories') and d['repositories'].size > 0
+              info = d['repositories'].first
+            # if .../search/foo+bar+foo1 fails init an empty dict
+            else
+              info = {}
+            end
+          end
+        end
+      rescue GBTimeout::Error
+        $params['isBusy'] = false
+        updateDIALOG
+        removeTempDir
+        writeToLogFile("Timeout error while fetching information") if ! $close
+        return
+      end
+    else
+      namehasdot = true
+      info = {}
+      info['description'] = "<font color=silver><small>no data available</small></font>"
+      info['watchers'] = "<font color=silver><small>no data available</small></font>"
+      info['private'] = "<font color=silver><small>no data available</small></font>"
+      info['forks'] = "<font color=silver><small>no data available</small></font>"
+      info['owner'] = url.gsub(/.*?com\/(.*?)\/.*/,'\1')
+    end
+    return if $close
+    begin
+      GBTimeout::timeout($timeout) do
+        data = Net::HTTP.get( URI.parse("#{url}/tree/master") )
+      end
+    rescue GBTimeout::Error
+      $params['isBusy'] = false
+      updateDIALOG
+      removeTempDir
+      writeToLogFile("Timeout error while fetching information") if ! $close
+      return
+    end
+    return if $close
+    begin
+      GBTimeout::timeout($timeout) do
+        begin
+          plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{url}/tree/master/info.plist?raw=true")).gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
+        rescue
+          writeToLogFile($!)
+        end
+      end
+    rescue GBTimeout::Error
+      $params['isBusy'] = false
+      updateDIALOG
+      removeTempDir
+      writeToLogFile("Timeout error while fetching information") if ! $close
+      return
+    end
+    return if $close
+    plist['name'] = bundle['name'] if plist['name'].nil?
+    plist['description'] = "" if plist['description'].nil?
+    plist['contactName'] = "" if plist['contactName'].nil?
+    plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
+    readme = nil
+    if data =~ /<div +id="readme".*?>/m
+      readme = data.gsub( /.*?(<div +id="readme".*?>.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
+    end
+    css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
+    data = ""
+    return if $close
+    gitbugreport = (namehasdot) ? "&nbsp;&nbsp;&nbsp;<i><small>incomplete caused by the dot in project name (known GitHub bug)</small></i><br>" : ""
+    File.open("#{$tempDir}/info.html", "w") do |io|
+      io << <<-HTML01
+        <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+        <base href='http://github.com'>
+        <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        #{css}
+        </head>
+        <body><div id='main'><div class='site'>
+        <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
+        <h3><u>git Information:</u></h3>#{gitbugreport}
+        <b>Description:</b><br />&nbsp;#{info['description']}<br />
+        <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
+        <b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />
+        <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
+        <b>Private:</b><br />&nbsp;#{info['private']}<br />
+        <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
+      HTML01
+      io << <<-HTML02
+      <br /><br />
+      <h3><u>Bundle Information (info.plist):</u></h3>
+      HTML02
+      if ! plist['contactName'].empty? or ! plist['contactEmailRot13'].empty? or ! plist['description'].empty?
+        io << "<b>Description:</b><br />&nbsp;#{plist['description']}<br />" unless plist['description'].empty?
+        contact = ""
+        contact = case
+          when plist['contactName'].empty? && plist['contactEmailRot13'].empty?:  "<font color=#666666><small>no data available</small></font>"
+          when plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}</a>"
+          when !plist['contactName'].empty? && plist['contactEmailRot13'].empty?: plist['contactName']
+          when !plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a>" 
+        end
+        io << "<b>Contact Name:</b><br />&nbsp;#{contact}<br />"
+      end
+      io << "<b>UUID:</b><br />&nbsp;#{plist['uuid']}"
+      unless readme.nil?
+        io << <<-HTML05
+        <br /><br />
+        <h3><u>README:</u></h3><br />
+        #{readme}</div></div>
+        </body></html>
+        HTML05
+      end
+    end
   elsif mode == 'svn'
     if $SVN.length > 0
       begin
@@ -325,11 +336,17 @@ def infoDIALOG(dlg)
         return
       end
       return if $close
-      plist['name'] = bundle['name'] if plist['name'].nil?
-      plist['description'] = "" if plist['description'].nil?
-      plist['contactName'] = "" if plist['contactName'].nil?
-      plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
-      writeToLogFile("q#{info['Last Changed Author']}p")
+      plist['name']               = bundle['name'] if plist['name'].nil?
+      plist['description']        = "<font color=silver><small>no data available</small></font>" if plist['description'].nil?
+      plist['contactName']        = "" if plist['contactName'].nil?
+      plist['contactEmailRot13']  = "" if plist['contactEmailRot13'].nil?
+      contact = ""
+      contact = case
+        when plist['contactName'].empty? && plist['contactEmailRot13'].empty?:  "<font color=#666666><small>no data available</small></font>"
+        when plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}</a>"
+        when !plist['contactName'].empty? && plist['contactEmailRot13'].empty?: plist['contactName']
+        when !plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a>" 
+      end
       info['Last Changed Author'] = $nicknames[info['Last Changed Author']] if ! $nicknames.nil? and $nicknames.has_key?(info['Last Changed Author'])
       File.open("#{$tempDir}/info.html", "w") do |io|
         io << <<-HTML11
@@ -347,13 +364,13 @@ def infoDIALOG(dlg)
         end
         io << <<-HTML12
           <span style="background-color:#EEEEEE">
-          <b>UUID:</b><br />&nbsp;#{plist['uuid']}<br />
           <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
-          <b>Contact Name:</b><br />&nbsp;<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a><br />
-          <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
+          <b>Contact Name:</b><br />&nbsp;#{contact}<br />
           <b>Last Changed Date:</b><br />&nbsp;#{Time.parse(info['Last Changed Date']).getutc.to_s}<br />
           <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
           <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
+          <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
+          <b>UUID:</b><br />&nbsp;#{plist['uuid']}<br />
           </span>
           </body></html>
         HTML12
@@ -362,9 +379,18 @@ def infoDIALOG(dlg)
       noSVNclientFound
     end
   else
+    if bundle.has_key?('url')
+      %x{open "#{bundle['url']}"}
+    else
+      writeToLogFile("No method found to fetch information")
+    end
+    $params['isBusy'] = false
+    $params['progressText'] = ""
+    updateDIALOG
     return
   end
   $params['isBusy'] = false
+  $params['progressText'] = ""
   updateDIALOG
   $infoTokenOld = $infoToken
   if $close
@@ -467,6 +493,7 @@ def getBundleLists
       rescue
         writeTimedMessage("Error: #{$!} while parsing the Bundle List file")
       end
+      # get nicknames from textmte.org
       begin
         nicks = Net::HTTP.get(URI.parse($nickNamesFile))
       rescue
@@ -476,7 +503,6 @@ def getBundleLists
         nicks.each_line do |l|
           $nicknames[l.split("\t").first] = l.split("\t").last
         end
-        writeToLogFile($nicknames.inspect)
       end
       # data_file = "#{$tempDir}/data.json"
       # FileUtils.mkdir_p $tempDir

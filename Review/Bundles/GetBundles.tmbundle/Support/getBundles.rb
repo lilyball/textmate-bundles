@@ -3,7 +3,7 @@
 SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/escape.rb'
 require SUPPORT + '/lib/osx/plist'
-require SUPPORT + '/lib/textmate.rb'
+# require SUPPORT + '/lib/textmate.rb'
 require 'erb'
 require "fileutils"
 require "open-uri"
@@ -536,7 +536,7 @@ def checkForSupportFolderUpdate
   end
   $params['supportFolderCheck'] = val
   updateDIALOG
-  writeToLogFile("It's recommended to update TextMate's “Support Folder”.") if val == 1
+  writeToLogFile("It's recommended to update TextMate's “Support Folder”.\nGetBundles will update it before the next installation of a bundles.") if val == 1
 end
 
 def joinThreads
@@ -614,6 +614,18 @@ def writeToLogFile(text)
   updateDIALOG
 end
 
+def writeTimedMessage(logtext, displaytext="An error occurred. Please check the Log.", sleepFor=2)
+  return if $close
+  writeToLogFile(logtext)
+  $params['isBusy'] = true
+  $params['progressText'] = displaytext
+  updateDIALOG
+  sleep(sleepFor)
+  $params['isBusy'] = false
+  $params['rescanBundleList'] = 0
+  updateDIALOG
+end
+
 def executeShell(cmd, cmdToLog = false, outToLog = false)
   writeToLogFile(cmd) if cmdToLog
   out = ""
@@ -643,84 +655,6 @@ def waitForTMtoInstall(folder)
     writeTimedMessage("Something went wrong while installing a bundle")
     $errorcnt += 1
     return
-  end
-end
-
-def installZIP(name, path, zip_path)
-  removeTempDir
-  FileUtils.mkdir_p $tempDir
-  begin
-    GBTimeout::timeout($timeout) do
-      begin
-        if path =~ /^http:\/\/github\.com/
-          executeShell(%Q{
-if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
-  if unzip --qq "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
-    rm "#{$tempDir}/archive.zip"
-    mv "#{$tempDir}/"* "#{$tempDir}/#{name}.tmbundle"
-  fi
-fi
-          }, false, true)
-        elsif !zip_path.nil? and zip_path =~ /\.tmbundle$/
-          executeShell(%Q{
-if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
-  if unzip --qq "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
-    rm "#{$tempDir}/archive.zip"
-    [[ ! -e "#{$tempDir}/#{zip_path}" ]] && mv "#{$tempDir}/"*"/#{zip_path}" "#{$tempDir}/#{name}.tmbundle"
-  fi
-fi
-          }, false, true)
-          name = zip_path.gsub(".tmbundle","")
-        else
-          $errorcnt += 1
-          writeToLogFile("Could not install “#{name}” by using “#{path}”")
-          removeTempDir
-          return
-        end
-      rescue
-        $errorcnt += 1
-        writeToLogFile("Error: #{$!}")
-        return
-      end
-    end
-  rescue GBTimeout::Error
-    $errorcnt += 1
-    writeToLogFile("Timeout error while installing %s" % name) if ! $close
-    return
-  end
-  return if $close
-  executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
-  waitForTMtoInstall("#{name}.tmbundle")
-end
-
-def installSVN(name, path)
-  removeTempDir
-  FileUtils.mkdir_p $tempDir
-  if $SVN.length > 0
-    begin
-      GBTimeout::timeout(60) do
-        executeShell(%Q{
-export LC_CTYPE=en_US.UTF-8
-cd '#{$tempDir}'
-'#{$SVN}' export '#{path}' '#{name}.tmbundle'
-        }, true, true)
-        if $errorcnt > 0
-          removeTempDir
-          return
-        end
-      end
-    rescue GBTimeout::Error
-      $errorcnt += 1
-      removeTempDir
-      writeToLogFile("Timeout error while installing %s" % name) unless $close
-      return
-    end
-    # get the bundle's real name (esp. for spaces and other symbols)
-    return if $close
-    executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
-    waitForTMtoInstall("#{name}.tmbundle")
-  else          #### no svn client found
-    noSVNclientFound
   end
 end
 
@@ -807,35 +741,115 @@ def installBundles(dlg)
   $listsLoaded = true
 end
 
+def installZIP(name, path, zip_path)
+  removeTempDir
+  FileUtils.mkdir_p $tempDir
+  begin
+    GBTimeout::timeout($timeout) do
+      begin
+        if path =~ /^http:\/\/github\.com/
+          executeShell(%Q{
+if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
+  if unzip --qq "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
+    rm "#{$tempDir}/archive.zip"
+    mv "#{$tempDir}/"* "#{$tempDir}/#{name}.tmbundle"
+  fi
+fi
+          }, false, true)
+        elsif !zip_path.nil? and zip_path =~ /\.tmbundle$/
+          executeShell(%Q{
+if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
+  if unzip --qq "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
+    rm "#{$tempDir}/archive.zip"
+    [[ ! -e "#{$tempDir}/#{zip_path}" ]] && mv "#{$tempDir}/"*"/#{zip_path}" "#{$tempDir}/#{name}.tmbundle"
+  fi
+fi
+          }, false, true)
+          name = zip_path.gsub(".tmbundle","")
+        else
+          $errorcnt += 1
+          writeToLogFile("Could not install “#{name}” by using “#{path}”")
+          removeTempDir
+          return
+        end
+      rescue
+        $errorcnt += 1
+        writeToLogFile("Error: #{$!}")
+        return
+      end
+    end
+  rescue GBTimeout::Error
+    $errorcnt += 1
+    writeToLogFile("Timeout error while installing %s" % name) if ! $close
+    return
+  end
+  return if $close
+  executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
+  waitForTMtoInstall("#{name}.tmbundle")
+end
+
+def installSVN(name, path)
+  removeTempDir
+  FileUtils.mkdir_p $tempDir
+  if $SVN.length > 0
+    begin
+      GBTimeout::timeout(60) do
+        executeShell(%Q{
+export LC_CTYPE=en_US.UTF-8
+cd '#{$tempDir}'
+'#{$SVN}' export '#{path}' '#{name}.tmbundle'
+        }, true, true)
+        if $errorcnt > 0
+          removeTempDir
+          return
+        end
+      end
+    rescue GBTimeout::Error
+      $errorcnt += 1
+      removeTempDir
+      writeToLogFile("Timeout error while installing %s" % name) unless $close
+      return
+    end
+    # get the bundle's real name (esp. for spaces and other symbols)
+    return if $close
+    executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
+    waitForTMtoInstall("#{name}.tmbundle")
+  else          #### no svn client found
+    noSVNclientFound
+  end
+end
+
 def doUpdateSupportFolder
   path = $bundleCache['SupportFolder']['url']
+  folderCreated = false
   if path.nil?
     writeTimedMessage("No Support Folder URL found in cache file")
     return
   end
-  unless File.directory?($supportFolder)
-    $errorcnt += 1
-    writeTimedMessage("‘#{$supportFolder}’ not found.")
-    return
-  end
+  FileUtils.mkdir_p($supportFolder) unless File.directory?($supportFolder)
   if $SVN.empty?
     $errorcnt += 1
     noSVNclientFound
     return
   end
-  doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolder}/Support'"))
-  supportURL = doc.root.elements['//info/entry/url'].text
-  if supportURL =~ /^http:\/\/macromates/
-    executeShell(%Q{
+  if File.directory?("#{$supportFolder}/Support")
+    doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolder}/Support'"))
+    supportURL = doc.root.elements['//info/entry/url'].text
+    if supportURL =~ /^http:\/\/macromates/
+      executeShell(%Q{
 cd '/Library/Application Support/TextMate/Support'
 svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn.textmate.org/trunk/Support/
-    }, true, true)
-    if $errorcnt == 0
-      writeToLogFile("“Support Folder”s svn repository was relocated")
-    else
-      writeTimedMessage("Error while relocating the svn repository of the “Support Folder”")
-      return
+      }, true, true)
+      if $errorcnt == 0
+        writeToLogFile("“Support Folder”s svn repository was relocated")
+      else
+        writeTimedMessage("Error while relocating the svn repository of the “Support Folder”")
+        return
+      end
     end
+  else
+    FileUtils.mkdir_p("#{$supportFolder}/Support")
+    folderCreated = true
   end
   $params['isBusy'] = true
   $params['progressText'] = "Updating TextMate's “Support Folder”…"
@@ -843,7 +857,7 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
   updateDIALOG
   begin
     GBTimeout::timeout(120) do
-      if File.directory?("#{$supportFolder}/Support")
+      if File.directory?("#{$supportFolder}/Support") and ! folderCreated
         executeShell(%Q{
 export LC_CTYPE=en_US.UTF-8;
 cd '#{$supportFolder}/Support';
@@ -889,17 +903,6 @@ def filterBundleList
   updateDIALOG
 end
 
-def writeTimedMessage(logtext, displaytext="An error occurred. Please check the Log.", sleepFor=2)
-  return if $close
-  writeToLogFile(logtext)
-  $params['isBusy'] = true
-  $params['progressText'] = displaytext
-  updateDIALOG
-  sleep(sleepFor)
-  $params['isBusy'] = false
-  $params['rescanBundleList'] = 0
-  updateDIALOG
-end
 
 ##------- main -------##
 

@@ -479,6 +479,7 @@ def getBundleLists
   updateDIALOG
   
   $listsLoaded = false
+
   $dataarray  = [ ]
   break if $close
   
@@ -550,7 +551,7 @@ def getBundleLists
     return
   end
   index = 0
-  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase.strip <=> b['name'].downcase.strip).zero? ? a['status'] <=> b['status'] : n}
+  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'] <=> b['status'] : n}
   $bundleCache['bundles'].each do |bundle|
     break if $close
     author = (bundle['contact'].empty?) ? "" : " (by %s)" % bundle['contact']
@@ -568,10 +569,19 @@ def getBundleLists
     end
     updated = ""
     updatedStr = ""
-    if $localBundles.has_key?(bundle['uuid'])
-      updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
-      updatedStr = (updated == "U") ? "=i=u" : "=i"
+    if repo == "P"
+      $localBundles.each_value do |h|
+        if h['name'] == bundle['name']
+          updated = (Time.parse(bundle['revision']).getutc > Time.parse(h['rev']).getutc) ? "U" : "✓"
+          break
+        end
+      end
+    else
+      if $localBundles.has_key?(bundle['uuid'])
+        updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
+      end
     end
+    updatedStr = (updated == "U") ? "=i=u" : "=i"
     $dataarray << {
       'name' => bundle['name'],
       'path' => index.to_s,
@@ -604,14 +614,18 @@ end
 def buildLocalBundleList
   $localBundles = { }
   local_bundle_paths.each do |name, path|
-    Dir["#{e_sh path}/*.tmbundle"].each do |b|
+    Dir["#{path}/*.tmbundle"].each do |b|
       begin
         plist = OSX::PropertyList::load(open("#{b}/info.plist"))
-        if !plist.has_key?('isDelta') && ! plist['isDelta'] == true
-          if $localBundles.has_key?(plist['uuid']) && Time.parse($localBundles[plist['uuid']]['rev']).getutc < File.new(b).ctime.getutc
-              $localBundles[plist['uuid']] = {'name' => plist['name'], 'rev' => File.new(b).ctime.getutc.to_s}
+        if !plist.has_key?('isDelta') && !plist['isDelta'] == true
+          theCtime = File.new(b).ctime.getutc
+          if $localBundles.has_key?(plist['uuid'])
+            # writeToLogFile("#{$localBundles[plist['uuid']]['name']} === plist['name']") if plist['name'] != $localBundles[plist['uuid']]['name']
+            if Time.parse($localBundles[plist['uuid']]['rev']).getutc < theCtime
+              $localBundles[plist['uuid']] = {'name' => plist['name'], 'rev' => theCtime.to_s}
+            end
           else
-            $localBundles[plist['uuid']] = {'name' => plist['name'], 'rev' => File.new(b).ctime.getutc.to_s}
+            $localBundles[plist['uuid']] = {'name' => plist['name'], 'rev' => theCtime.to_s}
           end
         else
         end
@@ -620,6 +634,7 @@ def buildLocalBundleList
       end
     end
   end
+  writeToLogFile("#{$localBundles.size} bundles are installed")
 end
 
 def updateUpdated
@@ -628,8 +643,17 @@ def updateUpdated
   
   $dataarray.each do |r|
     updated = ""
-    if $localBundles.has_key?($bundleCache['bundles'][cnt]['uuid'])
-      updated = (Time.parse($bundleCache['bundles'][cnt]['revision']).getutc > Time.parse($localBundles[$bundleCache['bundles'][cnt]['uuid']]['rev']).getutc) ? "U" : "✓"
+    if r['repo'] == "P"
+      $localBundles.each_value do |h|
+        if h['name'] == r['name']
+          updated = (Time.parse($bundleCache['bundles'][cnt]['revision']).getutc > Time.parse(h['rev']).getutc) ? "U" : "✓"
+          break
+        end
+      end
+    else
+      if $localBundles.has_key?($bundleCache['bundles'][cnt]['uuid'])
+        updated = (Time.parse($bundleCache['bundles'][cnt]['revision']).getutc > Time.parse($localBundles[$bundleCache['bundles'][cnt]['uuid']]['rev']).getutc) ? "U" : "✓"
+      end
     end
     r['updated'] = updated
     cnt += 1
@@ -1041,6 +1065,7 @@ $params = {
   'bundleSelection'         => 'All',
   'openBundleEditor'        => 0,
   'supportFolderCheck'      => 0,
+  'progressText'            => "Parsing local bundles…"
 }
 
 initLogFile
@@ -1090,6 +1115,16 @@ while $run do
     %x{osascript -e 'tell app "System Events" to keystroke "b" using {control down, option down, command down}' }
     $params['openBundleEditor'] = 0
     updateDIALOG
+  elsif $dialogResult.has_key?('refreshBundleList') && $dialogResult['refreshBundleList'] == 1
+    $x4 = Thread.new do
+      begin
+        updateUpdated
+      rescue
+        writeToLogFile("Fatal Error 02: #{$!}")
+        $run = false
+        exit 0
+      end
+    end
   elsif $dialogResult.has_key?('rescanBundleList') && $dialogResult['rescanBundleList'] == 1
     $x4 = Thread.new do
       begin

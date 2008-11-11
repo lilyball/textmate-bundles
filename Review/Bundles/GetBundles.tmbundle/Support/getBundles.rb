@@ -324,6 +324,16 @@ def infoDIALOG(dlg)
         return
       end
       return if $close
+      svnlogs = nil
+      begin
+        GBTimeout::timeout($timeout) do
+          svnlogs = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' log --limit 5 '#{bundle['source'].first['url']}'")
+          $errorcnt -= 1 if $errorcnt > 0
+        end
+      rescue GBTimeout::Error
+        writeToLogFile("Timeout error while fetching svn log information") unless $close
+      end
+      return if $close
       data.each_line do |l|
         info[l.split(': ').first] = l.split(': ').last.chomp
       end
@@ -383,8 +393,9 @@ def infoDIALOG(dlg)
           <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
           <b>UUID:</b><br />&nbsp;#{plist['uuid']}<br />
           </span>
-          </body></html>
         HTML12
+        io << "<br /><br /><b>Last svn log entries:</b><br /><pre>#{svnlogs}</pre>" unless svnlogs.nil?
+        io <<  "</body></html>"
       end
     else          #### no svn client found
       noSVNclientFound

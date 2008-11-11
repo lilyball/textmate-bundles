@@ -13,50 +13,6 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.matlab</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(%%).*$\n?</string>
-			<key>name</key>
-			<string>comment.double.percentage.matlab</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>%\{</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.matlab</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>%\}\s*\n</string>
-			<key>name</key>
-			<string>comment.block.percentage.matlab</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.matlab</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(%).*$\n?</string>
-			<key>name</key>
-			<string>comment.line.percentage.matlab</string>
-		</dict>
-		<dict>
 			<key>begin</key>
 			<string>(?x)
 (?=function\b) # borrowed from ruby bundle
@@ -175,6 +131,10 @@
 		<dict>
 			<key>include</key>
 			<string>#all_matlab_keywords</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#all_matlab_comments</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -405,6 +365,56 @@
 				</dict>
 			</array>
 		</dict>
+		<key>all_octave_comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.matlab</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(%%).*$\n?</string>
+					<key>name</key>
+					<string>comment.double.percentage.matlab</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>%\{</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.matlab</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>%\}\s*\n</string>
+					<key>name</key>
+					<string>comment.block.percentage.matlab</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.matlab</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(%).*$\n?</string>
+					<key>name</key>
+					<string>comment.line.percentage.matlab</string>
+				</dict>
+			</array>
+		</dict>
 		<key>allofem</key>
 		<dict>
 			<key>patterns</key>
@@ -440,6 +450,10 @@
 				<dict>
 					<key>include</key>
 					<string>#all_matlab_keywords</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#all_matlab_comments</string>
 				</dict>
 				<dict>
 					<key>include</key>

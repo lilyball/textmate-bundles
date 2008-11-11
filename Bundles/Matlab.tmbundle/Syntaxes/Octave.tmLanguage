@@ -15,64 +15,6 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.octave</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(%%).*$\n?</string>
-			<key>name</key>
-			<string>comment.double.percentage.octave</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>%\{</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.octave</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>%\}</string>
-			<key>name</key>
-			<string>comment.block.percentage.octave</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.octave</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(%).*$\n?</string>
-			<key>name</key>
-			<string>comment.line.percentage.octave</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.octave</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(#).*$\n?</string>
-			<key>name</key>
-			<string>comment.line.pound.octave</string>
-		</dict>
-		<dict>
 			<key>begin</key>
 			<string>(?x)
 (?=function\b) # borrowed from ruby bundle
@@ -178,6 +120,10 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#string_double</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#transpose</string>
 		</dict>
 		<dict>
@@ -191,6 +137,10 @@
 		<dict>
 			<key>include</key>
 			<string>#all_octave_keywords</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#all_octave_comments</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -215,6 +165,70 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>all_octave_comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.octave</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(%%).*$\n?</string>
+					<key>name</key>
+					<string>comment.double.percentage.octave</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>%\{</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.octave</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>%\}</string>
+					<key>name</key>
+					<string>comment.block.percentage.octave</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.octave</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(%).*$\n?</string>
+					<key>name</key>
+					<string>comment.line.percentage.octave</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.octave</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(#).*$\n?</string>
+					<key>name</key>
+					<string>comment.line.number-sign.octave</string>
+				</dict>
+			</array>
+		</dict>
 		<key>all_octave_keywords</key>
 		<dict>
 			<key>patterns</key>
@@ -267,15 +281,19 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#string_double</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#transpose</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#double_quote</string>
+					<string>#all_octave_keywords</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#all_octave_keywords</string>
+					<string>#all_octave_comments</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -369,18 +387,6 @@
 				<dict>
 					<key>include</key>
 					<string>#end_in_parens</string>
-				</dict>
-			</array>
-		</dict>
-		<key>double_quote</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>"</string>
-					<key>name</key>
-					<string>invalid.illegal.invalid-quote.octave</string>
 				</dict>
 			</array>
 		</dict>

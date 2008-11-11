@@ -3,6 +3,7 @@
 SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/escape.rb'
 require SUPPORT + '/lib/osx/plist'
+require SUPPORT + '/lib/textmate.rb'
 require "fileutils"
 require "open-uri"
 require "yaml"
@@ -63,6 +64,8 @@ $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json.gz"
 # $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json"
 # URL to nicknames.txt
 $nickNamesFile = "http://bibiko.textmate.org/bundleserver/nicknames.txt"
+# locally installed bundles
+$localBundles     = { }
 
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
@@ -73,6 +76,14 @@ $updateSupportFolder = true
 # last bundle filter selection
 $lastBundleFilterSelection = "All"
 
+def local_bundle_paths
+  { :Application       => TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Bundles",
+    :User              => "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles",
+    :System            => '/Library/Application Support/TextMate/Bundles',
+    :'User Pristine'   => "#{ENV["HOME"]}/Library/Application Support/TextMate/Pristine Copy/Bundles",
+    :'System Pristine' => '/Library/Application Support/TextMate/Pristine Copy/Bundles',
+    }
+end
 
 module GBTimeout
   class Error<Interrupt
@@ -452,7 +463,7 @@ def getResultFromDIALOG
 end
 
 def getBundleLists
-  
+  buildLocalBundleList
   $params['dataarray'] = [ ]
   updateDIALOG
   
@@ -528,7 +539,7 @@ def getBundleLists
     return
   end
   index = 0
-  $bundleCache['bundles'].sort!{|a,b| (n = a['name'] <=> b['name']).zero? ? a['status'] <=> b['status'] : n}
+  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase.strip <=> b['name'].downcase.strip).zero? ? a['status'] <=> b['status'] : n}
   $bundleCache['bundles'].each do |bundle|
     break if $close
     author = (bundle['contact'].empty?) ? "" : " (by %s)" % bundle['contact']
@@ -544,14 +555,20 @@ def getBundleLists
         else "P"
       end
     end
+    updated = ""
+    updatedStr = ""
+    if $localBundles.has_key?(bundle['uuid'])
+      updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
+      updatedStr = (updated == "U") ? "=i=u" : "=i"
+    end
     $dataarray << {
       'name' => bundle['name'],
       'path' => index.to_s,
       'bundleDescription' => desc,
-      'searchpattern' => "#{bundle['name']} #{desc} r=#{repo}",
+      'searchpattern' => "#{bundle['name']} #{desc} r=#{repo} #{updatedStr}",
       'repo' => repo,
       'rev' => Time.parse(bundle['revision']).strftime("%Y/%m/%d %H:%M:%S"),
-      'updated' => ""
+      'updated' => updated
     }
     index += 1
   end
@@ -571,6 +588,50 @@ def getBundleLists
   # suppress the updating of the table to preserve the selection
   $params.delete('dataarray')
 
+end
+
+def buildLocalBundleList
+  $localBundles = { }
+  local_bundle_paths.each do |name, path|
+    Dir["#{e_sh path}/*.tmbundle"].each do |b|
+      begin
+        plist = OSX::PropertyList::load(open("#{b}/info.plist"))
+        if !plist.has_key?('isDelta') && ! plist['isDelta'] == true
+          if $localBundles.has_key?(plist['uuid']) && Time.parse($localBundles[plist['uuid']]['rev']).getutc < File.new(b).ctime.getutc
+              $localBundles[plist['uuid']] = {'name' => plist['name'], 'rev' => File.new(b).ctime.getutc.to_s}
+          else
+            $localBundles[plist['uuid']] = {'name' => plist['name'], 'rev' => File.new(b).ctime.getutc.to_s}
+          end
+        else
+        end
+      rescue
+        writeToLogFile("Error while parsing “#{b}”: #{$!}")
+      end
+    end
+  end
+end
+
+def updateUpdated
+  buildLocalBundleList
+  cnt = 0
+  
+  $dataarray.each do |r|
+    updated = ""
+    if $localBundles.has_key?($bundleCache['bundles'][cnt]['uuid'])
+      updated = (Time.parse($bundleCache['bundles'][cnt]['revision']).getutc > Time.parse($localBundles[$bundleCache['bundles'][cnt]['uuid']]['rev']).getutc) ? "U" : "✓"
+    end
+    r['updated'] = updated
+    cnt += 1
+  end
+  b = case $params['bundleSelection']
+    when "3rd Party":  $dataarray.select {|v| v['repo'] !~ /^O|R$/}
+    when "Review":  $dataarray.select {|v| v['repo'] == 'R'}
+    when "Official": $dataarray.select {|v| v['repo'] == 'O'}
+    else $dataarray
+  end
+  $params['dataarray'] = b
+  updateDIALOG
+  $params.delete('dataarray')
 end
 
 def joinThreads
@@ -748,6 +809,7 @@ def installBundles(dlg)
     updateDIALOG
   end
   removeTempDir
+  updateUpdated
   $listsLoaded = true
 end
 
@@ -974,6 +1036,8 @@ initLogFile
 initGetBundlesPlist
 orderOutDIALOG
 checkUniversalAccess
+
+
 
 $x1 = Thread.new do
   begin

@@ -186,7 +186,6 @@ def infoDIALOG(dlg)
   if mode == 'github'
     namehasdot = false
     searchPath = url.gsub(/.*?com\/(.*?)\/(.*)/, '\1-\2')
-    writeToLogFile(searchPath)
     unless searchPath =~ /\./
       begin
         GBTimeout::timeout($timeout) do
@@ -579,9 +578,10 @@ def getBundleLists
     else
       if $localBundles.has_key?(bundle['uuid'])
         updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
+        updated += $localBundles[bundle['uuid']]['scm']
       end
     end
-    updatedStr = (updated == "U") ? "=i=u" : "=i"
+    updatedStr = (updated.empty?) ? "" : (updated =~ /^U/) ? "=i=u" : "=i"
     $dataarray << {
       'name' => bundle['name'],
       'path' => index.to_s,
@@ -619,13 +619,14 @@ def buildLocalBundleList
         plist = OSX::PropertyList::load(open("#{b}/info.plist"))
         if !plist.has_key?('isDelta') && !plist['isDelta'] == true
           theCtime = File.new(b).ctime.getutc
+          scm = (File.directory?("#{b}/.svn")) ? "  (svn)" : ""
+          scm = (File.directory?("#{b}/.git")) ? "  (git)" : scm
           if $localBundles.has_key?(plist['uuid'])
-            # writeToLogFile("#{$localBundles[plist['uuid']]['name']} === plist['name']") if plist['name'] != $localBundles[plist['uuid']]['name']
             if Time.parse($localBundles[plist['uuid']]['rev']).getutc < theCtime
-              $localBundles[plist['uuid']] = {'name' => plist['name'], 'rev' => theCtime.to_s}
+              $localBundles[plist['uuid']] = {'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s}
             end
           else
-            $localBundles[plist['uuid']] = {'name' => plist['name'], 'rev' => theCtime.to_s}
+            $localBundles[plist['uuid']] = {'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s}
           end
         else
         end
@@ -634,7 +635,7 @@ def buildLocalBundleList
       end
     end
   end
-  writeToLogFile("#{$localBundles.size} bundles are installed")
+  writeToLogFile("Locally #{$localBundles.size} bundles are installed")
 end
 
 def updateUpdated
@@ -655,7 +656,7 @@ def updateUpdated
         updated = (Time.parse($bundleCache['bundles'][cnt]['revision']).getutc > Time.parse($localBundles[$bundleCache['bundles'][cnt]['uuid']]['rev']).getutc) ? "U" : "✓"
       end
     end
-    r['updated'] = updated
+    r['updated'] = (r['updated'].empty?) ? updated : r['updated'].gsub(/^./, updated)
     cnt += 1
   end
   b = case $params['bundleSelection']
@@ -724,10 +725,10 @@ def initLogFile
   File.open($logFile, "w") {}
 end
 
-def initGetBundlesPlist
-  File.open($plistFile, "w") { |io| io << [].to_plist } unless File.exist?($plistFile)
-  $gbplist = OSX::PropertyList::load(open($plistFile))
-end
+# def initGetBundlesPlist
+#   File.open($plistFile, "w") { |io| io << [].to_plist } unless File.exist?($plistFile)
+#   $gbplist = OSX::PropertyList::load(open($plistFile))
+# end
 
 def removeTempDir
   if File.directory?($tempDir)
@@ -794,6 +795,9 @@ def installBundles(dlg)
       cnt += 1
       # get the bundle data (from json file)
       bundleData = $bundleCache['bundles'][item.to_i]
+      if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['scm'].empty?
+        next if askDIALOG("It seems that the bundle “#{bundleData['name']}” has been already installed under versioning control #{$localBundles[bundleData['uuid']]['scm'].gsub(/ +/,'')}. If you continue the versioning control will not be updated!", " Do you really want to continue?")
+      end
       name = bundleData['name']
       zip_path = nil
       source = nil
@@ -1069,7 +1073,7 @@ $params = {
 }
 
 initLogFile
-initGetBundlesPlist
+# initGetBundlesPlist
 orderOutDIALOG
 checkUniversalAccess
 
@@ -1119,6 +1123,8 @@ while $run do
     $x4 = Thread.new do
       begin
         updateUpdated
+        $params['refreshBundleList'] = 0
+        updateDIALOG
       rescue
         writeToLogFile("Fatal Error 02: #{$!}")
         $run = false

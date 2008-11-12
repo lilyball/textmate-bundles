@@ -76,6 +76,13 @@ $updateSupportFolder = true
 # last bundle filter selection
 $lastBundleFilterSelection = "All"
 
+# local git repositories
+$localGitRepos    = []
+# local svn repositories
+$localSvnRepos    = []
+# Log file handle
+$f                = nil
+
 def local_bundle_paths
   { :Application       => TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Bundles",
     :User              => "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles",
@@ -640,7 +647,12 @@ def getBundleLists
 end
 
 def buildLocalBundleList
+  $params['isBusy'] = true
+  $params['progressText'] = "Parsing local bundles…"
+  updateDIALOG
   $localBundles = { }
+  $localSvnRepos = [ ]
+  $localGitRepos = [ ]
   local_bundle_paths.each do |name, path|
     Dir["#{path}/*.tmbundle"].each do |b|
       begin
@@ -649,6 +661,24 @@ def buildLocalBundleList
           theCtime = File.new(b).ctime.getutc
           scm = (File.directory?("#{b}/.svn")) ? "  (svn)" : ""
           scm = (File.directory?("#{b}/.git")) ? "  (git)" : scm
+          if scm =~ /svn/
+            begin
+              theCtime = Time.parse(%x{svn info '#{b}' | tail -n 2}.chomp).getutc
+              $localSvnRepos << b
+            rescue
+              writeToLogFile("svn error for “#{b}”: #{$!}")
+              scm += " probably not working"
+            end
+          end
+          if scm =~ /git/
+            begin
+              theCtime = Time.parse(%x{cd '#{b}'; git show | head -n3 | tail -n 1}.chomp).getutc
+              $localGitRepos << b
+            rescue
+              writeToLogFile("git error for “#{b}”: #{$!}")
+              scm += " probably not working"
+            end
+          end
           if $localBundles.has_key?(plist['uuid'])
             if Time.parse($localBundles[plist['uuid']]['rev']).getutc < theCtime
               $localBundles[plist['uuid']] = {'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s}
@@ -663,13 +693,19 @@ def buildLocalBundleList
       end
     end
   end
-  writeToLogFile("Locally #{$localBundles.size} bundles are installed")
+  svnmes =  ($localSvnRepos.size > 0) ? "\nUnder svn control: #{$localSvnRepos.size}\n#{$localSvnRepos.join("\n")}\n" : ""
+  gitmes =  ($localGitRepos.size > 0) ? "\nUnder git control: #{$localGitRepos.size}\n#{$localGitRepos.join("\n")}\n" : ""
+  writeToLogFile("Locally #{$localBundles.size} bundles are installed\n#{svnmes}#{gitmes}")
+  $params['isBusy'] = false
+  updateDIALOG
 end
 
 def updateUpdated
+  $params['isBusy'] = true
+  $params['progressText'] = "Parsing local bundles…"
+  updateDIALOG
   buildLocalBundleList
   cnt = 0
-  
   $dataarray.each do |r|
     updated = ""
     if r['repo'] == "P"
@@ -682,9 +718,10 @@ def updateUpdated
     else
       if $localBundles.has_key?($bundleCache['bundles'][cnt]['uuid'])
         updated = (Time.parse($bundleCache['bundles'][cnt]['revision']).getutc > Time.parse($localBundles[$bundleCache['bundles'][cnt]['uuid']]['rev']).getutc) ? "U" : "✓"
+        updated += $localBundles[$bundleCache['bundles'][cnt]['uuid']]['scm']
       end
     end
-    r['updated'] = (r['updated'].empty?) ? updated : r['updated'].gsub(/^./, updated)
+    r['updated'] = updated
     cnt += 1
   end
   b = case $params['bundleSelection']
@@ -694,6 +731,7 @@ def updateUpdated
     else $dataarray
   end
   $params['dataarray'] = b
+  $params['isBusy'] = false
   updateDIALOG
   $params.delete('dataarray')
 end
@@ -769,11 +807,11 @@ def removeTempDir
 end
 
 def writeToLogFile(text)
-  f = File.open($logFile, "a")
-  f.puts Time.now.strftime("\n%m/%d/%Y %H:%M:%S") + "\tTextMate[GetBundles]"
-  f.puts text
-  f.flush
-  f.close
+  # f = File.open($logFile, "a")
+  $f.puts Time.now.strftime("\n%m/%d/%Y %H:%M:%S") + "\tTextMate[GetBundles]"
+  $f.puts text
+  $f.flush
+  # f.close
   $params['logPath'] = %x{cat '#{$logFile}'}
   updateDIALOG
 end
@@ -1100,6 +1138,8 @@ $params = {
   'progressText'            => "Parsing local bundles…"
 }
 
+
+$f = File.open($logFile, "a")
 initLogFile
 # initGetBundlesPlist
 orderOutDIALOG
@@ -1199,3 +1239,4 @@ while $run do
   $dialogResult = { }
 end
 closeDIALOG
+$f.close

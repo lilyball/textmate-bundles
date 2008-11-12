@@ -186,6 +186,7 @@ def infoDIALOG(dlg)
   if mode == 'github'
     namehasdot = false
     searchPath = url.gsub(/.*?com\/(.*?)\/(.*)/, '\1-\2')
+    projectName = url.gsub(/.*?com\/(.*?)\/(.*)/, '\2')
     unless searchPath =~ /\./
       begin
         GBTimeout::timeout($timeout) do
@@ -218,6 +219,23 @@ def infoDIALOG(dlg)
       info['private'] = "<font color=silver><small>no data available</small></font>"
       info['forks'] = "<font color=silver><small>no data available</small></font>"
       info['owner'] = url.gsub(/.*?com\/(.*?)\/.*/,'\1')
+    end
+    return if $close
+    lastCommit = nil
+    begin
+      GBTimeout::timeout(10) do
+        loop do
+          begin
+            lastCommit = YAML.load(open("http://github.com/api/v1/json/#{info['owner']}/#{projectName}/commits/master"))['commits'].first['committed_date']
+          rescue
+            lastCommit = nil
+          end
+          break unless lastCommit.nil?
+        end
+      end
+    rescue GBTimeout::Error
+      puts "Last commit date read error for #{url}."
+      lastCommit = nil
     end
     return if $close
     begin
@@ -260,6 +278,11 @@ def infoDIALOG(dlg)
     data = ""
     return if $close
     gitbugreport = (namehasdot) ? "&nbsp;&nbsp;&nbsp;<i><small>incomplete caused by the dot in project name (known GitHub bug)</small></i><br>" : ""
+    updateinfo = ""
+    if !lastCommit.nil? && Time.parse(lastCommit).getutc > Time.parse(bundle['revision']).getutc
+      t = "This bundle was updated meanwhile."
+      updateinfo = "<p align='right'><small><font color='#darkgreen'>#{t}</font></small></p>"
+    end
     File.open("#{$tempDir}/info.html", "w") do |io|
       io << <<-HTML01
         <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
@@ -270,6 +293,7 @@ def infoDIALOG(dlg)
         </head>
         <body><div id='main'><div class='site'>
         <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
+        #{updateinfo}
         <h3><u>git Information:</u></h3>#{gitbugreport}
         <b>Description:</b><br />&nbsp;#{info['description']}<br />
         <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
@@ -381,6 +405,10 @@ def infoDIALOG(dlg)
         else
           io << "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
           io << "#{plist['description']}<br /><br />"
+        end
+        if Time.parse(info['Last Changed Date']).getutc > Time.parse(bundle['revision']).getutc
+          t = "This bundle was updated meanwhile."
+          io << "<p align='right'><small><font color='#darkgreen'>#{t}</font></small></p>"
         end
         io << <<-HTML12
           <span style="background-color:#EEEEEE">

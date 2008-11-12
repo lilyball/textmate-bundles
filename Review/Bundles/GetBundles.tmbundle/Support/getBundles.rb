@@ -650,29 +650,27 @@ def buildLocalBundleList
   $params['isBusy'] = true
   $params['progressText'] = "Parsing local bundles…"
   updateDIALOG
-  $localBundles = { }
+  $localBundles  = { }
   $localSvnRepos = [ ]
   $localGitRepos = [ ]
   local_bundle_paths.each do |name, path|
     Dir["#{path}/*.tmbundle"].each do |b|
       begin
         plist = OSX::PropertyList::load(open("#{b}/info.plist"))
-        if !plist.has_key?('isDelta') && !plist['isDelta'] == true
+        unless plist.has_key?('isDelta') || plist['isDelta']
           theCtime = File.new(b).ctime.getutc
-          scm = (File.directory?("#{b}/.svn")) ? "  (svn)" : ""
-          scm = (File.directory?("#{b}/.git")) ? "  (git)" : scm
+          scm = (File.directory?("#{b}/.svn")) ? "  (svn)" : (File.directory?("#{b}/.git")) ? "  (git)" : ""
           if scm =~ /svn/
             begin
-              theCtime = Time.parse(%x{svn info '#{b}' | tail -n 2}.chomp).getutc
+              theCtime = Time.parse(File.read("|svn info '#{b}' | tail -n 2}").chomp).getutc
               $localSvnRepos << b
             rescue
               writeToLogFile("svn error for “#{b}”: #{$!}")
               scm += " probably not working"
             end
-          end
-          if scm =~ /git/
+          elsif scm =~ /git/
             begin
-              theCtime = Time.parse(%x{cd '#{b}'; git show | head -n3 | tail -n 1}.chomp).getutc
+              theCtime = Time.parse(File.read("|cd '#{b}'; git show | head -n3 | tail -n 1").chomp).getutc
               $localGitRepos << b
             rescue
               writeToLogFile("git error for “#{b}”: #{$!}")
@@ -708,17 +706,18 @@ def updateUpdated
   cnt = 0
   $dataarray.each do |r|
     updated = ""
+    cBundle = $bundleCache['bundles'][cnt]
     if r['repo'] == "P"
       $localBundles.each_value do |h|
         if h['name'] == r['name']
-          updated = (Time.parse($bundleCache['bundles'][cnt]['revision']).getutc > Time.parse(h['rev']).getutc) ? "U" : "✓"
+          updated = (Time.parse(cBundle['revision']).getutc > Time.parse(h['rev']).getutc) ? "U" : "✓"
           break
         end
       end
     else
-      if $localBundles.has_key?($bundleCache['bundles'][cnt]['uuid'])
-        updated = (Time.parse($bundleCache['bundles'][cnt]['revision']).getutc > Time.parse($localBundles[$bundleCache['bundles'][cnt]['uuid']]['rev']).getutc) ? "U" : "✓"
-        updated += $localBundles[$bundleCache['bundles'][cnt]['uuid']]['scm']
+      if $localBundles.has_key?(cBundle['uuid'])
+        updated = (Time.parse(cBundle['revision']).getutc > Time.parse($localBundles[cBundle['uuid']]['rev']).getutc) ? "U" : "✓"
+        updated += $localBundles[cBundle['uuid']]['scm']
       end
     end
     r['updated'] = updated

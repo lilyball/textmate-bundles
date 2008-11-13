@@ -120,7 +120,7 @@ end
 
 def orderOutDIALOG
   $params['nocancel'] = true
-    if $isDIALOG2
+  if $isDIALOG2
     $token = %x{#{$DIALOG} window create -p #{e_sh $params.to_plist} #{e_sh $NIB} }
   else
     $token = %x{#{$DIALOG} -a #{e_sh $NIB} -p #{e_sh $params.to_plist}}
@@ -724,9 +724,9 @@ def updateUpdated
     cnt += 1
   end
   b = case $params['bundleSelection']
-    when "3rd Party":  $dataarray.select {|v| v['repo'] !~ /^O|R$/}
-    when "Review":  $dataarray.select {|v| v['repo'] == 'R'}
-    when "Official": $dataarray.select {|v| v['repo'] == 'O'}
+    when "Official":    $dataarray.select {|v| v['repo'] == 'O'}
+    when "Review":      $dataarray.select {|v| v['repo'] == 'R'}
+    when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^O|R$/}
     else $dataarray
   end
   $params['dataarray'] = b

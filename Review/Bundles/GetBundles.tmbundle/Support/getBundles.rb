@@ -720,6 +720,7 @@ def updateUpdated
         updated += $localBundles[cBundle['uuid']]['scm']
       end
     end
+    r['searchpattern'].gsub!(/=[^ ]*$/, (updated.empty?) ? "" : (updated =~ /^U/) ? "=i=u" : "=i")
     r['updated'] = updated
     cnt += 1
   end
@@ -994,7 +995,6 @@ cd '#{$tempDir}'
 end
 
 def checkForSupportFolderUpdate
-  val = 1
   if File.directory?("#{$supportFolderPristine}/.svn")
     # get svn info
     begin
@@ -1002,13 +1002,12 @@ def checkForSupportFolderUpdate
       localRev = Time.parse(doc.root.elements['//info/entry/commit/date'].text).getutc
       cacheRev = Time.parse($bundleCache['SupportFolder']['revision']).getutc
     rescue
-      writeTimedMessage("Error while getting 'svn info' data of the “Support Folder”")
+      writeTimedMessage("Error while getting 'svn info' data of the “Support Folder”:\n#{$!}")
       return
     end
-    val = (cacheRev > localRev) ? 1 : 0
     $updateSupportFolder = (cacheRev > localRev) ? true : false
   end
-  writeToLogFile("TextMate's “Support Folder” (#{$supportFolderPristine}) will be updated.") if val == 1
+  writeToLogFile("TextMate's “Support Folder” (#{$supportFolderPristine}) will be updated.") if $updateSupportFolder
 end
 
 def doUpdateSupportFolder
@@ -1096,9 +1095,9 @@ def filterBundleList
   $params['progressText']     = "Filtering bundle list…"
   updateDIALOG
   b = case $dialogResult['bundleSelection']
-    when "3rd Party":  $dataarray.select {|v| v['repo'] !~ /^O|R$/}
-    when "Review":  $dataarray.select {|v| v['repo'] == 'R'}
-    when "Official": $dataarray.select {|v| v['repo'] == 'O'}
+    when "Review":      $dataarray.select {|v| v['repo'] == 'R'}
+    when "Official":    $dataarray.select {|v| v['repo'] == 'O'}
+    when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^O|R$/}
     else $dataarray
   end
   $lastBundleFilterSelection = $dialogResult['bundleSelection']

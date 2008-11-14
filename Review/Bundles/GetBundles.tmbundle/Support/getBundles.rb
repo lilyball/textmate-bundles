@@ -55,7 +55,7 @@ $tempDir          = "/tmp/TM_GetBundlesTEMP"
 # global timeout in seconds
 $timeout          = 30
 # global thread vars
-$x0=$x1=$x2=$x3=$x4 = nil
+$x0=$x1=$x2=$x3=$x4=$x10=$x20 = nil
 # bundle data hash containing data.json.gz 
 $bundleCache      = { }
 # hash of used nicknames
@@ -167,21 +167,28 @@ def helpDIALOG
 end
 
 def infoDIALOG(dlg)
+
   return unless dlg.has_key?('path')
+
   info = { }
   plist = { }
   readme = ""
   css = ""
   data = ""
+
   removeTempDir
   FileUtils.mkdir_p $tempDir
+
   bundle = $bundleCache['bundles'][dlg['path'].to_i]
+  url = bundle['url']
+
   $params['isBusy'] = true
   $params['progressIsIndeterminate'] = true
   $params['progressText'] = "Fetching information…"
   updateDIALOG
+
   return if $close
-  url = bundle['url']
+
   mode = case bundle['status']
     when "Official": "svn"
     when "Under Review": "svn"
@@ -193,11 +200,13 @@ def infoDIALOG(dlg)
       else "url"
     end
   end
+
   if mode == 'github'
     namehasdot = false
     searchPath = url.gsub(/.*?com\/(.*?)\/(.*)/, '\1-\2')
     projectName = url.gsub(/.*?com\/(.*?)\/(.*)/, '\2')
     unless searchPath =~ /\./
+
       begin
         GBTimeout::timeout($timeout) do
           d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))
@@ -221,7 +230,8 @@ def infoDIALOG(dlg)
         writeToLogFile("Timeout error while fetching information") if ! $close
         return
       end
-    else
+
+    else # github project contains a dot => due to a bug of github's API no info
       namehasdot = true
       info = {}
       info['description'] = "<font color=silver><small>no data available</small></font>"
@@ -230,8 +240,11 @@ def infoDIALOG(dlg)
       info['forks'] = "<font color=silver><small>no data available</small></font>"
       info['owner'] = url.gsub(/.*?com\/(.*?)\/.*/,'\1')
     end
+
     return if $close
+
     lastCommit = nil
+
     begin
       GBTimeout::timeout(10) do
         loop do
@@ -247,7 +260,9 @@ def infoDIALOG(dlg)
       puts "Last commit date read error for #{url}."
       lastCommit = nil
     end
+
     return if $close
+
     begin
       GBTimeout::timeout($timeout) do
         data = Net::HTTP.get( URI.parse("#{url}/tree/master") )
@@ -259,7 +274,9 @@ def infoDIALOG(dlg)
       writeToLogFile("Timeout error while fetching information") if ! $close
       return
     end
+
     return if $close
+
     begin
       GBTimeout::timeout($timeout) do
         begin
@@ -275,24 +292,32 @@ def infoDIALOG(dlg)
       writeToLogFile("Timeout error while fetching information") if ! $close
       return
     end
+
     return if $close
+
     plist['name'] = bundle['name'] if plist['name'].nil?
     plist['description'] = "" if plist['description'].nil?
     plist['contactName'] = "" if plist['contactName'].nil?
     plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
+
+    # get Readme if available plus CSS for display
     readme = nil
     if data =~ /<div +id="readme".*?>/m
       readme = data.gsub( /.*?(<div +id="readme".*?>.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
     end
     css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
     data = ""
+
     return if $close
+
     gitbugreport = (namehasdot) ? "&nbsp;&nbsp;&nbsp;<i><small>incomplete caused by the dot in project name (known GitHub bug)</small></i><br>" : ""
+
     updateinfo = ""
     if !lastCommit.nil? && Time.parse(lastCommit).getutc > Time.parse(bundle['revision']).getutc
       t = "This bundle was updated meanwhile."
       updateinfo = "<p align='right'><small><font color='#darkgreen'>#{t}</font></small></p>"
     end
+
     File.open("#{$tempDir}/info.html", "w") do |io|
       io << <<-HTML01
         <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
@@ -337,39 +362,55 @@ def infoDIALOG(dlg)
         HTML05
       end
     end
+  
   elsif mode == 'svn'
+  
     if $SVN.length > 0
+
+      data = nil
+      svnlogs = nil
+
+      $x10 = Thread.new($SVN, bundle['source'].first['url']) { %x{'#{$SVN}' log --limit 5 #{bundle['source'].first['url']}} }
+      $x20 = Thread.new($SVN, bundle['source'].first['url']) { %x{#{$SVN} info #{bundle['source'].first['url']}} }
       begin
         GBTimeout::timeout($timeout) do
-          data = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' info '#{bundle['source'].first['url']}'")
-          if $errorcnt > 0
-            removeTempDir
-            $params['isBusy'] = false
-            updateDIALOG
-            return
-          end
+          $x10.join
+          $x20.join
         end
       rescue GBTimeout::Error
+        begin
+          $x10.kill
+        rescue
+        end
+        begin
+          $x20.kill
+        rescue
+        end
+        writeToLogFile("Timeout error while fetching information") unless $close
         $params['isBusy'] = false
         updateDIALOG
-        removeTempDir
-        writeToLogFile("Timeout error while fetching information") unless $close
+      rescue
+        $params['isBusy'] = false
+        updateDIALOG
+        writeToLogFile("Error while fetching information:\n#{$!}") unless $close
         return
       end
-      return if $close
-      svnlogs = nil
-      begin
-        GBTimeout::timeout($timeout) do
-          svnlogs = executeShell("export LC_CTYPE=en_US.UTF-8;'#{$SVN}' log --limit 5 '#{bundle['source'].first['url']}'")
-          $errorcnt -= 1 if $errorcnt > 0
-        end
-      rescue GBTimeout::Error
-        writeToLogFile("Timeout error while fetching svn log information") unless $close
+      
+      svnlogs = $x10.value
+      data    = $x20.value
+
+      if data.nil?
+        writeTimedMessage("Error while fetching svn information for “#{bundle['name']}”") unless $close
+        return
       end
-      return if $close
+      
       data.each_line do |l|
         info[l.split(': ').first] = l.split(': ').last.chomp
       end
+
+      return if $close
+      
+      # get info.plist data
       begin
         GBTimeout::timeout($timeout) do
           begin
@@ -386,10 +427,12 @@ def infoDIALOG(dlg)
         $params['isBusy'] = false
         updateDIALOG
         removeTempDir
-        writeToLogFile("Timeout error while fetching information") unless $close
+        writeToLogFile("Timeout error while fetching the info.plist information") unless $close
         return
       end
+      
       return if $close
+      
       plist['name']               = bundle['name'] if plist['name'].nil?
       plist['description']        = "<font color=silver><small>no data available</small></font>" if plist['description'].nil?
       plist['contactName']        = "" if plist['contactName'].nil?
@@ -437,17 +480,22 @@ def infoDIALOG(dlg)
     else          #### no svn client found
       noSVNclientFound
     end
+
   else
+
     if bundle.has_key?('url')
       %x{open "#{bundle['url']}"}
     else
       writeToLogFile("No method found to fetch information")
     end
+
     $params['isBusy'] = false
     $params['progressText'] = ""
     updateDIALOG
     return
+
   end
+
   $params['isBusy'] = false
   $params['progressText'] = ""
   updateDIALOG
@@ -456,11 +504,15 @@ def infoDIALOG(dlg)
     removeTempDir
     return
   end
+  
+  # order out info window
   if $isDIALOG2
     $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}" help }
   else
     $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
   end
+
+  # close old info window if it exists
   unless $infoTokenOld.nil?
     if $isDIALOG2
       %x{#{$DIALOG} window close #{$infoTokenOld}}
@@ -468,14 +520,9 @@ def infoDIALOG(dlg)
       %x{#{$DIALOG} -x#{$infoTokenOld}}
     end
   end
+  
   removeTempDir
-end
-
-def noSVNclientFound
-  writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
-  $params['progressText'] = 'No svn client found! Please check the Activity Log.'
-  updateDIALOG
-  sleep(3)
+  
 end
 
 def askDIALOG(msg, text, btn1="No", btn2="Yes")
@@ -494,6 +541,13 @@ def askDIALOG(msg, text, btn1="No", btn2="Yes")
   rescue
   end
   return resStr
+end
+
+def noSVNclientFound
+  writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
+  $params['progressText'] = 'No svn client found! Please check the Activity Log.'
+  updateDIALOG
+  sleep(3)
 end
 
 def getResultFromDIALOG
@@ -821,6 +875,10 @@ def joinThreads
     $x3.kill
     $x4.join
     $x4.kill
+    $x10.join
+    $x10.kill
+    $x20.join
+    $x20.kill
   rescue
   end
 end
@@ -832,6 +890,8 @@ def killThreads
     $x2.kill
     $x3.kill
     $x4.kill
+    $x10.kill
+    $x20.kill
   rescue
   end
 end
@@ -1269,6 +1329,7 @@ initLogFile
 orderOutDIALOG
 checkUniversalAccess
 
+# init DIALOG
 $x1 = Thread.new do
   begin
     getBundleLists
@@ -1287,8 +1348,7 @@ if ENV.has_key?('TM_SVN')
   $SVN = ENV['TM_SVN']
 end
 
-
-
+# main loop
 while $run do
 
   getResultFromDIALOG

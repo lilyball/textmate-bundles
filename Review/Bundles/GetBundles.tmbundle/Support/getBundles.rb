@@ -1086,17 +1086,39 @@ end
 
 def checkForSupportFolderUpdate
 
+  $updateSupportFolder = true
+
+  if File.directory?($supportFolder) and ! File.symlink?($supportFolder)
+    writeTimedMessage(%Q{Warning:
+Please note that you have already installed an update of TextMate's “Support Folder” in ‘#{$supportFolder}’.
+This folder won't be touched by GetBundles' update!
+GetBundles will always check out the latest version into ‘#{$supportFolderPristine}’.
+To activate GetBundles' “Support Folder” simply rename or delete ‘#{$supportFolder}’ and run ‘Update “Support Folder”’.
+Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
+  "Warning: Please check the Log!", 1)
+  end
+
   if File.directory?("#{$supportFolderPristine}/.svn")
+    
     # get svn info and compare last modified date
     begin
       doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolderPristine}'"))
       localRev = Time.parse(doc.root.elements['//info/entry/commit/date'].text).getutc
-      cacheRev = Time.parse($bundleCache['SupportFolder']['revision']).getutc
     rescue
       writeTimedMessage("Error while getting 'svn info' data of the “Support Folder”:\n#{$!}")
       return
     end
-    $updateSupportFolder = (cacheRev > localRev) ? true : false
+    
+    # for safety reasons check always http://svn.textmate.org/trunk/Support/
+    begin
+      GBTimeout::timeout($timeout) do
+        doc = REXML::Document.new(File.read("|svn info --xml #{$bundleCache['SupportFolder']['url']}"))
+        trunkRev = Time.parse(doc.root.elements['//info/entry/commit/date'].text).getutc
+        $updateSupportFolder = (trunkRev > localRev) ? true : false
+      end
+    rescue
+    end
+
   end
 
   writeToLogFile("TextMate's “Support Folder” (#{$supportFolderPristine}) will be updated.") if $updateSupportFolder
@@ -1154,11 +1176,8 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
     return
   end
   
-  if File.directory?($supportFolder) and ! File.symlink?($supportFolder)
-    writeToLogFile("Please note that you are using your own “Support Folder” (#{$supportFolder}) which won't be touch by GetBundles' update!\n To use the update simply rename or delete ‘#{$supportFolder}’ and rerun ‘Update “Support Folder”’.")
-  end
-  
   $params['isBusy'] = true
+  $params['nocancel'] = true
   $params['progressText'] = "Updating TextMate's “Support Folder”…"
   $params['progressIsIndeterminate'] = true
   updateDIALOG
@@ -1190,6 +1209,7 @@ cd '#{$supportFolderPristine.gsub('/Support','')}';
   
   $params['supportFolderCheck'] = 0
   $params['isBusy'] = false
+  $params['nocancel'] = false
   $params['progressText'] = ""
   updateDIALOG
   

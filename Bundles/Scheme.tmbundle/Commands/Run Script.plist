@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
 	<string># Run the current document in our Scheme interpreter.
 #
@@ -27,7 +27,7 @@ if [ $CMD == "mzscheme" ] ; then
 elif [ $CMD == "csi" ] ; then
 	"$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
 elif [ $CMD = "guile" ] ; then
-  "$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
+	"$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
 fi
 
 # Delete tempfiles

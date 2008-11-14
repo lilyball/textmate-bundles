@@ -5,7 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+	<string>echo "under constructions" 
+exit 206
+
+
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
 html_header "Get Bundles — Help" "Get Bundles" "Help"
 
@@ -17,7 +21,7 @@ html_footer</string>
 	<key>name</key>
 	<string>Help</string>
 	<key>output</key>
-	<string>showAsHTML</string>
+	<string>showAsTooltip</string>
 	<key>uuid</key>
 	<string>ADD187FD-A8A4-4432-9D14-FA18970603E9</string>
 </dict>

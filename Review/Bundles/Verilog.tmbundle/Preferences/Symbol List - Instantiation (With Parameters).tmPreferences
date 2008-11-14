@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List - Instantiation (With Parameters)</string>
+	<key>scope</key>
+	<string>meta.block.instantiation.with.parameters.verilog</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>s/\s*// ; s/(\S+).*(?&lt;=\))\s*([a-zA-Z][a-zA-Z0-9_]*).*/    $1 $2/</string>
+	</dict>
+	<key>uuid</key>
+	<string>4AC194C6-BCFF-48AA-8694-275CC4D8087C</string>
+</dict>
+</plist>

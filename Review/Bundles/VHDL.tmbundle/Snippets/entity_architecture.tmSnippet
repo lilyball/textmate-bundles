@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>entity ${1:${TM_FILENAME/(.*?)(\..+)/$1/}} is
+  port (
+    ${0:clock}
+  ) ;
+end entity ; -- ${1:${TM_FILENAME/(.*?)(\..+)/$1/}}
+
+architecture ${2:arch} of ${1:${TM_FILENAME/(.*?)(\..+)/$1/}} is
+
+
+
+begin
+
+
+
+end architecture ; -- ${2:arch}</string>
+	<key>name</key>
+	<string>entity architecture</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>tabTrigger</key>
+	<string>entarch</string>
+	<key>uuid</key>
+	<string>6521BA9D-258F-4473-A3F5-FDDE31946573</string>
+</dict>
+</plist>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>library ieee ;
+use ieee.std_logic_1164.all ;
+use ieee.numeric_std.all ;
+
+entity ${1:${TM_FILENAME/(.*?)(\..+)/$1/}} is
+  port (
+    ${0:clock}
+  ) ;
+end entity ; -- ${1:${TM_FILENAME/(.*?)(\..+)/$1/}}
+
+architecture ${2:arch} of ${1:${TM_FILENAME/(.*?)(\..+)/$1/}} is
+
+begin
+
+end architecture ; -- ${2:arch}</string>
+	<key>name</key>
+	<string>vhdl template</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>tabTrigger</key>
+	<string>vhdl</string>
+	<key>uuid</key>
+	<string>E2C6B170-E06D-45D4-BFAF-BFE0A612742A</string>
+</dict>
+</plist>

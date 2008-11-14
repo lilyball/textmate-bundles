@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>package ${1:${TM_FILENAME/(.*?)(\..+)/$1_p/}} is
+    ${0}
+end package ; -- ${1:${TM_FILENAME/(.*?)(\..+)/$1_p/}} </string>
+	<key>name</key>
+	<string>package</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>tabTrigger</key>
+	<string>pack</string>
+	<key>uuid</key>
+	<string>42FEDCCE-509B-4A34-93D5-3AAE3E2E7BE3</string>
+</dict>
+</plist>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${1:handle} : process( ${2:clock}, ${3:reset} )
+begin
+    if( ${3:reset} = '1' ) then
+        ${0:statements}
+    elsif( rising_edge(${2:clock}) ) then
+        
+    end if ;
+end process ; -- ${1:handle}</string>
+	<key>name</key>
+	<string>asynchronous process</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>tabTrigger</key>
+	<string>apro</string>
+	<key>uuid</key>
+	<string>BADAA10C-92E6-408F-999F-8BD76CA1F71A</string>
+</dict>
+</plist>

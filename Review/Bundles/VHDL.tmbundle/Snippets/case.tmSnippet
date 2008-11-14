@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>case( ${1:signal_name} ) is
+
+    when ${2:state} =&gt;
+        ${0:statement}
+
+    when others =&gt;
+        
+end case ;</string>
+	<key>name</key>
+	<string>case</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>tabTrigger</key>
+	<string>case</string>
+	<key>uuid</key>
+	<string>EA15B152-C7A8-4BFD-93AD-C86C1F5A417D</string>
+</dict>
+</plist>

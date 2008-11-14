@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
+    perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' &lt; template_package.vhd &gt;"$TM_NEW_FILE"
+fi</string>
+	<key>extension</key>
+	<string>vhd</string>
+	<key>name</key>
+	<string>Package and Package Body</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>uuid</key>
+	<string>E92954D1-C991-4021-9DD1-A97CD1393E9C</string>
+</dict>
+</plist>

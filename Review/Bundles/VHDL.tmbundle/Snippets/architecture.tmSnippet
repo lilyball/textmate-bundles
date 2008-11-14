@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>architecture ${1:arch} of ${2:${TM_FILENAME/(.*?)(\..+)/$1/}} is
+
+	signal ${0:name}
+
+begin
+
+end architecture ; -- ${1:arch}</string>
+	<key>name</key>
+	<string>architecture</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>tabTrigger</key>
+	<string>arch</string>
+	<key>uuid</key>
+	<string>CF12C87E-3ECC-4184-A422-AF1D5CEA2871</string>
+</dict>
+</plist>

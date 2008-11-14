@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>entity ${1:${TM_FILENAME/(.*?)(\..+)/$1/}} is
+  port (
+    ${0:clock}
+  ) ;
+end entity ; -- ${1:${TM_FILENAME/(.*?)(\..+)/$1/}}</string>
+	<key>name</key>
+	<string>entity</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>tabTrigger</key>
+	<string>ent</string>
+	<key>uuid</key>
+	<string>3FB69040-7659-4F47-8F59-EE36751844AA</string>
+</dict>
+</plist>

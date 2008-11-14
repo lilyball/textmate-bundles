@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/perl
+# use: ./transform.pl in_file &gt; out_file
+# use warnings;
+# use strict;
+
+use File::Find ;
+
+our $keyword = &lt;&gt; ;
+$keyword = lc($keyword) ;
+
+# Check to see if the keyword is set
+if( $keyword eq "" ) {
+    print "\${0: keyword not set\}" ;
+    exit ;
+}
+
+my $dir = $ENV{'TM_PROJECT_DIRECTORY'} ;
+
+# Check to see if the directory is set
+if( $dir eq "" ) {
+    print $keyword . "\$\{0: project directory not set\}" ;
+    exit ;
+}
+
+# Find the entity
+finddepth( { wanted =&gt; \&amp;wanted, follow =&gt; 1 }, $dir ) ;
+
+# Didn't find anything
+print $keyword . "\$\{0: component not found\}" ;
+
+sub wanted {
+    if (opendir(DIR, $File::Find::fullname)) {
+        return ;
+    }
+    else {
+        my @parts = split(/\./) ;
+        $ext = lc(@parts[$#parts]) ;
+        if( $ext eq "vhd" or $ext eq "vhdl" ) {
+            $_ = parsefile($File::Find::fullname, $keyword) ;
+            if( $_ =~ m/.*$keyword.*/ ) {
+                print $_ ;
+                exit ;
+            }
+        }
+    }
+}
+
+sub parsefile {
+    open(FILE, shift) or return ;
+    my @in = &lt;FILE&gt;;
+    my $in = join "", @in;
+    my $key = shift ;
+    # split the file apart
+    $in =~ m{(.*)\s+(^\s*component.*)(?=^\s*end component)[^;]*;\s*(.*)}ms;
+    # my $before = $1;
+    my $component = $2;
+    # my $after = $3;
+
+    return findcomponent($component, $key) ;
+}
+
+# Format an entity
+sub findcomponent {
+    my $in = shift ;
+    my $key = shift ;
+    my $max_w = 0;
+    my $i = 2 ;
+    my $found = 0 ;
+    # discard the "end entity" line
+    $in =~ s{^end\s*component\s*\w+\s*;$}{}m;
+    my @in = split /\n/, $in;
+    foreach (@in) {
+	   # change the "component X is" definition line to "U_X : X"
+    	   $_ =~ s{^\s*component\s+([^ ]+)\s+is\s*$}{U_$1\$\{1:_0\} : $1};
+
+        # flag if we have found a component with the keyword
+        if ( lc($1) =~ /\b($key)\b/ and $found == 0 ) {
+            $found = 1 ;
+        }
+
+        # re-set comments interspersed formatted properly
+        $_ =~ s{\s*\-\-}{    \-\-} ;
+
+        # change comments at the end of lines to nothing
+        $_ =~ s{;\s*\-\-.*$}{} ;
+
+        # remove any attributes
+        $_ =~ s{^\s*attribute.*$}{} ;
+
+	   # change "X : integer :=" or "X : in std_logic;" line to "X =&gt;"
+    	   $_ =~ s{^\s+(\w+)\s*\:\s*[^;]+;?\s*$}{    $1\t=&gt; \$\{$i+1:$1\},};
+	   # determine the largest length of the generic/signal for fill
+    	   if (length $1 &gt; $max_w) {
+	       $max_w = length $1;
+    	   }
+	   # change "X (" to "X map ("
+    	   $_ =~ s{^\s+(\))?(\s*;\s*)?(\w+)\s*\(}{$1  $3 map \(};
+        if( $found == 0 ) {
+            return ;
+        }
+    }
+
+    # Reformat generic/signal lines to be filled properly
+    my $fmt    = '    %-' . $max_w . "s\t=&gt;\t\$\{%d:%s\},";
+    my $fmtend = '    %_' . $max_w . "s\t=&gt;\t\$\{%d:%s\}" ;
+    foreach (@in) {
+	if (m{=\&gt; }) {
+	    $_ =~ s{^\s+(\w+)\s*=\&gt;}{};
+	    $_ = sprintf $fmt, $1, $i, $1 ;
+        $i = $i + 1 ;
+	}
+    }
+    $in = join("\n", @in) . "\n";
+    # remove ending commas
+    $in =~ s{,\s*\)}{\n  \)}g ;
+    # nestle parenthesis where possible
+    $in =~ s{^\s+\)\s+;\s*port\s*([^ ]+)\s*\(\s*$}{  ) port $1 (}ms;
+
+    return $in;
+}
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@|</string>
+	<key>name</key>
+	<string>instantiate component</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>uuid</key>
+	<string>6752C387-8CEC-48A0-9CA6-76EE51ED8701</string>
+</dict>
+</plist>

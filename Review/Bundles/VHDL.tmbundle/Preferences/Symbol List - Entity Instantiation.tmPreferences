@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List - Entity Instantiation</string>
+	<key>scope</key>
+	<string>entity.name.section.entity_instantiation.vhdl</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>s/\s*:\s*/ of / ; s/\b(?i:use\s+)\b// ; s/(.*)/    instantiation $1/</string>
+	</dict>
+	<key>uuid</key>
+	<string>53F9A02C-CFA1-49D7-8F9A-92785B833D55</string>
+</dict>
+</plist>

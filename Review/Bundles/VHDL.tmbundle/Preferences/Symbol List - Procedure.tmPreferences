@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List - Procedure</string>
+	<key>scope</key>
+	<string>meta.block.procedure_prototype.vhdl, meta.block.procedure_definition.vhdl</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>s/\b(?i:is)\b.*/;/g ; s/(?i:\bprocedure\b)/procedure/g ; s/;$// ; s/\s+/ /g ; s/\s*/    /</string>
+	</dict>
+	<key>uuid</key>
+	<string>580853BB-7098-4A97-A8E8-19C18BD661EE</string>
+</dict>
+</plist>

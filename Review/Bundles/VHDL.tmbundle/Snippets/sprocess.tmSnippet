@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:handle} : process( ${2:clock} )
+	<string>${1:identifier} : process( ${2:clock} )
 begin
-    if( rising_edge(${2:clock}) ) then
-        ${0:statements}
-    end if ;
-end process ; -- ${1:handle}</string>
+	if( rising_edge(${2:clock}) ) then
+		$0
+	end if ;
+end process ; -- ${1:identifier}</string>
 	<key>name</key>
 	<string>synchronous process</string>
 	<key>scope</key>

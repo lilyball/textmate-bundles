@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>${1:handle} : process( ${2:clock}, ${3:reset} )
+	<string>${1:identifier} : process( ${2:clock}, ${3:reset} )
 begin
-    if( ${3:reset} = '1' ) then
-        ${0:statements}
-    elsif( rising_edge(${2:clock}) ) then
-        
-    end if ;
-end process ; -- ${1:handle}</string>
+	if( ${3:reset} = '1' ) then
+		$0
+	elsif( rising_edge(${2:clock}) ) then
+		
+	end if ;
+end process ; -- ${1:identifier}</string>
 	<key>name</key>
 	<string>asynchronous process</string>
 	<key>scope</key>

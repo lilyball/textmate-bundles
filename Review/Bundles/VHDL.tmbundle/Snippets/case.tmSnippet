@@ -5,11 +5,11 @@
 	<key>content</key>
 	<string>case( ${1:signal_name} ) is
 
-    when ${2:state} =&gt;
-        ${0:statement}
+	when ${2:IDLE} =&gt;
+		$0
 
-    when others =&gt;
-        
+	when others =&gt;
+
 end case ;</string>
 	<key>name</key>
 	<string>case</string>

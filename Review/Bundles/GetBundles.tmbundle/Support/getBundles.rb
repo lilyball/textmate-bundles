@@ -1121,7 +1121,7 @@ Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
 
   end
 
-  writeToLogFile("TextMate's “Support Folder” (#{$supportFolderPristine}) will be updated.") if $updateSupportFolder
+  writeToLogFile("TextMate's “Support Folder” (#{$supportFolderPristine}) will be updated if you install a bundle automatically.") if $updateSupportFolder
 
 end
 
@@ -1184,7 +1184,7 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
   
   # do a svn co/up
   begin
-    GBTimeout::timeout(120) do
+    GBTimeout::timeout(60) do
       if File.directory?($supportFolderPristine) and ! folderCreated
         executeShell(%Q{
 export LC_CTYPE=en_US.UTF-8;
@@ -1203,8 +1203,8 @@ cd '#{$supportFolderPristine.gsub('/Support','')}';
     end
   rescue GBTimeout::Error
     $errorcnt += 1
-    writeTimedMessage("Timeout while updating TextMate's “Support Folder”. Please check folder ‘#{$supportFolder}’!\n \
-    If problems occur remove ‘#{$supportFolder}’ manully and retry it.")
+    FileUtils.rm_rf($supportFolderPristine)
+    writeTimedMessage("Timeout while updating TextMate's “Support Folder”. Please check the folder ‘#{$supportFolder}’!\n If problems occur remove ‘#{$supportFolder}’ manully and retry it.")
   end
   
   $params['supportFolderCheck'] = 0
@@ -1273,6 +1273,7 @@ $x1 = Thread.new do
   begin
     getBundleLists
     checkForSupportFolderUpdate
+    $firstrun = false
   rescue
     writeTimedMessage("Error while initialization:\n#{$!}", "An error occurred. Please check the Log!")
   end
@@ -1286,7 +1287,7 @@ if ENV.has_key?('TM_SVN')
   $SVN = ENV['TM_SVN']
 end
 
-$firstrun = false
+
 
 while $run do
 
@@ -1296,7 +1297,11 @@ while $run do
   if $dialogResult.has_key?('returnArgument')
     case $dialogResult['returnArgument']
       when 'helpButtonIsPressed':   helpDIALOG
-      when 'cancelButtonIsPressed': $close = true
+      when 'cancelButtonIsPressed': 
+        $close = true
+        $params['isBusy'] = false
+        $firstrun = false
+        updateDIALOG
       when 'infoButtonIsPressed':   $x3 = Thread.new { infoDIALOG($dialogResult) }
       else # install bundle(s)
         if $dialogResult['returnArgument'].size > 10

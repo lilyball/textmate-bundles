@@ -128,7 +128,7 @@ def orderOutDIALOG
   else
     $token = %x{#{$DIALOG} -a #{e_sh $NIB} -p #{e_sh $params.to_plist}}
   end
-  writeToLogFile("Get Bundles DIALOG runs at token #{$token}")
+  writeToLogFile("GetBundles' DIALOG runs at token #{$token}")
   $params['nocancel'] = false
   updateDIALOG
 end

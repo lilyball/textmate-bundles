@@ -984,7 +984,7 @@ def installBundles(dlg)
 
       # check for versionig control to alert
       if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['scm'].empty?
-        next if askDIALOG("It seems that the bundle “#{name}” has been already installed under versioning control #{$localBundles[bundleData['uuid']]['scm'].gsub(/ +/,'')}. If you continue the versioning control will not be updated!", " Do you really want to continue?")
+        next askDIALOG("It seems that the bundle “#{name}” has been already installed under versioning control #{$localBundles[bundleData['uuid']]['scm'].gsub(/ +/,'')}.","Please update that bundle manually.", "OK", "")
       end
 
       source = nil
@@ -1296,7 +1296,7 @@ end
 def checkUniversalAccess
   ui = %x{osascript -e 'tell app "System Events" to set isUIScriptingEnabled to UI elements enabled'}
   if ui =~ /^false/
-    if askDIALOG("AppleScript's “UI scripting” is not enabled. Getbundles needs it to perform “Show Help Window”, “Open Bundle Editor”, and “to activate Getbundles if it's already open”.", "Do you want to open “System Preferences” to enable “Enable access for assistive devices”?", "Continue", "Cancel") == 0
+    if askDIALOG("AppleScript's “UI scripting” is not enabled. Getbundles needs it to perform “Show Help Window”, “Open Bundle Editor”, and “to activate Getbundles if it's already open”.", "Do you want to open “System Preferences” to enable “Enable access for assistive devices”?", "Yes", "No") == 0
       %x{osascript -e 'tell app "System Preferences" ' -e 'activate' -e 'set current pane to pane "com.apple.preference.universalaccess"' -e 'end tell'}
     end
   end
@@ -1373,7 +1373,7 @@ while $run do
           end
       end
     else
-      writeToLogFile("User interaction was ignored. GetBundles is busy…\n(#{$params['progressText']}) ")
+      writeToLogFile("User interaction was ignored. GetBundles is busy…\n#{$params['progressText']}")
     end
   elsif $dialogResult['openBundleEditor'] == 1
     %x{osascript -e 'tell app "System Events" to keystroke "b" using {control down, option down, command down}' }
@@ -1411,7 +1411,7 @@ while $run do
       $params['supportFolderCheck'] = 0
       updateDIALOG
     else
-      writeToLogFile("User interaction was ignored. GetBundles is busy…\n(#{$params['progressText']}) ")
+      writeToLogFile("User interaction was ignored. GetBundles is busy…\n#{$params['progressText']}")
     end
 
   else ###### closing the window

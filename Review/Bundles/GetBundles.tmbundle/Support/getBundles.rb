@@ -1354,24 +1354,27 @@ while $run do
   # writeToLogFile($dialogResult.inspect())
 
   if $dialogResult.has_key?('returnArgument')
-    case $dialogResult['returnArgument']
-      when 'helpButtonIsPressed':   helpDIALOG
-      when 'cancelButtonIsPressed': 
-        $close = true
-        $params['isBusy'] = false
-        $firstrun = false
-        updateDIALOG
-      when 'infoButtonIsPressed':   $x3 = Thread.new { infoDIALOG($dialogResult) }
-      else # install bundle(s)
-        if $dialogResult['returnArgument'].size > 10
-          if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
+    if $params['isBusy'] == false
+      case $dialogResult['returnArgument']
+        when 'helpButtonIsPressed':   helpDIALOG
+        when 'cancelButtonIsPressed': 
+          $close = true
+          $params['isBusy'] = false
+          $firstrun = false
+          updateDIALOG
+        when 'infoButtonIsPressed':   $x3 = Thread.new { infoDIALOG($dialogResult) }
+        else # install bundle(s)
+          if $dialogResult['returnArgument'].size > 10
+            if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
+              $x2 = Thread.new { installBundles($dialogResult) }
+            end
+          else
             $x2 = Thread.new { installBundles($dialogResult) }
           end
-        else
-          $x2 = Thread.new { installBundles($dialogResult) }
-        end
+      end
+    else
+      writeToLogFile("User interaction was ignored. GetBundles is busy…\n(#{$params['progressText']}) ")
     end
-
   elsif $dialogResult['openBundleEditor'] == 1
     %x{osascript -e 'tell app "System Events" to keystroke "b" using {control down, option down, command down}' }
     $params['openBundleEditor'] = 0
@@ -1400,15 +1403,16 @@ while $run do
     filterBundleList
 
   elsif $dialogResult.has_key?('supportFolderCheck')
-    if $dialogResult['supportFolderCheck'] == 1
-      doUpdateSupportFolder
-      checkForSupportFolderUpdate
+    if $params['isBusy'] == false
+      if $dialogResult['supportFolderCheck'] == 1
+        doUpdateSupportFolder
+        checkForSupportFolderUpdate
+      end
+      $params['supportFolderCheck'] = 0
+      updateDIALOG
     else
-      writeToLogFile("Update “Support Folder” was switched off") if $updateSupportFolder
-      $updateSupportFolder = false
+      writeToLogFile("User interaction was ignored. GetBundles is busy…\n(#{$params['progressText']}) ")
     end
-    $params['supportFolderCheck'] = 0
-    updateDIALOG
 
   else ###### closing the window
     $close = true

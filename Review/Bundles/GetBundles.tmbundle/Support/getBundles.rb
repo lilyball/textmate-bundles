@@ -71,8 +71,10 @@ $localBundles     = { }
 
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
+# TextMate's standard Support folder
+$asFolder    = "/Library/Application Support/TextMate"
 # TextMate's Support Folder
-$supportFolder    = "/Library/Application Support/TextMate/Support"
+$supportFolder    = "#{$asFolder}/Support"
 # should the Support Folder updated in beforehand?
 $updateSupportFolder = true
 # last bundle filter selection
@@ -1221,6 +1223,9 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
     end
     folderCreated = true
   end
+  
+  # check for /Lib/AS/TM
+  FileUtils.mkdir_p($asFolder) unless File.directory?($asFolder)
   
   # create symlink if no /Lib/AS/TM/Support
   begin

@@ -738,6 +738,9 @@ def buildLocalBundleList
     $deletedCoreAndDisabledBundles['deleted'] = [ ]
   end
 
+  $deletedCoreAndDisabledBundles['deleted'] = [] if $deletedCoreAndDisabledBundles['deleted'].nil?
+  $deletedCoreAndDisabledBundles['disabled'] = [] if $deletedCoreAndDisabledBundles['disabled'].nil?
+
   # loop through all locally installed bundles
   local_bundle_paths.each do |path|
     Dir["#{path}/*.tmbundle"].each do |b|

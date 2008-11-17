@@ -13,7 +13,7 @@ require 'cgi'
 require "open3"
 require "time"
 require "rexml/document"
-require "Benchmark"
+require "benchmark"
 
 
 $DIALOG           = e_sh ENV['DIALOG']
@@ -64,7 +64,6 @@ $nicknames        = { }
 $availableModi    = ["svn", "zip"]
 # URL to the bundle server's cache file
 $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json.gz"
-# $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json"
 # URL to nicknames.txt
 $nickNamesFile = "http://bibiko.textmate.org/bundleserver/nicknames.txt"
 # locally installed bundles
@@ -569,7 +568,7 @@ end
 
 def getBundleLists
 
-  buildLocalBundleList
+  locBundlesThread = Thread.new { buildLocalBundleList }
   
   $listsLoaded = false
   $dataarray  = [ ]
@@ -587,31 +586,18 @@ def getBundleLists
   
   begin
     GBTimeout::timeout($timeout) do
-      # download data.json.gz from textmate.org
-      data_file = "#{$tempDir}/data.json.gz"
-      FileUtils.mkdir_p $tempDir
+      
+      # read data file from bundle server
       begin
-        File.open(data_file, 'w') { |f| f.write(open($bundleServerFile).read) }
+        $bundleCache = YAML.load(File.read("|curl #{$bundleServerFile} | gzip -d"))
       rescue
-        writeTimedMessage("Error: #{$!} while fetching the Bundle List file from the Bundle Server")
-        return
-      end
-      # decompress data.json.gz
-      begin
-        %x{gzip -d '#{data_file}'}
-      rescue
-        writeTimedMessage("Error: #{$!} while decompressing the Bundle List file")
-      end
-      begin
-        $bundleCache = YAML.load(open("#{$tempDir}/data.json"))
-      rescue
-        writeTimedMessage("Error: #{$!} while parsing the Bundle List file")
+        writeTimedMessage("Error: #{$!} while parsing the Bundle Server file")
       end
       
       # get nicknames from textmte.org
       nicks = nil
       begin
-        nicks = Net::HTTP.get(URI.parse($nickNamesFile))
+        nicks = File.read("|curl --compressed #{$nickNamesFile}")
       rescue
         writeToLogFile("Could not load nicknames: #{$!}")
       end
@@ -620,28 +606,33 @@ def getBundleLists
           $nicknames[l.split("\t").first] = l.split("\t").last
         end
       end
-      # data_file = "#{$tempDir}/data.json"
-      # FileUtils.mkdir_p $tempDir
-      # begin
-      #   File.open(data_file, 'w') { |f| f.write(open($bundleServerFile).read) }
-      # rescue
-      #   writeTimedMessage("Error: #{$!} while fetching the Bundle List file from the Bundle Server")
-      #   return
-      # end
-      # begin
-      #   $bundleCache = YAML.load(open(data_file))
-      # rescue
-      #   writeTimedMessage("Error: #{$!} while parsing the Bundle List file")
-      # end
     end
   rescue GBTimeout::Error
     writeTimedMessage("Timeout while connecting Bundle Server", "Timeout while connecting Bundle Server")
   rescue
     writeTimedMessage("Error: #{$!} while loading the bundle list")
   end
-  unless $bundleCache.has_key?('bundles')
+  
+  # check $bundleCache hash for key 'bundles'
+  begin
+    unless $bundleCache.has_key?('bundles')
+      writeTimedMessage("Structural error in Bundle Server File")
+      return
+    end
+  rescue
     writeTimedMessage("Structural error in Bundle Server File")
     return
+  end
+  
+  # wait for parsing local bundles
+  begin
+    GBTimeout::timeout($timeout) {locBundlesThread.join}
+  rescue
+    writeToLogFile("Timeout while parsing local bundles") unless $close
+    begin
+      locBundlesThread.kill
+    rescue
+    end
   end
   
   # sort the cache first against name then against host
@@ -1389,6 +1380,7 @@ while $run do
     $x4 = Thread.new do
       begin
         getBundleLists
+        checkForSupportFolderUpdate
       rescue
         writeTimedMessage("Error while initialization:\n#{$!}", "An error occurred. Please check the Log!")
         $run = false

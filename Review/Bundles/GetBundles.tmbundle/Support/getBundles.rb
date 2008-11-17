@@ -1266,6 +1266,8 @@ cd '#{$supportFolderPristine.gsub('/Support','')}';
     writeTimedMessage("Timeout while updating TextMate's “Support Folder”. Please check the folder ‘#{$supportFolder}’!\n If problems occur remove ‘#{$supportFolder}’ manully and retry it.")
   end
   
+  checkForSupportFolderUpdate
+  
   $params['supportFolderCheck'] = 0
   $params['isBusy'] = false
   $params['nocancel'] = false

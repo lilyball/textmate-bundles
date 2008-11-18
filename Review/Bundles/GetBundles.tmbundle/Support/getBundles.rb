@@ -53,7 +53,7 @@ $warningcnt       = 0
 # temp dir for installation
 $tempDir          = "/tmp/TM_GetBundlesTEMP"
 # global timeout in seconds
-$timeout          = 30
+$timeout          = 45
 # global thread vars
 $x0=$x1=$x2=$x3=$x4=$x10=$x20 = nil
 # bundle data hash containing data.json.gz 
@@ -61,7 +61,7 @@ $bundleCache      = { }
 # hash of used nicknames
 $nicknames        = { }
 # available installation modi
-$availableModi    = ["svn", "zip"]
+$availableModi    = ["svn", "tar", "zip"]
 # URL to the bundle server's cache file
 $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json.gz"
 # URL to nicknames.txt
@@ -545,10 +545,7 @@ def askDIALOG(msg, text, btn1="No", btn2="Yes")
 end
 
 def noSVNclientFound
-  writeToLogFile("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
-  $params['progressText'] = 'No svn client found! Please check the Activity Log.'
-  updateDIALOG
-  sleep(3)
+  writeTimedMessage("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
 end
 
 def getResultFromDIALOG
@@ -743,15 +740,25 @@ def buildLocalBundleList
   $deletedCoreAndDisabledBundles['deleted'] = [] if $deletedCoreAndDisabledBundles['deleted'].nil?
   $deletedCoreAndDisabledBundles['disabled'] = [] if $deletedCoreAndDisabledBundles['disabled'].nil?
 
+  theCtimeOfDefaultBundle = File.new(TextMate::app_path).mtime.getutc
+  writeToLogFile(theCtimeOfDefaultBundle.to_s)
+
   # loop through all locally installed bundles
   local_bundle_paths.each do |path|
+    break if $close
     Dir["#{path}/*.tmbundle"].each do |b|
       begin
+        break if $close
         plist = OSX::PropertyList::load(open("#{b}/info.plist"))
         unless plist['isDelta']
           
           # get ctime of local bundle folder for comparison 
-          theCtime = File.new(b).ctime.getutc
+          
+          if b =~ /Shared/
+            theCtime = theCtimeOfDefaultBundle
+          else
+            theCtime = File.new(b).ctime.getutc
+          end
           
           # check for svn / git repos ; if so take the last commit date
           scm = (File.directory?("#{b}/.svn")) ? "  (svn)" : (File.directory?("#{b}/.git")) ? "  (git)" : ""
@@ -809,6 +816,7 @@ end
 def refreshUpdatedStatus
   
   $params['isBusy'] = true
+  $params['nocancel'] = true
   $params['progressText'] = "Parsing local bundles…"
   updateDIALOG
   
@@ -817,6 +825,8 @@ def refreshUpdatedStatus
   # loop through all shown bundles
   cnt = 0  # counter to link $dataaray and $bundleCache['bundles']
   $dataarray.each do |r|
+
+    break if $close
 
     updated = ""
 
@@ -852,6 +862,7 @@ def refreshUpdatedStatus
   end
 
   $params['isBusy'] = false
+  $params['nocancel'] = false
   updateDIALOG
 
   # suppress the updating of the table to preserve the selection
@@ -932,7 +943,7 @@ def executeShell(cmd, cmdToLog = false, outToLog = false)
   writeToLogFile(cmd) if cmdToLog
   out = ""
   err = ""
-  Open3.popen3(cmd) { |stdin, stdout, stderr|
+  Open3.popen3("export LC_CTYPE=en_US.UTF-8;"+cmd) { |stdin, stdout, stderr|
     out << stdout.read
     err << stderr.read
   }
@@ -1022,6 +1033,8 @@ def installBundles(dlg)
       case mode
         when "svn" 
           installSVN(name, path)
+        when "tar"
+          installTAR(name, path, zip_path)
         when "zip"
           installZIP(name, path, zip_path)
         else
@@ -1042,11 +1055,12 @@ def installBundles(dlg)
     $params['isBusy'] = false
     $params['progressText'] = ""
     updateDIALOG
+
+    removeTempDir
+    refreshUpdatedStatus
     
   end
   
-  removeTempDir
-  refreshUpdatedStatus
   $listsLoaded = true
   
 end
@@ -1063,7 +1077,7 @@ def installZIP(name, path, zip_path)
         if path =~ /^http:\/\/github\.com/  # hosted on github ?
           executeShell(%Q{
 if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
-  if unzip --qq "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
+  if unzip --q "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
     rm "#{$tempDir}/archive.zip"
     mv "#{$tempDir}/"* "#{$tempDir}/#{name}.tmbundle"
   fi
@@ -1073,7 +1087,7 @@ fi
         elsif !zip_path.nil? and zip_path =~ /\.tmbundle$/
           executeShell(%Q{
 if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
-  if unzip --qq "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
+  if unzip --q "#{$tempDir}/archive.zip" -d "#{$tempDir}"; then
     rm "#{$tempDir}/archive.zip"
     [[ ! -e "#{$tempDir}/#{zip_path}" ]] && mv "#{$tempDir}/"*"/#{zip_path}" "#{$tempDir}/#{name}.tmbundle"
   fi
@@ -1104,6 +1118,61 @@ fi
   executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
 
 end
+
+def installTAR(name, path, zip_path)
+
+  removeTempDir
+  FileUtils.mkdir_p $tempDir
+
+  begin
+    GBTimeout::timeout($timeout) do
+      begin
+
+        if path =~ /^http:\/\/github\.com/  # hosted on github ?
+          executeShell(%Q{
+if curl -sSLo "#{$tempDir}/archive.tar" "#{path}"; then
+  if tar -xf "#{$tempDir}/archive.tar" -C "#{$tempDir}"; then
+    rm "#{$tempDir}/archive.tar"
+    mv "#{$tempDir}/"* "#{$tempDir}/#{name}.tmbundle"
+  fi
+fi
+          }, false, true)
+
+        elsif !zip_path.nil? and zip_path =~ /\.tmbundle$/
+          executeShell(%Q{
+if curl -sSLo "#{$tempDir}/archive.zip" "#{path}"; then
+  if tar -xf "#{$tempDir}/archive.zip" -D "#{$tempDir}"; then
+    rm "#{$tempDir}/archive.zip"
+    [[ ! -e "#{$tempDir}/#{zip_path}" ]] && mv "#{$tempDir}/"*"/#{zip_path}" "#{$tempDir}/#{name}.tmbundle"
+  fi
+fi
+          }, false, true)
+          name = zip_path.gsub(".tmbundle","")
+
+        else
+          $errorcnt += 1
+          writeToLogFile("Could not install “#{name}” by using “#{path}”")
+          removeTempDir
+          return
+        end
+      rescue
+        $errorcnt += 1
+        writeToLogFile("Error: #{$!}")
+        return
+      end
+    end
+  rescue GBTimeout::Error
+    $errorcnt += 1
+    writeToLogFile("Timeout error while installing “#{name}”") unless $close
+    return
+  end
+
+  return if $close
+  # install bundle if everything went fine
+  executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
+
+end
+
 
 def installSVN(name, path)
 
@@ -1154,6 +1223,9 @@ Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
   "Warning: Please check the Log!", 1)
   end
 
+  localRev = nil
+  trunkRev = nil
+
   if File.directory?("#{$supportFolderPristine}/.svn")
     
     # get svn info and compare last modified date
@@ -1173,6 +1245,8 @@ Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
         $updateSupportFolder = (trunkRev > localRev) ? true : false
       end
     rescue
+      writeTimedMessage("Error while getting current 'svn info' data of the “Support Folder” from trunk:\n#{$!}")
+      return
     end
 
   end
@@ -1193,6 +1267,7 @@ def doUpdateSupportFolder
 
   if $SVN.empty?
     $errorcnt += 1
+    writeToLogFile("Could not update the “Support Folder”.")
     noSVNclientFound
     return
   end
@@ -1356,16 +1431,16 @@ while $run do
   # writeToLogFile($dialogResult.inspect())
 
   if $dialogResult.has_key?('returnArgument')
-    if $params['isBusy'] == false
-      case $dialogResult['returnArgument']
-        when 'helpButtonIsPressed':   helpDIALOG
-        when 'cancelButtonIsPressed': 
-          $close = true
-          $params['isBusy'] = false
-          $firstrun = false
-          updateDIALOG
-        when 'infoButtonIsPressed':   $x3 = Thread.new { infoDIALOG($dialogResult) }
-        else # install bundle(s)
+    case $dialogResult['returnArgument']
+      when 'helpButtonIsPressed':   helpDIALOG
+      when 'cancelButtonIsPressed': 
+        $close = true
+        $params['isBusy'] = false
+        $firstrun = false
+        updateDIALOG
+      when 'infoButtonIsPressed':   $x3 = Thread.new { infoDIALOG($dialogResult) }
+      else # install bundle(s)
+        if $params['isBusy'] == false
           if $dialogResult['returnArgument'].size > 10
             if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
               $x2 = Thread.new { installBundles($dialogResult) }
@@ -1373,10 +1448,10 @@ while $run do
           else
             $x2 = Thread.new { installBundles($dialogResult) }
           end
+        else
+          writeToLogFile("User interaction was ignored. GetBundles is busy…\n#{$params['progressText']}")
+        end
       end
-    else
-      writeToLogFile("User interaction was ignored. GetBundles is busy…\n#{$params['progressText']}")
-    end
   elsif $dialogResult['openBundleEditor'] == 1
     %x{osascript -e 'tell app "System Events" to keystroke "b" using {control down, option down, command down}' }
     $params['openBundleEditor'] = 0

@@ -295,6 +295,10 @@ def infoDIALOG(dlg)
     end
 
     return if $close
+    
+    gitsource = bundle['source'].find { |m| m['method'] == "git" }['url']
+    zipsource = bundle['source'].find { |m| m['method'] == "zip" }['url']
+    tarsource = bundle['source'].find { |m| m['method'] == "tar" }['url']
 
     plist['name'] = bundle['name'] if plist['name'].nil?
     plist['description'] = "" if plist['description'].nil?
@@ -337,8 +341,25 @@ def infoDIALOG(dlg)
         <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
         <b>Private:</b><br />&nbsp;#{info['private']}<br />
         <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
-      HTML01
+        <b>git clone:</b><br /><pre><small><small>export LC_CTYPE=en_US.UTF-8
+mkdir -p ~/Library/Application\\ Support/TextMate/Bundles
+cd ~/Library/Application\\ Support/TextMate/Bundles
+git clone #{gitsource} '#{plist['name']}.tmbundle'
+osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
+        HTML01
+        
+      if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
+        io << <<-HTML011
+        <b>git pull:</b><br /><pre><small><small>export LC_CTYPE=en_US.UTF-8
+cd '#{$localBundles[bundle['uuid']]['path']}'
+git pull
+osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
+      HTML011
+      end
+        
       io << <<-HTML02
+      <b>zip archive:</b><br />&nbsp;<a href='#{zipsource}'>#{zipsource}</a><br />
+      <b>tar archive:</b><br />&nbsp;<a href='#{tarsource}'>#{tarsource}</a><br />        
       <br /><br />
       <h3><u>Bundle Information (info.plist):</u></h3>
       HTML02
@@ -410,15 +431,17 @@ def infoDIALOG(dlg)
       end
 
       return if $close
+
+      svnsource = bundle['source'].find { |m| m['method'] == "svn" }['url']
       
       # get info.plist data
       begin
         GBTimeout::timeout($timeout) do
           begin
-            plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{bundle['source'].first['url']}/info.plist")))
+            plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{svnsource}/info.plist")))
           rescue
             begin
-              plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{bundle['source'].first['url']}/info.plist"))))
+              plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{svnsource}/info.plist"))))
             rescue
               plist = OSX::PropertyList::load("{description='?';}")
             end
@@ -446,6 +469,22 @@ def infoDIALOG(dlg)
         when !plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a>" 
       end
       info['Last Changed Author'] = $nicknames[info['Last Changed Author']] if ! $nicknames.nil? and $nicknames.has_key?(info['Last Changed Author'])
+      
+      # check for versionig control to alert
+      relocateHint = ""
+      if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
+        doc = REXML::Document.new(File.read("|svn info --xml '#{$localBundles[bundle['uuid']]['path']}'"))
+        localUrl = doc.root.elements['//info/entry/url'].text
+        if localUrl =~ /macromates\.com/
+          relocateHint << <<-HINT
+        <pre>cd '#{$localBundles[bundle['uuid']]['path']}'
+svn switch --relocate #{localUrl} #{localUrl.gsub("http://macromates.com/svn/Bundles/trunk/","http://svn.textmate.org/trunk/")}
+</pre>
+        HINT
+        end
+      end
+      
+      
       File.open("#{$tempDir}/info.html", "w") do |io|
         io << <<-HTML11
           <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
@@ -464,6 +503,7 @@ def infoDIALOG(dlg)
           t = "This bundle was updated meanwhile."
           io << "<p align='right'><small><font color='#darkgreen'>#{t}</font></small></p>"
         end
+
         io << <<-HTML12
           <span style="background-color:#EEEEEE">
           <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
@@ -473,8 +513,31 @@ def infoDIALOG(dlg)
           <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
           <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
           <b>UUID:</b><br />&nbsp;#{plist['uuid']}<br />
-          </span>
-        HTML12
+          <b>svn checkout</b><br /><pre>export LC_CTYPE=en_US.UTF-8
+mkdir -p ~/Library/Application\\ Support/TextMate/Bundles
+cd ~/Library/Application\\ Support/TextMate/Bundles
+svn co #{svnsource}
+osascript -e 'tell app "TextMate" to reload bundles'
+</pre>
+         HTML12
+
+        if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
+          io << <<-HTML121
+          <b>svn update</b><br /><pre>export LC_CTYPE=en_US.UTF-8
+cd '#{$localBundles[bundle['uuid']]['path']}'
+svn up
+osascript -e 'tell app "TextMate" to reload bundles'
+</pre>
+          HTML121
+        end
+        io << "<br /></span>"
+        unless relocateHint.empty?
+          io << <<-HTML112
+          <br /><b><span style="color:red">Hint</span></b> The svn URL points to an old repository. To relocate it please use the following command:<br />
+          #{relocateHint}
+          HTML112
+        end
+
         io << "<br /><br /><b>Last svn log entries:</b><br /><pre>#{svnlogs}</pre>" unless svnlogs.nil?
         io <<  "</body></html>"
       end
@@ -740,8 +803,8 @@ def buildLocalBundleList
   $deletedCoreAndDisabledBundles['deleted'] = [] if $deletedCoreAndDisabledBundles['deleted'].nil?
   $deletedCoreAndDisabledBundles['disabled'] = [] if $deletedCoreAndDisabledBundles['disabled'].nil?
 
+  # get the creation date of TextMAte's binary to set it to each default bundle
   theCtimeOfDefaultBundle = File.new(TextMate::app_path).mtime.getutc
-  writeToLogFile(theCtimeOfDefaultBundle.to_s)
 
   # loop through all locally installed bundles
   local_bundle_paths.each do |path|
@@ -791,10 +854,10 @@ def buildLocalBundleList
           # update local bundle list; if bundles with the same uuid -> take the latest ctime for revision
           if $localBundles.has_key?(plist['uuid'])
             if Time.parse($localBundles[plist['uuid']]['rev']).getutc < theCtime
-              $localBundles[plist['uuid']] = {'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled }
+              $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled }
             end
           else
-            $localBundles[plist['uuid']] = {'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled }
+            $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled }
           end
         end
       rescue
@@ -995,7 +1058,14 @@ def installBundles(dlg)
 
       # check for versionig control to alert
       if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['scm'].empty?
-        next askDIALOG("It seems that the bundle “#{name}” has been already installed under versioning control #{$localBundles[bundleData['uuid']]['scm'].gsub(/ +/,'')}.","Please update that bundle manually.", "OK", "")
+        hint = ""
+        if $localBundles[bundleData['uuid']]['scm'] =~ /svn/
+          doc = REXML::Document.new(File.read("|svn info --xml '#{$localBundles[bundleData['uuid']]['path']}'"))
+          localUrl = doc.root.elements['//info/entry/url'].text
+          writeToLogFile("New repository URL for “#{name}”:\nsvn co #{localUrl.gsub("http://macromates.com/svn/Bundles/trunk/","http://svn.textmate.org/trunk/")}")
+          hint = "Please note that the svn checkout of “#{name}” was done by using an old URL.\nSee details in the Logs." if localUrl =~ /macromates\.com/
+        end
+        next askDIALOG("It seems that the bundle “#{name}” has been already installed under versioning control #{$localBundles[bundleData['uuid']]['scm'].gsub(/ +/,'')}.","Please update that bundle manually or remove/rename it and use “GetBundles”.\n#{hint}", "OK", "")
       end
 
       source = nil

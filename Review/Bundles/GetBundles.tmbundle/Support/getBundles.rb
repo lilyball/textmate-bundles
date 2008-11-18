@@ -835,7 +835,7 @@ def buildLocalBundleList
             end
           elsif scm =~ /git/
             begin
-              theCtime = Time.parse(File.read("|cd '#{b}'; git show | head -n3 | tail -n 1").chomp).getutc
+              theCtime = Time.parse(File.read("|cd '#{b}'; git show | head -n3 | tail -n 1 | perl -pe 's/Date: +//;s/(.*?) (.*?) (.*?) (.*?) (.*?) (.*)/\1 \2 \3 \4\6 \5/'").chomp).getutc
             rescue
               writeToLogFile("git error for “#{b}”: #{$!}")
               scm += " probably not working"

@@ -492,10 +492,10 @@
 						\b((?i:component))\s+
 
 						# A valid identifier $3 or invalid identifier $4
-						(([a-zA-Z_][a-zA-Z0-9_]*)\s*|(.+?))(?=\s*(?i:is|port)|$|--)
+						(([a-zA-Z_][a-zA-Z0-9_]*)\s*|(.+?))(?=\b(?i:is|port)\b|$|--)
 
 						# Optional word is $6
-						(\s+((?i:is\b)))?
+						(\b((?i:is\b)))?
 					</string>
 					<key>beginCaptures</key>
 					<dict>

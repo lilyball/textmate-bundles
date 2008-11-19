@@ -13,8 +13,6 @@ require 'cgi'
 require "open3"
 require "time"
 require "rexml/document"
-require "benchmark"
-
 
 $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
@@ -36,8 +34,6 @@ $dialogResult     = { }
 # table of all bundles with repo, name, bundleDescription, path
 $dataarray        = [ ]
 
-# thread array for downloading svn descriptions
-$threads          = [ ]
 # set to true if Cancel button was pressed to interrput threads and each loops
 $close            = false
 # set to true for fetching something from the net (used for shut down procedure)
@@ -48,14 +44,12 @@ $numberOfBundles  = 0
 $run              = true
 # error counter
 $errorcnt         = 0
-# warning counter
-$warningcnt       = 0
 # temp dir for installation
 $tempDir          = "/tmp/TM_GetBundlesTEMP"
 # global timeout in seconds
 $timeout          = 45
 # global thread vars
-$x0=$x1=$x2=$x3=$x4=$x10=$x20 = nil
+$initThread=$installThread=$infoThread=$refreshThread=$reloadThread=$svnlogThread=$svndataThread = nil
 # bundle data hash containing data.json.gz 
 $bundleCache      = { }
 # hash of used nicknames
@@ -123,19 +117,25 @@ def strip_html(text)
 end
 
 def orderOutDIALOG
+
   $params['nocancel'] = true
+
   if $isDIALOG2
     $token = %x{#{$DIALOG} window create -p #{e_sh $params.to_plist} #{e_sh $NIB} }
   else
     $token = %x{#{$DIALOG} -a #{e_sh $NIB} -p #{e_sh $params.to_plist}}
   end
+
   writeToLogFile("GetBundles' DIALOG runs at token #{$token}")
   $params['nocancel'] = false
   updateDIALOG
+
 end
 
 def closeDIALOG
+
   list = ""
+  # close all DIALOGs containing 'GetBundles' in their titles (main, info)
   if $isDIALOG2
     %x{#{$DIALOG} window close #{$token}}
     list = %x{#{$DIALOG} window list | egrep 'GetBundles'}
@@ -151,7 +151,9 @@ def closeDIALOG
       %x{#{$DIALOG} -x#{t}}
     end
   end
+
   removeTempDir
+
 end
 
 def updateDIALOG
@@ -392,20 +394,20 @@ osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
       data = nil
       svnlogs = nil
 
-      $x10 = Thread.new($SVN, bundle['source'].first['url']) { %x{'#{$SVN}' log --limit 5 #{bundle['source'].first['url']}} }
-      $x20 = Thread.new($SVN, bundle['source'].first['url']) { %x{#{$SVN} info #{bundle['source'].first['url']}} }
+      $svnlogThread = Thread.new($SVN, bundle['source'].first['url']) { %x{'#{$SVN}' log --limit 5 #{bundle['source'].first['url']}} }
+      $svndataThread = Thread.new($SVN, bundle['source'].first['url']) { %x{#{$SVN} info #{bundle['source'].first['url']}} }
       begin
         GBTimeout::timeout($timeout) do
-          $x10.join
-          $x20.join
+          $svnlogThread.join
+          $svndataThread.join
         end
       rescue GBTimeout::Error
         begin
-          $x10.kill
+          $svnlogThread.kill
         rescue
         end
         begin
-          $x20.kill
+          $svndataThread.kill
         rescue
         end
         writeToLogFile("Timeout error while fetching information") unless $close
@@ -418,8 +420,8 @@ osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
         return
       end
       
-      svnlogs = $x10.value
-      data    = $x20.value
+      svnlogs = $svnlogThread.value
+      data    = $svndataThread.value
 
       if data.nil?
         writeTimedMessage("Error while fetching svn information for “#{bundle['name']}”") unless $close
@@ -590,21 +592,27 @@ osascript -e 'tell app "TextMate" to reload bundles'
 end
 
 def askDIALOG(msg, text, btn1="No", btn2="Yes")
+
   msg.gsub!("'","’")
   text.gsub!("'","’")
+
   resStr = 0
+
   if $isDIALOG2
     resStr = %x{"$DIALOG" alert -s critical -m "#{msg}" -t "#{text}" -1 "#{btn1}" -2 "#{btn2}"}
   else
     resStr = %x{"$DIALOG" -e -p '{messageTitle="#{msg}";alertStyle=critical;informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
     return resStr.to_i
   end
+
   begin
     plist = OSX::PropertyList.load(resStr)
     resStr = plist['buttonClicked']
   rescue
   end
+
   return resStr
+
 end
 
 def noSVNclientFound
@@ -612,24 +620,30 @@ def noSVNclientFound
 end
 
 def getResultFromDIALOG
+
   resStr = ""
+
   if $isDIALOG2
     resStr = %x{#{$DIALOG} window wait #{$token}}
   else
     resStr = %x{#{$DIALOG} -w#{$token}}
   end
+
   $close = false
+
   begin
     $dialogResult = OSX::PropertyList.load(resStr)
   rescue
-    writeToLogFile("Fatal error while retrieving data from dialog.")
+    writeToLogFile("Fatal error while retrieving data from DIALOG.")
     $run = false
     exit 1
   end
+
 end
 
 def getBundleLists
 
+  # only to speed up the init process
   locBundlesThread = Thread.new { buildLocalBundleList }
   
   $listsLoaded = false
@@ -668,6 +682,7 @@ def getBundleLists
           $nicknames[l.split("\t").first] = l.split("\t").last
         end
       end
+      
     end
   rescue GBTimeout::Error
     writeTimedMessage("Timeout while connecting Bundle Server", "Timeout while connecting Bundle Server")
@@ -703,10 +718,14 @@ def getBundleLists
   # build $dataarray for NIB
   index = 0
   $bundleCache['bundles'].each do |bundle|
+
     break if $close
+
     author = (bundle['contact'].empty?) ? "" : " (by #{bundle['contact']})"
+
     # show only first part of description if description is subdivided by <hr>
     desc = strip_html(bundle['description'].gsub(/(?m)<hr[^>]*?\/>.*/,'').gsub(/\n/, ' ') + author)
+
     repo = case bundle['status']
       when "Official":      "O"
       when "Under Review":  "R"
@@ -721,7 +740,7 @@ def getBundleLists
     
     # get update status
     updated = ""
-    updatedStr = ""
+    updatedStr = "" # for searching
     if repo == "P" # then compare names
       $localBundles.each_value do |localBundle|
         if localBundle['name'] == bundle['name']
@@ -735,8 +754,10 @@ def getBundleLists
         updated += $localBundles[bundle['uuid']]['scm'] + $localBundles[bundle['uuid']]['deleted'] + $localBundles[bundle['uuid']]['disabled']
       end
     end
+
     # set searchpattern
     updatedStr = (updated.empty?) ? "" : (updated =~ /^U/) ? "=i=u" : "=i"
+
     $dataarray << {
       'name'              => bundle['name'],
       'path'              => index.to_s,        # index of $dataarray to identify
@@ -746,7 +767,9 @@ def getBundleLists
       'rev'               => Time.parse(bundle['revision']).strftime("%Y/%m/%d %H:%M:%S"),
       'updated'           => updated
     }
+
     index += 1
+
   end
   
   writeToLogFile("Cache File lists %d bundles. Last modified date: %s" % [$dataarray.size, $bundleCache['cache_date'].to_s])
@@ -757,6 +780,7 @@ def getBundleLists
     $params['dataarray'] = $dataarray
     updateDIALOG
   end
+  
   $params['isBusy'] = false
   $params['rescanBundleList'] = 0
   updateDIALOG
@@ -797,13 +821,13 @@ def buildLocalBundleList
   rescue
     writeToLogFile("Could not read TextMate's plist")
     $deletedCoreAndDisabledBundles['disabled'] = [ ]
-    $deletedCoreAndDisabledBundles['deleted'] = [ ]
+    $deletedCoreAndDisabledBundles['deleted']  = [ ]
   end
 
-  $deletedCoreAndDisabledBundles['deleted'] = [] if $deletedCoreAndDisabledBundles['deleted'].nil?
-  $deletedCoreAndDisabledBundles['disabled'] = [] if $deletedCoreAndDisabledBundles['disabled'].nil?
+  $deletedCoreAndDisabledBundles['deleted']  = [ ] if $deletedCoreAndDisabledBundles['deleted'].nil?
+  $deletedCoreAndDisabledBundles['disabled'] = [ ] if $deletedCoreAndDisabledBundles['disabled'].nil?
 
-  # get the creation date of TextMAte's binary to set it to each default bundle
+  # get the creation date of TextMate's binary to set it to each default bundle
   theCtimeOfDefaultBundle = File.new(TextMate::app_path).mtime.getutc
 
   # loop through all locally installed bundles
@@ -816,12 +840,7 @@ def buildLocalBundleList
         unless plist['isDelta']
           
           # get ctime of local bundle folder for comparison 
-          
-          if b =~ /Shared/
-            theCtime = theCtimeOfDefaultBundle
-          else
-            theCtime = File.new(b).ctime.getutc
-          end
+          theCtime = (b =~ /Shared/) ? theCtimeOfDefaultBundle : File.new(b).ctime.getutc
           
           # check for svn / git repos ; if so take the last commit date
           scm = (File.directory?("#{b}/.svn")) ? "  (svn)" : (File.directory?("#{b}/.git")) ? "  (git)" : ""
@@ -859,6 +878,7 @@ def buildLocalBundleList
           else
             $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled }
           end
+          
         end
       rescue
         writeToLogFile("Error while parsing “#{b}”: #{$!}")
@@ -933,35 +953,15 @@ def refreshUpdatedStatus
 
 end
 
-def joinThreads
-  begin
-    $x1.join
-    $x1.kill
-    $x0.join
-    $x0.kill
-    $x2.join
-    $x2.kill
-    $x3.join
-    $x3.kill
-    $x4.join
-    $x4.kill
-    $x10.join
-    $x10.kill
-    $x20.join
-    $x20.kill
-  rescue
-  end
-end
-
 def killThreads
   begin
-    $x1.kill
-    $x0.kill
-    $x2.kill
-    $x3.kill
-    $x4.kill
-    $x10.kill
-    $x20.kill
+    $initThread.kill    unless $initThread.nil?
+    $installThread.kill unless $installThread.nil?
+    $infoThread.kill    unless $infoThread.nil?
+    $refreshThread.kill unless $refreshThread.nil?
+    $reloadThread.kill  unless $reloadThread.nil?
+    $svnlogThread.kill  unless $svnlogThread.nil?
+    $svndataThread.kill unless $svndataThread.nil?
   rescue
   end
 end
@@ -980,12 +980,10 @@ def removeTempDir
   end
 end
 
-def writeToLogFile(text)
-  # f = File.open($logFile, "a")
-  $logFileHandle.puts Time.now.strftime("\n%m/%d/%Y %H:%M:%S") + "\tTextMate[GetBundles]"
+def writeToLogFile(text, printTime=true)
+  $logFileHandle.puts Time.now.strftime("\n%m/%d/%Y %H:%M:%S") + "\tTextMate[GetBundles]" if printTime
   $logFileHandle.puts text
   $logFileHandle.flush
-  # f.close
   $params['logPath'] = %x{cat '#{$logFile}'}
   updateDIALOG
 end
@@ -1010,7 +1008,7 @@ def executeShell(cmd, cmdToLog = false, outToLog = false)
     out << stdout.read
     err << stderr.read
   }
-  writeToLogFile(out) if (! out.empty? and outToLog)
+  writeToLogFile(out, false) if (!out.empty? && outToLog)
   unless err.empty?
     $errorcnt += 1
     writeToLogFile(err)
@@ -1022,115 +1020,113 @@ end
 def installBundles(dlg)
   
   doUpdateSupportFolder if $updateSupportFolder
-  
+
+  return if $close
+
   $listsLoaded = false
 
   cnt = 0 # counter for installed bundles
-  unless $close
 
-    $params['isBusy'] = true
-    $params['progressIsIndeterminate'] = true
-    $params['progressText'] = "Installing…"
-    updateDIALOG
+  $params['isBusy'] = true
+  $params['progressIsIndeterminate'] = true
+  $params['progressText'] = "Installing…"
+  updateDIALOG
 
-    items = dlg['returnArgument']
-    items.each do |item|
-      
-      break if $close
-      
-      $errorcnt = 0
-      
-      cnt += 1 # counts the bundle to install
+  items = dlg['returnArgument']
+  items.each do |item|
+    
+    break if $close
+    
+    $errorcnt = 0
 
-      # get the bundle data (from json file)
-      bundleData = $bundleCache['bundles'][item.to_i]
-      name = bundleData['name']
+    # get the bundle data (from cache file)
+    bundleData = $bundleCache['bundles'][item.to_i]
+    name = bundleData['name']
 
-      # check for disabled bundles
-      if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['disabled'].empty?
-        $justUndeletedCoreAndEnabledBundles << bundleData['uuid']
+    # check for versioning control to alert
+    if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['scm'].empty?
+      hint = ""
+      if $localBundles[bundleData['uuid']]['scm'] =~ /svn/
+        doc = REXML::Document.new(File.read("|svn info --xml '#{$localBundles[bundleData['uuid']]['path']}'"))
+        localUrl = doc.root.elements['//info/entry/url'].text
+        hint = "Please note that the svn checkout of “#{name}” was done by using an old URL.\nSee details in the “Info Window”." if localUrl =~ /macromates\.com/
       end
-
-      # check for deleted default bundle
-      if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['deleted'].empty?
-        $justUndeletedCoreAndEnabledBundles << bundleData['uuid']
-      end
-
-      # check for versionig control to alert
-      if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['scm'].empty?
-        hint = ""
-        if $localBundles[bundleData['uuid']]['scm'] =~ /svn/
-          doc = REXML::Document.new(File.read("|svn info --xml '#{$localBundles[bundleData['uuid']]['path']}'"))
-          localUrl = doc.root.elements['//info/entry/url'].text
-          writeToLogFile("New repository URL for “#{name}”:\nsvn co #{localUrl.gsub("http://macromates.com/svn/Bundles/trunk/","http://svn.textmate.org/trunk/")}")
-          hint = "Please note that the svn checkout of “#{name}” was done by using an old URL.\nSee details in the Logs." if localUrl =~ /macromates\.com/
-        end
-        next askDIALOG("It seems that the bundle “#{name}” has been already installed under versioning control #{$localBundles[bundleData['uuid']]['scm'].gsub(/ +/,'')}.","Please update that bundle manually or remove/rename it and use “GetBundles”.\n#{hint}", "OK", "")
-      end
-
-      source = nil
-      
-      # look for a method to install
-      $availableModi.each do |mode|
-        source = bundleData['source'].find { |m| m['method'] == mode }
-        (source.nil?) ? next : break
-      end
-      if source.nil?
-        writeTimedMessage("No method found to install “#{name}”", "Installation was skipped.", 1)
-        next
-      end
-      
-      path = source['url']
-      mode = source['method']
-      zip_path = source['zip_path']
-
-      break if $close
-
-      writeToLogFile("Installing “#{name}”")
-      if mode.nil? or path.nil?
-        writeTimedMessage("No valid source data found")
-        mode = "skip"
-      end
-
-      if mode != 'skip'
-        $params['progressText'] = "Installing “#{name}”"
-        $params['progressText'] += (items.size == 1) ? "…" : " (#{cnt} / #{items.size})…"
-      end
-      updateDIALOG
-
-      break if $close
-
-      case mode
-        when "svn" 
-          installSVN(name, path)
-        when "tar"
-          installTAR(name, path, zip_path)
-        when "zip"
-          installZIP(name, path, zip_path)
-        else
-          writeToLogFile("No method found to install “#{name}”")
-          $params['progressText'] = "Installing “#{name}” was skipped. Please check the Log."
-          updateDIALOG
-          sleep(1)
-          next
-      end
-      break if $close
-      if $errorcnt > 0
-        writeTimedMessage(nil,'Error while installing! Please check the Log.')
-        $errorcnt = 0
-        break
-      end
+      next askDIALOG("It seems that the bundle “#{name}” has been already installed under versioning control #{$localBundles[bundleData['uuid']]['scm'].gsub(/ +/,'')}.","Please update that bundle manually or remove/rename it and use “GetBundles” to install.\n#{hint}", "OK", "")
     end
     
-    $params['isBusy'] = false
-    $params['progressText'] = ""
+    cnt += 1 # counts the bundle to install
+
+    # check for disabled bundles
+    if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['disabled'].empty?
+      $justUndeletedCoreAndEnabledBundles << bundleData['uuid']
+    end
+
+    # check for deleted default bundle
+    if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['deleted'].empty?
+      $justUndeletedCoreAndEnabledBundles << bundleData['uuid']
+    end
+
+    source = nil
+    
+    # look for a method to install
+    $availableModi.each do |mode|
+      source = bundleData['source'].find { |m| m['method'] == mode }
+      (source.nil?) ? next : break
+    end
+    if source.nil?
+      writeTimedMessage("No method found to install “#{name}”", "Installation was skipped.", 1)
+      next
+    end
+    
+    path = source['url']
+    mode = source['method']
+    zip_path = source['zip_path']
+
+    break if $close
+
+    writeToLogFile("Installing “#{name}”")
+    if mode.nil? or path.nil?
+      writeTimedMessage("No valid source data found")
+      mode = "skip"
+    end
+
+    if mode != 'skip'
+      $params['progressText'] = "Installing “#{name}”"
+      $params['progressText'] += (items.size == 1) ? "…" : " (#{cnt} / #{items.size})…"
+    end
     updateDIALOG
 
-    removeTempDir
-    refreshUpdatedStatus
-    
+    break if $close
+
+    case mode
+      when "svn" 
+        installSVN(name, path)
+      when "tar"
+        installTAR(name, path, zip_path)
+      when "zip"
+        installZIP(name, path, zip_path)
+      else
+        writeToLogFile("No method found to install “#{name}”")
+        $params['progressText'] = "Installing “#{name}” was skipped. Please check the Log."
+        updateDIALOG
+        sleep(1)
+        next
+    end
+    break if $close
+    if $errorcnt > 0
+      writeTimedMessage(nil,'Error while installing! Please check the Log.')
+      $errorcnt = 0
+      break
+    end
   end
   
+  $params['isBusy'] = false
+  $params['progressText'] = ""
+  updateDIALOG
+
+  removeTempDir
+  refreshUpdatedStatus if cnt > 0
+
   $listsLoaded = true
   
 end
@@ -1171,6 +1167,7 @@ fi
           removeTempDir
           return
         end
+
       rescue
         $errorcnt += 1
         writeToLogFile("Error: #{$!}")
@@ -1225,6 +1222,7 @@ fi
           removeTempDir
           return
         end
+
       rescue
         $errorcnt += 1
         writeToLogFile("Error: #{$!}")
@@ -1246,36 +1244,39 @@ end
 
 def installSVN(name, path)
 
+  if $SVN.empty?
+    $errorcnt += 1
+    writeToLogFile("Could not install “#{name}”.")
+    noSVNclientFound
+    return
+  end
+
   removeTempDir
   FileUtils.mkdir_p $tempDir
 
-  if $SVN.length > 0
-    begin
-      GBTimeout::timeout(60) do
-        executeShell(%Q{
+  begin
+    GBTimeout::timeout(60) do
+      executeShell(%Q{
 export LC_CTYPE=en_US.UTF-8
 cd '#{$tempDir}'
 '#{$SVN}' export '#{path}' '#{name}.tmbundle'
-        }, true, true)
-        if $errorcnt > 0
-          removeTempDir
-          return
-        end
+      }, true, true)
+      if $errorcnt > 0
+        removeTempDir
+        return
       end
-    rescue GBTimeout::Error
-      $errorcnt += 1
-      removeTempDir
-      writeToLogFile("Timeout error while installing “#{name}”") unless $close
-      return
     end
-
-    return if $close
-
-    # install bundle if everything went fine
-    executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
-  else          #### no svn client found
-    noSVNclientFound
+  rescue GBTimeout::Error
+    $errorcnt += 1
+    removeTempDir
+    writeToLogFile("Timeout error while installing “#{name}”") unless $close
+    return
   end
+
+  return if $close
+
+  # install bundle if everything went fine
+  executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
 
 end
 
@@ -1321,19 +1322,11 @@ Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
 
   end
 
-  writeToLogFile("TextMate's “Support Folder” (#{$supportFolderPristine}) will be updated if you install a bundle automatically.") if $updateSupportFolder
+  writeToLogFile("TextMate's “Support Folder” (#{$supportFolderPristine}) will be updated before you install a bundle automatically.") if $updateSupportFolder
 
 end
 
 def doUpdateSupportFolder
-
-  folderCreated = false
-
-  path = $bundleCache['SupportFolder']['url']
-  if path.nil?
-    writeTimedMessage("No Support Folder URL found in cache file")
-    return
-  end
 
   if $SVN.empty?
     $errorcnt += 1
@@ -1342,9 +1335,18 @@ def doUpdateSupportFolder
     return
   end
 
+  path = $bundleCache['SupportFolder']['url']
+  if path.nil?
+    writeTimedMessage("No Support Folder URL found in cache file")
+    return
+  end
+
+  folderCreated = false
+
   if File.directory?("#{$supportFolderPristine}/.svn") 
     doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolderPristine}'"))
     supportURL = doc.root.elements['//info/entry/url'].text
+
     if supportURL =~ /^http:\/\/macromates/  # relocate repo if old url
       executeShell(%Q{
 cd '/Library/Application Support/TextMate/Support'
@@ -1357,16 +1359,19 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
         return
       end
     end
+
   else
+
     begin
       FileUtils.rm_rf($supportFolderPristine)
       FileUtils.mkdir_p($supportFolderPristine)
-      # writeTimedMessage("Error while updating the “Support Folder”. Please try it again once, otherwise check the folder.")
     rescue
       writeTimedMessage("Error while creating “Support Folder”:\n#{$!}")
       return
     end
+
     folderCreated = true
+
   end
   
   # check for /Lib/AS/TM
@@ -1389,20 +1394,23 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
   # do a svn co/up
   begin
     GBTimeout::timeout(60) do
-      if File.directory?($supportFolderPristine) and ! folderCreated
+      if File.directory?($supportFolderPristine) && folderCreated
+        executeShell(%Q{
+export LC_CTYPE=en_US.UTF-8;
+cd '#{$supportFolderPristine.gsub('/Support','')}';
+'#{$SVN}' co '#{path}'
+        }, true, true)
+        return if $errorcnt > 0
+
+      else
+
         executeShell(%Q{
 export LC_CTYPE=en_US.UTF-8;
 cd '#{$supportFolderPristine}';
 '#{$SVN}' up
         }, true, true)
         return if $errorcnt > 0
-      else
-        executeShell(%Q{
-export LC_CTYPE=en_US.UTF-8;
-cd '#{$supportFolderPristine.gsub('/Support','')}';
-'#{$SVN}' co --no-auth-cache --non-interactive '#{path}'
-        }, true, true)
-        return if $errorcnt > 0
+
       end
     end
   rescue GBTimeout::Error
@@ -1422,22 +1430,27 @@ cd '#{$supportFolderPristine.gsub('/Support','')}';
 end
 
 def filterBundleList
-  $params['isBusy'] = true
+  
+  $params['isBusy']           = true
   $params['bundleSelection']  = $dialogResult['bundleSelection']
   $params['progressText']     = "Filtering bundle list…"
   updateDIALOG
+  
   b = case $dialogResult['bundleSelection']
     when "Review":      $dataarray.select {|v| v['repo'] == 'R'}
     when "Official":    $dataarray.select {|v| v['repo'] == 'O'}
     when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^O|R$/}
     else $dataarray
   end
+  
   $lastBundleFilterSelection = $dialogResult['bundleSelection']
-  $params['numberOfBundles'] = "%d in total found" % b.size
-  $params['dataarray'] = b
-  $params['progressIsIndeterminate'] = true
-  $params['isBusy'] = false
+  
+  $params['numberOfBundles']          = "#{b.size} in total found"
+  $params['dataarray']                = b
+  $params['progressIsIndeterminate']  = true
+  $params['isBusy']                   = false
   updateDIALOG
+  
 end
 
 def checkUniversalAccess
@@ -1469,30 +1482,26 @@ $params = {
 }
 
 $firstrun = true
-$logFileHandle = File.open($logFile, "a")
 
 initLogFile
+$logFileHandle = File.open($logFile, "a")
+
 orderOutDIALOG
 checkUniversalAccess
 
 # init DIALOG
-$x1 = Thread.new do
+$initThread = Thread.new do
   begin
     getBundleLists
     checkForSupportFolderUpdate
     $firstrun = false
   rescue
-    writeTimedMessage("Error while initialization:\n#{$!}", "An error occurred. Please check the Log!")
+    writeTimedMessage("Error while initialization:\n#{$!}")
   end
 end
 
-$SVN = ""
-unless %x{type -p svn}.strip!().nil?
-  $SVN = "svn"
-end
-if ENV.has_key?('TM_SVN')
-  $SVN = ENV['TM_SVN']
-end
+# set svn client
+$SVN = ENV['TM_SVN'] || ((%x{type -p svn}.strip!.nil?) ? "" : "svn")
 
 # main loop
 while $run do
@@ -1508,15 +1517,15 @@ while $run do
         $params['isBusy'] = false
         $firstrun = false
         updateDIALOG
-      when 'infoButtonIsPressed':   $x3 = Thread.new { infoDIALOG($dialogResult) }
+      when 'infoButtonIsPressed':   $infoThread = Thread.new { infoDIALOG($dialogResult) }
       else # install bundle(s)
         if $params['isBusy'] == false
           if $dialogResult['returnArgument'].size > 10
             if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
-              $x2 = Thread.new { installBundles($dialogResult) }
+              $installThread = Thread.new { installBundles($dialogResult) }
             end
           else
-            $x2 = Thread.new { installBundles($dialogResult) }
+            $installThread = Thread.new { installBundles($dialogResult) }
           end
         else
           writeToLogFile("User interaction was ignored. GetBundles is busy…\n#{$params['progressText']}")
@@ -1524,18 +1533,18 @@ while $run do
       end
   elsif $dialogResult['openBundleEditor'] == 1
     %x{osascript -e 'tell app "System Events" to keystroke "b" using {control down, option down, command down}' }
-    $params['openBundleEditor'] = 0
+    $params['openBundleEditor'] = 0 # hide checkmark in menu
     updateDIALOG
 
   elsif $dialogResult['refreshBundleList'] == 1
-    $x4 = Thread.new do
+    $refreshThread = Thread.new do
       refreshUpdatedStatus
-      $params['refreshBundleList'] = 0
+      $params['refreshBundleList'] = 0 # hide checkmark in menu
       updateDIALOG
     end
 
   elsif $dialogResult['rescanBundleList'] == 1
-    $x4 = Thread.new do
+    $reloadThread = Thread.new do
       begin
         getBundleLists
         checkForSupportFolderUpdate
@@ -1546,16 +1555,16 @@ while $run do
       end
     end
 
-  elsif $dialogResult.has_key?('bundleSelection') and $lastBundleFilterSelection != $dialogResult['bundleSelection']
+  elsif $dialogResult['bundleSelection'] && $lastBundleFilterSelection != $dialogResult['bundleSelection']
     filterBundleList
 
-  elsif $dialogResult.has_key?('supportFolderCheck')
+  elsif $dialogResult['supportFolderCheck']
     if $params['isBusy'] == false
       if $dialogResult['supportFolderCheck'] == 1
         doUpdateSupportFolder
         checkForSupportFolderUpdate
       end
-      $params['supportFolderCheck'] = 0
+      $params['supportFolderCheck'] = 0 # hide checkmark in menu
       updateDIALOG
     else
       writeToLogFile("User interaction was ignored. GetBundles is busy…\n#{$params['progressText']}")
@@ -1569,7 +1578,6 @@ while $run do
       $params['progressIsIndeterminate'] = true
       updateDIALOG
       begin
-        joinThreads
         killThreads
       rescue
         break

@@ -8,8 +8,6 @@ require "fileutils"
 require "open-uri"
 require "yaml"
 require 'net/http'
-require 'uri'
-require 'cgi'
 require "open3"
 require "time"
 require "rexml/document"
@@ -475,7 +473,7 @@ osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
       # check for versionig control to alert
       relocateHint = ""
       if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
-        doc = REXML::Document.new(File.read("|svn info --xml '#{$localBundles[bundle['uuid']]['path']}'"))
+        doc = REXML::Document.new(File.read("|'#{$SVN}' info --xml '#{$localBundles[bundle['uuid']]['path']}'"))
         localUrl = doc.root.elements['//info/entry/url'].text
         if localUrl =~ /macromates\.com/
           relocateHint << <<-HINT
@@ -831,7 +829,9 @@ def buildLocalBundleList
   theCtimeOfDefaultBundle = File.new(TextMate::app_path).mtime.getutc
 
   # loop through all locally installed bundles
+
   local_bundle_paths.each do |path|
+    next unless File.directory?(path)
     break if $close
     Dir["#{path}/*.tmbundle"].each do |b|
       begin
@@ -846,7 +846,7 @@ def buildLocalBundleList
           scm = (File.directory?("#{b}/.svn")) ? "  (svn)" : (File.directory?("#{b}/.git")) ? "  (git)" : ""
           if scm =~ /svn/
             begin
-              theCtime = Time.parse(File.read("|svn info '#{b}' | tail -n 2}").chomp).getutc
+              theCtime = Time.parse(%x{head -n10 '#{b}/.svn/entries' | tail -n1}).getutc
             rescue
               writeToLogFile("svn error for “#{b}”: #{$!}")
               scm += " probably not working"
@@ -885,7 +885,7 @@ def buildLocalBundleList
       end
     end
   end
-  
+
   # clean array of just installed bundles
   $justUndeletedCoreAndEnabledBundles = [ ]
   
@@ -1047,7 +1047,7 @@ def installBundles(dlg)
     if $localBundles.has_key?(bundleData['uuid']) && ! $localBundles[bundleData['uuid']]['scm'].empty?
       hint = ""
       if $localBundles[bundleData['uuid']]['scm'] =~ /svn/
-        doc = REXML::Document.new(File.read("|svn info --xml '#{$localBundles[bundleData['uuid']]['path']}'"))
+        doc = REXML::Document.new(File.read("|'#{$SVN}' info --xml '#{$localBundles[bundleData['uuid']]['path']}'"))
         localUrl = doc.root.elements['//info/entry/url'].text
         hint = "Please note that the svn checkout of “#{name}” was done by using an old URL.\nSee details in the “Info Window”." if localUrl =~ /macromates\.com/
       end
@@ -1301,8 +1301,7 @@ Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
     
     # get svn info and compare last modified date
     begin
-      doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolderPristine}'"))
-      localRev = Time.parse(doc.root.elements['//info/entry/commit/date'].text).getutc
+      localRev = Time.parse(%x{head -n10 '#{$supportFolderPristine}/.svn/entries' | tail -n1}).getutc
     rescue
       writeTimedMessage("Error while getting 'svn info' data of the “Support Folder”:\n#{$!}")
       return
@@ -1311,7 +1310,7 @@ Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
     # for safety reasons check always http://svn.textmate.org/trunk/Support/
     begin
       GBTimeout::timeout($timeout) do
-        doc = REXML::Document.new(File.read("|svn info --xml #{$bundleCache['SupportFolder']['url']}"))
+        doc = REXML::Document.new(File.read("|'#{$SVN}' info --xml #{$bundleCache['SupportFolder']['url']}"))
         trunkRev = Time.parse(doc.root.elements['//info/entry/commit/date'].text).getutc
         $updateSupportFolder = (trunkRev > localRev) ? true : false
       end
@@ -1344,7 +1343,7 @@ def doUpdateSupportFolder
   folderCreated = false
 
   if File.directory?("#{$supportFolderPristine}/.svn") 
-    doc = REXML::Document.new(File.read("|svn info --xml '#{$supportFolderPristine}'"))
+    doc = REXML::Document.new(File.read("|'#{$SVN}' info --xml '#{$supportFolderPristine}'"))
     supportURL = doc.root.elements['//info/entry/url'].text
 
     if supportURL =~ /^http:\/\/macromates/  # relocate repo if old url
@@ -1415,7 +1414,7 @@ cd '#{$supportFolderPristine}';
     end
   rescue GBTimeout::Error
     $errorcnt += 1
-    FileUtils.rm_rf($supportFolderPristine)
+    FileUtils.rm_rf($supportFolderPristine) # for safety reasons to be able to reinit it
     writeTimedMessage("Timeout while updating TextMate's “Support Folder”. Please check the folder ‘#{$supportFolder}’!\n If problems occur remove ‘#{$supportFolder}’ manully and retry it.")
   end
   

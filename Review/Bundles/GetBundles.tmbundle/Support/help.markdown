@@ -1,8 +1,8 @@
 ---
 
-<center><font color=red><big><big>Under Constructions</big></big></font></center>
+<center><font color=red><big><big>Still Under Constructions</big></big></font></center>
 
-<center><big>"GetBundles" provides an easy to use interface to install available TextMate bundles which are hosted on textmate.org's svn repositories and on github.com.</big></center>
+<center><big>"GetBundles" provides an easy to use interface to install available TextMate bundles which are hosted on textmate.org's svn repositories, on github.com, and on private sites and are collected by the “Bundle Server” running at textmate.org.<br>Additionally it updates TextMate's “Support Folder” automatically if needed.</big></center>
 
 # Requirements
 The computer has to be connected to the internet.
@@ -80,6 +80,8 @@ In order to close the "GetBundles" dialog simply hit the <button>&nbsp;&nbsp;&nb
 Each running task, except for Update “Support Folder”, can be cancelled by hitting <button>&#x238B;</button>.
 
 If you hold down the <button>&#x2325;</button> key while installing a bundle the bundle will be opened as **empty** project and will **not** installed.
+
+*Remark:* Please note that if you done any modifications to an already existing bundle these modifications are still valid after an update of that bundle. If you encounter a problem please check for user-defined modifications first.
 
 <pre>
 <small><i>Hint</i> The underlying script is written for Ruby 1.8.1 and up and has been tested on Mac OSX 10.4.x and 10.5.x. The script will probably not run under Ruby 1.9. If Ruby 1.9 is officially released the script will be updated as necessary.
@@ -241,7 +243,7 @@ If TextMate should always use the latest updates done by GetBundles you can simp
 
 ![](images/img_message.png)
 
-All activities and warnings will be shown in this message field. To cancel the current task, it is possible to click the spinning wheel or hit <button>&#x238B;</button>. While installing a bundle, it is possible to cancel the process as long as the script has not yet physically installed the bundle.
+All activities, errors and warnings will be shown in this message field. To cancel the current task, it is possible to click into the spinning wheel or hit <button>&#x238B;</button>. While installing a bundle, it is possible to cancel the process as long as TextMateGetBundles has not yet physically installed the bundle.
 
 ### Show Help ###
 
@@ -300,6 +302,10 @@ Both variables can be set in TextMate's Preferences, under the item "Advanced".
 
 * The description in the list differs to that one in the Info Window. Why?
 > There is a convention to "info.plist"'s description key: In the dialog everything before the HTML tag &lt;hr&gt; will be displayed as short description (without any other HTML tags). If the description contains the HTML tag &lt;hr&gt; everything after that tag will be shown as long description.
+
+* “GetBundles” updates the “Support Folder” even if it is up-to-date. Why?
+> This only could happen if you install a bundle just after the bundle list appeared. The internal routine to check for an update runs as background process.
+
 
 # Appendix #
 

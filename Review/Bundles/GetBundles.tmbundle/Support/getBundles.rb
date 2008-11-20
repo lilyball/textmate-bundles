@@ -387,162 +387,156 @@ osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
   
   elsif mode == 'svn'
   
-    if $SVN.length > 0
+    if $SVN.empty?
+      $errorcnt += 1
+      writeToLogFile("Could not install “#{name}”.")
+      noSVNclientFound
+      return
+    end
+    
+    data = nil
+    svnlogs = nil
+    svnsource = bundle['source'].find { |m| m['method'] == "svn" }['url']
 
-      data = nil
-      svnlogs = nil
-
-      $svnlogThread = Thread.new($SVN, bundle['source'].first['url']) { %x{'#{$SVN}' log --limit 5 #{bundle['source'].first['url']}} }
-      $svndataThread = Thread.new($SVN, bundle['source'].first['url']) { %x{#{$SVN} info #{bundle['source'].first['url']}} }
-      begin
-        GBTimeout::timeout($timeout) do
-          $svnlogThread.join
-          $svndataThread.join
-        end
-      rescue GBTimeout::Error
-        begin
-          $svnlogThread.kill
-        rescue
-        end
-        begin
-          $svndataThread.kill
-        rescue
-        end
-        writeToLogFile("Timeout error while fetching information") unless $close
-        $params['isBusy'] = false
-        updateDIALOG
-      rescue
-        $params['isBusy'] = false
-        updateDIALOG
-        writeToLogFile("Error while fetching information:\n#{$!}") unless $close
-        return
-      end
-      
-      svnlogs = $svnlogThread.value
-      data    = $svndataThread.value
-
-      if data.nil?
-        writeTimedMessage("Error while fetching svn information for “#{bundle['name']}”") unless $close
-        return
-      end
-      
-      data.each_line do |l|
-        info[l.split(': ').first] = l.split(': ').last.chomp
-      end
-
-      return if $close
-
-      svnsource = bundle['source'].find { |m| m['method'] == "svn" }['url']
-      
+    $svnlogThread = Thread.new($SVN, bundle['source'].first['url']) { %x{'#{$SVN}' log --limit 5 #{bundle['source'].first['url']}} }
+    $svndataThread = Thread.new($SVN, bundle['source'].first['url']) { %x{#{$SVN} info #{bundle['source'].first['url']}} }
+    $svnInfoHostThread = Thread.new(svnsource) do
       # get info.plist data
       begin
-        GBTimeout::timeout($timeout) do
-          begin
-            plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{svnsource}/info.plist")))
-          rescue
-            begin
-              plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse(URI.escape("#{svnsource}/info.plist"))))
-            rescue
-              plist = OSX::PropertyList::load("{description='?';}")
-            end
-          end
-        end
-      rescue GBTimeout::Error
-        $params['isBusy'] = false
-        updateDIALOG
-        removeTempDir
-        writeToLogFile("Timeout error while fetching the info.plist information") unless $close
-        return
+        plist = OSX::PropertyList::load(%x{curl -L "#{svnsource}/info.plist"})
+      rescue
+        plist = nil
       end
-      
-      return if $close
-      
-      plist['name']               = bundle['name'] if plist['name'].nil?
-      plist['description']        = "<font color=silver><small>no data available</small></font>" if plist['description'].nil?
-      plist['contactName']        = "" if plist['contactName'].nil?
-      plist['contactEmailRot13']  = "" if plist['contactEmailRot13'].nil?
-      contact = ""
-      contact = case
-        when plist['contactName'].empty? && plist['contactEmailRot13'].empty?:  "<font color=#666666><small>no data available</small></font>"
-        when plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}</a>"
-        when !plist['contactName'].empty? && plist['contactEmailRot13'].empty?: plist['contactName']
-        when !plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a>" 
+    end
+
+    begin
+      GBTimeout::timeout($timeout) do
+        $svnlogThread.join
+        $svndataThread.join
+        $svnInfoHostThread.join
       end
-      info['Last Changed Author'] = $nicknames[info['Last Changed Author']] if ! $nicknames.nil? and $nicknames.has_key?(info['Last Changed Author'])
-      
-      # check for versionig control to alert
-      relocateHint = ""
-      if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
-        doc = REXML::Document.new(File.read("|'#{$SVN}' info --xml '#{$localBundles[bundle['uuid']]['path']}'"))
-        localUrl = doc.root.elements['//info/entry/url'].text
-        if localUrl =~ /macromates\.com/
-          relocateHint << <<-HINT
-        <pre>cd '#{$localBundles[bundle['uuid']]['path']}'
+    rescue GBTimeout::Error
+      begin
+        $svnInfoHostThread.kill
+      rescue
+      end
+      begin
+        $svnlogThread.kill
+      rescue
+      end
+      begin
+        $svndataThread.kill
+      rescue
+      end
+      writeToLogFile("Timeout error while fetching information") unless $close
+      $params['isBusy'] = false
+      updateDIALOG
+    rescue
+      $params['isBusy'] = false
+      updateDIALOG
+      writeToLogFile("Error while fetching information:\n#{$!}") unless $close
+      return
+    end
+    
+    svnlogs = $svnlogThread.value
+    data    = $svndataThread.value
+    plist   = $svnInfoHostThread.value
+
+    if data.nil? || plist.nil?
+      writeTimedMessage("Could not fetch svn information entirely for “#{bundle['name']}”") unless $close
+      return
+    end
+
+    return if $close
+
+    data.each_line do |l|
+      info[l.split(': ').first] = l.split(': ').last.chomp
+    end
+
+    return if $close
+    
+    plist['name']               = bundle['name'] if plist['name'].nil?
+    plist['description']        = "<font color=silver><small>no data available</small></font>" if plist['description'].nil?
+    plist['contactName']        = "" if plist['contactName'].nil?
+    plist['contactEmailRot13']  = "" if plist['contactEmailRot13'].nil?
+    contact = ""
+    contact = case
+      when plist['contactName'].empty? && plist['contactEmailRot13'].empty?:  "<font color=#666666><small>no data available</small></font>"
+      when plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}</a>"
+      when !plist['contactName'].empty? && plist['contactEmailRot13'].empty?: plist['contactName']
+      when !plist['contactName'].empty? && !plist['contactEmailRot13'].empty?: "<a href='mailto:#{plist['contactEmailRot13'].tr("A-Ma-mN-Zn-z","N-Zn-zA-Ma-m")}'>#{plist['contactName']}</a>" 
+    end
+    info['Last Changed Author'] = $nicknames[info['Last Changed Author']] if ! $nicknames.nil? and $nicknames.has_key?(info['Last Changed Author'])
+    
+    # check for versionig control to alert
+    relocateHint = ""
+    if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
+      localUrl = %x{head -n5 '#{$localBundles[bundle['uuid']]['path']}/.svn/entries' | tail -n1}
+      if localUrl =~ /macromates\.com/
+        relocateHint << <<-HINT
+      <pre>cd '#{$localBundles[bundle['uuid']]['path']}'
 svn switch --relocate #{localUrl} #{localUrl.gsub("http://macromates.com/svn/Bundles/trunk/","http://svn.textmate.org/trunk/")}
 </pre>
-        HINT
-        end
+      HINT
       end
-      
-      
-      File.open("#{$tempDir}/info.html", "w") do |io|
-        io << <<-HTML11
-          <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
-          <head>
-          <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-          </head>
-          <body style='font-family:Lucida Grande'>
-        HTML11
-        if plist['description'].match(/<hr[^>]*\/>/)
-          io << "#{plist['description'].gsub(/.*?<hr[^>]*\/>/,'')}<br /><br />"
-        else
-          io << "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
-          io << "#{plist['description']}<br /><br />"
-        end
-        if Time.parse(info['Last Changed Date']).getutc > Time.parse(bundle['revision']).getutc
-          t = "This bundle was updated meanwhile."
-          io << "<p align='right'><small><font color='#darkgreen'>#{t}</font></small></p>"
-        end
+    end
+    
+    
+    File.open("#{$tempDir}/info.html", "w") do |io|
+      io << <<-HTML11
+        <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+        <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        </head>
+        <body style='font-family:Lucida Grande'>
+      HTML11
+      if plist['description'].match(/<hr[^>]*\/>/)
+        io << "#{plist['description'].gsub(/.*?<hr[^>]*\/>/,'')}<br /><br />"
+      else
+        io << "<font color='blue' size=12pt>#{plist['name']}</font><br /><br />"
+        io << "#{plist['description']}<br /><br />"
+      end
+      if Time.parse(info['Last Changed Date']).getutc > Time.parse(bundle['revision']).getutc
+        t = "This bundle was updated meanwhile."
+        io << "<p align='right'><small><font color='#darkgreen'>#{t}</font></small></p>"
+      end
 
-        io << <<-HTML12
-          <span style="background-color:#EEEEEE">
-          <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
-          <b>Contact Name:</b><br />&nbsp;#{contact}<br />
-          <b>Last Changed Date:</b><br />&nbsp;#{Time.parse(info['Last Changed Date']).getutc.to_s}<br />
-          <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
-          <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
-          <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
-          <b>UUID:</b><br />&nbsp;#{plist['uuid']}<br />
-          <b>svn checkout</b><br /><pre>export LC_CTYPE=en_US.UTF-8
+      io << <<-HTML12
+        <span style="background-color:#EEEEEE">
+        <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
+        <b>Contact Name:</b><br />&nbsp;#{contact}<br />
+        <b>Last Changed Date:</b><br />&nbsp;#{Time.parse(info['Last Changed Date']).getutc.to_s}<br />
+        <b>Last Changed Author:</b><br />&nbsp;#{info['Last Changed Author']}<br />
+        <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
+        <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
+        <b>UUID:</b><br />&nbsp;#{plist['uuid']}<br />
+        <b>svn checkout</b><br /><pre>export LC_CTYPE=en_US.UTF-8
 mkdir -p ~/Library/Application\\ Support/TextMate/Bundles
 cd ~/Library/Application\\ Support/TextMate/Bundles
 svn co #{svnsource}
 osascript -e 'tell app "TextMate" to reload bundles'
 </pre>
-         HTML12
+       HTML12
 
-        if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
-          io << <<-HTML121
-          <b>svn update</b><br /><pre>export LC_CTYPE=en_US.UTF-8
+      if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
+        io << <<-HTML121
+        <b>svn update</b><br /><pre>export LC_CTYPE=en_US.UTF-8
 cd '#{$localBundles[bundle['uuid']]['path']}'
 svn up
 osascript -e 'tell app "TextMate" to reload bundles'
 </pre>
-          HTML121
-        end
-        io << "<br /></span>"
-        unless relocateHint.empty?
-          io << <<-HTML112
-          <br /><b><span style="color:red">Hint</span></b> The svn URL points to an old repository. To relocate it please use the following command:<br />
-          #{relocateHint}
-          HTML112
-        end
-
-        io << "<br /><br /><b>Last svn log entries:</b><br /><pre>#{svnlogs}</pre>" unless svnlogs.nil?
-        io <<  "</body></html>"
+        HTML121
       end
-    else          #### no svn client found
-      noSVNclientFound
+      io << "<br /></span>"
+      unless relocateHint.empty?
+        io << <<-HTML112
+        <br /><b><span style="color:red">Hint</span></b> The svn URL points to an old repository. To relocate it please use the following command:<br />
+        #{relocateHint}
+        HTML112
+      end
+
+      io << "<br /><br /><b>Last svn log entries:</b><br /><pre>#{svnlogs}</pre>" unless svnlogs.nil?
+      io <<  "</body></html>"
     end
 
   else
@@ -648,15 +642,17 @@ def getBundleLists
   $dataarray  = [ ]
   break if $close
   
-  $params = {
-    'isBusy'                  => true,
-    'bundleSelection'         => 'All',
-    'progressText'            => 'Connecting Bundle Server…',
-    'progressIsIndeterminate' => true,
-    'progressValue'           => 0,
-    'dataarray'               => [],
-  }
-  updateDIALOG
+  unless $firstrun
+    $params = {
+      'isBusy'                  => true,
+      'bundleSelection'         => 'All',
+      'progressText'            => 'Connecting Bundle Server…',
+      'progressIsIndeterminate' => true,
+      'progressValue'           => 0,
+      'dataarray'               => [],
+    }
+    updateDIALOG
+  end
   
   begin
     GBTimeout::timeout($timeout) do
@@ -699,8 +695,14 @@ def getBundleLists
     return
   end
   
+  # sort the cache first against name then against host
+  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'] <=> b['status'] : n}
+
   # wait for parsing local bundles
   begin
+    $params['isBusy'] = true
+    $params['progressText'] = "Parsing local bundles…"
+    updateDIALOG
     GBTimeout::timeout($timeout) {locBundlesThread.join}
   rescue
     writeToLogFile("Timeout while parsing local bundles") unless $close
@@ -710,9 +712,6 @@ def getBundleLists
     end
   end
   
-  # sort the cache first against name then against host
-  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'] <=> b['status'] : n}
-
   # build $dataarray for NIB
   index = 0
   $bundleCache['bundles'].each do |bundle|
@@ -1477,7 +1476,7 @@ $params = {
   'bundleSelection'         => 'All',
   'openBundleEditor'        => 0,
   'supportFolderCheck'      => 0,
-  'progressText'            => "Parsing local bundles…"
+  'progressText'            => "Connecting Bundle Server…"
 }
 
 $firstrun = true

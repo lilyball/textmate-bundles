@@ -71,7 +71,7 @@ For installing a bundle by downloading it as zip/tar archive the script needs `u
 # General Operating Mode
 After invoking "GetBundles" the script downloads the current bundle cache file from TextMate's bundle server and checks all locally installed bundles.
 
-Once you have the list of bundles, you can select one or more and hit <button>Install Bundles</button>, <button>&#x21A9;</button>, or double-click at the bundle to install it/them . After a successful installation, TextMate will open the “Bundle Editor” and GetBundles will refresh the installation status in the table. The installation can be cancelled by hitting <button>&#x238B;</button>, as long as TextMate has not already physically installed that bundle (GetBundles uses a temporary folder first). If a given bundle is already installed on your system by using a versioning control system (svn/git), the script will only inform you about it. To install this bundle rename or delete it and install it by using GetBundles or use the versioning control system (see also for commands in the “Info Window”).
+Once you have the list of bundles, you can select one or more and hit <button>Install Bundles</button>, <button>&#x21A9;</button>, or double-click at the bundle to install it/them . After a successful installation, TextMate will open the “Bundle Editor” and GetBundles will refresh the installation status in the table. The installation can be cancelled by hitting <button>&#x238B;</button>, as long as TextMate has not already physically installed that bundle (GetBundles uses a temporary folder first). If a given bundle is already installed on your system by using a versioning control system (svn/git), the script will only inform you about it. To install this bundle rename or delete it and install it by using GetBundles or use the versioning control system (svn/git).
 
 "GetBundles" always checks before an installation whether there is an update of TextMate's “Support Folder”. If so it will update it first. This update can also be invoked directly by executing `Update “Support Folder”`in the "Gear Menu". See also [here](#sect_3.1.3.5).
 
@@ -168,9 +168,6 @@ Furthermore there are some shortcuts available for the search field:
 ### Get Bundle Info (“Info Window”)###
 
 <button>&#x2318;I</button> <img valign=middle src="images/img_info.png"> Opens a new window containing available details about the selected bundle. The data will be downloaded from the repository meaning they aren't cached.
-In addition the “Info Window” lists shell commands to checkout resp. update bundle using svn resp. git. 
-
-For a private hosted TextMate bundle it opens the site in the default web browser.
 
 ### Gear Action Menu ###
 

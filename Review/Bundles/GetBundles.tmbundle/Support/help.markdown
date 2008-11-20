@@ -247,27 +247,6 @@ All activities and warnings will be shown in this message field. To cancel the c
 
 <img valign=middle src="images/img_help.png"> Opens that "Help" window.
 
-### Installation
-
-#### Target Folder ####
-
-By using this pull down menu you can specify the installation folder for all selected bundles.
-
-<table style="margin-left:1cm">
-  <tr><td>Users Lib Pristine</td><td>&nbsp;</td><td><a onclick='TextMate.system("open \"$HOME/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
-  <tr><td>Users Lib Bundles</td><td>&nbsp;</td><td><a onclick='TextMate.system("open \"$HOME/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Bundles</a></td></tr>
-  <tr><td>Lib Bundles</td><td>&nbsp;</td><td><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Bundles</a></td></tr>
-  <tr><td>App Bundles</td><td>&nbsp;</td><td><span style="color:silver;">PATH_TO_TextMate.app</span><a onclick='TextMate.system("open \"`locate TextMate.app/Contents/SharedSupport/Bundle | head -n1`\"",null);' style="cursor:pointer">/Contents/SharedSupport/Bundles</a></td></tr>
-  <tr><td>Users Desktop</td><td>&nbsp;</td><td><a onclick='TextMate.system("open \"$HOME/Desktop\"",null);' style="cursor:pointer">~/Desktop</a></td></tr>
-  <tr><td>Users Downloads</td><td>&nbsp;</td><td><a onclick='TextMate.system("open \"$HOME/Downloads\"",null);' style="cursor:pointer">~/Downloads</a></td></tr>
-</table>
-
-The default installation folder is **Users Lib Pristine**. This is the same folder that will be chosen if you install a bundle by double-clicking a downloaded bundle. If you want to use `svn` or `git` afterwards with a bundle, it is recommended that you choose **Users Lib Bundles**. If you want the installed bundles to be available for all users, choose **Lib Bundles**.
-
-*Note:* **App Bundles** as installation folder should only be used in exceptional cases!
-
-For testing purposes, you can choose **Users Desktop** or **Users Downloads** as the installation folder. Bundles which are downloaded here will **not** be installed. 
-
 # Log Drawer #
 
 ![](images/img_act_log.png)

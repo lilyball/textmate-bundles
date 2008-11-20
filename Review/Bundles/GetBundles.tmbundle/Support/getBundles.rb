@@ -45,7 +45,14 @@ $tempDir          = "/tmp/TM_GetBundlesTEMP"
 # global timeout in seconds
 $timeout          = 45
 # global thread vars
-$initThread=$installThread=$infoThread=$refreshThread=$reloadThread=$svnlogThread=$svndataThread = nil
+$initThread       = nil
+$installThread    = nil
+$infoThread       = nil
+$refreshThread    = nil
+$reloadThread     = nil
+$svnlogThread     = nil
+$svndataThread    = nil
+$locBundlesThread = nil
 # bundle data hash containing data.json.gz 
 $bundleCache      = { }
 # hash of used nicknames
@@ -667,8 +674,10 @@ end
 
 def getBundleLists
 
+  begin
+  
   # only to speed up the init process
-  locBundlesThread = Thread.new { buildLocalBundleList }
+  $locBundlesThread = Thread.new { buildLocalBundleList }
   
   $listsLoaded = false
   $dataarray  = [ ]
@@ -681,7 +690,7 @@ def getBundleLists
       'progressText'            => 'Connecting Bundle Server…',
       'progressIsIndeterminate' => true,
       'progressValue'           => 0,
-      'dataarray'               => [],
+      'dataarray'               => [ ],
     }
     updateDIALOG
   end
@@ -731,15 +740,17 @@ def getBundleLists
   $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'] <=> b['status'] : n}
 
   # wait for parsing local bundles
+  $params['isBusy'] = true
+  $params['progressText'] = "Parsing local bundles…"
+  updateDIALOG
   begin
-    $params['isBusy'] = true
-    $params['progressText'] = "Parsing local bundles…"
-    updateDIALOG
-    GBTimeout::timeout($timeout) {locBundlesThread.join}
-  rescue
+    GBTimeout::timeout(15) do
+      $locBundlesThread.join
+    end
+  rescue GBTimeout::Error
     writeToLogFile("Timeout while parsing local bundles") unless $close
     begin
-      locBundlesThread.kill
+      $locBundlesThread.kill unless $locBundlesThread.nil?
     rescue
     end
   end
@@ -819,6 +830,9 @@ def getBundleLists
 
   # suppress the updating of the table to preserve the selection
   $params.delete('dataarray')
+  rescue
+    writeTimedMessage("Error while initialization:\n#{$!}")
+  end
 
 end
 
@@ -830,7 +844,7 @@ def buildLocalBundleList
     updateDIALOG
   end
 
-  $localBundles  = { }
+  $localBundles = { }
   
   # get deleted/disabled bundles from TM's plist
   $deletedCoreAndDisabledBundles = { }
@@ -931,11 +945,14 @@ end
 def refreshUpdatedStatus
   
   $params['isBusy'] = true
-  $params['nocancel'] = true
   $params['progressText'] = "Parsing local bundles…"
   updateDIALOG
   
   buildLocalBundleList
+
+  $params['nocancel'] = true
+  updateDIALOG
+
   
   # loop through all shown bundles
   cnt = 0  # counter to link $dataaray and $bundleCache['bundles']
@@ -995,6 +1012,7 @@ def killThreads
     $svnlogThread.kill      unless $svnlogThread.nil?
     $svndataThread.kill     unless $svndataThread.nil?
     $svnInfoHostThread.kill unless $svnInfoHostThread.nil?
+    $locBundlesThread.kill  unless $locBundlesThread.nil?
   rescue
   end
 end

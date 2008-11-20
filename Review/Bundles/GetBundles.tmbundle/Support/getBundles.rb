@@ -8,6 +8,7 @@ require "yaml"
 require "open3"
 require "time"
 require "rexml/document"
+# require "Benchmark"
 
 $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
@@ -348,14 +349,19 @@ def infoDIALOG(dlg)
         <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
         <b>Private:</b><br />&nbsp;#{info['private']}<br />
         <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
+        HTML01
+        
+        if ENV.has_key?('TM_GETBUNDLES_SHOW_SVNGIT_COMMANDS')
+          io << <<-HTML0001
         <b>git clone:</b><br /><pre><small><small>export LC_CTYPE=en_US.UTF-8
 mkdir -p ~/Library/Application\\ Support/TextMate/Bundles
 cd ~/Library/Application\\ Support/TextMate/Bundles
 git clone #{gitsource} '#{plist['name']}.tmbundle'
 osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
-        HTML01
+        HTML0001
+        end
         
-      if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
+      if ENV.has_key?('TM_GETBUNDLES_SHOW_SVNGIT_COMMANDS') && $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
         io << <<-HTML011
         <b>git pull:</b><br /><pre><small><small>export LC_CTYPE=en_US.UTF-8
 cd '#{$localBundles[bundle['uuid']]['path']}'
@@ -517,15 +523,20 @@ svn switch --relocate #{localUrl} #{localUrl.gsub("http://macromates.com/svn/Bun
         <b>Last Changed Rev:</b><br />&nbsp;#{info['Last Changed Rev']}<br />
         <b>Revision:</b><br />&nbsp;#{info['Revision']}<br />
         <b>UUID:</b><br />&nbsp;#{plist['uuid']}<br />
+        HTML12
+        
+        if ENV.has_key?('TM_GETBUNDLES_SHOW_SVNGIT_COMMANDS')
+          io << <<-HTML1222
         <b>svn checkout</b><br /><pre>export LC_CTYPE=en_US.UTF-8
 mkdir -p ~/Library/Application\\ Support/TextMate/Bundles
 cd ~/Library/Application\\ Support/TextMate/Bundles
 svn co #{svnsource}
 osascript -e 'tell app "TextMate" to reload bundles'
 </pre>
-       HTML12
+          HTML1222
+        end
 
-      if $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
+      if ENV.has_key?('TM_GETBUNDLES_SHOW_SVNGIT_COMMANDS') && $localBundles.has_key?(bundle['uuid']) && ! $localBundles[bundle['uuid']]['scm'].empty?
         io << <<-HTML121
         <b>svn update</b><br /><pre>export LC_CTYPE=en_US.UTF-8
 cd '#{$localBundles[bundle['uuid']]['path']}'
@@ -823,25 +834,26 @@ def buildLocalBundleList
   
   # get deleted/disabled bundles from TM's plist
   $deletedCoreAndDisabledBundles = { }
-  begin
-    tmPlist = OSX::PropertyList::load(open("#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.plist"))
+  unless ENV['TM_GETBUNDLES_AVOID_READING_TMPLIST']
     begin
-      $deletedCoreAndDisabledBundles['deleted'] = tmPlist['OakBundleManagerDeletedBundles']
+      tmPlist = OSX::PropertyList::load(open("#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.plist"))
+      begin
+        $deletedCoreAndDisabledBundles['deleted'] = tmPlist['OakBundleManagerDeletedBundles']
+      rescue
+        $deletedCoreAndDisabledBundles['deleted'] = [ ]
+      end
+      begin
+        $deletedCoreAndDisabledBundles['disabled'] = tmPlist['OakBundleManagerDisabledBundles']
+      rescue
+        $deletedCoreAndDisabledBundles['disabled'] = [ ]
+      end
+      tmPlist = { }
     rescue
-      $deletedCoreAndDisabledBundles['deleted'] = [ ]
-    end
-    begin
-      $deletedCoreAndDisabledBundles['disabled'] = tmPlist['OakBundleManagerDisabledBundles']
-    rescue
+      writeToLogFile("Could not read TextMate's plist")
       $deletedCoreAndDisabledBundles['disabled'] = [ ]
+      $deletedCoreAndDisabledBundles['deleted']  = [ ]
     end
-    tmPlist = { }
-  rescue
-    writeToLogFile("Could not read TextMate's plist")
-    $deletedCoreAndDisabledBundles['disabled'] = [ ]
-    $deletedCoreAndDisabledBundles['deleted']  = [ ]
   end
-
   $deletedCoreAndDisabledBundles['deleted']  = [ ] if $deletedCoreAndDisabledBundles['deleted'].nil?
   $deletedCoreAndDisabledBundles['disabled'] = [ ] if $deletedCoreAndDisabledBundles['disabled'].nil?
 

@@ -1,13 +1,10 @@
 #!/usr/bin/env ruby -wKU
 
 SUPPORT = ENV['TM_SUPPORT_PATH']
-require SUPPORT + '/lib/escape.rb'
 require SUPPORT + '/lib/osx/plist'
 require SUPPORT + '/lib/textmate.rb'
 require "fileutils"
-require "open-uri"
 require "yaml"
-require 'net/http'
 require "open3"
 require "time"
 require "rexml/document"
@@ -88,6 +85,12 @@ def local_bundle_paths
   ]
 end
 
+class Object
+  def blank?
+    respond_to?(:empty?) ? empty? : !self
+  end
+end
+
 module GBTimeout
   class Error<Interrupt
   end
@@ -112,6 +115,10 @@ end
 
 def strip_html(text)
   text.gsub(/<[^>]+>/, '')
+end
+
+def e_sh(str)
+	str.to_s.gsub(/(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])/, '\\').gsub(/\n/, "'\n'").sub(/^$/, "''")
 end
 
 def orderOutDIALOG
@@ -210,12 +217,12 @@ def infoDIALOG(dlg)
 
       begin
         GBTimeout::timeout($timeout) do
-          d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath}"))
+          d = YAML.load(%x{curl -L "http://github.com/api/v1/yaml/search/#{searchPath}"})
           if d.has_key?('repositories') and d['repositories'].size > 0
             info = d['repositories'].first
           else
             # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
-            d = YAML.load(open("http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"))
+            d = YAML.load(%x{curl -L "http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"})
             if d.has_key?('repositories') and d['repositories'].size > 0
               info = d['repositories'].first
             # if .../search/foo+bar+foo1 fails init an empty dict
@@ -250,7 +257,7 @@ def infoDIALOG(dlg)
       GBTimeout::timeout(10) do
         loop do
           begin
-            lastCommit = YAML.load(open("http://github.com/api/v1/json/#{info['owner']}/#{projectName}/commits/master"))['commits'].first['committed_date']
+            lastCommit = YAML.load(%x{curl -L "http://github.com/api/v1/json/#{info['owner']}/#{projectName}/commits/master"})['commits'].first['committed_date']
           rescue
             lastCommit = nil
           end
@@ -266,7 +273,7 @@ def infoDIALOG(dlg)
 
     begin
       GBTimeout::timeout($timeout) do
-        data = Net::HTTP.get( URI.parse("#{url}/tree/master") )
+        data = %x{curl -L "#{url}/tree/master"}
       end
     rescue GBTimeout::Error
       $params['isBusy'] = false
@@ -281,7 +288,7 @@ def infoDIALOG(dlg)
     begin
       GBTimeout::timeout($timeout) do
         begin
-          plist = OSX::PropertyList::load(Net::HTTP.get(URI.parse("#{url}/tree/master/info.plist?raw=true")).gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
+          plist = OSX::PropertyList::load(%x{curl -L "#{url}/tree/master/info.plist?raw=true"}.gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
         rescue
           writeToLogFile($!)
         end
@@ -398,8 +405,8 @@ osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
     svnlogs = nil
     svnsource = bundle['source'].find { |m| m['method'] == "svn" }['url']
 
-    $svnlogThread = Thread.new($SVN, bundle['source'].first['url']) { %x{'#{$SVN}' log --limit 5 #{bundle['source'].first['url']}} }
-    $svndataThread = Thread.new($SVN, bundle['source'].first['url']) { %x{#{$SVN} info #{bundle['source'].first['url']}} }
+    $svnlogThread = Thread.new($SVN, bundle['source'].first['url']) { %x{'#{$SVN}' log --limit 5 "#{bundle['source'].first['url']}"} }
+    $svndataThread = Thread.new($SVN, bundle['source'].first['url']) { %x{#{$SVN} info "#{bundle['source'].first['url']}"} }
     $svnInfoHostThread = Thread.new(svnsource) do
       # get info.plist data
       begin
@@ -442,7 +449,7 @@ osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
     data    = $svndataThread.value
     plist   = $svnInfoHostThread.value
 
-    if data.nil? || plist.nil?
+    if data.blank? || plist.blank?
       writeTimedMessage("Could not fetch svn information entirely for “#{bundle['name']}”") unless $close
       return
     end
@@ -954,13 +961,14 @@ end
 
 def killThreads
   begin
-    $initThread.kill    unless $initThread.nil?
-    $installThread.kill unless $installThread.nil?
-    $infoThread.kill    unless $infoThread.nil?
-    $refreshThread.kill unless $refreshThread.nil?
-    $reloadThread.kill  unless $reloadThread.nil?
-    $svnlogThread.kill  unless $svnlogThread.nil?
-    $svndataThread.kill unless $svndataThread.nil?
+    $initThread.kill        unless $initThread.nil?
+    $installThread.kill     unless $installThread.nil?
+    $infoThread.kill        unless $infoThread.nil?
+    $refreshThread.kill     unless $refreshThread.nil?
+    $reloadThread.kill      unless $reloadThread.nil?
+    $svnlogThread.kill      unless $svnlogThread.nil?
+    $svndataThread.kill     unless $svndataThread.nil?
+    $svnInfoHostThread.kill unless $svnInfoHostThread.nil?
   rescue
   end
 end
@@ -1309,7 +1317,7 @@ Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
     # for safety reasons check always http://svn.textmate.org/trunk/Support/
     begin
       GBTimeout::timeout($timeout) do
-        doc = REXML::Document.new(File.read("|'#{$SVN}' info --xml #{$bundleCache['SupportFolder']['url']}"))
+        doc = REXML::Document.new(File.read("|'#{$SVN}' info --xml '#{$bundleCache['SupportFolder']['url']}'"))
         trunkRev = Time.parse(doc.root.elements['//info/entry/commit/date'].text).getutc
         $updateSupportFolder = (trunkRev > localRev) ? true : false
       end
@@ -1481,6 +1489,10 @@ $params = {
 
 $firstrun = true
 
+# set svn client
+$SVN = ENV['TM_SVN'] || ((%x{type -p svn}.strip!.nil?) ? "" : "svn")
+
+
 initLogFile
 $logFileHandle = File.open($logFile, "a")
 
@@ -1497,9 +1509,6 @@ $initThread = Thread.new do
     writeTimedMessage("Error while initialization:\n#{$!}")
   end
 end
-
-# set svn client
-$SVN = ENV['TM_SVN'] || ((%x{type -p svn}.strip!.nil?) ? "" : "svn")
 
 # main loop
 while $run do

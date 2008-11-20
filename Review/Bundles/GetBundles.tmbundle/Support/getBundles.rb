@@ -546,14 +546,28 @@ osascript -e 'tell app "TextMate" to reload bundles'
       io <<  "</body></html>"
     end
 
+  elsif bundle.has_key?('url')
+
+    File.open("#{$tempDir}/info.html", "w") do |io|
+      io << <<-HTML11
+        <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+        <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        </head>
+        <body style='font-family:Lucida Grande'>
+        <font color='blue' size=12pt>#{bundle['name']}</font><br /><br />
+        #{bundle['description']}<br /><br />
+        <b>Info URL:</b><br />&nbsp;<a href='#{bundle['url']}'>#{bundle['url']}</a><br />
+        <b>Archive URL:</b><br />&nbsp;<a href='#{bundle['source'].first['url']}'>#{bundle['source'].first['url']}</a><br />
+        <b>Author:</b><br />&nbsp;#{bundle['contact']}<br />
+        <b>Last Modified:</b><br />&nbsp;#{bundle['revision']}<br />
+        </body></html>
+      HTML11
+    end      
+
   else
 
-    if bundle.has_key?('url')
-      %x{open "#{bundle['url']}"}
-    else
-      writeToLogFile("No method found to fetch information")
-    end
-
+    writeToLogFile("No method found to fetch information")
     $params['isBusy'] = false
     $params['progressText'] = ""
     updateDIALOG

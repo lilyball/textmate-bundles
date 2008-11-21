@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -wKU
+#!/usr/bin/env ruby -dwKU
 
 SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/osx/plist'
@@ -13,11 +13,6 @@ require "rexml/document"
 $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
 $isDIALOG2        = false # ! $DIALOG.match(/2$/).nil?
-
-# the log file
-$logFile          = "#{ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
-# Log file handle
-$logFileHandle    = nil
 
 # DIALOG's parameters hash
 $params           = { }
@@ -77,11 +72,12 @@ $updateSupportFolder = true
 # last bundle filter selection
 $lastBundleFilterSelection = "All"
 # hash with uuid of deleted or disabled bundles stored in TextMate's plist
-$deletedCoreAndDisabledBundles = { }
+$delCoreDisBundles = { }
 # array of just installed bundles which are marked as deleted/disabled for status
 $justUndeletedCoreAndEnabledBundles = [ ]
 
-
+# the Log file
+$logFilePath = "#{ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
 
 def local_bundle_paths
   [
@@ -125,10 +121,6 @@ def strip_html(text)
   text.gsub(/<[^>]+>/, '')
 end
 
-def e_sh(str)
-	str.to_s.gsub(/(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])/, '\\').gsub(/\n/, "'\n'").sub(/^$/, "''")
-end
-
 def orderOutDIALOG
 
   $params['nocancel'] = true
@@ -170,6 +162,7 @@ def closeDIALOG
 end
 
 def updateDIALOG
+  $params['logPath'] = %x{cat '#{$logFilePath}'}
   if $isDIALOG2
     %x{#{$DIALOG} window update #{$token} -p #{e_sh $params.to_plist}}
   else
@@ -225,12 +218,12 @@ def infoDIALOG(dlg)
 
       begin
         GBTimeout::timeout($timeout) do
-          d = YAML.load(%x{curl -L "http://github.com/api/v1/yaml/search/#{searchPath}"})
+          d = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/search/#{searchPath}"})
           if d.has_key?('repositories') and d['repositories'].size > 0
             info = d['repositories'].first
           else
             # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
-            d = YAML.load(%x{curl -L "http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"})
+            d = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"})
             if d.has_key?('repositories') and d['repositories'].size > 0
               info = d['repositories'].first
             # if .../search/foo+bar+foo1 fails init an empty dict
@@ -265,7 +258,7 @@ def infoDIALOG(dlg)
       GBTimeout::timeout(10) do
         loop do
           begin
-            lastCommit = YAML.load(%x{curl -L "http://github.com/api/v1/json/#{info['owner']}/#{projectName}/commits/master"})['commits'].first['committed_date']
+            lastCommit = YAML.load(%x{curl -sSL "http://github.com/api/v1/json/#{info['owner']}/#{projectName}/commits/master"})['commits'].first['committed_date']
           rescue
             lastCommit = nil
           end
@@ -281,7 +274,7 @@ def infoDIALOG(dlg)
 
     begin
       GBTimeout::timeout($timeout) do
-        data = %x{curl -L "#{url}/tree/master"}
+        data = %x{curl -sSL "#{url}/tree/master"}
       end
     rescue GBTimeout::Error
       $params['isBusy'] = false
@@ -296,7 +289,7 @@ def infoDIALOG(dlg)
     begin
       GBTimeout::timeout($timeout) do
         begin
-          plist = OSX::PropertyList::load(%x{curl -L "#{url}/tree/master/info.plist?raw=true"}.gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
+          plist = OSX::PropertyList::load(%x{curl -sSL "#{url}/tree/master/info.plist?raw=true"}.gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
         rescue
           writeToLogFile($!)
         end
@@ -423,7 +416,7 @@ osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
     $svnInfoHostThread = Thread.new(svnsource) do
       # get info.plist data
       begin
-        plist = OSX::PropertyList::load(%x{curl -L "#{svnsource}/info.plist"})
+        plist = OSX::PropertyList::load(%x{curl -sSL "#{svnsource}/info.plist"})
       rescue
         plist = nil
       end
@@ -700,7 +693,7 @@ def getBundleLists
       
       # read data file from bundle server
       begin
-        $bundleCache = YAML.load(File.read("|curl #{$bundleServerFile} | gzip -d"))
+        $bundleCache = YAML.load(File.read("|curl -sSL #{$bundleServerFile} | gzip -d"))
       rescue
         writeTimedMessage("Error: #{$!} while parsing the Bundle Server file")
       end
@@ -708,7 +701,7 @@ def getBundleLists
       # get nicknames from textmte.org
       nicks = nil
       begin
-        nicks = File.read("|curl --compressed #{$nickNamesFile}")
+        nicks = File.read("|curl -sSL --compressed #{$nickNamesFile}")
       rescue
         writeToLogFile("Could not load nicknames: #{$!}")
       end
@@ -847,29 +840,21 @@ def buildLocalBundleList
   $localBundles = { }
   
   # get deleted/disabled bundles from TM's plist
-  $deletedCoreAndDisabledBundles = { }
+  $delCoreDisBundles = { }
+  $delCoreDisBundles['deleted'] = [ ]
+  $delCoreDisBundles['disabled'] = [ ]
+
   unless ENV['TM_GETBUNDLES_AVOID_READING_TMPLIST']
     begin
-      tmPlist = OSX::PropertyList::load(open("#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.plist"))
-      begin
-        $deletedCoreAndDisabledBundles['deleted'] = tmPlist['OakBundleManagerDeletedBundles']
-      rescue
-        $deletedCoreAndDisabledBundles['deleted'] = [ ]
-      end
-      begin
-        $deletedCoreAndDisabledBundles['disabled'] = tmPlist['OakBundleManagerDisabledBundles']
-      rescue
-        $deletedCoreAndDisabledBundles['disabled'] = [ ]
-      end
-      tmPlist = { }
+      tmPlist = OSX::PropertyList::load(File.open("#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.plist","r"))
+      $delCoreDisBundles['deleted'] = tmPlist['OakBundleManagerDeletedBundles'] if tmPlist.has_key?('OakBundleManagerDeletedBundles')
+      $delCoreDisBundles['disabled'] = tmPlist['OakBundleManagerDisabledBundles'] if tmPlist.has_key?('OakBundleManagerDisabledBundles')
     rescue
-      writeToLogFile("Could not read TextMate's plist")
-      $deletedCoreAndDisabledBundles['disabled'] = [ ]
-      $deletedCoreAndDisabledBundles['deleted']  = [ ]
+      writeToLogFile("Could not read TextMate's plist.\n#{$!}")
+      $delCoreDisBundles['disabled'] = [ ]
+      $delCoreDisBundles['deleted']  = [ ]
     end
   end
-  $deletedCoreAndDisabledBundles['deleted']  = [ ] if $deletedCoreAndDisabledBundles['deleted'].nil?
-  $deletedCoreAndDisabledBundles['disabled'] = [ ] if $deletedCoreAndDisabledBundles['disabled'].nil?
 
   # get the creation date of TextMate's binary to set it to each default bundle
   theCtimeOfDefaultBundle = File.new(TextMate::app_path).mtime.getutc
@@ -912,8 +897,8 @@ def buildLocalBundleList
           disabled = ""
           deleted  = ""
           unless $justUndeletedCoreAndEnabledBundles.include?(plist['uuid']) # it was just installed? then don't ask TM's plist
-            disabled = " bundle disabled" if $deletedCoreAndDisabledBundles['disabled'].include?(plist['uuid'])
-            deleted  = " default bundle deleted" if $deletedCoreAndDisabledBundles['deleted'].include?(plist['uuid'])
+            disabled = " bundle disabled" if $delCoreDisBundles['disabled'].include?(plist['uuid'])
+            deleted  = " default bundle deleted" if $delCoreDisBundles['deleted'].include?(plist['uuid'])
           end
 
           # update local bundle list; if bundles with the same uuid -> take the latest ctime for revision
@@ -927,7 +912,7 @@ def buildLocalBundleList
           
         end
       rescue
-        writeToLogFile("Error while parsing “#{b}”: #{$!}")
+        writeToLogFile("Error while parsing “#{b}”:\n#{$!}")
       end
     end
   end
@@ -1032,10 +1017,9 @@ def removeTempDir
 end
 
 def writeToLogFile(text, printTime=true)
-  $logFileHandle.puts Time.now.strftime("\n%m/%d/%Y %H:%M:%S") + "\tTextMate[GetBundles]" if printTime
-  $logFileHandle.puts text
-  $logFileHandle.flush
-  $params['logPath'] = %x{cat '#{$logFile}'}
+  puts Time.now.strftime("\n%m/%d/%Y %H:%M:%S") + "\tTextMate[GetBundles]" if printTime
+  puts text
+  puts
   updateDIALOG
 end
 
@@ -1359,6 +1343,11 @@ Otherwise you have to update ‘#{$supportFolder}’ by yourself.},
     end
     
     # for safety reasons check always http://svn.textmate.org/trunk/Support/
+    unless $bundleCache
+      $errorcnt += 1
+      writeToLogFile("No url found for “Support Folder”")
+      return
+    end
     begin
       GBTimeout::timeout($timeout) do
         doc = REXML::Document.new(File.read("|'#{$SVN}' info --xml '#{$bundleCache['SupportFolder']['url']}'"))
@@ -1524,7 +1513,6 @@ $params = {
   'cancelBtn'               => 'cancelButtonIsPressed',
   'nocancel'                => false,
   'repoColor'               => '#0000FF',
-  'logPath'                 => %x{cat '#{$logFile}'},
   'bundleSelection'         => 'All',
   'openBundleEditor'        => 0,
   'supportFolderCheck'      => 0,
@@ -1536,9 +1524,8 @@ $firstrun = true
 # set svn client
 $SVN = ENV['TM_SVN'] || ((%x{type -p svn}.strip!.nil?) ? "" : "svn")
 
-
-initLogFile
-$logFileHandle = File.open($logFile, "a")
+STDOUT.sync = true
+STDERR.sync = true
 
 orderOutDIALOG
 checkUniversalAccess
@@ -1642,4 +1629,3 @@ while $run do
 end
 
 closeDIALOG
-$logFileHandle.close

@@ -23,7 +23,7 @@ def dialog_get_string(title="", prompt=""):
     ret = os.popen(st, 'r').read()
     # Extract exit value
     plist = plistlib.readPlistFromString(ret)
-    return plist['result']['returnArgument']
+    return plist['result']['returnArgument'].rstrip('\n')
 
 line_no = int(os.environ.get('TM_LINE_NUMBER'))-1
 
@@ -36,10 +36,10 @@ except KeyError:
 else:
     var = dialog_get_string('Enter new variable name', 'Variable name:')
     lines[line_no] = lines[line_no].replace(sel, var)
-    lines.insert(line_no, '%s = %s' % (var, sel))
+    lines.insert(line_no, '%s = %s;\n' % (var, sel))
 
 for line in lines:
-	print line</string>
+	print line,</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

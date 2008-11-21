@@ -25,32 +25,45 @@ def dialog_get_string(title="", prompt=""):
     plist = plistlib.readPlistFromString(ret)
     return plist['result']['returnArgument'].rstrip('\n')
 
-line_no = int(os.environ.get('TM_LINE_NUMBER'))-1
+def first_occurance(arr, str):
+    """find first_occurance of str in an array of strings"""
+    line_no = 0
+    # Find first instance of `sel`
+    for line in lines:
+        try:
+            line.index(sel)
+        except ValueError:
+            line_no = lines.index(line)
+            break;
+    
+    return line_no
 
 lines = sys.stdin.readlines()
+sel = ''
+var = ''
 
 try: 
     sel = os.environ['TM_SELECTED_TEXT']
 except KeyError:
     pass
 else:
-    var = dialog_get_string('Enter new variable name', 'Variable name:')
-    lines[line_no] = lines[line_no].replace(sel, var)
-    lines.insert(line_no, '%s = %s;\n' % (var, sel))
+    line_no = first_occurance(lines, sel)-1
+    var = dialog_get_string('Enter new variable name', 'Variable name:')    
+    print '%s = %s;\n' % (var, sel)
 
 for line in lines:
-	print line,</string>
+	print line.replace(sel, var),</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>^C</string>
 	<key>name</key>
-	<string>Introduce variable (line)</string>
+	<string>Introduce variable (throughout)</string>
 	<key>output</key>
 	<string>replaceDocument</string>
 	<key>scope</key>
 	<string>source.matlab,source.python</string>
 	<key>uuid</key>
-	<string>40B52D65-1B7C-4874-AA30-B4C95089CE55</string>
+	<string>4B350792-24A2-4083-A8FB-509DF4BD709A</string>
 </dict>
 </plist>

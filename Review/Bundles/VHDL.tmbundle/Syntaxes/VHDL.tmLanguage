@@ -921,6 +921,10 @@
 
 						# The for keyword $4
 						\b((?i:for))\b
+
+						# Make sure the next word is not all
+						(?!\s*(?i:all))
+
 					</string>
 					<key>beginCaptures</key>
 					<dict>

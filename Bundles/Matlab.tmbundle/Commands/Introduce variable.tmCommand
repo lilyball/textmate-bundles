@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+
+import sys,os
+sys.path.append(os.environ['TM_SUPPORT_PATH'] + '/lib')
+
+import plistlib
+
+def dialog_get_string(title="", prompt=""):
+    """docstring for dialog_get_string"""
+    dialog = os.environ.get('DIALOG')
+    nib = os.path.join(os.environ.get('TM_SUPPORT_PATH'), 
+    'nibs/RequestString')
+    plist = "title='%s'; prompt='%s';" % (title, prompt)
+    st = """'%s' -cmp "%s" '%s' """ % (dialog, plist, nib)
+    # run constructed command
+    ret = os.popen(st, 'r').read()
+    # Extract exit value
+    plist = plistlib.readPlistFromString(ret)
+    return plist['result']['returnArgument']
+
+line_no = int(os.environ.get('TM_LINE_NUMBER'))-1
+
+lines = sys.stdin.readlines()
+
+try: 
+    sel = os.environ['TM_SELECTED_TEXT']
+except KeyError:
+    pass
+else:
+    var = dialog_get_string('Enter new variable name', 'Variable name:')
+    lines[line_no] = lines[line_no].replace(sel, var)
+    lines.insert(line_no, '%s = %s' % (var, sel))
+
+for line in lines:
+	print line</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^C</string>
+	<key>name</key>
+	<string>Introduce variable</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>source.matlab,source.python</string>
+	<key>uuid</key>
+	<string>40B52D65-1B7C-4874-AA30-B4C95089CE55</string>
+</dict>
+</plist>

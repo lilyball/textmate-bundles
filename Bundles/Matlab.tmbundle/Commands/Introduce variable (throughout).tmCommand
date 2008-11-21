@@ -32,9 +32,11 @@ def first_occurance(arr, str):
     for line in lines:
         try:
             line.index(sel)
-        except ValueError:
             line_no = lines.index(line)
-            break;
+            break
+        except ValueError:
+            pass
+
     
     return line_no
 
@@ -49,10 +51,16 @@ except KeyError:
 else:
     line_no = first_occurance(lines, sel)-1
     var = dialog_get_string('Enter new variable name', 'Variable name:')    
-    print '%s = %s;\n' % (var, sel)
 
-for line in lines:
-	print line.replace(sel, var),</string>
+for line in lines[0:line_no]:
+	print line.replace(sel, var),
+
+print '%s = %s;' % (var, sel),
+
+for line in lines[line_no:]:
+	print line.replace(sel, var),
+
+</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

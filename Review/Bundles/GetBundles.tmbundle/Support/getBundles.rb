@@ -760,14 +760,14 @@ def getBundleLists
     desc = strip_html(bundle['description'].gsub(/(?m)<hr[^>]*?\/>.*/,'').gsub(/\n/, ' ') + author)
 
     repo = case bundle['status']
-      when "Official":      "O"
-      when "Under Review":  "R"
+      when "Official":      "Officially released TextMate bundle"
+      when "Under Review":  "Reviewed TextMate bundle"
       else "3"
     end
     if repo == "3" && bundle.has_key?('url')
       repo = case bundle['url']
-        when /github\.com/: "G"
-        else "P"
+        when /github\.com/: "Github.com hosted bundle"
+        else "Privately hosted bundle"
       end
     end
     
@@ -972,9 +972,9 @@ def refreshUpdatedStatus
 
   # reset to current host filter
   $params['dataarray'] = case $params['bundleSelection']
-    when "Official":    $dataarray.select {|v| v['repo'] == 'O'}
-    when "Review":      $dataarray.select {|v| v['repo'] == 'R'}
-    when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^O|R$/}
+    when "Official":    $dataarray.select {|v| v['repo'] =~ /^O/}
+    when "Review":      $dataarray.select {|v| v['repo'] =~ /^R/}
+    when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^[OR]/}
     else $dataarray
   end
 
@@ -1476,9 +1476,9 @@ def filterBundleList
   updateDIALOG
   
   b = case $dialogResult['bundleSelection']
-    when "Review":      $dataarray.select {|v| v['repo'] == 'R'}
-    when "Official":    $dataarray.select {|v| v['repo'] == 'O'}
-    when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^O|R$/}
+    when "Review":      $dataarray.select {|v| v['repo'] =~ /^R/}
+    when "Official":    $dataarray.select {|v| v['repo'] =~ /^O/}
+    when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^[OR]/}
     else $dataarray
   end
   

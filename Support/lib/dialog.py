@@ -10,6 +10,8 @@ if tm_support_path not in sys.path:
 from tm_helpers import to_plist, from_plist
 
 dialog = os.environ["DIALOG"]
+nib_path = os.environ['TM_SUPPORT_PATH'] + '/nibs'
+
 try:
     all
 except:

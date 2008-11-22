@@ -59,3 +59,31 @@ def menu(options):
     if hashed_options:
         return options[index][1]
     return options[index]
+
+def get_string(**options):
+    """Get a string using dialog
+    
+    Accepts `title` and `prompt` strings, and returns the string entered by
+    the user.
+    """
+    
+    # Set defaults and get options:
+    if not options.has_key('title'):
+        options['title']='Enter String'
+    if not options.has_key('prompt'):
+        options['prompt']='String:'
+    plist = to_plist(options)
+    
+    # Run dialog, piping our plist in, and reading the output:
+    nib = nib_path + '/RequestString'
+    proc = subprocess.Popen([dialog, '-cm', nib], 
+        stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+    proc.stdin.write(plist)
+    output, _ = proc.communicate()
+    
+    # Extract exit value:
+    result = from_plist(output)
+    if not 'result' in result:
+        return None
+    else:
+        return result['result'].get('returnArgument')

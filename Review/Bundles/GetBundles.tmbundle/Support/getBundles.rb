@@ -797,7 +797,7 @@ def getBundleLists
       'bundleDescription' => desc,
       'searchpattern'     => "#{bundle['name']} #{desc} r=#{repo} #{updatedStr}",
       'repo'              => repo,
-      'rev'               => Time.parse(bundle['revision']).strftime("%Y/%m/%d %H:%M:%S"),
+      'rev'               => Time.parse(bundle['revision']).strftime("%y-%m-%d %H:%M"),
       'updated'           => updated
     }
 

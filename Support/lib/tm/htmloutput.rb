@@ -28,13 +28,14 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
   <% } %>
   <% bundle_styles.each { |style| %>
     <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
-    <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/print.css"   type="text/css" charset="utf-8" media="screen">
-  <% } %>
-  <% user_styles.each { |style| %>
-    <link rel="stylesheet" href="file://<%= user_path %>/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
+    <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/print.css"   type="text/css" charset="utf-8" media="print">
   <% } %>
   <link rel="stylesheet" href="file://<%= support_path %>/themes/default/print.css"   type="text/css" charset="utf-8" media="print">
-  <link rel="stylesheet" href="file://<%= user_path %>/print.css"   type="text/css" charset="utf-8" media="print">
+  <link rel="stylesheet" href="file://<%= user_path %>print.css"   type="text/css" charset="utf-8" media="print">
+  <% user_styles.each { |style| %>
+    <link rel="stylesheet" href="file://<%= user_path %><%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
+    <link rel="stylesheet" href="file://<%= user_path %><%= style %>/print.css"   type="text/css" charset="utf-8" media="print">
+  <% } %>
   <script src="file://<%= support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
   <script src="file://<%= support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
   <script src="file://<%= support_path %>/script/sortable.js" type="text/javascript" charset="utf-8"></script>

@@ -1501,6 +1501,20 @@ def checkUniversalAccess
   end
 end
 
+def closeMe
+  $close = true
+  unless $listsLoaded  # while fetching something from the net wait for aborting of threads
+    $params['isBusy'] = true
+    $params['progressText'] = 'Closing…'
+    $params['progressIsIndeterminate'] = true
+    updateDIALOG
+    begin
+      killThreads
+    rescue
+    end
+  end
+end
+
 ##------- main -------##
 
 # init DIALOG's parameters hash
@@ -1511,6 +1525,7 @@ $params = {
   'showHelpBtn'             => 'helpButtonIsPressed',
   'infoBtn'                 => 'infoButtonIsPressed',
   'cancelBtn'               => 'cancelButtonIsPressed',
+  'closeBtn'                => 'closeButtonIsPressed',
   'nocancel'                => false,
   'repoColor'               => '#0000FF',
   'bundleSelection'         => 'All',
@@ -1556,6 +1571,9 @@ while $run do
         $firstrun = false
         updateDIALOG
       when 'infoButtonIsPressed':   $infoThread = Thread.new { infoDIALOG($dialogResult) }
+      when 'closeButtonIsPressed':
+        closeMe
+        break
       else # install bundle(s)
         if $params['isBusy'] == false
           if $dialogResult['returnArgument'].size > 10
@@ -1609,18 +1627,7 @@ while $run do
     end
 
   else ###### closing the window
-    $close = true
-    unless $listsLoaded  # while fetching something from the net wait for aborting of threads
-      $params['isBusy'] = true
-      $params['progressText'] = 'Closing…'
-      $params['progressIsIndeterminate'] = true
-      updateDIALOG
-      begin
-        killThreads
-      rescue
-        break
-      end
-    end
+    closeMe
     break
   end
 

@@ -11,7 +11,7 @@ The entire source code is written in scripting languages (Ruby, Perl, HTML (Java
 
 In order to work with the Rdaemon it is necessary to install the Rdaemon in `~/Rdaemon`.
 
-Simply do execute the command "Install Rdaemon" (Bundle Menu > Rdaemon Tools > Install Rdaemon) or type "installrd" and press "&#x21E5;".
+Simply do execute the command "Install Rdaemon" (Bundle Menu > Rdaemon Tools > Install Rdaemon) or set the language of the current document to `R Console (Rdaemon)`, type "installrd", and press "&#x21E5;".
 
 ***Please note that the folder `~/Rdaemon` may not yet exist.***
 
@@ -88,6 +88,10 @@ It executes the selection line by line or the current line.
 It sends the current line or the selection line by line to the Rdaemon and does not wait for the result. The result will be written into `~/Rdaemon/r_res`. This is useful if one knows that the task will take some minutes, thus one does not block TextMate.
 
 This command must be executed if you want to use the R commands `fix()` or `edit()`!
+
+## Evaluate Line/Selection and Copy into Pasteboard
+<button>⇧&#x2305;</button>
+It executes the selection or the current line and copies the result into the pasteboard.
 
 ## Completion… (R.bundle)
 <blockquote><small>This command is defined within the R.bundle, but it differs a bit if it will be invoked from the Rdaemon scope.</small></blockquote>
@@ -382,7 +386,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
     ***Background:*** If a R command is sent to the Rdaemon the used TextMate command will wait for R until R returned something which ends at: "> ", "+ ", or ": ". Otherwise that command runs in an eternal loop. You can cancel it by pressing "&#x2318;.". In some cases you have to switch to an other application and back to TextMate in order to get the focus back.
 
--   __`After calling locator() there is no way to get out of a graphic device`__
+-   __After calling `locator()` there is no way to get out of a graphic device__
 
     To finish the `locator()` command please do a CONTROL+click with the mouse.
 
@@ -390,13 +394,14 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
     Both commands can __only__ be executed in the background (using "Execute Line/Selection (Background > r_res)") because the Rdaemon will call TextMate via `mate -w`.
 
--   __I cannot use non-Latin and non-ASCII letters as labels in Quartz__
+-   __`pipe('pbcopy')` or '|pbcopy' doesn't work__
 
-    Non-ASCII but Latin letters should be displayed in a PDF plot correctly. Up to now it is not possible to use non-Latin letters in any graphical devices easily.
+    Each command which writes something to a pipe __must__ be executed by using “Execute Selection”
+    <button>&#x2305;</button>. Otherwise nothing will be written to the pipe. Please note if you want to  pipe something into the pasteboard you can use the command “Evaluate Selection/Line and Copy into Pasteboard” <button>⇧&#x2305;</button>.
 
 -   __How can I save a plot as JPEG, PNG, etc.__
 
-    Open the "Graphic Manager" and press "Save" or open the current plot in "Preview" and choose "Save As".
+    Open the "Graphic Manager" and press "Save" or open the current plot in "Preview" and choose "Save As". Since R 2.7 you can also use “R Quartz” window's menu to save the content.
 
 -   __Can I run more than one instance of Rdaemon?__
 
@@ -408,7 +413,7 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 # Main Bundle Maintainer
 
-***Date: Jul 04 2008***
+***Date: Nov 24 2008***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

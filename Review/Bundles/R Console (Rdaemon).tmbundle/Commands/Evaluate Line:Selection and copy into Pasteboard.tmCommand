@@ -5,20 +5,20 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>[[ -d "$HOME"/Rdaemon ]] &amp;&amp; echo -e "'$HOME/Rdaemon' already exists! Please remove it first." &amp;&amp; exit_show_tool_tip
-cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon "$HOME"/Rdaemon
-echo -e "Rdaemon was installed in:\n'$HOME/Rdaemon'"</string>
+	<string>. "$TM_BUNDLE_SUPPORT"/bin/execute.sh | sed '1d;$d' | pbcopy</string>
+	<key>fallbackInput</key>
+	<string>line</string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>$</string>
 	<key>name</key>
-	<string>Install Rdaemon</string>
+	<string>Evaluate Line/Selection and Copy into Pasteboard</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>
 	<string>source.rd.console</string>
-	<key>tabTrigger</key>
-	<string>installrd</string>
 	<key>uuid</key>
-	<string>C25F0701-67B0-44A4-AD75-76BD7F7EFF7F</string>
+	<string>CDBEF676-C47F-492B-B005-BFC7426798B9</string>
 </dict>
 </plist>

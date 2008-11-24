@@ -5,18 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>head -n 3 "$TM_SELECTED_TEXT"</string>
-	<key>fallbackInput</key>
-	<string>none</string>
+	<string>cat | R --slave | pbcopy</string>
 	<key>input</key>
 	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^@r</string>
 	<key>name</key>
-	<string>Show File Header</string>
+	<string>Copy Result into Pasteboard</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>
-	<string>source.r, source.rd.console</string>
+	<string>source.r</string>
 	<key>uuid</key>
-	<string>381D1464-6F33-41E3-A938-C10FAB619C24</string>
+	<string>C666D732-9E4D-49C7-BEEC-BC20590414BF</string>
 </dict>
 </plist>

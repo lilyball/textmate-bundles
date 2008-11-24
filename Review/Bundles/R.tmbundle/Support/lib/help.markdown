@@ -14,9 +14,9 @@ More information about R can be found at [r-project.org](http://www.r-project.or
 <button>&nbsp;&#x2318;R&nbsp;</button>
 It executes the current document or selection in a self-sufficient environment of the command-line version of R and it displays the output in an HTML window. By default new plots use the "pdf" device and are placed in a temporary folder and displayed at the end of the HTML window.
 
-## Execute Selection/Document In R (Tooltip/Insert)
+## Execute Selection/Document In R (Insert/Pasteboard/Tooltip)
 <button>&nbsp;^&#x2318;R&nbsp;</button>
-It executes the current document or selection in a self-sufficient environment of the command-line version of R. The output will be displayed as Tooltip or will be inserted.
+It executes the current document or selection in a self-sufficient environment of the command-line version of R. The output will be inserted, or will be copied into the pasteboard, or will be shown as Tooltip or.
 
 ## Send Selection/Document to Rdaemon
 <button>&nbsp;&#x21E7;&#x2318;R&nbsp;</button>
@@ -126,14 +126,13 @@ This is an auxiliary tool command with these two different tasks based on a sele
 It inserts a vector in the form of `x <- c(x1, x2, ...)` resp. `x <- matrix(c(x1, x2, ...))` as snippet taken from a selected string or the current content of the clipboard. Delimiters are " ", "&#x21A9;", or "&#x21E5;". If an element doesn't consist of digits the element will be enclosed by double-quotes. It won't be checked for creating a matrix whether the length of the vector is a sub-multiple of the numbers of rows.
 
 ## Show File Header
-<button>&nbsp;&#x2325;&#x2318;F&nbsp;</button>
-If one only selects a file path this command shows you the first three lines of that file as tooltip. Useful for the import of data files to determine whether the data file has an header or not etc.
+If one only selects a file path this command shows you the first three lines of that file as tooltip. Useful for the import of data files to determine the its structure or whether the data file has an header or not etc.
 
 ## Next/Previous List Element/Parameter Value
 <button>&nbsp;^&#x2325;&#x2192;&nbsp;</button><button>&nbsp;^&#x2325;&#x2190;&nbsp;</button>
 It tries to highlight the next/previous element (if quoted only the content) of a list/vector or the value of function parameters.
 
-## Tidy
+## Tidy (removes all comments!)
 <button>&nbsp;^&#x21E7;H&nbsp;</button>
 It tidies the selection or the entire document by deparsing them on-the-fly using the command-line version of R. General syntax errors will be displayed as tooltip and the caret will be moved to the first error.
 
@@ -221,7 +220,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Oct 06 2008***
+***Date: Nov 24 2008***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

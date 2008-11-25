@@ -67,7 +67,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>((:-)\s+(object|protocol|category|module))(?:\()([^(,)]+)</string>
+			<string>((:-)\s(object|protocol|category|module))(?:\()([^(,)]+)</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -79,7 +79,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(:-)\s+(end_(object|protocol|category))(?=[.])</string>
+			<string>(:-)\s(end_(object|protocol|category))(?=[.])</string>
 			<key>name</key>
 			<string>storage.type.closing.logtalk</string>
 		</dict>
@@ -99,7 +99,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(:-)\s+(e(lse|ndif)|dynamic|synchronized|threaded)(?=[.])</string>
+			<string>(:-)\s(e(lse|ndif)|dynamic|synchronized|threaded)(?=[.])</string>
 			<key>name</key>
 			<string>storage.modifier.others.logtalk</string>
 		</dict>
@@ -113,7 +113,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(:-)\s+(calls|e(lif|ncoding|xport)|i(f|n(itialization|fo))|uses)(?=[(])</string>
+			<string>(:-)\s(calls|e(lif|n(coding|sure_loaded)|xport)|i(f|n(itialization|fo))|set_(logtalk|prolog)_flag|uses)(?=[(])</string>
 			<key>name</key>
 			<string>storage.modifier.others.logtalk</string>
 		</dict>
@@ -127,7 +127,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(:-)\s+(alias|info|d(ynamic|iscontiguous)|m(eta_predicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|use(s|_module)|synchronized)(?=[(])</string>
+			<string>(:-)\s(alias|info|d(ynamic|iscontiguous)|m(eta_predicate|ode|ultifile)|p(ublic|r(otected|ivate))|op|use(s|_module)|synchronized)(?=[(])</string>
 			<key>name</key>
 			<string>storage.modifier.others.logtalk</string>
 		</dict>

@@ -5,34 +5,213 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># Run the current document in our Scheme interpreter.
+	<string>#!/usr/bin/env ruby
+
+require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
+require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
+require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
+
+TextMate.save_current_document
+TextMate::Executor.make_project_master_current_document
+
+interpreters = ["mzscheme", "csi", "guile"]
+args = []
+args &lt;&lt; (ENV["TM_SCHEME"] || interpreters.select{|ii| ENV["PATH"].split(":").any?{|dd| File.executable? File.join(dd, ii)}}.first)
+
+case args[0]
+when "mzscheme"
+  args &lt;&lt; "-e" &lt;&lt; '(require (lib "errortrace.ss" "errortrace"))' &lt;&lt; "-r"
+else
+  args &lt;&lt; "-s"
+end
+
+TextMate::Executor.run(args, ENV["TM_FILEPATH"]) do |line,type|
+  if line =~ /(.*):([0-9]+):([0-9]+):(.*)/ then
+    unless ENV["TM_FILE_IS_UNTITLED"] == "true"
+       "&lt;a href=\"txmt://open?url=file://#{htmlize($1)}&amp;line=#{$2}&amp;column=#{$3}\"&gt;#{htmlize($1)}:#{$2}:#{$3}&lt;/a&gt;:#{htmlize($4)}"
+    else
+      "&lt;a href=\"txmt://open?line=#{$2}&amp;column=#{$3}\"&gt;#{htmlize($1)}:#{$2}:#{$3}&lt;/a&gt;:#{htmlize($4)}"
+    end
+  end
+end
+    
+
+
+# def printheader(schemesystem, interpreter)
+#   print &lt;&lt;-ENDHTML
+#     &lt;html&gt;
+#     &lt;head&gt;
+#     &lt;title&gt;Scheme TextMate Runtime&lt;/title&gt;
+#     &lt;style type='text/css'&gt;
+#       body { background-color: #e0e0ff;}
+#       .header,
+#       .output,
+#       .errors {
+#           margin: 10px 0px 10px 0px;
+#           padding: 10px;
+#           border: 1px dotted black;
+#           background-color: #ffffff;
+#       }
+#       .header { background-color: #a0a0ff;}
+#       .output { background-color: #ffffff;}
+#       .outputline { font-family: Monaco;
+#                     font-size: 8pt; }
+#       .errors { background-color: #f0f0f0;}
+#       .errorline {  font-family: Monaco;
+#                     font-size: 8pt;
+#                     color: #0000f0 }
+#       .errorinfo {  font-family: Monaco;
+#                     font-size: 8pt; }
+#       .errorexp {   font-family: Monaco;
+#                     font-size: 8pt;
+#                     color: #f00000 }
+#       a { color: #f00000;
+#           text-decoration: none; }
+#     &lt;/style&gt;
+#     &lt;body&gt;
+#     &lt;div class='header'&gt;
+#     Executed Scheme file in #{schemesystem} (&lt;i&gt;#{interpreter}&lt;/i&gt;)
+#     &lt;/div&gt;
+#   ENDHTML
+# end
+# 
+# def printend
+#   print &lt;&lt;-ENDHTML
+#     &lt;/body&gt;
+#     &lt;/html&gt;
+#   ENDHTML
+# end
+# 
+# def printoutput(ioport)
+#   puts "&lt;div class='output'&gt;"
+#   ioport.each do |line| 
+#     puts "&lt;div class='outputline'&gt;"
+#     puts line
+#     puts "&lt;/div&gt;"
+#   end
+#   puts "&lt;/div&gt;"
+# end
+# 
+# def makeerrorlink(line, system)
+#   case system
+#   when "mzscheme"
+#     a = line.split(':', 4)
+#     file = a[0]
+#     line = a[1]
+#     column = a[2]
+#     exp = a[3]
+#     "&lt;tr&gt;&lt;td width='50'&gt;&lt;/td&gt;&lt;td&gt;&lt;div class='errorinfo'&gt;" +
+#     File.basename(file) + " line #{line}, column #{column}&lt;/div&gt;&lt;/td&gt;" +
+#     '&lt;td width="30"&gt;&lt;/td&gt;&lt;td&gt;&lt;div class="errorexp"&gt;&lt;a href="txmt://open?url=file://' + 
+#     File.expand_path(a[0]) + '&amp;line=' + line + '&amp;column=' + column + '"&gt;' + 
+#     escape(exp) + "&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;"
+#   end
+# end
+# 
+# def printerrors(errorfile, system)
+#   puts "&lt;div class='errors'&gt;"
+#   puts "&lt;table&gt;"
+#   errors = 0
+#   f = File.new(errorfile)  
+#   f.each do |line|
+#       errors = 1
+#       case system
+#       when "mzscheme"
+#         if line =~ /:[0-9]+:[0-9]+:/ then
+#           puts makeerrorlink(line, system)
+#         else
+#           puts "&lt;div class='errorline'&gt;"
+#           puts line
+#           puts "&lt;/div&gt;"
+#         end
+#       when "csi"
+#         if line =~ /^Error/ then
+#           puts "&lt;div class='errorline'&gt;"
+#           puts line
+#           puts "&lt;/div&gt;"        
+#         else
+#           puts "&lt;div class='errorinfo'&gt;"
+#           puts line
+#           puts "&lt;/div&gt;"
+#         end
+#       else
+#         puts "&lt;div class='errorline'&gt;"
+#         puts line
+#         puts "&lt;/div&gt;"        
+#       end
+#   end
+#   if errors == 0
+#       puts "Program exited normally."
+#   end
+#   puts "&lt;/table&gt;&lt;/div&gt;"
+# end
+
+
+
+# error_fd ||= IO.for_fd(ENV["TM_ERROR_FD"].to_i)
+# case type
+# when :err    # 
+#   if str =~ /^([^\:]+):(\d+):(\d+): (.*?): (.*) \((-?\d+)\)$/ then
+#     filepath, start,  stop, err, msg, status = $1, $2.to_i, $3.to_i, $4, $5, $6
+#   
+#     err = err.gsub(/\b\w(?=\w{3,})/) { |m| m.upcase }
+#     
+#     error_fd &lt;&lt; "&lt;div id=\"exception_report\" class=\"framed\"&gt;\n"
+#     error_fd &lt;&lt; "&lt;p id=\"exception\"&gt;&lt;strong&gt;#{htmlize err}&lt;/strong&gt;: #{htmlize msg}&lt;/p&gt;\n"
+#   
+#     from = document[0..start].rindex(/^/)
+#     to = start + document[start..-1].index(/$/)
+#     src =  document[from...to]
+#   
+#     line = document[0...start].count("\n") + 1
+#     column = start - from
+#   
+#     link = "txmt://open?line=#{line}&amp;column=#{column}"
+#     error_fd &lt;&lt; "&lt;pre&gt;#{src}\n"
+#     error_fd &lt;&lt; "#{' ' * (column)}↑&lt;/pre&gt;"
+#     error_fd &lt;&lt;  "&lt;blockquote&gt;&lt;a href=\"#{link}\"&gt;line #{line}, column #{column}&lt;/a&gt; in #{ENV['TM_DISPLAYNAME']}\n"
+#   
+#     error_fd &lt;&lt; "&lt;p&gt;Error #{status}.&lt;/p&gt;\n"
+#     error_fd &lt;&lt; "&lt;/div&gt;\n"
+#     
+#     error_fd.flush
+#     ""
+#   else
+#     "&lt;span class=\"err\" style=\"color:red;\"&gt;#{htmlize(str)}&lt;/span&gt;&lt;br/&gt;"
+#   end
+# when :out
+#   htmlize(str)
+# end
+
+
+# Run the current document in our Scheme interpreter.
 #
 # The interpreter you use should be set in the environment
 # variable TM_SCHEME_INTERPRETER.
 #
 
-# Save file, use tmp-file if there's no filepath.
-[[ -z "$TM_FILEPATH" ]] &amp;&amp; TM_TMPFILE=$(mktemp -t pythonmate)
-: "${TM_FILEPATH:=$TM_TMPFILE}"; cat &gt;"$TM_FILEPATH"
-
-# set up variables
-INTERPRET=${TM_SCHEME_INTERPRETER:=csi}
-CMD=$(basename "$INTERPRET")
-SHOWOUTPUT="$TM_BUNDLE_SUPPORT/showoutput.rb"
-TM_ERRORTEMP=$(mktemp -t scheme)
-
-# Run depending on the system are we on?
-if [ $CMD == "mzscheme" ] ; then
-	"$INTERPRET" -e '(require (lib "errortrace.ss" "errortrace"))' -r "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
-elif [ $CMD == "csi" ] ; then
-	"$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
-elif [ $CMD = "guile" ] ; then
-	"$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
-fi
-
-# Delete tempfiles
-rm -f "$TM_TMPFILE"
-rm -f "$TM_ERRORTEMP"</string>
+# # Save file, use tmp-file if there's no filepath.
+# [[ -z "$TM_FILEPATH" ]] &amp;&amp; TM_TMPFILE=$(mktemp -t pythonmate)
+# : "${TM_FILEPATH:=$TM_TMPFILE}"; cat &gt;"$TM_FILEPATH"
+# 
+# # set up variables
+# INTERPRET=${TM_SCHEME_INTERPRETER:=csi}
+# CMD=$(basename "$INTERPRET")
+# SHOWOUTPUT="$TM_BUNDLE_SUPPORT/showoutput.rb"
+# TM_ERRORTEMP=$(mktemp -t scheme)
+# 
+# # Run depending on the system are we on?
+# if [ $CMD == "mzscheme" ] ; then
+#   "$INTERPRET" -e '(require (lib "errortrace.ss" "errortrace"))' -r "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
+# elif [ $CMD == "csi" ] ; then
+#   "$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
+# elif [ $CMD = "guile" ] ; then
+#   "$INTERPRET" -s "$TM_FILEPATH" 2&gt;"$TM_ERRORTEMP" | "$SHOWOUTPUT" "$INTERPRET" "$TM_ERRORTEMP"
+# fi
+# 
+# # Delete tempfiles
+# rm -f "$TM_TMPFILE"
+# rm -f "$TM_ERRORTEMP" </string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

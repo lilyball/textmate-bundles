@@ -145,10 +145,10 @@ module TextMate
             # If the user has Dialog 2 available we can show the popup
 
             command =  "#{TM_DIALOG} popup --wait"
-            command << " --initial-filter #{e_sh options[:initial_filter]}"
-            command << " --static-prefix #{e_sh options[:static_prefix]}"   if options[:static_prefix]
-            command << " --extra-chars #{e_sh options[:extra_chars]}"       if options[:extra_chars]
-            command << " --case-insensitive"                                if options[:case_insensitive]
+            command << " --alreadyTyped #{e_sh options[:initial_filter]}"
+            command << " --staticPrefix #{e_sh options[:static_prefix]}"   if options[:static_prefix]
+            command << " --additionalWordCharacters #{e_sh options[:extra_chars]}"       if options[:extra_chars]
+            command << " --caseInsensitive"                                if options[:case_insensitive]
             IO.popen(command, 'w+') do |io|
               io << plist.to_plist
               io.close_write

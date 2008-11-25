@@ -144,7 +144,7 @@ module TextMate
           if ENV['DIALOG'] =~ /2$/ and not ENV['TM_USE_MENU_COMPLETION']
             # If the user has Dialog 2 available we can show the popup
 
-            command =  "#{TM_DIALOG} popup --wait"
+            command =  "#{TM_DIALOG} popup --returnChoice"
             command << " --alreadyTyped #{e_sh options[:initial_filter]}"
             command << " --staticPrefix #{e_sh options[:static_prefix]}"   if options[:static_prefix]
             command << " --additionalWordCharacters #{e_sh options[:extra_chars]}"       if options[:extra_chars]

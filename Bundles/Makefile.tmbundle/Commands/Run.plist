@@ -21,6 +21,9 @@ flags &lt;&lt; ENV["TM_MAKE_TARGET"] unless ENV["TM_MAKE_TARGET"].nil?
 
 ENV["TM_DISPLAYNAME"] = ENV["TM_MAKE_TARGET"].nil? ? "default" : ENV["TM_MAKE_TARGET"]
 
+# makefiles are always in the project directory.
+Dir.chdir(ENV["TM_PROJECT_DIRECTORY"]) unless ENV["TM_PROJECT_DIRECTORY"].nil?
+
 TextMate::Executor.run("make", flags, :verb =&gt; "Making") do |line, type|
   if line =~ /^(.*?):(?:(\d+):)?\s*(.*?)$/ and not $1.nil? and File.exists?($1)
     "&lt;a href=\"txmt://open?url=file://#{e_url File.expand_path($1)}#{$2.nil? ? '' : "&amp;line=" + $2}\"&gt;#{htmlize $3}&lt;/a&gt;&lt;br&gt;\n"

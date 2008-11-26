@@ -18,6 +18,7 @@ class GroovyMatePrefs
 end
 
 TextMate.save_current_document
+TextMate::Executor.make_project_master_current_document
 
 cmd = [ENV['TM_GROOVY'] || "groovy"]
 cmd << ENV['TM_FILEPATH']

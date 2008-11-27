@@ -66,7 +66,7 @@ echo '{ items = ({title = "foo"; header = 1;},{title = "bar";}); }' | "$DIALOG" 
 			if(++item_id <= 10)
 			{
 				SetMenuItemCommandKey(menu_ref, index, NO, item_id == 10 ? '0' : '1' + (item_id-1));
-				SetMenuItemModifiers(menu_ref, index, kMenuNoCommandModifier);
+				// SetMenuItemModifiers(menu_ref, index, kMenuNoCommandModifier);
 			}
 			if (in_section)
 				SetMenuItemIndent(menu_ref, index, 1);

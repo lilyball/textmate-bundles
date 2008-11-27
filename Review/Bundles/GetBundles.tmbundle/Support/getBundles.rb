@@ -1319,7 +1319,7 @@ def checkForSupportFolderUpdate
 
   $updateSupportFolder = true
 
-  if File.directory?($supportFolder) and ! File.symlink?($supportFolder)
+  if File.directory?($supportFolder)
     writeTimedMessage(%Q{Warning:
 Please note that you have already installed an update of TextMate's “Support Folder” in ‘#{$supportFolder}’.
 This folder won't be touched by GetBundles' update!
@@ -1414,15 +1414,15 @@ svn switch --relocate http://macromates.com/svn/Bundles/trunk/Support http://svn
   end
   
   # check for /Lib/AS/TM
-  FileUtils.mkdir_p($asFolder) unless File.directory?($asFolder)
+  # FileUtils.mkdir_p($asFolder) unless File.directory?($asFolder)
   
   # create symlink if no /Lib/AS/TM/Support
-  begin
-    File.symlink($supportFolderPristine, $supportFolder) unless File.directory?($supportFolder)
-  rescue
-    writeTimedMessage("Error while creating a symbolic link:\n#{$!}")
-    return
-  end
+  # begin
+  #   File.symlink($supportFolderPristine, $supportFolder) unless File.directory?($supportFolder)
+  # rescue
+  #   writeTimedMessage("Error while creating a symbolic link:\n#{$!}")
+  #   return
+  # end
   
   $params['isBusy'] = true
   $params['nocancel'] = true

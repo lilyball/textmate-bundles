@@ -89,16 +89,12 @@ echo '{ items = ({title = "foo"; header = 1;},{title = "bar";}); }' | "$DIALOG" 
 	short left = lroundf(pos.x - NSMinX(mainScreen));
 	long res = PopUpMenuSelect(menu_ref, top, left, 0 /* pop-up item */);
 
-	NSMutableDictionary* selectedItem = [NSMutableDictionary dictionary];
 	if(res != 0)
 	{
 		MenuCommand cmd = 0;
 		GetMenuItemCommandID(menu_ref, res, &cmd);
-		[selectedItem setObject:[NSNumber numberWithUnsignedInt:(unsigned)cmd] forKey:@"selectedIndex"];
-		[selectedItem setObject:[menuItems objectAtIndex:(unsigned)cmd] forKey:@"selectedMenuItem"];
+		[TMDCommand writePropertyList:[menuItems objectAtIndex:(unsigned)cmd] toFileHandle:[proxy outputHandle]];
 	}
-
-	[TMDCommand writePropertyList:selectedItem toFileHandle:[proxy outputHandle]];
 
 	DisposeMenu(menu_ref);
 }

@@ -1,0 +1,530 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		175614490EDEA3B80053AC52 /* images.mm in Sources */ = {isa = PBXBuildFile; fileRef = 175614480EDEA3B80053AC52 /* images.mm */; };
+		1756144D0EDEA96F0053AC52 /* defaults.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1756144C0EDEA96F0053AC52 /* defaults.mm */; };
+		177E4DA309132A0F0064163D /* Dialog2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 177E4DA209132A0F0064163D /* Dialog2.mm */; };
+		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
+		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
+		910713760D99768B0091C83C /* TextMate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 910713750D99768B0091C83C /* TextMate.mm */; };
+		91234F960D9A84E900E346BA /* insert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91234F950D9A84E900E346BA /* insert.mm */; };
+		9192ECB50CF7AF39003D9967 /* TMDNibController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9192ECB40CF7AF39003D9967 /* TMDNibController.mm */; };
+		91BF40BA0D6792CB001834B3 /* CLIProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91BF40B90D6792CB001834B3 /* CLIProxy.mm */; };
+		91D6F89E0CF23B0D000F8170 /* TMDCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F89A0CF23B0D000F8170 /* TMDCommand.mm */; };
+		91D6F8A40CF23B71000F8170 /* OptionParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F8A30CF23B71000F8170 /* OptionParser.mm */; };
+		91D6F8EE0CF23C2C000F8170 /* tm_dialog2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F8E40CF23C09000F8170 /* tm_dialog2.mm */; };
+		91D6F8F90CF23D6E000F8170 /* tm_dialog2 in Resources */ = {isa = PBXBuildFile; fileRef = 91D6F8EA0CF23C23000F8170 /* tm_dialog2 */; };
+		91D6F8FE0CF23E51000F8170 /* alert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F8FD0CF23E51000F8170 /* alert.mm */; };
+		91D6F9020CF23E79000F8170 /* help.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9010CF23E79000F8170 /* help.mm */; };
+		91D6F9060CF23E7F000F8170 /* menu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9040CF23E7F000F8170 /* menu.mm */; };
+		91D6F90B0CF23EAE000F8170 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D6F90A0CF23EAE000F8170 /* Carbon.framework */; };
+		91D6F95A0CF2BD16000F8170 /* extendedmenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9560CF2BD16000F8170 /* extendedmenu.mm */; };
+		91D6F95C0CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9590CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm */; };
+		91D6F9710CF2C803000F8170 /* htmltips.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F96E0CF2C803000F8170 /* htmltips.mm */; };
+		91D6F9730CF2C803000F8170 /* TMDHTMLTips.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9700CF2C803000F8170 /* TMDHTMLTips.mm */; };
+		91D6F97E0CF2C8EF000F8170 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D6F97D0CF2C8EF000F8170 /* WebKit.framework */; };
+		91D6F9940CF33A7A000F8170 /* TMDChameleon.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9900CF33A7A000F8170 /* TMDChameleon.mm */; };
+		91D6F9950CF33A7A000F8170 /* ValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9920CF33A7A000F8170 /* ValueTransformers.mm */; };
+		91D6F9960CF33A7A000F8170 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9930CF33A7A000F8170 /* window.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		91D6F8F30CF23C3D000F8170 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 91D6F8E90CF23C23000F8170;
+			remoteInfo = tm_dialog2;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		175614480EDEA3B80053AC52 /* images.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = images.mm; path = Commands/images.mm; sourceTree = "<group>"; };
+		1756144C0EDEA96F0053AC52 /* defaults.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = defaults.mm; path = Commands/defaults.mm; sourceTree = "<group>"; };
+		177E4DA109132A0F0064163D /* Dialog2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dialog2.h; sourceTree = "<group>"; };
+		177E4DA209132A0F0064163D /* Dialog2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Dialog2.mm; sourceTree = "<group>"; };
+		32DBCF630370AF2F00C91783 /* Dialog2_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dialog2_Prefix.pch; sourceTree = "<group>"; };
+		8D5B49B6048680CD000E48DA /* Dialog2.tmplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Dialog2.tmplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		910713750D99768B0091C83C /* TextMate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextMate.mm; path = Commands/Utilities/TextMate.mm; sourceTree = "<group>"; };
+		91234F950D9A84E900E346BA /* insert.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = insert.mm; path = Commands/insert.mm; sourceTree = "<group>"; };
+		9192ECB30CF7AF39003D9967 /* TMDNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDNibController.h; path = Commands/Utilities/TMDNibController.h; sourceTree = "<group>"; };
+		9192ECB40CF7AF39003D9967 /* TMDNibController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDNibController.mm; path = Commands/Utilities/TMDNibController.mm; sourceTree = "<group>"; };
+		91BF40B80D6792CB001834B3 /* CLIProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLIProxy.h; sourceTree = "<group>"; };
+		91BF40B90D6792CB001834B3 /* CLIProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CLIProxy.mm; sourceTree = "<group>"; };
+		91D6F89A0CF23B0D000F8170 /* TMDCommand.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = TMDCommand.mm; sourceTree = "<group>"; };
+		91D6F89C0CF23B0D000F8170 /* TMDCommand.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMDCommand.h; sourceTree = "<group>"; };
+		91D6F8A30CF23B71000F8170 /* OptionParser.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OptionParser.mm; sourceTree = "<group>"; };
+		91D6F8E40CF23C09000F8170 /* tm_dialog2.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = tm_dialog2.mm; sourceTree = "<group>"; };
+		91D6F8EA0CF23C23000F8170 /* tm_dialog2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tm_dialog2; sourceTree = BUILT_PRODUCTS_DIR; };
+		91D6F8FD0CF23E51000F8170 /* alert.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = alert.mm; path = Commands/alert.mm; sourceTree = "<group>"; };
+		91D6F9010CF23E79000F8170 /* help.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = help.mm; path = Commands/help.mm; sourceTree = "<group>"; };
+		91D6F9040CF23E7F000F8170 /* menu.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = menu.mm; path = Commands/menu.mm; sourceTree = "<group>"; };
+		91D6F90A0CF23EAE000F8170 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		91D6F9560CF2BD16000F8170 /* extendedmenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = extendedmenu.mm; path = Commands/ExtendedPopUp/extendedmenu.mm; sourceTree = "<group>"; };
+		91D6F9570CF2BD16000F8170 /* TMDIncrementalPopUpMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDIncrementalPopUpMenu.h; path = Commands/ExtendedPopUp/TMDIncrementalPopUpMenu.h; sourceTree = "<group>"; };
+		91D6F9590CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDIncrementalPopUpMenu.mm; path = Commands/ExtendedPopUp/TMDIncrementalPopUpMenu.mm; sourceTree = "<group>"; };
+		91D6F9670CF2C2B5000F8170 /* TextMate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextMate.h; path = Commands/Utilities/TextMate.h; sourceTree = "<group>"; };
+		91D6F96D0CF2C803000F8170 /* TMDHTMLTips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDHTMLTips.h; path = Commands/HTMLTips/TMDHTMLTips.h; sourceTree = "<group>"; };
+		91D6F96E0CF2C803000F8170 /* htmltips.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = htmltips.mm; path = Commands/HTMLTips/htmltips.mm; sourceTree = "<group>"; };
+		91D6F9700CF2C803000F8170 /* TMDHTMLTips.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDHTMLTips.mm; path = Commands/HTMLTips/TMDHTMLTips.mm; sourceTree = "<group>"; };
+		91D6F97D0CF2C8EF000F8170 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		91D6F98F0CF33A7A000F8170 /* TMDChameleon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDChameleon.h; path = Commands/Utilities/TMDChameleon.h; sourceTree = "<group>"; };
+		91D6F9900CF33A7A000F8170 /* TMDChameleon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDChameleon.mm; path = Commands/Utilities/TMDChameleon.mm; sourceTree = "<group>"; };
+		91D6F9910CF33A7A000F8170 /* ValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValueTransformers.h; path = Commands/Utilities/ValueTransformers.h; sourceTree = "<group>"; };
+		91D6F9920CF33A7A000F8170 /* ValueTransformers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ValueTransformers.mm; path = Commands/Utilities/ValueTransformers.mm; sourceTree = "<group>"; };
+		91D6F9930CF33A7A000F8170 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = Commands/window.mm; sourceTree = "<group>"; };
+		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D5B49B3048680CD000E48DA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
+				91D6F90B0CF23EAE000F8170 /* Carbon.framework in Frameworks */,
+				91D6F97E0CF2C8EF000F8170 /* WebKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91D6F8E80CF23C23000F8170 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* Dialog2 */ = {
+			isa = PBXGroup;
+			children = (
+				91D6F8FC0CF23E46000F8170 /* Commands */,
+				08FB77AFFE84173DC02AAC07 /* Classes */,
+				32C88E010371C26100C91783 /* Other Sources */,
+				91D6F8E30CF23C00000F8170 /* tm_dialog2 */,
+				089C167CFE841241C02AAC07 /* Resources */,
+				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
+				19C28FB8FE9D52D311CA2CBB /* Products */,
+			);
+			name = Dialog2;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 /* Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */,
+				1058C7AEFEA557BF11CA2CBB /* Other Frameworks */,
+			);
+			name = "Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C167CFE841241C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D5B49B7048680CD000E48DA /* Info.plist */,
+				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AFFE84173DC02AAC07 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				177E4DA209132A0F0064163D /* Dialog2.mm */,
+				177E4DA109132A0F0064163D /* Dialog2.h */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91D6F90A0CF23EAE000F8170 /* Carbon.framework */,
+				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7AEFEA557BF11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91D6F97D0CF2C8EF000F8170 /* WebKit.framework */,
+				089C167FFE841241C02AAC07 /* AppKit.framework */,
+				D2F7E65807B2D6F200F64583 /* CoreData.framework */,
+				089C1672FE841209C02AAC07 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FB8FE9D52D311CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D5B49B6048680CD000E48DA /* Dialog2.tmplugin */,
+				91D6F8EA0CF23C23000F8170 /* tm_dialog2 */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		32C88E010371C26100C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				91D6F8A30CF23B71000F8170 /* OptionParser.mm */,
+				91D6F89A0CF23B0D000F8170 /* TMDCommand.mm */,
+				91D6F89C0CF23B0D000F8170 /* TMDCommand.h */,
+				32DBCF630370AF2F00C91783 /* Dialog2_Prefix.pch */,
+				91BF40B80D6792CB001834B3 /* CLIProxy.h */,
+				91BF40B90D6792CB001834B3 /* CLIProxy.mm */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		91D6F8E30CF23C00000F8170 /* tm_dialog2 */ = {
+			isa = PBXGroup;
+			children = (
+				91D6F8E40CF23C09000F8170 /* tm_dialog2.mm */,
+			);
+			name = tm_dialog2;
+			sourceTree = "<group>";
+		};
+		91D6F8FC0CF23E46000F8170 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				1756144C0EDEA96F0053AC52 /* defaults.mm */,
+				175614480EDEA3B80053AC52 /* images.mm */,
+				91D6F9930CF33A7A000F8170 /* window.mm */,
+				91D6F94E0CF2BCEC000F8170 /* ExtendedPopUp */,
+				91D6F9680CF2C7E5000F8170 /* HTMLTips */,
+				91D6F9040CF23E7F000F8170 /* menu.mm */,
+				91D6F9010CF23E79000F8170 /* help.mm */,
+				91D6F8FD0CF23E51000F8170 /* alert.mm */,
+				91D6F95E0CF2BD26000F8170 /* Utilities */,
+				91234F950D9A84E900E346BA /* insert.mm */,
+			);
+			name = Commands;
+			sourceTree = "<group>";
+		};
+		91D6F94E0CF2BCEC000F8170 /* ExtendedPopUp */ = {
+			isa = PBXGroup;
+			children = (
+				91D6F9560CF2BD16000F8170 /* extendedmenu.mm */,
+				91D6F9570CF2BD16000F8170 /* TMDIncrementalPopUpMenu.h */,
+				91D6F9590CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm */,
+			);
+			name = ExtendedPopUp;
+			sourceTree = "<group>";
+		};
+		91D6F95E0CF2BD26000F8170 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				91D6F98F0CF33A7A000F8170 /* TMDChameleon.h */,
+				91D6F9900CF33A7A000F8170 /* TMDChameleon.mm */,
+				91D6F9910CF33A7A000F8170 /* ValueTransformers.h */,
+				91D6F9920CF33A7A000F8170 /* ValueTransformers.mm */,
+				91D6F9670CF2C2B5000F8170 /* TextMate.h */,
+				910713750D99768B0091C83C /* TextMate.mm */,
+				9192ECB30CF7AF39003D9967 /* TMDNibController.h */,
+				9192ECB40CF7AF39003D9967 /* TMDNibController.mm */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		91D6F9680CF2C7E5000F8170 /* HTMLTips */ = {
+			isa = PBXGroup;
+			children = (
+				91D6F96D0CF2C803000F8170 /* TMDHTMLTips.h */,
+				91D6F96E0CF2C803000F8170 /* htmltips.mm */,
+				91D6F9700CF2C803000F8170 /* TMDHTMLTips.mm */,
+			);
+			name = HTMLTips;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D5B49AC048680CD000E48DA /* Dialog2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "Dialog2" */;
+			buildPhases = (
+				8D5B49AF048680CD000E48DA /* Resources */,
+				8D5B49B1048680CD000E48DA /* Sources */,
+				8D5B49B3048680CD000E48DA /* Frameworks */,
+				177E4DB50913322B0064163D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				91D6F8F40CF23C3D000F8170 /* PBXTargetDependency */,
+			);
+			name = Dialog2;
+			productInstallPath = "$(HOME)/Library/Bundles";
+			productName = Dialog2;
+			productReference = 8D5B49B6048680CD000E48DA /* Dialog2.tmplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+		91D6F8E90CF23C23000F8170 /* tm_dialog2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91D6F8F20CF23C2F000F8170 /* Build configuration list for PBXNativeTarget "tm_dialog2" */;
+			buildPhases = (
+				91D6F8E70CF23C23000F8170 /* Sources */,
+				91D6F8E80CF23C23000F8170 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tm_dialog2;
+			productName = tm_dialog2;
+			productReference = 91D6F8EA0CF23C23000F8170 /* tm_dialog2 */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "Dialog2" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 089C166AFE841209C02AAC07 /* Dialog2 */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D5B49AC048680CD000E48DA /* Dialog2 */,
+				91D6F8E90CF23C23000F8170 /* tm_dialog2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D5B49AF048680CD000E48DA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91D6F8F90CF23D6E000F8170 /* tm_dialog2 in Resources */,
+				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		177E4DB50913322B0064163D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Copy ‘${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}’…\"\n\nmkdir -p \"$HOME/Library/Application Support/TextMate/PlugIns\"\nif cp -pR \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\" \"$HOME/Library/Application Support/TextMate/PlugIns\"; then\n   echo \"Installed in ‘$HOME/Library/Application Support/TextMate/PlugIns’.\"\n   ls -lAd \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\"\n   ls -lAd \"$HOME/Library/Application Support/TextMate/PlugIns/${FULL_PRODUCT_NAME}\"\nelse\n   echo \"Failed to install Dialog plug-in.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D5B49B1048680CD000E48DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				177E4DA309132A0F0064163D /* Dialog2.mm in Sources */,
+				91D6F89E0CF23B0D000F8170 /* TMDCommand.mm in Sources */,
+				91D6F8A40CF23B71000F8170 /* OptionParser.mm in Sources */,
+				91D6F8FE0CF23E51000F8170 /* alert.mm in Sources */,
+				91D6F9020CF23E79000F8170 /* help.mm in Sources */,
+				91D6F9060CF23E7F000F8170 /* menu.mm in Sources */,
+				91D6F95A0CF2BD16000F8170 /* extendedmenu.mm in Sources */,
+				91D6F95C0CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm in Sources */,
+				91D6F9710CF2C803000F8170 /* htmltips.mm in Sources */,
+				91D6F9730CF2C803000F8170 /* TMDHTMLTips.mm in Sources */,
+				91D6F9940CF33A7A000F8170 /* TMDChameleon.mm in Sources */,
+				91D6F9950CF33A7A000F8170 /* ValueTransformers.mm in Sources */,
+				91D6F9960CF33A7A000F8170 /* window.mm in Sources */,
+				9192ECB50CF7AF39003D9967 /* TMDNibController.mm in Sources */,
+				91BF40BA0D6792CB001834B3 /* CLIProxy.mm in Sources */,
+				910713760D99768B0091C83C /* TextMate.mm in Sources */,
+				91234F960D9A84E900E346BA /* insert.mm in Sources */,
+				175614490EDEA3B80053AC52 /* images.mm in Sources */,
+				1756144D0EDEA96F0053AC52 /* defaults.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91D6F8E70CF23C23000F8170 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91D6F8EE0CF23C2C000F8170 /* tm_dialog2.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		91D6F8F40CF23C3D000F8170 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 91D6F8E90CF23C23000F8170 /* tm_dialog2 */;
+			targetProxy = 91D6F8F30CF23C3D000F8170 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		089C167DFE841241C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C167EFE841241C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB913B08733D840010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Dialog2_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				PRODUCT_NAME = Dialog2;
+				WRAPPER_EXTENSION = tmplugin;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB913C08733D840010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Dialog2_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				PRODUCT_NAME = Dialog2;
+				WRAPPER_EXTENSION = tmplugin;
+			};
+			name = Release;
+		};
+		1DEB913F08733D840010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		1DEB914008733D840010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+		91D6F8EC0CF23C24000F8170 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = tm_dialog2;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		91D6F8ED0CF23C24000F8170 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = tm_dialog2;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "Dialog2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB913B08733D840010E9CD /* Debug */,
+				1DEB913C08733D840010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "Dialog2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB913F08733D840010E9CD /* Debug */,
+				1DEB914008733D840010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		91D6F8F20CF23C2F000F8170 /* Build configuration list for PBXNativeTarget "tm_dialog2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91D6F8EC0CF23C24000F8170 /* Debug */,
+				91D6F8ED0CF23C24000F8170 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}

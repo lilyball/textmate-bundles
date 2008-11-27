@@ -169,14 +169,7 @@ module TextMate
 
           # Use a default block if none was provided
           block ||= lambda do |choice|
-            return nil unless choice
-            
-            #Show the tool_tip before inserting the snippet to make it align to the end of the match
-            if choice['tool_tip'] and not ENV.has_key?('TM_DISABLE_TOOL_TIPS')
-              TextMate::UI.tool_tip( choice['tool_tip'], {:format => choice['tool_tip_format'] || :text }) 
-            end
-            
-            choice['insert']
+            choice ? choice['insert'] : nil
           end
 
           # The block should return the text to insert as a snippet

@@ -73,7 +73,7 @@ selected_desc = res['description']
 
 puts "&lt;h1&gt;#{selected_target}:&lt;/h1&gt;&lt;p&gt;#{selected_desc}&lt;/p&gt;&lt;pre&gt;"
 
-TextMate::Process.run("ant -buildfile #{ant_build_file} #{selected_target}") do |str|
+TextMate::Process.run("ant -buildfile #{ant_build_file} #{selected_target}", :interactive_input =&gt; false) do |str|
 	STDOUT &lt;&lt; htmlize(str, :no_newline_after_br =&gt; true)
 end
 

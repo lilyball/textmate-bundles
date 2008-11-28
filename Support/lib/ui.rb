@@ -149,7 +149,7 @@ module TextMate
             command << " --staticPrefix #{e_sh options[:static_prefix]}"   if options[:static_prefix]
             command << " --additionalWordCharacters #{e_sh options[:extra_chars]}"       if options[:extra_chars]
             command << " --caseInsensitive"                                if options[:case_insensitive]
-            IO.popen(command, 'w+') do |io|
+            ::IO.popen(command, 'w+') do |io|
               io << plist.to_plist
               io.close_write
               result = OSX::PropertyList.load io rescue nil
@@ -190,7 +190,7 @@ module TextMate
           options = options.collect { |e| e == nil ? { 'separator' => 1 } : { 'title' => e } }
         end
 
-        res = IO.popen("#{TM_DIALOG} -u", "r+") do |io|
+        res = ::IO.popen("#{TM_DIALOG} -u", "r+") do |io|
           Thread.new do
             plist = { 'menuItems' => options }.to_plist
             io.write plist; io.close_write

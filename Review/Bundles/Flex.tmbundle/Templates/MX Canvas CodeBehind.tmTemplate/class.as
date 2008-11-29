@@ -7,7 +7,7 @@
 package ${TM_CLASS_PATH}
 {
 	
-import mx.core.Container;
+import mx.containers.Canvas;
 
 /**
  *	Class description.
@@ -18,7 +18,7 @@ import mx.core.Container;
  *	@author ${TM_FULLNAME}
  *	@since  ${TM_DATE}
  */
-public class ${TM_NEW_FILE_BASENAME} extends Container
+public class ${TM_NEW_FILE_BASENAME} extends Canvas
 {
 	
 	//--------------------------------------

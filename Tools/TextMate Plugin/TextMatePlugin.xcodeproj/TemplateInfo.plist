@@ -1,0 +1,17 @@
+{
+	FilesToRename = {
+		"TextMatePlugin_Prefix.pch" = "«PROJECTNAME»_Prefix.pch";
+		"TextMatePlugin.xcodeproj" = "«PROJECTNAME».xcodeproj";
+		"TextMatePlugin.h" = "«PROJECTNAME».h";
+		"TextMatePlugin.mm" = "«PROJECTNAME».mm";
+	};
+	FilesToMacroExpand = (
+		"«PROJECTNAME».h",
+		"«PROJECTNAME».mm",
+		"Info.plist",
+		"«PROJECTNAME».xcodeproj/project.pbxproj",
+		"English.lproj/InfoPlist.strings",
+		"«PROJECTNAME»_Prefix.pch",
+	);
+	Description = "This project builds a basic TextMate plugin.";
+}

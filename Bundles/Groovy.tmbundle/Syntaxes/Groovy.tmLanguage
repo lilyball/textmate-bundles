@@ -100,7 +100,7 @@
 			<key>begin</key>
 			<string>(?x)^\s*
 					(?:(?:\b(?:(public|private|protected)|(static)|(final)|(native|synchronized|abstract|threadsafe|transient))\b\s*)*) # modifier
-					(class)\s+
+					(class|@interface)\s+
 					(\w+)\s* # identifier</string>
 			<key>captures</key>
 			<dict>

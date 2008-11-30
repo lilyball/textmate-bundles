@@ -324,7 +324,7 @@ class CppMethodCompletion
           r, k = traverse(scope, lib, default)
           r, k = traverse(qualifier, r, qualiferDefault) unless r.nil?
         end
-        #k = traverse(verify_presence_of, r)
+
         if k == :typedefs
           qualifier.replace(r[:type].split("::"))
           typedef, junk = applyTypedef(r, typedef)
@@ -451,9 +451,8 @@ class CppMethodCompletion
     if type_chain.first[:name] == "this"
       currentScope.pop
       type_chain.shift
-    end
     
-    if q = type_chain.first[:qualifier]
+    elsif q = type_chain.first[:qualifier]
       qualifier = q.dup
     end
     
@@ -484,6 +483,21 @@ class CppMethodCompletion
     end
     return returnType, templates
   end
+  
+  def all_symbols(prefix, scope, qualifier)
+    r = lookup(scope.dup, qualifier.dup, [])
+    k = lookup(scope.dup, qualifier.dup, [:field])
+
+    if r.nil? && k.nil?
+      po "could not find symbols starting with '#{item[:prefix]}'"
+    elsif r.nil?
+      return k
+    elsif k.nil?
+      return r
+    else
+      return k.merge(r)
+    end
+  end
 
 def print()
   #TextMate.exit_show_tool_tip @line
@@ -506,9 +520,15 @@ def print()
   #require 'pp'
   #pp temp
   #pd ""
-  po "No completion available" unless temp[:current_type]
-  type_chain = temp[:current_type].dup
-  rightMostClass(type_chain, namespace, qualifier)
+  po "No completion available" unless temp[:complete]
+  if temp[:current_type]
+    type_chain = temp[:current_type].dup
+    rightMostClass(type_chain, namespace, qualifier)
+  elsif temp[:all_static_symbols]
+  elsif temp[:everything]
+  else
+    po "this should not happen"
+  end
 
 end
 

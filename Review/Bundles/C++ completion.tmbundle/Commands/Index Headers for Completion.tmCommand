@@ -30,6 +30,11 @@ end
 
 dict = {}
 
+require 'ruby-prof'
+
+ # Profile the code
+ RubyProf.start
+
 TextMate.call_with_progress(:title =&gt;'Indexing...',
         :summary =&gt; 'Starting Up...',
         :indeterminate =&gt; false,
@@ -58,7 +63,13 @@ TextMate.call_with_progress(:title =&gt;'Indexing...',
   dialog.parameters = {'summary' =&gt; 'Complete!','progressValue' =&gt; 100 }
 end
 
+result = RubyProf.stop
 
+  # Print a flat profile to text
+  printer = RubyProf::FlatPrinter.new(result)
+  outstream = File.open("#{ENV['TM_PROJECT_DIRECTORY']}/prof.txt", 'w')
+  printer.print(outstream, 0)
+  outstream.close
 
 
 	</string>

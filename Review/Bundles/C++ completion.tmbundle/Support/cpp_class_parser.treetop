@@ -1,22 +1,43 @@
 grammar Cpp
 rule cpp
 statement+ {
-	def types(scope)
+	def types(scope, r = {})
 		#r = { :field => {}, :typedefs => {}, :classes => {}}
-		r = {}
 		elements.each do |e|
 			key, value, type = e.types(scope)
+			puts "key->" + key.inspect
 			if key && value
 			  if key == :current_type
 			    r[key] = value
 		    elsif type
-		        r[type] ||= {}
-		        r[type][key] = value
+		      helper(r, key, value, type )
+		        
 			  end
 		  end
 		end
 		return r
 	end
+	
+  def helperhelper(ipoint, value)
+	  value.each do |k,v|
+      if v.kind_of?(Hash) && ipoint[k]
+        helperhelper(ipoint[k], v)
+      else
+        ipoint[k] = v
+      end
+    end
+    
+  end
+  
+	def helper(dict, key, value, type )
+	  dict[type] ||= {}
+    ipoint = dict[type][key]
+    if ipoint.kind_of?(Hash)
+      helperhelper(ipoint, value)
+    else
+      dict[type][key] = value
+    end
+  end
 }
 end
 
@@ -86,7 +107,14 @@ forward_declare / namespace explicit_space variable space (':' ( !('{' / ';') . 
             retvalue[type][key] = [value]
           end
         else
-          retvalue[type][key] = value
+          ipoint = retvalue[type][key]
+          # instead of overwriting, Hashes are merged
+          # allowing for namespaces (and classes) to be reopened.
+	        if ipoint && ipoint.kind_of?(Hash)
+	          ipoint.merge! value
+          else
+            retvalue[type][key] = value
+          end
         end
       end
     end
@@ -172,25 +200,37 @@ start:(beginnings space)? m:( modifiers explicit_space )* dec space variable en:
 end
 
 rule current_type
-	method_chain prefix {
+	 qualifier method_chain prefix {
 		def types(scope)
 			r = method_chain.types(scope)
 			r << {:prefix => prefix.text_value}
+			q = qualifier.text_value
+			unless q.empty?
+			  r.first[:qualifier] = q.split('::')
+			  unless q == '::'
+			    r.first[:kind] = ( r.first[:kind] == :field ? :sfield : :smethods)
+		    end
+	    end
 			return :current_type, r
 		end
 	}
 end
 
+rule qualifier
+ '::'? (variable '::')*
+end
+
 rule method_chain
-	variable p:parens? tie m:method_chain? {
+	( variable p:parens? tie )+ {
 		def types(scope)
 		  r = []
-      val = ( p.empty? ? :field : :methods)
-		  val = (:field ? :sfield : :smethods) if tie.text_value == "::"
-		  num = (tie.text_value == "->" ? 1 : 0)
-		  r <<  { :kind => val, :name => variable.text_value, :dref => num }		  
-		  r << m.types(scope) unless m.empty? 
-		  return r.flatten
+      elements.each do |elem|
+        val = ( elem.p.empty? ? :field : :methods)
+		    num = (elem.tie.text_value == "->" ? 1 : 0)
+		    r <<  { :kind => val, :name => elem.variable.text_value, :dref => num }		  
+		  end
+		  #r << m.types(scope) unless m.empty? 
+		  return r #.flatten
 		end
 	}
 	
@@ -214,7 +254,7 @@ rule method_chain
 end
 
 rule allan_macro
-	"iterate(" space it:variable space ',' space dref:'*'* space mc:method_chain? variable p:parens? space ')' {
+	'iterate' '(' space it:variable space ',' space dref:'*'* space mc:method_chain? variable p:parens? space ')' {
 		def types(scope)
 		    t = []
 		    t << mc.types(scope) unless mc.empty?
@@ -226,7 +266,7 @@ rule allan_macro
     		t << { :kind => val, :name => variable.text_value, :dref => dref.text_value.size} 
 		    
 		    r = { :type_of => t.flatten, :iterator =>true  }
-    		return it.text_value, r
+    		return it.text_value, r, :field
 		end
 }
 end 
@@ -244,7 +284,7 @@ rule prefix
 end
 
 rule tie
-	('.' / '->' / '::' )
+	('.' / '->' )
 end
 
 rule caret
@@ -271,7 +311,7 @@ rule std
 end
 
 rule declaration
- text:("::"? variable )+ pointer:"*"* {
+ text:("::"? variable )+ space pointer:"*"* {
 	def types(scope) #key
  
 	  key = :type

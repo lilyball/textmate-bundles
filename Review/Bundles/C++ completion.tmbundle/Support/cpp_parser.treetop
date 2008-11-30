@@ -6,8 +6,9 @@ statement+ {
 		elements.each do |e|
 			key, value, type = e.types(scope)
 			if key && value
-			  if key == :current_type
-			    r[key] = value
+			  if key == :complete
+			    r[key] = {}
+			    r[key][type] = value
 		    elsif type
 		      helper(r, key, value, type )
 		        
@@ -199,6 +200,21 @@ start:(beginnings space)? m:( modifiers explicit_space )* dec space variable en:
 end
 
 rule current_type
+  qualifier prefix {
+		r = [{:prefix => prefix.text_value}]
+		q = qualifier.text_value
+		unless q.empty?
+		  r.first[:qualifier] = q.split('::')
+		  unless q == '::' # i.e ::prefix
+		    return :all_static_symbols, r, :complete
+	    end
+	    return :everything, r, :complete
+    else
+      
+    end
+		return :everything, r, :complete
+  }
+/
 	 qualifier method_chain prefix {
 		def types(scope)
 			r = method_chain.types(scope)
@@ -206,11 +222,11 @@ rule current_type
 			q = qualifier.text_value
 			unless q.empty?
 			  r.first[:qualifier] = q.split('::')
-			  unless q == '::'
+			  unless q == '::' # e.g ::method().field.prefix
 			    r.first[:kind] = ( r.first[:kind] == :field ? :sfield : :smethods)
 		    end
 	    end
-			return :current_type, r
+			return :current_type, r, :complete
 		end
 	}
 end

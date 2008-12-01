@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,14 +7,12 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
-# WARN: Assumes that the first line of the doc is the xml declaration.
-# TODO: Match against &lt;?xml version=
-
-# NOTE: We need to output to tmp as the document doesn't render when piped directly to "Show as HTML"
+# NOTE: We output to tmp as the document doesn't render when piped directly to "Show as HTML"
 tmp_build_uri = "/tmp/tm_ant_build.xml"
 
 doc_arr = STDIN.read
 doc_arr = doc_arr.split( "\n" )
+doc_arr.unshift('&lt;?xml version="1.0"?&gt;') if doc_arr[0] !~ /&lt;?xml\s+version/
 doc_arr.insert( 1, '&lt;?xml-stylesheet type="text/xsl" href="' + ENV['TM_BUNDLE_SUPPORT'] + '/style/ant2html.xsl"?&gt;' )
 tmp_build_xml = File.open( tmp_build_uri, "w" )
 doc_arr.each { |line| tmp_build_xml.puts line }

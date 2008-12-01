@@ -10,16 +10,37 @@
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
 
-mode = ENV["TM_SCOPE"].slice(/^source\.(?:obj)?(c(\+\+)?)/, 1)
+mode = ENV["TM_SCOPE"].slice(/^source\.((?:obj)?c(\+\+)?)/, 1)
 
-TextMate.save_current_document(mode.gsub(/\+\+/, "c"))
+
+case mode
+when "c"
+  g    = "GCC"
+  env  = "C"
+  ext  = "c"
+  lang = "c"
+when "c++"
+  g    = "GXX"
+  env  = "CXX"
+  ext  = "cc"
+  lang = "c++"
+when "objc"
+  g    = "GCC"
+  env  = "OBJC"
+  ext  = "m"
+  lang = "objective-c"
+when "objc++"
+  g    = "GXX"
+  env  = "OBJCXX"
+  ext  = "mm"
+  lang = "objective-c++"
+end
+
+TextMate.save_current_document(ext)
 TextMate::Executor.make_project_master_current_document
 
-g = {"c" =&gt; "GCC", "c++" =&gt; "GXX"}[mode[/c(\+\+)?$/]]
-e = {"c" =&gt; "C", "c++" =&gt; "CXX", "objc" =&gt; "OBJC", "objc++" =&gt; "OBJCXX"}[mode]
-
-flags = ENV["TM_#{e}_FLAGS"] || "-Wall -include stdio.h #{"-include iostream" unless mode[/c\+\+$/].nil?} #{"-framework Cocoa" unless mode[/^obj/].nil?}"
-args = [ENV["TM_#{g}"] || g.downcase.gsub("x", "+"), flags + " -x #{mode}", ENV["TM_FILEPATH"]] 
+flags = ENV["TM_#{env}_FLAGS"] || "-Wall -include stdio.h #{"-include iostream" unless mode[/c\+\+$/].nil?} #{"-framework Cocoa" unless mode[/^obj/].nil?}"
+args = [ENV["TM_#{g}"] || g.downcase.gsub("x", "+"), flags + " -x #{lang}", ENV["TM_FILEPATH"]] 
 
 TextMate::Executor.run(args, :version_args =&gt; ["--version"], :version_regex =&gt; /\A(.*) \(GCC\)/)
 </string>

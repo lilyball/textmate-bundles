@@ -122,7 +122,7 @@ module TextMate
             TextMate::Process.run(args, :env => options[:env], :echo => true, :watch_fds => { :echo => tm_echo_fd_read }, &callback)
           end
           finish = Time.now
-          exit_code = $?.exitstatus
+          
           
           tm_error_fd_write.close
           error = tm_error_fd_read.read
@@ -144,9 +144,17 @@ module TextMate
 
           io << error
           io << '<div class="controls"><a href="#" onclick="copyOutput(document.getElementById(\'_executor_output\'))">copy output</a></div>'
-          io << format("<div id=\"exception_report\" class=\"framed\">Program exited with code #{exit_code} after %0.2f seconds.</div>", finish-start)
           
-          io << '</div>'
+
+          io << "<div id=\"exception_report\" class=\"framed\">"
+          if $?.exited?
+            io << format("Program exited with code \##{$?.exitstatus} after %0.2f seconds.", finish-start)
+          elsif $?.signaled?
+            io << format("Program terminated by uncaught signal \##{$?.termsig} after %0.2f seconds.", finish-start)
+          elsif $?.stopped?
+            io << format("Program stopped by signal \##{$?.termsig} after %0.2f seconds.", finish-start)
+          end
+          io << '</div></div>'
         end
       end
       
@@ -177,6 +185,9 @@ module TextMate
 
       def process_output_wrapper(io)
         io << <<-HTML
+
+<script type="text/javascript" charset="utf-8">document.body.addEventListener("keydown", press, false);</script>
+
 <!-- first box containing version info and script output -->
 <pre>
 <div id="_executor_output" > <!-- Script output -->
@@ -193,11 +204,10 @@ HTML
   <script type="text/javascript" charset="utf-8">
   function press(evt) {
      if (evt.keyCode == 67 && evt.ctrlKey == true) {
-        TextMate.system("kill -s INT #{@pid}; sleep 0.5; kill -s TERM #{@pid}", null);
+       TextMate.system("kill -s USR1 #{::Process.pid};", null);
      }
   }
-  document.body.addEventListener('keydown', press, false);
-
+  
   function copyOutput(element) {
     output = element.innerText;
     cmd = TextMate.system('__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbcopy', function(){});
@@ -205,6 +215,7 @@ HTML
     cmd.close();
     element.innerText = 'output copied to clipboard';
   }
+  
   </script>
   <!-- end javascript -->
   <style type="text/css">

@@ -124,13 +124,14 @@ module TextMate
 
           exec(*cmd.compact)
         }
-
-        %w[INT TERM].each do |signal|
-          trap(signal) do
+        
+        #%w[INT TERM].each do |signal|
+        %w[USR1].each do |signal|
+          Signal.trap(signal) do
             begin
-              Process.kill("KILL", pid)
+              ::Process.kill("KILL", pid)
               sleep 0.5
-              Process.kill("TERM", pid)
+              ::Process.kill("TERM", pid)
             rescue
               # process doesn't exist anymore
             end

@@ -34,7 +34,9 @@ methods = []
 
   (?=\s* ;?)                # Optional semicolon
 
-/ix) { methods &lt;&lt; $&amp;.strip }
+/ix) do
+  methods &lt;&lt; $&amp;.strip.gsub(' *)', (ENV['TM_C_POINTER'] || ' *').rstrip + ')')
+end
 
 if ENV['TM_SCOPE'] =~ /meta.scope.interface.objc/
   methods.each { |e| puts "#{e};" }

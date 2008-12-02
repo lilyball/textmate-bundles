@@ -62,6 +62,8 @@ $nickNamesFile = "http://bibiko.textmate.org/bundleserver/nicknames.txt"
 # locally installed bundles
 $localBundles     = { }
 
+$localBundlesChanges = { }
+
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
 # TextMate's standard Support folder
@@ -809,6 +811,9 @@ def getBundleLists
     
     updatedStr,status,deleteButton,deleteButtonEnabled,locCom = getLocalStatus(bundle)
     
+    locCom += " [local changes]" if $localBundlesChanges[bundle['uuid']]
+
+    
     # set searchpattern
     updatedStr = (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u"
 
@@ -935,7 +940,8 @@ def buildLocalBundleList
           else
             $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s }
           end
-          
+        else
+          $localBundlesChanges[plist['uuid']] = true
         end
       rescue
         writeToLogFile("Error while parsing “#{b}”:\n#{$!}")
@@ -1599,7 +1605,7 @@ end
 while $run do
 
   getResultFromDIALOG
-  # writeToLogFile($dialogResult.inspect())
+  writeToLogFile($dialogResult.inspect())
 
   if $dialogResult.has_key?('returnArgument')
     case $dialogResult['returnArgument']
@@ -1615,12 +1621,19 @@ while $run do
         break
       else # install bundle(s)
         if $params['isBusy'] == false
-          if $dialogResult['returnArgument'].size > 10
-            if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
-              $installThread = Thread.new { installBundles($dialogResult) }
+          if $dialogResult['returnArgument'].first =~ /-/
+            begin
+              %x{mate '#{local_bundle_paths[$localBundles[$dialogResult['returnArgument'].first]['location']]}/#{$localBundles[$dialogResult['returnArgument'].first]['name']}.tmbundle'} if $localBundles.has_key?($dialogResult['returnArgument'].first)
+            rescue
             end
           else
-            $installThread = Thread.new { installBundles($dialogResult) }
+            if $dialogResult['returnArgument'].size > 10
+              if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
+                $installThread = Thread.new { installBundles($dialogResult) }
+              end
+            else
+              $installThread = Thread.new { installBundles($dialogResult) }
+            end
           end
         else
           writeToLogFile("User interaction was ignored. GetBundles is busy…\n#{$params['progressText']}")

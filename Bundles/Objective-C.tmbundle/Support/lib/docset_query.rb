@@ -138,40 +138,9 @@ end
 
 def documentation_for_selector
 	lines = STDIN.readlines
-
-	# Find out the caret's position within the whole document as we may need to
-	# more back and forwards across line boundaries while building up the
-	# selector signature.
-	line_index = ENV['TM_LINE_INDEX'].to_i
-	line_number = ENV['TM_LINE_NUMBER'].to_i - 1 - 1  # starts from 1 and stop on line before
-
-	# caret_placement identifies the index of the character to the left of the caret's position.
-	caret_placement = (0..line_number).inject(0) {|sum, i| sum + lines[i].length} + line_index - 1
-	start_char = end_char = nil
-
-	doc = lines.join
-
-	# Scan backwards looking for the the matching '[' enclosing the method selector.
-	nesting_level = 1
-	caret_placement.downto(0) do |start_char|
-		nesting_level += 1 if doc[start_char, 1] == ']'
-		nesting_level -= 1 if doc[start_char, 1] == '['
-		break if nesting_level == 0
-	end
 	
-	# Scan forwards looking for the the matching ']' enclosing the method selector.
-	nesting_level = 1
-	caret_placement.upto(doc.length - 1) do |end_char|
-		nesting_level += 1 if doc[end_char, 1] == '['
-		nesting_level -= 1 if doc[end_char, 1] == ']'
-		break if nesting_level == 0
-	end
-		
-	if doc[start_char, 1] != '[' && doc[end_char, 1] != ']'
-		TextMate.exit_show_tool_tip "Failed to isolate selector from input starting at #{caret_placement} with input: #{doc[start_char...end_char]}"
-	end
-	
-	selector = doc[(start_char + 1)...end_char]
+	# selector = doc[(start_char + 1)...end_char]
+	selector = lines.map { |line| line.strip }.join(" ")[1..-2]
 	
 	# Whittle out everything but the selectors.
 	selector.gsub!(/\n/m, ' ')		# remove newlines

@@ -13,7 +13,7 @@ require "rexml/document"
 $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
 $isDIALOG2        = false # ! $DIALOG.match(/2$/).nil?
-# $NIB = 'BundlesTreeTiger'
+
 # DIALOG's parameters hash
 $params           = { }
 # DIALOG's async token
@@ -76,20 +76,20 @@ $lastBundleFilterSelection = "All"
 $delCoreDisBundles = { }
 # array of just installed bundles which are marked as deleted/disabled for status
 $justUndeletedCoreAndEnabledBundles = [ ]
-
+# array of current checkbox values to figure out which checkbox was changed
 $deleteBundleOrgStatus = { }
 
 # the Log file
 $logFilePath = "#{ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
 
 def local_bundle_paths
-  [
-    TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Bundles",
-   "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles",
-   '/Library/Application Support/TextMate/Bundles',
-   "#{ENV["HOME"]}/Library/Application Support/TextMate/Pristine Copy/Bundles",
-   '/Library/Application Support/TextMate/Pristine Copy/Bundles'
-  ]
+  {
+   'default'         => TextMate::app_path.gsub('(.*?)/MacOS/TextMate','\1') + "/Contents/SharedSupport/Bundles",
+   'System Lib'      => '/Library/Application Support/TextMate/Bundles',
+   'Users Lib'       => "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles",
+   'System Pristine' => '/Library/Application Support/TextMate/Pristine Copy/Bundles',
+   'Users Pristine'  => "#{ENV["HOME"]}/Library/Application Support/TextMate/Pristine Copy/Bundles",
+  }
 end
 
 class Object
@@ -183,7 +183,7 @@ def closeDIALOG
 end
 
 def updateDIALOG
-  $params['logPath'] = %x{cat '#{$logFilePath}'}
+  $params['logPath'] = open($logFilePath).read
   if $isDIALOG2
     %x{#{$DIALOG} window update #{$token} -p #{e_sh $params.to_plist}}
   else
@@ -192,7 +192,17 @@ def updateDIALOG
 end
 
 def helpDIALOG
-  err = %x{open "txmt://open?"; osascript -e 'tell application "TextMate" to activate' -e 'tell application "System Events" to tell process "TextMate" to tell menu bar 1 to tell menu bar item "Bundles" to tell menu "Bundles" to tell menu item "GetBundles" to tell menu "GetBundles" to click menu item "Help"' 2>&1}
+  # err = %x{open "txmt://open?"; osascript -e 'tell application "TextMate" to activate' -e 'tell application "System Events" to tell process "TextMate" to tell menu bar 1 to tell menu bar item "Bundles" to tell menu "Bundles" to tell menu item "GetBundles" to tell menu "GetBundles" to click menu item "Help"' 2>&1}
+  err = %x{
+open "txmt://open?";
+cat <<-AS | iconv -f UTF-8 -t MACROMAN | osascript -- 2>&1 1>/dev/null
+tell application "TextMate" to activate
+tell application "System Events" to tell process "TextMate" to tell menu bar 1 to tell menu bar item "Bundles" to tell menu "Bundles" to tell menu item "GetBundles" to tell menu "GetBundles" to click menu item "Help"
+tell application "System Events" to tell process "TextMate" to tell menu bar 1 to tell menu bar item "Window" to tell menu "Window" to click menu item "TextMate — GetBundles" 
+delay 0.5
+tell application "System Events" to tell process "TextMate" to tell menu bar 1 to tell menu bar item "Window" to tell menu "Window" to click menu item "Get Bundles — Help" 
+AS
+  }
   writeToLogFile(err) if err.match(/error/)
 end
 
@@ -624,13 +634,13 @@ osascript -e 'tell app "TextMate" to reload bundles'
   end
 
   # close old info window if it exists
-  unless $infoTokenOld.nil?
-    if $isDIALOG2
-      %x{#{$DIALOG} window close #{$infoTokenOld}}
-    else
-      %x{#{$DIALOG} -x#{$infoTokenOld}}
-    end
-  end
+  # unless $infoTokenOld.nil?
+  #   if $isDIALOG2
+  #     %x{#{$DIALOG} window close #{$infoTokenOld}}
+  #   else
+  #     %x{#{$DIALOG} -x#{$infoTokenOld}}
+  #   end
+  # end
   
   removeTempDir
   
@@ -797,26 +807,10 @@ def getBundleLists
 
     repo = getRepoAbbrev(bundle)
     
-    # get update status
-    updated = ""
-    updatedStr = "" # for searching
-    status = ""
-    deleteButton = ""
-    if $localBundles.has_key?(bundle['uuid'])
-      if $localBundles[bundle['uuid']]['scm'].empty? && $localBundles[bundle['uuid']]['deleted'].empty?
-        deleteButton = "⃠"
-      end 
-      updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
-      updated += $localBundles[bundle['uuid']]['scm'] + $localBundles[bundle['uuid']]['deleted'] + $localBundles[bundle['uuid']]['disabled']
-      if Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc
-        status = secToStr(Time.parse(bundle['revision']), Time.parse($localBundles[bundle['uuid']]['rev']))
-      else
-        status = "✓"
-      end
-    end
+    updatedStr,status,deleteButton,deleteButtonEnabled,locCom = getLocalStatus(bundle)
     
     # set searchpattern
-    updatedStr = (status.empty?) ? "" : (status =~ /^✓/) ? "=i" : "=i=u"
+    updatedStr = (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u"
 
     $dataarray << {
       'name'              => bundle['name'],
@@ -826,13 +820,13 @@ def getBundleLists
       'source'            => repo,
       'uuid'              => bundle['uuid'],
       'status'            => status,
-      'updated'           => updated,
-      'locCom'            => '',
-      'deleteButtonEnabled'      => (deleteButton.empty?) ? "0" : "1",
+      'locCom'            => locCom,
+      'deleteButtonEnabled'      => deleteButtonEnabled,
+      'deleteButton'      => deleteButton,
       'category'          => ""
 
     }
-    $deleteBundleOrgStatus[bundle['uuid']] = (deleteButton.empty?) ? "0" : "1"
+    $deleteBundleOrgStatus[bundle['uuid']] = deleteButton
     index += 1
 
   end
@@ -893,7 +887,7 @@ def buildLocalBundleList
 
   # loop through all locally installed bundles
 
-  local_bundle_paths.each do |path|
+  local_bundle_paths.each do |name, path|
     next unless File.directory?(path)
     break if $close
     Dir["#{path}/*.tmbundle"].each do |b|
@@ -936,10 +930,10 @@ def buildLocalBundleList
           # update local bundle list; if bundles with the same uuid -> take the latest ctime for revision
           if $localBundles.has_key?(plist['uuid'])
             if Time.parse($localBundles[plist['uuid']]['rev']).getutc < theCtime
-              $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled }
+              $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s }
             end
           else
-            $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled }
+            $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s }
           end
           
         end
@@ -959,6 +953,27 @@ def buildLocalBundleList
   
 end
 
+def getLocalStatus(aBundle)
+  updatedStr = "" # for searching
+  status = ""
+  deleteBtn = "0"
+  deleteBtnEnabled = "0"
+  locCom = ""
+  if $localBundles.has_key?(aBundle['uuid'])
+    deleteBtn = "1"
+    if $localBundles[aBundle['uuid']]['scm'].empty? && $localBundles[aBundle['uuid']]['deleted'].empty? && $localBundles[aBundle['uuid']]['location'] =~ /Pristine/
+      deleteBtnEnabled = "1"
+    end
+    if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
+      status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
+    else
+      status = "Ok"
+    end
+    locCom = "#{$localBundles[aBundle['uuid']]['location']} #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
+  end
+  [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom]
+end
+
 def refreshUpdatedStatus
 
   $params['isBusy'] = true
@@ -976,41 +991,21 @@ def refreshUpdatedStatus
   $dataarray.each do |r|
 
     break if $close
-
     bundle = $bundleCache['bundles'][cnt]
-
-    updated = ""
-    updatedStr = "" # for searching
-    status = ""
-    deleteButton = ""
-    if $localBundles.has_key?(bundle['uuid'])
-      if $localBundles[bundle['uuid']]['scm'].empty? && $localBundles[bundle['uuid']]['deleted'].empty?
-        deleteButton = "⃠"
-      end 
-      updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
-      updated += $localBundles[bundle['uuid']]['scm'] + $localBundles[bundle['uuid']]['deleted'] + $localBundles[bundle['uuid']]['disabled']
-      if Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc
-        status = secToStr(Time.parse(bundle['revision']), Time.parse($localBundles[bundle['uuid']]['rev']))
-      else
-        status = "✓"
-      end
-    end
+    updatedStr,status,deleteButton,deleteButtonEnabled,locCom = getLocalStatus(bundle)
 
     # set the bundle status and the search patterns
-    r['searchpattern'].gsub!(/=[^ ]*$/, (status.empty?) ? "" : (status =~ /^✓/) ? "=i" : "=i=u")
+    r['searchpattern'].gsub!(/=[^ ]*$/, (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u")
     r['status'] = status
-    r['deleteButtonEnabled'] = (deleteButton.empty?) ? "0" : "1"
+    r['deleteButtonEnabled'] = deleteButtonEnabled
+    r['deleteButton'] = deleteButton
+    r['locCom'] = locCom
     cnt += 1
 
   end
 
   # reset to current host filter
-  $params['dataarray'] = case $params['bundleSelection']
-    when "Official":    $dataarray.select {|v| v['source'] =~ /^O/}
-    when "Review":      $dataarray.select {|v| v['source'] =~ /^R/}
-    when "3rd Party":   $dataarray.select {|v| v['source'] !~ /^[OR]/}
-    else $dataarray
-  end
+  filterDataarrayForParams
   $params['isBusy'] = false
   $params['nocancel'] = false
   updateDIALOG
@@ -1501,6 +1496,17 @@ cd '#{$supportFolderPristine}';
   
 end
 
+def filterDataarrayForParams
+  b = case $params['bundleSelection']
+    when "Review":      $dataarray.select {|v| v['source'] =~ /^R/}
+    when "Official":    $dataarray.select {|v| v['source'] =~ /^O/}
+    when "3rd Party":   $dataarray.select {|v| v['source'] !~ /^[OR]/}
+    else $dataarray
+  end
+  $params['dataarray'] = b
+  return b.size
+end
+
 def filterBundleList
   
   $params['isBusy']           = true
@@ -1508,17 +1514,9 @@ def filterBundleList
   $params['progressText']     = "Filtering bundle list…"
   updateDIALOG
   
-  b = case $dialogResult['bundleSelection']
-    when "Review":      $dataarray.select {|v| v['source'] =~ /^R/}
-    when "Official":    $dataarray.select {|v| v['source'] =~ /^O/}
-    when "3rd Party":   $dataarray.select {|v| v['source'] !~ /^[OR]/}
-    else $dataarray
-  end
-  
   $lastBundleFilterSelection = $dialogResult['bundleSelection']
   
-  $params['numberOfBundles']          = "#{b.size} in total found"
-  $params['dataarray']                = b
+  $params['numberOfBundles']          = "#{filterDataarrayForParams} in total found"
   $params['progressIsIndeterminate']  = true
   $params['isBusy']                   = false
   updateDIALOG
@@ -1536,7 +1534,7 @@ end
 
 def deleteBundle
   $dialogResult['dataarray'].each do |b|
-    if $deleteBundleOrgStatus[b['uuid']] != b['deleteButtonEnabled']
+    if $deleteBundleOrgStatus[b['uuid']] != b['deleteButton']
       askDIALOG("Not yet implemented.", "In future “#{b['name']}” will be deleted.","OK","")
       break
     end
@@ -1569,11 +1567,10 @@ $params = {
   'cancelBtn'               => 'cancelButtonIsPressed',
   'closeBtn'                => 'closeButtonIsPressed',
   'nocancel'                => false,
-  'repoColor'               => '#0000FF',
   'bundleSelection'         => 'All',
   'openBundleEditor'        => 0,
   'supportFolderCheck'      => 0,
-  'progressText'            => "Connecting Bundle Server…"
+  'progressText'            => "Connecting Bundle Server…",
 }
 
 $firstrun = true

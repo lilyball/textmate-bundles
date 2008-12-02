@@ -12,7 +12,6 @@
 #   • Insert return-statement in methods that have non-void/IBAction return type
 #   • Preserve empty lines between methods taken from the clipboard
 #   • Make the “parser” conform to the actual Objective-C spec
-#   • Avoid printing extra empty line after last method
 #
 
 methods = []
@@ -41,7 +40,7 @@ end
 if ENV['TM_SCOPE'] =~ /meta.scope.interface.objc/
   methods.each { |e| puts "#{e};" }
 else
-  methods.each { |e| puts "#{e}\n{\n}\n\n" }
+  puts methods.map { |e|"#{e}\n{\n}\n" }.join("\n")
 end
 </string>
 	<key>fallbackInput</key>

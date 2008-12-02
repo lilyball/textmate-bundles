@@ -13,7 +13,7 @@ require "rexml/document"
 $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
 $isDIALOG2        = false # ! $DIALOG.match(/2$/).nil?
-
+# $NIB = 'BundlesTreeTiger'
 # DIALOG's parameters hash
 $params           = { }
 # DIALOG's async token
@@ -48,6 +48,7 @@ $reloadThread     = nil
 $svnlogThread     = nil
 $svndataThread    = nil
 $locBundlesThread = nil
+$svnInfoHostThread = nil;
 # bundle data hash containing data.json.gz 
 $bundleCache      = { }
 # hash of used nicknames
@@ -75,6 +76,8 @@ $lastBundleFilterSelection = "All"
 $delCoreDisBundles = { }
 # array of just installed bundles which are marked as deleted/disabled for status
 $justUndeletedCoreAndEnabledBundles = [ ]
+
+$deleteBundleOrgStatus = { }
 
 # the Log file
 $logFilePath = "#{ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
@@ -107,7 +110,11 @@ module GBTimeout
         s = Time.now.to_i
         while Time.now.to_i - s < sec and ! $close do sleep 0.5 end
         writeToLogFile("Current task was interrupted by the user") if $close
-        x.raise exception, "execution expired" if x.alive?
+        unless $close
+          x.raise exception, "execution expired" if x.alive?
+        else
+          x.kill
+        end
       }
       yield sec
     ensure
@@ -119,6 +126,20 @@ end
 
 def strip_html(text)
   text.gsub(/<[^>]+>/, '')
+end
+
+def secToStr(t1, t2)
+  d = t1.getutc - t2.getutc
+  if d>=86400
+    return "#{(d/86400).round.to_s} day#{((d/86400).round <= 1) ? "" : "s"} old"
+  elsif d<86400 && d>=3600
+    return "#{(d/3600).round.to_s} hour#{((d/3600).round <= 1) ? "" : "s"} old"
+  elsif d<3600 && d>=60
+    return "#{(d/60).round.to_s} minute#{((d/60).round <= 1) ? "" : "s"} old"
+  else
+    return "#{d.round.to_s} second#{(d.round <= 1) ? "" : "s"} old"
+  end
+  return ""
 end
 
 def orderOutDIALOG
@@ -665,6 +686,21 @@ def getResultFromDIALOG
 
 end
 
+def getRepoAbbrev(aBundleDict)
+  repo = case aBundleDict['status']
+    when "Official":      "Official"
+    when "Under Review":  "Review"
+    else "3"
+  end
+  if repo == "3" && aBundleDict.has_key?('url')
+    repo = case aBundleDict['url']
+      when /github\.com/: "Github"
+      else "Private"
+    end
+  end
+  return repo
+end
+
 def getBundleLists
 
   begin
@@ -759,48 +795,44 @@ def getBundleLists
     # show only first part of description if description is subdivided by <hr>
     desc = strip_html(bundle['description'].gsub(/(?m)<hr[^>]*?\/>.*/,'').gsub(/\n/, ' ') + author)
 
-    repo = case bundle['status']
-      when "Official":      "Officially released TextMate bundle"
-      when "Under Review":  "Reviewed TextMate bundle"
-      else "3"
-    end
-    if repo == "3" && bundle.has_key?('url')
-      repo = case bundle['url']
-        when /github\.com/: "Github.com hosted bundle"
-        else "Privately hosted bundle"
-      end
-    end
+    repo = getRepoAbbrev(bundle)
     
     # get update status
     updated = ""
     updatedStr = "" # for searching
-    if repo == "P" # then compare names
-      $localBundles.each_value do |localBundle|
-        if localBundle['name'] == bundle['name']
-          updated = (Time.parse(bundle['revision']).getutc > Time.parse(localBundle['rev']).getutc) ? "U" : "✓"
-          break
-        end
-      end
-    else # compare ctime of local tmbundle dir
-      if $localBundles.has_key?(bundle['uuid'])
-        updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
-        updated += $localBundles[bundle['uuid']]['scm'] + $localBundles[bundle['uuid']]['deleted'] + $localBundles[bundle['uuid']]['disabled']
+    status = ""
+    deleteButton = ""
+    if $localBundles.has_key?(bundle['uuid'])
+      if $localBundles[bundle['uuid']]['scm'].empty? && $localBundles[bundle['uuid']]['deleted'].empty?
+        deleteButton = "⃠"
+      end 
+      updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
+      updated += $localBundles[bundle['uuid']]['scm'] + $localBundles[bundle['uuid']]['deleted'] + $localBundles[bundle['uuid']]['disabled']
+      if Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc
+        status = secToStr(Time.parse(bundle['revision']), Time.parse($localBundles[bundle['uuid']]['rev']))
+      else
+        status = "✓"
       end
     end
-
+    
     # set searchpattern
-    updatedStr = (updated.empty?) ? "" : (updated =~ /^U/) ? "=i=u" : "=i"
+    updatedStr = (status.empty?) ? "" : (status =~ /^✓/) ? "=i" : "=i=u"
 
     $dataarray << {
       'name'              => bundle['name'],
       'path'              => index.to_s,        # index of $dataarray to identify
       'bundleDescription' => desc,
       'searchpattern'     => "#{bundle['name']} #{desc} r=#{repo} #{updatedStr}",
-      'repo'              => repo,
-      'rev'               => Time.parse(bundle['revision']).strftime("%y-%m-%d %H:%M"),
-      'updated'           => updated
-    }
+      'source'            => repo,
+      'uuid'              => bundle['uuid'],
+      'status'            => status,
+      'updated'           => updated,
+      'locCom'            => '',
+      'deleteButtonEnabled'      => (deleteButton.empty?) ? "0" : "1",
+      'category'          => ""
 
+    }
+    $deleteBundleOrgStatus[bundle['uuid']] = (deleteButton.empty?) ? "0" : "1"
     index += 1
 
   end
@@ -928,7 +960,7 @@ def buildLocalBundleList
 end
 
 def refreshUpdatedStatus
-  
+
   $params['isBusy'] = true
   $params['progressText'] = "Parsing local bundles…"
   updateDIALOG
@@ -945,39 +977,40 @@ def refreshUpdatedStatus
 
     break if $close
 
+    bundle = $bundleCache['bundles'][cnt]
+
     updated = ""
-
-    cBundle = $bundleCache['bundles'][cnt]
-
-    if r['repo'] == "P"
-      $localBundles.each_value do |h|
-        if h['name'] == r['name']
-          updated = (Time.parse(cBundle['revision']).getutc > Time.parse(h['rev']).getutc) ? "U" : "✓"
-          break
-        end
-      end
-    else
-      if $localBundles.has_key?(cBundle['uuid'])
-        updated = (Time.parse(cBundle['revision']).getutc > Time.parse($localBundles[cBundle['uuid']]['rev']).getutc) ? "U" : "✓"
-        updated += $localBundles[cBundle['uuid']]['scm'] + $localBundles[cBundle['uuid']]['deleted'] + $localBundles[cBundle['uuid']]['disabled']
+    updatedStr = "" # for searching
+    status = ""
+    deleteButton = ""
+    if $localBundles.has_key?(bundle['uuid'])
+      if $localBundles[bundle['uuid']]['scm'].empty? && $localBundles[bundle['uuid']]['deleted'].empty?
+        deleteButton = "⃠"
+      end 
+      updated = (Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc) ? "U" : "✓"
+      updated += $localBundles[bundle['uuid']]['scm'] + $localBundles[bundle['uuid']]['deleted'] + $localBundles[bundle['uuid']]['disabled']
+      if Time.parse(bundle['revision']).getutc > Time.parse($localBundles[bundle['uuid']]['rev']).getutc
+        status = secToStr(Time.parse(bundle['revision']), Time.parse($localBundles[bundle['uuid']]['rev']))
+      else
+        status = "✓"
       end
     end
 
     # set the bundle status and the search patterns
-    r['searchpattern'].gsub!(/=[^ ]*$/, (updated.empty?) ? "" : (updated =~ /^U/) ? "=i=u" : "=i")
-    r['updated'] = updated
+    r['searchpattern'].gsub!(/=[^ ]*$/, (status.empty?) ? "" : (status =~ /^✓/) ? "=i" : "=i=u")
+    r['status'] = status
+    r['deleteButtonEnabled'] = (deleteButton.empty?) ? "0" : "1"
     cnt += 1
 
   end
 
   # reset to current host filter
   $params['dataarray'] = case $params['bundleSelection']
-    when "Official":    $dataarray.select {|v| v['repo'] =~ /^O/}
-    when "Review":      $dataarray.select {|v| v['repo'] =~ /^R/}
-    when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^[OR]/}
+    when "Official":    $dataarray.select {|v| v['source'] =~ /^O/}
+    when "Review":      $dataarray.select {|v| v['source'] =~ /^R/}
+    when "3rd Party":   $dataarray.select {|v| v['source'] !~ /^[OR]/}
     else $dataarray
   end
-
   $params['isBusy'] = false
   $params['nocancel'] = false
   updateDIALOG
@@ -1476,9 +1509,9 @@ def filterBundleList
   updateDIALOG
   
   b = case $dialogResult['bundleSelection']
-    when "Review":      $dataarray.select {|v| v['repo'] =~ /^R/}
-    when "Official":    $dataarray.select {|v| v['repo'] =~ /^O/}
-    when "3rd Party":   $dataarray.select {|v| v['repo'] !~ /^[OR]/}
+    when "Review":      $dataarray.select {|v| v['source'] =~ /^R/}
+    when "Official":    $dataarray.select {|v| v['source'] =~ /^O/}
+    when "3rd Party":   $dataarray.select {|v| v['source'] !~ /^[OR]/}
     else $dataarray
   end
   
@@ -1497,6 +1530,15 @@ def checkUniversalAccess
   if ui =~ /^false/
     if askDIALOG("AppleScript's “UI scripting” is not enabled. Getbundles needs it to perform “Show Help Window”, “Open Bundle Editor”, and “to activate Getbundles if it's already open”.", "Do you want to open “System Preferences” to enable “Enable access for assistive devices”?", "Yes", "No") == 0
       %x{osascript -e 'tell app "System Preferences" ' -e 'activate' -e 'set current pane to pane "com.apple.preference.universalaccess"' -e 'end tell'}
+    end
+  end
+end
+
+def deleteBundle
+  $dialogResult['dataarray'].each do |b|
+    if $deleteBundleOrgStatus[b['uuid']] != b['deleteButtonEnabled']
+      askDIALOG("Not yet implemented.", "In future “#{b['name']}” will be deleted.","OK","")
+      break
     end
   end
 end
@@ -1619,6 +1661,8 @@ while $run do
       if $dialogResult['supportFolderCheck'] == 1
         doUpdateSupportFolder
         checkForSupportFolderUpdate
+      else
+        deleteBundle
       end
       $params['supportFolderCheck'] = 0 # hide checkmark in menu
       updateDIALOG

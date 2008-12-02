@@ -140,12 +140,13 @@ def documentation_for_selector
 	lines = STDIN.readlines
 	
 	# selector = doc[(start_char + 1)...end_char]
-	selector = lines.map { |line| line.strip }.join(" ")[1..-2]
+	selector = lines.join(" ")[1..-2]
 	
 	# Whittle out everything but the selectors.
-	selector.gsub!(/\n/m, ' ')		# remove newlines
-	selector.gsub!(/".*"\]/, ' ')	# remove any string constants (may hold :)
-	selector.gsub!(/\[.*?\]/, ' ')	# remove nested messages
+	selector.gsub!(/\n/m, ' ')                  # remove newlines
+	selector.gsub!(/".*"\]/, ' ')               # remove any string constants (may hold :)
+	selector.gsub!(/@selector\([^\)]+\)/, '')   # remove @selector()s
+	selector.gsub!(/\[.*?\]/, ' ')              # remove nested messages
 	query = selector.scan(/\w+:/).join
 
 	if query == ''

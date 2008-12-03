@@ -1605,7 +1605,7 @@ end
 while $run do
 
   getResultFromDIALOG
-  writeToLogFile($dialogResult.inspect())
+  # writeToLogFile($dialogResult.inspect())
 
   if $dialogResult.has_key?('returnArgument')
     case $dialogResult['returnArgument']

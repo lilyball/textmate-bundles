@@ -5,7 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"$DIALOG" -x`"$DIALOG" -l | egrep 'TextMate — GetBundles' | cut -d " " -f 1` 2&amp;&gt;/dev/null</string>
+	<string>
+# if [ `echo -n "$DIALOG" | tail -c 1` != "2" ]; then
+#   "$DIALOG" -x `"$DIALOG" -l | egrep 'TextMate — GetBundles' | cut -d " " -f 1`
+# else
+#   "$DIALOG" nib --dispose `"$DIALOG" nib --list | egrep 'TextMate — GetBundles' | cut -d " " -f 1`
+# fi
+
+
+"$DIALOG" -x `"$DIALOG" -l | egrep 'TextMate — GetBundles' | cut -d " " -f 1`</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

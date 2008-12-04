@@ -12,8 +12,8 @@ require "rexml/document"
 
 $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
-$isDIALOG2        = false # ! $DIALOG.match(/2$/).nil?
-
+$isDIALOG2        = ! $DIALOG.match(/2$/).nil?
+$isDIALOG2  = false
 # DIALOG's parameters hash
 $params           = { }
 # DIALOG's async token
@@ -149,7 +149,7 @@ def orderOutDIALOG
   $params['nocancel'] = true
 
   if $isDIALOG2
-    $token = %x{#{$DIALOG} window create -p #{e_sh $params.to_plist} #{e_sh $NIB} }
+    $token = %x{#{$DIALOG} nib --load #{e_sh $NIB} --model #{e_sh $params.to_plist}}
   else
     $token = %x{#{$DIALOG} -a #{e_sh $NIB} -p #{e_sh $params.to_plist}}
   end
@@ -165,11 +165,11 @@ def closeDIALOG
   list = ""
   # close all DIALOGs containing 'GetBundles' in their titles (main, info)
   if $isDIALOG2
-    %x{#{$DIALOG} window close #{$token}}
-    list = %x{#{$DIALOG} window list | egrep 'GetBundles'}
+    %x{#{$DIALOG} nib --dispose #{$token}}
+    list = %x{#{$DIALOG} nib --list | egrep 'GetBundles'}
     list.each_line do |l|
       t = l.split(' ').first
-      %x{#{$DIALOG} window close #{t}}
+      %x{#{$DIALOG} nib --dispose #{t}}
     end
   else
     %x{#{$DIALOG} -x#{$token}}
@@ -185,12 +185,45 @@ def closeDIALOG
 end
 
 def updateDIALOG
-  $params['logPath'] = open($logFilePath).read
+
+  $params['logPath'] = open($logFilePath,"r").read
+
   if $isDIALOG2
-    %x{#{$DIALOG} window update #{$token} -p #{e_sh $params.to_plist}}
+    a={}
+    a['model']=$params
+    open("|#{$DIALOG} nib --update #{$token}", "w") { |io| io.write a.to_plist }
   else
     open("|#{$DIALOG} -t#{$token}", "w") { |io| io.write $params.to_plist }
   end
+
+end
+
+def getResultFromDIALOG
+
+  resStr = ""
+  if $isDIALOG2
+    resStr = %x{#{$DIALOG} nib --wait #{$token} }
+  else
+    resStr = %x{#{$DIALOG} -w#{$token}}
+  end
+
+  $close = false
+
+  begin
+    if $isDIALOG2
+      a = OSX::PropertyList.load(resStr)
+      $dialogResult = a['eventInfo'] if a['eventInfo']
+      $dialogResult.merge!(a['model']) if a['model']
+    else
+      $dialogResult = OSX::PropertyList.load(resStr)
+    end
+  rescue
+    writeToLogFile("Fatal error while retrieving data from DIALOG.")
+    closeDIALOG
+    $run = false
+    exit 1
+  end
+
 end
 
 def helpDIALOG
@@ -630,7 +663,7 @@ osascript -e 'tell app "TextMate" to reload bundles'
   
   # order out info window
   if $isDIALOG2
-    $infoToken = %x{#{$DIALOG} window create -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}" help }
+    $infoToken = %x{#{$DIALOG} nib --load help --model "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"  }
   else
     $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
   end
@@ -638,7 +671,7 @@ osascript -e 'tell app "TextMate" to reload bundles'
   # close old info window if it exists
   # unless $infoTokenOld.nil?
   #   if $isDIALOG2
-  #     %x{#{$DIALOG} window close #{$infoTokenOld}}
+  #     %x{#{$DIALOG} nib close #{$infoTokenOld}}
   #   else
   #     %x{#{$DIALOG} -x#{$infoTokenOld}}
   #   end
@@ -656,9 +689,9 @@ def askDIALOG(msg, text, btn1="No", btn2="Yes")
   resStr = 0
 
   if $isDIALOG2
-    resStr = %x{"$DIALOG" alert -s critical -m "#{msg}" -t "#{text}" -1 "#{btn1}" -2 "#{btn2}"}
+    resStr = %x{#{$DIALOG} alert --alertStyle critical --body "#{msg}" --title "#{text}" --button1 "#{btn1}" --button2 "#{btn2}"}
   else
-    resStr = %x{"$DIALOG" -e -p '{messageTitle="#{msg}";alertStyle=critical;informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
+    resStr = %x{#{$DIALOG} -e -p '{messageTitle="#{msg}";alertStyle=critical;informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
     return resStr.to_i
   end
 
@@ -674,28 +707,6 @@ end
 
 def noSVNclientFound
   writeTimedMessage("No svn client found!\nIf there is a svn client available but not found by 'GetBundles' set 'TM_SVN' accordingly.\nOtherwise you can install svn from http://www.collab.net/downloads/community/.")
-end
-
-def getResultFromDIALOG
-
-  resStr = ""
-
-  if $isDIALOG2
-    resStr = %x{#{$DIALOG} window wait #{$token}}
-  else
-    resStr = %x{#{$DIALOG} -w#{$token}}
-  end
-
-  $close = false
-
-  begin
-    $dialogResult = OSX::PropertyList.load(resStr)
-  rescue
-    writeToLogFile("Fatal error while retrieving data from DIALOG.")
-    $run = false
-    exit 1
-  end
-
 end
 
 def getRepoAbbrev(aBundleDict)
@@ -1034,10 +1045,6 @@ def killThreads
     $locBundlesThread.kill  unless $locBundlesThread.nil?
   rescue
   end
-end
-
-def initLogFile
-  File.open($logFile, "w") {}
 end
 
 def removeTempDir
@@ -1628,7 +1635,7 @@ while $run do
             end
           else
             if $dialogResult['returnArgument'].size > 10
-              if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['paths'].size ,"") == 1
+              if askDIALOG("Do you really want to install %d bundles?" % $dialogResult['returnArgument'].size ,"") == 1
                 $installThread = Thread.new { installBundles($dialogResult) }
               end
             else

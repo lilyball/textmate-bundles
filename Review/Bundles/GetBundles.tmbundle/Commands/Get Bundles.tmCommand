@@ -5,7 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
+	<string>
+# if [ `echo -n "$DIALOG" | tail -c 1` != "2" ]; then
+#   CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
+# else
+#   CHECK=$("$DIALOG" nib --list | egrep -c 'TextMate — GetBundles')
+# fi
+
+CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
+
+
+
+
 
 if [ $CHECK == 0 ]; then
 	"${TM_RUBY:-ruby}" -wKU "$TM_BUNDLE_SUPPORT/getBundles.rb" &amp;&gt;~/Library/Logs/TextMateGetBundles.log &amp;

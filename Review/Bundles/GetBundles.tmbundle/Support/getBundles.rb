@@ -981,6 +981,10 @@ def getLocalStatus(aBundle)
     if $localBundles[aBundle['uuid']]['scm'].empty? && $localBundles[aBundle['uuid']]['deleted'].empty? && $localBundles[aBundle['uuid']]['location'] =~ /Pristine/
       deleteBtnEnabled = "1"
     end
+    if ! $localBundles[aBundle['uuid']]['deleted'].empty? || ! $localBundles[aBundle['uuid']]['disabled'].empty?
+      deleteBtn = "0"
+      deleteBtnEnabled = "1"
+    end
     if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
       status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
     else
@@ -1545,11 +1549,37 @@ def checkUniversalAccess
   end
 end
 
-def deleteBundle
+def openInstalledBundle(aBundle)
+  begin
+    %x{mate '#{aBundle['path']}'}
+  rescue
+    $errorcnt += 1
+    writeToLogFile("Couldn't open “#{b['name']}”\n#{$!}")
+  end
+end
+
+def deleteBundleOrReinstallBundle
   $dialogResult['dataarray'].each do |b|
     if $deleteBundleOrgStatus[b['uuid']] != b['deleteButton']
-      askDIALOG("Not yet implemented.", "In future “#{b['name']}” will be deleted.","OK","")
-      break
+      if $localBundles.has_key?(b['uuid']) && $localBundles[b['uuid']]['deleted'].empty? && $localBundles[b['uuid']]['disabled'].empty?
+        askDIALOG("Not yet implemented.", "In future “#{b['name']}” will be deleted.","OK","")
+        break
+      else
+        openInstalledBundle($localBundles[b['uuid']])
+        if $errorcnt == 0 # because TM refreshes its plist not immediately
+          b['deleteButtonEnabled'] = ($localBundles[b['uuid']]['scm'].empty? && $localBundles[b['uuid']]['location'] =~ /Pristine/) ? "1" : "0"
+          b['deleteButton'] = "1"
+          b['locCom'].gsub!($localBundles[b['uuid']]['deleted'],"")
+          b['locCom'].gsub!($localBundles[b['uuid']]['disabled'],"")
+          $localBundles[b['uuid']]['deleted'] = ""
+          $localBundles[b['uuid']]['disabled'] = ""
+          $deleteBundleOrgStatus[b['uuid']] = "1"
+          $params['dataarray'] = $dialogResult['dataarray']
+          updateDIALOG
+          $params.delete('dataarray')
+        end
+        break
+      end
     end
   end
 end
@@ -1679,7 +1709,7 @@ while $run do
         doUpdateSupportFolder
         checkForSupportFolderUpdate
       else
-        deleteBundle
+        deleteBundleOrReinstallBundle
       end
       $params['supportFolderCheck'] = 0 # hide checkmark in menu
       updateDIALOG

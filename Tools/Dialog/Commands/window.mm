@@ -59,22 +59,22 @@ static int NibTokenCount = 0;
 @implementation TMDWindowCommand
 + (void)load
 {
-	[super registerObject:[self new] forCommand:@"window"];
+	[super registerObject:[self new] forCommand:@"nib"];
 }
 
 /*
 env|egrep 'DIALOG|TM_SUPPORT'|grep -v DIALOG_1|perl -pe 's/(.*?)=(.*)/export $1="$2"/'|pbcopy
 
-"$DIALOG" window --open "$TM_SUPPORT_PATH/../Bundles/Latex.tmbundle/Support/nibs/tex_prefs.nib" --defaults '{ latexEngineOptions = "bar"; }'
+"$DIALOG" nib --load "$TM_SUPPORT_PATH/../Bundles/Latex.tmbundle/Support/nibs/tex_prefs.nib" --defaults '{ latexEngineOptions = "bar"; }'
 
-"$DIALOG" window --open RequestString --center --model '{title = "Name?"; prompt = "Please enter your name:"; }'
-"$DIALOG" window --update 1 --model '{title = "updated title"; prompt = "updated prompt"; }'
-"$DIALOG" window --close 1
-"$DIALOG" window --list
+"$DIALOG" nib --load RequestString --center --model '{title = "Name?"; prompt = "Please enter your name:"; }'
+"$DIALOG" nib --update 1 --model '{title = "updated title"; prompt = "updated prompt"; }'
+"$DIALOG" nib --dispose 1
+"$DIALOG" nib --list
 
-"$DIALOG" window --open "$TM_SUPPORT_PATH/../Bundles/SQL.tmbundle/Support/nibs/connections.nib" --defaults "{'SQL Connections' = ( { title = untitled; serverType = MySQL; hostName = localhost; userName = '$LOGNAME'; } ); }" --prototypes "{ SQL_New_Connection = { title = untitled; serverType = MySQL; hostName = localhost; userName = '$LOGNAME'; }; }"
+"$DIALOG" nib --load "$TM_SUPPORT_PATH/../Bundles/SQL.tmbundle/Support/nibs/connections.nib" --defaults "{'SQL Connections' = ( { title = untitled; serverType = MySQL; hostName = localhost; userName = '$LOGNAME'; } ); }" --prototypes "{ SQL_New_Connection = { title = untitled; serverType = MySQL; hostName = localhost; userName = '$LOGNAME'; }; }"
 
-"$DIALOG" help window
+"$DIALOG" help nib
 */
 
 - (void)handleCommand:(CLIProxy*)proxy
@@ -92,26 +92,26 @@ env|egrep 'DIALOG|TM_SUPPORT'|grep -v DIALOG_1|perl -pe 's/(.*?)=(.*)/export $1=
 	{
 		if(TMDNibController* nibController = [Nibs objectForKey:updateToken])
 				[nibController updateParametersWith:model];
-		else	[proxy writeStringToOutput:@"There is no window with that token"];
+		else	[proxy writeStringToOutput:@"There is no nib with that token"];
 	}
 
 	if(NSString* waitToken = [args objectForKey:@"wait"])
 	{
 		if(TMDNibController* nibController = [Nibs objectForKey:waitToken])
 				[nibController addClientFileHandle:[proxy outputHandle]];
-		else	[proxy writeStringToError:@"There is no window with that token"];
+		else	[proxy writeStringToError:@"There is no nib with that token"];
 	}
 
-	if(NSString* closeToken = [args objectForKey:@"close"])
+	if(NSString* disposeToken = [args objectForKey:@"dispose"])
 	{
-		if(TMDNibController* nibController = [Nibs objectForKey:closeToken])
+		if(TMDNibController* nibController = [Nibs objectForKey:disposeToken])
 		{
 			[nibController tearDown];
-			[Nibs removeObjectForKey:closeToken];
+			[Nibs removeObjectForKey:disposeToken];
 		}
 		else
 		{
-			[proxy writeStringToError:@"There is no window with that token"];
+			[proxy writeStringToError:@"There is no nib with that token"];
 		}
 	}
 
@@ -136,7 +136,7 @@ env|egrep 'DIALOG|TM_SUPPORT'|grep -v DIALOG_1|perl -pe 's/(.*?)=(.*)/export $1=
 			[TMDChameleon createSubclassNamed:key withValues:[prototypes objectForKey:key]];
 	}
 
-	if(NSString* nibName = [args objectForKey:@"open"])
+	if(NSString* nibName = [args objectForKey:@"load"])
 	{
 		// TODO we should let an option type be ‘filename’ and have CLIProxy resolve these (and error when file does not exist)
 		NSString* nib = [NSString stringWithUTF8String:find_nib([nibName UTF8String], [[proxy workingDirectory] UTF8String] ?: "", [proxy environment]).c_str()];
@@ -164,10 +164,10 @@ env|egrep 'DIALOG|TM_SUPPORT'|grep -v DIALOG_1|perl -pe 's/(.*?)=(.*)/export $1=
 - (NSString *)usageForInvocation:(NSString *)invocation;
 {
 	return [NSString stringWithFormat:
-		@"%1$@ --load «nib» [«options»]\n"
+		@"%1$@ --load «nib file» [«options»]\n"
 		@"%1$@ --update «token» [«options»]\n"
 		@"%1$@ --wait «token»\n"
-		@"%1$@ --close «token»\n"
+		@"%1$@ --dispose «token»\n"
 		@"%1$@ --list\n"
 		@"\nOptions:\n"
 		@"\t--center\n"

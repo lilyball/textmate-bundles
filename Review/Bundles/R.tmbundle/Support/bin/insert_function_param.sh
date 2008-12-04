@@ -34,8 +34,8 @@ if [ $RD -gt 0 ]; then
 	if [ -z $RPID ]; then
 		RDTEXT="Rdaemon is not running."
 	else
-		if [ -e "$TM_BUNDLE_SUPPORT"/lib/command_args/$WORD ]; then
-			export RES=$(cat "$HOME/Library/Application Support"/TextMate/R/help/command_args/$WORD | perl -pe 's/\|/###/g;s/\n/|/g;s/ //g;')
+		if [ -e "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD" ]; then
+			export RES=$(cat "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD" | perl -pe 's/\|/###/g;s/\n/|/g;s/ //g;')
 		else
 			[[ -e "$RDRAMDISK"/r_tmp ]] && rm "$RDRAMDISK"/r_tmp
 			TASK="@|sink('$RDRAMDISK/r_tmp')"
@@ -72,8 +72,8 @@ if [ $RD -gt 0 ]; then
 else
 
 	#check for user-defined parameter list
-	if [ -e "$HOME/Library/Application Support"/TextMate/R/help/command_args/$WORD ]; then
-		export RES=$(cat "$HOME/Library/Application Support"/TextMate/R/help/command_args/$WORD | perl -pe 's/\|/###/g;s/\n/|/g;s/ //g;')
+	if [ -e "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD" ]; then
+		export RES=$(cat "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD" | perl -pe 's/\|/###/g;s/\n/|/g;s/ //g;')
 	else
 		. "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
 

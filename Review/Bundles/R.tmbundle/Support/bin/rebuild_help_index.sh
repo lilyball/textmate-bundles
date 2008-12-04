@@ -15,6 +15,11 @@ else
 	[[ -e "$INDEX" ]] && rm "$INDEX"
 fi
 
+if [ ! -e "$HOME/Library/Application Support/TextMate/R/help" ]; then
+	mkdir -p "$HOME/Library/Application Support/TextMate/R/help"
+	cp -R "$TM_BUNDLE_SUPPORT/lib/command_args" "$HOME/Library/Application Support/TextMate/R/help/command_args"
+fi
+
 if [ ! -e "$INDEX" ]; then
 	[[ -e "$HOME"/Rdaemon/daemon ]] && echo -n "$TM_BUNDLE_SUPPORT" > "$HOME"/Rdaemon/daemon/pathToRbundle
 	ls "${R_HOME:-/Library/Frameworks/R.framework/Resources}"/library/ | grep -v -F . > "$PKGS"

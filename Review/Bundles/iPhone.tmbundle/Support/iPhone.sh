@@ -1,9 +1,9 @@
-IPHONE_SDK_FRAMEWORK_PATH=/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator2.0.sdk/System/Library/Frameworks/
+IPHONE_SDK_FRAMEWORK_PATH=/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator2.2.sdk/System/Library/Frameworks/
 # Cocoa Functions
 find "$IPHONE_SDK_FRAMEWORK_PATH"*.framework -name \*.h -exec grep '^[A-Z][A-Z_]* [^;]* \**[A-Z][A-Z][A-Z][A-Za-z]* *(' '{}' \;|perl -pe 's/.*?\s\*?([A-Z][A-Z]\w+)\s*\(.*/$1/'|sort|uniq|./list_to_regexp.rb >/tmp/functions.txt
 
 # Cocoa Protocols Classes
-find "$IPHONE_SDK_FRAMEWORK_PATH"*.framework -name \*.h -exec grep '@interface [A-Z][A-Z][A-Za-z]*' '{}' \;|perl -pe 's/.*?([A-Z][A-Z][A-Za-z]+).*/$1/'|sort|uniq|./list_to_regexp.rb >/tmp/classes.txt
+find "$IPHONE_SDK_FRAMEWORK_PATH"*.framework -name \*.h -exec grep '@interface [A-Z][A-Z][A-Za-z]*' '{}' \;|perl -pe 's/.*?interface\s+([A-Z][A-Z][A-Za-z]+).*/$1/'|sort|uniq|./list_to_regexp.rb >/tmp/classes.txt
 
 find "$IPHONE_SDK_FRAMEWORK_PATH"*.framework -name \*.h -exec grep '@protocol [A-Z][A-Z][A-Za-z]*' '{}' \;|perl -pe 's/.*?([A-Z][A-Z][A-Za-z]+).*/$1/'|sort|uniq|./list_to_regexp.rb >/tmp/protocols.txt
 

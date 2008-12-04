@@ -9,7 +9,13 @@ fi
 
 
 ######### begin script #########
-
+{
+while [ 1 ]
+do
+	res=$("$DIALOG" -x `"$DIALOG" -l 2>/dev/null| grep Rdaemon | cut -d " " -f 1` 2>/dev/null)
+	[[ ${#res} -eq 0 ]] && break
+done
+} &
 #get R's PID
 RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 
@@ -83,35 +89,45 @@ PROMPT=$(tail -n 1 "$RDRAMDISK"/r_out | sed 's/> $//')
 if [ -z "$TM_SELECTED_TEXT" ]; then
 	echo -e "$TASK" > "$RDHOME"/r_in
 else
+	export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='Sending task to Rdaemon…';}")
 	echo "$TASK" | sed 's/\\n/\\\\n/g' | while read LINE
 	do
 		echo "$LINE" > "$RDHOME"/r_in
 		sleep 0.002
-		echo "$LINE"
-	done|CocoaDialog progressbar --indeterminate --title "Rdaemon is busy ..."
+		"$DIALOG" -t $token -p "{details='$LINE';}" 2&>/dev/null
+	done
+	"$DIALOG" -x $token 2&>/dev/null
 fi
+
 
 #wait for R's response by expecting >, +, or : plus SPACE!
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 OFFBIAS=2
 [[ "${TM_CURRENT_LINE:0:2}" == "+ " ]] && OFFBIAS=0
 
-while [ 1 ]
+PROGRESS_INIT=0 # to start the proggress dialog after 100ms only
+while [ ! -e ~/Rdaemon/pgstop ]
 do
 	RES=$(tail -c 2 "$RDRAMDISK"/r_out)
 	#expect these things from R
-#	[[ -f "$HOME/Rdaemon/status.txt" ]] && break
-    [[ "$RES" == "> " ]] && break
-    [[ "$RES" == "+ " ]] && break
-    [[ "$RES" == ": " ]] && break
-#	[[ `ps -p $RPID | tail -n 1 | awk '{print $3}'` == "S+" ]] && break
+	if [ "$RES" == "> " ]; then
+		"$DIALOG" -x $token 2&>/dev/null
+		break
+	fi
+	[[ "$RES" == "+ " ]] && break
+	[[ "$RES" == ": " ]] && break
 	#monitoring of the CPU coverage as progress bar
 	cpu=$(ps o pcpu -p "$RPID" | tail -n 1)
 	[[ "${cpu:0:1}" == "%" ]] && break
 	CP=$(echo -n "$cpu" | perl -e 'print 100-<>')
-	echo "$CP `tail -n 1 "$RDRAMDISK"/r_out`"
 	sleep 0.1
-done|CocoaDialog progressbar --title "Rdaemon is busy ..."
+	if [ $PROGRESS_INIT -eq 0 ]; then
+		export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;progressValue=50;summary='Rdaemon is busy…';}")
+		PROGRESS_INIT=1
+	fi
+	"$DIALOG" -t $token -p "{details='`tail -n 1 "$RDRAMDISK"/r_out`';progressValue=$CP;}" 2&>/dev/null
+done
+"$DIALOG" -w $token 2&>/dev/null
 
 #read only the current response from Rdaemon
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')

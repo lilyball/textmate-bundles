@@ -87,7 +87,7 @@ else
 	do
 		echo -e "$LINE" &gt; "$RDHOME"/r_in
 		sleep 0.002
-		"$DIALOG" -t $token -p "{details='$LINE';}" 2&amp;&gt;/dev/null
+		"$DIALOG" -t $token -p "{details='${LINE//\'/’}';}" 2&amp;&gt;/dev/null
 	done
 	"$DIALOG" -x $token 2&amp;&gt;/dev/null
 fi

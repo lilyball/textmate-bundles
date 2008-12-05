@@ -12,7 +12,7 @@ fi
 IN=$1
 
 #get R's PID
-RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+export RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 
 #check whether Rdaemon runs
 test -z $RPID && echo -en "Rdaemon is not running." && exit 206
@@ -39,6 +39,9 @@ echo -e "$TASK" > "$RDHOME"/r_in
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 OFF=$(($POSNEW - $POS + 2))
 
+trap "
+kill -s INT $RPID ; 
+echo -en 'Warning: Task was canceled. Press ⌘Z to get the last command(s).\nThe progress window will be disposed before the next R command.\n> '" 2
 PROGRESS_INIT=0 # to start the progress dialog after 100ms only
 while [ 1 ]
 do
@@ -57,7 +60,7 @@ do
 		export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;progressValue=50;summary='Rdaemon is busy…';}")
 		PROGRESS_INIT=1
 	fi
-	"$DIALOG" -t $token -p "{details='`tail -n 1 "$RDRAMDISK"/r_out`';progressValue=$CP;}" 2&>/dev/null
+	"$DIALOG" -t $token -p "{details='`tail -n 1 "$RDRAMDISK"/r_out|perl -pe 's/\x27/\\\\\x27/g'`';progressValue=$CP;}" 2&>/dev/null
 done
 "$DIALOG" -x $token 2&>/dev/null
 

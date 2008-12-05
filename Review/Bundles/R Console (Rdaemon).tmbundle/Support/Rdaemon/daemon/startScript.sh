@@ -32,6 +32,15 @@ runs() {
 
 ######### script begin #########
 
+# dispose all Rdaemon dialogs
+{
+while [ 1 ]
+do
+	res=$("$DIALOG" -x `"$DIALOG" -l 2>/dev/null| grep Rdaemon | cut -d " " -f 1` 2>/dev/null)
+	[[ ${#res} -eq 0 ]] && break
+done
+} &
+
 #check whether R is already running
 runs
 if [ $? == 1 ]; then

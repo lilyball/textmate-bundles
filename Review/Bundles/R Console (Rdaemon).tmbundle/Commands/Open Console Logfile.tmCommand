@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
-	mate /tmp/TMRramdisk1/r_out
+	cat /tmp/TMRramdisk1/r_out| perl -e '
+	undef($/); $a=&lt;&gt;;
+	$a=~s/\x0D{1,}/\x0D/sg;
+	while($a=~m/(.*?)\x0D&lt;.{50}(.) +\x08+(.*)/) { $a=~s/(.*?)\x0D&lt;.{50}(.) +\x08+(.*)/$1$2$3/sg; }
+	$a=~s/\\/\\\\/g;$a=~s/\`/\\\`/sg;$a=~s/\$/\\\$/sg;$a=~s/_\x08//sg;
+	$a=~s/\x07//sg;
+	$a .= "\n&gt; " if ($a!~/&gt; $/ &amp;&amp; $a!~/\+ $/);
+	print "$a";
+' &gt; "$HOME"/Rdaemon/r_out.R
+	mate "$HOME"/Rdaemon/r_out.R
 else
-	mate "$HOME"/Rdaemon/r_out
+	cat "$HOME"/Rdaemon/r_out| perl -e '
+	undef($/); $a=&lt;&gt;;
+	$a=~s/\x0D{1,}/\x0D/sg;
+	while($a=~m/(.*?)\x0D&lt;.{50}(.) +\x08+(.*)/) { $a=~s/(.*?)\x0D&lt;.{50}(.) +\x08+(.*)/$1$2$3/sg; }
+	$a=~s/\\/\\\\/g;$a=~s/\`/\\\`/sg;$a=~s/\$/\\\$/sg;$a=~s/_\x08//sg;
+	$a=~s/\x07//sg;
+	$a .= "\n&gt; " if ($a!~/&gt; $/ &amp;&amp; $a!~/\+ $/);
+	print "$a";
+' &gt; "$HOME"/Rdaemon/r_out.R
+	mate "$HOME"/Rdaemon/r_out.R
 fi</string>
 	<key>input</key>
 	<string>none</string>

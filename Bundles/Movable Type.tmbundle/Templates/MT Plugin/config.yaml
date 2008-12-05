@@ -1,0 +1,24 @@
+---
+# The MT Plugin Developer guide is available here:
+# http://www.movabletype.org/documentation/developer/
+
+name: My Plugin
+id: MyPlugin
+version: 1.0
+description: Description of this plugin.
+author_name: ${TM_FULLNAME}
+author_link: http://www.example.com/
+plugin_link: http://www.example.com/myplugin/
+doc_link: http://www.example.com/myplugin/docs/
+settings:
+    name:
+        default: Default value
+config_template: config.tmpl
+
+tags:
+    block:
+        MyCustomTag: $MyPlugin::MyPlugin::Tags::MyCustomTag
+    function:
+        MyCustomFn: $MyPlugin::MyPlugin::Tags::MyCustomFn
+    modifier:
+        my_modifer: $MyPlugin::MyPlugin::Tags::my_modifier

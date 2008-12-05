@@ -31,64 +31,79 @@
 	<key>keyEquivalent</key>
 	<string>^~M</string>
 	<key>name</key>
-	<string>Movable Type</string>
+	<string>Movable Type (MT only)</string>
 	<key>patterns</key>
 	<array>
 		<dict>
 			<key>include</key>
-			<string>#trans-tag</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#mt-container-tag</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#mt-variable-tag</string>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>This is set to use XHTML standards, but you can change that by changing .strict to .basic for HTML standards</string>
-			<key>include</key>
-			<string>text.html.basic</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>{{</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.embedded.smarty</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>}}</string>
-			<key>name</key>
-			<string>source.smarty.embedded.html</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>source.smarty</string>
-				</dict>
-			</array>
+			<string>#mt</string>
 		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>basic-html</key>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;)([a-zA-Z0-9:]+)(?=[^&gt;]*&gt;&lt;/\2&gt;)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(&gt;(&lt;)/)(\2)(&gt;)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.scope.between-tag-pair.html</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.html</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.tag.any.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tag-stuff</string>
+				</dict>
+			</array>
+		</dict>
 		<key>embedded-code</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#php</string>
+					<string>#mt</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#ruby</string>
+					<string>#php</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -127,13 +142,39 @@
 				</dict>
 			</array>
 		</dict>
+		<key>mt</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#trans-tag</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#mt-container-tag</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#mt-variable-tag</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#basic-html</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>text.html.basic</string>
+				</dict>
+			</array>
+		</dict>
 		<key>mt-container-tag</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;/?)([Mm][Tt]:?(\w+:)?\w+)</string>
+					<string>(&lt;/?)([mM][tT]:?(?:\w+)?:?\w+)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -175,7 +216,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;)(\$[Mm][Tt]:?(\w+:)?\w+)</string>
+					<string>(&lt;)(\$[mM][tT]:?(?:\w+)?:?\w+)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -222,31 +263,6 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?:^\s*)(&lt;\?(php|=)?)(?!.*\?&gt;)</string>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.section.embedded.php</string>
-						</dict>
-					</dict>
-					<key>comment</key>
-					<string>match only multi-line PHP with leading whitespace</string>
-					<key>end</key>
-					<string>(\?&gt;)(?:\s*$\n)?</string>
-					<key>name</key>
-					<string>source.php.embedded.html</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#php-source</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
 					<string>&lt;\?(php|=)?</string>
 					<key>captures</key>
 					<dict>
@@ -275,100 +291,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.php</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(#).*?(?=\?&gt;)</string>
-					<key>name</key>
-					<string>comment.line.number-sign.ruby</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.php</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(//).*?(?=\?&gt;)</string>
-					<key>name</key>
-					<string>comment.line.double-slash.ruby</string>
-				</dict>
-				<dict>
 					<key>include</key>
 					<string>source.php</string>
-				</dict>
-			</array>
-		</dict>
-		<key>ruby</key>
-		<dict>
-			<key>begin</key>
-			<string>&lt;%+(?!&gt;)=?</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.embedded.ruby</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>-?%&gt;</string>
-			<key>name</key>
-			<string>source.ruby.embedded.html</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.ruby</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(#).*?(?=-?%&gt;)</string>
-					<key>name</key>
-					<string>comment.line.number-sign.ruby</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>source.ruby</string>
-				</dict>
-			</array>
-		</dict>
-		<key>smarty</key>
-		<dict>
-			<key>begin</key>
-			<string>{{|{</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.embedded.smarty</string>
-				</dict>
-			</dict>
-			<key>disabled</key>
-			<string>1</string>
-			<key>end</key>
-			<string>}}|}</string>
-			<key>name</key>
-			<string>source.smarty.embedded.xhtml</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>source.smarty</string>
 				</dict>
 			</array>
 		</dict>
@@ -398,18 +322,6 @@
 			<string>string.quoted.double.html</string>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>include</key>
-					<string>#trans-tag</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#mt-variable-tag</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#mt-container-tag</string>
-				</dict>
 				<dict>
 					<key>include</key>
 					<string>#embedded-code</string>
@@ -448,18 +360,6 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#trans-tag</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#mt-variable-tag</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#mt-container-tag</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#embedded-code</string>
 				</dict>
 				<dict>
@@ -475,25 +375,112 @@
 			<key>name</key>
 			<string>entity.other.attribute-name.html</string>
 		</dict>
+		<key>tag-id-attribute</key>
+		<dict>
+			<key>begin</key>
+			<string>\b(id)\b\s*(=)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.attribute-name.id.html</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.key-value.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?&lt;='|")</string>
+			<key>name</key>
+			<string>meta.attribute-with-value.id.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.html</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.toc-list.id.html</string>
+					<key>end</key>
+					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.html</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>string.quoted.double.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#embedded-code</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#entities</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.html</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.toc-list.id.html</string>
+					<key>end</key>
+					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.html</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>string.quoted.single.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#embedded-code</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#entities</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>tag-stuff</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#trans-tag</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#tag-generic-attribute</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-double-quoted</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-single-quoted</string>
+					<string>#embedded-code</string>
 				</dict>
 			</array>
 		</dict>
@@ -548,6 +535,6 @@
 	<key>scopeName</key>
 	<string>text.html.mt</string>
 	<key>uuid</key>
-	<string>7071B5CA-849A-4D88-A96E-DD725ED622BF</string>
+	<string>AC9320E4-DE28-4D36-905D-AFBE099F7466</string>
 </dict>
 </plist>

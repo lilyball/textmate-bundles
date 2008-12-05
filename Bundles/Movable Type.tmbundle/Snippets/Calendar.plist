@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>content</key>
 	<string>&lt;div class="module-calendar module"&gt;
-&lt;h2 class="module-header"&gt;&lt;\$MTDate format="%B %Y"\$&gt;&lt;/h2&gt;
+&lt;h2 class="module-header"&gt;&lt;\$mt:Date format="%B %Y"\$&gt;&lt;/h2&gt;
 &lt;div class="module-content"&gt;
 &lt;table summary="Monthly calendar with links to each day's posts"&gt;
 
@@ -17,20 +17,20 @@
 &lt;th abbr="Friday"&gt;Fri&lt;/th&gt;
 &lt;th abbr="Saturday"&gt;Sat&lt;/th&gt;
 &lt;/tr&gt;
-&lt;MTCalendar&gt;
-&lt;MTCalendarWeekHeader&gt;&lt;tr&gt;&lt;/MTCalendarWeekHeader&gt;
+&lt;mt:Calendar&gt;
+&lt;mt:CalendarWeekHeader&gt;&lt;tr&gt;&lt;/mt:CalendarWeekHeader&gt;
 &lt;td&gt;
-&lt;MTCalendarIfEntries&gt;
-&lt;MTEntries lastn="1"&gt;
-&lt;a href="&lt;\$MTEntryPermalink\$&gt;"&gt;&lt;\$MTCalendarDay\$&gt;&lt;/a&gt;
-&lt;/MTEntries&gt;
-&lt;/MTCalendarIfEntries&gt;
-&lt;MTCalendarIfNoEntries&gt;
-&lt;\$MTCalendarDay\$&gt;
-&lt;/MTCalendarIfNoEntries&gt;
-&lt;MTCalendarIfBlank&gt;&amp;nbsp;&lt;/MTCalendarIfBlank&gt;&lt;/td&gt;
-&lt;MTCalendarWeekFooter&gt;&lt;/tr&gt;&lt;/MTCalendarWeekFooter&gt;
-&lt;/MTCalendar&gt;
+&lt;mt:CalendarIfEntries&gt;
+&lt;mt:Entries lastn="1"&gt;
+&lt;a href="&lt;\$mt:EntryPermalink\$&gt;"&gt;&lt;\$mt:CalendarDay\$&gt;&lt;/a&gt;
+&lt;/mt:Entries&gt;
+&lt;/mt:CalendarIfEntries&gt;
+&lt;mt:CalendarIfNoEntries&gt;
+&lt;\$mt:CalendarDay\$&gt;
+&lt;/mt:CalendarIfNoEntries&gt;
+&lt;mt:CalendarIfBlank&gt;&amp;nbsp;&lt;/mt:CalendarIfBlank&gt;&lt;/td&gt;
+&lt;mt:CalendarWeekFooter&gt;&lt;/tr&gt;&lt;/mt:CalendarWeekFooter&gt;
+&lt;/mt:Calendar&gt;
 &lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;</string>

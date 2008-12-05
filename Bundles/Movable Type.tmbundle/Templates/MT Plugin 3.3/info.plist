@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>command</key>
 	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
    TM_YEAR=`date +%Y` \
    TM_DATE=`date +%Y-%m-%d` \
+   TM_USERNAME=`niutil -readprop / /users/\$USER realname` \
    perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
       &lt; mt-plugin.pl &gt; "$TM_NEW_FILE"
 fi</string>
 	<key>extension</key>
 	<string>pl</string>
 	<key>name</key>
-	<string>MT Plugin</string>
+	<string>MT Plugin 3.3</string>
 	<key>uuid</key>
-	<string>615ADF71-D8DB-46F6-AA39-B47BA7040BD1</string>
+	<string>1BE5A560-0ABD-46D7-B33E-D66A0903E45F</string>
 </dict>
 </plist>

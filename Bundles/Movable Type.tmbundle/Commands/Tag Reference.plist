@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string># Context-sensitive help lookup for MT tags.
 if grep &lt;&lt;&lt;${TM_CURRENT_WORD:-!} -Esq '[a-zA-Z0-9_]+'
-	then exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=http://www.sixapart.com/movabletype/docs/$TM_CURRENT_WORD'&gt;"
+	then exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=http://www.movabletype.org/tag/$TM_CURRENT_WORD'&gt;"
 	else echo "Nothing to lookup (hint: place the caret on a tag name)"
 fi</string>
 	<key>input</key>

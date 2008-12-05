@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -17,7 +17,7 @@
 # possible to tab through the place holders.
 
 # single tags
-single        = /^(?:Button|CheckBox|ColorPicker|ComboBox|DateChooser|DateField|DataGridColumn|HRule|HSlider|Image|Label|MenuBar|NumericStepper|PopUpMenuButton|PopUpButton|ProgressBar|RadioButtonGroup|Spacer|Text|TextArea|TextInput|VSlider|Slider)$/i
+single = /^(?:Button|CheckBox|ColorPicker|ComboBox|DateChooser|DateField|DataGridColumn|HRule|HSlider|Image|Label|MenuBar|NumericStepper|PopUpMenuButton|PopUpButton|ProgressBar|RadioButtonGroup|Spacer|Text|TextArea|TextInput|VSlider|Slider)$/i
 
 # handle the case where caret is in the middle of a word, assume only the left part is the tag
 index = ENV['TM_LINE_INDEX'].to_i - ENV['TM_INPUT_START_LINE_INDEX'].to_i

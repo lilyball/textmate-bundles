@@ -5,7 +5,17 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>if [ -z "$TM_SELECTED_TEXT" ]; then
+	<string>#dispose all frozen ProgressDialogs
+{
+while [ 1 ]
+do
+	res=$("$DIALOG" -x `"$DIALOG" -l 2&gt;/dev/null| grep Rdaemon | cut -d " " -f 1` 2&gt;/dev/null)
+	[[ ${#res} -eq 0 ]] &amp;&amp; break
+done
+} &amp;
+
+
+if [ -z "$TM_SELECTED_TEXT" ]; then
 	export WORD=$(ruby -- &lt;&lt;-SCR1 
 		require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
 		word = Word.current_word('\w\.')
@@ -133,6 +143,7 @@ echo "&lt;table style='border-collapse:collapse'&gt;&lt;tr&gt;&lt;td style='padd
 
 CNT=$(echo -en "$FILE" | wc -l)
 HCNT=0
+export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Searching…';}")
 for i in `echo $FILE`
 do
 	echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
@@ -143,8 +154,8 @@ do
 #	HCNT=$(($HCNT + 1))
 #	PCNT=$(echo  $HCNT-$CNT | perl -e '@a=split(/-/,&lt;&gt;);printf("%3.0f",$a[0]*100/$a[1]);')
 #	echo "$PCNT $(($CNT - $HCNT)) files left. Please wait…";
-	echo "100 Searching…"
-done|CocoaDialog progressbar --indeterminate --title "R Documentation"
+done
+
 echo "&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;" &gt;&gt; "$HEAD"
 
 if [ "$CNT" -lt "2" ]; then
@@ -156,11 +167,9 @@ fi
 
 printframe 340
 if [ $CNT -eq 0 ]; then
-{   
-	echo "100 Searching…"
 	. "$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "$WORD" 1
-} &gt; &gt;(CocoaDialog progressbar --indeterminate --title "R Documentation")
 fi
+"$DIALOG" -x $token 2&amp;&gt;/dev/null
 exit_show_html
 
 </string>

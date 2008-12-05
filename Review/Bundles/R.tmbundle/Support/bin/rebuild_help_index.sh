@@ -1,3 +1,14 @@
+#dispose all frozen ProgressDialogs
+{
+while [ 1 ]
+do
+	res=$("$DIALOG" -x `"$DIALOG" -l 2>/dev/null| grep Rdaemon | cut -d " " -f 1` 2>/dev/null)
+	[[ ${#res} -eq 0 ]] && break
+done
+} &
+
+
+
 #rebuild help.index?
 
 PKGS="$TM_BUNDLE_SUPPORT"/help.pkgs
@@ -21,6 +32,7 @@ if [ ! -e "$HOME/Library/Application Support/TextMate/R/help" ]; then
 fi
 
 if [ ! -e "$INDEX" ]; then
+	export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Create Help Index…';}")
 	[[ -e "$HOME"/Rdaemon/daemon ]] && echo -n "$TM_BUNDLE_SUPPORT" > "$HOME"/Rdaemon/daemon/pathToRbundle
 	ls "${R_HOME:-/Library/Frameworks/R.framework/Resources}"/library/ | grep -v -F . > "$PKGS"
 	FILE=$(find -f "${R_HOME:-/Library/Frameworks/R.framework/Resources}"/library/* -name AnIndex)
@@ -28,6 +40,6 @@ if [ ! -e "$INDEX" ]; then
 	do
 		lib=$(echo -n "${f//\//\\/}" | sed 's/\\\/help\\\/AnIndex//')
 		cat "$f" | perl -e "while(<>){\$a=\$_;\$a=~s!(.*?)\t(.*)!\$1\t$lib/latex/\$2.tex!;print \$a;}" >> "$INDEX"
-		echo "100 Create Help Index…";
-	done|CocoaDialog progressbar --indeterminate --title "R Documentation"
+	done
+	"$DIALOG" -x $token 2&>/dev/null
 fi

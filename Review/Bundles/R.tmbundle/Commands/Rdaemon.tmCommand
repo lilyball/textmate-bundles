@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -74,16 +74,20 @@ PROMPT=$(tail -n 1 "$RDRAMDISK"/r_out | sed 's/&gt; $//')
 #fi
 
 #send task to Rdaemon and give Rdaemon the chance to read from the pipe
+export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='Sending task to Rdaemon…';}")
 echo "$TASK" | sed 's/\\/\\\\/g' | while read LINE
 do
 	echo -e "@|$LINE" &gt; "$RDHOME"/r_in
 	sleep 0.002
-	echo "$LINE"
-done|CocoaDialog progressbar --indeterminate --title "Rdaemon is busy ..."
+	"$DIALOG" -t $token -p "{details='$LINE';}" 2&amp;&gt;/dev/null
+done
+"$DIALOG" -x $token 2&amp;&gt;/dev/null
 
 #wait for R's response by expecting &gt;, +, or : plus SPACE!
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 OFF=$(($POSNEW - $POS + 2))
+
+PROGRESS_INIT=0 # to start the progress dialog after 100ms only
 while [ 1 ]
 do
 	RES=$(tail -c 2 "$RDRAMDISK"/r_out)
@@ -95,9 +99,14 @@ do
 	cpu=$(ps o pcpu -p "$RPID" | tail -n 1)
 	[[ "${cpu:0:1}" == "%" ]] &amp;&amp; break
 	CP=$(echo -n "$cpu" | perl -e 'print 100-&lt;&gt;')
-	echo "$CP `tail -n 1 "$RDRAMDISK"/r_out`"
 	sleep 0.1
-done|CocoaDialog progressbar --title "Rdaemon is busy ..."
+	if [ $PROGRESS_INIT -eq 0 ]; then
+		export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;progressValue=50;summary='Rdaemon is busy…';}")
+		PROGRESS_INIT=1
+	fi
+	"$DIALOG" -t $token -p "{details='`tail -n 1 "$RDRAMDISK"/r_out`';progressValue=$CP;}" 2&amp;&gt;/dev/null
+done
+"$DIALOG" -x $token 2&amp;&gt;/dev/null
 
 #read only the current response from Rdaemon
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')

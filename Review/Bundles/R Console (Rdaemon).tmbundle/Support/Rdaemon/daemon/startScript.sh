@@ -56,10 +56,6 @@ if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 		#save /dev/disk? for detaching
 		echo -n "$ramDiskPath" > ~/Rdaemon/daemon/ramDiskPath
 		newfs_hfs -v 'TMRdaemon' $ramDiskPath
-#		if [ -d "$RDRAMDISK" ]; then
-#			RES=$(rmdir "$RDRAMDISK")
-#			[[ ! -z "$RES" ]] && echo "Please delete $RDRAMDISK manually!" && exit 206
-#		fi
 		[[ ! -d "$RDRAMDISK" ]] && mkdir "$RDRAMDISK"
 		mount -t hfs $ramDiskPath "$RDRAMDISK"
 	fi	
@@ -129,13 +125,16 @@ do
 done
 
 #wait for Rdaemon's output is ready
+CNT=10
+export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;progressValue=$CNT;summary='Rdaemon is starting…';}")
 while [ 1 ]
 do
 	ST=$(tail -n 1 "$RDRAMDISK"/r_out )
 	[[ "$ST" == "> " ]] && break
-	echo "100 Rdaemon is starting…";
-	sleep .05
-done|CocoaDialog progressbar --indeterminate --title "Rdaemon"
+	sleep 0.05
+	CNT=$(( $CNT + 7 ))
+	"$DIALOG" -t $token -p "{progressValue=$CNT;}" 2&>/dev/null
+done
 
 #get R's PID
 RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
@@ -143,6 +142,7 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 runs
 if [ $? == 1 ]; then
 	# check for R errors while starting
+	"$DIALOG" -t $token -p "{summary='Waiting for respond…';progressValue=90;}" 2&>/dev/null
 	POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 	echo "@|sink('$RDRAMDISK/r_tmp');cat(geterrmessage());sink(file=NULL)" > ~/Rdaemon/r_in
 	POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
@@ -154,17 +154,14 @@ if [ $? == 1 ]; then
 		[[ "$RES" == "> " ]] && break
 		[[ "$RES" == "+ " ]] && break
 		[[ "$RES" == ": " ]] && break
-		#monitoring of the CPU coverage as progress bar
-		cpu=$(ps o pcpu -p "$RPID" | tail -n 1)
-		[[ "${cpu:0:1}" == "%" ]] && break
-		CP=$(echo -n "$cpu" | perl -e 'print 100-<>')
-		echo "$CP `tail -n 1 "$RDRAMDISK"/r_out`"
-		sleep 0.1
-	done|CocoaDialog progressbar --title "Rdaemon is busy ..."
+		sleep 0.05
+	done
 	ERR=`cat "$RDRAMDISK"/r_tmp 2>/dev/null`
 	[[ ! -z "$ERR" ]] && echo -e "$ERR"
 	echo -en ""
+	"$DIALOG" -x $token 2&>/dev/null
 else
 	echo "While starting Rdaemon was shutdown unexpectedly!"
+	"$DIALOG" -x $token 2&>/dev/null
 	exit 206
 fi

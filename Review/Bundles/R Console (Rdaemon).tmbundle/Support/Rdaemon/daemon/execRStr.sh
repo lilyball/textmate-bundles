@@ -38,6 +38,8 @@ echo -e "$TASK" > "$RDHOME"/r_in
 #wait for R's response by expecting >, +, or : plus SPACE!
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 OFF=$(($POSNEW - $POS + 2))
+
+PROGRESS_INIT=0 # to start the progress dialog after 100ms only
 while [ 1 ]
 do
 	RES=$(tail -c 2 "$RDRAMDISK"/r_out)
@@ -51,7 +53,13 @@ do
 	CP=$(echo -n "$cpu" | perl -e 'print 100-<>')
 	echo "$CP `tail -n 1 "$RDRAMDISK"/r_out`"
 	sleep 0.1
-done|CocoaDialog progressbar --title "Rdaemon is busy ..."
+	if [ $PROGRESS_INIT -eq 0 ]; then
+		export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;progressValue=50;summary='Rdaemon is busy…';}")
+		PROGRESS_INIT=1
+	fi
+	"$DIALOG" -t $token -p "{details='`tail -n 1 "$RDRAMDISK"/r_out`';progressValue=$CP;}" 2&>/dev/null
+done
+"$DIALOG" -x $token 2&>/dev/null
 
 #read only the current response from Rdaemon
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')

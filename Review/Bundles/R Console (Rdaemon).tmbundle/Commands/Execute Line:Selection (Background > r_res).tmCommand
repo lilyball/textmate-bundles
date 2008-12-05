@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -82,12 +82,14 @@ echo -e "@|sink('~/Rdaemon/r_res')"  &gt; "$RDHOME"/r_in
 if [ -z "$TM_SELECTED_TEXT" ]; then
 	echo -e "$TASK" &gt; "$RDHOME"/r_in
 else
+	export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='Sending task to Rdaemon…';}")
 	echo -e "$TASK" | while read LINE
 	do
 		echo -e "$LINE" &gt; "$RDHOME"/r_in
 		sleep 0.002
-		echo "$LINE"
-	done|CocoaDialog progressbar --indeterminate --title "Rdaemon is busy ..."
+		"$DIALOG" -t $token -p "{details='$LINE';}" 2&amp;&gt;/dev/null
+	done
+	"$DIALOG" -x $token 2&amp;&gt;/dev/null
 fi
 echo "@|sink(file=NULL)" &gt; ~/Rdaemon/r_in
 

@@ -81,10 +81,7 @@ do
 		fi
 	fi
 	if [ "$TMD_returnCode" -eq 2 ]; then
-		file=$(CocoaDialog fileselect \
-		--title "Save Plot As" \
-		--with-directory $HOME/ \
-		)
+		file=$(osascript -e 'tell application "TextMate"' -e 'activate' -e 'POSIX path of (choose file name with prompt "(without extension)" default name "plot")' -e 'end tell' 2>/dev/null)
 		# check for valid file
 		if [ -n "$file" ]; then
 			echo -ne "$file" | perl "$MYDIR/bin/setFileNameHSD.pl"

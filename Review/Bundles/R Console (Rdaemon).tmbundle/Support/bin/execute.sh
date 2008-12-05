@@ -9,6 +9,13 @@ fi
 
 
 ######### begin script #########
+
+#get R's PID
+RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+
+
+# send CTRL+C to the Rdaemon and dispose all frozen ProgressDialogs
+kill -s INT $RPID 2&>/dev/null
 {
 while [ 1 ]
 do
@@ -16,8 +23,6 @@ do
 	[[ ${#res} -eq 0 ]] && break
 done
 } &
-#get R's PID
-RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 
 #check whether Rdaemon runs
 test -z $RPID && echo -en "Rdaemon is not running." && exit 206
@@ -105,8 +110,8 @@ POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 OFFBIAS=2
 [[ "${TM_CURRENT_LINE:0:2}" == "+ " ]] && OFFBIAS=0
 
-PROGRESS_INIT=0 # to start the proggress dialog after 100ms only
-while [ ! -e ~/Rdaemon/pgstop ]
+PROGRESS_INIT=0 # to start the progress dialog after 100ms only
+while [ 1 ]
 do
 	RES=$(tail -c 2 "$RDRAMDISK"/r_out)
 	#expect these things from R
@@ -127,7 +132,7 @@ do
 	fi
 	"$DIALOG" -t $token -p "{details='`tail -n 1 "$RDRAMDISK"/r_out`';progressValue=$CP;}" 2&>/dev/null
 done
-"$DIALOG" -w $token 2&>/dev/null
+"$DIALOG" -x $token 2&>/dev/null
 
 #read only the current response from Rdaemon
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')

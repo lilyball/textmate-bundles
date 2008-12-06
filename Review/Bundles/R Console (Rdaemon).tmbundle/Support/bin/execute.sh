@@ -62,7 +62,7 @@ if [ "$QTASK" == "q()" -o "$QTASK" == "quit()" ]; then
 			echo -e "@|q()\n@|y\n" > "$HOME/Rdaemon/r_in"
 		fi
 		if [ "$ANS" == "2" ]; then
-			echo -e "@|q()\n@|y\n" > "$HOME/Rdaemon/r_in"
+			echo -e "@|q()\n@|n\n" > "$HOME/Rdaemon/r_in"
 		fi
 		if [ ! -e "$HOME"/Rdaemon/daemon/x11runs ]; then
 			osascript <<-AS &>/dev/null

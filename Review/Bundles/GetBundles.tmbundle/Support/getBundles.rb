@@ -415,6 +415,7 @@ def infoDIALOG(dlg)
         <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
         <b>Private:</b><br />&nbsp;#{info['private']}<br />
         <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
+        <b>Last Modified:</b><br />&nbsp;#{Time.parse(lastCommit).getutc.to_s}<br />
         HTML01
         
         if ENV.has_key?('TM_GETBUNDLES_SHOW_SVNGIT_COMMANDS')
@@ -638,6 +639,7 @@ osascript -e 'tell app "TextMate" to reload bundles'
         <b>Archive URL:</b><br />&nbsp;<a href='#{bundle['source'].first['url']}'>#{bundle['source'].first['url']}</a><br />
         <b>Author:</b><br />&nbsp;#{bundle['contact']}<br />
         <b>Last Modified:</b><br />&nbsp;#{bundle['revision']}<br />
+        <b>UUID:</b><br />&nbsp;#{bundle['uuid']}<br />
         </body></html>
       HTML11
     end      

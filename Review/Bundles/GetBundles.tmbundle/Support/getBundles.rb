@@ -418,6 +418,11 @@ def infoDIALOG(dlg)
         <b>Last Modified:</b><br />&nbsp;#{Time.parse(lastCommit).getutc.to_s}<br />
         HTML01
         
+        if $localBundles.has_key?(bundle['uuid'])
+          io << "<b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br /><br />"
+        end
+        
+        
         if ENV.has_key?('TM_GETBUNDLES_SHOW_SVNGIT_COMMANDS')
           io << <<-HTML0001
         <b>git clone:</b><br /><pre><small><small>export LC_CTYPE=en_US.UTF-8
@@ -580,7 +585,7 @@ svn switch --relocate #{localUrl} #{localUrl.gsub("http://macromates.com/svn/Bun
         t = "This bundle was updated meanwhile."
         io << "<p align='right'><small><font color='#darkgreen'>#{t}</font></small></p>"
       end
-
+      
       io << <<-HTML12
         <span style="background-color:#EEEEEE">
         <b>URL:</b><br />&nbsp;<a href='#{info['URL']}'>#{info['URL']}</a><br />
@@ -612,6 +617,12 @@ osascript -e 'tell app "TextMate" to reload bundles'
 </pre>
         HTML121
       end
+
+      if $localBundles.has_key?(bundle['uuid'])
+        io << "<b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br /><br />"
+      end
+
+
       io << "<br /></span>"
       unless relocateHint.empty?
         io << <<-HTML112
@@ -640,8 +651,13 @@ osascript -e 'tell app "TextMate" to reload bundles'
         <b>Author:</b><br />&nbsp;#{bundle['contact']}<br />
         <b>Last Modified:</b><br />&nbsp;#{bundle['revision']}<br />
         <b>UUID:</b><br />&nbsp;#{bundle['uuid']}<br />
-        </body></html>
-      HTML11
+        HTML11
+        
+        if $localBundles.has_key?(bundle['uuid'])
+          io << "<b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br /><br />"
+        end
+        
+        io << "</body></html>"
     end      
 
   else

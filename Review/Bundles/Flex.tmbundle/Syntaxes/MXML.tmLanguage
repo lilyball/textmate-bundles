@@ -285,6 +285,31 @@
 			<string>meta.tag.end.xml.mxml</string>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>&lt;[!%]--</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.xml.mxml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>--%?&gt;</string>
+			<key>name</key>
+			<string>comment.block.xml.mxml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>--</string>
+					<key>name</key>
+					<string>invalid.illegal.comment.chars.xml.mxml</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>text.xml</string>
 		</dict>

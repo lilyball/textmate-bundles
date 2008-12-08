@@ -64,6 +64,8 @@ $localBundles     = { }
 
 $localBundlesChanges = { }
 
+$localBundlesChangesPaths = { }
+
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
 # TextMate's standard Support folder
@@ -699,7 +701,7 @@ osascript -e 'tell app "TextMate" to reload bundles'
   
 end
 
-def askDIALOG(msg, text, btn1="No", btn2="Yes")
+def askDIALOG(msg, text, btn1="No", btn2="Yes", style="informational")
 
   msg.gsub!("'","’")
   text.gsub!("'","’")
@@ -707,9 +709,9 @@ def askDIALOG(msg, text, btn1="No", btn2="Yes")
   resStr = 0
 
   if $isDIALOG2
-    resStr = %x{#{$DIALOG} alert --alertStyle critical --body "#{msg}" --title "#{text}" --button1 "#{btn1}" --button2 "#{btn2}"}
+    resStr = %x{#{$DIALOG} alert --alertStyle #{style} --body "#{msg}" --title "#{text}" --button1 "#{btn1}" --button2 "#{btn2}"}
   else
-    resStr = %x{#{$DIALOG} -e -p '{messageTitle="#{msg}";alertStyle=critical;informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
+    resStr = %x{#{$DIALOG} -e -p '{messageTitle="#{msg}";alertStyle=#{style};informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
     return resStr.to_i
   end
 
@@ -838,10 +840,7 @@ def getBundleLists
 
     repo = getRepoAbbrev(bundle)
     
-    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened = getLocalStatus(bundle)
-    
-    locCom += " [local changes]" if $localBundlesChanges[bundle['uuid']]
-
+    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel = getLocalStatus(bundle)
     
     # set searchpattern
     updatedStr = (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u"
@@ -856,9 +855,11 @@ def getBundleLists
       'status'            => status,
       'locCom'            => locCom,
       'deleteButtonEnabled'      => deleteButtonEnabled,
+      'deleteButtonLabel' => deleteButtonLabel,
       'deleteButton'      => deleteButton,
       'category'          => "",
-      'canBeOpened'       => canBeOpened
+      'canBeOpened'       => canBeOpened,
+      'deleteButtonTooltip' => "#{deleteButtonLabel} “#{bundle['name']}”"
 
     }
     $deleteBundleOrgStatus[bundle['uuid']] = deleteButton
@@ -904,6 +905,8 @@ def buildLocalBundleList
   $delCoreDisBundles = { }
   $delCoreDisBundles['deleted'] = [ ]
   $delCoreDisBundles['disabled'] = [ ]
+  $localBundlesChanges = { }
+  $localBundlesChangesPaths = { }
 
   unless ENV['TM_GETBUNDLES_AVOID_READING_TMPLIST']
     begin
@@ -972,6 +975,12 @@ def buildLocalBundleList
           end
         else
           $localBundlesChanges[plist['uuid']] = true
+          if $localBundlesChangesPaths.has_key?(plist['uuid'])
+            $localBundlesChangesPaths[plist['uuid']] << b
+          else
+            $localBundlesChangesPaths[plist['uuid']] = [ ]
+            $localBundlesChangesPaths[plist['uuid']] << b
+          end
         end
       rescue
         writeToLogFile("Error while parsing “#{b}”:\n#{$!}")
@@ -996,15 +1005,18 @@ def getLocalStatus(aBundle)
   deleteBtnEnabled = "0"
   canBeOpened = 0
   locCom = ""
+  deleteButtonLabel = ""
   if $localBundles.has_key?(aBundle['uuid'])
     deleteBtn = "1"
     canBeOpened = 1
     if $localBundles[aBundle['uuid']]['scm'].empty? && $localBundles[aBundle['uuid']]['deleted'].empty? && $localBundles[aBundle['uuid']]['location'] =~ /Pristine/
       deleteBtnEnabled = "1"
+      deleteButtonLabel = "Delete"
     end
     if ! $localBundles[aBundle['uuid']]['deleted'].empty? || ! $localBundles[aBundle['uuid']]['disabled'].empty?
       deleteBtn = "0"
       deleteBtnEnabled = "1"
+      deleteButtonLabel = ($localBundles[aBundle['uuid']]['deleted'].empty?) ? "Enable" : "Undelete"
     end
     if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
       status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
@@ -1013,7 +1025,8 @@ def getLocalStatus(aBundle)
     end
     locCom = "#{$localBundles[aBundle['uuid']]['location']} #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
   end
-  [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom,canBeOpened]
+  locCom += " [local changes]" if $localBundlesChanges[aBundle['uuid']]
+    [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom,canBeOpened,deleteButtonLabel]
 end
 
 def refreshUpdatedStatus
@@ -1021,7 +1034,7 @@ def refreshUpdatedStatus
   $params['isBusy'] = true
   $params['progressText'] = "Parsing local bundles…"
   updateDIALOG
-  
+
   buildLocalBundleList
 
   $params['nocancel'] = true
@@ -1034,8 +1047,7 @@ def refreshUpdatedStatus
 
     break if $close
     bundle = $bundleCache['bundles'][cnt]
-    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened = getLocalStatus(bundle)
-
+    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel = getLocalStatus(bundle)
     # set the bundle status and the search patterns
     r['searchpattern'].gsub!(/=[^ ]*$/, (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u")
     r['status'] = status
@@ -1043,6 +1055,8 @@ def refreshUpdatedStatus
     r['deleteButton'] = deleteButton
     r['locCom'] = locCom
     r['canBeOpened'] = canBeOpened
+    r['deleteButtonLabel'] = deleteButtonLabel
+    r['deleteButtonTooltip'] = "#{deleteButtonLabel} “#{r['name']}”"
     cnt += 1
 
   end
@@ -1525,6 +1539,8 @@ cd '#{$supportFolderPristine}';
     writeTimedMessage("Timeout while updating TextMate's “Support Folder”. Please check the folder ‘#{$supportFolder}’!\n If problems occur remove ‘#{$supportFolder}’ manully and retry it.")
   end
   
+  $params['progressText'] = "Checking “Support Folder”…"
+  updateDIALOG
   checkForSupportFolderUpdate
   
   $params['supportFolderCheck'] = 0
@@ -1580,29 +1596,85 @@ def openInstalledBundle(aBundle)
   end
 end
 
-def deleteBundleOrReinstallBundle
-  $dialogResult['dataarray'].each do |b|
-    if $deleteBundleOrgStatus[b['uuid']] != b['deleteButton']
-      if $localBundles.has_key?(b['uuid']) && $localBundles[b['uuid']]['deleted'].empty? && $localBundles[b['uuid']]['disabled'].empty?
-        askDIALOG("Not yet implemented.", "In future “#{b['name']}” will be deleted.","OK","")
-        break
-      else
-        openInstalledBundle($localBundles[b['uuid']])
-        if $errorcnt == 0 # because TM refreshes its plist not immediately
-          b['deleteButtonEnabled'] = ($localBundles[b['uuid']]['scm'].empty? && $localBundles[b['uuid']]['location'] =~ /Pristine/) ? "1" : "0"
-          b['deleteButton'] = "1"
-          b['locCom'].gsub!($localBundles[b['uuid']]['deleted'],"")
-          b['locCom'].gsub!($localBundles[b['uuid']]['disabled'],"")
-          $localBundles[b['uuid']]['deleted'] = ""
-          $localBundles[b['uuid']]['disabled'] = ""
-          $deleteBundleOrgStatus[b['uuid']] = "1"
-          $params['dataarray'] = $dialogResult['dataarray']
-          updateDIALOG
-          $params.delete('dataarray')
-        end
-        break
-      end
+def moveFileToTrash(aPath)
+  # it's safer to use AS; no need for checking if aPath already exists in trash
+  begin
+    %x{osascript -e 'tell app "Finder" to delete POSIX file ("#{aPath}")'}
+  rescue
+    writeToLogFile("Error while moving “#{aPath}” to trash.\n#{$!}")
+  end
+end
+
+def deleteBundle(uuid)
+  
+  items = nil
+
+  begin
+    items = Dir.glob("#{$localBundles[uuid]['path']}/**/*.tm*").size
+    items2 = Dir.glob("#{$localBundles[uuid]['path']}/**/*.plist").size
+    items += (items2>1) ? (items2-1) : 0
+  rescue
+    writeToLogFile("Error while reading ‘#{$localBundles[uuid]['path']}’\n#{$!}")
+    items = nil
+  end
+
+  mes = (items.nil?) ? "“#{$localBundles[uuid]['name']}”" : "with #{items.to_s} item#{(items>1) ? 's' : ''}"
+  
+  localChangeMes = ($localBundlesChanges.has_key?(uuid)) ? "together with your local changes " : ""
+  alertStyle = (localChangeMes.empty?) ? "informational" : "critical"
+
+  if askDIALOG("Delete bundle #{mes}?", "The “#{$localBundles[uuid]['name']}” bundle will be moved #{localChangeMes}to Trash. Do you want to continue?", "Delete", "Cancel",alertStyle) == 0
+    moveFileToTrash($localBundles[uuid]['path'])
+    if $localBundlesChangesPaths.has_key?(uuid)
+      $localBundlesChangesPaths[uuid].each { |b| moveFileToTrash(b) }
     end
+    reloadBundles
+    refreshUpdatedStatus
+  end
+end
+
+def enableBundle(aBundle,path)
+  begin
+    %x{open -a Finder '#{aBundle['path']}'}
+  rescue
+    writeToLogFile("Error while enabling bundles.\n#{$!}")
+  end
+  #TM refreshes its plist not immediately
+  b = $dataarray[path.to_i]
+  b['deleteButtonEnabled'] = ($localBundles[b['uuid']]['scm'].empty? && $localBundles[b['uuid']]['location'] =~ /Pristine/) ? "1" : "0"
+  b['deleteButton'] = "1"
+  b['deleteButtonLabel'] = "Delete" if b['deleteButtonEnabled'] == "1"
+  b['locCom'].gsub!($localBundles[b['uuid']]['disabled'],"")
+  $localBundles[b['uuid']]['disabled'] = ""
+  $params['dataarray'] = $dataarray
+  updateDIALOG
+  $params.delete('dataarray')
+end
+
+def unDeleteBundle(aBundle,path)
+  begin
+    %x{open -a Finder '#{aBundle['path']}'}
+  rescue
+    writeToLogFile("Error while enabling bundles.\n#{$!}")
+  end
+  #TM refreshes its plist not immediately
+  b = $dataarray[path.to_i]
+  b['deleteButtonEnabled'] = ($localBundles[b['uuid']]['scm'].empty? && $localBundles[b['uuid']]['location'] =~ /Pristine/) ? "1" : "0"
+  b['deleteButton'] = "1"
+  b['deleteButtonLabel'] = "Delete" if b['deleteButtonEnabled'] == "1"
+  b['locCom'].gsub!($localBundles[b['uuid']]['deleted'],"")
+  $localBundles[b['uuid']]['deleted'] = ""
+  $params['dataarray'] = $dataarray
+  updateDIALOG
+  $params.delete('dataarray')
+
+end
+
+def reloadBundles
+  begin
+    %x{osascript -e 'tell app "TextMate" to reload bundles'}
+  rescue
+    writeToLogFile("Error while reloading bundles.\n#{$!}")
   end
 end
 
@@ -1633,6 +1705,7 @@ $params = {
   'closeBtn'                => 'closeButtonIsPressed',
   'revealInFinderBtn'       => 'revealInFinderIsPressed',
   'openAsProjectBtn'        => 'openAsProjectIsPressed',
+  'deleteBtn'               => 'deleteButtonIsPressed',
   'nocancel'                => false,
   'bundleSelection'         => 'All',
   'openBundleEditor'        => 0,
@@ -1679,6 +1752,13 @@ while $run do
       when 'infoButtonIsPressed':   $infoThread = Thread.new { infoDIALOG($dialogResult) }
       when 'revealInFinderIsPressed': %x{osascript -e 'tell app "Finder" to reveal POSIX file("#{$localBundles[$dialogResult['uuid']]['path']}")'}
       when 'openAsProjectIsPressed': %x{open -a Finder '#{$localBundles[$dialogResult['uuid']]['path']}'}
+      when 'deleteButtonIsPressed':
+        case $dialogResult['action']
+          when "Enable": enableBundle($localBundles[$dialogResult['uuid']], $dialogResult['path'])
+          when "Undelete": unDeleteBundle($localBundles[$dialogResult['uuid']], $dialogResult['path'])
+          else
+            deleteBundle($dialogResult['uuid'])
+        end
       when 'closeButtonIsPressed':
         closeMe
         break
@@ -1708,6 +1788,7 @@ while $run do
     updateDIALOG
 
   elsif $dialogResult['refreshBundleList'] == 1
+    reloadBundles
     $refreshThread = Thread.new do
       refreshUpdatedStatus
       $params['refreshBundleList'] = 0 # hide checkmark in menu
@@ -1715,6 +1796,7 @@ while $run do
     end
 
   elsif $dialogResult['rescanBundleList'] == 1
+    reloadBundles
     $reloadThread = Thread.new do
       begin
         getBundleLists
@@ -1734,8 +1816,6 @@ while $run do
       if $dialogResult['supportFolderCheck'] == 1
         doUpdateSupportFolder
         checkForSupportFolderUpdate
-      else
-        deleteBundleOrReinstallBundle
       end
       $params['supportFolderCheck'] = 0 # hide checkmark in menu
       updateDIALOG

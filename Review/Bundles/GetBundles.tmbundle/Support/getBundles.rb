@@ -838,7 +838,7 @@ def getBundleLists
 
     repo = getRepoAbbrev(bundle)
     
-    updatedStr,status,deleteButton,deleteButtonEnabled,locCom = getLocalStatus(bundle)
+    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened = getLocalStatus(bundle)
     
     locCom += " [local changes]" if $localBundlesChanges[bundle['uuid']]
 
@@ -857,7 +857,8 @@ def getBundleLists
       'locCom'            => locCom,
       'deleteButtonEnabled'      => deleteButtonEnabled,
       'deleteButton'      => deleteButton,
-      'category'          => ""
+      'category'          => "",
+      'canBeOpened'       => canBeOpened
 
     }
     $deleteBundleOrgStatus[bundle['uuid']] = deleteButton
@@ -993,9 +994,11 @@ def getLocalStatus(aBundle)
   status = ""
   deleteBtn = "0"
   deleteBtnEnabled = "0"
+  canBeOpened = 0
   locCom = ""
   if $localBundles.has_key?(aBundle['uuid'])
     deleteBtn = "1"
+    canBeOpened = 1
     if $localBundles[aBundle['uuid']]['scm'].empty? && $localBundles[aBundle['uuid']]['deleted'].empty? && $localBundles[aBundle['uuid']]['location'] =~ /Pristine/
       deleteBtnEnabled = "1"
     end
@@ -1010,7 +1013,7 @@ def getLocalStatus(aBundle)
     end
     locCom = "#{$localBundles[aBundle['uuid']]['location']} #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
   end
-  [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom]
+  [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom,canBeOpened]
 end
 
 def refreshUpdatedStatus
@@ -1031,7 +1034,7 @@ def refreshUpdatedStatus
 
     break if $close
     bundle = $bundleCache['bundles'][cnt]
-    updatedStr,status,deleteButton,deleteButtonEnabled,locCom = getLocalStatus(bundle)
+    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened = getLocalStatus(bundle)
 
     # set the bundle status and the search patterns
     r['searchpattern'].gsub!(/=[^ ]*$/, (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u")
@@ -1039,6 +1042,7 @@ def refreshUpdatedStatus
     r['deleteButtonEnabled'] = deleteButtonEnabled
     r['deleteButton'] = deleteButton
     r['locCom'] = locCom
+    r['canBeOpened'] = canBeOpened
     cnt += 1
 
   end
@@ -1627,6 +1631,8 @@ $params = {
   'infoBtn'                 => 'infoButtonIsPressed',
   'cancelBtn'               => 'cancelButtonIsPressed',
   'closeBtn'                => 'closeButtonIsPressed',
+  'revealInFinderBtn'       => 'revealInFinderIsPressed',
+  'openAsProjectBtn'        => 'openAsProjectIsPressed',
   'nocancel'                => false,
   'bundleSelection'         => 'All',
   'openBundleEditor'        => 0,
@@ -1671,6 +1677,8 @@ while $run do
         $firstrun = false
         updateDIALOG
       when 'infoButtonIsPressed':   $infoThread = Thread.new { infoDIALOG($dialogResult) }
+      when 'revealInFinderIsPressed': %x{osascript -e 'tell app "Finder" to reveal POSIX file("#{$localBundles[$dialogResult['uuid']]['path']}")'}
+      when 'openAsProjectIsPressed': %x{open -a Finder '#{$localBundles[$dialogResult['uuid']]['path']}'}
       when 'closeButtonIsPressed':
         closeMe
         break

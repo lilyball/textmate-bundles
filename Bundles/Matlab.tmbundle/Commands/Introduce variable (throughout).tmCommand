@@ -10,20 +10,7 @@
 import sys,os
 sys.path.append(os.environ['TM_SUPPORT_PATH'] + '/lib')
 
-import plistlib
-
-def dialog_get_string(title="", prompt=""):
-    """docstring for dialog_get_string"""
-    dialog = os.environ.get('DIALOG')
-    nib = os.path.join(os.environ.get('TM_SUPPORT_PATH'), 
-    'nibs/RequestString')
-    plist = "title='%s'; prompt='%s';" % (title, prompt)
-    st = """'%s' -cmp "%s" '%s' """ % (dialog, plist, nib)
-    # run constructed command
-    ret = os.popen(st, 'r').read()
-    # Extract exit value
-    plist = plistlib.readPlistFromString(ret)
-    return plist['result']['returnArgument'].rstrip('\n')
+import dialog
 
 def first_occurance(arr, str):
     """find first_occurance of str in an array of strings"""
@@ -36,7 +23,6 @@ def first_occurance(arr, str):
             break
         except ValueError:
             pass
-
     
     return line_no
 
@@ -50,12 +36,18 @@ except KeyError:
     pass
 else:
     line_no = first_occurance(lines, sel)-1
-    var = dialog_get_string('Enter new variable name', 'Variable name:')    
+    try:
+        var = dialog.get_string(text='Enter new variable name', 
+        prompt='Variable name:')
+    except AttributeError:
+        print '% Please update your support directory'
+        var = 'var'
 
 for line in lines[0:line_no]:
 	print line.replace(sel, var),
 
-print '%s = %s;' % (var, sel),
+term = os.environ.get('TM_LINE_TERMINATOR') or ';'
+print '%s = %s%s\n' % (var, sel, term),
 
 for line in lines[line_no:]:
 	print line.replace(sel, var),

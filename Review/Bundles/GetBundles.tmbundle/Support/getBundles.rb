@@ -83,6 +83,8 @@ $justUndeletedCoreAndEnabledBundles = [ ]
 # array of current checkbox values to figure out which checkbox was changed
 $deleteBundleOrgStatus = { }
 
+$bundleColors = [ '#663300', '#993300' ]
+
 # the Log file
 $logFilePath = "#{ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
 
@@ -829,18 +831,33 @@ def getBundleLists
   
   # build $dataarray for NIB
   index = 0
+  colorCnt = 0
+  colorFlag = false
+  lastColorFlag = false
   $bundleCache['bundles'].each do |bundle|
 
     break if $close
 
     author = (bundle['contact'].empty?) ? "" : " (by #{bundle['contact']})"
+    nameColor = '#000000'
+    if (index+1) < $bundleCache['bundles'].size
+      colorFlag = ($bundleCache['bundles'][(index+1)]['uuid'] == bundle['uuid']) ? true : false
+      if lastColorFlag || colorFlag
+        nameColor = $bundleColors[(colorCnt%2)]
+        colorCnt += 1 unless colorFlag
+      else
+        nameColor =  '#000000'
+      end
+      lastColorFlag = colorFlag
+    end
+
 
     # show only first part of description if description is subdivided by <hr>
     desc = strip_html(bundle['description'].gsub(/(?m)<hr[^>]*?\/>.*/,'').gsub(/\n/, ' ') + author)
 
     repo = getRepoAbbrev(bundle)
     
-    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel = getLocalStatus(bundle)
+    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel,nameBold = getLocalStatus(bundle)
     
     # set searchpattern
     updatedStr = (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u"
@@ -858,6 +875,8 @@ def getBundleLists
       'deleteButtonLabel' => deleteButtonLabel,
       'deleteButton'      => deleteButton,
       'category'          => "",
+      'nameColor'         => nameColor,
+      'nameBold'          => nameBold,
       'canBeOpened'       => canBeOpened,
       'deleteButtonTooltip' => "#{deleteButtonLabel} “#{bundle['name']}”"
 
@@ -1006,6 +1025,7 @@ def getLocalStatus(aBundle)
   canBeOpened = 0
   locCom = ""
   deleteButtonLabel = ""
+  nameBold = false
   if $localBundles.has_key?(aBundle['uuid'])
     deleteBtn = "1"
     canBeOpened = 1
@@ -1020,13 +1040,14 @@ def getLocalStatus(aBundle)
     end
     if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
       status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
+      nameBold = true
     else
       status = "Ok"
     end
     locCom = "#{$localBundles[aBundle['uuid']]['location']} #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
   end
   locCom += " [local changes]" if $localBundlesChanges[aBundle['uuid']]
-    [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom,canBeOpened,deleteButtonLabel]
+    [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom,canBeOpened,deleteButtonLabel,nameBold]
 end
 
 def refreshUpdatedStatus
@@ -1047,7 +1068,7 @@ def refreshUpdatedStatus
 
     break if $close
     bundle = $bundleCache['bundles'][cnt]
-    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel = getLocalStatus(bundle)
+    updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel,nameBold = getLocalStatus(bundle)
     # set the bundle status and the search patterns
     r['searchpattern'].gsub!(/=[^ ]*$/, (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u")
     r['status'] = status
@@ -1057,6 +1078,7 @@ def refreshUpdatedStatus
     r['canBeOpened'] = canBeOpened
     r['deleteButtonLabel'] = deleteButtonLabel
     r['deleteButtonTooltip'] = "#{deleteButtonLabel} “#{r['name']}”"
+    r['nameBold'] = nameBold
     cnt += 1
 
   end
@@ -1584,15 +1606,6 @@ def checkUniversalAccess
     if askDIALOG("AppleScript's “UI scripting” is not enabled. Getbundles needs it to perform “Show Help Window”, “Open Bundle Editor”, and “to activate Getbundles if it's already open”.", "Do you want to open “System Preferences” to enable “Enable access for assistive devices”?", "Yes", "No") == 0
       %x{osascript -e 'tell app "System Preferences" ' -e 'activate' -e 'set current pane to pane "com.apple.preference.universalaccess"' -e 'end tell'}
     end
-  end
-end
-
-def openInstalledBundle(aBundle)
-  begin
-    %x{mate '#{aBundle['path']}'}
-  rescue
-    $errorcnt += 1
-    writeToLogFile("Couldn't open “#{b['name']}”\n#{$!}")
   end
 end
 

@@ -93,7 +93,7 @@ module TextMate
 
         options[:script_args].each { |arg| args << arg }
         
-        TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME']}”…", :sub_title => version, :html_head => script_style_header) do |io|
+        TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME'] || File.basename(ENV["TM_FILEPATH"])}”…", :sub_title => version, :html_head => script_style_header) do |io|
           
           io << '<div class="executor">'
           

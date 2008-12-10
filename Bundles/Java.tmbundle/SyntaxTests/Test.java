@@ -98,7 +98,17 @@ public class Ticket3D1E429A
 public class Foo
 {
    public void bar() {
-       Int[] int1 = new Int[10];
+       Int[] int1 = new Int[10] {1,2,3};
        Int[] int2 = new Int[10];
    }
+   
+   void method() 
+   {
+       method(new Integer[334]);
+   }
+   
+   void method2() {
+    
+   }
+   
 }

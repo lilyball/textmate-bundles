@@ -858,7 +858,9 @@ def getBundleLists
     repo = getRepoAbbrev(bundle)
     
     updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel,nameBold = getLocalStatus(bundle)
-    
+    if nameColor != '#000000'
+      locCom += " date: " + Time.parse(bundle['revision']).getutc.strftime("%y-%m-%d %H:%M")
+    end
     # set searchpattern
     updatedStr = (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u"
 
@@ -870,7 +872,7 @@ def getBundleLists
       'source'            => repo,
       'uuid'              => bundle['uuid'],
       'status'            => status,
-      'locCom'            => locCom,
+      'locCom'            => locCom.strip,
       'deleteButtonEnabled'      => deleteButtonEnabled,
       'deleteButtonLabel' => deleteButtonLabel,
       'deleteButton'      => deleteButton,
@@ -1069,12 +1071,19 @@ def refreshUpdatedStatus
     break if $close
     bundle = $bundleCache['bundles'][cnt]
     updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel,nameBold = getLocalStatus(bundle)
+
+    if r['nameColor'] != '#000000'
+      locCom += " date: " + Time.parse(bundle['revision']).getutc.strftime("%y-%m-%d %H:%M")
+    end
+
+
     # set the bundle status and the search patterns
     r['searchpattern'].gsub!(/=[^ ]*$/, (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u")
+
     r['status'] = status
     r['deleteButtonEnabled'] = deleteButtonEnabled
     r['deleteButton'] = deleteButton
-    r['locCom'] = locCom
+    r['locCom'] = locCom.strip
     r['canBeOpened'] = canBeOpened
     r['deleteButtonLabel'] = deleteButtonLabel
     r['deleteButtonTooltip'] = "#{deleteButtonLabel} “#{r['name']}”"

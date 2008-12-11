@@ -842,7 +842,7 @@ def getBundleLists
       $numberOfBundleSources[b['uuid']] = 1
     end
   end
-  
+
   # build $dataarray for NIB
   index = 0
   colorCnt = 0
@@ -932,8 +932,17 @@ def getBundleLists
 end
 
 def initGetBundlePlist
+  $gbPlist = nil
   unless File.exist?($gbPlistPath)
     open($gbPlistPath, "w") {|io| io << { 'bundleSources' => { } }.to_plist }
+    $gbPlist = { 'bundleSources' => { } }
+  else
+    begin
+      $gbPlist = OSX::PropertyList::load(File.open($gbPlistPath,"r"))
+    rescue
+      writeToLogFile("Can't open GetBundles' plist ‘#{$gbPlistPath}’")
+      $gbPlist = { 'bundleSources' => { } }
+    end
   end
 end
 
@@ -1304,6 +1313,8 @@ def installBundles(dlg)
       $errorcnt = 0
       break
     end
+    $gbPlist['bundleSources'][bundleData['uuid']] = path
+    open($gbPlistPath, "w") {|io| io << $gbPlist.to_plist }
   end
   
   $params['isBusy'] = false

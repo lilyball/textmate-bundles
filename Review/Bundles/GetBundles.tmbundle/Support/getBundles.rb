@@ -66,6 +66,8 @@ $localBundlesChanges = { }
 
 $localBundlesChangesPaths = { }
 
+$numberOfBundleSources = { }
+
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
 # TextMate's standard Support folder
@@ -87,6 +89,8 @@ $bundleColors = [ '#663300', '#993300' ]
 
 # the Log file
 $logFilePath = "#{ENV['HOME']}/Library/Logs/TextMateGetBundles.log"
+# GetBundles' plist path
+$gbPlistPath = "#{ENV['HOME']}/Library/Preferences/com.macromates.textmate.getbundles.plist"
 
 def local_bundle_paths
   {
@@ -829,6 +833,16 @@ def getBundleLists
     end
   end
   
+  # build hash of uuid and the number of different sources in bundle cache
+  $numberOfBundleSources = { }
+  $bundleCache['bundles'].each do |b|
+    if $numberOfBundleSources.has_key?(b['uuid'])
+      $numberOfBundleSources[b['uuid']] += 1
+    else
+      $numberOfBundleSources[b['uuid']] = 1
+    end
+  end
+  
   # build $dataarray for NIB
   index = 0
   colorCnt = 0
@@ -889,6 +903,11 @@ def getBundleLists
   end
   
   writeToLogFile("Cache File lists %d bundles. Last modified date: %s" % [$dataarray.size, $bundleCache['cache_date'].to_s])
+  $dataarray.each do |b|
+    if b['status'] == "?"
+      b['status'] = "" if $localBundles[b['uuid']]['seen']
+    end
+  end
   
   unless $close
     $numberOfBundles = $dataarray.size
@@ -910,6 +929,12 @@ def getBundleLists
     writeTimedMessage("Error while initialization:\n#{$!}")
   end
 
+end
+
+def initGetBundlePlist
+  unless File.exist?($gbPlistPath)
+    open($gbPlistPath, "w") {|io| io << { 'bundleSources' => { } }.to_plist }
+  end
 end
 
 def buildLocalBundleList
@@ -985,15 +1010,21 @@ def buildLocalBundleList
             disabled = " bundle disabled" if $delCoreDisBundles['disabled'].include?(plist['uuid'])
             deleted  = " default bundle deleted" if $delCoreDisBundles['deleted'].include?(plist['uuid'])
           end
-
-          # update local bundle list; if bundles with the same uuid -> take the latest ctime for revision
-          if $localBundles.has_key?(plist['uuid'])
-            if Time.parse($localBundles[plist['uuid']]['rev']).getutc < theCtime
-              $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s }
-            end
-          else
-            $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s }
+          
+          begin
+            infoMD5 = %x{cat "#{b}/info.plist" | openssl dgst -md5 -hex}
+          rescue
+            infoMD5 = ""
           end
+          
+          # update local bundle list; if bundles with the same uuid -> take the latest ctime for revision
+          # if $localBundles.has_key?(plist['uuid'])
+          #   if Time.parse($localBundles[plist['uuid']]['rev']).getutc < theCtime
+          #     $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s, 'infoMD5' => infoMD5 }
+          #   end
+          # else
+          $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s, 'infoMD5' => infoMD5 }
+          # end
         else
           $localBundlesChanges[plist['uuid']] = true
           if $localBundlesChangesPaths.has_key?(plist['uuid'])
@@ -1040,16 +1071,24 @@ def getLocalStatus(aBundle)
       deleteBtnEnabled = "1"
       deleteButtonLabel = ($localBundles[aBundle['uuid']]['deleted'].empty?) ? "Enable" : "Undelete"
     end
-    if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
-      status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
-      nameBold = true
-    else
-      status = "Ok"
+    if $numberOfBundleSources[aBundle['uuid']] == 1 || $localBundles[aBundle['uuid']]['location'] == 'default' && aBundle['status'] == 'Official'
+      if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
+        status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
+        nameBold = true
+      else
+        status = "Ok"
+      end
+      locCom = " #{$localBundles[aBundle['uuid']]['location']}"
+      $localBundles[aBundle['uuid']]['seen'] = true
     end
-    locCom = "#{$localBundles[aBundle['uuid']]['location']} #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
+    unless $localBundles[aBundle['uuid']]['seen']
+        status = "installed (source not yet solvable)"
+        locCom = " #{$localBundles[aBundle['uuid']]['location']}"
+    end
+    locCom += " #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
   end
   locCom += " [local changes]" if $localBundlesChanges[aBundle['uuid']]
-    [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom,canBeOpened,deleteButtonLabel,nameBold]
+    [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom.strip,canBeOpened,deleteButtonLabel,nameBold]
 end
 
 def refreshUpdatedStatus
@@ -1743,6 +1782,7 @@ $SVN = ENV['TM_SVN'] || ((%x{type -p svn}.strip!.nil?) ? "" : "svn")
 STDOUT.sync = true
 STDERR.sync = true
 
+initGetBundlePlist
 orderOutDIALOG
 checkUniversalAccess
 

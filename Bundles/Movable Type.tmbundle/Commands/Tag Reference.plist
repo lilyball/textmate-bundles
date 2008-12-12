@@ -6,6 +6,12 @@
 	<string>nop</string>
 	<key>command</key>
 	<string># Context-sensitive help lookup for MT tags.
+# For better recognition of "mt:Foo" tag names, add ":" to your
+# word character list in TextMate's "Text Editing" preferences.
+if grep &lt;&lt;&lt;${TM_CURRENT_WORD:-!} -Esqi '^mt$'
+    then echo "You may need to add ':' to the \"Word Characters\" list in TextMate's \"Text Editing\" preferences."
+         exit
+fi
 if grep &lt;&lt;&lt;${TM_CURRENT_WORD:-!} -Esq '[a-zA-Z0-9_]+'
 	then exit_show_html "&lt;meta http-equiv='Refresh' content='0;URL=http://www.movabletype.org/tag/$TM_CURRENT_WORD'&gt;"
 	else echo "Nothing to lookup (hint: place the caret on a tag name)"

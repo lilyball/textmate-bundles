@@ -11,7 +11,7 @@
 	<key>foldingStartMarker</key>
 	<string>(?x)
 		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|li|form|dl)\b.*?&gt;
-		|&lt;[Mm][Tt]:?(\w+:)?\w+\b.*?&gt;
+		|&lt;(?i:MT:?(?!Else))(\w+:)?\w+\b.*?&gt;
 		|&lt;!--(?!.*--\s*&gt;)
 		|^&lt;!--\ \#tminclude\ (?&gt;.*?--&gt;)$
 		|&lt;\?(?:php)?.*\b(if|for(each)?|while)\b.+:
@@ -21,7 +21,7 @@
 	<key>foldingStopMarker</key>
 	<string>(?x)
 		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|li|form|dl)&gt;
-		|&lt;\/[Mm][Tt]:?(\w+:)?\w+\b.*?&gt;
+		|&lt;\/(?i:MT:?(?!Else))(\w+:)?\w+\b.*?&gt;
 		|^(?!.*?&lt;!--).*?--\s*&gt;
 		|^&lt;!--\ end\ tminclude\ --&gt;$
 		|&lt;\?(?:php)?.*\bend(if|for(each)?|while)\b

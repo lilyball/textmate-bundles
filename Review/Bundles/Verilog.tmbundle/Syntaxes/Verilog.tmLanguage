@@ -11,6 +11,8 @@
 	<string>^[^/]*-?(?!/)\s*(begin|^\s*case(x|z)?|^\s*module|^`ifdef)\b</string>
 	<key>foldingStopMarker</key>
 	<string>\s*(end(case|module)?|`endif)\b</string>
+	<key>keyEquivalent</key>
+	<string>^~V</string>
 	<key>name</key>
 	<string>Verilog</string>
 	<key>patterns</key>
@@ -34,6 +36,10 @@
 		<dict>
 			<key>include</key>
 			<string>#strings</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#operators</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -64,7 +70,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\b[0-9]+'[bBoOdDhH][a-fA-F0-9_]+\b</string>
+					<string>\b[0-9]+'[bBoOdDhH][a-fA-F0-9_xXzZ]+\b</string>
 					<key>name</key>
 					<string>constant.numeric.sized_integer.verilog</string>
 				</dict>
@@ -109,6 +115,12 @@
 					<string>#\d+</string>
 					<key>name</key>
 					<string>constant.numeric.delay.verilog</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b[01xXzZ]+\b</string>
+					<key>name</key>
+					<string>constant.numeric.logic.verilog</string>
 				</dict>
 			</array>
 		</dict>
@@ -322,7 +334,23 @@
 							<key>include</key>
 							<string>#instantiation_patterns</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#operators</string>
+						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>operators</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\+|-|\*|/|%|(&lt;|&gt;)=?|(!|=)?==?|!|&amp;&amp;?|\|\|?|\^?~|~\^?</string>
+					<key>name</key>
+					<string>keyword.operator.verilog</string>
 				</dict>
 			</array>
 		</dict>

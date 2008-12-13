@@ -15,7 +15,7 @@
 CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
 
 
-
+[[ ! -d ~/Library/Logs ]] &amp;&amp; mkdir -p ~/Library/Logs
 
 
 if [ $CHECK == 0 ]; then

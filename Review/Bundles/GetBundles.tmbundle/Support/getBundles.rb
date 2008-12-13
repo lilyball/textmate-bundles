@@ -68,6 +68,10 @@ $localBundlesChangesPaths = { }
 
 $numberOfBundleSources = { }
 
+$bundleSources = { }
+
+$canBundleBeDistinguishedByinfoMD5 = { }
+
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
 # TextMate's standard Support folder
@@ -150,6 +154,24 @@ def secToStr(t1, t2)
     return "#{d.round.to_s} second#{(d.round <= 1) ? "" : "s"} old"
   end
   return ""
+end
+
+def resolveDIALOG(urlList, name)
+  res = nil
+  parameters = {
+    'title'   => 'GetBundles – Resolve Bundle URL',
+    'summary' => 'Choose Bundle Source',
+    'details' => "Bla “#{name}”",
+    'urls'    => urlList,
+    'selectedUrl' => urlList.first,
+  }
+  p parameters.to_plist
+  if $isDIALOG2
+    # res = %x{#{$DIALOG} nib --load #{e_sh $NIB} --model #{e_sh parameters.to_plist}}
+  else
+    # res = %x{#{$DIALOG} -m '/Users/bibiko/Desktop/ResolveSource.nib' -p #{e_sh parameters.to_plist}}
+  end
+  return res
 end
 
 def orderOutDIALOG
@@ -755,7 +777,7 @@ def getBundleLists
   begin
   
   # only to speed up the init process
-  $locBundlesThread = Thread.new { buildLocalBundleList }
+  # $locBundlesThread = Thread.new { buildLocalBundleList }
   
   $listsLoaded = false
   $dataarray  = [ ]
@@ -817,31 +839,41 @@ def getBundleLists
   # sort the cache first against name then against host
   $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'] <=> b['status'] : n}
 
-  # wait for parsing local bundles
-  $params['isBusy'] = true
-  $params['progressText'] = "Parsing local bundles…"
-  updateDIALOG
-  begin
-    GBTimeout::timeout(15) do
-      $locBundlesThread.join
-    end
-  rescue GBTimeout::Error
-    writeToLogFile("Timeout while parsing local bundles") unless $close
-    begin
-      $locBundlesThread.kill unless $locBundlesThread.nil?
-    rescue
-    end
-  end
-  
-  # build hash of uuid and the number of different sources in bundle cache
+  # build hash of uuid and the number of different sources in bundle cache and check whether bundle can be distuished by their infoMD5
   $numberOfBundleSources = { }
+  $bundleSources = { }
   $bundleCache['bundles'].each do |b|
     if $numberOfBundleSources.has_key?(b['uuid'])
       $numberOfBundleSources[b['uuid']] += 1
     else
       $numberOfBundleSources[b['uuid']] = 1
     end
+    if $bundleSources.has_key?(b['uuid'])
+      $bundleSources[b['uuid']] << {'infoMD5' => b['infoMD5'], 'sources' => b['source']}
+    else
+      $bundleSources[b['uuid']] = [ ]
+      $bundleSources[b['uuid']] << {'infoMD5' => b['infoMD5'], 'sources' => b['source']}
+    end
   end
+
+  buildLocalBundleList
+
+  # wait for parsing local bundles
+  # $params['isBusy'] = true
+  # $params['progressText'] = "Parsing local bundles…"
+  # updateDIALOG
+  # begin
+  #   GBTimeout::timeout(15) do
+  #     $locBundlesThread.join
+  #   end
+  # rescue GBTimeout::Error
+  #   writeToLogFile("Timeout while parsing local bundles") unless $close
+  #   begin
+  #     $locBundlesThread.kill unless $locBundlesThread.nil?
+  #   rescue
+  #   end
+  # end
+  
 
   # build $dataarray for NIB
   index = 0
@@ -903,11 +935,6 @@ def getBundleLists
   end
   
   writeToLogFile("Cache File lists %d bundles. Last modified date: %s" % [$dataarray.size, $bundleCache['cache_date'].to_s])
-  $dataarray.each do |b|
-    if b['status'] == "?"
-      b['status'] = "" if $localBundles[b['uuid']]['seen']
-    end
-  end
   
   unless $close
     $numberOfBundles = $dataarray.size
@@ -1002,6 +1029,8 @@ def buildLocalBundleList
               scm += " probably not working"
               theCtime = File.new(b).ctime.getutc
             end
+            url = %x{head -n5 '#{b}/.svn/entries' | tail -n1}.chop
+            $gbPlist['bundleSources'][plist['uuid']] = url unless url.blank?
           elsif scm =~ /git/
             begin
               theCtime = Time.parse(File.read("|cd '#{b}'; git show | head -n3 | tail -n 1 | perl -pe 's/Date: +//;s/(.*?) (.*?) (.*?) (.*?) (.*?) (.*)/\1 \2 \3 \4\6 \5/'").chomp).getutc
@@ -1011,7 +1040,16 @@ def buildLocalBundleList
               theCtime = File.new(b).ctime.getutc
             end
           end
-          
+
+          begin
+            infoMD5 = %x{cat "#{b}/info.plist" | openssl dgst -md5 -hex}.chop
+          rescue
+            infoMD5 = ""
+          end
+          if $numberOfBundleSources[plist['uuid']] == 1
+            $gbPlist['bundleSources'][plist['uuid']] = $bundleSources[plist['uuid']].first['sources'].first['url']
+          end
+
           # check deleted/disabled status
           disabled = ""
           deleted  = ""
@@ -1020,11 +1058,6 @@ def buildLocalBundleList
             deleted  = " default bundle deleted" if $delCoreDisBundles['deleted'].include?(plist['uuid'])
           end
           
-          begin
-            infoMD5 = %x{cat "#{b}/info.plist" | openssl dgst -md5 -hex}
-          rescue
-            infoMD5 = ""
-          end
           
           # update local bundle list; if bundles with the same uuid -> take the latest ctime for revision
           # if $localBundles.has_key?(plist['uuid'])
@@ -1049,9 +1082,89 @@ def buildLocalBundleList
     end
   end
 
+
+  # check the sources for each installed bundle if bundle is listed in the bundle cache
+  mustBeResolved = [ ]
+  $localBundles.each do |uuid, bundle|
+    if !$gbPlist['bundleSources'].has_key?(uuid) && $bundleSources.has_key?(uuid)
+      
+      if $numberOfBundleSources[uuid] == 1 || bundle['location'] == 'default'
+        $gbPlist['bundleSources'][uuid] = $bundleSources[uuid].first['sources'].first['url']
+      
+      else # try to identify the bundle via its infoMD5
+        found = false
+        uniqInfoMD5 = []
+        md5Cnt = 0
+        $bundleSources[uuid].each {|b| uniqInfoMD5 << b['infoMD5']; md5Cnt += 1}
+        if uniqInfoMD5.uniq.size == md5Cnt
+          $bundleSources[uuid].each do |b|
+            if b['infoMD5'] == bundle['infoMD5']
+              if b['sources'].size == 1
+                $gbPlist['bundleSources'][uuid] = b['sources'].first['url']
+              else
+                b['sources'].each do |s|
+                  if s['url'] =~ /tarball/
+                    $gbPlist['bundleSources'][uuid] = s['url']
+                    break
+                  end
+                end
+              end
+              found = true
+              p "Source of the bundle “#{bundle['name']}” was set by identifying the MD5 value of ‘info.plist’."
+              break
+            end
+          end
+        end
+      
+        unless found || ENV['TM_GETBUNDLES_SKIP_RESOLVE_SOURCES']
+          urls = [ ]
+          $bundleSources[uuid].each do |b|
+            if b['sources'].size == 1
+              urls << b['sources'].first['url']
+            else
+              b['sources'].each { |t| urls << t['url'] if t['url'] =~ /tarball/ }
+            end
+          end
+          urls << 'unknown'
+          mustBeResolved << { 'uuid' => uuid, 'name' => bundle['name'], 'urls' => urls, 'selectedUrl' => urls.last }
+        end
+      end
+    end
+  end
+  if mustBeResolved.size > 0
+    mustBeResolved.sort! {|a,b| a['name'].downcase <=> b['name'].downcase}
+    pl = (mustBeResolved.size > 1) ? "s" : ""
+    parameters = {
+      'title'   => 'GetBundles – Resolve Bundle Sources',
+      'prompt'  => "Please specify the source#{pl} of the following bundle#{pl}:",
+      'items'   => mustBeResolved,
+    }
+    res = nil
+    begin
+      if $isDIALOG2
+        res = OSX::PropertyList.load(%x{'#{$DIALOG}' nib --load ResolveSources --model #{e_sh parameters.to_plist}})['result']
+      else
+        res = OSX::PropertyList.load(%x{'#{$DIALOG}' -m ResolveSources -p #{e_sh parameters.to_plist}})['result']
+      end
+    rescue
+      writeToLogFile("Error while retrieving data from “Resolve Sources” dialog\n#{$!}")
+    end
+    unless res.nil?
+      res['returnArgument'].each do |s|
+        $gbPlist['bundleSources'][s['uuid']] = s['selectedUrl']
+      end
+      writeGbPlist
+    end
+  end
+  
+
   # clean array of just installed bundles
   $justUndeletedCoreAndEnabledBundles = [ ]
   
+  # delete uuids in gbPlist if not installed
+  $gbPlist['bundleSources'].delete_if {|k,v| ! $localBundles.has_key?(k)}
+  writeGbPlist
+    
   unless $firstrun
     $params['isBusy'] = false
     updateDIALOG
@@ -1080,24 +1193,43 @@ def getLocalStatus(aBundle)
       deleteBtnEnabled = "1"
       deleteButtonLabel = ($localBundles[aBundle['uuid']]['deleted'].empty?) ? "Enable" : "Undelete"
     end
-    if $numberOfBundleSources[aBundle['uuid']] == 1 || $localBundles[aBundle['uuid']]['location'] == 'default' && aBundle['status'] == 'Official'
-      if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
-        status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
-        nameBold = true
-      else
-        status = "Ok"
-      end
-      locCom = " #{$localBundles[aBundle['uuid']]['location']}"
-      $localBundles[aBundle['uuid']]['seen'] = true
-    end
-    unless $localBundles[aBundle['uuid']]['seen']
-        status = "installed (source not yet solvable)"
+    
+    # verify the bundle source
+    if $gbPlist['bundleSources'].has_key?(aBundle['uuid'])
+      unless aBundle['source'].join(' ').index($gbPlist['bundleSources'][aBundle['uuid']]).nil?
+        if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
+          status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
+          nameBold = true
+        else
+          status = "Ok"
+        end
         locCom = " #{$localBundles[aBundle['uuid']]['location']}"
+        locCom += " #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
+        locCom += " [local changes]" if $localBundlesChanges[aBundle['uuid']]
+        $localBundles[aBundle['uuid']]['seen'] = true
+      end
+    else
+      if $numberOfBundleSources[aBundle['uuid']] == 1 || $localBundles[aBundle['uuid']]['location'] == 'default' && aBundle['status'] == 'Official'
+        if Time.parse(aBundle['revision']).getutc > Time.parse($localBundles[aBundle['uuid']]['rev']).getutc
+          status = secToStr(Time.parse(aBundle['revision']), Time.parse($localBundles[aBundle['uuid']]['rev']))
+          nameBold = true
+        else
+          status = "Ok"
+        end
+        locCom = " #{$localBundles[aBundle['uuid']]['location']}"
+        locCom += " #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
+        locCom += " [local changes]" if $localBundlesChanges[aBundle['uuid']]
+        $localBundles[aBundle['uuid']]['seen'] = true
+      end
     end
-    locCom += " #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
+    unless $localBundles[aBundle['uuid']]['seen'] || $gbPlist['bundleSources'].has_key?(aBundle['uuid'])
+        status = "installed (source unknown)"
+        locCom = " #{$localBundles[aBundle['uuid']]['location']}"
+        locCom += " #{$localBundles[aBundle['uuid']]['scm']} #{$localBundles[aBundle['uuid']]['deleted']} #{$localBundles[aBundle['uuid']]['disabled']}"
+        locCom += " [local changes]" if $localBundlesChanges[aBundle['uuid']]
+    end
   end
-  locCom += " [local changes]" if $localBundlesChanges[aBundle['uuid']]
-    [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom.strip,canBeOpened,deleteButtonLabel,nameBold]
+  [updatedStr,status,deleteBtn,deleteBtnEnabled,locCom.strip,canBeOpened,deleteButtonLabel,nameBold]
 end
 
 def refreshUpdatedStatus
@@ -1314,7 +1446,7 @@ def installBundles(dlg)
       break
     end
     $gbPlist['bundleSources'][bundleData['uuid']] = path
-    open($gbPlistPath, "w") {|io| io << $gbPlist.to_plist }
+    writeGbPlist
   end
   
   $params['isBusy'] = false
@@ -1701,8 +1833,14 @@ def deleteBundle(uuid)
       $localBundlesChangesPaths[uuid].each { |b| moveFileToTrash(b) }
     end
     reloadBundles
+    $gbPlist['bundleSources'].delete(uuid)
+    writeGbPlist
     refreshUpdatedStatus
   end
+end
+
+def writeGbPlist
+  open($gbPlistPath, "w") {|io| io << $gbPlist.to_plist }
 end
 
 def enableBundle(aBundle,path)

@@ -29,10 +29,12 @@ params = []
 params = last_proto_sel_with_types.scan(/(.+?)\s*:\s*\((.+?)\)\s*(\w+)/)
 
 def format_specifier_for_type(type)
-  %w[int bool BOOL long].each { |t| return('%d') if type.include? t }
+  type = type.gsub(/\s*const\s*/, '')
+  %w[int bool BOOL long NSInteger NSUInteger size_t].each { |t| return('%d') if type.include? t }
+  %w[float double CGFloat].each { |t| return('%f') if type.include? t }
   return '%c' if type == 'char'
   return '%C' if type == 'unichar'
-  return '%s' if type == 'char*'
+  return '%s' if type.include?('char*')
   '%@'
 end
 

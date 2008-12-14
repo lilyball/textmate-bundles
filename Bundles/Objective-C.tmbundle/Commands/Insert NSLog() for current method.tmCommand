@@ -26,7 +26,7 @@ exit if proto.nil? or proto.empty?
 last_proto_sel_with_types = proto[0].strip.sub(/^\s+/, '').sub(%r{\s*//.*$}, '').gsub(/\n\s*/, ' ')
 
 params = []
-params = last_proto_sel_with_types.scan(/(.+?):\((.+?)\)(\w+)/)
+params = last_proto_sel_with_types.scan(/(.+?)\s*:\s*\((.+?)\)\s*(\w+)/)
 
 def format_specifier_for_type(type)
   %w[int bool BOOL long].each { |t| return('%d') if type.include? t }

@@ -10,9 +10,9 @@ require "time"
 require "rexml/document"
 # require "Benchmark"
 
-$DIALOG           = e_sh ENV['DIALOG']
+# $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
-$isDIALOG2        = ! $DIALOG.match(/2$/).nil?
+$isDIALOG2        = ! ENV['DIALOG'].match(/2$/).nil?
 $isDIALOG2  = false
 # DIALOG's parameters hash
 $params           = { }
@@ -74,6 +74,8 @@ $canBundleBeDistinguishedByinfoMD5 = { }
 
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
+
+$pristineCopyFolder = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy"
 # TextMate's standard Support folder
 $asFolder    = "/Library/Application Support/TextMate"
 # TextMate's Support Folder
@@ -156,32 +158,14 @@ def secToStr(t1, t2)
   return ""
 end
 
-def resolveDIALOG(urlList, name)
-  res = nil
-  parameters = {
-    'title'   => 'GetBundles – Resolve Bundle URL',
-    'summary' => 'Choose Bundle Source',
-    'details' => "Bla “#{name}”",
-    'urls'    => urlList,
-    'selectedUrl' => urlList.first,
-  }
-  p parameters.to_plist
-  if $isDIALOG2
-    # res = %x{#{$DIALOG} nib --load #{e_sh $NIB} --model #{e_sh parameters.to_plist}}
-  else
-    # res = %x{#{$DIALOG} -m '/Users/bibiko/Desktop/ResolveSource.nib' -p #{e_sh parameters.to_plist}}
-  end
-  return res
-end
-
 def orderOutDIALOG
 
   $params['nocancel'] = true
 
   if $isDIALOG2
-    $token = %x{#{$DIALOG} nib --load #{e_sh $NIB} --model #{e_sh $params.to_plist}}
+    $token = %x{"$DIALOG" nib --load #{e_sh $NIB} --model #{e_sh $params.to_plist}}
   else
-    $token = %x{#{$DIALOG} -a #{e_sh $NIB} -p #{e_sh $params.to_plist}}
+    $token = %x{"$DIALOG" -a #{e_sh $NIB} -p #{e_sh $params.to_plist}}
   end
 
   writeToLogFile("GetBundles' DIALOG runs at token #{$token}")
@@ -195,18 +179,18 @@ def closeDIALOG
   list = ""
   # close all DIALOGs containing 'GetBundles' in their titles (main, info)
   if $isDIALOG2
-    %x{#{$DIALOG} nib --dispose #{$token}}
-    list = %x{#{$DIALOG} nib --list | egrep 'GetBundles'}
+    %x{"$DIALOG" nib --dispose #{$token}}
+    list = %x{"$DIALOG" nib --list | egrep 'GetBundles'}
     list.each_line do |l|
       t = l.split(' ').first
-      %x{#{$DIALOG} nib --dispose #{t}}
+      %x{"$DIALOG" nib --dispose #{t}}
     end
   else
-    %x{#{$DIALOG} -x#{$token}}
-    list = %x{#{$DIALOG} -l | egrep 'GetBundles'}
+    %x{"$DIALOG" -x#{$token}}
+    list = %x{"$DIALOG" -l | egrep 'GetBundles'}
     list.each_line do |l|
       t = l.split(' ').first
-      %x{#{$DIALOG} -x#{t}}
+      %x{"$DIALOG" -x#{t}}
     end
   end
 
@@ -221,9 +205,9 @@ def updateDIALOG
   if $isDIALOG2
     a={}
     a['model']=$params
-    open("|#{$DIALOG} nib --update #{$token}", "w") { |io| io.write a.to_plist }
+    open("|'#{ENV['DIALOG']}' nib --update #{$token}", "w") { |io| io.write a.to_plist }
   else
-    open("|#{$DIALOG} -t#{$token}", "w") { |io| io.write $params.to_plist }
+    open("|'#{ENV['DIALOG']}' -t#{$token}", "w") { |io| io.write $params.to_plist }
   end
 
 end
@@ -232,9 +216,9 @@ def getResultFromDIALOG
 
   resStr = ""
   if $isDIALOG2
-    resStr = %x{#{$DIALOG} nib --wait #{$token} }
+    resStr = %x{"$DIALOG" nib --wait #{$token} }
   else
-    resStr = %x{#{$DIALOG} -w#{$token}}
+    resStr = %x{"$DIALOG" -w#{$token}}
   end
 
   $close = false
@@ -414,7 +398,7 @@ def infoDIALOG(dlg)
     if data =~ /<div +id="readme".*?>/m
       readme = data.gsub( /.*?(<div +id="readme".*?>.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
     end
-    css = data.gsub( /.*?(<link href="\/stylesheets\/.*?\/>).*/m, '\1')
+    # css = data.gsub( /.*?(<link href=".*?\/stylesheets\/.*?\/>).*/m, '\1')
     data = ""
 
     return if $close
@@ -433,7 +417,7 @@ def infoDIALOG(dlg)
         <base href='http://github.com'>
         <head>
         <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-        #{css}
+        <link href="http://assets0.github.com/stylesheets/bundle.css" media="screen" rel="stylesheet" type="text/css" />
         </head>
         <body><div id='main'><div class='site'>
         <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
@@ -711,17 +695,17 @@ osascript -e 'tell app "TextMate" to reload bundles'
   
   # order out info window
   if $isDIALOG2
-    $infoToken = %x{#{$DIALOG} nib --load help --model "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"  }
+    $infoToken = %x{"$DIALOG" nib --load help --model "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"  }
   else
-    $infoToken = %x{#{$DIALOG} -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
+    $infoToken = %x{"$DIALOG" -a help -p "{title='GetBundles — Info';path='#{$tempDir}/info.html';}"}
   end
 
   # close old info window if it exists
   # unless $infoTokenOld.nil?
   #   if $isDIALOG2
-  #     %x{#{$DIALOG} nib close #{$infoTokenOld}}
+  #     %x{"$DIALOG" nib close #{$infoTokenOld}}
   #   else
-  #     %x{#{$DIALOG} -x#{$infoTokenOld}}
+  #     %x{"$DIALOG" -x#{$infoTokenOld}}
   #   end
   # end
   
@@ -737,9 +721,9 @@ def askDIALOG(msg, text, btn1="No", btn2="Yes", style="informational")
   resStr = 0
 
   if $isDIALOG2
-    resStr = %x{#{$DIALOG} alert --alertStyle #{style} --body "#{msg}" --title "#{text}" --button1 "#{btn1}" --button2 "#{btn2}"}
+    resStr = %x{"$DIALOG" alert --alertStyle #{style} --body "#{msg}" --title "#{text}" --button1 "#{btn1}" --button2 "#{btn2}"}
   else
-    resStr = %x{#{$DIALOG} -e -p '{messageTitle="#{msg}";alertStyle=#{style};informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
+    resStr = %x{"$DIALOG" -e -p '{messageTitle="#{msg}";alertStyle=#{style};informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
     return resStr.to_i
   end
 
@@ -1142,9 +1126,9 @@ def buildLocalBundleList
     res = nil
     begin
       if $isDIALOG2
-        res = OSX::PropertyList.load(%x{#{$DIALOG} nib --load ResolveSources --model #{e_sh parameters.to_plist}})['result']
+        res = OSX::PropertyList.load(%x{"$DIALOG" nib --load ResolveSources --model #{e_sh parameters.to_plist}})['result']
       else
-        res = OSX::PropertyList.load(%x{#{$DIALOG} -m ResolveSources -p #{e_sh parameters.to_plist}})['result']
+        res = OSX::PropertyList.load(%x{"$DIALOG" -m ResolveSources -p #{e_sh parameters.to_plist}})['result']
       end
     rescue
       writeToLogFile("Error while retrieving data from “Resolve Sources” dialog\n#{$!}")
@@ -1424,9 +1408,10 @@ def installBundles(dlg)
     updateDIALOG
 
     break if $close
-
+    # deleteBundle($dataarray[item.to_i]['uuid']) if $dataarray[item.to_i]['nameColor'] != '#000000'
+    
     case mode
-      when "svn" 
+      when "svn"
         installSVN(name, path)
       when "tar"
         installTAR(name, path, zip_path)
@@ -1445,8 +1430,13 @@ def installBundles(dlg)
       $errorcnt = 0
       break
     end
+
+    # if File.directory?("#{$pristineCopyFolder}/Bundles/#{bundleData['name']}.tmbundle")
     $gbPlist['bundleSources'][bundleData['uuid']] = path
     writeGbPlist
+    # else
+    #   p "Installation of the bundle “bundleData['name]” was probably canceled by the ‘Bundle Editor’"
+    # end
   end
   
   $params['isBusy'] = false

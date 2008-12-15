@@ -721,7 +721,7 @@ def askDIALOG(msg, text, btn1="No", btn2="Yes", style="informational")
   resStr = 0
 
   if $isDIALOG2
-    resStr = %x{"$DIALOG" alert --alertStyle #{style} --body "#{msg}" --title "#{text}" --button1 "#{btn1}" --button2 "#{btn2}"}
+    resStr = %x{"$DIALOG" alert --alertStyle #{style} --body "#{text}" --title "#{msg}" --button1 "#{btn1}" --button2 "#{btn2}"}
   else
     resStr = %x{"$DIALOG" -e -p '{messageTitle="#{msg}";alertStyle=#{style};informativeText="#{text}";buttonTitles=("#{btn1}","#{btn2}");}'}
     return resStr.to_i
@@ -1126,7 +1126,9 @@ def buildLocalBundleList
     res = nil
     begin
       if $isDIALOG2
-        res = OSX::PropertyList.load(%x{"$DIALOG" nib --load ResolveSources --model #{e_sh parameters.to_plist}})['result']
+        tk = %x{"$DIALOG" nib --load ResolveSources --model #{e_sh parameters.to_plist}}
+        res = OSX::PropertyList.load(%x{"$DIALOG" nib --wait #{tk}})['eventInfo']
+        %x{"$DIALOG" nib --dispose #{tk}}
       else
         res = OSX::PropertyList.load(%x{"$DIALOG" -m ResolveSources -p #{e_sh parameters.to_plist}})['result']
       end
@@ -1408,7 +1410,6 @@ def installBundles(dlg)
     updateDIALOG
 
     break if $close
-    # deleteBundle($dataarray[item.to_i]['uuid']) if $dataarray[item.to_i]['nameColor'] != '#000000'
     
     case mode
       when "svn"
@@ -1431,12 +1432,17 @@ def installBundles(dlg)
       break
     end
 
-    # if File.directory?("#{$pristineCopyFolder}/Bundles/#{bundleData['name']}.tmbundle")
-    $gbPlist['bundleSources'][bundleData['uuid']] = path
-    writeGbPlist
-    # else
-    #   p "Installation of the bundle “bundleData['name]” was probably canceled by the ‘Bundle Editor’"
-    # end
+    # wait for "Update Bundle" dialog if needed; 'updateDIALOG' has to wait for a modal TM dialog
+    sleep(0.5)
+    updateDIALOG
+    sleep(0.2)
+    if File.exist?("#{$pristineCopyFolder}/Bundles/#{bundleData['name']}.tmbundle/installed")
+      %x{rm '#{$pristineCopyFolder}/Bundles/#{bundleData['name']}.tmbundle/installed'}
+      $gbPlist['bundleSources'][bundleData['uuid']] = path
+      writeGbPlist
+    else
+       p "Installation of the bundle “#{bundleData['name']}” was canceled by the ‘Bundle Editor’"
+    end
   end
   
   $params['isBusy'] = false
@@ -1501,6 +1507,7 @@ fi
 
   return if $close
   # install bundle if everything went fine
+  %x{touch '#{$tempDir}/#{name}.tmbundle/installed'}
   executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
 
 end
@@ -1555,7 +1562,8 @@ fi
   end
 
   return if $close
-  # install bundle if everything went fine
+  %x{touch '#{$tempDir}/#{name}.tmbundle/installed'}
+    # install bundle if everything went fine
   executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
 
 end
@@ -1593,7 +1601,7 @@ cd '#{$tempDir}'
   end
 
   return if $close
-
+  %x{touch '#{$tempDir}/#{name}.tmbundle/installed'}
   # install bundle if everything went fine
   executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0
 
@@ -1816,16 +1824,20 @@ def deleteBundle(uuid)
   
   localChangeMes = ($localBundlesChanges.has_key?(uuid)) ? "together with your local changes " : ""
   alertStyle = (localChangeMes.empty?) ? "informational" : "critical"
-
-  if askDIALOG("Delete bundle #{mes}?", "The “#{$localBundles[uuid]['name']}” bundle will be moved #{localChangeMes}to Trash. Do you want to continue?", "Delete", "Cancel",alertStyle) == 0
-    moveFileToTrash($localBundles[uuid]['path'])
-    if $localBundlesChangesPaths.has_key?(uuid)
-      $localBundlesChangesPaths[uuid].each { |b| moveFileToTrash(b) }
+  if File.directory?($localBundles[uuid]['path'])
+    if askDIALOG("Delete bundle #{mes}?", "The “#{$localBundles[uuid]['name']}” bundle will be moved #{localChangeMes}to Trash. Do you want to continue?", "Delete", "Cancel",alertStyle) == 0
+      moveFileToTrash($localBundles[uuid]['path'])
+      if $localBundlesChangesPaths.has_key?(uuid)
+        $localBundlesChangesPaths[uuid].each { |b| moveFileToTrash(b) }
+      end
+      reloadBundles
+      $gbPlist['bundleSources'].delete(uuid)
+      writeGbPlist
+      refreshUpdatedStatus
     end
-    reloadBundles
-    $gbPlist['bundleSources'].delete(uuid)
-    writeGbPlist
+  else
     refreshUpdatedStatus
+    writeTimedMessage("", "It seems that the bundle has already been deleted.")
   end
 end
 

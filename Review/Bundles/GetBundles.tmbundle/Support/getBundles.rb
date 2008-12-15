@@ -1142,9 +1142,9 @@ def buildLocalBundleList
     res = nil
     begin
       if $isDIALOG2
-        res = OSX::PropertyList.load(%x{'#{$DIALOG}' nib --load ResolveSources --model #{e_sh parameters.to_plist}})['result']
+        res = OSX::PropertyList.load(%x{#{$DIALOG} nib --load ResolveSources --model #{e_sh parameters.to_plist}})['result']
       else
-        res = OSX::PropertyList.load(%x{'#{$DIALOG}' -m ResolveSources -p #{e_sh parameters.to_plist}})['result']
+        res = OSX::PropertyList.load(%x{#{$DIALOG} -m ResolveSources -p #{e_sh parameters.to_plist}})['result']
       end
     rescue
       writeToLogFile("Error while retrieving data from “Resolve Sources” dialog\n#{$!}")

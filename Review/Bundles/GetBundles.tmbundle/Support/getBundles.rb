@@ -1162,7 +1162,7 @@ def getLocalStatus(aBundle)
   updatedStr = "" # for searching
   status = ""
   deleteBtn = "0"
-  deleteBtnEnabled = "0"
+  deleteBtnEnabled = false
   canBeOpened = 0
   locCom = ""
   deleteButtonLabel = ""
@@ -1171,12 +1171,12 @@ def getLocalStatus(aBundle)
     deleteBtn = "1"
     canBeOpened = 1
     if $localBundles[aBundle['uuid']]['scm'].empty? && $localBundles[aBundle['uuid']]['deleted'].empty? && $localBundles[aBundle['uuid']]['location'] =~ /Pristine/
-      deleteBtnEnabled = "1"
+      deleteBtnEnabled = true
       deleteButtonLabel = "Delete"
     end
     if ! $localBundles[aBundle['uuid']]['deleted'].empty? || ! $localBundles[aBundle['uuid']]['disabled'].empty?
       deleteBtn = "0"
-      deleteBtnEnabled = "1"
+      deleteBtnEnabled = true
       deleteButtonLabel = ($localBundles[aBundle['uuid']]['deleted'].empty?) ? "Enable" : "Undelete"
     end
     
@@ -1868,7 +1868,7 @@ def enableBundle(aBundle,path)
   b = $dataarray[path.to_i]
   b['deleteButtonEnabled'] = ($localBundles[b['uuid']]['scm'].empty? && $localBundles[b['uuid']]['location'] =~ /Pristine/) ? "1" : "0"
   b['deleteButton'] = "1"
-  b['deleteButtonLabel'] = "Delete" if b['deleteButtonEnabled'] == "1"
+  b['deleteButtonLabel'] = "Delete" if b['deleteButtonEnabled']
   b['locCom'].gsub!($localBundles[b['uuid']]['disabled'],"")
   $localBundles[b['uuid']]['disabled'] = ""
   $params['dataarray'] = $dataarray
@@ -1886,7 +1886,7 @@ def unDeleteBundle(aBundle,path)
   b = $dataarray[path.to_i]
   b['deleteButtonEnabled'] = ($localBundles[b['uuid']]['scm'].empty? && $localBundles[b['uuid']]['location'] =~ /Pristine/) ? "1" : "0"
   b['deleteButton'] = "1"
-  b['deleteButtonLabel'] = "Delete" if b['deleteButtonEnabled'] == "1"
+  b['deleteButtonLabel'] = "Delete" if b['deleteButtonEnabled']
   b['locCom'].gsub!($localBundles[b['uuid']]['deleted'],"")
   $localBundles[b['uuid']]['deleted'] = ""
   $params['dataarray'] = $dataarray

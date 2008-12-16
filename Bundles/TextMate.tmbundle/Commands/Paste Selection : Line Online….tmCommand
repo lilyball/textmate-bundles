@@ -148,7 +148,7 @@ end
 
 def strip_leading(text, ch = ' ')
   count = text.gsub(/&lt;[^&gt;]+&gt;/, '').split("\n").map { |e| e =~ /^#{ch}*(?!#{ch}|$)/ ? $&amp;.length : nil }.reject { |e| e.nil? }.min
-  text.send(text.respond_to?(:lines) ? :lines : :to_s).map { |line| count.times { line.sub!(/^(&lt;[^&gt;]+&gt;)*#{ch}/, '\1') }; line }.join
+  text.send(text.respond_to?(:lines) ? :lines : :to_s).map { |line| count.times { line.sub!(/^((&lt;[^&gt;]+&gt;)*)#{ch}/, '\1') }; line }.join
 end
 
 URL_REGEXP = %r{

@@ -1330,6 +1330,19 @@ def executeShell(cmd, cmdToLog = false, outToLog = false)
   return out
 end
 
+def installAllUpdates
+  writeToLogFile("Installing all updates…")
+  counter = 0
+  items = [ ]
+  $dataarray.each do |b|
+    items << counter if b['nameBold'] && b['locCom'] !~ /(svn|git)/
+    p "The bundle “#{b['name']}” cannot be updated. It is under versioning control." if b['nameBold'] && b['locCom'] =~ /(svn|git)/
+    counter += 1
+  end
+  dlg = {'returnArgument' => items}
+  installBundles(dlg)
+end
+
 def installBundles(dlg)
   
   doUpdateSupportFolder if $updateSupportFolder
@@ -1919,6 +1932,7 @@ $params = {
   'openAsProjectBtn'        => 'openAsProjectIsPressed',
   'deleteBtn'               => 'deleteButtonIsPressed',
   'nocancel'                => false,
+  'instAllUpdates'          => 'installAllUpdates',
   'bundleSelection'         => 'All',
   'openBundleEditor'        => 0,
   'supportFolderCheck'      => 0,
@@ -1956,6 +1970,7 @@ while $run do
 
   if $dialogResult.has_key?('returnArgument')
     case $dialogResult['returnArgument']
+      when 'installAllUpdates': $installThread = Thread.new { installAllUpdates }
       when 'helpButtonIsPressed':   helpDIALOG
       when 'cancelButtonIsPressed': 
         $close = true

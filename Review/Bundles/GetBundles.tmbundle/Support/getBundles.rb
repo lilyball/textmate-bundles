@@ -1030,9 +1030,6 @@ def buildLocalBundleList
           rescue
             infoMD5 = ""
           end
-          if $numberOfBundleSources[plist['uuid']] == 1
-            $gbPlist['bundleSources'][plist['uuid']] = $bundleSources[plist['uuid']].first['sources'].first['url']
-          end
 
           # check deleted/disabled status
           disabled = ""
@@ -1041,16 +1038,7 @@ def buildLocalBundleList
             disabled = " bundle disabled" if $delCoreDisBundles['disabled'].include?(plist['uuid'])
             deleted  = " default bundle deleted" if $delCoreDisBundles['deleted'].include?(plist['uuid'])
           end
-          
-          
-          # update local bundle list; if bundles with the same uuid -> take the latest ctime for revision
-          # if $localBundles.has_key?(plist['uuid'])
-          #   if Time.parse($localBundles[plist['uuid']]['rev']).getutc < theCtime
-          #     $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s, 'infoMD5' => infoMD5 }
-          #   end
-          # else
           $localBundles[plist['uuid']] = {'path' => b, 'name' => plist['name'], 'scm' => scm, 'rev' => theCtime.to_s, 'deleted' => deleted, 'disabled' => disabled, 'location' => name.to_s, 'infoMD5' => infoMD5 }
-          # end
         else
           $localBundlesChanges[plist['uuid']] = true
           if $localBundlesChangesPaths.has_key?(plist['uuid'])
@@ -1073,7 +1061,17 @@ def buildLocalBundleList
     if !$gbPlist['bundleSources'].has_key?(uuid) && $bundleSources.has_key?(uuid)
       
       if $numberOfBundleSources[uuid] == 1 || bundle['location'] == 'default'
-        $gbPlist['bundleSources'][uuid] = $bundleSources[uuid].first['sources'].first['url']
+        if bundle['scm'] =~ /git/ # under git control
+          $bundleSources[uuid].each do |g|
+              g['sources'].each { |t| $gbPlist['bundleSources'][uuid] = t['url'] if t['method'] == "git" }
+          end
+        elsif $bundleSources[uuid].first['sources'].size > 1 # not under git control but from github.com
+          $bundleSources[uuid].each do |g|
+              g['sources'].each { |t| $gbPlist['bundleSources'][uuid] = t['url'] if t['method'] == "tar" }
+          end
+        else
+          $gbPlist['bundleSources'][uuid] = $bundleSources[uuid].first['sources'].first['url']
+        end
       
       else # try to identify the bundle via its infoMD5
         found = false
@@ -1084,7 +1082,18 @@ def buildLocalBundleList
           $bundleSources[uuid].each do |b|
             if b['infoMD5'] == bundle['infoMD5']
               if b['sources'].size == 1
-                $gbPlist['bundleSources'][uuid] = b['sources'].first['url']
+
+                if bundle['scm'] =~ /git/ # under git control
+                  $bundleSources[uuid].each do |g|
+                      g['sources'].each { |t| $gbPlist['bundleSources'][uuid] = t['url'] if t['method'] == "git" }
+                  end
+                elsif $bundleSources[uuid].first['sources'].size > 1 # not under git control but from github.com
+                  $bundleSources[uuid].each do |g|
+                      g['sources'].each { |t| $gbPlist['bundleSources'][uuid] = t['url'] if t['method'] == "tar" }
+                  end
+                else
+                  $gbPlist['bundleSources'][uuid] = $bundleSources[uuid].first['sources'].first['url']
+                end
               else
                 b['sources'].each do |s|
                   if s['url'] =~ /tarball/

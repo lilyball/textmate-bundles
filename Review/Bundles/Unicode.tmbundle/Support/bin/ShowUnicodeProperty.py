@@ -150,7 +150,9 @@ if "CJK" in name and ("IDEO" in name or "Ideo" in name):
             if zhDayi: zhDict['Dayi'] = zhDayi
             outDict['Chinese'] = zhDict
         if hangul_name_sound:
-            outDict['Korean'] = hangul_name_sound
+            korDict = SeqDict()
+            korDict['Hangul'] = hangul_name_sound
+            outDict['Korean'] = korDict
 else:
     if 'HANGUL' in name and not 'Jamo' in block:
         outDict['Decomposition'] = " ".join(unicodedata.normalize("NFKD", char))

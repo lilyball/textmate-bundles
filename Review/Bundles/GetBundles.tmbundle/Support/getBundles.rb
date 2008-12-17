@@ -431,9 +431,31 @@ def infoDIALOG(dlg)
         <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
         <b>Last Modified:</b><br />&nbsp;#{Time.parse(lastCommit).getutc.to_s}<br />
         HTML01
+
+        io << <<-HTML02
+        <br /><b>zip archive:</b><br />&nbsp;<a href='#{zipsource}'>#{zipsource}</a><br />
+        <b>tar archive:</b><br />&nbsp;<a href='#{tarsource}'>#{tarsource}</a><br />        
+        HTML02
         
         if $localBundles.has_key?(bundle['uuid'])
-          io << "<b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br /><br />"
+          io << "<br /><b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br />"
+          io << "&nbsp;<b>from:</b> #{$gbPlist['bundleSources'][bundle['uuid']]}<br /><br />"
+        end
+        
+        if $localBundlesChangesPaths.has_key?(bundle['uuid'])
+          io << "<b>Local changes at:</b><br />"
+          $localBundlesChangesPaths[bundle['uuid']].each do |path|
+            io << "&nbsp;<a href='file://#{path}'>#{path}</a><br />"
+            begin
+              Dir.glob("#{path}/**/*.tm*") do |item|
+                io << "&nbsp;• #{File.basename(item, '.*')}<br />"
+              end
+              Dir.glob("#{path}/**/*.plist") do |item|
+                io << "&nbsp;• #{File.basename(item, '.*')}<br />" unless File.basename(item) == "info.plist"
+              end
+            rescue
+            end
+          end
         end
         
         
@@ -455,13 +477,9 @@ git pull
 osascript -e 'tell app "TextMate" to reload bundles'</small></small></pre>
       HTML011
       end
+
+      io << "<br /><br /><h3><u>Bundle Information (info.plist):</u></h3>"
         
-      io << <<-HTML02
-      <b>zip archive:</b><br />&nbsp;<a href='#{zipsource}'>#{zipsource}</a><br />
-      <b>tar archive:</b><br />&nbsp;<a href='#{tarsource}'>#{tarsource}</a><br />        
-      <br /><br />
-      <h3><u>Bundle Information (info.plist):</u></h3>
-      HTML02
       if ! plist['contactName'].empty? or ! plist['contactEmailRot13'].empty? or ! plist['description'].empty?
         io << "<b>Description:</b><br />&nbsp;#{plist['description']}<br />" unless plist['description'].empty?
         contact = ""
@@ -633,10 +651,26 @@ osascript -e 'tell app "TextMate" to reload bundles'
       end
 
       if $localBundles.has_key?(bundle['uuid'])
-        io << "<b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br /><br />"
+        io << "<br /><b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br />"
+        io << "&nbsp;<b>from:</b> #{$gbPlist['bundleSources'][bundle['uuid']]}<br /><br />"
       end
 
-
+      if $localBundlesChangesPaths.has_key?(bundle['uuid'])
+        io << "<b>Local changes at:</b><br />"
+        $localBundlesChangesPaths[bundle['uuid']].each do |path|
+          io << "&nbsp;<a href='file://#{path}'>#{path}</a><br />"
+          begin
+            Dir.glob("#{path}/**/*.tm*") do |item|
+              io << "&nbsp;• #{File.basename(item, '.*')}<br />"
+            end
+            Dir.glob("#{path}/**/*.plist") do |item|
+              io << "&nbsp;• #{File.basename(item, '.*')}<br />" unless File.basename(item) == "info.plist"
+            end
+          rescue
+          end
+        end
+      end
+      
       io << "<br /></span>"
       unless relocateHint.empty?
         io << <<-HTML112
@@ -668,8 +702,26 @@ osascript -e 'tell app "TextMate" to reload bundles'
         HTML11
         
         if $localBundles.has_key?(bundle['uuid'])
-          io << "<b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br /><br />"
+          io << "<br /><b>Locally installed at:</b><br />&nbsp;<a href='file://#{$localBundles[bundle['uuid']]['path']}'>#{$localBundles[bundle['uuid']]['path']}</a><br />"
+          io << "&nbsp;<b>from:</b> #{$gbPlist['bundleSources'][bundle['uuid']]}<br /><br />"
         end
+
+        if $localBundlesChangesPaths.has_key?(bundle['uuid'])
+          io << "<b>Local changes at:</b><br />"
+          $localBundlesChangesPaths[bundle['uuid']].each do |path|
+            io << "&nbsp;<a href='file://#{path}'>#{path}</a><br />"
+            begin
+              Dir.glob("#{path}/**/*.tm*") do |item|
+                io << "&nbsp;• #{File.basename(item, '.*')}<br />"
+              end
+              Dir.glob("#{path}/**/*.plist") do |item|
+                io << "&nbsp;• #{File.basename(item, '.*')}<br />" unless File.basename(item) == "info.plist"
+              end
+            rescue
+            end
+          end
+        end
+
         
         io << "</body></html>"
     end      

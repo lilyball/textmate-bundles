@@ -2,7 +2,8 @@
 
 <center><font color=red><big><big>Still Under Constructions</big></big></font></center>
 
-<center><big>"GetBundles" provides an easy to use interface to install available TextMate bundles which are hosted on textmate.org's svn repositories, on github.com, and on private sites and are collected by the “Bundle Server” running at textmate.org.<br>Additionally it updates TextMate's “Support Folder” automatically if needed.</big></center>
+<center><big>"GetBundles" provides an easy to use interface to install available TextMate bundles which are hosted on textmate.org's svn repositories, on github.com, and on private sites.<br>
+  It makes usage of the “Bundle Server” running at textmate.org.<br>Additionally it updates TextMate's “Support Folder” automatically if needed.</big></center>
 
 # Requirements
 The computer has to be connected to the internet.
@@ -15,9 +16,6 @@ The computer has to be connected to the internet.
   function cr () {
     var cmd = 'echo -n "“svn” client found in: ";which svn && svn --version | head -n1;echo -n "<br><br>";';
     cmd += 'echo -n "“TM_SVN” set to: ";echo -n "${TM_SVN:-}";echo -n "<br><br>";';
-    cmd += 'echo -n "“git” client found in: ";which git && git --version | head -n1;echo -n "<br><br>";';
-    cmd += 'echo -n "“TM_GIT” set to: ";echo -n "${TM_GIT:-}";echo -n "<br><br>";';
-    cmd += 'echo -n "“GIT_PROXY_COMMAND” set to: ";echo -n "${GIT_PROXY_COMMAND:-}";echo -n "<br><br>";';
     cmd += 'echo -n "“unzip” found in: ";which unzip;echo -n "<br><br>";';
     cmd += 'echo -n "“tar” found in: ";which tar;echo -n "<br><br>";';
     cmd += 'echo -n "“ruby”: ";/usr/bin/env ruby -v;echo -n "<br><br>";';
@@ -71,9 +69,9 @@ For installing a bundle by downloading it as zip/tar archive the script needs `u
 # General Operating Mode
 After invoking "GetBundles" the script downloads the current bundle cache file from TextMate's bundle server and checks all locally installed bundles.
 
-Once you have the list of bundles, you can select one or more and hit <button>Install Bundles</button>, <button>&#x21A9;</button>, or double-click at the bundle to install it/them . After a successful installation, TextMate will open the “Bundle Editor” and GetBundles will refresh the installation status in the table. The installation can be cancelled by hitting <button>&#x238B;</button>, as long as TextMate has not already physically installed that bundle (GetBundles uses a temporary folder first). If a given bundle is already installed on your system by using a versioning control system (svn/git), the script will only inform you about it. To install this bundle rename or delete it and install it by using GetBundles or use the versioning control system (svn/git).
+Once you have the list of bundles, you can select one or more and hit <button>Install Bundles</button>, <button>&#x21A9;</button>, or double-click at the bundle to install it/them . After a successful installation, TextMate will open the “Bundle Editor” and “GetBundles” will refresh the installation status in the table. The installation can be cancelled by hitting <button>&#x238B;</button>, as long as TextMate has not already physically installed that bundle (GetBundles uses a temporary folder first). If a given bundle has been already installed on your system by using a versioning control system (svn/git), “GetBundles” cannot touch it. To install, delete, or update  this bundle rename or delete it and install it by using GetBundles or use the versioning control system (svn/git).
 
-"GetBundles" always checks before an installation whether there is an update of TextMate's “Support Folder”. If so it will update it first. This update can also be invoked directly by executing `Update “Support Folder”`in the "Gear Menu". See also [here](#sect_3.1.3.5).
+"GetBundles" always checks before an installation whether there is an update of TextMate's “Support Folder”. If so it will update it first. This update can also be invoked directly by executing `Update “Support Folder”` in the "Gear Menu". See also [here](#sect_3.1.3.5).
 
 In order to close the "GetBundles" dialog simply hit the <button>&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;</button> or press <button>&#x2318;W</button>.
 
@@ -98,62 +96,59 @@ If you hold down the <button>&#x2325;</button> key while installing a bundle the
 
 The core of the dialog is a table listing all discovered bundles.
 
-The first column indicates where the bundle is hosted:
+
+The first column **Name** displays the bundle's name. 
+
+
+The third column **Source** lists where the bundle is hosted:
 
 <table style="margin-left:1cm">
-    <tr><td><font color=blue>O</font></td><td>Official Bundles</td><td><a href="http:/svn.textmate.org/trunk/Bundles/">http:/svn.textmate.org/trunk/Bundles/</a> </td></tr>
-    <tr><td><font color=blue>R</font></td><td>Bundles under review</td><td><a href="http:/svn.textmate.org/trunk/Review/Bundles/">http:/svn.textmate.org/trunk/Review/Bundles/</a></td></tr>
-    <tr><td><font color=blue>G</font></td><td>Bundles hosted on GitHub</td><td><a href="http://github.com/"> http://github.com/</a></td></tr>
-    <tr><td><font color=blue>P</font></td><td>privately hosted bundles</td><td></td></tr>
-</table>
-
-The second column, "Status", displays the status of locally installed bundles.
-
-<table style="margin-left:1cm">
-    <tr><td>✓</td><td>the bundle is already installed</td></tr>
-    <tr><td>U</td><td>the bundle is already installed and an update is available</td><td></tr>
-    <tr><td valign='top'>..</td><td>indicates that there are some more details available; simply resize that column
-      <ul>
-        <li>(svn) or (git)<br>
-        <small>the bundle is under versioning control</small>
-        </li>
-        <li>bundle disabled<br>
-        <small>the bundle is installed but disabled in the “Bundle Editor”</small>
-        </li>
-        <li>default bundle deleted<br>
-        <small>that default bundle (shipped with TextMate's installation) is physically installed but was deleted</small>
-        </li>
-      </ul>
-      
-      </td><td></tr>
+    <tr><td>Official</td><td><a href="http:/svn.textmate.org/trunk/Bundles/">http:/svn.textmate.org/trunk/Bundles/</a> </td></tr>
+    <tr><td>Review</td><td><a href="http:/svn.textmate.org/trunk/Review/Bundles/">http:/svn.textmate.org/trunk/Review/Bundles/</a></td></tr>
+    <tr><td>Github</td><td><a href="http://github.com/">http://github.com/</a></td></tr>
+    <tr><td>Private</td><td>hosted on private sites</td></tr>
 </table>
 
 
-The third column, "Name", displays the bundle's name. 
-
-The fourth column, "Description", displays the description of each bundle, taken from the `info.plist` for svn repositories or from the description tag for git repositories and the author's name resp. nickname.
-
-The fifth column, "Last Modified", displays the date of the last modification. This date is taken from the svn/git repository or from the 'last modified' tag of private hosted bundles. Please note that this date mirrors the last modification date when the bundle server gathered the bundle data, i.e. it could be that a bundle was updated meanwhile (to check this open the “Info Window”).
 
 All columns can be sorted by clicking on appropriate part of the header.
 
 It is possible to select more than one bundle at the same time, and to install all of them.
 
-### Filtering/Searching ###
+### Repository Filter ###
 
-You can use the search field to enter a search term. This will look for bundles containing the search term, and is case insensitive. This process searches the fields "name", "description", and "author". The list can be further filtered using these buttons
+The bundle list can be further filtered using these buttons
 
 ![](images/img_repo_filter.png)
 
 which will display only those bundles which are hosted on the selected repository:
 
 <table style="margin-left:1cm">
-    <tr><td><font color=blue>O</font></td><td>Official</td><td><a href="http://macromates.com/svn/Bundles/trunk/Bundles/">http://macromates.com/svn/Bundles/trunk/Bundles/</a> </td></tr>
-    <tr><td><font color=blue>R</font></td><td>Under Review</td><td><a href="http://macromates.com/svn/Bundles/trunk/Review/Bundles/">http://macromates.com/svn/Bundles/trunk/Review/Bundles/</a></td></tr>
-    <tr><td><font color=blue></font></td><td>3rd Party</td><td>hosted on GitHub <a href="http://github.com/">http://github.com/</a> or privately</td></tr>
+    <tr><td>Official</td><td><a href="http://svn.textmate.org/trunk/Bundles/">http://svn.textmate.org/trunk/Bundles/</a> </td></tr>
+    <tr><td>Under Review</td><td><a href="http://svn.textmate.org/trunk/Review/Bundles/">http://svn.textmate.org/trunk/Review/Bundles/</a></td></tr>
+    <tr><td>3rd Party</td><td>hosted on GitHub <a href="http://github.com/">http://github.com/</a> or privately</td></tr>
 </table>
 
-Furthermore there are some shortcuts available for the search field:
+### Searching ###
+
+![](images/img_search.png)
+
+<button>&#x2318;F</button> Enter the search term into the search field to display only those bundles which matches against that term. The search field is set to "search while typing" and it looks at a hidden field which is constructed by appending the data for "name", "description", "author", "repository abbreviation", and "local status abbreviation". Please note that the search will only look for those bundles which are set by the repository filter.
+
+-   Search (literally)
+
+    The field contains the search term literally, case in-sensitive, ignoring diacritics.
+
+-   Search (.\*RegExp.\*)
+
+    The **entire** field matches against the search term which is interpreted as case in-sensitive regular expression.
+    -   `CSS.*`<br>looks for bundles which begins with "CSS" ( := "name" begins with "CSS")
+    -   `.\*CSS.\*bob.\*`<br>looks for bundles which contains "CSS" followed by any characters and the author name "bob"
+    -   `.*CSS.*Aylott.*=i.*`<br>looks for bundles which contains "CSS", the author name "Aylott", and are installed
+    -   `.*git.*=g.*=i.*`<br>looks for bundles which contains "git", are hosted on "GitHub", and are installed
+
+
+#### Additional pre-defined search patterns ####
 
 <table style="margin-left:1cm">
     <tr><td>=o</td><td>lists all bundles marked as O (Official)</td></tr>
@@ -164,10 +159,17 @@ Furthermore there are some shortcuts available for the search field:
     <tr><td>=u</td><td>lists all bundles for which an update is available</td></tr>
 </table>
 
-
 ### Get Bundle Info (“Info Window”)###
 
-<button>&#x2318;I</button> <img valign=middle src="images/img_info.png"> Opens a new window containing available details about the selected bundle. The data will be downloaded from the repository meaning they aren't cached.
+<img valign=middle src="images/img_info.png"> <button>&#x2318;I</button> Opens a new window containing available details about the selected bundle. The data will be downloaded from the repository meaning they aren't cached.
+
+### Reveal selected bundle in Finder ###
+
+<img valign=middle src="images/img_bundle.png"> <button>&#x21E7;&#x2318;O</button> Reveals the selected bundle in Finder if it is installed.
+
+### Open selected bundle as TextMate project ###
+
+<img valign=middle src="images/img_tmproj.png"> <button>&#x2318;O</button> Opens the selected bundle as TextMate project if it is installed.
 
 ### Gear Action Menu ###
 
@@ -176,19 +178,13 @@ Furthermore there are some shortcuts available for the search field:
 
 The "Gear Action Menu" provides some additional commands:
 
-#### Update Descriptions / Update (x missing) ####
-
-This command updates the local copy of descriptions for all svn repositories. It is recommended that this is done regularly in order to be up-to-date. The underlying script will recognize if a new bundle was added but **not** if the description of an pre-existing bundle was changed.
-
-If some descriptions are not found in the local copy of the descriptions, the name of that command will be changed into "Update (x missing)" indicating that x descriptions are missing.
-
 #### Reload Bundle List ####
 
 This command deletes the current list of bundles and reload the bundle list coming from TextMate's bundle server.
 
 #### Refresh Local Bundle List ####
 
-<button>&#x2318;R</button> This command refreshes the status of installed bundles. It is usually invoked if the user deleted bundles by using the “Bundle Editor” or updated bundles by using svn/git.
+<button>&#x2318;R</button> This command refreshes the status of installed bundles. It should be usually invoked if the user changed something on installed bundles by not using “GetBundles”.
 
 GetBundles will scan these local folders:
 
@@ -204,13 +200,18 @@ GetBundles will scan these local folders:
 
 #### Open Bundle Editor ####
 
-This opens TextMate's "Bundle Editor".
+<button>^&#x2325;&#x2318;B</button> This opens TextMate's "Bundle Editor".
+
+#### Install all Updates ####
+
+<button>&#x2318;U</button> Installs all available updates only for those installed bundles which are **not** under versioning control. If a bundle is under versioning control please update it manually.
+
 
 #### Update “Support Folder” ####
 
-By default TextMate, ships with a support folder located in <span style="color:silver;">PathToTextMate.app</span>`/Contents/SharedSupport/Support`. After downloading and installing TextMate for the first time or after a new release, the development of TextMate's bundles and additional scripts etc. will be continued. Due to that fact that bundles make use of new or changed features in the "Support Folder", it is sometimes necessary to update it.
+By default TextMate ships with a support folder located in <span style="color:silver;">PathToTextMate.app</span>`/Contents/SharedSupport/Support`. After downloading and installing TextMate for the first time or after a new release, the development of TextMate's bundles and additional scripts etc. will be continued. Due to that fact that bundles make use of new or changed features in the "Support Folder", it is sometimes necessary to update it.
 
-An update will be installed physically into `~/Library/Application Support/TextMate/Pristine Copy/Support`. If the folder `/Library/Application Support/TextMate/Support` doesn't exist GetBundles will create a symbolic link  `/Library/Application Support/TextMate/Support` pointing to `~/Library/Application Support/TextMate/Pristine Copy/Support`. This mechanism makes it possible that an user can still use its own “Support Folder” regardless of GetBundles' updates.
+An update will be installed physically into `~/Library/Application Support/TextMate/Pristine Copy/Support`. If the folder `/Library/Application Support/TextMate/Support` exists TextMate will use that “Support Folder” which is newer. This mechanism makes it possible that an user can still use its own “Support Folder” regardless of GetBundles' updates.
 
 If TextMate should always use the latest updates done by GetBundles you can simply delete or rename `/Library/Application Support/TextMate/Support` and execute this command again.
 
@@ -220,7 +221,7 @@ If TextMate should always use the latest updates done by GetBundles you can simp
 <script type="text/javascript" charset="utf-8">
   var outstr = "TM_SUPPORT_PATH:<br>";
   function chtmsp () {
-    var cmd = 'echo -en "$TM_SUPPORT_PATH"; echo -en " (version: ";cat "$TM_SUPPORT_PATH/version";echo -en ")<br>"';
+    var cmd = 'echo -en "$TM_SUPPORT_PATH"; echo -en " ( version: ";cat "$TM_SUPPORT_PATH/version";echo -en ")<br>"';
     myCommand = TextMate.system(cmd, function (task) { });
     myCommand.onreadoutput = setStr;
   }
@@ -233,7 +234,7 @@ If TextMate should always use the latest updates done by GetBundles you can simp
 
 #### Show Log ####
 
-<button>&#x2325;&#x21E7;&#x2318;A</button> Opens or closes a drawer displaying GetBundles' console log file. The path to the log file is <a onclick='TextMate.system("open \"$HOME/Library/Logs/TextMateGetBundles.log\"",null);' style="cursor:pointer">~/Library/Logs/TextMateGetBundles.log</a>. See also [here](#sect_5).
+<button>&#x2325;&#x21E7;&#x2318;L</button> Opens or closes a drawer displaying GetBundles' console log file. The path to the log file is <a onclick='TextMate.system("open \"$HOME/Library/Logs/TextMateGetBundles.log\"",null);' style="cursor:pointer">~/Library/Logs/TextMateGetBundles.log</a>. See also [here](#sect_4).
 
 
 ### Message Field + Cancel current Task ###
@@ -242,34 +243,35 @@ If TextMate should always use the latest updates done by GetBundles you can simp
 
 All activities, errors and warnings will be shown in this message field. To cancel the current task, it is possible to click into the spinning wheel or hit <button>&#x238B;</button>. While installing a bundle, it is possible to cancel the process as long as TextMateGetBundles has not yet physically installed the bundle.
 
-### Show Help ###
-
-<img valign=middle src="images/img_help.png"> Opens that "Help" window.
-
 # Log Drawer #
 
 ![](images/img_act_log.png)
 
 This drawer shows the current content of the log file <a onclick='TextMate.system("open \"$HOME/Library/Logs/TextMateGetBundles.log\"",null);' style="cursor:pointer">~/Library/Logs/TextMateGetBundles.log</a>. The log file will be overwritten each time if you invoke "GetBundles". 
 
-# Additional Keyboard Shortcuts #
+# Keyboard Shortcuts #
 <table style="margin-left:1cm">
+<tr><td align="center"><button>&#x2318;W</button></td><td>Close the "GetBundles" dialog</td></tr>
 <tr><td align="center"><button>&#x21A9;</button></td><td>Install selected bundle(s)</td></tr>
-<tr><td align="center"><button>&#x2318;I</button></td><td>Get details about selected bundle</td></tr>
-<tr><td align="center"><button>&#x238B;</button></td><td>Cancel current task</td></tr>
+<tr><td align="center"><button>&#x238B;</button></td><td>Cancel current task / Clear search field</td></tr>
 <tr><td align="center"><button>&#x2318;&#x238B;</button></td><td>Open "Gear Action Menu"</td></tr>
 <tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;L</button></td><td>Open/Close "Log"</td></tr>
-<tr><td align="center"><button>&#x2318;W</button></td><td>Close the "GetBundles" dialog</td></tr>
+<tr><td align="center"><button>&#x2318;I</button></td><td>Get details about selected bundle</td></tr>
+<tr><td align="center"><button>&#x2318;O</button></td><td>Open selected bundle as TextMate project if installed</td></tr>
+<tr><td align="center"><button>&#x21E7;&#x2318;O</button></td><td>Reveal selected bundle in Finder if installed</td></tr>
+<tr><td align="center"><button>&#x2318;F</button></td><td>Activate the search field</td></tr>
+<tr><td align="center"><button>&#x2318;R</button></td><td>Refresh status of locally installed bundles</td></tr>
+<tr><td align="center"><button>&#x2318;U</button></td><td>Install all available updates (except for bundles under versioning control)</td></tr>
+
 </table>
 
 # Used Shell Variables
 
 <table style="margin-left:1cm">
   <tr><td><strong>TM_SVN</strong></td><td>&nbsp;</td><td>absolute path to the `svn` client</td></tr>
-  <tr><td><strong>TM_GIT</strong></td><td>&nbsp;</td><td>absolute path to the `git` client</td></tr>  
 </table>
 
-Both variables can be set in TextMate's Preferences, under the item "Advanced".
+All variables can be set in TextMate's Preferences, under the item "Advanced".
 
 # Troubleshooting & FAQ #
 
@@ -281,12 +283,6 @@ Both variables can be set in TextMate's Preferences, under the item "Advanced".
 
 * I try to filter one repository, but it is empty. Why?
 >  It could happen that one repository is down or not accessible. In this case, the script will skip it. If the list is completely empty, it is very likely that you are not connected to the internet. Also ensure that you have cleared the search field.
-
-* I press the Help button but no "Help" is shown. Why?
->  Due to an internal issue, the script has to call the bundle's "Help" command by using AppleScript. This AppleScript only works properly if you have enabled access for assistive devices in "System Preferences" > "Universal Access" > "Enable access for assistive devices". <button onclick='TextMate.system("open /System/Library/PreferencePanes/UniversalAccessPref.prefPane/",null)'>Click to open that pane</button>
-
-* The computer beeps if I press the Help button. Why?
->  Due to an internal issue the script has to order out the front most document window. This is done by a command which is misused. This issue will be fixed in the near future. In other words don't worry about it.
 
 * I read the message: "Please check the Log". What should I do?
 >  Press <button>&#x2325;&#x21E7;&#x2318;L</button> or open the "Gear Action Menu" and chose "Show Log". Another option is to look at the log file <a onclick='TextMate.system("open \"$HOME/Library/Logs/TextMateGetBundles.log\"",null);' style="cursor:pointer">here</a>.
@@ -342,7 +338,7 @@ To set up proxy support in `git`, do the following:
 
 # Main Bundle Maintainer
 
-***Date: Nov 20 2008***
+***Date: Dec 18 2008***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

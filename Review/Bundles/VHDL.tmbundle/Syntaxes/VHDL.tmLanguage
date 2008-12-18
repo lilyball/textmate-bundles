@@ -1038,8 +1038,10 @@
 						(
 							# A valid normal identifier $3
 							 ([a-zA-Z][a-zA-Z\d_]*)
-							# A valid quoted identifier $4
+							# A valid string quoted identifier $4
 							|("\S+")
+							# A valid backslash escaped identifier $5
+							|(\\.+\\)
 							# An invalid identifier $5
 							|(.+?)
 						)
@@ -1072,6 +1074,11 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
+							<string>entity.name.function.function.begin.vhdl</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
 							<string>invalid.illegal.invalid.identifier.vhdl</string>
 						</dict>
 					</dict>
@@ -1087,7 +1094,7 @@
 						(\s+((?i:function)))?
 
 						# Optional matched identifier $6 or mismatched identifier $7
-						(\s+((\3|\4)|(.+?)))?
+						(\s+((\3|\4|\5)|(.+?)))?
 
 						# Ending with whitespace and semicolon
 						(?=\s*;)
@@ -1162,7 +1169,9 @@
 							 ([a-zA-Z][a-zA-Z\d_]*)
 							# A valid quoted identifier $4
 							|("\S+")
-							# An invalid identifier $5
+							# A valid backslash escaped identifier $5
+							|(\\.+\\)
+							# An invalid identifier $6
 							|(.+?)
 						)
 
@@ -1192,6 +1201,11 @@
 							<string>entity.name.function.function.prototype.vhdl</string>
 						</dict>
 						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.function.prototype.vhdl</string>
+						</dict>
+						<key>6</key>
 						<dict>
 							<key>name</key>
 							<string>invalid.illegal.function.name.vhdl</string>
@@ -1684,7 +1698,7 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>(?=[a-zA-Z0-9])</string>
+							<string>(?=['"a-zA-Z0-9])</string>
 							<key>end</key>
 							<string>(;|\)|,)</string>
 							<key>endCaptures</key>
@@ -2169,6 +2183,14 @@
 							<string>constant.character.escape.vhdl</string>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\\</string>
+					<key>end</key>
+					<string>\\</string>
+					<key>name</key>
+					<string>string.other.backslash.vhdl</string>
 				</dict>
 			</array>
 		</dict>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+
+abort "Unsaved file" unless ENV['TM_FILEPATH']
+
+path = File.dirname(File.dirname(ENV['TM_FILEPATH'])) + "/CMakeLists.txt"
+abort "No parent listfile" unless File.exist?(path)
+TextMate.go_to(:file =&gt; path)
+
+# subdir = nil
+# 
+# if line =~ /ADD_SUBDIRECTORY\s*\((.+?)\)/i
+#   subdir = $1
+# else
+#   subdirs = Dir[dir + "/*/CMakeLists.txt"].map { |p| File.basename(File.dirname(p)) }.sort
+#   abort "No listfile found in subdirectories" if subdirs.empty?
+#   choice = TextMate::UI.menu(subdirs)
+#   abort "Cancelled" unless choice
+#   subdir = subdirs[choice]
+# end
+# 
+# if subdir
+#   file = subdir + "/CMakeLists.txt"
+#   path = File.join(dir, file)
+#   abort "The file at #{file} doesn't exist" unless File.exist?(path)
+#   TextMate.go_to(:file =&gt; path)
+# end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>~@</string>
+	<key>name</key>
+	<string>Move to Parent Listfile</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.cmake</string>
+	<key>uuid</key>
+	<string>48A1D967-E8CF-4C16-A58F-60471E9469E3</string>
+</dict>
+</plist>

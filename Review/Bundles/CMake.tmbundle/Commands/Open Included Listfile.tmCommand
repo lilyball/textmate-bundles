@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+
+abort "Unsaved file" unless ENV['TM_FILEPATH']
+
+line = STDIN.read
+
+if line =~ /ADD_SUBDIRECTORY\s*\((.+?)\)/i
+  path = File.join(File.dirname(ENV['TM_FILEPATH']), $1 + "/CMakeLists.txt")
+  abort "The file at #{$1 + "/CMakeLists.txt"} doesn't exist" unless File.exist?(path)
+  TextMate.go_to(:file =&gt; path)
+else
+  abort "No ADD_SUBDIRECTORY command found"
+end</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@D</string>
+	<key>name</key>
+	<string>Open Included Listfile</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.cmake</string>
+	<key>uuid</key>
+	<string>6F326FB4-8DC0-49BE-B74C-7B49CFA5283F</string>
+</dict>
+</plist>

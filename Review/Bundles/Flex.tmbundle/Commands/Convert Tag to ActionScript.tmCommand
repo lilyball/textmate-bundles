@@ -15,10 +15,12 @@ require SUPPORT + '/lib/escape'
 require 'rexml/document'
 
 begin
-	tag = REXML::Document.new(STDIN.read)
+	tag = REXML::Document.new(STDIN.read.sub(/^\s*&lt;\w+:/, "&lt;"))
 rescue Exception =&gt; e
-	TextMate.exit_show_tool_tip("Tag parsing failed.\nIs it valid xml?")
+	tag = nil
 end
+
+TextMate.exit_show_tool_tip("Tag parsing failed.\nIs it valid xml?") unless tag &amp;&amp; tag.root
 
 type = tag.root.name
 prop = tag.root.attributes['id']

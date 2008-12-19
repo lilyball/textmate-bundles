@@ -7,26 +7,39 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
 abort "Unsaved file" unless ENV['TM_FILEPATH']
 
-line = STDIN.read
+line   = STDIN.read
+dir    = File.dirname(ENV['TM_FILEPATH'])
+subdir = nil
 
 if line =~ /ADD_SUBDIRECTORY\s*\((.+?)\)/i
-  path = File.join(File.dirname(ENV['TM_FILEPATH']), $1 + "/CMakeLists.txt")
-  abort "The file at #{$1 + "/CMakeLists.txt"} doesn't exist" unless File.exist?(path)
-  TextMate.go_to(:file =&gt; path)
+  subdir = $1
 else
-  abort "No ADD_SUBDIRECTORY command found"
-end</string>
+  subdirs = Dir[dir + "/*/CMakeLists.txt"].map { |p| File.basename(File.dirname(p)) }.sort
+  abort "No listfile found in subdirectories" if subdirs.empty?
+  choice = TextMate::UI.menu(subdirs)
+  abort "Cancelled" unless choice
+  subdir = subdirs[choice]
+end
+
+if subdir
+  file = subdir + "/CMakeLists.txt"
+  path = File.join(dir, file)
+  abort "The file at #{file} doesn't exist" unless File.exist?(path)
+  TextMate.go_to(:file =&gt; path)
+end
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>@D</string>
+	<string>~@</string>
 	<key>name</key>
-	<string>Open Included Listfile</string>
+	<string>Move to Subdirectory Listfile</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

@@ -11,30 +11,30 @@
 		import mx.managers.PopUpManager;
 		
 		/**
-		*	Description
-		*
-		*	@langversion ActionScript 3.0
-		*	@playerversion Flash 9.0
-		*
-		*	@author ${TM_FULLNAME}
-		*	@since  ${TM_DATE}
-		*/
+		 *	Description
+		 *
+		 *	@langversion ActionScript 3.0
+		 *	@playerversion Flash 9.0
+		 *
+		 *	@author ${TM_FULLNAME}
+		 *	@since  ${TM_DATE}
+		 */
 		
 		/**
-		*	Event handler for Creation Complete event.
-		*	
-		*	@see mx.events.FlexEvent
-		*/
+		 *	Event handler for Creation Complete event.
+		 *	
+		 *	@see mx.events.FlexEvent
+		 */
 		private function onCreationComplete(event:FlexEvent):void
 		{
 			PopUpManager.centerPopUp(this);
 		}
 		
 		/**
-		*	Event handler for Creation Complete event.
-		*	
-		*	@see mx.events.CloseEvent
-		*/
+		 *	Event handler for Creation Complete event.
+		 *	
+		 *	@see mx.events.CloseEvent
+		 */
 		private function onClosePopUp(event:CloseEvent):void
 		{
 			PopUpManager.removePopUp(this);

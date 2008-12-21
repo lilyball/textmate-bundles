@@ -10,7 +10,7 @@
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/bundle_locator'
 
-fm_path = find_bundle_item("/ActionScript 3.tmbundle/Support/lib/flex_mate.rb")
+fm_path = find_bundle_item("/ActionScript 3.tmbundle/Support/lib/fm/flex_mate.rb")
 
 if fm_path
 	require fm_path

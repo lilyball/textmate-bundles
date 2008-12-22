@@ -1,4 +1,3 @@
-# $DIALOG           = e_sh ENV['DIALOG']
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
 $isDIALOG2        = ! ENV['DIALOG'].match(/2$/).nil?
 $isDIALOG2  = false
@@ -21,7 +20,7 @@ $listsLoaded      = false
 $numberOfBundles  = 0
 # main run loop variable
 $run              = true
-# error counter
+# global error counter
 $errorcnt         = 0
 # temp dir for installation
 $tempDir          = "/tmp/TM_GetBundlesTEMP"
@@ -49,16 +48,14 @@ $bundleServerFile = "http://bibiko.textmate.org/bundleserver/data.json.gz"
 $nickNamesFile = "http://bibiko.textmate.org/bundleserver/nicknames.txt"
 # locally installed bundles
 $localBundles     = { }
-
+# does have an uuid a local change
 $localBundlesChanges = { }
-
+# paths of local changes per uuid
 $localBundlesChangesPaths = { }
-
+# how many sources per uuid
 $numberOfBundleSources = { }
-
-$bundleSources = { }
-
-$canBundleBeDistinguishedByinfoMD5 = { }
+# all sources per uuid
+$bundleSources    = { }
 
 # Pristine's Support Folder
 $supportFolderPristine = "#{ENV['HOME']}/Library/Application Support/TextMate/Pristine Copy/Support"
@@ -78,7 +75,7 @@ $delCoreDisBundles = { }
 $justUndeletedCoreAndEnabledBundles = [ ]
 # array of current checkbox values to figure out which checkbox was changed
 $deleteBundleOrgStatus = { }
-
+# colors for bundles which have the same uuid (alternating)
 $bundleColors = [ '#663300', '#993300' ]
 
 # the Log file

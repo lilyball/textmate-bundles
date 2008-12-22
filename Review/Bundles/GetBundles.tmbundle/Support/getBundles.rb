@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -dwKU
+#!/usr/bin/env ruby -wKU
 
 SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/osx/plist'
@@ -214,106 +214,7 @@ def getRepoAbbrev(aBundleDict)
   return repo
 end
 
-def getBundleLists
-
-  begin
-  
-  # only to speed up the init process
-  $locBundlesThread = Thread.new { buildLocalBundleList }
-  
-  $listsLoaded = false
-  $dataarray  = [ ]
-  break if $close
-  
-  unless $firstrun
-    $params = {
-      'isBusy'                  => true,
-      'bundleSelection'         => 'All',
-      'progressText'            => 'Connecting Bundle Server…',
-      'progressIsIndeterminate' => true,
-      'progressValue'           => 0,
-      'dataarray'               => [ ],
-    }
-    updateDIALOG
-  end
-  
-  begin
-    GBTimeout::timeout($timeout) do
-      
-      # read data file from bundle server
-      begin
-        $bundleCache = YAML.load(File.read("|curl -sSL #{$bundleServerFile} | gzip -d"))
-      rescue
-        writeTimedMessage("Error: #{$!} while parsing the Bundle Server file")
-      end
-      
-      # get nicknames from textmte.org
-      nicks = nil
-      begin
-        nicks = File.read("|curl -sSL --compressed #{$nickNamesFile}")
-      rescue
-        writeToLogFile("Could not load nicknames: #{$!}")
-      end
-      unless nicks.nil?
-        nicks.each_line do |l|
-          $nicknames[l.split("\t").first] = l.split("\t").last
-        end
-      end
-      
-    end
-  rescue GBTimeout::Error
-    writeTimedMessage("Timeout while connecting Bundle Server", "Timeout while connecting Bundle Server")
-  rescue
-    writeTimedMessage("Error: #{$!} while loading the bundle list")
-  end
-  
-  # check $bundleCache hash for key 'bundles'
-  begin
-    unless $bundleCache.has_key?('bundles')
-      writeTimedMessage("Structural error in Bundle Server File")
-      return
-    end
-  rescue
-    writeTimedMessage("Structural error in Bundle Server File")
-    return
-  end
-  
-  # sort the cache first against name then against host
-  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'] <=> b['status'] : n}
-
-  # wait for parsing local bundles
-  $params['isBusy'] = true
-  $params['progressText'] = "Parsing local bundles…"
-  updateDIALOG
-  begin
-    GBTimeout::timeout(15) do
-      $locBundlesThread.join
-    end
-  rescue GBTimeout::Error
-    writeToLogFile("Timeout while parsing local bundles") unless $close
-    begin
-      $locBundlesThread.kill unless $locBundlesThread.nil?
-    rescue
-    end
-  end
-
-  # build hash of uuid and the number of different sources in bundle cache and check whether bundle can be distuished by their infoMD5
-  $numberOfBundleSources = { }
-  $bundleSources = { }
-  $bundleCache['bundles'].each do |b|
-    if $numberOfBundleSources.has_key?(b['uuid'])
-      $numberOfBundleSources[b['uuid']] += 1
-    else
-      $numberOfBundleSources[b['uuid']] = 1
-    end
-    if $bundleSources.has_key?(b['uuid'])
-      $bundleSources[b['uuid']] << {'infoMD5' => b['infoMD5'], 'sources' => b['source']}
-    else
-      $bundleSources[b['uuid']] = [ ]
-      $bundleSources[b['uuid']] << {'infoMD5' => b['infoMD5'], 'sources' => b['source']}
-    end
-  end
-
+def checkSources
   # check the sources for each installed bundle if bundle is listed in the bundle cache
   mustBeResolved = [ ]
   $localBundles.each do |uuid, bundle|
@@ -415,6 +316,109 @@ def getBundleLists
   # delete uuids in gbPlist if not installed
   $gbPlist['bundleSources'].delete_if {|k,v| ! $localBundles.has_key?(k)}
   writeGbPlist
+end
+
+def getBundleLists
+
+  begin
+  
+  # only to speed up the init process
+  $locBundlesThread = Thread.new { buildLocalBundleList }
+  
+  $listsLoaded = false
+  $dataarray  = [ ]
+  break if $close
+  
+  unless $firstrun
+    $params = {
+      'isBusy'                  => true,
+      'bundleSelection'         => 'All',
+      'progressText'            => 'Connecting Bundle Server…',
+      'progressIsIndeterminate' => true,
+      'progressValue'           => 0,
+      'dataarray'               => [ ],
+    }
+    updateDIALOG
+  end
+  
+  begin
+    GBTimeout::timeout($timeout) do
+      
+      # read data file from bundle server
+      begin
+        $bundleCache = YAML.load(File.read("|curl -sSL #{$bundleServerFile} | gzip -d"))
+      rescue
+        writeTimedMessage("Error: #{$!} while parsing the Bundle Server file")
+      end
+      
+      # get nicknames from textmte.org
+      nicks = nil
+      begin
+        nicks = File.read("|curl -sSL --compressed #{$nickNamesFile}")
+      rescue
+        writeToLogFile("Could not load nicknames: #{$!}")
+      end
+      unless nicks.nil?
+        nicks.each_line do |l|
+          $nicknames[l.split("\t").first] = l.split("\t").last
+        end
+      end
+      
+    end
+  rescue GBTimeout::Error
+    writeTimedMessage("Timeout while connecting Bundle Server", "Timeout while connecting Bundle Server")
+  rescue
+    writeTimedMessage("Error: #{$!} while loading the bundle list")
+  end
+  
+  # check $bundleCache hash for key 'bundles'
+  begin
+    unless $bundleCache.has_key?('bundles')
+      writeTimedMessage("Structural error in Bundle Server File")
+      return
+    end
+  rescue
+    writeTimedMessage("Structural error in Bundle Server File")
+    return
+  end
+  
+  # sort the cache first against name then against host
+  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'] <=> b['status'] : n}
+
+  # wait for parsing local bundles
+  $params['isBusy'] = true
+  $params['progressText'] = "Parsing local bundles…"
+  updateDIALOG
+  begin
+    GBTimeout::timeout(15) do
+      $locBundlesThread.join
+    end
+  rescue GBTimeout::Error
+    writeToLogFile("Timeout while parsing local bundles") unless $close
+    begin
+      $locBundlesThread.kill unless $locBundlesThread.nil?
+    rescue
+    end
+  end
+
+  # build hash of uuid and the number of different sources in bundle cache and check whether bundle can be distuished by their infoMD5
+  $numberOfBundleSources = { }
+  $bundleSources = { }
+  $bundleCache['bundles'].each do |b|
+    if $numberOfBundleSources.has_key?(b['uuid'])
+      $numberOfBundleSources[b['uuid']] += 1
+    else
+      $numberOfBundleSources[b['uuid']] = 1
+    end
+    if $bundleSources.has_key?(b['uuid'])
+      $bundleSources[b['uuid']] << {'infoMD5' => b['infoMD5'], 'sources' => b['source']}
+    else
+      $bundleSources[b['uuid']] = [ ]
+      $bundleSources[b['uuid']] << {'infoMD5' => b['infoMD5'], 'sources' => b['source']}
+    end
+  end
+
+  checkSources
 
   # build $dataarray for NIB
   index = 0
@@ -558,7 +562,6 @@ def buildLocalBundleList
   theCtimeOfDefaultBundle = File.new(TextMate::app_path).mtime.getutc
 
   # loop through all locally installed bundles
-
   local_bundle_paths.each do |name, path|
     next unless File.directory?(path)
     break if $close
@@ -622,15 +625,14 @@ def buildLocalBundleList
     end
   end
 
-
-  
-
   # clean array of just installed bundles
   $justUndeletedCoreAndEnabledBundles = [ ]
   
   unless $firstrun
     $params['isBusy'] = false
     updateDIALOG
+  else
+    checkSources
   end
   
 end

@@ -320,8 +320,6 @@ end
 
 def getBundleLists
 
-  begin
-  
   # only to speed up the init process
   $locBundlesThread = Thread.new { buildLocalBundleList }
   
@@ -383,7 +381,7 @@ def getBundleLists
   end
   
   # sort the cache first against name then against host
-  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'] <=> b['status'] : n}
+  $bundleCache['bundles'].sort!{|a,b| (n = a['name'].downcase <=> b['name'].downcase).zero? ? a['status'].reverse <=> b['status'].reverse : n}
 
   # wait for parsing local bundles
   $params['isBusy'] = true
@@ -497,9 +495,6 @@ def getBundleLists
 
   # suppress the updating of the table to preserve the selection
   $params.delete('dataarray')
-  rescue
-    writeTimedMessage("Error while initialization:\n#{$!}")
-  end
 
 end
 

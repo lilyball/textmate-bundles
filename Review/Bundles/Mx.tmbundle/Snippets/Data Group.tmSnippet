@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>! Mx Data Group Created 
+Mx Data Group ${1:Title}
+	Data NInput_variables= ${2:columns in file} ${3:NObserations=}
+	! Insert Rectanglar, Ordinal, Cmatrix, Ctable or other commands here
+	 ${4:RECTANGULAR FILE=${5:swbsorted.dat}}
+  
+	! Followed by any labels, select or definition statements as required 
+	 ${6:LABELS
+	 SID country familyid zygosity5 
+	 sex1 age1 a1 n1 o1 e1 c1 swb1 
+	 sex2 age2 a2 n2 o2 e2 c2 swb2}
+    ${7:
+     select if zygosity5 ^= 1   ;
+	 select if zygosity5 ^= 3   ;
+	 select if familyid ^= 5839 ;
+     }
+
+	 ${8:SELECT 
+	   N1 E1 O1 A1 C1 SWB1 
+	   N2 E2 O2 A2 C2 SWB2  sex1 sex2 age1 age2  FAMilyID;}
+
+	 ${8:Define sex1 sex2 age1 age2 FAMilyID;}
+	
+	Begin Matrices;
+		
+	End Matrices;
+
+	! Insert Matrix, Specify and Boundary statements here
+
+	Begin Algebra;
+		
+	End Algebra;
+
+	! Covariance Matrix formula goes here 
+	Covariances
+      (  A+C+E  | H@A+R@C _
+       H@A+R@C  |   A+C+E)  ;
+	! Mean or Threshold Formula, if required, goes here
+
+	! Insert options after this line
+    ${:Options RSidual}
+
+End Group ! $1
+</string>
+	<key>name</key>
+	<string>Data Group</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>tabTrigger</key>
+	<string>data</string>
+	<key>uuid</key>
+	<string>B29818C1-61C6-4F45-8040-A24DFE61DCBF</string>
+</dict>
+</plist>

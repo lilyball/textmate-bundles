@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>${TM_SELECTED_TEXT/(\s*).*/$1/m} Begin Matrices;
+${TM_SELECTED_TEXT/(.+)|\n\z/(?1:\t$0)/g}
+	$0
+${TM_SELECTED_TEXT/(\s*).*/$1/m} End Matrices;
+</string>
+	<key>keyEquivalent</key>
+	<string>@m</string>
+	<key>name</key>
+	<string>Begin Matrices;…End Matrices;</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>tabTrigger</key>
+	<string>mat</string>
+	<key>uuid</key>
+	<string>2D7B6866-400B-4120-9EC1-0397E33169A1</string>
+</dict>
+</plist>

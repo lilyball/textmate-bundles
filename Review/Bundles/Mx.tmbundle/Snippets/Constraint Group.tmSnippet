@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>! Mx Constraint Group
+Mx Constraint Group ${1:Title}
+	Calculation
+	Begin Matrices = ${2:Group ${3:1}}
+		! Insert matrices A full 1 1 etc here
+	End Matrices;
+
+ 	! Insert Matrix, Specify and Boundary statements here
+
+	Begin Algebra;
+		! Insert matrix formulae e.g.,  A=B*C' ; Here
+	End Algebra;
+
+	! Insert options after this line
+	${4:options}
+End Group ! $1
+</string>
+	<key>name</key>
+	<string>Constraint Group</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>tabTrigger</key>
+	<string>cons</string>
+	<key>uuid</key>
+	<string>82E41FF7-A8DA-4185-99E4-F00D16DB85A6</string>
+</dict>
+</plist>

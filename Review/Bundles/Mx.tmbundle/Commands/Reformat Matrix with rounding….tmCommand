@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// creator: tim.bates@ed.ac.uk 
+// license = GPL
+// Purpose: Takes a delimtted block of text like this:
+/*
+
+// TO-DO: Add a dialog call to ask for rounding precision
+// TOD:
+ 1 7 0  0 0  0  
+ 2 0 9    0 0  0
+ 3   0 0 11 0  0
+ 4 0 0 0 12 0
+ 5  0 0    0 0  13
+ 6  8 10   0 0  14
+ and returns it formatted fixed width thus:
+1      7      0      0      0      0
+2      0      9      0      0      0
+3      0      0     11      0      0
+4      0      0      0     12      0
+5      0      0      0      0     13
+6      8     10      0      0     14
+*/
+
+// Also rounds data - handy if you have lots of 10.33333333333333333333 cells!
+// Works happily on pretty arge data files replacing tabs with spaces in the process
+
+// USEAGE notes: 
+// $padwidth sets the ... padding width :-)
+// Set $debug to 1 to let play with it in a TM window
+
+
+$debug = 0;
+$padWidth = 7;
+$nDecimals = 3;
+
+// takes mx matrix and returns formatted nicely into columns
+function getWidthFromFirstCellInString($stringIn, $delimitter=" "){
+    // strips all white space, rows are lines
+    $stringIn  = ltrim($stringIn);
+	// echo $stringIn;
+    ereg("^[^ \t]+[ \t]+[^ \t]", $stringIn, $regs);
+	// echo "cell1 is $regs[0]\n";
+	$o = strlen($regs[0]);
+    return $o;
+}
+function stringTo2DArray($stringIn, $delimitter=" "){
+    // strips all white space, rows are lines
+    $stringIn  = ereg_replace("[ \t]+", " ", $stringIn); //remove multiple spaces if found
+    $stringIn  = trim($stringIn);
+    $rows = explode("\n", $stringIn);
+	$o = array();
+	foreach ($rows as $key =&gt; $row) {
+	    $row  = trim($row);
+		$o[] = explode($delimitter, $row);
+	}
+    return $o;
+}
+function stringToArray($stringIn, $delimitter=" "){
+    // strips newlines and all white space
+    $stringIn  = ereg_replace("[ \t\n]{2,}", " ", $stringIn); //remove multiple spaces in case some present
+    $stringIn  = trim($stringIn);
+    return explode($delimitter, $stringIn);
+}
+function arrayToString($aVars, $suffix="1"){
+    $sep = "$suffix ";
+	if ( !is_array($aVars) ) {
+		echo("&lt;font color=\"red\"&gt;arrayToString got $aVars  when it expected an array&lt;/font&gt;&lt;br&gt;");
+		return "arrayToString got $aVars  when it expected an array";
+	}else{
+	    return implode($sep, $aVars). $sep;
+	}
+}
+
+function array_round(&amp;$item1, $key, $nDecimals) {
+	if($item1=='.'){
+		$item1 = 'NA';
+	}elseif( ereg("^[0-9.]$", $item1) ){
+    	$item1 = round($item1, $nDecimals);
+	}else{
+		// do nothing - this is a string character for some reason
+	}
+}
+
+
+if ($debug) {
+	echo "&lt;pre&gt;";
+	$input ="Y 201 27 0 0 0 0 
+	 202 0 209 0 0 0
+	 203 0 0 211 0 0
+	 204 0 0 0 212 0
+	 205 0 0 0 0 213
+	 206 28 210 0 0 214
+";
+}else{
+   $input = file_get_contents('php://stdin');
+   // $input = $_ENV["TM_SELECTED_TEXT"];	
+}
+
+// make 2D array;
+$aMatrix = stringTo2DArray($input);
+$padWidth = getWidthFromFirstCellInString($input, $delimitter=" ");
+
+array_walk_recursive($aMatrix, 'array_round', $nDecimals);
+
+$n=0;
+$outStr= "";
+foreach ($aMatrix as $key =&gt; $value) {
+	if ($n==0) {
+		$row1Length = count($aMatrix[0]);
+	}else{
+		$aMatrix[$n]= array_pad($aMatrix[$n], -$row1Length, "");		
+	}
+	for ($i=0; $i &lt; $row1Length; $i++) { 
+		if ($i==0) {
+			$newValue = str_pad($aMatrix[$n][$i], $padWidth, " ", STR_PAD_RIGHT);
+		}else{
+			$newValue = str_pad($aMatrix[$n][$i], $padWidth, " ", STR_PAD_LEFT);
+		}
+		$aMatrix[$n][$i] = $newValue;
+		$outStr .= $newValue;
+	}
+	$outStr .= "\n";
+	$n++;
+}
+echo $outStr;
+?&gt;
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^H</string>
+	<key>name</key>
+	<string>Reformat Matrix with rounding…</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>uuid</key>
+	<string>4027DB25-6790-444F-82A2-08D5113A6786</string>
+</dict>
+</plist>

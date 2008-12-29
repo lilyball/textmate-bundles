@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>! Mx Calculation Group
+Mx Calculation Group ${1:Title}
+	Calculation
+	Begin Matrices = ${2:Group ${3:1}}
+ 		
+	End Matrices;
+
+	! Insert Matrix, Specify and Boundary statements here
+
+	Begin Algebra;
+   R=A+C+E;			       ! total variance
+   S=(\sqrt(I.R));		 ! diagonal matrix of standard deviations
+   P=S~*X_ S~*Y_ S~*Z; ! standardized path coefficients stacked together
+   ! cleaner code to do this is 
+	 W = \stnd(A) ;			! calculates rg (off diagonal)
+	 U = \stnd(C) ;			! calculates rc (off diagonal)
+	 V = \stnd(E) ;			! calculates re (off diagonal)
+	 M = \stnd(R) ;			! calculates rdom (off diagonal)
+
+  End Algebra;
+  Option MX%P=neoade.txt 
+  Option Multiple Issat RS it=3000
+	End Algebra;
+
+	! Insert options after this line
+	! End of group 
+End Group
+</string>
+	<key>name</key>
+	<string>Calculation Group</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>tabTrigger</key>
+	<string>calc</string>
+	<key>uuid</key>
+	<string>6BA9776E-7FB7-4944-A4A6-6EE36E9A434E</string>
+</dict>
+</plist>

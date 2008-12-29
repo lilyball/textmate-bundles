@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>5B1D8959-F6BB-4F99-9E28-C97BFF447DF6</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+$padWidth = 7;
+//      g    N	   E	  O    A    C
+// n    1    7    -    -    -    -
+// e    2    -    9    -    -    -
+// o    3    -    -   11    -    -
+// a    4    -    -    -   12    -
+// c    5    -    -    -    -   13
+// swb  6    8   10    -    -   14
+
+
+// takes mx matrix and returns formatted nicely into columns
+function stringTo2DArray($stringIn, $delimitter=" "){
+    // strips all white space, rows are lines
+    $stringIn  = ereg_replace("[ \t]{2,}", " ", $stringIn); //remove multiple spaces in case some present
+    $stringIn  = trim($stringIn);
+    $rows = explode("\n", $stringIn);
+	$o = array();
+	foreach ($rows as $key =&gt; $row) {
+	    $row  = trim($row);
+		$o[] = explode($delimitter, $row);
+	}
+    return $o;
+}
+function stringToArray($stringIn, $delimitter=" "){
+    // strips newlines and all white space
+    $stringIn  = ereg_replace("[ \t\n]{2,}", " ", $stringIn); //remove multiple spaces in case some present
+    $stringIn  = trim($stringIn);
+    return explode($delimitter, $stringIn);
+}
+function arrayToString($aVars, $suffix="1"){
+    $sep = "$suffix ";
+	if ( !is_array($aVars) ) {
+		echo("&lt;font color=\"red\"&gt;arrayToString got $aVars  when it expected an array&lt;/font&gt;&lt;br&gt;");
+		return "arrayToString got $aVars  when it expected an array";
+	}else{
+	    return implode($sep, $aVars). $sep;
+	}
+}
+
+$debug = 0;
+if ($debug) {
+	$input ="101    107      0      0      0      0
+    102      0    109      0      0      0
+    103      0      0    111      0      0
+    104      0      0      0    112      0
+    105      0      0      0      0    113
+    106      8    110      0      0    114";
+}else{
+   $input = file_get_contents('php://stdin');
+   // $input = $_ENV["TM_SELECTED_TEXT"];	
+}
+// make 2D array;
+$aMatrix = stringTo2DArray($input);
+
+$r=0;
+foreach ($aMatrix as $key =&gt; $row) {
+	$c=0;
+	foreach ($row as $key =&gt; $value) {
+		if ($value==0) {
+			$aMatrix[$r][$c]="-";
+		}
+		$c+=1;
+	}
+	$r+=1;
+}
+$r=0;
+$o= "&lt;table border=\"0\" cellspacing=\"5\" cellpadding=\"5\"&gt;\n";
+foreach ($aMatrix as $key =&gt; $row) {
+	if ($r==0) {
+		$row1Length = count($aMatrix[0]);
+		$title=array("-");
+		for ($i=0; $i &lt; $row1Length; $i++) { 
+			$title[]="Lat $i";
+		}
+		$o.="&lt;tr&gt;\n&lt;td&gt;" . implode("&lt;/td&gt;&lt;td&gt;", $title). "&lt;/td&gt;\n&lt;/tr&gt;\n";
+	} else {
+		$aMatrix[$r]= array_pad($aMatrix[$r], -$row1Length, "");		
+	}
+	$o.="&lt;tr&gt;\n&lt;td&gt;var $r&lt;/td&gt;&lt;td&gt;" . implode("&lt;/td&gt;&lt;td&gt;", $aMatrix[$r]). "&lt;/td&gt;\n&lt;/tr&gt;\n";
+	$r++;
+}
+echo $o .="&lt;/table&gt;";
+
+?&gt;</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^D</string>
+	<key>name</key>
+	<string>Show Matrix as Html</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>uuid</key>
+	<string>04CC33D1-C24C-4B75-8D15-9AE1193C343C</string>
+</dict>
+</plist>

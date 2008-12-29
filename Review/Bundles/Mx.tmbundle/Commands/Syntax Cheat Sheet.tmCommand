@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>D99E8C0C-792F-11D9-A212-000D93B3A10E</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Mx Cheat Sheet"
+Markdown.pl &lt;&lt;MARKDOWN
+## Run ##
+    Under unix, type the following on the cmd line:
+    mx &lt; inputfile &gt; outputfile 
+    Add an ampersand (&amp;) to run in batch mode 
+    
+[http://www.vcu.edu/mx/mxkey.html#TitleLine]
+
+## Script Overview: Mx Group types ##
+TITLE: Simply a user sign-post, recognised by its location
+DATA: Indicates the group type: data/calculation/constraint
+  Read select any observed data and labels
+MATRICES: define at least one matrix that the group uses
+MODEL: the matrix formulae - covariances/means/threshold/compute/algebra
+  Specify numbers and parameters, starting values, equality constraints
+  Request fit functions output, options
+END: signifies end of group
+
+## Define a Variable##
+
+  #define &lt;name&gt; &lt;number&gt;
+
+## Matrix Declaration Block##
+Begin matrices; ! terminate with ; 
+  &lt;matrix name&gt; &lt;type&gt; &lt;r&gt; &lt;c&gt; 
+  …
+End matrices; ! terminate with ; 
+
+## Algebra Declaration Block##
+	**Begin Algebra**; ! terminate with ;
+
+		B = (I-A)~ ; ! for example 
+
+		C = B*S*B' ; ! for example
+
+	   	…
+
+	**End matrices**; ! terminate with ; 
+
+## Group Type ## 
+
+	Group Type Data/Calculation/Constraint {NGroups=n NInput_vars=n NObservations=n}
+
+## Covariance and Correlation Matrices
+
+	CMatrix/KMatrix/PMatrix {Full} {File=&lt;filename&gt;}
+
+### Asymptotic Variances and Covariances
+
+	Acov/AVar/AInv {File=&lt;filename&gt;}
+
+### Rectangular and Variable Length Data
+
+	Rectangular/VLength {File=&lt;filename&gt;}
+### Definition variables
+
+	Definition_variable &lt;label&gt;
+
+### Contingency Tables
+
+	CTable &lt;r&gt; &lt;c&gt; {File=&lt;filename&gt;}
+
+### Mean Vector
+
+	Means {File=&lt;filename&gt;}
+
+### Labels and Select commands
+
+	Labels &lt;label list&gt; 
+
+	Select &lt;label list&gt;/&lt;numlist&gt; / 
+
+	Labels Row/Col &lt;matrix name&gt; &lt;label list&gt;
+
+### Identification Codes
+
+	ICodes &lt;numlist&gt;
+		&lt;numlist&gt; is a number list of length NI.
+## Building Models with Matrices
+
+### Matrices command
+	Matrices
+		&lt;matrix name&gt; &lt;type&gt; &lt;r&gt; &lt;c&gt; {Free|Unique}
+nb: Unique is very handy in assigning numbers &gt; 10,000 to avoid conflicts with SPecify
+
+### Matrix Types
+
+_________________________________________________
+Type    Structure           Shape     # of Usable
+                                      Elements
+-------------------------------------------------
+Zero    Null                Any       0
+Unit    Unit                Any       0
+Iden    Identity            Square    0
+IZero   Identity|Zero       Any       0
+ZIden   Zero|Identity       Any       0
+Diag    Diagonal            Square    r
+SDiag   Subdiagonal         Square    r(r-1)/2
+Stand   Standardized        Square    r(r-1)/2
+Symm    Symmetric           Square    r(r+1)/2
+Lower   Lower triangular    Square    r(r+1)/2
+Full    Full                Any       rxc
+_________________________________________________
+r is the number of rows and c the number of columns of the matrix.
+
+
+### Equating Some Matrices across groups
+
+	&lt;matrix name&gt; &lt;type&gt; &lt;r&gt; &lt;c&gt; {= &lt;matrix name&gt; / &lt;symbol&gt; &lt;group&gt;} /
+________________________________________________
+Symbol   Matrix Quantity              Dimensions
+------------------------------------------------
+%On      Observed covariance/data     NIn x NIn
+%En      Expected covariance matrix   NIn x NIn
+%Mn      Expected mean vector           1 x NIn
+%Pn      Expected proportions         NRn x NCn
+%Fn      Function value                 1 x 1
+________________________________________________
+NIn: number of input variables in group n following any selection
+
+NR and NC: number of rows and columns in a contingency table
+
+
+### Equating Matrices to Computed Matrices
+
+	&lt;matrix name&gt; computed {&lt;r&gt; &lt;c&gt;} = &lt;matrix name&gt; &lt;group number&gt;
+
+### Equating All Matrices across groups
+
+	Matrices = Group &lt;number&gt;
+## Matrix Formulae
+
+### Matrix Functions
+
+_____________________________________________________________
+Keyword     Function                     Restric-  Result
+                                         tions     Size
+-------------------------------------------------------------
+\tr()       Trace                        r=c       1x1
+\det()      Determinant                  r=c       1x1
+
+\sum()      Sum                          None      1x1
+\prod()     Product                      None      1x1
+\max()      Maximum                      None      1x1
+\min()      Minimum                      None      1x1
+\abs()      Absolute value               None      rxc
+
+\cos()      Cosine                       None      rxc
+\cosh()     Hyperbolic cosine            None      rxc
+\sin()      Sin                          None      rxc
+\sinh()     Hyperbolic sin               None      rxc
+\tan()      Tan                          None      rxc
+\tanh()     Hyperbolic tan               None      rxc
+
+\exp()      Exponent (e**A)              None      rxc
+\ln()       Natural logarithm            None      rxc
+\sqrt()     Square root                  None      rxc
+
+\d2v()      Diagonal to Vector           None      min(r,c)x1
+\v2d()      Vector to Diagonal           r=1 or    max(r,c)x
+                                         c=1       max(r,c)
+\m2v()      Matrix to Vector             None      rcx1
+\vec()      Matrix to Vector*            None      rcx1
+\vech()     Lower triangle to Vector     None      rcx1
+\stnd()     Standardize matrix           r=c       rxc
+
+\eval()     Real eigenvalues             r=c       rxc
+\evec()     Real eigenvectors            r=c       rxr
+\ival()     Imaginary eigenvalues        r=c       rx1
+\ivec()     Imaginary eigenvectors       r=c       rxr
+
+\mean()     Mean of columns              None      1xc
+\cov()      Covariance of columns        None      cxc
+\mnor()     Multivariate normal integral r=c+3     1x1
+\momnor()   Moments of multiv normal     r=c+3     1x1
+
+\aorder()   Ascending sort order         rx1       rx1
+\dorder()   Descending sort order        rx1       rx1
+\sortr()    Row sort                     None      rxmax
+                                                   (1,c-1)
+\sortc()    Column sort                  None      max
+                                                   (1,r-1)xc
+\part()     Extract part of matrix**     None      Variable
+_____________________________________________________________
+*vec: vectorizes by columns, whereas m2v vectorizes by rows.
+
+**part: part(A,B) takes two arguments. Elements of the 1x4 matrix B define a rectangle in A to be extracted.
+
+
+### Matrix Operators
+
+_____________________________________________
+Symbol  Function            Example  Priority
+---------------------------------------------
+  ~     Inversion             A~       1
+  '     Transposition         A'       1
+
+  ^     Element powering      A^B      2
+
+  *     Multiplication        A*B      3
+  .     Dot product           A.B      3
+  @     Kronecker product     A@B      3
+  &amp;     Quadratic product     A&amp;B      3
+  %     Element division      A%B      3
+
+  +     Addition              A+B      4
+  -     Subtraction           A-B      4
+  |     Horizontal adhesion   A|B      4
+  _     Vertical adhesion     A_B      4
+_____________________________________________
+
+### Covariances/Compute command
+
+	Covariance/Compute {funct} &lt;matrix name&gt; {operator &lt;matrix name&gt; ..} /
+
+### Means command
+
+	Means &lt;matrix name&gt; .. /
+
+### Threshold command
+
+	Threshold &lt;matrix name&gt; .. /
+
+### Matrix command
+
+	Matrix &lt;matrix name&gt; {File=&lt;filename&gt;} &lt;numlist&gt;
+		&lt;numlist&gt; is a free format list of numbers.
+
+
+### Start and Value commands
+	Start/Value &lt;value&gt;&lt;elemlist&gt;/All
+		where &lt;elemlist&gt; consists of matrix elements and may include the TO keyword
+	The TO keyword operates differently for start and value, otherwise the commands are synonymous.
+
+### Free keyword
+
+	&lt;matrix name&gt; &lt;type&gt; &lt;r&gt; &lt;c&gt; {Free}
+
+### Specification command
+
+	Specification &lt;matrix name&gt; &lt;numlist&gt;
+		where &lt;numlist&gt; contains not necessarily distinct integers.
+
+Pattern command
+	Pattern &lt;matrix name&gt; {File=&lt;filename&gt;} &lt;numlist&gt;
+		where &lt;numlist&gt; is a list of 1's and 0's
+
+### Free, Fix and Equate commands
+
+	Free/Fix/Equate &lt;element list&gt;
+		where &lt;elemlist&gt; is a list of matrix elements
+
+### Boundary command
+
+	Bound low high &lt;parlist&gt; /All
+		where &lt;parlist&gt; is a list of parameter names or a list of parameter specification numbers.
+
+## Output Options
+
+### Options command
+
+	Options {options}
+
+### Fit Functions
+
+___________________________________________________
+Input data                              Default fit
+                                        function
+---------------------------------------------------
+CMatrix, Kmatrix or PMatrix             ML
+CMatrix, Kmatrix or Pmatrix with Acov   AWLS
+CMatrix, Kmatrix or Pmatrix with Avar   DWLS
+Rawdata, Vlength or Rectangular         RM
+Ctable                                  MLn
+___________________________________________________
+ML - maximum likelihood
+AWLS - asymptotic weighted least squares
+DWLS - diagonal weighted least squares, RM raw maximum likelihood
+MLn - maximum likelihood assuming bivariate normal liability.
+
+
+### Suppressing Output
+
+	Option NO_output
+
+### Residuals
+
+	Option RSiduals
+
+### Adjusting Degrees of Freedom
+
+	Option DFreedom=n
+		where n is the adjusted number of degrees of freedom
+
+### Power Calculations
+
+	Option Power=alpha,df
+		where alpha is the probability level of the test, and df are the degrees of freedom associated with it
+
+### Confidence Intervals
+
+	Option CInterval=n
+		where n is the desired percentage of the confidence interval; e.g. CI=90 will give 90% confidence intervals
+
+### Standard Errors
+	
+	Option SErrors
+
+### Randomizing Starting Values
+	
+	Option THard=n
+		where n is a positive or a negative integer
+
+### Jiggling Parameter Starting Values
+	Option Jiggle
+Sometimes used with the randomizing option described above, parameter start values can be jiggled. This option can be useful to nudge Mx away from a saddle point.
+
+### Fit indices
+	Option Null=,df
+
+### Check Identification of Model
+	Option Check
+
+### Optimization
+	Mx uses NPSOL to perform numerical optimization in the presence of general linear, non-linear and boundary constraints
+	NAG=n creates output file (NAGDUMP.OUT) if n&gt;0
+
+### Iterations
+	Iterations=n alters maximum numbers of iterations
+### Multiple Fit Option
+	Option Multiple
+
+### Changing the model
+	#group &lt;number&gt;
+		It is possible to change matrix formulae and other characteristics of a group. Options or matrix formulae supplied after this command would apply to that group.
+
+### Drop command
+	Drop {@value} &lt;parlist&gt;
+		where &lt;parlist&gt; is a list of parameter numbers and {@value} is an optional value to fix at.
+	Drop fixes all occurrences of a parameter with that number to zero or to a specified value.
+
+### Save and Get command
+
+	Save &lt;filename&gt;
+	
+	Get &lt;filename&gt;
+		where &lt;filename&gt; is the name of the file to be saved or retrieved;the extension .mxs is recommended.
+			
+### Mx command
+	
+	MXa= &lt;filename&gt;
+		where a is the single-letter name of the matrix to be written, or one of %E %M %P %V.
+
+### Draw command
+	
+	Draw=&lt;filename&gt;
+	
+	If you specify a RAM model with matrices A, S and F, RAMpath graphics commands may be written to a file for later input for RAMpath to draw a path diagram.
+
+### End command
+	End ! signifies the end of a group.
+
+### Error Messages
+
+MARKDOWN
+html_footer</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Syntax Cheat Sheet</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>uuid</key>
+	<string>C44758A4-884B-41F0-9F93-40FDEEFA2DA2</string>
+</dict>
+</plist>

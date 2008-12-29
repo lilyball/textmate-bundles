@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>5B1D8959-F6BB-4F99-9E28-C97BFF447DF6</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// creator: tim.bates@ed.ac.uk 
+// license = GPL
+// Purpose: Takes selected mx matrix like 
+/*
+
+X 1 7 0  0 0  0  
+ 2 0 9    0 0  0
+ 3   0 0 11 0  0
+ 4 0 0 0 12 0
+ 5  0 0    0 0  13
+ 6  8 10   0 0  14
+ and returns it formatted nicely into columns thus:
+X            1      7      0      0      0      0
+             2      0      9      0      0      0
+             3      0      0     11      0      0
+             4      0      0      0     12      0
+             5      0      0      0      0     13
+             6      8     10      0      0     14
+*/
+
+// Also works happily on large data files, creating readable fixed width files
+// , and replacing tabs with spaces in the process
+
+// USEAGE notes: 
+// $padwidth sets the ... padding width :-)
+// Set $debug to 1 to let play with it in a TM window
+// ********** 21 Aug 2008: Modified to use the first cell as a width guage **********
+// **********************************************************************************
+
+$debug = 0;
+$padWidth = 7; //sea change :-)
+
+function getWidthFromFirstCellInString($stringIn, $delimitter=" "){
+    // strips all white space, rows are lines
+    $stringIn  = ltrim($stringIn);
+	// echo $stringIn;
+    ereg("^[^ \t]+[ \t]+[^ \t]", $stringIn, $regs);
+	// echo "cell1 is $regs[0]\n";
+	$o = strlen($regs[0]);
+    return $o;
+}
+
+function stringTo2DArray($stringIn, $delimitter=" "){
+    // strips all white space, rows are lines
+    $stringIn  = ereg_replace("[ \t]{1,}", " ", $stringIn); //remove multiple spaces in case some present
+    $stringIn  = trim($stringIn);
+    $rows = explode("\n", $stringIn);
+	$o = array();
+	foreach ($rows as $key =&gt; $row) {
+	    $row  = trim($row);
+		$o[] = explode($delimitter, $row);
+	}
+    return $o;
+}
+function stringToArray($stringIn, $delimitter=" "){
+    // strips newlines and all white space
+    $stringIn  = ereg_replace("[ \t\n]{2,}", " ", $stringIn); //remove multiple spaces in case some present
+    $stringIn  = trim($stringIn);
+    return explode($delimitter, $stringIn);
+}
+function arrayToString($aVars, $suffix="1"){
+    $sep = "$suffix ";
+	if ( !is_array($aVars) ) {
+		echo("&lt;font color=\"red\"&gt;arrayToString got $aVars  when it expected an array&lt;/font&gt;&lt;br&gt;");
+		return "arrayToString got $aVars  when it expected an array";
+	}else{
+	    return implode($sep, $aVars). $sep;
+	}
+}
+
+if ($debug) {
+	echo "&lt;pre&gt;";
+	$input ="Y     201 27 0 0 0 0 
+	 202 0 209 0 0 0
+	 203 0 0 211 0 0
+	 204 0 0 0 212 0
+	 205 0 0 0 0 213
+	 206 28 210 0 0 214
+";
+//	echo $input . "&lt;br&gt;";
+}else{
+   $input = file_get_contents('php://stdin');
+   // $input = $_ENV["TM_SELECTED_TEXT"];	
+}
+
+// make 2D array;
+$aMatrix  = stringTo2DArray($input);
+$padWidth = getWidthFromFirstCellInString($input, $delimitter=" ");
+$n        = 0;
+$outStr   = "";
+
+foreach ($aMatrix as $key =&gt; $value) {
+	if ($n==0) {
+		$columnsInRow1 = count($aMatrix[0]);
+	}else{
+		$aMatrix[$n]   = array_pad($aMatrix[$n], -$columnsInRow1, "");		
+	}
+	for ($i=0; $i &lt; $columnsInRow1; $i++) { 
+		if ($i==0) {
+			$newValue = str_pad($aMatrix[$n][$i], $padWidth, " ", STR_PAD_RIGHT);
+		}else{
+			$newValue = str_pad($aMatrix[$n][$i], $padWidth, " ", STR_PAD_LEFT);
+		}
+		$aMatrix[$n][$i] = $newValue;
+		$outStr         .= $newValue;
+	}
+	$outStr .= "\n";
+	$n++;
+}
+echo $outStr;
+?&gt;
+</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^H</string>
+	<key>name</key>
+	<string>Reformat Matrix in Document / Selection</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>uuid</key>
+	<string>5FD94CDD-7F29-4DE9-9175-51605381A2E6</string>
+</dict>
+</plist>

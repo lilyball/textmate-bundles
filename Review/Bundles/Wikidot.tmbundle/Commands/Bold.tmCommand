@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// author tim.bates@ed.ac.uk
+// version .5 
+// created: 22:10:2008
+// bolds or unbolds the selection or the currentword
+
+$input = file_get_contents('php://stdin');
+
+$marker   =  $_ENV["TM_BOLD_MARKER"];
+//$marker =  $_ENV["TM_ITALIC_MARKER"];
+//$marker =  $_ENV["TM_UNDERLINED_MARKER"];
+$thisLine =  $_ENV["TM_CURRENT_LINE"];
+
+// TM_CURRENT_WORD doesn't include markup :-(
+
+$noFormat = ereg_replace("\*\*(.*)\*\*", "\\1", $input);
+
+//echo "i got: $input\n";
+
+if ($input==$noFormat) {
+	//plain--&gt;formatted
+	echo("**$input**");
+}else{
+	//bold --&gt; plain
+	echo("$noFormat");
+}
+
+
+/*
+foreach ($_ENV as $key =&gt; $value) {
+	echo "$key = $value\n";
+}
+// $_ENV["TM_SELECTED_TEXT"]);
+*/
+
+?&gt;</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Bold</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>AB5674B9-97E9-4271-AE78-6D4C881713AA</string>
+</dict>
+</plist>

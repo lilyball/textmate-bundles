@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/progress.rb"
+require 'open-uri'
+link = "http://site.com"
+title = STDIN.read
+urlpattern = Regexp.new('^(http(?:s?)\:\/\/)?([a-zA-Z0-9\-\._]+(?:\.[a-zA-Z0-9\-\._]{2,3}))(\/[a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_=]*)?$')
+s = IO.popen('pbpaste', 'r+').read
+if s.match(urlpattern) then
+  protocol, site, file = s.match(urlpattern)[1,3]
+  protocol = "http://" if protocol.nil?
+  link = protocol + site
+  link = link + file unless file.nil?
+  TextMate.call_with_progress(:title =&gt; "Opening Link", :message =&gt; "Retrieving Title (#{site})") do
+    begin
+    fp = open(link)
+    title = fp.read.match(/&lt;title&gt;([^&lt;&gt;]*)&lt;\/title&gt;/i).to_a[1].strip
+    rescue
+       title = "Unknown"
+    end
+  end
+end
+print %{[${1:#{link}}|${2:#{title}}]}$0</string>
+	<key>keyEquivalent</key>
+	<string>^L</string>
+	<key>name</key>
+	<string>Link (external, with title look up)</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>C8BCB154-FF9D-4925-B42E-DB2DEBCCC777</string>
+</dict>
+</plist>

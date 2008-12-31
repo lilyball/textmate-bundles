@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env php
+&lt;?php
+	// Turn a line or selection into a heading
+	// Created: 23.12.08 Author: timothy.c.bates@gmail.com
+	// Overrides existing cmd-n
+	// Works on lines that already have + attributes
+	
+	// ********* 
+	// Change this to alter the level being affected
+	// *********
+	
+	$level = '++++'; 	
+	if (1) { //set to 0 for debugging
+		$existing = fread(STDIN, 1024);
+	}else{
+		echo "&lt;pre&gt;";
+		$existing = " +++     Why is is this so badly formed?";
+		$existing = ""; //case of empty line
+		echo "started with:\n$existing\n--&gt;\n";
+	}
+	$bTagged  = ereg( "^ *\+",$existing);
+	// Change to $level strip leading and trailing spaces around the plus sign
+	if ($bTagged) {
+		echo ereg_replace("^ *(\++) *", "$level ", $existing);
+	} else {
+		if (empty($existing)) {
+			echo "$level \${1:Level 1 heading}";
+		}else{
+			echo ereg_replace("^ *", "$level ", $existing);			
+		}
+	}
+?&gt;</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@4</string>
+	<key>name</key>
+	<string>h4</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>4FB1CF7F-3F7C-4D6D-A0D3-277051542742</string>
+</dict>
+</plist>

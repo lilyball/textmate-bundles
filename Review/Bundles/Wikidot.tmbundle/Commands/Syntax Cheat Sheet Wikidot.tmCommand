@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>bundleUUID</key>
+	<string>D99E8C0C-792F-11D9-A212-000D93B3A10E</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Mx Cheat Sheet"
+Markdown.pl &lt;&lt;MARKDOWN
+## Run ##
+
+THIS NEEDS A LOT OF WORK AND IS BASICALLY BROKEN NOW.
+
+THE OFFICIAL HELP IS HERE
+
+http://www.wikidot.com/doc:wiki-syntax
+
+
+
+
+
+
+
+++ Links
+	[[[link-to-a-page]]]
+	[[[link "TO" ą pagE]]]
+	[[[category: sample page]]]
+	[[[some page| custom text]]]	custom text	using custom text
+	[[[doc|Documentation]]]	Documentation	linking to an existing page (different color)
+	[[[doc#toc1|Section 1]]]	Section 1	linking to an anchor (first section)
+	[[[doc#toc1]]]
+	[[# anchorname]]
+
+	[email@site.com email me!]
+	
+++ Lists
++++ Bulleted
+* Bullet 1
+* Bullet 2
+ * Bullet 2.1
++++ Numbered
+# Item 1
+# Item 2
+ # Item 2.1
++++ Definition Lists
+: Item 1 : Something
+: Item 2 : Something else
+
+
++++ Block Quote
+&gt; leading
+&gt;&gt; characters
+
++++ Image
+[[image image-source attribute1="value1" attribute2="value2"]]
+* alt="string"
+* width="200px"
+* height="200px"
+* style="border: 1px solid red; padding: 2em;"
+* class="myCSSstyle"
+
++++ Image Gallery
+	[[gallery size="image-size"]]
+or
+	[[gallery size="image-size"]]
+	: image-source1 attribute1="value1" attribute2="value2"
+	: image-source2 attribute1="value1" attribute2="value2"
+	[[/gallery]]
+
++++ Code Block
+[[code type='php]]
+
+[[/code]]
+
+++ Tables
+||~ head 1 ||~ head 2 ||~ head 3 ||
+|| cell 1 || cell 2 || cell 3 ||
+|||| long cell 4 || cell 5 ||
+||cell 6 |||| long cell 7 ||
+|||||| looong cell 8||
+
+
+++ Aligning Text
+
+[[&lt;]] left       [[/&lt;]]
+[[&gt;]] right      [[/&gt;]]
+[[=]] centered   [[/=]]
+[[==]] justified [[/==]]
+
+
+++ Custom Divs
+
++++ Custom DIV for (multi column)
+
+[[div style="float:left; width: 45%; padding: 0 2%"]]
+left 
+column 
+text
+[[/div]]
+[[div style="float:left; width: 45%; padding: 0 2%"]]
+right 
+column 
+text
+[[/div]]
+
++++ Other uses of div code
+
+[[div style="margin-left: 10px;"]]
+
+
+++ Footnotes
+Some text[[footnote]]And a small footnote.[[/footnote]]. Here we go 
+with another footnote[[footnote]]Content of another footnote.[[/footnote]].
+
+[[footnoteblock]]
+
+
+++ Math
+[[math label1]]
+\rho _{\rm GJ} = -\sigma (r) \left[ (1 - \eta _{\ast }^2 {\kappa \over {\eta ^3}}) \cos \chi \right.
++ \left. {3\over 2} \theta (\eta) H(\eta)
+\xi \sin \chi \cos \phi \right]
+[[/math]]
+
++++ Inline Math
+[[$ E = mc^2 $]] is much more popular than  [[$ G_{\mu\nu} - \Lambda g_{\mu\nu}  $]]
+
++++ Misc
+++++ Include other pages
+[[include pagename]]
+
+++++ Embedding Video
+[[embedvideo]] ... [[/embedvideo]]
+e.g.
+[[embedvideo]]
+&lt;embed style="width:400px; height:326px;" id="VideoPlayback" align="middle"
+type="application/x-shockwave-flash"
+src="http://video.google.com/googleplayer.swf?docId=263244138622602613"
+allowScriptAccess="sameDomain" quality="best" bgcolor="#ffffff" scale="noScale" salign="TL" 
+FlashVars="playerMode=embedded"&gt; &lt;/embed&gt;
+[[/embedvideo]]
+
+++++ Embedding Audio
+[[embedaudio]] ... [[/embedaudio]] 
+
+++++ Embed external code
+[[embed]]
+&lt;script type="text/javascript" src="http://del.icio.us/feeds/js/tags/michal_frackowiak?icon;size=12-35;color=87ceeb-0000ff;title=my%20del.icio.us%20tags"&gt;&lt;/script&gt;
+[[/embed]]
+
+
+++++ Embed iframe
+[[iframe url-source attributes]]
+
+
+
+MARKDOWN
+html_footer</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Syntax Cheat Sheet Wikidot</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>15D92459-A2C8-4107-BA3A-A3C8EF3A0171</string>
+</dict>
+</plist>

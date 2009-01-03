@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'escape'
 require SUPPORT_LIB + 'web_preview'

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # tm/executor.rb
 #
 # Provides some tools to create “Run Script” commands

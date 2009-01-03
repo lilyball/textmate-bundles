@@ -1,4 +1,5 @@
-# 
+# encoding: utf-8
+ 
 # TextMate Code Completion
 # Version: 9
 # By: Thomas Aylott / subtleGradient, oblivious@

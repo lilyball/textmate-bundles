@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'English'
 # require File.dirname(__FILE__) + '/escape'
 # require File.dirname(__FILE__) + '/osx/plist'

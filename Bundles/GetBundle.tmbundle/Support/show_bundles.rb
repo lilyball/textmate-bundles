@@ -44,19 +44,21 @@ x = Thread.new do
     params['progressMaxValue']        = bundles.size
     params['progressIsIndeterminate'] = false
 
-    open("|#{DIALOG} -t#{token}", "w") { |io| io.write params.to_plist }
+    open("|#{DIALOG} -t#{token}", "w") { |dialog| dialog.write params.to_plist }
     params['isBusy']                  = true
 
     bundles.each do |bundle|
       puts "Load #{bundle['path']}…"
-      plist = open("|svn cat http://macromates.com/svn/Bundles/trunk/Bundles/#{url_encode bundle['path']}/info.plist") { |io| OSX::PropertyList.load(io) }
+      plist = open("|svn cat http://macromates.com/svn/Bundles/trunk/Bundles/#{url_encode bundle['path']}/info.plist") do |svn|
+				OSX::PropertyList.load(svn) 
+			end
       # puts "Got #{plist}"
       bundle['uuid'] = plist['uuid'] unless plist['uuid'].nil?
       bundle['name'] = plist['name'] unless plist['name'].nil?
       bundle['bundleDescription'] = strip_html plist['description'].to_s
       params['progressValue'] += 1
       params['progressText'] = "Fetching Descriptions (#{params['progressValue'] + 1} / #{bundles.size})…"
-      open("|#{DIALOG} -t#{token}", "w") { |io| io.write params.to_plist }
+      open("|#{DIALOG} -t#{token}", "w") { |dialog| dialog.write params.to_plist }
     end
 
   end

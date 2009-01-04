@@ -46,10 +46,7 @@ require SUPPORT_LIB + 'escape'
 require SUPPORT_LIB + 'exit_codes'
 require SUPPORT_LIB + 'io'
 
-if RUBY_VERSION < "1.9"
-  $KCODE = 'u'
-  require 'jcode'
-end
+$KCODE = 'u' if RUBY_VERSION < "1.9"
 
 $stdout.sync = true
 

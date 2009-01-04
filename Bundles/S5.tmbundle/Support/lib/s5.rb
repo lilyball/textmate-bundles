@@ -1,4 +1,4 @@
-# Module for S5 presenation; S5 by Eric Meyer; module by Brad Choate
+# Module for S5 presenation; S5 by Eric Meyer; module by Brad Choate.  Encoding: utf-8
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/markdown"
 

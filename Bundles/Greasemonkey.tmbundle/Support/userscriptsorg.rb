@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Greasemonkey Userscript.org integration for TextMate
 # By Henrik Nyh <http://henrik.nyh.se>.
 # Free to modify and redistribute non-commercially with due credit.

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'cgi'
 require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes.rb"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
@@ -5,6 +7,7 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/ui.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/keychain.rb"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/metaweblog.rb"
 
+# FIXME: this will need work. DT
 $KCODE = 'u'
 
 class Blogging

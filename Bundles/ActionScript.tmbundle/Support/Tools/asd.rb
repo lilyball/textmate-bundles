@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
+
 #
 # Ale Muñoz <ale@bomberstudios.com> - 2006-11-25
 # Feel free to use and improve

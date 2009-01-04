@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 $bundle        = ENV['TM_BUNDLE_SUPPORT']
 
 require $bundle+'/hg_helper.rb'

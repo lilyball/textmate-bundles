@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 #
 # xcodebuild output parser for TextMate
 # chris@cjack.com

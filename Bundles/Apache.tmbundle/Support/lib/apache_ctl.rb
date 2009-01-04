@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/keychain"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"

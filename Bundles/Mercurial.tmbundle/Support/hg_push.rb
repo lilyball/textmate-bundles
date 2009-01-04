@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 bundle			= ENV['TM_BUNDLE_SUPPORT']
 support			= ENV['TM_SUPPORT_PATH']
 hg             = ENV['TM_HG'] || 'hg'

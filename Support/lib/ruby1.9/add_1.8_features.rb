@@ -6,25 +6,21 @@
 # vendor/rcodetools/lib/rcodetools/xmpfilter.rb assumes String
 # is enumerable, and that it has grep and friends
 
-class String
-	def grep(*args)
-		_txmt_each_.grep(*args)
-	end                   
+if RUBY_VERSION >= "1.9"
+  class String
+  	def grep(*args)
+  		each_line.grep(*args)
+  	end                   
 	
-	def reject(&block)
-		_txmt_each_.reject(&block)
-	end 
+  	def reject(&block)
+  		each_line.reject(&block)
+  	end 
 	
-	def map(&block)
-		_txmt_each_.map(&block)
-	end
-	
-private
-	
-	def _txmt_each_
-	  scan(%r{.*#{$/}|.+})
-	end
-end                                   
+  	def map(&block)
+  		each_line.map(&block)
+  	end
+  end
+end
 
 if $0 == __FILE__
 	require 'test/unit'

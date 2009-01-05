@@ -217,6 +217,24 @@ end
 def checkSources
   # check the sources for each installed bundle if bundle is listed in the bundle cache
   mustBeResolved = [ ]
+  
+  # reset source if only one source available to get rid of relocating bundles (e.g. from Review to Official)
+  $localBundles.each do |uuid, bundle|
+    if $numberOfBundleSources[uuid] == 1
+      if bundle['scm'] =~ /git/ # under git control
+        $bundleSources[uuid].each do |g|
+            g['sources'].each { |t| $gbPlist['bundleSources'][uuid] = t['url'] if t['method'] == "git" }
+        end
+      elsif $bundleSources[uuid].first['sources'].size > 1 # not under git control but from github.com
+        $bundleSources[uuid].each do |g|
+            g['sources'].each { |t| $gbPlist['bundleSources'][uuid] = t['url'] if t['method'] == "tar" }
+        end
+      else
+        $gbPlist['bundleSources'][uuid] = $bundleSources[uuid].first['sources'].first['url']
+      end
+    end
+  end
+
   $localBundles.each do |uuid, bundle|
     if !$gbPlist['bundleSources'].has_key?(uuid) && $bundleSources.has_key?(uuid)
       
@@ -242,7 +260,6 @@ def checkSources
           $bundleSources[uuid].each do |b|
             if b['infoMD5'] == bundle['infoMD5']
               if b['sources'].size == 1
-
                 if bundle['scm'] =~ /git/ # under git control
                   $bundleSources[uuid].each do |g|
                       g['sources'].each { |t| $gbPlist['bundleSources'][uuid] = t['url'] if t['method'] == "git" }
@@ -448,7 +465,7 @@ def getBundleLists
     
     updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel,nameBold = getLocalStatus(bundle)
     if nameColor != '#000000'
-      locCom += " date: " + Time.parse(bundle['revision']).getutc.strftime("%y-%m-%d %H:%M")
+      locCom += "  date: " + Time.parse(bundle['revision']).getutc.strftime("%y-%m-%d %H:%M")
     end
     # set searchpattern
     updatedStr = (status.empty?) ? "" : (status =~ /^O/) ? "=i" : "=i=u"
@@ -461,7 +478,7 @@ def getBundleLists
       'source'            => repo,
       'uuid'              => bundle['uuid'],
       'status'            => status,
-      'locCom'            => locCom.strip,
+      'locCom'            => locCom.strip.gsub(/ {2,}/,' ┋ '),
       'deleteButtonEnabled'      => deleteButtonEnabled,
       'deleteButtonLabel' => deleteButtonLabel,
       'deleteButton'      => deleteButton,
@@ -713,7 +730,7 @@ def refreshUpdatedStatus
     updatedStr,status,deleteButton,deleteButtonEnabled,locCom,canBeOpened,deleteButtonLabel,nameBold = getLocalStatus(bundle)
 
     if r['nameColor'] != '#000000'
-      locCom += " date: " + Time.parse(bundle['revision']).getutc.strftime("%y-%m-%d %H:%M")
+      locCom += "  date: " + Time.parse(bundle['revision']).getutc.strftime("%y-%m-%d %H:%M")
     end
 
 
@@ -723,7 +740,7 @@ def refreshUpdatedStatus
     r['status'] = status
     r['deleteButtonEnabled'] = deleteButtonEnabled
     r['deleteButton'] = deleteButton
-    r['locCom'] = locCom.strip
+    r['locCom'] = locCom.strip.gsub(/ {2,}/,' ┋ ')
     r['canBeOpened'] = canBeOpened
     r['deleteButtonLabel'] = deleteButtonLabel
     r['deleteButtonTooltip'] = "#{deleteButtonLabel} “#{r['name']}”"
@@ -1035,7 +1052,7 @@ def enableBundle(aBundle,path)
   begin
     %x{open -a Finder '#{aBundle['path']}'}
   rescue
-    writeToLogFile("Error while enabling bundles.\n#{$!}")
+    writeToLogFile("Error while enabling bundle.\n#{$!}")
   end
   #TM refreshes its plist not immediately
   b = $dataarray[path.to_i]
@@ -1043,6 +1060,7 @@ def enableBundle(aBundle,path)
   b['deleteButton'] = "1"
   b['deleteButtonLabel'] = "Delete" if b['deleteButtonEnabled']
   b['locCom'].gsub!($localBundles[b['uuid']]['disabled'],"")
+  b['locCom'].gsub!(/ ┋ *$/,'')
   $localBundles[b['uuid']]['disabled'] = ""
   $params['dataarray'] = $dataarray
   updateDIALOG
@@ -1053,7 +1071,7 @@ def unDeleteBundle(aBundle,path)
   begin
     %x{open -a Finder '#{aBundle['path']}'}
   rescue
-    writeToLogFile("Error while enabling bundles.\n#{$!}")
+    writeToLogFile("Error while undeleting bundle.\n#{$!}")
   end
   #TM refreshes its plist not immediately
   b = $dataarray[path.to_i]
@@ -1061,6 +1079,7 @@ def unDeleteBundle(aBundle,path)
   b['deleteButton'] = "1"
   b['deleteButtonLabel'] = "Delete" if b['deleteButtonEnabled']
   b['locCom'].gsub!($localBundles[b['uuid']]['deleted'],"")
+  b['locCom'].gsub!(/ ┋ *$/,'')
   $localBundles[b['uuid']]['deleted'] = ""
   $params['dataarray'] = $dataarray
   updateDIALOG

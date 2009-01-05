@@ -992,14 +992,16 @@ def filterBundleList
   
 end
 
-def checkUniversalAccess
-  ui = %x{osascript -e 'tell app "System Events" to set isUIScriptingEnabled to UI elements enabled'}
-  if ui =~ /^false/
-    if askDIALOG("AppleScript's “UI scripting” is not enabled. Getbundles needs it to perform “Show Help Window”, “Open Bundle Editor”, and “to activate Getbundles if it's already open”.", "Do you want to open “System Preferences” to enable “Enable access for assistive devices”?", "Yes", "No") == 0
-      %x{osascript -e 'tell app "System Preferences" ' -e 'activate' -e 'set current pane to pane "com.apple.preference.universalaccess"' -e 'end tell'}
-    end
-  end
-end
+# def checkUniversalAccess
+#   unless ENV['TM_GETBUNDLES_SKIP_UI_CHECK']
+#     ui = %x{osascript -e 'tell app "System Events" to set isUIScriptingEnabled to UI elements enabled'}
+#     if ui =~ /^false/
+#       if askDIALOG("AppleScript's “UI scripting” is not enabled. It is needed to activate GetBundles if it is already running. You can omit this check by setting the shell variable ‘TM_GETBUNDLES_SKIP_UI_CHECK’ in TextMate’s preferences.", "Do you want to open “System Preferences” to enable “Enable access for assistive devices”?", "Yes", "No") == 0
+#         %x{osascript -e 'tell app "System Preferences" ' -e 'activate' -e 'set current pane to pane "com.apple.preference.universalaccess"' -e 'end tell'}
+#       end
+#     end
+#   end
+# end
 
 def moveFileToTrash(aPath)
   # it's safer to use AS; no need for checking if aPath already exists in trash
@@ -1144,7 +1146,7 @@ STDERR.sync = true
 
 initGetBundlePlist
 orderOutDIALOG
-checkUniversalAccess
+# checkUniversalAccess
 
 # init DIALOG
 $initThread = Thread.new do

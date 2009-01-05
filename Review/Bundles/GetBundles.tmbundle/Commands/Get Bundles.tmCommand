@@ -21,10 +21,12 @@ CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
 if [ $CHECK == 0 ]; then
 	"${TM_RUBY:-ruby}" -wKU "$TM_BUNDLE_SUPPORT/getBundles.rb" &amp;&gt;~/Library/Logs/TextMateGetBundles.log &amp;
 else
-cat &lt;&lt;-AS | iconv -f UTF-8 -t MACROMAN | osascript -- 2&gt;&amp;1 1&gt;/dev/null
+ERR=$(cat &lt;&lt;-AS | iconv -f UTF-8 -t MACROMAN | osascript -- 2&gt;&amp;1 1&gt;/dev/null
 tell application "TextMate" to activate
 tell application "System Events" to tell process "TextMate" to tell menu bar 1 to tell menu bar item "Window" to tell menu "Window" to click menu item "TextMate — GetBundles" 
 AS
+)
+[[ ! -z $ERR ]] &amp;&amp; echo "GetBundles is already running"
 fi</string>
 	<key>input</key>
 	<string>none</string>
